@@ -2,198 +2,445 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88D9621EEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A406621EEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiKHWPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
+        id S229723AbiKHWQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiKHWPJ (ORCPT
+        with ESMTP id S229503AbiKHWQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:15:09 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FFF6068F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:15:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9331422705;
-        Tue,  8 Nov 2022 22:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667945705; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KGw9hUTJJhpAj6IJzhX+AXsNfcXbeLF/Lzm5TXyUezI=;
-        b=JVCYSGuD3gAluN5sya1jiBWpSf6dQfbkyzODuUDMvkUeckY4lABDZoyf7StSfgVmJIv6bD
-        tG4/UytksTnTiO5d9sYikg0UfurNfT8H4vEL86MojGi52kG50UWGRf+UCK1GnLBvsySmii
-        tDYpAtzGb1Ik3pY7tyf0EaO0i/wLmqo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7844F13398;
-        Tue,  8 Nov 2022 22:15:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IDbtGunUamOaKAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 08 Nov 2022 22:15:05 +0000
-Date:   Tue, 8 Nov 2022 23:15:04 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     zokeefe@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-Subject: Re: [mm-unstable v3 PATCH 3/3] mm: replace VM_WARN_ON to pr_warn if
- the node is offline with __GFP_THISNODE
-Message-ID: <Y2rU6BHD9eePn8IN@dhcp22.suse.cz>
-References: <20221108184357.55614-1-shy828301@gmail.com>
- <20221108184357.55614-3-shy828301@gmail.com>
+        Tue, 8 Nov 2022 17:16:30 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B820463CDA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:16:28 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id d6so23126611lfs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NtwsQ3gidzESt2kFCVdtlss3L/VOyObE+9Zu1FVQJqM=;
+        b=fVzvtBWNhshjyjYovUQGIibF6vUrBH2VbFfqJ7T4w9NyZBksRCcnhbaL4M5QsfpdwQ
+         YJegQc8gUgGQy6xj8MJuf7+OQOVD5MWKKAyOS8lrJjp5DUmAgQmddWHIskkpu/BzZKQq
+         1rv9bopMI6VmlMz2/C+oGWw8CroX5j7ZX7xD4K2/HF3yve7KYFO4a9AB6sN+N2TQ5Cym
+         lGmtcgYS0dYxEFtQV/GcxW+1UNNw+9uNwYv2ZFatbmv+Z38JE6WS8bZ3oqUTE/ad7Odq
+         utuxkE57gnrnFQjHiUgZpzRLrfJm3wAU+QRbuNz9HCz69LTpnlQO8pIlX9I+DtQpDSu/
+         2vaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NtwsQ3gidzESt2kFCVdtlss3L/VOyObE+9Zu1FVQJqM=;
+        b=AFzTIigXQOTR6tokQtRGjg2iUfnAsRryEkxqKxkpVahazyF/3T3g3w1q+e0wxpdNci
+         PHze6GMkXlyPrtPsShSPRzjL0VvyAsFEJ7r5Su5wfPc3rFy1BS6r3+dIydb1cYVxx+tV
+         /VpfBFYggBRXuTV5+oXzlVoqIpRv05GsMos1/CgYZh6E8hMNic/LtzdmgF5Ou4NlZFEE
+         tbOgjbOMUNQAYzu+sskjKoqHUt5dYOqqrirVQQKh/ABgn2jezt3+6DnpS3sKgQlfinqS
+         UNPz/g2ym4IOowIJmJO6CrodB5quLUtj9CY3uyCp03ceVo/TEp9IbK9tHjMUK179erFM
+         vAeQ==
+X-Gm-Message-State: ACrzQf3BDz3dCfGX5DyHcVsNHZo4wswrEprNebYp11KqgftFuPGUF9d8
+        HtmvYbXa9YvhLT7RitcU6h0=
+X-Google-Smtp-Source: AMsMyM77qvcMxyrwPALZwxY+K2q6Edks3WL4j3/Qml+1dYBrXETAkECQR7yCMrLsx34kG+eukvfSFA==
+X-Received: by 2002:a05:6512:224d:b0:4a2:7710:9b8b with SMTP id i13-20020a056512224d00b004a277109b8bmr18805622lfu.128.1667945786604;
+        Tue, 08 Nov 2022 14:16:26 -0800 (PST)
+Received: from ?IPV6:2a02:a31a:a240:1700:c55e:6e7d:cf12:d8b7? ([2a02:a31a:a240:1700:c55e:6e7d:cf12:d8b7])
+        by smtp.googlemail.com with ESMTPSA id a14-20020a056512200e00b004979ec19387sm1938366lfb.305.2022.11.08.14.16.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 14:16:25 -0800 (PST)
+From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
+X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Message-ID: <137895ef-b2c4-6e10-e245-125745b882bc@gmail.com>
+Date:   Tue, 8 Nov 2022 23:16:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108184357.55614-3-shy828301@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Reply-To: kfyatek+publicgit@gmail.com
+Subject: Re: [Nouveau] [PATCH v7 22/23] drm/vc4: vec: Add support for more
+ analog TV standards
+Content-Language: pl
+To:     Lukas Satin <luke.satin@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Dom Cobley <dom@raspberrypi.com>,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v7-22-7072a478c6b3@cerno.tech>
+ <CAEFVmOKn4Won90xyX2Efh2esZ94npoy0BuTQ7n-in+KapfBb=w@mail.gmail.com>
+In-Reply-To: <CAEFVmOKn4Won90xyX2Efh2esZ94npoy0BuTQ7n-in+KapfBb=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 08-11-22 10:43:57, Yang Shi wrote:
-> Syzbot reported the below splat:
-> 
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node
-> include/linux/gfp.h:221 [inline]
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-> hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-> alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> Modules linked in:
-> CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted
-> 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 10/11/2022
-> RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc
-> ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9
-> 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000)
-> knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
->  hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
->  madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
->  madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
->  madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
->  do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
->  do_madvise mm/madvise.c:1432 [inline]
->  __do_sys_madvise mm/madvise.c:1432 [inline]
->  __se_sys_madvise mm/madvise.c:1430 [inline]
->  __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f6b48a4eef9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89
-> f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-> f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-> RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
-> RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
-> RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
-> R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
->  </TASK>
-> 
-> It is because khugepaged allocates pages with __GFP_THISNODE, but the
-> preferred node is bogus.  The previous patch fixed the khugepaged
-> code to avoid allocating page from non-existing node.  But it is still
-> racy against memory hotremove.  There is no synchronization with the
-> memory hotplug so it is possible that memory gets offline during a
-> longer taking scanning.
-> 
-> So this warning still seems not quite helpful because:
->   * There is no guarantee the node is online for __GFP_THISNODE context
->     for all the callsites.
->   * Kernel just fails the allocation regardless the warning, and it looks
->     all callsites handle the allocation failure gracefully.
-> 
-> Although while the warning has helped to identify a buggy code, it is not
-> safe in general and this warning could panic the system with panic-on-warn
-> configuration which tends to be used surprisingly often.  So replace
-> VM_WARN_ON to pr_warn().  And the warning will be triggered if
-> __GFP_NOWARN is set since the allocator would print out warning for such
-> case if __GFP_NOWARN is not set.
-> 
-> Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> Cc: Zach O'Keefe <zokeefe@google.com>
+Hi Lukas, Maxime and everyone,
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+W dniu 8.11.2022 o 14:17, Lukas Satin pisze:
+> They are important for retrogaming and connecting TV out to CRT TV or using
+> emulator.
+>
+> I have PS1 that is using PAL-60 for example.
+>
+> Can you add 240p and 288p non-interlaced modes for NTSC and PAL, please?
 
-minor nit
+To add progressive mode support, at least for the VC4/VEC device that's used
+on the Raspberry Pi, all that's necessary is a patch like:
 
-> ---
-> v3: * Reverted the old commit from mm-unstable which remove the VM_WARN
->       (patch 1/3).
->     * Incorporated the suggestion from Michal to use pr_warn.
-> 
-> v2: * Added patch 1/2.
->     * Reworded the commit log per Michal.
-> 
->  include/linux/gfp.h | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index ef4aea3b356e..60a1c70ec85c 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -210,6 +210,16 @@ alloc_pages_bulk_array_node(gfp_t gfp, int nid, unsigned long nr_pages, struct p
->  	return __alloc_pages_bulk(gfp, nid, NULL, nr_pages, NULL, page_array);
->  }
->  
-> +static inline void warn_if_node_offline(int nid, gfp_t gfp_mask)
-> +{
-> +	gfp_t gfp = gfp_mask & (__GFP_THISNODE|__GFP_NOWARN);
+--- a/drivers/gpu/drm/vc4/vc4_vec.c
++++ b/drivers/gpu/drm/vc4/vc4_vec.c
+@@ -623,7 +623,9 @@ static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
+ 	VEC_WRITE(VEC_CLMP0_START, 0xac);
+ 	VEC_WRITE(VEC_CLMP0_END, 0xec);
+ 	VEC_WRITE(VEC_CONFIG2,
+-		  VEC_CONFIG2_UV_DIG_DIS | VEC_CONFIG2_RGB_DIG_DIS);
++		  VEC_CONFIG2_UV_DIG_DIS |
++		  VEC_CONFIG2_RGB_DIG_DIS |
++		  ((adjusted_mode->flags & DRM_MODE_FLAG_INTERLACE) ? 0 : VEC_CONFIG2_PROG_SCAN));
+ 	VEC_WRITE(VEC_CONFIG3, VEC_CONFIG3_HORIZ_LEN_STD);
+ 	VEC_WRITE(VEC_DAC_CONFIG, vec->variant->dac_config);
+ 
 
-I would use rather this_node or similarly descriptive name. gfp sounds
-like a pasm but this is only a subset of it. If you really want to
-improve the readability then you can restructure the condition a bit
+and then you can just add custom modes, for example within Xorg:
 
-	if (gfp_mask & (__GFP_THISNODE|__GFP_NOWARN)) != (__GFP_THISNODE|__GFP_NOWARN))
-		return;
-	
-	if (node_online(nid)) 
-		return;
-	
-	pr_warn("%pGg allocation from offline node %d\n", &gfp, nid);
-	dump_stack();
+xrandr --newmode 720x240 13.5 720 736 800 858 240 243 246 262
+xrandr --newmode 720x288 13.5 720 740 804 864 288 290 293 312
 
-> +
-> +	if ((gfp == (__GFP_THISNODE|__GFP_NOWARN)) && !node_online(nid)) {
-> +		pr_warn("%pGg allocation from offline node %d\n", &gfp, nid);
-> +		dump_stack();
-> +	}
-> +}
-> +
--- 
-Michal Hocko
-SUSE Labs
+Note that the pixel aspect ratio will be all over the place - unfortunately this
+is necessary at the driver level, because VC4's VEC does not support pixel
+clocks other than 13.5 MHz. However, you can fix it by running something like
+"xrandr --scale-from 320x240" or "xrandr --scale-from 384x288". Other (non-X)
+applications would need to be adapted to similarly configure DRM scaling.
+
+I'm not sure if Maxime wants to introduce any more code like the patch above to
+facilitate progressive scan support, though (@Maxime: feel free to grab the code
+from above or anything else from https://github.com/raspberrypi/linux/pull/4406
+if you do, however!). We talked recently that the priority is to finally merge
+existing functionality first, see this message:
+https://lore.kernel.org/dri-devel/20221027115822.5vd3fqlcpy4gfq5v@houat/
+
+I'm willing to post a couple of follow-up patches to improve things like
+support for progressive modes or exotic TV norms (such as PAL-M-50 or PAL-N-60)
+within the VC4 driver once this patchset lands - but I agree with Maxime's point
+to focus on merging existing functionality first.
+
+> Lukas
+
+Best regards,
+Mateusz Kwiatkowski
+
+> On Mon, Nov 7, 2022 at 3:19 PM Maxime Ripard <maxime@cerno.tech> wrote:
+>
+>     From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+>
+>     Add support for the following composite output modes (all of them are
+>     somewhat more obscure than the previously defined ones):
+>
+>     - NTSC_443 - NTSC-style signal with the chroma subcarrier shifted to
+>       4.43361875 MHz (the PAL subcarrier frequency). Never used for
+>       broadcasting, but sometimes used as a hack to play NTSC content in PAL
+>       regions (e.g. on VCRs).
+>     - PAL_N - PAL with alternative chroma subcarrier frequency,
+>       3.58205625 MHz. Used as a broadcast standard in Argentina, Paraguay
+>       and Uruguay to fit 576i50 with colour in 6 MHz channel raster.
+>     - PAL60 - 480i60 signal with PAL-style color at normal European PAL
+>       frequency. Another non-standard, non-broadcast mode, used in similar
+>       contexts as NTSC_443. Some displays support one but not the other.
+>     - SECAM - French frequency-modulated analog color standard; also have
+>       been broadcast in Eastern Europe and various parts of Africa and Asia.
+>       Uses the same 576i50 timings as PAL.
+>
+>     Also added some comments explaining color subcarrier frequency
+>     registers.
+>
+>     Acked-by: Noralf Trønnes <noralf@tronnes.org>
+>     Signed-off-by: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+>     Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>
+>     ---
+>     Changes in v6:
+>     - Support PAL60 again
+>     ---
+>      drivers/gpu/drm/vc4/vc4_vec.c | 111 ++++++++++++++++++++++++++++++++++++++++--
+>      1 file changed, 107 insertions(+), 4 deletions(-)
+>
+>     diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
+>     index a828fc6fb776..d23dbad3cbf6 100644
+>     --- a/drivers/gpu/drm/vc4/vc4_vec.c
+>     +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+>     @@ -46,6 +46,7 @@
+>      #define VEC_CONFIG0_YDEL(x)            ((x) << 26)
+>      #define VEC_CONFIG0_CDEL_MASK          GENMASK(25, 24)
+>      #define VEC_CONFIG0_CDEL(x)            ((x) << 24)
+>     +#define VEC_CONFIG0_SECAM_STD          BIT(21)
+>      #define VEC_CONFIG0_PBPR_FIL           BIT(18)
+>      #define VEC_CONFIG0_CHROMA_GAIN_MASK   GENMASK(17, 16)
+>      #define VEC_CONFIG0_CHROMA_GAIN_UNITY  (0 << 16)
+>     @@ -76,6 +77,27 @@
+>      #define VEC_SOFT_RESET                 0x10c
+>      #define VEC_CLMP0_START                        0x144
+>      #define VEC_CLMP0_END                  0x148
+>     +
+>     +/*
+>     + * These set the color subcarrier frequency
+>     + * if VEC_CONFIG1_CUSTOM_FREQ is enabled.
+>     + *
+>     + * VEC_FREQ1_0 contains the most significant 16-bit half-word,
+>     + * VEC_FREQ3_2 contains the least significant 16-bit half-word.
+>     + * 0x80000000 seems to be equivalent to the pixel clock
+>     + * (which itself is the VEC clock divided by 8).
+>     + *
+>     + * Reference values (with the default pixel clock of 13.5 MHz):
+>     + *
+>     + * NTSC  (3579545.[45] Hz)     - 0x21F07C1F
+>     + * PAL   (4433618.75 Hz)       - 0x2A098ACB
+>     + * PAL-M (3575611.[888111] Hz) - 0x21E6EFE3
+>     + * PAL-N (3582056.25 Hz)       - 0x21F69446
+>     + *
+>     + * NOTE: For SECAM, it is used as the Dr center frequency,
+>     + * regardless of whether VEC_CONFIG1_CUSTOM_FREQ is enabled or not;
+>     + * that is specified as 4406250 Hz, which corresponds to 0x29C71C72.
+>     + */
+>      #define VEC_FREQ3_2                    0x180
+>      #define VEC_FREQ1_0                    0x184
+>
+>     @@ -118,6 +140,14 @@
+>
+>      #define VEC_INTERRUPT_CONTROL          0x190
+>      #define VEC_INTERRUPT_STATUS           0x194
+>     +
+>     +/*
+>     + * Db center frequency for SECAM; the clock for this is the same as for
+>     + * VEC_FREQ3_2/VEC_FREQ1_0, which is used for Dr center frequency.
+>     + *
+>     + * This is specified as 4250000 Hz, which corresponds to 0x284BDA13.
+>     + * That is also the default value, so no need to set it explicitly.
+>     + */
+>      #define VEC_FCW_SECAM_B                        0x198
+>      #define VEC_SECAM_GAIN_VAL             0x19c
+>
+>     @@ -197,10 +227,15 @@ enum vc4_vec_tv_mode_id {
+>             VC4_VEC_TV_MODE_NTSC_J,
+>             VC4_VEC_TV_MODE_PAL,
+>             VC4_VEC_TV_MODE_PAL_M,
+>     +       VC4_VEC_TV_MODE_NTSC_443,
+>     +       VC4_VEC_TV_MODE_PAL_60,
+>     +       VC4_VEC_TV_MODE_PAL_N,
+>     +       VC4_VEC_TV_MODE_SECAM,
+>      };
+>
+>      struct vc4_vec_tv_mode {
+>             unsigned int mode;
+>     +       u16 expected_htotal;
+>             u32 config0;
+>             u32 config1;
+>             u32 custom_freq;
+>     @@ -236,35 +271,68 @@ static const struct debugfs_reg32 vec_regs[] = {
+>      static const struct vc4_vec_tv_mode vc4_vec_tv_modes[] = {
+>             {
+>                     .mode = DRM_MODE_TV_MODE_NTSC,
+>     +               .expected_htotal = 858,
+>                     .config0 = VEC_CONFIG0_NTSC_STD | VEC_CONFIG0_PDEN,
+>                     .config1 = VEC_CONFIG1_C_CVBS_CVBS,
+>             },
+>     +       {
+>     +               .mode = DRM_MODE_TV_MODE_NTSC_443,
+>     +               .expected_htotal = 858,
+>     +               .config0 = VEC_CONFIG0_NTSC_STD,
+>     +               .config1 = VEC_CONFIG1_C_CVBS_CVBS | VEC_CONFIG1_CUSTOM_FREQ,
+>     +               .custom_freq = 0x2a098acb,
+>     +       },
+>             {
+>                     .mode = DRM_MODE_TV_MODE_NTSC_J,
+>     +               .expected_htotal = 858,
+>                     .config0 = VEC_CONFIG0_NTSC_STD,
+>                     .config1 = VEC_CONFIG1_C_CVBS_CVBS,
+>             },
+>             {
+>                     .mode = DRM_MODE_TV_MODE_PAL,
+>     +               .expected_htotal = 864,
+>                     .config0 = VEC_CONFIG0_PAL_BDGHI_STD,
+>                     .config1 = VEC_CONFIG1_C_CVBS_CVBS,
+>             },
+>     +       {
+>     +               /* PAL-60 */
+>     +               .mode = DRM_MODE_TV_MODE_PAL,
+>     +               .expected_htotal = 858,
+>     +               .config0 = VEC_CONFIG0_PAL_M_STD,
+>     +               .config1 = VEC_CONFIG1_C_CVBS_CVBS | VEC_CONFIG1_CUSTOM_FREQ,
+>     +               .custom_freq = 0x2a098acb,
+>     +       },
+>             {
+>                     .mode = DRM_MODE_TV_MODE_PAL_M,
+>     +               .expected_htotal = 858,
+>                     .config0 = VEC_CONFIG0_PAL_M_STD,
+>                     .config1 = VEC_CONFIG1_C_CVBS_CVBS,
+>             },
+>     +       {
+>     +               .mode = DRM_MODE_TV_MODE_PAL_N,
+>     +               .expected_htotal = 864,
+>     +               .config0 = VEC_CONFIG0_PAL_N_STD,
+>     +               .config1 = VEC_CONFIG1_C_CVBS_CVBS,
+>     +       },
+>     +       {
+>     +               .mode = DRM_MODE_TV_MODE_SECAM,
+>     +               .expected_htotal = 864,
+>     +               .config0 = VEC_CONFIG0_SECAM_STD,
+>     +               .config1 = VEC_CONFIG1_C_CVBS_CVBS,
+>     +               .custom_freq = 0x29c71c72,
+>     +       },
+>      };
+>
+>      static inline const struct vc4_vec_tv_mode *
+>     -vc4_vec_tv_mode_lookup(unsigned int mode)
+>     +vc4_vec_tv_mode_lookup(unsigned int mode, u16 htotal)
+>      {
+>             unsigned int i;
+>
+>             for (i = 0; i < ARRAY_SIZE(vc4_vec_tv_modes); i++) {
+>                     const struct vc4_vec_tv_mode *tv_mode = &vc4_vec_tv_modes[i];
+>
+>     -               if (tv_mode->mode == mode)
+>     +               if (tv_mode->mode == mode &&
+>     +                   tv_mode->expected_htotal == htotal)
+>                             return tv_mode;
+>             }
+>
+>     @@ -273,9 +341,13 @@ vc4_vec_tv_mode_lookup(unsigned int mode)
+>
+>      static const struct drm_prop_enum_list legacy_tv_mode_names[] = {
+>             { VC4_VEC_TV_MODE_NTSC, "NTSC", },
+>     +       { VC4_VEC_TV_MODE_NTSC_443, "NTSC-443", },
+>             { VC4_VEC_TV_MODE_NTSC_J, "NTSC-J", },
+>             { VC4_VEC_TV_MODE_PAL, "PAL", },
+>     +       { VC4_VEC_TV_MODE_PAL_60, "PAL-60", },
+>             { VC4_VEC_TV_MODE_PAL_M, "PAL-M", },
+>     +       { VC4_VEC_TV_MODE_PAL_N, "PAL-N", },
+>     +       { VC4_VEC_TV_MODE_SECAM, "SECAM", },
+>      };
+>
+>      static enum drm_connector_status
+>     @@ -306,11 +378,16 @@ vc4_vec_connector_set_property(struct drm_connector *connector,
+>                     state->tv.mode = DRM_MODE_TV_MODE_NTSC;
+>                     break;
+>
+>     +       case VC4_VEC_TV_MODE_NTSC_443:
+>     +               state->tv.mode = DRM_MODE_TV_MODE_NTSC_443;
+>     +               break;
+>     +
+>             case VC4_VEC_TV_MODE_NTSC_J:
+>                     state->tv.mode = DRM_MODE_TV_MODE_NTSC_J;
+>                     break;
+>
+>             case VC4_VEC_TV_MODE_PAL:
+>     +       case VC4_VEC_TV_MODE_PAL_60:
+>                     state->tv.mode = DRM_MODE_TV_MODE_PAL;
+>                     break;
+>
+>     @@ -318,6 +395,14 @@ vc4_vec_connector_set_property(struct drm_connector *connector,
+>                     state->tv.mode = DRM_MODE_TV_MODE_PAL_M;
+>                     break;
+>
+>     +       case VC4_VEC_TV_MODE_PAL_N:
+>     +               state->tv.mode = DRM_MODE_TV_MODE_PAL_N;
+>     +               break;
+>     +
+>     +       case VC4_VEC_TV_MODE_SECAM:
+>     +               state->tv.mode = DRM_MODE_TV_MODE_SECAM;
+>     +               break;
+>     +
+>             default:
+>                     return -EINVAL;
+>             }
+>     @@ -341,6 +426,10 @@ vc4_vec_connector_get_property(struct drm_connector *connector,
+>                     *val = VC4_VEC_TV_MODE_NTSC;
+>                     break;
+>
+>     +       case DRM_MODE_TV_MODE_NTSC_443:
+>     +               *val = VC4_VEC_TV_MODE_NTSC_443;
+>     +               break;
+>     +
+>             case DRM_MODE_TV_MODE_NTSC_J:
+>                     *val = VC4_VEC_TV_MODE_NTSC_J;
+>                     break;
+>     @@ -353,6 +442,14 @@ vc4_vec_connector_get_property(struct drm_connector *connector,
+>                     *val = VC4_VEC_TV_MODE_PAL_M;
+>                     break;
+>
+>     +       case DRM_MODE_TV_MODE_PAL_N:
+>     +               *val = VC4_VEC_TV_MODE_PAL_N;
+>     +               break;
+>     +
+>     +       case DRM_MODE_TV_MODE_SECAM:
+>     +               *val = VC4_VEC_TV_MODE_SECAM;
+>     +               break;
+>     +
+>             default:
+>                     return -EINVAL;
+>             }
+>     @@ -448,13 +545,16 @@ static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
+>             struct drm_connector *connector = &vec->connector;
+>             struct drm_connector_state *conn_state =
+>                     drm_atomic_get_new_connector_state(state, connector);
+>     +       struct drm_display_mode *adjusted_mode =
+>     +               &encoder->crtc->state->adjusted_mode;
+>             const struct vc4_vec_tv_mode *tv_mode;
+>             int idx, ret;
+>
+>             if (!drm_dev_enter(drm, &idx))
+>                     return;
+>
+>     -       tv_mode = vc4_vec_tv_mode_lookup(conn_state->tv.mode);
+>     +       tv_mode = vc4_vec_tv_mode_lookup(conn_state->tv.mode,
+>     +                                        adjusted_mode->htotal);
+>             if (!tv_mode)
+>                     goto err_dev_exit;
+>
+>     @@ -648,9 +748,12 @@ static int vc4_vec_bind(struct device *dev, struct device *master, void *data)
+>
+>             ret = drm_mode_create_tv_properties(drm,
+>                                                 BIT(DRM_MODE_TV_MODE_NTSC) |
+>     +                                           BIT(DRM_MODE_TV_MODE_NTSC_443) |
+>                                                 BIT(DRM_MODE_TV_MODE_NTSC_J) |
+>                                                 BIT(DRM_MODE_TV_MODE_PAL) |
+>     -                                           BIT(DRM_MODE_TV_MODE_PAL_M));
+>     +                                           BIT(DRM_MODE_TV_MODE_PAL_M) |
+>     +                                           BIT(DRM_MODE_TV_MODE_PAL_N) |
+>     +                                           BIT(DRM_MODE_TV_MODE_SECAM));
+>             if (ret)
+>                     return ret;
+>
+>
+>     -- 
+>     b4 0.11.0-dev-99e3a 
+>
+
