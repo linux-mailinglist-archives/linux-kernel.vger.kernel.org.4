@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2E26217A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575566217AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbiKHPG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S234291AbiKHPIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233326AbiKHPGu (ORCPT
+        with ESMTP id S233326AbiKHPH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:06:50 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720EA1834F;
-        Tue,  8 Nov 2022 07:06:49 -0800 (PST)
-Date:   Tue, 08 Nov 2022 15:06:46 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667920007;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6nn2+6QPtNaSW1pyOCLfhVc5vN3vLiQaT1ZZLVJu6dY=;
-        b=odL9q5P5vQozLA/599EkB1XV7eltdBGo12zdaK1ho1phd/luifBUzobFGVFWPFAsC05lP8
-        c39WxfmJr2M9z6zHlXaJE0q/cQ4LAditpPvPuNHvZxorGwktfv+zSvUkh4Spry3DE8yuyI
-        i2uSirhe5rC5rO59srWWy3HsGtrxsnlaHBKp8A7raC/8bgqGHZfLturZdAnmsb5OT4gChZ
-        fFVQEABFUyMhK9zVVG9QlF/z3wDte6jaP5PDUrCb2wWT/HYM6hfd3Sz3+pIH4L3zNIS0kL
-        VRRz/Dg6MSD9Xzfg/wwAx2KoFv2JRc6OZImyY5lOMYiwOxfc3QpPTju52T3lVg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667920007;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6nn2+6QPtNaSW1pyOCLfhVc5vN3vLiQaT1ZZLVJu6dY=;
-        b=ai4bjf55eLxTVMxxZnI+YGYzya/laqIeAeUZYfFZjPyTAqAoglMqH5OVr07bbkUWky65eI
-        c0Kb6NHmkQfYZDBQ==
-From:   "tip-bot2 for Cole Robinson" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] virt/sev-guest: Add a MODULE_ALIAS
-Cc:     Cole Robinson <crobinso@redhat.com>, Borislav Petkov <bp@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <ff480c5e688eb0a72a4db0a29c7b1bb54c45bfd4.1667594253.git.crobinso@redhat.com>
-References: <ff480c5e688eb0a72a4db0a29c7b1bb54c45bfd4.1667594253.git.crobinso@redhat.com>
+        Tue, 8 Nov 2022 10:07:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469015802D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:07:55 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1osQCM-0000UE-Cj; Tue, 08 Nov 2022 16:07:34 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1osQCJ-0034pj-Oe; Tue, 08 Nov 2022 16:07:32 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1osQCJ-00FCdk-Qe; Tue, 08 Nov 2022 16:07:31 +0100
+Date:   Tue, 8 Nov 2022 16:07:31 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 2/6] pwm: lpss: Rename MAX_PWMS --> LPSS_MAX_PWMS
+Message-ID: <20221108150731.obmwkiepwcewtdqm@pengutronix.de>
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+ <20221108142226.63161-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <166792000609.4906.10929281276330288769.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dsjwetekhvvdedgm"
+Content-Disposition: inline
+In-Reply-To: <20221108142226.63161-3-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     2874529b3513bdc90299c90f40713602da685e35
-Gitweb:        https://git.kernel.org/tip/2874529b3513bdc90299c90f40713602da685e35
-Author:        Cole Robinson <crobinso@redhat.com>
-AuthorDate:    Fri, 04 Nov 2022 16:42:45 -04:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 08 Nov 2022 15:54:34 +01:00
+--dsjwetekhvvdedgm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-virt/sev-guest: Add a MODULE_ALIAS
+On Tue, Nov 08, 2022 at 04:22:22PM +0200, Andy Shevchenko wrote:
+> The MAX_PWMS definition is already being used by PWM core.
+> Using the same name in the certain driver confuses people
+> and potentially can clash with it.
+>=20
+> Hence, rename it by adding LPSS prefix.
+>=20
+> Reported-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Autoload the driver when, for example, SNP init code creates the
-corresponding platform device.
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-  [ bp: Rewrite commit message. ]
+Thanks
+Uwe
 
-Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
-Signed-off-by: Cole Robinson <crobinso@redhat.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lore.kernel.org/r/ff480c5e688eb0a72a4db0a29c7b1bb54c45bfd4.1667594253.git.crobinso@redhat.com
----
- drivers/virt/coco/sev-guest/sev-guest.c | 1 +
- 1 file changed, 1 insertion(+)
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index e9704ae..13911b9 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -742,3 +742,4 @@ MODULE_AUTHOR("Brijesh Singh <brijesh.singh@amd.com>");
- MODULE_LICENSE("GPL");
- MODULE_VERSION("1.0.0");
- MODULE_DESCRIPTION("AMD SEV Guest Driver");
-+MODULE_ALIAS("platform:sev-guest");
+--dsjwetekhvvdedgm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNqcLAACgkQwfwUeK3K
+7AmxHgf+JkfoFFD1fhwIOpede6fH0CofrcKC1M3kPM29kliA/+/VD/S2mT6PRIAO
+AaysKqJp8Ha0mXBUYfsUXEQ17OCnveP1GgiFjqGzmhQFmqWvetqCQKYWM4LAK1SC
+kxHpVHdaDH4ILScJ5J0JanOaSoQuOZA2CvXE9P+kzzANaK8/4UbCCkyak3wPkic8
+qhAIxTBDPyUsMWqegzrl9L5PAmTwCTtbiOAtll5SsQ5WJA8/Qku/hnd9aKgbW21P
+jCp8tyAWE26h+pmdpsikVnhpw2/C6uQwNavlS/mXKGXM7abOUPvJAh3cYbwWMydc
++nO5SetlhLGYHHFIJdD76C0+UY7Lwg==
+=dmFr
+-----END PGP SIGNATURE-----
+
+--dsjwetekhvvdedgm--
