@@ -2,92 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABE9620C78
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FFA620C83
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233830AbiKHJke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
+        id S233436AbiKHJll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233767AbiKHJk2 (ORCPT
+        with ESMTP id S233728AbiKHJlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:40:28 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C82727900;
-        Tue,  8 Nov 2022 01:40:22 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id r14so21569341edc.7;
-        Tue, 08 Nov 2022 01:40:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6R2u+4ncSx8KluFMuPj2ehi9rZ//rxoPRpAs8tI9poY=;
-        b=Fnn44XdkufgkSSnM4GLF7F4kNg8m/N+jGANKbUq2WAeEQ7iLvra2UN1+f0e8nLnC6e
-         gYz1xNnUUJaZtY0nTH2M5LgFsJwj/6bh2xhRT3qYbkwZHRv3CJ76Cao3yhUDDDR4QuyK
-         1Gbq4L4pmDznRj/9KTV4z52/0+s3RV1iBnGudg8WXAJAtz6a/7JOxUaWsYg9prNphWih
-         cR1gP8aQF6xu0jTpTHjhRSB+goaCNvk4K1A/HHpzyKCTuyR1RxypYFw9t8XQYZpuiaeY
-         nzXeWiRGQU8DnwhmzKN9D5blcKfqEQ8NctWarfkSXleA17D6rW76gj1flLM9A9rUdEzs
-         hu+w==
+        Tue, 8 Nov 2022 04:41:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8D827176
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:40:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667900428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lW38e6pXJ1acSlo/JcbNSc5AQG/ffLUgHR8IViSMTS4=;
+        b=UA8+oXJC+IW9OLSaXL9eq6ACo1uKgTXMGDp8u7oC1Eb0QB22A1MviLU6Azrm3pS2KZC++b
+        W7rYPAu3vFu2/B4ilK3kQ08oBrOwkpk6r3vu40vEjTj4jkcJ5EaV/Pzryqx+XXCcDMVBZv
+        7jvykvQekgcak06736A8bjvr1uY+kdo=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-363-Rd2odrCTOpKyWgbqDGWvxw-1; Tue, 08 Nov 2022 04:40:26 -0500
+X-MC-Unique: Rd2odrCTOpKyWgbqDGWvxw-1
+Received: by mail-wr1-f69.google.com with SMTP id r22-20020adfa156000000b0023660e969ddso3777010wrr.19
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:40:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6R2u+4ncSx8KluFMuPj2ehi9rZ//rxoPRpAs8tI9poY=;
-        b=G+f8FQ0zrRAJps2ZJVBw8QnpJL7iKlGWIvP9yPRFuVRL/fJa3wLTDqkojj+nZfHXTn
-         O5+8h6/JOkDiF8YX7yCLKN5ls4JCz/C/Z27Omlm3lGb5GSPw9KRR7TbLYI8T2UJh4CJC
-         gyHrp1drj93sMbvXddUMYFgHWhkzg9egdzJGJ+fCNGL99VGd2pIFrHOtcAzKgWS0h250
-         AjxmTsTW8KU7vENena/IWFzp3cdSeu3G4+MWuoVyO6CphapzY2NvZhmEMDrjIsUInjdf
-         FT0S0CmVLQPbmzToS7Atqz4yNp+aPyG6dvhCqBKgMU/emC7XXDu7f74jdykH55T4NrUe
-         4/hw==
-X-Gm-Message-State: ANoB5plmOYsFxCrBIpxCduNiecOdLNwo6sXMOmCKiKNQ1KA4mYbFlDzO
-        cHgGpYracCL5mK+5fK7ttc4CZCZdkaxF+w==
-X-Google-Smtp-Source: AA0mqf7femjNdGyEnapokREP6cqG8YFp2Vsz0oKrp/hKd997QAkd5iA8xAGiLc/EhnFHTq4mjynVzw==
-X-Received: by 2002:a05:6402:27d2:b0:462:8e41:569c with SMTP id c18-20020a05640227d200b004628e41569cmr13648250ede.191.1667900420657;
-        Tue, 08 Nov 2022 01:40:20 -0800 (PST)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id hg11-20020a1709072ccb00b007a8de84ce36sm4392806ejc.206.2022.11.08.01.40.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 01:40:20 -0800 (PST)
-Date:   Tue, 8 Nov 2022 11:40:18 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/14] net: vlan: remove invalid VLAN protocol warning
-Message-ID: <20221108094018.6cspe3mkh3hakxpd@skbuf>
-References: <20221107185452.90711-1-nbd@nbd.name>
- <20221107185452.90711-8-nbd@nbd.name>
- <20221107215745.ascdvnxqrbw4meuv@skbuf>
- <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
- <20221108090039.imamht5iyh2bbbnl@skbuf>
- <0948d841-b0eb-8281-455a-92f44586e0c0@nbd.name>
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lW38e6pXJ1acSlo/JcbNSc5AQG/ffLUgHR8IViSMTS4=;
+        b=0Ud+UTLsLfTiQPck8FI2767TpjU5d4wL9P+UWUk+JYiiI5DXl3TqBfLxXqT0WxaDPe
+         BT2PXGVe5gX+1FAHvhBsRMzCiWskXVLz3eOIZOQvCZuPWnEgSAhe170ceyCzg9bFPlg2
+         AWIvDt7/GgvnRSnX8UpJuEne5xmDDqINYLbUcmqR+b5unmuCJ/KSy2FNq/DUAz5gnt1j
+         gtoundxHN24HhHypmQw9Azw9ZaXcpRW8eDBQXVEw4/gm43+MPuv5dduj4R0PX4vs8ejW
+         wwYZRcjDVLXg6A1MJNtYxFufH6HhbTB+onFiz/ZyKEyP42AR4bz51bniqIlMHfKkZZ3J
+         9mzg==
+X-Gm-Message-State: ACrzQf0Fu4Wln+5Xg/MommbvpzoYjETCLvWJEdkv+RMwFMPBGGaxQz5B
+        8hjzktcMJa/gR8TYQkHWjQ3Ee+4H+12248+fQV9KNuROLYyHSK9BetfOS/gyd3ikscPOZUpkHqP
+        xaSITrNDDsgqbUPPuZ3RWhsR3
+X-Received: by 2002:a05:600c:54ca:b0:3cf:8e5d:7146 with SMTP id iw10-20020a05600c54ca00b003cf8e5d7146mr18675276wmb.191.1667900425631;
+        Tue, 08 Nov 2022 01:40:25 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5cH9tWJ/7f+h1bsvSFgTQP1m4PENc1Ye2cP0NqhUl7fQavJfxFFKESh5AiG6/w6GmkhSUyjQ==
+X-Received: by 2002:a05:600c:54ca:b0:3cf:8e5d:7146 with SMTP id iw10-20020a05600c54ca00b003cf8e5d7146mr18675241wmb.191.1667900425279;
+        Tue, 08 Nov 2022 01:40:25 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:db00:6510:da8d:df40:abbb? (p200300cbc708db006510da8ddf40abbb.dip0.t-ipconnect.de. [2003:cb:c708:db00:6510:da8d:df40:abbb])
+        by smtp.gmail.com with ESMTPSA id bu12-20020a056000078c00b0023655e51c33sm10027356wrb.4.2022.11.08.01.40.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 01:40:24 -0800 (PST)
+Message-ID: <040542e7-7d1c-4f25-b1ed-459f3c165283@redhat.com>
+Date:   Tue, 8 Nov 2022 10:40:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0948d841-b0eb-8281-455a-92f44586e0c0@nbd.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Content-Language: en-US
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221107161740.144456-1-david@redhat.com>
+ <20221107161740.144456-17-david@redhat.com>
+ <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC 16/19] mm/frame-vector: remove FOLL_FORCE usage
+In-Reply-To: <CAAFQd5C3Ba1WhjYJF_7tW06mgvzoz9KTakNo+Tz8h_f6dGKzHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 10:20:44AM +0100, Felix Fietkau wrote:
-> I need to look into how METADATA_HW_PORT_MUX works, but I think it could
-> work.
+On 08.11.22 05:45, Tomasz Figa wrote:
+> Hi David,
 
-Could you please coordinate with Maxime to come up with something
-common? Currently he proposes a generic "oob" tagger, while you propose
-that we stay with the "mtk"/"qca" taggers, but they are taught to look
-after offloaded metadata rather than in the packet. IMO your proposal
-sounds better; the name of the tagging protocol is already exposed to
-user space via /sys/class/net/<dsa-master>/dsa/tagging and therefore ABI.
-It's just that we need a way to figure out how to make the flow
-dissector and other layers not adjust for DSA header length if the DSA
-tag is offloaded and not present in the packet.
+Hi Tomasz,
+
+thanks for looking into this!
+
+> 
+> On Tue, Nov 8, 2022 at 1:19 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> FOLL_FORCE is really only for debugger access. According to commit
+>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>> writable"), the pinned pages are always writable.
+> 
+
+As reference, the cover letter of the series:
+
+https://lkml.kernel.org/r/20221107161740.144456-1-david@redhat.com
+
+> Actually that patch is only a workaround to temporarily disable
+> support for read-only pages as they seemed to suffer from some
+> corruption issues in the retrieved user pages. We expect to support
+> read-only pages as hardware input after. That said, FOLL_FORCE doesn't
+> sound like the right thing even in that case, but I don't know the
+> background behind it being added here in the first place. +Hans
+> Verkuil +Marek Szyprowski do you happen to remember anything about it?
+
+Maybe I mis-interpreted 707947247e95; re-reading it again, I am not 
+quite sure what the actual problem is and how it relates to GUP 
+FOLL_WRITE handling. FOLL_FORCE already was in place before 707947247e95 
+and should be removed.
+
+What I understood is "Just always call vb2_create_framevec() with 
+FOLL_WRITE to always allow writing to the buffers.".
+
+
+If the pinned page is never written to via the obtained GUP reference:
+* FOLL_WRITE should not be set
+* FOLL_FORCE should not be set
+* We should not dirty the page when unpinning
+
+If the pinned page may be written to via the obtained GUP reference:
+* FOLL_WRITE should be set
+* FOLL_FORCE should not be set
+* We should dirty the page when unpinning
+
+
+If the function is called for both, we should think about doing it 
+conditional based on a "write" variable, like pre-707947247e95 did.
+
+@Hans, any insight?
+
+-- 
+Thanks,
+
+David / dhildenb
+
