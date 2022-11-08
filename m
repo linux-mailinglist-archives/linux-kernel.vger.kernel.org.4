@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A28A621CD8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:18:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A6B621CA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiKHTSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 14:18:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S229689AbiKHTDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 14:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKHTSN (ORCPT
+        with ESMTP id S229607AbiKHTC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 14:18:13 -0500
-X-Greylist: delayed 1826 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Nov 2022 11:18:13 PST
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F30C67F5F;
-        Tue,  8 Nov 2022 11:18:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=8LLwr9lg+hA/QOowh3EjKMaaNzsCxbGFre4zlBG4jUM=; b=VSpqWfZI3/zAHSlCytnw/7m+SF
-        DYAZHNiPj1TOjB/6rz1oYsc2j9IPCbVw9+B7F082xn3AKUyy8VWVUk23G0RW+RHXv1j5JdZWcASF9
-        mcFYkJh6Ka33O3Hk+kfKuICSQcy3MntCZ1cpyrAQXPlYpGeQqe2AHC44m/YUw92pOyTR/FPpyAub5
-        O+0xbyNDZk/gUpddaL9TA5H+4t9FYBPkYheSI3REfmFYiTF8hKAJcqnclrHFahGSJuKALxZhoFk5S
-        VON8D00MEI/RyIT/AjcoXRrFyJCmOPkrkngbvBADgSodbGySBW0GbIr3rsJyrKG7yVmRRhteoilW8
-        zuW6oEcA==;
-Received: from p200300ccff1252001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff12:5200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1osTdQ-0006ZU-AE; Tue, 08 Nov 2022 19:47:44 +0100
-Date:   Tue, 8 Nov 2022 19:47:42 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Mark Jackson <mpfj@newflow.co.uk>
-Cc:     linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        tony@atomide.com
-Subject: Re: [PATCH] Update Nanobone
-Message-ID: <20221108194742.0d9340f4@aktux>
-In-Reply-To: <CAAbcLfiCoa=-20cydPG9=42G9npaeBOCRXPPPTwkNFU-3yGoCg@mail.gmail.com>
-References: <20221004143901.130935-1-mpfj@newflow.co.uk>
-        <CAAbcLfiCoa=-20cydPG9=42G9npaeBOCRXPPPTwkNFU-3yGoCg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 8 Nov 2022 14:02:58 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFC37832B;
+        Tue,  8 Nov 2022 11:02:57 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id 8so9686275qka.1;
+        Tue, 08 Nov 2022 11:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3KG5HTwbUWnHIh1/xSLWqezCx1gVcj4ogrO0fVWY3+c=;
+        b=YNGhzolnYHsjbIqKphzgb1s6nsxsgBM112eytFZL3/uZxCD8uc0kBgp0raeP0ueDJS
+         HP4uZC+H99k6T1HILl0955Su4Lb9c8ZhhiLwNQons+o4JNcdER384aVrzWFhQX4W/kMA
+         Ao1DJS4iD1YLhemCCJfi9M8w2gOuFymxiJeeNaZmjlIDD3cxUIWMHAxi3XBNAgfDc/ud
+         aj4KSH0kC1wEfKrG6YC5EohJSdldUl84t+RbjE6DOQmiMMuWcerxk6bANlaFlitjZ83Y
+         klTrwOKpyVzdE3zaTbHmwlIZ4O4eZghZ+MWc2Rb4BwZ2EbT9Wr+6w9gc9hNzshpmKz/d
+         TOZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3KG5HTwbUWnHIh1/xSLWqezCx1gVcj4ogrO0fVWY3+c=;
+        b=Q5iOVFu31TepCfmpQ+T0AGx5xuF99GVWBMwXsYtMl24NTUymoTvo0ttMrMLAbIJ3K0
+         PFSsmfWl7G4Z4ffxzFzIMYA53qv9bNtvmO/TgX4vUOMZPDCp5HNMemHYRpmxOUWamP8B
+         2+lnxDXRJCI5TUEEfCzNw9EEae+wLX4ReYpEjm2zRHpc26Xf10mOXWeWSIkWtB69yQo6
+         Rw8LV6vciDoN9yav9BRQn/1ry6th5kgujlqVmx4kpFKk6mg35sn2Zwot1NJwn3XBrvZZ
+         fFkpASshidAkSET6lANJoAnhTeVKRZVVDEwKw2p55bSPgP8G/2J0Qb+BMyGeisEIsFy9
+         4Ohw==
+X-Gm-Message-State: ACrzQf31DgYnjMcZ9kvGDXicAsbj9oJDosdlJqCSIrghaKYYctf3Uy5h
+        iKgYIHNthi/GNbpAjihXmhg=
+X-Google-Smtp-Source: AMsMyM7xP7cI78ex/eFm+5CJnRn70C4IZ1TJd562+dkXO/hXZs7nFClObcKZvjQfCHRISzXWQ54mAg==
+X-Received: by 2002:a05:620a:132e:b0:6fa:5082:f870 with SMTP id p14-20020a05620a132e00b006fa5082f870mr28354616qkj.391.1667934177028;
+        Tue, 08 Nov 2022 11:02:57 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id h4-20020ac846c4000000b00398a7c860c2sm8572295qto.4.2022.11.08.11.02.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 11:02:56 -0800 (PST)
+Message-ID: <33c89360-8f7d-469e-c365-c9c739b7b033@gmail.com>
+Date:   Tue, 8 Nov 2022 11:02:39 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.4 00/74] 5.4.224-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221108133333.659601604@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20221108133333.659601604@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, 8 Nov 2022 17:18:54 +0000
-Mark Jackson <mpfj@newflow.co.uk> wrote:
-
-> Any update on this patch ?
-> Did it ever get through ?
-
-it got probably caught in peoples "internal spam filter"
-reasons: 
- - bad subject line 
-     look at  git log arch/arm/boot/dts/am335x-nano.dts for sane values
- - bad recipient list
-     get_maintainer.pl is your friend
-
-Hmm, you already have contributed long time ago, it looks better:
-Author: Mark Jackson <mpfj-list@newflow.co.uk>
-Date:   Thu Dec 15 10:52:13 2016 +0000
-
-    ARM: dts: Update Nanobone dts file to add external FRAM chip
-
-That looks ok. But maybe reread the documentation/SubmittingPatches again
 
 
-Regards,
-Andreas
+On 11/8/2022 5:38 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.224 release.
+> There are 74 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.224-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
