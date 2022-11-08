@@ -2,135 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209EB621DF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9015621DF7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiKHUrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S229790AbiKHUrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKHUqm (ORCPT
+        with ESMTP id S229750AbiKHUqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:46:42 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF568C17;
-        Tue,  8 Nov 2022 12:46:37 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 07D0A1C09D7; Tue,  8 Nov 2022 21:46:36 +0100 (CET)
-Date:   Tue, 8 Nov 2022 21:46:35 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     sashal@kernel.org, Pavel Machek <pavel@denx.de>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 5.10 000/118] 5.10.154-rc1 review
-Message-ID: <Y2rAK1mD2n8wIMm2@duo.ucw.cz>
-References: <20221108133340.718216105@linuxfoundation.org>
- <Y2pxr88XE+XP6uNc@duo.ucw.cz>
- <Y2q0A/sbF65Z8UBs@kroah.com>
+        Tue, 8 Nov 2022 15:46:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594C72D2;
+        Tue,  8 Nov 2022 12:46:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC8536155B;
+        Tue,  8 Nov 2022 20:46:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E60BC433D6;
+        Tue,  8 Nov 2022 20:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667940403;
+        bh=BjPKZUugTJPY0ruKFTyaI8qh9SF7ES728az5Uo8cTjM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=GaU+h+CPbN402K23cbsNshlQpnujRxLQSBIrKb9P7mLFRfb553s36iumPJuPJLBxs
+         /Iiy7bKbSz2Mk4XmQY6xFjVXJgurSUtSVZ/cDMa77IEMk2gH5KK6p7HsLClAObhOX+
+         RVrxJ06QpdtSuFT1kJUfBM0JLUFfNFL2RM4qR0uPzJgyYMoi6eI4uzM3D1L2eNcIBD
+         3DDVlXlsmHB59ongahLOYbSQrnSUXAe3sPMG1MMYFKJoQPZS+eSD3Q6vpI/YoWrcxw
+         h83sCZCda7sH7phyFyF1fIYWFcvg3MOFbDhLNlYng4VAorGfUj45by2c2Tr+R09nrh
+         wMIBiXsul0GFA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B18145C1E8A; Tue,  8 Nov 2022 12:46:40 -0800 (PST)
+Date:   Tue, 8 Nov 2022 12:46:40 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Elliott <elliott@hpe.com>
+Subject: Re: [PATCH] rcu: Illustrate the stall information of
+ CONFIG_RCU_CPU_STALL_CPUTIME=y
+Message-ID: <20221108204640.GJ3907045@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221107152935.167-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="kR4JlILZHBvWLzQ/"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2q0A/sbF65Z8UBs@kroah.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221107152935.167-1-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 07, 2022 at 11:29:35PM +0800, Zhen Lei wrote:
+> Describes how to quickly determine the RCU stall fault type based on the
+> extra output information during CONFIG_RCU_CPU_STALL_CPUTIME=y.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
---kR4JlILZHBvWLzQ/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hearing no objections, I queued the following for further review.
 
-Hi!
+This commit might of course need to change based on your ongoing
+discussion with Robert.  I that case, please feel free to send me a
+replacment patch or to send me an incremental patch that I can fold into
+this patch.  Either way works.
 
-> > > This is the start of the stable review cycle for the 5.10.154 release.
-> > > There are 118 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> >=20
-> > I'm getting build errors with the dtbs:
-> >=20
-> > Error: arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:1296.24-25 syntax=
- error
-> > 10169FATAL ERROR: Unable to parse input tree
-> > 10170make[2]: *** [scripts/Makefile.lib:326: arch/arm64/boot/dts/freesc=
-ale/fsl-lx2160a-clearfog-cx.dtb] Error 1
-> > 10171make[2]: *** Waiting for unfinished jobs....
-> > 10172Error: arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:1296.24-25 s=
-yntax error
-> > 10173FATAL ERROR: Unable to parse input tree
-> > 10174make[2]: *** [scripts/Makefile.lib:326: arch/arm64/boot/dts/freesc=
-ale/fsl-lx2160a-honeycomb.dtb] Error 1
-> > 10175  DTC     arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2.d=
-tb
-> > 10176  DTC     arch/arm64/boot/dts/allwinner/sun50i-h5-bananapi-m2-plus=
--v1.2.dtb
-> > 10177  DTC     arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2-e=
-x.dtb
-> > 10178Error: arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:1296.24-25 s=
-yntax error
-> > 10179FATAL ERROR: Unable to parse input tree
-> > 10180make[2]: *** [scripts/Makefile.lib:326: arch/arm64/boot/dts/freesc=
-ale/fsl-lx2160a-qds.dtb] Error 1
-> > 10181  DTC     arch/arm64/boot/dts/amlogic/meson-gxbb-p200.dtb
-> > 10182
-> >=20
-> > https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/jobs/32=
-91098692
->=20
-> Odd.
->=20
-> Sasha, any ideas what went wrong here, but not in the other
-> branches?
+							Thanx, Paul
 
-I believe it is this commit:
+------------------------------------------------------------------------
 
- |4f9355148 c126a0 .: 5.10| arm64: dts: lx2160a: specify clock frequencies =
-for the MDIO controllers
+commit b05c2a06ff8a1267b7e8dc812e3944119535d6b6
+Author: Zhen Lei <thunder.leizhen@huawei.com>
+Date:   Mon Nov 7 23:29:35 2022 +0800
 
-pavel@duo:~/cip/krc$ grep -ri QORIQ_CLK_PLL_DIV .
-=2E/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:					    QORIQ_CLK_PLL_D=
-IV(2)>;
-=2E/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:					    QORIQ_CLK_PLL_D=
-IV(2)>;
-pavel@duo:~/cip/krc$=20
+    doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
+    
+    This commit doucments how to quickly determine the bug causing a given
+    RCU CPU stall fault warning based on the output information provided
+    by CONFIG_RCU_CPU_STALL_CPUTIME=y.
+    
+    [ paulmck: Apply wordsmithing. ]
+    
+    Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-The macro QORIQ_CLK_PLL_DIV is not defined in 5.10, so it confuses
-parser. I guess it should be dropped, or dependencies should be added.
-
-We need this:
-
-include/dt-bindings/clock/fsl,qoriq-clockgen.h:#define QORIQ_CLK_PLL_DIV(x)=
-     ((x) - 1)
-
-Which was added in commit 4cb15934ba05b49784d9d47778af308e7ea50b69 to
-mainline. That's not only dependency.=20
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---kR4JlILZHBvWLzQ/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY2rAKwAKCRAw5/Bqldv6
-8lCwAJ4iY5pw4oCr3KQV4Ui/dJJTjeZ59wCgkk/h8lWaC1qstBA0MMCZw+oOeIs=
-=lX56
------END PGP SIGNATURE-----
-
---kR4JlILZHBvWLzQ/--
+diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+index dfa4db8c0931e..bd8cf6c640984 100644
+--- a/Documentation/RCU/stallwarn.rst
++++ b/Documentation/RCU/stallwarn.rst
+@@ -390,3 +390,82 @@ for example, "P3421".
+ 
+ It is entirely possible to see stall warnings from normal and from
+ expedited grace periods at about the same time during the same run.
++
++RCU_CPU_STALL_CPUTIME
++=====================
++
++In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
++rcupdate.rcu_cpu_stall_cputime=1, the following additional information
++is supplied with each RCU CPU stall warning::
++
++rcu:          hardirqs   softirqs   csw/system
++rcu:  number:      624         45            0
++rcu: cputime:       69          1         2425   ==> 2500(ms)
++
++These statistics are collected during the second half of the rcu stall
++timeout. The values in row "number:" are the number of hard interrupts,
++number of soft interrupts, and number of context switches on the stalled
++CPU. The first three values in row "cputime:" indicate the CPU time in
++milliseconds consumed by hard interrupts, soft interrupts, and tasks
++on the stalled CPU.  The last number is the measurement interval, again
++in milliseconds.  Because user-mode tasks normally do not cause RCU CPU
++stalls, these tasks are typically kernel tasks, which is why only the
++system CPU time are considered.
++
++The following describes four typical scenarios:
++
++1. A CPU looping with interrupts disabled.::
++
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:        0          0            0
++   rcu: cputime:        0          0            0   ==> 2500(ms)
++
++   Because interrupts have been disabled throughout the measurement
++   interval, there are no interrupts and no context switches.
++   Furthermore, because CPU time consumption was measured using interrupt
++   handlers, the system CPU consumption is misleadingly measured as zero.
++   This scenario will normally also have "(0 ticks this GP)" printed on
++   this CPU's summary line.
++
++2. A CPU looping with bottom halves disabled.
++
++   This is similar to the previous example, but with non-zero number of
++   and CPU time consumed by hard interrupts, along with non-zero CPU
++   time consumed by in-kernel execution.::
++
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:      624          0            0
++   rcu: cputime:       49          0         2446   ==> 2500(ms)
++
++   The fact that there are zero softirqs gives a hint that these were
++   disabled, perhaps via local_bh_disable().  It is of course possible
++   that there were no softirqs, perhaps because all events that would
++   result in softirq execution are confined to other CPUs.  In this case,
++   the diagnosis should continue as shown in the next example.
++
++3. A CPU looping with preemption disabled.
++
++   Here, only the number of context switches is zero.::
++
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:      624         45            0
++   rcu: cputime:       69          1         2425   ==> 2500(ms)
++
++   This situation hints that the stalled CPU was looping with preemption
++   disabled.
++
++4. No looping, but massive hard and soft interrupts.::
++
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:       xx         xx            0
++   rcu: cputime:       xx         xx            0   ==> 2500(ms)
++
++   Here, the number and CPU time of hard interrupts are all non-zero,
++   but the number of context switches and the in-kernel CPU time consumed
++   are zero. The number and cputime of soft interrupts will usually be
++   non-zero, but could be zero, for example, if the CPU was spinning
++   within a single hard interrupt handler.
++
++   If this type of RCU CPU stall warning can be reproduced, you can
++   narrow it down by looking at /proc/interrupts or by writing code to
++   trace each interrupt, for example, by referring to show_interrupts().
