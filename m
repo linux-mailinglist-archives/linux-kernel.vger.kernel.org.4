@@ -2,111 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC5D620BA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B9C620BAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbiKHJAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S233425AbiKHJBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKHJAo (ORCPT
+        with ESMTP id S233413AbiKHJBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:00:44 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82671FD04;
-        Tue,  8 Nov 2022 01:00:43 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id x2so21432613edd.2;
-        Tue, 08 Nov 2022 01:00:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qqad13SKeURtqLzBBk2kO3txC+IAP/eZrITsK9q/+vM=;
-        b=Fyo6VKZFQCvyNKwJRr9u1BS9sxRBdiYwe4YcODvmtE+p8ZsS7RB/HbdAAwdL8JAb+s
-         nt1aESdu6rrhWskQlB7pxVWMVZVL8qx67qeKc9iCGhnN0vJquZx2AYFbWb3o5xU7zCGy
-         ncEuuWXw4523mIrYKX73Natdzn08Bz/I2xgFy8M9NNAN9rOcqupPgRGZerow6bqlUmwR
-         kEyC11F+2eCkIVoSvtoWf/0+xpaZ8z2a1JYSsYxFMMQirxwChSM/2ztTr5jO90dz+pJH
-         im+1bLc1CCyvW4Z4EymXPUw45Qu3n3u/I3Wv25HxRte3R/1wbz5xskKgsz89illO6g1/
-         il4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qqad13SKeURtqLzBBk2kO3txC+IAP/eZrITsK9q/+vM=;
-        b=bBJziHUYeDrNrLBBRl4HqUj7FJDqQD7y2T0SQeQL98dGPr8oXG6X+4qdhLmbBwaORa
-         1Xvr1oIX+Baa9OXCWHNdTezX6uSMKqGHhidoCvkx0WoKTa2OmCN2UQ/ZjG8qM/rsqB1N
-         dSlKX7secSTPAGd8JsMDzoirl5JMPM2P/PWTyH+pwKtoHrX+Xs27VgIFVH6iSWOLsYfA
-         NbNblWeOEMFMhg9sLQml35zoooJclcCs2mzJRiHxTqn97ONjZyONd6+RQFFlbK+r1f9g
-         6195Fu4yojmaenctlWyJa26sgcqCmlHmnTWSykv52sFwTdMhGSvsk7WfcTAu9VSo4xD3
-         yo7w==
-X-Gm-Message-State: ACrzQf1BT1sQ4cRn9ymc9AQWJWXw53DG1NSgp5/kBZliHrAtBEox2A4+
-        mKZeYzaawk4c3YIzC3N0+ds=
-X-Google-Smtp-Source: AMsMyM5fbz3Yar1FPlSiwEnrpZO0I/ObPDsunwBbAzz+bwhP5SMPbqSOgpd843grN3CwmQztGbN4aA==
-X-Received: by 2002:aa7:cd12:0:b0:463:69ac:a5d3 with SMTP id b18-20020aa7cd12000000b0046369aca5d3mr46793480edw.269.1667898041911;
-        Tue, 08 Nov 2022 01:00:41 -0800 (PST)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id f24-20020a056402069800b00458a03203b1sm5304486edy.31.2022.11.08.01.00.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 01:00:41 -0800 (PST)
-Date:   Tue, 8 Nov 2022 11:00:39 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/14] net: vlan: remove invalid VLAN protocol warning
-Message-ID: <20221108090039.imamht5iyh2bbbnl@skbuf>
-References: <20221107185452.90711-1-nbd@nbd.name>
- <20221107185452.90711-8-nbd@nbd.name>
- <20221107215745.ascdvnxqrbw4meuv@skbuf>
- <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
+        Tue, 8 Nov 2022 04:01:00 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5171EAC7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:00:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667898058; x=1699434058;
+  h=from:to:subject:in-reply-to:references:date:message-id:
+   mime-version;
+  bh=dqUc1q8prxlKmVN2pBzwuH9UNa0QagrT3ecK4s6e0aY=;
+  b=RMLJBAp3NA3dJsYlewSqTzwTybebK2hWK/Wbg1qkbWmuujUGTRyIl6G5
+   Pctqgs8pX3s5ETi8pKxTLZlV8+4F78br/QEh0Pj+RPXEEWexExy8dUbyi
+   PoGuqKe8LO28FPx+wUqLcyu3lU3y82/GHuhQpiVVlwyCkzatb7zb2TtWX
+   5oOaMy99fH8H9xDgj8myb3BumLow93BrIj3eiy03IMxBeY4Jb+238lE+6
+   Rr+v7vPw/+ClaW39nVtLTpAmGundjl7E8GnPKE9HUImg0H9flrknyp69/
+   mdJGepjm95jTxckWdd+wI2t1vliXyTqzJ0WQ4gb6pZb07kEgk4/UNnGH3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="294015689"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="294015689"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 01:00:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="881445112"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="881445112"
+Received: from smoriord-mobl.ger.corp.intel.com (HELO localhost) ([10.252.16.110])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 01:00:47 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Won Chung <wonchung@google.com>, wonchung@google.com,
+        bleung@google.com, pmalani@chromium.org,
+        heikki.krogerus@linux.intel.com, imre.deak@intel.com,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] drm/sysfs: Link DRM connectors to corresponding
+ Type-C connectors
+In-Reply-To: <20221027212854.1083686-1-wonchung@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20221027212854.1083686-1-wonchung@google.com>
+Date:   Tue, 08 Nov 2022 11:00:45 +0200
+Message-ID: <87k045akhu.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 07:08:46AM +0100, Felix Fietkau wrote:
-> On 07.11.22 22:57, Vladimir Oltean wrote:
-> > Aren't you calling __vlan_hwaccel_put_tag() with the wrong thing (i.e.
-> > htons(RX_DMA_VPID()) as opposed to VPID translated to something
-> > digestible by the rest of the network stack.. ETH_P_8021Q, ETH_P_8021AD
-> > etc)?
-> 
-> The MTK ethernet hardware treats the DSA special tag as a VLAN tag and
-> reports it as such. The ethernet driver passes this on as a hwaccel tag, and
-> the MTK DSA tag parser consumes it. The only thing that's sitting in the
-> middle looking at the tag is the VLAN device lookup with that warning.
-> 
-> Whenever DSA is not being used, the MTK ethernet device can also process
-> regular VLAN tags. For those tags, htons(RX_DMA_VPID()) will contain the
-> correct VPID.
+On Thu, 27 Oct 2022, Won Chung <wonchung@google.com> wrote:
+> Create a symlink pointing to USB Type-C connector for DRM connectors
+> when they are created. The link will be created only if the firmware is
+> able to describe the connection beween the two connectors.
 
-So I don't object to the overall theme of having the DSA master offload
-the parsing and removal of the DSA tag, but you knock down a bit too
-many fences if you carry the DSA tag in skb->vlan_present (not only VLAN
-upper device lookup, but also the flow dissector).
+The commit messages should explain the *why*.
 
-What other information will be present in the offloaded DSA headers
-except source port information? Maxime Chevallier is also working on a
-similar problem for qca8k, except in that case, the RX DSA offload seems
-to not be optional for him.
+BR,
+Jani.
 
-https://patchwork.kernel.org/project/netdevbpf/patch/20221104174151.439008-4-maxime.chevallier@bootlin.com/
 
-Would a solution based on METADATA_HW_PORT_MUX and dst_metadata that
-point to refcounted, preallocated structs work for Mediatek SoCs with
-DSA, or would more information be necessary?
+>
+> Signed-off-by: Won Chung <wonchung@google.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+> Changes from v2:
+> - Resending the patch to dri-devel list
+>
+> Changes from v1:
+> - Fix multiple lines to single line
+>
+>
+>  drivers/gpu/drm/drm_sysfs.c | 40 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
+> index 430e00b16eec..6a9904fa9186 100644
+> --- a/drivers/gpu/drm/drm_sysfs.c
+> +++ b/drivers/gpu/drm/drm_sysfs.c
+> @@ -11,12 +11,14 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> +#include <linux/component.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/export.h>
+>  #include <linux/gfp.h>
+>  #include <linux/i2c.h>
+>  #include <linux/kdev_t.h>
+> +#include <linux/property.h>
+>  #include <linux/slab.h>
+>  
+>  #include <drm/drm_connector.h>
+> @@ -95,6 +97,34 @@ static char *drm_devnode(struct device *dev, umode_t *mode)
+>  	return kasprintf(GFP_KERNEL, "dri/%s", dev_name(dev));
+>  }
+>  
+> +static int typec_connector_bind(struct device *dev,
+> +	struct device *typec_connector, void *data)
+> +{
+> +	int ret;
+> +
+> +	ret = sysfs_create_link(&dev->kobj, &typec_connector->kobj, "typec_connector");
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = sysfs_create_link(&typec_connector->kobj, &dev->kobj, "drm_connector");
+> +	if (ret)
+> +		sysfs_remove_link(&dev->kobj, "typec_connector");
+> +
+> +	return ret;
+> +}
+> +
+> +static void typec_connector_unbind(struct device *dev,
+> +	struct device *typec_connector, void *data)
+> +{
+> +	sysfs_remove_link(&typec_connector->kobj, "drm_connector");
+> +	sysfs_remove_link(&dev->kobj, "typec_connector");
+> +}
+> +
+> +static const struct component_ops typec_connector_ops = {
+> +	.bind = typec_connector_bind,
+> +	.unbind = typec_connector_unbind,
+> +};
+> +
+>  static CLASS_ATTR_STRING(version, S_IRUGO, "drm 1.1.0 20060810");
+>  
+>  /**
+> @@ -355,6 +385,13 @@ int drm_sysfs_connector_add(struct drm_connector *connector)
+>  	if (connector->ddc)
+>  		return sysfs_create_link(&connector->kdev->kobj,
+>  				 &connector->ddc->dev.kobj, "ddc");
+> +
+> +	if (dev_fwnode(kdev)) {
+> +		r = component_add(kdev, &typec_connector_ops);
+> +		if (r)
+> +			drm_err(dev, "failed to add component\n");
+> +	}
+> +
+>  	return 0;
+>  
+>  err_free:
+> @@ -367,6 +404,9 @@ void drm_sysfs_connector_remove(struct drm_connector *connector)
+>  	if (!connector->kdev)
+>  		return;
+>  
+> +	if (dev_fwnode(connector->kdev))
+> +		component_del(connector->kdev, &typec_connector_ops);
+> +
+>  	if (connector->ddc)
+>  		sysfs_remove_link(&connector->kdev->kobj, "ddc");
 
-Meaning: mtk_eth_soc attaches the dst_metadata to the skb, tag_mtk.c
-retrieves and removes it.
+-- 
+Jani Nikula, Intel Open Source Graphics Center
