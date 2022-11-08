@@ -2,171 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820356216FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1D5621702
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbiKHOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S234277AbiKHOmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233826AbiKHOlg (ORCPT
+        with ESMTP id S233826AbiKHOmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:41:36 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0520911821
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:41:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E65741FB;
-        Tue,  8 Nov 2022 06:41:40 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42A683F73D;
-        Tue,  8 Nov 2022 06:41:33 -0800 (PST)
-Date:   Tue, 8 Nov 2022 14:41:26 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Adam Langley <agl@google.com>
-Subject: Re: [PATCH v2] arm64: Enable data independent timing (DIT) in the
- kernel
-Message-ID: <Y2pqlmlro/aICn+u@FVFF77S0Q05N.cambridge.arm.com>
-References: <20221107172400.1851434-1-ardb@kernel.org>
+        Tue, 8 Nov 2022 09:42:07 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029E427910
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:42:05 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id a14so21326216wru.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 06:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W8UcJ0GaU+CjJ1uQZKnrPv8ndJ2BS66qRNxxSEafyKE=;
+        b=muz8Ab86BqaMTfG0PBWYuWzWU7rZMNLpVa+2bN/hRSDGr+1Pa/ucWfB8p0ROCZb/Ev
+         m35meCmJUyv14YfFOecebgNcU8vntDoSr6C1I01iAsyP4u+C5qFVpxWAB696bdRsgU/+
+         LOUoKnW6OW0qY/JG+WcNskD5992R0VJApE+RsCkRCx08Tx+Gsn6sC4y0wJZEArxLzZBy
+         nbMnKOWeJYtKzyME6LF97/TLGqqWDX39KFx6KqAYHprdac7XHWyONvgCXxjs1Rbr6qBu
+         GKsiKth9abImAXeUsFYs7uHCNlspBTbOfRz1vu8SwBbWGAy5aW9Cv1Oa5yBMn6h/9Hsp
+         R10A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W8UcJ0GaU+CjJ1uQZKnrPv8ndJ2BS66qRNxxSEafyKE=;
+        b=1/wTHqDpicsp0V6MTsA2VxtDfe7FJZF7G1AX0ztTYF4uvrYy1SWK7sms7Dcii3sV0l
+         nCwQFTiPknhrq2IrZSG5ZA0yYj7zSq88RBSZojd2v3tj/zPYU4jau4DRD9NLWQEJ95A0
+         2SJ+b9Vxd0SBoeEV9kYafrwdhYAOFacsHTuIHb7M6YIzos4iNd9vwK9aG23T4yvVgEDF
+         fu1K3gkzZAMI8WjccBHkyPVTBfsXb+M/oj3jxUeLSNx6tT8Fn94EatxC1r+k6wJqxQkn
+         Ua/xu9b8x87/carhwImpGPSvokM3Gvxwul5o1IyeC38iOlgNY68m6aLHXvxCT4yjf5oq
+         mD9g==
+X-Gm-Message-State: ACrzQf2i8jKmpNx+DKxzIiYpumSeSBwBdTVkFV8k0KnTdkZyWmoyRrTL
+        ZIA66IirCv5TJeTY3e3NrFzF/g==
+X-Google-Smtp-Source: AMsMyM5oMvEjL2vTJwXTlTKP2P+NZu+skMaqMeBR7astV6rsRFfYVY7xi0BdMj1Uwee6UHnFtlR5Qg==
+X-Received: by 2002:a5d:4889:0:b0:22b:214:38dd with SMTP id g9-20020a5d4889000000b0022b021438ddmr37505143wrq.32.1667918523474;
+        Tue, 08 Nov 2022 06:42:03 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l12-20020a05600c2ccc00b003b47ff307e1sm12228666wmc.31.2022.11.08.06.42.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 06:42:03 -0800 (PST)
+Message-ID: <a8c36604-5f52-0be9-29d7-f64811541c97@linaro.org>
+Date:   Tue, 8 Nov 2022 14:42:02 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107172400.1851434-1-ardb@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 03/18] dt-bindings: msm: dsi-controller-main: Add vdd*
+ descriptions back in
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        quic_mkrishn@quicinc.com, linux-arm-msm@vger.kernel.org
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
+ <20221107235654.1769462-4-bryan.odonoghue@linaro.org>
+ <ceffec42-f9af-6bde-8db1-076f0cc2a34f@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <ceffec42-f9af-6bde-8db1-076f0cc2a34f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ard,
-
-On Mon, Nov 07, 2022 at 06:24:00PM +0100, Ard Biesheuvel wrote:
-> The ARM architecture revision v8.4 introduces a data independent timing
-> control (DIT) which can be set at any exception level, and instructs the
-> CPU to avoid optimizations that may result in a correlation between the
-> execution time of certain instructions and the value of the data they
-> operate on.
+On 08/11/2022 12:59, Dmitry Baryshkov wrote:
+>>
+>> Warnings about missing regulators can be resolved by updating the 
+>> relevant
+>> dtsi files to point to fixed always-on regulators where appropriate.
 > 
-> The DIT bit is part of PSTATE, and is therefore context switched as
-> usual, given that it becomes part of the saved program state (SPSR) when
-> taking an exception. We have also defined a hwcap for DIT, and so user
-> space can discover already whether or nor DIT is available. This means
-> that, as far as user space is concerned, DIT is wired up and fully
-> functional.
-> 
-> In the kernel, however, we never bothered with DIT: we disable at it
-> boot (i.e., INIT_PSTATE_EL1 has DIT cleared) and ignore the fact that we
-> might run with DIT enabled if user space happened to set it.
-> 
-> Currently, we have no idea whether or not running privileged code with
-> DIT disabled on a CPU that implements support for it may result in a
-> side channel that exposes privileged data to unprivileged user space
-> processes, so let's be cautious and just enable DIT while running in the
-> kernel if supported by all CPUs.
+> Ugh. Are they missing or are they optional/not used on these platforms?
 
-Thanks for respinning the wording!
+Some platforms either don't implement them or worse possibly do 
+implement but don't model them when they should.
 
-I have one minor nit below, but otherwise this looks good to me.
+> Can you possibly list all regulator warnings?
 
-> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-> index f73f11b5504254be..f44579bca9f8107e 100644
-> --- a/arch/arm64/include/asm/cpufeature.h
-> +++ b/arch/arm64/include/asm/cpufeature.h
-> @@ -875,6 +875,11 @@ static inline bool cpu_has_pan(void)
->  						    ID_AA64MMFR1_EL1_PAN_SHIFT);
->  }
->  
-> +static inline bool cpu_has_dit(void)
-> +{
-> +	return cpus_have_const_cap(ARM64_HAS_DIT);
-> +}
 
-Normally cpu_has_X() implies a local feature check, and cpus_have_X() tests for
-common support, so this should be cpus_have_dit().
+Downstream we have
 
-That said, this is only used in one place below, so we could use the CAP
-directly there without a wrapper.
+arch/arm/boot/dts/qcom/msm8916-mdss.dtsi
 
-> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-> index 7d301700d1a93692..1f3f52ce407fe942 100644
-> --- a/arch/arm64/include/asm/sysreg.h
-> +++ b/arch/arm64/include/asm/sysreg.h
-> @@ -90,20 +90,24 @@
->   */
->  #define pstate_field(op1, op2)		((op1) << Op1_shift | (op2) << Op2_shift)
->  #define PSTATE_Imm_shift		CRm_shift
-> +#define SET_PSTATE(x, r)		__emit_inst(0xd500401f | PSTATE_ ## r | ((!!x) << PSTATE_Imm_shift))
->  
->  #define PSTATE_PAN			pstate_field(0, 4)
->  #define PSTATE_UAO			pstate_field(0, 3)
->  #define PSTATE_SSBS			pstate_field(3, 1)
-> +#define PSTATE_DIT			pstate_field(3, 2)
->  #define PSTATE_TCO			pstate_field(3, 4)
->  
-> -#define SET_PSTATE_PAN(x)		__emit_inst(0xd500401f | PSTATE_PAN | ((!!x) << PSTATE_Imm_shift))
-> -#define SET_PSTATE_UAO(x)		__emit_inst(0xd500401f | PSTATE_UAO | ((!!x) << PSTATE_Imm_shift))
-> -#define SET_PSTATE_SSBS(x)		__emit_inst(0xd500401f | PSTATE_SSBS | ((!!x) << PSTATE_Imm_shift))
-> -#define SET_PSTATE_TCO(x)		__emit_inst(0xd500401f | PSTATE_TCO | ((!!x) << PSTATE_Imm_shift))
-> +#define SET_PSTATE_PAN(x)		SET_PSTATE((x), PAN)
-> +#define SET_PSTATE_UAO(x)		SET_PSTATE((x), UAO)
-> +#define SET_PSTATE_SSBS(x)		SET_PSTATE((x), SSBS)
-> +#define SET_PSTATE_DIT(x)		SET_PSTATE((x), DIT)
-> +#define SET_PSTATE_TCO(x)		SET_PSTATE((x), TCO)
+mdss_dsi0: qcom,mdss_dsi@1a98000 {
+	vdda-supply = <&pm8916_l2>;
+	vdd-supply = <&pm8916_l17>;
+	vddio-supply = <&pm8916_l6>;
+};
 
-Nice!
+Looking at something like
 
-[...]
+arch/arm/boot/dts/qcom/msm8916-mtp.dtsi which references 
+arch/arm/boot/dts/qcom/dsi-panel-jdi-1080p-video.dtsi it doesn't appear 
+to delete andy of the vdd*-supply references
 
-> diff --git a/arch/arm64/kernel/suspend.c b/arch/arm64/kernel/suspend.c
-> index 8b02d310838f9240..3032a82ea51a19f7 100644
-> --- a/arch/arm64/kernel/suspend.c
-> +++ b/arch/arm64/kernel/suspend.c
-> @@ -60,6 +60,8 @@ void notrace __cpu_suspend_exit(void)
->  	 * PSTATE was not saved over suspend/resume, re-enable any detected
->  	 * features that might not have been set correctly.
->  	 */
-> +	if (cpu_has_dit())
-> +		set_pstate_dit(1);
+apq8016-sbc.dtb: dsi@1a98000: 'vdd-supply' is a required property
+msm8916-samsung-a3u-eur.dtb: dsi@1a98000: 'vdd-supply' is a required 
+property
+msm8916-samsung-a5u-eur.dtb: dsi@1a98000: 'vdd-supply' is a required 
+property
+msm8916-samsung-e5.dtb: dsi@1a98000: 'vdd-supply' is a required property
+msm8916-samsung-e7.dtb: dsi@1a98000: 'vdd-supply' is a required property
+msm8916-samsung-grandmax.dtb: dsi@1a98000: 'vdd-supply' is a required 
+property
+msm8996-xiaomi-natrium.dtb: dsi@994000: 'panel@0', 'vcca-supply' do not 
+match any of the regexes: 'pinctrl-[0-9]+'
+msm8996-xiaomi-scorpio.dtb: dsi@994000: 'vdda-supply' is a required property
+qrb5165-rb5.dtb: dsi@ae94000: 'vdd-supply' is a required property
+qrb5165-rb5.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sc7180-idp.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sc7180-idp.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sc7180-trogdor-coachz-r1.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-coachz-r1.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-coachz-r1-lte.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-coachz-r1-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-coachz-r3.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-coachz-r3.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-coachz-r3-lte.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-coachz-r3-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-homestar-r2.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-homestar-r2.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-homestar-r3.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-homestar-r3.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-homestar-r4.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-homestar-r4.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-kingoftown-r0.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-kingoftown-r0.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-kingoftown-r1.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-kingoftown-r1.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-r0.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r0.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-lazor-r1.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r1.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-lazor-r1-kb.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r1-kb.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-r1-lte.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r1-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-r3.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r3.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-lazor-r3-kb.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r3-kb.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-r3-lte.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r3-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-r9.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r9.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-lazor-r9-kb.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r9-kb.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-r9-lte.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-lazor-r9-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-limozeen-r4.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-lazor-limozeen-r4.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-limozeen-r9.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-lazor-limozeen-r9.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-lazor-limozeen-nots-r4.dtb: dsi@ae94000: 'vdd-supply' is 
+a required property
+sc7180-trogdor-lazor-limozeen-nots-r4.dtb: dsi@ae94000: 'vddio-supply' 
+is a required property
+sc7180-trogdor-lazor-limozeen-nots-r5.dtb: dsi@ae94000: 'vdd-supply' is 
+a required property
+sc7180-trogdor-lazor-limozeen-nots-r5.dtb: dsi@ae94000: 'vddio-supply' 
+is a required property
+sc7180-trogdor-lazor-limozeen-nots-r9.dtb: dsi@ae94000: 'vdd-supply' is 
+a required property
+sc7180-trogdor-lazor-limozeen-nots-r9.dtb: dsi@ae94000: 'vddio-supply' 
+is a required property
+sc7180-trogdor-mrbland-rev0-auo.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-mrbland-rev0-auo.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-mrbland-rev0-boe.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-mrbland-rev0-boe.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-mrbland-rev1-auo.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-mrbland-rev1-auo.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-mrbland-rev1-boe.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-mrbland-rev1-boe.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-pazquel-lte-parade.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-pazquel-lte-parade.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-pazquel-lte-ti.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-pazquel-lte-ti.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-pazquel-parade.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-pazquel-parade.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-pazquel-ti.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-pazquel-ti.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-pompom-r1.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-pompom-r1.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-pompom-r1-lte.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-pompom-r1-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-pompom-r2.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-pompom-r2.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-pompom-r2-lte.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-pompom-r2-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-pompom-r3.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-pompom-r3.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sc7180-trogdor-pompom-r3-lte.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-pompom-r3-lte.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-quackingstick-r0.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-quackingstick-r0.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
+sc7180-trogdor-quackingstick-r0-lte.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-quackingstick-r0-lte.dtb: dsi@ae94000: 'vddio-supply' is 
+a required property
+sc7180-trogdor-wormdingler-rev0-boe.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-wormdingler-rev0-boe.dtb: dsi@ae94000: 'vddio-supply' is 
+a required property
+sc7180-trogdor-wormdingler-rev0-inx.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-wormdingler-rev0-inx.dtb: dsi@ae94000: 'vddio-supply' is 
+a required property
+sc7180-trogdor-wormdingler-rev1-boe.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-wormdingler-rev1-boe.dtb: dsi@ae94000: 'vddio-supply' is 
+a required property
+sc7180-trogdor-wormdingler-rev1-inx.dtb: dsi@ae94000: 'vdd-supply' is a 
+required property
+sc7180-trogdor-wormdingler-rev1-inx.dtb: dsi@ae94000: 'vddio-supply' is 
+a required property
+sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb: dsi@ae94000: 
+'vdd-supply' is a required property
+sc7180-trogdor-wormdingler-rev1-inx-rt5682s.dtb: dsi@ae94000: 
+'vddio-supply' is a required property
+sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb: dsi@ae94000: 
+'vdd-supply' is a required property
+sc7180-trogdor-wormdingler-rev1-boe-rt5682s.dtb: dsi@ae94000: 
+'vddio-supply' is a required property
+sc7180-trogdor-r1.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sc7180-trogdor-r1.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sc7180-trogdor-r1-lte.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sc7180-trogdor-r1-lte.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sda660-inforce-ifc6560.dtb: dsi@c994000: 'vdd-supply' is a required property
+sda660-inforce-ifc6560.dtb: dsi@c994000: 'vddio-supply' is a required 
+property
+sdm845-cheza-r1.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-cheza-r1.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sdm845-cheza-r2.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-cheza-r2.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sdm845-cheza-r3.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-cheza-r3.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sdm845-db845c.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-db845c.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sdm845-mtp.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-mtp.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sdm845-mtp.dtb: dsi@ae96000: 'vdd-supply' is a required property
+sdm845-mtp.dtb: dsi@ae96000: 'vddio-supply' is a required property
+sdm845-oneplus-enchilada.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sdm845-oneplus-enchilada.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sdm845-oneplus-fajita.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-oneplus-fajita.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sdm845-xiaomi-beryllium.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sdm845-xiaomi-beryllium.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sdm845-xiaomi-polaris.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-xiaomi-polaris.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
+sdm845-shift-axolotl.dtb: dsi@ae94000: 'vdd-supply' is a required property
+sdm845-shift-axolotl.dtb: dsi@ae94000: 'vddio-supply' is a required property
+sdm850-lenovo-yoga-c630.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sdm850-lenovo-yoga-c630.dtb: dsi@ae94000: 'vddio-supply' is a required 
+property
 
-As above, I'd prefer if we either renamed cpu_has_dit() to cpus_have_dit(), or
-just open-coded this as:
+apq8016-sbc.dtb: dsi@1a98000: 'vdd-supply' is a required property
+msm8916-samsung-a5u-eur.dtb: dsi@1a98000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-homestar-r4.dtb: dsi@ae94000: 'vdd-supply' is a required 
+property
+sc7180-trogdor-homestar-r4.dtb: dsi@ae94000: 'vddio-supply' is a 
+required property
 
-	if (cpus_have_const_cap(ARM64_HAS_DIT))
-		set_pstate_dit(1);
-
-With either of those options:
-
-  Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-I assume Will might fix that up when applying.
-
-Mark.
-
->  	__uaccess_enable_hw_pan();
->  
->  	/*
-> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
-> index f1c0347ec31a85c7..a86ee376920a08dd 100644
-> --- a/arch/arm64/tools/cpucaps
-> +++ b/arch/arm64/tools/cpucaps
-> @@ -20,6 +20,7 @@ HAS_CNP
->  HAS_CRC32
->  HAS_DCPODP
->  HAS_DCPOP
-> +HAS_DIT
->  HAS_E0PD
->  HAS_ECV
->  HAS_EPAN
-> -- 
-> 2.35.1
-> 
