@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C98620A33
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C748F620A38
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbiKHHcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 02:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S233506AbiKHHdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 02:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233087AbiKHHcr (ORCPT
+        with ESMTP id S233452AbiKHHdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 02:32:47 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F67A1ADA6;
-        Mon,  7 Nov 2022 23:32:46 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A87WTnO010347;
-        Tue, 8 Nov 2022 01:32:29 -0600
+        Tue, 8 Nov 2022 02:33:18 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E413205D;
+        Mon,  7 Nov 2022 23:33:13 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A87X0s8067852;
+        Tue, 8 Nov 2022 01:33:00 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667892749;
+        s=ti-com-17Q1; t=1667892780;
         bh=fob4BUWDvkc0MXg4j41UHbMPxCqHjKfum4yhBy3PBzU=;
         h=From:To:CC:Subject:Date;
-        b=bSk955qOd+OnlGahpmQnRoRJw93xsRabx8ZgPfthn5B2Jky81gytE0v/o3cxRs2cg
-         Nkp3zPetxBgDrZauCGH86lr7NpW/94eIAw+0OXcC9sO9vnpMjj9zDWsJ8q5+iE+ZwJ
-         2X3DdELq1cHJnYcCZV9c4W7K4q6Z1KBbUxAJjkd0=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A87WTfS121556
+        b=sNKcJ/RTyRBPvPcXtkxaA15Df1W561mt3gFEQvzHnFm00QgM/tsVel7xHksm7+Yq1
+         QHHEmTIMWkngarE/XuPz2tNR9j87xXPI81omY4vkzOl6IPs+LvODQ55YVh/E8pTPH2
+         ZkfIyek29ZP1SxVUWI3voTJldaa7VlnvL1/z6JwI=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A87X0rD018522
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Nov 2022 01:32:29 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 8 Nov 2022 01:33:00 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 8 Nov
- 2022 01:32:28 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 01:33:00 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 8 Nov 2022 01:32:28 -0600
+ Frontend Transport; Tue, 8 Nov 2022 01:33:00 -0600
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A87WRq3053308;
-        Tue, 8 Nov 2022 01:32:27 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A87WwnV122665;
+        Tue, 8 Nov 2022 01:32:59 -0600
 From:   Bhavya Kapoor <b-kapoor@ti.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <nm@ti.com>, <piyali_g@ti.com>
+        <nm@ti.com>, <piyali_g@ti.com>, <b-kapoor@ti.com>
 Subject: [PATCH] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Date:   Tue, 8 Nov 2022 13:02:31 +0530
-Message-ID: <20221108073231.35008-1-b-kapoor@ti.com>
+Date:   Tue, 8 Nov 2022 13:02:52 +0530
+Message-ID: <20221108073252.35169-1-b-kapoor@ti.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
