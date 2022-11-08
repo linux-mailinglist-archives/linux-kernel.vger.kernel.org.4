@@ -2,185 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684E0620F3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9EF620F51
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiKHLhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S233827AbiKHLkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233103AbiKHLhn (ORCPT
+        with ESMTP id S233910AbiKHLki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:37:43 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6646918393
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:37:42 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id a15so20654398ljb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:37:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/lVzoqt83Ak42kIKiN8LqOfDF7RgMmRJivY7ZIPnKXQ=;
-        b=KbCk9zzDc2wv90rxSwsopGI0FlGUd0PHG+RyDVhJXRh4SJnAEKlKOHAO9WzEyon8/U
-         x8mfPKi9UZIZ9QyvTtebQx0+Gx0ESDxdOVK95xjJ0U2s0YKMlQua3U2+b/ucPREDz8ia
-         OYEVwIEafPl7Sencx2iu54Uzz/81mg7fz8Zm+KNetL+aRMNVH03nrfONnWzdc4Z9Q75h
-         11a45zws/P3tKRV/zIyFERUv6WRx8DqVi6CTX+cBPFYQv9ROPz47OMh6mXx2IIjhTxuU
-         pZ+fSG0PFRhHeZYK5Gx4OQHEQWQ/Nav1ZvRnWCgN7+2C/IddxLnpLb7U11DpCM11lOLJ
-         J9+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/lVzoqt83Ak42kIKiN8LqOfDF7RgMmRJivY7ZIPnKXQ=;
-        b=oDjYuBKE48UTVYs4mbLZH+7g7regiPGIVY3UxChqccAAbYG/JlW7WVNNmvsr2ae+Cj
-         6gnnLdWoDmX9Edksde/pW7nnEHmOnpkwL2H7CpRKTdil8dxr2YNgc15UU7y2+wn2A6ta
-         FKD/Zih3Fy0xJ4gEldxWjkZcHcNAsSW+ITYPmQMt+JR02LZPNnbHGgiDSMVI0BJqY4cI
-         G/LTm/K4HWXitLI5RHlcC3+CStte4u89UDRKhnSDHIg2iNcvE6WZC1rKOJuOO4Z5/hxv
-         TE/pRrJ0E6eUQfg0xYyNZ0J3b6Ol1hLtnBesNJ93bHzJrVKw9bXz8v3YivX2NZs3hMqO
-         UGtg==
-X-Gm-Message-State: ACrzQf3ZqVoBLR3q5KbDCdxxMQYKuNeMCQzVLLtgW8JVUOy2cbr8hAoT
-        aXWObgYbklZgkSXxg7TiTy+TRg==
-X-Google-Smtp-Source: AMsMyM5KfVSdGMmsYyYqwDpB8dMs4e5lU9f2Z35qXgpVXEtl8NlkUdlhY05UJ83tg5wczhgiCdWTlg==
-X-Received: by 2002:a05:651c:307:b0:277:113f:3a1e with SMTP id a7-20020a05651c030700b00277113f3a1emr19582705ljp.518.1667907460751;
-        Tue, 08 Nov 2022 03:37:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac25e24000000b0048af4dc964asm1758175lfg.73.2022.11.08.03.37.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 03:37:40 -0800 (PST)
-Message-ID: <6a4f7104-8b6f-7dcd-a7ac-f866956e31d6@linaro.org>
-Date:   Tue, 8 Nov 2022 12:37:39 +0100
+        Tue, 8 Nov 2022 06:40:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F422F4C27C;
+        Tue,  8 Nov 2022 03:40:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AAB72B81912;
+        Tue,  8 Nov 2022 11:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E81C433C1;
+        Tue,  8 Nov 2022 11:40:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OV+k2FSW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667907631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/QRzaz/OenfJp+r6yaKiscfmlDS/YWjOXCyB1m+YgKk=;
+        b=OV+k2FSWl23wVW/XgY+M0THCyXgIwWOOnscqiT0kTaFqt9OM2LXZ+a3NYSlhhTW0Q1YeXM
+        fz+EPyXERDas5CJJOIKcbhxi25MdszTwTplARLxBbg4aVTRVWAMWDVchmDFe1oF1UBaNVP
+        2KCv55EBic/9ijDa0c4ls+WGF8Kt15I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1e063cfe (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 8 Nov 2022 11:40:31 +0000 (UTC)
+Received: by mail-vs1-f41.google.com with SMTP id k67so13388010vsk.2;
+        Tue, 08 Nov 2022 03:40:31 -0800 (PST)
+X-Gm-Message-State: ACrzQf2eO2lnR83ykqYxVdiByM9QyjsUqgXP7uw/FI+3WNIqVoSDYUXg
+        +NVlLF7Ow/kYKOk2Kp5BNYA0pZeH8yCIJHyjJTA=
+X-Google-Smtp-Source: AMsMyM50Z8EdMSF4Ux8Jn4LmQ/p9eMK0jvqLMOYwcTuPxMbrsmVN1aRm9IETX8R9DxWX+G5QltJwcWJ4knbF5FB/Zfg=
+X-Received: by 2002:a67:c297:0:b0:3aa:3cac:97b6 with SMTP id
+ k23-20020a67c297000000b003aa3cac97b6mr29936878vsj.76.1667907630270; Tue, 08
+ Nov 2022 03:40:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 1/2] dt-bindings: net: h4-bluetooth: add new bindings
- for hci_h4
-Content-Language: en-US
-To:     Dominique Martinet <dominique.martinet@atmark-techno.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>, mizo@atmark-techno.com
-References: <20221108055531.2176793-1-dominique.martinet@atmark-techno.com>
- <20221108055531.2176793-2-dominique.martinet@atmark-techno.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221108055531.2176793-2-dominique.martinet@atmark-techno.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220916125916.652546-1-Jason@zx2c4.com> <87v8np978s.ffs@tglx>
+In-Reply-To: <87v8np978s.ffs@tglx>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 8 Nov 2022 12:40:19 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rye4sqKNbpu=oOvLjgMY=Whi13Qz8L0xyZR=Ty27pHfw@mail.gmail.com>
+Message-ID: <CAHmME9rye4sqKNbpu=oOvLjgMY=Whi13Qz8L0xyZR=Ty27pHfw@mail.gmail.com>
+Subject: Re: [PATCH RFC v3] random: implement getrandom() in vDSO
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        "Carlos O'Donell" <carlos@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/11/2022 06:55, Dominique Martinet wrote:
-> Add devicetree binding to support defining a bluetooth device using the h4
-> uart protocol
-> 
+On Tue, Nov 8, 2022 at 9:32 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Fri, Sep 16 2022 at 13:59, Jason A. Donenfeld wrote:
+> > ---
+> >  MAINTAINERS                            |   2 +
+> >  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+> >  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+> >  arch/x86/entry/vdso/Makefile           |   3 +-
+> >  arch/x86/entry/vdso/vdso.lds.S         |   2 +
+> >  arch/x86/entry/vdso/vgetrandom.c       |  16 ++++
+> >  arch/x86/include/asm/vdso/getrandom.h  |  37 ++++++++
+> >  arch/x86/include/asm/vvar.h            |  16 ++++
+> >  drivers/char/random.c                  |  64 ++++++++++++++
+> >  include/vdso/datapage.h                |   6 ++
+> >  lib/crypto/chacha.c                    |   4 +
+> >  lib/vdso/getrandom.c                   | 117 +++++++++++++++++++++++++
+> >  lib/vdso/getrandom.h                   |  25 ++++++
+> >  13 files changed, 293 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/x86/entry/vdso/vgetrandom.c
+> >  create mode 100644 arch/x86/include/asm/vdso/getrandom.h
+> >  create mode 100644 lib/vdso/getrandom.c
+> >  create mode 100644 lib/vdso/getrandom.h
+>
+> This is not how it works. Please split this apart into reviewable bits
+> and pieces:
+>
+> 1) Add the new syscall
+> 2) Add the vdso infrastructure
+> 3) Wire it up on x86
 
-subject: drop second redundant "bindings"
+No problem, will do.
 
-> This was tested with a NXP wireless+BT AW-XM458 module, but might
-> benefit others as the H4 protocol seems often used.
-> 
-> Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
-> ---
->  .../devicetree/bindings/net/h4-bluetooth.yaml | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/h4-bluetooth.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/h4-bluetooth.yaml b/Documentation/devicetree/bindings/net/h4-bluetooth.yaml
-> new file mode 100644
-> index 000000000000..5d11b89ca386
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/h4-bluetooth.yaml
-
-If the schema is for one specific device, then filename matching the
-compatible, so nxp,aw-xm458-bt.yaml... but I understand you want to
-describe here class of devices using H4 Bluetooth? Won't they need their
-own specific properties?
-
-
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/h4-bluetooth.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: H4 Bluetooth
-> +
-> +maintainers:
-> +  - Dominique Martinet <dominique.martinet@atmark-techno.com>
-> +
-> +description:
-> +  H4 is a common bluetooth over uart protocol.
-
-Bluetooth
-UART
-
-> +  For example, the AW-XM458 is a WiFi + BT module where the WiFi part is
-> +  connected over PCI (M.2), while BT is connected over serial speaking
-> +  the H4 protocol. Its firmware is sent on the PCI side.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,aw-xm458-bt
-> +
-> +  max-speed: true
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/clock/imx8mp-clock.h>
-> +
-> +    uart1 {
-
-uart
-
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&pinctrl_uart1>;
-> +        assigned-clocks = <&clk IMX8MP_CLK_UART1>;
-> +        assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_80M>;
-
-Drop unrelated properties.
-
-> +        status = "okay";
-
-Drop status.
-
-> +        fsl,dte-mode = <1>;
-> +        fsl,uart-has-rtscts;
-
-Are these two related to this hardware?
-
-> +
-> +
-> +        bluetooth {
-> +            compatible = "nxp,aw-xm458-bt";
-> +            max-speed = <3000000>;
-> +        };
-> +    };
-
-Best regards,
-Krzysztof
-
+Jason
