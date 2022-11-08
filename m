@@ -2,109 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02306217EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3296217F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234471AbiKHPSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S233955AbiKHPUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiKHPSF (ORCPT
+        with ESMTP id S232923AbiKHPUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:18:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD325E3F0
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:17:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B036B81ACB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:17:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56848C433C1;
-        Tue,  8 Nov 2022 15:17:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667920630;
-        bh=X/TsswHOqHKp8413KVgyA0sdzCNAqy6BNPALW3AUwjk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IZqHf5MaHCqWEFmI1oLVApLkDBt+aWoI77q7s5nconquu8YR1Rhzcb9r5MDynGLYZ
-         wW/yZpiyQqdYkn8EpAiNy6jgcRvdcdUsY25nDtsYhi2jFefkN5sHW/HY91I+gm9dj+
-         bXOt68rK7POsjyKVfIQ1cz529a4xowdtuuPPRSIs=
-Date:   Tue, 8 Nov 2022 16:17:07 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH v2] staging: vt6655: change the function name
- s_vFillRTSHead
-Message-ID: <Y2py83KhnWSSlX2W@kroah.com>
-References: <Y2QTON8cjU/D0GqO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        Tue, 8 Nov 2022 10:20:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C5D65E69
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:19:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667920756;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/eYyte+kPGDx2cu07guaw9hX+mwjlEDk8BWb8kT+tCg=;
+        b=IVQBzHlKakt/EMN77WjaTfGCbEKNrGbnq1MVJ2KInbc0k7FtdIvWKdRpJCTF4TLr/AIjXw
+        oBPKJpMSYUkS4gfOlCk7PlCEbjknBOOQA7s2pA54gVwIPwk66MHNSXXzs+0s9LzRoeZ7G6
+        IcXFzoMHhGfWGkJRy12bcYgVojb3sXI=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-443-kZGSup3zMb-2GNeC195j0Q-1; Tue, 08 Nov 2022 10:19:15 -0500
+X-MC-Unique: kZGSup3zMb-2GNeC195j0Q-1
+Received: by mail-qv1-f69.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso9819034qvr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 07:19:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/eYyte+kPGDx2cu07guaw9hX+mwjlEDk8BWb8kT+tCg=;
+        b=ODlw5DLK44Hos9U+jwf7GtsI+LFSPkIeR1lyWuHz7MwVvf1EHi64HW0JIHBqWi3ut2
+         z1FrIoM0F9RQu172k9+21WehIdVlzmd+YrhpUwgpCVjLp9luHFUspNh8sRODdWjAuIeR
+         nVVydkxgr+gyHPJ4IKqUbgwy3tWfYSRS1q4JDM44sT5+5PQdwlB+P/iRXGTPrKKElWPI
+         LiyKIadGKSd0I+Xcc21+tLqY2+3CZ5xSs083plV+b65qvxe7vCr/EnotRH0bfgdfAbVg
+         1pw91JPdchxwicwEJ4HY3BCeeJUUP+CTt/uhnv6rpIMxgTbokFFGGANQEA8DGDmS5nvx
+         hXLg==
+X-Gm-Message-State: ACrzQf2xt1MrB3prYfFYWQ28FXnV5+NfcWjetH2+3PCVh0rs87QlS7DH
+        8UO2c4x/nLzUkOhcSiThSXw4srEVg48SEl69AflmNcmBrS2x/7j2M2vr2Ea0X0tgFzxs2VLq+pu
+        ijDmN47G3ZUK4YoS4vP0km+JH
+X-Received: by 2002:a05:620a:284a:b0:6ab:9cc5:cb4c with SMTP id h10-20020a05620a284a00b006ab9cc5cb4cmr40188573qkp.609.1667920754343;
+        Tue, 08 Nov 2022 07:19:14 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5HRTL6BBYgWiKj4VNxx4x4EqfKrk8oTpbGAJ6VaO+NxtIKFXLFk2mXSHSFArlvJCkmKaOZYQ==
+X-Received: by 2002:a05:620a:284a:b0:6ab:9cc5:cb4c with SMTP id h10-20020a05620a284a00b006ab9cc5cb4cmr40188549qkp.609.1667920754068;
+        Tue, 08 Nov 2022 07:19:14 -0800 (PST)
+Received: from redhat.com ([138.199.52.3])
+        by smtp.gmail.com with ESMTPSA id m13-20020ac8688d000000b0039467aadeb8sm8264644qtq.13.2022.11.08.07.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 07:19:13 -0800 (PST)
+Date:   Tue, 8 Nov 2022 10:19:07 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Wei Gong <gongwei833x@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
+Message-ID: <20221108101209-mutt-send-email-mst@kernel.org>
+References: <20221108145300.GA472813@bhelgaas>
+ <20221108150228.GA473246@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2QTON8cjU/D0GqO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221108150228.GA473246@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 07:15:04PM +0000, Tanjuate Brunostar wrote:
-> Remove the use of Hungarian notation, which is not used in the Linux
-> kernel. Reported by checkpatch
+On Tue, Nov 08, 2022 at 09:02:28AM -0600, Bjorn Helgaas wrote:
+> On Tue, Nov 08, 2022 at 08:53:00AM -0600, Bjorn Helgaas wrote:
+> > On Wed, Oct 26, 2022 at 02:11:21AM -0400, Michael S. Tsirkin wrote:
+> > > virtio uses the same driver for VFs and PFs.  Accordingly,
+> > > pci_device_is_present is used to detect device presence. This function
+> > > isn't currently working properly for VFs since it attempts reading
+> > > device and vendor ID.
+> > 
+> > > As VFs are present if and only if PF is present,
+> > > just return the value for that device.
+> > 
+> > VFs are only present when the PF is present *and* the PF has VF Enable
+> > set.  Do you care about the possibility that VF Enable has been
+> > cleared?
 > 
-> Add indentation to the affected function headers to follow the Linux
-> kernel coding style
-> 
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> ---
-> 
-> v2: corrected confusing changlog message on this patch
-> 
->  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
->  1 file changed, 22 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index 31ae99b3cb35..debc5d5daede 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -23,7 +23,7 @@
->   *      s_uGetTxRsvTime- get frame reserved time
->   *      s_vFillCTSHead- fulfill CTS ctl header
->   *      s_vFillFragParameter- Set fragment ctl parameter.
-> - *      s_vFillRTSHead- fulfill RTS ctl header
-> + *      fill_rts_header- fulfill RTS ctl header
->   *      s_vFillTxKey- fulfill tx encrypt key
->   *      s_vSWencryption- Software encrypt header
->   *      vDMA0_tx_80211- tx 802.11 frame via dma0
-> @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
->  #define DATADUR_A_F1    13
->  
->  /*---------------------  Static Functions  --------------------------*/
-> -static void s_vFillRTSHead(struct vnt_private *pDevice,
-> -			   unsigned char byPktType,
-> -			   void *pvRTS,
-> -			   unsigned int	cbFrameLength,
-> -			   bool bNeedAck,
-> -			   bool bDisCRC,
-> -			   struct ieee80211_hdr *hdr,
-> -			   unsigned short wCurrentRate,
-> -			   unsigned char byFBOption);
-> +static void fill_rts_header(struct vnt_private *pDevice,
-> +			    unsigned char byPktType,
-> +			    void *pvRTS,
-> +			    unsigned int cbFrameLength,
-> +			    bool bNeedAck,
-> +			    bool bDisCRC,
-> +			    struct ieee80211_hdr *hdr,
-> +			    unsigned short wCurrentRate,
-> +			    unsigned char byFBOption);
->  
+> Can you also include a hint about how the problem manifests, and a URL
+> to the report if available?
 
-Again, this function prototype is not needed, please drop it.
+Here you go:
+lore.kernel.org/all/20221108044819.GA861843%40zander/t.mbox.gz
 
-thanks,
+is it enough to include this link or do you want me
+to repost copying the text from there?
 
-greg k-h
+> It's beyond the scope of this patch, but I've never liked the
+> semantics of pci_device_is_present() because it's racy by design.  All
+> it tells us is that some time in the *past*, the device was present.
+> It's telling that almost all calls test for !pci_device_is_present(),
+> which does make a little more sense.
+
+I agree. The problem is in the API really.
+What people want is pci_device_was_removed()
+
+With surprise removal at least at the pci express level
+we know that there was a surprise removal event.
+PCI subsystem seems to chose to discard that information.
+There's nothing driver could do to reliably detect
+that - if someone pulled the card out then stuck it back in
+quickly driver will assume it's the old card and
+attempt graceful removal, which is likely to fail.
+
+However some of the problem is at the hardware level too.
+If you are poking at the device's config and it's
+pulled out and another is put back in quickly, your
+config access might land at the new card.
+Does not feel robust. I don't have a good solution for this
+except "try to avoid config cycles as much as you can".
+
+
+
+
+> > > Reported-by: Wei Gong <gongwei833x@gmail.com>
+> > > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> > > ---
+> > > 
+> > > Wei Gong, thanks for your testing of the RFC!
+> > > As I made a small change, would appreciate re-testing.
+> > > 
+> > > Thanks!
+> > > 
+> > > changes from RFC:
+> > > 	use pci_physfn() wrapper to make the code build without PCI_IOV
+> > > 
+> > > 
+> > >  drivers/pci/pci.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > > index 2127aba3550b..899b3f52e84e 100644
+> > > --- a/drivers/pci/pci.c
+> > > +++ b/drivers/pci/pci.c
+> > > @@ -6445,8 +6445,13 @@ bool pci_devs_are_dma_aliases(struct pci_dev *dev1, struct pci_dev *dev2)
+> > >  
+> > >  bool pci_device_is_present(struct pci_dev *pdev)
+> > >  {
+> > > +	struct pci_dev *physfn = pci_physfn(pdev);
+> > >  	u32 v;
+> > >  
+> > > +	/* Not a PF? Switch to the PF. */
+> > > +	if (physfn != pdev)
+> > > +		return pci_device_is_present(physfn);
+> > > +
+> > >  	if (pci_dev_is_disconnected(pdev))
+> > >  		return false;
+> > >  	return pci_bus_read_dev_vendor_id(pdev->bus, pdev->devfn, &v, 0);
+> > > -- 
+> > > MST
+> > > 
+
