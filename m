@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57382620E37
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F75E620E33
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234055AbiKHLHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:07:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S234031AbiKHLHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234036AbiKHLHU (ORCPT
+        with ESMTP id S234097AbiKHLHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:07:20 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A3F4C256
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:07:10 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id j12so13860883plj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:07:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5/yRs+y53DAJ225f9gq7YtS+yadU9QI0BNYlnqPDhZM=;
-        b=Fdy7U+Zeib9GDPNku63uXCnIrBz4DkypUsCcCh30aOQtdGK2jUOIoGolYp9bymh/0b
-         tUEiG1j1BnM95r3GvtiaoUJvPhdxfqwIWzpCzasbD6njjb5BqrRv0iWcnIW0eu9BeXI9
-         JcclZKwQo49yXuGNIuYkwzg8fHmUIy8h00d2oUUECfwZPKIgJ5MY6v5Ms2RSEP5u2gJD
-         Pasi/KwpUYKQf2ldez+ue7TYnYIqe2AOsN6iak9BIPTOXZVcuzKgk5Hr6hoBUGNguQZ3
-         J/nBisQGtDI+Dok3nG5xhwU3qb8bX6gjAfZ/a1E94uXpwXHdLVHL+G+vGVdh2mkNBGGg
-         dcZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5/yRs+y53DAJ225f9gq7YtS+yadU9QI0BNYlnqPDhZM=;
-        b=CwSVEPcTPdz1dIYj2NLJMABaYTM2/J2bRv/SumIw5R/wOYAWcZSGyyubVN2FBEdGK3
-         gcJhaqRzEDLKSkp9RkhcXgpsB8RbNTojHRAB+QO081OVFCqtggSFskmGUazhnt2MYKR6
-         xDwVpG8kXWv4u1gI9Aif7UfXKDIjvEwrOu+tdx5BbfZ9AAOyOOUUOuOcZiXLVj/qYyk7
-         YVGhztFviYmTpCur7d6oIhV0yaI6a10ZUVC/1ysClQj1pkHu7i9e75j73GZQCpAeMI8O
-         hJHycqesbhMD//mg7lYUfcoem6lgWkePKi75crFOhRIIYO8kVANWi3H+3AX8WBgnKIYY
-         JoYA==
-X-Gm-Message-State: ACrzQf3VxexT6siBckZN2sefThSxvx9B9IWsB9ZzP5NcPQrLNkODSajH
-        /16yJdLWhBwKUhVnENWx/zpA5jXC83FwXOFC8mtV8A==
-X-Google-Smtp-Source: AMsMyM7ruYnA4wSj+YXFuThf157la9P6XriUdgbY/9J3/RZR0+A7idD6kCIl96wiczH1I9YhBbcjEvL7sV34vKRsEsI=
-X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id
- mw7-20020a17090b4d0700b001ef521cf051mr75338135pjb.164.1667905629698; Tue, 08
- Nov 2022 03:07:09 -0800 (PST)
+        Tue, 8 Nov 2022 06:07:18 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEB44AF07;
+        Tue,  8 Nov 2022 03:07:06 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A8AO8Ew002333;
+        Tue, 8 Nov 2022 11:06:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=z0xaTcA6eeg6FMwTcztQpDpMBhDj8XeaUGKaH0GIGpI=;
+ b=k0clqwUzVIb7f+oKM7w1M9H3gH+DrHO1jFc1M73kZmj45MBSbaaJ9nJ3LDWmllcuD14L
+ ZTzaionK5rKeY28QZNK+fEToClpZEADFxayh9ntCWUMXpr4EqA2USHB+WzmN+FbndFMF
+ SKyJ3gD7MGbTylhMQij+YqY2clisKPtHCDC5cKPBE51r2EbNbgeiLJEf+7vvQDcEtW7S
+ 1Yhjgd0AA2YgHHyw9BBiE9s5nPrMJ3acomMbnG6WdB+zgYvlfvIVkgamnIcVyONsUzBw
+ C8pMPiq6K/r4L0NtcAlEi9W0ZWOteYLTh6Uoq02GbUTFnHdBO9qsEEZz+7aIGe1o6r2Y CQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kqhmggjj9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 11:06:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A8B6tPd001297
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 8 Nov 2022 11:06:55 GMT
+Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
+ 03:06:51 -0800
+Message-ID: <06f59819-8e8c-bd57-76a2-3d548f8f427d@quicinc.com>
+Date:   Tue, 8 Nov 2022 16:36:48 +0530
 MIME-Version: 1.0
-References: <20221027115745.240516-1-ulf.hansson@linaro.org>
- <166779074268.500303.10369639779721394913.b4-ty@kernel.org> <CAMi1Hd3rE+r4vMdBy_LxQEbAKaXRYntje==eiO8cxkgSU9jXdw@mail.gmail.com>
-In-Reply-To: <CAMi1Hd3rE+r4vMdBy_LxQEbAKaXRYntje==eiO8cxkgSU9jXdw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 8 Nov 2022 12:06:33 +0100
-Message-ID: <CAPDyKFpa57K4yHq9MSBF7U7mXZyyMUe1eA1fMawO450-eSB3_Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: sm8250: Disable the not yet supported
- cluster idle state
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, konrad.dybcio@somainline.org,
-        dmitry.baryshkov@linaro.org, sudeep.holla@arm.com,
-        quic_mkshah@quicinc.com, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rjendra@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC 2/2] firmware: arm_scmi: Add SCMI QTI Memlat vendor protocol
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <sudeep.holla@arm.com>,
+        <cristian.marussi@arm.com>, <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <konrad.dybcio@somainline.org>,
+        <quic_avajid@quicinc.com>
+References: <1667451512-9655-1-git-send-email-quic_sibis@quicinc.com>
+ <1667451512-9655-3-git-send-email-quic_sibis@quicinc.com>
+ <Y2QeVDQOZZ89+DR0@google.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <Y2QeVDQOZZ89+DR0@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: v1siSt5-W4DY5Di2ybhU2na9WX7yFnwQ
+X-Proofpoint-ORIG-GUID: v1siSt5-W4DY5Di2ybhU2na9WX7yFnwQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211080062
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,46 +84,421 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 06:55, Amit Pundir <amit.pundir@linaro.org> wrote:
->
-> On Mon, 7 Nov 2022 at 08:43, Bjorn Andersson <andersson@kernel.org> wrote:
-> >
-> > On Thu, 27 Oct 2022 13:57:45 +0200, Ulf Hansson wrote:
-> > > To support the deeper cluster idle state for sm8250 platforms, some
-> > > additional synchronization is needed between the rpmh-rsc device and the
-> > > CPU cluster PM domain. Until that is supported, let's disable the cluster
-> > > idle state.
-> > >
-> > > This fixes a problem that has been reported for the Qcom RB5 platform (see
-> > > below), but most likely other sm8250 platforms suffers from similar issues,
-> > > so let's make the fix generic for sm8250.
-> > >
-> > > [...]
-> >
-> > Applied, thanks!
-> >
-> > [1/1] arm64: dts: qcom: sm8250: Disable the not yet supported cluster idle state
-> >       commit: 5c7fa5de12a31c1425cc87ba2ef27e6ae0a1788c
->
-> Hi Bjorn,
->
-> There seem to be some error while applying the patch "arm64: dts:
-> qcom: sm8250: Disable the not yet supported cluster idle state".
-> This patch is already applied in your arm64-fixes-for-6.1 tree
-> (commit: cadaa773bcf161184fa428180516bae33a7bc667)
->
-> The new commit: 5c7fa5de12a31c1425cc87ba2ef27e6ae0a1788c,
-> however, disables the Big cpu idle state instead. I'm not sure if that
-> is intentional though.
+Hey Matthias,
 
-It's a mistake. There have been a lot of various patches/discussions
-around this issue at LKML, not entirely easy to follow.
+Thanks for taking time to review the series.
 
-Anyway to make it clear, we shouldn't need to disable the
-BIG_CPU_SLEEP_0 state, but only the CLUSTER_SLEEP_0.
+On 11/4/22 01:32, Matthias Kaehlcke wrote:
+> Hi Sibi,
+> 
+> On Thu, Nov 03, 2022 at 10:28:32AM +0530, Sibi Sankar wrote:
+>> Add support for the SCMI QTI memlat (memory latency) vendor protocol.
+>> The QTI memlat vendor protocol takes in several tuneables including the
+>> IPM ratio (Instructions Per Miss), bus bandwidth requirements and PMU
+>> maps to enable frequency scaling of various buses (L3/LLCC/DDR) performed
+>> by the memory latency governor running on the CPUSS Control Processor.
+>>
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>> ---
+>>   drivers/firmware/arm_scmi/Kconfig              |  10 +
+>>   drivers/firmware/arm_scmi/Makefile             |   1 +
+>>   drivers/firmware/arm_scmi/qcom_memlat_vendor.c | 269 +++++++++++++++++++++++++
+>>   include/linux/scmi_protocol.h                  |  36 ++++
+>>   4 files changed, 316 insertions(+)
+>>   create mode 100644 drivers/firmware/arm_scmi/qcom_memlat_vendor.c
+>>
+>> diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
+>> index a14f65444b35..814a3fc37dc1 100644
+>> --- a/drivers/firmware/arm_scmi/Kconfig
+>> +++ b/drivers/firmware/arm_scmi/Kconfig
+>> @@ -136,6 +136,16 @@ config ARM_SCMI_TRANSPORT_VIRTIO_ATOMIC_ENABLE
+>>   
+>>   endif #ARM_SCMI_PROTOCOL
+>>   
+>> +config QTI_SCMI_MEMLAT_PROTOCOL
+>> +	tristate "Qualcomm Technologies, Inc. SCMI MEMLAT vendor Protocol"
+>> +	depends on ARM_SCMI_PROTOCOL && QCOM_CPUCP_MBOX
+>> +	help
+>> +	  The SCMI QTI memlat vendor protocol adds support for the frequency
+>> +	  scaling of buses (L3/LLCC/DDR) by the QTI HW memlat governor running
+>> +	  on the CPUSS Control Processor (CPUCP).
+>> +
+>> +	  Say Y here if you want to build this driver.
+>> +
+>>   config ARM_SCMI_POWER_DOMAIN
+>>   	tristate "SCMI power domain driver"
+>>   	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
+>> diff --git a/drivers/firmware/arm_scmi/Makefile b/drivers/firmware/arm_scmi/Makefile
+>> index 9ea86f8cc8f7..78e6d72fb9bb 100644
+>> --- a/drivers/firmware/arm_scmi/Makefile
+>> +++ b/drivers/firmware/arm_scmi/Makefile
+>> @@ -11,6 +11,7 @@ scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o volt
+>>   scmi-module-objs := $(scmi-bus-y) $(scmi-driver-y) $(scmi-protocols-y) \
+>>   		    $(scmi-transport-y)
+>>   obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-module.o
+>> +obj-$(CONFIG_QTI_SCMI_MEMLAT_PROTOCOL) += qcom_memlat_vendor.o
+>>   obj-$(CONFIG_ARM_SCMI_POWER_DOMAIN) += scmi_pm_domain.o
+>>   obj-$(CONFIG_ARM_SCMI_POWER_CONTROL) += scmi_power_control.o
+>>   
+>> diff --git a/drivers/firmware/arm_scmi/qcom_memlat_vendor.c b/drivers/firmware/arm_scmi/qcom_memlat_vendor.c
+>> new file mode 100644
+>> index 000000000000..4b7db309e633
+>> --- /dev/null
+>> +++ b/drivers/firmware/arm_scmi/qcom_memlat_vendor.c
+>> @@ -0,0 +1,269 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include <linux/module.h>
+>> +#include <linux/scmi_protocol.h>
+>> +
+>> +#include "protocols.h"
+>> +
+>> +#define MAX_MAP_ENTRIES 14
+>> +#define MAX_PMU_ENTRIES 24
+>> +
+>> +enum scmi_memlat_protocol_cmd {
+>> +	MEMLAT_SET_CPU_GROUP = 0x10,
+>> +	MEMLAT_SET_MONITOR = 0x11,
+>> +	MEMLAT_COMMON_PMU_MAP = 0x12,
+>> +	MEMLAT_MON_PMU_MAP = 0x13,
+>> +	MEMLAT_IPM_RATIO = 0x14,
+>> +	MEMLAT_STALL_RATIO = 0x15,
+>> +	MEMLAT_SAMPLE_MS = 0x18,
+>> +	MEMLAT_MON_FREQ_MAP = 0x19,
+>> +	MEMLAT_START_MONITOR = 0x1c,
+>> +	MEMLAT_STOP_MONITOR = 0x1d,
+>> +};
+>> +
+>> +struct node_msg {
+>> +	u32 cpumask;
+>> +	u32 mon_type;
+>> +};
+>> +
+>> +struct scalar_param_msg {
+>> +	u32 cpumask;
+>> +	u32 mon_type;
+>> +	u32 val;
+>> +};
+>> +
+>> +struct map_table {
+>> +	u32 v1;
+>> +	u32 v2;
+>> +};
+>> +
+>> +struct map_param_msg {
+>> +	u32 cpumask;
+>> +	u32 mon_type;
+>> +	u32 nr_rows;
+>> +	struct map_table tbl[MAX_MAP_ENTRIES];
+>> +};
+>> +
+>> +struct pmu_map_msg {
+>> +	u32 cpumask;
+>> +	u32 mon_type;
+>> +	u32 nr_entries;
+>> +	u32 pmu[MAX_PMU_ENTRIES];
+>> +};
+>> +
+>> +static int scmi_set_cpugrp_mon(const struct scmi_protocol_handle *ph,
+>> +			       u32 cpus_mpidr, u32 mon_type, u32 msg_id)
+>> +{
+>> +	int ret = 0;
+> 
+> no need to initialize
+> 
+>> +	struct scmi_xfer *t;
+>> +	struct node_msg *msg;
+>> +
+>> +	ret = ph->xops->xfer_get_init(ph, msg_id, sizeof(*msg), sizeof(*msg), &t);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	msg = t->tx.buf;
+>> +	msg->cpumask = cpu_to_le32(cpus_mpidr);
+>> +	msg->mon_type = cpu_to_le32(mon_type);
+>> +	ret = ph->xops->do_xfer(ph, t);
+>> +	ph->xops->xfer_put(ph, t);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int scmi_set_mon(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type)
+>> +{
+>> +	return scmi_set_cpugrp_mon(ph, cpus_mpidr, mon_type, MEMLAT_SET_MONITOR);
+>> +}
+>> +
+>> +static int scmi_set_cpu_grp(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type)
+>> +{
+>> +	return scmi_set_cpugrp_mon(ph, cpus_mpidr, mon_type, MEMLAT_SET_CPU_GROUP);
+>> +}
+>> +
+>> +static int scmi_send_pmu_map_command(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +				     u32 mon_type, u32 nr_entries, void *buf, u32 msg_id)
+>> +{
+>> +	u32 *dst;
+>> +	int ret, i = 0;
+> 
+> initialization is not needed
+> 
+>> +	struct scmi_xfer *t;
+>> +	struct pmu_map_msg *msg;
+>> +	struct map_table *src = buf;
+>> +
+>> +	if (nr_entries > MAX_PMU_ENTRIES)
+>> +		return -EINVAL;
+>> +
+>> +	ret = ph->xops->xfer_get_init(ph, msg_id, sizeof(*msg), sizeof(*msg), &t);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	msg = t->tx.buf;
+>> +	msg->cpumask = cpu_to_le32(cpus_mpidr);
+>> +	msg->mon_type = cpu_to_le32(mon_type);
+> 
+> The above 7 lines are a recurring pattern. Might be worth to have a wrapper for
+> it. The datatype of 'msg' varies though, so it would have to be a macro :(
+> 
+>> +	msg->nr_entries = cpu_to_le32(nr_entries);
+>> +	dst = msg->pmu;
+>> +
+>> +	for (i = 0; i < nr_entries; i++)
+>> +		dst[i] = cpu_to_le32(src[i].v2);
+>> +
+>> +	ret = ph->xops->do_xfer(ph, t);
+>> +	ph->xops->xfer_put(ph, t);
+>> +	return ret;
+> 
+> This above 3 lines also recurring, consider a wrapper. With that the above
+> would become:
+> 
+> 	return scmi_do_xfer(ph, t);
 
-Bjorn, can you please have a look and drop/revert commit
-5c7fa5de12a31c1425cc87ba2ef27e6ae0a1788c ?
+Ack. Will drop the unnecessary initialisations during the next re-spin
+as well.
 
-Kind regards
-Uffe
+>> +}
+>> +
+>> +static int scmi_common_pmu_map(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			       u32 mon_type, u32 nr_entries, void *buf)
+>> +{
+>> +	return scmi_send_pmu_map_command(ph, cpus_mpidr, mon_type, nr_entries,
+>> +					 buf, MEMLAT_COMMON_PMU_MAP);
+>> +}
+>> +
+>> +static int scmi_mon_pmu_map(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			    u32 mon_type, u32 nr_entries, void *buf)
+>> +{
+>> +	return scmi_send_pmu_map_command(ph, cpus_mpidr, mon_type, nr_entries,
+>> +					 buf, MEMLAT_MON_PMU_MAP);
+>> +}
+>> +
+>> +static int scmi_freq_map(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			 u32 mon_type, u32 nr_rows, void *buf)
+>> +{
+>> +	int ret, i = 0;
+> 
+> initialization is unnecessary
+> 
+>> +	struct scmi_xfer *t;
+>> +	struct map_param_msg *msg;
+>> +	struct map_table *tbl, *src = buf;
+>> +
+>> +	if (nr_rows > MAX_MAP_ENTRIES)
+>> +		return -EINVAL;
+>> +
+>> +	ret = ph->xops->xfer_get_init(ph, MEMLAT_MON_FREQ_MAP, sizeof(*msg),
+>> +				      sizeof(*msg), &t);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	msg = t->tx.buf;
+>> +	msg->cpumask = cpu_to_le32(cpus_mpidr);
+>> +	msg->mon_type = cpu_to_le32(mon_type);
+>> +	msg->nr_rows = cpu_to_le32(nr_rows);
+>> +	tbl = msg->tbl;
+>> +
+>> +	for (i = 0; i < nr_rows; i++) {
+>> +		tbl[i].v1 = cpu_to_le32(src[i].v1);
+>> +		tbl[i].v2 = cpu_to_le32(src[i].v2);
+>> +	}
+>> +
+>> +	ret = ph->xops->do_xfer(ph, t);
+>> +	ph->xops->xfer_put(ph, t);
+>> +	return ret;
+>> +}
+>> +
+>> +static int scmi_set_tunable(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			    u32 msg_id, u32 mon_type, u32 val)
+>> +{
+>> +	int ret = 0;
+> 
+> drop initialization
+> 
+>> +	struct scmi_xfer *t;
+>> +	struct scalar_param_msg *msg;
+>> +
+>> +	ret = ph->xops->xfer_get_init(ph, msg_id, sizeof(*msg), sizeof(*msg), &t);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	msg = t->tx.buf;
+>> +	msg->cpumask = cpu_to_le32(cpus_mpidr);
+>> +	msg->mon_type = cpu_to_le32(mon_type);
+>> +	msg->val = cpu_to_le32(val);
+>> +	ret = ph->xops->do_xfer(ph, t);
+>> +	ph->xops->xfer_put(ph, t);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int scmi_ipm_ratio(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			  u32 mon_type, u32 val)
+>> +{
+>> +	return scmi_set_tunable(ph, cpus_mpidr, MEMLAT_IPM_RATIO, mon_type, val);
+>> +}
+>> +
+>> +static int scmi_stall_ratio(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			    u32 mon_type, u32 val)
+>> +{
+>> +	return scmi_set_tunable(ph, cpus_mpidr, MEMLAT_STALL_RATIO, mon_type, val);
+>> +}
+>> +
+>> +static int scmi_sample_ms(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			  u32 mon_type, u32 val)
+>> +{
+>> +	return scmi_set_tunable(ph, cpus_mpidr, MEMLAT_SAMPLE_MS, mon_type, val);
+>> +}
+>> +
+>> +static int scmi_send_start_stop(const struct scmi_protocol_handle *ph,
+>> +				u32 cpus_mpidr, u32 mon_type, u32 msg_id)
+>> +{
+>> +	int ret = 0;
+> 
+> drop init
+> 
+>> +	struct scmi_xfer *t;
+>> +	struct scalar_param_msg *msg;
+>> +
+>> +	ret = ph->xops->xfer_get_init(ph, msg_id, sizeof(*msg), sizeof(*msg), &t);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	msg = t->tx.buf;
+>> +	msg->cpumask = cpu_to_le32(cpus_mpidr);
+>> +	msg->mon_type = cpu_to_le32(mon_type);
+>> +	ret = ph->xops->do_xfer(ph, t);
+>> +	ph->xops->xfer_put(ph, t);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int scmi_stop_mon(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type)
+>> +{
+>> +	return scmi_send_start_stop(ph, cpus_mpidr, mon_type, MEMLAT_STOP_MONITOR);
+>> +}
+>> +
+>> +static int scmi_start_mon(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type)
+>> +{
+>> +	return scmi_send_start_stop(ph, cpus_mpidr, mon_type, MEMLAT_START_MONITOR);
+>> +}
+>> +
+>> +static struct scmi_vendor_memlat_ops memlat_ops = {
+>> +	.set_cpu_grp = scmi_set_cpu_grp,
+>> +	.freq_map = scmi_freq_map,
+>> +	.set_mon = scmi_set_mon,
+>> +	.common_pmu_map = scmi_common_pmu_map,
+>> +	.mon_pmu_map = scmi_mon_pmu_map,
+>> +	.ipm_ratio = scmi_ipm_ratio,
+>> +	.stall_ratio = scmi_stall_ratio,
+>> +	.sample_ms = scmi_sample_ms,
+>> +	.start_monitor = scmi_start_mon,
+>> +	.stop_monitor = scmi_stop_mon,
+>> +};
+>> +
+>> +static int scmi_vendor_memlat_protocol_init(const struct scmi_protocol_handle *ph)
+>> +{
+>> +	int ret;
+>> +	u32 version;
+>> +
+>> +	ret = ph->xops->version_get(ph, &version);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	dev_dbg(ph->dev, "Memlat Version %d.%d\n",
+>> +		PROTOCOL_REV_MAJOR(version), PROTOCOL_REV_MINOR(version));
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct scmi_protocol scmi_vendor_memlat = {
+>> +	.id = SCMI_VENDOR_PROTOCOL_MEMLAT,
+>> +	.owner = THIS_MODULE,
+>> +	.instance_init = &scmi_vendor_memlat_protocol_init,
+>> +	.ops = &memlat_ops,
+>> +};
+>> +module_scmi_protocol(scmi_vendor_memlat);
+>> +
+>> +MODULE_DESCRIPTION("Qualcomm Technologies, Inc. SCMI Memlat Protocol");
+>> +MODULE_LICENSE("GPL");
+>> diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+>> index 4f765bc788ff..57abb5be45c9 100644
+>> --- a/include/linux/scmi_protocol.h
+>> +++ b/include/linux/scmi_protocol.h
+>> @@ -677,6 +677,40 @@ struct scmi_powercap_proto_ops {
+>>   };
+>>   
+>>   /**
+>> + * struct scmi_vendor_memlat_ops - represents the various operations provided
+>> + * by SCMI QTI HW Memlat Vendor Protocol
+>> + *
+>> + * @cpu_grp: set the cpugrp
+>> + * @set_mon: set the supported monitors
+>> + * @common_pmu_map: sets the common PMU map supported by governor
+>> + * @mon_pmu_map: sets the additional PMU map supported by governor
+>> + * @ipm_ratio: sets the ratio_ceil needed for hw memlat governor
+>> + * @stall_ratio: sets the stall_floor needed for hw memlat governor
+>> + * @sample_ms: sets the poll iterval of the governor
+>> + * @freq_map: sets the freq_map of the governor
+>> + * @start_mon: starts the monitor in firmware
+>> + * @stop_mon: stops the monitor in firmware
+>> + */
+>> +struct scmi_vendor_memlat_ops {
+>> +	int (*set_cpu_grp)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type);
+>> +	int (*set_mon)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type);
+>> +	int (*common_pmu_map)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type,
+>> +			      u32 nr_rows, void *buf);
+>> +	int (*mon_pmu_map)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type,
+>> +			   u32 nr_rows, void *buf);
+>> +	int (*ipm_ratio)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			 u32 mon_type, u32 val);
+>> +	int (*stall_ratio)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			   u32 mon_type, u32 val);
+>> +	int (*sample_ms)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr,
+>> +			 u32 mon_type, u32 val);
+>> +	int (*freq_map)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type,
+>> +			u32 nr_rows, void *buf);
+>> +	int (*start_monitor)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type);
+>> +	int (*stop_monitor)(const struct scmi_protocol_handle *ph, u32 cpus_mpidr, u32 mon_type);
+>> +};
+>> +
+>> +/**
+>>    * struct scmi_notify_ops  - represents notifications' operations provided by
+>>    * SCMI core
+>>    * @devm_event_notifier_register: Managed registration of a notifier_block for
+>> @@ -785,6 +819,8 @@ enum scmi_std_protocol {
+>>   	SCMI_PROTOCOL_POWERCAP = 0x18,
+>>   };
+>>   
+>> +#define SCMI_VENDOR_PROTOCOL_MEMLAT    0x80
+>> +
+>>   enum scmi_system_events {
+>>   	SCMI_SYSTEM_SHUTDOWN,
+>>   	SCMI_SYSTEM_COLDRESET,
+>> -- 
+>> 2.7.4
+>>
+> 
+> 
