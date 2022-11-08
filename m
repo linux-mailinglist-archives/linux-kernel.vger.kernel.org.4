@@ -2,164 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C77A620A5F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22AB3620A5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbiKHHiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 02:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S233720AbiKHHiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 02:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233692AbiKHHh2 (ORCPT
+        with ESMTP id S233587AbiKHHhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 02:37:28 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4773204D
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 23:37:25 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36fde8f2cdcso130160307b3.23
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 23:37:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XHQYG2S+r6ZQkfu64Vbijcu9xq3IEuE8DFugpR25f3I=;
-        b=ZUAZDJI66aG+v2oL+iUezXAlrcjCsx9STzuWpYrFIJ7KKSwlLdAeNYs6QXC12jzbr/
-         bUpGUlyBk99Us4IxVCkwQlFnPFn8h1EUalTZqH/TU8mV86dDNvu0UmnfecUV5mPeockq
-         G3yZNHGXas/SEjphMVJ2jTGysrb12qr9GZefcLdrPs7fWqPM5xK0/u58DVEyA4hKvkz5
-         6pKeza5OGk7tiEFBLcXfYErgwUObvWjHsk5t9Lu70d89j87FhY3ebuxcNMz3iCj9jl/l
-         m2kdkkOoG0vomG1G7qgqFTFoKv3qWH+KoJM5BQMF+aFTpwNRQcfpDXzK2Ey1BZ5y9fwh
-         QjEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XHQYG2S+r6ZQkfu64Vbijcu9xq3IEuE8DFugpR25f3I=;
-        b=Pd4q9uCSn0kH8qzJxVWFfxTrHhFn3nbBWn7h5IjG/R3KN/skqXbXioyYPOYXB9QfLD
-         bgP13MRIojt3NKUfU5TYZrYuvIrxn303u7d0ZPDd5K0R6o+1Go6kb+bSCTOi4luw9MDC
-         PjTT0wAuctw8VTyj3E1c2XQP5bna4fMWEf0Go7zjcICV7P1DrBNSJyNRrB8VhQI/hn3t
-         I9lRu5AKCJK2rPiKyjKEq0g4Nubt4rcopOgw5+sk/Y5z96AnToiYdW71FOZgefG7rwTK
-         yjk89bBgBsiJ+YMyCnG4FoUceezmQsxHLimGTP2vFKkpNoA9g4qol6XJ/GXdsNsx1QnS
-         WDhw==
-X-Gm-Message-State: ANoB5pmCWwrD093NfnI3dSH6J/I6AlU/pjCxMk0Uaw1NYOa+FN/+ZN6f
-        fDk3Fck0NtF833qy9vmSwb+gkZCwAYCm
-X-Google-Smtp-Source: AA0mqf77IeoARDi2HjW0xRmFqlor4qhJZxA6V4qBqBtWXQ+/I6DQ+Yo3d3HGw2vk41NyDb4dHed9X3vbRKAq
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a697:9013:186f:ed07])
- (user=irogers job=sendgmr) by 2002:a25:2507:0:b0:6d4:13d1:c781 with SMTP id
- l7-20020a252507000000b006d413d1c781mr617399ybl.478.1667893044770; Mon, 07 Nov
- 2022 23:37:24 -0800 (PST)
-Date:   Mon,  7 Nov 2022 23:35:18 -0800
-In-Reply-To: <20221108073518.1154450-1-irogers@google.com>
-Message-Id: <20221108073518.1154450-15-irogers@google.com>
-Mime-Version: 1.0
-References: <20221108073518.1154450-1-irogers@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v1 14/14] perf build: Use tools/lib headers from install path
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 8 Nov 2022 02:37:20 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2D518E18;
+        Mon,  7 Nov 2022 23:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5/nYtjluDMIKkEIdaeAgklUrPJKhrNBI5rnPWNIBsL0=; b=rwDtwUfG964npUGiqYEI1q7+5r
+        HQfIw39VitlFcgNC9xtONs63FFmdr4MtNerkfsjEO3wgHWDL/pvbCpDLW8jdOI6RJetisfhFpVm29
+        nWHFLh/24Tdrav5q4/xLuV34Yl+4YXbB+2AigfgMvCxnVxVD/yiFu7L90pzNMzEuGdoFR0h4y5zfc
+        H7QmQsstIL6VFiCa/5TLAjr6JaObvUuKM/NNjnTM+W+GtMwsSl+KgF/PXLKRaxQSR+iFk7g2uiR96
+        /XB5TuPLZRRMTi5KkhDsXNqHoEEEfH1ZPpsiLRA3NDHS1sXVZITdMDZXhSR08PsSrdQjEKeYjHzKD
+        mHgHE24w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1osJAZ-003S4u-E5; Tue, 08 Nov 2022 07:37:15 +0000
+Date:   Mon, 7 Nov 2022 23:37:15 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Max Kellermann <mk@cm4all.com>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Max Kellermann <max.kellermann@ionos.com>
+Subject: Re: [PATCH] fs/splice: don't block splice_direct_to_actor() after
+ data was read
+Message-ID: <Y2oHK3/MgHQzuepE@infradead.org>
+References: <20221105090421.21237-1-mk@cm4all.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221105090421.21237-1-mk@cm4all.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch -I from tools/lib to the install path for the tools/lib
-libraries that are depended upon.
+On Sat, Nov 05, 2022 at 10:04:21AM +0100, Max Kellermann wrote:
+> Since there are no other parameters, I suggest adding the
+> SPLICE_F_NOWAIT flag, which is similar to SPLICE_F_NONBLOCK, but
+> affects the "non-pipe" file descriptor passed to sendfile() or
+> splice().  It translates to IOCB_NOWAIT for regular files.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/Makefile.config | 2 --
- tools/perf/Makefile.perf   | 6 ++++++
- 2 files changed, 6 insertions(+), 2 deletions(-)
+This looks reasonable to me and matches the read/write side.
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index d3d3c13a9f25..d7fcd1624cd7 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -349,7 +349,6 @@ ifeq ($(DEBUG),0)
-   endif
- endif
- 
--INC_FLAGS += -I$(srctree)/tools/lib/perf/include
- INC_FLAGS += -I$(src-perf)/util/include
- INC_FLAGS += -I$(src-perf)/arch/$(SRCARCH)/include
- INC_FLAGS += -I$(srctree)/tools/include/
-@@ -367,7 +366,6 @@ endif
- 
- INC_FLAGS += -I$(src-perf)/util
- INC_FLAGS += -I$(src-perf)
--INC_FLAGS += -I$(srctree)/tools/lib/
- 
- CORE_CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
- 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 1d90d78303b4..851dcc0272e5 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -305,6 +305,7 @@ LIBTRACEEVENT_INCLUDE = $(LIBTRACEEVENT_DESTDIR)/include
- LIBTRACEEVENT = $(LIBTRACEEVENT_OUTPUT)/libtraceevent.a
- export LIBTRACEEVENT
- LIBTRACEEVENT_DYNAMIC_LIST = $(LIBTRACEEVENT_PLUGINS_OUTPUT)/libtraceevent-dynamic-list
-+CFLAGS += -I$(LIBTRACEEVENT_OUTPUT)/include
- 
- #
- # The static build has no dynsym table, so this does not work for
-@@ -322,6 +323,7 @@ LIBAPI_DESTDIR = $(LIBAPI_OUTPUT)
- LIBAPI_INCLUDE = $(LIBAPI_DESTDIR)/include
- LIBAPI = $(LIBAPI_OUTPUT)/libapi.a
- export LIBAPI
-+CFLAGS += -I$(LIBAPI_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBBPF_OUTPUT = $(abspath $(OUTPUT))/libbpf
-@@ -331,6 +333,7 @@ endif
- LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
- LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
- LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
-+CFLAGS += -I$(LIBBPF_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
-@@ -340,6 +343,7 @@ endif
- LIBSUBCMD_DESTDIR = $(LIBSUBCMD_OUTPUT)
- LIBSUBCMD_INCLUDE = $(LIBSUBCMD_DESTDIR)/include
- LIBSUBCMD = $(LIBSUBCMD_OUTPUT)/libsubcmd.a
-+CFLAGS += -I$(LIBSUBCMD_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBSYMBOL_OUTPUT = $(abspath $(OUTPUT))/libsymbol
-@@ -349,6 +353,7 @@ endif
- LIBSYMBOL_DESTDIR = $(LIBSYMBOL_OUTPUT)
- LIBSYMBOL_INCLUDE = $(LIBSYMBOL_DESTDIR)/include
- LIBSYMBOL = $(LIBSYMBOL_OUTPUT)/libsymbol.a
-+CFLAGS += -I$(LIBSYMBOL_OUTPUT)/include
- 
- ifneq ($(OUTPUT),)
-   LIBPERF_OUTPUT = $(abspath $(OUTPUT))/libperf
-@@ -359,6 +364,7 @@ LIBPERF_DESTDIR = $(LIBPERF_OUTPUT)
- LIBPERF_INCLUDE = $(LIBPERF_DESTDIR)/include
- LIBPERF = $(LIBPERF_OUTPUT)/libperf.a
- export LIBPERF
-+CFLAGS += -I$(LIBPERF_OUTPUT)/include
- 
- # python extension build directories
- PYTHON_EXTBUILD     := $(OUTPUT)python_ext_build/
--- 
-2.38.1.431.g37b22c650d-goog
+>
+> For now, I
+> have documented the flag to be kernel-internal with a high bit, like
+> io_uring does with SPLICE_F_FD_IN_FIXED, but making this part of the
+> system call ABI may be a good idea as well.
 
+Yeah, my only comment here is that I see no reason to make this
+purely kernel internal.
+
+And while looking at that: does anyone remember why the (public)
+SPLICE_F_* aren't in a uapi header?
