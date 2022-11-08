@@ -2,69 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43104620929
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 06:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E26620959
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 07:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbiKHFyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 00:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
+        id S233197AbiKHGLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 01:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232911AbiKHFyx (ORCPT
+        with ESMTP id S233153AbiKHGLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 00:54:53 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60056395;
-        Mon,  7 Nov 2022 21:54:51 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VUHuOoP_1667886888;
-Received: from 30.221.131.213(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VUHuOoP_1667886888)
-          by smtp.aliyun-inc.com;
-          Tue, 08 Nov 2022 13:54:49 +0800
-Message-ID: <084d78a4-6052-f2ec-72f2-af9c4979f5dc@linux.alibaba.com>
-Date:   Tue, 8 Nov 2022 13:54:47 +0800
+        Tue, 8 Nov 2022 01:11:08 -0500
+Received: from gw.atmark-techno.com (gw.atmark-techno.com [13.115.124.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8DD3FBAA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 22:11:06 -0800 (PST)
+Received: from gw.atmark-techno.com (localhost [127.0.0.1])
+        by gw.atmark-techno.com (Postfix) with ESMTP id 1155660131
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:55:47 +0900 (JST)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        by gw.atmark-techno.com (Postfix) with ESMTPS id 71BAF60131
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:55:45 +0900 (JST)
+Received: by mail-pj1-f70.google.com with SMTP id n4-20020a17090a2fc400b002132adb9485so6462001pjm.0
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 21:55:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=scjidRPc4iGIvCmBatKCX2F1Tnu8QI+jfRrfWYL73ZU=;
+        b=OvdLHgdz38AtSvWivNE9r9BK5VS1gVBpjh7oGEvcpsjRuqpdShnDm3ySgSWRQs3Y/o
+         TcgUxkQU0FlkaowZOd7qoHGDGo1z1MSwGXXti2+9mh2RTM3iFhczhenr58NC2xIG90cQ
+         aD6tnHNgDprU0epPMfSISU0LXICDPF1xUMIDTo2uGHS0mhU8DixHwcHFmLiBrVL2RcjQ
+         dtp/zPipnhEVnUmtIu6ou+SN3pz804KotevBiubG2qSNDpz3rR3P4Pg6HySwqKDUxBrD
+         6eWgzsGSfOpDljW6JV3+RJNEKcAzEr12nPZBCcV44b6SKEUb10UPtkoVsiJSbdPTGbR+
+         MQLA==
+X-Gm-Message-State: ACrzQf28NOG6B2J2ZDM5MPUu67rcqjO30uO5QBmm3NgWQH3iwgvtSuyU
+        AHui6slWUTHsGe0iqukaSyDh1GnOxCrES+BWp8UcQegS3SyYHjHwSQt9fMfX6QOcObPU+1WY2HI
+        auzrESXs2BG7WUJ8yL1pNs0dFbhjc
+X-Received: by 2002:a17:902:e493:b0:186:9de4:a7cd with SMTP id i19-20020a170902e49300b001869de4a7cdmr54287982ple.66.1667886944494;
+        Mon, 07 Nov 2022 21:55:44 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM55peqthT9o/HMP9yprkCEHGzsFlZtK9QZTvy+tMTjniQD8mY+dN503GnNnk/R9botVWPvRlA==
+X-Received: by 2002:a17:902:e493:b0:186:9de4:a7cd with SMTP id i19-20020a170902e49300b001869de4a7cdmr54287964ple.66.1667886944191;
+        Mon, 07 Nov 2022 21:55:44 -0800 (PST)
+Received: from pc-zest.atmarktech (178.101.200.35.bc.googleusercontent.com. [35.200.101.178])
+        by smtp.gmail.com with ESMTPSA id m12-20020a17090ab78c00b002132f3e71c6sm5185182pjr.52.2022.11.07.21.55.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 07 Nov 2022 21:55:43 -0800 (PST)
+Received: from martinet by pc-zest.atmarktech with local (Exim 4.96)
+        (envelope-from <martinet@pc-zest>)
+        id 1osHaI-0098Ix-2j;
+        Tue, 08 Nov 2022 14:55:42 +0900
+From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>, mizo@atmark-techno.com,
+        Dominique Martinet <dominique.martinet@atmark-techno.com>
+Subject: [RFC PATCH 0/2] Add serdev support for hci h4
+Date:   Tue,  8 Nov 2022 14:55:29 +0900
+Message-Id: <20221108055531.2176793-1-dominique.martinet@atmark-techno.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH v2 2/2] netfs: Fix dodgy maths
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>, willy@infradead.org
-Cc:     Jeff Layton <jlayton@kernel.org>, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <166757987929.950645.12595273010425381286.stgit@warthog.procyon.org.uk>
- <166757988611.950645.7626959069846893164.stgit@warthog.procyon.org.uk>
-From:   JeffleXu <jefflexu@linux.alibaba.com>
-In-Reply-To: <166757988611.950645.7626959069846893164.stgit@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
 
-On 11/5/22 12:38 AM, David Howells wrote:
-> Fix the dodgy maths in netfs_rreq_unlock_folios().  start_page could be
-> inside the folio, in which case the calculation of pgpos will be come up
-> with a negative number (though for the moment rreq->start is rounded down
-> earlier and folios would have to get merged whilst locked)
+A couple of questions with this patch (hence status as RFC), first for
+the dt bindings part:
+ - I have no idea what to do with the compatible name.
+I am not affiliated with nxp (except as a customer), so I'm not entierly
+comfortable just adding a new property in the nxp, namespace.
+The h4 protocol is very generic and I'd think a name such as
+'hci-h4,generic' make more sense as other boards would be able to
+benefit from it without extra modifications... But that doesn't seem to
+be how things are done with dt bindings, so can I just add an arbitrary
+name?
+ - I've set Marcel (who maintains the hci_h4 driver) as maintainer of
+he dt-bindings unilaterally without asking him for lack of a better
+idea: Marcel, are you ok with that? My first idea was making it myself
+but I don't really feel competent for this.
 
-Hi, the patch itself seems fine. Just some questions about the scenario.
+Second for the driver itself:
+ - I've just monkeyed the simplest serdev support I could come up with
+and it appears to work (I'm trying to replace the following command:
+btattach -B /dev/ttymxc0 -S 3000000 -P h4); perhaps there are other
+settings you'd want?
+I've also tried suspend and with no handler it appears to work with
+an idle controller, but I'd assume we might want some pm handling at
+some point if possible... Right now this is no worse than btattach,
+but unlike btattach it's not easy to restart (unbind/bind the driver?)
+so that might come up sooner or later; will be happy to look then.
 
-1. "start_page could be inside the folio" Is that because
-.expand_readahead() called from netfs_readahead()? Since otherwise,
-req-start is always aligned to the folio boundary.
 
-2. If start_page is indeed inside the folio, then only the trailing part
-of the first folio can be covered by the request, and this folio will be
-marked with uptodate, though the beginning part of the folio may have
-not been read from the cache. Is that expected? Or correct me if I'm wrong.
+I confirmed this works with the following dts fragment over
+imx8mp.dtsi, on a board with the AW-XM458 NXP wireless+BT module.
 
+--8<------
+&uart1 {
+        pinctrl-names = "default";
+        pinctrl-0 = <&pinctrl_uart1>;
+        assigned-clocks = <&clk IMX8MP_CLK_UART1>;
+        assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_80M>;
+        status = "okay";
+        fsl,dte-mode = <1>;
+        fsl,uart-has-rtscts;
+
+        bluetooth {
+                compatible = "nxp,aw-xm458-bt";
+                max-speed = <3000000>;
+        };
+};
+
+&iomuxc {
+        pinctrl_uart1: uart1grp {
+                fsl,pins = <
+                        MX8MP_IOMUXC_UART1_RXD__UART1_DTE_TX    0x140
+                        MX8MP_IOMUXC_UART1_TXD__UART1_DTE_RX    0x140
+                        MX8MP_IOMUXC_UART3_RXD__UART1_DTE_RTS   0x140
+                        MX8MP_IOMUXC_UART3_TXD__UART1_DTE_CTS   0x140
+                >;
+        };
+}
+--8<------
+
+
+Dominique Martinet (2):
+  dt-bindings: net: h4-bluetooth: add new bindings for hci_h4
+  bluetooth/hci_h4: add serdev support
+
+ .../devicetree/bindings/net/h4-bluetooth.yaml | 49 ++++++++++++++
+ drivers/bluetooth/Kconfig                     |  1 +
+ drivers/bluetooth/hci_h4.c                    | 64 +++++++++++++++++++
+ 3 files changed, 114 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/h4-bluetooth.yaml
 
 -- 
-Thanks,
-Jingbo
+2.35.1
+
+
