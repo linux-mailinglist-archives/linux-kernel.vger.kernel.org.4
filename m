@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE28620DDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F47620DF7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbiKHKyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
+        id S233795AbiKHLAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233819AbiKHKyH (ORCPT
+        with ESMTP id S233479AbiKHLAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:54:07 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4C7C75E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:54:06 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id j130so16898608ybj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:54:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rfZR5U4gChaI5Onrm1Hyr5yShLag3yC0LYHWhYpsmR0=;
-        b=UwpizaPyCRB/wtTIK8L8rPC3/ceyv48IHLpgUp0YZW6OZAEHSn0AMIISrUpqaIlLq+
-         M44EAd1fcIpce5Q1PhETFPAU+RCcQueGJA1ZRE3Ex9p3JyGVt6FTLk/YKDtDzkOw5aLR
-         kC+06lG8tAXRWD/pcT8MUJBFxTHnkrL3liMd5PvBekEIPB+ilAfiUfoTlwn20zyZRzxo
-         Lr6sR1WtCKrKCRCGSrreorm2G/lbiuOmrQM1lzDMmmbgqPwFkneY8mFDMWMZfAdcH8c1
-         5HqGUI4neBPPJQ5CGjGyaxug0RuMv7SHTnsZdeFqDKZYjZPB+UG/rf8PR2bF8t46QPXm
-         3OMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rfZR5U4gChaI5Onrm1Hyr5yShLag3yC0LYHWhYpsmR0=;
-        b=Irp2sVMJB046e/5307TBfzCPlyConYNs6bTI5VFXANtlqeZd0Wxw4wY4XWrDqcXOeO
-         n5Vqi53QuOAAuxIq1SkSmjimgX/xx1yCvFddz1WgmNAS/aARQlSpTrjETwx6pXsujRk8
-         4Zp+6YNDuyd+3ZCT0Ug60+yFj6neh4IDsS3NS5oV3i/5X8SU93RWl6x6+V+ttG3MunNI
-         WLecIZGtPVSokRvEi7auer2HZzh9nQHg6QcftvJNnVe39/pOqbw+HqFAiqsKgsvA2F00
-         E+hrOJE3U7fruWKlHxduee1kpXw18qp2ucwlKve0TDEYbd7xSZ6MWEa4l2G3hTxjvIs8
-         lpuA==
-X-Gm-Message-State: ANoB5pktVzWfFppna040X+wy1ppRioMM10aZtwZWf6YT9N0zoGKJD6Vs
-        9fohKmW4G0uLS7IoDv3fxzcnRLhvPowRu0Wh8EbW2A==
-X-Google-Smtp-Source: AA0mqf7a65z+WGBHF5Px9g1NUDAw3eBvcU7XU6gMVrOWCt2leXp8eGdMyRSNqtGaNlUq13gV7dbS917pYYnX5Z9Za4k=
-X-Received: by 2002:a05:6902:b16:b0:6d6:9455:d6c5 with SMTP id
- ch22-20020a0569020b1600b006d69455d6c5mr11950402ybb.164.1667904845653; Tue, 08
- Nov 2022 02:54:05 -0800 (PST)
+        Tue, 8 Nov 2022 06:00:03 -0500
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CA14450B3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:59:54 -0800 (PST)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Tue, 8 Nov 2022
+ 18:55:03 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.13.29]
+Date:   Tue, 8 Nov 2022 18:55:03 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wangkailong@jari.cn
+To:     Wentland <harry.wentland@amd.com>, Li <sunpeng.li@amd.com>,
+        Siqueira <Rodrigo.Siqueira@amd.com>,
+        Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Airlie <airlied@gmail.com>,
+        Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject:  [PATCH] drm/amd/display: fix array-bounds error in
+ dc_stream_remove_writeback()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-References: <CA+G9fYs+fOTBO=aTfO57xby=QQDaqUt4umwgo6bwLB_iGoSEPw@mail.gmail.com>
- <87h6z9ka3s.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <87h6z9ka3s.fsf@oldenburg.str.redhat.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 8 Nov 2022 16:23:54 +0530
-Message-ID: <CA+G9fYsAA-e+roKY3GoM5BXjRVDVz6wRDZCg6M7GeG_qWMQ6wA@mail.gmail.com>
-Subject: Re: selftests: clone3: clone3_clear_sighand failed - Bail out! Failed
- to clear signal handler for child process
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, libc-alpha@sourceware.org,
-        linux-api@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <7bafafdf.f5.18456e11abd.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwCXn+CHNWpjAcsBAA--.39W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAEB2FEYx0DdQABsu
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 at 16:05, Florian Weimer <fweimer@redhat.com> wrote:
->
-> * Naresh Kamboju:
->
-> > selftests: clone3: clone3_clear_sighand failed on arm32 and i386
-> > but passed on arm64 and x86_64.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > # selftests: clone3: clone3_clear_sighand
-> > # TAP version 13
-> > # 1..1
-> > # # clone3() syscall supported
-> > # Bail out! Failed to clear signal handler for child process
-> > # # Planned tests != run tests (1 != 0)
-> > # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > not ok 2 selftests: clone3: clone3_clear_sighand # exit=1
->
-> Not sure why you are reporting this to libc-alpha.  We'd like to help,
-> but there doesn't seem to be anything glibc-specific in this report?
-
-This is coming from a commit log having CC to the libc-alpha list.
-However, please ignore the report if it is not related.
-
---
-tests: test CLONE_CLEAR_SIGHAND
-Test that CLONE_CLEAR_SIGHAND resets signal handlers to SIG_DFL for the
-child process and that CLONE_CLEAR_SIGHAND and CLONE_SIGHAND are
-mutually exclusive.
-
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: libc-alpha@sourceware.org
-Cc: linux-api@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-Link: https://lore.kernel.org/r/20191014104538.3096-2-christian.brauner@ubuntu.com
-
->
-> Thanks,
-> Florian
-
-
-- Naresh
+cmVwbGFjZSB0aGUgc3Vic2VxdWVudCBjaGVjayBmb3IgJ2kgIT0gaicgd2l0aCAKRGVsZXRlIGhl
+YWRlciBmaWxlICJ0aW1pbmdfZ2VuZXJhdG9yLmgiCgpTaWduZWQtb2ZmLWJ5OiBLYWlMb25nIFdh
+bmcgPHdhbmdrYWlsb25nQGphcmkuY24+Ci0tLQogZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5
+L2RjL2NvcmUvZGNfc3RyZWFtLmMgfCAxNyArKysrKysrLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5n
+ZWQsIDcgaW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2NvcmUvZGNfc3RyZWFtLmMgYi9kcml2ZXJzL2dwdS9k
+cm0vYW1kL2Rpc3BsYXkvZGMvY29yZS9kY19zdHJlYW0uYwppbmRleCAzOGQ3MWI1YzFmMmQuLjY2
+NjYxYTIwMTE3YiAxMDA2NDQKLS0tIGEvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2Nv
+cmUvZGNfc3RyZWFtLmMKKysrIGIvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2RjL2NvcmUv
+ZGNfc3RyZWFtLmMKQEAgLTI5LDcgKzI5LDYgQEAKICNpbmNsdWRlICJjb3JlX3R5cGVzLmgiCiAj
+aW5jbHVkZSAicmVzb3VyY2UuaCIKICNpbmNsdWRlICJpcHAuaCIKLSNpbmNsdWRlICJ0aW1pbmdf
+Z2VuZXJhdG9yLmgiCiAjaW5jbHVkZSAiZGNfZG11Yl9zcnYuaCIKIAogI2RlZmluZSBEQ19MT0dH
+RVIgZGMtPmN0eC0+bG9nZ2VyCkBAIC0xNTIsOSArMTUxLDggQEAgc3RhdGljIHZvaWQgZGNfc3Ry
+ZWFtX2ZyZWUoc3RydWN0IGtyZWYgKmtyZWYpCiAKIHZvaWQgZGNfc3RyZWFtX3JlbGVhc2Uoc3Ry
+dWN0IGRjX3N0cmVhbV9zdGF0ZSAqc3RyZWFtKQogewotCWlmIChzdHJlYW0gIT0gTlVMTCkgewor
+CWlmIChzdHJlYW0gIT0gTlVMTCkKIAkJa3JlZl9wdXQoJnN0cmVhbS0+cmVmY291bnQsIGRjX3N0
+cmVhbV9mcmVlKTsKLQl9CiB9CiAKIHN0cnVjdCBkY19zdHJlYW1fc3RhdGUgKmRjX2NyZWF0ZV9z
+dHJlYW1fZm9yX3NpbmsoCkBAIC0zMTYsMTEgKzMxNCwxMSBAQCBib29sIGRjX3N0cmVhbV9zZXRf
+Y3Vyc29yX2F0dHJpYnV0ZXMoCiAJc3RydWN0IGRjICAqZGM7CiAJYm9vbCByZXNldF9pZGxlX29w
+dGltaXphdGlvbnMgPSBmYWxzZTsKIAotCWlmIChOVUxMID09IHN0cmVhbSkgeworCWlmIChzdHJl
+YW0gPT0gTlVMTCkgewogCQlkbV9lcnJvcigiREM6IGRjX3N0cmVhbSBpcyBOVUxMIVxuIik7CiAJ
+CXJldHVybiBmYWxzZTsKIAl9Ci0JaWYgKE5VTEwgPT0gYXR0cmlidXRlcykgeworCWlmIChhdHRy
+aWJ1dGVzID09IE5VTEwpIHsKIAkJZG1fZXJyb3IoIkRDOiBhdHRyaWJ1dGVzIGlzIE5VTEwhXG4i
+KTsKIAkJcmV0dXJuIGZhbHNlOwogCX0KQEAgLTM5OSwxMiArMzk3LDEyIEBAIGJvb2wgZGNfc3Ry
+ZWFtX3NldF9jdXJzb3JfcG9zaXRpb24oCiAJc3RydWN0IGRjICAqZGMgPSBzdHJlYW0tPmN0eC0+
+ZGM7CiAJYm9vbCByZXNldF9pZGxlX29wdGltaXphdGlvbnMgPSBmYWxzZTsKIAotCWlmIChOVUxM
+ID09IHN0cmVhbSkgeworCWlmIChzdHJlYW0gPT0gTlVMTCkgewogCQlkbV9lcnJvcigiREM6IGRj
+X3N0cmVhbSBpcyBOVUxMIVxuIik7CiAJCXJldHVybiBmYWxzZTsKIAl9CiAKLQlpZiAoTlVMTCA9
+PSBwb3NpdGlvbikgeworCWlmIChwb3NpdGlvbiA9PSBOVUxMKSB7CiAJCWRtX2Vycm9yKCJEQzog
+Y3Vyc29yIHBvc2l0aW9uIGlzIE5VTEwhXG4iKTsKIAkJcmV0dXJuIGZhbHNlOwogCX0KQEAgLTQ2
+OCw5ICs0NjYsOCBAQCBib29sIGRjX3N0cmVhbV9hZGRfd3JpdGViYWNrKHN0cnVjdCBkYyAqZGMs
+CiAJCX0KIAl9CiAKLQlpZiAoIWlzRHJjKSB7CisJaWYgKCFpc0RyYykKIAkJc3RyZWFtLT53cml0
+ZWJhY2tfaW5mb1tzdHJlYW0tPm51bV93Yl9pbmZvKytdID0gKndiX2luZm87Ci0JfQogCiAJaWYg
+KGRjLT5od3NzLmVuYWJsZV93cml0ZWJhY2spIHsKIAkJc3RydWN0IGRjX3N0cmVhbV9zdGF0dXMg
+KnN0cmVhbV9zdGF0dXMgPSBkY19zdHJlYW1fZ2V0X3N0YXR1cyhzdHJlYW0pOwpAQCAtNTI2LDcg
+KzUyMyw3IEBAIGJvb2wgZGNfc3RyZWFtX3JlbW92ZV93cml0ZWJhY2soc3RydWN0IGRjICpkYywK
+IAkvKiByZW1vdmUgd3JpdGViYWNrIGluZm8gZm9yIGRpc2FibGVkIHdyaXRlYmFjayBwaXBlcyBm
+cm9tIHN0cmVhbSAqLwogCWZvciAoaSA9IDAsIGogPSAwOyBpIDwgc3RyZWFtLT5udW1fd2JfaW5m
+bzsgaSsrKSB7CiAJCWlmIChzdHJlYW0tPndyaXRlYmFja19pbmZvW2ldLndiX2VuYWJsZWQpIHsK
+LQkJCWlmIChqIDwgaSkKKwkJCWlmIChpICE9IGopCiAJCQkJLyogdHJpbSB0aGUgYXJyYXkgKi8K
+IAkJCQlzdHJlYW0tPndyaXRlYmFja19pbmZvW2pdID0gc3RyZWFtLT53cml0ZWJhY2tfaW5mb1tp
+XTsKIAkJCWorKzsKLS0gCjIuMzYuMQoK
