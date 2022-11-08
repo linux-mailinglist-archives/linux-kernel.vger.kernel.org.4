@@ -2,152 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D56A621AEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED642621AF1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbiKHRkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S234116AbiKHRli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbiKHRkd (ORCPT
+        with ESMTP id S231357AbiKHRlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:40:33 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B6D50F14
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:40:32 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C017B1F88D;
-        Tue,  8 Nov 2022 17:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667929230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E19JDYRMCtHVo52riv0xC8e/AOPdJZyCAR84AHrfs3g=;
-        b=qRJI/Z9N8oaDhQAG9LC+m0VSM4vTRcZ8f3TUvFv5Eq9D2UFukL+yuJ62pE/5ukfiTnvj6U
-        9yjRuPlXmyBOKuEm3U3O7JoPZJxmgo9GDDdEXtyRjUYuyhsBXKq39c4R97xULUJMdRig7Z
-        Hmr+GoVnUFEcW2dLhbN7uVArU41USMg=
-Received: from suse.cz (unknown [10.100.208.146])
+        Tue, 8 Nov 2022 12:41:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B39950F14;
+        Tue,  8 Nov 2022 09:41:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 786412C141;
-        Tue,  8 Nov 2022 17:40:30 +0000 (UTC)
-Date:   Tue, 8 Nov 2022 18:40:30 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 08/40] printk: use console_is_enabled()
-Message-ID: <Y2qUjiBStRbVRGZ9@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-9-john.ogness@linutronix.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26EA7B81BE2;
+        Tue,  8 Nov 2022 17:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D245C433D7;
+        Tue,  8 Nov 2022 17:41:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667929292;
+        bh=cBKSOpSy+jUBQx59agJs7B0BFousNoTpEUsuo3M6i8U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r1w0CL8aqJPMtCnz0+aaL2hHdbPmMBtIIS7o+i0qWnujbARfUxmfnzw9GDeWw3B6b
+         He7M78EP35fq2DvWKmNhg7rqd+z6RS7BK6eDYkvs1w0kH4AUAqGsQ4Ir1+2eXrPZ7i
+         uL069c9KqxhCag1CWs7jagNH9RlhN+lyyccT6O8bgGMuq30ry6o7AqfRmWWl3pnlfz
+         GTIn5U1LGJ4OdeQfWc5OFbaNBghatIkbaObTz49iDqQZ51fYnz8TGbnGIj1UamSuHc
+         yvj2oMm8345Z93OdMrmjYtPbP0NS3Q6nq+exgHX2Hv8AUKowZmBGQNKeo9FMwHTLHr
+         n2OXtairHNQ3w==
+Date:   Tue, 8 Nov 2022 09:41:30 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     syzbot <syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Subject: Re: [syzbot] KMSAN: uninit-value in pagecache_write
+Message-ID: <Y2qUylpsZcJ7HF0Z@sol.localdomain>
+References: <00000000000058d01705ecddccb0@google.com>
+ <CAG_fn=WAyOc+1GEC+P3PpTM2zLcLcepAX1pPXkj5C6aPyrDVUA@mail.gmail.com>
+ <Y2lGu/QTIWNpzFI3@sol.localdomain>
+ <CAG_fn=VQBv-sgPhT0gLVChAtMNx0F3RcQYDKdvhBL4mBpiDkFA@mail.gmail.com>
+ <CAG_fn=VPvdHxQc3xm5xkqgFq3uo5oTU_w5vyMj-qQD7DvwQ4BA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221107141638.3790965-9-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAG_fn=VPvdHxQc3xm5xkqgFq3uo5oTU_w5vyMj-qQD7DvwQ4BA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-07 15:22:06, John Ogness wrote:
-> Replace (console->flags & CON_ENABLED) usage with console_is_enabled()
-> if it involves a data race. Otherwise add comments mentioning why the
-> wrapper is not used.
-
-The wrapper will be used/needed only on few locations. There are many
-more locations where the console flags are modified without any
-locking.
-
-Note that it is not only about CON_ENABLE flag. If we started playing
-the game with WRITE_ONCE()/READ_ONCE() then we would need to consider
-all locations where the flags are modified.
-
-In the end, it might be easier to use the proposed console_set_flag(),
-console_clear_flag(), console_check_flag(), and
-console_check_flag_unsafe(), instead of documenting all the locations.
-
-Also it is more important to document why it is acceptable to use
-the racy variant. The wrappers would make sure that all the other
-accesses are safe.
-
-
-> Note that this is a preparatory change for when console_lock no longer
-> provides synchronization for console->flags.
->
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> ---
->  kernel/printk/printk.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+On Tue, Nov 08, 2022 at 10:08:36AM +0100, 'Alexander Potapenko' via syzkaller-bugs wrote:
+> > >
+> > > Anyway, this patch doesn't hurt, I suppose.  Can please you send it out as a
+> > > formal patch to linux-ext4?  It would be easy for people to miss this patch
+> > > buried in this thread.  Also, can you please send a patch to linux-f2fs-devel
+> > > for the same code in fs/f2fs/verity.c?
+> >
+> > Will do!
 > 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 79811984da34..f243bb56a3ba 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2660,7 +2660,7 @@ static bool abandon_console_lock_in_panic(void)
->   */
->  static inline bool console_is_usable(struct console *con)
->  {
-> -	if (!(con->flags & CON_ENABLED))
-> +	if (!console_is_enabled(con))
+> Shall I also initialize fsdata here:
+> 
+> $ git grep 'void \*fsdata;'
+> fs/affs/file.c:         void *fsdata;
+> fs/ext4/verity.c:               void *fsdata;
+> fs/f2fs/verity.c:               void *fsdata;
+> fs/hfs/extent.c:                void *fsdata;
+> fs/hfsplus/extents.c:           void *fsdata;
+> fs/ocfs2/mmap.c:        void *fsdata;
 
-I agree that it makes sense to do this now. console_is_usable() is
-used in two cycles. They will get switched to the srcu walk one by one.
+Yes, it looks like they all need this.  Except maybe ocfs2?  It's hard to tell.
 
-Just please document that this allows to use console_is_usable() under
-console_srcu_read_lock. And that in this case, the value of the flag might
-get cleared at any time but the console still might be used
-as long as the console_srcu_read_lock is held.
-
-We should actually add a check into console_is_enabled() that either
-console_lock or console_srcu_read_lock is held. The console_lock
-should later be changed to console_list_lock.
-
-
->  		return false;
->  
->  	if (!con->write)
-> @@ -2946,7 +2946,7 @@ void console_unblank(void)
->  	console_locked = 1;
->  	console_may_schedule = 0;
->  	for_each_console(c)
-> -		if ((c->flags & CON_ENABLED) && c->unblank)
-> +		if (console_is_enabled(c) && c->unblank)
-
-I would prefer to do this change together with switching to
-for_each_console_srcu(). It would be more clear why this change
-is needed.
-
->  			c->unblank();
->  	console_unlock();
->  
-> @@ -3104,8 +3104,11 @@ static int try_enable_preferred_console(struct console *newcon,
->  	 * Some consoles, such as pstore and netconsole, can be enabled even
->  	 * without matching. Accept the pre-enabled consoles only when match()
->  	 * and setup() had a chance to be called.
-> +	 *
-> +	 * Note that reading @flags is race-free because the console is not
-> +	 * yet added to the console list.
-
-Nit: This is not completely true. We just know that it will not get
-     modified by the printk/console framework because the console is not
-     registered yet.
-
-Well, I could live with it. The comment is good enough. I am still
-more concerned about how to distinguish when READ_ONCE()/WRITE_ONCE()
-is needed. And it would affect all accesses to the flags.
-
->  	 */
-> -	if (newcon->flags & CON_ENABLED && c->user_specified ==	user_specified)
-> +	if ((newcon->flags & CON_ENABLED) && (c->user_specified == user_specified))
->  		return 0;
->  
->  	return -ENOENT;
-
-Best Regards,
-Petr
+- Eric
