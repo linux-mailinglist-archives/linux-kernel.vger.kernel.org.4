@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0CB62205C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C66E622063
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbiKHXco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:32:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
+        id S230076AbiKHXfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiKHXck (ORCPT
+        with ESMTP id S230050AbiKHXfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:32:40 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A46AE02
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667950359; x=1699486359;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kzTE424pFzXVf9IENFeVVx4TxNlGGTb4uFNWa9RUX7s=;
-  b=YRaKMpSN41sxL88h/+NklJFYBHd72qHAisLhZ+ClUXjvTdQ9eos+jmVp
-   qn4nXUWzu7xy4l5sjxH9AntFVhMfEz8dDLHYts5OtZbtuQ5CtUp33LurL
-   gzVbQOCTfH9YECeR55mPkoj5aLq3MJ9cEtgHilcnzl+nT6BmdaPBBOQNC
-   wBaN7pwTx6bUnSDBZ0SOTXWDg5VQ7CWNi8WGH1ta6ZSNe5LEeBVkIt46l
-   LeTk++jZyyZqLUQ+dO3lyYkMh65qx9cax0wKXAl115OSCUc+GOEgH4WxN
-   HlzacfS859f76FvXB2q9nY+n4y5v81NCi2cVctfd1yZ+pwj9bFqtJFxUg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312630635"
-X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
-   d="scan'208";a="312630635"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 15:32:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="669732728"
-X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
-   d="scan'208";a="669732728"
-Received: from vibhusha-mobl1.amr.corp.intel.com (HELO [10.252.133.56]) ([10.252.133.56])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 15:32:38 -0800
-Message-ID: <01fbc03e-bef0-bf07-d035-dac695800996@intel.com>
-Date:   Tue, 8 Nov 2022 15:32:38 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [v2 01/13] x86/microcode/intel: Prevent printing updated
- microcode rev multiple times
-Content-Language: en-US
-To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Arjan van de Ven <arjan.van.de.ven@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jacon Jun Pan <jacob.jun.pan@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-References: <20221103175901.164783-1-ashok.raj@intel.com>
- <20221103175901.164783-2-ashok.raj@intel.com> <Y2e4PgwAEXuFzoMd@zn.tnic>
- <Y2kuixb0RU9BxKls@araj-dh-work> <Y2lSyX+YS51dxAnr@zn.tnic>
- <Y2rg7OYkhtTWQVNL@a4bf019067fa.jf.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y2rg7OYkhtTWQVNL@a4bf019067fa.jf.intel.com>
-Content-Type: text/plain; charset=UTF-8
+        Tue, 8 Nov 2022 18:35:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D9E528B1;
+        Tue,  8 Nov 2022 15:35:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B49ED617D8;
+        Tue,  8 Nov 2022 23:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26B2C433C1;
+        Tue,  8 Nov 2022 23:35:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667950531;
+        bh=hAtFAfVdiMhWghQ20wXujauJ3CNhPfxI4wMaXk06c7k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q+KAC+UEamqmqDsoE7pph9YOK2v5vABXK/5EqjKKULl2sjQWbe7LL+GdpoPc+9Lhn
+         7BSWEiStjXMEHLsr6wwb7CfQ78kBPhBN9uLy95NHr/8oIBsotjOmlrsvMIbT9rX8gZ
+         Jfb3sVSpnqpqBco2z3FffR2GDviWDwzGGMhL3J9rI2wDINojBp9Gt4hT/DdB+jq7Xd
+         TOHGiihErMwpckwKCU34MfJfJCrnbW4SHN+csGsCNGBaEg3geSH74ZdwdbzkMr1Luc
+         OIbXwe4lk4cdfu0rnJVbZj8rJM+anM1NVM4qG4N3QD8L+lqSaogPTcbnmnbmFequwJ
+         Vq6U/sgUnjoFA==
+Date:   Wed, 9 Nov 2022 08:35:26 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] tools/perf: Fix to get the DW_AT_decl_file and
+ DW_AT_call_file as unsinged data
+Message-Id: <20221109083526.b5f052f5ab8c9dd930df38f1@kernel.org>
+In-Reply-To: <Y2rFS6CPfhIQhYUc@kernel.org>
+References: <166761727445.480106.3738447577082071942.stgit@devnote3>
+        <CAM9d7ci8YX22Bp31ZD9k31NFN6pP3fbPKpNDNZYnmdZiqav1Vg@mail.gmail.com>
+        <Y2rFS6CPfhIQhYUc@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,14 +64,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 15:06, Ashok Raj wrote:
-> Patch3 is a bug fix. I suspect some earlier upstream reports of ucode 
-> failure after update (early loading) might be related. The symptom is 
-> similar, but those are too old to followup. I got into a similare situation
-> when i tried to update an incompatible uCode from initrd and system hung.
+On Tue, 8 Nov 2022 18:08:27 -0300
+Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
 
-Hi Ashok,
+> Em Mon, Nov 07, 2022 at 01:09:00PM -0800, Namhyung Kim escreveu:
+> > Hi Masami,
+> > 
+> > On Fri, Nov 4, 2022 at 8:01 PM Masami Hiramatsu (Google)
+> > <mhiramat@kernel.org> wrote:
+> > >
+> > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > >
+> > > Dwarf version 5 standard Sec 2.14 says that
+> > >
+> > >   Any debugging information entry representing the declaration of an object,
+> > >   module, subprogram or type may have DW_AT_decl_file, DW_AT_decl_line and
+> > >   DW_AT_decl_column attributes, each of whose value is an unsigned integer
+> > >   constant.
+> > >
+> > > So it should be an unsigned integer data. Also, even though the standard
+> > > doesn't clearly say the DW_AT_call_file is signed or unsigned, the
+> > > elfutils (eu-readelf) interprets it as unsigned integer data and it is
+> > > natural to handle it as unsigned integer data as same as DW_AT_decl_file.
+> > > This changes the DW_AT_call_file as unsigned integer data too.
+> > >
+> > > Fixes: 3f4460a28fb2 ("perf probe: Filter out redundant inline-instances")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Acked-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Thanks, applied.
 
-If this really is a bug fix, could you please break it out and send it
-separately along with appropriate tags like Fixes and a cc:stable@?  We
-handle bug fixes differently from new features.
+Thanks Namhyung and Arnaldo!
+
+> 
+> - Arnaldo
+> 
+>  
+> > Thanks,
+> > Namhyung
+> > 
+> > 
+> > > ---
+> > >  tools/perf/util/dwarf-aux.c |   21 ++++-----------------
+> > >  1 file changed, 4 insertions(+), 17 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/dwarf-aux.c b/tools/perf/util/dwarf-aux.c
+> > > index 30b36b525681..b07414409771 100644
+> > > --- a/tools/perf/util/dwarf-aux.c
+> > > +++ b/tools/perf/util/dwarf-aux.c
+> > > @@ -315,19 +315,6 @@ static int die_get_attr_udata(Dwarf_Die *tp_die, unsigned int attr_name,
+> > >         return 0;
+> > >  }
+> > >
+> > > -/* Get attribute and translate it as a sdata */
+> > > -static int die_get_attr_sdata(Dwarf_Die *tp_die, unsigned int attr_name,
+> > > -                             Dwarf_Sword *result)
+> > > -{
+> > > -       Dwarf_Attribute attr;
+> > > -
+> > > -       if (dwarf_attr_integrate(tp_die, attr_name, &attr) == NULL ||
+> > > -           dwarf_formsdata(&attr, result) != 0)
+> > > -               return -ENOENT;
+> > > -
+> > > -       return 0;
+> > > -}
+> > > -
+> > >  /**
+> > >   * die_is_signed_type - Check whether a type DIE is signed or not
+> > >   * @tp_die: a DIE of a type
+> > > @@ -467,9 +454,9 @@ int die_get_data_member_location(Dwarf_Die *mb_die, Dwarf_Word *offs)
+> > >  /* Get the call file index number in CU DIE */
+> > >  static int die_get_call_fileno(Dwarf_Die *in_die)
+> > >  {
+> > > -       Dwarf_Sword idx;
+> > > +       Dwarf_Word idx;
+> > >
+> > > -       if (die_get_attr_sdata(in_die, DW_AT_call_file, &idx) == 0)
+> > > +       if (die_get_attr_udata(in_die, DW_AT_call_file, &idx) == 0)
+> > >                 return (int)idx;
+> > >         else
+> > >                 return -ENOENT;
+> > > @@ -478,9 +465,9 @@ static int die_get_call_fileno(Dwarf_Die *in_die)
+> > >  /* Get the declared file index number in CU DIE */
+> > >  static int die_get_decl_fileno(Dwarf_Die *pdie)
+> > >  {
+> > > -       Dwarf_Sword idx;
+> > > +       Dwarf_Word idx;
+> > >
+> > > -       if (die_get_attr_sdata(pdie, DW_AT_decl_file, &idx) == 0)
+> > > +       if (die_get_attr_udata(pdie, DW_AT_decl_file, &idx) == 0)
+> > >                 return (int)idx;
+> > >         else
+> > >                 return -ENOENT;
+> > >
+> 
+> -- 
+> 
+> - Arnaldo
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
