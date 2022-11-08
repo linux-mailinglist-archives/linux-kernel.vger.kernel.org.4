@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E74F6218B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD46F6218B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiKHPqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S234482AbiKHPqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233737AbiKHPqL (ORCPT
+        with ESMTP id S231787AbiKHPql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:46:11 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4321853EFF;
-        Tue,  8 Nov 2022 07:46:10 -0800 (PST)
+        Tue, 8 Nov 2022 10:46:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776085C74E;
+        Tue,  8 Nov 2022 07:46:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8E06FCE1BD8;
-        Tue,  8 Nov 2022 15:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA77C433C1;
-        Tue,  8 Nov 2022 15:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667922366;
-        bh=DZsjrJI0/NXHowKMtK9SYTyubsi9Lc1SR872ceeBNU0=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10C97615F0;
+        Tue,  8 Nov 2022 15:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E03AC433D6;
+        Tue,  8 Nov 2022 15:46:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667922399;
+        bh=j94Kohmh15MKz9lwMvrlIvKWFYBll4GPXGwEB1XBuW8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pqxQDRy5bGuQgAuXXCGJcdX85KKTp8Q8RzXYVTmmQpXCz7DjZXcaqcG0JAXIUznMa
-         eBtdRyLhgzsCcKhw0n+gfMiVN0E9GxzILMJD6f3BNJ0Cbn15NFsexe8HAB5o67cHZf
-         DxzJpycPhig+vI5bADAn5MSoYKTZDmhu/850Isz8/phlCgeQ1lkio0FMvDeiL5zA5a
-         ClUOW8u08P0BvMBLLa1sx70MMAFDyy/4xNCV6+e4tkL1D3cNogZfsInooH1B04pcFs
-         vj/8IZGkIY99oO8efAlllg0wdmebiSvYmp/yQ04VolzXFWvTOk4fAQPjsKkuote4mo
-         uY7i/cUlQudmQ==
-Date:   Tue, 8 Nov 2022 08:46:03 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
-Subject: Re: nvme-pci: NULL pointer dereference in nvme_dev_disable() on
- linux-next
-Message-ID: <Y2p5u8N+Hou/5v53@kbusch-mbp>
-References: <fad4d2d5e24eabe1a4fcab75c5d080a6229dc88b.camel@linux.ibm.com>
- <7a14c467-e67e-eede-4ebc-d8105cc3bcd5@nvidia.com>
+        b=q7JzbPHHSkCyXSWhKqlGPbaZeOVjLckME6v52kNoeGkQnduDNLmokEphEGUHUKDmn
+         dYJFQHJC4j80+D+XW+CR5mm5JHsne/WZMNaftjWBCHHmzYC+H2FC4wd/hvkk1m1GgU
+         BaRhU/+ZYfbfXOeGYsCZke/vQ+gN/i1wTmtYwXJE=
+Date:   Tue, 8 Nov 2022 16:46:35 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ray Chi <raychi@google.com>
+Cc:     stern@rowland.harvard.edu, m.grzeschik@pengutronix.de,
+        albertccwang@google.com, pumahsu@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [Patch v5] usb: core: stop USB enumeration if too many retries
+Message-ID: <Y2p52y7h2h0YCgXj@kroah.com>
+References: <20221107072754.3336357-1-raychi@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7a14c467-e67e-eede-4ebc-d8105cc3bcd5@nvidia.com>
+In-Reply-To: <20221107072754.3336357-1-raychi@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,13 +51,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 03:50:33AM +0000, Chaitanya Kulkarni wrote:
-> On 11/7/22 09:28, Gerd Bayer wrote:
+On Mon, Nov 07, 2022 at 03:27:54PM +0800, Ray Chi wrote:
+> When a broken USB accessory connects to a USB host, usbcore might
+> keep doing enumeration retries. If the host has a watchdog mechanism,
+> the kernel panic will happen on the host.
 > 
-> > We believe this to be a race-condition somewhere, since this sequence does not produce the panic
-> > when executed interactively.
-> > 
+> This patch provides an attribute early_stop to limit the numbers of retries
+> for each port of a hub. If a port was marked with early_stop attribute,
+> unsuccessful connection attempts will fail quickly. In addition, if an
+> early_stop port has failed to initialize, it will ignore all future
+> connection events until early_stop attribute is clear.
 > 
-> You can try and bisect the code to point out at exact commit.
+> Signed-off-by: Ray Chi <raychi@google.com>
+> ---
 
-Bisect doesn't work without a known good commit point.
+Much nicer, thanks for sticking with this!  I'll go queue it up now
+
+greg k-h
