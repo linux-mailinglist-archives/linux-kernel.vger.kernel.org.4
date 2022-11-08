@@ -2,90 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF844620C87
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F376C620C89
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiKHJmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S233841AbiKHJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233902AbiKHJl7 (ORCPT
+        with ESMTP id S233862AbiKHJmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:41:59 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93CD27176;
-        Tue,  8 Nov 2022 01:41:56 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id hh9so8319034qtb.13;
-        Tue, 08 Nov 2022 01:41:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B0xAJLxS4jYE+47ZWAmS8AWJyvD2QxuXvjLK3DII+Ys=;
-        b=yKsxjt4zmALu9n8wxgnDPE8jybXjoVlsJkLD9sD6eDOOrubRDnp17vx1K1o87qS5q7
-         faSqWlRwMSoCSoaafaL0lLX1QCDaX2FcU4wzHaBHqDqIKzs79AIf7l0xaJuGX72iXGq6
-         A9ZvtPvIRZpndJwLflV+D0pXh26XORfySNfcDjHGycAOB4sxf5+5SLxTghmjHdYM2bFW
-         VKTgsCZKasQfgqK39HuLkbVP2wNpXwezm4eZc0ziWRePHfptemsKfOKMlDnbrDJFqTq0
-         85IXvbHfOj8q5QQfDOCG67UkkQoiLYS2AnBCi+0pqgKiRIpDc87S4zw3573IwzyBhQr0
-         0FDA==
-X-Gm-Message-State: ACrzQf3RZ8Kp2HkpbYvOvt/VWSGLjHooSELXXUM3jWmX/eqKjCrn2oWT
-        hhBt8dh+wyxmkIc+f9cOVRBt8E+vk9BBxQ==
-X-Google-Smtp-Source: AMsMyM5HZAPaJZVamqxiZOYz8th/Oulr55msK790pV9yVVcIHYx+8mz5n0WgCdX6Txas7njtsD9SEQ==
-X-Received: by 2002:ac8:5a16:0:b0:39c:efc6:b370 with SMTP id n22-20020ac85a16000000b0039cefc6b370mr42168014qta.374.1667900515787;
-        Tue, 08 Nov 2022 01:41:55 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id q22-20020a05620a0d9600b006fafaac72a6sm2364272qkl.84.2022.11.08.01.41.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 01:41:55 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-36cbcda2157so128441707b3.11;
-        Tue, 08 Nov 2022 01:41:55 -0800 (PST)
-X-Received: by 2002:a81:9c49:0:b0:34a:de:97b8 with SMTP id n9-20020a819c49000000b0034a00de97b8mr51653454ywa.384.1667900514891;
- Tue, 08 Nov 2022 01:41:54 -0800 (PST)
+        Tue, 8 Nov 2022 04:42:22 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03A930541
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:42:21 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e764329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e764:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E03971EC0391;
+        Tue,  8 Nov 2022 10:42:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667900540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=aLpFfV2D89BsWZs9Fn618JtVOW7PZU0ZA1fa1+VqPf8=;
+        b=HZeoy2eYGNmQv7BqZpn/O0V+/41vMra0QIa9Kif7mCzgi1S6qe9NXX4m5l5kEct2bSo0R0
+        1vYnED4PFPdhuwYOtrXeFXakSJKHiWs0iMBpKG3+Q/B/BK39hCeRV90sHo8jJEX/5FcuAH
+        1zoZzUrykaRGsp3Cxk0b6TASVIB2Wk4=
+Date:   Tue, 8 Nov 2022 10:42:15 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86/cpu: Start documenting what the X86_FEATURE_ flag
+ testing macros do
+Message-ID: <Y2okdzF60XHLCK2v@zn.tnic>
+References: <20221107211505.8572-1-bp@alien8.de>
+ <50b2113d-d6a8-ab36-028d-b78c41142c18@intel.com>
 MIME-Version: 1.0
-References: <Y120X8dWqe15FPPG@ZenIV> <20221029231850.3668437-1-viro@zeniv.linux.org.uk>
- <20221029231850.3668437-7-viro@zeniv.linux.org.uk>
-In-Reply-To: <20221029231850.3668437-7-viro@zeniv.linux.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Nov 2022 10:41:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX010izuMLJ8me2WMLOHZ52FxyaGfA31oCekkwjriyBvA@mail.gmail.com>
-Message-ID: <CAMuHMdX010izuMLJ8me2WMLOHZ52FxyaGfA31oCekkwjriyBvA@mail.gmail.com>
-Subject: Re: [PATCH 07/10] [elf][non-regset] uninline elf_core_copy_task_fpregs()
- (and lose pt_regs argument)
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <50b2113d-d6a8-ab36-028d-b78c41142c18@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 1:20 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> Don't bother with pointless macros - we are not sharing it with aout coredumps
-> anymore.  Just convert the underlying functions to the same arguments (nobody
-> uses regs, actually) and call them elf_core_copy_task_fpregs().  And unexport
-> the entire bunch, while we are at it.
->
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+On Mon, Nov 07, 2022 at 02:13:52PM -0800, Dave Hansen wrote:
+> It seems to be mildly warning against using _static_cpu_has()
+> indiscriminately.  Should we tone that down a bit if we're recommending
+> implicit use of static_cpu_has() via cpu_feature_enabled() everywhere?
 
->  arch/m68k/kernel/process.c       |  3 +--
+Yeah, that comment is mine AFAIR. I was thinking of simply removing
+it as part of a long-term effort of converting everything to
+cpu_feature_enabled() and hiding static_cpu_has() eventually...
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+> I was also thinking that some longer-form stuff in Documentation/ might
+> be a good idea, along with some examples.  I'd be happy to follow this
+> up with another patch that added Documentation/ like:
 
-Gr{oetje,eeting}s,
+The problem with this is, it'll go out of sync with the code. So how
+about we make this a kernel-doc thing so that it gets updated in
+parallel?
 
-                        Geert
+Also look at Documentation/x86/cpuinfo.rst
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+It basically has most of what you wanna add.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+:-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
