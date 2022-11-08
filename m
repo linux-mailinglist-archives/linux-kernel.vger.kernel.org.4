@@ -2,126 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 885CF62175F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E417262176C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiKHOvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S234169AbiKHOx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbiKHOvI (ORCPT
+        with ESMTP id S233920AbiKHOxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:51:08 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D3613FA2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:51:07 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id 13so39320600ejn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 06:51:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5RfhvWt1Tv41V7xOdh182isXRfcqnMCvMMU4ZxjHa4I=;
-        b=vgPgq/fKoy91SWpS9t2e6oRNux2GYZ11uz4nq69Ecusn/WQxEr9PnRkXeciq96q9Kf
-         Y/uc1JXxwDcE7DZk4ERIHWnMD3xCOKQOkmZ9szh6zLYAHlS8jB3/9Vzu0GTEcRvD273p
-         QcJzqGu94FAUp4fND/CyiussZorc4AISQgkF6NZxvG/MLLVHHNxJkea27kaoeMZFf8NM
-         MrPmIrciQQHldO1W0L/ICYsoJczxk/E5K1ku/kfcnyWtcEYwFARIfMuiqAHSi0RwOReo
-         3xg6N55uGAcHesseexA8+25xPiouSe/QNOgAQpSqMWJsa4JVGZPnnvoO6B0S9mYDKIX0
-         HTaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5RfhvWt1Tv41V7xOdh182isXRfcqnMCvMMU4ZxjHa4I=;
-        b=SGqorLdLjRPZwGoQBXajtOgTd7aaqT2w6UxcuzfRccup6fLgzlLCpIBcBht6zhJyMT
-         v8ZADX1pMQ6sAzw0dU1uFL0uq6A/YLUjMMKh67rqveAeXCR3FmxWQquI0Ub0D+xkxVEb
-         xGrOjF7a9xxS/Sc0kNdKeOXEOLkd9qhdFOLJiz8M0PoNmvgJnt5+6PYbBEZ0l5/lA9jD
-         OQ3ENmRplI8dP3G4SdTpLmPMf7LRtvQ8zPlAl7VJV/gkSsGYK1gxamur0YhUP+yWGFxO
-         wAO1kJX6wwgfmrkZ4NwnmHyTek7obS+9XPY8gMmuvs9h3NceH/mSpXLAQssZZrG+ecIA
-         Eesg==
-X-Gm-Message-State: ACrzQf2c3YYmDo5ZscRYt39uhShoQ3ktjQX58/601LLLSKlLmyPsA8OH
-        Roen3O3yjcyOoPsWWIZsVOwnVWwVLSw7ZDvAVvaIGA==
-X-Google-Smtp-Source: AMsMyM43GACP12dQZV6v3KIC5Qxaj6QVCASShwmiPx6+SaG+30Y/RBMbREK4KJlCmGU7p1c/8UJC8IQmuja8j8BZsDc=
-X-Received: by 2002:a17:907:c1e:b0:7ae:31a0:571e with SMTP id
- ga30-20020a1709070c1e00b007ae31a0571emr21471098ejc.690.1667919065615; Tue, 08
- Nov 2022 06:51:05 -0800 (PST)
+        Tue, 8 Nov 2022 09:53:23 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20908FFE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:53:22 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8DT0d5020165;
+        Tue, 8 Nov 2022 14:51:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=Kq+EwDS9klVR2KEyoheGgm0wHLEBe3hpZ7mOespCuYA=;
+ b=qw6QeK1swq6A+IpyvnkndjGcI7qBDQs5h9NeQgUwmymEedAoGLzYfYsyIWNuG9Y02fcF
+ jJrtY18OoWnx6Hq+DbQOnCkgHCvdzTqQBRtMBepepfK8lgm+o3zn7TIRkEvlVgt6j5E5
+ pcH2unbOlSIkzReAFsza6VKaABhbHGlaoMSK4a1ttdbhAfkmwHH/PqmIyqBNkoq8kebY
+ RttTLwsm9ZppxHzfBur6BnSLXQuWnI+gqWBlaCLieknTsIAfkL2i/W0bvnGRyQSrFFj/
+ o6Bpzwdh3vCjks8JkwS6q+rVdQDDawzNd0lhkmULA8BLy5UQ1WlSaDZC5uJacOHbXB9P lQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkhm3h78-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:51:09 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A8CUCrI002463;
+        Tue, 8 Nov 2022 14:51:09 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkhm3h5m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:51:08 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A8Eo5d2013960;
+        Tue, 8 Nov 2022 14:51:06 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kngqgca96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:51:06 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A8Ep3rq25559416
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Nov 2022 14:51:03 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 126574C046;
+        Tue,  8 Nov 2022 14:51:03 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E66404C040;
+        Tue,  8 Nov 2022 14:51:00 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue,  8 Nov 2022 14:51:00 +0000 (GMT)
+Date:   Tue, 8 Nov 2022 20:21:00 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vishal Chourasia <vishalc@linux.vnet.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        vincent.guittot@linaro.org, vschneid@redhat.com,
+        sshegde@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        ritesh.list@gmail.com, aneesh.kumar@linux.ibm.com
+Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
+Message-ID: <20221108145100.GG145013@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
+ <Y01sk3l8yCMvhvYm@kroah.com>
+ <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y06ISBWhJflnV+NI@kroah.com>
+ <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y1jbhCYfktL51zNB@kroah.com>
+ <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
+ <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y2pKh3H0Ukvmfuco@kroah.com>
 MIME-Version: 1.0
-References: <20221025070255.14407-1-linux@fw-web.de> <e7192d9b-df86-a860-d5cb-8b4b9184e5bc@linaro.org>
- <trinity-889b4468-8a50-4eae-80a1-6bd9ffbeaaf2-1667577856206@3c-app-gmx-bs24>
-In-Reply-To: <trinity-889b4468-8a50-4eae-80a1-6bd9ffbeaaf2-1667577856206@3c-app-gmx-bs24>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 15:50:44 +0100
-Message-ID: <CACRpkdZFkeX7J9R2C0rhF+WZJXe65y6FfeBEMBGGkSTh4AWmsQ@mail.gmail.com>
-Subject: Re: Re: [PATCH v2] dt-bindings: pinctrl: update uart/mmc bindings for
- MT7986 SoC
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <Y2pKh3H0Ukvmfuco@kroah.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: RMyJNhVWo8VVHgJd8McL9rYsOSeF2_Te
+X-Proofpoint-GUID: LgwVsDUfh8tUESdaAx-ZLClqfNPU_ZDa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0
+ impostorscore=0 priorityscore=1501 clxscore=1011 spamscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211080087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 5:04 PM Frank Wunderlich <frank-w@public-files.de> wrote:
+* Greg Kroah-Hartman <gregkh@linuxfoundation.org> [2022-11-08 13:24:39]:
 
-> > Gesendet: Dienstag, 25. Oktober 2022 um 20:35 Uhr
-> > Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-> > Betreff: Re: [PATCH v2] dt-bindings: pinctrl: update uart/mmc bindings for MT7986 SoC
-> >
-> > On 25/10/2022 03:02, Frank Wunderlich wrote:
-> > > From: Frank Wunderlich <frank-w@public-files.de>
-> > >
-> > > Add new splitted uart pins and emmc_51
-> > >
-> > > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> >
-> >
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> after talking with MTK for the emmc pinctrl settings (custom pull-up) they suggested me to change
-> binding to fix other emmc-values and allow multiple (2) uart-items
->
-> so on top of this patch
->
->              then:
->                properties:
->                  groups:
-> -                  enum: [emmc, emmc_rst, emmc_51]
-> +                  enum: [emmc_45, emmc_51]
->            - if:
->                properties:
->                  function:
-> @@ -231,10 +231,12 @@ patternProperties:
->              then:
->                properties:
->                  groups:
-> -                  enum: [uart1_0, uart1_rx_tx, uart1_cts_rts, uart1_1,
-> -                         uart1_2_rx_tx, uart1_2_cts_rts, uart1_3_rx_tx,
-> -                         uart1_3_cts_rts, uart2_0_rx_tx, uart2_0_cts_rts,
-> -                         uart2_1, uart0, uart1, uart2]
-> +                  items:
-> +                    enum: [uart1_0, uart1_rx_tx, uart1_cts_rts, uart1_1,
-> +                           uart1_2_rx_tx, uart1_2_cts_rts, uart1_3_rx_tx,
-> +                           uart1_3_cts_rts, uart2_0_rx_tx, uart2_0_cts_rts,
-> +                           uart2_1, uart0, uart1, uart2]
-> +                  maxItems: 2
->
-> i would squash these changes and send as v3 or should i send an extra-patch?
+> On Tue, Nov 08, 2022 at 03:30:46PM +0530, Vishal Chourasia wrote:
 
-Squash and send av v3 if you haven't already! Easiest for me.
+Hi Greg, 
 
-Yours,
-Linus Walleij
+> > 
+> > Thanks Greg & Peter for your direction. 
+> > 
+> > While we pursue the idea of having debugfs based on kernfs, we thought about
+> > having a boot time parameter which would disable creating and updating of the
+> > sched_domain debugfs files and this would also be useful even when the kernfs
+> > solution kicks in, as users who may not care about these debugfs files would
+> > benefit from a faster CPU hotplug operation.
+> 
+> Ick, no, you would be adding a new user/kernel api that you will be
+> required to support for the next 20+ years.  Just to get over a
+> short-term issue before you solve the problem properly.
+> 
+> If you really do not want these debugfs files, just disable debugfs from
+> your system.  That should be a better short-term solution, right?
+> 
+> Or better yet, disable SCHED_DEBUG, why can't you do that?
+
+Thanks a lot for your quick inputs.
+
+CONFIG_SCHED_DEBUG disables a lot more stuff than just updation of debugfs
+files. Information like /sys/kernel/debug/sched/debug and system-wide and
+per process wide information would be lost when that config is disabled.
+
+Most users would still be using distribution kernels and most distribution
+kernels that I know of seem to have CONFIG_SCHED_DEBUG enabled.
+
+In a large system, lets say close to 2000 CPUs and we are offlining around
+1750 CPUs. For example ppc64_cpu --smt=1  on a powerpc. Even if we move to a
+lesser overhead kernfs based implementation, we would still be creating
+files and deleting files for every CPU offline. Most users may not even be
+aware of these files. However for a few users who may be using these files
+once a while, we end up creating and deleting these files for all users. The
+overhead increases exponentially with the number of CPUs. I would assume the
+max number of CPUs are going to increase in future further.
+
+Hence our approach was to reduce the overhead for those users who are sure
+they don't depend on these files. We still keep the creating of the files as
+the default approach so that others who depend on it are not going to be
+impacted.
+
+> 
+> thanks,
+> 
+> greg k-h
+
+-- 
+Thanks and Regards
+Srikar Dronamraju
