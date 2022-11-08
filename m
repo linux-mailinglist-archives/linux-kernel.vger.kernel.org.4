@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26297621E98
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E436621E9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiKHVeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 16:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S229797AbiKHVfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 16:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiKHVeJ (ORCPT
+        with ESMTP id S229452AbiKHVfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 16:34:09 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD526168;
-        Tue,  8 Nov 2022 13:34:08 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A8J91BI014736;
-        Tue, 8 Nov 2022 21:34:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xk0/gATUfPCz2Pcwg7YMbzT4uwfmlpFfnt8M/+kKiyc=;
- b=fdAVOg4itfXAcZ906bVb/dJRzl5NvMs1U8CptsBY30yl6Jz3jZqv7ry0Ogo6VO1Lst+s
- H+JEcvi+8I7KQoZH2fAfgWXq2lbdUJman2p0vJbl0JgKxHczJgxlmtbdFhZEhn18e3TT
- Hk6L6Hx2AeyveVQmin9eVMazbCjQixn59lxf9Z/LFht9A9Q2OX/cfDnvlNJBPsyhWci+
- gDGQf868Ch6dL+6pJRTkoTeZSW/i52LonsM9i5eFGNO7TCic0iqmiapYOK1acs6ml4xb
- tgA3yo+09VjKS39CekL90gLnuV350w+V6tPLDqAG8QtGV0pgy/+1hPGJXCE6GuSWcwvN Ew== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kqugb8nu1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 21:34:04 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A8LY3Ui011288
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 8 Nov 2022 21:34:03 GMT
-Received: from [10.110.77.231] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
- 13:34:02 -0800
-Message-ID: <d13d5638-67b1-218b-c16d-505a389ccc42@quicinc.com>
-Date:   Tue, 8 Nov 2022 13:34:01 -0800
+        Tue, 8 Nov 2022 16:35:23 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63105C755;
+        Tue,  8 Nov 2022 13:35:22 -0800 (PST)
+Date:   Tue, 08 Nov 2022 21:35:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667943320;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dwI1cOu1CAqRFRpZ/qAxaAT22s+X8nsjOxog7of8jq0=;
+        b=EOtfLMR0iqmpcRvEzNg//JD7cRfag+8Qu+/LsrUI+gMHur0Zk7ocE5nDXrqKfUXqAbfBPI
+        0JIOTydxex7m7fn4p+k4v/QSIA7eVihFzKNOgHrAbbTIo41O9fSuD6v2YUIpjgw5ych5jC
+        rH4boX4ntxS6qJrwd506cBdxJ2w06z1+9ezCyuYgXsMFSmT4wL7n5/0xdK/f4zF7jjAlhY
+        1gaqXfztCbJ15VU47sAVocqeyvQn4oS8K48LThRHby2hAu3SRz8URzBqY+2nnlCwdYNnx6
+        SZiuv9+VCnlFU2O4rBQwosB5e92GEegDot8z/cPWEQllW4vIVMOe/XhkW2yyxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667943320;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dwI1cOu1CAqRFRpZ/qAxaAT22s+X8nsjOxog7of8jq0=;
+        b=5Bq666RNTfL0TNiI79i5Xpl0vmE3SVtornf/3yQIUw2O1HouSp9HEP3muBIe7g9G9BJ0l0
+        kYxWSgbvcnenFjAA==
+From:   "tip-bot2 for Jiapeng Chong" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86: Fix misc small issues
+Cc:     Abaci Robot <abaci@linux.alibaba.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <1620902768-53822-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+References: <1620902768-53822-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/4] dt-bindings: soc: qcom,rpmh-rsc: Update to allow
- for generic nodes
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026200429.162212-1-quic_molvera@quicinc.com>
- <20221026200429.162212-2-quic_molvera@quicinc.com>
- <ad1d4135-031e-9393-07af-7b81c9ecffb5@linaro.org>
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <ad1d4135-031e-9393-07af-7b81c9ecffb5@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <166794331892.4906.5411586974851313804.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LeYmsa06Q8sqFs6GPGTNMM_ZBIu1qAUy
-X-Proofpoint-ORIG-GUID: LeYmsa06Q8sqFs6GPGTNMM_ZBIu1qAUy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- mlxlogscore=778 clxscore=1015 phishscore=0 mlxscore=0 lowpriorityscore=0
- adultscore=0 bulkscore=0 suspectscore=0 priorityscore=1501 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211080139
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/cleanups branch of tip:
 
+Commit-ID:     6426773410fd829c15b59575afe531d66abc7201
+Gitweb:        https://git.kernel.org/tip/6426773410fd829c15b59575afe531d66abc7201
+Author:        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+AuthorDate:    Tue, 08 Nov 2022 22:09:51 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Tue, 08 Nov 2022 22:16:08 +01:00
 
-On 10/27/2022 8:08 AM, Krzysztof Kozlowski wrote:
-> On 26/10/2022 16:04, Melody Olvera wrote:
->> Update the bindings to allow for generic regulator nodes instead of
->> device-specific node names.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
->> index 4a50f1d27724..0e7e07975f3a 100644
->> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
->> @@ -109,7 +109,7 @@ properties:
->>      $ref: /schemas/power/qcom,rpmpd.yaml#
->>  
->>  patternProperties:
->> -  '-regulators$':
->> +  'regulators$':
-> This should be rather fixed like:
-> https://lore.kernel.org/linux-devicetree/20220926092104.111449-1-krzysztof.kozlowski@linaro.org/
+x86: Fix misc small issues
 
-Got it.
+Fix:
 
-Thanks,
-Melody
->
-> I don't know why there is such a popularity of adding specific model
-> names as device node names...
+  ./arch/x86/kernel/traps.c: asm/proto.h is included more than once.
 
+  ./arch/x86/kernel/alternative.c:1610:2-3: Unneeded semicolon.
+
+  [ bp: Merge into a single patch. ]
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/1620902768-53822-1-git-send-email-jiapeng.chong@linux.alibaba.com
+Link: https://lore.kernel.org/r/20220926054628.116957-1-jiapeng.chong@linux.alibaba.com
+---
+ arch/x86/kernel/alternative.c | 2 +-
+ arch/x86/kernel/traps.c       | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 5cadcea..d5f1e13 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1608,7 +1608,7 @@ static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
+ 
+ 	default:
+ 		BUG_ON(len != insn.length);
+-	};
++	}
+ 
+ 
+ 	switch (tp->opcode) {
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 178015a..c3bff64 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -67,13 +67,13 @@
+ 
+ #ifdef CONFIG_X86_64
+ #include <asm/x86_init.h>
+-#include <asm/proto.h>
+ #else
+ #include <asm/processor-flags.h>
+ #include <asm/setup.h>
+-#include <asm/proto.h>
+ #endif
+ 
++#include <asm/proto.h>
++
+ DECLARE_BITMAP(system_vectors, NR_VECTORS);
+ 
+ static inline void cond_local_irq_enable(struct pt_regs *regs)
