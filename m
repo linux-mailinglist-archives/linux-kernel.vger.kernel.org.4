@@ -2,132 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F158620F1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1961E620F4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbiKHLav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S233603AbiKHLk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:40:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiKHLao (ORCPT
+        with ESMTP id S233600AbiKHLk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:30:44 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD8B1004C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:30:42 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id u2so20665535ljl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Df/2yQeWb1d9To2ggEgy9JGgAa1dKPEwPJTnp7RFKKI=;
-        b=EGFgZfWK7iun8X4qrBI1QRrVUzXrZHgr2HFTDssPuXHld6e8Xff5dU+7CK6LgoZcKj
-         VssQGbAgiwR9Gzn3En0qjbNygDiU+SR1mlKF773u8yeQjlcMYsBcBWen7rJGWtLa5Vwe
-         GDDdv0ND0P0qgO4+rk5YfUdGa6HupktHiuwh05B3qfqYD9ew/E7bbwSiOsKESe9ZUo/y
-         u+gGusZQi8Gp2XOH36SN6AATQzDVT3HlIEfFzGpnCuGaHzS1kitrfKBRiliff+su6GC6
-         7csYZ1r6Ksqe/Vvcf96JWHr3OzVSLAaD94108//PzpeM1OOMi1YEGxVGRg8Hh9BgEsIG
-         mv4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Df/2yQeWb1d9To2ggEgy9JGgAa1dKPEwPJTnp7RFKKI=;
-        b=bYtgEOnv+eskerHUyd0MwkcVp7cjgsYiRVFH0IUQ3bkwaD03vjDNLlgaRqKDnf6rZ+
-         wptlSZhKfAOUnqP7hNGVHuPx2xRrrGSR1/mxYeyiQZIvJwDOI3Ts9cN16zyYILn+jgE6
-         v8czprOsDWeT34DAKddqg4uvqJEVuApq/PxuIN7ooUSiCqnIiAYsw9gsc5nJ3vlKPaF/
-         ATk+hgg1Hv0q34KU5Gyka11FIKVE6CAhFnyLVzad/q3zzR8JHvoYKkpDKeaC0ZI2fFYJ
-         ApVVMbKf7s9LhCPfYW5ugR1NeM3RFUq9YigP43/xJ23pfxAY9xurkd5Vf4v2E/raA/Gv
-         tG2A==
-X-Gm-Message-State: ACrzQf019FJLD40MYulCs5P8gy8vwO/CO4BZzhssJYf5T02rlFAhTUN5
-        YUDcmaI9VqmLQV8hkEOSrONtJg==
-X-Google-Smtp-Source: AMsMyM4e3RprgOpTHPLpEtvIddL3m+QxWSPCTr4lHwgBI3qmC3SEGP42bF556j32ASbvjV3XzlbtRg==
-X-Received: by 2002:a2e:550:0:b0:277:e8c:a5a4 with SMTP id 77-20020a2e0550000000b002770e8ca5a4mr7011231ljf.311.1667907040968;
-        Tue, 08 Nov 2022 03:30:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id n1-20020ac24901000000b004971a83f839sm1744968lfi.39.2022.11.08.03.30.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 03:30:40 -0800 (PST)
-Message-ID: <c199600a-aad9-5639-ea57-a4d59d719ade@linaro.org>
-Date:   Tue, 8 Nov 2022 12:30:39 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/7] dt-bindings: usb: hpe,gxp-udc: Add binding for gxp
- gadget
-Content-Language: en-US
-To:     "Yu, Richard" <richard.yu@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221103160625.15574-1-richard.yu@hpe.com>
- <20221103160625.15574-3-richard.yu@hpe.com>
- <b85230d4-8fce-ba49-0d6b-8c4d20132cda@linaro.org>
- <SJ0PR84MB2085E6B922DAF1070DC802EF8D3C9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SJ0PR84MB2085E6B922DAF1070DC802EF8D3C9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Nov 2022 06:40:26 -0500
+X-Greylist: delayed 487 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Nov 2022 03:40:24 PST
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BF723BF0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:40:24 -0800 (PST)
+Received: from mxde.zte.com.cn (unknown [10.35.20.121])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N65YC3sHtz1DsG
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:32:15 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4N65Xx3YYlzBh2Sk
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:32:01 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N65Xt0BJBzdmMKn
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:31:58 +0800 (CST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N65Xp5nt7z5BNS0;
+        Tue,  8 Nov 2022 19:31:54 +0800 (CST)
+Received: from szxlzmapp06.zte.com.cn ([10.5.230.252])
+        by mse-fl2.zte.com.cn with SMTP id 2A8BVnvW021267;
+        Tue, 8 Nov 2022 19:31:49 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp03[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Tue, 8 Nov 2022 19:31:52 +0800 (CST)
+Date:   Tue, 8 Nov 2022 19:31:52 +0800 (CST)
+X-Zmail-TransId: 2b05636a3e28121965ef
+X-Mailer: Zmail v1.0
+Message-ID: <202211081931524521356@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <pierre-louis.bossart@linux.intel.com>
+Cc:     <lgirdwood@gmail.com>, <peter.ujfalusi@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <xu.panda668@gmail.com>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIEFTb0M6IFNPRjogcmVtb3ZlIGR1cGxpY2F0ZWQgaW5jbHVkZWQgc29mLWF1ZGlvLmg=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2A8BVnvW021267
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 636A3E3E.000 by FangMail milter!
+X-FangMail-Envelope: 1667907135/4N65YC3sHtz1DsG/636A3E3E.000/10.35.20.121/[10.35.20.121]/mxde.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 636A3E3E.000/4N65YC3sHtz1DsG
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 21:16, Yu, Richard wrote:
-> Hi Mr. Kozlowski,
-> 
->>> +
->>> +  vdevnum:
->>> +    description:
->>> +      virtual device number.
-> 
->> That's unusual property... Why numbering devices is part of DT (hardware description)?
-> 
-> In HPE GXP virtual EHCI controller chipset, it can support up to 8 virtual devices(gadgets). Each device/gadget will be represented by a bit in 8 bits register. For example, the interrupt register bit 0 indicates the interrupt from device 0, bit 1 for device 1 ... so on.  When a user defines a device/gadget, he/she can define the device number as between 0 and 7. Thus, the driver can look up to the bit position. That is why we have numbering devices as part of DT.
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Wrap your lines properly, it's impossible to reply in-line to such messages.
+The sof-audio.h is included more than once.
 
-Then how do you specify two devices? You allow here only one, right?
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
+---
+ sound/soc/sof/amd/acp-common.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Which bit in which register? Your devices have separate address space,
-so why they cannot poke the same register, right? Then just always set
-it to 0...
+diff --git a/sound/soc/sof/amd/acp-common.c b/sound/soc/sof/amd/acp-common.c
+index 27b95187356e..348e70dfe2a5 100644
+--- a/sound/soc/sof/amd/acp-common.c
++++ b/sound/soc/sof/amd/acp-common.c
+@@ -13,7 +13,6 @@
+ #include "../sof-priv.h"
+ #include "../sof-audio.h"
+ #include "../ops.h"
+-#include "../sof-audio.h"
+ #include "acp.h"
+ #include "acp-dsp-offset.h"
 
-I might miss here something but so far it looks to me like some hacky
-description matching the driver, not hardware, not existing bindings.
-
-> 
->>> +
->>> +  fepnum:
->>> +    description:
->>> +      number of the flexible end-points this device is needed.
-> 
->> Similar question.
-> 
-> In HPE GXP virtual EHCI Controller chipset, there is a flexible End-Point(EP) pool. Each flexible EP has its own mapping register. The mapping register bit 0 to 3 is for device number (vdevnum) and bit 4 to 7 is for EP number inside the device. The device driver configures the mapping register to assign a flexible EP to a specific device.  Here, "fepnum" is the input letting the driver know how many EPs are needed for this device/gadget.
-
-Nope. So you create here some weird IDs to poke into syscon register.
-First, syscon has offset if you need. You could treat it maybe as bits?
-I don't know... but even then your design is poor - two devices changing
-the same register. Even though it is sunchronized by regmap, it is
-conflicting, obfuscated access.
-
-Best regards,
-Krzysztof
-
+-- 
+2.15.2
