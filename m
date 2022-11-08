@@ -2,185 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D0B621B4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61A8621B47
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiKHR5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S234516AbiKHR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233901AbiKHR5w (ORCPT
+        with ESMTP id S234174AbiKHR51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:57:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D5912AA8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:56:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667930213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KC+QOAZ2Rjsc33WuLf5AORtVReDw8ySdynapXv7DDmc=;
-        b=SbDq3iFTyQxk4ZHy6Yej9Z4oBN5x/VUm7ogcZt8y0jQgyhwZ/BnmDnewViCkuKxT9Kp7eS
-        ExKnEvMwv6m4bu7jHmbyVt+h6OYQ1P8grAuVNDcCI0RLxveiFAL5M3cvAPmb2ZNeOJIlqo
-        eUvim6CzafG4wgLu0yo1fvC5aH6P51c=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-zhFYNgmFMtKD-qxxS7DJ1A-1; Tue, 08 Nov 2022 12:56:52 -0500
-X-MC-Unique: zhFYNgmFMtKD-qxxS7DJ1A-1
-Received: by mail-wm1-f69.google.com with SMTP id x10-20020a05600c420a00b003cfa33f2e7cso3327442wmh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:56:52 -0800 (PST)
+        Tue, 8 Nov 2022 12:57:27 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F7E1A04A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:57:25 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id y186so13607641yby.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:57:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yq6SxkaZozukMrO18EMGqMBbnexsg8nmoacOgG58fTU=;
+        b=QScNn0Kp+hzyQhI7j3OHVC3ZpGfVww8KjVkmD7X2+zcn5ZVnkcYxIZLnHRr3uHL09Y
+         Eh6U8QLplXpfKJwW2PUO0ot67x9sW6/LuDaeFxiqOyT9N8CHQGrZugmNiImBTIPPWFrm
+         gKBdO70LZ3dNocFhsoFy54RWoUfWhkl/ZnEH/AI0AgoMl3augkKlcAb1f9v2fcGqMDbg
+         k/igdO7FTbVidXZT+j8CTA1fTr/UvT4i/LxmoDCF13ivGqHdyQo0AR/wlcb2/RSVQ/Vz
+         BVycsu1e+y0EPuVnlCBviEZSvh2eqGx5Zfzrp4Iux5/gX0Ar2y9RMPFDwiR9b3/pEMxY
+         58Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KC+QOAZ2Rjsc33WuLf5AORtVReDw8ySdynapXv7DDmc=;
-        b=4f3QPi5+PfC3OafbyLTGUJg/ROyphPLRjzfgeI06FdKOBeCb2DU3uZh04p+DIDmwq5
-         jKLViMFy63yLnI+AUMm4SO+bKGflWV8ikNnWiTy24CKKmbBIMncayzBm6qf7XVQGsyor
-         AWSlG55YPde6umdB2uP6BD5crYW2R38VHEU4aSwu2uz6LlsldCwBPF4I7d/T5f/eQ4P/
-         IaHZ56ubXU6altzg+8yDg9MBuE2xWWV1rqbK/7LsDDRkISm6KZ2rYPtdXnW8YDF3Jx4k
-         CNf4pV8h1WAk/69K0lD7AVwXtfKAeF14zNT1WSh1ArYx5lMXe+MLPkhnICtveFyo9mbn
-         ndQw==
-X-Gm-Message-State: ACrzQf3v0Fp91gyehbebyZUg+rkkr20Vw9fUZAWBZXIiek079w68sLrb
-        mKbr2BhJwrdC2UU/WEL8bxgVCo7w3d5EwYu6jscMR+j7+G4WyEbUP42X1UIsxBAExElA1wFVxEX
-        PR5JwBXGKFki+qNIeBT1iEVqm
-X-Received: by 2002:a05:600c:3494:b0:3cf:8ed7:7124 with SMTP id a20-20020a05600c349400b003cf8ed77124mr615939wmq.140.1667930211422;
-        Tue, 08 Nov 2022 09:56:51 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6VUBcqMmBhSgArgPVMY9CQPRgOY/M6ncMhTHXwRtOanYZY7VA2pKJUh5kwU2FYxjJXG0Z1kA==
-X-Received: by 2002:a05:600c:3494:b0:3cf:8ed7:7124 with SMTP id a20-20020a05600c349400b003cf8ed77124mr615936wmq.140.1667930211007;
-        Tue, 08 Nov 2022 09:56:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:db00:6510:da8d:df40:abbb? (p200300cbc708db006510da8ddf40abbb.dip0.t-ipconnect.de. [2003:cb:c708:db00:6510:da8d:df40:abbb])
-        by smtp.gmail.com with ESMTPSA id h19-20020a05600c351300b003b4ff30e566sm34771742wmq.3.2022.11.08.09.56.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 09:56:50 -0800 (PST)
-Message-ID: <e94ac231-7137-010c-2f2b-6a309c941759@redhat.com>
-Date:   Tue, 8 Nov 2022 18:56:48 +0100
+        bh=yq6SxkaZozukMrO18EMGqMBbnexsg8nmoacOgG58fTU=;
+        b=5k9u6b/NOuEQQsaHO3aj/wOWAhDA3ZDdSmwSEaTUIWwJzZN8CPwcjEspVhYZ1u0U9E
+         5qz6uOsP4QbPzNTkodvYrU0kHYa+lPCz9yPO7Zkl2nTOWstbb30w088yi8x9XSwG7smZ
+         pp0aT6vuYhfpg+rB6PhxbLnWfxLDD1taOHcGXIiMgYoaHUmmspDZCBtfkmKap+D48RYo
+         4NggASUzGPNZ9X5YXD14GwhY6JUTcJOzddomwtud61s//ZQ1xO2UT66f5NqYFOUz/w96
+         RdnhcoBtEpr559BuKl7s93EkdQv7npeIur882pcA499DM5g6S+JClqRvJmNGT7P0WpEH
+         T4Hw==
+X-Gm-Message-State: ANoB5pnmVCIpU0pkfEz/V8CgUGGHGSY/jeFJF5FxBdM5ciXAXlTune8s
+        APKrtgM22I3ilta9PLxu+bkemh3EB6407g1dsQM5SQ==
+X-Google-Smtp-Source: AA0mqf4iqNsh5zLKqxE4owqIb5QivOPugZlsrSsWEsxhRGWffbKB62V6hcwEJxpvqyz9F2REc5qZ0rAi+mKHTqa21yU=
+X-Received: by 2002:a25:5888:0:b0:6d5:1100:5dcc with SMTP id
+ m130-20020a255888000000b006d511005dccmr17158056ybb.0.1667930244512; Tue, 08
+ Nov 2022 09:57:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Content-Language: en-US
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>, corbet@lwn.net,
-        akpm@linux-foundation.org, hughd@google.com, hannes@cmpxchg.org,
-        vincent.whitchurch@axis.com, seanjc@google.com, rppt@kernel.org,
-        shy828301@gmail.com, paul.gortmaker@windriver.com,
-        peterx@redhat.com, vbabka@suse.cz, Liam.Howlett@Oracle.com,
-        ccross@google.com, willy@infradead.org, arnd@arndb.de,
-        cgel.zte@gmail.com, yuzhao@google.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        bagasdotme@gmail.com, kirill@shutemov.name
-References: <20221107184715.3950621-1-pasha.tatashin@soleen.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2] mm: anonymous shared memory naming
-In-Reply-To: <20221107184715.3950621-1-pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221105045704.2315186-1-vipinsh@google.com> <20221105045704.2315186-5-vipinsh@google.com>
+ <Y2lXld6G+Hp0FW3A@google.com> <CAHVum0ewgeA81T2ttPGB0V-2njdc1oqTjQWziKzTu_pzN+srxw@mail.gmail.com>
+In-Reply-To: <CAHVum0ewgeA81T2ttPGB0V-2njdc1oqTjQWziKzTu_pzN+srxw@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 8 Nov 2022 09:56:57 -0800
+Message-ID: <CALzav=djtqYAchW0x=riSEtvoQAbpotjBeibBLWVQg4J2T5iiA@mail.gmail.com>
+Subject: Re: [PATCH 4/6] KVM: selftests: Make Hyper-V guest OS ID common
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.11.22 19:47, Pasha Tatashin wrote:
-> Since: commit 9a10064f5625 ("mm: add a field to store names for private
-> anonymous memory"), name for private anonymous memory, but not shared
-> anonymous, can be set. However, naming shared anonymous memory just as
+On Mon, Nov 7, 2022 at 5:45 PM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> On Mon, Nov 7, 2022 at 11:08 AM David Matlack <dmatlack@google.com> wrote:
+> >
+> > On Fri, Nov 04, 2022 at 09:57:02PM -0700, Vipin Sharma wrote:
+> > > Make guest OS ID calculation common to all hyperv tests and similar to
+> > > hv_generate_guest_id().
+> >
+> > This commit makes the HV_LINUX_VENDOR_ID and adds LINUX_VERSION_CODE
+> > to existing tests. Can you split out the latter to a separate commit?
+> > Also what's the reason to add LINUX_VERSION_CODE to the mix?
+> >
+>
+> I looked at the implementation in selftest and what is in the
+> include/asm-generic/mshyperv.h for the hv_generate_guest_id()
+> function, both looked different. I thought it would be nice to have
+> consistent logic at both places.
+>
+> I can remove LINUX_VERISON_CODE if you prefer.
 
-                                                                  ^ is
+Using LINUX_VERSION_CODE here assumes the selftest will run on the
+same kernel that it was compiled with. This might not be the case in
+practice, e.g. if anyone runs the latest upstream selftests against
+their internal kernel (something we've discussed doing recently).
 
-> useful for tracking purposes.
-> 
-> Extend the functionality to be able to set names for shared anon.
-> 
-> Sample output:
->    /* Create shared anonymous segmenet */
+The right way to incorporate the Linux version code would be for the
+selftest to query it from the host dynamically and use that (at which
+point hv_linux_guest_id() would actually have to be a function).
 
-s/segmenet/segment/
-
->    anon_shmem = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
->                      MAP_SHARED | MAP_ANONYMOUS, -1, 0);
->    /* Name the segment: "MY-NAME" */
->    rv = prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME,
->               anon_shmem, SIZE, "MY-NAME");
-> 
-> cat /proc/<pid>/maps (and smaps):
-> 7fc8e2b4c000-7fc8f2b4c000 rw-s 00000000 00:01 1024 [anon_shmem:MY-NAME]
-
-What would it have looked like before? Just no additional information?
-
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
+But since you don't strictly need it, it's probably best to just omit
+it for the time being.
 
 
-[...]
 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 8bbcccbc5565..06b6fb3277ab 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -699,8 +699,10 @@ static inline unsigned long vma_iter_addr(struct vma_iterator *vmi)
->    * paths in userfault.
->    */
->   bool vma_is_shmem(struct vm_area_struct *vma);
-> +bool vma_is_anon_shmem(struct vm_area_struct *vma);
->   #else
->   static inline bool vma_is_shmem(struct vm_area_struct *vma) { return false; }
-> +static inline bool vma_is_anon_shmem(struct vm_area_struct *vma) { return false; }
->   #endif
->   
->   int vma_is_stack_for_current(struct vm_area_struct *vma);
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 500e536796ca..08d8b973fb60 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -461,21 +461,11 @@ struct vm_area_struct {
->   	 * For areas with an address space and backing store,
->   	 * linkage into the address_space->i_mmap interval tree.
->   	 *
-> -	 * For private anonymous mappings, a pointer to a null terminated string
-> -	 * containing the name given to the vma, or NULL if unnamed.
->   	 */
-> -
-> -	union {
-> -		struct {
-> -			struct rb_node rb;
-> -			unsigned long rb_subtree_last;
-> -		} shared;
-> -		/*
-> -		 * Serialized by mmap_sem. Never use directly because it is
-> -		 * valid only when vm_file is NULL. Use anon_vma_name instead.
-> -		 */
-> -		struct anon_vma_name *anon_name;
-> -	};
-> +	struct {
-> +		struct rb_node rb;
-> +		unsigned long rb_subtree_last;
-> +	} shared;
->   
-
-So that effectively grows the size of vm_area_struct. Hm. I'd really 
-prefer to keep this specific to actual anonymous memory, not extending 
-it to anonymous files.
-
-Do we have any *actual* users where we don't have an alternative? I 
-doubt that this is really required.
-
-The simplest approach seems to be to use memfd instead of MAP_SHARED | 
-MAP_ANONYMOUS. __NR_memfd_create can be passed a name and you get what 
-you propose here effectively already. Or does anything speak against it?
-
--- 
-Thanks,
-
-David / dhildenb
-
+>
+> > >
+> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> > > ---
+> > >  tools/testing/selftests/kvm/include/x86_64/hyperv.h  | 10 ++++++++++
+> > >  tools/testing/selftests/kvm/x86_64/hyperv_clock.c    |  2 +-
+> > >  tools/testing/selftests/kvm/x86_64/hyperv_features.c |  6 ++----
+> > >  tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c |  2 +-
+> > >  4 files changed, 14 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > > index 075fd29071a6..9d8c325af1d9 100644
+> > > --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > > +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
+> > > @@ -9,6 +9,10 @@
+> > >  #ifndef SELFTEST_KVM_HYPERV_H
+> > >  #define SELFTEST_KVM_HYPERV_H
+> > >
+> > > +#include <linux/version.h>
+> > > +
+> > > +#define HV_LINUX_VENDOR_ID                   0x8100
+> > > +
+> > >  #define HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS        0x40000000
+> > >  #define HYPERV_CPUID_INTERFACE                       0x40000001
+> > >  #define HYPERV_CPUID_VERSION                 0x40000002
+> > > @@ -189,4 +193,10 @@
+> > >  /* hypercall options */
+> > >  #define HV_HYPERCALL_FAST_BIT                BIT(16)
+> > >
+> > > +static inline uint64_t hv_linux_guest_id(void)
+> > > +{
+> > > +     return ((uint64_t)HV_LINUX_VENDOR_ID << 48) |
+> > > +            ((uint64_t)LINUX_VERSION_CODE << 16);
+> >
+> > This can be a compile-time constant (i.e. macro).
+> >
+>
+> Yes, I will make it a macro in the next version.
+>
+> > > +}
+> > > +
+> > >  #endif /* !SELFTEST_KVM_HYPERV_H */
+> > > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+> > > index d576bc8ce823..f9112c5dc3f7 100644
+> > > --- a/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+> > > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_clock.c
+> > > @@ -104,7 +104,7 @@ static void guest_main(struct ms_hyperv_tsc_page *tsc_page, vm_paddr_t tsc_page_
+> > >
+> > >       /* Set Guest OS id to enable Hyper-V emulation */
+> > >       GUEST_SYNC(1);
+> > > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, (u64)0x8100 << 48);
+> > > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
+> > >       GUEST_SYNC(2);
+> > >
+> > >       check_tsc_msr_rdtsc();
+> > > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> > > index 6b443ce456b6..b5a42cf1ad9d 100644
+> > > --- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> > > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
+> > > @@ -13,8 +13,6 @@
+> > >  #include "processor.h"
+> > >  #include "hyperv.h"
+> > >
+> > > -#define LINUX_OS_ID ((u64)0x8100 << 48)
+> > > -
+> > >  static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
+> > >                               vm_vaddr_t output_address, uint64_t *hv_status)
+> > >  {
+> > > @@ -71,7 +69,7 @@ static void guest_hcall(vm_vaddr_t pgs_gpa, struct hcall_data *hcall)
+> > >
+> > >       GUEST_ASSERT(hcall->control);
+> > >
+> > > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, LINUX_OS_ID);
+> > > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
+> > >       wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
+> > >
+> > >       if (!(hcall->control & HV_HYPERCALL_FAST_BIT)) {
+> > > @@ -169,7 +167,7 @@ static void guest_test_msrs_access(void)
+> > >                        */
+> > >                       msr->idx = HV_X64_MSR_GUEST_OS_ID;
+> > >                       msr->write = 1;
+> > > -                     msr->write_val = LINUX_OS_ID;
+> > > +                     msr->write_val = hv_linux_guest_id();
+> > >                       msr->available = 1;
+> > >                       break;
+> > >               case 3:
+> > > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+> > > index a380ad7bb9b3..2c13a144b04c 100644
+> > > --- a/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+> > > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_svm_test.c
+> > > @@ -69,7 +69,7 @@ static void __attribute__((__flatten__)) guest_code(struct svm_test_data *svm)
+> > >
+> > >       GUEST_SYNC(1);
+> > >
+> > > -     wrmsr(HV_X64_MSR_GUEST_OS_ID, (u64)0x8100 << 48);
+> > > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
+> > >
+> > >       GUEST_ASSERT(svm->vmcb_gpa);
+> > >       /* Prepare for L2 execution. */
+> > > --
+> > > 2.38.1.273.g43a17bfeac-goog
+> > >
