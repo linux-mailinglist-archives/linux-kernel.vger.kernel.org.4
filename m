@@ -2,86 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9DD621BFD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9CF621C00
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiKHSfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S231467AbiKHSgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiKHSf1 (ORCPT
+        with ESMTP id S231403AbiKHSgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:35:27 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FC12B247
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:35:26 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id f63so14133208pgc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:35:26 -0800 (PST)
+        Tue, 8 Nov 2022 13:36:45 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A182C58010
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:36:44 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id h132so8553682oif.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:36:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RnyS3dwzu63wm+TBBKa4ksB7XTmDC722z2f6RyUHWPs=;
-        b=UNWTdZX009UhqhJ6UQ4R4+hp8SiQhxnMLXohooc/noo36cuTVOTPYeiHbI6l/If5If
-         J99V6SvhqOUJdXGP1USoU7SQ4UsQc0kDpJnivKhYJ1Gb1/UnIQFqmdMGK7+nTTT+MRSJ
-         vQAXN6CX7nJMHdk7l5MQFGieiB1Zx2apAH0MHUHKHnrjfzbpWmhVg9F9nCjWzW+8XYOU
-         SBv/FsmQOASl+XIqep9c2B037c8W8HTTwUNLVCWmGH8stGR96ZExj8ipESF8GjxhIevV
-         tdt7PlrDh92QBIH3Y28a8olvDACYlXbPkSwNq87XUXh94gRzQ+koxl8E3v5eQ1QW+pGb
-         XQZQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fMwy9JhsDtkEfYvoCi3Vv2kM/bZCakgL7LGXwDgD7c8=;
+        b=gC9LNMAegiA4Jf0erWP42jTuM1gr5OF16nO8+Kis6MUUI3a3J59FC4kuaia5eevrgj
+         5aMVrqdIr/VhdXsHBYlgkE2YWODgLOSohoPdyXxWnnigY0GwYPq01R7lgEPfo1L3CieJ
+         v8nJpmLBF4vXNoNYbyki/vLUaSn0NlGpXhsDLWLWFU/ufFqtV3t7x6Knf0P365b542wn
+         RG32NUv2pbv9X/LomjvJxNdrc2B7pNKfeQ4wicXG/KhxmPEPVmVwwJuRma2czE6rsdeO
+         /vIoM4WGwW22+EDbW2Qpy+KWMRaUgIYHYxrfBYOFMGM6h40v7tLDZks1FJ13APmZMkY8
+         JSTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RnyS3dwzu63wm+TBBKa4ksB7XTmDC722z2f6RyUHWPs=;
-        b=o4jvESQ/IzUHyAExKSYZxdaT3WzVosQGSRzjmIRaKsbm5ARe1snUjONg1WnW2V/kjr
-         yC9Y9+HOACpEvYegXpF7DAB0oimALEJz3QTeQKegpWM8NTavXUW6Hvba8HCKeIA780mC
-         TJyxDLjs9tJ6cLdzmuC5520h4l1pmfOS1i2/wUYERSaOKsN3EHSC+tQ5oOSujofQ8k8Z
-         jU3ZBwQ7g6kzWJ+zwfqyBZ7h4DLvwLbR3hdREV0+1XPChLl7VJGvFfZ53V7Q7QA36qz7
-         ZjgOXDWVQYPPa38c71juoPKBU8OONTBz5nRthjraCeRRG5j38gRqkHwhcUitA6vtcOIB
-         divA==
-X-Gm-Message-State: ACrzQf3zmTexzWVUJCbxLkKVwpiXGZC2ZEXdCt7DmkbmmUsSpmcMroSV
-        7Humo13ebdvCh3ammoEc69wJyA==
-X-Google-Smtp-Source: AMsMyM5Qg8YfT/bsoUeJb0OK8RxgGNg/b35ucvUXf02E9o8w0JO152nFj4Gk4WJt4CUR2YrbDzSCfA==
-X-Received: by 2002:a63:84c6:0:b0:46f:f8b0:ba09 with SMTP id k189-20020a6384c6000000b0046ff8b0ba09mr33082105pgd.192.1667932525661;
-        Tue, 08 Nov 2022 10:35:25 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902d2cf00b0018544ad1e8esm7324982plc.238.2022.11.08.10.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 10:35:24 -0800 (PST)
-Date:   Tue, 8 Nov 2022 18:35:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Liu Jingqi <jingqi.liu@intel.com>
-Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
- _host_ supported value
-Message-ID: <Y2qhaSr/d2ds+nqD@google.com>
-References: <20220607213604.3346000-6-seanjc@google.com>
- <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
- <Y2ABrnRzg729ZZNI@google.com>
- <20221101101801.zxcjswoesg2gltri@linux.intel.com>
- <Y2FePYteNrEfZ7D5@google.com>
- <20221102085414.fk2xss74jvtzs6mr@linux.intel.com>
- <Y2Px90RQydMUoiRH@google.com>
- <20221107082714.fq3sw7qii4unlcn2@linux.intel.com>
- <Y2kfCz02tQSUkMKS@google.com>
- <20221108102120.qdlgqlgvdi6wi22u@linux.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fMwy9JhsDtkEfYvoCi3Vv2kM/bZCakgL7LGXwDgD7c8=;
+        b=WkbBoIw11a1uWMK2Uz6HOx89Vos3xdI49atDdfCkc8/ropgY1PmYnkmj26EMrmHOKr
+         P3xQOSMgUKua792GJvpIBTqew4Cpep6x4Eh29/uBFXKRkA0ZvJY14XEptVhrgxFX01Ao
+         yfhNpwgT2f2TFS+fwmTLmVS6+FWIJf6qFVLN1ASqIfoweAaKMN2ZhUjBEb7JTAd0w8ZM
+         uTGV7LHaQ+TaTBc0vtnJ52hgLm9mkPiyuhKY+kSigpnEt418PVYI/RD3SWxt9PrjGXF3
+         M8+gaGhGn82xZZQibwIxUFz9WzCWUinhuoui5C1cVAtrIVYxaoKTkE1wqzsTOGukOsJr
+         DWNA==
+X-Gm-Message-State: ACrzQf3JSWKEE8YvCSBDGiEQdVime3bh35kR4mLjwtCNE1y7nzXN0a9A
+        CSG+g8iLhnSssfVzAzB44PuUZ43Mw6n22pUOcW0ZJg==
+X-Google-Smtp-Source: AMsMyM4aUyvVSKVG8vFRQUL68ZcsPvXRkDj4mEBD4c2JVjw+KaualiLVr75Z9yDAkuqcho9YbEni5ZrTQTr1F5mKbYk=
+X-Received: by 2002:a05:6808:1184:b0:350:f681:8c9a with SMTP id
+ j4-20020a056808118400b00350f6818c9amr30966555oil.282.1667932603686; Tue, 08
+ Nov 2022 10:36:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108102120.qdlgqlgvdi6wi22u@linux.intel.com>
+References: <0000000000003687bd05c2b2401d@google.com> <000000000000b4dae405ecf5af7f@google.com>
+In-Reply-To: <000000000000b4dae405ecf5af7f@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 8 Nov 2022 10:36:32 -0800
+Message-ID: <CACT4Y+ZYNqGwKJ8+do08hf0XrqBh0CAWrHxaBGp2tE=KHi=WDA@mail.gmail.com>
+Subject: Re: [syzbot] BUG: MAX_LOCKDEP_KEYS too low! (2)
+To:     syzbot <syzbot+a70a6358abd2c3f9550f@syzkaller.appspotmail.com>
+Cc:     Jason@zx2c4.com, davem@davemloft.net, edumazet@google.com,
+        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
+        rdunlap@infradead.org, syzkaller-bugs@googlegroups.com,
+        tonymarislogistics@yandex.com, wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,124 +72,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022, Yu Zhang wrote:
-> On Mon, Nov 07, 2022 at 03:06:51PM +0000, Sean Christopherson wrote:
-> > On Mon, Nov 07, 2022, Yu Zhang wrote:
-> > > On Thu, Nov 03, 2022 at 04:53:11PM +0000, Sean Christopherson wrote:
-> > > > Ideally, KVM should NEVER manipulate VMX MSRs in response to guest CPUID changes.
-> > > > That's what I was referring to earlier by commits:
-> > 
-> > ...
-> > 
-> > > Thanks Sean. Let me try to rephrase my understandings of your statement(
-> > > and pls feel free to correct me):
-> > > 
-> > > 1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
-> > > disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes.
-> > > 2> What makes sense is, if a feature is 
-> > > 	a. disabled by guest CPUID, it shall not be exposed in guest VMX MSR;
-> > > 	b. enabled by guest CPUID, it could be either exposed or hidden in
-> > > 	guest VMX MSR.
-> > > 3> So your previous change is to guarantee 2.a, and userspace VMM can choose
-> > > to follow follow either choices in 2.b(depending on whether it believes this
-> > > feature is correctly supported by KVM in nested). 
-> > > 
-> > > Is above understanding correct? 
-> > 
-> > Not quite.  Again, in an ideal world, KVM would not modify the VMX MSRs based on
-> > guest CPUID.  But it's possible userspace is relying on KVM to hide a feature from
-> > L2 if it's hidden from L1, so to avoid breaking an otherwise valide userspace config,
-> > it's worth enforcing that in KVM.
-> > 
-> 
-> Sorry, maybe I should understand this way:
-> 
-> In theroy, KVM shall not modify guest VMX MSRs in response to the guest CPUID
-> updates. Therefore we shall not enforce the exposure of a feature in guest VMX
-> MSR, just because it is enabled in guest CPUID (e.g., userspace VMM can choose
-> to hide such feature so long as it believes KVM can not provide correct nested
-> support for this feature). 
-> 
-> But in reverse, it is not reasonable for userspace VMM to expose a feature in
-> guest VMX MSR settings, if such feature is disabled in this guest's CPUID. So
-> KVM shall help to make sure such feature is hidden when guest CPUID changes.
-
-No.  Again, KVM _should never_ manipulate VMX MSRs in response to CPUID changes.
-Keeping the existing behavior would be done purely to maintain backwards
-compability with existing userspace, not because it's strictly the right thing to do.
-
-E.g. as a strawman, a weird userspace could do KVM_SET_MSRS => KVM_SET_CPUID =>
-KVM_SET_CPUID, where the first KVM_SET_CPUID reset to a base config and the second
-KVM_SET_CPUID incorporates "optional" features.  In that case, clearing bits in
-the VMX MSRs on the first KVM_SET_CPUID would do the wrong thing if the second
-KVM_SET_CPUID enabled the relevant features.
-
-AFAIK, no userspace actually does something odd like that, whereas there are VMMs
-that do KVM_SET_MSRS before KVM_SET_CPUID, e.g. disable a feature in VMX MSRs but
-later enable the feature in CPUID for L1.  And so disabling features is likely
-safe-ish, but enabling feature most definitely can cause problems for userspace.
-
-Hrm, actually, there are likely older VMMs that never set VMX MSRs, and so dropping
-the "enable features" code might not be safe either.  Grr.  The obvious solution
-would be to add a quirk, but maybe we can avoid a quirk by skipping KVM's
-misguided updates if userspace has set the MSR.  That should work for a userspace
-that deliberately sets the MSR during setup, and for a userspace that blindly
-migrates the MSR since the migrated value should already be correct/sane.
-
-E.g.
-
-diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index 45162c1bcd8f..671479cd7721 100644
---- a/arch/x86/kvm/vmx/capabilities.h
-+++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -51,6 +51,7 @@ struct nested_vmx_msrs {
-        u64 cr4_fixed1;
-        u64 vmcs_enum;
-        u64 vmfunc_controls;
-+       bool secondary_set_by_userspace;
- };
- 
- struct vmcs_config {
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 62e3967cf131..3f691ed169d8 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -1257,6 +1257,9 @@ vmx_restore_control_msr(struct vcpu_vmx *vmx, u32 msr_index, u64 data)
-        if (!is_bitwise_subset(supported, data, GENMASK_ULL(63, 32)))
-                return -EINVAL;
- 
-+       if (msr_index == MSR_IA32_VMX_PROCBASED_CTLS2)
-+               vmx->nested.msrs.secondary_set_by_userspace = true;
-+
-        vmx_get_control_msr(&vmx->nested.msrs, msr_index, &lowp, &highp);
-        *lowp = data;
-        *highp = data >> 32;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index ab89755dce66..8aadaae5b81e 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4523,7 +4523,7 @@ vmx_adjust_secondary_exec_control(struct vcpu_vmx *vmx, u32 *exec_control,
-         * Update the nested MSR settings so that a nested VMM can/can't set
-         * controls for features that are/aren't exposed to the guest.
-         */
--       if (nested) {
-+       if (nested && !vmx->nested.msrs.secondary_set_by_userspace) {
-                if (enabled)
-                        vmx->nested.msrs.secondary_ctls_high |= control;
-                else
+On Tue, 8 Nov 2022 at 05:40, syzbot
+<syzbot+a70a6358abd2c3f9550f@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has found a reproducer for the following issue on:
+>
+> HEAD commit:    3577a7611842 Merge branches 'for-next/acpi', 'for-next/kbu..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15ea3e61880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
+> dashboard link: https://syzkaller.appspot.com/bug?extid=a70a6358abd2c3f9550f
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168c4c99880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d6376880000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/054b1f56af52/disk-3577a761.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/c616835b2a22/vmlinux-3577a761.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/9825c28b2090/Image-3577a761.gz.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+a70a6358abd2c3f9550f@syzkaller.appspotmail.com
 
 
-> BTW, I found my previous understanding of what vmx_adjust_secondary_exec_control()
-> currently does was also wrong. It could also be used for EXITING controls. And
-> for such flags(e.g., SECONDARY_EXEC_RDRAND_EXITING), values for the nested settings
-> (vmx->nested.msrs.secondary_ctls_high) and for the L1 execution controls(*exec_control)
-> could be opposite. So the statement:
-> 	"1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
-> 	 disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes."
-> is wrong.
+I see team device code uses lockdep_register_key()/lockdep_set_class()
+in some interesting ways:
 
-No, it's correct.  The EXITING controls are just inverted feature flags.  E.g. if
-RDRAND is disabled in CPUID, KVM sets the EXITING control so that KVM intercepts
-RDRAND in order to inject #UD.
+https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/tree/drivers/net/team/team.c?id=3577a76118426e4409ecf4f75520925eff67d42c#n1657
+https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/tree/drivers/net/team/team.c?id=3577a76118426e4409ecf4f75520925eff67d42c#n2008
 
-	[EXIT_REASON_RDRAND]                  = kvm_handle_invalid_op,
+I guess that's what causes lockdep capacity exhaustion. Does team use
+it incorrectly?
+
+
+> netlink: 4 bytes leftover after parsing attributes in process `syz-executor357'.
+> device team6635 entered promiscuous mode
+> 8021q: adding VLAN 0 to HW filter on device team6635
+> BUG: MAX_LOCKDEP_KEYS too low!
+> turning off the locking correctness validator.
+> CPU: 0 PID: 9692 Comm: syz-executor357 Not tainted 6.1.0-rc4-syzkaller-31844-g3577a7611842 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+> Call trace:
+>  dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+>  show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+>  dump_stack+0x1c/0x58 lib/dump_stack.c:113
+>  register_lock_class+0x2e4/0x2f8 kernel/locking/lockdep.c:1326
+>  __lock_acquire+0xa8/0x3084 kernel/locking/lockdep.c:4934
+>  lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+>  __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+>  __mutex_lock kernel/locking/mutex.c:747 [inline]
+>  mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+>  team_vlan_rx_add_vid+0x38/0xd8 drivers/net/team/team.c:1904
+>  vlan_add_rx_filter_info net/8021q/vlan_core.c:211 [inline]
+>  __vlan_vid_add net/8021q/vlan_core.c:306 [inline]
+>  vlan_vid_add+0x328/0x38c net/8021q/vlan_core.c:336
+>  vlan_device_event+0x200/0xc4c net/8021q/vlan.c:385
+>  notifier_call_chain kernel/notifier.c:87 [inline]
+>  raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
+>  __dev_notify_flags+0x170/0x2e8
+>  rtnl_newlink_create+0x460/0x6bc net/core/rtnetlink.c:3372
+>  __rtnl_newlink net/core/rtnetlink.c:3581 [inline]
+>  rtnl_newlink+0x728/0xa04 net/core/rtnetlink.c:3594
+>  rtnetlink_rcv_msg+0x484/0x82c net/core/rtnetlink.c:6091
+>  netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
+>  rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6109
+>  netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
+>  netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
+>  netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
+>  sock_sendmsg_nosec net/socket.c:714 [inline]
+>  sock_sendmsg net/socket.c:734 [inline]
+>  ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
+>  ___sys_sendmsg net/socket.c:2536 [inline]
+>  __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
+>  __do_sys_sendmsg net/socket.c:2574 [inline]
+>  __se_sys_sendmsg net/socket.c:2572 [inline]
+>  __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
+>  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+>  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+>  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+>  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+>  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+>  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+>  el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+>
