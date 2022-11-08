@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9281A6211E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 827036211E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233607AbiKHNDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        id S234472AbiKHNDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234436AbiKHNDS (ORCPT
+        with ESMTP id S234421AbiKHNDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:03:18 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8278E5800C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 05:03:03 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id i21so22332292edj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 05:03:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o3T20fdGbELUpw/30bYXW9rk8UUViyvlGwNQtDEeL60=;
-        b=HftOwyrtLxzbkKxUC8HfvovTHmxETKauLq+2NZsmwAsaMGT6OQPWRuF5ff1cijRifO
-         wITQzfD0MbU45cAGywh7YwS+ps2iau6ZaG2lIqsWGKvD3SY8gBLFkxkCsjFGyd3gmUyQ
-         dAATAj4FpkOIkWA4ePVCwkeo3E5jCQeNXyYqkCGU+vsAHVsiH5LoKSmHjAnfAJK+Z7Gt
-         d9x2V1epibgaTLN6SV3Jgw3jfliBg0IRYRMgaLmq5Fq0DSXAR+054B+BoCIpg0IyodZ5
-         YjoPZmxUjN/VAVz4bhpOBNOXAyX/bC8b4TuCXCqOYiqJkroZnJk7zVEbVD58dvpx0Rc1
-         m7kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o3T20fdGbELUpw/30bYXW9rk8UUViyvlGwNQtDEeL60=;
-        b=SXgthpicnVohKzivpvePfwbGj7sxBpanJSMhTXUBbM44uI/p5R913NNJFbBjW2d8hy
-         1sg8AP5JCUECyb8py70iUjByopuElmtXV7biUAZRIsJNxBNko07b2uegoT6OMMBu64J0
-         Xp0DNtahlQuFDlXR1nnQlfMUz/mRNsj4eG4X+ZEgzoFJjcDKPssMux5Xhll/UEH4FLyJ
-         HM17EsdMRIuo8VasiYn9vi0MfdNQT1NhXA1OWeA/hem2cBALLm07R3eqCjy4qfNcBowS
-         QDPbPfBw1+RP8ligSIu21kzBeAH0p7Uelm0LXYk666RUMJIzV1ECNamIA2tJMD2QS2xu
-         ryqg==
-X-Gm-Message-State: ACrzQf1WkNEVkzEZrw4rCUZTlzDv2v8NQ7ST2Q3lI1ToDTwjIfT9RSyP
-        8TvKGpggGibX1g3hZOck8ludVOtSYWTy2v2GcmOpng==
-X-Google-Smtp-Source: AMsMyM76jkge9pSTavwCFjj3qtMVFFWyyr0y/FOcVzLJN3+Hurvyb53krF/r4r33HtFj9uBHLuQAPOvLjzn3W9ENCGY=
-X-Received: by 2002:a05:6402:d0b:b0:458:a244:4e99 with SMTP id
- eb11-20020a0564020d0b00b00458a2444e99mr55757302edb.46.1667912581984; Tue, 08
- Nov 2022 05:03:01 -0800 (PST)
+        Tue, 8 Nov 2022 08:03:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA52D554EF;
+        Tue,  8 Nov 2022 05:03:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61251B81A9A;
+        Tue,  8 Nov 2022 13:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99853C433D6;
+        Tue,  8 Nov 2022 13:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667912580;
+        bh=AkKnvGBH75slHzzHE2jOu7sJWLUsxZlpFfrdZcyFTDM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ns+E8Tv7GPN5IgSqRS+SQMVv63+PFMmAcROp3vocZleoS0OhimwEkzyKlTsJPbRpK
+         b89ftBToApCSbcTIw+xwsBD8M5qupBHwoYIZP93SnFoxXBWKZiJ6xPj8KVYrYesB59
+         bDecqOSum9jPc6lPx3kM3CRgMioAOmHiZpUYaw5WI1EooChmwOdvSp3JOjphWcGFEy
+         fl06d96hdvcuJHPuPRqVA6kNDC+nqyninhzcx8O+uqmQfnRChAOpI3hqg4cs6oJwBf
+         WevwRPSQzVHGCrscqW79e2OYEizuf1fq7BS6TzubN6vrhpWiGt4X0wsCHDOyJjWpbN
+         vT0F9X4YnxIjA==
+Message-ID: <af3bc209-5c89-e0c4-1534-7d190d5daae0@kernel.org>
+Date:   Tue, 8 Nov 2022 14:02:54 +0100
 MIME-Version: 1.0
-References: <20221108092840.14945-1-JJLIU0@nuvoton.com> <20221108092840.14945-2-JJLIU0@nuvoton.com>
-In-Reply-To: <20221108092840.14945-2-JJLIU0@nuvoton.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 14:02:50 +0100
-Message-ID: <CACRpkdb5NzUcnu6yK6t9CUPVb=FSpSJdWOwHVbJqq5FxapT_RA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] gpio:gpio-npcm-sgpio: Add Nuvoton sgpio driver
-To:     Jim Liu <jim.t90615@gmail.com>
-Cc:     JJLIU0@nuvoton.com, KWLIU@nuvoton.com, brgl@bgdev.pl,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ina3221: add support for summation channel control
+To:     Ninad Malwade <nmalwade@nvidia.com>, treding@nvidia.com,
+        jonathanh@nvidia.com, linux@roeck-us.net, jdelvare@suse.com,
+        nicolinc@nvidia.com, rkasirajan@nvidia.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20221108045243.24143-1-nmalwade@nvidia.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221108045243.24143-1-nmalwade@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jim!
+On 08/11/2022 05:52, Ninad Malwade wrote:
+> Add support to initialize summation channel control via kernel device
+> tree property "summation-bypass". The channel which has this property
+> is excluded from channel summation.
+> 
+> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
 
-thanks for your patch!
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-On Tue, Nov 8, 2022 at 10:29 AM Jim Liu <jim.t90615@gmail.com> wrote:
+You skipped not only one, but all DT maintainers and mailing lists...
 
-> Add Nuvoton BMC sgpio driver support.
->
-> Signed-off-by: Jim Liu <JJLIU0@nuvoton.com>
 > ---
-> Changes for v2:
->    - add prefix
->    - write the enum values in all capitals
->    - remove _init in npcm_sgpio_probe
+>  .../devicetree/bindings/hwmon/ina3221.txt          |  2 ++
+>  drivers/hwmon/ina3221.c                            | 14 ++++++++++++--
 
-Overall this looks very good.
+DT bindings and driver changes are separate patches.
 
-But:
 
-> +       u8 nin_sgpio;
-> +       u8 nout_sgpio;
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ina3221.txt b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> index fa63b6171407..c6e8e6aafcce 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> @@ -29,6 +29,7 @@ Texas Instruments INA3221 Device Tree Bindings
+>    Optional properties:
+>    - label: Name of the input source
+>    - shunt-resistor-micro-ohms: Shunt resistor value in micro-Ohm
+> +  - summation-bypass: exclude from channel summation.
 
-These seem to be software constructs, for which you also add
-custom device tree bindings.
+Convert to DT schema first.
 
-The purpose seems to be an extra layer of protection, such as
-blocking a user from setting some GPIOs as input or output.
 
-I think you should just remove this, the GPIO driver is already
-sufficiently low level without the need of protecting the users
-from themselves.
+Best regards,
+Krzysztof
 
-Yours,
-Linus Walleij
