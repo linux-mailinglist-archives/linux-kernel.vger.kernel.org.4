@@ -2,113 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC13620AF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D88620AFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbiKHIKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S233569AbiKHIMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiKHIK0 (ORCPT
+        with ESMTP id S233518AbiKHIMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:10:26 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1422BDF92;
-        Tue,  8 Nov 2022 00:10:26 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id y16so19608299wrt.12;
-        Tue, 08 Nov 2022 00:10:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y4QtVwIE3iZ0eHUBerHEnwY8Oj652LtFgZcRYLE4Yt4=;
-        b=DkgSIIBu+pZGOaqX8BayQHmLJe8c/9VaQWRuMrnAyGSf4M4P1Ut5+8SUUcU9m9I7zb
-         zuP/tqO/wSuU3QlJrg0wtSqMtZMDKNpURwmCwLIBEwm/yj6LjGUdPeh4aNhFE00IkKkj
-         be6mIbgXgLyF09oyq76hHVG/XfxG3rPOvTyRaNG6LcUJlgl6QxRKCyMflID9josFKbCZ
-         pBgNd4pujg5xyUvyZjC+dvnbWmEOrqbP6dI7Jz4kqApMpJNVk74kncPP5tiz0AOSCqR8
-         FjaJeNxg80RGj977KQbeXdarNhLnDEBAgBs6ZcAh02fckQT8/GhiEXsscSGhcIul6C0o
-         jHDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y4QtVwIE3iZ0eHUBerHEnwY8Oj652LtFgZcRYLE4Yt4=;
-        b=cO+gk6T0Q8R5/ZFUO+JM9MRE73LkxssV8F8w5Vv45gs3nbQYdtDkim6xn8gyoc/eS6
-         Jvdx2HhN/z86zgKMSmQFuUAUSQV2US5mIEdnnh8vimHUNLL9OlysjkWLf6/dz83AirP6
-         JEDsCRAyCITxxJvRhd0RxMpZNsDB12vHRGyCfcEPDeEZooePY1JT9cg51Y6N550kSNSf
-         FR2WhYVXmOnWMg+9tRGxDuzXMQvYwyzc1FyfF7UMYuEJj+J0Z9nvj6R4L4ZcGyBRL44y
-         BPg4JHuh30MAeuXyeLSt2ZtUmDNTH85fHbf2UL2BP0x3hRSZeYvehcH5tdkuvBJEA/s8
-         fjRg==
-X-Gm-Message-State: ACrzQf13M2mVGGf/gBpT16MVAIebUw2KDT+hrY5iFy9BEAlN+jZ57LsW
-        uGrzECBDbUkIidSej/vdeeE=
-X-Google-Smtp-Source: AMsMyM4kUvDPIy5Y848LkhbCiK8D3HDVHquXnAcIQWaFpwuBVc2yEvuVjN5j8IAtFHnVw1tRkghoLg==
-X-Received: by 2002:a5d:5c0f:0:b0:236:c429:361a with SMTP id cc15-20020a5d5c0f000000b00236c429361amr30800977wrb.475.1667895024558;
-        Tue, 08 Nov 2022 00:10:24 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b0023662245d3csm9451993wru.95.2022.11.08.00.10.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 00:10:24 -0800 (PST)
-Date:   Tue, 8 Nov 2022 11:10:21 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Deepak R Varma <drv@mailo.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: patches for staging:media drivers
-Message-ID: <Y2oO7fU4whKr+3hb@kadam>
-References: <Y2eSCZJNWn6DzCUu@qemulion>
- <48f4bda9-b5e3-9649-aab9-b529889bf110@linaro.org>
+        Tue, 8 Nov 2022 03:12:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6024019C12;
+        Tue,  8 Nov 2022 00:12:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1AE99B8171B;
+        Tue,  8 Nov 2022 08:12:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F748C433D6;
+        Tue,  8 Nov 2022 08:12:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667895160;
+        bh=tr4utLTvbJI5QC87X+bDHvLjs/lH810Iljf8WOasF2o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cdvmm3GJkral4rJEg2r6UXPxaz+Of9dPDkDwtTvSEFtexQbjRKECP00SnTv0Zit2/
+         s7vw3BHKA/16Mq25TGa1Fw2eL0y2gAmdmGneepskVp3Mz6Yll4H27QDDKyjfMo7Tuk
+         yaXncfy/GnepuZMK1/1iHzWWHN38SQvnfS/CyPYI=
+Date:   Tue, 8 Nov 2022 09:12:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
+        jslaby@suse.cz
+Subject: Re: Linux 4.14.297
+Message-ID: <Y2oPdQVmMDWCTZ8q@kroah.com>
+References: <166732705422181@kroah.com>
+ <20221104181745.ahtjvjvk5qk7vu37@google.com>
+ <Y2YzeruPdM2y327C@kroah.com>
+ <CAKwvOdk378tUkqXzS8_NvWZRfayQjJAtJX81PdemuBVZ16i4Dg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <48f4bda9-b5e3-9649-aab9-b529889bf110@linaro.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAKwvOdk378tUkqXzS8_NvWZRfayQjJAtJX81PdemuBVZ16i4Dg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 06:29:30PM +0100, Neil Armstrong wrote:
-> Hi,
+On Mon, Nov 07, 2022 at 10:38:51AM -0800, Nick Desaulniers wrote:
+> On Sat, Nov 5, 2022 at 2:57 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Nov 04, 2022 at 11:17:45AM -0700, Nick Desaulniers wrote:
+> > > On Tue, Nov 01, 2022 at 07:24:13PM +0100, Greg Kroah-Hartman wrote:
+> > > > I'm announcing the release of the 4.14.297 kernel.
+> > > >
+> > > > All users of the 4.14 kernel series must upgrade.
+> > > >
+> > > > The updated 4.14.y git tree can be found at:
+> > > >     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+> > > > and can be browsed at the normal kernel.org git web browser:
+> > > >     https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+> > >
+> > > Hi Greg and stable tree maintainers,
+> > > Please consider cherry-picking
+> > > commit 95b980d62d52 ("linux/bits.h: make BIT(), GENMASK(), and friends available in assembly")
+> > > back to 4.19.y and 4.14.y. It first landed in v5.3-rc1 and applies
+> > > cleanly to both branches. I did not find any fixups to 95b980d62d52,
+> > > FWIW.
+> > >
+> > > Otherwise users upgrading to this point release of linux-4.14.y still on
+> > > versions of the GNU assembler older than v1.28 will observe assembler
+> > > errors when building this series. See the link below for the error
+> > > messages.
+> > >
+> > > Please see
+> > > https://lore.kernel.org/llvm/20221103210748.1343090-1-ndesaulniers@google.com/
+> > > for more info.
+> >
+> > Did you try building with that commit applied?  I get the following
 > 
-> On 06/11/2022 11:52, Deepak R Varma wrote:
-> > Greetings to all.
-> > My name is Deepak R Varma and I was part of the recent Outreachy internship
-> > round. I learned during this program that patches for the media drivers were
-> > prohibited to be included in the Outreachy effort due to lack of bandwidth for
-> > the maintainers to respond on those.
-> > 
-> > The Outreachy round is now over but I am continuing to work on code improvement
-> > and changes. I would like to know if it is okay for me to now identify
-> > opportunities in the media drivers and send patch proposal for your kind
-> > consideration. I intend to send couple of Coccinelle identified code
-> > improvements as patches.
-> > 
-> > Please let me know.
+> I built 4.19 but not 4.14. Sorry! It looks like for 4.14 95b980d62d52
+> will additionally depend on
 > 
-> I won't say no but since the media maintainers will need to apply them,
-> the problem is the same.
+> commit 2dd8a62c6476 ("linux/const.h: move UL() macro to include/linux/const.h")
+> 
+> which first landed in v4.17-rc1.
+> 
+> That commit will depend on
+> 
+> commit 2a6cc8a6c0cb ("linux/const.h: prefix include guard of
+> uapi/linux/const.h with _UAPI")
+> 
+> which first landed in v4.17-rc1 as well. Looks like they were part of
+> the same series.
+> 
+> So 4.14.y will need the following 3 patches:
+> 1. commit 2a6cc8a6c0cb ("linux/const.h: prefix include guard of
+> uapi/linux/const.h with _UAPI")
+> 2. commit 2dd8a62c6476 ("linux/const.h: move UL() macro to
+> include/linux/const.h")
+> 3. commit 95b980d62d52 ("linux/bits.h: make BIT(), GENMASK(), and
+> friends available in assembly")
+> 
+> 2a6cc8a6c0cb will have a minor conflict in include/uapi/linux/const.h because
+> commit a85cbe6159ff ("uapi: move constants from <linux/kernel.h> to
+> <linux/const.h>")
+> was backported before 2a6cc8a6c0cb as b732e14e6218b (in 4.14).
+> Attached is a compile tested (x86 make CC=clang) mbox for 4.14.y.
+> Please let me know if that works for you.
 
-Yeah.  Me either.  Those rules are for Outreachy so they don't apply to
-anyone else, but at the same time no one is going to Ack your patches
-without seeing them and especially for a subsystem they don't maintain.
+Thanks, I've queued these up now and will test them later today on the
+Android build system as well.
 
-I always try to think about if maintainers will want my patches.  Like
-I sometimes see people returning -1 instead of -ENOMEM but, you know,
-unless it reaches user space it's not technically a bug.  You can't go
-around fixing everyone's bad taste.  But everyone likes bug fixes.
-
-regards,
-dan carpenter
-
+greg k-h
