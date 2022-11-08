@@ -2,136 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5757620FAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00405620FBB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbiKHL7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:59:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S233703AbiKHMDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbiKHL7w (ORCPT
+        with ESMTP id S234013AbiKHMDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:59:52 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9371E3E3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:59:51 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 63so11233796iov.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:59:51 -0800 (PST)
+        Tue, 8 Nov 2022 07:03:01 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81331F2C2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:02:59 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id p16so8670266wmc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:02:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CXsk1mCcDSCxO8pZyOxPVPpi8Y+w18c1q2hqTt7a5PE=;
-        b=WIpcMn/mwq0TzQFxTxKZt3DD2TtjK3CkAqgjRCkGCIfFkWecUeRQ5Iyv4BNNfpp/KS
-         RIDQgo7f/xiAsG5wtV2nSeEQ3RYI6fv6k4Ju0dKGhl7W+IA3ZutcczXbL65E7kwFI7AK
-         5yTh32v5DWwGsGdv1MPlmV/YLv3D1I5Bpp7p0=
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=hIvdpOhjCyNiqJSBAwvQQBj8Uqill7WA0zit53y3ii8=;
+        b=KLTeW1vZJd8TnbnX06b9xU8JdQSiRABXLn7DRR6r2chkTI8Qspl6yxcGULvjrycbDj
+         KoMvgeXfTNdukowYA3AaEh9jW0oO6+6zJjlKlTngjvYFYv93shZ9F/iHLpSnHH7bSnPO
+         UCHAha/D2MeRWssidl0tuII2MaEdeXTAY7gdkV6/1ABZdhoKIDLRJQh/DLVCNAoponJP
+         VlWi/aWNX+/SG3ajPFiYzzgNGqG9owQBFRubPQ6bc7cemTRLLuKb7kAyVKgTs2xV84qR
+         2RYCUVZzSkpU/RppH6otY24vHPt3ioI9FeyCOFQ5taXOrPVzZvI+1SyLCvLdQJADO0gD
+         x2Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CXsk1mCcDSCxO8pZyOxPVPpi8Y+w18c1q2hqTt7a5PE=;
-        b=xvsdLjFpJC2Ve2XGlvxNaH/LuDhX3zejGQB5jifcPMQcjWyoOasqnz/FEEDs77IoHl
-         OjLBWFb5j916DJcF/7OflxarReB4KymVD9lCA7CCjIG0m8t5WsOGlxum0LY/ZD9SFNHI
-         doeI2YgucLDtNJ1t280huYq4WWsd6d76ewmoH0OeS/TyV+C1KMr0JOyYk9R3fL/k2A4K
-         SqmoDpFBKZc4UfvFiV0JKk9cVQuxyfhpGo84m29iojvrXwTrTrYnuNfNJ8/wzYm3S0w9
-         8e/N2BZTIhLdYLUo1Nu9Rcxfae+G0CaNF2n2+ybZ6/iWTJJGxtwkrbiILqpK3M7G6Lzp
-         i2OA==
-X-Gm-Message-State: ACrzQf2pV2wBWuAaz4cZfAkHvpJX0IAerR1BI+DsjhDQuMoQjxAEWPhx
-        eYAwGVBqOXuQJpc5Iq6kul/oU/j925vzABADWeKnhw==
-X-Google-Smtp-Source: AMsMyM49MEe3AzoIi+i4+4PvEOiz9LC0kpaCPJ2sRyWMyS+fkN3Tjxe5zRXlxuOemyOSM1zOTozUqYa/WYkaU33SrHA=
-X-Received: by 2002:a6b:b882:0:b0:6b7:56c3:b602 with SMTP id
- i124-20020a6bb882000000b006b756c3b602mr32443363iof.5.1667908791200; Tue, 08
- Nov 2022 03:59:51 -0800 (PST)
+        bh=hIvdpOhjCyNiqJSBAwvQQBj8Uqill7WA0zit53y3ii8=;
+        b=rq+TGWj7i9YoNzE2wXszgiC/VbrmCsPGAXU8UF3uOHc2SRype+7NSniyTxltKsuVLD
+         LUhBVETX16XQfHC/mXJrZHMWcVe9uxyzVCzhgU8byjnTBD8GnFHxJkAinavmS5KsnsOb
+         qviPNUhY6p/eUswI6/3p4d1+54pLTvM9KA1ijyQRK/QJYmlBnKIyAh7dck3YLb8SJcY/
+         YoGhXt9Kt9GM5Hzpw3OcCIU/jxkUPl8O4yDdyIcEZy2A+RUcx2CS3xmyY9uGfNbABYDM
+         8yI7VmMmgAfPGZMERg1XIdkvAClylgCAzmLlPl9wDNqTiqP7b0ieVeQ2hRTiGxGEwIeA
+         /11Q==
+X-Gm-Message-State: ACrzQf1LLt+SA71O/E53rwhsIhfIC+Tzw5fslOmfpOKiSN68ZcAFUEAv
+        /96+7f5+xFbCJ0plDZRwmbpLSw==
+X-Google-Smtp-Source: AMsMyM7UPWEFVXALIjatygYKPCSG4hpLFypCBxStqFtN1IpXPmGg97KLO6VUpK072PDk4houkgRRsw==
+X-Received: by 2002:a05:600c:554b:b0:3cf:84ea:3097 with SMTP id iz11-20020a05600c554b00b003cf84ea3097mr23114193wmb.100.1667908978159;
+        Tue, 08 Nov 2022 04:02:58 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b0023662245d3csm10056034wru.95.2022.11.08.04.02.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 04:02:57 -0800 (PST)
+Subject: [PATCH v5 0/2] arm: qcom: mdm9615: first round of bindings and DT fixes
 MIME-Version: 1.0
-References: <20221027104406.549734-1-daniel.vetter@ffwll.ch>
- <87tu3n6cb2.fsf@meer.lwn.net> <CAKMK7uHXz7kteQ_sckTQx=E9cWSqGXS_Y0_pLjX2CRcApOvKRQ@mail.gmail.com>
-In-Reply-To: <CAKMK7uHXz7kteQ_sckTQx=E9cWSqGXS_Y0_pLjX2CRcApOvKRQ@mail.gmail.com>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Tue, 8 Nov 2022 12:59:39 +0100
-Message-ID: <CAKMK7uF7riJszvbVNA2PGAxndVkA-TmzBx0uVVfYZ4L_BLaEgA@mail.gmail.com>
-Subject: Re: [PATCH] docs/sphinx: More depth in the rtd sidebar toc
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAGxFamMC/43Oz2rDMAwG8FcpPk/D/532tPcoO8i20hgSB+wudJS8+8Ruo4flJD7B95OeolMr1M
+ Xl9BSNttLLWjm4t5NIE9YbQcmchZZay7MeYMnL2SsH+Q49TbQgjOVBHbzPNsuUYkhBcDtiJ4gNa5q4
+ X7/mmZdT6fe1ff9e2xSP6//wpkBC9OQNhjwqGj7mUrGt72u7iU9GN30Q0gwNYYwULZJ05gUyByHDkD
+ Mqo3M6GWdfIHsQsgxlTDqPiCnIvx/t+/4D6D5GpZ8BAAA=
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 08 Nov 2022 13:02:52 +0100
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v5-0-bbb120c6766a@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 21:06, Daniel Vetter <daniel.vetter@ffwll.ch> wrote:
->
-> On Fri, 28 Oct 2022 at 20:19, Jonathan Corbet <corbet@lwn.net> wrote:
-> >
-> > Daniel Vetter <daniel.vetter@ffwll.ch> writes:
-> >
-> > > We love to nest our documenation for good structure, but that means
-> > > the table of contents needs to keep up or you can't navigate them.
-> > >
-> > > Realized this trying to find the drm property documentation, which
-> > > with some shuffling around disappeared. Why I didn't realize we can do
-> > > this earlier, no idea.
-> > >
-> > > Since the relevant parts of the toc are only loaded if you're in the
-> > > right .html file there's no harm in going all the way to unlimited.
-> > >
-> > > Note that this has no impact on the classic theme (which doesn't have
-> > > the sidebar) nor on the various :toctree: rendered inline in the
-> > > output.
-> > >
-> > > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> > > Cc: Jonathan Corbet <corbet@lwn.net>
-> > > Cc: linux-doc@vger.kernel.org
-> > > ---
-> > >  Documentation/conf.py | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/Documentation/conf.py b/Documentation/conf.py
-> > > index 934727e23e0e..5dc141c66726 100644
-> > > --- a/Documentation/conf.py
-> > > +++ b/Documentation/conf.py
-> > > @@ -240,6 +240,10 @@ if html_theme == 'sphinx_rtd_theme' or html_theme == 'sphinx_rtd_dark_mode':
-> > >                  # Add color-specific RTD normal mode
-> > >                  html_css_files.append('theme_rtd_colors.css')
-> > >
-> > > +        html_theme_options = {
-> > > +            'navigation_depth': -1,
-> > > +        }
-> > > +
-> > >      except ImportError:
-> > >          html_theme = 'classic'
-> >
-> > So this patch isn't against docs-next, and applies to the RTD theme,
-> > which is no longer the default.  I have no objection to it, but have you
-> > looked at how your docs come out with the alabaster theme?
->
-> [sorry took a bit longer to get back to this]
->
-> Hm looks pretty, but more in a print style than using it dynamically,
-> you can't really click through the sidebar toc at all to quickly find
-> something, and if you're wrong, navigate up a few levels again. It's
-> just the toc for exactly the local document, nothing else at all. rtd
-> theme always gives you the full toc all the way up, and if you have
-> epic patience could actually give you the full toc on every document
-> (but that's probably not a good idea for the kernel). Do you need me
-> to send the rebased version or can you smash this one in?
->
-> btw on today's linux-next the sphinx.rst page isn't updated with the
-> new default theme choice of alabaster. That seems to have been
-> forgotten.
+This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
 
-Sorry got confused on this and looked at the wrong tab/build output
-locally, it's good. Anyway I sent out a rebased version of the rtd
-patch, I do like that sidebar a lot more for navigating the docs :-)
--Daniel
+This first round focuses on trivial changes, the remaining work will
+mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
+
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Alessandro Zummo <a.zummo@towertech.it>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Satya Priya <quic_c_skakit@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Dependencies: None
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v5:
+- Removed applied patches
+- Link to v4: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org
+
+Changes in v4:
+- patch 1: None
+- patch 2: None
+- patch 3: None
+- patch 4: None
+- patch 5: Added reviewed-by tag
+- patch 6: Fix descriptions, Added reviewed-by tags
+- patch 7: None
+- patch 8: None
+- patch 9: Added acked-by tag
+- patch 10: None
+- patch 11: None
+- Link to v3: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org
+
+Changes in v3:
+- Rebased on v6.1-rc1
+- patch 1: Added reviewed-by tag
+- patch 2: Fixes typo in commit msg and added precision about why MIT was selected
+- patch 3: Added reviewed-by tag
+- patch 4: None
+- patch 5: Drop second example node
+- patch 6: Drop Andy, fix interrupts desc and fix example indentation
+- patch 7: Fix commit msg wrap & add reviewed-by tag
+- patch 8: Reword commit msg & add reviewed-by tag
+- patch 9: Reword commit msg & add reviewed-by tag
+- patch 10: None
+- patch 11: Added reviewed-by tag
+- Link to v2: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org
+
+Changes in v2:
+- patch 1: switch to move from swir.txt to qcom.yaml
+- patch 2: use MIT licence instead of X11 licence
+- patch 3: move reg after compatible
+- patch 4: added Krzysztof's review
+- patch 5: split into 5 changes:
+  - document qcom,pm8921 as fallback of qcom,pm8018
+  - convert qcom,pm8921-pwrkey to dt-schema
+  - document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+  - drop unused PM8018 compatible
+  - drop unused pm8018 RTC compatible
+- patch 6: None
+- patch 7: Reworded commit log based on Dmitry's wording on similar patches
+- Link to v1: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org
+
+---
+Neil Armstrong (2):
+      dt-bindings: rtc: qcom-pm8xxx: document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+      rtc: pm8xxx: drop unused pm8018 compatible
+
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 16 ++++++++++------
+ drivers/rtc/rtc-pm8xxx.c                                 |  1 -
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+---
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+change-id: 20220928-mdm9615-dt-schema-fixes-66d4d0ccb7c7
+
+Best regards,
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Neil Armstrong <neil.armstrong@linaro.org>
