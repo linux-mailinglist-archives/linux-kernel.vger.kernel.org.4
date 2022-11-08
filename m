@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C154A6205E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8226B6205EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbiKHB2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S233397AbiKHB22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:28:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233187AbiKHB14 (ORCPT
+        with ESMTP id S232815AbiKHB14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 7 Nov 2022 20:27:56 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2C72AE12;
-        Mon,  7 Nov 2022 17:27:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC52AE19;
+        Mon,  7 Nov 2022 17:27:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BA8E611F4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECDE161373;
+        Tue,  8 Nov 2022 01:27:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE3AC433D6;
         Tue,  8 Nov 2022 01:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166B5C43143;
-        Tue,  8 Nov 2022 01:27:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667870874;
-        bh=3rIhWhWaO/IhkSOEqoQG5y/c79UcKpSiyf3xTXVinD4=;
+        s=k20201202; t=1667870875;
+        bh=GFsF+Y5GqYcWdLjkcGOB9BRTtB8F4Uoi7P3A7bNIvyU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jz3iIZMe6pL/rIL9Elm05Xwt//0QsMabqjxHScDpN3cm6Dsm1fkHCkT2SDXDp6aDq
-         QunJBHd6a+Wd8pBNF7y8hDN7wQZqTo8uVdgTaLbOxonhAf40QTEob09qWOJ4WmNzkY
-         pkZl6c03oDdLZw0aEYOFlb3biPFyqRlnHripFPot3mKoGuVKb6HHPh5l4shM8QVeZS
-         jiFsJ1PYrqG7LGw5SKAruRSIZQG5CMYP4uGN1OsaDF1ivPJ8gKrrweLc3ZT4kEGq5x
-         HOGFe47qUl7WiDm+UXejhEt6b2X23HNUxHHv91RLeGRKuuGNm5bHwudPwdx8hmXc2U
-         ZRdxveIlskojg==
+        b=umx9MldoW5952lcOA4FfDVE4AtOaBbofar89tFc7Vb5AV6p5PnFXvnHTTEeVCDoO8
+         V9b5O70DDIdmoWQkYzInqhD281/ezLJ6z4/fbjtDjnyCJNBWY/D6dyO+6w+5ItSyyt
+         ZvXqvQ3RFjzqwXjBGUP1WOkltyz1JQHsKetl5nFiFXNb00+2F0qMliCllyMwjIQ/Uo
+         GI68GxFXyDMyW3O3qItRp8ndTs3PlCpF9xZZ7QIWbRIAMuzTdlkkiPq6zytWSPmMkH
+         BySFlT7gTo3UyZEGH2bU8CluhDolVw0ntQjfVVXaxMd5cooY04ROq8qwQfijV/SSzo
+         K0T6I5GTPEu5Q==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, luca.weiss@fairphone.com
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+To:     luca@z3ntu.xyz, linux-arm-msm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 1/2] arm64: dts: qcom: pm6350: add temp sensor and thermal zone config
-Date:   Mon,  7 Nov 2022 19:27:26 -0600
-Message-Id: <166787084681.599230.14951776882326244215.b4-ty@kernel.org>
+        agross@kernel.org, afd@ti.com, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lee@kernel.org
+Subject: Re: (subset) [PATCH 1/3] dt-bindings: mfd: qcom,spmi-pmic: rename extcon node name
+Date:   Mon,  7 Nov 2022 19:27:27 -0600
+Message-Id: <166787084684.599230.17834459930926701866.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221028075405.124809-1-luca.weiss@fairphone.com>
-References: <20221028075405.124809-1-luca.weiss@fairphone.com>
+In-Reply-To: <20221031175717.942237-1-luca@z3ntu.xyz>
+References: <20221031175717.942237-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,20 +57,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 09:54:04 +0200, Luca Weiss wrote:
-> Add temp-alarm device tree node and a default configuration for the
-> corresponding thermal zone for this PMIC. Temperatures are based on
-> downstream values, except for trip2 where 125°C is used instead of 145°C
-> due to limitations without a configured ADC.
+On Mon, 31 Oct 2022 18:57:14 +0100, Luca Weiss wrote:
+> extcon is a Linux-specific name and shouldn't be a part of the dts. Make
+> it be called usb-detect@ instead.
 > 
 > 
 
 Applied, thanks!
 
-[1/2] arm64: dts: qcom: pm6350: add temp sensor and thermal zone config
-      commit: 16c0c46f38183573de5361d278772cfed2090b1c
-[2/2] arm64: dts: qcom: pm6150l: add temp sensor and thermal zone config
-      commit: ce1b5eb74b3ef042b1c797f04e8683e7cad34ae6
+[3/3] ARM: dts: qcom: pm8941: rename misc node name
+      commit: 52c47b894b260c3e5102bb4b3e77772734508bcf
 
 Best regards,
 -- 
