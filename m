@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F86621A9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:29:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBE0621AA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiKHR3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S234430AbiKHRai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234218AbiKHR33 (ORCPT
+        with ESMTP id S232035AbiKHRah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:29:29 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152AB2098E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:29:29 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id d10so14403601pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:29:29 -0800 (PST)
+        Tue, 8 Nov 2022 12:30:37 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6C6110C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:30:35 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-13c569e5ff5so17006098fac.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:30:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5FVCMfeiZLHWKmFh+FqLYpaeqKRAlifxYJVyfWqZqZk=;
-        b=TcXV7SAA0xvPOfmvHzBUPQnugs/YasXJ6whZHnJ7gjDDFxRs64xayMIqnUph3gVGuM
-         Vk7oED5XLpqF8JjKACQYtGGBJcsD1icZ4+7PfBZj5p814CvweAwkXr8kDdYGLXWjSTH8
-         mSeioFi2Rcl6sCMT060qYV7CiWku9QUPYtbzw=
+        d=arista.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bWo0wICwvqJmPXPuoTpa5Ov9X6wNIXJjhaYFsJ+BGYo=;
+        b=inpZwFESW1ZamihaSqdrc9ChUddB6Fjv4GA30UUriCnKoWNZPua4c19i62HP0o9S2a
+         qEWl1Tp7GsrnEFR1/5QI1MAS9CF6nX/bGHjx3Lk5QfR6EB6Q4YqdByIEx0PYn5SGa4F6
+         qc1DldWyqPJs1pzLWEnAx3R6itk4Fxamd6ErGvU5koAuSn+3HgoI6MX7oPMDX7/w74tm
+         UT6a8EYtym0NbjYnsulw9YHXuHNzcvyt9X9t4SPqvrzBwcXYI7p1KW53k1KjJJlm9K5j
+         I8ZT1Pfs6P/hMgzIbRnAaI/9h9kNfTxXobMUivlUo2RcAV2ZL9egrsTRPtfB8LZiyNke
+         cETg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5FVCMfeiZLHWKmFh+FqLYpaeqKRAlifxYJVyfWqZqZk=;
-        b=0MjAUKz3O+uSi31RGx8w+DYxos37hK0UDC9JM0xCDN9xrQmIYAym3gThelsl4PM2UE
-         l0HunS3gOJRMQt8ULj1LqPc9wwU5UtKxXTKr6S2ldltQFeioV8aeFvIrbWfXcCwx7Pvg
-         4D9YcBVOKWTDQmH/QmKgaXZKzEicKPaTFzCII6SPzr7HGXuRYGQsXAhf/yDYW41WHD+Y
-         m4NcwOIGq000Z+ulYJgYnWnqPVbXrCN7V0kvLJWdRzclupE08g3RHIDZd9BuG3Unguq3
-         dNz/9AC3WzE1QrPQTn5ZiRpIUUkMUWvxOnnz5c+TMdd/kPzhFXFBVqFLIdJfKivpYDxa
-         2PKQ==
-X-Gm-Message-State: ACrzQf30b8fnG9sko8IuiA7l5IGa1AUAKc2qzt2/Lx6h9zD2ZgUJtguh
-        bNcc0fkZno/l3IiZ/A5D4eeItg==
-X-Google-Smtp-Source: AMsMyM5aFIIqDhZfHqMUWHiT3mSwKknCdK4qJXdm+uZ0LnKIMqvrnR1fIs6JDxdhfeftiDlv8cN4qA==
-X-Received: by 2002:a63:6909:0:b0:41c:9f4f:a63c with SMTP id e9-20020a636909000000b0041c9f4fa63cmr50519040pgc.76.1667928568583;
-        Tue, 08 Nov 2022 09:29:28 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b191-20020a621bc8000000b0056bb0357f5bsm6631443pfb.192.2022.11.08.09.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 09:29:28 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Tue, 8 Nov 2022 09:29:27 -0800
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Olivia Mackall <olivia@selenic.com>,
-        linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: add_early_randomness(): Integer handling issues
-Message-ID: <202211080929.F5B344C9F@keescook>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bWo0wICwvqJmPXPuoTpa5Ov9X6wNIXJjhaYFsJ+BGYo=;
+        b=u08x94juqamWiQN6r251gh7h/dZk/zzsbkBMvylRS6hmTfMLHTyQnga6E5wcut8wli
+         szCqsTK0tfOjUOkmZ6S5C5ss4EOpw3mZf4WKdsBFvq1/JMDVlpPENaewHEI3ueUrY2bZ
+         QrJNp1Ouwgd1ddaIHM2F6YrpsdLggXDCRlu3Ny66P0rcHYWRlvAtxsThcWhwfnJTlgZ1
+         F1biYbCMcJf7O1Ry1uA1tqww1P8IGPmp2JwdT2K4zr4LAHJXMDRI3wT1l717VJ6R97zl
+         iPG2g9IrYV04A6Zz3MrNienZL0xUiPF/8+obWCK+9heeR6EqyEUPwZ/T13GufZkg8EEL
+         TqeQ==
+X-Gm-Message-State: ACrzQf0p8MWWYgsF5VrGYJvK4GWhpZDHXPejGfC+LUMp6/No7T4edxRN
+        ZKYf4/WJZ+D3e1nMinJNE5OXUZGiUuOo6Z7GF8WAzBOZfbdb2w==
+X-Google-Smtp-Source: AMsMyM5PyRLrb7aHWWG0mjHPxLyk0Yjif/RFNPSHYipaQZ54lZuk3GTphB97+yjXW9cIHwHIwpFjeA/4v43I8HrXxPY=
+X-Received: by 2002:a05:6870:3516:b0:13b:8bc3:1140 with SMTP id
+ k22-20020a056870351600b0013b8bc31140mr42724335oah.293.1667928635061; Tue, 08
+ Nov 2022 09:30:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20221108025602.E48005EC04F9@us226.sjc.aristanetworks.com> <Y2qJE2Bpbvnf5Ejb@kbusch-mbp>
+In-Reply-To: <Y2qJE2Bpbvnf5Ejb@kbusch-mbp>
+From:   Francesco Ruggeri <fruggeri@arista.com>
+Date:   Tue, 8 Nov 2022 09:30:23 -0800
+Message-ID: <CA+HUmGijWOvmt_+UZyc8bArdOYMecDUbwpMiSBBjnfJsLx6ofg@mail.gmail.com>
+Subject: Re: nvme: hung task in blk_mq_freeze_queue_wait
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        sagi@grimberg.me, hch@lst.de, axboe@fb.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Tue, Nov 8, 2022 at 8:51 AM Keith Busch <kbusch@kernel.org> wrote:
+> That is an old kernel, I think it'd be worth trying something newer to
+> confirm if this observation isn't already fixed. Specifically, it looks
+> like you have multiple namespaces timing out IO near simultaneously, and
+> causing a mismatched handling. That kind of thing was fixed after the
+> follow (plus some prior dependencies):
+>
+>   commit d6135c3a1ec0cddda7b8b8e1b5b4abeeafd98289
+>   Author: Keith Busch <kbusch@kernel.org>
+>   Date:   Tue May 14 14:46:09 2019 -0600
+>
+>       nvme-pci: Sync queues on reset
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221108 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+On Tue, Nov 8, 2022 at 3:29 AM Hillf Danton <hdanton@sina.com> wrote:
+>
+> Given blk_mq_freeze_queue_wait() in the call trace, another explanation
+> may be percpu refcount [1], which can be tested with the diff attached.
+>
+> Only for thoughts.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/block/blk-mq.c?h=next-20221104#n228
+>
+> Hillf
 
-  Mon Nov 7 12:47:57 2022 +0100
-    e0a37003ff0b ("hw_random: use add_hwgenerator_randomness() for early entropy")
+Thanks Keith, Hillf, I will look into that.
 
-Coverity reported the following:
-
-*** CID 1527234:  Integer handling issues  (SIGN_EXTENSION)
-drivers/char/hw_random/core.c:73 in add_early_randomness()
-67     	int bytes_read;
-68
-69     	mutex_lock(&reading_mutex);
-70     	bytes_read = rng_get_data(rng, rng_fillbuf, 32, 0);
-71     	mutex_unlock(&reading_mutex);
-72     	if (bytes_read > 0) {
-vvv     CID 1527234:  Integer handling issues  (SIGN_EXTENSION)
-vvv     Suspicious implicit sign extension: "rng->quality" with type "unsigned short" (16 bits, unsigned) is promoted in "bytes_read * 8 * rng->quality / 1024" to type "int" (32 bits, signed), then sign-extended to type "unsigned long" (64 bits, unsigned).  If "bytes_read * 8 * rng->quality / 1024" is greater than 0x7FFFFFFF, the upper bits of the result will all be 1.
-73     		size_t entropy = bytes_read * 8 * rng->quality / 1024;
-74     		add_hwgenerator_randomness(rng_fillbuf, bytes_read, entropy, false);
-75     	}
-76     }
-77
-78     static inline void cleanup_rng(struct kref *kref)
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527234 ("Integer handling issues")
-Fixes: e0a37003ff0b ("hw_random: use add_hwgenerator_randomness() for early entropy")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+Francesco
