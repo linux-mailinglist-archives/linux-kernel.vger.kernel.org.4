@@ -2,171 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D03B6210D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD736210D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:33:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbiKHMeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S233923AbiKHMdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233683AbiKHMeF (ORCPT
+        with ESMTP id S233853AbiKHMdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:34:05 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C146148;
-        Tue,  8 Nov 2022 04:34:04 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so11596112wmb.2;
-        Tue, 08 Nov 2022 04:34:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hs6bfBT9BT2l59umVn3/Z7dEM/XIWsGgJi1HUDGerFQ=;
-        b=SIHlW8VhlVcLU+yqYNIL4jzxCnNPNjN3wimrOLvLFFNwAW6vcaR/92/b0zJhNpfKT6
-         Sfcfkgg3Zqgb3CeClEtI4Y43S30lCh68NC1fjWMr2UNTFmNVLuk/ws60+EgRLZO4LeOT
-         t1aE1xljAVtNZkRu3Idc7WLajGC6Wg7feo+Ry3a4KNW4f4ACTyXuorV6GqLZMAzTAFWy
-         viXQjQTvtHtgKl+1gFxnnst/VM1mNT/h2XiJnU6ronyJjqk/hkz1P+O6JI/+4CGMY81S
-         XNRU2MVStGPZv36pG+IbisMBBZA9mSFHfZyuGO/rZkx4+i5lPSk3kwHZu0qoQWrR/nQA
-         RMzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hs6bfBT9BT2l59umVn3/Z7dEM/XIWsGgJi1HUDGerFQ=;
-        b=HLQ5VX3ca7CMsBnsyIl4mF9KvWKGN42zPR33aSTzChtVOFBXNUyKl3GNtcUJlj67y1
-         3rYAW9XDk2zWoMvmsI5laeDrrvpaK8K+IGHLSuXPWvQrjvZZfBX2nnkpA8Pab6BPpcCm
-         +63dXPDjSfzvvgVbZLNdOZDJ043THg8DvSPThgg5G39w4yGx9hMXfCMipy1d6FwXwD2X
-         M9HlHE2Y83JpAx50Kcvi1EWWCk/E96zlt9BWVD+8dMxzmCJKtOmvLVJ16gsssbv6GsLc
-         h962pC+kUUja5rhbpFOs50sEe105jm6KaF13A/ufoNnQu1Fd2ySCum2opWq1DieMAKew
-         7Hog==
-X-Gm-Message-State: ACrzQf2fRvWw3eDxEB6KHJjkdB+7tITa0tcDRnaDBc5M98j4yQejTxDu
-        d18awrA6JLPTOKSMELYtjKk=
-X-Google-Smtp-Source: AMsMyM7agjw76/9UWN4TjhHqSTs4AEF9Zol/a6+9dbFR9x6j8OXrSCZ7noMFtyd9NilUr7vJzghAyg==
-X-Received: by 2002:a05:600c:2143:b0:3cf:63dc:d011 with SMTP id v3-20020a05600c214300b003cf63dcd011mr37444145wml.194.1667910842756;
-        Tue, 08 Nov 2022 04:34:02 -0800 (PST)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id g17-20020a5d46d1000000b0022efc4322a9sm10171378wrs.10.2022.11.08.04.33.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 04:34:02 -0800 (PST)
-Date:   Tue, 8 Nov 2022 13:33:28 +0100
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lixiaoyan@google.com, alexanderduyck@fb.com,
-        steffen.klassert@secunet.com, richardbgobert@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2] gro: avoid checking for a failed search
-Message-ID: <20221108123320.GA59373@debian>
+        Tue, 8 Nov 2022 07:33:50 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CB312AA4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:33:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1667910825; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RiuMl0wIYLemKsntWqF37IR2ppjmdHzm41vMMbwpFfk=;
+        b=df+IgAAZ34PlYhbpVWvHT6l//QSqi7ZtbTzPVCLFwbui3OgMRPOoqa85q9EqzC8PKE1tb6
+        Mu9pZrkDjkC0Rz1kHlusPruJbzvtaU3bikB3EDOtX6RGLtQ9kD6owuyKbWIk0NrRYB1YGr
+        ajTMu6SzuNirp+66lwZjpDB5RFccWHw=
+Date:   Tue, 08 Nov 2022 12:33:34 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 01/26] drm: modeset-helper: Export dev_pm_ops for simple
+ drivers
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-Id: <Y741LR.3LC5VO42RZFD3@crapouillou.net>
+In-Reply-To: <39a93eaa-8942-d630-243a-f6e34a16718d@suse.de>
+References: <20221107175106.360578-1-paul@crapouillou.net>
+        <20221107175106.360578-2-paul@crapouillou.net>
+        <39a93eaa-8942-d630-243a-f6e34a16718d@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After searching for a protocol handler in dev_gro_receive, checking for
-failure is redundant. Skip the failure code after finding the 
-corresponding handler.
+Hi Thomas,
 
-Suggested-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
----
- net/core/gro.c | 72 +++++++++++++++++++++++++-------------------------
- 1 file changed, 36 insertions(+), 36 deletions(-)
+Le mar. 8 nov. 2022 =E0 13:10:49 +0100, Thomas Zimmermann=20
+<tzimmermann@suse.de> a =E9crit :
+> Hi Paul,
+>=20
+> thanks for cleaning up. Please see my comments below.
+>=20
+> Am 07.11.22 um 18:50 schrieb Paul Cercueil:
+>> Export a dev_pm_ops meant to be used with simple drivers, which have
+>> their struct drm_device registered as their struct device's drvdata,=20
+>> and
+>> only call drm_mode_config_pm_{suspend,resume}.
+>>=20
+>> The symbol is conditionally exported if IS_ENABLED(CONFIG_PM_SLEEP),=20
+>> and
+>> therefore it should always be referenced using the pm_sleep_ptr()=20
+>> macro.
+>>=20
+>> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>> ---
+>>   drivers/gpu/drm/drm_modeset_helper.c | 32=20
+>> ++++++++++++++++++++++++++++
+>>   include/drm/drm_modeset_helper.h     |  4 ++++
+>>   2 files changed, 36 insertions(+)
+>>=20
+>> diff --git a/drivers/gpu/drm/drm_modeset_helper.c=20
+>> b/drivers/gpu/drm/drm_modeset_helper.c
+>> index f858dfedf2cf..0bc9f9228a60 100644
+>> --- a/drivers/gpu/drm/drm_modeset_helper.c
+>> +++ b/drivers/gpu/drm/drm_modeset_helper.c
+>> @@ -20,6 +20,9 @@
+>>    * OF THIS SOFTWARE.
+>>    */
+>>=20
+>> +#include <linux/device.h>
+>> +#include <linux/pm.h>
+>> +
+>>   #include <drm/drm_atomic_helper.h>
+>>   #include <drm/drm_fb_helper.h>
+>>   #include <drm/drm_fourcc.h>
+>> @@ -244,3 +247,32 @@ int drm_mode_config_helper_resume(struct=20
+>> drm_device *dev)
+>>   	return ret;
+>>   }
+>>   EXPORT_SYMBOL(drm_mode_config_helper_resume);
+>> +
+>> +static int drm_mode_config_pm_suspend(struct device *dev)
+>> +{
+>> +	struct drm_device *drm =3D dev_get_drvdata(dev);
+>> +
+>> +	return drm_mode_config_helper_suspend(drm);
+>> +}
+>> +
+>> +static int drm_mode_config_pm_resume(struct device *dev)
+>> +{
+>> +	struct drm_device *drm =3D dev_get_drvdata(dev);
+>> +
+>> +	return drm_mode_config_helper_resume(drm);
+>> +}
+>> +
+>> +/**
+>> + * drm_mode_config_pm_ops - Exported dev_pm_ops helper for simple=20
+>> drivers
+>> + *
+>> + * This dev_pm_ops can be used for simple drivers that would=20
+>> otherwise only call
+>> + * drm_mode_config_helper_suspend / drm_mode_config_helper_resume=20
+>> in their PM
+>> + * callbacks. It is only valid if the driver's drm_device has been=20
+>> registered as
+>> + * the struct device's drvdata.
+>> + *
+>> + * The exported symbol must always be used with the pm_sleep_ptr()=20
+>> macro, like
+>> + * this:
+>> + * .pm =3D pm_sleep_ptr(&drm_mode_config_pm_ops),
+>> + */
+>> +EXPORT_SIMPLE_DEV_PM_OPS(drm_mode_config_pm_ops,
+>> +			 drm_mode_config_pm_suspend, drm_mode_config_pm_resume);
+>> diff --git a/include/drm/drm_modeset_helper.h=20
+>> b/include/drm/drm_modeset_helper.h
+>> index 995fd981cab0..85f29637e9c1 100644
+>> --- a/include/drm/drm_modeset_helper.h
+>> +++ b/include/drm/drm_modeset_helper.h
+>> @@ -23,6 +23,8 @@
+>>   #ifndef __DRM_KMS_HELPER_H__
+>>   #define __DRM_KMS_HELPER_H__
+>=20
+> I like that you clean up the driver, but not how it's done TBH.
+>=20
+>>=20
+>> +#include <linux/pm.h>
+>> +
+>=20
+> Half of DRM somehow incudes drm_kms_helper.h. So this include=20
+> statements
+> affects more or less everything.
+>=20
+>>   struct drm_crtc;
+>>   struct drm_crtc_funcs;
+>>   struct drm_device;
+>> @@ -41,4 +43,6 @@ int drm_crtc_init(struct drm_device *dev, struct=20
+>> drm_crtc *crtc,
+>>   int drm_mode_config_helper_suspend(struct drm_device *dev);
+>>   int drm_mode_config_helper_resume(struct drm_device *dev);
+>>=20
+>> +extern const struct dev_pm_ops drm_mode_config_pm_ops;
+>> +
+>=20
+> That's maybe subjective, but I don't like exporting such _funcs and=20
+> _ops
+> instances. They are like blackboxes.  And they pollute the symbol
+> namespace unnecessarily.
+>=20
+> I propose a solution similar to DEFINE_DRM_GEM_FOPS [1] or
+> drm_module_pci_driver. [2]
+>=20
+> Define a macro in the header to create the _ops instance, such as
+>=20
+> #if defined(CONFIG_PM)
+> #define DEFINE_DRM_MODE_CONFIG_HELPER_PM_OPS(_name)  \
+>   static __ ## _name ## _suspend() {  \
+>     call drm_mode_config_helper_suspend()  \
+>   } \
+>   static __ ## _name ## _resume() {  \
+>     call drm_mode_config_helper_resume()  \
+>   }  \
+>   static SIMPLE_DEV_PM_OPS(_name, __ ## _name ## _suspend, __ ## _name
+> ## _resume);
+> #else
+> #define DEFINE_DRM_MODE_CONFIG_HELPER_PM_OPS(_name)
+> #endif
+>=20
+> Drivers can then keep the instance and the include for pm.h internal
+> within their _drv.c file. The small callback functions are within the
+> source file as well.  If CONFIG_PM has been disabled, nothing is being
+> generated.
 
-diff --git a/net/core/gro.c b/net/core/gro.c
-index bc9451743307..8e0fe85a647d 100644
---- a/net/core/gro.c
-+++ b/net/core/gro.c
-@@ -489,45 +489,45 @@ static enum gro_result dev_gro_receive(struct napi_struct *napi, struct sk_buff
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(ptype, head, list) {
--		if (ptype->type != type || !ptype->callbacks.gro_receive)
--			continue;
--
--		skb_set_network_header(skb, skb_gro_offset(skb));
--		skb_reset_mac_len(skb);
--		BUILD_BUG_ON(sizeof_field(struct napi_gro_cb, zeroed) != sizeof(u32));
--		BUILD_BUG_ON(!IS_ALIGNED(offsetof(struct napi_gro_cb, zeroed),
--					 sizeof(u32))); /* Avoid slow unaligned acc */
--		*(u32 *)&NAPI_GRO_CB(skb)->zeroed = 0;
--		NAPI_GRO_CB(skb)->flush = skb_has_frag_list(skb);
--		NAPI_GRO_CB(skb)->is_atomic = 1;
--		NAPI_GRO_CB(skb)->count = 1;
--		if (unlikely(skb_is_gso(skb))) {
--			NAPI_GRO_CB(skb)->count = skb_shinfo(skb)->gso_segs;
--			/* Only support TCP at the moment. */
--			if (!skb_is_gso_tcp(skb))
--				NAPI_GRO_CB(skb)->flush = 1;
--		}
--
--		/* Setup for GRO checksum validation */
--		switch (skb->ip_summed) {
--		case CHECKSUM_COMPLETE:
--			NAPI_GRO_CB(skb)->csum = skb->csum;
--			NAPI_GRO_CB(skb)->csum_valid = 1;
--			break;
--		case CHECKSUM_UNNECESSARY:
--			NAPI_GRO_CB(skb)->csum_cnt = skb->csum_level + 1;
--			break;
--		}
--
--		pp = INDIRECT_CALL_INET(ptype->callbacks.gro_receive,
--					ipv6_gro_receive, inet_gro_receive,
--					&gro_list->list, skb);
--		break;
-+		if (ptype->type == type && ptype->callbacks.gro_receive)
-+			goto found_ptype;
- 	}
- 	rcu_read_unlock();
-+	goto normal;
- 
--	if (&ptype->list == head)
--		goto normal;
-+found_ptype:
-+	skb_set_network_header(skb, skb_gro_offset(skb));
-+	skb_reset_mac_len(skb);
-+	BUILD_BUG_ON(sizeof_field(struct napi_gro_cb, zeroed) != sizeof(u32));
-+	BUILD_BUG_ON(!IS_ALIGNED(offsetof(struct napi_gro_cb, zeroed),
-+					sizeof(u32))); /* Avoid slow unaligned acc */
-+	*(u32 *)&NAPI_GRO_CB(skb)->zeroed = 0;
-+	NAPI_GRO_CB(skb)->flush = skb_has_frag_list(skb);
-+	NAPI_GRO_CB(skb)->is_atomic = 1;
-+	NAPI_GRO_CB(skb)->count = 1;
-+	if (unlikely(skb_is_gso(skb))) {
-+		NAPI_GRO_CB(skb)->count = skb_shinfo(skb)->gso_segs;
-+		/* Only support TCP at the moment. */
-+		if (!skb_is_gso_tcp(skb))
-+			NAPI_GRO_CB(skb)->flush = 1;
-+	}
-+
-+	/* Setup for GRO checksum validation */
-+	switch (skb->ip_summed) {
-+	case CHECKSUM_COMPLETE:
-+		NAPI_GRO_CB(skb)->csum = skb->csum;
-+		NAPI_GRO_CB(skb)->csum_valid = 1;
-+		break;
-+	case CHECKSUM_UNNECESSARY:
-+		NAPI_GRO_CB(skb)->csum_cnt = skb->csum_level + 1;
-+		break;
-+	}
-+
-+	pp = INDIRECT_CALL_INET(ptype->callbacks.gro_receive,
-+				ipv6_gro_receive, inet_gro_receive,
-+				&gro_list->list, skb);
-+
-+	rcu_read_unlock();
- 
- 	if (PTR_ERR(pp) == -EINPROGRESS) {
- 		ret = GRO_CONSUMED;
--- 
-2.20.1
+Another alternative would be to make the exported=20
+"drm_mode_config_pm_ops" a pointer. Then it can be opaque and you=20
+wouldn't need the <linux/pm.h> include in the header.
+
+Your solution works too, I guess. I find it inelegant, but I won't=20
+fight you hard on this.
+
+Cheers,
+-Paul
+
+>=20
+> Best regards
+> Thomas
+>=20
+> [1]
+> https://elixir.bootlin.com/linux/v6.1-rc4/source/include/drm/drm_gem.h#L3=
+96
+> [2]
+> https://elixir.bootlin.com/linux/v6.1-rc4/source/include/drm/drm_module.h=
+#L58
+>=20
+>=20
+>>   #endif
+>=20
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 N=FCrnberg, Germany
+> (HRB 36809, AG N=FCrnberg)
+> Gesch=E4ftsf=FChrer: Ivo Totev
+
 
