@@ -2,109 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BEE620FC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C378620FCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbiKHMDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S233896AbiKHMFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbiKHMDE (ORCPT
+        with ESMTP id S233576AbiKHMFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:03:04 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA632FFF8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:03:01 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j15so20622754wrq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:03:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=34uELl7iSr0KkNMrPbDK0p3kOxj5Rp7IXkKhGBvUSAg=;
-        b=FCj0qS9DEU91XF9GU6/3CVjhV71oQF+Et5zuA/pS/cIe9ojQbZnfwNRx7EFmp7hBvG
-         TyRCjQNgGqJwe6+L75yUR/xe7XOrPKWiqXjoObsPy8JLGK40qYvnjc1orcH+YMw1nra5
-         VnFujy8cqUXcguo7JfGiJzjvSYCiAYs5auWGzE3DyUmvHeKC/v0PphLW64buuGR7QLjb
-         RZGPBBf3tWMHfKjhHPf+nkYMs7zGB/unm5MGmFBAOv6pYwO8w4b/FEAqntdZD3Lbly0J
-         sOgh7XxzZZtc+dVpWv6jzKoim1uiRNG8BzTvX2WAEZdnO2SeYqIyZI/WjITUZj0i4nC/
-         71Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=34uELl7iSr0KkNMrPbDK0p3kOxj5Rp7IXkKhGBvUSAg=;
-        b=bjd++MB+prlh2V7nAa/vGpBlmxtJ4wD3kt7V/ofPyw0XOrPFmprmc6KYewsxOmyvRS
-         NWDLcXO7Fdr2Ky3bxPLPXPes17P92Hg1KzvmC3ANRDs/kgDrxcYTUns3NitUClqOdXpE
-         3qOh+ZebXfXvm3xff6qjKVpzB5A+aqU5v8xgAAtdKko8xkeqjuohYv5yabAffoYPhAOL
-         5OtBOLpuFu1vX8Np//jcktQp9QXhYVtEBDw4FIVXzJ4d9ELJkQYy3xLAsJuiPrGlNxET
-         7z/wAZWqt5zMSjVy9aO3iHXDWXSl9XQzIPBI+Y7b/UKGCOYZEzWgGqXvg4xP3A+YG164
-         oJYA==
-X-Gm-Message-State: ACrzQf0xwBL4n990gXMTMeLUdKE4RNmObvRqe303Ht3CMeRc7Nd7/hCR
-        bLo7IUD3gnUfzWOxVKj7pRIKaQ==
-X-Google-Smtp-Source: AMsMyM7K13gbsFzH2YQDtPN8bvUJhHqreRaknylxG4yXs1QpWmAIghwCjAVDLvh7FGZApvlAxGuW0g==
-X-Received: by 2002:a5d:52d0:0:b0:21e:4923:fa09 with SMTP id r16-20020a5d52d0000000b0021e4923fa09mr35961603wrv.244.1667908980061;
-        Tue, 08 Nov 2022 04:03:00 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b0023662245d3csm10056034wru.95.2022.11.08.04.02.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 04:02:59 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 08 Nov 2022 13:02:54 +0100
-Subject: [PATCH v5 2/2] rtc: pm8xxx: drop unused pm8018 compatible
+        Tue, 8 Nov 2022 07:05:19 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC62E42985;
+        Tue,  8 Nov 2022 04:05:17 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A8BGpie021311;
+        Tue, 8 Nov 2022 12:04:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0N8xF34uZZ3oQaq7z3zSL7RQw2wjq3nrrQc7VpDG5JI=;
+ b=UT7bBe/IW79P3EM7Sjgpdx1K5RoBw1tHZwo+gy2gxnd+cYi2VQ5HCVqHvI0LFx1BOgWb
+ lmOGFflaUaTsD7EMj1zDu/dvcSMbe955Z4Ebfx8v0lOR3ia7KTISUxmZeDwg/88n0DBb
+ WbpLMWJmDUXhUjRXQMWipF12Y6wCot+2PxH6p/pk/zr11kv3Dlt0IarHMqSWORzUP8u4
+ e0D9fT77PdnYKdZfi2/J8Wet1f5UmCyHLfdlKVo0M0cua6HPAZVYyoaz6vbLFIjfNenT
+ irvuH2JwJ3QfjE5g9am70E+4ffbdVw8d4IW5jcUgwFLa2jigLPtWNoFXNiFOsagjZfg4 ow== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kq7g4j8by-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 12:04:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A8C4oRd031418
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 8 Nov 2022 12:04:50 GMT
+Received: from [10.216.12.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
+ 04:04:47 -0800
+Message-ID: <a07cb525-b814-241b-db72-840f5c17e785@quicinc.com>
+Date:   Tue, 8 Nov 2022 17:34:43 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220928-mdm9615-dt-schema-fixes-v5-2-bbb120c6766a@linaro.org>
-References: <20220928-mdm9615-dt-schema-fixes-v5-0-bbb120c6766a@linaro.org>
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v5-0-bbb120c6766a@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-X-Mailer: b4 0.10.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2] wifi: ath10k: Add WLAN firmware image version info
+ into smem
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>
+CC:     <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_mpubbise@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, kernel test robot <lkp@intel.com>
+References: <20221104082828.14386-1-quic_youghand@quicinc.com>
+ <166790340662.9633.4549756749859911615.kvalo@kernel.org>
+From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
+In-Reply-To: <166790340662.9633.4549756749859911615.kvalo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Vujk1Lx8zud34sldkyPGbqSZ09gIs06z
+X-Proofpoint-GUID: Vujk1Lx8zud34sldkyPGbqSZ09gIs06z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211080069
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PM8018 compatible is always used with PM8921 fallback, so PM8018
-compatible can be safely removed from device ID table
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/rtc/rtc-pm8xxx.c | 1 -
- 1 file changed, 1 deletion(-)
+On 11/8/2022 4:00 PM, Kalle Valo wrote:
+> Youghandhar Chintala <quic_youghand@quicinc.com> wrote:
+>
+>> In a SoC based solution, it would be useful to know the versions of the
+>> various binary firmware blobs the system is running on. On a QCOM based
+>> SoC, this info can be obtained from socinfo debugfs infrastructure. For
+>> this to work, respective subsystem drivers have to export the firmware
+>> version information to an SMEM based version information table.
+>>
+>> Having firmware version information at one place will help quickly
+>> figure out the firmware versions of various subsystems on the device
+>> instead of going through builds/logs in an event of a system crash.
+>>
+>> Fill WLAN firmware version information in SMEM version table to be
+>> printed as part of socinfo debugfs infrastructure on a Qualcomm based
+>> SoC.
+>>
+>> This change is applicable only for WCN399X targets.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+>>
+>> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+>> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> This doesn't compile unless QCOM_SMEM is enabled in Kconfig. So should we add
+> "select QCOM_SMEM" in Kconfig for ATH10K_SNOC?
 
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index dc6d1476baa5..716e5d9ad74d 100644
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -461,7 +461,6 @@ static const struct pm8xxx_rtc_regs pmk8350_regs = {
-  */
- static const struct of_device_id pm8xxx_id_table[] = {
- 	{ .compatible = "qcom,pm8921-rtc", .data = &pm8921_regs },
--	{ .compatible = "qcom,pm8018-rtc", .data = &pm8921_regs },
- 	{ .compatible = "qcom,pm8058-rtc", .data = &pm8058_regs },
- 	{ .compatible = "qcom,pm8941-rtc", .data = &pm8941_regs },
- 	{ .compatible = "qcom,pmk8350-rtc", .data = &pmk8350_regs },
+Yes Kalle. Thank you.
 
--- 
-b4 0.10.1
+Regards,
+
+Youghandhar
+
