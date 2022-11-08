@@ -2,133 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B4262129A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400556212B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbiKHNlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
+        id S234395AbiKHNmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234263AbiKHNkn (ORCPT
+        with ESMTP id S234442AbiKHNlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:40:43 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B2250F0F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 05:40:43 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id c4-20020a056e020bc400b0030098df879dso11047862ilu.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 05:40:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lIRjWRyR/WNWUuHmfvOw0G6aB24s/R1ym1OkCgoq76Y=;
-        b=AOFoCIKiFF7hj3Kms+nmqzkTHp1rPoA/mSx4v59deT1+K5nWJIPjRorcrI12K/OuEX
-         kEefZaalGdqp/QcH15sYIjzDK34wj+e8zqccUulp5tzOg+vuLcV9WGNgYZikJCt+h/gZ
-         NU9rbSQmdS5ZsZYu0mqPqJwv1u0/6kikhZ0cU8WUphhIKsffFCDipwS3Xrf59tghg1SK
-         scimOEb8uThecfgNsW2lpL3RQmJsNuXXnAxfc0yWmR68lQrv3WN49RTbiITXm4NZ4BeT
-         BDSlwoyETNrnklS1zSp9t/stGMppOXw0lDtk8DbQ/EQOr9tT1aWYi4J4YKhzdb9HA007
-         6dBA==
-X-Gm-Message-State: ACrzQf1QBrlZMwgB0/sEXnQ5+Pik+J0sbF1HLTVtO0nmDSJMoRK6B/MT
-        BpvZIs/nJteQMtgLBntXjinfuLjSmttDvjY6cAatR14nEVmL
-X-Google-Smtp-Source: AMsMyM6BkDF321uwHJ2d16e816qvxotb/2TSNQsHEBIupCfepvK/BiplQNE6Ub0Mey7VoPu8e5Von7i8j48KDE0L2q6hgihB7pM9
+        Tue, 8 Nov 2022 08:41:50 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B621D51C38;
+        Tue,  8 Nov 2022 05:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667914909; x=1699450909;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=FmRgVS4cTjgYRBdIR1Sl5CCtDj0f4AUy7bzdc1murYw=;
+  b=NZUJPMEMU0skIf1/6SkrAr9OYPhY+PZblPx6Mxqwt1c2BBC4j/oIXuGw
+   w+xRjB0eLpbE1KoK28549yF8P7xUSqfQQmHwtL+U2+a/Y/2uKiVxLAe2+
+   1adGBI7/Ld2TkaVcikvDEWKQCKozAzrOy0POOkHi1Bh4NM98WosJ9DHDk
+   s65aDuh57oeTYitOWFq8QGYx2Mcqb7M9BfFmu/vJskVHUj68e3Ap9+YPg
+   dha1EJt3L10lcxgPUj9ldrHUAA9Itl/aBh9q6l00LFeUoA0pjaDTs/TkD
+   SrOFjMSbnfKoLBeez4LK8IV3u+lHlfb/4PxKKzyFFKibenXRv8qL6kQK/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310692476"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="310692476"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:41:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="811243110"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="811243110"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.255.28.143]) ([10.255.28.143])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:41:46 -0800
+Message-ID: <30be6d64-31bd-bfc8-72f7-fb57999e4566@linux.intel.com>
+Date:   Tue, 8 Nov 2022 21:41:44 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a92:6a12:0:b0:2f6:3bd1:fbdf with SMTP id
- f18-20020a926a12000000b002f63bd1fbdfmr30767624ilc.205.1667914842558; Tue, 08
- Nov 2022 05:40:42 -0800 (PST)
-Date:   Tue, 08 Nov 2022 05:40:42 -0800
-In-Reply-To: <0000000000003687bd05c2b2401d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b4dae405ecf5af7f@google.com>
-Subject: Re: [syzbot] BUG: MAX_LOCKDEP_KEYS too low! (2)
-From:   syzbot <syzbot+a70a6358abd2c3f9550f@syzkaller.appspotmail.com>
-To:     Jason@zx2c4.com, davem@davemloft.net, dvyukov@google.com,
-        edumazet@google.com, jiri@resnulli.us, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, penguin-kernel@i-love.sakura.ne.jp,
-        peterz@infradead.org, rdunlap@infradead.org,
-        syzkaller-bugs@googlegroups.com, tonymarislogistics@yandex.com,
-        wireguard@lists.zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+Subject: Re: [PATCH v10 049/108] KVM: x86/tdp_mmu: Support TDX private mapping
+ for TDP MMU
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <9d5595dfe1b5ab77bcb5650bc4d940dd977b0a32.1667110240.git.isaku.yamahata@intel.com>
+In-Reply-To: <9d5595dfe1b5ab77bcb5650bc4d940dd977b0a32.1667110240.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    3577a7611842 Merge branches 'for-next/acpi', 'for-next/kbu..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ea3e61880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=a70a6358abd2c3f9550f
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168c4c99880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d6376880000
+On 2022/10/30 14:22, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata<isaku.yamahata@intel.com>
+>
+> Allocate protected page table for private page table, and add hooks to
+> operate on protected page table.  This patch adds allocation/free of
+> protected page tables and hooks.  When calling hooks to update SPTE entry,
+> freeze the entry, call hooks and unfree
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/054b1f56af52/disk-3577a761.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c616835b2a22/vmlinux-3577a761.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9825c28b2090/Image-3577a761.gz.xz
+unfreeze
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a70a6358abd2c3f9550f@syzkaller.appspotmail.com
 
-netlink: 4 bytes leftover after parsing attributes in process `syz-executor357'.
-device team6635 entered promiscuous mode
-8021q: adding VLAN 0 to HW filter on device team6635
-BUG: MAX_LOCKDEP_KEYS too low!
-turning off the locking correctness validator.
-CPU: 0 PID: 9692 Comm: syz-executor357 Not tainted 6.1.0-rc4-syzkaller-31844-g3577a7611842 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- register_lock_class+0x2e4/0x2f8 kernel/locking/lockdep.c:1326
- __lock_acquire+0xa8/0x3084 kernel/locking/lockdep.c:4934
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- team_vlan_rx_add_vid+0x38/0xd8 drivers/net/team/team.c:1904
- vlan_add_rx_filter_info net/8021q/vlan_core.c:211 [inline]
- __vlan_vid_add net/8021q/vlan_core.c:306 [inline]
- vlan_vid_add+0x328/0x38c net/8021q/vlan_core.c:336
- vlan_device_event+0x200/0xc4c net/8021q/vlan.c:385
- notifier_call_chain kernel/notifier.c:87 [inline]
- raw_notifier_call_chain+0x7c/0x108 kernel/notifier.c:455
- __dev_notify_flags+0x170/0x2e8
- rtnl_newlink_create+0x460/0x6bc net/core/rtnetlink.c:3372
- __rtnl_newlink net/core/rtnetlink.c:3581 [inline]
- rtnl_newlink+0x728/0xa04 net/core/rtnetlink.c:3594
- rtnetlink_rcv_msg+0x484/0x82c net/core/rtnetlink.c:6091
- netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
- rtnetlink_rcv+0x28/0x38 net/core/rtnetlink.c:6109
- netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
- netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
- ___sys_sendmsg net/socket.c:2536 [inline]
- __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
- __do_sys_sendmsg net/socket.c:2574 [inline]
- __se_sys_sendmsg net/socket.c:2572 [inline]
- __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+>   the entry to allow concurrent
+> updates on page tables.  Which is the advantage of TDP MMU.  As
+> kvm_gfn_shared_mask() returns false always, those hooks aren't called yet
+> with this patch.
+>
+> When the faulting GPA is private, the KVM fault is called private.  When
+> resolving private KVM,
 
+private KVM fault？
+
+
+> allocate protected page table and call hooks to
+> operate on protected page table. On the change of the private PTE entry,
+> invoke kvm_x86_ops hook in __handle_changed_spte() to propagate the change
+> to protected page table. The following depicts the relationship.
+>
+>    private KVM page fault   |
+>        |                    |
+>        V                    |
+>   private GPA               |     CPU protected EPTP
+>        |                    |           |
+>        V                    |           V
+>   private PT root           |     protected PT root
+>        |                    |           |
+>        V                    |           V
+>     private PT --hook to propagate-->protected PT
+>        |                    |           |
+>        \--------------------+------\    |
+>                             |      |    |
+>                             |      V    V
+>                             |    private guest page
+>                             |
+>                             |
+>       non-encrypted memory  |    encrypted memory
+>                             |
+> PT: page table
+>
+> The existing KVM TDP MMU code uses atomic update of SPTE.  On populating
+> the EPT entry, atomically set the entry.  However, it requires TLB
+> shootdown to zap SPTE.  To address it, the entry is frozen with the special
+> SPTE value that clears the present bit. After the TLB shootdown, the entry
+> is set to the eventual value (unfreeze).
+>
+> For protected page table, hooks are called to update protected page table
+> in addition to direct access to the private SPTE. For the zapping case, it
+> works to freeze the SPTE. It can call hooks in addition to TLB shootdown.
+> For populating the private SPTE entry, there can be a race condition
+> without further protection
+>
+>    vcpu 1: populating 2M private SPTE
+>    vcpu 2: populating 4K private SPTE
+>    vcpu 2: TDX SEAMCALL to update 4K protected SPTE => error
+>    vcpu 1: TDX SEAMCALL to update 2M protected SPTE
+>
+> To avoid the race, the frozen SPTE is utilized.  Instead of atomic update
+> of the private entry, freeze the entry, call the hook that update protected
+> SPTE, set the entry to the final value.
+>
+> Support 4K page only at this stage.  2M page support can be done in future
+> patches.
+>
+> Co-developed-by: Kai Huang<kai.huang@intel.com>
+> Signed-off-by: Kai Huang<kai.huang@intel.com>
+> Signed-off-by: Isaku Yamahata<isaku.yamahata@intel.com>
+> ---
+>   arch/x86/include/asm/kvm-x86-ops.h |   5 +
+>   arch/x86/include/asm/kvm_host.h    |  11 ++
+>   arch/x86/kvm/mmu/mmu.c             |  15 +-
+>   arch/x86/kvm/mmu/mmu_internal.h    |  32 ++++
+>   arch/x86/kvm/mmu/tdp_iter.h        |   2 +-
+>   arch/x86/kvm/mmu/tdp_mmu.c         | 244 +++++++++++++++++++++++++----
+>   arch/x86/kvm/mmu/tdp_mmu.h         |   2 +-
+>   virt/kvm/kvm_main.c                |   1 +
+>   8 files changed, 280 insertions(+), 32 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index f28c9fd72ac4..1b01dc2098b0 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -94,6 +94,11 @@ KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
+>   KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
+>   KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
+>   KVM_X86_OP(load_mmu_pgd)
+> +KVM_X86_OP_OPTIONAL(link_private_spt)
+> +KVM_X86_OP_OPTIONAL(free_private_spt)
+> +KVM_X86_OP_OPTIONAL(set_private_spte)
+> +KVM_X86_OP_OPTIONAL(remove_private_spte)
+> +KVM_X86_OP_OPTIONAL(zap_private_spte)
+>   KVM_X86_OP(has_wbinvd_exit)
+>   KVM_X86_OP(get_l2_tsc_offset)
+>   KVM_X86_OP(get_l2_tsc_multiplier)
+>
+> @@ -509,9 +524,81 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
+>   		WARN_ON_ONCE(ret);
+>   	}
+>   
+> +	if (is_private_sp(sp) &&
+> +	    WARN_ON(static_call(kvm_x86_free_private_spt)(kvm, sp->gfn, sp->role.level,
+> +							  kvm_mmu_private_spt(sp)))) {
+> +		/*
+> +		 * Failed to unlink Secure EPT page and there is nothing to do
+> +		 * further.  Intentionally leak the page to prevent the kernel
+> +		 * from accessing the encrypted page.
+> +		 */
+> +		kvm_mmu_init_private_spt(sp, NULL);
+
+Do you think is it better to add some statistics for the intentinal 
+leakage?
+
+
+> +	}
+> +
+>   	call_rcu(&sp->rcu_head, tdp_mmu_free_sp_rcu_callback);
+>   }
+>   
+> pu, until a matching vcpu_put()
