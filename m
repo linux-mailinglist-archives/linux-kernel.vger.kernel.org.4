@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCC9620DB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627E6620DBA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiKHKti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S233927AbiKHKu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiKHKs6 (ORCPT
+        with ESMTP id S234035AbiKHKui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:48:58 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3EC101FF;
-        Tue,  8 Nov 2022 02:48:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7BE911F88B;
-        Tue,  8 Nov 2022 10:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667904533; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSI2NTbS+XdsimuqF+drbRNdrmDPUdPcKKkDDnTK4+4=;
-        b=fl97OFHmDEqv9FfvncX8vUr17T2NnGUpng/euvxXI7gRYUNN7xR8C2W3uAmUQT0VMZOII2
-        Jey0hR5ZteFUEjkoMPmHMZP0AOidLtDRXUgMmvonpcLOUhxfhukdm6A6CbcEB299gb8wy1
-        jDhApY1kZCf9VK/q++2/PGsWXN057CY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667904533;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSI2NTbS+XdsimuqF+drbRNdrmDPUdPcKKkDDnTK4+4=;
-        b=WslxQq9BmflLTOGSUBFqnZzftqqOha2WlhXNYXKV83g0tBUM3TAh64dY5VUHm06PNxIhxF
-        PJpm9ov6pOJPDPCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F8AD139F1;
-        Tue,  8 Nov 2022 10:48:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FL/JERU0amP8IgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 08 Nov 2022 10:48:53 +0000
-Date:   Tue, 8 Nov 2022 11:48:51 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: smbus: support new RAM variant for SPD
-Message-ID: <20221108114851.4436c3cb@endymion.delvare>
-In-Reply-To: <20221107160602.1912225-1-clabbe@baylibre.com>
-References: <20221107160602.1912225-1-clabbe@baylibre.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 8 Nov 2022 05:50:38 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5BD43AE1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:50:20 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id f5so37523457ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:50:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cI1zMfq3lTc8UzWRLodrLvVbxywyN3pwGfeoh4TP7Pk=;
+        b=HbSjHAG+XMjuE1yuF4Dqsww1Soriw/tDonvjEn0RhbG+dx+XK/8rNeqM9nIhaOci/i
+         IhP4Iu9O+G4vaxfHK2IvYHtLJ3wrdJ7/2pByztIlpV6zD6khoDqfZwfecGHBtSu6Kbuh
+         QMhjVDGzCZhCkUNYa1oFs+lzelwJLwKAWi22MirwImE3XSBLphjrI6wB9baH2oYH9Ijj
+         nIWof0HDKDJUzG2DkSO5EmnherOt+8ASNa0iRG56Y1hzmQg9xkxB/o56l9XI/qvzUjaI
+         XRh0xaRroeM3nx65FnZlrRtcNMAxDGy3d1RVQw2LFNcj215HWrk9t017EfrBrP070Rj+
+         EDog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cI1zMfq3lTc8UzWRLodrLvVbxywyN3pwGfeoh4TP7Pk=;
+        b=pjIfFhqaBoC9JvQHEJEXo61hl+Id+U2nrhH09sextgR7GhkH+Fs+D7QdpB6E7X5rNx
+         9Wsrkl2+wj2Iqf/Vcj702RlUaSK4+gDEnLFuJnANvfn7woHZAl2hjGF59pAnRJtTCPPm
+         0e/z0RkAL9LWVRm8phj7Kgqxu4dspW0sMmtP3Bmxj8RBdNj3jpy2BfLsVGLQ3czPj393
+         8/3HPeJz1ee8Obo7m4WLzmIFFBqJoo4bQKKIC/ZA5miuCksUp7YKXmB/3QfNPRRYnVkr
+         VQI/ThTlcexHa0AcbX3GrCiikHib0L8gRruJsXPT1kCYx8zk6E1ufwJ35T3wKzValfdQ
+         PQng==
+X-Gm-Message-State: ACrzQf1Lrr5VyZz9pWImWD4QT01ZbwNQZ0Twz8xNJxdNTKMztLKN4HeM
+        XuVzP3FX56tUWEy/20Yqxxjd6Sf3DtdXPJRvdo/FjCLwtlk=
+X-Google-Smtp-Source: AMsMyM6TWlffPm2NhzhPMpDHWJ7vQjbA7Kdk+SXNums04xc/5fH3UzZ48rtJuLU8M+7f5WqkQMIJWkoF20YdR/IBeKQ=
+X-Received: by 2002:a17:906:4c4b:b0:7ad:a197:b58e with SMTP id
+ d11-20020a1709064c4b00b007ada197b58emr53429067ejw.203.1667904619249; Tue, 08
+ Nov 2022 02:50:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y2nKIbKxHAMimxII@google.com>
+In-Reply-To: <Y2nKIbKxHAMimxII@google.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Nov 2022 11:50:07 +0100
+Message-ID: <CACRpkdaW-dwKNtTQ2_Mj4JpG34N3m19g+s5xcs3Xj=2kAdE0cw@mail.gmail.com>
+Subject: Re: [PATCH] soc: fsl: qe: request pins non-exclusively
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Qiang Zhao <qiang.zhao@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
+        Li Yang <leoyang.li@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Corentin,
+On Tue, Nov 8, 2022 at 4:16 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
 
-On Mon,  7 Nov 2022 16:06:02 +0000, Corentin Labbe wrote:
-> On my x05 laptop I got:
-> Memory type 0x12 not supported yet, not instantiating SPD
+> Commit 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()") changed
+> qe_pin_request() to request and hold GPIO corresponding to a given pin.
+> Unfortunately this does not work, as fhci-hcd requests these GPIOs
+> first, befor calling qe_pin_request() (see
+> drivers/usb/host/fhci-hcd.c::of_fhci_probe()).
+> To fix it change qe_pin_request() to request GPIOs non-exclusively, and
+> free them once the code determines GPIO controller and offset for each
+> GPIO/pin.
+>
+> Also reaching deep into gpiolib implementation is not the best idea. We
+> should either export gpio_chip_hwgpio() or keep converting to the global
+> gpio numbers space until we fix the driver to implement proper pin
+> control.
+>
+> Fixes: 84582f9ed090 ("soc: fsl: qe: Avoid using gpio_to_desc()")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
+Wow! Thanks for fixing this!
 
-Oh, that one must be old.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
-> i801_smbus 0000:00:1f.3: SMBus using polling
-> i2c i2c-6: 2/2 memory slots populated (from DMI)
-> at24 6-0050: 256 byte spd EEPROM, read-only
-> i2c i2c-6: Successfully instantiated SPD at 0x50
-> at24 6-0051: 256 byte spd EEPROM, read-only
-> i2c i2c-6: Successfully instantiated SPD at 0x51
->=20
-> And then, I decoded it successfully via decode-dimms.
->=20
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> The result of decode-dimms could be found at http://kernel.montjoie.ovh/z=
-oo/x05/decode-dimms.txt
-> Since RAM is DDR, I wanted to add '/* DDR */' comment, but I didnt find a=
-ny document with
-> proof that this 0x12 is for DDR.
+I just sent that patch into the SoC patch tracker (soc@kernel.org)
+with a not to apply it directly, I suggest you do the same (or ask me
+to sign it off and send it).
 
-It is. The document you are looking for is:
-https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.=
-pdf
-
-and specifically section 7.18.2 (Memory Device =E2=80=94 Type), table 78
-(Memory Device: Type).
-
->=20
->  drivers/i2c/i2c-smbus.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> index 07c92c8495a3..6dca19c994db 100644
-> --- a/drivers/i2c/i2c-smbus.c
-> +++ b/drivers/i2c/i2c-smbus.c
-> @@ -362,6 +362,7 @@ void i2c_register_spd(struct i2c_adapter *adap)
->  	}
-> =20
->  	switch (common_mem_type) {
-> +	case 0x12:
->  	case 0x13:	/* DDR2 */
->  	case 0x18:	/* DDR3 */
->  	case 0x1C:	/* LPDDR2 */
-
-Please also add LPDDR (0x1B) for consistency.
-
-Thanks,
---=20
-Jean Delvare
-SUSE L3 Support
+Yours,
+Linus Walleij
