@@ -2,106 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BB7620EEF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5B9620F01
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234096AbiKHLYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S234129AbiKHLZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233903AbiKHLYP (ORCPT
+        with ESMTP id S234109AbiKHLZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:24:15 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFD84AF06
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:24:14 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id r2so7309911ilg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:24:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
-        b=LXzLwEfFEIjs9nRQ/0D9sK0UdFF/hcYD1/7lPcxtKxGf+ipiOyxIUkG9FxWjTQwnxI
-         D0k1pcJ4r9HbGweGR8VttiL8E2qc4lcsz3jC3X1z+Myzw30J2a8GCz5AS/bkRvOOAlHD
-         E+tAU65cwh01zP65Dht/AwghXmg8POvqM5wMW+NclASoJJ1M+p89BgFOSDch5BgQ0Avc
-         9JiZIkvYkz5qbwJiVyZnhn8aEs4dsNPEV6aJ60VBa1B1c4nkJvkSo/q1xUjbvGvnQsI2
-         YCKRfjADZRvavXIhrgWVqvohpAMKlTCL5cT3Ex4YqBvyGRv/IX591YGJ8Vqkx1vqKbDZ
-         WAQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
-        b=RSA0oKwCEdkIIKMTwum5swCgp3ETqAc8ckEgFI2KdwqP9f+JAx/NNfRRw2i/YdFr9A
-         kT4UTEdQ9B4GJAtysMoyopsX0H7Nurh9IyAuVDqKvL+somwbdwp1ctyNqdjd7XXgV+Qf
-         MnbV7jYYJBJS/d4jRbagVyu60l/nChZuJlisjkKdtZfgcT3lPi07+J6ETK1Qu0Gdc1tN
-         jb8B+V13yJXYygyZgCiIBG3T+3p2LtE9jKhXIX85VOiBB4OZr1qHfSd8nXdmtFVLXgUj
-         Thldsd7r5SfjlPErRIQx5XmMPkDa+XJEOSjooxOwK1uFdFZaCQ42YhiTcfE0t+b9axhg
-         hSwA==
-X-Gm-Message-State: ACrzQf2vkWQb3pUZZdvNI6lUzgnf+eCPEmH+NFIvPyvF3/M6OxInEoCV
-        eJzM21VWuGOCJA7vfXQRIvfdclg3s37ImsB3hjs=
-X-Google-Smtp-Source: AMsMyM7l9664LpWj9QcPDmFBWC92J2k8lgTtaMBq0d8Kn2LaY6/WvjL6jmQ58ep7k3CUc1mU0tvXdcs9IQAedNtHTSY=
-X-Received: by 2002:a92:bf0e:0:b0:300:cc8e:fe07 with SMTP id
- z14-20020a92bf0e000000b00300cc8efe07mr18642833ilh.184.1667906653482; Tue, 08
- Nov 2022 03:24:13 -0800 (PST)
+        Tue, 8 Nov 2022 06:25:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509174FF9A;
+        Tue,  8 Nov 2022 03:25:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C87B9614F6;
+        Tue,  8 Nov 2022 11:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A9EC433D6;
+        Tue,  8 Nov 2022 11:25:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667906705;
+        bh=Jlcv4F7K6dxP/Icf73x6ONzyur9GFR/J4bBQqn3lSGI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KYyqVfSmSq6CRBF0I0oBl/HeUwJx6zE4DpRuJqRHkqKccNQm+lZU3ecqXXJgkTqNw
+         IH2zkk0Ie+5wN+u/uRwnaCobHyZiRw7jkIhs+/nZgnk8PR53LOvUxxFGFR5OhP8Gx2
+         ukRnUPeDCCtwyTmLB5IkzLO0XpwqS/mGwWi/Wy174JfwTzGpFj9+yh9XKa88S9HMdx
+         CLxkV9/WMdyEEY33VMO7vNYSnqvXXvtt15ZD7Td4FBHLEtUGVi/jaxjCKA84W+ZGot
+         0BzNlyccOdBUEVUIZxXG04P7rgY7IWg4gyk1qMRCNrB4G36EUKTmhLLR0zh/3cm62o
+         l/L7vrd8imLkA==
+Date:   Tue, 8 Nov 2022 12:25:00 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Florian Weimer <fweimer@redhat.com>,
+        libc-alpha@sourceware.org, linux-api@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: selftests: clone3: clone3_clear_sighand failed - Bail out!
+ Failed to clear signal handler for child process
+Message-ID: <20221108112500.rffm2hmt2kvdc3io@wittgenstein>
+References: <CA+G9fYs+fOTBO=aTfO57xby=QQDaqUt4umwgo6bwLB_iGoSEPw@mail.gmail.com>
+ <20221108100420.6zhmrio226vbii4e@wittgenstein>
+ <CA+G9fYtoqQq9xgpEzPL=q7ds5WbudRYikBHEAZAh_25SkPj4ww@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1921:0:0:0:0 with HTTP; Tue, 8 Nov 2022 03:24:13
- -0800 (PST)
-Reply-To: mrinvest1010@gmail.com
-From:   "K. A. Mr. Kairi" <ctocik10@gmail.com>
-Date:   Tue, 8 Nov 2022 03:24:13 -0800
-Message-ID: <CAEbPynvxfjzGLRVVaaVB9fasgmGPWiH+Ceaj9c3oE5eqT5_+0Q@mail.gmail.com>
-Subject: Re: My Response..
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:129 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrinvest1010[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ctocik10[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ctocik10[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtoqQq9xgpEzPL=q7ds5WbudRYikBHEAZAh_25SkPj4ww@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Dear
+On Tue, Nov 08, 2022 at 03:51:24PM +0530, Naresh Kamboju wrote:
+> On Tue, 8 Nov 2022 at 15:34, Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Tue, Nov 08, 2022 at 03:28:55PM +0530, Naresh Kamboju wrote:
+> > > selftests: clone3: clone3_clear_sighand failed on arm32 and i386
+> > > but passed on arm64 and x86_64.
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > # selftests: clone3: clone3_clear_sighand
+> > > # TAP version 13
+> > > # 1..1
+> > > # # clone3() syscall supported
+> > > # Bail out! Failed to clear signal handler for child process
+> > > # # Planned tests != run tests (1 != 0)
+> > > # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > > not ok 2 selftests: clone3: clone3_clear_sighand # exit=1
+> > >
+> > > Test details links,
+> > > https://lkft.validation.linaro.org/scheduler/job/5820146#L1795
+> > >
+> > > Test results comparison link,
+> > > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848543/suite/kselftest-clone3/test/clone3.clone3_clear_sighand/history/
+> >
+> > Seems before 27 September 2022 this test wasn't run on 32bit instances
+> > and noone ever noticed?
+> 
+> This email is about sharing the results log and reporting failures.
+> If you think it is not supported on 32bit the test should SKIP instead of fail.
 
-How are you, I have a serious client, whom will be interested to
-invest in your country, I got your Details through the Investment
-Network and world Global Business directory.
-
-Let me know if you are interested for more details.....
-
-Sincerely,
-Mr. Kairi Andrew
+No, I was just asking whether this has been detected just now for the
+first time. If this has been a problem for such a long time I was just
+puzzled why this was never reported.
