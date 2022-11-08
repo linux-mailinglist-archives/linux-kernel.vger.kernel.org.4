@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E493762104B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0DB62103C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234180AbiKHMUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S234099AbiKHMUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiKHMUa (ORCPT
+        with ESMTP id S234046AbiKHMUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:20:30 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0795F17A9E;
-        Tue,  8 Nov 2022 04:20:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667910026; x=1699446026;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vkqZhcPnjGQqDiDQpqIE/N5L7Qt+GaZklcF5cPF1GxM=;
-  b=S04avOY4z2fnKV5eQWl0ii4kD8D9lSBAvdVDho6Sp2LRdnlQxYIaxhNR
-   VKR0Y6QSg37RtQvWqHGEP/nXVWvJN/OQybpjj1yeJb85HKc26reGl9G9Z
-   oCd5lQ9pKgNI5EVZkhRylc9Dit+qIrZYbywfdvkqXMybaxFo7Zuu0mVe8
-   4kMRtV1f8OKc9E4swrC3LVnaJFxNtTig1sCl+HP1CP6O519XM+nP9Wjq0
-   9u17JZnqq6gD0+91fcjTff3Xn44mzNSqeHBQjfwELGEDmo+oRfjcwFR5M
-   CckDC/TJRKKGiX56E1QVQrz82rf2ylyFGRPYnWbqjFTdhC4WHkCOG82Kc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="374951476"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="374951476"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="741932231"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="741932231"
-Received: from ppkrause-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.73])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:23 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Gilles BULOZ <gilles.buloz@kontron.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v2 4/4] serial: 8250: Flush DMA Rx on RLSI
-Date:   Tue,  8 Nov 2022 14:19:52 +0200
-Message-Id: <20221108121952.5497-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221108121952.5497-1-ilpo.jarvinen@linux.intel.com>
-References: <20221108121952.5497-1-ilpo.jarvinen@linux.intel.com>
+        Tue, 8 Nov 2022 07:20:03 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282E313F1A;
+        Tue,  8 Nov 2022 04:20:02 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1osNaA-0000q6-9s; Tue, 08 Nov 2022 13:19:58 +0100
+Message-ID: <76b09d3a-fe10-74b3-40a0-1aaa75b70ba6@leemhuis.info>
+Date:   Tue, 8 Nov 2022 13:19:57 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [Possible BUG] arm64: efi: efi_runtime_fixup_exception() and
+ efi_call_virt_check_flags() both taint the kernel #forregzbot
+Content-Language: en-US, de-DE
+To:     linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <Y2lAB508TrrjpDPi@monolith.localdoman>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <Y2lAB508TrrjpDPi@monolith.localdoman>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1667910002;f2c334a3;
+X-HE-SMSGID: 1osNaA-0000q6-9s
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Returning true from handle_rx_dma() without flushing DMA first creates
-a data ordering hazard. If DMA Rx has handled any character at the
-point when RLSI occurs, the non-DMA path handles any pending characters
-jumping them ahead of those characters that are pending under DMA.
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
 
-Fixes: 75df022b5f89 ("serial: 8250_dma: Fix RX handling")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_port.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 92dd18716169..388172289627 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1901,10 +1901,9 @@ static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
- 		if (!up->dma->rx_running)
- 			break;
- 		fallthrough;
-+	case UART_IIR_RLSI:
- 	case UART_IIR_RX_TIMEOUT:
- 		serial8250_rx_dma_flush(up);
--		fallthrough;
--	case UART_IIR_RLSI:
- 		return true;
- 	}
- 	return up->dma->rx_dma(up);
--- 
-2.30.2
+Hi, this is your Linux kernel regression tracker.
 
+On 07.11.22 18:27, Alexandru Elisei wrote:
+> I'm going to preface this by saying that I'm extremely unfamiliar with the
+> EFI code.
+> 
+> Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
+> possible") skipped the call to SetVirtualAddressMap() for certain
+> configurations, and that started causing kernel panics on an Ampere Altra
+> machine due to an EFI synchronous exception.
+> 
+> Commit 23715a26c8d8 ("arm64: efi: Recover from synchronous exceptions
+> occurring in firmware") made the EFI exception non-fatal.
+
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced d3549a938b73
+#regzbot title efi: arm64: updating the firmware is not feasible anymore
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
