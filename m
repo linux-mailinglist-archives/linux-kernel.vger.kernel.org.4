@@ -2,93 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE95620D31
+	by mail.lfdr.de (Postfix) with ESMTP id A7A86620D32
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbiKHKZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:25:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S233681AbiKHKZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:25:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233885AbiKHKY6 (ORCPT
+        with ESMTP id S232641AbiKHKZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:24:58 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C6C21829
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:24:56 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id a13so21791678edj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:24:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3U9H2oDYo0jHZ5n7VD9WQgIXQHftQXj5Rvrab9Xb/3M=;
-        b=FoICTrB0HokDj9Jr/RWi2HeiYU3xlqoZr/QJxMZBhg5PgaXUia0hn4SzasJunwTCQi
-         a59ynF8QExOW/dv2VvDEGzEJ+4nEy2fmWW/CIKkF++Rvlh7B0mkvjIvBQ5UQ/+ZBVwLq
-         0en6zt2YjQxJqsexkTC9HaxD5t5dEhp9BBx4GBInvt0LzgIBuIMZUp0NhP4czatc80P5
-         ZnRfaPTyQkiWEBBkoVxs8b8umWvE1hkQpZzlqNQQzBa8n9YllreQs1gCq1gaEyXol0SY
-         4gI2NFkG/zwVc7S4pTrIk/eoPajcxNRH3YCJnxzdgBggAUUMmopZOn4+5qm3/I4g2i6p
-         0lpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3U9H2oDYo0jHZ5n7VD9WQgIXQHftQXj5Rvrab9Xb/3M=;
-        b=IJtSLD3RYcLx9jLlvGPIRzoXe0K+W4aYCvKH6dgDC1E97k7rFEhf6sbMXAjAIJd19F
-         uGq6ee9TpMr5/j25+N6iIaNk6nr0zfKNlo14/oUZmJdjZ5rawUS1HPaE+2A4ddDP8MhX
-         5nRK7Va5XgQNDBcSUYyk93chpQ/Adp1tuRfy3PQfO8QsCKmfT/PO3bWYhcOJkb/FXEtD
-         2ONkiI/hD9rLW1jJD0M0Gmew3iGNxcdYDB2sbcMm8Ya8P5n+UXLgDHAkiFn8+guWKb4G
-         Dtn62Di21ZoaCvONb1xS+1acIHmvJHKoOQdU3dIz2PgXevKugjpUzR/dydwaLJIO+w9T
-         1CPw==
-X-Gm-Message-State: ACrzQf16/Akk4vCJXaXxN+CYaU9JiOIyv4sOsyRj06rsOpVcMd+TBj9T
-        V3Zf/bhWPuzdQGjlrZAcpJ30dw6RCWNGRS9pFP4iWw==
-X-Google-Smtp-Source: AMsMyM4+kmlt812NqsehPqTcJthwr/1SzuUus2LC5jb9udkKVf+AcR8z9rgNjpkcnZ+q75/1Cp00Q60NPGoskvtIQ5Q=
-X-Received: by 2002:aa7:d6d1:0:b0:463:ba50:e574 with SMTP id
- x17-20020aa7d6d1000000b00463ba50e574mr37142535edr.158.1667903094898; Tue, 08
- Nov 2022 02:24:54 -0800 (PST)
+        Tue, 8 Nov 2022 05:25:00 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8FB1B1FC;
+        Tue,  8 Nov 2022 02:24:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
+        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=2JjPFhp59qtLP/Cp/TS7I43kY8BphcdVe01unYamrKs=; b=mLx8VPk292EGLbdbeCGKQ7e10l
+        096nIOzgzfz4aHdsXB1JX7ZXZVM2SffVBKZFc+5WG/RuWFqyvFwHixx1uX9zynu09gKtLt/ASZgpw
+        Oq++kiJkBCBuVqAOYSCmRQSx3luRIl8KM4izR5Iqrr5v4BNCXWe27SJweYefIkzkUoJM=;
+Received: from p200300daa72ee1006d973cebf3767a25.dip0.t-ipconnect.de ([2003:da:a72e:e100:6d97:3ceb:f376:7a25] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1osLml-000UT6-JD; Tue, 08 Nov 2022 11:24:51 +0100
+Message-ID: <5dbfa404-ec02-ac41-8c9b-55f8dfb7800a@nbd.name>
+Date:   Tue, 8 Nov 2022 11:24:51 +0100
 MIME-Version: 1.0
-References: <20221027130859.1444412-1-shenwei.wang@nxp.com> <20221027130859.1444412-3-shenwei.wang@nxp.com>
-In-Reply-To: <20221027130859.1444412-3-shenwei.wang@nxp.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 11:24:43 +0100
-Message-ID: <CACRpkdY5Eu6gb+nsw6Teg21C7PVUUKB8vpvPE_0y_qmqyK6_CQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] arm64: dts: imx8qm-ss-lsio: add gpio-ranges property
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+References: <20221107185452.90711-1-nbd@nbd.name>
+ <20221107185452.90711-8-nbd@nbd.name> <20221107215745.ascdvnxqrbw4meuv@skbuf>
+ <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
+ <20221108090039.imamht5iyh2bbbnl@skbuf>
+ <0948d841-b0eb-8281-455a-92f44586e0c0@nbd.name>
+ <20221108094018.6cspe3mkh3hakxpd@skbuf>
+ <a9109da1-ba49-d8f4-1315-278e5c890b99@nbd.name>
+ <20221108100851.tl5aqhmbc5altdwv@skbuf>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH 08/14] net: vlan: remove invalid VLAN protocol warning
+In-Reply-To: <20221108100851.tl5aqhmbc5altdwv@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 3:09 PM Shenwei Wang <shenwei.wang@nxp.com> wrote:
+On 08.11.22 11:08, Vladimir Oltean wrote:
+> On Tue, Nov 08, 2022 at 10:46:54AM +0100, Felix Fietkau wrote:
+>> I think it depends on the hardware. If you can rely on the hardware always
+>> reporting the port out-of-band, a generic "oob" tagger would be fine.
+>> In my case, it depends on whether a second non-DSA ethernet MAC is active on
+>> the same device, so I do need to continue using the "mtk" tag driver.
+> 
+> It's not only about the time dimension (always OOB, vs sometimes OOB),
+> but also about what is conveyed through the OOB tag. I can see 2 vendors
+> agreeing today on a common "oob" tagger only to diverge in the future
+> when they'll need to convey more information than just port id. What do
+> you do with the tagging protocol string names then. Gotta make them
+> unique from the get go, can't export "oob" to user space IMO.
+> 
+>> The flow dissector part is already solved: I simply used the existing
+>> .flow_dissect() tag op.
+> 
+> Yes, well this seems like a generic enough case (DSA offload tag present
+> => don't shift network header because it's where it should be) to treat
+> it in the generic flow dissector and not have to invoke any tagger-specific
+> fixup method.
+In that case I think we shouldn't use METADATA_HW_PORT_MUX, since it is 
+already used for other purposes. I will add a new metadata type 
+METADATA_DSA instead.
 
-> add gpio-ranges property for imx8qm soc.
->
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Please put this into the i.MX SoC tree.
-
-(If that doesn't work tell me and I can queue it in the pinctrl tree)
-
-Yours,
-Linus Walleij
+- Felix
