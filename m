@@ -2,81 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED554621BF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9DD621BFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiKHSeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S230375AbiKHSfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:35:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbiKHSeL (ORCPT
+        with ESMTP id S230385AbiKHSf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:34:11 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EFA2B615;
-        Tue,  8 Nov 2022 10:34:10 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so12301834wmb.2;
-        Tue, 08 Nov 2022 10:34:10 -0800 (PST)
+        Tue, 8 Nov 2022 13:35:27 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FC12B247
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:35:26 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id f63so14133208pgc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:35:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/3hp60uFt/XqpVFEQ8lHI7m/IKYo89nJRwN7r0UdODk=;
-        b=FWfcRwAi66FGV4e2iOt3H5FG3JyY+JjnjgZF3gp1H2j6IENJmOaR4IR1a2LnfNOOWg
-         jXAcNhjSFRQ1l2/nqCBJ29Mc2GYr42SFPdNZteh/A0ZdugEUTkrRffJDnXdXyF7rxwEn
-         seCbGlr0lijKPcyGQUieC9RPSUzfXOKaeVpf1ypcWLh6kN+TX/GtP66BaFp1JpY7iH4Q
-         tAgugbvaQ2Ww1wqAVkdJ8PoL58j9goTV4PI2SGQQf/LEHpkA1joORsX8yy8SHJ0jwbt4
-         qxN8Tn8krmcKMftXKG+if3+XwqnRwxM171sEi1Eh+JEFfgU2h2ImNO6q3aTRKrvbTJiu
-         wL9w==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RnyS3dwzu63wm+TBBKa4ksB7XTmDC722z2f6RyUHWPs=;
+        b=UNWTdZX009UhqhJ6UQ4R4+hp8SiQhxnMLXohooc/noo36cuTVOTPYeiHbI6l/If5If
+         J99V6SvhqOUJdXGP1USoU7SQ4UsQc0kDpJnivKhYJ1Gb1/UnIQFqmdMGK7+nTTT+MRSJ
+         vQAXN6CX7nJMHdk7l5MQFGieiB1Zx2apAH0MHUHKHnrjfzbpWmhVg9F9nCjWzW+8XYOU
+         SBv/FsmQOASl+XIqep9c2B037c8W8HTTwUNLVCWmGH8stGR96ZExj8ipESF8GjxhIevV
+         tdt7PlrDh92QBIH3Y28a8olvDACYlXbPkSwNq87XUXh94gRzQ+koxl8E3v5eQ1QW+pGb
+         XQZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3hp60uFt/XqpVFEQ8lHI7m/IKYo89nJRwN7r0UdODk=;
-        b=2ThyI1NNCr70vqSWPyCCrFBvBYwTTjyAL7Yk+5Pr1Sb8Z+e8zbrq/3JF5He2rWk00k
-         gXePlSAuV5iaBcT02O0Bs2E5+j23wEqscUMnKRiW3n63KjJc7H58hu4+/BcmDHa91KCd
-         ODF/xBhH9D2MumELttHxZ0XdYjJvEwfEdEmQbZp6HwtFyG30tl50090/KgHwqOGFPCxI
-         9ZCseqL2naoi5DFhyBuXgHSclZ3kOB6wN7OnIPVuq21YYWsb/TEimcf7HymEbRHkja9e
-         p5FE7kdHqotxGAybhkXIosUOku/DBSrYl0r4C0ZPH4PYn57eqMEdBUwdFNBu4mrS4Zv8
-         AFsQ==
-X-Gm-Message-State: ANoB5pnz6MLiOucxX20b8hDOPB5IpRha29Aqr0H9o0S/0ifbm7RxQ4t5
-        qhUymwi5qVnKf+TYVbh7/4M=
-X-Google-Smtp-Source: AA0mqf52uXRHtcat6g1cDBSffb9BHvne26T0RWlXx66e8mwsVjfpxFljibCX+5KvBvD4EFtE+RGBjA==
-X-Received: by 2002:a05:600c:3ba6:b0:3cf:acc5:f7bd with SMTP id n38-20020a05600c3ba600b003cfacc5f7bdmr7511958wms.125.1667932449118;
-        Tue, 08 Nov 2022 10:34:09 -0800 (PST)
-Received: from [192.168.0.25] ([37.222.251.204])
-        by smtp.gmail.com with ESMTPSA id t12-20020a5d6a4c000000b00228692033dcsm11124391wrw.91.2022.11.08.10.34.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 10:34:08 -0800 (PST)
-Message-ID: <142fe940-6fcf-4eaa-2cb6-94df541723c3@gmail.com>
-Date:   Tue, 8 Nov 2022 19:34:06 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RnyS3dwzu63wm+TBBKa4ksB7XTmDC722z2f6RyUHWPs=;
+        b=o4jvESQ/IzUHyAExKSYZxdaT3WzVosQGSRzjmIRaKsbm5ARe1snUjONg1WnW2V/kjr
+         yC9Y9+HOACpEvYegXpF7DAB0oimALEJz3QTeQKegpWM8NTavXUW6Hvba8HCKeIA780mC
+         TJyxDLjs9tJ6cLdzmuC5520h4l1pmfOS1i2/wUYERSaOKsN3EHSC+tQ5oOSujofQ8k8Z
+         jU3ZBwQ7g6kzWJ+zwfqyBZ7h4DLvwLbR3hdREV0+1XPChLl7VJGvFfZ53V7Q7QA36qz7
+         ZjgOXDWVQYPPa38c71juoPKBU8OONTBz5nRthjraCeRRG5j38gRqkHwhcUitA6vtcOIB
+         divA==
+X-Gm-Message-State: ACrzQf3zmTexzWVUJCbxLkKVwpiXGZC2ZEXdCt7DmkbmmUsSpmcMroSV
+        7Humo13ebdvCh3ammoEc69wJyA==
+X-Google-Smtp-Source: AMsMyM5Qg8YfT/bsoUeJb0OK8RxgGNg/b35ucvUXf02E9o8w0JO152nFj4Gk4WJt4CUR2YrbDzSCfA==
+X-Received: by 2002:a63:84c6:0:b0:46f:f8b0:ba09 with SMTP id k189-20020a6384c6000000b0046ff8b0ba09mr33082105pgd.192.1667932525661;
+        Tue, 08 Nov 2022 10:35:25 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170902d2cf00b0018544ad1e8esm7324982plc.238.2022.11.08.10.35.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 10:35:24 -0800 (PST)
+Date:   Tue, 8 Nov 2022 18:35:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Liu Jingqi <jingqi.liu@intel.com>
+Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
+ _host_ supported value
+Message-ID: <Y2qhaSr/d2ds+nqD@google.com>
+References: <20220607213604.3346000-6-seanjc@google.com>
+ <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
+ <Y2ABrnRzg729ZZNI@google.com>
+ <20221101101801.zxcjswoesg2gltri@linux.intel.com>
+ <Y2FePYteNrEfZ7D5@google.com>
+ <20221102085414.fk2xss74jvtzs6mr@linux.intel.com>
+ <Y2Px90RQydMUoiRH@google.com>
+ <20221107082714.fq3sw7qii4unlcn2@linux.intel.com>
+ <Y2kfCz02tQSUkMKS@google.com>
+ <20221108102120.qdlgqlgvdi6wi22u@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 0/6] Add mmc-support for mt7986
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sam Shih <Sam.Shih@mediatek.com>
-References: <20221025132953.81286-1-linux@fw-web.de>
- <CAPDyKFriLmsSsy5LfiJJH-s7uQMD1AycE7R4NtN1_Td3XocyOQ@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAPDyKFriLmsSsy5LfiJJH-s7uQMD1AycE7R4NtN1_Td3XocyOQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108102120.qdlgqlgvdi6wi22u@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,62 +89,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26/10/2022 13:25, Ulf Hansson wrote:
-> On Tue, 25 Oct 2022 at 15:29, Frank Wunderlich <linux@fw-web.de> wrote:
->>
->> From: Frank Wunderlich <frank-w@public-files.de>
->>
->> I've noticed the mtk-sd binding needs a bit more work get into a more
->> clean state.
->>
->> There are 2 properties missing that maybe need to be added later or
->> dropped from devicetrees:
->> drv-type (which is used in mt8183-kukui.dtsi and set to <2>)
->> and
->> r_smpl (used in mt7622-rfb1.dts and mt7622-bananapi-bpi-r64.dts, both
->> times set to <1>)
->>
->> i don't know their function and boundaries and i do not find them in
->> driver. I guess they are added by accident, so i removing them in the
->> patches 5+6.
->>
->> v2:
->> - add compatible based binding
->> v3:
->> - solve "not" statement in binding and reorder if statements,drop mt8183
->> - added patches removing invalid properties (not in driver)
->> v4:
->> - squashed part 1 (compatible) and 3 (SoC specific clock config)
->> - new mt7986 clock bindings based on info from mtk
->> - re-add mt8183 reg boundary
->> v5:
->> - add fixes-tags to Patches 4+5 and reviewed-by to 6
->> - drop quotes from mt7986 clock-names from patch 2
->>
->> Frank Wunderlich (3):
->>    arm64: dts: mediatek: mt2712e: swap last 2 clocks to match binding
->>    arm64: dts: mt8183: drop drv-type from mmc-node
->>    arm64: dts: mt7622: drop r_smpl property from mmc node
->>
->> Nícolas F. R. A. Prado (1):
->>    dt-bindings: mmc: mtk-sd: Set clocks based on compatible
->>
->> Sam Shih (2):
->>    dt-bindings: mmc: Add support for Mediatek MT7986
->>    mmc: mediatek: add support for MT7986 SoC
->>
->>   .../devicetree/bindings/mmc/mtk-sd.yaml       | 149 ++++++++++++++----
->>   arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |   6 +-
->>   .../dts/mediatek/mt7622-bananapi-bpi-r64.dts  |   1 -
->>   arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts  |   1 -
->>   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   1 -
->>   drivers/mmc/host/mtk-sd.c                     |  14 ++
->>   6 files changed, 136 insertions(+), 36 deletions(-)
+On Tue, Nov 08, 2022, Yu Zhang wrote:
+> On Mon, Nov 07, 2022 at 03:06:51PM +0000, Sean Christopherson wrote:
+> > On Mon, Nov 07, 2022, Yu Zhang wrote:
+> > > On Thu, Nov 03, 2022 at 04:53:11PM +0000, Sean Christopherson wrote:
+> > > > Ideally, KVM should NEVER manipulate VMX MSRs in response to guest CPUID changes.
+> > > > That's what I was referring to earlier by commits:
+> > 
+> > ...
+> > 
+> > > Thanks Sean. Let me try to rephrase my understandings of your statement(
+> > > and pls feel free to correct me):
+> > > 
+> > > 1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
+> > > disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes.
+> > > 2> What makes sense is, if a feature is 
+> > > 	a. disabled by guest CPUID, it shall not be exposed in guest VMX MSR;
+> > > 	b. enabled by guest CPUID, it could be either exposed or hidden in
+> > > 	guest VMX MSR.
+> > > 3> So your previous change is to guarantee 2.a, and userspace VMM can choose
+> > > to follow follow either choices in 2.b(depending on whether it believes this
+> > > feature is correctly supported by KVM in nested). 
+> > > 
+> > > Is above understanding correct? 
+> > 
+> > Not quite.  Again, in an ideal world, KVM would not modify the VMX MSRs based on
+> > guest CPUID.  But it's possible userspace is relying on KVM to hide a feature from
+> > L2 if it's hidden from L1, so to avoid breaking an otherwise valide userspace config,
+> > it's worth enforcing that in KVM.
+> > 
 > 
-> I have dropped the earlier two patches I have applied for MT7986 and
-> applied patch1, 2 and 6 from this series instead, thanks!
+> Sorry, maybe I should understand this way:
 > 
+> In theroy, KVM shall not modify guest VMX MSRs in response to the guest CPUID
+> updates. Therefore we shall not enforce the exposure of a feature in guest VMX
+> MSR, just because it is enabled in guest CPUID (e.g., userspace VMM can choose
+> to hide such feature so long as it believes KVM can not provide correct nested
+> support for this feature). 
+> 
+> But in reverse, it is not reasonable for userspace VMM to expose a feature in
+> guest VMX MSR settings, if such feature is disabled in this guest's CPUID. So
+> KVM shall help to make sure such feature is hidden when guest CPUID changes.
 
-3, 4, 5 applied now thanks!
+No.  Again, KVM _should never_ manipulate VMX MSRs in response to CPUID changes.
+Keeping the existing behavior would be done purely to maintain backwards
+compability with existing userspace, not because it's strictly the right thing to do.
+
+E.g. as a strawman, a weird userspace could do KVM_SET_MSRS => KVM_SET_CPUID =>
+KVM_SET_CPUID, where the first KVM_SET_CPUID reset to a base config and the second
+KVM_SET_CPUID incorporates "optional" features.  In that case, clearing bits in
+the VMX MSRs on the first KVM_SET_CPUID would do the wrong thing if the second
+KVM_SET_CPUID enabled the relevant features.
+
+AFAIK, no userspace actually does something odd like that, whereas there are VMMs
+that do KVM_SET_MSRS before KVM_SET_CPUID, e.g. disable a feature in VMX MSRs but
+later enable the feature in CPUID for L1.  And so disabling features is likely
+safe-ish, but enabling feature most definitely can cause problems for userspace.
+
+Hrm, actually, there are likely older VMMs that never set VMX MSRs, and so dropping
+the "enable features" code might not be safe either.  Grr.  The obvious solution
+would be to add a quirk, but maybe we can avoid a quirk by skipping KVM's
+misguided updates if userspace has set the MSR.  That should work for a userspace
+that deliberately sets the MSR during setup, and for a userspace that blindly
+migrates the MSR since the migrated value should already be correct/sane.
+
+E.g.
+
+diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+index 45162c1bcd8f..671479cd7721 100644
+--- a/arch/x86/kvm/vmx/capabilities.h
++++ b/arch/x86/kvm/vmx/capabilities.h
+@@ -51,6 +51,7 @@ struct nested_vmx_msrs {
+        u64 cr4_fixed1;
+        u64 vmcs_enum;
+        u64 vmfunc_controls;
++       bool secondary_set_by_userspace;
+ };
+ 
+ struct vmcs_config {
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 62e3967cf131..3f691ed169d8 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -1257,6 +1257,9 @@ vmx_restore_control_msr(struct vcpu_vmx *vmx, u32 msr_index, u64 data)
+        if (!is_bitwise_subset(supported, data, GENMASK_ULL(63, 32)))
+                return -EINVAL;
+ 
++       if (msr_index == MSR_IA32_VMX_PROCBASED_CTLS2)
++               vmx->nested.msrs.secondary_set_by_userspace = true;
++
+        vmx_get_control_msr(&vmx->nested.msrs, msr_index, &lowp, &highp);
+        *lowp = data;
+        *highp = data >> 32;
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index ab89755dce66..8aadaae5b81e 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -4523,7 +4523,7 @@ vmx_adjust_secondary_exec_control(struct vcpu_vmx *vmx, u32 *exec_control,
+         * Update the nested MSR settings so that a nested VMM can/can't set
+         * controls for features that are/aren't exposed to the guest.
+         */
+-       if (nested) {
++       if (nested && !vmx->nested.msrs.secondary_set_by_userspace) {
+                if (enabled)
+                        vmx->nested.msrs.secondary_ctls_high |= control;
+                else
+
+
+> BTW, I found my previous understanding of what vmx_adjust_secondary_exec_control()
+> currently does was also wrong. It could also be used for EXITING controls. And
+> for such flags(e.g., SECONDARY_EXEC_RDRAND_EXITING), values for the nested settings
+> (vmx->nested.msrs.secondary_ctls_high) and for the L1 execution controls(*exec_control)
+> could be opposite. So the statement:
+> 	"1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
+> 	 disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes."
+> is wrong.
+
+No, it's correct.  The EXITING controls are just inverted feature flags.  E.g. if
+RDRAND is disabled in CPUID, KVM sets the EXITING control so that KVM intercepts
+RDRAND in order to inject #UD.
+
+	[EXIT_REASON_RDRAND]                  = kvm_handle_invalid_op,
