@@ -2,73 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA5A6218E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDE06218EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234025AbiKHP7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:59:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
+        id S234346AbiKHQAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233640AbiKHP7N (ORCPT
+        with ESMTP id S234486AbiKHQAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:59:13 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66CFA1A380;
-        Tue,  8 Nov 2022 07:59:12 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E6E61FB;
-        Tue,  8 Nov 2022 07:59:18 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F12263F73D;
-        Tue,  8 Nov 2022 07:59:08 -0800 (PST)
-Date:   Tue, 8 Nov 2022 15:59:06 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gavin Shan <gshan@redhat.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 1/5] cacheinfo: Use riscv's init_cache_level() as generic
- OF implem
-Message-ID: <20221108155906.3pssiipdfrm55q56@bogus>
-References: <20221108110424.166896-1-pierre.gondois@arm.com>
- <20221108110424.166896-2-pierre.gondois@arm.com>
- <Y2pirStbsJOidAkz@wendy>
+        Tue, 8 Nov 2022 11:00:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8220B58BE3
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:59:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667923154;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+7O/cdVA9cRWQClu+6yWqTBX+v+ngyo9UGXM4aHQHz0=;
+        b=WRspdi+qJKU0UK5jvbBOPsKSuUEZc8xeiH4/YoLH9KtpRkcYFD2SqG6Yetfrg8lwN+MYnh
+        n+LzcIM04ck1Nz7KFoKnGp5nCBAJtSL265xy8NhUQkKweiZdVg1jRLPlEvOQhD6ul5zrtK
+        Vug3ds7yFWO1KeIQOIN1I+RQ3fflcng=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641-ilJCerraMtCxfVDjkarK6A-1; Tue, 08 Nov 2022 10:59:11 -0500
+X-MC-Unique: ilJCerraMtCxfVDjkarK6A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 09905811E81;
+        Tue,  8 Nov 2022 15:59:11 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 492082166B29;
+        Tue,  8 Nov 2022 15:59:09 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <084d78a4-6052-f2ec-72f2-af9c4979f5dc@linux.alibaba.com>
+References: <084d78a4-6052-f2ec-72f2-af9c4979f5dc@linux.alibaba.com> <166757987929.950645.12595273010425381286.stgit@warthog.procyon.org.uk> <166757988611.950645.7626959069846893164.stgit@warthog.procyon.org.uk>
+To:     JeffleXu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, willy@infradead.org,
+        Jeff Layton <jlayton@kernel.org>, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] netfs: Fix dodgy maths
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2pirStbsJOidAkz@wendy>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2363339.1667923148.1@warthog.procyon.org.uk>
+Date:   Tue, 08 Nov 2022 15:59:08 +0000
+Message-ID: <2363340.1667923148@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 02:07:41PM +0000, Conor Dooley wrote:
-> On Tue, Nov 08, 2022 at 12:04:17PM +0100, Pierre Gondois wrote:
-> > Riscv's implementation of init_of_cache_level() is following
-> 
-> heh, "Riscv" always looks a bit odd!
-> Code movement looks fine, nothing surface level is broken on RISC-V.
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
-Thanks for the review and testing. I was planning to ask Pierre to cc you
-next time but you seem to have covered that for me :).
+JeffleXu <jefflexu@linux.alibaba.com> wrote:
 
--- 
-Regards,
-Sudeep
+> > Fix the dodgy maths in netfs_rreq_unlock_folios().  start_page could be
+> > inside the folio, in which case the calculation of pgpos will be come up
+> > with a negative number (though for the moment rreq->start is rounded down
+> > earlier and folios would have to get merged whilst locked)
+> 
+> Hi, the patch itself seems fine. Just some questions about the scenario.
+> 
+> 1. "start_page could be inside the folio" Is that because
+> .expand_readahead() called from netfs_readahead()? Since otherwise,
+> req-start is always aligned to the folio boundary.
+
+At the moment, rreq->start is always coincident with the start of the first
+folio in the collection because we always read whole folios - however, it
+might be best to assume that this might not always hold true if it's simple to
+fix the maths to get rid of the assumption.
+
+> 2. If start_page is indeed inside the folio, then only the trailing part
+> of the first folio can be covered by the request, and this folio will be
+> marked with uptodate, though the beginning part of the folio may have
+> not been read from the cache. Is that expected? Or correct me if I'm wrong.
+
+For the moment there's no scenario where this arises; I think we need to wait
+until we have a scenario and then see how we'll need to juggle the flags.
+
+David
+
