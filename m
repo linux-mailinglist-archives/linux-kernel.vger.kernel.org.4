@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE71621F6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35718621F71
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiKHWm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S229853AbiKHWpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:45:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiKHWmY (ORCPT
+        with ESMTP id S229842AbiKHWpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:42:24 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EF46035D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:42:22 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-367cd2807f2so147490097b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:42:22 -0800 (PST)
+        Tue, 8 Nov 2022 17:45:40 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BBD63CE5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:45:37 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id fz10so9534464qtb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:45:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tnDk2k9M8/LVHtazSqy+bXviz9yt0llV/82RlpALNZU=;
-        b=AUOW/h1u1FYK+H4+PLsSeADr4/+ODoTN3DzAnxb2B5ppCYAPRUAPVB5WygYNXNI3Lx
-         UHaKux2Mj+tl5XEee4y/7+yWqveJ35A4ozXA4yWTLd5Vp3AWRe3mvg0yhzD/NM1pN4X8
-         1L8VQE4MDpcJm/dsDc07kxIlXMftM+joJbYqe+FgFNMJP3mOCFmKNCjcCn5igOejlq5M
-         nmq1vjrKKt7lzWGMNkjUGR9Ghj9Rm66SHT0AgVZIFW292YjMLt0Sl36+vv6LElZtv2hF
-         aOAoICZnmrKeqIDGN4GEu+shE9+0IZtToOfvj/sqNS7tu0JcF6MOd0YojqAqLza1Qdfq
-         GSgQ==
+        bh=b/B2+o8hWx+Vy2/gk8SryrziA/1k8CwLOYbP1F5lrYU=;
+        b=AEz/PuzKz1OTr6hELS9WBy2xhyf4RDQLn1+30+wb5nF0GFNeAhvs/xiE5JHHi40EML
+         NX4IrbG3OYnWy1jjdRnoM27jllftQGKac/ifgeDJEw55SU83fOMIwXnAW/Cc1Ptm+Jh1
+         CV9SUnSYkgw6hPpG631J+NjhTW+1uNQ4dLMM975HmabrQZPsvToPcsgZAdKcJz3ViwZy
+         dJuouqQsT44LqcP3zV2p33W8vuGQlSBgSMaLbSJtidUmSd0HA7pu0rBFum7Xb06tdYfQ
+         C+N0WkeXno0rBMeoIBe+1Lp4qbAiEK52mc7Eb0pt7FwU0X054E8inZF6z5v2Q5ftIqR8
+         BEYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tnDk2k9M8/LVHtazSqy+bXviz9yt0llV/82RlpALNZU=;
-        b=HHgjCiNVoCdFafJ6IJkohFfZMcJWvsVD+J7C3n2LLuUsKRvrN54a+vjBNo6xm5/Fmc
-         +KYhBGbbvYsdDs/nUQvXdOPWGRnFHLKf1PIOkW8YBmL2pLJ6r1iyeFgKV2w1dcGXTzNx
-         VGq+cHcfZD9Y6KUhNqqVWZxQhFrOhWCGgx6maSGgCzVJXW6/g4btK+AoliyR5wFp08tV
-         SYUeBJTVwZFaByg+05TE31gNpm3BJkOihK1EOjjC8ey0qWn6WRoCJ3ZRwlqVB5k6w3MD
-         xJtw8No2SqQRRPcS8XsovYiF80+Vr8mRAk+2DgeSkpHn0hge529mX3w7z3TRoswvyXrz
-         hfmg==
-X-Gm-Message-State: ACrzQf0GC729ciTbOlHQI6rZarbvRMNac/z7UvmEsZneuljduTvwJonx
-        mMrsjXCDeH4QzmoUHFO970izWKkwB2ObNdjid7lLY3d4KYSJkfAf
-X-Google-Smtp-Source: AMsMyM44LOxVnaU+k/J26C1tqoizUB1mFwMJtGmuZM09A2ceLVIK4Z+bqO/Bm46wq5W5N99wDdZmRAG543LJdWychcU=
-X-Received: by 2002:a81:6e05:0:b0:35d:7f88:12f9 with SMTP id
- j5-20020a816e05000000b0035d7f8812f9mr959219ywc.471.1667947341642; Tue, 08 Nov
- 2022 14:42:21 -0800 (PST)
+        bh=b/B2+o8hWx+Vy2/gk8SryrziA/1k8CwLOYbP1F5lrYU=;
+        b=TqloRLQoIkxAy4+kuVz2j6oTpyPQC7UwtyBk6m3064mnNeAuOmv+p7U28pEiL5e5AD
+         torWQZEh0aKmkLiVI2MMaF3tD5ydkGiYTQsCrcE4CymjT3JZnLQWnY/5uNtbIVT2JEWN
+         wZe1YFXf8rC0Cwxv4MVSTdR9cqBwtLCt/kUVs/oORajwTpIeARIAScFBo0tYDMkddR6E
+         Q3VVz3iINud+WydIVk4qeEBuUUxzzTPjYEbCMXX6JJTsEFnp7cExhMDPiep14kktaA+Q
+         pc+deiaRSJ0WbBDtsyBHZYgM+D7T/ZBBszEK4H7CMWKYa6KwMXIfpOwkGskHVUMDi7MQ
+         Oofw==
+X-Gm-Message-State: ACrzQf1Z5UHOAtWZo85VOkbGsePxLLBmhffnI9XARFhMn5xMAT4wQG62
+        p3o04QngEz8NH0h72jQqTxAjODygPpg=
+X-Google-Smtp-Source: AMsMyM4dhE7TPiusUYk2EqLFu2wVSrGxvU04Z/e+rpnUpFyNmJ/fAhF0DOME8lvqBGkPlK6UYZsZwQ==
+X-Received: by 2002:a05:622a:1243:b0:3a5:4666:4122 with SMTP id z3-20020a05622a124300b003a546664122mr28328441qtx.230.1667947536908;
+        Tue, 08 Nov 2022 14:45:36 -0800 (PST)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id y20-20020a37f614000000b006cfaee39ccesm9769226qkj.114.2022.11.08.14.45.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 14:45:36 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id j130so19054325ybj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:45:35 -0800 (PST)
+X-Received: by 2002:a25:23d6:0:b0:6ca:7fd:d664 with SMTP id
+ j205-20020a2523d6000000b006ca07fdd664mr56857635ybj.85.1667947535381; Tue, 08
+ Nov 2022 14:45:35 -0800 (PST)
 MIME-Version: 1.0
 References: <20221030220203.31210-1-axboe@kernel.dk> <20221030220203.31210-7-axboe@kernel.dk>
  <Y2rUsi5yrhDZYpf/@google.com> <4764dcbf-c735-bbe2-b60e-b64c789ffbe6@kernel.dk>
-In-Reply-To: <4764dcbf-c735-bbe2-b60e-b64c789ffbe6@kernel.dk>
-From:   Soheil Hassas Yeganeh <soheil@google.com>
-Date:   Tue, 8 Nov 2022 17:41:45 -0500
-Message-ID: <CACSApvZg-H4y0ibOy=+dNyrfEaAz0dw8sFjzuqSNbfsBK3cULw@mail.gmail.com>
+ <CA+FuTSdawNGXhW0DEf0-R6--1bDh7qByO=ViD_h=BfRe3XaFkw@mail.gmail.com> <33832500-ddf3-dc2b-a765-046d46031991@kernel.dk>
+In-Reply-To: <33832500-ddf3-dc2b-a765-046d46031991@kernel.dk>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 8 Nov 2022 17:44:58 -0500
+X-Gmail-Original-Message-ID: <CA+FuTScvn016nJAYHDuu0Y4vq6n7mbx96_NiYF75HfYQrRjPKQ@mail.gmail.com>
+Message-ID: <CA+FuTScvn016nJAYHDuu0Y4vq6n7mbx96_NiYF75HfYQrRjPKQ@mail.gmail.com>
 Subject: Re: [PATCH 6/6] eventpoll: add support for min-wait
 To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,42 +81,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 5:20 PM Jens Axboe <axboe@kernel.dk> wrote:
-> > Is there a way to short cut the wait if the process is being terminated?
-> >
-> > We issues in production systems in the past where too many threads were
-> > in epoll_wait and the process got terminated.  It'd be nice if these
-> > threads could exit the syscall as fast as possible.
->
-> Good point, it'd be a bit racy though as this is called from the waitq
-> callback and hence not in the task itself. But probably Good Enough for
-> most use cases?
-
-Sounds good. We can definitely do that as a follow up later.
-
-> This should probably be a separate patch though, as it seems this
-> affects regular waits too without min_wait set?
->
-> >> @@ -1845,6 +1891,18 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
-> >>              ewq.timed_out = true;
-> >>      }
-> >>
-> >> +    /*
-> >> +     * If min_wait is set for this epoll instance, note the min_wait
-> >> +     * time. Ensure the lowest bit is set in ewq.min_wait_ts, that's
-> >> +     * the state bit for whether or not min_wait is enabled.
-> >> +     */
-> >> +    if (ep->min_wait_ts) {
-> >
-> > Can we limit this block to "ewq.timed_out && ep->min_wait_ts"?
-> > AFAICT, the code we run here is completely wasted if timeout is 0.
->
-> Yep certainly, I can gate it on both of those conditions.
-
-Thanks. I think that would help. You might also want to restructure the if/else
-condition above but it's your call.
-
-On Tue, Nov 8, 2022 at 5:29 PM Jens Axboe <axboe@kernel.dk> wrote:
+On Tue, Nov 8, 2022 at 5:30 PM Jens Axboe <axboe@kernel.dk> wrote:
 >
 > On 11/8/22 3:25 PM, Willem de Bruijn wrote:
 > >>> This would be similar to the approach that willemb@google.com used
@@ -127,10 +103,15 @@ On Tue, Nov 8, 2022 at 5:29 PM Jens Axboe <axboe@kernel.dk> wrote:
 > would be unfortunate. I'd hate to have to argue that API to anyone, let
 > alone Linus, when pushing the series.
 
-I personally like what Willem suggested. It feels more natural to me
-and as you suggested previously it can be a struct argument.
+I did mean for a new syscall epoll_pwait3. But not an array of
+pointers, an array of structs. The second arg is then mandatory for
+this epoll_pwait_minwait variant of the syscall.
 
-The overheads would be similar to any syscall that accepts itimerspec.
+It would indeed have been nicer to be able to do this in epoll_pwait2
+based on a flag. It's just doubling the size in copy_from_user in
+get_timespec64.
 
-I understand your concern on "epoll_pwait3".  I wish Linus would weigh
-in here. :-)
+Btw, when I added epoll_pwait2, there was a reasonable request to
+also update the manpages and add a basic test to
+tools/testing/selftests/filesystems/epoll. That is some extra work with
+a syscall based approach.
