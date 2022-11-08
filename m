@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843BE620D3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5781620D3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiKHK2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S233633AbiKHK2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:28:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKHK2A (ORCPT
+        with ESMTP id S233383AbiKHK2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:28:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48160B873
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:27:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05D22B81A00
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:27:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B151C433D6;
-        Tue,  8 Nov 2022 10:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667903276;
-        bh=XmXAMhLprGXDMRo5fiZJmyS/+wonVwXxZx5NgkKFdeM=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=q8c5nrc987RX11a4APalb9zO+ZIbGbiAnje+fmuo710RL+hB5/IIzHlv+fcoxiGyf
-         nqye7T1N4JW9WqHVidOCBzTt2v9Lvf76eGGx5Nk7N6yA3Co6kHEbIu7i+fIrx2W54d
-         PIJ8NC+4VxgveAbA0txKScaMqEqMELjrh7zxRGwtmAJge1LcMBdF6L0DPFAaWOTMEs
-         4CXwpq12p5Dr8zuIy2bXamE/XA7F2dmbcW0x/chT0VYnY8r7iV6s+ryoHqNZ5FJpCH
-         eU83U7pvZ07c4tQJw7IzAM9nIgiBu3HBVZc+mut/GJ5e/KV9FLzm0pmh1GsNY32V4u
-         qgMJiNYRgDaRg==
-Date:   Tue, 08 Nov 2022 10:27:51 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     linux-riscv@lists.infradead.org, guoren@kernel.org,
-        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de,
-        philipp.tomsich@vrull.eu
-CC:     linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_RESEND=5D_riscv=3A_asid=3A_Fixup_?= =?US-ASCII?Q?stale_TLB_entry_cause_application_crash?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221108102044.3317793-1-guoren@kernel.org>
-References: <20221108102044.3317793-1-guoren@kernel.org>
-Message-ID: <D91557B5-7E60-4A29-8669-34FF42454F8C@kernel.org>
+        Tue, 8 Nov 2022 05:28:19 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE891E3D4
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:28:18 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id a13so21804715edj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:28:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LlnvrOgzgIYzw4ErLSoSuTM9O5WrKKjLBVTFrQiiYrw=;
+        b=uRJpmF7t1GC1Egg7oFX+ei1Qh/4yebt4vO9g2dik7FW03duXGG0BEOE2gI6Y0FfvMX
+         +864UB7R9U4cJn8ChpItgijT6UBe7X+JpscotYbcxhiD3Dau1AWmEwQTqgXolQl7AAFs
+         B/I5uIktqkJ5DeYb+ofF5AgkTYKV3PmfcEMQ9RYY27fIn+0m/IGGgr30FftKknpxpsrA
+         WM1uByoGPRdftGxd7bpqJlLIGsKD8cSw4h925iIRw4C+2a/CtZMF4XuDS4YQoYC2xeZ2
+         lrtAU/5z5jYxlgbN0Qan6wVpKpr5JyozVZniLuNlG8Z+V7RJ0L1W1NiEfENeNI1/aZI6
+         Cr7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LlnvrOgzgIYzw4ErLSoSuTM9O5WrKKjLBVTFrQiiYrw=;
+        b=zykMs7+xfAC28cdzO7Xm/XOE8e6EhYo7SOxQEN17cuXWpMmzQWAPSw62Wow66RzRN0
+         /Q0B/k3jb5zBJG3UQAHAX5WHUEpr2H96bYKO85xZDIyBPLbxhyIh5dfRCpqA/XrpADo9
+         widSgX4BH8PkdQcHOoqx6LVnKB9nojpXfvhln7DMgiwRGbUfVJvbwsrCdZ2AVWX6UzvN
+         zaWgW94FbXY/pB3Oyt6Rly5FgKYcfX42YgRTYZAbmhC3zcRnIAhzhz6faa7QCJRSjhWx
+         P3kU0q07BBHRpxGyd4dkObNUegNTPXF8LEPmQmF/5qmut+qP8Q97QUoaQ0Aafr6dOyZL
+         4C0Q==
+X-Gm-Message-State: ACrzQf19+YMEi4IS51Gvhj9P/1iZAXXiTxDTpv1ctyvCp2S6e3LqbrS4
+        rTy1c0lIJShcGR+MpEg/bJdD42AIEcYAKuRFj5v3xg==
+X-Google-Smtp-Source: AMsMyM7wG2afDMiM73wj4GBVpgdRAm1+t9UlWeLhKqAi3x0F1p1MKifmuIe2E4I5GKjvUkxMDbkL4KHlbwyp4q/gzGs=
+X-Received: by 2002:aa7:d6d1:0:b0:463:ba50:e574 with SMTP id
+ x17-20020aa7d6d1000000b00463ba50e574mr37155013edr.158.1667903297471; Tue, 08
+ Nov 2022 02:28:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221027130859.1444412-1-shenwei.wang@nxp.com>
+In-Reply-To: <20221027130859.1444412-1-shenwei.wang@nxp.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Nov 2022 11:28:06 +0100
+Message-ID: <CACRpkdbCxW7yPKnMTFDsUhCH2LHja6Pf1GpbdmqhDMqLA28aRg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] gpio: add suspend/resume support for i.mx8x SoCs
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,73 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Oct 27, 2022 at 3:09 PM Shenwei Wang <shenwei.wang@nxp.com> wrote:
 
+> On i.MX8QM/QXP/DXL SoCs, even a GPIO is selected as the wakeup source,
+> the GPIO block will be powered off when system enters into suspend
+> state. This can greatly reduce the power consumption of suspend state
+> because the whole partition can be shutdown. This is called PAD wakeup
+> feature on i.MX8x platform.
+>
+> This series of patches enable this wakeup feature on i.MX8QM/QXP/DXL
+> platforms.
 
-On 8 November 2022 10:20:44 GMT, guoren@kernel=2Eorg wrote:
->From: Guo Ren <guoren@linux=2Ealibaba=2Ecom>
->
->After use_asid_allocator enabled, the userspace application will
->crash for stale tlb entry=2E Because only using cpumask_clear_cpu without
->local_flush_tlb_all couldn't guarantee CPU's tlb entries fresh=2E Then
->set_mm_asid would cause user space application get a stale value by
->the stale tlb entry, but set_mm_noasid is okay=2E
->
->Here is the symptom of the bug:
->unhandled signal 11 code 0x1 (coredump)
->   0x0000003fd6d22524 <+4>:     auipc   s0,0x70
->   0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
->=3D> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
->(gdb) i r s0
->s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
->(gdb) x/16 0x3fd6d92490
->0x3fd6d92490:   0xd80ac8a8      0x0000003f
->The core dump file shows that the value of register s0 is wrong, but the
->value in memory is right=2E This is because 'ld s0, -148(s0)' use a stale
->mapping entry in TLB and got a wrong value from a stale physical
->address=2E
->
->When task run on CPU0, the task loaded/speculative-loaded the value of
->address(0x3fd6d92490), and the first version of tlb mapping entry was
->PTWed into CPU0's tlb=2E
->When the task switched from CPU0 to CPU1 without local_tlb_flush_all
->(because of asid), the task happened to write a value on address
->(0x3fd6d92490)=2E It caused do_page_fault -> wp_page_copy ->
->ptep_clear_flush -> ptep_get_and_clear & flush_tlb_page=2E
->The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need
->tlb flush, but CPU0 had cleared the CPU0's mm_cpumask in previous switch_=
-mm=2E
->So we only flushed the CPU1 tlb, and setted second version mapping
->of the pte=2E When the task switch from CPU1 to CPU0 again, CPU0 still us=
-ed a
->stale tlb mapping entry which contained a wrong target physical address=
-=2E
->When the task happened to read that value, the bug would be raised=2E
->
->Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
->Signed-off-by: Guo Ren <guoren@linux=2Ealibaba=2Ecom>
->Signed-off-by: Guo Ren <guoren@kernel=2Eorg>
->Cc: Anup Patel <apatel@ventanamicro=2Ecom>
->Cc: Palmer Dabbelt <palmer@rivosinc=2Ecom>
->---
-> arch/riscv/mm/context=2Ec | 4 +++-
-> 1 file changed, 3 insertions(+), 1 deletion(-)
->
->diff --git a/arch/riscv/mm/context=2Ec b/arch/riscv/mm/context=2Ec
->index 7acbfbd14557=2E=2E8ad6c2493e93 100644
->--- a/arch/riscv/mm/context=2Ec
->+++ b/arch/riscv/mm/context=2Ec
->@@ -317,7 +317,9 @@ void switch_mm(struct mm_struct *prev, struct mm_stru=
-ct *next,
-> 	 */
-> 	cpu =3D smp_processor_id();
->=20
->-	cpumask_clear_cpu(cpu, mm_cpumask(prev));
->+	if (!static_branch_unlikely(&use_asid_allocator))
->+		cpumask_clear_cpu(cpu, mm_cpumask(prev));
->+
-> 	cpumask_set_cpu(cpu, mm_cpumask(next));
->=20
-> 	set_mm(next, cpu);
+First: thanks a lot for fixing this the way I wanted it!
 
-This is a completely different patch to what you already sent=2E Why have =
-you marked it RESEND rather than v2?
+> Shenwei Wang (5):
+>   arm64: dts: imx8dxl-ss-lsio: add gpio-ranges property
+>   arm64: dts: imx8qm-ss-lsio: add gpio-ranges property
+>   arm64: dts: imx8qxp-ss-lsio: add gpio-ranges property
+
+Please push these into the SoC tree for i.MX.
+
+>   pinctrl: freescale: add pad wakeup config
+>   gpio: mxc: enable pad wakeup on i.MX8x platforms
+
+I have applied these two to the pinctrl tree.
+
+Yours,
+Linus Walleij
