@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151AC621114
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB28762111B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiKHMlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S234259AbiKHMln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiKHMlK (ORCPT
+        with ESMTP id S234193AbiKHMlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:41:10 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB3750F2C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:41:07 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B6128224A0;
-        Tue,  8 Nov 2022 12:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667911265; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c3dZM4uCLlwzncmOgKppFTjizqzC3KOzooj1gFTH490=;
-        b=OHWhrJS4mb795unDDeporWwSHoWUPrjMOCIy07QYr/0hrnUV/nHxV/IYLNsd32ea+izcGH
-        HxwR3L2w97NZlULzWu73QcSmSX4oJZyTj/2cqiEMQv3/E+E8SQfoXpwACBXb/K19kauNLf
-        XkoijjZ27KhF4I4ed+q7TSRmDIfDNe8=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 508A72C142;
-        Tue,  8 Nov 2022 12:41:05 +0000 (UTC)
-Date:   Tue, 8 Nov 2022 13:41:04 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org
-Subject: Re: [PATCH printk v3 06/40] um: kmsg_dump: only dump when no output
- console available
-Message-ID: <Y2pOYBkNPY3wd6vn@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-7-john.ogness@linutronix.de>
+        Tue, 8 Nov 2022 07:41:40 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033A951C0F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:41:40 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id q9so38382005ejd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:41:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gi9G5NsNt+Ih2E7N83yfZTdIZYSFxlj5Rim1ZcoMIso=;
+        b=qGVPRCWL/D+mJBt/YMpR/hJd+4+6vgRZYwr0Y/oVlUwH+qLV4eWqaggSLqst80bRSK
+         33Dsc/PPoR4rNmTsCfQv/u1Pw3hKLnPKDz5ormbRqWS8C1px+0JIsCQxVc12d6egE9q8
+         xoiJc7yxZ/0dpZvPdBcH1AV6g8/Sw2SOSMcRaNP74U48RoJQouqtX3bx/zsgRQoWp6LF
+         Es3nd+BQmABuAYlGrosKrbyNePLh+BP7L2C4iFRzh7c/gtZERA2QOc+UHBlRtUzwdHQk
+         k/Y0LH4KrXCmcThcVJNx6p2pfBDMyJwhjE0F1v7AK9NeV/c877ozDa6Dm7zDoN4Upd34
+         Xrlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gi9G5NsNt+Ih2E7N83yfZTdIZYSFxlj5Rim1ZcoMIso=;
+        b=ZwlE2GoAOtwMnahekIgvifop3EyZRahQt9ML58sacxYppYK2URHyRYDRqTzOqvcWTo
+         g5J3fGcSHW52XdQQemjv2rLQ0vjTYWRuQMr0YNSoV14ANQXwS8BNRXSDoQxibJ1Na92F
+         xGdxTyfBfJQh5ZoxycgwC4al5jgm2NsUWWOX4CP5RCnkswkN9IWQHGR97zXlPB2V6kTt
+         1Yt+sr3x5LvdfY/JiqNBHFRiJ52Nmgvbsk1IyzYSRhmrEKMsZ/LybymyKIymlTVN5YZR
+         /rPYtcXkrTF47kgGx+G0oxuXbUwaEfZDFI/RHTSYk4ATNwwCCXZftszKEj50G0FIov3h
+         pezg==
+X-Gm-Message-State: ACrzQf3tY+IRY7oFiSr30oUoWDECCIYeQLg3pds6/4r6Qk3WnsSPbOMY
+        2rYj9OPcJUvj7mt6BivXFZtAbBmV7Oz79Wbd+UEIDQ==
+X-Google-Smtp-Source: AMsMyM4D93wKvgktKtF5pSLNAQhwJArnmkseAbPQu6Ig5bPJ7gB6T8TvEqq/MsHMHo31i9VmzOer9LWWXHAKTEwxw8g=
+X-Received: by 2002:a17:907:c1e:b0:7ae:31a0:571e with SMTP id
+ ga30-20020a1709070c1e00b007ae31a0571emr20975544ejc.690.1667911298631; Tue, 08
+ Nov 2022 04:41:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107141638.3790965-7-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101205159.1468069-1-lis8215@gmail.com>
+In-Reply-To: <20221101205159.1468069-1-lis8215@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Nov 2022 13:41:27 +0100
+Message-ID: <CACRpkdbKv_EBBpvSkGkftexJs4t2ani2bVz8vnRLN2YjpBVvAg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] docs/pinctrl: fix pinctrl examples
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-07 15:22:04, John Ogness wrote:
-> The initial intention of the UML kmsg_dumper is to dump the kernel
-> buffers to stdout if there is no console available to perform the
-> regular crash output.
-> 
-> However, if ttynull was registered as a console, no crash output was
-> seen. Commit e23fe90dec28 ("um: kmsg_dumper: always dump when not tty
-> console") tried to fix this by performing the kmsg_dump unless the
-> stdio console was behind /dev/console or enabled. But this allowed
-> kmsg dumping to occur even if other non-stdio consoles will output
-> the crash output. Also, a console being the driver behind
-> /dev/console has nothing to do with a crash scenario.
-> 
-> Restore the initial intention by dumping the kernel buffers to stdout
-> only if a non-ttynull console is registered and enabled. Also add
-> detailed comments so that it is clear why these rules are applied.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+On Tue, Nov 1, 2022 at 9:52 PM Siarhei Volkau <lis8215@gmail.com> wrote:
 
-The change makes sense to me:
+> The document has some typos in the examples related to using
+> pinctrl_select_state function and out-of-context variables.
+> The patchset aims to fix that.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Thanks so much for fixing this! My ages old mistakes...
 
-Best Regards,
-Petr
+Patches applied.
+
+Yours,
+Linus Walleij
