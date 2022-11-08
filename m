@@ -2,247 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AF4620E2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9E9620E1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbiKHLHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
+        id S233983AbiKHLFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233999AbiKHLGl (ORCPT
+        with ESMTP id S233658AbiKHLFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:06:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6214347323;
-        Tue,  8 Nov 2022 03:06:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 554B113D5;
-        Tue,  8 Nov 2022 03:06:46 -0800 (PST)
-Received: from pierre123.arm.com (unknown [10.57.5.33])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5A9DB3F534;
-        Tue,  8 Nov 2022 03:06:37 -0800 (PST)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gavin Shan <gshan@redhat.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
+        Tue, 8 Nov 2022 06:05:06 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C2C47309;
+        Tue,  8 Nov 2022 03:05:05 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id i5-20020a1c3b05000000b003cfa97c05cdso814930wma.4;
+        Tue, 08 Nov 2022 03:05:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=djx0y+EGNKlQ+Rmpfi08YMzznsTRBlDgFYnuDiHncdM=;
+        b=DdtabEAB8YkZDsbfpew8LBwerFB+hd2huHnSXPsuk6cozl8de643oj/QWLaxdPMpkX
+         dXSwHqmauJL8cE1UkHGzBfgJ8av89XtjIapV/j7glCVvzeze4xe30DnrDY3VITsXHQXY
+         3Uphz58+OBu7ycz0t8zX6hnN892i5fd6uLa8p368BjW9gkdjLA64y5T0RyW0Q+UPa4Le
+         5JU4MoJ6oVODY1K51UP7LWiVQFHuzzRz4ql2fH8qFvu+l1WPkeCLvnLegUYEE0QY/mFR
+         GR7y/Qi8OHn3XtA8gurPJKAEHYxSmcRA96HbtnhnEZcfJhUBGjBv3SpeMgj9/UufwJHm
+         KThA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=djx0y+EGNKlQ+Rmpfi08YMzznsTRBlDgFYnuDiHncdM=;
+        b=hXKOUEhgHbrLEmitnd12V6R4uFSUyLSBXfh9+XAN/Bc8RGDeu+jzsxyfDNE/ik7/s8
+         bk9zPe0Kr+87/ubIxeZegQcqlaGrHIR2txTw9KVEEFvSdbxGawpWMYfCK2rVtK8ijrWK
+         SKcwLzxU6feWKe44nUaAivfd5Gi+ZlOqVzggsxw9gOJHe5bFVlGod3Eh/b4zugrD6rPd
+         k0ktoE6j3OdORbkVLCmfPrK608vinEJG4WQ+ZWJ+PEOc2sDGH/s38ygRzB4S68kUJ6iS
+         I5j6j8gso6vWrbl/tjRfKX+Zlk/0IVe7nxUOUM0YB+6/dkIuHdDLDILxh4zZCc4fpDT8
+         67Ng==
+X-Gm-Message-State: ACrzQf3BzL1m8QPxYCOrRozpEQp+TMIe5k9HXNN4NXClJp9HyN002D4T
+        ePx5F2aLFLhhtR+fc6wjHkE=
+X-Google-Smtp-Source: AMsMyM6U/UcqQkaoQFwHy2HIStWRuHsxgcc6OxtK6VEE+wtFf2pLteWT7+gUwjcDfp6wYVbJv7eJtQ==
+X-Received: by 2002:a7b:cb81:0:b0:3c0:f8fc:ea23 with SMTP id m1-20020a7bcb81000000b003c0f8fcea23mr47203938wmi.31.1667905503881;
+        Tue, 08 Nov 2022 03:05:03 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bx14-20020a5d5b0e000000b0022cd0c8c696sm9933379wrb.103.2022.11.08.03.05.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 03:05:03 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
-Subject: [PATCH 5/5] arch_topology: Build cacheinfo from primary CPU
-Date:   Tue,  8 Nov 2022 12:04:21 +0100
-Message-Id: <20221108110424.166896-6-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221108110424.166896-1-pierre.gondois@arm.com>
-References: <20221108110424.166896-1-pierre.gondois@arm.com>
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] hinic: Fix spelling mistake "fliter" -> "filter"
+Date:   Tue,  8 Nov 2022 11:05:02 +0000
+Message-Id: <20221108110502.114328-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 3fcbf1c77d08 ("arch_topology: Fix cache attributes detection
-in the CPU hotplug path")
-adds a call to detect_cache_attributes() to populate the cacheinfo
-before updating the siblings mask. detect_cache_attributes() allocates
-memory and can take the PPTT mutex (on ACPI platforms). On PREEMPT_RT
-kernels, on secondary CPUs, this triggers a:
-  'BUG: sleeping function called from invalid context' [1]
-as the code is executed with preemption and interrupts disabled.
+There is a function name and a dev_err message containing a
+spelling mistake. Fix them.
 
-The primary CPU was previously storing the cache information using
-the now removed (struct cpu_topology).llc_id:
-commit 5b8dc787ce4a ("arch_topology: Drop LLC identifier stash from
-the CPU topology")
-
-allocate_cache_info() tries to build the cacheinfo from the primary
-CPU prior secondary CPUs boot, if the DT/ACPI description
-contains cache information.
-If allocate_cache_info() fails, then fallback to the current state
-for the cacheinfo allocation. [1] will be triggered in such case.
-
-When unplugging a CPU, the cacheinfo memory cannot be freed. If it
-was, then the memory would be allocated early by the re-plugged
-CPU and would trigger [1].
-
-[1]:
-[    7.560791] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-[    7.560794] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 0, name: swapper/111
-[    7.560796] preempt_count: 1, expected: 0
-[    7.560797] RCU nest depth: 1, expected: 1
-[    7.560799] 3 locks held by swapper/111/0:
-[    7.560800]  #0: ffff403e406cae98 (&pcp->lock){+.+.}-{3:3}, at: get_page_from_freelist+0x218/0x12c8
-[    7.560811]  #1: ffffc5f8ed09f8e8 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x48/0xf0
-[    7.560820]  #2: ffff403f400b4fd8 (&zone->lock){+.+.}-{3:3}, at: rmqueue_bulk+0x64/0xa80
-[    7.560824] irq event stamp: 0
-[    7.560825] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-[    7.560827] hardirqs last disabled at (0): [<ffffc5f8e9f7d594>] copy_process+0x5dc/0x1ab8
-[    7.560830] softirqs last  enabled at (0): [<ffffc5f8e9f7d594>] copy_process+0x5dc/0x1ab8
-[    7.560833] softirqs last disabled at (0): [<0000000000000000>] 0x0
-[    7.560834] Preemption disabled at:
-[    7.560835] [<ffffc5f8e9fd3c28>] migrate_enable+0x30/0x130
-[    7.560838] CPU: 111 PID: 0 Comm: swapper/111 Tainted: G        W          6.0.0-rc4-rt6-[...]
-[    7.560841] Call trace:
-[...]
-[    7.560870]  __kmalloc+0xbc/0x1e8
-[    7.560873]  detect_cache_attributes+0x2d4/0x5f0
-[    7.560876]  update_siblings_masks+0x30/0x368
-[    7.560880]  store_cpu_topology+0x78/0xb8
-[    7.560883]  secondary_start_kernel+0xd0/0x198
-[    7.560885]  __secondary_switched+0xb0/0xb4
-
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/base/arch_topology.c | 10 ++++++-
- drivers/base/cacheinfo.c     | 53 ++++++++++++++++++++++++++++--------
- include/linux/cacheinfo.h    |  1 +
- 3 files changed, 52 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/huawei/hinic/hinic_main.c | 2 +-
+ drivers/net/ethernet/huawei/hinic/hinic_port.c | 4 ++--
+ drivers/net/ethernet/huawei/hinic/hinic_port.h | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index d07a7cfa389a..4222a6d1e07b 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -825,7 +825,7 @@ __weak int __init parse_acpi_topology(void)
- #if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
- void __init init_cpu_topology(void)
- {
--	int ret;
-+	int cpu, ret;
- 
- 	reset_cpu_topology();
- 	ret = parse_acpi_topology();
-@@ -840,6 +840,14 @@ void __init init_cpu_topology(void)
- 		reset_cpu_topology();
- 		return;
- 	}
-+
-+	for_each_possible_cpu(cpu) {
-+		ret = allocate_cache_info(cpu);
-+		if (ret) {
-+			pr_err("Early cacheinfo failed, ret = %d\n", ret);
-+			break;
-+		}
-+	}
- }
- 
- void store_cpu_topology(unsigned int cpuid)
-diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-index 6f6cd120c4f1..889d94d89e18 100644
---- a/drivers/base/cacheinfo.c
-+++ b/drivers/base/cacheinfo.c
-@@ -371,10 +371,6 @@ static void free_cache_attributes(unsigned int cpu)
- 		return;
- 
- 	cache_shared_cpu_map_remove(cpu);
--
--	kfree(per_cpu_cacheinfo(cpu));
--	per_cpu_cacheinfo(cpu) = NULL;
--	cache_leaves(cpu) = 0;
- }
- 
- int __weak init_cache_level(unsigned int cpu)
-@@ -387,18 +383,53 @@ int __weak populate_cache_leaves(unsigned int cpu)
- 	return -ENOENT;
- }
- 
-+int allocate_cache_info(unsigned int cpu)
-+{
-+	struct cpu_cacheinfo *this_cpu_ci;
-+	unsigned int levels, split_levels;
-+	int ret;
-+
-+	if (acpi_disabled)
-+		ret = init_of_cache_level(cpu);
-+	else {
-+		ret = acpi_get_cache_info(cpu, &levels, &split_levels);
-+		this_cpu_ci = get_cpu_cacheinfo(cpu);
-+		this_cpu_ci->num_levels = levels;
-+		/*
-+		 * This assumes that:
-+		 * - there cannot be any split caches (data/instruction)
-+		 *   above a unified cache
-+		 * - data/instruction caches come by pair
-+		 */
-+		this_cpu_ci->num_leaves = levels + split_levels;
-+	}
-+	if (ret < 0)
-+		return ret;
-+	else if (!cache_leaves(cpu))
-+		return -ENOENT;
-+
-+	per_cpu_cacheinfo(cpu) = kcalloc(cache_leaves(cpu),
-+					sizeof(struct cacheinfo), GFP_ATOMIC);
-+	if (per_cpu_cacheinfo(cpu) == NULL) {
-+		cache_leaves(cpu) = 0;
-+		return -ENOMEM;
-+	}
-+
-+	return ret;
-+}
-+
- int detect_cache_attributes(unsigned int cpu)
- {
- 	int ret;
- 
--	/* Since early detection of the cacheinfo is allowed via this
--	 * function and this also gets called as CPU hotplug callbacks via
--	 * cacheinfo_cpu_online, the initialisation can be skipped and only
--	 * CPU maps can be updated as the CPU online status would be update
--	 * if called via cacheinfo_cpu_online path.
-+	/* Since early initialization/allocation of the cacheinfo is allowed
-+	 * via allocate_cache_info() and this also gets called as CPU hotplug
-+	 * callbacks via cacheinfo_cpu_online, the init/alloc can be skipped
-+	 * as it will happen only once (the cacheinfo memory is never freed).
-+	 * Just populate the cacheinfo.
- 	 */
- 	if (per_cpu_cacheinfo(cpu))
--		goto update_cpu_map;
-+		goto populate_leaves;
- 
- 	if (init_cache_level(cpu) || !cache_leaves(cpu))
- 		return -ENOENT;
-@@ -410,6 +441,7 @@ int detect_cache_attributes(unsigned int cpu)
- 		return -ENOMEM;
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_main.c b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+index 977c41473ab7..db82fe4736a6 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_main.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_main.c
+@@ -1093,7 +1093,7 @@ static int set_features(struct hinic_dev *nic_dev,
  	}
  
-+populate_leaves:
- 	/*
- 	 * populate_cache_leaves() may completely setup the cache leaves and
- 	 * shared_cpu_map or it may leave it partially setup.
-@@ -418,7 +450,6 @@ int detect_cache_attributes(unsigned int cpu)
- 	if (ret)
- 		goto free_ci;
+ 	if (changed & NETIF_F_HW_VLAN_CTAG_FILTER) {
+-		ret = hinic_set_vlan_fliter(nic_dev,
++		ret = hinic_set_vlan_filter(nic_dev,
+ 					    !!(features &
+ 					       NETIF_F_HW_VLAN_CTAG_FILTER));
+ 		if (ret) {
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.c b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+index 9406237c461e..0ab72069e377 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_port.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_port.c
+@@ -447,7 +447,7 @@ int hinic_set_rx_vlan_offload(struct hinic_dev *nic_dev, u8 en)
+ 	return 0;
+ }
  
--update_cpu_map:
- 	/*
- 	 * For systems using DT for cache hierarchy, fw_token
- 	 * and shared_cpu_map will be set up here only if they are
-diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
-index f992d81d211f..7d390806b788 100644
---- a/include/linux/cacheinfo.h
-+++ b/include/linux/cacheinfo.h
-@@ -85,6 +85,7 @@ int populate_cache_leaves(unsigned int cpu);
- int cache_setup_acpi(unsigned int cpu);
- bool last_level_cache_is_valid(unsigned int cpu);
- bool last_level_cache_is_shared(unsigned int cpu_x, unsigned int cpu_y);
-+int allocate_cache_info(unsigned int cpu);
- int detect_cache_attributes(unsigned int cpu);
- #ifndef CONFIG_ACPI_PPTT
- /*
+-int hinic_set_vlan_fliter(struct hinic_dev *nic_dev, u32 en)
++int hinic_set_vlan_filter(struct hinic_dev *nic_dev, u32 en)
+ {
+ 	struct hinic_hwdev *hwdev = nic_dev->hwdev;
+ 	struct hinic_hwif *hwif = hwdev->hwif;
+@@ -472,7 +472,7 @@ int hinic_set_vlan_fliter(struct hinic_dev *nic_dev, u32 en)
+ 		err = HINIC_MGMT_CMD_UNSUPPORTED;
+ 	} else if (err || !out_size || vlan_filter.status) {
+ 		dev_err(&pdev->dev,
+-			"Failed to set vlan fliter, err: %d, status: 0x%x, out size: 0x%x\n",
++			"Failed to set vlan filter, err: %d, status: 0x%x, out size: 0x%x\n",
+ 			err, vlan_filter.status, out_size);
+ 		err = -EINVAL;
+ 	}
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_port.h b/drivers/net/ethernet/huawei/hinic/hinic_port.h
+index c8694ac7c702..1b2e45c704d5 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_port.h
++++ b/drivers/net/ethernet/huawei/hinic/hinic_port.h
+@@ -841,7 +841,7 @@ int hinic_get_vport_stats(struct hinic_dev *nic_dev,
+ 
+ int hinic_set_rx_vlan_offload(struct hinic_dev *nic_dev, u8 en);
+ 
+-int hinic_set_vlan_fliter(struct hinic_dev *nic_dev, u32 en);
++int hinic_set_vlan_filter(struct hinic_dev *nic_dev, u32 en);
+ 
+ int hinic_get_mgmt_version(struct hinic_dev *nic_dev, u8 *mgmt_ver);
+ 
 -- 
-2.25.1
+2.38.1
 
