@@ -2,147 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D776213AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F23D6213E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiKHNwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S234768AbiKHNzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234730AbiKHNw2 (ORCPT
+        with ESMTP id S234715AbiKHNzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:52:28 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879BB60EBE;
-        Tue,  8 Nov 2022 05:52:23 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id p8so21278228lfu.11;
-        Tue, 08 Nov 2022 05:52:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Qj3oIcHyS3qss14Y0kNXWMR5kk6QHMclGVuX5Mg4TU=;
-        b=fpu5Yx2ZJcHB7yI+kOC42NrFSMfoP27zZZEGb2ATwOeRtUmN4UxNFwT80MtTpEWUtQ
-         RzAu9a0lkUtzy+hkDSI2Vbfgt9Dkf3xufhU/TTDtDE2SgYc58RdygKJbNOB7jMdnblRh
-         aqXdouUpidnPIUIAvLqwXINJ5qoqZti8tWPm4VgF0Ox0DFiHH58rfzEy9dsn1QJixO5z
-         DWR91LoNDUozHtiC0qpz1AJFy+vVPiG9jVs/W4Lx+b0/LcV9cPDjniDsdQBkQv+dTHa2
-         Z5vjPJdzbtuEFZ+M5XEprXGi1pD5kRWKGuA72O2xbYM0KAFcTGkbDI4CFffuZduUzjhR
-         WO/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Qj3oIcHyS3qss14Y0kNXWMR5kk6QHMclGVuX5Mg4TU=;
-        b=OG6jeKR0h4VaaVSWI3rG2UVsUQtFk6Y3EWn1V+Eblz1PMflznL1osmpyJyoD+bO0JV
-         s2vUG6nHQRgx1YfqolPReGNVZ18XkOSSHB2ojlInQeUdL/XQwB7GsAPTtneMr/FH/sXB
-         I+7p/bYd+jvyDToA0bnesjahFoOecgPEzdV2PHFduTUkkP2D2NWmJd0Lgjcm8O8cv4/G
-         D9UpRBOCW7xgG2ZzWfeqYvuJq+vIiQwskHj7F1QS+qG9uftJiYqdbC8Au2LgXo3E7gsc
-         4EiAY+vfyqmcBjOQWrveZzeVU2vVWpRHoEApXZ+cOBiEb2LMDiTCWukpn6AicXBsHD9/
-         fCLw==
-X-Gm-Message-State: ACrzQf2gu8TQ9z2qMAdml/7aBJEyhKerLjMe4LMdueTh6YaoKy+buGw+
-        xxbvZ/Me7mhssjD7P/yPWIc=
-X-Google-Smtp-Source: AMsMyM6EXzypZ307w4b62mG/V7hiB1Dn9cCnFvU1xUqxPaaXebOD/qgopIIWYwjbQZavgrJjiWgqxg==
-X-Received: by 2002:a05:6512:64:b0:4ae:2465:192a with SMTP id i4-20020a056512006400b004ae2465192amr18259365lfo.62.1667915541449;
-        Tue, 08 Nov 2022 05:52:21 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id bi27-20020a0565120e9b00b0049f9799d349sm1782870lfb.187.2022.11.08.05.52.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 05:52:20 -0800 (PST)
-Date:   Tue, 8 Nov 2022 16:52:18 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 09/20] dt-bindings: PCI: dwc: Add
- interrupts/interrupt-names common properties
-Message-ID: <20221108135218.v3jsla67372wt7ny@mobilestation>
-References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
- <20221107204934.32655-10-Sergey.Semin@baikalelectronics.ru>
- <TYBPR01MB5341E18D15BF78FFD6FA9782D83F9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+        Tue, 8 Nov 2022 08:55:11 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19CA11C26;
+        Tue,  8 Nov 2022 05:55:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667915710; x=1699451710;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wqCXR7/ERUAjOK9nxMrBawOH3yYc7LEcy0Ov7c+meso=;
+  b=CykA7ojHunXMW6rC6IvHy/+tiNsMNLwycaBagnTnsPr++4ZEAXBdccmD
+   NdN3YUiAGex+NLVNTx1PbiVQafpsHKAugGfxOTu5m2FGDQ4q+EqdNSRa/
+   j5oN3W7zABTXKUoXhYmx4+9vOtdFCjao7+w+Nt89OtB55xPhLJjVnzUOR
+   Z2c86Pl4buUVJTqYpm9BQ+GEdiw74C3F6cS5YD6b3GSjbe9+4YmswbSv4
+   Rben67TQ8fLXggWQnnykkupZZmDL+LbUOnMR2WLbAWgJv7KPjeQtfbbz1
+   GwEs6adZ19DGiL21fqWhMk8UH84qf53WDAIJ/npiP0JcBxTx+9cGdXNLh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="372838877"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="372838877"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:55:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="636338828"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="636338828"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 08 Nov 2022 05:55:08 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1osP4E-0099m6-1j;
+        Tue, 08 Nov 2022 15:55:06 +0200
+Date:   Tue, 8 Nov 2022 15:55:06 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v1 1/1] mac_pton: Don't access memory over expected length
+Message-ID: <Y2pfuloLUBKZ1+IA@smile.fi.intel.com>
+References: <20221005164301.14381-1-andriy.shevchenko@linux.intel.com>
+ <Y0R+ZU6kdbeUER1c@lunn.ch>
+ <Y0SAsQoD0/5oDlGX@smile.fi.intel.com>
+ <Y0SEfZi9oewmefGK@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TYBPR01MB5341E18D15BF78FFD6FA9782D83F9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y0SEfZi9oewmefGK@lunn.ch>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yoshihiro
+On Mon, Oct 10, 2022 at 10:45:49PM +0200, Andrew Lunn wrote:
+> On Mon, Oct 10, 2022 at 11:29:37PM +0300, Andy Shevchenko wrote:
+> > On Mon, Oct 10, 2022 at 10:19:49PM +0200, Andrew Lunn wrote:
+> > > On Wed, Oct 05, 2022 at 07:43:01PM +0300, Andy Shevchenko wrote:
+> > > > The strlen() may go too far when estimating the length of
+> > > > the given string. In some cases it may go over the boundary
+> > > > and crash the system which is the case according to the commit
+> > > > 13a55372b64e ("ARM: orion5x: Revert commit 4904dbda41c8.").
+> > > > 
+> > > > Rectify this by switching to strnlen() for the expected
+> > > > maximum length of the string.
+> > > 
+> > > This seems like something which should have a fixes: tag, and be
+> > > against net, not net-next.
+> > 
+> > I can (re-)send it that way. Just need a consensus by net maintainers.
+> 
+> I would probably do:
+> 
+> 	if (strnlen(s, maxlen) != maxlen)
+>  		return false;
+> 
+> I doubt anybody is removing leading zeros in MAC addresses.
 
-On Tue, Nov 08, 2022 at 12:40:54PM +0000, Yoshihiro Shimoda wrote:
-> Hi Serge,
-> 
-> > From: Serge Semin, Sent: Tuesday, November 8, 2022 5:49 AM
-> > 
-> > Currently the 'interrupts' and 'interrupt-names' properties are defined
-> > being too generic to really describe any actual IRQ interface. Moreover
-> > the DW PCIe End-point devices are left with no IRQ signals. All of that
-> > can be fixed by adding the IRQ-related properties to the common DW PCIe
-> > DT-schemas in accordance with the hardware reference manual. The DW PCIe
-> > common DT-schema will contain the generic properties definitions with just
-> > a number of entries per property, while the DW PCIe RP/EP-specific schemas
-> > will have the particular number of items and the generic resource names
-> > listed.
-> > 
-> > Note since there are DW PCI-based vendor-specific DT-bindings with the
-> > custom names assigned to the same IRQ resources we have no much choice but
-> > to add them to the generic DT-schemas in order to have the schemas being
-> > applicable for such devices. These names are marked as vendor-specific and
-> > should be avoided being used in new bindings in favor of the generic
-> > names.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Note without the next dtschema tool fix
-> > 
-> > --- a/lib.py 2022-09-29 15:17:13.100033810 +0300
-> > +++ b/lib.py     2022-09-29 15:19:54.886172794 +0300
-> 
+I'm not sure what this change gives us. < maxlen is more readable to understand
+that we refuse anything that less than maxlen, with your change it's easy to
+misinterpret it (by missing 'n' in the non-standard call) as "it must equal to
+maxlen" which is obviously not true.
 
-> JFYI.
-> 
-> git am command could not work correctly by this lib.py file:
-> ---
-> Applying: dt-bindings: PCI: dwc: Add interrupts/interrupt-names common properties
-> error: lib.py: does not exist in index
-> Patch failed at 0001 dt-bindings: PCI: dwc: Add interrupts/interrupt-names common properties
-> ---
-> 
-> If I used patch command and skipped the lib.py, it could apply this patch correctly.
+That said, I leave it as is.
 
-Got it. Thanks for the note. I'll either drop this part on the next
-patchset revision (hopefully Rob will do something about that by then)
-or make it less looking like a patch so git am wouldn't be confused.
+-- 
+With Best Regards,
+Andy Shevchenko
 
--Sergey 
 
-> 
-> Best regards,
-> Yoshihiro Shimoda
-> 
