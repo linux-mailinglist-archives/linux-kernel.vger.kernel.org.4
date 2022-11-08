@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F04B621039
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040F562103E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiKHMTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S234157AbiKHMUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbiKHMTe (ORCPT
+        with ESMTP id S234137AbiKHMUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:19:34 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE532339E;
-        Tue,  8 Nov 2022 04:19:32 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N66bd5nRmz4f3w16;
-        Tue,  8 Nov 2022 20:19:25 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP4 (Coremail) with SMTP id gCh0CgCH+dZQSWpjw668AA--.47234S2;
-        Tue, 08 Nov 2022 20:19:28 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf] selftests/bpf: Fix casting error when cross-compiling test_verifier for 32-bit platforms
-Date:   Tue,  8 Nov 2022 20:19:45 +0800
-Message-Id: <20221108121945.4104644-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 8 Nov 2022 07:20:06 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDFE2339E;
+        Tue,  8 Nov 2022 04:20:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667910005; x=1699446005;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8hUlbs0/W+4ojg69yIxFxx8Q+BRRsHAxyz+t3mWTkFM=;
+  b=mP7NGAFmsB/rt1gDZw5yfnuoNevtn5trk7kW+74FIsT6etXSxplqQNA4
+   TGCPCvfznQzvRsIEbMuhDGMKVQmzTFf+pRPc43OP9eDbv5XGabPg/YdBH
+   TIYWbZUvNHrPpBx3lpeVnKIIi4XAUstIGgb6IxAcQPk32AxRUzB13CziF
+   W/2laWQxRzFj90Zm2J2aH1u4RSriOM1a/tGLgzrIZp284nRtlyjyjo/r1
+   NHSDVrLun3Alyy6ClgiCLZtkJMfG2ihOCzmi1mFeax8U+VpEMjEveSk3Q
+   G/kyGFzWVINFOHiJDbJdp2GAYGIK5WfSWAJhNTR/uUaM/Sj5V+dhGhYYW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="291066064"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="291066064"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="741932166"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="741932166"
+Received: from ppkrause-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.73])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:20:03 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Gilles BULOZ <gilles.buloz@kontron.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 0/4] 8250: DMA Fixes
+Date:   Tue,  8 Nov 2022 14:19:48 +0200
+Message-Id: <20221108121952.5497-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH+dZQSWpjw668AA--.47234S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFykKF1UKw48KFyDCry5XFb_yoW8GryUpF
-        WrG3sFgFy8X3W3Kr1UAF4UtrW8KF1qqa48Gry3tryDZF4DKF92gFyxKrWqvr93uFWrXwna
-        y347Was8Xw1qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUr2-eDUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+Here are a number of 8250 DMA related fixes. The last one seems the
+most serious problem able to corrupt the payload ordering.
 
-When cross-compiling test_verifier for 32-bit platforms, the casting error is shown below:
+v2:
+- Tweak configure logic to match Andy's suggestion
+- Cleaned up the tags from the oneliner patch
 
-test_verifier.c:1263:27: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
- 1263 |  info.xlated_prog_insns = (__u64)*buf;
-      |                           ^
-cc1: all warnings being treated as errors
+Ilpo Järvinen (4):
+  serial: 8250: Fall back to non-DMA Rx if IIR_RDI occurs
+  serial: 8250_lpss: Configure DMA also w/o DMA filter
+  serial: 8250_lpss: Use 16B DMA burst with Elkhart Lake
+  serial: 8250: Flush DMA Rx on RLSI
 
-Fix it by adding zero-extension for it.
+ drivers/tty/serial/8250/8250_lpss.c | 17 +++++++++++++----
+ drivers/tty/serial/8250/8250_port.c |  7 +++++--
+ 2 files changed, 18 insertions(+), 6 deletions(-)
 
-Fixes: 933ff53191eb ("selftests/bpf: specify expected instructions in test_verifier tests")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/test_verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 2dbcbf363c18..b605a70d4f6b 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -1260,7 +1260,7 @@ static int get_xlated_program(int fd_prog, struct bpf_insn **buf, int *cnt)
- 
- 	bzero(&info, sizeof(info));
- 	info.xlated_prog_len = xlated_prog_len;
--	info.xlated_prog_insns = (__u64)*buf;
-+	info.xlated_prog_insns = (__u64)(unsigned long)*buf;
- 	if (bpf_obj_get_info_by_fd(fd_prog, &info, &info_len)) {
- 		perror("second bpf_obj_get_info_by_fd failed");
- 		goto out_free_buf;
 -- 
-2.25.1
+2.30.2
 
