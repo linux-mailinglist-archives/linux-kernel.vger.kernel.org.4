@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6876219B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 605DE6219BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbiKHQmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S233816AbiKHQss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbiKHQmA (ORCPT
+        with ESMTP id S233410AbiKHQsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:42:00 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE85654F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:41:59 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id g127so18033225ybg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:41:59 -0800 (PST)
+        Tue, 8 Nov 2022 11:48:46 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F175317E9
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:48:45 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id n12so40084181eja.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:48:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JD3PRe74QR2mJ+orp5KCKp7oflDuwpBWOjw8obsvdQc=;
-        b=ezAdGSbLm5hnxH9a3UKs0v0CGNhaTm5NwZtDjS9EEqbMnkp1Y2iUV48IxyEfmZ+0Kx
-         unxFChxpGKrMIO/AKuVpdPRMAOH4GAvvbcqOl2jUOyIhcD0e+2cXmwK836XVVX2abv2I
-         DDn3JnLzfMjf0qZJui350cU5ptyGDxUq2cA1/rnwTac3XS4TbsbX9r7S3lYSoSRJcblK
-         divx9A5gGxFXwdlV3pQj0M3zehum+TE28Ws14aurCYj2DL903dBJ6dujNz4nMLYfgKgQ
-         8U1AKAlyaWjm/nI2lZlnL6DYCTFMALUWDcKVrQthayTqYPSYWiRh+8HOUpCN4JMHDJGb
-         fWxg==
+        bh=QMec66hp71TWs3o/wo3ARGg7ftBfO6FZm4lMQC+qaXY=;
+        b=nygImnQwy/qQBpMTVv9i4AovKSBGIzVmc80uHobnTNMdDla+vBeLabbqi2Z8dx3NvM
+         NRjIiF4VLgItz+pOl8NoCU2nR2oDURxS0PC5rY68adCIChLjv+dLkHLAKmAdX0YzADBw
+         0IHXv6p9tFzZcUIxXCoIPgNpgHk016810nb2E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JD3PRe74QR2mJ+orp5KCKp7oflDuwpBWOjw8obsvdQc=;
-        b=r7w5FJWlkhxQKbu3JLLfCsKaNjkIAkz7wO4W7Vl/G/uo0iaJZs/AQdrANHkuBQ+cZo
-         h0fyurYQLJ8YPR3t2me9wiNPCrnTDo6hlXPIZMNysDMSJY3BoyQERnUQeUry0ASY7NL/
-         ccsK+359HdsSyRkiABU99Fk7dBEMHhCgtBY4y2YC10BxgjjiuXUcQprgqGqnfSCwIpf6
-         0RuUmiDPerwJKgX1PaSMFCYo3ohnzL3fEDO768t0wQjrgkxFDpPBW4i8I3TtLkrn9G26
-         pWUEh+ibMxmviKY9+QZVVMyGlAxHgdNSIVWhtkjusI0NJ+e7s4nGRjoylbrQhsLEctoS
-         KfDg==
-X-Gm-Message-State: ACrzQf1RhKSF4ZxWwqoSe0jMme8v6XQF8Qs/+AlrvZHBM547nMk+FQJu
-        gH1UPGHtlGkTZNZCJ+ZXNeHqfi1vwBd1qlcAEVCTkA==
-X-Google-Smtp-Source: AMsMyM7b5keHpnrPp6sbB8q5Ph5lxpcIatBUP8MgjCIRGloZ+3MsJQch3obqOYW8dlqcALhXh82dmnZYmZrU003kRTI=
-X-Received: by 2002:a05:6902:722:b0:6ca:260e:cc5 with SMTP id
- l2-20020a056902072200b006ca260e0cc5mr57709150ybt.336.1667925718127; Tue, 08
- Nov 2022 08:41:58 -0800 (PST)
+        bh=QMec66hp71TWs3o/wo3ARGg7ftBfO6FZm4lMQC+qaXY=;
+        b=q69os7FJvlJoRwaKXg5bRezWmlw2MpNM0clV8dzQhjgXCCDnLJihvwlQmaK9t35E5n
+         /N6TcUkxIeRB/xbfjwC1BIsBsW3cBR08JFKdGHGOqx9amlc91wWU+Hq25OgbCV3bg83S
+         XTMO3i2xqQsdqY2fCSWVa+pQsgGYtLBE0tBE+97Vz/IHXeQLXyorwMZS79TqRA2u71ll
+         p40NKD1Osw2KXW+R0Rvau42QUngGIxCAtzeXByC2/xOwO/tlKz4hhwkTonrqoZlxbPN1
+         9O8QSoB4XFFABIthgvff3qe4tv0Kfd9w6dZ4tmowS98ZtZNtLjRWzLYyi/R2MgGxrD4n
+         poYA==
+X-Gm-Message-State: ANoB5pntWQdd15Jq2nKfJugI+e4HQsQFvDen/mwF3i1OAi+Ti3+Zg1tF
+        K2Px9FeoVVR0z2rT8yZ5G74aRTK+n8aeAVmR
+X-Google-Smtp-Source: AA0mqf5sr7zoAagWCKXv5A/umkpaMAXR0nUrW4z4oRvoSfdcQfqdp1oyAPYRFETBecnCJWzmNKoL1g==
+X-Received: by 2002:a17:907:2179:b0:7ae:6bcd:d0cf with SMTP id rl25-20020a170907217900b007ae6bcdd0cfmr9623833ejb.428.1667926123333;
+        Tue, 08 Nov 2022 08:48:43 -0800 (PST)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id f24-20020a056402069800b00458a03203b1sm5784217edy.31.2022.11.08.08.48.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 08:48:42 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id y16so21836845wrt.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:48:42 -0800 (PST)
+X-Received: by 2002:a5d:4410:0:b0:236:a8f9:268f with SMTP id
+ z16-20020a5d4410000000b00236a8f9268fmr36396106wrq.405.1667925766971; Tue, 08
+ Nov 2022 08:42:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20221108133340.718216105@linuxfoundation.org>
-In-Reply-To: <20221108133340.718216105@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 8 Nov 2022 22:11:46 +0530
-Message-ID: <CA+G9fYtSBS77MiW99t7HGyBPnnpxyu-6L3HUPsA+pXd_fkZRVg@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/118] 5.10.154-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org> <20221107235654.1769462-18-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221107235654.1769462-18-bryan.odonoghue@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 8 Nov 2022 08:42:35 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VL5C86kA0Z3fMu-uVwKmKj5CGuNmWeCuwOTbXi-7xKaQ@mail.gmail.com>
+Message-ID: <CAD=FV=VL5C86kA0Z3fMu-uVwKmKj5CGuNmWeCuwOTbXi-7xKaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 17/18] arm64: dts: qcom: sdm845: Add compat qcom,mdss-dsi-ctrl-sdm845
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, quic_mkrishn@quicinc.com,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 at 19:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.154 release.
-> There are 118 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi,
 
-As other reported LKFT also noticed arm64 build failures.
+On Mon, Nov 7, 2022 at 3:57 PM Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
+>
+> Add silicon specific compatible qcom,mdss-dsi-ctrl-sdm845 to the
+> mdss-dsi-ctrl block. This allows us to differentiate the specific bindings
+> for sdm845 against the yaml documentation.
+>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Rajendra Nayak <rnayak@codeaurora.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Error: /builds/linux/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:1296.24-25
-syntax error
-FATAL ERROR: Unable to parse input tree
-make[3]: *** [scripts/Makefile.lib:326:
-arch/arm64/boot/dts/freescale/fsl-lx2160a-clearfog-cx.dtb] Error 1
-Error: /builds/linux/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi:1296.24-25
-syntax error
-FATAL ERROR: Unable to parse input tree
-
-URL:
-https://builds.tuxbuild.com/2HGddiHMonVVZRsckAWkubW4tdh/
-
-- Naresh
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
