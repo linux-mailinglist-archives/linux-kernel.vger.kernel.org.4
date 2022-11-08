@@ -2,91 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45327621F45
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFB1621F46
 	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiKHWaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S229928AbiKHWaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiKHW3y (ORCPT
+        with ESMTP id S229770AbiKHW3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 8 Nov 2022 17:29:54 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9371DA67;
-        Tue,  8 Nov 2022 14:29:13 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N6N765YW9z4xTt;
-        Wed,  9 Nov 2022 09:29:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667946546;
-        bh=R0Nrt+aLwmFltyK+1DTSPxxtz3w2ijtHQ8/Gvop5afg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q6HpBRw40X/4sQVBMna8Rp+vEjVev2pdlpAY64yIvPOidLkl6iQFqopL21WWdKpQd
-         vQJXhERZmIWBiAzuZC7qB/4MCtOpiwogwaFe4gxAD3yGCu2as05GNbwd0J6wol5TfS
-         iIbPFR9iwEJaLVlB+ckYmBRlr2U507mxA2Qj6Pt6llOpmSNSfH5NeZdXxcSe2jVhYE
-         j76JmOAE8UAZXZU2Ey2XphMWpW9dOb0qlKgNKAeMNWnSqmAljrCwNucRxYduCzAc5i
-         kqSwaUXC3z3zos8OPP9z19Yiaj/u3M3QVZTm+xxPmAEZ9uQgw8/lBe3ZxO0R2QdSRF
-         k/wxzoF3ufgKg==
-Date:   Wed, 9 Nov 2022 09:29:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the scmi tree
-Message-ID: <20221109092901.0c748a3e@canb.auug.org.au>
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535E1EAFF
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:29:18 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id i3so15018215pfc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:29:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Iw8zQOSB1EwwYJkuWC4Gw7hpw4rYDWi3Hqzc/4Lbh7o=;
+        b=PFGSZkKXJsa9OpJcwbSIHAaZ6KpHJxR+nJWtR8ZzOvaqJFwd4WjV4oy3liidEisi6c
+         v/pLIu99kKO/mutfZ2CRE+mSUypBKGiIEC6eM/FebisrMsxbdMOOICIxMOzscdBLOnD/
+         tqVFDymlA/o7qQG/MQcxmDSFgnqruT8vf0qdNZSfSnh/MmGOzxu440dZdM9+6eCL2/im
+         QxPRiepYMMGADwe8+bNVRdz9FZ8Fa+bN1GHAQ9QkVYXLOrccMMl++kxdyCsalDuw6P7U
+         kVe538dbI3Yozmpl6x/6QfJdxKcXtUeM5UGLyTeE2hE2Tnt0MVh9taquUqhh8GSnWc0q
+         6zzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iw8zQOSB1EwwYJkuWC4Gw7hpw4rYDWi3Hqzc/4Lbh7o=;
+        b=DqndlOBiY4zHJ1dzSH6sgpTXnJzBEnEgX91aEjhigw5AGl5X+hdIVm9I6aCc84J6Xr
+         +BdQw+BIpiNxf3NLt0Lpkd8+A5R4fdp92SYVuZRAhC/rDQ3P6/aVoJS29lHDM6y3DqkH
+         OYjFAkvjsu9VmXcIPe8P2bHrnqHyuUMF4mEYWnKMnyg50y6rlvCgUzrQKUBFLojVWIz0
+         /GlOiHUwzmnfrlGVXtXdz4fofvfuV534Faj4PnXzxte5ZatFCZD566nKhvnzoefwSl0N
+         JVuxp4Aw295O5qC9x2yj9/fJrvrl4xzkfw8sjIb/ySLeVl0JogVbTkkMCG46AsZMy6U+
+         rsXg==
+X-Gm-Message-State: ACrzQf0MmKZ0873IINw4pvgD4v+U2gpLxItDpMnJaRjKWSBKWbJ3m8se
+        3tnLNE/Phx8pBgqfro5imow4aw==
+X-Google-Smtp-Source: AMsMyM4EsHIPPFFrmKQJyvx12tsoJWdaa1o+pwBSqtRTUKdav2i1ILnHBR5mof/tvTh//YKJsW4Tog==
+X-Received: by 2002:a63:85c8:0:b0:46f:5bbb:737f with SMTP id u191-20020a6385c8000000b0046f5bbb737fmr51097348pgd.93.1667946557870;
+        Tue, 08 Nov 2022 14:29:17 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ik12-20020a170902ab0c00b00187197c499asm7504411plb.164.2022.11.08.14.29.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 14:29:17 -0800 (PST)
+Message-ID: <33832500-ddf3-dc2b-a765-046d46031991@kernel.dk>
+Date:   Tue, 8 Nov 2022 15:29:16 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ub9jelDoD3yMmBeJ8gs4rpW";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 6/6] eventpoll: add support for min-wait
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Soheil Hassas Yeganeh <soheil@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Shakeel Butt <shakeelb@google.com>
+References: <20221030220203.31210-1-axboe@kernel.dk>
+ <20221030220203.31210-7-axboe@kernel.dk> <Y2rUsi5yrhDZYpf/@google.com>
+ <4764dcbf-c735-bbe2-b60e-b64c789ffbe6@kernel.dk>
+ <CA+FuTSdawNGXhW0DEf0-R6--1bDh7qByO=ViD_h=BfRe3XaFkw@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CA+FuTSdawNGXhW0DEf0-R6--1bDh7qByO=ViD_h=BfRe3XaFkw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Ub9jelDoD3yMmBeJ8gs4rpW
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/8/22 3:25 PM, Willem de Bruijn wrote:
+>>> This would be similar to the approach that willemb@google.com used
+>>> when introducing epoll_pwait2.
+>>
+>> I have, see other replies in this thread, notably the ones with Stefan
+>> today. Happy to do that, and my current branch does split out the ctl
+>> addition from the meat of the min_wait support for this reason. Can't
+>> seem to find a great way to do it, as we'd need to move to a struct
+>> argument for this as epoll_pwait2() is already at max arguments for a
+>> syscall. Suggestions more than welcome.
+> 
+> Expect an array of two timespecs as fourth argument?
 
-Hi all,
+Unfortunately even epoll_pwait2() doesn't have any kind of flags
+argument to be able to do tricks like that... But I guess we could do
+that with epoll_pwait3(), but it'd be an extra indirection for the copy
+at that point (copy array of pointers, copy pointer if not NULL), which
+would be unfortunate. I'd hate to have to argue that API to anyone, let
+alone Linus, when pushing the series.
 
-After merging the scmi tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-ERROR: modpost: "debugfs_create_str" [drivers/firmware/arm_scmi/scmi-module=
-.ko] undefined!
-
-Caused by commit
-
-  4ccdc880f1bb ("firmware: arm_scmi: Add core Raw transmission support")
-
-I have used the scmi tree from next-20221108 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Ub9jelDoD3yMmBeJ8gs4rpW
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNq2C0ACgkQAVBC80lX
-0Gz3mwgAhc5hfzMLp3v2E+QVeqT2l+8qUYP1ojBUhHPP693x3bZtG4xVWAbwCeeI
-lDHosRPPn/47sB/pJpa7bT8V98+yS7GZgSQsWXh3j2lYC0F11lupsNedL8sZL/iL
-sLNaHI4XRt7/U8/uy3tCCejTY1T94yojdNtuVjj54B72trB8UluUPJk2jSE0zyEd
-+2NfQpk2PF6sv/FqAT060vU8np6Sx7tLCICRiVK/Uo1Xf5K900qQLi4rYS4G29V+
-Ugn/1efBFddtv51g4mafNDnabtAjaGXurJ8Gj7S5Rp8fDfrqlTZt6YDzgxQZ0ekM
-rrkIYk6onRioG0jamfZlVPMWEOqlWA==
-=KXfI
------END PGP SIGNATURE-----
-
---Sig_/Ub9jelDoD3yMmBeJ8gs4rpW--
+-- 
+Jens Axboe
