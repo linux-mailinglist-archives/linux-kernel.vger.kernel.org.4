@@ -2,1284 +2,426 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191C4620CC5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B66F620CDC
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbiKHKAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S233606AbiKHKI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbiKHKAc (ORCPT
+        with ESMTP id S233253AbiKHKIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:00:32 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A5EB2871E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:00:27 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.31:36708.1272434672
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 0C7431002BF;
-        Tue,  8 Nov 2022 18:00:18 +0800 (CST)
-Received: from  ([123.150.8.42])
-        by gateway-153622-dep-787c977d48-v8sdr with ESMTP id 546c366707c54507a03a5aad793ecf21 for rostedt@goodmis.org;
-        Tue, 08 Nov 2022 18:00:26 CST
-X-Transaction-ID: 546c366707c54507a03a5aad793ecf21
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.42
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Song Chen <chensong_2000@189.cn>
-Subject: [PATCH RFC] kernel/trace: move functions in trace_probe_tmpl.h to trace_probe.c
-Date:   Tue,  8 Nov 2022 18:05:58 +0800
-Message-Id: <1667901958-3991-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
+        Tue, 8 Nov 2022 05:08:24 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1AC28E32;
+        Tue,  8 Nov 2022 02:08:20 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A8A86GW042606;
+        Tue, 8 Nov 2022 04:08:06 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667902086;
+        bh=BdrT6yX1JwmbFBWLfTAC1LjDWVIHt4u0EWQTUoiiWYE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=JZjO795GiiXYS0/yHh0tlGG22rd3A8rwDFepofLTej1/M8SCDsiai5DBsTkAX1+Dy
+         66mJAztYt4ZT9tPud1ayUNHu+c9yceJ8ZPhPw2U+Gdrnj/NSFtrGdVmPbmCeMVSyvB
+         eKwdExEyZ7j+U30EUute7SYKJcFLGkOuE6vDXMxA=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A8A86PF002892
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 8 Nov 2022 04:08:06 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 8 Nov
+ 2022 04:08:06 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 8 Nov 2022 04:08:06 -0600
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A8A81wx017243;
+        Tue, 8 Nov 2022 04:08:02 -0600
+Message-ID: <fcb77e1d-0d2a-046d-e5ea-abbe5ee5a288@ti.com>
+Date:   Tue, 8 Nov 2022 15:38:01 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [EXTERNAL] Re: [PATCH v7 2/5] remoteproc: pru: Add APIs to get
+ and put the PRU cores
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
+        <nm@ti.com>, <vigneshr@ti.com>, <srk@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221031073801.130541-1-danishanwar@ti.com>
+ <20221031073801.130541-3-danishanwar@ti.com>
+ <a729e4e2-2f2e-8c3e-af45-3b8276bc6522@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+In-Reply-To: <a729e4e2-2f2e-8c3e-af45-3b8276bc6522@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I found there are simlilar implementation of functions like
-process_fetch_insn, fetch_store* and probe_mem* respectively in
-kprobe/uprobe/eprobe, they have a lot in common and their differences
-can be merged. I have tried this idea in them and passed the selftest,
-below is the report:
+Hi Roger,
 
-1, sudo ./ftracetest test.d/kprobe/
-[sudo] kylin 的密码：
-=== Ftrace unit tests ===
-[1] Kprobe dynamic event - adding and removing	[PASS]
-......
-[12] Kprobe dynamic event - probing module	[UNRESOLVED]
-......
-[21] Uprobe event parser error log check	[PASS]
+On 04/11/22 18:25, Roger Quadros wrote:
+> Hi Danish,
+> 
+> On 31/10/2022 09:37, MD Danish Anwar wrote:
+>> From: Tero Kristo <t-kristo@ti.com>
+>>
+>> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
+>> driver to allow client drivers to acquire and release the remoteproc
+>> device associated with a PRU core. The PRU cores are treated as
+>> resources with only one client owning it at a time.
+>>
+>> The pru_rproc_get() function returns the rproc handle corresponding
+>> to a PRU core identified by the device tree "ti,prus" property under
+>> the client node. The pru_rproc_put() is the complementary function
+>> to pru_rproc_get().
+>>
+>> Co-developed-by: Suman Anna <s-anna@ti.com>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> ---
+>>  drivers/remoteproc/pru_rproc.c | 142 +++++++++++++++++++++++++++++++--
+>>  include/linux/pruss.h          |  56 +++++++++++++
+>>  2 files changed, 193 insertions(+), 5 deletions(-)
+>>  create mode 100644 include/linux/pruss.h
+>>
+>> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+>> index 128bf9912f2c..9ba73cfc29e2 100644
+>> --- a/drivers/remoteproc/pru_rproc.c
+>> +++ b/drivers/remoteproc/pru_rproc.c
+>> @@ -2,12 +2,14 @@
+>>  /*
+>>   * PRU-ICSS remoteproc driver for various TI SoCs
+>>   *
+>> - * Copyright (C) 2014-2020 Texas Instruments Incorporated - https://www.ti.com/
+>> + * Copyright (C) 2014-2022 Texas Instruments Incorporated - https://www.ti.com/
+>>   *
+>>   * Author(s):
+>>   *	Suman Anna <s-anna@ti.com>
+>>   *	Andrew F. Davis <afd@ti.com>
+>>   *	Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org> for Texas Instruments
+>> + *	Puranjay Mohan <p-mohan@ti.com>
+>> + *	Md Danish Anwar <danishanwar@ti.com>
+>>   */
+>>  
+>>  #include <linux/bitops.h>
+>> @@ -16,6 +18,7 @@
+>>  #include <linux/module.h>
+>>  #include <linux/of_device.h>
+>>  #include <linux/of_irq.h>
+>> +#include <linux/pruss.h>
+>>  #include <linux/pruss_driver.h>
+>>  #include <linux/remoteproc.h>
+>>  
+>> @@ -111,6 +114,8 @@ struct pru_private_data {
+>>   * @rproc: remoteproc pointer for this PRU core
+>>   * @data: PRU core specific data
+>>   * @mem_regions: data for each of the PRU memory regions
+>> + * @client_np: client device node
+>> + * @lock: mutex to protect client usage
+>>   * @fw_name: name of firmware image used during loading
+>>   * @mapped_irq: virtual interrupt numbers of created fw specific mapping
+>>   * @pru_interrupt_map: pointer to interrupt mapping description (firmware)
+>> @@ -126,6 +131,8 @@ struct pru_rproc {
+>>  	struct rproc *rproc;
+>>  	const struct pru_private_data *data;
+>>  	struct pruss_mem_region mem_regions[PRU_IOMEM_MAX];
+>> +	struct device_node *client_np;
+>> +	struct mutex lock; /* client access lock */
+>>  	const char *fw_name;
+>>  	unsigned int *mapped_irq;
+>>  	struct pru_irq_rsc *pru_interrupt_map;
+>> @@ -146,6 +153,127 @@ void pru_control_write_reg(struct pru_rproc *pru, unsigned int reg, u32 val)
+>>  	writel_relaxed(val, pru->mem_regions[PRU_IOMEM_CTRL].va + reg);
+>>  }
+>>  
+>> +static struct rproc *__pru_rproc_get(struct device_node *np, int index)
+>> +{
+>> +	struct rproc *rproc;
+>> +	phandle rproc_phandle;
+>> +	int ret;
+>> +
+>> +	ret = of_property_read_u32_index(np, "ti,prus", index, &rproc_phandle);
+>> +	if (ret)
+>> +		return ERR_PTR(ret);
+>> +
+>> +	rproc = rproc_get_by_phandle(rproc_phandle);
+>> +	if (!rproc) {
+>> +		ret = -EPROBE_DEFER;
+>> +		goto err_no_rproc_handle;
+>> +	}
+>> +
+>> +	/* make sure it is PRU rproc */
+>> +	if (!is_pru_rproc(rproc->dev.parent)) {
+>> +		rproc_put(rproc);
+>> +		return ERR_PTR(-ENODEV);
+>> +	}
+>> +
+>> +	get_device(&rproc->dev);
+> 
+> Why do you need a get_device() here?
+> rproc_get_by_phandle() does it right?
+> 
 
-2, sudo ./ftracetest test.d/dynevent/
-=== Ftrace unit tests ===
-[1] Generic dynamic event - add/remove eprobe events	[PASS]
-[2] Generic dynamic event - add/remove kprobe events	[PASS]
-......
+Yes, this get_device() is not required. I'll remove it.
 
-You may have had the same idea at the first place, then turned to
-put those functions in trace_probe_tmpl.h for the reason i'm not
-aware of. Nevertheless, let me know if you like this idea.
+>> +
+>> +	return rproc;
+>> +
+>> +err_no_rproc_handle:
+>> +	rproc_put(rproc);
+>> +	return ERR_PTR(ret);
+>> +}
+>> +
+>> +/**
+>> + * pru_rproc_get() - get the PRU rproc instance from a device node
+>> + * @np: the user/client device node
+>> + * @index: index to use for the ti,prus property
+>> + * @pru_id: optional pointer to return the PRU remoteproc processor id
+>> + *
+>> + * This function looks through a client device node's "ti,prus" property at
+>> + * index @index and returns the rproc handle for a valid PRU remote processor if
+>> + * found. The function allows only one user to own the PRU rproc resource at a
+>> + * time. Caller must call pru_rproc_put() when done with using the rproc, not
+>> + * required if the function returns a failure.
+>> + *
+>> + * When optional @pru_id pointer is passed the PRU remoteproc processor id is
+>> + * returned.
+>> + *
+>> + * Return: rproc handle on success, and an ERR_PTR on failure using one
+>> + * of the following error values
+>> + *    -ENODEV if device is not found
+>> + *    -EBUSY if PRU is already acquired by anyone
+>> + *    -EPROBE_DEFER is PRU device is not probed yet
+>> + */
+>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+>> +			    enum pruss_pru_id *pru_id)
+>> +{
+>> +	struct rproc *rproc;
+>> +	struct pru_rproc *pru;
+>> +	struct device *dev;
+>> +	int ret;
+>> +
+>> +	rproc = __pru_rproc_get(np, index);
+>> +	if (IS_ERR(rproc))
+>> +		return rproc;
+> 
+> Why bother doing __pru_rproc_get() if pru->client_np exists?
+> 
+> You could do the below if check first and exit if pru->client_np exists.
+> 
 
-Signed-off-by: Song Chen <chensong_2000@189.cn>
----
- kernel/trace/trace_eprobe.c | 194 +--------------
- kernel/trace/trace_kprobe.c | 125 +---------
- kernel/trace/trace_probe.c  | 468 ++++++++++++++++++++++++++++++++++++
- kernel/trace/trace_probe.h  |  11 +
- kernel/trace/trace_uprobe.c | 177 +-------------
- 5 files changed, 499 insertions(+), 476 deletions(-)
+In order to do the below if check, we need to have pru. pru is obtained from
+rproc->priv and rproc is obtained from __pru_rproc_get() API. So in order to
+run the below if check we need to call the __pru_rproc_get() API first.
 
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 5dd0617e5df6..e6de612aa4e0 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -15,8 +15,6 @@
- 
- #include "trace_dynevent.h"
- #include "trace_probe.h"
--#include "trace_probe_tmpl.h"
--#include "trace_probe_kernel.h"
- 
- #define EPROBE_EVENT_SYSTEM "eprobes"
- 
-@@ -310,7 +308,7 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 
- 	trace_seq_putc(s, ')');
- 
--	if (print_probe_args(s, tp->args, tp->nr_args,
-+	if (trace_probe_print_args(s, tp->args, tp->nr_args,
- 			     (u8 *)&field[1], field) < 0)
- 		goto out;
- 
-@@ -319,192 +317,6 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 	return trace_handle_return(s);
- }
- 
--static unsigned long get_event_field(struct fetch_insn *code, void *rec)
--{
--	struct ftrace_event_field *field = code->data;
--	unsigned long val;
--	void *addr;
--
--	addr = rec + field->offset;
--
--	if (is_string_field(field)) {
--		switch (field->filter_type) {
--		case FILTER_DYN_STRING:
--			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
--			break;
--		case FILTER_RDYN_STRING:
--			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
--			break;
--		case FILTER_STATIC_STRING:
--			val = (unsigned long)addr;
--			break;
--		case FILTER_PTR_STRING:
--			val = (unsigned long)(*(char *)addr);
--			break;
--		default:
--			WARN_ON_ONCE(1);
--			return 0;
--		}
--		return val;
--	}
--
--	switch (field->size) {
--	case 1:
--		if (field->is_signed)
--			val = *(char *)addr;
--		else
--			val = *(unsigned char *)addr;
--		break;
--	case 2:
--		if (field->is_signed)
--			val = *(short *)addr;
--		else
--			val = *(unsigned short *)addr;
--		break;
--	case 4:
--		if (field->is_signed)
--			val = *(int *)addr;
--		else
--			val = *(unsigned int *)addr;
--		break;
--	default:
--		if (field->is_signed)
--			val = *(long *)addr;
--		else
--			val = *(unsigned long *)addr;
--		break;
--	}
--	return val;
--}
--
--static int get_eprobe_size(struct trace_probe *tp, void *rec)
--{
--	struct fetch_insn *code;
--	struct probe_arg *arg;
--	int i, len, ret = 0;
--
--	for (i = 0; i < tp->nr_args; i++) {
--		arg = tp->args + i;
--		if (arg->dynamic) {
--			unsigned long val;
--
--			code = arg->code;
-- retry:
--			switch (code->op) {
--			case FETCH_OP_TP_ARG:
--				val = get_event_field(code, rec);
--				break;
--			case FETCH_OP_IMM:
--				val = code->immediate;
--				break;
--			case FETCH_OP_COMM:
--				val = (unsigned long)current->comm;
--				break;
--			case FETCH_OP_DATA:
--				val = (unsigned long)code->data;
--				break;
--			case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--				code++;
--				goto retry;
--			default:
--				continue;
--			}
--			code++;
--			len = process_fetch_insn_bottom(code, val, NULL, NULL);
--			if (len > 0)
--				ret += len;
--		}
--	}
--
--	return ret;
--}
--
--/* Kprobe specific fetch functions */
--
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	unsigned long val;
--
-- retry:
--	switch (code->op) {
--	case FETCH_OP_TP_ARG:
--		val = get_event_field(code, rec);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = (unsigned long)current->comm;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--		code++;
--		goto retry;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen_user(unsigned long addr)
--{
--	return kern_fetch_store_strlen_user(addr);
--}
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen(unsigned long addr)
--{
--	return kern_fetch_store_strlen(addr);
--}
--
--/*
-- * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-- * with max length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string_user(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string_user(addr, dest, base);
--}
--
--/*
-- * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-- * length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string(addr, dest, base);
--}
--
--static nokprobe_inline int
--probe_mem_read_user(void *dest, void *src, size_t size)
--{
--	const void __user *uaddr =  (__force const void __user *)src;
--
--	return copy_from_user_nofault(dest, uaddr, size);
--}
--
--static nokprobe_inline int
--probe_mem_read(void *dest, void *src, size_t size)
--{
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)src < TASK_SIZE)
--		return probe_mem_read_user(dest, src, size);
--#endif
--	return copy_from_kernel_nofault(dest, src, size);
--}
--
- /* eprobe handler */
- static inline void
- __eprobe_trace_func(struct eprobe_data *edata, void *rec)
-@@ -520,7 +332,7 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
- 	if (trace_trigger_soft_disabled(edata->file))
- 		return;
- 
--	dsize = get_eprobe_size(&edata->ep->tp, rec);
-+	dsize = trace_probe_get_data_size(&edata->ep->tp, rec);
- 
- 	entry = trace_event_buffer_reserve(&fbuffer, edata->file,
- 					   sizeof(*entry) + edata->ep->tp.size + dsize);
-@@ -529,7 +341,7 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
- 		return;
- 
- 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
--	store_trace_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
- 
- 	trace_event_buffer_commit(&fbuffer);
- }
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 5a75b039e586..d734602f2898 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -19,8 +19,6 @@
- #include "trace_dynevent.h"
- #include "trace_kprobe_selftest.h"
- #include "trace_probe.h"
--#include "trace_probe_tmpl.h"
--#include "trace_probe_kernel.h"
- 
- #define KPROBE_EVENT_SYSTEM "kprobes"
- #define KRETPROBE_MAXACTIVE_MAX 4096
-@@ -1218,109 +1216,6 @@ static const struct file_operations kprobe_profile_ops = {
- 	.release        = seq_release,
- };
- 
--/* Kprobe specific fetch functions */
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen_user(unsigned long addr)
--{
--	return kern_fetch_store_strlen_user(addr);
--}
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen(unsigned long addr)
--{
--	return kern_fetch_store_strlen(addr);
--}
--
--/*
-- * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-- * with max length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string_user(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string_user(addr, dest, base);
--}
--
--/*
-- * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-- * length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string(addr, dest, base);
--}
--
--static nokprobe_inline int
--probe_mem_read_user(void *dest, void *src, size_t size)
--{
--	const void __user *uaddr =  (__force const void __user *)src;
--
--	return copy_from_user_nofault(dest, uaddr, size);
--}
--
--static nokprobe_inline int
--probe_mem_read(void *dest, void *src, size_t size)
--{
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)src < TASK_SIZE)
--		return probe_mem_read_user(dest, src, size);
--#endif
--	return copy_from_kernel_nofault(dest, src, size);
--}
--
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	struct pt_regs *regs = rec;
--	unsigned long val;
--
--retry:
--	/* 1st stage: get value from context */
--	switch (code->op) {
--	case FETCH_OP_REG:
--		val = regs_get_register(regs, code->param);
--		break;
--	case FETCH_OP_STACK:
--		val = regs_get_kernel_stack_nth(regs, code->param);
--		break;
--	case FETCH_OP_STACKP:
--		val = kernel_stack_pointer(regs);
--		break;
--	case FETCH_OP_RETVAL:
--		val = regs_return_value(regs);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = (unsigned long)current->comm;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
--	case FETCH_OP_ARG:
--		val = regs_get_kernel_argument(regs, code->param);
--		break;
--#endif
--	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--		code++;
--		goto retry;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
--
- /* Kprobe handler */
- static nokprobe_inline void
- __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
-@@ -1336,7 +1231,7 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
- 	if (trace_trigger_soft_disabled(trace_file))
- 		return;
- 
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
- 
- 	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
- 					   sizeof(*entry) + tk->tp.size + dsize);
-@@ -1346,7 +1241,7 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
- 	fbuffer.regs = regs;
- 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
- 	entry->ip = (unsigned long)tk->rp.kp.addr;
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
- 
- 	trace_event_buffer_commit(&fbuffer);
- }
-@@ -1377,7 +1272,7 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 	if (trace_trigger_soft_disabled(trace_file))
- 		return;
- 
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
- 
- 	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
- 					   sizeof(*entry) + tk->tp.size + dsize);
-@@ -1388,7 +1283,7 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
- 	entry->func = (unsigned long)tk->rp.kp.addr;
- 	entry->ret_ip = get_kretprobe_retaddr(ri);
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
- 
- 	trace_event_buffer_commit(&fbuffer);
- }
-@@ -1426,7 +1321,7 @@ print_kprobe_event(struct trace_iterator *iter, int flags,
- 
- 	trace_seq_putc(s, ')');
- 
--	if (print_probe_args(s, tp->args, tp->nr_args,
-+	if (trace_probe_print_args(s, tp->args, tp->nr_args,
- 			     (u8 *)&field[1], field) < 0)
- 		goto out;
- 
-@@ -1461,7 +1356,7 @@ print_kretprobe_event(struct trace_iterator *iter, int flags,
- 
- 	trace_seq_putc(s, ')');
- 
--	if (print_probe_args(s, tp->args, tp->nr_args,
-+	if (trace_probe_print_args(s, tp->args, tp->nr_args,
- 			     (u8 *)&field[1], field) < 0)
- 		goto out;
- 
-@@ -1536,7 +1431,7 @@ kprobe_perf_func(struct trace_kprobe *tk, struct pt_regs *regs)
- 	if (hlist_empty(head))
- 		return 0;
- 
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
- 	__size = sizeof(*entry) + tk->tp.size + dsize;
- 	size = ALIGN(__size + sizeof(u32), sizeof(u64));
- 	size -= sizeof(u32);
-@@ -1547,7 +1442,7 @@ kprobe_perf_func(struct trace_kprobe *tk, struct pt_regs *regs)
- 
- 	entry->ip = (unsigned long)tk->rp.kp.addr;
- 	memset(&entry[1], 0, dsize);
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
- 	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
- 			      head, NULL);
- 	return 0;
-@@ -1572,7 +1467,7 @@ kretprobe_perf_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 	if (hlist_empty(head))
- 		return;
- 
--	dsize = __get_data_size(&tk->tp, regs);
-+	dsize = trace_probe_get_data_size(&tk->tp, regs);
- 	__size = sizeof(*entry) + tk->tp.size + dsize;
- 	size = ALIGN(__size + sizeof(u32), sizeof(u64));
- 	size -= sizeof(u32);
-@@ -1583,7 +1478,7 @@ kretprobe_perf_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
- 
- 	entry->func = (unsigned long)tk->rp.kp.addr;
- 	entry->ret_ip = get_kretprobe_retaddr(ri);
--	store_trace_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
-+	trace_probe_store_args(&entry[1], &tk->tp, regs, sizeof(*entry), dsize);
- 	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
- 			      head, NULL);
- }
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 36dff277de46..ebee46a991d3 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -12,6 +12,7 @@
- #define pr_fmt(fmt)	"trace_probe: " fmt
- 
- #include "trace_probe.h"
-+#include "trace_probe_kernel.h"
- 
- #undef C
- #define C(a, b)		b
-@@ -1218,3 +1219,470 @@ int trace_probe_create(const char *raw_command, int (*createfn)(int, const char
- 
- 	return ret;
- }
-+
-+/*
-+ * Fetch a null-terminated string. Caller MUST set *(u32 *)dest with max
-+ * length and relative data location.
-+ */
-+static nokprobe_inline int
-+user_fetch_store_string(unsigned long addr, void *dest, void *base)
-+{
-+	long ret;
-+	u32 loc = *(u32 *)dest;
-+	int maxlen  = get_loc_len(loc);
-+	u8 *dst = get_loc_data(dest, base);
-+	void __user *src = (void __force __user *) addr;
-+
-+	if (unlikely(!maxlen))
-+		return -ENOMEM;
-+
-+	if (addr == FETCH_TOKEN_COMM)
-+		ret = strlcpy(dst, current->comm, maxlen);
-+	else
-+		ret = strncpy_from_user(dst, src, maxlen);
-+	if (ret >= 0) {
-+		if (ret == maxlen)
-+			dst[ret - 1] = '\0';
-+		else
-+			/*
-+			 * Include the terminating null byte. In this case it
-+			 * was copied by strncpy_from_user but not accounted
-+			 * for in ret.
-+			 */
-+			ret++;
-+		*(u32 *)dest = make_data_loc(ret, (void *)dst - base);
-+	}
-+
-+	return ret;
-+}
-+
-+static nokprobe_inline int
-+user_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-+{
-+	return user_fetch_store_string(addr, dest, base);
-+}
-+
-+/* Return the length of string -- including null terminal byte */
-+static nokprobe_inline int
-+user_fetch_store_strlen(unsigned long addr)
-+{
-+	int len;
-+	void __user *vaddr = (void __force __user *) addr;
-+
-+	if (addr == FETCH_TOKEN_COMM)
-+		len = strlen(current->comm) + 1;
-+	else
-+		len = strnlen_user(vaddr, MAX_STRING_SIZE);
-+
-+	return (len > MAX_STRING_SIZE) ? 0 : len;
-+}
-+
-+static nokprobe_inline int
-+user_fetch_store_strlen_user(unsigned long addr)
-+{
-+	return user_fetch_store_strlen(addr);
-+}
-+
-+static nokprobe_inline void
-+fetch_store_raw(unsigned long val, struct fetch_insn *code, void *buf)
-+{
-+	switch (code->size) {
-+	case 1:
-+		*(u8 *)buf = (u8)val;
-+		break;
-+	case 2:
-+		*(u16 *)buf = (u16)val;
-+		break;
-+	case 4:
-+		*(u32 *)buf = (u32)val;
-+		break;
-+	case 8:
-+		//TBD: 32bit signed
-+		*(u64 *)buf = (u64)val;
-+		break;
-+	default:
-+		*(unsigned long *)buf = val;
-+	}
-+}
-+
-+static nokprobe_inline void
-+fetch_apply_bitfield(struct fetch_insn *code, void *buf)
-+{
-+	switch (code->basesize) {
-+	case 1:
-+		*(u8 *)buf <<= code->lshift;
-+		*(u8 *)buf >>= code->rshift;
-+		break;
-+	case 2:
-+		*(u16 *)buf <<= code->lshift;
-+		*(u16 *)buf >>= code->rshift;
-+		break;
-+	case 4:
-+		*(u32 *)buf <<= code->lshift;
-+		*(u32 *)buf >>= code->rshift;
-+		break;
-+	case 8:
-+		*(u64 *)buf <<= code->lshift;
-+		*(u64 *)buf >>= code->rshift;
-+		break;
-+	}
-+}
-+
-+static nokprobe_inline int
-+probe_mem_read_user(void *dest, void *src, size_t size)
-+{
-+	const void __user *uaddr =  (__force const void __user *)src;
-+
-+	return copy_from_user_nofault(dest, uaddr, size);
-+}
-+
-+static nokprobe_inline int
-+probe_mem_read(void *dest, void *src, size_t size)
-+{
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+	if ((unsigned long)src < TASK_SIZE)
-+		return probe_mem_read_user(dest, src, size);
-+#endif
-+	return copy_from_kernel_nofault(dest, src, size);
-+}
-+
-+/* From the 2nd stage, routine is same */
-+static nokprobe_inline int
-+process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
-+			   void *dest, void *base, int flags)
-+{
-+	struct fetch_insn *s3 = NULL;
-+	int total = 0, ret = 0, i = 0;
-+	u32 loc = 0;
-+	unsigned long lval = val;
-+	int is_uprobe = flags & TRACE_EVENT_FL_UPROBE;
-+
-+stage2:
-+	/* 2nd stage: dereference memory if needed */
-+	do {
-+		if (code->op == FETCH_OP_DEREF) {
-+			lval = val;
-+			ret = probe_mem_read(&val, (void *)val + code->offset,
-+					     sizeof(val));
-+		} else if (code->op == FETCH_OP_UDEREF) {
-+			lval = val;
-+			ret = probe_mem_read_user(&val,
-+				 (void *)val + code->offset, sizeof(val));
-+		} else
-+			break;
-+		if (ret)
-+			return ret;
-+		code++;
-+	} while (1);
-+
-+	s3 = code;
-+stage3:
-+	/* 3rd stage: store value to buffer */
-+	if (unlikely(!dest)) {
-+		if (code->op == FETCH_OP_ST_STRING) {
-+			if (is_uprobe)
-+				ret = user_fetch_store_strlen(val + code->offset);
-+			else
-+				ret = kern_fetch_store_strlen(val + code->offset);
-+			code++;
-+			goto array;
-+		} else if (code->op == FETCH_OP_ST_USTRING) {
-+			if (is_uprobe)
-+				ret += user_fetch_store_strlen_user(val + code->offset);
-+			else
-+				ret += kern_fetch_store_strlen_user(val + code->offset);
-+			code++;
-+			goto array;
-+		} else
-+			return -EILSEQ;
-+	}
-+
-+	switch (code->op) {
-+	case FETCH_OP_ST_RAW:
-+		fetch_store_raw(val, code, dest);
-+		break;
-+	case FETCH_OP_ST_MEM:
-+		probe_mem_read(dest, (void *)val + code->offset, code->size);
-+		break;
-+	case FETCH_OP_ST_UMEM:
-+		probe_mem_read_user(dest, (void *)val + code->offset, code->size);
-+		break;
-+	case FETCH_OP_ST_STRING:
-+		loc = *(u32 *)dest;
-+		if (is_uprobe)
-+			ret = user_fetch_store_string(val + code->offset, dest, base);
-+		else
-+			ret = kern_fetch_store_string(val + code->offset, dest, base);
-+		break;
-+	case FETCH_OP_ST_USTRING:
-+		loc = *(u32 *)dest;
-+		if (is_uprobe)
-+			ret = user_fetch_store_string_user(val + code->offset, dest, base);
-+		else
-+			ret = kern_fetch_store_string_user(val + code->offset, dest, base);
-+		break;
-+	default:
-+		return -EILSEQ;
-+	}
-+	code++;
-+
-+	/* 4th stage: modify stored value if needed */
-+	if (code->op == FETCH_OP_MOD_BF) {
-+		fetch_apply_bitfield(code, dest);
-+		code++;
-+	}
-+
-+array:
-+	/* the last stage: Loop on array */
-+	if (code->op == FETCH_OP_LP_ARRAY) {
-+		total += ret;
-+		if (++i < code->param) {
-+			code = s3;
-+			if (s3->op != FETCH_OP_ST_STRING &&
-+			    s3->op != FETCH_OP_ST_USTRING) {
-+				dest += s3->size;
-+				val += s3->size;
-+				goto stage3;
-+			}
-+			code--;
-+			val = lval + sizeof(char *);
-+			if (dest) {
-+				dest += sizeof(u32);
-+				*(u32 *)dest = update_data_loc(loc, ret);
-+			}
-+			goto stage2;
-+		}
-+		code++;
-+		ret = total;
-+	}
-+
-+	return code->op == FETCH_OP_END ? ret : -EILSEQ;
-+}
-+
-+static unsigned long get_event_field(struct fetch_insn *code, void *rec)
-+{
-+	struct ftrace_event_field *field = code->data;
-+	unsigned long val;
-+	void *addr;
-+
-+	addr = rec + field->offset;
-+
-+	if (is_string_field(field)) {
-+		switch (field->filter_type) {
-+		case FILTER_DYN_STRING:
-+			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_RDYN_STRING:
-+			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_STATIC_STRING:
-+			val = (unsigned long)addr;
-+			break;
-+		case FILTER_PTR_STRING:
-+			val = (unsigned long)(*(char *)addr);
-+			break;
-+		default:
-+			WARN_ON_ONCE(1);
-+			return 0;
-+		}
-+		return val;
-+	}
-+
-+	switch (field->size) {
-+	case 1:
-+		if (field->is_signed)
-+			val = *(char *)addr;
-+		else
-+			val = *(unsigned char *)addr;
-+		break;
-+	case 2:
-+		if (field->is_signed)
-+			val = *(short *)addr;
-+		else
-+			val = *(unsigned short *)addr;
-+		break;
-+	case 4:
-+		if (field->is_signed)
-+			val = *(int *)addr;
-+		else
-+			val = *(unsigned int *)addr;
-+		break;
-+	default:
-+		if (field->is_signed)
-+			val = *(long *)addr;
-+		else
-+			val = *(unsigned long *)addr;
-+		break;
-+	}
-+	return val;
-+}
-+
-+#ifdef CONFIG_STACK_GROWSUP
-+static unsigned long adjust_stack_addr(unsigned long addr, unsigned int n)
-+{
-+	return addr - (n * sizeof(long));
-+}
-+#else
-+static unsigned long adjust_stack_addr(unsigned long addr, unsigned int n)
-+{
-+	return addr + (n * sizeof(long));
-+}
-+#endif
-+
-+static unsigned long get_user_stack_nth(struct pt_regs *regs, unsigned int n)
-+{
-+	unsigned long ret;
-+	unsigned long addr = user_stack_pointer(regs);
-+
-+	addr = adjust_stack_addr(addr, n);
-+
-+	if (copy_from_user(&ret, (void __force __user *) addr, sizeof(ret)))
-+		return 0;
-+
-+	return ret;
-+}
-+
-+static unsigned long translate_user_vaddr(unsigned long file_offset)
-+{
-+	unsigned long base_addr;
-+	struct uprobe_dispatch_data *udd;
-+
-+	udd = (void *) current->utask->vaddr;
-+
-+	base_addr = udd->bp_addr - udd->offset;
-+	return base_addr + file_offset;
-+}
-+
-+/* Note that we don't verify it, since the code does not come from user space */
-+static int
-+process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-+		   void *base, int flags)
-+{
-+	struct pt_regs *regs = rec;
-+	unsigned long val;
-+	int is_uprobe = flags & TRACE_EVENT_FL_UPROBE;
-+
-+retry:
-+	/* 1st stage: get value from context */
-+	switch (code->op) {
-+	case FETCH_OP_REG:
-+		val = regs_get_register(regs, code->param);
-+		break;
-+	case FETCH_OP_STACK:
-+		if (is_uprobe)
-+			val = get_user_stack_nth(regs, code->param);
-+		else
-+			val = regs_get_kernel_stack_nth(regs, code->param);
-+		break;
-+	case FETCH_OP_STACKP:
-+		if (is_uprobe)
-+			val = user_stack_pointer(regs);
-+		else
-+			val = kernel_stack_pointer(regs);
-+		break;
-+	case FETCH_OP_RETVAL:
-+		val = regs_return_value(regs);
-+		break;
-+	case FETCH_OP_IMM:
-+		val = code->immediate;
-+		break;
-+	case FETCH_OP_COMM:
-+		val = (unsigned long)current->comm;
-+		break;
-+	case FETCH_OP_DATA:
-+		val = (unsigned long)code->data;
-+		break;
-+#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-+	case FETCH_OP_ARG:
-+		val = regs_get_kernel_argument(regs, code->param);
-+		break;
-+#endif
-+	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-+		code++;
-+		goto retry;
-+	case FETCH_OP_TP_ARG:
-+		val = get_event_field(code, rec);
-+		break;
-+	case FETCH_OP_FOFFS:
-+		val = translate_user_vaddr(code->immediate);
-+		break;
-+	default:
-+		return -EILSEQ;
-+	}
-+	code++;
-+
-+	return process_fetch_insn_bottom(code, val, dest, base, flags);
-+}
-+NOKPROBE_SYMBOL(process_fetch_insn)
-+
-+/* Sum up total data length for dynamic arrays (strings) */
-+int trace_probe_get_data_size(struct trace_probe *tp, struct pt_regs *regs)
-+{
-+	struct probe_arg *arg;
-+	int i, len, ret = 0;
-+	struct trace_event_call *call = trace_probe_event_call(tp);
-+
-+	for (i = 0; i < tp->nr_args; i++) {
-+		arg = tp->args + i;
-+		if (unlikely(arg->dynamic)) {
-+			len = process_fetch_insn(arg->code, regs, NULL, NULL, call->flags);
-+			if (len > 0)
-+				ret += len;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+void trace_probe_store_args(void *data, struct trace_probe *tp, void *rec,
-+		 int header_size, int maxlen)
-+{
-+	struct probe_arg *arg;
-+	void *base = data - header_size;
-+	void *dyndata = data + tp->size;
-+	u32 *dl;	/* Data location */
-+	int ret, i;
-+	struct trace_event_call *call = trace_probe_event_call(tp);
-+
-+	for (i = 0; i < tp->nr_args; i++) {
-+		arg = tp->args + i;
-+		dl = data + arg->offset;
-+		/* Point the dynamic data area if needed */
-+		if (unlikely(arg->dynamic))
-+			*dl = make_data_loc(maxlen, dyndata - base);
-+		ret = process_fetch_insn(arg->code, rec, dl, base, call->flags);
-+		if (unlikely(ret < 0 && arg->dynamic)) {
-+			*dl = make_data_loc(0, dyndata - base);
-+		} else {
-+			dyndata += ret;
-+			maxlen -= ret;
-+		}
-+	}
-+}
-+
-+int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
-+		 u8 *data, void *field)
-+{
-+	void *p;
-+	int i, j;
-+
-+	for (i = 0; i < nr_args; i++) {
-+		struct probe_arg *a = args + i;
-+
-+		trace_seq_printf(s, " %s=", a->name);
-+		if (likely(!a->count)) {
-+			if (!a->type->print(s, data + a->offset, field))
-+				return -ENOMEM;
-+			continue;
-+		}
-+		trace_seq_putc(s, '{');
-+		p = data + a->offset;
-+		for (j = 0; j < a->count; j++) {
-+			if (!a->type->print(s, p, field))
-+				return -ENOMEM;
-+			trace_seq_putc(s, j == a->count - 1 ? '}' : ',');
-+			p += a->type->size;
-+		}
-+	}
-+	return 0;
-+}
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index de38f1c03776..918466087583 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -223,6 +223,12 @@ struct probe_arg {
- 	const struct fetch_type	*type;	/* Type of this argument */
- };
- 
-+struct uprobe_dispatch_data {
-+	struct trace_uprobe	*tu;
-+	unsigned long		bp_addr;
-+	unsigned long		offset;
-+};
-+
- struct trace_uprobe_filter {
- 	rwlock_t		rwlock;
- 	int			nr_systemwide;
-@@ -343,6 +349,11 @@ int trace_probe_compare_arg_type(struct trace_probe *a, struct trace_probe *b);
- bool trace_probe_match_command_args(struct trace_probe *tp,
- 				    int argc, const char **argv);
- int trace_probe_create(const char *raw_command, int (*createfn)(int, const char **));
-+int trace_probe_get_data_size(struct trace_probe *tp, struct pt_regs *regs);
-+void trace_probe_store_args(void *data, struct trace_probe *tp, void *rec,
-+		 int header_size, int maxlen);
-+int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
-+		 u8 *data, void *field);
- 
- #define trace_probe_for_each_link(pos, tp)	\
- 	list_for_each_entry(pos, &(tp)->event->files, list)
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index fb58e86dd117..abce09295f05 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -20,7 +20,6 @@
- 
- #include "trace_dynevent.h"
- #include "trace_probe.h"
--#include "trace_probe_tmpl.h"
- 
- #define UPROBE_EVENT_SYSTEM	"uprobes"
- 
-@@ -88,174 +87,10 @@ static struct trace_uprobe *to_trace_uprobe(struct dyn_event *ev)
- static int register_uprobe_event(struct trace_uprobe *tu);
- static int unregister_uprobe_event(struct trace_uprobe *tu);
- 
--struct uprobe_dispatch_data {
--	struct trace_uprobe	*tu;
--	unsigned long		bp_addr;
--};
--
- static int uprobe_dispatcher(struct uprobe_consumer *con, struct pt_regs *regs);
- static int uretprobe_dispatcher(struct uprobe_consumer *con,
- 				unsigned long func, struct pt_regs *regs);
- 
--#ifdef CONFIG_STACK_GROWSUP
--static unsigned long adjust_stack_addr(unsigned long addr, unsigned int n)
--{
--	return addr - (n * sizeof(long));
--}
--#else
--static unsigned long adjust_stack_addr(unsigned long addr, unsigned int n)
--{
--	return addr + (n * sizeof(long));
--}
--#endif
--
--static unsigned long get_user_stack_nth(struct pt_regs *regs, unsigned int n)
--{
--	unsigned long ret;
--	unsigned long addr = user_stack_pointer(regs);
--
--	addr = adjust_stack_addr(addr, n);
--
--	if (copy_from_user(&ret, (void __force __user *) addr, sizeof(ret)))
--		return 0;
--
--	return ret;
--}
--
--/*
-- * Uprobes-specific fetch functions
-- */
--static nokprobe_inline int
--probe_mem_read(void *dest, void *src, size_t size)
--{
--	void __user *vaddr = (void __force __user *)src;
--
--	return copy_from_user(dest, vaddr, size) ? -EFAULT : 0;
--}
--
--static nokprobe_inline int
--probe_mem_read_user(void *dest, void *src, size_t size)
--{
--	return probe_mem_read(dest, src, size);
--}
--
--/*
-- * Fetch a null-terminated string. Caller MUST set *(u32 *)dest with max
-- * length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string(unsigned long addr, void *dest, void *base)
--{
--	long ret;
--	u32 loc = *(u32 *)dest;
--	int maxlen  = get_loc_len(loc);
--	u8 *dst = get_loc_data(dest, base);
--	void __user *src = (void __force __user *) addr;
--
--	if (unlikely(!maxlen))
--		return -ENOMEM;
--
--	if (addr == FETCH_TOKEN_COMM)
--		ret = strlcpy(dst, current->comm, maxlen);
--	else
--		ret = strncpy_from_user(dst, src, maxlen);
--	if (ret >= 0) {
--		if (ret == maxlen)
--			dst[ret - 1] = '\0';
--		else
--			/*
--			 * Include the terminating null byte. In this case it
--			 * was copied by strncpy_from_user but not accounted
--			 * for in ret.
--			 */
--			ret++;
--		*(u32 *)dest = make_data_loc(ret, (void *)dst - base);
--	}
--
--	return ret;
--}
--
--static nokprobe_inline int
--fetch_store_string_user(unsigned long addr, void *dest, void *base)
--{
--	return fetch_store_string(addr, dest, base);
--}
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen(unsigned long addr)
--{
--	int len;
--	void __user *vaddr = (void __force __user *) addr;
--
--	if (addr == FETCH_TOKEN_COMM)
--		len = strlen(current->comm) + 1;
--	else
--		len = strnlen_user(vaddr, MAX_STRING_SIZE);
--
--	return (len > MAX_STRING_SIZE) ? 0 : len;
--}
--
--static nokprobe_inline int
--fetch_store_strlen_user(unsigned long addr)
--{
--	return fetch_store_strlen(addr);
--}
--
--static unsigned long translate_user_vaddr(unsigned long file_offset)
--{
--	unsigned long base_addr;
--	struct uprobe_dispatch_data *udd;
--
--	udd = (void *) current->utask->vaddr;
--
--	base_addr = udd->bp_addr - udd->tu->offset;
--	return base_addr + file_offset;
--}
--
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	struct pt_regs *regs = rec;
--	unsigned long val;
--
--	/* 1st stage: get value from context */
--	switch (code->op) {
--	case FETCH_OP_REG:
--		val = regs_get_register(regs, code->param);
--		break;
--	case FETCH_OP_STACK:
--		val = get_user_stack_nth(regs, code->param);
--		break;
--	case FETCH_OP_STACKP:
--		val = user_stack_pointer(regs);
--		break;
--	case FETCH_OP_RETVAL:
--		val = regs_return_value(regs);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = FETCH_TOKEN_COMM;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--	case FETCH_OP_FOFFS:
--		val = translate_user_vaddr(code->immediate);
--		break;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
--
- static inline void init_trace_uprobe_filter(struct trace_uprobe_filter *filter)
- {
- 	rwlock_init(&filter->rwlock);
-@@ -1041,7 +876,7 @@ print_uprobe_event(struct trace_iterator *iter, int flags, struct trace_event *e
- 		data = DATAOF_TRACE_ENTRY(entry, false);
- 	}
- 
--	if (print_probe_args(s, tu->tp.args, tu->tp.nr_args, data, entry) < 0)
-+	if (trace_probe_print_args(s, tu->tp.args, tu->tp.nr_args, data, entry) < 0)
- 		goto out;
- 
- 	trace_seq_putc(s, '\n');
-@@ -1485,6 +1320,7 @@ static int uprobe_dispatcher(struct uprobe_consumer *con, struct pt_regs *regs)
- 	tu->nhit++;
- 
- 	udd.tu = tu;
-+	udd.offset = tu->offset;
- 	udd.bp_addr = instruction_pointer(regs);
- 
- 	current->utask->vaddr = (unsigned long) &udd;
-@@ -1492,11 +1328,11 @@ static int uprobe_dispatcher(struct uprobe_consumer *con, struct pt_regs *regs)
- 	if (WARN_ON_ONCE(!uprobe_cpu_buffer))
- 		return 0;
- 
--	dsize = __get_data_size(&tu->tp, regs);
-+	dsize = trace_probe_get_data_size(&tu->tp, regs);
- 	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
- 
- 	ucb = uprobe_buffer_get();
--	store_trace_args(ucb->buf, &tu->tp, regs, esize, dsize);
-+	trace_probe_store_args(ucb->buf, &tu->tp, regs, esize, dsize);
- 
- 	if (trace_probe_test_flag(&tu->tp, TP_FLAG_TRACE))
- 		ret |= uprobe_trace_func(tu, regs, ucb, dsize);
-@@ -1520,6 +1356,7 @@ static int uretprobe_dispatcher(struct uprobe_consumer *con,
- 	tu = container_of(con, struct trace_uprobe, consumer);
- 
- 	udd.tu = tu;
-+	udd.offset = tu->offset;
- 	udd.bp_addr = func;
- 
- 	current->utask->vaddr = (unsigned long) &udd;
-@@ -1527,11 +1364,11 @@ static int uretprobe_dispatcher(struct uprobe_consumer *con,
- 	if (WARN_ON_ONCE(!uprobe_cpu_buffer))
- 		return 0;
- 
--	dsize = __get_data_size(&tu->tp, regs);
-+	dsize = trace_probe_get_data_size(&tu->tp, regs);
- 	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
- 
- 	ucb = uprobe_buffer_get();
--	store_trace_args(ucb->buf, &tu->tp, regs, esize, dsize);
-+	trace_probe_store_args(ucb->buf, &tu->tp, regs, esize, dsize);
- 
- 	if (trace_probe_test_flag(&tu->tp, TP_FLAG_TRACE))
- 		uretprobe_trace_func(tu, func, regs, ucb, dsize);
--- 
-2.25.1
+So, first we are obtaining rproc from __pru_rproc_get() API and then checking
+and exiting if pru->client_np exists.
 
+>> +
+>> +	pru = rproc->priv;
+>> +	dev = &rproc->dev;
+>> +
+>> +	mutex_lock(&pru->lock);
+>> +
+>> +	if (pru->client_np) {
+>> +		mutex_unlock(&pru->lock);
+>> +		put_device(dev);
+>> +		ret = -EBUSY;
+>> +		goto err_no_rproc_handle;
+>> +	}
+>> +
+>> +	pru->client_np = np;
+>> +
+>> +	mutex_unlock(&pru->lock);
+>> +
+>> +	if (pru_id)
+>> +		*pru_id = pru->id;
+>> +
+>> +	return rproc;
+>> +
+>> +err_no_rproc_handle:
+>> +	rproc_put(rproc);
+>> +	return ERR_PTR(ret);
+>> +}
+>> +EXPORT_SYMBOL_GPL(pru_rproc_get);
+>> +
+>> +/**
+>> + * pru_rproc_put() - release the PRU rproc resource
+>> + * @rproc: the rproc resource to release
+>> + *
+>> + * Releases the PRU rproc resource and makes it available to other
+>> + * users.
+>> + */
+>> +void pru_rproc_put(struct rproc *rproc)
+>> +{
+>> +	struct pru_rproc *pru;
+>> +
+>> +	if (IS_ERR_OR_NULL(rproc) || !is_pru_rproc(rproc->dev.parent))
+>> +		return;
+>> +
+>> +	pru = rproc->priv;
+>> +
+>> +	mutex_lock(&pru->lock);
+>> +
+>> +	if (!pru->client_np) {
+>> +		mutex_unlock(&pru->lock);
+>> +		return;
+>> +	}
+>> +
+>> +	pru->client_np = NULL;
+>> +	mutex_unlock(&pru->lock);
+>> +
+>> +	rproc_put(rproc);
+>> +}
+>> +EXPORT_SYMBOL_GPL(pru_rproc_put);
+>> +
+>>  static inline u32 pru_debug_read_reg(struct pru_rproc *pru, unsigned int reg)
+>>  {
+>>  	return readl_relaxed(pru->mem_regions[PRU_IOMEM_DEBUG].va + reg);
+>> @@ -438,7 +566,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
+>>  	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
+>>  	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
+>>  	/* PRU1 has its local RAM addresses reversed */
+>> -	if (pru->id == 1)
+>> +	if (pru->id == PRUSS_PRU1)
+> 
+> Introduction of PRUSS_PRU0/1 enum could have been a separate patch.
+> 
+>>  		swap(dram0, dram1);
+>>  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+>>  
+>> @@ -747,14 +875,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
+>>  	case RTU0_IRAM_ADDR_MASK:
+>>  		fallthrough;
+>>  	case PRU0_IRAM_ADDR_MASK:
+>> -		pru->id = 0;
+>> +		pru->id = PRUSS_PRU0;
+>>  		break;
+>>  	case TX_PRU1_IRAM_ADDR_MASK:
+>>  		fallthrough;
+>>  	case RTU1_IRAM_ADDR_MASK:
+>>  		fallthrough;
+>>  	case PRU1_IRAM_ADDR_MASK:
+>> -		pru->id = 1;
+>> +		pru->id = PRUSS_PRU1;
+>>  		break;
+>>  	default:
+>>  		ret = -EINVAL;
+>> @@ -816,6 +944,8 @@ static int pru_rproc_probe(struct platform_device *pdev)
+>>  	pru->pruss = platform_get_drvdata(ppdev);
+>>  	pru->rproc = rproc;
+>>  	pru->fw_name = fw_name;
+>> +	pru->client_np = NULL;
+>> +	mutex_init(&pru->lock);
+>>  
+>>  	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
+>>  		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>> @@ -904,7 +1034,7 @@ MODULE_DEVICE_TABLE(of, pru_rproc_match);
+>>  
+>>  static struct platform_driver pru_rproc_driver = {
+>>  	.driver = {
+>> -		.name   = "pru-rproc",
+>> +		.name   = PRU_RPROC_DRVNAME,
+>>  		.of_match_table = pru_rproc_match,
+>>  		.suppress_bind_attrs = true,
+>>  	},
+>> @@ -916,5 +1046,7 @@ module_platform_driver(pru_rproc_driver);
+>>  MODULE_AUTHOR("Suman Anna <s-anna@ti.com>");
+>>  MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
+>>  MODULE_AUTHOR("Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>");
+>> +MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
+>> +MODULE_AUTHOR("Md Danish Anwar <danishanwar@ti.com>");
+>>  MODULE_DESCRIPTION("PRU-ICSS Remote Processor Driver");
+>>  MODULE_LICENSE("GPL v2");
+>> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
+>> new file mode 100644
+>> index 000000000000..fdc719b43db0
+>> --- /dev/null
+>> +++ b/include/linux/pruss.h
+>> @@ -0,0 +1,56 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/**
+>> + * PRU-ICSS Subsystem user interfaces
+>> + *
+>> + * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
+>> + *	Suman Anna <s-anna@ti.com>
+>> + */
+>> +
+>> +#ifndef __LINUX_PRUSS_H
+>> +#define __LINUX_PRUSS_H
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/types.h>
+>> +
+>> +#define PRU_RPROC_DRVNAME "pru-rproc"
+>> +
+>> +/*
+>> + * enum pruss_pru_id - PRU core identifiers
+>> + */
+>> +enum pruss_pru_id {
+>> +	PRUSS_PRU0 = 0,
+>> +	PRUSS_PRU1,
+>> +	PRUSS_NUM_PRUS,
+>> +};
+>> +
+>> +struct device_node;
+>> +
+>> +#if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>> +
+>> +struct rproc *pru_rproc_get(struct device_node *np, int index,
+>> +			    enum pruss_pru_id *pru_id);
+>> +void pru_rproc_put(struct rproc *rproc);
+>> +
+>> +#else
+>> +
+>> +static inline struct rproc *
+>> +pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
+>> +{
+>> +	return ERR_PTR(-EOPNOTSUPP);
+>> +}
+>> +
+>> +static inline void pru_rproc_put(struct rproc *rproc) { }
+>> +
+>> +#endif /* CONFIG_PRU_REMOTEPROC */
+>> +
+>> +static inline bool is_pru_rproc(struct device *dev)
+>> +{
+>> +	const char *drv_name = dev_driver_string(dev);
+>> +
+>> +	if (strncmp(drv_name, PRU_RPROC_DRVNAME, sizeof(PRU_RPROC_DRVNAME)))
+>> +		return false;
+>> +
+>> +	return true;
+>> +}
+>> +
+>> +#endif /* __LINUX_PRUSS_H */
+> 
+> cheers,
+> -roger
+
+Thanks and Regards,
+Danish.
