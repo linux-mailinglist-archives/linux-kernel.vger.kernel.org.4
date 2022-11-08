@@ -2,137 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6F9621879
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB78362188D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234283AbiKHPin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        id S234237AbiKHPlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbiKHPij (ORCPT
+        with ESMTP id S233615AbiKHPlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:38:39 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBA214D14
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:38:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 47B56CE1BCA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7673C4314D;
-        Tue,  8 Nov 2022 15:38:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667921914;
-        bh=TV1sWn1Sv+7u6xiLUPX2HqlHGm1NQnC++jAOJ2OGZP8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2YOSsKC0IzgV3p2rkoaUMxjKkOENcukiz6dCckEUM9meMskbZI5XcFLEF/img5Jb8
-         Tc1XARaLIgZ8nOCd9MoMLNFAAvBXcBBDxDm3FYAh9Sj5Sfshxi0/SUK/Q2rHsTHNPU
-         QkWO8UeHPQY4Q/TwImD+Bt6xai6iURDOAVehIzCw=
-Date:   Tue, 8 Nov 2022 16:38:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Cc:     Vishal Chourasia <vishalc@linux.vnet.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        vincent.guittot@linaro.org, vschneid@redhat.com,
-        sshegde@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        ritesh.list@gmail.com, aneesh.kumar@linux.ibm.com
-Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
-Message-ID: <Y2p39yP4gfsXWXAj@kroah.com>
-References: <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
- <Y01sk3l8yCMvhvYm@kroah.com>
- <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y06ISBWhJflnV+NI@kroah.com>
- <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y1jbhCYfktL51zNB@kroah.com>
- <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
- <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y2pKh3H0Ukvmfuco@kroah.com>
- <20221108145100.GG145013@linux.vnet.ibm.com>
+        Tue, 8 Nov 2022 10:41:03 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC78D5C74A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:41:00 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id 5so9080809wmo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 07:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dtMFSLGIMNeVTZxLCqkj7tWGtF0CJEz5WaekwP9dego=;
+        b=NjnfutBKN3dagOdJZ04/4o6UvHmx7gCBH4fD5QajTuq9HLnGT8gsyYgeufHeOQhRfQ
+         c3UDrrJanI7iDjSyOtOIN2OX+0pTdLqzyyyUwVnQodK1EvF3WmuXbGrOQgGTDmxUxujP
+         ZS6ksVzKgmFsGUzrds/lR9X00QQjyUvQWP+ysiY8E6wMQeOIe79pAbGVrQRn6mMiOQAj
+         sVsZAbuBhM+gWczD3LQHhGJ+aNXaE2JJADY5jCRC67HB6D9efRyJGfy7Uw/4QKELpJzW
+         nBQ7hc+I4DytKZqFLAf2+on9jkiDg3EAnNu3Y6FYyy/P2sIgbtqTUD8iq3jrnpNi3BSs
+         FlTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dtMFSLGIMNeVTZxLCqkj7tWGtF0CJEz5WaekwP9dego=;
+        b=lE/zf9HZx40rCQcAcQpDJ5En9906WeEfxYB/O8gkqMYGsiRwwoN8zEX33IhM5s4a+g
+         wOjubdNWv5a0PHMEW5LwDfujYDYIwI4LeAHfNnAdxIxCEiASHUnK8FrNDDfkI67y42g1
+         K+7tt/MFeBEOrJNf/un+8Tw19VrDFLRchwiUy23XQfam+B3ux+F87geYmYWABcQ83hEq
+         NeqzrzHUz3uI7S9RzT3NfCkc22Sl+fTYx7PImdgx+KDz7v+I3weKWxO8Peb7+fe7Ko+t
+         c/bkipyIvM7iEl8BlmIwKtxqAPgMmw08PZ+wKC175lhwwGwPCQxs0I/3ShsK+LZ1QSyI
+         +3Rw==
+X-Gm-Message-State: ACrzQf1DaVHcK0hghxPyBHUrJmW3tLSyg8RhM9GJ2YhzqhS5ISMLfqV2
+        eGiFjquhIQ1wOvjbA10Mls43
+X-Google-Smtp-Source: AMsMyM6SWVW4hweJvSHlGAIvASyg36sxqkTSS6y/q5ALexhcDDH5J0V0eJOICvasXwcjz8F1weG6GA==
+X-Received: by 2002:a05:600c:2150:b0:3cf:6c05:b4ab with SMTP id v16-20020a05600c215000b003cf6c05b4abmr35259174wml.161.1667922059445;
+        Tue, 08 Nov 2022 07:40:59 -0800 (PST)
+Received: from localhost.localdomain ([117.207.25.46])
+        by smtp.gmail.com with ESMTPSA id e4-20020adff344000000b002364c77bc96sm10906899wrp.33.2022.11.08.07.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 07:40:58 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org
+Cc:     johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v5 0/3] qcom-cpufreq-hw: Add CPU clock provider support
+Date:   Tue,  8 Nov 2022 21:10:34 +0530
+Message-Id: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108145100.GG145013@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 08:21:00PM +0530, Srikar Dronamraju wrote:
-> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> [2022-11-08 13:24:39]:
-> 
-> > On Tue, Nov 08, 2022 at 03:30:46PM +0530, Vishal Chourasia wrote:
-> 
-> Hi Greg, 
-> 
-> > > 
-> > > Thanks Greg & Peter for your direction. 
-> > > 
-> > > While we pursue the idea of having debugfs based on kernfs, we thought about
-> > > having a boot time parameter which would disable creating and updating of the
-> > > sched_domain debugfs files and this would also be useful even when the kernfs
-> > > solution kicks in, as users who may not care about these debugfs files would
-> > > benefit from a faster CPU hotplug operation.
-> > 
-> > Ick, no, you would be adding a new user/kernel api that you will be
-> > required to support for the next 20+ years.  Just to get over a
-> > short-term issue before you solve the problem properly.
-> > 
-> > If you really do not want these debugfs files, just disable debugfs from
-> > your system.  That should be a better short-term solution, right?
-> > 
-> > Or better yet, disable SCHED_DEBUG, why can't you do that?
-> 
-> Thanks a lot for your quick inputs.
-> 
-> CONFIG_SCHED_DEBUG disables a lot more stuff than just updation of debugfs
-> files. Information like /sys/kernel/debug/sched/debug and system-wide and
-> per process wide information would be lost when that config is disabled.
-> 
-> Most users would still be using distribution kernels and most distribution
-> kernels that I know of seem to have CONFIG_SCHED_DEBUG enabled.
+Hello,
 
-Then work with the distros to remove that option if it doesn't do well
-on very large systems.
+This series adds clock provider support to the Qcom CPUFreq driver for
+supplying the clocks to the CPU cores in Qcom SoCs.
 
-Odds are they really do not want that enabled either, but that's not our
-issue, that's theirs :)
+The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+clocks to the CPU cores. But this is not represented clearly in devicetree.
+There is no clock coming out of the CPUFreq HW node to the CPU. This created
+an issue [1] with the OPP core when a recent enhancement series was submitted.
+Eventhough the issue got fixed in the OPP framework in the meantime, that's
+not a proper solution and this series aims to fix it properly.
 
-> In a large system, lets say close to 2000 CPUs and we are offlining around
-> 1750 CPUs. For example ppc64_cpu --smt=1  on a powerpc. Even if we move to a
-> lesser overhead kernfs based implementation, we would still be creating
-> files and deleting files for every CPU offline. Most users may not even be
-> aware of these files. However for a few users who may be using these files
-> once a while, we end up creating and deleting these files for all users. The
-> overhead increases exponentially with the number of CPUs. I would assume the
-> max number of CPUs are going to increase in future further.
+There was also an attempt made by Viresh [2] to fix the issue by moving the
+clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+since those clocks belong to the CPUFreq HW node only.
 
-I understand the issue, you don't have to explain it again.  The
-scheduler developers like to see these files, and for them it's useful.
-Perhaps for distros that is not a useful thing to have around, that's
-up to them.
+The proposal here is to add clock provider support to the Qcom CPUFreq HW
+driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+This correctly reflects the hardware implementation.
 
-> Hence our approach was to reduce the overhead for those users who are sure
-> they don't depend on these files. We still keep the creating of the files as
-> the default approach so that others who depend on it are not going to be
-> impacted.
+The clock provider is a simple one that just provides the frequency of the
+clocks supplied to each frequency domain in the SoC using .recalc_rate()
+callback. The frequency supplied by the driver will be the actual frequency
+that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+is not same as what the CPUFreq framework has set but it is the one that gets
+supplied to the CPUs after throttling by LMh.
 
-No, you are adding a new user/kernel api to the kernel that you then
-have to support for the next 20+ years because you haven't fixed the
-real issue here.
+This series has been tested on SM8450 based dev board with the OPP hack removed
+and hence there is a DTS change only for that platform. Once this series gets
+accepted, rest of the platform DTS can also be modified and finally the hack on
+the OPP core can be dropped.
 
-I think you could have done the kernfs conversion already, it shouldn't
-be that complex, right?
+Thanks,
+Mani
 
-Note, when you do it, you might want to move away from returning a raw
-dentry from debugfs calls, and instead use an opaque type "debugfs_file"
-or something like that, instead, which might make this easier over time.
+[1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+[2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
 
-thanks,
+Changes in v5:
 
-greg k-h
+* Switched to Hz unit for the CPU clocks
+
+Changes in v4:
+
+* Rebased on top of cpufreq/arm/linux-next branch
+
+Changes in v3:
+
+* Submitted the cpufreq driver cleanup patches as a separate series as
+  suggested by Viresh
+* Removed static keyword from clk_init_data declaration
+
+Changes in v2:
+
+* Moved the qcom_cpufreq_data allocation to probe
+* Added single clock provider with multiple clks for each freq domain
+* Moved soc_data to qcom_cpufreq struct
+* Added Rob's review for binding
+
+Manivannan Sadhasivam (3):
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+  arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+  cpufreq: qcom-hw: Add CPU clock provider support
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 12 ++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |  9 ++++
+ drivers/cpufreq/qcom-cpufreq-hw.c             | 43 +++++++++++++++++++
+ 3 files changed, 64 insertions(+)
+
+-- 
+2.25.1
+
