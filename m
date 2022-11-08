@@ -2,278 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DCC620BA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC5D620BA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbiKHI6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S233343AbiKHJAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbiKHI6T (ORCPT
+        with ESMTP id S229931AbiKHJAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:58:19 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB742F390
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:58:17 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso17340912pjc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 00:58:17 -0800 (PST)
+        Tue, 8 Nov 2022 04:00:44 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82671FD04;
+        Tue,  8 Nov 2022 01:00:43 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x2so21432613edd.2;
+        Tue, 08 Nov 2022 01:00:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R6zHKniDXHG6psc3MbF8qS0f79e5oPRG+XQe4V39iSs=;
-        b=jS3wKBZTZZjWrd+5/yh1fiJS8luDkuQZXwWeJsuFlhHPl01Cvyz5APoOukAAgI5lxs
-         DkuHUcU++n7RPoCR5ixF17Im6S/TU67bUB+ba16tg6x/NoNaOTJ1SB31OKfd2PYfxJxX
-         StTJ82K9eSLLCd3Zi4k04h9KiqqqZP4IfuOuiyGsu+MUaid2q6g0+c4mp+GJ44jcPi6d
-         TraPOjlIKGIttFjOk5l+4uO3IyflnI/bZZRxUAplwf5M3iRBdYyIzZXOmrKXxS5kByne
-         2icF1Hr+B+aXrBoF3AuPwMePm8XLFYRovOQACqLd1rDjzjyirYzLyhXhWl73y0fX72nu
-         qAJQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qqad13SKeURtqLzBBk2kO3txC+IAP/eZrITsK9q/+vM=;
+        b=Fyo6VKZFQCvyNKwJRr9u1BS9sxRBdiYwe4YcODvmtE+p8ZsS7RB/HbdAAwdL8JAb+s
+         nt1aESdu6rrhWskQlB7pxVWMVZVL8qx67qeKc9iCGhnN0vJquZx2AYFbWb3o5xU7zCGy
+         ncEuuWXw4523mIrYKX73Natdzn08Bz/I2xgFy8M9NNAN9rOcqupPgRGZerow6bqlUmwR
+         kEyC11F+2eCkIVoSvtoWf/0+xpaZ8z2a1JYSsYxFMMQirxwChSM/2ztTr5jO90dz+pJH
+         im+1bLc1CCyvW4Z4EymXPUw45Qu3n3u/I3Wv25HxRte3R/1wbz5xskKgsz89illO6g1/
+         il4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R6zHKniDXHG6psc3MbF8qS0f79e5oPRG+XQe4V39iSs=;
-        b=SSpdhNBdNIbfT0irsr0KkNk7YAs5aGeiCMpGE6qnluCK5O54TjB5zAhrY9YNR9/4mM
-         VATjV4M/25VFP3M/289PoEW8Ib3I0QNp4ds6mtkzLN9ZaN6voEWdrxFJaa6BPw9MRMLg
-         6Hf0fQaEmhSi60w/nC6neMfK6IS4Egc1WWfTmQiKaiSs/fuo/oCDHaL6uR5lBzC50RPH
-         bD0UlZgKJB1RDd1/SBs9keMVuERVDll/K/vyr8m1M00tXzrz0SjlEqIrI+kMCDv62aVL
-         tS2LmuTOqeUyh6EKJ+nY3cxOMOyDMWoUovG9XS3dXl7lGCrxAUrMw4ODDgrHlE6dyN6z
-         GIvA==
-X-Gm-Message-State: ACrzQf2w6oOb21Aqm8mvcKDCCgEQtnSTxrvmRDvvv9WI1mr2o5Ob7UaV
-        izCzb253djgv+11gBwzE0aotig==
-X-Google-Smtp-Source: AMsMyM6r+usVnhZ3DbQ0cit9SiOGzAR3uWWMZHRWXcqL1ZL/jpn3eb4zm7GKPG327wPwDjQuXvKb6g==
-X-Received: by 2002:a17:90b:3504:b0:214:199e:7e6d with SMTP id ls4-20020a17090b350400b00214199e7e6dmr38032578pjb.192.1667897896983;
-        Tue, 08 Nov 2022 00:58:16 -0800 (PST)
-Received: from [10.255.93.192] ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id k21-20020a628415000000b0056bb06ce1cfsm6044022pfd.97.2022.11.08.00.58.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 00:58:16 -0800 (PST)
-Message-ID: <70dfbac1-4c84-9567-30be-1e2594157e62@bytedance.com>
-Date:   Tue, 8 Nov 2022 16:58:04 +0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qqad13SKeURtqLzBBk2kO3txC+IAP/eZrITsK9q/+vM=;
+        b=bBJziHUYeDrNrLBBRl4HqUj7FJDqQD7y2T0SQeQL98dGPr8oXG6X+4qdhLmbBwaORa
+         1Xvr1oIX+Baa9OXCWHNdTezX6uSMKqGHhidoCvkx0WoKTa2OmCN2UQ/ZjG8qM/rsqB1N
+         dSlKX7secSTPAGd8JsMDzoirl5JMPM2P/PWTyH+pwKtoHrX+Xs27VgIFVH6iSWOLsYfA
+         NbNblWeOEMFMhg9sLQml35zoooJclcCs2mzJRiHxTqn97ONjZyONd6+RQFFlbK+r1f9g
+         6195Fu4yojmaenctlWyJa26sgcqCmlHmnTWSykv52sFwTdMhGSvsk7WfcTAu9VSo4xD3
+         yo7w==
+X-Gm-Message-State: ACrzQf1BT1sQ4cRn9ymc9AQWJWXw53DG1NSgp5/kBZliHrAtBEox2A4+
+        mKZeYzaawk4c3YIzC3N0+ds=
+X-Google-Smtp-Source: AMsMyM5fbz3Yar1FPlSiwEnrpZO0I/ObPDsunwBbAzz+bwhP5SMPbqSOgpd843grN3CwmQztGbN4aA==
+X-Received: by 2002:aa7:cd12:0:b0:463:69ac:a5d3 with SMTP id b18-20020aa7cd12000000b0046369aca5d3mr46793480edw.269.1667898041911;
+        Tue, 08 Nov 2022 01:00:41 -0800 (PST)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id f24-20020a056402069800b00458a03203b1sm5304486edy.31.2022.11.08.01.00.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 01:00:41 -0800 (PST)
+Date:   Tue, 8 Nov 2022 11:00:39 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/14] net: vlan: remove invalid VLAN protocol warning
+Message-ID: <20221108090039.imamht5iyh2bbbnl@skbuf>
+References: <20221107185452.90711-1-nbd@nbd.name>
+ <20221107185452.90711-8-nbd@nbd.name>
+ <20221107215745.ascdvnxqrbw4meuv@skbuf>
+ <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.3
-Subject: Re: [PATCH v2] mm: fix unexpected changes to
- {failslab|fail_page_alloc}.attr
-Content-Language: en-US
-To:     Wei Yongjun <weiyongjun1@huawei.com>, dvyukov@google.com,
-        jgg@nvidia.com, willy@infradead.org, akinobu.mita@gmail.com
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <Y2kxrerISWIxQsFO@nvidia.com>
- <20221108035232.87180-1-zhengqi.arch@bytedance.com>
- <65863340-b32f-a2fe-67ae-f1079b19eee4@huawei.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <65863340-b32f-a2fe-67ae-f1079b19eee4@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/8 16:44, Wei Yongjun wrote:
-> Hi Zheng Qi,
+On Tue, Nov 08, 2022 at 07:08:46AM +0100, Felix Fietkau wrote:
+> On 07.11.22 22:57, Vladimir Oltean wrote:
+> > Aren't you calling __vlan_hwaccel_put_tag() with the wrong thing (i.e.
+> > htons(RX_DMA_VPID()) as opposed to VPID translated to something
+> > digestible by the rest of the network stack.. ETH_P_8021Q, ETH_P_8021AD
+> > etc)?
 > 
-> On 2022/11/8 11:52, Qi Zheng wrote:
->> When we specify __GFP_NOWARN, we only expect that no warnings
->> will be issued for current caller. But in the __should_failslab()
->> and __should_fail_alloc_page(), the local GFP flags alter the
->> global {failslab|fail_page_alloc}.attr, which is persistent and
->> shared by all tasks. This is not what we expected, let's fix it.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 3f913fc5f974 ("mm: fix missing handler for __GFP_NOWARN")
->> Reported-by: Dmitry Vyukov <dvyukov@google.com>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> ---
->>   v1: https://lore.kernel.org/lkml/20221107033109.59709-1-zhengqi.arch@bytedance.com/
->>
->>   Changelog in v1 -> v2:
->>    - add comment for __should_failslab() and __should_fail_alloc_page()
->>      (suggested by Jason)
->>
->>   include/linux/fault-inject.h |  7 +++++--
->>   lib/fault-inject.c           | 14 +++++++++-----
->>   mm/failslab.c                | 12 ++++++++++--
->>   mm/page_alloc.c              |  7 +++++--
->>   4 files changed, 29 insertions(+), 11 deletions(-)
->>
->> diff --git a/include/linux/fault-inject.h b/include/linux/fault-inject.h
->> index 9f6e25467844..444236dadcf0 100644
->> --- a/include/linux/fault-inject.h
->> +++ b/include/linux/fault-inject.h
->> @@ -20,7 +20,6 @@ struct fault_attr {
->>   	atomic_t space;
->>   	unsigned long verbose;
->>   	bool task_filter;
->> -	bool no_warn;
->>   	unsigned long stacktrace_depth;
->>   	unsigned long require_start;
->>   	unsigned long require_end;
->> @@ -32,6 +31,10 @@ struct fault_attr {
->>   	struct dentry *dname;
->>   };
->>   
->> +enum fault_flags {
->> +	FAULT_NOWARN =	1 << 0,
->> +};
->> +
->>   #define FAULT_ATTR_INITIALIZER {					\
->>   		.interval = 1,						\
->>   		.times = ATOMIC_INIT(1),				\
->> @@ -40,11 +43,11 @@ struct fault_attr {
->>   		.ratelimit_state = RATELIMIT_STATE_INIT_DISABLED,	\
->>   		.verbose = 2,						\
->>   		.dname = NULL,						\
->> -		.no_warn = false,					\
+> The MTK ethernet hardware treats the DSA special tag as a VLAN tag and
+> reports it as such. The ethernet driver passes this on as a hwaccel tag, and
+> the MTK DSA tag parser consumes it. The only thing that's sitting in the
+> middle looking at the tag is the VLAN device lookup with that warning.
 > 
-> How about keep no_warn attr as it be, and export it to user?
-> 
-> When testing with fault injection, and each fault will print an backtrace.
-> but not all of the testsuit can tell us which one is fault injection
-> message or other is a real warning/crash like syzkaller do.
-> 
-> In my case, to make things simple, we usually used a regex to detect whether
-> wanring/error happend. So we disabled the slab/page fault warning message by
-> default, and only enable it when debug real issue.
+> Whenever DSA is not being used, the MTK ethernet device can also process
+> regular VLAN tags. For those tags, htons(RX_DMA_VPID()) will contain the
+> correct VPID.
 
-So you want to set/clear this no_warn attr through the procfs or sysfs
-interface, so that you can easily disable/enable the slab/page fault
-warning message from the user mode. Right?
+So I don't object to the overall theme of having the DSA master offload
+the parsing and removal of the DSA tag, but you knock down a bit too
+many fences if you carry the DSA tag in skb->vlan_present (not only VLAN
+upper device lookup, but also the flow dissector).
 
-Seems reasonable to me. Anyone else has an opinion on this? If it is
-really needed, I can do it later.
+What other information will be present in the offloaded DSA headers
+except source port information? Maxime Chevallier is also working on a
+similar problem for qca8k, except in that case, the RX DSA offload seems
+to not be optional for him.
 
-Thanks,
-Qi
+https://patchwork.kernel.org/project/netdevbpf/patch/20221104174151.439008-4-maxime.chevallier@bootlin.com/
 
-> 
-> Regards,
-> 
-> 
->>   	}
->>   
->>   #define DECLARE_FAULT_ATTR(name) struct fault_attr name = FAULT_ATTR_INITIALIZER
->>   int setup_fault_attr(struct fault_attr *attr, char *str);
->> +bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags);
->>   bool should_fail(struct fault_attr *attr, ssize_t size);
->>   
->>   #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
->> diff --git a/lib/fault-inject.c b/lib/fault-inject.c
->> index 4b8fafce415c..5971f7c3e49e 100644
->> --- a/lib/fault-inject.c
->> +++ b/lib/fault-inject.c
->> @@ -41,9 +41,6 @@ EXPORT_SYMBOL_GPL(setup_fault_attr);
->>   
->>   static void fail_dump(struct fault_attr *attr)
->>   {
->> -	if (attr->no_warn)
->> -		return;
->> -
->>   	if (attr->verbose > 0 && __ratelimit(&attr->ratelimit_state)) {
->>   		printk(KERN_NOTICE "FAULT_INJECTION: forcing a failure.\n"
->>   		       "name %pd, interval %lu, probability %lu, "
->> @@ -103,7 +100,7 @@ static inline bool fail_stacktrace(struct fault_attr *attr)
->>    * http://www.nongnu.org/failmalloc/
->>    */
->>   
->> -bool should_fail(struct fault_attr *attr, ssize_t size)
->> +bool should_fail_ex(struct fault_attr *attr, ssize_t size, int flags)
->>   {
->>   	bool stack_checked = false;
->>   
->> @@ -152,13 +149,20 @@ bool should_fail(struct fault_attr *attr, ssize_t size)
->>   		return false;
->>   
->>   fail:
->> -	fail_dump(attr);
->> +	if (!(flags & FAULT_NOWARN))
->> +		fail_dump(attr);
->>   
->>   	if (atomic_read(&attr->times) != -1)
->>   		atomic_dec_not_zero(&attr->times);
->>   
->>   	return true;
->>   }
->> +EXPORT_SYMBOL_GPL(should_fail_ex);
->> +
->> +bool should_fail(struct fault_attr *attr, ssize_t size)
->> +{
->> +	return should_fail_ex(attr, size, 0);
->> +}
->>   EXPORT_SYMBOL_GPL(should_fail);
->>   
->>   #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
->> diff --git a/mm/failslab.c b/mm/failslab.c
->> index 58df9789f1d2..ffc420c0e767 100644
->> --- a/mm/failslab.c
->> +++ b/mm/failslab.c
->> @@ -16,6 +16,8 @@ static struct {
->>   
->>   bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
->>   {
->> +	int flags = 0;
->> +
->>   	/* No fault-injection for bootstrap cache */
->>   	if (unlikely(s == kmem_cache))
->>   		return false;
->> @@ -30,10 +32,16 @@ bool __should_failslab(struct kmem_cache *s, gfp_t gfpflags)
->>   	if (failslab.cache_filter && !(s->flags & SLAB_FAILSLAB))
->>   		return false;
->>   
->> +	/*
->> +	 * In some cases, it expects to specify __GFP_NOWARN
->> +	 * to avoid printing any information(not just a warning),
->> +	 * thus avoiding deadlocks. See commit 6b9dbedbe349 for
->> +	 * details.
->> +	 */
->>   	if (gfpflags & __GFP_NOWARN)
->> -		failslab.attr.no_warn = true;
->> +		flags |= FAULT_NOWARN;
->>   
->> -	return should_fail(&failslab.attr, s->object_size);
->> +	return should_fail_ex(&failslab.attr, s->object_size, flags);
->>   }
->>   
->>   static int __init setup_failslab(char *str)
->> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> index 7192ded44ad0..cb6fe715d983 100644
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -3902,6 +3902,8 @@ __setup("fail_page_alloc=", setup_fail_page_alloc);
->>   
->>   static bool __should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
->>   {
->> +	int flags = 0;
->> +
->>   	if (order < fail_page_alloc.min_order)
->>   		return false;
->>   	if (gfp_mask & __GFP_NOFAIL)
->> @@ -3912,10 +3914,11 @@ static bool __should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
->>   			(gfp_mask & __GFP_DIRECT_RECLAIM))
->>   		return false;
->>   
->> +	/* See comment in __should_failslab() */
->>   	if (gfp_mask & __GFP_NOWARN)
->> -		fail_page_alloc.attr.no_warn = true;
->> +		flags |= FAULT_NOWARN;
->>   
->> -	return should_fail(&fail_page_alloc.attr, 1 << order);
->> +	return should_fail_ex(&fail_page_alloc.attr, 1 << order, flags);
->>   }
->>   
->>   #ifdef CONFIG_FAULT_INJECTION_DEBUG_FS
+Would a solution based on METADATA_HW_PORT_MUX and dst_metadata that
+point to refcounted, preallocated structs work for Mediatek SoCs with
+DSA, or would more information be necessary?
 
--- 
-Thanks,
-Qi
+Meaning: mtk_eth_soc attaches the dst_metadata to the skb, tag_mtk.c
+retrieves and removes it.
