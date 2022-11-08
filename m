@@ -2,96 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FEC62200B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC353621FFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiKHXGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S229660AbiKHXFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiKHXGK (ORCPT
+        with ESMTP id S229499AbiKHXFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:06:10 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952E463159;
-        Tue,  8 Nov 2022 15:06:09 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1osXfK-0005wb-6u; Wed, 09 Nov 2022 00:05:58 +0100
-Date:   Tue, 8 Nov 2022 23:04:35 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-efi@vger.kernel.org
-Subject: [PATCH v4 5/5] mtd: ubi: block: add option to enable scanning for
- partitions
-Message-ID: <Y2rgg6h22N6PfKNM@makrotopia.org>
+        Tue, 8 Nov 2022 18:05:20 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F83163140;
+        Tue,  8 Nov 2022 15:05:20 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id h14so15127048pjv.4;
+        Tue, 08 Nov 2022 15:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gcur06YXVkpMCUTbS1b/OnVOrutrgJBtjqG3uOLRXak=;
+        b=Kq4NEanaCGU52P7s3v3jGRzbSfwCAVDjno72X8vKFdqCzVRZrgtjrUA870eQKayPeh
+         M4zl2U8Rn0ov/0D01FgYWSkWBXu5b1SvtNxG5wZ1BzKIOB/W/c9p7LeRcyYfdMM+i8ZF
+         7gdDUY5kMhf7HA+BPFwsuQJaNsaEb9q7IDB7GJfY7wh5TEhBtLrfs9VG5KpEn41+lWl6
+         HGcyXKv27IGU2/TZyQOrV83e0fAxVtgvSFv8/s8rn0hUypZHyHdH0TM9rOAyzHegSEWF
+         2KktVwcvAFzF7MXDvAcVLplnS4jawB/BCrd97ticupTb0U1lypXrCfh3lSbpXXPm+rNz
+         y1Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gcur06YXVkpMCUTbS1b/OnVOrutrgJBtjqG3uOLRXak=;
+        b=AZyzsk9dh0+X98m/CbZ0Noc/fEcElPWI5xKPuFERDEdacRhuAbFLi7WchNXShQXWp2
+         4zn0wPM1rhQefl3X5DUpl/+KBEBm6eil+uAdf9T3+zd9VylkSj/Y2HBjCG57X5fg80WD
+         xu9AnI4tSVn/cMe/iq/nUYVOHhlOhLe0MDuYdnOzpjZEbDqoev4KXkN8vDuUbYqZvLjC
+         Np/EAwX9rNP9Q4ybRT4GSKzuGOeCb0q1vkADCnfWO6c8e6WRqK10DALgh8vECVxYinwu
+         Lk2MTru30Fyrjb9Vf8FYXD52W+djAy5bzPjKuwReMvM8Ypt41uD8r9rzMVRhuCmh6vm/
+         HyAg==
+X-Gm-Message-State: ACrzQf3NuowA9nZ29kO7oJbnIv35utMgoQdXVKf6nfLNoN1XevOVyUK5
+        9eekk03ezjiC4UFJmph+B2npJyXg2YRvryNpnxQ+Qk6XFZk=
+X-Google-Smtp-Source: AMsMyM7SqemD9JPp8GWfXJpXFIGp1dsxWi8Tw+x49gjJjHiIH4LM61lJcXMaFVFEWLwJYXtbpuclxFRPJUxYWxskNEw=
+X-Received: by 2002:a17:903:1211:b0:178:a692:b1e3 with SMTP id
+ l17-20020a170903121100b00178a692b1e3mr60279037plh.48.1667948719734; Tue, 08
+ Nov 2022 15:05:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221108133354.787209461@linuxfoundation.org>
+In-Reply-To: <20221108133354.787209461@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Tue, 8 Nov 2022 15:05:08 -0800
+Message-ID: <CAJq+SaCAUWM=ErYEesXQ5PNSsy6AxJWUpHhKcN0MH5X92azxEw@mail.gmail.com>
+Subject: Re: [PATCH 6.0 000/197] 6.0.8-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Kconfig option CONFIG_MTD_UBI_BLOCK_PARTITIONS and enable block
-partition parsers on ubiblock devices in case it is selected.
+> This is the start of the stable review cycle for the 6.0.8 release.
+> There are 197 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.8-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/mtd/ubi/Kconfig | 10 ++++++++++
- drivers/mtd/ubi/block.c |  5 ++++-
- 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/ubi/Kconfig b/drivers/mtd/ubi/Kconfig
-index 2ed77b7b3fcb..491330e42ab2 100644
---- a/drivers/mtd/ubi/Kconfig
-+++ b/drivers/mtd/ubi/Kconfig
-@@ -104,4 +104,14 @@ config MTD_UBI_BLOCK
- 
- 	   If in doubt, say "N".
- 
-+config MTD_UBI_BLOCK_PARTITIONS
-+	bool "Scan UBI block devices for partitions"
-+	default y if FIT_PARTITION
-+	depends on MTD_UBI_BLOCK
-+	help
-+	  Scan UBI block devices for partitions (ie. MBR, GPT, uImage.FIT, ...).
-+
-+	  Unless your UBI volumes contain sub-partitions mapped using a partition
-+	  table, say no.
-+
- endif # MTD_UBI
-diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
-index 75eaecc8639f..d9baa99ca093 100644
---- a/drivers/mtd/ubi/block.c
-+++ b/drivers/mtd/ubi/block.c
-@@ -430,7 +430,10 @@ int ubiblock_create(struct ubi_volume_info *vi)
- 		ret = -ENODEV;
- 		goto out_cleanup_disk;
- 	}
--	gd->flags |= GENHD_FL_NO_PART;
-+
-+	if (!IS_ENABLED(CONFIG_MTD_UBI_BLOCK_PARTITIONS))
-+		gd->flags |= GENHD_FL_NO_PART;
-+
- 	gd->private_data = dev;
- 	sprintf(gd->disk_name, "ubiblock%d_%d", dev->ubi_num, dev->vol_id);
- 	set_capacity(gd, disk_capacity);
--- 
-2.38.1
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
 
+Tested-by: Allen Pais <apais@linux.microsoft.com>
+
+Thanks.
