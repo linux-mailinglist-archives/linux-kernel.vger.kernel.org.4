@@ -2,132 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91D3620B52
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61842620B55
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233411AbiKHIha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S233358AbiKHIkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKHIh2 (ORCPT
+        with ESMTP id S229931AbiKHIkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:37:28 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFA65F89;
-        Tue,  8 Nov 2022 00:37:27 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id v17so21348660edc.8;
-        Tue, 08 Nov 2022 00:37:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rBcpmwuR/ODR32oPZ7gdO9KQiR1ADfHBqKZSH0UVkho=;
-        b=e4j1eCR1UhFtQybAXCXqziDfdLRUycEpk/7naGJdMUOu4pI6U8USOSWrdlRg1ua+IP
-         tdDQIACKuwIaWYopM6cZNwvb378Q51l1yGftXacFsJWHJl2yJH8HqYiPENH29e/Zj7DB
-         HxRA7azZ/7nXFkwC4DagnuOc82yl468l2fWKpJhluCtCpsC1TKbaL3T20lwM0ifFxqpU
-         5jDRZRVAUhft1F4qoCW5byKCPthBsfo+/M7fgcig74nWZiI2B6ZiXG5Ur5A0HbsojhSK
-         2lXaWU4y6slfgD3MyPf/xp65XNaCtXA7FISVcF+BDqPpXubeYeYqItufm1yu/RMEJyCP
-         u2yQ==
+        Tue, 8 Nov 2022 03:40:09 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A74D13CCD
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:40:08 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id l15so8300579qtv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 00:40:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rBcpmwuR/ODR32oPZ7gdO9KQiR1ADfHBqKZSH0UVkho=;
-        b=B+GJZKYzvZaRiuCVh0ocmCiRWI+54CGwls+kzl3pxKjhiCMBqURybJ4FxXyepKYwCf
-         s15L6teVsdcctJy4Xk6HQZ4r0948ISuceNSTDSwmcmzk1HNmGefH5sT7ztdi/6m71LA6
-         SJmdl0yi4/REpB37REtpSjR0ifeUt7kQoDAxv+guwSYhbRilhR+gB8GF4dshLUB2yUfA
-         bgCX+uluXC4die9lfIVG2YGtBt+ZnCoWUJGk84x9psd+S0FJ8fLYaKHp2AQLhb5e2H26
-         dZbn1aMVE7HFNemYxs9qvuAYMtwVDjw1e27GpXTwAPcPuG3O0SJYdoRbQxVa1cWtNAJZ
-         DvTQ==
-X-Gm-Message-State: ACrzQf2NaWkhL2SOTTWJZl+5ur0Cj34t7kS6VhT5LBTzagnLUdeSgPEW
-        BEqdMKVlhTVJOUeQ65W0KLk=
-X-Google-Smtp-Source: AMsMyM4EPEB/0Jafx+7+CGq+VrkQ04VdIij6KXFGXzOJRr7vzS9gA0A6MtNcCXd6mZfRmkj20o3Q7Q==
-X-Received: by 2002:aa7:c9cf:0:b0:462:f136:d143 with SMTP id i15-20020aa7c9cf000000b00462f136d143mr899540edt.418.1667896645648;
-        Tue, 08 Nov 2022 00:37:25 -0800 (PST)
-Received: from [10.76.84.153] ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id ca12-20020a170906a3cc00b0079800b81709sm4399358ejb.219.2022.11.08.00.37.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 00:37:25 -0800 (PST)
-Message-ID: <ba6b64f733aaee22ff85feba467ff01ccb220913.camel@gmail.com>
-Subject: Re: [PATCH v4 11/13] dt-bindings: iio: temperature: ltc2983: use
- generic node name in example
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-To:     Rob Herring <robh@kernel.org>, Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Date:   Tue, 08 Nov 2022 10:37:23 +0200
-In-Reply-To: <20221107181328.GA1354289-robh@kernel.org>
-References: <20221103130041.2153295-1-demonsingur@gmail.com>
-         <20221103130041.2153295-12-demonsingur@gmail.com>
-         <20221107181328.GA1354289-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2tFUsRL3FpgdBzxiQy/rXwlRUGlmMU62XkzHAixYMBY=;
+        b=NwGnBeUnGEbCODcVAS0dQCsUGJN4Jektqzf73gf1SYCBHB7E3CdjypLJvuK1cjDomJ
+         o0w3wNOqOSab+m/MWO/yLH6PIfj4XQBcdEXNjewoeMLhDEQhumbp4CE1YuRod3yUKTee
+         Yqg17Pwa44sFMQ4cY18zfbvLD7CNhaiujAp4TAmA6Ycx8DJmPdIMiAFccwm6ACfc1Yty
+         yAI8btZ2O3S60tM5kTKMHKNyicCt1NwSEBJEoXfBvVpv3XivrpPi1WdrN3VbaJcoe7gb
+         eWCr43VJNA4giiJ3ISg6C9KLhgJ/E42GW6SYRRdWbQao3fldN5IqMF6yXIIZDSxSLoGn
+         OVeA==
+X-Gm-Message-State: ACrzQf2F0RvVppySXYdObshsqGUbW4gcLWiOkdtZrrDgzWK9DDEqSdDv
+        rz0igzH7Vi7cfgqa3AGmGaETaxsj3oUX0DNk
+X-Google-Smtp-Source: AMsMyM6+g4BGn1YqbKPMTPrmCewy60ihixdZDlk8t7XeqGPE/RDuWe2YAnigatHfasYE82yHfm+C0w==
+X-Received: by 2002:ac8:5a8b:0:b0:3a5:75c2:46e9 with SMTP id c11-20020ac85a8b000000b003a575c246e9mr12871412qtc.229.1667896807008;
+        Tue, 08 Nov 2022 00:40:07 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id x20-20020a05620a449400b006faaf6dc55asm8569670qkp.22.2022.11.08.00.40.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 00:40:06 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id 7so12012635ybp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 00:40:05 -0800 (PST)
+X-Received: by 2002:a25:6b07:0:b0:6cd:3a43:bfe5 with SMTP id
+ g7-20020a256b07000000b006cd3a43bfe5mr41313897ybc.89.1667896805081; Tue, 08
+ Nov 2022 00:40:05 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221107141638.3790965-1-john.ogness@linutronix.de> <20221107141638.3790965-25-john.ogness@linutronix.de>
+In-Reply-To: <20221107141638.3790965-25-john.ogness@linutronix.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Nov 2022 09:39:53 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUEZ2pKM=RJu1NuVarsPSuOw1=R2E6OVQpeO0TqC2tMrA@mail.gmail.com>
+Message-ID: <CAMuHMdUEZ2pKM=RJu1NuVarsPSuOw1=R2E6OVQpeO0TqC2tMrA@mail.gmail.com>
+Subject: Re: [PATCH printk v3 24/40] tty: nfcon: use console_is_registered()
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-11-07 at 12:13 -0600, Rob Herring wrote:
-> On Thu, Nov 03, 2022 at 03:00:39PM +0200, Cosmin Tanislav wrote:
-> > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> >=20
-> > Examples should use the generic IIO node name. Fix it.
-> >=20
-> > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> > ---
-> > =C2=A0.../devicetree/bindings/iio/temperature/adi,ltc2983.yaml=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |
-> > 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > index 467e165e9b0b..bd357ff28e65 100644
-> > ---
-> > a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > +++
-> > b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yam
-> > l
-> > @@ -420,7 +420,7 @@ examples:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>=
-;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
-> > =C2=A0
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sensor_ltc2983: ltc2983@0 {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 temp@0 {
->=20
-> The DT spec defines 'temperature-sensor'.
+Hi John,
 
-Jonathan, could you maybe fix this (replace 'temp' with
-'temperature-sensor') while picking it up? Thanks.
+On Mon, Nov 7, 2022 at 3:16 PM John Ogness <john.ogness@linutronix.de> wrote:
+> Currently CON_ENABLED is being (mis)used to identify if the console
+> has been registered. This is not reliable because it can be set even
+> though registration failed or it can be unset, even though the console
+> is registered.
+>
+> Instead, use console_is_registered().
+>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
->=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "adi,ltc2983";
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0>;
-> > =C2=A0
-> > --=20
-> > 2.38.1
-> >=20
-> >=20
+Thanks for your patch!
 
+LGTM, so
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
