@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144AC621C53
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C32B621C59
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiKHSpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S229552AbiKHSpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiKHSoe (ORCPT
+        with ESMTP id S232925AbiKHSov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:44:34 -0500
+        Tue, 8 Nov 2022 13:44:51 -0500
 Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F4B53EED
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:44:21 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id q71so14128529pgq.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:44:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8E71C439
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:44:23 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id q71so14128596pgq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:44:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JH2QhHpqacgVEtOu6V/3tcH+ucME36GLS7VYH7bPh2s=;
-        b=gfgIf/HAVM/kaYeBJhJkJ8cAIt9JH8FVUt8AbdjcL2gtn5i2PkRUCbfffZxgLEJQda
-         Op9+9xqJl1ZSfgbDb+QoJ31XG+Y7SoFu3phXGIBD/BAi48blSD4Cy/m5cY1F0tBCCosf
-         sqct8v5HRhlNHTPkORouibJhLs16Y7nwqpA3GX3imljNb0GU6S/UFK+giUcl8+WjhnN5
-         Jhgs1R1yrL0LPw2NKGkTs68Wa7hEfQkcCL9yNDgDFKkiTiH5RLEcLhiNglxXwAeW8Uzo
-         UcsL257ewqmAUoHotpTt0ChgTn0CRmrq9BUeYpjYOqjLQQOFJ/8Bt0RwKzS6v/mY7Jl5
-         SKoQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SZMixwErSopU2O8DablnyBX7zPU8BTRivT7sp7p/Y2k=;
+        b=UWnAbl3xsubazJPZSTpP+mGoEzK8xdDx6DvgpgItlY6+1YoyGXx/GpECTAe7UnlikC
+         KntPpyAYXCzHCsqNqC76cAMz0msuKWO/0ZNBae3NBUneiuTOa0VW/3UrNeFVv2/TxeIh
+         CBIiwseA0stRU00EvLBIul5+gaze5zIyQGbDqmSdaVjnH0xplySPbOSkvcVWqVtxkJdP
+         K6JUFQtEiCjUx0awjWkunA4XSAyHf9U2Jq3qEmft+wPIh6rqPumkGL7qPJbWY034WJrw
+         MaJnuhcbJe8R8IRYhR7ZjMWA19YzbG9L2gxhKCAx5Hr5el45OOuZAYliQIoTZzyVEgMB
+         RTIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JH2QhHpqacgVEtOu6V/3tcH+ucME36GLS7VYH7bPh2s=;
-        b=V8JBgYMMIg4gj87LH3jLdNmP0Rz4J7AjnManu9CAVIirZ8sUiEWB27lN2mHDDpixPl
-         JN/Bf3Sty0V3nnXKtR8j0MoJ61qusAgfoWpxVXIDFY7Q5xBL84Zdl2z9S+QYHBQLRLU1
-         BW8TV3jrT1yNqaSSr63SiH/LsCjqoAQDQnhhQ5A/sXhlb7fVyx3oXo5bmagNnEXnliCx
-         IjLJP9JbjANcimONxrmjIGRMSZH/j1PK7ElMmo54Ww7tgW/VZ0UWNswZsa1ZQUrzwJ4X
-         WuXTKD1K3Y2SAYXUR6NkC3ERlEnPzj87+/srZeCSIBDQS+9fu7/HbvfyZ9T4Tp0f94Ay
-         LObg==
-X-Gm-Message-State: ACrzQf2xvKzpFRw+dliBbUOTiItDqGYITm6+YlyoBKaxNRUfDSgsvO+G
-        IH/7rXmI623cDGJCZJTXVIg=
-X-Google-Smtp-Source: AMsMyM4PVPwARffTYpnfKIvuWpr70fVa/7XOUmPKj6m5uJOzRmuzpTdhkZzWLkvkEwznfbYUe1f4vw==
-X-Received: by 2002:a63:1652:0:b0:470:4524:dc9e with SMTP id 18-20020a631652000000b004704524dc9emr18476984pgw.402.1667933061111;
-        Tue, 08 Nov 2022 10:44:21 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SZMixwErSopU2O8DablnyBX7zPU8BTRivT7sp7p/Y2k=;
+        b=V91jTPVcFmlNoDMRNXjNUUZbH3Xnv4/mbOnhJ4jRu3AsCWz9qAZK2NG3XKyD7f97RM
+         hKhyJVbk4GICBZ1alLxyws8SSUetXRHabAURKwWX4skIXilqwrCmyU5vZZ6ydPyWEkpo
+         fJtfVeSI4KbqigTiKdGh6GVvknGe3Ymwom5m/i/z8fSGoWcbfj02qXA6n39PUl1GEh6S
+         7ed7oHCKDhwY1Eq94TzISj/mqGX9WxUI5jkh7r0FvFmaKlFJiMu4SzyEkMIlRC5MEnEb
+         HDPH2XFQma98MOkAlWXr7MJWK2uBMxxKvcLnQrrPzCGqkL9eiVX7CktBaHpp+v8OJ6Jv
+         xuHQ==
+X-Gm-Message-State: ACrzQf016BJyETiPoDXe4HBqrNmv2n9+61qb4Wi9UUdN58Y0KeQHDdqx
+        WJVA6HTg1cLauojfkXBw8TSl6r4WbHs=
+X-Google-Smtp-Source: AMsMyM65OhKUtzTKt3KxeErbsLFDmoGgmhBuGJ8kPTQz+O90x+jf9QmUw6w9Fwjnl2HLZXuCj6HX8w==
+X-Received: by 2002:a63:2b41:0:b0:46e:9364:eb07 with SMTP id r62-20020a632b41000000b0046e9364eb07mr48969644pgr.46.1667933063156;
+        Tue, 08 Nov 2022 10:44:23 -0800 (PST)
 Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id ij22-20020a170902ab5600b0017f36638010sm7210438plb.276.2022.11.08.10.44.19
+        by smtp.gmail.com with ESMTPSA id ij22-20020a170902ab5600b0017f36638010sm7210438plb.276.2022.11.08.10.44.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 10:44:19 -0800 (PST)
+        Tue, 08 Nov 2022 10:44:22 -0800 (PST)
 From:   Yang Shi <shy828301@gmail.com>
 To:     zokeefe@google.com, mhocko@suse.com, akpm@linux-foundation.org
 Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [mm-unstable v3 PATCH 1/3] Revert "mm: don't warn if the node is offlined"
-Date:   Tue,  8 Nov 2022 10:43:55 -0800
-Message-Id: <20221108184357.55614-1-shy828301@gmail.com>
+        linux-kernel@vger.kernel.org,
+        syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com,
+        Zach O'Keefe <zokeefe@googel.com>
+Subject: [mm-unstable v3 PATCH 2/3] mm: khugepaged: allow page allocation fallback to eligible nodes
+Date:   Tue,  8 Nov 2022 10:43:56 -0800
+Message-Id: <20221108184357.55614-2-shy828301@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221108184357.55614-1-shy828301@gmail.com>
+References: <20221108184357.55614-1-shy828301@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,31 +74,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 6baf85a005ad36dd8586e5c3de598f8c3059dc91.
----
- include/linux/gfp.h | 2 ++
- 1 file changed, 2 insertions(+)
+Syzbot reported the below splat:
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index 594d6dee5646..ef4aea3b356e 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -218,6 +218,7 @@ static inline struct page *
- __alloc_pages_node(int nid, gfp_t gfp_mask, unsigned int order)
- {
- 	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
-+	VM_WARN_ON((gfp_mask & __GFP_THISNODE) && !node_online(nid));
+WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
+WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
+WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
+Modules linked in:
+CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
+RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
+RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
+Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
+RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
+RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
+ hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
+ madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
+ madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
+ madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
+ do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
+ do_madvise mm/madvise.c:1432 [inline]
+ __do_sys_madvise mm/madvise.c:1432 [inline]
+ __se_sys_madvise mm/madvise.c:1430 [inline]
+ __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6b48a4eef9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
+RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
+RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
+R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
+ </TASK>
+
+The khugepaged code would pick up the node with the most hit as the preferred
+node, and also tries to do some balance if several nodes have the same
+hit record.  Basically it does conceptually:
+    * If the target_node <= last_target_node, then iterate from
+last_target_node + 1 to MAX_NUMNODES (1024 on default config)
+    * If the max_value == node_load[nid], then target_node = nid
+
+But there is a corner case, paritucularly for MADV_COLLAPSE, that the
+non-existing node may be returned as preferred node.
+
+Assuming the system has 2 nodes, the target_node is 0 and the
+last_target_node is 1, if MADV_COLLAPSE path is hit, the max_value may
+be 0, then it may return 2 for target_node, but it is actually not
+existing (offline), so the warn is triggered.
+
+The node balance was introduced by commit 9f1b868a13ac ("mm: thp:
+khugepaged: add policy for finding target node") to satisfy
+"numactl --interleave=all".  But interleaving is a mere hint rather than
+something that has hard requirements.
+
+So use nodemask to record the nodes which have the same hit record, the
+hugepage allocation could fallback to those nodes.  And remove
+__GFP_THISNODE since it does disallow fallback.  And if the nodemask
+just has one node set, it means there is one single node has the most
+hit record, the nodemask approach actually behaves like __GFP_THISNODE.
+
+Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
+Suggested-by: Zach O'Keefe <zokeefe@google.com>
+Suggested-by: Michal Hocko <mhocko@suse.com>
+Reviewed-by: Zach O'Keefe <zokeefe@googel.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+---
+v3: * Corrected the commit log a little bit.
+
+ mm/khugepaged.c | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index ea0d186bc9d4..572ce7dbf4b0 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -97,8 +97,8 @@ struct collapse_control {
+ 	/* Num pages scanned per node */
+ 	u32 node_load[MAX_NUMNODES];
  
- 	return __alloc_pages(gfp_mask, order, nid, NULL);
- }
-@@ -226,6 +227,7 @@ static inline
- struct folio *__folio_alloc_node(gfp_t gfp, unsigned int order, int nid)
- {
- 	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
-+	VM_WARN_ON((gfp & __GFP_THISNODE) && !node_online(nid));
+-	/* Last target selected in hpage_collapse_find_target_node() */
+-	int last_target_node;
++	/* nodemask for allocation fallback */
++	nodemask_t alloc_nmask;
+ };
  
- 	return __folio_alloc(gfp, order, nid, NULL);
+ /**
+@@ -734,7 +734,6 @@ static void khugepaged_alloc_sleep(void)
+ 
+ struct collapse_control khugepaged_collapse_control = {
+ 	.is_khugepaged = true,
+-	.last_target_node = NUMA_NO_NODE,
+ };
+ 
+ static bool hpage_collapse_scan_abort(int nid, struct collapse_control *cc)
+@@ -783,16 +782,11 @@ static int hpage_collapse_find_target_node(struct collapse_control *cc)
+ 			target_node = nid;
+ 		}
+ 
+-	/* do some balance if several nodes have the same hit record */
+-	if (target_node <= cc->last_target_node)
+-		for (nid = cc->last_target_node + 1; nid < MAX_NUMNODES;
+-		     nid++)
+-			if (max_value == cc->node_load[nid]) {
+-				target_node = nid;
+-				break;
+-			}
++	for_each_online_node(nid) {
++		if (max_value == cc->node_load[nid])
++			node_set(nid, cc->alloc_nmask);
++	}
+ 
+-	cc->last_target_node = target_node;
+ 	return target_node;
  }
+ #else
+@@ -802,9 +796,10 @@ static int hpage_collapse_find_target_node(struct collapse_control *cc)
+ }
+ #endif
+ 
+-static bool hpage_collapse_alloc_page(struct page **hpage, gfp_t gfp, int node)
++static bool hpage_collapse_alloc_page(struct page **hpage, gfp_t gfp, int node,
++				      nodemask_t *nmask)
+ {
+-	*hpage = __alloc_pages_node(node, gfp, HPAGE_PMD_ORDER);
++	*hpage = __alloc_pages(gfp, HPAGE_PMD_ORDER, node, nmask);
+ 	if (unlikely(!*hpage)) {
+ 		count_vm_event(THP_COLLAPSE_ALLOC_FAILED);
+ 		return false;
+@@ -955,12 +950,11 @@ static int __collapse_huge_page_swapin(struct mm_struct *mm,
+ static int alloc_charge_hpage(struct page **hpage, struct mm_struct *mm,
+ 			      struct collapse_control *cc)
+ {
+-	/* Only allocate from the target node */
+ 	gfp_t gfp = (cc->is_khugepaged ? alloc_hugepage_khugepaged_gfpmask() :
+-		     GFP_TRANSHUGE) | __GFP_THISNODE;
++		     GFP_TRANSHUGE);
+ 	int node = hpage_collapse_find_target_node(cc);
+ 
+-	if (!hpage_collapse_alloc_page(hpage, gfp, node))
++	if (!hpage_collapse_alloc_page(hpage, gfp, node, &cc->alloc_nmask))
+ 		return SCAN_ALLOC_HUGE_PAGE_FAIL;
+ 	if (unlikely(mem_cgroup_charge(page_folio(*hpage), mm, gfp)))
+ 		return SCAN_CGROUP_CHARGE_FAIL;
+@@ -1144,6 +1138,7 @@ static int hpage_collapse_scan_pmd(struct mm_struct *mm,
+ 		goto out;
+ 
+ 	memset(cc->node_load, 0, sizeof(cc->node_load));
++	nodes_clear(cc->alloc_nmask);
+ 	pte = pte_offset_map_lock(mm, pmd, address, &ptl);
+ 	for (_address = address, _pte = pte; _pte < pte + HPAGE_PMD_NR;
+ 	     _pte++, _address += PAGE_SIZE) {
+@@ -2078,6 +2073,7 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+ 	present = 0;
+ 	swap = 0;
+ 	memset(cc->node_load, 0, sizeof(cc->node_load));
++	nodes_clear(cc->alloc_nmask);
+ 	rcu_read_lock();
+ 	xas_for_each(&xas, page, start + HPAGE_PMD_NR - 1) {
+ 		if (xas_retry(&xas, page))
+@@ -2581,7 +2577,6 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 	if (!cc)
+ 		return -ENOMEM;
+ 	cc->is_khugepaged = false;
+-	cc->last_target_node = NUMA_NO_NODE;
+ 
+ 	mmgrab(mm);
+ 	lru_add_drain_all();
+@@ -2607,6 +2602,7 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 		}
+ 		mmap_assert_locked(mm);
+ 		memset(cc->node_load, 0, sizeof(cc->node_load));
++		nodes_clear(cc->alloc_nmask);
+ 		if (IS_ENABLED(CONFIG_SHMEM) && vma->vm_file) {
+ 			struct file *file = get_file(vma->vm_file);
+ 			pgoff_t pgoff = linear_page_index(vma, addr);
 -- 
 2.35.1
 
