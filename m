@@ -2,109 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7167621D5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E3D621D60
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiKHUCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        id S229764AbiKHUDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiKHUCs (ORCPT
+        with ESMTP id S229716AbiKHUDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:02:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740BE67F50;
-        Tue,  8 Nov 2022 12:02:47 -0800 (PST)
-Date:   Tue, 08 Nov 2022 20:02:43 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667937765;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m957AOZ+7PMI2g5Y+f/g1wqY8SUIj2ZsgN/I1eKfwXQ=;
-        b=um3sksbWXHoJWNzO5Daa81xllF9fasZRzia2DOk4unBQLZfKahorHCk58KRrHGKvu/6icQ
-        FAOPfJebZTrn7Dd1lJs+ODz2UmqM8hH553rX8j13SrUrArgNnpseBepurE4Fg599m7uRgl
-        Svdh/d7Y8C7IGE1g0ZQIYZ/VcYmpIzzWjHLbc/aaCOYuFik1r0mcv5C31yNXikVsozP8Jv
-        OEs7TulGj8LG6apLvVtKP8+jHCXYX/gzCX/MhWny1Uc9N38TMFUCBcOVaSxeF9mKYHLBHC
-        BDsoMgRweIJY01b6Lwsic6gx+s1Xz310sJp24TYPLzzvtMbgHUGYdZD0IY8Q/A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667937765;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m957AOZ+7PMI2g5Y+f/g1wqY8SUIj2ZsgN/I1eKfwXQ=;
-        b=Z0T8LI2LLBegBX93t7VPAeh8mmaBSJpZTreLIVLvRoG18gD5SmP4SXT/EDiB4rxG6jRpFQ
-        SK2gEb8U8chZShAA==
-From:   tip-bot2 for Borys =?utf-8?q?Pop=C5=82awski?= 
-        <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/sgx: Add overflow check in sgx_validate_offset_length()
-Cc:     borysp@invisiblethingslab.com, Borislav Petkov <bp@suse.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>, stable@vger.kernel.org,
-        #@tip-bot2.tec.linutronix.de, v5.11+@tip-bot2.tec.linutronix.de,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <0d91ac79-6d84-abed-5821-4dbe59fa1a38@invisiblethingslab.com>
-References: <0d91ac79-6d84-abed-5821-4dbe59fa1a38@invisiblethingslab.com>
+        Tue, 8 Nov 2022 15:03:41 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEDD1AF0C
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:03:40 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id b62so14350298pgc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UabFGB3dgHdDGh8rYKaeDmUDo6Yz1+GrAprP6mnLPVs=;
+        b=WfTYpQNyDJezun0scrrYkgN5kOzozjxRJesX99og1g2FWnFHsFQhSW5hJaYGvdyNNU
+         jrPNbxpCjz5OQZE9neQx4nceeBX2V8HAapvLl5sJvakxwiNDX4e2RKGY+xBmd80cZK36
+         yXtIHa1sgZ6OUah9NP4H4VX9WR4tT5C1UpDODajvrBweEZW/i78Qyn5ginOCrVshndbu
+         uMlx/n2K2ydfLql3C6DuPrv3/3hve82YQB4AouzqS9Cv6Eq2VbfC9EQo3nK9o45sjthj
+         +giz5tY1/ABeEbtrg2lfeo0K1uPgfof7KTBhrhon1hPti0c1uakQLatrukR9xwhYmNBV
+         jGGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UabFGB3dgHdDGh8rYKaeDmUDo6Yz1+GrAprP6mnLPVs=;
+        b=1+/W1FqjuHa6dVPdO4TEu9vt1ZdGzucIV/S54WLWqmYXjatzUvTnyHjRQo3TeKZsHA
+         nw2mP1+uWr6gfBE4HzY8knL+HWW9t3hPcZ93RF8X+f8qW1f/hd1K+Bm8T1UCnDkxmji9
+         zJlKpatYHx3UlpOIeTNDw5WxVLy/iPohD8fFksuO6HyP1c2KSiOo/aifiEhBmLi2oR/i
+         37+gZcgcPsK/TzKvopL6/e2bbB666fNUWS0hwXT+epQna4ZmGNUdWhdhTQ51OtIVDFDz
+         go1hU36DAnnnZW5/p1ZBt2lvh2LCNrnfr6DEim6Dd29h02GUd0Td9+7LE+FwYuQGAFxl
+         uLmw==
+X-Gm-Message-State: ACrzQf2qpqFXlrYa2bjrbRvqgofSBlDSiknXNJYSTKHyjRsxvQAfdz0w
+        1bImF4P8avGmcSQB0HWo2iFwsw==
+X-Google-Smtp-Source: AMsMyM49BTXjwcisXJONM3dl57ISGPzbrtfdjF1FlSG9ZWqE52ZRy8EoJixFF07LWVmnHNbC+6vdIA==
+X-Received: by 2002:a05:6a00:b82:b0:56c:d5bf:1019 with SMTP id g2-20020a056a000b8200b0056cd5bf1019mr57436217pfj.72.1667937820352;
+        Tue, 08 Nov 2022 12:03:40 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id e13-20020a17090301cd00b001782398648dsm7424642plh.8.2022.11.08.12.03.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 12:03:39 -0800 (PST)
+Date:   Tue, 8 Nov 2022 20:03:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+Subject: Re: [PATCH 3/3] x86/kasan: Populate shadow for shared chunk of the
+ CPU entry area
+Message-ID: <Y2q2GFWjLKMp5eUr@google.com>
+References: <20221104183247.834988-1-seanjc@google.com>
+ <20221104183247.834988-4-seanjc@google.com>
+ <06debc96-ea5d-df61-3d2e-0d1d723e55b7@gmail.com>
 MIME-Version: 1.0
-Message-ID: <166793776319.4906.4394830802759229298.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <06debc96-ea5d-df61-3d2e-0d1d723e55b7@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Tue, Nov 08, 2022, Andrey Ryabinin wrote:
+> 
+> On 11/4/22 21:32, Sean Christopherson wrote:
+> > @@ -409,6 +410,15 @@ void __init kasan_init(void)
+> >  		kasan_mem_to_shadow((void *)VMALLOC_END + 1),
+> >  		(void *)shadow_cea_begin);
+> >  
+> > +	/*
+> > +	 * Populate the shadow for the shared portion of the CPU entry area.
+> > +	 * Shadows for the per-CPU areas are mapped on-demand, as each CPU's
+> > +	 * area is randomly placed somewhere in the 512GiB range and mapping
+> > +	 * the entire 512GiB range is prohibitively expensive.
+> > +	 */
+> > +	kasan_populate_shadow(shadow_cea_begin,
+> > +			      shadow_cea_per_cpu_begin, 0);
+> > +
+> 
+> I think we can extend the kasan_populate_early_shadow() call above up to
+> shadow_cea_per_cpu_begin point, instead of this.
+> populate_early_shadow() maps single RO zeroed page. No one should write to the shadow for IDT.
+> KASAN only needs writable shadow for linear mapping/stacks/vmalloc/global variables.
 
-Commit-ID:     f0861f49bd946ff94fce4f82509c45e167f63690
-Gitweb:        https://git.kernel.org/tip/f0861f49bd946ff94fce4f82509c45e167f=
-63690
-Author:        Borys Pop=C5=82awski <borysp@invisiblethingslab.com>
-AuthorDate:    Wed, 05 Oct 2022 00:59:03 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 08 Nov 2022 20:34:05 +01:00
+Is that the only difference between the "early" and "normal" variants?  If so,
+renaming them to kasan_populate_ro_shadow() vs. kasan_populate_rw_shadow() would
+make this code much more intuitive for non-KASAN folks.
 
-x86/sgx: Add overflow check in sgx_validate_offset_length()
-
-sgx_validate_offset_length() function verifies "offset" and "length"
-arguments provided by userspace, but was missing an overflow check on
-their addition. Add it.
-
-Fixes: c6d26d370767 ("x86/sgx: Add SGX_IOC_ENCLAVE_ADD_PAGES")
-Signed-off-by: Borys Pop=C5=82awski <borysp@invisiblethingslab.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: stable@vger.kernel.org # v5.11+
-Link: https://lore.kernel.org/r/0d91ac79-6d84-abed-5821-4dbe59fa1a38@invisibl=
-ethingslab.com
----
- arch/x86/kernel/cpu/sgx/ioctl.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-index ebe79d6..da8b8ea 100644
---- a/arch/x86/kernel/cpu/sgx/ioctl.c
-+++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-@@ -356,6 +356,9 @@ static int sgx_validate_offset_length(struct sgx_encl *en=
-cl,
- 	if (!length || !IS_ALIGNED(length, PAGE_SIZE))
- 		return -EINVAL;
-=20
-+	if (offset + length < offset)
-+		return -EINVAL;
-+
- 	if (offset + length - PAGE_SIZE >=3D encl->size)
- 		return -EINVAL;
-=20
+> 
+> >  	kasan_populate_early_shadow((void *)shadow_cea_end,
+> >  			kasan_mem_to_shadow((void *)__START_KERNEL_map));
+> >  
