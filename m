@@ -2,294 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33A5620C73
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABE9620C78
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbiKHJkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
+        id S233830AbiKHJke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbiKHJkP (ORCPT
+        with ESMTP id S233767AbiKHJk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:40:15 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E912716C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:40:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Ggbcx2/+wU4WPL0deN/0JJ/CN6ehJvsesRYoAq0FYYU=; b=ijCvXTdhEg8PrhALlm8CI7XGDL
-        O78hjgrPnZjXdNmqB9jJe/pNhnu2W2WavIFHO/4zJ6TzleOTcP9F2XMWWdJdaE6EH45DnKZSpbkgI
-        Z2Io/ZEcBPlWda6ZsgCGrGK9iIKIbT8bPiDgf0Y5EdVZ2vNz/rHI50bcx1VmRJwnKv/urLy71sRJS
-        3lmkhMjLWzjIfISPR7TvZ7Olbr+Ag8hw0wL3x2YJQ9Qg6HCp/3KgpLGjd7NHhyLBseZjtycWZUDLW
-        dSMoZ0uJ7KFrNQRXija0NZiRJdl8MtlOXI25lVc8OPYoa3p11bYl9KGIz63utD54Vnm9DxhID/tiK
-        BrH0OKDQ==;
-Received: from [2a01:799:95a:cb00:cca0:57ac:c55d:a485] (port=57695)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1osL5W-0001ox-VM; Tue, 08 Nov 2022 10:40:10 +0100
-Message-ID: <85a607b4-2645-68c7-0898-08f7c6d064b9@tronnes.org>
-Date:   Tue, 8 Nov 2022 10:40:07 +0100
+        Tue, 8 Nov 2022 04:40:28 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C82727900;
+        Tue,  8 Nov 2022 01:40:22 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id r14so21569341edc.7;
+        Tue, 08 Nov 2022 01:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6R2u+4ncSx8KluFMuPj2ehi9rZ//rxoPRpAs8tI9poY=;
+        b=Fnn44XdkufgkSSnM4GLF7F4kNg8m/N+jGANKbUq2WAeEQ7iLvra2UN1+f0e8nLnC6e
+         gYz1xNnUUJaZtY0nTH2M5LgFsJwj/6bh2xhRT3qYbkwZHRv3CJ76Cao3yhUDDDR4QuyK
+         1Gbq4L4pmDznRj/9KTV4z52/0+s3RV1iBnGudg8WXAJAtz6a/7JOxUaWsYg9prNphWih
+         cR1gP8aQF6xu0jTpTHjhRSB+goaCNvk4K1A/HHpzyKCTuyR1RxypYFw9t8XQYZpuiaeY
+         nzXeWiRGQU8DnwhmzKN9D5blcKfqEQ8NctWarfkSXleA17D6rW76gj1flLM9A9rUdEzs
+         hu+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6R2u+4ncSx8KluFMuPj2ehi9rZ//rxoPRpAs8tI9poY=;
+        b=G+f8FQ0zrRAJps2ZJVBw8QnpJL7iKlGWIvP9yPRFuVRL/fJa3wLTDqkojj+nZfHXTn
+         O5+8h6/JOkDiF8YX7yCLKN5ls4JCz/C/Z27Omlm3lGb5GSPw9KRR7TbLYI8T2UJh4CJC
+         gyHrp1drj93sMbvXddUMYFgHWhkzg9egdzJGJ+fCNGL99VGd2pIFrHOtcAzKgWS0h250
+         AjxmTsTW8KU7vENena/IWFzp3cdSeu3G4+MWuoVyO6CphapzY2NvZhmEMDrjIsUInjdf
+         FT0S0CmVLQPbmzToS7Atqz4yNp+aPyG6dvhCqBKgMU/emC7XXDu7f74jdykH55T4NrUe
+         4/hw==
+X-Gm-Message-State: ANoB5plmOYsFxCrBIpxCduNiecOdLNwo6sXMOmCKiKNQ1KA4mYbFlDzO
+        cHgGpYracCL5mK+5fK7ttc4CZCZdkaxF+w==
+X-Google-Smtp-Source: AA0mqf7femjNdGyEnapokREP6cqG8YFp2Vsz0oKrp/hKd997QAkd5iA8xAGiLc/EhnFHTq4mjynVzw==
+X-Received: by 2002:a05:6402:27d2:b0:462:8e41:569c with SMTP id c18-20020a05640227d200b004628e41569cmr13648250ede.191.1667900420657;
+        Tue, 08 Nov 2022 01:40:20 -0800 (PST)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id hg11-20020a1709072ccb00b007a8de84ce36sm4392806ejc.206.2022.11.08.01.40.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 01:40:20 -0800 (PST)
+Date:   Tue, 8 Nov 2022 11:40:18 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/14] net: vlan: remove invalid VLAN protocol warning
+Message-ID: <20221108094018.6cspe3mkh3hakxpd@skbuf>
+References: <20221107185452.90711-1-nbd@nbd.name>
+ <20221107185452.90711-8-nbd@nbd.name>
+ <20221107215745.ascdvnxqrbw4meuv@skbuf>
+ <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
+ <20221108090039.imamht5iyh2bbbnl@skbuf>
+ <0948d841-b0eb-8281-455a-92f44586e0c0@nbd.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 14/23] drm/modes: Properly generate a drm_display_mode
- from a named mode
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>
-Cc:     Phil Elwell <phil@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
- <20220728-rpi-analog-tv-properties-v7-14-7072a478c6b3@cerno.tech>
- <9e9a8a48-89f2-35d4-b26f-afa7cc44f2f6@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <9e9a8a48-89f2-35d4-b26f-afa7cc44f2f6@tronnes.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0948d841-b0eb-8281-455a-92f44586e0c0@nbd.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 08, 2022 at 10:20:44AM +0100, Felix Fietkau wrote:
+> I need to look into how METADATA_HW_PORT_MUX works, but I think it could
+> work.
 
-
-Den 07.11.2022 18.49, skrev Noralf Trønnes:
-> 
-> 
-> Den 07.11.2022 15.16, skrev Maxime Ripard:
->> The framework will get the drm_display_mode from the drm_cmdline_mode it
->> got by parsing the video command line argument by calling
->> drm_connector_pick_cmdline_mode().
->>
->> The heavy lifting will then be done by the drm_mode_create_from_cmdline_mode()
->> function.
->>
->> In the case of the named modes though, there's no real code to make that
->> translation and we rely on the drivers to guess which actual display mode
->> we meant.
->>
->> Let's modify drm_mode_create_from_cmdline_mode() to properly generate the
->> drm_display_mode we mean when passing a named mode.
->>
->> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>
->> ---
->> Changes in v7:
->> - Use tv_mode_specified in drm_mode_parse_command_line_for_connector
->>
->> Changes in v6:
->> - Fix get_modes to return 0 instead of an error code
->> - Rename the tests to follow the DRM test naming convention
->>
->> Changes in v5:
->> - Switched to KUNIT_ASSERT_NOT_NULL
->> ---
->>  drivers/gpu/drm/drm_modes.c                     | 34 ++++++++++-
->>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 77 ++++++++++++++++++++++++-
->>  2 files changed, 109 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
->> index dc037f7ceb37..49441cabdd9d 100644
->> --- a/drivers/gpu/drm/drm_modes.c
->> +++ b/drivers/gpu/drm/drm_modes.c
->> @@ -2497,6 +2497,36 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
->>  }
->>  EXPORT_SYMBOL(drm_mode_parse_command_line_for_connector);
->>  
->> +static struct drm_display_mode *drm_named_mode(struct drm_device *dev,
->> +					       struct drm_cmdline_mode *cmd)
->> +{
->> +	struct drm_display_mode *mode;
->> +	unsigned int i;
->> +
->> +	for (i = 0; i < ARRAY_SIZE(drm_named_modes); i++) {
->> +		const struct drm_named_mode *named_mode = &drm_named_modes[i];
->> +
->> +		if (strcmp(cmd->name, named_mode->name))
->> +			continue;
->> +
->> +		if (!cmd->tv_mode_specified)
->> +			continue;
-> 
-> Only a named mode will set cmd->name, so is this check necessary?
-> 
->> +
->> +		mode = drm_analog_tv_mode(dev,
->> +					  named_mode->tv_mode,
->> +					  named_mode->pixel_clock_khz * 1000,
->> +					  named_mode->xres,
->> +					  named_mode->yres,
->> +					  named_mode->flags & DRM_MODE_FLAG_INTERLACE);
->> +		if (!mode)
->> +			return NULL;
->> +
->> +		return mode;
-> 
-> You can just return the result from drm_analog_tv_mode() directly.
-> 
-> With those considered:
-> 
-> Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
-> 
-
-I forgot one thing, shouldn't the named mode test in
-drm_connector_pick_cmdline_mode() be removed now that we have proper modes?
-
-Noralf.
-
->> +	}
->> +
->> +	return NULL;
->> +}
->> +
->>  /**
->>   * drm_mode_create_from_cmdline_mode - convert a command line modeline into a DRM display mode
->>   * @dev: DRM device to create the new mode for
->> @@ -2514,7 +2544,9 @@ drm_mode_create_from_cmdline_mode(struct drm_device *dev,
->>  	if (cmd->xres == 0 || cmd->yres == 0)
->>  		return NULL;
->>  
->> -	if (cmd->cvt)
->> +	if (strlen(cmd->name))
->> +		mode = drm_named_mode(dev, cmd);
->> +	else if (cmd->cvt)
->>  		mode = drm_cvt_mode(dev,
->>  				    cmd->xres, cmd->yres,
->>  				    cmd->refresh_specified ? cmd->refresh : 60,
->> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
->> index 3aa1acfe75df..fdfe9e20702e 100644
->> --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
->> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
->> @@ -21,7 +21,26 @@ struct drm_client_modeset_test_priv {
->>  
->>  static int drm_client_modeset_connector_get_modes(struct drm_connector *connector)
->>  {
->> -	return drm_add_modes_noedid(connector, 1920, 1200);
->> +	struct drm_display_mode *mode;
->> +	int count;
->> +
->> +	count = drm_add_modes_noedid(connector, 1920, 1200);
->> +
->> +	mode = drm_mode_analog_ntsc_480i(connector->dev);
->> +	if (!mode)
->> +		return count;
->> +
->> +	drm_mode_probed_add(connector, mode);
->> +	count += 1;
->> +
->> +	mode = drm_mode_analog_pal_576i(connector->dev);
->> +	if (!mode)
->> +		return count;
->> +
->> +	drm_mode_probed_add(connector, mode);
->> +	count += 1;
->> +
->> +	return count;
->>  }
->>  
->>  static const struct drm_connector_helper_funcs drm_client_modeset_connector_helper_funcs = {
->> @@ -52,6 +71,9 @@ static int drm_client_modeset_test_init(struct kunit *test)
->>  
->>  	drm_connector_helper_add(&priv->connector, &drm_client_modeset_connector_helper_funcs);
->>  
->> +	priv->connector.interlace_allowed = true;
->> +	priv->connector.doublescan_allowed = true;
->> +
->>  	return 0;
->>  
->>  }
->> @@ -85,9 +107,62 @@ static void drm_test_pick_cmdline_res_1920_1080_60(struct kunit *test)
->>  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected_mode, mode));
->>  }
->>  
->> +static void drm_test_pick_cmdline_named_ntsc(struct kunit *test)
->> +{
->> +	struct drm_client_modeset_test_priv *priv = test->priv;
->> +	struct drm_device *drm = priv->drm;
->> +	struct drm_connector *connector = &priv->connector;
->> +	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
->> +	struct drm_display_mode *mode;
->> +	const char *cmdline = "NTSC";
->> +	int ret;
->> +
->> +	KUNIT_ASSERT_TRUE(test,
->> +			  drm_mode_parse_command_line_for_connector(cmdline,
->> +								    connector,
->> +								    cmdline_mode));
->> +
->> +	mutex_lock(&drm->mode_config.mutex);
->> +	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
->> +	mutex_unlock(&drm->mode_config.mutex);
->> +	KUNIT_ASSERT_GT(test, ret, 0);
->> +
->> +	mode = drm_connector_pick_cmdline_mode(connector);
->> +	KUNIT_ASSERT_NOT_NULL(test, mode);
->> +
->> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_ntsc_480i(drm), mode));
->> +}
->> +
->> +static void drm_test_pick_cmdline_named_pal(struct kunit *test)
->> +{
->> +	struct drm_client_modeset_test_priv *priv = test->priv;
->> +	struct drm_device *drm = priv->drm;
->> +	struct drm_connector *connector = &priv->connector;
->> +	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
->> +	struct drm_display_mode *mode;
->> +	const char *cmdline = "PAL";
->> +	int ret;
->> +
->> +	KUNIT_ASSERT_TRUE(test,
->> +			  drm_mode_parse_command_line_for_connector(cmdline,
->> +								    connector,
->> +								    cmdline_mode));
->> +
->> +	mutex_lock(&drm->mode_config.mutex);
->> +	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
->> +	mutex_unlock(&drm->mode_config.mutex);
->> +	KUNIT_ASSERT_GT(test, ret, 0);
->> +
->> +	mode = drm_connector_pick_cmdline_mode(connector);
->> +	KUNIT_ASSERT_NOT_NULL(test, mode);
->> +
->> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_pal_576i(drm), mode));
->> +}
->>  
->>  static struct kunit_case drm_test_pick_cmdline_tests[] = {
->>  	KUNIT_CASE(drm_test_pick_cmdline_res_1920_1080_60),
->> +	KUNIT_CASE(drm_test_pick_cmdline_named_ntsc),
->> +	KUNIT_CASE(drm_test_pick_cmdline_named_pal),
->>  	{}
->>  };
->>  
->>
+Could you please coordinate with Maxime to come up with something
+common? Currently he proposes a generic "oob" tagger, while you propose
+that we stay with the "mtk"/"qca" taggers, but they are taught to look
+after offloaded metadata rather than in the packet. IMO your proposal
+sounds better; the name of the tagging protocol is already exposed to
+user space via /sys/class/net/<dsa-master>/dsa/tagging and therefore ABI.
+It's just that we need a way to figure out how to make the flow
+dissector and other layers not adjust for DSA header length if the DSA
+tag is offloaded and not present in the packet.
