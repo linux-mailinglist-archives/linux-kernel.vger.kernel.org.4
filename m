@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA47262184A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F7862185F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234525AbiKHPaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S234317AbiKHPez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234520AbiKHPap (ORCPT
+        with ESMTP id S234255AbiKHPeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:30:45 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F50B56557
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:30:36 -0800 (PST)
-Date:   Tue, 8 Nov 2022 16:30:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667921434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4MVyWw7ozXcrMblhUHcrr7SNs20kmx0c9ac3Fc4GHxA=;
-        b=3G5uLyxIhUKvXhygKe/BdevH06bkBHTOAVpSVPeFcVhxsUqxfu9kH4zWKy+J+M6eVspb/p
-        ZrgLFbE28ixXxHkAfYipr4NFucKxv+PxkmMroKWR0i5hwKi+DQBJmOPvKNKiBGr4ghU4Bk
-        DnetRL5ljxtb2zSKcOyVwaS4LYS8BtmZ7hzcuyc7ZB1kOo0EPtlD9h7Tls1jLioCM5Ajre
-        hKyL2EpNW6hNnTXyBrJlHtORn39MQHrA49DqXv+1uiJN0qw5Xfage2aRTFr8ag375vmtIa
-        6xg4ykT0CauWwbVYin6pvwNH4RVe0EcOiKR1A2p0AjhhMqlYN99IbGsrGLZMYQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667921434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4MVyWw7ozXcrMblhUHcrr7SNs20kmx0c9ac3Fc4GHxA=;
-        b=euqAlzo52o/6jrfZX8Lp+1bNRbUkZ1W8dwyxUykH/ceBVA7N2iV0R8a2CXOTia5ACyqyxN
-        PwW5yOmZ5m4N7CCQ==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     Frederic Weisbecker <frederic@kernel.org>
-cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v4 09/16] timer: Split out "get next timer interrupt"
- functionality
-In-Reply-To: <20221107124205.GC4588@lothringen>
-Message-ID: <d1baf616-1bd7-5c1-8721-4d45ae43f9@linutronix.de>
-References: <20221104145737.71236-1-anna-maria@linutronix.de> <20221104145737.71236-10-anna-maria@linutronix.de> <20221107124205.GC4588@lothringen>
+        Tue, 8 Nov 2022 10:34:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1868358BD1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:34:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C741AB81B3A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:34:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A06C433D7;
+        Tue,  8 Nov 2022 15:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667921658;
+        bh=QULdRw93pmvMhegOa4ePuSQURnFlXlrdf9tEjj03QEU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vLDabxVgpbNTSTwEWB3ZHvOVjlO8SaGNBAcpiztSlSLwy7uH3nCw2udS/4Wus2EI3
+         553gkZ9ijOdEjlDteLyE+agQjchnFbdCpsTrsV6IOTd84rRivdmZHcKiYSd76/6Mse
+         33yNLzFtCtTN/aOWcjNQQAyfEqc/qi2w0iDOw5wU=
+Date:   Tue, 8 Nov 2022 16:34:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: staging/wlan-ng query: convert to flexible array member
+Message-ID: <Y2p29zc/TeX8OFWU@kroah.com>
+References: <Y2px+zOGjkpGh6qC@qemulion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2px+zOGjkpGh6qC@qemulion>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022, Frederic Weisbecker wrote:
-
-> On Fri, Nov 04, 2022 at 03:57:30PM +0100, Anna-Maria Behnsen wrote:
-> > forward_and_idle_timer_bases() includes the functionality for getting the
-> > next timer interrupt. To reuse it, it is splitted into an separate function
-> > "get_next_timer_interrupt()".
-> > 
-> > This is preparatory work for the conversion of the NOHZ timer
-> > placement to a pull at expiry time model. No functional change.
-> > 
-> > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > ---
-> > v4: Fix typo in comment
-> > ---
-> >  kernel/time/timer.c | 93 +++++++++++++++++++++++++--------------------
-> >  1 file changed, 51 insertions(+), 42 deletions(-)
-> > 
-> > diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-> > index 680a0760e30d..853089febf83 100644
-> > --- a/kernel/time/timer.c
-> > +++ b/kernel/time/timer.c
-> > @@ -1704,6 +1704,46 @@ static unsigned long next_timer_interrupt(struct timer_base *base)
-> >  	return base->next_expiry;
-> >  }
-> >  
-> > +static unsigned long get_next_timer_interrupt(struct timer_base *base_local,
+On Tue, Nov 08, 2022 at 08:42:59PM +0530, Deepak R Varma wrote:
+> Hello,
 > 
-> So perhaps forward_and_idle_timer_interrupt() could stay as
-> "get_next_timer_interrupt()" and the new get_next_timer_interrupt() above could
-> become fetch_next_timer_interrupt().
+> First, my apologies for the long email.
+> I am requesting guidance on how to approach resolving the zero element flexible
+> VLO struct implementation in this driver in file drivers/staging/waln-ng/hfa384x.f
 > 
-> Just an idea.
+> The struct hfa384x_pdrec contains nested structs with zero element arrays.  These
+> zero element structs are part of a union 'data' inside the struct container. This
+> union 'data' is the last element of this container. Please see the code snip below:
+> 
+> <snip>
+> 
+> 	1068 struct hfa384x_pdrec {
+> 	   1         __le16 len;             /* in words */
+> 	   2         __le16 code;
+> 	   3         union pdr {
+> 	   4                 struct hfa384x_pdr_pcb_partnum pcb_partnum;
+> 	  11                 struct hfa384x_pdr_nicid nicid;
+> 	  12                 struct hfa384x_pdr_refdac_measurements refdac_measurements;
+> 	  13                 struct hfa384x_pdr_vgdac_measurements vgdac_measurements;
+> 	  14                 struct hfa384x_pdr_level_comp_measurements level_compc_measurements;
+> 	  15                 struct hfa384x_pdr_mac_address mac_address;
+> 	  39         } data;
+> 	  40 } __packed;
+> 
+> </snip>
+> 
+> The three structures in question are declared as follows in the same file:
+> 
+> <snip>
+> 	962  struct hfa384x_pdr_refdac_measurements {
+> 	   1         u16 value[0];
+> 	   2 } __packed;
+> 	   3
+> 	   4 struct hfa384x_pdr_vgdac_measurements {
+> 	   5         u16 value[0];
+> 	   6 } __packed;
+> 	   7
+> 	   8 struct hfa384x_pdr_level_comp_measurements {
+> 	   9         u16 value[0];
+> 	  10 } __packed;
+> </snip>
+> 
+> As per the C99 specifications, the flexible array struct should have at least
+> one member other than the true flexible array member. So converting these from
+> [0] to [] is not feasible in the current form.
+> 
+> I did not find these struct variables being used for memory allocation in the
+> code directly. My find may be short since the implementation appears to get very
+> complex as I tried to get deeper.
+> 
+> Can you please suggest how should I approach correcting the zero element flex
+> array implementation here? Can these structs be removed if they are unused?
 
-Hmm... it's better than mine :) I know, forward_and_idle_timer_bases() is
-not the best name.
+Are you sure they are unused?
 
-Maybe, it is total irrelevant: Since local and global timer information is
-required, the original get_next_timer_interrupt() does not return directly
-the next timer interrupt. This was introduced already in patch "timer:
-Retrieve next expiry of pinned/non-pinned timers seperately". So it's no
-longer possible to write:
+They look like structures that are read from the memory of a device,
+right?  Try removing the structures from the union and see what happens
+:)
 
-	next_timer = get_next_timer_interrupt()
+thanks,
 
-When having a function "get_something()" I would expect the information is
-returned directly. Perhaps just a thing that I would expect... the new
-get_next_timer_interrupt() returns directly the next timer interrupt.
-
-Thanks,
-
-	Anna-Maria
-
-
+greg k-h
