@@ -2,189 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A09162189A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 438136218A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234398AbiKHPlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
+        id S234436AbiKHPlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbiKHPlX (ORCPT
+        with ESMTP id S234424AbiKHPlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:41:23 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DBC5C769
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:41:22 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id k8so21639080wrh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 07:41:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yIl+Qt8RB0v0fumM9NIaZyrAwuRsmhqUeWJ9GHQ1hx0=;
-        b=tCARyLvz99VJwDDOt8Xky84bnUUHQRpdVlzGY8N2/kstISvgFZ+XRmF3dnucaExqjU
-         gNoMznVSOT/l6qRF6bSuD5jGOUxvgL5DQu9fGg5ChzhmOpWBGmA/BbS1g5mEHxdrYwJ/
-         3zfsblPBHjc1Q+F8VJQX86okwjgtp9PDxP6WwNgVDYi0Sjmcc1DzH0iZofsJTiMc0XX5
-         nLAnCvaUJcoAcPZAm61QUewMNYtiJCJqvqO/OgUIhWUGXHtk/ixGsh8f+TKuuHjnWQvP
-         QurTk0FpZ1lY1NntzdpbWCdYzPID6aKOgnwDTfMpcv9eRHouTlhzK/FnCIFI1bon23yk
-         CrVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yIl+Qt8RB0v0fumM9NIaZyrAwuRsmhqUeWJ9GHQ1hx0=;
-        b=NcgoE8nZdG1QBEMA+L6ZgkLVFxc50V9pG8tYsJ47MKoLRUP0zbfk1qGA0eTbM+MPBy
-         +zOtry6r3ClicK2s/jsDVvgfP8VCfxaiEdYbO+t9c/oBOLZrkz/psFsK9XEHsvH95ydt
-         5dj0rUKpToit1ICl+Ac8BlBoQZPbiIUcxAaTfSW+pJovkHL/tZMfDjiY/RFngqzZsX8h
-         4g2BFzmkU6Lp80pACVrDzFmIq8LgycXZ9sgR6mBPW0XOux0hlAsJtgmTYKHnBtRVxpis
-         IfRA2dMV19ILmC6YDnmYzXOVb1RGsNh6DGSXorZHDDjo56VAbG41gbuyTq3sI1/1FqXb
-         D7UA==
-X-Gm-Message-State: ACrzQf0CP0AZGg0MWmPytyPpKCSRPbl1+jGQ1K5RXbc4Ii8JaeLmC7T4
-        FzUUmy2KJJWAqN1roW4lACnH
-X-Google-Smtp-Source: AMsMyM7+d+ZWrTGxRSmDihyy1b++yj9QqCARq+aXt+XyRNBTeMJ0PMfwCPVQ1bkXDOvpnQRdItpMAw==
-X-Received: by 2002:adf:d08f:0:b0:238:55af:b5db with SMTP id y15-20020adfd08f000000b0023855afb5dbmr607597wrh.97.1667922080766;
-        Tue, 08 Nov 2022 07:41:20 -0800 (PST)
-Received: from localhost.localdomain ([117.207.25.46])
-        by smtp.gmail.com with ESMTPSA id e4-20020adff344000000b002364c77bc96sm10906899wrp.33.2022.11.08.07.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 07:41:19 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, viresh.kumar@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org
-Cc:     johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v5 3/3] cpufreq: qcom-hw: Add CPU clock provider support
-Date:   Tue,  8 Nov 2022 21:10:37 +0530
-Message-Id: <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
-References: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
+        Tue, 8 Nov 2022 10:41:53 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32F95C751;
+        Tue,  8 Nov 2022 07:41:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667922112; x=1699458112;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Fj2cRf0yfLP9Hty6jDMoaxrwsB/IsUZhdIEv+NMr+lk=;
+  b=WJCQ17IGIH0C/eLm+QAik0jtkVN2S7YfJVpUalNQfjx2/xNPmMfVCTiZ
+   ppg1EorRy7HsyGn20Ly00AvEnSqD9wyzpYfQZZC2u/DsCAEgFHUMgNyQu
+   1zxtMvshpKBJvE0IqcGbZAGOYaD95kx4ZT6d4F2dM9QKDSzVMdkfA9vBI
+   glur8/yq53SojqKajMS09TV2lY4yCzkCLt8cRPYaS+G6OQYJzDH2JkFZR
+   gY9iKSpnXFCGic50UE6e78vMwqivZa3H+FMudHxAkBfA2OhRE/b3RfhSW
+   IvfYrOQR0z4TfA0UCqu2O/tcWLzyFsmJTkDXC9JaZW0NV7VgN57outFLf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="290445132"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="290445132"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="669591064"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="669591064"
+Received: from liuc3-mobl1.ccr.corp.intel.com ([10.254.214.201])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:49 -0800
+Message-ID: <0ab36c3ac0841296227b96ec0a5cadca0c4ac2ed.camel@intel.com>
+Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from
+ cmos_do_probe()
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date:   Tue, 08 Nov 2022 23:41:47 +0800
+In-Reply-To: <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
+References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher>
+         <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
+         <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-cores. But this relationship is not represented with the clk framework
-so far.
+On Tue, 2022-11-08 at 14:09 +0100, Rafael J. Wysocki wrote:
+> On Tue, Nov 8, 2022 at 3:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
+> > On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > 
+> > > Notice that cmos_wake_setup() is the only user of acpi_rtc_info
+> > > and
+> > > it
+> > > can operate on the cmos_rtc variable directly, so it need not set
+> > > the
+> > > platform_data pointer before cmos_do_probe() is called.  Instead,
+> > > it
+> > > can be called by cmos_do_probe() in the case when the
+> > > platform_data
+> > > pointer is not set to implement the default behavior (which is to
+> > > use
+> > > the FADT information as long as ACPI support is enabled).
+> > > 
+> > 
+> > ...
+> > 
+> > > @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
+> > >               if (info->address_space)
+> > >                       address_space = info->address_space;
+> > > 
+> > > -             if (info->rtc_day_alarm && info->rtc_day_alarm <
+> > > 128)
+> > > -                     cmos_rtc.day_alrm = info->rtc_day_alarm;
+> > > -             if (info->rtc_mon_alarm && info->rtc_mon_alarm <
+> > > 128)
+> > > -                     cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> > > -             if (info->rtc_century && info->rtc_century < 128)
+> > > -                     cmos_rtc.century = info->rtc_century;
+> > > +             cmos_rtc.day_alrm = info->rtc_day_alarm;
+> > > +             cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> > > +             cmos_rtc.century = info->rtc_century;
+> > > 
+> > >               if (info->wake_on && info->wake_off) {
+> > >                       cmos_rtc.wake_on = info->wake_on;
+> > >                       cmos_rtc.wake_off = info->wake_off;
+> > >               }
+> > > +     } else {
+> > > +             cmos_wake_setup(dev);
+> > >       }
+> > > 
+> > > 
+> > 
+> > Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup
+> > from
+> > ACPI glue into RTC driver"), dev->platform_data is set in
+> > drivers/acpi/glue.c, and the above commit moves it to
+> > cmos_wake_setup()
+> > in this file.
+> > 
+> > Now, with this patch, my understanding is that dev->platform_data
+> > is
+> > never set, thus we can remove the 'info' variable and the
+> >         if (info)
+> > check above.
+> 
+> There are other users of this driver which can be found by grepping
+> for cmos_rtc_board_info.
+> 
+> They create platform device objects with platform_data set which are
+> then bound to by this driver.
 
-So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-clock producer/consumer relationship cleaner and is also useful for CPU
-related frameworks like OPP to know the frequency at which the CPUs are
-running.
+yeah, I overlooked this.
 
-The clock frequency provided by the driver is for each frequency domain.
-We cannot get the frequency of each CPU core because, not all platforms
-support per-core DCVS feature.
-
-Also the frequency supplied by the driver is the actual frequency that
-comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-not same as what the CPUFreq framework has set but it is the one that gets
-supplied to the CPUs after throttling by LMh.
-
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 5e0598730a04..86bb11de347f 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
- #include <linux/cpufreq.h>
- #include <linux/init.h>
- #include <linux/interconnect.h>
-@@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
- 	bool cancel_throttle;
- 	struct delayed_work throttle_work;
- 	struct cpufreq_policy *policy;
-+	struct clk_hw cpu_clk;
- 
- 	bool per_core_dcvs;
- 
-@@ -615,8 +617,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
- 	.ready		= qcom_cpufreq_ready,
- };
- 
-+static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
-+
-+	return qcom_lmh_get_throttle_freq(data);
-+}
-+
-+static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
-+	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
-+};
-+
- static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- {
-+	struct clk_hw_onecell_data *clk_data;
- 	struct device *dev = &pdev->dev;
- 	struct device *cpu_dev;
- 	struct clk *clk;
-@@ -659,8 +673,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
- 
-+	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
-+	if (!clk_data)
-+		return -ENOMEM;
-+
-+	clk_data->num = num_domains;
-+
- 	for (i = 0; i < num_domains; i++) {
- 		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
-+		struct clk_init_data init = {};
-+		const char *clk_name;
- 		struct resource *res;
- 		void __iomem *base;
- 
-@@ -672,6 +694,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 		data->base = base;
- 		data->res = res;
-+
-+		/* Register CPU clock for each frequency domain */
-+		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
-+		init.name = clk_name;
-+		init.flags = CLK_GET_RATE_NOCACHE;
-+		init.ops = &qcom_cpufreq_hw_clk_ops;
-+		data->cpu_clk.init = &init;
-+
-+		ret = devm_clk_hw_register(dev, &data->cpu_clk);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
-+			return ret;
-+		}
-+
-+		clk_data->hws[i] = &data->cpu_clk;
-+	}
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
-+		return ret;
- 	}
- 
- 	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
--- 
-2.25.1
+thanks,
+rui
 
