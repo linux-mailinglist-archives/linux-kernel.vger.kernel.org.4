@@ -2,338 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CAC621165
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80605621160
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbiKHMts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
+        id S234291AbiKHMtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbiKHMtp (ORCPT
+        with ESMTP id S234277AbiKHMst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:49:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C9653ECB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:48:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667911708;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 8 Nov 2022 07:48:49 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE6563C7;
+        Tue,  8 Nov 2022 04:48:44 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EFE4F219A7;
+        Tue,  8 Nov 2022 12:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667911722; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=QAiHLCB1b9Tp2kmiKlrL3PjLUEp05CS+ZW+ASsM00nw=;
-        b=i0139aR3HuYShZMDaKNGCQKJix9KV2AnBnv1a4jolGUYeWY1wNWbmOOZrIU8YraqP6eOoh
-        YcRdd81XCVcYA9sCNwDccfBdI7UCfs78vI8obujEpw8mtUf6bZO/MiuWb4WHor76RkU7Jm
-        HaxzODPased4GjIDxDwdut8EPsvmVMo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-388-njv_6TCpNRq2YF6bhi7uMA-1; Tue, 08 Nov 2022 07:48:27 -0500
-X-MC-Unique: njv_6TCpNRq2YF6bhi7uMA-1
-Received: by mail-wm1-f72.google.com with SMTP id bg21-20020a05600c3c9500b003c2acbff422so746976wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:48:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QAiHLCB1b9Tp2kmiKlrL3PjLUEp05CS+ZW+ASsM00nw=;
-        b=1zLvo0MrGUeTIFHeviKLxKrba37vC2rVPmZ3mVNt4UfZ5A7821voSdOQGj1J7WU//q
-         vuAC9DKusTC3Sz9OOV6/xm5iRjWcPRMqWCHoRp+aMLnhHmGUcfWe5oGK4B/KNd/usGZJ
-         LRS+TAqLNpm+fABU5Npa41gCQKJqLmx3L6jCUC6ucjNw+/3KLtVan60vNjj8HGZjKu1N
-         sL4vMGU8mSco5YlPe6KKOt9lmGVy2eUnngYUXkRFXDqtk8MWrGumQdC04pdGLHvu7yoo
-         oVL6IunR5r3k9a6as8nXXIjDy5GPzy3SU7IMIpU+ChlaTtKvbdCcivELCmkVTJT71M5K
-         3iMw==
-X-Gm-Message-State: ANoB5plWtdroCFQXbrxfjXkMFOYX47aqdKM2fWMxhuRqNBvgUl/7xVU2
-        QkRP96n7zFl3j9+WW87VyHAmFWOeldvDe8XdG4jO61q50hFVz/+j1KOiYV8Aquj58vi/dNUlLEt
-        yDYFm0D/ByzFH2Vb6TujGvgA=
-X-Received: by 2002:adf:ef0d:0:b0:23a:aa41:8651 with SMTP id e13-20020adfef0d000000b0023aaa418651mr15413863wro.54.1667911705851;
-        Tue, 08 Nov 2022 04:48:25 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5j11s3d8iD6DLvWeBjJe0qJXbVbmoTTqp+N63kalsS6r92bGmymGHS0a6rForxGAZtyOS49g==
-X-Received: by 2002:adf:ef0d:0:b0:23a:aa41:8651 with SMTP id e13-20020adfef0d000000b0023aaa418651mr15413850wro.54.1667911705525;
-        Tue, 08 Nov 2022 04:48:25 -0800 (PST)
-Received: from [192.168.9.16] (net-2-34-30-201.cust.vodafonedsl.it. [2.34.30.201])
-        by smtp.gmail.com with ESMTPSA id m3-20020a05600c3b0300b003cf47556f21sm15119405wms.2.2022.11.08.04.48.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 04:48:24 -0800 (PST)
-Message-ID: <5a786018-559d-b25c-8a64-95968c6c1f44@redhat.com>
-Date:   Tue, 8 Nov 2022 13:48:23 +0100
+        bh=7k0wcvAZ4CGycbyZiSlNXig+JuKA87/KdBpVjXocIXI=;
+        b=TvITmIW+NvUP31Vs2pXHHA/g/1HPVCIWdiaOXLBcEBp5LSuqhEAY9pt3WwUeMa515lAiYj
+        +dbU/rTUWkv/nzDWPTxM9NHJj3FpkskPksk0eG+Ntn0w2CE3cuBw++pqbKL1pADrTjGAfW
+        MGZZIRvABkdohDVSxXyje8rksnR16CI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667911722;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7k0wcvAZ4CGycbyZiSlNXig+JuKA87/KdBpVjXocIXI=;
+        b=eoW2GHbH4yVF3ZtVg91GmEbafZCZk31318GoabK4AfUI5z9G9ATKAZ9HhcKrYX+J3fwO4l
+        GSGe0uSWnjSMl5Bw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DDBED13398;
+        Tue,  8 Nov 2022 12:48:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gBYcNipQamMjawAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 08 Nov 2022 12:48:42 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CBB1EA0704; Tue,  8 Nov 2022 13:48:41 +0100 (CET)
+Date:   Tue, 8 Nov 2022 13:48:41 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     jack@suse.cz, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        paolo.valente@linaro.org, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com
+Subject: Re: [PATCH] block, bfq: fix null pointer dereference in
+ bfq_bio_bfqg()
+Message-ID: <20221108124841.et6cddvczncp2cz7@quack3>
+References: <20221108103434.2853269-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-To:     ilpo.jarvinen@linux.intel.com
-Cc:     andriy.shevchenko@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, corbet@lwn.net,
-        geert+renesas@glider.be, hao.wu@intel.com, jirislaby@kernel.org,
-        johan@kernel.org, linux-doc@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, lukas@wunner.de, macro@orcam.me.uk,
-        marpagan@redhat.com, matthew.gerlach@linux.intel.com,
-        mdf@kernel.org, niklas.soderlund+renesas@ragnatech.se,
-        russell.h.weight@intel.com, tianfei.zhang@intel.com,
-        trix@redhat.com, yilun.xu@intel.com
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com>
- <20221020212610.697729-5-matthew.gerlach@linux.intel.com>
- <Y11FmiDeVhGir+7z@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2210311719460.2680729@rhweight-WRK1>
- <Y2B6kAnd+m3ftWRf@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2211010843110.2746019@rhweight-WRK1>
- <1a812bba-6832-36cc-dfed-7d7ddd8f421c@linux.intel.com>
- <alpine.DEB.2.22.394.2211011037420.2746019@rhweight-WRK1>
- <95eaaf28-4472-dfd7-624f-73d58bfccaf@linux.intel.com>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <95eaaf28-4472-dfd7-624f-73d58bfccaf@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108103434.2853269-1-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue 08-11-22 18:34:34, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Out test found a following problem in kernel 5.10, and the same problem
+> should exist in mainline:
+> 
+> BUG: kernel NULL pointer dereference, address: 0000000000000094
+> PGD 0 P4D 0
+> Oops: 0000 [#1] SMP
+> CPU: 7 PID: 155 Comm: kworker/7:1 Not tainted 5.10.0-01932-g19e0ace2ca1d-dirty 4
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-b4
+> Workqueue: kthrotld blk_throtl_dispatch_work_fn
+> RIP: 0010:bfq_bio_bfqg+0x52/0xc0
+> Code: 94 00 00 00 00 75 2e 48 8b 40 30 48 83 05 35 06 c8 0b 01 48 85 c0 74 3d 4b
+> RSP: 0018:ffffc90001a1fba0 EFLAGS: 00010002
+> RAX: ffff888100d60400 RBX: ffff8881132e7000 RCX: 0000000000000000
+> RDX: 0000000000000017 RSI: ffff888103580a18 RDI: ffff888103580a18
+> RBP: ffff8881132e7000 R08: 0000000000000000 R09: ffffc90001a1fe10
+> R10: 0000000000000a20 R11: 0000000000034320 R12: 0000000000000000
+> R13: ffff888103580a18 R14: ffff888114447000 R15: 0000000000000000
+> FS:  0000000000000000(0000) GS:ffff88881fdc0000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000094 CR3: 0000000100cdb000 CR4: 00000000000006e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  bfq_bic_update_cgroup+0x3c/0x350
+>  ? ioc_create_icq+0x42/0x270
+>  bfq_init_rq+0xfd/0x1060
+>  bfq_insert_requests+0x20f/0x1cc0
+>  ? ioc_create_icq+0x122/0x270
+>  blk_mq_sched_insert_requests+0x86/0x1d0
+>  blk_mq_flush_plug_list+0x193/0x2a0
+>  blk_flush_plug_list+0x127/0x170
+>  blk_finish_plug+0x31/0x50
+>  blk_throtl_dispatch_work_fn+0x151/0x190
+>  process_one_work+0x27c/0x5f0
+>  worker_thread+0x28b/0x6b0
+>  ? rescuer_thread+0x590/0x590
+>  kthread+0x153/0x1b0
+>  ? kthread_flush_work+0x170/0x170
+>  ret_from_fork+0x1f/0x30
+> Modules linked in:
+> CR2: 0000000000000094
+> ---[ end trace e2e59ac014314547 ]---
+> RIP: 0010:bfq_bio_bfqg+0x52/0xc0
+> Code: 94 00 00 00 00 75 2e 48 8b 40 30 48 83 05 35 06 c8 0b 01 48 85 c0 74 3d 4b
+> RSP: 0018:ffffc90001a1fba0 EFLAGS: 00010002
+> RAX: ffff888100d60400 RBX: ffff8881132e7000 RCX: 0000000000000000
+> RDX: 0000000000000017 RSI: ffff888103580a18 RDI: ffff888103580a18
+> RBP: ffff8881132e7000 R08: 0000000000000000 R09: ffffc90001a1fe10
+> R10: 0000000000000a20 R11: 0000000000034320 R12: 0000000000000000
+> R13: ffff888103580a18 R14: ffff888114447000 R15: 0000000000000000
+> FS:  0000000000000000(0000) GS:ffff88881fdc0000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000000000094 CR3: 0000000100cdb000 CR4: 00000000000006e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> 
+> Root cause is quite complex:
+> 
+> 1) use bfq elevator for the test device.
+> 2) create a cgroup CG
+> 3) config blk throtl in CG
+> 
+>    blkg_conf_prep
+>     blkg_create
+> 
+> 4) create a thread T1 and issue async io in CG:
+> 
+>    bio_init
+>     bio_associate_blkg
+>    ...
+>    submit_bio
+>     submit_bio_noacct
+>      blk_throtl_bio -> io is throttled
+>      // io submit is done
+> 
+> 5) switch elevator:
+> 
+>    bfq_exit_queue
+>     blkcg_deactivate_policy
+>      list_for_each_entry(blkg, &q->blkg_list, q_node)
+>       blkg->pd[] = NULL
+>       // bfq policy is removed
+> 
+> 5) thread t1 exist, then remove the cgroup CG:
+> 
+>    blkcg_unpin_online
+>     blkcg_destroy_blkgs
+>      blkg_destroy
+>       list_del_init(&blkg->q_node)
+>       // blkg is removed from queue list
+> 
+> 6) switch elevator back to bfq
+> 
+>  bfq_init_queue
+>   bfq_create_group_hierarchy
+>    blkcg_activate_policy
+>     list_for_each_entry_reverse(blkg, &q->blkg_list)
+>      // blkg is removed from list, hence bfq policy is still NULL
+> 
+> 7) throttled io is dispatched to bfq:
+> 
+>  bfq_insert_requests
+>   bfq_init_rq
+>    bfq_bic_update_cgroup
+>     bfq_bio_bfqg
+>      bfqg = blkg_to_bfqg(blkg)
+>      // bfqg is NULL because bfq policy is NULL
+> 
+> The problem is only possible in bfq because only bfq can be deactivated and
+> activated while queue is online, while others can only be deactivated while
+> the device is removed.
+> 
+> Fix the problem in bfq by checking if blkg is online before calling
+> blkg_to_bfqg().
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  block/bfq-cgroup.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-On 2022-11-02 10:57, Ilpo Järvinen wrote:
-> On Tue, 1 Nov 2022, matthew.gerlach@linux.intel.com wrote:
-> 
->>
->>
->> On Tue, 1 Nov 2022, Ilpo Järvinen wrote:
->>
->>> On Tue, 1 Nov 2022, matthew.gerlach@linux.intel.com wrote:
->>>
->>>>
->>>>
->>>> On Tue, 1 Nov 2022, Xu Yilun wrote:
->>>>
->>>>> On 2022-10-31 at 17:34:39 -0700, matthew.gerlach@linux.intel.com wrote:
->>>>>>
->>>>>>
->>>>>> On Sat, 29 Oct 2022, Xu Yilun wrote:
->>>>>>
->>>>>>> On 2022-10-20 at 14:26:10 -0700, matthew.gerlach@linux.intel.com
->>>>>>> wrote:
->>>>>>>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>>>>>
->>>>>>>> Add a Device Feature List (DFL) bus driver for the Altera
->>>>>>>> 16550 implementation of UART.
->>>>>>>>
->>>>>>>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>>>>> ---
->>>>>>>> v4: use dev_err_probe() everywhere that is appropriate
->>>>>>>>     clean up noise
->>>>>>>>     change error messages to use the word, unsupported
->>>>>>>>     tried again to sort Makefile and KConfig better
->>>>>>>>     reorder probe function for easier error handling
->>>>>>>>     use new dfh_find_param API
->>>>>>>>
->>>>>>>> v3: use passed in location of registers
->>>>>>>>     use cleaned up functions for parsing parameters
->>>>>>>>
->>>>>>>> v2: clean up error messages
->>>>>>>>     alphabetize header files
->>>>>>>>     fix 'missing prototype' error by making function static
->>>>>>>>     tried to sort Makefile and Kconfig better
->>>>>>>> ---
->>>>>>>>  drivers/tty/serial/8250/8250_dfl.c | 149
->>>>>>>> +++++++++++++++++++++++++++++
->>>>>>>>  drivers/tty/serial/8250/Kconfig    |  12 +++
->>>>>>>>  drivers/tty/serial/8250/Makefile   |   1 +
->>>>>>>>  3 files changed, 162 insertions(+)
->>>>>>>>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
->>>>>>>>
->>>>>>>> diff --git a/drivers/tty/serial/8250/8250_dfl.c
->>>>>>>> b/drivers/tty/serial/8250/8250_dfl.c
->>>>>>>> new file mode 100644
->>>>>>>> index 000000000000..f02f0ba2a565
->>>>>>>> --- /dev/null
->>>>>>>> +++ b/drivers/tty/serial/8250/8250_dfl.c
->>>>>>>> @@ -0,0 +1,149 @@
->>>>>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>>>>> +/*
->>>>>>>> + * Driver for FPGA UART
->>>>>>>> + *
->>>>>>>> + * Copyright (C) 2022 Intel Corporation, Inc.
->>>>>>>> + *
->>>>>>>> + * Authors:
->>>>>>>> + *   Ananda Ravuri <ananda.ravuri@intel.com>
->>>>>>>> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>>>>>>> + */
->>>>>>>> +
->>>>>>>> +#include <linux/bitfield.h>
->>>>>>>> +#include <linux/dfl.h>
->>>>>>>> +#include <linux/io-64-nonatomic-lo-hi.h>
->>>>>>>> +#include <linux/kernel.h>
->>>>>>>> +#include <linux/module.h>
->>>>>>>> +#include <linux/serial.h>
->>>>>>>> +#include <linux/serial_8250.h>
->>>>>>>> +
->>>>>>>> +struct dfl_uart {
->>>>>>>> +	int line;
->>>>>>>> +};
->>>>>>>> +
->>>>>>>> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct
->>>>>>>> uart_8250_port *uart)
->>>>>>>> +{
->>>>>>>> +	struct device *dev = &dfl_dev->dev;
->>>>>>>> +	u64 v, fifo_len, reg_width;
->>>>>>>> +	u64 *p;
->>>>>>>> +
->>>>>>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
->>>>>>>> +	if (!p)
->>>>>>>> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ
->>>>>>>> param\n");
->>>>>>>> +
->>>>>>>> +	uart->port.uartclk = *p;
->>>>>>>> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
->>>>>>>> +
->>>>>>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
->>>>>>>> +	if (!p)
->>>>>>>> +		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN
->>>>>>>> param\n");
->>>>>>>> +
->>>>>>>> +	fifo_len = *p;
->>>>>>>> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
->>>>>>>> +
->>>>>>>> +	switch (fifo_len) {
->>>>>>>> +	case 32:
->>>>>>>> +		uart->port.type = PORT_ALTR_16550_F32;
->>>>>>>> +		break;
->>>>>>>> +
->>>>>>>> +	case 64:
->>>>>>>> +		uart->port.type = PORT_ALTR_16550_F64;
->>>>>>>> +		break;
->>>>>>>> +
->>>>>>>> +	case 128:
->>>>>>>> +		uart->port.type = PORT_ALTR_16550_F128;
->>>>>>>> +		break;
->>>>>>>> +
->>>>>>>> +	default:
->>>>>>>> +		return dev_err_probe(dev, -EINVAL, "unsupported
->>>>>>>> fifo_len %llu\n", fifo_len);
->>>>>>>> +	}
->>>>>>>> +
->>>>>>>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
->>>>>>>> +	if (!p)
->>>>>>>> +		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT
->>>>>>>> param\n");
->>>>>>>> +
->>>>>>>> +	v = *p;
->>>>>>>> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
->>>>>>>> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
->>>>>>>
->>>>>>> I have concern that the raw layout inside the parameter block is
->>>>>>> still exposed to drivers and need to be parsed by each driver.
->>>>>>
->>>>>> Raw parameter block will always have to be passed to the driver
->>>>>> because HW
->>>>>> specific properties can be defined that will need to be parsed by the
->>>>>> specific driver.
->>>>>
->>>>> So there is a question about the scope of the definitions of these
->>>>> parameter
->>>>> blocks. MSIX seems globally used across all dfl devices. REG_LAYOUT
->>>>> seems specific to uart?
->>>>
->>>> There are definitely two classes of parameter blocks.  One class is HW
->>>> agnostic parameters where the parameters are relevant to many different
->>>> kinds
->>>> of HW components.  MSI-X, and input clock-frequency are certainly HW
->>>> agnostic,
->>>> and it turns out that REG_LAYOUT is not specific to uart.  You can see
->>>> reg_bits and reg_stride in struct regmap_config.  There are also device
->>>> tree
->>>> bindings for reg-shift and reg-io-width.  The second class of parameters
->>>> would
->>>> be specific to HW component.  In the case of this uart driver, all
->>>> parameters
->>>> would be considered HW agnostic parameters.
->>>>
->>>>>
->>>>> If a parameter block is widely used in dfl drivers, duplicate the
->>>>> parsing
->>>>> from HW layout in each driver may not be a good idea. While for device
->>>>> specific parameter block, it's OK.
->>>>
->>>> It sounds like we are in agreement.
->>>>
->>>>>
->>>>> Another concern is the indexing of the parameter IDs. If some parameter
->>>>> blocks should be device specific, then no need to have globally indexed
->>>>> parameter IDs. Index them locally in device is OK. So put the
->>>>> definitions
->>>>> of ID values, HW layout and their parsing operation in each driver.
->>>>
->>>> It may be confusing for two drivers to use the same parameter id that have
->>>> different meanings and data layout.  Since all the parameters for this
->>>> driver
->>>> would be considered HW agnostic, we'd don't need to address this issue
->>>> with
->>>> this patchset.
->>>>
->>>>>>> How about we define HW agnostic IDs for parameter specific fields
->>>>>>> like:
->>>>>>>
->>>>>>> PARAM_ID		FIELD_ID
->>>>>>> ================================
->>>>>>> MSIX			STARTV
->>>>>>> 			NUMV
->>>>>>> --------------------------------
->>>>>>> CLK			FREQ
->>>>>>> --------------------------------
->>>>>>> FIFO			LEN
->>>>>>> --------------------------------
->>>>>>> REG_LAYOUT		WIDTH
->>>>>>> 			SHIFT
->>>>>>>
->>>>>>> And define like u64 dfl_find_param(struct dfl_device *, int
->>>>>>> param_id,
->>>>>>> int field_id)
->>>>>>
->>>>>> I don't think dfl_find_param as defined above adds much value.
->>>>>>
->>>>>>>
->>>>>>> Think further, if we have to define HW agnostic property - value
->>>>>>> pairs,
->>>>>>> why don't we just use "Software nodes for the firmware node", see
->>>>>>> drivers/base/swnode.c. I think this may be a better choice.
->>>>>>
->>>>>> I am looking into "Software nodes for the firmware node", and it can
->>>>>> be
->>>>>> used
->>>>>> for HW agnostic properties.  Each dfl driver will still have to make a
->>>>>> function call to fetch each HW agnostice property value as well as a
->>>>>> function call to find the HW specific parameters and then parse those
->>>>>> parameters.
->>>
->>> Btw, another aspect this discussion has completely overlooked is the
->>> presence of parameter version and how it impacts data layout. Is v1
->>> always going be a subset of v2 or can a later version remove something
->>> v1 had?
->>
->> In general it would be preferable for v1 to be a subset of v2.  This allows
->> for v1 SW to work on v2 HW.
-> 
-> In that case, shouldn't the minimum acceptable version be part of 
-> dfh_find_param() parameters?
-> 
-> Currently there's no way for the caller to even look what version the 
-> parameter is from dfh_find_param()'s return value (except with some 
-> negative offset hack to access parameter header).
-> 
-> 
+Hum, that is indeed contrieved ;). Your fixup makes sense so feel free to
+add:
 
-Why not just checking dfl_dev->dfh_version in dfl_uart_probe() before
-calling dfh_find_param()? In general, any dfl_driver could potentially
-do this check in its *_probe() function before reading the header to avoid
-compatibility issues.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Cheers,
-Marco
+								Honza
 
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index 144bca006463..7d624a3a3f0f 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -610,6 +610,10 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+>  	struct bfq_group *bfqg;
+>  
+>  	while (blkg) {
+> +		if (!blkg->online) {
+> +			blkg = blkg->parent;
+> +			continue;
+> +		}
+>  		bfqg = blkg_to_bfqg(blkg);
+>  		if (bfqg->online) {
+>  			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
