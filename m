@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6243622020
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7460E622025
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKHXKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S229576AbiKHXK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKHXKR (ORCPT
+        with ESMTP id S230048AbiKHXKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:10:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E2E1D32A;
-        Tue,  8 Nov 2022 15:10:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 8 Nov 2022 18:10:44 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926F422B06;
+        Tue,  8 Nov 2022 15:10:39 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7e8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e8:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 597CC617DB;
-        Tue,  8 Nov 2022 23:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A6DADC433C1;
-        Tue,  8 Nov 2022 23:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667949015;
-        bh=BUIad6ZY4RJnNyNfGzLtmoCClzP6cuBxHkB0Ra7AX6Q=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fuH8TIh9GC7W+/nLQ1VauHSE6CfTM+lBzpbJfb8H24Da+2yKMEmoC1lOK7qUFU4cf
-         45WHQTZhjkX6VVHSTZ4q8lbsTRa7kxVVLLxMpdlX51RqrNFoxc0goNjqlhFEeKxMAr
-         YrjYa4WT16xC+iK6sG8YFPvj1nUgJIO04OOOsdhtC8ahnDSC5DHgMFSV5sGDPcmXm5
-         MHckQlZ6CCmhV8Z9aonBafUuukPzQ6vZIA9viC6N/K+3Hy80p0eY6+SuW7X1CrkYiC
-         dxkld8fiHWX3Ro4N7/Q1/I5MgZAYxPBrd4dFtoKxEryg3YSB5GsvSAgMwp0bXBuF7r
-         nQPm5ieDxRrGQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E1CAE270D3;
-        Tue,  8 Nov 2022 23:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DBC121EC03B9;
+        Wed,  9 Nov 2022 00:10:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667949037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MzGRpumXAyDorB94qJhH4CdO9wTTZaFcqHTtZT9tz4U=;
+        b=nk03BrMjaQjePwEJbGR3s60Yvw80tchgGtAKXD30v9fkOEMLVfrXEQPMVKFETG8YXdeiL2
+        1JlyaIARB2hfe2OYC/WEvJrp4csioagXFh1TnpGu+sptEKVJZjyg9FMZYXlkVJ+A8IsMGD
+        CDtPSn4fnuU9WKia1gD3DlDc9mMYHx0=
+Date:   Wed, 9 Nov 2022 00:10:32 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com
+Subject: Re: [PATCH 2/3] x86/cpu/amd: Add feature bit for MSR_AMD64_LS_CFG
+ enumeration
+Message-ID: <Y2rh6FN+gbD6Vbzj@zn.tnic>
+References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+ <034c7f5ac243ee7b40ba1a8cc3f9b10b1e380674.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+ <Y2qlyfRKgIc4KVcx@zn.tnic>
+ <20221108225141.aikng7veemp25p62@desk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next] lib: Fix some kernel-doc comments
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166794901557.27874.17243575572420623222.git-patchwork-notify@kernel.org>
-Date:   Tue, 08 Nov 2022 23:10:15 +0000
-References: <20221107062623.6709-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20221107062623.6709-1-yang.lee@linux.alibaba.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, fw@strlen.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        abaci@linux.alibaba.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221108225141.aikng7veemp25p62@desk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Nov 08, 2022 at 02:51:41PM -0800, Pawan Gupta wrote:
+> Looking at bsp_init_amd() this feature bit will only be set on AMD
+> families 0x15-0x17. Andrew mentioned that the MSR LS_CFG is present on
+> AMD family >= 0x10 && family <= 0x18.
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Do you need to save that MSR on those families?
 
-On Mon,  7 Nov 2022 14:26:23 +0800 you wrote:
-> Make the description of @policy to @p in nla_policy_len()
-> to clear the below warnings:
-> 
-> lib/nlattr.c:660: warning: Function parameter or member 'p' not described in 'nla_policy_len'
-> lib/nlattr.c:660: warning: Excess function parameter 'policy' description in 'nla_policy_len'
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2736
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> 
-> [...]
+Or do 0x15-0x18 suffice?
 
-Here is the summary with links:
-  - [-next] lib: Fix some kernel-doc comments
-    https://git.kernel.org/netdev/net-next/c/8e18be7610ae
+Yes, 0x18 because that's Hygon and that does its own detection.
 
-You are awesome, thank you!
+So, do you need to save it on families 0x10-0x14?
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette
