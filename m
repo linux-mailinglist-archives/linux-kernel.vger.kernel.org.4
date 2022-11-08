@@ -2,125 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985E2620DE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 271CD620DE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbiKHK4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        id S233747AbiKHK5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbiKHK4M (ORCPT
+        with ESMTP id S233982AbiKHK5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:56:12 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7563C45EEB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:56:11 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id i21so21831954edj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:56:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FccelAfQS/m5g8ggsBzyXrVvppJAlPrrtbe85Vmaz8Y=;
-        b=feDRgRyqWhJmIdvbBPPnVEbuWegO60t1uAEif7gII8pT7NHrsotmcPggE2iXi07sok
-         LoFVA1wmGZnhSaUApPZIeRymkQ0LLfUW9pNTUylaRhpfpq6S0RjCpGqiW42j3SQE0mcL
-         8UhSo3xK2Z24huYBJUNp4WJjiAEfLfhlfwNdgsfwqWar6cD6OTzg7lwhMH8vl6S4llfV
-         eBAnG3PdM7zj5H6TpZY8gt/fqIApdoHtblZD7WaXU/FoG+ETWt4KqJCf/qVKLxWRgcLg
-         ZamVJQLseyGIMv4d1z8ynwiOuMlNbil0Z+OQaaPHzw3kup38BGdckBVdkiSlHkHtaQTj
-         uTiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FccelAfQS/m5g8ggsBzyXrVvppJAlPrrtbe85Vmaz8Y=;
-        b=VW17ZMy7c5QFgDCDGpNrt7hzgDJPfRg3j8wa9ps8+CXNRxZDJs9avCaSmdXwvEfHYp
-         Dq+P2HztBlSHqm9GCid6t1s5IhtxY73KwdKS1q5xBkw5mlshbV6hgXh0k/DPvnkENufr
-         qPnm+zJDGcDPd4N3otjiZNFiVJEJrClJe6Uda6c0ZMySgpFRaiYKcS24TcZbR8iAr6GC
-         bLF70Vo+FmucGRKk1MDeCWjzBaxE8IV0FSDFhdC0xbr0zKq1DYmt50vaZt5gcS07z0m6
-         /LSMCZzci4TyWmMSgXU8K0MRaw0AbQ6dBWrWvWMg+WiCJ+uRba1igvH7L1F+Jtomoskt
-         8T1w==
-X-Gm-Message-State: ACrzQf1bVGo7tSQOwptxGYhAN9AcRQ7TW4EyUEv2dJTdlrijMQV8gm8c
-        qdQEpsxA5VaTzOAor8yUGK8WeW2r/yXubMqbKSppKQ==
-X-Google-Smtp-Source: AMsMyM4KOaiC0JNQ11EpiDKQI00Gz/S86LhHNuQlyz7TpGUYby386MG585a5cdedC4QDpFcFKnOwfrbBWZ1atnMKnbI=
-X-Received: by 2002:aa7:c718:0:b0:462:ff35:95dc with SMTP id
- i24-20020aa7c718000000b00462ff3595dcmr53791725edq.32.1667904970028; Tue, 08
- Nov 2022 02:56:10 -0800 (PST)
+        Tue, 8 Nov 2022 05:57:02 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE0829CB4;
+        Tue,  8 Nov 2022 02:57:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7LZgN1MGzpYB9kQzT0oOgi5SYlCbGt69gduWh0AtukQ=; b=macuIFLkl9VFOW3bU8Hl7xDksA
+        1hOxJwylT4ApuyJmgKKPlljl6wuxi+ay9ZY8fNk7AvtC05OrBcmJCAq9Geeh0QZcuzmEJoqt94mfA
+        HRG6JLmFro8OpFko+bKdJ8BTnGoPG2QUCLWNC/Uy2G5RPLkpKCZ2pWTPIaUzxQuw0Klk=;
+Received: from p200300daa72ee1006d973cebf3767a25.dip0.t-ipconnect.de ([2003:da:a72e:e100:6d97:3ceb:f376:7a25] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1osMHk-000Ui9-N2; Tue, 08 Nov 2022 11:56:52 +0100
+Message-ID: <75932a98-0f9b-0cda-c1dc-29322bc0141b@nbd.name>
+Date:   Tue, 8 Nov 2022 11:56:52 +0100
 MIME-Version: 1.0
-References: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
-In-Reply-To: <20221031-gpiolib-swnode-v1-0-a0ab48d229c7@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 11:55:58 +0100
-Message-ID: <CACRpkdYRcqHoW5KOaOW-kSh5QsTM2nZgdfM5AnNPZiepx7FWPQ@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Add support for software nodes to gpiolib
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH 08/14] net: vlan: remove invalid VLAN protocol warning
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+References: <20221107215745.ascdvnxqrbw4meuv@skbuf>
+ <3b275dda-39ac-282d-8a46-d3a95fdfc766@nbd.name>
+ <20221108090039.imamht5iyh2bbbnl@skbuf>
+ <0948d841-b0eb-8281-455a-92f44586e0c0@nbd.name>
+ <20221108094018.6cspe3mkh3hakxpd@skbuf>
+ <a9109da1-ba49-d8f4-1315-278e5c890b99@nbd.name>
+ <20221108100851.tl5aqhmbc5altdwv@skbuf>
+ <5dbfa404-ec02-ac41-8c9b-55f8dfb7800a@nbd.name>
+ <20221108103330.xt6wi3x3ugp7bbih@skbuf>
+ <1be4d21b-c0a4-e136-ed68-c96470135f14@nbd.name>
+ <20221108105237.v4coebbj7kzee7y6@skbuf>
+From:   Felix Fietkau <nbd@nbd.name>
+In-Reply-To: <20221108105237.v4coebbj7kzee7y6@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 7:10 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
+On 08.11.22 11:52, Vladimir Oltean wrote:
+> On Tue, Nov 08, 2022 at 11:42:09AM +0100, Felix Fietkau wrote:
+>> Okay, I will stick with METADATA_HW_PORT_MUX for now. If we use it in the
+>> flow dissector to avoid the tagger specific fixup, we might as well use it
+>> in DSA to skip the tag proto receive call. What do you think?
+> 
+> I suppose that dsa_switch_rcv() could test for the presence of a metadata_dst
+> and treat that generically if present, without unnecessarily calling down into
+> the tagging protocol ->rcv() call. The assumption being that the metadata_dst
+> is always formatted (by the DSA master) in a vendor-agnostic way.
+Right. The assumption is that if we use METADATA_HW_PORT_MUX, the field 
+md_dst->u.port_info.port_id will contain the index of the DSA port.
 
-> This series attempts to add support for software nodes to gpiolib, using
-> software node references. This allows us to convert more drivers to the
-> generic device properties and drop support for custom platform data.
->
-> To describe a GPIO via software nodes we can create the following data
-> items:
->
-> /* Node representing the GPIO controller/GPIO bank */
-> static const struct software_node gpio_bank_b_node = {
->         .name = "B",
-> };
->
-> /*
->  * Properties that will be assigned to a software node assigned to
->  * the devicei that used platform data.
->  */
-> static const struct property_entry simone_key_enter_props[] = {
->         PROPERTY_ENTRY_U32("linux,code", KEY_ENTER),
->         PROPERTY_ENTRY_STRING("label", "enter"),
->         PROPERTY_ENTRY_REF("gpios", &gpio_bank_b_node, 123, GPIO_ACTIVE_LOW),
->         { }
-> };
->
-> The code in gpiolib handling software nodes uses the name in the
-> software node representing GPIO controller to locate the actual instance
-> of GPIO controller.
->
-> Note that kbuild robot is likely to complain about this patchset because
-> it depends on patches removing [devm_]gpiod_get_from_of_node() and
-> devm_fwnode_get_[index_]gpiod_from_child() APIs that are still pending.
-> I pushed them to
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tmp-gpiolib
->
-> for your reference.
->
-> To: Linus Walleij <linus.walleij@linaro.org>
-> To: Bartosz Golaszewski <brgl@bgdev.pl>
-> To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-acpi@vger.kernel.org
-
-I have waited literally years for this patch series :D
-
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-The ACPI details is Andy territory so I dare not speak about those,
-but for everything else I think this is a go.
-
-Yours,
-Linus Walleij
+- Felix
