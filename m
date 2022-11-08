@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EE6620479
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6812F62047B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbiKHAKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 19:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S232891AbiKHALF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 19:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbiKHAKR (ORCPT
+        with ESMTP id S232200AbiKHALE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 19:10:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E2E1EEC4;
-        Mon,  7 Nov 2022 16:10:17 -0800 (PST)
+        Mon, 7 Nov 2022 19:11:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8B11F616
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 16:11:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDF28B816E1;
-        Tue,  8 Nov 2022 00:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 73EF5C433D6;
-        Tue,  8 Nov 2022 00:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667866214;
-        bh=bsvTLzsa4iK/5C7WBRfnagSX40VyRJDcI44X6EX4oQE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Xuqji6PxCyBrf8O1jUifjcaKom3IrqVdxgAnUCcDDe9jngbv7ZzBtH7JNyJs6KpgA
-         mry3hW+oy/P/nGyH4Nh0ADD0kLRpIkiwHLkA0Sei5lFcO1IZpABL7YOV/Q6aAARYxg
-         a0GSixDQPIJ+IMmaa++BhpT1rKlizg5gXF9PWYfzM4S+ikGMvlAb8v2o9ulvkgvBqZ
-         wMdxW4c5GR4o85qgjFgYJV0EfmPbFgjO84Uy5IiA4eEMvOSDAfYx12qoBbQexeh6LZ
-         hQAw1E5MhbWV4f7hqPl4+oYd94yqQw0J/UCVO60a/NeP7yr7faMIYsjl7ou58Q3sl0
-         f2wbX5Obx+kJw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5142AC4166D;
-        Tue,  8 Nov 2022 00:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB6F66131A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:11:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAECC433C1;
+        Tue,  8 Nov 2022 00:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1667866261;
+        bh=vHxhyutP9cB7DvECPymVNKDyiMvhF4zNuceuNtDxwVU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QZRY4ge/npV98d4/kIKfngLY8FdtlsE7dEX5IqV44G+gV2NeHk8t2bT2HH+ofN6uO
+         5f+m/AQbIbX6UasdlDuqZkznV4Vn2eay6p+KPxpnSRDdYgJQOqJDLXrN4VnxmgJRae
+         VVFUyjRCM94IgGLj3PXl6k24I+F1vWK9jKp9tLDI=
+Date:   Mon, 7 Nov 2022 16:10:59 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     HORIGUCHI =?UTF-8?B?TkFPWUE=?= (=?UTF-8?B?5aCA5Y+j44CA55u05Lmf?=) 
+        <naoya.horiguchi@nec.com>
+Cc:     Ville =?UTF-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] arch/x86/mm/hugetlbpage.c: pud_huge() returns 0 when
+ using 2-level paging
+Message-Id: <20221107161059.11414d456e24b77553d5a2df@linux-foundation.org>
+In-Reply-To: <20221108000014.GB471526@hori.linux.bs1.fc.nec.co.jp>
+References: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
+        <Y2j9KqIY9sAIDize@intel.com>
+        <20221108000014.GB471526@hori.linux.bs1.fc.nec.co.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf: Add explicit cast to 'void *' for
- __BPF_DISPATCHER_UPDATE()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166786621432.9069.11483477802170165558.git-patchwork-notify@kernel.org>
-Date:   Tue, 08 Nov 2022 00:10:14 +0000
-References: <20221107170711.42409-1-nathan@kernel.org>
-In-Reply-To: <20221107170711.42409-1-nathan@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        john.fastabend@gmail.com, jolsa@kernel.org, peterz@infradead.org,
-        bjorn@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev, lkp@intel.com,
-        bot@kernelci.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +64,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 8 Nov 2022 00:00:15 +0000 HORIGUCHI NAOYA(堀口　直也) <naoya.horiguchi@nec.com> wrote:
 
-This patch was applied to bpf/bpf.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Mon,  7 Nov 2022 10:07:11 -0700 you wrote:
-> When building with clang:
+> > > Recently pud_huge() got aware of non-present entry by commit 3a194f3f8ad0
+> > > ("mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present
+> > > pud entry") to handle some special states of gigantic page.  However, it's
+> > > overlooked that pud_none() always returns false when running with 2-level
+> > > paging, and as a result pmd_huge() can return true pointlessly.
 > 
->   kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *' and 'unsigned int (*)(const void *, const struct bpf_insn *, bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn *))')) [-Werror,-Wpointer-type-mismatch]
->           __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
->                                      ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
->   ./include/linux/bpf.h:1045:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
->           __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
->                                                               ^~~~
->   1 error generated.
-> 
-> [...]
+> Sorry, I found a non-negligible typo here (s/pmd_huge/pud_huge/).
+> Andrew, could you fix this on mm-hotfixes-unstable?
 
-Here is the summary with links:
-  - [bpf] bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()
-    https://git.kernel.org/bpf/bpf/c/a679120edfcf
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Done, thanks.
