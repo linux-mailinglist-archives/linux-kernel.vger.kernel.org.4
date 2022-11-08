@@ -2,120 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37421621AEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D56A621AEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbiKHRku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S234364AbiKHRkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiKHRkj (ORCPT
+        with ESMTP id S233817AbiKHRkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:40:39 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7DA528B3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:40:37 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id e123so13936578ybh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 09:40:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0pEFENNnYPCzo/HA8HAcobUswxlB4sH3bwnAUXJdnmc=;
-        b=L+o7B57z8N1w+FGZgs9tFm9SQ2vS6AajEJXJ0wxuQOrY214HHpcysobwIuPNofDBLD
-         Z+aq3/u2+84ZSqJ90xy6PFc7XWrKcUhyP8syDeJ6X2gl2l74Zsjf/SxvNPKp+sCAl+I1
-         dFCPnjVyidM95nmRzd+MH1K6cmRD5IIihyXRCf2jAON8f+AKJKQ77TKO4HA/+JCsV+E5
-         Bu2GFucBVVmj0wM0pk0/t8PSZxRwnxtwi4KnXM+zf5/OY+YXHXDSufR1qo+gm8EYxbXF
-         jzd0ytFDznJYTh0TfZwSVnXc0C6dwyYFOwQduL1TQsmRDqN9HYlOrofECHWNuMtPSLvV
-         Vzmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0pEFENNnYPCzo/HA8HAcobUswxlB4sH3bwnAUXJdnmc=;
-        b=XQNwBFJdDPFjFDKQ4tD85DwRzwtzd8pfrOAmX22nLMqEVSsMtAe0WpGgIsIY7D4Ffm
-         Qp2plB5/AeGycsromXT/d5z8HdQecHUFeb6aTTH4xw8x4yRq4qJR7K8ha2nCkjtG9rBJ
-         BLRvrDgxTeNVAgLIWzMl7gMLJRdXsjpGTJyBIH/uf3kPWyEW7VsWQmG65WwRiuQWKeTI
-         c8gVu/g9O/ufWK7Sw6ivfre2ihSzrCUqYi3jyri3gZ5UuVBfhGnROuYCeWvnhJiVjQFr
-         0RIuz6XMk5bpe8N7+EoVkzG4pdfPc3M6NiR4EfWTmjAa5Qj+kvtOzzXsnOw0JDHiYykE
-         tLLA==
-X-Gm-Message-State: ACrzQf1UPvf0+lSyUaidZ2yzhwSiINAOFy+tHClTHS5TmFj+XgNjvRW9
-        rzWNrnVQqQNyimXN37b5fp6l9MsYY8cAlUJ7Tgg6+g==
-X-Google-Smtp-Source: AMsMyM630slUuwA2yHI+5rrzisOZS6FXFWCgSpSU9LF0QRHhGi2OWrBHDhkUlz/mi1RtxLC9qc3tSdn4j4mxidhkaFU=
-X-Received: by 2002:a25:fb07:0:b0:6d1:a9c:3580 with SMTP id
- j7-20020a25fb07000000b006d10a9c3580mr30897999ybe.191.1667929236877; Tue, 08
- Nov 2022 09:40:36 -0800 (PST)
+        Tue, 8 Nov 2022 12:40:33 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B6D50F14
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:40:32 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C017B1F88D;
+        Tue,  8 Nov 2022 17:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667929230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E19JDYRMCtHVo52riv0xC8e/AOPdJZyCAR84AHrfs3g=;
+        b=qRJI/Z9N8oaDhQAG9LC+m0VSM4vTRcZ8f3TUvFv5Eq9D2UFukL+yuJ62pE/5ukfiTnvj6U
+        9yjRuPlXmyBOKuEm3U3O7JoPZJxmgo9GDDdEXtyRjUYuyhsBXKq39c4R97xULUJMdRig7Z
+        Hmr+GoVnUFEcW2dLhbN7uVArU41USMg=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 786412C141;
+        Tue,  8 Nov 2022 17:40:30 +0000 (UTC)
+Date:   Tue, 8 Nov 2022 18:40:30 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v3 08/40] printk: use console_is_enabled()
+Message-ID: <Y2qUjiBStRbVRGZ9@alley>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-9-john.ogness@linutronix.de>
 MIME-Version: 1.0
-References: <20221105045704.2315186-1-vipinsh@google.com> <20221105045704.2315186-6-vipinsh@google.com>
- <Y2lO1HQtaMBCGpcZ@google.com> <CAHVum0c2QVyuxQxOQHOxmU2csgE1RHtJ7nLBWCHt6=ywuB-Tmw@mail.gmail.com>
-In-Reply-To: <CAHVum0c2QVyuxQxOQHOxmU2csgE1RHtJ7nLBWCHt6=ywuB-Tmw@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 8 Nov 2022 09:40:09 -0800
-Message-ID: <CALzav=cS+WAiG63g=YCev5oKi-3MAe2HxDHrjRTk-6aOpzE-ag@mail.gmail.com>
-Subject: Re: [PATCH 5/6] KVM: selftests: Move hypercall() to hyper.h
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107141638.3790965-9-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 5:49 PM Vipin Sharma <vipinsh@google.com> wrote:
->
-> On Mon, Nov 7, 2022 at 10:30 AM David Matlack <dmatlack@google.com> wrote:
-> >
-> > On Fri, Nov 04, 2022 at 09:57:03PM -0700, Vipin Sharma wrote:
-> > > hypercall() can be used by other hyperv tests, move it to hyperv.h.
-> > >
-> > > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > > ---
-> > >  .../selftests/kvm/include/x86_64/hyperv.h       | 17 +++++++++++++++++
-> > >  .../selftests/kvm/x86_64/hyperv_features.c      | 17 -----------------
-> > >  2 files changed, 17 insertions(+), 17 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/kvm/include/x86_64/hyperv.h b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> > > index 9d8c325af1d9..87d8d9e444f7 100644
-> > > --- a/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> > > +++ b/tools/testing/selftests/kvm/include/x86_64/hyperv.h
-> > > @@ -199,4 +199,21 @@ static inline uint64_t hv_linux_guest_id(void)
-> > >              ((uint64_t)LINUX_VERSION_CODE << 16);
-> > >  }
-> > >
-> > > +static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
-> > > +                             vm_vaddr_t output_address, uint64_t *hv_status)
-> > > +{
-> > > +     uint8_t vector;
-> > > +
-> > > +     /* Note both the hypercall and the "asm safe" clobber r9-r11. */
-> > > +     asm volatile("mov %[output_address], %%r8\n\t"
-> > > +                  KVM_ASM_SAFE("vmcall")
-> > > +                  : "=a" (*hv_status),
-> > > +                    "+c" (control), "+d" (input_address),
-> > > +                    KVM_ASM_SAFE_OUTPUTS(vector)
-> > > +                  : [output_address] "r"(output_address),
-> > > +                    "a" (-EFAULT)
-> > > +                  : "cc", "memory", "r8", KVM_ASM_SAFE_CLOBBERS);
-> > > +     return vector;
-> > > +}
-> >
-> > Since this function is Hyper-V specific it probably makes sense to
-> > rename it to hyperv_hypercall() as part of moving it to library, e.g. to
-> > differentiate it from kvm_hypercall().
-> >
->
-> Sounds good. Does it keeping it in header file "hyperv.h" seems fine
-> or should I create a new "hyperv.c" lib file and move function
-> definition there?
+On Mon 2022-11-07 15:22:06, John Ogness wrote:
+> Replace (console->flags & CON_ENABLED) usage with console_is_enabled()
+> if it involves a data race. Otherwise add comments mentioning why the
+> wrapper is not used.
 
-I think it's fine to keep in hyperv.h. It seems like the type of
-function we'd want to be inlined anyway, and the implementation is
-short.
+The wrapper will be used/needed only on few locations. There are many
+more locations where the console flags are modified without any
+locking.
+
+Note that it is not only about CON_ENABLE flag. If we started playing
+the game with WRITE_ONCE()/READ_ONCE() then we would need to consider
+all locations where the flags are modified.
+
+In the end, it might be easier to use the proposed console_set_flag(),
+console_clear_flag(), console_check_flag(), and
+console_check_flag_unsafe(), instead of documenting all the locations.
+
+Also it is more important to document why it is acceptable to use
+the racy variant. The wrappers would make sure that all the other
+accesses are safe.
+
+
+> Note that this is a preparatory change for when console_lock no longer
+> provides synchronization for console->flags.
+>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> ---
+>  kernel/printk/printk.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index 79811984da34..f243bb56a3ba 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2660,7 +2660,7 @@ static bool abandon_console_lock_in_panic(void)
+>   */
+>  static inline bool console_is_usable(struct console *con)
+>  {
+> -	if (!(con->flags & CON_ENABLED))
+> +	if (!console_is_enabled(con))
+
+I agree that it makes sense to do this now. console_is_usable() is
+used in two cycles. They will get switched to the srcu walk one by one.
+
+Just please document that this allows to use console_is_usable() under
+console_srcu_read_lock. And that in this case, the value of the flag might
+get cleared at any time but the console still might be used
+as long as the console_srcu_read_lock is held.
+
+We should actually add a check into console_is_enabled() that either
+console_lock or console_srcu_read_lock is held. The console_lock
+should later be changed to console_list_lock.
+
+
+>  		return false;
+>  
+>  	if (!con->write)
+> @@ -2946,7 +2946,7 @@ void console_unblank(void)
+>  	console_locked = 1;
+>  	console_may_schedule = 0;
+>  	for_each_console(c)
+> -		if ((c->flags & CON_ENABLED) && c->unblank)
+> +		if (console_is_enabled(c) && c->unblank)
+
+I would prefer to do this change together with switching to
+for_each_console_srcu(). It would be more clear why this change
+is needed.
+
+>  			c->unblank();
+>  	console_unlock();
+>  
+> @@ -3104,8 +3104,11 @@ static int try_enable_preferred_console(struct console *newcon,
+>  	 * Some consoles, such as pstore and netconsole, can be enabled even
+>  	 * without matching. Accept the pre-enabled consoles only when match()
+>  	 * and setup() had a chance to be called.
+> +	 *
+> +	 * Note that reading @flags is race-free because the console is not
+> +	 * yet added to the console list.
+
+Nit: This is not completely true. We just know that it will not get
+     modified by the printk/console framework because the console is not
+     registered yet.
+
+Well, I could live with it. The comment is good enough. I am still
+more concerned about how to distinguish when READ_ONCE()/WRITE_ONCE()
+is needed. And it would affect all accesses to the flags.
+
+>  	 */
+> -	if (newcon->flags & CON_ENABLED && c->user_specified ==	user_specified)
+> +	if ((newcon->flags & CON_ENABLED) && (c->user_specified == user_specified))
+>  		return 0;
+>  
+>  	return -ENOENT;
+
+Best Regards,
+Petr
