@@ -2,124 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EF3620E56
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4406E620E5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiKHLN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:13:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
+        id S234065AbiKHLOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbiKHLNu (ORCPT
+        with ESMTP id S233856AbiKHLOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:13:50 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CEA186EC;
-        Tue,  8 Nov 2022 03:13:43 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id j15so20418931wrq.3;
-        Tue, 08 Nov 2022 03:13:43 -0800 (PST)
+        Tue, 8 Nov 2022 06:14:02 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1699117A8A
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:13:58 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id d20so20554158ljc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:13:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ji1uJ+VLtBXdsvcmViF94zHW4mvj6ILjubVPOBa2RGk=;
-        b=FcEGwYjCjOAWlZBOIMa7ZQ4a0r7fjKHCjXGwv6eEgRptjbks2AcaLEjE4LXrZ6/cwR
-         6fVi8OZK2w3hjePpvuZYFdSpywBj2bBLzGVnQYaqioLDYdLPmqY3peQsKsycb03l15Z8
-         ZA4yGIGnf8jjE/EK6x+qdno7S0q67sTqlm63dD4vNUYtoJTvtCB0DaylSu9tLarF2hZ0
-         Ff/DF28CFfw2W0nHpQBZyWA6x80H0IzIkILhxuH7GttHNZWRnfaRIZTXiyzwXmKjd7uw
-         n7o73pWfkqcOudywpPZwp1fiJ3Dn7HkFMpDIoqwSatAioYA2JmzgoijK9zxDvEgvSzcJ
-         n7GA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uEGHhzKbszqMWjuxMkREdBe3r8rfRgsqdTFsuaG+D8g=;
+        b=NJ7n5tDHA4FKrxdgKfMSK0JsHzzrPAaCYu9uFHzMI+iTMHzefvTrNRAMFyVDOa+Oke
+         SW0pFZ6VU3hfW9BacyR3YDPhurrPdQ0CX54079uUcGSkc5ci79eI5s0ENkwlVcxMumu/
+         JMK0yeEhyIe1tAIHjkny0+Qi/juWsPUek0fiUAirUKHM5bRLwFLmsv2ymf8Bl6bDntf0
+         tuL1j5f95LjnqRlvoeZsSRpFgW/3+N+1BFu3GByNkq0kjw6j317MtEYkxcg9K4hmGmsI
+         eqTliulwoOQVUFWIzLRzamvebCQH9XKIIvLN+FNGAVwTENV0KufYpY8qdPdCT3s/yVgO
+         QkPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ji1uJ+VLtBXdsvcmViF94zHW4mvj6ILjubVPOBa2RGk=;
-        b=1k5LjsQMqGbRhcqxHGpo1rTePtstXxkOv1c7/2tTA1JVbkbplpcVfYDTeOiXe8MU7c
-         RD5MEx5Y8qJ0RddO/EdmXPCvD/OcicMox86svyWig5SbN/0kKSiiSfE8BDS2fJ8bXIyV
-         eYJ2G+nTygvTKznariE29sWHeGgFkP6EZATvXe2wY8p3qoDAHJ9obJPnBfDKtw1gtXKo
-         P7gp6BylqnOZ2QtDaFclDRMWDzngAbRak6pXmLJteZtATYmch25m2WlxvU6D/UaH1i6n
-         eZHVJOBHY+iq+DVu69iS1/0VAshSfWGXljjHI8IxbWc4augprs1JCEhKfUWFoOlOUhF2
-         68ZQ==
-X-Gm-Message-State: ACrzQf2vY5QY+nrbDSpx2ZHKhuO3jKpw5PY1YAPwL+sAproNrIM4ikEu
-        43kAHaFk6k9trnmd4IWmggQ=
-X-Google-Smtp-Source: AMsMyM4l7Rfl+oM7BrNdp0vHXFkwDB6KbmzTO/A7TvXqqrdeNjv10bttLp2lz1DOqxrjbIbx1pUiEw==
-X-Received: by 2002:adf:a45a:0:b0:236:9aa8:e675 with SMTP id e26-20020adfa45a000000b002369aa8e675mr35498723wra.407.1667906022008;
-        Tue, 08 Nov 2022 03:13:42 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5d420a000000b0023682011c1dsm9840843wrq.104.2022.11.08.03.13.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 03:13:41 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: tegra: Fix spelling mistake "fliter" -> "filter"
-Date:   Tue,  8 Nov 2022 11:13:40 +0000
-Message-Id: <20221108111340.115387-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uEGHhzKbszqMWjuxMkREdBe3r8rfRgsqdTFsuaG+D8g=;
+        b=pYMmomo0mrdAQdD5CDd71NpjVOND4BkjxrttEUe40+e9vgIMpIqqiwINyjzv8Usln1
+         3S8EraTEbwBsnv/BIruwtFcepXwykCoVoHjhs4RMjjx/qPKZOVTCn3HL7+wdx/FQSAE2
+         lUhKmZlQWUqXDil0HWlxdL3AM7L7anz4giTYf4Jgt4H9PVRgcn7n2dIiAY0xIzwkhbZL
+         DIeOiVQvky4Wgef2BzXCOSESZV+EP0m+z99NoVUPBcsDGDlTb5EAxLPR+ABS6ha80z2j
+         pJC2wPNj/8IbCJ48ULWLpv80/XRGTm7XugiObAdVRt8MTByNWRKCbmu4HZCSrmO5bMKi
+         Hq9w==
+X-Gm-Message-State: ACrzQf3k58fbt4+jbUMFPsf/ZvaMOZkiHgd+PkqCWnb0SDFup1+cqqfO
+        s7syzEg+/Aa3XIOO8NdYCvThRw==
+X-Google-Smtp-Source: AMsMyM5LerxL9uLhjvhqx4rdYZ00h9GhQiY/qVsIX6zMEtdfJqU1Zg/x1+q1u6X6IVzcNyzLs9GczQ==
+X-Received: by 2002:a2e:8ec6:0:b0:26d:f909:6b7f with SMTP id e6-20020a2e8ec6000000b0026df9096b7fmr6984570ljl.482.1667906036420;
+        Tue, 08 Nov 2022 03:13:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id a11-20020ac25e6b000000b004b3e6010827sm685992lfr.66.2022.11.08.03.13.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 03:13:55 -0800 (PST)
+Message-ID: <37f8f24a-0f25-2f3d-1bc6-de9d5556d18e@linaro.org>
+Date:   Tue, 8 Nov 2022 12:13:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom: ipq8074: add missing
+ networking resets
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221107132901.489240-1-robimarko@gmail.com>
+ <20221107132901.489240-2-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107132901.489240-2-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in struct member fliter_structure.
-Fix it.
+On 07/11/2022 14:29, Robert Marko wrote:
+> Add bindings for the missing networking resets found in IPQ8074 GCC.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  include/dt-bindings/clock/qcom,gcc-ipq8074.h | 14 ++++++++++++++
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- sound/soc/tegra/tegra210_mbdrc.c | 4 ++--
- sound/soc/tegra/tegra210_mbdrc.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/tegra/tegra210_mbdrc.c b/sound/soc/tegra/tegra210_mbdrc.c
-index d786daa6aba6..eeacb1220268 100644
---- a/sound/soc/tegra/tegra210_mbdrc.c
-+++ b/sound/soc/tegra/tegra210_mbdrc.c
-@@ -54,7 +54,7 @@ static const struct tegra210_mbdrc_config mbdrc_init_config = {
- 	.mode			= 0, /* Bypass */
- 	.rms_off		= 48,
- 	.peak_rms_mode		= 1, /* PEAK */
--	.fliter_structure	= 0, /* All-pass tree */
-+	.filter_structure	= 0, /* All-pass tree */
- 	.shift_ctrl		= 30,
- 	.frame_size		= 32,
- 	.channel_mask		= 0x3,
-@@ -819,7 +819,7 @@ int tegra210_mbdrc_component_init(struct snd_soc_component *cmpnt)
- 
- 	regmap_update_bits(ope->mbdrc_regmap, TEGRA210_MBDRC_CFG,
- 		TEGRA210_MBDRC_CFG_FILTER_STRUCTURE_MASK,
--		conf->fliter_structure <<
-+		conf->filter_structure <<
- 		TEGRA210_MBDRC_CFG_FILTER_STRUCTURE_SHIFT);
- 
- 	regmap_update_bits(ope->mbdrc_regmap, TEGRA210_MBDRC_CFG,
-diff --git a/sound/soc/tegra/tegra210_mbdrc.h b/sound/soc/tegra/tegra210_mbdrc.h
-index 4c48da0e1dea..76e443a7934e 100644
---- a/sound/soc/tegra/tegra210_mbdrc.h
-+++ b/sound/soc/tegra/tegra210_mbdrc.h
-@@ -199,7 +199,7 @@ struct tegra210_mbdrc_config {
- 	unsigned int mode;
- 	unsigned int rms_off;
- 	unsigned int peak_rms_mode;
--	unsigned int fliter_structure;
-+	unsigned int filter_structure;
- 	unsigned int shift_ctrl;
- 	unsigned int frame_size;
- 	unsigned int channel_mask;
--- 
-2.38.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
