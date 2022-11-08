@@ -2,120 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1604621878
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6F9621879
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234288AbiKHPib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S234283AbiKHPin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbiKHPi2 (ORCPT
+        with ESMTP id S234302AbiKHPij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:38:28 -0500
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38E472736;
-        Tue,  8 Nov 2022 07:38:24 -0800 (PST)
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 96C4FB86;
-        Tue,  8 Nov 2022 16:38:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1667921901;
-        bh=QmFrYew7uldCRdEfnY237r/8E+rgbEnHjVQjjnRiroM=;
+        Tue, 8 Nov 2022 10:38:39 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBA214D14
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:38:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 47B56CE1BCA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7673C4314D;
+        Tue,  8 Nov 2022 15:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667921914;
+        bh=TV1sWn1Sv+7u6xiLUPX2HqlHGm1NQnC++jAOJ2OGZP8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rAckSJb0Nvd8f9bLqB/jNx/HbGoh4z5cUQgYfixAmFnBkKcZmhLyagtO9wUERm1wW
-         sXfmAL2985EWoB6SDCHvTV5+gTT5951NfRemZlHJEn+eY1hw0UjSEs5aFzhfnzfjVD
-         43TBQdL6BsdCfZJd+ApJD2X/Pa97gWIOI+DAQcCWXKsG0dh04KlUFzqj92BtITJQiN
-         9BvCsmOHKCg6bhGPls+bvJFTGsAiMSoiaB9Isu97wtgdMhPglIjv+v5CDmSAOn0mye
-         wRCIYaiqhzZFJM0Eaur/Alx0FJwKRirko3rwoyP3DEAV1x6bMdFKaTppuamEDL9Y+5
-         afuW7YfxXTb311b1E3HbbgnbAa25ca1PwfS5dw+0eIPWLzKrVc47+ER1bVeNGeTZf8
-         Zv5Gr4vDraGTqSNNokTG/zcWotNAAE07fp1BIHsAKp9b9X7mjhN7UQi9cU08FC74R4
-         H1rZYtiSRtmE8dCVU2frn2llbCoYe/x3/xnkSg0foazxLsxqkHxHOrluONEdgjAs70
-         jpibf1xyVKrIcNwXW+SMDbR2Iu2OuV8c+ixwICHBkHxPL1ngiDeyQ0VXJreeOPyuQY
-         ZKqqdziapgXRPdK+r05sH+KBfj0hj2CJmvDlrAhU0s1U9oUK42Vq2VvS86seW2PSaA
-         fWi1uQpl9AgI0mbcN24ar4r0=
-Date:   Tue, 8 Nov 2022 16:38:20 +0100
-From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 07/15] MIPS: IP27: clean out sn/nmi.h
-Message-ID: <20221108153820.fp5du7p7zr7pc7cs@tarta.nabijaczleweli.xyz>
-References: <cover.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
- <534e0e7e4f2b0cc1cb35d5024192473635ed1b94.1667330271.git.nabijaczleweli@nabijaczleweli.xyz>
- <20221104145002.GA16099@alpha.franken.de>
+        b=2YOSsKC0IzgV3p2rkoaUMxjKkOENcukiz6dCckEUM9meMskbZI5XcFLEF/img5Jb8
+         Tc1XARaLIgZ8nOCd9MoMLNFAAvBXcBBDxDm3FYAh9Sj5Sfshxi0/SUK/Q2rHsTHNPU
+         QkWO8UeHPQY4Q/TwImD+Bt6xai6iURDOAVehIzCw=
+Date:   Tue, 8 Nov 2022 16:38:31 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Cc:     Vishal Chourasia <vishalc@linux.vnet.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        vincent.guittot@linaro.org, vschneid@redhat.com,
+        sshegde@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        ritesh.list@gmail.com, aneesh.kumar@linux.ibm.com
+Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
+Message-ID: <Y2p39yP4gfsXWXAj@kroah.com>
+References: <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
+ <Y01sk3l8yCMvhvYm@kroah.com>
+ <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y06ISBWhJflnV+NI@kroah.com>
+ <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y1jbhCYfktL51zNB@kroah.com>
+ <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
+ <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y2pKh3H0Ukvmfuco@kroah.com>
+ <20221108145100.GG145013@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h7xzdhf5opgoap56"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104145002.GA16099@alpha.franken.de>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221108145100.GG145013@linux.vnet.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 08, 2022 at 08:21:00PM +0530, Srikar Dronamraju wrote:
+> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> [2022-11-08 13:24:39]:
+> 
+> > On Tue, Nov 08, 2022 at 03:30:46PM +0530, Vishal Chourasia wrote:
+> 
+> Hi Greg, 
+> 
+> > > 
+> > > Thanks Greg & Peter for your direction. 
+> > > 
+> > > While we pursue the idea of having debugfs based on kernfs, we thought about
+> > > having a boot time parameter which would disable creating and updating of the
+> > > sched_domain debugfs files and this would also be useful even when the kernfs
+> > > solution kicks in, as users who may not care about these debugfs files would
+> > > benefit from a faster CPU hotplug operation.
+> > 
+> > Ick, no, you would be adding a new user/kernel api that you will be
+> > required to support for the next 20+ years.  Just to get over a
+> > short-term issue before you solve the problem properly.
+> > 
+> > If you really do not want these debugfs files, just disable debugfs from
+> > your system.  That should be a better short-term solution, right?
+> > 
+> > Or better yet, disable SCHED_DEBUG, why can't you do that?
+> 
+> Thanks a lot for your quick inputs.
+> 
+> CONFIG_SCHED_DEBUG disables a lot more stuff than just updation of debugfs
+> files. Information like /sys/kernel/debug/sched/debug and system-wide and
+> per process wide information would be lost when that config is disabled.
+> 
+> Most users would still be using distribution kernels and most distribution
+> kernels that I know of seem to have CONFIG_SCHED_DEBUG enabled.
 
---h7xzdhf5opgoap56
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Then work with the distros to remove that option if it doesn't do well
+on very large systems.
 
-On Fri, Nov 04, 2022 at 03:50:02PM +0100, Thomas Bogendoerfer wrote:
-> On Wed, Nov 02, 2022 at 12:05:30AM +0100, Ahelenia Ziemia=C5=84ska wrote:
-> > The only user is arch/mips/sgi-ip27/ip27-nmi.c; this file was imported
-> > wholesale in 2.3.99pre9-1, and received only whitespace updates since
-> > then.
-> >=20
-> > NMI_MAGIC isn't a magic number; it's unclear if it's actually used by
-> > the firmware in some capacity or if it's a holdover from copying the SGI
-> > code, but in the former case it's API and in the latter it's dead cruft.
->=20
-> it's used by firmware and Linux code to register the NMI exception
-> handler.
-Great, I'll put that in the message.
+Odds are they really do not want that enabled either, but that's not our
+issue, that's theirs :)
 
-> Please leave arch/mips/include/asm/sn/nmi.h untouched as
-> it's documents firmware NMI handler usage (even when we don't use it, yet=
-).
-"Yet".
-This file appeared in 2.3.99pre9-1, and hasn't changed since.
-I removed hard-coded assembly struct offsets, which we'll never use,
-because we /haven't/ used them, and this part is implemented in C.
-This file's my age, and these parts have been dead for just as long.
+> In a large system, lets say close to 2000 CPUs and we are offlining around
+> 1750 CPUs. For example ppc64_cpu --smt=1  on a powerpc. Even if we move to a
+> lesser overhead kernfs based implementation, we would still be creating
+> files and deleting files for every CPU offline. Most users may not even be
+> aware of these files. However for a few users who may be using these files
+> once a while, we end up creating and deleting these files for all users. The
+> overhead increases exponentially with the number of CPUs. I would assume the
+> max number of CPUs are going to increase in future further.
 
-Yet.
+I understand the issue, you don't have to explain it again.  The
+scheduler developers like to see these files, and for them it's useful.
+Perhaps for distros that is not a useful thing to have around, that's
+up to them.
 
---h7xzdhf5opgoap56
-Content-Type: application/pgp-signature; name="signature.asc"
+> Hence our approach was to reduce the overhead for those users who are sure
+> they don't depend on these files. We still keep the creating of the files as
+> the default approach so that others who depend on it are not going to be
+> impacted.
 
------BEGIN PGP SIGNATURE-----
+No, you are adding a new user/kernel api to the kernel that you then
+have to support for the next 20+ years because you haven't fixed the
+real issue here.
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNqd+kACgkQvP0LAY0m
-WPGGpg//dLU8hnK9tZdfcpo5GV0ERzxD2jSaCqx+7GtOPqi06pMv+x1W9p+DtT+R
-yjWlIz7bfhLM+cK9Foh9xE4fw6q1OMLMxj+OTAgHvymPnMKqw+eTKvNA5Pli46wp
-knBbflMGUCyUT8y8U8vT7wL49xYTRsdH5h27yz+wjRvgaBYz9x8iExttM8M3pVaR
-j7sbzS9U3I3/y4TyJ+jySOix3zGmB3J9gOcYIv2226tUUSLWHn9x7RHO593pbWEv
-mGH+5sVG3jrCUZA9mriR4RI2ztrqse1RsvxSJYROJtoQh4so5zR0I796HHP+FLeh
-i0aDcILPce0YFKO/3wz/XgntV5k1CK5s0niqP2aTcscM5DGJHjkjZvXnacQFYp/I
-isf/2zz/XTmMuDehzC48hoGEkBtFFVIUm5JKiE361PxGtlh8EmpCLu1CN/jb/9Yy
-ZcOWYsRWezri/Y897k/IpQo54iwvVCrOuQmCkhfrXyqoSugVUC3Y/G2yMEU9vMij
-lz1c4e+FSzH8zZNqG06mKfo23JkFhJn5GcHKEdcqVrH/R18u+qEOue1Zzlamrqnf
-D4W9jdUUKCkvGGSpxyztm1Vvx5kTvTWF1yJevCoL/uYRVFpiLbUzkptSI3Ww5Q9e
-bU1YDGV3U1bCxT9a0pvGl3EzdN1fSf7cwDWsEae9agiRRS6+1UM=
-=FWO/
------END PGP SIGNATURE-----
+I think you could have done the kernfs conversion already, it shouldn't
+be that complex, right?
 
---h7xzdhf5opgoap56--
+Note, when you do it, you might want to move away from returning a raw
+dentry from debugfs calls, and instead use an opaque type "debugfs_file"
+or something like that, instead, which might make this easier over time.
+
+thanks,
+
+greg k-h
