@@ -2,39 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7DB620AAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BA4620AB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233572AbiKHHsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 02:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S233665AbiKHHtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 02:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiKHHsw (ORCPT
+        with ESMTP id S233301AbiKHHtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 02:48:52 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D9413D3D;
-        Mon,  7 Nov 2022 23:48:50 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 2DF4067373; Tue,  8 Nov 2022 08:48:47 +0100 (CET)
-Date:   Tue, 8 Nov 2022 08:48:47 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Gerd Bayer <gbayer@linux.ibm.com>
-Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: nvme-pci: NULL pointer dereference in nvme_dev_disable() on
- linux-next
-Message-ID: <20221108074846.GA22674@lst.de>
-References: <fad4d2d5e24eabe1a4fcab75c5d080a6229dc88b.camel@linux.ibm.com>
+        Tue, 8 Nov 2022 02:49:22 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6BB13D2E;
+        Mon,  7 Nov 2022 23:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667893761; x=1699429761;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4dh3IRHYQd4HH6cn+7mT19zqVvTBD88fHDivkBet2uM=;
+  b=Imdug1vo9Jjmv1Jp2a+lwGzXlQsPKsQ4ulmFIUl4YtJaLrZcFiTMkUx+
+   LX9ZU7eJ7cLI2g7MSSMFeDLqoscts3Puow/zUu90tWYSVgvjD1h8rcfdl
+   fMJXAZovkg3e+MNuvH7AtufU3gbzCDIC7ipVs4uLLHFONgajjhljrAb12
+   0XQRQJfCu05oDHZ8nr0FlW9ItKccxiGbDMQRlrhTxrsEjO2zykbqas6RO
+   E5QO2nug5eNGWZ25WHU/jUCcmhZP480vAlzBIsBk1JBokjKJMfEAoTyYj
+   mogEUHURaoBijKkmoN294LR2iLR2kORfoKPWNoXsDbryR/tvPDiMd1acE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310630781"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="310630781"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 23:49:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="881423689"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="881423689"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Nov 2022 23:49:19 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4E12DF7; Tue,  8 Nov 2022 09:49:43 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] at_hdmac: check and return DMA_PAUSED status when suitable
+Date:   Tue,  8 Nov 2022 09:49:37 +0200
+Message-Id: <20221108074938.48853-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fad4d2d5e24eabe1a4fcab75c5d080a6229dc88b.camel@linux.ibm.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,28 +64,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below is the minimal fix.  I'll see if I sort out the mess that is
-probe/reset failure vs ->remove a bit better, though.
+device_tx_status() may return DMA_PAUSED status when driver supports it.
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index f94b05c585cbc..577bacdcfee08 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -5160,6 +5160,8 @@ EXPORT_SYMBOL_GPL(nvme_start_freeze);
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/dma/at_hdmac.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
+index 8858470246e1..a9d8dd990d6e 100644
+--- a/drivers/dma/at_hdmac.c
++++ b/drivers/dma/at_hdmac.c
+@@ -1669,9 +1669,19 @@ atc_tx_status(struct dma_chan *chan,
+ 	int ret;
  
- void nvme_stop_queues(struct nvme_ctrl *ctrl)
- {
-+	if (!ctrl->tagset)
-+		return;
- 	if (!test_and_set_bit(NVME_CTRL_STOPPED, &ctrl->flags))
- 		blk_mq_quiesce_tagset(ctrl->tagset);
- 	else
-@@ -5169,6 +5171,8 @@ EXPORT_SYMBOL_GPL(nvme_stop_queues);
+ 	dma_status = dma_cookie_status(chan, cookie, txstate);
+-	if (dma_status == DMA_COMPLETE || !txstate)
++	if (dma_status == DMA_COMPLETE)
+ 		return dma_status;
  
- void nvme_start_queues(struct nvme_ctrl *ctrl)
- {
-+	if (!ctrl->tagset)
-+		return;
- 	if (test_and_clear_bit(NVME_CTRL_STOPPED, &ctrl->flags))
- 		blk_mq_unquiesce_tagset(ctrl->tagset);
- }
++	/*
++	 * There's no point in calculating the residue if there's
++	 * no txstate to store the value.
++	 */
++	if (!txstate) {
++		if (test_bit(ATC_IS_PAUSED, &atchan->status))
++			return DMA_PAUSED;
++		return DMA_ERROR;
++	}
++
+ 	spin_lock_irqsave(&atchan->vc.lock, flags);
+ 	/*  Get number of bytes left in the active transactions */
+ 	ret = atc_get_residue(chan, cookie, &residue);
+@@ -1684,6 +1694,9 @@ atc_tx_status(struct dma_chan *chan,
+ 		dma_set_residue(txstate, residue);
+ 	}
+ 
++	if (test_bit(ATC_IS_PAUSED, &atchan->status))
++		dma_status = DMA_PAUSED;
++
+ 	dev_vdbg(chan2dev(chan), "tx_status %d: cookie = %d residue = %u\n",
+ 		 dma_status, cookie, residue);
+ 
+-- 
+2.35.1
+
