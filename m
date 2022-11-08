@@ -2,127 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1040B6204AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1EB46204B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 01:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbiKHA3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 19:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S232953AbiKHAaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 19:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiKHA3t (ORCPT
+        with ESMTP id S232913AbiKHAaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 19:29:49 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEEF9FC4
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 16:29:48 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id k2so34588474ejr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 16:29:48 -0800 (PST)
+        Mon, 7 Nov 2022 19:30:21 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6831DDEA
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 16:30:19 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id e15so7910850qts.1
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 16:30:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5MkQztElB6TBdZbZej/oORtZzWsfAyi0xB0CiV9UFEI=;
-        b=dVe12lYAU0SpAJWVx0uFcqp08jjA3Nhr9V6bc7LC/oCcDrD3Hh/bCv/34I+pspFOqT
-         5mx3a0rT8zyNldmpRxc+zAeUD4LZ0sogf18nIlBYBrqr4HI6kylHMbPhwS5c6RBfGFA4
-         k9uW76Jj3u+2jSGqDZlRvdJYbM20B+5TVERtA=
+        bh=NF/Xjl4bGX60sTFdSkyJB0iuEuG5H4mSvhGQEhyFFsE=;
+        b=optWeMbKrLwYAP5/SViogLQxgNk3k+gmgqGwknY4DN9tkcLWh/wvnIQA+FvQ1HWubL
+         ZUGbEfIdlQ6roFAuBmalgMPoCEwLMx34IM7LoPms25sDGh628s9gpq5i9RLxDfaixGTU
+         HwZs2Y2ovr7Mf+NT6Zg9yF8PNLTUueIQPRqwEUgvtZBAJ8GSjpel3OIpP/3ZGSV4+dZJ
+         STzKJL5Ltpd393Ba/7QUFPAHknZdU5y9VPwMUpD+4ho6bTlyRs0E7jhXJ8UIr4UWK/1o
+         4obrgLwAFMea8d1x0oAIP/x9Ht9EJN3vCkqLweHFlubiHgVaa0+b0O5cOd3vawaAJbGc
+         wYfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5MkQztElB6TBdZbZej/oORtZzWsfAyi0xB0CiV9UFEI=;
-        b=Pr4aX6qH3y3rV3+ikVE3/vGe3mc1kDUu3O66NF6tRK8bYhZLC4zsST/JCllq/1jQNF
-         nhPrkK/V6s1hir/LOU5Qvuu+GeJKZ8HstL/Gqigypww/FOdDpp1Gl65pgd9v0Bmk/Zqg
-         BRqBu80xY3PY6PF9QylVWY7hbkfldh81qUBHERTpK9GjqgCvwitlEuEe46Dqm4Yn9U5U
-         Qy9QDkTaVR4pUNwCbHQMx7wW4jpyTHUQlICGJPNnbwWFm07vetx/cj16NRp5a9Mf6t7s
-         gaH2/67GOsSBW53PIsLe33z8G1YD+bjbMLNIcm5nqO/IGaVx/N1nglQ7ncyO0XKecdVI
-         ZQcg==
-X-Gm-Message-State: ACrzQf3Eq8V8BlzYlP5F31m35Q74GyiTcawU659skdNgAeAFCNqs1sWU
-        0osNRW+xADF6xaWNWZG4nMLj+O94sQY9XPLi
-X-Google-Smtp-Source: AMsMyM6QlgPsHyjw734kZWViNqwKem9qhOOQ8XIOs/fRQhF6YggQKEKc+z8NHOgG7XCU7s79Yohjqg==
-X-Received: by 2002:a17:907:628f:b0:72f:58fc:3815 with SMTP id nd15-20020a170907628f00b0072f58fc3815mr49610588ejc.719.1667867386130;
-        Mon, 07 Nov 2022 16:29:46 -0800 (PST)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id k14-20020a056402048e00b00456c6b4b777sm4869365edv.69.2022.11.07.16.29.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 16:29:45 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id o4so18605911wrq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 16:29:45 -0800 (PST)
-X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id
- g12-20020adfd1ec000000b00236880f2adfmr33865581wrd.617.1667867058306; Mon, 07
- Nov 2022 16:24:18 -0800 (PST)
+        bh=NF/Xjl4bGX60sTFdSkyJB0iuEuG5H4mSvhGQEhyFFsE=;
+        b=Dt08UrC4VnRrmO8YgwIHrrq3PSKtq0yfg0EjkXPiXoPQrNfRkTOP0HU32HpQI2k09Z
+         2wxBzUGY/Gb6aiJCcFV54HI2zqPiEsjsNaz/6+PC4WRG7/m/Fq5G/svUWmd3e8H5gge1
+         3wx+e6ZcmqfdE7FkEBPrJ+7CyuLbyfLN3/9GoyzPyRfPMX9BzmIzjSdg8lMgLhYe3QbP
+         bHyJ91SJn+/4f4h0YABl1zZ/6P32t5u+NnCL7sLlUiOHy98PRoXHECkKQOpLVDh+8Pdu
+         Z56p/sGu5ou9lEXMVNH6KIRkEuhiez2LdnSmk5KoipQ/zOMP4h2X0Wy7asb+jCiUNpRH
+         VxeA==
+X-Gm-Message-State: ACrzQf1ZmlYpOaUMN/yUV7464HkweOOytoHEWWAzlW/7gnrccCTrMhY0
+        FbfEFrsN7wLL5i1DNANBjUE+iEQVnrX1iwOC3v0s3w==
+X-Google-Smtp-Source: AMsMyM538Rf/rIwE958s8XEtxsLIOx6qcDRgjIB13zeIqU/f+VnJBFogAjCSAOLfk1E604oXa+bK0vYgoMmVMC45ISI=
+X-Received: by 2002:a05:622a:a05:b0:3a5:2c5f:9a66 with SMTP id
+ bv5-20020a05622a0a0500b003a52c5f9a66mr32343641qtb.508.1667867418139; Mon, 07
+ Nov 2022 16:30:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org> <20221107235654.1769462-14-bryan.odonoghue@linaro.org>
-In-Reply-To: <20221107235654.1769462-14-bryan.odonoghue@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 7 Nov 2022 16:24:06 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XZ79JjmCW7wYoc0eEhMsAtqxb+p40x2f4mH+kdb0byow@mail.gmail.com>
-Message-ID: <CAD=FV=XZ79JjmCW7wYoc0eEhMsAtqxb+p40x2f4mH+kdb0byow@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] arm64: dts: qcom: sc7180: Add compat qcom,mdss-dsi-ctrl-sc7180
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, quic_mkrishn@quicinc.com,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+References: <20221105025146.238209-1-horenchuang@bytedance.com> <CAADnVQK5t0YWGgdWmjiWX6vA0SjANrnf5x=yzu7PtDKpoK6cJQ@mail.gmail.com>
+In-Reply-To: <CAADnVQK5t0YWGgdWmjiWX6vA0SjANrnf5x=yzu7PtDKpoK6cJQ@mail.gmail.com>
+From:   "Hao Xiang ." <hao.xiang@bytedance.com>
+Date:   Mon, 7 Nov 2022 16:30:08 -0800
+Message-ID: <CAAYibXiHRg3C3tk=wbiHdaUgJD6AfJf7gX3w0gTJ2nsJ=DnY4g@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH bpf-next v1 0/4] Add BPF htab map's used
+ size for monitoring
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     "Ho-Ren (Jack) Chuang" <horenchuang@bytedance.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Kui-Feng Lee <kuifeng@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Punit Agrawal <punit.agrawal@bytedance.com>,
+        Yifei Ma <yifeima@bytedance.com>,
+        Xiaoning Ding <xiaoning.ding@bytedance.com>,
+        bpf <bpf@vger.kernel.org>, Ho-Ren Chuang <horenc@vt.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Alexei,
 
-On Mon, Nov 7, 2022 at 3:57 PM Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
->
-> Add silicon specific compatible qcom,mdss-dsi-ctrl-sc7180 to the
-> mdss-dsi-ctrl block. This allows us to differentiate the specific bindings
-> for sc7180 against the yaml documentation.
->
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Rajendra Nayak <rnayak@codeaurora.org>
-> Cc: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index d2c374e9d8c03..07acb7f843d62 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -2985,7 +2985,8 @@ opp-460000000 {
->                         };
->
->                         dsi0: dsi@ae94000 {
-> -                               compatible = "qcom,mdss-dsi-ctrl";
-> +                               compatible = "qcom,mdss-dsi-ctrl-sc7180",
-> +                                            "qcom,mdss-dsi-ctrl";
+We understand the concern on added performance overhead. We had some
+discussion about this while working on the patch and decided to give
+it a try (my bad).
 
-This seems fine, but I don't think it matches your bindings. Your
-bindings says you can have one compatible string. It could be
-"qcom,mdss-dsi-ctrl-sc7180" or it could be "qcom,mdss-dsi-ctrl".
-...but your device tree has two compatible strings: the SoC specific
-one and the fallback one. You need to change your bindings to make
-this work.
+Adding some more context. We are leveraging the BPF_OBJ_GET_INFO_BY_FD
+syscall to trace CPU usage per prog and memory usage per map. We would
+like to use this patch to add an interface for map types to return its
+internal "count". For instance, we are thinking of having the below
+map types to report the "count" and those won't add overhead to the
+hot path.
+1. ringbuf to return its "count" by calculating the distance between
+producer_pos and consumer_pos
+2. queue and stack to return its "count" from the head's position
+3. dev map hash to returns its "count" from items
 
--Doug
+There are other map types, similar to the hashtab pre-allocation case,
+will introduce overhead in the hot path in order to count the stats. I
+think we can find alternative solutions for those (eg, iterate the map
+and count, count only if bpf_stats_enabled switch is on, etc). There
+are cases where this can't be done at the application level because
+applications don't see the internal stats in order to do the right
+counting.
+
+We can remove the counting for the pre-allocated case in this patch.
+Please let us know what you think.
+
+Thanks, Hao
+
+On Sat, Nov 5, 2022 at 9:20 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Nov 4, 2022 at 7:52 PM Ho-Ren (Jack) Chuang
+> <horenchuang@bytedance.com> wrote:
+> >
+> > Hello everyone,
+> >
+> > We have prepared patches to address an issue from a previous discussion.
+> > The previous discussion email thread is here: https://lore.kernel.org/all/CAADnVQLBt0snxv4bKwg1WKQ9wDFbaDCtZ03v1-LjOTYtsKPckQ@mail.gmail.com/
+>
+> Rephrasing what was said earlier.
+> We're not keeping the count of elements in a preallocated hash map
+> and we are not going to add one.
+> The bpf prog needs to do the accounting on its own if it needs
+> this kind of statistics.
+> Keeping the count for non-prealloc is already significant performance
+> overhead. We don't trade performance for stats.
