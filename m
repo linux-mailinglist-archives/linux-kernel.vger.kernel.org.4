@@ -2,157 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED84621E37
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B6E621E3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiKHVIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 16:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S229910AbiKHVKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 16:10:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKHVIc (ORCPT
+        with ESMTP id S229546AbiKHVKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 16:08:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406451AF0F;
-        Tue,  8 Nov 2022 13:08:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D060061777;
-        Tue,  8 Nov 2022 21:08:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1817EC433C1;
-        Tue,  8 Nov 2022 21:08:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667941710;
-        bh=3GlHu5yvHpYryUxh56d4Wb/AASxB0UBpxBfH92jwobc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QVcd8Dym0GlpOtjERCRf/ewP9h45ZaL2OATHfkgK6RQCHDjuwwZk8D9qcuFEWmMH7
-         AQ776103W7cI0ZBVyOGaJhTPbA2H9je6TdvOW1v+gPTy4stZWMz4jORWU1qMVvBnHp
-         qROV7J555ykUQGJSqu33mwCvQn5b8X0DWlW1/shf5uhvdw9ZHmn3E7a8QSNFo5x1lk
-         +T0FDRSu9i22qxlTwbSMG/ksqHChIf8arA43NU7xbCX/RftfBwmZPDxplhtpxvQZra
-         BFRrF9Fg2SSD2Un4ek53cj0H74wk5thcuwDJxliaTElAYV3u3voam2hFpLMplpeRx+
-         cGHCe39elP11g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 82F304034E; Tue,  8 Nov 2022 18:08:27 -0300 (-03)
-Date:   Tue, 8 Nov 2022 18:08:27 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] tools/perf: Fix to get the DW_AT_decl_file and
- DW_AT_call_file as unsinged data
-Message-ID: <Y2rFS6CPfhIQhYUc@kernel.org>
-References: <166761727445.480106.3738447577082071942.stgit@devnote3>
- <CAM9d7ci8YX22Bp31ZD9k31NFN6pP3fbPKpNDNZYnmdZiqav1Vg@mail.gmail.com>
+        Tue, 8 Nov 2022 16:10:34 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C053C6EC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 13:10:33 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id b9so22959040ljr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 13:10:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZAafqOZBdpxx83ZFYFN1Hi8JWgUTuB0MF2wqgfb+j0=;
+        b=BmbRlhuIxfQgv60+/uxmJD2mUTMS1D0a5vXHhZdSI+B0M5n7f+PY+aY+i3bYejK+47
+         QAdInA8SRHniQJjhhghXtj43Y63XNmSMkmmTfTfgYedB6o8JaZTnyatSRXboWFXzzkD8
+         g2QTiyGD9OFXonYu/wW1c7sVz7Lz7oaxfiWFJNRGfSlCfaPJrTkpgUNBuc9HeD98Ah24
+         YpHZNx0F0/+cfv0RdCs+sd/hp7I/iGeLbyq/AyZr/jaiGdiBxohdkNnS+fx/fy2Hpfyr
+         3WxJzj5MdugdN3Sot7qFgjiKrVQpDMLOmwPQXKT4N6+Tmja50fD0vqu1PTZ0NNp4I0Lt
+         djPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6ZAafqOZBdpxx83ZFYFN1Hi8JWgUTuB0MF2wqgfb+j0=;
+        b=igISaQTnMEyad3Es5AKLum+HonzWjaekLzWiP8SQ4WRknMExmD8W/U2H+Yur3PdKA5
+         nO5XJqughQlyFYjfxsdy7aHigdaQPFoHrdX4pUogAjGarxnR90YBhzGfSYWzct/JFQqB
+         klMcivH/cbB5r3QzVzncHJtrcfTn6FY1EYubB9G/2G1IjFPTW4JWes2481mOey1Kwb29
+         bopUOgHYkbgDPnCUp1jfZK/qa667yruksMIIpo7JY1fn6Z/YQ6+NhhE1SgfxfrwPRGFn
+         TonsTnYWiG8m4MXMwOn+5C9u9ZGsDExuinxf5dTwndInuUiEvLBJQYBdLY8xZXb3zNAM
+         YSeg==
+X-Gm-Message-State: ACrzQf2KWcVrbeGr9vH4mdWF5WBMztoSejdBfshwRv+byxbF0Tgdb7DD
+        mv4/6pMuinoTxFln4ZWABHAamA==
+X-Google-Smtp-Source: AMsMyM4fusBtXtXt1yqqm9JfpkjsgoZrmDOHZ38/STvFvd3nHz0ohLlYZyuEMRbdkEJIFvFcju188w==
+X-Received: by 2002:a05:651c:1207:b0:277:276a:9d7b with SMTP id i7-20020a05651c120700b00277276a9d7bmr19141181lja.129.1667941831467;
+        Tue, 08 Nov 2022 13:10:31 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id q13-20020a056512210d00b0049c29292250sm1932529lfr.149.2022.11.08.13.10.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 13:10:30 -0800 (PST)
+Message-ID: <b482360f-16d2-6a7d-2cbe-72f2a1c6f50f@linaro.org>
+Date:   Tue, 8 Nov 2022 22:10:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7ci8YX22Bp31ZD9k31NFN6pP3fbPKpNDNZYnmdZiqav1Vg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 02/18] dt-bindings: msm: dsi-controller-main: Fix
+ power-domain constraint
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        quic_mkrishn@quicinc.com, linux-arm-msm@vger.kernel.org
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
+ <20221107235654.1769462-3-bryan.odonoghue@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221107235654.1769462-3-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Nov 07, 2022 at 01:09:00PM -0800, Namhyung Kim escreveu:
-> Hi Masami,
+On 08/11/2022 00:56, Bryan O'Donoghue wrote:
+> power-domain is required for the sc7180 dispcc GDSC but not every qcom SoC
+> has a similar dependency for example the aqp8064.
 > 
-> On Fri, Nov 4, 2022 at 8:01 PM Masami Hiramatsu (Google)
-> <mhiramat@kernel.org> wrote:
-> >
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> >
-> > Dwarf version 5 standard Sec 2.14 says that
-> >
-> >   Any debugging information entry representing the declaration of an object,
-> >   module, subprogram or type may have DW_AT_decl_file, DW_AT_decl_line and
-> >   DW_AT_decl_column attributes, each of whose value is an unsigned integer
-> >   constant.
-> >
-> > So it should be an unsigned integer data. Also, even though the standard
-> > doesn't clearly say the DW_AT_call_file is signed or unsigned, the
-> > elfutils (eu-readelf) interprets it as unsigned integer data and it is
-> > natural to handle it as unsigned integer data as same as DW_AT_decl_file.
-> > This changes the DW_AT_call_file as unsigned integer data too.
-> >
-> > Fixes: 3f4460a28fb2 ("perf probe: Filter out redundant inline-instances")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Most Qcom SoC's using mdss-dsi-ctrl seem to have the ability to
+> power-collapse the MDP without collapsing DSI.
 > 
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Thanks,
-> Namhyung
+> For example the qcom vendor kernel commit for apq8084, msm8226, msm8916, msm8974
 > 
+> https://review.carbonrom.org/plugins/gitiles/CarbonROM/android_kernel_oneplus_msm8994/+/7b5c011a770daa2811778937ed646237a28a8694
 > 
-> > ---
-> >  tools/perf/util/dwarf-aux.c |   21 ++++-----------------
-> >  1 file changed, 4 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/tools/perf/util/dwarf-aux.c b/tools/perf/util/dwarf-aux.c
-> > index 30b36b525681..b07414409771 100644
-> > --- a/tools/perf/util/dwarf-aux.c
-> > +++ b/tools/perf/util/dwarf-aux.c
-> > @@ -315,19 +315,6 @@ static int die_get_attr_udata(Dwarf_Die *tp_die, unsigned int attr_name,
-> >         return 0;
-> >  }
-> >
-> > -/* Get attribute and translate it as a sdata */
-> > -static int die_get_attr_sdata(Dwarf_Die *tp_die, unsigned int attr_name,
-> > -                             Dwarf_Sword *result)
-> > -{
-> > -       Dwarf_Attribute attr;
-> > -
-> > -       if (dwarf_attr_integrate(tp_die, attr_name, &attr) == NULL ||
-> > -           dwarf_formsdata(&attr, result) != 0)
-> > -               return -ENOENT;
-> > -
-> > -       return 0;
-> > -}
-> > -
-> >  /**
-> >   * die_is_signed_type - Check whether a type DIE is signed or not
-> >   * @tp_die: a DIE of a type
-> > @@ -467,9 +454,9 @@ int die_get_data_member_location(Dwarf_Die *mb_die, Dwarf_Word *offs)
-> >  /* Get the call file index number in CU DIE */
-> >  static int die_get_call_fileno(Dwarf_Die *in_die)
-> >  {
-> > -       Dwarf_Sword idx;
-> > +       Dwarf_Word idx;
-> >
-> > -       if (die_get_attr_sdata(in_die, DW_AT_call_file, &idx) == 0)
-> > +       if (die_get_attr_udata(in_die, DW_AT_call_file, &idx) == 0)
-> >                 return (int)idx;
-> >         else
-> >                 return -ENOENT;
-> > @@ -478,9 +465,9 @@ static int die_get_call_fileno(Dwarf_Die *in_die)
-> >  /* Get the declared file index number in CU DIE */
-> >  static int die_get_decl_fileno(Dwarf_Die *pdie)
-> >  {
-> > -       Dwarf_Sword idx;
-> > +       Dwarf_Word idx;
-> >
-> > -       if (die_get_attr_sdata(pdie, DW_AT_decl_file, &idx) == 0)
-> > +       if (die_get_attr_udata(pdie, DW_AT_decl_file, &idx) == 0)
-> >                 return (int)idx;
-> >         else
-> >                 return -ENOENT;
-> >
+> "ARM: dts: msm: add mdss gdsc supply to dsi controller device
+> 
+>  It is possible for the DSI controller to be active when MDP is
+>  power collapsed. DSI controller needs to have it's own vote for
+>  mdss gdsc to ensure that gdsc remains on in such cases."
+> 
+> This however doesn't appear to be the case for the apq8064 so we shouldn't
+> be marking power-domain as required in yaml checks.
+> 
+> Fixes: 4dbe55c97741 ("dt-bindings: msm: dsi: add yaml schemas for DSI bindings")
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Rob Clark <robdclark@gmail.com>
+> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Sean Paul <sean@poorly.run>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: freedreno@lists.freedesktop.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 
--- 
+Your Cc list is huge and not necessary to store in git log. For example
+I am appearing there twice. Please keep it under '---'.
 
-- Arnaldo
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
