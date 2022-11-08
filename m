@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F6D621C8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF521621C9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiKHSzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
+        id S229649AbiKHS7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKHSzH (ORCPT
+        with ESMTP id S229551AbiKHS7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:55:07 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A106483B9D;
-        Tue,  8 Nov 2022 10:55:06 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e764329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e764:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 469241EC0430;
-        Tue,  8 Nov 2022 19:55:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667933705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=bWJhiY8ctB7pAGVHnyodOQZIKFbNHN2HSf5SnuCoywg=;
-        b=pCdMQvSkox1928+NoowWdHrjhF1GyUzqYZR7LmHCRw+EjwH6O8Z4ZzhMkMmiySeSczUDdn
-        6SuE8L7XUDBAc05RQhhlhE9HCehOrLfacc/J6pQUcxXp66C0bm6DWnVPEftGHpgjEaE1t6
-        Ju2zii2Y74BoF0ei30KRYNe2fR9r264=
-Date:   Tue, 8 Nov 2022 19:55:04 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com
-Subject: Re: [PATCH 0/3] Check enumeration before MSR save/restore
-Message-ID: <Y2qmCJgOY6BOTlOb@zn.tnic>
-References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <aa8f5b80-b94e-b685-ed65-8b9c8f453832@redhat.com>
- <Y2qfY81OphcVRbUk@zn.tnic>
+        Tue, 8 Nov 2022 13:59:46 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF3260EA8;
+        Tue,  8 Nov 2022 10:59:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1667933986; x=1699469986;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=f/jLGb3VftbiMJ9+Hf3kCuMm11wmD3y9Crzv0IU8wPw=;
+  b=uh1ni13vxjFuqBIX+A01rosMSefaoENXUfXZGJalyhavXpakbFemJKdY
+   ZVcUChIDZ5l25Xo8fDDXkvtOhA/P1sODpD7lH9t2MoFN8m0B0yDEawmPy
+   9W7nb+5K+p9LnD6zg2q1mDdEodA7olh4D0K1HKcdMtGuDP9wiAQW3+LY6
+   8=;
+X-IronPort-AV: E=Sophos;i="5.96,148,1665446400"; 
+   d="scan'208";a="148956021"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 18:59:43 +0000
+Received: from EX13D25EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com (Postfix) with ESMTPS id 4B4DC41991;
+        Tue,  8 Nov 2022 18:59:42 +0000 (UTC)
+Received: from EX19D016EUA004.ant.amazon.com (10.252.50.4) by
+ EX13D25EUA002.ant.amazon.com (10.43.165.40) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Tue, 8 Nov 2022 18:59:40 +0000
+Received: from 38f9d34ed3b1.ant.amazon.com.com (10.43.162.178) by
+ EX19D016EUA004.ant.amazon.com (10.252.50.4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.15; Tue, 8 Nov 2022 18:59:35 +0000
+From:   Andra Paraschiv <andraprs@amazon.com>
+To:     linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Alexandru Ciobotaru <alcioa@amazon.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marcelo Cerri <marcelo.cerri@canonical.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Tim Gardner <tim.gardner@canonical.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        kvm <kvm@vger.kernel.org>,
+        ne-devel-upstream <ne-devel-upstream@amazon.com>,
+        "The AWS Nitro Enclaves Team" <aws-nitro-enclaves-devel@amazon.com>,
+        "Andra Paraschiv" <andraprs@amazon.com>
+Subject: [PATCH v1] MAINTAINERS: Update entries from the Nitro Enclaves section
+Date:   Tue, 8 Nov 2022 20:59:12 +0200
+Message-ID: <20221108185912.15792-1-andraprs@amazon.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y2qfY81OphcVRbUk@zn.tnic>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Originating-IP: [10.43.162.178]
+X-ClientProxiedBy: EX13D44UWC001.ant.amazon.com (10.43.162.26) To
+ EX19D016EUA004.ant.amazon.com (10.252.50.4)
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,13 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 07:26:43PM +0100, Borislav Petkov wrote:
-> Will take a look tomorrow.
+Update the list of maintainers for the Nitro Enclaves project. Alex
+(lexnv@) is not working at Amazon anymore and there will be the same
+case for me starting with 2023.
 
-Yap, needs a new revision.
+Add a reference to the mailing list of the Nitro Enclaves development
+team.
 
+Signed-off-by: Andra Paraschiv <andraprs@amazon.com>
+---
+ MAINTAINERS | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 046ff06ff97f..af2c178ba0dc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14564,10 +14564,9 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/dinguyen/linux.git
+ F:	arch/nios2/
+ 
+ NITRO ENCLAVES (NE)
+-M:	Andra Paraschiv <andraprs@amazon.com>
+-M:	Alexandru Vasile <lexnv@amazon.com>
+ M:	Alexandru Ciobotaru <alcioa@amazon.com>
+ L:	linux-kernel@vger.kernel.org
++L:	The AWS Nitro Enclaves Team <aws-nitro-enclaves-devel@amazon.com>
+ S:	Supported
+ W:	https://aws.amazon.com/ec2/nitro/nitro-enclaves/
+ F:	Documentation/virt/ne_overview.rst
 -- 
-Regards/Gruss,
-    Boris.
+2.37.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+
+
+Amazon Development Center (Romania) S.R.L. registered office: 27A Sf. Lazar Street, UBC5, floor 2, Iasi, Iasi County, 700045, Romania. Registered in Romania. Registration number J22/2621/2005.
+
