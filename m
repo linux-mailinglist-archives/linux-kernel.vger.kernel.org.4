@@ -2,139 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1817B621F4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9A5621F58
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiKHWao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S229853AbiKHWat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:30:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiKHWaP (ORCPT
+        with ESMTP id S229447AbiKHWa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:30:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFD051C00;
-        Tue,  8 Nov 2022 14:29:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E623617A3;
-        Tue,  8 Nov 2022 22:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F00BC433D6;
-        Tue,  8 Nov 2022 22:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667946586;
-        bh=BqvLW4jV5m1Bw96AoPI7MuAfx2h0xX+8YgylNPLrHPk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ALUXgK44ZlDy0Hq1JR65VSfRXW0YJEhV1L57HIyNALpCiXaedEt2EiQIlXZmytvMb
-         P7KANRx4MVmAgcYLibZnaI5nYHBpVk9QtRmCsvE9qS/CJENQCoiA9aZNGIfIAJqhbS
-         WFVnSh93jYn4RmX8alKaebzoNU+3ufrs0YNhbHM5YwRrMs5EavX/r0BApua83/yLtR
-         LBl+98l5WSe47pbVmTJO28XR/UYFQTAXhoGXvZAfi02qqqC3aJqNUA9/ScmgNgRakW
-         u6BRMgp6+LGEg+tsO8qj+09+uIhXGUMf260kQLjH6p89Q5PYLIbo9BlRgSAh1FI2Di
-         hAt+MWp3lOSBw==
-Date:   Tue, 8 Nov 2022 16:29:44 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nathan Rossi <nathan@nathanrossi.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Rossi <nathan.rossi@digi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI/ASPM: Wait for data link active after retraining
-Message-ID: <20221108222944.GA504625@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Tue, 8 Nov 2022 17:30:27 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF19A21A4;
+        Tue,  8 Nov 2022 14:30:13 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so17864096fac.1;
+        Tue, 08 Nov 2022 14:30:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EIyu2ScaB3AbxUJeW+TW/jRCR8cvhLIs+eO6qwh9G40=;
+        b=P8XlboiwnUurHAMOyeikQaRC5CJ4M8kL+K/8obGiuJPAe2wJ7Ez8W422laA/K7knyJ
+         J75/QXoeUImcyB0SqjfoxmZ+lhVtJCcri3HAMv36/IKh7MTZ+B5zli6cik6BLKZCWk6i
+         ICHraCDo05J/F5c/LiooaR8SJy+VSJXbRl2c6fwvgjQuHO/tQCQ+yK3fqqFxoInKVqxv
+         ZCYyTeI2+ap+ktkRFR572eKlF4Wue4FyshpvYv8BLaAgK0LndKdSHFxQivcx8Vnj7Nbm
+         OWG7dLp/o5CB3SN6OHA2ZcoqL2j5+Q1/DtM+ftjlh+GFn8jmMmntqJlJppLfMnL8lK9M
+         +SdA==
+X-Gm-Message-State: ACrzQf0CYcLfnyq9/FUvzcnZffwl1IsFBD7CYs3V1xtVorxmrJiCm9qY
+        Scpaiu/J9aUDyEPmu11eF4KUf9X9iw==
+X-Google-Smtp-Source: AMsMyM4ErTAiEBhhWUnCfkse1uPFXHKxuqvHukpK8jfMZpw4aZEAx3TQfjnc7l2d+tka0EwpvviWtQ==
+X-Received: by 2002:a05:6870:15d0:b0:13c:2aa5:d967 with SMTP id k16-20020a05687015d000b0013c2aa5d967mr34222286oad.143.1667946612838;
+        Tue, 08 Nov 2022 14:30:12 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 89-20020a9d0c62000000b00661946468c6sm4574509otr.31.2022.11.08.14.30.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 14:30:12 -0800 (PST)
+Received: (nullmailer pid 4095486 invoked by uid 1000);
+        Tue, 08 Nov 2022 22:30:08 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220602065544.2552771-1-nathan@nathanrossi.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-input@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@mediatek.com>, linux-rtc@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-leds@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
+Message-Id: <166794645623.4092225.9597102589319285416.robh@kernel.org>
+Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
+ documentation
+Date:   Tue, 08 Nov 2022 16:30:08 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 06:55:44AM +0000, Nathan Rossi wrote:
-> From: Nathan Rossi <nathan.rossi@digi.com>
+
+On Tue, 08 Nov 2022 19:43:37 +0100, Alexandre Mergnat wrote:
+> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
+> - Add mediatek,mt6357-rtc compatible.
+> - Add maintainer
+> - Remove the .txt binding file
 > 
-> When retraining the link either the child or the parent device may have
-> the data link layer state machine of the respective devices move out of
-> the active state despite the physical link training being completed.
-> Depending on how long is takes for the devices to return to the active
-> state, the device may not be ready and any further reads/writes to the
-> device can fail.
-> 
-> This issue is present with the pci-mvebu controller paired with a device
-> supporting ASPM but without advertising the Slot Clock, where during
-> boot the pcie_aspm_cap_init call would cause common clocks to be made
-> consistent and then retrain the link. However the data link layer would
-> not be active before any device initialization (e.g. ASPM capability
-> queries, BAR configuration) causing improper configuration of the device
-> without error.
-> 
-> To ensure the child device is accessible, after the link retraining use
-> pcie_wait_for_link to perform the associated state checks and any needed
-> delays.
-> 
-> Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 > ---
->  drivers/pci/pcie/aspm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
+>  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
+>  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
+>  3 files changed, 41 insertions(+), 32 deletions(-)
 > 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index a96b7424c9..4b8a1810be 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -288,7 +288,8 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->  		reg16 &= ~PCI_EXP_LNKCTL_CCC;
->  	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
->  
-> -	if (pcie_retrain_link(link))
-> +	/* Retrain link and then wait for the link to become active */
-> +	if (pcie_retrain_link(link) && pcie_wait_for_link(parent, true))
 
-pcie_retrain_link() waits for PCI_EXP_LNKSTA_LT (Link Training) to be
-cleared, which means the LTSSM has exited the Configuration/Recovery
-state.  pcie_wait_for_link() waits for PCI_EXP_LNKSTA_DLLLA (Data Link
-Layer Link Active) to be set, which means the link is in DL_Active.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I don't see an explicit procedure in the spec for determining when
-a link retrain is complete, but from PCIe r6.0, sec 6.2.11 (DPC):
+yamllint warnings/errors:
 
-  After software releases the Downstream Port from DPC, the Port’s
-  LTSSM must transition to the Detect state, where the Link will
-  attempt to retrain. Software can use Data Link Layer State Changed
-  interrupts, DL_ACTIVE ERR_COR signaling, or both, to signal when the
-  Link reaches the DL_Active state again.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.example.dtb:0:0: /example-0/pmic: failed to match any schema with compatible: ['mediatek,mt6397']
 
-and sec 6.6:
+doc reference errors (make refcheckdocs):
 
-  On the completion of Link Training (entering the DL_Active state,
-  see Section 3.2), a component must be able to receive and process
-  TLPs and DLLPs.
+See https://patchwork.ozlabs.org/patch/
 
-The only use mentioned in the spec for the Link Training bit is the
-implementation note in sec 7.5.3.7 about avoiding race conditions when
-using the Retrain Link bit, where software should poll Link Training
-until it returns to zero before setting the Retrain Link bit to change
-link parameters.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-And I think you're absolutely right that what we *want* here is the
-data link layer DL_Active state, not just the link layer L0 state.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-This all makes me think that checking the Link Training bit might be
-the wrong thing to begin with.
+pip3 install dtschema --upgrade
 
-Of course, the Data Link Layer Link Active bit wasn't added until PCIe
-r1.1, and even now it's optional.  Without it, I don't know if there's
-a way to make sure the link is in DL_Active.
+Please check and re-submit.
 
-Maybe pcie_retrain_link() should wait for Data Link Layer Link Active
-if it is supported, and use the existing behavior of waiting for Link
-Training to be cleared otherwise?
-
->  		return;
->  
->  	/* Training failed. Restore common clock configurations */
-> ---
-> 2.36.1
