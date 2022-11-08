@@ -2,110 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CFB6206C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DD3620642
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiKHC3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S233438AbiKHBlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:41:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiKHC3O (ORCPT
+        with ESMTP id S229534AbiKHBld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:29:14 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4B812D09;
-        Mon,  7 Nov 2022 18:29:10 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id r18so12174581pgr.12;
-        Mon, 07 Nov 2022 18:29:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h8+iDxfk1Lu5FMUmp5MLJsvPgLkzuNlpDVt+Jem4i3Q=;
-        b=Jp6Olhjx38ZCDIpDvJa1kIKktRPm6c5xnQbrcwbxWay6fgRWNK0dTBXcUESv2Ou9wj
-         mlhrbfIlEkDgdrQnx6HVbM9ZBII5gln6KLJd6+6tVcKZVN4z54kuoPubmB6j8IidDZTI
-         W9weypMD0ZPjGj5KN6/B7vCwTppH7/3YkT+f9Cs3J1ls3GeBLeQIgD0x+VYsina/5Oee
-         4izY6OU4D1ZVoDRiUCmNpjftQ/mVr81qX/Rd0N6uHQrAprw8F1K0QqVV4yNycxrn/49E
-         UVzyiHlNcQIlokU0fkuQWaCpkWMkaD3VMznkY0jZ8QtZUvfzgUQHR8UMGQYdehANEXm6
-         oOag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h8+iDxfk1Lu5FMUmp5MLJsvPgLkzuNlpDVt+Jem4i3Q=;
-        b=td2ujajh3hsZlV5QLdCDZrXfOGB24YUH+8hJoAQPfjKul7REklEzmeYxO7eRa2Sgnm
-         n9OqTTIzl1L8JzM8aIK/wl30BI3yOa8W0bLoQ51QKJpTAqqIhS3qw7bp9hhvIYywXSzf
-         /AKKuIPdaHl5g0yYT3o/gRxUSF0Z4aYvDMqAkNUY1WnD4NJxr232k2JgMOfrx1l/f1mQ
-         VmmEd+h6hXLfeunJ+Q9KSjRE4/mmKqDVBB62oUx0ROJibZZSb23J73HX4EdhgjZGMaUE
-         Zbn24HTK+0fcwvdZfS0IatTFTqTtcWBOEQAj8zZq3f6DNZKm/4dl60OOUueep+BKQEbw
-         JguQ==
-X-Gm-Message-State: ACrzQf3uJAvnmj2C7DJYzdf8olZTuHjEiZyVclyUr/TZ4ywMo953p9C9
-        r6JoXR4MsOngxhriEdZ1oRY=
-X-Google-Smtp-Source: AMsMyM4PHS1dbFAuhR5oCM2R3s+kkIX9oz32AKULQ5Nbtx0LyF1xDDPqA9EGoLuJeO4fX+1jOUKMfg==
-X-Received: by 2002:a05:6a00:1823:b0:56b:f348:998f with SMTP id y35-20020a056a00182300b0056bf348998fmr53571623pfa.28.1667874550131;
-        Mon, 07 Nov 2022 18:29:10 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-93.three.co.id. [180.214.232.93])
-        by smtp.gmail.com with ESMTPSA id k27-20020aa7999b000000b0056b8af5d46esm5144170pfh.168.2022.11.07.18.29.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 18:29:09 -0800 (PST)
-Message-ID: <206a95eb-5430-f9bf-15ad-4e644393255e@gmail.com>
-Date:   Tue, 8 Nov 2022 09:29:01 +0700
+        Mon, 7 Nov 2022 20:41:33 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5CA1A80C;
+        Mon,  7 Nov 2022 17:41:32 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5rRR5qFMzRp5p;
+        Tue,  8 Nov 2022 09:41:23 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 09:41:31 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
+ 2022 09:41:30 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <linux-nilfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] nilfs2: fix NULL pointer dereference in nilfs_segctor_prepare_write()
+Date:   Tue, 8 Nov 2022 10:29:28 +0800
+Message-ID: <20221108022928.497746-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] Documentation: RCU: use code blocks with autogenerated
- line (was: Re: linux-next: build warning after merge of the rcu tree)
-Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     corbet@lwn.net, frederic@kernel.org, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        paulmck@kernel.org, quic_neeraju@quicinc.com, rcu@vger.kernel.org,
-        rostedt@goodmis.org, sfr@canb.auug.org.au
-References: <Y2jWAR1QESe3OrhH@debian.me>
- <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <af3ec8bf-310e-69ea-9d32-f7aec740b306@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 18:48, Akira Yokosawa wrote:
-> That might be true if all you care about were the generated documents,
-> but we need to pay attention to readers of .rst files as plain-text.
-> 
-> There are a bunch of references to line numbers in RCU documents.
-> If explicit line numbers are removed from snippets, such readers need
-> to count the lines by themselves, which doesn't sound reasonable to me.
-> 
+Syzbot reported a NULL pointer dereference:
 
-I think only rcubarrier.rst have explicit references to line numbers.
+ Unable to handle kernel NULL pointer dereference at virtual address 0000000000000168
+ Mem abort info:
+   ESR = 0x0000000096000004
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x04: level 0 translation fault
+ Data abort info:
+   ISV = 0, ISS = 0x00000004
+   CM = 0, WnR = 0
+ user pgtable: 4k pages, 48-bit VAs, pgdp=0000000108bcf000
+ [0000000000000168] pgd=0000000000000000, p4d=0000000000000000
+ Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+ Modules linked in:
+ CPU: 1 PID: 3032 Comm: segctord Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+ Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+ pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : _compound_head include/linux/page-flags.h:253 [inline]
+ pc : lock_page+0x28/0x1e0 include/linux/pagemap.h:958
+ lr : lock_page+0x28/0x1e0 include/linux/pagemap.h:956
+ sp : ffff80001290bc00
+ x29: ffff80001290bc00 x28: ffff80001290bde0 x27: 000000000000001b
+ x26: fffffc000330d7c0 x25: ffff0000caa56d68 x24: ffff0000ca9fb1c0
+ x23: 0000000000000080 x22: ffff0000ca9fb130 x21: 0000000000000160
+ x20: ffff0000c91e10b8 x19: 0000000000000160 x18: 00000000000000c0
+ x17: ffff80000dd0b198 x16: ffff80000db49158 x15: ffff0000c3e63500
+ x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c3e63500
+ x11: ff808000095d1a0c x10: 0000000000000000 x9 : 0000000000000000
+ x8 : 0000000000000000 x7 : ffff80000856806c x6 : 0000000000000000
+ x5 : 0000000000000080 x4 : 0000000000000000 x3 : 0000000000000000
+ x2 : 0000000000000000 x1 : ffff80000cb431b1 x0 : 0000000000000000
+ Call trace:
+  lock_page+0x28/0x1e0 include/linux/pagemap.h:956
+  nilfs_segctor_prepare_write+0x6c/0x21c fs/nilfs2/segment.c:1658
+  nilfs_segctor_do_construct+0x9f4/0xee8 fs/nilfs2/segment.c:2068
+  nilfs_segctor_construct+0xa0/0x380 fs/nilfs2/segment.c:2375
+  nilfs_segctor_thread_construct fs/nilfs2/segment.c:2483 [inline]
+  nilfs_segctor_thread+0x180/0x660 fs/nilfs2/segment.c:2566
+  kthread+0x12c/0x158 kernel/kthread.c:376
+  ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
 
-Also, besides manual line counting, readers seeing rst sources can deduce
-where actually the lines are from explanation of the snippet. Of course
-they can make htmldocs and seeing the output if they want.
+If didn't call nilfs_sufile_alloc() in nilfs_segctor_begin_construction(),
+nilfs_sufile_header's sh_last_alloc is not updated. In such case, we will
+add a bh in two segbuf->sb_segsum_buffers. And finally cause list error.
 
-> If you can put labels to referenced lines within code snippets, auto
-> generation of line numbers might work, but as far as I know, Sphinx
-> doesn't provide such a nice feature.
-> 
+Reported-by: syzbot+77e4f005cb899d4268d1@syzkaller.appspotmail.com
+Fixes: 9ff05123e3bf ("nilfs2: segment constructor")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ fs/nilfs2/segment.c | 1 +
+ fs/nilfs2/sufile.c  | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-There's also :emphasize-lines: option to highlight selected line numbers.
-
-Thanks.
-
+diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
+index b4cebad21b48..7be632c15f91 100644
+--- a/fs/nilfs2/segment.c
++++ b/fs/nilfs2/segment.c
+@@ -1371,6 +1371,7 @@ static int nilfs_segctor_extend_segments(struct nilfs_sc_info *sci,
+ 		sci->sc_segbuf_nblocks += segbuf->sb_rest_blocks;
+ 
+ 		/* allocate the next next full segment */
++		nextnextnum = segbuf->sb_segnum;
+ 		err = nilfs_sufile_alloc(sufile, &nextnextnum);
+ 		if (unlikely(err))
+ 			goto failed_segbuf;
+diff --git a/fs/nilfs2/sufile.c b/fs/nilfs2/sufile.c
+index 77ff8e95421f..853a8212114f 100644
+--- a/fs/nilfs2/sufile.c
++++ b/fs/nilfs2/sufile.c
+@@ -317,7 +317,7 @@ int nilfs_sufile_alloc(struct inode *sufile, __u64 *segnump)
+ 		goto out_sem;
+ 	kaddr = kmap_atomic(header_bh->b_page);
+ 	header = kaddr + bh_offset(header_bh);
+-	last_alloc = le64_to_cpu(header->sh_last_alloc);
++	last_alloc = max(le64_to_cpu(header->sh_last_alloc), *segnump);
+ 	kunmap_atomic(kaddr);
+ 
+ 	nsegments = nilfs_sufile_get_nsegments(sufile);
 -- 
-An old man doll... just what I always wanted! - Clara
+2.25.1
 
