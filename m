@@ -2,102 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B267262171A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED59E62170F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234244AbiKHOpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
+        id S233203AbiKHOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbiKHOod (ORCPT
+        with ESMTP id S232367AbiKHOnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:44:33 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA176400;
-        Tue,  8 Nov 2022 06:44:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667918672; x=1699454672;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R8VSM/9itvp5kxWxpXkIS/pD4UFexUu9PXtV9Kc9JTo=;
-  b=ePYifdz8YpXoCwNXu19uNoFT8OccNRpSKvZvhmyXxxlorpE8JrdBMqtE
-   yINc5Z1IzihiAWH3jU3TqOGEJdlCgntcnO6y7KIV3BnuYvXuMv/LHJu45
-   9iSjzs+ziQ5kLpVoiSm5K194uvwpEA0nSSSHyix5zxQgySyHniXAz7bhf
-   ROvgRrkaioIMjBGcIni1jEelxE+8uhDKsRfMSByI64uXrDQG1osJdt+GQ
-   RH9JVUBnj0VVI7kUtA2gofl8Bcu1A/dEjY8hBg5Mu28Kb9pxJHhRarPeu
-   9RL2gr02EBvh5+52QZ/nc8aQkePl0F/hEMVBW9S4on70yvR9U99Qt6Avw
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312498021"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="312498021"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:44:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="638809931"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="638809931"
-Received: from ppkrause-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.44.73])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:44:12 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 12/12] mfd: intel-m10-bmc: Change MODULE_LICENSE() to GPL
-Date:   Tue,  8 Nov 2022 16:43:05 +0200
-Message-Id: <20221108144305.45424-13-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
-References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
+        Tue, 8 Nov 2022 09:43:21 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2102631ECF;
+        Tue,  8 Nov 2022 06:43:20 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id p18so4626390qkg.2;
+        Tue, 08 Nov 2022 06:43:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=chPq10Gzwk+MmB+dQBE8YARzKswl0L8S0c4cotUK9Yo=;
+        b=Nel+RCouuBuJs1TaAED5Cvd/nfznpqnUTi9Q0+X++UdFTeQ4MNw88NfXMK0pdiBLVp
+         xr4K+7kkKqYRk4HW5P2C7UsMk6UT9ghbd++Z0KEBUNJFPHGzJ3t1Whmuzz+oybC8xZQQ
+         xURZD392gkNacpyQ3UPKy7LPBjh5/BRtiqEbdAGRoEWuiViwRRuw+Cm+elPpe5V0rvG/
+         hsUAC/lkUEcKXq9GgtvdSke5QkeKvzTVxPjutX5/MzFbrqWD7cKyWZynmc5oI4MiLiNN
+         XOI/y1sJDeroHBMAOocVfr5t+RXxtTj73YRUz8PDlgKSMy+Qb93ohs0WFYBlSRA3GVGq
+         Y7lA==
+X-Gm-Message-State: ACrzQf0yBEiLduDrjmQczD9clJEByYdLMt414dNPUvhaFomUL06dYzzr
+        N55IUZIiIeP9qF3VU9aF3v4FAKoixSJiuwjHbzI=
+X-Google-Smtp-Source: AMsMyM61bIp/lkNqz9d4L2NL67oaG2AS8g2ED2d2BN7jytLEkidQhYJsMKVpa/kDJFQhN8K4Q8s3uCUrZF8Mm0Ykuqc=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr38559368qkl.443.1667918599300; Tue, 08
+ Nov 2022 06:43:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <2276401.ElGaqSPkdT@kreacher> <8155359.T7Z3S40VBb@kreacher> <Y2l21CkXvm7mkONq@smile.fi.intel.com>
+In-Reply-To: <Y2l21CkXvm7mkONq@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 8 Nov 2022 15:43:08 +0100
+Message-ID: <CAJZ5v0j1zeucPOrSa9buYoUms7M9rPAQqo7g50hS2SeyBy63HQ@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] rtc: rtc-cmos: Rename ACPI-related functions
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"GPL v2" should not be used as MODULE_LICENSE(). "GPL" is enough, see
-commit bf7fbeeae6db ("module: Cure the MODULE_LICENSE "GPL" vs. "GPL
-v2" bogosity") for more details.
+On Mon, Nov 7, 2022 at 10:22 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Nov 07, 2022 at 09:01:50PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > The names of rtc_wake_setup() and cmos_wake_setup() don't indicate
+> > that these functions are ACPI-related, which is the case, and the
+> > former doesn't really reflect the role of the function.
+> >
+> > Rename them to acpi_rtc_event_setup() and cmos_acpi_wake_setup(),
+> > respectively, to address this shortcoming.
+>
+> Hmm... I'm not sure I understand why in one case acpi is a prefix and
+> in the other is kinda mid-suffix?
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/mfd/intel-m10-bmc-core.c | 2 +-
- drivers/mfd/intel-m10-bmc-spi.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Because the former installs an ACPI RTC fixed event handler and the
+latter populates the cmos_rtc data structure in the ACPI case.
 
-diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-index 50a4ec758bdb..3b9e866b2bcf 100644
---- a/drivers/mfd/intel-m10-bmc-core.c
-+++ b/drivers/mfd/intel-m10-bmc-core.c
-@@ -130,4 +130,4 @@ EXPORT_SYMBOL_GPL(m10bmc_dev_init);
- 
- MODULE_DESCRIPTION("Intel MAX 10 BMC core MFD driver");
- MODULE_AUTHOR("Intel Corporation");
--MODULE_LICENSE("GPL v2");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-index 4a7a16d9f8d6..6a45b080a208 100644
---- a/drivers/mfd/intel-m10-bmc-spi.c
-+++ b/drivers/mfd/intel-m10-bmc-spi.c
-@@ -258,5 +258,5 @@ module_spi_driver(intel_m10bmc_spi_driver);
- 
- MODULE_DESCRIPTION("Intel MAX 10 BMC SPI bus interface");
- MODULE_AUTHOR("Intel Corporation");
--MODULE_LICENSE("GPL v2");
-+MODULE_LICENSE("GPL");
- MODULE_ALIAS("spi:intel-m10-bmc");
--- 
-2.30.2
-
+Maybe it would be better to call the latter cmos_wake_setup_acpi().
