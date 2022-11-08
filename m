@@ -2,148 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DBC62085F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 05:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E05620862
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 05:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiKHEmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 23:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S232967AbiKHEng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 23:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbiKHEmf (ORCPT
+        with ESMTP id S232308AbiKHEnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 23:42:35 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8842EF30
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 20:42:34 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id v17so13159084plo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 20:42:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+VoC5O6h7ZfIBAy9yt0jFTh5sWdzWSPpFHMVA1UnB6o=;
-        b=Amgys6yR9ThhrGUWgN0xwAeQVN11/9ieXyMbX53skvp+611RG7k7wb0w0vSOJ3j9s9
-         XtkeQ2dDiGvKdp9oPkWiZ86JTtcRE8BNcRAmdLSkzuHwcx/QOOplsvuIJVx9LECxSSLN
-         YvS5X40w6psbnkn7hSZM32LWh728Fdq/ep6JZS3rjgHQuKFXc8YaBPq3xHAkEQKxKcuz
-         1f4JJMfy+xjUeeJZLZ5S0nLKU2/44tr09WDzvIY4bsstdpbH+ACIM+FcZ5zucOBwGLEm
-         g5W5NuZQbt6erB3C5OG47Wa+SPRDsGknZJNCregml6WMAY4rhYbouwhjEl51e0Q41NWv
-         hVmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+VoC5O6h7ZfIBAy9yt0jFTh5sWdzWSPpFHMVA1UnB6o=;
-        b=vUszcy0bgmu8ojnl1Db8VgbpG7DvFBw3odq4b6nBrgHESRciGO4+AqxyS5w0i2xu63
-         o6RwzOvEEOPu6tBdHZh05tS6eghvp/56WMROE+C3UiuSonmzDW+bHhrF/Xh7qgeHCAMm
-         raq59snCRvdep+1QRBOghnROxiLw4ljoj8MXqX+9IwNbgz89ttPBI/HKi4eL3Gy5eUrY
-         oVZRHLaTIZD+pNzPlWBY99vw1HuRJdQJmc8jU1ip/wPqxbomCjx+sPLqzOthZc7EDn5Z
-         HqXYSdx/gUTrhZGBquH3fGpuklQxdXpdumyxTnDqEV/Lrexzkw42MTxBmjpybD+D0+yV
-         cmfA==
-X-Gm-Message-State: ACrzQf1nbGpJGDOwByARUE+tBWhHAlpupzYoc/2wo6uxpsTkh3Exhjrk
-        zQm3VucxXYggAG4wx+KHkEDHo3bKdE/hR/gy4rA=
-X-Google-Smtp-Source: AMsMyM6Kq3rk40ALl/YgkZXlUCq9NxAtWqN3do0TiYDNdcGLIfZ/Z/Hz1l3Zx0dndk5ZiHl0FiobuSJHCnWiwk+xMn4=
-X-Received: by 2002:a17:902:dac5:b0:186:a687:e082 with SMTP id
- q5-20020a170902dac500b00186a687e082mr55171671plx.84.1667882553684; Mon, 07
- Nov 2022 20:42:33 -0800 (PST)
+        Mon, 7 Nov 2022 23:43:32 -0500
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C42E2EB;
+        Mon,  7 Nov 2022 20:43:22 -0800 (PST)
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Tue,  8 Nov 2022 05:43:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1667882599; bh=f98Ft+mUpEotOSqRVEFhe1RWvSPSfa7SKKHkZsjFsfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kv8LgZ5F6sNlKfbW6DiaegLg4NlBrNQbFXSq115C3UktcU7xwTN9uch6q/bMWtXrC
+         Fu09Z4696U4wKUidHFNQEhsq3YBW4uVIZ8iCGAHjVIOXhGSZtnxpJ7mc0zveuthB6a
+         ZecfdwnbvxJFtarH8i2BDyho7/JMVozVm/GZaPI4=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPA id 1D5BA806B9;
+        Tue,  8 Nov 2022 05:43:19 +0100 (CET)
+Received: by buildd.core.avm.de (Postfix, from userid 1000)
+        id 0D7E01814CA; Tue,  8 Nov 2022 05:43:19 +0100 (CET)
+Date:   Tue, 8 Nov 2022 05:43:19 +0100
+From:   Nicolas Schier <n.schier@avm.de>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Sedat Dilek <sedat.dilek@dhl.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Terrell <terrelln@fb.com>, Tom Rix <trix@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2] Makefile.debug: support for -gz=zstd
+Message-ID: <Y2neZ1cfTIaECgcd@buildd.core.avm.de>
+References: <CAK7LNATrBDSLqBZFmWr5RA542pUVR=mieUSNVYXy8thkHS6w_A@mail.gmail.com>
+ <20221107180137.3634978-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-Received: by 2002:a17:522:8e11:b0:472:3709:5064 with HTTP; Mon, 7 Nov 2022
- 20:42:33 -0800 (PST)
-Reply-To: mrstheresaheidi8@gmail.com
-From:   "Ms. Theresa Heidi" <rev.johnpatrick1@gmail.com>
-Date:   Mon, 7 Nov 2022 20:42:33 -0800
-Message-ID: <CAMiB5XggM2hEnjNkoM+PXcTy4kQE1Jdpw4p-WtpeWs8rd4KUog@mail.gmail.com>
-Subject: =?UTF-8?B?56eB44KS5Yqp44GR44Gm44GP44Gg44GV44GE?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:62a listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [rev.johnpatrick1[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [rev.johnpatrick1[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrstheresaheidi8[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221107180137.3634978-1-ndesaulniers@google.com>
+X-purgate-ID: 149429::1667882599-8E411378-77C3A1E1/0/0
+X-purgate-type: clean
+X-purgate-size: 5164
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5oWI5ZaE5a+E5LuY77yBDQoNCuazqOaEj+a3seOBj+OBiuiqreOBv+OBj+OBoOOBleOBhOOAguOB
-k+OBruaJi+e0meOBjOOBguOBquOBn+OBq+OCteODl+ODqeOCpOOCuuOBqOOBl+OBpuWxiuOBj+OB
-i+OCguOBl+OCjOOBquOBhOOBk+OBqOOBr+S6i+Wun+OBp+OBmeOAguOBguOBquOBn+OBruWKqeOB
-keOBjOW/heimgeOBquOBqOOBjeOBq+OAgeODl+ODqeOCpOODmeODvOODiOaknOe0ouOBp+OBguOB
-quOBn+OBrumbu+WtkOODoeODvOODq+mAo+e1oeWFiOOBq+WHuuS8muOBhOOBvuOBl+OBn+OAguen
-geOBr+W/g+OBruS4reOBp+OBk+OBruODoeODvOODq+OCkuabuOOBhOOBpuOBhOOBvuOBmeOBjOOA
-geOCpOODs+OCv+ODvOODjeODg+ODiOOBr+S+neeEtuOBqOOBl+OBpuacgOmAn+OBrumAmuS/oeaJ
-i+auteOBp+OBguOCi+OBn+OCgeOAgeOCpOODs+OCv+ODvOODjeODg+ODiOOCkuS7i+OBl+OBpuOB
-guOBquOBn+OBq+mAo+e1oeOBmeOCi+OBk+OBqOOCkumBuOaKnuOBl+OBvuOBl+OBn+OAgg0KDQrn
-p4Hjga/nj77lnKjjgIHogrrjgYzjgpPjga7jgZ/jgoHjgqTjgrnjg6njgqjjg6vjga7np4Hnq4vn
-l4XpmaLjgavlhaXpmaLjgZfjgabjgYTjgosgNjINCuats+OBruODhuODrOOCteODj+OCpOOCuOWk
-q+S6uuOBp+OBmeOAguengeOBrzTlubTliY3jgIHjgZnjgbnjgabjgpLmrovjgZfjgabjgY/jgozj
-gZ/lpKvjgYzkuqHjgY/jgarjgaPjgZ/nm7TlvozjgavogrrjgYzjgpPjgajoqLrmlq3jgZXjgozj
-gb7jgZfjgZ/jgILnp4Hjga/jgIHogrrjgYzjgpPjga7msrvnmYLjgpLlj5fjgZHjgabjgYTjgovn
-l4XpmaLjgafjg6njg4Pjg5fjg4jjg4Pjg5fjgpLmjIHjgaPjgabjgYTjgb7jgZnjgIINCg0K56eB
-44Gv5Lqh44GP44Gq44Gj44Gf5aSr44GL44KJ5Y+X44GR57aZ44GE44Gg6LOH6YeR44KS5oyB44Gj
-44Gm44GE44G+44GZ44CC44Gd44Gu57eP6aGN44Gv44Gf44Gj44Gf44GuIDEyMCDkuIfjg4njg6sN
-CigxMuWEhOexs+ODieODqynjgafjgZnjgILku4rjgIHnp4HjgYzkurrnlJ/jga7mnIDlvozjga7m
-l6Xjgavov5HjgaXjgYTjgabjgYTjgovjgZPjgajjga/mmI7jgonjgYvjgafjgZnjgILjgZPjga7j
-gYrph5Hjga/jgoLjgYblv4XopoHjgarjgYTjgajmgJ3jgYTjgb7jgZnjgIIu56eB44Gu5Li75rK7
-5Yy744Gv44CB56eB44GM6IK644GM44KT44Gu5ZWP6aGM44Gu44Gf44KB44GrDQoxIOW5tOmWk+OB
-r+eUn+OBjeOCieOCjOOBquOBhOOBk+OBqOOCkueQhuino+OBleOBm+OBvuOBl+OBn+OAgg0KDQrj
-gZPjga7jgYrph5Hjga/jgb7jgaDlpJblm73jga7pioDooYzjgavkv53nrqHjgZXjgozjgabjgYrj
-gorjgIHntYzllrbpmaPjga/jgIHnp4HjgYznl4XmsJfjga7jgZ/jgoHjgavmnaXjgovjgZPjgajj
-gYzjgafjgY3jgarjgYTjga7jgafjgIHjgYrph5HjgpLlj5fjgZHlj5bjgovjgZ/jgoHjgavliY3j
-gavmnaXjgovjgYvjgIHku6Pjgo/jgorjgavoqrDjgYvjgavjgYrph5HjgpLlj5fjgZHlj5bjgovj
-gZ/jgoHjga7mib/oqo3mm7jjgpLnmbrooYzjgZnjgovjgojjgYbjgavjgIHnnJ/jga7miYDmnIno
-gIXjgajjgZfjgabnp4HjgavmiYvntJnjgpLmm7jjgY3jgb7jgZfjgZ/jgIIu6YqA6KGM44Gu6KGM
-5YuV44KS5oCg44KL44Go44CB6LOH6YeR44KS6ZW35pyf6ZaT5L+d566h44GX44Gf44Gf44KB44Gr
-6LOH6YeR44GM5rKh5Y+O44GV44KM44KL5Y+v6IO95oCn44GM44GC44KK44G+44GZ44CCDQoNCuOB
-k+OBruOBiumHkeOCkuWkluWbveOBrumKgOihjOOBi+OCieW8leOBjeWHuuOBl+OBpuOAgeaBteOB
-vuOCjOOBquOBhOS6uuOAheOCkuWKqeOBkeOCi+ODgeODo+ODquODhuOCo+ODvOa0u+WLleOBq+iz
-h+mHkeOCkuS9v+eUqOOBmeOCi+OBruOCkuaJi+S8neOBo+OBpuOBj+OCjOOCi+OBi+OBqeOBhuOB
-i+OAgeOBneOBl+OBpuiIiOWRs+OBjOOBguOCi+OBquOCieOAgeengeOBr+OBguOBquOBn+OBq+mA
-o+e1oeOBmeOCi+OBk+OBqOOBq+axuuOCgeOBvuOBl+OBny7np4HjgavkvZXjgYvjgYzotbfjgZPj
-govliY3jgavjgIHjgZPjgozjgonjga7kv6HoqJfln7rph5HjgpLoqqDlrp/jgavlh6bnkIbjgZfj
-gabjgbvjgZfjgYQu44GT44KM44Gv55uX44G+44KM44Gf44GK6YeR44Gn44Gv44Gq44GP44CB5a6M
-5YWo44Gq5rOV55qE6Ki85oug44GM44GC44KK44CBMTAwJQ0K44Oq44K544Kv44GM44Gq44GP44CB
-5Y2x6Zm644Gv44GC44KK44G+44Gb44KT44CCDQoNCuOBiumHkeOBriA1NSUg44Gv5oWI5ZaE5rS7
-5YuV44Gr5L2/44KP44KM44CB5ZCI6KiI6YeR6aGN44GuIDQ1JQ0K44Gv44GC44Gq44Gf44Gu5YCL
-5Lq655qE44Gq5L2/55So44Gu44Gf44KB44Gr5Y+W44Gj44Gm44G744GX44GELuengeOBr+engeOB
-ruacgOW+jOOBrumhmOOBhOOCkuWNsemZuuOBq+OBleOCieOBmeOCiOOBhuOBquOBk+OBqOOBr+S9
-leOCguacm+OCk+OBp+OBhOOBquOBhOOBruOBp+OAgeengeOBruW/g+OBi+OCieOBrumhmOOBhOOC
-kumBlOaIkOOBmeOCi+OBn+OCgeOBq+OAgeOBguOBquOBn+OBruacgOWkp+mZkOOBruS/oemgvOOB
-qOenmOWvhuS/neaMgeOBq+aEn+isneOBl+OBvuOBmS7jgZPjga7miYvntJnjgpLov7fmg5Hjg6Hj
-g7zjg6vjgaflj5fjgZHlj5bjgaPjgZ/loLTlkIjjga/jgIHnlLPjgZfoqLPjgYLjgorjgb7jgZvj
-gpPjgYzjgIHjgZPjgozjga/jgZPjga7lm73jgafjga7mnIDov5Hjga7mjqXntprjgqjjg6njg7zj
-gavjgojjgovjgoLjga7jgafjgZnjgIINCg0K44GC44Gq44Gf44Gu5pyA5oSb44Gu5aa544CCDQrj
-g4bjg6zjgrXjg7vjg4/jgqTjgrjlpKvkuroNCg==
+On Mon, Nov 07, 2022 at 10:01:33AM -0800, Nick Desaulniers wrote:
+> Make DEBUG_INFO_COMPRESSED a choice; DEBUG_INFO_UNCOMPRESSED is the
+> default, DEBUG_INFO_COMPRESSED uses zlib, DEBUG_INFO_COMPRESSED_ZSTD
+> uses zstd.
+> 
+> Some quick N=1 measurements with du, /usr/bin/time -v, and bloaty:
+> 
+> clang-16, x86_64 defconfig plus
+> CONFIG_DEBUG_INFO=y CONFIG_DEBUG_INFO_UNCOMPRESSED=y:
+> Elapsed (wall clock) time (h:mm:ss or m:ss): 0:55.43
+> 488M vmlinux
+> 27.6%   136Mi   0.0%       0    .debug_info
+>  6.1%  30.2Mi   0.0%       0    .debug_str_offsets
+>  3.5%  17.2Mi   0.0%       0    .debug_line
+>  3.3%  16.3Mi   0.0%       0    .debug_loclists
+>  0.9%  4.62Mi   0.0%       0    .debug_str
+> 
+> clang-16, x86_64 defconfig plus
+> CONFIG_DEBUG_INFO=y CONFIG_DEBUG_INFO_COMPRESSED=y (zlib):
+> Elapsed (wall clock) time (h:mm:ss or m:ss): 1:00.35
+> 385M vmlinux
+> 21.8%  85.4Mi   0.0%       0    .debug_info
+>  2.1%  8.26Mi   0.0%       0    .debug_str_offsets
+>  2.1%  8.24Mi   0.0%       0    .debug_loclists
+>  1.9%  7.48Mi   0.0%       0    .debug_line
+>  0.5%  1.94Mi   0.0%       0    .debug_str
+> 
+> clang-16, x86_64 defconfig plus
+> CONFIG_DEBUG_INFO=y CONFIG_DEBUG_INFO_COMPRESSED_ZSTD=y (zstd):
+> Elapsed (wall clock) time (h:mm:ss or m:ss): 0:59.69
+> 373M vmlinux
+> 21.4%  81.4Mi   0.0%       0    .debug_info
+>  2.3%  8.85Mi   0.0%       0    .debug_loclists
+>  1.5%  5.71Mi   0.0%       0    .debug_line
+>  0.5%  1.95Mi   0.0%       0    .debug_str_offsets
+>  0.4%  1.62Mi   0.0%       0    .debug_str
+> 
+> That's only a 3.11% overall binary size savings over zlib, but at no
+> performance regression.
+> 
+> This renames the existing KConfig options:
+> * DEBUG_INFO_UNCOMPRESSED -> DEBUG_INFO_COMPRESSED_NONE
+> * DEBUG_INFO_COMPRESSED -> DEBUG_INFO_COMPRESSED_ZLIB
+
+Might you want to update the DEBUG_INFO_(UN|)COMPRESSED above to the new
+names?
+
+Kind regards,
+Nicolas
+
+
+> So users upgrading may need to reset the new Kconfigs.
+> 
+> Link: https://maskray.me/blog/2022-09-09-zstd-compressed-debug-sections
+> Link: https://maskray.me/blog/2022-01-23-compressed-debug-sections
+> Suggested-by: Sedat Dilek (DHL Supply Chain) <sedat.dilek@dhl.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Changes v1 -> v2:
+> * Remove `depends on DEBUG_KERNEL` as per Nathan.
+> * Rename Kconfigs as per Sedat and Masahiro.
+> * Add note about renamed Kconfigs to commit message.
+> * Add more help text to DEBUG_INFO_COMPRESSED_ZSTD.
+> 
+>  lib/Kconfig.debug      | 29 +++++++++++++++++++++++++++--
+>  scripts/Makefile.debug |  4 ++++
+>  2 files changed, 31 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 29280072dc0e..7c28a8fba02e 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -312,8 +312,21 @@ config DEBUG_INFO_REDUCED
+>  	  DEBUG_INFO build and compile times are reduced too.
+>  	  Only works with newer gcc versions.
+>  
+> -config DEBUG_INFO_COMPRESSED
+> -	bool "Compressed debugging information"
+> +choice
+> +	prompt "Compressed Debug information"
+> +	help
+> +	  Compress the resulting debug info. Results in smaller debug info sections,
+> +	  but requires that consumers are able to decompress the results.
+> +
+> +	  If unsure, choose DEBUG_INFO_COMPRESSED_NONE.
+> +
+> +config DEBUG_INFO_COMPRESSED_NONE
+> +	bool "Don't compress debug information"
+> +	help
+> +	  Don't compress debug info sections.
+> +
+> +config DEBUG_INFO_COMPRESSED_ZLIB
+> +	bool "Compress debugging information with zlib"
+>  	depends on $(cc-option,-gz=zlib)
+>  	depends on $(ld-option,--compress-debug-sections=zlib)
+>  	help
+> @@ -327,6 +340,18 @@ config DEBUG_INFO_COMPRESSED
+>  	  preferable to setting $KDEB_COMPRESS to "none" which would be even
+>  	  larger.
+>  
+> +config DEBUG_INFO_COMPRESSED_ZSTD
+> +	bool "Compress debugging information with zstd"
+> +	depends on $(cc-option,-gz=zstd)
+> +	depends on $(ld-option,--compress-debug-sections=zstd)
+> +	help
+> +	  Compress the debug information using zstd.  This may provide better
+> +	  compression than zlib, for about the same time costs, but requires newer
+> +	  toolchain support.  Requires GCC 13.0+ or Clang 16.0+, binutils 2.40+, and
+> +	  zstd.
+> +
+> +endchoice # "Compressed Debug information"
+> +
+>  config DEBUG_INFO_SPLIT
+>  	bool "Produce split debuginfo in .dwo files"
+>  	depends on $(cc-option,-gsplit-dwarf)
+> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+> index 332c486f705f..8ac3379d2255 100644
+> --- a/scripts/Makefile.debug
+> +++ b/scripts/Makefile.debug
+> @@ -31,6 +31,10 @@ ifdef CONFIG_DEBUG_INFO_COMPRESSED
+>  DEBUG_CFLAGS	+= -gz=zlib
+>  KBUILD_AFLAGS	+= -gz=zlib
+>  KBUILD_LDFLAGS	+= --compress-debug-sections=zlib
+> +else ifdef CONFIG_DEBUG_INFO_COMPRESSED_ZSTD
+> +DEBUG_CFLAGS	+= -gz=zstd
+> +KBUILD_AFLAGS	+= -gz=zstd
+> +KBUILD_LDFLAGS	+= --compress-debug-sections=zstd
+>  endif
+>  
+>  KBUILD_CFLAGS	+= $(DEBUG_CFLAGS)
+> 
+> base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
+> -- 
+> 2.38.1.431.g37b22c650d-goog
+> 
