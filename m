@@ -2,126 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E5C6209CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 07:57:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DB06209D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiKHG5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 01:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
+        id S233301AbiKHHBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 02:01:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbiKHG5K (ORCPT
+        with ESMTP id S232641AbiKHHBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 01:57:10 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074941FCD3;
-        Mon,  7 Nov 2022 22:57:09 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7F4021F899;
-        Tue,  8 Nov 2022 06:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667890628; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9HsuM9y0VlNY6STi9GVfvRAUeLwjjk0OZ0q1YrHxZxA=;
-        b=PQlOorVSacK9kBqqDTVufL791tp1f97C0geHzbp95MGeTsZrL1SptB3ufb5MIGOH3E0VS5
-        SgA1P81wR6/yW64dw1I5HhiMvWcSkEnAPdk93oIE35HbD0DuKzNIG7KtE+5LU5u0OtM7I0
-        0cnYUrxTZTQEfIn2X4QIp0V7K/MsUkQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667890628;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9HsuM9y0VlNY6STi9GVfvRAUeLwjjk0OZ0q1YrHxZxA=;
-        b=Wz2Raops3HzN72/wiUuvca6T64lLPFg4WcdKN/30PzSOnpqusLRxF3vKEsWuQwrvWe7ViB
-        iRiZO1hdcKaXyuAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57ABE139F1;
-        Tue,  8 Nov 2022 06:57:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4e3RFMT9aWMzIQAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 08 Nov 2022 06:57:08 +0000
-Message-ID: <6349abb3-9fb5-8bd1-7d71-e8a1435b0cef@suse.de>
-Date:   Tue, 8 Nov 2022 07:57:09 +0100
+        Tue, 8 Nov 2022 02:01:13 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55F827B12;
+        Mon,  7 Nov 2022 23:01:11 -0800 (PST)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 28E9C419E9E7;
+        Tue,  8 Nov 2022 07:01:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 28E9C419E9E7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1667890867;
+        bh=vZj52kdIzoLSUwtu2CqHmy0BYlbjaJCqHxiUKCO/cd8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g48XDX2t71X1ak9fkpwJ1LkdptwZH4QNlXEPC9KJi99AiC1bXAhq73j3pe9zM5GPb
+         gqBoFcPHVGv5ASNCI22/l4JnYckx9q633LzhXInvb57QpVIM/Y6h1dNQXR9bVpPzMY
+         avHZPSwyUr2a8jdWS53Mio5b9wwfqXsXqVxxfmqQ=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] scsi: core: Add BLIST_NO_ASK_VPD_SIZE for some VDASD
-Content-Language: en-US
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Lee Duncan <leeman.duncan@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Duncan <lduncan@suse.com>, Martin Wilck <mwilck@suse.com>
-References: <20220928181350.9948-1-leeman.duncan@gmail.com>
- <11a582f0-723c-95e1-0e44-0a19e1a8a9a8@acm.org>
- <4a1da181-8a54-d2f8-6d19-d9c1982ab044@suse.de>
- <yq1k046kwyv.fsf@ca-mkp.ca.oracle.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <yq1k046kwyv.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 08 Nov 2022 10:01:07 +0300
+From:   Evgeniy Baskov <baskov@ispras.ru>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Peter Jones <pjones@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org, x86@kernel.org,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 00/23] x86_64: Improvements at compressed kernel stage
+In-Reply-To: <e2beec0b-22d3-91bd-c57c-8c8ad2137406@amd.com>
+References: <cover.1666705333.git.baskov@ispras.ru>
+ <e2beec0b-22d3-91bd-c57c-8c8ad2137406@amd.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <d97fdff486959dbf841c92b3cb644740@ispras.ru>
+X-Sender: baskov@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 03:50, Martin K. Petersen wrote:
+On 2022-11-04 21:21, Limonciello, Mario wrote:
+> On 10/25/2022 09:12, Evgeniy Baskov wrote:
+>> ...
+>> 
 > 
-> Hannes,
+> Hi,
 > 
-> I have been contemplating this for a bit.
+> I was talking to Peter Jones recently about what was still missing for
+> NX support in the kernel and he pointed me at this series.
 > 
->>> Has it been considered instead of introducing a blacklist flag to not
->>> use the reported VPD page size if the device reports that the VPD
->>> page size is zero? I am not aware of any VPD pages for which zero is
->>> a valid size.
+> So I had a try with this series on top of:
 > 
-> That would also be my preferred approach, I think. I haven't received
-> any bug reports about devices returning short VPD pages since this
-> change was introduced. So I think I'd prefer falling back to a
-> (hopefully small) default if a device returns a 0 page length.
+> ee6050c8af96 ("Merge tag 'ata-6.1-rc4' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/dlemoal/libata")
 > 
-> Now, my question is which VPD pages are actually supported by this
-> device and how large are they?
+> Unfortunately I can't boot the system with this series applied.
+> This is not on a system that enforces NX pre-boot (but that was my
+> goal after I could prove booting on something that doesn't).
+> I didn't apply Peter's patch 6 you referenced in your cover letter,
+> but I don't expect that's the reason for the failure.
 > 
->> But pre-SPC drives will ignore the VPD bit in the inquiry size. And
->> these devices do not set an additional length in the inquiry data
+> I get:
 > 
-> Can you elaborate a bit on your experience with older devices? I checked
-> SCSI-2 (1991) and don't see any indication this would be valid behavior
-> even back then.
+> "Failed to allocate space for tmp_cmdline"
 > 
-This is primarily crappy USB devices, which implement only the absolute 
-minimum to get SCSI rolling.
-In particular, if devices do _not_ check the VPD bit in the inquiry 
-command they will continue to return the standard inquiry data.
-And if the additional length is zero we have exactly the scenario above.
+>    -- System Halted
+> 
+> This is early enough [1] that I don't have anything else output to a
+> serial log from the kernel.
+> 
+> https://github.com/torvalds/linux/blob/d4013bc4d49f6da8178a340348369bb9920225c9/arch/x86/boot/compressed/kaslr.c#L268
+> 
+> Since this is only in the kaslr path, I tried to turn that off with
+> 'nokaslr' on the kernel command line.
+> 
+> I then get a failure of:
+> 
+> "Out of memory while allocating zstd_dctx"
+> 
+>   -- System Halted
+> 
+> This kernel was booted from the following path:
+> -> Insyde BIOS
+> --> shim (from Fedora 36 repository)
+> ---> GRUB (from Peter for Fedora 36 w/ some level NX support)
+> ----> kernel binary (self-built)
+> 
+> The BIOS on this system doesn't validate NX, but also the shim binary
+> did not have the NX bit set in the PE header.
+> 
+> Your cover letter referenced CONFIG_EFI_STUB_EXTRACT_DIRECT but I
+> didn't find this option in the series.  I also tried both with
+> CONFIG_EFI_DXE_MEM_ATTRIBUTES=y or unset, same result.
 
-However, we _could_ turn things around, and use the BLIST_NO_VPD flag 
-for these cases; so I'd be fine with having a default length for the VPD 
-page and delegate any fallout from the to use the BLIST_NO_VPD flags.
+Hi,
 
-Cheers,
+Thanks for your feedback!
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
+CONFIG_EFI_STUB_EXTRACT_DIRECT option was removed in v2 of the series
+and direct extraction is unconditional now.
 
+You are getting really weird errors, which unfortunately I am unable
+to reproduce yet. I've tried booting with fedora's grub and the series
+applied on top of ee6050c8af96, but it did boot successfully.
+
+ From the error messages it's some problem with malloc() implementation
+of compressed kernel code. I suspect that malloc_ptr inside .bss is not
+zeroed. This should not happen when booting via either non-UEFI
+interface, or via UEFI (when kernel is properly loaded as PE image).
+The problem, I think, arises when kernel is loaded as a blob, but EFI
+handover protocol is used to start its execution. This is what grub
+seems to be doing.
+
+Can you please try booting with patches below applied on top?
+If this fixes the problem, I'll include these changes in v3.
+
+Thanks,
+Evgeniy Baskov
+--
+diff --git a/arch/x86/boot/compressed/head_32.S 
+b/arch/x86/boot/compressed/head_32.S
+index 9871cc8466fb..69811d9ab4ce 100644
+--- a/arch/x86/boot/compressed/head_32.S
++++ b/arch/x86/boot/compressed/head_32.S
+@@ -152,6 +152,14 @@ SYM_FUNC_END(startup_32)
+
+  #ifdef CONFIG_EFI_STUB
+  SYM_FUNC_START(efi32_stub_entry)
++	/* Clear BSS */
++	xorl	%eax, %eax
++	leal	_bss@GOTOFF(%ebx), %edi
++	leal	_ebss@GOTOFF(%ebx), %ecx
++	subl	%edi, %ecx
++	shrl	$2, %ecx
++	rep	stosl
++
+  	add	$0x4, %esp
+  	movl	8(%esp), %esi	/* save boot_params pointer */
+  	call	efi_main
+diff --git a/arch/x86/boot/compressed/head_64.S 
+b/arch/x86/boot/compressed/head_64.S
+index 2bb0e6da08c0..384706d12354 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -553,8 +553,20 @@ SYM_CODE_END(startup_64)
+  #ifdef CONFIG_EFI_STUB
+  	.org 0x390
+  SYM_FUNC_START(efi64_stub_entry)
++	/* Preserve first parameter */
++	movq	%rdi, %r10
++
++	/* Clear BSS */
++	xorl	%eax, %eax
++	leaq	_bss(%rip), %rdi
++	leaq	_ebss(%rip), %rcx
++	subq	%rdi, %rcx
++	shrq	$3, %rcx
++	rep	stosq
++
+  	and	$~0xf, %rsp			/* realign the stack */
+  	movq	%rdx, %rbx			/* save boot_params pointer */
++	movq	%r10, %rdi
+  	call	efi_main
+
+  	cld
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c 
+b/drivers/firmware/efi/libstub/x86-stub.c
+index 95a69c37518e..1a2c52e77c6e 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -24,7 +24,7 @@
+
+  const efi_system_table_t *efi_system_table;
+  extern u32 image_offset;
+-static efi_loaded_image_t *image = NULL;
++static efi_loaded_image_t *image __section(".data");
+
+  extern char _head[], _ehead[];
+  extern char _compressed[], _ecompressed[];
