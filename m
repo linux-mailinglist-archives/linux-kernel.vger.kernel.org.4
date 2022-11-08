@@ -2,98 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3D26211F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE4C6211F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbiKHNFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:05:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S234147AbiKHNG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbiKHNFN (ORCPT
+        with ESMTP id S234291AbiKHNGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:05:13 -0500
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5306EB86B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 05:05:11 -0800 (PST)
-Received: by mail-oi1-x244.google.com with SMTP id n186so15431785oih.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 05:05:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=D1TmwerPuu6xMrsvpSYxOrQuzatAs0NZ5R+JGL280YN+H7WL6jQP6KUbS8/30aJfq1
-         rlF4DE+xefe2BJ8FZRZZnS3IwpsGbm7XY5WAps+bNGwDP6j6dXtMi8aZgDGsAUYv6+Xk
-         Kj6PKwOhD9ORyOGqTbZ5h5EOmCxlM2C4fMLHAP7yllKpNrdHkVdiKQorNeSwDHNa3erc
-         n5rMCiYQjpi7IF8mKMV2mUm/7Rz9D0GG2yJ1bUyPfkQy0ZrTfgdYQy9eBt6n8gvyQzOl
-         RqY8xbnkQmrS8STHamFVmTeQLRqJ0mylVOJBPJl9i9dfGVsYpqfiyETUOL9jBY+cMNfi
-         U1zQ==
+        Tue, 8 Nov 2022 08:06:51 -0500
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EEFA468;
+        Tue,  8 Nov 2022 05:06:50 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id z30so8974313qkz.13;
+        Tue, 08 Nov 2022 05:06:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=Xz/z5U03dC6SDbI8BzQ2NPW3oBg11qRIFAoIcEm2PiCCYXXhl9Wqdy6dfekt7c38nN
-         HD7grrWKlDaE+4rhqyhBuS7gvtYdmoysKheef0nuMis15G2rRiJ8Ky+I44HwuJjM4MHt
-         4mOj/37Z9JGc2LPqBloiC5WXEYxG7BLot5d65GEf9BBJIQZJQuZy6KL7JQL9WrvUdSsu
-         qaCKEgcnHS8hJhiXJMc56XJzYKlrbR9PjStJ8VHym2zfH5soy6NDmbUjaM5VawvfnPkV
-         YrgWs/3w8rYkId5Vb4WFGdhgMMJQnNacpJOmUlu0dXBSdNFM6Sv3mSm6MyQ77cpN+fHI
-         dFlQ==
-X-Gm-Message-State: ANoB5pmYuNQ0PB6DR5zA/Xq+FS4quw7cEKQhswT2yORbZgxbRsQvruQl
-        awbHbr7FruEJN3++1HJ4Sc0OnipoWZUPwnE1XV4=
-X-Google-Smtp-Source: AA0mqf7VxufJFINgThIW2uvWVeQUHKgMdTaClOSW66ImIlLwWTjBARMxCO83WLidDHzdDVJgiDa945xk8dRmeGmTgSc=
-X-Received: by 2002:a05:6808:10cb:b0:35a:7ec9:e972 with SMTP id
- s11-20020a05680810cb00b0035a7ec9e972mr6978540ois.200.1667912710493; Tue, 08
- Nov 2022 05:05:10 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LI5tKvQ3xbrBkw4pUpaVa/1GYtcIna1PWM17WCwqkc4=;
+        b=va+HiDmHMsNkjzcg1PqsywD6KByihnSiyvZhMV/t3REDkf7Ce4xmjiv/Eh/o1/oFM7
+         DHPFpa+KG7bP3+A7p4iLHPN6BY5adUFJxjhBlwvn7Ji9oEisQcKRIb0sxSSz8PHe1bZN
+         7heSGr5CuviYAOCW/GD0Z8parrX3YBeuwb0sdM5NL5qJYaFr2G+EuKyDIPPhy6s0jV4v
+         HAvzfV/z2InpgMReBarycPg9ySODQiv9JMhCks1yCgU97IpjATRlEP9pjsUc6/+fwByR
+         7dXNZ6osjITFece0P86LA/VuLlsjoFYxZcC3oA8lUA2WL1qqquCdiyAwYni6gdsliz03
+         H6Lw==
+X-Gm-Message-State: ACrzQf1NgCOO+pUdwzYekenKujMJE12v5wZr15H2qp3SLYBAQahTrKVg
+        eASY1CB0JdzKW0TMwO0cmxY9tYLmaG+G1EJUg3oLe6jb
+X-Google-Smtp-Source: AMsMyM6mWnv7hmiQNfBMlQvN6ojeFaZNX36NmVT47vgzqWz5SZt+WPWZwPyHGmH0W/MgDOOVPQhecxo4I04uf7M7HcI=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr38188547qkl.443.1667912809286; Tue, 08
+ Nov 2022 05:06:49 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6840:5eaa:b0:f64:bedc:f7d1 with HTTP; Tue, 8 Nov 2022
- 05:05:10 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidkekeli001@gmail.com>
-Date:   Tue, 8 Nov 2022 13:05:10 +0000
-Message-ID: <CAD7994c-cVTcEv8DBZwTC0RkhDP+=6zO551npFpbCuL_jGTctg@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
+References: <7ce6bd54.f8.184570dd1b6.Coremail.wangkailong@jari.cn>
+In-Reply-To: <7ce6bd54.f8.184570dd1b6.Coremail.wangkailong@jari.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 8 Nov 2022 14:06:36 +0100
+Message-ID: <CAJZ5v0iv5FP=RKjyvS6Yaq7JvvxmQnz0LKZj5HmOFDbn2VvS2g@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Fix return
+To:     wangkailong@jari.cn
+Cc:     Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wentland <harry.wentland@amd.com>, Li <sunpeng.li@amd.com>,
+        Siqueira <Rodrigo.Siqueira@amd.com>,
+        Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Airlie <airlied@gmail.com>,
+        Vetter <daniel@ffwll.ch>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:244 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4915]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidkekeli001[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidkekeli001[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On Tue, Nov 8, 2022 at 12:48 PM <wangkailong@jari.cn> wrote:
+>
+> return is not a function, parentheses are not required
+>
+> Signed-off-by: KaiLong Wang <wangkailong@jari.cn>
+
+ACPICA material is to be submitted to the upstream project at GitHub
+(please see MAINTAINERS for the link).
+
+You may notice, however, that your changes do not align with the
+coding style there.
+
+Moreover, the patch contains non-ACPICA changes that are not mentioned
+in the changelog.
+
+> ---
+>  drivers/acpi/acpica/evsci.c                     | 12 +++++-------
+>  drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 17 +++++++----------
+>  2 files changed, 12 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/acpi/acpica/evsci.c b/drivers/acpi/acpica/evsci.c
+> index 3915ff61412b..63dd2aa2d16a 100644
+> --- a/drivers/acpi/acpica/evsci.c
+> +++ b/drivers/acpi/acpica/evsci.c
+> @@ -38,9 +38,8 @@ u32 acpi_ev_sci_dispatch(void)
+>
+>         /* Are there any host-installed SCI handlers? */
+>
+> -       if (!acpi_gbl_sci_handler_list) {
+> -               return (int_status);
+> -       }
+> +       if (!acpi_gbl_sci_handler_list)
+> +               return int_status;
+>
+>         flags = acpi_os_acquire_lock(acpi_gbl_gpe_lock);
+>
+> @@ -57,7 +56,7 @@ u32 acpi_ev_sci_dispatch(void)
+>         }
+>
+>         acpi_os_release_lock(acpi_gbl_gpe_lock, flags);
+> -       return (int_status);
+> +       return int_status;
+>  }
+>
+>  /*******************************************************************************
+> @@ -193,9 +192,8 @@ acpi_status acpi_ev_remove_all_sci_handlers(void)
+>             acpi_os_remove_interrupt_handler((u32) acpi_gbl_FADT.sci_interrupt,
+>                                              acpi_ev_sci_xrupt_handler);
+>
+> -       if (!acpi_gbl_sci_handler_list) {
+> -               return (status);
+> -       }
+> +       if (!acpi_gbl_sci_handler_list)
+> +               return status;
+>
+>         flags = acpi_os_acquire_lock(acpi_gbl_gpe_lock);
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> index 38d71b5c1f2d..66661a20117b 100644
+> --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
+> @@ -29,7 +29,6 @@
+>  #include "core_types.h"
+>  #include "resource.h"
+>  #include "ipp.h"
+> -#include "timing_generator.h"
+>  #include "dc_dmub_srv.h"
+>
+>  #define DC_LOGGER dc->ctx->logger
+> @@ -152,9 +151,8 @@ static void dc_stream_free(struct kref *kref)
+>
+>  void dc_stream_release(struct dc_stream_state *stream)
+>  {
+> -       if (stream != NULL) {
+> +       if (stream != NULL)
+>                 kref_put(&stream->refcount, dc_stream_free);
+> -       }
+>  }
+>
+>  struct dc_stream_state *dc_create_stream_for_sink(
+> @@ -316,11 +314,11 @@ bool dc_stream_set_cursor_attributes(
+>         struct dc  *dc;
+>         bool reset_idle_optimizations = false;
+>
+> -       if (NULL == stream) {
+> +       if (stream == NULL) {
+>                 dm_error("DC: dc_stream is NULL!\n");
+>                 return false;
+>         }
+> -       if (NULL == attributes) {
+> +       if (attributes == NULL) {
+>                 dm_error("DC: attributes is NULL!\n");
+>                 return false;
+>         }
+> @@ -399,12 +397,12 @@ bool dc_stream_set_cursor_position(
+>         struct dc  *dc = stream->ctx->dc;
+>         bool reset_idle_optimizations = false;
+>
+> -       if (NULL == stream) {
+> +       if (stream == NULL) {
+>                 dm_error("DC: dc_stream is NULL!\n");
+>                 return false;
+>         }
+>
+> -       if (NULL == position) {
+> +       if (position == NULL) {
+>                 dm_error("DC: cursor position is NULL!\n");
+>                 return false;
+>         }
+> @@ -468,9 +466,8 @@ bool dc_stream_add_writeback(struct dc *dc,
+>                 }
+>         }
+>
+> -       if (!isDrc) {
+> +       if (!isDrc)
+>                 stream->writeback_info[stream->num_wb_info++] = *wb_info;
+> -       }
+>
+>         if (dc->hwss.enable_writeback) {
+>                 struct dc_stream_status *stream_status = dc_stream_get_status(stream);
+> @@ -526,7 +523,7 @@ bool dc_stream_remove_writeback(struct dc *dc,
+>         /* remove writeback info for disabled writeback pipes from stream */
+>         for (i = 0, j = 0; i < stream->num_wb_info; i++) {
+>                 if (stream->writeback_info[i].wb_enabled) {
+> -                       if (j < i)
+> +                       if (i != j)
+>                                 /* trim the array */
+>                                 stream->writeback_info[j] = stream->writeback_info[i];
+>                         j++;
+> --
+> 2.36.1
