@@ -2,134 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ABD620D58
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC08C620CF1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiKHKeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S233684AbiKHKNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:13:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbiKHKeL (ORCPT
+        with ESMTP id S232923AbiKHKNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:34:11 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0AD1A393
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:34:10 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id l11so21775437edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tsUmXbk4TNC/4MmU7uBNzHDSvmsd/gvHqvtl9XqOUAI=;
-        b=VuPrjU6CgHEVr8cZWDLWiAtOQEiLw7eStVzErc7DE/HRQdxYO3MklKO/ZwYYZQjb+V
-         btQbjcHQmnyOwzXBZCSS1Kb6FQ4FXDg0hM5AxhLa0U2NApXH3pxSHalBImKVQJ65GRZI
-         F2dVnqxT/qMe+qAVKg0qs6Fg0sFsaz3JRNgXadcHkmz9OhQtsxb0NfuA5lzsG334Rv2V
-         qF2K22EjqiUdSRYhNtVxcgU25u2EkLHSyG/EYZ4mJfoVNXEYor+cEZu59CFx6ZKNZuX1
-         NqUJCcAPsPRCfyVXU0o4AFTFVCADk2WeWocIkoBerDoFEcxMFnJiXeJQVcc1jCbZq/sB
-         iXrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tsUmXbk4TNC/4MmU7uBNzHDSvmsd/gvHqvtl9XqOUAI=;
-        b=wgS3XlUua0XXNQ86sadrVQC8QxyR71Wev6hDOgPBsYrhwhI0FJpwnfFfEzjhC9M7U7
-         d+d8JtEN4uIMqSJtB5w/VEJZY9dS2DpYIEf6TIX98qfIirEbOonSff2WU1hURgyGvFju
-         6P8WRB/WKyZdZUqV9AVjMDMYnNYLc+zctaNHyfjDw9rXWi9XlYSU9zZkdK8+EoQ7FQQk
-         aQSrRDPx0j4jzLZMS3Abcmw+qDhpcs8sVJfoZGdkRLN646bwm6a882uM9bkBUsQ4n/E6
-         Rc0oKs3h3Qp7Kdatc1e/GkSkO7hCH6nbbfGL+3IYpptr4vCcSVWEinsO72EWi+yl0uvN
-         mpPw==
-X-Gm-Message-State: ACrzQf3maR+rrzQLYdKQEDYriDrlZj12Wcxj7a0H552ivSHIcUEW5Qqq
-        xciWHoNpaX7Vo9dT20Y+GW+Ac6adNBSaSzHzChtnBQ==
-X-Google-Smtp-Source: AMsMyM6CM9EB4GkMIn4TVZFQa4ELD7L1wq9h2NlxoAuEHedbK/6RBB+xRP+Enb0V9DWuVMOhrwtG9OysjNLjhV6w1/4=
-X-Received: by 2002:a05:6402:d0b:b0:458:a244:4e99 with SMTP id
- eb11-20020a0564020d0b00b00458a2444e99mr55160795edb.46.1667903648874; Tue, 08
- Nov 2022 02:34:08 -0800 (PST)
+        Tue, 8 Nov 2022 05:13:05 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C8011828;
+        Tue,  8 Nov 2022 02:13:02 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N63nj0JMMz4f3wRR;
+        Tue,  8 Nov 2022 18:12:57 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP1 (Coremail) with SMTP id cCh0CgDHcK+qK2pjh8qrAA--.29617S4;
+        Tue, 08 Nov 2022 18:13:00 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     jack@suse.cz, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        paolo.valente@linaro.org
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH] block, bfq: fix null pointer dereference in bfq_bio_bfqg()
+Date:   Tue,  8 Nov 2022 18:34:34 +0800
+Message-Id: <20221108103434.2853269-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221026034219.172880-1-chenweilong@huawei.com>
-In-Reply-To: <20221026034219.172880-1-chenweilong@huawei.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 11:33:57 +0100
-Message-ID: <CACRpkdbfZoBsKhH-fDHbuiBMz=LuWJ5kRfRT9JupycJQLFzJZw@mail.gmail.com>
-Subject: Re: [PATCH next 1/2] gpio: hisi: Add initial device tree support
-To:     Weilong Chen <chenweilong@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     f.fangjian@huawei.com, yangyicong@hisilicon.com, xuwei5@huawei.com,
-        robh+dt@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDHcK+qK2pjh8qrAA--.29617S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxur1DJrW8XrW3XrW8Kr1UGFg_yoWrKrykpr
+        W3tr4UCr48tr15JF4jyr1UJryUtF4fAF1UJrWxZr15tF1Uuw1UJF1UAr4UJryrJF45XF13
+        Jw17Jw18tr1UtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+        XdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Weilong,
+From: Yu Kuai <yukuai3@huawei.com>
 
-thanks for your patch!
+Out test found a following problem in kernel 5.10, and the same problem
+should exist in mainline:
 
-On Wed, Oct 26, 2022 at 5:34 AM Weilong Chen <chenweilong@huawei.com> wrote:
+BUG: kernel NULL pointer dereference, address: 0000000000000094
+PGD 0 P4D 0
+Oops: 0000 [#1] SMP
+CPU: 7 PID: 155 Comm: kworker/7:1 Not tainted 5.10.0-01932-g19e0ace2ca1d-dirty 4
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-b4
+Workqueue: kthrotld blk_throtl_dispatch_work_fn
+RIP: 0010:bfq_bio_bfqg+0x52/0xc0
+Code: 94 00 00 00 00 75 2e 48 8b 40 30 48 83 05 35 06 c8 0b 01 48 85 c0 74 3d 4b
+RSP: 0018:ffffc90001a1fba0 EFLAGS: 00010002
+RAX: ffff888100d60400 RBX: ffff8881132e7000 RCX: 0000000000000000
+RDX: 0000000000000017 RSI: ffff888103580a18 RDI: ffff888103580a18
+RBP: ffff8881132e7000 R08: 0000000000000000 R09: ffffc90001a1fe10
+R10: 0000000000000a20 R11: 0000000000034320 R12: 0000000000000000
+R13: ffff888103580a18 R14: ffff888114447000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff88881fdc0000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000094 CR3: 0000000100cdb000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ bfq_bic_update_cgroup+0x3c/0x350
+ ? ioc_create_icq+0x42/0x270
+ bfq_init_rq+0xfd/0x1060
+ bfq_insert_requests+0x20f/0x1cc0
+ ? ioc_create_icq+0x122/0x270
+ blk_mq_sched_insert_requests+0x86/0x1d0
+ blk_mq_flush_plug_list+0x193/0x2a0
+ blk_flush_plug_list+0x127/0x170
+ blk_finish_plug+0x31/0x50
+ blk_throtl_dispatch_work_fn+0x151/0x190
+ process_one_work+0x27c/0x5f0
+ worker_thread+0x28b/0x6b0
+ ? rescuer_thread+0x590/0x590
+ kthread+0x153/0x1b0
+ ? kthread_flush_work+0x170/0x170
+ ret_from_fork+0x1f/0x30
+Modules linked in:
+CR2: 0000000000000094
+---[ end trace e2e59ac014314547 ]---
+RIP: 0010:bfq_bio_bfqg+0x52/0xc0
+Code: 94 00 00 00 00 75 2e 48 8b 40 30 48 83 05 35 06 c8 0b 01 48 85 c0 74 3d 4b
+RSP: 0018:ffffc90001a1fba0 EFLAGS: 00010002
+RAX: ffff888100d60400 RBX: ffff8881132e7000 RCX: 0000000000000000
+RDX: 0000000000000017 RSI: ffff888103580a18 RDI: ffff888103580a18
+RBP: ffff8881132e7000 R08: 0000000000000000 R09: ffffc90001a1fe10
+R10: 0000000000000a20 R11: 0000000000034320 R12: 0000000000000000
+R13: ffff888103580a18 R14: ffff888114447000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff88881fdc0000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000094 CR3: 0000000100cdb000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-> Add support for HiSilicon GPIO controller in embedded platform, which
-> boot from devicetree.
->
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+Root cause is quite complex:
 
-I will provide OF comments, I let Andy and other ACPI experts say
-what is necessary for ACPI.
+1) use bfq elevator for the test device.
+2) create a cgroup CG
+3) config blk throtl in CG
 
-(...)
-> +#include <linux/acpi.h>
+   blkg_conf_prep
+    blkg_create
 
-I don't know if this is necessary, check it.
+4) create a thread T1 and issue async io in CG:
 
->  #include <linux/gpio/driver.h>
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
-> +#include <linux/of.h>
+   bio_init
+    bio_associate_blkg
+   ...
+   submit_bio
+    submit_bio_noacct
+     blk_throtl_bio -> io is throttled
+     // io submit is done
 
-This is unnecessary for what you are trying to do. Drop it.
+5) switch elevator:
 
-> +#ifdef CONFIG_ACPI
->  static const struct acpi_device_id hisi_gpio_acpi_match[] = {
->         {"HISI0184", 0},
->         {}
->  };
->  MODULE_DEVICE_TABLE(acpi, hisi_gpio_acpi_match);
-> +#endif
+   bfq_exit_queue
+    blkcg_deactivate_policy
+     list_for_each_entry(blkg, &q->blkg_list, q_node)
+      blkg->pd[] = NULL
+      // bfq policy is removed
 
-Don't know about this #ifdef, check if it is needed.
+5) thread t1 exist, then remove the cgroup CG:
 
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id hisi_gpio_dts_match[] = {
-> +       { .compatible = "hisilicon,gpio-ascend910", },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(of, hisi_gpio_dts_match);
-> +#endif
+   blkcg_unpin_online
+    blkcg_destroy_blkgs
+     blkg_destroy
+      list_del_init(&blkg->q_node)
+      // blkg is removed from queue list
 
-Drop the ifdef, it is not needed.
+6) switch elevator back to bfq
 
->  static void hisi_gpio_get_pdata(struct device *dev,
->                                 struct hisi_gpio *hisi_gpio)
-> @@ -310,7 +322,8 @@ static int hisi_gpio_probe(struct platform_device *pdev)
->  static struct platform_driver hisi_gpio_driver = {
->         .driver         = {
->                 .name   = HISI_GPIO_DRIVER_NAME,
-> -               .acpi_match_table = hisi_gpio_acpi_match,
-> +               .acpi_match_table = ACPI_PTR(hisi_gpio_acpi_match),
-> +               .of_match_table = of_match_ptr(hisi_gpio_dts_match),
+ bfq_init_queue
+  bfq_create_group_hierarchy
+   blkcg_activate_policy
+    list_for_each_entry_reverse(blkg, &q->blkg_list)
+     // blkg is removed from list, hence bfq policy is still NULL
 
-Drop of_match_ptr() just assign it.
+7) throttled io is dispatched to bfq:
 
-The reason it works is because we put struct of_device_id into the generic
-headers so we can avoid the ifdefing.
+ bfq_insert_requests
+  bfq_init_rq
+   bfq_bic_update_cgroup
+    bfq_bio_bfqg
+     bfqg = blkg_to_bfqg(blkg)
+     // bfqg is NULL because bfq policy is NULL
 
-Yours,
-Linus Walleij
+The problem is only possible in bfq because only bfq can be deactivated and
+activated while queue is online, while others can only be deactivated while
+the device is removed.
+
+Fix the problem in bfq by checking if blkg is online before calling
+blkg_to_bfqg().
+
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/bfq-cgroup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+index 144bca006463..7d624a3a3f0f 100644
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -610,6 +610,10 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
+ 	struct bfq_group *bfqg;
+ 
+ 	while (blkg) {
++		if (!blkg->online) {
++			blkg = blkg->parent;
++			continue;
++		}
+ 		bfqg = blkg_to_bfqg(blkg);
+ 		if (bfqg->online) {
+ 			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
+-- 
+2.31.1
+
