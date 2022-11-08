@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C378620FCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B42620FC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233896AbiKHMFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
+        id S233763AbiKHMEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbiKHMFT (ORCPT
+        with ESMTP id S233298AbiKHMEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:05:19 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC62E42985;
-        Tue,  8 Nov 2022 04:05:17 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A8BGpie021311;
-        Tue, 8 Nov 2022 12:04:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0N8xF34uZZ3oQaq7z3zSL7RQw2wjq3nrrQc7VpDG5JI=;
- b=UT7bBe/IW79P3EM7Sjgpdx1K5RoBw1tHZwo+gy2gxnd+cYi2VQ5HCVqHvI0LFx1BOgWb
- lmOGFflaUaTsD7EMj1zDu/dvcSMbe955Z4Ebfx8v0lOR3ia7KTISUxmZeDwg/88n0DBb
- WbpLMWJmDUXhUjRXQMWipF12Y6wCot+2PxH6p/pk/zr11kv3Dlt0IarHMqSWORzUP8u4
- e0D9fT77PdnYKdZfi2/J8Wet1f5UmCyHLfdlKVo0M0cua6HPAZVYyoaz6vbLFIjfNenT
- irvuH2JwJ3QfjE5g9am70E+4ffbdVw8d4IW5jcUgwFLa2jigLPtWNoFXNiFOsagjZfg4 ow== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kq7g4j8by-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 12:04:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A8C4oRd031418
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 8 Nov 2022 12:04:50 GMT
-Received: from [10.216.12.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
- 04:04:47 -0800
-Message-ID: <a07cb525-b814-241b-db72-840f5c17e785@quicinc.com>
-Date:   Tue, 8 Nov 2022 17:34:43 +0530
+        Tue, 8 Nov 2022 07:04:52 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350A5624D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:04:50 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so8996767iob.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:04:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JUtAod7ik8axbS2mcSWOVXWN5+ZnGt4lhHuscBLj+Ys=;
+        b=ohoisZukoUdj8gFpd8lvN/pDGC+f7WshUORW2zgh9GAvznntMD1VNoHjuDjelHl1nK
+         e2Vl/m9ztrurFj/h2gvC/ccaMJUv0ywVrSNhVhjLEO7KYz21vst37bv1pY6CqorGeYMP
+         cSnKKLY20gQWJapUbcN8de9YU5mdoNP2vds1PYSxkug1rBNoC2zjKtVo9I7c1vWPAaBQ
+         8DpTKQTxkjhPRIIZVqsJIUl3555Gom0xwhmm164wfg2+GLfvtTctxCxjvnds8aKczTEE
+         qI11v+OXU6okQgDcrB7qgJ81Dnhx5Fg0BbQQl26PUblw0P6b2O5ZCcb1pTzGmgJCh5ja
+         DVxg==
+X-Gm-Message-State: ACrzQf0a0Hwr8SVZvKVFtX1Bt1AmP7zFI3Te33x13lIYOtdlihbDl1RP
+        oiTwMbBWQN7cYvYftrYQU+l+tEcAikrRGmDMkaT4PKo3sd9t
+X-Google-Smtp-Source: AMsMyM6qJgVyHEubAq6DsnqPMu41Jr73H8iqWfCsDz5e1dPS2QiwvTlP2xA8yKaIzN50tKM3b54RdeflyLzjmpG+02I0Hz0SsmID
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2] wifi: ath10k: Add WLAN firmware image version info
- into smem
-Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>
-CC:     <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mpubbise@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, kernel test robot <lkp@intel.com>
-References: <20221104082828.14386-1-quic_youghand@quicinc.com>
- <166790340662.9633.4549756749859911615.kvalo@kernel.org>
-From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
-In-Reply-To: <166790340662.9633.4549756749859911615.kvalo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Vujk1Lx8zud34sldkyPGbqSZ09gIs06z
-X-Proofpoint-GUID: Vujk1Lx8zud34sldkyPGbqSZ09gIs06z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 bulkscore=0
- spamscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211080069
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2cd3:b0:6d8:5b3e:c456 with SMTP id
+ j19-20020a0566022cd300b006d85b3ec456mr11732782iow.152.1667909089385; Tue, 08
+ Nov 2022 04:04:49 -0800 (PST)
+Date:   Tue, 08 Nov 2022 04:04:49 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ca64fe05ecf458e3@google.com>
+Subject: [syzbot] net-next test error: WARNING in devl_port_unregister
+From:   syzbot <syzbot+85e47e1a08b3e159b159@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, jiri@nvidia.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 11/8/2022 4:00 PM, Kalle Valo wrote:
-> Youghandhar Chintala <quic_youghand@quicinc.com> wrote:
->
->> In a SoC based solution, it would be useful to know the versions of the
->> various binary firmware blobs the system is running on. On a QCOM based
->> SoC, this info can be obtained from socinfo debugfs infrastructure. For
->> this to work, respective subsystem drivers have to export the firmware
->> version information to an SMEM based version information table.
->>
->> Having firmware version information at one place will help quickly
->> figure out the firmware versions of various subsystems on the device
->> instead of going through builds/logs in an event of a system crash.
->>
->> Fill WLAN firmware version information in SMEM version table to be
->> printed as part of socinfo debugfs infrastructure on a Qualcomm based
->> SoC.
->>
->> This change is applicable only for WCN399X targets.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
->>
->> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
->> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-> This doesn't compile unless QCOM_SMEM is enabled in Kconfig. So should we add
-> "select QCOM_SMEM" in Kconfig for ATH10K_SNOC?
+syzbot found the following issue on:
 
-Yes Kalle. Thank you.
+HEAD commit:    91c596cc8d32 Merge branch 'net-txgbe-fix-two-bugs-in-txgbe..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10cf5b96880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=155594ab86a8ef7a
+dashboard link: https://syzkaller.appspot.com/bug?extid=85e47e1a08b3e159b159
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Regards,
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/811c994625c9/disk-91c596cc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/bf46bee439d4/vmlinux-91c596cc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c005328dcdaa/bzImage-91c596cc.xz
 
-Youghandhar
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+85e47e1a08b3e159b159@syzkaller.appspotmail.com
 
+netdevsim netdevsim0 netdevsim3 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 56 at net/core/devlink.c:9998 devl_port_unregister+0x2f6/0x390 net/core/devlink.c:9998
+Modules linked in:
+CPU: 1 PID: 56 Comm: kworker/u4:4 Not tainted 6.1.0-rc3-syzkaller-00810-g91c596cc8d32 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: netns cleanup_net
+RIP: 0010:devl_port_unregister+0x2f6/0x390 net/core/devlink.c:9998
+Code: e8 0f 39 0b fa 85 ed 0f 85 7a fd ff ff e8 32 3c 0b fa 0f 0b e9 6e fd ff ff e8 26 3c 0b fa 0f 0b e9 53 ff ff ff e8 1a 3c 0b fa <0f> 0b e9 94 fd ff ff e8 7e ae 57 fa e9 78 ff ff ff e8 44 ae 57 fa
+RSP: 0018:ffffc90001577a08 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff8880736c0810 RCX: 0000000000000000
+RDX: ffff8880183c8000 RSI: ffffffff87717606 RDI: 0000000000000005
+RBP: 0000000000000002 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000002 R11: 0000000000000000 R12: ffff8880736c0810
+R13: ffff8880736c0808 R14: ffff88806f2c7800 R15: ffff8880736c0800
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055bd232a4068 CR3: 000000001f12c000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __nsim_dev_port_del+0x1bb/0x240 drivers/net/netdevsim/dev.c:1433
+ nsim_dev_port_del_all drivers/net/netdevsim/dev.c:1443 [inline]
+ nsim_dev_reload_destroy+0x171/0x510 drivers/net/netdevsim/dev.c:1660
+ nsim_dev_reload_down+0x6b/0xd0 drivers/net/netdevsim/dev.c:968
+ devlink_reload+0x1c2/0x6b0 net/core/devlink.c:4501
+ devlink_pernet_pre_exit+0x104/0x1c0 net/core/devlink.c:12609
+ ops_pre_exit_list net/core/net_namespace.c:159 [inline]
+ cleanup_net+0x451/0xb10 net/core/net_namespace.c:594
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
