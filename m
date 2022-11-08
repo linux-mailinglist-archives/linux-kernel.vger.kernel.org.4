@@ -2,182 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B93620F23
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E07F620F35
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbiKHLd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S233748AbiKHLhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233737AbiKHLdX (ORCPT
+        with ESMTP id S233592AbiKHLhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:33:23 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56965262E;
-        Tue,  8 Nov 2022 03:33:22 -0800 (PST)
+        Tue, 8 Nov 2022 06:37:06 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F6E15723;
+        Tue,  8 Nov 2022 03:37:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667907202; x=1699443202;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=S8g2cgxm0XkvKABDo9lBb54Wb/JIUYvkql9q46/tkiE=;
-  b=DinQRuIX5mdAgFcdPdteAl2/3eQw7O1ItVjTHrMTUpLqYXvRuxkP5Y+U
-   wgLi6oF8s5g57h4zm69IH06zWoZfWqatxcSJXnQQvqpC7gDxq9DGfaxcm
-   a/XVtbdwvJzzZrrUVf0UvQhEb1DOzyVAOLAaRl66lOSJXNTan/2hRYLQY
-   W4zdlOjSPFvP2sC9V2pcD9k7rNYN2JGznjB6zGeJlvZkKWqyQVnFHJCnE
-   btYPYxHmfFOxliAhL9T+xBlzwhuz+sFq5OpgMRclmw5MfqYtVTjrovXcL
-   5GJwstjhkisYxRDoqbshv8hOw0qNBKRWF4f6eeekrFdDNy8ku6k8vmcuN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="311827203"
+  t=1667907425; x=1699443425;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wS7+TWmj2Lw3rMZ6NWcYNkuSEncHx1hdZe7Eikl/1AM=;
+  b=ispRJdmhZIDA+cz48HXbePXDNNJAnTc2p04ZYO3hjjIpI+y6gVQwuZvL
+   w23R0hamT0UOBPDPeLeOE6yOB07Lcp/VrI0vY6zoH31XiMrWgSnQQ7w9j
+   tpJjKhdI52P8XcFtqlQa+THnvQOoYfsAkKBufJg8ofHXpMkOyAwyS2yOn
+   ooby1zgCTQdwM+APaVVSPSfwiRKhcZRQbUrlP2ZYIOUkuY3QqBdV7CsNp
+   rSCzKQtQa6VwKYTNpS9rUk4+/CGqRoFHZLsHbjJ+WcNKwVQckyTEsKA71
+   zxPgMe2CKPprHe9ClTBSl6gW07jzmLC1FYwc246z8t78GWDXEIfL0Id34
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="290391527"
 X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="311827203"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 03:33:21 -0800
+   d="scan'208";a="290391527"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 03:37:05 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="778894233"
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="638761222"
 X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="778894233"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Nov 2022 03:33:21 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 8 Nov 2022 03:33:20 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 8 Nov 2022 03:33:20 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.46) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 8 Nov 2022 03:33:20 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gj5JtWtH+4YQh9rLGHA0AAjviqmI8v4kheYDxt5IizKsSRZq20zqNqXdaOFoAOsbFvg2HFbUfO9pWpMbwaM7NcduiP6oWAvn3p33nxOzR8a1Bq6KF2SEeLUhAmLeOKJ8aTz4UX6A0Du3TLHgEhUed0bs3gGXOAJ3MfDzT3lOYMoKrxs3fAVtix4z3D/44brrtTNE01vNyO4qjblGfDFtroGDbgOqN7U3U9fss52ombOaVrXy+hDRNYe609UROGW/7cWXGFUcvRZRIy6GMYIBmkcNAQwIt2mSFG6H2FF6pDIIZPWSiCBGIOgnweXiTV5DR1mReJERTtqpImjpjr+rnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S8g2cgxm0XkvKABDo9lBb54Wb/JIUYvkql9q46/tkiE=;
- b=D90BdrgEPEcUiaXV5YYZJ9RYi1ACelW8c3/WFEHRcm1p5TGIMfZ6Lmr8NrGf25W8X6yp+BtieVQVK0jcf08yNa+V9Oq15mCMsmfSMQIqgcEgVfxOohISp61+RHuMMhjN8+vdZUqAUBN2ggVoZNvJzoYlMTvgsex0FP+HxtJ19GwOhjyJG+EMcACKYJDcJwW0xsCfu7f64wWHr75iuXcZ30zMFD/uOqHYWoeSKCGxGR+ZXI+CFoLllYZNwEhCQDe561efzrY0lXQaBpDrnAJQ0ccauCUU9yEsLXr+agqHAMOV6+6ce/q8J3RBOnhcHI1DGfn7H0XCRz58djWUmn1XSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by SA0PR11MB4606.namprd11.prod.outlook.com (2603:10b6:806:71::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
- 2022 11:33:13 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b%3]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
- 11:33:13 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-CC:     "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v10 031/108] KVM: x86/mmu: Replace hardcoded value 0 for
- the initial value for SPTE
-Thread-Topic: [PATCH v10 031/108] KVM: x86/mmu: Replace hardcoded value 0 for
- the initial value for SPTE
-Thread-Index: AQHY7ChqFm18Dc57R0q52gblRqNeNK4083KA
-Date:   Tue, 8 Nov 2022 11:33:12 +0000
-Message-ID: <eab804a34b96dfdd74a816b92039fca9a81475f0.camel@intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
-         <0de1d5dfbce49b5e9d4f93289296b726180b8dd0.1667110240.git.isaku.yamahata@intel.com>
-In-Reply-To: <0de1d5dfbce49b5e9d4f93289296b726180b8dd0.1667110240.git.isaku.yamahata@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SA0PR11MB4606:EE_
-x-ms-office365-filtering-correlation-id: d896db59-969c-4208-fbc7-08dac17d053e
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9qnoOm+ZTbumIbMDiP4xKR3V/HTEoDX5Dv6Z4qtCltJzu+kkLhh02NR++9QS0OmHy9b7y+F/Gifb98Zir5Yplh9lz5IdU7PRZh+UTFBL45BtV3GNR9z+BKHUlImz3attpbXjPF5VsvmF13FwrChExs8OaD8W3gjUsvO+Y4N1rJIHBjYrKEyL2gzzskEWXwslrbKt9VySejolqeRzFqrsg5WCUOpnsrALq9F9YFs1QixO8TXmAQx7zcoo8oxuKwv1Ko42nk8s+5wkjMGAexLJVeUQCXoqlhTN0GZQ+vlfnTvFCaUTXwWIhB/xaEkzgKCgUv/KgFKoDA6wGvyQFJzpCqfecJb3LC1WpGEDvfapuR6+T1lbOTRxm0DJEL3sQfMOzh0ydQgyCT1oTNRkI0TPI0Vn8zlMABk3iVtSDLOHb5qgNIf52rn87BDsmS4UqwIeXSxVC0YT4ec4vbhlv6PA/NlSwQ9v8mwyWVQlTnULQXzwEgsG0zg6JBDJFdJiWV5PcQ4cfWElrM0w13WL266yCR47/5SuBi/aF4xhtnKi54zw/zYicbYdye/U5OufStUZBEh/bp0hzhP5SqzFPIIJrlk7CwfKIcW5eyHG7B920vrKFi7SHiC31utwDU3Nm2LvVtx5m2uT4qgvTBqDE8Gy1+9x/sh4DZ/weUNfcHSNyaazQLJlV7xPKSBcFelGwtBfkvW2yDHQSmxKm7KZB5wuO4mcvq+zfUqfoZEgl5AEqyjaZCo1+ljQ6Y3ScxMioE28RWoZFP8Lk3BUr3029ga3BZugZtG27ZgROydflaMjtDU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(376002)(136003)(366004)(346002)(451199015)(478600001)(966005)(6486002)(71200400001)(38100700002)(122000001)(82960400001)(110136005)(54906003)(6636002)(86362001)(36756003)(8936002)(316002)(6506007)(91956017)(26005)(41300700001)(6512007)(66946007)(38070700005)(66556008)(8676002)(4326008)(76116006)(66476007)(4744005)(64756008)(4001150100001)(66446008)(186003)(2616005)(5660300002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UEcvYm9MSDZCSEVxaHVSTkgwOWY0Z0xvaldmeEJaUkxEcGd1YUtKcmllYUFV?=
- =?utf-8?B?aXBzNExDcHNrdWx4TWdBYW85Z1JmYnhwNDkrYytYS1hIemV0ZXF0TjJLRFNn?=
- =?utf-8?B?M1VjTFNzdmRteEZENzRxcERnUWRHZitVYnpadkVyc2pyS3o3VW56eGtpdVk0?=
- =?utf-8?B?UXdEd2xIOUt4dkVCZm1aY1dhN1I1ZUxUUnBRWlN5THpOSTYveDhsU1NQUmxr?=
- =?utf-8?B?ZDBYS1lMS1o5d2lwdGYxQmtvYkFraEF6NVI2OTZsZjlZejdSazdaTmFYZjNU?=
- =?utf-8?B?NjdpWUFvd1VZbG81TDJLY1l6YzRaUXUwbU1ndXFvZm5aVTlMTW1LbWVnWDJz?=
- =?utf-8?B?WmpkMkljV2xZeEJRbzg0ampGRHFtSERaRlZFN1RQaXdpeVl5VjM4NlFDSGJE?=
- =?utf-8?B?U01GNjRGTEFVL0ZhTmJvS3ZEOG5ZemdQOE1na2x1eDZuc29aSE5YSmxTYURJ?=
- =?utf-8?B?Y2Q0bzIyNUNFVXBEWnVHOHA3aGx3bnZBRmU0ZjE1ekFwZkNHUElNdDVjcVNU?=
- =?utf-8?B?dWN2WncvQ1Jtek53NXRQeVhQZVBpQVJmSE13RC9Kb0tlVmJsRHZnTkZQNkhJ?=
- =?utf-8?B?V25MYUpHZUVHT1kvT05MV3lIRDNFY1gvcXZ4QnRCN3JRdkNyMyswOHJFdkdJ?=
- =?utf-8?B?NlRwK0JtU1RyODRhamFRcm1mdGthUUowLzMrYnBjdDg3WTlJdzFvQUFvRGs1?=
- =?utf-8?B?RUIxRVp1c3lBNDBSekpyUm5OajB2VVFWK25YMkVtOG0vTUsxWTljYUlmM2Vy?=
- =?utf-8?B?MjdXMm1xaThCNzc5TG1RczlGbEVWOUdsc0RHRFFqK2pWWlU4ME1UV3lPc1g0?=
- =?utf-8?B?aVRSN0FTeitUQmlZL3NDcU9MMHN6VzB4WjZMdERZMFBnYW04TTBqL0JaSDZK?=
- =?utf-8?B?TkVzbDdDYlpkQlNyTEFUWHVGZDZOQlQ4emRZbXlSaXltT1RTQ1dIZ0IzNzhk?=
- =?utf-8?B?bDU2VHRWRXRDeWljcmVUSkUyWnlyc3RQY21EWHAwYnpCaURyR1N6RGJTenps?=
- =?utf-8?B?eFcyWTRUODFzQUlFSUdwN1RTRzlHb3B3eGlmTFRDclM2UzhLUXRZaFJ5QmJj?=
- =?utf-8?B?NGQ5Y0NuWTFtaG4rc0plM3JRcWJVZ0RPVWZPOXExbVp0OHVjWmhQWUFqcSto?=
- =?utf-8?B?c3h0akhxdThaMitSRzZnMjRWWkdna09JTGVDR1MyUm9HWCtuMVlwL1JmUGpt?=
- =?utf-8?B?QkUvejRSTjgwWTRXZGtrVWJhRjlKUmxSMkVBZTJYNVlEU1VYZ01oeGRSa3dU?=
- =?utf-8?B?NHljaWZmaS9VaFllb3dDaVFXSU5CSk45c0Z2M0Jhalk1L2JLWklEb01FRmhB?=
- =?utf-8?B?SWVncmpBQWcyQUhaYTZtcC93UDZER2dZalc5cC9reXRPT3VsVXlPYUJRU3pH?=
- =?utf-8?B?TXl0SFhzSjd5ZHlCb3FUeEpjbnZlVUloa21tejBncXBDSWNSS2RyalJPZnI0?=
- =?utf-8?B?dk42T25wTkVaNXdmK21EZDJ5S0QrbUxRcFFReXp3b214OTAxTC9KbzhNUWEz?=
- =?utf-8?B?Ykc4VndTUDdFd3Zqa0RRUnAvV0JqSFM0V0RjemwyU0xwWUR1cmkwNkV4eVhj?=
- =?utf-8?B?RVhNTUdVdSt5YXYyVFZpVjRua09aT0kzWVlsNlZ2UG5YK2tDNzh5L1pFeDFG?=
- =?utf-8?B?dEpYMnFyNkJNSENMdlRhWGtyNVNTVDFxK2lQQXFYNUpKYmJ6TisxYzFNN2hP?=
- =?utf-8?B?c0tRVzk0YXZuRWp4WjdIZndieEU2bUhzOVRuemo5UVpYQWZLNXdjU1B2YVp5?=
- =?utf-8?B?YkpxWUFNZ1NDdUFSQW1ob01WYjQyVitmK0FaRlRBb2kwMTBuVWU1ZzloVHRv?=
- =?utf-8?B?dkQ1b2RIK3VXL0JhOTNBT2pPaW1RZGNIeHZnK3I3U1VDNnNkU2RIaS9KUXpV?=
- =?utf-8?B?eFZYR2ZudGJ2VWxLOVVCNTFQWWo4NEtUcDZZSlFKSFcrTmZCS0JMSW9IQjVK?=
- =?utf-8?B?c2JvMUNIK3pBVDEzeC9oVzhpVERNNjl2TEYvSXpxRE5URk1hNGJ6ekNhUXBM?=
- =?utf-8?B?QXhHTkhEWGdOVE81RVUxOHdDRUNad1h3ekp6d3lSMHdkOGdtK3N0WmV4ZTly?=
- =?utf-8?B?dEs3U2ZybHpDQnpHbzlPcG1oK2NDQlZxZTRMcElwb1JxM1d4OFVORU9zVHBD?=
- =?utf-8?B?K2dYVCtSVDQwN1NQYUtFZG1UZk52eXk3MTdZZHN4VVE3eEJHREtWbnJJdnVZ?=
- =?utf-8?B?RlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0391E4CC912D5440995F9A3AB101D05E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="638761222"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Nov 2022 03:37:02 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2A8Bb1SU015189;
+        Tue, 8 Nov 2022 11:37:01 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        linux@armlinux.org.uk
+Subject: Re: [PATCH net-next v2 4/4] net: lan96x: Use page_pool API
+Date:   Tue,  8 Nov 2022 12:33:31 +0100
+Message-Id: <20221108113331.605821-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221107213521.i6qmjut5hdxrrmcs@soft-dev3-1>
+References: <20221106211154.3225784-1-horatiu.vultur@microchip.com> <20221106211154.3225784-5-horatiu.vultur@microchip.com> <20221107164056.557894-1-alexandr.lobakin@intel.com> <20221107213521.i6qmjut5hdxrrmcs@soft-dev3-1>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d896db59-969c-4208-fbc7-08dac17d053e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2022 11:33:12.8808
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MVZsY7dUFQCKJXXwhwbUZ3D883b6lxK3LTlyfa/IIekeL50ALCchibP4b1L7dWKPpXl+i/QsFqUh+Mh+hxuE2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4606
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0LCAyMDIyLTEwLTI5IGF0IDIzOjIyIC0wNzAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20gd3JvdGU6DQo+IFRoZSBwbGFuIGlzIHRvIHVuY29uZGl0aW9uYWxseSBzZXQgdGhlICJzdXBw
-cmVzcyAjVkUiIGJpdCBmb3IgYm90aCBBTUQgYW5kDQo+IEludGVsIGFzOiAxKSBBTUQgaGFyZHdh
-cmUgZG9lc24ndCB1c2UgdGhpcyBiaXQ7IDIpIGZvciBjb252ZW50aW9uYWwgVk1YDQo+IGd1ZXN0
-cywgS1ZNIG5ldmVyIGVuYWJsZXMgdGhlICJFUFQtdmlvbGF0aW9uICNWRSIgaW4gVk1DUyBjb250
-cm9sIGFuZA0KPiAic3VwcHJlc3MgI1ZFIiBiaXQgaXMgaWdub3JlZCBieSBoYXJkd2FyZS4NCg0K
-SGkgSXNha3UsDQoNCiJBTUQgaGFyZHdhcmUgZG9lc24ndCB1c2UgdGhpcyBiaXQiIGlzIHdyb25n
-Og0KDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sL2NvdmVyLjE2NTk4NTQ3OTAuZ2l0Lmlz
-YWt1LnlhbWFoYXRhQGludGVsLmNvbS9ULyNtNWVkNTk0MDRkYTQzNjc3ZTk5YWM1MWRkMTM2MGRj
-MjJiOTY0YmNiYg0K
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Mon, 7 Nov 2022 22:35:21 +0100
+
+> The 11/07/2022 17:40, Alexander Lobakin wrote:
+> 
+> Hi Olek,
+> 
+> > 
+> > From: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > Date: Sun, 6 Nov 2022 22:11:54 +0100
+> > 
+> > > Use the page_pool API for allocation, freeing and DMA handling instead
+> > > of dev_alloc_pages, __free_pages and dma_map_page.
+> > >
+> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > > ---
+> > >  .../net/ethernet/microchip/lan966x/Kconfig    |  1 +
+> > >  .../ethernet/microchip/lan966x/lan966x_fdma.c | 72 ++++++++++---------
+> > >  .../ethernet/microchip/lan966x/lan966x_main.h |  3 +
+> > >  3 files changed, 43 insertions(+), 33 deletions(-)
+> > 
+> > [...]
+> > 
+> > > @@ -84,6 +62,27 @@ static void lan966x_fdma_rx_add_dcb(struct lan966x_rx *rx,
+> > >       rx->last_entry = dcb;
+> > >  }
+> > >
+> > > +static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
+> > > +{
+> > > +     struct lan966x *lan966x = rx->lan966x;
+> > > +     struct page_pool_params pp_params = {
+> > > +             .order = rx->page_order,
+> > > +             .flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
+> > > +             .pool_size = FDMA_DCB_MAX,
+> > > +             .nid = NUMA_NO_NODE,
+> > > +             .dev = lan966x->dev,
+> > > +             .dma_dir = DMA_FROM_DEVICE,
+> > > +             .offset = 0,
+> > > +             .max_len = PAGE_SIZE << rx->page_order,
+> > 
+> > ::max_len's primary purpose is to save time on DMA syncs.
+> > First of all, you can substract
+> > `SKB_DATA_ALIGN(sizeof(struct skb_shared_info))`, your HW never
+> > writes to those last couple hundred bytes.
+> > But I suggest calculating ::max_len basing on your current MTU
+> > value. Let's say you have 16k pages and MTU of 1500, that is a huge
+> > difference (except your DMA is always coherent, but I assume that's
+> > not the case).
+> > 
+> > In lan966x_fdma_change_mtu() you do:
+> > 
+> >         max_mtu = lan966x_fdma_get_max_mtu(lan966x);
+> >         max_mtu += IFH_LEN_BYTES;
+> >         max_mtu += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> >         max_mtu += VLAN_HLEN * 2;
+> > 
+> > `lan966x_fdma_get_max_mtu(lan966x) + IFH_LEN_BYTES + VLAN_HLEN * 2`
+> > (ie 1536 for the MTU of 1500) is your max_len value actually, given
+> > that you don't reserve any headroom (which is unfortunate, but I
+> > guess you're working on this already, since XDP requires
+> > %XDP_PACKET_HEADROOM).
+> 
+> Thanks for the suggestion. I will try it.
+> Regarding XDP_PACKET_HEADROOM, for the XDP_DROP, I didn't see it to be
+> needed. Once the support for XDP_TX or XDP_REDIRECT is added, then yes I
+> need to reserve also the headroom.
+
+Correct, since you're disabling metadata support in
+xdp_prepare_buff(), headroom is not needed for pass and drop
+actions.
+
+It's always good to have at least %NET_SKB_PAD headroom inside an
+skb, so that networking stack won't perform excessive reallocations,
+and your code currently misses that -- if I understand currently,
+after converting hardware-specific header to an Ethernet header you
+have 28 - 14 = 14 bytes of headroom, which sometimes can be not
+enough for example for forwarding cases. It's not related to XDP,
+but I would do that as a prerequisite patch for Tx/redirect, since
+you'll be adding headroom support anyway :)
+
+> 
+> > 
+> > > +     };
+> > > +
+> > > +     rx->page_pool = page_pool_create(&pp_params);
+> > > +     if (IS_ERR(rx->page_pool))
+> > > +             return PTR_ERR(rx->page_pool);
+
+[...]
+
+> > > --
+> > > 2.38.0
+> > 
+> > Thanks,
+> > Olek
+> 
+> -- 
+> /Horatiu
+
+Thanks,
+Olek
