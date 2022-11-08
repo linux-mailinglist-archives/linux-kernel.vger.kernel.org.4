@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E81621770
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF4862176F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbiKHOxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:53:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S234111AbiKHOxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiKHOxp (ORCPT
+        with ESMTP id S234191AbiKHOxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:53:45 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F60CCE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:53:43 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id r81so11629243iod.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 06:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=md7pq5Y61523ftXLUcPOT58RE3lJ/xJd5Ph3p8iEops=;
-        b=ZXZdWEAL1R1ZVFA2P8fuWqcX2rj1JRkf1sp5+gC2XB9VDMVOHlyvW06sVoWrr0JeLS
-         tvUZupelkiZrBGHM4LVCUF9TJL0PrccBEvLQqTWDh37RAs+5ZOMQgNgQqZsVeWWTWl20
-         pPi2oeRzwQuqwhUBo7egz7jaC5Dx7kiLJrTQYY5RUrSmxRyaebac4H7gxtQ5lFDXRHkr
-         sDxMbEHOoBWiIPdLSayctyrYpXiHkqYZePXrc4vmmPCakZrhLAjrSdNFi/rT/bSfGjk/
-         fEaa/X6uGH57UhEHgRxznmXcajiDWhf0/RsixaCP39jbo00AGUVbCIRsqQ9c6UeYwnW5
-         V0mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=md7pq5Y61523ftXLUcPOT58RE3lJ/xJd5Ph3p8iEops=;
-        b=Dxu9n0QjnyXSPmUpCZY7edc+6cwjUs5PdkthLDlTRkrX8QQE7xRl8FcWfOYB+AeJrE
-         f5MwhAtBWjDURyG176WwNj0YznufCeMt43B4EyNBghq+3L7vAPbpzTEjNNwE6dLqVWAw
-         qCNtdQt/siifWss246vWM4QaRO+9U/NcD/ylF4+u5wUg4z2kHB4KPFSQAmQYXKjtwdwB
-         ICttC6UOirpF9hhz1cBFj60xJl29Nh9Gh4cqM2C+I8uA78CGSuo3JjbQfHbs1yLORUHu
-         ZMn+uSBSfkoheuaHfh6dXIkWdnEu62ANAuFmWlqPUru+2JNMxkvbg21RyfuesA5U51hi
-         nh8g==
-X-Gm-Message-State: ANoB5pkPK5F7QVz+E5oiqvHUKJ8dqtDuXanAV+5qYdhquzSRPWz7mvjh
-        Sh8Xzf8ILmKfi5gtPM6xFapyMlKwEm5XR1CFb1wjPw==
-X-Google-Smtp-Source: AA0mqf64FMOjlHNu2kF5bZaWRJmb+rAcbAEZwyePMAW3WnAc6couRpYkD7fasQW1Ra9c+tlJUfPYQqMoNMGd+ru8XS8=
-X-Received: by 2002:a6b:b80a:0:b0:6dd:3f5a:32d6 with SMTP id
- i10-20020a6bb80a000000b006dd3f5a32d6mr2104168iof.154.1667919223019; Tue, 08
- Nov 2022 06:53:43 -0800 (PST)
+        Tue, 8 Nov 2022 09:53:44 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AE1B74;
+        Tue,  8 Nov 2022 06:53:43 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8EhLxb032609;
+        Tue, 8 Nov 2022 14:53:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=h4W95olN0LycfTNL87vNH5nWJi0C3cCQd2t4GI1g3Ao=;
+ b=HXOF/1pDIF80rRy1TtN8PLLvr90qthPe9yUfiFnMtICQyre1DwduAMQi01fNc4NKdF1v
+ EBvmqnocX0yL+iIagp5jCYy44HjCjrUDiZMqr1AH7eNSWqUdxAA+AxnwbaxDl40gP2qN
+ pX7LphOTSWz6R0wns8Jza4Ub+tMxLo3qgd1Q40bli0phRsI0+Z7tVFLAna1MuO6PWEA6
+ 5tXp2Q9SGiLmwrTb91Mrf8wwdhzzGrbLP5Re//Kbji/4IwQWDzQYhN1lyN2ugvXKJmVJ
+ lsNGWn7bQ107OXSEOBljUxTmqohOR9sl04LQL0kf38Dvi2+lI+jnImRLKypv2cz1WXTr SQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqs4egcu7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:53:41 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A8EjrHd010071;
+        Tue, 8 Nov 2022 14:53:41 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqs4egctd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:53:40 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A8EqKLF010058;
+        Tue, 8 Nov 2022 14:53:39 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kngnccan6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 14:53:39 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A8ErZIn4915718
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Nov 2022 14:53:35 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5251AE04D;
+        Tue,  8 Nov 2022 14:53:35 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 152E8AE045;
+        Tue,  8 Nov 2022 14:53:32 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.211.104.47])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue,  8 Nov 2022 14:53:31 +0000 (GMT)
+Date:   Tue, 8 Nov 2022 15:53:27 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 26/30] s390/ipl: Use kstrtobool() instead of strtobool()
+Message-ID: <Y2ptZwUFdpR3Hxlm@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <7766dac5969021bf7432e8c4f038db8afc996b8a.1667336095.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20221107201317.324457-1-jannh@google.com> <3e2f7e2cb4f6451a9ef5d0fb9e1f6080@AcuMS.aculab.com>
-In-Reply-To: <3e2f7e2cb4f6451a9ef5d0fb9e1f6080@AcuMS.aculab.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 8 Nov 2022 15:53:07 +0100
-Message-ID: <CAG48ez3AGh-R+deQMbNPt6PCQazOz8a96skW+qP3_HmUaANmmQ@mail.gmail.com>
-Subject: Re: [PATCH] exit: Put an upper limit on how often we can oops
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7766dac5969021bf7432e8c4f038db8afc996b8a.1667336095.git.christophe.jaillet@wanadoo.fr>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -DM1x5yhenxVOr4HlphkT1EWcTX0Lfu1
+X-Proofpoint-ORIG-GUID: Po9WtIPhNzLNhdW9EYvJM1NifDKc-mne
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=643 impostorscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211080087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 10:26 AM David Laight <David.Laight@aculab.com> wrote:
-> > Many Linux systems are configured to not panic on oops; but allowing an
-> > attacker to oops the system **really** often can make even bugs that look
-> > completely unexploitable exploitable (like NULL dereferences and such) if
-> > each crash elevates a refcount by one or a lock is taken in read mode, and
-> > this causes a counter to eventually overflow.
-> >
-> > The most interesting counters for this are 32 bits wide (like open-coded
-> > refcounts that don't use refcount_t). (The ldsem reader count on 32-bit
-> > platforms is just 16 bits, but probably nobody cares about 32-bit platforms
-> > that much nowadays.)
-> >
-> > So let's panic the system if the kernel is constantly oopsing.
->
-> I think you are pretty much guaranteed to run out of memory
-> (or at least KVA) before any 32bit counter wraps.
+On Tue, Nov 01, 2022 at 10:14:14PM +0100, Christophe JAILLET wrote:
+> strtobool() is the same as kstrtobool().
+> However, the latter is more used within the kernel.
+> 
+> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> the other function name.
+> 
+> While at it, include the corresponding header file (<linux/kstrtox.h>)
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Not if you repeatedly take a reference and then oops without dropping
-the reference, and the oops path cleans up all the resources that were
-allocated for the crashing tasks. In that case, each oops increments
-the reference count by 1 without causing memory allocation.
-
-(Also, as a sidenote: To store 2^32 densely packed pointers, you just
-need around 8 bytes * (2^32) = 32 GiB of RAM. So on a workstation or
-server with a decent amount of RAM, there can already be cases where
-you can overflow a 32-bit reference counter with legitimate references
-- see <https://bugs.chromium.org/p/project-zero/issues/detail?id=809>.
-Another example that needs more RAM is
-<https://bugs.chromium.org/p/project-zero/issues/detail?id=1752>, that
-needs ~140 GiB. Still probably within the realm of what a beefy server
-might have nowadays? Kernel virtual address space is not a meaningful
-limit on x86-64 - even with 4-level paging, the kernel has a 64 TiB
-virtual memory area (the direct mapping) that is used for slab
-allocations and such, see
-<https://www.kernel.org/doc/html/latest/x86/x86_64/mm.html>. With
-5-level paging it's even more, 32 PiB.)
+Applied, thanks!
