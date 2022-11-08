@@ -2,264 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48A162204E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AA5622052
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiKHX01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:26:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S229850AbiKHX2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiKHX0Q (ORCPT
+        with ESMTP id S229453AbiKHX2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:26:16 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CF81035
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:26:14 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id j15so23319381wrq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 15:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7muNCfKPcTAIJC8+7u1fXd+PrZAhVIK0iHSzkIipCo=;
-        b=Cc4hv4qE0+esdxtOp5ZtK4pxPl5JIw0sNPSlLP0dQBGb6SQqWo8ZRT6BB+6LIX0nNZ
-         KmjEy2bRyQwR2YkCAcPjRbXfj8OAvFPOsx4Avh5LeAakDTkxJf1IUps8o9Nl5aUaIl3T
-         RuagSiLDBU+1XlYKMiWaOQvikTiERcFos0TiKQpLnlDwYNjF1TbZ7kk9Uwr2MkuPWgUO
-         WM/oOQFdo9D5qwv3AdhTBMlfDqFo9ZbPQ5CM0c3HzkA1vMWsnMrbx4W63Hi1gxmTtQJw
-         Z6EwHs25yK1rmvYWnVO6rb0l3aos+Ei7i7gcHF7zFJRqCy6Dbp6LOwm6sXkt2zQbXfCj
-         RI9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y7muNCfKPcTAIJC8+7u1fXd+PrZAhVIK0iHSzkIipCo=;
-        b=eoL6+BYN1Tw/uYHLxn7NDNxEFvVQNyrrC5USx42wHKFXlyRgv/B4Qfz/f4UxoDO4nL
-         sStp1YhzOZK+5vEcfCpRtZnw9ia2n/u+lFqGPaolb6J0NgWmQZ9s5yDeU20OloTTplDm
-         qFV0D46kaqwqMSGH8i4CNPRgyQVnvKeKGcvSTdLn0OPosaXDVB1CQ0FHYpEsTPNgyDXY
-         QoooMwqYeELuBvA7DryZNocR2YjuUH+gSW73pKmJv8V/Z4+MvKhqJpejo6tzoP+1F6ye
-         zk3DMN73+4CXZxZS0t2Ems0yZfrRYNioklfRFNqIjznsIFDBjedg5iEKefSuiJ3JiYtA
-         pl2A==
-X-Gm-Message-State: ACrzQf1h/G95glWTeqnHDbt3QRfAStLWfRGkenDzdkNUaoSKuuMte+2+
-        ZoM80EWhJVYJs3EEXmVsemMmvY9HchNJM0oM6SDndw==
-X-Google-Smtp-Source: AMsMyM7r6FM5+I5i6GQM9g9fxvFtrFypj5/B0fsNWo/VOe5QUIJrB+E+pt2EEZg77mehW1evbVB+WAa4tZVJlCzOeeE=
-X-Received: by 2002:a5d:47a6:0:b0:236:7854:246d with SMTP id
- 6-20020a5d47a6000000b002367854246dmr36335160wrb.300.1667949973218; Tue, 08
- Nov 2022 15:26:13 -0800 (PST)
+        Tue, 8 Nov 2022 18:28:14 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2087.outbound.protection.outlook.com [40.107.244.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847D5BAD;
+        Tue,  8 Nov 2022 15:28:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bVhSohUu6Nu5dK4tS8mWcr2SsVMbnuOdYsSbi3zBLIMjv9So4272shUIG8a2E7112fczdX3lk1PrSzRZgqPTsf+GZdfcJ75SPoi6dEP3l08n4Ev87NEgpYzdxpjrQuvOGjblSIQ0hHYtDJzmKB8lxJqD/QRLhbJ3n2zy59opiupNJRMBggK2zCyzaAoo8QC5Cm5n806p7FibV1aL9CFwPdipPMHoya6h539NyztnLYIGc7D3YKptbHtUZ6qaEUSZp43kAwo0IPU14kN48vYhMmXP9vRsiW1A/+Dz1bYf9ZEaZvPDtGutSXA8ZGMeZRqrIRnsIPmQl6dm1oyRhWVAng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dOT6sDaNi43wJIZnL2zAeAiTNa9KNB3uIUBILauyHZs=;
+ b=h/qRndiE/yPSFTscTGpQF/hY5MlMxZk1qC8pZny4QCcGjJ5FzK2P5WFd7w3GMubLYa3pzCMEMig7otMe4bv1hoCvXE5LeT0Ww9QxcEJmArvdcPLKAtLtsO6gKMMtYSJTgREaal59YG4b2AF7+oXhpsxAlxA47KxrQOZr3SMSuw6Orymhl3O4kwhMyrM27Cm8/xTC5uGRo0thQakdNq1ijnT8tp+G5OKHP+29FGSNN//XVR+ZQF/KTRhizVLI4UZ0rdKG8zNI64+VGU0pLKBs8bda8pCbtrModpKfyREVccA0TokIKbASoFJQbpaZb1+FAq2NMCamv0ejNtPmisYFWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dOT6sDaNi43wJIZnL2zAeAiTNa9KNB3uIUBILauyHZs=;
+ b=Jqp2e9ezE5ezC8/wZqnDmp14+AS0a/Ju1xpJ2+IG59tJU0qG5Pj/KGHqKTlEcQYEjnCwu3gzWG8YDCdhvfExJbiyRafCEc2I00lIyLSF1/TUQK114my73PemmYwx+E+bzC2PvDquS9xaOWzsuihpi5JHEv7Opb30dsNaGcat5OT8CMINGMYk2tSIHqetu4iMEAF55i9pEufxfXduE4bhcQ3Ic2B+WAEjPKZe02RJwGahj1E775n76pZoTEOud0YnxzOdmTb9rfBvyoR8D5du5CzvyI2MdPc8IFIz/dm92AxTAPap654B52kMiy7mNspOZ7IJtAh1N1ln0RhUt54S2Q==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by CY8PR12MB7219.namprd12.prod.outlook.com (2603:10b6:930:59::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Tue, 8 Nov
+ 2022 23:28:12 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::eaf1:9be8:d472:ea57]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::eaf1:9be8:d472:ea57%7]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 23:28:11 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        Liu Song <liusong@linux.alibaba.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up queued
+ tags
+Thread-Topic: [PATCH] sbitmap: Use single per-bitmap counting to wake up
+ queued tags
+Thread-Index: AQHY8Wvm+CZdxB4ohkivtu7W5Z+5TK41sLCA
+Date:   Tue, 8 Nov 2022 23:28:11 +0000
+Message-ID: <f2d6dfd6-1234-2545-7955-07db078faa54@nvidia.com>
+References: <20221105231055.25953-1-krisman@suse.de>
+In-Reply-To: <20221105231055.25953-1-krisman@suse.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|CY8PR12MB7219:EE_
+x-ms-office365-filtering-correlation-id: 251a511e-ca80-4e0e-86d7-08dac1e0e6e9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uwpxG9NmCd3OLEw2JOluLIz9sC6g6zOIJIBmLCJ2l5GPV4tzC8KEh+3sn4Opg5WMvU1yneBQtHXafqjFBRq0gLbMJ8hoOiVOBs9sB588uHa7RPsRr7s1dyzLQyH5R6IloqjALNybH9oV9rjpWlyqb4618k80B8nJvGZIiBaAVNt4nTRGNIYlDrbWOQ//4h4uXLhBhNvffinNiY/sa7CNbsguP3OSc1k2PG9SoPu6OEmMToRqzz8t/ywBKoFogs9us3PnacR1tUqrDe9+41lUXHniX5ONfK3dUZR9qR2nIad+haOo30zjO3vp8t405U+6qTfgvl2BTVhcNF+WGn1XHPI6YEqmX4NoUTH+0bWXYep2Qt2VFFEDBIU7RXe2zrWjrQtXGTuuOl4bvproscsmbVESpawpq3z+7J7tqjlxUkKi8/xtN9573j1ZiONQU47XLz/qi0WPVz4zaXIw4B36xUBb6QdLX9hq6PUTgbgP3hA0u5aM0tq5OJOvUbQe7gfXGTupKEAlvikwWN4j22VAHSy7D3GO+mlq4GPz3W8IDUjSlXwZ5hmjjyLqAm+AzzaYqVeBRMqxn0bcKZeLI0fWS4WJNwkzCnqoB02mPyfz8t35FYqlp0wMhW2V3tphneNk3Xz7xiuvjRYfwMHeGDqGP/4smsZo2142uBGafD/ybZFN4T0LJ3bvhy8l3Qpna36+lUaOPYUPazcmwmm3Y7sxVPZGMS0lmUj/oO88p93YeHqFObizG9/hFRvAuGbiRG1UR24szASOtj4SovZ82SNWgaArVQkN25s/RB0dZ7PtJjTcG2/VBUBIGh6f0Qkzw7CG
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199015)(83380400001)(41300700001)(31696002)(86362001)(6916009)(38070700005)(122000001)(38100700002)(64756008)(66446008)(66556008)(66476007)(8936002)(76116006)(4326008)(316002)(91956017)(2906002)(8676002)(66946007)(5660300002)(6506007)(6512007)(186003)(71200400001)(54906003)(2616005)(478600001)(6486002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M3U1WWdla0hIUWZkeEhJRUI0SEp0cW1KZjdUWlUwWVRPRUlOUTRIdGdXSDNL?=
+ =?utf-8?B?bjdmVWFuTGw1ZXJvNGJwc1VnOXQyaTFJbCsxUnF4QmRwYlY4cGtGenRMUStl?=
+ =?utf-8?B?UGQ2azVPc0ErTXFnQzlab2MvR1pNbVNXU2ErNTl0ZElSQWVIdVUyL1IwYmRr?=
+ =?utf-8?B?c0NSdlNLWGZCbXRmNjNhV1ZsYnpRaVMwSDNyN3RCN0VMVXdrSkRhYU9jNFlL?=
+ =?utf-8?B?d09YYU9QT3llOEVDUElZNHZOdWluNkZLR2ZpWkhsdElzSXFhUXAwTzduVjJQ?=
+ =?utf-8?B?c3E5dHQ1YmZJMVVDaTdDeGRjMlRxL09rZDVLamhObmMzd0huSFBuZmpEcTYy?=
+ =?utf-8?B?QlVLMWt0OVJTZm9wenlWSEJ3ZXhFWFJ2Mm1EWktnR2M3bXBJRUl0N3Y0MUJ4?=
+ =?utf-8?B?enl2b3VIU293MmVCRERtN09ZTmxIZUI5UVhtL09WZzVwMStyOXhPMCt0TmdN?=
+ =?utf-8?B?ZStwNUtTQUNxbE1JNHIzUHIxUWUrRTNOa1JyZFQzd3Q4RmtHWnFkenNldkI4?=
+ =?utf-8?B?VXQ1UkZpOUREZkZYZFJ5aUE1WVFyTTlJWVlPdnBpSDkzZzN1bmdKRHJMQUFq?=
+ =?utf-8?B?cml6RWtPV0ZRWnBVQ00yM2tqR093azc5Nm9EMVYvWlhoQW12QzRoV1B6WXpx?=
+ =?utf-8?B?elJ4OFRDcGgxV3V5VmVyUGlCUVpVSUErMlp1bkFQaitHRUNmajhoendhVndw?=
+ =?utf-8?B?OXNwOTlQRVh2Q1lNQnpUaFVrQUxOZkhCQmQ4UE9leVBjV2k2N09VNmc0Y3FR?=
+ =?utf-8?B?V09tTzdvZzlDdi9WcFBtbFFjd1RwMDNwTWlZVW1nVzBpQWUzV0xQcDV2YjMr?=
+ =?utf-8?B?akF4ZjhoekRldXFHQzB2aHQ2bXBQdCs0RVJhQkkzbjlPMEdFNnlUNG45dW9y?=
+ =?utf-8?B?VkZyUHBOREZjR1d3L1E3WlVVTVRxSnBCNWNPeUFaa3EwZ29lYkZXeVVJTFVr?=
+ =?utf-8?B?UFVYYkI0OEJwT05xVEF1UGZibHpZMUNMWWEyMUJtRkN3YkhhVVpKZlNaZUVq?=
+ =?utf-8?B?R0ZUUkJTNkRsN2VOL244NFFNZzdHbjVIWjlGSVY1VC93R3ZzMm1yNERyQkpH?=
+ =?utf-8?B?SnJvQXgwbk9RK3U5L1puOEJ0L3JodXFRMDQ2Wm5GditOQlg3UGZWdVRWQ2Nh?=
+ =?utf-8?B?RFFieTF0Y2s5akZoNVpyODA0ZmpMNnhTUEhLdVg1YlNoYXBldlVTTjNXeW9s?=
+ =?utf-8?B?aTFGM3RZRktTTFRJcnZoMkI1Z3owSzF0WTZSUytzL2VhSWdZU1E0NE54eTd1?=
+ =?utf-8?B?QTJNdzFnTGlQUEFVaTRrNTgrbzFEUnZsaktUbFRJcm44SHllWjR0T2tsdXhu?=
+ =?utf-8?B?clIzSzVxa1BWa0t0Vml0UmVLR2JUVG0ydkZHZll2Tnd3dS9XekpTTUV2WjBW?=
+ =?utf-8?B?R2pmUWh3ZW5KdmhmcHVNRWxBbnJ3NU9veU5hZ1prZ2wzRTN5RXVaYjdsNHN5?=
+ =?utf-8?B?M2xXQ1hJVnJudFdpd2Y1Y0xhYXNZWGhSb2xraVV1cmJKV0pFUk5TamMzSVlZ?=
+ =?utf-8?B?NnZJaEViQzRGUk9Jc0hNN1kxWWtTaFAwakpKR3Q1Z2NSNnpkWFZScnRES3pP?=
+ =?utf-8?B?amJUcGd2QWt3amNMaUJkREdTR3ZIdjhNZWY3ZHNMNm5YRTNwdXQ1QjRvUHFk?=
+ =?utf-8?B?Z1ZqMlNIT0g3by9oVDNYc3NEVWFzNmlieE9qeFViVXhqak9uL0c2bytBeHdR?=
+ =?utf-8?B?SFU4WVZaTVp6cGpqVFhzb0UzU084MkFMdUJQMFBOMTgrcWFRZXlKT1U5Skx1?=
+ =?utf-8?B?aDhKOEY5S0VTb0YyOVVUU2EvTS8wMUR3SXlOcFlPY2RRNzc1bkF2YVZZbnZF?=
+ =?utf-8?B?YW9Zdko0Tm5Jd0NYb3dva0ljQnUrM01TbU9MZlpsajAyYXV2NEhxZjJMZDAy?=
+ =?utf-8?B?N25UOEZMVUx4eDJXU2ZraWFSL2tSNjlFUEp4eHhncThleHc4QisxWVZyMW1G?=
+ =?utf-8?B?czI5RkNXN1NNelowZEdkNHVGNXRUTnZYdUc1OE1pWmZUMUVRamN4VGtXK2RG?=
+ =?utf-8?B?bzN1WmI2aVBoTEVBUW5iazk1czNuVVRwOTJyME5XYklSMlF6UTJFdyt0VVdW?=
+ =?utf-8?B?VS9kYW9Xd3RuSHQwQUZaTDVob3ZPOHRsK0hpWGorakxNWTJEeVNtUzhGVVBw?=
+ =?utf-8?B?Ykk2SmZvcE5lMXlLMjdNdGtRQzZHd2lpU0l0Q0R5QldGTTBWY3FxcVBWd29B?=
+ =?utf-8?B?Nnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AD98F6C37BF2414F86188F29657EEFC3@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221104051440.220989-1-namhyung@kernel.org>
-In-Reply-To: <20221104051440.220989-1-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 8 Nov 2022 15:26:01 -0800
-Message-ID: <CAP-5=fXm1EkFiQMWmTgG80xkwzcPDKjwA4wCQr765AGVSG=Ucw@mail.gmail.com>
-Subject: Re: [PATCH] perf lock: Allow concurrent record and report
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 251a511e-ca80-4e0e-86d7-08dac1e0e6e9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2022 23:28:11.6620
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LBW5upuM+mw34DGBCQelqohD9qY8NGMkzA6AdPJ+zyNITydE080bGnxrhfpWdjkhNXPuBaxfVUSxpwadLFLADQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7219
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 10:14 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> To support live monitoring of kernel lock contention without BPF,
-> it should support something like below:
->
->   # perf lock record -a -o- sleep 1 | perf lock contention -i-
->    contended   total wait     max wait     avg wait         type   caller
->
->            2     10.27 us      6.17 us      5.13 us     spinlock   load_balance+0xc03
->            1      5.29 us      5.29 us      5.29 us     rwlock:W   ep_scan_ready_list+0x54
->            1      4.12 us      4.12 us      4.12 us     spinlock   smpboot_thread_fn+0x116
->            1      3.28 us      3.28 us      3.28 us        mutex   pipe_read+0x50
->
-> To do that, it needs to handle HEAD_ATTR, HEADER_EVENT_UPDATE and
-> HEADER_TRACING_DATA which are generated only for the pipe mode.
-> And setting event handler also should be delayed until it gets the
-> event information.
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
-
-> ---
->  tools/perf/builtin-lock.c                 | 68 +++++++++++++++--------
->  tools/perf/tests/shell/lock_contention.sh | 15 ++++-
->  2 files changed, 60 insertions(+), 23 deletions(-)
->
-> diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-> index 6f79175365a8..0d280093b19a 100644
-> --- a/tools/perf/builtin-lock.c
-> +++ b/tools/perf/builtin-lock.c
-> @@ -1390,6 +1390,34 @@ static int dump_info(void)
->         return rc;
->  }
->
-> +static const struct evsel_str_handler lock_tracepoints[] = {
-> +       { "lock:lock_acquire",   evsel__process_lock_acquire,   }, /* CONFIG_LOCKDEP */
-> +       { "lock:lock_acquired",  evsel__process_lock_acquired,  }, /* CONFIG_LOCKDEP, CONFIG_LOCK_STAT */
-> +       { "lock:lock_contended", evsel__process_lock_contended, }, /* CONFIG_LOCKDEP, CONFIG_LOCK_STAT */
-> +       { "lock:lock_release",   evsel__process_lock_release,   }, /* CONFIG_LOCKDEP */
-> +};
-> +
-> +static const struct evsel_str_handler contention_tracepoints[] = {
-> +       { "lock:contention_begin", evsel__process_contention_begin, },
-> +       { "lock:contention_end",   evsel__process_contention_end,   },
-> +};
-> +
-> +static int process_event_update(struct perf_tool *tool,
-> +                               union perf_event *event,
-> +                               struct evlist **pevlist)
-> +{
-> +       int ret;
-> +
-> +       ret = perf_event__process_event_update(tool, event, pevlist);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       /* this can return -EEXIST since we call it for each evsel */
-> +       perf_session__set_tracepoints_handlers(session, lock_tracepoints);
-> +       perf_session__set_tracepoints_handlers(session, contention_tracepoints);
-> +       return 0;
-> +}
-> +
->  typedef int (*tracepoint_handler)(struct evsel *evsel,
->                                   struct perf_sample *sample);
->
-> @@ -1545,28 +1573,19 @@ static void print_contention_result(struct lock_contention *con)
->         print_bad_events(bad, total);
->  }
->
-> -static const struct evsel_str_handler lock_tracepoints[] = {
-> -       { "lock:lock_acquire",   evsel__process_lock_acquire,   }, /* CONFIG_LOCKDEP */
-> -       { "lock:lock_acquired",  evsel__process_lock_acquired,  }, /* CONFIG_LOCKDEP, CONFIG_LOCK_STAT */
-> -       { "lock:lock_contended", evsel__process_lock_contended, }, /* CONFIG_LOCKDEP, CONFIG_LOCK_STAT */
-> -       { "lock:lock_release",   evsel__process_lock_release,   }, /* CONFIG_LOCKDEP */
-> -};
-> -
-> -static const struct evsel_str_handler contention_tracepoints[] = {
-> -       { "lock:contention_begin", evsel__process_contention_begin, },
-> -       { "lock:contention_end",   evsel__process_contention_end,   },
-> -};
-> -
->  static bool force;
->
->  static int __cmd_report(bool display_info)
->  {
->         int err = -EINVAL;
->         struct perf_tool eops = {
-> +               .attr            = perf_event__process_attr,
-> +               .event_update    = process_event_update,
->                 .sample          = process_sample_event,
->                 .comm            = perf_event__process_comm,
->                 .mmap            = perf_event__process_mmap,
->                 .namespaces      = perf_event__process_namespaces,
-> +               .tracing_data    = perf_event__process_tracing_data,
->                 .ordered_events  = true,
->         };
->         struct perf_data data = {
-> @@ -1585,17 +1604,19 @@ static int __cmd_report(bool display_info)
->         symbol_conf.sort_by_name = true;
->         symbol__init(&session->header.env);
->
-> -       if (!perf_session__has_traces(session, "lock record"))
-> -               goto out_delete;
-> +       if (!data.is_pipe) {
-> +               if (!perf_session__has_traces(session, "lock record"))
-> +                       goto out_delete;
->
-> -       if (perf_session__set_tracepoints_handlers(session, lock_tracepoints)) {
-> -               pr_err("Initializing perf session tracepoint handlers failed\n");
-> -               goto out_delete;
-> -       }
-> +               if (perf_session__set_tracepoints_handlers(session, lock_tracepoints)) {
-> +                       pr_err("Initializing perf session tracepoint handlers failed\n");
-> +                       goto out_delete;
-> +               }
->
-> -       if (perf_session__set_tracepoints_handlers(session, contention_tracepoints)) {
-> -               pr_err("Initializing perf session tracepoint handlers failed\n");
-> -               goto out_delete;
-> +               if (perf_session__set_tracepoints_handlers(session, contention_tracepoints)) {
-> +                       pr_err("Initializing perf session tracepoint handlers failed\n");
-> +                       goto out_delete;
-> +               }
->         }
->
->         if (setup_output_field(false, output_fields))
-> @@ -1633,9 +1654,12 @@ static int __cmd_contention(int argc, const char **argv)
->  {
->         int err = -EINVAL;
->         struct perf_tool eops = {
-> +               .attr            = perf_event__process_attr,
-> +               .event_update    = process_event_update,
->                 .sample          = process_sample_event,
->                 .comm            = perf_event__process_comm,
->                 .mmap            = perf_event__process_mmap,
-> +               .tracing_data    = perf_event__process_tracing_data,
->                 .ordered_events  = true,
->         };
->         struct perf_data data = {
-> @@ -1698,7 +1722,7 @@ static int __cmd_contention(int argc, const char **argv)
->                         pr_err("lock contention BPF setup failed\n");
->                         goto out_delete;
->                 }
-> -       } else {
-> +       } else if (!data.is_pipe) {
->                 if (!perf_session__has_traces(session, "lock record"))
->                         goto out_delete;
->
-> diff --git a/tools/perf/tests/shell/lock_contention.sh b/tools/perf/tests/shell/lock_contention.sh
-> index 04bf604e3c6f..f7bd0d8eb5c3 100755
-> --- a/tools/perf/tests/shell/lock_contention.sh
-> +++ b/tools/perf/tests/shell/lock_contention.sh
-> @@ -53,7 +53,7 @@ test_bpf()
->
->         if ! perf lock con -b true > /dev/null 2>&1 ; then
->                 echo "[Skip] No BPF support"
-> -               exit
-> +               return
->         fi
->
->         # the perf lock contention output goes to the stderr
-> @@ -65,9 +65,22 @@ test_bpf()
->         fi
->  }
->
-> +test_record_concurrent()
-> +{
-> +       echo "Testing perf lock record and perf lock contention at the same time"
-> +       perf lock record -o- -- perf bench sched messaging 2> /dev/null | \
-> +       perf lock contention -i- -E 1 -q 2> ${result}
-> +       if [ $(cat "${result}" | wc -l) != "1" ]; then
-> +               echo "[Fail] Recorded result count is not 1:" $(cat "${result}" | wc -l)
-> +               err=1
-> +               exit
-> +       fi
-> +}
-> +
->  check
->
->  test_record
->  test_bpf
-> +test_record_concurrent
->
->  exit ${err}
-> --
-> 2.38.1.431.g37b22c650d-goog
->
+DQo+IEZvciBtb3JlIGludGVyZXN0aW5nIGNhc2VzLCB3aGVyZSB0aGVyZSBpcyBxdWV1ZWluZywg
+d2UgbmVlZCB0byB0YWtlDQo+IGludG8gYWNjb3VudCB0aGUgY3Jvc3MtY29tbXVuaWNhdGlvbiBv
+ZiB0aGUgYXRvbWljIG9wZXJhdGlvbnMuICBJJ3ZlDQo+IGJlZW4gYmVuY2htYXJraW5nIGJ5IHJ1
+bm5pbmcgcGFyYWxsZWwgZmlvIGpvYnMgYWdhaW5zdCBhIHNpbmdsZSBoY3R4DQo+IG51bGxiIGlu
+IGRpZmZlcmVudCBoYXJkd2FyZSBxdWV1ZSBkZXB0aCBzY2VuYXJpb3MsIGFuZCB2ZXJpZnlpbmcg
+Ym90aA0KPiBJT1BTIGFuZCBxdWV1ZWluZy4NCj4gDQo+IEVhY2ggZXhwZXJpbWVudCB3YXMgcmVw
+ZWF0ZWQgNSB0aW1lcyBvbiBhIDIwLUNQVSBib3gsIHdpdGggMjAgcGFyYWxsZWwNCj4gam9icy4g
+ZmlvIHdhcyBpc3N1aW5nIGZpeGVkLXNpemUgcmFuZHdyaXRlcyB3aXRoIHFkPTY0IGFnYWluc3Qg
+bnVsbGIsDQo+IHZhcnlpbmcgb25seSB0aGUgaGFyZHdhcmUgcXVldWUgbGVuZ3RoIHBlciB0ZXN0
+Lg0KPiANCj4gcXVldWUgc2l6ZSAyICAgICAgICAgICAgICAgICA0ICAgICAgICAgICAgICAgICA4
+ICAgICAgICAgICAgICAgICAxNiAgICAgICAgICAgICAgICAgMzIgICAgICAgICAgICAgICAgIDY0
+DQo+IDYuMS1yYzIgICAgMTY4MS4xSyAoMS42SykgICAgMjYzMy4wSyAoMTIuN0spICAgNjk0MC44
+SyAoMTYuM0spICAgODE3Mi4zSyAoNjE3LjVLKSAgIDgzOTEuN0sgKDM2Ny4xSykgICA4NjA2LjFL
+ICgzNTEuMkspDQo+IHBhdGNoZWQgICAgMTcyMS44SyAoMTUuMUspICAgMzAxNi43SyAoMy44Sykg
+ICAgNzU0My4wSyAoODkuNEspICAgODEzMi41SyAoMzAzLjRLKSAgIDgzMjQuMksgKDIzMC42Sykg
+ICA4NDAxLjhLICgyODQuN0spDQoNCj4gDQoNClNvIGlmIEkgdW5kZXJzdGFuZCBjb3JyZWN0bHkN
+ClFEIDIsNCw4IHNob3dzIGNsZWFyIHBlcmZvcm1hbmNlIGJlbmVmaXQgZnJvbSB0aGlzIHBhdGNo
+IHdoZXJlYXMNClFEIDE2LCAzMiwgNjQgc2hvd3MgZHJvcCBpbiBwZXJmb3JtYW5jZSBpdCB0aGF0
+IGNvcnJlY3QgPw0KDQpJZiBteSBvYnNlcnZhdGlvbiBpcyBjb3JyZWN0IHRoZW4gYXBwbGljYXRp
+b25zIHdpdGggaGlnaCBRRCB3aWxsDQpvYnNlcnZlIGRyb3AgaW4gdGhlIHBlcmZvcm1hbmNlID8N
+Cg0KQWxzbywgcGxlYXNlIHNoYXJlIGEgdGFibGUgd2l0aCBibG9jayBzaXplL0lPUFMvQlcvQ1BV
+IChzeXN0ZW0vdXNlcikNCi9MQVQvU0xBVCB3aXRoICUgaW5jcmVhc2UvZGVjcmVhc2UgYW5kIGRv
+Y3VtZW50IHRoZSByYXcgbnVtYmVycyBhdCB0aGUNCmVuZCBvZiB0aGUgY292ZXItbGV0dGVyIGZv
+ciBjb21wbGV0ZW5lc3MgYWxvbmcgd2l0aCBmaW8gam9iIHRvIG90aGVycw0KY2FuIHJlcGVhdCB0
+aGUgZXhwZXJpbWVudC4uLg0KDQo+IFRoZSBmb2xsb3dpbmcgaXMgYSBzaW1pbGFyIGV4cGVyaW1l
+bnQsIHJhbiBhZ2FpbnN0IGEgbnVsbGIgd2l0aCBhIHNpbmdsZQ0KPiBiaXRtYXAgc2hhcmVkIGJ5
+IDIwIGhjdHggc3ByZWFkIGFjcm9zcyAyIE5VTUEgbm9kZXMuIFRoaXMgaGFzIDQwDQo+IHBhcmFs
+bGVsIGZpbyBqb2JzIG9wZXJhdGluZyBvbiB0aGUgc2FtZSBkZXZpY2UNCj4gDQo+IHF1ZXVlIHNp
+emUgMiAJICAgICAgICAgICAgIDQgICAgICAgICAgICAgICAgIDggICAgICAgICAgICAgIAkxNiAg
+ICAgICAgICAgICAJICAgIDMyCQkgICAgICAgNjQNCj4gNi4xLXJjMgkgICAxMDgxLjBLICgyLjNL
+KSAgICA5NTcuMksgKDEuNUspICAgICAxNjk5LjFLICg1LjdLKSAJNjE3OC4ySyAoMTI0LjZLKSAg
+ICAxMjIyNy45SyAoMzcuN0spICAgMTMyODYuNksgKDkyLjlLKQ0KPiBwYXRjaGVkCSAgIDEwODEu
+OEsgKDIuOEspICAgIDEzMTYuNUsgKDUuNEspICAgIDIzNjQuNEsgKDEuOEspIAk2MTUxLjRLICAo
+MjAuMEspICAgIDExODkzLjZLICgxNy41SykgICAxMjM4NS42SyAoMTguNEspDQo+IA0KDQpzYW1l
+IGhlcmUgLi4uDQoNCj4gSXQgaGFzIGFsc28gc3Vydml2ZWQgYmxrdGVzdHMgYW5kIGEgMTJoLXN0
+cmVzcyBydW4gYWdhaW5zdCBudWxsYi4gSSBhbHNvDQo+IHJhbiB0aGUgY29kZSBhZ2FpbnN0IG52
+bWUgYW5kIGEgc2NzaSBTU0QsIGFuZCBJIGRpZG4ndCBvYnNlcnZlDQo+IHBlcmZvcm1hbmNlIHJl
+Z3Jlc3Npb24gaW4gdGhvc2UuIElmIHRoZXJlIGFyZSBvdGhlciB0ZXN0cyB5b3UgdGhpbmsgSQ0K
+PiBzaG91bGQgcnVuLCBwbGVhc2UgbGV0IG1lIGtub3cgYW5kIEkgd2lsbCBmb2xsb3cgdXAgd2l0
+aCByZXN1bHRzLg0KPiANCi1jaw0KDQo=
