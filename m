@@ -2,115 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BFE621C6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C9D621C6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiKHSuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
+        id S229647AbiKHSuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKHSts (ORCPT
+        with ESMTP id S229695AbiKHStx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:49:48 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DE568284
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:48:50 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id f63so14160889pgc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:48:50 -0800 (PST)
+        Tue, 8 Nov 2022 13:49:53 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA76E61BA5
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:49:10 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v17so23902398edc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:49:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1L5kOZNHYfCA3IRYVLUmKIQqOspk+Yz3BJ9Q+3CIhRs=;
-        b=W78BfCdzW3rFNxBBa9CJ99fIOIknqSWEHZQpGE4CP0gnNR+4VJ+1rYb8sEs0NBsASe
-         K4rEBjnnoCJk0a33aTy3cf9rfMp4VkUTZPwynhqWc6xUvWZh5c7hCT/NquaGP8tWiAmk
-         hcNg7xenoISlUZ3pmp4wYxBJpQOoNNtgg3hIJ2CWRKxb7/HZIa1PVdjWFm4ksV+cIxq8
-         YrF3aINsofbWuXc8co8smgqZQglTdPK9ATlmu723Lc7vcDYFsIrqGa+4SDMwuJYOSwOW
-         VL0XN5QRJNpA74ovJB+2axjmbYlMF5U+hQWpwC53WgZLq2bVPa2W9STH+x/xfs2jlapp
-         IPrA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iFEI+OVj3meMKerE8m3XRj1WIR+3TY6afj77dwFQNKU=;
+        b=zQNl4VxL6/HH42SQyC7RyGNCefk+IDdeZXh7OGPP3F7RD1rvw+/PIElhr53HAr6aYT
+         HnDjRNSoe2b7aLI3Gfc5sp6PnIoQk9afxZBlaXYOGEpBBv1qaGGyWo/V1NnRkFPlILen
+         SGIQVa4F0dwpf2ARHzGvsE26abq9gm0BU9eissEjf0Hjst4zGINgZjcvo4Wggp0s2o2E
+         nZTKOpQcGUHEbsht43TxlgP7PyADnNBf+v28nf/RVrTvmnXgqsWS5V2JYn9Hk8kpofCJ
+         yBDH/0QJkK4c4ASlZSgKWXD9TVt6pY3qdJPhpmjALcKZoX/YwVW2vI8hapbIoN+b73yj
+         B9cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1L5kOZNHYfCA3IRYVLUmKIQqOspk+Yz3BJ9Q+3CIhRs=;
-        b=mz5nvYRSkoD7sHNS55pyOX7CYLBmeXiauClBl+nRYQZzJSyZP/oPD8rAr0zBpC1dvm
-         dprh42bmmKeDodb8WNZvltW7i2PL39RcIjchbJ7NW42dUtNe2Tws/OOAlQm4pCPMpjXj
-         b2k4aOwpJE2dwTKjzetadi9zUP9cT1sq8R9kTBDExoA12qVhc3VvOtTz8ndfo7ZUgbQB
-         rriAbTKLT23xLZ1olXS32JNdT0KXmZfBIu9Hkqn3O/eA7s0agcEIEz/1n+MtEXUHCOpq
-         Qz5/eH62ko4lFz2gNR8qWkwOdeC9LTRxxO/l5zBvU7outMxyf4/Q3FO7SYtV7n4g3cK2
-         9h5Q==
-X-Gm-Message-State: ACrzQf1aNDctDF4xgw1rGsIt9ImdmRWWlqKLdufo6KKymgUJzh9Mm2oo
-        kY9DTRAAZ2el/NpS2iGpf0riRg==
-X-Google-Smtp-Source: AMsMyM5S9PjQE+J86OOSmzTz+w8ShiglmFoLAyopqlYc5Iemshl9f9rh9AOUnKWCV3mF3rIgtAIvgw==
-X-Received: by 2002:a05:6a00:1a44:b0:528:6af7:ff4a with SMTP id h4-20020a056a001a4400b005286af7ff4amr57736839pfv.78.1667933330266;
-        Tue, 08 Nov 2022 10:48:50 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e13-20020a17090301cd00b0018855a22ccfsm7325722plh.91.2022.11.08.10.48.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 10:48:49 -0800 (PST)
-Date:   Tue, 8 Nov 2022 18:48:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>
-Subject: Re: [PATCH v10 005/108] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-Message-ID: <Y2qkjnpZsWEFBe6G@google.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <99e5fcf2a7127347816982355fd4141ee1038a54.1667110240.git.isaku.yamahata@intel.com>
- <0feaa13fa5bf45258f2ebb8407eaefadf5c48976.camel@intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iFEI+OVj3meMKerE8m3XRj1WIR+3TY6afj77dwFQNKU=;
+        b=7CydgQDqIlJ5+CAzYuM9o6Tsu88Q0PxPOAAkdQMedhE/d5ovxI7TK46BI4Y01T/7N9
+         SCDG5iKWQjKBy869zkb3IJIUgIKAL2F94zUIm1gmc4r2m5K7IJhNpBysPga14Vooj0ER
+         gLJU/JPtZfzwAzXsX8TaHRkbbPsv4cuzBd3Y3vxJnK664fVD5aelXn4mU8QfttbpHrnX
+         wvWA8FskWVUT+ruVm77W/vDSD/wEqDHv7NT6b9HhEvwDlTm5nU/i2BRTMtk9JurzjiuU
+         AwwiytWf1F3b/BdJ6CLi8UNcAcs4f1y91m/GviOqjBmu9DMWvrW6+WGmXr5sgJbvuLha
+         9peQ==
+X-Gm-Message-State: ACrzQf1GP0Xpsmk+mRwrFrmXNBQcBJAHNGI2KAReDQjf2Q8RHEf1c4cz
+        00VrWpgKlGNTvmhLwimI5/lxUQ==
+X-Google-Smtp-Source: AMsMyM7DLtgr+46W3y81zE9KYE2rJh3K9Swfz6w7mHqc/kxaNTcNqq9Ah0sjkBOh7YlgfOAjnwcjJA==
+X-Received: by 2002:aa7:d8c4:0:b0:461:8d31:41fc with SMTP id k4-20020aa7d8c4000000b004618d3141fcmr57059380eds.202.1667933349379;
+        Tue, 08 Nov 2022 10:49:09 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id a1-20020a05640213c100b004614c591366sm5828499edx.48.2022.11.08.10.49.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 10:49:08 -0800 (PST)
+Message-ID: <41242ffc-fd61-ded1-0647-bba1efb60a1e@linaro.org>
+Date:   Tue, 8 Nov 2022 19:49:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0feaa13fa5bf45258f2ebb8407eaefadf5c48976.camel@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH 2/3] ARM: dts: qcom-msm8960: use define for interrupt
+ constants
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221108184529.26857-1-krzysztof.kozlowski@linaro.org>
+ <20221108184529.26857-2-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221108184529.26857-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022, Huang, Kai wrote:
-> > +int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
-> > +{
-> > +	int r;
-> > +
-> > +	if (!enable_ept) {
-> > +		pr_warn("Cannot enable TDX with EPT disabled\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/* MOVDIR64B instruction is needed. */
-> > +	if (!static_cpu_has(X86_FEATURE_MOVDIR64B)) {
 
-Nit unrelated to Kai's comments: use boot_cpu_has(), not static_cpu_has().  This
-is run-once code that's not a hot path so there's zero reason to trigger patching.
 
-> > +		pr_warn("Cannot enable TDX with MOVDIR64B supported ");
-> 					   ^
-> 					   without
-> > +		return -ENODEV;
-> > +	}
+On 08/11/2022 19:45, Krzysztof Kozlowski wrote:
+> Replace GIC_PPI, GIC_SPI and interrupt type numbers with appropriate
+> defines.
 > 
-> I think you should explain why MOVDIR64B is required, otherwise this just comes
-> out of blue.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>   arch/arm/boot/dts/qcom-msm8960-cdp.dts |  2 +-
+>   arch/arm/boot/dts/qcom-msm8960.dtsi    | 22 ++++++++++++----------
+>   2 files changed, 13 insertions(+), 11 deletions(-)
 > 
-> Btw, is this absolutely required?  TDX also supports Li-mode, which doesn't have
-> integrity check.  So theoretically with Li-mode, normal zeroing is also OK but
-> doesn't need to use MOVDIR64B.
-> 
-> That being said, do we have a way to tell whether TDX works in Ci or Li mode?
-> 
-> 
-> 
+> diff --git a/arch/arm/boot/dts/qcom-msm8960-cdp.dts b/arch/arm/boot/dts/qcom-msm8960-cdp.dts
+> index cb0f612e6c90..3a484ac53917 100644
+> --- a/arch/arm/boot/dts/qcom-msm8960-cdp.dts
+> +++ b/arch/arm/boot/dts/qcom-msm8960-cdp.dts
+> @@ -42,7 +42,7 @@ ethernet@0 {
+>   		compatible = "micrel,ks8851";
+>   		reg = <0>;
+>   		interrupt-parent = <&msmgpio>;
+> -		interrupts = <90 8>;
+> +		interrupts = <90 IRQ_TYPE_LEVEL_LOW>;
+>   		spi-max-frequency = <5400000>;
+>   		vdd-supply = <&ext_l2>;
+>   		vdd-io-supply = <&pm8921_lvs6>;
+> diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> index 30abf53b062d..2f32e734f18d 100644
+> --- a/arch/arm/boot/dts/qcom-msm8960.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
+> @@ -17,7 +17,7 @@ / {
+>   	cpus {
+>   		#address-cells = <1>;
+>   		#size-cells = <0>;
+> -		interrupts = <1 14 0x304>;
+> +		interrupts = <GIC_PPI 14 0x304>;
+>   
+>   		cpu@0 {
+>   			compatible = "qcom,krait";
+> @@ -52,7 +52,7 @@ memory {
+>   
+>   	cpu-pmu {
+>   		compatible = "qcom,krait-pmu";
+> -		interrupts = <1 10 0x304>;
+> +		interrupts = <GIC_PPI 10 0x304>;
+>   		qcom,no-pc-write;
+>   	};
+>   
+> @@ -105,9 +105,9 @@ intc: interrupt-controller@2000000 {
+>   		timer@200a000 {
+>   			compatible = "qcom,kpss-timer",
+>   				     "qcom,kpss-wdt-msm8960", "qcom,msm-timer";
+> -			interrupts = <1 1 0x301>,
+> -				     <1 2 0x301>,
+> -				     <1 3 0x301>;
+> +			interrupts = <GIC_PPI 1 0x301>,
+> +				     <GIC_PPI 2 0x301>,
+> +				     <GIC_PPI 3 0x301>;
+>   			reg = <0x0200a000 0x100>;
+>   			clock-frequency = <27000000>,
+>   					  <32768>;
+> @@ -119,7 +119,7 @@ msmgpio: pinctrl@800000 {
+>   			gpio-controller;
+>   			gpio-ranges = <&msmgpio 0 0 152>;
+>   			#gpio-cells = <2>;
+> -			interrupts = <0 16 0x4>;
+> +			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+>   			interrupt-controller;
+>   			#interrupt-cells = <2>;
+>   			reg = <0x800000 0x4000>;
+> @@ -255,7 +255,7 @@ ssbi@500000 {
+>   			pmicintc: pmic {
+>   				compatible = "qcom,pm8921";
+>   				interrupt-parent = <&msmgpio>;
+> -				interrupts = <104 8>;
+> +				interrupts = <104 IRQ_TYPE_LEVEL_LOW>;
+>   				#interrupt-cells = <2>;
+>   				interrupt-controller;
+>   				#address-cells = <1>;
+> @@ -265,7 +265,8 @@ pwrkey@1c {
+>   					compatible = "qcom,pm8921-pwrkey";
+>   					reg = <0x1c>;
+>   					interrupt-parent = <&pmicintc>;
+> -					interrupts = <50 1>, <51 1>;
+> +					interrupts = <50 IRQ_TYPE_EDGE_RISING>,
+> +						     <51 IRQ_TYPE_EDGE_RISING>;
+>   					debounce = <15625>;
+>   					pull-up;
+>   				};
+> @@ -274,7 +275,8 @@ keypad@148 {
+>   					compatible = "qcom,pm8921-keypad";
+>   					reg = <0x148>;
+>   					interrupt-parent = <&pmicintc>;
+> -					interrupts = <74 1>, <75 1>;
+> +					interrupts = <74 IRQ_TYPE_EDGE_RISING>,
+> +						     <75 IRQ_TYPE_EDGE_RISING>;
+>   					debounce = <15>;
+>   					scan-delay = <32>;
+>   					row-hold = <91500>;
+> @@ -283,7 +285,7 @@ keypad@148 {
+>   				rtc@11d {
+>   					compatible = "qcom,pm8921-rtc";
+>   					interrupt-parent = <&pmicintc>;
+> -					interrupts = <39 1>;
+> +					interrupts = <39 IRQ_TYPE_EDGE_RISING>;
+>   					reg = <0x11d>;
+>   					allow-set-time;
+>   				};
