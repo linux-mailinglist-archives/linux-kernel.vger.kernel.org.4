@@ -2,316 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841296207E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 04:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E256207E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 04:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiKHD5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 22:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S233235AbiKHD6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 22:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiKHD5x (ORCPT
+        with ESMTP id S233214AbiKHD5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 22:57:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1E42FFF8;
+        Mon, 7 Nov 2022 22:57:54 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0D0D30541;
         Mon,  7 Nov 2022 19:57:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD4F61440;
-        Tue,  8 Nov 2022 03:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D6DC433D6;
-        Tue,  8 Nov 2022 03:57:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667879870;
-        bh=+EdeUVZWzM6tGPByItIkYHRcg8Djxf8WDkFOqvAHYSc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oT3vkECnt+jcxluwIaA7tlbifQNhFterDzW8TMG3kGTJ5zTj5hZKm5o2OCd05yTcV
-         6OHa/mRuoVJYiIXThiZdehOplFitM/Cm8FcLnkglZnWhaJraY8oWUSbmO0rch6Qe8H
-         gAUJotcZDD6GxUsXHTI0RKbu6mKRZQe/sxcud4evQL9J2BCQa1p62TxfhO2s1onxrV
-         CIc0nUow8gSnNZcFWIuv++79yLd2iaJzXgmdUeIBabeIHaZEHXCZofxOpMA6D9WhvQ
-         YvQwky395T1HyX6+dNfOX/Ht7+kiJIc29+ZnfZNDsYgeGU6QqVmaXeTTL9D4iP+7D/
-         2Kuodl4gfi5BQ==
-Date:   Mon, 7 Nov 2022 21:57:47 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8BxGdi+02ljJzgFAA--.15331S3;
+        Tue, 08 Nov 2022 11:57:50 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOK902ljTsQOAA--.40796S3;
+        Tue, 08 Nov 2022 11:57:49 +0800 (CST)
+Subject: Re: [PATCH v3] PCI: loongson: skip scanning unavailable child device
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom,msm8660: convert to
- dtschema
-Message-ID: <20221108035747.twcypv7ibqnvuuqj@builder.lan>
-References: <20221107185931.22075-1-krzysztof.kozlowski@linaro.org>
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221107211525.GA419924@bhelgaas>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <7f0f3c7c-9adb-2a05-c93c-44eb5e28e786@loongson.cn>
+Date:   Tue, 8 Nov 2022 11:57:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107185931.22075-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107211525.GA419924@bhelgaas>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxoOK902ljTsQOAA--.40796S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAECmNo9WQJ3wABsC
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXFyxKryUJF18Zw1ftrWrZrb_yoW5AFy7pF
+        W5AFW3KF48tr13Cwnaq3y8CF1avF9aga4DJF43Cw17KasIk34xWryxJF4F93sIvr4UWF42
+        vF1qgr4rGFs8AFDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 07:59:30PM +0100, Krzysztof Kozlowski wrote:
-> Convert Qualcomm MSM8660 pin controller bindings to DT schema.  Keep the
-> parsing of pin configuration subnodes consistent with other Qualcomm
-> schemas (children named with '-state' suffix, their children with
-> '-pins').
+On 11/8/22 5:15 AM, Bjorn Helgaas wrote:
+> Capitalize subject line to match other commits:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-
-Regards,
-Bjorn
-
-> ---
->  .../bindings/pinctrl/qcom,msm8660-pinctrl.txt |  96 --------------
->  .../pinctrl/qcom,msm8660-pinctrl.yaml         | 125 ++++++++++++++++++
->  2 files changed, 125 insertions(+), 96 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
+>   930c6074d7dd ("PCI: loongson: Work around LS7A incorrect Interrupt Pin registers")
+>   2410e3301fcc ("PCI: loongson: Don't access non-existent devices")
+>   cd89edda4002 ("PCI: loongson: Add ACPI init support")
+>   dee449aafd48 ("PCI: loongson: Use generic 8/16/32-bit config ops on LS2K/LS7A")
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
-> deleted file mode 100644
-> index f095209848c8..000000000000
-> --- a/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
-> +++ /dev/null
-> @@ -1,96 +0,0 @@
-> -Qualcomm MSM8660 TLMM block
-> -
-> -Required properties:
-> -- compatible: "qcom,msm8660-pinctrl"
-> -- reg: Should be the base address and length of the TLMM block.
-> -- interrupts: Should be the parent IRQ of the TLMM block.
-> -- interrupt-controller: Marks the device node as an interrupt controller.
-> -- #interrupt-cells: Should be two.
-> -- gpio-controller: Marks the device node as a GPIO controller.
-> -- #gpio-cells : Should be two.
-> -                The first cell is the gpio pin number and the
-> -                second cell is used for optional parameters.
-> -- gpio-ranges: see ../gpio/gpio.txt
-> -
-> -Optional properties:
-> -
-> -- gpio-reserved-ranges: see ../gpio/gpio.txt
-> -
-> -Please refer to ../gpio/gpio.txt and ../interrupt-controller/interrupts.txt for
-> -a general description of GPIO and interrupt bindings.
-> -
-> -Please refer to pinctrl-bindings.txt in this directory for details of the
-> -common pinctrl bindings used by client devices, including the meaning of the
-> -phrase "pin configuration node".
-> -
-> -Qualcomm's pin configuration nodes act as a container for an arbitrary number of
-> -subnodes. Each of these subnodes represents some desired configuration for a
-> -pin, a group, or a list of pins or groups. This configuration can include the
-> -mux function to select on those pin(s)/group(s), and various pin configuration
-> -parameters, such as pull-up, drive strength, etc.
-> -
-> -The name of each subnode is not important; all subnodes should be enumerated
-> -and processed purely based on their content.
-> -
-> -Each subnode only affects those parameters that are explicitly listed. In
-> -other words, a subnode that lists a mux function but no pin configuration
-> -parameters implies no information about any pin configuration parameters.
-> -Similarly, a pin subnode that describes a pullup parameter implies no
-> -information about e.g. the mux function.
-> -
-> -
-> -The following generic properties as defined in pinctrl-bindings.txt are valid
-> -to specify in a pin configuration subnode:
-> -
-> - pins, function, bias-disable, bias-pull-down, bias-pull-up, drive-strength,
-> - output-low, output-high.
-> -
-> -Non-empty subnodes must specify the 'pins' property.
-> -
-> -Valid values for pins are:
-> -  gpio0-gpio172, sdc3_clk, sdc3_cmd, sdc3_data sdc4_clk, sdc4_cmd, sdc4_data
-> -
-> -Valid values for function are:
-> -  gpio, cam_mclk, dsub, ext_gps, gp_clk_0a, gp_clk_0b, gp_clk_1a, gp_clk_1b,
-> -  gp_clk_2a, gp_clk_2b, gp_mn, gsbi1, gsbi1_spi_cs1_n, gsbi1_spi_cs2a_n,
-> -  gsbi1_spi_cs2b_n, gsbi1_spi_cs3_n, gsbi2, gsbi2_spi_cs1_n, gsbi2_spi_cs2_n,
-> -  gsbi2_spi_cs3_n, gsbi3, gsbi3_spi_cs1_n, gsbi3_spi_cs2_n, gsbi3_spi_cs3_n,
-> -  gsbi4, gsbi5, gsbi6, gsbi7, gsbi8, gsbi9, gsbi10, gsbi11, gsbi12, hdmi, i2s,
-> -  lcdc, mdp_vsync, mi2s, pcm, ps_hold, sdc1, sdc2, sdc5, tsif1, tsif2, usb_fs1,
-> -  usb_fs1_oe_n, usb_fs2, usb_fs2_oe_n, vfe, vsens_alarm, ebi2, ebi2cs
-> -
-> -Example:
-> -
-> -	msmgpio: pinctrl@800000 {
-> -		compatible = "qcom,msm8660-pinctrl";
-> -		reg = <0x800000 0x4000>;
-> -
-> -		gpio-controller;
-> -		#gpio-cells = <2>;
-> -		gpio-ranges = <&msmgpio 0 0 173>;
-> -		interrupt-controller;
-> -		#interrupt-cells = <2>;
-> -		interrupts = <0 16 0x4>;
-> -
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&gsbi12_uart>;
-> -
-> -		gsbi12_uart: gsbi12-uart {
-> -			mux {
-> -				pins = "gpio117", "gpio118";
-> -				function = "gsbi12";
-> -			};
-> -
-> -			tx {
-> -				pins = "gpio118";
-> -				drive-strength = <8>;
-> -				bias-disable;
-> -			};
-> -
-> -			rx {
-> -				pins = "gpio117";
-> -				drive-strength = <2>;
-> -				bias-pull-up;
-> -			};
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
-> new file mode 100644
-> index 000000000000..ad0cad4694c0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
-> @@ -0,0 +1,125 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pinctrl/qcom,msm8660-pinctrl.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm MSM8660 TLMM pin controller
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +
-> +description:
-> +  Top Level Mode Multiplexer pin controller in Qualcomm MSM8660 SoC.
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,msm8660-pinctrl
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
-> +  interrupt-controller: true
-> +  "#interrupt-cells": true
-> +  gpio-controller: true
-> +  "#gpio-cells": true
-> +  gpio-ranges: true
-> +  wakeup-parent: true
-> +
-> +  gpio-reserved-ranges:
-> +    minItems: 1
-> +    maxItems: 86
-> +
-> +  gpio-line-names:
-> +    maxItems: 173
-> +
-> +patternProperties:
-> +  "-state$":
-> +    oneOf:
-> +      - $ref: "#/$defs/qcom-msm8660-tlmm-state"
-> +      - patternProperties:
-> +          "-pins$":
-> +            $ref: "#/$defs/qcom-msm8660-tlmm-state"
-> +        additionalProperties: false
-> +
-> +$defs:
-> +  qcom-msm8660-tlmm-state:
-> +    type: object
-> +    description:
-> +      Pinctrl node's client devices use subnodes for desired pin configuration.
-> +      Client device subnodes use below standard properties.
-> +    $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
-> +
-> +    properties:
-> +      pins:
-> +        description:
-> +          List of gpio pins affected by the properties specified in this
-> +          subnode.
-> +        items:
-> +          oneOf:
-> +            - pattern: "^gpio([0-9]|[1-9][0-9]|1[0-6][0-9]|17[0-2])$"
-> +            - enum: [ sdc3_clk, sdc3_cmd, sdc3_data, sdc4_clk, sdc4_cmd, sdc4_data ]
-> +        minItems: 1
-> +        maxItems: 36
-> +
-> +      function:
-> +        description:
-> +          Specify the alternative function to be configured for the specified
-> +          pins.
-> +
-> +        enum: [ gpio, cam_mclk, dsub, ext_gps, gp_clk_0a, gp_clk_0b, gp_clk_1a,
-> +                gp_clk_1b, gp_clk_2a, gp_clk_2b, gp_mn, gsbi1, gsbi1_spi_cs1_n,
-> +                gsbi1_spi_cs2a_n, gsbi1_spi_cs2b_n, gsbi1_spi_cs3_n, gsbi2,
-> +                gsbi2_spi_cs1_n, gsbi2_spi_cs2_n, gsbi2_spi_cs3_n, gsbi3,
-> +                gsbi3_spi_cs1_n, gsbi3_spi_cs2_n, gsbi3_spi_cs3_n, gsbi4,
-> +                gsbi5, gsbi6, gsbi7, gsbi8, gsbi9, gsbi10, gsbi11, gsbi12,
-> +                hdmi, i2s, lcdc, mdp_vsync, mi2s, pcm, ps_hold, sdc1, sdc2,
-> +                sdc5, tsif1, tsif2, usb_fs1, usb_fs1_oe_n, usb_fs2,
-> +                usb_fs2_oe_n, vfe, vsens_alarm, ebi2, ebi2cs ]
-> +
-> +
-> +      bias-pull-down: true
-> +      bias-pull-up: true
-> +      bias-disable: true
-> +      drive-strength: true
-> +      input-enable: true
-> +      output-high: true
-> +      output-low: true
-> +
-> +    required:
-> +      - pins
-> +
-> +    additionalProperties: false
-> +
-> +allOf:
-> +  - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    tlmm: pinctrl@800000 {
-> +        compatible = "qcom,msm8660-pinctrl";
-> +        reg = <0x800000 0x4000>;
-> +
-> +        gpio-controller;
-> +        gpio-ranges = <&tlmm 0 0 173>;
-> +        #gpio-cells = <2>;
-> +        interrupts = <0 16 0x4>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <2>;
-> +
-> +        gsbi3-i2c-state {
-> +            pins = "gpio43", "gpio44";
-> +            function = "gsbi3";
-> +            drive-strength = <8>;
-> +            bias-disable;
-> +        };
-> +    };
-> -- 
-> 2.34.1
+
+OK, I will do this in the next version patch.
+
+> On Fri, Nov 04, 2022 at 06:53:40PM +0800, Liu Peibao wrote:
+>> The PCI Controller of 2k1000 could not mask devices by
+>> setting vender id or device id in configuration space header
+>> as invalid values. When there are pins shareble between
+>> the platform device and PCI device, if the platform device
+>> is preferred, we should not scan this PCI device. In the
+>> above scene, add `status = "disabled"` property in DT node
+>> of this PCI device.
 > 
+> Rewrap this to fill 75 columns.
+> > s/id/ID/
+> s/shareble/shareable/
+> 
+
+OK, I will take care in the next version patch.
+
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> ---
+>> V2 -> V3: 1. use list_for_each_entry() for more clearly.
+>>           2. fix wrong use of sizeof().
+>> V1 -> V2: use existing property "status" instead of adding new property.
+>>
+>>
+>>  drivers/pci/controller/pci-loongson.c | 55 +++++++++++++++++++++++++++
+>>  1 file changed, 55 insertions(+)
+>>
+>> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+>> index 05c50408f13b..c7dd88eac885 100644
+>> --- a/drivers/pci/controller/pci-loongson.c
+>> +++ b/drivers/pci/controller/pci-loongson.c
+>> @@ -40,11 +40,21 @@ struct loongson_pci_data {
+>>  	struct pci_ops *ops;
+>>  };
+>>  
+>> +#ifdef CONFIG_OF
+>> +struct mask_entry {
+>> +	struct list_head entry;
+>> +	unsigned int devfn;
+>> +};
+>> +#endif
+>> +
+>>  struct loongson_pci {
+>>  	void __iomem *cfg0_base;
+>>  	void __iomem *cfg1_base;
+>>  	struct platform_device *pdev;
+>>  	const struct loongson_pci_data *data;
+>> +#ifdef CONFIG_OF
+>> +	struct list_head masklist;
+>> +#endif
+>>  };
+>>  
+>>  /* Fixup wrong class code in PCIe bridges */
+>> @@ -194,6 +204,18 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+>>  			return NULL;
+>>  	}
+>>  
+>> +#ifdef CONFIG_OF
+>> +	/* Don't access devices in masklist */
+>> +	if (pci_is_root_bus(bus)) {
+>> +		struct mask_entry *entry;
+>> +
+>> +		list_for_each_entry(entry, &priv->masklist, entry) {
+>> +			if (devfn == entry->devfn)
+>> +				return NULL;
+>> +		}
+>> +	}
+>> +#endif
+> 
+> I would probably get rid of the masklist and just search for a disabled
+> property when reading config offset 0 (vendor ID).  That's not a
+> performance path anyway.  And this seems similar to the
+> FLAG_DEV_HIDDEN path where you probably don't need to do it for all
+> controllers.
+> 
+
+Thanks for your idea! This really helps a lot!
+I will follow your idea and rework it.
+
+Yes, this is similar to the FLAG_DEV_HIDDEN path and currently, this path
+is only needed by 2K1000 PCI controller.
+
+BR,
+Peibao
+
