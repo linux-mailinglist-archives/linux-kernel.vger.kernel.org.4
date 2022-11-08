@@ -2,84 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F13622077
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA1D62207F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiKHXvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S229556AbiKHXzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKHXvL (ORCPT
+        with ESMTP id S229511AbiKHXy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:51:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A395D682;
-        Tue,  8 Nov 2022 15:51:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C97A7B81C57;
-        Tue,  8 Nov 2022 23:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766F6C433C1;
-        Tue,  8 Nov 2022 23:51:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pucrpXY4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667951464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BIpTayP8e5DLYAF1ks9yHQeZPVCugHfqM/0zG2fIuMQ=;
-        b=pucrpXY4vgk4NY2HPL1tlwaFtaPg3Ft3rGhF69CyJ17IfMpoQbbarGBVy5MH0t5J8JWdkm
-        0Bj2Fhow3fL5R34r1JqGZp8Q5aGgx8kUVe+WBqrjw/V1b+boMzViwM3TUN9c+rVzoJeqrf
-        +DzYZBRS00mFW0Db8EwjM6hPQzEx6OU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1a050be7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 8 Nov 2022 23:51:04 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 00:51:03 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+25aae26fb74bd5909706@syzkaller.appspotmail.com>,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux@dominikbrodowski.net, olivia@selenic.com,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] linux-next boot error: WARNING in kthread_should_stop
-Message-ID: <Y2rrZ8lIIMrKkb2Z@zx2c4.com>
-References: <000000000000e915eb05ecf9dc4d@google.com>
- <Y2qjerZigLiO8YVw@zx2c4.com>
- <CACT4Y+a3bJmMf8JNm=SZYOKtgSVnOpY4+bgdT4ugLLhVV-NCEA@mail.gmail.com>
+        Tue, 8 Nov 2022 18:54:59 -0500
+Received: from gw.atmark-techno.com (gw.atmark-techno.com [13.115.124.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EED21812
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:54:57 -0800 (PST)
+Received: from gw.atmark-techno.com (localhost [127.0.0.1])
+        by gw.atmark-techno.com (Postfix) with ESMTP id 62737600D2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:54:56 +0900 (JST)
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        by gw.atmark-techno.com (Postfix) with ESMTPS id 067E6600F5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:54:55 +0900 (JST)
+Received: by mail-pf1-f199.google.com with SMTP id bw25-20020a056a00409900b0056bdd4f8818so7977735pfb.15
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 15:54:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KnksoYaM8c4ehrc9G/4XJM9Rzso4aSMZWSvfC6plin4=;
+        b=wcDw0BWfivubsc2Thw+umINuVEhfnlQE9nhxHekEqjkJ9W2vPk6sm9Xg9WWYE28A8d
+         FcPN0tdqf8zgc8HZGCY3cT9EDk152kVzh6EIjYbGM7ENktK3BCYd7rtnEaSXR6pSRIrH
+         mzKv9Z8XyokdTWsiFkjthm+nR8jPdbsJde4bq9clnI5eA1s7CCz+84+aRx2LJsU9gdqB
+         rC3oLninBPhCpgm1eFCsik1YJUgEdLTc2HJfXcXFCemzGvjSYhH9hG4mtwA7aMbuorXZ
+         h2QFh5L6KlQkk28ZpD9IkTuMLi57ZY+M5An6IEPfZZoWeWQa1GEtfA9WWyb0B9ES11lr
+         7+9Q==
+X-Gm-Message-State: ANoB5plqTHLHkRDT9uhbsYzmULXDosMuvvupA0uwWYF+8M9C8XQr709E
+        WY7hrQi7JPy28xL1RR4B389nGOJVcnZs6Sj8c72oQV9EVOq0nxJpzDLTXED76GC73B/HYCB8LVg
+        Jf/58KLUuht+HaQ6ZkMRwnPEKKTHD
+X-Received: by 2002:a17:90a:49c9:b0:217:c5f6:4092 with SMTP id l9-20020a17090a49c900b00217c5f64092mr17169909pjm.33.1667951694114;
+        Tue, 08 Nov 2022 15:54:54 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7lkcyT6KvvbkCMvIGHyAcNSvH+64wkGaI4+wTqhrX3TWqblxAynjwlMg46xqVUO1hbqGJEPw==
+X-Received: by 2002:a17:90a:49c9:b0:217:c5f6:4092 with SMTP id l9-20020a17090a49c900b00217c5f64092mr17169877pjm.33.1667951693797;
+        Tue, 08 Nov 2022 15:54:53 -0800 (PST)
+Received: from pc-zest.atmarktech (162.198.187.35.bc.googleusercontent.com. [35.187.198.162])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902b68100b00186a2444a43sm7469812pls.27.2022.11.08.15.54.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 08 Nov 2022 15:54:53 -0800 (PST)
+Received: from martinet by pc-zest.atmarktech with local (Exim 4.96)
+        (envelope-from <martinet@pc-zest>)
+        id 1osYQe-00C2iT-1F;
+        Wed, 09 Nov 2022 08:54:52 +0900
+Date:   Wed, 9 Nov 2022 08:54:42 +0900
+From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>, mizo@atmark-techno.com
+Subject: Re: [RFC PATCH 1/2] dt-bindings: net: h4-bluetooth: add new bindings
+ for hci_h4
+Message-ID: <Y2rsQowbtvOdmQO9@atmark-techno.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+a3bJmMf8JNm=SZYOKtgSVnOpY4+bgdT4ugLLhVV-NCEA@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAL_JsqKCb2ZA+CLTVnGBMjp6zu0yw-rSFjWRg2S3hA7S6h-XEA@mail.gmail.com>
+ <6a4f7104-8b6f-7dcd-a7ac-f866956e31d6@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 02:39:22PM -0800, Dmitry Vyukov wrote:
-> On Tue, 8 Nov 2022 at 10:44, 'Jason A. Donenfeld' via syzkaller-bugs
-> <syzkaller-bugs@googlegroups.com> wrote:
-> >
-> > Already fixed in the tree.
-> 
-> Hi Jason,
-> 
-> The latest commit touching this code in linux-next is this one. Is it
-> the fixing commit?
-> 
-> commit e0a37003ff0beed62e85a00e313b21764c5f1d4f
-> Author:     Jason A. Donenfeld <Jason@zx2c4.com>
-> CommitDate: Mon Nov 7 12:47:57 2022 +0100
->     hw_random: use add_hwgenerator_randomness() for early entropy
+Thanks for all the replies!
 
-It's this one: https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=9807175c5515cea94f8ac6c157f20cc48c40465b
+All remarks make sense, I'll do my homework and send a v2 once extra
+questions have been answered.
 
-Couple hours more and there'll be a new linux-next with the fix.
+Rob Herring wrote on Tue, Nov 08, 2022 at 07:59:33AM -0600:
+> On Mon, Nov 7, 2022 at 11:56 PM Dominique Martinet
+> <dominique.martinet@atmark-techno.com> wrote:
+> > Add devicetree binding to support defining a bluetooth device using the h4
+> > uart protocol
+> 
+> The protocol is mostly irrelevant to the binding. The binding is for a
+> particular device even if the driver is shared.
 
-Jason
+This echoes the point below: I wanted to make this a bit more generic
+for other adapters, question at the end of my first reply to Krzysztof
+below.
+
+> There's now a pending (in linux-next) net/bluetooth/ directory and a
+> bluetooth-controller.yaml schema which you should reference.
+
+Will check it out and add that.
+
+Krzysztof Kozlowski wrote on Tue, Nov 08, 2022 at 12:37:39PM +0100:
+> > diff --git a/Documentation/devicetree/bindings/net/h4-bluetooth.yaml b/Documentation/devicetree/bindings/net/h4-bluetooth.yaml
+> > new file mode 100644
+> > index 000000000000..5d11b89ca386
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/h4-bluetooth.yaml
+> 
+> If the schema is for one specific device, then filename matching the
+> compatible, so nxp,aw-xm458-bt.yaml... but I understand you want to
+> describe here class of devices using H4 Bluetooth? Won't they need their
+> own specific properties?
+
+H4 bluetooth itself has very little configurable elements, from what I
+can see about the device I'm using the actual configuration is done by
+the wifi driver that uploads a "combo" firmware over the PCI side
+(it's based on mwifiex, so for example mrvl/pcieuart8997_combo_v4.bin
+upstream works the same way afaik)
+
+This is a pretty terrible design, as the Bluetooth side cannot actually
+know when the device is ready as the initialization takes place, but
+that means there really aren't any property to give here
+
+(I haven't reproduced during normal boot, but in particular if I run
+bluetoothd before loading the wifi driver, I need to unbind/bind the
+serial device from the hci_uart_h4 driver to recover bluetooth...
+With that in mind it might actually be best to try to coordinate this
+from userspace with btattach after all, and I'd be happy with that if I
+didn't have to fight our init system so much, but as things stand having
+it autoloaded by the kernel is more convenient for us... Which is
+admitedly a weak reason for you all, feel free to tell me this isn't
+viable)
+
+
+Anyway, there probably would be other devices benefiting from this, at
+the very least other cards in the mwifiex family, but I'm doing this as
+a end user so I'm not comfortable adding devices I cannot test.
+
+So with all of this (sorry for the wall of text), should I try to keep
+this generic, or just give up and make it specific to nxp,aw-xm458-bt
+and let whoever adds the next device rename the file?
+
+
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/gpio/gpio.h>
+> > +    #include <dt-bindings/clock/imx8mp-clock.h>
+> > +
+> > +    uart {
+> > +        fsl,dte-mode = <1>;
+> > +        fsl,uart-has-rtscts;
+> 
+> Are these two related to this hardware?
+
+I'd say it's related to my soc rather than the Bluetooth adapter; I
+tried to give a full example but it's unrelated and I'll drop this as
+well.
+
+-- 
+Dominique Martinet
+
+
