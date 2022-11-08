@@ -2,46 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BE7621C06
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:39:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D34621C0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbiKHSi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S231235AbiKHSj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:39:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiKHSi4 (ORCPT
+        with ESMTP id S231868AbiKHSjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:38:56 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C15A1C406
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:38:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667932726; bh=TPAj0q+ojgQRR92+IWucBz3U88D6H7YDwaMa5MVeU64=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Sg7aODFKmyNFHj/x85Of7QDEmx2jDFt7Djw/z3Gy3nHtF/Uza06H+5DJSPSvpHfFX
-         60XjlbxgYHMDNNioCEcvrQ5HJWb6yJnAgWPb6XyqDy+S3NgPZv9HnONpfhnZiOKAMD
-         iFazhp7sssZ1NYEFsxjNYG4O6Y1xR12cuIzg2vqk=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue,  8 Nov 2022 19:38:46 +0100 (CET)
-X-EA-Auth: TZqfKQaxwqdVg2PYONWFARJueSPXgTQI1O0AWkSXOUQBZS2NqQ3vrLk4zMjWIK50AYtvfRt0sl+aZ1G3aSxj1/mIPTVcU/xg
-Date:   Wed, 9 Nov 2022 00:08:41 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: staging/wlan-ng query: convert to flexible array member
-Message-ID: <Y2qiMbpBobzvR4ED@qemulion>
-References: <Y2px+zOGjkpGh6qC@qemulion>
- <Y2p29zc/TeX8OFWU@kroah.com>
- <Y2p5hqdFo5UZoHUY@qemulion>
- <Y2p7TOeg8vzK0rvB@kroah.com>
- <Y2qT0zSlhtQrYwl+@qemulion>
- <Y2qgs3hu95Okjs2w@kroah.com>
+        Tue, 8 Nov 2022 13:39:13 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A1A5654B;
+        Tue,  8 Nov 2022 10:39:09 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e764329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e764:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED7821EC0430;
+        Tue,  8 Nov 2022 19:39:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667932748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=8fLhmoHxNKU+a+bc3xohiwQRE4EoG7MAtkbqTpQZLlw=;
+        b=mPXbp6FmjW7vXaUgvrmqFNU/7eex8aszg6F8EqeAIN7Fxm7uqSZpr9oT/RQsNKzfXT1yJu
+        gfZ8GTIeyksuECZAYikvBRPCJ1T15c8otctpg41kl6K8MkdwNgODuBP+SF0TuobytFnnU/
+        vnp4C8FZ4NbYz58keDmRznfRiYdA4KY=
+Date:   Tue, 8 Nov 2022 19:39:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, saikrishna12468@gmail.com, git@amd.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 2/2] EDAC/zynqmp: Add EDAC support for Xilinx ZynqMP
+ OCM
+Message-ID: <Y2qiRoiYepte/R4W@zn.tnic>
+References: <20221102070655.247511-1-sai.krishna.potthuri@amd.com>
+ <20221102070655.247511-3-sai.krishna.potthuri@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y2qgs3hu95Okjs2w@kroah.com>
+In-Reply-To: <20221102070655.247511-3-sai.krishna.potthuri@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -51,31 +61,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 07:32:19PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Nov 08, 2022 at 11:07:23PM +0530, Deepak R Varma wrote:
-> > On Tue, Nov 08, 2022 at 04:52:44PM +0100, Greg Kroah-Hartman wrote:
-> > > On Tue, Nov 08, 2022 at 09:15:10PM +0530, Deepak R Varma wrote:
-> > > > On Tue, Nov 08, 2022 at 04:34:15PM +0100, Greg Kroah-Hartman wrote:
-> > > > 	  MODPOST drivers/staging/wlan-ng/Module.symvers
-> > > > 	  LD [M]  drivers/staging/wlan-ng/prism2_usb.ko
-> > > > 	  BTF [M] drivers/staging/wlan-ng/prism2_usb.ko
-> > > > 	drv@qemulion:~/git/kernels/staging$
-> > > > </snip>
-> > > >
-> > >
-> > > Test the device to make sure it still works?
-> >
-> > I was able to build and load the driver on my machine. I do not have p54 device
-> > to test. Is there another way to test it? Some sort of a udev program???
->
-> You need the real hardware to test it properly.
+On Wed, Nov 02, 2022 at 12:36:55PM +0530, Sai Krishna Potthuri wrote:
+> Add EDAC support for Xilinx ZynqMP OCM Controller, this driver
 
-Do you know if I work with someone to test the change locally rather than
-sending in a untested change?
+So a while ago you said that this driver is for the on chip memory
+controller. Is it possible for such a system to have another memory
+controller too for which another EDAC driver gets loaded?
 
+Because the EDAC core - at least on x86 - assumes that a single driver
+runs on the system and I don't think I've ever had the case where we
+need multiple drivers. And in such case to audit it for concurrency
+issues.
 
-Thank you,
-./drv
->
+So I guess the question is, can a system have zynqmp_ocm_edac and say,
+synopsys_edac or some other EDAC driver loaded at the same time?
 
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
