@@ -2,111 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03F9621E5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7179E621E63
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiKHVNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 16:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
+        id S229660AbiKHVPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 16:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiKHVNs (ORCPT
+        with ESMTP id S229587AbiKHVPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 16:13:48 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FAC20F5F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 13:13:46 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id u11so22973206ljk.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 13:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b+TEdIfIt1XEAkSUPk37PpRaSa+HP3u0XbUt51o/R5Q=;
-        b=hybL/ifLuD7Lq7OrqxEgPb+C3hZe6Zq/o9AmhBC3t26Y3R8MzxahlatCWAkuQxba6s
-         EPuEj4JngMnlo3aeVxau/Z1Qxs+H4hGVSBG+Vb3QnPV5hfRrbg/MhpQmYGnQacNIdzM9
-         Uu6BHThBxpHD7xHsdvES0oRgA+K49VywCjvxSo4gmm3bP+1480sreCSqcgLZBxKvDrJY
-         LM6qrbd3aMdEqxhBvamfi2ZZhgvEXsf2XQ7R8B9S7kurZ6AkdWCrINjDFXXqvaZJcp68
-         em7YdfcJ/kU/5L2Qov073/b188bqObSSwO7qpAa8DbMGNzqeRqKQC2x+LRYKkDk4qxAy
-         2NgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b+TEdIfIt1XEAkSUPk37PpRaSa+HP3u0XbUt51o/R5Q=;
-        b=NaStOWCtn7EDpkvmDYTCTbBfgH7SY5a7rh3BX/6wMWX0oJuzrH6LV54Kao/DA7P+ob
-         9cykwnAGhiAsdaQuxJrOcaCK47S/STq8gxhrOQq0ZzvtyrV1b3zrb2sIoVDX4+/yrJi2
-         9okbpU4VdkYgckJfw1myXPV4UIizr1ahdxEAYBR4/8OQiGOs+cXjpH4DyiCc0XapfU4O
-         vjCzqQs4EV2OHiXyNk1CeOedAEnyJtNYSfCWyRXVOwGutoFPkEOTsyfruWq70LcJHIfj
-         LcV9L+at+LBRMpfLHRWt/ymk2xr04ThNaJTKe9hiwd/lBxj1HE6qO2n9vqtoUiH3K8pl
-         2F4A==
-X-Gm-Message-State: ACrzQf06DmGcghijWmhVQnzpR7Pnu7tou9Ocy4XBnst8OocWtqFdogDA
-        tGKmzBviOrSR2gtGW71qEBsGbg==
-X-Google-Smtp-Source: AMsMyM704MrNlUBJ/82vwUjFUx934aW7BWfazzzhogmQIqSx2TtM8uSFy20O42NaVeF2kUOmlZ6Pqw==
-X-Received: by 2002:a2e:b626:0:b0:26e:6fb:4845 with SMTP id s6-20020a2eb626000000b0026e06fb4845mr7126546ljn.120.1667942025342;
-        Tue, 08 Nov 2022 13:13:45 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id 8-20020ac24d48000000b004998d9ccb62sm1939713lfp.99.2022.11.08.13.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 13:13:44 -0800 (PST)
-Message-ID: <20aa6301-c576-9221-d084-b11d3e9687e3@linaro.org>
-Date:   Tue, 8 Nov 2022 22:13:43 +0100
+        Tue, 8 Nov 2022 16:15:30 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073B45B866;
+        Tue,  8 Nov 2022 13:15:27 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N6LV23pCRz4xZ0;
+        Wed,  9 Nov 2022 08:15:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667942123;
+        bh=awZUebozG6l0VSgtn/Y968RpJ+MjxLNoG9Mj415Fp6k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CR+KEmTA7O6FJEho9SCB5p5/iZxi6KLg0M4Eqgu4xJ4cYN5pO6QaLWskDANe3+mBw
+         6b1FWWfIhOOgmfij8kltOwDpf5axFoY2+OiEu5coy6IQTz7uxhtC7voZDjlvwRdq8Q
+         H7AqT1O3zgLoxN8QWUXCyZSf1F5xYMgvQrMgtOoodG4DsfZLfx6vBLoCXvq0pLz7OY
+         N/aiROIu5AsAa1G89+6AuKCUteHeSeddWyG/dIiEGnFgqbYZ+itvGi+T2ZinQQFtTW
+         yhDzVrtmHGdruZUQWv3bif0MnIrnxbuMKjn7TrYveN2BuRtXO9I501/Iu02KdCNguX
+         gIQAuPzpYKzmg==
+Date:   Wed, 9 Nov 2022 08:15:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Xinlei Lee <xinlei.lee@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mediatek tree
+Message-ID: <20221109081504.23e0fe6c@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 06/18] dt-bindings: msm: dsi-controller-main:
- Alphanumerically sort compatible enum
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        quic_mkrishn@quicinc.com, linux-arm-msm@vger.kernel.org
-Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
- <20221107235654.1769462-7-bryan.odonoghue@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107235654.1769462-7-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/SChaYkhd.6HxKPvxV3mOa4k";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/11/2022 00:56, Bryan O'Donoghue wrote:
-> Sort the order of the compatible strings alphanumerically.
-> 
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Sean Paul <sean@poorly.run>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: freedreno@lists.freedesktop.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+--Sig_/SChaYkhd.6HxKPvxV3mOa4k
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think here you can see how the commit msg looks now... One line of
-message and 13 lines of CC.
+Hi all,
 
-With commit msg fixed:
+In commit
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  e6c7e6216dc6 ("soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_c=
+onfig func")
 
-Best regards,
-Krzysztof
+Fixes tag
 
+  Fixes: a071e52f75d1 ("soc: mediatek: Add mmsys func to adapt to dpi outpu=
+t for MT8186")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: b404cb45990b ("soc: mediatek: Add mmsys func to adapt to dpi output =
+for MT8186")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/SChaYkhd.6HxKPvxV3mOa4k
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNqxtgACgkQAVBC80lX
+0GzBEAf/YooGjLa5FsEQc/stc2iqyMKBjn8T8bQ72z+snx5w47sqcvYhbyLwcsQa
+4qigaKSg3hHUABi2Qau/+4mk3gRVPM3J3gMapFlZagnd7l1gHoNbIFm2+PD1jgcS
+jq/ToaJveWIGIF/1JCqHZBa9Gdig2uLKkKvMdxAHYRsoQVx4DQDV3o5DF2f3jgf4
+lIjgm3LiVSb/n2ij76ALM1GosFTUWnYhGxKphBv+RlJsejCjewGwyz8B+pnOCLvn
+hcF8driomw8dnsbVy/Ogiq11flTLho8ft+qAmHAgioI7Us8lWRWDn6WtRHwJHxg4
+p7fNIkRwLY9t45YVU24z4+x9YMoWXw==
+=iZ2s
+-----END PGP SIGNATURE-----
+
+--Sig_/SChaYkhd.6HxKPvxV3mOa4k--
