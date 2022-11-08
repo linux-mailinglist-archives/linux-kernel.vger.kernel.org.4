@@ -2,145 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E8D621934
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE25621935
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbiKHQPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S234615AbiKHQQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:16:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbiKHQP2 (ORCPT
+        with ESMTP id S233665AbiKHQQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:15:28 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C356253EE5
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:15:25 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id b2so11806933iof.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:15:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GOOfSEYU17x7lW1mqeOYHAxqV1vrJzMhRnJ6jcrQTOI=;
-        b=e1St1Y9udR0/nj90z94foyJrJ/mzlShjP0N/7N59idoPMW0xoxVnf78HiR/g27DNSZ
-         aFXhVhqtYn4CTSteWZ3rV47He+PsRhYJun05Eon387RDHJWbkybD/Op7gGQ/9r03/uJZ
-         Rs/hKzJwlBobB9uDkXqPRD8XMbuB8DKkper16UEVKQq80r9Jx3y4W7KoqGZ6xsX4rATr
-         Uu2kESsANla5KtnfNMfgR6WsgmpCl6uAhXd4P8CZNhttOrHxu0LtnKoTRAwdO9ZpYA6n
-         Joc5N8E7eZnC3MAqhz3bin82Ncb6lXmpNk856eHdFD2slFU7fWMPOnF5EykNUAZF7RsX
-         8Ltw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GOOfSEYU17x7lW1mqeOYHAxqV1vrJzMhRnJ6jcrQTOI=;
-        b=kP4Yw4uLBr02oB7OG7rFs3DWjAkmrVCAe5pRvHGSmDprjC2PrQnyXkEwpWUTilmohJ
-         +teR9il+Vh2XIWT6HyimpknzYzB/LFYwVfyyjq2HHX9Cusd5/81ld5PF/nTi0Lvo0V1H
-         sKaE82NWbOmTBig5T98TVeJs33iDl9qciiH4xDMTYGKy+IwvoBG5KimSrF0BFSLy5J5J
-         KjbPd6D5TLlXwInI5+UFxq2pJrFGRUXbIbkUwsBUfSvFD4TZelK38XB8K+ThNXcscJAy
-         VqxbYnNhjNe1bTJ+wfAxbK5F3MCiJRf+77IJC4B/4I5tZLCcmoq7Pelnn3D3ZcCgsDYf
-         Uveg==
-X-Gm-Message-State: ACrzQf1ywz4uqujF3i6dDBrj4aywR361p6OguElQfReXuvPITmbQbx4v
-        dnMLfxWex3B2rlNZlYjNvzQH24S2E6vQjfMu
-X-Google-Smtp-Source: AMsMyM61Zi2wQyEOc95fNAuneImn5zVZickePKLuvqc2EAZe7l/PZ02Y5H7fKVGqSQbuo1veAuYQaQ==
-X-Received: by 2002:a6b:4417:0:b0:6ca:d30a:913d with SMTP id r23-20020a6b4417000000b006cad30a913dmr34357226ioa.180.1667924125121;
-        Tue, 08 Nov 2022 08:15:25 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id y9-20020a029509000000b003758390c97esm3914291jah.83.2022.11.08.08.15.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 08:15:24 -0800 (PST)
-Message-ID: <75c8f5fe-6d5f-32a9-1417-818246126789@kernel.dk>
-Date:   Tue, 8 Nov 2022 09:15:23 -0700
+        Tue, 8 Nov 2022 11:16:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506F34FFB1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:16:14 -0800 (PST)
+Date:   Tue, 8 Nov 2022 17:16:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667924171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y/ltunOlWhT9qoWXICQY0xwWTfJd8Uki4/DwJbamrBE=;
+        b=qxOu//IU8dpyp2QX83G/PvnanL7DYdvtvd46g+6Ih75xGWFSlYF7HBkZ9KU3g1OXhimwgd
+        neh2drKoXa3yuVAqSf/eQWJNH+tfBA96rSS2FDcK1UEllJCQnuRoZknxBpMuGSqQNMxTyY
+        j3DM1EslEXgw7T7e9KKOMQGNI34SRIcGrXqE42M03b+wvr4MIcHhW1/WK/JKahhOeNSelz
+        Xb/5BFRd9B3ucE2IVv2N4PKYoTmhbDaqRAdM2Pb6EEUYCr8qGl1hpg95lCQ7NVDMEYZlc7
+        nNh7Cdn6ygx+LiKJfTd3FRCr1tJ8Uqh6j6F2GhDrlAxj34zghqCKwLHj8wGS3Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667924171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y/ltunOlWhT9qoWXICQY0xwWTfJd8Uki4/DwJbamrBE=;
+        b=HYCtGka5HQFmG0JjqSK60wBA6ad7vpK/y8RBW9RodlclYKKJOat+rX3lJpN8l60VD9MNyX
+        j9emKErcpbSC7LBg==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Frederic Weisbecker <frederic@kernel.org>
+cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v4 14/16] timer: Implement the hierarchical pull model
+In-Reply-To: <20221107220727.GA10939@lothringen>
+Message-ID: <c0afb1-2a23-f595-3e30-bb95c39e8e65@linutronix.de>
+References: <20221104145737.71236-1-anna-maria@linutronix.de> <20221104145737.71236-15-anna-maria@linutronix.de> <20221107220727.GA10939@lothringen>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
-To:     Stefan Hajnoczi <stefanha@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <Y2lw4Qc1uI+Ep+2C@fedora>
- <4281b354-d67d-2883-d966-a7816ed4f811@kernel.dk> <Y2phEZKYuSmPL5B5@fedora>
- <93fa2da5-c81a-d7f8-115c-511ed14dcdbb@kernel.dk> <Y2p/YcUFhFDUnLGq@fedora>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <Y2p/YcUFhFDUnLGq@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 9:10 AM, Stefan Hajnoczi wrote:
-> On Tue, Nov 08, 2022 at 07:09:30AM -0700, Jens Axboe wrote:
->> On 11/8/22 7:00 AM, Stefan Hajnoczi wrote:
->>> On Mon, Nov 07, 2022 at 02:38:52PM -0700, Jens Axboe wrote:
->>>> On 11/7/22 1:56 PM, Stefan Hajnoczi wrote:
->>>>> Hi Jens,
->>>>> NICs and storage controllers have interrupt mitigation/coalescing
->>>>> mechanisms that are similar.
->>>>
->>>> Yep
->>>>
->>>>> NVMe has an Aggregation Time (timeout) and an Aggregation Threshold
->>>>> (counter) value. When a completion occurs, the device waits until the
->>>>> timeout or until the completion counter value is reached.
->>>>>
->>>>> If I've read the code correctly, min_wait is computed at the beginning
->>>>> of epoll_wait(2). NVMe's Aggregation Time is computed from the first
->>>>> completion.
->>>>>
->>>>> It makes me wonder which approach is more useful for applications. With
->>>>> the Aggregation Time approach applications can control how much extra
->>>>> latency is added. What do you think about that approach?
->>>>
->>>> We only tested the current approach, which is time noted from entry, not
->>>> from when the first event arrives. I suspect the nvme approach is better
->>>> suited to the hw side, the epoll timeout helps ensure that we batch
->>>> within xx usec rather than xx usec + whatever the delay until the first
->>>> one arrives. Which is why it's handled that way currently. That gives
->>>> you a fixed batch latency.
->>>
->>> min_wait is fine when the goal is just maximizing throughput without any
->>> latency targets.
->>
->> That's not true at all, I think you're in different time scales than
->> this would be used for.
->>
->>> The min_wait approach makes it hard to set a useful upper bound on
->>> latency because unlucky requests that complete early experience much
->>> more latency than requests that complete later.
->>
->> As mentioned in the cover letter or the main patch, this is most useful
->> for the medium load kind of scenarios. For high load, the min_wait time
->> ends up not mattering because you will hit maxevents first anyway. For
->> the testing that we did, the target was 2-300 usec, and 200 usec was
->> used for the actual test. Depending on what the kind of traffic the
->> server is serving, that's usually not much of a concern. From your
->> reply, I'm guessing you're thinking of much higher min_wait numbers. I
->> don't think those would make sense. If your rate of arrival is low
->> enough that min_wait needs to be high to make a difference, then the
->> load is low enough anyway that it doesn't matter. Hence I'd argue that
->> it is indeed NOT hard to set a useful upper bound on latency, because
->> that is very much what min_wait is.
->>
->> I'm happy to argue merits of one approach over another, but keep in mind
->> that this particular approach was not pulled out of thin air AND it has
->> actually been tested and verified successfully on a production workload.
->> This isn't a hypothetical benchmark kind of setup.
+On Mon, 7 Nov 2022, Frederic Weisbecker wrote:
+
+> On Fri, Nov 04, 2022 at 03:57:35PM +0100, Anna-Maria Behnsen wrote:
+> > @@ -1859,6 +1863,36 @@ void forward_and_idle_timer_bases(unsigned long basej, u64 basem,
+> >  	 */
+> >  	is_idle = time_after(nextevt, basej + 1);
+> >  
+> > +	if (is_idle) {
+> > +		u64 next_tmigr;
+> > +
+> > +		next_tmigr = tmigr_cpu_deactivate(tevt->global);
+> > +
+> > +		tevt->global = KTIME_MAX;
+> > +
+> > +		/*
+> > +		 * If CPU is the last going idle in timer migration
+> > +		 * hierarchy, make sure CPU will wake up in time to handle
+> > +		 * remote timers. next_tmigr == KTIME_MAX if other CPUs are
+> > +		 * still active.
+> > +		 */
+> > +		if (next_tmigr < tevt->local) {
+> > +			u64 tmp;
+> > +
+> > +			/* If we missed a tick already, force 0 delta */
+> > +			if (next_tmigr < basem)
+> > +				next_tmigr = basem;
+> > +
+> > +			tmp = div_u64(next_tmigr - basem, TICK_NSEC);
+> > +
+> > +			nextevt = basej + (unsigned long)tmp;
+> > +			tevt->local = next_tmigr;
+> > +			is_idle = time_after(nextevt, basej + 1);
+> > +		} else {
+> > +			nextevt = nextevt_local;
 > 
-> Fair enough. I just wanted to make sure the syscall interface that gets
-> merged is as useful as possible.
+> That else part look unecessary.
 
-That is indeed the main discussion as far as I'm concerned - syscall,
-ctl, or both? At this point I'm inclined to just push forward with the
-ctl addition. A new syscall can always be added, and if we do, then it'd
-be nice to make one that will work going forward so we don't have to
-keep adding epoll_wait variants...
+Yes, you are right. I will add a comment instead. Maybe someone wants to
+improve it and then requires the proper nextevt...
 
--- 
-Jens Axboe
+> > +		}
+> > +	}
+> > +
+> >  	/* We need to mark both bases in sync */
+> >  	base_local->is_idle = base_global->is_idle = is_idle;
+> 
+> Do we still need to maintain base_global->is_idle ?
+
+is_idle information is required in trigger_dyntick_cpu(). I made a mistake
+with the hunk in trigger_dyntick_cpu() introduced in this patch. Because
+after this patch, global timers are still enqueued on any CPU because
+crystallball still exists. trigger_dyntick_cpu() is also required for non
+pinned timers. I need to move the hunk of trigger_dyntick_cpu() into the
+last patch of the queue where crystallball is removed during enqueue and
+there update also this line. Then I will drop the update of
+base_global->is_idle in timer_clear_idle() as well.
+
+Sorry. This went wrong during splitting and folding the queue back and
+forwards...
+
+> (I'm going to do daily reviews on this patch because it's quite dense :)
+
+Thanks! I try to answer your questions fast. Let me know when you are done
+or when you need an updated version for further review :)
+
+Thanks,
+
+	Anna-Maria
+
