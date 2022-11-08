@@ -2,101 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51B86210BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 066146210C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbiKHMbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
+        id S233998AbiKHMby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:31:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiKHMba (ORCPT
+        with ESMTP id S233706AbiKHMbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:31:30 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B334CE3E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:31:29 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id kt23so38142678ejc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:31:29 -0800 (PST)
+        Tue, 8 Nov 2022 07:31:47 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821E912A88
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:31:46 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-367cd2807f2so132484807b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:31:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sm+oC/YPWF/iZNcfGahmynT1lvQ6GZ85C3/IGkCpcBg=;
-        b=uOF5AWIk4QTXqHhAviukr3WgFBbqJAthELAkouqC5SPAKtYa2dhvPvalBKk8aQIhOA
-         C6QdxBUGCZD8XHA2Tcb+stvMx6RD+jEN1FXcMt8EUTde5Nqt/yPwiziVSrIl6FRzAKGw
-         7WHs+gNB2Eo04TurLhyHF8DQsMsnUTszhbPTkNgxpNrM9TQLoVL2g/ipepIsbu42c8f/
-         Ucsk2YPk64Le/SK6lOoCE7EwcTsmdJPRGngxdwSP/My16Inn864TipaOy4Gfu0AuQAB3
-         PQn8l9hT4+yg8dGyptmbz+Gw0qSt+XZfk/9UDi4UyA1YUFJ8WhLyl+ztp8lueLoPPHRo
-         dc0A==
+        bh=Kkp3BTBdGKr/zxpTwv+t+pQaYjah9GJQ+Ok1Ti6KajU=;
+        b=AiljhK2ByEsKMVnFOYJmDo6qXk8Sq6qn54NKVFSGRcTKmNN6G1cm1KxmwEt7Grgt+3
+         YzK6aGYgTSR+3mC3bjmARy1w9NpDi0+bUcQabUNunGrDmtzGCPO85NrLi/8brNA4gi+Q
+         qp8WOe3L6CMi/hNwdg66hfX9dWTOAs3vPQiZ3gpX7L/yiTWD+lF9qYyNrKtkTmjZpzkx
+         VQVfBb66ccDTthWFSdNPMI8lG9jCoWWvYuwtrBhZALoxVoYauLklOHnAnSDIvq57YZc1
+         3Etj2Lx88IDSS0acbUCZg05Xi6DGW5cRXzyodPQ6pRKkXEHNFlDTG5YfQidGFZ2qvtjz
+         Ff7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sm+oC/YPWF/iZNcfGahmynT1lvQ6GZ85C3/IGkCpcBg=;
-        b=PWmY8fU7WB3YjSY0oNrPN6e1xM9OIL/4Jxazaq/YscFd3k8fNUe0eLEty8JB5ceb5N
-         gekJ/KfwJtNyL3DOYjD336oS3kQM9iAeNYMaqxDfyWVh5EIv5A2VTc73yYyRVu27eW4Q
-         Rx2RP7yvVGqrMnCWc2gh2kv/OawAA7GbcuSqBDQB7Zqwh4Vkq91a7cLsQHrDH5C4KihZ
-         yaKeEmppl27TCX7K5aCqd8ZsPXoJ+hCZdICS9878ROs5BRbbU9rrkZNXPfvLXLc8PIaJ
-         T2Sjab6/WOxEZEf/VPIIko1IPKfwe/mSz7Hf0gdH7HhzbcrB82PmoWuC5ac6LboEIjq+
-         8QSw==
-X-Gm-Message-State: ANoB5pkRoCeTFIdknOwkJZWN6LsLGDQlKBrf3aAwW4IHdV0OzJGiFyiH
-        Sa3afIsqfDzJvnV5uGVroDqtGxRA1mOXgdviMMfauOP3IK0=
-X-Google-Smtp-Source: AA0mqf6mScTI8wfSGbpo+cE2WOMgktUG3GbfO4kwbhqKSf/NX3F8x3YQuNjKwU0wd/caXHpjY3fm9Kvzkc0l9DucqnE=
-X-Received: by 2002:a17:906:6acc:b0:7ae:658c:ee45 with SMTP id
- q12-20020a1709066acc00b007ae658cee45mr10953313ejs.190.1667910688158; Tue, 08
- Nov 2022 04:31:28 -0800 (PST)
+        bh=Kkp3BTBdGKr/zxpTwv+t+pQaYjah9GJQ+Ok1Ti6KajU=;
+        b=r5jV6O7qnmxioWkm2G6fmlD3iHyHBUGpQznHm6ed5T/oR5PaEF/gMDAiG8UTzGWCwn
+         KS+n19h5UfdqUqYeMA4m+TNNCo/0q5Omr+Y0B0HSL7Apnyh2T1BVwtzncmMV8m9B+D8R
+         AbFSV8RXLecbfey1BfvsCtiND/WOkm3P3rDvyGiHY+TMREPI15lxc1zlXFgn9kzhOuNM
+         HP9pnFlWYm6MIo1diUjewW7xIPXJE0PvUR/MTmSnea/AW9+YR84Yk9JZFCpoyr0ASU4a
+         56p5Vxm1Xx/69eWQmpxQjIjnTdQL3dafcbuxR8naNWuAQHGlrwSJ8u5ZZJU6dn3eaJRT
+         i/bw==
+X-Gm-Message-State: ACrzQf3yoKAbg1VdJ8gArgqB5nDNr+eE/UxGKwK166wTx+T8DNEWnwfi
+        2x4rxR1dI65XpY+sVWNcQahKXfNniVD0vFWzwQ6q8XjzeSw=
+X-Google-Smtp-Source: AMsMyM5NH9N1uVGSsgSL8uqeieYyCquEJJSPIV2IksigqI3T9+uJChODv+F8Pux4dZxJGFSmtH3drdP2uJaKSN2BIn4=
+X-Received: by 2002:a81:ab4f:0:b0:36f:d141:f9af with SMTP id
+ d15-20020a81ab4f000000b0036fd141f9afmr51153372ywk.311.1667910705512; Tue, 08
+ Nov 2022 04:31:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20221031100843.14579-1-clin@suse.com> <20221031100843.14579-2-clin@suse.com>
-In-Reply-To: <20221031100843.14579-2-clin@suse.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 8 Nov 2022 13:31:16 +0100
-Message-ID: <CACRpkdY-uaQ--vFM+vVPbwa-q9nbSU0rQB+qbL=9m0wVMwA3Aw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: add schema for NXP S32 SoCs
-To:     Chester Lin <clin@suse.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        s32@nxp.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>
+References: <CA+G9fYtLoBo31wRD=+Q8DfO36OGBACp2GY6xvyj8CmUk37rbuA@mail.gmail.com>
+ <20221108112811.56mhfrguuscrh2ow@wittgenstein>
+In-Reply-To: <20221108112811.56mhfrguuscrh2ow@wittgenstein>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 8 Nov 2022 18:01:33 +0530
+Message-ID: <CA+G9fYsVnDSwudT=go0p__2Jas-JuT-8Y+9Jk1xPtA1h4Nmreg@mail.gmail.com>
+Subject: Re: selftests: clone3: clone3_cap_checkpoint_restore fails - Could
+ not set CAP_CHECKPOINT_RESTORE
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Florian Weimer <fweimer@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chester,
-
-thanks for your patch!
-
-On Mon, Oct 31, 2022 at 11:09 AM Chester Lin <clin@suse.com> wrote:
-
-> Add DT schema for the pinctrl driver of NXP S32 SoC family.
+On Tue, 8 Nov 2022 at 16:58, Christian Brauner <brauner@kernel.org> wrote:
 >
-> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
-> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
-> Signed-off-by: Chester Lin <clin@suse.com>
-(...)
-> +  nxp,pins:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
-> +      A list of [start, end] pin ID boundaries that correspond to each of
-> +      the register regions reserved.
+> On Tue, Nov 08, 2022 at 03:59:56PM +0530, Naresh Kamboju wrote:
+> > selftests clone3 cap_checkpoint_restore fails on all devices.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > [   97.198602] audit: type=1701 audit(1651167820.383:12):
+> > auid=4294967295 uid=0 gid=0 ses=4294967295 pid=1732
+> > comm=\"clone3_cap_chec\"
+> > exe=\"/opt/kselftests/default-in-kernel/clone3/clone3_cap_checkpoint_restore\"
+> > sig=6 res=1
+> >
+> > # selftests: clone3: clone3_cap_checkpoint_restore
+> > # TAP version 13
+> > # 1..1
+> > # # Starting 1 tests from 1 test cases.
+> > # #  RUN           global.clone3_cap_checkpoint_restore ...
+> > # # clone3_cap_checkpoint_restore.c:155:clone3_cap_checkpoint_restore:Child
+> > has PID 1733
+> > # # clone3() syscall supported
+> > # cap_set_proc: Operation not permitted
+> > # # clone3_cap_checkpoint_restore.c:164:clone3_cap_checkpoint_restore:Expected
+> > set_capability() (-1) == 0 (0)
+> > # # clone3_cap_checkpoint_restore.c:165:clone3_cap_checkpoint_restore:Could
+> > not set CAP_CHECKPOINT_RESTORE
+> > # # clone3_cap_checkpoint_restore: Test terminated by assertion
+> > # #          FAIL  global.clone3_cap_checkpoint_restore
+> > # not ok 1 global.clone3_cap_checkpoint_restore
+> > # # FAILED: 0 / 1 tests passed.
+> > # # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+> > not ok 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
+> >
+> > Test details links,
+> > https://lkft.validation.linaro.org/scheduler/job/5812724#L2074
+> >
+> > Test results comparison link,
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848543/suite/kselftest-clone3/tests/
+> >
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848543/suite/kselftest-clone3/test/clone3.clone3_cap_checkpoint_restore/history/
+> >
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848543/suite/kselftest-clone3/test/clone3.clone3_cap_checkpoint_restore/details/
+>
+> Similar question to the other report. Is this something that has
+> happened before or are we starting to see this failures just now?
 
-That's an interesting approach.
+These failures have been happening for a long time.
 
-But what about just hardcoding this into the driver instead?
+FYI,
+LKFT email is configured to send out email to Linux next mailing list with
+daily kselftest results / regressions / pass / fail / xfails / skips.
 
-If you have the compatible, surely you know these indexes from
-that compatible string?
+Please refer this link for our reports,
+https://lore.kernel.org/linux-next/?q=lkft+kselftest+for+
 
-Yours,
-Linus Walleij
+We are improving our process to report failures and regressions on
+mailing lists.
+
+- Naresh
