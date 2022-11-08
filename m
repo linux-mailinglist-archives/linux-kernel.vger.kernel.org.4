@@ -2,216 +2,667 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2125C621DB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5750621DB7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiKHUfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
+        id S229853AbiKHUfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiKHUfC (ORCPT
+        with ESMTP id S229913AbiKHUfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:35:02 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C6E5EFBD;
-        Tue,  8 Nov 2022 12:35:00 -0800 (PST)
-Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8JPW1X002692;
-        Tue, 8 Nov 2022 20:34:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=f/7GBB2/K3K39TY5imV1840t9I4fsSrnUZTmiwKTCw8=;
- b=n3S8meHjJrN774EEBHBizFAmhQalpeUcqzq0Y9DAXHLT6prF4tjeByOnNMwRVaV/BU3q
- qb0jpdTDv6RJA9e+DmSwDjTKq6F+HRoQsPABlFUOgr5YqI3QgByzLpqRgWlHQRdFQEHB
- fpCl/yonJQjIrFbpsKbMlt5CunZEgfXN+4PP4vk7hCsHItQyspet0Oob+FfQHfbJ8udz
- +MVV7lCH5E8ZGASTWH3gapdPcWB7vm+jIomhWzys1zWk7QhUtb9+WbkgzymnTb8kP9aJ
- PSwEbX6J7o+OsKa9jOzmKiJ6NHhoHjpNHlE2DnHo9qI3VFHyvuzEWVsoRceYy329ty7Y RA== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3kqw8r0j0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 20:34:32 +0000
-Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
+        Tue, 8 Nov 2022 15:35:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F8566CA1;
+        Tue,  8 Nov 2022 12:35:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id DFA44806B55;
-        Tue,  8 Nov 2022 20:34:31 +0000 (UTC)
-Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Nov 2022 08:34:14 -1200
-Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
- p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Nov 2022 08:34:13 -1200
-Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Tue, 8 Nov 2022 08:34:13 -1200
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Nov 2022 08:34:11 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AhKCBBez8AxzksqFp6/iEF/tGO+u6vm5Pk+fkggUwSo3O+81jsF2X38XvD03GCRP9a2IxuViYdK/ntEeBW1X9txDEv7lKXel26gP6B6QRpATxODu3r7796ACmz4ElbXBD4PEyqcOX8NQHt5d9Xq34OdYGSusbIQpizcwHm0VNkCgQBecfMksaaWxtfXwyBuJSDxD7CcXOvNcf3VLYISW3mmDAG8DMAWoBRXOA9t3HMyqj6cq6wlbQTY2KKIaSqVsXg3rduR482DI1GpBziACHHpzswJcs5cFkB4DLddlIn9KqiKkZl/61AGwtT5gzgPsnF4jZAjer6q4lARGoFswmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f/7GBB2/K3K39TY5imV1840t9I4fsSrnUZTmiwKTCw8=;
- b=oIruVdP+JnD0zmQULPSQpHFZaUvZX9e11nOI1xxY9X+SJddGhxeajoFhXStIAslzJLzrCCGenT4qQIbHKSgpG47FUa0nL6Ny6uHg+6eP2d8HEctWeLLb2freppkLnPmeeihwiBlk2tUEJHKOO72bl6RMjgKNQyLmhObGrnL6BoTEf/vtBDQ93U4S3PrS3FCaHhmkuDcx/G2p2gbUnDUCu9mk0dasRjIV+6tvUlPlj6haffd5WyUCazRK830dTIKADECy12x2ZI8t4vcWO1NM3NKRAYDDNa56lvoNFRq8u+aJVvngh7VlcL1J2C/k5nLVaSAIIgCuUnx+SllDkqR4FA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1c4::18)
- by PH0PR84MB1429.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:170::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Tue, 8 Nov
- 2022 20:34:10 +0000
-Received: from MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::e739:d90:9fca:8e22]) by MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::e739:d90:9fca:8e22%7]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
- 20:34:10 +0000
-From:   "Elliott, Robert (Servers)" <elliott@hpe.com>
-To:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-CC:     Vladis Dronov <vdronov@redhat.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/4] crypto: xts - restrict key lengths to approved values
- in FIPS mode
-Thread-Topic: [PATCH 1/4] crypto: xts - restrict key lengths to approved
- values in FIPS mode
-Thread-Index: AQHY831ixjJdferq10idPflaF1LnHq41ep+g
-Date:   Tue, 8 Nov 2022 20:34:10 +0000
-Message-ID: <MW5PR84MB1842EEC44A8CB6594D4D0CD0AB3F9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20221108142025.13461-1-nstange@suse.de>
- <20221108142025.13461-2-nstange@suse.de>
-In-Reply-To: <20221108142025.13461-2-nstange@suse.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW5PR84MB1842:EE_|PH0PR84MB1429:EE_
-x-ms-office365-filtering-correlation-id: 240deed6-6d11-487a-b4d3-08dac1c89789
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OD/S2+Cq47VAjWaR3keSqZr8F9pTuAFZmO6qOuVmmUds5FLpet/jKhFeKqzsj76LYATTvXtExMMHhxe3kknV/jpihA/E3zgMxNh15GNBRRjOt4bPC16j/YH3ZFaJMBc0aqLw/rQGIbXhfqo4qY4IpST/D5NJLdPzJs5+Itms98Sb0OzOKZkBYaRgNa5tDMskEeEXY4xb8NqxytjAjdEIfmIJGZhXO0xmAJjs1xNwrNuwtu3uevXlYSxVaos9Hm3E35rnVh5s4db351ZCznbT3Dv2VzmeDJnXEeLNsEKwqbeSMUcTwxgCLq1pn1OPWACG3m7qwPwviy6m0YX9kOJUuUJhc7MSztkOQcMaRUJqd+0wNFBUT86T/bfmwiHIC+Et9kEGYpKkry+NIac8Pso4y84sEPNHiU/TlONQoiz6SUYJ3mlSgs/OhPC+L7oRDH1kOhC+8aKkkwYFUPgYHTGI7GICVqvwLIUlZZFdalFWLHqU3W6KZS7bAMDrUmZSGhuVWSebPJ3aiwDyR8QVRJtSAJY3eAGR+zMhH3yUyVP31P+ObcD9jxA2Dt2ZC1igIYpq0RERHtrWAbyACNNXTw/naIzF+PtE14TmlhGlDuZdkXciTce9eVbnB98DsKsJp98lQQLia+zSKCEEVw8xm9bjDyNXf+e8uDN5AwbxCbpVfAzSM9Px72a+bjKz+3iiQRWAQdz1vBwLk899OpWA6hfMIteA4DTIFObZq4Ptc3TqIP5DxQhnLEu0L+0Z0yx4CXorZidXhwYv5dsZpbxXFfPsWw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(39860400002)(346002)(376002)(451199015)(86362001)(55016003)(66446008)(66476007)(64756008)(316002)(66946007)(76116006)(66556008)(54906003)(110136005)(8936002)(52536014)(41300700001)(5660300002)(33656002)(71200400001)(186003)(2906002)(478600001)(9686003)(38100700002)(6506007)(38070700005)(26005)(122000001)(4326008)(8676002)(7696005)(83380400001)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7hr+beydPqAnGdZOEGsQScOq29Y0E8kCCQCnw+5+hZePrLaDwofHz72is293?=
- =?us-ascii?Q?JfhIMw4PXbZTWLkSK4W7hjBHhyYZF7FMYiQPHCwAV0uLPu7Jg0/6TwcH33lS?=
- =?us-ascii?Q?yqVyfn7mYN9tt4zAbBzxhrmImKpq/xSWTVKndxflLIq9bJ2Qq1WgwtoSpz76?=
- =?us-ascii?Q?v05Tqg8P2vyIOewJ9IN4fmW/c6IMwLKisTg7JG0ZLihkUz+7MJpjZyHOPhGQ?=
- =?us-ascii?Q?WVF39neVnVNYAv3UUjCiV45ItIfFZ9ZCPAAG9kolAFKvyqSTz/JQCspH8T5A?=
- =?us-ascii?Q?2fYpjQbu6lI9wgTh9Kz5DmXSvsZHc+IzOPEcYotTCxf001pvfTBqjQXFcBAY?=
- =?us-ascii?Q?nTBaVSBL2awKKfBlx52O5/mt9GlI3F+bgSgZ/NbkI92YQlQ4tdj1YKO1TL7r?=
- =?us-ascii?Q?TkF+oaNbXl/cawwZqu7n+2EYnluEGsPqlElAVbkgkQTZaMEpJiXTA0KTy8o9?=
- =?us-ascii?Q?5FINOBgFZf1/JZ5Woo5IJYqmbHomXjwDhle/SLc6KU15CEod5ooqMgq6aglL?=
- =?us-ascii?Q?HzJRwVHGOSuiioCy4hQyzMVkY1+ErOe44x+xSw+UN1UceTUbBizejMV34pIR?=
- =?us-ascii?Q?qsKWobT9j7y4LTukSPZCnGWZ81aXM1C3egF/GbBXigp5iuitZ/T7ZQG7Busq?=
- =?us-ascii?Q?TY+X6GWdfBNmhjnjo2VUFpZvh9AJ0SHOwtXwBZqmnBau2T2zYP21fqJOBmYD?=
- =?us-ascii?Q?lO4Ew/YHJutRapD06asmpmxZBOqTJOcxUuyejIHn40sSqRR5cwwKuR4GtqmJ?=
- =?us-ascii?Q?MdrOUfSxl6SzwDIhegfxGRsrhOqLm1F5nX/hw3oenNk/I8oTYJmli+/9umu2?=
- =?us-ascii?Q?+bdHZER2gFPjxMkQA2LpzZqmnOkX7KrZ7siAAVfC3MnuVeANiBLijIaLGnoY?=
- =?us-ascii?Q?8ZGgUu6lF54dyUgkcK/HDkU0Ize1YoM8ZeoxoIPbLN1b82XGj/vHWj1AcBot?=
- =?us-ascii?Q?rWgjji/rfVYqfKUlfwRMc0xgSxJjHHCxjhORsE5PGqBY6xh3RYHDVIFgtPv9?=
- =?us-ascii?Q?SAWU3cM2jMTv4w1TqOBaJvEaioPzsahBbA8SXUy/VPH9AP8ZodhjzXiio4RI?=
- =?us-ascii?Q?bW0Avawdvphs2PH+6+fcz1hnfZoqrVph/Pbq2Fqd+u3+GW8QKJZx8cAdeCjQ?=
- =?us-ascii?Q?RO/TnVaSEbLvj3NaakBwzsfrLwm3CZSgqSmXmprK+ALbLdcGR3d2zh56bOlR?=
- =?us-ascii?Q?hloDQEOd5QDUj5YQffS7RCB6/+RnQnkhja7SjtPkkqtZNRpJKpinRo4TQdOG?=
- =?us-ascii?Q?KI70sHfWLhaJj85VV51tuh8UGe4q8Tk5rGXDMLQcUtYarswT9totA0/OgCRA?=
- =?us-ascii?Q?La5QPY5ua7tyJ9M8CLqQopkMNLGBsbudi24tq/TkStF0INI0b8zFNvgNmM66?=
- =?us-ascii?Q?clv+B30F4/MckqcImAIhhB910/IuAGZ9gYaa7JAdlEeOLaC2GQFWED5s18xi?=
- =?us-ascii?Q?48mRFhpvzzJTPN0o1BWG28dfbnV6TBddLA2DFTZPUy8aUB9Nr3qQKVVq+jOn?=
- =?us-ascii?Q?PQcuwvz7nA8ROu5uq/RIEK3HeEVjevkNqd7Npi5C/tuf/W4yH3yxTuruHvv0?=
- =?us-ascii?Q?gnSu+IJLKR4YS22dWUU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71FBA6175E;
+        Tue,  8 Nov 2022 20:35:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A9E9C433D6;
+        Tue,  8 Nov 2022 20:35:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667939710;
+        bh=Xx+mGAgvbypl1rTYLXJ4XaeL7gpH3pdFmHyagpcxEKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vGmcrrSZZwovL4jNQyrhPoksEpLagKDTxbkEdYTRlqNOwH8L/5eoiGc1MScOmgQZq
+         hogSe69bDz+J/NrAC1S+KOoSwlQKen0ObfwT6b2NoS8KBV1DT159EavitXThk9rgUg
+         KoW3Y2/7F1ZIT4xOAb8LHqck3yn3+G5FHCUCj6znOqm8BHhO5z7AHpOVOgeGeyGFMQ
+         dGmwyHqmspHJDkVQg2keeU2GSP0wuxZBRT3uAwHuSTID4UKxJpdTLNbWZsHSiNQl+V
+         I3byDZWai6t2qGZu1W950ez3IUa6937ZGNbegkFwi0Ir8g6bJ+4YWJXzZXPRjFHiOV
+         zNCwEefoqPUEw==
+Date:   Tue, 8 Nov 2022 14:34:46 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v3 7/7] staging: ks7010: Avoid clashing function prototypes
+Message-ID: <8d2ceee1248b5a76e9b6c379f578e65482c91168.1667934775.git.gustavoars@kernel.org>
+References: <cover.1667934775.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 240deed6-6d11-487a-b4d3-08dac1c89789
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2022 20:34:10.5882
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gd5uSgdi0FDYNPnzJZ5sDxuXofZKaWrFlkLolALfhFJCRxEqy3C89lUu1VdaHWDp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR84MB1429
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: FhFnDzrQpfRWoYBkQqtr2KfwJ2HoQanI
-X-Proofpoint-ORIG-GUID: FhFnDzrQpfRWoYBkQqtr2KfwJ2HoQanI
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- suspectscore=0 impostorscore=0 mlxlogscore=877 bulkscore=0 malwarescore=0
- spamscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211080131
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1667934775.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> diff --git a/include/crypto/xts.h b/include/crypto/xts.h
-...
-> @@ -35,6 +35,13 @@ static inline int xts_verify_key(struct crypto_skciphe=
-r
-> *tfm,
->  	if (keylen % 2)
->  		return -EINVAL;
->=20
-> +	/*
-> +	 * In FIPS mode only a combined key length of either 256 or
-> +	 * 512 bits is allowed, c.f. FIPS 140-3 IG C.I.
-> +	 */
-> +	if (fips_enabled && keylen !=3D 32 && keylen !=3D 64)
-> +		return -EINVAL;
-> +
->  	/* ensure that the AES and tweak key are not identical */
->  	if ((fips_enabled || (crypto_skcipher_get_flags(tfm) &
->  			      CRYPTO_TFM_REQ_FORBID_WEAK_KEYS)) &&
-> --
-> 2.38.0
+When built with Control Flow Integrity, function prototypes between
+caller and function declaration must match. These mismatches are visible
+at compile time with the new -Wcast-function-type-strict in Clang[1].
 
-There's another function in the same file called xts_check_key()=20
-that is used by some of the hardware drivers:
+Fix a total of 27 warnings like these:
 
-arch/s390/crypto/paes_s390.c:    * xts_check_key verifies the key length is=
- not odd and makes
- [that references it in the comment but actually calls xts_verify_key in th=
-e code]
-drivers/crypto/axis/artpec6_crypto.c:   ret =3D xts_check_key(&cipher->base=
-, key, keylen);
-drivers/crypto/cavium/cpt/cptvf_algs.c: err =3D xts_check_key(tfm, key, key=
-len);
-drivers/crypto/cavium/nitrox/nitrox_skcipher.c: ret =3D xts_check_key(tfm, =
-key, keylen);
-drivers/crypto/ccree/cc_cipher.c:           xts_check_key(tfm, key, keylen)=
-) {
-drivers/crypto/marvell/octeontx/otx_cptvf_algs.c:       ret =3D xts_check_k=
-ey(crypto_skcipher_tfm(tfm), key, keylen);
-drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c:     ret =3D xts_check_k=
-ey(crypto_skcipher_tfm(tfm), key, keylen);
-drivers/crypto/atmel-aes.c:     err =3D xts_check_key(crypto_skcipher_tfm(t=
-fm), key, keylen);
+drivers/staging/ks7010/ks_wlan_net.c:2415:2: warning: cast from 'int (*)(struct net_device *, struct iw_request_info *, struct iw_point *, char *)' to 'iw_handler' (aka 'int (*)(struct net_device *, struct iw_request_info *, union iwreq_data *, char *)') converts to incompatible function type [-Wcast-function-type-strict]
+        (iw_handler)ks_wlan_get_firmware_version,/* 3 KS_WLAN_GET_FIRM_VERSION */
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It already has one check qualified by fips_enabled:
+The ks_wlan_net Wireless Extension handler callbacks (iw_handler) use a
+union for the data argument. Actually use the union and perform explicit
+member selection in the function body instead of having a function
+prototype mismatch. There are no resulting binary differences
+before/after changes.
 
-        /* ensure that the AES and tweak key are not identical */
-        if (fips_enabled && !crypto_memneq(key, key + (keylen / 2), keylen =
-/ 2))
-                return -EINVAL;
+These changes were made partly manually and partly with the help of
+Coccinelle.
 
-Should that implement the same key length restrictions?
+Link: https://reviews.llvm.org/D134831 [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+Changes in v3:
+ - Remove iw_handler casts from ks_wlan_private_handler[].
+ - Update changelog text.
+
+Changes in v2:
+ - None. This patch is new in the series.
+ - Link: https://lore.kernel.org/linux-hardening/34bf3ce1b1ca2da4c5ec8a6e26f31bbb9ca1c4f5.1666894751.git.gustavoars@kernel.org/
+
+ drivers/staging/ks7010/ks_wlan_net.c | 248 ++++++++++++++-------------
+ 1 file changed, 126 insertions(+), 122 deletions(-)
+
+diff --git a/drivers/staging/ks7010/ks_wlan_net.c b/drivers/staging/ks7010/ks_wlan_net.c
+index 7e8d37c169f0..044c807ca022 100644
+--- a/drivers/staging/ks7010/ks_wlan_net.c
++++ b/drivers/staging/ks7010/ks_wlan_net.c
+@@ -1763,8 +1763,8 @@ static struct iw_statistics *ks_get_wireless_stats(struct net_device *dev)
+ }
+ 
+ static int ks_wlan_set_stop_request(struct net_device *dev,
+-				    struct iw_request_info *info, __u32 *uwrq,
+-				    char *extra)
++				    struct iw_request_info *info,
++				    union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+@@ -1772,7 +1772,7 @@ static int ks_wlan_set_stop_request(struct net_device *dev,
+ 		return -EPERM;
+ 
+ 	/* for SLEEP MODE */
+-	if (!(*uwrq))
++	if (!(uwrq->mode))
+ 		return -EINVAL;
+ 
+ 	hostif_sme_enqueue(priv, SME_STOP_REQUEST);
+@@ -1786,7 +1786,9 @@ static int ks_wlan_set_mlme(struct net_device *dev,
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 	struct iw_mlme *mlme = (struct iw_mlme *)extra;
+-	__u32 mode = 1;
++	union iwreq_data uwrq;
++
++	uwrq.mode = 1;
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+@@ -1799,13 +1801,14 @@ static int ks_wlan_set_mlme(struct net_device *dev,
+ 	    mlme->reason_code == WLAN_REASON_MIC_FAILURE)
+ 		return 0;
+ 
+-	return ks_wlan_set_stop_request(dev, NULL, &mode, NULL);
++	return ks_wlan_set_stop_request(dev, NULL, &uwrq, NULL);
+ }
+ 
+ static int ks_wlan_get_firmware_version(struct net_device *dev,
+ 					struct iw_request_info *info,
+-					struct iw_point *dwrq, char *extra)
++					union iwreq_data *uwrq, char *extra)
+ {
++	struct iw_point *dwrq = &uwrq->data;
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	dwrq->length = priv->version_size + 1;
+@@ -1814,8 +1817,8 @@ static int ks_wlan_get_firmware_version(struct net_device *dev,
+ }
+ 
+ static int ks_wlan_set_preamble(struct net_device *dev,
+-				struct iw_request_info *info, __u32 *uwrq,
+-				char *extra)
++				struct iw_request_info *info,
++				union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+@@ -1823,17 +1826,17 @@ static int ks_wlan_set_preamble(struct net_device *dev,
+ 		return -EPERM;
+ 
+ 	/* for SLEEP MODE */
+-	if (*uwrq != LONG_PREAMBLE && *uwrq != SHORT_PREAMBLE)
++	if (uwrq->mode != LONG_PREAMBLE && uwrq->mode != SHORT_PREAMBLE)
+ 		return -EINVAL;
+ 
+-	priv->reg.preamble = *uwrq;
++	priv->reg.preamble = uwrq->mode;
+ 	priv->need_commit |= SME_MODE_SET;
+ 	return -EINPROGRESS;	/* Call commit handler */
+ }
+ 
+ static int ks_wlan_get_preamble(struct net_device *dev,
+-				struct iw_request_info *info, __u32 *uwrq,
+-				char *extra)
++				struct iw_request_info *info,
++				union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+@@ -1841,37 +1844,37 @@ static int ks_wlan_get_preamble(struct net_device *dev,
+ 		return -EPERM;
+ 
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->reg.preamble;
++	uwrq->mode = priv->reg.preamble;
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_power_mgmt(struct net_device *dev,
+-				  struct iw_request_info *info, __u32 *uwrq,
+-				  char *extra)
++				  struct iw_request_info *info,
++				  union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 
+-	if (*uwrq != POWER_MGMT_ACTIVE &&
+-	    *uwrq != POWER_MGMT_SAVE1 &&
+-	    *uwrq != POWER_MGMT_SAVE2)
++	if (uwrq->mode != POWER_MGMT_ACTIVE &&
++	    uwrq->mode != POWER_MGMT_SAVE1 &&
++	    uwrq->mode != POWER_MGMT_SAVE2)
+ 		return -EINVAL;
+ 
+-	if ((*uwrq == POWER_MGMT_SAVE1 || *uwrq == POWER_MGMT_SAVE2) &&
++	if ((uwrq->mode == POWER_MGMT_SAVE1 || uwrq->mode == POWER_MGMT_SAVE2) &&
+ 	    (priv->reg.operation_mode != MODE_INFRASTRUCTURE))
+ 		return -EINVAL;
+ 
+-	priv->reg.power_mgmt = *uwrq;
++	priv->reg.power_mgmt = uwrq->mode;
+ 	hostif_sme_enqueue(priv, SME_POW_MNGMT_REQUEST);
+ 
+ 	return 0;
+ }
+ 
+ static int ks_wlan_get_power_mgmt(struct net_device *dev,
+-				  struct iw_request_info *info, __u32 *uwrq,
+-				  char *extra)
++				  struct iw_request_info *info,
++				  union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+@@ -1879,13 +1882,13 @@ static int ks_wlan_get_power_mgmt(struct net_device *dev,
+ 		return -EPERM;
+ 
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->reg.power_mgmt;
++	uwrq->mode = priv->reg.power_mgmt;
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_scan_type(struct net_device *dev,
+-				 struct iw_request_info *info, __u32 *uwrq,
+-				 char *extra)
++				 struct iw_request_info *info,
++				 union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+@@ -1893,39 +1896,39 @@ static int ks_wlan_set_scan_type(struct net_device *dev,
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+ 
+-	if (*uwrq != ACTIVE_SCAN && *uwrq != PASSIVE_SCAN)
++	if (uwrq->mode != ACTIVE_SCAN && uwrq->mode != PASSIVE_SCAN)
+ 		return -EINVAL;
+ 
+-	priv->reg.scan_type = *uwrq;
++	priv->reg.scan_type = uwrq->mode;
+ 	return 0;
+ }
+ 
+ static int ks_wlan_get_scan_type(struct net_device *dev,
+-				 struct iw_request_info *info, __u32 *uwrq,
+-				 char *extra)
++				 struct iw_request_info *info,
++				 union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->reg.scan_type;
++	uwrq->mode = priv->reg.scan_type;
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_beacon_lost(struct net_device *dev,
+-				   struct iw_request_info *info, __u32 *uwrq,
+-				   char *extra)
++				   struct iw_request_info *info,
++				   union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	if (*uwrq > BEACON_LOST_COUNT_MAX)
++	if (uwrq->mode > BEACON_LOST_COUNT_MAX)
+ 		return -EINVAL;
+ 
+-	priv->reg.beacon_lost_count = *uwrq;
++	priv->reg.beacon_lost_count = uwrq->mode;
+ 
+ 	if (priv->reg.operation_mode == MODE_INFRASTRUCTURE) {
+ 		priv->need_commit |= SME_MODE_SET;
+@@ -1936,101 +1939,101 @@ static int ks_wlan_set_beacon_lost(struct net_device *dev,
+ }
+ 
+ static int ks_wlan_get_beacon_lost(struct net_device *dev,
+-				   struct iw_request_info *info, __u32 *uwrq,
+-				   char *extra)
++				   struct iw_request_info *info,
++				   union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->reg.beacon_lost_count;
++	uwrq->mode = priv->reg.beacon_lost_count;
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_phy_type(struct net_device *dev,
+-				struct iw_request_info *info, __u32 *uwrq,
+-				char *extra)
++				struct iw_request_info *info,
++				union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 
+-	if (*uwrq != D_11B_ONLY_MODE &&
+-	    *uwrq != D_11G_ONLY_MODE &&
+-	    *uwrq != D_11BG_COMPATIBLE_MODE)
++	if (uwrq->mode != D_11B_ONLY_MODE &&
++	    uwrq->mode != D_11G_ONLY_MODE &&
++	    uwrq->mode != D_11BG_COMPATIBLE_MODE)
+ 		return -EINVAL;
+ 
+ 	/* for SLEEP MODE */
+-	priv->reg.phy_type = *uwrq;
++	priv->reg.phy_type = uwrq->mode;
+ 	priv->need_commit |= SME_MODE_SET;
+ 	return -EINPROGRESS;	/* Call commit handler */
+ }
+ 
+ static int ks_wlan_get_phy_type(struct net_device *dev,
+-				struct iw_request_info *info, __u32 *uwrq,
+-				char *extra)
++				struct iw_request_info *info,
++				union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->reg.phy_type;
++	uwrq->mode = priv->reg.phy_type;
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_cts_mode(struct net_device *dev,
+-				struct iw_request_info *info, __u32 *uwrq,
+-				char *extra)
++				struct iw_request_info *info,
++				union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	if (*uwrq != CTS_MODE_FALSE && *uwrq != CTS_MODE_TRUE)
++	if (uwrq->mode != CTS_MODE_FALSE && uwrq->mode != CTS_MODE_TRUE)
+ 		return -EINVAL;
+ 
+-	priv->reg.cts_mode = (*uwrq == CTS_MODE_FALSE) ? *uwrq :
++	priv->reg.cts_mode = (uwrq->mode == CTS_MODE_FALSE) ? uwrq->mode :
+ 			      (priv->reg.phy_type == D_11G_ONLY_MODE ||
+ 			       priv->reg.phy_type == D_11BG_COMPATIBLE_MODE) ?
+-			       *uwrq : !*uwrq;
++			       uwrq->mode : !uwrq->mode;
+ 
+ 	priv->need_commit |= SME_MODE_SET;
+ 	return -EINPROGRESS;	/* Call commit handler */
+ }
+ 
+ static int ks_wlan_get_cts_mode(struct net_device *dev,
+-				struct iw_request_info *info, __u32 *uwrq,
+-				char *extra)
++				struct iw_request_info *info,
++				union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->reg.cts_mode;
++	uwrq->mode = priv->reg.cts_mode;
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_sleep_mode(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  __u32 *uwrq, char *extra)
++				  union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+-	if (*uwrq != SLP_SLEEP &&
+-	    *uwrq != SLP_ACTIVE) {
+-		netdev_err(dev, "SET_SLEEP_MODE %d error\n", *uwrq);
++	if (uwrq->mode != SLP_SLEEP &&
++	    uwrq->mode != SLP_ACTIVE) {
++		netdev_err(dev, "SET_SLEEP_MODE %d error\n", uwrq->mode);
+ 		return -EINVAL;
+ 	}
+ 
+-	priv->sleep_mode = *uwrq;
++	priv->sleep_mode = uwrq->mode;
+ 	netdev_info(dev, "SET_SLEEP_MODE %d\n", priv->sleep_mode);
+ 
+-	if (*uwrq == SLP_SLEEP)
++	if (uwrq->mode == SLP_SLEEP)
+ 		hostif_sme_enqueue(priv, SME_STOP_REQUEST);
+ 
+ 	hostif_sme_enqueue(priv, SME_SLEEP_REQUEST);
+@@ -2040,52 +2043,53 @@ static int ks_wlan_set_sleep_mode(struct net_device *dev,
+ 
+ static int ks_wlan_get_sleep_mode(struct net_device *dev,
+ 				  struct iw_request_info *info,
+-				  __u32 *uwrq, char *extra)
++				  union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+-	*uwrq = priv->sleep_mode;
++	uwrq->mode = priv->sleep_mode;
+ 
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_wps_enable(struct net_device *dev,
+-				  struct iw_request_info *info, __u32 *uwrq,
+-				  char *extra)
++				  struct iw_request_info *info,
++				  union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	if (*uwrq != 0 && *uwrq != 1)
++	if (uwrq->mode != 0 && uwrq->mode != 1)
+ 		return -EINVAL;
+ 
+-	priv->wps.wps_enabled = *uwrq;
++	priv->wps.wps_enabled = uwrq->mode;
+ 	hostif_sme_enqueue(priv, SME_WPS_ENABLE_REQUEST);
+ 
+ 	return 0;
+ }
+ 
+ static int ks_wlan_get_wps_enable(struct net_device *dev,
+-				  struct iw_request_info *info, __u32 *uwrq,
+-				  char *extra)
++				  struct iw_request_info *info,
++				  union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->wps.wps_enabled;
+-	netdev_info(dev, "return=%d\n", *uwrq);
++	uwrq->mode = priv->wps.wps_enabled;
++	netdev_info(dev, "return=%d\n", uwrq->mode);
+ 
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_wps_probe_req(struct net_device *dev,
+ 				     struct iw_request_info *info,
+-				     struct iw_point *dwrq, char *extra)
++				     union iwreq_data *uwrq, char *extra)
+ {
++	struct iw_point *dwrq = &uwrq->data;
+ 	u8 *p = extra;
+ 	unsigned char len;
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+@@ -2114,76 +2118,76 @@ static int ks_wlan_set_wps_probe_req(struct net_device *dev,
+ }
+ 
+ static int ks_wlan_set_tx_gain(struct net_device *dev,
+-			       struct iw_request_info *info, __u32 *uwrq,
+-			       char *extra)
++			       struct iw_request_info *info,
++			       union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	if (*uwrq > 0xFF)
++	if (uwrq->mode > 0xFF)
+ 		return -EINVAL;
+ 
+-	priv->gain.tx_gain = (u8)*uwrq;
++	priv->gain.tx_gain = (u8)uwrq->mode;
+ 	priv->gain.tx_mode = (priv->gain.tx_gain < 0xFF) ? 1 : 0;
+ 	hostif_sme_enqueue(priv, SME_SET_GAIN);
+ 	return 0;
+ }
+ 
+ static int ks_wlan_get_tx_gain(struct net_device *dev,
+-			       struct iw_request_info *info, __u32 *uwrq,
+-			       char *extra)
++			       struct iw_request_info *info,
++			       union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->gain.tx_gain;
++	uwrq->mode = priv->gain.tx_gain;
+ 	hostif_sme_enqueue(priv, SME_GET_GAIN);
+ 	return 0;
+ }
+ 
+ static int ks_wlan_set_rx_gain(struct net_device *dev,
+-			       struct iw_request_info *info, __u32 *uwrq,
+-			       char *extra)
++			       struct iw_request_info *info,
++			       union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	if (*uwrq > 0xFF)
++	if (uwrq->mode > 0xFF)
+ 		return -EINVAL;
+ 
+-	priv->gain.rx_gain = (u8)*uwrq;
++	priv->gain.rx_gain = (u8)uwrq->mode;
+ 	priv->gain.rx_mode = (priv->gain.rx_gain < 0xFF) ? 1 : 0;
+ 	hostif_sme_enqueue(priv, SME_SET_GAIN);
+ 	return 0;
+ }
+ 
+ static int ks_wlan_get_rx_gain(struct net_device *dev,
+-			       struct iw_request_info *info, __u32 *uwrq,
+-			       char *extra)
++			       struct iw_request_info *info,
++			       union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+ 	if (priv->sleep_mode == SLP_SLEEP)
+ 		return -EPERM;
+ 	/* for SLEEP MODE */
+-	*uwrq = priv->gain.rx_gain;
++	uwrq->mode = priv->gain.rx_gain;
+ 	hostif_sme_enqueue(priv, SME_GET_GAIN);
+ 	return 0;
+ }
+ 
+ static int ks_wlan_get_eeprom_cksum(struct net_device *dev,
+-				    struct iw_request_info *info, __u32 *uwrq,
+-				    char *extra)
++				    struct iw_request_info *info,
++				    union iwreq_data *uwrq, char *extra)
+ {
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+ 
+-	*uwrq = priv->eeprom_checksum;
++	uwrq->mode = priv->eeprom_checksum;
+ 	return 0;
+ }
+ 
+@@ -2302,7 +2306,7 @@ static void print_hif_event(struct net_device *dev, int event)
+ 
+ /* get host command history */
+ static int ks_wlan_hostt(struct net_device *dev, struct iw_request_info *info,
+-			 __u32 *uwrq, char *extra)
++			 union iwreq_data *uwrq, char *extra)
+ {
+ 	int i, event;
+ 	struct ks_wlan_private *priv = netdev_priv(dev);
+@@ -2409,38 +2413,38 @@ static const iw_handler ks_wlan_handler[] = {
+ 
+ /* private_handler */
+ static const iw_handler ks_wlan_private_handler[] = {
+-	(iw_handler)NULL,			/* 0 */
+-	(iw_handler)NULL,			/* 1, KS_WLAN_GET_DRIVER_VERSION */
+-	(iw_handler)NULL,			/* 2 */
+-	(iw_handler)ks_wlan_get_firmware_version,/* 3 KS_WLAN_GET_FIRM_VERSION */
+-	(iw_handler)ks_wlan_set_wps_enable,	/* 4 KS_WLAN_SET_WPS_ENABLE */
+-	(iw_handler)ks_wlan_get_wps_enable,	/* 5 KS_WLAN_GET_WPS_ENABLE */
+-	(iw_handler)ks_wlan_set_wps_probe_req,	/* 6 KS_WLAN_SET_WPS_PROBE_REQ */
+-	(iw_handler)ks_wlan_get_eeprom_cksum,	/* 7 KS_WLAN_GET_CONNECT */
+-	(iw_handler)ks_wlan_set_preamble,	/* 8 KS_WLAN_SET_PREAMBLE */
+-	(iw_handler)ks_wlan_get_preamble,	/* 9 KS_WLAN_GET_PREAMBLE */
+-	(iw_handler)ks_wlan_set_power_mgmt,	/* 10 KS_WLAN_SET_POWER_SAVE */
+-	(iw_handler)ks_wlan_get_power_mgmt,	/* 11 KS_WLAN_GET_POWER_SAVE */
+-	(iw_handler)ks_wlan_set_scan_type,	/* 12 KS_WLAN_SET_SCAN_TYPE */
+-	(iw_handler)ks_wlan_get_scan_type,	/* 13 KS_WLAN_GET_SCAN_TYPE */
+-	(iw_handler)ks_wlan_set_rx_gain,	/* 14 KS_WLAN_SET_RX_GAIN */
+-	(iw_handler)ks_wlan_get_rx_gain,	/* 15 KS_WLAN_GET_RX_GAIN */
+-	(iw_handler)ks_wlan_hostt,		/* 16 KS_WLAN_HOSTT */
+-	(iw_handler)NULL,			/* 17 */
+-	(iw_handler)ks_wlan_set_beacon_lost,	/* 18 KS_WLAN_SET_BECAN_LOST */
+-	(iw_handler)ks_wlan_get_beacon_lost,	/* 19 KS_WLAN_GET_BECAN_LOST */
+-	(iw_handler)ks_wlan_set_tx_gain,	/* 20 KS_WLAN_SET_TX_GAIN */
+-	(iw_handler)ks_wlan_get_tx_gain,	/* 21 KS_WLAN_GET_TX_GAIN */
+-	(iw_handler)ks_wlan_set_phy_type,	/* 22 KS_WLAN_SET_PHY_TYPE */
+-	(iw_handler)ks_wlan_get_phy_type,	/* 23 KS_WLAN_GET_PHY_TYPE */
+-	(iw_handler)ks_wlan_set_cts_mode,	/* 24 KS_WLAN_SET_CTS_MODE */
+-	(iw_handler)ks_wlan_get_cts_mode,	/* 25 KS_WLAN_GET_CTS_MODE */
+-	(iw_handler)NULL,			/* 26 */
+-	(iw_handler)NULL,			/* 27 */
+-	(iw_handler)ks_wlan_set_sleep_mode,	/* 28 KS_WLAN_SET_SLEEP_MODE */
+-	(iw_handler)ks_wlan_get_sleep_mode,	/* 29 KS_WLAN_GET_SLEEP_MODE */
+-	(iw_handler)NULL,			/* 30 */
+-	(iw_handler)NULL,			/* 31 */
++	NULL,				/* 0 */
++	NULL,				/* 1, KS_WLAN_GET_DRIVER_VERSION */
++	NULL,				/* 2 */
++	ks_wlan_get_firmware_version,	/* 3 KS_WLAN_GET_FIRM_VERSION */
++	ks_wlan_set_wps_enable,		/* 4 KS_WLAN_SET_WPS_ENABLE */
++	ks_wlan_get_wps_enable,		/* 5 KS_WLAN_GET_WPS_ENABLE */
++	ks_wlan_set_wps_probe_req,	/* 6 KS_WLAN_SET_WPS_PROBE_REQ */
++	ks_wlan_get_eeprom_cksum,	/* 7 KS_WLAN_GET_CONNECT */
++	ks_wlan_set_preamble,		/* 8 KS_WLAN_SET_PREAMBLE */
++	ks_wlan_get_preamble,		/* 9 KS_WLAN_GET_PREAMBLE */
++	ks_wlan_set_power_mgmt,		/* 10 KS_WLAN_SET_POWER_SAVE */
++	ks_wlan_get_power_mgmt,		/* 11 KS_WLAN_GET_POWER_SAVE */
++	ks_wlan_set_scan_type,		/* 12 KS_WLAN_SET_SCAN_TYPE */
++	ks_wlan_get_scan_type,		/* 13 KS_WLAN_GET_SCAN_TYPE */
++	ks_wlan_set_rx_gain,		/* 14 KS_WLAN_SET_RX_GAIN */
++	ks_wlan_get_rx_gain,		/* 15 KS_WLAN_GET_RX_GAIN */
++	ks_wlan_hostt,			/* 16 KS_WLAN_HOSTT */
++	NULL,				/* 17 */
++	ks_wlan_set_beacon_lost,	/* 18 KS_WLAN_SET_BECAN_LOST */
++	ks_wlan_get_beacon_lost,	/* 19 KS_WLAN_GET_BECAN_LOST */
++	ks_wlan_set_tx_gain,		/* 20 KS_WLAN_SET_TX_GAIN */
++	ks_wlan_get_tx_gain,		/* 21 KS_WLAN_GET_TX_GAIN */
++	ks_wlan_set_phy_type,		/* 22 KS_WLAN_SET_PHY_TYPE */
++	ks_wlan_get_phy_type,		/* 23 KS_WLAN_GET_PHY_TYPE */
++	ks_wlan_set_cts_mode,		/* 24 KS_WLAN_SET_CTS_MODE */
++	ks_wlan_get_cts_mode,		/* 25 KS_WLAN_GET_CTS_MODE */
++	NULL,				/* 26 */
++	NULL,				/* 27 */
++	ks_wlan_set_sleep_mode,		/* 28 KS_WLAN_SET_SLEEP_MODE */
++	ks_wlan_get_sleep_mode,		/* 29 KS_WLAN_GET_SLEEP_MODE */
++	NULL,				/* 30 */
++	NULL,				/* 31 */
+ };
+ 
+ static const struct iw_handler_def ks_wlan_handler_def = {
+@@ -2461,7 +2465,7 @@ static int ks_wlan_netdev_ioctl(struct net_device *dev, struct ifreq *rq,
+ 
+ 	switch (cmd) {
+ 	case SIOCIWFIRSTPRIV + 20:	/* KS_WLAN_SET_STOP_REQ */
+-		ret = ks_wlan_set_stop_request(dev, NULL, &wrq->u.mode, NULL);
++		ret = ks_wlan_set_stop_request(dev, NULL, &wrq->u, NULL);
+ 		break;
+ 		// All other calls are currently unsupported
+ 	default:
+-- 
+2.34.1
 
