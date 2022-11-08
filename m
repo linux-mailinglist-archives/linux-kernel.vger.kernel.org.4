@@ -2,159 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E417262176C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440B6621762
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234169AbiKHOx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S233996AbiKHOvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiKHOxX (ORCPT
+        with ESMTP id S233472AbiKHOvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:53:23 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20908FFE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:53:22 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8DT0d5020165;
-        Tue, 8 Nov 2022 14:51:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=Kq+EwDS9klVR2KEyoheGgm0wHLEBe3hpZ7mOespCuYA=;
- b=qw6QeK1swq6A+IpyvnkndjGcI7qBDQs5h9NeQgUwmymEedAoGLzYfYsyIWNuG9Y02fcF
- jJrtY18OoWnx6Hq+DbQOnCkgHCvdzTqQBRtMBepepfK8lgm+o3zn7TIRkEvlVgt6j5E5
- pcH2unbOlSIkzReAFsza6VKaABhbHGlaoMSK4a1ttdbhAfkmwHH/PqmIyqBNkoq8kebY
- RttTLwsm9ZppxHzfBur6BnSLXQuWnI+gqWBlaCLieknTsIAfkL2i/W0bvnGRyQSrFFj/
- o6Bpzwdh3vCjks8JkwS6q+rVdQDDawzNd0lhkmULA8BLy5UQ1WlSaDZC5uJacOHbXB9P lQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkhm3h78-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 14:51:09 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A8CUCrI002463;
-        Tue, 8 Nov 2022 14:51:09 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkhm3h5m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 14:51:08 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A8Eo5d2013960;
-        Tue, 8 Nov 2022 14:51:06 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3kngqgca96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 14:51:06 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A8Ep3rq25559416
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Nov 2022 14:51:03 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 126574C046;
-        Tue,  8 Nov 2022 14:51:03 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E66404C040;
-        Tue,  8 Nov 2022 14:51:00 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Tue,  8 Nov 2022 14:51:00 +0000 (GMT)
-Date:   Tue, 8 Nov 2022 20:21:00 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vishal Chourasia <vishalc@linux.vnet.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        vincent.guittot@linaro.org, vschneid@redhat.com,
-        sshegde@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        ritesh.list@gmail.com, aneesh.kumar@linux.ibm.com
-Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
-Message-ID: <20221108145100.GG145013@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
- <Y01sk3l8yCMvhvYm@kroah.com>
- <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y06ISBWhJflnV+NI@kroah.com>
- <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y1jbhCYfktL51zNB@kroah.com>
- <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
- <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y2pKh3H0Ukvmfuco@kroah.com>
+        Tue, 8 Nov 2022 09:51:48 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1677E9FFF;
+        Tue,  8 Nov 2022 06:51:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1667919107; x=1699455107;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HsdY6zCJIEKANfpIY5U3ik/vL6pjeUx8wwQCo5HbjZw=;
+  b=ILnaklCD4f23o3CD7ICcqVmKnahB+PSWeA/eXeol11F2v2vPN5sK/wki
+   fpEqQ5iC+zaK1KYjhKU+wC6+H3Q8KR+g5AUtNnHYwOq7oBLPzAalHLJYO
+   6VGXzlOESXot6L3sb/sH7VcwOMi1ji/dsLGecBXIpecl4h28Nfw1lWKo6
+   Q=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Nov 2022 06:51:46 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.45.79.139])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 06:51:46 -0800
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
+ 06:51:42 -0800
+Message-ID: <9ed3e7f6-9188-746c-2320-80fdb7d3b1c0@quicinc.com>
+Date:   Tue, 8 Nov 2022 20:21:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <Y2pKh3H0Ukvmfuco@kroah.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RMyJNhVWo8VVHgJd8McL9rYsOSeF2_Te
-X-Proofpoint-GUID: LgwVsDUfh8tUESdaAx-ZLClqfNPU_ZDa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- phishscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0
- impostorscore=0 priorityscore=1501 clxscore=1011 spamscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211080087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v5 4/4] rcu: Add RCU stall diagnosis information
+Content-Language: en-US
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Robert Elliott <elliott@hpe.com>
+References: <20221104141118.119-1-thunder.leizhen@huawei.com>
+ <20221104141118.119-5-thunder.leizhen@huawei.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20221104141118.119-5-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> [2022-11-08 13:24:39]:
+Hi,
 
-> On Tue, Nov 08, 2022 at 03:30:46PM +0530, Vishal Chourasia wrote:
+On 11/4/2022 7:41 PM, Zhen Lei wrote:
+> In some extreme cases, such as the I/O pressure test, the CPU usage may
+> be 100%, causing RCU stall. In this case, the printed information about
+> current is not useful. Displays the number and usage of hard interrupts,
 
-Hi Greg, 
+Displaying
 
-> > 
-> > Thanks Greg & Peter for your direction. 
-> > 
-> > While we pursue the idea of having debugfs based on kernfs, we thought about
-> > having a boot time parameter which would disable creating and updating of the
-> > sched_domain debugfs files and this would also be useful even when the kernfs
-> > solution kicks in, as users who may not care about these debugfs files would
-> > benefit from a faster CPU hotplug operation.
+> soft interrupts, and context switches that are generated within half of
+> the CPU stall timeout, can help us make a general judgment. In other
+> cases, we can preliminarily determine whether an infinite loop occurs
+> when local_irq, local_bh or preempt is disabled.
 > 
-> Ick, no, you would be adding a new user/kernel api that you will be
-> required to support for the next 20+ years.  Just to get over a
-> short-term issue before you solve the problem properly.
+> For example:
+> rcu: INFO: rcu_preempt self-detected stall on CPU
+> rcu:     0-....: (1250 ticks this GP) <omitted>
+> rcu:          hardirqs   softirqs   csw/system
+> rcu:  number:      624         45            0
+> rcu: cputime:       69          1         2425   ==> 2500(ms)
 > 
-> If you really do not want these debugfs files, just disable debugfs from
-> your system.  That should be a better short-term solution, right?
+> The example above shows that the number of hard and soft interrupts is
+> small, there is zero context switching, and the system takes up a lot of
+> time. We can quickly conclude that the current task is infinitely looped
+> with preempt_disable().
 > 
-> Or better yet, disable SCHED_DEBUG, why can't you do that?
+> The impact on system performance is negligible because snapshot is
+> recorded only one time after 1/2 CPU stall timeout.
+> 
+> This enhanced debugging information is suppressed by default and can be
+> enabled by CONFIG_RCU_CPU_STALL_DEEP_DEBUG=y or
+> rcupdate.rcu_cpu_stall_deep_debug=1.
 
-Thanks a lot for your quick inputs.
-
-CONFIG_SCHED_DEBUG disables a lot more stuff than just updation of debugfs
-files. Information like /sys/kernel/debug/sched/debug and system-wide and
-per process wide information would be lost when that config is disabled.
-
-Most users would still be using distribution kernels and most distribution
-kernels that I know of seem to have CONFIG_SCHED_DEBUG enabled.
-
-In a large system, lets say close to 2000 CPUs and we are offlining around
-1750 CPUs. For example ppc64_cpu --smt=1  on a powerpc. Even if we move to a
-lesser overhead kernfs based implementation, we would still be creating
-files and deleting files for every CPU offline. Most users may not even be
-aware of these files. However for a few users who may be using these files
-once a while, we end up creating and deleting these files for all users. The
-overhead increases exponentially with the number of CPUs. I would assume the
-max number of CPUs are going to increase in future further.
-
-Hence our approach was to reduce the overhead for those users who are sure
-they don't depend on these files. We still keep the creating of the files as
-the default approach so that others who depend on it are not going to be
-impacted.
+CONFIG_RCU_CPU_STALL_CPUTIME ??
+rcupdate.rcu_cpu_stall_cputime ??
 
 > 
-> thanks,
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>   .../admin-guide/kernel-parameters.txt         |  5 +++
+>   kernel/rcu/Kconfig.debug                      | 10 ++++++
+>   kernel/rcu/rcu.h                              |  1 +
+>   kernel/rcu/tree.c                             | 16 ++++++++++
+>   kernel/rcu/tree.h                             | 17 ++++++++++
+>   kernel/rcu/tree_stall.h                       | 31 +++++++++++++++++++
+>   kernel/rcu/update.c                           |  2 ++
+>   7 files changed, 82 insertions(+)
 > 
-> greg k-h
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index a465d5242774af8..f7c0cfd1cdcacd3 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5082,6 +5082,11 @@
+>   			rcupdate.rcu_cpu_stall_timeout to be used (after
+>   			conversion from seconds to milliseconds).
+>   
+> +	rcupdate.rcu_cpu_stall_cputime= [KNL]
+> +			Provide statistics on the cputime and count of
+> +			interrupts and tasks during the second half of
+> +			rcu stall timeout.
+> +
+>   	rcupdate.rcu_expedited= [KNL]
+>   			Use expedited grace-period primitives, for
+>   			example, synchronize_rcu_expedited() instead
+> diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
+> index 1b0c41d490f0588..cd7190d6b34e790 100644
+> --- a/kernel/rcu/Kconfig.debug
+> +++ b/kernel/rcu/Kconfig.debug
+> @@ -95,6 +95,16 @@ config RCU_EXP_CPU_STALL_TIMEOUT
+>   	  says to use the RCU_CPU_STALL_TIMEOUT value converted from
+>   	  seconds to milliseconds.
+>   
+> +config RCU_CPU_STALL_CPUTIME
+> +	bool "Provide additional rcu stall debug information"
+> +	depends on RCU_STALL_COMMON
+> +	default n
+> +	help
+> +	  Statistics during the period from RCU_CPU_STALL_TIMEOUT/2 to
+> +	  RCU_CPU_STALL_TIMEOUT, such as the number of (hard interrupts, soft
+> +	  interrupts, task switches) and the cputime of (hard interrupts, soft
+> +	  interrupts, kerenl tasks) are added to the rcu stall report.
+Kernel ?
 
--- 
-Thanks and Regards
-Srikar Dronamraju
+> +
+>   config RCU_TRACE
+>   	bool "Enable tracing for RCU"
+>   	depends on DEBUG_KERNEL
+> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+> index 65704cbc9df7b3d..70c79adfdc7046c 100644
+> --- a/kernel/rcu/rcu.h
+> +++ b/kernel/rcu/rcu.h
+> @@ -224,6 +224,7 @@ extern int rcu_cpu_stall_ftrace_dump;
+>   extern int rcu_cpu_stall_suppress;
+>   extern int rcu_cpu_stall_timeout;
+>   extern int rcu_exp_cpu_stall_timeout;
+> +extern int rcu_cpu_stall_cputime;
+>   int rcu_jiffies_till_stall_check(void);
+>   int rcu_exp_jiffies_till_stall_check(void);
+>   
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index c8ed24933b69c8c..93c286b98c8f03d 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -925,6 +925,22 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
+>   			rdp->rcu_iw_gp_seq = rnp->gp_seq;
+>   			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
+>   		}
+> +
+> +		if (rcu_cpu_stall_cputime && rdp->snap_record.gp_seq != rdp->gp_seq) {
+> +			u64 *cpustat;
+> +			struct rcu_snap_record *rsrp;
+> +
+> +			cpustat = kcpustat_cpu(rdp->cpu).cpustat;
+> +
+> +			rsrp = &rdp->snap_record;
+> +			rsrp->cputime_irq     = cpustat[CPUTIME_IRQ];
+> +			rsrp->cputime_softirq = cpustat[CPUTIME_SOFTIRQ];
+> +			rsrp->cputime_system  = cpustat[CPUTIME_SYSTEM];
+> +			rsrp->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
+> +			rsrp->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
+> +			rsrp->nr_csw = nr_context_switches_cpu(rdp->cpu);
+> +			rsrp->gp_seq = rdp->gp_seq;
+> +		}
+>   	}
+>   
+>   	return 0;
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index fcb5d696eb1700d..fa159a951ded42e 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -158,6 +158,22 @@ union rcu_noqs {
+>   	u16 s; /* Set of bits, aggregate OR here. */
+>   };
+>   
+> +/*
+> + * Record the snapshot of the core stats at 1/2 rcu stall timeout. The member
+> + * gp_seq is used to ensure that all members are updated only once during the
+> + * second half period. The snapshot is taken only if this gp_seq is not equal
+> + * to rdp->gp_seq.
+> + */
+> +struct rcu_snap_record {
+> +	unsigned long	gp_seq;		/* Track rdp->gp_seq counter */
+> +	u64		cputime_irq;	/* Accumulated cputime of hard irqs */
+> +	u64		cputime_softirq;/* Accumulated cputime of soft irqs */
+> +	u64		cputime_system; /* Accumulated cputime of kernel tasks */
+> +	unsigned long	nr_hardirqs;	/* Accumulated number of hard irqs */
+> +	unsigned int	nr_softirqs;	/* Accumulated number of soft irqs */
+> +	unsigned long long nr_csw;	/* Accumulated number of task switches */
+> +};
+> +
+>   /* Per-CPU data for read-copy update. */
+>   struct rcu_data {
+>   	/* 1) quiescent-state and grace-period handling : */
+> @@ -262,6 +278,7 @@ struct rcu_data {
+>   	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
+>   	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
+>   	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
+> +	struct rcu_snap_record snap_record; /* Snapshot of core stats at 1/2 rcu stall timeout */
+>   
+>   	long lazy_len;			/* Length of buffered lazy callbacks. */
+>   	int cpu;
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index 5653560573e22d6..2e560a70d88fd87 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -428,6 +428,35 @@ static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp
+>   	return j > 2 * HZ;
+>   }
+>   
+> +static void print_cpu_stat_info(int cpu)
+> +{
+> +	u64 *cpustat;
+> +	unsigned long half_timeout;
+> +	struct rcu_snap_record *rsrp;
+> +	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+> +
+> +	if (!rcu_cpu_stall_cputime)
+> +		return;
+> +
+> +	rsrp = &rdp->snap_record;
+> +	if (rsrp->gp_seq != rdp->gp_seq)
+> +		return;
+> +
+> +	cpustat = kcpustat_cpu(cpu).cpustat;
+> +	half_timeout = rcu_jiffies_till_stall_check() / 2;
+> +
+> +	pr_err("         hardirqs   softirqs   csw/system\n");
+> +	pr_err(" number: %8ld %10d %12lld\n",
+> +		kstat_cpu_irqs_sum(cpu) - rsrp->nr_hardirqs,
+> +		kstat_cpu_softirqs_sum(cpu) - rsrp->nr_softirqs,
+> +		nr_context_switches_cpu(cpu) - rsrp->nr_csw);
+> +	pr_err("cputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
+> +		div_u64(cpustat[CPUTIME_IRQ] - rsrp->cputime_irq, NSEC_PER_MSEC),
+> +		div_u64(cpustat[CPUTIME_SOFTIRQ] - rsrp->cputime_softirq, NSEC_PER_MSEC),
+> +		div_u64(cpustat[CPUTIME_SYSTEM] - rsrp->cputime_system, NSEC_PER_MSEC),
+> +		jiffies64_to_msecs(half_timeout));
+> +}
+> +
+>   /*
+>    * Print out diagnostic information for the specified stalled CPU.
+>    *
+> @@ -484,6 +513,8 @@ static void print_cpu_stall_info(int cpu)
+>   	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
+>   	       rcuc_starved ? buf : "",
+>   	       falsepositive ? " (false positive?)" : "");
+> +
+> +	print_cpu_stat_info(cpu);
+>   }
+>   
+>   /* Complain about starvation of grace-period kthread.  */
+> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+> index 738842c4886b235..aec76ccbe1e343b 100644
+> --- a/kernel/rcu/update.c
+> +++ b/kernel/rcu/update.c
+> @@ -508,6 +508,8 @@ int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
+>   module_param(rcu_cpu_stall_timeout, int, 0644);
+>   int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
+>   module_param(rcu_exp_cpu_stall_timeout, int, 0644);
+> +int rcu_cpu_stall_cputime __read_mostly = IS_ENABLED(CONFIG_RCU_CPU_STALL_CPUTIME);
+> +module_param(rcu_cpu_stall_cputime, int, 0644);
+>   #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
+>   
+>   // Suppress boot-time RCU CPU stall warnings and rcutorture writer stall
+
+
+Overall, ack the idea.
+
+
+-Mukesh
