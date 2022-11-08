@@ -2,151 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6C66216EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820356216FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbiKHOi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S234220AbiKHOlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:41:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiKHOiv (ORCPT
+        with ESMTP id S233826AbiKHOlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:38:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFB712AC8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:38:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59A6F615B2
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:38:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A6EC433C1;
-        Tue,  8 Nov 2022 14:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667918329;
-        bh=b06RHEoXPnJDhsGMEMR17ZoTZFIEJbYp2XZZpBaKs30=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Dg+vUj0wvoS76ihRQms745SlnPMub+4jKjvDl+1iiuw+Jf5CQTaYKSBkcA99YVJig
-         QuCeUzI4YS2M90uQ9fsz313ZKykgSpTMWflUdZhDnzh6Rnx7EXXciuTiPWZpn7V9A3
-         6eYFvW8EikBF/N96vge2+MmDnRv/RVLEKtgVk9ka9vCVLnSYNRK/3RgiGDzndxw1Ie
-         onqk6ah+gj2PcjZrwxQKyO6w1ok5oyNOBSthLL1nHjwkomGPKtDCj7uNNKY+EAcYna
-         IogSxYUYOqXPRaKSMeQ8+6fhJy4AF9HoF/4q0KA07VYqN13abmprpkYHcD2PHSltTj
-         PbgrGWS0AxgLQ==
-Date:   Tue, 8 Nov 2022 23:38:46 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Shang XiaoJing <shangxiaojing@huawei.com>
-Cc:     <rostedt@goodmis.org>, <zanussi@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] tracing: kprobe: Fix potential null-ptr-deref on
- trace_array in kprobe_event_gen_test_exit()
-Message-Id: <20221108233846.fcff734a2f4b1a2a091fb831@kernel.org>
-In-Reply-To: <20221108015130.28326-3-shangxiaojing@huawei.com>
-References: <20221108015130.28326-1-shangxiaojing@huawei.com>
-        <20221108015130.28326-3-shangxiaojing@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 8 Nov 2022 09:41:36 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0520911821
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:41:35 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E65741FB;
+        Tue,  8 Nov 2022 06:41:40 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.153])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42A683F73D;
+        Tue,  8 Nov 2022 06:41:33 -0800 (PST)
+Date:   Tue, 8 Nov 2022 14:41:26 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Adam Langley <agl@google.com>
+Subject: Re: [PATCH v2] arm64: Enable data independent timing (DIT) in the
+ kernel
+Message-ID: <Y2pqlmlro/aICn+u@FVFF77S0Q05N.cambridge.arm.com>
+References: <20221107172400.1851434-1-ardb@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107172400.1851434-1-ardb@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 09:51:30 +0800
-Shang XiaoJing <shangxiaojing@huawei.com> wrote:
+Hi Ard,
 
-> When test_gen_kprobe_cmd() failed after kprobe_event_gen_cmd_end(), it
-> will goto delete, which will call kprobe_event_delete() and release the
-> corresponding resource. However, the trace_array in gen_kretprobe_test
-> will point to the invalid resource. Set gen_kretprobe_test to NULL
-> after called kprobe_event_delete() to prevent null-ptr-deref.
+On Mon, Nov 07, 2022 at 06:24:00PM +0100, Ard Biesheuvel wrote:
+> The ARM architecture revision v8.4 introduces a data independent timing
+> control (DIT) which can be set at any exception level, and instructs the
+> CPU to avoid optimizations that may result in a correlation between the
+> execution time of certain instructions and the value of the data they
+> operate on.
 > 
-> BUG: kernel NULL pointer dereference, address: 0000000000000070
-> PGD 0 P4D 0
-> Oops: 0000 [#1] SMP PTI
-> CPU: 0 PID: 246 Comm: modprobe Tainted: G        W
-> 6.1.0-rc1-00174-g9522dc5c87da-dirty #248
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-> RIP: 0010:__ftrace_set_clr_event_nolock+0x53/0x1b0
-> Code: e8 82 26 fc ff 49 8b 1e c7 44 24 0c ea ff ff ff 49 39 de 0f 84 3c
-> 01 00 00 c7 44 24 18 00 00 00 00 e8 61 26 fc ff 48 8b 6b 10 <44> 8b 65
-> 70 4c 8b 6d 18 41 f7 c4 00 02 00 00 75 2f
-> RSP: 0018:ffffc9000159fe00 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: ffff88810971d268 RCX: 0000000000000000
-> RDX: ffff8881080be600 RSI: ffffffff811b48ff RDI: ffff88810971d058
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-> R10: ffffc9000159fe58 R11: 0000000000000001 R12: ffffffffa0001064
-> R13: ffffffffa000106c R14: ffff88810971d238 R15: 0000000000000000
-> FS:  00007f89eeff6540(0000) GS:ffff88813b600000(0000)
-> knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000070 CR3: 000000010599e004 CR4: 0000000000330ef0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __ftrace_set_clr_event+0x3e/0x60
->  trace_array_set_clr_event+0x35/0x50
->  ? 0xffffffffa0000000
->  kprobe_event_gen_test_exit+0xcd/0x10b [kprobe_event_gen_test]
->  __x64_sys_delete_module+0x206/0x380
->  ? lockdep_hardirqs_on_prepare+0xd8/0x190
->  ? syscall_enter_from_user_mode+0x1c/0x50
->  do_syscall_64+0x3f/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f89eeb061b7
+> The DIT bit is part of PSTATE, and is therefore context switched as
+> usual, given that it becomes part of the saved program state (SPSR) when
+> taking an exception. We have also defined a hwcap for DIT, and so user
+> space can discover already whether or nor DIT is available. This means
+> that, as far as user space is concerned, DIT is wired up and fully
+> functional.
 > 
-> Fixes: 64836248dda2 ("tracing: Add kprobe event command generation test module")
-> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
-
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
-> Cc: stable@vger.kernel.org
-> ---
-> changes in v2:
-> - add cc tag to stable@vger.kernel.org.
-> - set gen_kprobe_test to NULL instead of gen_kprobe_test->tr, so as
-> gen_kretprobe_test.
-> ---
->  kernel/trace/kprobe_event_gen_test.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> In the kernel, however, we never bothered with DIT: we disable at it
+> boot (i.e., INIT_PSTATE_EL1 has DIT cleared) and ignore the fact that we
+> might run with DIT enabled if user space happened to set it.
 > 
-> diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
-> index 1c98fafcf333..c736487fc0e4 100644
-> --- a/kernel/trace/kprobe_event_gen_test.c
-> +++ b/kernel/trace/kprobe_event_gen_test.c
-> @@ -143,6 +143,8 @@ static int __init test_gen_kprobe_cmd(void)
->  	kfree(buf);
->  	return ret;
->   delete:
-> +	if (trace_event_file_is_valid(gen_kprobe_test))
-> +		gen_kprobe_test = NULL;
->  	/* We got an error after creating the event, delete it */
->  	ret = kprobe_event_delete("gen_kprobe_test");
->  	goto out;
-> @@ -206,6 +208,8 @@ static int __init test_gen_kretprobe_cmd(void)
->  	kfree(buf);
->  	return ret;
->   delete:
-> +	if (trace_event_file_is_valid(gen_kretprobe_test))
-> +		gen_kretprobe_test = NULL;
->  	/* We got an error after creating the event, delete it */
->  	ret = kprobe_event_delete("gen_kretprobe_test");
->  	goto out;
+> Currently, we have no idea whether or not running privileged code with
+> DIT disabled on a CPU that implements support for it may result in a
+> side channel that exposes privileged data to unprivileged user space
+> processes, so let's be cautious and just enable DIT while running in the
+> kernel if supported by all CPUs.
+
+Thanks for respinning the wording!
+
+I have one minor nit below, but otherwise this looks good to me.
+
+> diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+> index f73f11b5504254be..f44579bca9f8107e 100644
+> --- a/arch/arm64/include/asm/cpufeature.h
+> +++ b/arch/arm64/include/asm/cpufeature.h
+> @@ -875,6 +875,11 @@ static inline bool cpu_has_pan(void)
+>  						    ID_AA64MMFR1_EL1_PAN_SHIFT);
+>  }
+>  
+> +static inline bool cpu_has_dit(void)
+> +{
+> +	return cpus_have_const_cap(ARM64_HAS_DIT);
+> +}
+
+Normally cpu_has_X() implies a local feature check, and cpus_have_X() tests for
+common support, so this should be cpus_have_dit().
+
+That said, this is only used in one place below, so we could use the CAP
+directly there without a wrapper.
+
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 7d301700d1a93692..1f3f52ce407fe942 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -90,20 +90,24 @@
+>   */
+>  #define pstate_field(op1, op2)		((op1) << Op1_shift | (op2) << Op2_shift)
+>  #define PSTATE_Imm_shift		CRm_shift
+> +#define SET_PSTATE(x, r)		__emit_inst(0xd500401f | PSTATE_ ## r | ((!!x) << PSTATE_Imm_shift))
+>  
+>  #define PSTATE_PAN			pstate_field(0, 4)
+>  #define PSTATE_UAO			pstate_field(0, 3)
+>  #define PSTATE_SSBS			pstate_field(3, 1)
+> +#define PSTATE_DIT			pstate_field(3, 2)
+>  #define PSTATE_TCO			pstate_field(3, 4)
+>  
+> -#define SET_PSTATE_PAN(x)		__emit_inst(0xd500401f | PSTATE_PAN | ((!!x) << PSTATE_Imm_shift))
+> -#define SET_PSTATE_UAO(x)		__emit_inst(0xd500401f | PSTATE_UAO | ((!!x) << PSTATE_Imm_shift))
+> -#define SET_PSTATE_SSBS(x)		__emit_inst(0xd500401f | PSTATE_SSBS | ((!!x) << PSTATE_Imm_shift))
+> -#define SET_PSTATE_TCO(x)		__emit_inst(0xd500401f | PSTATE_TCO | ((!!x) << PSTATE_Imm_shift))
+> +#define SET_PSTATE_PAN(x)		SET_PSTATE((x), PAN)
+> +#define SET_PSTATE_UAO(x)		SET_PSTATE((x), UAO)
+> +#define SET_PSTATE_SSBS(x)		SET_PSTATE((x), SSBS)
+> +#define SET_PSTATE_DIT(x)		SET_PSTATE((x), DIT)
+> +#define SET_PSTATE_TCO(x)		SET_PSTATE((x), TCO)
+
+Nice!
+
+[...]
+
+> diff --git a/arch/arm64/kernel/suspend.c b/arch/arm64/kernel/suspend.c
+> index 8b02d310838f9240..3032a82ea51a19f7 100644
+> --- a/arch/arm64/kernel/suspend.c
+> +++ b/arch/arm64/kernel/suspend.c
+> @@ -60,6 +60,8 @@ void notrace __cpu_suspend_exit(void)
+>  	 * PSTATE was not saved over suspend/resume, re-enable any detected
+>  	 * features that might not have been set correctly.
+>  	 */
+> +	if (cpu_has_dit())
+> +		set_pstate_dit(1);
+
+As above, I'd prefer if we either renamed cpu_has_dit() to cpus_have_dit(), or
+just open-coded this as:
+
+	if (cpus_have_const_cap(ARM64_HAS_DIT))
+		set_pstate_dit(1);
+
+With either of those options:
+
+  Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+I assume Will might fix that up when applying.
+
+Mark.
+
+>  	__uaccess_enable_hw_pan();
+>  
+>  	/*
+> diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+> index f1c0347ec31a85c7..a86ee376920a08dd 100644
+> --- a/arch/arm64/tools/cpucaps
+> +++ b/arch/arm64/tools/cpucaps
+> @@ -20,6 +20,7 @@ HAS_CNP
+>  HAS_CRC32
+>  HAS_DCPODP
+>  HAS_DCPOP
+> +HAS_DIT
+>  HAS_E0PD
+>  HAS_ECV
+>  HAS_EPAN
 > -- 
-> 2.17.1
+> 2.35.1
 > 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
