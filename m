@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EED662115C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5631E62115F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbiKHMsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S234035AbiKHMs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234163AbiKHMsb (ORCPT
+        with ESMTP id S234278AbiKHMst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:48:31 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19D25289F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:48:20 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id s24so20917947ljs.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4s4Z1WdUOPpLx6Zbqf7L1892zlqXckJCl3Ja/uP89L4=;
-        b=q4zKbmw94I9pKmSWoe1A3Z/AzqpYt6qpaN3SW9lzEWOqTY8eaaaJuqXM1wk6WGGLYM
-         7sI2uCTjDurSYYLQu1LE/8Rj4uHJGC+81xE4Q4OnEwH/uqCsLXMy1yiHuAhdbRxtjE5y
-         AaTHEEkEAzPsI+cVKXlTxV771Mkg7tCW4n6Urqq3KBG9y5jeZBV0q8dX132l6sNaOCb4
-         jQe5GMdRFVrP3Hyqq7uM5RI/fSmKBXO504+GUY+jokmW7j4Ztrhx7fRGiwyr8UWfopPy
-         MJ1e8STAA0bb7J07uwj3dFWVoiVfLcYqSIlFHs9W7OZfx09PfDB4zDzlNwDxgCq4HrBS
-         86Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4s4Z1WdUOPpLx6Zbqf7L1892zlqXckJCl3Ja/uP89L4=;
-        b=s4UnKqPulHEvPjwKIqXQQM+K6JFEaKbwo5eJhYVRQBd5LiKp3BojYr3hQ1MHBER5Yt
-         m09iP+NX5d+w/tFnxGNMNMHEZwFZ8QO76kZoyPKAjI30aPxxo4RXgOACMFYLco+d7F06
-         ftnUkiUTOoahQBwa+QtA0oD6b9ta6gk8/EzxX8dk0Pl1DiYVJ+PUnNjsozgfikWRdXWa
-         7f25ZpA7U6RCIqXKUxj1HWij8RRttBdK3iIQPE5cMYm1boWD+el32UMxCzPIet032w4o
-         RB6elrqUbaSEnx6R4wxtBzNI9m9cSptZFcVrOmgpzJ+A+rQv3ieHZcAWfo2exk6R4Aph
-         OFEA==
-X-Gm-Message-State: ACrzQf0qsXBMs7vHZ9sZorGB0aqFObPrDo9tmv1V88U2KurPS9Wgh119
-        s1cSXuebhaKJsN6kzJwcbvrv+Q==
-X-Google-Smtp-Source: AMsMyM6tlA5qzQlcNJ0y1TkIG//th+wyQ8gWeyik8VyEAXOPTD7CNbXS8/glvZgW2PFrCL59t12K8g==
-X-Received: by 2002:a05:651c:2d9:b0:277:14bc:da0 with SMTP id f25-20020a05651c02d900b0027714bc0da0mr18784418ljo.212.1667911699164;
-        Tue, 08 Nov 2022 04:48:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id a7-20020a2e88c7000000b0026daf4fc0f7sm1729753ljk.92.2022.11.08.04.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 04:48:18 -0800 (PST)
-Message-ID: <6a939e52-b69f-b30f-664d-dfb9f279b5dd@linaro.org>
-Date:   Tue, 8 Nov 2022 13:48:17 +0100
+        Tue, 8 Nov 2022 07:48:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14F81928B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:48:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FA3061522
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78680C4314F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667911725;
+        bh=/C+b508gAj/Q+BmeIpxPFXFveLDZojLGt927GrLKC/s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=T5XI5kDaxuWTZFlRoTxCxMjci3972mvKPT1Js/gWkB4QwmGvSLR9AwDBnJK2CZOvs
+         BpwvKvfXohfo44tUC4z7BDUfwN7o/4TG2+sVrKWmcuAssZ9lKqCVJTMJdTMqsBN8Sw
+         jSEBWQHBJJN221ZCDrWEAH3SAdopIIwNkZiQCFH7V19QjvVfWMXoNAH2fPCkgQUIOf
+         OqmjawYaRAToWUNGQg0XyvXtMeYb8HWpxyCKY8T7jOZqBbrSTA8VG31nARZqhIThup
+         yxF/ydBFHmxSrqHbX9W7ihHn/V+TW6EfUq7F0sL8CLT8hWGDrL2mb+nCpOPobmUnVi
+         s3wtUuAIC5eBw==
+Received: by mail-yb1-f174.google.com with SMTP id n85so11619892yba.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:48:45 -0800 (PST)
+X-Gm-Message-State: ANoB5pllAJAXpAYrAGHsrfSS27+SSIuxgR6ibImSLCXdPZo4tiMyP2Oc
+        pY6oyyLRN5pfYydGTJHpKTA0hY/ZO1LdF5PLhHg=
+X-Google-Smtp-Source: AA0mqf6aAqrZKqRWPUmWG7Y6EiQsDi9ZjRKXAfj/lEixKDnfne0KRvlHho7AtHsaSH9EO35/AhsJIFG/EbpEjWqqjdI=
+X-Received: by 2002:a25:2389:0:b0:6d8:7f81:edaf with SMTP id
+ j131-20020a252389000000b006d87f81edafmr7102372ybj.443.1667911724199; Tue, 08
+ Nov 2022 04:48:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 3/4] arm64: dts: qcom: sc7280: Remove redundant
- soundwire property
-Content-Language: en-US
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
-        robh+dt@kernel.org, broonie@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
-        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
-        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
-        konrad.dybcio@somainline.org, mka@chromium.org
-Cc:     Ratna Deepthi Kudaravalli <quic_rkudarav@quicinc.com>
-References: <1667911156-19238-1-git-send-email-quic_srivasam@quicinc.com>
- <1667911156-19238-4-git-send-email-quic_srivasam@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1667911156-19238-4-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20221106210225.2065371-1-ogabbay@kernel.org> <20221106210225.2065371-2-ogabbay@kernel.org>
+ <20221108124614.GA6397@linux.intel.com>
+In-Reply-To: <20221108124614.GA6397@linux.intel.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Tue, 8 Nov 2022 14:48:17 +0200
+X-Gmail-Original-Message-ID: <CAFCwf12D=nEsRyDvbEotXN6xCP+8FPu-d-heTQGzas9DwCPRSQ@mail.gmail.com>
+Message-ID: <CAFCwf12D=nEsRyDvbEotXN6xCP+8FPu-d-heTQGzas9DwCPRSQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 1/3] drivers/accel: define kconfig and register a
+ new major
+To:     Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,20 +82,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/11/2022 13:39, Srinivasa Rao Mandadapu wrote:
-> Remove redundant and undocumented property qcom,port-offset in
-> soundwire controller nodes.
-> This patch is required to avoid dtbs_check errors with
-> qcom,soundwie.yaml
+On Tue, Nov 8, 2022 at 2:46 PM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
+>
+> On Sun, Nov 06, 2022 at 11:02:23PM +0200, Oded Gabbay wrote:
+> > Add a new Kconfig for the accel subsystem. The Kconfig currently
+> > contains only the basic CONFIG_DRM_ACCEL option that will be used to
+> > decide whether to compile the accel registration code. Therefore, the
+> > kconfig option is defined as bool.
+> >
+> > The accel code will be compiled as part of drm.ko and will be called
+> > directly from the DRM core code. The reason we compile it as part of
+> > drm.ko and not as a separate module is because of cyclic dependency
+> > between drm.ko and the separate module (if it would have existed).
+> > This is due to the fact that DRM core code calls accel functions and
+> > vice-versa.
+> >
+> > The accelerator devices will be exposed to the user space with a new,
+> > dedicated major number - 261.
+> >
+> > The accel init function registers the new major number as a char device
+> > and create corresponding sysfs and debugfs root entries, similar to
+> > what is done in DRM init function.
+> >
+> > I added a new header called drm_accel.h to include/drm/, that will hold
+> > the prototypes of the drm_accel.c functions. In case CONFIG_DRM_ACCEL
+> > is set to 'N', that header will contain empty inline implementations of
+> > those functions, to allow DRM core code to compile successfully
+> > without dependency on CONFIG_DRM_ACCEL.
+> >
+> > I Updated the MAINTAINERS file accordingly with the newly added folder
+> > and I have taken the liberty to appropriate the dri-devel mailing list
+> > and the dri-devel IRC channel for the accel subsystem.
+> >
+> > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+>
+> Tested-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+>
+> I tested those patches with intel_vpu driver. After initial troubles,
+> I got things worked with our driver and user mode components.
+>
+> Regards
+> Stanislaw
 
-> 
-> Fixes: 12ef689f09ab ("arm64: dts: qcom: sc7280: Add nodes for soundwire and va tx rx digital macro codecs")
-> 
-
-Same two comments as patch #2.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Thanks!
+Great to hear that.
+Oded
