@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC80A620AB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CDA620AFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233681AbiKHHt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 02:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S233664AbiKHIOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiKHHtW (ORCPT
+        with ESMTP id S229843AbiKHIOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 02:49:22 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314FA13D3F;
-        Mon,  7 Nov 2022 23:49:22 -0800 (PST)
+        Tue, 8 Nov 2022 03:14:30 -0500
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Nov 2022 00:14:28 PST
+Received: from zm-mta-out-3.u-ga.fr (zm-mta-out-3.u-ga.fr [152.77.200.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA2A20191;
+        Tue,  8 Nov 2022 00:14:28 -0800 (PST)
+Received: from mailhub.u-ga.fr (mailhub-1.u-ga.fr [129.88.178.98])
+        by zm-mta-out-3.u-ga.fr (Postfix) with ESMTP id E97F140388;
+        Tue,  8 Nov 2022 08:55:04 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667893762; x=1699429762;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rDiKYYjFpjjWtrYxiCT/r9k/W3/JQ0t2Kz7s3ZTXOAY=;
-  b=OGYPdk5HR54T6Nok04p9yKDoruiDGhvy/1O5LKFej1fCCuzldNF3+qzP
-   aEyC1hD9GRCq1T3qGHRVd8JgqmJKqjV5Vq6wH2FIDt/mi92cfv7YIuwfS
-   QziVKOqrwWJrLxGcmG5mTMwC6/wx/Pjdf/Ha8eUZtuZ54bKolXDkrNSSV
-   ST7UaxzYXFyz2fCDFLs607BOoSKTGdi2F1C2lzsmNNFG24rSwBR4eZ3wP
-   eYAkb27iubQP3aSEsWk5Is/9AAe23LDFhNYl3iI8LOh5XeDg+FKUp0yHL
-   X95sAmjmpb6Lu94miqQTZkQP7eCYUPaSYpmudwBa0sxOgrGHahFWeJ1a6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="308252779"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="308252779"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 23:49:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="725470502"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="725470502"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Nov 2022 23:49:19 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5DCE9B7; Tue,  8 Nov 2022 09:49:43 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] at_hdmac: return actual status when txstatus parameter is NULL
-Date:   Tue,  8 Nov 2022 09:49:38 +0200
-Message-Id: <20221108074938.48853-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221108074938.48853-1-andriy.shevchenko@linux.intel.com>
-References: <20221108074938.48853-1-andriy.shevchenko@linux.intel.com>
+        d=univ-grenoble-alpes.fr; s=2020; t=1667894104;
+        bh=CifegeMCjXZQIpdO+ZEFHnXLYSNMGD8TGBz3ntYzCk4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=M9e07P2kLBWj/+Uoas4G4ukBBAhMtEvltORoInAIUwOv/kYb7r0m/QK/mgGEbnt9L
+         vUk2yzDN6koFWiywXVim5q1+KXnXaI3SwsDnhphFBnLeHR3He9RZWBOpFuxllR6d6F
+         KPYoTM7IMOIxe/6rohzAsGdKDyQzNoV6sYgpu5YSrDvDvjuXf75fqVwKT8hqVhPWTQ
+         tHPHVDxrg4ZSrN3aymcowwu/pEADWq6afZD9djULZh5ugSKz06fWnlBOtgfpprQxXJ
+         hKZe36ejGrwuATY9jWVquT9oFF/rVlaga5W/sHWnyaAVAKpYh34DPBmLxAwUgMmIQ+
+         pRng8whQopcDg==
+Received: from smtps.univ-grenoble-alpes.fr (smtps3.u-ga.fr [195.83.24.62])
+        by mailhub.u-ga.fr (Postfix) with ESMTP id E663D10005A;
+        Tue,  8 Nov 2022 08:55:04 +0100 (CET)
+Received: from [192.168.1.50] (amontpellier-653-1-4-7.w92-145.abo.wanadoo.fr [92.145.106.7])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: palixn@univ-grenoble-alpes.fr)
+        by smtps.univ-grenoble-alpes.fr (Postfix) with ESMTPSA id 70BDD40050;
+        Tue,  8 Nov 2022 08:55:04 +0100 (CET)
+Message-ID: <2fcd7fdb-7984-a2b7-7995-d164754c5eb2@univ-grenoble-alpes.fr>
+Date:   Tue, 8 Nov 2022 08:55:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [cocci] [PATCH] coccinelle: api: Don't use
+ devm_platform_get_and_ioremap_resource with res==NULL
+Content-Language: fr
+To:     Julia Lawall <julia.lawall@inria.fr>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Markus Elfring <Markus.Elfring@web.de>, cocci@inria.fr,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        nicolas palix <nicolas.palix@imag.fr>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel@pengutronix.de
+References: <20221107114702.15706-1-u.kleine-koenig@pengutronix.de>
+ <bd13da2d-6d18-4f33-0987-a193e3c9b761@web.de>
+ <20221107200815.u7hcwejileeabnct@pengutronix.de>
+ <257596884.6156222.1667886713273.JavaMail.zimbra@inria.fr>
+From:   Nicolas Palix <nicolas.palix@univ-grenoble-alpes.fr>
+In-Reply-To: <257596884.6156222.1667886713273.JavaMail.zimbra@inria.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no point to return DMA_ERROR if txstatus parameter is NULL. It's a
-valid case and should be handled correspondingly.
+Hi all,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/dma/at_hdmac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 08/11/2022 06:51, Julia Lawall wrote:
+> 
+>> After uninstalling python2 this ends in:
+>>
+>> 	Cannot find Python library
+>> 	coccicheck failed
+>> 	make: *** [Makefile:2076: coccicheck] Error 255
+>>
+>> Didn't try to debug that any further. Is that worth a bug report against
+>> coccinelle (which is shipped by my distribution)?
+>>
+>> I tried to adapt the org and report modes from other patches in the same
+>> directory. So a critical glimpse by someone more knowledgable than me is
+>> recommended. However I don't know how to react to "I doubt ... is
+>> appropriate", I'd need a more constructive feedback to act on.
+> 
+> I'm not a python expert, so I'm not sure what to do about this python2 vs python3 problem.  Is there some strategy for printing that works in both of them?
 
-diff --git a/drivers/dma/at_hdmac.c b/drivers/dma/at_hdmac.c
-index a9d8dd990d6e..4035d5438530 100644
---- a/drivers/dma/at_hdmac.c
-+++ b/drivers/dma/at_hdmac.c
-@@ -1679,7 +1679,7 @@ atc_tx_status(struct dma_chan *chan,
- 	if (!txstate) {
- 		if (test_bit(ATC_IS_PAUSED, &atchan->status))
- 			return DMA_PAUSED;
--		return DMA_ERROR;
-+		return dma_status;
- 	}
- 
- 	spin_lock_irqsave(&atchan->vc.lock, flags);
+It sounds like a missing dependency in the package system of the 
+distribution. Coccinelle has been build with Python support, but
+some libraries are missing.
+
+Which distribution is it ?
+Can you install some packages that provide the two missing shared 
+librairies ?
+
+> 
+> julia
+
 -- 
-2.35.1
+Nicolas Palix
++33 4 574 21538
 
