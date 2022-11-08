@@ -2,257 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C77620E60
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B81EA620E6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiKHLPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S233805AbiKHLRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233629AbiKHLPT (ORCPT
+        with ESMTP id S232929AbiKHLRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:15:19 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1759611C17
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:15:15 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id s24so20566761ljs.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:15:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P3ZLCmxWvOh6TEjZjrnrV0zDBY9aQOqVbQrPCQaVAEk=;
-        b=WlHPlygiKtyT62slIvPbpfz+YDg3uwUYL7kuUpr0P4ikg+xjHYRdvsRpoOUFMUl/VR
-         nNCxYLM/ia4qVZuLlr3QB76vsCqD7JhhbJYMBPjbnWpAlgzMj9fMGLvuS99I4Myqtl48
-         AOBOIU2yFSAwSycSlW1K49U30XNmOudUQNtQn8YN4lVVXY5cvwzCoyR2vGBfzmpH9P2P
-         mfmw9WqVyD0BQ1Ko2O+I45oVecEwoSIm7KP/7n3tvTy6r1f//lr8HPLCj7LO5K3ZbjH7
-         vVvEFRiiSiLDHI9Gpc4FZVwIrZGSgGvPNuUZXqffZJMiL2SpsCasBtzLxvFL3DfvE0aL
-         7h/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P3ZLCmxWvOh6TEjZjrnrV0zDBY9aQOqVbQrPCQaVAEk=;
-        b=Wcr+V4HFEwvzMFKePqD7VCujrnKMZN9FV8glxL9N3QLz6deo54WbeQWoE7yn+7MhWz
-         wWfQF7Taby2CBeI0gE0WNSpjGii5qgVD8jKkoXU/KOhV2A6xnWblPkr88WHtPwtyzcJC
-         Yfq41sjgp+Ylgq2Kd8iKDZi4jA47kEft/ZtrDnwoyPYmJOybyKA4OA4scRts8CWQvCMU
-         8SI9qseGsd0+xAKyFFzrXdgVJuisVekPI448XTYrNTnE4oUFqwpTOkhSzq6CWGHQqIAp
-         Sq/URB7XDbsLlB5SWOaLF/0M8CItMuGLLE361jy8jbb5xYlwIvFmYWWEQDmfeDdMbZ8l
-         m36Q==
-X-Gm-Message-State: ACrzQf1WlNDvL/wfCtQ6Ko4fnEWpQUaod/LuMPoetRnZnsvW1dXlKME9
-        BlGHKGSA89Ws6EO1pTX1bpMt1A==
-X-Google-Smtp-Source: AMsMyM6C8QkOCZEfi1KXMfCOZLj5buP/8v1j6qCGkx9gYNA11mZiiiWjFjNA7/XWUJ6g/M4rGe+7OA==
-X-Received: by 2002:a05:651c:1c4:b0:277:5059:8298 with SMTP id d4-20020a05651c01c400b0027750598298mr17627642ljn.325.1667906113246;
-        Tue, 08 Nov 2022 03:15:13 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id f8-20020a2ea0c8000000b0025ebaef9570sm1698045ljm.40.2022.11.08.03.15.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 03:15:12 -0800 (PST)
-Message-ID: <1166e892-d630-fcd4-6931-212081819493@linaro.org>
-Date:   Tue, 8 Nov 2022 12:15:11 +0100
+        Tue, 8 Nov 2022 06:17:37 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29B917E1F;
+        Tue,  8 Nov 2022 03:17:35 -0800 (PST)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N65D55WTLzRp4y;
+        Tue,  8 Nov 2022 19:17:25 +0800 (CST)
+Received: from [10.174.179.106] (10.174.179.106) by
+ canpemm500004.china.huawei.com (7.192.104.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 19:17:32 +0800
+Subject: Re: [PATCH next 1/2] gpio: hisi: Add initial device tree support
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <f.fangjian@huawei.com>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <robh+dt@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20221026034219.172880-1-chenweilong@huawei.com>
+ <CACRpkdbfZoBsKhH-fDHbuiBMz=LuWJ5kRfRT9JupycJQLFzJZw@mail.gmail.com>
+From:   chenweilong <chenweilong@huawei.com>
+Message-ID: <33794563-ae4b-87e5-09df-d800268828f8@huawei.com>
+Date:   Tue, 8 Nov 2022 19:17:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] dt-bindings: input: Convert ti,drv260x to DT schema
+In-Reply-To: <CACRpkdbfZoBsKhH-fDHbuiBMz=LuWJ5kRfRT9JupycJQLFzJZw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-input@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Andrew Davis <afd@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221105141707.92652-1-luca@z3ntu.xyz>
- <Y2ldc33ByZB/T+kZ@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y2ldc33ByZB/T+kZ@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.179.106]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 20:33, Dmitry Torokhov wrote:
-> On Sat, Nov 05, 2022 at 03:17:06PM +0100, Luca Weiss wrote:
->> Convert the drv260x haptics binding to DT schema format.
+On 2022/11/8 18:33, Linus Walleij wrote:
+> Hi Weilong,
+>
+> thanks for your patch!
+>
+> On Wed, Oct 26, 2022 at 5:34 AM Weilong Chen <chenweilong@huawei.com> wrote:
+>
+>> Add support for HiSilicon GPIO controller in embedded platform, which
+>> boot from devicetree.
 >>
->> The only notable change from .txt format is that vbat-supply is not
->> actually required, so don't make it a required property.
->>
->> Acked-by: Andrew Davis <afd@ti.com>
->> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->> ---
->> Changes since v2:
->> * add default values for vib-*-mv
->> * add note about 'mode' property
->> * add enable-gpios, deprecate enable-gpio
->>
->>  .../devicetree/bindings/input/ti,drv260x.txt  |  50 --------
->>  .../devicetree/bindings/input/ti,drv260x.yaml | 109 ++++++++++++++++++
->>  2 files changed, 109 insertions(+), 50 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.txt
->>  create mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.txt b/Documentation/devicetree/bindings/input/ti,drv260x.txt
->> deleted file mode 100644
->> index 4c5312eaaa85..000000000000
->> --- a/Documentation/devicetree/bindings/input/ti,drv260x.txt
->> +++ /dev/null
->> @@ -1,50 +0,0 @@
->> -* Texas Instruments - drv260x Haptics driver family
->> -
->> -Required properties:
->> -	- compatible - One of:
->> -		"ti,drv2604" - DRV2604
->> -		"ti,drv2605" - DRV2605
->> -		"ti,drv2605l" - DRV2605L
->> -	- reg -  I2C slave address
->> -	- vbat-supply - Required supply regulator
->> -	- mode - Power up mode of the chip (defined in include/dt-bindings/input/ti-drv260x.h)
->> -		DRV260X_LRA_MODE - Linear Resonance Actuator mode (Piezoelectric)
->> -		DRV260X_LRA_NO_CAL_MODE - This is a LRA Mode but there is no calibration
->> -				sequence during init.  And the device is configured for real
->> -				time playback mode (RTP mode).
->> -		DRV260X_ERM_MODE - Eccentric Rotating Mass mode (Rotary vibrator)
->> -	- library-sel - These are ROM based waveforms pre-programmed into the IC.
->> -				This should be set to set the library to use at power up.
->> -				(defined in include/dt-bindings/input/ti-drv260x.h)
->> -		DRV260X_LIB_EMPTY - Do not use a pre-programmed library
->> -		DRV260X_ERM_LIB_A - Pre-programmed Library
->> -		DRV260X_ERM_LIB_B - Pre-programmed Library
->> -		DRV260X_ERM_LIB_C - Pre-programmed Library
->> -		DRV260X_ERM_LIB_D - Pre-programmed Library
->> -		DRV260X_ERM_LIB_E - Pre-programmed Library
->> -		DRV260X_ERM_LIB_F - Pre-programmed Library
->> -		DRV260X_LIB_LRA - Pre-programmed LRA Library
->> -
->> -Optional properties:
->> -	- enable-gpio - gpio pin to enable/disable the device.
->> -	- vib-rated-mv - The rated voltage of the actuator in millivolts.
->> -			  If this is not set then the value will be defaulted to
->> -			  3.2 v.
->> -	- vib-overdrive-mv - The overdrive voltage of the actuator in millivolts.
->> -			  If this is not set then the value will be defaulted to
->> -			  3.2 v.
->> -Example:
->> -
->> -haptics: haptics@5a {
->> -	compatible = "ti,drv2605l";
->> -	reg = <0x5a>;
->> -	vbat-supply = <&vbat>;
->> -	enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
->> -	mode = <DRV260X_LRA_MODE>;
->> -	library-sel = <DRV260X_LIB_LRA>;
->> -	vib-rated-mv = <3200>;
->> -	vib-overdrive-mv = <3200>;
->> -}
->> -
->> -For more product information please see the link below:
->> -http://www.ti.com/product/drv2605
->> diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.yaml b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
->> new file mode 100644
->> index 000000000000..63230977043e
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
->> @@ -0,0 +1,109 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/input/ti,drv260x.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments - drv260x Haptics driver family
->> +
->> +maintainers:
->> +  - Andrew Davis <afd@ti.com>
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ti,drv2604
->> +      - ti,drv2605
->> +      - ti,drv2605l
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  vbat-supply:
->> +    description: Power supply to the haptic motor
->> +
->> +  # TODO: Deprecate 'mode' in favor of differently named property
->> +  mode:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: |
->> +      Power up mode of the chip
->> +      (defined in include/dt-bindings/input/ti-drv260x.h)
->> +
->> +      DRV260X_LRA_MODE
->> +        Linear Resonance Actuator mode (Piezoelectric)
->> +
->> +      DRV260X_LRA_NO_CAL_MODE
->> +        This is a LRA Mode but there is no calibration sequence during init.
->> +        And the device is configured for real time playback mode (RTP mode).
->> +
->> +      DRV260X_ERM_MODE
->> +        Eccentric Rotating Mass mode (Rotary vibrator)
->> +    enum: [ 0, 1, 2 ]
->> +
->> +  library-sel:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: |
->> +      These are ROM based waveforms pre-programmed into the IC.
->> +      This should be set to set the library to use at power up.
->> +      (defined in include/dt-bindings/input/ti-drv260x.h)
->> +
->> +      DRV260X_LIB_EMPTY - Do not use a pre-programmed library
->> +      DRV260X_ERM_LIB_A - Pre-programmed Library
->> +      DRV260X_ERM_LIB_B - Pre-programmed Library
->> +      DRV260X_ERM_LIB_C - Pre-programmed Library
->> +      DRV260X_ERM_LIB_D - Pre-programmed Library
->> +      DRV260X_ERM_LIB_E - Pre-programmed Library
->> +      DRV260X_ERM_LIB_F - Pre-programmed Library
->> +      DRV260X_LIB_LRA - Pre-programmed LRA Library
->> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
->> +
->> +  enable-gpio:
->> +    maxItems: 1
->> +    deprecated: true
->> +
->> +  enable-gpios:
->> +    maxItems: 1
->> +
->> +  vib-rated-mv:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: |
->> +      The rated voltage of the actuator in millivolts.
->> +      If this is not set then the value will be defaulted to 3200 mV.
->> +    default: 3200
->> +
->> +  vib-overdrive-mv:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: |
->> +      The overdrive voltage of the actuator in millivolts.
->> +      If this is not set then the value will be defaulted to 3200 mV.
->> +    default: 3200
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - enable-gpio
-> 
-> It is weird to have a deprecated property listed in required list and
-> also in the example...
+>> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> I will provide OF comments, I let Andy and other ACPI experts say
+> what is necessary for ACPI.
+>
+> (...)
+>> +#include <linux/acpi.h>
+> I don't know if this is necessary, check it.
+>
+>>  #include <linux/gpio/driver.h>
+>>  #include <linux/module.h>
+>>  #include <linux/mod_devicetable.h>
+>> +#include <linux/of.h>
+> This is unnecessary for what you are trying to do. Drop it.
+>
+>> +#ifdef CONFIG_ACPI
+>>  static const struct acpi_device_id hisi_gpio_acpi_match[] = {
+>>         {"HISI0184", 0},
+>>         {}
+>>  };
+>>  MODULE_DEVICE_TABLE(acpi, hisi_gpio_acpi_match);
+>> +#endif
+> Don't know about this #ifdef, check if it is needed.
+>
+>> +#ifdef CONFIG_OF
+>> +static const struct of_device_id hisi_gpio_dts_match[] = {
+>> +       { .compatible = "hisilicon,gpio-ascend910", },
+>> +       { }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, hisi_gpio_dts_match);
+>> +#endif
+> Drop the ifdef, it is not needed.
+>
+>>  static void hisi_gpio_get_pdata(struct device *dev,
+>>                                 struct hisi_gpio *hisi_gpio)
+>> @@ -310,7 +322,8 @@ static int hisi_gpio_probe(struct platform_device *pdev)
+>>  static struct platform_driver hisi_gpio_driver = {
+>>         .driver         = {
+>>                 .name   = HISI_GPIO_DRIVER_NAME,
+>> -               .acpi_match_table = hisi_gpio_acpi_match,
+>> +               .acpi_match_table = ACPI_PTR(hisi_gpio_acpi_match),
+>> +               .of_match_table = of_match_ptr(hisi_gpio_dts_match),
+> Drop of_match_ptr() just assign it.
+>
+> The reason it works is because we put struct of_device_id into the generic
+> headers so we can avoid the ifdefing.
+>
+> Yours,
+> Linus Walleij
 
-Yep, this should be fixed.
+Thank for your review，I get it，and make  improvements in subsequent patches.
+
 
 Best regards,
-Krzysztof
+
+Weilong Chen.
+
+> .
+
 
