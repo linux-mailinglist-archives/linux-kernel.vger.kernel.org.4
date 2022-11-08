@@ -2,98 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4268A62118E
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D335E621195
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbiKHM4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:56:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S233962AbiKHM5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbiKHM4S (ORCPT
+        with ESMTP id S233437AbiKHM5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:56:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9E2202;
-        Tue,  8 Nov 2022 04:56:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6102EB81AC8;
-        Tue,  8 Nov 2022 12:56:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D463BC433C1;
-        Tue,  8 Nov 2022 12:56:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667912175;
-        bh=XvymLCJnXrNHYFs8X6SUfP/5VXUZ4pXi4sc7TkGbZ30=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ISLmN0DVWouF+XbXafAPUQeKdX2a7QdKnBpH3nY8K+cVITbJ3Lr8S6ulKHuIsxTPJ
-         b/wM/9VCEOO7f55HLi432H2ar3hYdU088HdKh+PM157cmOaAaEnK+5JkX5ug13lKiJ
-         tveEkvnvX3aGhG34N2ClTeGXRmLdYno5+2Wqo38gIyrzQuQdp/PZ57iflb+CXRRAnd
-         XfR16wO1OPGfpZeDKy1lk+6nL09vM+QMV0PM0+aHMRc/2kmoSajWgL0vieg3rf+aRp
-         Qp2GrIQUuYm4j5I3YdRbw07PTR2rbJv0HngMp0KvUzrnt5Y7qM/0naWlTtCCostKeN
-         WJj2zY5EdEMdQ==
-Date:   Tue, 8 Nov 2022 06:56:13 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com
-Subject: Re: [PATCH v4 0/5] PCI: endpoint: Rework the EPC to EPF notification
-Message-ID: <20221108125613.GA463696@bhelgaas>
+        Tue, 8 Nov 2022 07:57:14 -0500
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE57613F74
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:57:11 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id sOA7o2YX9XaejsOA7odE9X; Tue, 08 Nov 2022 13:57:09 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 08 Nov 2022 13:57:09 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <482e8394-ceac-658f-7a69-29033f805440@wanadoo.fr>
+Date:   Tue, 8 Nov 2022 13:57:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108121440.GA29115@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
+To:     ibrahim.tilki@analog.com
+Cc:     Zeynep.Arslanbenzer@analog.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux@roeck-us.net, robh+dt@kernel.org
+References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
+ <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 05:44:40PM +0530, Manivannan Sadhasivam wrote:
-> On Mon, Nov 07, 2022 at 02:28:53PM -0600, Bjorn Helgaas wrote:
-> > On Tue, Oct 25, 2022 at 08:20:56PM +0530, Manivannan Sadhasivam wrote:
-> > > Hello,
-> > > 
-> > > During the review of the patch that fixes DBI access in PCI EP, Rob
-> > > suggested [1] using a fixed interface for passing the events from EPC to
-> > > EPF instead of the in-kernel notifiers.
-> > 
-> > > Manivannan Sadhasivam (5):
-> > >   PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
-> > >   PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
-> > >   PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
-> > >   PCI: endpoint: Use callback mechanism for passing events from EPC to
-> > >     EPF
-> > >   PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
-> > > 
-> > >  drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
-> > >  drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
-> > >  drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
-> > >  drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
-> > >  include/linux/pci-epc.h                       | 10 +----
-> > >  include/linux/pci-epf.h                       | 19 ++++++----
-> > >  6 files changed, 59 insertions(+), 51 deletions(-)
-> > 
-> > Doesn't apply cleanly on v6.1-rc1.  Does it depend on something else?
+Le 08/11/2022 à 13:22, Ibrahim Tilki a écrit :
+> Adding support for Analog Devices MAX313XX series RTCs.
 > 
-> Yes, this patch:
-> https://lore.kernel.org/linux-pci/20220825090101.20474-1-hayashi.kunihiko@socionext.com/
-> 
-> Since this patch is already merged by Lorenzo, I based this series on top of
-> that. If that's not required, I can send a new version without that patch.
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
+> ---
 
-I think it's fine as-is.  
+[...]
 
-I tried applying it on both v6.1-rc1 and my current "next" branch.
-Both failed because I haven't merged Lorenzo's branch into "next" yet.
-As long as Lorenzo merges this on the correct branch, there's no
-problem.  
+> +static int max313xx_clkout_register(struct device *dev)
+> +{
+> +	struct max313xx *rtc = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	if (!device_property_present(dev, "#clock-cells"))
+> +		return 0;
+> +
+> +	max313xx_clk_init.name = rtc->chip->clkout_name;
+> +	device_property_read_string(dev, "clock-output-names",
+> +				    &max313xx_clk_init.name);
+> +	rtc->clkout.init = &max313xx_clk_init;
+> +
+> +	ret = devm_clk_hw_register(dev, &rtc->clkout);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "cannot register clock\n");
+> +
+> +	return of_clk_add_provider(dev->of_node, of_clk_src_simple_get,
+> +				   rtc->clkout.clk);
 
-Mentioning the dependency or what the patch is based on in the cover
-letter is the easiest way to make this smoother.
+Hi,
 
-Bjorn
+No devm like functionality here?
+
+devm_of_clk_add_hw_provider()? (not sure of the impact or not of the 
+"_hw_" in the function name)
+
+> +}
+
+[...]
+
+> +static int max313xx_irq_init(struct device *dev, const char *devname)
+> +{
+> +	struct max313xx *rtc = dev_get_drvdata(dev);
+> +	bool wakeup;
+> +	int ret;
+> +
+> +	rtc->irq = rtc->irqs[0];
+> +
+> +	switch (rtc->id) {
+> +	case ID_MAX31328:
+> +		/* max31328 sqw ant int pin is shared */
+> +		if (rtc->id == ID_MAX31328 && rtc->irq > 0 && rtc->clkout.clk)
+> +			return dev_err_probe(dev, -EOPNOTSUPP,
+> +					     "cannot have both sqw clock output and irq enabled");
+> +
+> +		break;
+> +	case ID_MAX31331:
+> +	case ID_MAX31334:
+> +		if (rtc->clkout.clk) {
+> +			/* clockout needs to be enabled for using INTA pin */
+> +			ret = clk_prepare_enable(rtc->clkout.clk);
+> +			if (ret)
+> +				return dev_err_probe(dev, ret,
+> +						     "cannot enable clkout\n");
+> +		} else {
+> +			rtc->irq = rtc->irqs[1];
+> +		}
+> +		break;
+> +	default:
+> +		if (rtc->clkin) {
+> +			rtc->irq = rtc->irqs[1];
+> +
+> +			/* wrong interrupt specified */
+> +			if (rtc->irqs[0] > 0 && rtc->irqs[1] <= 0)
+> +				dev_warn(dev, "INTA is specified but INTB required for irq when clkin is enabled\n");
+> +
+> +			if (rtc->clkout.clk && rtc->irq > 0)
+> +				return dev_err_probe(dev, -EOPNOTSUPP,
+> +						"irq not possible when both clkin and clkout are configured\n");
+> +
+> +			if (rtc->irq <= 0)
+> +				break;
+> +
+> +			/* clkout needs to be disabled for using INTB pin */
+> +			if (rtc->chip->clkout->en_invert)
+> +				ret = regmap_set_bits(rtc->regmap,
+> +						      rtc->chip->clkout->reg,
+> +						      rtc->chip->clkout->en_bit);
+> +			else
+> +				ret = regmap_clear_bits(rtc->regmap,
+> +							rtc->chip->clkout->reg,
+> +							rtc->chip->clkout->en_bit);
+> +
+> +			if (ret)
+> +				return ret;
+> +		}
+> +		break;
+> +	}
+> +
+> +	if (rtc->irq > 0) {
+> +		ret = devm_request_threaded_irq(dev, rtc->irq, NULL,
+> +						&max313xx_irq, IRQF_ONESHOT,
+> +						devname, rtc);
+> +		if (ret)
+> +			return ret;
+> +
+> +		wakeup = device_property_read_bool(dev, "wakeup-source");
+> +		return device_init_wakeup(dev, wakeup);
+> +	}
+> +
+> +	__clear_bit(RTC_FEATURE_ALARM, rtc->rtc->features);
+
+Is it safe? Does it worth it to use __clear_bit() instead of clear_bit() 
+here?
+
+> +
+> +	return 0;
+> +}
+
+[...]
+
+
