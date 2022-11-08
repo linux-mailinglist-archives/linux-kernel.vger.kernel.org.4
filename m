@@ -2,384 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C998621D1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66213621D21
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiKHTls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 14:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S229531AbiKHTma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 14:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiKHTlo (ORCPT
+        with ESMTP id S229452AbiKHTm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 14:41:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF0A7057F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 11:41:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D07F6173F
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:41:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59062C433D6;
-        Tue,  8 Nov 2022 19:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1667936502;
-        bh=h11BLOABoRmeXTPU3NUF80nlJbZBLsLoS32EJ3aGj64=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z07aI4M7Omdci6AhIi1Bee8aSVhAyN6srxOMIGaK70Vzw8ghAoUJW/H/x0TOxTGBp
-         Muw8GdFF+7I7cNqqPG3yjFtHAgutHZHWGP3xLI3xlSZ64ODp0E60utlU3igmnX6PXq
-         W6BHQUPqSpbe8u0Yqh1lQX6N9+qY7tmM/3I0h6Iw=
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-To:     Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Subject: [PATCH 4/4] mm: delay page_remove_rmap() until after the TLB has been flushed
-Date:   Tue,  8 Nov 2022 11:41:39 -0800
-Message-Id: <20221108194139.57604-4-torvalds@linux-foundation.org>
-X-Mailer: git-send-email 2.38.1.284.gfd9468d787
-In-Reply-To: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
-References: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
+        Tue, 8 Nov 2022 14:42:27 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B32F716FA;
+        Tue,  8 Nov 2022 11:42:26 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id f5so41333076ejc.5;
+        Tue, 08 Nov 2022 11:42:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uCfFBPnvKgh1kXxmqYQOr9Dj76h0DzapsRsTmMteAyo=;
+        b=IQN9hEauYkqPNz3uDp7hm+fsvMGwRkAil3F6vVajQda2BkKKr+mDQYVUkw/hf2sb+/
+         9OWejEsRzQA6Ww70dbsT3hMJ+hiUZUf+jxELTn2MRZN/ViVJVft2iSI52y1FW56gqU3l
+         8OM+jxM4dVryfewYzxHvdymytD8Z/ronn7yRXRoZK6bzUW88PBJM/L+0iRHl/4KyY+RP
+         NQXhBg6rg1849qSZCmborLA3Rxa1zD8sS10NRb9JWmmCwgYCU72e0qbQ++P1BWgG6zol
+         p2OKptIqXHdpFI8BhlKStG4VPBaqOwKCRcTxNXx7RhmSPfupXK8aFLjQCBkqMt2oHtxH
+         o+ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uCfFBPnvKgh1kXxmqYQOr9Dj76h0DzapsRsTmMteAyo=;
+        b=tTh78YsINRgNIDFHSt4yBByFvf35PEcK7ER3X7/Haiudj/IJGngRdBLGfMSg20z2x2
+         nIH4PDeP7Ipb+Xf+Etqx920qPa5ClGZYSqJvH6reYMRu1P3K1AIyFrjcfx7o+hr9yN9U
+         eZqBg3bhoQaTQLY5P8tDmmJrHhUL15jpoajxRyUZYUGnb1yYQDE0DoWeEkGyS3gEC1jU
+         td0r5dVnmQ9pzBY3SDXOBTuVasE5LHs3eHSFVcLcUK101Jnbh3aDd8VwRfK98RhvzqWh
+         HxwKADyoTZFOYH8mGZ3WjA5JVqcuIuwNPu3s2VtE8frFs8RpBe+3wacuuxLk27XQz+kM
+         b6eg==
+X-Gm-Message-State: ANoB5pmZUMRU7eovKnsAAywlzzUxFZ8Yt3nG4cprY739srVZt9ol0Vz+
+        lWgceR05a2MReTv8vnYFxzXJYRU6uz6J4g==
+X-Google-Smtp-Source: AA0mqf5IwHC6JWNP+c7u4NO+CCMmNKWD3xYJivdfKnBsQQOObhTs4zo9bPlWFPCKqafEzPuMCD7pbQ==
+X-Received: by 2002:a17:907:2e0b:b0:7a7:d37e:4650 with SMTP id ig11-20020a1709072e0b00b007a7d37e4650mr13427702ejc.261.1667936544550;
+        Tue, 08 Nov 2022 11:42:24 -0800 (PST)
+Received: from fedora.. (dh207-98-26.xnet.hr. [88.207.98.26])
+        by smtp.googlemail.com with ESMTPSA id p20-20020aa7cc94000000b00457c85bd890sm5916142edt.55.2022.11.08.11.42.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 11:42:23 -0800 (PST)
+From:   Robert Marko <robimarko@gmail.com>
+To:     andersson@kernel.org, agross@kernel.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH] clk: qcom: ipq8074: populate fw_name for all parents
+Date:   Tue,  8 Nov 2022 20:42:17 +0100
+Message-Id: <20221108194217.553303-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we remove a page table entry, we are very careful to only free the
-page after we have flushed the TLB, because other CPUs could still be
-using the page through stale TLB entries until after the flush.
+It appears that having only .name populated in parent_data for clocks
+which are only globally searchable currently will not work as the clk core
+won't copy that name if there is no .fw_name present as well.
 
-However, we have removed the rmap entry for that page early, which means
-that functions like folio_mkclean() would end up not serializing with
-the page table lock because the page had already been made invisible to
-rmap.
+So, populate .fw_name for all parent clocks in parent_data.
 
-And that is a problem, because while the TLB entry exists, we could end
-up with the following situation:
+Fixes: ae55ad32e273 ("clk: qcom: ipq8074: convert to parent data")
 
- (a) one CPU could come in and clean it, never seeing our mapping of the
-     page
-
- (b) another CPU could continue to use the stale and dirty TLB entry and
-     continue to write to said page
-
-resulting in a page that has been dirtied, but then marked clean again,
-all while another CPU might have dirtied it some more.
-
-End result: possibly lost dirty data.
-
-This extends our current TLB gather infrastructure to optionally track a
-"should I do a delayed page_remove_rmap() for this page after flushing
-the TLB".  It uses the newly introduced 'encoded page pointer' to do
-that without having to keep separate data around.
-
-Note, this is complicated by a couple of issues:
-
- - s390 has its own mmu_gather model that doesn't delay TLB flushing,
-   and as a result also does not want the delayed rmap
-
- - we want to delay the rmap removal, but not past the page table lock
-
- - we can track an enormous number of pages in our mmu_gather structure,
-   with MAX_GATHER_BATCH_COUNT batches of MAX_TABLE_BATCH pages each,
-   all set up to be approximately 10k pending pages.
-
-   We do not want to have a huge number of batched pages that we then
-   need to check for delayed rmap handling inside the page table lock.
-
-Particularly that last point results in a noteworthy detail, where the
-normal page batch gathering is limited once we have delayed rmaps
-pending, in such a way that only the last batch (the so-called "active
-batch") in the mmu_gather structure can have any delayed entries.
-
-NOTE! While the "possibly lost dirty data" sounds catastrophic, for this
-all to happen you need to have a user thread doing either madvise() with
-MADV_DONTNEED or a full re-mmap() of the area concurrently with another
-thread continuing to use said mapping.
-
-So arguably this is about user space doing crazy things, but from a VM
-consistency standpoint it's better if we track the dirty bit properly
-even when user space goes off the rails.
-
-Reported-by: Nadav Amit <nadav.amit@gmail.com>
-Link: https://lore.kernel.org/all/B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com/
-Cc: Will Deacon <will@kernel.org>
-Cc: Aneesh Kumar <aneesh.kumar@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Nick Piggin <npiggin@gmail.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com> # s390
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Co-developed-by: Christian Marangi <ansuelsmth@gmail.com>
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- arch/s390/include/asm/tlb.h | 21 +++++++++++++++++++--
- include/asm-generic/tlb.h   | 21 +++++++++++++++++----
- mm/memory.c                 | 23 +++++++++++++++++------
- mm/mmu_gather.c             | 35 +++++++++++++++++++++++++++++++++--
- 4 files changed, 86 insertions(+), 14 deletions(-)
+ drivers/clk/qcom/gcc-ipq8074.c | 48 +++++++++++++++++-----------------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
-index 3a5c8fb590e5..e5903ee2f1ca 100644
---- a/arch/s390/include/asm/tlb.h
-+++ b/arch/s390/include/asm/tlb.h
-@@ -25,7 +25,8 @@
- void __tlb_remove_table(void *_table);
- static inline void tlb_flush(struct mmu_gather *tlb);
- static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
--					  struct page *page, int page_size);
-+					  struct page *page, int page_size,
-+					  unsigned int flags);
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index d231866804f6..bf64aa683605 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -1137,7 +1137,7 @@ static const struct freq_tbl ftbl_nss_noc_bfdcd_clk_src[] = {
  
- #define tlb_flush tlb_flush
- #define pte_free_tlb pte_free_tlb
-@@ -36,13 +37,24 @@ static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
- #include <asm/tlbflush.h>
- #include <asm-generic/tlb.h>
+ static const struct clk_parent_data gcc_xo_bias_pll_nss_noc_clk_gpll0_gpll2[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "bias_pll_nss_noc_clk" },
++	{ .fw_name = "bias_pll_nss_noc_clk", .name = "bias_pll_nss_noc_clk" },
+ 	{ .hw = &gpll0.clkr.hw },
+ 	{ .hw = &gpll2.clkr.hw },
+ };
+@@ -1362,7 +1362,7 @@ static const struct freq_tbl ftbl_nss_ppe_clk_src[] = {
  
-+/*
-+ * s390 never needs to delay page_remove_rmap, because
-+ * the ptep_get_and_clear_full() will have flushed the
-+ * TLB across CPUs
-+ */
-+static inline bool tlb_delay_rmap(struct mmu_gather *tlb)
-+{
-+	return false;
-+}
-+
- /*
-  * Release the page cache reference for a pte removed by
-  * tlb_ptep_clear_flush. In both flush modes the tlb for a page cache page
-  * has already been freed, so just do free_page_and_swap_cache.
-  */
- static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
--					  struct page *page, int page_size)
-+					  struct page *page, int page_size,
-+					  unsigned int flags)
- {
- 	free_page_and_swap_cache(page);
- 	return false;
-@@ -53,6 +65,11 @@ static inline void tlb_flush(struct mmu_gather *tlb)
- 	__tlb_flush_mm_lazy(tlb->mm);
- }
+ static const struct clk_parent_data gcc_xo_bias_gpll0_gpll4_nss_ubi32[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "bias_pll_cc_clk" },
++	{ .fw_name = "bias_pll_cc_clk", .name = "bias_pll_cc_clk" },
+ 	{ .hw = &gpll0.clkr.hw },
+ 	{ .hw = &gpll4.clkr.hw },
+ 	{ .hw = &nss_crypto_pll.clkr.hw },
+@@ -1413,10 +1413,10 @@ static const struct freq_tbl ftbl_nss_port1_rx_clk_src[] = {
  
-+static inline void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma)
-+{
-+	/* Nothing to do, s390 does not delay rmaps */
-+}
-+
- /*
-  * pte_free_tlb frees a pte table and clears the CRSTE for the
-  * page table from the tlb.
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index faca23e87278..9df513e5ad28 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -257,7 +257,15 @@ struct mmu_gather_batch {
- #define MAX_GATHER_BATCH_COUNT	(10000UL/MAX_GATHER_BATCH)
+ static const struct clk_parent_data gcc_xo_uniphy0_rx_tx_ubi32_bias[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "uniphy0_gcc_rx_clk" },
+-	{ .name = "uniphy0_gcc_tx_clk" },
++	{ .fw_name = "uniphy0_gcc_rx_clk", .name = "uniphy0_gcc_rx_clk" },
++	{ .fw_name = "uniphy0_gcc_tx_clk", .name = "uniphy0_gcc_tx_clk" },
+ 	{ .hw = &ubi32_pll.clkr.hw },
+-	{ .name = "bias_pll_cc_clk" },
++	{ .fw_name = "bias_pll_cc_clk", .name = "bias_pll_cc_clk" },
+ };
  
- extern bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page,
--				   int page_size);
-+				   int page_size, unsigned int flags);
-+extern void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma);
-+
-+/*
-+ * This both sets 'delayed_rmap', and returns true. It would be an inline
-+ * function, except we define it before the 'struct mmu_gather'.
-+ */
-+#define tlb_delay_rmap(tlb) (((tlb)->delayed_rmap = 1), true)
-+
- #endif
+ static const struct parent_map gcc_xo_uniphy0_rx_tx_ubi32_bias_map[] = {
+@@ -1465,10 +1465,10 @@ static const struct freq_tbl ftbl_nss_port1_tx_clk_src[] = {
  
- /*
-@@ -290,6 +298,11 @@ struct mmu_gather {
- 	 */
- 	unsigned int		freed_tables : 1;
+ static const struct clk_parent_data gcc_xo_uniphy0_tx_rx_ubi32_bias[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "uniphy0_gcc_tx_clk" },
+-	{ .name = "uniphy0_gcc_rx_clk" },
++	{ .fw_name = "uniphy0_gcc_tx_clk", .name = "uniphy0_gcc_tx_clk" },
++	{ .fw_name = "uniphy0_gcc_rx_clk", .name = "uniphy0_gcc_rx_clk" },
+ 	{ .hw = &ubi32_pll.clkr.hw },
+-	{ .name = "bias_pll_cc_clk" },
++	{ .fw_name = "bias_pll_cc_clk", .name = "bias_pll_cc_clk" },
+ };
  
-+	/*
-+	 * Do we have pending delayed rmap removals?
-+	 */
-+	unsigned int		delayed_rmap : 1;
-+
- 	/*
- 	 * at which levels have we cleared entries?
- 	 */
-@@ -431,13 +444,13 @@ static inline void tlb_flush_mmu_tlbonly(struct mmu_gather *tlb)
- static inline void tlb_remove_page_size(struct mmu_gather *tlb,
- 					struct page *page, int page_size)
- {
--	if (__tlb_remove_page_size(tlb, page, page_size))
-+	if (__tlb_remove_page_size(tlb, page, page_size, 0))
- 		tlb_flush_mmu(tlb);
- }
+ static const struct parent_map gcc_xo_uniphy0_tx_rx_ubi32_bias_map[] = {
+@@ -1696,12 +1696,12 @@ static const struct freq_tbl ftbl_nss_port5_rx_clk_src[] = {
  
--static inline bool __tlb_remove_page(struct mmu_gather *tlb, struct page *page)
-+static inline bool __tlb_remove_page(struct mmu_gather *tlb, struct page *page, unsigned int flags)
- {
--	return __tlb_remove_page_size(tlb, page, PAGE_SIZE);
-+	return __tlb_remove_page_size(tlb, page, PAGE_SIZE, flags);
- }
+ static const struct clk_parent_data gcc_xo_uniphy0_rx_tx_uniphy1_rx_tx_ubi32_bias[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "uniphy0_gcc_rx_clk" },
+-	{ .name = "uniphy0_gcc_tx_clk" },
+-	{ .name = "uniphy1_gcc_rx_clk" },
+-	{ .name = "uniphy1_gcc_tx_clk" },
++	{ .fw_name = "uniphy0_gcc_rx_clk", .name = "uniphy0_gcc_rx_clk" },
++	{ .fw_name = "uniphy0_gcc_tx_clk", .name = "uniphy0_gcc_tx_clk" },
++	{ .fw_name = "uniphy1_gcc_rx_clk", .name = "uniphy1_gcc_rx_clk" },
++	{ .fw_name = "uniphy1_gcc_tx_clk", .name = "uniphy1_gcc_tx_clk" },
+ 	{ .hw = &ubi32_pll.clkr.hw },
+-	{ .name = "bias_pll_cc_clk" },
++	{ .fw_name = "bias_pll_cc_clk", .name = "bias_pll_cc_clk" },
+ };
  
- /* tlb_remove_page
-diff --git a/mm/memory.c b/mm/memory.c
-index f88c351aecd4..60a0f44f6e72 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1432,6 +1432,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			break;
+ static const struct parent_map
+@@ -1758,12 +1758,12 @@ static const struct freq_tbl ftbl_nss_port5_tx_clk_src[] = {
  
- 		if (pte_present(ptent)) {
-+			unsigned int delay_rmap;
-+
- 			page = vm_normal_page(vma, addr, ptent);
- 			if (unlikely(!should_zap_page(details, page)))
- 				continue;
-@@ -1443,20 +1445,26 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			if (unlikely(!page))
- 				continue;
+ static const struct clk_parent_data gcc_xo_uniphy0_tx_rx_uniphy1_tx_rx_ubi32_bias[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "uniphy0_gcc_tx_clk" },
+-	{ .name = "uniphy0_gcc_rx_clk" },
+-	{ .name = "uniphy1_gcc_tx_clk" },
+-	{ .name = "uniphy1_gcc_rx_clk" },
++	{ .fw_name = "uniphy0_gcc_tx_clk", .name = "uniphy0_gcc_tx_clk" },
++	{ .fw_name = "uniphy0_gcc_rx_clk", .name = "uniphy0_gcc_rx_clk" },
++	{ .fw_name = "uniphy1_gcc_tx_clk", .name = "uniphy1_gcc_tx_clk" },
++	{ .fw_name = "uniphy1_gcc_rx_clk", .name = "uniphy1_gcc_rx_clk" },
+ 	{ .hw = &ubi32_pll.clkr.hw },
+-	{ .name = "bias_pll_cc_clk" },
++	{ .fw_name = "bias_pll_cc_clk", .name = "bias_pll_cc_clk" },
+ };
  
-+			delay_rmap = 0;
- 			if (!PageAnon(page)) {
- 				if (pte_dirty(ptent)) {
--					force_flush = 1;
- 					set_page_dirty(page);
-+					if (tlb_delay_rmap(tlb)) {
-+						delay_rmap = 1;
-+						force_flush = 1;
-+					}
- 				}
- 				if (pte_young(ptent) &&
- 				    likely(!(vma->vm_flags & VM_SEQ_READ)))
- 					mark_page_accessed(page);
- 			}
- 			rss[mm_counter(page)]--;
--			page_remove_rmap(page, vma, false);
--			if (unlikely(page_mapcount(page) < 0))
--				print_bad_pte(vma, addr, ptent, page);
--			if (unlikely(__tlb_remove_page(tlb, page))) {
-+			if (!delay_rmap) {
-+				page_remove_rmap(page, vma, false);
-+				if (unlikely(page_mapcount(page) < 0))
-+					print_bad_pte(vma, addr, ptent, page);
-+			}
-+			if (unlikely(__tlb_remove_page(tlb, page, delay_rmap))) {
- 				force_flush = 1;
- 				addr += PAGE_SIZE;
- 				break;
-@@ -1513,8 +1521,11 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 	arch_leave_lazy_mmu_mode();
+ static const struct parent_map
+@@ -1820,10 +1820,10 @@ static const struct freq_tbl ftbl_nss_port6_rx_clk_src[] = {
  
- 	/* Do the actual TLB flush before dropping ptl */
--	if (force_flush)
-+	if (force_flush) {
- 		tlb_flush_mmu_tlbonly(tlb);
-+		if (tlb->delayed_rmap)
-+			tlb_flush_rmaps(tlb, vma);
-+	}
- 	pte_unmap_unlock(start_pte, ptl);
+ static const struct clk_parent_data gcc_xo_uniphy2_rx_tx_ubi32_bias[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "uniphy2_gcc_rx_clk" },
+-	{ .name = "uniphy2_gcc_tx_clk" },
++	{ .fw_name = "uniphy2_gcc_rx_clk", .name = "uniphy2_gcc_rx_clk" },
++	{ .fw_name = "uniphy2_gcc_tx_clk", .name = "uniphy2_gcc_tx_clk" },
+ 	{ .hw = &ubi32_pll.clkr.hw },
+-	{ .name = "bias_pll_cc_clk" },
++	{ .fw_name = "bias_pll_cc_clk", .name = "bias_pll_cc_clk" },
+ };
  
- 	/*
-diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-index 57b7850c1b5e..136f5fad43e3 100644
---- a/mm/mmu_gather.c
-+++ b/mm/mmu_gather.c
-@@ -9,6 +9,7 @@
- #include <linux/rcupdate.h>
- #include <linux/smp.h>
- #include <linux/swap.h>
-+#include <linux/rmap.h>
+ static const struct parent_map gcc_xo_uniphy2_rx_tx_ubi32_bias_map[] = {
+@@ -1877,10 +1877,10 @@ static const struct freq_tbl ftbl_nss_port6_tx_clk_src[] = {
  
- #include <asm/pgalloc.h>
- #include <asm/tlb.h>
-@@ -19,6 +20,10 @@ static bool tlb_next_batch(struct mmu_gather *tlb)
- {
- 	struct mmu_gather_batch *batch;
+ static const struct clk_parent_data gcc_xo_uniphy2_tx_rx_ubi32_bias[] = {
+ 	{ .fw_name = "xo", .name = "xo" },
+-	{ .name = "uniphy2_gcc_tx_clk" },
+-	{ .name = "uniphy2_gcc_rx_clk" },
++	{ .fw_name = "uniphy2_gcc_tx_clk", .name = "uniphy2_gcc_tx_clk" },
++	{ .fw_name = "uniphy2_gcc_rx_clk", .name = "uniphy2_gcc_rx_clk" },
+ 	{ .hw = &ubi32_pll.clkr.hw },
+-	{ .name = "bias_pll_cc_clk" },
++	{ .fw_name = "bias_pll_cc_clk", .name = "bias_pll_cc_clk" },
+ };
  
-+	/* No more batching if we have delayed rmaps pending */
-+	if (tlb->delayed_rmap)
-+		return false;
-+
- 	batch = tlb->active;
- 	if (batch->next) {
- 		tlb->active = batch->next;
-@@ -43,6 +48,31 @@ static bool tlb_next_batch(struct mmu_gather *tlb)
- 	return true;
- }
- 
-+/**
-+ * tlb_flush_rmaps - do pending rmap removals after we have flushed the TLB
-+ * @tlb: the current mmu_gather
-+ *
-+ * Note that because of how tlb_next_batch() above works, we will
-+ * never start new batches with pending delayed rmaps, so we only
-+ * need to walk through the current active batch.
-+ */
-+void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma)
-+{
-+	struct mmu_gather_batch *batch;
-+
-+	batch = tlb->active;
-+	for (int i = 0; i < batch->nr; i++) {
-+		struct encoded_page *enc = batch->encoded_pages[i];
-+
-+		if (encoded_page_flags(enc)) {
-+			struct page *page = encoded_page_ptr(enc);
-+			page_remove_rmap(page, vma, false);
-+		}
-+	}
-+
-+	tlb->delayed_rmap = 0;
-+}
-+
- static void tlb_batch_pages_flush(struct mmu_gather *tlb)
- {
- 	struct mmu_gather_batch *batch;
-@@ -77,7 +107,7 @@ static void tlb_batch_list_free(struct mmu_gather *tlb)
- 	tlb->local.next = NULL;
- }
- 
--bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_size)
-+bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_size, unsigned int flags)
- {
- 	struct mmu_gather_batch *batch;
- 
-@@ -92,7 +122,7 @@ bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_
- 	 * Add the page and check if we are full. If so
- 	 * force a flush.
- 	 */
--	batch->encoded_pages[batch->nr++] = encode_page(page, 0);
-+	batch->encoded_pages[batch->nr++] = encode_page(page, flags);
- 	if (batch->nr == batch->max) {
- 		if (!tlb_next_batch(tlb))
- 			return true;
-@@ -286,6 +316,7 @@ static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
- 	tlb->active     = &tlb->local;
- 	tlb->batch_count = 0;
- #endif
-+	tlb->delayed_rmap = 0;
- 
- 	tlb_table_init(tlb);
- #ifdef CONFIG_MMU_GATHER_PAGE_SIZE
+ static const struct parent_map gcc_xo_uniphy2_tx_rx_ubi32_bias_map[] = {
 -- 
-2.38.1.284.gfd9468d787
+2.38.1
 
