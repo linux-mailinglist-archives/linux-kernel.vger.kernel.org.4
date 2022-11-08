@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4CB620F0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255F7620F15
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbiKHL2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:28:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S234028AbiKHL2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233417AbiKHL2X (ORCPT
+        with ESMTP id S233918AbiKHL2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:28:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339F02648;
-        Tue,  8 Nov 2022 03:28:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C56A1614DE;
-        Tue,  8 Nov 2022 11:28:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A73AC433C1;
-        Tue,  8 Nov 2022 11:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667906901;
-        bh=vML2v+p9FO8o5nsIHTCyl3gLuB3uE46mkRG3fNi8ErU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xg/sHvj4JctLVmXzGVxeWQnvIitZ8y5pC4kHB/zuCQv/AOf1kZ2yQo1Py5zZREaI8
-         Pym+cN1Kx8A3ipCHIGOL1uPXGwl9grTcaJV3y0wNRayC4eAD272WixnSXb9ROu8KXp
-         d6gnDe64FzLWG2Ob8hTT05UxSEJHDIXUisTfUQ0IL2dtfqGRdnMIdFPyvHF1tZx24Y
-         BVtlz9gIdB1Qa022ggPYXd2N19bkshTrt3qFGiTNooqygRWRsttlW0NaA8cmm5423C
-         VfJ4r2dtsMFzCHiiZpi/e2mFNwIdaufspADWRLhx7dLbgZnTT2/LZEdBe7UQQ/XY1c
-         QAfLJUeSxBNJA==
-Date:   Tue, 8 Nov 2022 12:28:11 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Florian Weimer <fweimer@redhat.com>, libc-alpha@sourceware.org,
-        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-Subject: Re: selftests: clone3: clone3_cap_checkpoint_restore fails - Could
- not set CAP_CHECKPOINT_RESTORE
-Message-ID: <20221108112811.56mhfrguuscrh2ow@wittgenstein>
-References: <CA+G9fYtLoBo31wRD=+Q8DfO36OGBACp2GY6xvyj8CmUk37rbuA@mail.gmail.com>
+        Tue, 8 Nov 2022 06:28:30 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54D14B9BA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 03:28:27 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id g7so20821511lfv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 03:28:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/4bF5b4uSR+PiYI+2EWUk5/vuKUO/CvUGHdFYYb5oFo=;
+        b=eQF7DappUd2N5b981o9yxaOb99guRAo/uqgsDGSn0OHT6KEsr9JBcQZsnjJryaoGQu
+         Lzd7refSfqCHKxgt/iggiTidS17wYvvC5/njGYkdC7HWK5XCGhl+Eogk13MTtcjuyj7w
+         dDDkX4Lov7LGbMfUDGJqQdlf/PwCVg5LcwJ9numup5jCw/DOl9OZUsByaXBbjqTwsT+N
+         YjxwKE0BouFoXlnRZnOaxl0uOnh8gTFc0/DyiJACGRQzvjg0M9eiPLWCNRjcV6KeTg64
+         ORO/CyTHsaZuXplWrTB4h9ClRxhgLqDCGVJvYxeY4MqGlvWkP1SUxntZZmZmFEsL+YO9
+         0Fzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/4bF5b4uSR+PiYI+2EWUk5/vuKUO/CvUGHdFYYb5oFo=;
+        b=duO/Mb7hCzZ1ZyKEzvZTD5gX+ywR8T+gMWikUW9/rigm5Q93jtbtna0YuRwdhrZEDA
+         A+eVE9U51ZhDv+NpTQrBaLyrd2n/En55ZO9luaLNqouzMqJetlzB/0w9X3E/zSYKzWwz
+         cyMPgm0eGlRgaddNPaOY/TtpdIZuUVfStyIKmVAFYV6X4vKCFjMr+5aCeQrsY+147Sd8
+         XGO71Mj1ZW+2IG/ynRFc0Q+OTMFhsevoAmo9UqpIgLx6qcM+q7tgLj8BRs9nuACTNd88
+         t08T25PtNi9S1PdOP8GBI8V5A6TsnHKdel1DLff+PMwdvirrn9v2citj4aOGVzpwfq9M
+         Xp+w==
+X-Gm-Message-State: ACrzQf2+7jFHsDC69Ik0AobN7PpVxCsPtijpQlUHp+Wlksek8HdWW7hm
+        Aaz8MSHSEF1iKyfxzgJm39PUfQ==
+X-Google-Smtp-Source: AMsMyM4yHGNR2Ct1uNwRmvEy3UsNs7Pg4gtxGic+wGvnBCnfwKCtFXI0kII1QiSaoswtC8dY0bIHIg==
+X-Received: by 2002:a05:6512:150c:b0:4aa:f81e:6c17 with SMTP id bq12-20020a056512150c00b004aaf81e6c17mr20752532lfb.275.1667906906320;
+        Tue, 08 Nov 2022 03:28:26 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id v21-20020a2e9255000000b002776ce08326sm1699183ljg.29.2022.11.08.03.28.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 03:28:25 -0800 (PST)
+Message-ID: <fd9ee5df-0b9d-59c1-92c6-4874312aae1c@linaro.org>
+Date:   Tue, 8 Nov 2022 12:28:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtLoBo31wRD=+Q8DfO36OGBACp2GY6xvyj8CmUk37rbuA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 5/7] ARM: dts: hpe: Add UDC nodes
+Content-Language: en-US
+To:     richard.yu@hpe.com, verdun@hpe.com, nick.hawkins@hpe.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20221103160625.15574-1-richard.yu@hpe.com>
+ <20221103160625.15574-6-richard.yu@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221103160625.15574-6-richard.yu@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,46 +78,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 03:59:56PM +0530, Naresh Kamboju wrote:
-> selftests clone3 cap_checkpoint_restore fails on all devices.
+On 03/11/2022 17:06, richard.yu@hpe.com wrote:
+> From: Richard Yu <richard.yu@hpe.com>
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Add support for the USB drivers on HPE GXP SoC.
 > 
-> [   97.198602] audit: type=1701 audit(1651167820.383:12):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=1732
-> comm=\"clone3_cap_chec\"
-> exe=\"/opt/kselftests/default-in-kernel/clone3/clone3_cap_checkpoint_restore\"
-> sig=6 res=1
+> Signed-off-by: Richard Yu <richard.yu@hpe.com>
+> ---
+>  arch/arm/boot/dts/hpe-gxp.dtsi | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
 > 
-> # selftests: clone3: clone3_cap_checkpoint_restore
-> # TAP version 13
-> # 1..1
-> # # Starting 1 tests from 1 test cases.
-> # #  RUN           global.clone3_cap_checkpoint_restore ...
-> # # clone3_cap_checkpoint_restore.c:155:clone3_cap_checkpoint_restore:Child
-> has PID 1733
-> # # clone3() syscall supported
-> # cap_set_proc: Operation not permitted
-> # # clone3_cap_checkpoint_restore.c:164:clone3_cap_checkpoint_restore:Expected
-> set_capability() (-1) == 0 (0)
-> # # clone3_cap_checkpoint_restore.c:165:clone3_cap_checkpoint_restore:Could
-> not set CAP_CHECKPOINT_RESTORE
-> # # clone3_cap_checkpoint_restore: Test terminated by assertion
-> # #          FAIL  global.clone3_cap_checkpoint_restore
-> # not ok 1 global.clone3_cap_checkpoint_restore
-> # # FAILED: 0 / 1 tests passed.
-> # # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
-> not ok 4 selftests: clone3: clone3_cap_checkpoint_restore # exit=1
-> 
-> Test details links,
-> https://lkft.validation.linaro.org/scheduler/job/5812724#L2074
-> 
-> Test results comparison link,
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848543/suite/kselftest-clone3/tests/
-> 
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848543/suite/kselftest-clone3/test/clone3.clone3_cap_checkpoint_restore/history/
-> 
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221107/testrun/12848543/suite/kselftest-clone3/test/clone3.clone3_cap_checkpoint_restore/details/
+> diff --git a/arch/arm/boot/dts/hpe-gxp.dtsi b/arch/arm/boot/dts/hpe-gxp.dtsi
+> index cf735b3c4f35..60f2d3b15d90 100644
+> --- a/arch/arm/boot/dts/hpe-gxp.dtsi
+> +++ b/arch/arm/boot/dts/hpe-gxp.dtsi
+> @@ -59,6 +59,36 @@
+>  			ranges = <0x0 0xc0000000 0x30000000>;
+>  			dma-ranges;
+>  
+> +			vuhc0: vuhc@80400000 {
+> +				compatible = "hpe,gxp-vuhc", "syscon";
+> +				reg = <0x80400000 0x80>;
+> +			};
+> +
+> +			udc_system_controller: system-controller@80400800 {
+> +				compatible = "hpe,gxp-udcg", "syscon";
+> +				reg = <0x80400800 0x200>;
+> +			};
+> +
+> +			gadget0: udc@80401000 {
+> +				compatible = "hpe,gxp-udc";
+> +				reg = <0x80401000 0x1000>;
+> +				interrupts = <13>;
+> +				interrupt-parent = <&vic1>;
+> +				vdevnum = <0>;
+> +				fepnum = <7>;
+> +				hpe,syscon-phandle = <&udc_system_controller>;
+> +			};
+> +
+> +			gadget1: udc@80402000 {
+> +				compatible = "hpe,gxp-udc";
+> +				reg = <0x80402000 0x1000>;
+> +				interrupts = <13>;
+> +				interrupt-parent = <&vic1>;
+> +				vdevnum = <1>;
+> +				fepnum = <7>;
+> +				hpe,syscon-phandle = <&udc_system_controller>;
 
-Similar question to the other report. Is this something that has
-happened before or are we starting to see this failures just now?
+Based on your bindings explanation, UDC should be rather the device
+with multiple children representing actual devices.
+
+Best regards,
+Krzysztof
+
