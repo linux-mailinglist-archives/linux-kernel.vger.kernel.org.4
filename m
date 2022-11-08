@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446A462061C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9433262061E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiKHBdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:33:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S233362AbiKHBdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbiKHBcr (ORCPT
+        with ESMTP id S233350AbiKHBdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:32:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D972B250;
-        Mon,  7 Nov 2022 17:30:54 -0800 (PST)
+        Mon, 7 Nov 2022 20:33:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBA111A;
+        Mon,  7 Nov 2022 17:32:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1589B81714;
-        Tue,  8 Nov 2022 01:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D58C1C433C1;
-        Tue,  8 Nov 2022 01:30:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A176B61374;
+        Tue,  8 Nov 2022 01:32:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC968C433C1;
+        Tue,  8 Nov 2022 01:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667871051;
-        bh=0yBZHoDeAsx88XhELODMBIElqdEk3adTf9nXLZge1ak=;
+        s=k20201202; t=1667871131;
+        bh=ED313/aaAI+lz49lB29Wmv20Z3nVuXhp1WXomGj7JMo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d0B2Iu5Ms8CoTSUOD8gb4w79uATuWiyzX1YnEckxthgG+aPpcnkynxjHluphhgyPH
-         2n3N8q4g8FDNTPG38kq0Il/EKoT+ibgPfjcKsk9w4dU3jqSXDIECsSBB7KA91/q/aN
-         57keLiFlkjEl3xxhX2cfZG6WhC/LEg+arKMHYfac4mLojETvXDHvdfaiO0CBB1T5Ve
-         Pbzzahaqt367SPfupSM16BF+7UvY4G1HWogU9JRcbSQWWbnr7YEzNGaSHdJu4/D+85
-         Bd4F8YJRjDLoNqOL/SS/+H6QmdusCnj0S3Rz5ft8lAC7I/IlN38eRVj3fMr2UH/XKs
-         EY35Bm/08Gtuw==
-Date:   Mon, 7 Nov 2022 19:30:48 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Gross <agross@kernel.org>,
-        Matti =?utf-8?Q?Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Rayyan Ansari <rayyan@ansari.sh>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the qcom tree
-Message-ID: <20221108013048.7uu4gseeysbzpoqt@builder.lan>
-References: <20221108090018.44624610@canb.auug.org.au>
+        b=YAIosAcx5ddEnbPE5VGv5y5o955A5t4+cQY/gyHGTJb2+jU4Xgk+ldbnQy+yCjVaE
+         5krArbp38G8pflcWUNemKsugI8PO9LdPYSMuz/+Gd2lSj/GfKQOto9bx8iq7j+JKXa
+         OYcGdSVe75nEOCI9UPNjwTNostb54PggF6ZUx9KclSfFXkad654d4ClVdjGkXMtnVU
+         jAGODql/ITbX5DrOVIRUYhciEP8BAqxrg3vGFSgEgJ7yPtcxORm+uh+sQG+3doZiiN
+         vQyXK/4Vap7NgMgsZiVAxqDFlJPezuHWO8ewYH+0ERYeRjdNRdR5QYqCBWqVhUwVYd
+         Mazsa0qZjMX2A==
+Date:   Mon, 7 Nov 2022 17:32:09 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <20221108013209.eqrxs3xqtat6kksm@treble>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20221104010327.wa256pos75dczt4x@treble>
+ <Y2TooogxxLTIkBcj@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221108090018.44624610@canb.auug.org.au>
+In-Reply-To: <Y2TooogxxLTIkBcj@alley>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,29 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 09:00:18AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Fri, Nov 04, 2022 at 11:25:38AM +0100, Petr Mladek wrote:
+> > I get the feeling the latter would be easier to implement (no reference
+> > counting; also maybe can be auto-detected with THIS_MODULE?) and harder
+> > for the patch author to mess up (by accidentally omitting an object
+> > which uses it).
 > 
-> After merging the qcom tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> arch/arm/boot/dts/qcom-msm8226.dtsi:302.21-327.5: ERROR (phandle_references): /soc/cci@fda0c000: Reference to non-existent node or label "mmcc"
-> 
+> I am not sure how you mean it. I guess that you suggest to store
+> the name of the livepatch module into the shadow variable.
+> And use the variable only when the livepatch module is still loaded.
 
-Sorry about that, not sure why I didn't catch that before pushing my
-branch. I've pulled in the missing patch today.
+Actually I was thinking the klp_patch could have references to all the
+shadow variables (or shadow variable types?) it owns.
 
-Thanks,
-Bjorn
+Instead of reference counting, the livepatch atomic replace code could
+just migrate any previously owned shadow variables to the new klp_patch.
 
-> Caused by commit
-> 
->   4ab2f41b0850 ("ARM: dts: qcom: msm8226: Add CCI bus")
-> 
-> I have used the qcom tree from next-20221107 for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+This of course adds the restriction that such garbage-collected shadow
+variables couldn't be shared across non-replace livepatches.  But I
+wouldn't expect that to be much of a problem.
+
+Additionally, I was wondering if "which klp_patch owns which shadow
+variables" could be auto-detected somehow.
+
+For example:
+
+1) add 'struct module *owner' or 'struct klp_patch *owner' to klp_shadow
+
+2) add klp_shadow_alloc_gc() and klp_shadow_get_or_alloc_gc(), which are
+   similar to their non-gc counterparts, with a few additional
+   arguments: the klp module owner (THIS_MODULE for the caller); and a
+   destructor to be used later for the garbage collection
+
+3) When atomic replacing a patch, iterate through the klp_shadow_hash
+   and, for each klp_shadow which previously had an owner, change it to
+   be owned by the new patch
+
+4) When unloading/freeing a patch, free all its associated klp_shadows
+   (also calling destructors where applicable)
 
 
+I'm thinking this would be easier for the patch author, and also simpler
+overall.  I could work up a patch.
+
+-- 
+Josh
