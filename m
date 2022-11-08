@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D57A621073
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EC7621088
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbiKHMYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S234104AbiKHM0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234231AbiKHMYq (ORCPT
+        with ESMTP id S233633AbiKHM0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:24:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A874FFA7
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:24:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A375561503
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:24:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D24AC433D6;
-        Tue,  8 Nov 2022 12:24:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667910282;
-        bh=DIgP7uPQKj0lwA2YB9gPgcW4fnH+W7WgHIsSh/Cgwt8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XLzezLU97ctWJIIz/k8E9MMSMNTMfFqBpXh6PJaunmdTM/169PtNdVX+ufSSaZzIL
-         L/ueI4AhoprqGnU4JiKPeAYGKavd91uo+Lu6esW20CEeaV0JaOpUzE1c7TEd0Trj2j
-         bBnMk0J4aBRAV5/EY+HzNhE/hq9oFMKkXk3zMQf8=
-Date:   Tue, 8 Nov 2022 13:24:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        vincent.guittot@linaro.org, vschneid@redhat.com,
-        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, ritesh.list@gmail.com,
-        aneesh.kumar@linux.ibm.com
-Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
-Message-ID: <Y2pKh3H0Ukvmfuco@kroah.com>
-References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
- <Y01sk3l8yCMvhvYm@kroah.com>
- <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y06ISBWhJflnV+NI@kroah.com>
- <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
- <Y1jbhCYfktL51zNB@kroah.com>
- <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
- <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+        Tue, 8 Nov 2022 07:26:42 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0842849B6B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:26:41 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id q9so38279596ejd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 04:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tyyODRHXtilG30dzd65m7MqoIR0cCDBRC2Fx24RI5us=;
+        b=NwqsXVnBhJboZ5eY8Xcr2QcAQU3A73tG4C/C3p5ehSjxJZ4ThJ57K0n0cIX/tv2Ybk
+         e/aZXkZsV/52EeZ3Le1b63V7g/eNCwIkd0TE/TLJWWeahFa03vuMnSydXOenjn2O+r26
+         2b/+7v45FlbfjgjFEiKAW+5AGPVmIMb+x2naOXmRQRPBYZAOl0H/J1XwncIGM27oUW7h
+         hwdUK4R8iXXnUYFHq2CJ0iS+KSgnH7rgwtSsFICV9x+QW4KvtpbstlLVmnp8jZn3Hx9j
+         iqUALcQYxf7JGjd41US5zsmlUnqFpgwe4nBqHKXNNqmk2K57ezo4Pl9D8wU9l/HVgEGF
+         A9GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tyyODRHXtilG30dzd65m7MqoIR0cCDBRC2Fx24RI5us=;
+        b=PoPnbtUV4uGRjb8vWJn/kRC3HXMVTQLM18mi+YpWh5lyBHI3roBlIVl3bC3MYvsYRu
+         4//mYX5ISAeFKz9+JY8jsndnn8ciIlHG+WtknVKTfZ2tPlELjIlc50mY3UAwPon5rZi0
+         XFl2G+Ht8H9uk4be1ZUuj8JHIWEq2dmmwQ9nkI7RRHmAh3C5jpleW77s3IDIBsPaNnfF
+         pJUXf4Gtg3mglpyThcclzquHCCJub8+cBy0hCUhE4hUwtofezxf+nDPxo4MqiAO1V3d2
+         KO3yEN4kuK3oVkIZN9+La3LgmEBlYjb+AuCEtXlTJMDMSiDF+bDsLft90t4Qm955HvnH
+         fNGQ==
+X-Gm-Message-State: ANoB5pmZSYnsmHmx6NRZytMGbZWxXhZRIssSs7Q9dSRKo8nP0Fzc15Yq
+        /B+XwcHUpDjNkAqIGvQHc1np7P/yjhnYJsE7zq7Dpw==
+X-Google-Smtp-Source: AA0mqf7/Kq3Eo4YzTUVxcP/fg8+u1hyvRb5r0lVcTK6pr5Bewd4oHaTol2L4r9Xfdxk26RfW13/NiikTqCw5vcoldf8=
+X-Received: by 2002:a17:906:6acc:b0:7ae:658c:ee45 with SMTP id
+ q12-20020a1709066acc00b007ae658cee45mr10932109ejs.190.1667910399610; Tue, 08
+ Nov 2022 04:26:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221028153505.23741-1-y.oudjana@protonmail.com>
+In-Reply-To: <20221028153505.23741-1-y.oudjana@protonmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Nov 2022 13:26:28 +0100
+Message-ID: <CACRpkdb6FFCtry+93jnXw0f8jeu7yDR7_S2GOKaGYiEGSGc27A@mail.gmail.com>
+Subject: Re: [PATCH v4 00/13] MediaTek pinctrl DT binding cleanup and MT6735
+ pinctrl support
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 03:30:46PM +0530, Vishal Chourasia wrote:
-> 
-> Thanks Greg & Peter for your direction. 
-> 
-> While we pursue the idea of having debugfs based on kernfs, we thought about
-> having a boot time parameter which would disable creating and updating of the
-> sched_domain debugfs files and this would also be useful even when the kernfs
-> solution kicks in, as users who may not care about these debugfs files would
-> benefit from a faster CPU hotplug operation.
+Hi Yassine,
 
-Ick, no, you would be adding a new user/kernel api that you will be
-required to support for the next 20+ years.  Just to get over a
-short-term issue before you solve the problem properly.
+On Fri, Oct 28, 2022 at 5:35 PM Yassine Oudjana
+<yassine.oudjana@gmail.com> wrote:
 
-If you really do not want these debugfs files, just disable debugfs from
-your system.  That should be a better short-term solution, right?
+> This series adds a driver for the pin controller found on the MediaTek MT6735
+> and MT6735M SoCs. The two differ in the last 6 physical pins, which are used
+> for MSDC2 on MT6735 but don't exist on MT6735M (since MSDC2 doesn't exist on it
+> to begin with). In preparation to document DT bindings for this pin controller,
+> the existing documents for MT67xx SoCs are combined into one in order to
+> eliminate duplicate property definitions and standardize pin configuration node
+> names. Necessary cleanup is done along the way.
+>
+> Changes since v3:
+>  - Improve interrupts description to make clear what sysirq means.
+>  - Set drive-strength constraints per variant.
+>  - Set maxItems for reg in MT6795.
+>  - Add blank lines between conditionals.
+>  - Add ref for both pinmux-node.yaml and pincfg-node.yaml.
+>  - Make pinctrl subnode-related changes in separate patch.
+>  - Fix up some pinctrl subnode property descriptions.
+>  - Add interrupts items descriptions to MT6765 and MT6735.
 
-Or better yet, disable SCHED_DEBUG, why can't you do that?
+I have applied patches 1-6 so you do not need to resend those.
+Keep it going with the rest!
 
-thanks,
-
-greg k-h
+Yours,
+Linus Walleij
