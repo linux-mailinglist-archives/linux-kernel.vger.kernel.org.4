@@ -2,72 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F296218E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 380416218E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbiKHP5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S234499AbiKHP6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbiKHP5X (ORCPT
+        with ESMTP id S234310AbiKHP6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:57:23 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DD9413F62;
-        Tue,  8 Nov 2022 07:57:22 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F3F81FB;
-        Tue,  8 Nov 2022 07:57:28 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 162973F73D;
-        Tue,  8 Nov 2022 07:57:19 -0800 (PST)
-Date:   Tue, 8 Nov 2022 15:57:17 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] cpufreq: qcom-hw: Add CPU clock provider support
-Message-ID: <20221108155717.srlnabls5ze2resx@bogus>
-References: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
- <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
+        Tue, 8 Nov 2022 10:58:16 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8B815701
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:58:14 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R261e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=shawnwang@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VUK61dP_1667923078;
+Received: from 30.39.65.162(mailfrom:shawnwang@linux.alibaba.com fp:SMTPD_---0VUK61dP_1667923078)
+          by smtp.aliyun-inc.com;
+          Tue, 08 Nov 2022 23:58:09 +0800
+Message-ID: <fd711241-5811-9673-aa02-dfa5ecd36dbf@linux.alibaba.com>
+Date:   Tue, 8 Nov 2022 23:57:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+From:   Shawn Wang <shawnwang@linux.alibaba.com>
+Subject: Re: [PATCH 06/18] x86/resctrl: Allow the allocator to check if a
+ CLOSID can allocate clean RMID
+To:     James Morse <james.morse@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
+        baolin.wang@linux.alibaba.com, peternewman@google.com
+References: <20221021131204.5581-1-james.morse@arm.com>
+ <20221021131204.5581-7-james.morse@arm.com>
+In-Reply-To: <20221021131204.5581-7-james.morse@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 09:10:37PM +0530, Manivannan Sadhasivam wrote:
-> Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-> cores. But this relationship is not represented with the clk framework
-> so far.
-> 
-> So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-> clock producer/consumer relationship cleaner and is also useful for CPU
-> related frameworks like OPP to know the frequency at which the CPUs are
-> running.
-> 
-> The clock frequency provided by the driver is for each frequency domain.
-> We cannot get the frequency of each CPU core because, not all platforms
-> support per-core DCVS feature.
-> 
-> Also the frequency supplied by the driver is the actual frequency that
-> comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-> not same as what the CPUFreq framework has set but it is the one that gets
-> supplied to the CPUs after throttling by LMh.
->
+Hi James,
 
-OK now I see more info here. How different is this value from the one
-returned by qcom_cpufreq_hw_get() ?
+On 10/21/2022 9:11 PM, James Morse wrote:
+> MPAM's PMG bits extend its PARTID space, meaning the same PMG value can be
+> used for different control groups.
+> 
+> This means once a CLOSID is allocated, all its monitoring ids may still be
+> dirty, and held in limbo.
+> 
+> Add a helper to allow the CLOSID allocator to check if a CLOSID has dirty
+> RMID values. This behaviour is enabled by a kconfig option selected by
+> the architecture, which avoids a pointless search for x86.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>   arch/x86/kernel/cpu/resctrl/internal.h |  1 +
+>   arch/x86/kernel/cpu/resctrl/monitor.c  | 31 ++++++++++++++++++++++++++
+>   arch/x86/kernel/cpu/resctrl/rdtgroup.c | 18 +++++++++------
+>   3 files changed, 43 insertions(+), 7 deletions(-)
 
--- 
-Regards,
-Sudeep
+> +/**
+> + * resctrl_closid_is_dirty - Determine if clean RMID can be allocate for this
+> + *                           CLOSID.
+> + * @closid: The CLOSID that is being queried.
+> + *
+> + * MPAM's equivalent of RMID are per-CLOSID, meaning a freshly allocate CLOSID
+> + * may not be able to allocate clean RMID. To avoid this the allocator will
+> + * only return clean CLOSID.
+> + */
+> +bool resctrl_closid_is_dirty(u32 closid)
+> +{
+> +	struct rmid_entry *entry;
+> +	int i;
+> +
+> +	lockdep_assert_held(&rdtgroup_mutex);
+> +
+> +	if (IS_ENABLED(CONFIG_RESCTRL_RMID_DEPENDS_ON_CLOSID))
+> +		return false;
+
+Since dirty closid occurs when the kconfig option for MPAM is enabled, it seems
+that the condition of the if statement here should take the opposite value:
+	if (!IS_ENABLED(CONFIG_RESCTRL_RMID_DEPENDS_ON_CLOSID))
+
+> +
+> +	for (i = 0; i < resctrl_arch_system_num_rmid_idx(); i++) {
+> +		entry = &rmid_ptrs[i];
+> +		if (entry->closid != closid)
+> +			continue;
+> +
+> +		if (entry->busy)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+
+Shawn
