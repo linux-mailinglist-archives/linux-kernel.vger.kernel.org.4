@@ -2,85 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38036206C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEBB6206D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbiKHCa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        id S232776AbiKHCb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 21:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232693AbiKHCaT (ORCPT
+        with ESMTP id S233664AbiKHCbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:30:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E5613D15;
-        Mon,  7 Nov 2022 18:30:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69BB1B81897;
-        Tue,  8 Nov 2022 02:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1DA0EC4347C;
-        Tue,  8 Nov 2022 02:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667874616;
-        bh=9KfydVgSjM3cZjncm7PF0+qJF0xg7cNKU6hP+GeZcIM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=NQq+XL6T6qt9/x0yq+/643/AwMkuc4AH+Cpf6t67R1rv0s+ySYTBwckDnv8YtFe3i
-         fOnJC6f7HVSJT1SH81Bgtg7FfO7VVhkGecXNpylClZDGpos0w5FGC63/0czE/tmNe6
-         e96c1zlkhxSQOPapr4QNP/C1Rb7W26ST33v9ZFN5ZWRtFWcIfRi2mmsb2LREMTy+rk
-         iBoRoLFVV6XoQcJXgUT1MJT37wBuY5Qcat+qHRoQZLpCIB/kKK0RPohOZbsbvJg+Yp
-         B9neMD/jZ9AwJkNSbGEaXwMWAYHTPCgeIrAbHPqqYzBP9/ou2MRk1El5r084Jr5EVH
-         KmQh4b3DL7ieg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 09AA5C4166D;
-        Tue,  8 Nov 2022 02:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 7 Nov 2022 21:31:04 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DF140B6;
+        Mon,  7 Nov 2022 18:30:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667874653; x=1699410653;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v5JfCjrostcFM57ehzBq1YAw5lngVCrvuFrcq8Fs8LI=;
+  b=KPQxqcVwd0zGsSxuMmVIgm9AL5kfdDK+kZ0BCiy1Jpu9e36UHgLb9iyL
+   eXH1PoOD/3ueHn1ayOStEu6vuGO6QpIx0BiyVH54jWT/A623FcWVy8CR/
+   L7ASyg3ykPX/70E4sp/gkIFXs2ENNQNo+M0Rs2TrMUQVl1mHKzYp8x4o1
+   aPek3ES9L9pqoV4fYEuFWGTntF1u6fRs4id0dEbQqfKl3SOvJl9WaiX2j
+   /wx8+fQXRGrYVeCiB5eyrdHov1BTWmSrhvDwRPB3P7rhn799vM6jFMFER
+   SRkI0gT+hPrtEzalSdkUi5J9u7BqSKa/cnYSm/cS1F65YUrYmz8OJ5QYb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="396879231"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="396879231"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 18:30:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="669373099"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="669373099"
+Received: from hushengh-mobl.ccr.corp.intel.com ([10.254.212.182])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 18:30:36 -0800
+Message-ID: <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
+Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from
+ cmos_do_probe()
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date:   Tue, 08 Nov 2022 10:30:33 +0800
+In-Reply-To: <1850290.tdWV9SEqCh@kreacher>
+References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] netlink: Fix potential skb memleak in netlink_ack
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166787461603.16737.13661067186331397164.git-patchwork-notify@kernel.org>
-Date:   Tue, 08 Nov 2022 02:30:16 +0000
-References: <bff442d62c87de6299817fe1897cc5a5694ba9cc.1667638204.git.chentao.kernel@linux.alibaba.com>
-In-Reply-To: <bff442d62c87de6299817fe1897cc5a5694ba9cc.1667638204.git.chentao.kernel@linux.alibaba.com>
-To:     Tao Chen <chentao.kernel@linux.alibaba.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, johannes@sipsolutions.net,
-        socketcan@hartkopp.net, petrm@nvidia.com, keescook@chromium.org,
-        harshit.m.mogalapalli@oracle.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sat,  5 Nov 2022 17:05:04 +0800 you wrote:
-> Fix coverity issue 'Resource leak'.
+On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> We should clean the skb resource if nlmsg_put/append failed.
+> Notice that cmos_wake_setup() is the only user of acpi_rtc_info and
+> it
+> can operate on the cmos_rtc variable directly, so it need not set the
+> platform_data pointer before cmos_do_probe() is called.  Instead, it
+> can be called by cmos_do_probe() in the case when the platform_data
+> pointer is not set to implement the default behavior (which is to use
+> the FADT information as long as ACPI support is enabled).
 > 
-> Fixes: 738136a0e375 ("netlink: split up copies in the ack construction")
-> Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
+
+...
+
+>  
+> @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
+>  		if (info->address_space)
+>  			address_space = info->address_space;
+>  
+> -		if (info->rtc_day_alarm && info->rtc_day_alarm < 128)
+> -			cmos_rtc.day_alrm = info->rtc_day_alarm;
+> -		if (info->rtc_mon_alarm && info->rtc_mon_alarm < 128)
+> -			cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> -		if (info->rtc_century && info->rtc_century < 128)
+> -			cmos_rtc.century = info->rtc_century;
+> +		cmos_rtc.day_alrm = info->rtc_day_alarm;
+> +		cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> +		cmos_rtc.century = info->rtc_century;
+>  
+>  		if (info->wake_on && info->wake_off) {
+>  			cmos_rtc.wake_on = info->wake_on;
+>  			cmos_rtc.wake_off = info->wake_off;
+>  		}
+> +	} else {
+> +		cmos_wake_setup(dev);
+>  	}
+>  
 > 
-> [...]
 
-Here is the summary with links:
-  - [net-next,v2] netlink: Fix potential skb memleak in netlink_ack
-    https://git.kernel.org/netdev/net-next/c/e69761483361
+Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup from
+ACPI glue into RTC driver"), dev->platform_data is set in
+drivers/acpi/glue.c, and the above commit moves it to cmos_wake_setup()
+in this file.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Now, with this patch, my understanding is that dev->platform_data is
+never set, thus we can remove the 'info' variable and the
+	if (info)
+check above.
 
+thanks,
+rui
 
