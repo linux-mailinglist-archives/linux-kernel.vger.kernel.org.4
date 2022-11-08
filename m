@@ -2,167 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E256207E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 04:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364806207E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 04:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiKHD6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 22:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S233233AbiKHD60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 22:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233214AbiKHD5y (ORCPT
+        with ESMTP id S232884AbiKHD6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 22:57:54 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0D0D30541;
-        Mon,  7 Nov 2022 19:57:51 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8BxGdi+02ljJzgFAA--.15331S3;
-        Tue, 08 Nov 2022 11:57:50 +0800 (CST)
-Received: from [10.20.42.77] (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOK902ljTsQOAA--.40796S3;
-        Tue, 08 Nov 2022 11:57:49 +0800 (CST)
-Subject: Re: [PATCH v3] PCI: loongson: skip scanning unavailable child device
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221107211525.GA419924@bhelgaas>
-From:   Liu Peibao <liupeibao@loongson.cn>
-Message-ID: <7f0f3c7c-9adb-2a05-c93c-44eb5e28e786@loongson.cn>
-Date:   Tue, 8 Nov 2022 11:57:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 7 Nov 2022 22:58:15 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDDA31F8D;
+        Mon,  7 Nov 2022 19:58:09 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id 4so13118125pli.0;
+        Mon, 07 Nov 2022 19:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=3w2NZSwyPPI/Z7ZkFiZmUgxVMdr3WnPezn9G8jIb89k=;
+        b=X7mu302r89riVzCOc5c+QGr3J3ji059SuTRG+TJx6kuVWDrRW3lv3gkTC1uHEyPpyH
+         PHxhlYGHktePLoMIyLJ4LsQEJdnsyZDw5+QbG9MG77UD8wLMi2yQ322T6jcOjm3wIYD9
+         xxcoPXaBe8lj6/jl2fcEWFiv9HEiTyd7lGLqNHXxSMEeUnqYk5i/EhLMyBrFa4imTFNX
+         ZvJrth5PYo27TsjmYXAwfdifsW92nn597nk4qKi03oboTpck1Nk3+L8uaWOeMgktd4fi
+         cbrPEjgkiST2oGWIRnuFroFS3PGiAA7VwzeuuVKgYCPeXgEuZ45LjmoLlT21LFc2tlRi
+         G2oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3w2NZSwyPPI/Z7ZkFiZmUgxVMdr3WnPezn9G8jIb89k=;
+        b=uXzaVUi58lkypRXSbgtmwvzMhrpt3de4i1Vq9k+rVdSP15gUzTDZG6z+XZRXSXBVsv
+         hpFReGTi4HJeVeMjGkisP4xX0zszL3aE7onNK2iodEreVNZuBtNtalaofoLai/hR/RKR
+         bzyHenMczemuhQCiKG2SHL5s4DVQDqxKKIxcGnh/7mt3x/mqAhQIArGpjMtEcpXyR+nY
+         hZXS+Cl9Bm7D94AfJ8jdTTDpGoYQKRitKR4FuY2nwI/U9D9VdCzm4vBU8Jpj28AzAynL
+         k6B6Bs0uik0Op2GX2n0O7rJZDEuI+dxXo+bAPmMbtsdMQs/re6ec7fYEucO2Q8IpSP83
+         ccPw==
+X-Gm-Message-State: ACrzQf2Qkpc+YtkVJflO2VVzbO4VsgaBbnSeifYMSW6uDie95PqTsIgE
+        yqCS1gz/JczhSDg6ziY+NKkx32C2AiosrQ==
+X-Google-Smtp-Source: AMsMyM4x7rvP60abguWcxTGRbCowt/rtTIIGdTlcjrCW4mEjjh+hL3fix3lxJQ0LBbPEc6Fz2rv+sw==
+X-Received: by 2002:a17:90b:1a84:b0:213:e8b5:2d16 with SMTP id ng4-20020a17090b1a8400b00213e8b52d16mr45255481pjb.9.1667879888388;
+        Mon, 07 Nov 2022 19:58:08 -0800 (PST)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id s5-20020a170903200500b00172cb8b97a8sm5785105pla.5.2022.11.07.19.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 19:58:08 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Guangbin Huang <huangguangbin2@huawei.com>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Tom Rix <trix@redhat.com>,
+        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Marco Bonelli <marco@mebeim.net>, linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH net-next v1] ethtool: ethtool_get_drvinfo: populate drvinfo fields even if callback exits
+Date:   Tue,  8 Nov 2022 12:57:54 +0900
+Message-Id: <20221108035754.2143-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-In-Reply-To: <20221107211525.GA419924@bhelgaas>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxoOK902ljTsQOAA--.40796S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAECmNo9WQJ3wABsC
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXFyxKryUJF18Zw1ftrWrZrb_yoW5AFy7pF
-        W5AFW3KF48tr13Cwnaq3y8CF1avF9aga4DJF43Cw17KasIk34xWryxJF4F93sIvr4UWF42
-        vF1qgr4rGFs8AFDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 5:15 AM, Bjorn Helgaas wrote:
-> Capitalize subject line to match other commits:
-> 
->   930c6074d7dd ("PCI: loongson: Work around LS7A incorrect Interrupt Pin registers")
->   2410e3301fcc ("PCI: loongson: Don't access non-existent devices")
->   cd89edda4002 ("PCI: loongson: Add ACPI init support")
->   dee449aafd48 ("PCI: loongson: Use generic 8/16/32-bit config ops on LS2K/LS7A")
-> 
+If ethtool_ops::get_drvinfo() callback isn't set,
+ethtool_get_drvinfo() will fill the ethtool_drvinfo::name and
+ethtool_drvinfo::bus_info fields.
 
-OK, I will do this in the next version patch.
+However, if the driver provides the callback function, those two
+fields are not touched. This means that the driver has to fill these
+itself.
 
-> On Fri, Nov 04, 2022 at 06:53:40PM +0800, Liu Peibao wrote:
->> The PCI Controller of 2k1000 could not mask devices by
->> setting vender id or device id in configuration space header
->> as invalid values. When there are pins shareble between
->> the platform device and PCI device, if the platform device
->> is preferred, we should not scan this PCI device. In the
->> above scene, add `status = "disabled"` property in DT node
->> of this PCI device.
-> 
-> Rewrap this to fill 75 columns.
-> > s/id/ID/
-> s/shareble/shareable/
-> 
+Allow the driver to leave those two fields empty and populate them in
+such case. This way, the driver can rely on the default values for the
+name and the bus_info. If the driver provides values, do nothing.
 
-OK, I will take care in the next version patch.
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ net/ethtool/ioctl.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
->> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->> ---
->> V2 -> V3: 1. use list_for_each_entry() for more clearly.
->>           2. fix wrong use of sizeof().
->> V1 -> V2: use existing property "status" instead of adding new property.
->>
->>
->>  drivers/pci/controller/pci-loongson.c | 55 +++++++++++++++++++++++++++
->>  1 file changed, 55 insertions(+)
->>
->> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
->> index 05c50408f13b..c7dd88eac885 100644
->> --- a/drivers/pci/controller/pci-loongson.c
->> +++ b/drivers/pci/controller/pci-loongson.c
->> @@ -40,11 +40,21 @@ struct loongson_pci_data {
->>  	struct pci_ops *ops;
->>  };
->>  
->> +#ifdef CONFIG_OF
->> +struct mask_entry {
->> +	struct list_head entry;
->> +	unsigned int devfn;
->> +};
->> +#endif
->> +
->>  struct loongson_pci {
->>  	void __iomem *cfg0_base;
->>  	void __iomem *cfg1_base;
->>  	struct platform_device *pdev;
->>  	const struct loongson_pci_data *data;
->> +#ifdef CONFIG_OF
->> +	struct list_head masklist;
->> +#endif
->>  };
->>  
->>  /* Fixup wrong class code in PCIe bridges */
->> @@ -194,6 +204,18 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
->>  			return NULL;
->>  	}
->>  
->> +#ifdef CONFIG_OF
->> +	/* Don't access devices in masklist */
->> +	if (pci_is_root_bus(bus)) {
->> +		struct mask_entry *entry;
->> +
->> +		list_for_each_entry(entry, &priv->masklist, entry) {
->> +			if (devfn == entry->devfn)
->> +				return NULL;
->> +		}
->> +	}
->> +#endif
-> 
-> I would probably get rid of the masklist and just search for a disabled
-> property when reading config offset 0 (vendor ID).  That's not a
-> performance path anyway.  And this seems similar to the
-> FLAG_DEV_HIDDEN path where you probably don't need to do it for all
-> controllers.
-> 
-
-Thanks for your idea! This really helps a lot!
-I will follow your idea and rework it.
-
-Yes, this is similar to the FLAG_DEV_HIDDEN path and currently, this path
-is only needed by 2K1000 PCI controller.
-
-BR,
-Peibao
+diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+index 57e7238a4136..546f931c3b6c 100644
+--- a/net/ethtool/ioctl.c
++++ b/net/ethtool/ioctl.c
+@@ -713,15 +713,22 @@ static int
+ ethtool_get_drvinfo(struct net_device *dev, struct ethtool_devlink_compat *rsp)
+ {
+ 	const struct ethtool_ops *ops = dev->ethtool_ops;
++	struct device *parent = dev->dev.parent;
+ 
+ 	rsp->info.cmd = ETHTOOL_GDRVINFO;
+ 	strscpy(rsp->info.version, UTS_RELEASE, sizeof(rsp->info.version));
+ 	if (ops->get_drvinfo) {
+ 		ops->get_drvinfo(dev, &rsp->info);
+-	} else if (dev->dev.parent && dev->dev.parent->driver) {
+-		strscpy(rsp->info.bus_info, dev_name(dev->dev.parent),
++		if (!rsp->info.bus_info[0] && parent)
++			strscpy(rsp->info.bus_info, dev_name(parent),
++				sizeof(rsp->info.bus_info));
++		if (!rsp->info.driver[0] && parent && parent->driver)
++			strscpy(rsp->info.driver, parent->driver->name,
++				sizeof(rsp->info.driver));
++	} else if (parent && parent->driver) {
++		strscpy(rsp->info.bus_info, dev_name(parent),
+ 			sizeof(rsp->info.bus_info));
+-		strscpy(rsp->info.driver, dev->dev.parent->driver->name,
++		strscpy(rsp->info.driver, parent->driver->name,
+ 			sizeof(rsp->info.driver));
+ 	} else if (dev->rtnl_link_ops) {
+ 		strscpy(rsp->info.driver, dev->rtnl_link_ops->kind,
+-- 
+2.37.4
 
