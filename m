@@ -2,149 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFAA6217D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EACB6217E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234424AbiKHPQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S234574AbiKHPRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:17:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiKHPQg (ORCPT
+        with ESMTP id S234465AbiKHPRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:16:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227491929B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:15:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667920537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cr2jmTtt8Ake5OU8pjUtzSkMz+I+1JsR/QXu4X/Lkso=;
-        b=WZqGChGaR3A+U0oqHW9lzb20wRHsUshnwZjSKpPMyq1yoHZQ1poUYgAIky7ps3wmSfb6NT
-        eZRl36rX+JHfzGVW0RTH/DKU3/ylTDOTLW1trrYoJJp4m95mcHfXQ8kZIqMNRpVtp/PrxR
-        RCzdNwjdxjMHPuiK858gjkKtD8a/zu0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-zpRARqi3OF-vVOF4jj319g-1; Tue, 08 Nov 2022 10:15:36 -0500
-X-MC-Unique: zpRARqi3OF-vVOF4jj319g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 8 Nov 2022 10:17:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87588186F8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:16:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50B28858F13;
-        Tue,  8 Nov 2022 15:15:35 +0000 (UTC)
-Received: from virtlab511.virt.lab.eng.bos.redhat.com (virtlab511.virt.lab.eng.bos.redhat.com [10.19.152.198])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1AE4E40C6FA3;
-        Tue,  8 Nov 2022 15:15:35 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org,
-        jmattson@google.com, seanjc@google.com
-Subject: [PATCH v2 8/8] x86, KVM: remove unnecessary argument to x86_virt_spec_ctrl and callers
-Date:   Tue,  8 Nov 2022 10:15:32 -0500
-Message-Id: <20221108151532.1377783-9-pbonzini@redhat.com>
-In-Reply-To: <20221108151532.1377783-1-pbonzini@redhat.com>
-References: <20221108151532.1377783-1-pbonzini@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B13B6615FA
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C8AFC433C1;
+        Tue,  8 Nov 2022 15:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667920600;
+        bh=VyObGno3eWCppLggnWSbcxxTvObvPyRmksOsBBBl7WQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fy5/LIDtHF/+VUnhwnkeFl4WowNnzzkCvBAMzvZWRQ6IynAx+dDXVqYRnGxfnDCCa
+         gURISwHChRbdJKfMWMKq3qGaI53m3MRcPDXgmNCCg0lg1CJG/B1Pgrvd27q8sbtr39
+         F1lA16Ce/E3VZZucEEYJZfilaBT9FZxeP+IaPNgg=
+Date:   Tue, 8 Nov 2022 16:16:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: vt6655: change the function name
+ s_vGenerateTxParameter
+Message-ID: <Y2py1M0HC/olQxWD@kroah.com>
+References: <Y2OmAuBswNbWFWRd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2OmAuBswNbWFWRd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-x86_virt_spec_ctrl only deals with the paravirtualized
-MSR_IA32_VIRT_SPEC_CTRL now and does not handle MSR_IA32_SPEC_CTRL
-anymore; remove the corresponding, unused argument.
+On Thu, Nov 03, 2022 at 11:29:06AM +0000, Tanjuate Brunostar wrote:
+> Remove the use of Hongarian notation which is not used in Linux kernel.
+> Join some lines of code to avoid a line ending in a '('
+> Reported by Checkpatch
+> 
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> ---
+>  drivers/staging/vt6655/rxtx.c | 54 ++++++++++++++++-------------------
+>  1 file changed, 25 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index debc5d5daede..793a63b2ff46 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -10,7 +10,7 @@
+>   * Date: May 20, 2003
+>   *
+>   * Functions:
+> - *      s_vGenerateTxParameter - Generate tx dma required parameter.
+> + *      generate_tx_parameter - Generate tx dma required parameter.
+>   *      vGenerateMACHeader - Translate 802.3 to 802.11 header
+>   *      cbGetFragCount - Calculate fragment number count
+>   *      csBeacon_xmit - beacon tx function
+> @@ -95,17 +95,17 @@ static void fill_rts_header(struct vnt_private *pDevice,
+>  			    unsigned short wCurrentRate,
+>  			    unsigned char byFBOption);
+>  
+> -static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> -				   unsigned char byPktType,
+> -				   struct vnt_tx_fifo_head *,
+> -				   void *pvRrvTime,
+> -				   void *pvRTS,
+> -				   void *pvCTS,
+> -				   unsigned int	cbFrameSize,
+> -				   bool bNeedACK,
+> -				   unsigned int	uDMAIdx,
+> -				   void *psEthHeader,
+> -				   unsigned short wCurrentRate);
+> +static void generate_tx_parameter(struct vnt_private *pDevice,
+> +				  unsigned char byPktType,
+> +				  struct vnt_tx_fifo_head *,
+> +				  void *pvRrvTime,
+> +				  void *pvRTS,
+> +				  void *pvCTS,
+> +				  unsigned int	cbFrameSize,
+> +				  bool bNeedACK,
+> +				  unsigned int	uDMAIdx,
+> +				  void *psEthHeader,
+> +				  unsigned short wCurrentRate);
+>  
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/include/asm/spec-ctrl.h | 10 +++++-----
- arch/x86/kernel/cpu/bugs.c       |  2 +-
- arch/x86/kvm/svm/svm.c           |  4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+This function prototype is not needed at all, right?  So just delete it
+instead of renaming it.
 
-diff --git a/arch/x86/include/asm/spec-ctrl.h b/arch/x86/include/asm/spec-ctrl.h
-index 5393babc0598..cb0386fc4dc3 100644
---- a/arch/x86/include/asm/spec-ctrl.h
-+++ b/arch/x86/include/asm/spec-ctrl.h
-@@ -13,7 +13,7 @@
-  * Takes the guest view of SPEC_CTRL MSR as a parameter and also
-  * the guest's version of VIRT_SPEC_CTRL, if emulated.
-  */
--extern void x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bool guest);
-+extern void x86_virt_spec_ctrl(u64 guest_virt_spec_ctrl, bool guest);
- 
- /**
-  * x86_spec_ctrl_set_guest - Set speculation control registers for the guest
-@@ -24,9 +24,9 @@ extern void x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bo
-  * Avoids writing to the MSR if the content/bits are the same
-  */
- static inline
--void x86_spec_ctrl_set_guest(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl)
-+void x86_spec_ctrl_set_guest(u64 guest_virt_spec_ctrl)
- {
--	x86_virt_spec_ctrl(guest_spec_ctrl, guest_virt_spec_ctrl, true);
-+	x86_virt_spec_ctrl(guest_virt_spec_ctrl, true);
- }
- 
- /**
-@@ -38,9 +38,9 @@ void x86_spec_ctrl_set_guest(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl)
-  * Avoids writing to the MSR if the content/bits are the same
-  */
- static inline
--void x86_spec_ctrl_restore_host(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl)
-+void x86_spec_ctrl_restore_host(u64 guest_virt_spec_ctrl)
- {
--	x86_virt_spec_ctrl(guest_spec_ctrl, guest_virt_spec_ctrl, false);
-+	x86_virt_spec_ctrl(guest_virt_spec_ctrl, false);
- }
- 
- /* AMD specific Speculative Store Bypass MSR data */
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 6ec0b7ce7453..3e3230cccaa7 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -200,7 +200,7 @@ void __init check_bugs(void)
-  * MSR_IA32_SPEC_CTRL for SSBD.
-  */
- void
--x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bool setguest)
-+x86_virt_spec_ctrl(u64 guest_virt_spec_ctrl, bool setguest)
- {
- 	u64 guestval, hostval;
- 	struct thread_info *ti = current_thread_info();
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 512bc06a4ba1..e6706fd88cfa 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -3998,7 +3998,7 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
- 	 * being speculatively taken.
- 	 */
- 	if (!static_cpu_has(X86_FEATURE_V_SPEC_CTRL))
--		x86_spec_ctrl_set_guest(svm->spec_ctrl, svm->virt_spec_ctrl);
-+		x86_spec_ctrl_set_guest(svm->virt_spec_ctrl);
- 
- 	svm_vcpu_enter_exit(vcpu, spec_ctrl_intercepted);
- 
-@@ -4006,7 +4006,7 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
- 		reload_tss(vcpu);
- 
- 	if (!static_cpu_has(X86_FEATURE_V_SPEC_CTRL))
--		x86_spec_ctrl_restore_host(svm->spec_ctrl, svm->virt_spec_ctrl);
-+		x86_spec_ctrl_restore_host(svm->virt_spec_ctrl);
- 
- 	if (!sev_es_guest(vcpu->kvm)) {
- 		vcpu->arch.cr2 = svm->vmcb->save.cr2;
--- 
-2.31.1
+thanks,
 
+greg k-h
