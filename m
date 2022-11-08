@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7179E621E63
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94543621E60
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 22:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiKHVPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 16:15:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S229686AbiKHVPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 16:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKHVPa (ORCPT
+        with ESMTP id S229499AbiKHVPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 16:15:30 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073B45B866;
-        Tue,  8 Nov 2022 13:15:27 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N6LV23pCRz4xZ0;
-        Wed,  9 Nov 2022 08:15:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667942123;
-        bh=awZUebozG6l0VSgtn/Y968RpJ+MjxLNoG9Mj415Fp6k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CR+KEmTA7O6FJEho9SCB5p5/iZxi6KLg0M4Eqgu4xJ4cYN5pO6QaLWskDANe3+mBw
-         6b1FWWfIhOOgmfij8kltOwDpf5axFoY2+OiEu5coy6IQTz7uxhtC7voZDjlvwRdq8Q
-         H7AqT1O3zgLoxN8QWUXCyZSf1F5xYMgvQrMgtOoodG4DsfZLfx6vBLoCXvq0pLz7OY
-         N/aiROIu5AsAa1G89+6AuKCUteHeSeddWyG/dIiEGnFgqbYZ+itvGi+T2ZinQQFtTW
-         yhDzVrtmHGdruZUQWv3bif0MnIrnxbuMKjn7TrYveN2BuRtXO9I501/Iu02KdCNguX
-         gIQAuPzpYKzmg==
-Date:   Wed, 9 Nov 2022 08:15:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Xinlei Lee <xinlei.lee@mediatek.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the mediatek tree
-Message-ID: <20221109081504.23e0fe6c@canb.auug.org.au>
+        Tue, 8 Nov 2022 16:15:15 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBB050F31
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 13:15:14 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id z24so22976144ljn.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 13:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TbPSXqBkkfsvy6sh0R6QLPf4hCgHc3rDcYUsSV8QWAw=;
+        b=gq3BauSNoIQY8OsQReR2/NvF09kGSEZx51qdGVmKUYIUteqzHQQ5J2TnLGb2gefFa/
+         66mzynqqNlKLZY2kx74CtQADZIfTPWdGr+5ssjYmxfxCpJgL/xyfq5TI0ZUqDrcatlMF
+         xiVLW5M++2vI6ENo5p5rDUHK2ZZXwo81A+Hp26+sU00A3RfwzSgl1wv9jVTvLHXH/6HO
+         WJywjXUdU44T1Yx4GweCVL5Cy4y+rNrKlSwVIvYv791IKImsObPWrQ6mLXKARM6BQQio
+         jkxVCEs/kOCqhlMPkclREiGtlgPn85HnFq3NQiJS8izHFlulLo0wgwJB8be2jIDStm7r
+         zC2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TbPSXqBkkfsvy6sh0R6QLPf4hCgHc3rDcYUsSV8QWAw=;
+        b=2ll/2erCoyDfh4WGMM3HfF/h3hr0Mo0/58ZuOTIXfwJaKjGRM19rZZgZD0xsRfV93E
+         /eMeMpgFIFCS2VLAvblJ8O1bz9bQSLv1XwLNtljCk2UFTMVAGrf8wN5aZN3vxAuqKwUg
+         L09zCP4F4AzGk4vg4CSqAIm+buKPwRYYngyAOti5YlMyivOcbGqe8LKGCdLHp7eRa8vR
+         HN3NjJxNx83GWblSFkXL8vwBF6uj20Qejeglf23fnb3L2sKWww2WPm3ex0ufGmgqwlbo
+         NHFDZBtbo9Ki+MbhiqwJjMbhy7+OzenFMrYcYLVmyyB4jC0b7bb0Bi4Q7QLQQ/g+2flg
+         bKLA==
+X-Gm-Message-State: ACrzQf1DyYhjvQ0AwppRYirXcgJG1OfSlyMmc699OYbA+Lrj1rlVGmYo
+        ttW6VZbg3gG/hKhYIKh5rgXcDg==
+X-Google-Smtp-Source: AMsMyM7WIn32uNwx5DstbReB/5SJTwpZj+9Ij378/4SmbHtfHmPVJdupIAz9ZY92s7CNJTzU3Lfmaw==
+X-Received: by 2002:a2e:9cd9:0:b0:277:489a:40b1 with SMTP id g25-20020a2e9cd9000000b00277489a40b1mr19393074ljj.367.1667942112646;
+        Tue, 08 Nov 2022 13:15:12 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id s17-20020a056512315100b0048a934168c0sm1931190lfi.35.2022.11.08.13.15.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 13:15:12 -0800 (PST)
+Message-ID: <d721d484-84d3-f380-3bbc-43dad139bdee@linaro.org>
+Date:   Tue, 8 Nov 2022 22:15:11 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SChaYkhd.6HxKPvxV3mOa4k";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 07/18] dt-bindings: msm: dsi-controller-main: Add
+ compatible strings for every current SoC
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        quic_mkrishn@quicinc.com, linux-arm-msm@vger.kernel.org
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221107235654.1769462-1-bryan.odonoghue@linaro.org>
+ <20221107235654.1769462-8-bryan.odonoghue@linaro.org>
+ <aeb59d3c-34d0-f00a-bfc3-524cd03acb71@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <aeb59d3c-34d0-f00a-bfc3-524cd03acb71@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/SChaYkhd.6HxKPvxV3mOa4k
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 08/11/2022 13:46, Dmitry Baryshkov wrote:
+> On 08/11/2022 02:56, Bryan O'Donoghue wrote:
+>> Currently we do not differentiate between the various users of the
+>> qcom,mdss-dsi-ctrl. The driver is flexible enough to operate from one
+>> compatible string but, the hardware does have some significant differences
+>> in the number of clocks.
+>>
+>> To facilitate documenting the clocks add the following compatible strings
+>>
+>> - qcom,mdss-dsi-ctrl-apq8064
+> 
+> Generic comment: I think we'd better follow the arm/qcom-soc.yaml and 
+> use qcom,soc-something as compat string. This would leave us with 
+> qcom,apq8064-dsi-ctrl
 
-Hi all,
+That's a requirement. Only existing patterns are allowed to continue,
+but here all there is no such pattern.
 
-In commit
+Best regards,
+Krzysztof
 
-  e6c7e6216dc6 ("soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_c=
-onfig func")
-
-Fixes tag
-
-  Fixes: a071e52f75d1 ("soc: mediatek: Add mmsys func to adapt to dpi outpu=
-t for MT8186")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: b404cb45990b ("soc: mediatek: Add mmsys func to adapt to dpi output =
-for MT8186")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/SChaYkhd.6HxKPvxV3mOa4k
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNqxtgACgkQAVBC80lX
-0GzBEAf/YooGjLa5FsEQc/stc2iqyMKBjn8T8bQ72z+snx5w47sqcvYhbyLwcsQa
-4qigaKSg3hHUABi2Qau/+4mk3gRVPM3J3gMapFlZagnd7l1gHoNbIFm2+PD1jgcS
-jq/ToaJveWIGIF/1JCqHZBa9Gdig2uLKkKvMdxAHYRsoQVx4DQDV3o5DF2f3jgf4
-lIjgm3LiVSb/n2ij76ALM1GosFTUWnYhGxKphBv+RlJsejCjewGwyz8B+pnOCLvn
-hcF8driomw8dnsbVy/Ogiq11flTLho8ft+qAmHAgioI7Us8lWRWDn6WtRHwJHxg4
-p7fNIkRwLY9t45YVU24z4+x9YMoWXw==
-=iZ2s
------END PGP SIGNATURE-----
-
---Sig_/SChaYkhd.6HxKPvxV3mOa4k--
