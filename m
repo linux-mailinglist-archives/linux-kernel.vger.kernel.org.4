@@ -2,207 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01E462169C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB1F62169E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233916AbiKHOa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 09:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
+        id S233968AbiKHObC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbiKHOaj (ORCPT
+        with ESMTP id S234246AbiKHOap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:30:39 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A60BA20F58;
-        Tue,  8 Nov 2022 06:30:08 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 08 Nov 2022 23:30:08 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id EC8A72059027;
-        Tue,  8 Nov 2022 23:30:07 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 8 Nov 2022 23:30:07 +0900
-Received: from [10.212.157.169] (unknown [10.212.157.169])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 1D870B62A4;
-        Tue,  8 Nov 2022 23:30:07 +0900 (JST)
-Message-ID: <3fcebf71-bdcb-8592-020c-4aa240a9e9a7@socionext.com>
-Date:   Tue, 8 Nov 2022 23:30:06 +0900
+        Tue, 8 Nov 2022 09:30:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6956454B08
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 06:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EABB8615F2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E4FC433D7;
+        Tue,  8 Nov 2022 14:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667917817;
+        bh=HfYyn2zfWoXVMiL04ajYFQAOGugFAO+1dw/DJMyUUU8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ue6Zs8utYdJmMhWRb1grLj7XVg1S4ZS8CcHg3jCMIwRfqQfu9PhbaGVHqA5LGmlZG
+         mB7kHOoOgL5NIJNOWQrNNVPKj/lHdaRCFYrBsybYiaAFsHyvzOas6o6UpgHbElIx50
+         3/xKG4SS/2vgmkH8ZKZWw1sLsN6TMstkH+2COUbTf9BaCUy8OKPwRZuJJUoFkZKkIe
+         funsPjlipwr1tnbBiNgke/m3jZnmmCFYz2i53hooT1xc3vRt7jbM2ppaYJd+z3Qu1v
+         9h0GfrD8lnSmFOyOU7RQAWqu4lrTO75AS4qymZ53zP7JUurtgj7e0TgxJ95P4f4rQQ
+         gJ01DEKAJZrEg==
+Message-ID: <8368702c-ae33-b810-a6c3-ac8fa29998df@kernel.org>
+Date:   Tue, 8 Nov 2022 22:30:13 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/5] dt-bindings: arm: uniphier: Add system controller
- bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
- <20221107103410.3443-2-hayashi.kunihiko@socionext.com>
- <48988a50-3c3d-7a85-af28-66f7842e5893@linaro.org>
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] f2fs: separate IPU policy for fdatasync from
+ F2FS_IPU_FSYNC
+To:     qixiaoyu <qxy65535@gmail.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>
+References: <20221021023136.22863-1-qixiaoyu1@xiaomi.com>
+ <af41e68c-4f78-0934-1041-974e44bd3825@kernel.org>
+ <20221102122518.GB22857@mi-HP-ProDesk-680-G4-MT>
+ <3d2b1141-995a-4bfb-4bf0-5227be25105a@kernel.org>
+ <20221108123218.GC22857@mi-HP-ProDesk-680-G4-MT>
 Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <48988a50-3c3d-7a85-af28-66f7842e5893@linaro.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221108123218.GC22857@mi-HP-ProDesk-680-G4-MT>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On 2022/11/08 20:09, Krzysztof Kozlowski wrote:
-> On 07/11/2022 11:34, Kunihiko Hayashi wrote:
->> Add DT binding schema for system controller implemented in UniPhier SoCs.
->> This describes that the nodes defined here are treated as "syscon".
+On 2022/11/8 20:32, qixiaoyu wrote:
+> On Sun, Nov 06, 2022 at 09:54:59PM +0800, Chao Yu wrote:
+>> On 2022/11/2 20:25, qixiaoyu wrote:
+>>> Hi Chao,
+>>>
+>>> fdatasync do in-place-update to avoid additional node writes, but currently
+>>> it only do that with F2FS_IPU_FSYNC as:
+>>>
+>>> f2fs_do_sync_file:
+>>> 	if (datasync || get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks)
+>>>   		set_inode_flag(inode, FI_NEED_IPU);
+>>>
+>>> check_inplace_update_policy:
+>>> 	/* this is only set during fdatasync */
+>>> 	if (policy & (0x1 << F2FS_IPU_FSYNC) &&
+>>> 			is_inode_flag_set(inode, FI_NEED_IPU))
+>>> 		return true;
+>>>
+>>> So this patch separate in-place-update of fdatasync from F2FS_IPU_FSYNC to
+>>> apply it to all IPU policy.
+>>>
+>>> BTW, we found small performance improvement with this patch on AndroBench app
+>>> using F2FS_IPU_SSR_UTIL on our product:
 >>
->> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> ---
->>   .../socionext/socionext,uniphier-sysctrl.yaml | 92 +++++++++++++++++++
->>   1 file changed, 92 insertions(+)
->>   create mode 100644
->> Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
+>> How this patch affects performance when F2FS_IPU_SSR_UTIL is on?
 >>
->> diff --git
->> a/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
->> b/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
->> new file mode 100644
->> index 000000000000..be7cf72c232e
->> --- /dev/null
->> +++
->> b/Documentation/devicetree/bindings/arm/socionext/socionext,uniphier-sysctrl.yaml
+>> Thanks,
+>>
 > 
-> arm is only for top-level stuff. System controllers go to soc.
+> SQLite test in AndroBench app use fdatasync to sync file to the disk.
+> When switch to F2FS_IPU_SSR_UTIL ipu_policy, it will use out-of-place-update
+> even though SQLite calls fdatasync, which will introduce extra meta data write.
 
-Okay. I wondered if I should put it here.
-I'll make vendor's directory on "soc" and move it.
+Why not using F2FS_IPU_SSR_UTIL | F2FS_IPU_FSYNC, I guess these two flags
+cover different scenarios, F2FS_IPU_SSR_UTIL for ssr case, and F2FS_IPU_FSYNC
+for f{data,}sync case.
 
+Thanks,
 
->> @@ -0,0 +1,92 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id:
->> http://devicetree.org/schemas/arm/socionext/socionext,uniphier-sysctrl.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Socionext UniPhier system controller
->> +
->> +maintainers:
->> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> +
->> +description: |+
->> +  This describes the devicetree bindings for system controller
->> +  implemented on Socionext UniPhier SoCs.
 > 
-> Drop "This describes the devicetree bindings for" and instead describe
-> the hardware.
-
-Surely I think the system controller's description itself is insufficient.
-This description contains multiple controllers, so add descriptions for each.
-
-
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
+> Thanks.
 > 
-> You do not have more than one entry, so no need for oneOf.
-
-Got it.
-
->> +      - items:
->> +          - enum:
->> +              # sysctrl
->> +              - socionext,uniphier-ld4-sysctrl
->> +              - socionext,uniphier-pro4-sysctrl
->> +              - socionext,uniphier-pro5-sysctrl
->> +              - socionext,uniphier-pxs2-sysctrl
->> +              - socionext,uniphier-ld6b-sysctrl
->> +              - socionext,uniphier-sld8-sysctrl
->> +              - socionext,uniphier-ld11-sysctrl
->> +              - socionext,uniphier-ld20-sysctrl
->> +              - socionext,uniphier-pxs3-sysctrl
->> +              - socionext,uniphier-nx1-sysctrl
->> +              - socionext,uniphier-sysctrl
->> +              # soc-glue
->> +              - socionext,uniphier-ld4-soc-glue
->> +              - socionext,uniphier-pro4-soc-glue
->> +              - socionext,uniphier-pro5-soc-glue
->> +              - socionext,uniphier-pxs2-soc-glue
->> +              - socionext,uniphier-ld6b-soc-glue
->> +              - socionext,uniphier-sld8-soc-glue
->> +              - socionext,uniphier-ld11-soc-glue
->> +              - socionext,uniphier-ld20-soc-glue
->> +              - socionext,uniphier-pxs3-soc-glue
->> +              - socionext,uniphier-nx1-soc-glue
->> +              - socionext,uniphier-soc-glue
->> +              # perictrl
->> +              - socionext,uniphier-ld4-perictrl
->> +              - socionext,uniphier-pro4-perictrl
->> +              - socionext,uniphier-pro5-perictrl
->> +              - socionext,uniphier-pxs2-perictrl
->> +              - socionext,uniphier-ld6b-perictrl
->> +              - socionext,uniphier-sld8-perictrl
->> +              - socionext,uniphier-ld11-perictrl
->> +              - socionext,uniphier-ld20-perictrl
->> +              - socionext,uniphier-pxs3-perictrl
->> +              - socionext,uniphier-nx1-perictrl
->> +              - socionext,uniphier-perictrl
->> +              # sdctrl
->> +              - socionext,uniphier-ld4-sdctrl
->> +              - socionext,uniphier-pro4-sdctrl
->> +              - socionext,uniphier-pro5-sdctrl
->> +              - socionext,uniphier-pxs2-sdctrl
->> +              - socionext,uniphier-ld6b-sdctrl
->> +              - socionext,uniphier-sld8-sdctrl
->> +              - socionext,uniphier-ld11-sdctrl
->> +              - socionext,uniphier-ld20-sdctrl
->> +              - socionext,uniphier-pxs3-sdctrl
->> +              - socionext,uniphier-nx1-sdctrl
->> +              - socionext,uniphier-sdctrl
->> +              # mioctrl
->> +              - socionext,uniphier-ld4-mioctrl
->> +              - socionext,uniphier-pro4-mioctrl
->> +              - socionext,uniphier-sld8-mioctrl
->> +              - socionext,uniphier-ld11-mioctrl
->> +              - socionext,uniphier-mioctrl
->> +              # adamv
->> +              - socionext,uniphier-ld11-adamv
->> +              - socionext,uniphier-ld20-adamv
->> +              - socionext,uniphier-adamv
->> +          - const: simple-mfd
->> +          - const: syscon
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties:
->> +  type: object
-> 
-> No, instead you should describe the children. This must me
-> additionalProperties: false
-
-Each controller has different children, so need to define children
-for each controller using "if".
-
-> You also miss example.
-> 
-> Start from example-schema as your template or guidance.
-
-I see. I'll add example.
-
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+>>>
+>>>                  F2FS_IPU_FSYNC  F2FS_IPU_SSR_UTIL   F2FS_IPU_SSR_UTIL(with patch)
+>>> SQLite Insert(QPS)  6818.08     6327.09(-7.20%)     6757.72
+>>> SQLite Update(QPS)  6528.81     6336.57(-2.94%)     6490.77
+>>> SQLite Delete(QPS)  9724.68     9378.37(-3.56%)     9622.27
+>>>
+>>> Thanks
+>>>
+>>> On Tue, Nov 01, 2022 at 11:14:55PM +0800, Chao Yu wrote:
+>>>> On 2022/10/21 10:31, qixiaoyu1 wrote:
+>>>>> Currently IPU policy for fdatasync is coupled with F2FS_IPU_FSYNC.
+>>>>> Fix to apply it to all IPU policy.
+>>>>
+>>>> Xiaoyu,
+>>>>
+>>>> Sorry for the delay.
+>>>>
+>>>> I didn't get the point, can you please explain more about the
+>>>> issue?
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>> Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+>>>>> ---
+>>>>>   fs/f2fs/data.c | 8 +++-----
+>>>>>   fs/f2fs/file.c | 4 +++-
+>>>>>   2 files changed, 6 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>> index a71e818cd67b..fec8e15fe820 100644
+>>>>> --- a/fs/f2fs/data.c
+>>>>> +++ b/fs/f2fs/data.c
+>>>>> @@ -2518,6 +2518,9 @@ static inline bool check_inplace_update_policy(struct inode *inode,
+>>>>>   	if (policy & (0x1 << F2FS_IPU_HONOR_OPU_WRITE) &&
+>>>>>   			is_inode_flag_set(inode, FI_OPU_WRITE))
+>>>>>   		return false;
+>>>>> +	/* this is set by fdatasync or F2FS_IPU_FSYNC policy */
+>>>>> +	if (is_inode_flag_set(inode, FI_NEED_IPU))
+>>>>> +		return true;
+>>>>>   	if (policy & (0x1 << F2FS_IPU_FORCE))
+>>>>>   		return true;
+>>>>>   	if (policy & (0x1 << F2FS_IPU_SSR) && f2fs_need_SSR(sbi))
+>>>>> @@ -2538,11 +2541,6 @@ static inline bool check_inplace_update_policy(struct inode *inode,
+>>>>>   			!IS_ENCRYPTED(inode))
+>>>>>   		return true;
+>>>>> -	/* this is only set during fdatasync */
+>>>>> -	if (policy & (0x1 << F2FS_IPU_FSYNC) &&
+>>>>> -			is_inode_flag_set(inode, FI_NEED_IPU))
+>>>>> -		return true;
+>>>>> -
+>>>>>   	if (unlikely(fio && is_sbi_flag_set(sbi, SBI_CP_DISABLED) &&
+>>>>>   			!f2fs_is_checkpointed_data(sbi, fio->old_blkaddr)))
+>>>>>   		return true;
+>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>>> index 82cda1258227..08091550cdf2 100644
+>>>>> --- a/fs/f2fs/file.c
+>>>>> +++ b/fs/f2fs/file.c
+>>>>> @@ -270,8 +270,10 @@ static int f2fs_do_sync_file(struct file *file, loff_t start, loff_t end,
+>>>>>   		goto go_write;
+>>>>>   	/* if fdatasync is triggered, let's do in-place-update */
+>>>>> -	if (datasync || get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks)
+>>>>> +	if (datasync || (SM_I(sbi)->ipu_policy & (0x1 << F2FS_IPU_FSYNC) &&
+>>>>> +			get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks))
+>>>>>   		set_inode_flag(inode, FI_NEED_IPU);
+>>>>> +
+>>>>>   	ret = file_write_and_wait_range(file, start, end);
+>>>>>   	clear_inode_flag(inode, FI_NEED_IPU);
