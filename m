@@ -2,173 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D335E621195
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAB4621199
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233962AbiKHM5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:57:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
+        id S234011AbiKHM5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233437AbiKHM5O (ORCPT
+        with ESMTP id S234099AbiKHM5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:57:14 -0500
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE57613F74
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:57:11 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id sOA7o2YX9XaejsOA7odE9X; Tue, 08 Nov 2022 13:57:09 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 08 Nov 2022 13:57:09 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <482e8394-ceac-658f-7a69-29033f805440@wanadoo.fr>
-Date:   Tue, 8 Nov 2022 13:57:07 +0100
+        Tue, 8 Nov 2022 07:57:40 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7812D14033;
+        Tue,  8 Nov 2022 04:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667912258; x=1699448258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xSK23YgmWbIwWWCN8dNWUK/G0TelxDekE8oSOLxEO5o=;
+  b=MqnOC1mKI3xQaATx1++88QHGg5Wy8o4d4t4iBN4XNpULW5HDV/Lnw2HD
+   RkKQlicUnVGOJdy9qlWlR173jo1R8qTMx+SIUPPF1MrayW+W4YfD0ZRta
+   Uq5jknvJw2dpWd6V/DWpIopunVJ6AJqhlM4B1uY+y5PwQcW7WCdGYkB16
+   evdXBbjUOw+Yqb4WTck7Fica/4458H3cjxVlIrTvCT9Qjbrvyfy5h489i
+   rkzh9qVdCZyHTq4N9KpVo/sUxLqibwW7S/hPdWVRn9qYQ7U1MkADsdQ7/
+   oVtPiQWpEuWTjifXwHUQcQasm0mOJPFqIryAg8eX3/uoA/tYDoLVFNOQH
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310684135"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="310684135"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 04:57:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="669538018"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="669538018"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 08 Nov 2022 04:57:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1osOAY-0098S5-1J;
+        Tue, 08 Nov 2022 14:57:34 +0200
+Date:   Tue, 8 Nov 2022 14:57:34 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gilles BULOZ <gilles.buloz@kontron.com>
+Subject: Re: [PATCH 1/1] serial: 8250_dma: Rearm DMA Rx if more data is
+ pending
+Message-ID: <Y2pSPspgnx+YkBJH@smile.fi.intel.com>
+References: <20221107102126.56481-1-ilpo.jarvinen@linux.intel.com>
+ <Y2jsqNHQ5KhYISb3@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/2] drivers: rtc: add max313xx series rtc driver
-To:     ibrahim.tilki@analog.com
-Cc:     Zeynep.Arslanbenzer@analog.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        jdelvare@suse.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux@roeck-us.net, robh+dt@kernel.org
-References: <20221108122254.1185-1-Ibrahim.Tilki@analog.com>
- <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221108122254.1185-2-Ibrahim.Tilki@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2jsqNHQ5KhYISb3@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 08/11/2022 à 13:22, Ibrahim Tilki a écrit :
-> Adding support for Analog Devices MAX313XX series RTCs.
+On Mon, Nov 07, 2022 at 01:31:52PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 07, 2022 at 12:21:26PM +0200, Ilpo J�rvinen wrote:
+
+...
+
+> Yep, I used to have something like draft of the below change locally.
+> Thanks for putting it in shape and upstreamimg!
 > 
-> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
-> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer-OyLXuOCK7orQT0dZR+AlfA@public.gmane.org>
-> ---
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[...]
+...
 
-> +static int max313xx_clkout_register(struct device *dev)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (!device_property_present(dev, "#clock-cells"))
-> +		return 0;
-> +
-> +	max313xx_clk_init.name = rtc->chip->clkout_name;
-> +	device_property_read_string(dev, "clock-output-names",
-> +				    &max313xx_clk_init.name);
-> +	rtc->clkout.init = &max313xx_clk_init;
-> +
-> +	ret = devm_clk_hw_register(dev, &rtc->clkout);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "cannot register clock\n");
-> +
-> +	return of_clk_add_provider(dev->of_node, of_clk_src_simple_get,
-> +				   rtc->clkout.clk);
+> > -static void __dma_rx_complete(void *param)
+> > +static void __dma_rx_complete(struct uart_8250_port *p)
+> >  {
+> > -	struct uart_8250_port	*p = param;
+> >  	struct uart_8250_dma	*dma = p->dma;
 
-Hi,
+Btw, looking into my patch in archives I noticed that dma can also be passed as
+a parameter...
 
-No devm like functionality here?
+...
 
-devm_of_clk_add_hw_provider()? (not sure of the impact or not of the 
-"_hw_" in the function name)
+> > +static void dma_rx_complete(void *param)
+> > +{
+> > +	struct uart_8250_port *p = param;
 
-> +}
+> > +	struct uart_8250_dma *dma = p->dma;
 
-[...]
+...since you have it already here.
 
-> +static int max313xx_irq_init(struct device *dev, const char *devname)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	bool wakeup;
-> +	int ret;
-> +
-> +	rtc->irq = rtc->irqs[0];
-> +
-> +	switch (rtc->id) {
-> +	case ID_MAX31328:
-> +		/* max31328 sqw ant int pin is shared */
-> +		if (rtc->id == ID_MAX31328 && rtc->irq > 0 && rtc->clkout.clk)
-> +			return dev_err_probe(dev, -EOPNOTSUPP,
-> +					     "cannot have both sqw clock output and irq enabled");
-> +
-> +		break;
-> +	case ID_MAX31331:
-> +	case ID_MAX31334:
-> +		if (rtc->clkout.clk) {
-> +			/* clockout needs to be enabled for using INTA pin */
-> +			ret = clk_prepare_enable(rtc->clkout.clk);
-> +			if (ret)
-> +				return dev_err_probe(dev, ret,
-> +						     "cannot enable clkout\n");
-> +		} else {
-> +			rtc->irq = rtc->irqs[1];
-> +		}
-> +		break;
-> +	default:
-> +		if (rtc->clkin) {
-> +			rtc->irq = rtc->irqs[1];
-> +
-> +			/* wrong interrupt specified */
-> +			if (rtc->irqs[0] > 0 && rtc->irqs[1] <= 0)
-> +				dev_warn(dev, "INTA is specified but INTB required for irq when clkin is enabled\n");
-> +
-> +			if (rtc->clkout.clk && rtc->irq > 0)
-> +				return dev_err_probe(dev, -EOPNOTSUPP,
-> +						"irq not possible when both clkin and clkout are configured\n");
-> +
-> +			if (rtc->irq <= 0)
-> +				break;
-> +
-> +			/* clkout needs to be disabled for using INTB pin */
-> +			if (rtc->chip->clkout->en_invert)
-> +				ret = regmap_set_bits(rtc->regmap,
-> +						      rtc->chip->clkout->reg,
-> +						      rtc->chip->clkout->en_bit);
-> +			else
-> +				ret = regmap_clear_bits(rtc->regmap,
-> +							rtc->chip->clkout->reg,
-> +							rtc->chip->clkout->en_bit);
-> +
-> +			if (ret)
-> +				return ret;
-> +		}
-> +		break;
-> +	}
-> +
-> +	if (rtc->irq > 0) {
-> +		ret = devm_request_threaded_irq(dev, rtc->irq, NULL,
-> +						&max313xx_irq, IRQF_ONESHOT,
-> +						devname, rtc);
-> +		if (ret)
-> +			return ret;
-> +
-> +		wakeup = device_property_read_bool(dev, "wakeup-source");
-> +		return device_init_wakeup(dev, wakeup);
-> +	}
-> +
-> +	__clear_bit(RTC_FEATURE_ALARM, rtc->rtc->features);
+> > +	unsigned long flags;
+> > +
+> > +	__dma_rx_complete(p);
 
-Is it safe? Does it worth it to use __clear_bit() instead of clear_bit() 
-here?
-
-> +
-> +	return 0;
-> +}
-
-[...]
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
