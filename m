@@ -2,289 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CD4620B83
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD10620B92
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 09:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbiKHIvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 03:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S233656AbiKHIxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 03:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiKHIvX (ORCPT
+        with ESMTP id S233354AbiKHIxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 03:51:23 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F602DA86;
-        Tue,  8 Nov 2022 00:51:21 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id s12so11774167edd.5;
-        Tue, 08 Nov 2022 00:51:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kRzenHJKW7SUmdyxPbW7TBO+s2zFUo40TmdxQBfees4=;
-        b=FpfU2s1kOdyaiPi83ZwN2JP4LuVvpVlBJjB62ZrBm0ngLIjpE74ghzde6YHiQ/dcSK
-         WBt0mX+FC7yVlqZkImpQvsHfRmzyBC2iU8HwhkexueNeqjA1OGIvc29R8h+PqikZXLns
-         cKGDxNw9+g3frz7hQTkdsnqjqbZT0zQgl5QK+vNcIAHg6DudOswXsVZ+Pw9ZOtCcrqjn
-         qZJHYX6egfh1W4GeofnmsDzGPM1OFaRW8EtVLT/dWRJAO3ZvscxABWvrYC2eLJS5b1D1
-         z0AAMwvod1jOqU+8/H8bm0pppXg3uNwEVlnlXKIUSUiKEekAVw5WKLj+gGxl9+6cQOjn
-         ZaoA==
+        Tue, 8 Nov 2022 03:53:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0107C2E69E
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 00:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667897568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RKuZuuCI3q1K/HAD0IraHvmgBZQfdPy2jKFzjPsKHLQ=;
+        b=PbAV/nsQYNlOgKCOTa+7l3+MxDr52SGnVzXAO28ZISmpl/lQEByPligXroMNLFOK9vZOT9
+        QEu+TllH23kUJr3ro8fVaNus5XLJA1R+Y270FB+wlK+0fjcJx4Xc/9ind805QAHO7oG9j7
+        S/3ZlYA0fTYQm6yhiYQ+dfG4/UWqAJk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-163-Rpz48Fb2OwayaBUvVT5Pog-1; Tue, 08 Nov 2022 03:52:46 -0500
+X-MC-Unique: Rpz48Fb2OwayaBUvVT5Pog-1
+Received: by mail-wm1-f69.google.com with SMTP id m34-20020a05600c3b2200b003cf549cb32bso9610998wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 00:52:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kRzenHJKW7SUmdyxPbW7TBO+s2zFUo40TmdxQBfees4=;
-        b=u+Bw+eWOCC70sSiROMRmgRibjpWqLmDGdanOYQ3i+agKiKp5VUP8iKGqSonyii2CUd
-         /7b3vnIqQmBxlwZWiK+13JYcAcZ3vEnJw4/2lxYKP2Jk+F29vX526yGsLbq9KXTy7vqo
-         mG+fYda30wO43dHCnEvutPy1fosoDlwB1TTrX9aREUCMs+NuJdRc0lnNiyzSAgoxeM34
-         bO8QpzfsCgTVG2zjNRFRk90IkcJkoC+UvavB57pu/TMpmf1u0ZfLbqsybkjGGuTKVxii
-         9nAM6tKMgJxePDIYafFl6OPwogPKBEou5EGYxFMUMNc4JrjzpqiiszIrG3pqpAsNpApm
-         Ss4w==
-X-Gm-Message-State: ACrzQf0nc80LBf7rNYKQOc/82XD8lqbR+RxJnCmrsONd3Gaf1+BZM2AJ
-        9OEQdbI2dXkA4y7KhcY6JJA=
-X-Google-Smtp-Source: AMsMyM65xiO+iPV1WqAee4U6PJ1Ob7mwksc2UNM7XMP8gkVUz+Me/KxMGngv5ETGeo3Vw21D2bkFzQ==
-X-Received: by 2002:a05:6402:538f:b0:444:c17b:1665 with SMTP id ew15-20020a056402538f00b00444c17b1665mr55539158edb.98.1667897480354;
-        Tue, 08 Nov 2022 00:51:20 -0800 (PST)
-Received: from [10.76.84.153] ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id ky8-20020a170907778800b00782539a02absm4351636ejc.194.2022.11.08.00.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 00:51:20 -0800 (PST)
-Message-ID: <c01b0e56563b2b6f8ef48ad90977646706a2c933.camel@gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: iio: addac: add AD74115
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 08 Nov 2022 10:51:18 +0200
-In-Reply-To: <20221106154634.2286faf3@jic23-huawei>
-References: <20221103094436.2136698-1-demonsingur@gmail.com>
-         <20221103094436.2136698-2-demonsingur@gmail.com>
-         <20221106154634.2286faf3@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKuZuuCI3q1K/HAD0IraHvmgBZQfdPy2jKFzjPsKHLQ=;
+        b=SejKP2N5QN5+/uUllAbpLeLVJPrezOOAYRFsvuXd7FXNN6HLf9Yx7/eu+Y4swMUByO
+         6fBkDEZV2lwF3ChZzhmLyLTzg98rzBjySL/fO2AaORT2mtcMDROzOzKuNBKkH3rTmmzG
+         nFprj5Yu6xrJoHyWMYvdsa0hMbhlS9Ab0BocQBzzwuoH1m++8Z5zzkCd/Qjy/BjXkgI0
+         gCvbd2ThpLYAIOqadzOVNGDoosNf6nGLU6rxWlXQ9DKItrnBalbmoIjxs+VxZY/A8oQi
+         pDSYIOkR43XRmf0Kwo0RFDC1qPIH4NUftK5zexk/qrjOoVTCIrOExSvKAMgs9C+IQZ7b
+         BbVg==
+X-Gm-Message-State: ACrzQf3VFSmrFff6fLSEynomxopnqLVCxBdcOORyGlVsZOhCRr6CqOqX
+        bYhFGKxQYc0CLtJZMKbl1+efQGrIGhviDn790VMw20TEZoUQ8OySwhme5KVkM+p1MDj6Ynz0gUc
+        o1ReAeUhbUdT/8FLhCkcFTSGT
+X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id g12-20020adfd1ec000000b00236880f2adfmr34973830wrd.617.1667897565468;
+        Tue, 08 Nov 2022 00:52:45 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM7Td3mYckln2lF/t1NuVY8SNErV7PoyhpXFlmaTgJp4otL4qyQGKPyguMnBStkFyC35OBmmZw==
+X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id g12-20020adfd1ec000000b00236880f2adfmr34973813wrd.617.1667897565248;
+        Tue, 08 Nov 2022 00:52:45 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:e3ec:5559:7c5c:1928? ([2001:b07:6468:f312:e3ec:5559:7c5c:1928])
+        by smtp.googlemail.com with ESMTPSA id bq21-20020a5d5a15000000b00231ed902a4esm9931077wrb.5.2022.11.08.00.52.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 00:52:44 -0800 (PST)
+Message-ID: <b9debf81-1489-6379-4377-e987f604bf96@redhat.com>
+Date:   Tue, 8 Nov 2022 09:52:43 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/8] KVM: SVM: extract VMCB accessors to a new file
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        nathan@kernel.org, thomas.lendacky@amd.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org,
+        jmattson@google.com, stable@vger.kernel.org
+References: <20221107145436.276079-1-pbonzini@redhat.com>
+ <20221107145436.276079-2-pbonzini@redhat.com> <Y2k7o8i/qhBm9bpC@google.com>
+ <3ca5e8b6-c786-2f15-8f81-fd6353c43692@redhat.com>
+ <Y2lLFEt3tQBoZTDe@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y2lLFEt3tQBoZTDe@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-11-06 at 15:46 +0000, Jonathan Cameron wrote:
-> On Thu,  3 Nov 2022 11:44:35 +0200
-> Cosmin Tanislav <demonsingur@gmail.com> wrote:
->=20
-> > From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> >=20
-> > The AD74115H is a single-channel, software-configurable, input and
-> > output device for industrial control applications. The AD74115H
-> > provides a wide range of use cases, integrated on a single chip.
-> >=20
-> > These use cases include analog output, analog input, digital output,
-> > digital input, resistance temperature detector (RTD), and thermocouple
-> > measurement capability. The AD74115H also has an integrated HART modem.
-> >=20
-> > A serial peripheral interface (SPI) is used to handle all communication=
-s
-> > to the device, including communications with the HART modem. The digita=
-l
-> > input and digital outputs can be accessed via the SPI or the
-> > general-purpose input and output (GPIO) pins to support higher
-> > speed data rates.
-> >=20
-> > The device features a 16-bit, sigma-delta analog-to-digital converter
-> > (ADC) and a 14-bit digital-to-analog converter (DAC).
-> > The AD74115H contains a high accuracy 2.5 V on-chip reference that can
-> > be used as the DAC and ADC reference.
-> >=20
-> > Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
->=20
-> Hi Cosmin,
->=20
-> A few questions inline.  Complex device so I'll doubt we'll ever get this
-> binding to be as tidy as for simpler devices.  Hence most of the below ar=
-e
-> suggestions rather than requirements from me.
->=20
-> Jonathan
->=20
-> > ---
-> >  .../bindings/iio/addac/adi,ad74115.yaml       | 370 ++++++++++++++++++
-> >  MAINTAINERS                                   |   7 +
-> >  2 files changed, 377 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/iio/addac/adi,ad7=
-4115.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/iio/addac/adi,ad74115.ya=
-ml b/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
-> > new file mode 100644
-> > index 000000000000..621f11d5c1f3
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
-> > @@ -0,0 +1,370 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/iio/addac/adi,ad74115.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analog Devices AD74115H device
-> > +
-> > +maintainers:
-> > +  - Cosmin Tanislav <cosmin.tanislav@analog.com>
-> > +
-> > +description: |
-> > +  The AD74115H is a single-channel software configurable input/output
-> > +  device for industrial control applications. It contains functionalit=
-y for
-> > +  analog output, analog input, digital output, digital input, resistan=
-ce
-> > +  temperature detector, and thermocouple measurements integrated into =
-a single
-> > +  chip solution with an SPI interface. The device features a 16-bit AD=
-C and a
-> > +  14-bit DAC.
-> > +
-> > +    https://www.analog.com/en/products/ad74115h.html
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - adi,ad74115h
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 0
->=20
-> I'm not seeing any child nodes, so why do we need these two?
->=20
+On 11/7/22 19:14, Sean Christopherson wrote:
+> On Mon, Nov 07, 2022, Paolo Bonzini wrote:
+>> On 11/7/22 18:08, Sean Christopherson wrote:
+>>> What about making KVM self-sufficient?
+>>
+>> You mean having a different asm-offsets.h file just for arch/x86/kvm/?
+> 
+> Yeah.
 
-Will fix.
+Doh, it would have been enough to add #ifdef COMPILE_OFFSETS to 
+svm/svm.h, but it was also pretty easy to generate a separate 
+asm-offsets file so why not.
 
-> > +
-> > +  avdd-supply: true
-> > +  avcc-supply: true
-> > +  dvcc-supply: true
-> > +  aldo1v8-supply: true
->=20
-> aldo1v8 is an output pin. "1.8 V Analog LDO Output. Do not use ALDO1V8 ex=
-ternally."
-> The associated input is avcc.  Given we shouldn't connect anything to the=
- pin,
-> we don't want it in the binding docs
->=20
-
-Will fix.
-
-> > +  dovdd-supply: true
-> > +  refin-supply: true
-> > +
->=20
-> ...
->=20
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description: |
-> > +      Conversion range for ADC conversion 2.
-> > +      0 - 0V to 12V
-> > +      1 - -12V to +12V
-> > +      2 - -2.5V to +2.5V
-> > +      3 - -2.5V to 0V
-> > +      4 - 0V to 2.5V
-> > +      5 - 0V to 0.625V
-> > +      6 - -104mV to +104mV
-> > +      7 - 0V to 12V
->=20
-> For a lot of similar cases we handle these numerically to give
-> a human readable dts.  Is there a strong reason not to do so here (in mv)
->=20
-
-I used this approach mostly because it maps dirrectly to register values
-and because it's easier to parse. dts isn't exactly nice at handling
-negative values. I can switch it to mv array if you insist.
-
->=20
-> > +    minimum: 0
-> > +    maximum: 7
-> > +    default: 0
-> > +
-> > +  adi,sense-agnd-buffer-lp:
-> lp is a little ambiguous, given we have a habit of using it for low pass
-> in filters etc. Perhaps worth spelling these out?
->      adi,sens-agnd-buffer-low-power etc?
-
-Will fix.
-
->=20
-> > +    type: boolean
-> > +    description: |
-> > +      Whether to enable low-power buffered mode for the AGND sense pin=
-.
-> > +
-> > +  adi,lf-buffer-lp:
-> > +    type: boolean
-> > +    description: |
-> > +      Whether to enable low-power buffered mode for the low-side filte=
-red
-> > +      sense pin.
-> > +
-> > +  adi,hf-buffer-lp:
-> > +    type: boolean
-> > +    description: |
-> > +      Whether to enable low-power buffered mode for the high-side filt=
-ered
-> > +      sense pin.
-> > +
-> > +  adi,ext2-buffer-lp:
-> > +    type: boolean
-> > +    description: Whether to enable low-power buffered mode for the EXT=
-2 pin.
-> > +
-> > +  adi,ext1-buffer-lp:
-> > +    type: boolean
-> > +    description: Whether to enable low-power buffered mode for the EXT=
-1 pin.
->=20
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - spi-cpol
-> > +  - avdd-supply
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> > +  - if:
-> > +      properties:
-> > +        adi,digital-input-sink-range-high: true
-> > +    then:
-> > +      properties:
-> > +        adi,digital-input-sink-microamp:
-> > +          maximum: 7400
-> > +
-> > +additionalProperties: false
->=20
-> Does this need to be unevalutatedProperties to allow
-> for the extra ones in spi-periphera-props.yaml?
->=20
-
-Will fix.
-
-> > +
+Paolo
 
