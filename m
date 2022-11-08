@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7472D620E06
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B1C620E0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 12:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbiKHLBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 06:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S233935AbiKHLCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 06:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbiKHLBa (ORCPT
+        with ESMTP id S233479AbiKHLCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 06:01:30 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C2345EDF;
-        Tue,  8 Nov 2022 03:01:29 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A8AMfHC030637;
-        Tue, 8 Nov 2022 11:01:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=b8ful+Ico9cTg5FCbvxSJcqiOop2CXximVnBcSFM/x4=;
- b=BFZLhCd25oN1JQXFyvawgxBXRCyYova+GKqwvJrLJTdhgL3BcdNS4YwapF8pQS3hZ2eI
- ioGxJ12has4fB8EFz/0KLYCro68hGOBUdPuvBQp/gDvJGNJjN5cO6fuK7COhUAY66VbI
- XyQSjkb4Sm6P0kOad7nhkbnlKmUikcE2Vht3RInenLeXrpJzcDRxMUVkTp/Hcm7/9pwR
- Zkd6kjHdkGFKzm5rteb1RcSHhjtrbm4+6AdZ6tD485Z2GHIa1Zg29J1e2mjiWOBBVs5W
- O2bTESNztHR4KSlkATBV+CVMY0dM4noOzNH+XpErytMizi2jMx7pTPcZmgrHkSVmbiFa /A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kqhmggj7t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Nov 2022 11:01:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A8B1IkG021849
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 8 Nov 2022 11:01:18 GMT
-Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
- 03:01:15 -0800
-Message-ID: <dad47960-6c91-3b77-4371-db649de0c147@quicinc.com>
-Date:   Tue, 8 Nov 2022 16:31:12 +0530
+        Tue, 8 Nov 2022 06:02:50 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34980450B3;
+        Tue,  8 Nov 2022 03:02:49 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id E87E732003D3;
+        Tue,  8 Nov 2022 06:02:44 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 08 Nov 2022 06:02:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1667905364; x=1667991764; bh=nP2DN9huvRZCwj+EeirHvDaYlV3K
+        zWuv19wsVeFnYlg=; b=nPTarOnIxrW/zamDmNXsZG4ai+ApYSZmmzu+BhtbT5rw
+        mtbLXtnZ91Wsx6cYX7aQe4jZNZCZsGJC2Mla0GEjFkbCGOJ0KBcJtDMhDKwLl2qA
+        xaOoirLqqKZ47HBzkKP2M5j76dDIFWFnVqIqsP9aY5MXXANWgjOnEYn4r2NdpYtA
+        eIrKIfH3WTwPLnB+RkwhAu7gPi2pBocGLuYYuCxZ37Yy0ZkfWkf3aIyWlg2KfItI
+        fMMe5Ex/coTrt3s6VoIfzZS7AryQmV2ko/ZWtQmxKcO8hjv2Nz70dTdz6ifpHEZp
+        1rdY7PjtxERy0Q0Niv606EEZIHGhJMdtMiFBZqSRHw==
+X-ME-Sender: <xms:UzdqY1hDCSISO_-tueqlv65Y-WT_by5RX-iY4Ks0vXO6BVm1TInShQ>
+    <xme:UzdqY6DYiH1jBu5p3i9vMHEdK2-4ppT4mhYlRGf9-8zqlnPHTBDTgXN0NbEFsvbtS
+    zLCMQh0zQpRTRU>
+X-ME-Received: <xmr:UzdqY1FUxNDg1EKaGIKEFlwu8n9f0aHEgH_ktHJyHrIG3Nfq7Pts_ecTuHbXqhjLAVUYSbUIN1n-K5SXRB-pYNAEYQQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedtgddvfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpeehhfdtjedviefffeduuddvffegteeiieeguefgudffvdfftdefheeijedthfej
+    keenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:VDdqY6QY6IRVvS7SoRrZrc9OVQxuCMX-yqC-_VGfglqi2aj1Iptghg>
+    <xmx:VDdqYyyaaUhuHCuo7VOmKuyeUPaPEquhT5Xgch_f2n0DWNtfriLfFQ>
+    <xmx:VDdqYw7J8H6KkbKUGE7Dk_PaNtjh_YA5u9eNYUPoWMDKw7x29dzckg>
+    <xmx:VDdqY3Lw9EuSetC5HmwinjJF4KgSYqFnlwzwvtxQZtZHdjcE_Ao8bg>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 8 Nov 2022 06:02:43 -0500 (EST)
+Date:   Tue, 8 Nov 2022 13:02:38 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Andy Ren <andy.ren@getcruise.com>
+Cc:     netdev@vger.kernel.org, richardbgobert@gmail.com,
+        davem@davemloft.net, wsa+renesas@sang-engineering.com,
+        edumazet@google.com, petrm@nvidia.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, andrew@lunn.ch,
+        dsahern@gmail.com, sthemmin@microsoft.com,
+        sridhar.samudrala@intel.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, roman.gushchin@linux.dev
+Subject: Re: [PATCH net-next v3] net/core: Allow live renaming when an
+ interface is up
+Message-ID: <Y2o3ThYXNADKiwRT@shredder>
+References: <20221107174242.1947286-1-andy.ren@getcruise.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC 0/2] Add support for SCMI QTI Memlat Vendor Protocol
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>
-CC:     <andersson@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <sudeep.holla@arm.com>, <agross@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <konrad.dybcio@somainline.org>,
-        <quic_avajid@quicinc.com>, <souvik.chakravarty@arm.com>
-References: <1667451512-9655-1-git-send-email-quic_sibis@quicinc.com>
- <Y2OMpiMXcaEiiA/2@e120937-lin>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <Y2OMpiMXcaEiiA/2@e120937-lin>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: OVAiJ6J_y-sOXeBB5zq_9fDSTte_3FAD
-X-Proofpoint-ORIG-GUID: OVAiJ6J_y-sOXeBB5zq_9fDSTte_3FAD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1011 impostorscore=0 adultscore=0 suspectscore=0 mlxlogscore=975
- priorityscore=1501 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211080061
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107174242.1947286-1-andy.ren@getcruise.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Cristian,
-Thanks for taking time to review the series.
+On Mon, Nov 07, 2022 at 09:42:42AM -0800, Andy Ren wrote:
+> Allow a network interface to be renamed when the interface
+> is up.
+> 
+> As described in the netconsole documentation [1], when netconsole is
+> used as a built-in, it will bring up the specified interface as soon as
+> possible. As a result, user space will not be able to rename the
+> interface since the kernel disallows renaming of interfaces that are
+> administratively up unless the 'IFF_LIVE_RENAME_OK' private flag was set
+> by the kernel.
+> 
+> The original solution [2] to this problem was to add a new parameter to
+> the netconsole configuration parameters that allows renaming of
+> the interface used by netconsole while it is administratively up.
+> However, during the discussion that followed, it became apparent that we
+> have no reason to keep the current restriction and instead we should
+> allow user space to rename interfaces regardless of their administrative
+> state:
+> 
+> 1. The restriction was put in place over 20 years ago when renaming was
+> only possible via IOCTL and before rtnetlink started notifying user
+> space about such changes like it does today.
+> 
+> 2. The 'IFF_LIVE_RENAME_OK' flag was added over 3 years ago in version
+> 5.2 and no regressions were reported.
+> 
+> 3. In-kernel listeners to 'NETDEV_CHANGENAME' do not seem to care about
+> the administrative state of interface.
+> 
+> Therefore, allow user space to rename running interfaces by removing the
+> restriction and the associated 'IFF_LIVE_RENAME_OK' flag. Help in
+> possible triage by emitting a message to the kernel log that an
+> interface was renamed while UP.
+> 
+> [1] https://www.kernel.org/doc/Documentation/networking/netconsole.rst
+> [2] https://lore.kernel.org/netdev/20221102002420.2613004-1-andy.ren@getcruise.com/
+> 
+> Signed-off-by: Andy Ren <andy.ren@getcruise.com>
 
-On 11/3/22 15:11, Cristian Marussi wrote:
-> On Thu, Nov 03, 2022 at 10:28:30AM +0530, Sibi Sankar wrote:
->> The patch series documents the bindings and adds support for the
->> SCMI QTI memlat (memory latency) vendor protocol. The protocol takes
->> in several tuneables including the IPM ratio (Instructions Per Miss),
->> bus bandwidth requirements and PMU maps to enable frequency scaling
->> of various buses (L3/LLCC/DDR). The scaling is performed by the HW
->> memory latency governor running on the CPUSS Control Processor.
->>
->> Depends on CPUCP mailbox driver:
->> https://patchwork.kernel.org/project/linux-arm-msm/cover/1663135386-26270-1-git-send-email-quic_sibis@quicinc.com/
->>
-> 
-> [+ CC: souvik.chakravarty@arm.com ]
-> 
-> Hi Sibi,
-> 
-> Nice to see vendor protocols starting to make their way into upstream !
-> 
-> I only glanced through the series as of now, and I'd have a few
-> questions before going on with the review:
-> 
->   - why this protocol is dependent on a specific transport ?
->     Is it to compile it only on platform supoprting it without adding
->     a per-protocol Kconfig ?
-
-It was done just to compile it on platforms supporting it but it doesn't
-have to done that way. I remove the dependency during the next re-spin.
-
-- Sibi
-
-> 
-> Protocols are anyway enumerated at SCMI stack probe time so even if it
-> is not there it just won't be activated...I maybe missing something.
-> 
-> Thanks,
-> Cristian
-> 
-> 
-> 
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
