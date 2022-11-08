@@ -2,169 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF2D621D33
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A95621D30
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKHTpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 14:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S229490AbiKHTp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 14:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiKHTpc (ORCPT
+        with ESMTP id S229452AbiKHTpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 14:45:32 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2062.outbound.protection.outlook.com [40.107.96.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A186748C9
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 11:45:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DWwCUeKS7yNabdLynju+v6Xn0gAphKe/92nNDuMs+koe5fE9Zthe8M22JAOa9DGkEeln4I+UJOpt4JgmX8uOJYC9xiAZvTp1RHBF0lfGaIqeFr73UP8FyorZDyjcEijAGYKtG/jqi/4N5f+ezfLNHRJs4i1V2eli4/CaeA2DLDQXhRUuDWqOa5sVP3GjHJySEUCP0YL1PsUsLCcW/dtGFNkgGSlGHfGfXWZPYKjZ/PKGColWKkV9enBE6cM53Ukr/pAG7sQE4UJ/ccEjZnwsTwetBXQLMML6jg+yvXak4i5R9p6KwQL8kMVjsn8JZaRf5PSzSCd3JAQsrKTzQNbQ1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7LJPB+/JLKzL1YEVvMr7pgn/5j0IjihC2kIEUZ7O1Q8=;
- b=lJrIEFeTVhcaOdAm/QJdgC/QtrDWNoirl7+4eWb+v2pipBsFAWWVWjDDdX/19zQG47wzxKFlaIdHPVuSLub9ANtQxxUtggLAdlIdrA/fFMYKg/NOYViYBJTaXzCCPfQ6ft+hzlE3whOG4MhVrkC018kjUDIsvzmoCJbesd2sCq3bC1+diNk8vTHLSDju9AQUHVJQIdaMOKVZoxCme73a9jPZik/dOTg1nS9o3Sh3i8yeJ1QmdHy7AgcpPWDI9eyeAvyBRDy+94wVKfZlhGKTaU2dp9oyP+6e2Df0JOe9lv4NCwvfB51MMu0bMd1ACqqyYSXwaNabubD7z8pRIyP8hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7LJPB+/JLKzL1YEVvMr7pgn/5j0IjihC2kIEUZ7O1Q8=;
- b=MMPuP7imC0jYLolSmuFwor2XURPc0JrK+ir9LdUAjUYgZGusk8bioWfDAn3rU7gxWXhva4i2mlViwd+HqPU4BcGGbii0RGROgOzUUSsPVtWplhYeBtAgWu2OZgy1Gb5JLf+CVqTgo7gIn5RZnUlrWPmyx/ZgssDBSexGiHDSA2c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by BL1PR12MB5319.namprd12.prod.outlook.com (2603:10b6:208:317::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Tue, 8 Nov
- 2022 19:45:26 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::8db:7ef4:cd2b:2926]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::8db:7ef4:cd2b:2926%6]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
- 19:45:26 +0000
-Message-ID: <0fd9044b-d0c9-5d93-3d5d-8c6baaf695fd@amd.com>
-Date:   Tue, 8 Nov 2022 14:45:21 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] drm/amd/display: Amend descriptions within enum
- pipe_split_policy
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com
-Cc:     aric.cyr@amd.com, Xinhui.Pan@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, alexander.deucher@amd.com, jun.lei@amd.com,
-        airlied@gmail.com, christian.koenig@amd.com, bilbao@vt.edu
-References: <20221107143715.279841-1-carlos.bilbao@amd.com>
-Content-Language: en-US
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20221107143715.279841-1-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR0101CA0180.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:f::23) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Tue, 8 Nov 2022 14:45:21 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519D31D654;
+        Tue,  8 Nov 2022 11:45:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1667936717;
+        bh=N9FGx501778vNVrOHYv7pAKWQyx42YqgfZDZQz7Kpgk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=k3iNJAuKTFU1zCZs/molOCmMlgz/rjg/gx2J96nBs8Qmowxl5/5/XbzmM8ddiN31j
+         HH4vY1V+Uxx11sHIUyU0mRQmfs0aMLSZ5a/hDbv13H4spU7VQ8qf8+L/eIZWvDnQ6N
+         gZlzjsswfTAW1xCXAv7yESvj2OK11CO1cnMXGS9n2glgaqwBEkIBADosDHvorRPBwl
+         nf+qFoDKxJndZCKSQczBv5XFZUTh3oSyQyJxyTvL1kBrAuE05fxgs5r+fvXxkMOCp1
+         QER9Qns99zg8tw80p/vMPMxUTTon9pMOpqjOGnuM1kh53FKdiK+OBDXP+4MLO/tg01
+         RlnUMNIryPV9Q==
+Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N6JV51LvbzgHZ;
+        Tue,  8 Nov 2022 14:45:17 -0500 (EST)
+Message-ID: <916c7a1f-fddd-77d6-6f91-6d3c196e1d86@efficios.com>
+Date:   Tue, 8 Nov 2022 14:45:24 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|BL1PR12MB5319:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c04a5bb-0ffd-4295-734f-08dac1c1c834
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K54OZa7SuEiUAwLQ81qLC3PL6owmAxMeRQGFwMXCZp4dI9ANXzapnbwhF0ZZHuV3Gf2LQcX8O/Rm5LJP6+EnMtvrLQ7UPEnANHt12hL9P4eoNqW5OPKS6PWinyBMFna2HQtCjjwGn8VLB8+oiSb5LnUgfMjP+snUHOiwrKw/CqxFhmYwWTOJa6Q/axvDr3uxBPS+0VKoXFsW1oJ16xLbyHJadatMDs9LLNFKQtnDrP28jXpkfb9SdRuWCpnG1kYZU8on1d9PLKslItpxrp9xl43/gfzjNTUGPA8J1RgVtd9bQ+AgExjXOmn/wXXocyABMDNDByiUeQQ3/xvuI0aQTXbCyN0ZBSa6xI+ZTZ2uzivd+b1Tnaw+oqzzqUT24f0WaiUxBg350rkgrhVNnDD1o5z1o+Sf/okIamK1EyXkpCNGQUsbb93XU02+jXiaXg10icrTclvaQU1yZss5/zh6bQq5Zg4nZqYVmA+gjxxFLDsYqYz+XPTYDt7q1jXzzpSIp/0zH7G2VfkjiEvUAkxuwW4EOZRR/ny+S4DefB/wLsSokr9/nUpbLlGOTYXJwPweWhk07QMkngbVw/3epbexc7Ynjslucd6eb1Ff58JI2OJmO0Og0sPRqY3X6ti3zjGGLlJyplZ5WKt8kesLUwM36dAVfJDSHObxCrhzvq8L4Oo4i45qtldQIxTBibQ11om/loBgqKvY7VZip3LkE0pHQUJgCrGesODZWUxJwHJDADpyTHKkh4wwoFCqh0lOTRdg+qJgsExjVNr1KEXsjkcWiA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199015)(36756003)(31686004)(38100700002)(86362001)(41300700001)(478600001)(6486002)(31696002)(83380400001)(26005)(6666004)(186003)(44832011)(4326008)(6512007)(6506007)(53546011)(8936002)(5660300002)(2906002)(8676002)(2616005)(66946007)(6636002)(66476007)(316002)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWlsajIrTGlKaVFDa1V0VkswOTdKSXp5UFJGZC9qNWRNQ2lSZjVCQ255aFFj?=
- =?utf-8?B?SHl3WGVFdjFkMDNpT1J1Q1JWNEw3c25Gb1dWeHlsWXJXckdtcyt2WFByM0tp?=
- =?utf-8?B?UWZ3WnFTTUUxNWY2NnlNOUwyU29GS2RtWFpxTll4ODNmUWZnMW8zOTVsSVlq?=
- =?utf-8?B?SnBWTzdiRldMMURPSk43dE1aeGF5ZE5wRWVYU2hhWHd0SGJrMXZYd1FvVXpU?=
- =?utf-8?B?SHpleHlCY0FSdDl6VTZBOFlmejZpd1RUSDVheVQ1bDFZSXhnOXE4eTZNd3Zs?=
- =?utf-8?B?S3d6VThwMFFhYVdTZWZJRmo3TTJpaXNEM0VEcE94ZVJKaXNOcWlKTXg0QkFY?=
- =?utf-8?B?ZnNnenVGN0dmSzJ5TnY2dHBac1lPVXN2MGI4cm5iVmNvN3hjQVBvNEl6cVpn?=
- =?utf-8?B?cFN0RHZYOSs0QU1yVFYxSVFGaTBuWGpYZ1FWc1pqMXZzYjV6VGNNYnR0R0d4?=
- =?utf-8?B?ZXRrZXlrYzZkT2NwcnZzOEJqd1RqeW5OWThLa0VNQmU0ZDNYN2VCckZRWGRH?=
- =?utf-8?B?YnNOWllaK3BjUGNMV0F3TXJvd0p6SGVlUGtPYlJCS2g4Tm9NYStzemVaeUhO?=
- =?utf-8?B?SGtHdDh3RjN2VXZpZ0RlcHA1VjZKRjkzczdZU2tLcW9sUTVDZ2MyZkdEY3ZN?=
- =?utf-8?B?MFI0L0JrSnc5aDg1UDlRVmJONFNzVEluVnhjZUtsU3R1OVhkWjR6ZDlHQ1Fp?=
- =?utf-8?B?alI1OEtZOEsvRmN0Smx5aGo0TmZjQmtjNW5pVWdnZ0xkWEVXeHQyQ3IvRDBQ?=
- =?utf-8?B?V080SE5NUEV2RTl4OHljbUozSmdUVDlUZkdQZzFqaFpGVGlPQjRERGxXUDhu?=
- =?utf-8?B?ZzVnZ0YxYUdHcUZPNWlBZGp6STk3Z1ZSTjRhT3hSR1JIanlGUDU1aUVWWmVX?=
- =?utf-8?B?Uy9MU2JCczdFWGd0OTYvSzEzQ1lLeC9mVXRoTGYzYzJTUjBIVjJickVVQnA3?=
- =?utf-8?B?blhNTFFIcjZ1TVNtWDlUSVloVnZpSmxqbVlyTzJmNlExNGJXaFZUcjhZTGVQ?=
- =?utf-8?B?TlAwYWxRZmZIbytDS04vMVNscy9ETEM2WnBNVHBZVWNKSndSbGQzZzZnSXJF?=
- =?utf-8?B?dmhXMWpDT0hzOWtTanU0ZG5FZjBhK0FNQ2NoODg4NXhHSnNLaFI4VjAwc0dk?=
- =?utf-8?B?a0lCUTNUa3hXcmMrbCtMY1BQbnl0ZlJmNi9Xd3dxU2Y2TkVoMGtDMytLWWFN?=
- =?utf-8?B?aWZObFJKd25IS0UwZmk2R2g2RUc4UmVzZGlmTjhFZ0w0NzJnZU1BbjY2NUJ4?=
- =?utf-8?B?MDJmektoQi9ucVpYOFhnUDJZOUsreUI2Qm9VT2ZYRW9jaTcxcmxESFZ4dWk0?=
- =?utf-8?B?QThDWFVPc09rNk0yTzhIRGJ5YUV1dFFlb1FBanZSR01VOEpiOTF0RURkaG5z?=
- =?utf-8?B?OTg3RlVPV0ZFSkFhaFJ0T1NzTVU0SHowZnZ6RXN2clFJSGlQbElvYnRQdFJa?=
- =?utf-8?B?REJxZ291bmJyTHU3L1lZWnlzcG1LdlMwdGpESHo5MElDeHF2TjdyRGErb3lr?=
- =?utf-8?B?V2g4clc1OC9OR25PN25wdjRJRU50RFR0UnVFdWJpeTNGNlhtNDVBckpMYlpY?=
- =?utf-8?B?TkZNbmpqN2krVFU2SE9vMVZqRUNYb1FiM2xwNnFMd3RIaVcvUVFNVkhEQy9v?=
- =?utf-8?B?M3Z3RTlxN3lHOWlaZWkyTEhPN0Urd0kwVmNsV3FXeTBkbGxhQldabDRHWi9y?=
- =?utf-8?B?MVJrYlZCZVJPWjlnblUxbHdpajUvNU5WeWZ2U2VleXl0WUtiR20wYjFCNi90?=
- =?utf-8?B?bXZxeW5IdUxSeWNMN3Uzb3BiYkJPWmZ2dDdBRlFYUWpHcXNzeHVYMjdLckQ3?=
- =?utf-8?B?c0pSRzg3ZVlJOFZxaGRSbGNmbXZIcDk1SDBob09xajdqZW1EWS9US01FNTM4?=
- =?utf-8?B?MmlWdDhZMzgwb3pTazhUeGQxVENuSkpMTlNDa0NINWRtV0xmNmovRTAvb2pn?=
- =?utf-8?B?VmpoNkgxdVJ0dWRSOXowR055ZDRHY2prU1BYanNHWCttWHFxNy9MREthcHUy?=
- =?utf-8?B?SmZZV2psUnhXN2ZXM2lLdThlUU01QUdDTW0zeVBFdnlKSkNIYXBPRzlEM3RC?=
- =?utf-8?B?UG1HOU80UTg5SWVqVnhzNlhacjVSdHhjVTJHY1ZEWC9GL3hMOGo5V2Q1a1Jt?=
- =?utf-8?Q?2tHxrX40rHvx8H5HUOApxjqH7?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c04a5bb-0ffd-4295-734f-08dac1c1c834
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 19:45:26.1044
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8ApwxW6GCy+yd30TcIoFm6DchwRhEXE5wfI2dhLIAhmkpOHQtXYKMakBktaXAJ5lU8ppVYVdN/l0+Imk2CmJVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5319
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v5 08/24] sched: Introduce per memory space current
+ virtual cpu id
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>
+References: <20221103200359.328736-1-mathieu.desnoyers@efficios.com>
+ <20221103200359.328736-9-mathieu.desnoyers@efficios.com>
+ <Y2pS4gC1MHw+mX3x@hirez.programming.kicks-ass.net>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <Y2pS4gC1MHw+mX3x@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 09:37, Carlos Bilbao wrote:
-> Correct descriptions of two last fields of enum pipe_split_policy, updating
-> comments with proper field names.
+On 2022-11-08 08:00, Peter Zijlstra wrote:
+> On Thu, Nov 03, 2022 at 04:03:43PM -0400, Mathieu Desnoyers wrote:
 > 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-
-Harry
-
-> ---
->  drivers/gpu/drm/amd/display/dc/dc.h | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+>> diff --git a/fs/exec.c b/fs/exec.c
+>> index 349a5da91efe..93eb88f4053b 100644
+>> --- a/fs/exec.c
+>> +++ b/fs/exec.c
+>> @@ -1013,6 +1013,9 @@ static int exec_mmap(struct mm_struct *mm)
+>>   	tsk->active_mm = mm;
+>>   	tsk->mm = mm;
+>>   	lru_gen_add_mm(mm);
+>> +	mm_init_vcpu_lock(mm);
+>> +	mm_init_vcpumask(mm);
+>> +	mm_init_node_vcpumask(mm);
+>>   	/*
+>>   	 * This prevents preemption while active_mm is being loaded and
+>>   	 * it and mm are being updated, which could cause problems for
 > 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
-> index bfc5474c0f4c..277631a899d8 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc.h
-> +++ b/drivers/gpu/drm/amd/display/dc/dc.h
-> @@ -457,15 +457,16 @@ enum pipe_split_policy {
->  	MPC_SPLIT_DYNAMIC = 0,
->  
->  	/**
-> -	 * @MPC_SPLIT_DYNAMIC: Avoid pipe split, which means that DC will not
-> +	 * @MPC_SPLIT_AVOID: Avoid pipe split, which means that DC will not
->  	 * try any sort of split optimization.
->  	 */
->  	MPC_SPLIT_AVOID = 1,
->  
->  	/**
-> -	 * @MPC_SPLIT_DYNAMIC: With this option, DC will only try to optimize
-> -	 * the pipe utilization when using a single display; if the user
-> -	 * connects to a second display, DC will avoid pipe split.
-> +	 * @MPC_SPLIT_AVOID_MULT_DISP: With this option, DC will only try
-> +	 * to optimize the pipe utilization when using a single display;
-> +	 * if the user connects to a second display, DC will avoid pipe
-> +	 * split.
->  	 */
->  	MPC_SPLIT_AVOID_MULT_DISP = 2,
->  };
+>> @@ -1150,6 +1154,9 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+>>   
+>>   	mm->user_ns = get_user_ns(user_ns);
+>>   	lru_gen_init_mm(mm);
+>> +	mm_init_vcpu_lock(mm);
+>> +	mm_init_vcpumask(mm);
+>> +	mm_init_node_vcpumask(mm);
+>>   	return mm;
+>>   
+>>   fail_nocontext:
+> 
+> Why isn't all that a single mm_init_vcpu(mm) or something ?
+
+Good point, I'll update that.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
