@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD45621F92
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4610F621F9E
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiKHWxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
+        id S229975AbiKHW71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKHWxq (ORCPT
+        with ESMTP id S229891AbiKHW7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:53:46 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989B32B627
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:53:45 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id a13-20020a9d6e8d000000b00668d65fc44fso9201458otr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:53:45 -0800 (PST)
+        Tue, 8 Nov 2022 17:59:24 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F086623A2
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:59:23 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id e11-20020a4ab14b000000b0049be568062bso2246672ooo.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:59:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=knuha/0L3whh8nT50lR2ItuT1EONyZVV+ouqJ68QHZA=;
-        b=i4I18xsZKajr58O29V/LVujDoAOrDQYT3U7wdkvIrXpZbp9Ca5Qiz8midqU94kQUvG
-         gK76lIwmEix693nERMwMD6nG3KorWFLH/s/CHOQz//303Bvnm/tfoXivbxi1i0o4jXIW
-         2PpsEz25qapySiXRBuCGz0aZYcfaU3D4FmlWh/TFh79GWt/Qdepu0al2QH59vWvwGs4c
-         Z7YlYsstqw5pFYtTap3ya3+HLSnjPu9tsI7N6wdqLiA9XSmiUJ1OcG7JqNjiT75YOeFf
-         XAd96YEsw7RXoFHQ25QlPlf9bi+lKbkUfmFPwU1ozWFnU1kt5PEaDyFAGAt5ZwuaAyTD
-         Hzew==
+        bh=BksNmJr9/G65J0IUfruVbXUCosG4IvOng5/LXlEyWfc=;
+        b=sP90Hxk8uTXToM6rA+n0zpJf4uCmThqIh4903RqZLnhC5dvBplEpETcRcMMDOhghLN
+         FcbqjoX88LzuOcU2Kcahd5PpWUNrUYxOw4P04oNu0Be8nrVALqxMSV2EgNuU1nnkQId0
+         gAHqYW+Z6K/788cFCxGeL5pM9Au59ZUxSnt6ufp68NBeTK5M2oRK2g36FB+v/GQKFiLI
+         BDalbHYMSp/HVLxq++ub5yCc75h5UWJadDp8H/gyK+68DY0Zky2kLiWT4tjXxJ/rc1vm
+         AqyNUm767N3cugAIRaLVTrDpqT4v551YbPWeqKY7fj9VUfDyFsVefGX9i6o8YR45eb4O
+         /pRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=knuha/0L3whh8nT50lR2ItuT1EONyZVV+ouqJ68QHZA=;
-        b=hyM2YIgNuv8TB/Skh5LN48fIetwCGyFZtDIvZPG0mX4qQaShBeqlvEAhvTnRD8ApTi
-         L3JgQ/uEJGwiGTvDmCoR4AQepL10R1kv23ga6gDt/5M/GpMx1Morh0CGpKjnZxJxoKNK
-         BkvJ2eCRwGZt8b5CPgKWfUPS7+cRdseidkW1nUac5PdKJXNLCNhtMnK2NoHjmCSb1Fj7
-         QimbMTKNZpnsxXmY2Pj16W/bdL04klNfNVIKlImluW3o32SyDov0OQqquCPyn8uStTrJ
-         2Hm3TMl7xNfdi22WhlZ/LX1EOU15b72BGQYlKqvq3GM9GwsGlx57hybseew6BeSlGELi
-         x7wA==
-X-Gm-Message-State: ACrzQf0i1n9zg1RFKs5t4aejKIFuR+EcPUGN0Ce3fAn3FjaWN9oWWRvO
-        j0RpMb1KgPn5+PHkPnzdJSMGgNyQODYX3wHmNLvEvw==
-X-Google-Smtp-Source: AMsMyM6sbyW4Z90a1WvOaiYwAlYDgogLA5zn3UR3LNLstqEXoVzvOwGScU2a4MAsLERATJ/u37KNdb+1huwgmhmZXno=
-X-Received: by 2002:a9d:62d8:0:b0:66c:4f88:78ff with SMTP id
- z24-20020a9d62d8000000b0066c4f8878ffmr23580029otk.269.1667948024724; Tue, 08
- Nov 2022 14:53:44 -0800 (PST)
+        bh=BksNmJr9/G65J0IUfruVbXUCosG4IvOng5/LXlEyWfc=;
+        b=Up4/S7xJIsRzVT1sWo7QQ1/9ZN+gWF4QwdGksf0bkQ+Jy27k0cJI97lLSRzt80Y8aO
+         4cJjD8AL3Bmx2AwAaxicVCedlz46LdKTEH0QK2YvZWTFRJOmW4d4UwwiEJyDOKbSBpAa
+         qZq2Lne1A8z65Xdtzu/XgsZw1AjIzfyZxOSAy4uaSFSpLtaOpHt6J3f/wGWKp87m3F9/
+         m7f0iugBLUIjZ42GIiZCcME39+Es3nxF3Mg4ZuwpYiN2yYnKswL+Ye6qyPO6Bq5jXFW9
+         ny3HLAIqu+anX7Qoty7dhO9r85rJFVwDcblNh5PyOWormnsbu4hPL4/m/9wy4CRiiRNW
+         aq/g==
+X-Gm-Message-State: ACrzQf0SSa74Qgvtx8AuLnhyN7ihECpird+R3DYoY+KjFSIuSH5Ij26V
+        vBvuCW0wylJvyDHhVk6tgq22kQxX0u0F0fAe+1fRUQ==
+X-Google-Smtp-Source: AMsMyM5B2SF57F48P+yb2v9B3TLUan4HlNTgXnRYSW6AKC/5CgdIGauhtqTai63v8JxRJZx2o1bcy0tk3RgoPJM7MzI=
+X-Received: by 2002:a4a:d8d4:0:b0:49c:e0de:ebbe with SMTP id
+ c20-20020a4ad8d4000000b0049ce0deebbemr15766402oov.31.1667948362297; Tue, 08
+ Nov 2022 14:59:22 -0800 (PST)
 MIME-Version: 1.0
-References: <000000000000dc81b705a0af279c@google.com> <000000000000564bd705ecdf291f@google.com>
-In-Reply-To: <000000000000564bd705ecdf291f@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 8 Nov 2022 14:53:34 -0800
-Message-ID: <CACT4Y+bnN7oZp2WJf+Jcx8+de1roOdLB=f_Zu+0H4UHEkfcO8A@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in bpf_check (3)
-To:     syzbot <syzbot+245129539c27fecf099a@syzkaller.appspotmail.com>
-Cc:     andrii@kernel.org, andriin@fb.com, ast@kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
-        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
-        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
-        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        martin.lau@linux.dev, memxor@gmail.com, nathan@kernel.org,
-        ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com,
-        shanavas@crystalwater.ae, song@kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        trix@redhat.com, yhs@fb.com
+References: <20221104213651.141057-1-kim.phillips@amd.com> <20221104213651.141057-4-kim.phillips@amd.com>
+ <CALMp9eSpKGCYK_1r3o326ui5RVoH73_RR5-LR2Div9Jm5zvk6A@mail.gmail.com>
+ <f25152d2-7045-94f4-d5dc-69b609c0be6a@amd.com> <CALMp9eQF7iPXCNkafmaGHY5Dzg+opt0xp+Y8ceML8RTxFyCo7A@mail.gmail.com>
+ <4c8945ae-62c4-7550-dc75-068cca99e678@amd.com>
+In-Reply-To: <4c8945ae-62c4-7550-dc75-068cca99e678@amd.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 8 Nov 2022 14:59:11 -0800
+Message-ID: <CALMp9eRcLPpt-OuXiNFUQwrkyDxRXErY7U_U3PZE0qN_ep7wdw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] x86/speculation: Support Automatic IBRS under virtualization
+To:     Kim Phillips <kim.phillips@amd.com>
+Cc:     x86@kernel.org, Borislav Petkov <bp@alien8.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,32 +87,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 02:48, syzbot
-<syzbot+245129539c27fecf099a@syzkaller.appspotmail.com> wrote:
+On Tue, Nov 8, 2022 at 2:48 PM Kim Phillips <kim.phillips@amd.com> wrote:
 >
-> syzbot suspects this issue was fixed by commit:
+> On 11/7/22 4:42 PM, Jim Mattson wrote:
+> > On Mon, Nov 7, 2022 at 2:29 PM Kim Phillips <kim.phillips@amd.com> wrote:
+> >>
+> >> On 11/4/22 5:00 PM, Jim Mattson wrote:
+> >>> On Fri, Nov 4, 2022 at 2:38 PM Kim Phillips <kim.phillips@amd.com> wrote:
+> >>>>
+> >>>> VM Guests may want to use Auto IBRS, so propagate the CPUID to them.
+> >>>>
+> >>>> Co-developed-by: Babu Moger <Babu.Moger@amd.com>
+> >>>> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
+> >>>
+> >>> The APM says that, under AutoIBRS, CPL0 processes "have IBRS
+> >>> protection." I'm taking this to mean only that indirect branches in
+> >>> CPL0 are not subject to steering from a less privileged predictor
+> >>> mode. This would imply that indirect branches executed at CPL0 in L1
+> >>> could potentially be subject to steering by code running at CPL0 in
+> >>> L2, since L1 and L2 share hardware predictor modes.
+> >>
+> >> That's true for AMD processors that don't support Same Mode IBRS, also
+> >> documented in the APM.
+> >>
+> >> Processors that support AutoIBRS also support Same Mode IBRS (see
+> >> CPUID Fn8000_0008_EBX[IbrsSameMode] (bit 19)).
+> >>
+> >>> Fortunately, there is an IBPB when switching VMCBs in svm_vcpu_load().
+> >>> But it might be worth noting that this is necessary for AutoIBRS to
+> >>> work (unless it actually isn't).
+> >>
+> >> It is needed, but not for kernel/CPL0 code, rather to protect one
+> >> guest's user-space code from another's.
+> >
+> > The question is whether it's necessary when switching between L1 and
+> > L2 on the same vCPU of the same VM.
+> >
+> > On the Intel side, this was (erroneously) optimized away in commit
+> > 5c911beff20a ("KVM: nVMX: Skip IBPB when switching between vmcs01 and
+> > vmcs02").
 >
-> commit 34dd3bad1a6f1dc7d18ee8dd53f1d31bffd2aee8
-> Author: Alexei Starovoitov <ast@kernel.org>
-> Date:   Fri Sep 2 21:10:47 2022 +0000
->
->     bpf: Relax the requirement to use preallocated hash maps in tracing progs.
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1232e176880000
-> start commit:   506357871c18 Merge tag 'spi-fix-v6.0-rc4' of git://git.ker..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1b95a17a5bfb1521
-> dashboard link: https://syzkaller.appspot.com/bug?extid=245129539c27fecf099a
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10940477080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177e8f43080000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: bpf: Relax the requirement to use preallocated hash maps in tracing progs.
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> Then why hasn't it been reverted?
 
-Looks reasonable based on the subsystem and the patch:
+Sometimes, the wheels turn slowly. See
+https://lore.kernel.org/kvm/20221019213620.1953281-1-jmattson@google.com/.
 
-#syz fix:
-bpf: Relax the requirement to use preallocated hash maps in tracing progs.
+> Does its rationale not make sense?:
+>
+>      The IBPB is intended to prevent one guest from attacking another, which
+>      is unnecessary in the nested case as it's the same guest from KVM's
+>      perspective.
+
+No, it doesn't. IBRS promises to protect the host from the guest. To
+properly virtualize IBRS, KVM has to provide that protection,
+regardless of its "perspective."
