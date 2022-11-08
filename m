@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74479622030
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98C2B622034
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 00:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiKHXO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 18:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S229754AbiKHXQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 18:16:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbiKHXO4 (ORCPT
+        with ESMTP id S229464AbiKHXQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 18:14:56 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CBC193D7
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:14:51 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id d3so5123117uan.4
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 15:14:51 -0800 (PST)
+        Tue, 8 Nov 2022 18:16:17 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4A1ADA7
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:16:16 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id v1so23257345wrt.11
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 15:16:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYCuoIUGPE42ilDgGQytWyIslRZ6M8LJ2EAILalAs0o=;
-        b=To94lOqRjXZBN9kxBxfUKjfkICaQJCt722ripndWA1UY9X+AfSgYPwQWq9LOlL2O+h
-         3jyMOX2C9XRbqiI3mDa+ZNuRpWvUc4pDogFxLpy03rL3osnomGoZ5iWgo4voJBP8s9cj
-         WQOALsjljhqPfVnw5DXn6SlIa17W0NWNuWswFWvGI5LoobrBCcmih+ba6FwrgOTfQyMj
-         +GHf56vE6hPSz6X4/+jQ/7zYzBsMXK/pqWcVhJmgZOLYSWLd+tXpp5+a9mRi9m75Lvzs
-         Tm9uNZPa23PvJUdfhCscZjuVWX9kPMQx9HROz6gPJ/CEQS+aot/pWg3yQWwvqrYW5pmI
-         p7+g==
+        bh=o6bbEVkp/O+6HFBPQrcPCeDrxXI7++0ZLl8zYzUmUHM=;
+        b=Ei6BncYhV7jPMWsfnUvXvoN1cQzVOrERH3xmvYSdqOjTjsEKwUA/JKPZqLCiHD9uvh
+         mR1/quI0l6SKPQc6aa+ZYv9jM2FUgaNXeN7MnXOOp6HqT7I2dgAqYctcqQQ+DwCG69qo
+         e/R70p2aoxRAITBvw3NzrWfn2/Bm/Uhh/0zddIV7oul3dmM9iUrI8XysszGqwPVsaq8i
+         Bhf9/5Y4Bra5+07VBR4sb55TTawMazg02qZIp+nBy8PeNwBZsmsOT9gAwU2HYGocl1l3
+         KNNdCqRJIHw7mY8poaZYgmh7iN1Xa+Q2/vCZUIn1obYIG6/PL18j614Xv/s5JyFb3UfN
+         qpbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JYCuoIUGPE42ilDgGQytWyIslRZ6M8LJ2EAILalAs0o=;
-        b=myGwGJqzGDxlV5g0J28CtN9fG6hX7E5cshj36tLNX2YeYpPa/dypD+sNwreX65gXvO
-         lKGAkHFuqrTHAQeW07FA30j4FBUrULk3KEhOXBhmB2I7tyJg+ZFS70zeALomPagLAwZg
-         ViM6YdsG2ywMCgNNnkeStcZX8DQbxFbTQO9TeK3jewTN/md8mDS22lJ9bIdamkJQhxkD
-         nRfyaMqBjMhNfGEpYaA7Vki3azFqDl2Z4qVGFYb6nsFgXOwvzHPnSgxueypqttbjbdVa
-         +P4FYRN3fxfB3hhQ4h1/UfLMKmpfEEQokLrfcf4UzeNfmhPbcUJUrwZQqv2buzn1h2Uc
-         krvg==
-X-Gm-Message-State: ACrzQf2yRC4V/bb2h/Wc0Q+/NHuKmIq3qd9WSDA8mgYt9oEX0Ogmjb3x
-        pTz7vc+pk39qLVdhGhIeC63YJ1nHdS67ukQkwkfWHg==
-X-Google-Smtp-Source: AMsMyM4w6MA55Zlevm3yMSNfNR488eK8ZwVcC6yOcOTIdorfxOZ0OYKwVQ9Khel5Eul5oJ8dDOvDX/NrktnnFcGHqNg=
-X-Received: by 2002:ab0:390f:0:b0:3af:3c62:bea2 with SMTP id
- b15-20020ab0390f000000b003af3c62bea2mr18747871uaw.21.1667949290602; Tue, 08
- Nov 2022 15:14:50 -0800 (PST)
+        bh=o6bbEVkp/O+6HFBPQrcPCeDrxXI7++0ZLl8zYzUmUHM=;
+        b=hEciL0N4eO67KOXqoc+88DgS/BomWo3CxL7TDOOtnFQKebdUQeNGsxqR7P9jUCBD7E
+         LaCGG9fyP9U2iaVhSgtglpBo6QaUJh4tzfOUeJjdt7DZ7EK5JixeDIr9sYpZ0YbR9KlV
+         8nW0WlPh26XdgpnVAYDtPHsPhJS+aXbCmP3s3TcQA2K7KTOM5PWv41NFTaxxUMpZsOnZ
+         rTSty95pR/7WEpv5WW/vyvxgwW1eCbAIvg2mzo5ukIoEcSMfKnm+G+BQbnVeMSbekxdQ
+         P8uCqDOom51itPatE2GTxcqlQfoGGN43ieScogZ1ofricMTkbKMI3mlJH8zSmahRgk9S
+         as1A==
+X-Gm-Message-State: ACrzQf0SiXvzCGIsUNTblb9TKEqpQ/ydEtGoMBWoilr9KoZ10ZTZpcwm
+        GJHMlbLIWsj38L28bI3HggqUWZKCfuxifF+eQ4iCPvUbj9U=
+X-Google-Smtp-Source: AMsMyM7/dic9/JyfUZsBFtA+TVNm7iuSTlgQA63H+lcm7Cyf1EqEGKz313B+P6eYpjNVycKyB4IaETcGY5BjeXP0We8=
+X-Received: by 2002:a5d:47a6:0:b0:236:7854:246d with SMTP id
+ 6-20020a5d47a6000000b002367854246dmr36320076wrb.300.1667949374614; Tue, 08
+ Nov 2022 15:16:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20221107213314.3239159-1-namhyung@kernel.org> <20221107213314.3239159-3-namhyung@kernel.org>
-In-Reply-To: <20221107213314.3239159-3-namhyung@kernel.org>
+References: <20221107213314.3239159-1-namhyung@kernel.org> <20221107213314.3239159-4-namhyung@kernel.org>
+In-Reply-To: <20221107213314.3239159-4-namhyung@kernel.org>
 From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 8 Nov 2022 15:14:39 -0800
-Message-ID: <CAP-5=fW+vsMEVCoGbouMbH0GQ875KsMKwJ9NKhCecYd7PFESWA@mail.gmail.com>
-Subject: Re: [PATCH 2/9] perf stat: Increase metric length to align outputs
+Date:   Tue, 8 Nov 2022 15:16:02 -0800
+Message-ID: <CAP-5=fWXAjWd-dbVXCVfRzP9iw5RzXo+cPWWPpOmTw-1xBECqg@mail.gmail.com>
+Subject: Re: [PATCH 3/9] perf stat: Clear screen only if output file is a tty
 To:     Namhyung Kim <namhyung@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
@@ -67,7 +67,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,62 +77,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Mon, Nov 7, 2022 at 1:33 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> When perf stat is called with very detailed events, the output doesn't
-> align well like below:
->
->   $ sudo perf stat -a -ddd sleep 1
->
->    Performance counter stats for 'system wide':
->
->           8,020.23 msec cpu-clock                        #    7.997 CPUs utilized
->              3,970      context-switches                 #  494.998 /sec
->                169      cpu-migrations                   #   21.072 /sec
->                586      page-faults                      #   73.065 /sec
->        649,568,060      cycles                           #    0.081 GHz                      (30.42%)
->        304,044,345      instructions                     #    0.47  insn per cycle           (38.40%)
->         60,313,022      branches                         #    7.520 M/sec                    (38.89%)
->          2,766,919      branch-misses                    #    4.59% of all branches          (39.26%)
->         74,422,951      L1-dcache-loads                  #    9.279 M/sec                    (39.39%)
->          8,025,568      L1-dcache-load-misses            #   10.78% of all L1-dcache accesses  (39.22%)
->          3,314,995      LLC-loads                        #  413.329 K/sec                    (30.83%)
->          1,225,619      LLC-load-misses                  #   36.97% of all LL-cache accesses  (30.45%)
->    <not supported>      L1-icache-loads
->         20,420,493      L1-icache-load-misses            #    0.00% of all L1-icache accesses  (30.29%)
->         58,017,947      dTLB-loads                       #    7.234 M/sec                    (30.37%)
->            704,677      dTLB-load-misses                 #    1.21% of all dTLB cache accesses  (30.27%)
->            234,225      iTLB-loads                       #   29.204 K/sec                    (30.29%)
->            417,166      iTLB-load-misses                 #  178.10% of all iTLB cache accesses  (30.32%)
->    <not supported>      L1-dcache-prefetches
->    <not supported>      L1-dcache-prefetch-misses
->
->        1.002947355 seconds time elapsed
->
-> Increase the METRIC_LEN by 3 so that it can align properly.
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> The --interval-clear option makes perf stat to clear the terminal at
+> each interval.  But it doesn't need to clear the screen when it saves
+> to a file.
 
-Acked-by: Ian Rogers <irogers@google.com>
+Would it be more intuitive to warn if interval-clear is specified with a file?
 
 Thanks,
 Ian
 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 > ---
 >  tools/perf/util/stat-display.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> index ea41e6308c50..17d656566cd9 100644
+> index 17d656566cd9..d4936a502560 100644
 > --- a/tools/perf/util/stat-display.c
 > +++ b/tools/perf/util/stat-display.c
-> @@ -218,7 +218,7 @@ struct outstate {
->         struct evsel *evsel;
->  };
+> @@ -892,7 +892,7 @@ static void print_interval(struct perf_stat_config *config,
+>         FILE *output = config->output;
+>         static int num_print_interval;
 >
-> -#define METRIC_LEN  35
-> +#define METRIC_LEN  38
+> -       if (config->interval_clear)
+> +       if (config->interval_clear && isatty(fileno(output)))
+>                 puts(CONSOLE_CLEAR);
 >
->  static void new_line_std(struct perf_stat_config *config __maybe_unused,
->                          void *ctx)
+>         if (!config->iostat_run && !config->json_output)
 > --
 > 2.38.1.431.g37b22c650d-goog
 >
