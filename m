@@ -2,427 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3CC62070F
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2C8620717
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbiKHC51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S233095AbiKHC7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 21:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233202AbiKHC5N (ORCPT
+        with ESMTP id S232854AbiKHC7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:57:13 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7E82E6AC;
-        Mon,  7 Nov 2022 18:57:11 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VUHOUMA_1667876228;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VUHOUMA_1667876228)
-          by smtp.aliyun-inc.com;
-          Tue, 08 Nov 2022 10:57:09 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, jlayton@kernel.org, xiang@kernel.org,
-        chao@kernel.org, linux-cachefs@redhat.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2 2/2] erofs: switch to prepare_ondemand_read() in fscache mode
-Date:   Tue,  8 Nov 2022 10:57:05 +0800
-Message-Id: <20221108025705.14816-3-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20221108025705.14816-1-jefflexu@linux.alibaba.com>
-References: <20221108025705.14816-1-jefflexu@linux.alibaba.com>
+        Mon, 7 Nov 2022 21:59:22 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D681D291;
+        Mon,  7 Nov 2022 18:59:21 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A80ONEf028583;
+        Tue, 8 Nov 2022 02:59:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=Cog4HwxDYZlh5BcgvwTYhBledR+CjTvPzn03fd7miw4=;
+ b=rLI/0IhxUjXTocBARhBzzupF7W7bP0L6SE4YBrOZqsKcjQvs3KZ5ITYHe6TrZHYFyqQa
+ lYsb+VOlj+zk9zX6LnuDXhgucaAs6uRwWVZyj+s9YNgH+t971iwkCrhXnTDu4MeXIbjR
+ HB44YEiifD/bqAeig7VJxr8sBQ49Psc+cTk+qRHLGGd0EEph7pYsqvLnWHE+OZajPEsw
+ qQO2eO4yrCTfVcmBz8sX+1372Y6DxYwDvgQUHuCsEn/GdZCUwYJ4gh1EUPJzjYMGxLvV
+ bBefFMzXqOXBmUOySDv7CwjxmeelrM5By63av95hROdr82UZ8xXv/7eELwAoyFnQDq9+ ig== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kngkfx2sx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Nov 2022 02:59:19 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A8106vN014319;
+        Tue, 8 Nov 2022 02:59:19 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2040.outbound.protection.outlook.com [104.47.56.40])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kpcq1e9cd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Nov 2022 02:59:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iWcMILr0ncQ9t9A0PQpORCheG7jyLZqiVLaRv9T0DSKnQL6VWKWWmNv+hXrcIzKTuIU1wNq7O38kGnruMxRKfoguJu6Deh+3N2Uj4bFbNO2dbSR0BaoFzv1a7QabeEJdWlx63vevmKamcGIlgW+seUNXOAkIpcRx3y9BAkVee1HAkyOzM3m/Rnr4DZse9a7wlhRLTupPsebRg4MvOtbi77v8BCp6EFdkqUmom0GtpqcxActV4TeydzfW3BKqolXymClMIhVE/ZSaHbkrFvf/i5n3UTXXtexwG7aqOqGaTlp6W3701tcz0w+e2JIJL4YPFjwwvh8XHwrOl9WoKsDMQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cog4HwxDYZlh5BcgvwTYhBledR+CjTvPzn03fd7miw4=;
+ b=Yg2azeWhYRj/2IcvNCnLuX36tipGiywnbGEcoi0eM9EAX5T/3A2SVE5moqjjx21kX0lHCh5cXDEJD5iGZRdte/ndfhCZH1emBvRACEsN8geHwfA+Zai2P8rMtoEDLmSeHcbdDDGvkucIiBKr9+aycOBT++d14xPHuyuYqXI0P3Sd9PD3gpLkYcoauFHbvG015ELVg5J+ZNhHMIrM6G+43W3gg1gS/tva7sR4LIbGsxJ0YVJJqNsKyTYGVTQBWyf8c41LYNRQhGaTZVj7Dj0Ude8Hdc807IJheujCI8qsN4K16hJQlkEWmCvSJc31yhOnpXZPHM5LN7sPinwUZGQpdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cog4HwxDYZlh5BcgvwTYhBledR+CjTvPzn03fd7miw4=;
+ b=RcBIxwdaiP3qn7Jecus+YA4kD3ddHd8iU6v34Zyh3ctNoRmQHyCnGwwXcgVcj19oNxLsuD+rMq8gJVPsLvyNOB8FgJF9lgv5mblpnjiuvpEHP7Gc9otgNxnYYuMFXf4up2vppUf0hIvEPqtwMFFvrUPMuEpqiwYFnuYHvxiMuFg=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH7PR10MB5856.namprd10.prod.outlook.com (2603:10b6:510:131::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Tue, 8 Nov
+ 2022 02:59:17 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::f77e:1a1a:38b3:8ff1]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::f77e:1a1a:38b3:8ff1%9]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 02:59:17 +0000
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: message: fusion: remove variable 'where'
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq18rkmkv7p.fsf@ca-mkp.ca.oracle.com>
+References: <20221031154538.870223-1-colin.i.king@gmail.com>
+Date:   Mon, 07 Nov 2022 21:59:14 -0500
+In-Reply-To: <20221031154538.870223-1-colin.i.king@gmail.com> (Colin Ian
+        King's message of "Mon, 31 Oct 2022 15:45:38 +0000")
+Content-Type: text/plain
+X-ClientProxiedBy: SN7PR04CA0187.namprd04.prod.outlook.com
+ (2603:10b6:806:126::12) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|PH7PR10MB5856:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3dfa723-66c8-4be8-3214-08dac135398a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 18UL9eVJuZEzKU4wKYwQTeyIVAJzue+4CxigwnqEPSS6dK06PSaK0OpPeQuhGXKBylyfZzL1sEqYTA0FN+b/qx/hqJ1dXcb8QUAfAVoBF3tGOSsx7H1MIbIbbFQFbDiCLKYcWidhXKdPjiUUHi9BYVU5+o0Mxtl/QjR3A52eZbKbjP5krBpjkNBiBFTJkutTyM9O/Tcs4nh70m/cJJASBSxQzAKxQN/RbnSEaupVUS+4WYNPl8GKg2GtktSHdySI/mcDZDFNHgeDcZlnqaTeXJKm8/hZG5qU5yS6RuKnQ6zhu4nikh1VppYHUdMlmyW4uR8JFvyH8QRIHsRtlXZTfIJh9SFsBQU91CwV9cj9IWNwBeNkgYWjJGsNjE2LNiVccbgGaKmu1sRbPwlCKh9aLCGE2e27g+P93T7DS70sNoyW7M/FG9CHBHnhpbv6xN8O2uAkASXnreZAvSKAZCzjxpPuPooDXjFUSYoCryoMSVrNZO7xmIJL9yFLfu3ZH9UJa4eVMAQFYuCu4+QGXsBEMhjuiFHjaczqhxWfeLrnsdyxy/GL0FiElwmWepiB68hwGwwPzyMvHA3+heLvy8Y4d2SwGPyFd8AakwqdJcwunuiE/rkkbbNa1Ty/CWj0Y7jd5rFVpbINqx4u5y8GXyGT03snWTQzmfQEPXmsHTSWbZi7A+skHh3f8duXC4P6FRPUINYMWaUsGqpvyK6xpOblag==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(346002)(366004)(136003)(39860400002)(451199015)(186003)(2906002)(558084003)(6666004)(38100700002)(6486002)(36916002)(26005)(478600001)(316002)(6916009)(54906003)(6512007)(6506007)(86362001)(66476007)(66946007)(66556008)(8676002)(4326008)(41300700001)(8936002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jRj0av9TyZMDg5HXBnWukyHo9q0drjGzIXdiMnZNjOiy5ItQZESUhwJm5mGC?=
+ =?us-ascii?Q?+fyQPRgu+1K4loNaccmdYzr235ecHL+oSxiC2MhDzjt/4GYSasaLPOfSYBVi?=
+ =?us-ascii?Q?7hdfmJcWT+vVOHZqMQ6abllhMPyOXkVpju/swXbaUOyEqQHVng+PpYENjOTc?=
+ =?us-ascii?Q?9OFE/4TU5RiBGTSTEI60WoetAtqGFRNxd70Nu4c+W3Wld2HrUr+1Ui0rsa90?=
+ =?us-ascii?Q?5T4dmuGeIZgwGB6ycKHfF02rvLOzcP1voewKHB4lGppok/Vlk72ftA1gSLRp?=
+ =?us-ascii?Q?mPol9YYg/bSkG8oGHztjWw54Ae73su6oKQNQD2NsYlqK9hmLPlqWuufE4llx?=
+ =?us-ascii?Q?e3yZQ+GdY4B4+y+RojRWmtunBfJC5ka78hvz5l7IIZoZAAygQ5Lh7BLS7pi9?=
+ =?us-ascii?Q?1bxdletZaaAQOGtZB05MTD3l4rBd+zqQ7bbcz4EdfANr8lQdL/Vq0ZrWFqVM?=
+ =?us-ascii?Q?OLGTpHr8AGUHHJDuiffQ+/jwqg9xmMzklGpbhwtdPXbA3YnHmAvbABG4sHAz?=
+ =?us-ascii?Q?ij23Eiu/q0EG9tjhV5d/WKw2ku3e6+zAY1ytD7g168ET9hBQgRKV0auEiqdJ?=
+ =?us-ascii?Q?Q0iui6zfOIQJyolGOTb0Xx29rYAXK6V+2ZSflV+nY9cl2pYWQ72O4JrI0lKO?=
+ =?us-ascii?Q?EY1zJ1879/XqN6DJ9kIHFml5fHzoRI0OpzC+CBItumR0JD6dup2UNx/E6UG1?=
+ =?us-ascii?Q?qdm6ZYyy9ictYExHgFyvyqYHZbckY5XL+w9zJRz1dNmiBxcAV/PyNXWbrhCw?=
+ =?us-ascii?Q?KByTubaK3B14iIGQXaq415dkjpGKcVHKW6RLHz+66bXlSzBnzjoXz6DGrFUB?=
+ =?us-ascii?Q?J89aN4FcRlgfyFNyw0mwcjehKfrYBwL0qbX/R4lLXz2td3L2l86hXqAMPva3?=
+ =?us-ascii?Q?LE+RDuOCsXH3Th4PTgkrL5S0b2uRq+uymsojMnikXYJ0lwTZvcrwMpwRHXpj?=
+ =?us-ascii?Q?3RDF4y/jq9bOSdoywxnwPE/yHEPYWPwx79kv0RJuDTnGfIDx2TlQ9tXhLm1B?=
+ =?us-ascii?Q?XgY4TiqlIj4LO5yCCz3W3XwANFInPTHw8VwpwG310U3MHaATIN0J3nocQ//a?=
+ =?us-ascii?Q?PCIdP3T1D10bKMNnyNJJ0akS5hmQ1KsdlX7Hs981KCd4UWN9R2IJfTocU18g?=
+ =?us-ascii?Q?bVsPtqjmQj3TTy1+GCmkJDzV9oUMJ2jft1LSyYOVGLjifPN3EcKmfz1gfFam?=
+ =?us-ascii?Q?Z+BKXF1hTMoTjzXjIR89cYSUkcao6+wMk6RJu3gLO7108OpiQzuuosjUjjns?=
+ =?us-ascii?Q?VfaPSvJNZgcqj4nNe7L/ljrKZb5knWONqu9SLOUeBC1fAE7egtTPKwWTx3gJ?=
+ =?us-ascii?Q?P9kdxhG5gSRsd0iatIDL5X9tjz2iIljdcWWNX13YP0m4kpgWaNUZHLgNwOX5?=
+ =?us-ascii?Q?7ALffanLi9bvrj5JMkfHVHsbsK3G9qxCXCBNntRS2EDRB+Oldl9xUAFjaRk3?=
+ =?us-ascii?Q?O4dmzipuzbndsYQeZm2W8qlGOD3D3eiwE6+WWc2FlR1v1dt1G7ZYzy2CXY+Y?=
+ =?us-ascii?Q?zkEGXzPNT4lkOy3tZiKCs0KuHhIraUyRxe2bunzjBP6K/bVqB0Zv2Ik6kQGO?=
+ =?us-ascii?Q?CqODHIUUjN0S8eDm8PPyMtWgmF1Hxu0j5QJh9cWhhcjPHVgI77zxFNStxXJF?=
+ =?us-ascii?Q?7A=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3dfa723-66c8-4be8-3214-08dac135398a
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 02:59:17.1787
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xGR9Sv73+tQK+yhxrb4WMTKxp1tPtrFQ6eNsD+DowWAYeL8e03U3M6iKiFCOtDxoD9h7Pli89HDZCOCGDSnPIHhZN8G2f1Hwj1rvDtjv7i0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5856
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
+ malwarescore=0 mlxlogscore=859 mlxscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211080014
+X-Proofpoint-ORIG-GUID: trq275mt0gNQ3iC57QpM-apvjqMx3YaQ
+X-Proofpoint-GUID: trq275mt0gNQ3iC57QpM-apvjqMx3YaQ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch to prepare_ondemand_read() interface and a self-contained request
-completion to get rid of netfs_io_[request|subrequest].
 
-The whole request will still be split into slices (subrequest) according
-to the cache state of the backing file.  As long as one of the
-subrequests fails, the whole request will be marked as failed.
+Colin,
 
-Besides, add the missing xas_retry() checking when iterating xarray
-under RCU lock.
+> Variable where is just being incremented and it's never used anywhere
+> else. The variable and the increment are redundant so remove it.
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/fscache.c | 259 ++++++++++++++++-----------------------------
- 1 file changed, 94 insertions(+), 165 deletions(-)
+Applied to 6.2/scsi-staging, thanks!
 
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index 260fa4737fc0..2d31894c3249 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -11,253 +11,178 @@ static DEFINE_MUTEX(erofs_domain_cookies_lock);
- static LIST_HEAD(erofs_domain_list);
- static struct vfsmount *erofs_pseudo_mnt;
- 
--static struct netfs_io_request *erofs_fscache_alloc_request(struct address_space *mapping,
-+struct erofs_fscache_request {
-+	struct netfs_cache_resources cache_resources;
-+	struct address_space	*mapping;	/* The mapping being accessed */
-+	loff_t			start;		/* Start position */
-+	size_t			len;		/* Length of the request */
-+	size_t			submitted;	/* Length of submitted */
-+	short			error;		/* 0 or error that occurred */
-+	refcount_t		ref;
-+};
-+
-+static struct erofs_fscache_request *erofs_fscache_req_alloc(struct address_space *mapping,
- 					     loff_t start, size_t len)
- {
--	struct netfs_io_request *rreq;
-+	struct erofs_fscache_request *req;
- 
--	rreq = kzalloc(sizeof(struct netfs_io_request), GFP_KERNEL);
--	if (!rreq)
-+	req = kzalloc(sizeof(struct erofs_fscache_request), GFP_KERNEL);
-+	if (!req)
- 		return ERR_PTR(-ENOMEM);
- 
--	rreq->start	= start;
--	rreq->len	= len;
--	rreq->mapping	= mapping;
--	rreq->inode	= mapping->host;
--	INIT_LIST_HEAD(&rreq->subrequests);
--	refcount_set(&rreq->ref, 1);
--	return rreq;
--}
--
--static void erofs_fscache_put_request(struct netfs_io_request *rreq)
--{
--	if (!refcount_dec_and_test(&rreq->ref))
--		return;
--	if (rreq->cache_resources.ops)
--		rreq->cache_resources.ops->end_operation(&rreq->cache_resources);
--	kfree(rreq);
--}
--
--static void erofs_fscache_put_subrequest(struct netfs_io_subrequest *subreq)
--{
--	if (!refcount_dec_and_test(&subreq->ref))
--		return;
--	erofs_fscache_put_request(subreq->rreq);
--	kfree(subreq);
--}
--
--static void erofs_fscache_clear_subrequests(struct netfs_io_request *rreq)
--{
--	struct netfs_io_subrequest *subreq;
-+	req->mapping = mapping;
-+	req->start   = start;
-+	req->len     = len;
-+	refcount_set(&req->ref, 1);
- 
--	while (!list_empty(&rreq->subrequests)) {
--		subreq = list_first_entry(&rreq->subrequests,
--				struct netfs_io_subrequest, rreq_link);
--		list_del(&subreq->rreq_link);
--		erofs_fscache_put_subrequest(subreq);
--	}
-+	return req;
- }
- 
--static void erofs_fscache_rreq_unlock_folios(struct netfs_io_request *rreq)
-+static void erofs_fscache_req_complete(struct erofs_fscache_request *req)
- {
--	struct netfs_io_subrequest *subreq;
- 	struct folio *folio;
--	unsigned int iopos = 0;
--	pgoff_t start_page = rreq->start / PAGE_SIZE;
--	pgoff_t last_page = ((rreq->start + rreq->len) / PAGE_SIZE) - 1;
--	bool subreq_failed = false;
--
--	XA_STATE(xas, &rreq->mapping->i_pages, start_page);
-+	bool failed = req->error;
-+	pgoff_t start_page = req->start / PAGE_SIZE;
-+	pgoff_t last_page = ((req->start + req->len) / PAGE_SIZE) - 1;
- 
--	subreq = list_first_entry(&rreq->subrequests,
--				  struct netfs_io_subrequest, rreq_link);
--	subreq_failed = (subreq->error < 0);
-+	XA_STATE(xas, &req->mapping->i_pages, start_page);
- 
- 	rcu_read_lock();
- 	xas_for_each(&xas, folio, last_page) {
--		unsigned int pgpos =
--			(folio_index(folio) - start_page) * PAGE_SIZE;
--		unsigned int pgend = pgpos + folio_size(folio);
--		bool pg_failed = false;
--
--		for (;;) {
--			if (!subreq) {
--				pg_failed = true;
--				break;
--			}
--
--			pg_failed |= subreq_failed;
--			if (pgend < iopos + subreq->len)
--				break;
--
--			iopos += subreq->len;
--			if (!list_is_last(&subreq->rreq_link,
--					  &rreq->subrequests)) {
--				subreq = list_next_entry(subreq, rreq_link);
--				subreq_failed = (subreq->error < 0);
--			} else {
--				subreq = NULL;
--				subreq_failed = false;
--			}
--			if (pgend == iopos)
--				break;
--		}
--
--		if (!pg_failed)
-+		if (xas_retry(&xas, folio))
-+			continue;
-+		if (!failed)
- 			folio_mark_uptodate(folio);
--
- 		folio_unlock(folio);
- 	}
- 	rcu_read_unlock();
-+
-+	if (req->cache_resources.ops)
-+		req->cache_resources.ops->end_operation(&req->cache_resources);
-+
-+	kfree(req);
- }
- 
--static void erofs_fscache_rreq_complete(struct netfs_io_request *rreq)
-+static void erofs_fscache_req_put(struct erofs_fscache_request *req)
- {
--	erofs_fscache_rreq_unlock_folios(rreq);
--	erofs_fscache_clear_subrequests(rreq);
--	erofs_fscache_put_request(rreq);
-+	if (refcount_dec_and_test(&req->ref))
-+		erofs_fscache_req_complete(req);
- }
- 
--static void erofc_fscache_subreq_complete(void *priv,
-+static void erofs_fscache_subreq_complete(void *priv,
- 		ssize_t transferred_or_error, bool was_async)
- {
--	struct netfs_io_subrequest *subreq = priv;
--	struct netfs_io_request *rreq = subreq->rreq;
-+	struct erofs_fscache_request *req = priv;
- 
- 	if (IS_ERR_VALUE(transferred_or_error))
--		subreq->error = transferred_or_error;
--
--	if (atomic_dec_and_test(&rreq->nr_outstanding))
--		erofs_fscache_rreq_complete(rreq);
--
--	erofs_fscache_put_subrequest(subreq);
-+		req->error = transferred_or_error;
-+	erofs_fscache_req_put(req);
- }
- 
- /*
-- * Read data from fscache and fill the read data into page cache described by
-- * @rreq, which shall be both aligned with PAGE_SIZE. @pstart describes
-- * the start physical address in the cache file.
-+ * Read data from fscache (cookie, pstart, len), and fill the read data into
-+ * page cache described by (req->mapping, lstart, len). @pstart describeis the
-+ * start physical address in the cache file.
-  */
- static int erofs_fscache_read_folios_async(struct fscache_cookie *cookie,
--				struct netfs_io_request *rreq, loff_t pstart)
-+		struct erofs_fscache_request *req, loff_t pstart, size_t len)
- {
- 	enum netfs_io_source source;
--	struct super_block *sb = rreq->mapping->host->i_sb;
--	struct netfs_io_subrequest *subreq;
--	struct netfs_cache_resources *cres = &rreq->cache_resources;
-+	struct super_block *sb = req->mapping->host->i_sb;
-+	struct netfs_cache_resources *cres = &req->cache_resources;
- 	struct iov_iter iter;
--	loff_t start = rreq->start;
--	size_t len = rreq->len;
-+	loff_t lstart = req->start + req->submitted;
- 	size_t done = 0;
- 	int ret;
- 
--	atomic_set(&rreq->nr_outstanding, 1);
-+	DBG_BUGON(len > req->len - req->submitted);
- 
- 	ret = fscache_begin_read_operation(cres, cookie);
- 	if (ret)
--		goto out;
-+		return ret;
- 
- 	while (done < len) {
--		subreq = kzalloc(sizeof(struct netfs_io_subrequest),
--				 GFP_KERNEL);
--		if (subreq) {
--			INIT_LIST_HEAD(&subreq->rreq_link);
--			refcount_set(&subreq->ref, 2);
--			subreq->rreq = rreq;
--			refcount_inc(&rreq->ref);
--		} else {
--			ret = -ENOMEM;
--			goto out;
--		}
--
--		subreq->start = pstart + done;
--		subreq->len	=  len - done;
--		subreq->flags = 1 << NETFS_SREQ_ONDEMAND;
--
--		list_add_tail(&subreq->rreq_link, &rreq->subrequests);
-+		loff_t sstart = pstart + done;
-+		size_t slen = len - done;
- 
--		source = cres->ops->prepare_read(subreq, LLONG_MAX);
--		if (WARN_ON(subreq->len == 0))
-+		source = cres->ops->prepare_ondemand_read(cres, sstart, &slen, LLONG_MAX);
-+		if (WARN_ON(slen == 0))
- 			source = NETFS_INVALID_READ;
- 		if (source != NETFS_READ_FROM_CACHE) {
--			erofs_err(sb, "failed to fscache prepare_read (source %d)",
--				  source);
--			ret = -EIO;
--			subreq->error = ret;
--			erofs_fscache_put_subrequest(subreq);
--			goto out;
-+			erofs_err(sb, "failed to fscache prepare_read (source %d)", source);
-+			return -EIO;
- 		}
- 
--		atomic_inc(&rreq->nr_outstanding);
--
--		iov_iter_xarray(&iter, READ, &rreq->mapping->i_pages,
--				start + done, subreq->len);
-+		refcount_inc(&req->ref);
-+		iov_iter_xarray(&iter, READ, &req->mapping->i_pages,
-+				lstart + done, slen);
- 
--		ret = fscache_read(cres, subreq->start, &iter,
--				   NETFS_READ_HOLE_FAIL,
--				   erofc_fscache_subreq_complete, subreq);
-+		ret = fscache_read(cres, sstart, &iter, NETFS_READ_HOLE_FAIL,
-+				   erofs_fscache_subreq_complete, req);
- 		if (ret == -EIOCBQUEUED)
- 			ret = 0;
- 		if (ret) {
- 			erofs_err(sb, "failed to fscache_read (ret %d)", ret);
--			goto out;
-+			return ret;
- 		}
- 
--		done += subreq->len;
-+		done += slen;
- 	}
--out:
--	if (atomic_dec_and_test(&rreq->nr_outstanding))
--		erofs_fscache_rreq_complete(rreq);
--
--	return ret;
-+	DBG_BUGON(done != len);
-+	req->submitted += len;
-+	return 0;
- }
- 
- static int erofs_fscache_meta_read_folio(struct file *data, struct folio *folio)
- {
- 	int ret;
- 	struct super_block *sb = folio_mapping(folio)->host->i_sb;
--	struct netfs_io_request *rreq;
-+	struct erofs_fscache_request *req;
- 	struct erofs_map_dev mdev = {
- 		.m_deviceid = 0,
- 		.m_pa = folio_pos(folio),
- 	};
- 
- 	ret = erofs_map_dev(sb, &mdev);
--	if (ret)
--		goto out;
-+	if (ret) {
-+		folio_unlock(folio);
-+		return ret;
-+	}
- 
--	rreq = erofs_fscache_alloc_request(folio_mapping(folio),
-+	req = erofs_fscache_req_alloc(folio_mapping(folio),
- 				folio_pos(folio), folio_size(folio));
--	if (IS_ERR(rreq)) {
--		ret = PTR_ERR(rreq);
--		goto out;
-+	if (IS_ERR(req)) {
-+		folio_unlock(folio);
-+		return PTR_ERR(req);
- 	}
- 
--	return erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
--				rreq, mdev.m_pa);
--out:
--	folio_unlock(folio);
-+	ret = erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
-+				req, mdev.m_pa, folio_size(folio));
-+	if (ret)
-+		req->error = ret;
-+
-+	erofs_fscache_req_put(req);
- 	return ret;
- }
- 
- /*
-  * Read into page cache in the range described by (@pos, @len).
-  *
-- * On return, the caller is responsible for page unlocking if the output @unlock
-- * is true, or the callee will take this responsibility through netfs_io_request
-- * interface.
-+ * On return, if the output @unlock is true, the caller is responsible for page
-+ * unlocking; otherwise the callee will take this responsibility through request
-+ * completion.
-  *
-  * The return value is the number of bytes successfully handled, or negative
-  * error code on failure. The only exception is that, the length of the range
-- * instead of the error code is returned on failure after netfs_io_request is
-- * allocated, so that .readahead() could advance rac accordingly.
-+ * instead of the error code is returned on failure after request is allocated,
-+ * so that .readahead() could advance rac accordingly.
-  */
- static int erofs_fscache_data_read(struct address_space *mapping,
- 				   loff_t pos, size_t len, bool *unlock)
- {
- 	struct inode *inode = mapping->host;
- 	struct super_block *sb = inode->i_sb;
--	struct netfs_io_request *rreq;
-+	struct erofs_fscache_request *req;
- 	struct erofs_map_blocks map;
- 	struct erofs_map_dev mdev;
- 	struct iov_iter iter;
-@@ -314,13 +239,17 @@ static int erofs_fscache_data_read(struct address_space *mapping,
- 	if (ret)
- 		return ret;
- 
--	rreq = erofs_fscache_alloc_request(mapping, pos, count);
--	if (IS_ERR(rreq))
--		return PTR_ERR(rreq);
-+	req = erofs_fscache_req_alloc(mapping, pos, count);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
- 
- 	*unlock = false;
--	erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
--			rreq, mdev.m_pa + (pos - map.m_la));
-+	ret = erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
-+			req, mdev.m_pa + (pos - map.m_la), count);
-+	if (ret)
-+		req->error = ret;
-+
-+	erofs_fscache_req_put(req);
- 	return count;
- }
- 
 -- 
-2.19.1.6.gb485710b
-
+Martin K. Petersen	Oracle Linux Engineering
