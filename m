@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE4C6211F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCF1621201
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234147AbiKHNG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:06:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S234298AbiKHNJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbiKHNGv (ORCPT
+        with ESMTP id S233603AbiKHNJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:06:51 -0500
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EEFA468;
-        Tue,  8 Nov 2022 05:06:50 -0800 (PST)
-Received: by mail-qk1-f181.google.com with SMTP id z30so8974313qkz.13;
-        Tue, 08 Nov 2022 05:06:50 -0800 (PST)
+        Tue, 8 Nov 2022 08:09:21 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B291B9E3;
+        Tue,  8 Nov 2022 05:09:20 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id p18so4452436qkg.2;
+        Tue, 08 Nov 2022 05:09:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LI5tKvQ3xbrBkw4pUpaVa/1GYtcIna1PWM17WCwqkc4=;
-        b=va+HiDmHMsNkjzcg1PqsywD6KByihnSiyvZhMV/t3REDkf7Ce4xmjiv/Eh/o1/oFM7
-         DHPFpa+KG7bP3+A7p4iLHPN6BY5adUFJxjhBlwvn7Ji9oEisQcKRIb0sxSSz8PHe1bZN
-         7heSGr5CuviYAOCW/GD0Z8parrX3YBeuwb0sdM5NL5qJYaFr2G+EuKyDIPPhy6s0jV4v
-         HAvzfV/z2InpgMReBarycPg9ySODQiv9JMhCks1yCgU97IpjATRlEP9pjsUc6/+fwByR
-         7dXNZ6osjITFece0P86LA/VuLlsjoFYxZcC3oA8lUA2WL1qqquCdiyAwYni6gdsliz03
-         H6Lw==
-X-Gm-Message-State: ACrzQf1NgCOO+pUdwzYekenKujMJE12v5wZr15H2qp3SLYBAQahTrKVg
-        eASY1CB0JdzKW0TMwO0cmxY9tYLmaG+G1EJUg3oLe6jb
-X-Google-Smtp-Source: AMsMyM6mWnv7hmiQNfBMlQvN6ojeFaZNX36NmVT47vgzqWz5SZt+WPWZwPyHGmH0W/MgDOOVPQhecxo4I04uf7M7HcI=
+        bh=tp5OMnbOjRDcClttdvcSBeqhMkw9nAZs4zoixrpu0Ao=;
+        b=5JbFpnFsykVdYy1yIEdjFcPNjjbTPdP4tVr+X3hsZ0t3lEBfh3BDgoRcctT6ygnE3C
+         GIvTKxuYO8ni/5ekA8Y5ytu1A/jZTH37LGDd1LQg3fGlPYwHX0/S2gmE3B8rZXg4KI3G
+         qW4IKFBMkujpRNOyk7XS8PJTKLB9291oy+aFUF1nE9/ZWxyCgnUTGfDPPYY1L00bZ1am
+         PQBTQhxB6lOextBrYP4Pv1gDOtX2GPGuD4557Fwat6SjtHxHXjyx9bZSTyIUXa7nl5cP
+         VHNgcVMOCHf9htBPFpoQIWrF+g5qVLiWTvyezZQ/Q1dMCO7T7Khuw8LwHjN1QPyOyWkq
+         pWFw==
+X-Gm-Message-State: ACrzQf0QiSC0sWKCzracyMFLZSUZDKqwfPQgKnuK7CaxRmCIyGlbe04q
+        VFawEYLEDookkaNkEKinsHnqkmhG9+iYdCeXH+k=
+X-Google-Smtp-Source: AMsMyM7+IhXIk2o4MVZnaGbRer32KZO8HPffRRWa5txMjuW5kyjpco5GjzuVGiYEwwl98+vbuAF9Wuc/hiMSDY8JAAI=
 X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
- q9-20020a05620a0d8900b006cfc98b744cmr38188547qkl.443.1667912809286; Tue, 08
- Nov 2022 05:06:49 -0800 (PST)
+ q9-20020a05620a0d8900b006cfc98b744cmr38198402qkl.443.1667912959715; Tue, 08
+ Nov 2022 05:09:19 -0800 (PST)
 MIME-Version: 1.0
-References: <7ce6bd54.f8.184570dd1b6.Coremail.wangkailong@jari.cn>
-In-Reply-To: <7ce6bd54.f8.184570dd1b6.Coremail.wangkailong@jari.cn>
+References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher> <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
+In-Reply-To: <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 8 Nov 2022 14:06:36 +0100
-Message-ID: <CAJZ5v0iv5FP=RKjyvS6Yaq7JvvxmQnz0LKZj5HmOFDbn2VvS2g@mail.gmail.com>
-Subject: Re: [PATCH] ACPICA: Fix return
-To:     wangkailong@jari.cn
-Cc:     Moore <robert.moore@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wentland <harry.wentland@amd.com>, Li <sunpeng.li@amd.com>,
-        Siqueira <Rodrigo.Siqueira@amd.com>,
-        Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Airlie <airlied@gmail.com>,
-        Vetter <daniel@ffwll.ch>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
+Date:   Tue, 8 Nov 2022 14:09:07 +0100
+Message-ID: <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from cmos_do_probe()
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -64,134 +61,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 12:48 PM <wangkailong@jari.cn> wrote:
+On Tue, Nov 8, 2022 at 3:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> return is not a function, parentheses are not required
+> On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Notice that cmos_wake_setup() is the only user of acpi_rtc_info and
+> > it
+> > can operate on the cmos_rtc variable directly, so it need not set the
+> > platform_data pointer before cmos_do_probe() is called.  Instead, it
+> > can be called by cmos_do_probe() in the case when the platform_data
+> > pointer is not set to implement the default behavior (which is to use
+> > the FADT information as long as ACPI support is enabled).
+> >
 >
-> Signed-off-by: KaiLong Wang <wangkailong@jari.cn>
+> ...
+>
+> >
+> > @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
+> >               if (info->address_space)
+> >                       address_space = info->address_space;
+> >
+> > -             if (info->rtc_day_alarm && info->rtc_day_alarm < 128)
+> > -                     cmos_rtc.day_alrm = info->rtc_day_alarm;
+> > -             if (info->rtc_mon_alarm && info->rtc_mon_alarm < 128)
+> > -                     cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> > -             if (info->rtc_century && info->rtc_century < 128)
+> > -                     cmos_rtc.century = info->rtc_century;
+> > +             cmos_rtc.day_alrm = info->rtc_day_alarm;
+> > +             cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> > +             cmos_rtc.century = info->rtc_century;
+> >
+> >               if (info->wake_on && info->wake_off) {
+> >                       cmos_rtc.wake_on = info->wake_on;
+> >                       cmos_rtc.wake_off = info->wake_off;
+> >               }
+> > +     } else {
+> > +             cmos_wake_setup(dev);
+> >       }
+> >
+> >
+>
+> Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup from
+> ACPI glue into RTC driver"), dev->platform_data is set in
+> drivers/acpi/glue.c, and the above commit moves it to cmos_wake_setup()
+> in this file.
+>
+> Now, with this patch, my understanding is that dev->platform_data is
+> never set, thus we can remove the 'info' variable and the
+>         if (info)
+> check above.
 
-ACPICA material is to be submitted to the upstream project at GitHub
-(please see MAINTAINERS for the link).
+There are other users of this driver which can be found by grepping
+for cmos_rtc_board_info.
 
-You may notice, however, that your changes do not align with the
-coding style there.
-
-Moreover, the patch contains non-ACPICA changes that are not mentioned
-in the changelog.
-
-> ---
->  drivers/acpi/acpica/evsci.c                     | 12 +++++-------
->  drivers/gpu/drm/amd/display/dc/core/dc_stream.c | 17 +++++++----------
->  2 files changed, 12 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/acpi/acpica/evsci.c b/drivers/acpi/acpica/evsci.c
-> index 3915ff61412b..63dd2aa2d16a 100644
-> --- a/drivers/acpi/acpica/evsci.c
-> +++ b/drivers/acpi/acpica/evsci.c
-> @@ -38,9 +38,8 @@ u32 acpi_ev_sci_dispatch(void)
->
->         /* Are there any host-installed SCI handlers? */
->
-> -       if (!acpi_gbl_sci_handler_list) {
-> -               return (int_status);
-> -       }
-> +       if (!acpi_gbl_sci_handler_list)
-> +               return int_status;
->
->         flags = acpi_os_acquire_lock(acpi_gbl_gpe_lock);
->
-> @@ -57,7 +56,7 @@ u32 acpi_ev_sci_dispatch(void)
->         }
->
->         acpi_os_release_lock(acpi_gbl_gpe_lock, flags);
-> -       return (int_status);
-> +       return int_status;
->  }
->
->  /*******************************************************************************
-> @@ -193,9 +192,8 @@ acpi_status acpi_ev_remove_all_sci_handlers(void)
->             acpi_os_remove_interrupt_handler((u32) acpi_gbl_FADT.sci_interrupt,
->                                              acpi_ev_sci_xrupt_handler);
->
-> -       if (!acpi_gbl_sci_handler_list) {
-> -               return (status);
-> -       }
-> +       if (!acpi_gbl_sci_handler_list)
-> +               return status;
->
->         flags = acpi_os_acquire_lock(acpi_gbl_gpe_lock);
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-> index 38d71b5c1f2d..66661a20117b 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_stream.c
-> @@ -29,7 +29,6 @@
->  #include "core_types.h"
->  #include "resource.h"
->  #include "ipp.h"
-> -#include "timing_generator.h"
->  #include "dc_dmub_srv.h"
->
->  #define DC_LOGGER dc->ctx->logger
-> @@ -152,9 +151,8 @@ static void dc_stream_free(struct kref *kref)
->
->  void dc_stream_release(struct dc_stream_state *stream)
->  {
-> -       if (stream != NULL) {
-> +       if (stream != NULL)
->                 kref_put(&stream->refcount, dc_stream_free);
-> -       }
->  }
->
->  struct dc_stream_state *dc_create_stream_for_sink(
-> @@ -316,11 +314,11 @@ bool dc_stream_set_cursor_attributes(
->         struct dc  *dc;
->         bool reset_idle_optimizations = false;
->
-> -       if (NULL == stream) {
-> +       if (stream == NULL) {
->                 dm_error("DC: dc_stream is NULL!\n");
->                 return false;
->         }
-> -       if (NULL == attributes) {
-> +       if (attributes == NULL) {
->                 dm_error("DC: attributes is NULL!\n");
->                 return false;
->         }
-> @@ -399,12 +397,12 @@ bool dc_stream_set_cursor_position(
->         struct dc  *dc = stream->ctx->dc;
->         bool reset_idle_optimizations = false;
->
-> -       if (NULL == stream) {
-> +       if (stream == NULL) {
->                 dm_error("DC: dc_stream is NULL!\n");
->                 return false;
->         }
->
-> -       if (NULL == position) {
-> +       if (position == NULL) {
->                 dm_error("DC: cursor position is NULL!\n");
->                 return false;
->         }
-> @@ -468,9 +466,8 @@ bool dc_stream_add_writeback(struct dc *dc,
->                 }
->         }
->
-> -       if (!isDrc) {
-> +       if (!isDrc)
->                 stream->writeback_info[stream->num_wb_info++] = *wb_info;
-> -       }
->
->         if (dc->hwss.enable_writeback) {
->                 struct dc_stream_status *stream_status = dc_stream_get_status(stream);
-> @@ -526,7 +523,7 @@ bool dc_stream_remove_writeback(struct dc *dc,
->         /* remove writeback info for disabled writeback pipes from stream */
->         for (i = 0, j = 0; i < stream->num_wb_info; i++) {
->                 if (stream->writeback_info[i].wb_enabled) {
-> -                       if (j < i)
-> +                       if (i != j)
->                                 /* trim the array */
->                                 stream->writeback_info[j] = stream->writeback_info[i];
->                         j++;
-> --
-> 2.36.1
+They create platform device objects with platform_data set which are
+then bound to by this driver.
