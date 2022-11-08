@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812CC6212F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E5E621345
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234502AbiKHNog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S234604AbiKHNsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234493AbiKHNob (ORCPT
+        with ESMTP id S234595AbiKHNsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:44:31 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918BF53ED2;
-        Tue,  8 Nov 2022 05:44:29 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 32cedeb4721d5569; Tue, 8 Nov 2022 14:44:26 +0100
-Received: from kreacher.localnet (unknown [213.134.163.116])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 17AEF66EB7F;
-        Tue,  8 Nov 2022 14:44:26 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ACPICA: Add utcksum.o to the acpidump Makefile
-Date:   Tue, 08 Nov 2022 14:44:26 +0100
-Message-ID: <2672720.mvXUDI8C0e@kreacher>
+        Tue, 8 Nov 2022 08:48:38 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084CABC93;
+        Tue,  8 Nov 2022 05:48:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667915309; x=1699451309;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qR1PAw49O9yyNQraw+N2we5BbIg280yLj3h68SdQpeY=;
+  b=mW2b8wax7YgITXVarLvCWdQtrNsWZ5mkLD4k722Gj6jFGQzv3CJbOHAf
+   P8gfpef1tqJ2n9dJyX/RoBewPNKKE2AjNqVNShH8uV9HMMWXvus1wiUyW
+   lju7K62RrH36M4oHKhytttbqJArS/1V0DXouyeAEaJO2Sz+fm+6i3dq/q
+   0ieDl6MgjYu3CC/l7jC9d5RBItGtAzuT8nme+D3aRegFgOrQGrENBSbpS
+   Y6gNM83fRhy0RO2YEEZR06JuFLvXdKHkZhsS9ydQcenantoR/+NcpQLa1
+   jQ6VYvOxoirmloObsjSNCMkMvxv+Df911jykJLkSRpdI9E6Famb8HKW16
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="310693654"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="310693654"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:48:29 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="669551302"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="669551302"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:48:26 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id B942D2015B;
+        Tue,  8 Nov 2022 15:48:23 +0200 (EET)
+Date:   Tue, 8 Nov 2022 13:48:23 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kishon@ti.com, vkoul@kernel.org,
+        laurent.pinchart@ideasonboard.com, jacopo@jmondi.org,
+        hverkuil@xs4all.nl, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-media@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] Add support for Toshiba TC358746
+Message-ID: <Y2peJ+G7ho1HuJSl@paasikivi.fi.intel.com>
+References: <20220930124812.450332-1-m.felsch@pengutronix.de>
+ <20221028134349.lxvo2jjvs6aehrbd@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.116
-X-CLIENT-HOSTNAME: 213.134.163.116
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrfedtgdehiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeifedrudduieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduudeipdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=2 Fuz1=2 Fuz2=2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028134349.lxvo2jjvs6aehrbd@pengutronix.de>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Marco,
 
-Commit 51aad1a6723b ("ACPICA: Finish support for the CDAT table")
-did not add utcksum.o to the acpidump Makefile by mistake.
+On Fri, Oct 28, 2022 at 03:43:49PM +0200, Marco Felsch wrote:
+> Hi,
+> 
+> gentle ping.
 
-Do that now.
+This is in my latest PR to Mauro:
 
-Fixes: 51aad1a6723b ("ACPICA: Finish support for the CDAT table")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- tools/power/acpi/tools/acpidump/Makefile |    1 +
- 1 file changed, 1 insertion(+)
+<URL:https://patchwork.linuxtv.org/project/linux-media/patch/Y1uVp8hHo7DYUK82@valkosipuli.retiisi.eu/>
 
-Index: linux-pm/tools/power/acpi/tools/acpidump/Makefile
-===================================================================
---- linux-pm.orig/tools/power/acpi/tools/acpidump/Makefile
-+++ linux-pm/tools/power/acpi/tools/acpidump/Makefile
-@@ -28,6 +28,7 @@ TOOL_OBJS = \
- 	tbxfroot.o\
- 	utascii.o\
- 	utbuffer.o\
-+	utcksum.o\
- 	utdebug.o\
- 	utexcep.o\
- 	utglobal.o\
-
-
-
+-- 
+Sakari Ailus
