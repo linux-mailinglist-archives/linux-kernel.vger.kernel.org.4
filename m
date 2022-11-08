@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B2D620657
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF1662065A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiKHBw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S233522AbiKHBxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233464AbiKHBwx (ORCPT
+        with ESMTP id S233125AbiKHBx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:52:53 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F7D1F2EC
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:52:52 -0800 (PST)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5rhR0ksTzmVlY;
-        Tue,  8 Nov 2022 09:52:39 +0800 (CST)
-Received: from huawei.com (10.175.100.227) by kwepemi500016.china.huawei.com
- (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 7 Nov 2022 20:53:27 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA67A46B;
+        Mon,  7 Nov 2022 17:53:26 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N5rdr6HxKzJnYH;
+        Tue,  8 Nov 2022 09:50:24 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
- 2022 09:52:49 +0800
-From:   Shang XiaoJing <shangxiaojing@huawei.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <zanussi@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <shangxiaojing@huawei.com>
-Subject: [PATCH v2 2/2] tracing: kprobe: Fix potential null-ptr-deref on trace_array in kprobe_event_gen_test_exit()
-Date:   Tue, 8 Nov 2022 09:51:30 +0800
-Message-ID: <20221108015130.28326-3-shangxiaojing@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221108015130.28326-1-shangxiaojing@huawei.com>
-References: <20221108015130.28326-1-shangxiaojing@huawei.com>
+ 2022 09:53:24 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <saeedm@nvidia.com>, <leon@kernel.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <kliteyn@nvidia.com>, <mbloch@nvidia.com>, <valex@nvidia.com>,
+        <erezsh@mellanox.com>
+CC:     <netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH net] net/mlx5: DR, Fix uninitialized var warning
+Date:   Tue, 8 Nov 2022 09:53:14 +0800
+Message-ID: <20221108015314.17928-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.175.100.227]
+X-Originating-IP: [10.174.179.215]
 X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500016.china.huawei.com (7.221.188.220)
+ canpemm500007.china.huawei.com (7.192.104.62)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,82 +47,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When test_gen_kprobe_cmd() failed after kprobe_event_gen_cmd_end(), it
-will goto delete, which will call kprobe_event_delete() and release the
-corresponding resource. However, the trace_array in gen_kretprobe_test
-will point to the invalid resource. Set gen_kretprobe_test to NULL
-after called kprobe_event_delete() to prevent null-ptr-deref.
+Smatch warns this:
 
-BUG: kernel NULL pointer dereference, address: 0000000000000070
-PGD 0 P4D 0
-Oops: 0000 [#1] SMP PTI
-CPU: 0 PID: 246 Comm: modprobe Tainted: G        W
-6.1.0-rc1-00174-g9522dc5c87da-dirty #248
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-RIP: 0010:__ftrace_set_clr_event_nolock+0x53/0x1b0
-Code: e8 82 26 fc ff 49 8b 1e c7 44 24 0c ea ff ff ff 49 39 de 0f 84 3c
-01 00 00 c7 44 24 18 00 00 00 00 e8 61 26 fc ff 48 8b 6b 10 <44> 8b 65
-70 4c 8b 6d 18 41 f7 c4 00 02 00 00 75 2f
-RSP: 0018:ffffc9000159fe00 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88810971d268 RCX: 0000000000000000
-RDX: ffff8881080be600 RSI: ffffffff811b48ff RDI: ffff88810971d058
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffc9000159fe58 R11: 0000000000000001 R12: ffffffffa0001064
-R13: ffffffffa000106c R14: ffff88810971d238 R15: 0000000000000000
-FS:  00007f89eeff6540(0000) GS:ffff88813b600000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000070 CR3: 000000010599e004 CR4: 0000000000330ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __ftrace_set_clr_event+0x3e/0x60
- trace_array_set_clr_event+0x35/0x50
- ? 0xffffffffa0000000
- kprobe_event_gen_test_exit+0xcd/0x10b [kprobe_event_gen_test]
- __x64_sys_delete_module+0x206/0x380
- ? lockdep_hardirqs_on_prepare+0xd8/0x190
- ? syscall_enter_from_user_mode+0x1c/0x50
- do_syscall_64+0x3f/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f89eeb061b7
+drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c:81
+ mlx5dr_table_set_miss_action() error: uninitialized symbol 'ret'.
 
-Fixes: 64836248dda2 ("tracing: Add kprobe event command generation test module")
-Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
-Cc: stable@vger.kernel.org
+Fix this by initializing ret with zero.
+
+Fixes: 7838e1725394 ("net/mlx5: DR, Expose steering table functionality")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
-changes in v2:
-- add cc tag to stable@vger.kernel.org.
-- set gen_kprobe_test to NULL instead of gen_kprobe_test->tr, so as
-gen_kretprobe_test.
----
- kernel/trace/kprobe_event_gen_test.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
-index 1c98fafcf333..c736487fc0e4 100644
---- a/kernel/trace/kprobe_event_gen_test.c
-+++ b/kernel/trace/kprobe_event_gen_test.c
-@@ -143,6 +143,8 @@ static int __init test_gen_kprobe_cmd(void)
- 	kfree(buf);
- 	return ret;
-  delete:
-+	if (trace_event_file_is_valid(gen_kprobe_test))
-+		gen_kprobe_test = NULL;
- 	/* We got an error after creating the event, delete it */
- 	ret = kprobe_event_delete("gen_kprobe_test");
- 	goto out;
-@@ -206,6 +208,8 @@ static int __init test_gen_kretprobe_cmd(void)
- 	kfree(buf);
- 	return ret;
-  delete:
-+	if (trace_event_file_is_valid(gen_kretprobe_test))
-+		gen_kretprobe_test = NULL;
- 	/* We got an error after creating the event, delete it */
- 	ret = kprobe_event_delete("gen_kretprobe_test");
- 	goto out;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c
+index 31d443dd8386..44dea75dabde 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c
+@@ -46,7 +46,7 @@ static int dr_table_set_miss_action_nic(struct mlx5dr_domain *dmn,
+ int mlx5dr_table_set_miss_action(struct mlx5dr_table *tbl,
+ 				 struct mlx5dr_action *action)
+ {
+-	int ret;
++	int ret = 0;
+ 
+ 	if (action && action->action_type != DR_ACTION_TYP_FT)
+ 		return -EOPNOTSUPP;
 -- 
 2.17.1
 
