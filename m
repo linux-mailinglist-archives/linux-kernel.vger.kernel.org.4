@@ -2,40 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF741620639
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B724620638
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233202AbiKHBjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
+        id S233152AbiKHBiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKHBjP (ORCPT
+        with ESMTP id S231796AbiKHBiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:39:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD311625F
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:39:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C54BECE1755
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:39:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF33AC433C1;
-        Tue,  8 Nov 2022 01:39:07 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: SMP: Change prefix from loongson3 to loongson
-Date:   Tue,  8 Nov 2022 09:36:49 +0800
-Message-Id: <20221108013649.3872869-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        Mon, 7 Nov 2022 20:38:12 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F642FC8
+        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 17:38:11 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id y13so12466771pfp.7
+        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 17:38:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pdA0+o4nyWXXtAJUwdO+TLMgOFzpgSrlvCyZWaWI2z4=;
+        b=uUF3kWMxyWjpSj4fV0JBu57jdZdaitSPay1bfIGp0XFYDlcqtKIDm772KToGoDVuY4
+         k9NhItfI5Xy02zSY93Cz8FaCrS8XLcp/MtGhI5bT5m8nQWCfpGn+phXjMMcRfr+8pxZV
+         7bxnR51fohdrg2TI+WnAznLqy/w9xciGNh4WQzz/Tn/ccnE40nq6giHICh8zn/xqyAnz
+         DDvNBkZWpZI2cm/EKxjqsUV2dtHsRYfVlcokfFJOGJOnzOL4uUUogUKcH7jWFUqRjNCh
+         CVLoFVFMOaqlboAbAGKERaafeEe8W3UR9dHov2alPnaf+DPx++C5qIsxy2K0caHLXR6l
+         jkyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pdA0+o4nyWXXtAJUwdO+TLMgOFzpgSrlvCyZWaWI2z4=;
+        b=HqTGQ4Ydhzj4MTJn7UxMEUPRDBjZJApUtD8yTap/V59W7zjs46uIuaLSkASQ0Xy+0v
+         MLzRf3Rv79hntONLVydUcz4ztOeMy9yWWTeGZuR+BGbYSIXXTJk6V9VXG2D97g4nwUmZ
+         m9PoN5hshPZERYXTu0jbFv5GK02p3jhjkepaLLyQgovNctKTd1JH5Id2Ip4y6V41zg3v
+         CUBvvf3JRuALAOeN3UJoVP7aDA4Ys7ih32JFbrr53bHEJ2t/lxseFKQmLtp5+D8C6O8m
+         k3c6BZwQs+ikYpJAWIA++6gJabF3x+XE7GRQEXqU6PjWYh5cvV15vyIGAqM2OcPp+27M
+         7Sdg==
+X-Gm-Message-State: ACrzQf2MA1WAGBvGJjF3zOEA9H5fhyaVgDjfBpfC6Me7ZvF6yKhlnAKQ
+        eFLwza8KCZ7bLYM/1kz6j712ew==
+X-Google-Smtp-Source: AMsMyM45kxmMVB29FW11WfTPJoOy/nQGourjL5hLHSIUpug+JZdQcZpcSqfddvvyRg+/HMEccH5/cA==
+X-Received: by 2002:a63:d90c:0:b0:462:cfa2:285b with SMTP id r12-20020a63d90c000000b00462cfa2285bmr45569279pgg.202.1667871490747;
+        Mon, 07 Nov 2022 17:38:10 -0800 (PST)
+Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
+        by smtp.gmail.com with ESMTPSA id p18-20020a170902ebd200b00176b63535adsm5560623plg.260.2022.11.07.17.38.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 17:38:10 -0800 (PST)
+Message-ID: <1634d6c4-40fa-1298-efa2-c606b1e57fd7@rivosinc.com>
+Date:   Mon, 7 Nov 2022 17:38:08 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v12 09/17] riscv: Add ptrace vector support
+Content-Language: en-US
+To:     Chris Stillson <stillson@rivosinc.com>
+Cc:     Greentime Hu <greentime.hu@sifive.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20220921214439.1491510-1-stillson@rivosinc.com>
+ <20220921214439.1491510-9-stillson@rivosinc.com>
+From:   Vineet Gupta <vineetg@rivosinc.com>
+In-Reply-To: <20220921214439.1491510-9-stillson@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,287 +86,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SMP operations can be shared by Loongson-2 series and Loongson-3 series,
-so we change the prefix from loongson3 to loongson for all functions and
-data structures.
+Trimmed CC list
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/include/asm/irq.h |  2 +-
- arch/loongarch/include/asm/smp.h | 30 +++++++++++-----------
- arch/loongarch/kernel/irq.c      |  2 +-
- arch/loongarch/kernel/smp.c      | 44 ++++++++++++++++----------------
- 4 files changed, 39 insertions(+), 39 deletions(-)
+On 9/21/22 14:43, Chris Stillson wrote:
+> From: Greentime Hu <greentime.hu@sifive.com>
+> 
+> This patch adds ptrace support for riscv vector. The vector registers will
+> be saved in datap pointer of __riscv_v_state. This pointer will be set
+> right after the __riscv_v_state data structure then it will be put in ubuf
+> for ptrace system call to get or set. It will check if the datap got from
+> ubuf is set to the correct address or not when the ptrace system call is
+> trying to set the vector registers.
+> 
+> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
+> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> ---
+>   arch/riscv/include/uapi/asm/ptrace.h |  6 +++
+>   arch/riscv/kernel/ptrace.c           | 71 ++++++++++++++++++++++++++++
+>   include/uapi/linux/elf.h             |  1 +
+>   3 files changed, 78 insertions(+)
+> 
+> diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
+> index 6ee1ca2edfa7..2491875be80d 100644
+> --- a/arch/riscv/include/uapi/asm/ptrace.h
+> +++ b/arch/riscv/include/uapi/asm/ptrace.h
+> @@ -94,6 +94,12 @@ struct __riscv_v_state {
+>   	 */
+>   };
+>   
+> +/*
+> + * According to spec: The number of bits in a single vector register,
+> + * VLEN >= ELEN, which must be a power of 2, and must be no greater than
+> + * 2^16 = 65536bits = 8192bytes
+> + */
+> +#define RISCV_MAX_VLENB (8192)
 
-diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-index d06d4542b634..5332b1433f38 100644
---- a/arch/loongarch/include/asm/irq.h
-+++ b/arch/loongarch/include/asm/irq.h
-@@ -117,7 +117,7 @@ extern struct fwnode_handle *liointc_handle;
- extern struct fwnode_handle *pch_lpc_handle;
- extern struct fwnode_handle *pch_pic_handle[MAX_IO_PICS];
- 
--extern irqreturn_t loongson3_ipi_interrupt(int irq, void *dev);
-+extern irqreturn_t loongson_ipi_interrupt(int irq, void *dev);
- 
- #include <asm-generic/irq.h>
- 
-diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/asm/smp.h
-index 71189b28bfb2..3dd172d9ffea 100644
---- a/arch/loongarch/include/asm/smp.h
-+++ b/arch/loongarch/include/asm/smp.h
-@@ -19,21 +19,21 @@ extern cpumask_t cpu_sibling_map[];
- extern cpumask_t cpu_core_map[];
- extern cpumask_t cpu_foreign_map[];
- 
--void loongson3_smp_setup(void);
--void loongson3_prepare_cpus(unsigned int max_cpus);
--void loongson3_boot_secondary(int cpu, struct task_struct *idle);
--void loongson3_init_secondary(void);
--void loongson3_smp_finish(void);
--void loongson3_send_ipi_single(int cpu, unsigned int action);
--void loongson3_send_ipi_mask(const struct cpumask *mask, unsigned int action);
-+void loongson_smp_setup(void);
-+void loongson_prepare_cpus(unsigned int max_cpus);
-+void loongson_boot_secondary(int cpu, struct task_struct *idle);
-+void loongson_init_secondary(void);
-+void loongson_smp_finish(void);
-+void loongson_send_ipi_single(int cpu, unsigned int action);
-+void loongson_send_ipi_mask(const struct cpumask *mask, unsigned int action);
- #ifdef CONFIG_HOTPLUG_CPU
--int loongson3_cpu_disable(void);
--void loongson3_cpu_die(unsigned int cpu);
-+int loongson_cpu_disable(void);
-+void loongson_cpu_die(unsigned int cpu);
- #endif
- 
- static inline void plat_smp_setup(void)
- {
--	loongson3_smp_setup();
-+	loongson_smp_setup();
- }
- 
- static inline int raw_smp_processor_id(void)
-@@ -85,28 +85,28 @@ extern void show_ipi_list(struct seq_file *p, int prec);
-  */
- static inline void smp_send_reschedule(int cpu)
- {
--	loongson3_send_ipi_single(cpu, SMP_RESCHEDULE);
-+	loongson_send_ipi_single(cpu, SMP_RESCHEDULE);
- }
- 
- static inline void arch_send_call_function_single_ipi(int cpu)
- {
--	loongson3_send_ipi_single(cpu, SMP_CALL_FUNCTION);
-+	loongson_send_ipi_single(cpu, SMP_CALL_FUNCTION);
- }
- 
- static inline void arch_send_call_function_ipi_mask(const struct cpumask *mask)
- {
--	loongson3_send_ipi_mask(mask, SMP_CALL_FUNCTION);
-+	loongson_send_ipi_mask(mask, SMP_CALL_FUNCTION);
- }
- 
- #ifdef CONFIG_HOTPLUG_CPU
- static inline int __cpu_disable(void)
- {
--	return loongson3_cpu_disable();
-+	return loongson_cpu_disable();
- }
- 
- static inline void __cpu_die(unsigned int cpu)
- {
--	loongson3_cpu_die(cpu);
-+	loongson_cpu_die(cpu);
- }
- 
- extern void play_dead(void);
-diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-index 1ba19c76563e..0524bf1169b7 100644
---- a/arch/loongarch/kernel/irq.c
-+++ b/arch/loongarch/kernel/irq.c
-@@ -117,7 +117,7 @@ void __init init_IRQ(void)
- 	if (ipi_irq < 0)
- 		panic("IPI IRQ mapping failed\n");
- 	irq_set_percpu_devid(ipi_irq);
--	r = request_percpu_irq(ipi_irq, loongson3_ipi_interrupt, "IPI", &ipi_dummy_dev);
-+	r = request_percpu_irq(ipi_irq, loongson_ipi_interrupt, "IPI", &ipi_dummy_dev);
- 	if (r < 0)
- 		panic("IPI IRQ request failed\n");
- #endif
-diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-index 781a4d4bdddc..6ed72f7ff278 100644
---- a/arch/loongarch/kernel/smp.c
-+++ b/arch/loongarch/kernel/smp.c
-@@ -136,12 +136,12 @@ static void ipi_write_action(int cpu, u32 action)
- 	}
- }
- 
--void loongson3_send_ipi_single(int cpu, unsigned int action)
-+void loongson_send_ipi_single(int cpu, unsigned int action)
- {
- 	ipi_write_action(cpu_logical_map(cpu), (u32)action);
- }
- 
--void loongson3_send_ipi_mask(const struct cpumask *mask, unsigned int action)
-+void loongson_send_ipi_mask(const struct cpumask *mask, unsigned int action)
- {
- 	unsigned int i;
- 
-@@ -149,7 +149,7 @@ void loongson3_send_ipi_mask(const struct cpumask *mask, unsigned int action)
- 		ipi_write_action(cpu_logical_map(i), (u32)action);
- }
- 
--irqreturn_t loongson3_ipi_interrupt(int irq, void *dev)
-+irqreturn_t loongson_ipi_interrupt(int irq, void *dev)
- {
- 	unsigned int action;
- 	unsigned int cpu = smp_processor_id();
-@@ -169,7 +169,7 @@ irqreturn_t loongson3_ipi_interrupt(int irq, void *dev)
- 	return IRQ_HANDLED;
- }
- 
--void __init loongson3_smp_setup(void)
-+void __init loongson_smp_setup(void)
- {
- 	cpu_data[0].core = cpu_logical_map(0) % loongson_sysconf.cores_per_package;
- 	cpu_data[0].package = cpu_logical_map(0) / loongson_sysconf.cores_per_package;
-@@ -178,7 +178,7 @@ void __init loongson3_smp_setup(void)
- 	pr_info("Detected %i available CPU(s)\n", loongson_sysconf.nr_cpus);
- }
- 
--void __init loongson3_prepare_cpus(unsigned int max_cpus)
-+void __init loongson_prepare_cpus(unsigned int max_cpus)
- {
- 	int i = 0;
- 
-@@ -193,7 +193,7 @@ void __init loongson3_prepare_cpus(unsigned int max_cpus)
- /*
-  * Setup the PC, SP, and TP of a secondary processor and start it running!
-  */
--void loongson3_boot_secondary(int cpu, struct task_struct *idle)
-+void loongson_boot_secondary(int cpu, struct task_struct *idle)
- {
- 	unsigned long entry;
- 
-@@ -205,13 +205,13 @@ void loongson3_boot_secondary(int cpu, struct task_struct *idle)
- 
- 	csr_mail_send(entry, cpu_logical_map(cpu), 0);
- 
--	loongson3_send_ipi_single(cpu, SMP_BOOT_CPU);
-+	loongson_send_ipi_single(cpu, SMP_BOOT_CPU);
- }
- 
- /*
-  * SMP init and finish on secondary CPUs
-  */
--void loongson3_init_secondary(void)
-+void loongson_init_secondary(void)
- {
- 	unsigned int cpu = smp_processor_id();
- 	unsigned int imask = ECFGF_IP0 | ECFGF_IP1 | ECFGF_IP2 |
-@@ -231,7 +231,7 @@ void loongson3_init_secondary(void)
- 		     cpu_logical_map(cpu) / loongson_sysconf.cores_per_package;
- }
- 
--void loongson3_smp_finish(void)
-+void loongson_smp_finish(void)
- {
- 	local_irq_enable();
- 	iocsr_write64(0, LOONGARCH_IOCSR_MBUF0);
-@@ -240,7 +240,7 @@ void loongson3_smp_finish(void)
- 
- #ifdef CONFIG_HOTPLUG_CPU
- 
--int loongson3_cpu_disable(void)
-+int loongson_cpu_disable(void)
- {
- 	unsigned long flags;
- 	unsigned int cpu = smp_processor_id();
-@@ -262,7 +262,7 @@ int loongson3_cpu_disable(void)
- 	return 0;
- }
- 
--void loongson3_cpu_die(unsigned int cpu)
-+void loongson_cpu_die(unsigned int cpu)
- {
- 	while (per_cpu(cpu_state, cpu) != CPU_DEAD)
- 		cpu_relax();
-@@ -300,19 +300,19 @@ void play_dead(void)
-  */
- #ifdef CONFIG_PM
- 
--static int loongson3_ipi_suspend(void)
-+static int loongson_ipi_suspend(void)
- {
- 	return 0;
- }
- 
--static void loongson3_ipi_resume(void)
-+static void loongson_ipi_resume(void)
- {
- 	iocsr_write32(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
- }
- 
--static struct syscore_ops loongson3_ipi_syscore_ops = {
--	.resume         = loongson3_ipi_resume,
--	.suspend        = loongson3_ipi_suspend,
-+static struct syscore_ops loongson_ipi_syscore_ops = {
-+	.resume         = loongson_ipi_resume,
-+	.suspend        = loongson_ipi_suspend,
- };
- 
- /*
-@@ -321,7 +321,7 @@ static struct syscore_ops loongson3_ipi_syscore_ops = {
-  */
- static int __init ipi_pm_init(void)
- {
--	register_syscore_ops(&loongson3_ipi_syscore_ops);
-+	register_syscore_ops(&loongson_ipi_syscore_ops);
- 	return 0;
- }
- 
-@@ -425,7 +425,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
- {
- 	init_new_context(current, &init_mm);
- 	current_thread_info()->cpu = 0;
--	loongson3_prepare_cpus(max_cpus);
-+	loongson_prepare_cpus(max_cpus);
- 	set_cpu_sibling_map(0);
- 	set_cpu_core_map(0);
- 	calculate_cpu_foreign_map();
-@@ -436,7 +436,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
- 
- int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- {
--	loongson3_boot_secondary(cpu, tidle);
-+	loongson_boot_secondary(cpu, tidle);
- 
- 	/* Wait for CPU to start and be ready to sync counters */
- 	if (!wait_for_completion_timeout(&cpu_starting,
-@@ -465,7 +465,7 @@ asmlinkage void start_secondary(void)
- 
- 	cpu_probe();
- 	constant_clockevent_init();
--	loongson3_init_secondary();
-+	loongson_init_secondary();
- 
- 	set_cpu_sibling_map(cpu);
- 	set_cpu_core_map(cpu);
-@@ -487,11 +487,11 @@ asmlinkage void start_secondary(void)
- 	complete(&cpu_running);
- 
- 	/*
--	 * irq will be enabled in loongson3_smp_finish(), enabling it too
-+	 * irq will be enabled in loongson_smp_finish(), enabling it too
- 	 * early is dangerous.
- 	 */
- 	WARN_ON_ONCE(!irqs_disabled());
--	loongson3_smp_finish();
-+	loongson_smp_finish();
- 
- 	cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
- }
--- 
-2.31.1
+Need a line here.
+
+>   #endif /* __ASSEMBLY__ */
+>   
+>   #endif /* _UAPI_ASM_RISCV_PTRACE_H */
+> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> index 2ae8280ae475..cce459ff551d 100644
+> --- a/arch/riscv/kernel/ptrace.c
+> +++ b/arch/riscv/kernel/ptrace.c
+> @@ -27,6 +27,9 @@ enum riscv_regset {
+>   #ifdef CONFIG_FPU
+>   	REGSET_F,
+>   #endif
+> +#ifdef CONFIG_VECTOR
+> +	REGSET_V,
+> +#endif
+>   };
+>   
+>   static int riscv_gpr_get(struct task_struct *target,
+> @@ -83,6 +86,64 @@ static int riscv_fpr_set(struct task_struct *target,
+>   }
+>   #endif
+>   
+> +#ifdef CONFIG_VECTOR
+> +static int riscv_vr_get(struct task_struct *target,
+> +			const struct user_regset *regset,
+> +			struct membuf to)
+> +{
+> +	struct __riscv_v_state *vstate = &target->thread.vstate;
+> +
+> +	/*
+> +	 * Ensure the vector registers have been saved to the memory before
+> +	 * copying them to membuf.
+> +	 */
+> +	if (target == current)
+> +		vstate_save(current, task_pt_regs(current));
+> +
+> +	/* Copy vector header from vstate. */
+> +	membuf_write(&to, vstate, RISCV_V_STATE_DATAP);
+> +	membuf_zero(&to, sizeof(void *));
+> +#if __riscv_xlen == 32
+> +	membuf_zero(&to, sizeof(__u32));
+> +#endif
+> +
+> +	/* Copy all the vector registers from vstate. */
+> +	return membuf_write(&to, vstate->datap, riscv_vsize);
+> +}
+> +
+> +static int riscv_vr_set(struct task_struct *target,
+> +			 const struct user_regset *regset,
+> +			 unsigned int pos, unsigned int count,
+> +			 const void *kbuf, const void __user *ubuf)
+> +{
+> +	int ret, size;
+> +	struct __riscv_v_state *vstate = &target->thread.vstate;
+> +
+> +	/* Copy rest of the vstate except datap and __padding. */
+> +	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, vstate, 0,
+> +				 RISCV_V_STATE_DATAP);
+> +	if (unlikely(ret))
+> +		return ret;
+> +
+> +	/* Skip copy datap. */
+> +	size = sizeof(vstate->datap);
+> +	count -= size;
+> +	ubuf += size;
+> +#if __riscv_xlen == 32
+> +	/* Skip copy _padding. */
+> +	size = sizeof(vstate->__padding);
+> +	count -= size;
+> +	ubuf += size;
+> +#endif
+> +
+> +	/* Copy all the vector registers. */
+> +	pos = 0;
+> +	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, vstate->datap,
+> +				 0, riscv_vsize);
+> +	return ret;
+> +}
+> +#endif
+> +
+>   static const struct user_regset riscv_user_regset[] = {
+>   	[REGSET_X] = {
+>   		.core_note_type = NT_PRSTATUS,
+> @@ -102,6 +163,16 @@ static const struct user_regset riscv_user_regset[] = {
+>   		.set = riscv_fpr_set,
+>   	},
+>   #endif
+> +#ifdef CONFIG_VECTOR
+> +	[REGSET_V] = {
+> +		.core_note_type = NT_RISCV_VECTOR,
+> +		.align = 16,
+> +		.n = (32 * RISCV_MAX_VLENB)/sizeof(__u32),
+> +		.size = sizeof(__u32),
+> +		.regset_get = riscv_vr_get,
+> +		.set = riscv_vr_set,
+> +	},
+> +#endif
+>   };
+>   
+>   static const struct user_regset_view riscv_user_native_view = {
+> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+> index c7b056af9ef0..5a5056c6a2a1 100644
+> --- a/include/uapi/linux/elf.h
+> +++ b/include/uapi/linux/elf.h
+> @@ -439,6 +439,7 @@ typedef struct elf64_shdr {
+>   #define NT_MIPS_DSP	0x800		/* MIPS DSP ASE registers */
+>   #define NT_MIPS_FP_MODE	0x801		/* MIPS floating-point mode */
+>   #define NT_MIPS_MSA	0x802		/* MIPS SIMD registers */
+> +#define NT_RISCV_VECTOR	0x900		/* RISC-V vector registers */
+>   #define NT_LOONGARCH_CPUCFG	0xa00	/* LoongArch CPU config registers */
+>   #define NT_LOONGARCH_CSR	0xa01	/* LoongArch control and status registers */
+>   #define NT_LOONGARCH_LSX	0xa02	/* LoongArch Loongson SIMD Extension registers */
+
+I think we should break this one out as a seperate patch to be applied 
+independently, avoid merge conflicts (but this file doesn't change much 
+anyways. @Arnd or is it ok to carry with riscv change ?
 
