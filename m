@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F8D621F79
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5E621F7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiKHWqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S229861AbiKHWqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:46:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiKHWqJ (ORCPT
+        with ESMTP id S229931AbiKHWqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:46:09 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9673563CFB;
-        Tue,  8 Nov 2022 14:46:05 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A8MjubB123806;
-        Tue, 8 Nov 2022 16:45:56 -0600
+        Tue, 8 Nov 2022 17:46:15 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB0264A2C;
+        Tue,  8 Nov 2022 14:46:14 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A8Mk5k9003110;
+        Tue, 8 Nov 2022 16:46:05 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667947556;
-        bh=YsQiQgcfYIfbwbT7Xc9VyrBKRDiZ8BrkYIfbn/HB7BI=;
+        s=ti-com-17Q1; t=1667947565;
+        bh=A1R8PBQaeoaFSr9oyLi+Qqna9IPehNdoiDKTif4WC30=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=GzyiWz4Zag1GwnRg5ABGplAvJoFThSh/VATZXK6yXJ2e2GHeTnvEun0ESQzO0vr6c
-         chjPBJnH0NRk9tY+SgxyVwcBgxM5/kq45MRbKnkwQntmEOxupkPptwNR+2WafjhUpc
-         q2Rv4csNPlsfnxR1IkQ8l0g48k/KJ8ZCosKUwEwA=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A8MjuEW119112
+        b=cIVoClqGlvuwN/gE4JRftv+poT5xlbuj1TsLi+dE+6RAYG/rxC5WwlqxTtGHY5JiK
+         6wqKNd3VLrwqEXta2HUMbCZDPslO8mA38bi6l1yc0RUZqX7SNATlTs2MLzOfyQ6wn9
+         t1WE1PNxeGDyoWncWF+c1+O24fn/+qa86snxXxu4=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A8Mk5gX114195
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Nov 2022 16:45:56 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 8 Nov 2022 16:46:05 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 8 Nov
- 2022 16:45:55 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 16:46:04 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 8 Nov 2022 16:45:55 -0600
+ Frontend Transport; Tue, 8 Nov 2022 16:46:04 -0600
 Received: from jti.ent.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A8MjSow071038;
-        Tue, 8 Nov 2022 16:45:47 -0600
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A8MjSox071038;
+        Tue, 8 Nov 2022 16:45:57 -0600
 From:   Georgi Vlaev <g-vlaev@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
         Santosh Shilimkar <ssantosh@kernel.org>,
@@ -50,9 +50,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Vibhore Vardhan <vibhore@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Georgi Vlaev <g-vlaev@ti.com>
-Subject: [PATCH v2 2/5] firmware: ti_sci: Introduce Power Management Ops
-Date:   Wed, 9 Nov 2022 00:45:24 +0200
-Message-ID: <20221108224527.137179-3-g-vlaev@ti.com>
+Subject: [PATCH v2 3/5] firmware: ti_sci: Allocate memory for the LPM modes
+Date:   Wed, 9 Nov 2022 00:45:25 +0200
+Message-ID: <20221108224527.137179-4-g-vlaev@ti.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221108224527.137179-1-g-vlaev@ti.com>
 References: <20221108224527.137179-1-g-vlaev@ti.com>
@@ -71,386 +71,130 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dave Gerlach <d-gerlach@ti.com>
 
-Introduce power management ops supported by the TISCI
-Low Power Mode API [0]. These messages are currently
-supported only on AM62x platforms.
+A region of memory in DDR must be used during Deep Sleep for saving
+of some system context when using the ti_sci firmware. From DM's point
+of view, this can be any contiguous region in the DDR, so can allocate
+512KB of DMA reserved memory in probe(), instead of another carveout.
 
-1) TISCI_MSG_PREPARE_SLEEP [1]:
-Prepare the SOC for entering into a low power mode and
-provide details to firmware about the state being entered.
-
-2) TISCI_MSG_LPM_WAKE_REASON [2]:
-Get which wake up source woke the SoC from Low Power Mode.
-The wake up source IDs will be common for all K3 platforms.
-
-3) TISCI_MSG_SET_IO_ISOLATION [3]:
-Control the IO isolation for Low Power Mode.
-
-[0] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
-[1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html#pm-lpm-msg-prepare-sleep
-[2] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html#pm-lpm-msg-wake-reason
-[3] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html#pm-lpm-msg-set-io-isolation
+Also send a TISCI_MSG_PREPARE_SUSPEND message to the firmware during
+probe to determine if system suspend is supported and if
+ti_sci_init_suspend should be called based on the response received.
 
 Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
 Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-[g-vlaev@ti.com: LPM_WAKE_REASON and IO_ISOLATION support]
 Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
 ---
- drivers/firmware/ti_sci.c              | 174 +++++++++++++++++++++++++
- drivers/firmware/ti_sci.h              |  64 ++++++++-
- include/linux/soc/ti/ti_sci_protocol.h |  44 +++++++
- 3 files changed, 281 insertions(+), 1 deletion(-)
+ drivers/firmware/ti_sci.c | 55 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
 diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index ebc32bbd9b83..f13cf19587e3 100644
+index f13cf19587e3..6a07c7276c24 100644
 --- a/drivers/firmware/ti_sci.c
 +++ b/drivers/firmware/ti_sci.c
-@@ -1667,6 +1667,175 @@ static int ti_sci_cmd_clk_get_freq(const struct ti_sci_handle *handle,
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/bitmap.h>
+ #include <linux/debugfs.h>
++#include <linux/dma-mapping.h>
+ #include <linux/export.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+@@ -25,6 +26,9 @@
+ 
+ #include "ti_sci.h"
+ 
++/* Low power mode memory context size */
++#define LPM_CTX_MEM_SIZE 0x80000
++
+ /* List of all TI SCI devices active in system */
+ static LIST_HEAD(ti_sci_list);
+ /* Protection for the entire list */
+@@ -96,6 +100,8 @@ struct ti_sci_desc {
+  * @minfo:	Message info
+  * @node:	list head
+  * @host_id:	Host ID
++ * @ctx_mem_addr: Low power context memory phys address
++ * @ctx_mem_buf: Low power context memory buffer
+  * @users:	Number of users of this instance
+  * @is_suspending: Flag set to indicate in suspend path.
+  */
+@@ -114,6 +120,8 @@ struct ti_sci_info {
+ 	struct ti_sci_xfers_info minfo;
+ 	struct list_head node;
+ 	u8 host_id;
++	dma_addr_t ctx_mem_addr;
++	void* ctx_mem_buf;
+ 	/* protected by ti_sci_list_mutex */
+ 	int users;
+ 	bool is_suspending;
+@@ -3486,6 +3494,41 @@ static int ti_sci_resume(struct device *dev)
+ 
+ static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
+ 
++static int ti_sci_init_suspend(struct platform_device *pdev,
++			       struct ti_sci_info *info)
++{
++	struct device *dev = &pdev->dev;
++	int ret;
++
++	dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
++	info->ctx_mem_buf = dma_alloc_coherent(info->dev, LPM_CTX_MEM_SIZE,
++					       &info->ctx_mem_addr,
++					       GFP_KERNEL);
++	if (!info->ctx_mem_buf) {
++		dev_err(info->dev, "Failed to allocate LPM context memory\n");
++		return -ENOMEM;
++	}
++
++	/*
++	 * Attempt to call prepare_sleep, this will be NAK'd if suspend is not
++	 * supported by firmware in use, in which case we will not attempt to
++	 * init suspend.
++	 */
++	ret = ti_sci_cmd_prepare_sleep(&info->handle, 0,
++				       (u32)(info->ctx_mem_addr & 0xffffffff) ,
++				       (u32)(info->ctx_mem_addr >> 32), 0);
++
++	if (ret)
++		goto err;
++
++	return 0;
++err:
++	dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
++			  info->ctx_mem_buf,
++			  info->ctx_mem_addr);
++	return ret;
++}
++
+ /* Description for K2G */
+ static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
+ 	.default_host_id = 2,
+@@ -3638,6 +3681,14 @@ static int ti_sci_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	ret = ti_sci_init_suspend(pdev, info);
++	if (ret)
++		dev_warn(dev,
++			 "ti_sci_init_suspend failed, mem suspend will be non-functional.\n");
++
++	/* Suspend is an optional feature, reset return value and continue. */
++	ret = 0;
++
+ 	dev_info(dev, "ABI: %d.%d (firmware rev 0x%04x '%s')\n",
+ 		 info->handle.version.abi_major, info->handle.version.abi_minor,
+ 		 info->handle.version.firmware_revision,
+@@ -3685,6 +3736,10 @@ static int ti_sci_remove(struct platform_device *pdev)
+ 		mbox_free_channel(info->chan_rx);
+ 	}
+ 
++	if (info->ctx_mem_buf)
++		dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
++				  info->ctx_mem_buf,
++				  info->ctx_mem_addr);
  	return ret;
  }
  
-+/**
-+ * ti_sci_cmd_prepare_sleep() - Prepare system for system suspend
-+ * @handle:		pointer to TI SCI handle
-+ * @mode:		Device identifier
-+ * @ctx_lo:		Low part of address for context save
-+ * @ctx_hi:		High part of address for context save
-+ * @debug_flags:	Debug flags to pass to firmware
-+ *
-+ * Return: 0 if all went well, else returns appropriate error value.
-+ */
-+static int ti_sci_cmd_prepare_sleep(const struct ti_sci_handle *handle, u8 mode,
-+				    u32 ctx_lo, u32 ctx_hi, u32 debug_flags)
-+{
-+	struct ti_sci_info *info;
-+	struct ti_sci_msg_req_prepare_sleep *req;
-+	struct ti_sci_msg_hdr *resp;
-+	struct ti_sci_xfer *xfer;
-+	struct device *dev;
-+	int ret = 0;
-+
-+	if (IS_ERR(handle))
-+		return PTR_ERR(handle);
-+	if (!handle)
-+		return -EINVAL;
-+
-+	info = handle_to_ti_sci_info(handle);
-+	dev = info->dev;
-+
-+	xfer = ti_sci_get_one_xfer(info, TI_SCI_MSG_PREPARE_SLEEP,
-+				   TI_SCI_FLAG_REQ_ACK_ON_PROCESSED,
-+				   sizeof(*req), sizeof(*resp));
-+	if (IS_ERR(xfer)) {
-+		ret = PTR_ERR(xfer);
-+		dev_err(dev, "Message alloc failed(%d)\n", ret);
-+		return ret;
-+	}
-+
-+	req = (struct ti_sci_msg_req_prepare_sleep *)xfer->xfer_buf;
-+	req->mode = mode;
-+	req->ctx_lo = ctx_lo;
-+	req->ctx_hi = ctx_hi;
-+	req->debug_flags = debug_flags;
-+
-+	ret = ti_sci_do_xfer(info, xfer);
-+	if (ret) {
-+		dev_err(dev, "Mbox send fail %d\n", ret);
-+		goto fail;
-+	}
-+
-+	resp = (struct ti_sci_msg_hdr *)xfer->xfer_buf;
-+
-+	ret = ti_sci_is_response_ack(resp) ? 0 : -ENODEV;
-+
-+fail:
-+	ti_sci_put_one_xfer(&info->minfo, xfer);
-+
-+	return ret;
-+}
-+
-+/**
-+ * ti_sci_msg_cmd_lpm_wake_reason() - Get the wakeup source from LPM
-+ * @handle:		Pointer to TI SCI handle
-+ * @source:		The wakeup source that woke the SoC from LPM
-+ * @timestamp:		Timestamp of the wakeup event
-+ *
-+ * Return: 0 if all went well, else returns appropriate error value.
-+ */
-+static int ti_sci_msg_cmd_lpm_wake_reason(const struct ti_sci_handle *handle,
-+					  u32 *source, u64 *timestamp)
-+{
-+	struct ti_sci_info *info;
-+	struct ti_sci_xfer *xfer;
-+	struct ti_sci_msg_resp_lpm_wake_reason *resp;
-+	struct device *dev;
-+	int ret = 0;
-+
-+	if (IS_ERR(handle))
-+		return PTR_ERR(handle);
-+	if (!handle)
-+		return -EINVAL;
-+
-+	info = handle_to_ti_sci_info(handle);
-+	dev = info->dev;
-+
-+	xfer = ti_sci_get_one_xfer(info, TI_SCI_MSG_LPM_WAKE_REASON,
-+				   TI_SCI_FLAG_REQ_ACK_ON_PROCESSED,
-+				   sizeof(struct ti_sci_msg_hdr),
-+				   sizeof(*resp));
-+	if (IS_ERR(xfer)) {
-+		ret = PTR_ERR(xfer);
-+		dev_err(dev, "Message alloc failed(%d)\n", ret);
-+		return ret;
-+	}
-+
-+	ret = ti_sci_do_xfer(info, xfer);
-+	if (ret) {
-+		dev_err(dev, "Mbox send fail %d\n", ret);
-+		goto fail;
-+	}
-+
-+	resp = (struct ti_sci_msg_resp_lpm_wake_reason *)xfer->xfer_buf;
-+
-+	if (!ti_sci_is_response_ack(resp)) {
-+		ret = -ENODEV;
-+		goto fail;
-+	}
-+
-+	if (source)
-+		*source = resp->wake_source;
-+	if (timestamp)
-+		*timestamp = resp->wake_timestamp;
-+
-+fail:
-+	ti_sci_put_one_xfer(&info->minfo, xfer);
-+
-+	return ret;
-+}
-+/**
-+ * ti_sci_cmd_set_io_isolation() - Enable IO isolation in LPM
-+ * @handle:		Pointer to TI SCI handle
-+ * @state:		The desired state of the IO isolation
-+ *
-+ * Return: 0 if all went well, else returns appropriate error value.
-+ */
-+static int ti_sci_cmd_set_io_isolation(const struct ti_sci_handle *handle,
-+				       u8 state)
-+{
-+	struct ti_sci_info *info;
-+	struct ti_sci_msg_req_set_io_isolation *req;
-+	struct ti_sci_msg_hdr *resp;
-+	struct ti_sci_xfer *xfer;
-+	struct device *dev;
-+	int ret = 0;
-+
-+	if (IS_ERR(handle))
-+		return PTR_ERR(handle);
-+	if (!handle)
-+		return -EINVAL;
-+
-+	info = handle_to_ti_sci_info(handle);
-+	dev = info->dev;
-+
-+	xfer = ti_sci_get_one_xfer(info, TI_SCI_MSG_SET_IO_ISOLATION,
-+				   TI_SCI_FLAG_REQ_ACK_ON_PROCESSED,
-+				   sizeof(*req), sizeof(*resp));
-+	if (IS_ERR(xfer)) {
-+		ret = PTR_ERR(xfer);
-+		dev_err(dev, "Message alloc failed(%d)\n", ret);
-+		return ret;
-+	}
-+	req = (struct ti_sci_msg_req_set_io_isolation *)xfer->xfer_buf;
-+	req->state = state;
-+
-+	ret = ti_sci_do_xfer(info, xfer);
-+	if (ret) {
-+		dev_err(dev, "Mbox send fail %d\n", ret);
-+		goto fail;
-+	}
-+
-+	resp = (struct ti_sci_msg_hdr *)xfer->xfer_buf;
-+
-+	ret = ti_sci_is_response_ack(resp) ? 0 : -ENODEV;
-+
-+fail:
-+	ti_sci_put_one_xfer(&info->minfo, xfer);
-+
-+	return ret;
-+}
-+
- static int ti_sci_cmd_core_reboot(const struct ti_sci_handle *handle)
- {
- 	struct ti_sci_info *info;
-@@ -2808,6 +2977,7 @@ static void ti_sci_setup_ops(struct ti_sci_info *info)
- 	struct ti_sci_core_ops *core_ops = &ops->core_ops;
- 	struct ti_sci_dev_ops *dops = &ops->dev_ops;
- 	struct ti_sci_clk_ops *cops = &ops->clk_ops;
-+	struct ti_sci_pm_ops *pmops = &ops->pm_ops;
- 	struct ti_sci_rm_core_ops *rm_core_ops = &ops->rm_core_ops;
- 	struct ti_sci_rm_irq_ops *iops = &ops->rm_irq_ops;
- 	struct ti_sci_rm_ringacc_ops *rops = &ops->rm_ring_ops;
-@@ -2847,6 +3017,10 @@ static void ti_sci_setup_ops(struct ti_sci_info *info)
- 	cops->set_freq = ti_sci_cmd_clk_set_freq;
- 	cops->get_freq = ti_sci_cmd_clk_get_freq;
- 
-+	pmops->prepare_sleep = ti_sci_cmd_prepare_sleep;
-+	pmops->lpm_wake_reason = ti_sci_msg_cmd_lpm_wake_reason;
-+	pmops->set_io_isolation = ti_sci_cmd_set_io_isolation;
-+
- 	rm_core_ops->get_range = ti_sci_cmd_get_resource_range;
- 	rm_core_ops->get_range_from_shost =
- 				ti_sci_cmd_get_resource_range_from_shost;
-diff --git a/drivers/firmware/ti_sci.h b/drivers/firmware/ti_sci.h
-index ef3a8214d002..e4bfe146c43d 100644
---- a/drivers/firmware/ti_sci.h
-+++ b/drivers/firmware/ti_sci.h
-@@ -6,7 +6,7 @@
-  * The system works in a message response protocol
-  * See: http://processors.wiki.ti.com/index.php/TISCI for details
-  *
-- * Copyright (C)  2015-2016 Texas Instruments Incorporated - https://www.ti.com/
-+ * Copyright (C)  2015-2022 Texas Instruments Incorporated - https://www.ti.com/
-  */
- 
- #ifndef __TI_SCI_H
-@@ -35,6 +35,11 @@
- #define TI_SCI_MSG_QUERY_CLOCK_FREQ	0x010d
- #define TI_SCI_MSG_GET_CLOCK_FREQ	0x010e
- 
-+/* Low Power Mode Requests */
-+#define TI_SCI_MSG_PREPARE_SLEEP       0x0300
-+#define TI_SCI_MSG_LPM_WAKE_REASON	0x0306
-+#define TI_SCI_MSG_SET_IO_ISOLATION	0x0307
-+
- /* Resource Management Requests */
- #define TI_SCI_MSG_GET_RESOURCE_RANGE	0x1500
- 
-@@ -545,6 +550,63 @@ struct ti_sci_msg_resp_get_clock_freq {
- 	u64 freq_hz;
- } __packed;
- 
-+#define TISCI_MSG_VALUE_SLEEP_MODE_DEEP_SLEEP				0x0
-+#define TISCI_MSG_VALUE_SLEEP_MODE_MCU_ONLY				0x1
-+#define TISCI_MSG_VALUE_SLEEP_MODE_STANDBY				0x2
-+
-+/**
-+ * struct tisci_msg_prepare_sleep_req - Request for TISCI_MSG_PREPARE_SLEEP.
-+ *
-+ * @hdr				TISCI header to provide ACK/NAK flags to the host.
-+ * @mode			Low power mode to enter.
-+ * @ctx_lo			Low 32-bits of physical pointer to address to use for context save.
-+ * @ctx_hi			High 32-bits of physical pointer to address to use for context save.
-+ * @debug_flags			Flags that can be set to halt the sequence during suspend or
-+ *				resume to allow JTAG connection and debug.
-+ *
-+ * This message is used as the first step of entering a low power mode. It
-+ * allows configurable information, including which state to enter to be
-+ * easily shared from the application, as this is a non-secure message and
-+ * therefore can be sent by anyone.
-+ */
-+struct ti_sci_msg_req_prepare_sleep {
-+	struct ti_sci_msg_hdr	hdr;
-+	u8			mode;
-+	u32			ctx_lo;
-+	u32			ctx_hi;
-+	u32			debug_flags;
-+} __packed;
-+
-+/**
-+ * struct ti_sci_msg_resp_lpm_wake_reason - Response for TI_SCI_MSG_LPM_WAKE_REASON.
-+ *
-+ * @hdr:		Generic header.
-+ * @wake_source:	The wake up source that woke soc from LPM.
-+ * @wake_timestamp:	Timestamp at which soc woke.
-+ *
-+ * Response to a generic message with message type TI_SCI_MSG_LPM_WAKE_REASON,
-+ * used to query the wake up source from low power mode.
-+ */
-+struct ti_sci_msg_resp_lpm_wake_reason {
-+	struct ti_sci_msg_hdr hdr;
-+	u32 wake_source;
-+	u64 wake_timestamp;
-+} __packed;
-+
-+/**
-+ * struct tisci_msg_set_io_isolation_req - Request for TI_SCI_MSG_SET_IO_ISOLATION.
-+ *
-+ * @hdr:	Generic header
-+ * @state:	The deseared state of the IO isolation.
-+ *
-+ * This message is used to enable/disable IO isolation for low power modes.
-+ * Response is generic ACK / NACK message.
-+ */
-+struct ti_sci_msg_req_set_io_isolation {
-+	struct ti_sci_msg_hdr hdr;
-+	u8 state;
-+} __packed;
-+
- #define TI_SCI_IRQ_SECONDARY_HOST_INVALID	0xff
- 
- /**
-diff --git a/include/linux/soc/ti/ti_sci_protocol.h b/include/linux/soc/ti/ti_sci_protocol.h
-index bd0d11af76c5..f2d1d74ab8fc 100644
---- a/include/linux/soc/ti/ti_sci_protocol.h
-+++ b/include/linux/soc/ti/ti_sci_protocol.h
-@@ -195,6 +195,49 @@ struct ti_sci_clk_ops {
- 			u64 *current_freq);
- };
- 
-+/* TISCI LPM wake up sources */
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_WKUP_I2C0	0x00
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_WKUP_UART0	0x10
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_MCU_GPIO0	0x20
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_WKUP_ICEMELTER0	0x30
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_WKUP_TIMER0	0x40
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_WKUP_TIMER1	0x41
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_WKUP_RTC0	0x50
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_RESET		0x60
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_USB0		0x70
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_USB1		0x71
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_MAIN_IO		0x80
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_MCU_IO		0x81
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_CAN_IO		0x82
-+#define TISCI_MSG_VALUE_LPM_WAKE_SOURCE_INVALID		0xFF
-+
-+/* TISCI LPM IO isolation control values */
-+#define TISCI_MSG_VALUE_IO_ENABLE			1
-+#define TISCI_MSG_VALUE_IO_DISABLE			0
-+
-+/**
-+ * struct ti_sci_pm_ops - Low Power Mode (LPM) control operations
-+ * @prepare_sleep: Prepare to enter low power mode
-+ *		- mode: Low power mode to enter.
-+ *		- ctx_lo: Low 32-bits of physical address for context save.
-+ *		- ctx_hi: High 32-bits of physical address for context save.
-+ *		- ctx_lo: 'true' if frequency change is desired.
-+ *		- debug_flags: JTAG control flags for debug.
-+ * @lpm_wake_reason: Get the wake up source that woke the SoC from LPM
-+ *		- source: The wake up source that woke soc from LPM.
-+ *		- timestamp: Timestamp at which soc woke.
-+ * @set_io_isolation: Enable or disable IO isolation
-+ *		- state: The desired state of the IO isolation.
-+ */
-+struct ti_sci_pm_ops {
-+	int (*prepare_sleep)(const struct ti_sci_handle *handle, u8 mode,
-+			     u32 ctx_lo, u32 ctx_hi, u32 flags);
-+	int (*lpm_wake_reason)(const struct ti_sci_handle *handle,
-+			       u32 *source, u64 *timestamp);
-+	int (*set_io_isolation)(const struct ti_sci_handle *handle,
-+				u8 state);
-+};
-+
- /**
-  * struct ti_sci_resource_desc - Description of TI SCI resource instance range.
-  * @start:	Start index of the first resource range.
-@@ -539,6 +582,7 @@ struct ti_sci_ops {
- 	struct ti_sci_core_ops core_ops;
- 	struct ti_sci_dev_ops dev_ops;
- 	struct ti_sci_clk_ops clk_ops;
-+	struct ti_sci_pm_ops pm_ops;
- 	struct ti_sci_rm_core_ops rm_core_ops;
- 	struct ti_sci_rm_irq_ops rm_irq_ops;
- 	struct ti_sci_rm_ringacc_ops rm_ring_ops;
 -- 
 2.30.2
 
