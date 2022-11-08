@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308E3621AA7
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099C3621AAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234517AbiKHRb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:31:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S234136AbiKHRbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbiKHRbX (ORCPT
+        with ESMTP id S234522AbiKHRbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:31:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D031DDDD;
-        Tue,  8 Nov 2022 09:31:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACB8C616EF;
-        Tue,  8 Nov 2022 17:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795BBC433B5;
-        Tue,  8 Nov 2022 17:31:21 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X8TWEhxg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667928678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WFchwpYWTZe1uP8NzfYiIHuE3VUM7GlNjwOOVlNkivY=;
-        b=X8TWEhxgMqUY3ABKegdYHjdTULR1ZAEQzm/G3BRcJHsT3IMdcLhB/GXyxlyHExuWSMEb+L
-        wzLJtg1bPIWtG9zqERGIRh7/8hr1aN3VjKE+y0AE/zjRg+gcSNy5I6AONviXfni+IH363+
-        QQRKnVbPdHfwtKnwknSH1V9RCICTNsc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 277c757f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 8 Nov 2022 17:31:18 +0000 (UTC)
-Received: by mail-vs1-f52.google.com with SMTP id z189so14321125vsb.4;
-        Tue, 08 Nov 2022 09:31:17 -0800 (PST)
-X-Gm-Message-State: ACrzQf2VaSLNfefNdPDdBntwxPARsvsGkRJWzXtWUlLW/G/v5hbaLTHP
-        VaATmjWqePZdD60rE+yzJhNkGm8RDIsYciiqwwo=
-X-Google-Smtp-Source: AMsMyM6OVmzlIf5XCDhf4Ss4zAoklzwJ63nR7aCZ5EFvtrKLrKq8Vw6R5xzFM1Hpl8GzbqEh3JVzJKqkRY2Xv5kJjVI=
-X-Received: by 2002:a05:6102:f9a:b0:3aa:1a11:2702 with SMTP id
- e26-20020a0561020f9a00b003aa1a112702mr29981791vsv.73.1667928676884; Tue, 08
- Nov 2022 09:31:16 -0800 (PST)
+        Tue, 8 Nov 2022 12:31:35 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A911E21827;
+        Tue,  8 Nov 2022 09:31:34 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id r18so13961501pgr.12;
+        Tue, 08 Nov 2022 09:31:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t0H4adOijjNqijdNgVvvEHYfjJqDCB5srsjIOvFZOw0=;
+        b=ZqTEJ90xelHKa0fL8oXwDT466llWgiuptNThuod1N2qyEisflmX8u8/pUTGhy3Q5a1
+         FR70sscCsHno1LY6f/q05V9ooUBuIrULhSHzNkSlKkvgEWd2JsEmCfxo2wRL8hlWd3Cc
+         ZborFQi0eXqqsnMvH/1nn4gL3rdukb3TcHK/uUFFqVFJqgmCUZ+O9a7UZgaP9EpZoRjD
+         t4/PbBogqan5ehmBHBT9RWMINqUbPCtWC7AzUe9qX5Me/zGxCd2fo3PTMdKWAp1DN/mh
+         VDqTy0PY1u1cnqEetIpEiUU0ZuArVgTNLOEeaIjvjAaob3JxRveUgluvwbH2y2S1WR3t
+         Rwig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t0H4adOijjNqijdNgVvvEHYfjJqDCB5srsjIOvFZOw0=;
+        b=jq2XIjM3AhPeqKJEbOIIye+XF0UcIKvv+wXKQ+28msXMCk7m7WNcH+uGrIvvRv7C7o
+         /STshA8xugvfnLSJk11ZVbdwqy6LqIiD3H0gDXc9iSGkRC3ftlp2ZA0s28swz4DfBAZB
+         pRLE1UtZgJrKP9aqJwlMjeW/y/dGCo57kht1It51Y8Xd0u3bQWSbW6PIYFmX5KGnQ73x
+         llGoHWKdLUPKRX+QUD/1Oob/2CxMmMNwFhImi34BoSsGgNtGb05SelVMh8L9gDCwh4Of
+         QPVSontl9nNfhzWbHkI8R797EMvsW9hW8kH8PrJfpossdcL6wW8J03ZCBmDvztsKbU7I
+         Reyw==
+X-Gm-Message-State: ACrzQf3W9fMD1FW+WMObxUv0Q5cU9xVr9qiNRWj1DzigdC9PA8CI/74M
+        etP/Xx6j/T4Z6uXbgnX64bg=
+X-Google-Smtp-Source: AMsMyM75+JkMtPaXuOEkZdNu3ya8LG6mkj6PpvauFxRCX50MGK1eRYMW2kWqxAU3LRUVg21M9a1w5g==
+X-Received: by 2002:a63:82c3:0:b0:470:9d9:c2a9 with SMTP id w186-20020a6382c3000000b0047009d9c2a9mr30084096pgd.255.1667928693898;
+        Tue, 08 Nov 2022 09:31:33 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:fb10:b5b0:232e:4afb])
+        by smtp.gmail.com with ESMTPSA id t17-20020a17090a5d9100b00209a12b3879sm6282247pji.37.2022.11.08.09.31.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 09:31:33 -0800 (PST)
+Date:   Tue, 8 Nov 2022 09:31:30 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] Input: i8042 - Apply probe defer to more ASUS
+ ZenBook models
+Message-ID: <Y2qScl9UeyBHteh3@google.com>
+References: <20221108142027.28480-1-tiwai@suse.de>
 MIME-Version: 1.0
-References: <202211080929.F5B344C9F@keescook>
-In-Reply-To: <202211080929.F5B344C9F@keescook>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 8 Nov 2022 18:31:05 +0100
-X-Gmail-Original-Message-ID: <CAHmME9o_vJL6YstAGutZNzQ30EmWQ5vcYqbeFYoSvPm3CYeXzg@mail.gmail.com>
-Message-ID: <CAHmME9o_vJL6YstAGutZNzQ30EmWQ5vcYqbeFYoSvPm3CYeXzg@mail.gmail.com>
-Subject: Re: Coverity: add_early_randomness(): Integer handling issues
-To:     coverity-bot <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Olivia Mackall <olivia@selenic.com>,
-        linux-crypto@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108142027.28480-1-tiwai@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,9 +71,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"If "bytes_read * 8 * rng->quality / 1024" is greater than 0x7FFFFFFF,
-the upper bits of the result will all be 1."
+On Tue, Nov 08, 2022 at 03:20:27PM +0100, Takashi Iwai wrote:
+> There are yet a few more ASUS ZenBook models that require the deferred
+> probe.  At least, there are different ZenBook UX325x and UX425x
+> models.  Let's extend the DMI matching table entries for adapting
+> those missing models.
+> 
+> Link: https://bugzilla.suse.com/show_bug.cgi?id=1190256
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
-Except "bytes_read" is an int. So false positive.
+Applied, thank you.
 
-Jason
+-- 
+Dmitry
