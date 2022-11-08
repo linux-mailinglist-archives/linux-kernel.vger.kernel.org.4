@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E78620672
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA38620678
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbiKHCFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
+        id S233175AbiKHCGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 21:06:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbiKHCFI (ORCPT
+        with ESMTP id S232060AbiKHCGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:05:08 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E3E20989
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 18:05:07 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id a14so18796936wru.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 18:05:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FUEPXHKzAMUHVmD4WvM6dOc560yHHvBZi3eb3Aooaf0=;
-        b=PLHcG5fH4ho2jlxitjL9A00nNuuJPjoWfZkPJdkmCf+9vSj/QHFnAUsMyoPdrwQw5e
-         Xoj0anXoEX67uDx3VlAWe/MDV6sJe8cKPlYWvBtuKPkq5JEgCuz1srm8ccE72kkByG17
-         /Ho4AV2CsTZRLI2ZP3Nvc7WA0kW8CF/kl6Wx7ShSyuR+WaNL2fwPfgottAyap+0UGKEW
-         OgfER170rd+rEQhzvfqbGrmZRdVyc8CBTURk7ReD2XGXydDGkqHs8rSgI+hCw+eH07Mk
-         WMCwoVl9Of8HpI/MjsKkFT19o2rs/9o2jgDkMTjNa+FudEJXc5mzW+ZiMArem/NRr8Sd
-         jVxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FUEPXHKzAMUHVmD4WvM6dOc560yHHvBZi3eb3Aooaf0=;
-        b=w0Q+O+X5klhcVgojUfqHqli2vlhlyooxof8dwSK7lzMNELW2e8u5uso6g8nFflXre6
-         ExZecLi6ABoX+tUejTKka2r7VqsPgkRL0PmP/bXpDZKVNhtHPwEY8KeqTeettZDhEO7+
-         UfQMAij8AkZXfm9yvqyN7fxRlXB6qDCcuXQRUFZl24FkB13kUvDLZD1bb9F1tZGWDN7J
-         kO/oM1/rQtggbX3gA2kcLt1oX0WzF+6k5w30B0xTWQFdDuYadpouDIJZI7yDY/2KjPZi
-         V4hE9gAa3hhoJeZp9WTYPznC70dy9QgqWQzsyvSh0xziS+r0+/EKv3WtMQSCnGFpKbWh
-         spzA==
-X-Gm-Message-State: ACrzQf3dPFuGw7otyd874Crcodb7U4chJtDC53lOJ20T6iEoCLwohrxv
-        gKwbdV+SfM7j1SuiatI6sIhAxCbDiAbN5HUqwFg0iw==
-X-Google-Smtp-Source: AMsMyM47ozfThHqf8FTKFr4zFo99pM6oLeEwjH+kPw6CR9OGe1ZvFhFIHsFE6TGcCUB1HO8S0khEO8qXfw2Qsz//jQs=
-X-Received: by 2002:adf:f081:0:b0:236:5e7c:4ec2 with SMTP id
- n1-20020adff081000000b002365e7c4ec2mr32735182wro.641.1667873105816; Mon, 07
- Nov 2022 18:05:05 -0800 (PST)
+        Mon, 7 Nov 2022 21:06:42 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D0C13CEE;
+        Mon,  7 Nov 2022 18:06:41 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N5rx81X4gzJnYV;
+        Tue,  8 Nov 2022 10:03:40 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 10:06:40 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 10:06:39 +0800
+Subject: Re: [PATCH v3 2/2] arm64: kdump: Support crashkernel=X fall back to
+ reserve region above DMA zones
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, <kexec@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        "Dave Kleikamp" <dave.kleikamp@oracle.com>
+References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
+ <20220711090319.1604-3-thunder.leizhen@huawei.com> <Y2k8yuUghrbQE6da@arm.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <6b20a203-6aab-2b87-9b95-814aeb79b5bd@huawei.com>
+Date:   Tue, 8 Nov 2022 10:06:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20221105045704.2315186-1-vipinsh@google.com> <20221105045704.2315186-7-vipinsh@google.com>
- <Y2lWG7wV+UvzX5jm@google.com>
-In-Reply-To: <Y2lWG7wV+UvzX5jm@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 7 Nov 2022 18:04:29 -0800
-Message-ID: <CAHVum0eM7NtBDRFhXa9pk9DAEere1q4XVTUti2TFZuKPiGK6LQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] KVM: selftests: Test Hyper-V extended hypercall exit
- to userspace
-To:     David Matlack <dmatlack@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <Y2k8yuUghrbQE6da@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,211 +66,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 11:01 AM David Matlack <dmatlack@google.com> wrote:
->
-> On Fri, Nov 04, 2022 at 09:57:04PM -0700, Vipin Sharma wrote:
-> > Hyper-V extended hypercalls by default exit to userspace. Verify
-> > userspace gets the call, update the result and then guest verifies
-> > result it received.
-> >
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/.gitignore        |  1 +
-> >  tools/testing/selftests/kvm/Makefile          |  1 +
-> >  .../kvm/x86_64/hyperv_extended_hcalls.c       | 90 +++++++++++++++++++
-> >  3 files changed, 92 insertions(+)
-> >  create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c
-> >
-> > diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> > index 2f0d705db9db..ffe06dd1cc6e 100644
-> > --- a/tools/testing/selftests/kvm/.gitignore
-> > +++ b/tools/testing/selftests/kvm/.gitignore
-> > @@ -24,6 +24,7 @@
-> >  /x86_64/kvm_pv_test
-> >  /x86_64/hyperv_clock
-> >  /x86_64/hyperv_cpuid
-> > +/x86_64/hyperv_extended_hcalls
->
-> nit: Any reason not to name this hyperv_extended_hypercalls? It's not
-> too long and as a non-Hyper-V developer it's easier to read.
->
 
-I was keeping it consistent with other names like
-KVM_EXIT_HYPERV_HCALL, and struct hcall{} in struct kvm_hyperv_exit{}.
 
-I am fine with renaming it to hyperv_extended_hypercalls.
+On 2022/11/8 1:13, Catalin Marinas wrote:
+> On Mon, Jul 11, 2022 at 05:03:19PM +0800, Zhen Lei wrote:
+>> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+>> index 5390f361208ccf7..8539598f9e58b4d 100644
+>> --- a/arch/arm64/mm/init.c
+>> +++ b/arch/arm64/mm/init.c
+>> @@ -138,6 +138,7 @@ static void __init reserve_crashkernel(void)
+>>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>>  	char *cmdline = boot_command_line;
+>>  	int ret;
+>> +	bool fixed_base;
+>>  
+>>  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
+>>  		return;
+>> @@ -166,15 +167,28 @@ static void __init reserve_crashkernel(void)
+>>  		return;
+>>  	}
+>>  
+>> +	fixed_base = !!crash_base;
+>>  	crash_size = PAGE_ALIGN(crash_size);
+>>  
+>>  	/* User specifies base address explicitly. */
+>> -	if (crash_base)
+>> +	if (fixed_base)
+>>  		crash_max = crash_base + crash_size;
+> 
+> Not a fan of '!!', it is converted automatically. If you don't like the
+> conversion, just initialise fixed_base to false and here:
+> 
+> 	if (crash_base) {
+> 		fixed_base = true;
 
-> >  /x86_64/hyperv_features
-> >  /x86_64/hyperv_svm_test
-> >  /x86_64/max_vcpuid_cap_test
-> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> > index 0172eb6cb6ee..366345099363 100644
-> > --- a/tools/testing/selftests/kvm/Makefile
-> > +++ b/tools/testing/selftests/kvm/Makefile
-> > @@ -85,6 +85,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/emulator_error_test
-> >  TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
-> >  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
-> >  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
-> > +TEST_GEN_PROGS_x86_64 += x86_64/hyperv_extended_hcalls
-> >  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
-> >  TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
-> >  TEST_GEN_PROGS_x86_64 += x86_64/kvm_clock_test
-> > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c
-> > new file mode 100644
-> > index 000000000000..d378877235d4
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hcalls.c
-> > @@ -0,0 +1,90 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Test Hyper-V extended hypercalls
->
-> It would probably be worth adding a note in this comment that the
-> negative tests for extended hypercalls live in hyperv_features.c, that
-> way someone doesn't accidentally go down the rabbit hole of adding
-> negative tests here in the future.
->
+OK, This way would be better.
 
-Sure.
+> 		crash_max = crash_base + crash_size;
+> 	}
+> 
+>> +retry:
+>>  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>  					       crash_base, crash_max);
+>>  	if (!crash_base) {
+>> +		/*
+>> +		 * Attempt to fully allocate low memory failed, fall back
+>> +		 * to high memory, the minimum required low memory will be
+>> +		 * reserved later.
+>> +		 */
+> 
+> I'm not sure this comment makes sense. If !crash_base, it doesn't mean
+> the kernel failed to fully allocate low memory. crash_max here could be
+> CRASH_ADDR_HIGH_MAX if crashkerne=X,high was specified. Maybe says
+> something like "If the first attempt was for low memory, fall back to
+> high ..."
 
-> > + *
-> > + * Copyright 2020 Google LLC
->
-> 2022 :)
->
-> > + * Author: Vipin Sharma <vipinsh@google.com>
-> > + */
-> > +
-> > +#include "kvm_util.h"
-> > +#include "processor.h"
-> > +#include "hyperv.h"
-> > +
-> > +/* Any value is fine */
-> > +#define EXT_CAPABILITIES 0xbull
-> > +
-> > +static void guest_code(vm_vaddr_t pgs_gpa, vm_vaddr_t output_pg_gva)
-> > +{
-> > +     uint64_t res, vector;
-> > +     uint64_t *output_gva;
-> > +
-> > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, hv_linux_guest_id());
-> > +     wrmsr(HV_X64_MSR_HYPERCALL, pgs_gpa);
-> > +
-> > +     output_gva = (uint64_t *)output_pg_gva;
-> > +
-> > +     vector = hypercall(HV_EXT_CALL_QUERY_CAPABILITIES, pgs_gpa,
-> > +                        pgs_gpa + 4096, &res);
-> > +
-> > +     GUEST_ASSERT_1(!vector, vector);
-> > +     GUEST_ASSERT_2(res == HV_STATUS_SUCCESS, res, HV_STATUS_SUCCESS);
->
-> GUEST_ASSERT_EQ(res, HV_STATUS_SUCCESS);
->
+This description is accurate. I'll update. Thanks.
 
-Copied things from hyperv_features test. This looks better, I will change it.
+> 
+>> +		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
+>> +			crash_max = CRASH_ADDR_HIGH_MAX;
+>> +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+>> +			goto retry;
+>> +		}
+> 
+> The retry logic looks fine, it only happens once as crash_max is
+> updated.
+> 
 
-> > +
-> > +     /* TLFS states output will be a uint64_t value */
-> > +     GUEST_ASSERT_2(*output_gva == EXT_CAPABILITIES, *output_gva,
-> > +                    EXT_CAPABILITIES);
->
-> GUEST_ASSERT_EQ(*output_gva, EXT_CAPABILITIES);
->
-> > +
-> > +     GUEST_DONE();
-> > +}
-> > +
-> > +static void guest_extended_hcall_test(void)
-> > +{
-> > +     struct kvm_vcpu *vcpu;
-> > +     struct kvm_run *run;
-> > +     struct kvm_vm *vm;
-> > +     struct ucall uc;
-> > +     vm_vaddr_t hcall_page;
-> > +     uint64_t *outval;
-> > +
-> > +     vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> > +     run = vcpu->run;
-> > +     vcpu_enable_cap(vcpu, KVM_CAP_HYPERV_ENFORCE_CPUID, 1);
-> > +     vcpu_set_hv_cpuid(vcpu);
->
-> Check if KVM offers HV_ENABLE_EXTENDED_HYPERCALLS in CPUID, and skip the
-> test if not.
->
-
-Sure.
-
-> > +
-> > +     /* Hypercall input/output */
-> > +     hcall_page = vm_vaddr_alloc_pages(vm, 2);
-> > +     memset(addr_gva2hva(vm, hcall_page), 0x0, 2 * getpagesize());
->
-> s/getpagesize()/vm->page_size/
->
-> > +     vcpu_args_set(vcpu, 2, addr_gva2gpa(vm, hcall_page), hcall_page + 4096);
->
-> s/4096/vm->page_size/
->
-> And to avoid hard-coding 4096 in guest_code(), you could pass in the GPA
-> of the ouput page as another argument.
->
-
-Sounds good.
-
-> > +
-> > +     vcpu_run(vcpu);
-> > +
-> > +     TEST_ASSERT((run->exit_reason == KVM_EXIT_HYPERV),
-> > +                 "unexpected exit reason: %u (%s)", run->exit_reason,
-> > +                 exit_reason_str(run->exit_reason));
-> > +
-> > +     outval = addr_gpa2hva(vm, run->hyperv.u.hcall.params[1]);
-> > +     *outval = EXT_CAPABILITIES;
-> > +     run->hyperv.u.hcall.result = HV_STATUS_SUCCESS;
-> > +
-> > +     vcpu_run(vcpu);
-> > +
-> > +     TEST_ASSERT((run->exit_reason == KVM_EXIT_IO),
-> > +                 "unexpected exit reason: %u (%s)", run->exit_reason,
-> > +                 exit_reason_str(run->exit_reason));
->
-> Optional: Asserting a specific exit reason is a pretty common pattern in
-> the x86 selftests. It'd be nice to create a common macro for it. e.g.
->
->         ASSERT_EXIT_REASON(vcpu, KVM_EXIT_IO);
->
-
-This is much better. I can add a patch which creates this API.
-
-Should it be run or vcpu? Seems like everything needed is in struct kvm_run{}.
-
-> > +
-> > +     switch (get_ucall(vcpu, &uc)) {
-> > +     case UCALL_ABORT:
-> > +             REPORT_GUEST_ASSERT_2(uc, "arg1 = %ld, arg2 = %ld");
-> > +             break;
-> > +     case UCALL_DONE:
-> > +             break;
-> > +     default:
-> > +             TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-> > +     }
-> > +
-> > +     kvm_vm_free(vm);
-> > +}
-> > +
-> > +int main(void)
-> > +{
-> > +     guest_extended_hcall_test();
->
-> Why not just put all this in main()?
->
-
-I will.
-
-> > +}
->
-> return 0?
->
-> > --
-> > 2.38.1.273.g43a17bfeac-goog
-> >
+-- 
+Regards,
+  Zhen Lei
