@@ -2,82 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E3D621D60
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985A3621D63
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 21:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiKHUDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 15:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
+        id S229794AbiKHUDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 15:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiKHUDl (ORCPT
+        with ESMTP id S229797AbiKHUDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 15:03:41 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEDD1AF0C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:03:40 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id b62so14350298pgc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:03:40 -0800 (PST)
+        Tue, 8 Nov 2022 15:03:51 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282DA3C6DD
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 12:03:49 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id o8so10970127qvw.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 12:03:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linuxfoundation.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UabFGB3dgHdDGh8rYKaeDmUDo6Yz1+GrAprP6mnLPVs=;
-        b=WfTYpQNyDJezun0scrrYkgN5kOzozjxRJesX99og1g2FWnFHsFQhSW5hJaYGvdyNNU
-         jrPNbxpCjz5OQZE9neQx4nceeBX2V8HAapvLl5sJvakxwiNDX4e2RKGY+xBmd80cZK36
-         yXtIHa1sgZ6OUah9NP4H4VX9WR4tT5C1UpDODajvrBweEZW/i78Qyn5ginOCrVshndbu
-         uMlx/n2K2ydfLql3C6DuPrv3/3hve82YQB4AouzqS9Cv6Eq2VbfC9EQo3nK9o45sjthj
-         +giz5tY1/ABeEbtrg2lfeo0K1uPgfof7KTBhrhon1hPti0c1uakQLatrukR9xwhYmNBV
-         jGGg==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nL0asLvlwl9giKA9UGTHJNcZfeM0NFLRZL9VMviIdpQ=;
+        b=IOKkCDTIpUpxSMaRhG1HFNbcwYu+PEBJ+mUJ8Wr4Y3q9YzVktrJ0Ro6T06x6yTcVRo
+         /oaNbicnQNvOi+BcBQbkylbpBU2WS5TRf1OC+Gh5E7PEqm0JAj5fmW5FUn2Q+s7VT4iF
+         c2BMZ1ahH6YGuUTO6PW8yxp6BKdcQoorRbGm8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UabFGB3dgHdDGh8rYKaeDmUDo6Yz1+GrAprP6mnLPVs=;
-        b=1+/W1FqjuHa6dVPdO4TEu9vt1ZdGzucIV/S54WLWqmYXjatzUvTnyHjRQo3TeKZsHA
-         nw2mP1+uWr6gfBE4HzY8knL+HWW9t3hPcZ93RF8X+f8qW1f/hd1K+Bm8T1UCnDkxmji9
-         zJlKpatYHx3UlpOIeTNDw5WxVLy/iPohD8fFksuO6HyP1c2KSiOo/aifiEhBmLi2oR/i
-         37+gZcgcPsK/TzKvopL6/e2bbB666fNUWS0hwXT+epQna4ZmGNUdWhdhTQ51OtIVDFDz
-         go1hU36DAnnnZW5/p1ZBt2lvh2LCNrnfr6DEim6Dd29h02GUd0Td9+7LE+FwYuQGAFxl
-         uLmw==
-X-Gm-Message-State: ACrzQf2qpqFXlrYa2bjrbRvqgofSBlDSiknXNJYSTKHyjRsxvQAfdz0w
-        1bImF4P8avGmcSQB0HWo2iFwsw==
-X-Google-Smtp-Source: AMsMyM49BTXjwcisXJONM3dl57ISGPzbrtfdjF1FlSG9ZWqE52ZRy8EoJixFF07LWVmnHNbC+6vdIA==
-X-Received: by 2002:a05:6a00:b82:b0:56c:d5bf:1019 with SMTP id g2-20020a056a000b8200b0056cd5bf1019mr57436217pfj.72.1667937820352;
-        Tue, 08 Nov 2022 12:03:40 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e13-20020a17090301cd00b001782398648dsm7424642plh.8.2022.11.08.12.03.39
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nL0asLvlwl9giKA9UGTHJNcZfeM0NFLRZL9VMviIdpQ=;
+        b=WK2rENS1tZ1TJu2lYirMR0RpDZMzzRHgJzr1NDvZk/9TNogeqvgwv8hkO7kMwcFOjj
+         OR3bkvgMlEi4jZwt68QP8eg7XTMoq+LjXsXER+b8ZogpjA1BotEHcunfF/GOCx+TxXPH
+         rFR8e+X2t77ib/KKCj09krmSrEwOofNn5omOx1J+nnQZ4vZYP6eLzrziyrdMGDA+p+uA
+         msOkNgg58Bgy3CvA2ALuh3ZNiQ65hn/+ncGDCa1bZeIuA5WUSXlHFp2hBYwIE93oUUkx
+         rePpjpHaLKnf5fcNUDtczNiayq7JHOBqWpBbpBzJcfN25g86FH97AKxQCdbsenuqJzqC
+         /xcg==
+X-Gm-Message-State: ACrzQf10FVACeae2Re4Jq+Ac5M23Nv29rVF48UdxogVQH2iM48Iou8hr
+        +PdH1yZ+M7PpKMnXW0x1qN0P1Q==
+X-Google-Smtp-Source: AMsMyM6rEDtWEBWAQcaTFfwCNgKArFwSlYHL/s0WwHcHNkYUSaH5x6Z0HBtzbns4+gyUTJ4h8ARXpg==
+X-Received: by 2002:ad4:5dc6:0:b0:4bb:798f:5272 with SMTP id m6-20020ad45dc6000000b004bb798f5272mr51061523qvh.131.1667937828083;
+        Tue, 08 Nov 2022 12:03:48 -0800 (PST)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-33-142-113-79-147.dsl.bell.ca. [142.113.79.147])
+        by smtp.gmail.com with ESMTPSA id t19-20020a05620a451300b006ce2c3c48ebsm10087338qkp.77.2022.11.08.12.03.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 12:03:39 -0800 (PST)
-Date:   Tue, 8 Nov 2022 20:03:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        Tue, 08 Nov 2022 12:03:47 -0800 (PST)
+Sender: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Date:   Tue, 8 Nov 2022 15:03:45 -0500
+From:   Konstantin Ryabitsev <mricon@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Hugh Dickins <hughd@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
-Subject: Re: [PATCH 3/3] x86/kasan: Populate shadow for shared chunk of the
- CPU entry area
-Message-ID: <Y2q2GFWjLKMp5eUr@google.com>
-References: <20221104183247.834988-1-seanjc@google.com>
- <20221104183247.834988-4-seanjc@google.com>
- <06debc96-ea5d-df61-3d2e-0d1d723e55b7@gmail.com>
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: mm: delay rmap removal until after TLB flush
+Message-ID: <20221108200345.xxcvnsnwgjyb7w3a@meerkat.local>
+References: <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+ <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
+ <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com>
+ <Y2llcRiDLHc2kg/N@cmpxchg.org>
+ <CAHk-=whw1Oo0eJ7fFjy_Fus80CM8CnA4Lb5BrrCdot3Rc1ZZRQ@mail.gmail.com>
+ <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
+ <CAHk-=whi2BB9FviYiuUWV0KHibP_Lx_CWDWkxxv3SXA1PKV0Lg@mail.gmail.com>
+ <CAHk-=wivgyfywteXoO7K0Mj_KoCRF-RyXDH-eGW0A_fev+dGug@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <06debc96-ea5d-df61-3d2e-0d1d723e55b7@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <CAHk-=wivgyfywteXoO7K0Mj_KoCRF-RyXDH-eGW0A_fev+dGug@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,33 +102,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022, Andrey Ryabinin wrote:
+On Tue, Nov 08, 2022 at 11:56:13AM -0800, Linus Torvalds wrote:
+> On Mon, Nov 7, 2022 at 8:28 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > I'm sending this out because I'm stepping away from the keyboard,
+> > because that whole "let's massage it into something legible" was
+> > really somewhat exhausting. You don't see all the small side turns it
+> > took only to go "that's ugly, let's try again" ;)
 > 
-> On 11/4/22 21:32, Sean Christopherson wrote:
-> > @@ -409,6 +410,15 @@ void __init kasan_init(void)
-> >  		kasan_mem_to_shadow((void *)VMALLOC_END + 1),
-> >  		(void *)shadow_cea_begin);
-> >  
-> > +	/*
-> > +	 * Populate the shadow for the shared portion of the CPU entry area.
-> > +	 * Shadows for the per-CPU areas are mapped on-demand, as each CPU's
-> > +	 * area is randomly placed somewhere in the 512GiB range and mapping
-> > +	 * the entire 512GiB range is prohibitively expensive.
-> > +	 */
-> > +	kasan_populate_shadow(shadow_cea_begin,
-> > +			      shadow_cea_per_cpu_begin, 0);
-> > +
+> Ok, I actually sent the individual patches with 'git-send-email',
+> although I only sent them to the mailing list and to people that were
+> mentioned in the commit descriptions.
 > 
-> I think we can extend the kasan_populate_early_shadow() call above up to
-> shadow_cea_per_cpu_begin point, instead of this.
-> populate_early_shadow() maps single RO zeroed page. No one should write to the shadow for IDT.
-> KASAN only needs writable shadow for linear mapping/stacks/vmalloc/global variables.
+> I hope that makes review easier.
+> 
+> See
+> 
+>    https://lore.kernel.org/all/20221108194139.57604-1-torvalds@linux-foundation.org
+> 
+> for the series if you weren't mentioned and are interested.
+> 
+> Oh, and because I decided to just use the email in this thread as the
+> reference and cover letter, it turns out that this all confuses 'b4',
+> because it actually walks up the whole thread all the way to the
+> original 13-patch series by PeterZ that started this whole discussion.
+> 
+> I've seen that before with other peoples patch series, but now that it
+> happened to my own, I'm cc'ing Konstantine here too to see if there's
+> some magic for b4 to say "look, I pointed you to a msg-id that is
+> clearly a new series, don't walk all the way up and then take patches
+> from a completely different one.
 
-Is that the only difference between the "early" and "normal" variants?  If so,
-renaming them to kasan_populate_ro_shadow() vs. kasan_populate_rw_shadow() would
-make this code much more intuitive for non-KASAN folks.
+Yes, --no-parent.
 
-> 
-> >  	kasan_populate_early_shadow((void *)shadow_cea_end,
-> >  			kasan_mem_to_shadow((void *)__START_KERNEL_map));
-> >  
+It's slightly more complicated in your case because the patches aren't
+threaded to the first patch/cover letter, but you can choose an arbitrary
+msgid upthread and tell b4 to ignore anything that came before it. E.g.:
+
+b4 am -o/tmp --no-parent 20221108194139.57604-1-torvalds@linux-foundation.org
+
+-K
