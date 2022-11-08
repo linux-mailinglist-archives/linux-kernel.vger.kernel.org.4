@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C488620D75
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D38D6620D7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiKHKgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S233587AbiKHKhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232891AbiKHKgQ (ORCPT
+        with ESMTP id S234024AbiKHKhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:36:16 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A956845A27
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:36:02 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id k1so13190580vsc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:36:02 -0800 (PST)
+        Tue, 8 Nov 2022 05:37:13 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67584298A;
+        Tue,  8 Nov 2022 02:36:54 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id b21so13790400plc.9;
+        Tue, 08 Nov 2022 02:36:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XIwMGfWyNQ7s5l6wql3uvlBpgJdlvAeJW6d0366qQQs=;
-        b=c/tDJvrT2wHv4vJWmTx3PQDFAb+Y/XJPBG2EIptwqdCWhYX5CAktQnHNOx40Ot5Hmj
-         YVogdQ9uwLEYZlZs9fS18niOIAsddaAjWEtKbbTiy4+k+7WbFQWRqOa+z0XprQfI2pTy
-         embv6SCWU66djSMx502aQWrD5bB8ckF5PZvik=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7FC4xTWKbEcJxVm+LBMuB4SUqqHDVOvyFDbcq+yh01A=;
+        b=oCWmwDp8Mq/94lPgWOpRNMqusVjIbpZKRV9JeuSrdvQOJhGpRXChOO08QAlKk8Wx73
+         s9dECqgOGqSg/8HsqRHiP/XKfZq37XO9aPQHjT6sIVfwd2T5rgHuMt0YXR0vcVnuqJPC
+         bYyXpc+YB5DY79XuJsgDgEnii3hXBb2hLVOouhQABdDKDpptyrIasT3qltTbts8XnJrU
+         VZTd4OMKS0clmozmVyOJgYGhRCfkJh6l8h11/FOcCQ+LBk3+XZqX0RE3+w4sLEria5R3
+         Qsi/EmUKkAqx8Cc/Ujp41/7pVyFg5TMnjalYEafM8z3HSH10qmw+8OMIN07CWneo6bGA
+         xdsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XIwMGfWyNQ7s5l6wql3uvlBpgJdlvAeJW6d0366qQQs=;
-        b=wYbw+rpIzOlVTOfZNLGb9/nPyypl1BPJadeQGLeSJeCGsnLizx1DzQBiG+b2Rhbd1o
-         sRqo4n9aiM9J5iFAmDtT9hw4Gemr/L94GujHIlc5Sur57N96l1dWEIGeCUab79FRjgZg
-         Qj1HdpVknF+TL5/eBV7gYGRuBU2hjUjIlCc4e5kMXF7cTYXlX+CZ6+uMNuzI+dPV02KL
-         A7Nx4yJXlYJO4e99E+SlXXgqqVuj1cTCXZ8IKghr+wQt5UxEmtRdAcB70SNClo+Z+S7O
-         h08K24CGgvgE8c32XPxDpj3R9AcZ54hZLbtaRPb/rwpi6cgtUTjddkI+54+RaHQ9V9AT
-         lpMg==
-X-Gm-Message-State: ACrzQf1dy/pUI03ddfdAaoPT6v169xn11Sc67D9ABrDaTPdpPA5j/E9+
-        8l0cDa+H6/Tnslam/ug7JW8ohAkZ6Lfxfh+Risxr6Q==
-X-Google-Smtp-Source: AMsMyM5jLCmjiXZ4jvSVXS8J/qTXmQOOIgSjI3NrNmXTmWAuW0AmzL7SRcukaw4oeCm789X2QNm3ZTTOWYDLc8Q7zvc=
-X-Received: by 2002:a05:6102:3c83:b0:3ac:7ce4:1bc0 with SMTP id
- c3-20020a0561023c8300b003ac7ce41bc0mr27570121vsv.65.1667903761637; Tue, 08
- Nov 2022 02:36:01 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7FC4xTWKbEcJxVm+LBMuB4SUqqHDVOvyFDbcq+yh01A=;
+        b=pJruh9JrSZeI3RPG9Djmph6xka+bXU3ieDTszK6HR9tUalxsckaWfe08+qq/ThY7rW
+         Dgewo09gIoPDObpiqAtXZhN2EgNx+1VonZrwd/pAerJyVAtoSHIrmRiuUm7cUxv4+3si
+         Xd0hmEPByQzYXjfY7w1Gtg5wjyPtNxjyYcZ8YFgVzxpFO0cBm1kfK89TBu1DuhSvJmZb
+         VtB6uWqwaH7crvvfBMxc/1nPnTKJevXXzkSqreEBafOcIPr4UOsyx0S5q0jdmG5/jtaN
+         ozoUjZw6xqpKbEr7shyIbsY6KvqXtGAQckvg+Ndxpz2vqfnaux544xZgacm9+4FCDE2d
+         JkXw==
+X-Gm-Message-State: ACrzQf1TXcmCs2LcDd1iFpoNzqc69NWs4kFVc/HKVMl8bS+vqP6KLIXm
+        /xXpd//U0QrwDdyNGJN01qQ=
+X-Google-Smtp-Source: AMsMyM4t0UZsTKGoBIe7o5gVWR0wgRXPrt+fajdjHMMuWw0RmjuTkgxkIK95E7qPspPcKE7d1giP0A==
+X-Received: by 2002:a17:90b:254c:b0:20a:8a92:ea5b with SMTP id nw12-20020a17090b254c00b0020a8a92ea5bmr56165515pjb.81.1667903814151;
+        Tue, 08 Nov 2022 02:36:54 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id h5-20020a17090a648500b0020a11217682sm5700073pjj.27.2022.11.08.02.36.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 02:36:53 -0800 (PST)
+Message-ID: <9a4edf34-6e49-9fd0-fc23-2536c5f087ea@gmail.com>
+Date:   Tue, 8 Nov 2022 18:36:40 +0800
 MIME-Version: 1.0
-References: <20221107160437.740353-1-nfraprado@collabora.com>
-In-Reply-To: <20221107160437.740353-1-nfraprado@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 8 Nov 2022 18:35:50 +0800
-Message-ID: <CAGXv+5FRdA+OaA-tEE6Aa1avb1YtacqcE5e=A6ZpBFsCaLQRJw@mail.gmail.com>
-Subject: Re: [PATCH 0/9] ASoC: mediatek: Register machine drivers to module
- device table
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        alsa-devel@alsa-project.org, "chunxu.li" <chunxu.li@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 09/12] hv_netvsc: Remove second mapping of send and recv
+ buffers
+Content-Language: en-US
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 12:05 AM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
->
-> Some ASoC machine drivers for MediaTek platforms were not being
-> registered to the module device table, preventing them to be
-> automatically loaded when built as modules. This series adds the missing
-> registration to the drivers.
->
->
-> N=C3=ADcolas F. R. A. Prado (9):
->   ASoC: mediatek: mt2701-cs42448: Register to module device table
->   ASoC: mediatek: mt2701-wm8960: Register to module device table
->   ASoC: mediatek: mt6797-mt6351: Register to module device table
->   ASoC: mediatek: mt8183-da7219: Register to module device table
->   ASoC: mediatek: mt8183-mt6358: Register to module device table
->   ASoC: mediatek: mt8186-da7219: Register to module device table
->   ASoC: mediatek: mt8186-rt5682: Register to module device table
->   ASoC: mediatek: mt8192-mt6359: Register to module device table
->   ASoC: mediatek: mt8195-mt6359: Register to module device table
+On 10/21/2022 1:57 AM, Michael Kelley wrote:
+> With changes to how Hyper-V guest VMs flip memory between private
+> (encrypted) and shared (decrypted), creating a second kernel virtual
+> mapping for shared memory is no longer necessary.  Everything needed
+> for the transition to shared is handled by set_memory_decrypted().
+> 
+> As such, remove the code to create and manage the second
+> mapping for the pre-allocated send and recv buffers.  This mapping
+> is the last user of hv_map_memory()/hv_unmap_memory(), so delete
+> these functions as well.  Finally, hv_map_memory() is the last
+> user of vmap_pfn() in Hyper-V guest code, so remove the Kconfig
+> selection of VMAP_PFN.
+> 
+> Signed-off-by: Michael Kelley<mikelley@microsoft.com>
 
-Thanks! This was on my TODO list. Whole series is
-
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
