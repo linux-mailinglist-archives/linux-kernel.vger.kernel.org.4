@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F24E6205CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8376F6205D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbiKHB14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:27:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S233240AbiKHB2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbiKHB1s (ORCPT
+        with ESMTP id S232887AbiKHB1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:27:48 -0500
+        Mon, 7 Nov 2022 20:27:51 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45E028733;
-        Mon,  7 Nov 2022 17:27:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894CC28733;
+        Mon,  7 Nov 2022 17:27:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77090B81711;
-        Tue,  8 Nov 2022 01:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527A5C433D6;
-        Tue,  8 Nov 2022 01:27:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34116B81716;
+        Tue,  8 Nov 2022 01:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC3BC433D7;
+        Tue,  8 Nov 2022 01:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667870865;
-        bh=YVL/Z4RHzbZLpJLzw4S+SsdSECoQ90X3z5A4ZYCso3M=;
+        s=k20201202; t=1667870867;
+        bh=0TXBwQrSlPJZArSBgz+4MwrNnxL7OCGqH6k4Ht3vkjw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N36T1pBkQqEnmWp0xa+IsgsKycL4H8OGWCgTXKGiPQIcIOGUlgXMjhTsbx2MhQckF
-         cvWh2acMkhcqXo5ex3qlBSD5mos1zZuB2SR1PgI2J3APx8PrDmGhsjKSxPP2Nzhnpf
-         hnhYnaS9hH3MucvtIVML33rVnUkLc6wMhVjpRkbA1sCTN4b94O52hxR7OyglCy6iU/
-         0MC2aJN4GFSBIB4sodrsT4XpFr9Mk6YWiNn3LpZV2/sl/waCpFqhGZ6wCH8vlF93GP
-         NTXG6rVxpyLdyTNBnD7KsTkcaKvJdFhBdXLk5m982pd976Ap43WjX08Gj443OSXcyG
-         M21MnRe7bwiTg==
+        b=N7Rbr9XQ4X/9+qkumFZpMhuT11KyNHQ+kThx6Vtf2Hjvi16NfuoqdIPpXMyoMh9mC
+         gXbIrCRgsz5ldhfUORE80/54jTOtUDgzDYdFfEnSA6EhJr4+oy1fp6tsU+emf/GZmN
+         P1J0HyVcyxYBJTF6QbP1GG0s92PjleSOy67b/OUVbB/3GrD49+7UMqdVWTwBv/nXrd
+         bJyN/1WntlDok1DdYlP05m1F0n7ID7z/ijVwQ3fd7KapOA3qyruVxamJa3gNnFUZxz
+         Ughdqvti9DHgngKGujBmHeKRiusYzIR6e5Qfz/BfgRqW5V8h9NC4yCiwtalC9uuRJ2
+         Kw4nRQTef6qcg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     dianders@chromium.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org, swboyd@chromium.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Villager doesn't have NVME
-Date:   Mon,  7 Nov 2022 19:27:17 -0600
-Message-Id: <166787084678.599230.3259461323160653012.b4-ty@kernel.org>
+To:     jiasheng@iscas.ac.cn
+Cc:     quic_jjohnson@quicinc.com, konrad.dybcio@somainline.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v6] soc: qcom: apr: Add check for idr_alloc and of_property_read_string_index
+Date:   Mon,  7 Nov 2022 19:27:20 -0600
+Message-Id: <166787084685.599230.7554750931145257916.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221025164915.1.I38e2545eda2b3bd3fef6b41c98f451e32851ae70@changeid>
-References: <20221025164915.1.I38e2545eda2b3bd3fef6b41c98f451e32851ae70@changeid>
+In-Reply-To: <20221107014403.3606-1-jiasheng@iscas.ac.cn>
+References: <20221107014403.3606-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,17 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 16:52:39 -0700, Douglas Anderson wrote:
-> The sc7280-herobrine-villager derivative doesn't have NVME enabled so
-> we shouldn't mark the PCIe nodes as "okay" since they're just for
-> boards that have NVME.
+On Mon, 7 Nov 2022 09:44:03 +0800, Jiasheng Jiang wrote:
+> As idr_alloc() and of_property_read_string_index() can return negative
+> numbers, it should be better to check the return value and deal with
+> the exception.
+> Therefore, it should be better to use goto statement to stop and return
+> error.
 > 
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sc7280: Villager doesn't have NVME
-      commit: bcfefc98c5781ee97f1b7a8063870830d9e42b30
+[1/1] soc: qcom: apr: Add check for idr_alloc and of_property_read_string_index
+      commit: 6d7860f5750d73da2fa1a1f6c9405058a593fa32
 
 Best regards,
 -- 
