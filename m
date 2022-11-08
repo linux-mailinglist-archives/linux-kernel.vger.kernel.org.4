@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1615621214
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F24621216
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234368AbiKHNPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
+        id S234374AbiKHNPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 08:15:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233751AbiKHNPO (ORCPT
+        with ESMTP id S234324AbiKHNPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:15:14 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6103B27B20;
-        Tue,  8 Nov 2022 05:15:13 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N67qv3Tfsz4f3mJP;
-        Tue,  8 Nov 2022 21:15:07 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP1 (Coremail) with SMTP id cCh0CgAn0a9cVmpjc06yAA--.42643S3;
-        Tue, 08 Nov 2022 21:15:10 +0800 (CST)
-Subject: Re: [PATCH] block, bfq: fix null pointer dereference in
- bfq_bio_bfqg()
-To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        paolo.valente@linaro.org, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20221108103434.2853269-1-yukuai1@huaweicloud.com>
- <20221108124841.et6cddvczncp2cz7@quack3>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <6cd64e77-e14d-ff9c-d97f-055165a7b214@huaweicloud.com>
-Date:   Tue, 8 Nov 2022 21:15:08 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 8 Nov 2022 08:15:46 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5000E27B25;
+        Tue,  8 Nov 2022 05:15:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667913346; x=1699449346;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=V8a1s54ki0Du02Crq9QZu279WBYeboXOkqd8m36ok38=;
+  b=Tl2D9JtP+tKzBoZ5ip/xbtUwQPlPN6gbQaN/k5y5Yk/tpEcbrHswhYKs
+   zALvlTfFe5WCCyK/GDZ0E8jDCQa5ZU+yHnS2GzkNx/r6kc/w6s68lAVab
+   ciYUTuACMO2PqIEKTULPjiMKl2B4CwVQtxdAbxgxCOCkGDDPtGjnMEnKM
+   7OutSS8fAFtEP5n0sJkrctDamr1k0aBOvsPWkY2WgH4WQvBIwNiviXEHC
+   /kKszd923cm/p1Nhvmzq7MqxknPkB6xVN0Yj9UwSbblwi2wJqfz/QxN7E
+   VWg5aj07v6DduuRBa3SCattzHjgeuicXRBI1tH/9//cLeJ1ObRks7Efvb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="372831877"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="372831877"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:15:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="614275786"
+X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
+   d="scan'208";a="614275786"
+Received: from smoriord-mobl.ger.corp.intel.com (HELO localhost) ([10.252.16.110])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:15:38 -0800
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, vkoul@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        linux-imx@nxp.com, tzimmermann@suse.de, lyude@redhat.com,
+        Sandor.yu@nxp.com, javierm@redhat.com,
+        ville.syrjala@linux.intel.com, sam@ravnborg.org, maxime@cerno.tech,
+        penguin-kernel@I-love.SAKURA.ne.jp, oliver.brown@nxp.com
+Subject: Re: [PATCH v3 00/10] Initial support for Cadence MHDP(HDMI/DP) for
+ i.MX8MQ
+In-Reply-To: <cover.1667911321.git.Sandor.yu@nxp.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1667911321.git.Sandor.yu@nxp.com>
+Date:   Tue, 08 Nov 2022 15:15:32 +0200
+Message-ID: <87iljp8u4r.fsf@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20221108124841.et6cddvczncp2cz7@quack3>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgAn0a9cVmpjc06yAA--.42643S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7JFykGr45WFy5AFWDXF43ZFb_yoW3Crb_Gw
-        10yw10yFyDA3ySyr1qyr1aqa9YyrZ2qwna9r1YkFZ3Z3WkJan7A3srGw48JrZxCry8Cr1a
-        vrn8Xwn3GFn5ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
-        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
-        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
-        ACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkI
-        wI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Tue, 08 Nov 2022, Sandor Yu <Sandor.yu@nxp.com> wrote:
+> The patch set initial support for Cadence MHDP(HDMI/DP) DRM bridge
+> drivers and Cadence HDP-TX PHY(HDMI/DP) drivers for iMX8MQ.
 
-ÔÚ 2022/11/08 20:48, Jan Kara Ð´µÀ:
-> 
-> Hum, that is indeed contrieved ;). Your fixup makes sense so feel free to
-> add:
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
+Has some get_maintainer.pl guidance changed recently or something, or
+why am I increasingly being Cc'd on patches that are largely irrelevant
+to me?
 
-Thanks for the review, our test do many unusual operations together...
+BR,
+Jani.
 
-Thanks,
-Kuai
-> 
-> 								Honza
-> 
->>
->> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
->> index 144bca006463..7d624a3a3f0f 100644
->> --- a/block/bfq-cgroup.c
->> +++ b/block/bfq-cgroup.c
->> @@ -610,6 +610,10 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
->>   	struct bfq_group *bfqg;
->>   
->>   	while (blkg) {
->> +		if (!blkg->online) {
->> +			blkg = blkg->parent;
->> +			continue;
->> +		}
->>   		bfqg = blkg_to_bfqg(blkg);
->>   		if (bfqg->online) {
->>   			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
->> -- 
->> 2.31.1
->>
-
+-- 
+Jani Nikula, Intel Open Source Graphics Center
