@@ -2,152 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E6362067A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0879A620680
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiKHCIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S232950AbiKHCRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 21:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbiKHCIX (ORCPT
+        with ESMTP id S230362AbiKHCRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:08:23 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E376638D;
-        Mon,  7 Nov 2022 18:08:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667873302; x=1699409302;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=i/dLpV2uFjEVIuCUEjBPXiMF2Qtt/k5JOyenuO0QQz0=;
-  b=C6srNNIhEhb76aYNHdKzhPs3/l8VECFnAW+NgYkt3TGHdi97sfFH0C3H
-   nePra7KVgW+BUoXb4EdMu4dgYeulOlYmXXWmxZ4nTVIpwXcH3gfiiVgm4
-   mPNxq9G2Xja3GrJF7HBxn+jT6zOTd9NZ5LmT9awwoNIitAmwqlUAazN3M
-   pkFufHameSMXXA+tzupDsxfTsjg+GBtmEtcj3At01S6Ucq6JwO+ebyFjF
-   SWCx8751K4qPGcyxl6O7maMpP8P4rYsti2uIBXsp8aOF8LU702kgcAxXY
-   HXAvlgor9SHHsPdiaxHR3p9jGsoToUnxNdAyVpSjFC8scEEED5neN7qFz
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="372719715"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="372719715"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 18:08:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="811064706"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="811064706"
-Received: from ganyifangubuntu20-ilbpg12.png.intel.com ([10.88.229.31])
-  by orsmga005.jf.intel.com with ESMTP; 07 Nov 2022 18:08:17 -0800
-From:   Gan Yi Fang <yi.fang.gan@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Gan Yi Fang <yi.fang.gan@intel.com>
-Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Ling Pei Lee <pei.lee.ling@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
-        Sit Michael Wei Hong <michael.wei.hong.sit@intel.com>
-Subject: [PATCH net 1/1] stmmac: intel: Update PCH PTP clock rate from 200MHz to 204.8MHz
-Date:   Mon,  7 Nov 2022 21:08:11 -0500
-Message-Id: <20221108020811.12919-1-yi.fang.gan@intel.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Mon, 7 Nov 2022 21:17:02 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150045.outbound.protection.outlook.com [40.107.15.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1356821247;
+        Mon,  7 Nov 2022 18:17:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mg0lPZVe8RotW2ONmdTRiteRRtvprJ4MGdyiUeyRSdgZEJQMsI9tPCYSKvPDm3pgROPK4RNrFdr2ceHD0g0YaNj/S/AV7TUyTaWJkEiCGjSWc3nqUv+pUQebuNWXUqdcTBVJgkdyKo16w0duqcFT5Y74UAUCWezUyQh9QQ3kdKfMG2hZwReGRApEcYgbRiGA0m5flBoGbCMUjbr42yac9gJU2rjJvIlDcnDRWRgxMjSV743yIhBBu5yI00mO6sfdmuIVVbNOHfQAs+qW+QJ9lDBRCKV9leYBLOK1s4ochRezgioW08irxFwW/7CLr3P83Y5Da65k46hOnPLm/ewWcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XKQOWdhLRMYI/ssNamZHmXacVB47QxYI5MrsOTmeNnE=;
+ b=aEgJX17CKQOURTpgrNNbZv4/ifDa4XnQqBH6Rqu1cW6R1c5B/8/7T7bi3Jec3EURkDo50oaW2/7VTz4+LmUSh1v9TQmwWkT73eVguWMBJkia/y7BIPAKm1szANAn/uXqn01WQmstmoDtEmaO7tDwTxn6OxVOBELWJ+/qXl7uS+aKvjtt3Vg3wN6jis2qzPtElBzJjc/EscPxJAzIUPZ+8SDt73wJBiMeZKvLaVukFAbu5v9xgPBfmCC7fIvCTUxJDKH5PnFrbWCIUeofz0TI3oNDc56STsRhDecAQveUYJEOj769XNLKIr3LqLTOyEwzMqRCdnruOSLGpIDqVwPhmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XKQOWdhLRMYI/ssNamZHmXacVB47QxYI5MrsOTmeNnE=;
+ b=a9mnlneqBaz+v8s1wSgjlUhAEQJgSjMzOFEANOBboEAKX+GxBiKIUrV6lnqsyR2P9mhAM4FgVjxZAjq/YGHQ72mCP5TbckU6tssWVs4sPTKrCSsuPjtJMXoLRa+m0tc2DCl/h+bEZnu6xxztxDv0iG9iROC8dlT1e4mobh0KhEs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB8PR04MB7195.eurprd04.prod.outlook.com (2603:10a6:10:12d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24; Tue, 8 Nov
+ 2022 02:16:57 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::36a4:e1fc:67a2:c701]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::36a4:e1fc:67a2:c701%9]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 02:16:56 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V3 00/14] arm64: dts: imx8m-evk: misc dts update
+Date:   Tue,  8 Nov 2022 10:18:06 +0800
+Message-Id: <20221108021820.1854971-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0012.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::8) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|DB8PR04MB7195:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1a48b5f-f6f4-489f-d373-08dac12f4f54
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N2IurMIV6twNTIDSTnLtJaj8/jrdbb01lwXvpbaywyVoGTXJSyhJnYJ8xQe4oGsqTc3tw2bWlgoThFwkfaR1O99PrgeU/CShKY3ibkR1E5CY6U7Qx1gZx3/ARbCcUoT2LxiPcAxU7nC1dXUh4ad2WvhfzGDVLRFCMA77qgHktgTksx3eXSp0ekjtg3A7R9yhuev8DOeIF+U+4t9QPRSrne4uhy0tEI2YPIA7M5+biUmlwFoRxChUzWdxFPYUlmIl/TB5XGg2LmS7cA4AkR7Z+ONfR45LC9UmsBk7A1KfIuSDeSMDbp3ZV9JFGUCEsZVB98brkCYqoS6GqqvRq9wZbMHdjE2FbRGrjb9J3NTQZwVe5A0AS6/uvfcPCOklsk20I5PdAW07q42NwH2yZci2V7rwqYMs0nrfrPpxE2CQ/QM9dxS//SHRFbPKi/ovxvjcBWXtZemDVDtE+jRFIjpoZNfCD+2OKrIgeoXLsNbhnG+cH14G1oaZnubJ5xeK89JUMFJGhWv8wotXXXUDJKTJ4+ldKqRRkwCZM1ayTrlTjwjqSVusmzJQQUNb4+bArLNo/6Fo0iJzmG88gZ2XXE9tScmuA4QlwHhWlW91e3OESVMmiNE2atTJO2XS3P+wl+TEA/+M/GRxVibt/603S3/2tFQE0ZV/XFfJqoCoyx/jYiZcSRcHZda8rvnI3bv9kPYEw7aKtVz37R1+UdXoeuVNhQ7jYFZFLYDCTuy1Kxv5vEjQBbXoDg3mekG2IcOPHaRqWsTVPI4MXNZXGSvd3O7gjSVfGoU23xKW5jAuT+YerzUbMU9z6ZyAVHjtU4OJjfoDFhpvRDkOcp/l9FK6icJb9f5m/nARjBZWU8/aSWRF1cA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(346002)(366004)(376002)(451199015)(15650500001)(6506007)(38350700002)(2906002)(86362001)(38100700002)(478600001)(6666004)(6512007)(26005)(41300700001)(52116002)(316002)(4326008)(6486002)(966005)(66476007)(66946007)(83380400001)(66556008)(186003)(8936002)(1076003)(2616005)(8676002)(5660300002)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6Pi6lOIqFtf24frmKiuPdIZkGPfShHdGtPZE32SrfJ4lu+/eP0IabMNsobqs?=
+ =?us-ascii?Q?tzUqJMl9PyC+Rl+DmyYlK7WbZj409nOjMt656JS8+LOdlfITz+8dYEWdEFo5?=
+ =?us-ascii?Q?hew+z6mqD6k0ud/WZFbeG9hmqF/U2uAqee+QPpBJMx7QGFnZbxtOcvLM7jCt?=
+ =?us-ascii?Q?5RYuLMtZRwdkaCtmpSU//aboCfqxvPpkTq7MTe93LXRnVWXSG9Ieb0Nut6zx?=
+ =?us-ascii?Q?YOrhFQS2WRz6rJXtUWLQSJIp7qo7AhN1XqzHqjJyP0sUSvSMJoBWBLSyNlNi?=
+ =?us-ascii?Q?jfsslm4y8my7UNKoUbfVf7MDvemsTcNEgBzjB8ngz+LlzcQLs/gPq50/KRmd?=
+ =?us-ascii?Q?781iQ5YqHr1mHtphPOFyMdrMeJtAz/Tl5CwSgbWT9nL1F9y+M61BJcqjNM2l?=
+ =?us-ascii?Q?PpFqWpYZZFYeZa1GlbKsrlKax1vWhhVFJDdOry0xzjhcQBSYgnqTwcv2aiOH?=
+ =?us-ascii?Q?igC2NUtPCB8LX2qsuPqYg4lP3MAtQ//G2gJ3ytC+crZFM+LfEEwdBxAVNTOE?=
+ =?us-ascii?Q?ufcZxbYfci5Zoptya5sYDbbCwUQycjMAiCVTMA3/kHZQxhLTygtG+Jxdw3TT?=
+ =?us-ascii?Q?FdWKW+/lR9sC7NuCiBVx0MS3evsQwBo+z/zg47r69tHIlHwHBQNAruX1v+fl?=
+ =?us-ascii?Q?ker0V1rg8pZ2sfnVDKHpKMqRNCS3Snsa50IoRASvwBHmp8sE24HGjK/YLWjJ?=
+ =?us-ascii?Q?45Ghx2W0mLwL43vciUKHfl+WkpsEyfydclG/ll0+L0T5x9UJGPwM1f9Lz/bm?=
+ =?us-ascii?Q?aqcC8Kjf4FZGUz9fsay6ffNBVe4jdZOMMqS7sBU5nC20V2XLtUq/68mWbV4x?=
+ =?us-ascii?Q?s1fhlRF2EHltMYIewo2OQZOauskaz/IoCk0NIcz45/+9SfBl5J/bVL9fZWnL?=
+ =?us-ascii?Q?uUvB4oxnMB0JqdVEykC6p8E0/tOe72UJ/6spUDGjL89uKzXGm9bYB6dAzJxt?=
+ =?us-ascii?Q?3BLlqXuTbrbqF85T6biBim3psEA0Ohjpg7Z32elcn+O/PhU+gs8QBdpHE20P?=
+ =?us-ascii?Q?Tvx0gA3T29kVXZMbvfCbhYMVI1jcGjoUAce82y/Q873AS4eFA2k1eCyqo5CB?=
+ =?us-ascii?Q?i0B/Sl8b7nk8YuI12vKfJlqMD9/SiRyzNiSFk3RLCjD+34E7XFwVpJ7YudR9?=
+ =?us-ascii?Q?nAA24D1nLtij8B/rkLIhYZHcS2+Q28vKQ3CkoLLixxg4jYq5BNqgPXZ3QnQv?=
+ =?us-ascii?Q?LHRcoYy26o8uu2ZzdgNN7fsGc4eyGMj2o+TvxNLidtggqSEuyudjI/5cI6Yc?=
+ =?us-ascii?Q?gjMfjHWB4y4UxvUZ2wKdIkxj7JPlgz4x6wWr8f0zdz6NNE6CkMj1FM+lda4Y?=
+ =?us-ascii?Q?PpVTHsCLurhilpBmkTeRnOWm9YJQTpygDEt4v6DZIIgDEMGPdXOlGcIp3cjS?=
+ =?us-ascii?Q?ZtpFs96BIiq3VyusEWCN5+wwOhRgFCXX2ctkRqk2smPK0yJgvu/sk9H+IkM8?=
+ =?us-ascii?Q?kjt/Y3+D+ijb1cmjSYXPNpb4LUBD4rQh5XGhPwbDLSLp49ltMTqrSBkT3FvP?=
+ =?us-ascii?Q?KU292q4K7HofEc59FjjsqvfXPfEQ0L/fVW7wJB5WbUyq4bhIlWYyMBk2nr87?=
+ =?us-ascii?Q?KSnmvU43RlRtay6QMEZT/ttK/TOXqQtCOZGkIk7V?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1a48b5f-f6f4-489f-d373-08dac12f4f54
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 02:16:56.7756
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /Acz7wsEg9bOT3JdL4Ff6kY5MC6TgrRP+A/wuwa4wjVgbXkqJWruFr/ga1U8b8k8hGbwJwP78qz1sieczWd1gA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7195
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Tan, Tee Min" <tee.min.tan@intel.com>
+From: Peng Fan <peng.fan@nxp.com>
 
-Current Intel platform has an output of ~976ms interval
-when probed on 1 Pulse-per-Second(PPS) hardware pin.
+V3:
+ Drop patch V2 3/15 
+ Add A-b R-b
+ Sort order in patch 9
+ Update commit log in patch 10
+ Drop #address-cells, #size-cells in patch 11
+ Use off-on-delay-us in patch 12
+ Update patch 13 according to patch 12 change
 
-The correct PTP clock frequency for PCH GbE should be 204.8MHz
-instead of 200MHz. PSE GbE PTP clock rate remains at 200MHz.
+V2:
+ https://lore.kernel.org/all/20221024031351.4135651-1-peng.fan@oss.nxp.com/
+ Address Marco's comments
+   Update commit log for patch [3,5,9,14]/15
+   Order iomuxc in patch 4/15
+   Update flexspi node name in patch 6/15
+   Increase i2c speed in patch 7/15
 
-Fixes: 58da0cfa6cf1 ("net: stmmac: create dwmac-intel.c to contain all Intel platform")
-Signed-off-by: Ling Pei Lee <pei.lee.ling@intel.com>
-Signed-off-by: Tan, Tee Min <tee.min.tan@intel.com>
-Signed-off-by: Voon Weifeng <weifeng.voon@intel.com>
-Signed-off-by: Gan Yi Fang <yi.fang.gan@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+V1:
+ https://lore.kernel.org/all/20221020095934.1659449-1-peng.fan@oss.nxp.com/
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 0a2afc1a3124..7deb1f817dac 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -629,7 +629,6 @@ static int ehl_common_data(struct pci_dev *pdev,
- {
- 	plat->rx_queues_to_use = 8;
- 	plat->tx_queues_to_use = 8;
--	plat->clk_ptp_rate = 200000000;
- 	plat->use_phy_wol = 1;
- 
- 	plat->safety_feat_cfg->tsoee = 1;
-@@ -654,6 +653,8 @@ static int ehl_sgmii_data(struct pci_dev *pdev,
- 	plat->serdes_powerup = intel_serdes_powerup;
- 	plat->serdes_powerdown = intel_serdes_powerdown;
- 
-+	plat->clk_ptp_rate = 204800000;
-+
- 	return ehl_common_data(pdev, plat);
- }
- 
-@@ -667,6 +668,8 @@ static int ehl_rgmii_data(struct pci_dev *pdev,
- 	plat->bus_id = 1;
- 	plat->phy_interface = PHY_INTERFACE_MODE_RGMII;
- 
-+	plat->clk_ptp_rate = 204800000;
-+
- 	return ehl_common_data(pdev, plat);
- }
- 
-@@ -683,6 +686,8 @@ static int ehl_pse0_common_data(struct pci_dev *pdev,
- 	plat->bus_id = 2;
- 	plat->addr64 = 32;
- 
-+	plat->clk_ptp_rate = 200000000;
-+
- 	intel_mgbe_pse_crossts_adj(intel_priv, EHL_PSE_ART_MHZ);
- 
- 	return ehl_common_data(pdev, plat);
-@@ -722,6 +727,8 @@ static int ehl_pse1_common_data(struct pci_dev *pdev,
- 	plat->bus_id = 3;
- 	plat->addr64 = 32;
- 
-+	plat->clk_ptp_rate = 200000000;
-+
- 	intel_mgbe_pse_crossts_adj(intel_priv, EHL_PSE_ART_MHZ);
- 
- 	return ehl_common_data(pdev, plat);
-@@ -757,7 +764,7 @@ static int tgl_common_data(struct pci_dev *pdev,
- {
- 	plat->rx_queues_to_use = 6;
- 	plat->tx_queues_to_use = 4;
--	plat->clk_ptp_rate = 200000000;
-+	plat->clk_ptp_rate = 204800000;
- 	plat->speed_mode_2500 = intel_speed_mode_2500;
- 
- 	plat->safety_feat_cfg->tsoee = 1;
+This patchset includes several dts update for i.MX8M/N/P-EVK, with
+only one dtsi patch to add mlmix power domain for i.MX8MP.
+
+ i.MX8MP-EVK: Enable PWM, uart1/3, I2C2
+              correct pcie pad
+	      Fix pmic buck/ldo voltage
+	      off-on-delay-us for SD
+ i.MX8MN-EVK: Enable UART1, SDHC1, I2C recovery IOMUXC
+	      Update vdd_soc dvs voltage
+ i.MX8MM-EVK: add vcc supply for pca6416
+              use off-on-delay-us for SD
+
+A few patches are directly cherry-picked from NXP downstream which
+already includes R-b tag
+
+Adrian Alonso (1):
+  arm64: dts: imx8mm-evk: add vcc supply for pca6416
+
+Clark Wang (1):
+  ARM64: dts: imx8mp-evk: add pwm support
+
+Haibo Chen (1):
+  arm64: dts: imx8m[m,q]-evk: change to use off-on-delay-us in regulator
+
+Han Xu (1):
+  arm64: dts: imx8mp-evk: enable fspi nor on imx8mp evk
+
+Peng Fan (9):
+  arm64: dts: imx8mp: add mlmix power domain
+  arm64: dts: imx8mp-evk: correct pcie pad settings
+  arm64: dts: imx8mp-evk: enable uart1/3 ports
+  arm64: dts: imx8mp-evk: enable I2C2 node
+  arm64: dts: imx8mn-evk: update vdd_soc dvs voltage
+  arm64: dts: imx8mn-evk: set off-on-delay-us in regulator
+  arm64: dts: imx8mn-evk: add i2c gpio recovery settings
+  arm64: dts: imx8mn-evk: enable uart1
+  arm64: dts: imx8mn-evk: enable usdhc1
+
+Sherry Sun (1):
+  arm64: dts: imx8mm-evk: Enable usdhc1 to support wifi
+
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dts  |  23 ++++
+ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi |  41 ++++++
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dts  |   4 +-
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi | 110 +++++++++++++++-
+ arch/arm64/boot/dts/freescale/imx8mp-evk.dts  | 117 +++++++++++++++++-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |   8 ++
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |   1 +
+ 7 files changed, 297 insertions(+), 7 deletions(-)
+
 -- 
-2.34.1
+2.37.1
 
