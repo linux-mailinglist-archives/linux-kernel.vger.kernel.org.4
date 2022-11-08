@@ -2,68 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A994620701
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81772620703
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 03:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbiKHC4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 21:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35862 "EHLO
+        id S233113AbiKHC4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 21:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbiKHC4G (ORCPT
+        with ESMTP id S230362AbiKHC4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 21:56:06 -0500
-Received: from mail-pg1-x561.google.com (mail-pg1-x561.google.com [IPv6:2607:f8b0:4864:20::561])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A99C1B9C6
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 18:56:04 -0800 (PST)
-Received: by mail-pg1-x561.google.com with SMTP id q71so12222375pgq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 18:56:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:message-id:content-transfer-encoding:user-agent:subject:to
-         :date:dkim-signature:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dpZj7X5Two18D9Vasgv7AH793WdduwGaJXYn74NdXF0=;
-        b=rZrx5HAZ+5S45KpDY4VlRp2mHWpVk3g90bmN2wEiv8Ay9wcXiQP/FqYndnZovLFbD2
-         HFYqfwlEWgdjVs0Qi0OL52wiufdvw+dKyzTt3DYqSZbU03gJddsFSIKdHiu56Pncdv0W
-         0feU/Z5bK0hOtGRpgDKsdmZ6Vkr05CWEjvO8LkR1OfoEhhW7tuiJhYxCJoE7WtdTxeBS
-         hDoybwHVoWhsbfWlvXQxtU4yEUATsC5kCx/GU3a4A/bBW7dA9IdWEGHF9aA0HSI7QNFC
-         22M9a8CNdn0vqNcKzASMnzlglWcghmfWHPSzXdhvDKIzIu8vtwyt1d3rT6m+l5aEBNPV
-         fpsw==
-X-Gm-Message-State: ACrzQf0f1QO/P4036BuQe+gYP/wXO4ajHOF4wFdgDEHaVUAey5huf+ES
-        oUdT+cS/aqH8yJsjAlu8YnweYu7e49pVmcivZD7zWjCsdwZV
-X-Google-Smtp-Source: AMsMyM4COWnw3wwSCUAGBvsyIOyTaG7HIX3TjoVA/GwYBqGU3aWe9BW8AcwELEU/DOZhlb+ZJ87PWskHFEjN
-X-Received: by 2002:a63:5559:0:b0:464:a987:8365 with SMTP id f25-20020a635559000000b00464a9878365mr46076556pgm.479.1667876163471;
-        Mon, 07 Nov 2022 18:56:03 -0800 (PST)
-Received: from smtp.aristanetworks.com (mx.aristanetworks.com. [162.210.129.12])
-        by smtp-relay.gmail.com with ESMTPS id mz9-20020a17090b378900b00212e4b57315sm517742pjb.16.2022.11.07.18.56.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Nov 2022 18:56:03 -0800 (PST)
-X-Relaying-Domain: arista.com
-Received: from us226.sjc.aristanetworks.com (us226.sjc.aristanetworks.com [10.243.208.9])
-        by smtp.aristanetworks.com (Postfix) with ESMTP id 1AF17400F81;
-        Mon,  7 Nov 2022 18:56:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-B; t=1667876163;
-        bh=dpZj7X5Two18D9Vasgv7AH793WdduwGaJXYn74NdXF0=;
-        h=Date:To:Subject:From:From;
-        b=LDOk7VQNpXA5rV0gRrb/JFDyNBCzKnW/VsL8NIApQQ674/1UKnQNPFgsSiK4tXk0I
-         stqfPCdOGSAST93pDoYOhqBj5Nk17fT4/Xqf2Mn00bHOuAH/4I0Y8kFmACApQWZhuD
-         ZqWB7ZvfeHz0yxCmH3TzE+RBIny+JG11fFShBdb8=
-Received: by us226.sjc.aristanetworks.com (Postfix, from userid 10189)
-        id E48005EC04F9; Mon,  7 Nov 2022 18:56:02 -0800 (PST)
-Date:   Mon, 07 Nov 2022 18:56:02 -0800
-To:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        sagi@grimberg.me, hch@lst.de, axboe@fb.com, kbusch@kernel.org,
-        fruggeri@arista.com
-Subject: nvme: hung task in blk_mq_freeze_queue_wait
-User-Agent: Heirloom mailx 12.5 7/5/10
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221108025602.E48005EC04F9@us226.sjc.aristanetworks.com>
-From:   fruggeri@arista.com (Francesco Ruggeri)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Mon, 7 Nov 2022 21:56:35 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384012E68E;
+        Mon,  7 Nov 2022 18:56:35 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A80NwMR023029;
+        Tue, 8 Nov 2022 02:56:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=Pzy1fQMa4bfK+8ZN8cJBqEjNBCRx3Bkbkd5P8VK4mwA=;
+ b=ajiEXsh65AhhE9b6DJ58YXLQXutW8ZDKbqqX4hCvMNw0Mw54AG3SYrc1tg7MwfYfy/No
+ 6fX5Eoim7bBP2buMscZLMniM1vLcZ24KUP4QIQcgEPtZFnKDXySVmTYaaszNz8HgHCMY
+ osTouoIT6u2MpguTwCFFIsttVFN0s7yrtC6LdyWf6GtwSfNZ4cZWrov0Wi7+bB4VuYsr
+ /6BXNyKpwthwk2RxYhqAUMETt8pi7fhnBhfCajXRGMXIUu+95/uWWMw+LAnVZeh1fx/s
+ uluCCoDouYYj21r8eDLIltmX0xV0FOX5chcarun3+eB6RndsrFqYGFiuaKI+w0v7VBlJ Bg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kngkw5xep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Nov 2022 02:56:27 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7NC25F010742;
+        Tue, 8 Nov 2022 02:56:27 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2175.outbound.protection.outlook.com [104.47.73.175])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kpcyn8aby-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Nov 2022 02:56:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aMLhNqho9oEAV/6xmoSFNXRlEC5GT+gddm+mQPvUfZ8BEn+fDTryaCbCWzLWuBeJroLi+4/GPw9CVZrByjT5dKghyp74zgVWSstCPkSyfLJrDcaJpELgnmcK3rZ2UEf+BgHRGDTlj5/8hMRwjDuBaVVvtwkFH4BtOxRyF6Ja4KMoNk8m5CW2rCLyGm5M+NdHdOApXpsKNcZVlMZQJwtUTOd0+umY8i14wUf5HyHDNvyiBfrvA3WnyVwhESGBA+iHult8qBctEXvMK7D39Ojh7DazmNnigGp/va0dRq8RqQELdlsSIUiw8jX1bp0VHpl4EjvLKtPAiOuFVc1pnI5Ohg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pzy1fQMa4bfK+8ZN8cJBqEjNBCRx3Bkbkd5P8VK4mwA=;
+ b=E7wx9xqgME98OOlO6zLCWlbJpWt934gAMhGc7rgTQtMeDdjnJQCy2hxPVIpwXc+R7UO4qCFr8H/VIoZnvzuVfhswo3yRFdqcLp2xPNUfcolnaIujvFGJEBQz4UXuFyxgLQiI10tGrYSxkAZ2Hv41ckDp5t2nxnuLTGbD4msPqH4bFbqBPtX+1IZX63apx6xvt6Ud/iC7HyA+dWKUMAnhgYNfSWG6S1k7M7wU1sRDwfOFeg7qVPTK8ByBs/AnXXc8IaK7FvY4ohgtBmKSc0BkszQcreeAc0Rvrv2G8Zz4BV4TURfoOTQxvT3yjCfUS2sgbpLXqa8x0a0WhoK9/KSw9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pzy1fQMa4bfK+8ZN8cJBqEjNBCRx3Bkbkd5P8VK4mwA=;
+ b=Dj1SU0CE9x2CQKXmP85eoojgUfMPjEL6vVGh5EW+YQNfjXu+EbhDZWiFweYsbf+rl7xSw1MHIBffEX31nwt8HnlAH+Rh6wHzNyNWNwkYM8yLvuJPSORbp3umM1pOYFHFOY3rC8SHPFjmDgg6A582X1jtmt3JiwGle0zadwOuITU=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by PH7PR10MB5856.namprd10.prod.outlook.com (2603:10b6:510:131::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Tue, 8 Nov
+ 2022 02:56:25 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::f77e:1a1a:38b3:8ff1]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::f77e:1a1a:38b3:8ff1%9]) with mapi id 15.20.5791.027; Tue, 8 Nov 2022
+ 02:56:25 +0000
+To:     Keoseong Park <keosung.park@samsung.com>
+Cc:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] scsi: ufs: core: Refactor ufshcd_hba_enable()
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1eduekvcp.fsf@ca-mkp.ca.oracle.com>
+References: <CGME20221028073553epcms2p6dc4f8bdbebdc8f96f43fc4197b3edd0c@epcms2p6>
+        <20221028073553epcms2p6dc4f8bdbebdc8f96f43fc4197b3edd0c@epcms2p6>
+Date:   Mon, 07 Nov 2022 21:56:12 -0500
+In-Reply-To: <20221028073553epcms2p6dc4f8bdbebdc8f96f43fc4197b3edd0c@epcms2p6>
+        (Keoseong Park's message of "Fri, 28 Oct 2022 16:35:53 +0900")
+Content-Type: text/plain
+X-ClientProxiedBy: SN7PR04CA0217.namprd04.prod.outlook.com
+ (2603:10b6:806:127::12) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|PH7PR10MB5856:EE_
+X-MS-Office365-Filtering-Correlation-Id: c8f8aa2e-2bf4-43d0-8a02-08dac134d2f9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gE0de5D2WPB3w+wDzeS4Q6uF9A9P/dvqDvZauZacD05l+B8UGpxiVE0DEW7zo5r1H5CHeZiSh8GwtGKwBQPDiMXzV7zCjdBUuX7p7hYHqqMnHDkGlQbLxH9NNuiz8Wj/HWiOsVwJpZC84DCh8GbReoTTDNT7IX6+xE3D0dis/joHSTBR1wJWJohTg+m2y4E4YMgNMdT6l8YY6E+BzkWyWLPzH37Eue6y0WrH2ReCKdQBig6J0xOEF4ms4JEP5IjEKIgb7Llg1B4o+ZLfFgxP+TAWQFgtZOpmWNTXxtopizxD8hI3qVDo6HC7is5//LpOrtWnkb8df7YwwmxxYAoNHpekgKGbr2PLcKYZiVvETOo8dRSxDQAJ/vZM99vlImIHJsZ91QRi+aEzobqywIzMHtbzv2cbwZ46VkoiOAp5IjhFbBhKGih8t2edHDwCbRi971NQXQzcHz8K7Owfusllr6bxuFtM9E6RAyqO0EW0slR27OmCGVY9oeVGfZwRfw4P56K7CzroYPRx6xJbc2cMeCdOSUbSBwmqsujuJqriwoPtbLoNq0Vj+M7yH1Agk5rcPWouasJnXI3IGPsl47w0w8RfcKefhASCB0Tc8HhX67Rjw3UP81MpkG9kj9v0ie1A4gQFscw/UEUghCc9wvujjF47j4zgwVgLrhS7eEztXyeJTvqnzvbyXH+70N7fwdItMSp2WgNuQxDFD4ZAmoDvgQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(346002)(366004)(136003)(39860400002)(451199015)(186003)(2906002)(558084003)(6666004)(38100700002)(6486002)(36916002)(26005)(478600001)(316002)(6916009)(54906003)(6512007)(6506007)(86362001)(66476007)(66946007)(66556008)(8676002)(4326008)(41300700001)(8936002)(7416002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fVEcPcuO9z0K/upcVTd2jFZGzI+Ztlk5ZBeQ5gwdCV5XwNogib6agCGNa/nS?=
+ =?us-ascii?Q?pTVtL7ITSDpJpa9YLHDJOdMc0QOpLGKo/8Hay5k2L18jHbNMAudjMYzfmIPL?=
+ =?us-ascii?Q?eMqnQi7hUK7ZLki5IWDOipqngXFlAQScwr3iKJEuE32Yjm2NO1E48I3Ka2PW?=
+ =?us-ascii?Q?99TYSvs/o8rj4cuHLqrxltQNdBMUvzmRNRAXPlekjnHzOe470ccrR8xJhWOI?=
+ =?us-ascii?Q?KhtfwBUjWrnRnCCUTUbHOMTwJ7yBpKd5SWjzdt/RsAdHq3HsluV5pRdIYPTc?=
+ =?us-ascii?Q?YPPQUnP+7wcywS2+FQr0DqYGvA7DH606XdBPoZBxNka2CUqAkbRuv6isYuPI?=
+ =?us-ascii?Q?FEKswBK0xV+uB0+ZVhEDpQ5cwrhh/aVr3ryZ/mzctCr7D2+cPucQuyeUFFyn?=
+ =?us-ascii?Q?W2xpWq/o6yNrMcslIRejEJ07Yh8xne6a0mcbT55E/Kaa6+aGlF7UVMJJAeQn?=
+ =?us-ascii?Q?8CDhvBlUEWsjbYVMm7WGFd7VtB1m32gh4m701Rz511nhpMiL4PSmTFNu9XZD?=
+ =?us-ascii?Q?8O7jmJCUdrvYEf29SXemeP92fp53klrgfhZQrs+m5mvuUdTvSRSM2CFwrxSP?=
+ =?us-ascii?Q?KkmqLOO/IaDJ2ctf01lOvGudplZK1lFZDYD//ugdlmTOOSsjJGZ4S2NlZl42?=
+ =?us-ascii?Q?575vbgqT2IEUkxlF7VyqEeWI23LszIHW9IzOYzHIgkf9cn5xjzgOj6JD/GOf?=
+ =?us-ascii?Q?E2QhMZ9Btq02auF1+4Wdxx8FrjgDUerxQeAtvE/CBkGLtICIh8wO3QEkIuz+?=
+ =?us-ascii?Q?DQBebust5xlDwlhR52wffh0p/HyvWwHkczY9S4deWBX/mDF0v6Xd5GCs+RbX?=
+ =?us-ascii?Q?+I0uq/OsbDJE4f23JU7ui4zTvE7RwU79VqOaUYmhmbJ7FNNjByYYO9Ri/1Zc?=
+ =?us-ascii?Q?VHCTOQ8C/xAvpQhsSEliSe5FpJESbKvKO1Lu80mXgZ1EINnFgfxhSrL0cdDt?=
+ =?us-ascii?Q?05+/ClP7xL8FUZl0gFqyAVacVn8TSBhMgWyjS2X1nCJz6R+V3rL/n0ZObkHO?=
+ =?us-ascii?Q?yNraYOSIFIw+9JMYqhhXM3HeVpmA4fPe+rRj2Rvvs864BTycAUjNmfJbtiBW?=
+ =?us-ascii?Q?fdtZKvV0uk0QP3QJlTk1LlBV9q/Fh8saYtvCs/5jepv9YVJSjKYWenFeF8yC?=
+ =?us-ascii?Q?966gQmJFnbp5Gi+auLw2Vp0IK8Mr/qG3BUHUZnl6hgYVIxKhwjlSBSj6qRul?=
+ =?us-ascii?Q?cUJPceKc950LLqNUnoCY2kG3V5R5w5SDSEa8wenNxi23JhdagrGJt9JSApeg?=
+ =?us-ascii?Q?brAQo1XsAH5nmCCnfPCZpwXbT3u4Mre6Mh0oCHtcZ1QUq+RBZBQIX2a2/MgV?=
+ =?us-ascii?Q?MnRBJSweKlLW1wFGnWqpBHbgQpLiz+W7hOYN7CnHvRTi0/cAczn82qcJq6N0?=
+ =?us-ascii?Q?OTslB7EnX4lPIzH6bQlbbh17xZF32aisIOkrEnMjTrLBJrPf3il/fJYBqgC2?=
+ =?us-ascii?Q?vFxhsZvl8MTqyUP8WYe8G2TLAcqwYcqlBwwZr1/JOoixI4EDLe2efMt9Q4ma?=
+ =?us-ascii?Q?S+7yd0+NKOSk4NhbvoVyYJxfWCroBB+4Y1vcB+LVwc0g6Yk2ottdvnRF714H?=
+ =?us-ascii?Q?5AQHD4Dkjt+slDoQsbbyhH44pswgTLmlsTlepp0a+oWXmsFNyL6XL4qWF5hA?=
+ =?us-ascii?Q?wQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8f8aa2e-2bf4-43d0-8a02-08dac134d2f9
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2022 02:56:25.0094
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uG5PlANGCdTyWXDfSqaqI6mOFmNrTkNGwH4pA9uw2IDV9qDN2UKPfwsHxAk62poJPfk92N1K0Qod7mPTnEE7t5Z1ZKx7Z22lxBHhLJgmrW4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5856
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 mlxlogscore=773 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211080013
+X-Proofpoint-GUID: 1vtnlH_rZbQCIA6aDLemN_QlWsnCSUhV
+X-Proofpoint-ORIG-GUID: 1vtnlH_rZbQCIA6aDLemN_QlWsnCSUhV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,118 +154,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are running into hung tasks in blk_mq_freeze_queue_wait, sometimes
-in nvme_reset_work and sometimes in nvme_scan_work.
-In some cases we also see a warning in blk_mq_unfreeze_queue
-(WARN_ON_ONCE(q->mq_freeze_depth < 0)):
-WARNING: CPU: 10 PID: 152 at block/blk-mq.c:199 blk_mq_unfreeze_queue+0x26/0x5a
-The hung tasks are preceded by two instances of nvme_timeout racing in
-nvme_dev_disable after a device becomes unresponsive.
-The first nvme_dev_disable blocks in wait_for_completion_io_timeout, and
-a while later a second instance blocks in mutex_lock(&dev->shutdown_lock).
-When the timeout expires and the first instance releases the mutex,
-the two instances start racing.
-We have seen the hung tasks in 4.19, but from a quick look at the
-latest 6.1 code the issue is probably there as well.
-There seem to be two different scenarios where unbalanced
-blk_freeze_queue_start/blk_mq_unfreeze_queue could be the cause.
 
-1) In this case we have an unfreeze without a corresponding freeze
-preceding it.
+Keoseong,
 
-TIMEOUT 1	TIMEOUT 2	RESET WORK 1	RESET WORK 2
+> Use "if error return" style in ufshcd_hba_enable().  No functional
+> change.
 
-state = NVME_CTRL_LIVE
-nvme_timeout
-nvme_dev_disable
-mutex_lock
-nvme_start_freeze
-blk_freeze_queue_start
-nvme_disable_io_queues
-wait_for_completion_io_timeout
-		nvme_timeout
-		nvme_dev_disable
-		mutex_lock
-mutex_unlock
-nvme_reset_ctrl
-state = NVME_CTRL_RESETTING
-queue_work(nvme_reset_work)
-				nvme_reset_work
-				state = NVME_CTRL_CONNECTING
-		(state != NVME_CTRL_LIVE and
-		state != NVME_CTRL_RESETTING)
-		skips nvme_start_freeze
-		mutex_unlock
-		nvme_reset_ctrl
-		state = NVME_CTRL_RESETTING
-		queue_work(nvme_reset_work)
-				nvme_unfreeze (matches
-				nvme_start_freeze in
-				TIMEOUT 1)
-						nvme_reset_work
-						nvme_unfreeze (no
-						match in TIMEOUT 2)
+Applied to 6.2/scsi-staging, thanks!
 
-
-2) In this case a freeze has no corresponding unfreeze following it.
-TIMEOUT 2 cannot schedule nvme_reset_work because TIMEOUT 1's is already
-scheduled but not yet running.
-
-TIMEOUT 1	TIMEOUT 2	RESET WORK 1	RESET WORK 2
-
-state = NVME_CTRL_LIVE
-nvme_timeout
-nvme_dev_disable
-mutex_lock
-nvme_start_freeze
-blk_freeze_queue_start
-nvme_disable_io_queues
-wait_for_completion_io_timeout
-		nvme_timeout
-		nvme_dev_disable
-		mutex_lock
-mutex_unlock
-nvme_reset_ctrl
-state = NVME_CTRL_RESETTING
-queue_work(nvme_reset_work)
-		(state == NVME_CTRL_LIVE or
-		state == NVME_CTRL_RESETTING)
-		nvme_start_freeze
-		blk_freeze_queue_start
-		mutex_unlock
-		nvme_reset_ctrl
-		state = NVME_CTRL_RESETTING
-		queue_work(nvme_reset_work)
-		fails because nvme_reset_work
-		is not running yet
-				nvme_reset_work
-				nvme_unfreeze (matches
-				nvme_start_freeze in
-				TIMEOUT 1)
-						It gets never
-						scheduled.
-
-
-Following is one such backtrace.
-
-[ 4390.119745] INFO: task kworker/u80:2:8279 blocked for more than 300 seconds.
-[ 4390.471456]       Tainted: P           O      4.19.142.Ar-29007847.buytenhb7335070 #1
-[ 4390.832568] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[ 4391.193663] kworker/u80:2   D    0  8279      2 0x80000000
-[ 4391.526603] Workqueue: nvme-reset-wq nvme_reset_work
-[ 4391.853272] Call Trace:
-[ 4392.149696]  __schedule+0x75b/0x7c2
-[ 4392.458627]  schedule+0x78/0x8c
-[ 4392.763399]  blk_mq_freeze_queue_wait+0x8b/0xb6
-[ 4393.084849]  ? wait_woken+0x92/0x92
-[ 4393.393791]  nvme_wait_freeze+0x39/0x4e
-[ 4393.706900]  nvme_reset_work+0x1464/0x1665
-[ 4394.023142]  ? dequeue_entity+0x694/0x6a3
-[ 4394.338340]  process_one_work+0x1c2/0x30f
-[ 4394.511642]  worker_thread+0x1e9/0x2cc
-[ 4394.556626]  ? rescuer_thread+0x2b7/0x2b7
-[ 4394.604738]  kthread+0x15d/0x165
-[ 4394.643460]  ? kthread_park+0x98/0x98
-[ 4394.687396]  ret_from_fork+0x1f/0x30
-
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
