@@ -2,201 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC08C620CF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A070620D6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233684AbiKHKNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
+        id S233978AbiKHKf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbiKHKNF (ORCPT
+        with ESMTP id S233931AbiKHKft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:13:05 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C8011828;
-        Tue,  8 Nov 2022 02:13:02 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N63nj0JMMz4f3wRR;
-        Tue,  8 Nov 2022 18:12:57 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgDHcK+qK2pjh8qrAA--.29617S4;
-        Tue, 08 Nov 2022 18:13:00 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     jack@suse.cz, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        paolo.valente@linaro.org
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH] block, bfq: fix null pointer dereference in bfq_bio_bfqg()
-Date:   Tue,  8 Nov 2022 18:34:34 +0800
-Message-Id: <20221108103434.2853269-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 8 Nov 2022 05:35:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E7E19C12
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667903689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8hI+VXGlNsYpteEY2VwbFWoOIdKQL0RxnupFV92rerk=;
+        b=ECyGnwnIFQ8S5+xb/u53rlfXAoUaHiIzhrchZ+kYw7QjJMBKIjtKumDuQR6McgnQnAbvGX
+        r3ZyTPTJLDDyM36frTgAXKZ8XiIp1spHOSOD85zqnmsmPNQqHqmv7vjNP3OqNiLfMJRhhf
+        +9CaPbngB5hEBZszVEPaAAZrVLN7/FU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-54-E1dN9wnlOJ-KshRuheZ3Vw-1; Tue, 08 Nov 2022 05:34:40 -0500
+X-MC-Unique: E1dN9wnlOJ-KshRuheZ3Vw-1
+Received: by mail-wm1-f71.google.com with SMTP id f1-20020a1cc901000000b003cf703a4f08so3700408wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:34:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8hI+VXGlNsYpteEY2VwbFWoOIdKQL0RxnupFV92rerk=;
+        b=vlhD9IQc6dhnO4vpMaFeRHERiaBMB4/NV3UBvsBODsNarI+ibiyiBMSKa2GD6VezG6
+         Tommlk5jpGilet+kznJInhuLCJST6nPhpIr/ApxAYS0VRjh/ZvV8kh61AEd8tA3D7MPx
+         jZjpq1Bs+xCoITrsm5JAOjXQYFnMl8w4uETv9KVnLvZo64Gmd7xcPPGa8R/8QGPQxblU
+         p9ke+fNQX0eG+zoeDq40KKKXiYjyxzNbodmX5x985RM+iBzBra5yAlKI9aineSxMTRBf
+         bIsVwXMw8ozjNA5aObMMxj8HGHiQDw2X1WNygs3pGLdWXwy+2P/Y6riSA6rz+Gu9QCL7
+         TWhg==
+X-Gm-Message-State: ACrzQf3D5Ipv58HCI6cEUkOO37NDVrQ3rqKjFBPaGV7FoCyoppemadzE
+        ToZkGV41pq5I/u4TK7i1D3oWHDpgEjkitR1C692unm5qnMEJ7GBedbCRK+sY2Rxmn9Q4A+fSL4r
+        O119nhkA89ulcS+tgDPuwsprI
+X-Received: by 2002:a7b:c3d8:0:b0:3cf:9b7b:b96c with SMTP id t24-20020a7bc3d8000000b003cf9b7bb96cmr14185208wmj.113.1667903679370;
+        Tue, 08 Nov 2022 02:34:39 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6RD9d9dmQiyq7sLWytIU3odBHdl1zaUxi78OJvddMLj7UOQAvMCdSY9vUfUFobQvSSZ7B9AA==
+X-Received: by 2002:a7b:c3d8:0:b0:3cf:9b7b:b96c with SMTP id t24-20020a7bc3d8000000b003cf9b7bb96cmr14185199wmj.113.1667903679190;
+        Tue, 08 Nov 2022 02:34:39 -0800 (PST)
+Received: from step1.redhat.com (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id m11-20020a5d4a0b000000b0022ca921dc67sm9632802wrq.88.2022.11.08.02.34.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 02:34:38 -0800 (PST)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH 0/2] vhost: fix ranges when call vhost_iotlb_itree_first()
+Date:   Tue,  8 Nov 2022 11:34:35 +0100
+Message-Id: <20221108103437.105327-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.38.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgDHcK+qK2pjh8qrAA--.29617S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxur1DJrW8XrW3XrW8Kr1UGFg_yoWrKrykpr
-        W3tr4UCr48tr15JF4jyr1UJryUtF4fAF1UJrWxZr15tF1Uuw1UJF1UAr4UJryrJF45XF13
-        Jw17Jw18tr1UtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
-        XdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+While I was working on vringh to support VA in vringh_*_iotlb()
+I saw that the range we use in iotlb_translate() when we call
+vhost_iotlb_itree_first() was not correct IIUC.
+So I looked at all the calls and found that in vhost.c as well.
 
-Out test found a following problem in kernel 5.10, and the same problem
-should exist in mainline:
+I didn't observe a failure and I don't have a reproducer because
+I noticed the problem by looking at the code.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000094
-PGD 0 P4D 0
-Oops: 0000 [#1] SMP
-CPU: 7 PID: 155 Comm: kworker/7:1 Not tainted 5.10.0-01932-g19e0ace2ca1d-dirty 4
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-b4
-Workqueue: kthrotld blk_throtl_dispatch_work_fn
-RIP: 0010:bfq_bio_bfqg+0x52/0xc0
-Code: 94 00 00 00 00 75 2e 48 8b 40 30 48 83 05 35 06 c8 0b 01 48 85 c0 74 3d 4b
-RSP: 0018:ffffc90001a1fba0 EFLAGS: 00010002
-RAX: ffff888100d60400 RBX: ffff8881132e7000 RCX: 0000000000000000
-RDX: 0000000000000017 RSI: ffff888103580a18 RDI: ffff888103580a18
-RBP: ffff8881132e7000 R08: 0000000000000000 R09: ffffc90001a1fe10
-R10: 0000000000000a20 R11: 0000000000034320 R12: 0000000000000000
-R13: ffff888103580a18 R14: ffff888114447000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff88881fdc0000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000094 CR3: 0000000100cdb000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- bfq_bic_update_cgroup+0x3c/0x350
- ? ioc_create_icq+0x42/0x270
- bfq_init_rq+0xfd/0x1060
- bfq_insert_requests+0x20f/0x1cc0
- ? ioc_create_icq+0x122/0x270
- blk_mq_sched_insert_requests+0x86/0x1d0
- blk_mq_flush_plug_list+0x193/0x2a0
- blk_flush_plug_list+0x127/0x170
- blk_finish_plug+0x31/0x50
- blk_throtl_dispatch_work_fn+0x151/0x190
- process_one_work+0x27c/0x5f0
- worker_thread+0x28b/0x6b0
- ? rescuer_thread+0x590/0x590
- kthread+0x153/0x1b0
- ? kthread_flush_work+0x170/0x170
- ret_from_fork+0x1f/0x30
-Modules linked in:
-CR2: 0000000000000094
----[ end trace e2e59ac014314547 ]---
-RIP: 0010:bfq_bio_bfqg+0x52/0xc0
-Code: 94 00 00 00 00 75 2e 48 8b 40 30 48 83 05 35 06 c8 0b 01 48 85 c0 74 3d 4b
-RSP: 0018:ffffc90001a1fba0 EFLAGS: 00010002
-RAX: ffff888100d60400 RBX: ffff8881132e7000 RCX: 0000000000000000
-RDX: 0000000000000017 RSI: ffff888103580a18 RDI: ffff888103580a18
-RBP: ffff8881132e7000 R08: 0000000000000000 R09: ffffc90001a1fe10
-R10: 0000000000000a20 R11: 0000000000034320 R12: 0000000000000000
-R13: ffff888103580a18 R14: ffff888114447000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff88881fdc0000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000094 CR3: 0000000100cdb000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Maybe we didn't have a problem, because a shorter range was being
+returned anyway and the loop stopped taking into account the total
+amount of bytes translated, but I think it's better to fix.
 
-Root cause is quite complex:
+Thanks,
+Stefano
 
-1) use bfq elevator for the test device.
-2) create a cgroup CG
-3) config blk throtl in CG
+Stefano Garzarella (2):
+  vringh: fix range used in iotlb_translate()
+  vhost: fix range used in translate_desc()
 
-   blkg_conf_prep
-    blkg_create
+ drivers/vhost/vhost.c  | 4 ++--
+ drivers/vhost/vringh.c | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-4) create a thread T1 and issue async io in CG:
-
-   bio_init
-    bio_associate_blkg
-   ...
-   submit_bio
-    submit_bio_noacct
-     blk_throtl_bio -> io is throttled
-     // io submit is done
-
-5) switch elevator:
-
-   bfq_exit_queue
-    blkcg_deactivate_policy
-     list_for_each_entry(blkg, &q->blkg_list, q_node)
-      blkg->pd[] = NULL
-      // bfq policy is removed
-
-5) thread t1 exist, then remove the cgroup CG:
-
-   blkcg_unpin_online
-    blkcg_destroy_blkgs
-     blkg_destroy
-      list_del_init(&blkg->q_node)
-      // blkg is removed from queue list
-
-6) switch elevator back to bfq
-
- bfq_init_queue
-  bfq_create_group_hierarchy
-   blkcg_activate_policy
-    list_for_each_entry_reverse(blkg, &q->blkg_list)
-     // blkg is removed from list, hence bfq policy is still NULL
-
-7) throttled io is dispatched to bfq:
-
- bfq_insert_requests
-  bfq_init_rq
-   bfq_bic_update_cgroup
-    bfq_bio_bfqg
-     bfqg = blkg_to_bfqg(blkg)
-     // bfqg is NULL because bfq policy is NULL
-
-The problem is only possible in bfq because only bfq can be deactivated and
-activated while queue is online, while others can only be deactivated while
-the device is removed.
-
-Fix the problem in bfq by checking if blkg is online before calling
-blkg_to_bfqg().
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/bfq-cgroup.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index 144bca006463..7d624a3a3f0f 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -610,6 +610,10 @@ struct bfq_group *bfq_bio_bfqg(struct bfq_data *bfqd, struct bio *bio)
- 	struct bfq_group *bfqg;
- 
- 	while (blkg) {
-+		if (!blkg->online) {
-+			blkg = blkg->parent;
-+			continue;
-+		}
- 		bfqg = blkg_to_bfqg(blkg);
- 		if (bfqg->online) {
- 			bio_associate_blkg_from_css(bio, &blkg->blkcg->css);
 -- 
-2.31.1
+2.38.1
 
