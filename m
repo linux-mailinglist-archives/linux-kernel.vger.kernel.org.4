@@ -2,194 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C39621BE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C7C621BE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 19:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbiKHS1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 13:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S229933AbiKHS3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 13:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiKHS1j (ORCPT
+        with ESMTP id S230079AbiKHS3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 13:27:39 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08651AD9C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 10:27:37 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id b2so12117942iof.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 10:27:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jf9WajsSrjJ+WBtuoM/CpRnwctyi+9OwrkPgKP+pwEs=;
-        b=TQ6GCM2ZX3ATNDOT1a3PVgvZMVBdxJafFMx8wGqde06tEytrAox7rS8LG5d092Pe44
-         p1C4VNGKKKeNwC3dvgOUUFSy67+N8PBrntcWv6hZwEfll8Esox+En7rKccC88K0NkbqH
-         Jpwdv+MDM3k/WuztnZnjCOONej93KjlplrZWI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jf9WajsSrjJ+WBtuoM/CpRnwctyi+9OwrkPgKP+pwEs=;
-        b=c0QBUlcFlNpNsqfYgWLG6chN/PPvI3ZucLFfB9ggqmjulvFiCEY+M9jj6cc0lhOnlo
-         VOX08hyakv1VJE++zFWCWzN+iFv+q38dOUbkxJt9DlgbcHIoS6Al/TJxcMBHLHUjXtuT
-         pwgrWNspig03Q501wG3x7pZtCTJIe7bQLbwZQJirvBmtcy0OcMOSxSc2VO3az7r5nwy9
-         5oY17ftt1xJR3a3P9wWTMX5FdZrUiZmIyu+IMYY3s3JF1trka5hVaDo+YN4ilN6mypEy
-         5xMcchrpuIVDstxRyjQ/5Twu2e+otAUa/XQJJ8xGOiqoPU3tc9xom1MqKuNnCo+X9X7b
-         BLwQ==
-X-Gm-Message-State: ACrzQf3bBRLmoF6Pf8ouFfunFNREnBj2hgIC5IRq47Uyb2/AXFIXgWDh
-        +3v+tPjK82cH+lzFxu6YxPJBPQ==
-X-Google-Smtp-Source: AMsMyM4wQ+H9Ug7agqUznRjmIm264rk28jmElmlQ86/RFNioHxizEbgv6+UCugSdMK5ZPgNbYj0cAA==
-X-Received: by 2002:a02:cc71:0:b0:373:1604:274d with SMTP id j17-20020a02cc71000000b003731604274dmr32211390jaq.119.1667932057170;
-        Tue, 08 Nov 2022 10:27:37 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id f24-20020a056638113800b0036371872137sm4022229jar.11.2022.11.08.10.27.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 10:27:36 -0800 (PST)
-Date:   Tue, 8 Nov 2022 18:27:36 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] cpufreq: qcom-hw: Add CPU clock provider support
-Message-ID: <Y2qfmFVK665b1Nbw@google.com>
-References: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
- <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
+        Tue, 8 Nov 2022 13:29:07 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C6F2AE2;
+        Tue,  8 Nov 2022 10:29:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667932146; x=1699468146;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pJxT5M9z/7O1GhSHzC1EnjXBsVZgl67H/7V8AvhcL0o=;
+  b=RzSAjGcJF8tit26BUqmTPBu8+S7mNT/Ci3H54HYzaPOXmF7/ZA4NWVI3
+   3kyhDc5Phw9grBeWynrg1w6wtqO4PSEqWbGh0Mm0MakFNNy4Bdj177C4L
+   1jBrh4Z1QX6/JxOV6LV6dY4k3z9Wz6ZHZs//KgE07WPwHCVowSEBpQIYi
+   v4DMGw6zRwwW9KQzUU/SjjjkqtikqtFf8++ZLG8llCcCEWv3F1WH82A2C
+   tieLwCtjJW6Yu/V27eSJGL55T28WGx9rJNLPX8qGwUk2kyh+wvNqZURnb
+   xyrW/FYm31AolGbM8yiSMWltE2ZdESr2sF5qoYMdg1apz6MLl7I29bE6S
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="311928738"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="311928738"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:27:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="638890327"
+X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
+   d="scan'208";a="638890327"
+Received: from vibhusha-mobl1.amr.corp.intel.com (HELO [10.252.133.56]) ([10.252.133.56])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:27:57 -0800
+Message-ID: <9eb8f395-c77f-a0bf-96b7-f1a3bb178c48@intel.com>
+Date:   Tue, 8 Nov 2022 10:27:56 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/3] x86/tsx: Add feature bit for TSX control MSR support
+Content-Language: en-US
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>, degoede@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com
+References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+ <8592af5e3b95b197231445beb8c3123948ced15a.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <8592af5e3b95b197231445beb8c3123948ced15a.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 9/12/22 16:39, Pawan Gupta wrote:
+> Support for TSX control MSR is enumerated in MSR_IA32_ARCH_CAPABILITIES.
+> This is different from how other CPU features are enumerated i.e. via
+> CPUID. Enumerating support for TSX control currently has an overhead of
+> reading the MSR every time which can be avoided.
 
-On Tue, Nov 08, 2022 at 09:10:37PM +0530, Manivannan Sadhasivam wrote:
-> Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-> cores. But this relationship is not represented with the clk framework
-> so far.
-> 
-> So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-> clock producer/consumer relationship cleaner and is also useful for CPU
-> related frameworks like OPP to know the frequency at which the CPUs are
-> running.
-> 
-> The clock frequency provided by the driver is for each frequency domain.
-> We cannot get the frequency of each CPU core because, not all platforms
-> support per-core DCVS feature.
-> 
-> Also the frequency supplied by the driver is the actual frequency that
-> comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-> not same as what the CPUFreq framework has set but it is the one that gets
-> supplied to the CPUs after throttling by LMh.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 5e0598730a04..86bb11de347f 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -4,6 +4,7 @@
->   */
->  
->  #include <linux/bitfield.h>
-> +#include <linux/clk-provider.h>
->  #include <linux/cpufreq.h>
->  #include <linux/init.h>
->  #include <linux/interconnect.h>
-> @@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
->  	bool cancel_throttle;
->  	struct delayed_work throttle_work;
->  	struct cpufreq_policy *policy;
-> +	struct clk_hw cpu_clk;
->  
->  	bool per_core_dcvs;
->  
-> @@ -615,8 +617,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
->  	.ready		= qcom_cpufreq_ready,
->  };
->  
-> +static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +{
-> +	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
-> +
-> +	return qcom_lmh_get_throttle_freq(data);
-> +}
-> +
-> +static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
-> +	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
-> +};
-> +
->  static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  {
-> +	struct clk_hw_onecell_data *clk_data;
->  	struct device *dev = &pdev->dev;
->  	struct device *cpu_dev;
->  	struct clk *clk;
-> @@ -659,8 +673,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  
->  	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
->  
-> +	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
-> +	if (!clk_data)
-> +		return -ENOMEM;
-> +
-> +	clk_data->num = num_domains;
-> +
->  	for (i = 0; i < num_domains; i++) {
->  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
-> +		struct clk_init_data init = {};
-> +		const char *clk_name;
->  		struct resource *res;
->  		void __iomem *base;
->  
-> @@ -672,6 +694,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  
->  		data->base = base;
->  		data->res = res;
-> +
-> +		/* Register CPU clock for each frequency domain */
-> +		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
-> +		init.name = clk_name;
+I only see tsx_ctrl_is_supported() getting called in three places:
 
-nit: 'clk_name' isn't really needed, the result of devm_kasprintf() could be
-assigned directly to 'init.name'. 'init' could be renamed to 'clk_init' if
-the purpose of using 'clk_name' is to make clear that this is the name of a
-clock.
+> 1 tsx.c tsx_clear_cpuid       138 } else if (tsx_ctrl_is_supported()) {
+> 2 tsx.c tsx_dev_mode_disable  161 if (!boot_cpu_has_bug(X86_BUG_TAA) || !tsx_ctrl_is_supported() ||
+> 3 tsx.c tsx_init              194 if (!tsx_ctrl_is_supported()) {
 
-> +		init.flags = CLK_GET_RATE_NOCACHE;
-> +		init.ops = &qcom_cpufreq_hw_clk_ops;
-> +		data->cpu_clk.init = &init;
-> +
-> +		ret = devm_clk_hw_register(dev, &data->cpu_clk);
-> +		if (ret < 0) {
-> +			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
-> +			return ret;
-> +		}
-> +
-> +		clk_data->hws[i] = &data->cpu_clk;
-> +	}
-> +
-> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
-> +		return ret;
->  	}
->  
->  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
-> -- 
-> 2.25.1
-> 
+Those all look like boot-time things to me.  Why does the overhead matter?
