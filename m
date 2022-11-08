@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE836219F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E586219F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233736AbiKHRB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:01:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        id S234050AbiKHRCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiKHRBw (ORCPT
+        with ESMTP id S231740AbiKHRCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:01:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9DBE11;
-        Tue,  8 Nov 2022 09:01:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4850A616EE;
-        Tue,  8 Nov 2022 17:01:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F109C433C1;
-        Tue,  8 Nov 2022 17:01:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667926910;
-        bh=C0ygJNIHY7YHHTXjkz/J5QGMeVxxURlhGZV1Kafdb7Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FBUlZ75AuBrQU6xeEnIcruXOdGvwE/gs3BnFGwr1uJtkXfIe9TGhUHQqcCOOZLMoE
-         aLeyhIx36Qkup5b8xOzJgDEvKXh230unMjFCPIPCKOa/u/A0MVTX+U5+jlemljJtU2
-         8gDNDraNu//aVTBCM8yFTtZ35sguEYHrYixvC5wNQlvjE41P2/HrgQv4SLNtmyekJG
-         U2cAMjaJe/mYs/6j0ACLjcZuewoOZTmMIl/JA/bbesmf8ktwVAnr2CLXWhboHn5+TQ
-         g7LhU1RFrocrIG55AXdz1NhdQoY0CWe3nbCNvdz+cDJUgQwHfQinHaw0YydeAAbNjx
-         ++/Vi666AYYEQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Stuart Hayes <stuart.w.hayes@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] cpufreq: ACPI: Remove unused variables 'acpi_cpufreq_online' and 'ret'
-Date:   Tue,  8 Nov 2022 10:01:03 -0700
-Message-Id: <20221108170103.3375832-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Tue, 8 Nov 2022 12:02:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B9528F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:02:13 -0800 (PST)
+Date:   Tue, 8 Nov 2022 18:02:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667926932;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LeK/LIk+Guc9QGV9/1QheCdNK87ebw4f5sjVkGN6Orw=;
+        b=BFroQblfgQGtG5rAQN0ZN4rxBDncY25iD/utujYzqQPBSNpkmqTBSHcDAcUDH5/Gi3UEyL
+        zVpfN11ZtCc0pCcPDrM7B+tqcWTPs9mtOSjuZvdJy2rQuUcOg2wISF712Ja8BxvsdLWbvc
+        JqRlwwNQUFr0t2Tl7bIzcp/gyNfOs2ZTdKzDy9VtioR07MfnLCpWLhraMmrMf8of9cP+Ek
+        ipWa2OznR8ylRb4/GdTUgdWlTPfwIxUyRZSolDNAm4XdRCr6QZSJ4mZfwpGQJKvOp1W+2I
+        th7jTmQVejXdVZBGwGgFUpQRuy8q2KMMaUtz+xoBBJJARlVp6ASBCio3SYVjBg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667926932;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LeK/LIk+Guc9QGV9/1QheCdNK87ebw4f5sjVkGN6Orw=;
+        b=ZsHVs8GYkH/BLoxYTxAjEZDcxwPFdZHGFfqt5TZkBrpvm2LO/zj7eaU3vc3AdCREgGrRHi
+        G2HTi/E4hYY2LsAg==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Frederic Weisbecker <frederic@kernel.org>
+cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v4 14/16] timer: Implement the hierarchical pull model
+In-Reply-To: <20221108104738.GA21669@lothringen>
+Message-ID: <9496e1a6-d1-1a20-c1c9-2bc3f34eb888@linutronix.de>
+References: <20221104145737.71236-1-anna-maria@linutronix.de> <20221104145737.71236-15-anna-maria@linutronix.de> <20221108104738.GA21669@lothringen>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+On Tue, 8 Nov 2022, Frederic Weisbecker wrote:
 
-  drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
-          acpi_cpufreq_online = ret;
-                                ^~~
-  drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 'ret' to silence this warning
-          int ret;
-                ^
-                  = 0
-  1 error generated.
+> On Fri, Nov 04, 2022 at 03:57:35PM +0100, Anna-Maria Behnsen wrote:
+> > @@ -1859,6 +1863,36 @@ void forward_and_idle_timer_bases(unsigned long basej, u64 basem,
+> >  	 */
+> >  	is_idle = time_after(nextevt, basej + 1);
+> >  
+> > +	if (is_idle) {
+> > +		u64 next_tmigr;
+> > +
+> > +		next_tmigr = tmigr_cpu_deactivate(tevt->global);
+> > +
+> > +		tevt->global = KTIME_MAX;
+> > +
+> > +		/*
+> > +		 * If CPU is the last going idle in timer migration
+> > +		 * hierarchy, make sure CPU will wake up in time to handle
+> > +		 * remote timers. next_tmigr == KTIME_MAX if other CPUs are
+> > +		 * still active.
+> > +		 */
+> > +		if (next_tmigr < tevt->local) {
+> > +			u64 tmp;
+> > +
+> > +			/* If we missed a tick already, force 0 delta */
+> > +			if (next_tmigr < basem)
+> > +				next_tmigr = basem;
+> > +
+> > +			tmp = div_u64(next_tmigr - basem, TICK_NSEC);
+> > +
+> > +			nextevt = basej + (unsigned long)tmp;
+> > +			tevt->local = next_tmigr;
+> > +			is_idle = time_after(nextevt, basej + 1);
+> 
+> So after that, tevt->global shouldn't matter anymore for tick_nohz_next_event(),
+> right? If so then probably that line can go away (with a comment specifying why we can
+> ignore the global part)?:
+> 
+>        tevt.local = min_t(u64, tevt.local, tevt.global);
+> 
 
-Both ret and acpi_cpufreq_online are now unused so they can be safely
-removed, clearing up the warning.
-
-Fixes: 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1757
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/cpufreq/acpi-cpufreq.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index c8fdfcf659e6..74ef0e05ff7b 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -953,12 +953,8 @@ static struct cpufreq_driver acpi_cpufreq_driver = {
- 	.attr		= acpi_cpufreq_attr,
- };
- 
--static enum cpuhp_state acpi_cpufreq_online;
--
- static void __init acpi_cpufreq_boost_init(void)
- {
--	int ret;
--
- 	if (!(boot_cpu_has(X86_FEATURE_CPB) || boot_cpu_has(X86_FEATURE_IDA))) {
- 		pr_debug("Boost capabilities not present in the processor\n");
- 		return;
-@@ -966,8 +962,6 @@ static void __init acpi_cpufreq_boost_init(void)
- 
- 	acpi_cpufreq_driver.set_boost = set_boost;
- 	acpi_cpufreq_driver.boost_enabled = boost_state(0);
--
--	acpi_cpufreq_online = ret;
- }
- 
- static int __init acpi_cpufreq_init(void)
-
-base-commit: 21cdb6c18f85fe538ca8740bc79f11fbe08d0197
--- 
-2.38.1
-
+tevt->global is set to KTIME_MAX anyway. So the whole tevt information is
+also no longer required in tick_nohz_next_event(). I need to rework the
+patch where this was introduced. Then the forward_and_idle_timer_bases()
+could still simply return the next timer and then there is no longer a
+point against using your idea with naming of the functions.
