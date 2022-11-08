@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65683620CCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C28620CD1
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbiKHKCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 05:02:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S233822AbiKHKDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233835AbiKHKCd (ORCPT
+        with ESMTP id S233903AbiKHKDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 05:02:33 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDFC2871E
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:02:31 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id j4so20568971lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:02:31 -0800 (PST)
+        Tue, 8 Nov 2022 05:03:41 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA1717AB8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:03:38 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id w14so20107905wru.8
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 02:03:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EHNjQqKpTzK+fEHFihMcLQbytKyXJaAokofqYVuV5wA=;
-        b=f85zp0xvskFQs6eDSsm9sGJ4sEVBcwAiIqc558ZScZ4Yn+2/z4pNFHdcuuv3HvK8qC
-         iGcjgoIkfZK/EqVv9aKkdlRe0CJhurh5MRXZtPkgnfvZK3VJtWiJWtFmXMIKcASshUfr
-         xyw1DFkkSWrQiqvWk/ft854ZYZfr/lk0PEjxs52vM4Y9ZJ6NPZpHKk/WvVse7PnjerHn
-         z+8zzjS5Ukpw3VTkAOTr/GGm/qODRsnhBGfJBSG7d3hymD+twapfeix7EcdQDAG6x5r9
-         +FE7igQb1BQZ0xSzjdDKlCdoMM57GgB3FptPUUOW8z1vKx/n2nsKtt1Ard4HlT2oEwBt
-         SV3w==
+        bh=hOX9zjUZFkr9z7v9HthQbYfzbIWKCxg0bpV+kFj752Q=;
+        b=RLCmOwYKvHF1KTZilJEPRrub4fLrNsrQTLfsWXZADJCzY6xp5OTw18NwtJKD+W4OF6
+         Yy0ifNLkO82kg7ygIaZxBIoStesEoPAAkXUF7vCzeSnIGxdbfWSW4S1vWYtxB+jjmGVw
+         Clmb68bkVHRK2Gmkn8caxbz06opiaHt/GgZMbvb0ZxH58b8KkGNsAtQmfqLNxobBEYqH
+         6H8WnLTyz2p1L7/I6L++y9cEmGSLo9SDDJsHLsw4NWJ5cXXV9tBr5/YMrUuWBJDBX2u4
+         823JEAuCh1qqKn0QVNCrdu20vBvdoBMDYO5fhsXzhII6im8h/TVNhZAGRQoWTLsjKLce
+         zuPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHNjQqKpTzK+fEHFihMcLQbytKyXJaAokofqYVuV5wA=;
-        b=csOmf33e16OhOcw1t2ZXT6ilO/wRtVpBWbjf4W472z8E8r0xSYS8QUNSJB9CDNtn6E
-         mOgqjHCoPxYieZ9Fcrz5J7gxsUlFBKJpiFkuJjfXfR2P4YWqNmWOj5caZkQF+c7hfPX7
-         X25UV2TG1duCZc+tN8iXdHzkvFpR7HUGfnTxRq4n3iN/J7E+moPvU4SZviE8pXYSVl6j
-         pq/m5U0uFubCbRqZBC7XYD5ddAmBEPuK7rProdDs65ApdzCKCBGXiG2HFvU8PsGSKPm4
-         28wXMsmgZlAqRND9+nIaqg83XL1pamzv1aU8OtclzYhkcZAssR5M6S3fRCR4w2CT6Ywh
-         b6RQ==
-X-Gm-Message-State: ACrzQf1yajFqLZEbt7svdAco7+eVtWJm/DPg1jEPS965PnFNQYzqAmVg
-        6mYyTKK5jrtKug9IY42UbxOEeQ==
-X-Google-Smtp-Source: AMsMyM5jPJ5kxg3fGIpaqiQgN+hS5YgpEZHRkTfYuVrNQHj2/36SpHFHuyzVb7LjBRkKTr5gFoWR+g==
-X-Received: by 2002:a05:6512:2144:b0:4a2:3c2b:f694 with SMTP id s4-20020a056512214400b004a23c2bf694mr20770760lfr.642.1667901749862;
-        Tue, 08 Nov 2022 02:02:29 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac258e2000000b0048af397c827sm1711096lfo.218.2022.11.08.02.02.28
+        bh=hOX9zjUZFkr9z7v9HthQbYfzbIWKCxg0bpV+kFj752Q=;
+        b=FRMcv8ck1zwOK2R/6HH0kDwnLZBoKy0OMqfzdzDFJt6YQEy85ikFGKxne5hXHszO96
+         uUqaFejLe4GKnCpgt1dYRkbAsy+hltDM37Gzs0FNq5vdOUZgaVEE8/frET7kUCfdyfwI
+         flT099hNe0JypyduQPNxomP81cnauf6vgWacZQFu43HdRIcppNkA0ZkvTVmr6CoU4dIz
+         EB72aZGgeJ4nu6H3eRaG4KIcxAE4vx2JofDoB3BHfc9Vpue1J0axqTkfQMawondLhs8K
+         J/aFXY1VlvSQxhGna26Yfcq7i30kx/WABUaxWAvoh+uuFKFyJbIyeiB0fj1eeeagGIud
+         NeSA==
+X-Gm-Message-State: ACrzQf1npy5AqGLyDBX4Jh57PIYFLLPxnXMsaXq6u94BBv7zHWAu25rG
+        wa4OwMRBM9Olk7EF0WJllUfQNg==
+X-Google-Smtp-Source: AMsMyM74duCvRHfxLbIJOIZ+HAamQmseiB+R4lDKUyA/yqs2F1ppB+86f6gdiucReM3MNJoPm7wCKQ==
+X-Received: by 2002:a5d:6589:0:b0:236:52af:3b70 with SMTP id q9-20020a5d6589000000b0023652af3b70mr33270343wru.349.1667901817444;
+        Tue, 08 Nov 2022 02:03:37 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id o35-20020a05600c512300b003cfbbd54178sm1120625wms.2.2022.11.08.02.03.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 02:02:29 -0800 (PST)
-Message-ID: <c2535843-f05e-256a-65dc-59b2325f247b@linaro.org>
-Date:   Tue, 8 Nov 2022 11:02:28 +0100
+        Tue, 08 Nov 2022 02:03:36 -0800 (PST)
+Message-ID: <4789703d-0434-2e72-0001-5a7e1014f816@linaro.org>
+Date:   Tue, 8 Nov 2022 10:03:32 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] arm64: dts: mediatek: Initial mt8365-evk support
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-mediatek@lists.infradead.org,
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 3/3] nvmem: stm32: add OP-TEE support for STM32MP13x
+To:     Patrick DELAUNAY <patrick.delaunay@foss.st.com>,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     Etienne CARRIERE <etienne.carriere@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-References: <20221107211001.257393-1-bero@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107211001.257393-1-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
+        linux-stm32@st-md-mailman.stormreply.com,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+References: <20221028145252.2115933-1-patrick.delaunay@foss.st.com>
+ <20221028165150.3.Ibc43aa73f865090affeb1751af0cc260c7f1dd07@changeid>
+ <99a8d093-13f3-9ff8-6d87-d4aecaec1566@linaro.org>
+ <a4ae3648-2943-55e0-243f-71a3c5f71ad8@foss.st.com>
+Content-Language: en-US
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <a4ae3648-2943-55e0-243f-71a3c5f71ad8@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -76,550 +81,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 22:10, Bernhard Rosenkränzer wrote:
-> From: Fabien Parent <fparent@baylibre.com>
+
+
+On 02/11/2022 10:59, Patrick DELAUNAY wrote:
+> Hi,
 > 
-> This adds minimal support for the MediaTek 8365 SOC and the EVK reference
-> board, allowing the board to boot to initramfs with serial port I/O.
+> On 11/1/22 08:26, Srinivas Kandagatla wrote:
+>>
+>>
+>> On 28/10/2022 15:52, Patrick Delaunay wrote:
+>>> For boot with OP-TEE on STM32MP13, the communication with the secure
+>>> world no more use STMicroelectronics SMC but communication with the
+>>> BSEC TA, for data access (read/write) or lock operation:
+>>> - all the request are sent to OP-TEE trusted application,
+>>> - for upper OTP with ECC protection and with word programming only
+>>>    each OTP are permanently locked when programmed to avoid ECC error
+>>>    on the second write operation
+>>>
+>>> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+>>> ---
+>>
+>> For some reason I pushed this patch without a full review, This is now 
+>> reverted from nvmem-next.
 > 
-> GPIO keys are supported, MMC is partially supported (needs the clocks
-> driver for full support).
 > 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> [bero@baylibre.com: Removed parts depending on drivers that aren't upstream yet, cleanups]
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-> ---
+> Ok
 > 
-> Compared to the previous version of the patch submitted by Fabien
-> Parent, this removes dependencies on drivers/patches that are not yet in
-> mainline (obviously this comes with some reduced functionality for now;
-> this will be added back as drivers are accepted), and addresses some
-> feedback from reviewers.
 > 
->  arch/arm64/boot/dts/mediatek/Makefile       |   1 +
->  arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 344 +++++++++++
->  arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 602 ++++++++++++++++++++
->  3 files changed, 947 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+>>
+>> Why not add TEE client based new driver instead of ifdefing around 
+>> this driver? Also I see there is not much common across both drivers 
+>> anyway.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index 0ec90cb3ef289..e668fd50a3326 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -46,4 +46,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r2.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r3.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> new file mode 100644
-> index 0000000000000..a24e478fff51f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -0,0 +1,344 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2021-2022 BayLibre, SAS.
-> + * Authors:
-> + * Fabien Parent <fparent@baylibre.com>
-> + * Bernhard Rosenkränzer <bero@baylibre.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
-> +#include "mt8365.dtsi"
-> +
-> +/ {
-> +	model = "MediaTek MT8365 Open Platform EVK";
-> +	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
+> 
+> I hesitate between the 2 solutions. I choose this update to handle the 
+> STM32MP15 support with OP-TEE.
 
-Missing documentation.
+How are you to handing this?
 
-Run checkpatch on your patches. It will print several warnings, which
-must be fixed.
+> 
+> For backward compatibility reason the same driver STM32 ROMEM associated 
+> to compatible "st,stm32mp15-bsec" should be kept.
+> 
+> - the lower OTP can directly accessible by Linux (the IP is not secured) 
+> => boot with SPL
+
+Can we determine this at runtime?
+
+> 
+> - the upper OTP and the write operation are requested by 
+> STMicroelectronics SMCs
+> 
+>     => boot with TF-A SPMIN and old OP-TEE (before migration to STM32 
+> BSEC PTA)
+> 
+> 
+> But in the future OP-TEE the access to OTP should be also done with 
+> STM32 BSEC PTA...
+
+Given that we have only one compatible for these two type of 
+combinations how are you planning to deal with both the cases and still 
+be backward compatible?
+
+--srini
+> 
+> 
+> I can manage this compatibility by detection in STM32 romem driver if 
+> the booth access are managed in the same driver.
 
 
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:921600n8";
-> +	};
-> +
-> +	firmware {
-> +		optee {
-> +			compatible = "linaro,optee-tz";
-> +			method = "smc";
-> +		};
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		input-name = "gpio-keys";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&gpio_keys>;
-> +
-> +		key-volume-up {
-> +			gpios = <&pio 24 GPIO_ACTIVE_LOW>;
-> +			label = "volume_up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			wakeup-source;
-> +			debounce-interval = <15>;
-> +		};
-> +	};
-> +
-> +	memory@40000000 {
-> +		device_type = "memory";
-> +		reg = <0 0x40000000 0 0xc0000000>;
-> +	};
-> +
-> +	usb_otg_vbus: regulator-2 {
 
-Where are regulators 0 and 1 (or just 1)?
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "otg_vbus";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		gpio = <&pio 16 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
-
-(...)
-
-> +
-> +		mcucfg: syscon@10200000 {
-> +			compatible = "mediatek,mt8365-mcucfg", "syscon";
-> +			reg = <0 0x10200000 0 0x2000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		sysirq: interrupt-controller@10200a80 {
-> +			compatible = "mediatek,mt8365-sysirq",
-> +				     "mediatek,mt6577-sysirq";
-> +			interrupt-controller;
-> +			#interrupt-cells = <3>;
-> +			interrupt-parent = <&gic>;
-> +			reg = <0 0x10200a80 0 0x20>;
-> +		};
-> +
-> +		infracfg_nao: infracfg-nao@1020e000 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +			compatible = "syscon";
-
-Not allowed on its own.
-
-> +			reg = <0 0x1020e000 0 0x1000>;
-> +		};
-> +
-> +		rng: rng@1020f000 {
-> +			compatible = "mediatek,mt8365-rng",
-> +				     "mediatek,mt7623-rng";
-> +			reg = <0 0x1020f000 0 0x100>;
-> +			clocks = <&infracfg CLK_IFR_TRNG>;
-> +			clock-names = "rng";
-> +		};
-> +
-> +		apdma: dma-controller@11000280 {
-> +			compatible = "mediatek,mt8365-uart-dma",
-> +				     "mediatek,mt6577-uart-dma";
-> +			reg = <0 0x11000280 0 0x80>,
-> +			      <0 0x11000300 0 0x80>,
-> +			      <0 0x11000380 0 0x80>,
-> +			      <0 0x11000400 0 0x80>,
-> +			      <0 0x11000580 0 0x80>,
-> +			      <0 0x11000600 0 0x80>;
-> +			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 46 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 47 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 48 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
-> +				     <GIC_SPI 52 IRQ_TYPE_LEVEL_LOW>;
-> +			dma-requests = <6>;
-> +			clocks = <&infracfg CLK_IFR_AP_DMA>;
-> +			clock-names = "apdma";
-> +			#dma-cells = <1>;
-> +		};
-> +
-> +		auxadc: adc@11001000 {
-> +			compatible = "mediatek,mt8365-auxadc",
-> +				     "mediatek,mt8173-auxadc";
-> +			reg = <0 0x11001000 0 0x1000>;
-> +			clocks = <&infracfg CLK_IFR_AUXADC>;
-> +			clock-names = "main";
-> +			#io-channel-cells = <1>;
-> +		};
-> +
-> +		uart0: serial@11002000 {
-> +			compatible = "mediatek,mt8365-uart",
-> +				     "mediatek,mt6577-uart";
-> +			reg = <0 0x11002000 0 0x1000>;
-> +			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART0>;
-> +			clock-names = "baud", "bus";
-> +			dmas = <&apdma 0>, <&apdma 1>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		uart1: serial@11003000 {
-> +			compatible = "mediatek,mt8365-uart",
-> +				     "mediatek,mt6577-uart";
-> +			reg = <0 0x11003000 0 0x1000>;
-> +			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART1>;
-> +			clock-names = "baud", "bus";
-> +			dmas = <&apdma 2>, <&apdma 3>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		uart2: serial@11004000 {
-> +			compatible = "mediatek,mt8365-uart",
-> +				     "mediatek,mt6577-uart";
-> +			reg = <0 0x11004000 0 0x1000>;
-> +			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&clk26m>, <&infracfg CLK_IFR_UART2>;
-> +			clock-names = "baud", "bus";
-> +			dmas = <&apdma 4>, <&apdma 5>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		pwm: pwm@11006000 {
-> +			compatible = "mediatek,mt8365-pwm";
-> +			reg = <0 0x11006000 0 0x1000>;
-> +			#pwm-cells = <2>;
-> +			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&infracfg CLK_IFR_PWM_HCLK>,
-> +				 <&infracfg CLK_IFR_PWM>,
-> +				 <&infracfg CLK_IFR_PWM1>,
-> +				 <&infracfg CLK_IFR_PWM2>,
-> +				 <&infracfg CLK_IFR_PWM3>;
-> +			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
-> +		};
-> +
-> +		i2c0: i2c@11007000 {
-> +			compatible = "mediatek,mt8365-i2c",
-> +				     "mediatek,mt8168-i2c";
-> +			reg = <0 0x11007000 0 0xa0>,
-> +			      <0 0x11000080 0 0x80>;
-> +			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_LOW>;
-> +			clock-div = <1>;
-> +			clocks = <&infracfg CLK_IFR_I2C0_AXI>,
-> +				 <&infracfg CLK_IFR_AP_DMA>;
-> +			clock-names = "main", "dma";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c1: i2c@11008000 {
-> +			compatible = "mediatek,mt8365-i2c",
-> +				     "mediatek,mt8168-i2c";
-> +			reg = <0 0x11008000 0 0xa0>,
-> +			      <0 0x11000100 0 0x80>;
-> +			interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_LOW>;
-> +			clock-div = <1>;
-> +			clocks = <&infracfg CLK_IFR_I2C1_AXI>,
-> +				 <&infracfg CLK_IFR_AP_DMA>;
-> +			clock-names = "main", "dma";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +		};
-> +
-> +		i2c2: i2c@11009000 {
-> +			compatible = "mediatek,mt8365-i2c",
-> +				     "mediatek,mt8168-i2c";
-> +			reg = <0 0x11009000 0 0xa0>,
-> +			      <0 0x11000180 0 0x80>;
-> +			interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_LOW>;
-> +			clock-div = <1>;
-> +			clocks = <&infracfg CLK_IFR_I2C2_AXI>,
-> +				 <&infracfg CLK_IFR_AP_DMA>;
-> +			clock-names = "main", "dma";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +		};
-> +
-> +		spi: spi@1100a000 {
-> +			compatible = "mediatek,mt8365-spi",
-> +				     "mediatek,mt7622-spi";
-> +			reg = <0 0x1100a000 0 0x100>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&topckgen CLK_TOP_UNIVPLL2_D4>,
-> +				 <&topckgen CLK_TOP_SPI_SEL>,
-> +				 <&infracfg CLK_IFR_SPI0>;
-> +			clock-names = "parent-clk", "sel-clk", "spi-clk";
-> +			status = "disabled";
-> +		};
-> +
-> +		thermal: thermal@1100b000 {
-> +			compatible = "mediatek,mt8365-thermal";
-> +			reg = <0 0x1100b000 0 0x1000>;
-> +			interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&infracfg CLK_IFR_THERM>,
-> +				 <&infracfg CLK_IFR_AUXADC>;
-> +			clock-names = "therm", "auxadc";
-> +			mediatek,auxadc = <&auxadc>;
-> +			mediatek,apmixedsys = <&apmixedsys>;
-> +			nvmem-cells = <&thermal_calibration>;
-> +			nvmem-cell-names = "calibration-data";
-> +			#thermal-sensor-cells = <1>;
-> +		};
-> +
-> +		i2c3: i2c@1100f000 {
-> +			compatible = "mediatek,mt8365-i2c",
-> +				     "mediatek,mt8168-i2c";
-> +			reg = <0 0x1100f000 0 0xa0>,
-> +			      <0 0x11000200 0 0x80>;
-> +			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_LOW>;
-> +			clock-div = <1>;
-> +			clocks = <&infracfg CLK_IFR_I2C3_AXI>,
-> +				 <&infracfg CLK_IFR_AP_DMA>;
-> +			clock-names = "main", "dma";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +		};
-> +
-> +		ssusb: usb@11201000 {
-> +			compatible = "mediatek,mt8365-mtu3", "mediatek,mtu3";
-> +			reg = <0 0x11201000 0 0x2e00>,
-> +			      <0 0x11203e00 0 0x0100>;
-> +			reg-names = "mac", "ippc";
-> +			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_LOW>;
-> +			phys = <&u2port0 PHY_TYPE_USB2>,
-> +			       <&u2port1 PHY_TYPE_USB2>;
-> +			clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-> +				 <&infracfg CLK_IFR_SSUSB_REF>,
-> +				 <&infracfg CLK_IFR_SSUSB_SYS>,
-> +				 <&infracfg CLK_IFR_ICUSB>;
-> +			clock-names = "sys_ck", "ref_ck", "mcu_ck",
-> +				      "dma_ck";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			status = "disabled";
-> +
-> +			usb_host: usb@11200000 {
-> +				compatible = "mediatek,mt8365-xhci",
-> +					     "mediatek,mtk-xhci";
-> +				reg = <0 0x11200000 0 0x1000>;
-> +				reg-names = "mac";
-> +				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_LOW>;
-> +				clocks = <&topckgen CLK_TOP_SSUSB_TOP_CK_EN>,
-> +					 <&infracfg CLK_IFR_SSUSB_REF>,
-> +					 <&infracfg CLK_IFR_SSUSB_SYS>,
-> +					 <&infracfg CLK_IFR_ICUSB>,
-> +					 <&infracfg CLK_IFR_SSUSB_XHCI>;
-> +				clock-names = "sys_ck", "ref_ck", "mcu_ck",
-> +					      "dma_ck", "xhci_ck";
-> +				status = "disabled";
-> +			};
-> +		};
-> +
-> +		mmc0: mmc@11230000 {
-> +			compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11230000 0 0x1000>,
-> +			      <0 0x11cd0000 0 0x1000>;
-> +			interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&topckgen CLK_TOP_MSDC50_0_SEL>,
-> +				 <&infracfg CLK_IFR_MSDC0_HCLK>,
-> +				 <&infracfg CLK_IFR_MSDC0_SRC>;
-> +			clock-names = "source", "hclk", "source_cg";
-> +			status = "disabled";
-> +		};
-> +
-> +		mmc1: mmc@11240000 {
-> +			compatible = "mediatek,mt8365-mmc", "mediatek,mt8183-mmc";
-> +			reg = <0 0x11240000 0 0x1000>,
-> +			      <0 0x11c90000 0 0x1000>;
-> +			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_LOW>;
-> +			clocks = <&topckgen CLK_TOP_MSDC30_1_SEL>,
-> +				 <&infracfg CLK_IFR_MSDC1_HCLK>,
-> +				 <&infracfg CLK_IFR_MSDC1_SRC>;
-> +			clock-names = "source", "hclk", "source_cg";
-> +			status = "disabled";
-> +		};
-> +
-> +		ethernet: ethernet@112a0000 {
-> +			compatible = "mediatek,mt8365-eth";
-> +			reg = <0 0x112a0000 0 0x1000>;
-> +			mediatek,pericfg = <&infracfg>;
-> +			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&topckgen CLK_TOP_ETH_SEL>,
-> +				 <&infracfg CLK_IFR_NIC_AXI>,
-> +				 <&infracfg CLK_IFR_NIC_SLV_AXI>;
-> +			clock-names = "core", "reg", "trans";
-> +			status = "disabled";
-> +		};
-> +
-> +		mipi_tx0: dsi-phy@11c00000 {
-> +			compatible = "mediatek,mt8365-mipi-tx",
-> +				     "mediatek,mt8183-mipi-tx";
-> +			reg = <0 0x11c00000 0 0x800>;
-> +			clocks = <&clk26m>;
-> +			clock-names = "ref_clk";
-> +			#clock-cells = <0>;
-> +			#phy-cells = <0>;
-> +			clock-output-names = "mipi_tx0_pll";
-> +		};
-> +
-> +		efuse: efuse@11c50000 {
-> +			compatible = "mediatek,mt8365-efuse", "mediatek,efuse";
-> +			reg = <0 0x11c50000 0 0x1000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			thermal_calibration: calib@180 {
-> +				reg = <0x180 0xc>;
-> +			};
-> +		};
-> +
-> +		u3phy: t-phy@11cc0000 {
-
-Node names should be generic, so just phy
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +			compatible = "mediatek,mt8365-tphy",
-> +				     "mediatek,generic-tphy-v2";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			#phy-cells = <1>;
-> +			ranges;
-> +
-> +			u2port0: usb-phy@11cc0000 {
-> +				reg = <0 0x11cc0000 0 0x400>;
-> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
-> +				clock-names = "ref", "da_ref";
-> +				#phy-cells = <1>;
-> +			};
-> +
-> +			u2port1: usb-phy@11cc1000 {
-> +				reg = <0 0x11cc1000 0 0x400>;
-> +				clocks = <&topckgen CLK_TOP_SSUSB_PHY_CK_EN>,
-> +					 <&topckgen CLK_TOP_USB20_48M_EN>;
-> +				clock-names = "ref", "da_ref";
-> +				#phy-cells = <1>;
-> +			};
-> +		};
-> +
-> +		mfgcfg: syscon@13000000 {
-> +			compatible = "mediatek,mt8365-mfgcfg", "syscon";
-> +			reg = <0 0x13000000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		mmsys: syscon@14000000 {
-> +			compatible = "mediatek,mt8365-mmsys", "syscon";
-> +			reg = <0 0x14000000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		camsys: syscon@15000000 {
-> +			compatible = "mediatek,mt8365-imgsys", "syscon";
-> +			reg = <0 0x15000000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		vdecsys: syscon@16000000 {
-> +			compatible = "mediatek,mt8365-vdecsys", "syscon";
-> +			reg = <0 0x16000000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		vencsys: syscon@17000000 {
-> +			compatible = "mediatek,mt8365-vencsys", "syscon";
-> +			reg = <0 0x17000000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		apu: syscon@19020000 {
-> +			compatible = "mediatek,mt8365-apu", "syscon";
-> +			reg = <0 0x19020000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +	};
-> +
-> +	thermal-zones {
-> +		cpu_thermal: cpu-thermal {
-> +			polling-delay-passive = <1000>; /* milliseconds */
-> +			polling-delay = <1000>; /* milliseconds */
-> +			thermal-sensors = <&thermal 0>;
-> +
-> +			trips {
-> +				threshold: trip-point0 {
-> +					temperature = <95000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				target: trip-point1 {
-> +					temperature = <105000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				cpu_crit: cpu_crit0 {
-> +					temperature = <117000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&target>;
-> +					cooling-device =
-> +						<&cpu0
-> +						 THERMAL_NO_LIMIT
-> +						 THERMAL_NO_LIMIT>,
-> +						<&cpu1
-> +						 THERMAL_NO_LIMIT
-> +						 THERMAL_NO_LIMIT>,
-> +						<&cpu2
-> +						 THERMAL_NO_LIMIT
-> +						 THERMAL_NO_LIMIT>,
-> +						<&cpu3
-> +						 THERMAL_NO_LIMIT
-> +						 THERMAL_NO_LIMIT>;
-> +					contribution = <100>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +
-
-Only one blank line.
-
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupt-parent = <&gic>;
-> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW 0>,
-> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW 0>,
-> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW 0>,
-> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>;
-> +	};
-> +};
-
-Best regards,
-Krzysztof
-
+> 
+> This patch can be added in the serie to understood the detection mechanism.
+> 
+> 
+>>
+>>
+>>>
+>>>   drivers/nvmem/stm32-romem.c | 450 +++++++++++++++++++++++++++++++++++-
+>>>   1 file changed, 446 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
+>>> index 6de565639d5f..dfdedbcca9b9 100644
+>>> --- a/drivers/nvmem/stm32-romem.c
+>>> +++ b/drivers/nvmem/stm32-romem.c
+>>> @@ -11,6 +11,7 @@
+>>>   #include <linux/module.h>
+>>>   #include <linux/nvmem-provider.h>
+>>>   #include <linux/of_device.h>
+>>> +#include <linux/tee_drv.h>
+>>>     /* BSEC secure service access from non-secure */
+>>>   #define STM32_SMC_BSEC            0x82001003
+>>> @@ -25,14 +26,22 @@
+>>>   struct stm32_romem_cfg {
+>>>       int size;
+>>>       u8 lower;
+>>> +    bool ta;
+>>>   };
+>>>     struct stm32_romem_priv {
+>>>       void __iomem *base;
+>>>       struct nvmem_config cfg;
+>>>       u8 lower;
+>>> +    struct device *ta;
+>>>   };
+>>>   +struct device *stm32_bsec_pta_find(struct device *dev);
+>>> +static int stm32_bsec_pta_read(void *context, unsigned int offset, 
+>>> void *buf,
+>>> +                   size_t bytes);
+>>> +static int stm32_bsec_pta_write(void *context, unsigned int offset, 
+>>> void *buf,
+>>> +                size_t bytes);
+>>> +
+>>>   static int stm32_romem_read(void *context, unsigned int offset, 
+>>> void *buf,
+>>>                   size_t bytes)
+>>>   {
+>>> @@ -173,15 +182,25 @@ static int stm32_romem_probe(struct 
+>>> platform_device *pdev)
+>>>       } else {
+>>>           priv->cfg.size = cfg->size;
+>>>           priv->lower = cfg->lower;
+>>> -        priv->cfg.reg_read = stm32_bsec_read;
+>>> -        priv->cfg.reg_write = stm32_bsec_write;
+>>> +        if (cfg->ta) {
+>>> +            priv->ta = stm32_bsec_pta_find(dev);
+>>> +            /* wait for OP-TEE client driver to be up and ready */
+>>> +            if (!priv->ta)
+>>> +                return -EPROBE_DEFER;
+>>> +
+>>> +            priv->cfg.reg_read = stm32_bsec_pta_read;
+>>> +            priv->cfg.reg_write = stm32_bsec_pta_write;
+>>> +        } else {
+>>> +            priv->cfg.reg_read = stm32_bsec_read;
+>>> +            priv->cfg.reg_write = stm32_bsec_write;
+>>> +        }
+>>>       }
+>>>         return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &priv->cfg));
+>>>   }
+>>>     /*
+>>> - * STM32MP15 BSEC OTP regions: 4096 OTP bits (with 3072 effective bits)
+>>> + * STM32MP15/13 BSEC OTP regions: 4096 OTP bits (with 3072 effective 
+>>> bits)
+>>>    * => 96 x 32-bits data words
+>>>    * - Lower: 1K bits, 2:1 redundancy, incremental bit programming
+>>>    *   => 32 (x 32-bits) lower shadow registers = words 0 to 31
+>>> @@ -191,6 +210,13 @@ static int stm32_romem_probe(struct 
+>>> platform_device *pdev)
+>>>   static const struct stm32_romem_cfg stm32mp15_bsec_cfg = {
+>>>       .size = 384,
+>>>       .lower = 32,
+>>> +    .ta = false,
+>>> +};
+>>> +
+>>> +static const struct stm32_romem_cfg stm32mp13_bsec_cfg = {
+>>> +    .size = 384,
+>>> +    .lower = 32,
+>>> +    .ta = true,
+>>>   };
+>>>     static const struct of_device_id stm32_romem_of_match[] = {
+>>> @@ -198,6 +224,8 @@ static const struct of_device_id 
+>>> stm32_romem_of_match[] = {
+>>>           .compatible = "st,stm32mp15-bsec",
+>>>           .data = (void *)&stm32mp15_bsec_cfg,
+>>>       }, {
+>>> +        .compatible = "st,stm32mp13-bsec",
+>>> +        .data = (void *)&stm32mp13_bsec_cfg,
+>>
+>> missing sentinel, which caused a regression in next.
+> 
+> 
+> Ok, sorry for my error in the rebase conflict.
+> 
+> 
+> Patrick
+> 
+> 
+>>
+>>
+>> --srini
+>>>       },
+>>>   };
+>>>   MODULE_DEVICE_TABLE(of, stm32_romem_of_match);
+>>> @@ -209,7 +237,421 @@ static struct platform_driver 
+>>> stm32_romem_driver = {
+>>>           .of_match_table = of_match_ptr(stm32_romem_of_match),
+>>>       },
+>>>   };
+>>> -module_platform_driver(stm32_romem_driver);
+>>> +
+>>> +#if IS_ENABLED(CONFIG_OPTEE)
+>>>
+> ....
+> 
+> 
+>>> +
+>>> +module_init(stm32_romem_init);
+>>> +module_exit(stm32_romem_exit);
+>>>     MODULE_AUTHOR("Fabrice Gasnier <fabrice.gasnier@st.com>");
+>>>   MODULE_DESCRIPTION("STMicroelectronics STM32 RO-MEM");
