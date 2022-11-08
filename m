@@ -2,89 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D58621CFC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15244621CFE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:27:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiKHT1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 14:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S229834AbiKHT1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 14:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiKHT1a (ORCPT
+        with ESMTP id S229686AbiKHT1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 14:27:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D4F2228E;
-        Tue,  8 Nov 2022 11:27:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A3711CE1CA3;
-        Tue,  8 Nov 2022 19:27:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C38D7C433D6;
-        Tue,  8 Nov 2022 19:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667935645;
-        bh=rq7F0InOrMlwRw7encxZx6osS6nmIJqGkHa4eG3AHBs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Z70DYLiV/aCtv/CcfdJmewvu0TANLJLK+uksgfMpk0zXwUZsxRTN7BUr/g96lbZUN
-         5prjjCiRPv/q0twL04hzyOx+9c2IA6lGYzeHgMB7hqYLAmQfeI2LtqDhV2DjjNIw5T
-         kIZMVenm4AsmmFfdT5853m/vqRPpc/geTUtNWEhS4vTrmtAy+9RAZkMY7MiZItj+sO
-         7xkjP+3IzAFp22Q759nzXo83Pjaki9wvga8cDm1YO0Rgb+WdSMMxx8arp6VkAANN9L
-         adOXni8EJE2UuuYe5Dh0iP4Ylv+AmWSaGhlK4buTdwddRu1NgDYyc+3vuAPJCMpgIm
-         8TNqH7HrJvZ0w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3A6D65C1E87; Tue,  8 Nov 2022 11:27:24 -0800 (PST)
-Date:   Tue, 8 Nov 2022 11:27:24 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH printk v3 01/40] rcu: implement lockdep_rcu_enabled for
- !CONFIG_DEBUG_LOCK_ALLOC
-Message-ID: <20221108192724.GI3907045@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-2-john.ogness@linutronix.de>
- <20221107180157.GL28461@paulmck-ThinkPad-P17-Gen-1>
- <87h6za602y.fsf@jogness.linutronix.de>
+        Tue, 8 Nov 2022 14:27:51 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7962228E;
+        Tue,  8 Nov 2022 11:27:50 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id h10so10894284qvq.7;
+        Tue, 08 Nov 2022 11:27:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EF69t9SF3x61lH/czl++mmCOkbNRPl0mdOxYpEl0ZJY=;
+        b=i/R/UyK00fjhw0Gd1bgCB8+Wxb7ibJvCxm18utgoIFJt6d6GVhSv68rLdnzfFEHSnE
+         Nb7AHIHbmmlfl4WZr5eBaERoXudsUFgt+qOnT3k53Lr4F2gijlVOQmxNskxw9NBLiafX
+         DBajWxgwsPFzHwZlKOQUaHgcM2RO/J2RP/qFu5I0Y5yF6NDrlyeAwfid7Ft8Nup2Ca3d
+         YTa2fsoNFbbLhvlzNaWJX+EFUBsD/GuDXGF+ZU1U+C0Wp5GQJF7xySKPCHj/LFbs4JiW
+         6CrH4XhjdcxzDgnYhMKJo1v2o4dI7YpjeuLnoZHohABlyTa5wkmlWyo6qWetoGycZM4a
+         xptA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EF69t9SF3x61lH/czl++mmCOkbNRPl0mdOxYpEl0ZJY=;
+        b=jenCZ0BRS/8jVXy20qlJidBovky7btYPz03c6ZVWLXs/gc+RXicMCCMGPxO9GCVs2B
+         5Kqvayx8Iqb1dL/dz3PAUonGvp76D0FGX5NGBS3BFOtJBD09K81ZwDn0ZKm7+cUTXK47
+         vwHqT5fzUoD1K2ww/h6+LM6+L2IEza3h4Dx9QvRW6RTkEkny65/+o6CnJN1nCsAj2YYY
+         MXtuhV/yf8vLDkNpSSQ3bEzZCqSKFFFjkp8CPuzSw7/5fMQe3X931dhjDw0N/FdPkQuX
+         DRRhGYkpq02q+eo+J/YGhIiXycxQ2MfbTuFhzadEZHdZnQQpm22jpagal58SoXYij87Q
+         d5GA==
+X-Gm-Message-State: ACrzQf1G+mNVNY2NWOSjdjqpQ25POQTFRNy5fqqnvNbW8Z0crmuOzdgV
+        qP++/QzbvSKtJmfzPCPrFHs=
+X-Google-Smtp-Source: AMsMyM6BBm6ib7X3NTmbMzqQ4gCyTQwLwGpv9L8fijeutqCGsSZZ6bF7OzYf7J1Ecm+IRsyH/fafZw==
+X-Received: by 2002:a05:6214:76d:b0:4bb:e59a:17dc with SMTP id f13-20020a056214076d00b004bbe59a17dcmr47088968qvz.125.1667935669746;
+        Tue, 08 Nov 2022 11:27:49 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id u22-20020a05620a431600b006cfc01b4461sm9647505qko.118.2022.11.08.11.27.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 11:27:49 -0800 (PST)
+Message-ID: <682a9f6a-d8d0-8f73-b262-2d38c55bc4be@gmail.com>
+Date:   Tue, 8 Nov 2022 11:27:46 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87h6za602y.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 5.10 000/118] 5.10.154-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221108133340.718216105@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20221108133340.718216105@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 08:29:01PM +0106, John Ogness wrote:
-> On 2022-11-07, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> >> Provide an implementation for debug_lockdep_rcu_enabled() when
-> >> CONFIG_DEBUG_LOCK_ALLOC is not enabled. This allows code to check
-> >> if rcu lockdep debugging is available without needing an extra
-> >> check if CONFIG_DEBUG_LOCK_ALLOC is enabled.
-> >> 
-> >> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> >
-> > If you would like me to take this one, please let me know.
+
+
+On 11/8/2022 5:37 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.154 release.
+> There are 118 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Yes, it would be great if you would carry this in the rcu tree. This
-> printk series is already relying on the rcu tree for the NMI-safe
-> work. Thanks!
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Very good, I have queued it.  It is currently on -rcu branch "dev",
-but will find its way to srcunmisafe.2022.10.21a in the next day or two.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-							Thanx, Paul
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
