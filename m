@@ -2,160 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B545D6218F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A386218F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234618AbiKHQA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:00:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S234538AbiKHQBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234402AbiKHQA1 (ORCPT
+        with ESMTP id S233856AbiKHQBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:00:27 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823225B870
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:00:26 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id f7so23155702edc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:00:26 -0800 (PST)
+        Tue, 8 Nov 2022 11:01:10 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1161A380
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:01:09 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id x2so23193680edd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:01:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
-        b=C7OwW3FUJWQ9TsMP4XtJFWdFbq3CIFU6pSqTzLUuNeB55sqBurNd9+lK+4O64ax5nw
-         sLHuW2BZWPNwW/HcxRsLULIhKy0426zbG2SmHFYjzexcTd9nih+dAA6GOaJuqGPnIlJp
-         1nZOK9263PPnD7jUo2SElcu0BQprg/+ggeWhc9GM9gBFv6XxZxODbXJ1OOSJG0De8TjU
-         TFUI9lToIWmJ9FDoEL1WLfETPa3grArpG45+0E7aAGCcNp9vSy2/3HGJfReROVxd2Utw
-         XtSCF2zhCxlopPVvcacqaaSX4KJXfXQIedEUmZeOJLbdqt2wlmR4FMQ9nuaDqYZybzye
-         Bucw==
+        d=ffwll.ch; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Cs/tzdzMNxyrkME08FtkUJHq/5+jxAWtBxJkRKMVSo=;
+        b=dHv+YvRHsFfiWO1fcs6ArCsBbZg5HSKFkglygNPjpjWyGiX+AO7rYbXOpflkG3ytj8
+         AHXUF7uSRh6oI/nTEJ8wtEj8E8ByMHs2xSQKg2LmxY75hEbuvPhnKqp55Uodr4eWa9NS
+         B/j4Q2v082uFC1Z/Db8IXir8xe7g/nG97fdqc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
-        b=OrubbYdAaVAwQml34jVIl7UxOB3EgAaqXVRNtGnPC/Q2Xk8F6HHFCPB6MnLo8+Iytq
-         RO6ibrZbsDV0YNLoIMfj1eG6yRSREUrsgAUY3oTttgHRlx1NY0cD+wfOli28NmLbiJ64
-         uVFldxNmdlUxJbWB+PpLDiK73ZWYKDKRcQigYGxaY/PUbDGczZo6uxchMwjhjcXabCA0
-         yxGFwSclZJXkErvJBa0KfJSukCfocJ1sufA7h0tsUISH9cEbV9z6EB6p8tFixNE8gQl7
-         m2zhrZx5FU5LVQxMuob5ytenAs9eA9WaegY9f1hzibvhjj0upXzcnTqL3SfOa6HeqQ3W
-         +qow==
-X-Gm-Message-State: ACrzQf3RuDkXAYHefwriAsHjOSV78nyfV/uPHOhQB/eQPel3SuBEJNOt
-        nXjYo0CkO011NUKB1a2NEHqn+tfVM8epTYfhLZlWpw==
-X-Google-Smtp-Source: AMsMyM764Q6z1uaMrpLCjAMUVJWnIa32kDHXvdKz3wR3PYoFGk/3nY8ikLUuVdV2GstlG+PMkGKaZX23fir9c7kMHtY=
-X-Received: by 2002:a05:6402:386:b0:463:c43f:6628 with SMTP id
- o6-20020a056402038600b00463c43f6628mr39052165edv.53.1667923224985; Tue, 08
- Nov 2022 08:00:24 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Cs/tzdzMNxyrkME08FtkUJHq/5+jxAWtBxJkRKMVSo=;
+        b=zI+9+V2CW7UrSk5NkIB+FB3pNtJ6Eec49kPHeLtRCIcmuX2ahRh6GjkjKviLYuuLEu
+         Byw154m45vCrWkZCuHBDn4Ls234rIoGg7Rt4osRIqGEZW2OUIs/k6NDCD8wtguwuGZZb
+         gsgXEp/osKa6uPQmblMZjIuiJpNnnj0nU6OYNifc68dy2n7fiDXEY3S4fNL9E3kJn0DB
+         V7L1tGMrjkKyDgcMaz4nrMjdLZIadwiWYIEEPXni3EedkxCOKzy8B+E9PcBGChKxh1F1
+         nThGGn6mbAzqgUTHeL2uCb1+rv4l9y1aJ9ukJoHjLoQF5jVxCP3QLi28H2HrU0GYII1Q
+         m+ew==
+X-Gm-Message-State: ACrzQf1eL0rph//1QznINb7XfPaonvHqcIRRErCCKHJDXzKyWdQzygMC
+        Lpbo6ilI1UBn++ssBbM+pYj9gA==
+X-Google-Smtp-Source: AMsMyM7k84xE0Vp2RnScuP0vAATzQQr6nR48LmO1Cm0kWzxrLiFGrr13BA0xgcGf9RCJ0A2oQf8TEg==
+X-Received: by 2002:aa7:cb59:0:b0:461:7378:7be0 with SMTP id w25-20020aa7cb59000000b0046173787be0mr56905949edt.60.1667923267738;
+        Tue, 08 Nov 2022 08:01:07 -0800 (PST)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1709063d2200b0076ff600bf2csm4832601ejf.63.2022.11.08.08.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 08:01:07 -0800 (PST)
+Date:   Tue, 8 Nov 2022 17:01:05 +0100
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>
+Cc:     Melissa Wen <mwen@igalia.com>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        "Juan A . Suarez" <jasuarez@igalia.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] drm/v3d: add missing mutex_destroy
+Message-ID: <Y2p9QX2r+0MoY1+C@phenom.ffwll.local>
+Mail-Followup-To: =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
+        Melissa Wen <mwen@igalia.com>, Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@gmail.com>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        "Juan A . Suarez" <jasuarez@igalia.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221107224656.278135-1-mcanal@igalia.com>
+ <20221107224656.278135-3-mcanal@igalia.com>
 MIME-Version: 1.0
-References: <20221103145353.3049303-1-usama.anjum@collabora.com>
- <20221103145353.3049303-3-usama.anjum@collabora.com> <CABb0KFFaYZG62TS+iM3Y92+hDyB35XR8dTX-5hDgWrXCcDQx7Q@mail.gmail.com>
- <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
-In-Reply-To: <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Tue, 8 Nov 2022 17:00:14 +0100
-Message-ID: <CABb0KFGbhM8V6qeDEzq7Lc_3cseScbK3zvfLndRdJfLstTO=2g@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221107224656.278135-3-mcanal@igalia.com>
+X-Operating-System: Linux phenom 5.19.0-2-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 at 15:25, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
->
-> Hi Micha=C5=82,
->
-> Thank you so much for reviewing.
->
-> On 11/7/22 5:26 PM, Micha=C5=82 Miros=C5=82aw wrote:
-> >> +
-> >> +/*
-> >> + * struct page_region - Page region with bitmap flags
-> >> + * @start:     Start of the region
-> >> + * @len:       Length of the region
-> >> + * bitmap:     Bits sets for the region
-> >> + */
-> >> +struct page_region {
-> >> +       __u64 start;
-> >> +       __u64 len;
-> >> +       __u32 bitmap;
-> >> +       __u32 __reserved;
-> >
-> > "u64 flags"? If an extension is needed it would already require a new
-> > ioctl or something in the `arg` struct.
-> I feel like the masks must have the same type as this bitmap variable as
-> the return_mask specifies the flags to be returned in bitmap. All the
-> masks are of type __u32. This is why I'd kept the bitmap of type _u32 as
-> well. I've kept them of 32 bit size as currently we are adding support
-> for 4 flags and there is still room to add 28 more bits in the future.
-> Do you still think that I should update the masks and bitmap to _u64?
+On Mon, Nov 07, 2022 at 07:46:56PM -0300, Maíra Canal wrote:
+> v3d_perfmon_open_file() instantiates a mutex for a particular file
+> instance, but it never destroys it by calling mutex_destroy() in
+> v3d_perfmon_close_file().
+> 
+> Similarly, v3d_perfmon_create_ioctl() instantiates a mutex for a
+> particular perfmon, but it never destroys it by calling mutex_destroy()
+> in v3d_perfmon_destroy_ioctl().
+> 
+> So, add the missing mutex_destroy on both cases.
+> 
+> Signed-off-by: Maíra Canal <mcanal@igalia.com>
+> ---
+>  drivers/gpu/drm/v3d/v3d_perfmon.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/v3d/v3d_perfmon.c b/drivers/gpu/drm/v3d/v3d_perfmon.c
+> index 48aaaa972c49..292c73544255 100644
+> --- a/drivers/gpu/drm/v3d/v3d_perfmon.c
+> +++ b/drivers/gpu/drm/v3d/v3d_perfmon.c
+> @@ -113,6 +113,7 @@ void v3d_perfmon_close_file(struct v3d_file_priv *v3d_priv)
+>  	idr_for_each(&v3d_priv->perfmon.idr, v3d_perfmon_idr_del, NULL);
+>  	idr_destroy(&v3d_priv->perfmon.idr);
+>  	mutex_unlock(&v3d_priv->perfmon.lock);
+> +	mutex_destroy(&v3d_priv->perfmon.lock);
+>  }
+>  
+>  int v3d_perfmon_create_ioctl(struct drm_device *dev, void *data,
+> @@ -177,6 +178,7 @@ int v3d_perfmon_destroy_ioctl(struct drm_device *dev, void *data,
+>  	if (!perfmon)
+>  		return -EINVAL;
+>  
+> +	mutex_destroy(&perfmon->lock);
 
-I agree that the `bitmap` (I'd rather call it `flags` though) should
-have the type matching the masks in the request. But the size I'm not
-sure about if u32 is enough compared to what is used (or will be in
-the future) for page flags in MM code. I suppose the ioctl() is not
-expected to be a fast path, so I would go with u64 and assume that
-overhead of the extra bytes read by the kernel won't matter.
+This one looks wrong, I think this should be put into v3d_perfmon_put.
+There is also an error case in v3d_perfmon_create_ioctl() that I think you
+missed, right above the kfree(perfmon).
 
-> >> + * @start:             Starting address of the region
-> >> + * @len:               Length of the region (All the pages in this le=
-ngth are included)
-> >> + * @vec:               Address of page_region struct array for output
-> >> + * @vec_len:           Length of the page_region struct array
-> >> + * @max_pages:         Optional max return pages (It must be less tha=
-n vec_len if specified)
-> >
-> > I think we discussed that this is not counting the same things as
-> > vec_len, so there should not be a reference between the two. The limit
-> > is whatever fits under both conditions (IOW: n_vecs <=3D vec_len &&
-> > (!max_pages || n_pages <=3D max_pages).
-> In worse case when pages cannot be folded into the page_region, the one
-> page_region may have information of only one page. This is why I've
-> compared them. I want to communicate to the user that if max_pages is
-> used, the vec_len should be of equal or greater size (to cater worse
-> case which can happen at any time). Otherwise in worse case, the api can
-> return without finding the max_pages number of pages. I don't know how
-> should I put this in the comment.
+With these two fixes this is Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-I'm not sure you need to, as this conclusion follows from the range vs
-page distinction.
-A user who wants to cater for the worst case will provide big-enough
-`vec` array, but another, who might be memory-constrained, could
-instead just retry the call with `start` updated to just after the
-last returned page until the ioctl() returns less ranges than
-`vec_len` allows.
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+>  	v3d_perfmon_put(perfmon);
+>  
+>  	return 0;
+> -- 
+> 2.38.1
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
