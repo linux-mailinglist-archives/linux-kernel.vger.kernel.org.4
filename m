@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6BC621D00
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA67621D03
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 20:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKHT2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 14:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
+        id S229537AbiKHT3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 14:29:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKHT2o (ORCPT
+        with ESMTP id S229447AbiKHT3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 14:28:44 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708F7193F8;
-        Tue,  8 Nov 2022 11:28:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667935713;
-    s=strato-dkim-0002; d=iokpp.de;
-    h=References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=XAL3s5j75Kq2jhzOQEusmr7a0Cgo2qohGoilcfq/xf4=;
-    b=cHbVnCCXWcwfxWCZlcbKF7m6KfX+30BGIYu6AlrzTHjHMRV7PKTJppFo9ZgCEfblhO
-    C3NFauFyawmgV8mwoD6BUaYnwAb2Z2eAHf+GUv8lghmCk7jvzVmJ8jCxd26GLSqPQW5V
-    I5f/zSy4AeLk4kbwfnnqVK2KKJgRPdnu3iaJejnyFxwIDPhp0zeSA/AxOmnnD2HuhZyS
-    2rT8O4VQQibM7y8aYLMyxYTEkhAIXlQ+zkA0KMCAvLYXrd3Ui9+y0pV7Rz1E2Y+b48vB
-    LoiNxyxA/V+CvwyGvcaQl73RQsY/7fV5mq7p3PlX7Ca0S4XKep6rTRd9vh4RRBMW3Pop
-    tkSg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSeBwhhSxarlUcu05JCAPyj3VPAceccYJs0uz"
-X-RZG-CLASS-ID: mo00
-Received: from blinux
-    by smtp.strato.de (RZmta 48.2.1 AUTH)
-    with ESMTPSA id z9cfbfyA8JSUpIh
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 8 Nov 2022 20:28:30 +0100 (CET)
-Message-ID: <fa3905bff8ba47b0ed45f9221dd1d033ca553179.camel@iokpp.de>
-Subject: Re: [RFC PATCH v1 2/2] ufs: core: Add advanced RPMB support in
- ufs_bsg
-From:   Bean Huo <beanhuo@iokpp.de>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "daejun7.park@samsung.com" <daejun7.park@samsung.com>,
-        "quic_cang@quicinc.com" <quic_cang@quicinc.com>,
-        "quic_nguyenb@quicinc.com" <quic_nguyenb@quicinc.com>,
-        "quic_xiaosenh@quicinc.com" <quic_xiaosenh@quicinc.com>,
-        "quic_richardp@quicinc.com" <quic_richardp@quicinc.com>,
-        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
-        "hare@suse.de" <hare@suse.de>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 08 Nov 2022 20:28:29 +0100
-In-Reply-To: <DM6PR04MB657518129522996B2B5C9640FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
-References: <20221107131038.201724-1-beanhuo@iokpp.de>
-         <20221107131038.201724-3-beanhuo@iokpp.de>
-         <DM6PR04MB657518129522996B2B5C9640FC3F9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 8 Nov 2022 14:29:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EAF62E9;
+        Tue,  8 Nov 2022 11:29:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 214EF6175D;
+        Tue,  8 Nov 2022 19:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54715C433D6;
+        Tue,  8 Nov 2022 19:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667935751;
+        bh=nG53Ngx8dZxQ0QPTeQv9gyI7E0KrRpZ8mTEGFAPa2Bc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CQG4SOZWhO7Jaszq6PVDU7ix/7bZ7v8dy1GPwsNtoN/+u2l4CRoEO9BoBVBxntrT5
+         5LH6IZjVnaxhnJLlILQn8+aMX7U1+RSlyWYzBWQ94BuDZWwgEyPgCdtGgngP6HcnzA
+         yRbEvaZR+F97w5exFjB7jiNUcPHXUHZRBlPuzwSOOGBYFFB79JydSERhKWJYPHsymt
+         mNt0s5CtcsNKVDhuqZs+0LG2LRTjfDKwh/81rUNhjs4lYJQD1Qlmai/w0NZ7wLVFdI
+         OqU+mM8pliwA9ehKOS1qQAw4nNmKiBGuzDMTOMeca1MK06ZSXfydY7I/PiZsYadz0F
+         hg6qZF/XhPo2g==
+Date:   Tue, 8 Nov 2022 19:29:04 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v5 0/7] Add support for Renesas RZ/Five SoC
+Message-ID: <Y2quAB1zSGAvOFzD@spud>
+References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y17BWPuEcmY7Bba3@spud>
+ <CA+V-a8uKQ8QvYi5qLC9O=QAQN5CxNB7cOTmw4vk+ndB2R8d3nQ@mail.gmail.com>
+ <Y17+pHAg/SBJAEXq@spud>
+ <CA+V-a8t-niCHSWo_CSRSkPS4ND12DAkiwxWxOM1vNn=oBKKd_w@mail.gmail.com>
+ <CA+V-a8utoDSKcZFdtJ0BKwvPfcvf0WVH2Va-Fv_-pKC1FOOVsQ@mail.gmail.com>
+ <Y2lLpCRpTQL+0dsR@spud>
+ <CAMuHMdXjZGTNM7pUqxwXd08bjuPEFUuUwKFGx01FVCqOGnc6hQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdXjZGTNM7pUqxwXd08bjuPEFUuUwKFGx01FVCqOGnc6hQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avri, 
-thanks for your comments and review.
+On Tue, Nov 08, 2022 at 05:02:57PM +0100, Geert Uytterhoeven wrote:
+> Hi Conor,
+> On Mon, Nov 7, 2022 at 7:17 PM Conor Dooley <conor@kernel.org> wrote:
+> > Geert, are you waiting for an ack from Palmer?
+> 
+> I can take:
+>   - [PATCH v5 4/7] riscv: dts: renesas: Add initial devicetree for
+> Renesas RZ/Five SoC
+>   - [PATCH v5 5/7] riscv: dts: renesas: Add minimal DTS for Renesas
+> RZ/Five SMARC EVK
+>   - [PATCH v5 6/7] MAINTAINERS: Add entry for Renesas RISC-V
+> (4/7 and 5/7 depend on my renesas-arm-dt-for-v6.2 branch) and funnel
+> them to the SoC-people.
+> 
+> I can take
+>   - [PATCH v5 3/7] riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
+>   - [PATCH v5 7/7] riscv: configs: defconfig: Enable Renesas RZ/Five SoC
+> with an ack from Palmer.
+> 
+> The rest
+>   - [PATCH v5 1/7] dt-bindings: riscv: Sort the CPU core list alphabetically
+>   - [PATCH v5 2/7] dt-bindings: riscv: Add Andes AX45MP core to the list
+> should probably go through the riscv tree, to avoid merge conflicts
+> when support for other SoCs is added?
 
+Or depending on the outcome of [0], maybe I take the dt-binding stuff?
 
-On Tue, 2022-11-08 at 19:09 +0000, Avri Altman wrote:
-> > Add advanced RPMB support in ufs_bsg. For these reasons, we try to
-> > implement Advanced RPMB in ufs_bsg:
-> > 1. According to the UFS specification, only one RPMB operation can
-> > be
-> > performed at any time. We can ensure this by using reserved slot
-> > and its
-> > dev_cmd sync operation protection mechanism.
-> 
-> Regardless of its technical convenience, this approach unfortunately
-> breaks the spec.
-> 
-> The spec say (please note the line numbers):
-> 
-> ".....
-> 
-> 5197 12.4.5.1 Advanced RPMB Message
-> 
-> 5198 An Advanced RPMB Message is composed of an Advanced RPMB Meta
-> Information and a MAC/KEY in
-> 
-> 5199 the EHS field in *COMMAND UPIU* and *RESPONSE UPIU*. Advanced
-> RPMB Data is delivered through
-> 
-> ....."
+Either way, looks like an ack from Palmer is needed for 3 & 7. I can do
+the video call version of a ping on that tomorrow at the pw sync thing.
 
-> Moreover, in the examples that are provided, it is still expected to
-> be carried via SECURITY PROTOCOL IN and SECURITY PROTOCOL OUT,
-> 
-> See e.g. Figure 12.15 — Authenticated Data Write Flow (in Advanced
-> RPMB Mode).
-> 
-> 
-not quite get what you meant here.
-> 
-
-> 
-> Therefore, wrapping the rpmb packets in a query-request upiu and
-> query-response upiu is not allowed.
-> 
-> 
-
-no, I didn't wrap RPMB packet in query-request/response, it is inupiu_req and upiu_rsp, it is upiu command. Based on Bart's suggestion,
-we shouldn't change the current ufs_bsg structure. I think his concern
-is that if we change ufs_bsg structure, the user space tool also
-needs to change as well. 
-
-> 
-> Still, I agree that the approach you suggested, namely to rely on the
-> ufs-bsg driver, is the cleanest way to handle the advance rpmb
-> access.
-> 
-> However, IMHO, you need to do it is by adding command UPIU to the
-> ufs-bsg driver.
-> 
-> 
-
-Yes, agree with you on this point. But we still need to use reserved
-slots for RPMB or command UPIU, we don't want to affect IO requests on
-the normal path.
-
-One problem is that we didn't split the dev_manage command and the RPMB
-command in their completion handlers. I would like to change dev_man to
-passthrough or something else, and then split dev_man and RPMB,
-otherwise, they would be mixed in one dev_man completion handler. No
-technical issues here, just want to make it more readable and
-maintainable.
-
-
-
-Kind regards,
-Bean
-
-> 
-> Thanks,
-> 
-> Avri
-
+[0] - https://lore.kernel.org/linux-riscv/Y2puchRvbo6+YJSy@wendy/T/#me49f1e779dee210d3ab6fc4bc308dbaed036e1a8
