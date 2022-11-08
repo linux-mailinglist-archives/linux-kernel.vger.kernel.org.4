@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C3A6217F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C02306217EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbiKHPSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S234471AbiKHPSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:18:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234567AbiKHPSU (ORCPT
+        with ESMTP id S233436AbiKHPSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:18:20 -0500
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B872C5F847;
-        Tue,  8 Nov 2022 07:17:24 -0800 (PST)
-Date:   Tue, 8 Nov 2022 23:16:59 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667920642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ofc1K6fag3Hze+EjFjV0OZRiW9SfH6RvaP2AiG/EVsg=;
-        b=XXKhV3HRUopPUkPt/xgSFdDneCnT5ZCXZ0Ao0fRfRONhMMiXMcKWcmwsfkO4Zhy6fFm7JL
-        8vLre5/4jhNGmxdnbBCaOe5DYId+6VhMnar/CaGUHlp8cO+jQ1RefMY6X7mmlfEyXEq3tA
-        VICR4QtY6mIqt1lbdo9G9dGv/uciu6U=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Wu XiangCheng <wu.xiangcheng@linux.dev>
-To:     Yanteng Si <siyanteng@loongson.cn>
-Cc:     Rui Li <me@lirui.org>, Alex Shi <alexs@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] docs/zh_CN: Add userspace-api/seccomp_filter Chinese
- translation
-Message-ID: <Y2py67n+RMetFVn8@bobwxc.mipc>
-References: <20221108112921.312071-1-me@lirui.org>
- <2337a1af-5f8b-602e-f989-351a371387a1@loongson.cn>
+        Tue, 8 Nov 2022 10:18:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD325E3F0
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 07:17:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B036B81ACB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 15:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56848C433C1;
+        Tue,  8 Nov 2022 15:17:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667920630;
+        bh=X/TsswHOqHKp8413KVgyA0sdzCNAqy6BNPALW3AUwjk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IZqHf5MaHCqWEFmI1oLVApLkDBt+aWoI77q7s5nconquu8YR1Rhzcb9r5MDynGLYZ
+         wW/yZpiyQqdYkn8EpAiNy6jgcRvdcdUsY25nDtsYhi2jFefkN5sHW/HY91I+gm9dj+
+         bXOt68rK7POsjyKVfIQ1cz529a4xowdtuuPPRSIs=
+Date:   Tue, 8 Nov 2022 16:17:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] staging: vt6655: change the function name
+ s_vFillRTSHead
+Message-ID: <Y2py83KhnWSSlX2W@kroah.com>
+References: <Y2QTON8cjU/D0GqO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2337a1af-5f8b-602e-f989-351a371387a1@loongson.cn>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2QTON8cjU/D0GqO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-11-08 (二) 21:02:15 +0800 Yanteng Si 曰：
+On Thu, Nov 03, 2022 at 07:15:04PM +0000, Tanjuate Brunostar wrote:
+> Remove the use of Hungarian notation, which is not used in the Linux
+> kernel. Reported by checkpatch
 > 
-> On 11/8/22 19:29, Rui Li wrote:
-> > Translate the following documents into Chinese:
-> > 
-> > - userspace-api/seccomp_filter.rst
-> > 
-> > Also adjust index order according to the original index file.
-> > 
-> > Signed-off-by: Rui Li <me@lirui.org>
+> Add indentation to the affected function headers to follow the Linux
+> kernel coding style
 > 
-> Miss Xiangcheng's Review tag.
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> ---
+> 
+> v2: corrected confusing changlog message on this patch
+> 
+>  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
+>  1 file changed, 22 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 31ae99b3cb35..debc5d5daede 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -23,7 +23,7 @@
+>   *      s_uGetTxRsvTime- get frame reserved time
+>   *      s_vFillCTSHead- fulfill CTS ctl header
+>   *      s_vFillFragParameter- Set fragment ctl parameter.
+> - *      s_vFillRTSHead- fulfill RTS ctl header
+> + *      fill_rts_header- fulfill RTS ctl header
+>   *      s_vFillTxKey- fulfill tx encrypt key
+>   *      s_vSWencryption- Software encrypt header
+>   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+>  #define DATADUR_A_F1    13
+>  
+>  /*---------------------  Static Functions  --------------------------*/
+> -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> -			   unsigned char byPktType,
+> -			   void *pvRTS,
+> -			   unsigned int	cbFrameLength,
+> -			   bool bNeedAck,
+> -			   bool bDisCRC,
+> -			   struct ieee80211_hdr *hdr,
+> -			   unsigned short wCurrentRate,
+> -			   unsigned char byFBOption);
+> +static void fill_rts_header(struct vnt_private *pDevice,
+> +			    unsigned char byPktType,
+> +			    void *pvRTS,
+> +			    unsigned int cbFrameLength,
+> +			    bool bNeedAck,
+> +			    bool bDisCRC,
+> +			    struct ieee80211_hdr *hdr,
+> +			    unsigned short wCurrentRate,
+> +			    unsigned char byFBOption);
+>  
 
-Simply give it again,
+Again, this function prototype is not needed, please drop it.
 
-Reviewed-by: Wu XiangCheng <bobwxc@email.cn>
+thanks,
 
-> 
-> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
-> 
-> 
-> Thanks,
-> 
-> Yanteng
-> 
-> > ---
-> > Changes since v3:
-> > - Improve translation.
-> > 
-> > Changes since v2:
-> > - Fix some typo.
-> > 
-> > Changes since v1:
-> > - Add a note for Seccomp.
-> > - Fix some typo.
-> > ---
-> >   .../zh_CN/userspace-api/index.rst             |   4 +-
-> >   .../zh_CN/userspace-api/seccomp_filter.rst    | 293 ++++++++++++++++++
-> >   2 files changed, 295 insertions(+), 2 deletions(-)
-> >   create mode 100644 Documentation/translations/zh_CN/userspace-api/seccomp_filter.rst
-> > 
-
--- 
-Wu XiangCheng	0x32684A40BCA7AEA7
-
+greg k-h
