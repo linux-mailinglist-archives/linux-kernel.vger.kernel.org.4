@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0DB62103C
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300F062103F
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 13:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234099AbiKHMUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 07:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
+        id S234148AbiKHMUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 07:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbiKHMUD (ORCPT
+        with ESMTP id S233763AbiKHMUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 07:20:03 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282E313F1A;
-        Tue,  8 Nov 2022 04:20:02 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1osNaA-0000q6-9s; Tue, 08 Nov 2022 13:19:58 +0100
-Message-ID: <76b09d3a-fe10-74b3-40a0-1aaa75b70ba6@leemhuis.info>
-Date:   Tue, 8 Nov 2022 13:19:57 +0100
+        Tue, 8 Nov 2022 07:20:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ECA13EBE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 04:20:04 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0721D22496;
+        Tue,  8 Nov 2022 12:20:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667910003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i1ez2b6nAQxv47XY59j1FdNBLhiUKsk/XyDIZANCyJ8=;
+        b=d4559rvDxPe5Htwb6TY0SZPRJzbDJuF5S010XBtRDy6EcdS2Ql7YhZo3cygnXWixx9hV63
+        OCkn2gKJtdQd2kn5L1Hvw3P4AehroWYfwfY6jtj1ZFUgdNwF8kllf8LFjaeIkVSpTf3dNX
+        S5fHX+FTg2wWTt+jd7o0scnSnSt/nvw=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DD5C82C142;
+        Tue,  8 Nov 2022 12:20:02 +0000 (UTC)
+Date:   Tue, 8 Nov 2022 13:20:02 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v3 05/40] printk: fix setting first seq for
+ consoles
+Message-ID: <Y2pJcoCD2mN5SUfH@alley>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-6-john.ogness@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [Possible BUG] arm64: efi: efi_runtime_fixup_exception() and
- efi_call_virt_check_flags() both taint the kernel #forregzbot
-Content-Language: en-US, de-DE
-To:     linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <Y2lAB508TrrjpDPi@monolith.localdoman>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <Y2lAB508TrrjpDPi@monolith.localdoman>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1667910002;f2c334a3;
-X-HE-SMSGID: 1osNaA-0000q6-9s
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107141638.3790965-6-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
-
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
-
-Hi, this is your Linux kernel regression tracker.
-
-On 07.11.22 18:27, Alexandru Elisei wrote:
-> I'm going to preface this by saying that I'm extremely unfamiliar with the
-> EFI code.
+On Mon 2022-11-07 15:22:03, John Ogness wrote:
+> It used to be that all consoles were synchronized with respect to
+> which message they were printing. After commit a699449bb13b ("printk:
+> refactor and rework printing logic"), all consoles have their own
+> @seq for tracking which message they are on. That commit also changed
+> how the initial sequence number was chosen. Instead of choosing the
+> next non-printed message, it chose the sequence number of the next
+> message that will be added to the ringbuffer.
 > 
-> Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
-> possible") skipped the call to SetVirtualAddressMap() for certain
-> configurations, and that started causing kernel panics on an Ampere Altra
-> machine due to an EFI synchronous exception.
+> That change created a possibility that a non-boot console taking over
+> for a boot console might skip messages if the boot console was behind
+> and did not have a chance to catch up before being unregistered.
 > 
-> Commit 23715a26c8d8 ("arm64: efi: Recover from synchronous exceptions
-> occurring in firmware") made the EFI exception non-fatal.
+> Since it is not possible to know which boot console a console is
+> taking over, use the lowest @seq of all the enabled boot consoles. If
+> no boot consoles are available/enabled, begin with the next message
+> that will be added to the ringbuffer.
+> 
+> Also, since boot consoles are meant to be used at boot time, handle
+> them the same as CON_PRINTBUFFER to ensure that no initial messages
+> are skipped.
+> 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-#regzbot ^introduced d3549a938b73
-#regzbot title efi: arm64: updating the firmware is not feasible anymore
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+Best Regards,
+Petr
