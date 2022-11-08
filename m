@@ -2,102 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFB1621F46
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1817B621F4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 23:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbiKHWaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 17:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S229488AbiKHWao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 17:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKHW3y (ORCPT
+        with ESMTP id S230341AbiKHWaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 17:29:54 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7535E1EAFF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 14:29:18 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id i3so15018215pfc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 14:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Iw8zQOSB1EwwYJkuWC4Gw7hpw4rYDWi3Hqzc/4Lbh7o=;
-        b=PFGSZkKXJsa9OpJcwbSIHAaZ6KpHJxR+nJWtR8ZzOvaqJFwd4WjV4oy3liidEisi6c
-         v/pLIu99kKO/mutfZ2CRE+mSUypBKGiIEC6eM/FebisrMsxbdMOOICIxMOzscdBLOnD/
-         tqVFDymlA/o7qQG/MQcxmDSFgnqruT8vf0qdNZSfSnh/MmGOzxu440dZdM9+6eCL2/im
-         QxPRiepYMMGADwe8+bNVRdz9FZ8Fa+bN1GHAQ9QkVYXLOrccMMl++kxdyCsalDuw6P7U
-         kVe538dbI3Yozmpl6x/6QfJdxKcXtUeM5UGLyTeE2hE2Tnt0MVh9taquUqhh8GSnWc0q
-         6zzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iw8zQOSB1EwwYJkuWC4Gw7hpw4rYDWi3Hqzc/4Lbh7o=;
-        b=DqndlOBiY4zHJ1dzSH6sgpTXnJzBEnEgX91aEjhigw5AGl5X+hdIVm9I6aCc84J6Xr
-         +BdQw+BIpiNxf3NLt0Lpkd8+A5R4fdp92SYVuZRAhC/rDQ3P6/aVoJS29lHDM6y3DqkH
-         OYjFAkvjsu9VmXcIPe8P2bHrnqHyuUMF4mEYWnKMnyg50y6rlvCgUzrQKUBFLojVWIz0
-         /GlOiHUwzmnfrlGVXtXdz4fofvfuV534Faj4PnXzxte5ZatFCZD566nKhvnzoefwSl0N
-         JVuxp4Aw295O5qC9x2yj9/fJrvrl4xzkfw8sjIb/ySLeVl0JogVbTkkMCG46AsZMy6U+
-         rsXg==
-X-Gm-Message-State: ACrzQf0MmKZ0873IINw4pvgD4v+U2gpLxItDpMnJaRjKWSBKWbJ3m8se
-        3tnLNE/Phx8pBgqfro5imow4aw==
-X-Google-Smtp-Source: AMsMyM4EsHIPPFFrmKQJyvx12tsoJWdaa1o+pwBSqtRTUKdav2i1ILnHBR5mof/tvTh//YKJsW4Tog==
-X-Received: by 2002:a63:85c8:0:b0:46f:5bbb:737f with SMTP id u191-20020a6385c8000000b0046f5bbb737fmr51097348pgd.93.1667946557870;
-        Tue, 08 Nov 2022 14:29:17 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ik12-20020a170902ab0c00b00187197c499asm7504411plb.164.2022.11.08.14.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 14:29:17 -0800 (PST)
-Message-ID: <33832500-ddf3-dc2b-a765-046d46031991@kernel.dk>
-Date:   Tue, 8 Nov 2022 15:29:16 -0700
+        Tue, 8 Nov 2022 17:30:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFD051C00;
+        Tue,  8 Nov 2022 14:29:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E623617A3;
+        Tue,  8 Nov 2022 22:29:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F00BC433D6;
+        Tue,  8 Nov 2022 22:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667946586;
+        bh=BqvLW4jV5m1Bw96AoPI7MuAfx2h0xX+8YgylNPLrHPk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ALUXgK44ZlDy0Hq1JR65VSfRXW0YJEhV1L57HIyNALpCiXaedEt2EiQIlXZmytvMb
+         P7KANRx4MVmAgcYLibZnaI5nYHBpVk9QtRmCsvE9qS/CJENQCoiA9aZNGIfIAJqhbS
+         WFVnSh93jYn4RmX8alKaebzoNU+3ufrs0YNhbHM5YwRrMs5EavX/r0BApua83/yLtR
+         LBl+98l5WSe47pbVmTJO28XR/UYFQTAXhoGXvZAfi02qqqC3aJqNUA9/ScmgNgRakW
+         u6BRMgp6+LGEg+tsO8qj+09+uIhXGUMf260kQLjH6p89Q5PYLIbo9BlRgSAh1FI2Di
+         hAt+MWp3lOSBw==
+Date:   Tue, 8 Nov 2022 16:29:44 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Nathan Rossi <nathan@nathanrossi.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH] PCI/ASPM: Wait for data link active after retraining
+Message-ID: <20221108222944.GA504625@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 6/6] eventpoll: add support for min-wait
-Content-Language: en-US
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Soheil Hassas Yeganeh <soheil@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>
-References: <20221030220203.31210-1-axboe@kernel.dk>
- <20221030220203.31210-7-axboe@kernel.dk> <Y2rUsi5yrhDZYpf/@google.com>
- <4764dcbf-c735-bbe2-b60e-b64c789ffbe6@kernel.dk>
- <CA+FuTSdawNGXhW0DEf0-R6--1bDh7qByO=ViD_h=BfRe3XaFkw@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CA+FuTSdawNGXhW0DEf0-R6--1bDh7qByO=ViD_h=BfRe3XaFkw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220602065544.2552771-1-nathan@nathanrossi.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 3:25 PM, Willem de Bruijn wrote:
->>> This would be similar to the approach that willemb@google.com used
->>> when introducing epoll_pwait2.
->>
->> I have, see other replies in this thread, notably the ones with Stefan
->> today. Happy to do that, and my current branch does split out the ctl
->> addition from the meat of the min_wait support for this reason. Can't
->> seem to find a great way to do it, as we'd need to move to a struct
->> argument for this as epoll_pwait2() is already at max arguments for a
->> syscall. Suggestions more than welcome.
+On Thu, Jun 02, 2022 at 06:55:44AM +0000, Nathan Rossi wrote:
+> From: Nathan Rossi <nathan.rossi@digi.com>
 > 
-> Expect an array of two timespecs as fourth argument?
+> When retraining the link either the child or the parent device may have
+> the data link layer state machine of the respective devices move out of
+> the active state despite the physical link training being completed.
+> Depending on how long is takes for the devices to return to the active
+> state, the device may not be ready and any further reads/writes to the
+> device can fail.
+> 
+> This issue is present with the pci-mvebu controller paired with a device
+> supporting ASPM but without advertising the Slot Clock, where during
+> boot the pcie_aspm_cap_init call would cause common clocks to be made
+> consistent and then retrain the link. However the data link layer would
+> not be active before any device initialization (e.g. ASPM capability
+> queries, BAR configuration) causing improper configuration of the device
+> without error.
+> 
+> To ensure the child device is accessible, after the link retraining use
+> pcie_wait_for_link to perform the associated state checks and any needed
+> delays.
+> 
+> Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> ---
+>  drivers/pci/pcie/aspm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index a96b7424c9..4b8a1810be 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -288,7 +288,8 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
+>  		reg16 &= ~PCI_EXP_LNKCTL_CCC;
+>  	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
+>  
+> -	if (pcie_retrain_link(link))
+> +	/* Retrain link and then wait for the link to become active */
+> +	if (pcie_retrain_link(link) && pcie_wait_for_link(parent, true))
 
-Unfortunately even epoll_pwait2() doesn't have any kind of flags
-argument to be able to do tricks like that... But I guess we could do
-that with epoll_pwait3(), but it'd be an extra indirection for the copy
-at that point (copy array of pointers, copy pointer if not NULL), which
-would be unfortunate. I'd hate to have to argue that API to anyone, let
-alone Linus, when pushing the series.
+pcie_retrain_link() waits for PCI_EXP_LNKSTA_LT (Link Training) to be
+cleared, which means the LTSSM has exited the Configuration/Recovery
+state.  pcie_wait_for_link() waits for PCI_EXP_LNKSTA_DLLLA (Data Link
+Layer Link Active) to be set, which means the link is in DL_Active.
 
--- 
-Jens Axboe
+I don't see an explicit procedure in the spec for determining when
+a link retrain is complete, but from PCIe r6.0, sec 6.2.11 (DPC):
+
+  After software releases the Downstream Port from DPC, the Port’s
+  LTSSM must transition to the Detect state, where the Link will
+  attempt to retrain. Software can use Data Link Layer State Changed
+  interrupts, DL_ACTIVE ERR_COR signaling, or both, to signal when the
+  Link reaches the DL_Active state again.
+
+and sec 6.6:
+
+  On the completion of Link Training (entering the DL_Active state,
+  see Section 3.2), a component must be able to receive and process
+  TLPs and DLLPs.
+
+The only use mentioned in the spec for the Link Training bit is the
+implementation note in sec 7.5.3.7 about avoiding race conditions when
+using the Retrain Link bit, where software should poll Link Training
+until it returns to zero before setting the Retrain Link bit to change
+link parameters.
+
+And I think you're absolutely right that what we *want* here is the
+data link layer DL_Active state, not just the link layer L0 state.
+
+This all makes me think that checking the Link Training bit might be
+the wrong thing to begin with.
+
+Of course, the Data Link Layer Link Active bit wasn't added until PCIe
+r1.1, and even now it's optional.  Without it, I don't know if there's
+a way to make sure the link is in DL_Active.
+
+Maybe pcie_retrain_link() should wait for Data Link Layer Link Active
+if it is supported, and use the existing behavior of waiting for Link
+Training to be cleared otherwise?
+
+>  		return;
+>  
+>  	/* Training failed. Restore common clock configurations */
+> ---
+> 2.36.1
