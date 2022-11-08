@@ -2,140 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438136218A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDDA6218A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 16:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234436AbiKHPlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 10:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S233974AbiKHPnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 10:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbiKHPlx (ORCPT
+        with ESMTP id S232923AbiKHPn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 10:41:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32F95C751;
-        Tue,  8 Nov 2022 07:41:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667922112; x=1699458112;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Fj2cRf0yfLP9Hty6jDMoaxrwsB/IsUZhdIEv+NMr+lk=;
-  b=WJCQ17IGIH0C/eLm+QAik0jtkVN2S7YfJVpUalNQfjx2/xNPmMfVCTiZ
-   ppg1EorRy7HsyGn20Ly00AvEnSqD9wyzpYfQZZC2u/DsCAEgFHUMgNyQu
-   1zxtMvshpKBJvE0IqcGbZAGOYaD95kx4ZT6d4F2dM9QKDSzVMdkfA9vBI
-   glur8/yq53SojqKajMS09TV2lY4yCzkCLt8cRPYaS+G6OQYJzDH2JkFZR
-   gY9iKSpnXFCGic50UE6e78vMwqivZa3H+FMudHxAkBfA2OhRE/b3RfhSW
-   IvfYrOQR0z4TfA0UCqu2O/tcWLzyFsmJTkDXC9JaZW0NV7VgN57outFLf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="290445132"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="290445132"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="669591064"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="669591064"
-Received: from liuc3-mobl1.ccr.corp.intel.com ([10.254.214.201])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:49 -0800
-Message-ID: <0ab36c3ac0841296227b96ec0a5cadca0c4ac2ed.camel@intel.com>
-Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from
- cmos_do_probe()
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date:   Tue, 08 Nov 2022 23:41:47 +0800
-In-Reply-To: <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
-References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher>
-         <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
-         <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 8 Nov 2022 10:43:28 -0500
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEE1C65;
+        Tue,  8 Nov 2022 07:43:25 -0800 (PST)
+Received: by mail-qv1-f48.google.com with SMTP id h10so10462946qvq.7;
+        Tue, 08 Nov 2022 07:43:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rBbeZBrYz0Ir8oJqm4j9qjBeLOLNJGXBr3pOfnglPQM=;
+        b=F6/n5OUzU35GqdkQPLfCfK0+G+OLJXDLfDbtK1sH1Hbq0Di6EdKkuLJoweuC2xKvxl
+         ZjD/RfrIHn8vU5ZCYBC6ehK0RWCtWFL1ta8hxOJYzRdWLU6V36pJXNVXmaq/AtakVy2t
+         sCALysz7eJeAjmncE59IWsvpLYuLR2DEWxUUwRPN+hJ3FhJ5+BpY7LaWmuGTIxomy7fo
+         tToAn+9jnEVlDX1Ir82v1UZEY5cjnuztMyb+tGMXl0/veDVEhSB8CzStFx5/D37TAgQM
+         mhRrozr3DdcRPXYiIv59i27IEFa31Ef5m6kYKYe7tMCxLCj4Jo2oAVag4j0vBIN54LP7
+         5SWQ==
+X-Gm-Message-State: ACrzQf2rAGl/mtM5aF3s9CyLHMwwZQ6UrvaWClpmzY2QI9UGSB9wL6gq
+        nfZh8oulhLERRX6g4fbmgoYgwTcFpQdcs6Oy
+X-Google-Smtp-Source: AMsMyM4cxRv6xEDikoFMDmSPm18wmN2RO0qUsd0jshBPjVIvU5caAMMsM31Uc6ltQNRY6ZxiT2TsHQ==
+X-Received: by 2002:a05:6214:1bc6:b0:4bb:abfc:4a7e with SMTP id m6-20020a0562141bc600b004bbabfc4a7emr49899718qvc.74.1667922204778;
+        Tue, 08 Nov 2022 07:43:24 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id u18-20020a37ab12000000b006eeae49537bsm9241031qke.98.2022.11.08.07.43.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 07:43:23 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id y186so13166209yby.10;
+        Tue, 08 Nov 2022 07:43:23 -0800 (PST)
+X-Received: by 2002:a05:6902:503:b0:6cf:c510:6a23 with SMTP id
+ x3-20020a056902050300b006cfc5106a23mr36322209ybs.380.1667922202961; Tue, 08
+ Nov 2022 07:43:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221028165921.94487-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221028165921.94487-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Nov 2022 16:43:10 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXh-aWpty=JEwB4Lx5eZZ3Mm43gxjCx2yptV+MOWx4kaw@mail.gmail.com>
+Message-ID: <CAMuHMdXh-aWpty=JEwB4Lx5eZZ3Mm43gxjCx2yptV+MOWx4kaw@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] riscv: dts: renesas: Add initial devicetree for
+ Renesas RZ/Five SoC
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-08 at 14:09 +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 8, 2022 at 3:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
-> > On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > 
-> > > Notice that cmos_wake_setup() is the only user of acpi_rtc_info
-> > > and
-> > > it
-> > > can operate on the cmos_rtc variable directly, so it need not set
-> > > the
-> > > platform_data pointer before cmos_do_probe() is called.  Instead,
-> > > it
-> > > can be called by cmos_do_probe() in the case when the
-> > > platform_data
-> > > pointer is not set to implement the default behavior (which is to
-> > > use
-> > > the FADT information as long as ACPI support is enabled).
-> > > 
-> > 
-> > ...
-> > 
-> > > @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
-> > >               if (info->address_space)
-> > >                       address_space = info->address_space;
-> > > 
-> > > -             if (info->rtc_day_alarm && info->rtc_day_alarm <
-> > > 128)
-> > > -                     cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > > -             if (info->rtc_mon_alarm && info->rtc_mon_alarm <
-> > > 128)
-> > > -                     cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > > -             if (info->rtc_century && info->rtc_century < 128)
-> > > -                     cmos_rtc.century = info->rtc_century;
-> > > +             cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > > +             cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > > +             cmos_rtc.century = info->rtc_century;
-> > > 
-> > >               if (info->wake_on && info->wake_off) {
-> > >                       cmos_rtc.wake_on = info->wake_on;
-> > >                       cmos_rtc.wake_off = info->wake_off;
-> > >               }
-> > > +     } else {
-> > > +             cmos_wake_setup(dev);
-> > >       }
-> > > 
-> > > 
-> > 
-> > Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup
-> > from
-> > ACPI glue into RTC driver"), dev->platform_data is set in
-> > drivers/acpi/glue.c, and the above commit moves it to
-> > cmos_wake_setup()
-> > in this file.
-> > 
-> > Now, with this patch, my understanding is that dev->platform_data
-> > is
-> > never set, thus we can remove the 'info' variable and the
-> >         if (info)
-> > check above.
-> 
-> There are other users of this driver which can be found by grepping
-> for cmos_rtc_board_info.
-> 
-> They create platform device objects with platform_data set which are
-> then bound to by this driver.
+On Fri, Oct 28, 2022 at 6:59 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Add initial device tree for Renesas RZ/Five RISC-V CPU Core (AX45MP
+> Single).
+>
+> RZ/Five SoC is almost identical to RZ/G2UL Type-1 SoC (ARM64) hence we
+> will be reusing r9a07g043.dtsi [0] as a base DTSI for both the SoC's.
+> r9a07g043f.dtsi includes RZ/Five SoC specific blocks.
+>
+> Below are the RZ/Five SoC specific blocks added in the initial DTSI which
+> can be used to boot via initramfs on RZ/Five SMARC EVK:
+> - AX45MP CPU
+> - PLIC
+>
+> [0] arch/arm64/boot/dts/renesas/r9a07g043.dtsi
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v4 -> v5
+> * Fixed riscv,ndev value (should be 511)
+> * Reworked completely (sort of new patch)
 
-yeah, I overlooked this.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-thanks,
-rui
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
