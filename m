@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF1662065A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7DC620653
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbiKHBxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
+        id S233125AbiKHBvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233125AbiKHBx1 (ORCPT
+        with ESMTP id S229485AbiKHBvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:53:27 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA67A46B;
-        Mon,  7 Nov 2022 17:53:26 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N5rdr6HxKzJnYH;
-        Tue,  8 Nov 2022 09:50:24 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 7 Nov 2022 20:51:07 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3331DF18;
+        Mon,  7 Nov 2022 17:51:06 -0800 (PST)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N5rZP4hKZzpW4R;
+        Tue,  8 Nov 2022 09:47:25 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 8 Nov
- 2022 09:53:24 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <saeedm@nvidia.com>, <leon@kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <kliteyn@nvidia.com>, <mbloch@nvidia.com>, <valex@nvidia.com>,
-        <erezsh@mellanox.com>
-CC:     <netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH net] net/mlx5: DR, Fix uninitialized var warning
-Date:   Tue, 8 Nov 2022 09:53:14 +0800
-Message-ID: <20221108015314.17928-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+ 2022 09:51:04 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
+        <wsa@kernel.org>
+CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5] i2c: hisi: Add support to get clock frequency from clock property
+Date:   Tue, 8 Nov 2022 09:58:11 +0800
+Message-ID: <20221108015811.275384-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500004.china.huawei.com (7.192.104.92)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -47,32 +45,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch warns this:
+The clk_rate attribute is not generic device tree bindings for I2C
+busses described in Documentation/devicetree/bindings/i2c/i2c.txt.
+It can be managed by clock binding.
 
-drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c:81
- mlx5dr_table_set_miss_action() error: uninitialized symbol 'ret'.
+Support the driver to obtain clock information by clk_rate or
+clock property. Find clock first, if not, fall back to clk_rate.
 
-Fix this by initializing ret with zero.
-
-Fixes: 7838e1725394 ("net/mlx5: DR, Expose steering table functionality")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+Acked-by: Yicong Yang <yangyicong@hisilicon.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Change since v4:
+- No change, just resend. As its the dependency "i2c: hisi:
+  Add initial device tree support" is applied.
+Link: https://lore.kernel.org/lkml/Yz3XLfHGzrPcOEpn@shikoro/T/
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c
-index 31d443dd8386..44dea75dabde 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_table.c
-@@ -46,7 +46,7 @@ static int dr_table_set_miss_action_nic(struct mlx5dr_domain *dmn,
- int mlx5dr_table_set_miss_action(struct mlx5dr_table *tbl,
- 				 struct mlx5dr_action *action)
- {
--	int ret;
-+	int ret = 0;
+Change since v3:
+- Commit message update.
+Link: https://lore.kernel.org/lkml/20220926091503.199474-1-chenweilong@huawei.com/T/
+
+Change since v2:
+- Remove redundant blank line.
+Link: https://lore.kernel.org/all/20220923011417.78994-1-chenweilong@huawei.com/
+
+Change since v1:
+- Ordered struct field to inverted triangle.
+- Use devm_clk_get_optional_enabled().
+- Use IS_ERR_OR_NULL.
+Link: https://lore.kernel.org/lkml/20220921101540.352553-1-chenweilong@huawei.com/
+
+ drivers/i2c/busses/i2c-hisi.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+index bcc97e4fcb65..8c6c7075c765 100644
+--- a/drivers/i2c/busses/i2c-hisi.c
++++ b/drivers/i2c/busses/i2c-hisi.c
+@@ -7,6 +7,7 @@
  
- 	if (action && action->action_type != DR_ACTION_TYP_FT)
- 		return -EOPNOTSUPP;
+ #include <linux/bits.h>
+ #include <linux/bitfield.h>
++#include <linux/clk.h>
+ #include <linux/completion.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+@@ -88,6 +89,7 @@ struct hisi_i2c_controller {
+ 	struct i2c_adapter adapter;
+ 	void __iomem *iobase;
+ 	struct device *dev;
++	struct clk *clk;
+ 	int irq;
+ 
+ 	/* Intermediates for recording the transfer process */
+@@ -454,10 +456,15 @@ static int hisi_i2c_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
+-	if (ret) {
+-		dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
+-		return ret;
++	ctlr->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
++	if (IS_ERR_OR_NULL(ctlr->clk)) {
++		ret = device_property_read_u64(dev, "clk_rate", &clk_rate_hz);
++		if (ret) {
++			dev_err(dev, "failed to get clock frequency, ret = %d\n", ret);
++			return ret;
++		}
++	} else {
++		clk_rate_hz = clk_get_rate(ctlr->clk);
+ 	}
+ 
+ 	ctlr->clk_rate_khz = DIV_ROUND_UP_ULL(clk_rate_hz, HZ_PER_KHZ);
 -- 
-2.17.1
+2.31.GIT
 
