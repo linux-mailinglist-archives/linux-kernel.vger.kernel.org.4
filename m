@@ -2,49 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B71D620CC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9397D620CC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 11:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbiKHJ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S233813AbiKHKBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 05:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiKHJ74 (ORCPT
+        with ESMTP id S233816AbiKHKBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:59:56 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F192113CFA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:59:54 -0800 (PST)
+        Tue, 8 Nov 2022 05:01:16 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6BE2B24F
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 02:01:14 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A89SSnP025369;
+        Tue, 8 Nov 2022 10:00:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=7iB60qJUvL4Ren5jwx4wWRI4fo2YZAcZYJ+1rXNr2g8=;
+ b=jYAqvmmHDiN67EARPe1M9nr66bA/ZVdNM4VWuYVl5979oeamRwwopmyF/fC3TkY+znzz
+ JRrWrVhyA/8WqAGUGv2vWB1CcIvMXu4q87LvxXsNdUGxZCxNOXm/TsWuuljO80/GwhJJ
+ G0p/zymXHvxFGBZwYkzolzRkXT2XP3ecYNVa79HdYJsqpyT3kN9RyWAD2bfagH5boOIj
+ uewylOH0QArJR9xG/SNHmucp0UZSBvPni8AZnD8j4hA6ejGYFp9ZW3wIwbxy9FVEoKCO
+ 1pJm+jpPgjs9Jr4QeclstGTyeIQ8VtTiLvVMDq4Z5mkFdhS8EC2YCMJjxvfMIRLD32mj RA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkmx2hb8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 10:00:57 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A89rwWa014216;
+        Tue, 8 Nov 2022 10:00:56 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kqkmx2ha4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 10:00:56 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A89oP98010000;
+        Tue, 8 Nov 2022 10:00:54 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3kngp5jtr2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Nov 2022 10:00:54 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A8A0pJ02491130
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Nov 2022 10:00:51 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D82FA4055;
+        Tue,  8 Nov 2022 10:00:51 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF8DFA4053;
+        Tue,  8 Nov 2022 10:00:48 +0000 (GMT)
+Received: from li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com (unknown [9.204.207.240])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue,  8 Nov 2022 10:00:48 +0000 (GMT)
+Date:   Tue, 8 Nov 2022 15:30:46 +0530
+From:   Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        vincent.guittot@linaro.org, vschneid@redhat.com,
+        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
+        linuxppc-dev@lists.ozlabs.org, ritesh.list@gmail.com,
+        aneesh.kumar@linux.ibm.com
+Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
+Message-ID: <Y2oozs/YgqqRV5hq@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
+ <Y01sk3l8yCMvhvYm@kroah.com>
+ <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y06ISBWhJflnV+NI@kroah.com>
+ <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y1jbhCYfktL51zNB@kroah.com>
+ <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667901592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EMkuLdfSQLSirQ8jlC+1HOH0BNO4JwnCeqnVpRV5Hls=;
-        b=Tsm26ZDb1wlvwWj8GQp9rtRsrE+D2Gc37EJFCt45dgPxsf6TKVdiSL1KmuYu6wZx/PxM3b
-        /urhLVl4vwWM4uoQVlsAkiB/GNxqr43CW8y6mvlM6NhpVL6DmKq5X6XEhfK17H5S7NwtRk
-        YX9UxmoiXiESq3iegM1PZiDiA2WlL0Y=
-Date:   Tue, 08 Nov 2022 09:59:52 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <473d7ded2b2d176e093daec2244b2e01@linux.dev>
-Subject: Re: [6.1.0-rc3-next-20221104] Boot failure - kernel BUG at
- mm/memblock.c:519
-To:     "Mike Rapoport" <rppt@linux.ibm.com>
-Cc:     "Sachin Sant" <sachinp@linux.ibm.com>,
-        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
-        "open list" <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-In-Reply-To: <Y2oLYB7Tu7J91tVm@linux.ibm.com>
-References: <Y2oLYB7Tu7J91tVm@linux.ibm.com>
- <E2499567-0D0F-44DA-AC68-1E279009A6DE@linux.ibm.com>
- <58779468e28e026a1aa30a42ca7e8aec@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UBpU2kI7vuMERruO"
+Content-Disposition: inline
+In-Reply-To: <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: uUo2UJkkFOI1n3ZZkVZmmpoWRPKICybp
+X-Proofpoint-ORIG-GUID: ghyKGEPRvZc5JBabE61avI6_p-ueX0mL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211080051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,64 +101,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-November 8, 2022 3:55 PM, "Mike Rapoport" <rppt@linux.ibm.com> wrote:=0A=
-=0A> Hi Yajun,=0A> =0A> On Tue, Nov 08, 2022 at 02:27:53AM +0000, Yajun D=
-eng wrote:=0A> =0A>> Hi Sachin,=0A>> I didn't have a powerpc architecture=
- machine. I don't know why this happened.=0A>> =0A>> Hi Mike,=0A>> Do you=
- have any suggestions?=0A> =0A> You can try reproducing the bug qemu or w=
-ork with Sachin to debug the=0A> issue.=0A> =0A=0AThanks, I'll try it.=0A=
-=0A>> I tested in tools/testing/memblock, and it was successful.=0A> =0A>=
- Memblock tests provide limited coverage still and they don't deal with a=
-ll=0A> possible cases.=0A> =0A> For now I'm dropping this patch from the =
-memblock tree until the issue is=0A> fixed.=0A> =0A>> November 6, 2022 8:=
-07 PM, "Sachin Sant" <sachinp@linux.ibm.com> wrote:=0A>> =0A>> While boot=
-ing recent linux-next on a IBM Power10 Server LPAR=0A>> following crash i=
-s observed:=0A>> =0A>> [ 0.000000] numa: Partition configured for 32 NUMA=
- nodes.=0A>> [ 0.000000] ------------[ cut here ]------------=0A>> [ 0.00=
-0000] kernel BUG at mm/memblock.c:519!=0A>> [ 0.000000] Oops: Exception i=
-n kernel mode, sig: 5 [#1]=0A>> [ 0.000000] LE PAGE_SIZE=3D64K MMU=3DRadi=
-x SMP NR_CPUS=3D2048 NUMA pSeries=0A>> [ 0.000000] Modules linked in:=0A>=
-> [ 0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3-next-2022=
-1104 #1=0A>> [ 0.000000] Hardware name: IBM,9080-HEX POWER10 (raw) 0x8002=
-00 0xf000006 of:IBM,FW1030.00=0A>> (NH1030_026) hv:phyp pSeries=0A>> [ 0.=
-000000] NIP: c0000000004ba240 LR: c0000000004bb240 CTR: c0000000004ba210=
-=0A>> [ 0.000000] REGS: c000000002a8b7b0 TRAP: 0700 Not tainted (6.1.0-rc=
-3-next-20221104)=0A>> [ 0.000000] MSR: 8000000000021033 <SF,ME,IR,DR,RI,L=
-E> CR: 24042424 XER: 00000001=0A>> [ 0.000000] CFAR: c0000000004ba290 IRQ=
-MASK: 1=0A>> [ 0.000000] GPR00: c0000000004bb240 c000000002a8ba50 c000000=
-00136ee00 c0000010f3ac00a8=0A>> [ 0.000000] GPR04: 0000000000000000 c0000=
-010f3ac0090 00000010f3ac0000 0000000000000d00=0A>> [ 0.000000] GPR08: 000=
-0000000000001 0000000000000007 0000000000000001 0000000000000081=0A>> [ 0=
-.000000] GPR12: c0000000004ba210 c000000002e10000 0000000000000000 000000=
-000000000d=0A>> [ 0.000000] GPR16: 000000000f6be620 000000000f6be8e8 0000=
-00000f6be788 000000000f6bed58=0A>> [ 0.000000] GPR20: 000000000f6f6d58 c0=
-000000029a8de8 00000010f3ad8800 0000000000000080=0A>> [ 0.000000] GPR24: =
-00000010f3ad7b00 0000000000000000 0000000000000100 0000000000000d00=0A>> =
-[ 0.000000] GPR28: 00000010f3ad7b00 c0000000029a8de8 c0000000029a8e00 000=
-0000000000006=0A>> [ 0.000000] NIP [c0000000004ba240] memblock_merge_regi=
-ons.isra.12+0x40/0x130=0A>> [ 0.000000] LR [c0000000004bb240] memblock_ad=
-d_range+0x190/0x300=0A>> [ 0.000000] Call Trace:=0A>> [ 0.000000] [c00000=
-0002a8ba50] [0000000000000100] 0x100 (unreliable)=0A>> [ 0.000000] [c0000=
-00002a8ba90] [c0000000004bb240] memblock_add_range+0x190/0x300=0A>> [ 0.0=
-00000] [c000000002a8bb10] [c0000000004bb5e0] memblock_reserve+0x70/0xd0=
-=0A>> [ 0.000000] [c000000002a8bba0] [c000000002045234] memblock_alloc_ra=
-nge_nid+0x11c/0x1e8=0A>> [ 0.000000] [c000000002a8bc60] [c0000000020453a4=
-] memblock_alloc_internal+0xa4/0x110=0A>> [ 0.000000] [c000000002a8bcb0] =
-[c0000000020456cc] memblock_alloc_try_nid+0x94/0xcc=0A>> [ 0.000000] [c00=
-0000002a8bd40] [c00000000200b570] alloc_paca_data+0x7c/0xcc=0A>> [ 0.0000=
-00] [c000000002a8bdb0] [c00000000200b770] allocate_paca+0x8c/0x28c=0A>> [=
- 0.000000] [c000000002a8be50] [c00000000200a26c] setup_arch+0x1c4/0x4d8=
-=0A>> [ 0.000000] [c000000002a8bed0] [c000000002004378] start_kernel+0xb4=
-/0xa84=0A>> [ 0.000000] [c000000002a8bf90] [c00000000000da90] start_here_=
-common+0x1c/0x20=0A>> [ 0.000000] Instruction dump:=0A>> [ 0.000000] 7c08=
-02a6 fba1ffe8 fbc1fff0 fbe1fff8 7c7d1b78 7c9e2378 3be00000 f8010010=0A>> =
-[ 0.000000] f821ffc1 e9230000 3969ffff 4800000c <0b0a0000> 7d3f4b78 393f0=
-001 7fbf5840=0A>> [ 0.000000] ---[ end trace 0000000000000000 ]---=0A>> [=
- 0.000000]=0A>> [ 0.000000] Kernel panic - not syncing: Fatal exception=
-=0A>> [ 0.000000] Rebooting in 180 seconds..=0A>> =0A>> This problem was =
-introduced with next-20221101. Git bisect points to=0A>> following patch=
-=0A>> =0A>> commit 3f82c9c4ac377082e1230f5299e0ccce07b15e12=0A>> Date: Tu=
-e Oct 25 15:09:43 2022 +0800=0A>> memblock: don't run loop in memblock_ad=
-d_range() twice=0A>> =0A>> Reverting this patch helps boot the kernel to =
-login prompt.=0A>> =0A>> Have attached .config=0A>> =0A>> - Sachin=0A> =
-=0A> --=0A> Sincerely yours,=0A> Mike.
+
+--UBpU2kI7vuMERruO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+Thanks Greg & Peter for your direction.=20
+
+While we pursue the idea of having debugfs based on kernfs, we thought about
+having a boot time parameter which would disable creating and updating of t=
+he
+sched_domain debugfs files and this would also be useful even when the kern=
+fs
+solution kicks in, as users who may not care about these debugfs files would
+benefit from a faster CPU hotplug operation.
+
+However, these sched_domain debugfs files are created by default.
+
+-- vishal.c
+
+------>8-----------------------------------------------------8<------------=
+--
+
+=46rom f66f66ee05a9f719b58822d13e501d65391dd9d3 Mon Sep 17 00:00:00 2001
+=46rom: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+Date: Tue, 8 Nov 2022 14:21:15 +0530
+Subject: [PATCH] Add kernel parameter to disable creation of sched_domain
+ files
+
+For large systems, creation of sched_domain debug files takes unusually long
+time. In which case, sched_sd_export can be passed as kernel command line
+parameter during boot time to prevent kernel from creating sched_domain fil=
+es.
+
+This commit adds a kernel command line parameter, sched_sd_export, which ca=
+n be
+used to, optionally, disable the creation of sched_domain debug files.=20
+---
+ kernel/sched/debug.c    |  9 ++++++---
+ kernel/sched/sched.h    |  1 +
+ kernel/sched/topology.c | 11 ++++++++++-
+ 3 files changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index bb3d63bdf4ae..bd307847b76a 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -279,6 +279,7 @@ static const struct file_operations sched_dynamic_fops =
+=3D {
+ #endif /* CONFIG_PREEMPT_DYNAMIC */
+=20
+ __read_mostly bool sched_debug_verbose;
++__read_mostly int sched_debug_export =3D 1;
+=20
+ static const struct seq_operations sched_debug_sops;
+=20
+@@ -321,9 +322,11 @@ static __init int sched_init_debug(void)
+ 	debugfs_create_u32("migration_cost_ns", 0644, debugfs_sched, &sysctl_sche=
+d_migration_cost);
+ 	debugfs_create_u32("nr_migrate", 0644, debugfs_sched, &sysctl_sched_nr_mi=
+grate);
+=20
+-	mutex_lock(&sched_domains_mutex);
+-	update_sched_domain_debugfs();
+-	mutex_unlock(&sched_domains_mutex);
++	if (likely(sched_debug_export)) {
++		mutex_lock(&sched_domains_mutex);
++		update_sched_domain_debugfs();
++		mutex_unlock(&sched_domains_mutex);
++	}
+ #endif
+=20
+ #ifdef CONFIG_NUMA_BALANCING
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index e26688d387ae..a4d06588d876 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2738,6 +2738,7 @@ extern struct sched_entity *__pick_last_entity(struct=
+ cfs_rq *cfs_rq);
+=20
+ #ifdef	CONFIG_SCHED_DEBUG
+ extern bool sched_debug_verbose;
++extern int sched_debug_export;
+=20
+ extern void print_cfs_stats(struct seq_file *m, int cpu);
+ extern void print_rt_stats(struct seq_file *m, int cpu);
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8739c2a5a54e..7bcdbc2f856d 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -19,6 +19,13 @@ static int __init sched_debug_setup(char *str)
+ }
+ early_param("sched_verbose", sched_debug_setup);
+=20
++static int __init sched_debug_disable_export(char *str)
++{
++	sched_debug_export =3D 0;
++	return 0;
++}
++early_param("sched_sd_export", sched_debug_disable_export);
++
+ static inline bool sched_debug(void)
+ {
+ 	return sched_debug_verbose;
+@@ -152,6 +159,7 @@ static void sched_domain_debug(struct sched_domain *sd,=
+ int cpu)
+ #else /* !CONFIG_SCHED_DEBUG */
+=20
+ # define sched_debug_verbose 0
++# define sched_debug_export 1
+ # define sched_domain_debug(sd, cpu) do { } while (0)
+ static inline bool sched_debug(void)
+ {
+@@ -2632,7 +2640,8 @@ void partition_sched_domains_locked(int ndoms_new, cp=
+umask_var_t doms_new[],
+ 	dattr_cur =3D dattr_new;
+ 	ndoms_cur =3D ndoms_new;
+=20
+-	update_sched_domain_debugfs();
++	if (likely(sched_debug_export))
++		update_sched_domain_debugfs();
+ }
+=20
+ /*
+
+base-commit: 7e18e42e4b280c85b76967a9106a13ca61c16179
+--=20
+2.31.1
+
+ =20
+
+--UBpU2kI7vuMERruO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEyetz6oh8pzQ87ZNz8y5vG2Pik+wFAmNqKMIACgkQ8y5vG2Pi
+k+xZTgf+O4+TVrSssEu9R1VM/1n9SjLRJkgmuRNOKW0mIxLPcZ55qWYN0kD/4Mb+
+jUnHWFPF1X5yC1E3ntmd6sEa2wNbkBF76CH1BMavTU8cvwhcZ34GuJtGp6MYaJ6s
+xNGbtxzcRuSVosPW1FloESNhlYmL0x8jXySEYoaAHkyW1teBwvfg6lEAPMeEaUkT
+DasNW8FWw0MfjwVtj9lf1k7XAUutQRG3f/Jcmpc7lmYAHfZcbxldBDuTJTdNo62S
+k09BYcMI1+0zR1sX7pM9nciPVrWFblfmxyiVlXBNqKeDyl+dBxkKaGP5iW0QLlFS
+nTttuQ73QeT8/FRlsWbxwTUsYzzRqQ==
+=JIfg
+-----END PGP SIGNATURE-----
+
+--UBpU2kI7vuMERruO--
+
