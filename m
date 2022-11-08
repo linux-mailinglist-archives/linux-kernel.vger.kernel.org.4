@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07666218EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B545D6218F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 17:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbiKHQAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 11:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S234618AbiKHQA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 11:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233640AbiKHQAC (ORCPT
+        with ESMTP id S234402AbiKHQA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 11:00:02 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F4358BE2;
-        Tue,  8 Nov 2022 08:00:01 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id q186so3548633oia.9;
-        Tue, 08 Nov 2022 08:00:01 -0800 (PST)
+        Tue, 8 Nov 2022 11:00:27 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823225B870
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 08:00:26 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id f7so23155702edc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 08:00:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rQWR9yg5CMjikZZ2r20JPexBcqtHeW0qLuMNX9N7j+c=;
-        b=Sm3Qqvk7rpotxm8tMX6U4k6sAj6XTDWsi2J7WE3eOYE6moWIKRSqyw6AgOgZLjnoVp
-         xCC7DmJqJxry4uE/y8F5JWLY0heCgbpPgWxyCgBv/Elq/BgU+/QWxnBqbx5HWu3JBNuB
-         DZVXgn3uJugiOpGZuNbKzfEss2x8floIKKoZpnqg6cQKuPFKns8yJa7GGEY+L14UycWb
-         S7/a+74tU6vBP6DLHAkOwJSZjFi/QsxaWpPWTBoUWjgk3OI4iy8l1ObMh6WOrbrN1PoS
-         E14NThDYcy9X8fz+xjijyL8ZTOQEtjG8Llg7oLOFxJjMGXXc9NVct/rmtTQw2Pbbk9qk
-         htaA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
+        b=C7OwW3FUJWQ9TsMP4XtJFWdFbq3CIFU6pSqTzLUuNeB55sqBurNd9+lK+4O64ax5nw
+         sLHuW2BZWPNwW/HcxRsLULIhKy0426zbG2SmHFYjzexcTd9nih+dAA6GOaJuqGPnIlJp
+         1nZOK9263PPnD7jUo2SElcu0BQprg/+ggeWhc9GM9gBFv6XxZxODbXJ1OOSJG0De8TjU
+         TFUI9lToIWmJ9FDoEL1WLfETPa3grArpG45+0E7aAGCcNp9vSy2/3HGJfReROVxd2Utw
+         XtSCF2zhCxlopPVvcacqaaSX4KJXfXQIedEUmZeOJLbdqt2wlmR4FMQ9nuaDqYZybzye
+         Bucw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rQWR9yg5CMjikZZ2r20JPexBcqtHeW0qLuMNX9N7j+c=;
-        b=ok5gw886C8G9o4w/yIJRT+Wu972qr3TSj1pg8nShOf/nyOQuPY3i5IQjFCP05zuyz0
-         zMAtdOZNWmym4mcFe60vROiAyk3DzKrYdlpX4qpHyO4geeKEn4GKAyujkKxVjVWmnkjy
-         u8v38dCGfmAxPn0iXF05soT/w01hzMgZSkWbDMRYkzZhjudqDQya9WdGzKJvqm7EPQFu
-         zTnVI17ISI2ZIGvqmc2pHSyD2qHoko/g2ewv7P6FCgxynQZw7OeC3WLXwH2i9ISi2gph
-         q6B/NUInJfkFBTCyyu8hFDDruxJIsS+PW8iFJY1kvNFdGJq0nlKJ8slVerPpT1upOzWa
-         nEbg==
-X-Gm-Message-State: ACrzQf0yCNJCiRCrmF0Fg2KV5PcbSyHecw264ZOIcFm/FHBSW3GKOrxf
-        o73v3lAuS9Z2SVwYIMAXzTuxBX9UHKoSA7w6d7c=
-X-Google-Smtp-Source: AMsMyM7xaleGKPoZfpfaoNjmTRNkBto0+MBNOqoaWhcA2auPXlX8DcbOzRaxpoFsCjBS9kgxzXyZxbrD61rVDJXuiqI=
-X-Received: by 2002:aca:b655:0:b0:35a:4fb4:c3d2 with SMTP id
- g82-20020acab655000000b0035a4fb4c3d2mr15977595oif.96.1667923200813; Tue, 08
- Nov 2022 08:00:00 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VFfZ5Bl5zhnH71PaGJAYrI//Xb3WWbjWoqFqkYPKW30=;
+        b=OrubbYdAaVAwQml34jVIl7UxOB3EgAaqXVRNtGnPC/Q2Xk8F6HHFCPB6MnLo8+Iytq
+         RO6ibrZbsDV0YNLoIMfj1eG6yRSREUrsgAUY3oTttgHRlx1NY0cD+wfOli28NmLbiJ64
+         uVFldxNmdlUxJbWB+PpLDiK73ZWYKDKRcQigYGxaY/PUbDGczZo6uxchMwjhjcXabCA0
+         yxGFwSclZJXkErvJBa0KfJSukCfocJ1sufA7h0tsUISH9cEbV9z6EB6p8tFixNE8gQl7
+         m2zhrZx5FU5LVQxMuob5ytenAs9eA9WaegY9f1hzibvhjj0upXzcnTqL3SfOa6HeqQ3W
+         +qow==
+X-Gm-Message-State: ACrzQf3RuDkXAYHefwriAsHjOSV78nyfV/uPHOhQB/eQPel3SuBEJNOt
+        nXjYo0CkO011NUKB1a2NEHqn+tfVM8epTYfhLZlWpw==
+X-Google-Smtp-Source: AMsMyM764Q6z1uaMrpLCjAMUVJWnIa32kDHXvdKz3wR3PYoFGk/3nY8ikLUuVdV2GstlG+PMkGKaZX23fir9c7kMHtY=
+X-Received: by 2002:a05:6402:386:b0:463:c43f:6628 with SMTP id
+ o6-20020a056402038600b00463c43f6628mr39052165edv.53.1667923224985; Tue, 08
+ Nov 2022 08:00:24 -0800 (PST)
 MIME-Version: 1.0
-References: <Y2jQw6ve83Bvb/D9@mail.google.com>
-In-Reply-To: <Y2jQw6ve83Bvb/D9@mail.google.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 8 Nov 2022 10:59:48 -0500
-Message-ID: <CADnq5_Oi0ADZJ=_=DRLvRVF+q2qT_5f1H3nuTnZYh5PKpbXPPw@mail.gmail.com>
-Subject: Re: [PATCH] [next] drm/amdgpu: Replace 1-element array with
- flexible-array member
-To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Slark Xiao <slark_xiao@163.com>,
-        Rongguang Wei <weirongguang@kylinos.cn>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20221103145353.3049303-1-usama.anjum@collabora.com>
+ <20221103145353.3049303-3-usama.anjum@collabora.com> <CABb0KFFaYZG62TS+iM3Y92+hDyB35XR8dTX-5hDgWrXCcDQx7Q@mail.gmail.com>
+ <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
+In-Reply-To: <f394de31-b9c1-5a6c-eab2-74b84f2b3ba3@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 8 Nov 2022 17:00:14 +0100
+Message-ID: <CABb0KFGbhM8V6qeDEzq7Lc_3cseScbK3zvfLndRdJfLstTO=2g@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,156 +92,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Tue, 8 Nov 2022 at 15:25, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> Hi Micha=C5=82,
+>
+> Thank you so much for reviewing.
+>
+> On 11/7/22 5:26 PM, Micha=C5=82 Miros=C5=82aw wrote:
+> >> +
+> >> +/*
+> >> + * struct page_region - Page region with bitmap flags
+> >> + * @start:     Start of the region
+> >> + * @len:       Length of the region
+> >> + * bitmap:     Bits sets for the region
+> >> + */
+> >> +struct page_region {
+> >> +       __u64 start;
+> >> +       __u64 len;
+> >> +       __u32 bitmap;
+> >> +       __u32 __reserved;
+> >
+> > "u64 flags"? If an extension is needed it would already require a new
+> > ioctl or something in the `arg` struct.
+> I feel like the masks must have the same type as this bitmap variable as
+> the return_mask specifies the flags to be returned in bitmap. All the
+> masks are of type __u32. This is why I'd kept the bitmap of type _u32 as
+> well. I've kept them of 32 bit size as currently we are adding support
+> for 4 flags and there is still room to add 28 more bits in the future.
+> Do you still think that I should update the masks and bitmap to _u64?
 
-Alex
+I agree that the `bitmap` (I'd rather call it `flags` though) should
+have the type matching the masks in the request. But the size I'm not
+sure about if u32 is enough compared to what is used (or will be in
+the future) for page flags in MM code. I suppose the ioctl() is not
+expected to be a fast path, so I would go with u64 and assume that
+overhead of the extra bytes read by the kernel won't matter.
 
-On Mon, Nov 7, 2022 at 4:33 AM Paulo Miguel Almeida
-<paulo.miguel.almeida.rodenas@gmail.com> wrote:
->
-> One-element arrays are deprecated, and we are replacing them with
-> flexible array members instead. So, replace one-element array with
-> flexible-array member in structs _ATOM_GPIO_PIN_ASSIGNMENT,
-> _ATOM_DISPLAY_OBJECT_PATH, _ATOM_DISPLAY_OBJECT_PATH_TABLE,
-> _ATOM_OBJECT_TABLE and refactor the rest of the code accordingly.
->
-> Important to mention is that doing a build before/after this patch results
-> in no functional binary output differences.
->
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
->
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/238
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
->
-> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-> ---
->
-> Binary difference findings:
->
->         Some changes took more than a single line which changed the line
->         number parameter passed to the drm_dbg function (which leverages
->         kernel's dynamic debugging). Functionally-wise, nothing changed
->         after doing a before/after patch build.
->
-> Additional one-element arrays to be changed:
->
->         There are more instances of one-element arrays to be changed but
->         I will keep patches small so they are easy to review. [and I can
->         only dedicate a few hours per day on this :-) ]
->
-> ---
->  .../gpu/drm/amd/display/dc/bios/bios_parser.c | 23 ++++++++++++-------
->  drivers/gpu/drm/amd/include/atombios.h        |  8 +++----
->  2 files changed, 19 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-> index 9b8ea6e9a2b9..39dd8b2dc254 100644
-> --- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-> +++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
-> @@ -138,7 +138,9 @@ static uint8_t get_number_of_objects(struct bios_parser *bp, uint32_t offset)
->
->         uint32_t object_table_offset = bp->object_info_tbl_offset + offset;
->
-> -       table = GET_IMAGE(ATOM_OBJECT_TABLE, object_table_offset);
-> +       table = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base,
-> +                               object_table_offset,
-> +                               struct_size(table, asObjects, 1)));
->
->         if (!table)
->                 return 0;
-> @@ -166,8 +168,9 @@ static struct graphics_object_id bios_parser_get_connector_id(
->         uint32_t connector_table_offset = bp->object_info_tbl_offset
->                 + le16_to_cpu(bp->object_info_tbl.v1_1->usConnectorObjectTableOffset);
->
-> -       ATOM_OBJECT_TABLE *tbl =
-> -               GET_IMAGE(ATOM_OBJECT_TABLE, connector_table_offset);
-> +       ATOM_OBJECT_TABLE *tbl = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base,
-> +                               connector_table_offset,
-> +                               struct_size(tbl, asObjects, 1)));
->
->         if (!tbl) {
->                 dm_error("Can't get connector table from atom bios.\n");
-> @@ -1789,11 +1792,13 @@ static enum bp_result bios_parser_get_gpio_pin_info(
->         if (!DATA_TABLES(GPIO_Pin_LUT))
->                 return BP_RESULT_BADBIOSTABLE;
->
-> -       header = GET_IMAGE(ATOM_GPIO_PIN_LUT, DATA_TABLES(GPIO_Pin_LUT));
-> +       header = ((ATOM_GPIO_PIN_LUT *) bios_get_image(&bp->base,
-> +                               DATA_TABLES(GPIO_Pin_LUT),
-> +                               struct_size(header, asGPIO_Pin, 1)));
->         if (!header)
->                 return BP_RESULT_BADBIOSTABLE;
->
-> -       if (sizeof(ATOM_COMMON_TABLE_HEADER) + sizeof(ATOM_GPIO_PIN_LUT)
-> +       if (sizeof(ATOM_COMMON_TABLE_HEADER) + struct_size(header, asGPIO_Pin, 1)
->                         > le16_to_cpu(header->sHeader.usStructureSize))
->                 return BP_RESULT_BADBIOSTABLE;
->
-> @@ -1978,7 +1983,8 @@ static ATOM_OBJECT *get_bios_object(struct bios_parser *bp,
->
->         offset += bp->object_info_tbl_offset;
->
-> -       tbl = GET_IMAGE(ATOM_OBJECT_TABLE, offset);
-> +       tbl = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base, offset,
-> +                               struct_size(tbl, asObjects, 1)));
->         if (!tbl)
->                 return NULL;
->
-> @@ -2709,8 +2715,9 @@ static enum bp_result get_bracket_layout_record(
->
->         genericTableOffset = bp->object_info_tbl_offset +
->                 bp->object_info_tbl.v1_3->usMiscObjectTableOffset;
-> -       object_table = (ATOM_OBJECT_TABLE *)
-> -               GET_IMAGE(ATOM_OBJECT_TABLE, genericTableOffset);
-> +       object_table = ((ATOM_OBJECT_TABLE *) bios_get_image(&bp->base,
-> +                               genericTableOffset,
-> +                               struct_size(object_table, asObjects, 1)));
->         if (!object_table)
->                 return BP_RESULT_FAILURE;
->
-> diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
-> index b5b1d073f8e2..55ae93c1e365 100644
-> --- a/drivers/gpu/drm/amd/include/atombios.h
-> +++ b/drivers/gpu/drm/amd/include/atombios.h
-> @@ -4386,7 +4386,7 @@ typedef struct _ATOM_GPIO_PIN_ASSIGNMENT
->  typedef struct _ATOM_GPIO_PIN_LUT
->  {
->    ATOM_COMMON_TABLE_HEADER  sHeader;
-> -  ATOM_GPIO_PIN_ASSIGNMENT   asGPIO_Pin[1];
-> +  ATOM_GPIO_PIN_ASSIGNMENT   asGPIO_Pin[];
->  }ATOM_GPIO_PIN_LUT;
->
->  /****************************************************************************/
-> @@ -4513,7 +4513,7 @@ typedef struct  _ATOM_DISPLAY_OBJECT_PATH
->    USHORT    usSize;                                        //the size of ATOM_DISPLAY_OBJECT_PATH
->    USHORT    usConnObjectId;                                //Connector Object ID
->    USHORT    usGPUObjectId;                                 //GPU ID
-> -  USHORT    usGraphicObjIds[1];                            //1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
-> +  USHORT    usGraphicObjIds[];                            //1st Encoder Obj source from GPU to last Graphic Obj destinate to connector.
->  }ATOM_DISPLAY_OBJECT_PATH;
->
->  typedef struct  _ATOM_DISPLAY_EXTERNAL_OBJECT_PATH
-> @@ -4530,7 +4530,7 @@ typedef struct _ATOM_DISPLAY_OBJECT_PATH_TABLE
->    UCHAR                           ucNumOfDispPath;
->    UCHAR                           ucVersion;
->    UCHAR                           ucPadding[2];
-> -  ATOM_DISPLAY_OBJECT_PATH        asDispPath[1];
-> +  ATOM_DISPLAY_OBJECT_PATH        asDispPath[];
->  }ATOM_DISPLAY_OBJECT_PATH_TABLE;
->
->  typedef struct _ATOM_OBJECT                                //each object has this structure
-> @@ -4545,7 +4545,7 @@ typedef struct _ATOM_OBJECT_TABLE                         //Above 4 object table
->  {
->    UCHAR               ucNumberOfObjects;
->    UCHAR               ucPadding[3];
-> -  ATOM_OBJECT         asObjects[1];
-> +  ATOM_OBJECT         asObjects[];
->  }ATOM_OBJECT_TABLE;
->
->  typedef struct _ATOM_SRC_DST_TABLE_FOR_ONE_OBJECT         //usSrcDstTableOffset pointing to this structure
-> --
-> 2.37.3
->
+> >> + * @start:             Starting address of the region
+> >> + * @len:               Length of the region (All the pages in this le=
+ngth are included)
+> >> + * @vec:               Address of page_region struct array for output
+> >> + * @vec_len:           Length of the page_region struct array
+> >> + * @max_pages:         Optional max return pages (It must be less tha=
+n vec_len if specified)
+> >
+> > I think we discussed that this is not counting the same things as
+> > vec_len, so there should not be a reference between the two. The limit
+> > is whatever fits under both conditions (IOW: n_vecs <=3D vec_len &&
+> > (!max_pages || n_pages <=3D max_pages).
+> In worse case when pages cannot be folded into the page_region, the one
+> page_region may have information of only one page. This is why I've
+> compared them. I want to communicate to the user that if max_pages is
+> used, the vec_len should be of equal or greater size (to cater worse
+> case which can happen at any time). Otherwise in worse case, the api can
+> return without finding the max_pages number of pages. I don't know how
+> should I put this in the comment.
+
+I'm not sure you need to, as this conclusion follows from the range vs
+page distinction.
+A user who wants to cater for the worst case will provide big-enough
+`vec` array, but another, who might be memory-constrained, could
+instead just retry the call with `start` updated to just after the
+last returned page until the ioctl() returns less ranges than
+`vec_len` allows.
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
