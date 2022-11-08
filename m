@@ -2,125 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF41620C3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0799C620C39
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbiKHJa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S233591AbiKHJaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233639AbiKHJaW (ORCPT
+        with ESMTP id S233790AbiKHJ3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:30:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AA012AEB
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:29:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667899762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G/IvXa3Gtc42ocSwbE6e2PTXEI1xHOCM/WDymiGQVjk=;
-        b=EclQgB/BAXWPmHv1CQSriGjM01041EmwLWXrYJNK4SB8YG848WwPaT3gtRThNKwuxzmdw5
-        WIGW9R+7AM/5gAAZRH/0L5G44XvsMJQpHiO/l6SjGpDw5LLZtlzG5p9K4gQknYqLCl5Jpf
-        5BIWRtsM4d1QsnoJfX3bzespR7vjkbA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-538-Ue3MTbJZNPOCTRgtPQTaEg-1; Tue, 08 Nov 2022 04:29:21 -0500
-X-MC-Unique: Ue3MTbJZNPOCTRgtPQTaEg-1
-Received: by mail-wr1-f70.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so3768353wru.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:29:21 -0800 (PST)
+        Tue, 8 Nov 2022 04:29:52 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB08927DD1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:29:49 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id a15so20174513ljb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rOVmsonL+k/0HZVK2nxpFgpQMHWhsli4Q3QlCw0qmsE=;
+        b=tDhHK71PxNsz0WNgtB/w97HLA516yj+UB6dkiAiSfyEHunUfai9u2vudUgCSjnZK4g
+         XI212VYIzT3Z+8kAiNxqL44J0IDz9EM7L3a/5hY3TcY0mCcDlWjy1fKU610hHLUwsIQD
+         fFP+Eh2u7g8oP0fWT2YC+pbmkzlY0bAnFBuEgUa5Ueb5UjR/UQGUMk9TspPhb7/vGvdX
+         4vjAT1iZDFUTnIOncRdoPRk5iPbMhvDc4tkiwBGsF7GV/R7SLGvcmlSeCL8pz6M0YM7T
+         rw9ymsI/bExsNZV4Rxiq7izCA9+5l2J9B5A0HtYIj2ceFX1E3i31FYCC44Ssg9ZrBITd
+         nXeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G/IvXa3Gtc42ocSwbE6e2PTXEI1xHOCM/WDymiGQVjk=;
-        b=F/X3xq/Sq7Y/gd737pe2GPXokqDc37+yFLM8VN/kPQnMDYgTOK/lzfleRM4rnQpkbK
-         7PjRgucDJ8kixgC0PNr3H1J0s+CosQL5lEdFoOnDQEvrUG2ywt9FvIoOedvWfDcdX8Ne
-         LDk90sIzS6CDLpKIDCUj0A9Te/CjP4qnY0Ma+JlWLsGfNNQSjPxY7X7GiMBhQMvBz29G
-         tYgNlqLLBvZK9831BqxFmHC3paI8MA9gcF3rbNxHorQKBz+6is/RZ6ypjfpj23TbHnOR
-         21urHxifqZF3/9qrYCe1wHtat803NeSZKK6Oz9iKZAhGAWKm1LlsRgNxvJtGFL53XI3N
-         t6bQ==
-X-Gm-Message-State: ACrzQf0yr6Tf0II5bn3iRbe4KPcGE14ZE3wARmmtAwsE0yVODp+Egbxf
-        d+RloNjtMlD87muY0PG+BMcCxnWZPCbJ+bKjbCY4htUo5x1IGrPlj0ru/vRGE3hKWDlhQ/pt5Sr
-        byLEbgLHwUq2NcOHCwaBfS9fj
-X-Received: by 2002:a1c:7418:0:b0:3cf:703a:4f0c with SMTP id p24-20020a1c7418000000b003cf703a4f0cmr31192072wmc.63.1667899760173;
-        Tue, 08 Nov 2022 01:29:20 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5StZVkpugFYppLkRHp5xlGTjmqFOUyferk1nDQuYzjbb+gdKwEthZaHv8SGYCGJ8Geu++6Xg==
-X-Received: by 2002:a1c:7418:0:b0:3cf:703a:4f0c with SMTP id p24-20020a1c7418000000b003cf703a4f0cmr31192042wmc.63.1667899759842;
-        Tue, 08 Nov 2022 01:29:19 -0800 (PST)
-Received: from ?IPV6:2003:cb:c708:db00:6510:da8d:df40:abbb? (p200300cbc708db006510da8ddf40abbb.dip0.t-ipconnect.de. [2003:cb:c708:db00:6510:da8d:df40:abbb])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5d420a000000b0023682011c1dsm9563940wrq.104.2022.11.08.01.29.18
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rOVmsonL+k/0HZVK2nxpFgpQMHWhsli4Q3QlCw0qmsE=;
+        b=DupATUnHE02O7Nhk/Lb6ioyDlguDwtVkswnFaePx829TWJ1mnvr7DoqDIQHvDqs5H6
+         Uar9LLFkeSJubpfMOoW33ub1QGGVyVFP8kl+2eqEP1fwYvaPbS+ydJFNl5A2eo7TxJzC
+         WOD1ho0V1QN80EWbnRR0y5lgRPkSnRF1/P9jmwGDDR7vM2INa5pkmSd8yYs09HfqFPfA
+         5ai4qqtEBJjU26OpwemGpmVKszYrYiVv9GoMhZ9uB23ZZXi5ta9iDfS6fGk5HEp4LmJF
+         VqCqHnRxT12pIWklL/jE1Sb9+08uI8jvUal3bKxsbwEmCFFgCIxM26FKgxBEZl7q7yZk
+         u8qg==
+X-Gm-Message-State: ACrzQf0W+lxtpeX9jdCsrvytZw1spYd0yw1vnxiuepjDZBG5DMIU7A3r
+        /pJ1Ss/1PvmMdgEhqqXUJkqAXg==
+X-Google-Smtp-Source: AMsMyM40579+zfxIe+Ql7/outiP4k9BXLWi8yzxj8i7/ri53RvHNqLkyvFPwfRVxa4oQ6UqtiowIyw==
+X-Received: by 2002:a2e:a211:0:b0:277:1888:e14b with SMTP id h17-20020a2ea211000000b002771888e14bmr6331047ljm.339.1667899788261;
+        Tue, 08 Nov 2022 01:29:48 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id o4-20020a05651205c400b0048ae518364dsm1721417lfo.148.2022.11.08.01.29.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 01:29:19 -0800 (PST)
-Message-ID: <ee9fceb8-f928-8754-d94f-54b662bb0c74@redhat.com>
-Date:   Tue, 8 Nov 2022 10:29:17 +0100
+        Tue, 08 Nov 2022 01:29:47 -0800 (PST)
+Message-ID: <13d80a37-9202-480c-94ec-13cb1abce305@linaro.org>
+Date:   Tue, 8 Nov 2022 10:29:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH RFC 00/19] mm/gup: remove FOLL_FORCE usage from drivers
- (reliable R/O long-term pinning)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-References: <20221107161740.144456-1-david@redhat.com>
- <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: add sdm670 and pixel 3a device
+ trees
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Richard Acayan <mailingradian@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20221108030411.59409-1-mailingradian@gmail.com>
+ <20221108030411.59409-5-mailingradian@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221108030411.59409-5-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.11.22 18:27, Linus Torvalds wrote:
-> On Mon, Nov 7, 2022 at 8:18 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> So instead, make R/O long-term pinning work as expected, by breaking COW
->> in a COW mapping early, such that we can remove any FOLL_FORCE usage from
->> drivers.
+On 08/11/2022 04:04, Richard Acayan wrote:
+> The Qualcomm Snapdragon 670 has been out for a while. Add a device tree
+> for it and the Google Pixel 3a as the first device.
 > 
-> Nothing makes me unhappy from a quick scan through these patches.
+> The Pixel 3a has the same bootloader issue as the Pixel 3 and will not work
+> on Android 10 bootloaders or later until it gets fixed for the Pixel 3.
 > 
-> And I'd really love to just have this long saga ended, and FOLL_FORCE
-> finally relegated to purely ptrace accesses.
+> SoC Initial Features:
+>  - power management
+>  - clocks
+>  - pinctrl
+>  - eMMC
+>  - USB 2.0
+>  - GENI I2C
+>  - IOMMU
+>  - RPMh
+>  - interrupts
 > 
-> So an enthusiastic Ack from me.
+> Device-Specific Initial Features:
+>  - side buttons (keys)
+>  - regulators
+>  - touchscreen
+> 
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |    1 +
+>  .../boot/dts/qcom/sdm670-google-sargo.dts     |  533 ++++++++
+>  arch/arm64/boot/dts/qcom/sdm670.dtsi          | 1160 +++++++++++++++++
+>  3 files changed, 1694 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sdm670.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index b0558d3389e5..4eb5d8829efb 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -124,6 +124,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-voyager.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm632-fairphone-fp3.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm636-sony-xperia-ganges-mermaid.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm660-xiaomi-lavender.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sdm670-google-sargo.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-cheza-r3.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts b/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
+> new file mode 100644
+> index 000000000000..fe3f61f8a348
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
+> @@ -0,0 +1,533 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Device tree for Google Pixel 3a, adapted from google-blueline device tree,
+> + * xiaomi-lavender device tree, and oneplus-common device tree.
+> + *
+> + * Copyright (c) 2022, Richard Acayan. All rights reserved.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +#include <dt-bindings/power/qcom-rpmpd.h>
+> +#include "sdm670.dtsi"
+> +#include "pm660.dtsi"
+> +#include "pm660l.dtsi"
+> +
+> +/delete-node/ &mpss_region;
+> +/delete-node/ &venus_mem;
+> +/delete-node/ &wlan_msa_mem;
+> +/delete-node/ &cdsp_mem;
+> +/delete-node/ &mba_region;
+> +/delete-node/ &adsp_mem;
+> +/delete-node/ &ipa_fw_mem;
+> +/delete-node/ &ipa_gsi_mem;
+> +/delete-node/ &gpu_mem;
+> +
+> +/ {
+> +	model = "Google Pixel 3a";
+> +	compatible = "google,sargo", "qcom,sdm670";
+> +	qcom,board-id = <0x00041e05 0>;
+> +	qcom,msm-id = <321 0x20001>;
 
-Thanks Linus! My hope is that we can remove it from all drivers and not 
-have to leave it in for some corner cases; so far it looks promising.
+These two are not allowed for your platform. If you tested your DTS, you
+would see:
 
--- 
-Thanks,
+ /: qcom,board-id: False schema does not allow [[269829, 0]]
+ /: qcom,msm-id: False schema does not allow [[321, 131073]]
 
-David / dhildenb
+This must be fixed.
+
+Best regards,
+Krzysztof
 
