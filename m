@@ -2,162 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680F4620A35
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C98620A33
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 08:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiKHHdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 02:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S233376AbiKHHcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 02:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbiKHHc5 (ORCPT
+        with ESMTP id S233087AbiKHHcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 02:32:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F4E167EE
-        for <linux-kernel@vger.kernel.org>; Mon,  7 Nov 2022 23:31:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667892714;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qMzkFr5wWO2ErYRr9fFrSjmX0hB7P0RxUcl1SJ2pD3Q=;
-        b=JyOLAYpbqNaZdTzilppZo430FuG7OeppYzE7PsHsgjJ4iKmh0zIujvcUEiptcWQ+8aGZ7c
-        Z50xEcFoX7fvNm8PFYTXpZtufIG5pR/TUdLjZ5m+lvUG7PfblDshygub2awXCRcq4rbIK6
-        vEA2fPT9SpT1BjZDn+getXtUcMzCZyA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-616-sLd_oTq3NbmOL_jiXycHGQ-1; Tue, 08 Nov 2022 02:31:51 -0500
-X-MC-Unique: sLd_oTq3NbmOL_jiXycHGQ-1
-Received: by mail-wr1-f69.google.com with SMTP id k1-20020adfb341000000b00238745c9b1aso3607864wrd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 07 Nov 2022 23:31:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qMzkFr5wWO2ErYRr9fFrSjmX0hB7P0RxUcl1SJ2pD3Q=;
-        b=cDACFtYzWviKwVxz17juvWQC59qGtcqcr+cSSUd8eEJmCcOfZsDtRcIrsLjOKDuDGa
-         sh/3esAIdCdg4vkER4zc82qBgGJxCxEN0N+mVZD13cha7FbLaYx7o4MwNJf5bNDnt8cw
-         op4aiUSFxIDDuVV/hWxCmWhnvadS7CoRsSlFi8sf3zhW6ucXUxmKupROQ5liwkAp2YVN
-         HOmt2yJ/k47TpDHY3lkHWEf37TNkFGSZBPN3bD6RS9DAXMRVCZrI3fJNJBNO0u3StUo6
-         IeLLVPR4cMQamFd1EOLAMk920sJQLNPOsRAT2EWWjxGwQiIjr3SOENUyeYHWKYlTlocD
-         MI0g==
-X-Gm-Message-State: ANoB5pn9VPeAM705rCQfrCvc3u+cDco/Da9+qpgIU72UFwyQr7mC5Uxu
-        lVcRNSiYaVeOUCm3A/g7n8/AumwKkOWLnmUx7mOLOoYsx4mUKVeS2Ps30BaVutYEaXwgwSaJx1/
-        yDhlpKY7leyqQY1MFNeu+O3ud
-X-Received: by 2002:a1c:a1c4:0:b0:3cf:a616:cc8d with SMTP id k187-20020a1ca1c4000000b003cfa616cc8dmr8088678wme.62.1667892710086;
-        Mon, 07 Nov 2022 23:31:50 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5uIx7UmC0fECL2xHHWwwpOMztkaHKJt1L2WyCKzX01NL2l1JGJEX5qifjLTMybc5+Tr12N5A==
-X-Received: by 2002:a1c:a1c4:0:b0:3cf:a616:cc8d with SMTP id k187-20020a1ca1c4000000b003cfa616cc8dmr8088667wme.62.1667892709861;
-        Mon, 07 Nov 2022 23:31:49 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id p4-20020a05600c1d8400b003b497138093sm10405740wms.47.2022.11.07.23.31.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 23:31:49 -0800 (PST)
-Message-ID: <c9c0ca0d-d100-c789-dbb8-b308652695e7@redhat.com>
-Date:   Tue, 8 Nov 2022 08:31:47 +0100
+        Tue, 8 Nov 2022 02:32:47 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F67A1ADA6;
+        Mon,  7 Nov 2022 23:32:46 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A87WTnO010347;
+        Tue, 8 Nov 2022 01:32:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667892749;
+        bh=fob4BUWDvkc0MXg4j41UHbMPxCqHjKfum4yhBy3PBzU=;
+        h=From:To:CC:Subject:Date;
+        b=bSk955qOd+OnlGahpmQnRoRJw93xsRabx8ZgPfthn5B2Jky81gytE0v/o3cxRs2cg
+         Nkp3zPetxBgDrZauCGH86lr7NpW/94eIAw+0OXcC9sO9vnpMjj9zDWsJ8q5+iE+ZwJ
+         2X3DdELq1cHJnYcCZV9c4W7K4q6Z1KBbUxAJjkd0=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A87WTfS121556
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 8 Nov 2022 01:32:29 -0600
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 8 Nov
+ 2022 01:32:28 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 8 Nov 2022 01:32:28 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A87WRq3053308;
+        Tue, 8 Nov 2022 01:32:27 -0600
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <nm@ti.com>, <piyali_g@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
+Date:   Tue, 8 Nov 2022 13:02:31 +0530
+Message-ID: <20221108073231.35008-1-b-kapoor@ti.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Reply-To: eric.auger@redhat.com
-Subject: Re: [RFC] vhost: Clear the pending messages on
- vhost_init_device_iotlb()
-Content-Language: en-US
-To:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     eric.auger.pro@gmail.com, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterx@redhat.com
-References: <20221107203431.368306-1-eric.auger@redhat.com>
- <20221107153924-mutt-send-email-mst@kernel.org>
- <b8487793-d7b8-0557-a4c2-b62754e14830@redhat.com>
- <20221107180022-mutt-send-email-mst@kernel.org>
- <CACGkMEsYyH5P2h6XkBgrW4O-xJXxdzzRa1+T2zjJ07OHiYObVA@mail.gmail.com>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <CACGkMEsYyH5P2h6XkBgrW4O-xJXxdzzRa1+T2zjJ07OHiYObVA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+J721S2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
+for 8 channel ADCs for J721S2.
 
+Enable ADCs present on J721S2 soc.
 
-On 11/8/22 04:09, Jason Wang wrote:
-> On Tue, Nov 8, 2022 at 7:06 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->> On Mon, Nov 07, 2022 at 10:10:06PM +0100, Eric Auger wrote:
->>> Hi Michael,
->>> On 11/7/22 21:42, Michael S. Tsirkin wrote:
->>>> On Mon, Nov 07, 2022 at 09:34:31PM +0100, Eric Auger wrote:
->>>>> When the vhost iotlb is used along with a guest virtual iommu
->>>>> and the guest gets rebooted, some MISS messages may have been
->>>>> recorded just before the reboot and spuriously executed by
->>>>> the virtual iommu after the reboot. Despite the device iotlb gets
->>>>> re-initialized, the messages are not cleared. Fix that by calling
->>>>> vhost_clear_msg() at the end of vhost_init_device_iotlb().
->>>>>
->>>>> Signed-off-by: Eric Auger <eric.auger@redhat.com>
->>>>> ---
->>>>>  drivers/vhost/vhost.c | 1 +
->>>>>  1 file changed, 1 insertion(+)
->>>>>
->>>>> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
->>>>> index 40097826cff0..422a1fdee0ca 100644
->>>>> --- a/drivers/vhost/vhost.c
->>>>> +++ b/drivers/vhost/vhost.c
->>>>> @@ -1751,6 +1751,7 @@ int vhost_init_device_iotlb(struct vhost_dev *d, bool enabled)
->>>>>    }
->>>>>
->>>>>    vhost_iotlb_free(oiotlb);
->>>>> +  vhost_clear_msg(d);
->>>>>
->>>>>    return 0;
->>>>>  }
->>>> Hmm.  Can't messages meanwhile get processes and affect the
->>>> new iotlb?
->>> Isn't the msg processing stopped at the moment this function is called
->>> (VHOST_SET_FEATURES)?
->>>
->>> Thanks
->>>
->>> Eric
->> It's pretty late here I'm not sure.  You tell me what prevents it.
-> So the proposed code assumes that Qemu doesn't process device IOTLB
-> before VHOST_SET_FEAETURES. Consider there's no reset in the general
-> vhost uAPI,  I wonder if it's better to move the clear to device code
-> like VHOST_NET_SET_BACKEND. So we can clear it per vq?
+Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+---
+ .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++++
+ 2 files changed, 54 insertions(+)
 
-OK I will look at this alternative
->
->> BTW vhost_init_device_iotlb gets enabled parameter but ignores
->> it, we really should drop that.
-> Yes.
-Yes I saw that too. I will send a patch.
->
->> Also, it looks like if features are set with VIRTIO_F_ACCESS_PLATFORM
->> and then cleared, iotlb is not properly cleared - bug?
-> Not sure, old IOTLB may still work. But for safety, we need to disable
-> device IOTLB in this case.
-OK
-
-Thanks
-
-Eric
->
-> Thanks
->
->>
->>>>
->>>>> --
->>>>> 2.37.3
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+index b210cc07c539..de9cb40273be 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+@@ -429,3 +429,17 @@
+ &main_mcan17 {
+ 	status = "disabled";
+ };
++
++&tscadc0 {
++	status = "okay";
++	adc {
++		ti,adc-channels = <0 1 2 3 4 5 6 7>;
++	};
++};
++
++&tscadc1 {
++	status = "okay";
++	adc {
++		ti,adc-channels = <0 1 2 3 4 5 6 7>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+index 4d1bfabd1313..47a7a6b500c2 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+@@ -299,4 +299,44 @@
+ 			ti,cpts-periodic-outputs = <2>;
+ 		};
+ 	};
++
++	tscadc0: tscadc@40200000 {
++		compatible = "ti,am3359-tscadc";
++		reg = <0x0 0x40200000 0x0 0x1000>;
++		interrupts = <GIC_SPI 892 IRQ_TYPE_LEVEL_HIGH>;
++		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 0 0>;
++		assigned-clocks = <&k3_clks 0 2>;
++		assigned-clock-rates = <60000000>;
++		clock-names = "adc_tsc_fck";
++		dmas = <&main_udmap 0x7400>,
++			<&main_udmap 0x7401>;
++		dma-names = "fifo0", "fifo1";
++		status = "disabled";
++
++		adc {
++			#io-channel-cells = <1>;
++			compatible = "ti,am3359-adc";
++		};
++	};
++
++	tscadc1: tscadc@40210000 {
++		compatible = "ti,am3359-tscadc";
++		reg = <0x0 0x40210000 0x0 0x1000>;
++		interrupts = <GIC_SPI 893 IRQ_TYPE_LEVEL_HIGH>;
++		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 1 0>;
++		assigned-clocks = <&k3_clks 1 2>;
++		assigned-clock-rates = <60000000>;
++		clock-names = "adc_tsc_fck";
++		dmas = <&main_udmap 0x7402>,
++			<&main_udmap 0x7403>;
++		dma-names = "fifo0", "fifo1";
++		status = "disabled";
++
++		adc {
++			#io-channel-cells = <1>;
++			compatible = "ti,am3359-adc";
++		};
++	};
+ };
+-- 
+2.20.1
 
