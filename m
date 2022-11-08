@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A64621B13
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28520621B04
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 18:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbiKHRsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 12:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
+        id S234623AbiKHRrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 12:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbiKHRsT (ORCPT
+        with ESMTP id S234618AbiKHRq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 12:48:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C8C5B846
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 09:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667929639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=38MUyfY75dlZXD6vpb40hXjC6++exqwh71jAXDbCRZc=;
-        b=L7Jm2WmjL8gKBAlK4f5yHsCYJEGPoShDjjYkRRYZig1FUZE5zEvTg6/C2syldVSx5H13ZS
-        eZwTIJtQ49qgIH78Nkivn3qeG3E97fqWsexUvFkpmQkMyChbqhJV0WIFyFRDisLyjRsEzS
-        Q63ICjBRVONqqwvNsUbyR8YofvT8vjE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-396-55uJzxynM92kRGlc8OpujA-1; Tue, 08 Nov 2022 12:47:16 -0500
-X-MC-Unique: 55uJzxynM92kRGlc8OpujA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B6E5101A56D;
-        Tue,  8 Nov 2022 17:47:15 +0000 (UTC)
-Received: from t480s.fritz.box (unknown [10.39.194.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E830C15BB5;
-        Tue,  8 Nov 2022 17:47:12 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        David Hildenbrand <david@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Dave Chinner <david@fromorbit.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: [PATCH v2 5/7] mm/autonuma: use can_change_(pte|pmd)_writable() to replace savedwrite
-Date:   Tue,  8 Nov 2022 18:46:50 +0100
-Message-Id: <20221108174652.198904-6-david@redhat.com>
-In-Reply-To: <20221108174652.198904-1-david@redhat.com>
-References: <20221108174652.198904-1-david@redhat.com>
+        Tue, 8 Nov 2022 12:46:57 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DA7554D7;
+        Tue,  8 Nov 2022 09:46:55 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id g12so22105041wrs.10;
+        Tue, 08 Nov 2022 09:46:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eCAW19E5l681mF+R72oFht/CQ2wMh6AzLr3NL86vzHU=;
+        b=KTzmBk0JE13err2vSnXrAVtcQ2rrmE9bBZw+gTbDrZaw1ZzmWcNDqIUhdizIQPUY0+
+         01GwSZa+t7UD/xjc4ZcdcUKdd+6rE57pOaEEe7IwMe0sDKjs7LuKZNHgfEBjHQD479bp
+         CWxHXfzO4cGP8hQtsTxMSk0npAaqN3ZJdUoY7heJBXk2/OgquAvBHVPX+TLCcx6mOtzc
+         KVmLyXcOCRGJF0v7c08dE1A5tH5g35g+qXdKSYVrBJNgHB0Vu8eOEx4hqXSrb+SYzPFf
+         8UuAKeRynC02FfwxxhK9D27/GX9FI45AJp6rCyD7j1Sfocv6icDNwsdFi87SDJ4bpccR
+         /Euw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eCAW19E5l681mF+R72oFht/CQ2wMh6AzLr3NL86vzHU=;
+        b=ZMyTG+eIO8ADFMOwnRARIemdzThG6Ndgq7pg/YC4wuu3bQtMt2SZFLhlMAV9OCgaJx
+         xa7QIWL6x3symps/ARW8agaKVsmMiTShjia6vT2ddr1NH4ZZmWe3GDKY/ptKym/JGZDM
+         SxrCTU7a95b2TWRCXd9AJ4yQxJoIXzcLLsju87qwUbHxFdlbehkno0cMHEZAqkMnfO/s
+         EtGxQ4E9zF+RWwTatO8F7ADEa7mgdoliHmFhS/ZbdGWoGs55trtAWZ9cj7kiBg+/YTk1
+         8ezSEfdCoAOf/WNnfc2XmBfI3Mg1NsAWF0qjkB9JJ4La5KPncnFqRMMrPiGQIE5/FUsn
+         X5EQ==
+X-Gm-Message-State: ACrzQf1arRr5NhdwhHuTiyxwiAIVAhITb/OKvNxj9MQ4QPhGiho4vTJ1
+        RQaThB2TMiZqb2msK28SAgQ=
+X-Google-Smtp-Source: AMsMyM7wysQrxo4qkni3Qar3s+rAjvxOzJif1WlMKCVrxnJjxUAX/BfYxsSJWY/0BdqiVCNkMtPmBA==
+X-Received: by 2002:a5d:5942:0:b0:225:7425:4e39 with SMTP id e2-20020a5d5942000000b0022574254e39mr35607783wri.566.1667929614298;
+        Tue, 08 Nov 2022 09:46:54 -0800 (PST)
+Received: from [192.168.0.25] ([37.222.251.204])
+        by smtp.gmail.com with ESMTPSA id s1-20020a7bc381000000b003c6b874a0dfsm13993940wmj.14.2022.11.08.09.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 09:46:53 -0800 (PST)
+Message-ID: <32ae4104-673b-1b34-5efb-dc1317e80530@gmail.com>
+Date:   Tue, 8 Nov 2022 18:46:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
+        nfraprado@collabora.com
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
+        singo.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221107072243.15748-1-nancy.lin@mediatek.com>
+ <20221107072243.15748-7-nancy.lin@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v28 06/11] soc: mediatek: add mtk-mmsys config API for
+ mt8195 vdosys1
+In-Reply-To: <20221107072243.15748-7-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,291 +92,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit b191f9b106ea ("mm: numa: preserve PTE write permissions across a
-NUMA hinting fault") added remembering write permissions using ordinary
-pte_write() for PROT_NONE mapped pages to avoid write faults when
-remapping the page !PROT_NONE on NUMA hinting faults.
 
-That commit noted:
 
-    The patch looks hacky but the alternatives looked worse. The tidest was
-    to rewalk the page tables after a hinting fault but it was more complex
-    than this approach and the performance was worse. It's not generally
-    safe to just mark the page writable during the fault if it's a write
-    fault as it may have been read-only for COW so that approach was
-    discarded.
+On 07/11/2022 08:22, Nancy.Lin wrote:
+> Add four mmsys config APIs. The config APIs are used for config
+> mmsys reg. Some mmsys regs need to be set according to the
+> HW engine binding to the mmsys simultaneously.
+> 
+> 1. mtk_mmsys_merge_async_config: config merge async width/height.
+>     async is used for cross-clock domain synchronization.
+> 2. mtk_mmsys_hdr_confing: config hdr backend async width/height.
+> 3. mtk_mmsys_mixer_in_config and mtk_mmsys_mixer_in_config:
+>     config mixer related settings.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 
-Later, commit 288bc54949fc ("mm/autonuma: let architecture override how
-the write bit should be stashed in a protnone pte.") introduced a family
-of savedwrite PTE functions that didn't necessarily improve the whole
-situation.
+Not something we need to fix in this series, but it would make sense instead of 
+adding all the EXPORTS to pass the functions as callbacks in the 
+platform_device_register_data. But I realize you don't pass the VDOSYS number to 
+the DRM driver to distinguish between the different MMSYS devices that created 
+the platform device. I hadn't had a deep look on the DRM implementation but I 
+suppose it will be challenge...
 
-One confusing thing is that nowadays, if a page is pte_protnone()
-and pte_savedwrite() then also pte_write() is true. Another source of
-confusion is that there is only a single pte_mk_savedwrite() call in the
-kernel. All other write-protection code seems to silently rely on
-pte_wrprotect().
+Regards,
+Matthias
 
-Ever since PageAnonExclusive was introduced and we started using it in
-mprotect context via commit 64fe24a3e05e ("mm/mprotect: try avoiding write
-faults for exclusive anonymous pages when changing protection"), we do
-have machinery in place to avoid write faults when changing protection,
-which is exactly what we want to do here.
-
-Let's similarly do what ordinary mprotect() does nowadays when upgrading
-write permissions and reuse can_change_pte_writable() and
-can_change_pmd_writable() to detect if we can upgrade PTE permissions to be
-writable.
-
-For anonymous pages there should be absolutely no change: if an
-anonymous page is not exclusive, it could not have been mapped writable --
-because only exclusive anonymous pages can be mapped writable.
-
-However, there *might* be a change for writable shared mappings that
-require writenotify: if they are not dirty, we cannot map them writable.
-While it might not matter in practice, we'd need a different way to
-identify whether writenotify is actually required -- and ordinary mprotect
-would benefit from that as well.
-
-Note that we don't optimize for the actual migration case:
-(1) When migration succeeds the new PTE will not be writable because the
-    source PTE was not writable (protnone); in the future we
-    might just optimize that case similarly by reusing
-    can_change_pte_writable()/can_change_pmd_writable() when removing
-    migration PTEs.
-(2) When migration fails, we'd have to recalculate the "writable" flag
-    because we temporarily dropped the PT lock; for now keep it simple and
-    set "writable=false".
-
-We'll remove all savedwrite leftovers next.
-
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- include/linux/mm.h |  2 ++
- mm/huge_memory.c   | 26 +++++++++++++++-----------
- mm/ksm.c           |  9 ++++-----
- mm/memory.c        | 16 +++++++++++++---
- mm/mprotect.c      |  7 ++-----
- 5 files changed, 36 insertions(+), 24 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 4a7c10bed8bd..0637de13aa82 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1989,6 +1989,8 @@ static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma
- 	return !!(vma->vm_flags & VM_WRITE);
- 
- }
-+bool can_change_pte_writable(struct vm_area_struct *vma, unsigned long addr,
-+			     pte_t pte);
- extern unsigned long change_protection(struct mmu_gather *tlb,
- 			      struct vm_area_struct *vma, unsigned long start,
- 			      unsigned long end, pgprot_t newprot,
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index eeba9c00df62..1ea76240dda6 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1465,8 +1465,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
- 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
- 	int page_nid = NUMA_NO_NODE;
- 	int target_nid, last_cpupid = (-1 & LAST_CPUPID_MASK);
--	bool migrated = false;
--	bool was_writable = pmd_savedwrite(oldpmd);
-+	bool migrated = false, writable = false;
- 	int flags = 0;
- 
- 	vmf->ptl = pmd_lock(vma->vm_mm, vmf->pmd);
-@@ -1476,12 +1475,22 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
- 	}
- 
- 	pmd = pmd_modify(oldpmd, vma->vm_page_prot);
-+
-+	/*
-+	 * Detect now whether the PMD could be writable; this information
-+	 * is only valid while holding the PT lock.
-+	 */
-+	writable = pmd_write(pmd);
-+	if (!writable && vma_wants_manual_pte_write_upgrade(vma) &&
-+	    can_change_pmd_writable(vma, vmf->address, pmd))
-+		writable = true;
-+
- 	page = vm_normal_page_pmd(vma, haddr, pmd);
- 	if (!page)
- 		goto out_map;
- 
- 	/* See similar comment in do_numa_page for explanation */
--	if (!was_writable)
-+	if (!writable)
- 		flags |= TNF_NO_GROUP;
- 
- 	page_nid = page_to_nid(page);
-@@ -1500,6 +1509,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
- 	}
- 
- 	spin_unlock(vmf->ptl);
-+	writable = false;
- 
- 	migrated = migrate_misplaced_page(page, vma, target_nid);
- 	if (migrated) {
-@@ -1526,7 +1536,7 @@ vm_fault_t do_huge_pmd_numa_page(struct vm_fault *vmf)
- 	/* Restore the PMD */
- 	pmd = pmd_modify(oldpmd, vma->vm_page_prot);
- 	pmd = pmd_mkyoung(pmd);
--	if (was_writable)
-+	if (writable)
- 		pmd = pmd_mkwrite(pmd);
- 	set_pmd_at(vma->vm_mm, haddr, vmf->pmd, pmd);
- 	update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
-@@ -1767,11 +1777,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	struct mm_struct *mm = vma->vm_mm;
- 	spinlock_t *ptl;
- 	pmd_t oldpmd, entry;
--	bool preserve_write;
--	int ret;
- 	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
- 	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
- 	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
-+	int ret = 1;
- 
- 	tlb_change_page_size(tlb, HPAGE_PMD_SIZE);
- 
-@@ -1782,9 +1791,6 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	if (!ptl)
- 		return 0;
- 
--	preserve_write = prot_numa && pmd_write(*pmd);
--	ret = 1;
--
- #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
- 	if (is_swap_pmd(*pmd)) {
- 		swp_entry_t entry = pmd_to_swp_entry(*pmd);
-@@ -1864,8 +1870,6 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 	oldpmd = pmdp_invalidate_ad(vma, addr, pmd);
- 
- 	entry = pmd_modify(oldpmd, newprot);
--	if (preserve_write)
--		entry = pmd_mk_savedwrite(entry);
- 	if (uffd_wp) {
- 		entry = pmd_wrprotect(entry);
- 		entry = pmd_mkuffd_wp(entry);
-diff --git a/mm/ksm.c b/mm/ksm.c
-index dc15c4a2a6ff..dd02780c387f 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -1069,7 +1069,6 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
- 
- 	anon_exclusive = PageAnonExclusive(page);
- 	if (pte_write(*pvmw.pte) || pte_dirty(*pvmw.pte) ||
--	    (pte_protnone(*pvmw.pte) && pte_savedwrite(*pvmw.pte)) ||
- 	    anon_exclusive || mm_tlb_flush_pending(mm)) {
- 		pte_t entry;
- 
-@@ -1107,11 +1106,11 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
- 
- 		if (pte_dirty(entry))
- 			set_page_dirty(page);
-+		entry = pte_mkclean(entry);
-+
-+		if (pte_write(entry))
-+			entry = pte_wrprotect(entry);
- 
--		if (pte_protnone(entry))
--			entry = pte_mkclean(pte_clear_savedwrite(entry));
--		else
--			entry = pte_mkclean(pte_wrprotect(entry));
- 		set_pte_at_notify(mm, pvmw.address, pvmw.pte, entry);
- 	}
- 	*orig_pte = *pvmw.pte;
-diff --git a/mm/memory.c b/mm/memory.c
-index 78e2c58f6f31..eb76705f7739 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4684,10 +4684,10 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct page *page = NULL;
- 	int page_nid = NUMA_NO_NODE;
-+	bool writable = false;
- 	int last_cpupid;
- 	int target_nid;
- 	pte_t pte, old_pte;
--	bool was_writable = pte_savedwrite(vmf->orig_pte);
- 	int flags = 0;
- 
- 	/*
-@@ -4706,6 +4706,15 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	old_pte = ptep_get(vmf->pte);
- 	pte = pte_modify(old_pte, vma->vm_page_prot);
- 
-+	/*
-+	 * Detect now whether the PTE could be writable; this information
-+	 * is only valid while holding the PT lock.
-+	 */
-+	writable = pte_write(pte);
-+	if (!writable && vma_wants_manual_pte_write_upgrade(vma) &&
-+	    can_change_pte_writable(vma, vmf->address, pte))
-+		writable = true;
-+
- 	page = vm_normal_page(vma, vmf->address, pte);
- 	if (!page || is_zone_device_page(page))
- 		goto out_map;
-@@ -4722,7 +4731,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	 * pte_dirty has unpredictable behaviour between PTE scan updates,
- 	 * background writeback, dirty balancing and application behaviour.
- 	 */
--	if (!was_writable)
-+	if (!writable)
- 		flags |= TNF_NO_GROUP;
- 
- 	/*
-@@ -4749,6 +4758,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 		goto out_map;
- 	}
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
-+	writable = false;
- 
- 	/* Migrate to the requested node */
- 	if (migrate_misplaced_page(page, vma, target_nid)) {
-@@ -4777,7 +4787,7 @@ static vm_fault_t do_numa_page(struct vm_fault *vmf)
- 	old_pte = ptep_modify_prot_start(vma, vmf->address, vmf->pte);
- 	pte = pte_modify(old_pte, vma->vm_page_prot);
- 	pte = pte_mkyoung(pte);
--	if (was_writable)
-+	if (writable)
- 		pte = pte_mkwrite(pte);
- 	ptep_modify_prot_commit(vma, vmf->address, vmf->pte, old_pte, pte);
- 	update_mmu_cache(vma, vmf->address, vmf->pte);
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index fe22db2c9cdd..093cb50f2fc4 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -39,8 +39,8 @@
- 
- #include "internal.h"
- 
--static inline bool can_change_pte_writable(struct vm_area_struct *vma,
--					   unsigned long addr, pte_t pte)
-+bool can_change_pte_writable(struct vm_area_struct *vma, unsigned long addr,
-+			     pte_t pte)
- {
- 	struct page *page;
- 
-@@ -121,7 +121,6 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 		oldpte = *pte;
- 		if (pte_present(oldpte)) {
- 			pte_t ptent;
--			bool preserve_write = prot_numa && pte_write(oldpte);
- 
- 			/*
- 			 * Avoid trapping faults against the zero or KSM
-@@ -177,8 +176,6 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 
- 			oldpte = ptep_modify_prot_start(vma, addr, pte);
- 			ptent = pte_modify(oldpte, newprot);
--			if (preserve_write)
--				ptent = pte_mk_savedwrite(ptent);
- 
- 			if (uffd_wp) {
- 				ptent = pte_wrprotect(ptent);
--- 
-2.38.1
-
+> ---
+>   drivers/soc/mediatek/mt8195-mmsys.h    |  6 +++++
+>   drivers/soc/mediatek/mtk-mmsys.c       | 35 ++++++++++++++++++++++++++
+>   include/linux/soc/mediatek/mtk-mmsys.h |  9 +++++++
+>   3 files changed, 50 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mt8195-mmsys.h b/drivers/soc/mediatek/mt8195-mmsys.h
+> index fd7b455bd675..454944a9409c 100644
+> --- a/drivers/soc/mediatek/mt8195-mmsys.h
+> +++ b/drivers/soc/mediatek/mt8195-mmsys.h
+> @@ -75,6 +75,12 @@
+>   #define MT8195_SOUT_DSC_WRAP1_OUT_TO_SINA_VIRTUAL0		(2 << 16)
+>   #define MT8195_SOUT_DSC_WRAP1_OUT_TO_VPP_MERGE			(3 << 16)
+>   
+> +#define MT8195_VDO1_MERGE0_ASYNC_CFG_WD				0xe30
+> +#define MT8195_VDO1_HDRBE_ASYNC_CFG_WD				0xe70
+> +#define MT8195_VDO1_HDR_TOP_CFG					0xd00
+> +#define MT8195_VDO1_MIXER_IN1_ALPHA				0xd30
+> +#define MT8195_VDO1_MIXER_IN1_PAD				0xd40
+> +
+>   #define MT8195_VDO1_VPP_MERGE0_P0_SEL_IN			0xf04
+>   #define MT8195_VPP_MERGE0_P0_SEL_IN_FROM_MDP_RDMA0			1
+>   
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+> index 73c8bd27e6ae..6040a3cff6f8 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -137,6 +137,41 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_mmsys_ddp_disconnect);
+>   
+> +void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height)
+> +{
+> +	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MERGE0_ASYNC_CFG_WD + 0x10 * idx,
+> +			      ~0, height << 16 | width);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_merge_async_config);
+> +
+> +void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height)
+> +{
+> +	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_HDRBE_ASYNC_CFG_WD, ~0,
+> +			      be_height << 16 | be_width);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_hdr_config);
+> +
+> +void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
+> +			       u8 mode, u32 biwidth)
+> +{
+> +	struct mtk_mmsys *mmsys = dev_get_drvdata(dev);
+> +
+> +	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_ALPHA + (idx - 1) * 4, ~0,
+> +			      alpha << 16 | alpha);
+> +	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_HDR_TOP_CFG, BIT(19 + idx),
+> +			      alpha_sel << (19 + idx));
+> +	mtk_mmsys_update_bits(mmsys, MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
+> +			      GENMASK(31, 16) | GENMASK(1, 0), biwidth << 16 | mode);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_config);
+> +
+> +void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap)
+> +{
+> +	mtk_mmsys_update_bits(dev_get_drvdata(dev), MT8195_VDO1_MIXER_IN1_PAD + (idx - 1) * 4,
+> +			      BIT(4), channel_swap << 4);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_mmsys_mixer_in_channel_swap);
+> +
+>   void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val)
+>   {
+>   	if (val)
+> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+> index 127f1b888ace..a4708859c188 100644
+> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> @@ -75,4 +75,13 @@ void mtk_mmsys_ddp_disconnect(struct device *dev,
+>   
+>   void mtk_mmsys_ddp_dpi_fmt_config(struct device *dev, u32 val);
+>   
+> +void mtk_mmsys_merge_async_config(struct device *dev, int idx, int width, int height);
+> +
+> +void mtk_mmsys_hdr_config(struct device *dev, int be_width, int be_height);
+> +
+> +void mtk_mmsys_mixer_in_config(struct device *dev, int idx, bool alpha_sel, u16 alpha,
+> +			       u8 mode, u32 biwidth);
+> +
+> +void mtk_mmsys_mixer_in_channel_swap(struct device *dev, int idx, bool channel_swap);
+> +
+>   #endif /* __MTK_MMSYS_H */
