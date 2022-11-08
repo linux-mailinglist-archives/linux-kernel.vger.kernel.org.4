@@ -2,172 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE066620BBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FA6620BC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiKHJHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S233416AbiKHJJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbiKHJG5 (ORCPT
+        with ESMTP id S233098AbiKHJJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:06:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FF21DA5A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:06:56 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1osKZD-0004wI-4U; Tue, 08 Nov 2022 10:06:47 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1osKZC-0001Jg-6J; Tue, 08 Nov 2022 10:06:46 +0100
-Date:   Tue, 8 Nov 2022 10:06:46 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        Sherry Sun <sherry.sun@nxp.com>, devicetree@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V3 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
- support wifi
-Message-ID: <20221108090646.n4qbhouc7vxtwir5@pengutronix.de>
-References: <20221108021820.1854971-1-peng.fan@oss.nxp.com>
- <20221108021820.1854971-13-peng.fan@oss.nxp.com>
+        Tue, 8 Nov 2022 04:09:18 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB2917E09
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:09:14 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3321c2a8d4cso128106117b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:09:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0/mSgd3/KZGrXlWsE1BO75aHYjWXnPANqXO30jlvy0o=;
+        b=H1EigSh4jOLThRSpHnq9dcIPvYq1a+cJg60eKWX0jxMGiEoZ0mo+2o5tl/OIMQUMIR
+         rilQK60Pz5yFli/andC57hJq6+PZvFQe5qFkMWEOMDd7ZrvCE8f6Mt4oFlrDbcZItgH9
+         XgzcLaEbWSxRmR2pOqH3glvWxtnOC0ClHmtmaoQwylDKc1I3EPLIJGdH9p5RJL6ygn3Z
+         8NWD8wGJyjDvU6qqlEcHl1e5E1xBLpadx/eUBbFR+hIAHfKE0bA8DNDQV45riUVRCPig
+         xIc5gq/GdP0/7jbVk8yIZ8gGW2LGv5fbv4CiqkHkdaE7bPwxWaPUiId9bpfxbX9vAKzc
+         +lRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0/mSgd3/KZGrXlWsE1BO75aHYjWXnPANqXO30jlvy0o=;
+        b=m9E5OZcHoj7xw76ZSkBTbkZQJ8c2uGsSAlpL/1MdI2sMps9bwCUbHB/RnCRFGcoBy1
+         +JTdf9Q9ezYhyrUraeGGbBW+m5pOuSbjEzGKuq4hM1IBAkb7a7o7ljXLq6kXKj5t48Ue
+         WhW4aLyxUu2OLk6mZPkABQlK+G/+2zSJiULLuj0dWiBpbNgxGu9V2Yasdz+CagMOGACb
+         ocBE9vN3nC46RHveyf/j6amRlNeCWxugB9iAaVm9gBE2cgqko68yB8UzeBRXqAri0JjG
+         uYXQUJC8c5oKYshtftAd4YxDZBxlemLkaBAfHasvDRfyaxqSvxdhFqLaUQKRMt77WOVa
+         YdUQ==
+X-Gm-Message-State: ACrzQf09k6qYbqjd6iFK2wnj6oCn607WqXw0WQHmbD8LUZvI1igMGVqq
+        eGtu0daLrIPUN9PialQeXsIMErJwi+m/MlZ/TzAkUA==
+X-Google-Smtp-Source: AMsMyM4RQNU9stUJYhb4ZQLjB3gwRGc8RPODKXAWT5OzpvKnNsmrRhh9YG160heTdWtV/rSGnxwnNWI6zaktjNvEz7Q=
+X-Received: by 2002:a81:4811:0:b0:368:e6a7:6b38 with SMTP id
+ v17-20020a814811000000b00368e6a76b38mr51888756ywa.20.1667898553086; Tue, 08
+ Nov 2022 01:09:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108021820.1854971-13-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <00000000000058d01705ecddccb0@google.com> <CAG_fn=WAyOc+1GEC+P3PpTM2zLcLcepAX1pPXkj5C6aPyrDVUA@mail.gmail.com>
+ <Y2lGu/QTIWNpzFI3@sol.localdomain> <CAG_fn=VQBv-sgPhT0gLVChAtMNx0F3RcQYDKdvhBL4mBpiDkFA@mail.gmail.com>
+In-Reply-To: <CAG_fn=VQBv-sgPhT0gLVChAtMNx0F3RcQYDKdvhBL4mBpiDkFA@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 8 Nov 2022 10:08:36 +0100
+Message-ID: <CAG_fn=VPvdHxQc3xm5xkqgFq3uo5oTU_w5vyMj-qQD7DvwQ4BA@mail.gmail.com>
+Subject: Re: [syzbot] KMSAN: uninit-value in pagecache_write
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     syzbot <syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-08, Peng Fan (OSS) wrote:
-> From: Sherry Sun <sherry.sun@nxp.com>
-> 
-> Enable usdhc1 which is used for wifi.
-> 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 23 +++++++++++
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 39 +++++++++++++++++++
->  2 files changed, 62 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> index a2b24d4d4e3e..898735965ac9 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> @@ -15,6 +15,17 @@ / {
->  	aliases {
->  		spi0 = &flexspi;
->  	};
-> +
-> +	reg_sd1_vmmc: sd1_regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "WLAN_EN";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpio = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay-us = <20000>;
-> +		startup-delay-us = <100>;
-> +		enable-active-high;
-> +	};
+> >
+> > Anyway, this patch doesn't hurt, I suppose.  Can please you send it out as a
+> > formal patch to linux-ext4?  It would be easy for people to miss this patch
+> > buried in this thread.  Also, can you please send a patch to linux-f2fs-devel
+> > for the same code in fs/f2fs/verity.c?
+>
+> Will do!
 
-This is a bit inconsistent with the imx8mn-evk.dtsi where you used
-mmc-pwrseq instead of vmmc-supply. Also Do you really need the delay
-here?
+Shall I also initialize fsdata here:
 
-Regards,
-  Marco
+$ git grep 'void \*fsdata;'
+fs/affs/file.c:         void *fsdata;
+fs/ext4/verity.c:               void *fsdata;
+fs/f2fs/verity.c:               void *fsdata;
+fs/hfs/extent.c:                void *fsdata;
+fs/hfsplus/extents.c:           void *fsdata;
+fs/ocfs2/mmap.c:        void *fsdata;
 
->  };
->  
->  &ddrc {
-> @@ -53,6 +64,18 @@ flash@0 {
->  	};
->  };
->  
-> +&usdhc1 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_usdhc1_gpio>;
-> +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_usdhc1_gpio>;
-> +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_usdhc1_gpio>;
-> +	bus-width = <4>;
-> +	vmmc-supply = <&reg_sd1_vmmc>;
-> +	keep-power-in-suspend;
-> +	non-removable;
-> +	status = "okay";
-> +};
-> +
->  &usdhc3 {
->  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
->  	assigned-clock-rates = <400000000>;
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> index 7d6317d95b13..ce450965e837 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> @@ -559,6 +559,45 @@ MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX	0x140
->  		>;
->  	};
->  
-> +	pinctrl_usdhc1_gpio: usdhc1grpgpio {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1: usdhc1grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x190
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x194
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d4
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x196
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d6
-> +		>;
-> +	};
-> +
->  	pinctrl_usdhc2_gpio: usdhc2grpgpiogrp {
->  		fsl,pins = <
->  			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x1c4
-> -- 
-> 2.37.1
-> 
-> 
-> 
+?
