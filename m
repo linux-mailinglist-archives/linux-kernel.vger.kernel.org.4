@@ -2,149 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63D1620BC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C9C620BCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 10:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbiKHJHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 04:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
+        id S233497AbiKHJLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 04:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiKHJHJ (ORCPT
+        with ESMTP id S233354AbiKHJLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 04:07:09 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114801E3F0;
-        Tue,  8 Nov 2022 01:07:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667898429; x=1699434429;
-  h=from:to:cc:subject:date:message-id;
-  bh=LJJFnczcEeMn0nte3m6151Gb7yapTGUV60MFhRsjZeo=;
-  b=VUJDq89fa7dihyhJXSGJ6IpBwaEjAS6KVCVI8okK+YXtgOpPWVecbDVB
-   89KkL3WlwDycZiqXzIMlSGFYe7JbTqrD/wCHcwTcfVKT5h0TdnUrjJIrR
-   cBYIhzQf3Pnel4Fnn46uTVnxFYbc5niGY2dyPys6B0mPC8rTmJWMWHbKJ
-   uB8h6LXeAnKR4xQhSfjIraK6FzEBCf4bvjcnoiz7pGZeB9VqLjsbqfedJ
-   0VNZqQ12ERGeVpMb7H3F1Crg9ijDAfjTM4lkOZAn5KVH9bBcHFtg5qAqx
-   ATw56WUbGKULHLJ6do6/FxjGS+8wkrvJBUWtbnLgNDf/d7okwd3R6aDkv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="291034619"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="291034619"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 01:07:08 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="811172114"
-X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="811172114"
-Received: from yzhao56-desk.sh.intel.com ([10.238.200.254])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 01:07:07 -0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com,
-        Yan Zhao <yan.y.zhao@intel.com>
-Subject: [PATCH] KVM: move memslot invalidation later than possible failures
-Date:   Tue,  8 Nov 2022 16:44:16 +0800
-Message-Id: <20221108084416.11447-1-yan.y.zhao@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 8 Nov 2022 04:11:19 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE94183AC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 01:11:19 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id g62so13237236pfb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 01:11:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRKV49RtI4t06gBNCIkuiW6giDB9Zs5tU0YwgFHAQ9I=;
+        b=A5iclJj8bB5EX4XPb6T391tNql9/mwYiP9FSSOlr5xCXDVlY3thYs8+OCJSEqT9KZR
+         MFPb9sXi+9QZwIQzUfCOdzv4T7YmF0wiOs8lq/itbPTG//CopLb6SmwPus/f8UhfZr9B
+         2dmBKHaeCV9C0Fj/BAVgkS18tVOAJiRb+obpN4WRQIzqVkKNhsYiEhEC2jqqihpljGYf
+         ycgxO7UTr3lSd7rQSE2yGek3H7jbxUDkEJZ6W56R5mpQKSg9RwtYYmKqR/MkpHxRv5Ce
+         D/FBVpI74ASmNv14BG+zQQdZV2KPTSokJNrxjwygj623vxAInuCydsOvsOdzLQhk01vD
+         M1PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vRKV49RtI4t06gBNCIkuiW6giDB9Zs5tU0YwgFHAQ9I=;
+        b=xWHI+nmc3di8zK/3z+wvYBMx25rWkVP2QflbPz7RV8OfqWQ7Ul1kVWOVjo5Kp2sgOU
+         M6whM6y7M2jlNu98ZEuxpOFe2LOl37Jc7ZyfQcg1m8s7WhukE9qwb2H69EBrJ+6sBxG8
+         OPi1BhkVSrQlxNjzrtnognfmfNtPuUtHmxvogHDLnEIh6qjEqajsSuMunKTrjXrhcJ1s
+         SPMgNIb7dgxSbxnk7Lqz2Mubs4pT/VbVOyc9YFFXqzo6J95jMFJzNHb22U0sIg3lJnRa
+         +bE4ON5Vqq/ngRcaRyWbBnySl8exqEy2dLwsmxwuAeSFB4U5LbX8NbRybiVTu5oCkaZ7
+         EycQ==
+X-Gm-Message-State: ACrzQf087mkJT7vkuOvx8ndXfC9sbBCEgYKI/gtyRmLRquxFuomzxgoq
+        rM4jb5vIPEec8tZDhuh4xIY/zNS1p4cWLw==
+X-Google-Smtp-Source: AMsMyM5v7FKB6HKjO3RYKKttn8DsE+8IkK5A4RYSarKkAG9Favldp3lQ+AFGCI33aMNBAF8GtY9Fog==
+X-Received: by 2002:a63:6a03:0:b0:43a:18ce:7473 with SMTP id f3-20020a636a03000000b0043a18ce7473mr48937524pgc.616.1667898678521;
+        Tue, 08 Nov 2022 01:11:18 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-20.three.co.id. [180.214.232.20])
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b00172fad607b3sm6401146plh.207.2022.11.08.01.11.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 01:11:18 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id BB0E3103FE4; Tue,  8 Nov 2022 16:03:45 +0700 (WIB)
+Date:   Tue, 8 Nov 2022 16:03:45 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Pedro Falcato <pedro.falcato@gmail.com>
+Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, dalias@libc.org, ebiederm@xmission.com,
+        sam@gentoo.org, viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v2] fs/binfmt_elf: Fix memsz > filesz handling
+Message-ID: <Y2obcdsvOE00v8ue@debian.me>
+References: <20221108060145.224880-1-pedro.falcato@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221108060145.224880-1-pedro.falcato@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For memslot delete and move, kvm_invalidate_memslot() is required before
-the real changes committed.
-Besides swapping to an inactive slot, kvm_invalidate_memslot() will call
-kvm_arch_flush_shadow_memslot() and further kvm_page_track_flush_slot() in
-arch x86.
-And according to the definition in kvm_page_track_notifier_node, users can
-drop write-protection for the pages in the memory slot on receiving
-.track_flush_slot.
+On Tue, Nov 08, 2022 at 06:01:45AM +0000, Pedro Falcato wrote:
+> This patch fixes memsz > filesz handling for elf interpreters
+> and refactors interpreter/program BSS clearing into a common
+> codepath; it also fixes problems where a segment after a bss
+> could overwrite our bss clear.
+> 
 
-However, if kvm_prepare_memory_region() fails, the later
-kvm_activate_memslot() will only swap back the original slot, leaving
-previous write protection not recovered.
+Please describe your patch in imperative mood (that is, write as "Fix
+memsz > filesz handling ...").
 
-This may not be a problem for kvm itself as a page tracker user, but may
-cause problem to other page tracker users, e.g. kvmgt, whose
-write-protected pages are removed from the write-protected list and not
-added back.
+Thanks.
 
-So call kvm_prepare_memory_region first for meta data preparation before
-the slot invalidation so as to avoid failure and recovery.
-
-Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
----
- virt/kvm/kvm_main.c | 40 +++++++++++++++-------------------------
- 1 file changed, 15 insertions(+), 25 deletions(-)
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 25d7872b29c1..5f29011f432d 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1827,45 +1827,35 @@ static int kvm_set_memslot(struct kvm *kvm,
- 	 */
- 	mutex_lock(&kvm->slots_arch_lock);
- 
--	/*
--	 * Invalidate the old slot if it's being deleted or moved.  This is
--	 * done prior to actually deleting/moving the memslot to allow vCPUs to
--	 * continue running by ensuring there are no mappings or shadow pages
--	 * for the memslot when it is deleted/moved.  Without pre-invalidation
--	 * (and without a lock), a window would exist between effecting the
--	 * delete/move and committing the changes in arch code where KVM or a
--	 * guest could access a non-existent memslot.
--	 *
--	 * Modifications are done on a temporary, unreachable slot.  The old
--	 * slot needs to be preserved in case a later step fails and the
--	 * invalidation needs to be reverted.
--	 */
- 	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE) {
- 		invalid_slot = kzalloc(sizeof(*invalid_slot), GFP_KERNEL_ACCOUNT);
- 		if (!invalid_slot) {
- 			mutex_unlock(&kvm->slots_arch_lock);
- 			return -ENOMEM;
- 		}
--		kvm_invalidate_memslot(kvm, old, invalid_slot);
- 	}
- 
- 	r = kvm_prepare_memory_region(kvm, old, new, change);
- 	if (r) {
--		/*
--		 * For DELETE/MOVE, revert the above INVALID change.  No
--		 * modifications required since the original slot was preserved
--		 * in the inactive slots.  Changing the active memslots also
--		 * release slots_arch_lock.
--		 */
--		if (change == KVM_MR_DELETE || change == KVM_MR_MOVE) {
--			kvm_activate_memslot(kvm, invalid_slot, old);
-+		if (change == KVM_MR_DELETE || change == KVM_MR_MOVE)
- 			kfree(invalid_slot);
--		} else {
--			mutex_unlock(&kvm->slots_arch_lock);
--		}
-+
-+		mutex_unlock(&kvm->slots_arch_lock);
- 		return r;
- 	}
- 
-+	/*
-+	 * Invalidate the old slot if it's being deleted or moved.  This is
-+	 * done prior to actually deleting/moving the memslot to allow vCPUs to
-+	 * continue running by ensuring there are no mappings or shadow pages
-+	 * for the memslot when it is deleted/moved.  Without pre-invalidation
-+	 * (and without a lock), a window would exist between effecting the
-+	 * delete/move and committing the changes in arch code where KVM or a
-+	 * guest could access a non-existent memslot.
-+	 */
-+	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE)
-+		kvm_invalidate_memslot(kvm, old, invalid_slot);
-+
- 	/*
- 	 * For DELETE and MOVE, the working slot is now active as the INVALID
- 	 * version of the old slot.  MOVE is particularly special as it reuses
 -- 
-2.17.1
-
+An old man doll... just what I always wanted! - Clara
