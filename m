@@ -2,181 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B272062059A
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8A66205A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 02:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbiKHBH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 7 Nov 2022 20:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S233274AbiKHBJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 7 Nov 2022 20:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiKHBHx (ORCPT
+        with ESMTP id S229534AbiKHBJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 7 Nov 2022 20:07:53 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF573248CA;
-        Mon,  7 Nov 2022 17:07:52 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id f27so34741850eje.1;
-        Mon, 07 Nov 2022 17:07:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tz4DXUwB8MapeXYHJsCdHftchNNLXz8UNlurMY6/9pU=;
-        b=k1lwV6cTVWO0lVK0eV6W8mfgRjranpkmcFc04FvVS2YggyrwV1MLiGfprsJYgRgyYR
-         m/17SeVYABfYWCB/CRjVrQ/VgMV0+OSEjS2X0oi1VQXqBZFe5KadyqKYoUlYXMgxBZxf
-         NUTWWUJoX3JOjufPoplM5bCc20m+WGl+JJz35IQJ6W+F+k+DVoRDZ8HEUX53FuCKZUyH
-         4vvDbZvnb2DT4xJVkOgPr54qLjsmHZdPO6FUNIeV+LZLnR3VodZNbovX5qEwaH+c0VWU
-         y6MqIHvzAeDNFtDtfA+uBTmwmgm7fhzEPusQNXR7J7xdOwAcqU2El5g69n5/xUyWLBkV
-         Mn0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tz4DXUwB8MapeXYHJsCdHftchNNLXz8UNlurMY6/9pU=;
-        b=Nz/mM1PIexFTmfZXv8zszoO+CvoAVb8kitQjVA1x1fyuMI2g022q+KUBmL/DirlTRK
-         nLcQy6jkxri6+C/Qa8I4PraFIdMzNRTMhakyvHM3izj8Es8pICDASVw2QiMqJ488/fP2
-         lpMnmaqjH2ksfuLlY49YvwogU/rAXaKf6rlMjHbZT1Vv5vn4MjwYueZozeDu2MK/Gmho
-         /sDjZt7kej1TMHAtTLkbO368QnTduFAosf0PnsRydTQHpkByjQm1tUinkhBzpZI2EMQR
-         hmTN8GApHh6pQ6YRam933T4kzSl5aHyS+Zb/Vl/c/N0GMcVq8LIWdY73Ix3mvFDNMY0i
-         QQTQ==
-X-Gm-Message-State: ACrzQf26vAs34mil03GYy0wOko9yXEf0Dg3iU/Jw4FUW2BnMGbA6VFdO
-        QffXEM9D8B0F25XX3QsJJCLddoDpU4ugYszNNGM=
-X-Google-Smtp-Source: AMsMyM7F/wfMIAI3Pzk6zlUhjURIiB8mQML2zO0akN3+D3xP5rRkJy5XRZoc47qAoqbfK9eQtPt/3eIZHRUKm7zf6tc=
-X-Received: by 2002:a17:906:99c5:b0:73d:70c5:1a4f with SMTP id
- s5-20020a17090699c500b0073d70c51a4fmr50095400ejn.302.1667869671316; Mon, 07
- Nov 2022 17:07:51 -0800 (PST)
+        Mon, 7 Nov 2022 20:09:32 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9531FF84;
+        Mon,  7 Nov 2022 17:09:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667869771; x=1699405771;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=VkqNyk2uy7aZU4BJCc8txVHZE1SS4+Ujzdx5wfRzL4c=;
+  b=bodXX9w8DUA1I/17d1LBS5u4IV75qv2D9Iog1ojobjfye8ew8Q5VV3O+
+   WEVlNzx2he54QHbs7N+ib0FMn6lbF+9+5P0pxBMNpcZBX/BmXYFnmhGJw
+   x47+W20wigiWsA7VCmQzwMJqN5UVRGXxYNDydzpN/+d0HS/Pwcs3mzAPq
+   w1cOmTxxDd7dmMG6ScIREanvbzx0BVmaM9Ipz2eC23V2BcuWo0SF0SoPh
+   b5joXw9QVQY5fDk+iB7BGAh19uT79ZYFE7LDgMLrV/1cQn+Gfb24mC18H
+   ZKfVAXyo8WlR99xepTDeDWflPRFOhkUEu5f4+BtSGqxiVBm8gRuhi9ewV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="298081762"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="298081762"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 17:09:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="705098742"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="705098742"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Nov 2022 17:09:30 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 17:09:29 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 17:09:29 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 7 Nov 2022 17:09:29 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.48) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 7 Nov 2022 17:09:28 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yqj7/9VmIbXC8sWWzshWUHoOZVBWO5A50PHV13zSwJ4O3Wu4aH6tm2ODuuhJYIZA8y1Q5UKJyfjdZewLxcs8jXRr0ICu6Sr/gR72hXQL6TjsvBVp/MSDXlASwgq8JCD338smfg/9yI0lemfqOtvBYvCOMGEKVj/MpD59QuUUTjYtSbcjbFD0Wk9ZRms+N4STopCmfbjU6F2dwhLvwCbehhTW0q8AkAIXUcxLWlF75lOzGhKvHx8fXSVmWTyCtfxwIuMR+U+aj81/RU1eNGotaYnZw9DISqL9vhbp1q0OXIK8Uj8vkzldwK361QA2W7+FZ4oEW+jahMhaq8Bi8haowQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VkqNyk2uy7aZU4BJCc8txVHZE1SS4+Ujzdx5wfRzL4c=;
+ b=ktrt00OaBdyPTXiRYVEEyAxqKSJZCj4pdOnlEUrU910WkZ2nwB5VUfl643Q1YqUInmYX7aK2OZmBTpZKbfcEtFmTHJAqJ7Cc+b3fPR6auMsbaWRekzLSERUdCRIxxy3s9npxpG2Kg1NrplLW6u5+Cjaut8XwD3ocOEtOUk3FNWOSuHNF3ShWFJd/IARx16bEKZ2/oxd/ZOdGKdrQmM2/Z5rh2spJiAgCN965DOQk8kM7cMzZeJSyBq8nKJdLA9qakpA6ngoinXlZnGQa4lNNjym6ExCxXFp4bMF2hXEpkV0ta61OpHQGzuawyJQMTP2SsPMKrL+BXTs+wDEvfVIr8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH0PR11MB5078.namprd11.prod.outlook.com (2603:10b6:510:3e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Tue, 8 Nov
+ 2022 01:09:27 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::6eb:99bf:5c45:a94b]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::6eb:99bf:5c45:a94b%3]) with mapi id 15.20.5791.026; Tue, 8 Nov 2022
+ 01:09:27 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "Christopherson,, Sean" <seanjc@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
+CC:     "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
+Thread-Topic: [PATCH 00/44] KVM: Rework kvm_init() and hardware enabling
+Thread-Index: AQHY7xGUTp4lUVPML0yWgaOmsA79Vq4uXPOAgADckACABM0oAIAAOK8A
+Date:   Tue, 8 Nov 2022 01:09:27 +0000
+Message-ID: <bf29fe1ac84cae8ddb06e566b56c653600a1901c.camel@intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+         <20221104071749.GC1063309@ls.amr.corp.intel.com>
+         <Y2V1oslbw24/2Opd@google.com>
+         <20221107214634.GE1063309@ls.amr.corp.intel.com>
+In-Reply-To: <20221107214634.GE1063309@ls.amr.corp.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH0PR11MB5078:EE_
+x-ms-office365-filtering-correlation-id: f3173709-8644-456d-08c0-08dac125e1b6
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tRVN7ieVEs7UUPBr4s/6sRl4w30qcOlzXJ0bb4EXvUEO5NruxHDDGfhugZflEVHHky0k4r3zuwj1rcJ1BRFMBSytllvDW5zm9vbussiAbfu7cq0ME0zpUBTJ5zBABx96zq6yw/hjQaYqER1lx5F2MSRal6JQv9fWsywxbj1qI4YyJ3rkijevLFMgzotqAeAQbifEAbKzKq0CcgNY9NqvAaXWcTBNsCqyDZlR72Dq977kJnr7903EHeDwp4mhZ+6k9csCID3VAvqfAtHa7txS21YPsWA5euS9ExGMVSp6QbGwM2pnUQzc9ylfovHwd88qnv/lI2wT94xaD8o39PQp6rl6zEeBSgyyuY/idzg050ymkN9NZ20GOLaMkxhZw0rEh4n3dhlIR/cqixCjpsWVCH11/4mrAjbO3of6aWG63jmPRLYPtfg1IaNF5sfBlRfnjwkWjjRkOEV5WGDyBiPxwRTMu56Z9p3BGfNAK9Y+pBn4MGHX+eCO3n6tJLEewd5JspDgUgt7H2P0rMFwKIzqMRgl+mOc3lsbL7qwj67XZgscSoQbWI+vLt2an9CJcsbsf6zSfDD3Pd349uydzak1YhsqvET5v0v/RjISdOSs9tMOCm2WJF8SxJKWTrtUA1gXpGC8DYkgVfMw+SBELGKt/9Suf93mAHfufK8K/yTTM3WcxZ4VGoPu2tzXe8p06JVGZATPN5SSjS0N07fLkx4tr4NI2CxEqqnqRwC/JZ/dLQIugMh7VJ286DULquEX+i/CXR4iRGBUNjs8Dw3NLLnAog==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(396003)(136003)(346002)(366004)(451199015)(26005)(186003)(6512007)(83380400001)(82960400001)(38100700002)(2616005)(122000001)(38070700005)(7416002)(7406005)(5660300002)(2906002)(8936002)(41300700001)(6506007)(66946007)(71200400001)(478600001)(6486002)(107886003)(8676002)(66556008)(66446008)(66476007)(64756008)(76116006)(4326008)(54906003)(110136005)(91956017)(316002)(86362001)(36756003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?a1lEMjc1UklnSWJpc2JKVml4ai9PNkxrRnordm9DMzNTdHJLbkFOOExGZmRH?=
+ =?utf-8?B?cmJiOE5Td3dpZDlkUURzSzNDeDRtSmhoRmRrenVqTm1Ldk04NGlGSTRZNzBV?=
+ =?utf-8?B?dzhFcVBZdWFoRlZwcXg1RS93UHV5Ky8yNm82bHdObjlpTzhVUzlLd0lyaG5s?=
+ =?utf-8?B?eGVLall3NGY1RkZmL0VkeU1Galp6NGY2OU52bEdRRm9OdUgxQjk5MXZOa3FC?=
+ =?utf-8?B?enM0ZXVwQytsU0JTcU1tbm1WNlFLYkVtWmNDZVlBY0lzeSt4cTRnWDUrVm8z?=
+ =?utf-8?B?TjY0ZW1sUWtRZlVyMXhhdlhFcnlpdUZoaGJmdW12KzRLVUpQcGVQM25kS04y?=
+ =?utf-8?B?cE5vcm1CZW5kVkRsNFJYQVVPb3gwRXNiOGhGWjN2T0c5V0pScjVudWN5N2w1?=
+ =?utf-8?B?SjUxU1B5NXI0TWVHZGpzNGZHd1hwM29vdkVsTEd4L05uRzhHZ2ZvYU9rcnJl?=
+ =?utf-8?B?cHFqOUJqaWVLK1BrSk9PM2xvbGdDN25HWGNUZkdFMERUdFZWMndMN2p3eElq?=
+ =?utf-8?B?TFllU1pzRDR1M0VBOXZuSnNZQ2VaY3BMV1lPK1dlenVWeGZBUUdHbW9VNkt3?=
+ =?utf-8?B?eUtQVHBUd1FZRGVtZjFobGw1dlpZTTBYYlJLVHllUmErVStiY3pjeFVaSlFF?=
+ =?utf-8?B?QTQ4dFhCU0RYZ1hwWHozOTVIWStCWXY5YjJqT0ZrTFZMVjQwR0F0eXFLTCs1?=
+ =?utf-8?B?UDI4Uk9paEJWRG1hWUUwNVl1bVA1ZnFCY25INnZRaE1OVEFJc01PVXJ4M2Nn?=
+ =?utf-8?B?UDBqeWdXU2JlR3VVVWphcVo5WkZ1QVJxUnhpNXZmcVF2aGF5a1RIR1ZWbzlL?=
+ =?utf-8?B?Ny8zdXNJSFVtOWp6L0paWHMvazFJbkVrU2pKbUVlenJXUStEaE5mK3lzUW43?=
+ =?utf-8?B?a1huZkRvOHhPc09kOThXYTRQS0ZJMGRQYjY5QndiaGJmV0VyaUw0ZTEzNjha?=
+ =?utf-8?B?Y2ppWjVUNWFJdjlRUkdXVVJCam95bW5jRFlJcmhHcW1NL1NHZ1R4M0tIR0Y1?=
+ =?utf-8?B?SHZPK1o1Nmw5QXI2a1dac011dWd2NGpnUi9CYnFKbTdMcFU2bk1xMjRZY2dN?=
+ =?utf-8?B?aGFPR3dNU1REM09sWEoxaHpUdExqaG1LRHMvaGVYeDFoMGhVMlpXbWYxQ0Q1?=
+ =?utf-8?B?OTJQK0U3OXdUVG1EWFVoc2dUSU56MGpPUlBleGFGUjgvM2pPdWVNMXhYUXBh?=
+ =?utf-8?B?a2h5NzE3TTJlcElrMlIxcjBENFdZWjNOcjAwWUdDY1ltSlpDU2pVUmhqVXVp?=
+ =?utf-8?B?TFNSaWpDMFo5c3IrQ2FyZkswbC9KRzhSVElNZnZLY2w3ak02dE11OUQrZUR4?=
+ =?utf-8?B?aWZOTHB0NzczaWkvOENXY1NPV203TWlITUR4TElRSXNYM0lpQ1pwQ1ljc0Va?=
+ =?utf-8?B?UFJCcWJ0dUxKd3pDNi9oZElENU9FK005cWZ1dSs2MGsycmlBVllwTFFmeEJ3?=
+ =?utf-8?B?clcwOEtpUXEreGZXWTBhKzcySzM4eURuUVVqeFpFcjBHaERFMThtK2RHbHlB?=
+ =?utf-8?B?a0haeGt2UlFEY0Z6NWpNb0pQd3kzQXBZSGYvSFIwcDdQU2lzZTZhWGlSME84?=
+ =?utf-8?B?MzFRUDVBcFVHOWZIOFJBTFJpT2RQNHNMQytTRkFjYzJTeGtUMTFrR0VobFhj?=
+ =?utf-8?B?U3dxNm5oRkd1bnRDaEJ0aXlsNzB4R3V0RjV5RElsdVYwS1hoaC94cklZMk1s?=
+ =?utf-8?B?bEZlZzJNUThWWFBvMW54SWNSV0h0Q25ZZm0zWEoyVlJQRXo0aWp2R2hhcG1j?=
+ =?utf-8?B?YkR6eHhhRkRQUDFPM3hKVXI4YXVHRGd0SjcvVzUzaHFlZEhXa2RsZHRyTm4r?=
+ =?utf-8?B?Z2RMLyt1VEdZQjFOWUlSalV5Y21rd2s0Tzcwa3hPZmNwdFNTempORlRVR3JD?=
+ =?utf-8?B?eW40b3RTOXhCS2FoVkp4WmJpa0xTZ0tLZlF1eERZYURXUkVxaFJFOW1HZE9r?=
+ =?utf-8?B?WThUZmFTalB2NXlaL2x1c2lqN2RaYVUvMGRWUVlqSmtkNmVraWtoQm92UzZI?=
+ =?utf-8?B?aThCelBneVJpMUQyb2paYVpHTld6Ym1NOXlwT0EycWI0bGFMc1I5cDQ1MmtU?=
+ =?utf-8?B?ZURuZiswTWZhWlNjb0VlTWllQzI4dmdtMnl3dEd3RUE0NFY5UHNCMGlFTnpt?=
+ =?utf-8?B?VUFjQ2k0NXUvNjBkU1dpMnVXaFBVbFAwS0lPMW5GdWw3OCtMY2NoWXBGKzRh?=
+ =?utf-8?B?Znc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <737100AB69F03E4EA2AF6DD9B8BD99F4@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221103083254.237646-1-yangjihong1@huawei.com>
- <20221103083254.237646-3-yangjihong1@huawei.com> <CAEf4BzY+qP1wwVddjg7_rypcUAW8iPRzSa=1O6aFG5dSLX+1Gg@mail.gmail.com>
- <CAADnVQJW3CisB3L2nNOC0aGkPPBTHnyM-ZCXoZJc-KtNNEj+QQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJW3CisB3L2nNOC0aGkPPBTHnyM-ZCXoZJc-KtNNEj+QQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 7 Nov 2022 17:07:39 -0800
-Message-ID: <CAEf4Bzb+qJ-jzMkvWkBV0nXYj51P8DSbEHagT7h5ujCjCrRu8Q@mail.gmail.com>
-Subject: Re: [PATCH 2/4] bpf: Remove size check for sk in bpf_skb_is_valid_access
- for 32-bit architecture
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yang Jihong <yangjihong1@huawei.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>,
-        Artem Savkov <asavkov@redhat.com>, colin.i.king@gmail.com,
-        bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3173709-8644-456d-08c0-08dac125e1b6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2022 01:09:27.0631
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qMnjBY91n3Cjz0ECxgnFn2pNqk00oWRsibzMaAk6wp+8Ix1bjWtZX0+l+VGgTT9cekEfkmGg9PfQNvAqxmbQow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5078
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 4:32 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Nov 4, 2022 at 2:56 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Nov 3, 2022 at 1:36 AM Yang Jihong <yangjihong1@huawei.com> wrote:
-> > >
-> > > The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
-> > > This is because bpf_object__relocate modifies the instruction to change memory
-> > > size to 4 bytes, as shown in the following messages:
-> > >
-> > > libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
-> > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
-> > > libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
-> > >
-> > > As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
-> > > unnecessary checks need to be deleted.
-> > >
-> > > Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> > > ---
-> > >  net/core/filter.c | 2 --
-> > >  1 file changed, 2 deletions(-)
-> > >
-> > > diff --git a/net/core/filter.c b/net/core/filter.c
-> > > index bb0136e7a8e4..eab7ce89740c 100644
-> > > --- a/net/core/filter.c
-> > > +++ b/net/core/filter.c
-> > > @@ -8269,8 +8269,6 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
-> > >                         return false;
-> > >                 break;
-> > >         case offsetof(struct __sk_buff, sk):
-> > > -               if (type == BPF_WRITE || size != sizeof(__u64))
-> > > -                       return false;
-> >
-> > this probably should be specific to host architecture bitness? I'd
-> > imagine that size = 4 should be invalid on 64-bit arches (reading half
-> > of the pointer is bad)
->
-> Not quite.
-> In __sk_buff the field 'sk' is defined as:
-> __bpf_md_ptr(struct bpf_sock *, sk);
-> so it's always 64-bit load when bpf prog reads it.
-> In this case CO_RE shouldn't have been applied to uapi struct __sk_buff.
-
-Ok, hold on. __bpf_md_ptr just creates a 8-byte sized and aligned
-union. It doesn't change the pointer itself in any way:
-
-union {
-    struct bpf_sock* sk;
-    __u64 :64;
-};
-
-
-It's a 64-bit pointer only because any pointer in the BPF target is
-64-bit. But on 32-bit architectures such struct bpf_sock *sk pointer
-will *actually* be 4-byte pointer (and __u64 :64 will just make
-compiler add 4 bytes of padding after it, effectively), and BPF
-verifier will actually generate LDX instruction of BPF_W size (4 byte
-load):
-
-        case offsetof(struct __sk_buff, sk):
-                *insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, sk),
-                                      si->dst_reg, si->src_reg,
-                                      offsetof(struct sk_buff, sk));
-                break;
-
-
-BPF_FIELD_SIZEOF(struct sk_buff, sk) is 4 for 32-bit kernels.
-
-So while you are correct that it will be 8-byte load from the BPF
-side, allowing 4-byte load for such pointers should also be correct.
-It's our choice, there is no fundamental limitation why this shouldn't
-be the case.
-
-Note also that we do this transformation when fentry/fexit/raw_tp_btf
-programs traverse pointers in kernel structures. There pretending like
-pointer to an 8-byte value is actually invalid. So libbpf adjusts such
-loads to 4-byte loads for CO-RE-relocatable types, which makes it all
-work transparently on 32-bit architectures. Context accesses deviate
-from that, as they came earlier and we didn't have CO-RE at that time.
-
-So what you are saying is that __sk_buff shouldn't be
-CO-RE-relocatable, and yes, that would be good. But I think that's
-orthogonal in this case.
+T24gTW9uLCAyMDIyLTExLTA3IGF0IDEzOjQ2IC0wODAwLCBJc2FrdSBZYW1haGF0YSB3cm90ZToN
+Cj4gPiBPbiBGcmksIE5vdiAwNCwgMjAyMiwgSXNha3UgWWFtYWhhdGEgd3JvdGU6DQo+ID4gPiBU
+aGFua3MgZm9yIHRoZSBwYXRjaCBzZXJpZXMuIEkgdGhlIHJlYmFzZWQgVERYIEtWTSBwYXRjaCBz
+ZXJpZXMgYW5kIGl0DQo+ID4gPiB3b3JrZWQuDQo+ID4gPiBTaW5jZSBjcHUgb2ZmbGluZSBuZWVk
+cyB0byBiZSByZWplY3RlZCBpbiBzb21lIGNhc2VzKFRvIGtlZXAgYXQgbGVhc3Qgb25lDQo+ID4g
+PiBjcHUNCj4gPiA+IG9uIGEgcGFja2FnZSksIGFyY2ggaG9vayBmb3IgY3B1IG9mZmxpbmUgaXMg
+bmVlZGVkLg0KPiA+IA0KPiA+IEkgaGF0ZSB0byBicmluZyB0aGlzIHVwIGJlY2F1c2UgSSBkb3Vi
+dCB0aGVyZSdzIGEgcmVhbCB1c2UgY2FzZSBmb3IgU1VTUEVORA0KPiA+IHdpdGgNCj4gPiBURFgs
+IGJ1dCB0aGUgQ1BVIG9mZmxpbmUgcGF0aCBpc24ndCBqdXN0IGZvciB0cnVlIG9mZmxpbmluZyBv
+ZiBDUFVzLsKgIFdoZW4NCj4gPiB0aGUNCj4gPiBzeXN0ZW0gZW50ZXJzIFNVU1BFTkQsIG9ubHkg
+dGhlIGluaXRpYXRpbmcgQ1BVIGdvZXMgdGhyb3VnaA0KPiA+IGt2bV9zdXNwZW5kKCkra3ZtX3Jl
+c3VtZSgpLA0KPiA+IGFsbCByZXNwb25kaW5nIENQVXMgZ28gdGhyb3VnaCBDUFUgb2ZmbGluZStv
+bmxpbmUuwqAgSS5lLiBkaXNhbGxvd2luZyBhbGwNCj4gPiBDUFVzIGZyb20NCj4gPiBnb2luZyAi
+b2ZmbGluZSIgd2lsbCBwcmV2ZW50IHN1c3BlbmRpbmcgdGhlIHN5c3RlbS4NCj4gDQo+IFRoZSBj
+dXJyZW50IFREWCBLVk0gaW1wbGVtZW50YXRpb24gZGlzYWxsb3dzIENQVSBwYWNrYWdlIGZyb20g
+b2ZmbGluZSBvbmx5DQo+IHdoZW4NCj4gVERzIGFyZSBydW5uaW5nLsKgIElmIG5vIFREIGlzIHJ1
+bm5pbmcsIENQVSBvZmZsaW5lIGlzIGFsbG93ZWQuwqAgU28gYmVmb3JlDQo+IFNVU1BFTkQsIFRE
+cyBuZWVkIHRvIGJlIGtpbGxlZCB2aWEgc3lzdGVtZCBvciBzb21ldGhpbmcuwqAgQWZ0ZXIga2ls
+bGluZyBURHMsDQo+IHRoZQ0KPiBzeXN0ZW0gY2FuIGVudGVyIGludG8gU1VTUEVORCBzdGF0ZS4N
+Cg0KVGhpcyBzZWVtcyBub3QgY29ycmVjdC4gIFlvdSBuZWVkIG9uZSBjcHUgZm9yIGVhY2ggdG8g
+YmUgb25saW5lIGluIG9yZGVyIHRvDQpjcmVhdGUgVEQgYXMgd2VsbCwgYXMgVERILk1ORy5LRVku
+Q09ORklHIG5lZWRzIHRvIGJlIGNhbGxlZCBvbiBhbGwgcGFja2FnZXMsDQpjb3JyZWN0Pw0K
