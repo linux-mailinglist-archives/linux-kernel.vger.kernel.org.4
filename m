@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5292C622408
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F18CA622406
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiKIGmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 01:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S229660AbiKIGlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 01:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKIGl6 (ORCPT
+        with ESMTP id S229550AbiKIGlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 01:41:58 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F0215722
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 22:41:57 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6b3G6sfPzHvfg;
-        Wed,  9 Nov 2022 14:41:30 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 14:41:55 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 14:41:55 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>
-Subject: [PATCH] drivers: dio: fix possible memory leak in dio_init()
-Date:   Wed, 9 Nov 2022 14:40:36 +0800
-Message-ID: <20221109064036.1835346-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Nov 2022 01:41:10 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24C615733;
+        Tue,  8 Nov 2022 22:41:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667976048; bh=s2xnc8dtE9RdQHld1qiAbNnZOdtNe2s+3N0KAhbpfss=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=ndkZyXusVJy9VW0jXi8vkuuV13fsCt/56qU728chMOc2JpCE9kTefADbxnUar/XZm
+         57OMxk53j5ZQRPy0AU3esFAWUQt9a6H3neQoMExVrjFBs7oy9uf/3PvLMLckzXPBP6
+         onkglGt2BakIfxgSo1wNSLgj/CmT09/K+yQFVt6k=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Wed,  9 Nov 2022 07:40:48 +0100 (CET)
+X-EA-Auth: F61TFAW5EIxTOLGMc0AqWx1vFt0VZ8WWn5l9nu0xUmZiOFCbHY9NJ+7ODh/iOVr28E2+bZFRA3PVvl3YE6fgdY81AlgJbShA
+Date:   Wed, 9 Nov 2022 12:10:37 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Dan Carpenter <error27@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: patches for staging:media drivers
+Message-ID: <Y2tLZaPSUT45TF4f@qemulion>
+References: <Y2eSCZJNWn6DzCUu@qemulion>
+ <48f4bda9-b5e3-9649-aab9-b529889bf110@linaro.org>
+ <Y2oO7fU4whKr+3hb@kadam>
+ <Y2q7tFF7YeX16H20@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2q7tFF7YeX16H20@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If device_register() returns error, the 'dev' and name needs be
-freed. Add a release function, and then call put_device() in the
-error path, so the name is freed in kobject_cleanup() and to the
-'dev' is freed in release function.
+On Tue, Nov 08, 2022 at 09:27:32PM +0100, Andrew Lunn wrote:
+> On Tue, Nov 08, 2022 at 11:10:21AM +0300, Dan Carpenter wrote:
+>
+> I cannot say anything about the media subsystem, but for networking
+> patches, i will be much more willing to help somebody going from
+> Outreach to being a full kernel developers if they decide to take on
+> something more than just some Coccinelle changes. If it looks like you
+> have the hardware and want to make it better, have a vision where the
+> driver should go, then you are likely to get more help from me. So if
+> media drivers are what you interested in, go buy some hardware which
+> uses one of the drivers in staging, look at the TODO file, and submit
+> bigger patches than just -1 to -ENOMEM.
 
-Fixes: 2e4c77bea3d8 ("m68k: dio - Kill warn_unused_result warnings")
-Fixes: 1fa5ae857bb1 ("driver core: get rid of struct device's bus_id string array")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/dio/dio.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Hello Andrew,
+Thank you so much for your kind advice and willingness to help a newbie
+become a valued kernel developer. I am committed to acquire necessary
+knowledge and skills to contribute more than current cleanup and minor
+correction patches. I am sure that the upcoming Coccinelle based project
+work [if I am shortlisted] will be much more complex and meaningful.
 
-diff --git a/drivers/dio/dio.c b/drivers/dio/dio.c
-index 0e5a5662d5a4..0a051d656880 100644
---- a/drivers/dio/dio.c
-+++ b/drivers/dio/dio.c
-@@ -109,6 +109,12 @@ static char dio_no_name[] = { 0 };
- 
- #endif /* CONFIG_DIO_CONSTANTS */
- 
-+static void dio_dev_release(struct device *dev)
-+{
-+	struct dio_dev *ddev = container_of(dev, typeof(struct dio_dev), dev);
-+	kfree(ddev);
-+}
-+
- int __init dio_find(int deviceid)
- {
- 	/* Called to find a DIO device before the full bus scan has run.
-@@ -225,6 +231,7 @@ static int __init dio_init(void)
- 		dev->bus = &dio_bus;
- 		dev->dev.parent = &dio_bus.dev;
- 		dev->dev.bus = &dio_bus_type;
-+		dev->dev.release = dio_dev_release;
- 		dev->scode = scode;
- 		dev->resource.start = pa;
- 		dev->resource.end = pa + DIO_SIZE(scode, va);
-@@ -252,6 +259,7 @@ static int __init dio_init(void)
- 		if (error) {
- 			pr_err("DIO: Error registering device %s\n",
- 			       dev->name);
-+			put_device(&dev->dev);
- 			continue;
- 		}
- 		error = dio_create_sysfs_dev_files(dev);
--- 
-2.25.1
+I will explore the staging directory to identify a hardware I can afford.
+I would welcome suggestion on a driver that is not much expensive and
+complex to start with. Anything for the networking subsystem???
+
+Thank you once again!
+./drv
+
+>
+>      Andrew
+>
+
 
