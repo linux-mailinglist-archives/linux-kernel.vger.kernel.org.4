@@ -2,89 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAEF6236AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 23:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154796236B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 23:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbiKIWlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 17:41:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S232197AbiKIWnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 17:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiKIWlQ (ORCPT
+        with ESMTP id S229516AbiKIWm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 17:41:16 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857D0D13D;
-        Wed,  9 Nov 2022 14:41:15 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p16so73569wmc.3;
-        Wed, 09 Nov 2022 14:41:15 -0800 (PST)
+        Wed, 9 Nov 2022 17:42:58 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6827D13D;
+        Wed,  9 Nov 2022 14:42:55 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id d20so30560plr.10;
+        Wed, 09 Nov 2022 14:42:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=72SRA5lrKUs0W8xkTsquem3V1Ku1VH8DVJEO2i+3wLM=;
-        b=ibl7hcVB2q3N30mwPYiDyU2n2efcA2mhjwKrEycsn2/uMV/RxGxZgN0FaG/Z+5ON/s
-         7d6Vl01KgwNOhgBbfOcX83aLRUItOmOcU225DWB2BsI8I31zEEYbtzFvsCq5/IAIEPZb
-         8nLhQvLIh+XpFiyuynQpceqBKuIGkcgca38Id1BucEBQvqSNvpIcHmZJQT/IxXaBE1FI
-         vYjjYKYLJlJfsJqKyUxlbHRswqSQUcDJkMnQvUXAahhDWVsmCBmNHUA5Wh3q8/D9CJr3
-         jUW7Imnz0cdeUQuIzxmcp+qMjz5p3LUdmqGZjMkvBbLDa5e+XBhPtXLMIimTFGHjshTk
-         n49g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ssYymsxkXdmTSFU0hvcEkwkIoh7xAypCTM5P5Govko=;
+        b=Gnns+h8o5AhIOXBqLaKWICAXOgSZMznymYnrEBDzfZviX7IPTd82rZRJap6bkYZ65Q
+         nf7zqCUUYfKYgb8vUHJ1SE4HYKUtGTYttvHkM4Uv4Tc+WQN3hJWTE4UyzQ8hCR7jFPvN
+         AYWmjq1oQWfKCK4dhHu0xypt5weHNbO6m0O8yz8BkAxv6Yzt2+8winicehFZLNYw05En
+         oIFA/LFH4a2keePJIVF0oOOYZYYGLcwFXHeMLozOxOmhy+ozzosYisx24NouFVVXb+Ro
+         yorzilL0AouMTZlrbzQToS56O+cH9/dQv8mbv23td9kWJqNkw8u7EQ3WTeqyeJgENyn4
+         1Qew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=72SRA5lrKUs0W8xkTsquem3V1Ku1VH8DVJEO2i+3wLM=;
-        b=Diaa5c8CsTEUTGOOEUyODoFqv/eCgDH9i3Sg1w/+v+GyhqKEfnvYPFt/os/0pzVkiQ
-         j7B4ynnLZFSNOlH4kWECbjRoIgN/BfK2AirjOMqMEYEu3RcQD2nPhKsXk/+Gk5GIQ/ot
-         yV20q9o3Y5MLJxES5MoTZl7DNLY+nIvIib3CijCcHILL6JyxCtGoqRbaC2u5yuDnuqoq
-         O3+HOa5tLYdlgak8wd9vbxPJys0ESbbrmJEdyomzyNLu2HmkijCpbZxG4H46g+VY9quR
-         yFM+/2o2HyOlL3RvlpkAOfdyfIER2AyLdljNNKyyc5tEEULxYYPopN2y2Gc66D5IkFE3
-         Zp1Q==
-X-Gm-Message-State: ACrzQf06uImP81dVDBUhZHEJg0nVj2lhsu2tGJPqVXYWyidEleNTeJxK
-        3FgSFGlaTqu+DMUl+fPzwCDBMR4wwQBRpA==
-X-Google-Smtp-Source: AMsMyM5R51wkRbWukTP527Ud/KNaaX7vPG9ioje5356mfGLpTU0MufKXFd6OipCgf3slypg5cLb5gg==
-X-Received: by 2002:a7b:cb8d:0:b0:3cf:4969:9bc7 with SMTP id m13-20020a7bcb8d000000b003cf49699bc7mr53086243wmi.71.1668033673843;
-        Wed, 09 Nov 2022 14:41:13 -0800 (PST)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id h8-20020a05600c2ca800b003b4a699ce8esm3166923wmc.6.2022.11.09.14.41.11
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1ssYymsxkXdmTSFU0hvcEkwkIoh7xAypCTM5P5Govko=;
+        b=R5O2ZI5XQkCR9SR375uzpPwcV5AXTvRMtzmePzEzxrUGY8lkyI6czVqDT8pLSzTHVh
+         tMUHl3hNgOE85bMKraT+gTn/+z6c4ZFsvmkVY2FhD6GcFeKBrGC9Obp4xRtllH+4AyZY
+         qUTQmq9jb8OSdc3qVogY1UBMnRNoOVI2Y0tH/Ro/9wayS1V7D2lBsRu+Wg8k7uHPf0QN
+         q05O4gSgs1ZBY82h3wOZII/M6QpDywheKhDhpMB8h4OxgLXmPUs1XeQUy15nhG4+YzFH
+         VZEUXh7S5bT6xprYdWKyb6UDkToC0KWfIWIZSPtcueZTQ5xOkz6tb9oIStuaBKNY9VxP
+         PILw==
+X-Gm-Message-State: ACrzQf0o9mdBjYGE0IBsFaYwbIBQAX9Eq3+Sg9nLW0VIcqXy63WIGwW4
+        Lvx++1fCM2uOa0qLmbpS5fA=
+X-Google-Smtp-Source: AMsMyM4lnjqdKeMAabw8PP9V3uvyuKnpItq35VaTgS9zjxq/kTTRw3EEUlakeQXrm3m+QjSq8LwjyA==
+X-Received: by 2002:a17:902:cf42:b0:182:bccf:619f with SMTP id e2-20020a170902cf4200b00182bccf619fmr1272698plg.9.1668033775073;
+        Wed, 09 Nov 2022 14:42:55 -0800 (PST)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:6af4:9e55:5482:c0de])
+        by smtp.gmail.com with ESMTPSA id k17-20020a63ff11000000b0046f9f4a2de6sm7995042pgi.74.2022.11.09.14.42.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 14:41:13 -0800 (PST)
-Date:   Thu, 10 Nov 2022 00:41:10 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Shawn Guo <shawnguo@kernel.org>, UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH net-next v2 00/11] net: pcs: Add support for devices
- probed in the "usual" manner
-Message-ID: <20221109224110.erfaftzja4fybdbc@skbuf>
-References: <20221103210650.2325784-1-sean.anderson@seco.com>
+        Wed, 09 Nov 2022 14:42:54 -0800 (PST)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Kalle Valo <kvalo@kernel.org>, Tony Lindgren <tony@atomide.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH v2 1/3] ARM: OMAP2+: pdata-quirks: stop including wl12xx.h
+Date:   Wed,  9 Nov 2022 14:42:48 -0800
+Message-Id: <20221109224250.2885119-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103210650.2325784-1-sean.anderson@seco.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -95,8 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 05:06:39PM -0400, Sean Anderson wrote:
-> Several (later) patches in this series cannot be applied until a stable
-> release has occured containing the dts updates.
+As of commit 2398c41d6432 ("omap: pdata-quirks: remove openpandora
+quirks for mmc3 and wl1251") the code no longer creates an instance of
+wl1251_platform_data, so there is no need for including this header.
 
-New kernels must remain compatible with old device trees.
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+
+Changes in v2: added fix to arch/arm/mach-omap2/pdata-quirks.c
+Note this series was only compile-tested.
+
+ arch/arm/mach-omap2/pdata-quirks.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/arm/mach-omap2/pdata-quirks.c b/arch/arm/mach-omap2/pdata-quirks.c
+index 9deba798cc91..baba73fd6f11 100644
+--- a/arch/arm/mach-omap2/pdata-quirks.c
++++ b/arch/arm/mach-omap2/pdata-quirks.c
+@@ -10,7 +10,6 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/of_platform.h>
+-#include <linux/wl12xx.h>
+ #include <linux/mmc/card.h>
+ #include <linux/mmc/host.h>
+ #include <linux/power/smartreflex.h>
+-- 
+2.38.1.431.g37b22c650d-goog
+
