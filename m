@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90536234E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FD26234E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiKIUtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S231818AbiKIUtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiKIUtR (ORCPT
+        with ESMTP id S231666AbiKIUtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:49:17 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C9826AFA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:49:16 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id a27so11064189qtw.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:49:16 -0800 (PST)
+        Wed, 9 Nov 2022 15:49:35 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0D62CCA1;
+        Wed,  9 Nov 2022 12:49:34 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id r12so27861670lfp.1;
+        Wed, 09 Nov 2022 12:49:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jv5zvrDMIjVJDZdCoLhQ5HOm0TuMGzwYNTnzMDBX7h4=;
-        b=Qfeg8wV9yFrnUA09Qe5i4xmP6B4GfnyxmTQQ8nudUDGnUqLrv+UXqQ/KZQbabXKFcB
-         OPFCoUXnuPC2rkcqRCIa2J4PIuNWEs5ZuG2uI8jLOfF1hF4m8cE7WQCsGLGHXRakOkYg
-         O8UJdbZHCOcg1qsw6/OLcM/igMwW2imEu2o54=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HMexBlxBxOfaLRccW2JVyrflm9G7r7sk5hRAu9Qd8Xw=;
+        b=lNabaBwBDx8wdVGBNgTi9QC7ZUqI1PcJvBPYkx5jrHBUeWhiNinibODdCdAobmUQsp
+         xX/EDJFbuhFE0m9R3ZyxxJXaocdRM7BwV3OHrhEH4ZSJqWDNDOEU8kAbOzh/Qw7grLtQ
+         2VDPcwgFBJlvk/MF2Lnt+TlB52oW2yPF+Vp1shEB5BicSyRVPfzlC4gUEX28a9jJuS+Y
+         d+T7DDTc2OqSBIJGkr5q0G8dv1mquMEhGbGaEc2Nh8qp8YP5Uy4OV4SOR5jlHVbQa9K6
+         DAoNKZkghLTa/oh6kaqdgzRmhd5vhM3Rdc49nb3dyQ/j38+8IIdKnkLLrf6EU0jumPbf
+         kxFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jv5zvrDMIjVJDZdCoLhQ5HOm0TuMGzwYNTnzMDBX7h4=;
-        b=a8V5K3abz+xRPvZVNjmIaOngl0CeFsTx+0PMnp4KYdpXnQhNQNDTz92Z7cA8YR8etf
-         VLzSADOVRFyHQ1QpmSD2qJnWxq3riQO5jZd1QY1ILWFgp3oDL2bffvdYGlId4NRECpRU
-         FFFf+HzpiI6aHCnCXezVbbM92wpfMsgsEUT1iPRQlzGgSnqyGpq/sJTt0G9TInLd2cfm
-         H05C4ouVc7WLvUiaGWwNBgjSDQPrmJGEK4n64ZuizRkarOaahQtILXVtS4dkX4aNLofm
-         +IH+N/CjVpYFv7dqTTpEISl+9MOkWFGO+DphWL89zL0XPLJGbMWhTAy2ysAcGpZPygk9
-         Rs8w==
-X-Gm-Message-State: ANoB5pnoi747Gckc/SBfmKEkTbrE+SYP5jzsVtQ1Axaw63qokiQKrdJj
-        Z37mP4nbQ2kSAS2/vjC+7sWSlm0tC8EwFw==
-X-Google-Smtp-Source: AA0mqf5EHxI9UoNimc91L0XB/SXTYWC30po7frejFOwNJrYe9tvq36yeratEdF7db8rfxDAzRdCsGg==
-X-Received: by 2002:a05:622a:103:b0:3a5:8efc:7388 with SMTP id u3-20020a05622a010300b003a58efc7388mr13547404qtw.291.1668026955036;
-        Wed, 09 Nov 2022 12:49:15 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id cc25-20020a05622a411900b0039a9b55b829sm10179114qtb.29.2022.11.09.12.49.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 12:49:12 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id r3so112908yba.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:49:12 -0800 (PST)
-X-Received: by 2002:a05:6902:1352:b0:6bb:3f4b:9666 with SMTP id
- g18-20020a056902135200b006bb3f4b9666mr56404285ybu.101.1668026951807; Wed, 09
- Nov 2022 12:49:11 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HMexBlxBxOfaLRccW2JVyrflm9G7r7sk5hRAu9Qd8Xw=;
+        b=hmXfG7zO5G3AE1a/88yUfPlcFgRq+ZLpYReqFMqK+apTHNqV6qd9lwK1A0SzgJ99Rr
+         18138jciOMSDPi3MhAtX1xd7hC9pt20/eK8GtspM4Bt5NRGgUBnO2N5dZjC3gM/uodOi
+         2EZP+NF4DYMaSvC0ExRtbtXekGeDdg8EbpOV7VhrCsJ7kHOWVuSRAAUuPNsT2T6gnoRB
+         aM9XvrdZKgLrZTYMSEi2sUo11ZyGKCUp60ovgR35e8BPUcMfQ02guqa/dXp5uIW45zfU
+         6YJa/WwxnxVaJsuToDQKebllhlNN0w3U5U7s81ydlL4g39dEug+II/EXT2an/7z9bljj
+         tT4g==
+X-Gm-Message-State: ACrzQf2u3sovvnXh9m0ioSg6EKeNVaqBlIfXpKCfSzhGpov7SB0dqUG4
+        aiJjWakEh7dHhng7lgqdml3HVS9WU1EDlSlG04A=
+X-Google-Smtp-Source: AMsMyM47rnxNdnhq2uJF1dI0lUZOzuLnsLb7XNFBM3pLXMpIHNfi4zaMlJ30IDlwjmXIXU+3bvfZZXI248olgA0My5A=
+X-Received: by 2002:a19:6554:0:b0:4a2:be5c:688f with SMTP id
+ c20-20020a196554000000b004a2be5c688fmr775793lfj.121.1668026972441; Wed, 09
+ Nov 2022 12:49:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20221109203051.1835763-1-torvalds@linux-foundation.org> <20221109203051.1835763-4-torvalds@linux-foundation.org>
-In-Reply-To: <20221109203051.1835763-4-torvalds@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 9 Nov 2022 12:48:55 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjf+gN25grUT3o3XK8-B-b2jhBuN8YMLQvq-=AXTcuFXg@mail.gmail.com>
-Message-ID: <CAHk-=wjf+gN25grUT3o3XK8-B-b2jhBuN8YMLQvq-=AXTcuFXg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] mm: delay page_remove_rmap() until after the TLB has
- been flushed
-To:     Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+References: <20221029202454.25651-1-swyterzone@gmail.com> <20221029202454.25651-3-swyterzone@gmail.com>
+In-Reply-To: <20221029202454.25651-3-swyterzone@gmail.com>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Wed, 9 Nov 2022 12:49:20 -0800
+Message-ID: <CABBYNZKnw+b+KE2=M=gGV+rR_KBJLvrxRrtEc8x12W6PY=LKMw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Bluetooth: btusb: Add a parameter to let users
+ disable the fake CSR force-suspend hack
+To:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, luiz.von.dentz@intel.com,
+        quic_zijuhu@quicinc.com, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,31 +73,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bah, in carefully removing all the "let's send it as a reply to the
-previous thread" command line flags, I cleverly also skipped adding a
-cover letter, so this updated series got sent out without one.
+Hi Ismael,
 
-I need more coffee.
+On Sat, Oct 29, 2022 at 1:25 PM Ismael Ferreras Morezuelas
+<swyterzone@gmail.com> wrote:
+>
+> A few users have reported that their cloned Chinese dongle doesn't
+> work well with the hack Hans de Goede added, that tries this
+> off-on mechanism as a way to unfreeze them.
+>
+> It's still more than worthwhile to have it, as in the vast majority
+> of cases it either completely brings dongles to life or just resets
+> them harmlessly as it already happens during normal USB operation.
+>
+> This is nothing new and the controllers are expected to behave
+> correctly. But yeah, go figure. :)
+>
+> For that unhappy minority we can easily handle this edge case by letting
+> users disable it via our =C2=ABbtusb.disable_fake_csr_forcesuspend_hack=
+=3D1=C2=BB kernel option.
 
-But hey, it's not like the people cc'd haven't seen it before, and if
-you want to see *all* the patches (I didn't want to patch-bomb people
-with the prep-work), at least 'b4' is happy so you can get it all with
-just
+Don't really like the idea of adding module parameter for device
+specific problem.
 
-   b4 am 20221109203051.1835763-1-torvalds@linux-foundation.org
+> I believe this is the most generic way of doing it, given the constraints
+> and by still having a good out-of-the-box experience.
+>
+> No clone left behind.
+>
+> Cc: stable@vger.kernel.org
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
+> ---
+>  drivers/bluetooth/btusb.c | 31 +++++++++++++++++++------------
+>  1 file changed, 19 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+> index 8f34bf195bae..d31d4f925463 100644
+> --- a/drivers/bluetooth/btusb.c
+> +++ b/drivers/bluetooth/btusb.c
+> @@ -34,6 +34,7 @@ static bool force_scofix;
+>  static bool enable_autosuspend =3D IS_ENABLED(CONFIG_BT_HCIBTUSB_AUTOSUS=
+PEND);
+>  static bool enable_poll_sync =3D IS_ENABLED(CONFIG_BT_HCIBTUSB_POLL_SYNC=
+);
+>  static bool reset =3D true;
+> +static bool disable_fake_csr_forcesuspend_hack;
+>
+>  static struct usb_driver btusb_driver;
+>
+> @@ -2171,7 +2172,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+>                 is_fake =3D true;
+>
+>         if (is_fake) {
+> -               bt_dev_warn(hdev, "CSR: Unbranded CSR clone detected; add=
+ing workarounds and force-suspending once...");
+> +               bt_dev_warn(hdev, "CSR: Unbranded CSR clone detected; add=
+ing workarounds...");
+>
+>                 /* Generally these clones have big discrepancies between
+>                  * advertised features and what's actually supported.
+> @@ -2215,21 +2216,24 @@ static int btusb_setup_csr(struct hci_dev *hdev)
+>                  * apply this initialization quirk to every controller th=
+at gets here,
+>                  * it should be harmless. The alternative is to not work =
+at all.
+>                  */
+> -               pm_runtime_allow(&data->udev->dev);
+> +               if (!disable_fake_csr_forcesuspend_hack) {
+> +                       bt_dev_warn(hdev, "CSR: Unbranded CSR clone detec=
+ted; force-suspending once...");
+> +                       pm_runtime_allow(&data->udev->dev);
+>
+> -               ret =3D pm_runtime_suspend(&data->udev->dev);
+> -               if (ret >=3D 0)
+> -                       msleep(200);
+> -               else
+> -                       bt_dev_warn(hdev, "CSR: Couldn't suspend the devi=
+ce for our Barrot 8041a02 receive-issue workaround");
+> +                       ret =3D pm_runtime_suspend(&data->udev->dev);
+> +                       if (ret >=3D 0)
+> +                               msleep(200);
+> +                       else
+> +                               bt_dev_warn(hdev, "CSR: Couldn't suspend =
+the device for our Barrot 8041a02 receive-issue workaround");
 
-this time.
+Is this specific to Barrot 8041a02? Why don't we add a quirk then?
 
-The main changes to the previously posted series are
+> -               pm_runtime_forbid(&data->udev->dev);
+> +                       pm_runtime_forbid(&data->udev->dev);
+>
+> -               device_set_wakeup_capable(&data->udev->dev, false);
+> +                       device_set_wakeup_capable(&data->udev->dev, false=
+);
+>
+> -               /* Re-enable autosuspend if this was requested */
+> -               if (enable_autosuspend)
+> -                       usb_enable_autosuspend(data->udev);
+> +                       /* Re-enable autosuspend if this was requested */
+> +                       if (enable_autosuspend)
+> +                               usb_enable_autosuspend(data->udev);
+> +               }
+>         }
+>
+>         kfree_skb(skb);
+> @@ -4312,6 +4316,9 @@ MODULE_PARM_DESC(enable_autosuspend, "Enable USB au=
+tosuspend by default");
+>  module_param(reset, bool, 0644);
+>  MODULE_PARM_DESC(reset, "Send HCI reset command on initialization");
+>
+> +module_param(disable_fake_csr_forcesuspend_hack, bool, 0644);
+> +MODULE_PARM_DESC(disable_fake_csr_forcesuspend_hack, "Don't indiscrimina=
+tely force-suspend Chinese-cloned CSR dongles trying to unfreeze them");
+> +
+>  MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+>  MODULE_DESCRIPTION("Generic Bluetooth USB driver ver " VERSION);
+>  MODULE_VERSION(VERSION);
+> --
+> 2.38.1
+>
 
- (a) try to  move the s390 changes to generic code
 
- (b) build-time checking for the value range of the flags passed to
-encode_page()
-
- (c) added comments both to code and commit messages
-
-I'm sure I messed something up in the process, not just the lack of
-cover letter which has now turned into this "tail letter" instead.
-
-                 Linus
+--=20
+Luiz Augusto von Dentz
