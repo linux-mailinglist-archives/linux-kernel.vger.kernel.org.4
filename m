@@ -2,143 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CE9622211
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D41622263
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiKICoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 21:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S230131AbiKIDDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 22:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiKICnw (ORCPT
+        with ESMTP id S229447AbiKIDDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:43:52 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D53210064;
-        Tue,  8 Nov 2022 18:43:51 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6Tms09BtzRp7Z;
-        Wed,  9 Nov 2022 10:43:41 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 10:43:49 +0800
-Received: from build.huawei.com (10.175.101.6) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 10:43:49 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Doug Gilbert <dgilbert@interlog.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Wenchao Hao <haowenchao@huawei.com>
-Subject: [RFC PATCH 5/5] scsi:scsi_debug: fail specific scsi command with result and sense data
-Date:   Wed, 9 Nov 2022 10:59:50 -0500
-Message-ID: <20221109155950.3536976-6-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20221109155950.3536976-1-haowenchao@huawei.com>
-References: <20221109155950.3536976-1-haowenchao@huawei.com>
+        Tue, 8 Nov 2022 22:03:30 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ECD63F3;
+        Tue,  8 Nov 2022 19:03:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3F92F2253D;
+        Wed,  9 Nov 2022 03:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667963008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AahacXl0LjGDU+aPu6eWT1p/Z9IsaDvNUBLIggy5mHc=;
+        b=vxxmenHxiStbw6bwNmZooecHGNPIe+eqivgrtUljFwjugBM1M3JdIMSN2iH1ZaTdyNdorG
+        kusHYyv2VggMJrh/c3HhKlDkMCYQzZ7iA9HDc79rKygXlDC5hWIEVcRJVkai0hq01OuYAz
+        YBCAupMXupkhvBx3eD6pkyfLOTFiiZ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667963008;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AahacXl0LjGDU+aPu6eWT1p/Z9IsaDvNUBLIggy5mHc=;
+        b=4MeANHdTJWCU4yHpP7WKKKlJIFn64mRG7m8cx9WUpKCBQd2ISUpoIIQ7NlCAKRwSgEVpLg
+        adF0zq5TP3rFSkCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 07E871376E;
+        Wed,  9 Nov 2022 03:03:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JxTlN38Ya2OWNAAAMHmgww
+        (envelope-from <krisman@suse.de>); Wed, 09 Nov 2022 03:03:27 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        Liu Song <liusong@linux.alibaba.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up
+ queued tags
+Organization: SUSE
+References: <20221105231055.25953-1-krisman@suse.de>
+        <f2d6dfd6-1234-2545-7955-07db078faa54@nvidia.com>
+Date:   Tue, 08 Nov 2022 22:03:26 -0500
+In-Reply-To: <f2d6dfd6-1234-2545-7955-07db078faa54@nvidia.com> (Chaitanya
+        Kulkarni's message of "Tue, 8 Nov 2022 23:28:11 +0000")
+Message-ID: <871qqcg77l.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a fail commnd error is injected for specific scsi command, set the
-scsi command's status and sense data, then finish this scsi command.
+Chaitanya Kulkarni <chaitanyak@nvidia.com> writes:
 
-For example, the following command would make read(0x88) command finished
-with UNC for 8 times:
+>> For more interesting cases, where there is queueing, we need to take
+>> into account the cross-communication of the atomic operations.  I've
+>> been benchmarking by running parallel fio jobs against a single hctx
+>> nullb in different hardware queue depth scenarios, and verifying both
+>> IOPS and queueing.
+>> 
+>> Each experiment was repeated 5 times on a 20-CPU box, with 20 parallel
+>> jobs. fio was issuing fixed-size randwrites with qd=64 against nullb,
+>> varying only the hardware queue length per test.
+>> 
+>> queue size 2                 4                 8                 16                 32                 64
+>> 6.1-rc2    1681.1K (1.6K)    2633.0K (12.7K)   6940.8K (16.3K)   8172.3K (617.5K)   8391.7K (367.1K)   8606.1K (351.2K)
+>> patched    1721.8K (15.1K)   3016.7K (3.8K)    7543.0K (89.4K)   8132.5K (303.4K)   8324.2K (230.6K)   8401.8K (284.7K)
+>
+>> 
 
-  error=/sys/block/sdb/device/error_inject/error
-  echo "2 -8 0x88 0 0 0x2 0x3 0x11 0x0" >$error
+Hi Chaitanya,
 
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
----
- drivers/scsi/scsi_debug.c | 46 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+Thanks for the feedback.
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 217a9e892391..06fe2914117f 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -7832,6 +7832,41 @@ static int sdebug_fail_queue_cmd(struct scsi_cmnd *cmnd)
- 	return 0;
- }
- 
-+static int sdebug_fail_cmd(struct scsi_cmnd *cmnd, int *retval,
-+			   struct sdebug_err_inject *info)
-+{
-+	struct scsi_device *sdp = cmnd->device;
-+	struct sdebug_dev_info *devip = (struct sdebug_dev_info *)sdp->hostdata;
-+	struct sdebug_err_inject *err;
-+	unsigned char *cmd = cmnd->cmnd;
-+	int ret = 0;
-+	int result;
-+
-+	if (devip == NULL)
-+		return 0;
-+
-+	list_for_each_entry(err, &devip->inject_err_list, list) {
-+		if (err->type == ERR_FAIL_CMD &&
-+		    (err->cmd == cmd[0] || err->cmd == 0xff)) {
-+			if (!err->cnt)
-+				return 0;
-+			ret = !!err->cnt;
-+			goto out_handle;
-+		}
-+	}
-+	return 0;
-+
-+out_handle:
-+	if (err->cnt < 0)
-+		err->cnt++;
-+	mk_sense_buffer(cmnd, err->sense_key, err->asc, err->asq);
-+	result = err->status_byte | err->host_byte << 16 | err->driver_byte << 24;
-+	*info = *err;
-+	*retval = schedule_resp(cmnd, devip, result, NULL, 0, 0);
-+
-+	return ret;
-+}
-+
- static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 				   struct scsi_cmnd *scp)
- {
-@@ -7852,6 +7887,7 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 	bool has_wlun_rl;
- 	bool inject_now;
- 	int ret = 0;
-+	struct sdebug_err_inject err;
- 
- 	scsi_set_resid(scp, 0);
- 	if (sdebug_statistics) {
-@@ -7904,6 +7940,16 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
- 		return ret;
- 	}
- 
-+	if (sdebug_fail_cmd(scp, &ret, &err)) {
-+		scmd_printk(KERN_INFO, scp,
-+			"fail command 0x%x with hostbyte=0x%x, "
-+			"driverbyte=0x%x, statusbyte=0x%x, "
-+			"sense_key=0x%x, asc=0x%x, asq=0x%x\n",
-+			opcode, err.host_byte, err.driver_byte,
-+			err.status_byte, err.sense_key, err.asc, err.asq);
-+		return ret;
-+	}
-+
- 	if (unlikely(inject_now && !atomic_read(&sdeb_inject_pending)))
- 		atomic_set(&sdeb_inject_pending, 1);
- 
+> So if I understand correctly
+> QD 2,4,8 shows clear performance benefit from this patch whereas
+> QD 16, 32, 64 shows drop in performance it that correct ?
+>
+> If my observation is correct then applications with high QD will
+> observe drop in the performance ?
+
+To be honest, I'm not sure.  Given the overlap of the standard variation
+(in parenthesis) with the mean, I'm not sure the observed drop is
+statistically significant. In my prior analysis, I thought it wasn't.
+
+I don't see where a significant difference would come from, to be honest,
+because the higher the QD, the more likely it is  to go through the
+not-contended path, where sbq->ws_active == 0.  This hot path is
+identical to the existing implementation.
+
+> Also, please share a table with block size/IOPS/BW/CPU (system/user)
+> /LAT/SLAT with % increase/decrease and document the raw numbers at the
+> end of the cover-letter for completeness along with fio job to others
+> can repeat the experiment...
+
+This was issued against the nullb and the IO size is fixed, matching the
+device's block size (512b), which is why I am not tracking BW, only
+IOPS.  I'm not sure the BW is still relevant in this scenario.
+
+I'll definitely follow up with CPU time and latencies, and share the
+fio job.  I'll also take another look on the significance of the
+measured values for high QD.
+
+Thank you,
+
 -- 
-2.35.3
-
+Gabriel Krisman Bertazi
