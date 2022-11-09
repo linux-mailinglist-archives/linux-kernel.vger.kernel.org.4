@@ -2,310 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5D7622FA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290A3622FA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiKIQHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 11:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S231322AbiKIQHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiKIQHh (ORCPT
+        with ESMTP id S231335AbiKIQHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 11:07:37 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72C421E16
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:07:35 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A9Fx5GA026190;
-        Wed, 9 Nov 2022 16:07:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=sN2B9PY00YJrHj0UbPQOPc4u68FcxaU7L88WDPKBDdM=;
- b=X5sYheskljdEDNl8Y6AC4+51nuVG8BUy43MXP7JwGjxZAkg8kNOw4u+wSgZ8s6AD4svv
- nqBI5Qfy8MfbJvvS/PwBbiT81qHoCxNJImv/Tsz2DVP+sFAAk5nm6KU2epsMLNgN6dDo
- yZTLNvVn/KT5iJDnk3LnfIrjy8PgXjErnRnyBUpbxyRFKasAtQx/0Fa7T5qYtvczjSCM
- SqlZb2izAMZv55FeGk8Iz/JbAT2w/awDd7m34p514xDuAgxKVRDErXVaHOnMyOo5tMeD
- SqwRufEEwJr1EPWcTRB9mrJ3r+uyqSpQAZBZ8TYe33lWMb103/rdhVOAvZF5uJZxpW2W Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3krfb1ga7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 16:07:22 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A9G1DO0006719;
-        Wed, 9 Nov 2022 16:07:21 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3krfb1ga60-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 16:07:21 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A9G62mB006013;
-        Wed, 9 Nov 2022 16:07:19 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3krcbr06sm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 16:07:19 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A9G7t2v51577116
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Nov 2022 16:07:55 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D08D4C044;
-        Wed,  9 Nov 2022 16:07:17 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B0B7F4C040;
-        Wed,  9 Nov 2022 16:07:16 +0000 (GMT)
-Received: from [9.171.72.210] (unknown [9.171.72.210])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Nov 2022 16:07:16 +0000 (GMT)
-Message-ID: <faf8d9cd-b0aa-838a-2f06-25bcf0d6a908@linux.ibm.com>
-Date:   Wed, 9 Nov 2022 17:07:16 +0100
-Subject: Re: [PATCH] gcov: clang: fix the buffer overflow issue
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     nathan@kernel.org, trix@redhat.com, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <1667568213-26227-1-git-send-email-quic_mojha@quicinc.com>
- <CAKwvOdkdeLEvtOmX423oYaWCami0kAFatWe25DdJq7gbmGb+5g@mail.gmail.com>
- <fda57ad1-bc92-a7ae-53a0-47c2a8467c47@quicinc.com>
- <CAKwvOdmJcmnKWNSFkzCPKmJ5eVDqJ5u631hWWmEQNwPszMg_Kg@mail.gmail.com>
-Content-Language: en-US
-From:   Peter Oberparleiter <oberpar@linux.ibm.com>
-In-Reply-To: <CAKwvOdmJcmnKWNSFkzCPKmJ5eVDqJ5u631hWWmEQNwPszMg_Kg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: f-iJxmbzaGXOcyXxxTtM2oRLTIDA11Py
-X-Proofpoint-GUID: cGWp5zMgu09gAuU7GNUleYbFMVBHZ5kW
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 9 Nov 2022 11:07:42 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19AAD21E37
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:07:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668010061; x=1699546061;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=nPUy4OXFirIgtbVqkaYMcDkqLSEIsYDAFNag26+ZqlY=;
+  b=AG1wGy10R7etrCI0UrbeHQKBFEekrw+udfec3tqhcner1aUH61cuYK38
+   TG3iRYrzyhGFq06bESHyvfiU7E3InKfosvfvhDYLTkxMa1DO6dEClHtt7
+   yoI5K7n0oh2Kk4/7pFVtKxa7wlOic1837zL5eFi0eV+Fl9U5VhwALO/aO
+   XlxkTypGQ3gulkptfZsLJ4HYKRVT2pCnjMFOzCngJFDUC0XMJIPEaysrl
+   udXHh2RWzZXqDnrmfwdAjmIovINiGDAkWNQJjzlVyggr93YhjeK2wFMVo
+   4sY92lNj3ArhppuWExYkOCT7X2siHgkillmrWg6Rb2pVAH060EIOt/b9Y
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="397312301"
+X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
+   d="scan'208";a="397312301"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 08:07:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="705760465"
+X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
+   d="scan'208";a="705760465"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Nov 2022 08:07:40 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 08:07:40 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 9 Nov 2022 08:07:40 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 9 Nov 2022 08:07:40 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MMi3j4ETKMiXrTEvjpJivIfo6/wH+Kuf1tOw25UGGtgqAI1iJGxng4mLzINBIKM6OAzYeN19Ln5DSvU3gr4tv/uRhPi31xkVpquxBjF5wnl1UfhFlHKOzi7DPDcIVfnL84Ww0zgU/ohuAE4qxeXW+0otxLkQjQh+oCCmsEbobu8zzZY+tSSlwgFHvcX9nkz3LE5tc8cIde5clJYu2TQnlJzXHcXydz5Foy9yQYPO5h9HehLaiaNpTllXu5UXpu+prmW56MOqE2dNx0XZpJqkUTOX9r5gN0dPDJoxYkfw9I2mVG+hLBIQZXALvnCyPyfN8A440CaNj5GtZ1aEk3A3Uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yzbWXfbhkjZ2jaNgcIKlkjjaOpUrzxLavQFBKWwDgOc=;
+ b=NUZ10mFVsMxVrbnU+68wbb5qqq6+3Zy6e+vNCUHqlhczwgFEx8nhZn6T+LcqLvMjsnTAbArk5xK90Ucz9Dkhrlhv4ZQ9sn8Auy3JsHXkstRCwfsd/xS2G8uroQWJ2kj++RnGvjODHc43zmiAqayyaNRzDZPAjiOFt7MgyaU6+NDhNSUSurh/afv2489Pna7RepcD+YOPDNsa+mmsmREg7pwjapeOyZVf8W1TIVR+4nkb7UPUNSt7n2ROYjfoP0EJ0I3r0LDNoJTF69GVS4X23f6+8nQF/yW5deJzRQLkGw4Z0gi7GXHnGvOb+C3g/Ffww8vI6ElOsx1Pu47W7Pj4oQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ by CO1PR11MB5156.namprd11.prod.outlook.com (2603:10b6:303:94::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
+ 2022 16:07:37 +0000
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad]) by SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad%3]) with mapi id 15.20.5791.026; Wed, 9 Nov 2022
+ 16:07:37 +0000
+Date:   Wed, 9 Nov 2022 08:07:32 -0800
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Jacon Jun Pan" <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kai Huang" <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Ashok Raj" <ashok.raj@intel.com>
+Subject: Re: [v2 03/13] x86/microcode/intel: Fix a hang if early loading
+ microcode fails
+Message-ID: <Y2vQRMyOndQtG/yJ@a4bf019067fa.jf.intel.com>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
+ <20221103175901.164783-4-ashok.raj@intel.com>
+ <Y2uODnpkSvQs/nbU@zn.tnic>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y2uODnpkSvQs/nbU@zn.tnic>
+X-ClientProxiedBy: SJ0PR03CA0224.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::19) To SJ1PR11MB6201.namprd11.prod.outlook.com
+ (2603:10b6:a03:45c::14)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- clxscore=1011 mlxscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090122
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|CO1PR11MB5156:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1130be87-a20a-474c-7148-08dac26c8556
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: keCA4gUtzuAPU9kkuf1bnLkTpNoV7LYtaNyERB+zRZ1gSQ/1jWklhLwTn8JLE//K9j6jEOnfrSPiPf6LLjl6DVs0tbMQLonzGUlHZ4MXStkwh3cTeDd8C1XxYq0hnBe9ilzV0UaWcRvbD8mlz638DQUPy5hSDjYYBTJ1QIIiHY2kt//nHNSHc7iw09e/j6DNvHsqcKsmCnB+tfXqrL5wZQCKjU6DG7pZiUkEhc0bvgjdpUc5ZOxkqUZ6TAuJlydLldIg+tZ96FpReWGy4P5W4vg0e+Xbb+o1n9WUbrcLqO9GOw2voVPw/n5qY2JL08VhOO6QtQe2d2bP6VCBCwgyM5GRdANt6e4joajDiqm8/OdddRrWFv95C679eB+fz0eBU7hpIt8KX4f/Mazqpm/NdGLq8h01dzBoxaQ+C/vPrXfGxHg4vsnJbmBPtvNE7SqZk0CuBFLkvn8MvoXhMlw+TBh9SR17M6+cfbUFmdmKe+xv2uYdTvXSEbQDLnfMtLIJFGFQ3TBNsyGszWVfyLvzNTlwuWBGGsEB2DnwGY0BxPSkHSkvy8CrG3eZohqYsafqC2ZwlqkvddRGebS/pnEa/4+3hsaD8hm8s1Fm1KpNJiJzHzWkpy2jQfBWkHMRKor32EVNV0mu9LEBhSiqhwQrh6bkXslZeWU/L+CU5ueq6UFnsFdUcKiaszNyKgLXq7N6szJRRJVKjXkzUW2FpKuetg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(396003)(39860400002)(366004)(376002)(451199015)(38100700002)(6506007)(478600001)(82960400001)(86362001)(6666004)(6486002)(44832011)(186003)(26005)(6512007)(107886003)(66946007)(5660300002)(2906002)(8936002)(4326008)(8676002)(66476007)(6916009)(54906003)(66556008)(316002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?w6dE0RsjDk/77zUvZDtDBEMMfYB5bmwMIE1cpYlraHnWm/j8p1bnSW2CXqSS?=
+ =?us-ascii?Q?ve+115Ehfq8pS3T8O2uddUSJ65705rRgl4f4NwAJah+Od1/R//JbgLZu8DDc?=
+ =?us-ascii?Q?FhzpOLocN3IuQ9ZAHN8TYwNzvWvKNlg6/E8SKSfJVeg+NkbWv/Viskt2YTyN?=
+ =?us-ascii?Q?VPuINYy1xrYZyKYUDTewBzTeA4HRzbDysvdV1ceUbbBt6NAg/kjGnTmg4aN5?=
+ =?us-ascii?Q?K8Z922u3TTSv9ccUGkyIAbSFaj++KeJep67S4FTf6m1qjGBDyO1M5qXN/tdp?=
+ =?us-ascii?Q?Bf+pOyPUEUw3yRXzhwohLVjGBTkLfF4JSkPW1td3pSUen7+afD82asn0l8Rc?=
+ =?us-ascii?Q?7Dqo5ZjnOEYnaq39Sf6OcSAUiHobThrvNWOOGN96u7o04UAnnD6JgtiVJWrj?=
+ =?us-ascii?Q?2y3esr+XnIL6d6usmIJ2lzVQNoO1yZ49XHfHBJekev2ydp7XauS7za62PPEE?=
+ =?us-ascii?Q?zl1qFwDoBqw/B9r93eRNV53MBsupNj/TxeLoAliKozJdEQ+Zn43yI+QU8JO1?=
+ =?us-ascii?Q?YCzI2Tjqr4Pa3wMt7Wxx/cL3JF+L9Gbu4tzA9mMfN1r1Dnn5Mo+qyDFZyU6A?=
+ =?us-ascii?Q?cfEkPT6IeyibV5hh/KMNTtN1JYqVoPDzlXVPOIKZrxfGuRDWiMXNtqL1JDOn?=
+ =?us-ascii?Q?K7Ir9o0f1tEnQaoDDPMlaGevfdPflKEwjw/BXLZ7HcQWdpmFCUZBMgdCwzNW?=
+ =?us-ascii?Q?YadqBhsPfwy1IaotiqpBPoxMogCRHo2Gbt3gNndN20ljnLig49lJSSkBMK7k?=
+ =?us-ascii?Q?vmyFp0BGonD8KciuvMNv/PQKP1qfFhxoW6iHven8Zrv+WkEFh8Qi6ix0U011?=
+ =?us-ascii?Q?RiPZWH8RHTwb+5SibhGlXuw3Cxm7/XKuXXIkPMNgmkf1BPOKAhjbkZzIaGtF?=
+ =?us-ascii?Q?rpkMi7kGcWstwJN7vfGQlaacAdhH/0XHg/vto4EwxFRkvjQKbd3UVPIq3JBv?=
+ =?us-ascii?Q?Qu960kxYLhIE6v9x5rSZQdGtCEi4As/tkmiJLZCu24lT4QgqzQEPTTjzX34Y?=
+ =?us-ascii?Q?IuHILKztwb20QtJla04QU/gR+iyHm/y0oWigtXl2js2LlvJwpFhgzW81VkNU?=
+ =?us-ascii?Q?sLdtlKfJJn/Bt5Rls4agK14OV5sqfsYD5ZY6pW+m/KkqNwVME39P8a0NB3qJ?=
+ =?us-ascii?Q?UcdTx7inUzwptoidOmInv7+PH1QmlTEMalQuHei6NpFYf1nULQ5UpQZTEZD8?=
+ =?us-ascii?Q?UgamWtsdGbf0qRBlORRDpM1CM5Y5kiqoqSoTcRFlHX+AhDWRQtGVBdi3wl8E?=
+ =?us-ascii?Q?HNjJmc4+S6Hh8P1vVJq+3KSHr/2/0VENbhoZUgoVp2KEs2HWCfdgcyat7gHV?=
+ =?us-ascii?Q?ed4JfeFZMSgxGdSK7XtzG0z8Tjv2CM/OnXXBdb6xJqvjx4Ui4TxPHjZE1QmB?=
+ =?us-ascii?Q?faKCFOnjLRjbkZTcnWCIWlIY9gXQ5oRhHTZzC+VILYmRWdpn3R5Tird0zTEz?=
+ =?us-ascii?Q?gaWyQvqMuoFeTPyTfzEy3oK44SOelFpb3W/1uXPTLxKo7q14hvXB35cxDOc7?=
+ =?us-ascii?Q?dj7k4StgdxmFvr/j65rQSaiTM5oThKLPHrXRGYQFyb64sEsJUvtrsd3LYT5K?=
+ =?us-ascii?Q?QT0iHohPMwnI2Ls1uk3hj9Y8bO2MYsVcoyL3irxO?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1130be87-a20a-474c-7148-08dac26c8556
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 16:07:37.7199
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hEl+1ptwu2ySxAiwYxDZiJWD8WLNQDL5eEVs9JAXLOHBW0sStE8vCS5cJO2St6uJircIU85SvtugZSIDPby56g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5156
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.11.2022 20:38, Nick Desaulniers wrote:
-> On Fri, Nov 4, 2022 at 12:58 PM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->> On 11/4/2022 11:18 PM, Nick Desaulniers wrote:
->>> On Fri, Nov 4, 2022 at 6:23 AM Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->>>>
->>>> Currently, in clang version of gcov code when module is getting removed
->>>> gcov_info_add() incorrectly adds the sfn_ptr->counter to all the
->>>> dst->functions and it result in the kernel panic in below crash report.
->>>> Fix this by properly handling it.
->>>>
->>>> [    8.899094][  T599] Unable to handle kernel write to read-only memory at virtual address ffffff80461cc000
->>>> [    8.899100][  T599] Mem abort info:
->>>> [    8.899102][  T599]   ESR = 0x9600004f
->>>> [    8.899103][  T599]   EC = 0x25: DABT (current EL), IL = 32 bits
->>>> [    8.899105][  T599]   SET = 0, FnV = 0
->>>> [    8.899107][  T599]   EA = 0, S1PTW = 0
->>>> [    8.899108][  T599]   FSC = 0x0f: level 3 permission fault
->>>> [    8.899110][  T599] Data abort info:
->>>> [    8.899111][  T599]   ISV = 0, ISS = 0x0000004f
->>>> [    8.899113][  T599]   CM = 0, WnR = 1
->>>> [    8.899114][  T599] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000ab8de000
->>>> [    8.899116][  T599] [ffffff80461cc000] pgd=18000009ffcde003, p4d=18000009ffcde003, pud=18000009ffcde003, pmd=18000009ffcad003, pte=00600000c61cc787
->>>> [    8.899124][  T599] Internal error: Oops: 9600004f [#1] PREEMPT SMP
->>>> [    8.899265][  T599] Skip md ftrace buffer dump for: 0x1609e0
->>>> ....
->>>> ..,
->>>> [    8.899544][  T599] CPU: 7 PID: 599 Comm: modprobe Tainted: G S         OE     5.15.41-android13-8-g38e9b1af6bce #1
->>>> [    8.899547][  T599] Hardware name: XXX (DT)
->>>> [    8.899549][  T599] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
->>>> [    8.899551][  T599] pc : gcov_info_add+0x9c/0xb8
->>>> [    8.899557][  T599] lr : gcov_event+0x28c/0x6b8
->>>> [    8.899559][  T599] sp : ffffffc00e733b00
->>>> [    8.899560][  T599] x29: ffffffc00e733b00 x28: ffffffc00e733d30 x27: ffffffe8dc297470
->>>> [    8.899563][  T599] x26: ffffffe8dc297000 x25: ffffffe8dc297000 x24: ffffffe8dc297000
->>>> [    8.899566][  T599] x23: ffffffe8dc0a6200 x22: ffffff880f68bf20 x21: 0000000000000000
->>>> [    8.899569][  T599] x20: ffffff880f68bf00 x19: ffffff8801babc00 x18: ffffffc00d7f9058
->>>> [    8.899572][  T599] x17: 0000000000088793 x16: ffffff80461cbe00 x15: 9100052952800785
->>>> [    8.899575][  T599] x14: 0000000000000200 x13: 0000000000000041 x12: 9100052952800785
->>>> [    8.899577][  T599] x11: ffffffe8dc297000 x10: ffffffe8dc297000 x9 : ffffff80461cbc80
->>>> [    8.899580][  T599] x8 : ffffff8801babe80 x7 : ffffffe8dc2ec000 x6 : ffffffe8dc2ed000
->>>> [    8.899583][  T599] x5 : 000000008020001f x4 : fffffffe2006eae0 x3 : 000000008020001f
->>>> [    8.899586][  T599] x2 : ffffff8027c49200 x1 : ffffff8801babc20 x0 : ffffff80461cb3a0
->>>> [    8.899589][  T599] Call trace:
->>>> [    8.899590][  T599]  gcov_info_add+0x9c/0xb8
->>>> [    8.899592][  T599]  gcov_module_notifier+0xbc/0x120
->>>> [    8.899595][  T599]  blocking_notifier_call_chain+0xa0/0x11c
->>>> [    8.899598][  T599]  do_init_module+0x2a8/0x33c
->>>> [    8.899600][  T599]  load_module+0x23cc/0x261c
->>>> [    8.899602][  T599]  __arm64_sys_finit_module+0x158/0x194
->>>> [    8.899604][  T599]  invoke_syscall+0x94/0x2bc
->>>> [    8.899607][  T599]  el0_svc_common+0x1d8/0x34c
->>>> [    8.899609][  T599]  do_el0_svc+0x40/0x54
->>>> [    8.899611][  T599]  el0_svc+0x94/0x2f0
->>>> [    8.899613][  T599]  el0t_64_sync_handler+0x88/0xec
->>>> [    8.899615][  T599]  el0t_64_sync+0x1b4/0x1b8
->>>> [    8.899618][  T599] Code: f905f56c f86e69ec f86e6a0f 8b0c01ec (f82e6a0c)
->>>> [    8.899620][  T599] ---[ end trace ed5218e9e5b6e2e6 ]---
->>>>
->>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>>> ---
->>>>   kernel/gcov/clang.c | 13 +++++++++----
->>>>   1 file changed, 9 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
->>>> index cbb0bed..0aabb9a 100644
->>>> --- a/kernel/gcov/clang.c
->>>> +++ b/kernel/gcov/clang.c
->>>> @@ -271,15 +271,20 @@ int gcov_info_is_compatible(struct gcov_info *info1, struct gcov_info *info2)
->>>>    */
->>>>   void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)
->>>>   {
->>>> -       struct gcov_fn_info *dfn_ptr;
->>>> -       struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
->>>> -                       struct gcov_fn_info, head);
->>>
->>> Hi Mukesh,
->>> Thanks for the report and patch!
->>>
->>> Looking closer at the existing implementation, it looks curious to me
->>> that we use list_first_entry_or_null() since that may return NULL,
->>> which we never check for.  I'm curious if that's safe to remove?
->>> Probably, since we haven't had any issues reported thus far.
->>>
->>>> +       struct gcov_fn_info *sfn_ptr;
->>>> +       struct gcov_fn_info *dfn_ptr = list_first_entry_or_null(
->>>> +                       &dst->functions, struct gcov_fn_info, head);
->>>>
->>>> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
->>>> +       list_for_each_entry(sfn_ptr, &src->functions, head) {
->>>
->>> This seems to be iterating BOTH src and dest, whereas previously we
->>> were only iterating dest AFAICT.  Is this correct?  Seems to be a
->>> change of behavior, at the least, which seems orthogonal to fixing the
->>> panic.
->>
->> Can you just check the implementation here once ?
->>
->> https://elixir.bootlin.com/linux/v6.1-rc3/source/kernel/gcov/gcc_4_7.c#L241
->>
->> By looking at the above link clang version does not seem to doing right ?
+On Wed, Nov 09, 2022 at 12:25:02PM +0100, Borislav Petkov wrote:
+> On Thu, Nov 03, 2022 at 05:58:51PM +0000, Ashok Raj wrote:
+> > When early loading of microcode fails for any reason other than the wrong
+> > family-model-stepping, Linux can get into an infinite loop retrying the
+> > same failed load.
+> > 
+> > A single retry is needed to handle any mixed stepping case.
+> > 
+> > Assume we have a microcode that fails to load for some reason.
+> > load_ucode_ap() seems to retry if the loading fails. But it searches for
 > 
-> Oh, indeed, the GCC variant is looping over BOTH src+dest together,
-> then the counters.
-> 
-> I expect this patch to change the counter values, but I suspect they
-> haven't been correct previously and we've only noticed whether
-> branches were taken vs not.
+> Seems to retry because we were supporting mixed revisions. Which we do
+> not now.
 
-It seems that you need the following to force this issue:
-- gcov_persists=1 on the kernel command line
-- unload of a kernel module
-- have an object file compiled into the kernel module where the first
-  function has more basic blocks transitions than later functions
+The retry wasn't the problem, but hitting the same failed microcode over
+and over is the problem. It is called out in the commit log.
 
-> Thanks for the patch.
-> 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> Peter, can you pick this up?
+As part of dropping mixed stepping, we can drop this retry.
 
-While this patch works correctly, it seems to contain changes that are
-not necessary to fix the underlying problem.
+Maybe the right way is to remember if the bsp failed, then there is no
+point in trying to apply on the AP's. 
 
-The null-pointer check for !dfn_ptr in the loop body should not be
-required because both lists are guaranteed to contain the same number of
-elements (via a previous call to gcov_info_is_compatible()). As a
-result, if dfn_ptr is null because dst->functions is empty, the loop
-body will never be called because src->functions is also empty.
+reload_early_microcode->reload_ucode_intel()
+                               ->apply_microcode_intel() 
 
-Also I don't understand why the patch changes the roles of dfn_ptr and
-sfn_ptr - it should have no functional effect if you iterate over
-src->functions or dst->functions.
-
-The only required change seems to be the addition of the list_next_entry
-statement for the non-loop-variable (sfn_ptr in the original code
-version) to the end of the loop body. Without it, gcov_info_add() tries
-to add counters of the very first function to the counter-arrays of all
-other functions. This will cause the reported out-of-bounds write error
-in case later functions in an object file provide fewer counts than the
-first function.
-
-@Mukesh: Please test if the minimal change outlined above also fixes the
-problem you are seeing, and if it does, please send an updated patch.
-
-Thanks!
+we aren't checking if early load failed for bsp, we should save and
+skip loading on all AP's.
 
 > 
->>
->>>
->>> Otherwise it sounds like we could just add NULL ptr checks against
->>> sfn_ptr outside the loop, and against dfn_ptr inside the loop.
->>> Something like this?
->>> ```
->>> diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
->>> index cbb0bed958ab..5d4cb801aa9c 100644
->>> --- a/kernel/gcov/clang.c
->>> +++ b/kernel/gcov/clang.c
->>> @@ -275,10 +275,13 @@ void gcov_info_add(struct gcov_info *dst, struct
->>> gcov_info *src)
->>>          struct gcov_fn_info *sfn_ptr = list_first_entry_or_null(&src->functions,
->>>                          struct gcov_fn_info, head);
->>>
->>> -       list_for_each_entry(dfn_ptr, &dst->functions, head) {
->>> -               u32 i;
->>> +       if (!sfn_ptr)
->>> +               return;
->>>
->>> -               for (i = 0; i < sfn_ptr->num_counters; i++)
->>> +       list_for_each_entry(dfn_ptr, &dst->functions, head) {
->>> +               if (!dfn_ptr)
->>> +                       continue;
->>> +               for (u32 i = 0, e = sfn_ptr->num_counters; i != e; ++i)
->>>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
->>>          }
->>>   }
->>> ```
->>> Can you test the above hunk or comment on whether it addresses the issue?
->>
->>
->> BTW, it just handles NUL pointer issue and not the one which is
->> mentioned here.
->>
->> "Unable to handle kernel write to read-only memory at virtual address
->> ffffff80461cc000"
->>
->> -Mukesh
->>
->>>
->>>>                  u32 i;
->>>>
->>>> +               if (!dfn_ptr)
->>>> +                       return;
->>>> +
->>>>                  for (i = 0; i < sfn_ptr->num_counters; i++)
->>>>                          dfn_ptr->counters[i] += sfn_ptr->counters[i];
->>>> +
->>>> +               dfn_ptr = list_next_entry(dfn_ptr, head);
->>>>          }
->>>>   }
->>>>
->>>> --
->>>> 2.7.4
->>>>
->>>
->>>
+> And if you say "seems" then this sounds like the problem hasn't been
+> analyzed properly. If this can happen with the current code, then this
+> needs to be fixed in stable. So, how do you trigger exactly?
 > 
-> 
-> 
+> I'd like to reproduce it myself.
 
--- 
-Peter Oberparleiter
-Linux on IBM Z Development - IBM Germany R&D
+Certainly, take the fms+pf of the platform you are testing. 
 
+- Take a microcode file from the distribution for a different fms that didn't
+  belong to the one you are testing.
+- You will have to fake the external header data and change it to the one
+  you want microcode match to work 
+- recompute all checksums and use that file instead of the original file.
+
+I accidently ran into it since I had a copy of debug uCode that require
+additional steps before loading.
+
+I have a tool that I can change to give you some production microcode that
+will fail in your platform. Just provide me with the fms+pf values, and I
+an provide one for  your test. 
+
+Let me know if you need one for testing.
+
+> 
+> As to this patch: it should simply be removing the retrying instead of
+> doing silly crap like
+> 
+> 	bool retried = false;
+> 
+> ...
+> 
+> In light of how a lot has changed since last time, yes, please redo the
+> patchset ontop of tip:x86/microcode, keeping in mind now that we don't
+> support mixed revisions anymore.
+> 
+> Just like dhansen said, you can split it in fixes and new features so
+> that it is not too many patches at once - your call.
+
+
+That makes sense, I'll send the bug fix patches separately.
+
+Cheers,
+Ashok
