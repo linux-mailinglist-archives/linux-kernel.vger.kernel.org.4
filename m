@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A480C623021
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0551C623022
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiKIQZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 11:25:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S231652AbiKIQZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiKIQZo (ORCPT
+        with ESMTP id S231384AbiKIQZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 11:25:44 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D5C1A048;
-        Wed,  9 Nov 2022 08:25:42 -0800 (PST)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 05DEBC000B;
-        Wed,  9 Nov 2022 16:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668011141;
+        Wed, 9 Nov 2022 11:25:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2946119286;
+        Wed,  9 Nov 2022 08:25:50 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668011148;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=md+3BvVMOqhbT4Mg1/eofVo42NnM0QIADOtucHcIgg4=;
-        b=gF6sAue/cSpFVYdCzn6XaeoAMUvRAr/BsmC8fZpflEJ6rq4f51Dmw+AsyA3tEdtFLjGgrj
-        tPnOphPVGbtNot0izJb5ZAo1Sf1hW3VhIwbn2e/cZQKg79XWffb6+IGIaejZo/roXifsR2
-        Gjcp0vNbtMLQFSNeprS5gc5f0fD+0+RuzrqzJQn92RUAf30+elKjORYPND6L7fiZz8xNmE
-        iwEFgC5dbi+ZqX6ppxaEOT6gN6skuFspwDI90hy2rGq2TvbFBAOGIpwJ0IxDUIU8yj4WoX
-        U83Zl2D9Gv0tfnRoCaCjtAuSDgllp61yxa8WXAOTDfpRlVrHqOiPCR9CApmHPg==
-Date:   Wed, 9 Nov 2022 17:25:37 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>
-Subject: Re: [PATCH 23/23] staging: media: tegra-video: add tegra20 variant
-Message-ID: <20221109172537.0c48f66c@booty>
-In-Reply-To: <20221109141852.729246-24-luca.ceresoli@bootlin.com>
-References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
-        <20221109141852.729246-24-luca.ceresoli@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        bh=dS+4jgWIp3j9dZW4rFcYGh+sxLvaYK0P20ezcjFZXV4=;
+        b=QSJ6LNleWHA1RHSFfXDxaPCmn+jVt13MdBC439LXEnVNK/hFvPdwB5B398jBp60AT0pIQS
+        wkqvdpn5kNXVCgwTko1XfQm3JRQBr3TviBBKhxWn75PHzday7t36VquvGBZxeXzW4Mq903
+        GOSrp4WESbB4JPlcJS/Wpy8DjKYKhUT6t/c1h4omwmQRuTXbyzKc/XXcibunUtKGkKFP79
+        YJuAAUklyZ9CwQahkEIezqyCJr5OwWQkK/nbuN5T+oPHHAX+OkBoTY8Q+NZl46O8jaiajH
+        wEZFLs7VED6bVxf/7x4LDLExXVvd1qzAcqcrXCststE9EtbGwDQ8l63yV4xGDw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668011148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dS+4jgWIp3j9dZW4rFcYGh+sxLvaYK0P20ezcjFZXV4=;
+        b=lwdaORWqUif3kCYJceQQDzwyZjs2HDufqdzeXFV9iRm3q2ov1baXwSOqmazm7c/nIxYJ9M
+        cbqO7rZS1r9gftBA==
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>, Mike Galbraith <efault@gmx.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-RT <linux-rt-users@vger.kernel.org>
+Subject: Re: [RFC PATCH] x86: Drop fpregs lock before inheriting FPU
+ permissions during clone
+In-Reply-To: <20221109113044.7ncdw6263o3msycl@techsingularity.net>
+References: <20221109113044.7ncdw6263o3msycl@techsingularity.net>
+Date:   Wed, 09 Nov 2022 17:25:47 +0100
+Message-ID: <87o7tg8584.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Spam-Score: 400
-X-GND-Status: SPAM
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,30 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  9 Nov 2022 15:18:52 +0100
-luca.ceresoli@bootlin.com wrote:
+On Wed, Nov 09 2022 at 11:30, Mel Gorman wrote:
+>    BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+...
+>   The splat comes from fpu_inherit_perms() being called under fpregs_lock(),
+>   and us reaching the spin_lock_irq() therein due to fpu_state_size_dynamic()
+>   returning true despite static key __fpu_state_size_dynamic having never
+>   been enabled.
+>
+> Mike's assessment looks correct. fpregs_lock on PREEMPT_RT disables
+> preemption only so the spin_lock_irq() in fpu_inherit_perms is unsafe
+> and converting siglock to raw spinlock would be an unwelcome change.
+> This problem exists since commit 9e798e9aa14c ("x86/fpu: Prepare fpu_clone()
+> for dynamically enabled features"). While the bug triggering is probably a
+> mistake for the affected machine and due to a bug that is not in mainline,
+> spin_lock_irq within a preempt_disable section on PREEMPT_RT is problematic.
+>
+> In this specific context, it may not be necessary to hold fpregs_lock at
+> all. The lock is necessary when editing the FPU registers or a tasks fpstate
+> but in this case, the only write of any FP state in fpu_inherit_perms is
+> for the new child which is not running yet so it cannot context switch or
+> be borrowed by a kernel thread yet. Hence, fpregs_lock is not protecting
+> anything in the new child until clone() completes. The siglock still needs
+> to be acquired by fpu_inherit_perms as the read of the parents permissions
+> has to be serialised.
 
-> +static int tegra20_vi_enable(struct tegra_vi *vi, bool on)
-> +{
-> +	/* from arch/arm/mach-tegra/iomap.h */
-> +	const phys_addr_t TEGRA_APB_MISC_BASE = 0x70000000;
-> +	const unsigned long reg_offset = 0x42c;
-> +	void __iomem *apb_misc;
-> +	u32 val;
-> +
-> +	apb_misc = ioremap(TEGRA_APB_MISC_BASE, PAGE_SIZE);
-> +	if (!apb_misc)
-> +		apb_misc = ERR_PTR(-ENOENT);
-> +	if (IS_ERR(apb_misc))
-> +		return dev_err_probe(vi->dev, PTR_ERR(apb_misc), "cannot access APB_MISC");
-> +
-> +	val = readl(apb_misc + reg_offset);
-> +	writel(val | (!!on), apb_misc + reg_offset);
+That's correct and siglock is the real protection for the permissions.
 
-Sorry, there is a mistake here, the bit should be set to 0 when
-on==false, but this code does not do that. This will be fixed in v2.
+> This is not tested as I did not access to a machine with Intel's
+> eXtended Feature Disable (XFD) feature that enables the relevant path
+> in fpu_inherit_perms and the bug is against a non-mainline kernel.
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+It's still entirely correct on mainline as there is no requirement to
+hold fpregs_lock in this case
+
+> Reported-by: Mike Galbraith <efault@gmx.de>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
