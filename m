@@ -2,90 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9609622B8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB89622B94
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiKIMbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
+        id S230098AbiKIMcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKIMbf (ORCPT
+        with ESMTP id S230096AbiKIMbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:31:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906CC1CB24;
-        Wed,  9 Nov 2022 04:31:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eRzuEXN9362q/hm/FS3+aYwyK9q6wPOkykwNudQnk2w=; b=Jm3QTcZJ/2OzYib865/QJe6Jib
-        Y8zYsQaCrGdvDo5tzhK3G15u0bHeC5kQuF71N2vAYRTqMG761I9uVM0cfHGO4jOmFHzqrIK3dOIWS
-        I2mRv1F7RkQ3+0GpWH8B7IRff4kVuDkb1RSVv8sBO9acSuY37ve8hRgmYjB3WFubV2sjA9id04fe9
-        MCEJ++8s+9MJFBDDaRNZ7r6db3JKIvdeJU6sR7tts3fGa83kRFPIpZFwT+RyUeL5vSUP4MRuYw9//
-        wNBSLYMaYXq+F0gAHDo7NhJBu4eDv0uD8bDDMN6vSTCUJuZPu4tD65/njJivEd4VlsUn+y/cZZvZY
-        tA3G8VKg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oskEk-00DPR6-Ny; Wed, 09 Nov 2022 12:31:22 +0000
-Date:   Wed, 9 Nov 2022 04:31:22 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Juhyung Park <qkrwngud825@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jiaming Li <lijiaming3@xiaomi.corp-partner.google.com>,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lijiaming3 <lijiaming3@xiaomi.com>
-Subject: Re: [RESEND PATCH 0/4] Implement File-Based optimization
- functionality
-Message-ID: <Y2udmtayRau/x5AO@infradead.org>
-References: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
- <Y2IuhG8nBJj0F1fd@infradead.org>
- <c5948336-19fc-ddd3-bc34-aba2d1b02302@gmail.com>
+        Wed, 9 Nov 2022 07:31:51 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588F62529D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 04:31:50 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id e189so13777115iof.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 04:31:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lqsvzjmGwht8cKHofdUzRio0AO8PpWTzzIiOfJRFQE4=;
+        b=aYFwnvyLzaH/j+XiPtktbb9nM8TRssVjeuYcsWVpeZcHJ68m9wUpNp9jWosKYugJ53
+         uzhj2UC1pe170NC3viVnqtGYS+z81CsBQZqtiOdXOkKC4s3oXvK6wKC2yD0T0MI2g62f
+         aJblvbeGC70UnCArbV90BrhO0IU7YhYc0T7f9uoyXj1fDDMMm+aUlaOlVZS41YRKfnwt
+         FnqbetJ+oNr8seA8W0ByVbUVJ1iQXtLxjPctSg8HNDTqOmPdnbgDijRfaA3YZc/3DA5s
+         jc+LY2Mp39uAnSxtc8ebUsqOQobpMleOWZZSI2LJycxo5GW1dcSj+6XCMGYgG5HM1lFZ
+         Qg2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lqsvzjmGwht8cKHofdUzRio0AO8PpWTzzIiOfJRFQE4=;
+        b=qkozOxx6YKdum0dzndn2Oum+CNQrIDPYcmNsvf+P2daSiTsmO01n75kU7rvIdKt3k6
+         eymlunW+Ka457C60IkocljSTUnwthDpVQcr9JyyJv0G4qCxYARgr6ENbtozEDrpQPd7U
+         As1Kn/kr4ZE0ik1dpO5wmx1pfrU2oxITJXBcQyHQ41npAfs68l4JrTW3vIIndu8hTHSl
+         9aCSq2vMktkeTzLdA3VxecDEwVtKNIvDMasD5q62tkZkg0wETm5S7I929nYSx9lCjtym
+         bNsq4ApcsBg4+9+f+dNdoAaTRSApVu7s4SFvgwwMeWUdz9daohI4zHe7O2dMUUGvsRP3
+         Nn/w==
+X-Gm-Message-State: ACrzQf0upU2jlSNtzn83aZEK3Ul1XpAlB23XhoZejtofjvED4ioNfd75
+        HpdS6KDm1FkZhpy6rwMD/CafOpOypXdPtCBlN1urrg==
+X-Google-Smtp-Source: AMsMyM6WIgbhPIffuYu2nJXpggadzifpgyzIo1PIr7J3wDOGwa3zOo4GgX76HqJHmnHwI5hSbwgqXzoHrOwPzI5/tCQ=
+X-Received: by 2002:a6b:8dcd:0:b0:6d3:c9df:bc7d with SMTP id
+ p196-20020a6b8dcd000000b006d3c9dfbc7dmr1645703iod.142.1667997109467; Wed, 09
+ Nov 2022 04:31:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5948336-19fc-ddd3-bc34-aba2d1b02302@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027090342.38928-1-ndumazet@google.com> <Y2uPIItkmcYgDy6k@kroah.com>
+In-Reply-To: <Y2uPIItkmcYgDy6k@kroah.com>
+From:   Nicolas Dumazet <ndumazet@google.com>
+Date:   Wed, 9 Nov 2022 13:31:33 +0100
+Message-ID: <CANZQvtgQyATwCyomGqtdOhthnkVc4_jEHY_U-s1x4u4kp5YKow@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: add NO_LPM quirk for Realforce 87U Keyboard
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        Petar Kostic <petar@kostic.dev>,
+        Oliver Neukum <oneukum@suse.com>, Ole Ernst <olebowle@gmx.com>,
+        Hannu Hartikainen <hannu@hrtk.in>,
+        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000393e3805ed08d7d8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:11:16PM +0900, Juhyung Park wrote:
-> Is the idea really an utter madness?
+--000000000000393e3805ed08d7d8
+Content-Type: text/plain; charset="UTF-8"
 
-Yes.
+On Wed, Nov 9, 2022 at 12:29 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Oct 27, 2022 at 11:03:42AM +0200, Nicolas Dumazet wrote:
+> > Before adding this quirk, this (mechanical keyboard) device would not be
+> > recognized, logging:
+> >
+> >   new full-speed USB device number 56 using xhci_hcd
+> >   unable to read config index 0 descriptor/start: -32
+> >   chopping to 0 config(s)
+> >
+> > It would take dozens of plugging/unpuggling cycles for the keyboard to
+> > be recognized. Keyboard seems to simply work after applying this quirk.
+> >
+> > This issue had been reported by users in two places already ([1], [2])
+> > but nobody tried upstreaming a patch yet. After testing I believe their
+> > suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
+> > little overkill. I assume this particular combination was tested because
+> > it had been previously suggested in [3], but only NO_LPM seems
+> > sufficient for this device.
+> >
+> > [1]: https://qiita.com/float168/items/fed43d540c8e2201b543
+> > [2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
+> > [3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
+> >
+> > ---
+> > Changes in v2:
+> >   - add the entry to the right location (sorting entries by
+> >     vendor/device id).
+> >
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
+> > ---
+>
+> By putting your s-o-b below the --- line, tools will drop it, how did
+> you test this?
+>
+> Put the v2 stuff below the --- line, don't add a new one.  See the
+> thousands of examples on the list for how to do this correctly (as well
+> as the kernel documentation.)
+>
+> Can you fix this up and resend a v3 please?
 
-> Majority of regular files that may be
-> of interest from the perspective of UFS aren't reflinked or snapshotted (let
-> alone the lack of support from ext4 or f2fs).
+Duh -- apologies for this rookie mistake. v3 sent your way.
 
-Linux does not require you in any way to use obsolete file systems
-desings only on any given block device.
+>
+> thanks,
+>
+> greg k-h
 
-> Device-side fragmentation is a real issue [1] and it makes more than enough
-> sense to defrag LBAs of interests to improve performance. This was long
-> overdue, unless the block interface itself changes somehow.
+--000000000000393e3805ed08d7d8
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Or maybe random writes to flash aren't a good idea if you FTL sucks?
-Full blown FTLs tend to not do any extent based mappings, so
-fragmentation does not matter.  The price paid for that is much larger
-FTL tables.  If you stop pretending flash is random writable through
-saner interfaces like ZNS you automatically solve this fragmentation
-problem as well.
-
-> The question is how to implement it correctly without creating a mess with
-> mismatched/outdated LBAs as you've mentioned, preferably through
-> file-system's integration: If the LBAs in questions are indeed reflinked,
-> how do we handle it?, If the LBAs are moved/invalidated from defrag or GC,
-> how do we make sure that UFS is up-to-date?, etc.
-
-The fix is to plug the leaking abtractions in UFS.  If it wants to look
-like a random writable block device it better perform when doing that.
-And if it doesn't want to pay the prize for that it'd better expose
-an abstraction that actually fits the underlying media.  It's not like
-some of us haven't worked on that for the last decade.
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+3THKPWAG9jcUnLFr5tdwMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBMchz/m9DAzkDk
+6JtxR1Ns3Ux0kJZKyIxCFNDOJpN4XUGpRlddEC/cWrtsX1AR5872/c9DekBJ9gQ7eZVBDR5VReKg
+tpG21RU7CCXjAwBDtfLz+nkGxnuq1XJef2OwL1/Rr2xXJ+nraZV7EcpNW92RNDsKzTWI8kmsXyK9
+XDDJDhNvFcAO3K4lbACkuxCfrE9tzdp9uG2Y/1aDALr2r8XZi9uiMb0js2p08tT7cCgh+WLF8pDP
+Ng5Bs1uZYJrY+Lrgg0GsQFiFpBI/e0m8VwvFbDUEexpaPEWdBYP53cVDFD/R6kVj+rHiAI57DZ9k
+0Bk/2Ylow6FBQrPzcK2D4OqEMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABkqWti5VJYTIDwUw2I1HaMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBQ
+fpQpYfZbbo1wpniBg4s2UfVKvPxwolh+YB7qdTTZPTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMDkxMjMxNDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAV13+bwDT2rk+8lHF88lw
+q5lpgmkVVYJrOFtusMH6rV7gIIHS1yGDhN+0r75sAYX0+CWlEiLCadV7tAGvgJsRkstNIql9SV0Q
+ZIcp6cGSAfgtqH1Iji3WqJdiNItRhmMZNfbDWS/IwTMAsmumGGbQ7NQdKFYgMSGMTSUlLA1HC5E+
+PAx2I7PwXzLKm6V3715mJifSkPXGIggwhIqcdsdXPQvDWezjB/ipjazI0QomJxthUmY+fR+UZGch
+MFqNreSaQDVcA0/6R4+C3GgBqjzGoP1AtjMvm8hm2J+m0h4yfWMu9gWL9IbdpjdsdVVtHqL0hNSK
+FDs6b3dE6mQzy6tYHw==
+--000000000000393e3805ed08d7d8--
