@@ -2,126 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7947623280
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30395623289
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiKISdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
+        id S229627AbiKISeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiKISdc (ORCPT
+        with ESMTP id S231373AbiKISeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:33:32 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA815592
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:33:30 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id y13so17495817pfp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:33:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FHp5Q2wOQy0KMZQlD30NsVfoIRug5gwk53ibb7cieWI=;
-        b=Kii37SevvA7bc8LA5fR8u9bJRXykNhlhfF6YHQSyXl62ImyXzbUda3785EJz8uzhh3
-         69zKPRTy3mrNBKumMEyOsuNn5B6+1UUh67uIk8dvoPYphmxpis3TXp2SFyIkwu6Inszv
-         GaE072uorf+pfDiDWt/3qEBYtBR2wFG36f9V1MFmtR0F56Nds344w3immMLHM6i1qPNX
-         9X330aao4iGbTZdV6W6m6ZZNnyS5NKoo4LmkB+8/osfYwU5ApsrTZF7AH8oUH6m31IzI
-         Fvv/1EhdnP7y9srrnQvbiKhrPZq7eI5wae2MrkxsD3zZBbbzxs8h25CL0p/LMiunBPlb
-         2sFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FHp5Q2wOQy0KMZQlD30NsVfoIRug5gwk53ibb7cieWI=;
-        b=3777gzgau6UY1L2s9IdIlVeNkVPdOnnLAzrBoBrEDHrL69hoibFwHeuJc9ir+OJ1xc
-         hJE8pJrX6HrJM3KUUGWSUYuTF0gAkxuX05xgf6DpEl+Tunzrx4QBonDQX62XCFR4XF9v
-         9VCKeB14LrbsnM9zADyJPtNXauOUzjRO/9UmD0j+JZpPX5Dm0TO5TIUDCA6MfAUNvgri
-         5VUxGae0uUIE4YjIRWmH+g8liFLuEuLfNoR5jIVGaOe08sj5eRm/sfhlN+BzFd5477ah
-         1AAKlFicSiVhsYSkoKAB1YEQQ+j8LTOvjwlmy+jxZVUVATk5pVf8iXG+tNYc72Gf1dGW
-         i3ig==
-X-Gm-Message-State: ACrzQf0rwGRl2SRVEUzEFa28bZr8QQI5m05zfk0XX5jqOK2KfHwhzybV
-        K28YVy4DqcxkhCTr6LdCvJXKxg==
-X-Google-Smtp-Source: AMsMyM7hU2AShV4UZ4WTmMAwHQxYL4v/lW/DeBqUTu/MwpyWv2SRw77PxU9vDpozEEBwxy5XwsEB7g==
-X-Received: by 2002:a63:187:0:b0:43b:cf3c:c64d with SMTP id 129-20020a630187000000b0043bcf3cc64dmr52910762pgb.359.1668018810159;
-        Wed, 09 Nov 2022 10:33:30 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b0018863dbf3b0sm4977252plh.45.2022.11.09.10.33.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 10:33:29 -0800 (PST)
-Message-ID: <2e7ccd49-b37b-2837-4baf-27a76f177c4f@kernel.dk>
-Date:   Wed, 9 Nov 2022 11:33:26 -0700
+        Wed, 9 Nov 2022 13:34:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC20013CC7;
+        Wed,  9 Nov 2022 10:33:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6680EB81F8F;
+        Wed,  9 Nov 2022 18:33:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA235C433D6;
+        Wed,  9 Nov 2022 18:33:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668018832;
+        bh=1NlJ0Cb9DDuBdKZM1kCO/SoFwcQXtKDYxi8lugqUymk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XBYwW2UIi570upRgrDi3H+eWtCnh8yyhY/cSNYmkZ0gVhAAXOQlRU84zaqvAgQxLt
+         KmoI+7eFh6aTwAqAndoBS4vr8PgZ/oDPbI87LOD54CCfH/+pL7dWsOBSVbsJYKZ7EF
+         wuzlQX/cBhlSk5RvL1i41H6R2cgTl0F3CZ9QTQQTSm2aHIucln6IW7QO8ZqTkdgrca
+         +0cYtb3L/n9+yNQJ3N8f49qaul8Tdy5as4AIwyqUeDgYIevFrza0DMmz+ZsMT0vuTj
+         RQvS9ecOwl+rtqPZ0JyoC6pkfXDh40Y3Rkx9XwTnUsJ5vF+5DyzJejpshXiZnj9JUa
+         MRVuLqnpox5iQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 89A824034E; Wed,  9 Nov 2022 15:33:49 -0300 (-03)
+Date:   Wed, 9 Nov 2022 15:33:49 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>
+Subject: Re: [PATCH 5/9] perf stat: Fix --metric-only --json output
+Message-ID: <Y2vyjUx6OeWFGIeH@kernel.org>
+References: <20221107213314.3239159-1-namhyung@kernel.org>
+ <20221107213314.3239159-6-namhyung@kernel.org>
+ <Y2q/0LNDCspN0Tm8@kernel.org>
+ <CAM9d7chsOAQ_y3Z8ZUPzmcAFfS5x8E2s7eH68Nu792TG-ZnzdA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v11 0/9] Userspace P2PDMA with O_DIRECT NVMe devices
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>, viro@zeniv.linux.org.uk
-References: <20221021174116.7200-1-logang@deltatee.com>
- <20221024150320.GA26731@lst.de>
- <743ad0e5-6936-9287-d093-2ce1c2a3e32d@nvidia.com>
- <20221108065618.GA20283@lst.de>
- <ee9f817f-1573-f3f6-9b20-b4b2b2053eb6@deltatee.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ee9f817f-1573-f3f6-9b20-b4b2b2053eb6@deltatee.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM9d7chsOAQ_y3Z8ZUPzmcAFfS5x8E2s7eH68Nu792TG-ZnzdA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/22 10:28 AM, Logan Gunthorpe wrote:
-> @add Jens
+Em Tue, Nov 08, 2022 at 02:07:39PM -0800, Namhyung Kim escreveu:
+> Hi Arnaldo,
 > 
-> On 2022-11-07 23:56, Christoph Hellwig wrote:
->> On Mon, Oct 24, 2022 at 12:15:56PM -0700, John Hubbard wrote:
->>> A little earlier, Jens graciously offered [1] to provide a topic branch,
->>> such as:
->>>
->>>     for-6.2/block-gup [2]
->>>
->>> (I've moved the name forward from 6.1 to 6.2, because that discussion
->>> was 7 weeks ago.)
->>
->> So what are we going to do with this series?  It would be sad to miss
->> the merge window again.
+> On Tue, Nov 8, 2022 at 12:45 PM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Mon, Nov 07, 2022 at 01:33:10PM -0800, Namhyung Kim escreveu:
+> > > Currently it prints all metric headers for JSON output.  But actually it
+> > > skips some metrics with valid_only_metric().  So the output looks like:
+> > >
+> > >   $ perf stat --metric-only --json true
+> > >   {"unit" : "CPUs utilized", "unit" : "/sec", "unit" : "/sec", "unit" : "/sec", "unit" : "GHz", "unit" : "insn per cycle", "unit" : "/sec", "unit" : "branch-misses of all branches"}
+> > >   {"metric-value" : "3.861"}{"metric-value" : "0.79"}{"metric-value" : "3.04"}
+> > >
+> > > As you can see there are 8 units in the header but only 3 metric-values
+> > > are there.  It should skip the unused headers as well.  Also each unit
+> > > should be printed as a separate object like metric values.
+> > >
+> > > With this patch:
+> > >
+> > >   $ perf stat --metric-only --json true
+> > >   {"unit" : "GHz"}{"unit" : "insn per cycle"}{"unit" : "branch-misses of all branches"}
+> > >   {"metric-value" : "4.166"}{"metric-value" : "0.73"}{"metric-value" : "2.96"}
+> >
+> > Can we get a Fixes tag for this one?
 > 
-> I noticed Jens wasn't copied on this series. I've added him. It would be
-> nice to get this in someone's tree soon.
+> I think this is it:
+> 
+> df936cadfb58 ("perf stat: Add JSON output option")
 
-I took a look and the series looks fine to me.
+I'll add it
+ 
+> But this also depends on patch 4.  Do you want me to rebase
+> this not to depend on it?
+
+Nope, I put the first one on perf/urgent, 2- on perf/core,
+
+- Arnaldo
+ 
+> Thanks,
+> Namhyung
+> 
+> >
+> > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > > ---
+> > >  tools/perf/util/stat-display.c | 22 +++-------------------
+> > >  1 file changed, 3 insertions(+), 19 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> > > index 115477461224..515fb6db3d67 100644
+> > > --- a/tools/perf/util/stat-display.c
+> > > +++ b/tools/perf/util/stat-display.c
+> > > @@ -430,12 +430,12 @@ static void print_metric_header(struct perf_stat_config *config,
+> > >           os->evsel->priv != os->evsel->evlist->selected->priv)
+> > >               return;
+> > >
+> > > -     if (!valid_only_metric(unit) && !config->json_output)
+> > > +     if (!valid_only_metric(unit))
+> > >               return;
+> > >       unit = fixunit(tbuf, os->evsel, unit);
+> > >
+> > >       if (config->json_output)
+> > > -             fprintf(os->fh, "\"unit\" : \"%s\"", unit);
+> > > +             fprintf(os->fh, "{\"unit\" : \"%s\"}", unit);
+> > >       else if (config->csv_output)
+> > >               fprintf(os->fh, "%s%s", unit, config->csv_sep);
+> > >       else
+> > > @@ -847,10 +847,6 @@ static void print_metric_headers(struct perf_stat_config *config,
+> > >               .new_line = new_line_metric,
+> > >               .force_header = true,
+> > >       };
+> > > -     bool first = true;
+> > > -
+> > > -     if (config->json_output && !config->interval)
+> > > -             fprintf(config->output, "{");
+> > >
+> > >       if (prefix && !config->json_output)
+> > >               fprintf(config->output, "%s", prefix);
+> > > @@ -871,18 +867,12 @@ static void print_metric_headers(struct perf_stat_config *config,
+> > >       evlist__for_each_entry(evlist, counter) {
+> > >               os.evsel = counter;
+> > >
+> > > -             if (!first && config->json_output)
+> > > -                     fprintf(config->output, ", ");
+> > > -             first = false;
+> > > -
+> > >               perf_stat__print_shadow_stats(config, counter, 0,
+> > >                                             0,
+> > >                                             &out,
+> > >                                             &config->metric_events,
+> > >                                             &rt_stat);
+> > >       }
+> > > -     if (config->json_output)
+> > > -             fprintf(config->output, "}");
+> > >       fputc('\n', config->output);
+> > >  }
+> > >
+> > > @@ -954,14 +944,8 @@ static void print_interval(struct perf_stat_config *config,
+> > >               }
+> > >       }
+> > >
+> > > -     if ((num_print_interval == 0 || config->interval_clear)
+> > > -                      && metric_only && !config->json_output)
+> > > +     if ((num_print_interval == 0 || config->interval_clear) && metric_only)
+> > >               print_metric_headers(config, evlist, " ", true);
+> > > -     if ((num_print_interval == 0 || config->interval_clear)
+> > > -                      && metric_only && config->json_output) {
+> > > -             fprintf(output, "{");
+> > > -             print_metric_headers(config, evlist, " ", true);
+> > > -     }
+> > >       if (++num_print_interval == 25)
+> > >               num_print_interval = 0;
+> > >  }
+> > > --
+> > > 2.38.1.431.g37b22c650d-goog
+> >
+> > --
+> >
+> > - Arnaldo
 
 -- 
-Jens Axboe
 
-
+- Arnaldo
