@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45FD26234E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEA86234ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiKIUtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S231812AbiKIUx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiKIUtf (ORCPT
+        with ESMTP id S229635AbiKIUxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:49:35 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0D62CCA1;
-        Wed,  9 Nov 2022 12:49:34 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id r12so27861670lfp.1;
-        Wed, 09 Nov 2022 12:49:34 -0800 (PST)
+        Wed, 9 Nov 2022 15:53:23 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE2F27B37;
+        Wed,  9 Nov 2022 12:53:20 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id io19so18216642plb.8;
+        Wed, 09 Nov 2022 12:53:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HMexBlxBxOfaLRccW2JVyrflm9G7r7sk5hRAu9Qd8Xw=;
-        b=lNabaBwBDx8wdVGBNgTi9QC7ZUqI1PcJvBPYkx5jrHBUeWhiNinibODdCdAobmUQsp
-         xX/EDJFbuhFE0m9R3ZyxxJXaocdRM7BwV3OHrhEH4ZSJqWDNDOEU8kAbOzh/Qw7grLtQ
-         2VDPcwgFBJlvk/MF2Lnt+TlB52oW2yPF+Vp1shEB5BicSyRVPfzlC4gUEX28a9jJuS+Y
-         d+T7DDTc2OqSBIJGkr5q0G8dv1mquMEhGbGaEc2Nh8qp8YP5Uy4OV4SOR5jlHVbQa9K6
-         DAoNKZkghLTa/oh6kaqdgzRmhd5vhM3Rdc49nb3dyQ/j38+8IIdKnkLLrf6EU0jumPbf
-         kxFA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NQ9Dolrn30ZEqCTjBOSWfRyBoKcMQaygSY6Y+KT0Mec=;
+        b=NX5S/PpvIB7oLqcAwzdN/Ioz4UByjq90t5Su7sRUT3us5IJbhaw+Znt5IXbXVWh1Z0
+         fL5hjn8LoJQwT/Alod0MpVLNjLWtasCGoAZpGi58bNZEu/RJ8kK8nDa9kk5gNcOv1aFR
+         CIbP5TgV00ob1KELFcj+4uaHkA+9Ug2qc3ABDxXtYlzlg+Y95CuMLIUbN+hEBj99DeTd
+         NUL5D5mCbJ1C2cl6wZJI+5hurMdfzwjakCWlAs0RgRmsf49qUt1eIc3laBhDx1l8OlzK
+         litzszx7bMY8wB40GkcbCi/t9lF91XpX49Wx87RXhf8YkEmSf53Wkc/89+DWi6DzETXF
+         YA0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HMexBlxBxOfaLRccW2JVyrflm9G7r7sk5hRAu9Qd8Xw=;
-        b=hmXfG7zO5G3AE1a/88yUfPlcFgRq+ZLpYReqFMqK+apTHNqV6qd9lwK1A0SzgJ99Rr
-         18138jciOMSDPi3MhAtX1xd7hC9pt20/eK8GtspM4Bt5NRGgUBnO2N5dZjC3gM/uodOi
-         2EZP+NF4DYMaSvC0ExRtbtXekGeDdg8EbpOV7VhrCsJ7kHOWVuSRAAUuPNsT2T6gnoRB
-         aM9XvrdZKgLrZTYMSEi2sUo11ZyGKCUp60ovgR35e8BPUcMfQ02guqa/dXp5uIW45zfU
-         6YJa/WwxnxVaJsuToDQKebllhlNN0w3U5U7s81ydlL4g39dEug+II/EXT2an/7z9bljj
-         tT4g==
-X-Gm-Message-State: ACrzQf2u3sovvnXh9m0ioSg6EKeNVaqBlIfXpKCfSzhGpov7SB0dqUG4
-        aiJjWakEh7dHhng7lgqdml3HVS9WU1EDlSlG04A=
-X-Google-Smtp-Source: AMsMyM47rnxNdnhq2uJF1dI0lUZOzuLnsLb7XNFBM3pLXMpIHNfi4zaMlJ30IDlwjmXIXU+3bvfZZXI248olgA0My5A=
-X-Received: by 2002:a19:6554:0:b0:4a2:be5c:688f with SMTP id
- c20-20020a196554000000b004a2be5c688fmr775793lfj.121.1668026972441; Wed, 09
- Nov 2022 12:49:32 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NQ9Dolrn30ZEqCTjBOSWfRyBoKcMQaygSY6Y+KT0Mec=;
+        b=qYV6Tj6rcQbB9JkEUwNBfjsT0YNoI4IG6HFo8fVVz8kk9vvOvcPnclC/+RQGtxIC0W
+         zeLhZAcIiB1sCEhFf80Lnr8ci3TDk3UyGQ8P1owDEkd/Lpm8BUT9Sx9lhKrS2PET16BY
+         71HggB6shAk8Od4lwRq451zxzCmWXQo2A1yKv1LPJ3JeyXjnOqUOsB+JmdZEnG/0Lpjv
+         yfS7XynVfhCSEpVSOMoM3zsO9vVXRaVLSJSUHKZGdtramfoHGAIT+fUbXZaZXOWnBgTG
+         tKZnpWsnEBE4CxAF9bxWtRS4demJr/fvHrmnRJlTOewP90L7sPHnnhndjxWtH7Z+bIN8
+         +rfQ==
+X-Gm-Message-State: ACrzQf0dtqCS74WAMj1evhpZZapnWFe8GQJ0WGK3kWqHT7jyneYOkQam
+        K7X40TKh+zBq7dnT9jvA5DU/VPfWdih7lA==
+X-Google-Smtp-Source: AMsMyM4yPvUCtlV3AR1sV5khbTRv3EDOSYNzQcaXkYigDxudTUruWCdW/VPp4VujTZbbU1AvA5ro1w==
+X-Received: by 2002:a17:90a:24b:b0:213:9da2:5c98 with SMTP id t11-20020a17090a024b00b002139da25c98mr64206526pje.123.1668027200320;
+        Wed, 09 Nov 2022 12:53:20 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:1:c61f:2003:6c97:8057])
+        by smtp.gmail.com with ESMTPSA id y7-20020aa79427000000b0056baca45977sm8659378pfo.21.2022.11.09.12.53.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 12:53:19 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [RFC PATCH 00/17] x86/hyperv/sev: Add AMD sev-snp enlightened guest support on hyperv
+Date:   Wed,  9 Nov 2022 15:52:58 -0500
+Message-Id: <20221109205316.984635-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221029202454.25651-1-swyterzone@gmail.com> <20221029202454.25651-3-swyterzone@gmail.com>
-In-Reply-To: <20221029202454.25651-3-swyterzone@gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Wed, 9 Nov 2022 12:49:20 -0800
-Message-ID: <CABBYNZKnw+b+KE2=M=gGV+rR_KBJLvrxRrtEc8x12W6PY=LKMw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] Bluetooth: btusb: Add a parameter to let users
- disable the fake CSR force-suspend hack
-To:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, luiz.von.dentz@intel.com,
-        quic_zijuhu@quicinc.com, hdegoede@redhat.com,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,126 +81,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ismael,
+From: Tianyu Lan <tiala@microsoft.com>
 
-On Sat, Oct 29, 2022 at 1:25 PM Ismael Ferreras Morezuelas
-<swyterzone@gmail.com> wrote:
->
-> A few users have reported that their cloned Chinese dongle doesn't
-> work well with the hack Hans de Goede added, that tries this
-> off-on mechanism as a way to unfreeze them.
->
-> It's still more than worthwhile to have it, as in the vast majority
-> of cases it either completely brings dongles to life or just resets
-> them harmlessly as it already happens during normal USB operation.
->
-> This is nothing new and the controllers are expected to behave
-> correctly. But yeah, go figure. :)
->
-> For that unhappy minority we can easily handle this edge case by letting
-> users disable it via our =C2=ABbtusb.disable_fake_csr_forcesuspend_hack=
-=3D1=C2=BB kernel option.
+This patchset is to add AMD sev-snp enlightened guest
+support on hyperv. Hyperv uses Linux direct boot mode
+to boot up Linux kernel and so it needs to pvalidate
+system memory by itself.
 
-Don't really like the idea of adding module parameter for device
-specific problem.
+In hyperv case, there is no boot loader and so cc blob
+is prepared by hypervisor. In this series, hypervisor
+set the cc blob address directly into boot parameter
+of Linux kernel. If the magic number on cc blob address
+is valid, kernel will read cc blob.
 
-> I believe this is the most generic way of doing it, given the constraints
-> and by still having a good out-of-the-box experience.
->
-> No clone left behind.
->
-> Cc: stable@vger.kernel.org
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Ismael Ferreras Morezuelas <swyterzone@gmail.com>
-> ---
->  drivers/bluetooth/btusb.c | 31 +++++++++++++++++++------------
->  1 file changed, 19 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 8f34bf195bae..d31d4f925463 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -34,6 +34,7 @@ static bool force_scofix;
->  static bool enable_autosuspend =3D IS_ENABLED(CONFIG_BT_HCIBTUSB_AUTOSUS=
-PEND);
->  static bool enable_poll_sync =3D IS_ENABLED(CONFIG_BT_HCIBTUSB_POLL_SYNC=
-);
->  static bool reset =3D true;
-> +static bool disable_fake_csr_forcesuspend_hack;
->
->  static struct usb_driver btusb_driver;
->
-> @@ -2171,7 +2172,7 @@ static int btusb_setup_csr(struct hci_dev *hdev)
->                 is_fake =3D true;
->
->         if (is_fake) {
-> -               bt_dev_warn(hdev, "CSR: Unbranded CSR clone detected; add=
-ing workarounds and force-suspending once...");
-> +               bt_dev_warn(hdev, "CSR: Unbranded CSR clone detected; add=
-ing workarounds...");
->
->                 /* Generally these clones have big discrepancies between
->                  * advertised features and what's actually supported.
-> @@ -2215,21 +2216,24 @@ static int btusb_setup_csr(struct hci_dev *hdev)
->                  * apply this initialization quirk to every controller th=
-at gets here,
->                  * it should be harmless. The alternative is to not work =
-at all.
->                  */
-> -               pm_runtime_allow(&data->udev->dev);
-> +               if (!disable_fake_csr_forcesuspend_hack) {
-> +                       bt_dev_warn(hdev, "CSR: Unbranded CSR clone detec=
-ted; force-suspending once...");
-> +                       pm_runtime_allow(&data->udev->dev);
->
-> -               ret =3D pm_runtime_suspend(&data->udev->dev);
-> -               if (ret >=3D 0)
-> -                       msleep(200);
-> -               else
-> -                       bt_dev_warn(hdev, "CSR: Couldn't suspend the devi=
-ce for our Barrot 8041a02 receive-issue workaround");
-> +                       ret =3D pm_runtime_suspend(&data->udev->dev);
-> +                       if (ret >=3D 0)
-> +                               msleep(200);
-> +                       else
-> +                               bt_dev_warn(hdev, "CSR: Couldn't suspend =
-the device for our Barrot 8041a02 receive-issue workaround");
+Shared memory between guests and hypervisor should be
+decrypted and zero memory after decrypt memory. The data
+in the target address. It maybe smearedto avoid smearing
+data.
 
-Is this specific to Barrot 8041a02? Why don't we add a quirk then?
+Introduce #HV exception support in AMD sev snp code and
+#HV handler.
 
-> -               pm_runtime_forbid(&data->udev->dev);
-> +                       pm_runtime_forbid(&data->udev->dev);
->
-> -               device_set_wakeup_capable(&data->udev->dev, false);
-> +                       device_set_wakeup_capable(&data->udev->dev, false=
-);
->
-> -               /* Re-enable autosuspend if this was requested */
-> -               if (enable_autosuspend)
-> -                       usb_enable_autosuspend(data->udev);
-> +                       /* Re-enable autosuspend if this was requested */
-> +                       if (enable_autosuspend)
-> +                               usb_enable_autosuspend(data->udev);
-> +               }
->         }
->
->         kfree_skb(skb);
-> @@ -4312,6 +4316,9 @@ MODULE_PARM_DESC(enable_autosuspend, "Enable USB au=
-tosuspend by default");
->  module_param(reset, bool, 0644);
->  MODULE_PARM_DESC(reset, "Send HCI reset command on initialization");
->
-> +module_param(disable_fake_csr_forcesuspend_hack, bool, 0644);
-> +MODULE_PARM_DESC(disable_fake_csr_forcesuspend_hack, "Don't indiscrimina=
-tely force-suspend Chinese-cloned CSR dongles trying to unfreeze them");
-> +
->  MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
->  MODULE_DESCRIPTION("Generic Bluetooth USB driver ver " VERSION);
->  MODULE_VERSION(VERSION);
-> --
-> 2.38.1
->
+Tianyu Lan (17):
+  x86/boot: Check boot param's cc_blob_address for direct boot mode
+  x86/sev: Pvalidate memory gab for decompressing kernel
+  x86/hyperv: Add sev-snp enlightened guest specific config
+  x86/hyperv: apic change for sev-snp enlightened guest
+  x86/hyperv: Decrypt hv vp assist page in sev-snp enlightened guest
+  x86/hyperv: Get Virtual Trust Level via hvcall
+  x86/hyperv: Use vmmcall to implement hvcall in sev-snp enlightened
+    guest
+  clocksource: hyper-v: decrypt hyperv tsc page in sev-snp enlightened
+    guest
+  x86/hyperv: decrypt vmbus pages for sev-snp enlightened guest
+  x86/hyperv: set target vtl in the vmbus init message
+  drivers: hv: Decrypt percpu hvcall input arg page in sev-snp
+    enlightened guest
+  Drivers: hv: vmbus: Decrypt vmbus ring buffer
+  x86/hyperv: Initialize cpu and memory for sev-snp enlightened guest
+  x86/hyperv: Add smp support for sev-snp guest
+  x86/hyperv: Add hyperv-specific hadling for VMMCALL under SEV-ES
+  x86/sev: Add a #HV exception handler
+  x86/sev: Initialize #HV doorbell and handle interrupt requests
 
+ arch/x86/boot/compressed/head_64.S    |   8 +
+ arch/x86/boot/compressed/sev.c        | 111 +++++++-
+ arch/x86/entry/entry_64.S             |  76 +++++
+ arch/x86/hyperv/hv_apic.c             |  79 ++++--
+ arch/x86/hyperv/hv_init.c             |  47 ++++
+ arch/x86/hyperv/ivm.c                 |  12 +-
+ arch/x86/include/asm/cpu_entry_area.h |   6 +
+ arch/x86/include/asm/idtentry.h       |  39 ++-
+ arch/x86/include/asm/irqflags.h       |  19 ++
+ arch/x86/include/asm/mem_encrypt.h    |   2 +
+ arch/x86/include/asm/mshyperv.h       |  68 +++--
+ arch/x86/include/asm/msr-index.h      |   6 +
+ arch/x86/include/asm/page_64_types.h  |   1 +
+ arch/x86/include/asm/sev.h            |  13 +
+ arch/x86/include/asm/svm.h            |  55 +++-
+ arch/x86/include/asm/trapnr.h         |   1 +
+ arch/x86/include/asm/traps.h          |   1 +
+ arch/x86/include/uapi/asm/svm.h       |   4 +
+ arch/x86/kernel/cpu/common.c          |   1 +
+ arch/x86/kernel/cpu/mshyperv.c        | 267 +++++++++++++++++-
+ arch/x86/kernel/dumpstack_64.c        |   9 +-
+ arch/x86/kernel/idt.c                 |   1 +
+ arch/x86/kernel/sev.c                 | 384 ++++++++++++++++++++++----
+ arch/x86/kernel/traps.c               |  50 ++++
+ arch/x86/mm/cpu_entry_area.c          |   2 +
+ drivers/clocksource/hyperv_timer.c    |   2 +-
+ drivers/hv/connection.c               |  14 +
+ drivers/hv/hv.c                       |  32 ++-
+ drivers/hv/hv_common.c                |  22 ++
+ drivers/hv/ring_buffer.c              |   7 +-
+ include/asm-generic/hyperv-tlfs.h     |  19 ++
+ include/asm-generic/mshyperv.h        |   2 +
+ include/linux/hyperv.h                |   4 +-
+ 33 files changed, 1250 insertions(+), 114 deletions(-)
 
---=20
-Luiz Augusto von Dentz
+-- 
+2.25.1
+
