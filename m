@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B67623477
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E5A623478
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiKIUYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S231273AbiKIUYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:24:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKIUYB (ORCPT
+        with ESMTP id S231169AbiKIUYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:24:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F1ABC27
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:24:01 -0800 (PST)
+        Wed, 9 Nov 2022 15:24:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0212DBC27
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:24:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEF4E61CAF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:24:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343CEC433D7;
-        Wed,  9 Nov 2022 20:23:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7E32B8200A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:24:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770BBC433C1;
+        Wed,  9 Nov 2022 20:24:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668025440;
+        s=k20201202; t=1668025441;
         bh=7+5jyTKDsBSnzUCypgmhEzafnQWwO3MDHgaXspdMOVI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T8ooVs2pwLN7kWzDt7NoDC1RaNGkZQxrFFi205GVftjQlo2Nioki0YrA+fcUEIahG
-         VzQ1hUkw9QguGB37xPLlBVA0ntWVhfZhPLFLL7mkx7pT918QKQl53AtoVFFCGN1Yi6
-         BnjWCN9s6g6CXcagFjozEsiHV8k1ZF4SazO3di3RuN8xmzuH199BiO78xtXzrmtJwt
-         Z3nCmj1o9gxdDrMEK2PHSGjSn1IdA5ahBDr/sE1QWZCSqePni6scTKXAA6LOnS9aPp
-         l9dxUsv19Fe/soI9y7iaeIx0b23ng9hP0lDEPdiyPH3Mi8Y6+V8zUWPM0soFBxp4t4
-         dYcaSgmKNQrYA==
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YTvRSomozFkiUg/FfR3yII1xY8PkR+w5h0C/UzmWX0Itx4wzX7VptefOqXmMGxhuP
+         MLJcDXaJXSOVudCNuNYZLGjRZN8AzVQ465SU3fu3UfOoo7lX3vbjLPPQPCxLHY2SVI
+         MDQ/q4RNeM7fhlwIOJ5HjoN+Q2ipG0WlrtKMpfMePmp4kFbj7EdPipxB3q1saktGFX
+         1NVQ7oK3PxBPht7A8b/ipFkNUvUK/hJTW38VKoz2V+Vhpc7OjD5pckLOue2tng3hUG
+         Xg/RTX8xz5yGtuD4kc9AgisLEzwowboi0BftHtgGCAF8IHzvEvXsHAVjbkLHdyLz1x
+         MpcU0Bf7dqq/g==
 From:   Dinh Nguyen <dinguyen@kernel.org>
 To:     linux-mtd@lists.infradead.org
 Cc:     dinguyen@kernel.org, tudor.ambarus@microchip.com,
@@ -39,9 +39,11 @@ Cc:     dinguyen@kernel.org, tudor.ambarus@microchip.com,
         linux-kernel@vger.kernel.org,
         Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 Subject: [PATCH] mtd: spi-nor: macronix: Add support for mx66u1g45g
-Date:   Wed,  9 Nov 2022 14:23:47 -0600
-Message-Id: <20221109202348.93666-1-dinguyen@kernel.org>
+Date:   Wed,  9 Nov 2022 14:23:48 -0600
+Message-Id: <20221109202348.93666-2-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221109202348.93666-1-dinguyen@kernel.org>
+References: <20221109202348.93666-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
