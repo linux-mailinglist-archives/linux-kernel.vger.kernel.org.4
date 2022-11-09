@@ -2,121 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F145622895
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CFC622898
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiKIKgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S230494AbiKIKhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiKIKgo (ORCPT
+        with ESMTP id S230333AbiKIKhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:36:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3029D1A202
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667990146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 9 Nov 2022 05:37:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4EA1A222;
+        Wed,  9 Nov 2022 02:37:04 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 168FF225EC;
+        Wed,  9 Nov 2022 10:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667990223; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OXh9xRxeOqiCgGAyIslxozC+WKA3WlHvk2TQ5NzdIts=;
-        b=b8b6TfX/Esa8rV7V2Ibv4YktQ4h2/YPI2Pw6nNNXFj/Rhq1Lxvzhu/k+1DH8qASF0G3a1O
-        BpmBr8ZEn4ELypRD2PJApMpPQKxBBFEFj8zhdbKCqG24vgaXjp4/3JPE9iVsHVaQMvGHRr
-        k1Lm5mTSYWra7EQwKBwCPXOt7qjIGU0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-62-tBj-lUyxPya-UsHYmMy0ww-1; Wed, 09 Nov 2022 05:35:45 -0500
-X-MC-Unique: tBj-lUyxPya-UsHYmMy0ww-1
-Received: by mail-wm1-f72.google.com with SMTP id ay19-20020a05600c1e1300b003cf758f1617so823480wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 02:35:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OXh9xRxeOqiCgGAyIslxozC+WKA3WlHvk2TQ5NzdIts=;
-        b=BMr3JqV5fUWRU+hzQWPBRx5mEX2USkUUu9jp/a1X/D+zTCAUfHAqTDkeIP9Xr84Tj0
-         cgcMXSH2q0QU3AjOOrGl40w9oOqV0YRgyJpJSwxC4VtvB3UfHUsvK0NNxgjYMoaGoRTu
-         nAsGnsoL7ZhKHGjndnwQmXIjm0Hi48rTTaWkRxNh3DZ73KH3J9fP909qHuke/Y/Tu6PS
-         oBl/Ikb899mnMJIMf/K7zWaTKde9EmTKR0QFuMscoZQfMbZg2Ly289NpTBVqBZRB+iyp
-         XzZd1XPK6IW5Tzp7mGYEtJ4bzj4nUchsMkSPjhWyoX5ChWUZGrJ/1FEK7a0N9Pg5bz4S
-         unAw==
-X-Gm-Message-State: ACrzQf0sNYDphIK6eKs8X6njdSvcj4GtxIXVJIDCwao1QpDkhdEiFxND
-        LiUYlkqIaNcSN7PDs/6PXx0zOLzw7pa196qJSv3NkPqyK8cUA2BBHQ7FmVECCtvoreZrLAFsn3u
-        7JKEeqbq9OT/RJ7zHRavBP8Gb
-X-Received: by 2002:a05:600c:54d1:b0:3cf:a39f:eafe with SMTP id iw17-20020a05600c54d100b003cfa39feafemr14003396wmb.159.1667990143966;
-        Wed, 09 Nov 2022 02:35:43 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM67vMbZOxyO9HdRP++/quRqreMLNQgI0Z3kPqtanXbNCYKYQhOFA99t07LzkKg+TdBKcSIorg==
-X-Received: by 2002:a05:600c:54d1:b0:3cf:a39f:eafe with SMTP id iw17-20020a05600c54d100b003cfa39feafemr14003389wmb.159.1667990143748;
-        Wed, 09 Nov 2022 02:35:43 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id x15-20020adfdd8f000000b002365921c9aesm13026740wrl.77.2022.11.09.02.35.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 02:35:43 -0800 (PST)
-Message-ID: <1fc523b0-da9c-64a0-7459-e8cf9fe3b819@redhat.com>
-Date:   Wed, 9 Nov 2022 11:35:41 +0100
+        bh=PTFgvjXWv3n/EyOFo+Gn65eHKp4vrNFiybKk0Lhb4sk=;
+        b=gXNQBDbmjlsgp588+LUzu7wzA8UxZILvj45/6YZLB7i4G51xTE2MGemwx/7ZTLsceOGOZ+
+        woGy/tMQpCUSo0SiqaxFpvQ1Zm8pm1HVfdP91aQfbrJ5Eca8gQiMX2SeocwYTfPdSRwGip
+        /NOIpKvk7OL7IHo/FDuv97wNUEwUXp4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667990223;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PTFgvjXWv3n/EyOFo+Gn65eHKp4vrNFiybKk0Lhb4sk=;
+        b=6+oN0DLXt1cuL0OAvI7l8TQ6wSpbSpAWwXEYC16QDK1uAMqspD0x7W5p9yDVSp28o72kiN
+        C3XEB9pNVzwUTZBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A29AD139F1;
+        Wed,  9 Nov 2022 10:37:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +4vgI86Ca2OoHAAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Wed, 09 Nov 2022 10:37:02 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id a0c8f054;
+        Wed, 9 Nov 2022 10:38:03 +0000 (UTC)
+Date:   Wed, 9 Nov 2022 10:38:03 +0000
+From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ceph: fix memory leak in mount error path when using
+ test_dummy_encryption
+Message-ID: <Y2uDCwDf+ZgKcRqu@suse.de>
+References: <20221108143421.30993-1-lhenriques@suse.de>
+ <215b729e-0af0-45d8-96af-3d3c319581c9@redhat.com>
+ <Y2tz8zQPlTWtfOdw@suse.de>
+ <614e430a-a559-e640-b2f3-020db758c061@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 2/8] KVM: SVM: replace regs argument of __svm_vcpu_run
- with vcpu_svm
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org,
-        jmattson@google.com, stable@vger.kernel.org
-References: <20221108151532.1377783-1-pbonzini@redhat.com>
- <20221108151532.1377783-3-pbonzini@redhat.com> <Y2rCIWtAsmEF1UuM@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y2rCIWtAsmEF1UuM@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <614e430a-a559-e640-b2f3-020db758c061@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 21:54, Sean Christopherson wrote:
-> On Tue, Nov 08, 2022, Paolo Bonzini wrote:
->> Since registers are reachable through vcpu_svm, and we will
->> need to access more fields of that struct, pass it instead
->> of the regs[] array.
->>
->> No functional change intended.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: f14eec0a3203 ("KVM: SVM: move more vmentry code to assembly")
+On Wed, Nov 09, 2022 at 05:57:41PM +0800, Xiubo Li wrote:
+> Hi Luis,
 > 
-> I don't think a Fixes: tag for a pure nop patch is fair to the original commit.
+> Please check https://github.com/ceph/ceph-client/commit/205efda80b6759a741dde209a7158a5bbf044d23#diff-eb62c69f842ed95a7d047262a62946b07eda52f2ea49ae33c39ea13754dfc291.
 
-That's for the sake of correct tracking in stable@, still it's not the 
-right commit to point at:
+Ugh! That's quite confusing :-)
 
-- f14eec0a3203 did not move the RSB stuffing before the GSBASE restore, 
-the code before was:
+I did a 'git fetch' and looked into commit 205efda80b67 ("ceph: implement
+-o test_dummy_encryption mount option") instead, and compared it with it's
+version in the wip-fscrypt branch.  It looks good to me: the only
+difference I see is my fix (adding the 'ceph_fscrypt_free_dummy_policy'
+call to 'ceph_real_mount').  Thanks!
 
-	vmexit_fill_RSB();
-  #ifdef CONFIG_X86_64
-  	wrmsrl(MSR_GS_BASE, svm->host.gs_base);
-  #else
+Cheers,
+--
+Luís
 
-- anyway it wasn't really buggy at the time: it's only in -next that 
-FILL_RETURN_BUFFER uses percpu data, because alternatives take care of 
-the X86_FEATURE_* checks
-
-The real reason to do all this is to access the percpu host spec_ctrl, 
-which in turn is needed for retbleed.  I'll point the Fixes tag to 
-a149180fbcf3 ("x86: Add magic AMD return-thunk") instead, again just for 
-the sake of tracking releases that need the change to full fix retbleed.
-
-Paolo
-
+> 
+> Currently I only applied it into the 'testing' branch.
+> 
+> Thanks!
+> 
+> - Xiubo
+> 
+> 
+> On 09/11/2022 17:33, Luís Henriques wrote:
+> > On Wed, Nov 09, 2022 at 11:08:49AM +0800, Xiubo Li wrote:
+> > > On 08/11/2022 22:34, Luís Henriques wrote:
+> > > > Because ceph_init_fs_context() will never be invoced in case we get a
+> > > > mount error, destroy_mount_options() won't be releasing fscrypt resources
+> > > > with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
+> > > > an invocation to this function in the mount error path.
+> > > > 
+> > > > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > > > ---
+> > > > * Changes since v1:
+> > > > 
+> > > > As suggested by Xiubo, moved fscrypt free from ceph_get_tree() to
+> > > > ceph_real_mount().
+> > > > 
+> > > > (Also used 'git format-patch' with '--base' so that the bots know what to
+> > > > (not) do with this patch.)
+> > > > 
+> > > >    fs/ceph/super.c | 1 +
+> > > >    1 file changed, 1 insertion(+)
+> > > > 
+> > > > diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+> > > > index 2224d44d21c0..f10a076f47e5 100644
+> > > > --- a/fs/ceph/super.c
+> > > > +++ b/fs/ceph/super.c
+> > > > @@ -1196,6 +1196,7 @@ static struct dentry *ceph_real_mount(struct ceph_fs_client *fsc,
+> > > >    out:
+> > > >    	mutex_unlock(&fsc->client->mount_mutex);
+> > > > +	ceph_fscrypt_free_dummy_policy(fsc);
+> > > >    	return ERR_PTR(err);
+> > > >    }
+> > > > 
+> > > > base-commit: 8b9ee21dfceadd4cc35a87bbe7f0ad547cffa1be
+> > > > prerequisite-patch-id: 34ba9e6b37b68668d261ddbda7858ee6f83c82fa
+> > > > prerequisite-patch-id: 87f1b323c29ab8d0a6d012d30fdc39bc49179624
+> > > > prerequisite-patch-id: c94f448ef026375b10748457a3aa46070aa7046e
+> > > > 
+> > > LGTM.
+> > > 
+> > > Thanks Luis.
+> > > 
+> > > Could I fold this into the previous commit ?
+> > Yes, sure.  I'm fine with that.
+> > 
+> > Cheers,
+> > --
+> > Luís
+> > 
+> 
