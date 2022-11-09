@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B7B622E36
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F7B622E39
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbiKIOoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S231642AbiKIOo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiKIOoL (ORCPT
+        with ESMTP id S229974AbiKIOox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:44:11 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20E2186EB;
-        Wed,  9 Nov 2022 06:44:09 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id l190so16732400vsc.10;
-        Wed, 09 Nov 2022 06:44:09 -0800 (PST)
+        Wed, 9 Nov 2022 09:44:53 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111811A222
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:44:52 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id bk15so26029424wrb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:44:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=newflow-co-uk.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pd3oCLn1GKk4PquKayZllpj3KkafLGWk7nWdgAL1e1Q=;
-        b=SNhfXW7DsOWLFsYLC55azBYl0sk5kMq1wYeALdVSIOTR7CrbGXE7cLcER54edpbFAV
-         Ufq/ULlrBM0UDVysT4m8CR/bpjJBFlk7mp7Auy1UTJjj4VqXMJS0Nk6U01U9vwbsphTN
-         2fAPwt2XlJGDvDBHBAiy5UI5Ck3mkhhu0QuA6v34pyiDaIi8o2uULuSvjxJhiVfX+hnp
-         AYZXnRPWtl7mai2DLNS/FkTK6AhfYub9PjmHQ2J7bamLOOdpCOpR+80dYdakFlf153ZW
-         qKxR9brYh5DjBfs7L3qSHK0iHmex012ILrNfKN6NxlHzYsRIzdQ/A9kFs9q9Uq54j8zt
-         N89w==
+        bh=+4S3lC7F0fSjRbh6HcH66tCyyW86t0VmiX9/wXKqMoo=;
+        b=1+XBqG7xzylQDBCu7YxHXE8VL0EVu96uyJM5I2UvIQwuFNcDnBigTS2Nz38LxeoX8Q
+         8FNH0rIDV/qFBnk+toSdVgATZJ/4SxeODjXERcP3+WVkszWUpVU/qZSHY9GWfJ4kIJcy
+         pDDdZiF2qXsjkFNh8p9Nr0Gq0Ud4bV1M5uUUWI8Osk7QuXKYKynC6bfhY3748Ly7YNxV
+         XzRbGsgfYT8v38vkmInhNTjyB4nl4pt2Xe0EiX2IzkLyRF/ANjP39Hxq1jxcik0nBmCY
+         I618RpRfw/tfWJkYrDIXZxX5aexxppW4wj2UDz6IGl/by9JXxpULW7s4tP4+PzO+CJcq
+         AQwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Pd3oCLn1GKk4PquKayZllpj3KkafLGWk7nWdgAL1e1Q=;
-        b=DakOjKjHGO6hsJb/lBn/lBdN7h3ZHl9R8m0TFP/uHlgth1Myks8C9f1NcY2e9I6nvr
-         TJl5N1WDdNHdoXR3Rm8qISBScM0lp9neOu+Fxt/3ROVvgbxIYKBdPZpDHlRyq0T+JhR+
-         uLM54bhKd4OGN67f8SfI75wmAoQSDMlvnGFTfYBSVVq+pZlVsvuCLfnrova9CLf6oNRG
-         WjnaAlV7sTv/+UC2WqGVNhl4RTKOgQzkEUKnRSOO885/r8e0IZ+bRO88PA/WDDG1CVZ4
-         F1YcDlaSw+5p2Z4JFg4ySNApaujcyUUsucKlNzhWuZTuyv8HNwmBLvhSX950rW6GJm7a
-         3Ffg==
-X-Gm-Message-State: ACrzQf2cxEUwzysJbycnQTFv1NzuUjP3PbIPPEphLYn0mlVxKbwxDJ2z
-        OGiU+UKW2a7STtdgzKRvKpyf8i0bWIST+ZelwYQ/BQt6
-X-Google-Smtp-Source: AMsMyM4RFlhx8Oigq3QssJQ8TvCY/9/mUUXM9K82HK3ax46rGx/SbmF1FLe/QBfFZPFztNFikj8AhihgjxZ+AN5UPKA=
-X-Received: by 2002:a67:dc18:0:b0:3aa:4149:510c with SMTP id
- x24-20020a67dc18000000b003aa4149510cmr31149048vsj.20.1668005048879; Wed, 09
- Nov 2022 06:44:08 -0800 (PST)
+        bh=+4S3lC7F0fSjRbh6HcH66tCyyW86t0VmiX9/wXKqMoo=;
+        b=T0kmPewH1xGmsK0DuS9d5vkpbRAk9wJMCR+cPou/j1CbPDquRIFav5DgCT6xMUAlod
+         C/FHm5hwBZ+PYo0NVdvjjgUJ0ffHEVNWl12RVQI6iV99OecscZ4TDErSD/hfzKC3xCf5
+         heDAq805N/D+sdY7lTuekmku6TFaXHVOs0lbzIPDdzwLb8CDH7Jc59tWio3ISOFH06YJ
+         YZctObNtTWDd5BjUPYM75+Y+2mTr6lQ/4urapbcT1SWaGWbxZQ1LMF5tUZkF0w9LYLL9
+         CnpUMVzrVPkoJIeUe0ufy+OUg3jo+OHVmkTSppvKFC71tTBCy/cJPeSoNdKgHt+9gW4q
+         bfVg==
+X-Gm-Message-State: ACrzQf2m4Yf/epTB5oa8zFYHg5FPIBD1MEOUSAcU8KfTCP48U06Hmqhg
+        Zy5XaYtRKohXuK0PJnrSskhO83v4uJMVaMOxE6D9Bw==
+X-Google-Smtp-Source: AMsMyM7dQfVhmqXthQiVXOuuOOe3liFCrH8mG/c5x+iaHJFcZcDUAk5OUhkkcEKaHdLw4+kYLs+O03pXs8OuqiJ4POY=
+X-Received: by 2002:a05:6000:1c1a:b0:236:8321:d875 with SMTP id
+ ba26-20020a0560001c1a00b002368321d875mr38870978wrb.45.1668005090702; Wed, 09
+ Nov 2022 06:44:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20221026093710.449809-1-pawell@cadence.com>
-In-Reply-To: <20221026093710.449809-1-pawell@cadence.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Wed, 9 Nov 2022 22:43:06 +0800
-Message-ID: <CAL411-qwmC8xuZUtrrVjtiiyaD-aLamO6GJAeMbLd1X73UDSmQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+References: <20221004143901.130935-1-mpfj@newflow.co.uk> <CAAbcLfiCoa=-20cydPG9=42G9npaeBOCRXPPPTwkNFU-3yGoCg@mail.gmail.com>
+ <20221108194742.0d9340f4@aktux> <Y2tYoHSFdJzrp9MW@atomide.com>
+In-Reply-To: <Y2tYoHSFdJzrp9MW@atomide.com>
+From:   Mark Jackson <mpfj@newflow.co.uk>
+Date:   Wed, 9 Nov 2022 14:44:39 +0000
+Message-ID: <CAAbcLfgYr1gfHNSycDc142aPuNUzxvhQ0GTyvExmMLa36e1nWg@mail.gmail.com>
+Subject: Re: [PATCH] Update Nanobone
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,73 +67,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 5:37 PM Pawel Laszczak <pawell@cadence.com> wrote:
+On Wed, 9 Nov 2022 at 07:37, Tony Lindgren <tony@atomide.com> wrote:
 >
-> During handling Clear Halt Endpoint Feature request driver invokes
+> The separate defconfig should not be needed. Please send any defconfig
+> changes to multi_v7_defconfig or omap2plu_defconfig as separate patches.
+>
+> Note that you can run make savedefconfig first to produce a minimal diff.
+> Then if adding device drivers, please add them as loadable modules where
+> possible.
 
-Add "," between request and driver. Otherwise, it is okay for me.
+But using the omap2plus_defconfig increases my kernel to 4.7MB
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
+My "custom" one has been specifically designed for the NANO platform
+and currently sits at about 3.7MB (which nicely fits into the ~4MB memory
+bank allocated to the kernel)
 
-Peter
+Hence the use of my custom defconfig.
 
-> Reset Endpoint command. Because this command has some issue with
-> transition endpoint from Running to Idle state the driver must
-> stop the endpoint by using Stop Endpoint command.
->
-> cc: <stable@vger.kernel.org>
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> ---
->  drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
->  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
->  2 files changed, 6 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-> index e2e7d16f43f4..0576f9b0e4aa 100644
-> --- a/drivers/usb/cdns3/cdnsp-gadget.c
-> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
-> @@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
->
->         trace_cdnsp_ep_halt(value ? "Set" : "Clear");
->
-> -       if (value) {
-> -               ret = cdnsp_cmd_stop_ep(pdev, pep);
-> -               if (ret)
-> -                       return ret;
-> +       ret = cdnsp_cmd_stop_ep(pdev, pep);
-> +       if (ret)
-> +               return ret;
->
-> +       if (value) {
->                 if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_STOPPED) {
->                         cdnsp_queue_halt_endpoint(pdev, pep->idx);
->                         cdnsp_ring_cmd_db(pdev);
-> @@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
->
->                 pep->ep_state |= EP_HALTED;
->         } else {
-> -               /*
-> -                * In device mode driver can call reset endpoint command
-> -                * from any endpoint state.
-> -                */
->                 cdnsp_queue_reset_ep(pdev, pep->idx);
->                 cdnsp_ring_cmd_db(pdev);
->                 ret = cdnsp_wait_for_cmd_compl(pdev);
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 25e5e51cf5a2..aa79bce89d8a 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
->         u32 ep_state = GET_EP_CTX_STATE(pep->out_ctx);
->         int ret = 0;
->
-> -       if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED) {
-> +       if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED ||
-> +           ep_state == EP_STATE_HALTED) {
->                 trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
->                 goto ep_stopped;
->         }
-> --
-> 2.25.1
->
+I don't have modules enabled as the platform functionality is pretty fixed.
+
+The defconfig I posted was created using savedefconfig.
+Is it still wrong ?
+
+Cheers
+Mark J.
