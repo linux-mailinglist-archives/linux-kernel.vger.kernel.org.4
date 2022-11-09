@@ -2,154 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC97C6237AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3115D6237AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiKIXrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S231772AbiKIXsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiKIXr3 (ORCPT
+        with ESMTP id S230334AbiKIXsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:47:29 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFF91277B;
-        Wed,  9 Nov 2022 15:47:28 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9Nfg0Q003561;
-        Wed, 9 Nov 2022 23:47:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8z6ePNURMRjxd7MtLxb/FSdAdPRY7ppEWaO03gWnvWM=;
- b=Se7hIpnxcGbp6o55s/JLIRA9pg+PEqh3p8zKhi8C4xZANxY1PzjbXpVXk38f9rlPvn7H
- AR+zzhW2FK1o7DB66itmsZW2B5hQrhH3RPJAopmYSTWOzbV9Mbth0lvKRj6E6PWCc3QP
- eJG4/U4AhZ10DwBm0lEzyuCve/6SF2Ix5/FoTKYy9MXfUnjBbaokDREZAETggZFEBjM/
- 8565RLbxAQ9FJnh/fV9MmYXU1bB5F/N/aziEtLqVQp9xwVERI3ZeZ1M0OaXRDIWGPmWC
- g8GhBwGIjjybLUdt3Ardhlb7J5eg5D+vVnOJ5HlHYy72g6slGWEHSJ/pC8+7v5+g8Ng9 8Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3krg2q900b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 23:47:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A9NlKvC023503
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 9 Nov 2022 23:47:20 GMT
-Received: from [10.110.62.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 9 Nov 2022
- 15:47:19 -0800
-Message-ID: <a4127ba2-5968-e8a9-da63-fd709aa01e7f@quicinc.com>
-Date:   Wed, 9 Nov 2022 15:47:18 -0800
+        Wed, 9 Nov 2022 18:48:39 -0500
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE80C642B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 15:48:37 -0800 (PST)
+Received: from darkstar.musicnaut.iki.fi (85-76-49-22-nat.elisa-mobile.fi [85.76.49.22])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id E120B2024D;
+        Thu, 10 Nov 2022 01:48:33 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1668037714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qJTJOn9jstyUEzsYgJ/tqc7eioOfTr+ik31YpBBRsgk=;
+        b=auWrSkoEd999srUucLgYvptD6WOJmRi+vSGbQ5/hqi9ZLwSH2ILN716AgJxr7MHAC7GHsT
+        lGMAxyqYDSH+HBeu1+tI4QLaOrlAJVwxIZPtQjLi9cZhzXWSFS0nsqUhlT0Qy/k7V3yOX0
+        lOD6UKeYm1m0Cdv65pLwYaXI5YxPa4Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1668037714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qJTJOn9jstyUEzsYgJ/tqc7eioOfTr+ik31YpBBRsgk=;
+        b=xESqOqCC3hAiixbH+oEmoxspY65y12L6LHOET7DiT+z/LyWA8yLOlUp2P6kh+tz49EE0FD
+        bo1I7e1zVAWNHJzJAp1Izzo0OhYeUG2NZeaq/6OnLNtBMfsqSOUYSaa/C1HaXdc72qfYl/
+        wQ10Hm392R7jVjbDj/rSVLmABsdPrgs=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1668037714; a=rsa-sha256; cv=none;
+        b=ShDkGCFFaJKzXmIDK6dsPKZWpEUvNh5spDKcHZro9JEecIW+we79zsgOUXokLbecmNyh/o
+        VIajcoy3COJ7Dvb8wUkiLMGWmKnIf8wLOfqoUAwzDvCcre/qFVcw6PsrdH/9c605ZSGEtN
+        14qsHhNN5SaPeDLCZucD/cWeY3Dxqbc=
+Date:   Thu, 10 Nov 2022 01:48:32 +0200
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>, vbabka@suse.cz,
+        42.hyeyoo@gmail.com, akpm@linux-foundation.org,
+        catalin.marinas@arm.com, cl@linux.com, iamjoonsoo.kim@lge.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        penberg@kernel.org, rientjes@google.com, rkovhaev@gmail.com,
+        roman.gushchin@linux.dev, willy@infradead.org
+Subject: Re: Deprecating and removing SLOB
+Message-ID: <20221109234832.GE307514@darkstar.musicnaut.iki.fi>
+References: <K5M3LR.3O50LSSSY5L3@crapouillou.net>
+ <CAHk-=wjBqwJk9RgfoBuM00T49M7uQiLnOvLST7L6v5rhS7fkDA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
- support HBR3
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Doug Anderson <dianders@chromium.org>
-CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
- <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
- <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
- <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
- <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
- <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
- <CAD=FV=XTOUjVAGFWZ6xTkcNOrCT1p73aU-=KJNYUOxsS-BQsyA@mail.gmail.com>
- <c5aedb31-3881-50e7-f747-e75b18c3f4b8@linaro.org>
- <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
- <60643572-4148-cea5-e64d-ec6534b0c407@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <60643572-4148-cea5-e64d-ec6534b0c407@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HutC2z3yT8RN_6bXhyEjUefMrOqIVQEo
-X-Proofpoint-GUID: HutC2z3yT8RN_6bXhyEjUefMrOqIVQEo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 priorityscore=1501 mlxscore=0 clxscore=1011 phishscore=0
- adultscore=0 spamscore=0 bulkscore=0 mlxlogscore=891 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090179
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjBqwJk9RgfoBuM00T49M7uQiLnOvLST7L6v5rhS7fkDA@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 11/2/2022 11:04 AM, Dmitry Baryshkov wrote:
-> On 02/11/2022 20:28, Doug Anderson wrote:
->> Hi,
->>
->> On Wed, Nov 2, 2022 at 10:23 AM Dmitry Baryshkov
->> <dmitry.baryshkov@linaro.org> wrote:
->>>
->>>> 1. Someone figures out how to model this with the bridge chain and
->>>> then we only allow HBR3 if we detect we've got a TCPC that supports
->>>> it. This seems like the cleanest / best but feels like a long pole.
->>>> Not only have we been trying to get the TCPC-modeled-as-a-bridge stuff
->>>> landed for a long time but even when we do it we still don't have a
->>>> solution for how to communicate the number of lanes and other stuff
->>>> between the TCPC and the DP controller so we have to enrich the bridge
->>>> interface.
->>>
->>> I think we'd need some OOB interface. For example for DSI interfaces we
->>> have mipi_dsi_device struct to communicate such OOB data.
->>>
->>> Also take a note regarding data-lanes from my previous email.
->>
->> Right, we can somehow communicate the max link rate through the bridge
->> chain to the DP controller in an OOB manner that would work.
->
-> I'd note that our dp_panel has some notion of such OOB data. So do AUX 
-> drivers including the panel-edp. My suggestion would be to consider 
-> both of them while modelling the OOB data.
->
->>
->>
->>>> 2. We add in a DT property to the display controller node that says
->>>> the max link rate for use on this board. This feels like a hack, but
->>>> maybe it's not too bad. Certainly it would be incredibly simple to
->>>> implement. Actually... ...one could argue that even if we later model
->>>> the TCPC as a bridge that this property would still be valid / useful!
->>>> You could certainly imagine that the SoC supports HBR3 and the TCPC
->>>> supports HBR3 but that the board routing between the SoC and the TCPC
->>>> is bad and only supports HBR2. In this case the only way out is
->>>> essentially a "board constraint" AKA a DT property in the DP
->>>> controller.
->>>
->>> We have been discussing similar topics with Abhinav. Krzysztof 
->>> suggested
->>> using link-frequencies property to provide max and min values.
+On Wed, Nov 09, 2022 at 01:39:12PM -0800, Linus Torvalds wrote:
+> On Wed, Nov 9, 2022 at 12:56 PM Paul Cercueil <paul@crapouillou.net> wrote:
+> >
+> > It worked fine on some boards, but on others it had about a 25% chance
+> > of booting, and 75% chance of hanging at boot. I tried printk-debugging
+> > it, and was coming to the conclusion that it's memory corruption of
+> > some sort.
+> >
+> > Then I switched to SLUB and all the problems are gone. Same with SLAB.
+> >
+> > So while I can't say for sure that SLOB is broken (it might be
+> > triggering a bug somewhere else), I am highly suspicious that it is.
+> 
+> I have this distinct memory of having seen other reports like this,
+> but my google-fu is not strong enough to back that up.
+> 
+> There definitely has been recurring noise about SLOB issues. There's a
+> reason people have wanted to remove it for years and years.
 
-questions,
+Some of the reported SLOB issues have been actually real driver bugs,
+that go unnoticed when SLUB/SLAB are used (unless perhaps debug stuff
+is enabled). I'm not saying kernel should keep SLUB, but it's good at
+failing early when there is a bug. See e.g. commit 120ee599b5bf ("staging:
+octeon-usb: prevent memory corruption")
 
-1)is Krzysztof suggested had been implemented?
-
-2) where is link property i can add link-frequencies?
-
-
->>
->> This sounds good to me and seems worth doing even if we eventually do 
->> #1.
->
-> And the bonus point is that it can be done easily.
->
+A.
