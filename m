@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822766234D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CCB6234BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiKIUpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        id S231567AbiKIUlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiKIUpG (ORCPT
+        with ESMTP id S229561AbiKIUln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:45:06 -0500
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4F914D14;
-        Wed,  9 Nov 2022 12:45:05 -0800 (PST)
-Received: by mail-qk1-f175.google.com with SMTP id x18so11715083qki.4;
-        Wed, 09 Nov 2022 12:45:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bKBYazOHxtCaO2FguzlHAhQzUkX2fPZcyJSc9EJ/FY8=;
-        b=3xRlWMsgCkcR79jyh3WOgGV76MpIG21ajgHWtQ907kPfAHF/xeCHRpGQ7azcnJyoS4
-         5M/to2goWIkvIMOxnByokm6JCwZI6ixhkILG3PjnzgUq0BVkOMiHr1VlvFZUmt/nLgiw
-         +SQe+w+tkQ3wMMXAkYbur9ue0VIDiBbjhI7g3uKd0Gsj0T8Ol5iCHyg1bSiFzjtm/m92
-         CLOLjsDIImUb+pGpXz/i+xlO7vqXURtal9iKPVfTmFK56F7tRHYkbeln5VjceOFDSlj8
-         HeC+Hzgm/om6Y8nOL3HjMYuch2wB7iAtClnZwSm36fR4PqE1P0aLZpT/zFyazHSmqKVv
-         rtQQ==
-X-Gm-Message-State: ACrzQf38V5ww+Ayp/1aohuSVymz56qwDKLvPodfENXE4gOesB+tY3CpW
-        UqTG5omLND/438ufu6/VXCDBPoeimZhatg==
-X-Google-Smtp-Source: AMsMyM5hwAbiKOLz1InhnM8WYemxE/bsnl52vm/hllaWED6zfxxXUSmwi8WvJORo29NNfF+5FCaDmA==
-X-Received: by 2002:a05:620a:280d:b0:6cf:ab57:a130 with SMTP id f13-20020a05620a280d00b006cfab57a130mr45145181qkp.749.1668026704698;
-        Wed, 09 Nov 2022 12:45:04 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id br7-20020a05620a460700b006bbc09af9f5sm11851997qkb.101.2022.11.09.12.45.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 12:45:03 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id 131so117413ybl.3;
-        Wed, 09 Nov 2022 12:45:03 -0800 (PST)
-X-Received: by 2002:a05:6902:503:b0:6cf:c510:6a23 with SMTP id
- x3-20020a056902050300b006cfc5106a23mr41506442ybs.380.1668026703709; Wed, 09
- Nov 2022 12:45:03 -0800 (PST)
+        Wed, 9 Nov 2022 15:41:43 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23B217050;
+        Wed,  9 Nov 2022 12:41:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668026500; x=1699562500;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+O/GefFOW6jxFk/nJ/+JlQXGvg7uqtqqmPjyGOaK5B0=;
+  b=XN4IiU0Unq0aMJymV9WnlRzbXaohPuFMBv9HTaM0jC0e5RAZrXoHsWFX
+   zPE8rJ/0vcyrVRLl3UadDmWsfHmQQ3fYq0gjGvLDaMUIx4SehOJfUihRb
+   YRgu9M/VCzs2YdFqC1Tl9GtQL+IVQGLdGpvdVK66BKo9WtjCAx8/2Hg+a
+   D80rc6wVIgYHR6IiWbzT71AnEQhJpoccc1zvzs7e5RMfd9GGf2lrdQSMV
+   LBA+TD64pz7pYW+uiv3IbTtfA41B6K6DMZM85c2eQRhI/1S8QssnKTrre
+   b32FgqGuc0W/7yqiMwPTdGDFItMFQooahrcqw988jsf2UH/CXa0FMGs64
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
+   d="scan'208";a="122642737"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Nov 2022 13:41:39 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 9 Nov 2022 13:41:39 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 9 Nov 2022 13:41:36 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.co>,
+        <linux@armlinux.org.uk>, <alexandr.lobakin@intel.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v3 0/4] net: lan966x: Add xdp support
+Date:   Wed, 9 Nov 2022 21:46:09 +0100
+Message-ID: <20221109204613.3669905-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20220613131033.10053-1-wsa+renesas@sang-engineering.com>
- <20220613131033.10053-2-wsa+renesas@sang-engineering.com> <CAMuHMdX-56GZmZJ-JvkFvZ6NsozsamtoKURPzsS-3+AYtZBhFQ@mail.gmail.com>
- <YqmoWYARVsXos3me@shikoro>
-In-Reply-To: <YqmoWYARVsXos3me@shikoro>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Nov 2022 21:44:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU7foCN873wrwUVgCyuoN6Y52Ds-ENXUSoEH0wKpD_qBQ@mail.gmail.com>
-Message-ID: <CAMuHMdU7foCN873wrwUVgCyuoN6Y52Ds-ENXUSoEH0wKpD_qBQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: renesas: spider-cpu: Switch from SCIF3 to HSCIF0
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+Add support for xdp in lan966x driver. Currently only XDP_PASS and
+XDP_DROP are supported.
 
-On Wed, Jun 15, 2022 at 11:37 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > I.e. the U-Boot on the Spider in Magnus' lab has "baudrate=115200"
-> > in its environment, while I can read the output from ICUMXA Loader
-> > to U-Boot, and Linux just fine.
->
-> Earlier U-Boot may have no HSCIF support. Recent ones have and the
-> installer suggests to set baudrate to highspeed. ICUMXA loaders never
-> worked for me in 115200.
->
-> I can keep my patch local if you prefer 115200.
+The first 2 patches are just moving things around just to simplify
+the code for when the xdp is added.
+Patch 3 actually adds the xdp. Currently the only supported actions
+are XDP_PASS and XDP_DROP. In the future this will be extended with
+XDP_TX and XDP_REDIRECT.
+Patch 4 changes to use page pool API, because the handling of the
+pages is similar with what already lan966x driver is doing. In this
+way is possible to remove some of the code.
 
-As all active white-hawk users are now suffering from this,
-I will queue your patch in renesas-devel for v6.2.
+All these changes give a small improvement on the RX side:
+Before:
+iperf3 -c 10.96.10.1 -R
+[  5]   0.00-10.01  sec   514 MBytes   430 Mbits/sec    0         sender
+[  5]   0.00-10.00  sec   509 MBytes   427 Mbits/sec              receiver
 
-Thanks!
+After:
+iperf3 -c 10.96.10.1 -R
+[  5]   0.00-10.02  sec   540 MBytes   452 Mbits/sec    0         sender
+[  5]   0.00-10.01  sec   537 MBytes   450 Mbits/sec              receiver
 
-Gr{oetje,eeting}s,
+---
+v2->v3:
+- inline lan966x_xdp_port_present
+- update max_len of page_pool_params not to be the page size anymore but
+  actually be rx->max_mtu.
 
-                        Geert
+v1->v2:
+- rebase on net-next, once the fixes for FDMA and MTU were accepted
+- drop patch 2, which changes the MTU as is not needed anymore
+- allow to run xdp programs on frames bigger than 4KB
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Horatiu Vultur (4):
+  net: lan966x: Add define IFH_LEN_BYTES
+  net: lan966x: Split function lan966x_fdma_rx_get_frame
+  net: lan966x: Add basic XDP support
+  net: lan96x: Use page_pool API
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ .../net/ethernet/microchip/lan966x/Kconfig    |   1 +
+ .../net/ethernet/microchip/lan966x/Makefile   |   3 +-
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 181 +++++++++++-------
+ .../ethernet/microchip/lan966x/lan966x_ifh.h  |   1 +
+ .../ethernet/microchip/lan966x/lan966x_main.c |   7 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  33 ++++
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  |  76 ++++++++
+ 7 files changed, 236 insertions(+), 66 deletions(-)
+ create mode 100644 drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+
+-- 
+2.38.0
+
