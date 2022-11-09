@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9C662297F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E56E622984
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiKILEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S230063AbiKILFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:05:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiKILEc (ORCPT
+        with ESMTP id S229821AbiKILFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:04:32 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 909B7644C;
-        Wed,  9 Nov 2022 03:04:30 -0800 (PST)
-Received: from pwmachine.localnet (85-170-25-210.rev.numericable.fr [85.170.25.210])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E10EA20B929F;
-        Wed,  9 Nov 2022 03:04:26 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E10EA20B929F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667991870;
-        bh=xjS3RSgFinUTnn09YzQPAUOcc5Q2nF9iD2L4KzdBxww=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gf/R1SCtcGFF4CgzLlMsIc28oU4/5u8K8PB3INvwTTeVUNeluS7YQDzb7WkVZBGXM
-         aTE3sOLwkcICATx7N4IcHvqtFxt3hZH5a9ZuqjcrhWmR/tnPzX5NnDMaAnbb243Fdt
-         a+TEzsT3R21bijzQv3l8DC5BsrleqV8rqMp/comQ=
-From:   Francis Laniel <flaniel@linux.microsoft.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alban Crequy <alban.crequy@gmail.com>,
-        Alban Crequy <albancrequy@microsoft.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/2] maccess: fix writing offset in case of fault in strncpy_from_kernel_nofault()
-Date:   Wed, 09 Nov 2022 12:04:24 +0100
-Message-ID: <2655397.mvXUDI8C0e@pwmachine>
-In-Reply-To: <20221108130551.85ad67b402582e3855418294@linux-foundation.org>
-References: <20221108195211.214025-1-flaniel@linux.microsoft.com> <20221108195211.214025-2-flaniel@linux.microsoft.com> <20221108130551.85ad67b402582e3855418294@linux-foundation.org>
+        Wed, 9 Nov 2022 06:05:32 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413AA18382
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:05:31 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id u2so25233483ljl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KzaCvH3xkARHHfJKzBlJJDQJiXN89YFdinP6IW/0fKQ=;
+        b=h5S0vl+gwxO3+hZ1VmiEIxOPNO/y3K372NLE/9cA+qNUI/BhCEdUwZ1Z3z1sTh6GpU
+         V90cw/FEBs6QSt655LhsMF1AGo7wDl03wHn6S5EaI+RJLKH40Qq7XRFAgsq5mFr5u1S8
+         Ic1Y6akI7pTH7tfxZBqnKi3LSVrbGkuDJIQiYh6IBr1agVGGN1Utqdf28jo1DMQYiDS9
+         a4PmqaCX8ptMAm+WudXQ0JKu+FbUAdBMaohGMElD2Wfw6RW6hU7cNwrXH/HMmjsp/jNv
+         7BVDMhvoRkXVocpmgnk2dZhrXfsYqV/6M69E3qTG3JL47J+8RxCVBj6szGHAhut6hMMo
+         Ck5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KzaCvH3xkARHHfJKzBlJJDQJiXN89YFdinP6IW/0fKQ=;
+        b=i6mPDDhrUDGi886oP0aBZ9Z22BwijN5m5dsCnS/YXLzNAzXsncOqcstL+zljRIVzbA
+         nPfJH1pUW11xCkpg+fsdct1Q5bs+xFreM8xZnMpWR/IRHsnniCob93NAIQAn3PR5ICGg
+         TKf8fUhe4esGH5oS48QSPNrf5rrT9oMVWy8AYS4t6VHAaIWJUI5UQdzNHjRuq6i0zPPD
+         qwPblN+B1C4JgCe8MhQbAfRDyvWizqW9pkvP1jcUhjxM0Yz5HroTeWxftuhzAoaVQF2C
+         IJLrVNg8Jmg3Zv9bKA3/XqYm9+dKhYjIngrUIz2UATmn7rht0yG7D7Tbh4vJ3oFbVHxZ
+         4kGg==
+X-Gm-Message-State: ACrzQf0FlwM6Fr1oRqQDjYV6s5jb/CHHKfevj6Fzdw84OmzQMv2dGUe+
+        omn7qbT2KL+sI6SHFdINXKVl0Q==
+X-Google-Smtp-Source: AMsMyM5EaAzEjE2wqAIdQQS9DKHqggJlSiktGSWvrpBK/emQnzuqrjmMZklhZEQDYjO0bXVRuJtiSw==
+X-Received: by 2002:a2e:953:0:b0:277:3609:bd2b with SMTP id 80-20020a2e0953000000b002773609bd2bmr7300851ljj.340.1667991929507;
+        Wed, 09 Nov 2022 03:05:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id z4-20020a056512376400b00499b1873d6dsm2177860lft.269.2022.11.09.03.05.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 03:05:29 -0800 (PST)
+Message-ID: <fe352971-dcb2-c33f-285b-a47c40dbcf2a@linaro.org>
+Date:   Wed, 9 Nov 2022 12:05:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 1/2] soc: loongson: add GUTS driver for loongson-2
+ platforms
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org
+References: <20221104024835.3570-1-zhuyinbo@loongson.cn>
+ <57c9f565-e75b-0c8f-fdce-9dc8c334d50f@loongson.cn>
+ <CACRpkda=-_a+gWQVk1vi4QJ30j-hzeraX-wr86RcQ9xne4-d6Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CACRpkda=-_a+gWQVk1vi4QJ30j-hzeraX-wr86RcQ9xne4-d6Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi.
+On 09/11/2022 11:15, Linus Walleij wrote:
+> On Wed, Nov 9, 2022 at 11:03 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> 
+>> Hi maintainer,
+>>
+>> This patch I had verified that base on mainline 6.1-rc3 tree, it is
+>> okay, if no other issue, please you help me merge it to upstream.
+> 
+> Aren't these loongarch maintainers listed in MAINTAINERS able to
+> merge this? Certainly Huacai can merge stuff to drivers/soc as
+> need be. drivers/soc is a bit shared between different archs.
 
-Le mardi 8 novembre 2022, 22:05:51 CET Andrew Morton a =E9crit :
-> On Tue,  8 Nov 2022 20:52:06 +0100 Francis Laniel=20
-<flaniel@linux.microsoft.com> wrote:
-> > From: Alban Crequy <albancrequy@microsoft.com>
-> >=20
-> > If a page fault occurs while copying the first byte, this function rese=
-ts
-> > one byte before dst.
-> > As a consequence, an address could be modified and leaded to kernel
-> > crashes if case the modified address was accessed later.
-> >=20
-> > Signed-off-by: Alban Crequy <albancrequy@microsoft.com>
-> > Tested-by: Francis Laniel <flaniel@linux.microsoft.com>
->=20
-> Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
->=20
-> Please merge via the bpf tree.
->=20
-> This looks potentially nasty.  Fortunately only tracing code uses it,
-> but I'm thinking it should have cc:stable and a Fixes:?
+The problem was they were not cc-ed on these patches for some reason.
+Maybe the maintainers patterns are incorrect...
 
-Thank you for the review!
-Sorry, I thought to add stable list but forgot to add it when sending the=20
-series...
-I will sent a v2 with your review and without rfc tag to, among others,=20
-stable.
-
+Best regards,
+Krzysztof
 
