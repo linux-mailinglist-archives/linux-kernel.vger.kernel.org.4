@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10D862248D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9BA6224DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiKIHWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 02:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S229834AbiKIHq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 02:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiKIHWQ (ORCPT
+        with ESMTP id S229530AbiKIHqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 02:22:16 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962471CFE8;
-        Tue,  8 Nov 2022 23:22:13 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6bxl1bc1zHvgl;
-        Wed,  9 Nov 2022 15:21:47 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 15:22:11 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH] ext4: correct inconsistent error msg in nojournal mode
-Date:   Wed, 9 Nov 2022 15:43:43 +0800
-Message-ID: <20221109074343.4184862-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 9 Nov 2022 02:46:23 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDDA186FE
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 23:46:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667979968; bh=4y+p6G+6Eyrf3pYDyQ3PW7+HxDBRFvP76sfcfvr405o=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=Tx3A3hiw1+wUw/GGd3EY1Vy10Eu0OfaNks4pN6IpVUGYN0NPsu7J6GTniwOdr2OS+
+         OrFvVOtSWLzW4iqDe6C5CaMXmc4BPWWE27bCpCW3421zQSqM+JUCn+00wnXvZ1pijO
+         sPkMmsgjE5CZvrPAxec1kwNX0kFus2Tg3CMOiXIE=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Wed,  9 Nov 2022 08:46:08 +0100 (CET)
+X-EA-Auth: 5WhwHM9XqEWUpElfHoVsyiSNRigbkBV1oekffDsZQS3OO3TMni5CBDdtyn7IdurPP3ccJ3dnRKFudoW0pY8qUOwkWzy7vJiN
+Date:   Wed, 9 Nov 2022 13:16:02 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev, Sven Van Asbroeck <TheSven73@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: fieldbus: replace snprintf in show functions
+ with sysfs_emit
+Message-ID: <Y2taurqOvGiPo3jB@qemulion>
+References: <Y2tBJFSsyUzdb+eO@qemulion>
+ <Y2tXEibm2QxH37FK@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2tXEibm2QxH37FK@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we used the journal_async_commit mounting option in nojournal mode,
-the kernel told me that "can't mount with journal_checksum", was very
-confusing. I find that when we mount with journal_async_commit, both the
-JOURNAL_ASYNC_COMMIT and EXPLICIT_JOURNAL_CHECKSUM flags are set. However,
-in the error branch, CHECKSUM is checked before ASYNC_COMMIT. As a result,
-the above inconsistency occurs, and the ASYNC_COMMIT branch becomes dead
-code that cannot be executed. Therefore, we exchange the positions of the
-two judgments to make the error msg more accurate.
+On Wed, Nov 09, 2022 at 08:30:26AM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Nov 09, 2022 at 11:26:52AM +0530, Deepak R Varma wrote:
+> > The show() methods should only use sysfs_emit() when formatting values
+> > to be returned to the user space.
+> > Ref: Documentation/filesystems/sysfs.rst
+> > Issue identified by coccicheck.
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> >  	/*
+> > -	 * card_name was provided by child driver, could potentially be long.
+> > -	 * protect against buffer overrun.
+> > +	 * sysfs provides PAGE_SIZE long buffer to take care of potentially
+>
+> No need to ever mention PAGE_SIZE at all, this comment should just be:
+> 	/* card_name was provided by child driver */
 
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/ext4/super.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+Sure. I will update the comment in the revision.
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 63ef74eb8091..e4ababd0f132 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -5286,14 +5286,15 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 		goto failed_mount3a;
- 	} else {
- 		/* Nojournal mode, all journal mount options are illegal */
--		if (test_opt2(sb, EXPLICIT_JOURNAL_CHECKSUM)) {
-+		if (test_opt(sb, JOURNAL_ASYNC_COMMIT)) {
- 			ext4_msg(sb, KERN_ERR, "can't mount with "
--				 "journal_checksum, fs mounted w/o journal");
-+				 "journal_async_commit, fs mounted w/o journal");
- 			goto failed_mount3a;
- 		}
--		if (test_opt(sb, JOURNAL_ASYNC_COMMIT)) {
-+
-+		if (test_opt2(sb, EXPLICIT_JOURNAL_CHECKSUM)) {
- 			ext4_msg(sb, KERN_ERR, "can't mount with "
--				 "journal_async_commit, fs mounted w/o journal");
-+				 "journal_checksum, fs mounted w/o journal");
- 			goto failed_mount3a;
- 		}
- 		if (sbi->s_commit_interval != JBD2_DEFAULT_MAX_COMMIT_AGE*HZ) {
--- 
-2.31.1
+>
+> But the larger question is, why did you only convert one of the sysfs
+> show functions in this file?  Why not do them all?
+
+I was limiting it to what is reported by coccicheck. I will review other such
+show functions and send a consolidated patch.
+
+Thank you,
+./drv
+
+>
+> thanks,
+>
+> greg k-h
+>
+
 
