@@ -2,78 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1136224CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B10D862248D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiKIHmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 02:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S229854AbiKIHWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 02:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiKIHmO (ORCPT
+        with ESMTP id S229849AbiKIHWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 02:42:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD871B784;
-        Tue,  8 Nov 2022 23:42:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60173B81D1C;
-        Wed,  9 Nov 2022 07:42:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E99C433C1;
-        Wed,  9 Nov 2022 07:42:08 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 13:12:05 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mhi tree
-Message-ID: <20221109074205.GA4651@thinkpad>
-References: <20221109151637.67be60f8@canb.auug.org.au>
+        Wed, 9 Nov 2022 02:22:16 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962471CFE8;
+        Tue,  8 Nov 2022 23:22:13 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6bxl1bc1zHvgl;
+        Wed,  9 Nov 2022 15:21:47 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 15:22:11 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>
+Subject: [PATCH] ext4: correct inconsistent error msg in nojournal mode
+Date:   Wed, 9 Nov 2022 15:43:43 +0800
+Message-ID: <20221109074343.4184862-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221109151637.67be60f8@canb.auug.org.au>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 03:16:37PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the mhi tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> drivers/bus/mhi/host/pci_generic.c: In function 'mhi_pci_get_irqs':
-> drivers/bus/mhi/host/pci_generic.c:743:60: error: assignment of member 'irq' in read-only object
->   743 |                         mhi_cntrl_config->event_cfg[i].irq = 0;
->       |                                                            ^
-> 
-> Caused by commit
-> 
->   c970e67d64a5 ("bus: mhi: host: make mhi_controller_config::event_cfg const")
-> 
+When we used the journal_async_commit mounting option in nojournal mode,
+the kernel told me that "can't mount with journal_checksum", was very
+confusing. I find that when we mount with journal_async_commit, both the
+JOURNAL_ASYNC_COMMIT and EXPLICIT_JOURNAL_CHECKSUM flags are set. However,
+in the error branch, CHECKSUM is checked before ASYNC_COMMIT. As a result,
+the above inconsistency occurs, and the ASYNC_COMMIT branch becomes dead
+code that cannot be executed. Therefore, we exchange the positions of the
+two judgments to make the error msg more accurate.
 
-Dropped it now.
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/ext4/super.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Thanks,
-Mani
-
-> I have used the mhi tree from next-20221108 for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-
-
-
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 63ef74eb8091..e4ababd0f132 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -5286,14 +5286,15 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+ 		goto failed_mount3a;
+ 	} else {
+ 		/* Nojournal mode, all journal mount options are illegal */
+-		if (test_opt2(sb, EXPLICIT_JOURNAL_CHECKSUM)) {
++		if (test_opt(sb, JOURNAL_ASYNC_COMMIT)) {
+ 			ext4_msg(sb, KERN_ERR, "can't mount with "
+-				 "journal_checksum, fs mounted w/o journal");
++				 "journal_async_commit, fs mounted w/o journal");
+ 			goto failed_mount3a;
+ 		}
+-		if (test_opt(sb, JOURNAL_ASYNC_COMMIT)) {
++
++		if (test_opt2(sb, EXPLICIT_JOURNAL_CHECKSUM)) {
+ 			ext4_msg(sb, KERN_ERR, "can't mount with "
+-				 "journal_async_commit, fs mounted w/o journal");
++				 "journal_checksum, fs mounted w/o journal");
+ 			goto failed_mount3a;
+ 		}
+ 		if (sbi->s_commit_interval != JBD2_DEFAULT_MAX_COMMIT_AGE*HZ) {
 -- 
-மணிவண்ணன் சதாசிவம்
+2.31.1
+
