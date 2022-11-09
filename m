@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580B962363E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58374623642
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 23:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiKIV7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S232059AbiKIWAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 17:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKIV7s (ORCPT
+        with ESMTP id S229657AbiKIWAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:59:48 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162A5F61;
-        Wed,  9 Nov 2022 13:59:47 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A9Lx727033026;
-        Wed, 9 Nov 2022 15:59:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668031147;
-        bh=b7PO55ox9Ku0+BUb/jH+AxWWw1UBs2sKYVo9NFf7PL4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Bdde3cIGRfuIlPIRh6X6Mq1Ya3UWGQ2qFo03xmImNW1ty+jN+mw/e3cKGGILP9H/T
-         3XKmaia5VWUhGuztW2z2LtF0z42twWLZkO61/9sLfK/BD2TXzmylhwwjp9y+mL2FJI
-         +xZiHpspuXnXm7IxCRdWEEA4WWu87iMIjfyJyDBE=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A9Lx7VM057000
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Nov 2022 15:59:07 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 9 Nov
- 2022 15:59:06 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 9 Nov 2022 15:59:07 -0600
-Received: from [128.247.81.39] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A9Lx6jt009420;
-        Wed, 9 Nov 2022 15:59:06 -0600
-Message-ID: <5418ac3b-04d7-5e77-7612-c8f168e24621@ti.com>
-Date:   Wed, 9 Nov 2022 15:59:06 -0600
+        Wed, 9 Nov 2022 17:00:06 -0500
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCBE15824;
+        Wed,  9 Nov 2022 14:00:05 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13bef14ea06so323653fac.3;
+        Wed, 09 Nov 2022 14:00:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MBKBlPlYHH+d23qoAhQOq2lKx+b+s6DjJqW2E+tnx78=;
+        b=vF1Ae9NzXfI6JISwGKGv8JwLRALwEyCqkoDFVQAGy+3LcBSoCBU+7VXyx5S8QyPtwR
+         1srm2pvBJ1DEBcM62BB5SfO27jYfmn/biwp0CNuPPo0OmobUJOX2oQZWbLGeFsHTGEDa
+         wBpKXEFQU6B5PKyZFz2Jcs40T0oRcGw+VlLkasZZT7Mcxy3TyQPeQgO7mPQ+KN7HO1qg
+         I1VY56c064WJLyVPhp114NImk9KkZb8oZzKRUFtZqycjCov3z64WWQ2JF0vc8ut4z/L4
+         rC5i4aB7OHpr39YsRcZmPk/q6tW4q/T5EFtY0xAhV4uG459nZIrCl+6emUO3KIlL3PDp
+         TRtg==
+X-Gm-Message-State: ACrzQf0y7tgNg9mFaaIP1cwh8qDSQnoQBkj+VVq0ctazDHhYRwrXUfax
+        fElWXxQx4W8TgNnoqodLeQ==
+X-Google-Smtp-Source: AMsMyM6RtkRPsY/21k9tRFMpIeKt38HsQlzu9nAZrPUmyHUaj27aNg7tYDMULJ1nSDY2kux7Z8WMjg==
+X-Received: by 2002:a05:6870:a2ce:b0:131:a8bc:54db with SMTP id w14-20020a056870a2ce00b00131a8bc54dbmr38331247oak.187.1668031204238;
+        Wed, 09 Nov 2022 14:00:04 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id er33-20020a056870c8a100b00131c3d4d38fsm6666398oab.39.2022.11.09.14.00.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 14:00:03 -0800 (PST)
+Received: (nullmailer pid 2946725 invoked by uid 1000);
+        Wed, 09 Nov 2022 22:00:05 -0000
+Date:   Wed, 9 Nov 2022 16:00:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dominique Martinet <dominique.martinet@atmark-techno.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>, mizo@atmark-techno.com
+Subject: Re: [RFC PATCH 1/2] dt-bindings: net: h4-bluetooth: add new bindings
+ for hci_h4
+Message-ID: <20221109220005.GA2930253-robh@kernel.org>
+References: <CAL_JsqKCb2ZA+CLTVnGBMjp6zu0yw-rSFjWRg2S3hA7S6h-XEA@mail.gmail.com>
+ <6a4f7104-8b6f-7dcd-a7ac-f866956e31d6@linaro.org>
+ <Y2rsQowbtvOdmQO9@atmark-techno.com>
+ <Y2tW8EMmhTpCwitM@atmark-techno.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v6 4/6] mfd: tps65219: Add driver for TI TPS65219 PMIC
-Content-Language: en-US
-To:     Kevin Hilman <khilman@baylibre.com>, Nishanth Menon <nm@ti.com>,
-        jerome Neanne <jneanne@baylibre.com>
-CC:     Lee Jones <lee@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>, <kristo@kernel.org>,
-        <dmitry.torokhov@gmail.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>, <tony@atomide.com>,
-        <vigneshr@ti.com>, <bjorn.andersson@linaro.org>,
-        <shawnguo@kernel.org>, <geert+renesas@glider.be>,
-        <dmitry.baryshkov@linaro.org>, <marcel.ziswiler@toradex.com>,
-        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>, <arnd@arndb.de>,
-        <jeff@labundy.com>, <narmstrong@baylibre.com>, <msp@baylibre.com>,
-        <j-keerthy@ti.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-input@vger.kernel.org>, <linux-omap@vger.kernel.org>
-References: <20221011140549.16761-1-jneanne@baylibre.com>
- <20221011140549.16761-5-jneanne@baylibre.com> <Y1+q2Usm9ecicXqp@google.com>
- <1383fd22-c720-811e-a2bb-be2151675089@baylibre.com>
- <20221105000104.rtj3r6ufqwqmepon@keenly> <7heduewjp0.fsf@baylibre.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <7heduewjp0.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2tW8EMmhTpCwitM@atmark-techno.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +76,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 3:14 PM, Kevin Hilman wrote:
-> Nishanth Menon <nm@ti.com> writes:
-> 
->> On 13:58-20221104, jerome Neanne wrote:
->>>
->> [...]
->>
->>>
->>>>
->>>> Can you try an compile with W=1 please.
->>> This raise one warning on mfd:
->>> drivers/mfd/tps65219.c:28:12: warning: ‘tps65219_soft_shutdown’ defined but
->>> not used [-Wunused-function]
->>>     28 | static int tps65219_soft_shutdown(struct tps65219 *tps)
->>>        |            ^~~~~~~~~~~~~~~~~~~~~~
->>> soft_shutdown has been validated and is used in TI baseline even if not
->>> hooked in upstream version further to this review:
->>> https://lore.kernel.org/lkml/20220825150224.826258-5-msp@baylibre.com/
->>>
->>> It was a TI requirement to implement it...
->>> Let me know if you want me to remove this function or if we can keep it like
->>> this.
->>
->> There are platforms without psci, correct? I think the comment was to
->> drop the force override with system-power-controller property,
->>
->> if (!pm_power_off) {
->> 	tps65219_i2c_client = client;
->> 	pm_power_off = &tps65219_pm_power_off;
->> }
->>
->> Could still be valid for such platforms, no? I do see that the
->> capability that the PMIC has - which is software shutdown is a valid
->> feature that we support in many different PMIC drivers. Is'nt the job of
->> the driver to introduce the functionality in a manner that is
->> appropriate to the OS framework?
-> 
-> Yeah, I think Nishanth is right here.
-> 
-> We should probably keep the `if (!pm_power_off)` part so the PMIC will
-> be used if PSCI is not, but it also allows an easy way to test/use the PMIC
-> shutdown functionality downstream if needed.
-> 
+On Wed, Nov 09, 2022 at 04:29:52PM +0900, Dominique Martinet wrote:
+> Dominique Martinet wrote on Wed, Nov 09, 2022 at 08:54:42AM +0900:
+> > This is a pretty terrible design, as the Bluetooth side cannot actually
+> > know when the device is ready as the initialization takes place, but
+> > that means there really aren't any property to give here
+> > 
+> > (I haven't reproduced during normal boot, but in particular if I run
+> > bluetoothd before loading the wifi driver, I need to unbind/bind the
+> > serial device from the hci_uart_h4 driver to recover bluetooth...
+> > With that in mind it might actually be best to try to coordinate this
+> > from userspace with btattach after all, and I'd be happy with that if I
+> > didn't have to fight our init system so much, but as things stand having
+> > it autoloaded by the kernel is more convenient for us... Which is
+> > admitedly a weak reason for you all, feel free to tell me this isn't
+> > viable)
 
-Then should be using the sys-off handler API[0] so it doesn't block PSCI
-which is also switching over[1].
+Punting the issue to userspace is not a great solution...
 
-Andrew
 
-[0] https://lwn.net/Articles/894511/
-[1] https://www.spinics.net/lists/arm-kernel/msg1024127.html
+> This actually hasn't taken long to bite us: while the driver does work,
+> we get error messages early on before the firmware is loaded.
+> (In hindsight, I probably should have waited a few days before sending
+> this...)
+> 
+> 
+> My current workaround is to return EPROBE_DEFER until we can find a
+> netdev with a known name in the init namespace, but that isn't really
+> something I'd consider upstreamable for obvious reasons (interfaces can
+> be renamed or moved to different namespaces so this is inherently racy
+> and it's just out of place in BT code)
+
+Can't you just try to access the BT h/w in some way and defer when that 
+fails?
+
+Or perhaps use fw_devlink to create a dependency on the wifi node. I'm 
+not sure offhand how exactly you do that with a custom property.
+
+Rob
