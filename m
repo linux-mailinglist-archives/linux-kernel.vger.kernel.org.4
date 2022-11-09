@@ -2,131 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDA5623200
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D7F623203
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiKISDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
+        id S229835AbiKISEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiKISDE (ORCPT
+        with ESMTP id S230413AbiKISE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:03:04 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA606426
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:03:03 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id j15so26979786wrq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:03:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JW3fkWgeAG3LT4kZ6rcMCrGgnOiIVlFxIYHqqCAg8qs=;
-        b=lQ+SPL8FwdXmfcTzLpYYBS17369BtI2K5e3Q720yl0CpD4+sF0J2A2pXEV/F2sHJtG
-         twPlu+RX4BePLR7u8nDZLB8A6ZpLn18SEpk0An51PrNdFi9kzU2aRTDm8P93tgFHe90s
-         kTZzgOhaatBC/di9nY5d/kxp7Y2w2ZhA8/P4LGCuo/bc7PJF47rUT5xkLbqWBcJkx6Fa
-         Y4dDjLChh1iFAlc48G2EVCXtSSHqnhsl7w1a+TBMaaMuLpNbZ2gF179z1lRCRARaeBeX
-         c+ZC9mcbI+rJk4e/L+Tm1UlL8CV8tfp46VSY8BsZNMDwvVWnPoMCPK7tM4+47SNJ/t0N
-         GMTA==
+        Wed, 9 Nov 2022 13:04:29 -0500
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1A41D0;
+        Wed,  9 Nov 2022 10:04:28 -0800 (PST)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so20515852fac.1;
+        Wed, 09 Nov 2022 10:04:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JW3fkWgeAG3LT4kZ6rcMCrGgnOiIVlFxIYHqqCAg8qs=;
-        b=Jn3BE/YMlELsdc1TaZx3YQ9E7TQ1ZiiHKCEtgq7CbcRArbAcOre9jNzKBx7Br5KYFQ
-         0RILiI31UYJCiaPjiBYrzqBE9Kyv+GPfrzKtNKU8/Vhu8DaF8pilDBlm/fIV8knmb8w7
-         Cijdjs1aIdvdVLWC/6fI4zUlfFcBehMxruQeGzJ132E/r2Bowq2dqKwLhp5nrLBRK6f9
-         vC2SrQ4dNifxZdfFMikixuO2tCnKr7KvzI4XHD7RgDhfKxu/2vFQ8Hse8U+d75SQg+qj
-         47pshSWOq0EpeeJrMvzKrYBYeDz3TvO8tvO9ULODoeQA+B6m0ig1P78ycODEOjfkIRiN
-         AIhw==
-X-Gm-Message-State: ACrzQf3sgCUzl6B6CFzn8ZXcSXjXgaA8BFvZ3zZ8GwMd2+l6w+/mbU2+
-        4B1EVGnaGrkt3tGj3g99bwhxqg==
-X-Google-Smtp-Source: AMsMyM6SeXTYaN56/vVPHIrwx/UP6BpPLjNPyIdTSjxe/Rs+selrIt/kcFmP7DR2igBjtS13ycWK4A==
-X-Received: by 2002:a5d:68ce:0:b0:236:9981:d216 with SMTP id p14-20020a5d68ce000000b002369981d216mr38881975wrw.384.1668016982241;
-        Wed, 09 Nov 2022 10:03:02 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id m2-20020a056000008200b0023662d97130sm13563050wrx.20.2022.11.09.10.03.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 10:03:01 -0800 (PST)
-Message-ID: <52fa1899-6eb9-389f-2ff1-22164356df66@linaro.org>
-Date:   Wed, 9 Nov 2022 18:02:58 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p46dqoJSw8bP5Xrwkyogv/cFNXRfHSlK4u22fVva9CE=;
+        b=cJO4q64CevlsFKKyxFNc4HpeGLx4Ba+ys5qVXeIkG+TblZJmFEuOvYnIQUw/rXL2yu
+         1mcjCVtgPx+HJ+4ExkaYxZsiLQK3FMfjzIg/uNmpj8jMSoz4oUpegMbK1GIe/WOO4ki9
+         YH53MZjzLaCUyPPprv0ApUAYCLQa5icpMcJ5Hl2kZhHI8GCd666LdE2CrQzo60rMhfsN
+         s3eXWZpf4YQ0NjGtnp0x5HKX8NOXdTYWGwZjj0esP6Bc7fXmKQtb9WjZNCiJvkHvkGNe
+         aSOeALZbD5Xyez1Ux5v/h2UEbnlUbOMBv+V+WdaHpHmIsFIdiF23/8FhJT+tFLqni308
+         8HQw==
+X-Gm-Message-State: ACrzQf0tK4JXzMKh7beSTQoUJIlBl+Ksa90AZ19EfSVkPo2w/3Qutxta
+        uCmdMUZiBznYTXCajjO/YlHAY4rfunNcP2KrblI=
+X-Google-Smtp-Source: AMsMyM4PNbiHpCGT33PlBOe4Cjvqr2v9IFss8aL/nIZa7B6W80YX9Tphnu1annkI0XjuxDwSGg3kcxJ7nmcklnQgoL0=
+X-Received: by 2002:a05:6870:9a27:b0:140:6f4c:f532 with SMTP id
+ fo39-20020a0568709a2700b001406f4cf532mr16454902oab.209.1668017068196; Wed, 09
+ Nov 2022 10:04:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 3/3] nvmem: stm32: add OP-TEE support for STM32MP13x
-Content-Language: en-US
-To:     Patrick DELAUNAY <patrick.delaunay@foss.st.com>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     Etienne CARRIERE <etienne.carriere@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-References: <20221028145252.2115933-1-patrick.delaunay@foss.st.com>
- <20221028165150.3.Ibc43aa73f865090affeb1751af0cc260c7f1dd07@changeid>
- <99a8d093-13f3-9ff8-6d87-d4aecaec1566@linaro.org>
- <a4ae3648-2943-55e0-243f-71a3c5f71ad8@foss.st.com>
- <4789703d-0434-2e72-0001-5a7e1014f816@linaro.org>
- <6df7b823-463b-d6fa-9662-54f39463a894@foss.st.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <6df7b823-463b-d6fa-9662-54f39463a894@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107213314.3239159-1-namhyung@kernel.org> <20221107213314.3239159-5-namhyung@kernel.org>
+ <CAP-5=fXOsQFGo90mg8yRvgMF3k4-s51-HC-n0+1hnE=4VR-rew@mail.gmail.com>
+In-Reply-To: <CAP-5=fXOsQFGo90mg8yRvgMF3k4-s51-HC-n0+1hnE=4VR-rew@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 9 Nov 2022 10:04:17 -0800
+Message-ID: <CAM9d7cjmVsd4FU5a73vCmg9pgosQUAipTABi5Agjj92W8=9YJA@mail.gmail.com>
+Subject: Re: [PATCH 4/9] perf stat: Move common code in print_metric_headers()
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 8, 2022 at 3:19 PM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Nov 7, 2022 at 1:33 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > The struct perf_stat_output_ctx is set in a loop with the same values.
+> > Move the code out of the loop and keep the loop minimal.
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>
+> Acked-by: Ian Rogers <irogers@google.com>
+> Could also potentially make it const, but functions it is passed to
+> would also need changing.
 
+I'll consider when I work on it later.
 
-On 09/11/2022 17:35, Patrick DELAUNAY wrote:
->>>
->>>
->>>>
->>>> Why not add TEE client based new driver instead of ifdefing around 
->>>> this driver? Also I see there is not much common across both drivers 
->>>> anyway.
->>>
->>>
->>> I hesitate between the 2 solutions. I choose this update to handle 
->>> the STM32MP15 support with OP-TEE.
->>
->> How are you to handing this?
->>
->>>
->>> For backward compatibility reason the same driver STM32 ROMEM 
->>> associated to compatible "st,stm32mp15-bsec" should be kept.
->>>
->>> - the lower OTP can directly accessible by Linux (the IP is not 
->>> secured) => boot with SPL
->>
->> Can we determine this at runtime?
-> 
-> 
-> Not directly with IP register, but we detect the OP-TEE support at runtime.
-> 
-You mean using CONFIG_OP_TEE ?
-
-
-> 
->>
->>>
->>> - the upper OTP and the write operation are requested by 
->>> STMicroelectronics SMCs
->>>
->>>     => boot with TF-A SPMIN and old OP-TEE (before migration to STM32 
->>> BSEC PTA)
->>>
->>>
->>> But in the future OP-TEE the access to OTP should be also done with 
->>> STM32 BSEC PTA...
->>
->> Given that we have only one compatible for these two type of 
->> combinations how are you planning to deal with both the cases and 
->> still be backward compatible?
+Thanks,
+Namhyung
