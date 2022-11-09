@@ -2,163 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296B86226D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67AE6226D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiKIJYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:24:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
+        id S230191AbiKIJYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiKIJYH (ORCPT
+        with ESMTP id S230113AbiKIJYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:24:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7C119C22
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:24:05 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oshJI-00051Y-JP; Wed, 09 Nov 2022 10:23:52 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1oshJG-0004y5-8A; Wed, 09 Nov 2022 10:23:50 +0100
-Date:   Wed, 9 Nov 2022 10:23:50 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        alistair@alistair23.me
-Subject: Re: [PATCH v3] ARM: dts: imx: e60k02: Add touchscreen
-Message-ID: <20221109092350.2ke6sbgbcp3wpelc@pengutronix.de>
-References: <20221108191543.1752080-1-andreas@kemnade.info>
+        Wed, 9 Nov 2022 04:24:17 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8971C904
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:24:16 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id v81so18181775oie.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:24:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9aoSzj5gFxWAAaDB9wA+hoVy7J4arsSLOOrNC4UGVPg=;
+        b=opMudCvE/uIcxq/mbzLqp6Usd8n7tmy8E0goFgUu1BbD32iPe2CKZjwkTqAy7o1BCd
+         8EzTT7m5Ouxrlf1jH8qJcOeiEybtjjXDCzzbcDSosBMzhV/dH0AsPUvMbMLixIXP1BKF
+         F3IHse1rYDvu0U9A9vKndRo8384wJIUpdZuE+DngltUsVnHJ2+vjBSPC3JkmIFYT5BIl
+         7ygUfcxHSpEQPFTu4ArGfKKkqtkigq2xFUlczC/1EEoi3Wu0N3Q/TjyYUX4aSmY6NbYG
+         ykenkvWEgSzbVwhJotI0hPJ/bzSxggLipq87CHL/tQ8FbFioei4J1zjCIZmqTp4RtKBx
+         lmjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9aoSzj5gFxWAAaDB9wA+hoVy7J4arsSLOOrNC4UGVPg=;
+        b=GBLSXhE4OtThWztkRXX2xYsQwIgX8+UInFjYLFPowOfd9y5Je4I3+PRoznOVmRD7VS
+         I/KVp7j+lPKbkbW2CPp4A9TsYtrwx3dB+2D7R+ciB4/r9qx7Pst9aNIIJQF33M4BeQMa
+         cO3rnJB7Wwb5O7PClQ7urpX6i1emyub5QI5jxmsmLbVyh/CV86JG/fUrMNYRncAN6F+W
+         x6PUG2z0Azo0bh1tkBH9uAMM+S5QDlKD46x3nl+onK2ocLK2tqkAgf0p7djYuDBOsqhO
+         ryOQMwVgV61/A4qMqJaO7FgnfBHlmWKoiNwlHzR5LE2G10/Kei3NxSeX4htpt6CJE4Rg
+         NHYw==
+X-Gm-Message-State: ACrzQf0w+XDxVU2MN6CrbEC4wfdzmm88kJqFcjv3Y6BxUhXO8LxF4H5G
+        puoKoNdcf4xQRp8TxJEHzGXAjTuOeQVzrJO5rnM=
+X-Google-Smtp-Source: AMsMyM666Vl2iG/RCacDGcDpyIKxeGR42x8l3wbaEqUxXZXwmG4k8d3KEDmqlQ1ad4SknwzzmeqVXFoDw+JUINcqNmc=
+X-Received: by 2002:aca:e108:0:b0:345:a189:fea9 with SMTP id
+ y8-20020acae108000000b00345a189fea9mr32923011oig.129.1667985856146; Wed, 09
+ Nov 2022 01:24:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108191543.1752080-1-andreas@kemnade.info>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109084142.226960-1-zyytlz.wz@163.com> <Y2to4/kH6Gu+ykpk@kroah.com>
+In-Reply-To: <Y2to4/kH6Gu+ykpk@kroah.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Wed, 9 Nov 2022 17:24:05 +0800
+Message-ID: <CAJedcCwzQj7pLzejX01PeuwL3a-DwRFmAEBLR-CR3_bAc0tx1g@mail.gmail.com>
+Subject: Re: [PATCH v6 RESEND] misc: sgi-gru: fix use-after-free error in
+ gru_set_context_option, gru_fault and gru_handle_user_call_os
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, zhengyejian1@huawei.com,
+        dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, alex000young@gmail.com,
+        security@kernel.org, sivanich@hpe.com, lkp@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andreas,
+Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=889=E6=
+=97=A5=E5=91=A8=E4=B8=89 16:46=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Wed, Nov 09, 2022 at 04:41:42PM +0800, Zheng Wang wrote:
+> > Gts may be freed in gru_check_chiplet_assignment.
+> > The caller still use it after that, UAF happens.
+> >
+> > Fix it by introducing a return value to see if it's in error path or no=
+t.
+> > Free the gts in caller if gru_check_chiplet_assignment check failed.
+> >
+> > Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+> > Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+>
+> Why the blank line?
 
-On 22-11-08, Andreas Kemnade wrote:
-> Add the touchscreen now, since the driver is available.
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
-> Changes in v3: no phandles pointing from dtsi to dts
+> Sorry for the spelling problem, fixed it next version
 
-Thanks for this change...
+> And the kernel test robot didn't find this issue, right?
+>
 
-> Changes in v2: fix pinmux naming
-> 
->  arch/arm/boot/dts/e60k02.dtsi              |  9 ++++++++-
->  arch/arm/boot/dts/imx6sl-tolino-shine3.dts | 12 ++++++++++++
->  arch/arm/boot/dts/imx6sll-kobo-clarahd.dts | 12 ++++++++++++
->  3 files changed, 32 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/e60k02.dtsi b/arch/arm/boot/dts/e60k02.dtsi
-> index 935e2359f8df..99091db3ab2a 100644
-> --- a/arch/arm/boot/dts/e60k02.dtsi
-> +++ b/arch/arm/boot/dts/e60k02.dtsi
-> @@ -104,7 +104,14 @@ &i2c2 {
->  	clock-frequency = <100000>;
->  	status = "okay";
->  
-> -	/* TODO: CYTTSP5 touch controller at 0x24 */
-> +	cyttsp5: touchscreen@24 {
-> +		compatible = "cypress,tt21000";
-> +		reg = <0x24>;
-> +		interrupt-parent = <&gpio5>;
-> +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-> +		reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-> +		vdd-supply = <&ldo5_reg>;
-> +	};
+Yes, it helped with the test and found an unused variable. I added
+this line as the mail suggested
+("If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>").
 
-but we still have a cross-reference to the .dtsi file here. Therefore I
-said to move the interrupt/reset-gpio into the dts file too. I know this
-is a kind of a nitpick but I really don't like such cross-references.
+Should I remove it?
 
-Regards,
-  Marco
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > Acked-by: Dimitri Sivanich <sivanich@hpe.com>
+>
+> You can not have a reported-by and a signed-off-by for the same person
+> with different email addresses.  You do not need both if it is you, just
+> use the signed-off-by line.
+>
 
->  
->  	/* TODO: TPS65185 PMIC for E Ink at 0x68 */
->  
-> diff --git a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
-> index e3f1e8d79528..e98dc302e2e3 100644
-> --- a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
-> +++ b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
-> @@ -26,6 +26,11 @@ / {
->  	compatible = "kobo,tolino-shine3", "fsl,imx6sl";
->  };
->  
-> +&cyttsp5 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_cyttsp5_gpio>;
-> +};
-> +
->  &gpio_keys {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_gpio_keys>;
-> @@ -52,6 +57,13 @@ &iomuxc {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_hog>;
->  
-> +	pinctrl_cyttsp5_gpio: cyttsp5-gpiogrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT3__GPIO5_IO06                0x17059 /* TP_INT */
-> +			MX6SL_PAD_SD1_DAT2__GPIO5_IO13                0x10059 /* TP_RST */
-> +		>;
-> +	};
-> +
->  	pinctrl_gpio_keys: gpio-keysgrp {
->  		fsl,pins = <
->  			MX6SL_PAD_SD1_DAT1__GPIO5_IO08	0x17059	/* PWR_SW */
-> diff --git a/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts b/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
-> index 90b32f5eb529..6bb80720ea66 100644
-> --- a/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
-> +++ b/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
-> @@ -36,6 +36,11 @@ &cpu0 {
->  	soc-supply = <&dcdc1_reg>;
->  };
->  
-> +&cyttsp5 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_cyttsp5_gpio>;
-> +};
-> +
->  &gpio_keys {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_gpio_keys>;
-> @@ -62,6 +67,13 @@ &iomuxc {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_hog>;
->  
-> +	pinctrl_cyttsp5_gpio: cyttsp5-gpiogrp {
-> +		fsl,pins = <
-> +			MX6SLL_PAD_SD1_DATA3__GPIO5_IO06                0x17059 /* TP_INT */
-> +			MX6SLL_PAD_SD1_DATA2__GPIO5_IO13                0x10059 /* TP_RST */
-> +		>;
-> +	};
-> +
->  	pinctrl_gpio_keys: gpio-keysgrp {
->  		fsl,pins = <
->  			MX6SLL_PAD_SD1_DATA1__GPIO5_IO08	0x17059	/* PWR_SW */
-> -- 
-> 2.30.2
-> 
-> 
-> 
+Thanks very much for your explaination. I'll send another patch as
+soon as possible.
+
+Best Regards,
+Zheng Wang
