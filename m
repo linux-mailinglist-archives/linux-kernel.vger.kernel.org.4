@@ -2,159 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA006235BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979946235D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiKIVXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:23:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S231790AbiKIV2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiKIVXg (ORCPT
+        with ESMTP id S229447AbiKIV2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:23:36 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02873B852
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:23:34 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id h132so12345585oif.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 13:23:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6osH2CHG24SjyK30ZoBUndUFe6RAe9+84/GlrRsbBnM=;
-        b=iQ2chr+X2kRuB01a+ZYYy/UQFv+aDzlpR+2R1eF5XkDVs+1B8ppV+Csc3qP+NOILZX
-         KTCi+X9EXlUHeYL1hIVPuMh1DMQr1RvjvJXu71kE2iziI8MNeOI56xaEknzffVHTbskr
-         rsBCLlWHIWeshq1WxeK9zwvp3NdnZDYc/iGf7mSv643pEnMuEUwREHOgrUtj8MOsy5MK
-         JA0jPGCpb8Xpmv7rLLSNyXaX7Ri5QofSzhRYovs1MOM6569AJWUdOBQhTSozlc/tzwVi
-         KBddeiJLSwZzr1KdbDDBlnDs4DDEuo8I1MoTg5HhRs7dcLsV9Srot3IuP69IJvRCP8zJ
-         /plg==
+        Wed, 9 Nov 2022 16:28:48 -0500
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B27F647B;
+        Wed,  9 Nov 2022 13:28:48 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id k15so17899349pfg.2;
+        Wed, 09 Nov 2022 13:28:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6osH2CHG24SjyK30ZoBUndUFe6RAe9+84/GlrRsbBnM=;
-        b=YxP/r3FUsEYZvTJoPHjzOlmdEz1zvZlw1EzE/Zsyz5YvstJYK24O5mkNH/2eL6PqWH
-         nexsrWakKB3NFpSs6kxUiu8PfnKQWuD/pImoZIS7ovbMy2Loy5BAo7PzTzuYvToAYC5b
-         YMLZsQVaw89nWCY5svnhhD48vSHJLwz8NWfuMuvOPkdWd1jqDw9zu6tXkdlLj8fdForF
-         cRJYILf9wvPoqmRAJrNsdH3LDsv898bE15g2WCk87EDJ/tUdA60kCxeKRenR637ysvuS
-         adjbDXTJGBGo5jZIY5T5m+7o4S0MzeeZFU3KKdZ5qLhP8tYfBoBhrmYuNCfuTgj2s7ZW
-         jZCQ==
-X-Gm-Message-State: ACrzQf3Y/IntFET1uNhcZ5D4Lsi+hercL3A/c5ynr/2ScNpdkl9ln4lo
-        Nl1GUEv1ZmofZmFgiZZh/L3+0cV6+sdo5rA/Au007Q==
-X-Google-Smtp-Source: AMsMyM7oeyA6T8YvG0AE/+9cMNUnq1sl/0vB7ZmbqimmBPi2qfR8pJSuAFElhfnxqh850sWuHg3fblWAYbw3XtrrRUE=
-X-Received: by 2002:aca:6007:0:b0:35a:1bda:d213 with SMTP id
- u7-20020aca6007000000b0035a1bdad213mr27166493oib.181.1668029013158; Wed, 09
- Nov 2022 13:23:33 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7LdAQJWTrd4JcStydM8JyAFPJqn01KyaOFQuGdHMw6I=;
+        b=cxNNchvItesiBGWnOyJntZLzwXh9jVnFEjyhhemzF4UkqAtGrwJC3N3UYHNJybkORU
+         etjValgJK6zfk1y79D3T5l04arqngCQf+JIpKhAMG8A6uDOEoQOFxH13Z7MR5a9RV7TL
+         HBACwHAdgZpYMWxVKn/BZ/Oh3cP/5ykFr4Zln7UbZleZwT8NoG4/4F7mMY9AMnL1ndME
+         Qh+4vKYGwqWWWzTUuRodg5aANlVOE+ysXmtDuZW9LbyOmtIZOA6+X58+JA3VJMrPVUGN
+         IUAftbNPU3RR7MCevMp5MQCLVdrbTT9JpGtHnRStaeH6S4QL/VY8zywGX245j2gl/KAH
+         1vFw==
+X-Gm-Message-State: ACrzQf0v0tP7hDCy3KR2anYh9rKNMNNM0c/bDK5Q7AYtP0sdoheewlZK
+        EJGv7v4opEE4lJB3Zl+957E=
+X-Google-Smtp-Source: AMsMyM7g2PdQbZkjCGHGNaX4mYqFciebR+sudQXUYX1ncYUZRYIY31kzYCyf2dbiHsvlJWf4LKCBLA==
+X-Received: by 2002:a05:6a00:22d6:b0:56d:39a2:14ae with SMTP id f22-20020a056a0022d600b0056d39a214aemr57482266pfj.80.1668029327769;
+        Wed, 09 Nov 2022 13:28:47 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:68b6:5dae:a00c:c3b? ([2620:15c:211:201:68b6:5dae:a00c:c3b])
+        by smtp.gmail.com with ESMTPSA id k92-20020a17090a4ce500b00211d5f93029sm1655557pjh.24.2022.11.09.13.28.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 13:28:46 -0800 (PST)
+Message-ID: <d934fe3b-df58-838f-a5cb-f26c05500609@acm.org>
+Date:   Wed, 9 Nov 2022 13:28:44 -0800
 MIME-Version: 1.0
-References: <20221107145436.276079-1-pbonzini@redhat.com> <20221107145436.276079-8-pbonzini@redhat.com>
- <CALMp9eRDehmWC1gZmSjxjwCvm4VXf_FnR-MiFkHxkTn4_DJ4aA@mail.gmail.com> <81f7dc5c-c45d-76fc-d9e8-4f3f65c29c12@redhat.com>
-In-Reply-To: <81f7dc5c-c45d-76fc-d9e8-4f3f65c29c12@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 9 Nov 2022 13:23:22 -0800
-Message-ID: <CALMp9eSrifYwOyPzs3UiUnM7o3iRead5-m5ta4tMo+72Td1y5A@mail.gmail.com>
-Subject: Re: [PATCH 7/8] KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to assembly
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org, seanjc@google.com,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 07/16] ufs: core: mcq: Calculate queue depth
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1668022680.git.quic_asutoshd@quicinc.com>
+ <fb85bf2b7dd3126b3168ce4613481365da291db5.1668022680.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <fb85bf2b7dd3126b3168ce4613481365da291db5.1668022680.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 11:08 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 11/7/22 19:45, Jim Mattson wrote:
-> >> +.macro RESTORE_GUEST_SPEC_CTRL
-> >> +       /* No need to do anything if SPEC_CTRL is unset or V_SPEC_CTRL is set */
-> >> +       ALTERNATIVE_2 "jmp 999f", \
-> >> +               "", X86_FEATURE_MSR_SPEC_CTRL, \
-> >> +               "jmp 999f", X86_FEATURE_V_SPEC_CTRL
-> >> +
-> >> +       /*
-> >> +        * SPEC_CTRL handling: if the guest's SPEC_CTRL value differs from the
-> >> +        * host's, write the MSR.
-> >> +        *
-> >> +        * IMPORTANT: To avoid RSB underflow attacks and any other nastiness,
-> >> +        * there must not be any returns or indirect branches between this code
-> >> +        * and vmentry.
-> >> +        */
-> >> +       movl SVM_spec_ctrl(%_ASM_DI), %eax
-> >> +       cmp PER_CPU_VAR(x86_spec_ctrl_current), %eax
-> >> +       je 999f
-> >> +       mov $MSR_IA32_SPEC_CTRL, %ecx
-> >> +       xor %edx, %edx
-> >> +       wrmsr
-> >> +999:
-> >> +
-> >> +.endm
-> >> +
-> >> +.macro RESTORE_HOST_SPEC_CTRL
-> >> +       /* No need to do anything if SPEC_CTRL is unset or V_SPEC_CTRL is set */
-> >> +       ALTERNATIVE_2 "jmp 999f", \
-> >> +               "", X86_FEATURE_MSR_SPEC_CTRL, \
-> >> +               "jmp 999f", X86_FEATURE_V_SPEC_CTRL
-> >> +
-> >> +       mov $MSR_IA32_SPEC_CTRL, %ecx
-> >> +
-> >> +       /*
-> >> +        * Load the value that the guest had written into MSR_IA32_SPEC_CTRL,
-> >> +        * if it was not intercepted during guest execution.
-> >> +        */
-> >> +       cmpb $0, (%_ASM_SP)
-> >> +       jnz 998f
-> >> +       rdmsr
-> >> +       movl %eax, SVM_spec_ctrl(%_ASM_DI)
-> >> +998:
-> >> +
-> >> +       /* Now restore the host value of the MSR if different from the guest's.  */
-> >> +       movl PER_CPU_VAR(x86_spec_ctrl_current), %eax
-> >> +       cmp SVM_spec_ctrl(%_ASM_DI), %eax
-> >> +       je 999f
-> >> +       xor %edx, %edx
-> >> +       wrmsr
-> >> +999:
-> >> +
-> >> +.endm
-> >> +
-> >> +
-> >
-> > It seems unfortunate to have the unconditional branches in the more
-> > common cases.
->
-> One way to do it could be something like
->
-> .macro RESTORE_HOST_SPEC_CTRL
->         ALTERNATIVE_2 "", \
->                 "jmp 900f", X86_FEATURE_MSR_SPEC_CTRL, \
->                 "", X86_FEATURE_V_SPEC_CTRL \
-> 901:
-> .endm
->
-> .macro RESTORE_SPEC_CTRL_BODY \
-> 800:
->         /* restore guest spec ctrl ... */
->         jmp 801b
->
-> 900:
->         /* save guest spec ctrl + restore host ... */
->         jmp 901b
-> .endm
->
-> The cmp/je pair can also jump back to 801b/901b.
->
-> What do you think?  I'll check if objtool is happy and if so include it
-> in v2.
->
-> Paolo
->
-This seems reasonable, if you trust a direct branch prior to the IBPB.
+On 11/9/22 11:41, Asutosh Das wrote:
+> +int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hba)
+> +{
+> +	int mac;
+> +
+> +	/* Mandatory to implement get_hba_mac() */
+> +	mac = ufshcd_mcq_vops_get_hba_mac(hba);
+> +	if (mac < 0) {
+> +		dev_err(hba->dev, "Failed to get mac, err=%d\n", mac);
+> +		return mac;
+> +	}
+> +
+> +	/*  MAC is a 0 based value. */
+> +	mac += 1;
+
+Please make ufshcd_mcq_vops_get_hba_mac() return a 1-based value. The 
+0-based convention is useful for bit-constrained device registers but is 
+confusing when not reading from a hardware register.
+
+> +	/*
+> +	 * max. value of bqueuedepth = 256, mac is host dependent.
+> +	 * It is mandatory for UFS device to define bQueueDepth if
+> +	 * shared queuing architecture is enabled.
+> +	 */
+> +	return min_t(int, mac, hba->dev_info.bqueuedepth);
+
+According to the UFS specification bQueueDepth is zero if there is one 
+queue per logical unit inside the device. Should a warning statement be 
+added that reports a complaint if bQueueDepth == 0 since the above code 
+does not support bQueueDepth == 0? I'm not sure whether any UFS devices 
+exist that use per-LU queuing.
+
+> +static int ufs_qcom_get_hba_mac(struct ufs_hba *hba)
+> +{
+> +	/* Default is 32, but Qualcomm HC supports upto 64 */
+
+I think that "default is 32" should be left out since the code that 
+reads the MAC register has been removed.
+
+Additionally, please change "upto" into "up to".
+
+Thanks,
+
+Bart.
