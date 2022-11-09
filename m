@@ -2,168 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A7862241A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A46062241D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiKIGuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 01:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
+        id S229752AbiKIGug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 01:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbiKIGuO (ORCPT
+        with ESMTP id S229774AbiKIGub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 01:50:14 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE3217423;
-        Tue,  8 Nov 2022 22:50:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CF837CE1D14;
-        Wed,  9 Nov 2022 06:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA54C433C1;
-        Wed,  9 Nov 2022 06:50:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667976609;
-        bh=ut7EzIUNIiE0yhwgdV7ZbRJKon0eflJ3Fbn5UHXoL04=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TMNa28F5RRTMFGUaIb/uf6YrbkzsOwFQK8PGvRMUQ9xyrB9/PuUT9ztiKteYlIM2r
-         JC3eJrbZoUguf6W7EPJaY6zTNH83U6UY9BO6o932xt14lvKbh6uT9k+Q2nh5lwAcSo
-         cb6vXzzkKiqqUVNgkZBru/VUoh+Dkff6049EZ3xDzChiRDGwG+ac5tKbDNJoM/72Aj
-         PNCz/PMJh6y9xCF7FfR6CBOPbaNsnlFmy+xkbs9a9P/lT6vA0NK8J/8Dex2oZgKPqu
-         nuR9B2r8wqaAHjkKyvg035wpt9Oj1y7dryM6AGVBWoUBeFzqMCN+WC+9nEUPRJnMqd
-         AnsobWmxO0v3w==
-From:   guoren@kernel.org
-To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, peterz@infradead.org,
-        arnd@arndb.de, linux-arch@vger.kernel.org, keescook@chromium.org,
-        paulmck@kernel.org, frederic@kernel.org, nsaenzju@redhat.com,
-        changbin.du@intel.com, vincent.chen@sifive.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 2/2] riscv: stacktrace: Make walk_stackframe cross pt_regs frame
-Date:   Wed,  9 Nov 2022 01:49:37 -0500
-Message-Id: <20221109064937.3643993-3-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221109064937.3643993-1-guoren@kernel.org>
-References: <20221109064937.3643993-1-guoren@kernel.org>
+        Wed, 9 Nov 2022 01:50:31 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F7419017
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 22:50:25 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so970423pjs.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 22:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hy9yWm3EPsb6RbVghUPJanZO5MYjfITHEKuEDJq6g0k=;
+        b=Bs1D4bml8x+maqPLoWnDCBMLcTmi2jluu7gRuRF50V6EIEZViifxH1l4BoRYFgIyc6
+         BxSqjeFXI8b++f+1g4sAEpM3sXN5107/XUdiZLKpS+crlPF3FzH1IzVERH1Y1BveXepM
+         7Af9OfEzfU2E0vTWsDSwOtbRlIl8dnT28LC8qjA9dH+CllFF2ickKXPwKkd1Thkg87I0
+         cviJEZCLbnW4uZKijTwlgCcCVypsfTF3vlVIBJ19OGQTOBwfORQGSHkXHFzUgyBjGPEN
+         sa2gE88E4Y+D28IgejExcrua1Fi6eMjNEmAIgZECg3OxKeBE/rLN1MVwXm/QdiXrag5Y
+         Grmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hy9yWm3EPsb6RbVghUPJanZO5MYjfITHEKuEDJq6g0k=;
+        b=qCYy1+tAJgSh1NoqmfYdC1OMmhvzMZgPsr18B3Sg6ai46UjwBjJb2kOYQCtrYccSjQ
+         StLY72eXB/xr+WtEklCgNj/K1vclIN6i52udO/eExkR/soq66cQrj+xln47ypSM6yP0b
+         NXtGT/ErcvUF9hjPBvFLyhhP7BtRZ0JCkPPWE0Z0sEytPSaH1mp3mywzAEZ4aMR+paWR
+         zEh+ojiDbXjIrdG2xSNk43n1sabCQRP3jc6ZbQHIvo7QYh3oYBDLxDZezZlXPBGFVt7O
+         /81gei9lqEdt8xVtZeUs8LbS7KiQijBs5eRmWof8VnMXeavzIxqdH8TQqY4bKTFWtBsX
+         eHqQ==
+X-Gm-Message-State: ACrzQf3l0nUQHIUQ89vy+TUn3QKLlVUBdR1J37PFhxwwqlK4q3VxUKfd
+        PhFW+gX5PrSoZHKjccu5oztHDQ==
+X-Google-Smtp-Source: AMsMyM5MwK4KweG78Z9x+oIbwtm97gO0TUSwaZDg1yKwbC9UlevYrrWAcQwxIWPUw7Qyi/FNR0NCeg==
+X-Received: by 2002:a17:90b:164d:b0:213:6a84:2529 with SMTP id il13-20020a17090b164d00b002136a842529mr61965836pjb.32.1667976624929;
+        Tue, 08 Nov 2022 22:50:24 -0800 (PST)
+Received: from localhost ([122.172.81.73])
+        by smtp.gmail.com with ESMTPSA id u2-20020a17090341c200b00186afd756edsm8137442ple.283.2022.11.08.22.50.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 22:50:24 -0800 (PST)
+Date:   Wed, 9 Nov 2022 12:20:22 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Chen Hui <judy.chenhui@huawei.com>
+Cc:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, rafael@kernel.org,
+        sibis@codeaurora.org, mka@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom-hw: Fix memory leak in
+ qcom_cpufreq_hw_read_lut()
+Message-ID: <20221109065022.yc4teojggd4mrkqt@vireshk-i7>
+References: <20221108072302.736-1-judy.chenhui@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108072302.736-1-judy.chenhui@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On 08-11-22, 15:23, Chen Hui wrote:
+> If "cpu_dev" fails to get opp table in qcom_cpufreq_hw_read_lut(),
+> the program will return, resulting in "table" resource is not released.
+> 
+> Fixes: 51c843cf77bb ("cpufreq: qcom: Update the bandwidth levels on frequency change")
+> Signed-off-by: Chen Hui <judy.chenhui@huawei.com>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 833589bc95e4..d15097549e8c 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -193,6 +193,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
+>  		}
+>  	} else if (ret != -ENODEV) {
+>  		dev_err(cpu_dev, "Invalid opp table in device tree\n");
+> +		kfree(table);
+>  		return ret;
+>  	} else {
+>  		policy->fast_switch_possible = true;
 
-The current walk_stackframe with FRAME_POINTER would stop unwinding at
-ret_from_exception:
-  BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
-  in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
-  CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
-  Call Trace:
-  [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
-  [<ffffffe000aecf48>] show_stack+0x32/0x4a
-  [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
-  [<ffffffe000af1648>] dump_stack+0x14/0x1c
-  [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
-  [<ffffffe000239aec>] __might_sleep+0x10/0x18
-  [<ffffffe000afe3fe>] down_read+0x22/0xa4
-  [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
-  [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+Applied. Thanks.
 
-The optimization would help walk_stackframe cross the pt_regs frame and
-get more backtrace of debug info:
-  BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
-  in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
-  CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
-  Call Trace:
-  [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
-  [<ffffffe000aecf48>] show_stack+0x32/0x4a
-  [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
-  [<ffffffe000af1648>] dump_stack+0x14/0x1c
-  [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
-  [<ffffffe000239aec>] __might_sleep+0x10/0x18
-  [<ffffffe000afe3fe>] down_read+0x22/0xa4
-  [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
-  [<ffffffe000201b80>] ret_from_exception+0x0/0xc
-  [<ffffffe000613c06>] riscv_intc_irq+0x1a/0x72
-  [<ffffffe000201b80>] ret_from_exception+0x0/0xc
-  [<ffffffe00033f44a>] vma_link+0x54/0x160
-  [<ffffffe000341d7a>] mmap_region+0x2cc/0x4d0
-  [<ffffffe000342256>] do_mmap+0x2d8/0x3ac
-  [<ffffffe000326318>] vm_mmap_pgoff+0x70/0xb8
-  [<ffffffe00032638a>] vm_mmap+0x2a/0x36
-  [<ffffffe0003cfdde>] elf_map+0x72/0x84
-  [<ffffffe0003d05f8>] load_elf_binary+0x69a/0xec8
-  [<ffffffe000376240>] bprm_execve+0x246/0x53a
-  [<ffffffe00037786c>] kernel_execve+0xe8/0x124
-  [<ffffffe000aecdf2>] run_init_process+0xfa/0x10c
-  [<ffffffe000aece16>] try_to_run_init_process+0x12/0x3c
-  [<ffffffe000afa920>] kernel_init+0xb4/0xf8
-  [<ffffffe000201b80>] ret_from_exception+0x0/0xc
-
-Here is the error injection test code for the above output:
- drivers/irqchip/irq-riscv-intc.c:
- static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
- {
-        unsigned long cause = regs->cause & ~CAUSE_IRQ_FLAG;
-+       u32 tmp; __get_user(tmp, (u32 *)0);
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>
-Cc: Changbin Du <changbin.du@intel.com>
----
- arch/riscv/kernel/entry.S      | 2 +-
- arch/riscv/kernel/stacktrace.c | 9 +++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index b9eda3fcbd6d..329cf51fcd4d 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -248,7 +248,7 @@ ret_from_syscall_rejected:
- 	andi t0, t0, _TIF_SYSCALL_WORK
- 	bnez t0, handle_syscall_trace_exit
- 
--ret_from_exception:
-+ENTRY(ret_from_exception)
- 	REG_L s0, PT_STATUS(sp)
- 	csrc CSR_STATUS, SR_IE
- #ifdef CONFIG_TRACE_IRQFLAGS
-diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-index bcfe9eb55f80..75c8dd64fc48 100644
---- a/arch/riscv/kernel/stacktrace.c
-+++ b/arch/riscv/kernel/stacktrace.c
-@@ -16,6 +16,8 @@
- 
- #ifdef CONFIG_FRAME_POINTER
- 
-+extern asmlinkage void ret_from_exception(void);
-+
- void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- 			     bool (*fn)(void *, unsigned long), void *arg)
- {
-@@ -59,6 +61,13 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- 			fp = frame->fp;
- 			pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
- 						   &frame->ra);
-+			if (pc == (unsigned long)ret_from_exception) {
-+				if (unlikely(!__kernel_text_address(pc) || !fn(arg, pc)))
-+					break;
-+
-+				pc = ((struct pt_regs *)sp)->epc;
-+				fp = ((struct pt_regs *)sp)->s0;
-+			}
- 		}
- 
- 	}
 -- 
-2.36.1
-
+viresh
