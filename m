@@ -2,153 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148E0622710
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A46622716
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiKIJcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
+        id S230187AbiKIJds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbiKIJcc (ORCPT
+        with ESMTP id S229816AbiKIJdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:32:32 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6107E22BDC;
-        Wed,  9 Nov 2022 01:32:31 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2B5576602905;
-        Wed,  9 Nov 2022 09:32:29 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667986350;
-        bh=aKTpg/ANFcmHZS6rm4S2+2Jpe3Cgbu7viy4fKsSsIpo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O2GvFZIETDdsB/6xrek1ymsjKH5wqdVDFwde5Ddu8gIy5YdTeN8tUODdLJjzy6PgD
-         Uq12P/F7sVOWjVUYhVPOQgY/kb5vrxGi/MvMsMYzWKyUSMLMJUI9dJgPap0duXutzA
-         FI9bePzzml12R37tj9UUBHs626/WZiTQVqCPz1rkgmKrpwxHCWybwZJGLO3WLFufVG
-         eSaYcfJiyyWgZmtBA6dhOq/8YWToduukp2SIGf2anvZCQwENk4mYnUjfpKrShYbKyy
-         Lyb9SQB5p0e2h4qsOxB9BDVzm2Kl2CqL66XdBfz0l+49ppZF+YXReXSA3QRyi0T8u8
-         EVLwd4yKi0Ncg==
-Message-ID: <e3224f98-3f76-ef32-2088-dc7119f080be@collabora.com>
-Date:   Wed, 9 Nov 2022 10:32:26 +0100
+        Wed, 9 Nov 2022 04:33:45 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64B09FDE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:33:43 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id r2so8770632ilg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0IbVjZeeZUd5a3T1kVXY2URyfXn/ZP2LWDBW3L+YLzk=;
+        b=o3ZxD3e0+Zj2SmdDhc6hKxjMHX289z5HSc572OZzcONUeqpCbN9iFjnd/pNOKwVzYf
+         9YTF/LJ/OhKsOZw/miZqAe7y4eeKtduT000SHmFgN3WX7V+CIyqcMuqin+uX6Lch5nDU
+         SAQl6ks4pJN5l+1xi13gAk0kxAmKpJ+44xk4NMvARjlIYa+iafOD/0KgVN/4PlyhrL4i
+         U5Qp+jZt3hRDBjoFwFJyZ/t0xhd0ydQS17ccQRH0PlGk7TQ6OJNRxovFS39lSDqZnUpk
+         /bOoeDBPhUs04jzxtdqq8h+WIHMSlrFHZf7DOIxqWBUBXScgQ8l5us0m+7BPwns7GnGf
+         BKgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0IbVjZeeZUd5a3T1kVXY2URyfXn/ZP2LWDBW3L+YLzk=;
+        b=ee56E/r+OtsdXl7SOZel3UL3txvMv5LVt9+H/oxsO4ujfOSyo2tEV1HLl3SRjJJm9L
+         MTv1/PvJLQrY47PXqI9VrTeoydGwko0dQDQAzTEysbjCSzFfWIB0+bBmmWFi+Lr1oMhR
+         MF++dfNr4zS6OO4D0H3R+EsW3OPn9nTRohZ0X+WFw2xHnT5+n6r9YkSNiZfzULlfgfDD
+         IvMUYx/C4U/RmOaM9r/QaCsZKWa6kbB+0X3DG9cKKNWdQoVDJXQRkizjIX/eJ+O0k08/
+         yWFrSRrvDvDa5BsP0+TV5OOEVR3BwxzezTrmjMBWbOhcsyYqhSbQfrJAeDtQe9kbQC3g
+         nx/Q==
+X-Gm-Message-State: ACrzQf3fbawwaWV76W8MzjQyhv8efb+5y+SUvsBZiOiYCUb80MNKRIor
+        VbEaxjpy2YF9BVLlLm7b4RL/kETYR8UQNerSX65QGQ==
+X-Google-Smtp-Source: AMsMyM57CuGAwsh8GlZqWabFTRdKwOzYDnDxAh9Duy8n4B7pDdV1sMgE+4XJj8v4tvq88HofurNZL9VD1MPZFY8CbZA=
+X-Received: by 2002:a05:6e02:966:b0:300:e9f9:8716 with SMTP id
+ q6-20020a056e02096600b00300e9f98716mr14846177ilt.254.1667986422946; Wed, 09
+ Nov 2022 01:33:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 3/3] arm64: dts: mt8195: Add video decoder node
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221109073529.26765-1-yunfei.dong@mediatek.com>
- <20221109073529.26765-3-yunfei.dong@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221109073529.26765-3-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107201317.324457-1-jannh@google.com> <3e2f7e2cb4f6451a9ef5d0fb9e1f6080@AcuMS.aculab.com>
+ <CAG48ez3AGh-R+deQMbNPt6PCQazOz8a96skW+qP3_HmUaANmmQ@mail.gmail.com> <d88999d8e9ec486bb1a0f75911457985@AcuMS.aculab.com>
+In-Reply-To: <d88999d8e9ec486bb1a0f75911457985@AcuMS.aculab.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 9 Nov 2022 10:33:06 +0100
+Message-ID: <CAG48ez3UO03RRMxxj-ZAcw5vhjhPYeoN1DB82s2SAiYm-qWmYw@mail.gmail.com>
+Subject: Re: [PATCH] exit: Put an upper limit on how often we can oops
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "kernel-hardening@lists.openwall.com" 
+        <kernel-hardening@lists.openwall.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Seth Jenkins <sethjenkins@google.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/11/22 08:35, Yunfei Dong ha scritto:
-> Add video decoder node to mt8195 device tree.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
-> dtbs_check pass.
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 63 ++++++++++++++++++++++++
->   1 file changed, 63 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 905d1a90b406..ffabf91d4273 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -1874,6 +1874,69 @@
->   			power-domains = <&spm MT8195_POWER_DOMAIN_CAM>;
->   		};
->   
-> +		video-codec@18000000 {
-> +			compatible = "mediatek,mt8195-vcodec-dec";
-> +			mediatek,scp = <&scp>;
-> +			iommus = <&iommu_vdo M4U_PORT_L21_VDEC_MC_EXT>;
-> +			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			reg = <0 0x18000000 0 0x1000>,      /* VDEC_SYS */
-> +			      <0 0x18004000 0 0x1000>;      /* VDEC_RACING_CTRL */
+On Wed, Nov 9, 2022 at 10:04 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Jann Horn
+> > Sent: 08 November 2022 14:53
+> >
+> > On Tue, Nov 8, 2022 at 10:26 AM David Laight <David.Laight@aculab.com> wrote:
+> > > > Many Linux systems are configured to not panic on oops; but allowing an
+> > > > attacker to oops the system **really** often can make even bugs that look
+> > > > completely unexploitable exploitable (like NULL dereferences and such) if
+> > > > each crash elevates a refcount by one or a lock is taken in read mode, and
+> > > > this causes a counter to eventually overflow.
+> > > >
+> > > > The most interesting counters for this are 32 bits wide (like open-coded
+> > > > refcounts that don't use refcount_t). (The ldsem reader count on 32-bit
+> > > > platforms is just 16 bits, but probably nobody cares about 32-bit platforms
+> > > > that much nowadays.)
+> > > >
+> > > > So let's panic the system if the kernel is constantly oopsing.
+> > >
+> > > I think you are pretty much guaranteed to run out of memory
+> > > (or at least KVA) before any 32bit counter wraps.
+> >
+> > Not if you repeatedly take a reference and then oops without dropping
+> > the reference, and the oops path cleans up all the resources that were
+> > allocated for the crashing tasks. In that case, each oops increments
+> > the reference count by 1 without causing memory allocation.
+>
+> I'd have thought that the kernel stack and process areas couldn't
+> be freed because they might contain 'live data'.
+> There is also the much smaller pid_t structure.
+>
+> Of course I might be wrong...
+> But I'm sure /proc/pid/stack is valid for an oopsed process.
 
-Since we're adding register descriptions to the schema file, you don't need any
-comments in front of the iospaces that you're declaring here... this means that
-it also fits on one line:
-			reg = <0 0x18000000 0 0x1000>, <0 0x18004000 0 0x1000>;
-
-> +			ranges = <0 0 0 0x18000000 0 0x26000>;
-> +			clocks = <&topckgen CLK_TOP_VDEC>,
-> +			         <&topckgen CLK_TOP_UNIVPLL_D4>;
-> +			clock-names = "vdec-sel", "top";
-> +			assigned-clocks = <&topckgen CLK_TOP_VDEC>;
-> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-> +
-> +			vcodec-lat-soc@2000 {
-> +				compatible = "mediatek,mtk-vcodec-lat-soc";
-> +				reg = <0 0x2000 0 0x800>;		/* VDEC_MISC */
-
-We can perhaps add descriptions to the schema file for VDEC_MISC as well,
-meaning that we don't need that comment as well.
-
-> +				iommus = <&iommu_vpp M4U_PORT_L23_VDEC_UFO_ENC_EXT>,
-> +					 <&iommu_vpp M4U_PORT_L23_VDEC_RDMA_EXT>;
-> +				clocks = <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-> +					 <&vdecsys_soc CLK_VDEC_SOC_LAT>;
-> +				clock-names = "vdec-soc-vdec", "vdec-soc-lat";
-> +				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
-> +			};
-> +
-> +			vcodec-lat@10000 {
-> +				compatible = "mediatek,mtk-vcodec-lat";
-> +				reg = <0 0x10000 0 0x800>;		/* VDEC_MISC */
-
-same here
-
-> +				interrupts = <GIC_SPI 708 IRQ_TYPE_LEVEL_HIGH 0>;
-> +				iommus = <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD_EXT>,
-> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD2_EXT>,
-> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_AVC_MC_EXT>,
-> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_PRED_RD_EXT>,
-> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_TILE_EXT>,
-> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_WDMA_EXT>;
-> +				clocks = <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-> +					 <&vdecsys_soc CLK_VDEC_SOC_LAT>;
-> +				clock-names = "vdec-soc-vdec", "vdec-soc-lat";
-> +				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
-> +			};
-> +
-> +			vcodec-core@25000 {
-> +				compatible = "mediatek,mtk-vcodec-core";
-> +				reg = <0 0x25000 0 0x1000>;		/* VDEC_CORE_MISC */
-
-...and same here too.
-
-Regards,
-Angelo
+No. It might be in the edgecase where the process oopses, then the
+kernel tries to exit, then it oopses again, and the kernel decides
+that that process is a hazardous mess and can't be cleaned up. But in
+the general case, oopsed processes don't have /proc/$pid/stack
+anymore, they go through the normal exit path, and they get reaped
+normally by their parent.
