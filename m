@@ -2,92 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57B3622ED0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D25F622ED7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbiKIPOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:14:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S231934AbiKIPPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:15:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiKIPOI (ORCPT
+        with ESMTP id S231907AbiKIPPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:14:08 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2E4FD05
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:14:07 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id v17so17381263plo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:14:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtJwvJLci/JkatzPK3HpdffetRpjfLyKGKg9pHS1Les=;
-        b=MwKhsKJKuWT7rUX72ct9BRC3oqwZp+jCkoE4Wj4/KI6/IAHTVWqF+i1o6oWMA6UrEG
-         1h/4GOO/9ys3qzDeMRBQ2oZRjeXrAp/SvFOnZ6Cqh/qX215D9d/QEteSI5UvFpASq+Dk
-         7kCGz8qmfvs0D+OUhAMN6Zlbe6DO8JZWgxdLqReTuzVODyRy9yuH719baf+Kl6/q2zjA
-         vsI0dRXhaT6Vt0MU32TLShFbaXhdkyCn16OnvMzzEkKpmDUCakpm00+4ManMWm7JKc7j
-         q9avGzkB5W8zoWyqjelAmfCiQDV/O7qLitX3GLKtfjGd8dDKd8W8bN4yTVaQ0ZU4QuRk
-         mtyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UtJwvJLci/JkatzPK3HpdffetRpjfLyKGKg9pHS1Les=;
-        b=Q3toSCrVYtlMUJM3KAHobxU+PVr+tnD9hb3S5VXOWIB5qMt0j/CBxI6stI8tTOUJQ+
-         97gdoJ35ZjFrDOmW6G055CrOc/+rJV+qXz9QhhB65G//DlZeS0sHnPESpcnn7UlrDsXS
-         lAhbSqUa1ZD0ObIQ1t4NyT1qf+S1jGAbkAIfI2Sk+d2S3n2VGQUf1Gn6oTAdqLi72N6I
-         EGN7d8JLd8dEx7TWGxLRDA4PAqLPz9qQ0uAn0cykpW0LduUSkNJ5V/mL/ZeCanA5bino
-         uR3M0BsbaVUVecFiZqop3kKssOIfRddU/UJuEagtLGU7u2vsTOWX/4pTyMOKIUs6h2Yt
-         ZdEA==
-X-Gm-Message-State: ANoB5ply8fR7HXhDnzSoyKUN6QlEQkLK+yFrb4+LglASxRyegkaJZ+aC
-        cdN3GMs+JWw712FadJfjezrq6A==
-X-Google-Smtp-Source: AA0mqf5uG8MYfxZdmmvFGzKC7bnnIjzg8XzE+ryacGjVjx1GXT2Idp4er6qqAOaAC1YFbCO4UEwJcg==
-X-Received: by 2002:a17:902:ce88:b0:188:6429:fedd with SMTP id f8-20020a170902ce8800b001886429feddmr28807424plg.0.1668006846620;
-        Wed, 09 Nov 2022 07:14:06 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170903110600b001865c298588sm9252603plh.258.2022.11.09.07.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 07:14:06 -0800 (PST)
-Date:   Wed, 9 Nov 2022 15:14:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        thomas.lendacky@amd.com, jmattson@google.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 02/11] KVM: SVM: replace regs argument of __svm_vcpu_run
- with vcpu_svm
-Message-ID: <Y2vDujWx1Zz29VvF@google.com>
-References: <20221109145156.84714-1-pbonzini@redhat.com>
- <20221109145156.84714-3-pbonzini@redhat.com>
+        Wed, 9 Nov 2022 10:15:07 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043661115B;
+        Wed,  9 Nov 2022 07:15:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668006907; x=1699542907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1hotSbJr/nzsHTXdw6IvBY9ZABhKC6mYa3ikm0iprvY=;
+  b=O+h8wNYOasqTmt4xXPzBt+fdKH2liZZwP6S+9Wt4Jbq1tAOPHlOwM/8w
+   k+eHAuhbxt8MObRpPoD+NVAvxjqKsD6rwbVbBfdTpaE2Z0jtJPGi8g/9D
+   uSEXagh3a6PT1KbokZYh7oh4NWngTiPtIh2yBGTTVJAySrJFMW3BSKMn+
+   baLiu1mETabUyrX6xs5UNl5vneqIXpGYtIBTCy38rZrDN242QhcCOWRFx
+   8VxsfD/YDfchmeNAyAOpcBEfqpKkwD40VXll+MFpFjFSQEZW5omPp0mhT
+   /C6AmsymhlwPr7qJCLjlR8CyN/Psp03gplXAPKmTvaF+EG6nB1XIMOJlV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="310996457"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="310996457"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 07:15:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="587794946"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="587794946"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 09 Nov 2022 07:14:45 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1osmmq-009ngV-0V;
+        Wed, 09 Nov 2022 17:14:44 +0200
+Date:   Wed, 9 Nov 2022 17:14:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Raul E Rangel <rrangel@chromium.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 1/2] gpiolib: of: Drop redundant check in
+ of_mm_gpiochip_remove()
+Message-ID: <Y2vD49wJkKFw72tS@smile.fi.intel.com>
+References: <20221109150706.38823-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221109145156.84714-3-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221109150706.38823-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nit, () on function names.  Maybe I should offer to buy you a beer every time you
-remember to add parantheses :-)
+On Wed, Nov 09, 2022 at 05:07:05PM +0200, Andy Shevchenko wrote:
+> The callers never call the function with invalid pointer.
+> Moreover, compiler quite likely dropped that check anyway
+> because we use that pointer before the check.
 
-On Wed, Nov 09, 2022, Paolo Bonzini wrote:
-> Since registers are reachable through vcpu_svm, and we will
-> need to access more fields of that struct, pass it instead
-> of the regs[] array.
-> 
-> No functional change intended.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: a149180fbcf3 ("x86: Add magic AMD return-thunk")
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+Please, ignore this series, it was wrong offset to send the patches from.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
