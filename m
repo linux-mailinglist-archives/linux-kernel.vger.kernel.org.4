@@ -2,239 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9701B623733
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC83D62373C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:07:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbiKIXBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
+        id S231738AbiKIXHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:07:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbiKIXAu (ORCPT
+        with ESMTP id S229691AbiKIXHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:00:50 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ED727DFF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 15:00:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1668034849; x=1699570849;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+OovEAf12y9Fz1WE3tu8W4ZvEc94J8OydV/Ckp1pyWo=;
-  b=fIntjugyH1g3FMb08iv9LohbyeTH8ffrERXc2LN60nh3hoz4UAy4+Jgl
-   dWOh3DUqOKECvimNEBodfuUzGGXZ1+QIfJcv1viBUohVosNQ1dn+/Of3Z
-   EQ6TwM0MHRc3mJyVDAHk9/i3He0omhavrDObVbzWgTAzWWL3YCYNQUdrD
-   TByT+TYbFNmHnHNi2sXSH5RtRB+ccQPbCFDD4U/ewvBbdrfxK5tcG512T
-   h0ElTg4sy5mYXWvqCsmtFZ8O3UNfuATuhYSWvboryFsH5EK1OzoOeXb51
-   to4niqWx5LsbvTkStirzJqFXwdYkDLAbhio43vbwMoey2Ig3eNKm0cZD4
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,152,1665417600"; 
-   d="scan'208";a="327999930"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Nov 2022 07:00:48 +0800
-IronPort-SDR: KZIbGiY63GxQZ0IDcNppQLEo/5apYaCOd6OkPU4AxXT98vhN5b+XmOP2ItYp0TU4g+zMRa7NJs
- iU5NVYXSgI34hMzh6vjZrSAOz8Q895GkKw1bdCTzK6JuGOuQaCO/WVWQU4o9MKrlTYVxm4eJmQ
- aMul/XDp6KtpIKUSmKPzkYJszxK6oLXtfm/CvpMAbU/nGrODr0cgJRGE1E/JZTM0pZMA6kDqBb
- 2z2WNlHpOUnya9FMNcI+g6qhPGOn7qSfi+ylKtDNtN9I6rRf0NaSi/bBgm3Vfs7SByK055Vh+q
- ChU=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Nov 2022 14:14:07 -0800
-IronPort-SDR: /xRo8HgcPor/gwuPI1PYoCVEL5uzl6rpq6C6OcgaYOPq0OxxFuoS/vdWHUtdcKVNc+ADPYr6gB
- S1D5eNDTjhFF+CLS3mvSkeL2vpQi8Zv3AdAUlbzIaB/Rx7M5rMNifq65R67mO6SJA+NtCX/lGp
- Lsm2+G4cTV66D+DhJcaQD+6PNwDfBHS17XgrwqvzR/swYA1Zqgine5M4553K4Bvb/vKo32wh+A
- HqidWqEGtxvaA04lgKmWNoVwS1TwUorpQ4dOjHyoxik7Mjw/AFtCRECWA+r2c58B6pCgz27dwP
- okw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Nov 2022 15:00:48 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N70nC35qDz1Rwrq
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 15:00:47 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1668034845; x=1670626846; bh=+OovEAf12y9Fz1WE3tu8W4ZvEc94J8OydV/
-        Ckp1pyWo=; b=d5LVMefkImhlC6X1M33kgnqUOVSy4OyuwgPnKssoBInc+jvQcn4
-        mRRuo+n6+xCwto2lCdhHGgn9/yE1IHd5m/mJCMy6AFepyMSmjVXDYGgTZMIVFXGS
-        VnebvtXnT509frqgR5o5RXtTO65PqKMKMnNszxNhGD1yK/zDmt347VPSVP8+HPpT
-        QlyBCEbm29bzelLyj59zv9D7RO9FSUZTVKQ5JyfjnJtOXxm6lhPKIRLEFSG9m65h
-        h/D5FTPTb3a2PEhrIRZcz0k9S37N5XgX4y/WaiyV1tcjEDeX4xPJ2WFW2el5q+Ut
-        CQgDEdrJAHxx+n8C3SJTFg280Co5py7YdGw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8fIyKAhj8v1K for <linux-kernel@vger.kernel.org>;
-        Wed,  9 Nov 2022 15:00:45 -0800 (PST)
-Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N70n70Mkrz1RvLy;
-        Wed,  9 Nov 2022 15:00:42 -0800 (PST)
-Message-ID: <a0201035-8cd3-f8bc-7db3-4d011cd2c35c@opensource.wdc.com>
-Date:   Thu, 10 Nov 2022 08:00:41 +0900
+        Wed, 9 Nov 2022 18:07:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1E9647D;
+        Wed,  9 Nov 2022 15:07:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 586F961D10;
+        Wed,  9 Nov 2022 23:07:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0FFC433B5;
+        Wed,  9 Nov 2022 23:07:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668035234;
+        bh=QVbJuuASX3h4Jz3Lm8MMNfZQd7k5AEXGegUih81XkzM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YJb7PdweWdzkXJcJkksW1F8gyz9CusdJzwyYMz7FHgIwSm9SupYfjWQgP1ZxtKhmF
+         yJVXjaGqat52C5i7+HlzwOGUOL5dyZ1vlqQfOsbzraviagtWZISTkW7fEgLA3jl4f3
+         XhSbLsSZh033TT+FTt03SukODY10xfemUPiFkd5bxMbHH9pVC43HlA3cpkddBqGYLZ
+         OriGhzJZnvFhfPwrZUSvEVuIeG5fo3pQgbjWmWUsX/blv1G5XVdiX0mPKQadOdrTeQ
+         vT2BguG3AkcjC3oYq2OqQWmS5LLhjrjT1fGVoZZ5RbGQ1zMExsP2yIy8ux0k9CSyp+
+         fjdvPolcqwmqg==
+Date:   Wed, 9 Nov 2022 17:07:12 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, stable@vger.kernel.org,
+        Sergey Miroshnichenko <s.miroshnichenko@yadro.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Re: [PATCH] PCI/sysfs: Fix double free in error path
+Message-ID: <20221109230712.GA580188@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: Deprecating and removing SLOB
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com
-Cc:     cl@linux.com, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        penberg@kernel.org, 42.hyeyoo@gmail.com, willy@infradead.org,
-        roman.gushchin@linux.dev, pasha.tatashin@soleen.com,
-        torvalds@linux-foundation.org, linux-mm@kvack.org, vbabka@suse.cz,
-        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        rkovhaev@gmail.com, akpm@linux-foundation.org
-References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz>
- <CA+CK2bD-uVGJ0=9uc7Lt5zwY+2PM2RTcfOhxEd65S7TvTrJULA@mail.gmail.com>
- <efa623fb-686f-072e-df0d-9f5727ae1b1f@microchip.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <efa623fb-686f-072e-df0d-9f5727ae1b1f@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221007070735.GX986@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/22 02:57, Conor.Dooley@microchip.com wrote:
-> +CC Damien
+[+cc Sergey, Alex, Krzysztof since you all posted similar patches in
+the past]
+
+On Fri, Oct 07, 2022 at 09:07:35AM +0200, Sascha Hauer wrote:
+> On Fri, Oct 07, 2022 at 08:56:18AM +0200, Sascha Hauer wrote:
+> > When pci_create_attr() fails then pci_remove_resource_files() is called
+> > which will iterate over the res_attr[_wc] arrays and frees every non
+> > NULL entry. To avoid a double free here we have to set the failed entry
+> > to NULL in pci_create_attr() when freeing it.
+> > 
 > 
->> There are some devices with configs where SLOB is enabled by default.
->> Perhaps, the owners/maintainers of those devices/configs should be
->> included into this thread:
->>
->> tatashin@soleen:~/x/linux$ git grep SLOB=y
+> You might consider applying this alternative version instead which IMO
+> looks a bit better.
+
+Thanks, I agree, I like how this one doesn't set res_attr[] until we
+know we're going to return success.
+
+Applied to pci/sysfs for v6.2, thanks!
+
+> -------------------------------8<-----------------------------
 > 
->> arch/riscv/configs/nommu_k210_defconfig:CONFIG_SLOB=y
->> arch/riscv/configs/nommu_k210_sdcard_defconfig:CONFIG_SLOB=y
->> arch/riscv/configs/nommu_virt_defconfig:CONFIG_SLOB=y
+> From fe8e0e6f914c14395c751b7dc165967b12427995 Mon Sep 17 00:00:00 2001
+> From: Sascha Hauer <s.hauer@pengutronix.de>
+> Date: Fri, 7 Oct 2022 07:35:35 +0200
+> Subject: [PATCH] PCI/sysfs: Fix double free in error path
 > 
-> Saw you were not added to the CC Damien & I know you don't want your
-> baby broken!
-
-:)
-
-I set SLOB=y for the K210 as the config help mentions it is a bit more
-efficient in low memory cases. I did run a few times with SLAB and it
-was OK, so removing slob should not be a problem. Can check again.
-
-Cheers.
-
+> When pci_create_attr() fails then pci_remove_resource_files() is called
+> which will iterate over the res_attr[_wc] arrays and frees every non
+> NULL entry. To avoid a double free here set the array entry only after
+> it's clear we successfully initialized it.
 > 
+> Fixes: b562ec8f74e4 ("PCI: Don't leak memory if sysfs_create_bin_file() fails")
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: <stable@vger.kernel.org>
+> ---
+>  drivers/pci/pci-sysfs.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
 > 
-> On 08/11/2022 21:44, Pasha Tatashin wrote:
->> On Tue, Nov 8, 2022 at 10:55 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->>>
->>> Hi,
->>>
->>> as we all know, we currently have three slab allocators. As we discussed
->>> at LPC [1], it is my hope that one of these allocators has a future, and
->>> two of them do not.
->>>
->>> The unsurprising reasons include code maintenance burden, other features
->>> compatible with only a subset of allocators (or more effort spent on the
->>> features), blocking API improvements (more on that below), and my
->>> inability to pronounce SLAB and SLUB in a properly distinguishable way,
->>> without resorting to spelling out the letters.
->>>
->>> I think (but may be proven wrong) that SLOB is the easier target of the
->>> two to be removed, so I'd like to focus on it first.
->>>
->>> I believe SLOB can be removed because:
->>>
->>> - AFAIK nobody really uses it? It strives for minimal memory footprint
->>> by putting all objects together, which has its CPU performance costs
->>> (locking, lack of percpu caching, searching for free space...). I'm not
->>> aware of any "tiny linux" deployment that opts for this. For example,
->>> OpenWRT seems to use SLUB and the devices these days have e.g. 128MB
->>> RAM, not up to 16 MB anymore. I've heard anecdotes that the performance
->>> SLOB impact is too much for those who tried. Googling for
->>> "CONFIG_SLOB=y" yielded nothing useful.
->>
->> I am all for removing SLOB.
->>
->> There are some devices with configs where SLOB is enabled by default.
->> Perhaps, the owners/maintainers of those devices/configs should be
->> included into this thread:
->>
->> tatashin@soleen:~/x/linux$ git grep SLOB=y
->> arch/arm/configs/clps711x_defconfig:CONFIG_SLOB=y
->> arch/arm/configs/collie_defconfig:CONFIG_SLOB=y
->> arch/arm/configs/multi_v4t_defconfig:CONFIG_SLOB=y
->> arch/arm/configs/omap1_defconfig:CONFIG_SLOB=y
->> arch/arm/configs/pxa_defconfig:CONFIG_SLOB=y
->> arch/arm/configs/tct_hammer_defconfig:CONFIG_SLOB=y
->> arch/arm/configs/xcep_defconfig:CONFIG_SLOB=y
->> arch/openrisc/configs/or1ksim_defconfig:CONFIG_SLOB=y
->> arch/openrisc/configs/simple_smp_defconfig:CONFIG_SLOB=y
->> arch/riscv/configs/nommu_k210_defconfig:CONFIG_SLOB=y
->> arch/riscv/configs/nommu_k210_sdcard_defconfig:CONFIG_SLOB=y
->> arch/riscv/configs/nommu_virt_defconfig:CONFIG_SLOB=y
->> arch/sh/configs/rsk7201_defconfig:CONFIG_SLOB=y
->> arch/sh/configs/rsk7203_defconfig:CONFIG_SLOB=y
->> arch/sh/configs/se7206_defconfig:CONFIG_SLOB=y
->> arch/sh/configs/shmin_defconfig:CONFIG_SLOB=y
->> arch/sh/configs/shx3_defconfig:CONFIG_SLOB=y
->> kernel/configs/tiny.config:CONFIG_SLOB=y
->>
->>>
->>> - Last time we discussed it [2], it seemed SLUB memory requirements can
->>> be brought very close to SLOB's if needed. Of course it can never have
->>> as small footprint as SLOB due to separate kmem_caches, but the
->>> difference is not that significant, unless somebody still tries to use
->>> Linux on very tiny systems (goes back to the previous point).
->>>
->>> Besides the smaller maintenance burden, removing SLOB would allow us to
->>> do a useful API improvement - the ability to use kfree() for both
->>> objects allocated by kmalloc() and kmem_cache_alloc(). Currently the
->>> latter has to be freed by kmem_cache_free(), passing a kmem_cache
->>> pointer in addition to the object pointer. With SLUB and SLAB, it is
->>> however possible to use kfree() instead, as the kmalloc caches and the
->>> rest of kmem_caches are the same and kfree() can lookup the kmem_cache
->>> from object pointer easily for any of those. XFS has apparently did that
->>> for years without anyone noticing it's broken on SLOB [3], and
->>> legitimizing and expanding this would help some use cases beside XFS
->>> (IIRC Matthew mentioned rcu-based freeing for example).
->>>
->>> However for SLOB to support kfree() on all allocations, it would need to
->>> store object size of allocated objects (which it currently does only for
->>> kmalloc() objects, prepending a size header to the object), but for
->>> kmem_cache_alloc() allocations as well. This has been attempted in the
->>> thread [3] but it bloats the memory usage, especially on architectures
->>> with large ARCH_KMALLOC_MINALIGN, where the prepended header basically
->>> has to occupy the whole ARCH_KMALLOC_MINALIGN block to be DMA safe.
->>> There are ongoing efforts to reduce this minalign, but the memory
->>> footprint would still increase, going against the purpose of SLOB, so
->>> again it would be easier if we could just remove it.
->>>
->>> So with this thread I'm interested in hearing arguments/use cases for
->>> keeping SLOB. There might be obviously users of SLOB whom this
->>> conversation will not reach, so I assume the eventual next step would be
->>> to deprecate it in a way that those users are notified when building a
->>> new kernel and can raise their voice then. Is there a good proven way
->>> how to do that for a config option like this one?
->>>
->>> Thanks,
->>> Vlastimil
->>>
->>> [1] https://lpc.events/event/16/contributions/1272/ - slides in the
->>> slabs.pdf linked there
->>> [2]
->>> https://lore.kernel.org/all/20211017135708.GA8442@kvm.asia-northeast3-a.c.our-ratio-313919.internal/#t
->>> [3]
->>> https://lore.kernel.org/all/20210930044202.GP2361455@dread.disaster.area/
->>>
->>>
->>>
-
--- 
-Damien Le Moal
-Western Digital Research
-
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index fc804e08e3cb5..6dd4050c9f2ed 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -1174,11 +1174,9 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
+>  
+>  	sysfs_bin_attr_init(res_attr);
+>  	if (write_combine) {
+> -		pdev->res_attr_wc[num] = res_attr;
+>  		sprintf(res_attr_name, "resource%d_wc", num);
+>  		res_attr->mmap = pci_mmap_resource_wc;
+>  	} else {
+> -		pdev->res_attr[num] = res_attr;
+>  		sprintf(res_attr_name, "resource%d", num);
+>  		if (pci_resource_flags(pdev, num) & IORESOURCE_IO) {
+>  			res_attr->read = pci_read_resource_io;
+> @@ -1196,10 +1194,17 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
+>  	res_attr->size = pci_resource_len(pdev, num);
+>  	res_attr->private = (void *)(unsigned long)num;
+>  	retval = sysfs_create_bin_file(&pdev->dev.kobj, res_attr);
+> -	if (retval)
+> +	if (retval) {
+>  		kfree(res_attr);
+> +		return retval;
+> +	}
+> +
+> +	if (write_combine)
+> +		pdev->res_attr_wc[num] = res_attr;
+> +	else
+> +		pdev->res_attr[num] = res_attr;
+>  
+> -	return retval;
+> +	return 0;
+>  }
+>  
+>  /**
+> -- 
+> 2.30.2
+> 
+> -- 
+> Pengutronix e.K.                           |                             |
+> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
