@@ -2,155 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C3262250B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E48E62250E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiKIICR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:02:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S229612AbiKIIFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:05:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiKIIB7 (ORCPT
+        with ESMTP id S229452AbiKIIFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:01:59 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1497A1C906
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:01:55 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VUN.-.w_1667980911;
-Received: from 30.221.128.156(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VUN.-.w_1667980911)
-          by smtp.aliyun-inc.com;
-          Wed, 09 Nov 2022 16:01:52 +0800
-Message-ID: <d36d09ba-271a-dc42-395f-0613fc75259b@linux.alibaba.com>
-Date:   Wed, 9 Nov 2022 16:01:51 +0800
+        Wed, 9 Nov 2022 03:05:31 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7081CB3C;
+        Wed,  9 Nov 2022 00:05:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CF4E71F8C4;
+        Wed,  9 Nov 2022 08:05:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667981128; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NtpuDwdakbsSweUDnOE8zAX0zXuYtEwWTzH9ZnpMCs8=;
+        b=lViDlySknjzjl7K3UwqMWkFkLRCXSNasuR0ZF0+MldKSfQJZ3QyiiPpUXRzAJg95iSXXIn
+        fdbGXvK8zzgSbxslolLq7XdBqXTtd0E5KCtQHOyy2Nn2/3EBrfweJRkiBn44TId/IZOOzo
+        WCspmBuikEMQfpAIci0sYwXsNfU9Aig=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A8E91139F1;
+        Wed,  9 Nov 2022 08:05:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zTxfJkhfa2PCRgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 09 Nov 2022 08:05:28 +0000
+Date:   Wed, 9 Nov 2022 09:05:28 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v1 0/3] Avoid scheduling cache draining to isolated cpus
+Message-ID: <Y2tfSAgt/lBVcdvf@dhcp22.suse.cz>
+References: <20221102020243.522358-1-leobras@redhat.com>
+ <Y2IwHVdgAJ6wfOVH@dhcp22.suse.cz>
+ <07810c49ef326b26c971008fb03adf9dc533a178.camel@redhat.com>
+ <Y2Pe45LHANFxxD7B@dhcp22.suse.cz>
+ <0183b60e79cda3a0f992d14b4db5a818cd096e33.camel@redhat.com>
+ <Y2TQLavnLVd4qHMT@dhcp22.suse.cz>
+ <3c4ae3bb70d92340d9aaaa1856928476641a8533.camel@redhat.com>
+ <Y2i9h+TRdX9EOs0T@dhcp22.suse.cz>
+ <4a4a6c73f3776d65f70f7ca92eb26fc90ed3d51a.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v2] ocfs2: fix memory leak in ocfs2_mount_volume()
-Content-Language: en-US
-To:     Li Zetao <lizetao1@huawei.com>, akpm <akpm@linux-foundation.org>
-Cc:     jlbec@evilplan.org, linux-kernel@vger.kernel.org, mark@fasheh.com,
-        ocfs2-devel@oss.oracle.com, srinivas.eeda@oracle.com
-References: <05c24286-427d-e572-aa70-8f1d882b9602@linux.alibaba.com>
- <20221109074627.2303950-1-lizetao1@huawei.com>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <20221109074627.2303950-1-lizetao1@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4a4a6c73f3776d65f70f7ca92eb26fc90ed3d51a.camel@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue 08-11-22 20:09:25, Leonardo Brás wrote:
+[...]
+> > Yes, with a notable difference that with your spin lock option there is
+> > still a chance that the remote draining could influence the isolated CPU
+> > workload throug that said spinlock. If there is no pcp cache for that
+> > cpu being used then there is no potential interaction at all.
+> 
+> I see. 
+> But the slow path is slow for some reason, right?
+> Does not it make use of any locks also? So on normal operation there could be a
+> potentially larger impact than a spinlock, even though there would be no
+> scheduled draining.
 
+Well, for the regular (try_charge) path that is essentially page_counter_try_charge
+which boils down to atomic_long_add_return of the memcg counter + all
+parents up the hierarchy and high memory limit evaluation (essentially 2
+atomic_reads for the memcg + all parents up the hierchy). That is not
+whole of a lot - especially when the memcg hierarchy is not very deep.
 
-On 11/9/22 3:46 PM, Li Zetao wrote:
-> There is a memory leak reported by kmemleak:
-> 
->   unreferenced object 0xffff88810cc65e60 (size 32):
->     comm "mount.ocfs2", pid 23753, jiffies 4302528942 (age 34735.105s)
->     hex dump (first 32 bytes):
->       10 00 00 00 00 00 00 00 00 01 01 01 01 01 01 01  ................
->       01 01 01 01 01 01 01 01 00 00 00 00 00 00 00 00  ................
->     backtrace:
->       [<ffffffff8170f73d>] __kmalloc+0x4d/0x150
->       [<ffffffffa0ac3f51>] ocfs2_compute_replay_slots+0x121/0x330 [ocfs2]
->       [<ffffffffa0b65165>] ocfs2_check_volume+0x485/0x900 [ocfs2]
->       [<ffffffffa0b68129>] ocfs2_mount_volume.isra.0+0x1e9/0x650 [ocfs2]
->       [<ffffffffa0b7160b>] ocfs2_fill_super+0xe0b/0x1740 [ocfs2]
->       [<ffffffff818e1fe2>] mount_bdev+0x312/0x400
->       [<ffffffff819a086d>] legacy_get_tree+0xed/0x1d0
->       [<ffffffff818de82d>] vfs_get_tree+0x7d/0x230
->       [<ffffffff81957f92>] path_mount+0xd62/0x1760
->       [<ffffffff81958a5a>] do_mount+0xca/0xe0
->       [<ffffffff81958d3c>] __x64_sys_mount+0x12c/0x1a0
->       [<ffffffff82f26f15>] do_syscall_64+0x35/0x80
->       [<ffffffff8300006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 
-> This call stack is related to two problems. Firstly, the ocfs2 super uses
-> "replay_map" to trace online/offline slots, in order to recover offline
-> slots during recovery and mount. But when ocfs2_truncate_log_init()
-> returns an error in ocfs2_mount_volume(), the memory of "replay_map"
-> will not be freed in error handling path. Secondly, the memory of
-> "replay_map" will not be freed if d_make_root() returns an error in
-> ocfs2_fill_super(). But the memory of "replay_map" will be freed normally
-> when completing recovery and mount in ocfs2_complete_mount_recovery().
-> 
-> Fix the first problem by adding error handling path to free "replay_map"
-> when ocfs2_truncate_log_init() fails. And fix the second problem by
-> calling ocfs2_free_replay_slots(osb) in the error handling path
-> "out_dismount". In addition, since ocfs2_free_replay_slots() is static,
-> it is necessary to remove its static attribute and declare it in header
-> file.
-> 
-> Fixes: 9140db04ef18 ("ocfs2: recover orphans in offline slots during recovery and mount")
-> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+Per cpu batch amortizes those per hierarchy updates as well as atomic
+operations + cache lines bouncing on updates.
 
-Looks fine.
-Reviewed-by: Joseph Qi <joseph.qi@linux.alibaba.com>
+On the other hand spinlock would do the unconditional atomic updates as
+well and even much more on CONFIG_RT. A plus is that the update will be
+mostly local so cache line bouncing shouldn't be terrible. Unless
+somebody heavily triggers pcp cache draining but this shouldn't be all
+that common (e.g. when a memcg triggers its limit.
 
-> ---
-> v1 was posted at: https://lore.kernel.org/all/20221108152516.1189165-1-lizetao1@huawei.com/
-> v1 -> v2: Rename the label "out_truncate_log" to "out_check_volume"
+All that being said, I am still not convinced that the pcp cache bypass
+for isolated CPUs would make a dramatic difference. Especially in the
+context of workloads that tend to run on isolated CPUs and rarely enter
+kernel.
+ 
+> > It is true true that appart from user
+> > space memory which can be under full control of the userspace there are
+> > kernel allocations which can be done on behalf of the process and those
+> > could be charged to memcg as well. So I can imagine the pcp cache could
+> > be populated even if the process is not faulting anything in during RT
+> > sensitive phase.
 > 
->  fs/ocfs2/journal.c | 2 +-
->  fs/ocfs2/journal.h | 1 +
->  fs/ocfs2/super.c   | 5 ++++-
->  3 files changed, 6 insertions(+), 2 deletions(-)
+> Humm, I think I will apply the change and do a comparative testing with
+> upstream. This should bring good comparison results.
+
+That would be certainly appreciated!
+ 
+> > > On the other hand, compared to how it works now now, this should be a more
+> > > controllable way of introducing latency than a scheduled cache drain.
+> > > 
+> > > Your suggestion on no-stocks/caches in isolated CPUs would be great for
+> > > predictability, but I am almost sure the cost in overall performance would not
+> > > be fine.
+> > 
+> > It is hard to estimate the overhead without measuring that. Do you think
+> > you can give it a try? If the performance is not really acceptable
+> > (which I would be really surprised) then we can think of a more complex
+> > solution.
 > 
-> diff --git a/fs/ocfs2/journal.c b/fs/ocfs2/journal.c
-> index 126671e6caed..3fb98b4569a2 100644
-> --- a/fs/ocfs2/journal.c
-> +++ b/fs/ocfs2/journal.c
-> @@ -157,7 +157,7 @@ static void ocfs2_queue_replay_slots(struct ocfs2_super *osb,
->  	replay_map->rm_state = REPLAY_DONE;
->  }
->  
-> -static void ocfs2_free_replay_slots(struct ocfs2_super *osb)
-> +void ocfs2_free_replay_slots(struct ocfs2_super *osb)
->  {
->  	struct ocfs2_replay_map *replay_map = osb->replay_map;
->  
-> diff --git a/fs/ocfs2/journal.h b/fs/ocfs2/journal.h
-> index 969d0aa28718..41c382f68529 100644
-> --- a/fs/ocfs2/journal.h
-> +++ b/fs/ocfs2/journal.h
-> @@ -150,6 +150,7 @@ int ocfs2_recovery_init(struct ocfs2_super *osb);
->  void ocfs2_recovery_exit(struct ocfs2_super *osb);
->  
->  int ocfs2_compute_replay_slots(struct ocfs2_super *osb);
-> +void ocfs2_free_replay_slots(struct ocfs2_super *osb);
->  /*
->   *  Journal Control:
->   *  Initialize, Load, Shutdown, Wipe a journal.
-> diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
-> index 42c993e53924..0b0e6a132101 100644
-> --- a/fs/ocfs2/super.c
-> +++ b/fs/ocfs2/super.c
-> @@ -1159,6 +1159,7 @@ static int ocfs2_fill_super(struct super_block *sb, void *data, int silent)
->  out_dismount:
->  	atomic_set(&osb->vol_state, VOLUME_DISABLED);
->  	wake_up(&osb->osb_mount_event);
-> +	ocfs2_free_replay_slots(osb);
->  	ocfs2_dismount_volume(sb, 1);
->  	goto out;
->  
-> @@ -1822,12 +1823,14 @@ static int ocfs2_mount_volume(struct super_block *sb)
->  	status = ocfs2_truncate_log_init(osb);
->  	if (status < 0) {
->  		mlog_errno(status);
-> -		goto out_system_inodes;
-> +		goto out_check_volume;
->  	}
->  
->  	ocfs2_super_unlock(osb, 1);
->  	return 0;
->  
-> +out_check_volume:
-> +	ocfs2_free_replay_slots(osb);
->  out_system_inodes:
->  	if (osb->local_alloc_state == OCFS2_LA_ENABLED)
->  		ocfs2_shutdown_local_alloc(osb);
+> Sure, I can try that.
+> Do you suggest any specific workload that happens to stress the percpu cache
+> usage, with usual drains and so? Maybe I will also try with synthetic worloads
+> also.
+
+I really think you want to test it on the isolcpu aware workload.
+Artificial benchmark are not all that useful in this context.
+-- 
+Michal Hocko
+SUSE Labs
