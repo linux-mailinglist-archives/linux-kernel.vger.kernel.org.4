@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559AE622A8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEABB622A90
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiKIL3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S229929AbiKIL3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiKIL3o (ORCPT
+        with ESMTP id S229527AbiKIL3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:29:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F5910054;
-        Wed,  9 Nov 2022 03:29:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DDF9619E1;
-        Wed,  9 Nov 2022 11:29:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF761C4347C;
-        Wed,  9 Nov 2022 11:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667993380;
-        bh=vL0H/xg+uyXS8iiPDew7LK7Mbki2qfEr/CbZcV15j8w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sIYdJJb5vWalABgOzySHd+vPCnVOhmAFGdCq0wa+NtT1jBIED2Jb9Y2A9mT74nGIh
-         Ev8M9oLZlkblhyVsb69RPlWlnCmIrFDwGZ75S/BKFdy3rphDkw9IxUyTXlK3eyL51M
-         gM64kryzubzXqLBqTrsrjhxVdc4aexRwxS/OHswo=
-Date:   Wed, 9 Nov 2022 12:29:36 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nicolas Dumazet <ndumazet@google.com>
-Cc:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-        Petar Kostic <petar@kostic.dev>,
-        Oliver Neukum <oneukum@suse.com>, Ole Ernst <olebowle@gmx.com>,
-        Hannu Hartikainen <hannu@hrtk.in>,
-        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: add NO_LPM quirk for Realforce 87U Keyboard
-Message-ID: <Y2uPIItkmcYgDy6k@kroah.com>
-References: <20221027090342.38928-1-ndumazet@google.com>
+        Wed, 9 Nov 2022 06:29:46 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5C3E0F3;
+        Wed,  9 Nov 2022 03:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667993385; x=1699529385;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=weDABe4QTLm1KrZFnbFPqLVoV09bftWW7j0CQtDumik=;
+  b=mZQYm2cDeA3CxZwWXe76Le0CeAWLaGkVSZhky1HQMabQUIq5St6mVVm/
+   Zo2UuNX76snddsfjIu1x0oTUe0YVasRmKY1dW0DArgpyW3bBuykD2lmjq
+   tnCKqtMKE1fYB2P/wvoTCdSCEPIc1IrIewWmWODm/5wWpM86XxGgC/VT1
+   XZu3QXf+/SFjxLxJLwelEamYmJpUUdRio+WN9DFjIxyxwHTnJHAfxcO66
+   03tix07TR0B7AfCNsGKZFYeVsREKFnB3yOaAFI0CEe4M3hrgxFAybHaO0
+   IPBZO5xDv7FDf0+6MBY8WUKxeGHebftVs4GdkrSTlo6zSqXTxbXkp/eCR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="298475926"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="298475926"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 03:29:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="631223690"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="631223690"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 09 Nov 2022 03:29:43 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1osjH3-009ibe-33;
+        Wed, 09 Nov 2022 13:29:41 +0200
+Date:   Wed, 9 Nov 2022 13:29:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] Add support for software nodes to gpiolib
+Message-ID: <Y2uPJfkYpuI/uHeQ@smile.fi.intel.com>
+References: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027090342.38928-1-ndumazet@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:03:42AM +0200, Nicolas Dumazet wrote:
-> Before adding this quirk, this (mechanical keyboard) device would not be
-> recognized, logging:
+On Tue, Nov 08, 2022 at 04:26:45PM -0800, Dmitry Torokhov wrote:
+> This series attempts to add support for software nodes to gpiolib, using
+> software node references. This allows us to convert more drivers to the
+> generic device properties and drop support for custom platform data.
 > 
->   new full-speed USB device number 56 using xhci_hcd
->   unable to read config index 0 descriptor/start: -32
->   chopping to 0 config(s)
+> To describe a GPIO via software nodes we can create the following data
+> items:
 > 
-> It would take dozens of plugging/unpuggling cycles for the keyboard to
-> be recognized. Keyboard seems to simply work after applying this quirk.
+> /* Node representing the GPIO controller/GPIO bank */
+> static const struct software_node gpio_bank_b_node = {
+>         .name = "B",
+> };
 > 
-> This issue had been reported by users in two places already ([1], [2])
-> but nobody tried upstreaming a patch yet. After testing I believe their
-> suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
-> little overkill. I assume this particular combination was tested because
-> it had been previously suggested in [3], but only NO_LPM seems
-> sufficient for this device.
+> /*
+>  * Properties that will be assigned to a software node assigned to
+>  * the device that used platform data.
+>  */
+> static const struct property_entry simone_key_enter_props[] = {
+>         PROPERTY_ENTRY_U32("linux,code", KEY_ENTER),
+>         PROPERTY_ENTRY_STRING("label", "enter"),
+>         PROPERTY_ENTRY_REF("gpios", &gpio_bank_b_node, 123, GPIO_ACTIVE_LOW),
+>         { }
+> };
 > 
-> [1]: https://qiita.com/float168/items/fed43d540c8e2201b543
-> [2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
-> [3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
-> 
-> ---
-> Changes in v2:
->   - add the entry to the right location (sorting entries by
->     vendor/device id).
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
-> ---
+> The code in gpiolib handling software nodes uses the name in the
+> software node representing GPIO controller to locate the actual instance
+> of GPIO controller.
 
-By putting your s-o-b below the --- line, tools will drop it, how did
-you test this?
+Thank for an update!
 
-Put the v2 stuff below the --- line, don't add a new one.  See the
-thousands of examples on the list for how to do this correctly (as well
-as the kernel documentation.)
+I have almost nothing serious except two nit-picks I think we can address:
+- dropping const qualifier for no (?) reason
+- having a superfluous check and extra dev_dbg()
 
-Can you fix this up and resend a v3 please?
+If you are are going to address them, feel free to add my Rb tag to
+the patches 5 & 6.
 
-thanks,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-greg k-h
+
