@@ -2,205 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB89622B94
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB9A622B93
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiKIMcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
+        id S229977AbiKIMcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiKIMbv (ORCPT
+        with ESMTP id S229865AbiKIMbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:31:51 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588F62529D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 04:31:50 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id e189so13777115iof.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 04:31:50 -0800 (PST)
+        Wed, 9 Nov 2022 07:31:50 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B78125284
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 04:31:49 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id e123so16530668ybh.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 04:31:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lqsvzjmGwht8cKHofdUzRio0AO8PpWTzzIiOfJRFQE4=;
-        b=aYFwnvyLzaH/j+XiPtktbb9nM8TRssVjeuYcsWVpeZcHJ68m9wUpNp9jWosKYugJ53
-         uzhj2UC1pe170NC3viVnqtGYS+z81CsBQZqtiOdXOkKC4s3oXvK6wKC2yD0T0MI2g62f
-         aJblvbeGC70UnCArbV90BrhO0IU7YhYc0T7f9uoyXj1fDDMMm+aUlaOlVZS41YRKfnwt
-         FnqbetJ+oNr8seA8W0ByVbUVJ1iQXtLxjPctSg8HNDTqOmPdnbgDijRfaA3YZc/3DA5s
-         jc+LY2Mp39uAnSxtc8ebUsqOQobpMleOWZZSI2LJycxo5GW1dcSj+6XCMGYgG5HM1lFZ
-         Qg2A==
+        bh=iBC82BkZBsCUgADC2E0SC+W37JMGP5amatij69xACMo=;
+        b=bY7ZLJzytwpVOV1+fucTCu4HgzV/EG5N5wXc2/VUbRTzSlJBucO5XYmcqXhosxb29l
+         a91d0BgRwjC93KlLL55zIvh2QLbzTrGoTYvB9kbQ2JuGIg6bKILsW8EMtZGWlYNAizgE
+         wlkZ6UD23QTHBjpa3rsM+Wm3BofB1guq6T4xJ0mqnIblKZTRhAUDBn1N2sL0pDeinv9n
+         dk14zZx54A18U+K2mieoKxSkgGBFZGWTQ4DX7d3/qtVeiuY+1TKebWwIkhNAH8WfZHNg
+         rDjtIQWAUCMShqsPSjIgmG7pUNG0uQDXfJ4uD7pBQNFQk6G/MlmTMYVDMR1k8a2v4ncB
+         Avcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lqsvzjmGwht8cKHofdUzRio0AO8PpWTzzIiOfJRFQE4=;
-        b=qkozOxx6YKdum0dzndn2Oum+CNQrIDPYcmNsvf+P2daSiTsmO01n75kU7rvIdKt3k6
-         eymlunW+Ka457C60IkocljSTUnwthDpVQcr9JyyJv0G4qCxYARgr6ENbtozEDrpQPd7U
-         As1Kn/kr4ZE0ik1dpO5wmx1pfrU2oxITJXBcQyHQ41npAfs68l4JrTW3vIIndu8hTHSl
-         9aCSq2vMktkeTzLdA3VxecDEwVtKNIvDMasD5q62tkZkg0wETm5S7I929nYSx9lCjtym
-         bNsq4ApcsBg4+9+f+dNdoAaTRSApVu7s4SFvgwwMeWUdz9daohI4zHe7O2dMUUGvsRP3
-         Nn/w==
-X-Gm-Message-State: ACrzQf0upU2jlSNtzn83aZEK3Ul1XpAlB23XhoZejtofjvED4ioNfd75
-        HpdS6KDm1FkZhpy6rwMD/CafOpOypXdPtCBlN1urrg==
-X-Google-Smtp-Source: AMsMyM6WIgbhPIffuYu2nJXpggadzifpgyzIo1PIr7J3wDOGwa3zOo4GgX76HqJHmnHwI5hSbwgqXzoHrOwPzI5/tCQ=
-X-Received: by 2002:a6b:8dcd:0:b0:6d3:c9df:bc7d with SMTP id
- p196-20020a6b8dcd000000b006d3c9dfbc7dmr1645703iod.142.1667997109467; Wed, 09
- Nov 2022 04:31:49 -0800 (PST)
+        bh=iBC82BkZBsCUgADC2E0SC+W37JMGP5amatij69xACMo=;
+        b=70lt+smnjEl/XzNBimQAwe60FhRush7NEdwDprJ9Wi5vTfKcVP04HmA+W39Rqeh3wL
+         LLCnZribOf/NxL/Pxvx2lRHM51wvOShqeNQkbNDkaakBmdPRKTAHWZckxW/id/dhgFtY
+         gBj4qjurV4mP2O8/YnzsWqyqfwr1pe+TPF1cgFXAyph4b34kstwDrQwSSsN9H1LTvR1E
+         sT7oz/1jCtrkPBT88R7JN2BGn1JGchfnu1OJupJrdBNMnR4Fk91Rpb55VXhqpb0i7FPP
+         2lWItRdj24hnmIc3dgbrmy6AemAJYVLPVSc1eM4KOOd3JnPhAIyKOdnPD1gUDvabLUJh
+         M/cQ==
+X-Gm-Message-State: ACrzQf0tQSlad/AMTR/Q2wf+5+gB8LceTDybb5RBgl/tRVdFJ/PMhXgm
+        EQtJPuqdvuqT7uoWZxQcHK1WO/Zgma6yYuIanw7r1Q==
+X-Google-Smtp-Source: AMsMyM5YPnwjmr20I1VTvC2kAhC6XAmOskCHD4Es/yZYbOFeQRspsxGwZR2Z6hWwr+HzxeHWdeVFBUNnWrT5z6iVRes=
+X-Received: by 2002:a05:6902:722:b0:6ca:260e:cc5 with SMTP id
+ l2-20020a056902072200b006ca260e0cc5mr61345317ybt.336.1667997108534; Wed, 09
+ Nov 2022 04:31:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20221027090342.38928-1-ndumazet@google.com> <Y2uPIItkmcYgDy6k@kroah.com>
-In-Reply-To: <Y2uPIItkmcYgDy6k@kroah.com>
-From:   Nicolas Dumazet <ndumazet@google.com>
-Date:   Wed, 9 Nov 2022 13:31:33 +0100
-Message-ID: <CANZQvtgQyATwCyomGqtdOhthnkVc4_jEHY_U-s1x4u4kp5YKow@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: add NO_LPM quirk for Realforce 87U Keyboard
+References: <20221108133326.715586431@linuxfoundation.org>
+In-Reply-To: <20221108133326.715586431@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 9 Nov 2022 18:01:37 +0530
+Message-ID: <CA+G9fYts=xTAh7m=vjY=PA9Q1YBzUcU3oG4Rx0axOJEfSsYUwg@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/30] 4.9.333-rc1 review
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-        Petar Kostic <petar@kostic.dev>,
-        Oliver Neukum <oneukum@suse.com>, Ole Ernst <olebowle@gmx.com>,
-        Hannu Hartikainen <hannu@hrtk.in>,
-        Jimmy Wang <wangjm221@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000393e3805ed08d7d8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000393e3805ed08d7d8
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, Nov 9, 2022 at 12:29 PM Greg Kroah-Hartman
+On Tue, 8 Nov 2022 at 19:11, Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> On Thu, Oct 27, 2022 at 11:03:42AM +0200, Nicolas Dumazet wrote:
-> > Before adding this quirk, this (mechanical keyboard) device would not be
-> > recognized, logging:
-> >
-> >   new full-speed USB device number 56 using xhci_hcd
-> >   unable to read config index 0 descriptor/start: -32
-> >   chopping to 0 config(s)
-> >
-> > It would take dozens of plugging/unpuggling cycles for the keyboard to
-> > be recognized. Keyboard seems to simply work after applying this quirk.
-> >
-> > This issue had been reported by users in two places already ([1], [2])
-> > but nobody tried upstreaming a patch yet. After testing I believe their
-> > suggested fix (DELAY_INIT + NO_LPM + DEVICE_QUALIFIER) was probably a
-> > little overkill. I assume this particular combination was tested because
-> > it had been previously suggested in [3], but only NO_LPM seems
-> > sufficient for this device.
-> >
-> > [1]: https://qiita.com/float168/items/fed43d540c8e2201b543
-> > [2]: https://blog.kostic.dev/posts/making-the-realforce-87ub-work-with-usb30-on-Ubuntu/
-> > [3]: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1678477
-> >
-> > ---
-> > Changes in v2:
-> >   - add the entry to the right location (sorting entries by
-> >     vendor/device id).
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Nicolas Dumazet <ndumazet@google.com>
-> > ---
+> This is the start of the stable review cycle for the 4.9.333 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> By putting your s-o-b below the --- line, tools will drop it, how did
-> you test this?
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
 >
-> Put the v2 stuff below the --- line, don't add a new one.  See the
-> thousands of examples on the list for how to do this correctly (as well
-> as the kernel documentation.)
->
-> Can you fix this up and resend a v3 please?
-
-Duh -- apologies for this rookie mistake. v3 sent your way.
-
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.333-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
 >
 > thanks,
 >
 > greg k-h
 
---000000000000393e3805ed08d7d8
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-3THKPWAG9jcUnLFr5tdwMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBMchz/m9DAzkDk
-6JtxR1Ns3Ux0kJZKyIxCFNDOJpN4XUGpRlddEC/cWrtsX1AR5872/c9DekBJ9gQ7eZVBDR5VReKg
-tpG21RU7CCXjAwBDtfLz+nkGxnuq1XJef2OwL1/Rr2xXJ+nraZV7EcpNW92RNDsKzTWI8kmsXyK9
-XDDJDhNvFcAO3K4lbACkuxCfrE9tzdp9uG2Y/1aDALr2r8XZi9uiMb0js2p08tT7cCgh+WLF8pDP
-Ng5Bs1uZYJrY+Lrgg0GsQFiFpBI/e0m8VwvFbDUEexpaPEWdBYP53cVDFD/R6kVj+rHiAI57DZ9k
-0Bk/2Ylow6FBQrPzcK2D4OqEMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABkqWti5VJYTIDwUw2I1HaMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBQ
-fpQpYfZbbo1wpniBg4s2UfVKvPxwolh+YB7qdTTZPTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMDkxMjMxNDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAV13+bwDT2rk+8lHF88lw
-q5lpgmkVVYJrOFtusMH6rV7gIIHS1yGDhN+0r75sAYX0+CWlEiLCadV7tAGvgJsRkstNIql9SV0Q
-ZIcp6cGSAfgtqH1Iji3WqJdiNItRhmMZNfbDWS/IwTMAsmumGGbQ7NQdKFYgMSGMTSUlLA1HC5E+
-PAx2I7PwXzLKm6V3715mJifSkPXGIggwhIqcdsdXPQvDWezjB/ipjazI0QomJxthUmY+fR+UZGch
-MFqNreSaQDVcA0/6R4+C3GgBqjzGoP1AtjMvm8hm2J+m0h4yfWMu9gWL9IbdpjdsdVVtHqL0hNSK
-FDs6b3dE6mQzy6tYHw==
---000000000000393e3805ed08d7d8--
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.9.333-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: 2f583ceb0e8087ea02cfa74537a54532dd9b3d0c
+* git describe: v4.9.332-31-g2f583ceb0e80
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.332-31-g2f583ceb0e80
+
+## Test Regressions (compared to v4.9.332-20-g6ba04d5b05d0)
+
+## Metric Regressions (compared to v4.9.332-20-g6ba04d5b05d0)
+
+## Test Fixes (compared to v4.9.332-20-g6ba04d5b05d0)
+
+## Metric Fixes (compared to v4.9.332-20-g6ba04d5b05d0)
+
+## Test result summary
+total: 102350, pass: 85472, fail: 1553, skip: 14404, xfail: 921
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 280 total, 277 passed, 3 failed
+* arm64: 51 total, 46 passed, 5 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 40 passed, 1 failed
+* parisc: 12 total, 0 passed, 12 failed
+* powerpc: 45 total, 19 passed, 26 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 48 total, 47 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
