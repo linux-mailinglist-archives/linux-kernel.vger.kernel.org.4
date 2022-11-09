@@ -2,50 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF1F6237A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC97C6237AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbiKIXqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:46:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S231544AbiKIXrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKIXqx (ORCPT
+        with ESMTP id S229806AbiKIXr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:46:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53829654B;
-        Wed,  9 Nov 2022 15:46:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0FBD61D22;
-        Wed,  9 Nov 2022 23:46:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F92AC433C1;
-        Wed,  9 Nov 2022 23:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668037611;
-        bh=JcxGzPO6Cd16TxVvX67Wl9duYpJlfmwyedOx+YzFaAE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qVs5UUTu4tf62brkdoXTy6/39Hc2M5O/RBn9/15aC2Ng771sM8T+RTA0hxYazI7RN
-         IV19FIJnCBwPA7s1Y6f/n8CDJRaUvLLypToRMzOHn6rPNTV0jWI1Uad+ESe/GAe6/0
-         zCH7tJoT/0yPgugZMsHer02VNKTWUPfZU+NgdZIi2kbsbch1Nor7WIQdVReEJG9Yng
-         e8QFPPaJNIzb85DkROVRH+IAUKuTs/UGLyOxMmSUTecge1K6pe5AdnscL1JkTt4WLy
-         Q4zXUxxsa58cgFkpblvzXdyhe/+pvYNBkYoel2t6Xg19Mb8B2JDZnK0u8t/eBUdwSr
-         oi9F/QvQ9XTEQ==
-Date:   Wed, 9 Nov 2022 17:46:49 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rui Ma <Rui.Ma@amd.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Alexander.Deucher@amd.com, bhelgaas@google.com
-Subject: Re: [PATCH] PCI/IOV: Decrease VF memory BAR size to save host memory
- occupied by PTEs
-Message-ID: <20221109234649.GA584052@bhelgaas>
+        Wed, 9 Nov 2022 18:47:29 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFF91277B;
+        Wed,  9 Nov 2022 15:47:28 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9Nfg0Q003561;
+        Wed, 9 Nov 2022 23:47:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=8z6ePNURMRjxd7MtLxb/FSdAdPRY7ppEWaO03gWnvWM=;
+ b=Se7hIpnxcGbp6o55s/JLIRA9pg+PEqh3p8zKhi8C4xZANxY1PzjbXpVXk38f9rlPvn7H
+ AR+zzhW2FK1o7DB66itmsZW2B5hQrhH3RPJAopmYSTWOzbV9Mbth0lvKRj6E6PWCc3QP
+ eJG4/U4AhZ10DwBm0lEzyuCve/6SF2Ix5/FoTKYy9MXfUnjBbaokDREZAETggZFEBjM/
+ 8565RLbxAQ9FJnh/fV9MmYXU1bB5F/N/aziEtLqVQp9xwVERI3ZeZ1M0OaXRDIWGPmWC
+ g8GhBwGIjjybLUdt3Ardhlb7J5eg5D+vVnOJ5HlHYy72g6slGWEHSJ/pC8+7v5+g8Ng9 8Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3krg2q900b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 23:47:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A9NlKvC023503
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 9 Nov 2022 23:47:20 GMT
+Received: from [10.110.62.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 9 Nov 2022
+ 15:47:19 -0800
+Message-ID: <a4127ba2-5968-e8a9-da63-fd709aa01e7f@quicinc.com>
+Date:   Wed, 9 Nov 2022 15:47:18 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011112325.992317-1-Rui.Ma@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
+ support HBR3
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Doug Anderson <dianders@chromium.org>
+CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <quic_abhinavk@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
+ <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
+ <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
+ <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
+ <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
+ <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
+ <CAD=FV=XTOUjVAGFWZ6xTkcNOrCT1p73aU-=KJNYUOxsS-BQsyA@mail.gmail.com>
+ <c5aedb31-3881-50e7-f747-e75b18c3f4b8@linaro.org>
+ <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
+ <60643572-4148-cea5-e64d-ec6534b0c407@linaro.org>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <60643572-4148-cea5-e64d-ec6534b0c407@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HutC2z3yT8RN_6bXhyEjUefMrOqIVQEo
+X-Proofpoint-GUID: HutC2z3yT8RN_6bXhyEjUefMrOqIVQEo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 mlxscore=0 clxscore=1011 phishscore=0
+ adultscore=0 spamscore=0 bulkscore=0 mlxlogscore=891 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211090179
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,146 +94,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 07:23:25PM +0800, Rui Ma wrote:
-> In some certain SR-IOV scene, when the device physical space(such as Video
-> RAM)is fixed, as the number of VFs increases, some device driver may decrease
-> actual BAR memory space used by each VF. However, the VF BAR memory mapping is
-> always based on the usual BAR probing algorithm in PCIe spec. So do not map this
-> unneeded memory can save host memory which occupied by PTEs. Although each PTE
-> only occupies a few bytes of space on its own, a large number of PTEs can still
-> take up a lot of space.
 
-Dropping this for now until we resolve whether this is working around
-a KVM bug as Alex suggests:
+On 11/2/2022 11:04 AM, Dmitry Baryshkov wrote:
+> On 02/11/2022 20:28, Doug Anderson wrote:
+>> Hi,
+>>
+>> On Wed, Nov 2, 2022 at 10:23 AM Dmitry Baryshkov
+>> <dmitry.baryshkov@linaro.org> wrote:
+>>>
+>>>> 1. Someone figures out how to model this with the bridge chain and
+>>>> then we only allow HBR3 if we detect we've got a TCPC that supports
+>>>> it. This seems like the cleanest / best but feels like a long pole.
+>>>> Not only have we been trying to get the TCPC-modeled-as-a-bridge stuff
+>>>> landed for a long time but even when we do it we still don't have a
+>>>> solution for how to communicate the number of lanes and other stuff
+>>>> between the TCPC and the DP controller so we have to enrich the bridge
+>>>> interface.
+>>>
+>>> I think we'd need some OOB interface. For example for DSI interfaces we
+>>> have mipi_dsi_device struct to communicate such OOB data.
+>>>
+>>> Also take a note regarding data-lanes from my previous email.
+>>
+>> Right, we can somehow communicate the max link rate through the bridge
+>> chain to the DP controller in an OOB manner that would work.
+>
+> I'd note that our dp_panel has some notion of such OOB data. So do AUX 
+> drivers including the panel-edp. My suggestion would be to consider 
+> both of them while modelling the OOB data.
+>
+>>
+>>
+>>>> 2. We add in a DT property to the display controller node that says
+>>>> the max link rate for use on this board. This feels like a hack, but
+>>>> maybe it's not too bad. Certainly it would be incredibly simple to
+>>>> implement. Actually... ...one could argue that even if we later model
+>>>> the TCPC as a bridge that this property would still be valid / useful!
+>>>> You could certainly imagine that the SoC supports HBR3 and the TCPC
+>>>> supports HBR3 but that the board routing between the SoC and the TCPC
+>>>> is bad and only supports HBR2. In this case the only way out is
+>>>> essentially a "board constraint" AKA a DT property in the DP
+>>>> controller.
+>>>
+>>> We have been discussing similar topics with Abhinav. Krzysztof 
+>>> suggested
+>>> using link-frequencies property to provide max and min values.
 
-https://lore.kernel.org/r/BL1PR12MB51446437265DD1E8AA0794E9F7239@BL1PR12MB5144.namprd12.prod.outlook.com
+questions,
 
-> Signed-off-by: Rui Ma <Rui.Ma@amd.com>
-> ---
->  drivers/pci/iov.c    | 14 ++++++++++++--
->  drivers/pci/pci.h    | 15 +++++++++++++++
->  drivers/pci/quirks.c | 37 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 64 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/iov.c b/drivers/pci/iov.c
-> index 952217572113..92a69e51d85c 100644
-> --- a/drivers/pci/iov.c
-> +++ b/drivers/pci/iov.c
-> @@ -296,6 +296,14 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
->  	struct pci_sriov *iov = dev->sriov;
->  	struct pci_bus *bus;
->  
-> +    /*
-> +     * Some SR-IOV device's BAR map range is larger than they can actually use.
-> +     * This extra BAR space occupy too much reverse mapping size(physical page
-> +     * back to the PTEs). So add a divisor shift parameter to resize the request
-> +     * resource of VF according to num of VFs.
-> +     */
-> +	u16 shift = 1;
-> +
->  	bus = virtfn_add_bus(dev->bus, pci_iov_virtfn_bus(dev, id));
->  	if (!bus)
->  		goto failed;
-> @@ -328,8 +336,10 @@ int pci_iov_add_virtfn(struct pci_dev *dev, int id)
->  		virtfn->resource[i].name = pci_name(virtfn);
->  		virtfn->resource[i].flags = res->flags;
->  		size = pci_iov_resource_size(dev, i + PCI_IOV_RESOURCES);
-> +		shift = 1;
-> +		shift = virtfn_get_shift(dev, iov->num_VFs, i);
->  		virtfn->resource[i].start = res->start + size * id;
-> -		virtfn->resource[i].end = virtfn->resource[i].start + size - 1;
-> +		virtfn->resource[i].end = virtfn->resource[i].start + (size >> (shift - 1)) - 1;
->  		rc = request_resource(res, &virtfn->resource[i]);
->  		BUG_ON(rc);
->  	}
-> @@ -680,12 +690,12 @@ static int sriov_enable(struct pci_dev *dev, int nr_virtfn)
->  	msleep(100);
->  	pci_cfg_access_unlock(dev);
->  
-> +	iov->num_VFs = nr_virtfn;
->  	rc = sriov_add_vfs(dev, initial);
->  	if (rc)
->  		goto err_pcibios;
->  
->  	kobject_uevent(&dev->dev.kobj, KOBJ_CHANGE);
-> -	iov->num_VFs = nr_virtfn;
->  
->  	return 0;
->  
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 3d60cabde1a1..befc67a280eb 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -603,6 +603,21 @@ static inline int pci_dev_specific_reset(struct pci_dev *dev, bool probe)
->  }
->  #endif
->  
-> +struct virtfn_get_shift_methods {
-> +	u16 vendor;
-> +	u16 device;
-> +	u16 (*get_shift)(struct pci_dev *dev, u16 arg, int arg2);
-> +};
-> +
-> +#ifdef CONFIG_PCI_QUIRKS
-> +u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2);
-> +#else
-> +static inline u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
-> +{
-> +	return (u16)1;
-> +}
-> +#endif
-> +
->  #if defined(CONFIG_PCI_QUIRKS) && defined(CONFIG_ARM64)
->  int acpi_get_rc_resources(struct device *dev, const char *hid, u16 segment,
->  			  struct resource *res);
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index da829274fc66..3466738c1c54 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -4085,6 +4085,43 @@ int pci_dev_specific_reset(struct pci_dev *dev, bool probe)
->  	return -ENOTTY;
->  }
->  
-> +static u16 resize_vf_bar0(struct pci_dev *dev, u16 num_VFs, int bar_num)
-> +{
-> +	u16 shift = 1;
-> +
-> +	if (bar_num == 0) {
-> +		while ((1 << shift) <= num_VFs)
-> +			shift += 1;
-> +	}
-> +	pci_info(dev, "with %d VFs, VF BAR%d get shift: %d\n", num_VFs, bar_num, shift);
-> +	return shift;
-> +}
-> +
-> +static const struct virtfn_get_shift_methods virtfn_get_shift_methods[] = {
-> +	{ PCI_VENDOR_ID_ATI, 0x73a1, resize_vf_bar0},
-> +	{ 0 }
-> +};
-> +
-> +/*
-> + * Get shift num to calculate SR-IOV device BAR. Sometimes the BAR size for
-> + * SR-IOV device is too large and we want to calculate the size to define
-> + * the end of virtfn.
-> + */
-> +u16 virtfn_get_shift(struct pci_dev *dev, u16 arg1, int arg2)
-> +{
-> +	const struct virtfn_get_shift_methods *i;
-> +
-> +	for (i = virtfn_get_shift_methods; i->get_shift; i++) {
-> +		if ((i->vendor == dev->vendor ||
-> +		     i->vendor == (u16)PCI_ANY_ID) &&
-> +		    (i->device == dev->device ||
-> +		     i->device == (u16)PCI_ANY_ID))
-> +			return i->get_shift(dev, arg1, arg2);
-> +	}
-> +
-> +	return (u16)1;
-> +}
-> +
->  static void quirk_dma_func0_alias(struct pci_dev *dev)
->  {
->  	if (PCI_FUNC(dev->devfn) != 0)
-> -- 
-> 2.25.1
-> 
+1)is Krzysztof suggested had been implemented?
+
+2) where is link property i can add link-frequencies?
+
+
+>>
+>> This sounds good to me and seems worth doing even if we eventually do 
+>> #1.
+>
+> And the bonus point is that it can be done easily.
+>
