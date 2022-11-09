@@ -2,114 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24C0622E10
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08188622E16
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiKIOgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
+        id S231620AbiKIOgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiKIOga (ORCPT
+        with ESMTP id S230507AbiKIOgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:36:30 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F4C3A2;
-        Wed,  9 Nov 2022 06:36:28 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 43E541FAB3;
-        Wed,  9 Nov 2022 14:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668004587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RK4f1H5YPdP8JjJ/U+5vet//t/WB+7YrMTLnpKKnQlI=;
-        b=pSfZscTy0iQa1K0Zgsw1nk2XxmOkbvROXvTvi3iv/jPP0IzG1Yfs9IqrLaoldLwOwcITXp
-        30t9wzNHXZIis/QBD1tdV4KB2Bult6sThZXCHj5urxUSPJuWCATVV3gtPWTCsvX8+0+KQg
-        qH3tcuTSlbs4B8TKdk3hSNCHF6gyKrc=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 264E82C141;
-        Wed,  9 Nov 2022 14:36:27 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 15:36:23 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Nicolai Stange <nstange@suse.de>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com, joe.lawrence@redhat.com
-Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
- shadow variables
-Message-ID: <Y2u659H1tZQfG0uQ@alley>
-References: <20221026194122.11761-1-mpdesouza@suse.com>
- <20221026194122.11761-5-mpdesouza@suse.com>
- <20221104010327.wa256pos75dczt4x@treble>
- <Y2TooogxxLTIkBcj@alley>
- <20221108013209.eqrxs3xqtat6kksm@treble>
- <Y2od6gc5oKeTHjIE@alley>
- <20221108184410.qhpxhtbfryzeh6eq@treble>
+        Wed, 9 Nov 2022 09:36:40 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AF6DE95
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:36:38 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id h12so26043814ljg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:36:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gKEIa4d4PXxZHsy+REJGIS5k0lMx2knvhKiineEouMs=;
+        b=AewmfnuRfPL2XnkdjjtcalH3nWK7+1doHGbLFf1fdFnSPD1BEQHA85mD5uotVItko/
+         8U0WiuVkQl+53+a5EwgdAhUbCLNRpVUGiBCoUAttQ6uOLUUxyibB33RJwvAUnbsNIBOM
+         4F1l+g2rZnWhxsOWqFMGd012X9kXrlI713qlQt35QR1z+wFDzHyacL0Lgm4xZ3L9F/Cp
+         hsGWAx1oB0I4h4Tr+2B4DmUX4wASO83wdyGVd3NgN/PjCM6RsumTgygkOjG0qCwDULzK
+         cmBr8A3UTXm3sQ4/qZ2zdk2ZAWs5EHoVXTM2LMj92RJcPnnKH9ABjhJGnGYmUplJYtIB
+         h9vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gKEIa4d4PXxZHsy+REJGIS5k0lMx2knvhKiineEouMs=;
+        b=0QqSOtlguljB4T4eynJqUr6owOr+CljO+jWJoe04ueOlBZkXuTVpjXFnCgY7/DcMvI
+         fAOPvZuJ13DCzZZmSDY+sbtW4gNDeXfk6dB4EfySI9RZR6cTcIuC8RzAMU1+neFzndRo
+         O4CHixT/vRCOPvDWJNrkzLy9WTcfnO9d8/Z7bn1XbPoj/yqO7795HXgSdHat9K25w1U6
+         At3sysFuWe5AT3rh5bdleTy7JdMMfvNzh+gux+BzFY28EHyk/Bbnu28vV3gR/v5zxt+t
+         RIGUtRMpRO5zyyFA7R9EQ73EFeCN/ukN5QDdgfKsWDSRflCnzziPkyKnKfrX7Bva1zOC
+         9mvQ==
+X-Gm-Message-State: ACrzQf0y+xxBLkpxioFWxE1U8EqVVNVkmmHIqAF3+Rr1iN2P/yrmHBbH
+        //q9QcMrB5ERdRTCus68N3PvcQ==
+X-Google-Smtp-Source: AMsMyM5XqSNP93AqO9f4HmbeDKe1y8cIlnGgwPXoT68FvBWlJ1DOqhyHn0MmNwSjmxPcZlNvu/NYnw==
+X-Received: by 2002:a2e:9819:0:b0:277:23f9:866d with SMTP id a25-20020a2e9819000000b0027723f9866dmr19664531ljj.60.1668004596628;
+        Wed, 09 Nov 2022 06:36:36 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id s16-20020ac24650000000b0049aa20af00fsm2240053lfo.21.2022.11.09.06.36.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 06:36:35 -0800 (PST)
+Message-ID: <87ff8801-0d0a-9ac3-6a9f-6b21302e3e72@linaro.org>
+Date:   Wed, 9 Nov 2022 15:36:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108184410.qhpxhtbfryzeh6eq@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6375-pdx225: Enable SD card slot
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221109142623.53052-1-konrad.dybcio@linaro.org>
+ <20221109142623.53052-4-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221109142623.53052-4-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-11-08 10:44:10, Josh Poimboeuf wrote:
-> On Tue, Nov 08, 2022 at 10:14:18AM +0100, Petr Mladek wrote:
-> > On Mon 2022-11-07 17:32:09, Josh Poimboeuf wrote:
-> > > On Fri, Nov 04, 2022 at 11:25:38AM +0100, Petr Mladek wrote:
-> > > > > I get the feeling the latter would be easier to implement (no reference
-> > > > > counting; also maybe can be auto-detected with THIS_MODULE?) and harder
-> > > > > for the patch author to mess up (by accidentally omitting an object
-> > > > > which uses it).
-> > > > 
-> > > > I am not sure how you mean it. I guess that you suggest to store
-> > > > the name of the livepatch module into the shadow variable.
-> > > > And use the variable only when the livepatch module is still loaded.
-> > > 
-> > > Actually I was thinking the klp_patch could have references to all the
-> > > shadow variables (or shadow variable types?) it owns.
-> > 
-> > In short, you suggest to move the array of used klp_shadow_types from
-> > struct klp_object to struct klp_patch. Do I get it correctly?
+On 09/11/2022 15:26, Konrad Dybcio wrote:
+> Set SDHCI VMMC/VQMMC to <=2v96 and allow load setting by the SDHCI
+> driver, as required by this use case.
 > 
-> Right.  Though, thinking about it more, this isn't even needed.  Each
-> klp_shadow would have a pointer to its owning module.  We already have a
-> global hash of klp_shadows which can be iterated when the module gets
-> unloaded or replaced.
->
-> Assuming atomic replace, the new patch is almost always a superset of
-> the old patch.  We can optimize for that case.
+> Configure the SD Card Detect pin, enable the SDHCI2 controller and
+> assign it the aforementioned regulators.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../qcom/sm6375-sony-xperia-murray-pdx225.dts | 34 +++++++++++++++++--
+>  1 file changed, 32 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
+> index 33083f18755b..c4181476f3b8 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
+> @@ -153,7 +153,8 @@ pm6125_l4: l4 {
+>  
+>  		pm6125_l5: l5 {
+>  			regulator-min-microvolt = <1650000>;
+> -			regulator-max-microvolt = <3050000>;
+> +			regulator-max-microvolt = <2960000>;
+> +			regulator-allow-set-load;
+>  		};
+>  
+>  		pm6125_l6: l6 {
+> @@ -235,7 +236,8 @@ pm6125_l21: l21 {
+>  
+>  		pm6125_l22: l22 {
+>  			regulator-min-microvolt = <2704000>;
+> -			regulator-max-microvolt = <3544000>;
+> +			regulator-max-microvolt = <2960000>;
+> +			regulator-allow-set-load;
+>  		};
+>  
+>  		pm6125_l23: l23 {
+> @@ -302,6 +304,34 @@ &qupv3_id_1 {
+>  	status = "okay";
+>  };
+>  
+> +&sdc2_off_state {
+> +	sd-cd-pins {
+> +		pins = "gpio94";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
+> +
+> +&sdc2_on_state {
+> +	sd-cd-pins {
+> +		pins = "gpio94";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +};
+> +
+> +&sdhc_2 {
+> +	status = "okay";
+> +
+> +	vmmc-supply = <&pm6125_l22>;
+> +	vqmmc-supply = <&pm6125_l5>;
+> +
+> +	cd-gpios = <&tlmm 94 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +
 
-I see. But I do not agree with this assumption. The new livepatch
-might also remove code that caused problems.
+Just one blank line.
 
-Also we allow downgrades. I mean that there is no versioning
-of livepatches. Older livepatches might replace new ones.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-We really want to support downgrades or upgrades that remove
-problematic code. Or upgrades that start fixing the problem
-a better way using another shadow variable.
 
-I personally think that registering the supported klp_shadow_types
-is worth the effort. It allows to do various changes a safe way.
+Best regards,
+Krzysztof
 
-Also it should be easy to make sure that all klp_shadow_types
-are registered:
-
-1. Grep might be used to find declarations in the source code.
-   IMHO, it should work even with kPatch.
-
-2. The klp_shadow_*() API will warn when a non-registered shadow
-   variable is used. IMHO, this might be useful and catch some bugs
-   on its own.
-
-Best Regards,
-Petr
