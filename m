@@ -2,120 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB84622A70
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79093622A6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiKILZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S230444AbiKILZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKILZg (ORCPT
+        with ESMTP id S230209AbiKILZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Nov 2022 06:25:36 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684451A068;
-        Wed,  9 Nov 2022 03:25:35 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id z14so25281928wrn.7;
-        Wed, 09 Nov 2022 03:25:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yVfcpsRQhZ+K1eDUGm/hT79865gqKPGqp1NWWMzmywA=;
-        b=QYl+yjjJGwob7l4O1fw3+oiBMl/GAN8a/Tzrcirxu+K51wcXU1Tk02WMEgePKIKx2x
-         CRzaFVSCpQYyr4Jr9nO+rr9BltzAyt4y3PhHd3qwidEqPikm8OZGzn+alPWjkYV/Sacz
-         /5/1+eyo4xMg/gr7O/PoXrfZu/DW1a82+xYgZAxBpZ83Y/uG6dLLriPz/Mp28FGuLKpz
-         vhUFGpWrQbxGGa7T9Bk/iD1N2h/QsgMJNEoUrsxioP9kxLQv5WSWMXvvKgSWpbKCkQjz
-         j72DKYn1Zytrw9JrSiS+QdeUQNi16sX8VGrRaX71sCZuaB24lT8gGAGChEOq6FohMZTS
-         qepg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yVfcpsRQhZ+K1eDUGm/hT79865gqKPGqp1NWWMzmywA=;
-        b=6UqsdwNBZTzXg7/qTSpAkXDkT750AUkza7jGaiYqHpuQGVCTDL8c8EgCoBlKXjh8s0
-         tyEC8c+JLN6gTjabxiFJXgRyHycdIuYPL6Nptjf9w+GznIWYEAkm/jEFdL1j17ETF85w
-         XaZi7DzV7AL7dFohBW5XaYElt0t9LDamAcLhauDdHvRMyLk0MfkCjPe3PADo/5AEtS94
-         DrgZPCCQPY+V+oaKvP+4z3gQBEEzqlBAobBtXZ9KNFr+SHhz5gLveVKboRRWMT4hFzQk
-         LkywIhxpFzEt/zoBTr4b7Y5jeQkyI439mj8TAJdZSMeVU9mftWCIHHwEgVz1ZUoKaFFI
-         Axuw==
-X-Gm-Message-State: ACrzQf2YCCAbR69Zn4xaQ8CCgk3IUsMSMCSDHNRV9FJ7EhAMsJzaZsRT
-        yFVBnWcANl3EME6SP597gnZJGOu4364=
-X-Google-Smtp-Source: AMsMyM4iaCUXPelD5JPs3GwdxrrcdP1EVcbyNAKOCSt0mIJomogbed+Y7iZa1JRJyZ3hoqj23+CxWw==
-X-Received: by 2002:a05:6000:1566:b0:236:6a6f:6c27 with SMTP id 6-20020a056000156600b002366a6f6c27mr38530858wrz.553.1667993133963;
-        Wed, 09 Nov 2022 03:25:33 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id u2-20020a5d4342000000b0022eafed36ebsm12791671wrr.73.2022.11.09.03.25.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:25:32 -0800 (PST)
-Message-ID: <a0b61872-12bb-0ed2-a1b4-75cb5609c1c3@gmail.com>
-Date:   Wed, 9 Nov 2022 12:25:30 +0100
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEF91ADB2;
+        Wed,  9 Nov 2022 03:25:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 198C1224D2;
+        Wed,  9 Nov 2022 11:25:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667993133; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FaFXLN3//Kh0Ud8Ewuj40PbtTMr1Fvb/Pm0uu8z6Dlo=;
+        b=huXHZX2MkJRTk0CeewrRkSjJIfem0X4zCjoKjLosebWRavFmjiz/3xe0+Jon9+rZyy3Pmd
+        7F7aPS2DXiIBVZ6wrOZuzWhFHUopPTcHO6wJGcmJNzT0VTQ3ZhlPBIBisphL5nztw0LH7U
+        3K49Hojendoc6cHgeZ/DsWMGT9ob+Hw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667993133;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FaFXLN3//Kh0Ud8Ewuj40PbtTMr1Fvb/Pm0uu8z6Dlo=;
+        b=Wz1daGNzOeIp1Tr6Y58nhJCvxLtK5cPGh85S5olgR884HWkKKPiwF+toi8t0Eq9umD7wBw
+        DhtnuRsqSuntkOAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 099521331F;
+        Wed,  9 Nov 2022 11:25:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DxRWAi2Oa2NnOgAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 09 Nov 2022 11:25:33 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8CC80A0704; Wed,  9 Nov 2022 12:25:32 +0100 (CET)
+Date:   Wed, 9 Nov 2022 12:25:32 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Peng Zhang <zhangpeng362@huawei.com>
+Cc:     jack@suse.com, jack@suse.cz, yi.zhang@huawei.com,
+        yujie.liu@intel.com, hch@lst.de, akpm@linux-foundation.org,
+        butterflyhuangxx@gmail.com, willy@infradead.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+69c9fdccc6dd08961d34@syzkaller.appspotmail.com
+Subject: Re: [PATCH] udf: Fix a slab-out-of-bounds write bug in
+ udf_find_entry()
+Message-ID: <20221109112532.kfgjpbb3rdkynltb@quack3>
+References: <20221109013542.442790-1-zhangpeng362@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 3/6] soc: mediatek: add mtk-mmsys support for mt8195
- vdosys0
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220927152704.12018-1-jason-jh.lin@mediatek.com>
- <20220927152704.12018-4-jason-jh.lin@mediatek.com>
- <0e67041f-a61d-1e34-2ce4-6a199c2c9f8e@collabora.com>
- <ac0a8cadf18291575d5fc798f0d6b99f5c3a4258.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <ac0a8cadf18291575d5fc798f0d6b99f5c3a4258.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109013542.442790-1-zhangpeng362@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 05/10/2022 09:08, Jason-JH.Lin wrote:
-> Hi Matthias,
+On Wed 09-11-22 01:35:42, Peng Zhang wrote:
+> From: ZhangPeng <zhangpeng362@huawei.com>
 > 
-> Do you have any comment for this binding?
+> Syzbot reported a slab-out-of-bounds Write bug:
 > 
-> Can you help us review the soc/mediatek related patches?
+> loop0: detected capacity change from 0 to 2048
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in udf_find_entry+0x8a5/0x14f0
+> fs/udf/namei.c:253
+> Write of size 105 at addr ffff8880123ff896 by task syz-executor323/3610
 > 
-
-Patches 1-3 applied now. Sorry for the late answer.
-
-Matthias
-
-> Regards,
-> Jason-JH.Lin
+> CPU: 0 PID: 3610 Comm: syz-executor323 Not tainted
+> 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+> Hardware name: Google Compute Engine/Google Compute Engine, BIOS
+> Google 10/11/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+>  print_address_description+0x74/0x340 mm/kasan/report.c:284
+>  print_report+0x107/0x1f0 mm/kasan/report.c:395
+>  kasan_report+0xcd/0x100 mm/kasan/report.c:495
+>  kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
+>  memcpy+0x3c/0x60 mm/kasan/shadow.c:66
+>  udf_find_entry+0x8a5/0x14f0 fs/udf/namei.c:253
+>  udf_lookup+0xef/0x340 fs/udf/namei.c:309
+>  lookup_open fs/namei.c:3391 [inline]
+>  open_last_lookups fs/namei.c:3481 [inline]
+>  path_openat+0x10e6/0x2df0 fs/namei.c:3710
+>  do_filp_open+0x264/0x4f0 fs/namei.c:3740
+>  do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+>  do_sys_open fs/open.c:1326 [inline]
+>  __do_sys_creat fs/open.c:1402 [inline]
+>  __se_sys_creat fs/open.c:1396 [inline]
+>  __x64_sys_creat+0x11f/0x160 fs/open.c:1396
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7ffab0d164d9
+> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89
+> f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
+> f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffe1a7e6bb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ffab0d164d9
+> RDX: 00007ffab0d164d9 RSI: 0000000000000000 RDI: 0000000020000180
+> RBP: 00007ffab0cd5a10 R08: 0000000000000000 R09: 0000000000000000
+> R10: 00005555573552c0 R11: 0000000000000246 R12: 00007ffab0cd5aa0
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
 > 
-> On Wed, 2022-09-28 at 10:14 +0200, AngeloGioacchino Del Regno wrote:
->> Il 27/09/22 17:27, Jason-JH.Lin ha scritto:
->>> 1. Add mt8195 driver data with compatible "mediatek-mt8195-
->>> vdosys0".
->>> 2. Add mt8195 routing table settings of vdosys0.
->>>
->>> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
->>
->> Reviewed-by: AngeloGioacchino Del Regno <
->> angelogioacchino.delregno@collabora.com>
->>
->>
->>
+> Allocated by task 3610:
+>  kasan_save_stack mm/kasan/common.c:45 [inline]
+>  kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
+>  ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+>  __kasan_kmalloc+0x97/0xb0 mm/kasan/common.c:380
+>  kmalloc include/linux/slab.h:576 [inline]
+>  udf_find_entry+0x7b6/0x14f0 fs/udf/namei.c:243
+>  udf_lookup+0xef/0x340 fs/udf/namei.c:309
+>  lookup_open fs/namei.c:3391 [inline]
+>  open_last_lookups fs/namei.c:3481 [inline]
+>  path_openat+0x10e6/0x2df0 fs/namei.c:3710
+>  do_filp_open+0x264/0x4f0 fs/namei.c:3740
+>  do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+>  do_sys_open fs/open.c:1326 [inline]
+>  __do_sys_creat fs/open.c:1402 [inline]
+>  __se_sys_creat fs/open.c:1396 [inline]
+>  __x64_sys_creat+0x11f/0x160 fs/open.c:1396
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> The buggy address belongs to the object at ffff8880123ff800
+>  which belongs to the cache kmalloc-256 of size 256
+> The buggy address is located 150 bytes inside of
+>  256-byte region [ffff8880123ff800, ffff8880123ff900)
+> 
+> The buggy address belongs to the physical page:
+> page:ffffea000048ff80 refcount:1 mapcount:0 mapping:0000000000000000
+> index:0x0 pfn:0x123fe
+> head:ffffea000048ff80 order:1 compound_mapcount:0 compound_pincount:0
+> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+> raw: 00fff00000010200 ffffea00004b8500 dead000000000003 ffff888012041b40
+> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x0(),
+> pid 1, tgid 1 (swapper/0), ts 1841222404, free_ts 0
+>  create_dummy_stack mm/page_owner.c:67 [inline]
+>  register_early_stack+0x77/0xd0 mm/page_owner.c:83
+>  init_page_owner+0x3a/0x731 mm/page_owner.c:93
+>  kernel_init_freeable+0x41c/0x5d5 init/main.c:1629
+>  kernel_init+0x19/0x2b0 init/main.c:1519
+> page_owner free stack trace missing
+> 
+> Memory state around the buggy address:
+>  ffff8880123ff780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff8880123ff800: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >ffff8880123ff880: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 06
+>                                                                 ^
+>  ffff8880123ff900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>  ffff8880123ff980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+> 
+> Fix this by changing the memory size allocated for copy_name from
+> UDF_NAME_LEN(254) to UDF_NAME_LEN_CS0(255), because the total length
+> (lfi) of subsequent memcpy can be up to 255.
+> 
+> Reported-by: syzbot+69c9fdccc6dd08961d34@syzkaller.appspotmail.com
+> Fixes: 066b9cded00b ("udf: Use separate buffer for copying split names")
+> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+
+Ah, good catch! Thanks for the fix! I've added it to my tree and will push
+it to Linus tomorrow.
+
+								Honza
+
+
+> ---
+>  fs/udf/namei.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/udf/namei.c b/fs/udf/namei.c
+> index fb4c30e05245..ae7bc13a5298 100644
+> --- a/fs/udf/namei.c
+> +++ b/fs/udf/namei.c
+> @@ -240,7 +240,7 @@ static struct fileIdentDesc *udf_find_entry(struct inode *dir,
+>  						      poffset - lfi);
+>  			else {
+>  				if (!copy_name) {
+> -					copy_name = kmalloc(UDF_NAME_LEN,
+> +					copy_name = kmalloc(UDF_NAME_LEN_CS0,
+>  							    GFP_NOFS);
+>  					if (!copy_name) {
+>  						fi = ERR_PTR(-ENOMEM);
+> -- 
+> 2.25.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
