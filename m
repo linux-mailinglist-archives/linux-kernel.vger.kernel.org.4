@@ -2,171 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D276622516
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E8B62251A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiKIIJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S229811AbiKIIJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKIIJY (ORCPT
+        with ESMTP id S229821AbiKIIJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:09:24 -0500
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20085.outbound.protection.outlook.com [40.107.2.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223401902F;
-        Wed,  9 Nov 2022 00:09:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BDcYZRubiZafMQyzFsVWWm64+lZjQLMftt5YNdWZtCEAX0RSTMSVyp/1Wt8QMFc8bA4wrDytmUlMwIlxAtLoSynVGSAUN67jkODH9fwN6pUGgjoNRrqatQMM9aueRxMZixjsF0zU6+pOWNEghkual7fMVxFMLj115BcshDC7ITNFtvXGC/m7OfaqnapKNe9dSM9abfWFKwfepITkCmzF+5x1LMeb7qhm8z79dDalGgOoKI8zKbg1DJlq0mNWv4G30oiKVWXdV5ng/GXGuSC/IOMtRG9aNG+GD5EtyjJhMIUHQRHOk195ICzhLLhX10yVYt2aRDqy5rDk/7ieOW7uMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mCpcBICFN67qWF9yMDqfNKOhH1ks0lVWx6S11f6CAxM=;
- b=Ux4Mns/0+8hXek8GDmrL0ZjzECmUhInkGVJ8I0SUMGL8Lj19EuS3TapyoyYulcVwUZlPSIt1WeE469KbD/5p2ICcYCjtctuC9EZ23EgJj3VAsKOTQBfKBvuM/ooBAxCcknVf7of9Y2SirQhG2NSBdP0Bm3BJz6zWwzttOGsZySw5mOhaq/kjnt/z/TCiDy3fNVCizaXOcj+joivoYI80bGw04AiZ6B3St/+ukQb4ag1Sb2kjhDI7zpJ0CadkCU/MMoSZglOsgVf700Loba7WXPBmBM5OvIrAmzb5aJ73OyO/EjDkN/Qa5OkKMZy+OMK7+M2XcEy2dJURF6C7JyBSag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mCpcBICFN67qWF9yMDqfNKOhH1ks0lVWx6S11f6CAxM=;
- b=bdhTRp/3IsB0jJXretSMNduehOWa6vD/opULhtrwQA3TDa02FeTNuwsMjkpumjV1suqJri3buE4+vN4ZwDLgXeW/pjTTnuPtpeJpLqE9iJChgbborqhEHsPu7ZszPLLBd6iID35rw+OKhk5kcRMAJe9HvgP2L8bmJn5Ke5Uc2iLhJW7EKNV/aAJIbsbeHhAlECcxKPbr1BuKtBSMpUZiYcvdRZKpULzBrJKYajNEXvXkPnb4i7neuTG/izAXO12OtiBpqnapRbv/1Y6MckZcFdGDryb9tBwdVs4lWN94kltBTgXjzImrWR0BcZ+Z9DVkOpxIdvz72tp2ZsEEUh95JQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
- by AM9PR04MB8323.eurprd04.prod.outlook.com (2603:10a6:20b:3e5::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Wed, 9 Nov
- 2022 08:09:19 +0000
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::b7c1:3e11:9b46:28c9]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::b7c1:3e11:9b46:28c9%4]) with mapi id 15.20.5791.025; Wed, 9 Nov 2022
- 08:09:19 +0000
-Date:   Wed, 9 Nov 2022 16:09:01 +0800
-From:   Chester Lin <clin@suse.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Rob Herring <robh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Wed, 9 Nov 2022 03:09:42 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8160D1902F;
+        Wed,  9 Nov 2022 00:09:40 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxPdlCYGtjqoAFAA--.17632S3;
+        Wed, 09 Nov 2022 16:09:38 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuBBYGtjIXAPAA--.42818S2;
+        Wed, 09 Nov 2022 16:09:37 +0800 (CST)
+Subject: Re: [PATCH v10 1/2] thermal: loongson-2: add thermal management
+ support
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jan Petrous <jan.petrous@nxp.com>, netdev@vger.kernel.org,
-        s32@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <mbrugger@suse.com>,
-        Chester Lin <clin@suse.com>
-Subject: Re: [PATCH 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
- glue driver
-Message-ID: <Y2tgHYT+rV1+fxTm@linux-8mug>
-References: <20221031101052.14956-1-clin@suse.com>
- <20221031101052.14956-3-clin@suse.com>
- <20221102155515.GA3959603-robh@kernel.org>
- <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
- <Y2Q7KtYkvpRz76tn@lunn.ch>
- <Y2T5/w8CvZH5ZlE2@linux-8mug>
- <Y2UT4yIqk0pV6FHA@lunn.ch>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2UT4yIqk0pV6FHA@lunn.ch>
-X-ClientProxiedBy: TYWPR01CA0017.jpnprd01.prod.outlook.com
- (2603:1096:400:a9::22) To VI1PR0402MB3439.eurprd04.prod.outlook.com
- (2603:10a6:803:4::13)
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221103083407.4039-1-zhuyinbo@loongson.cn>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <d634c8db-3036-08eb-24d2-568771b0e104@loongson.cn>
+Date:   Wed, 9 Nov 2022 16:09:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3439:EE_|AM9PR04MB8323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 26108198-e30e-407f-48b3-08dac229b3df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z7RS3Xvv6qDJrBc691bmIO9RzeKDsEjwLzwNZfvF6919wEkT4639NRSGWphJdHlYocjpFX7C9CqfDt6AulrI//k4Kzg6w21D5NY0uVyuEZh28ADcGaA9G+nlYzPs+5uIG8j4APCqWjLzIzgmRxGj6t1+tuQpGJba74yCXGzv6OMMmbSqOfBueAniSlbg5SWpdpDunmC/xygYviQEIBkyc8GW2HpB7Vqjc4yZLjQqamT2zH3w2hSjt6u/Qql1ntxZNWPTFPvlJLqiEr5c2uwH8pBCyCq6rsmAF9k/+GPQpvWx/uk1fTkWnu2HpPWaICvBFKMq9Ayl+1C3txUx7Tv7eqyu4YNl/u6Ds+/HYlGpBiKPpQYGiI2ICXlbpwoPfrfG/fQZ6irOPP+5xkT9dRqspJ54n2sjWZ2M5apfW5Px6jw+OWJIL/JU+2PtYz58JN6vD6hv0G6T+ScAjXJpZEtz376s6jtfITBPN2knYUhKMcIVzBHR7cj/MqobKqJnvVIexLo9PgfKec4uvX8KyeZfmBytmAhZBH3dppQ+3+GH7yCkuaeXuz00xCggh5+vKaGQTYUcFVxU9XklP73ttap3Ma1V9lWFNBrDVrRiu5yEC2NvKRJ7j8Qd5IB6p6mKBd5gkX1r5uBPPxFgIxSZu/kGC0cVfVoL0CTJ2aqrOO7PcpdA+iOSsAS36gxAI4tYg7exBgO6VzQNn30CD9MaItTpBw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(39860400002)(346002)(366004)(376002)(136003)(451199015)(6486002)(478600001)(6916009)(33716001)(107886003)(54906003)(6666004)(6506007)(316002)(4326008)(8676002)(66476007)(66946007)(66556008)(26005)(38100700002)(9686003)(86362001)(6512007)(8936002)(5660300002)(7416002)(186003)(83380400001)(41300700001)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3DuYdI/+KOdCNk7DNgMxL4a33ZRhtfGkgdMX4aVPIFf0+M3f1TGjkjeYuBhv?=
- =?us-ascii?Q?JlKm8wrgeq7HoTOeL+im2G/pGLNn+H9i0/bP8ux/NwrE4K8IU69SL7AfXUV8?=
- =?us-ascii?Q?qJT0UGm3WOAo/d3oo9G2/PweVjUzOXpJIj9M6YiCU3CzXrIzUkGSrZn8JY3v?=
- =?us-ascii?Q?z4qvheJFunQl+SoMVzEmnaLBYgSAruppswHv2OJIG0pVf950oLpwoT28jjfu?=
- =?us-ascii?Q?U1s/XQ0GbrJIimMBek6mwCRNWJN/5ftinD/HOHVzXC79Fm7JKDS0xLweiilP?=
- =?us-ascii?Q?gcFYIOn+QVfc1nkLqa+dzFg2Iwsm0oEVJav2bI+mj8W7QRjyQm5MKDPu5+jx?=
- =?us-ascii?Q?rZohgaeuw3K2NUgAQEnqnVnMPOKj+4ZBsPJYrMye2IbNUCbRudIeoAn9j+Sz?=
- =?us-ascii?Q?ulrMtxFJdORuKr05kofamZbQD7TkNP3ax0R2e8dzbytwE1QyZ83DPq5BXUco?=
- =?us-ascii?Q?MPnjGZlLr1LfSt16vtUg+nidMTw1Y12tKblLUeGiCY/PKeMnGIeKr/qe5IPF?=
- =?us-ascii?Q?MiZlah8lfd2zIt/E0H9JVPunCI60EAy5lVuPgl0yRo23W3UwrxAUsGLLBWEp?=
- =?us-ascii?Q?Yt9PxygmyjuUpCS5XlvMQZ9McfsIQ0s4sF2POrURUagsL1JPixonBht6XfvX?=
- =?us-ascii?Q?OJwmwzzh18iFuJQN0Z50FVvwP/TEYDimg60PCbMwOq6OBgPTSG6eILagnrMi?=
- =?us-ascii?Q?x0TNF6UQaJsyXT/XsyNmrrTipqojNNgGCgbLghhsWO/XCJL5l0rZ9yJRaC/p?=
- =?us-ascii?Q?Q43tGhZX5VA6WVg2U7KcAb1gzEhNNTcphNm90FDgXy5PsjQL9AgjdZaRyWr1?=
- =?us-ascii?Q?hMW55Hm2tpMzz0Sl/4aL5u209PnYErvt0dJIgj1c/Zt25ZpgSop9rht2G1eF?=
- =?us-ascii?Q?HE9MDBSu06ugotiajSTzZsRjjP1+n0mCjl/8d5Zx8QXWx/y1srpopDbh13Xa?=
- =?us-ascii?Q?wQPSCauW7t3IL/S6RxJKfsUwmZAI52bmXbxOmFifng4EJSf23QoBneaEEoTu?=
- =?us-ascii?Q?FFIQkVQ6U23TfQt2yYSW4KAySATMxyZ0Ac3ScLinMSgebLSXv7B6V70oOn5t?=
- =?us-ascii?Q?Ko3fWoARZln4RN2m74SCfAQSg3lUJCA2KvtOsztjI8IPMmtMNLlJuXq8tK9B?=
- =?us-ascii?Q?gAM20vQRskhM7N2dzoSayHswj6T4YfSu8ruCzpZflmD1OMOuMfF3UO//7BDa?=
- =?us-ascii?Q?wswR8GZRAK2AlyAi5RwWyEkRbuQiEeNFewIgk/3IMz0RA6KaAHSCVYwcWUet?=
- =?us-ascii?Q?B3CUn9nRzYLoShA77ycV39+nEfdWf8WwSSMmr8HYPXT4AFj2s+ZNIlVH+h8O?=
- =?us-ascii?Q?HiA97exo0sYWzFbiqG1qDlm04eTQiQnADWz/fB1eoRqqL5nlwJFOFbofIgea?=
- =?us-ascii?Q?zPbVEAzwF0bqlcXWKJj8TrHpw+RI0Sydpf9mhyrjdl7vgXmFriM6D0cjIbAm?=
- =?us-ascii?Q?LoEGXvT+XevYJIJ7C6EMySdZpAad9tkXTTfihYvepn4mRHVV0skllRkbNKOY?=
- =?us-ascii?Q?rNGOS76vo3UCTU4da10OR1lWvTAeJFkFb89Keg5Tqein1Z/As3HTbwPN1pgZ?=
- =?us-ascii?Q?VzOwXWxkcCqb7QXVbR4=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26108198-e30e-407f-48b3-08dac229b3df
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 08:09:19.6048
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bRyAJlfA4bgzJC37PO+ctqunKmphpaC8JyjEncIx3QGMVZgvpU1eNBSkjsOE2VaB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8323
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221103083407.4039-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxPuBBYGtjIXAPAA--.42818S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWfGFW3WFWkGw13try5uFyUKFg_yoWkuF18pF
+        WUJws3CFZrJFsrZwn8Zr1UZF90vr1ayFy3ZFWxG3s8urZ8t343Wry8GF18ArWSkrWDGF4U
+        ZFsYkrW5CFWqq3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        ba8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
+        IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
+        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
+        WUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8I
+        cVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
+        Xa7IU8SksDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+Hi Rafael J.Wysocki,
 
-On Fri, Nov 04, 2022 at 02:30:11PM +0100, Andrew Lunn wrote:
-> > Here I just focus on GMAC since there are other LAN interfaces that S32 family
-> > uses [e.g. PFE]. According to the public GMACSUBSYS ref manual rev2[1] provided
-> > on NXP website, theoretically GMAC can run SGMII in 1000Mbps and 2500Mbps so I
-> > assume that supporting 1000BASE-X could be achievable. I'm not sure if any S32
-> > board variant might have SFP ports but RJ-45 [1000BASE-T] should be the major
-> > type used on S32G-EVB and S32G-RDB2.
+I just have a verified on your tree about my patch again, it is okay,
+if no other proplems, please help merge it to your tree and sync it to 
+linux mainline tree.
+
+Thanks,
+Yinbo.
+
+ÔÚ 2022/11/3 ÏÂÎç4:34, Yinbo Zhu Ð´µÀ:
+> This patch adds the support for Loongson-2 thermal sensor controller,
+> which can support maximum 4 sensors.
 > 
-> SGMII at 2500Mbps does not exist. Lots of people get this wrong. It
-> will be 2500Base-X.
+> It's based on thermal of framework:
+>   - Trip points defined in device tree.
+>   - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
+>   - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+> 
+> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v10:
+> 		1. Add all history change log information.
+> Change in v9:
+> 		1. Switch new API that use devm_thermal_of_zone_register
+> 		   to replace previous interfaces.
+> 		2. Add depend on LOONGARCH || COMPILE_TEST.
+> Change in v8:
+>                  1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
+>                     Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
+> 		   files.
+> Change in v7:
+> 		1. Split the modification of patch 3 and merge it into this patch.
+> 		2. Remove the unless code annotation to fix the compile warning
+> 		   when compile C code with W=1.
+> Change in v6:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v5:
+> 		1. NO change, but other patch in this series of patches set has
+> 		   changes.
+> Change in v4:
+> 		1. Fixup the compatible.
+> Change in v3:
+> 		1. Add a function to gain sensor id an remove dts id.
+> Change in v2:
+> 		1. Remove error msg printing when addr ioremap has error.
+> 		2. Make loongson2 thermal driver was built-in by default.
+> 		3. Replace ls2k with loongson2.
+> 		4. Remove CONFIG_PM_SLEEP and set pm function type was
+> 		   __maybe_unused.
+> 
+>   MAINTAINERS                         |   7 +
+>   drivers/thermal/Kconfig             |  10 ++
+>   drivers/thermal/Makefile            |   1 +
+>   drivers/thermal/loongson2_thermal.c | 266 ++++++++++++++++++++++++++++
+>   4 files changed, 284 insertions(+)
+>   create mode 100644 drivers/thermal/loongson2_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 379945f82a64..37ab451d9258 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12010,6 +12010,13 @@ F:	drivers/*/*loongarch*
+>   F:	Documentation/loongarch/
+>   F:	Documentation/translations/zh_CN/loongarch/
+>   
+> +LOONGSON-2 SOC SERIES THERMAL DRIVER
+> +M:	zhanghongchen <zhanghongchen@loongson.cn>
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/thermal/loongson2_thermal.c
+> +
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>   M:	Sathya Prakash <sathya.prakash@broadcom.com>
+>   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e052dae614eb..93d84bcb16dd 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config LOONGSON2_THERMAL
+> +	tristate "Loongson-2 SoC series thermal driver"
+> +	depends on LOONGARCH || COMPILE_TEST
+> +	depends on OF
+> +	help
+> +	  Support for Thermal driver found on Loongson-2 SoC series platforms.
+> +	  It supports one critical trip point and one passive trip point. The
+> +	  cpufreq and the pwm fan is used as the cooling device to throttle
+> +	  CPUs when the passive trip is crossed.
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 2506c6c8ca83..02f3db809858 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+> new file mode 100644
+> index 000000000000..87b07731f17e
+> --- /dev/null
+> +++ b/drivers/thermal/loongson2_thermal.c
+> @@ -0,0 +1,266 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
+> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/cpufreq.h>
+> +#include <linux/delay.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/io.h>
+> +#include <linux/of_device.h>
+> +#include <linux/thermal.h>
+> +#include "thermal_hwmon.h"
+> +
+> +#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
+> +
+> +#define LOONGSON2_TSENSOR_CTRL_HI			0x0
+> +#define LOONGSON2_TSENSOR_CTRL_LO			0x8
+> +#define LOONGSON2_TSENSOR_STATUS			0x10
+> +#define LOONGSON2_TSENSOR_OUT				0x14
+> +
+> +struct loongson2_thermal_data {
+> +	struct thermal_zone_device *tzd;
+> +	int irq;
+> +	int id;
+> +	void __iomem *regs;
+> +	struct platform_device *pdev;
+> +	u16 ctrl_low_val;
+> +	u16 ctrl_hi_val;
+> +};
+> +
+> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+> +					int low, int high, bool enable)
+> +{
+> +	u64 reg_ctrl = 0;
+> +	int reg_off = data->id * 2;
+> +
+> +	if (low > high)
+> +		return -EINVAL;
+> +
+> +	low = low < -100 ? -100 : low;
+> +	high = high > 155 ? 155 : high;
+> +
+> +	low += 100;
+> +	high += 100;
+> +
+> +	reg_ctrl |= low;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +
+> +	reg_ctrl = 0;
+> +	reg_ctrl |= high;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	u32 reg_val;
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+> +	*temp = ((reg_val & 0xff) - 100) * 1000;
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_get_sensor_id(void)
+> +{
+> +	int ret, id;
+> +	struct of_phandle_args sensor_specs;
+> +	struct device_node *np, *sensor_np;
+> +
+> +	np = of_find_node_by_name(NULL, "thermal-zones");
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	sensor_np = of_get_next_child(np, NULL);
+> +	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
+> +			"#thermal-sensor-cells",
+> +			0, &sensor_specs);
+> +	if (ret) {
+> +		of_node_put(np);
+> +		of_node_put(sensor_np);
+> +		return ret;
+> +	}
+> +
+> +	if (sensor_specs.args_count >= 1) {
+> +		id = sensor_specs.args[0];
+> +		WARN(sensor_specs.args_count > 1,
+> +				"%s: too many cells in sensor specifier %d\n",
+> +				sensor_specs.np->name, sensor_specs.args_count);
+> +	} else {
+> +		id = 0;
+> +	}
+> +
+> +	of_node_put(np);
+> +	of_node_put(sensor_np);
+> +
+> +	return id;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	/* clear interrupt */
+> +	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	disable_irq_nosync(irq);
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
+> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev;
+> +
+> +	thermal_zone_device_update(data->tzd,
+> +				   THERMAL_EVENT_UNSPECIFIED);
+> +	enable_irq(data->irq);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+> +{
+> +	struct loongson2_thermal_data *data = tz->devdata;
+> +
+> +	return loongson2_thermal_set(data, low/1000, high/1000, true);
+> +}
+> +
+> +static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
+> +	.get_temp = loongson2_thermal_get_temp,
+> +	.set_trips = loongson2_thermal_set_trips,
+> +};
+> +
+> +static int loongson2_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	struct loongson2_thermal_data *data;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->pdev = pdev;
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(data->regs))
+> +		return PTR_ERR(data->regs);
+> +
+> +	/* get irq */
+> +	data->irq = platform_get_irq(pdev, 0);
+> +	if (data->irq < 0)
+> +		return data->irq;
+> +
+> +	/* get id */
+> +	data->id = loongson2_thermal_get_sensor_id();
+> +	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
+> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+> +				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
+> +		return -EINVAL;
+> +	}
+> +
+> +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +
+> +	loongson2_thermal_set(data, 0, 0, false);
+> +
+> +	data->tzd = devm_thermal_of_zone_register(&pdev->dev,
+> +							   data->id, data,
+> +							   &loongson2_of_thermal_ops);
+> +	if (IS_ERR(data->tzd)) {
+> +		ret = PTR_ERR(data->tzd);
+> +		data->tzd = NULL;
+> +		dev_err(&pdev->dev, "failed to register %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_request_threaded_irq(dev, data->irq,
+> +			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
+> +			IRQF_ONESHOT, "loongson2_thermal", data);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to request alarm irq: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/*
+> +	 * Thermal_zone doesn't enable hwmon as default,
+> +	 * enable it here
+> +	 */
+> +	data->tzd->tzp->no_hwmon = false;
+> +	ret = thermal_add_hwmon_sysfs(data->tzd);
+> +	if (ret) {
+> +		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int loongson2_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
+> +	int reg_off = data->id * 2;
+> +
+> +	/* disable interrupt */
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_loongson2_thermal_match[] = {
+> +	{ .compatible = "loongson,ls2k-thermal",},
+> +	{ /* end */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
+> +
+> +static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused loongson2_thermal_resume(struct device *dev)
+> +{
+> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
+> +	int reg_off = data->id * 2;
+> +
+> +	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
+> +			 loongson2_thermal_suspend, loongson2_thermal_resume);
+> +
+> +static struct platform_driver loongson2_thermal_driver = {
+> +	.driver = {
+> +		.name		= "loongson2_thermal",
+> +		.pm = &loongson2_thermal_pm_ops,
+> +		.of_match_table = of_loongson2_thermal_match,
+> +	},
+> +	.probe	= loongson2_thermal_probe,
+> +	.remove	= loongson2_thermal_remove,
+> +};
+> +module_platform_driver(loongson2_thermal_driver);
 > 
 
-Thanks for your correction.
-
-> Does the clock need to change in order to support 2500Base-X? If i
-
-Since I'm not a hardware designer from NXP and I can't find any board that
-S32G2 CPUs could integrate SFP, so I am not able to tell how the clock could
-be configured while supporting 2500Base-X.
-
-> understand you correctly, Linux does not control the clocks, and so
-> cannot change the clocks? So that probably means you cannot actually
-
-To be more precise, the SCMI clock protocol in ATF [ARM Trusted Firmware]
-doesn't design any interface to get/set parents of a clock so that re-parenting
-clocks via the SCMI clk driver [clk-scmi.c] in Linux Kernel is impossible
-for this case. That means, if any board design allows run-time swap on different
-phys, the dedicated clks which represent each phy-mode are required in order
-to trigger clock re-parenting in ATF since different phy connections would
-need different clock sources.
-
-> support 2500Base-X? Once you have Linux actually controlling the
-> hardware, you can then make use of an SFP or a copper PHY which
-> supports 2.5G. The PHY will swap its host side between SGMII and
-> 2500Base-X depending on what the line side negotiates, 1000Base-T or
-> 2500Base-T. The MAC driver then needs to change its configuration to
-> suite.
-> 
-> 	Andrew
