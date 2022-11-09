@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C6B862327E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7947623280
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiKISdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        id S231233AbiKISdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiKISdb (ORCPT
+        with ESMTP id S231185AbiKISdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:33:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F377125EC;
-        Wed,  9 Nov 2022 10:33:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5CED61C61;
-        Wed,  9 Nov 2022 18:33:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C83C9C433D7;
-        Wed,  9 Nov 2022 18:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668018808;
-        bh=adakfXPD3xra37+C3JuUmmuu/s4R54ybHPOnov/3ReI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JGw0+QzVA22MDEGqM+WzfWqt8Xeq1unnYm+DZaKQ30hgg7+mMhgQDnpCeA8PalKxQ
-         Po77IAGR6cteXaJvd/BP0fLRVrU3lEcOu2C+6+/Gwj1Pyrn8czUZXtEIz15Hfm0jc+
-         isBGdhyYcje1EJcBEkgyBIx0mHs2ny7OpFXyxknen+iYKASpapV0YhuNzreZ4lTAvz
-         H3WTIwASsS3O5rrUQPhZELyT6oWOXf592jthlGV3yIv4Uf6VwLWwi0aidhnPXoTXCX
-         SzUcRx5jXL0ZyvB2R01T0+l9ji8Bxi+sBGoO/HdJ/Dz/utUUg/ItV6Sw+5nBFFewRF
-         ZPJlGBtsOxoDQ==
-Date:   Wed, 9 Nov 2022 20:33:24 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     rama nichanamatlu <rama.nichanamatlu@oracle.com>
-Cc:     Rohit Nair <rohit.sajan.kumar@oracle.com>, jgg@ziepe.ca,
-        saeedm@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        manjunath.b.patil@oracle.com,
-        Michael Guralnik <michaelgur@nvidia.com>
-Subject: Re: [External] : Re: [PATCH 1/1] IB/mlx5: Add a signature check to
- received EQEs and CQEs
-Message-ID: <Y2vydHwL3waJeaHw@unreal>
-References: <20221005174521.63619-1-rohit.sajan.kumar@oracle.com>
- <Y0UYml07lb1I38MQ@unreal>
- <5bab650a-3c0b-cfd2-d6a7-2e39c8474514@oracle.com>
- <Y1p4OEIWNObQCDoG@unreal>
- <fdb9f874-1998-5270-4360-61c74c34294d@oracle.com>
- <Y2f21JKWkQg8KtyK@unreal>
- <f3a56720-4df4-6b17-bfdf-4385dc27a2c0@oracle.com>
+        Wed, 9 Nov 2022 13:33:32 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA815592
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:33:30 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id y13so17495817pfp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:33:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FHp5Q2wOQy0KMZQlD30NsVfoIRug5gwk53ibb7cieWI=;
+        b=Kii37SevvA7bc8LA5fR8u9bJRXykNhlhfF6YHQSyXl62ImyXzbUda3785EJz8uzhh3
+         69zKPRTy3mrNBKumMEyOsuNn5B6+1UUh67uIk8dvoPYphmxpis3TXp2SFyIkwu6Inszv
+         GaE072uorf+pfDiDWt/3qEBYtBR2wFG36f9V1MFmtR0F56Nds344w3immMLHM6i1qPNX
+         9X330aao4iGbTZdV6W6m6ZZNnyS5NKoo4LmkB+8/osfYwU5ApsrTZF7AH8oUH6m31IzI
+         Fvv/1EhdnP7y9srrnQvbiKhrPZq7eI5wae2MrkxsD3zZBbbzxs8h25CL0p/LMiunBPlb
+         2sFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FHp5Q2wOQy0KMZQlD30NsVfoIRug5gwk53ibb7cieWI=;
+        b=3777gzgau6UY1L2s9IdIlVeNkVPdOnnLAzrBoBrEDHrL69hoibFwHeuJc9ir+OJ1xc
+         hJE8pJrX6HrJM3KUUGWSUYuTF0gAkxuX05xgf6DpEl+Tunzrx4QBonDQX62XCFR4XF9v
+         9VCKeB14LrbsnM9zADyJPtNXauOUzjRO/9UmD0j+JZpPX5Dm0TO5TIUDCA6MfAUNvgri
+         5VUxGae0uUIE4YjIRWmH+g8liFLuEuLfNoR5jIVGaOe08sj5eRm/sfhlN+BzFd5477ah
+         1AAKlFicSiVhsYSkoKAB1YEQQ+j8LTOvjwlmy+jxZVUVATk5pVf8iXG+tNYc72Gf1dGW
+         i3ig==
+X-Gm-Message-State: ACrzQf0rwGRl2SRVEUzEFa28bZr8QQI5m05zfk0XX5jqOK2KfHwhzybV
+        K28YVy4DqcxkhCTr6LdCvJXKxg==
+X-Google-Smtp-Source: AMsMyM7hU2AShV4UZ4WTmMAwHQxYL4v/lW/DeBqUTu/MwpyWv2SRw77PxU9vDpozEEBwxy5XwsEB7g==
+X-Received: by 2002:a63:187:0:b0:43b:cf3c:c64d with SMTP id 129-20020a630187000000b0043bcf3cc64dmr52910762pgb.359.1668018810159;
+        Wed, 09 Nov 2022 10:33:30 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b0018863dbf3b0sm4977252plh.45.2022.11.09.10.33.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 10:33:29 -0800 (PST)
+Message-ID: <2e7ccd49-b37b-2837-4baf-27a76f177c4f@kernel.dk>
+Date:   Wed, 9 Nov 2022 11:33:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f3a56720-4df4-6b17-bfdf-4385dc27a2c0@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v11 0/9] Userspace P2PDMA with O_DIRECT NVMe devices
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>, viro@zeniv.linux.org.uk
+References: <20221021174116.7200-1-logang@deltatee.com>
+ <20221024150320.GA26731@lst.de>
+ <743ad0e5-6936-9287-d093-2ce1c2a3e32d@nvidia.com>
+ <20221108065618.GA20283@lst.de>
+ <ee9f817f-1573-f3f6-9b20-b4b2b2053eb6@deltatee.com>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ee9f817f-1573-f3f6-9b20-b4b2b2053eb6@deltatee.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 04:24:48PM -0600, rama nichanamatlu wrote:
-> in-line.
-
-<...>
-
-> > The thing is that "vendor" failed to explain internally if this debug
-> > code is useful. Like I said, extremely rare debug code shouldn't be part
-> > of main data path.
-> > 
-> > Thanks
+On 11/9/22 10:28 AM, Logan Gunthorpe wrote:
+> @add Jens
 > 
-> thank you very much for you insights into the relevance of the patch. before
-> we close this topic, do want to ask on this.  what is the expectation of the
-> nic hardware when it signatures / checksum's an eqe or cqe ?
+> On 2022-11-07 23:56, Christoph Hellwig wrote:
+>> On Mon, Oct 24, 2022 at 12:15:56PM -0700, John Hubbard wrote:
+>>> A little earlier, Jens graciously offered [1] to provide a topic branch,
+>>> such as:
+>>>
+>>>     for-6.2/block-gup [2]
+>>>
+>>> (I've moved the name forward from 6.1 to 6.2, because that discussion
+>>> was 7 weeks ago.)
+>>
+>> So what are we going to do with this series?  It would be sad to miss
+>> the merge window again.
 > 
-> if it not to be verified by the receiver host for what ever reasons, then
-> why even do the checksum computation on the hardware ? 
+> I noticed Jens wasn't copied on this series. I've added him. It would be
+> nice to get this in someone's tree soon.
 
-mlx5 data sheet has more than 3000 pages in it. Not everything there is needed now.
+I took a look and the series looks fine to me.
 
-Thanks
+-- 
+Jens Axboe
+
+
