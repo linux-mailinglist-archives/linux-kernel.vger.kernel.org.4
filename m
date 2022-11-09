@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BCB6235A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CF56235AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbiKIVTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        id S231750AbiKIVUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiKIVTf (ORCPT
+        with ESMTP id S231703AbiKIVUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:19:35 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D69BC02;
-        Wed,  9 Nov 2022 13:19:34 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id v28so17852626pfi.12;
-        Wed, 09 Nov 2022 13:19:34 -0800 (PST)
+        Wed, 9 Nov 2022 16:20:39 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC18513DFF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:20:38 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id b18-20020a170903229200b00186e357f3b9so14103257plh.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 13:20:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CDN2Kjk9sFP44u2icW4scvppHNpqfGQ8HN02CsgJWJc=;
-        b=nOa4PjJDGPvcgGjEbHX25jixgJf6FfXTf0x1H7pLV89JmM44vhlD1YLtpbv8o2B/jI
-         AuTmpdu0Q8Bmj8z/JbUK5sJ8X+3RjlZ2P7jQiVbvHxTVNpWJ/vyi0wJ4GDYK4UUo2cke
-         9AIYhMh/hHmBjlW98/Bmcg1B2bzFuQbpX7/I8uih7j3sGjS7Pj+wwfexzCHHloCgL+Ya
-         rwe++AoJ4ntSQTfu+WwbsTZMCsyrQsdHDvtfVbrVvdLnc1FXcE8lDL2z8JKUaxL7Ul4C
-         65SwBOleUCpm+cnPfa3iS91kkeQXztraCR5C1n5b8EQaEEWCFWm210RWIh+JuAgyUO3G
-         HWWg==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9j1Fdjw+QKrP8KK510mV9QHiJhXJjqbCZmYMnpYJD+w=;
+        b=lc6wWWvNrO5dyaVIDT2ULScb++4l6ht9/mmwQ7XVv4hfdd/ZsFA7RYpeCE04Ig4rOT
+         ft7xWbGZt0pAYXYGDcUBzCCKFcyxGCJxvndT13WIjww8CNWljGbcW65CVwBTkJSDUTuJ
+         TaBMe2liq1yujJ0OMvYv4JkY366+GY7RVqGF+GjQJb9jx5nPxYcJ+0SkRY5hQ9Y0j+WD
+         NfFexaeGObUTniQIwHhCNusmzbXgzKcolmTKOkhtHWDmfQematDe5+OC66ArvNVIfjeG
+         GIadcjaOY4infU6r1EClQJXUBsKuCvdAUs/yVehu4mqGn0wq98RK4a/eSTeZMnjR7MyH
+         SlrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CDN2Kjk9sFP44u2icW4scvppHNpqfGQ8HN02CsgJWJc=;
-        b=OteBx0zq7N51vAgLw9qxm8d8z45pN/SWAU758niTA2MutkQOZQ0RNDZhdPHY8THbD9
-         pFjEwaLBZxbike2btaq2zz6hRwv/ZdfHhQQtDb/1RQzBni1r5piq2SaagSp4jhf4dfAz
-         aLfKtkHENcGbodEeuZJHUbws3Gjag1R0AzNLdDV+SUF6rcCSuw0ZTA4Uc2ADzFAe2Y6v
-         uLGmgthF3hxn3ZUvCBQscrCjYd3PTEO/CyHlJ6V2SgEtagCtkEJPOtcRtQlGTEk1IIu7
-         IScAdv5cNr6Z7CA1xgV0/DLz2wOn1PJYcmYfiafiLOoUh39/6DBl2CroFicOdnCEmaOe
-         uinQ==
-X-Gm-Message-State: ACrzQf2DTHV60hPQZdZj/lFbCeOg1OVAqf7rbTKNLmutmMPrK8kaJ4m0
-        0L9hTLUhoe+myOKL3pIACeY=
-X-Google-Smtp-Source: AMsMyM7KW9+YoZkyJv4Zjqq8UfNiaIt0QNVN3qRdVwNCgYQen8AO2JT+9lKSXNpGgwMohSmFPL4uPw==
-X-Received: by 2002:a63:2364:0:b0:46f:5de2:30d1 with SMTP id u36-20020a632364000000b0046f5de230d1mr52885222pgm.304.1668028774022;
-        Wed, 09 Nov 2022 13:19:34 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:6af4:9e55:5482:c0de])
-        by smtp.gmail.com with ESMTPSA id w7-20020a634747000000b0042b5095b7b4sm7945972pgk.5.2022.11.09.13.19.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 13:19:33 -0800 (PST)
-Date:   Wed, 9 Nov 2022 13:19:30 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 1/2] gpiolib: of: Prepare of_mm_gpiochip_add_data()
- for fwnode
-Message-ID: <Y2wZYuadSwbqxpge@google.com>
-References: <20221109150734.38874-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109150734.38874-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9j1Fdjw+QKrP8KK510mV9QHiJhXJjqbCZmYMnpYJD+w=;
+        b=0m9t6hmDOynLJhevKZ7/jIGIog0QQtlSBObTK9OAm+G7hCKt21JOq33AxSapqeMoFt
+         3aNhOmpMGCKfWC1R5tJ+qMwaBx2Yxn+/KI3hFuh0r/yTVD7f2g3f+8011ilocrWoVwOf
+         Unq2OqPyu5iTwKbG+vtLg/XMyzh0qRiwwF0wFWsc+dKCutPXW2vQe053jzTLCVvagLN9
+         7XNFS+MF9CbTnnFO4BkZQW6d9K7tENrJp7MnoIIVmPU4Y7faxkkxFz5ROiKWVuaYaRJN
+         Lm2kpMbNi4Te2wN3SOhAvjNtug6acXBPVpaM+V1wKMiJzcdH865jgYk9JH2cv14oYQo+
+         uRdA==
+X-Gm-Message-State: ACrzQf2itlpQSxJo7lUfWRV5reIMw7csrx2/QTLdYil0a+/6dgYheOLN
+        lSCBLa76X+Q21ggY8JTBosVPm+DS3r1olA==
+X-Google-Smtp-Source: AMsMyM69MAZSgTG0L+a1corcfO0Yh14SP+6sG4CoVQqfQuA7E0mImAEeypcGoh1NSt/V/gdclsyHzTl0vfTt/A==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a62:e214:0:b0:56c:4303:a93d with SMTP id
+ a20-20020a62e214000000b0056c4303a93dmr1265599pfi.73.1668028838307; Wed, 09
+ Nov 2022 13:20:38 -0800 (PST)
+Date:   Wed,  9 Nov 2022 13:20:32 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221109212032.123021-1-dlatypov@google.com>
+Subject: [PATCH] kunit: remove KUNIT_INIT_MEM_ASSERTION macro
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,57 +67,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 05:07:33PM +0200, Andy Shevchenko wrote:
-> GPIO library is getting rid of of_node, fwnode should be utilized instead.
-> Prepare of_mm_gpiochip_add_data() for fwnode.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/gpio/gpiolib-of.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 4be3c21aa718..feeb9e8e846d 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -919,14 +919,15 @@ int of_mm_gpiochip_add_data(struct device_node *np,
->  			    struct of_mm_gpio_chip *mm_gc,
->  			    void *data)
->  {
-> +	struct fwnode_handle *fwnode = of_fwnode_handle(np);
->  	int ret = -ENOMEM;
->  	struct gpio_chip *gc = &mm_gc->gc;
->  
-> -	gc->label = kasprintf(GFP_KERNEL, "%pOF", np);
-> +	gc->label = kasprintf(GFP_KERNEL, "%pfw", fwnode);
->  	if (!gc->label)
->  		goto err0;
->  
-> -	mm_gc->regs = of_iomap(np, 0);
-> +	mm_gc->regs = fwnode_iomap(fwnode, 0);
->  	if (!mm_gc->regs)
->  		goto err1;
->  
-> @@ -935,8 +936,8 @@ int of_mm_gpiochip_add_data(struct device_node *np,
->  	if (mm_gc->save_regs)
->  		mm_gc->save_regs(mm_gc);
->  
-> -	of_node_put(mm_gc->gc.of_node);
-> -	mm_gc->gc.of_node = of_node_get(np);
-> +	fwnode_handle_put(mm_gc->gc.fwnode);
-> +	mm_gc->gc.fwnode = fwnode_handle_get(fwnode);
+Commit 870f63b7cd78 ("kunit: eliminate KUNIT_INIT_*_ASSERT_STRUCT
+macros") removed all the other macros of this type.
 
-Can we reduce the patch to
+But it raced with commit b8a926bea8b1 ("kunit: Introduce
+KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros"), which added another
+instance.
 
-	fwnode_handle_put(mm_gc->gc.fwnode);
-	mm_gc->gc.fwnode = fwnode_handle_get(of_fwnode_handle(np));
+Remove KUNIT_INIT_MEM_ASSERTION and just use the generic
+KUNIT_INIT_ASSERT macro instead.
+Rename the `size` arg to avoid conflicts by appending a "_" (like we did
+in the previous commit).
 
-?
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ include/kunit/assert.h |  7 -------
+ include/kunit/test.h   | 12 ++++++------
+ 2 files changed, 6 insertions(+), 13 deletions(-)
 
-I do not see a reason for converting the rest of invocations to fwnode
-given that this is clearly an OF API.
+diff --git a/include/kunit/assert.h b/include/kunit/assert.h
+index 43144cfddc19..24c2b9fa61e8 100644
+--- a/include/kunit/assert.h
++++ b/include/kunit/assert.h
+@@ -192,13 +192,6 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
+ 				    const struct va_format *message,
+ 				    struct string_stream *stream);
+ 
+-#define KUNIT_INIT_MEM_ASSERT_STRUCT(text_, left_val, right_val, size_) {      \
+-	.text = text_,							       \
+-	.left_value = left_val,						       \
+-	.right_value = right_val,				       	       \
+-	.size = size_						       	       \
+-}
+-
+ /**
+  * struct kunit_mem_assert - An expectation/assertion that compares two
+  *	memory blocks.
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index d7f60e8aab30..4666a4d199ea 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -666,13 +666,13 @@ do {									       \
+ 			    left,					       \
+ 			    op,						       \
+ 			    right,					       \
+-			    size,					       \
++			    size_,					       \
+ 			    fmt,					       \
+ 			    ...)					       \
+ do {									       \
+ 	const void *__left = (left);					       \
+ 	const void *__right = (right);					       \
+-	const size_t __size = (size);					       \
++	const size_t __size = (size_);					       \
+ 	static const struct kunit_binary_assert_text __text = {		       \
+ 		.operation = #op,					       \
+ 		.left_text = #left,					       \
+@@ -686,10 +686,10 @@ do {									       \
+ 		      assert_type,					       \
+ 		      kunit_mem_assert,					       \
+ 		      kunit_mem_assert_format,				       \
+-		      KUNIT_INIT_MEM_ASSERT_STRUCT(&__text,		       \
+-						   __left,		       \
+-						   __right,		       \
+-						   __size),		       \
++		      KUNIT_INIT_ASSERT(.text = &__text,		       \
++					.left_value = __left,		       \
++					.right_value = __right,		       \
++					.size = __size),		       \
+ 		      fmt,						       \
+ 		      ##__VA_ARGS__);					       \
+ } while (0)
 
-Thanks.
-
+base-commit: 870f63b7cd78d0055902d839a60408f7428b4e84
 -- 
-Dmitry
+2.38.1.431.g37b22c650d-goog
+
