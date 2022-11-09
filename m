@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C853622568
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE9D622569
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiKII2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
+        id S230035AbiKII2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiKII1z (ORCPT
+        with ESMTP id S229875AbiKII1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Nov 2022 03:27:55 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3051E13D5E;
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A34013D63;
         Wed,  9 Nov 2022 00:27:54 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6dPl45LczmVnk;
-        Wed,  9 Nov 2022 16:27:39 +0800 (CST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N6dPm5WCCz15MR9;
+        Wed,  9 Nov 2022 16:27:40 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.70) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -25,10 +25,10 @@ Received: from localhost.localdomain (10.175.112.70) by
 From:   Wang Yufen <wangyufen@huawei.com>
 To:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <pavel@ucw.cz>, Wang Yufen <wangyufen@huawei.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Subject: [PATCH 09/13] leds: mt6323: Fix devm vs. non-devm ordering
-Date:   Wed, 9 Nov 2022 16:48:10 +0800
-Message-ID: <1667983694-15040-10-git-send-email-wangyufen@huawei.com>
+        Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
+Subject: [PATCH 10/13] leds: powernv: Fix devm vs. non-devm ordering
+Date:   Wed, 9 Nov 2022 16:48:11 +0800
+Message-ID: <1667983694-15040-11-git-send-email-wangyufen@huawei.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
 References: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
@@ -51,49 +51,50 @@ allocations, otherwise it will break the tear down ordering and might
 lead to crashes or other bugs during ->remove() stage. Fix this by
 wrapping mutex_destroy() call with devm_add_action_or_reset().
 
-Fixes: 216ec6cc4c19 ("leds: Add LED support for MT6323 PMIC")
+Fixes: 84ad6e5cd3e8 ("leds/powernv: Add driver for PowerNV platform")
 Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Cc: Sean Wang <sean.wang@mediatek.com>
+Cc: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
 ---
- drivers/leds/leds-mt6323.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/leds/leds-powernv.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
-index f59e0e8..2dacaca 100644
---- a/drivers/leds/leds-mt6323.c
-+++ b/drivers/leds/leds-mt6323.c
-@@ -361,6 +361,11 @@ static int mt6323_led_set_dt_default(struct led_classdev *cdev,
- 	return ret;
+diff --git a/drivers/leds/leds-powernv.c b/drivers/leds/leds-powernv.c
+index 743e2cd..535f295 100644
+--- a/drivers/leds/leds-powernv.c
++++ b/drivers/leds/leds-powernv.c
+@@ -275,6 +275,11 @@ static int powernv_led_classdev(struct platform_device *pdev,
+ 	return rc;
  }
  
-+static void mt6323_led_mutex_destroy(void *lock)
++static void powernv_led_mutex_destroy(void *lock)
 +{
 +	mutex_destroy(lock);
 +}
 +
- static int mt6323_led_probe(struct platform_device *pdev)
+ /* Platform driver probe */
+ static int powernv_led_probe(struct platform_device *pdev)
  {
- 	struct device *dev = &pdev->dev;
-@@ -386,6 +391,10 @@ static int mt6323_led_probe(struct platform_device *pdev)
- 	 */
- 	leds->hw = hw;
- 	mutex_init(&leds->lock);
-+	ret = devm_add_action_or_reset(dev, mt6323_led_mutex_destroy,
-+				       &leds->lock);
+@@ -298,6 +303,10 @@ static int powernv_led_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	mutex_init(&powernv_led_common->lock);
++	ret = devm_add_action_or_reset(dev, powernv_led_mutex_destroy,
++				       &powernv_led_common->lock);
 +	if (ret)
 +		return ret;
+ 	powernv_led_common->max_led_type = cpu_to_be64(OPAL_SLOT_LED_TYPE_MAX);
  
- 	status = MT6323_RG_DRV_32K_CK_PDN;
- 	ret = regmap_update_bits(leds->hw->regmap, MT6323_TOP_CKPDN0,
-@@ -464,8 +473,6 @@ static int mt6323_led_remove(struct platform_device *pdev)
- 			   MT6323_RG_DRV_32K_CK_PDN_MASK,
- 			   MT6323_RG_DRV_32K_CK_PDN);
+ 	platform_set_drvdata(pdev, powernv_led_common);
+@@ -317,9 +326,6 @@ static int powernv_led_remove(struct platform_device *pdev)
+ 	powernv_led_common = platform_get_drvdata(pdev);
+ 	powernv_led_common->led_disabled = true;
  
--	mutex_destroy(&leds->lock);
+-	/* Destroy lock */
+-	mutex_destroy(&powernv_led_common->lock);
 -
+ 	dev_info(&pdev->dev, "PowerNV led module unregistered\n");
  	return 0;
  }
- 
 -- 
 1.8.3.1
 
