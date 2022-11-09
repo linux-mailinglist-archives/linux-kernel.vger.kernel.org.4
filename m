@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98394623307
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E54B623308
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbiKISwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S230137AbiKISw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:52:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiKISvj (ORCPT
+        with ESMTP id S231873AbiKISv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:51:39 -0500
+        Wed, 9 Nov 2022 13:51:57 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AA22B61C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:51:14 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 204-20020a250fd5000000b006ccc0e91098so17635108ybp.13
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:51:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91FB2D1DB
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:51:23 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id c188-20020a25c0c5000000b006d8eba07513so6516636ybf.17
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:51:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FRHZ0FW2HIw6QS+Bkui5kSfb7e3a9NpS1DLZODqxyrQ=;
-        b=GPgb7yM3peSx5lbtrgAYiXyGaOh2dWb1x0APsgQSFdREbuoKUMUsu6vcx8Evw40fiY
-         QAGjtLjIdv7+MYtobi6OJJlAIYqgn5nCyrkMWbGzI62qqkSAwtB7LA9ofYRpKx36RHKS
-         eRIGKfs/HfJW6/ucPO/jwLYCyRgbdKepcMe3HU6W2PdzwhxhpD0KhzMoULrZw8ExJahG
-         wHszHa+LZPcpl834kijyH641IEurVR85AF5yzOQuBCGOJNQLQyGotaFhmdfWCseui+Xz
-         wJgRjoBihZ78jmltkEnNnE/cApoRkahbTh1TL+SAKqszC2ELjdcLziOI5MprJfzPa9fE
-         K16A==
+        bh=hRpn0P3+fcqOignA9YAOhkIfzWGGy39oUBEKle0pWl4=;
+        b=Gum16eZlyNc399k5d3tx6ll5pKDYbio/60xDhY7KrQQQTJnfdPao24XhCFCL0DMhbb
+         qhuhZ7+QZdM51F5m8K6I5jt9r9MzyOXKsVF+cvGL4mDrk5nJJGXlDfNVBFYHudWU8kws
+         3Nn9958gEw2UiddLZMUkOrS/YkoQSsNfYzdla3r/4O/X9rWeSoKUS/H7hEQJVLptlp/l
+         YwNPr3UBMdaXuQVTtJz84Zp0qOCOuxwEoiq71oB/v9GMwFWXXRSUuvNFUah0aAJUYwlW
+         5roVXQcMwnPiM6w6Ips7fTqCM/mflO0K0aLpNUtAyNtVBeOLRRI3QxrVm8FzFGlE8N1d
+         gL/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FRHZ0FW2HIw6QS+Bkui5kSfb7e3a9NpS1DLZODqxyrQ=;
-        b=a+Pn5GGbr61KZ+zpSjCdgIR4CHatuBIDlNKz2ehY7Y1cDX8o8dHFgvgMNn6INXQDTQ
-         i40VEwtY2na/wYN/1TiCtvMbNlxdm7nXlHOI9YPlyEDAPShaz8qOPn3bU487H3ckVwvi
-         vwp8EpYq6HOCUi6hCh5W2H+6eAoYBxt6ICSJD4NNr1dWhHvToakXG0Qwpdd6AP8t0Va9
-         5gKkV7ZIrxV83jsjYTwB7T8gQXpmt2mRw/q1B2sDyNOuvSGoyLAO7g6vEa2aDeXuHZos
-         Ok5Z40+msmewjou4iLoFiX4dqvYHsRvmURqa0ZCfHwNY1I4N6n/5IXaAMuH+Bz3DS8IN
-         4h2g==
-X-Gm-Message-State: ACrzQf0hrAV6xAadpyPTieKsg2NQzxbKctkCc97azvnwTfwhneXw8q0C
-        uA3RWgAIpQ6iOpjPrajojcC/Q+hpfSBb
-X-Google-Smtp-Source: AMsMyM4aG/qfIRrPsZc6e0jRKlvIWUDtNj+DGVN0VGLeGwCxia/YIhlvD0BRcIpmKA7adfm9rZBzCu9ZqgpG
+        bh=hRpn0P3+fcqOignA9YAOhkIfzWGGy39oUBEKle0pWl4=;
+        b=hwHCNkr7VD5qhxPml9NssQNiRvi4jLcLBKJqceO6U6fUPQhyL6Ook51eej/pjQ1kPa
+         Md9tPkALzkEKuBU/3vTxEhHnDyfe6dUNiafSyiJvcCM3h7BJzbSGVCOAT1S8XsPbcQZo
+         55mTnxSxQy16gkXqy7fzc5e22D4hqwWcNn7nZJYtOJ8GOCnCj7uUOR7lD0iJgqbairYq
+         mdz1GwZQeFpdd6+q2FUV4frv8B9NqDebN4OliFqbxCim7bnevKck985jPkHtXJKwfbqu
+         ZgCfpu0DyBVg+bw3dPwfnn03S/EZw71OUwPb+/Ev1VIyVQYq9YqAMYZY8sOpiBKc2Ekz
+         lklw==
+X-Gm-Message-State: ACrzQf3s7/HUL6khytkUZ/7mtofoDpW3epjEMJ5sWHYcj3f+sqPxl59l
+        a4rgt+8/Xx2IYYzktfg3okwRjQxj3OUT
+X-Google-Smtp-Source: AMsMyM6UYHYvI9oRglfbF00i/rXNWsAuwQ6/Jdg2ihwWhfW0WufkEgYQy01iVSCK8Q9cfdVmss5mD7PwOXZ0
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b06f:a254:5ce9:c442])
- (user=irogers job=sendgmr) by 2002:a0d:dd90:0:b0:36d:2005:5417 with SMTP id
- g138-20020a0ddd90000000b0036d20055417mr1097889ywe.238.1668019873667; Wed, 09
- Nov 2022 10:51:13 -0800 (PST)
-Date:   Wed,  9 Nov 2022 10:49:13 -0800
+ (user=irogers job=sendgmr) by 2002:a25:df85:0:b0:6d0:6e1:85bc with SMTP id
+ w127-20020a25df85000000b006d006e185bcmr36982852ybg.519.1668019882993; Wed, 09
+ Nov 2022 10:51:22 -0800 (PST)
+Date:   Wed,  9 Nov 2022 10:49:14 -0800
 In-Reply-To: <20221109184914.1357295-1-irogers@google.com>
-Message-Id: <20221109184914.1357295-14-irogers@google.com>
+Message-Id: <20221109184914.1357295-15-irogers@google.com>
 Mime-Version: 1.0
 References: <20221109184914.1357295-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v2 13/14] perf cpumap: Tidy libperf includes
+Subject: [PATCH v2 14/14] perf build: Use tools/lib headers from install path
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -71,7 +71,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,83 +79,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use public API when possible, don't include internal API in header
-files in evsel.h. Fix any related breakages.
+Switch -I from tools/lib to the install path for the tools/lib
+libraries that are depended upon. List header files provided by
+libraries so that dependencies are built in the correct order.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/cpumap.c  | 2 +-
- tools/perf/util/auxtrace.h | 2 +-
- tools/perf/util/cpumap.c   | 1 +
- tools/perf/util/cpumap.h   | 2 +-
- tools/perf/util/evsel.h    | 2 --
- 5 files changed, 4 insertions(+), 5 deletions(-)
+ tools/perf/Makefile.config |  2 --
+ tools/perf/Makefile.perf   | 46 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
-index 7c873c6ae3eb..3150fc1fed6f 100644
---- a/tools/perf/tests/cpumap.c
-+++ b/tools/perf/tests/cpumap.c
-@@ -6,7 +6,7 @@
- #include "util/synthetic-events.h"
- #include <string.h>
- #include <linux/bitops.h>
--#include <perf/cpumap.h>
-+#include <internal/cpumap.h>
- #include "debug.h"
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index a7f6c0669fae..9cc3c48f3288 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -349,7 +349,6 @@ ifeq ($(DEBUG),0)
+   endif
+ endif
  
- struct machine;
-diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
-index 6a0f9b98f059..2cf63d377831 100644
---- a/tools/perf/util/auxtrace.h
-+++ b/tools/perf/util/auxtrace.h
-@@ -15,7 +15,7 @@
- #include <linux/list.h>
- #include <linux/perf_event.h>
- #include <linux/types.h>
--#include <internal/cpumap.h>
-+#include <perf/cpumap.h>
- #include <asm/bitsperlong.h>
- #include <asm/barrier.h>
+-INC_FLAGS += -I$(srctree)/tools/lib/perf/include
+ INC_FLAGS += -I$(src-perf)/util/include
+ INC_FLAGS += -I$(src-perf)/arch/$(SRCARCH)/include
+ INC_FLAGS += -I$(srctree)/tools/include/
+@@ -367,7 +366,6 @@ endif
  
-diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-index 6e3fcf523de9..5e564974fba4 100644
---- a/tools/perf/util/cpumap.c
-+++ b/tools/perf/util/cpumap.c
-@@ -12,6 +12,7 @@
+ INC_FLAGS += -I$(src-perf)/util
+ INC_FLAGS += -I$(src-perf)
+-INC_FLAGS += -I$(srctree)/tools/lib/
  
- #include <linux/ctype.h>
- #include <linux/zalloc.h>
-+#include <internal/cpumap.h>
+ CORE_CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE
  
- static struct perf_cpu max_cpu_num;
- static struct perf_cpu max_present_cpu_num;
-diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-index da28b3146ef9..c2f5824a3a22 100644
---- a/tools/perf/util/cpumap.h
-+++ b/tools/perf/util/cpumap.h
-@@ -4,8 +4,8 @@
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 6c1a2a3ccc38..d71e728e7a5c 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -305,6 +305,7 @@ LIBTRACEEVENT_INCLUDE = $(LIBTRACEEVENT_DESTDIR)/include
+ LIBTRACEEVENT = $(LIBTRACEEVENT_OUTPUT)/libtraceevent.a
+ export LIBTRACEEVENT
+ LIBTRACEEVENT_DYNAMIC_LIST = $(LIBTRACEEVENT_PLUGINS_OUTPUT)/libtraceevent-dynamic-list
++CFLAGS += -I$(LIBTRACEEVENT_OUTPUT)/include
  
- #include <stdbool.h>
- #include <stdio.h>
--#include <internal/cpumap.h>
- #include <perf/cpumap.h>
-+#include <linux/refcount.h>
+ #
+ # The static build has no dynsym table, so this does not work for
+@@ -322,6 +323,13 @@ LIBAPI_DESTDIR = $(LIBAPI_OUTPUT)
+ LIBAPI_INCLUDE = $(LIBAPI_DESTDIR)/include
+ LIBAPI = $(LIBAPI_OUTPUT)/libapi.a
+ export LIBAPI
++CFLAGS += -I$(LIBAPI_OUTPUT)/include
++$(LIBAPI_OUTPUT)/include/api/fs/fs.h \
++$(LIBAPI_OUTPUT)/include/api/fs/tracing_path.h \
++$(LIBAPI_OUTPUT)/include/api/io.h \
++$(LIBAPI_OUTPUT)/include/api/debug.h \
++$(LIBAPI_OUTPUT)/include/api/cpu.h \
++$(LIBAPI_OUTPUT)/include/api/fd/array.h: $(LIBAPI)
  
- /** Identify where counts are aggregated, -1 implies not to aggregate. */
- struct aggr_cpu_id {
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index 989865e16aad..f5d9f6a351cd 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -10,8 +10,6 @@
- #include <internal/evsel.h>
- #include <perf/evsel.h>
- #include "symbol_conf.h"
--#include <internal/cpumap.h>
--#include <perf/cpumap.h>
+ ifneq ($(OUTPUT),)
+   LIBBPF_OUTPUT = $(abspath $(OUTPUT))/libbpf
+@@ -331,6 +339,20 @@ endif
+ LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
+ LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
+ LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
++CFLAGS += -I$(LIBBPF_OUTPUT)/include
++$(LIBBPF_OUTPUT)/include/bpf/bpf_helpers.h \
++$(LIBBPF_OUTPUT)/include/bpf/libbpf_legacy.h \
++$(LIBBPF_OUTPUT)/include/bpf/bpf_tracing.h \
++$(LIBBPF_OUTPUT)/include/bpf/usdt.bpf.h \
++$(LIBBPF_OUTPUT)/include/bpf/bpf_helper_defs.h \
++$(LIBBPF_OUTPUT)/include/bpf/libbpf_common.h \
++$(LIBBPF_OUTPUT)/include/bpf/bpf_core_read.h \
++$(LIBBPF_OUTPUT)/include/bpf/bpf.h \
++$(LIBBPF_OUTPUT)/include/bpf/libbpf.h \
++$(LIBBPF_OUTPUT)/include/bpf/skel_internal.h \
++$(LIBBPF_OUTPUT)/include/bpf/bpf_endian.h \
++$(LIBBPF_OUTPUT)/include/bpf/btf.h \
++$(LIBBPF_OUTPUT)/include/bpf/libbpf_version.h: $(LIBBPF)
  
- struct bpf_object;
- struct cgroup;
+ ifneq ($(OUTPUT),)
+   LIBSUBCMD_OUTPUT = $(abspath $(OUTPUT))/libsubcmd
+@@ -340,6 +362,12 @@ endif
+ LIBSUBCMD_DESTDIR = $(LIBSUBCMD_OUTPUT)
+ LIBSUBCMD_INCLUDE = $(LIBSUBCMD_DESTDIR)/include
+ LIBSUBCMD = $(LIBSUBCMD_OUTPUT)/libsubcmd.a
++CFLAGS += -I$(LIBSUBCMD_OUTPUT)/include
++$(LIBSUBCMD_OUTPUT)/include/subcmd/run-command.h \
++$(LIBSUBCMD_OUTPUT)/include/subcmd/exec-cmd.h \
++$(LIBSUBCMD_OUTPUT)/include/subcmd/help.h \
++$(LIBSUBCMD_OUTPUT)/include/subcmd/pager.h \
++$(LIBSUBCMD_OUTPUT)/include/subcmd/parse-options.h : $(LIBSUBCMD)
+ 
+ ifneq ($(OUTPUT),)
+   LIBSYMBOL_OUTPUT = $(abspath $(OUTPUT))/libsymbol
+@@ -349,6 +377,8 @@ endif
+ LIBSYMBOL_DESTDIR = $(LIBSYMBOL_OUTPUT)
+ LIBSYMBOL_INCLUDE = $(LIBSYMBOL_DESTDIR)/include
+ LIBSYMBOL = $(LIBSYMBOL_OUTPUT)/libsymbol.a
++CFLAGS += -I$(LIBSYMBOL_OUTPUT)/include
++$(LIBSYMBOL_OUTPUT)/symbol/kallsyms.h: $(LIBSYMBOL)
+ 
+ ifneq ($(OUTPUT),)
+   LIBPERF_OUTPUT = $(abspath $(OUTPUT))/libperf
+@@ -359,6 +389,22 @@ LIBPERF_DESTDIR = $(LIBPERF_OUTPUT)
+ LIBPERF_INCLUDE = $(LIBPERF_DESTDIR)/include
+ LIBPERF = $(LIBPERF_OUTPUT)/libperf.a
+ export LIBPERF
++CFLAGS += -I$(LIBPERF_OUTPUT)/include
++$(LIBPERF_OUTPUT)/include/perf/core.h \
++$(LIBPERF_OUTPUT)/include/perf/mmap.h \
++$(LIBPERF_OUTPUT)/include/perf/evsel.h \
++$(LIBPERF_OUTPUT)/include/perf/evlist.h \
++$(LIBPERF_OUTPUT)/include/perf/bpf_perf.h \
++$(LIBPERF_OUTPUT)/include/perf/event.h \
++$(LIBPERF_OUTPUT)/include/perf/cpumap.h \
++$(LIBPERF_OUTPUT)/include/perf/threadmap.h \
++$(LIBPERF_OUTPUT)/include/internal/mmap.h \
++$(LIBPERF_OUTPUT)/include/internal/evsel.h \
++$(LIBPERF_OUTPUT)/include/internal/lib.h \
++$(LIBPERF_OUTPUT)/include/internal/evlist.h \
++$(LIBPERF_OUTPUT)/include/internal/cpumap.h \
++$(LIBPERF_OUTPUT)/include/internal/xyarray.h \
++$(LIBPERF_OUTPUT)/include/internal/threadmap.h: $(LIBPERF)
+ 
+ # python extension build directories
+ PYTHON_EXTBUILD     := $(OUTPUT)python_ext_build/
 -- 
 2.38.1.431.g37b22c650d-goog
 
