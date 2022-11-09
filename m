@@ -2,125 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE86622C0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D6C622C10
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiKINAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 08:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
+        id S229917AbiKINCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 08:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiKINAR (ORCPT
+        with ESMTP id S229633AbiKINCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 08:00:17 -0500
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBE12D1F6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 05:00:15 -0800 (PST)
-Received: by mail-vk1-xa36.google.com with SMTP id r13so9279582vkf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 05:00:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+S5RqoJR7eNe+UaJkaYqcNTqaJzBg/EYLhKrA3XeTJU=;
-        b=rel5ChBGOWyyPrddCcExdpNk6z2wGkv02sSJ3Ur8AgAiG81XQo6uyS7ekn5oSKkVD/
-         0K2A7M8rKye5Ef9vzj5Q+WX+6PdEllkM5zevX9Y2XeNeOTo5gK3ozm/jCMy6HaV08zLt
-         Jgnjft+gnVJNZa37xueaFYjkxwLXGOUs0MaZ9/RCKaW55DVX02GaFXZYi8qmaP3/NQGo
-         NACh6/96YRotOn/YrO5Z8u8dTj5tT1R3eoG4tWmY4LqHzL7OMTnUNMlB7R2AQZfSZD0F
-         Cklf7yVZx0xKA/oKNLeNdsHmdpqEvzMElzN81Jw0LF7/dw2u44YCixewsXkQbfCsGNeZ
-         sC7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+S5RqoJR7eNe+UaJkaYqcNTqaJzBg/EYLhKrA3XeTJU=;
-        b=sQj9E/q8YEtr86Ii6Mx1RPmI4/nxQwrsObhitXLeNXedP4DXRYu3GXmFwDpHsg4frJ
-         t1exXPEQW5lYwLTqXnYYXWlmzc24zWmrYIa7PwciJQ8iPfv8WVJrOsequczyh2x2lY0U
-         U4IIbGZLnKAs/Qzr3DYkCjouWEjpgc/+BwHr55vsSgrE3GHua53p6ElTkHZkY1W30ACa
-         xN+/TUkKzTs5iNBFwR9xYuKtES1kiUZXKmtoSGwfO9xvqFvkHEzIZKcC2SulfTrgiRc0
-         ySFIMNEIwdhL1nE+kDLfcxGNfcqrMR+6ckww5bP5EPNrIR5BLcpocjZeBtC9Q3H32e7M
-         tBJA==
-X-Gm-Message-State: ACrzQf084gEZFLECnz9Ebqr2B+zmjKQryUpjsenBBpX0bHi1LNoF2NGN
-        f5Qzg0O5ga7yL9Ac2RbzNYrDAUnEm8yqWRW0D77MIQ==
-X-Google-Smtp-Source: AMsMyM4Hv8fvC//1o6S/UqfJLdecKRfXQBgB0zlcBIQd3tRd5vJVClWy+ngarqMcUdi0XfIgwMKO7msMaawfJQHUAPc=
-X-Received: by 2002:a05:6122:2219:b0:3b8:7fbd:9554 with SMTP id
- bb25-20020a056122221900b003b87fbd9554mr10547205vkb.27.1667998814618; Wed, 09
- Nov 2022 05:00:14 -0800 (PST)
+        Wed, 9 Nov 2022 08:02:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CB12CE3A;
+        Wed,  9 Nov 2022 05:02:39 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 16C6522794;
+        Wed,  9 Nov 2022 13:02:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667998958; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hjfNn8jWIDsAR7kj9048Nl6m/l0f5ueCW8Gr2KNsOhw=;
+        b=GXHgKSoxVW2YHlobbVQ8ol4lr6y1L+R1WkwXWcywXSnO9u1Mw6EsJhKMeli8wxNFnlUIKC
+        9W/xzN3bTiQE3YyvMnKqzOTeNSbjgA7Hie45fMgjudI4RTWsfUHFHo2Sn/kKH+0zgjVXT0
+        OLoATfsROR/5PiDKsctW0VIxLonqrcs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667998958;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hjfNn8jWIDsAR7kj9048Nl6m/l0f5ueCW8Gr2KNsOhw=;
+        b=B+iYC70KKeLhRoB50dbtvb61T+WftFbN2iOATMC86HAbdpyATElGU6dJpnEfvX0g3a6GmK
+        /yshg0SqwH5Qk/BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D5EBA139F1;
+        Wed,  9 Nov 2022 13:02:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id K9/kMu2ka2OndQAAMHmgww
+        (envelope-from <nstange@suse.de>); Wed, 09 Nov 2022 13:02:37 +0000
+From:   Nicolai Stange <nstange@suse.de>
+To:     Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Martin Doucha <mdoucha@suse.cz>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] padata: make padata_free_shell() to respect pd's
+ ->refcnt
+References: <20221019083708.27138-1-nstange@suse.de>
+        <20221019083708.27138-3-nstange@suse.de>
+        <20221028143546.3xc6rnfkfcml373c@parnassus.localdomain>
+Date:   Wed, 09 Nov 2022 14:02:37 +0100
+In-Reply-To: <20221028143546.3xc6rnfkfcml373c@parnassus.localdomain> (Daniel
+        Jordan's message of "Fri, 28 Oct 2022 10:35:46 -0400")
+Message-ID: <87educb7rm.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220902-get_gpiod_from_child-remove-v1-0-1e47125df20f@gmail.com>
- <YyzYKmsjKflqT1xZ@google.com> <Y1aCgJihNIqExUR2@google.com>
- <CAMRc=McvJ7AvhKdP7cv8K1+rzMf8-ptg2SnU+XOAwERhRx1Eyw@mail.gmail.com> <CACRpkdaPDXBWKQgNnmBLBmaXDo6roEDSpe1wrvMi_aG5F52K4g@mail.gmail.com>
-In-Reply-To: <CACRpkdaPDXBWKQgNnmBLBmaXDo6roEDSpe1wrvMi_aG5F52K4g@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 9 Nov 2022 14:00:03 +0100
-Message-ID: <CAMRc=Mf5va=ZbV5zhz30hqEVW_fGi3B4Qe+tBcU-P3DT3zxQmg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Get rid of devm_fwnode_get_[index_]gpiod_from_child()
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 11:54 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Tue, Oct 25, 2022 at 5:48 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> > On Mon, Oct 24, 2022 at 2:18 PM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> > >
-> > > On Thu, Sep 22, 2022 at 02:48:26PM -0700, Dmitry Torokhov wrote:
-> > > > Hi Pavel, Marek,
-> > > >
-> > > > On Fri, Sep 02, 2022 at 05:55:24PM -0700, Dmitry Torokhov wrote:
-> > > > > This drops the last uses of devm_fwnode_get_[index_]gpiod_from_child()
-> > > > > from the tree and drops the stubs implementing this API on top of
-> > > > > devm_fwnode_gpiod_get_index().
-> > > > >
-> > > > > Note that the bulk of users were converted in 2019, the couple of LED
-> > > > > drivers are all that have remained.
-> > > > >
-> > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > > >
-> > > > > ---
-> > > > > Dmitry Torokhov (3):
-> > > > >       leds: gpio: switch to using devm_fwnode_gpiod_get()
-> > > > >       leds: lgm-sso: switch to using devm_fwnode_gpiod_get()
-> > > > >       gpiolib: remove devm_fwnode_get_[index_]gpiod_from_child()
-> > > > >
-> > > > >  drivers/leds/blink/leds-lgm-sso.c |  5 ++---
-> > > > >  drivers/leds/leds-gpio.c          |  5 ++---
-> > > > >  include/linux/gpio/consumer.h     | 21 ---------------------
-> > > > >  3 files changed, 4 insertions(+), 27 deletions(-)
-> > > > > ---
-> > > > > base-commit: 7fd22855300e693668c3397771b3a2b3948f827a
-> > > > > change-id: 20220902-get_gpiod_from_child-remove-a62638849e91
-> > > > >
-> > > >
-> > > > Could you please consider picking this up for 6.1? Or would you be OK
-> > > > with this going through other tree (GPIO maybe)?
-> > >
-> > > *ping* Could this go through GPIO tree? Dropping this API helps with
-> > > some outstanding work that I have...
-> > >
-> >
-> > Sure! I'll let it wait for another week - it would be great to get an
-> > ack from Pavel - but in case of no response I'll take it through my
-> > tree.
->
-> I'd say just apply it at this point.
->
+Daniel Jordan <daniel.m.jordan@oracle.com> writes:
 
-Right. Applied to gpio/for-next.
+> On Wed, Oct 19, 2022 at 10:37:05AM +0200, Nicolai Stange wrote:
+>>=20
+>> Fixes: 07928d9bfc81 ("padata: Remove broken queue flushing")
+>
+> It looks like this issue goes back to the first padata commit.  For
+> instance, pd->refcnt goes to zero after the last _priv is serialized,
+> padata_free is called in another task, and a particularly sluggish
+> padata_reorder call touches pd after.
+>
+> So wouldn't it be
+>
+> Fixes: 16295bec6398 ("padata: Generic parallelization/serialization inter=
+face")
+
+I chose 07928d9bfc81 ("padata: Remove broken queue flushing"), because
+that one reads like it fixed a couple of much more severe padata
+lifetime issues, it only missed the relatively minor one addressed here,
+in a sense.
+
+Or to put it the other way around: if one were to backport this patch
+here, 07928d9bfc81 should probably get picked first, I think.
+
+But I'd be fine with any Fixes tag, of course, I don't have a strong
+opinion on this matter.
 
 Thanks!
-Bartosz
+
+Nicolai
+
+>
+> ?
+>
+> Otherwise,
+>
+> Acked-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+>
+>> Signed-off-by: Nicolai Stange <nstange@suse.de>
+>> ---
+
+--=20
+SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
+rnberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+(HRB 36809, AG N=C3=BCrnberg)
