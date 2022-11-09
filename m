@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75645623592
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 382116235A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbiKIVQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S231648AbiKIVRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbiKIVQV (ORCPT
+        with ESMTP id S229452AbiKIVRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:16:21 -0500
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB41E31237;
-        Wed,  9 Nov 2022 13:16:20 -0800 (PST)
-Received: by mail-pl1-f175.google.com with SMTP id k7so18274570pll.6;
-        Wed, 09 Nov 2022 13:16:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sv2S8v8aoIMkFk8Z4x5Dwl/WF1J53tF7mO3deU2RxH4=;
-        b=fZineH2xMMs5kSWrTdHOhG5xu3sRXY37FHckr786byS8ggjBR4vBAV5HRLT8ue+z8f
-         yFAoRyKk+Ag6bU1rb6OzUMbiPnJ5IWv2YBdrZiNU4bInUHqB9RmvwRk6YZXchr+5+a+F
-         /u7Y5fb08HXncKVjjdRdomgEdfUI16aLoB9/NZcJ1849gmMkc5NGjTWsR9I+qely7wSI
-         qvck/L2e9XTRtcwMOYV3d2QutAKMP+H5hr97jLFxlIof1cTXnlrOMxHYbavhmItNMePG
-         LY7f1mcJTp0Dsz67tLynJMQZhbYQUY5RcB+05menRhTjBpaD5uFYtnnimO0oBGpbkXlI
-         08Pw==
-X-Gm-Message-State: ACrzQf2t5RhueKScV+nnGAvifqdKS3GLq9PKlC4+FlEJtX/fBscLlf7X
-        J8C4d1h3iuXkfbVSKcyBpsIqK7dykr0=
-X-Google-Smtp-Source: AMsMyM4Z33DzYBqAFNPYNm40x5e/hzUYtWYeSl/cmk8tx/NFjuGTcXEQ3UiY9NkahDb0Nf5ytXqrPA==
-X-Received: by 2002:a17:902:ced1:b0:186:b18a:d0d5 with SMTP id d17-20020a170902ced100b00186b18ad0d5mr63284859plg.60.1668028580058;
-        Wed, 09 Nov 2022 13:16:20 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:68b6:5dae:a00c:c3b? ([2620:15c:211:201:68b6:5dae:a00c:c3b])
-        by smtp.gmail.com with ESMTPSA id i16-20020a632210000000b0043a18cef977sm7781598pgi.13.2022.11.09.13.16.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 13:16:19 -0800 (PST)
-Message-ID: <e92d248b-6041-49bc-a3dd-1e17abf0fb26@acm.org>
-Date:   Wed, 9 Nov 2022 13:16:16 -0800
+        Wed, 9 Nov 2022 16:17:42 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A5431221;
+        Wed,  9 Nov 2022 13:17:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=c2Wy125HjX2W7gqEInmUWaHL+2Vak7X60gZ/uKVxsSs=; b=yTyMtQVIIuXac7UW27SjuG9FjG
+        FaNaEfZ1TQyT856V2r9PHoNMTj1OFga3j6sCeGL5vpTaladSMUcaUqlEh7FhPpGzmcgViQIE+XamI
+        57plJW0OSYsmvdILQmQY1Q/fNcPb2WEGHDp6RnEVFTvXds//du5ABC2lJNjVOqyXX1A704rNcdiHM
+        aHhVDPBY7FMDBohK5yGY1VIjFtEWemGGKAC1JVcG84zgDMzQiZempRpkBc4NYYMUhbJvIIxVGGvfi
+        XKzZ06LfYfF7ex2aqalbXQBI14ZikP4rfNEIAEAQmmt1pv0oSTTKxu6qp2CS1l45ct8nuw+AyhJWK
+        KjxiEKAg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ossRG-00HMpa-89; Wed, 09 Nov 2022 21:16:50 +0000
+Date:   Wed, 9 Nov 2022 13:16:50 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jann Horn <jannh@google.com>, Greg KH <gregkh@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Seth Jenkins <sethjenkins@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        tangmeng <tangmeng@uniontech.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        David Gow <davidgow@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH next v2 0/6] exit: Put an upper limit on how often we can
+ oops
+Message-ID: <Y2wYwsolgpRGPuMK@bombadil.infradead.org>
+References: <20221109194404.gonna.558-kees@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 05/16] ufs: core: mcq: Add Multi Circular Queue support
-Content-Language: en-US
-To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
-        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
-        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
-        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1668022680.git.quic_asutoshd@quicinc.com>
- <5f3cfdaee098ef245e19824b45c092acd8cc48c8.1668022680.git.quic_asutoshd@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <5f3cfdaee098ef245e19824b45c092acd8cc48c8.1668022680.git.quic_asutoshd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109194404.gonna.558-kees@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/22 11:41, Asutosh Das wrote:
-> +static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
-> +{
-> +	int i;
-> +	u32 hba_maxq, rem, tot_queues;
-> +	struct Scsi_Host *host = hba->host;
-> +
-> +	hba_maxq = FIELD_GET(GENMASK(7, 0), hba->mcq_capabilities);
-> +
-> +	if (!rw_queues)
-> +		rw_queues = num_possible_cpus();
-> +
-> +	tot_queues = UFS_MCQ_NUM_DEV_CMD_QUEUES + read_queues + poll_queues +
-> +			rw_queues;
-> +
-> +	if (hba_maxq < tot_queues) {
-> +		dev_err(hba->dev, "Total queues (%d) exceeds HC capacity (%d)\n",
-> +			tot_queues, hba_maxq);
-> +		return -EOPNOTSUPP;
-> +	}
+On Wed, Nov 09, 2022 at 12:00:43PM -0800, Kees Cook wrote:
+> Hi,
+> 
+> This builds on Jann's v1 patch[1]. Changes in v2:
+> - move sysctl into kernel/exit.c (where it belongs)
+> - expand Documentation slightly
+> 
+> New stuff in v2:
+> - expose oops_count to sysfs
+> - consolidate panic_on_warn usage
+> - introduce warn_limit
+> - expose warn_count to sysfs
+> 
+> [1] https://lore.kernel.org/lkml/20221107201317.324457-1-jannh@google.com
+> 
+> Jann Horn (1):
+>   exit: Put an upper limit on how often we can oops
+> 
+> Kees Cook (5):
+>   panic: Separate sysctl logic from CONFIG_SMP
+>   exit: Expose "oops_count" to sysfs
+>   panic: Consolidate open-coded panic_on_warn checks
+>   panic: Introduce warn_limit
+>   panic: Expose "warn_count" to sysfs
 
-This function can fail with default kernel module parameters, e.g. 
-num_possible_cpus() == 8 and hba_maxq == 4. This is not acceptable. A 
-better solution is required, e.g. reducing rw_queues if the user has not 
-set this kernel module parameter.
+For all:
 
-Thanks,
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Bart.
+  Luis
