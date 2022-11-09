@@ -2,199 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D43862257E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D832362257F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiKIIa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        id S230082AbiKIIbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiKIIaU (ORCPT
+        with ESMTP id S229762AbiKIIbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:30:20 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CA9122B19;
-        Wed,  9 Nov 2022 00:29:20 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Bx37fYZGtjh4EFAA--.12874S3;
-        Wed, 09 Nov 2022 16:29:12 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtuPTZGtjJnIPAA--.42697S6;
-        Wed, 09 Nov 2022 16:29:11 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH v4 4/4] perf bench syscall: Add execve syscall benchmark
-Date:   Wed,  9 Nov 2022 16:29:07 +0800
-Message-Id: <1667982547-22331-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1667982547-22331-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1667982547-22331-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8BxtuPTZGtjJnIPAA--.42697S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAF13JryxJF1UCw1rAF4ktFb_yoWrCFy3pF
-        s7Ca18Jws5WFWYvr13tr1DKFy3Awn7Zry5Kw17C3yDZr42g343tr42gFy3GF17XwsrK343
-        uFs7Zry8Wa1rXaUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I
-        0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCI
-        bckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
-        I_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
-        6ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj4
-        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
-        JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Gii3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Nov 2022 03:31:16 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E0B233B6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667982581; x=1699518581;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MWCBL9F6YZ2BT26MwJWvXdQvFr+m2HtI7fXc04wVGyk=;
+  b=Zi7MIKiZnbtgElgIVi7elQPQL4jCKQkMu2HCmK6V137CczF4wxhIiSjv
+   7FO3IHurx6ARBqwFpBrSLpT4tWR4DhVOiTlX4yd83CyATDUF9yjb7WUFk
+   HRRhYrsOoHLRe3Fu4rH4EjwEe0KcJzJKVT0TCYhSCnUDY7TlckFQiqt7j
+   f4ciiyKk8qt5qNA/HHP+eEEAFQ/afvsgiqdpEazOdLnyQaHtyLHEpQdTV
+   WVoQaFHvByhG4FzFQKTC24FWWpRkey3AREMedesHRE1lPxQ2HCE6/G4Nu
+   7oExdvf057Q8Jw7smZcYAb+qBy45NWrvcMlDVBfAL8pHShp6KhYA10xbO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="397215891"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="397215891"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 00:29:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="725893454"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="725893454"
+Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 09 Nov 2022 00:29:25 -0800
+Received: from kbuild by e783503266e8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1osgSb-0001Gy-06;
+        Wed, 09 Nov 2022 08:29:25 +0000
+Date:   Wed, 09 Nov 2022 16:29:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ f0861f49bd946ff94fce4f82509c45e167f63690
+Message-ID: <636b64df.VSlP/WzruCVhioUl%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds the execve syscall benchmark, more syscall
-benchmarks can be added in the future.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: f0861f49bd946ff94fce4f82509c45e167f63690  x86/sgx: Add overflow check in sgx_validate_offset_length()
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/arch/x86/include/uapi/asm/unistd_32.h |  3 +++
- tools/arch/x86/include/uapi/asm/unistd_64.h |  3 +++
- tools/perf/bench/bench.h                    |  1 +
- tools/perf/bench/syscall.c                  | 36 +++++++++++++++++++++++++++++
- tools/perf/builtin-bench.c                  |  1 +
- 5 files changed, 44 insertions(+)
+elapsed time: 726m
 
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
-index 2bcf47f..d20b43c 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_32.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_32.h
-@@ -1,4 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __NR_execve
-+#define __NR_execve 11
-+#endif
- #ifndef __NR_getppid
- #define __NR_getppid 64
- #endif
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-index 5472203..80d4d90 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-@@ -1,4 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __NR_execve
-+#define __NR_execve 59
-+#endif
- #ifndef __NR_getppid
- #define __NR_getppid 110
- #endif
-diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-index 7ccc021..9d6f692 100644
---- a/tools/perf/bench/bench.h
-+++ b/tools/perf/bench/bench.h
-@@ -35,6 +35,7 @@ int bench_sched_messaging(int argc, const char **argv);
- int bench_sched_pipe(int argc, const char **argv);
- int bench_syscall_basic(int argc, const char **argv);
- int bench_syscall_getpgrp(int argc, const char **argv);
-+int bench_syscall_execve(int argc, const char **argv);
- int bench_mem_memcpy(int argc, const char **argv);
- int bench_mem_memset(int argc, const char **argv);
- int bench_mem_find_bit(int argc, const char **argv);
-diff --git a/tools/perf/bench/syscall.c b/tools/perf/bench/syscall.c
-index 2b89884..c71334c 100644
---- a/tools/perf/bench/syscall.c
-+++ b/tools/perf/bench/syscall.c
-@@ -14,6 +14,7 @@
- #include <sys/time.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
-+#include <sys/wait.h>
- #include <unistd.h>
- #include <stdlib.h>
- 
-@@ -30,6 +31,27 @@ static const char * const bench_syscall_usage[] = {
- 	NULL
- };
- 
-+static void test_execve(void)
-+{
-+	const char *pathname = "/bin/true";
-+	char *const argv[] = { (char *)pathname, NULL };
-+	pid_t pid = fork();
-+
-+	if (pid < 0) {
-+		fprintf(stderr, "fork failed\n");
-+		exit(1);
-+	} else if (pid == 0) {
-+		execve(pathname, argv, NULL);
-+		fprintf(stderr, "execve /bin/true failed\n");
-+		exit(1);
-+	} else {
-+		if (waitpid(pid, NULL, 0) < 0) {
-+			fprintf(stderr, "waitpid failed\n");
-+			exit(1);
-+		}
-+	}
-+}
-+
- static int bench_syscall_common(int argc, const char **argv, int syscall)
- {
- 	struct timeval start, stop, diff;
-@@ -49,6 +71,12 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
- 		case __NR_getpgrp:
- 			getpgrp();
- 			break;
-+		case __NR_execve:
-+			test_execve();
-+			/* Only loop 10000 times to save time */
-+			if (i == 10000)
-+				loops = 10000;
-+			break;
- 		default:
- 			break;
- 		}
-@@ -64,6 +92,9 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
- 	case __NR_getpgrp:
- 		name = "getpgrp()";
- 		break;
-+	case __NR_execve:
-+		name = "execve()";
-+		break;
- 	default:
- 		break;
- 	}
-@@ -111,3 +142,8 @@ int bench_syscall_getpgrp(int argc, const char **argv)
- {
- 	return bench_syscall_common(argc, argv, __NR_getpgrp);
- }
-+
-+int bench_syscall_execve(int argc, const char **argv)
-+{
-+	return bench_syscall_common(argc, argv, __NR_execve);
-+}
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index 20ca4ac..ace7a2a 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -53,6 +53,7 @@ static struct bench sched_benchmarks[] = {
- static struct bench syscall_benchmarks[] = {
- 	{ "basic",	"Benchmark for basic getppid(2) calls",		bench_syscall_basic	},
- 	{ "getpgrp",	"Benchmark for getpgrp(2) calls",		bench_syscall_getpgrp	},
-+	{ "execve",	"Benchmark for execve(2) calls",		bench_syscall_execve    },
- 	{ "all",	"Run all syscall benchmarks",			NULL			},
- 	{ NULL,		NULL,						NULL			},
- };
+configs tested: 88
+configs skipped: 64
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                            allnoconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                             allyesconfig
+i386                                defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+ia64                             allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+i386                 randconfig-a001-20221107
+i386                 randconfig-a006-20221107
+i386                 randconfig-a003-20221107
+i386                 randconfig-a002-20221107
+i386                 randconfig-a005-20221107
+i386                 randconfig-a004-20221107
+arm                        trizeps4_defconfig
+arm                           sunxi_defconfig
+sh                  sh7785lcr_32bit_defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+arc                              alldefconfig
+sparc                       sparc32_defconfig
+arm                          exynos_defconfig
+mips                          rb532_defconfig
+arm                             rpc_defconfig
+arm                      integrator_defconfig
+powerpc                        cell_defconfig
+powerpc                     rainier_defconfig
+x86_64               randconfig-a006-20221107
+x86_64               randconfig-a001-20221107
+x86_64               randconfig-a004-20221107
+x86_64               randconfig-a003-20221107
+x86_64               randconfig-a005-20221107
+x86_64               randconfig-a002-20221107
+sh                           se7751_defconfig
+powerpc                 linkstation_defconfig
+arm                             ezx_defconfig
+arm                        clps711x_defconfig
+arm                      footbridge_defconfig
+m68k                       m5275evb_defconfig
+nios2                            alldefconfig
+powerpc                    klondike_defconfig
+mips                        bcm47xx_defconfig
+riscv                               defconfig
+openrisc                 simple_smp_defconfig
+arc                        vdk_hs38_defconfig
+m68k                        m5272c3_defconfig
+sh                          rsk7269_defconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221108
+hexagon              randconfig-r045-20221108
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+mips                        qi_lb60_defconfig
+arm                         mv78xx0_defconfig
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+mips                     cu1000-neo_defconfig
+
 -- 
-2.1.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
