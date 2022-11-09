@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89744622AF7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA56B622AFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbiKILvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S231248AbiKILwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiKILva (ORCPT
+        with ESMTP id S231232AbiKILvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:51:30 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56813317DE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:51:20 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id io19so16854739plb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:51:20 -0800 (PST)
+        Wed, 9 Nov 2022 06:51:32 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FBA31216
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:51:23 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id v28so16444082pfi.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:51:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n7l0gcyZTSMtgONlgCq8JYmzNKlzJdwXwSa9TtKzHX4=;
-        b=dCtnfolV7NZTjIQst7bLm+R0e8lXueKVV0v7b/QjyVHeRBIdxnvcnXoOnCxxFDvSvk
-         EwwKsn9H/c3u3wxAH18AuVZrTTGa0xtsRdZ2lQvewblpJv1hQ/BJ1/cVh02T51kqwibA
-         9TfwfyIhmJ1AFeRqYwaDl6PjbFd3przV0Cnok=
+        bh=78mZXjDUqjc2CGPH2b0kN46OixnL1hoGKm7bE9XBgUM=;
+        b=IYn1pZPbT037tiskU40SdcUjr00Tb2lBA9rYT1D2KmHOqM8EdBQ1VdZg5ulYfsHP9S
+         6TKjKXb8ojMut+VZdnTW4d1VRfI7CfvfRNdt+nviVa7k35eGqRtMxtMJsHHgyGLW1otC
+         FMK6emkiAqsGvvLekKvM1N8+He8/Dg8Ekinew=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=n7l0gcyZTSMtgONlgCq8JYmzNKlzJdwXwSa9TtKzHX4=;
-        b=c/5Hb3R6dYADGrTTgn3PO5Zg5TRoGCR0bZNueq9tXrc/8O+Vt5uAhSQF4UHQtn4E3B
-         fX+vG62L7V/P9mI6Y5EMXkOJzARWby+E7mt8q/1khebJGROotqe87b5F42ipui1sfzOR
-         a4CinDWNRUvYrFjsDwsWFyfetW4ebBvFwVX4rWrezrjPzq/NqVmGnZGEOJWhdgLLc/Au
-         2d1QYm0hGLnE71m7jou30sId8UzG9Vt68SWp2g4xaTD1f6eKyhRXeXqvdMhW2kluIH1e
-         Dzgxk5tPe4I/A3ZRer6/D401Pa6ytsfBVrkmlA+Zg9faOcyos/e3sjamyXQjBQ7d6C0x
-         Y9ig==
-X-Gm-Message-State: ACrzQf2emUEp99M/24i5zognwepUNYDxoRtTUsc+V5DkhCh77pdtlKl8
-        aeTTuTFN/sFHk1YdV1CkMAnyGg==
-X-Google-Smtp-Source: AMsMyM7Rg2hU/k1WD6TqY27OHXzxKTED3WjneC0q/KoUbZcCmKt04o1vVWc7COK2SZU7DinwUBf6Tg==
-X-Received: by 2002:a17:90a:cb03:b0:214:219:b2b9 with SMTP id z3-20020a17090acb0300b002140219b2b9mr48462292pjt.191.1667994680525;
-        Wed, 09 Nov 2022 03:51:20 -0800 (PST)
+        bh=78mZXjDUqjc2CGPH2b0kN46OixnL1hoGKm7bE9XBgUM=;
+        b=m5BqeFSZQ1nIifPoNaRmpGxe0V4tcuHbZxdTe8x0ogT7mFWawmj1yGw9rwhuy1Wu8g
+         /9O8fFzWSgTEm0VH/eWQyW8cm1TC3t0Jeme04FGB7/81FcOADhLT2ABJ4CVKNxktC2tF
+         wMNvvu1e6qWOn/kYIIb6/VNHZDo9RZfVEmkub2NKMPxdDY4kHiz/cC+XPucCeHm31Mwb
+         Q6vQtAqK9K4fIyo4hbvVkbkohEOUdXRBtJv0BzwOuZ/1pM41CDINj+gHjdMOYX+8QZ5l
+         kZBQaadYqvScI1FVi9A+HfVvhSVwRtNc4aUCgIqe8u8EKr/et+N2f5mF3jMBw1d6Zd/x
+         fuMQ==
+X-Gm-Message-State: ACrzQf1C6OEWTtHa+tF49Q1v8nVzgXzBaYJn2LZiomQvtTQuycWhvRDi
+        zGIQoCGGJ9+wsLEmFfJEqr0bZbQaUWM1LQ==
+X-Google-Smtp-Source: AMsMyM4evVnWSvLkw+dSHbFX3CGE0wpnSBNFc155E+fkSbYY7z5M05e2ebLt+A3Ah2OBlfptSutn1w==
+X-Received: by 2002:a05:6a02:113:b0:43f:3554:ff9c with SMTP id bg19-20020a056a02011300b0043f3554ff9cmr52961284pgb.578.1667994683200;
+        Wed, 09 Nov 2022 03:51:23 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:61f1:44d3:3f47:2cdb])
-        by smtp.gmail.com with ESMTPSA id f5-20020a655505000000b00434760ee36asm7292311pgr.16.2022.11.09.03.51.18
+        by smtp.gmail.com with ESMTPSA id f5-20020a655505000000b00434760ee36asm7292311pgr.16.2022.11.09.03.51.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 03:51:20 -0800 (PST)
+        Wed, 09 Nov 2022 03:51:22 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Minchan Kim <minchan@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -54,9 +54,9 @@ Cc:     Nitin Gupta <ngupta@vflare.org>,
         Suleiman Souhlal <suleiman@google.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv5 10/13] zram: Add algo parameter support to zram_recompress()
-Date:   Wed,  9 Nov 2022 20:50:44 +0900
-Message-Id: <20221109115047.2921851-11-senozhatsky@chromium.org>
+Subject: [PATCHv5 11/13] documentation: Add zram recompression documentation
+Date:   Wed,  9 Nov 2022 20:50:45 +0900
+Message-Id: <20221109115047.2921851-12-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221109115047.2921851-1-senozhatsky@chromium.org>
 References: <20221109115047.2921851-1-senozhatsky@chromium.org>
@@ -71,164 +71,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recompression iterates through all the registered secondary
-compression algorithms in order of their priorities so that
-we have higher chances of finding the algorithm that compresses
-a particular page. This, however, may not always be best
-approach and sometimes we may want to limit recompression to
-only one particular algorithm. For instance, when a higher
-priority algorithm uses too much power and device has a
-relatively low battery level we may want to limit recompression
-to use only a lower priority algorithm, which uses less power.
-
-Introduce algo= parameter support to recompression sysfs knob
-so that user-sapce can request recompression with particular
-algorithm only:
-
-  echo "type=idle algo=zstd" > /sys/block/zramX/recompress
+Document user-space visible device attributes that
+are enabled by ZRAM_MULTI_COMP.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- drivers/block/zram/zram_drv.c | 54 +++++++++++++++++++++++++++++------
- drivers/block/zram/zram_drv.h |  1 +
- 2 files changed, 46 insertions(+), 9 deletions(-)
+ Documentation/admin-guide/blockdev/zram.rst | 81 +++++++++++++++++++++
+ 1 file changed, 81 insertions(+)
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 67b58f2255db..89d25f60b33e 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1677,6 +1677,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 	unsigned int comp_len_new;
- 	unsigned int class_index_old;
- 	unsigned int class_index_new;
-+	u32 num_recomps = 0;
- 	void *src, *dst;
- 	int ret;
+diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+index 177a142c3146..d898b7ace33d 100644
+--- a/Documentation/admin-guide/blockdev/zram.rst
++++ b/Documentation/admin-guide/blockdev/zram.rst
+@@ -401,6 +401,87 @@ budget in next setting is user's job.
+ If admin wants to measure writeback count in a certain period, they could
+ know it via /sys/block/zram0/bd_stat's 3rd column.
  
-@@ -1711,6 +1712,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 		if (prio <= zram_get_priority(zram, index))
- 			continue;
- 
-+		num_recomps++;
- 		zstrm = zcomp_stream_get(zram->comps[prio]);
- 		src = kmap_atomic(page);
- 		ret = zcomp_compress(zstrm, src, &comp_len_new);
-@@ -1743,13 +1745,19 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 	if (!zstrm)
- 		return 0;
- 
--	/*
--	 * All secondary algorithms failed to re-compress the page in a way
--	 * that would save memory, mark the object as incompressible so that
--	 * we will not try to compress it again.
--	 */
- 	if (class_index_new >= class_index_old) {
--		zram_set_flag(zram, index, ZRAM_INCOMPRESSIBLE);
-+		/*
-+		 * Secondary algorithms failed to re-compress the page
-+		 * in a way that would save memory, mark the object as
-+		 * incompressible so that we will not try to compress
-+		 * it again.
-+		 *
-+		 * We need to make sure that all secondary algorithms have
-+		 * failed, so we test if the number of recompressions matches
-+		 * the number of active secondary algorithms.
-+		 */
-+		if (num_recomps == zram->num_active_comps - 1)
-+			zram_set_flag(zram, index, ZRAM_INCOMPRESSIBLE);
- 		return 0;
- 	}
- 
-@@ -1798,10 +1806,11 @@ static ssize_t recompress_store(struct device *dev,
- 				struct device_attribute *attr,
- 				const char *buf, size_t len)
- {
-+	u32 prio = ZRAM_SECONDARY_COMP, prio_max = ZRAM_MAX_COMPS;
- 	struct zram *zram = dev_to_zram(dev);
--	u32 mode = 0, threshold = 0, prio = ZRAM_SECONDARY_COMP;
- 	unsigned long nr_pages = zram->disksize >> PAGE_SHIFT;
--	char *args, *param, *val;
-+	char *args, *param, *val, *algo = NULL;
-+	u32 mode = 0, threshold = 0;
- 	unsigned long index;
- 	struct page *page;
- 	ssize_t ret;
-@@ -1833,6 +1842,11 @@ static ssize_t recompress_store(struct device *dev,
- 				return ret;
- 			continue;
- 		}
++recompression
++-------------
 +
-+		if (!strcmp(param, "algo")) {
-+			algo = val;
-+			continue;
-+		}
- 	}
- 
- 	if (threshold >= PAGE_SIZE)
-@@ -1844,6 +1858,26 @@ static ssize_t recompress_store(struct device *dev,
- 		goto release_init_lock;
- 	}
- 
-+	if (algo) {
-+		bool found = false;
++With CONFIG_ZRAM_MULTI_COMP, zram can recompress pages using alternative
++(secondary) compression algorithms. The basic idea is that alternative
++compression algorithm can provide better compression ratio at a price of
++(potentially) slower compression/decompression speeds. Alternative compression
++algorithm can, for example, be more successful compressing huge pages (those
++that default algorithm failed to compress). Another application is idle pages
++recompression - pages that are cold and sit in the memory can be recompressed
++using more effective algorithm and, hence, reduce zsmalloc memory usage.
 +
-+		for (; prio < ZRAM_MAX_COMPS; prio++) {
-+			if (!zram->comp_algs[prio])
-+				continue;
++With CONFIG_ZRAM_MULTI_COMP, zram supports up to 4 compression algorithms:
++one primary and up to 3 secondary ones. Primary zram compressor is explained
++in "3) Select compression algorithm", secondary algorithms are configured
++using recomp_algorithm device attribute.
 +
-+			if (!strcmp(zram->comp_algs[prio], algo)) {
-+				prio_max = min(prio + 1, ZRAM_MAX_COMPS);
-+				found = true;
-+				break;
-+			}
-+		}
++Example:::
 +
-+		if (!found) {
-+			ret = -EINVAL;
-+			goto release_init_lock;
-+		}
-+	}
++	#show supported recompression algorithms
++	cat /sys/block/zramX/recomp_algorithm
++	#1: lzo lzo-rle lz4 lz4hc [zstd]
++	#2: lzo lzo-rle lz4 [lz4hc] zstd
 +
- 	page = alloc_page(GFP_KERNEL);
- 	if (!page) {
- 		ret = -ENOMEM;
-@@ -1874,7 +1908,7 @@ static ssize_t recompress_store(struct device *dev,
- 			goto next;
++Alternative compression algorithms are sorted by priority. In the example
++above, zstd is used as the first alternative algorithm, which has priority
++of 1, while lz4hc is configured as a compression algorithm with priority 2.
++Alternative compression algorithm's priority is provided during algorithms
++configuration:::
++
++	#select zstd recompression algorithm, priority 1
++	echo "algo=zstd priority=1" > /sys/block/zramX/recomp_algorithm
++
++	#select deflate recompression algorithm, priority 2
++	echo "algo=deflate priority=2" > /sys/block/zramX/recomp_algorithm
++
++Another device attribute that CONFIG_ZRAM_MULTI_COMP enables is recompress,
++which controls recompression.
++
++Examples:::
++
++	#IDLE pages recompression is activated by `idle` mode
++	echo "type=idle" > /sys/block/zramX/recompress
++
++	#HUGE pages recompression is activated by `huge` mode
++	echo "type=huge" > /sys/block/zram0/recompress
++
++	#HUGE_IDLE pages recompression is activated by `huge_idle` mode
++	echo "type=huge_idle" > /sys/block/zramX/recompress
++
++The number of idle pages can be significant, so user-space can pass a size
++threshold (in bytes) to the recompress knob: zram will recompress only pages
++of equal or greater size:::
++
++	#recompress all pages larger than 3000 bytes
++	echo "threshold=3000" > /sys/block/zramX/recompress
++
++	#recompress idle pages larger than 2000 bytes
++	echo "type=idle threshold=2000" > /sys/block/zramX/recompress
++
++Recompression of idle pages requires memory tracking.
++
++During re-compression for every page, that matches re-compression criteria,
++ZRAM iterates the list of registered alternative compression algorithms in
++order of their priorities. ZRAM stops either when re-compression was
++successful (re-compressed object is smaller in size than the original one)
++and matches re-compression criteria (e.g. size threshold) or when there are
++no secondary algorithms left to try. If none of the secondary algorithms can
++successfully re-compressed the page such a page is marked as incompressible,
++so ZRAM will not attempt to re-compress it in the future.
++
++This re-compression behaviour, when it iterates through the list of
++registered compression algorithms, increases our chances of finding the
++algorithm that successfully compresses a particular page. Sometimes, however,
++it is convenient (and sometimes even necessary) to limit recompression to
++only one particular algorithm so that it will not try any other algorithms.
++This can be achieved by providing a algo=NAME parameter:::
++
++	#use zstd algorithm only (if registered)
++	echo "type=huge algo=zstd" > /sys/block/zramX/recompress
++
+ memory tracking
+ ===============
  
- 		err = zram_recompress(zram, index, page, threshold,
--				      prio, ZRAM_MAX_COMPS);
-+				      prio, prio_max);
- next:
- 		zram_slot_unlock(zram, index);
- 		if (err) {
-@@ -2110,6 +2144,7 @@ static void zram_destroy_comps(struct zram *zram)
- 		if (!comp)
- 			continue;
- 		zcomp_destroy(comp);
-+		zram->num_active_comps--;
- 	}
- }
- 
-@@ -2177,6 +2212,7 @@ static ssize_t disksize_store(struct device *dev,
- 		}
- 
- 		zram->comps[prio] = comp;
-+		zram->num_active_comps++;
- 	}
- 	zram->disksize = disksize;
- 	set_capacity_and_notify(zram->disk, zram->disksize >> SECTOR_SHIFT);
-diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
-index b80faae76835..473325415a74 100644
---- a/drivers/block/zram/zram_drv.h
-+++ b/drivers/block/zram/zram_drv.h
-@@ -125,6 +125,7 @@ struct zram {
- 	 */
- 	u64 disksize;	/* bytes */
- 	const char *comp_algs[ZRAM_MAX_COMPS];
-+	s8 num_active_comps;
- 	/*
- 	 * zram is claimed so open request will be failed
- 	 */
 -- 
 2.38.1.431.g37b22c650d-goog
 
