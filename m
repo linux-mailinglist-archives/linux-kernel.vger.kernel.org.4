@@ -2,285 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3B7622F18
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB26622F1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiKIPd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S230174AbiKIPfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiKIPd0 (ORCPT
+        with ESMTP id S230153AbiKIPfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:33:26 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108F427B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:33:22 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1osn4k-0006HM-QC; Wed, 09 Nov 2022 16:33:14 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1osn4h-003HLm-Vh; Wed, 09 Nov 2022 16:33:12 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1osn4h-00FRbV-OJ; Wed, 09 Nov 2022 16:33:11 +0100
-Date:   Wed, 9 Nov 2022 16:33:11 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Wesley W. Terpstra" <wesley@sifive.com>,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] pwm: sifive: Always let the first pwm_apply_state
- succeed
-Message-ID: <20221109153311.cszr7fgfmyelwra3@pengutronix.de>
-References: <20221109113724.519021-1-emil.renner.berthing@canonical.com>
- <20221109120102.ylnseq2w33rvt7fz@pengutronix.de>
- <CAJM55Z-EVXB6FTWwh_vY_B3LoVv+b7TCQCE7asB8G8wkEwui_g@mail.gmail.com>
+        Wed, 9 Nov 2022 10:35:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9590BFF7;
+        Wed,  9 Nov 2022 07:35:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F97E61B7A;
+        Wed,  9 Nov 2022 15:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD11C433D6;
+        Wed,  9 Nov 2022 15:35:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668008145;
+        bh=LhZ+WjU7cSTCcqle6TSdTZQmNC7lZrjyrwVVzROOAoE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b3fQ3ICluA9Zcx34dPXCyRlAAVIQNROlvfRQHOH0VmfSD/l3RwoPvXLq76a9KJUAX
+         wCfL829a2E3baedcfG6gzEkrlmvj0y/v1KNkXBLWVCaVvEdpbAMRsXvbry7besDYrv
+         tAqLavWVeFqSKr2A7JqiMCUSNeglwoH+pjXZVO6TlG42t8GA8OtOfnrlDYSsmRMVD8
+         2YHG783DGRAoaNBUCt8i923oPMSfGtW/a/fxMtmtQPw8vIS1xw9xi7MXoXueYuON5A
+         p9Xp6Fms/X0vo8TpFxQqfXTu3pmgHsZoy9vjV5J5KqslKXJ1O5oIKSyzMV+s/PQyMH
+         iGKr8VI8SkAsg==
+Date:   Wed, 9 Nov 2022 21:05:33 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, lpieralisi@kernel.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lukas Wunner <lukas@wunner.de>, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kw@linux.com, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        Sergey.Semin@baikalelectronics.ru, jszhang@kernel.org,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH V1 0/4] GPIO based PCIe Hot-Plug support
+Message-ID: <20221109153533.GA46277@thinkpad>
+References: <2a465222-342a-418b-95af-9948f6ce9065@linux.dev>
+ <20221003180949.GA2104321@bhelgaas>
+ <20221003182147.jp5gn2jpnf4gucdl@pali>
+ <364fc93d-a4b5-59cb-c62a-8e3b32507523@nvidia.com>
+ <9210e81f-15ee-6c54-bfbb-1188da48dd68@nvidia.com>
+ <38c1d688-1488-3ecb-422e-fbc47106c144@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wiechjgncqw7xr3v"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJM55Z-EVXB6FTWwh_vY_B3LoVv+b7TCQCE7asB8G8wkEwui_g@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <38c1d688-1488-3ecb-422e-fbc47106c144@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 08:16:06AM +0530, Vidya Sagar wrote:
+> 
+> 
+> On 10/10/2022 11:44 AM, Vidya Sagar wrote:
+> > 
+> > 
+> > On 10/4/2022 9:34 AM, Vidya Sagar wrote:
+> > > 
+> > > 
+> > > On 10/3/2022 11:51 PM, Pali Rohár wrote:
+> > > > External email: Use caution opening links or attachments
+> > > > 
+> > > > 
+> > > > On Monday 03 October 2022 13:09:49 Bjorn Helgaas wrote:
+> > > > > On Sat, Oct 01, 2022 at 05:50:07PM -0600, Jonathan Derrick wrote:
+> > > > > > On 10/1/2022 10:20 AM, Pali Rohár wrote:
+> > > > > > ...
+> > > > > 
+> > > > > > > Would not it better to rather synthesise PCIe Slot
+> > > > > > > Capabilities support
+> > > > > > > in your PCIe Root Port device (e.g. via
+> > > > > > > pci-bridge-emul.c) and then let
+> > > > > > > existing PCI hotplug code to take care for hotplugging? Because it
+> > > > > > > already implements all required stuff for
+> > > > > > > re-scanning, registering and
+> > > > > > > unregistering PCIe devices for Root Ports with Slot
+> > > > > > > Capabilities. And I
+> > > > > > > think that there is no need to have just another (GPIO based)
+> > > > > > > implementation of PCI hotplug.
+> > > > > > 
+> > > > > > I did that a few years ago (rejected), but can attest to
+> > > > > > the robustness of
+> > > > > > the pcie hotplug code on non-hotplug slots.
+> > > > > > https://lwn.net/Articles/811988/
+> > > > > 
+> > > > > I think the thread is here:
+> > > > > https://lore.kernel.org/linux-pci/1581120007-5280-1-git-send-email-jonathan.derrick@intel.com/
+> > > > > 
+> > > > > and I'm sorry that my response came across as "rejected".  I intended
+> > > > > it as "this is good ideas and good work and we should keep going".
+> > > > > 
+> > > > > Bjorn
+> > > > 
+> > > > Nice! So we have consensus that this is a good idea. Anyway, if you need
+> > > > help with designing something here, please let me know as I have good
+> > > > understanding of all (just two) consumers of pci-bridge-emul.c driver.
+> > > > 
+> > > 
+> > > Thanks all for your comments.
+> > > 
+> > > I would like to hear from Bjorn / Lorenzo if the design of the
+> > > current patch series is fine at a high level or I should explore
+> > > emulating the root port's configuration space to fake slot
+> > > config/control registers (which in turn depend on the hotplug GPIO
+> > > interrupt & state to update Presence Detect related bits in Slot
+> > > status register) and use the PCIe native Hot-plug framework itself
+> > > to carry out with enabling the Hot-plug functionality?
+> > 
+> > Bjorn / Lorenzo,
+> > Could you please take time to comment on the discussion happened here
+> > and the right approach to be followed?
+> 
+> I'm really sorry to bug you on this, but would like to hear your comments on
+> the approach to be taken. So, I would really like to hear your take on this.
+> 
 
---wiechjgncqw7xr3v
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since Bjorn already expressed his good will about the approach, I think you
+can just proceed with the emulation layer. I don't think there will be any
+controversy.
 
-On Wed, Nov 09, 2022 at 01:45:43PM +0100, Emil Renner Berthing wrote:
-> On Wed, 9 Nov 2022 at 13:01, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > Hello Emil,
-> >
-> > On Wed, Nov 09, 2022 at 12:37:24PM +0100, Emil Renner Berthing wrote:
-> > > Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
-> > > RGB and green PWM controlled LEDs on the HiFive Unmatched board
-> > > managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
-> > > All three colours of the RGB LED and the green LED run from different
-> > > lines of the same PWM, but with the same period so this works fine wh=
-en
-> > > the LED drivers are loaded one after the other.
-> > >
-> > > Unfortunately it does expose a race in the PWM driver when both LED
-> > > drivers are loaded at roughly the same time. Here is an example:
-> > >
-> > >   |          Thread A           |          Thread B           |
-> > >   |  led_pwm_mc_probe           |  led_pwm_probe              |
-> > >   |    devm_fwnode_pwm_get      |                             |
-> > >   |      pwm_sifive_request     |                             |
-> > >   |        ddata->user_count++  |                             |
-> > >   |                             |    devm_fwnode_pwm_get      |
-> > >   |                             |      pwm_sifive_request     |
-> > >   |                             |        ddata->user_count++  |
-> > >   |         ...                 |          ...                |
-> > >   |    pwm_state_apply          |    pwm_state_apply          |
-> > >   |      pwm_sifive_apply       |      pwm_sifive_apply       |
-> > >
-> > > Now both calls to pwm_sifive_apply will see that ddata->approx_period,
-> > > initially 0, is different from the requested period and the clock nee=
-ds
-> > > to be updated. But since ddata->user_count >=3D 2 both calls will fail
-> > > with -EBUSY, which will then cause both LED drivers to fail to probe.
-> > >
-> > > Fix it by letting the first call to pwm_sifive_apply update the clock
-> > > even when ddata->user_count !=3D 1.
-> > >
-> > > Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
-> > > Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.c=
-om>
-> > > ---
-> > >  drivers/pwm/pwm-sifive.c | 8 +++++++-
-> > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> > > index 2d4fa5e5fdd4..b3c60ec72a6e 100644
-> > > --- a/drivers/pwm/pwm-sifive.c
-> > > +++ b/drivers/pwm/pwm-sifive.c
-> > > @@ -159,7 +159,13 @@ static int pwm_sifive_apply(struct pwm_chip *chi=
-p, struct pwm_device *pwm,
-> > >
-> > >       mutex_lock(&ddata->lock);
-> > >       if (state->period !=3D ddata->approx_period) {
-> > > -             if (ddata->user_count !=3D 1) {
-> > > +             /*
-> > > +              * Don't let a 2nd user change the period underneath th=
-e 1st user.
-> > > +              * However if ddate->approx_period =3D=3D 0 this is the=
- first time we set
-> > > +              * any period, so let whoever gets here first set the p=
-eriod so other
-> > > +              * users who agree on the period won't fail.
-> > > +              */
-> > > +             if (ddata->user_count !=3D 1 && ddata->approx_period) {
-> >
-> > While I'm convinced this works, we'd get some more uniform behaviour
-> > compared to other hardwares with similar restrictions if you lock the
-> > period on enabling the PWM instead of at request time. See for example
-> > drivers/pwm/pwm-pca9685.c.
->=20
-> Hmm.. that driver uses a pwms_enabled bitmap rather than a user count,
-> but it still sets the bit in the request method and refuses to change
-> period in the apply method if more than 1 bit is set.
+Thanks,
+Mani
 
-Note there are two different bitmaps. The one modified in .request is
-for gpio stuff and the other in .apply() for locking the common period
-length.
+> Thanks,
+> Vidya Sagar
+> 
+> > 
+> > Thanks,
+> > Vidya Sagar
+> > 
+> > > 
+> > > Thanks,
+> > > Vidya Sagar
+> > > 
+> > > 
 
-> So as far as I
-> can tell it still suffers from the same race. However using a bitmap
-> instead of a user count would let us handle everything in the apply
-> method if we don't set the bit in the request method, but then the
-> behaviour would still be different. In any case it would still be a
-> large change to this driver.
->=20
-> How about we merge this bug fix that can easily be backported first
-> and then look at how it should be handled properly?
-
-I thought it wouldn't be that hard to do it right from the start,
-but I admit it's harder than I expected to get right. My prototype looks
-as follows:
-
-diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-index 2d4fa5e5fdd4..89846d95bfc0 100644
---- a/drivers/pwm/pwm-sifive.c
-+++ b/drivers/pwm/pwm-sifive.c
-@@ -41,13 +41,13 @@
-=20
- struct pwm_sifive_ddata {
- 	struct pwm_chip	chip;
--	struct mutex lock; /* lock to protect user_count and approx_period */
-+	struct mutex lock; /* lock to protect approx_period */
- 	struct notifier_block notifier;
- 	struct clk *clk;
- 	void __iomem *regs;
- 	unsigned int real_period;
- 	unsigned int approx_period;
--	int user_count;
-+	DECLARE_BITMAP(pwms_enabled, 4);
- };
-=20
- static inline
-@@ -59,10 +59,16 @@ struct pwm_sifive_ddata *pwm_sifive_chip_to_ddata(struc=
-t pwm_chip *c)
- static int pwm_sifive_request(struct pwm_chip *chip, struct pwm_device *pw=
-m)
- {
- 	struct pwm_sifive_ddata *ddata =3D pwm_sifive_chip_to_ddata(chip);
-+	u32 val =3D readl(ddata->regs + PWM_SIFIVE_PWMCFG);
-=20
--	mutex_lock(&ddata->lock);
--	ddata->user_count++;
--	mutex_unlock(&ddata->lock);
-+	if (val & PWM_SIFIVE_PWMCFG_EN_ALWAYS) {
-+		val =3D readl(ddata->regs + PWM_SIFIVE_PWMCMP(pwm->hwpwm));
-+		if (val > 0) {
-+			mutex_lock(&ddata->lock);
-+			__set_bit(pwm->hwpwm, ddata->pwms_enabled);
-+			mutex_unlock(&ddata->lock);
-+		}
-+	}
-=20
- 	return 0;
- }
-@@ -72,7 +78,7 @@ static void pwm_sifive_free(struct pwm_chip *chip, struct=
- pwm_device *pwm)
- 	struct pwm_sifive_ddata *ddata =3D pwm_sifive_chip_to_ddata(chip);
-=20
- 	mutex_lock(&ddata->lock);
--	ddata->user_count--;
-+	__clear_bit(pwm->hwpwm, ddata->pwms_enabled);
- 	mutex_unlock(&ddata->lock);
- }
-=20
-@@ -158,11 +164,18 @@ static int pwm_sifive_apply(struct pwm_chip *chip, st=
-ruct pwm_device *pwm,
- 	frac =3D min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
-=20
- 	mutex_lock(&ddata->lock);
-+
-+	if (state->enabled) {
-+		__set_bit(pwm->hwpwm, ddata->pwms_enabled);
-+
- 	if (state->period !=3D ddata->approx_period) {
--		if (ddata->user_count !=3D 1) {
-+		if (bitmap_weight(ddata->pwms_enabled, 4) > 1) {
-+			if (!enabled) {
-+				__clear_bit(pwm->hwpwm, ddata->pwms_enabled);
- 			mutex_unlock(&ddata->lock);
- 			return -EBUSY;
- 		}
-+
- 		ddata->approx_period =3D state->period;
- 		pwm_sifive_update_clock(ddata, clk_get_rate(ddata->clk));
- 	}
-@@ -177,14 +190,23 @@ static int pwm_sifive_apply(struct pwm_chip *chip, st=
-ruct pwm_device *pwm,
- 		ret =3D clk_enable(ddata->clk);
- 		if (ret) {
- 			dev_err(ddata->chip.dev, "Enable clk failed\n");
-+			if (state->enabled) {
-+				mutex_lock(&ddata->lock);
-+				__clear_bit(pwm->hwpwm, ddata->pwms_enabled);
-+				mutex_unlock(&ddata->lock);
-+			}
- 			return ret;
- 		}
- 	}
-=20
- 	writel(frac, ddata->regs + PWM_SIFIVE_PWMCMP(pwm->hwpwm));
-=20
--	if (!state->enabled)
-+	if (!state->enabled) {
-+		mutex_lock(&ddata->lock);
-+		__clear_bit(pwm->hwpwm, ddata->pwms_enabled);
-+		mutex_unlock(&ddata->lock);
- 		clk_disable(ddata->clk);
-+	}
-=20
- 	return 0;
- }
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---wiechjgncqw7xr3v
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNryDQACgkQwfwUeK3K
-7AkMVAf+KzRDTK6DBmkno8MPgGyQLYPP4iboShZ7T4i3IA15toLWxs+PyU/E18vx
-gct9YRRoyS6PfZ4vR39SLcRh0l12rnXMAS9iKKORYnnpvK6cai3ayZkTZNNmQiRS
-7TMPBhrcm9jJ60RJjqHToVfV+b393+ZmeVslIR7VdQCOCBk2QWwFxPZl07a/+7D4
-XK3L+BCx8LDViPIOE73S3LeXkC727yPKYPmtJAigX5+SXAMxPrj8KesAD/k3n8QE
-Anj3+XEgKnlJM2YK32mvbdszvm/MfFV+JGEifisotFV//d/+N92srRs0oY2dG29S
-k8buk+fIM9Y8ekV/fapyjcRkDXg1Nw==
-=9mwE
------END PGP SIGNATURE-----
-
---wiechjgncqw7xr3v--
+-- 
+மணிவண்ணன் சதாசிவம்
