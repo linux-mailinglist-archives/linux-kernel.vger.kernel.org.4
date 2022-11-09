@@ -2,152 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC096226A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65AC86226C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiKIJRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:17:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S230017AbiKIJW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKIJRT (ORCPT
+        with ESMTP id S229900AbiKIJWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:17:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4860F11C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:15:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667985325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X02nRL309PhEzx0jCPIZSs9mBHARHTVVyhCWK/3u8/A=;
-        b=DT+GQY+lZ2xtvTped+FBJvGW5DTjxj6Tz8e+w50U8TiuTa3dOO+Gq/6CsL0kXHEFpqHjlp
-        4QM2Y+/E08nBEv/i3KEedbDWKKuw6OvZvmZyYrSBYc7/ZRjyqfyEdDQ7FSmX8EZ6BeRURo
-        8wC6HEWmBPCSt3zrmLojNZp43ruqnbM=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-505-MlkGSStoMGa-jRyzTRoWlQ-1; Wed, 09 Nov 2022 04:15:23 -0500
-X-MC-Unique: MlkGSStoMGa-jRyzTRoWlQ-1
-Received: by mail-qt1-f199.google.com with SMTP id y19-20020a05622a121300b003a526e0ff9bso12118121qtx.15
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:15:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X02nRL309PhEzx0jCPIZSs9mBHARHTVVyhCWK/3u8/A=;
-        b=A3vm5MHklvenvZPgWRjdLcBrojZ0Gn0SoaSq12IKB3LC7sNdGDMTo3vfALl6qwyXIH
-         ANq6fnxRa2cqJBDcsHJzkNGPl51g4ALAu9kyle00BwLGWUD/wRlEB7bLKn1cPvjoZL7q
-         RETLcTqXmhj17iKjPTpdXDRIujigDDHC0pDfxNnnAAMP8cAkrCd1sVbpEU4VlaAKzUM7
-         1V5OvfdvJ8jCQFelsKB5tDeDRyHor3Jp4Gn1JbBrGNzSdDVXKAOHWPIIXnAMwTK9uk7a
-         GpoLVLbG3g3Uf9craBuy5h0sgK9Z2xen8hVS0SvIkpAQnFyfuv52zYOrBZwAT8+aL/qV
-         rE2A==
-X-Gm-Message-State: ACrzQf218zJ/GFhIjOuMMyDO8aDIU91ceH8EaoXKYCkMYKaDF4YMvaRj
-        /knfFq6iMaudSnUtNWgFBvCHdGgL7dRnH8ASda5wZSAXffVv/FdhSQZInhby8H4Cwx216mSTCiz
-        DcxqaAAwhmtfzN3rn/kJRNfSZ
-X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id o3-20020a05620a22c300b006ec53bbd296mr42354532qki.158.1667985321960;
-        Wed, 09 Nov 2022 01:15:21 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM72DOuuaGj1I+qPxM2t/sXaQdbORDHatD+H9ZRGH21aquAj6PF1iyJoYCs45Nh/suMZZUzzMQ==
-X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id o3-20020a05620a22c300b006ec53bbd296mr42354511qki.158.1667985321736;
-        Wed, 09 Nov 2022 01:15:21 -0800 (PST)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05620a284c00b006cbc6e1478csm10388193qkp.57.2022.11.09.01.15.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 01:15:21 -0800 (PST)
-Message-ID: <30b8e07970f2cfbba0ebee82aa3b46a047a0f43b.camel@redhat.com>
-Subject: Re: [PATCH v2 9/9] KVM: x86: remove exit_int_info warning in
- svm_handle_exit
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        Yang Zhong <yang.zhong@intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Borislav Petkov <bp@alien8.de>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kselftest@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        David Matlack <dmatlack@google.com>, stable@vger.kernel.org
-Date:   Wed, 09 Nov 2022 11:15:16 +0200
-In-Reply-To: <3d25a0b4-6957-d070-db11-69ec9e0132ba@oracle.com>
-References: <20221103141351.50662-1-mlevitsk@redhat.com>
-         <20221103141351.50662-10-mlevitsk@redhat.com>
-         <3d25a0b4-6957-d070-db11-69ec9e0132ba@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Wed, 9 Nov 2022 04:22:25 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AF91838A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:22:23 -0800 (PST)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221109092222epoutp01cf031e68aed72c9f4a2925368da51bb2~l4DHs58dD2114321143epoutp01T
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:22:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221109092222epoutp01cf031e68aed72c9f4a2925368da51bb2~l4DHs58dD2114321143epoutp01T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667985742;
+        bh=0Fp8gjhjNu8/y7GV683SkiOwYjglOgKKa34wixxzrp4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=tmTqsJ63mb5mNRjq11zCjWVcvBYQkF/G7/9YhvvBuaiNhiMATlPMirqV11LdNNRgQ
+         /jtYOhHa+wcGeuO7uLjEUa+KoP5FyzgIBRHkWsaGpvmGDlTIGP+PJEp/Hxzy1pQXGq
+         tCrsOCraIcLpMJ8nTLxDPXOclGavTiG9W48zSOrU=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20221109092220epcas5p1dfab955ed2cc60897f646c98fe8ae8ee~l4DGqwDaB2787227872epcas5p19;
+        Wed,  9 Nov 2022 09:22:20 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4N6fcp31qlz4x9Q3; Wed,  9 Nov
+        2022 09:22:18 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B5.0C.01710.8417B636; Wed,  9 Nov 2022 18:22:16 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221109091623epcas5p1023143581849a8799650b86f40e65787~l395gfqF00292802928epcas5p1s;
+        Wed,  9 Nov 2022 09:16:23 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221109091623epsmtrp1c8e3337edbf2c8a713017eab6ac631a3~l395fMr7S1307013070epsmtrp1H;
+        Wed,  9 Nov 2022 09:16:23 +0000 (GMT)
+X-AuditID: b6c32a49-c9ffa700000006ae-54-636b714802b1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        25.71.18644.7EF6B636; Wed,  9 Nov 2022 18:16:23 +0900 (KST)
+Received: from FDSFTE314 (unknown [107.122.81.85]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221109091620epsmtip236bd598509b7313213f3c437c7abb9cc~l392jyR2q2012520125epsmtip2A;
+        Wed,  9 Nov 2022 09:16:19 +0000 (GMT)
+From:   "Vivek Yadav" <vivek.2311@samsung.com>
+To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
+Cc:     <rcsekar@samsung.com>, <wg@grandegger.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <pankaj.dubey@samsung.com>, <ravi.patel@samsung.com>,
+        <alim.akhtar@samsung.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Sriranjani P'" <sriranjani.p@samsung.com>
+In-Reply-To: <20221025074459.z7utljgnexqnohir@pengutronix.de>
+Subject: RE: [PATCH 5/7] arm64: dts: fsd: Add MCAN device node
+Date:   Wed, 9 Nov 2022 14:46:18 +0530
+Message-ID: <006a01d8f41b$efae1fd0$cf0a5f70$@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJD6JMFT7t8BSDsfE8Wj4Sh/mZZ1gIfGw/mAff9b8ECH8qDTK0ur0Lw
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNJsWRmVeSWpSXmKPExsWy7bCmlq5HYXayweOdUhYP5m1js5hzvoXF
+        4umxR+wWF7b1sVqs+j6V2eLyrjlsFusXTWGxOLZAzOLb6TeMFou2fmG3ePhhD7vFrAs7WC1u
+        v1nHarH03k5WBz6PLStvMnks2FTq8fHSbUaPTas62Tz6/xp4vN93lc2jb8sqRo/Pm+QCOKKy
+        bTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOArlZSKEvM
+        KQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn5haX5qXr5aWWWBkaGBiZAhUmZGds
+        3nOGrWACd8X3M03MDYzdnF2MnBwSAiYSVw/uYu5i5OIQEtjNKPFkyXtWCOcTo8Tb7Z0sEM5n
+        RombL/+zwLTs3r+aDSKxi1Gib08vE4TznFFi+Y/XTCBVbAI6Es2T/zKC2CICehK/JywCK2IW
+        eMwk0Xv1MBtIglPAVqL1XhNYg7CAncTNvsOsIDaLgIpEw/b/zCA2r4ClxJmT71ggbEGJkzOf
+        gNnMAvIS29/OYYY4SUHi59NlrBDL3CTatu9ngqgRlzj6swfsOwmBOxwSC54+ZodocJG4vrAR
+        6h9hiVfHt0DFpSRe9rdB2ckSO/51skLYGRILJu5hhLDtJQ5cmQPUywG0QFNi/S59iLCsxNRT
+        66D28kn0/n7CBBHnldgxD8ZWkXjxeQIrSCvIqt5zwhMYlWYh+WwWks9mIflgFsKyBYwsqxgl
+        UwuKc9NTi00LDPNSy+Exnpyfu4kRnKq1PHcw3n3wQe8QIxMH4yFGCQ5mJRFebo3sZCHelMTK
+        qtSi/Pii0pzU4kOMpsDgnsgsJZqcD8wWeSXxhiaWBiZmZmYmlsZmhkrivItnaCULCaQnlqRm
+        p6YWpBbB9DFxcEo1MAkHyz2338IpN7vwcqb8jYf/l8UfFfn33EqGIXYLz8nAKb0xfOapRnIh
+        WpUzfZ4tuqH7zu3x0cUTC7jFu9kkBYOu7HWec6pvWbBrpUHH8oYry/wSVulOivjT6LuJ0XvR
+        yt1Fv5LXnNvd4dgj0JElw3qceduqxtnFwlYnpWY4Hdlgl9t71tr9xlyBkK6WGdrPsgx2if8R
+        O3Ci+sH9nZF33x69x+158uy7gmvsz4WTnxk+vdHDovx1ThT7hWCd3GY5vU4JjjWXawOanikL
+        9Z2b7Ku7SMAkt53PzTZvR55HQNdrx+NBLxzkBBed7kxWdvkUv3yGSfojkaWqsowx7l6LFJkf
+        Nf/bp/9l58ZAZg8zJZbijERDLeai4kQAuadMq14EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMIsWRmVeSWpSXmKPExsWy7bCSvO7z/OxkgzU32S0ezNvGZjHnfAuL
+        xdNjj9gtLmzrY7VY9X0qs8XlXXPYLNYvmsJicWyBmMW3028YLRZt/cJu8fDDHnaLWRd2sFrc
+        frOO1WLpvZ2sDnweW1beZPJYsKnU4+Ol24wem1Z1snn0/zXweL/vKptH35ZVjB6fN8kFcERx
+        2aSk5mSWpRbp2yVwZWzec4atYAJ3xfczTcwNjN2cXYycHBICJhK7969mA7GFBHYwShzsNISI
+        S0lMOfOSBcIWllj57zl7FyMXUM1TRomX/74ygyTYBHQkmif/ZQSxRQT0JH5PWMQEUsQs8JFJ
+        4s/nRqiOd4wS69bsABvFKWAr0XqviQnEFhawk7jZd5gVxGYRUJFo2P4fbCqvgKXEmZPvWCBs
+        QYmTM5+A2cwC2hJPbz6FsuUltr+dwwxxnoLEz6fLWCGucJNo276fCaJGXOLozx7mCYzCs5CM
+        moVk1Cwko2YhaVnAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4XrW0djDuWfVB
+        7xAjEwfjIUYJDmYlEV5ujexkId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqem
+        FqQWwWSZODilGpiU2Xe8fB6m6B1+L//hmTUtNxZFxDnlhU6o2mZs9UDuzfFjTz9ubXyul1if
+        3n59vrH4+1NsKdcdnjtv1Tbd0znF3Cq3Vn35tGclbubKB3OsJadrM5t0dW85dMD6ptcHm1wV
+        PcV/Ln16TY+OWcx6YnzmX8G02RGBvA1pU+/9aExvk0voUfoqmvJYd/2FHLm+inRBG36BX0kX
+        e3iVH60tWTOz8fkevraXJbkLJ8Z+OrZVZ+nxlG/8hW0JzrxrZ6cYTNKZMaHwaOGChZ6lUXwX
+        XOdvcT98+NW3wIm7Zs2S/2e9W+OwdnOOjprOw++JSyRMGCbff1HHFc40vfnuEb7MBmO2jPdP
+        Mxfma+twSN1WWa3EUpyRaKjFXFScCABaV9DaRgMAAA==
+X-CMS-MailID: 20221109091623epcas5p1023143581849a8799650b86f40e65787
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221021102635epcas5p33623e6b6ed02d3fb663da9ec253585ad
+References: <20221021095833.62406-1-vivek.2311@samsung.com>
+        <CGME20221021102635epcas5p33623e6b6ed02d3fb663da9ec253585ad@epcas5p3.samsung.com>
+        <20221021095833.62406-6-vivek.2311@samsung.com>
+        <20221025074459.z7utljgnexqnohir@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-11-06 at 15:53 +0000, Liam Merwick wrote:
-> On 03/11/2022 14:13, Maxim Levitsky wrote:
-> > It is valid to receive external interrupt and have broken IDT entry,
-> > which will lead to #GP with exit_int_into that will contain the index of
-> > the IDT entry (e.g any value).
-> > 
-> > Other exceptions can happen as well, like #NP or #SS
-> > (if stack switch fails).
-> > 
-> > Thus this warning can be user triggred and has very little value.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >   arch/x86/kvm/svm/svm.c | 9 ---------
-> >   1 file changed, 9 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > index e9cec1b692051c..36f651ce842174 100644
-> > --- a/arch/x86/kvm/svm/svm.c
-> > +++ b/arch/x86/kvm/svm/svm.c
-> > @@ -3428,15 +3428,6 @@ static int svm_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
-> >                 return 0;
-> >         }
-> >   
-> > -       if (is_external_interrupt(svm->vmcb->control.exit_int_info) &&
-> > -           exit_code != SVM_EXIT_EXCP_BASE + PF_VECTOR &&
-> > -           exit_code != SVM_EXIT_NPF && exit_code != SVM_EXIT_TASK_SWITCH &&
-> > -           exit_code != SVM_EXIT_INTR && exit_code != SVM_EXIT_NMI)
-> > -               printk(KERN_ERR "%s: unexpected exit_int_info 0x%x "
-> > -                      "exit_code 0x%x\n",
-> > -                      __func__, svm->vmcb->control.exit_int_info,
-> > -                      exit_code);
-> > -
-> >         if (exit_fastpath != EXIT_FASTPATH_NONE)
-> >                 return 1;
-> >   
+
+
+> -----Original Message-----
+> From: Marc Kleine-Budde <mkl@pengutronix.de>
+> Sent: 25 October 2022 13:15
+> To: Vivek Yadav <vivek.2311@samsung.com>
+> Cc: rcsekar@samsung.com; wg@grandegger.com; davem@davemloft.net;
+> edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+> pankaj.dubey@samsung.com; ravi.patel@samsung.com;
+> alim.akhtar@samsung.com; linux-can@vger.kernel.org;
+> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Sriranjani P
+> <sriranjani.p@samsung.com>
+> Subject: Re: [PATCH 5/7] arm64: dts: fsd: Add MCAN device node
 > 
-> This was the only caller of is_external_interrupt() - should the 
-> definition be removed also to avoid a 'defined but not used' warning?
-
-I hate to say it but I have seen a warning about an unused function,
-but I really didn't expect that to come from this patch.
-I somehow thought that its some leftover in kvm/queue.
-
-I'll remove the unused function in a next version.
-
-Best regards,
-	Maxim Levitsky
-
+> On 21.10.2022 15:28:31, Vivek Yadav wrote:
+> > Add MCAN device node and enable the same for FSD platform.
+> > This also adds the required pin configuration for the same.
+> >
+> > Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
+> > Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
 > 
-> Regards,
-> Liam
+> Please add the DT people on Cc.
+Okay, I will add them in the next patch series.
 > 
-
+> Marc
+> 
+Thanks for the review.
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   |
+> https://protect2.fireeye.com/v1/url?k=6c1d2429-0d96311f-6c1caf66-
+> 000babff9b5d-435a1e79c4c5ee61&q=1&e=74fb5a49-eb28-4786-8c1d-
+> 9aa91f25ec04&u=https%3A%2F%2Fwww.pengutronix.de%2F  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
