@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8AD622566
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF1B622567
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiKII22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:28:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        id S229903AbiKII2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiKII1y (ORCPT
+        with ESMTP id S229871AbiKII1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Nov 2022 03:27:54 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCB513E9E;
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4786B13D16;
         Wed,  9 Nov 2022 00:27:53 -0800 (PST)
 Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N6dPl0SP1z15MVD;
-        Wed,  9 Nov 2022 16:27:39 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6dPW0SvtzHvk6;
+        Wed,  9 Nov 2022 16:27:27 +0800 (CST)
 Received: from localhost.localdomain (10.175.112.70) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -26,9 +26,9 @@ From:   Wang Yufen <wangyufen@huawei.com>
 To:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <pavel@ucw.cz>, Wang Yufen <wangyufen@huawei.com>,
         Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH 06/13] leds: lp50xx: Fix devm vs. non-devm ordering
-Date:   Wed, 9 Nov 2022 16:48:07 +0800
-Message-ID: <1667983694-15040-7-git-send-email-wangyufen@huawei.com>
+Subject: [PATCH 07/13] leds: lp8860: Fix devm vs. non-devm ordering
+Date:   Wed, 9 Nov 2022 16:48:08 +0800
+Message-ID: <1667983694-15040-8-git-send-email-wangyufen@huawei.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
 References: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
@@ -51,50 +51,49 @@ allocations, otherwise it will break the tear down ordering and might
 lead to crashes or other bugs during ->remove() stage. Fix this by
 wrapping mutex_destroy() call with devm_add_action_or_reset().
 
-Fixes: 242b81170fb8 ("leds: lp50xx: Add the LP50XX family of the RGB LED driver")
+Fixes: a2169c9b762a ("leds: lp8860: Various fixes to align with LED framework")
 Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 Cc: Dan Murphy <dmurphy@ti.com>
 ---
- drivers/leds/leds-lp50xx.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/leds/leds-lp8860.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/leds/leds-lp50xx.c b/drivers/leds/leds-lp50xx.c
-index 28d6b39..fcec568e 100644
---- a/drivers/leds/leds-lp50xx.c
-+++ b/drivers/leds/leds-lp50xx.c
-@@ -521,6 +521,11 @@ static int lp50xx_probe_dt(struct lp50xx *priv)
- 	return ret;
- }
+diff --git a/drivers/leds/leds-lp8860.c b/drivers/leds/leds-lp8860.c
+index e2b36d3..ca73d91 100644
+--- a/drivers/leds/leds-lp8860.c
++++ b/drivers/leds/leds-lp8860.c
+@@ -375,6 +375,11 @@ static int lp8860_init(struct lp8860_led *led)
+ 	.cache_type = REGCACHE_NONE,
+ };
  
-+static void lp50xx_mutex_destroy(void *lock)
++static void lp8860_mutex_destroy(void *lock)
 +{
 +	mutex_destroy(lock);
 +}
 +
- static int lp50xx_probe(struct i2c_client *client)
+ static int lp8860_probe(struct i2c_client *client,
+ 			const struct i2c_device_id *id)
  {
- 	struct lp50xx *led;
-@@ -539,6 +544,11 @@ static int lp50xx_probe(struct i2c_client *client)
- 		return -ENOMEM;
+@@ -408,6 +413,10 @@ static int lp8860_probe(struct i2c_client *client,
+ 	led->led_dev.brightness_set_blocking = lp8860_brightness_set;
  
  	mutex_init(&led->lock);
-+	ret = devm_add_action_or_reset(&client->dev, lp50xx_mutex_destroy,
++	ret = devm_add_action_or_reset(&client->dev, lp8860_mutex_destroy,
 +				       &led->lock);
 +	if (ret)
 +		return ret;
-+
- 	led->client = client;
- 	led->dev = &client->dev;
- 	led->chip_info = device_get_match_data(&client->dev);
-@@ -577,8 +587,6 @@ static void lp50xx_remove(struct i2c_client *client)
- 		if (ret)
- 			dev_err(led->dev, "Failed to disable regulator\n");
+ 
+ 	i2c_set_clientdata(client, led);
+ 
+@@ -459,8 +468,6 @@ static void lp8860_remove(struct i2c_client *client)
+ 			dev_err(&led->client->dev,
+ 				"Failed to disable regulator\n");
  	}
 -
 -	mutex_destroy(&led->lock);
  }
  
- static const struct i2c_device_id lp50xx_id[] = {
+ static const struct i2c_device_id lp8860_id[] = {
 -- 
 1.8.3.1
 
