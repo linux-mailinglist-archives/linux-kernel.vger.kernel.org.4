@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219BE622A6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB84622A70
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiKILZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S231137AbiKILZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbiKILZd (ORCPT
+        with ESMTP id S231167AbiKILZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:25:33 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA971B1E7;
-        Wed,  9 Nov 2022 03:25:31 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id o4so25300753wrq.6;
-        Wed, 09 Nov 2022 03:25:31 -0800 (PST)
+        Wed, 9 Nov 2022 06:25:36 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684451A068;
+        Wed,  9 Nov 2022 03:25:35 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id z14so25281928wrn.7;
+        Wed, 09 Nov 2022 03:25:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=G7aHBcV/NNodzOnLWHFv0Riu76BmXp6c1Mma1hVG8aM=;
-        b=XYam02f3n+s+9rA8MLrmSemGlScqvoMoyF9wLzLKhPcp4FqNR/uN7+e5XwyAviqitk
-         cLi0AzRqM8DeNh6XzYcqB3Bjlf0KCgI2pnhMWcqLfCTM3QlDOnyyyQmxA5MgHhrd9kmj
-         fT+nY9F1bHt5nyeoQawsO0YiEnLJu4/xWh2P7+joV5gc89rCg20nOlA0zpijWjoByK/Q
-         B8ljkLARZUqQmYZ2N/ExbQVrTdgXYj+tQEz3nptPBQPoYbWWRP97/86m8Q889gQFHKEq
-         7/aHhW7jEuBZoWCxUnWoOrYFbI0A/E5LoHHTx5cVnBUdnRmF76P/BszM+ef5iQ38pUle
-         Xuew==
+        bh=yVfcpsRQhZ+K1eDUGm/hT79865gqKPGqp1NWWMzmywA=;
+        b=QYl+yjjJGwob7l4O1fw3+oiBMl/GAN8a/Tzrcirxu+K51wcXU1Tk02WMEgePKIKx2x
+         CRzaFVSCpQYyr4Jr9nO+rr9BltzAyt4y3PhHd3qwidEqPikm8OZGzn+alPWjkYV/Sacz
+         /5/1+eyo4xMg/gr7O/PoXrfZu/DW1a82+xYgZAxBpZ83Y/uG6dLLriPz/Mp28FGuLKpz
+         vhUFGpWrQbxGGa7T9Bk/iD1N2h/QsgMJNEoUrsxioP9kxLQv5WSWMXvvKgSWpbKCkQjz
+         j72DKYn1Zytrw9JrSiS+QdeUQNi16sX8VGrRaX71sCZuaB24lT8gGAGChEOq6FohMZTS
+         qepg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G7aHBcV/NNodzOnLWHFv0Riu76BmXp6c1Mma1hVG8aM=;
-        b=WUoqIo6KbN+hPMFrkrGvXIjpSWyqNaPlJPdXBcBT9r0v7gDy/UuBKOaeZaXBV2i6om
-         qjUhQ/PIs1mzRp55MR22sxVJJl5hKEELmdo9JrpS7uDoc35WC4XqMB3vBUVPVDqjEkxJ
-         9+OkgJ6t9nKGyotwcmoCLn0Rbj3KbSp29lfFWzmocmhKlGLSuaktllCcYA95+KJlm5A5
-         QtaYl4Z2xD/Qmyi6lX4V9yrzWUeDq+MT9YGCiQ3mt2WTqiUZokfNN7af0mnzcEae0UFf
-         xO91YbDtsAuhcSATM3apPuIbBHtWSH9lz45dkXeBwyX/+m+hB0J+sW21+ESm+dQ/ZuKO
-         2big==
-X-Gm-Message-State: ACrzQf0OY26yc3o95jbrpHmrB8K2UybvGM+5CbQH+dUXmFndp7M0vT+s
-        slzAWNmAlm91V4+MtMJ1YXo=
-X-Google-Smtp-Source: AMsMyM7F9beiptQWeU4dn/9YH5JLDFHVU3Fan7jjQBd5F6TMfl1va8bhwzE+wyiUlb6x39jmOAp+9g==
-X-Received: by 2002:adf:f8c2:0:b0:236:9cd1:6748 with SMTP id f2-20020adff8c2000000b002369cd16748mr36855017wrq.283.1667993129624;
-        Wed, 09 Nov 2022 03:25:29 -0800 (PST)
+        bh=yVfcpsRQhZ+K1eDUGm/hT79865gqKPGqp1NWWMzmywA=;
+        b=6UqsdwNBZTzXg7/qTSpAkXDkT750AUkza7jGaiYqHpuQGVCTDL8c8EgCoBlKXjh8s0
+         tyEC8c+JLN6gTjabxiFJXgRyHycdIuYPL6Nptjf9w+GznIWYEAkm/jEFdL1j17ETF85w
+         XaZi7DzV7AL7dFohBW5XaYElt0t9LDamAcLhauDdHvRMyLk0MfkCjPe3PADo/5AEtS94
+         DrgZPCCQPY+V+oaKvP+4z3gQBEEzqlBAobBtXZ9KNFr+SHhz5gLveVKboRRWMT4hFzQk
+         LkywIhxpFzEt/zoBTr4b7Y5jeQkyI439mj8TAJdZSMeVU9mftWCIHHwEgVz1ZUoKaFFI
+         Axuw==
+X-Gm-Message-State: ACrzQf2YCCAbR69Zn4xaQ8CCgk3IUsMSMCSDHNRV9FJ7EhAMsJzaZsRT
+        yFVBnWcANl3EME6SP597gnZJGOu4364=
+X-Google-Smtp-Source: AMsMyM4iaCUXPelD5JPs3GwdxrrcdP1EVcbyNAKOCSt0mIJomogbed+Y7iZa1JRJyZ3hoqj23+CxWw==
+X-Received: by 2002:a05:6000:1566:b0:236:6a6f:6c27 with SMTP id 6-20020a056000156600b002366a6f6c27mr38530858wrz.553.1667993133963;
+        Wed, 09 Nov 2022 03:25:33 -0800 (PST)
 Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id p14-20020adff20e000000b0022e344a63c7sm13030211wro.92.2022.11.09.03.25.27
+        by smtp.gmail.com with ESMTPSA id u2-20020a5d4342000000b0022eafed36ebsm12791671wrr.73.2022.11.09.03.25.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:25:28 -0800 (PST)
-Message-ID: <30278e0f-88ec-069b-3469-56b3fb795702@gmail.com>
-Date:   Wed, 9 Nov 2022 12:25:27 +0100
+        Wed, 09 Nov 2022 03:25:32 -0800 (PST)
+Message-ID: <a0b61872-12bb-0ed2-a1b4-75cb5609c1c3@gmail.com>
+Date:   Wed, 9 Nov 2022 12:25:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH v5 6/6] soc: mediatek: remove DDP_DOMPONENT_DITHER from
- enum
+Subject: Re: [PATCH v5 3/6] soc: mediatek: add mtk-mmsys support for mt8195
+ vdosys0
 Content-Language: en-US
 To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
         Chun-Kuang Hu <chunkuang.hu@kernel.org>,
@@ -72,9 +72,11 @@ Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220927152704.12018-1-jason-jh.lin@mediatek.com>
- <20220927152704.12018-7-jason-jh.lin@mediatek.com>
+ <20220927152704.12018-4-jason-jh.lin@mediatek.com>
+ <0e67041f-a61d-1e34-2ce4-6a199c2c9f8e@collabora.com>
+ <ac0a8cadf18291575d5fc798f0d6b99f5c3a4258.camel@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220927152704.12018-7-jason-jh.lin@mediatek.com>
+In-Reply-To: <ac0a8cadf18291575d5fc798f0d6b99f5c3a4258.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,38 +91,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 27/09/2022 17:27, Jason-JH.Lin wrote:
-> After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
-> mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
+On 05/10/2022 09:08, Jason-JH.Lin wrote:
+> Hi Matthias,
 > 
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Do you have any comment for this binding?
+> 
+> Can you help us review the soc/mediatek related patches?
+> 
 
-Chun-Kuan, I understand you will take this patch through your tree as it depends 
-on DRM changes. We can also sync so that I take it once you merged the rest of 
-the series. Having vdosys1 series around maybe that's better to avoid merge 
-problems.
+Patches 1-3 applied now. Sorry for the late answer.
 
-Regards,
 Matthias
 
-> ---
->   include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> Regards,
+> Jason-JH.Lin
 > 
-> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
-> index d2b02bb43768..16ac0e5847f0 100644
-> --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> @@ -16,8 +16,7 @@ enum mtk_ddp_comp_id {
->   	DDP_COMPONENT_CCORR,
->   	DDP_COMPONENT_COLOR0,
->   	DDP_COMPONENT_COLOR1,
-> -	DDP_COMPONENT_DITHER,
-> -	DDP_COMPONENT_DITHER0 = DDP_COMPONENT_DITHER,
-> +	DDP_COMPONENT_DITHER0,
->   	DDP_COMPONENT_DITHER1,
->   	DDP_COMPONENT_DP_INTF0,
->   	DDP_COMPONENT_DP_INTF1,
+> On Wed, 2022-09-28 at 10:14 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 27/09/22 17:27, Jason-JH.Lin ha scritto:
+>>> 1. Add mt8195 driver data with compatible "mediatek-mt8195-
+>>> vdosys0".
+>>> 2. Add mt8195 routing table settings of vdosys0.
+>>>
+>>> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+>>
+>> Reviewed-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>>
+>>
+>>
