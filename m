@@ -2,76 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2D4622786
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405AC62278A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiKIJuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S229588AbiKIJvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:51:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiKIJuw (ORCPT
+        with ESMTP id S230190AbiKIJvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:50:52 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3091409F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:50:51 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id r3so20389247yba.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:50:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u1s0y43ZpuBvyMz8zkFJk/Bh36z/uSELIAuni6JBmQc=;
-        b=JPd7ilXsPlRk4baOLUUijHuKIyTl3/LkY19HBwIEdcPGxVD7UWC0QfT+/h59P4GMXl
-         /jMRH/n87zn90m4V+iDrQ+g6sDP9+P8g9XEjxvXDzMVzca7NMmSe7JVowTOeTX58xiWW
-         wLAooVlLv/HAqv/eeKYp1NTlV1i9YJvebRNDje3qNHv1GZkzWcWYZb6hmAmIUEUfuaHZ
-         fa3odSDQpoxob5fr+wgFLsFKqVKIDU/wEokhS3bkZYkuzBw2c6Zf+COJhtU6tO+sIBdi
-         2KG0u0YgqDbUEwh+Jdn093/xNsg2t1AIdnRTiiSaJqsZ0VXNCCY540aXVlXwFoHUGa1u
-         j4pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u1s0y43ZpuBvyMz8zkFJk/Bh36z/uSELIAuni6JBmQc=;
-        b=s6vh9jfH7zjeAsF2yKxUKLJJawU00W8xQCj9gImSGwB5kGMdAlLh2GeMbR/skBlrhi
-         Ng7MdAZatjhAAEB5pDC/5Vnt5rR0M9jbsqsg1kM9rzzczSHU7SpBA87fHGK8GakL2lQH
-         va5QDFavLsrQj5NV16flh0bCOnd0ZL/qlllRz+IJJC5eH5tyTq0/j72atFXQECNpVlPH
-         k6uAmXnAaGcKoWJ/Vg9ikHcZXQ1eA6cgmMePCQk9Z9Gjjoef/KpI3QundnM0CNxR5rSc
-         /BMrMaHkiIT2hGQ0IvfdomFQIlhL53ZujaqdXDRI8TCctrIwt/MWU0RMvsjaw6UpOibT
-         6akQ==
-X-Gm-Message-State: ACrzQf2OVNJiBpVvmXleYLYmzoohcvh/8YGHXX+KcuLKAmrHL7LzRMHW
-        FB9EizEVgnacLMK0F8wO0t/4DVHpJVrS6RX1E4u8pw==
-X-Google-Smtp-Source: AMsMyM6dkuMqghj0uHvukWdGg3PdhBt611a+v+y58uFqFWHNYeTTvF6FQvlSllfCNOxBqavxYJXF1yL0LTemQ3FuRps=
-X-Received: by 2002:a05:6902:10ca:b0:671:3616:9147 with SMTP id
- w10-20020a05690210ca00b0067136169147mr56611236ybu.105.1667987450132; Wed, 09
- Nov 2022 01:50:50 -0800 (PST)
+        Wed, 9 Nov 2022 04:51:12 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBA21409F;
+        Wed,  9 Nov 2022 01:51:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LFRLx/F2aSiM2Wz3VkJVpROMRzB73XMVkoYmXzVsMWgH9uaVlR5M/bfFhyLGa6UAEXz1vA693JkEDflMHHGoIDP60nNTMDwDmOjrrrfKLDwIBXN2CkB3HQ5rv/KV6PiQP0LXERluV3Av5F1V4/Z3QBOV+p4DSmB1xRSIwn+hdYlVkfVE57qzWw3H3g2JtVpxzQHs6M/WMI1b6Vz/qc/1a5LUGTQmSs+/+xq8Bq3sCGOSEfCp3SZb+/766v1/7NSFKWPNamADh+y+0Jx5wRTKtRPNejpUFSzq4hzE0JKWeOHra+5ljAOUN9U69Kw/pbnXaRJOvHG3zZ5MuqXgHd0PSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c4viiPlclFCm0lRfBYtgbzhmQQ/nn8TwX6ZlzrlVHIw=;
+ b=aORZOskM6jpJ3y93qnNjmRnF0FaHCFR66xJ6Ne7cX27fqDl4nObMkOEE7FavuFQmC5MvlSvAkhxWUJDEcJ0Qz0KUB+q2zqnHOboUQRSoknak3gWZU6B4d+ZE8L4gMY7HEUzzBQFcT1278cehiSoXucauaCYTVW4nuTmAX2lq+nckxXJbG1tW0a+eF+i69Cz2fEHZLi9I0gsdZDYbvJ39DSnl0ewt2ftl8cARwR4hc3CpW+fYgG49vRFZcMoMaS6F1Wd2nnJIEii51sjeaREqZJn0LEnmTCLrrOrg1Yo7pi+8RelMvbLpmv4Sq4quZ8fIvm0HEtQ4yWkzRuKHzW52vA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c4viiPlclFCm0lRfBYtgbzhmQQ/nn8TwX6ZlzrlVHIw=;
+ b=Pax2usQ8n74pcfoODYrk1wvdrbzcKgu2fIZwd9EKfje7MStbqPa6VFckHAO01hgCmUPmqAE3HFaEKQgMPxQ5R+rV7UPuQESEQXpCVhHs6cYRuYu7zZRtWbzeN2enl4Bqgf8gFRPd1peeRkns/vri6mhhR5YrjGkwgfVcIMQj8CE=
+Received: from CO6PR12MB5489.namprd12.prod.outlook.com (2603:10b6:303:139::18)
+ by MN2PR12MB4406.namprd12.prod.outlook.com (2603:10b6:208:268::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
+ 2022 09:51:08 +0000
+Received: from CO6PR12MB5489.namprd12.prod.outlook.com
+ ([fe80::2509:5f0c:f0f4:882d]) by CO6PR12MB5489.namprd12.prod.outlook.com
+ ([fe80::2509:5f0c:f0f4:882d%3]) with mapi id 15.20.5813.012; Wed, 9 Nov 2022
+ 09:51:08 +0000
+From:   "Lin, Wayne" <Wayne.Lin@amd.com>
+To:     Lyude Paul <lyude@redhat.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Imre Deak <imre.deak@intel.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/2] drm/display/dp_mst: Fix
+ drm_dp_mst_add_affected_dsc_crtcs() return code
+Thread-Topic: [PATCH 2/2] drm/display/dp_mst: Fix
+ drm_dp_mst_add_affected_dsc_crtcs() return code
+Thread-Index: AQHY8KmDgDOpykFiaUquLWRxaffyka42X5Gw
+Date:   Wed, 9 Nov 2022 09:51:08 +0000
+Message-ID: <CO6PR12MB5489C81E7CA10EFD47771E07FC3E9@CO6PR12MB5489.namprd12.prod.outlook.com>
+References: <20221104235926.302883-1-lyude@redhat.com>
+ <20221104235926.302883-3-lyude@redhat.com>
+In-Reply-To: <20221104235926.302883-3-lyude@redhat.com>
+Accept-Language: en-US, zh-TW
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-11-09T09:50:57Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=3fc3d74a-8c90-4768-a12f-ca62fef7349b;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO6PR12MB5489:EE_|MN2PR12MB4406:EE_
+x-ms-office365-filtering-correlation-id: a9f900da-ef97-4bb8-24ce-08dac237ed31
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: j1fXbLb8w5rQkEmKRXR6o+NGDlXP40TPHkeYLti+w7RIyDIUznAlA8TgptXV45QjHskXE1x4ZzktRlvT5dEwXjT3jMOTXWEEBA7da13qmD6kzPvVRvrBfMxp0hIRMKEr2BMJRh7a+Q3kK5iNXe8FS6X+S5Rc/QwRi09oluWUedeKy6X9Lx0z2LdvgOKivwgVp/1IH1iz+PP0cEv+BbiE6QoL0jBS6xX37T99AFIyjrup7Sl8nDOda7RsKDIRBCHRAXNZgBMwNlSzMtk8v84SkMglWnwVieY3mPbo+BgyL5Qh4RYa6htZkL8NpnIAk2Jt5DGnGEfgBVVS+DCtdFS3jWWQURImwbWIJPNEuSxyo/bl7g3E7xKh3eDWVPbozMNvuCNBf25HRl4eYCMOBlSqPT5hGdBFDwMqbtrsanY5sYxKM8LcYoTA52yCCD41RLvEBIeYCAC+TSUX85sDaAWMKn4zkGNGMVgXn8ZJW3FzTg6thnXiU8L6q0Z+KFmthJERkWxlBn16hHFePZ7S4KlmUXtd5DfpO5oKib2WpHrKcaGw2QQRYiXu0MDAkb+Ww2sRWE5tPoUrh4utHndzwA/Uw46ZNH7yhcMpceFNVeTW6ooJaNp4e83FjCzxpLa7u7C1zDvXOkczQaqAllLKEmrhGYaetU50PIDDa/5rWXvLADda6M1Qw6/PL+NEafDZZfbeHMqlCTJSnJXls5cIO0+KiJvr5mYxOVRc5abFJ+ALg6D7M761jbT5VgHqSlwFvZGRjtvRXQHDoopbvIt7IGK13/W/Mwr5ZnYHa+jHJ4dVeEQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5489.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199015)(26005)(9686003)(7416002)(64756008)(38100700002)(71200400001)(83380400001)(41300700001)(110136005)(54906003)(53546011)(66446008)(86362001)(33656002)(8676002)(4326008)(76116006)(66946007)(66556008)(66476007)(7696005)(6506007)(316002)(186003)(52536014)(55016003)(5660300002)(8936002)(38070700005)(122000001)(2906002)(478600001)(11716005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?dyHcPsynM15MqJv9di+XR6krqAiKjv9Fee3JSkEeIFgxR+SVAJdB9jBTS3rV?=
+ =?us-ascii?Q?f7X3oCq0m4LyND0QR0Ex5FdkavBbKrF6AgeHh1WPCTJkur2bKRk9KokqTUr9?=
+ =?us-ascii?Q?+tAjqldYSQDOdwd4MGOSBbDO0NeYqZtJj/J3HJd402WkFaRoDNIXcafk3clD?=
+ =?us-ascii?Q?2/pOUmE1GsuM5RmRGs6jHhMYJ15UQvRkyKXmlgSN6Vl3w/C+jZLEuDoWPi/s?=
+ =?us-ascii?Q?yJNDu+l0pmxjpsAIiqLVpphPzgm4Uz7eRwUGNQwyvhz4UozPnBv1ho6VYbjj?=
+ =?us-ascii?Q?C0HHKTq/lYTBqetSHnt8UXXra08amx2us25h+4hBZ52gQZSh2Mzt7ZN8AEli?=
+ =?us-ascii?Q?wJHBaHp20PRcV3yVcKcfHe8W6Z0hBwNmapl0bj9bnuS6Vvw9QAa4wiSDTkAB?=
+ =?us-ascii?Q?l/xEaWUR7AIm+kwua7GtpC5GZXoOzZLVK3pSXiuFgnF411MLlGDC2Y4GV4uz?=
+ =?us-ascii?Q?1plsonXtfwuA29v6tOgoId/CL/Q/TSyaVV2UQLR7MBAKsuE5vLEu9TutB0JX?=
+ =?us-ascii?Q?ZQQnjpMIaC/D0pFgJdNcGAGd4frydAoPYOLQbLFkPCIMYwI+nyePoA6YmdLQ?=
+ =?us-ascii?Q?K+52SSuonY8oxnFnwAK5R06HdT8P8WxnXIymMikxD5sItIZlbSZvZPaxNRKp?=
+ =?us-ascii?Q?Dfa8f+qFww2V/dBnXuMfqHNa56YSxL0bCbE5wKkXVw+Qh6uJSWeI1HJ/gkJY?=
+ =?us-ascii?Q?cgCeMfUC/0GDCP7qAcColQHaHG49IObgyZtNtjyRLL2okGIrvaUYem/AORoe?=
+ =?us-ascii?Q?CkGumOvjGhGi2GmiEDIYcHsiky4lwImzfxawrGZkX+wdIWEll2f0JKGbCaAr?=
+ =?us-ascii?Q?nFf+HQQIRkOnnWipRRpoGf/hApmRhyJbvgfTLCnoVonD5+bOniDFioNG/KS8?=
+ =?us-ascii?Q?dZiJF3mjSCfZDstxZSp3ZVDjHilGt9ecLABS+yZQZuL0uweWTk5C1M90t+66?=
+ =?us-ascii?Q?Z9cH+WSNdTaP7xkZnfc1DkYgFCWkmNGmZ6AqSp9ZvdGqQHIjHGACWNFxf14l?=
+ =?us-ascii?Q?lpm43jj5Yq/HJhNpf6rFQUT9n7kapabH4b4socZwrSodormklPHrGD8Gt6bo?=
+ =?us-ascii?Q?Y1PoonhbqOatfRImnt662ij7PoVACEsZhm2eIiHzO3p4z+54V5JhtMtF4xmD?=
+ =?us-ascii?Q?/GwkzkpvY2UKyDSiiPZGVppNc+2U7hLhfQ0CYeT+UY3RTodIpqVK/OTlVihE?=
+ =?us-ascii?Q?beLfe0+2lvmcB4N3+cnb6lcOPzx6TBklGZyhyWMzkqd+SVhfse0mnOE59TXJ?=
+ =?us-ascii?Q?dmHr7Gd9b7k0AyJq3S9d/QMJ7JGSd/Y5R8vrQVV7oUy5nxxQjURXN8bdCtdo?=
+ =?us-ascii?Q?Luey9ICp9SlzU/AxBjeakc9F6/hOq7bZZd3el+FjVVEjVkEGXKpeG+WheCGs?=
+ =?us-ascii?Q?ZnK6vAYxWvHqOqm2wgeYIDiKcw70rCEWej6rUt2cRzHITawscOC7FPkdE11h?=
+ =?us-ascii?Q?8HWDxct07e4v+vfeHwZ6dSmDaBu1nmhAmwUyJ9jU21yop8980dDdQZ3ka/rG?=
+ =?us-ascii?Q?B0WMKkZ0QLi5wg6zburGsGIHUW1UiAgq3P5ojAUSw6gR5cAs6LEXAC9n8eZq?=
+ =?us-ascii?Q?FXzhcOgerYV+WcYyQYs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
- <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com> <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
- <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com> <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
- <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
- <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com> <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
- <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com> <09029c7a-489a-7054-1ab5-01fa879fb42f@intel.com>
- <f80299a4-7eaf-46a0-89e6-b9f5385f183c@arm.com> <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
-In-Reply-To: <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Wed, 9 Nov 2022 10:50:38 +0100
-Message-ID: <CALPaoCidd+WwGTyE3D74LhoL13ce+EvdTmOnyPrQN62j+zZ1fg@mail.gmail.com>
-Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Gaurang Upasani <gupasani@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5489.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9f900da-ef97-4bb8-24ce-08dac237ed31
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2022 09:51:08.4132
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ElGfTNd1JKvlKK+bWvF33XdFE2S+du2tvtbz8RcELx2HSuP/2ZIq5x1B4pjAf6xlPesJT4djEBJ2b+yGN0YNFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4406
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,77 +134,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+[AMD Official Use Only - General]
 
-On Tue, Nov 8, 2022 at 10:28 PM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
-> On 11/3/2022 10:06 AM, James Morse wrote:
-> > That is true. MPAM has an additional headache here as it needs to allocate a monitor in
-> > order to read the counters. If there are enough monitors for each CLOSID*RMID to have one,
-> > then MPAM can export the counter files in the same way RDT does.
-> >
-> > While there are systems that have enough monitors, I don't think this is going to be the
-> > norm. To allow systems that don't have a surfeit of monitors to use the counters, I plan
-> > to export the values from resctrl_arch_rmid_read() via perf. (but only for bandwidth counters)
->
-> This sounds related to the way monitoring was done in earlier kernels. This was
-> long before I become involved with this work. Unfortunately I am not familiar with
-> all the history involved that ended in it being removed from the kernel. Looks like
-> this was around v4.6, here is a sample commit that may help point to what was done:
+Hi Lyude,
 
-Sort of related, this is a problem we have to work around on AMD
-implementations that I will be sharing a patch for soon.
+It LGTM. Feel free to add=20
+Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
 
-Note the second paragraph at the top of page 13:
-
-https://developer.amd.com/wp-content/resources/56375_1.00.pdf
-
-AMD QoS often provides less counters than RMIDs, but the architecture
-promises there will be at least as many counters in a QoS domain as
-CPUs. Using this we can permanently pin RMIDs to CPUs and read the
-counters on every task switch to implement MBM RMIDs in software.
-
-This has the caveats that evictions while one task is running could have
-resulted from a previous task on the current CPU, but will be counted
-against the new task's software-RMID, and that CMT doesn't work.
-
-I will propose making this available as a mount option for cloud container
-use cases which need to monitor a large number of tasks on B/W counter-poor
-systems, and of course don't need CMT.
-
-> [...]
->
-> > I think the solution to all this is:
-> >  * Add rename support to move a monitor group between two control groups.
-> >  ** On x86, this is guaranteed to preserve the RMID, so the destination counter continues
-> > unaffected.
-> >  ** On arm64, the PARTID is also relevant to the monitors, so the old counters will
-> > continue to count.
->
-> This looks like the solution to me also.
->
-> The details of the arm64 support is not clear to me though. The destination
-> group may not have enough PMG to host the new group so failures need to be
-> handled. As you mention also, the old counters will continue to count.
-> I assume that you mean the hardware will still have a record of the occupancy
-> and that needs some time to dissipate? I assume this would fall under the
-> limbo handling so in some scenarios (for example the just moved monitor
-> group used the last PMG) it may take some time for the source control
-> group to allow a new monitor group? The new counters will also not
-> reflect the task's history.
->
-> Moving an arm64  monitor group may thus have a few surprises for user
-> space while sounding complex to support. Would adding all this additional
-> support be worth it if the guidance to user space is to instead create many
-> control groups in such a control-group-rich environment?
->
-> > Whether this old counters keep counting needs exposing to user-space so that it is aware.
->
-> Could you please elaborate? Do old counters not always keep counting?
-
-Based on this, is it even worth it to allocate PMGs given that the
-systems James has seen so far only have a single PMG bit? All this will
-get us is the ability to create a single child mon_group in each control
-group. This seems too limiting for the feature to be useful.
-
--Peter
+> -----Original Message-----
+> From: Lyude Paul <lyude@redhat.com>
+> Sent: Saturday, November 5, 2022 7:59 AM
+> To: amd-gfx@lists.freedesktop.org
+> Cc: stable@vger.kernel.org; David Airlie <airlied@gmail.com>; Daniel Vett=
+er
+> <daniel@ffwll.ch>; Jani Nikula <jani.nikula@intel.com>; Thomas
+> Zimmermann <tzimmermann@suse.de>; Lin, Wayne
+> <Wayne.Lin@amd.com>; Imre Deak <imre.deak@intel.com>; Mikita Lipski
+> <mikita.lipski@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; open list:DRM DRIVERS <dri-
+> devel@lists.freedesktop.org>; open list <linux-kernel@vger.kernel.org>
+> Subject: [PATCH 2/2] drm/display/dp_mst: Fix
+> drm_dp_mst_add_affected_dsc_crtcs() return code
+>=20
+> Looks like that we're accidentally dropping a pretty important return cod=
+e
+> here. For some reason, we just return -EINVAL if we fail to get the MST
+> topology state. This is wrong: error codes are important and should never=
+ be
+> squashed without being handled, which here seems to have the potential to
+> cause a deadlock.
+>=20
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> Fixes: 8ec046716ca8 ("drm/dp_mst: Add helper to trigger modeset on
+> affected DSC MST CRTCs")
+> Cc: <stable@vger.kernel.org> # v5.6+
+> ---
+>  drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> index ecd22c038c8c0..51a46689cda70 100644
+> --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> @@ -5186,7 +5186,7 @@ int drm_dp_mst_add_affected_dsc_crtcs(struct
+> drm_atomic_state *state, struct drm
+>  	mst_state =3D drm_atomic_get_mst_topology_state(state, mgr);
+>=20
+>  	if (IS_ERR(mst_state))
+> -		return -EINVAL;
+> +		return PTR_ERR(mst_state);
+>=20
+>  	list_for_each_entry(pos, &mst_state->payloads, next) {
+>=20
+> --
+> 2.37.3
