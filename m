@@ -2,141 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEB0622AB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAE4622ABC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiKILhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:37:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S229911AbiKILkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiKILhc (ORCPT
+        with ESMTP id S229530AbiKILkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:37:32 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17C52EF57
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:37:28 -0800 (PST)
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id EB082412BF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1667993846;
-        bh=PUPJbzepJx5AFbllHqJhTSHtk/HwYip0Muk/9EDtYSQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=MmrQ2LVIc+NXpRvTTrrTO9+fRdLs4V/YtQyh4kLdi0EGsZ5P7iXmNPi+AZrx33T3I
-         bH0huCjcUczj80ltgE4kTX5Uippw3jbT9tloKL/v46favap5NHJ4484BZDcxXPvLVo
-         vPqQSnq8E6N3li8AK00dbCkvb0/2ZYfSsikF3OmXhGZbUNnnr3XnXv/hCgx91ySqXr
-         ettLO4wtSO2Y3TnjwnFbd/dzJ6sLN9YKi9gVgY5o1EeuMejb6z+sYTlPyyzi0YGwON
-         Jxm/8LYmfPUFrHiOUjC+8t9HjRqUkc3tXuq3ytxqrHM2faddufJXbSKChPlAUJ9SmL
-         ybHqD8qFi1gzw==
-Received: by mail-wm1-f72.google.com with SMTP id r187-20020a1c44c4000000b003c41e9ae97dso890127wma.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:37:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PUPJbzepJx5AFbllHqJhTSHtk/HwYip0Muk/9EDtYSQ=;
-        b=oyt93wBo7I3u5KuUdqs7ElFM3oFPIU6IzqguKgBDwXthOEgEcDUV7xTl4tUckyRG1N
-         pZwXTYDRyEfnrIXpAVVaDc5EzmGuq4gzk5jP2vp6aELY38E+oJWQaecP2j1Nv2TnLcxw
-         22ZBvFc8BqnQDe6hgHcknxEJ4llf4TU6qrikkyHh3hZoZo1exVVPbJtTulmvZ2xz70pN
-         x7xTCllodkpAMUpQpxq7aT4DcTgr+3P5juJw/dqGyVXvKDaAGnysnucx0EjZyYrP0RjP
-         oE6PO7mJEAVh/3MXRjtzuKOQ4MwQ7Zt6d/lfth1o7QQAsex8jcGOwZ92u0cFIGLjCyQI
-         B18A==
-X-Gm-Message-State: ACrzQf0E/30BtWuxGpkUTE2wdYmTUCCvBFQgFv8GFmBIRAyaii7xyGdV
-        T1wiIqOMlJhZ3/nagKr/ZP/+HACNx8+SIv5z39Z2MlqFWCtsO+Pqvh6UEhEqiIaeHPlia6P9AT2
-        ZJKxbJ0PNkh6wfvL9TXPOC4vmMIR85X4GRnJ5IqMajg==
-X-Received: by 2002:adf:dd88:0:b0:236:57e3:fc86 with SMTP id x8-20020adfdd88000000b0023657e3fc86mr37599038wrl.493.1667993846676;
-        Wed, 09 Nov 2022 03:37:26 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6NtbE5g2zTudkMZu+AtZfvOOIrFo9uWBtwl+NVJp9Bq1Dv1FfXdNKK8Djewf5xz5JNHgBBSg==
-X-Received: by 2002:adf:dd88:0:b0:236:57e3:fc86 with SMTP id x8-20020adfdd88000000b0023657e3fc86mr37599028wrl.493.1667993846479;
-        Wed, 09 Nov 2022 03:37:26 -0800 (PST)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id m27-20020a05600c3b1b00b003cf6c2f9513sm1487261wms.2.2022.11.09.03.37.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 03:37:26 -0800 (PST)
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Wesley W. Terpstra" <wesley@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] pwm: sifive: Always let the first pwm_apply_state succeed
-Date:   Wed,  9 Nov 2022 12:37:24 +0100
-Message-Id: <20221109113724.519021-1-emil.renner.berthing@canonical.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 9 Nov 2022 06:40:51 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45440264B7;
+        Wed,  9 Nov 2022 03:40:50 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1osjRQ-0007kT-Bq; Wed, 09 Nov 2022 12:40:24 +0100
+Date:   Wed, 9 Nov 2022 11:40:21 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH v4 3/5] partitions/efi: add support for uImage.FIT
+ sub-partitions
+Message-ID: <Y2uRpY8QVZMZlMCo@makrotopia.org>
+References: <Y2rgVIbtuDsySzBr@makrotopia.org>
+ <CAMj1kXG3UWUP-inYHNibJyuJfQwGzfQH8QvJqBNHZgyLc1a+6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXG3UWUP-inYHNibJyuJfQwGzfQH8QvJqBNHZgyLc1a+6A@mail.gmail.com>
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
-RGB and green PWM controlled LEDs on the HiFive Unmatched board
-managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
-All three colours of the RGB LED and the green LED run from different
-lines of the same PWM, but with the same period so this works fine when
-the LED drivers are loaded one after the other.
+On Wed, Nov 09, 2022 at 10:13:48AM +0100, Ard Biesheuvel wrote:
+> On Wed, 9 Nov 2022 at 00:05, Daniel Golle <daniel@makrotopia.org> wrote:
+> >
+> > Add new GUID allowing to parse uImage.FIT stored in a GPT partition
+> > and map filesystem sub-image as sub-partitions.
+> >
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> 
+> I'm not sure I follow the logic here.
+> 
+> You are adding uImage.FIT support as a pseudo-partition type right?
 
-Unfortunately it does expose a race in the PWM driver when both LED
-drivers are loaded at roughly the same time. Here is an example:
+Yes, exactly.
 
-  |          Thread A           |          Thread B           |
-  |  led_pwm_mc_probe           |  led_pwm_probe              |
-  |    devm_fwnode_pwm_get      |                             |
-  |      pwm_sifive_request     |                             |
-  |        ddata->user_count++  |                             |
-  |                             |    devm_fwnode_pwm_get      |
-  |                             |      pwm_sifive_request     |
-  |                             |        ddata->user_count++  |
-  |         ...                 |          ...                |
-  |    pwm_state_apply          |    pwm_state_apply          |
-  |      pwm_sifive_apply       |      pwm_sifive_apply       |
+> And the only partition driver that supports it is GPT?
 
-Now both calls to pwm_sifive_apply will see that ddata->approx_period,
-initially 0, is different from the requested period and the clock needs
-to be updated. But since ddata->user_count >= 2 both calls will fail
-with -EBUSY, which will then cause both LED drivers to fail to probe.
+Support for uImage.FIT subvolumes is added only for GPT partitions for
+now. Being the most flexible/modern partition table type I don't think
+anything else is actually relevant for new designs.
 
-Fix it by letting the first call to pwm_sifive_apply update the clock
-even when ddata->user_count != 1.
+In other patches in the series following this one I also want to allow
+enabling scanning for partitions on mtdblock and ubiblock devices.
 
-Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
-Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
----
- drivers/pwm/pwm-sifive.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On embedded devices with raw NOR or NAND storage those can then be used
+to directly store a uImage.FIT and the FIT partition parsers is then
+used on that whole block device, mapping the filesystem sub-image(s)
+as mtdblockXpY or ubiblockXpY.
 
-diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-index 2d4fa5e5fdd4..b3c60ec72a6e 100644
---- a/drivers/pwm/pwm-sifive.c
-+++ b/drivers/pwm/pwm-sifive.c
-@@ -159,7 +159,13 @@ static int pwm_sifive_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 
- 	mutex_lock(&ddata->lock);
- 	if (state->period != ddata->approx_period) {
--		if (ddata->user_count != 1) {
-+		/*
-+		 * Don't let a 2nd user change the period underneath the 1st user.
-+		 * However if ddate->approx_period == 0 this is the first time we set
-+		 * any period, so let whoever gets here first set the period so other
-+		 * users who agree on the period won't fail.
-+		 */
-+		if (ddata->user_count != 1 && ddata->approx_period) {
- 			mutex_unlock(&ddata->lock);
- 			return -EBUSY;
- 		}
--- 
-2.37.2
+> 
+> Does that mean that all the other types would need a similar change to
+> be able to detect these subvolumes?
 
+If you wanted to support uImage.FIT subvolumes inside other types of
+partitions, then yes, this would have to be implemented for those as
+well.
+
+I've also written a (not very clean) implementation of that for MBR
+partitions, it is needed e.g. on MT7623 because one cannot use GPT on
+the block device used for booting with that SoC as the BootROM expects
+to load the preloader exactly from where GPT would be located...
+I wasn't planning on submitting that upstream though.
+
+And other than for GPT and MBR, I don't think implementing detection of
+uImage.FIT subvolumes makes any sense (but maybe I got something wrong
+here or didn't fully understand your question).
+
+> 
+> > ---
+> >  block/partitions/efi.c | 9 +++++++++
+> >  block/partitions/efi.h | 3 +++
+> >  2 files changed, 12 insertions(+)
+> >
+> > diff --git a/block/partitions/efi.c b/block/partitions/efi.c
+> > index 5e9be13a56a8..bf87893eabe4 100644
+> > --- a/block/partitions/efi.c
+> > +++ b/block/partitions/efi.c
+> > @@ -716,6 +716,9 @@ int efi_partition(struct parsed_partitions *state)
+> >         gpt_entry *ptes = NULL;
+> >         u32 i;
+> >         unsigned ssz = queue_logical_block_size(state->disk->queue) / 512;
+> > +#ifdef CONFIG_FIT_PARTITION
+> > +       u32 extra_slot = 65;
+> > +#endif
+> >
+> >         if (!find_valid_gpt(state, &gpt, &ptes) || !gpt || !ptes) {
+> >                 kfree(gpt);
+> > @@ -749,6 +752,12 @@ int efi_partition(struct parsed_partitions *state)
+> >                                 ARRAY_SIZE(ptes[i].partition_name));
+> >                 utf16_le_to_7bit(ptes[i].partition_name, label_max, info->volname);
+> >                 state->parts[i + 1].has_info = true;
+> > +               /* If this is a U-Boot FIT volume it may have subpartitions */
+> > +#ifdef CONFIG_FIT_PARTITION
+> > +               if (!efi_guidcmp(ptes[i].partition_type_guid, PARTITION_LINUX_FIT_GUID))
+> > +                       (void) parse_fit_partitions(state, start * ssz, size * ssz,
+> > +                                                   &extra_slot, 127, 1);
+> > +#endif
+> >         }
+> >         kfree(ptes);
+> >         kfree(gpt);
+> > diff --git a/block/partitions/efi.h b/block/partitions/efi.h
+> > index 84b9f36b9e47..06c11f6ae398 100644
+> > --- a/block/partitions/efi.h
+> > +++ b/block/partitions/efi.h
+> > @@ -51,6 +51,9 @@
+> >  #define PARTITION_LINUX_LVM_GUID \
+> >      EFI_GUID( 0xe6d6d379, 0xf507, 0x44c2, \
+> >                0xa2, 0x3c, 0x23, 0x8f, 0x2a, 0x3d, 0xf9, 0x28)
+> > +#define PARTITION_LINUX_FIT_GUID \
+> > +    EFI_GUID( 0xcae9be83, 0xb15f, 0x49cc, \
+> > +              0x86, 0x3f, 0x08, 0x1b, 0x74, 0x4a, 0x2d, 0x93)
+> >
+> >  typedef struct _gpt_header {
+> >         __le64 signature;
+> > --
+> > 2.38.1
+> >
