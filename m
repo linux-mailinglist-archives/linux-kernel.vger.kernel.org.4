@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50B1622B67
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:19:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7805D622B6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiKIMTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S229952AbiKIMWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:22:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiKIMTh (ORCPT
+        with ESMTP id S229629AbiKIMWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:19:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0A02612E;
-        Wed,  9 Nov 2022 04:19:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667996374; x=1699532374;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=bCkzJnJGlqi2Ptd+wmfFB6aY/2jG6IDmsgal7Led+7Q=;
-  b=k8cctlNhz6shQhnGSiOBlWPYWgohVe1CuxXkIPReg56FEZVQwFCyhQcN
-   L8tYU8jCc5CIvUVE9SKh6VvnhM+JuQVYRIvPw1v8DqqJQ+yzX9HoEnLvL
-   7xBHyg0D7tz3JLeLgzQs2GgoTWqWFj/rNWASY1lnfc36/OT3o3SFHTA5k
-   NIeTwBrdN4aBqhILQoWX61fUzzRbW8fvUqDkq+hnxX0oO0uPidgdBIgsL
-   53XCYnr6UsehsFEL0cicaiVL1o+fsVkRUf7pQ47XdxKpZbRqYxKsjtm+0
-   YPnBs0AuRGNlYQPjGP5qx3wd5d1BnRlUISRGcVLGwxqzD7o2oKqRmCwlK
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312123326"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="312123326"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 04:19:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="881911295"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="881911295"
-Received: from jsanche3-mobl1.ger.corp.intel.com ([10.251.219.48])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 04:19:25 -0800
-Date:   Wed, 9 Nov 2022 14:19:21 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Sherry Sun <sherry.sun@nxp.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-imx@nxp.com
-Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: improve lpuart32 registers
- clearing when shutdown
-In-Reply-To: <20221109104515.17266-3-sherry.sun@nxp.com>
-Message-ID: <9e682825-3420-fbe3-eb9d-8e864430363a@linux.intel.com>
-References: <20221109104515.17266-1-sherry.sun@nxp.com> <20221109104515.17266-3-sherry.sun@nxp.com>
+        Wed, 9 Nov 2022 07:22:18 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E6A250;
+        Wed,  9 Nov 2022 04:22:17 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id l2so10197183qtq.11;
+        Wed, 09 Nov 2022 04:22:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XvBiFkolKGUNT/T8gjXpcXzeHtarJfPAvEGuDLN1G0E=;
+        b=s99MiDBO7eAhnWAxeDGGJrdHdVOtxlXxWPC30w1PgFXr+XY1nxBUuhLPQ5k5yuMZgG
+         o7RtW/JkcS92aszpKWr7KK5GGz7Vcn+c+897dgp9LLUlxK9YGCfsGuYNh1JQPQGm/Lvw
+         ziqJQ6UmtPQ2XoDEx0/1N+i0DcwjGe9K3gSew7HNnAmxEDw5tUtayrjkTR4r8ZKtrDAH
+         QEE0AqC3gH64ZqO9lwmKwKt0P28Szt+9XCdH7g9gEEoQi93rIqVshoUKGiRae8k9wp2i
+         iwCcqEXJlpdANWflmo95Cd/uV+M1sU8DoMOlDW2HHylRXJ4cmpFL8EO8Nrc3wZ+n7Vka
+         sclw==
+X-Gm-Message-State: ACrzQf0/LR6gDuCyTHN5wxPfpNy5Uy4YhWMzRkJ94UFhQu4dqo5QBeFT
+        gY6vsJF0B4TlLOUaCgsYSFQCP6AkX7gs0DrJKBc=
+X-Google-Smtp-Source: AMsMyM4poJGku7VUKnTRBml+VyWLtEWGUgmc0O+LQC5DfNjZ/VebWumF69asi53wkVrHRzyK/tfGHFQwOBzNriOpPS8=
+X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
+ g21-20020ac87d15000000b003a5044987c3mr47257311qtb.357.1667996536769; Wed, 09
+ Nov 2022 04:22:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109104059.766720-1-rrichter@amd.com> <20221109104059.766720-10-rrichter@amd.com>
+In-Reply-To: <20221109104059.766720-10-rrichter@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 9 Nov 2022 13:22:05 +0100
+Message-ID: <CAJZ5v0i-RcsjMhoZymcTTR8P-WteHpxYgZ+aLEeQSpWVQRXF0g@mail.gmail.com>
+Subject: Re: [PATCH v3 9/9] cxl/acpi: Set ACPI's CXL _OSC to indicate CXL1.1 support
+To:     Robert Richter <rrichter@amd.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Terry Bowman <terry.bowman@amd.com>, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022, Sherry Sun wrote:
+On Wed, Nov 9, 2022 at 11:41 AM Robert Richter <rrichter@amd.com> wrote:
+>
+> From: Terry Bowman <terry.bowman@amd.com>
+>
+> ACPI includes a CXL _OSC support procedure to communicate the available
+> CXL support to FW. The CXL support _OSC includes a field to indicate
+> CXL1.1 RCH RCD support. The OS sets this bit to 1 if it supports access
+> to RCD and RCH Port registers.[1] FW can potentially change it's operation
+> depending on the _OSC support setting reported by the OS.
+>
+> The ACPI driver does not currently set the ACPI _OSC support to indicate
+> CXL1.1 RCD RCH support. Change the capability reported to include CXL1.1.
+>
+> [1] CXL3.0 Table 9-26 'Interpretation of CXL _OSC Support Field'
+>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 
-> Need to clear the UARTSTAT and UARTMODIR registers when shutdown the
-> uart port, also clear the Rx/Tx DMA enable bits and loopback
-> configuration bit.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This lacks answer to "Why?" question. Think about somebody not as familiar 
-with the HW as you are looking back to this very commit message like 5 
-years from now and wondering why this change was made.
-
-Preferrably make a separate change out of all these four changes if the 
-answers to why question are different.
-
-It would also help in deciding whether Fixes tag is necessary or not 
-since you didn't seem to include.
-
--- 
- i.
-
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
 > ---
->  drivers/tty/serial/fsl_lpuart.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-> index f5a0a14fa366..43d9d6a6e94a 100644
-> --- a/drivers/tty/serial/fsl_lpuart.c
-> +++ b/drivers/tty/serial/fsl_lpuart.c
-> @@ -1771,11 +1771,22 @@ static void lpuart32_shutdown(struct uart_port *port)
->  
->  	spin_lock_irqsave(&port->lock, flags);
->  
-> +	/* clear statue */
-> +	temp = lpuart32_read(&sport->port, UARTSTAT);
-> +	lpuart32_write(&sport->port, temp, UARTSTAT);
-> +
-> +	/* disable Rx/Tx DMA */
-> +	temp = lpuart32_read(port, UARTBAUD);
-> +	temp &= ~(UARTBAUD_TDMAE | UARTBAUD_RDMAE);
-> +	lpuart32_write(port, temp, UARTBAUD);
-> +
->  	/* disable Rx/Tx and interrupts */
->  	temp = lpuart32_read(port, UARTCTRL);
->  	temp &= ~(UARTCTRL_TE | UARTCTRL_RE | UARTCTRL_ILIE |
-> -			UARTCTRL_TIE | UARTCTRL_TCIE | UARTCTRL_RIE);
-> +			UARTCTRL_TIE | UARTCTRL_TCIE | UARTCTRL_RIE |
-> +			UARTCTRL_LOOPS);
->  	lpuart32_write(port, temp, UARTCTRL);
-> +	lpuart32_write(port, 0, UARTMODIR);
->  
->  	spin_unlock_irqrestore(&port->lock, flags);
->  
-> 
+>  drivers/acpi/pci_root.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> index c8385ef54c37..094a59b216ae 100644
+> --- a/drivers/acpi/pci_root.c
+> +++ b/drivers/acpi/pci_root.c
+> @@ -492,6 +492,7 @@ static u32 calculate_cxl_support(void)
+>         u32 support;
+>
+>         support = OSC_CXL_2_0_PORT_DEV_REG_ACCESS_SUPPORT;
+> +       support |= OSC_CXL_1_1_PORT_REG_ACCESS_SUPPORT;
+>         if (pci_aer_available())
+>                 support |= OSC_CXL_PROTOCOL_ERR_REPORTING_SUPPORT;
+>         if (IS_ENABLED(CONFIG_HOTPLUG_PCI_PCIE))
+> --
+> 2.30.2
+>
