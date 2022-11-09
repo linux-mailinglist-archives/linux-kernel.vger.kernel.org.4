@@ -2,193 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497CA6225A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FAF06225B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiKIImu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S229971AbiKIIpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiKIImt (ORCPT
+        with ESMTP id S229591AbiKIIpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:42:49 -0500
-Received: from mail-m974.mail.163.com (mail-m974.mail.163.com [123.126.97.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D83A17E0D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:42:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=LMER/
-        XN9djBC7ZzxLygpTeXj9Jg1JgKK8qqQA21yk+w=; b=duJlt1bdgZ3F9xn53vzyp
-        IpUxfDmXJXzPDxZFCd0oLh8JYqW9ZGb1VWUGmxdeo7yskOHOrPyz7+UsYwefFsu6
-        um/PrQcuBbeuJNu8uprCF7uwrsOLSWP3+REj7ClTpPvJADQDeoVaN1A5aTp1kZlG
-        0ci4ShszM31IEDzHeCgF08=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp4 (Coremail) with SMTP id HNxpCgBXNfnGZ2tjm+4IrQ--.50247S2;
-        Wed, 09 Nov 2022 16:41:43 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
-        lkp@intel.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v6 RESEND] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Wed,  9 Nov 2022 16:41:42 +0800
-Message-Id: <20221109084142.226960-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Nov 2022 03:45:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14572231;
+        Wed,  9 Nov 2022 00:44:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 650C3B81D46;
+        Wed,  9 Nov 2022 08:44:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC5DC433C1;
+        Wed,  9 Nov 2022 08:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667983496;
+        bh=gubP5wUhKwsJa2PWsBZNowl7hrwhl0rnCsCJXTmXSnY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pBT6BNA5qf/wh+ppx/PLc1yeErH5HcRlf2fmSiKdNg+3QN4nB1uGZQEjSZw/aQs3o
+         ZGnMI6DtDXlqry99ie+yx/ba0zE6wv7pd1EqFq8A4rfkiQULuLfEjvsMVfeZxbdeiR
+         m4spPUsmqc4dkSfd4OiKDbyaIoQjMtU8IfJZwc4k=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v2] USB: gadget: dummy_hcd: switch char * to u8 *
+Date:   Wed,  9 Nov 2022 09:44:50 +0100
+Message-Id: <20221109084450.2181848-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2518; i=gregkh@linuxfoundation.org; h=from:subject; bh=gubP5wUhKwsJa2PWsBZNowl7hrwhl0rnCsCJXTmXSnY=; b=owGbwMvMwCRo6H6F97bub03G02pJDMnZGQ2T+6cf/i25Rm1n+DX7Tw1cHwu23cg6IX06d8ln9+0/ 30pO74hlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJFGkxzBW4+Z1X74b99RXchX5pXY oT1jktms+wYGNFXQzT4ll67TtDRHt5P+/749ohDwA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HNxpCgBXNfnGZ2tjm+4IrQ--.50247S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKF43Gr4kCw1UGFg_yoWrtF13pa
-        1jg348urW3JF4Y9F47ta1kXFW3Ca4kJFW5Gr9rt34ruw4rAFs8GryDtas0qr4DurW0qa1a
-        yr4rtFnI93Z0ga7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziWv38UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiGge0U1aEDYX12wAAsO
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gts may be freed in gru_check_chiplet_assignment.
-The caller still use it after that, UAF happens.
+The function handle_control_request() casts the urb buffer to a char *,
+and then treats it like a unsigned char buffer when assigning data to
+it.  On some architectures, "char" is really signed, so let's just
+properly set this pointer to a u8 to take away any potential problems as
+that's what is really wanted here.
 
-Fix it by introducing a return value to see if it's in error path or not.
-Free the gts in caller if gru_check_chiplet_assignment check failed.
+Use put_unaligned_le16() to copy the full 16bits into the buffer,
+it's not a problem just yet as only 7 bits are being used here, but this
+protects us when/if the USB spec changes in the future to define more of
+these bits.
 
-Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Acked-by: Dimitri Sivanich <sivanich@hpe.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Jakob Koschel <jakobkoschel@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-v6:
-- remove unused var checked by kernel test robot
+v2: - use put_unaligned_le16() on Linus's recommendation as a simpler and
+      more obvious way to describe the data being copied here.
+    - update device: comment based on Alan's review
 
-v5:
-- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+ drivers/usb/gadget/udc/dummy_hcd.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-v4:
-- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
-
-v3:
-- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
-
-v2:
-- commit message changes suggested by Greg
-
-v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
----
- drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
- drivers/misc/sgi-gru/grumain.c   | 16 ++++++++++++----
- drivers/misc/sgi-gru/grutables.h |  2 +-
- 3 files changed, 25 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-index d7ef61e602ed..bdd515d33225 100644
---- a/drivers/misc/sgi-gru/grufault.c
-+++ b/drivers/misc/sgi-gru/grufault.c
-@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
- 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
- 		goto exit;
- 
--	gru_check_context_placement(gts);
-+	ret = gru_check_context_placement(gts);
-+	if (ret)
-+		goto err;
- 
- 	/*
- 	 * CCH may contain stale data if ts_force_cch_reload is set.
-@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
- exit:
- 	gru_unlock_gts(gts);
- 	return ret;
-+err:
-+	gru_unlock_gts(gts);
-+	gru_unload_context(gts, 1);
-+	return -EINVAL;
- }
- 
- /*
-@@ -874,7 +880,11 @@ int gru_set_context_option(unsigned long arg)
- 		} else {
- 			gts->ts_user_blade_id = req.val1;
- 			gts->ts_user_chiplet_id = req.val0;
--			gru_check_context_placement(gts);
-+			if (gru_check_context_placement(gts)) {
-+				gru_unlock_gts(gts);
-+				gru_unload_context(gts, 1);
-+				return -EINVAL;
-+			}
- 		}
- 		break;
- 	case sco_gseg_owner:
-diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-index 9afda47efbf2..beba69fc3cd7 100644
---- a/drivers/misc/sgi-gru/grumain.c
-+++ b/drivers/misc/sgi-gru/grumain.c
-@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
-  * chiplet. Misassignment can occur if the process migrates to a different
-  * blade or if the user changes the selected blade/chiplet.
-  */
--void gru_check_context_placement(struct gru_thread_state *gts)
-+int gru_check_context_placement(struct gru_thread_state *gts)
- {
- 	struct gru_state *gru;
-+	int ret = 0;
- 
- 	/*
- 	 * If the current task is the context owner, verify that the
-@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
- 	 */
- 	gru = gts->ts_gru;
- 	if (!gru || gts->ts_tgid_owner != current->tgid)
--		return;
-+		return ret;
- 
- 	if (!gru_check_chiplet_assignment(gru, gts)) {
- 		STAT(check_context_unload);
--		gru_unload_context(gts, 1);
-+		ret = -EINVAL;
- 	} else if (gru_retarget_intr(gts)) {
- 		STAT(check_context_retarget_intr);
- 	}
-+
-+	return ret;
- }
- 
- 
-@@ -934,7 +937,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	mutex_lock(&gts->ts_ctxlock);
- 	preempt_disable();
- 
--	gru_check_context_placement(gts);
-+	if (gru_check_context_placement(gts)) {
-+		preempt_enable();
-+		mutex_unlock(&gts->ts_ctxlock);
-+		gru_unload_context(gts, 1);
-+		return VM_FAULT_NOPAGE;
-+	}
- 
- 	if (!gts->ts_gru) {
- 		STAT(load_user_context);
-diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-index 5efc869fe59a..f4a5a787685f 100644
---- a/drivers/misc/sgi-gru/grutables.h
-+++ b/drivers/misc/sgi-gru/grutables.h
-@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
- extern int gru_user_unload_context(unsigned long arg);
- extern int gru_get_exception_detail(unsigned long arg);
- extern int gru_set_context_option(unsigned long address);
--extern void gru_check_context_placement(struct gru_thread_state *gts);
-+extern int gru_check_context_placement(struct gru_thread_state *gts);
- extern int gru_cpu_fault_map_id(void);
- extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
- extern void gru_flush_all_tlb(struct gru_state *gru);
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index 899ac9f9c279..7c59c20c8623 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -1740,13 +1740,13 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 		if (setup->bRequestType == Dev_InRequest
+ 				|| setup->bRequestType == Intf_InRequest
+ 				|| setup->bRequestType == Ep_InRequest) {
+-			char *buf;
++			u8 *buf;
+ 			/*
+-			 * device: remote wakeup, selfpowered
++			 * device: remote wakeup, selfpowered, LTM, U1, or U2
+ 			 * interface: nothing
+ 			 * endpoint: halt
+ 			 */
+-			buf = (char *)urb->transfer_buffer;
++			buf = urb->transfer_buffer;
+ 			if (urb->transfer_buffer_length > 0) {
+ 				if (setup->bRequestType == Ep_InRequest) {
+ 					ep2 = find_endpoint(dum, w_index);
+@@ -1755,10 +1755,9 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
+ 						break;
+ 					}
+ 					buf[0] = ep2->halted;
+-				} else if (setup->bRequestType ==
+-					   Dev_InRequest) {
+-					buf[0] = (u8)dum->devstatus;
+-				} else
++				} else if (setup->bRequestType == Dev_InRequest)
++					put_unaligned_le16(dum->devstatus, buf);
++				else
+ 					buf[0] = 0;
+ 			}
+ 			if (urb->transfer_buffer_length > 1)
 -- 
-2.25.1
+2.38.1
 
