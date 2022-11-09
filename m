@@ -2,344 +2,551 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4B2622395
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 06:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2DA62239B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 06:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiKIFw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 00:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S229763AbiKIFws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 00:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKIFwZ (ORCPT
+        with ESMTP id S229447AbiKIFwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 00:52:25 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09521EAD1;
-        Tue,  8 Nov 2022 21:52:23 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A95ddVN010028;
-        Wed, 9 Nov 2022 05:52:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=SnvHB7kZEQoWAqO+fv3jevM7zXHHs+RqEVq32Pctpek=;
- b=KAXo9SCN3OWx9JGIzXzyeYYPBeHxvGJEVDoXFWybeD42TzRqjGuRlF9HLy5v+N1P2s6I
- MXj++0QEnsB8M4fEc0jECTJdrMGeZbF39Ktjki5OFzFt0T5iAGvIte88IHhRW0u3apUg
- GUlXpgQTeVcYeE0xkqKRfA+0/jtrwJ975YL4R0GxvYqcxBRgDjdo3PZorKj73ufwskOC
- RiHB0sKcZs3S6uN5R8GZny2iXKSLW12Zd2Iaa7QXurxFz9wJRHXbMCg2vdWnqe1MlcKB
- bkS7lVfDgwrtCmZ5nefCK+2AO+xQZarOSIq4dERmOIb6bNLidIWd3QeEiH6oxS4eItrc aQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kr664r0wm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 05:52:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A95qCvA007569
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 9 Nov 2022 05:52:12 GMT
-Received: from blr-ubuntu-311.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 8 Nov 2022 21:52:08 -0800
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-To:     <bjorn.andersson@linaro.org>, <dianders@chromium.org>,
-        <jinghung.chen3@hotmail.com>
-CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <konrad.dybcio@somainline.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH V3 2/2] arm64: dts: qcom: sc7280: Add Google Herobrine WIFI SKU dts fragment
-Date:   Wed, 9 Nov 2022 11:21:32 +0530
-Message-ID: <20221109055132.609-2-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221109055132.609-1-quic_sibis@quicinc.com>
-References: <20221109055132.609-1-quic_sibis@quicinc.com>
+        Wed, 9 Nov 2022 00:52:46 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531A1E716;
+        Tue,  8 Nov 2022 21:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667973164; x=1699509164;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ap9e/igucmBJkn635/rQ8Ig9OUeQNetMHsHOxYxgYmE=;
+  b=W8OW3I44A+g1tgkwMEB04y0G+GFnL6kJp3bE8b0YkL/8hSB7e9+vxUCa
+   MfFLutxwy80LzTwllgn+MbevOpGtz6hPmBDVFNEzUiyEak9ksrUhA2Ldi
+   XACOb6mDI5amurZOr6dg/8+iFXApClyC/J1w7K/elrway46c2PIGF0ixC
+   ziZ2bhv3Dr1lj2druI/9hFiSupIlLbzbnkCdBoBSI5ETsiArQ6vZ3RGw/
+   hfz7yFFoKoRgAvie83SM+O6iefabLDn197EHrzUIj29nkVwWbwnGqlqkl
+   g9/X5tVT4AJYTvEQO68eV8oHrBNzd91Uez3CutHFTXdZv0ZUXeyMeDs5K
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="337627626"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="337627626"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 21:52:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="614556139"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="614556139"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga006.jf.intel.com with ESMTP; 08 Nov 2022 21:52:33 -0800
+Date:   Wed, 9 Nov 2022 13:52:32 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
+ regions
+Message-ID: <20221109055232.ufj6tgv52p2pxsmr@yy-desk-7060>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
+ <20221108013506.xbwkse2v475jqzyj@yy-desk-7060>
+ <20221108094141.GA84958@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LgYX4Xi_dxKxwy-w2D-xSgdJsq4HSQYD
-X-Proofpoint-ORIG-GUID: LgYX4Xi_dxKxwy-w2D-xSgdJsq4HSQYD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_01,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- spamscore=0 malwarescore=0 impostorscore=0 adultscore=0 mlxlogscore=901
- suspectscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090045
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108094141.GA84958@chaop.bj.intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Google Herobrine WIFI SKU can save 256M by not having modem/mba/rmtfs
-memory regions defined. Add the dts fragment and mark all the board files
-appropriately.
+On Tue, Nov 08, 2022 at 05:41:41PM +0800, Chao Peng wrote:
+> On Tue, Nov 08, 2022 at 09:35:06AM +0800, Yuan Yao wrote:
+> > On Tue, Oct 25, 2022 at 11:13:41PM +0800, Chao Peng wrote:
+> > > Introduce generic private memory register/unregister by reusing existing
+> > > SEV ioctls KVM_MEMORY_ENCRYPT_{UN,}REG_REGION. It differs from SEV case
+> > > by treating address in the region as gpa instead of hva. Which cases
+> > > should these ioctls go is determined by the kvm_arch_has_private_mem().
+> > > Architecture which supports KVM_PRIVATE_MEM should override this function.
+> > >
+> > > KVM internally defaults all guest memory as private memory and maintain
+> > > the shared memory in 'mem_attr_array'. The above ioctls operate on this
+> > > field and unmap existing mappings if any.
+> > >
+> > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > > ---
+> > >  Documentation/virt/kvm/api.rst |  17 ++-
+> > >  arch/x86/kvm/Kconfig           |   1 +
+> > >  include/linux/kvm_host.h       |  10 +-
+> > >  virt/kvm/Kconfig               |   4 +
+> > >  virt/kvm/kvm_main.c            | 227 +++++++++++++++++++++++++--------
+> > >  5 files changed, 198 insertions(+), 61 deletions(-)
+> > >
+> > > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > > index 975688912b8c..08253cf498d1 100644
+> > > --- a/Documentation/virt/kvm/api.rst
+> > > +++ b/Documentation/virt/kvm/api.rst
+> > > @@ -4717,10 +4717,19 @@ Documentation/virt/kvm/x86/amd-memory-encryption.rst.
+> > >  This ioctl can be used to register a guest memory region which may
+> > >  contain encrypted data (e.g. guest RAM, SMRAM etc).
+> > >
+> > > -It is used in the SEV-enabled guest. When encryption is enabled, a guest
+> > > -memory region may contain encrypted data. The SEV memory encryption
+> > > -engine uses a tweak such that two identical plaintext pages, each at
+> > > -different locations will have differing ciphertexts. So swapping or
+> > > +Currently this ioctl supports registering memory regions for two usages:
+> > > +private memory and SEV-encrypted memory.
+> > > +
+> > > +When private memory is enabled, this ioctl is used to register guest private
+> > > +memory region and the addr/size of kvm_enc_region represents guest physical
+> > > +address (GPA). In this usage, this ioctl zaps the existing guest memory
+> > > +mappings in KVM that fallen into the region.
+> > > +
+> > > +When SEV-encrypted memory is enabled, this ioctl is used to register guest
+> > > +memory region which may contain encrypted data for a SEV-enabled guest. The
+> > > +addr/size of kvm_enc_region represents userspace address (HVA). The SEV
+> > > +memory encryption engine uses a tweak such that two identical plaintext pages,
+> > > +each at different locations will have differing ciphertexts. So swapping or
+> > >  moving ciphertext of those pages will not result in plaintext being
+> > >  swapped. So relocating (or migrating) physical backing pages for the SEV
+> > >  guest will require some additional steps.
+> > > diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> > > index 8d2bd455c0cd..73fdfa429b20 100644
+> > > --- a/arch/x86/kvm/Kconfig
+> > > +++ b/arch/x86/kvm/Kconfig
+> > > @@ -51,6 +51,7 @@ config KVM
+> > >  	select HAVE_KVM_PM_NOTIFIER if PM
+> > >  	select HAVE_KVM_RESTRICTED_MEM if X86_64
+> > >  	select RESTRICTEDMEM if HAVE_KVM_RESTRICTED_MEM
+> > > +	select KVM_GENERIC_PRIVATE_MEM if HAVE_KVM_RESTRICTED_MEM
+> > >  	help
+> > >  	  Support hosting fully virtualized guest machines using hardware
+> > >  	  virtualization extensions.  You will need a fairly recent
+> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > index 79e5cbc35fcf..4ce98fa0153c 100644
+> > > --- a/include/linux/kvm_host.h
+> > > +++ b/include/linux/kvm_host.h
+> > > @@ -245,7 +245,8 @@ bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+> > >  int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
+> > >  #endif
+> > >
+> > > -#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
+> > > +
+> > > +#if defined(KVM_ARCH_WANT_MMU_NOTIFIER) || defined(CONFIG_KVM_GENERIC_PRIVATE_MEM)
+> > >  struct kvm_gfn_range {
+> > >  	struct kvm_memory_slot *slot;
+> > >  	gfn_t start;
+> > > @@ -254,6 +255,9 @@ struct kvm_gfn_range {
+> > >  	bool may_block;
+> > >  };
+> > >  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
+> > > +#endif
+> > > +
+> > > +#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
+> > >  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+> > >  bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+> > >  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+> > > @@ -794,6 +798,9 @@ struct kvm {
+> > >  	struct notifier_block pm_notifier;
+> > >  #endif
+> > >  	char stats_id[KVM_STATS_NAME_SIZE];
+> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > > +	struct xarray mem_attr_array;
+> > > +#endif
+> > >  };
+> > >
+> > >  #define kvm_err(fmt, ...) \
+> > > @@ -1453,6 +1460,7 @@ bool kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu);
+> > >  int kvm_arch_post_init_vm(struct kvm *kvm);
+> > >  void kvm_arch_pre_destroy_vm(struct kvm *kvm);
+> > >  int kvm_arch_create_vm_debugfs(struct kvm *kvm);
+> > > +bool kvm_arch_has_private_mem(struct kvm *kvm);
+> > >
+> > >  #ifndef __KVM_HAVE_ARCH_VM_ALLOC
+> > >  /*
+> > > diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> > > index 9ff164c7e0cc..69ca59e82149 100644
+> > > --- a/virt/kvm/Kconfig
+> > > +++ b/virt/kvm/Kconfig
+> > > @@ -89,3 +89,7 @@ config HAVE_KVM_PM_NOTIFIER
+> > >
+> > >  config HAVE_KVM_RESTRICTED_MEM
+> > >         bool
+> > > +
+> > > +config KVM_GENERIC_PRIVATE_MEM
+> > > +       bool
+> > > +       depends on HAVE_KVM_RESTRICTED_MEM
+> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > index 09c9cdeb773c..fc3835826ace 100644
+> > > --- a/virt/kvm/kvm_main.c
+> > > +++ b/virt/kvm/kvm_main.c
+> > > @@ -520,6 +520,62 @@ void kvm_destroy_vcpus(struct kvm *kvm)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(kvm_destroy_vcpus);
+> > >
+> > > +static inline void update_invalidate_range(struct kvm *kvm, gfn_t start,
+> > > +							    gfn_t end)
+> > > +{
+> > > +	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+> > > +		kvm->mmu_invalidate_range_start = start;
+> > > +		kvm->mmu_invalidate_range_end = end;
+> > > +	} else {
+> > > +		/*
+> > > +		 * Fully tracking multiple concurrent ranges has diminishing
+> > > +		 * returns. Keep things simple and just find the minimal range
+> > > +		 * which includes the current and new ranges. As there won't be
+> > > +		 * enough information to subtract a range after its invalidate
+> > > +		 * completes, any ranges invalidated concurrently will
+> > > +		 * accumulate and persist until all outstanding invalidates
+> > > +		 * complete.
+> > > +		 */
+> > > +		kvm->mmu_invalidate_range_start =
+> > > +			min(kvm->mmu_invalidate_range_start, start);
+> > > +		kvm->mmu_invalidate_range_end =
+> > > +			max(kvm->mmu_invalidate_range_end, end);
+> > > +	}
+> > > +}
+> > > +
+> > > +static void mark_invalidate_in_progress(struct kvm *kvm, gfn_t start, gfn_t end)
+> > > +{
+> > > +	/*
+> > > +	 * The count increase must become visible at unlock time as no
+> > > +	 * spte can be established without taking the mmu_lock and
+> > > +	 * count is also read inside the mmu_lock critical section.
+> > > +	 */
+> > > +	kvm->mmu_invalidate_in_progress++;
+> > > +}
+> > > +
+> > > +void kvm_mmu_invalidate_begin(struct kvm *kvm, gfn_t start, gfn_t end)
+> > > +{
+> > > +	mark_invalidate_in_progress(kvm, start, end);
+> > > +	update_invalidate_range(kvm, start, end);
+> > > +}
+> > > +
+> > > +void kvm_mmu_invalidate_end(struct kvm *kvm, gfn_t start, gfn_t end)
+> > > +{
+> > > +	/*
+> > > +	 * This sequence increase will notify the kvm page fault that
+> > > +	 * the page that is going to be mapped in the spte could have
+> > > +	 * been freed.
+> > > +	 */
+> > > +	kvm->mmu_invalidate_seq++;
+> > > +	smp_wmb();
+> > > +	/*
+> > > +	 * The above sequence increase must be visible before the
+> > > +	 * below count decrease, which is ensured by the smp_wmb above
+> > > +	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
+> > > +	 */
+> > > +	kvm->mmu_invalidate_in_progress--;
+> > > +}
+> > > +
+> > >  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+> > >  static inline struct kvm *mmu_notifier_to_kvm(struct mmu_notifier *mn)
+> > >  {
+> > > @@ -715,51 +771,12 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+> > >  	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
+> > >  }
+> > >
+> > > -static inline void update_invalidate_range(struct kvm *kvm, gfn_t start,
+> > > -							    gfn_t end)
+> > > -{
+> > > -	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+> > > -		kvm->mmu_invalidate_range_start = start;
+> > > -		kvm->mmu_invalidate_range_end = end;
+> > > -	} else {
+> > > -		/*
+> > > -		 * Fully tracking multiple concurrent ranges has diminishing
+> > > -		 * returns. Keep things simple and just find the minimal range
+> > > -		 * which includes the current and new ranges. As there won't be
+> > > -		 * enough information to subtract a range after its invalidate
+> > > -		 * completes, any ranges invalidated concurrently will
+> > > -		 * accumulate and persist until all outstanding invalidates
+> > > -		 * complete.
+> > > -		 */
+> > > -		kvm->mmu_invalidate_range_start =
+> > > -			min(kvm->mmu_invalidate_range_start, start);
+> > > -		kvm->mmu_invalidate_range_end =
+> > > -			max(kvm->mmu_invalidate_range_end, end);
+> > > -	}
+> > > -}
+> > > -
+> > > -static void mark_invalidate_in_progress(struct kvm *kvm, gfn_t start, gfn_t end)
+> > > -{
+> > > -	/*
+> > > -	 * The count increase must become visible at unlock time as no
+> > > -	 * spte can be established without taking the mmu_lock and
+> > > -	 * count is also read inside the mmu_lock critical section.
+> > > -	 */
+> > > -	kvm->mmu_invalidate_in_progress++;
+> > > -}
+> > > -
+> > >  static bool kvm_mmu_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> > >  {
+> > >  	update_invalidate_range(kvm, range->start, range->end);
+> > >  	return kvm_unmap_gfn_range(kvm, range);
+> > >  }
+> > >
+> > > -void kvm_mmu_invalidate_begin(struct kvm *kvm, gfn_t start, gfn_t end)
+> > > -{
+> > > -	mark_invalidate_in_progress(kvm, start, end);
+> > > -	update_invalidate_range(kvm, start, end);
+> > > -}
+> > > -
+> > >  static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+> > >  					const struct mmu_notifier_range *range)
+> > >  {
+> > > @@ -807,23 +824,6 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+> > >  	return 0;
+> > >  }
+> > >
+> > > -void kvm_mmu_invalidate_end(struct kvm *kvm, gfn_t start, gfn_t end)
+> > > -{
+> > > -	/*
+> > > -	 * This sequence increase will notify the kvm page fault that
+> > > -	 * the page that is going to be mapped in the spte could have
+> > > -	 * been freed.
+> > > -	 */
+> > > -	kvm->mmu_invalidate_seq++;
+> > > -	smp_wmb();
+> > > -	/*
+> > > -	 * The above sequence increase must be visible before the
+> > > -	 * below count decrease, which is ensured by the smp_wmb above
+> > > -	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
+> > > -	 */
+> > > -	kvm->mmu_invalidate_in_progress--;
+> > > -}
+> > > -
+> > >  static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
+> > >  					const struct mmu_notifier_range *range)
+> > >  {
+> > > @@ -937,6 +937,89 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+> > >
+> > >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+> > >
+> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > > +
+> > > +static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
+> > > +{
+> > > +	struct kvm_gfn_range gfn_range;
+> > > +	struct kvm_memory_slot *slot;
+> > > +	struct kvm_memslots *slots;
+> > > +	struct kvm_memslot_iter iter;
+> > > +	int i;
+> > > +	int r = 0;
+> > > +
+> > > +	gfn_range.pte = __pte(0);
+> > > +	gfn_range.may_block = true;
+> > > +
+> > > +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
+> > > +		slots = __kvm_memslots(kvm, i);
+> > > +
+> > > +		kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
+> > > +			slot = iter.slot;
+> > > +			gfn_range.start = max(start, slot->base_gfn);
+> > > +			gfn_range.end = min(end, slot->base_gfn + slot->npages);
+> > > +			if (gfn_range.start >= gfn_range.end)
+> > > +				continue;
+> > > +			gfn_range.slot = slot;
+> > > +
+> > > +			r |= kvm_unmap_gfn_range(kvm, &gfn_range);
+> > > +		}
+> > > +	}
+> > > +
+> > > +	if (r)
+> > > +		kvm_flush_remote_tlbs(kvm);
+> > > +}
+> > > +
+> > > +#define KVM_MEM_ATTR_SHARED	0x0001
+> > > +static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+> > > +				     bool is_private)
+> > > +{
+> > > +	gfn_t start, end;
+> > > +	unsigned long i;
+> > > +	void *entry;
+> > > +	int idx;
+> > > +	int r = 0;
+> > > +
+> > > +	if (size == 0 || gpa + size < gpa)
+> > > +		return -EINVAL;
+> > > +	if (gpa & (PAGE_SIZE - 1) || size & (PAGE_SIZE - 1))
+> > > +		return -EINVAL;
+> > > +
+> > > +	start = gpa >> PAGE_SHIFT;
+> > > +	end = (gpa + size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> > > +
+> > > +	/*
+> > > +	 * Guest memory defaults to private, kvm->mem_attr_array only stores
+> > > +	 * shared memory.
+> > > +	 */
+> > > +	entry = is_private ? NULL : xa_mk_value(KVM_MEM_ATTR_SHARED);
+> > > +
+> > > +	idx = srcu_read_lock(&kvm->srcu);
+> > > +	KVM_MMU_LOCK(kvm);
+> > > +	kvm_mmu_invalidate_begin(kvm, start, end);
+> > > +
+> > > +	for (i = start; i < end; i++) {
+> > > +		r = xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> > > +				    GFP_KERNEL_ACCOUNT));
+> > > +		if (r)
+> > > +			goto err;
+> > > +	}
+> > > +
+> > > +	kvm_unmap_mem_range(kvm, start, end);
+> >
+> > lock is hold by KVM_MMU_LOCK() so how about do
+> > kvm_mmu_invalidate_begin() after changing xarray:
+> >
+> > kvm_mmu_invalidate_begin(kvm, start, end);
+> > kvm_unmap_mem_range(kvm, start, end);
+> > kvm_mmu_invalidate_end(kvm, start, end);
+> >
+> > Also the error handling path doesn't need to care it yet.
+>
+> The mem_attr_array is consumed in the page fault handler(i.e.
+> kvm_mem_is_private() in patch 08) so it should also be protected by
+> kvm_mmu_invalidate_begin/end(). E.g. if we change the mem_attr_arry here
+> after the page fault handler has read the mem_attr_array, the
+> mmu_invalidate_retry_gfn() should return 1 to let the page fault handler
+> to retry the fault.
 
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
----
+You're right!
+Even the changes are undo by error handling path, we still need to
+sure that user of mem_attr_arry retry the fault, due to the user may
+get some "stale" data (they're "stale" becaus the xarray is recovered
+in error case).
 
-v2:
- * Mark the WIFI SKUs of Evoker/Villager-r1
- * Misc. Fixes [Doug]
-
-Instead of just having remoteproc_mpss node disabled, we go ahead and
-delete it on wifi only SKUs. This is done to avoid the dtbs_check
-failures that we would end of getting if we delete the memory-region
-property present in the node (since it's a required property). I'll
-send a follow up patch with IPA node enabled only on LTE SKUs as soon
-as I verify that it doesn't have any impact on suspend/resume.
-
- .../boot/dts/qcom/sc7280-chrome-common.dtsi   | 15 --------
- .../dts/qcom/sc7280-herobrine-evoker-lte.dts  |  4 +-
- .../boot/dts/qcom/sc7280-herobrine-evoker.dts |  2 +-
- .../dts/qcom/sc7280-herobrine-evoker.dtsi     |  1 +
- .../dts/qcom/sc7280-herobrine-lte-sku.dtsi    | 19 ++++++++++
- .../qcom/sc7280-herobrine-villager-r1-lte.dts |  4 +-
- .../dts/qcom/sc7280-herobrine-villager-r1.dts | 31 +---------------
- .../qcom/sc7280-herobrine-villager-r1.dtsi    | 37 +++++++++++++++++++
- .../dts/qcom/sc7280-herobrine-wifi-sku.dtsi   | 11 ++++++
- 9 files changed, 77 insertions(+), 47 deletions(-)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dtsi
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-wifi-sku.dtsi
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-index 25f31c81b2b7..16fb20369c01 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
-@@ -39,20 +39,10 @@
- 			no-map;
- 		};
- 
--		mpss_mem: memory@8b800000 {
--			reg = <0x0 0x8b800000 0x0 0xf600000>;
--			no-map;
--		};
--
- 		wpss_mem: memory@9ae00000 {
- 			reg = <0x0 0x9ae00000 0x0 0x1900000>;
- 			no-map;
- 		};
--
--		mba_mem: memory@9c700000 {
--			reg = <0x0 0x9c700000 0x0 0x200000>;
--			no-map;
--		};
- 	};
- };
- 
-@@ -88,11 +78,6 @@
- 	firmware-name = "ath11k/WCN6750/hw1.0/wpss.mdt";
- };
- 
--/* Increase the size from 2.5MB to 8MB */
--&rmtfs_mem {
--	reg = <0x0 0x9c900000 0x0 0x800000>;
--};
--
- &wifi {
- 	status = "okay";
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
-index 3af9224a7492..14f20e705869 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
-@@ -5,7 +5,9 @@
-  * Copyright 2022 Google LLC.
-  */
- 
--#include "sc7280-herobrine-evoker.dts"
-+/dts-v1/;
-+
-+#include "sc7280-herobrine-evoker.dtsi"
- #include "sc7280-herobrine-lte-sku.dtsi"
- 
- / {
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
-index 51f0401b11ed..4f781fe25c9c 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
-@@ -8,7 +8,7 @@
- /dts-v1/;
- 
- #include "sc7280-herobrine-evoker.dtsi"
--#include "sc7280-herobrine-audio-rt5682-3mic.dtsi"
-+#include "sc7280-herobrine-wifi-sku.dtsi"
- 
- / {
- 	model = "Google Evoker";
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-index 706dd82a7013..3d639c70a06e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtsi
-@@ -6,6 +6,7 @@
-  */
- 
- #include "sc7280-herobrine.dtsi"
-+#include "sc7280-herobrine-audio-rt5682-3mic.dtsi"
- 
- /*
-  * ADDITIONS TO FIXED REGULATORS DEFINED IN PARENT DEVICE TREE FILES
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-index a92eeccd2b2a..ad66e5e9db4e 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-@@ -6,6 +6,20 @@
-  */
- /* Modem setup is different on Chrome setups than typical Qualcomm setup */
- 
-+/ {
-+	reserved-memory {
-+		mpss_mem: memory@8b800000 {
-+			reg = <0x0 0x8b800000 0x0 0xf600000>;
-+			no-map;
-+		};
-+
-+		mba_mem: memory@9c700000 {
-+			reg = <0x0 0x9c700000 0x0 0x200000>;
-+			no-map;
-+		};
-+	};
-+};
-+
- &remoteproc_mpss {
- 	compatible = "qcom,sc7280-mss-pil";
- 	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
-@@ -15,3 +29,8 @@
- 			"qcom/sc7280-herobrine/modem/qdsp6sw.mbn";
- 	status = "okay";
- };
-+
-+/* Increase the size from 2.5MB to 8MB */
-+&rmtfs_mem {
-+	reg = <0x0 0x9c900000 0x0 0x800000>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-index f1017809e5da..d71cc4bbc4b3 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
-@@ -5,7 +5,9 @@
-  * Copyright 2022 Google LLC.
-  */
- 
--#include "sc7280-herobrine-villager-r1.dts"
-+/dts-v1/;
-+
-+#include "sc7280-herobrine-villager-r1.dtsi"
- #include "sc7280-herobrine-lte-sku.dtsi"
- 
- / {
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-index cfc648726930..edb52f12f0ea 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
-@@ -7,37 +7,10 @@
- 
- /dts-v1/;
- 
--#include "sc7280-herobrine-villager.dtsi"
--#include "sc7280-herobrine-audio-wcd9385.dtsi"
-+#include "sc7280-herobrine-villager-r1.dtsi"
-+#include "sc7280-herobrine-wifi-sku.dtsi"
- 
- / {
- 	model = "Google Villager (rev1+)";
- 	compatible = "google,villager", "qcom,sc7280";
- };
--
--&lpass_va_macro {
--	vdd-micb-supply = <&pp1800_l2c>;
--};
--
--&sound {
--	audio-routing =
--			"IN1_HPHL", "HPHL_OUT",
--			"IN2_HPHR", "HPHR_OUT",
--			"AMIC1", "MIC BIAS1",
--			"AMIC2", "MIC BIAS2",
--			"VA DMIC0", "vdd-micb",
--			"VA DMIC1", "vdd-micb",
--			"VA DMIC2", "vdd-micb",
--			"VA DMIC3", "vdd-micb",
--			"TX SWR_ADC0", "ADC1_OUTPUT",
--			"TX SWR_ADC1", "ADC2_OUTPUT",
--			"TX SWR_ADC2", "ADC3_OUTPUT",
--			"TX SWR_DMIC0", "DMIC1_OUTPUT",
--			"TX SWR_DMIC1", "DMIC2_OUTPUT",
--			"TX SWR_DMIC2", "DMIC3_OUTPUT",
--			"TX SWR_DMIC3", "DMIC4_OUTPUT",
--			"TX SWR_DMIC4", "DMIC5_OUTPUT",
--			"TX SWR_DMIC5", "DMIC6_OUTPUT",
--			"TX SWR_DMIC6", "DMIC7_OUTPUT",
--			"TX SWR_DMIC7", "DMIC8_OUTPUT";
--};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dtsi
-new file mode 100644
-index 000000000000..b25df5a99161
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dtsi
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Villager board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include "sc7280-herobrine-villager.dtsi"
-+#include "sc7280-herobrine-audio-wcd9385.dtsi"
-+
-+&lpass_va_macro {
-+	vdd-micb-supply = <&pp1800_l2c>;
-+};
-+
-+&sound {
-+	audio-routing =
-+			"IN1_HPHL", "HPHL_OUT",
-+			"IN2_HPHR", "HPHR_OUT",
-+			"AMIC1", "MIC BIAS1",
-+			"AMIC2", "MIC BIAS2",
-+			"VA DMIC0", "vdd-micb",
-+			"VA DMIC1", "vdd-micb",
-+			"VA DMIC2", "vdd-micb",
-+			"VA DMIC3", "vdd-micb",
-+			"TX SWR_ADC0", "ADC1_OUTPUT",
-+			"TX SWR_ADC1", "ADC2_OUTPUT",
-+			"TX SWR_ADC2", "ADC3_OUTPUT",
-+			"TX SWR_DMIC0", "DMIC1_OUTPUT",
-+			"TX SWR_DMIC1", "DMIC2_OUTPUT",
-+			"TX SWR_DMIC2", "DMIC3_OUTPUT",
-+			"TX SWR_DMIC3", "DMIC4_OUTPUT",
-+			"TX SWR_DMIC4", "DMIC5_OUTPUT",
-+			"TX SWR_DMIC5", "DMIC6_OUTPUT",
-+			"TX SWR_DMIC6", "DMIC7_OUTPUT",
-+			"TX SWR_DMIC7", "DMIC8_OUTPUT";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-wifi-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-wifi-sku.dtsi
-new file mode 100644
-index 000000000000..2febd6126d4c
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-wifi-sku.dtsi
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Google Herobrine dts fragment for WIFI SKUs
-+ *
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/* WIFI SKUs save 256M by not having modem/mba/rmtfs memory regions defined. */
-+
-+/delete-node/ &remoteproc_mpss;
-+/delete-node/ &rmtfs_mem;
--- 
-2.17.1
-
+>
+> >
+> > > +
+> > > +	goto ret;
+> > > +err:
+> > > +	for (; i > start; i--)
+> > > +		xa_erase(&kvm->mem_attr_array, i);
+> >
+> > the start should be covered yet, consider the i is
+> > unsigned long and case of start is 0, may need another
+> > variable j for this.
+>
+> Ah, right!
+>
+> Thanks,
+> Chao
+> >
+> > > +ret:
+> > > +	kvm_mmu_invalidate_end(kvm, start, end);
+> > > +	KVM_MMU_UNLOCK(kvm);
+> > > +	srcu_read_unlock(&kvm->srcu, idx);
+> > > +
+> > > +	return r;
+> > > +}
+> > > +#endif /* CONFIG_KVM_GENERIC_PRIVATE_MEM */
+> > > +
+> > >  #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
+> > >  static int kvm_pm_notifier_call(struct notifier_block *bl,
+> > >  				unsigned long state,
+> > > @@ -1165,6 +1248,9 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+> > >  	spin_lock_init(&kvm->mn_invalidate_lock);
+> > >  	rcuwait_init(&kvm->mn_memslots_update_rcuwait);
+> > >  	xa_init(&kvm->vcpu_array);
+> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > > +	xa_init(&kvm->mem_attr_array);
+> > > +#endif
+> > >
+> > >  	INIT_LIST_HEAD(&kvm->gpc_list);
+> > >  	spin_lock_init(&kvm->gpc_lock);
+> > > @@ -1338,6 +1424,9 @@ static void kvm_destroy_vm(struct kvm *kvm)
+> > >  		kvm_free_memslots(kvm, &kvm->__memslots[i][0]);
+> > >  		kvm_free_memslots(kvm, &kvm->__memslots[i][1]);
+> > >  	}
+> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > > +	xa_destroy(&kvm->mem_attr_array);
+> > > +#endif
+> > >  	cleanup_srcu_struct(&kvm->irq_srcu);
+> > >  	cleanup_srcu_struct(&kvm->srcu);
+> > >  	kvm_arch_free_vm(kvm);
+> > > @@ -1541,6 +1630,11 @@ static void kvm_replace_memslot(struct kvm *kvm,
+> > >  	}
+> > >  }
+> > >
+> > > +bool __weak kvm_arch_has_private_mem(struct kvm *kvm)
+> > > +{
+> > > +	return false;
+> > > +}
+> > > +
+> > >  static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+> > >  {
+> > >  	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> > > @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
+> > >  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> > >  		break;
+> > >  	}
+> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> > > +		struct kvm_enc_region region;
+> > > +		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
+> > > +
+> > > +		if (!kvm_arch_has_private_mem(kvm))
+> > > +			goto arch_vm_ioctl;
+> > > +
+> > > +		r = -EFAULT;
+> > > +		if (copy_from_user(&region, argp, sizeof(region)))
+> > > +			goto out;
+> > > +
+> > > +		r = kvm_vm_ioctl_set_mem_attr(kvm, region.addr,
+> > > +					      region.size, set);
+> > > +		break;
+> > > +	}
+> > > +#endif
+> > >  	case KVM_GET_DIRTY_LOG: {
+> > >  		struct kvm_dirty_log log;
+> > >
+> > > @@ -4861,6 +4973,9 @@ static long kvm_vm_ioctl(struct file *filp,
+> > >  		r = kvm_vm_ioctl_get_stats_fd(kvm);
+> > >  		break;
+> > >  	default:
+> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > > +arch_vm_ioctl:
+> > > +#endif
+> > >  		r = kvm_arch_vm_ioctl(filp, ioctl, arg);
+> > >  	}
+> > >  out:
+> > > --
+> > > 2.25.1
+> > >
+> > >
