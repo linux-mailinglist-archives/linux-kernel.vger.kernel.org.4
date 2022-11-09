@@ -2,220 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FED62331B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CDF62331D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbiKITAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 14:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S230492AbiKITCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:02:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiKITAg (ORCPT
+        with ESMTP id S229530AbiKITCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:00:36 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6EA1A3B8;
-        Wed,  9 Nov 2022 11:00:34 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id gw22so17581271pjb.3;
-        Wed, 09 Nov 2022 11:00:34 -0800 (PST)
+        Wed, 9 Nov 2022 14:02:11 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F94193EA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:02:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xAtfUGAzFgcNBnIbSWDsNJ1US/mY0mv1SDKeGTpMFnc=;
-        b=M12WA5jstlEU37vqEZqQvYN2fOKWK4EhddWc3WwseBsnDLnJ+3S+TA4+cBgWZAkuWw
-         qopSMSvT1UeUdPMsRY92q2lXMLvQTjYVtGrBhYVo02CFboXysPpn+gIsN4Pm13lG/WDz
-         WfL8pm149rlrh8YPSjfSFJCgvYT6eQDqlVD9/TFuYeGGvpwfMBC6YWqFYmyixVf4WggQ
-         dG9im4tAISZi9QibM7ivOvSwLHtDUId2eSHpbXWqZpkrTarSdZf8/GZqDZ77Wz0nfC1G
-         9oE/JKTn7QVfnWjIH8rQDII4fC83iaj0qwna/sMgKXwhGbVClqb4xhulZSWzZJj/Wi28
-         +X6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xAtfUGAzFgcNBnIbSWDsNJ1US/mY0mv1SDKeGTpMFnc=;
-        b=x0hNSdcL/bxnbZQvYsLZmLqz7rWKB0JVC7G7nPlgv4WorG4dsSpwmnBaWLQjz0ldnD
-         qKC4MDqx3eKL2ju9QLAaskMFEmw6YY9mvU5WptTr/cTj6uJbXfqmjM6cChX5u4Sy4UNR
-         AP6xT4qk/FgrSdISNSajlbbCQNjPGj61ZEtlCBRYlPTVdXkRMqnSKAlKqH5MGlo/oOpp
-         Q7M9esOvdpOuSPqDDjI2Oh7XLcBssFUFUppSl4dCdJ+KjZr9WVAVQiZvtlr62EznKiPy
-         NuKIhCG+WBpFtrwfDc5iOBYSXDmhdLzSFrnb3sBO4yGpzPEiY3hylUa5BRgKIJu1Cu6/
-         8Mmw==
-X-Gm-Message-State: ACrzQf0Jv47J6XESzK0aFPLMX5+qodoLiB/4Iqil5va90OtOu87HM8UM
-        4cTMKCdyVP02jyf3gCzaJmY=
-X-Google-Smtp-Source: AMsMyM5EgFkoZv9A+1YW81vdlp0hVYvECWFfUwWH8to7ophfb+qijhzGq+eVO3KIW/KjFBqsgCn6IA==
-X-Received: by 2002:a17:90a:d493:b0:213:ce33:4a4d with SMTP id s19-20020a17090ad49300b00213ce334a4dmr56294701pju.140.1668020433698;
-        Wed, 09 Nov 2022 11:00:33 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:9f46:7242:26:f220])
-        by smtp.gmail.com with ESMTPSA id r29-20020aa79edd000000b0056e32a2b88esm8623930pfq.219.2022.11.09.11.00.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 11:00:32 -0800 (PST)
-Date:   Wed, 9 Nov 2022 11:00:29 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] gpiolib: consolidate GPIO lookups
-Message-ID: <Y2v4ze4y8qDThjrv@google.com>
-References: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
- <20221031-gpiolib-swnode-v2-5-81f55af5fa0e@gmail.com>
- <Y2uOEhib5dvIcobF@smile.fi.intel.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1668020530; x=1699556530;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=EzgVSr8p6AWJcO9uVFCKvzcBGMokmfaMcM0n8y9bssg=;
+  b=bxG7spbfUbhpmbfEGlW0vX/KlWrlvGeeecFtVPo5xkeuarMDDsley/Xk
+   k5VNbeorlmAgWZK4mzYyRwryg1tctAc2aVWEc2c6VYKxFmZ0vxEFQBVAh
+   XpiQGcwwS7T9RFdR9ASZJw+Ks5a2GKyn3Wx9RrAADs2rP/21LoPZGmZwl
+   g=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Nov 2022 11:02:09 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.45.79.139])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 11:02:09 -0800
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 9 Nov 2022 11:02:07 -0800
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <oberpar@linux.ibm.com>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <trix@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v2] gcov: clang: fix the buffer overflow issue
+Date:   Thu, 10 Nov 2022 00:31:37 +0530
+Message-ID: <1668020497-13142-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2uOEhib5dvIcobF@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 01:25:06PM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 08, 2022 at 04:26:50PM -0800, Dmitry Torokhov wrote:
-> > Ensure that all paths to obtain/look up GPIOD from generic
-> > consumer-visible APIs go through the new gpiod_find_and_request()
-> > helper, so that we can easily extend it with support for new firmware
-> > mechanisms.
-> > 
-> > The only exception is OF-specific [devm_]gpiod_get_from_of_node() API
-> > that is still being used by a couple of drivers and will be removed as
-> > soon as patches converting them to use generic fwnode/device APIs are
-> > accepted.
-> 
-> ...
-> 
-> > +static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
-> > +					      struct device *consumer,
-> > +					      const char *con_id,
-> > +					      unsigned int idx,
-> > +					      enum gpiod_flags *flags,
-> > +					      unsigned long *lookupflags)
-> >  {
-> > -	unsigned long lflags = GPIO_LOOKUP_FLAGS_DEFAULT;
-> 
-> > -	struct gpio_desc *desc = ERR_PTR(-ENODEV);
-> 
-> Not sure why this is needed. Now I see that else branch has been changed,
-> but looking closer to it, we can drop it completely, while leaving this
-> line untouched, correct?
+Currently, in clang version of gcov code when module is getting removed
+gcov_info_add() incorrectly adds the sfn_ptr->counter to all the
+dst->functions and it result in the kernel panic in below crash report.
+Fix this by properly handling it.
 
-Yes. I believe removing an initializer and doing a series of if/else
-if/else was discussed and [soft] agreed-on in the previous review cycle,
-but I can change it back.
+[    8.899094][  T599] Unable to handle kernel write to read-only memory at virtual address ffffff80461cc000
+[    8.899100][  T599] Mem abort info:
+[    8.899102][  T599]   ESR = 0x9600004f
+[    8.899103][  T599]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    8.899105][  T599]   SET = 0, FnV = 0
+[    8.899107][  T599]   EA = 0, S1PTW = 0
+[    8.899108][  T599]   FSC = 0x0f: level 3 permission fault
+[    8.899110][  T599] Data abort info:
+[    8.899111][  T599]   ISV = 0, ISS = 0x0000004f
+[    8.899113][  T599]   CM = 0, WnR = 1
+[    8.899114][  T599] swapper pgtable: 4k pages, 39-bit VAs, pgdp=00000000ab8de000
+[    8.899116][  T599] [ffffff80461cc000] pgd=18000009ffcde003, p4d=18000009ffcde003, pud=18000009ffcde003, pmd=18000009ffcad003, pte=00600000c61cc787
+[    8.899124][  T599] Internal error: Oops: 9600004f [#1] PREEMPT SMP
+[    8.899265][  T599] Skip md ftrace buffer dump for: 0x1609e0
+....
+..,
+[    8.899544][  T599] CPU: 7 PID: 599 Comm: modprobe Tainted: G S         OE     5.15.41-android13-8-g38e9b1af6bce #1
+[    8.899547][  T599] Hardware name: XXX (DT)
+[    8.899549][  T599] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
+[    8.899551][  T599] pc : gcov_info_add+0x9c/0xb8
+[    8.899557][  T599] lr : gcov_event+0x28c/0x6b8
+[    8.899559][  T599] sp : ffffffc00e733b00
+[    8.899560][  T599] x29: ffffffc00e733b00 x28: ffffffc00e733d30 x27: ffffffe8dc297470
+[    8.899563][  T599] x26: ffffffe8dc297000 x25: ffffffe8dc297000 x24: ffffffe8dc297000
+[    8.899566][  T599] x23: ffffffe8dc0a6200 x22: ffffff880f68bf20 x21: 0000000000000000
+[    8.899569][  T599] x20: ffffff880f68bf00 x19: ffffff8801babc00 x18: ffffffc00d7f9058
+[    8.899572][  T599] x17: 0000000000088793 x16: ffffff80461cbe00 x15: 9100052952800785
+[    8.899575][  T599] x14: 0000000000000200 x13: 0000000000000041 x12: 9100052952800785
+[    8.899577][  T599] x11: ffffffe8dc297000 x10: ffffffe8dc297000 x9 : ffffff80461cbc80
+[    8.899580][  T599] x8 : ffffff8801babe80 x7 : ffffffe8dc2ec000 x6 : ffffffe8dc2ed000
+[    8.899583][  T599] x5 : 000000008020001f x4 : fffffffe2006eae0 x3 : 000000008020001f
+[    8.899586][  T599] x2 : ffffff8027c49200 x1 : ffffff8801babc20 x0 : ffffff80461cb3a0
+[    8.899589][  T599] Call trace:
+[    8.899590][  T599]  gcov_info_add+0x9c/0xb8
+[    8.899592][  T599]  gcov_module_notifier+0xbc/0x120
+[    8.899595][  T599]  blocking_notifier_call_chain+0xa0/0x11c
+[    8.899598][  T599]  do_init_module+0x2a8/0x33c
+[    8.899600][  T599]  load_module+0x23cc/0x261c
+[    8.899602][  T599]  __arm64_sys_finit_module+0x158/0x194
+[    8.899604][  T599]  invoke_syscall+0x94/0x2bc
+[    8.899607][  T599]  el0_svc_common+0x1d8/0x34c
+[    8.899609][  T599]  do_el0_svc+0x40/0x54
+[    8.899611][  T599]  el0_svc+0x94/0x2f0
+[    8.899613][  T599]  el0t_64_sync_handler+0x88/0xec
+[    8.899615][  T599]  el0t_64_sync+0x1b4/0x1b8
+[    8.899618][  T599] Code: f905f56c f86e69ec f86e6a0f 8b0c01ec (f82e6a0c)
+[    8.899620][  T599] ---[ end trace ed5218e9e5b6e2e6 ]---
 
-I think we still need to have it return -ENOENT and not -ENODEV/-EINVAL
-so that we can fall back to GPIO lookup tables when dealing with an
-unsupported node type.
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+v1..v2:
+ - Addressed Peter O. comment.
 
-> 
-> > -	int ret;
-> > +	struct gpio_desc *desc;
-> >  
-> > +	dev_dbg(consumer, "GPIO lookup for consumer %s in node '%pfw'\n",
-> > +		con_id, fwnode);
-> > +
-> > +	/* Using device tree? */
-> >  	if (is_of_node(fwnode)) {
-> > -		desc = gpiod_get_from_of_node(to_of_node(fwnode),
-> > -					      propname, index,
-> > -					      dflags,
-> > -					      label);
-> > -		return desc;
-> > +		dev_dbg(consumer, "using device tree for GPIO lookup\n");
-> > +		desc = of_find_gpio(to_of_node(fwnode),
-> > +				    con_id, idx, lookupflags);
-> 
-> At least con_id can be placed on the previous line.
+ kernel/gcov/clang.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-OK, I made it all 1 line.
-
-> 
-> >  	} else if (is_acpi_node(fwnode)) {
-> > -		desc = acpi_node_get_gpiod(fwnode, propname, index,
-> > -					   &lflags, &dflags);
-> > -		if (IS_ERR(desc))
-> > -			return desc;
-> > +		dev_dbg(consumer, "using ACPI for GPIO lookup\n");
-> > +		desc = acpi_find_gpio(fwnode, con_id, idx, flags, lookupflags);
-> >  	} else {
-> > -		return ERR_PTR(-EINVAL);
-> > +		desc = ERR_PTR(-ENOENT);
-> >  	}
-> >  
-> > -	/* Currently only ACPI takes this path */
-> > +	return desc;
-> > +}
-> 
-> ...
-> 
-> > +	struct gpio_desc *desc = ERR_PTR(-ENOENT);
-> > +	unsigned long lookupflags;
-> > +	int ret;
-> 
-> > +	if (!IS_ERR_OR_NULL(fwnode))
-> 
-> I think this is superfluous check.
-> 
-> Now in the form of this series, you have only a single dev_dbg() that tries to
-> dereference it. Do we really need to have it there, since every branch has its
-> own dev_dbg() anyway?
-
-As I mentioned, I like to keep this check to show the reader that we
-should only descend into gpiod_find_by_fwnode() if we have a valid
-fwnode. It is less about code generation and more about the intent.
-
-I did change the logging to remove extra dev_dbg(). We will lose message
-when dealing with unsupported node type, but that should not really
-happen in practice.
-
-> 
-> > +		desc = gpiod_find_by_fwnode(fwnode, consumer, con_id, idx,
-> > +					    &flags, &lookupflags);
-> 
-> > +
-> 
-> This blank line can be dropped after addressing above.
-> 
-> > +	if (gpiod_not_found(desc) && platform_lookup_allowed) {
-> > +		/*
-> > +		 * Either we are not using DT or ACPI, or their lookup did not
-> > +		 * return a result. In that case, use platform lookup as a
-> > +		 * fallback.
-> > +		 */
-> > +		dev_dbg(consumer, "using lookup tables for GPIO lookup\n");
-> > +		desc = gpiod_find(consumer, con_id, idx, &lookupflags);
-> > +	}
-> > +
-> > +	if (IS_ERR(desc)) {
-> > +		dev_dbg(consumer, "No GPIO consumer %s found\n", con_id);
-> > +		return desc;
-> > +	}
-> 
-> ...
-> 
-> > +	return gpiod_find_and_request(NULL, fwnode, con_id, index, flags, label,
-> > +				      false);
-> 
-> One line?
-
-OK :)
-
-> 
-> ...
-> 
-> > +	return gpiod_find_and_request(dev, fwnode, con_id, idx, flags, label,
-> > +				      true);
-> 
-> One line?
-
-OK.
-
-Thanks,
-
+diff --git a/kernel/gcov/clang.c b/kernel/gcov/clang.c
+index cbb0bed..7670a81 100644
+--- a/kernel/gcov/clang.c
++++ b/kernel/gcov/clang.c
+@@ -280,6 +280,8 @@ void gcov_info_add(struct gcov_info *dst, struct gcov_info *src)
+ 
+ 		for (i = 0; i < sfn_ptr->num_counters; i++)
+ 			dfn_ptr->counters[i] += sfn_ptr->counters[i];
++
++		sfn_ptr = list_next_entry(sfn_ptr, head);
+ 	}
+ }
+ 
 -- 
-Dmitry
+2.7.4
+
