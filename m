@@ -2,140 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C572C6231B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E8A6231C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbiKIRqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        id S231835AbiKIRrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:47:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiKIRqI (ORCPT
+        with ESMTP id S231786AbiKIRqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:46:08 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCDD64FD
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:46:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MHfsFUJzMTs+moow60vQwInpGBHbPKoN+2yepis2x+ak1hoGjoHau/AsgPmAGqWWV7efUAk+kQScmH6G3SjMzXG6wXGiS8ubzqymrz5/rebKO+VApNedwlyeg7nO9M5muTHCEqHNJNpCkkKCWA2h9Vzv9aWEx6xd4r/6qkBxQp3DNKVc+MxQmI+QSsfDPkWp5/FDndFxvnj/x9JCP4JiQrJ5m5HFo54L2Zp1BICJ/RvNuwTcVTQ0ac9aovUq61Tt8Vqt1YiEHnm5HVlijPDGqUSSmXdMcnTAVUcd7icWxe/Soo9QcKX9qSbhvi10V7Ecbc5bSWKNr7dQSe7VclE1ZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kAn/CfaYg8T7hiRGZ/nflqMFNH7A7GqWKnsKdoQepcQ=;
- b=E8ezOiLCwvgilgOLQTotx0kUNbuQ9X5YtIpCSbDX7E2Q3OzkhtdU96hMvhb5LGI0AoUsdtsNcIyDdM08LWDwHzmn+F72uSaL2iDXnkA/rKahVmUAfl6pCvYb4hoDGaeBAJ0/OyBZI1ztJSKjc2/bd2+KrS1stCI0E/FU39iyIcq/bNVk4wkWCIEeZEJGzSE4zbk86rGAIGVaVWIGF+f2rQRRX+NF4kEnO6HPmmmRpWJMZxusI2M1GhkLHMTBlFAf0BD2RENAXbECu4tnhQIG96fZHeY24KntZdzJUhbBJVI4A687sVAHSvE1WE3aLr54WWW5I32SLC5xu1hin0MkXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kAn/CfaYg8T7hiRGZ/nflqMFNH7A7GqWKnsKdoQepcQ=;
- b=tcSvj3esFf09eoAgdl9kwPjIo1UM3CAZPa/Pp7zBXRQXLpbeYUpXfk4oYKNavRGEaU7laFqgzuDrzSYbSG1SpPTg0TPdOLWSjR1kiTPdFZ93Kq3jN31LT/AkdjIIINSXXZDRAO7MzQpeDo7G8kJKqm6AOlarmzKgqvt9qO+sD3k=
-Received: from DM6PR08CA0050.namprd08.prod.outlook.com (2603:10b6:5:1e0::24)
- by PH7PR12MB5687.namprd12.prod.outlook.com (2603:10b6:510:13e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
- 2022 17:46:04 +0000
-Received: from DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1e0:cafe::6f) by DM6PR08CA0050.outlook.office365.com
- (2603:10b6:5:1e0::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.12 via Frontend
- Transport; Wed, 9 Nov 2022 17:46:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT107.mail.protection.outlook.com (10.13.172.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 17:46:04 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 11:46:02 -0600
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        "Roman Li" <roman.li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amd/display: only fill dirty rectangles when PSR is enabled
-Date:   Wed, 9 Nov 2022 12:46:27 -0500
-Message-ID: <20221109174628.150234-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 9 Nov 2022 12:46:45 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC9B656A;
+        Wed,  9 Nov 2022 09:46:44 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so2535333pjc.3;
+        Wed, 09 Nov 2022 09:46:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ekBIIhWuS/McjnSrAfG5owEyQPc2NQJYCb6tIV2JExs=;
+        b=qajXQrHHC/YSACOZC+77puLxlEZ+ohDov+N7tJCH2gZ3y9Za4tDul+D9HftTfkXgVS
+         ZkADKrCg3t9ZelEiFcPQhAMnNGUAtfUA9sdiVOvaemwZ4em3dfOPrn0a8Hk8Vvib7GwI
+         fxAR/TT7JllxYQ/nqbqkFvsCOEnUzVZpOyHeZYl6rb4jXNQBjQtLTN3IYQzBhX/TEpVG
+         lReBse2V8JHcaT1M2Uxkpl/dur6oEGwPfbHPU4gX977RFaPaMWdfjnGBSFNeuZiq4O/I
+         UhCrUgc5L2HOJOnWaVxkTR/TaMqZBijVsngJa0q68oBfJ83gI4uLwaIYlWxISOoMeSO9
+         zEpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ekBIIhWuS/McjnSrAfG5owEyQPc2NQJYCb6tIV2JExs=;
+        b=o6n8JxfBmtCRJXqV6ZIBgbTWLxI+kkVxUecCeY24nokU2KPxz7Jz9gVRRBK5tlmIHE
+         Jr8ibdT05mFTXtWIGRwAMI1mZDKsGqQcmq/iHuEuzpBIfwVPCA7B8/wzYwd3M01SlPgc
+         V4kABr9OH80579G96JTEju/37OxVh2l8IoCU8253o/tY1S157Olyna+CqX7NS3loT3a5
+         3SPbpHbNhrkaXJrPsRZj54vfPr5SJLBgTokSzw6k+ffFzQ8lnD5PhVvIwgyWOHTGARTE
+         BfxwLMzYoxPdRbJSIctawIUSU4Clm8+al9NXOE5bVFDuAsfiYeq+RhNmejC2spEc32Dw
+         iWMA==
+X-Gm-Message-State: ACrzQf1Ze7QRVsxCD8x032/BnTfAAIm9CSGgst9NAQaf5ytRgUnM/qzd
+        q6Pu08GSgI6byOb+0eCMJ/w=
+X-Google-Smtp-Source: AMsMyM4L0pXYAkYvRkwDlndKpOtM5JFNENBKSObbMv9B8Ghf/sbHxGqCFNkh2fZ3NGB5pyuFwEI5vQ==
+X-Received: by 2002:a17:902:7590:b0:187:29fe:bdb1 with SMTP id j16-20020a170902759000b0018729febdb1mr50187346pll.134.1668016004011;
+        Wed, 09 Nov 2022 09:46:44 -0800 (PST)
+Received: from balhae.corp.google.com ([2620:15c:2c1:200:fa05:f3cd:da75:3103])
+        by smtp.gmail.com with ESMTPSA id a10-20020a63cd4a000000b0043941566481sm7877909pgj.39.2022.11.09.09.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 09:46:43 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>
+Subject: [PATCH 05/12] perf test: Add 'leafloop' test workload
+Date:   Wed,  9 Nov 2022 09:46:28 -0800
+Message-Id: <20221109174635.859406-6-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+In-Reply-To: <20221109174635.859406-1-namhyung@kernel.org>
+References: <20221109174635.859406-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT107:EE_|PH7PR12MB5687:EE_
-X-MS-Office365-Filtering-Correlation-Id: 879d6752-1cd8-4595-4567-08dac27a4616
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6l7DexLWkh2HOEYjvm+TXdTK11zUixmHgEeT7Po0sqCFO4+sF3u+4LzX8F9oAv7OFzf4IXF5nCHygAR9/WpmrcsvW4/DxpPe9YDi4NUk8pZb9oJwZQe3gdZU9RswsoN4nA7plKca77XRctq+b5BVE07N19oHzghvS2K5g1Mtevypp1S0wOoQ2EBRt4ch4ZhPpmPGQpcpIHfQBEn3xXW5zOkIg/ydvoTeFa/7gA/5logIy0SftXKuf6S73m90rsfFnzL909cIrbc51+/AfwfZAY2bBQZHfOSagKY8Th/2g3kBKmXkqduLr+jhWRaVfuNgDfa/eNwGxBQNQxMVDVZ2SMrGAtCFz/gZo/AdB6ihTmPGLje5Mw+Vp2SUGJrMgePFsHxQuWuynEMdCsX0swoTbG/hGfzZagJk4cX+7ItRyfPZo4B3+uITM43joeamPxpbZmZa65Q7CBHAleOttrP24dHiu/KaSB+UBH3GhiXxcLM1wAwFv9VmFA5iLBFcdl4iENNDAY280d+pkZ20QU8DgNfzulPsvhY4rdEwBZ4JILBUqtfiGCGzzMNtyCygnPGBydyaqz2lSVeSM89g3/bpRTcNST8HSZ/uubT/DkC/WJl8Oo1dWu/JymiBfaV22e4L/IAq3fXg9wbv67Rp3ScmnO/WXwrOhD7WU66IK1jeO7aOjF5jdjpWQjNeu++xT6EpWcNh9/HHK/iwNkj82Whc93Awipv+AQw4Zf2gV4PWr21qyw0JfI7nShEHGxLKu1oWPDwj8IlLkDKLpR4aMgN5jYI7ATlDpDPK1Ba1deEBBD/i7dpfUwNNL1ImjYrTSxqnrGA9lEBaTty25wBLq8/DorHs6QUBKk8EDL5eSli3VS0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(376002)(346002)(451199015)(46966006)(36840700001)(40470700004)(70586007)(70206006)(82740400003)(26005)(8676002)(4326008)(316002)(2906002)(7696005)(47076005)(40480700001)(426003)(336012)(83380400001)(36860700001)(44832011)(40460700003)(86362001)(16526019)(186003)(1076003)(5660300002)(2616005)(41300700001)(36756003)(8936002)(82310400005)(478600001)(6666004)(356005)(81166007)(54906003)(6916009)(14143004)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 17:46:04.3228
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 879d6752-1cd8-4595-4567-08dac27a4616
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5687
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we are calling fill_dc_dirty_rects() even if PSR isn't
-supported by the relevant link in amdgpu_dm_commit_planes(). So, we can
-instead limit the filling of dirty rectangles to only when PSR is
-enabled.
+The leafloop workload is to run an infinite loop in the test_leaf
+function.  This is needed for the ARM fp callgraph test to verify if it
+gets the correct callchains.
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+  $ perf test -w leafloop
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ tools/perf/tests/builtin-test.c       |  1 +
+ tools/perf/tests/tests.h              |  1 +
+ tools/perf/tests/workloads/Build      |  3 +++
+ tools/perf/tests/workloads/leafloop.c | 34 +++++++++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 tools/perf/tests/workloads/leafloop.c
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 66eb16fbe09f..956a6e494709 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -7697,9 +7697,10 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
- 		bundle->surface_updates[planes_count].plane_info =
- 			&bundle->plane_infos[planes_count];
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index 161f38476e77..0ed5ac452f6e 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -121,6 +121,7 @@ static struct test_suite **tests[] = {
+ static struct test_workload *workloads[] = {
+ 	&workload__noploop,
+ 	&workload__thloop,
++	&workload__leafloop,
+ };
  
--		fill_dc_dirty_rects(plane, old_plane_state, new_plane_state,
--				    new_crtc_state,
--				    &bundle->flip_addrs[planes_count]);
-+		if (acrtc_state->stream->link->psr_settings.psr_feature_enabled)
-+			fill_dc_dirty_rects(plane, old_plane_state,
-+					    new_plane_state, new_crtc_state,
-+					    &bundle->flip_addrs[planes_count]);
+ static int num_subtests(const struct test_suite *t)
+diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
+index e6edfeeadaeb..86804dd6452b 100644
+--- a/tools/perf/tests/tests.h
++++ b/tools/perf/tests/tests.h
+@@ -202,5 +202,6 @@ struct test_workload workload__##work = {	\
+ /* The list of test workloads */
+ DECLARE_WORKLOAD(noploop);
+ DECLARE_WORKLOAD(thloop);
++DECLARE_WORKLOAD(leafloop);
  
- 		/*
- 		 * Only allow immediate flips for fast updates that don't
+ #endif /* TESTS_H */
+diff --git a/tools/perf/tests/workloads/Build b/tools/perf/tests/workloads/Build
+index b8964b1099c0..631596bdb2b3 100644
+--- a/tools/perf/tests/workloads/Build
++++ b/tools/perf/tests/workloads/Build
+@@ -2,3 +2,6 @@
+ 
+ perf-y += noploop.o
+ perf-y += thloop.o
++perf-y += leafloop.o
++
++CFLAGS_leafloop.o         = -g -O0 -fno-inline -fno-omit-frame-pointer
+diff --git a/tools/perf/tests/workloads/leafloop.c b/tools/perf/tests/workloads/leafloop.c
+new file mode 100644
+index 000000000000..1bf5cc97649b
+--- /dev/null
++++ b/tools/perf/tests/workloads/leafloop.c
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <stdlib.h>
++#include <linux/compiler.h>
++#include "../tests.h"
++
++/* We want to check these symbols in perf script */
++noinline void leaf(volatile int b);
++noinline void parent(volatile int b);
++
++static volatile int a;
++
++noinline void leaf(volatile int b)
++{
++	for (;;)
++		a += b;
++}
++
++noinline void parent(volatile int b)
++{
++	leaf(b);
++}
++
++static int leafloop(int argc, const char **argv)
++{
++	int c = 1;
++
++	if (argc > 0)
++		c = atoi(argv[0]);
++
++	parent(c);
++	return 0;
++}
++
++DEFINE_WORKLOAD(leafloop);
 -- 
-2.38.1
+2.38.1.431.g37b22c650d-goog
 
