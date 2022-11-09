@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59160623499
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4253C623498
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiKIUbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
+        id S231474AbiKIUa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiKIUa4 (ORCPT
+        with ESMTP id S231362AbiKIUa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Nov 2022 15:30:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDD019018
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166ADB4B4
         for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:30:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFF24B82004
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:30:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6098AC433C1;
-        Wed,  9 Nov 2022 20:30:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EA761CCC
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF72C433D6;
+        Wed,  9 Nov 2022 20:30:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1668025852;
-        bh=penp5eGjlAzwEMHIlYfO2UthsDqmi4JE3eNVxwebGdU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QDtR/oMNFrNnuSC8rkqWQuyDgSXMdz7cE6sGNbUSY63i7rPywtVF2bs/QeWo1hR6D
-         E+ZSTT3gQ1V/p4cp0tg271dSgkqpaQYCwj4Hw+IDg1mhCSpAbyrGxAwL6Aja826eaJ
-         t6IFNeMUW7uI0RdE4bX2KpSOHjrhnD9sK5lLsPGY=
+        s=korg; t=1668025854;
+        bh=jfWc6kn68kAyUZF8S+7X4sveku1vOvDNUz/xy6wAir4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xAEEZ1gj7l/8wAdz869fjwgcq9wqP+Dk9DLHIoqpv7MpspKrUddN8gJBa9flxuM9G
+         Vrz2Zp2MCnXa6CWwwcVkFSlbSQHlIrFSXzHlH1b8ADAoxLYHHvXiB9fJOStTLi+dBv
+         CJTPJDnlQrjEPOrNEJgV2mPcJCmjITlERtnVSK7U=
 From:   Linus Torvalds <torvalds@linux-foundation.org>
 To:     Hugh Dickins <hughd@google.com>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: [PATCH 1/4] mm: introduce 'encoded' page pointers with embedded extra bits
-Date:   Wed,  9 Nov 2022 12:30:48 -0800
-Message-Id: <20221109203051.1835763-1-torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 2/4] mm: teach release_pages() to take an array of encoded page pointers too
+Date:   Wed,  9 Nov 2022 12:30:49 -0800
+Message-Id: <20221109203051.1835763-2-torvalds@linux-foundation.org>
 X-Mailer: git-send-email 2.38.1.284.gfd9468d787
+In-Reply-To: <20221109203051.1835763-1-torvalds@linux-foundation.org>
+References: <20221109203051.1835763-1-torvalds@linux-foundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -50,100 +51,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We already have this notion in parts of the MM code (see the mlock code
-with the LRU_PAGE and NEW_PAGE bits), but I'm going to introduce a new
-case, and I refuse to do the same thing we've done before where we just
-put bits in the raw pointer and say it's still a normal pointer.
+release_pages() already could take either an array of page pointers, or
+an array of folio pointers.  Expand it to also accept an array of
+encoded page pointers, which is what both the existing mlock() use and
+the upcoming mmu_gather use of encoded page pointers wants.
 
-So this introduces a 'struct encoded_page' pointer that cannot be used
-for anything else than to encode a real page pointer and a couple of
-extra bits in the low bits.  That way the compiler can trivially track
-the state of the pointer and you just explicitly encode and decode the
-extra bits.
+Note that release_pages() won't actually use, or react to, any extra
+encoded bits.  Instead, this is very much a case of "I have walked the
+array of encoded pages and done everything the extra bits tell me to do,
+now release it all".
 
-Note that this makes the alignment of 'struct page' explicit even for
-the case where CONFIG_HAVE_ALIGNED_STRUCT_PAGE is not set.  That is
-entirely redundant in almost all cases, since the page structure already
-contains several word-sized entries.
+Also, while the "either page or folio pointers" dual use was handled
+with a cast of the pointer in "release_folios()", this takes a slightly
+different approach and uses the "transparent union" attribute to
+describe the set of arguments to the function:
 
-However, on m68k, the alignment of even 32-bit data is just 16 bits, and
-as such in theory the alignment of 'struct page' could be too.  So let's
-just make it very very explicit that the alignment needs to be at least
-32 bits, giving us a guarantee of two unused low bits in the pointer.
+  https://gcc.gnu.org/onlinedocs/gcc/Common-Type-Attributes.html
 
-Now, in practice, our page struct array is aligned much more than that
-anyway, even on m68k, and our existing code in mm/mlock.c obviously
-already depended on that.  But since the whole point of this change is
-to be careful about the type system when hiding extra bits in the
-pointer, let's also be explicit about the assumptions we make.
+which has been supported by gcc forever, but the kernel hasn't used
+before.
 
-NOTE! This is being very careful in another way too: it has a build-time
-assertion that the 'flags' added to the page pointer actually fit in the
-two bits.  That means that this helper must be inlined, and can only be
-used in contexts where the compiler can statically determine that the
-value fits in the available bits.
+That allows us to avoid using various wrappers with casts, and just use
+the same function regardless of use.
 
-Link: https://lore.kernel.org/all/Y2tKixpO4RO6DgW5@tuxmaker.boeblingen.de.ibm.com/
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
 Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 Acked-by: Hugh Dickins <hughd@google.com>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- include/linux/mm_types.h | 34 +++++++++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+ include/linux/mm.h | 21 +++++++++++++++++++--
+ mm/swap.c          | 16 ++++++++++++----
+ 2 files changed, 31 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 500e536796ca..0a38fcb08d85 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -67,7 +67,7 @@ struct mem_cgroup;
- #ifdef CONFIG_HAVE_ALIGNED_STRUCT_PAGE
- #define _struct_page_alignment	__aligned(2 * sizeof(unsigned long))
- #else
--#define _struct_page_alignment
-+#define _struct_page_alignment	__aligned(sizeof(unsigned long))
- #endif
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 8bbcccbc5565..d9fb5c3e3045 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1179,7 +1179,24 @@ static inline void folio_put_refs(struct folio *folio, int refs)
+ 		__folio_put(folio);
+ }
  
- struct page {
-@@ -241,6 +241,38 @@ struct page {
- #endif
- } _struct_page_alignment;
- 
+-void release_pages(struct page **pages, int nr);
 +/**
-+ * struct encoded_page - a nonexistent type marking this pointer
++ * release_pages - release an array of pages or folios
 + *
-+ * An 'encoded_page' pointer is a pointer to a regular 'struct page', but
-+ * with the low bits of the pointer indicating extra context-dependent
-+ * information. Not super-common, but happens in mmu_gather and mlock
-+ * handling, and this acts as a type system check on that use.
++ * This just releases a simple array of multiple pages, and
++ * accepts various different forms of said page array: either
++ * a regular old boring array of pages, an array of folios, or
++ * an array of encoded page pointers.
 + *
-+ * We only really have two guaranteed bits in general, although you could
-+ * play with 'struct page' alignment (see CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
-+ * for more.
-+ *
-+ * Use the supplied helper functions to endcode/decode the pointer and bits.
++ * The transparent union syntax for this kind of "any of these
++ * argument types" is all kinds of ugly, so look away.
 + */
-+struct encoded_page;
-+#define ENCODE_PAGE_BITS 3ul
-+static __always_inline struct encoded_page *encode_page(struct page *page, unsigned long flags)
-+{
-+	BUILD_BUG_ON(flags > ENCODE_PAGE_BITS);
-+	return (struct encoded_page *)(flags | (unsigned long)page);
-+}
++typedef union {
++	struct page **pages;
++	struct folio **folios;
++	struct encoded_page **encoded_pages;
++} release_pages_arg __attribute__ ((__transparent_union__));
 +
-+static inline unsigned long encoded_page_flags(struct encoded_page *page)
-+{
-+	return ENCODE_PAGE_BITS & (unsigned long)page;
-+}
-+
-+static inline struct page *encoded_page_ptr(struct encoded_page *page)
-+{
-+	return (struct page *)(~ENCODE_PAGE_BITS & (unsigned long)page);
-+}
-+
++void release_pages(release_pages_arg, int nr);
+ 
  /**
-  * struct folio - Represents a contiguous set of bytes.
-  * @flags: Identical to the page flags.
+  * folios_put - Decrement the reference count on an array of folios.
+@@ -1195,7 +1212,7 @@ void release_pages(struct page **pages, int nr);
+  */
+ static inline void folios_put(struct folio **folios, unsigned int nr)
+ {
+-	release_pages((struct page **)folios, nr);
++	release_pages(folios, nr);
+ }
+ 
+ static inline void put_page(struct page *page)
+diff --git a/mm/swap.c b/mm/swap.c
+index 955930f41d20..596ed226ddb8 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -968,22 +968,30 @@ void lru_cache_disable(void)
+ 
+ /**
+  * release_pages - batched put_page()
+- * @pages: array of pages to release
++ * @arg: array of pages to release
+  * @nr: number of pages
+  *
+- * Decrement the reference count on all the pages in @pages.  If it
++ * Decrement the reference count on all the pages in @arg.  If it
+  * fell to zero, remove the page from the LRU and free it.
++ *
++ * Note that the argument can be an array of pages, encoded pages,
++ * or folio pointers. We ignore any encoded bits, and turn any of
++ * them into just a folio that gets free'd.
+  */
+-void release_pages(struct page **pages, int nr)
++void release_pages(release_pages_arg arg, int nr)
+ {
+ 	int i;
++	struct encoded_page **encoded = arg.encoded_pages;
+ 	LIST_HEAD(pages_to_free);
+ 	struct lruvec *lruvec = NULL;
+ 	unsigned long flags = 0;
+ 	unsigned int lock_batch;
+ 
+ 	for (i = 0; i < nr; i++) {
+-		struct folio *folio = page_folio(pages[i]);
++		struct folio *folio;
++
++		/* Turn any of the argument types into a folio */
++		folio = page_folio(encoded_page_ptr(encoded[i]));
+ 
+ 		/*
+ 		 * Make sure the IRQ-safe lock-holding time does not get
 -- 
 2.38.1.284.gfd9468d787
 
