@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76F9622C6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F023622C72
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiKINdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 08:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S229853AbiKINeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 08:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiKINc6 (ORCPT
+        with ESMTP id S229558AbiKINeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 08:32:58 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A644B2EF39
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 05:32:56 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Wed, 9 Nov 2022 08:34:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35645252BF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 05:34:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N6m9z25qSz8QrkZ;
-        Wed,  9 Nov 2022 21:32:55 +0800 (CST)
-Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
-        by mse-fl2.zte.com.cn with SMTP id 2A9DWnZt099946;
-        Wed, 9 Nov 2022 21:32:49 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp03[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Wed, 9 Nov 2022 21:32:53 +0800 (CST)
-Date:   Wed, 9 Nov 2022 21:32:53 +0800 (CST)
-X-Zmail-TransId: 2b05636bac05ffffffff8eb2a033
-X-Mailer: Zmail v1.0
-Message-ID: <202211092132530746481@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <axboe@kernel.dk>
-Cc:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGJsb2NrOiB1c2Ugc3Ryc2NweSgpIGlzIG1vcmUgcm9idXN0IGFuZCBzYWZlcg==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2A9DWnZt099946
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 636BAC07.000 by FangMail milter!
-X-FangMail-Envelope: 1668000775/4N6m9z25qSz8QrkZ/636BAC07.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 636BAC07.000/4N6m9z25qSz8QrkZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3F07B81E6E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:34:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9CEC433C1;
+        Wed,  9 Nov 2022 13:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668000842;
+        bh=iLOLzZH3lZ0qvtTlUeIyrFI4l/lH4TDEVH11XOog/eE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=omUyaOtEQPiBhzHY1L9VpnHLIuaVkl0eYg9QuoErXUGMd2VUn0mOwLqybB9km4gvd
+         rqJmvCfhlTtwp4/s9hNOzyXErsnghwrNr8wY0DoAk3d+902p1IEeBF7SoP0DJIEvk3
+         13IbKN562xfCr/xkoX/7c9jFUlRXseeoTkUx00AaAQJP6iSl6GUpjNXknwRpGMAJrm
+         i3zVBOS2PraWOAC5F3q6rlHBIBg+D/HUhYwceoEL0vkE5MnrE/nx8LPEShMo7wDq5D
+         T+fJiE0kcX/MrnjUBJOLBg7ZGhsElu+u+jCaUH2PZ0cwFjWnAA+OE9UaFiHtTU46nm
+         cDmPqvckggbcg==
+Date:   Wed, 9 Nov 2022 13:33:55 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Joey Gouly <joey.gouly@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Topi Miettinen <toiwoton@gmail.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
+Subject: Re: [PATCH v1 2/2] kselftest: vm: add tests for
+ memory-deny-write-execute
+Message-ID: <Y2usQ6HjvwDEisCY@sirena.org.uk>
+References: <20221026150457.36957-1-joey.gouly@arm.com>
+ <20221026150457.36957-3-joey.gouly@arm.com>
+ <Y1wLVsg8VN26xI7j@sirena.org.uk>
+ <20221108173303.GA53007@e124191.cambridge.arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PkmQYXH0bfQF8a57"
+Content-Disposition: inline
+In-Reply-To: <20221108173303.GA53007@e124191.cambridge.arm.com>
+X-Cookie: Sign here without admitting guilt.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL terminated strings.
+--PkmQYXH0bfQF8a57
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- block/elevator.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Nov 08, 2022 at 05:33:03PM +0000, Joey Gouly wrote:
+> On Fri, Oct 28, 2022 at 06:03:18PM +0100, Mark Brown wrote:
+> > On Wed, Oct 26, 2022 at 04:04:57PM +0100, Joey Gouly wrote:
 
-diff --git a/block/elevator.c b/block/elevator.c
-index a5bdc3b1e7e5..0885b66c3868 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -749,7 +749,7 @@ ssize_t elv_iosched_store(struct request_queue *q, const char *buf,
- 	if (!elv_support_iosched(q))
- 		return count;
+> > > +#ifdef __aarch64__
+> > > +#define PROT_BTI      0x10            /* BTI guarded page */
+> > > +#endif
 
--	strlcpy(elevator_name, buf, sizeof(elevator_name));
-+	strscpy(elevator_name, buf, sizeof(elevator_name));
- 	ret = elevator_change(q, strstrip(elevator_name));
- 	if (!ret)
- 		return count;
--- 
-2.15.2
+> > We should get this from the kernel headers shouldn't we?  We generally
+> > rely on things getting pulled in from there rather than locally
+> > defining.
+
+> I believe the mman.h included is from the toolchain, not the kernel's uapi headers.
+> The toolchain I was using didn't have PROT_BTI defined in its mman.h
+
+I'd expect that whatever we're doing in the build process ought to be
+overriding the default headers provided by the toolchain, that's kind of
+the point here...
+
+--PkmQYXH0bfQF8a57
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNrrEIACgkQJNaLcl1U
+h9Dd2Qf+JstBgiUB9xskBNs/qV0yCbAwDcm1yxj1hcr7EBTB6UpqUs0dFMDc7viS
+tGVkyALj5WpqjA7o5D8zc+LMhA5cYPNZwNwuXm0DBcHp51LrlC9REsBLihDvOLDh
+S+wOnXfoajkP5Ujt2yRcwPufZ7tQ5z/SZJcy9LhffgLy/fC9cYiYviLakrw1P3Ua
+6nm3muwCUaXteqgQHzduoJe7DXTOmROICv1r6yHSIwLHMIELEFAA89rHgIwpGqH/
+UvqiB/v35R63DufGRHFedDk01tG5ZGe7wm7P9+1jlDVSECMJGI4l2MZyfn/iEekW
++FVctvLpNpeb4nlV98EwvIx+OtnM+Q==
+=hO+N
+-----END PGP SIGNATURE-----
+
+--PkmQYXH0bfQF8a57--
