@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAADB622959
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DEC622956
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiKIK55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S230331AbiKIK5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiKIK5k (ORCPT
+        with ESMTP id S231394AbiKIK5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:57:40 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6113AD
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:57:14 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A99MKB5002368;
-        Wed, 9 Nov 2022 10:55:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
- from : in-reply-to : date : cc : message-id : references : to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Z7Wf8ct09eK4ViEpf0UW9mV2GGqYyKN0h7Q7fnU9dGE=;
- b=gMDBSra28bcQSjhQQDXY1vmIIUhCka/8xHoepmERMd5eZmus44RRWtsO4AbELOpJQIZ+
- T3m4gg/oQyoa/v320Noutcs3jfEFBuMEToHoxiqiO3Y9JIAW3eL5Faskl8qkyZjbjmUa
- DfSP1YOMG7w1UsYZFNJwT7rQlKooQtAXC/pNaboVYU7cHtolv02DtKrEb/96xN+iRdpy
- K3Iy9MHGFBnU0Sp+3LHjhpctuOb6yE6n2l8WSRQGeeznPu0EsyYQnLxU5GWVlghzVtYO
- ctzmhvjDuknvC2QZqZxH1u5kIjnCZ86dADUNb8+EOGSXBHp+foqkebnYg+qrkGVTbGLN YA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kr7ns5my7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 10:55:55 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A9ApkVG001934;
-        Wed, 9 Nov 2022 10:55:53 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3kngpgm1gr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 10:55:53 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A9AuTrB43057444
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Nov 2022 10:56:29 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4943E11C04C;
-        Wed,  9 Nov 2022 10:55:51 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2620411C04A;
-        Wed,  9 Nov 2022 10:55:50 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.28.188])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Nov 2022 10:55:49 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Subject: Re: [6.1.0-rc3-next-20221104] Boot failure - kernel BUG at
- mm/memblock.c:519
-From:   Sachin Sant <sachinp@linux.ibm.com>
-In-Reply-To: <4fee7f2b0e99e256465ef6e7656c6349@linux.dev>
-Date:   Wed, 9 Nov 2022 16:25:39 +0530
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Message-Id: <74979021-D386-4402-BD70-167531C7405B@linux.ibm.com>
-References: <e00989c4a69943cb4f60fc7ffaa06f8c@linux.dev>
- <Y2oLYB7Tu7J91tVm@linux.ibm.com>
- <E2499567-0D0F-44DA-AC68-1E279009A6DE@linux.ibm.com>
- <58779468e28e026a1aa30a42ca7e8aec@linux.dev>
- <4fee7f2b0e99e256465ef6e7656c6349@linux.dev>
-To:     Yajun Deng <yajun.deng@linux.dev>
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UP7PTNYWFa0FnyjErRmc0w-n1JP_k0J8
-X-Proofpoint-GUID: UP7PTNYWFa0FnyjErRmc0w-n1JP_k0J8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 9 Nov 2022 05:57:11 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B9A22BC0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:55:59 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id d20so25136878ljc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 02:55:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VmS+uedq9rzycs24wj1ycZpaKGAK2vI/UBOPK1atnrA=;
+        b=GgkLbTwIv0gYH4cA7XhimXYQplcIxaHYU+mNeFgIocVHSw6fM8odmsAUs5EemQJrwb
+         Zg2paMHVXI9sVHH+/J5JeyDOiN0m/5d1AV5TQBkoZQnMmt8WXhx9oGjZit5yBWNG8+7b
+         prBES21UJbaUNNVamrcXPt/iI4mFgrrNZyHgag3paRdrVhasuY3lStXohSqOMlego/SI
+         kX9BAjjg5YfQGxaxAk1jPsvm54zeiryybXQnUqIum3jraKPTig0x7x5ArwBDmHG43gk6
+         64H+JTJH5Tq8lHUS3GKw7QRYmwGroa28/VnOuMCo8xwVM8JP0vzAVRJ2ZZ7AzmO9qo/7
+         wb0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VmS+uedq9rzycs24wj1ycZpaKGAK2vI/UBOPK1atnrA=;
+        b=093FGcZ86IymVbxA0Yw/ReFPt80sYiS+TpwCFy1K4cj94U8i4v0gEKQXwR5TKVrr4O
+         Zi2QmoV66j4LmZjX/Qo63H0Mckjipdb/0wsFcsls0E8ULS1R2743zmAux6AzNr9405gQ
+         E9AKgqra/LSFJjf0112tSCmz0bOBvERwhvOh0RuxOG2VkoOJbQ61pobD5H/hGCY6cnxk
+         nBFXosoWHh1Z6MtCB100MX1zKUiQQYR8cseDLtefDWBsHoK5TirHYTtn72ii0OQ3p+D2
+         6YCqUMPiXHf5cEhoBvmN4S3IsfEiMM7lVr7ICN3fVKCWYHv2BSsk9XauBQg9WXEsO7Et
+         gyww==
+X-Gm-Message-State: ANoB5pmeYuTIzHwEBvswZflQuLqArroo6rlGRIIDvxHX69IwYvJnUN3S
+        GLn/jjp7uEEPEtDT9dib8T42Ag==
+X-Google-Smtp-Source: AA0mqf4nif+CJ3U8Pw5CMHykLKvpzcKuerU1RCFm6uA4Tb2/BAp+OnksagiUoGLT4ZqVAcrzYrtfwA==
+X-Received: by 2002:a05:651c:38b:b0:277:5656:ea3 with SMTP id e11-20020a05651c038b00b0027756560ea3mr3088191ljp.226.1667991358001;
+        Wed, 09 Nov 2022 02:55:58 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id f3-20020ac24e43000000b0048b1b2233ddsm2169588lfr.120.2022.11.09.02.55.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 02:55:57 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [RESEND PATCH] dt-bindings: PCI: qcom,pcie-ep: correct qcom,perst-regs
+Date:   Wed,  9 Nov 2022 11:55:55 +0100
+Message-Id: <20221109105555.49557-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_04,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- malwarescore=0 impostorscore=0 mlxlogscore=979 bulkscore=0 spamscore=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090077
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+qcom,perst-regs is an phandle array of one item with a phandle and its
+arguments.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> On 09-Nov-2022, at 3:55 PM, Yajun Deng <yajun.deng@linux.dev> wrote:
-> 
-> November 9, 2022 6:03 PM, "Yajun Deng" <yajun.deng@linux.dev> wrote:
-> 
->> Hey Mike,
->> 
-> Sorry, this email should be sent to Sachin but not Mike. 
-> Please forgive my confusion. So:
-> 
-> Hey Sachin,
-> Can you help me test the attached file? 
-> Please use this new patch instead of the one in memblock tree.
-
-Thanks for the fix. With the updated patch kernel boots correctly.
-
-Tested-by: Sachin Sant <sachinp@linux.ibm.com <mailto:sachinp@linux.ibm.com>>
-
-- Sachin
+diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+index 977c976ea799..5aa590957ee4 100644
+--- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
++++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+@@ -47,8 +47,10 @@ properties:
+                  enable registers
+     $ref: "/schemas/types.yaml#/definitions/phandle-array"
+     items:
+-      minItems: 3
+-      maxItems: 3
++      - items:
++          - description: Syscon to TCSR system registers
++          - description: Perst enable offset
++          - description: Perst separateion enable offset
+ 
+   interrupts:
+     items:
+-- 
+2.34.1
 
