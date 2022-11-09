@@ -2,281 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65F8622F47
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A509622F32
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbiKIPoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
+        id S230336AbiKIPlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKIPoM (ORCPT
+        with ESMTP id S229918AbiKIPlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:44:12 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DF526B;
-        Wed,  9 Nov 2022 07:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668008650; x=1699544650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Uf8x9QH/RmFX0sTNIMKa4yl3lKUnVcVn+Gb5ElJY89Q=;
-  b=ZvOL4dO1VcI4kCCqOt02/eqfgTENLpG8KN7hYVMV4EeWvhzs87+npCmr
-   +1elIzPY84cpXpnjxd1LT2fFWw0xvT+98qqlz7jEKXmtv5uRCQEKqB09T
-   CLKZFuG7F5FxUOV6tXi0dC5Nt8qe2d9xxheT4tfQYLDFkK7jbrOKdTAQB
-   w4RjTwi2L4BMOvsuWcBZngWe/+6LTizw/5Z/dUD56HFH52RCcVPjZcig2
-   AzPjgA8GJrbnsordAsd+WifFHN2pR+aEvrvw0J2ssi5W6fXDjbqOq3BRl
-   5n09EOl76TeJ/DPQrcHKfdsJwKAkfMo65TLgZQPJY98ANudYjPl9AI+1y
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="375286938"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="375286938"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 07:40:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="631287359"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="631287359"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 09 Nov 2022 07:40:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1osnBw-009oDq-0f;
-        Wed, 09 Nov 2022 17:40:40 +0200
-Date:   Wed, 9 Nov 2022 17:40:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-Subject: Re: [PATCH v8 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver
- support
-Message-ID: <Y2vJ953qKHQTalru@smile.fi.intel.com>
-References: <20221109061122.786-1-zhuyinbo@loongson.cn>
+        Wed, 9 Nov 2022 10:41:45 -0500
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0794AB76
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:41:43 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id D93F02B05EA7;
+        Wed,  9 Nov 2022 10:41:37 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 09 Nov 2022 10:41:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668008497; x=
+        1668015697; bh=RCyshHC41nd39fvXLSqmZArQb870AHZw66GwFRxnroM=; b=m
+        6M99+0EF+2lM4FWiKahRXCTJ/2TRlz60OSCpfjLh0dwLmJt8UZlGysvW6zVlL2pp
+        Lr+WltoyoR+IUFtxULmpx9V4PwWXUoTK4lT0XrTSj5OvW/EuKUSq5OP7fCPSv/hS
+        wMLhIZFZK8xtnKAD9HRpKE6bFT9+wsAEN69ffr7dSfS1rpaxm7Hu+1woa3Z/o8NN
+        3pMECxBqnO7uCjXhTY1CIEOjl5zs2PPTo+UtduJ3Rp8RuU/G2ycnUdEQw76dETW2
+        RAZTS2OHN2xECUNb6NdkAEGXy0l0HrmS51YjeCqALxmBWtJmoeNmXqsRuIUWSADN
+        tB1lVQ/av/uRi0fIEh3kw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668008497; x=
+        1668015697; bh=RCyshHC41nd39fvXLSqmZArQb870AHZw66GwFRxnroM=; b=Q
+        1/HqsQB3psOc+96b6isRXoX5C5ybTom2C7vyqoPLqp6JQbF0UAVFZTxbWo+gL3Z7
+        y51qQFpEdFsWqcGqsfn/LvJJEjy0xXvTlIm+jkDjJL7W2PUy0KZtNHaHgAbKSzIo
+        EXABW/A3a68xWi6D9zvPbEuQNITYea4uEAs14se9B4WgqQk7704vEkRSEj1hITqn
+        SuwL1/x4lWuzJktnqdj0yaghQoItbO/N1nJd5FeM4RK1VJ6E2U1ERYVRZjBPJq/o
+        oZgqdBUCMtxCDJJqCd3vUbP8Pj6gYNwNSIoi5BMIwLk53Qg+nZqzgdElZRJPx9/p
+        hSuGxkmOWcv95FeDiejzA==
+X-ME-Sender: <xms:MMprY44s5uzkOROU2zHEfWl9aJUVwCgeTFwkoIaoC8uvSdgvD-Thag>
+    <xme:MMprY56o5iiiBf61_8abJX__s-HAqE4YCR2hlccU8ReACbG0thX7mIhfHRBpDIZSh
+    RKfSUNIqO9Y0bI2vBM>
+X-ME-Received: <xmr:MMprY3cXvBJulNae7ipti96x_ZJvMRoIGjmME7i6lUuPDYyopQlU92K8WrUb829ARuUXjBRc5ketZAEhaS_3g2VgVlsgQnHfFiBzPvuwyPr6bQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgdejlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeelleefieelleetteefvdeikeeffeffvefhtdevgfehveduveehjedvvdei
+    ledtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:MMprY9JTwg_wzFj8EWHTdbjBtWZJHYPCN4V_xLC-bRoRQgnaKQCqIw>
+    <xmx:MMprY8Ig6OqyUH6VsywLi3cQuOIsSc94EBfT82yvHaUlhJfnpliaBA>
+    <xmx:MMprY-zaAoIdjYBBMBRxQowmsI7JmMk3IojZrK3a217hu4nC8Pxobg>
+    <xmx:McprY2rAchrF3eCgdTb_46WNWdcdn_DFIex5hkcfFEYhCf4ui436F9V3VWs>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Nov 2022 10:41:35 -0500 (EST)
+Date:   Wed, 9 Nov 2022 16:41:33 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org
+Subject: Re: [PATCH v7 16/23] drm/probe-helper: Provide a TV get_modes helper
+Message-ID: <20221109154133.koqhn6upwz6jd2oe@houat>
+References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v7-16-7072a478c6b3@cerno.tech>
+ <a9c0380a-f538-1a19-fd27-983eea42b1b2@tronnes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221109061122.786-1-zhuyinbo@loongson.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <a9c0380a-f538-1a19-fd27-983eea42b1b2@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 02:11:21PM +0800, Yinbo Zhu wrote:
-> The Loongson-2 SoC has a few pins that can be used as GPIOs or take
-> multiple other functions. Add a driver for the pinmuxing.
-> 
-> There is currently no support for GPIO pin pull-up and pull-down.
-
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-
-Why two SoBs? Who is(are) the author(s)?
-
-...
-
-> +	help
-> +	  This selects pin control driver for the Loongson-2 SoC. It
-
-One space is enough.
-
-> +	  provides pin config functions multiplexing.  GPIO pin pull-up,
-> +	  pull-down functions are not supported. Say yes to enable
-> +	  pinctrl for Loongson-2 SoC.
-
-Perhaps keep your entry in order?
-
->  source "drivers/pinctrl/actions/Kconfig"
->  source "drivers/pinctrl/aspeed/Kconfig"
->  source "drivers/pinctrl/bcm/Kconfig"
-
-...
-
-> @@ -29,6 +29,7 @@ obj-$(CONFIG_PINCTRL_KEEMBAY)	+= pinctrl-keembay.o
->  obj-$(CONFIG_PINCTRL_LANTIQ)	+= pinctrl-lantiq.o
->  obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
->  obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
-> +obj-$(CONFIG_PINCTRL_LOONGSON2) += pinctrl-loongson2.o
-
-I would expect more order here...
-
->  obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
->  obj-$(CONFIG_PINCTRL_MAX77620)	+= pinctrl-max77620.o
->  obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
-
-...
-
-> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
-> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
-
-Missed Co-developed-by tag above?
-
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-
-> +#include <linux/of.h>
-
-I found no user of this header.
-But you missed mod_devicetable.h.
-
-> +#include <linux/pinctrl/pinmux.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-> +#include <linux/pinctrl/pinctrl.h>
-
-Can we keep it as a separate group after generic linux/* ones?
-
-> +#include <linux/seq_file.h>
-
-+ Blank line.
-
-> +#include <asm-generic/io.h>
-
-No, use linux/io.h.
-
-...
-
-> +#define PMX_GROUP(grp, offset, bitv)					\
-> +	{								\
-> +		.name = #grp,						\
-> +		.pins = grp ## _pins,					\
-> +		.num_pins = ARRAY_SIZE(grp ## _pins),			\
-> +		.reg = offset,						\
-> +		.bit = bitv,						\
-> +	}
-
-Use PINCTRL_PINGROUP() and associated data structure.
-
-...
-
-> +static const unsigned int lio_pins[]    = {};
-> +static const unsigned int uart2_pins[]  = {};
-> +static const unsigned int uart1_pins[]  = {};
-> +static const unsigned int camera_pins[] = {};
-> +static const unsigned int dvo1_pins[]   = {};
-> +static const unsigned int dvo0_pins[]   = {};
-
-No sure what this means.
-
-...
-
-> +static struct loongson2_pmx_group loongson2_pmx_groups[] = {
-> +	PMX_GROUP(gpio, 0x0, 64),
-> +	PMX_GROUP(sdio, 0x0, 20),
-> +	PMX_GROUP(can1, 0x0, 17),
-> +	PMX_GROUP(can0, 0x0, 16),
-> +	PMX_GROUP(pwm3, 0x0, 15),
-> +	PMX_GROUP(pwm2, 0x0, 14),
-> +	PMX_GROUP(pwm1, 0x0, 13),
-> +	PMX_GROUP(pwm0, 0x0, 12),
-> +	PMX_GROUP(i2c1, 0x0, 11),
-> +	PMX_GROUP(i2c0, 0x0, 10),
-> +	PMX_GROUP(nand, 0x0, 9),
-> +	PMX_GROUP(sata_led, 0x0, 8),
-> +	PMX_GROUP(lio, 0x0, 7),
-> +	PMX_GROUP(i2s, 0x0, 6),
-> +	PMX_GROUP(hda, 0x0, 4),
-> +	PMX_GROUP(uart2, 0x8, 13),
-> +	PMX_GROUP(uart1, 0x8, 12),
-> +	PMX_GROUP(camera, 0x10, 5),
-> +	PMX_GROUP(dvo1, 0x10, 4),
-> +	PMX_GROUP(dvo0, 0x10, 1),
-
-> +
-
-Redundant blank line.
-
-> +};
-
-...
-
-> +static const char * const gpio_groups[] = {
-> +	"sdio", "can1", "can0", "pwm3", "pwm2", "pwm1", "pwm0", "i2c1",
-> +	"i2c0", "nand", "sata_led", "lio", "i2s", "hda", "uart2", "uart1",
-> +	"camera", "dvo1", "dvo0"
-
-Leave trailing comma.
-
-Also it would be nice to have that grouped like
-
-	"sdio",
-	"can1", "can0",
-	"pwm3", "pwm2", "pwm1", "pwm0",
-	"i2c1", "i2c0",
-	"nand",
-	"sata_led",
-	"lio",
-	"i2s", "hda",
-	"uart2", "uart1",
-	"camera",
-	"dvo1", "dvo0",
-
-> +};
-
-
-...
-
-> +	unsigned long reg = (unsigned long)pctrl->reg_base +
-> +				loongson2_pmx_groups[group_num].reg;
-
-Why casting?!
-
-...
-
-> +	val = readl((void *)reg);
-
-Ouch.
-
-> +	if (func_num == 0)
-> +		val &= ~(1<<mux_bit);
-> +	else
-> +		val |= (1<<mux_bit);
-
-Why not using __assign_bit() or similar? Or at least BIT() ?
-
-...
-
-> +	writel(val, (void *)reg);
-
-Ouch!
-
-...
-
-> +	pctrl->reg_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(pctrl->reg_base))
-
-> +		return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->reg_base),
-> +				     "unable to map I/O memory");
-
-Message duplicates what core does.
-
-...
-
-> +	pctrl->desc.confops	= NULL;
-
-Redundant.
-
-...
-
-> +static const struct of_device_id loongson2_pinctrl_dt_match[] = {
-> +	{
-> +		.compatible = "loongson,ls2k-pinctrl",
-> +	},
-
-> +	{ },
-
-No comma for the terminator line.
-
-> +};
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Hi Noralf,
+
+On Mon, Nov 07, 2022 at 07:11:27PM +0100, Noralf Tr=F8nnes wrote:
+>=20
+>=20
+> Den 07.11.2022 15.16, skrev Maxime Ripard:
+> > From: Noralf Tr=F8nnes <noralf@tronnes.org>
+> >=20
+> > Most of the TV connectors will need a similar get_modes implementation
+> > that will, depending on the drivers' capabilities, register the 480i and
+> > 576i modes.
+> >=20
+> > That implementation will also need to set the preferred flag and order
+> > the modes based on the driver and users preferrence.
+> >=20
+> > This is especially important to guarantee that a userspace stack such as
+> > Xorg can start and pick up the preferred mode while maintaining a
+> > working output.
+> >=20
+> > Signed-off-by: Noralf Tr=F8nnes <noralf@tronnes.org>
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >=20
+> > ---
+> > Changes in v7:
+> > - Used Noralf's implementation
+> >=20
+> > Changes in v6:
+> > - New patch
+> > ---
+> >  drivers/gpu/drm/drm_probe_helper.c | 97 ++++++++++++++++++++++++++++++=
+++++++++
+> >  include/drm/drm_probe_helper.h     |  1 +
+> >  2 files changed, 98 insertions(+)
+> >=20
+> > diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_p=
+robe_helper.c
+> > index 2fc21df709bc..edb2e4c4530a 100644
+> > --- a/drivers/gpu/drm/drm_probe_helper.c
+> > +++ b/drivers/gpu/drm/drm_probe_helper.c
+> > @@ -1147,3 +1147,100 @@ int drm_connector_helper_get_modes(struct drm_c=
+onnector *connector)
+> >  	return count;
+> >  }
+> >  EXPORT_SYMBOL(drm_connector_helper_get_modes);
+> > +
+> > +static bool tv_mode_supported(struct drm_connector *connector,
+> > +			      enum drm_connector_tv_mode mode)
+> > +{
+> > +	struct drm_device *dev =3D connector->dev;
+> > +	struct drm_property *property =3D dev->mode_config.tv_mode_property;
+> > +
+> > +	unsigned int i;
+> > +
+> > +	for (i =3D 0; i < property->num_values; i++)
+> > +		if (property->values[i] =3D=3D mode)
+> > +			return true;
+> > +
+> > +	return false;
+> > +}
+>=20
+> This function is not used in the new implementation.
+>
+> I hope you have tested this patch since I didn't even compile test my
+> implementation (probably should have said so...)
+
+You nailed it ;)
+
+I had tested it (but missed the warning), and added unit tests to make
+sure it was behaving properly, and it did. I'll send the unit tests in
+my next version.
+
+Thanks
+Maxime
