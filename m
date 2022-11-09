@@ -2,153 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610976222DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856746222D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiKIDyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 22:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        id S230083AbiKIDuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 22:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiKIDyv (ORCPT
+        with ESMTP id S229902AbiKIDtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 22:54:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06101743D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:54:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 224846187D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:54:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D6DC433D6;
-        Wed,  9 Nov 2022 03:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667966088;
-        bh=S8pWdgOR4rgQDJEViUkztQ4JOnFYoyoZ1YvkqP2E6ck=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XC1176GMX+onGjvVsBZjQ48A0CtsihKje05ARr/k6lkUTDWKrwUzXRgyoXjfKMlwO
-         TTz8d0+y5B5YkjmJiFCCD4geYrQLanHqBzKJzu7Znm5z1NUmGTwVylqwx4tSzETZpr
-         H86rqo703xqz9lXQRxej1copWFrkhMHcPrqG0Bc/koLYK0DfK2X76zAQMbSGabiM4L
-         QGKjn8Gm8WeCaSdgXX/5QkO4Ada5JawGsDZ+eY4ku1VNThgJdRzWz7t53Jx4TMo+jB
-         YQ/4D9BXEHQJ+RV75f9fB38Z/v0QhuwQhk9r2o9Q7OgqOsxKR5QwqQUiN0/EEhbf7T
-         I0WqK+hc+0yYQ==
-Message-ID: <6782d309-5e4b-580c-fbbb-4388bda69bf3@kernel.org>
-Date:   Tue, 8 Nov 2022 19:54:35 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCHv11.1 04/16] x86/mm: Handle LAM on context switch
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        dave.hansen@intel.com
-Cc:     ak@linux.intel.com, andreyknvl@gmail.com, ashok.raj@intel.com,
-        bharata@amd.com, dave.hansen@linux.intel.com, dvyukov@google.com,
-        glider@google.com, hjl.tools@gmail.com,
-        jacob.jun.pan@linux.intel.com, kcc@google.com,
-        kirill@shutemov.name, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, peterz@infradead.org,
-        rick.p.edgecombe@intel.com, ryabinin.a.a@gmail.com,
-        tarasmadan@google.com, x86@kernel.org
-References: <b778fcdd-5c20-e897-9d17-1a884172a826@intel.com>
- <20221107213558.27807-1-kirill.shutemov@linux.intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20221107213558.27807-1-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 8 Nov 2022 22:49:50 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF76817066
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:49:48 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221109034947epoutp022f30b902f9d56dbfa710424e36f81951~lzgvWh5gE1987319873epoutp02M
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:49:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221109034947epoutp022f30b902f9d56dbfa710424e36f81951~lzgvWh5gE1987319873epoutp02M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667965787;
+        bh=rlp+qXaLAX0ZIbta6kqClM45VmPJd4TFz1poBktpQjo=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=FI8YmAU6tTVu5FPWLjwRQdHNKHXrFs+gP8Gxb7HjccJCSOhPGKCllIZ7sLryPVO4Q
+         j9MfECZQOf30REWWKc22ZLvRJV20ndDmQNcgqkuxwbY9PnOdl7eXN+U8srsykFQOcy
+         RSH/8PoBLuKu9aGzZqDvSHBaZ4pwxwC51ZGe449E=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20221109034946epcas5p457727ccf4b42f12a3d1fea68d6f99d98~lzguMXbbQ0918409184epcas5p4L;
+        Wed,  9 Nov 2022 03:49:46 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4N6WF22wNKz4x9Q0; Wed,  9 Nov
+        2022 03:49:42 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.84.39477.5532B636; Wed,  9 Nov 2022 12:49:41 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8~lzfObbFFO1703417034epcas5p2r;
+        Wed,  9 Nov 2022 03:48:03 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221109034803epsmtrp1f925d26956cf3fe42d690b9a864ed454~lzfOaB74x1103811038epsmtrp11;
+        Wed,  9 Nov 2022 03:48:03 +0000 (GMT)
+X-AuditID: b6c32a4a-007ff70000019a35-7a-636b2355cf0b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BB.AF.14392.2F22B636; Wed,  9 Nov 2022 12:48:03 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20221109034759epsmtip1d7f61366e0e9d1b617963c7ee10c8ab8~lzfK7GFxD0213402134epsmtip1p;
+        Wed,  9 Nov 2022 03:47:59 +0000 (GMT)
+From:   Aakarsh Jain <aakarsh.jain@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com, smitha.t@samsung.com,
+        aakarsh.jain@samsung.com
+Subject: [Patch v2 1/3] arm: exynos: Add new compatible string for
+ Exynos3250 SoC.
+Date:   Wed,  9 Nov 2022 09:25:05 +0530
+Message-Id: <20221109035507.69086-1-aakarsh.jain@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTbVBUVRjHO/fevbvYrN2Q7LCh4kUoGBZYW9bDywoO6NwJMpywSc2hdbkC
+        7Wu7S0Z9iCZBAkRRVAQC40VmAFdcWVgNEpctjBFmiB12Rt2CIGUtJgVD05J2uVLffud5/v/z
+        POc55whw/yFSJMjTmliDVqGmyRVE90D4a+KdISplzKg7Ev1qO81DE/XdJGp6dAdDPzfNE8h+
+        0cpHXc5aHLUO9vNQg2OEh3qu/kKgCzPe7OhpN4HuNJgB8tT8RKKKmUkcWabGeWjsch2Jyjut
+        PHTO4eajFtcohs5a/sZQo/UBHxX1OfjI3dsN0MFiB5YMmY76DsDY3M2AcTXP4cylGjefaer1
+        YIyl7UuSuTXeSzIXmz9jir57TDAVXW2AKXW4SGbespYZ+nOenyHcrUrMZRXZrCGY1Sp12Xna
+        HDmd9nZWSlasLEYilsShTXSwVqFh5XRqeoZ4W57aOwI6+COFOt8bylAYjXT05kSDLt/EBufq
+        jCY5zeqz1XqpPsqo0BjztTlRWtYUL4mJ2RjrFb6vyh28vVd/lvrY87CDKAQeYSnwE0BKCmtv
+        jPB87E99A2DZIigFK7w8B+D3zlM8brEA4LXffiCWHYt9Yxjn6ANw4GESJyrC4PR8mdcuEJCU
+        GA73qH2aAOpzAKdKTD4NTlUS8GbFDO5LrKIyodN1nfTpCSoUTphDfCik5PBJz1au1DrY3tmP
+        +6yQmhbAxwv9hE8DqVToahZxmlXw7mAXn2MR9BwpfsZKONXowTlWw/O9Vc/aT4L9zrqlbXAq
+        HJ6/HM2F18ATQ+alU+HUSnj4yTTGxYXQVr/MYbDu1iMex0FwoL0FcMzAHnMNwU1kL/y98xw4
+        CtbU/F/hDABtIJDVGzU5rDFWv1HLHvjvjpQ6jQUsPeqIN2xgcuJelB1gAmAHUIDTAcIO8wdK
+        f2G2ouAT1qDLMuSrWaMdxHoHVomLXlLqvL9Ca8qSSONipDKZTBr3ukxCvyxsqo5Q+lM5ChOr
+        Ylk9a1j2YQI/USF2nElKj33VWh+UOl1uVbXcTe9tiQyyb3BQi2nkWHL8V1V/iehvHSl2oNqK
+        RU0WdWZ2tP44Zq6IG55fN7GYt/mF62f2H2vOTFm9e+5C4bV7hYee7gke2bX+VOA+kaZyKlIS
+        INt1cv/Oq4HSL5wiS1/8lZM23U0qYVv0yvKFVuNCbeOW0NmCUMfq7WK/6RuV1amJdIp1/aHD
+        zw233591vvPPiaPmkq9v246NOoqHC8Ou7JmMzHsxet39t/7QXGog39W5XCHhUzs0QHxkw6eN
+        tXIyfnaTIzQh7T0xfCpPqkp9wJtdu6/gOJMw+PwrI/qC5KCSkR0fytJ0irLxOl31QcObBzq3
+        h9GEMVchicANRsW/9w7DbV0EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBLMWRmVeSWpSXmKPExsWy7bCSnO5npexkg0O/GS2e7pjJavFg3jY2
+        i8U/njNZ3F/8mcXi0Oat7BZbrsxmtlh+/ACrxfwj51gtth98xGKx8QVQ9uLMuywWz+evY7R4
+        Oesem0Xfi4fMFpseX2O1uLxrDptFz4atrBZrj9xlt1h6/SKTxbJNf5gsFm39wm7RuvcIu8Xd
+        PdsYLVrajjA5SHismbeG0WPH3SWMHteXfGL22DnrLrvH4j0vmTw2repk87hzbQ+bx+Yl9R6t
+        R3+xePRtWcXo0XXkOpvH501yHqe+fmYP4I3isklJzcksSy3St0vgyjj+LLZgmUDFy+9rWBoY
+        X/J2MXJySAiYSPzfe5mpi5GLQ0hgN6PEl1XX2SESMhL/245B2cISK/89B7OFBJqZJE6dcOhi
+        5OBgE9CVOLs9B6RXRKCVUeL6yk6wQcwCK1kkbm/sYQJpEBYIknj86yEjSAOLgKrEg3XKICav
+        gK3E7+2uEOPlJVZvOMA8gZFnASPDKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M4MjR
+        0tzBuH3VB71DjEwcjIcYJTiYlUR416zLShbiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQ
+        QHpiSWp2ampBahFMlomDU6qBqX/Wu/Y+jT1JG7tut0+6f/yDX499rtD/9W9a8uJ1JfNeHbs5
+        71O15Pl7T5QcXipONPA11PQqydvpy9dT/1nf/L5KBF/mp8X3TNgt3l5PaFm2SUX9lIiRU+w6
+        /VXscYc/93yw3qRhtOt+ucjfvMOfZ+t8+tOz5aJa3f6ja695L32/Q+6O59sdGWXz1oT1v97w
+        hbNV3VVJ6UGKdpXmq5crn29m2/Lt+4EjLItrnyhvYr1jKf+XLy3p9h69r9UScb5x+nteTT21
+        /HzK7t59x0pVH73zMdRMfl38xvGubZDrMbM6pzuBDgfOXtKWd6hKnOi8LrT4Jy8P54VLnsL3
+        574FpjXGZ345j/NjtI1mXEltVGIpzkg01GIuKk4EAECCGZcLAwAA
+X-CMS-MailID: 20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8
+References: <CGME20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8@epcas5p2.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 13:35, Kirill A. Shutemov wrote:
-> Linear Address Masking mode for userspace pointers encoded in CR3 bits.
-> The mode is selected per-process and stored in mm_context_t.
-> 
-> switch_mm_irqs_off() now respects selected LAM mode and constructs CR3
-> accordingly.
-> 
-> The active LAM mode gets recorded in the tlb_state.
-> 
+Since,MFC v7 support was added for Exynos5420 and Exynos
+3250 SoC with same compatible string "samsung,mfc-v7".As
+both SoCs having different hardware properties and having
+same compatible string for both SoCs doesn't seems to be correct.
+New compatible is added for Exynos3250 SOC which will
+differentiate the node properties for both SoCs which
+support MFC v7.
 
-> +static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
-> +{
-> +	return mm->context.lam_cr3_mask;
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
+Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+---
+ Documentation/devicetree/bindings/media/s5p-mfc.txt | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-READ_ONCE -- otherwise this has a data race and might generate sanitizer 
-complaints.
+We are already in process of converting this txt file to yaml.
+https://patchwork.kernel.org/project/linux-media/patch/20221011122516.32135-2-aakarsh.jain@samsung.com/
+Modifying this txt binding for completeness.
 
-> +}
-
-> @@ -491,6 +496,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
->   {
->   	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
->   	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
-> +	unsigned long prev_lam = tlbstate_lam_cr3_mask();
-> +	unsigned long new_lam = mm_lam_cr3_mask(next);
-
-So I'm reading this again after drinking a cup of coffee.  new_lam is 
-next's LAM mask according to mm_struct (and thus can change 
-asynchronously due to a remote CPU).  prev_lam is based on tlbstate and 
-can't change asynchronously, at least not with IRQs off.
-
-
->   	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
->   	unsigned cpu = smp_processor_id();
->   	u64 next_tlb_gen;
-> @@ -520,7 +527,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
->   	 * isn't free.
->   	 */
->   #ifdef CONFIG_DEBUG_VM
-> -	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
-> +	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid, prev_lam))) {
-
-So is the only purpose of tlbstate_lam_cr3_mask() to enable this warning 
-to work?
-
->   		/*
->   		 * If we were to BUG here, we'd be very likely to kill
->   		 * the system so hard that we don't see the call trace.
-> @@ -552,9 +559,15 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
->   	 * instruction.
->   	 */
->   	if (real_prev == next) {
-> +		/* Not actually switching mm's */
->   		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
->   			   next->context.ctx_id);
->   
-> +		/*
-> +		 * If this races with another thread that enables lam, 'new_lam'
-> +		 * might not match 'prev_lam'.
-> +		 */
-> +
-
-Indeed.
-
->   		/*
->   		 * Even in lazy TLB mode, the CPU should stay set in the
->   		 * mm_cpumask. The TLB shootdown code can figure out from
-> @@ -622,15 +635,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
->   		barrier();
->   	}
-
-> @@ -691,6 +705,10 @@ void initialize_tlbstate_and_flush(void)
->   	/* Assert that CR3 already references the right mm. */
->   	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
->   
-> +	/* LAM expected to be disabled in CR3 and init_mm */
-> +	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
-> +	WARN_ON(mm_lam_cr3_mask(&init_mm));
-> +
-
-I think the callers all have init_mm selected, but the rest of this 
-function is not really written with this assumption.  (But it does force 
-ASID 0, which is at least a bizarre thing to do for non-init-mm.)
-
-What's the purpose of this warning?  I'm okay with keeping it, but maybe 
-also add a warning that fires if mm != &init_mm.
+diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+index aa54c8159d9f..cb166654fa81 100644
+--- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
++++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+@@ -10,10 +10,11 @@ Required properties:
+   - compatible : value should be either one among the following
+ 	(a) "samsung,mfc-v5" for MFC v5 present in Exynos4 SoCs
+ 	(b) "samsung,mfc-v6" for MFC v6 present in Exynos5 SoCs
+-	(c) "samsung,mfc-v7" for MFC v7 present in Exynos5420 SoC
+-	(d) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
+-	(e) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
+-	(f) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
++	(c) "samsung,exynos3250-mfc" for MFC v7 present in Exynos3250 SoC
++	(d) "samsung,mfc-v7" for MFC v7 present in Exynos5420 SoC
++	(e) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
++	(f) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
++	(g) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
+ 
+   - reg : Physical base address of the IP registers and length of memory
+ 	  mapped region.
+-- 
+2.17.1
 
