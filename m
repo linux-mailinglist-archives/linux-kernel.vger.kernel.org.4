@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DD66226EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CFA6226E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiKIJ2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S229817AbiKIJ2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbiKIJ2l (ORCPT
+        with ESMTP id S229537AbiKIJ2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:28:41 -0500
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60BD2127C;
-        Wed,  9 Nov 2022 01:28:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1667986117; x=1699522117;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1lyMS97aOhK9HdVaYOKoc1UrcZ3a7mFZFdUnkHkf4V0=;
-  b=Ttk+/I4TJeM+YVBAjzgVjG9oIL7ICawEgHYKBBoyWdkf+jqG7SRsvNpi
-   OB/tzPrrZfXe90gZ5BkQAORm/tDGMODBOVbIKZrCzJwlzyxbgDAL7x7Vd
-   PQay7Gx7fLHh+rS38e+IRCdmSBViXafwwM92XB0gq44ysgsTzYVhU80tq
-   8=;
-X-IronPort-AV: E=Sophos;i="5.96,150,1665446400"; 
-   d="scan'208";a="149137753"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-83883bdb.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 09:28:13 +0000
-Received: from EX13D10EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-83883bdb.us-west-2.amazon.com (Postfix) with ESMTPS id BA57661477;
-        Wed,  9 Nov 2022 09:28:11 +0000 (UTC)
-Received: from EX19D016EUA004.ant.amazon.com (10.252.50.4) by
- EX13D10EUA003.ant.amazon.com (10.43.165.52) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Wed, 9 Nov 2022 09:28:09 +0000
-Received: from [192.168.16.138] (10.43.160.223) by
- EX19D016EUA004.ant.amazon.com (10.252.50.4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.15; Wed, 9 Nov 2022 09:28:05 +0000
-Message-ID: <62a9ab52-af59-fa60-c52b-34f7bc7741a2@amazon.com>
-Date:   Wed, 9 Nov 2022 11:27:39 +0200
+        Wed, 9 Nov 2022 04:28:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE19140F2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:27:58 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667986076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rBWd6rB3fdMHT6oEL/e7KMDZ3KQ02pRiVMTRw5/T4Fs=;
+        b=FfJighKGc9u3FkH5JHCszV7Aco3v/VpYXSSQedDDZQ/lWpPTEGNV0hwEW8IQ/80zZVXDvl
+        kBvNEpcMV7S5PSi5IJ/G/2KAkEp3aBCSpMUV8zdhwfNzbhPPXt1C7mjDrP/sNAcKsIB7ZC
+        hJPjSKupEO9xf4Vq5DS3nMujR+RQ3ng8LuCMpKsp86TlCiCMTaMDWZl+VcLCmrajCHQaJN
+        IZH/ME2QlxG9O6H1E7J7wZZCgYGssS9WCwlXvUQtMS3dzRklS/1nuTJawDWyXA+NhxUEFI
+        z+XolyeeTTOPH80+LiRjGbxDvQpOzXLeS0RAgRbTqcFSoLM38nTX8BZek2gcFQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667986076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rBWd6rB3fdMHT6oEL/e7KMDZ3KQ02pRiVMTRw5/T4Fs=;
+        b=Ga1lG42zkWBk2sHyLogpfBWSoJrf/w9HW93ZPvv5qxNV/asdr3AI5W4jEdErP5K0y8Mr36
+        1U/NOcrx5dl7cGBg==
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net
+Subject: Re: [PATCH printk v3 15/40] kdb: use srcu console list iterator
+In-Reply-To: <20221109085325.wiub564iqnewvczb@ash.lan>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-16-john.ogness@linutronix.de>
+ <20221109085325.wiub564iqnewvczb@ash.lan>
+Date:   Wed, 09 Nov 2022 10:33:55 +0106
+Message-ID: <87wn848okk.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v1] MAINTAINERS: Update entries from the Nitro Enclaves
- section
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Alexandru Ciobotaru <alcioa@amazon.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Tim Gardner <tim.gardner@canonical.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        kvm <kvm@vger.kernel.org>,
-        ne-devel-upstream <ne-devel-upstream@amazon.com>,
-        "The AWS Nitro Enclaves Team" <aws-nitro-enclaves-devel@amazon.com>
-References: <20221108185912.15792-1-andraprs@amazon.com>
- <Y2qtFONe55pYI7oC@kroah.com>
- <a302bf1b-0263-ccff-b8c9-a3ce9db65f55@amazon.com>
- <Y2tYUeVXgIo7ONfA@kroah.com>
-Content-Language: en-US
-From:   "Paraschiv, Andra-Irina" <andraprs@amazon.com>
-In-Reply-To: <Y2tYUeVXgIo7ONfA@kroah.com>
-X-Originating-IP: [10.43.160.223]
-X-ClientProxiedBy: EX13D20UWC004.ant.amazon.com (10.43.162.41) To
- EX19D016EUA004.ant.amazon.com (10.252.50.4)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpPbiAwOS4xMS4yMDIyIDA5OjM1LCBHcmVnIEtIIHdyb3RlOgo+IAo+IE9uIFR1ZSwgTm92IDA4
-LCAyMDIyIGF0IDEwOjUzOjM0UE0gKzAyMDAsIFBhcmFzY2hpdiwgQW5kcmEtSXJpbmEgd3JvdGU6
-Cj4+Cj4+Cj4+IE9uIDA4LjExLjIwMjIgMjE6MjUsIEdyZWcgS0ggd3JvdGU6Cj4+Pgo+Pj4gT24g
-VHVlLCBOb3YgMDgsIDIwMjIgYXQgMDg6NTk6MTJQTSArMDIwMCwgQW5kcmEgUGFyYXNjaGl2IHdy
-b3RlOgo+Pj4+IFVwZGF0ZSB0aGUgbGlzdCBvZiBtYWludGFpbmVycyBmb3IgdGhlIE5pdHJvIEVu
-Y2xhdmVzIHByb2plY3QuIEFsZXgKPj4+PiAobGV4bnZAKSBpcyBub3Qgd29ya2luZyBhdCBBbWF6
-b24gYW55bW9yZSBhbmQgdGhlcmUgd2lsbCBiZSB0aGUgc2FtZQo+Pj4+IGNhc2UgZm9yIG1lIHN0
-YXJ0aW5nIHdpdGggMjAyMy4KPj4+Pgo+Pj4+IEFkZCBhIHJlZmVyZW5jZSB0byB0aGUgbWFpbGlu
-ZyBsaXN0IG9mIHRoZSBOaXRybyBFbmNsYXZlcyBkZXZlbG9wbWVudAo+Pj4+IHRlYW0uCj4+Pj4K
-Pj4+PiBTaWduZWQtb2ZmLWJ5OiBBbmRyYSBQYXJhc2NoaXYgPGFuZHJhcHJzQGFtYXpvbi5jb20+
-Cj4+Pj4gLS0tCj4+Pj4gICAgTUFJTlRBSU5FUlMgfCAzICstLQo+Pj4+ICAgIDEgZmlsZSBjaGFu
-Z2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkKPj4+Pgo+Pj4+IGRpZmYgLS1naXQg
-YS9NQUlOVEFJTkVSUyBiL01BSU5UQUlORVJTCj4+Pj4gaW5kZXggMDQ2ZmYwNmZmOTdmLi5hZjJj
-MTc4YmEwZGMgMTAwNjQ0Cj4+Pj4gLS0tIGEvTUFJTlRBSU5FUlMKPj4+PiArKysgYi9NQUlOVEFJ
-TkVSUwo+Pj4+IEBAIC0xNDU2NCwxMCArMTQ1NjQsOSBAQCBUOiAgIGdpdCBnaXQ6Ly9naXQua2Vy
-bmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvZGluZ3V5ZW4vbGludXguZ2l0Cj4+Pj4g
-ICAgRjogICBhcmNoL25pb3MyLwo+Pj4+Cj4+Pj4gICAgTklUUk8gRU5DTEFWRVMgKE5FKQo+Pj4+
-IC1NOiAgIEFuZHJhIFBhcmFzY2hpdiA8YW5kcmFwcnNAYW1hem9uLmNvbT4KPj4+PiAtTTogICBB
-bGV4YW5kcnUgVmFzaWxlIDxsZXhudkBhbWF6b24uY29tPgo+Pj4KPj4+IEkgbmVlZCBhbiBhY2sg
-ZnJvbSBBbGV4YW5kcnUgdG9vLgo+Pgo+PiBIZSBpcyBub3Qgd29ya2luZyBhdCBBbWF6b24gYW55
-bW9yZSwgYnV0IEkgc2VudCBhIG1lc3NhZ2UgdG8gaGltIHdpdGggdGhlCj4+IHJlZmVyZW5jZSB0
-byB0aGlzIG1haWwgdGhyZWFkLiBIb3BlIHRoYXQgaGUgY291bGQgc2VlIHRoZSBtZXNzYWdlIGFu
-ZCBnZXQKPj4gYmFjayB3aXRoIGEgcmVwbHkgb24gdGhpcyBtYWlsIHRocmVhZC4KPiAKPiBPaywg
-aWYgdGhhdCBkb2Vzbid0IGhhcHBlbiwganVzdCBzZW5kIGEgdmVyc2lvbiBvZiB0aGF0IHBhdGNo
-IHJlbW92aW5nCj4geW91LgoKQWNrLiBBbGV4IG1lbnRpb25lZCB0aGF0IHdpbGwgY29tZSBiYWNr
-IHRoaXMgd2VlayB3aXRoIGEgcmVwbHkuCgpJZiBub3QgaGFwcGVuaW5nLCBJJ2xsIGNyZWF0ZSBh
-IG5ldyB2ZXJzaW9uIG9mIHRoZSBwYXRjaC4KClRoYW5rIHlvdS4KCkFuZHJhCgoKCkFtYXpvbiBE
-ZXZlbG9wbWVudCBDZW50ZXIgKFJvbWFuaWEpIFMuUi5MLiByZWdpc3RlcmVkIG9mZmljZTogMjdB
-IFNmLiBMYXphciBTdHJlZXQsIFVCQzUsIGZsb29yIDIsIElhc2ksIElhc2kgQ291bnR5LCA3MDAw
-NDUsIFJvbWFuaWEuIFJlZ2lzdGVyZWQgaW4gUm9tYW5pYS4gUmVnaXN0cmF0aW9uIG51bWJlciBK
-MjIvMjYyMS8yMDA1Lgo=
+Hi Daniel,
 
+On 2022-11-09, Daniel Thompson <daniel.thompson@linaro.org> wrote:
+>> +	/*
+>> +	 * The console_srcu_read_lock() only provides safe console list
+>> +	 * traversal. The use of the ->write() callback relies on all other
+>> +	 * CPUs being stopped at the moment and console drivers being able to
+>> +	 * handle reentrance when @oops_in_progress is set. (Note that there
+>> +	 * is no guarantee for either criteria.)
+>> +	 */
+>
+> The debugger entry protocol does ensure that other CPUs are either
+> stopped or unresponsive. In the case where the other CPU is unresponsive
+> (e.g. timed out after being asked to stop) then there is a "real" printk()
+> issued prior to any of the above interference with the console system to
+> the developer driving the debugger gets as much clue as we can offer them
+> about what is going on (typically this is emitted from regular interrupt
+> context).
+>
+> Given this comment is part of the debugger code then for the
+> oops_in_progress hack it might be more helpful to describe what
+> the developer in front the debugger needs to do to have the most
+> reliable debug session possible.
+>
+>   There is no guarantee that every console drivers can handle reentrance
+>   in this way; the developer deploying the debugger is responsible for
+>   ensuring that the console drivers they have selected handle reentrance
+>   appropriately.
+
+Thanks for the explanation. I will change the comment to:
+
+	/*
+	 * The console_srcu_read_lock() only provides safe console list
+	 * traversal. The use of the ->write() callback relies on all other
+	 * CPUs being stopped at the moment and console drivers being able to
+	 * handle reentrance when @oops_in_progress is set.
+	 *
+	 * There is no guarantee that every console driver can handle
+	 * reentrance in this way; the developer deploying the debugger
+	 * is responsible for ensuring that the console drivers they
+	 * have selected handle reentrance appropriately.
+	 */
+
+John
