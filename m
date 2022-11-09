@@ -2,113 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBCE623472
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B67623477
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiKIUWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:22:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S231150AbiKIUYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiKIUW3 (ORCPT
+        with ESMTP id S229447AbiKIUYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:22:29 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1531B1D335
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:22:29 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13d9a3bb27aso3279fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:22:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DkZEBtgDxLwh8xU3neb1FAkv2BmAFLuGBlDLcfKRoW8=;
-        b=vnj1SQDl8mqR3MmD7DqMUdNfi9EUJZvJILOHciyG+VNOp6U0W8rfmn1+Xt31N+DcQi
-         vDOnwVOnau8LUSczoJ0WHV2krITQHPokBhbZJC4BIkUnl+t4Dat/K/WTsgm/5X4H7YWQ
-         zFVnHpsYmAev6RqZbkyoPpbxfEtuuC5V3kacc7B9jDIVJ86H3JkUSioH5iFiZXPAsk9u
-         +2/qR/DZ7H515xlu6tv/Rw8xxaQ8v68Mmf2Mn0Ren3VUaznJd1IL/5goc6xepZl65XJt
-         fP0AgfYdfvqQpcEsC69in5ywcxiT3s9Q3QxNfKI3qY3mYeuTNkzps4sk3UzAOewW8GKp
-         JWqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DkZEBtgDxLwh8xU3neb1FAkv2BmAFLuGBlDLcfKRoW8=;
-        b=MWhopa3xeVdFvsTpRWd/V/A8mCEC/JEl9IoBdKbK1HxrAlg0fp7kEmYgalAL4HpvwY
-         EV2YxYf4+3Hq0pBrvzaiFj1Z2bAtLJ5+7wo0wHCLMk4OLxGspg2ozpyEGryktYyTvqqI
-         o6sknMSmPVF5sdL5ey0cKp/Ag/dGYg7ecUUtHpjdk8j8Oyd+gj+BI/54XBgr967L1OJE
-         cnVN0pYDX8H/VKa7SD+iOFeFezCzsVocvZYYKFxS/+I/9hMGALmT1H2h2134ap6QfUCG
-         IMx9HhzLG3pnpIsFmyOY9lgdvZ7RSB8Cotzf7UyOL/ZA0uJsROTrQ+SJhdqSsreMFK4J
-         hyFQ==
-X-Gm-Message-State: ACrzQf2SyuBIkuppnHy8Fmrsp4F3IZqKCR7Rx5LC8qO5OOR2USvhvUI4
-        SBdYiA1N2KqTx6auyZcURQ3eYEvYdrM7otdMkVEQsmIGyBE9
-X-Google-Smtp-Source: AMsMyM4PhU2aWuL/hCnXMmV01mOurB3yfd1swJ4U7viOAdtWTL7HzwxBLnJkoFMtxmc+5Qwsw+/v3/n+uTUZ8vvCy4s=
-X-Received: by 2002:a05:6870:f299:b0:13b:ad21:934d with SMTP id
- u25-20020a056870f29900b0013bad21934dmr36758992oap.172.1668025345426; Wed, 09
- Nov 2022 12:22:25 -0800 (PST)
+        Wed, 9 Nov 2022 15:24:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F1ABC27
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:24:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEF4E61CAF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:24:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343CEC433D7;
+        Wed,  9 Nov 2022 20:23:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668025440;
+        bh=7+5jyTKDsBSnzUCypgmhEzafnQWwO3MDHgaXspdMOVI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T8ooVs2pwLN7kWzDt7NoDC1RaNGkZQxrFFi205GVftjQlo2Nioki0YrA+fcUEIahG
+         VzQ1hUkw9QguGB37xPLlBVA0ntWVhfZhPLFLL7mkx7pT918QKQl53AtoVFFCGN1Yi6
+         BnjWCN9s6g6CXcagFjozEsiHV8k1ZF4SazO3di3RuN8xmzuH199BiO78xtXzrmtJwt
+         Z3nCmj1o9gxdDrMEK2PHSGjSn1IdA5ahBDr/sE1QWZCSqePni6scTKXAA6LOnS9aPp
+         l9dxUsv19Fe/soI9y7iaeIx0b23ng9hP0lDEPdiyPH3Mi8Y6+V8zUWPM0soFBxp4t4
+         dYcaSgmKNQrYA==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     linux-mtd@lists.infradead.org
+Cc:     dinguyen@kernel.org, tudor.ambarus@microchip.com,
+        pratyush@kernel.org, michael@walle.cc,
+        linux-kernel@vger.kernel.org,
+        Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+Subject: [PATCH] mtd: spi-nor: macronix: Add support for mx66u1g45g
+Date:   Wed,  9 Nov 2022 14:23:47 -0600
+Message-Id: <20221109202348.93666-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAHC9VhSSafrkW4VbTVoAUJmjFQdCwPTGDqTP8yBnLBqc7rW7iQ@mail.gmail.com>
- <CAHk-=wj_6Df1NAMs14S0OOqX1Z=460j-mfwn_qm-7EK1eK76qw@mail.gmail.com>
- <20221109143834.GB24561@mail.hallyn.com> <CAHC9VhQgEej_yKXRJFtLHUQkL8hGrBYqRPye5SwBz_SU+2eK2A@mail.gmail.com>
-In-Reply-To: <CAHC9VhQgEej_yKXRJFtLHUQkL8hGrBYqRPye5SwBz_SU+2eK2A@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 9 Nov 2022 15:22:14 -0500
-Message-ID: <CAHC9VhS9h2ZL=JZOoNK7Q+TDU7BSq3Jk2BqZ0nZExCfTvkuUuQ@mail.gmail.com>
-Subject: Re: [GIT PULL] LSM fixes for v6.1 (#1)
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 3:13 PM Paul Moore <paul@paul-moore.com> wrote:
-> On Wed, Nov 9, 2022 at 9:38 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> > On Mon, Oct 31, 2022 at 12:22:29PM -0700, Linus Torvalds wrote:
-> > > On Mon, Oct 31, 2022 at 4:07 AM Paul Moore <paul@paul-moore.com> wrote:
-> > > >
-> > > > A single patch to the capabilities code to fix a potential memory leak
-> > > > in the xattr allocation error handling.  Please apply for v6.1-rcX.
-> > >
-> > > Pulled.
-> > >
-> > > However, I react to the strange test condition. Sure, it's
-> > > pre-existing, but does it really make sense?
-> > >
-> > > It does
-> > >
-> > > +       if (ret < 0 || !tmpbuf) {
-> > > +               size = ret;
-> > > +               goto out_free;
-> > > +       }
-> > >
-> > > and how the heck can 'tmpbuf' be NULL if vfs_getxattr_alloc() succeeded?
-> >
-> > I had to go through the history a bit - the !tmpbuf check was added
-> >
-> > https://www.spinics.net/lists/stable/msg463010.html
-> >
-> > because of a gcc warning.  Perhaps there's a better way to tell gcc
-> > that it can't remain NULL if ret was < 0 ?
->
-> Ooof, that's ugly, but thanks for digging it up.  As it turns out I
-> happen to be working on a patch for vfs_getxattr_alloc() to fix the
-> return value type right now, but it looks like I'll leave that gcc
-> hack in place ... although I might leave a comment about it so the
-> next person doesn't have to wonder.
+The MX66U1G45G is the smaller sibling (128MB) of the MX66U2G45G (256MB)
+that is already supported.
 
-Actually, it looks like there are other similar conditions, e.g.
-evm_is_immutable(), without such a check and my compiler (gcc v12.2.0)
-seems okay with it; presumably they fixed the compiler bug?
+Tested on Intel N5X socdk board,
+  - random data write, erase, read   - verified erase operations
+  - random data write, read and compare  - verified write/read operations
 
-I guess I'll leave the hack in place for commoncap.c but not propagate
-it elsewhere.
+Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+ drivers/mtd/spi-nor/macronix.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
+diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
+index d81a4cb2812b..46ba898f3dd0 100644
+--- a/drivers/mtd/spi-nor/macronix.c
++++ b/drivers/mtd/spi-nor/macronix.c
+@@ -97,6 +97,10 @@ static const struct flash_info macronix_nor_parts[] = {
+ 			      SPI_NOR_QUAD_READ) },
+ 	{ "mx66l1g55g",  INFO(0xc2261b, 0, 64 * 1024, 2048)
+ 		NO_SFDP_FLAGS(SPI_NOR_QUAD_READ) },
++	{ "mx66u1g45g",  INFO(0xc2253b, 0, 64 * 1024, 2048)
++		PARSE_SFDP,
++		FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
++		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
+ 	{ "mx66u2g45g",	 INFO(0xc2253c, 0, 64 * 1024, 4096)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
+ 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
 -- 
-paul-moore.com
+2.25.1
+
