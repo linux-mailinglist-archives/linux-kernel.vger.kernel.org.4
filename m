@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D18E623769
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3C7623774
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiKIXZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
+        id S231466AbiKIXaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiKIXZY (ORCPT
+        with ESMTP id S229551AbiKIXaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:25:24 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA32D1C8;
-        Wed,  9 Nov 2022 15:25:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N71KR4F7Rz4xYD;
-        Thu, 10 Nov 2022 10:25:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668036317;
-        bh=ERJC9eRMspSvsDqwdNvHOLiIP1XOJz4EMAXQzGjCFDQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Dq29p6qEMuw95b6qrvea0y0KOVhyJaTY6uvGt8aRxNfEDnl+1bRW/0IjXW/J3JVbV
-         cLKuwXkBvVxEMspmiVOZpw1A/VfsAslL3lPG6Fsu/PH1x+ZF0ISaTwVJFasbkwzy4i
-         GiZLcnGSORWqMznK+cPy002+sOnFmGtHDBz7Sce4S1pCsDtBMUIyRYdDCGF17qlmjo
-         FEvl0CntzCd8biNgfELg3nHHZB8ab19LqIBxthdnIaERN0Ekqz71l4g6MIK7CiT9mM
-         ZZ9JQMrJ5T1tjaj4IHO1xKzq9JY7oFmVWmmZxN/9mnCkG2G1p5dTNoce5a94psJAIx
-         EpTwjRYGbm9LQ==
-Date:   Thu, 10 Nov 2022 10:25:09 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20221110102509.1f7d63cc@canb.auug.org.au>
+        Wed, 9 Nov 2022 18:30:10 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085E9E003;
+        Wed,  9 Nov 2022 15:30:09 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id v17so525640edc.8;
+        Wed, 09 Nov 2022 15:30:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uAvE+zmS2KRIMgnsrjebgmPG4+u2jRS9iMLFQsNWlzM=;
+        b=TeL5fw501TdmYB+S0bqSmi4rWOTLEyLBPDNa1z0oqzbUu71nT5AVEQb+AVJwvGwP99
+         AVxncPhSzbXwfwqxm8+H7NmHidGlr/fwrg+GxCrxHIbj1LYwXgZNmkncjTBCbWJSi0pF
+         uiANWPwOTPmLWxGAHchE04VluTznStBm28XqwUIqFlBlzbMWdtooE+uToLgI99rrADDe
+         OpnKFHsRM4bU5VY0NHlFmI8LF6ohvQ6300ZvKskCnp7jnEjG5rw2OoqQrcLoNK7qc2r8
+         wPN9kSDVu4cJxUXyEdJY8f5F+Hh5CkUOAm2s4PBcsZMc9E9MbwEUDREKSDslztQyu3zw
+         1jFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uAvE+zmS2KRIMgnsrjebgmPG4+u2jRS9iMLFQsNWlzM=;
+        b=Qtj0SnmXwKCoZ6rYO30S3ILAt4ToO+56yI+JqaoeMZEspFMCd03cUqfwMy7QFz1okV
+         8O+gs9HKk56zlZSuVp657PRZ8JJKTY+9OJtYBUuZGv3W9K/SnPXfcBiQgCMC1L2swZoE
+         6Q6i6+DtIEKIb4UFNAwii6lSLejkQv6GQ11Bo+wmlapXBxhB1d/iPS4GmztLxQBAKxYh
+         79JSFN8kRqXqcQXIA8iXy6LerdYJTrLMGooIxtLnXmAVLTLi+IqMcuSS+QTB/fmu5oNe
+         uRD/H4Ibjy6/krNZJv7nmQbbUy8+2nwJ8zsEqCHC5sX5ihJegEv2T/VFseJ+cwF1cgWy
+         ydUQ==
+X-Gm-Message-State: ACrzQf31OskhSG0EEBt8ANOtCgRUOK2pYWxAtJstSROamUhd14wWv60y
+        gRu8MfCvoNPOhaIltCAXfOM=
+X-Google-Smtp-Source: AMsMyM5G52Uk5JJgv+lLd/5HS64MTU2tuQrNv0/SblnZv7Q8PuX1moHfcSZJY9pqGWAqnrAli0PR6w==
+X-Received: by 2002:aa7:cd12:0:b0:463:69ac:a5d3 with SMTP id b18-20020aa7cd12000000b0046369aca5d3mr53912084edw.269.1668036607529;
+        Wed, 09 Nov 2022 15:30:07 -0800 (PST)
+Received: from eray-Lenovo-Z50-70.. ([188.132.247.187])
+        by smtp.googlemail.com with ESMTPSA id a12-20020a50ff0c000000b00458b41d9460sm7468800edu.92.2022.11.09.15.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 15:30:07 -0800 (PST)
+From:   =?UTF-8?q?Eray=20Or=C3=A7unus?= <erayorcunus@gmail.com>
+To:     hdegoede@redhat.com
+Cc:     benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
+        erayorcunus@gmail.com, ike.pan@canonical.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mgross@linux.intel.com, platform-driver-x86@vger.kernel.org,
+        pobrn@protonmail.com
+Subject: Re: [PATCH v2 0/7] Add camera access keys, IdeaPad driver improvements
+Date:   Thu, 10 Nov 2022 02:30:04 +0300
+Message-Id: <20221109233004.9751-1-erayorcunus@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <9e0074f8-4cbf-e390-6680-39fe3649bbc4@redhat.com>
+References: <20221029120311.11152-1-erayorcunus@gmail.com> <0b298830-47cc-bb94-0e73-493e4e9244f7@canonical.com> <9e0074f8-4cbf-e390-6680-39fe3649bbc4@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/URFtFf22l.+X3Y1NFfBS6RV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/URFtFf22l.+X3Y1NFfBS6RV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi!
 
-Hi all,
+On 11/9/22 19:38, Hans de Goede wrote:
+> Hi Eray,
+> 
+> Sorry for the long silence, I have not done any pdx86 patch review
+> the last 2 weeks due to personal circumstances.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Oh, I wasn't even aware I had to wait for pdx86 review, and Ike Panhc
+just sent his Acked-By anyway, no problem at all.
 
-  drivers/net/can/pch_can.c
+> On 11/9/22 13:58, Eray Orçunus wrote:
+> > On 11/08/22 06:56, Ike Panhc wrote:
+> >>
+> >> Thanks. Also test on my ideapad s410 and it looks good.
+> >>
+> >> Acked-by: Ike Panhc <ike.pan@canonical.com>
+> > 
+> > 
+> > Thank you :)
+> > 
+> > I need some advice since I'm new in here, sadly another patch has been
+> > merged to ideapad-laptop along the way and currently it's not possible to
+> > merge patch #7, does that mean I should send v3 of my patch series?
+> 
+> No that is not necessary, I can rework it to apply on top of the other
+> patch.
 
-between commit:
+Oh, that's great, thank you.
 
-  ae64438be192 ("can: dev: fix skb drop check")
+> For the touchpad patches I would first like to get
+> a better handle on how to fix things more generic.
+> 
+> Specifically patch 1/7 will cause priv->features.touchpad_ctrl_via_ec
+> to get set to 1 on more models and since that is causing issues
+> I don't think that is a good idea (even though the patch does
+> make sense) and for 7/7 I hope to come up with something
+> more generic.
+> 
+> If you can run the tests from the touchpad mail soon that
+> would really help!
 
-from the net tree and commit:
+That sounds great! I will try to help as much as I can. And yeah,
+I couldn't guess patch 1 can cause a regression on some IdeaPads.
+ 
+> > I think that is the only subsystem whose maintainers haven't replied yet.
+> 
+> Correct, but I have replied now :)
 
-  1dd1b521be85 ("can: remove obsolete PCH CAN driver")
+Hehe, this reply was very informative, thank you :)
 
-from the net-next tree.
-
-I fixed it up (I just removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/URFtFf22l.+X3Y1NFfBS6RV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsNtUACgkQAVBC80lX
-0GxFswf/djufZrRbLl+gPNoti1zVqCMOm95cWuWOTr6tAnsoYYCAdEKRdc9EK8hn
-DvKNQghwe4DhpoRc3UvloA+ad0Iw5UATxMghWgXzVpJKD6KID+XDZwzy32ZqrCRk
-xf/JCQgHEwVKuihfW1ryM6hpcMSz8s1OgBBxJyEzsiiJI33CJC0ylKi1177ws47o
-2ErVgqkWS0zukPReWCUQbGv+ke0LafnR2uyPp+blqATaaqeSo/BlrvrFqvxKSHiG
-nbIdZWmUjsnAmzwmM5+k/uJDHb4lVpuYO4sQWKS+k6Bsm80MPl07XdpJK4VS4ANI
-qe6khrMbsB3aZACwMi9t0r51cdS4qA==
-=rE2s
------END PGP SIGNATURE-----
-
---Sig_/URFtFf22l.+X3Y1NFfBS6RV--
+Best,
+Eray
