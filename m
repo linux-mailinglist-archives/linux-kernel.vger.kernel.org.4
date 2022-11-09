@@ -2,102 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2F662360F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB383623617
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbiKIVtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
+        id S231355AbiKIVvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiKIVtE (ORCPT
+        with ESMTP id S229447AbiKIVvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:49:04 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7471F2F669
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:49:03 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id ud5so314979ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 13:49:03 -0800 (PST)
+        Wed, 9 Nov 2022 16:51:41 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562816551
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:51:40 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 187-20020a1c02c4000000b003cf9c3f3b80so2195674wmc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 13:51:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cnCKimjPnszuIv7P7tspkRhy5Ca1GNkxCTByBpzQ+sI=;
-        b=DO9FR6ZD8ZIFh+aT5h4gwblO1n9ghAWy3MsuSo3TmN7NhzBNojKqBDaAOyjojPXBpb
-         2apvdXr1918BW/PGEEnPwlYhi00OUDvvaN6HBtkWxJvxACQMtWImcvQB9v/0iOJ8C+xl
-         tJHnnlH4FWdcXpQT3kBvkMyMvMnwsS9vhSGxa8N8daChnXdybjvYQCSwDiawdsC1TMkj
-         CHU04xFNEn7j8Q9B/F07yQKjkM1nCiGvBEAoBVYVWIrikEcdXLsyMzcCEMnYcKWCtYkO
-         yV4FZUnABZSnS2NkNwyo2QEUHICiCYQmL+WUQAs8EHwZRUxSg4ZHHPOeyb/Ehtc/klrr
-         JI+g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0iMYADahNRMz+BK4j5B8SILP6qEihete8xrXHT4Brv0=;
+        b=EB4h4lOaOXb+d4nw4ML10k66onCvQcpKVRCNbXcDIOwA/78VwEFvd3hwI6ofuaWhkx
+         gmApBQvLVdsG8LH89yIjK8ZDTt+f6SKBwtBf88f9AT3FRbNytlC29bRoYekl9DutGlvI
+         HNVLeSc3FIstSigqR8c2DH6FVD4htFNhTOyx47OZSToQMO8eKxh1IZP2k7daM99ohA19
+         +nbjufUT18ETP1qSBjUrA30fqoLNy68AlO7ykfeRBA91f2ZcbimymWge8t9BfjzMdxjd
+         +D+7OGqlvRMti+k2kFiSbAFB65rseLlHyuvTnb4JOIxe9mZm3kTdAQ9PhIzbFsLilTgp
+         WiYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cnCKimjPnszuIv7P7tspkRhy5Ca1GNkxCTByBpzQ+sI=;
-        b=2BM99zNLz3A0e0Dg3/FJDUAXSW2UrHODEGGyD9rPbNNlavuqU9zia7X2wF5kal0pPC
-         HSkAegLii5SaZncC7wYGKq+uYd1ZZUDabUBQasFVA5QmemndrofzuP9oQ26nB15g6tTI
-         FAr0wx3TpdCU+h4iMNdXH51UeTXMb8Hbf5vu0n/FJvnQL1FEMiazkQZ2nCbEkvNFHDTH
-         vnFpx1Cp31zDMmtNXNIf9h7YKsxJFBMleVIQiiUNQfGgXVxgjjIbRxsqYXYVMGKMxtDw
-         wLxJ5XrUgZ91GKF8IeV6H4NGx6QmUqJfgMUTi3d/48hNfVLsgAMkLm4EQcDM0H87Dq75
-         5VuA==
-X-Gm-Message-State: ACrzQf3pYrdwYuk1UR16tO7kts5NgOiM02tA89bicEijF8to7dDACrq/
-        kRWmgI7V8cTX7kTFmXv79rBPnPpkNNe5ZnbKhuBc
-X-Google-Smtp-Source: AMsMyM4GI/CT8J2vgpNPmtw7prru+BKDWcCBKJuFSaTiFl13pqM1mmfcmz/5X1/dsZC/odHmQ3nDLRca52uPdbt1N30=
-X-Received: by 2002:a17:906:c839:b0:78a:d0a4:176 with SMTP id
- dd25-20020a170906c83900b0078ad0a40176mr1831678ejb.720.1668030541823; Wed, 09
- Nov 2022 13:49:01 -0800 (PST)
+        bh=0iMYADahNRMz+BK4j5B8SILP6qEihete8xrXHT4Brv0=;
+        b=0ghvqgYn4MjrOvPXH89e4Q1pKsXmN/Der4BOqds1pGG/boaucGesy+U5saaCAxDpYc
+         FNslS0PuWWyOVg1feWtZOCYFtN3WmAL9LFb3Uw8GZaN0ifCrqMZubb6mQHzBX70aPiyA
+         k9ezx41N+vEQ2IzZ8Gb4a/gMXebW4ykaaqmzNb6uwqkh51TB0Hr+aic/dHbe6KnafL+Y
+         FRl9AKfOU/njTi2zDkZOV+PfIkuJ/AxloF2dhdWOTnsCWafnzjhqNmvRSwHiH8C7nPyB
+         G9xUdBXJBVhee+IMFsDSTmADu8a/qsSBOUoxBGFPTWKihA52LmrRlwDGtuoKHOGh9si3
+         OU4g==
+X-Gm-Message-State: ACrzQf1uEIG2H7AYzvT+VJE3L0kTG8iNW4KJ3HzkzZCfTkwpoNVgUNJA
+        qB8HMZ0B/zS8Wcqs2X+PmOg=
+X-Google-Smtp-Source: AMsMyM64e7N9vTQ5GbK5YX1rMTTB5vqC7LBO/O1eNCnZMS0ROu8+Iq5wX2DGxCdymlXos2qcgRXN3g==
+X-Received: by 2002:a1c:7418:0:b0:3cf:703a:4f0c with SMTP id p24-20020a1c7418000000b003cf703a4f0cmr36462474wmc.63.1668030698735;
+        Wed, 09 Nov 2022 13:51:38 -0800 (PST)
+Received: from localhost.localdomain ([111.88.203.172])
+        by smtp.gmail.com with ESMTPSA id o20-20020a05600c4fd400b003cf7292c553sm3022305wmq.13.2022.11.09.13.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 13:51:38 -0800 (PST)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Osama Muhammad s <osmtendev@gmail.com>
+Subject: [PATCH 00/15] Accessiblity: speakup: specifying the default driver parameters among the module params
+Date:   Thu, 10 Nov 2022 02:50:53 +0500
+Message-Id: <20221109215108.7933-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221109194404.gonna.558-kees@kernel.org> <20221109200050.3400857-1-keescook@chromium.org>
-In-Reply-To: <20221109200050.3400857-1-keescook@chromium.org>
-From:   Bill Wendling <morbo@google.com>
-Date:   Wed, 9 Nov 2022 13:48:45 -0800
-Message-ID: <CAGG=3QXM3u_uz1fuW2LzvrZqqPhYL15m+LJgD39R=jkuyENmYg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] panic: Separate sysctl logic from CONFIG_SMP
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jann Horn <jannh@google.com>, Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        tangmeng <tangmeng@uniontech.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        David Gow <davidgow@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,51 +69,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 12:01 PM Kees Cook <keescook@chromium.org> wrote:
->
-> In preparation for adding more sysctls directly in kernel/panic.c, split
-> CONFIG_SMP from the logic that adds sysctls.
->
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: tangmeng <tangmeng@uniontech.com>
-> Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  kernel/panic.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index da323209f583..129936511380 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -75,8 +75,9 @@ ATOMIC_NOTIFIER_HEAD(panic_notifier_list);
->
->  EXPORT_SYMBOL(panic_notifier_list);
->
-> -#if defined(CONFIG_SMP) && defined(CONFIG_SYSCTL)
-> +#if CONFIG_SYSCTL
+This patch series is an enhancement which allows to specify the default driver
+parameters among the module parameters.
 
-Should this be "#ifdef CONFIG_SYSCTL"?
+Adding default variables to the speakup modules
+allows to easily set that at boot, rather than
+setting the sys variables after boot.
+More details can be found here:
+https://github.com/linux-speakup/speakup/issues/7
 
->  static struct ctl_table kern_panic_table[] = {
-> +#if defined(CONFIG_SMP)
 
-nit: This could be "#ifdef CONFIG_SMP"
+Osama Muhammad (15):
+  Accessiblity: speakup_soft: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_apollo: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_audptr: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_bns: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_decext: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_decpc: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_dtlk: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_dtlk: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_dummy: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_keypc: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_dtlk: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_spkout: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_txprt: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_acntpc: specifying the default driver parameters
+    among the module params
+  Accessiblity: speakup_acntsa: specifying the default driver parameters
+    among the module params
 
->         {
->                 .procname       = "oops_all_cpu_backtrace",
->                 .data           = &sysctl_oops_all_cpu_backtrace,
-> @@ -86,6 +87,7 @@ static struct ctl_table kern_panic_table[] = {
->                 .extra1         = SYSCTL_ZERO,
->                 .extra2         = SYSCTL_ONE,
->         },
-> +#endif
->         { }
->  };
->
-> --
-> 2.34.1
->
+ .../accessibility/speakup/speakup_acntpc.c    | 38 +++++++++---
+ .../accessibility/speakup/speakup_acntsa.c    | 37 +++++++++---
+ .../accessibility/speakup/speakup_apollo.c    | 46 ++++++++++++---
+ .../accessibility/speakup/speakup_audptr.c    | 42 ++++++++++---
+ drivers/accessibility/speakup/speakup_bns.c   | 36 ++++++++---
+ .../accessibility/speakup/speakup_decext.c    | 44 ++++++++++----
+ drivers/accessibility/speakup/speakup_decpc.c | 48 +++++++++++----
+ .../accessibility/speakup/speakup_dectlk.c    | 45 ++++++++++----
+ drivers/accessibility/speakup/speakup_dtlk.c  | 50 ++++++++++++----
+ drivers/accessibility/speakup/speakup_dummy.c | 53 +++++++++++++----
+ drivers/accessibility/speakup/speakup_keypc.c | 29 +++++++--
+ drivers/accessibility/speakup/speakup_ltlk.c  | 53 +++++++++++++----
+ drivers/accessibility/speakup/speakup_soft.c  | 59 ++++++++++++++-----
+ .../accessibility/speakup/speakup_spkout.c    | 43 +++++++++++---
+ drivers/accessibility/speakup/speakup_txprt.c | 45 +++++++++++---
+ 15 files changed, 524 insertions(+), 144 deletions(-)
+
+-- 
+2.25.1
+
