@@ -2,191 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5F4622387
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 06:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 282C2622392
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 06:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiKIFoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 00:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S229662AbiKIFwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 00:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiKIFoZ (ORCPT
+        with ESMTP id S229454AbiKIFwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 00:44:25 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2157513CEA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 21:44:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667972664; x=1699508664;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=k30YCsYovgZ573RlEhBAbnw87OUlaeJ1oT1DCStXMDE=;
-  b=Q9yjDY+SY1hPiyGkSuIlxBj/R+amJNP0LdEKzGtweWhUS/3tvSepPvdD
-   LNcAJrtD+tmG0WJH+cnRRYVbuYg/nNF0ZR4AqVnxJy6B7BucG0w2xfMpd
-   Gl2cDqNXogF1UeBgSY+2TjSVUDGPZ9R6is1bd1M/HorDQ9rXXNC3DA1mL
-   inp9AFvmS/7UukhEhY5NzirfMyshV8xNnRWh2NAJAVjOxgN0JvP7GKr/y
-   aYlT9gds+trwsJQgyh5xFs9oVU/oAkR+tl1pRFuINqciVefRxfuvfnunw
-   ZnMLEHDzA8R6kNqzSqXC+EKhgRPYv8rYi+32YhcVeHGZxC7kwKoO9v4ET
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312692920"
-X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
-   d="scan'208";a="312692920"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 21:44:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="639069198"
-X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
-   d="scan'208";a="639069198"
-Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Nov 2022 21:44:20 -0800
-Received: from kbuild by e783503266e8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1osdsq-00016i-06;
-        Wed, 09 Nov 2022 05:44:20 +0000
-Date:   Wed, 09 Nov 2022 13:43:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/sev] BUILD SUCCESS
- 2874529b3513bdc90299c90f40713602da685e35
-Message-ID: <636b3e1e.dGqt911KhAIlUnKk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 9 Nov 2022 00:52:08 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587381E3F4;
+        Tue,  8 Nov 2022 21:52:07 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A95ZZYw000324;
+        Wed, 9 Nov 2022 05:51:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=XVXevSW52ryd86FBGsq+1//zlPGXc/p+U7PiHaLfysI=;
+ b=mqANZIbQl1EaA9fB2KGxb+Dns9wiaeg3F32t01nvQN6bGWcCzMZNPKU9lQvMWLo4HPyC
+ Nkhe3G0IKhZhrdGqqE0tpg2f5MyKt+5bsL3+p+HoRYslkpav4tvPpGyqMajurMn55xvY
+ hOMec5AybSYqAtMxa5RWYNcHiQRM/TG/66sq6JdxTxl5TmiHjwnC/3A9IZsm7/nNSoJy
+ NbVhmiwclTWi/Tmbg7j/rq+RRXsOMTkRn4rzmHv2adMi2gKjm1K/CEWwnFVG3NCURirT
+ lCBfS19CCd+bRhz6VvYAVFQwAWkC6j6Xv+9MnZfz8bG8XwGMvxnLQbkA8+eWeP249Jwj hg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kr664r0w7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 05:51:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A95pt2G000939
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 9 Nov 2022 05:51:55 GMT
+Received: from blr-ubuntu-311.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 8 Nov 2022 21:51:51 -0800
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <dianders@chromium.org>,
+        <jinghung.chen3@hotmail.com>
+CC:     <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH V3 1/2] arm64: dts: qcom: sc7280: Mark all Qualcomm reference boards as LTE
+Date:   Wed, 9 Nov 2022 11:21:31 +0530
+Message-ID: <20221109055132.609-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Kd2AOktYyLr99lwufBzBH3XprGWhdPPF
+X-Proofpoint-ORIG-GUID: Kd2AOktYyLr99lwufBzBH3XprGWhdPPF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_01,2022-11-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ spamscore=0 malwarescore=0 impostorscore=0 adultscore=0 mlxlogscore=683
+ suspectscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211090045
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
-branch HEAD: 2874529b3513bdc90299c90f40713602da685e35  virt/sev-guest: Add a MODULE_ALIAS
+When the modem node was re-located to a separate LTE source file
+"sc7280-herobrine-lte-sku.dtsi", some of the previous LTE users
+weren't marked appropriately. Fix this by marking all Qualcomm
+reference devices as LTE.
 
-elapsed time: 793m
+Suggested-by: Douglas Anderson <dianders@chromium.org>
+Fixes: d42fae738f3a ("arm64: dts: qcom: Add LTE SKUs for sc7280-villager family")
+Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+---
 
-configs tested: 108
-configs skipped: 3
+v3:
+ * Fix incorrect tag usage [Krzysztof]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-gcc tested configs:
-x86_64                            allnoconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-ia64                             allmodconfig
-i386                          randconfig-c001
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-sparc                       sparc32_defconfig
-csky                             alldefconfig
-sh                           se7712_defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-mips                      loongson3_defconfig
-sh                  sh7785lcr_32bit_defconfig
-powerpc                     sequoia_defconfig
-arm                             ezx_defconfig
-powerpc                     mpc83xx_defconfig
-powerpc                       holly_defconfig
-arc                              alldefconfig
-arm                          exynos_defconfig
-mips                          rb532_defconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64               randconfig-a006-20221107
-x86_64               randconfig-a001-20221107
-x86_64               randconfig-a004-20221107
-x86_64               randconfig-a003-20221107
-x86_64               randconfig-a005-20221107
-x86_64               randconfig-a002-20221107
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-xtensa                           allyesconfig
-powerpc                      makalu_defconfig
-powerpc                       maple_defconfig
-i386                 randconfig-a001-20221107
-i386                 randconfig-a006-20221107
-i386                 randconfig-a003-20221107
-i386                 randconfig-a002-20221107
-i386                 randconfig-a005-20221107
-i386                 randconfig-a004-20221107
-arm                        trizeps4_defconfig
-arm                           sunxi_defconfig
-arc                        vdk_hs38_defconfig
-m68k                        m5272c3_defconfig
-sh                          rsk7269_defconfig
-arm                             rpc_defconfig
-arm                      integrator_defconfig
-powerpc                        cell_defconfig
-powerpc                     rainier_defconfig
-sh                           se7751_defconfig
-powerpc                 linkstation_defconfig
-arm                        clps711x_defconfig
-arm                      footbridge_defconfig
-m68k                       m5275evb_defconfig
-nios2                            alldefconfig
-powerpc                    klondike_defconfig
-mips                        bcm47xx_defconfig
-riscv                               defconfig
-openrisc                 simple_smp_defconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20221108
-hexagon              randconfig-r045-20221108
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-arm                       imx_v4_v5_defconfig
-arm                          moxart_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-mips                     cu1000-neo_defconfig
-mips                          ath25_defconfig
-mips                        qi_lb60_defconfig
-arm                         mv78xx0_defconfig
-x86_64                        randconfig-k001
-powerpc                 mpc836x_rdk_defconfig
-i386                              allnoconfig
-arm                       aspeed_g4_defconfig
-arm64                            allyesconfig
-powerpc                     skiroot_defconfig
-
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index 4884647a8a95..ca09367abb6c 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -13,6 +13,7 @@
+ #include "pmk8350.dtsi"
+ 
+ #include "sc7280-chrome-common.dtsi"
++#include "sc7280-herobrine-lte-sku.dtsi"
+ 
+ / {
+ 	aliases {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+
