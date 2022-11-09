@@ -2,199 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CC56227BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 335026227CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiKIJ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S230368AbiKIJ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiKIJ5Y (ORCPT
+        with ESMTP id S229874AbiKIJ6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:57:24 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6F9240B3;
-        Wed,  9 Nov 2022 01:57:22 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id f27so45265186eje.1;
-        Wed, 09 Nov 2022 01:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nL5z1Js6hyAcZrzyFU0BOmZNXRwS5uMdz4l6yylknWc=;
-        b=JTFpGXxocV3WCUC3KPauTR1lExSPlX6xdVTo7SaZ3bR1BmKgPMEIl8IbuUqUcG802T
-         LM/OAauC87Wj1PB+oGYWAYG7K3FnlSHsdcHW07k8t8cDSezMiVo9fsQqQRTxHybBFy+W
-         FLoUuIPFesQsz7f7lRGKwbvkr5b0c5yTOOY6JaFLc54me/FV7tQfO5C8yx0lL3n7LyRE
-         5zeEx/nCJDV7Lg4dB45nEJowvJrPBqabsRTYFYhdgso9tQPdrySZfOCLii5CGXdE3Rgn
-         Z0WPg/HCMxUqe8ISGixYIyyNXuV+bcfceFA/OAqYkKr7fwDqcat0yIgaFwHgqTzdWSzv
-         WbGw==
+        Wed, 9 Nov 2022 04:58:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609B523162
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:57:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667987872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FDMpqou/pq7flrplrADwoL3gK1upqLAy4b6L3fxBqxM=;
+        b=ehEHEDtatx7qIa9xWC67h99ZWbWlkr7Q1oLwCPkiz0AgAClpbprhVvF61OCAaVh3/zGPp6
+        UQhP07tcoBFk/nnc1vmNQ3uMejVEnGQPH/MXH3qdJNsu0g7JupkSbF1vvCp1y23F41y1mz
+        NDoAXUWj9j3pCoUnKHZEtjLYLH/h7uw=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-257-NZq3wGdDM46Env-KSmzkOA-1; Wed, 09 Nov 2022 04:57:51 -0500
+X-MC-Unique: NZq3wGdDM46Env-KSmzkOA-1
+Received: by mail-pl1-f199.google.com with SMTP id a6-20020a170902ecc600b00186f035ed74so13128006plh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:57:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nL5z1Js6hyAcZrzyFU0BOmZNXRwS5uMdz4l6yylknWc=;
-        b=cRtuF6WNEmQtSu7YJaXqlVFjwpdmoZdWt/SQ1xDp4GX2SzNdjRyKmFOEuIFTis+L1p
-         0h+3mL1Nk8lNu31Wh+Yq+MyG17+pqUMexxMwR7zxuxwG9zhYausCJjEv/ZasKmGA49nh
-         pGcO2fdFC3XFRmJt5UNzkBYDNJ0gPN6liZ9rzZcO1aCHPbtC9XA/bi/jqLgXlEzzowV1
-         fNxgzSv4u8+RUkD5SJ3eTNrWMSk8w20m8tQ0F56sT9PH1wQf0UfYRG5g0pdnMM+kCV2G
-         zUAUUjNjfTvZb6ysFAZ3UvEaRVX6BtUF685rAn+gDV1u3vtEvhXCZ8wrmHSl4GcyFpPk
-         JOZw==
-X-Gm-Message-State: ACrzQf2pvJfcLcJUBgPyLStShQMjtFCyCf5LFB4FdIieYsWd6JFoVB2d
-        GZWDJGo6cQKkdzzDCJGgdRg=
-X-Google-Smtp-Source: AMsMyM5uFFRc5skbmGh0Z8d+QcefJmP/NWF5aU2IwgfknwLbB/WeaF0mHX1Y0WzRXxAS1r+U0SWQdg==
-X-Received: by 2002:a17:906:3b91:b0:7a5:e944:9e48 with SMTP id u17-20020a1709063b9100b007a5e9449e48mr1149141ejf.109.1667987840266;
-        Wed, 09 Nov 2022 01:57:20 -0800 (PST)
-Received: from leonid-Inspiron-3421 (93-172-204-39.bb.netvision.net.il. [93.172.204.39])
-        by smtp.gmail.com with ESMTPSA id gg3-20020a170906e28300b0077d6f628e14sm5666716ejb.83.2022.11.09.01.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 01:57:19 -0800 (PST)
-Date:   Wed, 9 Nov 2022 11:57:17 +0200
-From:   Leonid Ravich <lravich@gmail.com>
-To:     jgg@ziepe.ca, leon@kernel.org, mhiramat@kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] IB/MAD: fix might sleep in atomic
-Message-ID: <Y2t5feomyznrVj7V@leonid-Inspiron-3421>
+        bh=FDMpqou/pq7flrplrADwoL3gK1upqLAy4b6L3fxBqxM=;
+        b=TBW9Dojl5EPLmEarjr0oDxGTQzcWBHPzBMjqHERSicU1xQkf3U56gtjv81dZV0xvr5
+         XJnyUfmbth0sGtyKigBxb3Oo15F24LmS3gjZq4NJPogEiCBEz/BEG9yrbEHCBRvIE8GB
+         s4leQFsE4mL23cf8xknxF2xxoZTQiLNKqEDqqa3fKrXvdUZScvRdE+Jr8nIFknOnZWom
+         +zU6OO22DgrPU8U4WajkP2JQ4ufl3ouxKMEc3DXXFAu7iM8APaI9VGpOVe8D/bUq/6mg
+         yN7You+wxfabJOo39GwW97/C3BwP1PuXrfXx8yjfJt11SvT7dg1qj8/tmhKxwFBdchyo
+         lu+w==
+X-Gm-Message-State: ACrzQf0ijR4kBrcJtyGgf0ASj4bOcKvemfwAGyDGBUci9VIGvRcPVuTC
+        sS0nIVLgDoOoGv8ipQFSCIA5dYmWDUv/C4fW6JNdo0Pew/kS6VDtA7n2RzBV2S7mID57TOVuXz+
+        m1dno+frRJrLRLPUX6cWBiUewT/Ge8jU5teht1DEFazMJyvaQkG35cKfgO3aWBTC2B+97m28vQg
+        ==
+X-Received: by 2002:a17:90a:bf11:b0:211:84c5:42d7 with SMTP id c17-20020a17090abf1100b0021184c542d7mr77174042pjs.122.1667987870111;
+        Wed, 09 Nov 2022 01:57:50 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6F7rSxTnk1TNm4PMzbEEH6hs03HVKe/bAPHQIOZ8CM5D8D/l93IJ2riWbVWdU2U5LdEV5HFw==
+X-Received: by 2002:a17:90a:bf11:b0:211:84c5:42d7 with SMTP id c17-20020a17090abf1100b0021184c542d7mr77174013pjs.122.1667987869816;
+        Wed, 09 Nov 2022 01:57:49 -0800 (PST)
+Received: from [10.72.12.229] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id k4-20020a170902c40400b001869581f7ecsm8701777plk.116.2022.11.09.01.57.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 01:57:49 -0800 (PST)
+Subject: Re: [PATCH v2] ceph: fix memory leak in mount error path when using
+ test_dummy_encryption
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221108143421.30993-1-lhenriques@suse.de>
+ <215b729e-0af0-45d8-96af-3d3c319581c9@redhat.com> <Y2tz8zQPlTWtfOdw@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <614e430a-a559-e640-b2f3-020db758c061@redhat.com>
+Date:   Wed, 9 Nov 2022 17:57:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2tz8zQPlTWtfOdw@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sleep in TR_assign not allowd
+Hi Luis,
 
-WARNING: CPU: 0 PID: 1888000 at kernel/trace/ring_buffer.c:2492 rb_commit+0xc1/0x220
-CPU: 0 PID: 1888000 Comm: kworker/u9:0 Kdump: loaded Tainted: G           OE    --------- -  - 4.18.0-305.3.1.el8.x86_64 #1
-l: Hardware name: Red Hat KVM, BIOS 1.13.0-2.module_el8.3.0+555+a55c8938 04/01/2014
-l: Workqueue: ib-comp-unb-wq ib_cq_poll_work [ib_core]
-l: RIP: 0010:rb_commit+0xc1/0x220
-l: RSP: 0000:ffffa8ac80f9bca0 EFLAGS: 00010202
-l: RAX: ffff8951c7c01300 RBX: ffff8951c7c14a00 RCX: 0000000000000246
-l: RDX: ffff8951c707c000 RSI: ffff8951c707c57c RDI: ffff8951c7c14a00
-l: RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-l: R10: ffff8951c7c01300 R11: 0000000000000001 R12: 0000000000000246
-l: R13: 0000000000000000 R14: ffffffff964c70c0 R15: 0000000000000000
-l: FS:  0000000000000000(0000) GS:ffff8951fbc00000(0000) knlGS:0000000000000000
-l: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-l: CR2: 00007f20e8f39010 CR3: 000000002ca10005 CR4: 0000000000170ef0
-l: Call Trace:
-l:  ring_buffer_unlock_commit+0x1d/0xa0
-l:  trace_buffer_unlock_commit_regs+0x3b/0x1b0
-l:  trace_event_buffer_commit+0x67/0x1d0
-l:  trace_event_raw_event_ib_mad_recv_done_handler+0x11c/0x160 [ib_core]
-l:  ib_mad_recv_done+0x48b/0xc10 [ib_core]
-l:  ? trace_event_raw_event_cq_poll+0x6f/0xb0 [ib_core]
-l:  __ib_process_cq+0x91/0x1c0 [ib_core]
-l:  ib_cq_poll_work+0x26/0x80 [ib_core]
-l:  process_one_work+0x1a7/0x360
-l:  ? create_worker+0x1a0/0x1a0
-l:  worker_thread+0x30/0x390
-l:  ? create_worker+0x1a0/0x1a0
-l:  kthread+0x116/0x130
-l:  ? kthread_flush_work_fn+0x10/0x10
-l:  ret_from_fork+0x35/0x40
-l: ---[ end trace 78ba8509d3830a16 ]---
+Please check 
+https://github.com/ceph/ceph-client/commit/205efda80b6759a741dde209a7158a5bbf044d23#diff-eb62c69f842ed95a7d047262a62946b07eda52f2ea49ae33c39ea13754dfc291.
 
-Signed-off-by: Leonid Ravich <lravich@gmail.com>
----
- drivers/infiniband/core/mad.c |  3 ---
- include/trace/events/ib_mad.h | 13 ++++---------
- 2 files changed, 4 insertions(+), 12 deletions(-)
+Currently I only applied it into the 'testing' branch.
 
-diff --git a/drivers/infiniband/core/mad.c b/drivers/infiniband/core/mad.c
-index 1893aa613ad7..3937b40b93c1 100644
---- a/drivers/infiniband/core/mad.c
-+++ b/drivers/infiniband/core/mad.c
-@@ -59,7 +59,6 @@ static void create_mad_addr_info(struct ib_mad_send_wr_private *mad_send_wr,
- 			  struct ib_mad_qp_info *qp_info,
- 			  struct trace_event_raw_ib_mad_send_template *entry)
- {
--	u16 pkey;
- 	struct ib_device *dev = qp_info->port_priv->device;
- 	u32 pnum = qp_info->port_priv->port_num;
- 	struct ib_ud_wr *wr = &mad_send_wr->send_wr;
-@@ -69,8 +68,6 @@ static void create_mad_addr_info(struct ib_mad_send_wr_private *mad_send_wr,
- 
- 	/* These are common */
- 	entry->sl = attr.sl;
--	ib_query_pkey(dev, pnum, wr->pkey_index, &pkey);
--	entry->pkey = pkey;
- 	entry->rqpn = wr->remote_qpn;
- 	entry->rqkey = wr->remote_qkey;
- 	entry->dlid = rdma_ah_get_dlid(&attr);
-diff --git a/include/trace/events/ib_mad.h b/include/trace/events/ib_mad.h
-index 59363a083ecb..d92691c78cff 100644
---- a/include/trace/events/ib_mad.h
-+++ b/include/trace/events/ib_mad.h
-@@ -49,7 +49,6 @@ DECLARE_EVENT_CLASS(ib_mad_send_template,
- 		__field(int,            retries_left)
- 		__field(int,            max_retries)
- 		__field(int,            retry)
--		__field(u16,            pkey)
- 	),
- 
- 	TP_fast_assign(
-@@ -89,7 +88,7 @@ DECLARE_EVENT_CLASS(ib_mad_send_template,
- 		  "hdr : base_ver 0x%x class 0x%x class_ver 0x%x " \
- 		  "method 0x%x status 0x%x class_specific 0x%x tid 0x%llx " \
- 		  "attr_id 0x%x attr_mod 0x%x  => dlid 0x%08x sl %d "\
--		  "pkey 0x%x rpqn 0x%x rqpkey 0x%x",
-+		  "rpqn 0x%x rqpkey 0x%x",
- 		__entry->dev_index, __entry->port_num, __entry->qp_num,
- 		__entry->agent_priv, be64_to_cpu(__entry->wrtid),
- 		__entry->retries_left, __entry->max_retries,
-@@ -100,7 +99,7 @@ DECLARE_EVENT_CLASS(ib_mad_send_template,
- 		be16_to_cpu(__entry->class_specific),
- 		be64_to_cpu(__entry->tid), be16_to_cpu(__entry->attr_id),
- 		be32_to_cpu(__entry->attr_mod),
--		be32_to_cpu(__entry->dlid), __entry->sl, __entry->pkey,
-+		be32_to_cpu(__entry->dlid), __entry->sl,
- 		__entry->rqpn, __entry->rqkey
- 	)
- );
-@@ -204,7 +203,6 @@ TRACE_EVENT(ib_mad_recv_done_handler,
- 		__field(u16,            wc_status)
- 		__field(u32,            slid)
- 		__field(u32,            dev_index)
--		__field(u16,            pkey)
- 	),
- 
- 	TP_fast_assign(
-@@ -224,9 +222,6 @@ TRACE_EVENT(ib_mad_recv_done_handler,
- 		__entry->slid = wc->slid;
- 		__entry->src_qp = wc->src_qp;
- 		__entry->sl = wc->sl;
--		ib_query_pkey(qp_info->port_priv->device,
--			      qp_info->port_priv->port_num,
--			      wc->pkey_index, &__entry->pkey);
- 		__entry->wc_status = wc->status;
- 	),
- 
-@@ -234,7 +229,7 @@ TRACE_EVENT(ib_mad_recv_done_handler,
- 		  "base_ver 0x%02x class 0x%02x class_ver 0x%02x " \
- 		  "method 0x%02x status 0x%04x class_specific 0x%04x " \
- 		  "tid 0x%016llx attr_id 0x%04x attr_mod 0x%08x " \
--		  "slid 0x%08x src QP%d, sl %d pkey 0x%04x",
-+		  "slid 0x%08x src QP%d, sl %d",
- 		__entry->dev_index, __entry->port_num, __entry->qp_num,
- 		__entry->wc_status,
- 		__entry->length,
-@@ -244,7 +239,7 @@ TRACE_EVENT(ib_mad_recv_done_handler,
- 		be16_to_cpu(__entry->class_specific),
- 		be64_to_cpu(__entry->tid), be16_to_cpu(__entry->attr_id),
- 		be32_to_cpu(__entry->attr_mod),
--		__entry->slid, __entry->src_qp, __entry->sl, __entry->pkey
-+		__entry->slid, __entry->src_qp, __entry->sl
- 	)
- );
- 
--- 
-2.34.1
+Thanks!
+
+- Xiubo
+
+
+On 09/11/2022 17:33, Luís Henriques wrote:
+> On Wed, Nov 09, 2022 at 11:08:49AM +0800, Xiubo Li wrote:
+>> On 08/11/2022 22:34, Luís Henriques wrote:
+>>> Because ceph_init_fs_context() will never be invoced in case we get a
+>>> mount error, destroy_mount_options() won't be releasing fscrypt resources
+>>> with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
+>>> an invocation to this function in the mount error path.
+>>>
+>>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+>>> ---
+>>> * Changes since v1:
+>>>
+>>> As suggested by Xiubo, moved fscrypt free from ceph_get_tree() to
+>>> ceph_real_mount().
+>>>
+>>> (Also used 'git format-patch' with '--base' so that the bots know what to
+>>> (not) do with this patch.)
+>>>
+>>>    fs/ceph/super.c | 1 +
+>>>    1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+>>> index 2224d44d21c0..f10a076f47e5 100644
+>>> --- a/fs/ceph/super.c
+>>> +++ b/fs/ceph/super.c
+>>> @@ -1196,6 +1196,7 @@ static struct dentry *ceph_real_mount(struct ceph_fs_client *fsc,
+>>>    out:
+>>>    	mutex_unlock(&fsc->client->mount_mutex);
+>>> +	ceph_fscrypt_free_dummy_policy(fsc);
+>>>    	return ERR_PTR(err);
+>>>    }
+>>>
+>>> base-commit: 8b9ee21dfceadd4cc35a87bbe7f0ad547cffa1be
+>>> prerequisite-patch-id: 34ba9e6b37b68668d261ddbda7858ee6f83c82fa
+>>> prerequisite-patch-id: 87f1b323c29ab8d0a6d012d30fdc39bc49179624
+>>> prerequisite-patch-id: c94f448ef026375b10748457a3aa46070aa7046e
+>>>
+>> LGTM.
+>>
+>> Thanks Luis.
+>>
+>> Could I fold this into the previous commit ?
+> Yes, sure.  I'm fine with that.
+>
+> Cheers,
+> --
+> Luís
+>
 
