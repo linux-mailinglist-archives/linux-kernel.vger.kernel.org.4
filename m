@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6232D6225C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA074622556
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiKIIsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
+        id S229909AbiKII15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiKIIsF (ORCPT
+        with ESMTP id S229645AbiKII1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:48:05 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58621F8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:48:04 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id i21so26150979edj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 00:48:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgKw+Gh28HJpy0lOLg2VuN1GbSzQApQ/IwdWYvuR8jc=;
-        b=sQTRYJ/yi+sjBa5mWm8+48njabEHftow78Vc2hvDFKSRNfgxhj4XHmCZu9G/DTuOuQ
-         DQ8TVkL3J+i2xGZhkZOT8jFGS7uRl5d3ojLBScdxVOPXBjNG25XY+N1sU0ctSK3qq+z0
-         sDPr4j4+CctAxiwDtsIvv5bz/6dii0MPmkODbiF997PIUDoYCeK4zpGT07TU1toufbL1
-         jn2DcS2fw4v70fGnjol0kcmXjOPLnN3KwwOIDQUHus+BHWr1EZuz+pePsoaleUcE8B14
-         Ik6RPnZcbKVXmy+XPbAEMZQ9wxLKflPKUpNfBGyzEkKnPjIKS665N1M+/xvuiTUGUH/u
-         A2ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jgKw+Gh28HJpy0lOLg2VuN1GbSzQApQ/IwdWYvuR8jc=;
-        b=4itl3trn7QjUuK/xHqsWykwXrOYNeBXnNxbDE1PeJU3pm8TMvmtKQtjbLSOyHuBWDg
-         EiMwIgp0hDiIQj1Utk0lVDurtAlYjRfSbGmThDGWxIrE1Z31/T20W6Z1XMqYtrFir6dM
-         i1JUToxhFL8xi2QesfL/DSB9T76zmUZqN+kmFn+b8XxER2O5zdmMTjZdwlOuAMDKPVnV
-         ptgVhhMZ66RkgUTY+LuewO7q21Z2O0rNmlqFEdktosV00efi07KyIC1jbapn9VTK7+/M
-         rwHvSJY8wD5t456+Iksa9ITTBVZG3vYogEgvRTDcFjQpDP+ajPfftA90G0R3UJfun53q
-         hukw==
-X-Gm-Message-State: ACrzQf3IrzxLxjqvbCQ9eAR+61PeAzjVrKWcPO6S4L1X4hyaOHzuEQSQ
-        t7H/UXgXfZVlgDcBb0IA11zeTDOlvbUUKzbFfmT5Zw==
-X-Google-Smtp-Source: AMsMyM66HMeRmiFNje6X1hfW+hyz2r0uhBi6Gv73jHX8UHIxvtNoaoS0yeuG7bndaaSvkLkoHDD5JCKCirUHEp1hUe0=
-X-Received: by 2002:a05:6402:d0b:b0:458:a244:4e99 with SMTP id
- eb11-20020a0564020d0b00b00458a2444e99mr59337467edb.46.1667983683311; Wed, 09
- Nov 2022 00:48:03 -0800 (PST)
+        Wed, 9 Nov 2022 03:27:51 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD5E13D52;
+        Wed,  9 Nov 2022 00:27:50 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N6dLR2gyvzJnRL;
+        Wed,  9 Nov 2022 16:24:47 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 16:27:48 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <pavel@ucw.cz>, Wang Yufen <wangyufen@huawei.com>
+Subject: [PATCH 00/13] leds: Fix devm vs. non-devm ordering
+Date:   Wed, 9 Nov 2022 16:48:01 +0800
+Message-ID: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20221106080114.7426-1-linux@fw-web.de>
-In-Reply-To: <20221106080114.7426-1-linux@fw-web.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Nov 2022 09:47:51 +0100
-Message-ID: <CACRpkdY87GBYCK0RCD89aZT8Pg5ihTpUK=GXvSf5eD0Xj2psmA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] update mediatek MT7986 pinctrl driver
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 6, 2022 at 9:01 AM Frank Wunderlich <linux@fw-web.de> wrote:
+Fault-inject tests reports this issue:
 
-> From: Frank Wunderlich <frank-w@public-files.de>
->
-> This patch series introduces common bias-pull* pinconf support to MediaTek
-> MT7986 pinctrl driver and fix some register offsets in the driver.
->
-> v2:
-> - added patches previously postes separately which are needed to have
->   dt binding checks clean
-> - fixed odd numbers in comments for mt7986_pull_type
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 2 PID: 52 at kernel/locking/mutex.c:582 __mutex_lock+0x1366/0x15b0
+Call Trace:
+ <TASK>
+   cr0014114_set_sync+0x2d/0x80 [leds_cr0014114 dbd1de3fefae3e163bcc08f4eeaa6d1b243203a9]
+   set_brightness_delayed+0xc2/0x140
+   process_one_work+0x651/0xc30
+   worker_thread+0x30b/0x820
+   kthread+0x1a0/0x1e0
+   ret_from_fork+0x1f/0x30
+ </TASK>
 
-Oh OK thanks for collecting the stuff I need, I applied this series,
-I had to use some fuzz on patch 5/6 due to other patches I have
-applied so please check the result once I push it out.
+The issue occurs in the following scenarios:
 
-Yours,
-Linus Walleij
+.probe()
+  mutex_init()
+  led->brightness_set_blocking = callback  <-- e.g. cr0014114_set_sync()
+  devm_led_classdev_register_ext()
+  <-- dr->node.release = devm_led_classdev_release()
+...
+
+.remove()
+  mutex_destroy(lock)         <-- lock destroy
+
+worker_thread()
+  set_brightness_work
+    set_brightness_delayed()
+      __led_set_brightness_blocking()
+        led_cdev->brightness_set_blocking()
+        <-- callback, e.g. cr0014114_set_sync()
+          mutex_lock(lock)              <-- lock is used after destroy
+
+.release()
+  devm_led_classdev_release()
+    led_classdev_unregister()
+      <-- flush set_brightness_work
+
+When non-devm resources are allocated they mustn't be followed by devm
+allocations, otherwise it will break the tear down ordering and might
+lead to crashes or other bugs during ->remove() stage. Fix this by
+wrapping mutex_destroy() call with devm_add_action_or_reset().
+
+Wang Yufen (13):
+  leds: cr0014114: Fix devm vs. non-devm ordering
+  leds: el15203000: Fix devm vs. non-devm ordering
+  leds: lm3532: Fix devm vs. non-devm ordering
+  leds: lm3692x: Fix devm vs. non-devm ordering
+  leds: lm3697: Fix devm vs. non-devm ordering
+  leds: lp50xx: Fix devm vs. non-devm ordering
+  leds: lp8860: Fix devm vs. non-devm ordering
+  leds: mlxreg: Fix devm vs. non-devm ordering
+  leds: mt6323: Fix devm vs. non-devm ordering
+  leds: powernv: Fix devm vs. non-devm ordering
+  leds: sc27xx: Fix devm vs. non-devm ordering
+  leds: spi-byte: Fix devm vs. non-devm ordering
+  leds: rt8515: Fix devm vs. non-devm ordering
+
+ drivers/leds/flash/leds-rt8515.c | 11 +++++++++--
+ drivers/leds/leds-cr0014114.c    | 11 ++++++++++-
+ drivers/leds/leds-el15203000.c   | 18 +++++++++++-------
+ drivers/leds/leds-lm3532.c       | 10 ++++++++++
+ drivers/leds/leds-lm3692x.c      | 11 ++++++++++-
+ drivers/leds/leds-lm3697.c       | 13 ++++++++++---
+ drivers/leds/leds-lp50xx.c       | 12 ++++++++++--
+ drivers/leds/leds-lp8860.c       | 11 +++++++++--
+ drivers/leds/leds-mlxreg.c       | 20 ++++++++++----------
+ drivers/leds/leds-mt6323.c       | 11 +++++++++--
+ drivers/leds/leds-powernv.c      | 12 +++++++++---
+ drivers/leds/leds-sc27xx-bltc.c  | 27 +++++++++++----------------
+ drivers/leds/leds-spi-byte.c     | 21 ++++++++++-----------
+ 13 files changed, 128 insertions(+), 60 deletions(-)
+
+-- 
+1.8.3.1
+
