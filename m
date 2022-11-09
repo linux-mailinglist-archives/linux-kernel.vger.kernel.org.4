@@ -2,213 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A681622B0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED592622B0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiKIMBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S229735AbiKIMCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:02:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiKIMBc (ORCPT
+        with ESMTP id S229584AbiKIMCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:01:32 -0500
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189E82CE30;
-        Wed,  9 Nov 2022 04:01:28 -0800 (PST)
-X-QQ-mid: bizesmtpipv602t1667995270t37f
-Received: from [IPV6:240e:3b7:3244:5040::360] ( [255.117.123.4])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 09 Nov 2022 20:01:09 +0800 (CST)
-X-QQ-SSF: 01100000000000I0F000000A0000000
-X-QQ-FEAT: 7q8qOdSUjLVaaMsDKNrSeCX2ytnuz1Hbx/zDiF7iyWD+RcqLlibUJae6jaEeS
-        0lV8zFshiIDCnB5XpITY7puZQJz+IqCS/nwL4RXUca687FEUMmn7fekm2KF0KtTLwCJnMyB
-        wn/2J2y8en30bQSvD6XArAmQg6XqzvFVWfEn4JGoiK+NFJAEgUXC4a8XlhPw6z6cyN9DCOu
-        c2ZnabEGlSqr1r66f4AgEOQqnBa1NlqF7PTHtuAz8C3qLIt2zFTFwoBWQ2Z6R1u7Z+R02TU
-        N4+kFQv1IT4bZIDJu3qL7DamhaHhHUG/whQGq81tJ1pOkxADS7m8IieYuGe3ACQFoITG+YO
-        5pawRG7uIJl+kZ4fO4fnvszbwynGc6y/cl6mQVO9qpnldxX2W0sG1AsTzOodu6RPYH9xrRw
-        3hyXSVwJw9a3ycd/jX3b8BIb0SSFEZN0
-X-QQ-GoodBg: 0
-Message-ID: <892CB3E963AEF095+eaed7498-2324-9476-6a24-f940d62adb74@radxa.com>
-Date:   Wed, 9 Nov 2022 20:01:09 +0800
+        Wed, 9 Nov 2022 07:02:09 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57BB2CE30;
+        Wed,  9 Nov 2022 04:02:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667995328; x=1699531328;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=hypwsi6BOBxwCxzYBfJ6znER4INgKD9gmMosAIAe8os=;
+  b=T29Vnlu9HD24NzsK9BxZfPT/PviIDkAUJwwqUsi1uDR/op0imtKVwemd
+   ARFQVmxo8PaJoRfN8ozoSofKrO32YbtBPOuKLuvtSKUHzqCflZvH6KSUs
+   LVezkR0Ni0XDuQ1k+ZaIUXfH9ddw/Mzlv1hdqzRYKzCprv2+mTtcUxC88
+   9F8Uujqbx6WtOHCTyBnDFk3PkV1Mw0v5gtOCWNUt+nrrks6xNWgEMaUup
+   8qHnORca+mIEm+N45erPHoKsz5RfXdXBc+k4N0KCpw03SNwZfK+NDiWaI
+   BgekN7Hz16O0E2ztBegHo/MpHrXq7P6ICLFShDw1DQpgmLSrS940gwaOM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="309669979"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="309669979"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 04:02:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="779320963"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="779320963"
+Received: from jsanche3-mobl1.ger.corp.intel.com ([10.251.219.48])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 04:02:06 -0800
+Date:   Wed, 9 Nov 2022 14:02:04 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Sherry Sun <sherry.sun@nxp.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-imx@nxp.com
+Subject: Re: [PATCH 1/2] tty: serial: fsl_lpuart: only enable Idle Line
+ Interrupt for non-dma case
+In-Reply-To: <20221109104515.17266-2-sherry.sun@nxp.com>
+Message-ID: <154eb2b-9467-e915-f51c-18d616c81d34@linux.intel.com>
+References: <20221109104515.17266-1-sherry.sun@nxp.com> <20221109104515.17266-2-sherry.sun@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Cc:     tom@radxa.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: Re: [PATCH 5/5] arm64: dts: rockchip: Add rock-5a board
-Content-Language: en-US
-To:     Michael Riesch <michael.riesch@wolfvision.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>
-References: <20221108171500.99599-1-sebastian.reichel@collabora.com>
- <20221108171500.99599-6-sebastian.reichel@collabora.com>
- <9bdc7e3b-a57b-7247-39ae-ece7bf1566fc@wolfvision.net>
-From:   ZHANG Yuntian <yt@radxa.com>
-Organization: Radxa Computer Co., Ltd
-In-Reply-To: <9bdc7e3b-a57b-7247-39ae-ece7bf1566fc@wolfvision.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpipv:radxa.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_ILLEGAL_IP,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/22 17:16, Michael Riesch wrote:
-> Hi Sebastian,
-> 
-> On 11/8/22 18:15, Sebastian Reichel wrote:
->> Add board file for the RK3588s Rock 5A board. While the hardware
->> offers plenty of peripherals and connectivity this basic implementation
->> just handles things required to access eMMC, UART and Ethernet (i.e.
->> enough to successfully boot Linux).
->>
->> Tested-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->> ---
->>   .../devicetree/bindings/arm/rockchip.yaml     |  5 ++
->>   arch/arm64/boot/dts/rockchip/Makefile         |  1 +
->>   .../boot/dts/rockchip/rk3588s-rock-5a.dts     | 63 +++++++++++++++++++
->>   3 files changed, 69 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
->>
->> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
->> index 4230881371fa..6bff4c42d815 100644
->> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
->> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
->> @@ -744,6 +744,11 @@ properties:
->>             - const: rockchip,rk3588-evb1-v10
->>             - const: rockchip,rk3588
->>   
->> +      - description: Radxa Rock 5A
+On Wed, 9 Nov 2022, Sherry Sun wrote:
 
-Please change to "Radxa ROCK 5 Model A". This is the full product name 
-per our naming convention.
+> For the lpuart driver, the Idle Line Interrupt Enable now is only needed
+> for the CPU mode, so enable the UARTCTRL_ILIE at the correct place, and
+> clear it when shutdown.
+> 
+> Also need to configure the suitable UARTCTRL_IDLECFG, now the value is
+> 0x7, represent 128 idle characters will trigger the Idle Line Interrupt.
+>
+> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> ---
+>  drivers/tty/serial/fsl_lpuart.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index bd685491eead..f5a0a14fa366 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -179,7 +179,7 @@
+>  #define UARTCTRL_SBK		0x00010000
+>  #define UARTCTRL_MA1IE		0x00008000
+>  #define UARTCTRL_MA2IE		0x00004000
+> -#define UARTCTRL_IDLECFG	0x00000100
+> +#define UARTCTRL_IDLECFG_OFF   8
+>  #define UARTCTRL_LOOPS		0x00000080
+>  #define UARTCTRL_DOZEEN		0x00000040
+>  #define UARTCTRL_RSRC		0x00000020
+> @@ -230,6 +230,8 @@
+>  #define GLOBAL_RST_MIN_US	20
+>  #define GLOBAL_RST_MAX_US	40
+>  
+> +#define UARTCTRL_IDLECFG	0x7
+> +
 
->> +        items:
->> +          - const: radxa,rock-5a
-> 
-> FYI: I was wondering what the convention was when I submitted the
-> rk3568-rock-3a.dts. There are boards with the compatible
-> "radxa,rockpi4a", "radxa,rockpi4b", "radxa,rockpis", but also the
-> "radxa,rock-4c-plus". I went with the slight majority and named it
-> "radxa,rock3a". Maybe you would like to consider "radxa,rock5a" in order
-> to follow suit.
+GEN_MASK() to the correct bits directly?
 
-Currently we keep the compatible field to match the file name excluding 
-the SoC prefix, since that seems to be what other boards are doing (ex. 
-odroid-go2, nanopi-r2s, orion-r68-meta, etc). I'll say `rock-5a` looks 
-good to me.
+>  /* Rx DMA timeout in ms, which is used to calculate Rx ring buffer size */
+>  #define DMA_RX_TIMEOUT		(10)
+>  
+> @@ -1506,7 +1508,7 @@ static void lpuart32_setup_watermark(struct lpuart_port *sport)
+>  	ctrl = lpuart32_read(&sport->port, UARTCTRL);
+>  	ctrl_saved = ctrl;
+>  	ctrl &= ~(UARTCTRL_TIE | UARTCTRL_TCIE | UARTCTRL_TE |
+> -			UARTCTRL_RIE | UARTCTRL_RE);
+> +			UARTCTRL_RIE | UARTCTRL_RE | UARTCTRL_ILIE);
+>  	lpuart32_write(&sport->port, ctrl, UARTCTRL);
+>  
+>  	/* enable FIFO mode */
+> @@ -1530,7 +1532,8 @@ static void lpuart32_setup_watermark_enable(struct lpuart_port *sport)
+>  	lpuart32_setup_watermark(sport);
+>  
+>  	temp = lpuart32_read(&sport->port, UARTCTRL);
+> -	temp |= UARTCTRL_RE | UARTCTRL_TE | UARTCTRL_ILIE;
+> +	temp |= UARTCTRL_RE | UARTCTRL_TE;
+> +	temp |= UARTCTRL_IDLECFG << UARTCTRL_IDLECFG_OFF;
 
-> 
-> Best regards,
-> Michael
-> 
->> +          - const: rockchip,rk3588s
->> +
->>   additionalProperties: true
->>   
->>   ...
->> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
->> index 12ed53de11eb..31fa55750a0f 100644
->> --- a/arch/arm64/boot/dts/rockchip/Makefile
->> +++ b/arch/arm64/boot/dts/rockchip/Makefile
->> @@ -73,3 +73,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
->>   dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
->>   dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-rock-3a.dtb
->>   dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588-evb1-v10.dtb
->> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3588s-rock-5a.dtb
->> diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
->> new file mode 100644
->> index 000000000000..25387a000341
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
->> @@ -0,0 +1,63 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +
->> +/dts-v1/;
->> +
->> +#include <dt-bindings/pinctrl/rockchip.h>
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include "rk3588s.dtsi"
->> +
->> +/ {
->> +	model = "Radxa Rock 5A Board";
->> +	compatible = "radxa,rock-5a", "rockchip,rk3588s";
->> +
->> +	chosen {
->> +		stdout-path = "serial2:1500000n8";
->> +	};
->> +};
->> +
->> +&gmac1 {
->> +	phy-mode = "rgmii-rxid";
->> +	clock_in_out = "output";
->> +
->> +	snps,reset-gpio = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
->> +	snps,reset-active-low;
->> +	/* Reset time is 20ms, 100ms for rtl8211f */
->> +	snps,reset-delays-us = <0 20000 100000>;
->> +
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&gmac1_miim
->> +		     &gmac1_tx_bus2
->> +		     &gmac1_rx_bus2
->> +		     &gmac1_rgmii_clk
->> +		     &gmac1_rgmii_bus>;
->> +
->> +	tx_delay = <0x3a>;
->> +	rx_delay = <0x3e>;
->> +
->> +	phy-handle = <&rgmii_phy1>;
->> +	status = "okay";
->> +};
->> +
->> +&mdio1 {
->> +	rgmii_phy1: phy@1 {
->> +		compatible = "ethernet-phy-ieee802.3-c22";
->> +		reg = <0x1>;
->> +		#phy-cells = <0>;
->> +	};
->> +};
->> +
->> +&sdhci {
->> +	bus-width = <8>;
->> +	no-sdio;
->> +	no-sd;
->> +	non-removable;
->> +	max-frequency = <200000000>;
->> +	mmc-hs400-1_8v;
->> +	mmc-hs400-enhanced-strobe;
->> +	status = "okay";
->> +};
->> +
->> +&uart2 {
->> +	pinctrl-0 = <&uart2m0_xfer>;
->> +	status = "okay";
->> +};
-> 
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
-> 
+FIELD_PREP() would probably be more appropriate for this? Then you can 
+also drop the shift offset.
 
 -- 
-Best regards,
+ i.
 
-ZHANG Yuntian
+>  	lpuart32_write(&sport->port, temp, UARTCTRL);
+>  }
+>  
+> @@ -1669,7 +1672,7 @@ static void lpuart32_configure(struct lpuart_port *sport)
+>  	}
+>  	temp = lpuart32_read(&sport->port, UARTCTRL);
+>  	if (!sport->lpuart_dma_rx_use)
+> -		temp |= UARTCTRL_RIE;
+> +		temp |= UARTCTRL_RIE | UARTCTRL_ILIE;
+>  	if (!sport->lpuart_dma_tx_use)
+>  		temp |= UARTCTRL_TIE;
+>  	lpuart32_write(&sport->port, temp, UARTCTRL);
+> @@ -1770,7 +1773,7 @@ static void lpuart32_shutdown(struct uart_port *port)
+>  
+>  	/* disable Rx/Tx and interrupts */
+>  	temp = lpuart32_read(port, UARTCTRL);
+> -	temp &= ~(UARTCTRL_TE | UARTCTRL_RE |
+> +	temp &= ~(UARTCTRL_TE | UARTCTRL_RE | UARTCTRL_ILIE |
+>  			UARTCTRL_TIE | UARTCTRL_TCIE | UARTCTRL_RIE);
+>  	lpuart32_write(port, temp, UARTCTRL);
+>  
+> 
 
-Operating System Developer
-Radxa Computer Co., Ltd
-Shenzhen, China
