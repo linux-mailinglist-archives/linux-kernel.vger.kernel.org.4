@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8764362223A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE90622246
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiKICui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 21:50:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S229898AbiKICyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 21:54:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiKICue (ORCPT
+        with ESMTP id S229530AbiKICyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:50:34 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCFA1F62F;
-        Tue,  8 Nov 2022 18:50:32 -0800 (PST)
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1667962230;
-        bh=5ie3Yn8WEIYoQFT16uM/WFQsRiA4aQakHFCHCuSu24o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S4RyJ1wzsu+CpZMBbNLMM2Rag3TXO+Xb3KPkzsImCQFf5lvbhoyLEXMvCLg+y4W4P
-         s5eZT9wXxoZDpGbOcLoHawu1teXnAudH1mwzGMMXEy1x3Gm9jXVBZh0duYW9j9jTQj
-         x4kZPMShWc4wEdNpenaPh88pLrVCr8Ta8dsMZghY=
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v2 3/3] certs: don't try to update blacklist keys
-Date:   Wed,  9 Nov 2022 03:50:19 +0100
-Message-Id: <20221109025019.1855-4-linux@weissschuh.net>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221109025019.1855-1-linux@weissschuh.net>
-References: <20221109025019.1855-1-linux@weissschuh.net>
+        Tue, 8 Nov 2022 21:54:06 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3CC21274;
+        Tue,  8 Nov 2022 18:54:05 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id r76so17488296oie.13;
+        Tue, 08 Nov 2022 18:54:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rBLZkJy5Pp4Vpzz0NWiO5S2UOJ9yN9uTsYNq/gfnkYI=;
+        b=ltk5/S5XHdqjLJtA8myZw111jK4YqHjyFUd66tIyRXCFvddlDxeXY2V6w31crN1exN
+         rV8/oVEY3jfko9wObsLjdRwt3WU6IghTUYnYRoQbTibSVZ75bJaUTdwRQGxhbGMKWwrz
+         BftVdHlBkj7e7iamWNLd28QVMjXwrgh5qi1VCrOmvQi98xr/KKRydOEgO0vcWFEzrGTs
+         LseOhn8Ag9O+vsmRIh5XDV6Kx8mDpjScYBPObe44OQEi9RvAaaS9Y/S/grGi4yMkF/pQ
+         1cDeOsa14AgGnc63jOn06mN4fH76S26Bg8/AXi4vuZ07x1egokjB3/wkZBtv8mUFraZe
+         Xh4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rBLZkJy5Pp4Vpzz0NWiO5S2UOJ9yN9uTsYNq/gfnkYI=;
+        b=x3ICY2Omg2wDYS3x7ZARhRh4vhwncuRkmJCaCj9zCNoQkDKby2ARxYbvu8Ow3SmchG
+         HqKlBviq3PJ/+76RMZ244NN0iDH/Q/Y/sam7RsrLcYff3PhGqte3X4zVfag/nURYzmdq
+         o3NeJvX9TIyeXsCdCk0HNC8uMoxBBH5N40tkhPhEUkC5/uMl8JJnWgjAvYYU6XH/dtO4
+         CHWhVjXyAh/W69TKeAO+3lZymh12Oz8bVdVIiOY6LCcKuYgAbIDErUkrp3siCflbGGy/
+         OT7+l3QS3KHO4UIXu5ecFTZwrfZK9kiOa21stddfkDRZaXvVqS0WraPxMNBUiNEpFrYR
+         3fCA==
+X-Gm-Message-State: ACrzQf2bZJ4LTpBFVgSRe9gSPukMwzazgFeinvgUlcfR6JNpLfD8PCQl
+        i6oJzCIXoV5eT9MPQVXFgN8=
+X-Google-Smtp-Source: AMsMyM65LdLfRxE0GxhydaG8ObHJgW/wS+FwVUJIoUp1X73R6GIfsgnVSVh3fUuZ+mlbIJsjW9oUJQ==
+X-Received: by 2002:aca:b154:0:b0:35a:856:4b88 with SMTP id a81-20020acab154000000b0035a08564b88mr28020880oif.219.1667962444769;
+        Tue, 08 Nov 2022 18:54:04 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e1-20020a056830200100b00661b5e95173sm4763329otp.35.2022.11.08.18.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 18:54:03 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 8 Nov 2022 18:54:01 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 6.0 000/197] 6.0.8-rc1 review
+Message-ID: <20221109025401.GA2033086@roeck-us.net>
+References: <20221108133354.787209461@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1667962214; l=1899; s=20211113; h=from:subject; bh=5ie3Yn8WEIYoQFT16uM/WFQsRiA4aQakHFCHCuSu24o=; b=OUVFxglzNA9V+JeUq6PfXkiyi8NjbHyOn/P067eIM9yuQtAu1elOs+T/uDNnoy72YvI6yHQrLyma IEfj5nx7Dt2CnrEBvK0SE2q0NTMjoP3maKxCmE9wV84O9Uf12dvH
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108133354.787209461@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the same key is blacklisted repeatedly we don't want to log an
-error. These duplicates can be provided by buggy firmware. Instead of
-spamming the bootlog with errors we use a warning that can still be seen
-by OEMs when testing.
+On Tue, Nov 08, 2022 at 02:37:18PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.8 release.
+> There are 197 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+> 
 
-Also extend BLACKLIST_KEY_PERM as otherwise the EACCES will shadow the
-EEXIST.
+Build results:
+	total: 152 pass: 152 fail: 0
+Qemu test results:
+	total: 500 pass: 500 fail: 0
 
-Link: https://lore.kernel.org/all/c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de/
-Link: https://lore.kernel.org/all/20221104014704.3469-1-linux@weissschuh.net/
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- certs/blacklist.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/certs/blacklist.c b/certs/blacklist.c
-index 6e260c4b6a19..ac8e3166b6d7 100644
---- a/certs/blacklist.c
-+++ b/certs/blacklist.c
-@@ -26,7 +26,7 @@
-  */
- #define MAX_HASH_LEN	128
- 
--#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
-+#define BLACKLIST_KEY_PERM (KEY_POS_WRITE | KEY_POS_SEARCH | KEY_POS_VIEW | \
- 			    KEY_USR_SEARCH | KEY_USR_VIEW)
- 
- static const char tbs_prefix[] = "tbs";
-@@ -183,16 +183,19 @@ static int mark_raw_hash_blacklisted(const char *hash)
- {
- 	key_ref_t key;
- 
--	key = key_create_or_update(make_key_ref(blacklist_keyring, true),
--				   "blacklist",
--				   hash,
--				   NULL,
--				   0,
--				   BLACKLIST_KEY_PERM,
--				   KEY_ALLOC_NOT_IN_QUOTA |
--				   KEY_ALLOC_BUILT_IN);
-+	key = key_create(make_key_ref(blacklist_keyring, true),
-+			 "blacklist",
-+			 hash,
-+			 NULL,
-+			 0,
-+			 BLACKLIST_KEY_PERM,
-+			 KEY_ALLOC_NOT_IN_QUOTA |
-+			 KEY_ALLOC_BUILT_IN);
- 	if (IS_ERR(key)) {
--		pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
-+		if (PTR_ERR(key) == -EEXIST)
-+			pr_warn("Duplicate blacklisted hash %s\n", hash);
-+		else
-+			pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
- 		return PTR_ERR(key);
- 	}
- 	return 0;
--- 
-2.38.1
-
+Guenter
