@@ -2,74 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68A56221DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12BF6221ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiKICUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 21:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
+        id S229937AbiKIC1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 21:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiKICUT (ORCPT
+        with ESMTP id S229969AbiKIC1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:20:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3F85EF8F;
-        Tue,  8 Nov 2022 18:20:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 763FE6188A;
-        Wed,  9 Nov 2022 02:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58320C433D6;
-        Wed,  9 Nov 2022 02:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667960417;
-        bh=9UD9mS0AlmvSB+RXBHnYiAss0eAbPtXExNTzwxSaC0w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hRsd0VqGogz/wiuMi+6gyh4G2OnAklp5GxPyiF9ZBTj5o3ghQyBwcQxRw2t0OjqPO
-         5U3imFA/FvIV4GAu+ZjAa1TN+Y0TSB2SNt54xPmGToouKP7D4NFE+H6Aw557QzVEtq
-         kLB2nzFeQxHave+BJznMMQvKgv7dol2TDosZ36rYaGQTC42arivgB71ZxU9ut0Xo84
-         misUFz3MyqfvbBRxIA7/7RUuGvmOZQQcQIRCg9ixG7Pe+wN09g+k4k9W1RBQTkVdPR
-         X9xcBGA30Mau7DCYAgSa6UThkKT3q05SjVya0N355GaLn2pbwCd9MCxySY4ep13BML
-         prs2I5RtMqbyA==
-Date:   Tue, 8 Nov 2022 18:20:16 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+        Tue, 8 Nov 2022 21:27:06 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675A95E3F6;
+        Tue,  8 Nov 2022 18:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667960825; x=1699496825;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jpaNDrFwzMZ2iLH1l1kbK43THTPUMBLW8XKIRWONvtQ=;
+  b=IitEZemphTvLzxWmsU43KH+BpKxaJA5vQCHuwwvwKCCNktL0wEBcYgzF
+   KuHoqQaMe5jukg+9EN3uP8viynRN5n33RQOdqyDhbNLoCOYcT7vnoUEQJ
+   lm+MuYr8SJnTB7j3GdodJlvwi/9fyKQr9yZs+iT7blntv7y5235l4hSGW
+   zScLd9IHh8SH7ZuF408c2F+2vQrbeo56VnpyXnvG9V8Y6zJVNX2QxmK4w
+   DY8OkPojfqawbp/pUjonMizH/pNa8Izsvi71npWMn+JJr6BvAvhuITlrD
+   Y9TCa3I2TC+bNfCTUIGkjeTXYTPIFrMW0VBCQ7zSr4qQysIlCdYOKhWFY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="310865200"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="310865200"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 18:27:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="881748275"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="881748275"
+Received: from mike-ilbpg1.png.intel.com ([10.88.227.76])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Nov 2022 18:27:02 -0800
+From:   Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-Subject: Re: [EXT] Re: [PATCH v2 0/2] net: fec: optimization and statistics
-Message-ID: <20221108182016.59e27158@kernel.org>
-In-Reply-To: <PAXPR04MB918598BE192BEF2B5E7CF678893E9@PAXPR04MB9185.eurprd04.prod.outlook.com>
-References: <20221108172105.3760656-1-shenwei.wang@nxp.com>
-        <20221108175710.095a96e8@kernel.org>
-        <PAXPR04MB918598BE192BEF2B5E7CF678893E9@PAXPR04MB9185.eurprd04.prod.outlook.com>
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
+        Gan Yi Fang <yi.fang.gan@intel.com>
+Subject: [PATCH net v2 1/1] net: phy: dp83867: Fix SGMII FIFO depth for non OF devices
+Date:   Wed,  9 Nov 2022 10:26:29 +0800
+Message-Id: <20221109022629.615015-1-michael.wei.hong.sit@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 02:15:28 +0000 Shenwei Wang wrote:
-> > This set doesn't apply to net-next, is it on top of some not-yet-applied patches ?  
-> 
-> I saw the first patch " net: fec: simplify the code logic of quirks" had already been
-> applied a day ago. May only need to apply the second one: " net: fec: add xdp and page pool statistics".
+Current driver code will read device tree node information,
+and set default values if there is no info provided.
 
-Oh, I see. You can wait for reviews a bit longer, but you'll have 
-to repost just the parts that can be applied separately.
-It's fairly tricky to skip the first patch when applying,
-and the build bot will definitely not be able to cope.
+This is not done in non-OF devices leading to SGMII fifo depths being
+set to the smallest size.
+
+This patch sets the value to the default value of the PHY as stated in the
+PHY datasheet.
+
+Fixes: 4dc08dcc9f6f ("net: phy: dp83867: introduce critical chip default init for non-of platform")
+Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+---
+v1->v2:
+- Add Fixes tag to commit message
+---
+ drivers/net/phy/dp83867.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
+index 6939563d3b7c..fb7df4baaf6f 100644
+--- a/drivers/net/phy/dp83867.c
++++ b/drivers/net/phy/dp83867.c
+@@ -682,6 +682,13 @@ static int dp83867_of_init(struct phy_device *phydev)
+ 	 */
+ 	dp83867->io_impedance = DP83867_IO_MUX_CFG_IO_IMPEDANCE_MIN / 2;
+ 
++	/* For non-OF device, the RX and TX FIFO depths are taken from
++	 * default value. So, we init RX & TX FIFO depths here
++	 * so that it is configured correctly later in dp83867_config_init();
++	 */
++	dp83867->tx_fifo_depth = DP83867_PHYCR_FIFO_DEPTH_4_B_NIB;
++	dp83867->rx_fifo_depth = DP83867_PHYCR_FIFO_DEPTH_4_B_NIB;
++
+ 	return 0;
+ }
+ #endif /* CONFIG_OF_MDIO */
+-- 
+2.34.1
+
