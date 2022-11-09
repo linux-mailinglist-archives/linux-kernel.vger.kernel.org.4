@@ -2,93 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D31623551
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326B0623574
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbiKIVBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55994 "EHLO
+        id S231442AbiKIVKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiKIVBD (ORCPT
+        with ESMTP id S231846AbiKIVJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:01:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AFB31DC4;
-        Wed,  9 Nov 2022 13:00:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 9 Nov 2022 16:09:46 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C8E31343;
+        Wed,  9 Nov 2022 13:09:39 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 346E361CF3;
-        Wed,  9 Nov 2022 21:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 77E90C433D6;
-        Wed,  9 Nov 2022 21:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668027615;
-        bh=YnYnG33WUJGPL+XZx0SlUCTlC7LDUUGpSuhxT4Cxz7s=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XEWi6q9l/eyzfk+IIUzt6Gfz8EKp3r7UmjiUHfmVj5mSucQPZl22DK2nMS7OrCEYC
-         +7smGYnD5syCjO3LkCONt+0UfESXziwJQ0ST5u9HNmAepF5bEE7PLOsG14rLc8YHqH
-         htFPCbkxAUo1w6YpMXaIZqWl2MpuagRV7TMjhO76J/qBukmNALDikDbgbS/4IU+jLM
-         t8MJKT1YjJQ+d+8woke7cjRlOlYoVol6j5eegtVCIxXV5nwR7NHz9JGn1dHlRK48x4
-         aLw6eui6LSiIqmrdn0TIg+FbZMySmD3NV5WPS8M93dsRxg0CC0EzxKV36FHEqGIii2
-         DnVXpBObqhejA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58A9FC395F6;
-        Wed,  9 Nov 2022 21:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N6yJt68Vbz4xZY;
+        Thu, 10 Nov 2022 08:09:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668028175;
+        bh=WdEMKlPmE6cvS+4UxE5MDkzm2xXLyjq3CrEKnZGzouU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BTJ7naoK8COV451kwu6MvOECUNZumWPO9O9phY+FxOu2+JKQJ0LpSB+ld4yNsjAC3
+         R2xW5N52uq4Fg9tma4lTkXIsi+JPva7maDPA0zlJwzKTOtnPiyu9CsIw70Wc75zV5N
+         N3nHH+kvHJEXb/1H7Qluf6i55M4yx5cPzdnLIHQ9fvAKAjOUrg4ZKnkfTB3HrpOzhA
+         6NpuqJqVGilVC9GrfHXxUyW7PDHO86++F3mnYQ8yqkZD8zJZG/H3/PiIzkT3zBF9q+
+         evemggYOahTB5ag8Ei36ypw0bXMDYe9Bs19Nb6DB7FHCHfmPgLtJQZzl0xE1Dh26/D
+         a4PRg0axNRK2Q==
+Date:   Thu, 10 Nov 2022 04:29:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the s390 tree
+Message-ID: <20221110042914.5d9cdc75@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/bpf: Fix test_progs compilation failure in 32-bit
- arch
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166802761535.23951.11996164309163589980.git-patchwork-notify@kernel.org>
-Date:   Wed, 09 Nov 2022 21:00:15 +0000
-References: <20221108015857.132457-1-yangjihong1@huawei.com>
-In-Reply-To: <20221108015857.132457-1-yangjihong1@huawei.com>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        shuah@kernel.org, sunyucong@gmail.com, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LfuEonrlo8lCo/Mq2t_bAsn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/LfuEonrlo8lCo/Mq2t_bAsn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to bpf/bpf.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+Hi all,
 
-On Tue, 8 Nov 2022 09:58:57 +0800 you wrote:
-> test_progs fails to be compiled in the 32-bit arch, log is as follows:
-> 
->   test_progs.c:1013:52: error: format '%ld' expects argument of type 'long int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
->    1013 |                 sprintf(buf, "MSG_TEST_LOG (cnt: %ld, last: %d)",
->         |                                                  ~~^
->         |                                                    |
->         |                                                    long int
->         |                                                  %d
->    1014 |                         strlen(msg->test_log.log_buf),
->         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                         |
->         |                         size_t {aka unsigned int}
-> 
-> [...]
+Commit
 
-Here is the summary with links:
-  - selftests/bpf: Fix test_progs compilation failure in 32-bit arch
-    https://git.kernel.org/bpf/bpf/c/5704bc7e8991
+  0de03a40d599 ("s390: select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP")
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+is missing a Signed-off-by from its committer.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/LfuEonrlo8lCo/Mq2t_bAsn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNr42oACgkQAVBC80lX
+0GzxNwgAnsFXt1sIFy0jEI9+BaIaLkvq04lZPF32Wffm54Z7DnhYSaMJWtDpcdZN
+nbxDkC3X35yp5hmxyHmdDjzznF/JzQHvpYwZNkL5NwR3rIG/EcFUxVYzBhn94aOI
+lyXVR9AOj4ejJxFmSphDnoK3wxd2LDMPmOWxh4oJl49og2NRZLww+egkjN/8rBdP
+wZ27yIP3XS7RmRYffTA5+HL2s1ODIkJRqrxt2QpL1eGfihmkS7f65QmUkLBQXRd2
+gZbr6zfwx507ZfZrW4GubYh9gwcGPW6Ra7Z8aGqywUFvdTfeUAqtbMJhFagef+8n
+wkSNzJBTZrHbhgZbFMuvMbwBSnSf5g==
+=nZvD
+-----END PGP SIGNATURE-----
+
+--Sig_/LfuEonrlo8lCo/Mq2t_bAsn--
