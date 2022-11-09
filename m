@@ -2,91 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA39623777
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1C762377D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbiKIXaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S229811AbiKIXeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiKIXaO (ORCPT
+        with ESMTP id S229806AbiKIXd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:30:14 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A307E03F;
-        Wed,  9 Nov 2022 15:30:13 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id w14so28113865wru.8;
-        Wed, 09 Nov 2022 15:30:13 -0800 (PST)
+        Wed, 9 Nov 2022 18:33:59 -0500
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A3FFCD4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 15:33:58 -0800 (PST)
+Received: by mail-ot1-x32e.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso248479otq.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 15:33:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yd53OIp69atYo/xq3UTNLVEYNs18PHuXNa5tnT/NW9k=;
-        b=HjI7n8jwrI1i9d0mghiBrQ8cNkDGiVdP5rlGYlbuCL5hzabhIzTU1GaXCbCIDdmzCJ
-         taRsFNF8weRKi3lPSbm9yOyzDEYAkCvrP0TJFkvGGsDZ9P85EoKXVlejtNkMfAgrOher
-         IK46/G4gNPm55e/0WPialtNWy/+jt+S16UBlNeYPst1vMbB0J9L7XyU/HqZtAxYGCgQC
-         Wa/iRrKfzGaMrH22mZ9+AYnX4aZjADE55HttXdH/m7uZ7zLYM9qldTqu+rJ8KKDsHdB2
-         RiNZUD+Byzl5eRjjk51ene6p5Q3a38n2zNkauNZmx9cGVKpIzV/y0Dg4PBbEtBend8s1
-         wzyg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7dLiDnqXQpyBzsozj56gFcsd4WQsntSnrI1Dq8cPcBA=;
+        b=tAoQMDHytMmH7nFKf9VCji2q1tB1MAtwBjWjOsgH0kuasg86nWhbMehYoTZQa2tCIs
+         3JC+5qYx9RPgmzc2WnpNJiFpcJqIHJxtEtyPhFWLp0VJUvAegB88t+cBEBnz9ADvXjKK
+         PPYgPvw6HaCcpGmM6kv8Sq5jCliQ+kPFVbFD7QM/xMpygIa2ROCx1vBxsTsBUUxxsmeB
+         /EZSur0XUfMYlMiF00TyjX3CwUzrXkSZcEibGpL/Ecl3XuLD9eCV7wKhUZtg9LIQ6DC3
+         i2uLpe3eJ1nRdSd3iDzc4j6na8Oqb/7a0xAo7ljjvrBZyHB0onMSEo1kYeK5okdbjSwO
+         ljnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yd53OIp69atYo/xq3UTNLVEYNs18PHuXNa5tnT/NW9k=;
-        b=J4Ud9XWLdisU4L7BHmSVEwS1ZDkDqViCxVXPHNYA58Q+407L7eUM1X0dvkCoH9+c9/
-         McFtmGo4bsR9cfPcs4SofJTUCaAzx566OsQH7a7wdmVMM+Ii3romMjEaXEn42CDW4iXn
-         RRQEO7i3iLtHwQow0PAzQUm9dIwkCUBB7e5vnG/xw9D6acPqhr/SVq1BzAk5AO8gtLQb
-         QHOq7oLc6uns05jR/4iAGl08jIz8+zLPxiVEO+J3zEfJTIeh0KAyQqtCmTtJf9iEYqxm
-         FZJ45pfgGcYqFapjrnUUCdCvyQYAEbGT7HLUTKlXrvy9jUdEs/yoZWsCMfvcqWldD3ej
-         ll3w==
-X-Gm-Message-State: ACrzQf1LbS6p0Zw9/0kgEZrgCWjMBTL7DXysl6y88XDPeBf7ErBPgm2b
-        ldtLNQGZ+Zek6JyVni7DSEU=
-X-Google-Smtp-Source: AMsMyM7IHFxlRJdSaiea1qynaJTdSS1ofJAQcfFdlfMvly3FeETbIZYli4VVuBjOfWQXY3W6Av+NqA==
-X-Received: by 2002:a05:6000:118d:b0:236:f075:dccd with SMTP id g13-20020a056000118d00b00236f075dccdmr27367367wrx.37.1668036611828;
-        Wed, 09 Nov 2022 15:30:11 -0800 (PST)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id m23-20020a05600c3b1700b003cf47556f21sm3351289wms.2.2022.11.09.15.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 15:30:11 -0800 (PST)
-Date:   Thu, 10 Nov 2022 01:30:08 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 net-next 4/6] dt-bindings: net: add generic
- ethernet-switch
-Message-ID: <20221109233008.bsu2zl4bixsz44mi@skbuf>
-References: <20221104045204.746124-1-colin.foster@in-advantage.com>
- <20221104045204.746124-1-colin.foster@in-advantage.com>
- <20221104045204.746124-5-colin.foster@in-advantage.com>
- <20221104045204.746124-5-colin.foster@in-advantage.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7dLiDnqXQpyBzsozj56gFcsd4WQsntSnrI1Dq8cPcBA=;
+        b=ecYlT37kb72r0SfXFVDApyCzBbKlAFLWUcdnCEIW5Z13hBLE7CIDPcGvO4E50ddt2o
+         JXBaRXtPJp2Q33E31z68C4kFR+24wP3vahKXqHxPD3INWg/FZpPd3YiT2aWJi4hDLjnb
+         InoFhge5TH2uJXu1ZVUApivMmeTjcmxKZZNwjvoxoX3iwKHv5CiG+ECZjzynBc2MOc/D
+         6gOE6FeTOxaCgzEzlnUr+B+RyNaACYB928ZSOamNJjGiekWn/gD/lj7rjLG0awD+kiEo
+         eTw6y+A7pMc4B+gayFtoGNurfEryqqXj32NSQ/2vgb1IdFgeZ0xhMT6goeLNgLfGqKjj
+         iWAA==
+X-Gm-Message-State: ACrzQf0BQukeK/JAH2kyJ0BIh6uWmkTME7dKIeKfKJvlswY5KaXp3HaG
+        GiBwUMwW4PdgRfHqNXTDsrd0M33apQ1TK8zDr83a
+X-Google-Smtp-Source: AMsMyM68dDXBbuqVEKDurPj0t5g4PgiQwtOK4V8TKADlLJagug+5vKGH3zECUny4I28XV/Ze4A8ZpmgXi6asaEJNvMQ=
+X-Received: by 2002:a9d:1aa:0:b0:66c:6922:8640 with SMTP id
+ e39-20020a9d01aa000000b0066c69228640mr870217ote.34.1668036837558; Wed, 09 Nov
+ 2022 15:33:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104045204.746124-5-colin.foster@in-advantage.com>
- <20221104045204.746124-5-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221025184519.13231-1-casey@schaufler-ca.com> <20221025184519.13231-3-casey@schaufler-ca.com>
+In-Reply-To: <20221025184519.13231-3-casey@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 9 Nov 2022 18:33:46 -0500
+Message-ID: <CAHC9VhQONd9zFJswcAsY9-xQcRhoYwXtwyo4zT5XsSPTEtvuRg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/8] LSM: Add an LSM identifier for external use
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,100 +69,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 09:52:02PM -0700, Colin Foster wrote:
-> diff --git a/Documentation/devicetree/bindings/net/ethernet-switch.yaml b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
-> new file mode 100644
-> index 000000000000..fbaac536673d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/ethernet-switch.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/ethernet-switch.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ethernet Switch Device Tree Bindings
+On Tue, Oct 25, 2022 at 2:45 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+> Add an integer member "id" to the struct lsm_id. This value is
+> a unique identifier associated with each security module. The
+> values are defined in a new UAPI header file. Each existing LSM
+> has been updated to include it's LSMID in the lsm_id.
+>
+> The LSM ID values are sequential, with the oldest module
+> LSM_ID_CAPABILITY being the lowest value and the existing
+> modules numbered in the order they were included in the
+> main line kernel. The first 32 values (0 - 31) are reserved
+> for some as yet unknown but important use.
+>
+> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> ---
+>  include/linux/lsm_hooks.h    |  1 +
+>  include/uapi/linux/lsm.h     | 32 ++++++++++++++++++++++++++++++++
+>  security/apparmor/lsm.c      |  2 ++
+>  security/bpf/hooks.c         |  2 ++
+>  security/commoncap.c         |  2 ++
+>  security/landlock/setup.c    |  2 ++
+>  security/loadpin/loadpin.c   |  2 ++
+>  security/lockdown/lockdown.c |  2 ++
+>  security/safesetid/lsm.c     |  2 ++
+>  security/selinux/hooks.c     |  2 ++
+>  security/smack/smack_lsm.c   |  2 ++
+>  security/tomoyo/tomoyo.c     |  2 ++
+>  security/yama/yama_lsm.c     |  2 ++
+>  13 files changed, 55 insertions(+)
+>  create mode 100644 include/uapi/linux/lsm.h
 
-I vaguely remember Krzysztof saying during other reviews that "Device
-Tree Bindings" in the title is superfluous. Suggest: "Generic Ethernet
-Switch".
+Unless you're getting paid by the patch, I'd rather you combine
+patches 1/8 and 2/8 into a single patch.  They are both pretty small,
+very related, and I don't want to see 1/8 merged anywhere without 2/8.
 
-> +
-> +maintainers:
-> +  - Andrew Lunn <andrew@lunn.ch>
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +  - Vivien Didelot <vivien.didelot@gmail.com>
-> +
-> +description:
-> +  This binding represents Ethernet Switches which have a dedicated CPU
-> +  port. That port is usually connected to an Ethernet Controller of the
-> +  SoC. Such setups are typical for embedded devices.
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index e383e468f742..dd4b4d95a172 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -1607,6 +1607,7 @@ struct security_hook_heads {
+>   */
+>  struct lsm_id {
+>         const char      *lsm;           /* Name of the LSM */
+> +       int             id;             /* LSM ID */
+>  };
 
-This description was taken from the DSA switch schema and not adapted
-for the generic Ethernet switch schema.
+At the very least let's define lsm_id::id as an 'unsigned int' type,
+but since we are going to see the lsm_id::id token used as part of the
+kernel ABI (likely not in this struct) I agree with Greg's comments
+about making the size more explicit.  I would suggest __u32/u32 as
+32-bits should be plenty for this token.
 
-Suggest instead:
+Given the other upstream discussions we may want to do something
+similar with lsm_id::lsm and __u8/u8.  I'm pretty sure I saw a similar
+comment (by Greg?) elsewhere in this patchset when I was quickly
+skimming these on my phone while away ...
 
-  Ethernet switches are multi-port Ethernet controllers. Each port has
-  its own number and is represented as its own Ethernet controller.
-  The minimum required functionality is to pass packets to software.
-  They may or may not be able to forward packets autonomously between
-  ports.
-
-(this should also clarify if it's okay to reference ethernet-switch.yaml
-from drivers which don't speak switchdev, which I believe it is).
-
-(my suggestion is open to further comments for improvement)
-
-> +
-> +select: false
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^(ethernet-)?switch(@.*)?$"
-> +
-> +patternProperties:
-> +  "^(ethernet-)?ports$":
-> +    type: object
-> +    properties:
-> +      '#address-cells':
-> +        const: 1
-> +      '#size-cells':
-> +        const: 0
-> +
-> +    patternProperties:
-> +      "^(ethernet-)?port@[0-9]+$":
-> +        type: object
-> +        description: Ethernet switch ports
-> +
-> +        $ref: /schemas/net/dsa/dsa-port.yaml#
-
-I wonder if you actually meant dsa-port.yaml and not ethernet-controller.yaml?
-
-> +
-> +oneOf:
-> +  - required:
-> +      - ports
-> +  - required:
-> +      - ethernet-ports
-> +
-> +additionalProperties: true
-> +
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3106a9f0567a..3b6c3989c419 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14326,6 +14326,7 @@ M:	Florian Fainelli <f.fainelli@gmail.com>
->  M:	Vladimir Oltean <olteanv@gmail.com>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/net/dsa/
-> +F:	Documentation/devicetree/bindings/net/ethernet-switch.yaml
->  F:	drivers/net/dsa/
->  F:	include/linux/dsa/
->  F:	include/linux/platform_data/dsa.h
-> -- 
-> 2.25.1
-> 
-
+--
+paul-moore.com
