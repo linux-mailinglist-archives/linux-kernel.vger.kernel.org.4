@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684D16220C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 01:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B386220C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 01:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKIA1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 19:27:33 -0500
+        id S229911AbiKIA1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 19:27:42 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiKIA1H (ORCPT
+        with ESMTP id S229576AbiKIA1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 19:27:07 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8A061762;
-        Tue,  8 Nov 2022 16:27:05 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id io19so15622383plb.8;
-        Tue, 08 Nov 2022 16:27:05 -0800 (PST)
+        Tue, 8 Nov 2022 19:27:30 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BC661746;
+        Tue,  8 Nov 2022 16:27:07 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso410331pjc.0;
+        Tue, 08 Nov 2022 16:27:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Vlcf6K0fvrpHjK0WpwcdporIi8K80mxmLgEaAmXhKG8=;
-        b=ps5AbPS9Okyf/Gs9daJxzryher8XSwbIjH41tljfk0O6Mi13Uukh1jsyVoHAIzlLeh
-         Qnpdm0UKb1GDQQCHTOctt/WbtHMp2tKSikxHcDsTfkMih4rwp3GrMhNzYHFKWMF0rJ9n
-         tK5DgGPZwa3Va2K7umQEO+e3ETdRC3n59n2tXDYR3CbWTugBAvxikBkLOJUCnQ/EPee6
-         D/LzOonOLkoK6m9R5Z4aUM3lwX5H/dqsDZhUhnxrtZbev93y+NuMPsiKAumiQ4VY+Xr6
-         BKmYAqOckk6l58yLO/7sAwr5tHjET1+TInmC/nW1Jg/fLkM0A7J7hL1KhE+qwsjQmMBD
-         hzYA==
+        bh=0Ijc7x8fTPDGZNvBUT+idDBJ96j7Q8JpBhejyZkqpOE=;
+        b=cno7Z9azlDI6o85fEz8MD2y/a8szxhVEbZY6MEh6gZBL/HphROAHhLzvsJCRI80MoE
+         aqTCiO6+fj+O8UytedhuuTc3mA7WLJeEHv0igHqHpz4YpjKwSElnXEmhStte6ro6aTkY
+         rLgPj221M3z+N+65Hk/BGHAMtEZI5SPBraZFsv8ATL/8mhe3RbcmrfW5HxWqQrpwABLz
+         +4m5BQ7AonG4CL0y1Vx+iEWG6dP85VlgmiTTK+Q+yI/aP2bWyS3WJ3A+HlqKgDmz+h/F
+         mb89E5qBHZ8G2HwECBGE6ULIg4JeCDp4L/35vqTLrsjyn6ztfwisBzJJ+YM+9UsBoqz/
+         +7JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Vlcf6K0fvrpHjK0WpwcdporIi8K80mxmLgEaAmXhKG8=;
-        b=RVjWy1Uk4jCpxKqdR2cLOuDzHCTHmfsLoIDocJ7D0Y+LItJsNkyBdS8dttqJEL26z4
-         l8r/c2yNP5MkUZ8lqGjaAEdLPBJdeW4XNrTDA0dUzif6JZMklR8oy7dRHcRbM384NW90
-         d3oFqmHa+RfwSz2rWTCnhcJBBahPwGIVLmTJ7u2vNY/+y4Qoc0S9TFKm5Am1Hp0AE3HG
-         uF8o+paIl5yCL2tomaX6DqoCSCgyyKHFjKUTeVF+X/CXqvQXQ3kt2uxnRqelp087ddcC
-         u5y1IeZ9VhnjvAgURHFAn8v6cr0NW9aBry+813NTtW757VMTGfvMDvc9huiZtApPP0DL
-         7l5g==
-X-Gm-Message-State: ACrzQf2tqIOg6N7ssOaTQWP1HaxWzBIgHo6wKrjFDxzB1FUb+Z6eI7Lv
-        x0vBwL9ZD5Vq9CGZu6lDAv9QAivn4Co=
-X-Google-Smtp-Source: AMsMyM5ErGzcRzxNW3hkneESQO9FOl/N8MqlS4MwBnpOQtlyr7i6Gssov+ct/g0GqOL9KFIQfHvSlQ==
-X-Received: by 2002:a17:902:db12:b0:187:4736:f780 with SMTP id m18-20020a170902db1200b001874736f780mr36661880plx.145.1667953624844;
-        Tue, 08 Nov 2022 16:27:04 -0800 (PST)
+        bh=0Ijc7x8fTPDGZNvBUT+idDBJ96j7Q8JpBhejyZkqpOE=;
+        b=S5SdAI2pjLdU+I/lpnse7pN+e6xjAjHnVNusGTpRpas2IcMLrSTVOFkWg3JQrZZ9GJ
+         +mMoNwiJKaHRtI++8qit5W4rJa1hmFfOIpvHBoWurtAkbB+RULx/wIF4ZqfmqDRGwxKP
+         1LxWNS5Vtm8JKLeS4Cz2h97ezdBvWuSIjkL2iUiDs4uEIq7Eh7YAyjRBFfnVqbA+2SND
+         I/Xb9Fv3LT99yN+xeg1XhIxtj0OoREodZqURRyA8VNZEmUhSn753voEkWvy1ibmBiC6F
+         swO8HlWQa8jMW8BztO10P5ODpOM9yAe0wiXPZ1eVhGKZ59E3lmcxkjEL+Xett12+zhYq
+         509Q==
+X-Gm-Message-State: ACrzQf0eP3JzRMnb7fvcrm0FupOrm2yNwzZWvHLJBajo6ogyYfQbZZGF
+        16IM1dfBDx1CvBp5eeP8ufU=
+X-Google-Smtp-Source: AMsMyM5C5riJ1nVd+Rtkgzz6gmb2zCxGgtA8Ic5C4bQw2CZdCRWTFvM5ZL1aVP1hHeVJmLwuWA2Tmw==
+X-Received: by 2002:a17:90b:1212:b0:213:a3a4:4d97 with SMTP id gl18-20020a17090b121200b00213a3a44d97mr58093759pjb.225.1667953626621;
+        Tue, 08 Nov 2022 16:27:06 -0800 (PST)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:9f46:7242:26:f220])
-        by smtp.gmail.com with ESMTPSA id i65-20020a626d44000000b0056bd737fdf3sm6907324pfc.123.2022.11.08.16.27.03
+        by smtp.gmail.com with ESMTPSA id i65-20020a626d44000000b0056bd737fdf3sm6907324pfc.123.2022.11.08.16.27.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 16:27:04 -0800 (PST)
+        Tue, 08 Nov 2022 16:27:05 -0800 (PST)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/6] gpiolib: consolidate GPIO lookups
-Date:   Tue,  8 Nov 2022 16:26:50 -0800
-Message-Id: <20221031-gpiolib-swnode-v2-5-81f55af5fa0e@gmail.com>
+Subject: [PATCH v2 6/6] gpiolib: add support for software nodes
+Date:   Tue,  8 Nov 2022 16:26:51 -0800
+Message-Id: <20221031-gpiolib-swnode-v2-6-81f55af5fa0e@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
 References: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
@@ -76,349 +76,295 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that all paths to obtain/look up GPIOD from generic
-consumer-visible APIs go through the new gpiod_find_and_request()
-helper, so that we can easily extend it with support for new firmware
-mechanisms.
+Now that static device properties understand notion of child nodes and
+references, let's teach gpiolib to handle them:
 
-The only exception is OF-specific [devm_]gpiod_get_from_of_node() API
-that is still being used by a couple of drivers and will be removed as
-soon as patches converting them to use generic fwnode/device APIs are
-accepted.
+- GPIOs are represented as a references to software nodes representing
+  gpiochip
+- references must have 2 arguments - GPIO number within the chip and
+  GPIO flags (GPIO_ACTIVE_LOW/GPIO_ACTIVE_HIGH, etc)
+- a new PROPERTY_ENTRY_GPIO() macro is supplied to ensure the above
+- name of the software node representing gpiochip must match label of
+  the gpiochip, as we use it to locate gpiochip structure at runtime
+
+The following illustrates use of software nodes to describe a "System"
+button that is currently specified via use of gpio_keys_platform_data
+in arch/mips/alchemy/board-mtx1.c. It follows bindings specified in
+Documentation/devicetree/bindings/input/gpio-keys.yaml.
+
+static const struct software_node mxt1_gpiochip2_node = {
+	.name = "alchemy-gpio2",
+};
+
+static const struct property_entry mtx1_gpio_button_props[] = {
+	PROPERTY_ENTRY_U32("linux,code", BTN_0),
+	PROPERTY_ENTRY_STRING("label", "System button"),
+	PROPERTY_ENTRY_GPIO("gpios", &mxt1_gpiochip2_node, 7, GPIO_ACTIVE_LOW),
+	{ }
+};
+
+Similarly, arch/arm/mach-tegra/board-paz00.c can be converted to:
+
+static const struct software_node tegra_gpiochip_node = {
+	.name = "tegra-gpio",
+};
+
+static struct property_entry wifi_rfkill_prop[] __initdata = {
+	PROPERTY_ENTRY_STRING("name", "wifi_rfkill"),
+	PROPERTY_ENTRY_STRING("type", "wlan"),
+	PROPERTY_ENTRY_GPIO("reset-gpios",
+			    &tegra_gpiochip_node, 25, GPIO_ACTIVE_HIGH);
+	PROPERTY_ENTRY_GPIO("shutdown-gpios",
+			    &tegra_gpiochip_node, 85, GPIO_ACTIVE_HIGH);
+	{ },
+};
+
+static struct platform_device wifi_rfkill_device = {
+	.name	= "rfkill_gpio",
+	.id	= -1,
+};
+
+...
+
+	software_node_register(&tegra_gpiochip_node);
+	device_create_managed_software_node(&wifi_rfkill_device.dev,
+					    wifi_rfkill_prop, NULL);
 
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/gpio/gpiolib-acpi.c |  39 ---------
- drivers/gpio/gpiolib-acpi.h |  10 ---
- drivers/gpio/gpiolib.c      | 207 +++++++++++++++++---------------------------
- 3 files changed, 81 insertions(+), 175 deletions(-)
+ drivers/gpio/Makefile         |   1 +
+ drivers/gpio/gpiolib-swnode.c | 128 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/gpio/gpiolib-swnode.h |  14 +++++
+ drivers/gpio/gpiolib.c        |  12 +++-
+ include/linux/gpio/property.h |  11 ++++
+ 5 files changed, 164 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-index 1bc386032ca8..bed0380c5136 100644
---- a/drivers/gpio/gpiolib-acpi.c
-+++ b/drivers/gpio/gpiolib-acpi.c
-@@ -1024,45 +1024,6 @@ struct gpio_desc *acpi_find_gpio(struct fwnode_handle *fwnode,
- 	return desc;
- }
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 8629e9eaf79e..010587025fc8 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -10,6 +10,7 @@ obj-$(CONFIG_OF_GPIO)		+= gpiolib-of.o
+ obj-$(CONFIG_GPIO_CDEV)		+= gpiolib-cdev.o
+ obj-$(CONFIG_GPIO_SYSFS)	+= gpiolib-sysfs.o
+ obj-$(CONFIG_GPIO_ACPI)		+= gpiolib-acpi.o
++obj-$(CONFIG_GPIOLIB)		+= gpiolib-swnode.o
  
--/**
-- * acpi_node_get_gpiod() - get a GPIO descriptor from ACPI resources
-- * @fwnode: pointer to an ACPI firmware node to get the GPIO information from
-- * @propname: Property name of the GPIO
-- * @index: index of GpioIo/GpioInt resource (starting from %0)
-- * @lflags: bitmask of gpio_lookup_flags GPIO_* values
-- * @dflags: gpiod initialization flags
-- *
-- * If @fwnode is an ACPI device object, call acpi_get_gpiod_by_index() for it.
-- * Otherwise (i.e. it is a data-only non-device object), use the property-based
-- * GPIO lookup to get to the GPIO resource with the relevant information and use
-- * that to obtain the GPIO descriptor to return.
-- *
-- * If the GPIO cannot be translated or there is an error an ERR_PTR is
-- * returned.
-- */
--struct gpio_desc *acpi_node_get_gpiod(struct fwnode_handle *fwnode,
--				      const char *propname, int index,
--				      unsigned long *lflags,
--				      enum gpiod_flags *dflags)
--{
--	struct acpi_gpio_info info;
--	struct acpi_device *adev;
--	struct gpio_desc *desc;
--
--	adev = to_acpi_device_node(fwnode);
--	if (adev)
--		desc = acpi_get_gpiod_by_index(adev, propname, index, &info);
--	else
--		desc = acpi_get_gpiod_from_data(fwnode, propname, index, &info);
--
--	if (!IS_ERR(desc)) {
--		acpi_gpio_update_gpiod_flags(dflags, &info);
--		acpi_gpio_update_gpiod_lookup_flags(lflags, &info);
--	}
--
--	return desc;
--}
--
- /**
-  * acpi_dev_gpio_irq_wake_get_by() - Find GpioInt and translate it to Linux IRQ number
-  * @adev: pointer to a ACPI device to get IRQ from
-diff --git a/drivers/gpio/gpiolib-acpi.h b/drivers/gpio/gpiolib-acpi.h
-index 8880615327ac..9475f99a9694 100644
---- a/drivers/gpio/gpiolib-acpi.h
-+++ b/drivers/gpio/gpiolib-acpi.h
-@@ -36,10 +36,6 @@ struct gpio_desc *acpi_find_gpio(struct fwnode_handle *fwnode,
- 				 unsigned int idx,
- 				 enum gpiod_flags *dflags,
- 				 unsigned long *lookupflags);
--struct gpio_desc *acpi_node_get_gpiod(struct fwnode_handle *fwnode,
--				      const char *propname, int index,
--				      unsigned long *lflags,
--				      enum gpiod_flags *dflags);
- 
- int acpi_gpio_count(struct device *dev, const char *con_id);
- #else
-@@ -61,12 +57,6 @@ acpi_find_gpio(struct fwnode_handle *fwnode, const char *con_id,
- {
- 	return ERR_PTR(-ENOENT);
- }
--static inline struct gpio_desc *
--acpi_node_get_gpiod(struct fwnode_handle *fwnode, const char *propname,
--		    int index, unsigned long *lflags, enum gpiod_flags *dflags)
--{
--	return ERR_PTR(-ENXIO);
--}
- static inline int acpi_gpio_count(struct device *dev, const char *con_id)
- {
- 	return -ENODEV;
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index f0a7a59ac630..c33ffdd47667 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -3801,58 +3801,89 @@ static int platform_gpio_count(struct device *dev, const char *con_id)
- 	return count;
- }
- 
--/**
-- * fwnode_get_named_gpiod - obtain a GPIO from firmware node
-- * @fwnode:	handle of the firmware node
-- * @propname:	name of the firmware property representing the GPIO
-- * @index:	index of the GPIO to obtain for the consumer
-- * @dflags:	GPIO initialization flags
-- * @label:	label to attach to the requested GPIO
-- *
-- * This function can be used for drivers that get their configuration
-- * from opaque firmware.
-- *
-- * The function properly finds the corresponding GPIO using whatever is the
-- * underlying firmware interface and then makes sure that the GPIO
-- * descriptor is requested before it is returned to the caller.
-- *
-- * Returns:
-- * On successful request the GPIO pin is configured in accordance with
-- * provided @dflags.
-- *
-- * In case of error an ERR_PTR() is returned.
-- */
--static struct gpio_desc *fwnode_get_named_gpiod(struct fwnode_handle *fwnode,
--						const char *propname, int index,
--						enum gpiod_flags dflags,
--						const char *label)
-+static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
-+					      struct device *consumer,
-+					      const char *con_id,
-+					      unsigned int idx,
-+					      enum gpiod_flags *flags,
-+					      unsigned long *lookupflags)
- {
--	unsigned long lflags = GPIO_LOOKUP_FLAGS_DEFAULT;
--	struct gpio_desc *desc = ERR_PTR(-ENODEV);
--	int ret;
-+	struct gpio_desc *desc;
- 
-+	dev_dbg(consumer, "GPIO lookup for consumer %s in node '%pfw'\n",
-+		con_id, fwnode);
+ # Device drivers. Generally keep list sorted alphabetically
+ obj-$(CONFIG_GPIO_REGMAP)	+= gpio-regmap.o
+diff --git a/drivers/gpio/gpiolib-swnode.c b/drivers/gpio/gpiolib-swnode.c
+new file mode 100644
+index 000000000000..4cf41234bfc6
+--- /dev/null
++++ b/drivers/gpio/gpiolib-swnode.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Software Node helpers for the GPIO API
++ *
++ * Copyright 2022 Google LLC
++ */
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/gpio/consumer.h>
++#include <linux/gpio/driver.h>
++#include <linux/kernel.h>
++#include <linux/printk.h>
++#include <linux/property.h>
++#include <linux/string.h>
 +
-+	/* Using device tree? */
- 	if (is_of_node(fwnode)) {
--		desc = gpiod_get_from_of_node(to_of_node(fwnode),
--					      propname, index,
--					      dflags,
--					      label);
--		return desc;
-+		dev_dbg(consumer, "using device tree for GPIO lookup\n");
-+		desc = of_find_gpio(to_of_node(fwnode),
-+				    con_id, idx, lookupflags);
- 	} else if (is_acpi_node(fwnode)) {
--		desc = acpi_node_get_gpiod(fwnode, propname, index,
--					   &lflags, &dflags);
--		if (IS_ERR(desc))
--			return desc;
-+		dev_dbg(consumer, "using ACPI for GPIO lookup\n");
-+		desc = acpi_find_gpio(fwnode, con_id, idx, flags, lookupflags);
- 	} else {
--		return ERR_PTR(-EINVAL);
-+		desc = ERR_PTR(-ENOENT);
- 	}
- 
--	/* Currently only ACPI takes this path */
++#include "gpiolib.h"
++#include "gpiolib-swnode.h"
++
++static void swnode_format_propname(const char *con_id, char *propname,
++				   size_t max_size)
++{
++	/*
++	 * Note we do not need to try both -gpios and -gpio suffixes,
++	 * as, unlike OF and ACPI, we can fix software nodes to conform
++	 * to the proper binding.
++	 */
++	if (con_id)
++		snprintf(propname, max_size, "%s-gpios", con_id);
++	else
++		strscpy(propname, "gpios", max_size);
++}
++
++static int swnode_gpiochip_match_name(struct gpio_chip *chip, void *data)
++{
++	return !strcmp(chip->label, data);
++}
++
++static struct gpio_chip *swnode_get_chip(struct fwnode_handle *fwnode)
++{
++	const struct software_node *chip_node;
++	struct gpio_chip *chip;
++
++	chip_node = to_software_node(fwnode);
++	if (!chip_node || !chip_node->name)
++		return ERR_PTR(-EINVAL);
++
++	chip = gpiochip_find((void *)chip_node->name,
++			     swnode_gpiochip_match_name);
++	if (!chip)
++		return ERR_PTR(-EPROBE_DEFER);
++
++	return chip;
++}
++
++struct gpio_desc *swnode_find_gpio(struct fwnode_handle *fwnode,
++				   const char *con_id, unsigned int idx,
++				   unsigned long *flags)
++{
++	const struct software_node *swnode;
++	struct fwnode_reference_args args;
++	struct gpio_chip *chip;
++	struct gpio_desc *desc;
++	char propname[32]; /* 32 is max size of property name */
++	int error;
++
++	swnode = to_software_node(fwnode);
++	if (!swnode)
++		return ERR_PTR(-EINVAL);
++
++	swnode_format_propname(con_id, propname, sizeof(propname));
++
++	/*
++	 * We expect all swnode-described GPIOs have GPIO number and
++	 * polarity arguments, hence nargs is set to 2.
++	 */
++	error = fwnode_property_get_reference_args(fwnode, propname, NULL,
++						   2, idx, &args);
++	if (error) {
++		pr_debug("%s: can't parse '%s' property of node '%pfwP[%d]'\n",
++			__func__, propname, fwnode, idx);
++		return ERR_PTR(error);
++	}
++
++	chip = swnode_get_chip(args.fwnode);
++	fwnode_handle_put(args.fwnode);
++	if (IS_ERR(chip))
++		return ERR_CAST(chip);
++
++	desc = gpiochip_get_desc(chip, args.args[0]);
++	*flags = args.args[1]; /* We expect native GPIO flags */
++
++	pr_debug("%s: parsed '%s' property of node '%pfwP[%d]' - status (%d)\n",
++		 __func__, propname, fwnode, idx, PTR_ERR_OR_ZERO(desc));
++
 +	return desc;
 +}
 +
-+static struct gpio_desc *gpiod_find_and_request(struct device *consumer,
-+						struct fwnode_handle *fwnode,
-+						const char *con_id,
-+						unsigned int idx,
-+						enum gpiod_flags flags,
-+						const char *label,
-+						bool platform_lookup_allowed)
++/**
++ * swnode_gpio_count - count the GPIOs associated with a device / function
++ * @fwnode:	firmware node of the GPIO consumer, can be %NULL for
++ *		system-global GPIOs
++ * @con_id:	function within the GPIO consumer
++ *
++ * Return:
++ * The number of GPIOs associated with a device / function or %-ENOENT,
++ * if no GPIO has been assigned to the requested function.
++ */
++int swnode_gpio_count(struct fwnode_handle *fwnode, const char *con_id)
 +{
-+	struct gpio_desc *desc = ERR_PTR(-ENOENT);
-+	unsigned long lookupflags;
-+	int ret;
++	struct fwnode_reference_args args;
++	char propname[32];
++	int count;
 +
-+	if (!IS_ERR_OR_NULL(fwnode))
-+		desc = gpiod_find_by_fwnode(fwnode, consumer, con_id, idx,
-+					    &flags, &lookupflags);
-+
-+	if (gpiod_not_found(desc) && platform_lookup_allowed) {
-+		/*
-+		 * Either we are not using DT or ACPI, or their lookup did not
-+		 * return a result. In that case, use platform lookup as a
-+		 * fallback.
-+		 */
-+		dev_dbg(consumer, "using lookup tables for GPIO lookup\n");
-+		desc = gpiod_find(consumer, con_id, idx, &lookupflags);
-+	}
-+
-+	if (IS_ERR(desc)) {
-+		dev_dbg(consumer, "No GPIO consumer %s found\n", con_id);
-+		return desc;
-+	}
++	swnode_format_propname(con_id, propname, sizeof(propname));
 +
 +	/*
-+	 * If a connection label was passed use that, else attempt to use
-+	 * the device name as label
++	 * This is not very efficient, but GPIO lists usually have only
++	 * 1 or 2 entries.
 +	 */
- 	ret = gpiod_request(desc, label);
--	if (ret)
--		return ERR_PTR(ret);
-+	if (ret) {
-+		if (!(ret == -EBUSY && flags & GPIOD_FLAGS_BIT_NONEXCLUSIVE))
-+			return ERR_PTR(ret);
-+
-+		/*
-+		 * This happens when there are several consumers for
-+		 * the same GPIO line: we just return here without
-+		 * further initialization. It is a bit of a hack.
-+		 * This is necessary to support fixed regulators.
-+		 *
-+		 * FIXME: Make this more sane and safe.
-+		 */
-+		dev_info(consumer,
-+			 "nonexclusive access to GPIO for %s\n", con_id);
-+		return desc;
++	count = 0;
++	while (fwnode_property_get_reference_args(fwnode, propname, NULL,
++						  0, count, &args) == 0) {
++		fwnode_handle_put(args.fwnode);
++		count++;
 +	}
++
++	return count ?: -ENOENT;
++}
+diff --git a/drivers/gpio/gpiolib-swnode.h b/drivers/gpio/gpiolib-swnode.h
+new file mode 100644
+index 000000000000..4e07be56ed9f
+--- /dev/null
++++ b/drivers/gpio/gpiolib-swnode.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef GPIOLIB_SWNODE_H
++#define GPIOLIB_SWNODE_H
++
++struct fwnode_handle;
++struct gpio_desc;
++
++struct gpio_desc *swnode_find_gpio(struct fwnode_handle *fwnode,
++				   const char *con_id, unsigned int idx,
++				   unsigned long *flags);
++int swnode_gpio_count(struct fwnode_handle *fwnode, const char *con_id);
++
++#endif /* GPIOLIB_SWNODE_H */
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index c33ffdd47667..bf5c072206da 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -26,6 +26,7 @@
+ #include "gpiolib.h"
+ #include "gpiolib-of.h"
+ #include "gpiolib-acpi.h"
++#include "gpiolib-swnode.h"
+ #include "gpiolib-cdev.h"
+ #include "gpiolib-sysfs.h"
  
--	ret = gpiod_configure_flags(desc, propname, lflags, dflags);
-+	ret = gpiod_configure_flags(desc, con_id, lookupflags, flags);
- 	if (ret < 0) {
-+		dev_dbg(consumer, "setup of GPIO %s failed\n", con_id);
- 		gpiod_put(desc);
- 		return ERR_PTR(ret);
+@@ -3821,6 +3822,9 @@ static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
+ 	} else if (is_acpi_node(fwnode)) {
+ 		dev_dbg(consumer, "using ACPI for GPIO lookup\n");
+ 		desc = acpi_find_gpio(fwnode, con_id, idx, flags, lookupflags);
++	} else if (is_software_node(fwnode)) {
++		dev_dbg(consumer, "using software node for GPIO lookup\n");
++		desc = swnode_find_gpio(fwnode, con_id, idx, lookupflags);
+ 	} else {
+ 		desc = ERR_PTR(-ENOENT);
  	}
-@@ -3885,29 +3916,13 @@ static struct gpio_desc *fwnode_get_named_gpiod(struct fwnode_handle *fwnode,
-  * In case of error an ERR_PTR() is returned.
+@@ -3934,13 +3938,17 @@ EXPORT_SYMBOL_GPL(fwnode_gpiod_get_index);
   */
- struct gpio_desc *fwnode_gpiod_get_index(struct fwnode_handle *fwnode,
--					 const char *con_id, int index,
-+					 const char *con_id,
-+					 int index,
- 					 enum gpiod_flags flags,
- 					 const char *label)
+ int gpiod_count(struct device *dev, const char *con_id)
  {
--	struct gpio_desc *desc;
--	char prop_name[32]; /* 32 is max size of property name */
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(gpio_suffixes); i++) {
--		if (con_id)
--			snprintf(prop_name, sizeof(prop_name), "%s-%s",
--					    con_id, gpio_suffixes[i]);
--		else
--			snprintf(prop_name, sizeof(prop_name), "%s",
--					    gpio_suffixes[i]);
--
--		desc = fwnode_get_named_gpiod(fwnode, prop_name, index, flags,
--					      label);
--		if (!gpiod_not_found(desc))
--			break;
--	}
--
--	return desc;
-+	return gpiod_find_and_request(NULL, fwnode, con_id, index, flags, label,
-+				      false);
- }
- EXPORT_SYMBOL_GPL(fwnode_gpiod_get_index);
+-	const struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
+-	int count = -ENOENT;
++	struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
++	int count;
  
-@@ -4061,72 +4076,12 @@ struct gpio_desc *__must_check gpiod_get_index(struct device *dev,
- 					       unsigned int idx,
- 					       enum gpiod_flags flags)
- {
--	unsigned long lookupflags = GPIO_LOOKUP_FLAGS_DEFAULT;
--	struct gpio_desc *desc = NULL;
--	int ret;
--	/* Maybe we have a device name, maybe not */
--	const char *devname = dev ? dev_name(dev) : "?";
- 	struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
-+	const char *devname = dev ? dev_name(dev) : "?";
-+	const char *label = con_id ?: devname;
+ 	if (is_of_node(fwnode))
+ 		count = of_gpio_get_count(dev, con_id);
+ 	else if (is_acpi_node(fwnode))
+ 		count = acpi_gpio_count(dev, con_id);
++	else if (is_software_node(fwnode))
++		count = swnode_gpio_count(fwnode, con_id);
++	else
++		count = -ENOENT;
  
--	dev_dbg(dev, "GPIO lookup for consumer %s\n", con_id);
--
--	/* Using device tree? */
--	if (is_of_node(fwnode)) {
--		dev_dbg(dev, "using device tree for GPIO lookup\n");
--		desc = of_find_gpio(to_of_node(fwnode),
--				    con_id, idx, &lookupflags);
--	} else if (is_acpi_node(fwnode)) {
--		dev_dbg(dev, "using ACPI for GPIO lookup\n");
--		desc = acpi_find_gpio(fwnode,
--				      con_id, idx, &flags, &lookupflags);
--	}
--
--	/*
--	 * Either we are not using DT or ACPI, or their lookup did not return
--	 * a result. In that case, use platform lookup as a fallback.
--	 */
--	if (!desc || gpiod_not_found(desc)) {
--		dev_dbg(dev, "using lookup tables for GPIO lookup\n");
--		desc = gpiod_find(dev, con_id, idx, &lookupflags);
--	}
--
--	if (IS_ERR(desc)) {
--		dev_dbg(dev, "No GPIO consumer %s found\n", con_id);
--		return desc;
--	}
--
--	/*
--	 * If a connection label was passed use that, else attempt to use
--	 * the device name as label
--	 */
--	ret = gpiod_request(desc, con_id ?: devname);
--	if (ret) {
--		if (!(ret == -EBUSY && flags & GPIOD_FLAGS_BIT_NONEXCLUSIVE))
--			return ERR_PTR(ret);
--
--		/*
--		 * This happens when there are several consumers for
--		 * the same GPIO line: we just return here without
--		 * further initialization. It is a bit of a hack.
--		 * This is necessary to support fixed regulators.
--		 *
--		 * FIXME: Make this more sane and safe.
--		 */
--		dev_info(dev, "nonexclusive access to GPIO for %s\n", con_id ?: devname);
--		return desc;
--	}
--
--	ret = gpiod_configure_flags(desc, con_id, lookupflags, flags);
--	if (ret < 0) {
--		dev_dbg(dev, "setup of GPIO %s failed\n", con_id);
--		gpiod_put(desc);
--		return ERR_PTR(ret);
--	}
--
--	blocking_notifier_call_chain(&desc->gdev->notifier,
--				     GPIOLINE_CHANGED_REQUESTED, desc);
--
--	return desc;
-+	return gpiod_find_and_request(dev, fwnode, con_id, idx, flags, label,
-+				      true);
- }
- EXPORT_SYMBOL_GPL(gpiod_get_index);
- 
+ 	if (count < 0)
+ 		count = platform_gpio_count(dev, con_id);
+diff --git a/include/linux/gpio/property.h b/include/linux/gpio/property.h
+new file mode 100644
+index 000000000000..f76a46469f66
+--- /dev/null
++++ b/include/linux/gpio/property.h
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: GPL-2.0+
++#ifndef __LINUX_GPIO_PROPERTY_H
++#define __LINUX_GPIO_PROPERTY_H
++
++#include <dt-bindings/gpio/gpio.h>
++#include <linux/property.h>
++
++#define PROPERTY_ENTRY_GPIO(_name_, _chip_node_, _idx_, _flags_) \
++	PROPERTY_ENTRY_REF(_name_, _chip_node_, _idx_, _flags_)
++
++#endif /* __LINUX_GPIO_PROPERTY_H */
 
 -- 
 b4 0.11.0-dev-28747
