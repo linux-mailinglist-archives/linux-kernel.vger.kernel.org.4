@@ -2,196 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52790622924
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0919B62291E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiKIKxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S230324AbiKIKxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiKIKwq (ORCPT
+        with ESMTP id S231178AbiKIKwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:52:46 -0500
-Received: from mail-m971.mail.163.com (mail-m971.mail.163.com [123.126.97.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7ED511E9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:52:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=rXKfF
-        JwhiWEACYFD7KDlgTShbALI2EcokSoJnIEUMZI=; b=XpWD/1YO6ES6tTA0bx+zs
-        J3sNlQ/0L9a9oc3jBG7laU7CIkK1R4/4YT8oZp/+xjxr/ietppOdrPUf/8ARrlQf
-        LsMqfx9zbTswoco6OCp9nGMlE2506OfVolJHMywQW0ym4XrSxmwxt0/7GBgbph5N
-        n6gSxbxE3Pom1vDoPi8X/w=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp1 (Coremail) with SMTP id GdxpCgAXGzdQhmtjWuk1qw--.34727S2;
-        Wed, 09 Nov 2022 18:52:01 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
-        lkp@intel.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v8] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Wed,  9 Nov 2022 18:51:58 +0800
-Message-Id: <20221109105158.230081-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Nov 2022 05:52:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA4013F46
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:52:25 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7e8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4F81B1EC03B9;
+        Wed,  9 Nov 2022 11:52:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667991144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=OHEQD9knIsVX43ZDdRle56rw0hgWVR+NJHFg2Jb5tb8=;
+        b=oUloTHgSK3OhV2iuftrVhbpGpyz9ZaaPKf385+TpclWvQgO+n3k0eFV0I6n5s1yDl8IlPk
+        UiJz6lZs+cyf6CGt15iSse3d2ncU1qPh7HDZwHXPFClo7TcCnJEKSB4riEizwkjdalSems
+        NEZTTjcVZ/l1Z2aIk8eEZ5KfyY0KlMU=
+Date:   Wed, 9 Nov 2022 11:52:20 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: AMD uncore kmemleak
+Message-ID: <Y2uGZL1ou+JGu2mh@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GdxpCgAXGzdQhmtjWuk1qw--.34727S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKF4rXFyfAF4rAFb_yoWrtw4Upa
-        1jg3409rW3JF4a9F47ta1kXFW3Ca48JFW5Gr9rt34rur4rAF45GryDtas0qr4DZrW0qa1a
-        yr4rtF9I93Z0ga7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziM5l8UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQhG0U1aEDd-XlwAAs0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gts may be freed in gru_check_chiplet_assignment.
-The caller still use it after that, UAF happens.
+Hey,
 
-Fix it by introducing a return value to see if it's in error path or not.
-Free the gts in caller if gru_check_chiplet_assignment check failed.
+Peter said you liked this stuff so here it is. :-)
 
-Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Acked-by: Dimitri Sivanich <sivanich@hpe.com>
----
-v8:
-- remove tested-by tag suggested by Greg
+On one of my test boxes (Carrizo laptop - that's an Excavator core) I
+see the below. It happens with 6.1-rc1.
 
-v7:
-- fix some spelling problems suggested by Greg, change kernel test robot from reported-by tag to tested-by tag
+I booted latest -rc4 + tip/master and it is gone so something has
+changed in the meantime or this particular version doesn't fire...
 
-v6:
-- remove unused var checked by kernel test robot
+Anyway, we thought you should know in case you want to dig deeper.
 
-v5:
-- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+Thx.
 
-v4:
-- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+cat /sys/kernel/debug/kmemleak
+unreferenced object 0xffff888101a3d3a0 (size 32):
+  comm "swapper/0", pid 1, jiffies 4294892455 (age 294.968s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000002f5fe849>] __kmalloc_node+0x5f/0x180
+    [<00000000066a1fb1>] amd_uncore_cpu_up_prepare+0xc7/0x240
+    [<000000005fa7fab5>] cpuhp_invoke_callback+0xf8/0x460
+    [<00000000d4b0952e>] cpuhp_issue_call+0x118/0x190
+    [<000000008cb1592a>] __cpuhp_setup_state_cpuslocked+0xee/0x2a0
+    [<0000000007534fa6>] __cpuhp_setup_state+0x76/0x100
+    [<00000000d8277f50>] amd_uncore_init+0x275/0x336
+    [<000000004af336cd>] do_one_initcall+0x44/0x200
+    [<0000000040cb5caf>] kernel_init_freeable+0x198/0x1e4
+    [<000000008b0e9fae>] kernel_init+0x16/0x120
+    [<00000000459bcaeb>] ret_from_fork+0x22/0x30
+unreferenced object 0xffff888101a3d240 (size 32):
+  comm "swapper/0", pid 1, jiffies 4294892455 (age 294.968s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000002f5fe849>] __kmalloc_node+0x5f/0x180
+    [<00000000066a1fb1>] amd_uncore_cpu_up_prepare+0xc7/0x240
+    [<000000005fa7fab5>] cpuhp_invoke_callback+0xf8/0x460
+    [<00000000d4b0952e>] cpuhp_issue_call+0x118/0x190
+    [<000000008cb1592a>] __cpuhp_setup_state_cpuslocked+0xee/0x2a0
+    [<0000000007534fa6>] __cpuhp_setup_state+0x76/0x100
+    [<00000000d8277f50>] amd_uncore_init+0x275/0x336
+    [<000000004af336cd>] do_one_initcall+0x44/0x200
+    [<0000000040cb5caf>] kernel_init_freeable+0x198/0x1e4
+    [<000000008b0e9fae>] kernel_init+0x16/0x120
+    [<00000000459bcaeb>] ret_from_fork+0x22/0x30
+unreferenced object 0xffff888101a3d4a0 (size 32):
+  comm "swapper/0", pid 1, jiffies 4294892455 (age 294.968s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000002f5fe849>] __kmalloc_node+0x5f/0x180
+    [<00000000066a1fb1>] amd_uncore_cpu_up_prepare+0xc7/0x240
+    [<000000005fa7fab5>] cpuhp_invoke_callback+0xf8/0x460
+    [<00000000d4b0952e>] cpuhp_issue_call+0x118/0x190
+    [<000000008cb1592a>] __cpuhp_setup_state_cpuslocked+0xee/0x2a0
+    [<0000000007534fa6>] __cpuhp_setup_state+0x76/0x100
+    [<00000000d8277f50>] amd_uncore_init+0x275/0x336
+    [<000000004af336cd>] do_one_initcall+0x44/0x200
+    [<0000000040cb5caf>] kernel_init_freeable+0x198/0x1e4
+    [<000000008b0e9fae>] kernel_init+0x16/0x120
+    [<00000000459bcaeb>] ret_from_fork+0x22/0x30
 
-v3:
-- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
-
-v2:
-- commit message changes suggested by Greg
-
-v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
----
- drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
- drivers/misc/sgi-gru/grumain.c   | 16 ++++++++++++----
- drivers/misc/sgi-gru/grutables.h |  2 +-
- 3 files changed, 25 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-index d7ef61e602ed..bdd515d33225 100644
---- a/drivers/misc/sgi-gru/grufault.c
-+++ b/drivers/misc/sgi-gru/grufault.c
-@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
- 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
- 		goto exit;
- 
--	gru_check_context_placement(gts);
-+	ret = gru_check_context_placement(gts);
-+	if (ret)
-+		goto err;
- 
- 	/*
- 	 * CCH may contain stale data if ts_force_cch_reload is set.
-@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
- exit:
- 	gru_unlock_gts(gts);
- 	return ret;
-+err:
-+	gru_unlock_gts(gts);
-+	gru_unload_context(gts, 1);
-+	return -EINVAL;
- }
- 
- /*
-@@ -874,7 +880,11 @@ int gru_set_context_option(unsigned long arg)
- 		} else {
- 			gts->ts_user_blade_id = req.val1;
- 			gts->ts_user_chiplet_id = req.val0;
--			gru_check_context_placement(gts);
-+			if (gru_check_context_placement(gts)) {
-+				gru_unlock_gts(gts);
-+				gru_unload_context(gts, 1);
-+				return -EINVAL;
-+			}
- 		}
- 		break;
- 	case sco_gseg_owner:
-diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-index 9afda47efbf2..beba69fc3cd7 100644
---- a/drivers/misc/sgi-gru/grumain.c
-+++ b/drivers/misc/sgi-gru/grumain.c
-@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
-  * chiplet. Misassignment can occur if the process migrates to a different
-  * blade or if the user changes the selected blade/chiplet.
-  */
--void gru_check_context_placement(struct gru_thread_state *gts)
-+int gru_check_context_placement(struct gru_thread_state *gts)
- {
- 	struct gru_state *gru;
-+	int ret = 0;
- 
- 	/*
- 	 * If the current task is the context owner, verify that the
-@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
- 	 */
- 	gru = gts->ts_gru;
- 	if (!gru || gts->ts_tgid_owner != current->tgid)
--		return;
-+		return ret;
- 
- 	if (!gru_check_chiplet_assignment(gru, gts)) {
- 		STAT(check_context_unload);
--		gru_unload_context(gts, 1);
-+		ret = -EINVAL;
- 	} else if (gru_retarget_intr(gts)) {
- 		STAT(check_context_retarget_intr);
- 	}
-+
-+	return ret;
- }
- 
- 
-@@ -934,7 +937,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	mutex_lock(&gts->ts_ctxlock);
- 	preempt_disable();
- 
--	gru_check_context_placement(gts);
-+	if (gru_check_context_placement(gts)) {
-+		preempt_enable();
-+		mutex_unlock(&gts->ts_ctxlock);
-+		gru_unload_context(gts, 1);
-+		return VM_FAULT_NOPAGE;
-+	}
- 
- 	if (!gts->ts_gru) {
- 		STAT(load_user_context);
-diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-index 5efc869fe59a..f4a5a787685f 100644
---- a/drivers/misc/sgi-gru/grutables.h
-+++ b/drivers/misc/sgi-gru/grutables.h
-@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
- extern int gru_user_unload_context(unsigned long arg);
- extern int gru_get_exception_detail(unsigned long arg);
- extern int gru_set_context_option(unsigned long address);
--extern void gru_check_context_placement(struct gru_thread_state *gts);
-+extern int gru_check_context_placement(struct gru_thread_state *gts);
- extern int gru_cpu_fault_map_id(void);
- extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
- extern void gru_flush_all_tlb(struct gru_state *gru);
 -- 
-2.25.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
