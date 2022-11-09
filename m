@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5516232EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325546232EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiKISti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S229947AbiKIStu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiKIStf (ORCPT
+        with ESMTP id S230094AbiKIStq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:49:35 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C981C13FAF
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:49:34 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id u3-20020a056a00124300b0056d4ab0c7cbso9202350pfi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:49:34 -0800 (PST)
+        Wed, 9 Nov 2022 13:49:46 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C855614099
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:49:42 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-367f94b9b16so170176617b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:49:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rOWTS1f0segyhlSbmQWDTAnD8D0Og1YhYgrPvc18rTU=;
-        b=h8+HoLUbYhCjId0Y+B244sJvGF1KwrxdyFZTx69OSLbRfEnws6kzRpSaCdTIRDjYnp
-         4Piy3y3cJ7wY6F4MjoLW/ZrCko/VItNGisyhAiDlUOLT6Loa+OB7OMvNK9kP6TthCM4+
-         81YfXJYk7kVGXTg/7LoouhUv0QE89yJpr3qltAyaS9g2UORODNXSwHeaBLJD6KwtXbHj
-         7VEBC7nKz4YtZ4+Dai53TP4wIm937JBC0Hbt0aX56Ivx4y1O/N0s5HAk84haphososiM
-         qW8Q7Qj7rkQM7veSWJ/SBAMl+aq+9hLOofy3340Ga92XUKXsL+EXRoDfTTJ99cgyyti3
-         ZBZw==
+        bh=05tcS3sAQNNzElcGvhYcBZhblO5ft3NSeZEHHXzfROg=;
+        b=FrfJDilUGgqEU/9xZ+Sx8LJdZL5uNGHCI2s8HC7ZCFe709f+PQu2+EUpf7+hVKuye/
+         c8mNJ8oEOMdgrGrCmMK7Yogk0cFIeax8K4SVFScGSYN+5uM/gxzjJWykyEv7IO1Erb7G
+         oY3CkH1dU1SBAxSogNxpJq8MaD/fREJrv4LGWTr2fOVfIUCmu7Aidpvfj0Yt453x+n1P
+         60wOo9fn3505b90GaT6vLmhfwGihiU03pR6pNi1Hw63c9YQ5QjPZYPPKflBa0yqm8g7l
+         bSk2VA9zIDYZwCREZCRpMLDsYX15xZXt72ROcOSt3pNfspfwAePUifyKmJDtl/TXimBc
+         vJDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rOWTS1f0segyhlSbmQWDTAnD8D0Og1YhYgrPvc18rTU=;
-        b=tv4/0xPZV5/ScoR2UYgZmUAGLPha8l0rdavVYZjIv60kSLIVxImCNsB7M60rytAjCp
-         79oETOMeKKIUXmHWfsyhYnKnlP2zutsMg0dTyfDQDk9yNcz9D7tX65c/x9PalaPnZQyJ
-         vzGTxoGlXcNbpkC1T0GLNsKSWwMZVIlxAwWv4sI4/dAu7HsWU2XGFnb/Yj4x6A2LXjhh
-         Jr0z68gOkcU3c5ptTSKaERQvZfI3yfRo9yPlJPtwasm7I43+YW0boEiEn8gkSaZ2vsBg
-         2Dz8t1F+4zjhKCgTwnYaRaDql1cvjEkz9NiqfZALtMJJrpfVAQCLHrZJpuY+5UcBxxZ4
-         JrHA==
-X-Gm-Message-State: ACrzQf18c+MFsKpWh9uBSUbcgMrAnQuNuVt8Gv/35KITVB9C7Or279+J
-        jULYTGCXJEW1G4jl73FMYc+brqaG5yWw
-X-Google-Smtp-Source: AMsMyM5xbUA/rskJrvjee/Gig9EwkjMLwfHK7DAHXLoRP2Wt7Pd/WfJSt74tu+vCa0w33TdxjKA8n5JVmqVt
+        bh=05tcS3sAQNNzElcGvhYcBZhblO5ft3NSeZEHHXzfROg=;
+        b=iGoyglUVQRosS7l2OAeQSeBH1Go50HIvJBn6W65ia7kYRTrhsmI5qfR0Y8+Yeo6fZf
+         44vHcFkiybasaN6T4DmU51w6LlYgbetBudE6WlRUxys700hLtd/NF0KZ5HteSMa08Hpn
+         NertGiyUQWyylx1/4VpdMOWc/05NplBbDlTPFaQyfWmqvVUrzBljfRItjwrgDVcd9aYj
+         LiZqy3voOAEMUoxCD5bLKt/DbLZZDyy9cnSWwR9Ap/0p1xtyJWYf6vi9PKT4iCS2hOa3
+         y0VV2XIxmpDzhUvt9UU4n+EtCIM8Nf8yU2yeyi6NOBXQTKjCEFTLUefmpnMGF6X7eL/M
+         9Tuw==
+X-Gm-Message-State: ACrzQf1hRI/HI6/gETwh7XBAu4DhrHHmeT8ytdPEf7tRO2nTfK3vd2c5
+        9kfLRzBXVUL3Ftsoghw6t9aCtnA/rzVt
+X-Google-Smtp-Source: AMsMyM4LuD0xOiXFa9VTn835MwJvnx4tty3fk6NsDMzkkxI/Oa7orJu46gG+n077o2x4ODuIFKZ5ACHUDA0U
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b06f:a254:5ce9:c442])
- (user=irogers job=sendgmr) by 2002:a17:902:9692:b0:186:6180:fb89 with SMTP id
- n18-20020a170902969200b001866180fb89mr1199782plp.142.1668019774263; Wed, 09
- Nov 2022 10:49:34 -0800 (PST)
-Date:   Wed,  9 Nov 2022 10:49:01 -0800
+ (user=irogers job=sendgmr) by 2002:a25:ab33:0:b0:6be:a6ab:6955 with SMTP id
+ u48-20020a25ab33000000b006bea6ab6955mr1110559ybi.230.1668019782047; Wed, 09
+ Nov 2022 10:49:42 -0800 (PST)
+Date:   Wed,  9 Nov 2022 10:49:02 -0800
 In-Reply-To: <20221109184914.1357295-1-irogers@google.com>
-Message-Id: <20221109184914.1357295-2-irogers@google.com>
+Message-Id: <20221109184914.1357295-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20221109184914.1357295-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v2 01/14] tools lib api: Add install target
+Subject: [PATCH v2 02/14] tools lib subcmd: Add install target
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -71,7 +71,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,23 +79,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows libapi to be installed as a dependency.
+This allows libsubcmd to be installed as a dependency.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/api/Makefile | 49 ++++++++++++++++++++++++++++++++++++++++++
+ tools/lib/subcmd/Makefile | 49 +++++++++++++++++++++++++++++++++++++++
  1 file changed, 49 insertions(+)
 
-diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
-index e21e1b40b525..6629d0fd0130 100644
---- a/tools/lib/api/Makefile
-+++ b/tools/lib/api/Makefile
-@@ -15,6 +15,16 @@ LD ?= $(CROSS_COMPILE)ld
+diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+index 8f1a09cdfd17..e96566f8991c 100644
+--- a/tools/lib/subcmd/Makefile
++++ b/tools/lib/subcmd/Makefile
+@@ -17,6 +17,15 @@ RM = rm -f
  
  MAKEFLAGS += --no-print-directory
  
 +INSTALL = install
-+
 +
 +# Use DESTDIR for installing into a different root directory.
 +# This is useful for building a package. The program will be
@@ -104,12 +103,12 @@ index e21e1b40b525..6629d0fd0130 100644
 +DESTDIR ?=
 +DESTDIR_SQ = '$(subst ','\'',$(DESTDIR))'
 +
- LIBFILE = $(OUTPUT)libapi.a
+ LIBFILE = $(OUTPUT)libsubcmd.a
  
- CFLAGS := $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
-@@ -45,10 +55,23 @@ RM = rm -f
+ CFLAGS := -ggdb3 -Wall -Wextra -std=gnu99 -fPIC
+@@ -48,6 +57,18 @@ CFLAGS += $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
  
- API_IN := $(OUTPUT)libapi-in.o
+ SUBCMD_IN := $(OUTPUT)libsubcmd-in.o
  
 +ifeq ($(LP64), 1)
 +  libdir_relative = lib64
@@ -126,14 +125,9 @@ index e21e1b40b525..6629d0fd0130 100644
  all:
  
  export srctree OUTPUT CC LD CFLAGS V
- include $(srctree)/tools/build/Makefile.include
-+include $(srctree)/tools/scripts/Makefile.include
- 
- all: fixdep $(LIBFILE)
- 
-@@ -58,6 +81,32 @@ $(API_IN): FORCE
- $(LIBFILE): $(API_IN)
- 	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $(API_IN)
+@@ -61,6 +82,34 @@ $(SUBCMD_IN): FORCE
+ $(LIBFILE): $(SUBCMD_IN)
+ 	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $(SUBCMD_IN)
  
 +define do_install_mkdir
 +	if [ ! -d '$(DESTDIR_SQ)$1' ]; then             \
@@ -155,14 +149,16 @@ index e21e1b40b525..6629d0fd0130 100644
 +
 +install_headers:
 +	$(call QUIET_INSTALL, headers) \
-+		$(call do_install,cpu.h,$(prefix)/include/api,644); \
-+		$(call do_install,debug.h,$(prefix)/include/api,644); \
-+		$(call do_install,io.h,$(prefix)/include/api,644);
++		$(call do_install,exec-cmd.h,$(prefix)/include/subcmd,644); \
++		$(call do_install,help.h,$(prefix)/include/subcmd,644); \
++		$(call do_install,pager.h,$(prefix)/include/subcmd,644); \
++		$(call do_install,parse-options.h,$(prefix)/include/subcmd,644); \
++		$(call do_install,run-command.h,$(prefix)/include/subcmd,644);
 +
 +install: install_lib install_headers
 +
  clean:
- 	$(call QUIET_CLEAN, libapi) $(RM) $(LIBFILE); \
+ 	$(call QUIET_CLEAN, libsubcmd) $(RM) $(LIBFILE); \
  	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
 -- 
 2.38.1.431.g37b22c650d-goog
