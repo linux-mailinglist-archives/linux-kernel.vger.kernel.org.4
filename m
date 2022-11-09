@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC08622096
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 01:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6E26220A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 01:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiKIAE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 19:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
+        id S229552AbiKIAQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 19:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiKIAEz (ORCPT
+        with ESMTP id S229453AbiKIAQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 19:04:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFD75EFBF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 16:04:54 -0800 (PST)
+        Tue, 8 Nov 2022 19:16:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D18461751
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 16:16:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37E78617E7
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:04:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C6BC433C1;
-        Wed,  9 Nov 2022 00:04:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6BC5616F1
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF77C433D6;
+        Wed,  9 Nov 2022 00:16:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667952293;
-        bh=q6xWKkEfyPavV0D6lBApe8O7RpHUwHY2qmgNGpjeGok=;
+        s=k20201202; t=1667953000;
+        bh=k6rIgcDbcoDJIq3EZLWAhM+cWpUtGnxgL4bipmDPg84=;
         h=From:To:Cc:Subject:Date:From;
-        b=MNBKSJZ1GVZ+AEDsNWUzAZOtiCepw859zd6bUVt+w6aHfUkpT2qt3h7g3eGpMqSQ/
-         BtuSSaQDoFfkhnsqkXozmAoFKiFubILgXRNQsb4NcXMnZGToKaAS/ZGl5HOkkqfxlX
-         5MlF0V9s0jFWcsZaDT8qyxiq6ij+h2dl8v3bp2Ty8foRXYEyxXRP56m75eJsvJqF2a
-         uFL1+AvSTPbhWIPGdZBJEITmEWUFionWfBDKGPsVpFfEBRU6AfbLjDtSDPAMN4pRYX
-         0odwF9WhIDe8fKxwlMCkdkH5ZBwxQ8MDwFIh4P9NkycLmGlzpQsDNL53G5sLq+JxM7
-         3vxTlGMR/vlwQ==
+        b=nBRaKyid9YJHdSRpVRPiKJB1X2djFFHf1FwKmGhDdtx3oyOSmXoZgtee8iyHzhWJE
+         8Zof+FrAtl/JLA1JUbb3GWxdaCcS+RMFTYGIwmASTw54XyRRXpZIxq+HJttXQVKgYq
+         ZQeYOB1BTzC/0shjVZMXMAsleg0HxuoxMZDg+txLbP31IPvsTQwFWk9c2uYUXm2U5Y
+         Q7YdeW6yis4kROVm7h5gCxiQ90/fdvo/Egmu25OSSCBuPZcP4L1rNDYg5YLUda1plK
+         p+ZXy7pQ3vN/th/TXNdSOfZeVWVGjgJ578G01uIIVOBXi71d+JYaLBgAZ1Bt7eeb7X
+         AoXhCkL19X2jA==
 From:   Nathan Chancellor <nathan@kernel.org>
-To:     Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] x86/vdso: Conditionally export __vdso_sgx_enter_enclave
-Date:   Tue,  8 Nov 2022 17:03:07 -0700
-Message-Id: <20221109000306.1407357-1-nathan@kernel.org>
+To:     Hyun Kwon <hyun.kwon@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Nathan Huckleberry <nhuck@google.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2] drm: xlnx: Fix return type of zynqmp_dp_bridge_mode_valid
+Date:   Tue,  8 Nov 2022 17:14:25 -0700
+Message-Id: <20221109001424.1422495-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,45 +59,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently, ld.lld moved from '--undefined-version' to
-'--no-undefined-version' as the default, which breaks building the vDSO
-when CONFIG_X86_SGX is not set:
+From: Nathan Huckleberry <nhuck@google.com>
 
-  ld.lld: error: version script assignment of 'LINUX_2.6' to symbol '__vdso_sgx_enter_enclave' failed: symbol not defined
+The mode_valid field in drm_bridge_helper_funcs is expected to be of
+type
+enum drm_mode_status (* mode_valid) (struct drm_bridge *bridge,
+                                     struct drm_display_mode *mode);
 
-__vdso_sgx_enter_enclave is only included in the vDSO when
-CONFIG_X86_SGX is set. Only export it if it will be present in the final
-object, which clears up the error.
+The mismatched return type breaks forward edge kCFI since the underlying
+function definition does not match the function hook definition. A new
+warning in clang will catch this at compile time:
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1756
+  drivers/gpu/drm/xlnx/zynqmp_dp.c:1573:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .mode_valid = zynqmp_dp_bridge_mode_valid,
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
+
+The return type of zynqmp_dp_bridge_mode_valid should be changed from
+int to enum drm_mode_status.
+
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+[nathan: Rebase on drm-misc-next and fix conflicts
+         Add note about new clang warning]
 Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
 
-It would be nice if this could be picked up for an -rc release but I
-won't argue otherwise.
+Please consider picking this up so that it makes 6.2.
 
-Alternatively, we could add '--undefined-version' to the vDSO ldflags
-but this does not seem unreasonable to me.
+v2:
+  - Take over for Nathan, as he is busy with other matters.
+  - Rebase on drm-misc-next and resolve conflicts.
+  - Add a note about new clang warning that will catch this issue at
+    compile time.
 
- arch/x86/entry/vdso/vdso.lds.S | 2 ++
- 1 file changed, 2 insertions(+)
+v1: https://lore.kernel.org/20220913205600.155172-1-nhuck@google.com/
 
-diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
-index 4bf48462fca7..e8c60ae7a7c8 100644
---- a/arch/x86/entry/vdso/vdso.lds.S
-+++ b/arch/x86/entry/vdso/vdso.lds.S
-@@ -27,7 +27,9 @@ VERSION {
- 		__vdso_time;
- 		clock_getres;
- 		__vdso_clock_getres;
-+#ifdef CONFIG_X86_SGX
- 		__vdso_sgx_enter_enclave;
-+#endif
- 	local: *;
- 	};
+ drivers/gpu/drm/xlnx/zynqmp_dp.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/xlnx/zynqmp_dp.c b/drivers/gpu/drm/xlnx/zynqmp_dp.c
+index 7c9ae167eac7..0a7b466446fb 100644
+--- a/drivers/gpu/drm/xlnx/zynqmp_dp.c
++++ b/drivers/gpu/drm/xlnx/zynqmp_dp.c
+@@ -1362,9 +1362,10 @@ static void zynqmp_dp_bridge_detach(struct drm_bridge *bridge)
+ 	zynqmp_dp_aux_cleanup(dp);
  }
+ 
+-static int zynqmp_dp_bridge_mode_valid(struct drm_bridge *bridge,
+-				       const struct drm_display_info *info,
+-				       const struct drm_display_mode *mode)
++static enum drm_mode_status
++zynqmp_dp_bridge_mode_valid(struct drm_bridge *bridge,
++			    const struct drm_display_info *info,
++			    const struct drm_display_mode *mode)
+ {
+ 	struct zynqmp_dp *dp = bridge_to_dp(bridge);
+ 	int rate;
 
-base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
+base-commit: 1a0257c352638916fdaffaac2ddedb8e049312f3
 -- 
 2.38.1
 
