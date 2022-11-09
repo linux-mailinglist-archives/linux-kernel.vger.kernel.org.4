@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2C1623084
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82069623087
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiKIQwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 11:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S230375AbiKIQxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiKIQwf (ORCPT
+        with ESMTP id S230388AbiKIQwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 11:52:35 -0500
+        Wed, 9 Nov 2022 11:52:36 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF0A240A8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:52:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C6125E8C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:52:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668012737; x=1699548737;
+  t=1668012740; x=1699548740;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qQuq8QNGbNiZCBzAMV30JlXBLCHT9H1+EgK3GfrClpQ=;
-  b=SaLl3i7TQAcy6FwgC5q8VE/gJfLmI8zS+1hzKKei6JPArTdZffD2hn5T
-   Ncmj4HZ82vlQrszK0Zhf6HUfNh9phF4MT/6JDZigGj4Yx0VoJ9wwHhRrP
-   WtPkK+y1JbIKV6gyMarq9N41wu13o9UETnLc9uwnE30A3l0wfa1lf41xT
-   Cs6DuD5N9e45c7FNw1WFwE5SnHF9KHu4eTS1bLpQWA6rbDLCrKbRKIXBf
-   l0loWXcSD8rQgA2LwwEql17RXe30OHtW3pP7J/v1Lu5HYM6NnXhfKzo4e
-   OYphM4sNJvH8OidbPRwNEsimPM4yi6z95vbuNvXGXtyo0c598Ck2zgJGR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="298553708"
+  bh=4KmDSGMvHF7ZrGPOcEVvMUSJNn2iMbIpR8ULBIekJIg=;
+  b=EhHKS/TGcc/denCM5GU2GqQ+iVHXFOOSIxbEw2GDzhykw1+vJY6qb33T
+   3VdKYyKGEM6KzU82cyJ0h1ssFdB7CotGviKhMA4hoHtwhyjq4/kd+HLDk
+   nAyMQWhRFe2ddxKKWc+kxwa9A4nwsUf2arJpNMIvFRwnmHpBgRi2fghBX
+   yMiWio/tMphzs6c7+xiU3hqtyF5XmaKKsLPpJTuvW8sG/PRDmBFnJkYis
+   dVFjStvEHeSCKNFXG1Tf7zHTYEAbDU0BjD+TZ2FI+JyztIqhG45YoEjpL
+   QgFWcgrypWhDlHWVcch5Yt0+ihp4262ZbCQSrqPmFElAa7ZtGjGA5/3Ft
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="298553727"
 X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="298553708"
+   d="scan'208";a="298553727"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 08:52:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="587827255"
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 08:52:17 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="587827263"
 X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="587827255"
+   d="scan'208";a="587827263"
 Received: from dschramm-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.219.85])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 08:52:10 -0800
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id A93E0109474; Wed,  9 Nov 2022 19:52:00 +0300 (+03)
+        id B46D6109475; Wed,  9 Nov 2022 19:52:00 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -57,10 +57,13 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>,
         Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv12 08/16] x86/mm: Reduce untagged_addr() overhead until the first LAM user
-Date:   Wed,  9 Nov 2022 19:51:32 +0300
-Message-Id: <20221109165140.9137-9-kirill.shutemov@linux.intel.com>
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCHv12 09/16] mm: Expose untagging mask in /proc/$PID/status
+Date:   Wed,  9 Nov 2022 19:51:33 +0300
+Message-Id: <20221109165140.9137-10-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221109165140.9137-1-kirill.shutemov@linux.intel.com>
 References: <20221109165140.9137-1-kirill.shutemov@linux.intel.com>
@@ -76,64 +79,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use static key to reduce untagged_addr() overhead.
-
-The key only gets enabled when the first process enables LAM.
+Add a line in /proc/$PID/status to report untag_mask. It can be
+used to find out LAM status of the process from the outside. It is
+useful for debuggers.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 ---
- arch/x86/include/asm/uaccess.h | 8 ++++++--
- arch/x86/kernel/process_64.c   | 4 ++++
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/mmu_context.h    | 6 ++++++
+ arch/sparc/include/asm/mmu_context_64.h | 6 ++++++
+ arch/x86/include/asm/mmu_context.h      | 6 ++++++
+ fs/proc/array.c                         | 6 ++++++
+ include/linux/mmu_context.h             | 7 +++++++
+ 5 files changed, 31 insertions(+)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 0db6f5451854..1d2c79246681 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -23,6 +23,8 @@ static inline bool pagefault_disabled(void);
- #endif
+diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
+index d3f8b5df0c1f..81ac12d69795 100644
+--- a/arch/arm64/include/asm/mmu_context.h
++++ b/arch/arm64/include/asm/mmu_context.h
+@@ -278,6 +278,12 @@ void post_ttbr_update_workaround(void);
+ unsigned long arm64_mm_context_get(struct mm_struct *mm);
+ void arm64_mm_context_put(struct mm_struct *mm);
  
- #ifdef CONFIG_X86_64
-+DECLARE_STATIC_KEY_FALSE(tagged_addr_key);
++#define mm_untag_mask mm_untag_mask
++static inline unsigned long mm_untag_mask(struct mm_struct *mm)
++{
++	return -1UL >> 8;
++}
 +
- /*
-  * Mask out tag bits from the address.
-  *
-@@ -31,8 +33,10 @@ static inline bool pagefault_disabled(void);
-  */
- #define untagged_addr(mm, addr)	({					\
- 	u64 __addr = (__force u64)(addr);				\
--	s64 sign = (s64)__addr >> 63;					\
--	__addr &= (mm)->context.untag_mask | sign;			\
-+	if (static_branch_likely(&tagged_addr_key)) {			\
-+		s64 sign = (s64)__addr >> 63;				\
-+		__addr &= (mm)->context.untag_mask | sign;		\
-+	}								\
- 	(__force __typeof__(addr))__addr;				\
- })
+ #include <asm-generic/mmu_context.h>
  
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index b8f2558a3aeb..457f79be8bc7 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -743,6 +743,9 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
- }
- #endif
- 
-+DEFINE_STATIC_KEY_FALSE(tagged_addr_key);
-+EXPORT_SYMBOL_GPL(tagged_addr_key);
-+
- static void enable_lam_func(void *mm)
- {
- 	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
-@@ -798,6 +801,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
+ #endif /* !__ASSEMBLY__ */
+diff --git a/arch/sparc/include/asm/mmu_context_64.h b/arch/sparc/include/asm/mmu_context_64.h
+index 7a8380c63aab..799e797c5cdd 100644
+--- a/arch/sparc/include/asm/mmu_context_64.h
++++ b/arch/sparc/include/asm/mmu_context_64.h
+@@ -185,6 +185,12 @@ static inline void finish_arch_post_lock_switch(void)
  	}
+ }
  
- 	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
-+	static_branch_enable(&tagged_addr_key);
- out:
- 	mmap_write_unlock(mm);
- 	return ret;
++#define mm_untag_mask mm_untag_mask
++static inline unsigned long mm_untag_mask(struct mm_struct *mm)
++{
++       return -1UL >> adi_nbits();
++}
++
+ #include <asm-generic/mmu_context.h>
+ 
+ #endif /* !(__ASSEMBLY__) */
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 92cf8f51faf5..91fdbb47b0ef 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -103,6 +103,12 @@ static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
+ 	mm->context.untag_mask = oldmm->context.untag_mask;
+ }
+ 
++#define mm_untag_mask mm_untag_mask
++static inline unsigned long mm_untag_mask(struct mm_struct *mm)
++{
++	return mm->context.untag_mask;
++}
++
+ static inline void mm_reset_untag_mask(struct mm_struct *mm)
+ {
+ 	mm->context.untag_mask = -1UL;
+diff --git a/fs/proc/array.c b/fs/proc/array.c
+index 49283b8103c7..d2a94eafe9a3 100644
+--- a/fs/proc/array.c
++++ b/fs/proc/array.c
+@@ -428,6 +428,11 @@ static inline void task_thp_status(struct seq_file *m, struct mm_struct *mm)
+ 	seq_printf(m, "THP_enabled:\t%d\n", thp_enabled);
+ }
+ 
++static inline void task_untag_mask(struct seq_file *m, struct mm_struct *mm)
++{
++	seq_printf(m, "untag_mask:\t%#lx\n", mm_untag_mask(mm));
++}
++
+ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
+ 			struct pid *pid, struct task_struct *task)
+ {
+@@ -443,6 +448,7 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
+ 		task_mem(m, mm);
+ 		task_core_dumping(m, task);
+ 		task_thp_status(m, mm);
++		task_untag_mask(m, mm);
+ 		mmput(mm);
+ 	}
+ 	task_sig(m, task);
+diff --git a/include/linux/mmu_context.h b/include/linux/mmu_context.h
+index b9b970f7ab45..14b9c1fa05c4 100644
+--- a/include/linux/mmu_context.h
++++ b/include/linux/mmu_context.h
+@@ -28,4 +28,11 @@ static inline void leave_mm(int cpu) { }
+ # define task_cpu_possible(cpu, p)	cpumask_test_cpu((cpu), task_cpu_possible_mask(p))
+ #endif
+ 
++#ifndef mm_untag_mask
++static inline unsigned long mm_untag_mask(struct mm_struct *mm)
++{
++	return -1UL;
++}
++#endif
++
+ #endif
 -- 
 2.38.0
 
