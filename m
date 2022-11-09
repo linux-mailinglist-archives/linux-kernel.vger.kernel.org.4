@@ -2,111 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0649A62299A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB2B6229A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiKILGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:06:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S229948AbiKILHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbiKILGc (ORCPT
+        with ESMTP id S229560AbiKILHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:06:32 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7E22B3C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:06:31 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id i5-20020a1c3b05000000b003cfa97c05cdso1004809wma.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:06:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bkxuXtDed4rc7dbRvY9+2yDzxFpGHl/JP9vCeNecjEQ=;
-        b=6DFmQR5sbsez/Ge+WY3V6ty840AoV8XrukBvGEINyWwWIa5Atsx6UQyioeb3ThYd1s
-         87Edyh3XI17NuhV9Xv1ikEJTOvzAwntA2hRBdcY1OQVe1wcWysR5z8K8257HmINhRMkF
-         +Ss0VI9GYh4W35My1qvSx8d9WAtR3C6MBL/8gaXeXMJIiBoSaZZvSInCKIktQmFb7wMb
-         JvW7wN/vhoLc0Tuik/alsqmt5DnR8guLjwad/Sd1H55rYZq4+J0qLGKO4zf2qCrKFnfJ
-         cbOxYBOTaoeSFMza9dYvOTuQ1glAgXey9AnoloQzoCu0IePxDHqlmajTlF7PGlacKPJP
-         bP9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bkxuXtDed4rc7dbRvY9+2yDzxFpGHl/JP9vCeNecjEQ=;
-        b=eBbPo9r1AB/JJswVQKkWCWelCKYxETN0IYgseDUAOEjXVYomnrkobl5nwCM/B298mT
-         D/k5rDlsVLTRcBCiJFuiCY3Od+aY6M/jJnPcN47AsJghBM/OiKX0cG7EXRFTyYb80F2m
-         +2IVINQ6qsdvyk3zclVouRlgPYRtoNcxNSrLz1SseOxqcqBgZv7/aE5cK12wYzTCuVvH
-         WFH6cND2ZFWOHNX4douPImxa2Z+3l56YsVMqDteY9r5uoekssR5j/d7E6+NLkKO0dt54
-         SHX7xXn8123emhuoT5g96rKde/6YmzUUhD1BZ69HA6JC9BO2IeAYfUG5eTl7OOIEGVrv
-         Jegw==
-X-Gm-Message-State: ACrzQf3HCIDzkUxkbYayY1HjHy7I2iRQ2ffDfRnQY/3l9iUsVR8FMEp7
-        jVodbm7v4nJKPu8296rThKb5bg==
-X-Google-Smtp-Source: AMsMyM5BvadxqH6GX2b2GSNjxZbt+RfSbJqqVZaOmo19Ouk7XqKsVYC0osO0pMhoMvRYcjnFslHO4Q==
-X-Received: by 2002:a05:600c:2e46:b0:3cf:8a34:2e98 with SMTP id q6-20020a05600c2e4600b003cf8a342e98mr23430198wmf.30.1667991989984;
-        Wed, 09 Nov 2022 03:06:29 -0800 (PST)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id r2-20020adfdc82000000b0022ae401e9e0sm12999034wrj.78.2022.11.09.03.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 03:06:29 -0800 (PST)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org
-Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Punit Agrawal <punit.agrawal@bytedance.com>
-Subject: [PATCH] selftests: proc: Fix proc-empty-vm build error on non x86_64
-Date:   Wed,  9 Nov 2022 11:06:21 +0000
-Message-Id: <20221109110621.1791999-1-punit.agrawal@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 9 Nov 2022 06:07:35 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E3A1A047;
+        Wed,  9 Nov 2022 03:07:34 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 85DE13200A3C;
+        Wed,  9 Nov 2022 06:07:33 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 09 Nov 2022 06:07:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667992053; x=
+        1668078453; bh=PtXlGxu5pHm04GVMp9fkQqlVpuB3Y1JtbfwxVosbUzs=; b=j
+        1d3Ye6iodxIBcobDJ4jPLQmX77Ts7LeEuNx2Ld9Sx+Qcr2wnEWicj231rjZ/n89p
+        XG7so0qsFFJcnfrDuAhE/+wGO2hUV3QAIHaVU4wbaJgyGneszDcgVPfuzufW3ihq
+        2zrxNK5IeaWNFpPhKs0ZP8Zl4T6wzUOJobJ4utUCArtwBuEEjwBTrD3svDQDqYFP
+        OHkPF6QCGfU9sh4Rs2cnQQHEB1Dt9ZJXpvXztP4nk74zOiTy1QFt8+Ndo8f1BHvy
+        0CMGN8zlmQx5kouOFpinp2+H9zPQRTOsEwLk7SOumiljDNhvQqPdL52Rmu8LzASb
+        PlaMC9eN0P55xVV5f6shw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667992053; x=
+        1668078453; bh=PtXlGxu5pHm04GVMp9fkQqlVpuB3Y1JtbfwxVosbUzs=; b=I
+        Yc3t4YdziTHLywjI+YFY6zpSxIVbNH9hzmeisqHIJgHabF55nkH9kheIkbi6j1QI
+        N9alZGLD0AFTWJ/Iwc/tcJZsxwqXfSy20YLzmzhGFDdVuNT1EH5wN36OAHsKRlGT
+        H829vg431NZO2U4l+MG7jXySBAOtmvbIUj900U0rV/4mGGoKoM2MWDZV4DE5M/rz
+        UAsMgwJGXW3ImwWXs9bopRqrlsUlUJSaTAlO26Bzl6q9NFtGicMRChP4O/R1Z6Wr
+        /IUhvCgKoRM+ZVAPwfK0MUeruKiO6oJJmk48ednJHuou2hrI9VRbLeKjp5T3QoPi
+        buHDk9v32rRG+fE0OEuEg==
+X-ME-Sender: <xms:84lrY8dfLs5n4KJHIHsoocSthNsOOjxmYeRvwnyeNwX2wI55MbZ2Yg>
+    <xme:84lrY-OtNZmA5t6tDLeNxuUOaGMbJ2n35SFVnqnktxmC__vdvwnt29-qO_s4rxpEv
+    THORMzK5Y5m3XNom1I>
+X-ME-Received: <xmr:84lrY9hTuZQlrnXLlD3Ec4uXJSZd4e3Lrobn25mqWcBrecs44_OIl1anOxK100US>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgddvfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
+    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:84lrYx8vQLR9iBrsZ1bvuhWotdsmB--UhFGHhFvdmNTgYnkPU6ESlg>
+    <xmx:84lrY4uugfgyJb3i5TNXlbM1KBth0AjzkNlEpodFdM63kEjQFFp74Q>
+    <xmx:84lrY4HPEkVVu2pSm8Gj9stvYwYaQAjip66M93gIYH2O3V7iIPDa6Q>
+    <xmx:9YlrYyWm8bYblbQn03_co7Fr3d6MUc6ykBQobXT1Ottkq1S9x-Yvug>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Nov 2022 06:07:30 -0500 (EST)
+Message-ID: <7cf55c95-540e-b182-b4b3-e641535752e1@flygoat.com>
+Date:   Wed, 9 Nov 2022 11:07:18 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] MIPS: jump_label: Fix compat branch range check
+Content-Language: en-US
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ardb@kernel.org, rostedt@goodmis.org, stable@vger.kernel.org,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+References: <20221103151053.213583-1-jiaxun.yang@flygoat.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20221103151053.213583-1-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The proc-empty-vm test is implemented for x86_64 and fails to build
-for other architectures. Rather then emitting a compiler error it
-would be preferable to only build the test on supported architectures.
 
-Mark proc-empty-vm as a test for x86_64 and customise to the Makefile
-to build it only when building for this target architecture.
 
-Fixes: 5bc73bb3451b ("proc: test how it holds up with mapping'less process")
-Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
----
- tools/testing/selftests/proc/Makefile | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+在 2022/11/3 15:10, Jiaxun Yang 写道:
+> Cast upper bound of branch range to long to do signed compare,
+> avoid negative offset trigger this warning.
+>
+> Fixes: 9b6584e35f40 ("MIPS: jump_label: Use compact branches for >= r6")
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
-index cd95369254c0..6b31439902af 100644
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -1,14 +1,18 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
- CFLAGS += -Wall -O2 -Wno-unused-function
- CFLAGS += -D_GNU_SOURCE
- LDFLAGS += -pthread
- 
--TEST_GEN_PROGS :=
-+TEST_GEN_PROGS_x86_64 += proc-empty-vm
-+
- TEST_GEN_PROGS += fd-001-lookup
- TEST_GEN_PROGS += fd-002-posix-eq
- TEST_GEN_PROGS += fd-003-kthread
- TEST_GEN_PROGS += proc-loadavg-001
--TEST_GEN_PROGS += proc-empty-vm
- TEST_GEN_PROGS += proc-pid-vm
- TEST_GEN_PROGS += proc-self-map-files-001
- TEST_GEN_PROGS += proc-self-map-files-002
--- 
-2.30.2
+Ping :-)
+
+Thanks
+- Jiaxun
+
+> ---
+> v2: Fix typo, collect review tags.
+> ---
+>   arch/mips/kernel/jump_label.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/kernel/jump_label.c b/arch/mips/kernel/jump_label.c
+> index 71a882c8c6eb..f7978d50a2ba 100644
+> --- a/arch/mips/kernel/jump_label.c
+> +++ b/arch/mips/kernel/jump_label.c
+> @@ -56,7 +56,7 @@ void arch_jump_label_transform(struct jump_entry *e,
+>   			 * The branch offset must fit in the instruction's 26
+>   			 * bit field.
+>   			 */
+> -			WARN_ON((offset >= BIT(25)) ||
+> +			WARN_ON((offset >= (long)BIT(25)) ||
+>   				(offset < -(long)BIT(25)));
+>   
+>   			insn.j_format.opcode = bc6_op;
 
