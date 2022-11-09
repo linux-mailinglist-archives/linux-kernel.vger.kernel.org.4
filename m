@@ -2,41 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3A4622F38
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFF8622F43
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbiKIPmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S230215AbiKIPnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:43:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbiKIPmQ (ORCPT
+        with ESMTP id S229882AbiKIPnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:42:16 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FCA11C00
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:42:15 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1osnDQ-0000Uh-Cx; Wed, 09 Nov 2022 16:42:12 +0100
-Message-ID: <7c5bbff7-298f-b38d-9409-3e8efef82619@leemhuis.info>
-Date:   Wed, 9 Nov 2022 16:42:12 +0100
+        Wed, 9 Nov 2022 10:43:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D2717898
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:42:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668008539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=uBVk1nqDlUO1v7VnKX9niZ4LQDEatQ7W082F8JoznKQ=;
+        b=Qk1YM57xTbs9SXSHfW0xPEtOtcVF9iIebLHMmxMoFi18tsdqjScq6JeBvIu+0bUdWmYAzA
+        bDl6C0YJ2K59ZyzC2IK0PD6wXwh+l/lRx5tC3IX6vGdAxPqNoV2qDBXXcwi/sLWzQywjrR
+        VwnuvAuHj50NfabMWeZ47GKThi604kg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-255-tEJaA4aHMOGeNnN2GS1ROg-1; Wed, 09 Nov 2022 10:42:17 -0500
+X-MC-Unique: tEJaA4aHMOGeNnN2GS1ROg-1
+Received: by mail-wm1-f71.google.com with SMTP id 186-20020a1c02c3000000b003cfab28cbe0so1193745wmc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:42:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uBVk1nqDlUO1v7VnKX9niZ4LQDEatQ7W082F8JoznKQ=;
+        b=DIF7Zm3XPRnrIT6Zazj3ch+W4J0XnIu5aYwnFr4aajWAp4CqGTMxotKn4RT+Xv7+eW
+         6JC18DByLVh6z1mBUWyb+sr6EjgB6o7IVv9iMVK875i+PPPV0BfqbvOIkqSIXjamXv77
+         qEvfA+PDwM4app25XPJ5S1YP9nBSabUv4RJKgR1ueEsPwHNUSma3eUQn2TZBSp5BAMd4
+         RSOHV6i/6ytiM4rDaFSYGeB0JpyKpLBYf7l69vT2mIsxJ5DOK8C4M9I6pct/UITDDd57
+         0xOd9TJgnyizUcbL3IYVgLc264BNWh7mR1Y2DqZMf30PVKr+aX0j4fHUwt/rwPAJ/iBs
+         XBcA==
+X-Gm-Message-State: ACrzQf16di9NASJvytVpTe2+8TVvQfBeA1HD1XNMqObWD1qwhk5RPenN
+        wCABCb1FcjCDBmzSXuLSa7oJOnW46d3tmC9iMvZ4TKQvOavhur0zi2FsoUo1YraEdtUdHb1XDri
+        VCbZ7vTxYGub9dav9CRvLiY8R
+X-Received: by 2002:a5d:4acc:0:b0:236:6665:b471 with SMTP id y12-20020a5d4acc000000b002366665b471mr40056301wrs.633.1668008535789;
+        Wed, 09 Nov 2022 07:42:15 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6Nup3xHjcr5VxzgJQLxU3Z8kDbx4kIJ2rHrJiE2B1Op4/F3Uk6ha1/jqX1LnJByU9gSr8umQ==
+X-Received: by 2002:a5d:4acc:0:b0:236:6665:b471 with SMTP id y12-20020a5d4acc000000b002366665b471mr40056289wrs.633.1668008535575;
+        Wed, 09 Nov 2022 07:42:15 -0800 (PST)
+Received: from step1.redhat.com (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id i18-20020adfe492000000b002345cb2723esm13696712wrm.17.2022.11.09.07.42.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 07:42:14 -0800 (PST)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, eperezma@redhat.com,
+        netdev@vger.kernel.org, kvm@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] vhost-vdpa: fix potential memory leak during the release
+Date:   Wed,  9 Nov 2022 16:42:13 +0100
+Message-Id: <20221109154213.146789-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [REGRESSION] Bug 216493 - Panic on __kernfs_remove (probably
- after 5.19.8)
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <c38235e9-b620-510c-4b53-6b190b83f997@leemhuis.info>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-In-Reply-To: <c38235e9-b620-510c-4b53-6b190b83f997@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668008535;dbb6641b;
-X-HE-SMSGID: 1osnDQ-0000Uh-Cx
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,10 +79,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.09.22 11:56, Thorsten Leemhuis wrote:
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216493 :
+Before commit 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
+we call vhost_vdpa_iotlb_unmap(v, iotlb, 0ULL, 0ULL - 1) during the
+release to free all the resources allocated when processing user IOTLB
+messages through vhost_vdpa_process_iotlb_update().
+That commit changed the handling of IOTLB a bit, and we accidentally
+removed some code called during the release.
 
-#regzbot invalid: Patrick can't reproduce the problem anymore, Igor
-didn't reply to a status inquiry
+We partially fixed with commit 037d4305569a ("vhost-vdpa: call
+vhost_vdpa_cleanup during the release") but a potential memory leak is
+still there as showed by kmemleak if the application does not send
+VHOST_IOTLB_INVALIDATE or crashes:
+
+  unreferenced object 0xffff888007fbaa30 (size 16):
+    comm "blkio-bench", pid 914, jiffies 4294993521 (age 885.500s)
+    hex dump (first 16 bytes):
+      40 73 41 07 80 88 ff ff 00 00 00 00 00 00 00 00  @sA.............
+    backtrace:
+      [<0000000087736d2a>] kmem_cache_alloc_trace+0x142/0x1c0
+      [<0000000060740f50>] vhost_vdpa_process_iotlb_msg+0x68c/0x901 [vhost_vdpa]
+      [<0000000083e8e205>] vhost_chr_write_iter+0xc0/0x4a0 [vhost]
+      [<000000008f2f414a>] vhost_vdpa_chr_write_iter+0x18/0x20 [vhost_vdpa]
+      [<00000000de1cd4a0>] vfs_write+0x216/0x4b0
+      [<00000000a2850200>] ksys_write+0x71/0xf0
+      [<00000000de8e720b>] __x64_sys_write+0x19/0x20
+      [<0000000018b12cbb>] do_syscall_64+0x3f/0x90
+      [<00000000986ec465>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Let's fix calling vhost_vdpa_iotlb_unmap() on the whole range in
+vhost_vdpa_remove_as(). We move that call before vhost_dev_cleanup()
+since we need a valid v->vdev.mm in vhost_vdpa_pa_unmap().
+vhost_iotlb_reset() call can be removed, since vhost_vdpa_iotlb_unmap()
+on the whole range removes all the entries.
+
+The kmemleak log reported was observed with a vDPA device that has `use_va`
+set to true (e.g. VDUSE). This patch has been tested with both types of
+devices.
+
+Fixes: 037d4305569a ("vhost-vdpa: call vhost_vdpa_cleanup during the release")
+Fixes: 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+---
+ drivers/vhost/vdpa.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index 166044642fd5..b08e07fc7d1f 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -65,6 +65,10 @@ static DEFINE_IDA(vhost_vdpa_ida);
+ 
+ static dev_t vhost_vdpa_major;
+ 
++static void vhost_vdpa_iotlb_unmap(struct vhost_vdpa *v,
++				   struct vhost_iotlb *iotlb,
++				   u64 start, u64 last);
++
+ static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
+ {
+ 	struct vhost_vdpa_as *as = container_of(iotlb, struct
+@@ -135,7 +139,7 @@ static int vhost_vdpa_remove_as(struct vhost_vdpa *v, u32 asid)
+ 		return -EINVAL;
+ 
+ 	hlist_del(&as->hash_link);
+-	vhost_iotlb_reset(&as->iotlb);
++	vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+ 	kfree(as);
+ 
+ 	return 0;
+@@ -1162,14 +1166,14 @@ static void vhost_vdpa_cleanup(struct vhost_vdpa *v)
+ 	struct vhost_vdpa_as *as;
+ 	u32 asid;
+ 
+-	vhost_dev_cleanup(&v->vdev);
+-	kfree(v->vdev.vqs);
+-
+ 	for (asid = 0; asid < v->vdpa->nas; asid++) {
+ 		as = asid_to_as(v, asid);
+ 		if (as)
+ 			vhost_vdpa_remove_as(v, asid);
+ 	}
++
++	vhost_dev_cleanup(&v->vdev);
++	kfree(v->vdev.vqs);
+ }
+ 
+ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
+-- 
+2.38.1
+
