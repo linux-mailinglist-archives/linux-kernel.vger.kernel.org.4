@@ -2,148 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DB6622B32
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9DF622B31
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiKIMPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S229870AbiKIMPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKIMPt (ORCPT
+        with ESMTP id S229509AbiKIMPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Nov 2022 07:15:49 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E706813F0F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 04:15:48 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id d20so15853019plr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 04:15:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yybp5GQkINWOGNJfWdB4Wuog9A6gcJ2pt653sLMEWvA=;
-        b=SCqUdVWMgRBRF5if0NYhIo9YJLY3EzcceIYuHAdGuVfdc0dt8tITUguFKB8l42msOp
-         9zi49zCHJKTs3USdfW+NnzKaM3uSsRxg2OzJSr4ycwGVJ1PdBEBfJMuUQ98fNMpOAITF
-         8ZvuqHcNVjiRNbfmBx961B949M6vm/achhz33E8tVNXNlR1yPpkJBNchEOpxter52lRq
-         nPjEpsfZi7fe4ox/ubHDkI862st4zHYtI/5qPTWGwR9x4GpdY2sbq79mgudcQZCAz9po
-         jaOdyoJBPv2ZJy83KhgkxJ6ambSn2wtRdbUdz5smTpjrmrvG9BELgXwLjNBOJ6zoemEI
-         mzlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yybp5GQkINWOGNJfWdB4Wuog9A6gcJ2pt653sLMEWvA=;
-        b=ycPLWC43513NVt6zvBmuYmLHdjqO/pcYlJ0qJHl2G6CJKW8Q3URE1TXRi3hkbTgQ1H
-         dXlWff7TpvrP3G3xE2yA0LHhCw7aC+y4UTeFBDGOT8zxRM8hThIxByTfT6CI5IxUunmR
-         hQRZiXd9W3MY0QEy+hFnoV1U22lSPzZ6OAyJ4/hRWrALlPlWifRydjLdyPzOvWKFVUf9
-         WCX+/MwbDk89xlw06cEb3WOa+iQZxlUXcDEYF/BOs/vYqv8LiPU+w86TVI87+Tc7D2go
-         Zwe+CYPyr3W0fl6xDmSf5vO7WHNemZGwOeiA0NEqcUveHltEspV/BDeqAexuS5WJH8ZZ
-         Jt+w==
-X-Gm-Message-State: ACrzQf3+sgzgGcPb0fTEmy1MGgls/GNV8XLek4aExpM6gcsYpfOoNQzm
-        3Ets7fqQ4MD0OKoVHd82wdKgqje3VrgbjA3n2/r6kj45Z5BLwQ==
-X-Google-Smtp-Source: AMsMyM7VP/8HEW9l66u8NEL4a3twNyQ9cwzwT7IBL2QiPspRTi3I6iqZgP4JV5H5B8A2lmw8lMHoYf0PS2sXG2vpfOA=
-X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id
- mw7-20020a17090b4d0700b001ef521cf051mr80652557pjb.164.1667996148432; Wed, 09
- Nov 2022 04:15:48 -0800 (PST)
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D07F13E9E;
+        Wed,  9 Nov 2022 04:15:47 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id f64f02712e042cbc; Wed, 9 Nov 2022 13:15:44 +0100
+Received: from kreacher.localnet (unknown [213.134.163.195])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 0EB3C66EBA7;
+        Wed,  9 Nov 2022 13:15:44 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: [PATCH v2 5/5] rtc: rtc-cmos: Disable ACPI RTC event on removal
+Date:   Wed, 09 Nov 2022 13:15:36 +0100
+Message-ID: <2224609.iZASKD2KPV@kreacher>
+In-Reply-To: <5640233.DvuYhMxLoT@kreacher>
+References: <5640233.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-References: <20221108082533.21384-1-hayashi.kunihiko@socionext.com> <20221108082533.21384-2-hayashi.kunihiko@socionext.com>
-In-Reply-To: <20221108082533.21384-2-hayashi.kunihiko@socionext.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 9 Nov 2022 13:15:11 +0100
-Message-ID: <CAPDyKFoiowaut9EhDeBH0ci50WJ7y8UFivxqExxS0EfV_KAhpw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] mmc: f-sdh30: Add reset control support
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.163.195
+X-CLIENT-HOSTNAME: 213.134.163.195
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgdefjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeifedrudelheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduleehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghl
+ rdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 at 09:25, Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
->
-> Add reset control support for F_SDH30 controller. This is optional.
->
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This needs an update to the DT doc too, which is also the case for patch4.
+Make cmos_do_remove() drop the ACPI RTC fixed event handler so as to
+prevent it from operating on stale data in case the event triggers
+after driver removal.
 
-That said, please convert the DT doc into the yaml based format as the
-first step.
+Fixes: 311ee9c151ad ("rtc: cmos: allow using ACPI for RTC alarm instead of HPET")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-Kind regards
-Uffe
+v1 -> v2:
+   * Do not clear the driver data pointer (the driver core does that) (Andy)
+   * Adjust the code pattern in acpi_rtc_event_cleanup() (Andy)
+   * Drop inline from the full definition of acpi_rtc_event_cleanup()
 
-> ---
->  drivers/mmc/host/sdhci_f_sdh30.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/sdhci_f_sdh30.c b/drivers/mmc/host/sdhci_f_sdh30.c
-> index 3f5977979cf2..7f4553b28180 100644
-> --- a/drivers/mmc/host/sdhci_f_sdh30.c
-> +++ b/drivers/mmc/host/sdhci_f_sdh30.c
-> @@ -14,6 +14,7 @@
->  #include <linux/of.h>
->  #include <linux/property.h>
->  #include <linux/clk.h>
-> +#include <linux/reset.h>
->
->  #include "sdhci-pltfm.h"
->  #include "sdhci_f_sdh30.h"
-> @@ -21,6 +22,7 @@
->  struct f_sdhost_priv {
->         struct clk *clk_iface;
->         struct clk *clk;
-> +       struct reset_control *rst;
->         u32 vendor_hs200;
->         struct device *dev;
->         bool enable_cmd_dat_delay;
-> @@ -150,6 +152,16 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
->                 ret = clk_prepare_enable(priv->clk);
->                 if (ret)
->                         goto err_clk;
-> +
-> +               priv->rst = devm_reset_control_get_optional_shared(dev, NULL);
-> +               if (IS_ERR(priv->rst)) {
-> +                       ret = PTR_ERR(priv->rst);
-> +                       goto err_rst;
-> +               }
-> +
-> +               ret = reset_control_deassert(priv->rst);
-> +               if (ret)
-> +                       goto err_rst;
->         }
->
->         /* init vendor specific regs */
-> @@ -175,6 +187,8 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
->         return 0;
->
->  err_add_host:
-> +       reset_control_assert(priv->rst);
-> +err_rst:
->         clk_disable_unprepare(priv->clk);
->  err_clk:
->         clk_disable_unprepare(priv->clk_iface);
-> @@ -191,8 +205,9 @@ static int sdhci_f_sdh30_remove(struct platform_device *pdev)
->         sdhci_remove_host(host, readl(host->ioaddr + SDHCI_INT_STATUS) ==
->                           0xffffffff);
->
-> -       clk_disable_unprepare(priv->clk_iface);
-> +       reset_control_assert(priv->rst);
->         clk_disable_unprepare(priv->clk);
-> +       clk_disable_unprepare(priv->clk_iface);
->
->         sdhci_free_host(host);
->         platform_set_drvdata(pdev, NULL);
-> --
-> 2.25.1
->
+---
+ drivers/rtc/rtc-cmos.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+Index: linux-pm/drivers/rtc/rtc-cmos.c
+===================================================================
+--- linux-pm.orig/drivers/rtc/rtc-cmos.c
++++ linux-pm/drivers/rtc/rtc-cmos.c
+@@ -798,6 +798,14 @@ static void acpi_rtc_event_setup(struct
+ 	acpi_disable_event(ACPI_EVENT_RTC, 0);
+ }
+ 
++static void acpi_rtc_event_cleanup(void)
++{
++	if (acpi_disabled)
++		return;
++
++	acpi_remove_fixed_event_handler(ACPI_EVENT_RTC, rtc_handler);
++}
++
+ static void rtc_wake_on(struct device *dev)
+ {
+ 	acpi_clear_event(ACPI_EVENT_RTC);
+@@ -884,6 +892,10 @@ static inline void acpi_rtc_event_setup(
+ {
+ }
+ 
++static inline void acpi_rtc_event_cleanup(void)
++{
++}
++
+ static inline void acpi_cmos_wake_setup(struct device *dev)
+ {
+ }
+@@ -1138,6 +1150,9 @@ static void cmos_do_remove(struct device
+ 			hpet_unregister_irq_handler(cmos_interrupt);
+ 	}
+ 
++	if (!dev_get_platdata(dev))
++		acpi_rtc_event_cleanup();
++
+ 	cmos->rtc = NULL;
+ 
+ 	ports = cmos->iomem;
+
+
+
