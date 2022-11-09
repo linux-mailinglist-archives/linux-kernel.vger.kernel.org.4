@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD842623114
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8163623116
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiKIRIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:08:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
+        id S231638AbiKIRIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiKIRId (ORCPT
+        with ESMTP id S231535AbiKIRIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:08:33 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90E9DEE3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:08:28 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id kt23so48462108ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:08:28 -0800 (PST)
+        Wed, 9 Nov 2022 12:08:34 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F491DF04
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:08:30 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id ft34so12152215ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UGckoAKiL+PDGTYOUgV90XuQ0OsD8munY0lKgBlT8+s=;
-        b=NIOItJRTewEv5DYvzGdBGeSKT4mpKmy1pGwnHstesPtSCqn1tXV6A5AcJGX4WPtN13
-         YR5sM1Zo1yLI+FVdB+gbRVeHkS96fpcisi37Omz0g/e6V8SI9zO27z9Q1WMG8zvJajAc
-         1zmAbfyvQYU1nzXtbsQr0ABbAhJ/q3/iKYVZ4lIvcyQC7/5lwVHMen4OSLPhoAG01Bq8
-         89MrSUpJtPgSmsOhi8DUeTBVirY9VWZFleyPU9cYp2Ivll3eI+SMWS8an0kwCY6auMG8
-         C7stn7GLl2czqLWHeMbia7dGsJPSZVxGeZ3kt1mOKzJoDgK5AKt3S2wpPNBiaFT2Jh3Q
-         3S+A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lHux2jjrYoVEJwP0MNszHotsTHFQdT2cU1/inZIsUFg=;
+        b=aJzV4MBPzdttkFtPuCHAOshT6jPGNBb7lVNbTsO9VVVS+V/MkhszX/I/AWhC8H28jT
+         wy7R0olId8GXrCXSaG+zbyMjDDPjf9ieVIXMUDBPTXJqZ5EmDXlc0vHvp6w/rvPzTM41
+         qbeU2uR95aiFVJeENsDOj80OomP3V3Czml9LL0lzRAq0zTGTCz5fXcg2qgDDBIIIEGRz
+         0Cy68ScPR/6lNbqfXITDCSBKSQ+3gidKOqHTm3nT3xbGrmYzvm2vEZWTkrAfL4j/zjIJ
+         OZ7mdv98vr0pSAICpiRKNkzQm1f4zEGC9i1MlrdQsyzcQ/8M6ffCatvvm15i4h4I+RPJ
+         t2+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UGckoAKiL+PDGTYOUgV90XuQ0OsD8munY0lKgBlT8+s=;
-        b=i0Lkf8op1ALtGNY0bnW0y+t8e0Nn31ZfnWxOh0ir7FdGB0ZmggaXtUUncVnCzsLbtm
-         2Y5HRgU4avzuf1hS/bNiM5+2rybfSc3SYH+KJfBD+wSeuE9ZgMSYak1Ku3Y2CN+21IKL
-         ZvAQxD0SAEydl6SuaG6Ty9ORiNtVzcD7CsR0itgWtE/9iFJF+hsv7dFrP76u4DoEPuTL
-         30LwomPc4UI4JtV1VCHMC1K2kgfYKa71cynvSw5JXMI+QiqsFYPyWKvmgNGRjv0okyb6
-         qe3KD2xGCQmpWGufJXoHFOnRHVM0TXYoL3XMQ4pDx+ghXXN+3Kr9U3VvBj7WVDMnY+R0
-         goiw==
-X-Gm-Message-State: ACrzQf1Lbdpj5aQ8OkTSMWmgbGnyvq/AsTo9wXWP+ETE85RaBpzEuohc
-        B38Cwrg503rsEuKq3xAGS8JWMg==
-X-Google-Smtp-Source: AMsMyM6Fmko3ZwqfkYv4RDk0uzq7sMO+AwhwNSzC3++RWkc09dWpeViELtKxZUiXmPtkvGuE1F9FvA==
-X-Received: by 2002:a17:907:217a:b0:7ae:415:3fb5 with SMTP id rl26-20020a170907217a00b007ae04153fb5mr1136935ejb.255.1668013707262;
-        Wed, 09 Nov 2022 09:08:27 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lHux2jjrYoVEJwP0MNszHotsTHFQdT2cU1/inZIsUFg=;
+        b=uSeVl4UyHDXWR/q5wvuJjhC7DbAHCi+G/mycUj91wC5KFFzM8QI8/Hr5c4vgb6rf+x
+         efWflUSIQSQJcyELd7mJMP79s2VwQHRSGx/8T2Wgw9OKumQd/IErpknXRsud5z6rFcV3
+         3HOI/lls/bQiuUpBT3W7K2svlRatIrxPwAxrPIg65LK1CGNkZVWm6ggiRbpMJR+Dsi4I
+         O74AHqCgs24wj84YtVSXf6l0qCU6fJJfeQlFR8a5ob9QmJToOttEFKUeTnFTH0vLEWn/
+         fZtGwwTNo+fFJvsedbXV2kn1B8bs8f/YHtcCdhCQMxNYIKYiBRDYSD8RxgW4GCrbaFnV
+         tdEg==
+X-Gm-Message-State: ACrzQf05TIqdMpw7r73pwjR/K4ENB5kppjaBCUSiEMpKOBzT126UjLb5
+        AZg/+v4FvgOCKpHTkIibmzpn5A==
+X-Google-Smtp-Source: AMsMyM6nqVNe4nxWMn/U4o0xAXjpk2JvCNNAgh2vyA1qC/klN+TtUOwpNWub26MagPzg6BcoTb2/3g==
+X-Received: by 2002:a17:906:5ac2:b0:78d:3358:7694 with SMTP id x2-20020a1709065ac200b0078d33587694mr57535641ejs.276.1668013709376;
+        Wed, 09 Nov 2022 09:08:29 -0800 (PST)
 Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id w6-20020a056402070600b0046191f5e946sm7207012edx.21.2022.11.09.09.08.25
+        by smtp.gmail.com with ESMTPSA id w6-20020a056402070600b0046191f5e946sm7207012edx.21.2022.11.09.09.08.27
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 09 Nov 2022 09:08:26 -0800 (PST)
+        Wed, 09 Nov 2022 09:08:29 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -60,10 +61,12 @@ Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
         Manivannan Sadhasivam <mani@kernel.org>,
         linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: remoteproc: qcom,adsp: Add SM6375 ADSP and CDSP
-Date:   Wed,  9 Nov 2022 18:08:21 +0100
-Message-Id: <20221109170822.58281-1-konrad.dybcio@linaro.org>
+Subject: [PATCH 2/2] remoteproc: qcom: pas: Add SM6375 ADSP & CDSP
+Date:   Wed,  9 Nov 2022 18:08:22 +0100
+Message-Id: <20221109170822.58281-2-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20221109170822.58281-1-konrad.dybcio@linaro.org>
+References: <20221109170822.58281-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,61 +79,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add entries for SM6375 ADSP and CDSP. They are effectively the same
-as SM6350 ADSP and SM8150 CDSP respectively.
+Add a config for the ADSP&CDSP present on SM6375.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../devicetree/bindings/remoteproc/qcom,adsp.yaml         | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/remoteproc/qcom_q6v5_pas.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index db9e0f0c2bea..a9219c7c8349 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -40,6 +40,8 @@ properties:
-       - qcom,sm6350-adsp-pas
-       - qcom,sm6350-cdsp-pas
-       - qcom,sm6350-mpss-pas
-+      - qcom,sm6375-adsp-pas
-+      - qcom,sm6375-cdsp-pas
-       - qcom,sm8150-adsp-pas
-       - qcom,sm8150-cdsp-pas
-       - qcom,sm8150-mpss-pas
-@@ -197,6 +199,8 @@ allOf:
-               - qcom,sm6350-adsp-pas
-               - qcom,sm6350-cdsp-pas
-               - qcom,sm6350-mpss-pas
-+              - qcom,sm6375-adsp-pas
-+              - qcom,sm6375-cdsp-pas
-               - qcom,sm8150-adsp-pas
-               - qcom,sm8150-cdsp-pas
-               - qcom,sm8150-mpss-pas
-@@ -315,6 +319,8 @@ allOf:
-               - qcom,sdm845-cdsp-pas
-               - qcom,sm6350-adsp-pas
-               - qcom,sm6350-cdsp-pas
-+              - qcom,sm6375-adsp-pas
-+              - qcom,sm6375-cdsp-pas
-               - qcom,sm8150-adsp-pas
-               - qcom,sm8150-cdsp-pas
-               - qcom,sm8150-slpi-pas
-@@ -372,6 +378,7 @@ allOf:
-               - qcom,msm8226-adsp-pil
-               - qcom,msm8996-adsp-pil
-               - qcom,msm8998-adsp-pas
-+              - qcom,sm6375-cdsp-pas
-               - qcom,sm8150-adsp-pas
-               - qcom,sm8150-cdsp-pas
-     then:
-@@ -468,6 +475,7 @@ allOf:
-               - qcom,sc8180x-cdsp-pas
-               - qcom,sc8280xp-adsp-pas
-               - qcom,sm6350-adsp-pas
-+              - qcom,sm6375-adsp-pas
-               - qcom,sm8150-slpi-pas
-               - qcom,sm8250-adsp-pas
-               - qcom,sm8250-slpi-pas
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 6afd0941e552..80151101376e 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -971,6 +971,8 @@ static const struct of_device_id adsp_of_match[] = {
+ 	{ .compatible = "qcom,sm6350-adsp-pas", .data = &sm6350_adsp_resource},
+ 	{ .compatible = "qcom,sm6350-cdsp-pas", .data = &sm6350_cdsp_resource},
+ 	{ .compatible = "qcom,sm6350-mpss-pas", .data = &mpss_resource_init},
++	{ .compatible = "qcom,sm6375-adsp-pas", .data = &sm6350_adsp_resource},
++	{ .compatible = "qcom,sm6375-cdsp-pas", .data = &sm8150_cdsp_resource},
+ 	{ .compatible = "qcom,sm8150-adsp-pas", .data = &sm8150_adsp_resource},
+ 	{ .compatible = "qcom,sm8150-cdsp-pas", .data = &sm8150_cdsp_resource},
+ 	{ .compatible = "qcom,sm8150-mpss-pas", .data = &mpss_resource_init},
 -- 
 2.38.1
 
