@@ -2,113 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D690622EB3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C235622EBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiKIPGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S231869AbiKIPHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbiKIPGh (ORCPT
+        with ESMTP id S231758AbiKIPG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:06:37 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316D91A20D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:06:36 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id o7so16979679pjj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:06:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wHPhbbvw5zFQKI19I4sRlCQw5xxCQ/IYVwUpkVORIms=;
-        b=R/SWCxd+3hQJIoJnDxrsqdA56lLB5g+FgnJMOYd8l4iyIq96g+qxIwYGU0X8opCQfd
-         qTl67qlRX1cM4loGOVfON0qjK65rCHwemp7HPP7+J3JSi9QhlC23IwXQQXU33QhIAQsu
-         7SBqJGvSM4zIjGUjq/KemmRWQ9r8ojzN2AN3UG6ulpQ9oZPgWEsqjmvOogAN+WkgljqQ
-         eA/75xbxirqNB0iWC7CkaU+25AloDkSx+G24wbQbVj2ycJ3Ea9ljz1bIFzj15pboP0fn
-         So2czgfaa9+daUHBRcqu1U04LAR2sIG6io3ydzlVeHN1n/uBOtNyNcPSVCBzCPdjNtgY
-         5HAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wHPhbbvw5zFQKI19I4sRlCQw5xxCQ/IYVwUpkVORIms=;
-        b=qVWON8eGHlEzeiNzgNkiTpEeK4i3HAZY5b+WsO4p+xLSyI8U4yIcMyvLAzpLpZ/Bxf
-         /PxyFdQjtmia05eN1gUb348qa7w/s1VxoI+OXQiJSiaGaofj2zyK+N7X7mtJkQd6Pjxa
-         vsBsezMci78jyQT1fNwbhjr2TH2oC7cj76hahzD+mODogSa1Kmq0w7DwNmzAx9FrVhpk
-         v5MLhbdtD8WG0SIgQmE3wN41LXT1zki0aEXbOHgr+0sZwUIRolsHAnycdOlYZyKvslU+
-         xWU+0r6FADOL8RsILaPLX4kYUvj/z+FHVRE9lOD/9kixhLfx4Tz8YCplp4Yfe3ewmfcF
-         EUEA==
-X-Gm-Message-State: ACrzQf228Mu1gXJaj3Pk7zjRV/coOPywmiFF/QMIl5EKQN3i/Mk9XCOL
-        DQPUwU0ZjrX6hl5yAhZEA+9grS3J7oRBtQ==
-X-Google-Smtp-Source: AMsMyM6Z5xLVh5jZzjJlzADewH2T5jsFGuZx0MlXhl+qVr1AAl9XYi1PgOdRS78kxn+PpGeJKUGNKg==
-X-Received: by 2002:a17:90b:1d8a:b0:213:cdfa:8aa2 with SMTP id pf10-20020a17090b1d8a00b00213cdfa8aa2mr55457865pjb.204.1668006395438;
-        Wed, 09 Nov 2022 07:06:35 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902da8c00b0017f5ad327casm9224672plx.103.2022.11.09.07.06.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 07:06:35 -0800 (PST)
-Date:   Wed, 9 Nov 2022 15:06:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        thomas.lendacky@amd.com, jmattson@google.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 01/11] KVM: x86: use a separate asm-offsets.c file
-Message-ID: <Y2vB96tzh8GqfmFF@google.com>
-References: <20221109145156.84714-1-pbonzini@redhat.com>
- <20221109145156.84714-2-pbonzini@redhat.com>
+        Wed, 9 Nov 2022 10:06:56 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD301A810;
+        Wed,  9 Nov 2022 07:06:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668006415; x=1699542415;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vkdjifLpDIz2k79GbiPxj/nDQjo5PWlLax+xg6MpmuQ=;
+  b=Dx3fWmbC83bjOofNg7hcMScn6sDLjHaojN+vk7xw31mLB0rJVrSSQWOG
+   IE4cGnA46O+Sc2hQ3MHOR2o7x4B3YwydzJlX1RYEWRCAWOxzP6MeFvQtI
+   YygVFSozW4h0ZOWRpTsVxEWY2UDMOt1OkYjopkBHOIZafvjR14iHF8KEG
+   aCzo/zbjmYDidEODMSnOP+jUSBB3DKrdM0/+oF0aRKL8k9OtgE1ZQtnkZ
+   gtdJdVMssfnXB1gnfXOj9sbqnusY41Md6ra1iHVAuv6V/dVoBzkLyr78n
+   sN2QS5FjAfoAK96JmDvDUV3WXUbGUj/LvVENAOZ1m8HbOx5LdNB5+rED3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="291386812"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="291386812"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 07:06:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="705736758"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="705736758"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Nov 2022 07:06:45 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4AF91155; Wed,  9 Nov 2022 17:07:09 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v1 1/2] gpiolib: of: Drop redundant check in of_mm_gpiochip_remove()
+Date:   Wed,  9 Nov 2022 17:07:05 +0200
+Message-Id: <20221109150706.38823-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109145156.84714-2-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022, Paolo Bonzini wrote:
-> This already removes the ugly #includes from asm-offsets.c, but especially
-> it avoids a future error when asm-offsets will try to include svm/svm.h.
-> 
-> This would not work for kernel/asm-offsets.c, because svm/svm.h
-> includes kvm_cache_regs.h which is not in the include path when
-> compiling asm-offsets.c.  The problem is not there if the .c file is
-> in arch/x86/kvm.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Cc: stable@vger.kernel.org
-> Fixes: a149180fbcf3 ("x86: Add magic AMD return-thunk")
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+The callers never call the function with invalid pointer.
+Moreover, compiler quite likely dropped that check anyway
+because we use that pointer before the check.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/gpio/gpiolib-of.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-> diff --git a/arch/x86/kvm/vmx/vmenter.S b/arch/x86/kvm/vmx/vmenter.S
-> index 8477d8bdd69c..0b5db4de4d09 100644
-> --- a/arch/x86/kvm/vmx/vmenter.S
-> +++ b/arch/x86/kvm/vmx/vmenter.S
-> @@ -1,12 +1,12 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  #include <linux/linkage.h>
->  #include <asm/asm.h>
-> -#include <asm/asm-offsets.h>
->  #include <asm/bitsperlong.h>
->  #include <asm/kvm_vcpu_regs.h>
->  #include <asm/nospec-branch.h>
->  #include <asm/percpu.h>
->  #include <asm/segment.h>
-> +#include "kvm-asm-offsets.h"
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index feeb9e8e846d..83997434215e 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -963,9 +963,6 @@ void of_mm_gpiochip_remove(struct of_mm_gpio_chip *mm_gc)
+ {
+ 	struct gpio_chip *gc = &mm_gc->gc;
+ 
+-	if (!mm_gc)
+-		return;
+-
+ 	gpiochip_remove(gc);
+ 	iounmap(mm_gc->regs);
+ 	kfree(gc->label);
+-- 
+2.35.1
 
-Do you have a preference on KVM files using dashes or underscores?  Outside of
-kvm-x86-ops.h and kvm-x86-pmu-ops.h, KVM x86 uses underscores.  I actually prefer
-dashes because they're slightly easier to type, but when there are only a few
-outliers I constantly mistype the names.  If dashes are generally, maybe we could
-gradually/opportunistically move in that direction?
