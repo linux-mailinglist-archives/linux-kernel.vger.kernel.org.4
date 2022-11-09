@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AC96226F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2906622704
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiKIJ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S229868AbiKIJbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiKIJ3x (ORCPT
+        with ESMTP id S230387AbiKIJbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:29:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3F6CE36;
-        Wed,  9 Nov 2022 01:29:50 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0CA2C6602905;
-        Wed,  9 Nov 2022 09:29:48 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667986189;
-        bh=C8+nFwWVDoUq71o67J0VVROq2sCLrQLLqWeEm7+iVaE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=POk09DRHegyVz/QyxPE5BfWwmv+Gwuw+YeFBVbjaXAXsPz0nVb33wjiUz5+xZqqOZ
-         +WusxulJimoKo3+Jn53vsheaG5yCRsOf8NjNoXmQ01PDr4WvCDGCOxGWf1gFwS9vJO
-         /X+4yijAwSx20wFr6v287csda71d4PyS91HvJslXbe/epBOb43ccn/R3agE4JXmrwx
-         RPVO/XxGPgT+YR8FMZHm1YxN8x36KCzGr7oK6cfSwPenAUvMXck1awtTKtMDKQbgr2
-         yMtmYOMc7I4IdMsmlVVeDNNTG/tMM1vsL/7JBHZFGKmWDKWt3p8I+BJJUePN9zhzbQ
-         teKhbKJt3X2cw==
-Message-ID: <96979d33-829a-4b38-bd8e-83b7f07a7c2c@collabora.com>
-Date:   Wed, 9 Nov 2022 10:29:45 +0100
+        Wed, 9 Nov 2022 04:31:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C990A14086
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:30:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667986203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q81R0xjwZq+Uqwnnq1xIVaWYwdB8y5Gee+dkpFHuQEI=;
+        b=gsDfjVF4RmUQEb45hXAxQcPXmJ/7EMld1sBgGeX+8YpBlTJX1ae50Nk8U3BpK3q0tMyH/5
+        4FhpeLEvlu/SCulXEa2Shi32OqgoaHQj0na1VN/PlEGUn8VI0e2PWzA9kDBz+U08cHBa8K
+        3qTWOuzyaYYFwCDw5G37shb3SIlsMeU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-674-WGF4U5bUMYyhnlyuzxwEdg-1; Wed, 09 Nov 2022 04:30:01 -0500
+X-MC-Unique: WGF4U5bUMYyhnlyuzxwEdg-1
+Received: by mail-wm1-f71.google.com with SMTP id ay40-20020a05600c1e2800b003cf8aa16377so7819014wmb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:30:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q81R0xjwZq+Uqwnnq1xIVaWYwdB8y5Gee+dkpFHuQEI=;
+        b=5H2HcCXnXhmr9d9payFkuvQ7rkVNNOGy+iUAktra8xg4nmij10u0yeqwS3FqK+bPxX
+         7qiFOCW4asmkvgsYEGgvztq7rAHWs7sUcU/BaHqm5Py48vh+kD5DrOkg3fvbTNblOcp2
+         REaf5i6zIRs3J7PcAh803lFNyRjb0TcdbZKe7qdrFWX6T5KP8/uVddPLziB0LBv8RHrz
+         rB/6TRkrqc5ejfjeTFCnm3go3XHsCRCnyd7ABaD47gcc3Z3DV9v4jo74LZsuP0sL3+RB
+         kyd37kNMXQApDXkJzCdGuXWkDLNPus32U1GmRsCADG/MS2owVEgDg6oTFwM1hsc9nq5u
+         x8Sw==
+X-Gm-Message-State: ACrzQf1NX26LMPNdFB69Pj8Ae1Ay5y1grdBOsToRqDmfqZFx+Un/Ubvj
+        kL8Jp9SNuEMPXL+SU2aH6WVQ3FvIUgGERPSKg4r4wWlr7+85nPNfAr5Qrowuq3HENKAvOhQB2LK
+        jtMSgL3H+uRowhMX9TIPMreLw
+X-Received: by 2002:a05:600c:48a7:b0:3cf:8025:c899 with SMTP id j39-20020a05600c48a700b003cf8025c899mr29896508wmp.26.1667986200745;
+        Wed, 09 Nov 2022 01:30:00 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM65t7+LWnDL71R+3AhoHt5oj9qYOtk7HdQRv2DlwJcYLMkAaWkALyOAg1gZGKJPkzQQ4ug7qg==
+X-Received: by 2002:a05:600c:48a7:b0:3cf:8025:c899 with SMTP id j39-20020a05600c48a700b003cf8025c899mr29896496wmp.26.1667986200542;
+        Wed, 09 Nov 2022 01:30:00 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id q189-20020a1c43c6000000b003cf483ee8e0sm975366wma.24.2022.11.09.01.29.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 01:30:00 -0800 (PST)
+Message-ID: <85d7b64a-cdb0-d63b-ec4a-8d6920071fef@redhat.com>
+Date:   Wed, 9 Nov 2022 10:29:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 2/3] media: dt-bindings: media: mediatek: vcodec: Change
- the max reg value to 2
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221109073529.26765-1-yunfei.dong@mediatek.com>
- <20221109073529.26765-2-yunfei.dong@mediatek.com>
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 7/8] KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to
+ assembly
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221109073529.26765-2-yunfei.dong@mediatek.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        nathan@kernel.org, thomas.lendacky@amd.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org,
+        jmattson@google.com, stable@vger.kernel.org
+References: <20221108151532.1377783-1-pbonzini@redhat.com>
+ <20221108151532.1377783-8-pbonzini@redhat.com> <Y2r+/UYNeZ7ljYXC@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y2r+/UYNeZ7ljYXC@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/11/22 08:35, Yunfei Dong ha scritto:
-> Need to add racing control register base in device node for mt8195 support
-> inner racing mode. Changing the max reg value from 1 to 2.
+On 11/9/22 02:14, Sean Christopherson wrote:
+>>
+>> +.macro RESTORE_SPEC_CTRL_BODY
 > 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->   .../bindings/media/mediatek,vcodec-subdev-decoder.yaml          | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Can we split these into separate macros?  It's a bit more typing, but it's not
+> immediately obvious that these are two independent chunks (I was expecting a JMP
+> from the 800 section into the 900 section).
 > 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> index 794012853834..1697feb1f854 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-> @@ -61,7 +61,7 @@ properties:
->         - mediatek,mt8195-vcodec-dec
->   
->     reg:
-> -    maxItems: 1
-> +    maxItems: 2
+> E.g. RESTORE_GUEST_SPEC_CTRL_BODY and RESTORE_HOST_SPEC_CTRL_BODY
 
-What about doing, instead...
+Sure, I had it like that in an earlier version.  I didn't see much 
+benefit but it is indeed a bit more readable if you order the macros like
 
-- description: VDEC_SYS register space
-- description: VDEC_RACING_CTRL register space
+.macro RESTORE_GUEST_SPEC_CTRL
+.macro RESTORE_GUEST_SPEC_CTRL_BODY
+.macro RESTORE_HOST_SPEC_CTRL
+.macro RESTORE_HOST_SPEC_CTRL_BODY
 
-then, setting `minItems: 1` will make the racing_ctrl iospace optional :-)
+>> +800:
+>
+> Ugh, the multiple users makes it somewhat ugly, but rather than arbitrary numbers,
+> what about using named labels to make it easier to understand the branches?
 
-Regards,
-Angelo
+I think it's okay if we separate the macros.
+
+Paolo
 
