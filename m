@@ -2,104 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D480622C93
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF6F622C95
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiKINi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 08:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S229947AbiKINkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 08:40:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiKINi6 (ORCPT
+        with ESMTP id S229733AbiKINkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 08:38:58 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE04233A3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 05:38:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668001137; x=1699537137;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ig2AAvmJ4d5/ScWgFInIfDGDvmUqTlDzptDrlLKqlNo=;
-  b=bQJeEnJf01tYWdC0trRE9059QDp3qt+ps0VQaCPgJkszGueBJ88saVR2
-   4uIJHQ+tJ3lApI6/b9qLT6EXzqG1V5xgR/RUJWS0OrLB+1xXS+80Vei+V
-   mowtcvkkU5k1+/XqL3XAaVQT1GSOcpKOqWf/5YkAfwe5bMi+eSI3zG5nz
-   SVbf/QNw9juoj3euKoot4MQ3IOvA+hhmoJFfhLak51okCqco52vwmQNIT
-   tUXnVsYH59RWFNOmbAiGJ15aY4XOQg6ERWZWgjoNWNbvi8aaPGIkLxEvX
-   RRXtExWBKh22AWim3AOiDoAOxrrvrCTz48/rxnoXmDZl87kdoIsRAfRya
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="290693255"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="290693255"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 05:38:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="700358654"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="700358654"
-Received: from bsdoyle-mobl1.amr.corp.intel.com (HELO [10.252.0.23]) ([10.252.0.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 05:38:55 -0800
-Message-ID: <94717ffd-11b0-7242-b145-baff9035092a@linux.intel.com>
-Date:   Wed, 9 Nov 2022 15:39:23 +0200
+        Wed, 9 Nov 2022 08:40:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D9B233A3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 05:40:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1022161AB2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097A0C433D6;
+        Wed,  9 Nov 2022 13:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668001202;
+        bh=R5D/mual96ln/JPqzbIm8Tg82MFVZP6ncu4epnJxztA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aJdGIOYjXTenNHND7xhh42IpIgD3S6NE0OECKL14T4to7SrNmNm6EFryNC0YjdQf7
+         rf/VJngQZhIV/cqxtmB7XegrcJ5PCNjHgG1aI2RkHYmrkskJCI9limk+T90nVFnd/a
+         nFPo/gJEQ8rkNa1uXnOGvK5qOXCCZGPkV9ZL77TQNC2UTQvXWgLRFP/Q1/6Ql3UCOd
+         GR4H8yRztwpfS4PH/ZdEQtmvUdFCg21VkLuhYIccMdZYNrrIIeGCCrV/ndFz3TWXqz
+         9BSBhKOSoXR1SlMyj/tfjvod+FZ2egpCI5x0TeEb7I3Gr1DGy/xo3zBps4fAw2LwUE
+         u/Pu2f4mHfkSg==
+Message-ID: <8fe7450e-6d21-e85a-c6dc-89134206b264@kernel.org>
+Date:   Wed, 9 Nov 2022 21:39:58 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH linux-next v2] ASoC: SOF: remove duplicated included
- sof-audio.h
-To:     yang.yang29@zte.com.cn, pierre-louis.bossart@linux.intel.com
-Cc:     lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        broonie@kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
-References: <202211092130548796460@zte.com.cn>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] f2fs: separate IPU policy for fdatasync from
+ F2FS_IPU_FSYNC
 Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-In-Reply-To: <202211092130548796460@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     qixiaoyu <qxy65535@gmail.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>
+References: <20221021023136.22863-1-qixiaoyu1@xiaomi.com>
+ <af41e68c-4f78-0934-1041-974e44bd3825@kernel.org>
+ <20221102122518.GB22857@mi-HP-ProDesk-680-G4-MT>
+ <3d2b1141-995a-4bfb-4bf0-5227be25105a@kernel.org>
+ <20221108123218.GC22857@mi-HP-ProDesk-680-G4-MT>
+ <8368702c-ae33-b810-a6c3-ac8fa29998df@kernel.org>
+ <20221109125605.GD22857@mi-HP-ProDesk-680-G4-MT>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221109125605.GD22857@mi-HP-ProDesk-680-G4-MT>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/11/9 20:56, qixiaoyu wrote:
+> On Tue, Nov 08, 2022 at 10:30:13PM +0800, Chao Yu wrote:
+>> On 2022/11/8 20:32, qixiaoyu wrote:
+>>> On Sun, Nov 06, 2022 at 09:54:59PM +0800, Chao Yu wrote:
+>>>> On 2022/11/2 20:25, qixiaoyu wrote:
+>>>>> Hi Chao,
+>>>>>
+>>>>> fdatasync do in-place-update to avoid additional node writes, but currently
+>>>>> it only do that with F2FS_IPU_FSYNC as:
+>>>>>
+>>>>> f2fs_do_sync_file:
+>>>>> 	if (datasync || get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks)
+>>>>>   		set_inode_flag(inode, FI_NEED_IPU);
+>>>>>
+>>>>> check_inplace_update_policy:
+>>>>> 	/* this is only set during fdatasync */
+>>>>> 	if (policy & (0x1 << F2FS_IPU_FSYNC) &&
+>>>>> 			is_inode_flag_set(inode, FI_NEED_IPU))
+>>>>> 		return true;
+>>>>>
+>>>>> So this patch separate in-place-update of fdatasync from F2FS_IPU_FSYNC to
+>>>>> apply it to all IPU policy.
+>>>>>
+>>>>> BTW, we found small performance improvement with this patch on AndroBench app
+>>>>> using F2FS_IPU_SSR_UTIL on our product:
+>>>>
+>>>> How this patch affects performance when F2FS_IPU_SSR_UTIL is on?
+>>>>
+>>>> Thanks,
+>>>>
+>>>
+>>> SQLite test in AndroBench app use fdatasync to sync file to the disk.
+>>> When switch to F2FS_IPU_SSR_UTIL ipu_policy, it will use out-of-place-update
+>>> even though SQLite calls fdatasync, which will introduce extra meta data write.
+>>
+>> Why not using F2FS_IPU_SSR_UTIL | F2FS_IPU_FSYNC, I guess these two flags
+>> cover different scenarios, F2FS_IPU_SSR_UTIL for ssr case, and F2FS_IPU_FSYNC
+>> for f{data,}sync case.
+>>
+>> Thanks,
+>>
+> 
+> As fsync(2) says:
+> fdatasync() is similar to fsync(), but does not flush modified metadata unless that
+> metadata is needed in order to allow a subsequent data retrieval to be correctly handled.
 
-
-On 09/11/2022 15:30, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
-> 
-> The sof-audio.h is included more than once.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+I guess it says it allows fdatasync to flush metatdata in order to recovery data in SPO
+case.
 
 > 
-> ---
-> change for v2
->  - add maintainers and the alsa-devel mailing list in CC.  
-> ---
-> 
->  sound/soc/sof/amd/acp-common.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/amd/acp-common.c b/sound/soc/sof/amd/acp-common.c
-> index 27b95187356e..348e70dfe2a5 100644
-> --- a/sound/soc/sof/amd/acp-common.c
-> +++ b/sound/soc/sof/amd/acp-common.c
-> @@ -13,7 +13,6 @@
->  #include "../sof-priv.h"
->  #include "../sof-audio.h"
->  #include "../ops.h"
-> -#include "../sof-audio.h"
->  #include "acp.h"
->  #include "acp-dsp-offset.h"
-> 
+> I think fdatasync should try to perform in-place-update to avoid unnecessary metadata
+> update whatever the ipu_policy is, and F2FS_IPU_FSYNC is used for fsync independently.
 
--- 
-Péter
+IMO, FSYNC key word in F2FS_IPU_FSYNC means fsync path or interface name as below:
+
+int (*fsync) (struct file *, loff_t, loff_t, int datasync);
+
+And by default, f2fs enables F2FS_IPU_FSYNC, I didn't get why we need to disable it.
+
+To Jaegeuk, any comments?
+
+Thanks,
+
+> 
+> Thanks
+> 
+>>>
+>>> Thanks.
+>>>
+>>>>>
+>>>>>                  F2FS_IPU_FSYNC  F2FS_IPU_SSR_UTIL   F2FS_IPU_SSR_UTIL(with patch)
+>>>>> SQLite Insert(QPS)  6818.08     6327.09(-7.20%)     6757.72
+>>>>> SQLite Update(QPS)  6528.81     6336.57(-2.94%)     6490.77
+>>>>> SQLite Delete(QPS)  9724.68     9378.37(-3.56%)     9622.27
+>>>>>
+>>>>> Thanks
+>>>>>
+>>>>> On Tue, Nov 01, 2022 at 11:14:55PM +0800, Chao Yu wrote:
+>>>>>> On 2022/10/21 10:31, qixiaoyu1 wrote:
+>>>>>>> Currently IPU policy for fdatasync is coupled with F2FS_IPU_FSYNC.
+>>>>>>> Fix to apply it to all IPU policy.
+>>>>>>
+>>>>>> Xiaoyu,
+>>>>>>
+>>>>>> Sorry for the delay.
+>>>>>>
+>>>>>> I didn't get the point, can you please explain more about the
+>>>>>> issue?
+>>>>>>
+>>>>>> Thanks,
+>>>>>>
+>>>>>>>
+>>>>>>> Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+>>>>>>> ---
+>>>>>>>   fs/f2fs/data.c | 8 +++-----
+>>>>>>>   fs/f2fs/file.c | 4 +++-
+>>>>>>>   2 files changed, 6 insertions(+), 6 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>>>> index a71e818cd67b..fec8e15fe820 100644
+>>>>>>> --- a/fs/f2fs/data.c
+>>>>>>> +++ b/fs/f2fs/data.c
+>>>>>>> @@ -2518,6 +2518,9 @@ static inline bool check_inplace_update_policy(struct inode *inode,
+>>>>>>>   	if (policy & (0x1 << F2FS_IPU_HONOR_OPU_WRITE) &&
+>>>>>>>   			is_inode_flag_set(inode, FI_OPU_WRITE))
+>>>>>>>   		return false;
+>>>>>>> +	/* this is set by fdatasync or F2FS_IPU_FSYNC policy */
+>>>>>>> +	if (is_inode_flag_set(inode, FI_NEED_IPU))
+>>>>>>> +		return true;
+>>>>>>>   	if (policy & (0x1 << F2FS_IPU_FORCE))
+>>>>>>>   		return true;
+>>>>>>>   	if (policy & (0x1 << F2FS_IPU_SSR) && f2fs_need_SSR(sbi))
+>>>>>>> @@ -2538,11 +2541,6 @@ static inline bool check_inplace_update_policy(struct inode *inode,
+>>>>>>>   			!IS_ENCRYPTED(inode))
+>>>>>>>   		return true;
+>>>>>>> -	/* this is only set during fdatasync */
+>>>>>>> -	if (policy & (0x1 << F2FS_IPU_FSYNC) &&
+>>>>>>> -			is_inode_flag_set(inode, FI_NEED_IPU))
+>>>>>>> -		return true;
+>>>>>>> -
+>>>>>>>   	if (unlikely(fio && is_sbi_flag_set(sbi, SBI_CP_DISABLED) &&
+>>>>>>>   			!f2fs_is_checkpointed_data(sbi, fio->old_blkaddr)))
+>>>>>>>   		return true;
+>>>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>>>>> index 82cda1258227..08091550cdf2 100644
+>>>>>>> --- a/fs/f2fs/file.c
+>>>>>>> +++ b/fs/f2fs/file.c
+>>>>>>> @@ -270,8 +270,10 @@ static int f2fs_do_sync_file(struct file *file, loff_t start, loff_t end,
+>>>>>>>   		goto go_write;
+>>>>>>>   	/* if fdatasync is triggered, let's do in-place-update */
+>>>>>>> -	if (datasync || get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks)
+>>>>>>> +	if (datasync || (SM_I(sbi)->ipu_policy & (0x1 << F2FS_IPU_FSYNC) &&
+>>>>>>> +			get_dirty_pages(inode) <= SM_I(sbi)->min_fsync_blocks))
+>>>>>>>   		set_inode_flag(inode, FI_NEED_IPU);
+>>>>>>> +
+>>>>>>>   	ret = file_write_and_wait_range(file, start, end);
+>>>>>>>   	clear_inode_flag(inode, FI_NEED_IPU);
