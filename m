@@ -2,56 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A026D622CDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13866622CE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiKINw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 08:52:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        id S230241AbiKINxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 08:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiKINw4 (ORCPT
+        with ESMTP id S230234AbiKINxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 08:52:56 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C61BA1CB24
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 05:52:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B54321FB;
-        Wed,  9 Nov 2022 05:53:00 -0800 (PST)
-Received: from [10.57.3.250] (unknown [10.57.3.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA3363F73D;
-        Wed,  9 Nov 2022 05:52:51 -0800 (PST)
-Message-ID: <9ca45a07-00ba-9afd-2e25-7bab6cefab0e@arm.com>
-Date:   Wed, 9 Nov 2022 14:52:46 +0100
+        Wed, 9 Nov 2022 08:53:12 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1900205F2;
+        Wed,  9 Nov 2022 05:53:09 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id m204so18827720oib.6;
+        Wed, 09 Nov 2022 05:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IP5GuE55LXSPGOYJX6tyMHFgYaUe2wT0zbakn2aZiKA=;
+        b=IRoPyveQ9oFrAzTF3HHWGRj0bUrCS8UXLDCa9ddqKqECHwdlDrMOiKDSZFD12lTdMl
+         XNBIQOgXzPdtgZPPrv9GafkLQB/QCIIiL+YPya0/Hp1NPKysiaBQGQjOfZI3/fws8WmO
+         IC351Nj8xsn5UopowW+WN6XagzJpYeXF21UXhjDo9EsVVx2/tmOi23Yx33AbvliZBYWZ
+         rjCm3e40+B0iBtSKK9mkxqcUkAjx9wi3fsP9JzExbAkKPOzS1PbKl5D01nmRmZqwArlf
+         c4WRIWu9QxLRLeK41yi7GJb8h2BS48MGKMxNelapj/igM3ozt9vWWbfuoFaITTowNE3m
+         D41w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IP5GuE55LXSPGOYJX6tyMHFgYaUe2wT0zbakn2aZiKA=;
+        b=FRrIRXX+o4aIfRjgAux1OeF+rXp732Bbku/J1BsB4Bpmw8nNxRuWni5pr7hKmKOfIG
+         1wX5zBV+18cltG/z8hMXkhEPTzx8Un5DBIAGg33cGMpl1foK2k2ParWdm92IdN+zRsao
+         C5DS6c/S2XLQSf9+g71LZ0bTtE8hwNJ5KV6HtL9/XVRm2Rv8K3SyLaMxVnCxQKtRRT2k
+         MW8JuBfMvPPJyJ/zfhVHydxqMidBFvWWDL9q7WfX7lk8mnl8oHWw3FrGOpKF2sCLQoFW
+         K3T7s/F6ioKA6NwaeEWHijZ10gFT/5auSUSMoFFuC9MPwe9JBo6frnKBKJoUT5042KLO
+         WhKw==
+X-Gm-Message-State: ACrzQf1S7RazKyE+7+OavluiX2CMdgFL5q0BGyMQkKsEWY3vMtWwScee
+        KF2xzuNJyyoVA43OsSDMBYE=
+X-Google-Smtp-Source: AMsMyM7yhbw8cdCur7Z/B3HPRG1UyZ5Xhy0cQKinNow41q8SEdCpF9Q0zCPt1dXhUKXdFyWWSxduvw==
+X-Received: by 2002:a05:6808:1b13:b0:35a:57ef:8388 with SMTP id bx19-20020a0568081b1300b0035a57ef8388mr16587593oib.195.1668001989314;
+        Wed, 09 Nov 2022 05:53:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f15-20020a056870210f00b0013ae5246449sm6082480oae.22.2022.11.09.05.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 05:53:08 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 9 Nov 2022 05:53:06 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, nfraprado@collabora.com,
+        angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v5 5/7] dt-bindings: watchdog: mediatek: Convert mtk-wdt
+ to json-schema
+Message-ID: <20221109135306.GA3538893@roeck-us.net>
+References: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
+ <20221108033209.22751-6-allen-kh.cheng@mediatek.com>
+ <585a9cbb-4df4-1c06-ecfa-3b9442f1a5e2@gmail.com>
+ <5758c2af-c2c5-dfbe-c7d8-036bbdaf71c7@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: Crash with PREEMPT_RT on aarch64 machine
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>, Mark Rutland <mark.rutland@arm.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-References: <20221103115444.m2rjglbkubydidts@quack3>
- <Y2U+Je+LICO2HkNY@linutronix.de> <20221107135636.biouna36osqc4rik@quack3>
- <Y2kf6tcX47Cl7q0W@linutronix.de>
- <359cc93a-fce0-5af2-0fd5-81999fad186b@redhat.com>
- <Y2o1NAE7d6Tf5ILt@FVFF77S0Q05N.cambridge.arm.com>
- <20221108174529.pp4qqi2mhpzww77p@quack3>
- <Y2t4+6MwVZEhoV5n@FVFF77S0Q05N.cambridge.arm.com>
- <20221109110133.txft66ukwfw2ifkj@quack3>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20221109110133.txft66ukwfw2ifkj@quack3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5758c2af-c2c5-dfbe-c7d8-036bbdaf71c7@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,103 +87,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/9/22 12:01, Jan Kara wrote:
-> On Wed 09-11-22 09:55:07, Mark Rutland wrote:
->> On Tue, Nov 08, 2022 at 06:45:29PM +0100, Jan Kara wrote:
->>> On Tue 08-11-22 10:53:40, Mark Rutland wrote:
->>>> On Mon, Nov 07, 2022 at 11:49:01AM -0500, Waiman Long wrote:
->>>>> On 11/7/22 10:10, Sebastian Andrzej Siewior wrote:
->>>>>> + locking, arm64
->>>>>>
->>>>>> On 2022-11-07 14:56:36 [+0100], Jan Kara wrote:
->>>>>>>> spinlock_t and raw_spinlock_t differ slightly in terms of locking.
->>>>>>>> rt_spin_lock() has the fast path via try_cmpxchg_acquire(). If you
->>>>>>>> enable CONFIG_DEBUG_RT_MUTEXES then you would force the slow path which
->>>>>>>> always acquires the rt_mutex_base::wait_lock (which is a raw_spinlock_t)
->>>>>>>> while the actual lock is modified via cmpxchg.
->>>>>>> So I've tried enabling CONFIG_DEBUG_RT_MUTEXES and indeed the corruption
->>>>>>> stops happening as well. So do you suspect some bug in the CPU itself?
->>>>>> If it is only enabling CONFIG_DEBUG_RT_MUTEXES (and not whole lockdep)
->>>>>> then it looks very suspicious.
->>>>>> CONFIG_DEBUG_RT_MUTEXES enables a few additional checks but the main
->>>>>> part is that rt_mutex_cmpxchg_acquire() + rt_mutex_cmpxchg_release()
->>>>>> always fail (and so the slowpath under a raw_spinlock_t is done).
->>>>>>
->>>>>> So if it is really the fast path (rt_mutex_cmpxchg_acquire()) then it
->>>>>> somehow smells like the CPU is misbehaving.
->>>>>>
->>>>>> Could someone from the locking/arm64 department check if the locking in
->>>>>> RT-mutex (rtlock_lock()) is correct?
->>>>>>
->>>>>> rtmutex locking uses try_cmpxchg_acquire(, ptr, ptr) for the fastpath
->>>>>> (and try_cmpxchg_release(, ptr, ptr) for unlock).
->>>>>> Now looking at it again, I don't see much difference compared to what
->>>>>> queued_spin_trylock() does except the latter always operates on 32bit
->>>>>> value instead a pointer.
->>>>>
->>>>> Both the fast path of queued spinlock and rt_spin_lock are using
->>>>> try_cmpxchg_acquire(), the only difference I saw is the size of the data to
->>>>> be cmpxchg'ed. qspinlock uses 32-bit integer whereas rt_spin_lock uses
->>>>> 64-bit pointer. So I believe it is more on how the arm64 does cmpxchg. I
->>>>> believe there are two different ways of doing it depending on whether LSE
->>>>> atomics is available in the platform. So exactly what arm64 system is being
->>>>> used here and what hardware capability does it have?
->>>>
->>>>  From the /proc/cpuinfo output earlier, this is a Neoverse N1 system, with the
->>>> LSE atomics. Assuming the kernel was built with support for atomics in-kernel
->>>> (which is selected by default), it'll be using the LSE version.
->>>
->>> So I was able to reproduce the corruption both with LSE atomics enabled &
->>> disabled in the kernel. It seems the problem takes considerably longer to
->>> reproduce with LSE atomics enabled but it still does happen.
->>>
->>> BTW, I've tried to reproduced the problem on another aarch64 machine with
->>> CPU from a different vendor:
->>>
->>> processor       : 0
->>> BogoMIPS        : 200.00
->>> Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma dcpop asimddp asimdfhm
->>> CPU implementer : 0x48
->>> CPU architecture: 8
->>> CPU variant     : 0x1
->>> CPU part        : 0xd01
->>> CPU revision    : 0
->>>
->>> And there the problem does not reproduce. So might it be a genuine bug in
->>> the CPU implementation?
->>
->> Perhaps, though I suspect it's more likely that we have an ordering bug in the
->> kernel code, and it shows up on CPUs with legitimate but more relaxed ordering.
->> We've had a couple of those show up on Apple M1, so it might be worth trying on
->> one of those.
->>
->> How easy is this to reproduce? What's necessary?
+On Wed, Nov 09, 2022 at 10:04:09AM +0100, Krzysztof Kozlowski wrote:
+> On 08/11/2022 11:50, Matthias Brugger wrote:
+> > 
+> > 
+> > On 08/11/2022 04:32, Allen-KH Cheng wrote:
+> >> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> >>
+> >> Convert the MediaTek watchdog bindings to schema.
+> >>
+> >> The original binding only had 4 without a fallback but there is a reset
+> >> controller on the "mediatek,mt7986-wdt", "mediatek,mt8186-wdt",
+> >> "mediatek,mt8188-wdt" and "mediatek,mt8195-wdt" Since there is no reset
+> >> controller for the mt6589, we remove "mediatek,mt6589-wdt" as a
+> >> fallback.
+> >>
+> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> >> Co-developed-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> >> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> >> Reviewed-by: Rob Herring <robh@kernel.org>
+> >> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> >> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > As I'm put as the maintainer:
+> > Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+> > 
+> > Shall I take that through my tree or shall it go through the watchdog tree?
+> > 
 > 
-> As Pierre writes, on Ampere Altra machine running dbench benchmark on XFS
-> filesystem triggers this relatively easily (it takes it about 10 minutes to
-> trigger without atomics and about 30 minutes to trigger with the atomics
-> enabled).
-> 
-> Running the benchmark on XFS somehow seems to be important, we didn't see
-> the crash happen on ext4 (which may just mean it is less frequent on ext4
-> and didn't trigger in our initial testing after which we've started to
-> investigate crashes with XFS).
-> 
-> 								Honza
+> In general, bindings should go via subsystem trees (so watchdog), just
+> like drivers. However this got Guenter's review tag, so usually it means
+> also an ack... Dunno... :)
 
-It was possible to reproduce on an Ampere eMAG. It takes < 1min to reproduce
-once dbench is launched and seems more likely to trigger with the previous diff
-applied. It even sometimes triggers without launching dbench on the Altra.
+For watchdog patches, if I send a Reviewed-by: tag, I expect Wim to pick
+up the patch through the watchdog tree. If I expect some other tree to
+pick it up, I use Acked-by: and usually add a note saying that I assume
+that the patch will be picked up by someone else.
 
-/proc/cpuinfo for eMAG:
-   processor       : 0
-   BogoMIPS        : 80.00
-   Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-   CPU implementer : 0x50
-   CPU architecture: 8
-   CPU variant     : 0x3
-   CPU part        : 0x000
-   CPU revision    : 2
+I usually also add watchdog patches to my own watchdog-next tree as
+reference for Wim. I already have several mediatek devicetree patches
+queued there. Handling some of the patches through watchdog and others
+through some other tree would create a mess. Please don't do that.
 
+Guenter
