@@ -2,150 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC2E622CF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F1A622CF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiKINz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 08:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S230361AbiKIN53 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Nov 2022 08:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiKINzN (ORCPT
+        with ESMTP id S230323AbiKIN5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 08:55:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E13EA5;
-        Wed,  9 Nov 2022 05:55:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B2B861AC4;
-        Wed,  9 Nov 2022 13:55:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E484C433D6;
-        Wed,  9 Nov 2022 13:55:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668002110;
-        bh=4NwwsEbCbswN53T4UEwwOlgLBEjJU2ohr2t1zlmAODw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eU/+cyvmee3zNEITLx3DRExwDjKNI1MyQPOiKwJ8pkJiB8+lO6ZdrkPOeyh8qRjo0
-         jasOtJGBm/3IGYdBP0DutC+AUlfxlHPZfOOkaZ+gQ/abdkK8WYRlEFllxKXN3k57m4
-         UHZgropZD6h+fPVrS4G8qpKiNlBEuhWHkujLuEgSiomSHUs+kYwzJya2tLYmJ/dP1c
-         eEPQihYi27GO0jS7PnjMD/buLcTXZ/uBwuUhrq2KbKv0f0SHX77Eg3+4vF/ote9AT9
-         Ekz4UyfTSmSxh9M0OVMaqiOhDIcJngBmktu9pZRuK21eoePTGui18TxaSQYp5mQH0M
-         J7qvg7QO5yIcw==
-Message-ID: <4de6be5d-b23e-5927-515c-233f697d0be1@kernel.org>
-Date:   Wed, 9 Nov 2022 15:55:06 +0200
+        Wed, 9 Nov 2022 08:57:23 -0500
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62729A1AC;
+        Wed,  9 Nov 2022 05:57:22 -0800 (PST)
+Received: by mail-qk1-f169.google.com with SMTP id f8so10935799qkg.3;
+        Wed, 09 Nov 2022 05:57:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZlCICaMl7bVoWfbHUbXFE6WjK/mpRfkQ1BpJ4tD81wg=;
+        b=hYAyJrJrprd7b0VJs4fu9izwePkRd6u3kCLEH0ucaDYLowYUqvMI9cVgsX1ZV2lfTI
+         lJiwXL8+J6BXYbfREn1al8CFChSx0JZ+N6X6XVVuY3W4DUnCTnQupDxZ6s+p6hNUeRZG
+         puyzAzR3DA5D1rUXe/2PaWXPolRmDMt/+x8RZGEwpUcjLKvN+RSwSDTxUkUP203O62A+
+         YtKC6aQ9YbvkfHQz3Pj4hwrki2+H4H5+Q3xNlxMZl2T2kcazNt3mX7WyZ762ZJlzXhrl
+         8GW9oGSiTfLcysE8fbNiSXQUtGU2g/8BI3lQDCqR1RohVq/52XR260bYdrRm8Xc2cb/f
+         vpbQ==
+X-Gm-Message-State: ACrzQf3OxnDSwOlIgBiKAX9wAeSRbMjmdh2SgdBVaqSNz6+bTT1yF6V9
+        6SEaA7HCdI0qXOjCWYoObQt1ysyPQ0FUgg==
+X-Google-Smtp-Source: AMsMyM750pznucp7md3lSwY7NlWmE4AfNBaGyscG+QYT36cSHCpD2cxupqOG3MBq9nwNLkvVZl0zkw==
+X-Received: by 2002:a05:620a:4447:b0:6c6:c438:1ced with SMTP id w7-20020a05620a444700b006c6c4381cedmr45021187qkp.658.1668002241345;
+        Wed, 09 Nov 2022 05:57:21 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id a185-20020ae9e8c2000000b006fa0d98a037sm10987120qkg.87.2022.11.09.05.57.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 05:57:20 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-368edbc2c18so162343457b3.13;
+        Wed, 09 Nov 2022 05:57:19 -0800 (PST)
+X-Received: by 2002:a81:12c8:0:b0:36a:bd6b:92fb with SMTP id
+ 191-20020a8112c8000000b0036abd6b92fbmr55685175yws.316.1668002239320; Wed, 09
+ Nov 2022 05:57:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 0/5] firmware: ti_sci: Introduce system suspend support
-Content-Language: en-US
-To:     Georgi Vlaev <g-vlaev@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Vibhore Vardhan <vibhore@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20221108224527.137179-1-g-vlaev@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20221108224527.137179-1-g-vlaev@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YzN+ZYLjK6HI1P1C@ZenIV> <YzSSl1ItVlARDvG3@ZenIV>
+ <YzpcXU2WO8e22Cmi@iweiny-desk3> <7714.1664794108@jrobl> <Yzs4mL3zrrC0/vN+@iweiny-mobl>
+ <YztfvaAFOe2kGvDz@ZenIV> <4011.1664837894@jrobl> <YztyLFZJKKTWcMdO@ZenIV>
+ <CAHk-=whsOyuRhjmUQ5c1dBQYt1E4ANhObAbEspWtUyt+Pq=Kmw@mail.gmail.com> <CA+icZUVXvMM-sK41oz_Ne4HyRGxXHNz=fPqy+1AYXmXPiE_=Rw@mail.gmail.com>
+In-Reply-To: <CA+icZUVXvMM-sK41oz_Ne4HyRGxXHNz=fPqy+1AYXmXPiE_=Rw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 9 Nov 2022 14:57:08 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUTHi35MwFt=x+soc1XdYH09DYfHxzjexKG8swR1K40Zw@mail.gmail.com>
+Message-ID: <CAMuHMdUTHi35MwFt=x+soc1XdYH09DYfHxzjexKG8swR1K40Zw@mail.gmail.com>
+Subject: Re: [PATCH][CFT] [coredump] don't use __kernel_write() on kmap_local_page()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     sedat.dilek@gmail.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "J. R. Okajima" <hooanon05g@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Al,
 
+On Tue, Oct 4, 2022 at 8:19 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> On Tue, Oct 4, 2022 at 2:51 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> > On Mon, Oct 3, 2022 at 4:37 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > >
+> > > One variant would be to revert the original patch, put its
+> > > (hopefully) fixed variant into -next and let it sit there for
+> > > a while.  Another is to put this incremental into -next and
+> > > merge it into mainline once it gets a sane amount of testing.
+> >
+> > Just do the incremental fix. It looks obvious enough ("oops, we need
+> > to get the pos _after_ we've done any skip-lseeks on the core file")
+> > that I think it would be just harder to follow a "revert and follow up
+> > with a fix".
+> >
+> > I don't think it needs a ton of extra testing, with Okajima having
+> > already confirmed it fixes his problem case..
+> >
+> >                 Linus
+>
+> [ CC Geert ]
+>
+> There was another patch from Geert concerning the same coredump changes:
+>
+> [PATCH] coredump: Move dump_emit_page() to kill unused warning
+>
+> If CONFIG_ELF_CORE is not set:
+>
+>     fs/coredump.c:835:12: error: ‘dump_emit_page’ defined but not used
+> [-Werror=unused-function]
+>       835 | static int dump_emit_page(struct coredump_params *cprm,
+> struct page *page)
+>           |            ^~~~~~~~~~~~~~
+>
+> Fix this by moving dump_emit_page() inside the existing section
+> protected by #ifdef CONFIG_ELF_CORE.
+>
+> Fixes: 06bbaa6dc53cb720 ("[coredump] don't use __kernel_write() on
+> kmap_local_page()")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>
+> Please, check yourself!
 
-On 09/11/2022 00:45, Georgi Vlaev wrote:
-> This series introduces necessary ti_sci driver functionality in
-> preparation of supporting DeepSleep mode for suspend to mem on TI
-> K3 AM62x. This version is a fixup and rebase of the patch series by
-> Dave Gerlach [1]. It applies on top of v6.1-rc4.
-> 
-> Deep Sleep mode is described in section "5.2.4.4 DeepSleep" of the
-> AM62x Technical Reference Manual [2].
-> 
-> The kernel triggers entry to Deep Sleep mode through the mem suspend
-> transition with the following:
-> 
-> * Use a TF-A binary that supports PSCI_SYSTEM_SUSPEND call. This causes
->   system to use PSCI system suspend as last step of mem sleep.
-> 
-> * The firmware requires that the OS sends a TISCI_MSG_PREPARE_SLEEP
->   message in order to provide details about suspend, so we must add the
->   ability to send this message. We also add TISCI_MSG_LPM_WAKE_REASON
->   and TISCI_MSG_SET_IO_ISOLATION messages as part of a new PM ops. These
->   messages are part of the TISCI PM Low Power Mode API [3]. (Patch 2)
-> 
-> * A memory address must be provided to the firmware using the above
->   message, which is allocated and managed by dma_alloc_coherent()
->   and friends. (Patch 3)
-> 
-> * System must load firmware to a specific location before Deep Sleep is
->   entered, and this is accomplished using a memory region in device
->   tree to indicate where this firmware should be loaded, and also a
->   "firmware-name" property to indicate the name of the firmware
->   to load. The ti_sci driver checks in its pm handler to see if
->   the firmware has been loaded and if not, loads it. (Patch 4)
-> 
-> * Finally, the ti_sci driver must actually send TISCI_MSG_PREPARE_SLEEP
->   message to firmware with the above information included, which it
->   does during the driver suspend handler when PM_MEM_SUSPEND is the
->   determined state being entered. (Patch 5)
-> 
-> This is tested on am625-sk using a limited dts with all devices disabled
-> apart from cpu0, main_uart0, i2c, rtc, mmc/sd, dmsc, and secure_proxy_main.
-> 
-> Testing this sequence requires K3 sdhci suspend/resume support [4],
-> enable the wkup_rtc in the am625-sk.dts, disable devices that don't
-> support system suspend/resume like OSPI and CPSW3G.
-> 
-> In can be tested on the following branch:
-> https://github.com/gvlaev/linux/tree/upstream-v6.2/lpm-ti-sci-v1
-> 
-> Changelog:
-> v2:
-> - Addressed comments received for v1 series [1].
-> - Updated v1 patch 5 to use pm notifier to avoid firmware loading
->   issues.
-> - Dropped the reserved region requirement and allocate DMA memory
->   instead. The reserved region binding patch is also removed.
-> - Introduce two more TISCI LPM messages that are supported in SysFW.
-> - Fixes in error handling.
-> 
-> [1] https://lore.kernel.org/lkml/20220421203659.27853-1-d-gerlach@ti.com
-> [2] https://www.ti.com/lit/pdf/spruiv7
-> [3] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
-> [4] https://lore.kernel.org/lkml/20220408124338.27090-1-a-govindraju@ti.com
-> 
-> Dave Gerlach (5):
->   dt-bindings: ti, sci: Add lpm region and firmware-name
->   firmware: ti_sci: Introduce Power Management Ops
->   firmware: ti_sci: Allocate memory for the LPM modes
->   firmware: ti_sci: Use dt provided fw name and address to load at
->     suspend time
->   firmware: ti_sci: Introduce prepare system suspend call
-> 
->  .../bindings/arm/keystone/ti,sci.yaml         |  21 +-
->  drivers/firmware/ti_sci.c                     | 356 ++++++++++++++++++
->  drivers/firmware/ti_sci.h                     |  64 +++-
->  include/linux/soc/ti/ti_sci_protocol.h        |  44 +++
->  4 files changed, 480 insertions(+), 5 deletions(-)
-> 
-> 
-> base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
+The build issue is still present in today's linux-next.
+Al, can you please apply my fix, so Greg can backport all of this to stable?
+https://lore.kernel.org/all/YzxxtFSCEsycgXSK@kroah.com
 
-Tested-by: Roger Quadros <rogerq@kernel.org>
+Thanks!
 
-Tested this with am65-CPSW suspend/resume patches [1]
-[1] - https://lore.kernel.org/netdev/20221104132310.31577-3-rogerq@kernel.org/T/
+> [1] https://lore.kernel.org/all/20221003090657.2053236-1-geert@linux-m68k.org/
 
--- 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
