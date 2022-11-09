@@ -2,224 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24691622BD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68F6622BDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKIMqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
+        id S229896AbiKIMr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiKIMqQ (ORCPT
+        with ESMTP id S229678AbiKIMrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:46:16 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737D92D1C9;
-        Wed,  9 Nov 2022 04:46:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667997975; x=1699533975;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=DNkrF3nPbup25jiU6KCUuTEsqNkB+iZwfVJlfM1JnsU=;
-  b=jN0kskgJEEa0Sz8foJwCXG4ZP1BRfT0GhuZyYw3ZUWw0HQt7lw/IX/I+
-   SLm1EHsA6rv5QSmquz3lYhzjl1aY+5l0ks3eJp9EcwCreM93zQ0zeRky/
-   Gur10SUltOOpt+nPhiPfEFgrEnhSCkiyggKaaA+9v7FqRX4HJ0dLf7s6X
-   Awop44fIYRAqHARVMtbSgdr5gWGa0ox6g+4wJWANs/d7urWGdmQlM96SJ
-   tTetR1coHU/QbC5H8Sb5MCNVoH+ugcbT3H7lgVKi6b7CsOHnWiiWVaSMi
-   Wok6bgzPyTnBDWnzWwPr67VIahJaBSw+urD5gs0QsVvubxdTXofRdH0HX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312127814"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="312127814"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 04:46:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="742383982"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="742383982"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Nov 2022 04:46:14 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 04:46:13 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 9 Nov 2022 04:46:13 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 9 Nov 2022 04:46:13 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E6+XCzBzmJ3uDu/s1NJzRUECtmioI9PFgAWw3nVBV3YXs0uK5GpYq/1SBi2DKO+MDpA2qkuJXD48mkEtuTGQVc/D8Nhn+VbajUcj4SWmXElkhYzptQD7RM4lKZYy7K8FIB1+qqV0Xl3z4z/6Un57NnzLKRkV6j5ldaIkgB9t2Fs5GTy+/e9CLaAIUgz7eGIzJXpOM5yKO7JZ6VkrBcoRWrzhVDCnBAWCGM5IYMyL7qcB+qjZmHjt+fODTeu+nZQ5ZbWS2HEEP7x3tBs3oWtCF6Sz9MO+OkWuqVL2XfXHMdfmki2OqJayIxA0XTgWjLlwuME9+eQsfuQpD/yE9sYSBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DNkrF3nPbup25jiU6KCUuTEsqNkB+iZwfVJlfM1JnsU=;
- b=HVK3cBptLbsTkOHrza1CJxuA8uUNW3Xc1kHOYnK709AHAQR2YWQN0wLbXlgzQeyoedxFot1odxMJuWNSsxI18gATz4YUw9ZJqcvBbbHVfIVq5GixQ5HzhWrK5z0Pvba7RcLpq3UBPx2Y1cypHCOuj/8ygnkOBe4Eb68+vwan3QkXIul/nWLXK9Pse8rzm2UMPC+S151iNycZpOnGK6nRvemLHkJwEvjnwSZzx5sp0YlAcYDzOJL4yvikpXfUNrbHtx95yg0dGWOOys/8CskufTMmgejP7A1OG4kLBQNI00DY6fLNJk72uv1CuZus00YwaTE5+Jri3bVqzTUUPGcWzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by SA1PR11MB6711.namprd11.prod.outlook.com (2603:10b6:806:25b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
- 2022 12:46:11 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b%3]) with mapi id 15.20.5791.026; Wed, 9 Nov 2022
- 12:46:11 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v10 036/108] KVM: TDX: Enable mmio spte caching always for
- TDX
-Thread-Topic: [PATCH v10 036/108] KVM: TDX: Enable mmio spte caching always
- for TDX
-Thread-Index: AQHY7ChuBthSf8B20Eq0yiIImvqBi642misA
-Date:   Wed, 9 Nov 2022 12:46:11 +0000
-Message-ID: <11ccff55a5fbb52d59c36c3dbb88c8d8d937b60e.camel@intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
-         <820bac8ce45b92d643630084096dcd7e71038a58.1667110240.git.isaku.yamahata@intel.com>
-In-Reply-To: <820bac8ce45b92d643630084096dcd7e71038a58.1667110240.git.isaku.yamahata@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SA1PR11MB6711:EE_
-x-ms-office365-filtering-correlation-id: bbe72ed4-023b-4499-22ef-08dac2506161
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: U4DX5TXIOunzAHARrVfw46D2ECNPCduoIo7DqdY874FHBNeiCup/dYAwoXUfUQSm/65elLkwbaLJkNrB/q3pO6440f5GsBYb6EEUvD/jNwv0OubUwgz8fw9CPqIjP2dZUIPPyneqw1Lj/zhBWmPlBS7vy4RsIwreDrtNrrOvas0FxOao20X2PwvchgxID3z+rmCI6DvfVW6CfvfnfEMxkEEY4qL0V8j71RwBncm6xvLpJqOMtRNIPzMgIsIS3tDvA4FWEarrd16XlcmYOeb6q5y7Fp12hQAwYq4T4arcglEwKAX04wECb9IxUwUDqsXDQHxtHnIvTH7duM179PP3md04J8LO/U4Talyvt/sg9TJtiQaL3Uj4Mb96TOQKCov/74tn2u9ed7Wt+I/GTUSa/Yk0hrW2jGOvwS1hMsmLbq8JXDnQPNPhgpQhlf0fLMGnNH4U/ZYVldCOaS2uV1QYinLCt2z2wMJtck7tgO8LZXYp8KM0IbIFfeaQwUNMcgA7TGrx4rTaz8rp6nvfOpeqgjQviXtA3Kcdz84kbq4/0SeiYlo9irgwzTaKwmy5GPGupM5cx3xL5UD4m8BQK+QERZGLTPePitHP6x1bq+C/WApF77QH9MKnY5167Jh2oSTguzNb50O2x0ghIKnhg6IlqeqrYfHaZpUiSPSpLHR3sekfd6+9sl1V/7tpoYQFC8LPUXZxaIVplI/RPcOhS23ISSjlm+abNzbmH8ZZRpHxbpwoN52oDUImRxMi9t/ntn/at/8RvSr9E4bPB6C72lHF85LbhTzwlwodWXUkLbpRs+g=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(136003)(346002)(39860400002)(376002)(451199015)(36756003)(38070700005)(86362001)(82960400001)(26005)(5660300002)(2906002)(4001150100001)(6506007)(186003)(38100700002)(6512007)(83380400001)(122000001)(2616005)(76116006)(66946007)(6636002)(64756008)(66556008)(478600001)(966005)(66446008)(8936002)(91956017)(66476007)(54906003)(110136005)(316002)(8676002)(4326008)(71200400001)(6486002)(41300700001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M2JxZUlSeXFqbkh4cC83d1ZuSkp2QnJvKyttRG1RK2pVdzlIeVBTc0xqbDBx?=
- =?utf-8?B?amEzdUJGbktXcjZKaExkUDRnWVlQMWpFR2Nkam0yNkl6ejNPRzIvSFpWcU93?=
- =?utf-8?B?ZVVsOEYvOG1zMnhhcWNDZzFmZndrd3F5WUxOUVZsenVqN1c4b29hbGlZT0NM?=
- =?utf-8?B?dmRYTHQxMjc0S25tWW5YUktiK1ZLRWUxMkRMWUtCd2QxUkE5eisycmRyUFRW?=
- =?utf-8?B?ZGFMK3pyTnpyYnBpZHpNVkd3c2FsSUNUajV0eVhCT01NMVJZdExVRG4wbVlQ?=
- =?utf-8?B?SDZSTlkzYWVWYU9xSC94NHVWcHBqM3NHeDdZTkQybm1DcjhndXoyMi96K09D?=
- =?utf-8?B?SjBONnY3OTNnZVJaOVh3Q1Z5bEJ0YmxKRjd5S1RGdk44dk5mTEpkZXlLY2R1?=
- =?utf-8?B?WmhVTUVNYWNCQzlPSXlGalBvT09Kb2pJaXRiQW1PeDdpSDk2NWszNzhEbVQz?=
- =?utf-8?B?R2kvQnJvWW02MzJFeXNlMmpSSWVrOG5qVkJDN0ZUM0JFekJvZEE3cXBYWjVo?=
- =?utf-8?B?UDQxL3JGaWJUNTJpTTFENnBSZExrZVd4RHNYa1U0SEZmaHRFVHY1NEh4SUkw?=
- =?utf-8?B?ZzFWQklySDVRb05WMDdMUU9IK1hSR2pDOHdCdXlheGVYc2JOc2w0bFRZcUxN?=
- =?utf-8?B?Y2lFNU1IMWN0amlmTzd6NmtpVlpZWUpISTdtcTlWWGg4NVFaeUQyN1I1c0VK?=
- =?utf-8?B?WUNZK3ozMitCM3E4ZkxiL1l3UlptZHg4YnQxZmpDYURDMlpJVjRYcXBPUkFs?=
- =?utf-8?B?RmRXVjZGV3RNQVIwMW15Sk1PMWVzMndJYXdJMHJoSGhQU2pXR25LZ1FoQWZ6?=
- =?utf-8?B?blkzUklsTVpjNWxQZHZWc1hvUWdiK0Y2b2dFS09rVzZKZ3ZzL01TYTh0cVRS?=
- =?utf-8?B?bFd1dzErRWhyemxYL2Zla2ZkazFjZzB4VHdXSmJtUngxTWw3WkNKMUlJNkdO?=
- =?utf-8?B?NVRsb2o2emdlWUtzQVF0ajB3dXhPd2t6WGQ1dk5QekYrZ1lVdnowN3FaMjJa?=
- =?utf-8?B?d2Z1NU9jQ1c4ci9XUnN0SkExTFRYaXF1ckVVK1NiMjkzdEpkSWhvODhJY21k?=
- =?utf-8?B?RkhHT0diSW5zVWxXUkZaQlJxUXp3cW51Vkc1THdWQVRPOG84STN6WlJaMURT?=
- =?utf-8?B?L05MSkxpY1FuTlB6QUd4ZkVrT2ZQNXcrMG5zd2Z4VmJIZWRwbHdlZVB2aUJE?=
- =?utf-8?B?ak1vVW9vZXVVTERPNWtmVExDSHlZcG82dndQU2w2Y0dFYm5ldUgrcHBSRUtr?=
- =?utf-8?B?TUN2aTNVL0YyVGVpUStSS2F6czk0eTZ1NDY3djNuVjlmRG1lM1hBd1l2dSs3?=
- =?utf-8?B?aTFNQmppUHRTZlhRNlFyeXBhajRldVhrQ1pzRmluL015TzRsQkFDZHdic1p1?=
- =?utf-8?B?aEU5QmFOdlYvdElGODJ0RHBHc3JkM2EvVDR4SnR6L3pHdTFyNUtpV1g2TFll?=
- =?utf-8?B?RVF3VzEySzRWVHBpTjhHWmFiU0lkTDQ3ekY1L1BqVEJUUVRxOUQvODZIZWNi?=
- =?utf-8?B?ZTdGS1BEQUdmOHNtUU83NHdJMHVCakhZOVAzVjBRYitrOGRhMi8za2VvVnlu?=
- =?utf-8?B?UHNueVc2WldRTnZvS0RMMHRJb2FGb2dPTVJIT1lrTmw2RXM2bTdzUHA0bGd0?=
- =?utf-8?B?cWhLL1Q1WDdOUUtJRTI3b2ZaTEFxOE9HQS9GMW1zY2ZkRDhUNkdzWmt1bTRu?=
- =?utf-8?B?WDRDemVDNS9vT3dOUG84a2JZTlM1NnFUSTBwYVdocHU4QmlSUnVtUENWdDZD?=
- =?utf-8?B?Q2syWnVWVXVzVlYrRzZFR0xzZXhMYU9yM3lNZ0RrUVM3RzlSK1g3Mm5VbnFl?=
- =?utf-8?B?TTV6S3ZhU0d1TmNrUFNsOXJGT3BNTG5OWEs4QjQwRkJGK3ZLSk1IdnFSRGhP?=
- =?utf-8?B?KzBERWhBZlhGYmtmM25wMHpkekhmR0hPRjJQT2JUdWFnZ2dneHFtTlEzOXp3?=
- =?utf-8?B?Z25vRFYrUUVqVmVlMSs3NXRJbCtGdVV1RU1BVlJSTGNlMmdxT29zRTlac0ky?=
- =?utf-8?B?ODR2R1M5eHVTQUxhZXM1Ym9sWWd0QTRuRlZHMmFlbHcyM2g2WURyeG1oY0tZ?=
- =?utf-8?B?MmVmWTR6OG5uZllkdUdQN0hXaVo3TWJFQmdZZFZPMzdPeGdjMnN5ckM3ZzRt?=
- =?utf-8?B?WkhhZVFEQS8rNGI4Y3FjelBvNGFTM1Y0Y0dJNGl1VkpyeTJaMGtEdENvSE5F?=
- =?utf-8?B?cmc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8EBBDA4D5735D441881835A7B2A5C36E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 9 Nov 2022 07:47:23 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368892CDC2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 04:47:21 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id d3so25603631ljl.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 04:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qaG7nxdQlrF0Gfd1lgG+gaQR/Ksch3wgDZc+ACCQybs=;
+        b=CV/6BLccRRxz1fMV6d71Hqkm81Jl7O0wkIFeIsSEJeRo/EHa+8kjYzkNNwb4zNAmUJ
+         4478NsYDUQy7czthe8MOb6jPcfE7+3Bbs6x7570GOxw9LWDFqFui/XJ6OdWsjAowYyh2
+         SeocY93xVPpWmV31+275kvGB5UU25EiyAgkcw5dRKqd1jJ+ghJifQD7thdlhVFtN1mrv
+         2a0uZLbU3632/MES59RnuEBi49aYVxnOJDbiTPX0bEvNkNw1uHet3wg/3/GQkJB99GXP
+         kp14Olq41T8FSwMc4ptvZFkH4Y85HoEoIZJFPKtoRdtC/TICmTItdpOOr3GlHw7qGaE9
+         ZjMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qaG7nxdQlrF0Gfd1lgG+gaQR/Ksch3wgDZc+ACCQybs=;
+        b=J6S4G2DevSITs6/tBrzrAkNNAhfs0i5AHBxy0ylWrFUuSuKrTZUAfImm7Dwat4liJr
+         j8yrdW47mKiJ0XZiYWXlM++tLkXas4XsLsbOf0CEyarTbhXkPrv0cqsfqP1A/0CN66gi
+         xLDqykLZRiLLl12hSGb6E/KFHhL6UV60kL7hlR42if/e7P3VlRUeQNr/N2bIWTnWtkvK
+         uUyYGxuhot4qqyMEGK8iTITxHVQ5Byqb/yO/kDEsjAiEf+cc4WHE0PXXOdu7nt9NclYQ
+         x2NLEbqAA8MVpAUaC24DuY6yuWwTz9CvNTGLeIslgRMskR8L2mCxDaadtTqolHG0Ru5y
+         PhsA==
+X-Gm-Message-State: ACrzQf0+hFFQ8htuo27P/asn3Srd1Er0zyt+EXpDzzX3Q6dG1frZHYMe
+        FkQHhcBkB9jSg9hICKorqPyjVZF/ynpZTaFJ
+X-Google-Smtp-Source: AMsMyM6S/lmxxN+LmAUhn8rewJTmcVirJBnMPoiFJBu/8xfsWqSdmNqS+3DF5PsnXZbnW+5NTUMLxQ==
+X-Received: by 2002:a05:651c:1c3:b0:26f:a855:c415 with SMTP id d3-20020a05651c01c300b0026fa855c415mr7623181ljn.443.1667998039560;
+        Wed, 09 Nov 2022 04:47:19 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id m6-20020a0565120a8600b004b373f61a60sm2101939lfu.96.2022.11.09.04.47.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 04:47:19 -0800 (PST)
+Message-ID: <7fe94a47-83af-b362-47a5-6900a800c3cb@linaro.org>
+Date:   Wed, 9 Nov 2022 15:47:18 +0300
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bbe72ed4-023b-4499-22ef-08dac2506161
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2022 12:46:11.2649
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wqrW292xw/9L/SNBE/eAPXgduWl1CDtzVq0H6sp3TC+qymeFuSdN2yfFI3toafVTLeuY/2086MYrAYCcDTcUBg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6711
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 4/4] drm/msm/disp/dpu1: add color management support for
+ the crtc
+Content-Language: en-GB
+To:     Kalyan Thota <kalyant@qti.qualcomm.com>,
+        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@chromium.org" <robdclark@chromium.org>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
+References: <1667996206-4153-1-git-send-email-quic_kalyant@quicinc.com>
+ <1667996206-4153-4-git-send-email-quic_kalyant@quicinc.com>
+ <7dedd020-179d-ba40-f97e-6560326fc421@linaro.org>
+ <BN0PR02MB81423107545EBE0D19213ACF963E9@BN0PR02MB8142.namprd02.prod.outlook.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <BN0PR02MB81423107545EBE0D19213ACF963E9@BN0PR02MB8142.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0LCAyMDIyLTEwLTI5IGF0IDIzOjIyIC0wNzAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20gd3JvdGU6DQo+IEZyb206IElzYWt1IFlhbWFoYXRhIDxpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20+DQo+IA0KPiBURFggbmVlZHMgdG8gc2V0IHNoYXJlZCBzcHRlIGZvciBNTUlPIEdGTiB0byAh
-U1VQUFJFU19WRV9CSVQgfCAhUldYIHNvIHRoYXQNCj4gZ3Vlc3QgVEQgY2FuIGdldCAjVkUgYW5k
-IHRoZW4gaXNzdWUgVERHLlZQLlZNQ0FMTDxNTUlPPi4gIEVuYWJsZSBtbWlvDQo+IGNhY2hpbmcg
-YWx3YXlzIGZvciBURFggaXJyZWxldmFudCB0aGUgbW9kdWxlIHBhcmFtZXRlciBlbmFibGVfbW1p
-b19jYWNoaW5nLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSXNha3UgWWFtYWhhdGEgPGlzYWt1Lnlh
-bWFoYXRhQGludGVsLmNvbT4NCj4gLS0tDQo+ICBhcmNoL3g4Ni9rdm0vbW11L21tdS5jICAgICB8
-IDMgKystDQo+ICBhcmNoL3g4Ni9rdm0vbW11L3NwdGUuaCAgICB8IDIgKy0NCj4gIGFyY2gveDg2
-L2t2bS9tbXUvdGRwX21tdS5jIHwgNyArKysrKysrDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDEwIGlu
-c2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYv
-a3ZtL21tdS9tbXUuYyBiL2FyY2gveDg2L2t2bS9tbXUvbW11LmMNCj4gaW5kZXggMGQzZmEyOWNj
-Y2NjLi45MDk4Zjc3Y2RhYTQgMTAwNjQ0DQo+IC0tLSBhL2FyY2gveDg2L2t2bS9tbXUvbW11LmMN
-Cj4gKysrIGIvYXJjaC94ODYva3ZtL21tdS9tbXUuYw0KPiBAQCAtMzIyOSw3ICszMjI5LDggQEAg
-c3RhdGljIGludCBoYW5kbGVfYWJub3JtYWxfcGZuKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSwgc3Ry
-dWN0IGt2bV9wYWdlX2ZhdWx0ICpmYXUNCj4gIAkJICogYW5kIG9ubHkgaWYgTDEncyBNQVhQSFlB
-RERSIGlzIGluYWNjdXJhdGUgd2l0aCByZXNwZWN0IHRvDQo+ICAJCSAqIHRoZSBoYXJkd2FyZSdz
-KS4NCj4gIAkJICovDQo+IC0JCWlmICh1bmxpa2VseSghZW5hYmxlX21taW9fY2FjaGluZykgfHwN
-Cj4gKwkJaWYgKHVubGlrZWx5KCFlbmFibGVfbW1pb19jYWNoaW5nICYmDQo+ICsJCQkgICAgICFr
-dm1fZ2ZuX3NoYXJlZF9tYXNrKHZjcHUtPmt2bSkpIHx8DQo+ICAJCSAgICB1bmxpa2VseShmYXVs
-dC0+Z2ZuID4ga3ZtX21tdV9tYXhfZ2ZuKCkpKQ0KPiAgCQkJcmV0dXJuIFJFVF9QRl9FTVVMQVRF
-Ow0KPiAgCX0NCj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2t2bS9tbXUvc3B0ZS5oIGIvYXJjaC94
-ODYva3ZtL21tdS9zcHRlLmgNCj4gaW5kZXggODJmMGQ1YzA4Yjc3Li5mZWNmZGNiNWYzMjEgMTAw
-NjQ0DQo+IC0tLSBhL2FyY2gveDg2L2t2bS9tbXUvc3B0ZS5oDQo+ICsrKyBiL2FyY2gveDg2L2t2
-bS9tbXUvc3B0ZS5oDQo+IEBAIC0yNDQsNyArMjQ0LDcgQEAgZXh0ZXJuIHU2NCBfX3JlYWRfbW9z
-dGx5IHNoYWRvd19ub25wcmVzZW50X29yX3JzdmRfbG93ZXJfZ2ZuX21hc2s7DQo+ICBzdGF0aWMg
-aW5saW5lIGJvb2wgaXNfbW1pb19zcHRlKHN0cnVjdCBrdm0gKmt2bSwgdTY0IHNwdGUpDQo+ICB7
-DQo+ICAJcmV0dXJuIChzcHRlICYgc2hhZG93X21taW9fbWFzaykgPT0ga3ZtLT5hcmNoLnNoYWRv
-d19tbWlvX3ZhbHVlICYmDQo+IC0JICAgICAgIGxpa2VseShlbmFibGVfbW1pb19jYWNoaW5nKTsN
-Cj4gKwkgICAgICAgbGlrZWx5KGVuYWJsZV9tbWlvX2NhY2hpbmcgfHwga3ZtX2dmbl9zaGFyZWRf
-bWFzayhrdm0pKTsNCj4gIH0NCg0KDQpTZWFuIHN1Z2dlc3RlZCB3ZSBjYW4gY2hhbmdlIHRvIHRy
-ZWF0ICJtbWlvX3ZhbHVlID09IDAiIGFsc28gYXMgTU1JTyBjYWNoaW5nDQpiZWluZyBlbmFibGVk
-Og0KDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzI0NGY2MTlhNGU3YTFjNzA3OTgzMGQx
-MjM3OTg3MmExMTFkYTQxOGQuY2FtZWxAaW50ZWwuY29tLw0KIA0KDQo+ICANCj4gIHN0YXRpYyBp
-bmxpbmUgYm9vbCBpc19zaGFkb3dfcHJlc2VudF9wdGUodTY0IHB0ZSkNCj4gZGlmZiAtLWdpdCBh
-L2FyY2gveDg2L2t2bS9tbXUvdGRwX21tdS5jIGIvYXJjaC94ODYva3ZtL21tdS90ZHBfbW11LmMN
-Cj4gaW5kZXggZTA3ZjE0MzUxZDE0Li4zMzI1NjMzYjFjYjUgMTAwNjQ0DQo+IC0tLSBhL2FyY2gv
-eDg2L2t2bS9tbXUvdGRwX21tdS5jDQo+ICsrKyBiL2FyY2gveDg2L2t2bS9tbXUvdGRwX21tdS5j
-DQo+IEBAIC0xODc1LDYgKzE4NzUsMTMgQEAgaW50IGt2bV90ZHBfbW11X2dldF93YWxrKHN0cnVj
-dCBrdm1fdmNwdSAqdmNwdSwgdTY0IGFkZHIsIHU2NCAqc3B0ZXMsDQo+ICANCj4gIAkqcm9vdF9s
-ZXZlbCA9IHZjcHUtPmFyY2gubW11LT5yb290X3JvbGUubGV2ZWw7DQo+ICANCj4gKwkvKg0KPiAr
-CSAqIG1taW8gcGFnZSBmYXVsdCBpc24ndCBzdXBwb3J0ZWQgZm9yIHByb3RlY3RlZCBndWVzdCBi
-ZWNhdXNlDQo+ICsJICogaW5zdHJ1Y3Rpb25zIGluIHByb3RlY3RlZCBndWVzdCBtZW1vcnkgY2Fu
-J3QgYmUgcGFyc2VkIGJ5IFZNTS4NCj4gKwkgKi8NCj4gKwlpZiAoV0FSTl9PTl9PTkNFKGt2bV9n
-Zm5fc2hhcmVkX21hc2sodmNwdS0+a3ZtKSkpDQo+ICsJCXJldHVybiBsZWFmOw0KPiArDQoNCkl0
-J3Mgd2VpcmQgdG8gcHV0IHRoaXMgaGVyZS4NCg0KSSB0aGluayB0aGUgbG9naWMgaXMsIGZvciBU
-RFggZ3Vlc3QgKG9yIHNpbWlsYXIgcHJvdGVjdGVkIGd1ZXN0cyksDQpoYW5kbGVfbW1pb19wYWdl
-X2ZhdWx0KCkgc2hvdWxkIG5vdCBiZSByZWFjaGVkIGF0IGFsbC4gIFNvIEkgdGhpbmsgd2UgY2Fu
-IGp1c3QNCmFkZCBhIFdBUk4oKSBhZ2FpbnN0IGt2bV9nZm5fc2hhcmVkX21hc2soKSwgb3IgaXNf
-dGR4X3ZtKCkgYXQgdGhlIHZlcnkgYmVnaW5uaW5nDQpvZiBoYW5kbGVfbW1pb19wYWdlX2ZhdWx0
-KCk/DQoNCj4gIAl0ZHBfbW11X2Zvcl9lYWNoX3B0ZShpdGVyLCBtbXUsIGdmbiwgZ2ZuICsgMSkg
-ew0KPiAgCQlsZWFmID0gaXRlci5sZXZlbDsNCj4gIAkJc3B0ZXNbbGVhZl0gPSBpdGVyLm9sZF9z
-cHRlOw0KDQo=
+On 09/11/2022 15:39, Kalyan Thota wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Sent: Wednesday, November 9, 2022 6:02 PM
+>> To: Kalyan Thota (QUIC) <quic_kalyant@quicinc.com>; dri-
+>> devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
+>> freedreno@lists.freedesktop.org; devicetree@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org; robdclark@chromium.org;
+>> dianders@chromium.org; swboyd@chromium.org; Vinod Polimera (QUIC)
+>> <quic_vpolimer@quicinc.com>; Abhinav Kumar (QUIC)
+>> <quic_abhinavk@quicinc.com>
+>> Subject: Re: [PATCH 4/4] drm/msm/disp/dpu1: add color management support
+>> for the crtc
+>>
+>> WARNING: This email originated from outside of Qualcomm. Please be wary of
+>> any links or attachments, and do not enable macros.
+>>
+>> On 09/11/2022 15:16, Kalyan Thota wrote:
+>>> Add color management support for the crtc provided there are enough
+>>> dspps that can be allocated from the catalogue
+>>>
+>>> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+>>> ---
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 15 ++++++--
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  6 ++++
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 11 +++---
+>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     | 53
+>> +++++++++++++++++++++++++++++
+>>>    4 files changed, 77 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>>> index 4170fbe..6bd3a64 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>>> @@ -18,9 +18,11 @@
+>>>    #include <drm/drm_flip_work.h>
+>>>    #include <drm/drm_framebuffer.h>
+>>>    #include <drm/drm_mode.h>
+>>> +#include <drm/drm_mode_object.h>
+>>>    #include <drm/drm_probe_helper.h>
+>>>    #include <drm/drm_rect.h>
+>>>    #include <drm/drm_vblank.h>
+>>> +#include "../../../drm_crtc_internal.h"
+>>
+>> If it's internal, it is not supposed to be used by other parties, including the msm
+>> drm. At least a comment why you are including this file would be helpful.
+>>
+> This header file was included to make use of " drm_mode_obj_find_prop_id" function from DRM framework.
+> Should I add a comment near function definition ?
+
+No, it would have been better to add a comment near the #include 
+directive. However if this is the only user, you don't need it at all. 
+You see, you know whether the CRTC has color management propreties at 
+the time of creation. And this can not change. So, you just add a 
+boolean to dpu_crtc (or dpu_crtc_state, whichever suits better).
+
+>>>
+>>>    #include "dpu_kms.h"
+>>>    #include "dpu_hw_lm.h"
+>>> @@ -553,6 +555,17 @@ static void _dpu_crtc_complete_flip(struct drm_crtc
+>> *crtc)
+>>>        spin_unlock_irqrestore(&dev->event_lock, flags);
+>>>    }
+>>>
+>>> +bool dpu_crtc_has_color_enabled(struct drm_crtc *crtc) {
+>>> +     u32 ctm_id = crtc->dev->mode_config.ctm_property->base.id;
+>>> +     u32 gamma_id = crtc->dev->mode_config.gamma_lut_property->base.id;
+>>> +     u32 degamma_id =
+>>> +crtc->dev->mode_config.degamma_lut_property->base.id;
+>>> +
+>>> +     return !!(drm_mode_obj_find_prop_id(&crtc->base, ctm_id) ||
+>>> +                drm_mode_obj_find_prop_id(&crtc->base, gamma_id) ||
+>>> +                drm_mode_obj_find_prop_id(&crtc->base, degamma_id));
+>>> +}
+>>> +
+>>>    enum dpu_intf_mode dpu_crtc_get_intf_mode(struct drm_crtc *crtc)
+>>>    {
+>>>        struct drm_encoder *encoder;
+>>> @@ -1604,8 +1617,6 @@ struct drm_crtc *dpu_crtc_init(struct drm_device
+>>> *dev, struct drm_plane *plane,
+>>>
+>>>        drm_crtc_helper_add(crtc, &dpu_crtc_helper_funcs);
+>>>
+>>> -     drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
+>>> -
+>>>        /* save user friendly CRTC name for later */
+>>>        snprintf(dpu_crtc->name, DPU_CRTC_NAME_SIZE, "crtc%u",
+>>> crtc->base.id);
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+>>> index 539b68b..8bac395 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+>>> @@ -300,4 +300,10 @@ static inline enum dpu_crtc_client_type
+>> dpu_crtc_get_client_type(
+>>>        return crtc && crtc->state ? RT_CLIENT : NRT_CLIENT;
+>>>    }
+>>>
+>>> +/**
+>>> + * dpu_crtc_has_color_enabled - check if the crtc has color
+>>> +management enabled
+>>> + * @crtc: Pointer to drm crtc object
+>>> + */
+>>> +bool dpu_crtc_has_color_enabled(struct drm_crtc *crtc);
+>>> +
+>>>    #endif /* _DPU_CRTC_H_ */
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>> index 4c56a16..ebc3f25 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+>>> @@ -545,7 +545,8 @@ bool dpu_encoder_use_dsc_merge(struct drm_encoder
+>> *drm_enc)
+>>>    static struct msm_display_topology dpu_encoder_get_topology(
+>>>                        struct dpu_encoder_virt *dpu_enc,
+>>>                        struct dpu_kms *dpu_kms,
+>>> -                     struct drm_display_mode *mode)
+>>> +                     struct drm_display_mode *mode,
+>>> +                     struct drm_crtc *crtc)
+>>>    {
+>>>        struct msm_display_topology topology = {0};
+>>>        int i, intf_count = 0;
+>>> @@ -573,11 +574,9 @@ static struct msm_display_topology
+>> dpu_encoder_get_topology(
+>>>        else
+>>>                topology.num_lm = (mode->hdisplay > MAX_HDISPLAY_SPLIT)
+>>> ? 2 : 1;
+>>>
+>>> -     if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
+>>> -             if (dpu_kms->catalog->dspp &&
+>>> -                     (dpu_kms->catalog->dspp_count >= topology.num_lm))
+>>> +     if (dpu_crtc_has_color_enabled(crtc) &&
+>>> +             (dpu_kms->catalog->dspp_count >= topology.num_lm))
+>>
+>> See the comment to the previous patch. It still applies here.
+>>
+>>>                        topology.num_dspp = topology.num_lm;
+>>> -     }
+>>>
+>>>        topology.num_enc = 0;
+>>>        topology.num_intf = intf_count;
+>>> @@ -643,7 +642,7 @@ static int dpu_encoder_virt_atomic_check(
+>>>                }
+>>>        }
+>>>
+>>> -     topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode);
+>>> +     topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode,
+>>> + crtc_state->crtc);
+>>>
+>>>        /* Reserve dynamic resources now. */
+>>>        if (!ret) {
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> index 552a89c..47a73fa 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+>>> @@ -13,6 +13,7 @@
+>>>    #include <linux/dma-buf.h>
+>>>    #include <linux/of_irq.h>
+>>>    #include <linux/pm_opp.h>
+>>> +#include <linux/bitops.h>
+>>>
+>>>    #include <drm/drm_crtc.h>
+>>>    #include <drm/drm_file.h>
+>>> @@ -537,6 +538,44 @@ static void dpu_kms_wait_flush(struct msm_kms
+>> *kms, unsigned crtc_mask)
+>>>                dpu_kms_wait_for_commit_done(kms, crtc);
+>>>    }
+>>>
+>>> +/**
+>>> + * _dpu_kms_possible_dspps - Evaluate how many dspps pairs can be
+>> facilitated
+>>> +                             to enable color features for crtcs.
+>>> + * @dpu_kms:    Pointer to dpu kms structure
+>>> + * Returns:     count of dspp pairs
+>>> + *
+>>> + * Baring single entry, if atleast 2 dspps are available in the
+>>> +catalogue,
+>>> + * then color can be enabled for that crtc  */ static inline u32
+>>> +_dpu_kms_possible_dspps(struct dpu_kms *dpu_kms) {
+>>> +
+>>> +     u32 num_dspps = dpu_kms->catalog->dspp_count;
+>>> +
+>>> +     if (num_dspps > 1)
+>>> +             num_dspps =
+>>> +                     !(num_dspps % 2) ? num_dspps / 2 : (num_dspps -
+>>> + 1) / 2;
+>>
+>> Ugh. No. Please spell this clearly rather than using nice math and ternary
+>> operators:
+>>
+>> if (num_dspps <= 1)
+>>    return num_dspps;
+>> else
+>>    return num_dspps / 2;
+>>
+>> You see, if num_dspps %2 ! =0, then num_dspps / 2 == (num_dspps_2 - 1) / 2.
+>>
+>>
+>>> +
+>>> +     return num_dspps;
+>>> +}
+>>> +
+>>> +static u32 _dpu_kms_attach_color(struct drm_device *dev, u32 enc_mask,
+>>> +                                             u32 num_dspps) {
+>>> +     struct drm_encoder *encoder;
+>>> +     struct drm_crtc *crtc;
+>>> +
+>>> +     drm_for_each_encoder_mask(encoder, dev, enc_mask) {
+>>> +             crtc = drm_crtc_from_index(dev, ffs(encoder->possible_crtcs) - 1);
+>>> +             if (num_dspps && crtc) {
+>>> +                     drm_crtc_enable_color_mgmt(crtc, 0, true, 0);
+>>> +                     num_dspps--;
+>>
+>> Please.  You can do this at the time you create the crtc. It would be much simpler.
+>>
+>>> +             }
+>>> +     }
+>>> +
+>>> +     return num_dspps;
+>>> +}
+>>> +
+>>>    static int _dpu_kms_initialize_dsi(struct drm_device *dev,
+>>>                                    struct msm_drm_private *priv,
+>>>                                    struct dpu_kms *dpu_kms) @@ -747,6
+>>> +786,8 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
+>>>
+>>>        int primary_planes_idx = 0, cursor_planes_idx = 0, i, ret;
+>>>        int max_crtc_count;
+>>> +     u32 num_dspps, primary_enc_mask = 0, external_enc_mask = 0;
+>>> +
+>>>        dev = dpu_kms->dev;
+>>>        priv = dev->dev_private;
+>>>        catalog = dpu_kms->catalog;
+>>> @@ -796,6 +837,7 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms
+>> *dpu_kms)
+>>>        }
+>>>
+>>>        max_crtc_count = min(max_crtc_count, primary_planes_idx);
+>>> +     num_dspps = _dpu_kms_possible_dspps(dpu_kms);
+>>>
+>>>        /* Create one CRTC per encoder */
+>>>        encoder = list_first_entry(&(dev)->mode_config.encoder_list,
+>>> @@ -808,9 +850,20 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms
+>> *dpu_kms)
+>>>                }
+>>>                priv->crtcs[priv->num_crtcs++] = crtc;
+>>>                encoder->possible_crtcs = 1 << drm_crtc_index(crtc);
+>>> +
+>>> +             if (!dpu_encoder_is_external(encoder) &&
+>>> +                     !dpu_encoder_is_virtual(encoder))
+>>
+>> if (dpu_encoder_internal_output(encoder))
+>>
+>>> +                     primary_enc_mask |= drm_encoder_mask(encoder);
+>>> +             else if (dpu_encoder_is_external(encoder))
+>>> +                     external_enc_mask |= drm_encoder_mask(encoder);
+>>> +
+>>>                encoder = list_next_entry(encoder, head);
+>>>        }
+>>>
+>>> +     /* Prefer Primary encoders in registering for color support */
+>>> +     num_dspps = _dpu_kms_attach_color(dev, primary_enc_mask,
+>> num_dspps);
+>>> +     num_dspps = _dpu_kms_attach_color(dev, external_enc_mask,
+>>> + num_dspps);
+>>> +
+>>>        return 0;
+>>>    }
+>>>
+>>
+>> --
+>> With best wishes
+>> Dmitry
+> 
+
+-- 
+With best wishes
+Dmitry
+
