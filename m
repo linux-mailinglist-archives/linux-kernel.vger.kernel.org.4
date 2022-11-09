@@ -2,162 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AC86226C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6E26226A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiKIJW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S229600AbiKIJRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiKIJWZ (ORCPT
+        with ESMTP id S230448AbiKIJRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:22:25 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AF91838A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:22:23 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221109092222epoutp01cf031e68aed72c9f4a2925368da51bb2~l4DHs58dD2114321143epoutp01T
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:22:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221109092222epoutp01cf031e68aed72c9f4a2925368da51bb2~l4DHs58dD2114321143epoutp01T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1667985742;
-        bh=0Fp8gjhjNu8/y7GV683SkiOwYjglOgKKa34wixxzrp4=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=tmTqsJ63mb5mNRjq11zCjWVcvBYQkF/G7/9YhvvBuaiNhiMATlPMirqV11LdNNRgQ
-         /jtYOhHa+wcGeuO7uLjEUa+KoP5FyzgIBRHkWsaGpvmGDlTIGP+PJEp/Hxzy1pQXGq
-         tCrsOCraIcLpMJ8nTLxDPXOclGavTiG9W48zSOrU=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221109092220epcas5p1dfab955ed2cc60897f646c98fe8ae8ee~l4DGqwDaB2787227872epcas5p19;
-        Wed,  9 Nov 2022 09:22:20 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4N6fcp31qlz4x9Q3; Wed,  9 Nov
-        2022 09:22:18 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B5.0C.01710.8417B636; Wed,  9 Nov 2022 18:22:16 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221109091623epcas5p1023143581849a8799650b86f40e65787~l395gfqF00292802928epcas5p1s;
-        Wed,  9 Nov 2022 09:16:23 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221109091623epsmtrp1c8e3337edbf2c8a713017eab6ac631a3~l395fMr7S1307013070epsmtrp1H;
-        Wed,  9 Nov 2022 09:16:23 +0000 (GMT)
-X-AuditID: b6c32a49-c9ffa700000006ae-54-636b714802b1
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        25.71.18644.7EF6B636; Wed,  9 Nov 2022 18:16:23 +0900 (KST)
-Received: from FDSFTE314 (unknown [107.122.81.85]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221109091620epsmtip236bd598509b7313213f3c437c7abb9cc~l392jyR2q2012520125epsmtip2A;
-        Wed,  9 Nov 2022 09:16:19 +0000 (GMT)
-From:   "Vivek Yadav" <vivek.2311@samsung.com>
-To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
-Cc:     <rcsekar@samsung.com>, <wg@grandegger.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <pankaj.dubey@samsung.com>, <ravi.patel@samsung.com>,
-        <alim.akhtar@samsung.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "'Sriranjani P'" <sriranjani.p@samsung.com>
-In-Reply-To: <20221025074459.z7utljgnexqnohir@pengutronix.de>
-Subject: RE: [PATCH 5/7] arm64: dts: fsd: Add MCAN device node
-Date:   Wed, 9 Nov 2022 14:46:18 +0530
-Message-ID: <006a01d8f41b$efae1fd0$cf0a5f70$@samsung.com>
+        Wed, 9 Nov 2022 04:17:11 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266FDFD0B;
+        Wed,  9 Nov 2022 01:17:03 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id a67so26229348edf.12;
+        Wed, 09 Nov 2022 01:17:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I1zyBcnmnvpRBfGlxFnRX4M70p2ogoa1GyrlPIeTzdw=;
+        b=BjpEbmaoJDNc4n7cpaEjbJmuPNCYnGUspWa3NzYItOh4f0HPEmBap23DjiEmOFJU5/
+         FtMVTOcs7n560e1YQjyBknvvsJRvnyEePjSi738SsGAt/YLOk2msL/Nkn+jdRnNyVGJm
+         Dtg81dL29fTK86N0pb2x4ajgntrerHFsZ8To4yFWh0rNFvPmmiO+xpqdaPA3K4jg6rf7
+         US2+GV1wgs5vzeO8ha4pU5mkyfspmnIFwkNtsh6ozqaMYQY2xVaIGoJOCohIOn/uAxmp
+         snrsOq6O2QjuCRC+epuIkzYlFhYg8kDljK2XCOUt/FeWhBlE2RuVHEOan5P9+HyiG9Hv
+         R3qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I1zyBcnmnvpRBfGlxFnRX4M70p2ogoa1GyrlPIeTzdw=;
+        b=X+mCQjey7pdpsFlX7yLTe9VSa3CeNEiZdvkyVtpT2zKpDR+dxQlj/DhFNrtF7/oxaI
+         4FafgJJjxuAjPTK6w9MfvVJPb3R5Kpl4uuoc8kGURLyfMQARgznUx7AFbLQI1JdSrY2L
+         MHhQFbfBf45NO9rw/YgVtpNsmpFQZNn2II58uX4BhayIy2TKL8hBGfp9AyALVNxjIV3g
+         geMxz4GWe6e86cb92/TSgsq+N1FMAwWL+H+SDv+/bZSY7IaX54tU/gYFm9jOoKVAqcFf
+         BGOXtloyDV2xWgG3leBEzMs0H12zNlG7r67327fh+FmwxYgFP5E3XPNF4SVFBNy4qns5
+         gpng==
+X-Gm-Message-State: ACrzQf3ecTb5tfhLpuw4DyjwRJyv0uyK1WOuXoSCOCMzZnhEMUVqRcuU
+        mzl41Bb9W6u1OCD6azBOH4gK+YwLUAM8g+5SAww=
+X-Google-Smtp-Source: AMsMyM5JTh8OBKn6CyUVPAMPhk00DiERy1AvRNJugn7Gkoi+/k4oghom5cpUyQ4DeRimiTJAJ9q/O2K34KO8p/0rT6Q=
+X-Received: by 2002:a05:6402:1219:b0:462:e788:723f with SMTP id
+ c25-20020a056402121900b00462e788723fmr59327500edw.319.1667985421580; Wed, 09
+ Nov 2022 01:17:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJD6JMFT7t8BSDsfE8Wj4Sh/mZZ1gIfGw/mAff9b8ECH8qDTK0ur0Lw
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNJsWRmVeSWpSXmKPExsWy7bCmlq5HYXayweOdUhYP5m1js5hzvoXF
-        4umxR+wWF7b1sVqs+j6V2eLyrjlsFusXTWGxOLZAzOLb6TeMFou2fmG3ePhhD7vFrAs7WC1u
-        v1nHarH03k5WBz6PLStvMnks2FTq8fHSbUaPTas62Tz6/xp4vN93lc2jb8sqRo/Pm+QCOKKy
-        bTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOArlZSKEvM
-        KQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn5haX5qXr5aWWWBkaGBiZAhUmZGds
-        3nOGrWACd8X3M03MDYzdnF2MnBwSAiYSVw/uYu5i5OIQEtjNKPFkyXtWCOcTo8Tb7Z0sEM5n
-        RombL/+zwLTs3r+aDSKxi1Gib08vE4TznFFi+Y/XTCBVbAI6Es2T/zKC2CICehK/JywCK2IW
-        eMwk0Xv1MBtIglPAVqL1XhNYg7CAncTNvsOsIDaLgIpEw/b/zCA2r4ClxJmT71ggbEGJkzOf
-        gNnMAvIS29/OYYY4SUHi59NlrBDL3CTatu9ngqgRlzj6swfsOwmBOxwSC54+ZodocJG4vrAR
-        6h9hiVfHt0DFpSRe9rdB2ckSO/51skLYGRILJu5hhLDtJQ5cmQPUywG0QFNi/S59iLCsxNRT
-        66D28kn0/n7CBBHnldgxD8ZWkXjxeQIrSCvIqt5zwhMYlWYh+WwWks9mIflgFsKyBYwsqxgl
-        UwuKc9NTi00LDPNSy+Exnpyfu4kRnKq1PHcw3n3wQe8QIxMH4yFGCQ5mJRFebo3sZCHelMTK
-        qtSi/Pii0pzU4kOMpsDgnsgsJZqcD8wWeSXxhiaWBiZmZmYmlsZmhkrivItnaCULCaQnlqRm
-        p6YWpBbB9DFxcEo1MAkHyz2338IpN7vwcqb8jYf/l8UfFfn33EqGIXYLz8nAKb0xfOapRnIh
-        WpUzfZ4tuqH7zu3x0cUTC7jFu9kkBYOu7HWec6pvWbBrpUHH8oYry/wSVulOivjT6LuJ0XvR
-        yt1Fv5LXnNvd4dgj0JElw3qceduqxtnFwlYnpWY4Hdlgl9t71tr9xlyBkK6WGdrPsgx2if8R
-        O3Ci+sH9nZF33x69x+158uy7gmvsz4WTnxk+vdHDovx1ThT7hWCd3GY5vU4JjjWXawOanikL
-        9Z2b7Ku7SMAkt53PzTZvR55HQNdrx+NBLxzkBBed7kxWdvkUv3yGSfojkaWqsowx7l6LFJkf
-        Nf/bp/9l58ZAZg8zJZbijERDLeai4kQAuadMq14EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMIsWRmVeSWpSXmKPExsWy7bCSvO7z/OxkgzU32S0ezNvGZjHnfAuL
-        xdNjj9gtLmzrY7VY9X0qs8XlXXPYLNYvmsJicWyBmMW3028YLRZt/cJu8fDDHnaLWRd2sFrc
-        frOO1WLpvZ2sDnweW1beZPJYsKnU4+Ol24wem1Z1snn0/zXweL/vKptH35ZVjB6fN8kFcERx
-        2aSk5mSWpRbp2yVwZWzec4atYAJ3xfczTcwNjN2cXYycHBICJhK7969mA7GFBHYwShzsNISI
-        S0lMOfOSBcIWllj57zl7FyMXUM1TRomX/74ygyTYBHQkmif/ZQSxRQT0JH5PWMQEUsQs8JFJ
-        4s/nRqiOd4wS69bsABvFKWAr0XqviQnEFhawk7jZd5gVxGYRUJFo2P4fbCqvgKXEmZPvWCBs
-        QYmTM5+A2cwC2hJPbz6FsuUltr+dwwxxnoLEz6fLWCGucJNo276fCaJGXOLozx7mCYzCs5CM
-        moVk1Cwko2YhaVnAyLKKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM4XrW0djDuWfVB
-        7xAjEwfjIUYJDmYlEV5ujexkId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqem
-        FqQWwWSZODilGpiU2Xe8fB6m6B1+L//hmTUtNxZFxDnlhU6o2mZs9UDuzfFjTz9ubXyul1if
-        3n59vrH4+1NsKdcdnjtv1Tbd0znF3Cq3Vn35tGclbubKB3OsJadrM5t0dW85dMD6ptcHm1wV
-        PcV/Ln16TY+OWcx6YnzmX8G02RGBvA1pU+/9aExvk0voUfoqmvJYd/2FHLm+inRBG36BX0kX
-        e3iVH60tWTOz8fkevraXJbkLJ8Z+OrZVZ+nxlG/8hW0JzrxrZ6cYTNKZMaHwaOGChZ6lUXwX
-        XOdvcT98+NW3wIm7Zs2S/2e9W+OwdnOOjprOw++JSyRMGCbff1HHFc40vfnuEb7MBmO2jPdP
-        Mxfma+twSN1WWa3EUpyRaKjFXFScCABaV9DaRgMAAA==
-X-CMS-MailID: 20221109091623epcas5p1023143581849a8799650b86f40e65787
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221021102635epcas5p33623e6b6ed02d3fb663da9ec253585ad
-References: <20221021095833.62406-1-vivek.2311@samsung.com>
-        <CGME20221021102635epcas5p33623e6b6ed02d3fb663da9ec253585ad@epcas5p3.samsung.com>
-        <20221021095833.62406-6-vivek.2311@samsung.com>
-        <20221025074459.z7utljgnexqnohir@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221028165921.94487-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdUKVxO24Qgyx37tbs5+m0Us0VF3eTZCC2KV=AC8z2JneQ@mail.gmail.com>
+ <CA+V-a8t5Qah3MNm2m__xnmgK-52=HC9QBPPudnB+1j4-FYJ_NA@mail.gmail.com>
+ <CAMuHMdWTJf24XR+KR8yVJOnfpgs-PkUf9b8B=PX9Dd4mfawD5Q@mail.gmail.com>
+ <CA+V-a8vCGDHL1SUTEnD-WvoUGKSVL=xzDeQxy77=1vFJdk+fYg@mail.gmail.com>
+ <CAMuHMdU=K0o6KHVPUdfEu0tkH8kDMBg-WaRFcYS7r=azWEnfTQ@mail.gmail.com>
+ <CA+V-a8s6Amvb35wRE7pbwXHxwzk8znT8OWsbA9DRpX76E8Uh+w@mail.gmail.com> <CAMuHMdU2cQ_9a6HcXzMQPNUoJ78i4y04oAkZ0HnRLzyYq2MsuA@mail.gmail.com>
+In-Reply-To: <CAMuHMdU2cQ_9a6HcXzMQPNUoJ78i4y04oAkZ0HnRLzyYq2MsuA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 9 Nov 2022 09:16:35 +0000
+Message-ID: <CA+V-a8v1HR2vL433ZwKy-pTUeSXuiqp1+yAj1arC=t4SCDQ=vg@mail.gmail.com>
+Subject: Re: [PATCH v5 7/7] riscv: configs: defconfig: Enable Renesas RZ/Five SoC
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
+On Wed, Nov 9, 2022 at 7:48 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Tue, Nov 8, 2022 at 11:05 PM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Tue, Nov 8, 2022 at 7:20 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Tue, Nov 8, 2022 at 6:23 PM Lad, Prabhakar
+> > > <prabhakar.csengg@gmail.com> wrote:
+> > > > On Tue, Nov 8, 2022 at 4:12 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > On Tue, Nov 8, 2022 at 5:07 PM Lad, Prabhakar
+> > > > > <prabhakar.csengg@gmail.com> wrote:
+> > > > > > On Tue, Nov 8, 2022 at 3:52 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > > > > On Fri, Oct 28, 2022 at 6:59 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > > > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > > > >
+> > > > > > > > Enable Renesas RZ/Five SoC config in defconfig. It allows the default
+> > > > > > > > upstream kernel to boot on RZ/Five SMARC EVK board.
+> > > > > > > >
+> > > > > > > > Alongside enable SERIAL_SH_SCI config so that the serial driver used by
+> > > > > > > > RZ/Five SoC is built-in.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > > > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > > > > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > > > > > ---
+> > > > > > > > v4 -> v5
+> > > > > > > > * No change
+> > > > > > > >
+> > > > > > > > v3 -> v4
+> > > > > > > > * Explicitly enabled ARCH_R9A07G043 config (note I have restored the RB
+> > > > > > > >   tags with this change)
+> > > > > > > > * Used riscv instead of RISC-V in subject line
+> > > > > > >
+> > > > > > > Thanks for the update!
+> > > > > > >
+> > > > > > > > --- a/arch/riscv/configs/defconfig
+> > > > > > > > +++ b/arch/riscv/configs/defconfig
+> > > > > > > > @@ -29,6 +29,8 @@ CONFIG_SOC_MICROCHIP_POLARFIRE=y
+> > > > > > > >  CONFIG_SOC_SIFIVE=y
+> > > > > > > >  CONFIG_SOC_STARFIVE=y
+> > > > > > > >  CONFIG_SOC_VIRT=y
+> > > > > > > > +CONFIG_ARCH_RENESAS=y
+> > > > > > > > +CONFIG_ARCH_R9A07G043=y
+> > > > > > >
+> > > > > > > You forgot to refresh after moving ARCH_RENESAS in v5 of "riscv:
+> > > > > > > Kconfig.socs: Add ARCH_RENESAS kconfig option", and after relying on
+> > > > > > > ARCH_R9A07G043 in drivers/soc/renesas/Kconfig.
+> > > > > > >
+> > > > > > Sorry I missed your point here, could you please elaborate.
+> > > > >
+> > > > > I mean that the options have moved, so you should update
+> > > > > your patch like this:
+> > > > >
+> > > > Ouch got that.
+> > > >
+> > > > >     --- a/arch/riscv/configs/defconfig
+> > > > >     +++ b/arch/riscv/configs/defconfig
+> > > > >     @@ -26,11 +26,10 @@ CONFIG_EXPERT=y
+> > > > >      # CONFIG_SYSFS_SYSCALL is not set
+> > > > >      CONFIG_PROFILING=y
+> > > > >      CONFIG_SOC_MICROCHIP_POLARFIRE=y
+> > > > >     +CONFIG_ARCH_RENESAS=y
+> > > > >      CONFIG_SOC_SIFIVE=y
+> > > > >      CONFIG_SOC_STARFIVE=y
+> > > > >      CONFIG_SOC_VIRT=y
+> > > > >     -CONFIG_ARCH_RENESAS=y
+> > > > >     -CONFIG_ARCH_R9A07G043=y
+> > > > >      CONFIG_SMP=y
+> > > > >      CONFIG_HOTPLUG_CPU=y
+> > > > >      CONFIG_PM=y
+> > > > >     @@ -163,6 +159,7 @@ CONFIG_MAILBOX=y
+> > > > >      CONFIG_RPMSG_CHAR=y
+> > > > >      CONFIG_RPMSG_CTRL=y
+> > > > >      CONFIG_RPMSG_VIRTIO=y
+> > > > >     +CONFIG_ARCH_R9A07G043=y
+> > > > >      CONFIG_EXT4_FS=y
+> > > > >      CONFIG_EXT4_FS_POSIX_ACL=y
+> > > > >      CONFIG_EXT4_FS_SECURITY=y
+> > > > >
+> > > > > > > >  CONFIG_SMP=y
+> > > > > > > >  CONFIG_HOTPLUG_CPU=y
+> > > > > > > >  CONFIG_PM=y
+> > > > > > >
+> > > > > > > PM and GPIOLIB are auto-selected by ARCH_R9A07G043 (through ARCH_RZG2L)
+> > > > > > > resp. SOC_RENESAS, so they can be dropped.  But it's better to do this
+> > > > > > > after the release of v6.2-rc1, when all pieces have fallen together.
+> > > > > > >
+> > > > > > Are you suggesting dropping it from defconfig?
+> > > > >
+> > > > > Yes, but not right now, as that would make it depend on my
+> > > > > renesas-drivers-for-v6.2 branch to keep them enabled.
+> > > > >
+> > ^^^
+> > > > I was wondering if that's required by other platforms though.
+> > > > CONFIG_PM was added for VIRT machine and GPIOLIB for HiFive.
+> > >
+> > > Does that matter? They would still get it, as long as they use the
+> > > defconfig.
+> > >
+> > Confused, didnt you say about dropping it from defconfig...
+>
+> Yes, I did, but not right now, only after v6.2-rc1.
+>
+>   - Once the defconfig has CONFIG_ARCH_R9A07G043=y, ARCH_RZG2L will
+>     be auto-selected (commit ebd0e06f3063cc2e ("soc: renesas: Identify
+>     RZ/Five SoC") is already upstream), and CONFIG_PM as well. So there
+>     is no longer a need for the defconfig to enable it explicitly.
+>   - Once the defconfig has CONFIG_ARCH_RENESAS=y, SOC_RENESAS will
+>     be auto-selected, but auto-selecting CONFIG_GPIOLIB depends on commit
+>     b3acbca3c80e6124 ("soc: renesas: Kconfig: Explicitly select GPIOLIB and
+>     PINCTRL config under SOC_RENESAS") is only in renesas-drivers-for-v6.2.
+>
+> Please run "make savedefconfig", and compare the generated defconfig
+> with arch/riscv/configs/defconfig.
+>
+Thanks for the detailed explanation, I got you now :)
 
-> -----Original Message-----
-> From: Marc Kleine-Budde <mkl@pengutronix.de>
-> Sent: 25 October 2022 13:15
-> To: Vivek Yadav <vivek.2311@samsung.com>
-> Cc: rcsekar@samsung.com; wg@grandegger.com; davem@davemloft.net;
-> edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
-> pankaj.dubey@samsung.com; ravi.patel@samsung.com;
-> alim.akhtar@samsung.com; linux-can@vger.kernel.org;
-> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Sriranjani P
-> <sriranjani.p@samsung.com>
-> Subject: Re: [PATCH 5/7] arm64: dts: fsd: Add MCAN device node
-> 
-> On 21.10.2022 15:28:31, Vivek Yadav wrote:
-> > Add MCAN device node and enable the same for FSD platform.
-> > This also adds the required pin configuration for the same.
-> >
-> > Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> > Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
-> 
-> Please add the DT people on Cc.
-Okay, I will add them in the next patch series.
-> 
-> Marc
-> 
-Thanks for the review.
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   |
-> https://protect2.fireeye.com/v1/url?k=6c1d2429-0d96311f-6c1caf66-
-> 000babff9b5d-435a1e79c4c5ee61&q=1&e=74fb5a49-eb28-4786-8c1d-
-> 9aa91f25ec04&u=https%3A%2F%2Fwww.pengutronix.de%2F  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
+Cheers,
+Prabhakar
