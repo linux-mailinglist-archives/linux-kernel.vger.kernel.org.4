@@ -2,281 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383FC623245
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C986623246
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiKISTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S230190AbiKISUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKISTl (ORCPT
+        with ESMTP id S229517AbiKISUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:19:41 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB2627DDA;
-        Wed,  9 Nov 2022 10:19:40 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9GDbFf026232;
-        Wed, 9 Nov 2022 18:19:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AQG2RkQE2K4jN3DTLcKCj+n7FIQpSRuiWYNx9YKVzEk=;
- b=VwYD9hP+R7W/LVy/bW3uIx72vxxarFykVLa0KkG2gl4mp+etoUrJDcbbvjDMkPLjE3e0
- K6bDQ9oxtepOWYnoiVb++hk8FIJnc2XRwrC87LxlLT8XYGRdxRgLQmcHFP2GnsUcnd7f
- eKpXrGCQRM6Se+AA/KA5owsI3OlUP9qTUhFexCppHPApIS5JOJUy0+nv1mO8g05BMvDe
- zHDhQx5IDRXekJAN72Scb8BneDwWNBq99sumju7oDzi1m+iYIV4s55pJFvXO/yH9vFEk
- tvIpFRzjLhaWSvBMqN0CSP6OM4kHJvnFqVX5QM3s4muMieqH/L4yWhaZQDoubFrTi/km Pw== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kr6b424k4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 18:19:32 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A9IJVNN028161
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 9 Nov 2022 18:19:31 GMT
-Received: from [10.110.39.13] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 9 Nov 2022
- 10:19:31 -0800
-Message-ID: <8c1072a0-338e-7bf4-2d78-c59954cf8164@quicinc.com>
-Date:   Wed, 9 Nov 2022 10:19:30 -0800
+        Wed, 9 Nov 2022 13:20:09 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20619.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::619])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BCB1FFAB
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:20:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mG4d8U5Ohs9QJhUcHfAyNEsjcMjw3ro9OFouZjAwRu+3Jctj6c7THao6V9o2EkBkJBqAet+o4ZIMES3jdetK0QvNLTekhoW2fUUma1tvF64I9KzNJqhr0P8RMj+FbQO2iz38nKbOub19M876yfQNRP/tF9llPg+vYdSLqIPb7dyr1/X72FkNZ4ku/4ROlfTcdBoi9gTGgvXFjdrghKWSyMxxD4hcac9NPVjYuBH7i+tnZ30XXzR7jLSQDRleun9hiYItHRasvRATfCytYbFrD7Bn/OY83lf/JdPFl+Hq+zb1cbmuu42SbJtiaplAdsGcszYHhihLglEgw+T6hkB2qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IGeok/wWfvdo7M5b8nIFNKz0dMXnz4uaTsigUy2pkGw=;
+ b=QZW9hcGvNS28naoBjYMgDdgMhk5KHG/NaLRbLlx7Mw103Q1OBTy2xi5tEtHyKcb0lS1D6obpA+QNyUwZgEXCRe44ip1U+zo23l1GUgrJHeeF+X6dk8m3sYKgChTXmR+jb6kJzgGpxYFJfNw6tmGUSPNdNFm2DvHsh6sleKfw4ytsOhICvnI0UKFYIdYn5cWP0xvJyc+tEu4QW+rVA5ZHyGyOIZTH7k97sbdi3WKJjZfbrS3e4dLqzczKMHJzzABDSDJGQqLf3pQHxx8gSe4GdnWw2AtfIIchE3i3TVZFnH2eJXFdM/byA0LZEdLE6LLDdS8N8xYoQ+1qmJGOYE6ECg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IGeok/wWfvdo7M5b8nIFNKz0dMXnz4uaTsigUy2pkGw=;
+ b=Ca2+W3a2zP/EWGVgyqm5l1UYd7pF/D0Oi7f3Ijy5OSyLCug9fxEMuC7plSx6Ic67eyjaaGXARMTFZt5KOVnX9luHK1JyGwvQzL5pAfGjARvMNvcdgm/7uku0qU8GAA1cKwlFX9qWQ9WhftX11qraBPhYN0s9w2RWozz7GCh8eV4=
+Received: from MW4PR03CA0134.namprd03.prod.outlook.com (2603:10b6:303:8c::19)
+ by CY8PR12MB7338.namprd12.prod.outlook.com (2603:10b6:930:52::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Wed, 9 Nov
+ 2022 18:20:05 +0000
+Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8c:cafe::6e) by MW4PR03CA0134.outlook.office365.com
+ (2603:10b6:303:8c::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27 via Frontend
+ Transport; Wed, 9 Nov 2022 18:20:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 18:20:04 +0000
+Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 12:20:01 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        "Roman Li" <roman.li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] drm/amd/display: only fill dirty rectangles when PSR is enabled
+Date:   Wed, 9 Nov 2022 13:20:09 -0500
+Message-ID: <20221109182010.171534-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026200429.162212-1-quic_molvera@quicinc.com>
- <20221026200429.162212-4-quic_molvera@quicinc.com>
- <ae4b2333-d243-17ee-1ebd-6b1c89eef9f3@linaro.org>
- <d109cbdf-1b0e-ff67-879c-d0955da4898e@quicinc.com>
- <9eaaf256-8de2-ddc9-ac95-aed9b0670f5e@linaro.org>
- <4832b716-6caf-cf72-1c7e-f21a0670cbaa@quicinc.com>
- <5109d728-ebea-21ca-3ee1-15710dfd6f1b@quicinc.com>
- <23a0dc6b-b704-c094-96dc-cf2c083ef55e@somainline.org>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <23a0dc6b-b704-c094-96dc-cf2c083ef55e@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: r83aBRtG6KiPbIgypLlXK0PCW43atpnV
-X-Proofpoint-ORIG-GUID: r83aBRtG6KiPbIgypLlXK0PCW43atpnV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 phishscore=0
- adultscore=0 spamscore=0 clxscore=1011 suspectscore=0 malwarescore=0
- mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090138
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT012:EE_|CY8PR12MB7338:EE_
+X-MS-Office365-Filtering-Correlation-Id: cbf720c9-ee66-4adf-1362-08dac27f0677
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VLQy3eDGdCehxIBWbVgHgCrOvrZcN4KS6eC9lPueCp8ra/GZrsaJ2bSKFs7qYfJgbWi91IbZCLQ+DzbMbpuaZIbYI00ZmabD/LX+fIkf9aFRZY3TVaGoMyvLzS00fLmYYjxFNixAIxV+nv+A4UAn5HjiRZCNWSszO61ZP7VU3oI8QuRo/IYhMonXdr9r7pT0fgu31LSWkjrLLzauWGZVpzdE4d+uLBY0MwgDo1mmyeOihw6hfsNu1RHm9DfwuQJ9iyInXai5wkyA5TqVM6PhngSc0YqJ9KkdfMhMIXF61kGSuyPDBrwDZz1bocsAv8CKAzBa6rmvMKOYfPWohN1w2T99zdpEzYSkQ5ziRuXJhAYvtfMFlXd0EbP97sU+b+UA8OIFtR67nZrgqmacP/KGAPU/7eLgPpZzwzwm8/xRFlS9i10nZ6u+mho4Slq3e0KCHSVg6VzveafO+dO6veJYRY5wURef4f6nA+lsSeMQMiEy6fepqSAu7rs7YGTKXYIOAfdqb8SAZHVVwV+yy/NvqO2VHAo7wHZRNbHPS9Je6YHW5rA8Oy2jik/jkoM18d77DpRhGpBAU4mCREw72VCiLSkJyUwN83I34sbZLdkHSfmSXBO2IN4Ng6vvByTLng0kLPc9xjsqvrXiy4ROZ2+pHSWIgLymh9b21YitjMpr1XydQXtLAXCdy7ZJUeNi1ReB86xH+yHvDFIIhRtEVLbR8hUDBh5BN8xLZsDZfITkH3vE1Zhov9DDrpMdASDzlx8pEt3dxQ3Lsmi2W5jdGR07OxwWtnMgXTh0mcTuGbV7JFgtOwl0qMSDr+TD7A8hpukmyAX9kGtYT6RXH2UzdR/PhVgSToFeOFbWQFgEFRws8w4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(86362001)(26005)(7696005)(478600001)(36860700001)(8936002)(316002)(41300700001)(36756003)(6916009)(54906003)(2616005)(1076003)(8676002)(16526019)(40460700003)(83380400001)(426003)(47076005)(336012)(186003)(40480700001)(70206006)(82310400005)(44832011)(5660300002)(2906002)(70586007)(82740400003)(4326008)(81166007)(356005)(14143004)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 18:20:04.9886
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbf720c9-ee66-4adf-1362-08dac27f0677
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7338
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, we are calling fill_dc_dirty_rects() even if PSR isn't
+supported by the relevant link in amdgpu_dm_commit_planes(), this is
+undesirable especially because when drm.debug is enabled we are printing
+messages in fill_dc_dirty_rects() that are only useful for debugging PSR
+(and confusing otherwise). So, we can instead limit the filling of dirty
+rectangles to only when PSR is enabled.
 
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+v2: give a more concrete reason.
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-On 11/4/2022 2:32 AM, Konrad Dybcio wrote:
->
-> On 04/11/2022 05:05, Trilok Soni wrote:
->> + Adding Konrad, Bjorn is already there in this email
->>
->> On 11/3/2022 2:13 PM, Melody Olvera wrote:
->>>
->>>
->>> On 11/2/2022 9:24 AM, Krzysztof Kozlowski wrote:
->>>> On 31/10/2022 17:49, Melody Olvera wrote:
->>>>>
->>>>> On 10/27/2022 8:21 AM, Krzysztof Kozlowski wrote:
->>>>>> On 26/10/2022 16:04, Melody Olvera wrote:
->>>>>>> Add the base DTSI files for QDU1000 and QRU1000 SoCs, including base
->>>>>>> descriptions of CPUs, GCC, RPMHCC, QUP, TLMM, and interrupt-controller
->>>>>>> to boot to shell with console on these SoCs.
->>>>>>>
->>>>>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>>>>>> ---
->>>>>>>   arch/arm64/boot/dts/qcom/qdu1000.dtsi | 1406 +++++++++++++++++++++++++
->>>>>> Please use scripts/get_maintainers.pl to get a list of necessary people
->>>>>> and lists to CC.  It might happen, that command when run on an older
->>>>>> kernel, gives you outdated entries.  Therefore please be sure you base
->>>>>> your patches on recent Linux kernel.
->>>>> Sure thing; we talked about this on a different patch.
->>>>>>> arch/arm64/boot/dts/qcom/qru1000.dtsi |   27 +
->>>>>>>   2 files changed, 1433 insertions(+)
->>>>>>>   create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
->>>>>>>   create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
->>>>>>>
->>>>>>> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
->>>>>>> new file mode 100644
->>>>>>> index 000000000000..76474106e931
->>>>>>> --- /dev/null
->>>>>>> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
->>>>>>> @@ -0,0 +1,1406 @@
->>>>>>> +// SPDX-License-Identifier: BSD-3-Clause
->>>>>>> +/*
->>>>>>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->>>>>>> + */
->>>>>> (...)
->>>>>>
->>>>>>> +
->>>>>>> +    soc: soc@0 {
->>>>>>> +        #address-cells = <2>;
->>>>>>> +        #size-cells = <2>;
->>>>>>> +        ranges = <0 0 0 0 0x10 0>;
->>>>>>> +        dma-ranges = <0 0 0 0 0x10 0>;
->>>>>>> +        compatible = "simple-bus";
->>>>>>> +
->>>>>>> +        gcc: clock-controller@80000 {
->>>>>>> +            compatible = "qcom,gcc-qdu1000", "syscon";
->>>>>>> +            reg = <0x0 0x80000 0x0 0x1f4200>;
->>>>>>> +            #clock-cells = <1>;
->>>>>>> +            #reset-cells = <1>;
->>>>>>> +            #power-domain-cells = <1>;
->>>>>>> +            clocks = <&rpmhcc RPMH_CXO_CLK>, <&sleep_clk>;
->>>>>>> +            clock-names = "bi_tcxo", "sleep_clk";
->>>>>>> +        };
->>>>>>> +
->>>>>>> +        gpi_dma0: dma-controller@900000  {
->>>>>>> +            compatible = "qcom,sm6350-gpi-dma";
->>>>>> You should add here a specific compatible as well. Same in other places.
->>>>>> All places. I had impression we talked about this few times, so I don't
->>>>>> know what is missing on your side.
->>>>>>
->>>>>> This must be:
->>>>>> "qcom,qdu1000-gpi-dma", "qcom,sm6350-gpi-dma"
->>>>> Got it. I talked to Stephan and he said either your suggestion or just using
->>>>> preexisting compatibles would be ok. I thought it might be cleaner to not
->>>>> have the qdu compats, but I'm fine either way.
->
-> We use specific compats so that if it turns out this specific SoC (or rather the
->
-> bundled firmware) has some peculiar bugs, we can retroactively only apply them
->
-> to that specific SoC by adding the compatible somewhere in .c code if need be.
-
-Ah that makes plenty sense.
-
->
->
->>>>>>> +            #dma-cells = <3>;
->>>>>>> +            reg = <0x0 0x900000 0x0 0x60000>;
->>>>>>> +            interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 248 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 250 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 252 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 253 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 254 IRQ_TYPE_LEVEL_HIGH>,
->>>>>>> +                     <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>> +            dma-channels = <12>;
->>>>>>> +            dma-channel-mask = <0x3f>;
->>>>>>> +            iommus = <&apps_smmu 0xf6 0x0>;
->>>>>>> +        };
->>>>>>> +
->>>>>> (...)
->>>>>>
->>>>>>
->>>>>>> +
->>>>>>> +        tlmm: pinctrl@f000000 {
->>>>>>> +            compatible = "qcom,qdu1000-tlmm";
->>>>>>> +            reg = <0x0 0xf000000 0x0 0x1000000>;
->>>>>>> +            interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->>>>>>> +            gpio-controller;
->>>>>>> +            #gpio-cells = <2>;
->>>>>>> +            interrupt-controller;
->>>>>>> +            #interrupt-cells = <2>;
->>>>>>> +            gpio-ranges = <&tlmm 0 0 151>;
->>>>>>> +            wakeup-parent = <&pdc>;
->>>>>>> +
->>>>>>> +            qup_uart0_default: qup-uart0-default-state {
->>>>>>> +                pins = "gpio6", "gpio7", "gpio8", "gpio9";
->>>>>>> +                function = "qup00";
->>>>>>> +            };
->>>>>>> +
->>>>>>> +            qup_i2c1_data_clk: qup-i2c1-data-clk-state {
->>>>>>> +                pins = "gpio10", "gpio11";
->>>>>>> +                function = "qup01";
->>>>>>> +                drive-strength = <2>;
->>>>>> Can we have some generic agreement where to put drive-strengths and bias?
->>>>>>
->>>>>> See also:
->>>>>> https://lore.kernel.org/linux-devicetree/20221026200357.391635-2-krzysztof.kozlowski@linaro.org/
->>>>>>
->>>>>> https://lore.kernel.org/lkml/CAD=FV=VUL4GmjaibAMhKNdpEso_Hg_R=XeMaqah1LSj_9-Ce4Q@mail.gmail.com/
->
-> I agree with Doug on having 'generic' drive-strength. Moreover, maybe even adding some property like
->
-> bias-type = <NONE/PULL_DOWN/...> would be cool to make it more flexible so that we could trim off
->
-> A LOT of repeated lines (remember, most boards are more or less copies of the reference design for a
->
-> given platform like QRD or CRD) going forward.
-
-Huh so if I understand this correctly, like a generic QRD/CRD file which has the bias for specific pins?
-That's a neat idea.
-
-I will say it kinda seems like this is a larger conversation happening here. Does it make sense to submit
-a next version with these pins as they are or wait until this larger conversation concludes?
-
->
->
->>>>> Not sure how much two-sense I have for the conversation at large, but generally I agree with Doug's
->>>>> point in the first paragraph. Pulls for this soc are consistent across boards so I don't think it makes
->>>>> sense to move them to the board files here. I vote that these stay here.
->>>> I would be great if Konrad and Bjorn shared their opinion on this... but
->>>> wait, you did not Cc all maintainers... Eh.
->>> I'm not sure why this is being brought up again; we've already discussed this here
->>> https://lore.kernel.org/all/9707bf67-1b22-8a77-7193-fc909b4f49de@quicinc.com/
->>> Would you like to discuss this issue here, on the next version, or not at all?
->>>
->>> On a side note, I'm uncomfortable with how our continued interactions are going
->>> and do not believe this to be conductive to continued collaboration. I would ask that
->>> we keep our correspondence polite and professional moving forward.
->>
->> I have added Konrad and Bjorn is already there on the thread. Our understanding is that CCing maintainers comment is for next patch series after this one.
->
-> BTW: you can feed git send-email with --cc-cmd='./scripts/get_maintainer.pl --norolestats' and
->
-> it'll pick the right people for you (most of the time, anyway).
-
-Sounds good; thanks for the help!
-
-Thanks,
-Melody
-
->
->
->>
->> Bjorn, please check and comment on above? If requires we should start writing the guidelines for MSM boards since lot of comments are based on the experience or knowledge in the community Vs caught by tools - so it is easy to be missed by developers submitting new boards. Thoughts?
->
-> Big yes! Some of the points should probably even be raised wrt the DT spec itself, such as property order.
->
->
-> Konrad
->
->>
->> ---Trilok Soni
->>
->>
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 66eb16fbe09f..956a6e494709 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -7697,9 +7697,10 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 		bundle->surface_updates[planes_count].plane_info =
+ 			&bundle->plane_infos[planes_count];
+ 
+-		fill_dc_dirty_rects(plane, old_plane_state, new_plane_state,
+-				    new_crtc_state,
+-				    &bundle->flip_addrs[planes_count]);
++		if (acrtc_state->stream->link->psr_settings.psr_feature_enabled)
++			fill_dc_dirty_rects(plane, old_plane_state,
++					    new_plane_state, new_crtc_state,
++					    &bundle->flip_addrs[planes_count]);
+ 
+ 		/*
+ 		 * Only allow immediate flips for fast updates that don't
+-- 
+2.38.1
 
