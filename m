@@ -2,205 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22576231C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C572C6231B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiKIRq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:46:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S231409AbiKIRqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiKIRqn (ORCPT
+        with ESMTP id S230222AbiKIRqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:46:43 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411B164F9;
-        Wed,  9 Nov 2022 09:46:43 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id g62so17367912pfb.10;
-        Wed, 09 Nov 2022 09:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=audwF3R26hO5/1tDhu1hZ0cjBE15kB3JCoKo0JD+sBo=;
-        b=pxrvctklMWfU4Gw5H7393MIwP0VxLN6JqplrrIb1uGKQrtemctjAlR3Xxor574z33L
-         ybcyJGD/lI7c9Tx0zKswNiJm9pONqSSd4Luiw85JsK9CRQho004/05D+baCwCmOMNjDd
-         ihMYeWMgXYo83+dv3f/CIJvBkpF+rLF0+s8xiBhlmpi9BJVnBywf+0r43LBbvBmqQ1i7
-         nDgXXM9SVo4KxeV/aZI/mWdy+jTyaLSTpTjjSg0KrsGzGeqpPWGhJVa1gcJ5ayCZ5Be/
-         M2o83nn07RSAm6oWSNu79EAjS7/RzUXQFzP2zfaPLN9s43x6l6FPZPlRnqACmYgvMmmX
-         zMqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=audwF3R26hO5/1tDhu1hZ0cjBE15kB3JCoKo0JD+sBo=;
-        b=kmuylX+vLahydrhn9lmq5IlySG7BlbcWcGKYoe0OQmnxLog5bxD/CclrDyvElM5Fh7
-         dgQm2YXN8urjTuEa4S7iwUj8eQ12HGAreLLjN6RX5zySUYfwVSZyg39Kn/2ZhAlWRf5z
-         vahkSEl4gI9DhYaLyDWzFTUCaCLjQm3sgXJZoNR69fD6+gVqBkEzh+Ed7jTpHln0M1+t
-         Ze7TbeJfeT5uKNyDsMlCa95AxerKUdRsk8B1tH22qm44lB1JfJ08uNNT0TEfGdBzbifs
-         jtnLkOK82vraYcn1GSllJgj8P42CdccI/AwBDanXCtLDTD1vVzxC9aOOOtwbMTsttv3i
-         zMDQ==
-X-Gm-Message-State: ACrzQf008Sxzsw3mHbipF9MtWjsWXJG8Eiv+V8E7EHvVg/nAi3BQLvEM
-        ECd/c1SKBsCJ/ICw0oLA5SA=
-X-Google-Smtp-Source: AMsMyM4NcogTBT1uuHGwhRJDZMPCS72KvD42DHVMeWyW4QN46ae5pgvMry1bAP0tR1OyAvXighcKaA==
-X-Received: by 2002:a63:1748:0:b0:46f:18be:4880 with SMTP id 8-20020a631748000000b0046f18be4880mr52638669pgx.128.1668016002702;
-        Wed, 09 Nov 2022 09:46:42 -0800 (PST)
-Received: from balhae.corp.google.com ([2620:15c:2c1:200:fa05:f3cd:da75:3103])
-        by smtp.gmail.com with ESMTPSA id a10-20020a63cd4a000000b0043941566481sm7877909pgj.39.2022.11.09.09.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 09:46:42 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>
-Subject: [PATCH 04/12] perf test: Replace record test workload with thloop
-Date:   Wed,  9 Nov 2022 09:46:27 -0800
-Message-Id: <20221109174635.859406-5-namhyung@kernel.org>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221109174635.859406-1-namhyung@kernel.org>
-References: <20221109174635.859406-1-namhyung@kernel.org>
+        Wed, 9 Nov 2022 12:46:08 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCDD64FD
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:46:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MHfsFUJzMTs+moow60vQwInpGBHbPKoN+2yepis2x+ak1hoGjoHau/AsgPmAGqWWV7efUAk+kQScmH6G3SjMzXG6wXGiS8ubzqymrz5/rebKO+VApNedwlyeg7nO9M5muTHCEqHNJNpCkkKCWA2h9Vzv9aWEx6xd4r/6qkBxQp3DNKVc+MxQmI+QSsfDPkWp5/FDndFxvnj/x9JCP4JiQrJ5m5HFo54L2Zp1BICJ/RvNuwTcVTQ0ac9aovUq61Tt8Vqt1YiEHnm5HVlijPDGqUSSmXdMcnTAVUcd7icWxe/Soo9QcKX9qSbhvi10V7Ecbc5bSWKNr7dQSe7VclE1ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kAn/CfaYg8T7hiRGZ/nflqMFNH7A7GqWKnsKdoQepcQ=;
+ b=E8ezOiLCwvgilgOLQTotx0kUNbuQ9X5YtIpCSbDX7E2Q3OzkhtdU96hMvhb5LGI0AoUsdtsNcIyDdM08LWDwHzmn+F72uSaL2iDXnkA/rKahVmUAfl6pCvYb4hoDGaeBAJ0/OyBZI1ztJSKjc2/bd2+KrS1stCI0E/FU39iyIcq/bNVk4wkWCIEeZEJGzSE4zbk86rGAIGVaVWIGF+f2rQRRX+NF4kEnO6HPmmmRpWJMZxusI2M1GhkLHMTBlFAf0BD2RENAXbECu4tnhQIG96fZHeY24KntZdzJUhbBJVI4A687sVAHSvE1WE3aLr54WWW5I32SLC5xu1hin0MkXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kAn/CfaYg8T7hiRGZ/nflqMFNH7A7GqWKnsKdoQepcQ=;
+ b=tcSvj3esFf09eoAgdl9kwPjIo1UM3CAZPa/Pp7zBXRQXLpbeYUpXfk4oYKNavRGEaU7laFqgzuDrzSYbSG1SpPTg0TPdOLWSjR1kiTPdFZ93Kq3jN31LT/AkdjIIINSXXZDRAO7MzQpeDo7G8kJKqm6AOlarmzKgqvt9qO+sD3k=
+Received: from DM6PR08CA0050.namprd08.prod.outlook.com (2603:10b6:5:1e0::24)
+ by PH7PR12MB5687.namprd12.prod.outlook.com (2603:10b6:510:13e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
+ 2022 17:46:04 +0000
+Received: from DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::6f) by DM6PR08CA0050.outlook.office365.com
+ (2603:10b6:5:1e0::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.12 via Frontend
+ Transport; Wed, 9 Nov 2022 17:46:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT107.mail.protection.outlook.com (10.13.172.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 17:46:04 +0000
+Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 11:46:02 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        "Roman Li" <roman.li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: only fill dirty rectangles when PSR is enabled
+Date:   Wed, 9 Nov 2022 12:46:27 -0500
+Message-ID: <20221109174628.150234-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT107:EE_|PH7PR12MB5687:EE_
+X-MS-Office365-Filtering-Correlation-Id: 879d6752-1cd8-4595-4567-08dac27a4616
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6l7DexLWkh2HOEYjvm+TXdTK11zUixmHgEeT7Po0sqCFO4+sF3u+4LzX8F9oAv7OFzf4IXF5nCHygAR9/WpmrcsvW4/DxpPe9YDi4NUk8pZb9oJwZQe3gdZU9RswsoN4nA7plKca77XRctq+b5BVE07N19oHzghvS2K5g1Mtevypp1S0wOoQ2EBRt4ch4ZhPpmPGQpcpIHfQBEn3xXW5zOkIg/ydvoTeFa/7gA/5logIy0SftXKuf6S73m90rsfFnzL909cIrbc51+/AfwfZAY2bBQZHfOSagKY8Th/2g3kBKmXkqduLr+jhWRaVfuNgDfa/eNwGxBQNQxMVDVZ2SMrGAtCFz/gZo/AdB6ihTmPGLje5Mw+Vp2SUGJrMgePFsHxQuWuynEMdCsX0swoTbG/hGfzZagJk4cX+7ItRyfPZo4B3+uITM43joeamPxpbZmZa65Q7CBHAleOttrP24dHiu/KaSB+UBH3GhiXxcLM1wAwFv9VmFA5iLBFcdl4iENNDAY280d+pkZ20QU8DgNfzulPsvhY4rdEwBZ4JILBUqtfiGCGzzMNtyCygnPGBydyaqz2lSVeSM89g3/bpRTcNST8HSZ/uubT/DkC/WJl8Oo1dWu/JymiBfaV22e4L/IAq3fXg9wbv67Rp3ScmnO/WXwrOhD7WU66IK1jeO7aOjF5jdjpWQjNeu++xT6EpWcNh9/HHK/iwNkj82Whc93Awipv+AQw4Zf2gV4PWr21qyw0JfI7nShEHGxLKu1oWPDwj8IlLkDKLpR4aMgN5jYI7ATlDpDPK1Ba1deEBBD/i7dpfUwNNL1ImjYrTSxqnrGA9lEBaTty25wBLq8/DorHs6QUBKk8EDL5eSli3VS0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(376002)(346002)(451199015)(46966006)(36840700001)(40470700004)(70586007)(70206006)(82740400003)(26005)(8676002)(4326008)(316002)(2906002)(7696005)(47076005)(40480700001)(426003)(336012)(83380400001)(36860700001)(44832011)(40460700003)(86362001)(16526019)(186003)(1076003)(5660300002)(2616005)(41300700001)(36756003)(8936002)(82310400005)(478600001)(6666004)(356005)(81166007)(54906003)(6916009)(14143004)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 17:46:04.3228
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 879d6752-1cd8-4595-4567-08dac27a4616
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5687
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So that it can get rid of requirements for a compiler.
+Currently, we are calling fill_dc_dirty_rects() even if PSR isn't
+supported by the relevant link in amdgpu_dm_commit_planes(). So, we can
+instead limit the filling of dirty rectangles to only when PSR is
+enabled.
 
-  $ sudo ./perf test -v 92
-   92: perf record tests                                               :
-  --- start ---
-  test child forked, pid 740204
-  Basic --per-thread mode test
-  Basic --per-thread mode test [Success]
-  Register capture test
-  Register capture test [Success]
-  Basic --system-wide mode test
-  Basic --system-wide mode test [Success]
-  Basic target workload test
-  Basic target workload test [Success]
-  test child finished with 0
-  ---- end ----
-  perf record tests: Ok
-
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 ---
- tools/perf/tests/shell/record.sh | 59 ++------------------------------
- 1 file changed, 3 insertions(+), 56 deletions(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
-index e93b3a8871fe..4dff89e3a3fd 100755
---- a/tools/perf/tests/shell/record.sh
-+++ b/tools/perf/tests/shell/record.sh
-@@ -9,17 +9,13 @@ shelldir=$(dirname "$0")
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 66eb16fbe09f..956a6e494709 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -7697,9 +7697,10 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+ 		bundle->surface_updates[planes_count].plane_info =
+ 			&bundle->plane_infos[planes_count];
  
- err=0
- perfdata=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
--testprog=$(mktemp /tmp/__perf_test.prog.XXXXXX)
-+testprog="perf test -w thloop"
- testsym="test_loop"
+-		fill_dc_dirty_rects(plane, old_plane_state, new_plane_state,
+-				    new_crtc_state,
+-				    &bundle->flip_addrs[planes_count]);
++		if (acrtc_state->stream->link->psr_settings.psr_feature_enabled)
++			fill_dc_dirty_rects(plane, old_plane_state,
++					    new_plane_state, new_crtc_state,
++					    &bundle->flip_addrs[planes_count]);
  
- cleanup() {
-   rm -rf "${perfdata}"
-   rm -rf "${perfdata}".old
- 
--  if [ "${testprog}" != "true" ]; then
--    rm -f "${testprog}"
--  fi
--
-   trap - EXIT TERM INT
- }
- 
-@@ -29,53 +25,6 @@ trap_cleanup() {
- }
- trap trap_cleanup EXIT TERM INT
- 
--build_test_program() {
--  if ! [ -x "$(command -v cc)" ]; then
--    # No CC found. Fall back to 'true'
--    testprog=true
--    testsym=true
--    return
--  fi
--
--  echo "Build a test program"
--  cat <<EOF | cc -o ${testprog} -xc - -pthread
--#include <stdio.h>
--#include <stdlib.h>
--#include <pthread.h>
--
--void test_loop(void) {
--  volatile int count = 1000000;
--
--  while (count--)
--    continue;
--}
--
--void *thfunc(void *arg) {
--  int forever = *(int *)arg;
--
--  do {
--    test_loop();
--  } while (forever);
--
--  return NULL;
--}
--
--int main(int argc, char *argv[]) {
--  pthread_t th;
--  int forever = 0;
--
--  if (argc > 1)
--    forever = atoi(argv[1]);
--
--  pthread_create(&th, NULL, thfunc, &forever);
--  test_loop();
--  pthread_join(th, NULL);
--
--  return 0;
--}
--EOF
--}
--
- test_per_thread() {
-   echo "Basic --per-thread mode test"
-   if ! perf record -o /dev/null --quiet ${testprog} 2> /dev/null
-@@ -96,8 +45,8 @@ test_per_thread() {
-     return
-   fi
- 
--  # run the test program in background (forever)
--  ${testprog} 1 &
-+  # run the test program in background (for 30 seconds)
-+  ${testprog} 30 &
-   TESTPID=$!
- 
-   rm -f "${perfdata}"
-@@ -205,8 +154,6 @@ test_workload() {
-   echo "Basic target workload test [Success]"
- }
- 
--build_test_program
--
- test_per_thread
- test_register_capture
- test_system_wide
+ 		/*
+ 		 * Only allow immediate flips for fast updates that don't
 -- 
-2.38.1.431.g37b22c650d-goog
+2.38.1
 
