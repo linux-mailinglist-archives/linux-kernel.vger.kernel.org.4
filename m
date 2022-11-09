@@ -2,156 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F8A6231CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2446231D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbiKIRrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S230221AbiKIRs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbiKIRrB (ORCPT
+        with ESMTP id S230014AbiKIRsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:47:01 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AD4A189;
-        Wed,  9 Nov 2022 09:46:53 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so2549441pjk.2;
-        Wed, 09 Nov 2022 09:46:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W0zLgQdSAIqAU+WOoh8QcTGRCE1+p+yashdyC8yN0/4=;
-        b=KsEREoges0F7NLoKhExkw1DyTx3/yMVl0I967wXWVWd6CkOCd93c6pXeHKi8sPAX7H
-         d3sEFja87m883x4BOw2BPyYmKbZJi9gU2FxzcmSN9AVyTbLNfqR+2l3/AHR2ZHO5k/No
-         ifeTe6Ve4vTbdSJfT5a/Pj/mRcC3GwfUiSKbPoDQ+9y/BBylqJg5xeuq8XDBgyuOqM60
-         QlycBxlTtLCKtVu9RZ96bwY/4ZTaAuCvc9hLpWE4r4XT8KRspJtxydjxvMqlngIZyz0g
-         C+w0MtUOwR3ewWYJGR/2dd3B9n9X6qmelVMJb8894/BxhogW31k+czZXjvSgqVdb6kF7
-         cQ3g==
+        Wed, 9 Nov 2022 12:48:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6809118B2D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:47:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668016047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t/Kh42tMKfFvo4S/QFU8eolDVeSpitIJIiOT5FWjq3s=;
+        b=eQF8ThcYggio4aSmCJfa3bMT85GKto0/9Rjyv5oSYWLvBYGEsplnGILvmXz0i+k7l39ikn
+        zgm4WOcfETsVewWUT1Czo25EgTJNpSbdjK2zpq+90X9H8YZ4QkfqBIhhDXjsw0InsZC6gv
+        kBlBs25v6GVenjRF7TKsJ/gEYi6Xxso=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-149-upYKfeadOU2lVJaqzukqPg-1; Wed, 09 Nov 2022 12:47:26 -0500
+X-MC-Unique: upYKfeadOU2lVJaqzukqPg-1
+Received: by mail-qk1-f198.google.com with SMTP id j13-20020a05620a288d00b006be7b2a758fso16263628qkp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:47:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=W0zLgQdSAIqAU+WOoh8QcTGRCE1+p+yashdyC8yN0/4=;
-        b=HY93gGMMSpqTuzLo7U2NxMngzKtAyJTLsdUkegCIvaAP846x5neypQ1gX4OVSNWPnA
-         JHeMKMLeVzIbphyxS8q8G5OXaXa0BP7QYYBsC4GCJh2e3w7K3oarlrBs04S3bN0mkuMM
-         aW0ElOg/waSVsEps7addmceudKNzo2zNzAjcI/o6EUs0fFmcpRed9cZEF7HVeX+I/Tfu
-         tBfYzT4skjhnEHdS7MyCtjxN5OiXHOjOE/hgK9sEP5+2xh6Rfo2964T7IvgWYcfJsFzM
-         SxMGGLCsT+hhe5Qkia9cFTfeoDwyoBONcZPgTVWoHwl3vFyLPTuft6JG2sHzjIox8Uc3
-         6TwQ==
-X-Gm-Message-State: ACrzQf0wP1NHaaItIzwRzaBEWAlwGM9ncGFjFZPDmYindUy+5UIqbJGG
-        imd48g7uAZX+r8M+bGOtOTY=
-X-Google-Smtp-Source: AMsMyM5cfDmsKklEm7jwgKoBTdqSIAAFVo9O1YJZuIUQ798AnkHoy29sCF1ZlFPkyiJT7x+wITIz5A==
-X-Received: by 2002:a17:90a:ba05:b0:213:b1c2:ff88 with SMTP id s5-20020a17090aba0500b00213b1c2ff88mr62367294pjr.240.1668016013193;
-        Wed, 09 Nov 2022 09:46:53 -0800 (PST)
-Received: from balhae.corp.google.com ([2620:15c:2c1:200:fa05:f3cd:da75:3103])
-        by smtp.gmail.com with ESMTPSA id a10-20020a63cd4a000000b0043941566481sm7877909pgj.39.2022.11.09.09.46.52
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t/Kh42tMKfFvo4S/QFU8eolDVeSpitIJIiOT5FWjq3s=;
+        b=u4xit1VoZWJvguGyuvk7fmT86f2uFd3adHGHK9PVTkXkXlcSA0gKj1rG6g4gdRYTlR
+         NkN3NGokEqouiv2ajTACVbs1d4NKNCM/lkr9c1F+AlX8nkjF6RQyH1hKd+IMek8/ouwJ
+         0hZLTOIsczh+rj67Z7LSRGeV0zU1vIcyku48boLIfbsEtat3MPYTW/hn1yQPKLHY1vja
+         wzNt7Nmnc6DonZMRZ1BUrJ88DEMYyoyMz6fN3Ft/Yc2cHHgWZKxTOflRhAnpfSWZgHTm
+         AHkRfo2pITyRmF2TQbzai1buEoavd1K56bv/jpryN+uQRMBM7fkmMTVyUaB/MSgku24a
+         kIug==
+X-Gm-Message-State: ACrzQf026CJs1VODQwzJcXPYELp+BlOF0IE8UF2BEoK6lP7rFUZ+jatW
+        GpDh4+8+mDoDTyaRi9m/lj9LIZrRT2DCAOmmNF8cnHlif2W4lLT+39xKaiiMyz5on8Kst8IZuFI
+        unTh4KmrA+WDENRD62DAZTLUz
+X-Received: by 2002:a05:6214:19e3:b0:4b6:8a99:3054 with SMTP id q3-20020a05621419e300b004b68a993054mr55096682qvc.108.1668016045398;
+        Wed, 09 Nov 2022 09:47:25 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM4cIKDmZFid0Kdu9UcncIAXfb+bkR8ZjQnilX9u+j9N1m8IT/D1lrE9WWhovxtcPfHOO2c1+Q==
+X-Received: by 2002:a05:6214:19e3:b0:4b6:8a99:3054 with SMTP id q3-20020a05621419e300b004b68a993054mr55096665qvc.108.1668016045154;
+        Wed, 09 Nov 2022 09:47:25 -0800 (PST)
+Received: from redhat.com ([185.195.59.47])
+        by smtp.gmail.com with ESMTPSA id u12-20020a37ab0c000000b006e54251993esm11254690qke.97.2022.11.09.09.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 09:46:52 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>
-Subject: [PATCH 12/12] perf test: Replace data symbol test workload with datasym
-Date:   Wed,  9 Nov 2022 09:46:35 -0800
-Message-Id: <20221109174635.859406-13-namhyung@kernel.org>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221109174635.859406-1-namhyung@kernel.org>
-References: <20221109174635.859406-1-namhyung@kernel.org>
+        Wed, 09 Nov 2022 09:47:24 -0800 (PST)
+Date:   Wed, 9 Nov 2022 12:47:19 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org, eperezma@redhat.com,
+        netdev@vger.kernel.org, kvm@vger.kernel.org,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: fix potential memory leak during the release
+Message-ID: <20221109124430-mutt-send-email-mst@kernel.org>
+References: <20221109154213.146789-1-sgarzare@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109154213.146789-1-sgarzare@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So that it can get rid of requirement of a compiler.
+On Wed, Nov 09, 2022 at 04:42:13PM +0100, Stefano Garzarella wrote:
+> Before commit 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
+> we call vhost_vdpa_iotlb_unmap(v, iotlb, 0ULL, 0ULL - 1) during the
+> release to free all the resources allocated when processing user IOTLB
+> messages through vhost_vdpa_process_iotlb_update().
+> That commit changed the handling of IOTLB a bit, and we accidentally
+> removed some code called during the release.
+> 
+> We partially fixed with commit 037d4305569a ("vhost-vdpa: call
+> vhost_vdpa_cleanup during the release") but a potential memory leak is
+> still there as showed by kmemleak if the application does not send
+> VHOST_IOTLB_INVALIDATE or crashes:
+> 
+>   unreferenced object 0xffff888007fbaa30 (size 16):
+>     comm "blkio-bench", pid 914, jiffies 4294993521 (age 885.500s)
+>     hex dump (first 16 bytes):
+>       40 73 41 07 80 88 ff ff 00 00 00 00 00 00 00 00  @sA.............
+>     backtrace:
+>       [<0000000087736d2a>] kmem_cache_alloc_trace+0x142/0x1c0
+>       [<0000000060740f50>] vhost_vdpa_process_iotlb_msg+0x68c/0x901 [vhost_vdpa]
+>       [<0000000083e8e205>] vhost_chr_write_iter+0xc0/0x4a0 [vhost]
+>       [<000000008f2f414a>] vhost_vdpa_chr_write_iter+0x18/0x20 [vhost_vdpa]
+>       [<00000000de1cd4a0>] vfs_write+0x216/0x4b0
+>       [<00000000a2850200>] ksys_write+0x71/0xf0
+>       [<00000000de8e720b>] __x64_sys_write+0x19/0x20
+>       [<0000000018b12cbb>] do_syscall_64+0x3f/0x90
+>       [<00000000986ec465>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Let's fix calling vhost_vdpa_iotlb_unmap() on the whole range in
+> vhost_vdpa_remove_as(). We move that call before vhost_dev_cleanup()
+> since we need a valid v->vdev.mm in vhost_vdpa_pa_unmap().
+> vhost_iotlb_reset() call can be removed, since vhost_vdpa_iotlb_unmap()
+> on the whole range removes all the entries.
+> 
+> The kmemleak log reported was observed with a vDPA device that has `use_va`
+> set to true (e.g. VDUSE). This patch has been tested with both types of
+> devices.
+> 
+> Fixes: 037d4305569a ("vhost-vdpa: call vhost_vdpa_cleanup during the release")
+> Fixes: 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 
-  $ sudo ./perf test -v 109
-  109: Test data symbol                                                :
-  --- start ---
-  test child forked, pid 844526
-  Recording workload...
-  [ perf record: Woken up 2 times to write data ]
-  [ perf record: Captured and wrote 0.354 MB /tmp/__perf_test.perf.data.GFeZO (4847 samples) ]
-  Cleaning up files...
-  test child finished with 0
-  ---- end ----
-  Test data symbol: Ok
+It's fine, just pls don't say "potential" here in the subject, let's
+avoid pleonasms - it's a memory leak, yes it triggers under some coditions
+but little is unconditional in this world :)
 
-Cc: Leo Yan <leo.yan@linaro.org>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/tests/shell/test_data_symbol.sh | 29 +---------------------
- 1 file changed, 1 insertion(+), 28 deletions(-)
+No need to repost.
 
-diff --git a/tools/perf/tests/shell/test_data_symbol.sh b/tools/perf/tests/shell/test_data_symbol.sh
-index cd6eb54d235d..d871e6c743ef 100755
---- a/tools/perf/tests/shell/test_data_symbol.sh
-+++ b/tools/perf/tests/shell/test_data_symbol.sh
-@@ -11,13 +11,7 @@ skip_if_no_mem_event() {
- 
- skip_if_no_mem_event || exit 2
- 
--# skip if there's no compiler
--if ! [ -x "$(command -v cc)" ]; then
--	echo "skip: no compiler, install gcc"
--	exit 2
--fi
--
--TEST_PROGRAM=$(mktemp /tmp/__perf_test.program.XXXXX)
-+TEST_PROGRAM="perf test -w datasym"
- PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
- 
- check_result() {
-@@ -45,31 +39,10 @@ cleanup_files()
- {
- 	echo "Cleaning up files..."
- 	rm -f ${PERF_DATA}
--	rm -f ${TEST_PROGRAM}
- }
- 
- trap cleanup_files exit term int
- 
--# compile test program
--echo "Compiling test program..."
--cat << EOF | cc -o ${TEST_PROGRAM} -x c -
--typedef struct _buf {
--	char data1;
--	char reserved[55];
--	char data2;
--} buf __attribute__((aligned(64)));
--
--static buf buf1;
--
--int main(void) {
--	for (;;) {
--		buf1.data1++;
--		buf1.data2 += buf1.data1;
--	}
--	return 0;
--}
--EOF
--
- echo "Recording workload..."
- 
- # perf mem/c2c internally uses IBS PMU on AMD CPU which doesn't support
--- 
-2.38.1.431.g37b22c650d-goog
+> ---
+>  drivers/vhost/vdpa.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 166044642fd5..b08e07fc7d1f 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -65,6 +65,10 @@ static DEFINE_IDA(vhost_vdpa_ida);
+>  
+>  static dev_t vhost_vdpa_major;
+>  
+> +static void vhost_vdpa_iotlb_unmap(struct vhost_vdpa *v,
+> +				   struct vhost_iotlb *iotlb,
+> +				   u64 start, u64 last);
+> +
+>  static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
+>  {
+>  	struct vhost_vdpa_as *as = container_of(iotlb, struct
+> @@ -135,7 +139,7 @@ static int vhost_vdpa_remove_as(struct vhost_vdpa *v, u32 asid)
+>  		return -EINVAL;
+>  
+>  	hlist_del(&as->hash_link);
+> -	vhost_iotlb_reset(&as->iotlb);
+> +	vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+>  	kfree(as);
+>  
+>  	return 0;
+> @@ -1162,14 +1166,14 @@ static void vhost_vdpa_cleanup(struct vhost_vdpa *v)
+>  	struct vhost_vdpa_as *as;
+>  	u32 asid;
+>  
+> -	vhost_dev_cleanup(&v->vdev);
+> -	kfree(v->vdev.vqs);
+> -
+>  	for (asid = 0; asid < v->vdpa->nas; asid++) {
+>  		as = asid_to_as(v, asid);
+>  		if (as)
+>  			vhost_vdpa_remove_as(v, asid);
+>  	}
+> +
+> +	vhost_dev_cleanup(&v->vdev);
+> +	kfree(v->vdev.vqs);
+>  }
+>  
+>  static int vhost_vdpa_open(struct inode *inode, struct file *filep)
+> -- 
+> 2.38.1
 
