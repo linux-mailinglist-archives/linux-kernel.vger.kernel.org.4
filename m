@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3196E622D3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE941622D3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbiKIOMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S229842AbiKIOMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiKIOMB (ORCPT
+        with ESMTP id S230432AbiKIOL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:12:01 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8486C1902A;
-        Wed,  9 Nov 2022 06:12:00 -0800 (PST)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 72203896;
-        Wed,  9 Nov 2022 15:11:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668003118;
-        bh=AffXHvdxCHZjAgL7Z9CuecNf9qFUAfZCnvn/pjOY1HI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ffO7kK8Rx6z7y+oG64svjLUW+zCTHx5u6OuAQWUNDNScvBrY+gsleyDUUKvX5cVlU
-         MYt4pd0CSIBLUj/vKUJDjGj0sKb0upFIGDhRskNM1cu9kAqM/N32bDqJVdOAqDNy4V
-         /xJCHiPiC2LrEHsSevkMndX19TGYcsZlQlCZ2C0w=
-Date:   Wed, 9 Nov 2022 16:11:39 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH] drm: rcar_du: DRM_RCAR_DU optionally depends on
- RCAR_MIPI_DSI
-Message-ID: <Y2u1G2OBMwlBjZ+8@pendragon.ideasonboard.com>
-References: <20221018181828.19528-1-rdunlap@infradead.org>
+        Wed, 9 Nov 2022 09:11:59 -0500
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7317665
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:11:59 -0800 (PST)
+Received: by mail-qk1-f182.google.com with SMTP id 8so10975079qka.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:11:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+/cT2gZsJ2v9YrZOvT3xenA9VViLuZ5d27nLPJyUinc=;
+        b=bLRTnoJE+1EohlRVCQPyd+aA/31OID0nBSEBdx7RyHLHXq5h4vgPlm/bCUoTikASKI
+         qvOAIhkXFd5WkLGYK78iywsdNf75bPjtnFUepvpRIDWyUfvbxDLEO8FtBlQwI5w3yuv3
+         1a6Kcilycou9DbiFzxNCiyibrDXXW5QOVG//qb7Y71B/qE+zpvsZvIAlGDfhowkVA0XK
+         LdeWY3fN8MOuFZnDEhKiuIAC5OiAhoCOdfeKfVtyQAMDwQPUcu1X7nrTMvgBgJttPFUF
+         Uxtl4eq9r9vf1SBVV9opjkkQCXfvGUBfNYLQ3nd5Eo4yA9f01esGhHL8rw6hn66PZxJB
+         zV1g==
+X-Gm-Message-State: ACrzQf3UuxGGie9tf/2KPXi/+qNoqGz7peZTAZpPvWUYt5QAkVvPhAEU
+        qnaezGgCHMYQKQhHtOXLpkh9PEELsU+smNZJwzc=
+X-Google-Smtp-Source: AMsMyM6kxRFSioMBt88vdU7sYhFFokwPINKbJdJaVQ5SGcrfGyp0E/XBSOQ4/YrNIktcOvkZs2k0z3J9LwmR8RsXe1I=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr42126816qkl.443.1668003118163; Wed, 09
+ Nov 2022 06:11:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221018181828.19528-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109140711.105222-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20221109140711.105222-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 9 Nov 2022 15:11:47 +0100
+Message-ID: <CAJZ5v0gv6L9Q+Nu3U0JAWqJk4MPt7kGVGiOAKuX5FcF=znyfTA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] driver core: remove devm_device_remove_groups()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+On Wed, Nov 9, 2022 at 3:07 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> There is no in-kernel user of this function, so it is not needed anymore
+> and can be removed.
+>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thank you for the patch.
+For both patches in the series:
 
-On Tue, Oct 18, 2022 at 11:18:28AM -0700, Randy Dunlap wrote:
-> When CONFIG_DRM_RCAR_DU=y and CONFIG_DRM_RCAR_MIPI_DSI=m, calls
-> from the builtin driver to the mipi driver fail due to linker
-> errors.
-> Since the RCAR_MIPI_DSI driver is not always required, fix the
-> build error by making DRM_RCAR_DU optionally depend on the
-> RCAR_MIPI_DSI Kconfig symbol. This prevents the problematic
-> kconfig combination without requiring that RCAR_MIPI_DSI always
-> be enabled.
-> 
-> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_enable':
-> rcar_du_crtc.c:(.text+0x3a18): undefined reference to `rcar_mipi_dsi_pclk_enable'
-> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_disable':
-> rcar_du_crtc.c:(.text+0x47cc): undefined reference to `rcar_mipi_dsi_pclk_disable'
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 
-I've already posted a fix, see
-
-https://lore.kernel.org/dri-devel/20221001220342.5828-1-laurent.pinchart+renesas@ideasonboard.com/
-
-It aligns with how the LVDS encoder driver is handled, so I would prefer
-that. I will send a pull request shortly, as a v6.1 fix.
-
-> Fixes: 957fe62d7d15 ("drm: rcar-du: Fix DSI enable & disable sequence")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Cc: LUU HOAI <hoai.luu.ub@renesas.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-renesas-soc@vger.kernel.org
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
 > ---
->  drivers/gpu/drm/rcar-du/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff -- a/drivers/gpu/drm/rcar-du/Kconfig b/drivers/gpu/drm/rcar-du/Kconfig
-> --- a/drivers/gpu/drm/rcar-du/Kconfig
-> +++ b/drivers/gpu/drm/rcar-du/Kconfig
-> @@ -4,6 +4,7 @@ config DRM_RCAR_DU
->  	depends on DRM && OF
->  	depends on ARM || ARM64
->  	depends on ARCH_RENESAS || COMPILE_TEST
-> +	depends on DRM_RCAR_MIPI_DSI || DRM_RCAR_MIPI_DSI=n
->  	select DRM_KMS_HELPER
->  	select DRM_GEM_DMA_HELPER
->  	select VIDEOMODE_HELPERS
-
--- 
-Regards,
-
-Laurent Pinchart
+>  drivers/base/core.c    | 17 -----------------
+>  include/linux/device.h |  2 --
+>  2 files changed, 19 deletions(-)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index d02501933467..6137de5073b1 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2693,23 +2693,6 @@ int devm_device_add_groups(struct device *dev,
+>  }
+>  EXPORT_SYMBOL_GPL(devm_device_add_groups);
+>
+> -/**
+> - * devm_device_remove_groups - remove a list of managed groups
+> - *
+> - * @dev:       The device for the groups to be removed from
+> - * @groups:    NULL terminated list of groups to be removed
+> - *
+> - * If groups is not NULL, remove the specified groups from the device.
+> - */
+> -void devm_device_remove_groups(struct device *dev,
+> -                              const struct attribute_group **groups)
+> -{
+> -       WARN_ON(devres_release(dev, devm_attr_groups_remove,
+> -                              devm_attr_group_match,
+> -                              /* cast away const */ (void *)groups));
+> -}
+> -EXPORT_SYMBOL_GPL(devm_device_remove_groups);
+> -
+>  static int device_add_attrs(struct device *dev)
+>  {
+>         struct class *class = dev->class;
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 023ea50b1916..4efc607c008c 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -1062,8 +1062,6 @@ static inline void device_remove_group(struct device *dev,
+>
+>  int __must_check devm_device_add_groups(struct device *dev,
+>                                         const struct attribute_group **groups);
+> -void devm_device_remove_groups(struct device *dev,
+> -                              const struct attribute_group **groups);
+>  int __must_check devm_device_add_group(struct device *dev,
+>                                        const struct attribute_group *grp);
+>  void devm_device_remove_group(struct device *dev,
+> --
+> 2.38.1
+>
