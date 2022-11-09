@@ -2,114 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA34622EA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75B8622EA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbiKIPEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S231723AbiKIPEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbiKIPDz (ORCPT
+        with ESMTP id S231716AbiKIPE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:03:55 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 78AFCFD17
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:03:53 -0800 (PST)
-Received: (qmail 511314 invoked by uid 1000); 9 Nov 2022 10:03:52 -0500
-Date:   Wed, 9 Nov 2022 10:03:52 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2] USB: gadget: dummy_hcd: switch char * to u8 *
-Message-ID: <Y2vBWJOgEBDn0NzU@rowland.harvard.edu>
-References: <20221109084450.2181848-1-gregkh@linuxfoundation.org>
+        Wed, 9 Nov 2022 10:04:29 -0500
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B761704C;
+        Wed,  9 Nov 2022 07:04:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1668006266;
+        bh=faHKfW8MX8mNlpGQT35ygkU0EZ9+oVOiOfdlQbE62ZE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=rbl/rYo99EGMuJjSPaRXAEF7Mhf0Op8mWIS0vRknojlJhj4Ueov+4p9CITPz5kZE+
+         qVjU6OIOccpiTKU00ulHyzVmRNUcbMFWq8ZU941T/BZcyff/mQGWm2QAVPQ7DBOY6h
+         wYr78zGi69TlKZFlfLrI1RjmP0LS+88O79AfW13DQ4nldxc79GlHV6ZQ8syW+mjPxR
+         UvLsDpoSYsjydX4OjVaLeZ0cKqb4PKTAnOFGQrp3LP7dY4OV+9gc1T4wbWmR2KbGre
+         r/5wB3viilNmSrpxZBKbo4BUn2N52fAaqPl4muvIqTQWA+XZKOOseShlON4c84zP9V
+         t0iC9mKBuo4vw==
+Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N6pCY64HXzgg1;
+        Wed,  9 Nov 2022 10:04:25 -0500 (EST)
+Message-ID: <afdd9ed9-6224-3a47-e3de-017a5398024f@efficios.com>
+Date:   Wed, 9 Nov 2022 10:04:33 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109084450.2181848-1-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v5 08/24] sched: Introduce per memory space current
+ virtual cpu id
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>
+References: <20221103200359.328736-1-mathieu.desnoyers@efficios.com>
+ <20221103200359.328736-9-mathieu.desnoyers@efficios.com>
+ <Y2tyshbt+qgJXU9O@hirez.programming.kicks-ass.net>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <Y2tyshbt+qgJXU9O@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 09:44:50AM +0100, Greg Kroah-Hartman wrote:
-> The function handle_control_request() casts the urb buffer to a char *,
-> and then treats it like a unsigned char buffer when assigning data to
-> it.  On some architectures, "char" is really signed, so let's just
-> properly set this pointer to a u8 to take away any potential problems as
-> that's what is really wanted here.
+On 2022-11-09 04:28, Peter Zijlstra wrote:
+> On Thu, Nov 03, 2022 at 04:03:43PM -0400, Mathieu Desnoyers wrote:
 > 
-> Use put_unaligned_le16() to copy the full 16bits into the buffer,
-> it's not a problem just yet as only 7 bits are being used here, but this
-> protects us when/if the USB spec changes in the future to define more of
-> these bits.
+>> diff --git a/kernel/fork.c b/kernel/fork.c
+>> index 08969f5aa38d..6a2323266942 100644
+>> --- a/kernel/fork.c
+>> +++ b/kernel/fork.c
+>> @@ -1047,6 +1047,10 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+>>   	tsk->reported_split_lock = 0;
+>>   #endif
+>>   
+>> +#ifdef CONFIG_SCHED_MM_VCPU
+>> +	tsk->mm_vcpu = -1;
+>> +	tsk->mm_vcpu_active = 0;
+>> +#endif
+>>   	return tsk;
+>>   
+>>   free_stack:
 > 
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Jakob Koschel <jakobkoschel@gmail.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> v2: - use put_unaligned_le16() on Linus's recommendation as a simpler and
->       more obvious way to describe the data being copied here.
->     - update device: comment based on Alan's review
+> Note how the above hunk does exactly the same as the below thunk, and I
+> think they're even on the same code-path.
 > 
->  drivers/usb/gadget/udc/dummy_hcd.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+> How about moving all of this to __sched_fork() or something?
 > 
-> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-> index 899ac9f9c279..7c59c20c8623 100644
-> --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> @@ -1740,13 +1740,13 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
->  		if (setup->bRequestType == Dev_InRequest
->  				|| setup->bRequestType == Intf_InRequest
->  				|| setup->bRequestType == Ep_InRequest) {
-> -			char *buf;
-> +			u8 *buf;
->  			/*
-> -			 * device: remote wakeup, selfpowered
-> +			 * device: remote wakeup, selfpowered, LTM, U1, or U2
->  			 * interface: nothing
->  			 * endpoint: halt
->  			 */
-> -			buf = (char *)urb->transfer_buffer;
-> +			buf = urb->transfer_buffer;
->  			if (urb->transfer_buffer_length > 0) {
->  				if (setup->bRequestType == Ep_InRequest) {
->  					ep2 = find_endpoint(dum, w_index);
-> @@ -1755,10 +1755,9 @@ static int handle_control_request(struct dummy_hcd *dum_hcd, struct urb *urb,
->  						break;
->  					}
->  					buf[0] = ep2->halted;
-> -				} else if (setup->bRequestType ==
-> -					   Dev_InRequest) {
-> -					buf[0] = (u8)dum->devstatus;
-> -				} else
-> +				} else if (setup->bRequestType == Dev_InRequest)
-> +					put_unaligned_le16(dum->devstatus, buf);
+>> @@ -1579,6 +1586,7 @@ static int copy_mm(unsigned long clone_flags, struct task_struct *tsk)
+>>   
+>>   	tsk->mm = mm;
+>>   	tsk->active_mm = mm;
+>> +	sched_vcpu_fork(tsk);
+>>   	return 0;
+>>   }
+> 
+>> +void sched_vcpu_fork(struct task_struct *t)
+>> +{
+>> +	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm);
+>> +	t->mm_vcpu = -1;
+>> +	t->mm_vcpu_active = 1;
+>> +}
 
-This is tempting but wrong.  At this point we haven't checked how big 
-the transfer_buffer is; if it is only one byte long then this call will 
-overflow the buffer.  Notice the "if" statement three lines below.
+Let's look at how things are brought up in copy_process():
 
-Alan Stern
+         p = dup_task_struct(current, node);
+           tsk->mm_vcpu = -1;
+           tsk->mm_vcpu_active = 0;
+­[...]
 
-> +				else
->  					buf[0] = 0;
->  			}
->  			if (urb->transfer_buffer_length > 1)
-> -- 
-> 2.38.1
-> 
+         /* Perform scheduler related setup. Assign this task to a CPU. */
+         retval = sched_fork(clone_flags, p);
+
+-> I presume that from this point the task is observable by the scheduler. However, tsk->mm does not point to the new mm yet.
+The "mm_vcpu_active" flag == 0 prevents the scheduler from trying to poke into the wrong mm vcpu_id bitmaps across early mm-struct
+lifetime (clone/fork), late in the mm-struct lifetime (exit), and across reset of the mm-struct (exec).
+
+[...]
+
+         retval = copy_mm(clone_flags, p);
+             new_mm = dup_mm(old_mm)
+               mm_init(new_mm)
+                  mm_init_vcpu(new_mm)
+-> At this point it becomes OK for the scheduler to poke into the tsk->mm vcpu_id bitmaps. Therefore, sched_vcpu_fork() sets
+mm_vcpu_active flag = 1.
+              sched_vcpu_fork(tsk)
+-> From this point the scheduler can poke into tsk->mm's vcpu_id bitmaps.
+
+So what I think we should to do here is to remove the extra "t->mm_vcpu = -1;" assignment from sched_vcpu_fork(), because
+it has already been set by dup_task_struct. We could actually turn that into a "WARN_ON_ONCE(t->mm_vcpu != -1)".
+
+However, if my understanding is correct, keeping "tsk->mm_vcpu_active = 0;" early in dup_task_struct and "tsk->mm_vcpu_active = 1"
+in sched_vcpu_fork() after the new mm is initialized is really important. Or am I missing something ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
