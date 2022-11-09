@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669AE622A08
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D359F622A11
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiKILRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:17:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S229593AbiKILRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiKILQb (ORCPT
+        with ESMTP id S229558AbiKILRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:16:31 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C672AC7D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:16:11 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E8F41F6E6;
-        Wed,  9 Nov 2022 11:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667992570; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nt/ta1l555vr4EsYp1C+UKFBUJaf1xMeh2se9hvTXV4=;
-        b=A+ZNMvKzJsRbs3XX0kDqucBV1QNYQeSVip1ZSRDe6o/ioxjNewKigBfJ/jKiAwRYHN8oOY
-        tfDdGmNMDy0YWSd/Q0hEmo8HW2llBqZasFgJQ+Qc077dyXpHhVfAvbnhHEY8ddylWvpNuY
-        p0/5Tjy2pNTIKp0I22D9cw+9UUKMJaY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667992570;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nt/ta1l555vr4EsYp1C+UKFBUJaf1xMeh2se9hvTXV4=;
-        b=v+hsFIFU7SeXH0BVMt0N5U6cmbClwvje2b0/4Xit0/rOiAaD5EWurfl9KA9zqMrvmbtZrT
-        jeTJiqAygmEW+6Bw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 33ACA1331F;
-        Wed,  9 Nov 2022 11:16:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id R5NDC/qLa2M7NAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 09 Nov 2022 11:16:10 +0000
-Message-ID: <cb71d0f1-c8dd-2bd4-30cf-7fe8531a66e4@suse.cz>
-Date:   Wed, 9 Nov 2022 12:16:09 +0100
+        Wed, 9 Nov 2022 06:17:01 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A5CD2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:16:59 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id d3so25258306ljl.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:16:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4rsVLg9MNVYcsu7j/AVDjA3CpudFe+3V/rIcx//bM/8=;
+        b=B/CmR1XUEcS5WLZWLUVsjGgsF4fuXr92HkbkYKQNxq0ZqHv4kcXVa5/bwWgEDUIY5Z
+         /+5gl1MCszn9Jk/348pjFi68PPnWaXHHSvlVZH7gtjqYmaDq/TzzcJTIqI5+I4JMwPmw
+         LejMH2rkXFIWB+YtpkZrRHE1D3/yzthxVfF0nhGKUUvdpLcIT9OYfPPPVdbsN8ggYh6W
+         +zAbKxXfWsskneRQp2FiZAvwBdiHGCTxPCaWBAYRWXANCnXHM8U7F+OwDeNrqJJt98gG
+         hVjaiXXsSPVqrhw/APyr2cH28j8D9k+run4gELf3d8EuL3LfR1EUf69Y6FHGgmlFw1Fn
+         0NPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4rsVLg9MNVYcsu7j/AVDjA3CpudFe+3V/rIcx//bM/8=;
+        b=InTYS320x+GVdEP4yO8u2bB9yIlwr0/39blEVkd0hsyC6XPecns/y95q5YfJDsHuZi
+         mm8XZB0lNFyZjv020gRFumR/SdZoSqoYpn0yZmsM2odHWzTG2x4cvwOPnajaJtD5bLqg
+         bnW33AmPHCjDGJEmTapZi2h9xHpTpmYOU+SEL+ZV3bLUA2ytJPga6ppx1/HtjXqSJV0E
+         JP6SuZwNt/MIGWscybhDVUP7Jc+qX3i2O2Gx6rGl5J+hB3JHjOc8ReKZP6bt5ceFc28D
+         YP4pIQrguHtHTdX3CrZJe8xU/PbqBkKucz6ocehakGbALn7j3cieavrChYjlc5InlsrG
+         PEgg==
+X-Gm-Message-State: ACrzQf0YFoid9kce94e3Uv6KozizCbU4TB7MdoE8lZCwwff6DZqrNqKW
+        kZT0y0AHG9GXweBwJgd6qp5Zgw==
+X-Google-Smtp-Source: AMsMyM6sOcBec1Du0eXhO+Yr7RRND9y3KXBX470kt/YbaN8UFxrkx/2eswIcD7gcwZsEB3IdXHxgzw==
+X-Received: by 2002:a05:651c:54b:b0:277:2f02:8da8 with SMTP id q11-20020a05651c054b00b002772f028da8mr21780310ljp.73.1667992617922;
+        Wed, 09 Nov 2022 03:16:57 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id bp9-20020a056512158900b004b19f766b07sm2187362lfb.91.2022.11.09.03.16.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 03:16:57 -0800 (PST)
+Message-ID: <953916b4-5c00-29a3-11a8-015911d23f69@linaro.org>
+Date:   Wed, 9 Nov 2022 12:16:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 0/3] Refactor __kmem_cache_create() and fix memory leak
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/6] arm64: dts: fsd: add sysreg device node
 Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Liu Shixin <liushixin2@huawei.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20221031134747.3049593-1-liushixin2@huawei.com>
- <Y2IgUwTH/dO06Tot@hyeyoo> <c03620e3-6159-1c46-c472-c15186f4ccae@huawei.com>
- <Y2PA6JBklwwtLlST@hyeyoo>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y2PA6JBklwwtLlST@hyeyoo>
+To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
+        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, alim.akhtar@samsung.com,
+        linux-fsd@tesla.com, robh+dt@kernel.org
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        aswani.reddy@samsung.com, sriranjani.p@samsung.com
+References: <20221109100928.109478-1-vivek.2311@samsung.com>
+ <CGME20221109100254epcas5p48c574876756f899875df8ac71464ce11@epcas5p4.samsung.com>
+ <20221109100928.109478-4-vivek.2311@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221109100928.109478-4-vivek.2311@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,77 +83,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 14:23, Hyeonggon Yoo wrote:
-> On Wed, Nov 02, 2022 at 04:53:08PM +0800, Liu Shixin wrote:
->> On 2022/11/2 15:46, Hyeonggon Yoo wrote:
->> > On Mon, Oct 31, 2022 at 09:47:44PM +0800, Liu Shixin wrote:
->> >> I found a memory leak of kobj->name in sysfs_slab_add() which is introduced
->> >> by 80da026a8e5d ("mm/slub: fix slab double-free in case of duplicate sysfs filename").
->> >> Following the rules stated in the comment for kobject_init_and_add():
->> > Thank you for reporting this! Indeed it seems tried to fix double free but
->> > introduced a leak.
->> >
->> >>  If this function returns an error, kobject_put() must be called to
->> >>  properly clean up the memory associated with the object.
->> >>
->> >> We should use kobject_put() to free kobject.
->> > But what to do if a cache is created early and later sysfs_slab_add() failed?
->> > (Which is unlikely on normal condition)
->> >
->> > With this series it introduces use-after-free if sysfs_slab_add() in
->> > slab_sysfs_init() failed.  Should we just call BUG() or something like that?
->>
->> Thanks for your discovery, what I missed.
+On 09/11/2022 11:09, Vivek Yadav wrote:
+> From: Sriranjani P <sriranjani.p@samsung.com>
 > 
-> You're welcome.
-> 
->> I prefer to panic directly, just as create_boot_cache() does.
-> 
-> IMHO that should be nothing serious. but let's hear maintainers' opinion.
-> 
->> Of couse, if you want the system to continue booting, I think it's possible to distinguish them
->> by slab_state.
-> 
-> I'm afraid to make it more complex :(
+> Add SYSREG controller device node, which is available in PERIC and FSYS0
+> block of FSD SoC.
+> > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Signed-off-by: Pankaj Kumar Dubey <pankaj.dubey@samsung.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
 
-+Cc Rasmus who did a recent patch in this area. Thread starts here:
-https://lore.kernel.org/all/20221031134747.3049593-1-liushixin2@huawei.com/
+Drop Cc list from commit msgs. Instead use get_maintainers.pl.
 
-As for me, I don't think we should be addung new BUG() or panic() in
-general, and especially not for a failing sysfs add. AFAICS
-create_boot_cache() might panic, but not because of sysfs, as that's delayed
-until slab_sysfs_init() and we don't panic anymore in the latter.
-
-So yeah, it could work to tell sysfs_slab_add() whether it should not do the
-kobject_put() as it's a boot cache. The slab_state should work.
-
+> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
+> ---
+>  arch/arm64/boot/dts/tesla/fsd.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
->> Looking forward to your advice.
->> Thanks,
->> >
->> >> But we can't simply add kobject_put() since it will free kmem_cache too.
->> >> If we use kobject_put(), we need to skip other release functions.
->> >>
->> >> In this series, We refactor the code to separate sysfs_slab_add() and
->> >> debugfs_slab_add() from __kmem_cache_create(), and then use kobject_put()
->> >> to free kobject in sysfs_slab_add(). This can fix the memory leak of
->> >> kobject->name.
->> >>
->> >> v1->v2: Fix build error reported by kernel test robot <lkp@intel.com>.
->> >>
->> >> Liu Shixin (3):
->> >>   mm/slab_common: Move cache_name to create_cache()
->> >>   mm/slub: Refactor __kmem_cache_create()
->> >>   mm/slub: Fix memory leak of kobj->name in sysfs_slab_add()
->> >>
->> >>  include/linux/slub_def.h | 11 +++++++++
->> >>  mm/slab_common.c         | 44 ++++++++++++++++++----------------
->> >>  mm/slub.c                | 52 ++++++++++------------------------------
->> >>  3 files changed, 48 insertions(+), 59 deletions(-)
->> >>
->> >> -- 
->> >> 2.25.1
->> >>
->> 
-> 
+> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> index f35bc5a288c2..3d8ebbfc27f4 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> @@ -518,6 +518,16 @@
+>  				"dout_cmu_fsys1_shared0div4";
+>  		};
+>  
+> +		sysreg_peric: system-controller@14030000 {
+> +			compatible = "tesla,sysreg_peric", "syscon";
+> +			reg = <0x0 0x14030000 0x0 0x1000>;
+
+Put it next  to the other system-controller node (and ordered by unit
+address against it).
+
+Best regards,
+Krzysztof
 
