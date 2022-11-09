@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE02622403
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5292C622408
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiKIGiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 01:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        id S229638AbiKIGmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 01:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKIGiM (ORCPT
+        with ESMTP id S229452AbiKIGl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 01:38:12 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D30C1A05C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 22:38:11 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A95QeDH008034;
-        Wed, 9 Nov 2022 06:37:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=3+LWY7rOfZY5YRaRctYvHIq2Smel5cZR6qlqZRITIEA=;
- b=DqCYsqQRYiiITVG7TXe41v+sdWeGH8DXQ7XBVo2uwUMxoaMowvXB1lAJWGmo8PX7si88
- IDle+Gzgbo9nw4Mnw/g1cym/69lJFpO3dlPYcqkAnCdy/oLiI/uWeOT0tP4FQYucW8lP
- ZK8N9EG5t/WIUdpn2iFO6qUt1KbXWiV9M4n9mrckCUJfdtZkCY2jdM5bDCykX2tGtz1e
- 2zp6mjZlq8R/lj9+n6jVlwH8yJ5mIZdpbBX86VREpR2lkjFtnS6bIsC9bDspeEDocKQw
- u8s5VQQkTmzQuqFRGTLvtJ4DEZkvrGZ/2ZZY9+NVVwBVQQhLRaMJ9zhU8hJegfHzovJb CA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kr62k1t4e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 06:37:06 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A95SHbb013584;
-        Wed, 9 Nov 2022 06:37:05 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kr62k1t3d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 06:37:05 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A96ZAqs002383;
-        Wed, 9 Nov 2022 06:37:03 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3kngqdd619-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 06:37:03 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A96bdAj51118414
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Nov 2022 06:37:39 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 506EB4C040;
-        Wed,  9 Nov 2022 06:37:01 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 189474C059;
-        Wed,  9 Nov 2022 06:37:01 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  9 Nov 2022 06:37:01 +0000 (GMT)
-Date:   Wed, 9 Nov 2022 07:36:59 +0100
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/4] mm: introduce 'encoded' page pointers with embedded
- extra bits
-Message-ID: <Y2tKixpO4RO6DgW5@tuxmaker.boeblingen.de.ibm.com>
-References: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
- <20221108194139.57604-1-torvalds@linux-foundation.org>
+        Wed, 9 Nov 2022 01:41:58 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F0215722
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 22:41:57 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6b3G6sfPzHvfg;
+        Wed,  9 Nov 2022 14:41:30 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 14:41:55 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 14:41:55 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>
+Subject: [PATCH] drivers: dio: fix possible memory leak in dio_init()
+Date:   Wed, 9 Nov 2022 14:40:36 +0800
+Message-ID: <20221109064036.1835346-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108194139.57604-1-torvalds@linux-foundation.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: V-p-gepv-JjtVCpdUPM3yXLfoFt-c4gD
-X-Proofpoint-GUID: rv-w7d64gYvLTMH2r6geoPP9I4zXBO2L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_01,2022-11-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- clxscore=1011 priorityscore=1501 spamscore=0 mlxscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 mlxlogscore=831 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 11:41:36AM -0800, Linus Torvalds wrote:
+If device_register() returns error, the 'dev' and name needs be
+freed. Add a release function, and then call put_device() in the
+error path, so the name is freed in kobject_cleanup() and to the
+'dev' is freed in release function.
 
-Hi Linus,
+Fixes: 2e4c77bea3d8 ("m68k: dio - Kill warn_unused_result warnings")
+Fixes: 1fa5ae857bb1 ("driver core: get rid of struct device's bus_id string array")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/dio/dio.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-[...]
+diff --git a/drivers/dio/dio.c b/drivers/dio/dio.c
+index 0e5a5662d5a4..0a051d656880 100644
+--- a/drivers/dio/dio.c
++++ b/drivers/dio/dio.c
+@@ -109,6 +109,12 @@ static char dio_no_name[] = { 0 };
+ 
+ #endif /* CONFIG_DIO_CONSTANTS */
+ 
++static void dio_dev_release(struct device *dev)
++{
++	struct dio_dev *ddev = container_of(dev, typeof(struct dio_dev), dev);
++	kfree(ddev);
++}
++
+ int __init dio_find(int deviceid)
+ {
+ 	/* Called to find a DIO device before the full bus scan has run.
+@@ -225,6 +231,7 @@ static int __init dio_init(void)
+ 		dev->bus = &dio_bus;
+ 		dev->dev.parent = &dio_bus.dev;
+ 		dev->dev.bus = &dio_bus_type;
++		dev->dev.release = dio_dev_release;
+ 		dev->scode = scode;
+ 		dev->resource.start = pa;
+ 		dev->resource.end = pa + DIO_SIZE(scode, va);
+@@ -252,6 +259,7 @@ static int __init dio_init(void)
+ 		if (error) {
+ 			pr_err("DIO: Error registering device %s\n",
+ 			       dev->name);
++			put_device(&dev->dev);
+ 			continue;
+ 		}
+ 		error = dio_create_sysfs_dev_files(dev);
+-- 
+2.25.1
 
-> +struct encoded_page;
-> +#define ENCODE_PAGE_BITS 3ul
-> +static inline struct encoded_page *encode_page(struct page *page, unsigned long flags)
-> +{
-
-Any reaction in case ((flags & ~ENCODE_PAGE_BITS) != 0)?
-
-> +	return (struct encoded_page *)(flags | (unsigned long)page);
-> +}
-
-Thanks!
