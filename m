@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C40E622D7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF100622D76
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiKIOUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S231387AbiKIOUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiKIOTq (ORCPT
+        with ESMTP id S231311AbiKIOTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:19:46 -0500
+        Wed, 9 Nov 2022 09:19:50 -0500
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BC71CFCF;
-        Wed,  9 Nov 2022 06:19:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19EA21E0B;
+        Wed,  9 Nov 2022 06:19:42 -0800 (PST)
 Received: from booty.fritz.box (unknown [77.244.183.192])
         (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id C8C17FF816;
-        Wed,  9 Nov 2022 14:19:32 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 8731BFF817;
+        Wed,  9 Nov 2022 14:19:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668003575;
+        t=1668003578;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f3PNKMdE0RdXN+WZAH+jyICgofcfEBOVB1XLcjAJPYg=;
-        b=kUCW3DmgNBxhDT17iQQtq7wcue3w6JrwUt/g0ar9zWGvH3hoFA6gLKC6DTVI0ifxYfHAV3
-        My6pfQeMHKG+M/dmj8M1wSd26Tuio6ftjajAUxTcgOaNVWp01LYEuU6da/ja/5WWAS2QvQ
-        qETmB0VfhJljXyuvFcptHxZTmsN0zFDpWfl2X9FINLSuvXz4h9LlK13XX8gGvTfb27zUPv
-        ThI1DYj+g3dd3ZnMTyiCpC5SZoOOeRTdCcEiG+S2vW7bz2jp5AhjzzwhARFjVWai7NvVOx
-        63D2j5DDnna7fKYrJwc4OVVpIu3gbJUPFJXkUUHmZYHFYEdFA3xvGkcGc1PhaA==
+        bh=/BzvYI+82AsJNmU/oztfOvlLmRSAFV6HnDtwxGnWX6I=;
+        b=mjHH7meDLl/qOGRKmwohShYMZj/CGk50NwS94SI6WvY/N4mUQywNBBMRKMRcyRFSlDo0YF
+        aYj9oagjh8OvFG34wtZlzIHiHs31HKS4bio4n15QdGFFLY6bFCURWtT2Gcxf7+izHgk0v4
+        7skD7rvUaR1eMy8g1dXASDZVzk6aXnjpsdRb4V6XlhyGi5g2ODCTT23BTSAiZ78RrmLFS7
+        9zvUNPbV9jnyFLZSq05Tb+PAK8QIUdchzrFTtI++MTTGUAW2opsMbLuuA7hiQ3c9Wih3zA
+        IJ9vgFiq3KAwp8wLXhZpGPGGu854ZukyxfDcUvAf91dC4T8yg39oytBTJIfp2Q==
 From:   luca.ceresoli@bootlin.com
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Richard Leitner <richard.leitner@skidata.com>
-Subject: [PATCH 07/23] staging: media: tegra-video: document tegra_channel_get_remote_source_subdev
-Date:   Wed,  9 Nov 2022 15:18:36 +0100
-Message-Id: <20221109141852.729246-8-luca.ceresoli@bootlin.com>
+Subject: [PATCH 08/23] staging: media: tegra-video: fix typos in comment
+Date:   Wed,  9 Nov 2022 15:18:37 +0100
+Message-Id: <20221109141852.729246-9-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
 References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
@@ -68,27 +68,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-Clarify what this function does.
+Add "skip" in "so we can *skip* the current channel" or it doesn't make
+sense.
+
+Also add articles where appropriate to fix English grammar.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/staging/media/tegra-video/vi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/media/tegra-video/vi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 0fe3c7f6d234..8a7512ce2273 100644
+index 8a7512ce2273..b24b9353077f 100644
 --- a/drivers/staging/media/tegra-video/vi.c
 +++ b/drivers/staging/media/tegra-video/vi.c
-@@ -154,6 +154,9 @@ tegra_channel_get_remote_csi_subdev(struct tegra_vi_channel *chan)
- 	return media_entity_to_v4l2_subdev(pad->entity);
- }
- 
-+/*
-+ * Walk up the chain until the initial source (e.g. image sensor)
-+ */
- struct v4l2_subdev *
- tegra_channel_get_remote_source_subdev(struct tegra_vi_channel *chan)
- {
+@@ -1762,10 +1762,10 @@ static int tegra_vi_graph_init(struct tegra_vi *vi)
+ 	 * Walk the links to parse the full graph. Each channel will have
+ 	 * one endpoint of the composite node. Start by parsing the
+ 	 * composite node and parse the remote entities in turn.
+-	 * Each channel will register v4l2 async notifier to make the graph
+-	 * independent between the channels so we can the current channel
++	 * Each channel will register a v4l2 async notifier to make the graph
++	 * independent between the channels so we can skip the current channel
+ 	 * in case of something wrong during graph parsing and continue with
+-	 * next channels.
++	 * the next channels.
+ 	 */
+ 	list_for_each_entry(chan, &vi->vi_chans, list) {
+ 		struct fwnode_handle *ep, *remote;
 -- 
 2.34.1
 
