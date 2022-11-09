@@ -2,141 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046AC6229F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A7C6229E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiKILNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        id S229545AbiKILNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbiKILNN (ORCPT
+        with ESMTP id S229763AbiKILMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:13:13 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1382A41A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:12:59 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id a67so26658398edf.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:12:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ORdNvCZeW1eLAFgDoT00Z0MnsQHTXCI5a/39+Z9Rwg=;
-        b=H+DqAPYQ+juP9L8EStGj6rtNPo+W1K7Y9V83bFMIe7nWZmoht8czm8SMlj9aisAmck
-         C3uASnAdE3qgYNqg2/UWCBu4Yf3YSKrygbvAo9crUIxFD/xIf5aF7jl7guWQ7k1Y6fTq
-         lP5vAyrR9rVC59uTchwPMy1lihErdHwMH1uZRLpNWDggMTLPfGce1KBVJowJl6PnmoOr
-         RWYou4rosw1WZkGGnOMLo+TTOhNp+yuG2Ze53DgCLvadpKvKtkSqzl8dqeCtLkLA7ErJ
-         SI3J35dq2UOEg71TFsPzwJ9iYy3+f/2mC7rquoe8boLZjAcZqpIFnsAi5DG4fox5TeVX
-         6a1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7ORdNvCZeW1eLAFgDoT00Z0MnsQHTXCI5a/39+Z9Rwg=;
-        b=VG7wmWAtYu89/p/kUGR3qMgVBcXOgVlKjBq2t3hw2dGHrCLLUnGE9ZI/SMhDezmzED
-         JG2VV34edzrqza0Nu0TOLDytjqnjidySaKupbOq/Hi4YBvO3ynqgS7WeAOONBSNB32We
-         8zQ/UunyO4ztWWi7k1QDsiRFuIY29UK6vWeQuEieMFigmFioJczUca3TATCJ9j2uYFzS
-         wtLCYOqqRrjig2JErHeNyNg16fXYQZuI4pgKxY2lhIKTraLjUv6m2AFN2jP1jGRXVOsY
-         WBpk9wV9taptuwsgzR1Eq/9ic4uFP8TxTY33JYsKo1gYe3c7BCIsn/65MRXBdqk6xZpa
-         CQpw==
-X-Gm-Message-State: ACrzQf37GtHrSuWNpZqmKlz5nXNIZgkc5IfVj3W4IeaeucdSW6bC5CcI
-        Ku1zRLu4Rlh0IXukhSuhZZ2cng==
-X-Google-Smtp-Source: AMsMyM455QkPeaIE50OfnLrA6tvN0gkcUk54pjOM6YPFBWmAo9uMmusfVz+yHWHIVJAYWKBKtCyDDg==
-X-Received: by 2002:a05:6402:1b01:b0:463:a54a:d551 with SMTP id by1-20020a0564021b0100b00463a54ad551mr44890196edb.428.1667992378115;
-        Wed, 09 Nov 2022 03:12:58 -0800 (PST)
-Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id k8-20020a1709062a4800b007ad9c826d75sm5825899eje.61.2022.11.09.03.12.56
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 09 Nov 2022 03:12:57 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/10] arm64: dts: qcom: sm6375-pdx225: Configure Samsung touchscreen
-Date:   Wed,  9 Nov 2022 12:12:35 +0100
-Message-Id: <20221109111236.46003-11-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20221109111236.46003-1-konrad.dybcio@linaro.org>
-References: <20221109111236.46003-1-konrad.dybcio@linaro.org>
+        Wed, 9 Nov 2022 06:12:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C30128704
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:12:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA667B81D7E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB7BC433D6;
+        Wed,  9 Nov 2022 11:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667992366;
+        bh=cBNVVy2XQTnhLulDF5VKWQjp25xKbYOz3XlbA6B82qI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xQR4+JUGjxFm+DUdj/oQSk99WN50lW5tNj2qdosi1/1Hqm6XXffT8NFMKXp4cV1K4
+         /10DPAmce3jvZdOUMvUjq+rV04R6Y0w7jGWol9YiKB9nM2TTyjYxsTEIEYG5phyQ0w
+         h7GObr8bj7b9GlRwBLrTSuhp+CvpxctvCS6mA1+I=
+Date:   Wed, 9 Nov 2022 12:12:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
+        lkp@intel.com
+Subject: Re: [PATCH v8] misc: sgi-gru: fix use-after-free error in
+ gru_set_context_option, gru_fault and gru_handle_user_call_os
+Message-ID: <Y2uLK6Zxsz9TD9WV@kroah.com>
+References: <20221109105158.230081-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109105158.230081-1-zyytlz.wz@163.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a pretty bog-standard-for-Xperias-for-the-past-3-years
-touchscreen setup.
+On Wed, Nov 09, 2022 at 06:51:58PM +0800, Zheng Wang wrote:
+> Gts may be freed in gru_check_chiplet_assignment.
+> The caller still use it after that, UAF happens.
 
-The OEM that built the Xperia 10 IV for SONY decided to use some
-kind of a GPIO regulator that needs to be enabled at all times
-for both the touch panel and the display panel to function.
+I do not understand what this text means, sorry.  Can you try to make it
+more descriptive?
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../qcom/sm6375-sony-xperia-murray-pdx225.dts | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+> 
+> Fix it by introducing a return value to see if it's in error path or not.
+> Free the gts in caller if gru_check_chiplet_assignment check failed.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-index 17094e588a3a..33083f18755b 100644
---- a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-+++ b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-@@ -78,6 +78,23 @@ &gpi_dma1 {
- 	status = "okay";
- };
- 
-+&i2c8 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	touchscreen@48 {
-+		compatible = "samsung,s6sy761";
-+		reg = <0x48>;
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <22 0x2008>;
-+
-+		vdd-supply = <&pm6125_l13>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ts_int_default &ts_avdd_default>;
-+	};
-+};
-+
- &pmk8350_adc_tm {
- 	status = "okay";
- };
-@@ -287,6 +304,20 @@ &qupv3_id_1 {
- 
- &tlmm {
- 	gpio-reserved-ranges = <13 4>;
-+
-+	ts_int_default: ts-int-default-state {
-+		pins = "gpio22";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+
-+	ts_avdd_default: ts-avdd-default-state {
-+		pins = "gpio59";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		output-high;
-+	};
- };
- 
- &usb_1 {
--- 
-2.38.1
+Please wrap all of your changelog text at 72 columns, you have 2
+paragraphs with different wrappings.
 
+> 
+> Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> Acked-by: Dimitri Sivanich <sivanich@hpe.com>
+> ---
+> v8:
+> - remove tested-by tag suggested by Greg
+> 
+> v7:
+> - fix some spelling problems suggested by Greg, change kernel test robot from reported-by tag to tested-by tag
+> 
+> v6:
+> - remove unused var checked by kernel test robot
+> 
+> v5:
+> - fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+> 
+> v4:
+> - use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+> 
+> v3:
+> - add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
+> 
+> v2:
+> - commit message changes suggested by Greg
+> 
+> v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
+> ---
+>  drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+>  drivers/misc/sgi-gru/grumain.c   | 16 ++++++++++++----
+>  drivers/misc/sgi-gru/grutables.h |  2 +-
+>  3 files changed, 25 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+> index d7ef61e602ed..bdd515d33225 100644
+> --- a/drivers/misc/sgi-gru/grufault.c
+> +++ b/drivers/misc/sgi-gru/grufault.c
+> @@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+>  	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+>  		goto exit;
+>  
+> -	gru_check_context_placement(gts);
+> +	ret = gru_check_context_placement(gts);
+> +	if (ret)
+> +		goto err;
+>  
+>  	/*
+>  	 * CCH may contain stale data if ts_force_cch_reload is set.
+> @@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+>  exit:
+>  	gru_unlock_gts(gts);
+>  	return ret;
+> +err:
+> +	gru_unlock_gts(gts);
+> +	gru_unload_context(gts, 1);
+> +	return -EINVAL;
+>  }
+>  
+>  /*
+> @@ -874,7 +880,11 @@ int gru_set_context_option(unsigned long arg)
+>  		} else {
+>  			gts->ts_user_blade_id = req.val1;
+>  			gts->ts_user_chiplet_id = req.val0;
+> -			gru_check_context_placement(gts);
+> +			if (gru_check_context_placement(gts)) {
+> +				gru_unlock_gts(gts);
+> +				gru_unload_context(gts, 1);
+> +				return -EINVAL;
+> +			}
+>  		}
+>  		break;
+>  	case sco_gseg_owner:
+> diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+> index 9afda47efbf2..beba69fc3cd7 100644
+> --- a/drivers/misc/sgi-gru/grumain.c
+> +++ b/drivers/misc/sgi-gru/grumain.c
+> @@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+>   * chiplet. Misassignment can occur if the process migrates to a different
+>   * blade or if the user changes the selected blade/chiplet.
+>   */
+> -void gru_check_context_placement(struct gru_thread_state *gts)
+> +int gru_check_context_placement(struct gru_thread_state *gts)
+>  {
+>  	struct gru_state *gru;
+> +	int ret = 0;
+>  
+>  	/*
+>  	 * If the current task is the context owner, verify that the
+> @@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+>  	 */
+>  	gru = gts->ts_gru;
+>  	if (!gru || gts->ts_tgid_owner != current->tgid)
+> -		return;
+> +		return ret;
+
+Why does this check return "all is good!" ?
+
+Shouldn't that be an error?
+
+thanks,
+
+greg k-h
