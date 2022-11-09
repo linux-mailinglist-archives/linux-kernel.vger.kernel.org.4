@@ -2,73 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE4A62335F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD126623368
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiKITWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 14:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S230374AbiKIT0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKITWx (ORCPT
+        with ESMTP id S229447AbiKITZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:22:53 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9BCD2F0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:22:51 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id s196so17063350pgs.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 11:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kLv3OyQL52LGPRwGlac/buhpBCkg1Ieh2JvpXhiIZC8=;
-        b=tM1B501ybW4koBIxpoOtpMN1Ogpd3wLYBHlm1wJpE92/ftk3HZBkSc/coWGYkzUA7M
-         JXomermPlfUprWO9+cLMB/+2UG8tc+ST7F8FONV6ctYz3Tk+mXqzJ9pYkHajH4bcyYj7
-         w9wJhFXDquZbVZY9/TQs1WC3Qpw97DxBr0qY0S7y98jf1a10Di51uMd8rmx6uKnrh+Yy
-         LOkzU47i4eNGq6MX+W4Ph9xsK6fkgliDYb4/VpKd4spMAoKrklQ+ocs5CFbMJTuJxi5R
-         e1WH6bsHkRfldtCLzSBPUuLMMcLQXIiXNvnji3oZvdukrec+iZqkhPC3MN9SncQKoZ1l
-         Xmmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kLv3OyQL52LGPRwGlac/buhpBCkg1Ieh2JvpXhiIZC8=;
-        b=zCZ4aOS8D32ZDXQ2TzRpdKFyFy8hg38iw2Td8M33iHaO5k+UD22Fii1EtbSQf7K94H
-         PJxkwOq6SLvSL71330Z12T4EPaItuTQhn1HmMHXuAtKY4BRbCP1XS1R+We6YL3tOtUIr
-         ke2Y/HpggQPnjaj/HCpHspSmYwlWdmpi/PNwHHYtOixsNFJ+N+Dry3l7Ca06WYtxTfQ1
-         OmJTqtvZxI3UAPgEeyvgD84EVqAx/BrA8ZlFa1RJlZ8HCO+vuRf2jaI7jw2BeZl0dstr
-         eIbiPUTsSkD0rkdE6AcDn4ztS3qNcNORc+n1Syya5sksB97w5OHTR37dvat5HgmAfZdw
-         jLEQ==
-X-Gm-Message-State: ACrzQf1UVylL6SmLnN9blT3OENHaTmYdUsycVvl5WsYgf75fnS3Jq4hj
-        sJpOWeNas4HpsofBFH9RMBwItw==
-X-Google-Smtp-Source: AMsMyM4E66eh2tWqdAh/uCGl2GPERNL6j9lZq6UYULFy0cu0Is9RaMEnBN7V3IyrhrqDOnGybQ5YaQ==
-X-Received: by 2002:a65:6404:0:b0:46f:a711:c481 with SMTP id a4-20020a656404000000b0046fa711c481mr47804596pgv.262.1668021771130;
-        Wed, 09 Nov 2022 11:22:51 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u64-20020a626043000000b0056d2317455bsm8623362pfb.7.2022.11.09.11.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 11:22:50 -0800 (PST)
-Date:   Wed, 9 Nov 2022 19:22:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Thomas Huth <thuth@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/3] Use TAP in some more KVM selftests
-Message-ID: <Y2v+B3xxYKJSM/fH@google.com>
-References: <20221004093131.40392-1-thuth@redhat.com>
- <Y0nOv6fqTe2NnPuu@google.com>
- <Y2mrh7h1jrZSPU5l@google.com>
+        Wed, 9 Nov 2022 14:25:58 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B88524F09
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:25:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nto37k7DnvUt3MSitcOVlogNQ3H7Rgb72c7bTidOp6TQUxHgFy3afIWJwG48YD/1oozjsSwp60IF5vuhrmphRErBjNtzngUjE5TyjRE+WWJNAYUAWla4nqz2hupixgvw4hHLBDMc6CaP0NaTgqDaWX6IggFbDwsn5ibQl6VVODCrd17eOtE3rufjJqBkApG/5ogKqeQ5d8dABmiE9BbfgyQmxTuSJoSqh+emC5Xqa3xG0CEE5Y19ejAlpT6K9CNtn+cMjVP4O1RpA+3a/abrCj7esQWqdF6XuPI9gYQmnd/4D1m6WXbiQJSw+0ohis2+wbupr0aCByblCyArgJ4GYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yV4jgGYwzavo/3otj4tp5+js/UzjvNOzZj9dAhE6Hug=;
+ b=lAVY1UmJI4HN9yjUeNlPGkjRzqW4gpVbwbSNuDFabKEuXU7BtsiZ7X5jX4+SMCXAmqBOIXeekIYphFR+bpgEL3PuBv9u0Bv+L0Q5LyOyzKfW2Xla/iXvliF4OFBbpiUL99V1hKcri/Tf0N9EIo6GW5Jt4nVVEn2ZktDF8aVNYdJ6sKjYyzmXkJ2PsmHJXYRzjMTBN03Hkf7QsGkO2RWYwzQwd/0MXzxpiX06tlg+InfG04o4eXx849+0WAzz5nE1gUruIxs772F3YXXZd8bKE+9PcvI4j2E4BO5tLs7sMEqWCJpdzmJdyc0Rh3siHYQDf7r5NhuAVRIeIlXiVTLMew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yV4jgGYwzavo/3otj4tp5+js/UzjvNOzZj9dAhE6Hug=;
+ b=CE1tumJPPGhvASs30dRCEqp55eTqh1scK0fIORIPnhODq+0f6ftZI8VlsMWmK5NObAIOKrsS9hRKY6z+GcnyOkI9ZR4SlMykUyB7llSBMlQErDCGqKyTOuNcx5SeoJ/HuoAFPCCwjC1TLoE4FDNdX2h+2NDXSZX+pwwbXyh+BKU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com (2603:10b6:5:39f::7) by
+ SJ0PR12MB7083.namprd12.prod.outlook.com (2603:10b6:a03:4ae::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
+ 2022 19:25:55 +0000
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::a052:ef2f:8408:de1d]) by DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::a052:ef2f:8408:de1d%9]) with mapi id 15.20.5791.027; Wed, 9 Nov 2022
+ 19:25:55 +0000
+Message-ID: <3956fafe-b6db-a1fe-78c4-24f364e37cfb@amd.com>
+Date:   Wed, 9 Nov 2022 14:25:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2] drm/amd/display: only fill dirty rectangles when PSR
+ is enabled
+Content-Language: en-US
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Roman Li <roman.li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221109182010.171534-1-hamza.mahfooz@amd.com>
+From:   Leo Li <sunpeng.li@amd.com>
+In-Reply-To: <20221109182010.171534-1-hamza.mahfooz@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR03CA0032.namprd03.prod.outlook.com
+ (2603:10b6:610:b3::7) To DM4PR12MB5311.namprd12.prod.outlook.com
+ (2603:10b6:5:39f::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2mrh7h1jrZSPU5l@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5311:EE_|SJ0PR12MB7083:EE_
+X-MS-Office365-Filtering-Correlation-Id: 322fcc17-d214-4062-d2f2-08dac28838cb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zLa8Yh1mMwHOhaouv0RAMrwlNMdSlL/4SCAeKsyLGdu3QdV73iGZqdO6xc90/yVnF29jgw9/WDld/4Xt7h8+Nmj5jvtF1Eyvqrv++1Bh3l3ljOFlnVIvDo/ufCMusYKivkfoe2Gn8lnLbgQTUJ2FytYE2ddvayNBqqItMIYCMF2a38CXi87oEiTPeGTRHzWaJcs87GSN7SufmEDqs6fA0/xzyt9mts8/uB0rLmNdreXaQ+J1wQoTIrnke9NRx7Fe1xr7/S29ZyH3OD5ssIbdx6t18ZqbGpSLn4Dnh6fQREQRUWV9j9isz9uqK7upTwYzhgQAJ/u5C0m1F/Sc6RwREPBux67jogu63/fGWiOaCpynTps8B43x0niP2sVOx2VDYT+bnG6hmRBOfqEYKyda0t6eyzWE/4cQWrSBq93Wqil+hPZ18cBWMsZjoJk0bx+TMy10jOtGK43PotBXl+fAZlUKyDly8e4qAWntlEomoJHy/Qzhmn2XbO0CyW+TMvRa1OVKuUxg2iJJTDqYzOYu3Z44jzyhP4XgEcOYqW31cDtlxxlXXyTnTYn4yN5ome7oNt2IsSDDMKC5zLQvVsE26Hr6y2pQkvLzSxPzXrQLjbm7meCaB/zXGcisIKYuljpi3PhRz6tsZCXEXSn9MPjIZKS3yS+7TfjZcGa29nFDL5BTU1veJs9OpyNE6PKt0WyM94/N6LkPKhf8Hdcv3LT9mw57d6s6EBJy1p8HLdYO8azWBSBsykYe4rJp4G6fW0BkuxdC3KD852ZxUGKVfOyyuYn1eofDAjtwW50AaDD2n0P6i1GKLNtlVWEfFmhiaGBx
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5311.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(376002)(39860400002)(346002)(136003)(451199015)(2906002)(6512007)(31696002)(86362001)(5660300002)(41300700001)(6506007)(36756003)(8676002)(4326008)(6666004)(8936002)(26005)(316002)(53546011)(54906003)(478600001)(66476007)(66556008)(6486002)(83380400001)(186003)(2616005)(66946007)(38100700002)(31686004)(14143004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TXgvT0ZzTlRPWHRJUTNPc09wOWkxQUJxeXZ0MGtMM0QzM0FUOWxKRXE1ZjA2?=
+ =?utf-8?B?N3dNSEJLbld1OUtMMnpDcmtFU0xRMzRJUEVNd1VLZGNEQnhjZFdZam82U3Vz?=
+ =?utf-8?B?Vmlra0Q3Nit2Ym5RRUc4M2F2bmFwV25nNXJhMmVMS05ZL0dqRDJvUkl0bE16?=
+ =?utf-8?B?aTI5eW5NYjBKYVBXZlppWW53L3VuVlR1S1BCck5zSXFDY2dlRkg0L25rWDQ3?=
+ =?utf-8?B?SXlkNGp4VStjVDBuU3NwZVZzS1ZJdVppaUNlY3lWODVvTEs1UlZza0tPaGls?=
+ =?utf-8?B?MFluK0kwRnFZUWpPazNGUFRwK1dNRXJrQ1pIZThtS3pzYVRZbUMyNmJCMGw1?=
+ =?utf-8?B?UThLczdvTXZqaG1WcTdaTGRuNWNhMkZ4VFdUZGZTNkZ4a245bzBwNDZJcG1p?=
+ =?utf-8?B?S3BRVFBTaEFlS1daRVJJV1lMdU5XQmFrZ0hMbDVWSUtKSHFmaE04WEVRVTFJ?=
+ =?utf-8?B?djRWL3N0YkRYK0hEdjJDQ01mWm1LNkdRL0VHb3g1dUdSalZxdlBrdHV3UjF1?=
+ =?utf-8?B?dlVhVTJyakpHanVQaGpMNU1tb0JhT0UyanlpSTBYek5OZWs5OGFuanBvMDNo?=
+ =?utf-8?B?WVNzWktvUDVPV3JJSjA0WTJYRXdiemtIMkMvWnpuU0t4akF1bGpTYVdPRmxm?=
+ =?utf-8?B?YUwzRWJ5d2RzcGV1OUVQeFFDcGJrTjBTclRXdS9IKzk5MCtEQy9lOVJLcTdi?=
+ =?utf-8?B?V0F4bjFncVl5T2dwaUt6UGttR2V5UVE2UzF0OTFBR3Y4eW9IdjBteDNEWUxh?=
+ =?utf-8?B?UXZ2WGhVWmp6ek02RmJuWWJ3MGx0M3VabHp5aGZRNFJIRVBpcFNJWUNWM1M2?=
+ =?utf-8?B?NzNuQXFZYnpvaFZGd1ZkL1BkMDRrVHo5VGl0NnV5anpXMjhrTlQrMkVQTnJj?=
+ =?utf-8?B?bWFrRVYwbklQRUhoWTBYR3FmcEZBSGV2VmNOa0d2VTRKWUx1ekMwa25hTkNF?=
+ =?utf-8?B?bG5rQzlYa0tZNXlkYWxtNG4wUTRFNm5UekltRG9Eam5rMytvZmVSMzN0U3Qz?=
+ =?utf-8?B?SWJxeWV6U2h6RXFOWnlpSitZQnN2djlZa3NoWWI3MkhoaktDZWhOamExYXBi?=
+ =?utf-8?B?ZGtYOFBkVUs0bEU5VnBzNzFGTGNtZG8rVmt5UHpOMkZ2QkVTa1dHY1VHc1FH?=
+ =?utf-8?B?eVlSRFpjb1paRkZzbnBwVFVIbkc4MVl0QWVBVU90NGNqbDhuUDNtVWtLcU5v?=
+ =?utf-8?B?ZE5tL0MrMWhRdGEwYkgvZTh5eVg1TWdMMktkSkk0V2FKRityaGkvdDMzeEQr?=
+ =?utf-8?B?SzZYVVJ0eHFIcS9PZUNrTm5uSlJLNFl4WGxCSmpGUUl3a2JGb3M1V1IvSHE4?=
+ =?utf-8?B?UURCbmM4NVNYejdWRkI4V0kxQ1YycjZLbE8ycllmVWtWbnBwQTNuUHlSQ2dV?=
+ =?utf-8?B?TE9Nd1B2TitoR0JNU3QxclRpMG1aNUlXNjNYdVREM01Td2xUcDY1Uk5zNDhU?=
+ =?utf-8?B?QXJZMU1IU3duWExBWDhGOXRUcUt1YUJ4aytLVTUvblJFVWFkSncwa2UvbEth?=
+ =?utf-8?B?TXZPdFNCMC9pZGVSQjcrL1ZGNlo5ODI2VkZ3d3Rxc0xOMDFBWTNxQTBFUmdX?=
+ =?utf-8?B?Rjk3ZXpVeXJMa25Lc3JrWE8yNjhteU1oUFh3WWI4UWxoRGZKM2g3bVpOQldz?=
+ =?utf-8?B?SDBTQjQrYmREZnNtOEY2eWNkVWRnWUUrS29sQUk2WmltWTk4M3R4NHNyYWN5?=
+ =?utf-8?B?QXRoZjVHRW1tNkFlNzJHc3NFb2RtbHFLTis0T1dTM3J3OTlzdHFyOTlVOHRy?=
+ =?utf-8?B?Z3J2S0lVRTl3Q1FmY0UyRDF3YWJKTkZvd3pQVEh0NHlXRitEK3g1QStsUkxt?=
+ =?utf-8?B?MjRzYi9PeWZ3MU9OZkhoRFllRUhuTHE5U0ZFeVZhdk1SRzhKV2VhZWZVNkp6?=
+ =?utf-8?B?RE9BUDc3Z3hzZDBRT1dUZEorb2IyUEtRUUpaNnhYQzcvSjhtaEhvcDZHd0tk?=
+ =?utf-8?B?M2VBei9BeThWZHFIOG9MTnlHYWd6bC84aGx2bFdqNDMxRXczVWh1QUxESmJF?=
+ =?utf-8?B?aExYUkQ0SWVNeWNyN1ZoNEhCM0dBanJ1WFpJclhGeFZNQ3RUdUNWN2dBdGpP?=
+ =?utf-8?B?YTZ1Sk1aVXVBLy8yeFdRVDZMMGI5V1liRnZWTlJTTDMzMHlqcWVwTUVCQTZX?=
+ =?utf-8?Q?1msc=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 322fcc17-d214-4062-d2f2-08dac28838cb
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5311.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 19:25:55.2755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RadayOt/6fI4sJLm0nyU/VyF/lNUxWSo0ipTelIMkq6s14u5afvzgLsVlZQnRR56
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7083
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,322 +135,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022, David Matlack wrote:
-> On Fri, Oct 14, 2022 at 09:03:59PM +0000, Sean Christopherson wrote:
-> > On Tue, Oct 04, 2022, Thomas Huth wrote:
-> > Adding a macro or three to let tests define and run testscases with minimal effort
-> > would more or less eliminate the boilerplate.  And in theory providing semi-rigid
-> > macros would help force simple tests to conform to standard patterns, which should
-> > reduce the cost of someone new understanding the test, and would likely let us do
-> > more automagic things in the future.
-> > 
-> > E.g. something like this in the test:
-> > 
-> > 	KVM_RUN_TESTCASES(vcpu,
-> > 		test_clear_kvm_dirty_regs_bits,
-> > 		test_set_invalid,
-> > 		test_req_and_verify_all_valid_regs,
-> > 		test_set_and_verify_various_reg_values,
-> > 		test_clear_kvm_dirty_regs_bits,
-> > 	);
+
+
+On 11/9/22 13:20, Hamza Mahfooz wrote:
+> Currently, we are calling fill_dc_dirty_rects() even if PSR isn't
+> supported by the relevant link in amdgpu_dm_commit_planes(), this is
+> undesirable especially because when drm.debug is enabled we are printing
+> messages in fill_dc_dirty_rects() that are only useful for debugging PSR
+> (and confusing otherwise). So, we can instead limit the filling of dirty
+> rectangles to only when PSR is enabled.
 > 
-> There is an existing framework in
-> tools/testing/selftests/kselftest_harness.h that provides macros for
-> setting up and running tests cases. I converted sync_regs_test to use it
-> below as an example [1].
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 
-Looks awesome!  Some thoughts to cut down on boilerplate below.  We'll also need
-to deal with the ASSERT_EQ conflict.  Easiest thing there is to rename KVM's
-version to TEST_ASSERT_EQ(), which IMO is an improvement irrespective of this
-conversion.
+Reviewed-by: Leo Li <sunpeng.li@amd.com>
+Thanks
 
-> The harness runs each subtest in a child process, so sharing a VM/VCPU
-> across test cases is not possible. This means setting up and tearing
-> down a VM for every test case, 
-
-This is a feature, not a bug.  My single biggest complaint about KVM-unit-tests
-is the lack of isolation between sub-tests.  E.g. there have been far too many
-bugs where sub-tests fail if run on their own due to sub-tests relying on setup
-being done elsewhere.
-
-> but the harness makes this pretty easy with FIXTURE_{SETUP,TEARDOWN}(). With
-> this harness, we can keep using TEST_ASSERT() as-is, and still run all test
-> cases even if one fails.  Plus no need for the hard-coded ksft_*() calls in
-> main().
-> +FIXTURE(sync_regs_test) {
->  	struct kvm_vm *vm;
-
-A dedicated "vm" field isn't necessary, it's available in the vcpu.
-
-> +	struct kvm_vcpu *vcpu;
-> +};
->  
-> -	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
-> -	TEST_REQUIRE((cap & TEST_SYNC_FIELDS) == TEST_SYNC_FIELDS);
-> -	TEST_REQUIRE(!(cap & INVALID_SYNC_FIELD));
-> +FIXTURE_SETUP(sync_regs_test) {
-> +	self->vm = vm_create_with_one_vcpu(&self->vcpu, guest_code);
-> +}
->  
-> -	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> +FIXTURE_TEARDOWN(sync_regs_test) {
-> +	kvm_vm_free(self->vm);
-
-From above, this would be:
-
-	kvm_vm_free(self->vcpu->vm);
-
-> +}
->  
-> -	run = vcpu->run;
-> +TEST_F(sync_regs_test, read_invalid) {
-
-Regardless of what other selftests do, IMO we should dress these up to look like
-the functions they are, i.e. put the curly brace on its own line.
-
-> +	struct kvm_run *run = self->vcpu->run;
-
-I don't love the @self boilerplate, and the setup+teardown will be identical for
-the vast majority of simple tests.  There will also be tests that want to run
-different guest code.
-
-What if we add our own wrappers (because one can never have enough macros) to
-handle most of the boilerplate?  Sample conversion below (the wrapper macros would
-obviously go in a common header).  And then to support per-testcase guest code, we
-could add vcpu_arch_set_guest_code() and another wrapper, e.g.
-
-#define KVM_ONE_VCPU_TEST_EX(suite, test, guest_code)				\
-static void __suite##_##test(struct kvm_vcpu *vcpu);				\
-										\
-TEST_F(suite, test)								\
-{										\
-	vcpu_arch_set_guest_code(guest_code);					\
-	__suite##_##test(self->vcpu);						\
-}										\
-static void __suite##_##test(struct kvm_vcpu *vcpu)
-
-
-Alternatives to "suite" would be bundle, crate, cluster, etc...
-
----
- .../selftests/kvm/x86_64/sync_regs_test.c     | 119 ++++++++++++++----
- 1 file changed, 93 insertions(+), 26 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
-index 9b6db0b0b13e..b805170980bb 100644
---- a/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/sync_regs_test.c
-@@ -20,6 +20,9 @@
- #include "kvm_util.h"
- #include "processor.h"
- 
-+#undef ASSERT_EQ
-+#include "../kselftest_harness.h"
-+
- #define UCALL_PIO_PORT ((uint16_t)0x1000)
- 
- struct ucall uc_none = {
-@@ -80,26 +83,34 @@ static void compare_vcpu_events(struct kvm_vcpu_events *left,
- #define TEST_SYNC_FIELDS   (KVM_SYNC_X86_REGS|KVM_SYNC_X86_SREGS|KVM_SYNC_X86_EVENTS)
- #define INVALID_SYNC_FIELD 0x80000000
- 
--int main(int argc, char *argv[])
-+#define KVM_ONE_VCPU_TEST_SUITE(name, guest_code)				\
-+	FIXTURE(name) {								\
-+		struct kvm_vcpu *vcpu;						\
-+	};									\
-+										\
-+	FIXTURE_SETUP(name) {							\
-+		(void)vm_create_with_one_vcpu(&self->vcpu, guest_code);		\
-+	}									\
-+										\
-+	FIXTURE_TEARDOWN(name) {						\
-+		kvm_vm_free(self->vcpu->vm);					\
-+	}
-+
-+#define KVM_ONE_VCPU_TEST(suite, test)						\
-+static void __suite##_##test(struct kvm_vcpu *vcpu);				\
-+										\
-+TEST_F(suite, test)								\
-+{										\
-+	__suite##_##test(self->vcpu);						\
-+}										\
-+static void __suite##_##test(struct kvm_vcpu *vcpu)
-+
-+KVM_ONE_VCPU_TEST_SUITE(sync_regs_test, guest_code);
-+
-+KVM_ONE_VCPU_TEST(sync_regs_test, read_invalid)
- {
--	struct kvm_vcpu *vcpu;
--	struct kvm_vm *vm;
--	struct kvm_run *run;
--	struct kvm_regs regs;
--	struct kvm_sregs sregs;
--	struct kvm_vcpu_events events;
--	int rv, cap;
--
--	/* Tell stdout not to buffer its content */
--	setbuf(stdout, NULL);
--
--	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
--	TEST_REQUIRE((cap & TEST_SYNC_FIELDS) == TEST_SYNC_FIELDS);
--	TEST_REQUIRE(!(cap & INVALID_SYNC_FIELD));
--
--	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
--
--	run = vcpu->run;
-+	struct kvm_run *run = vcpu->run;
-+	int rv;
- 
- 	/* Request reading invalid register set from VCPU. */
- 	run->kvm_valid_regs = INVALID_SYNC_FIELD;
-@@ -115,6 +126,12 @@ int main(int argc, char *argv[])
- 		    "Invalid kvm_valid_regs did not cause expected KVM_RUN error: %d\n",
- 		    rv);
- 	run->kvm_valid_regs = 0;
-+}
-+
-+KVM_ONE_VCPU_TEST(sync_regs_test, set_invalid)
-+{
-+	struct kvm_run *run = vcpu->run;
-+	int rv;
- 
- 	/* Request setting invalid register set into VCPU. */
- 	run->kvm_dirty_regs = INVALID_SYNC_FIELD;
-@@ -130,11 +147,19 @@ int main(int argc, char *argv[])
- 		    "Invalid kvm_dirty_regs did not cause expected KVM_RUN error: %d\n",
- 		    rv);
- 	run->kvm_dirty_regs = 0;
-+}
-+
-+KVM_ONE_VCPU_TEST(sync_regs_test, req_and_verify_all_valid)
-+{
-+	struct kvm_run *run = vcpu->run;
-+	struct kvm_vcpu_events events;
-+	struct kvm_sregs sregs;
-+	struct kvm_regs regs;
- 
- 	/* Request and verify all valid register sets. */
- 	/* TODO: BUILD TIME CHECK: TEST_ASSERT(KVM_SYNC_X86_NUM_FIELDS != 3); */
- 	run->kvm_valid_regs = TEST_SYNC_FIELDS;
--	rv = _vcpu_run(vcpu);
-+	vcpu_run(vcpu);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 		    "Unexpected exit reason: %u (%s),\n",
- 		    run->exit_reason,
-@@ -148,6 +173,21 @@ int main(int argc, char *argv[])
- 
- 	vcpu_events_get(vcpu, &events);
- 	compare_vcpu_events(&events, &run->s.regs.events);
-+}
-+
-+KVM_ONE_VCPU_TEST(sync_regs_test, set_and_verify_various)
-+{
-+	struct kvm_run *run = vcpu->run;
-+	struct kvm_vcpu_events events;
-+	struct kvm_sregs sregs;
-+	struct kvm_regs regs;
-+
-+	run->kvm_valid_regs = TEST_SYNC_FIELDS;
-+	vcpu_run(vcpu);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "Unexpected exit reason: %u (%s),\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
- 
- 	/* Set and verify various register values. */
- 	run->s.regs.regs.rbx = 0xBAD1DEA;
-@@ -156,7 +196,7 @@ int main(int argc, char *argv[])
- 
- 	run->kvm_valid_regs = TEST_SYNC_FIELDS;
- 	run->kvm_dirty_regs = KVM_SYNC_X86_REGS | KVM_SYNC_X86_SREGS;
--	rv = _vcpu_run(vcpu);
-+	vcpu_run(vcpu);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 		    "Unexpected exit reason: %u (%s),\n",
- 		    run->exit_reason,
-@@ -176,6 +216,12 @@ int main(int argc, char *argv[])
- 
- 	vcpu_events_get(vcpu, &events);
- 	compare_vcpu_events(&events, &run->s.regs.events);
-+}
-+
-+KVM_ONE_VCPU_TEST(sync_regs_test, clear_kvm_valid_and_dirty)
-+{
-+	struct kvm_run *run = vcpu->run;
-+	struct kvm_regs regs;
- 
- 	/* Clear kvm_dirty_regs bits, verify new s.regs values are
- 	 * overwritten with existing guest values.
-@@ -183,7 +229,7 @@ int main(int argc, char *argv[])
- 	run->kvm_valid_regs = TEST_SYNC_FIELDS;
- 	run->kvm_dirty_regs = 0;
- 	run->s.regs.regs.rbx = 0xDEADBEEF;
--	rv = _vcpu_run(vcpu);
-+	vcpu_run(vcpu);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 		    "Unexpected exit reason: %u (%s),\n",
- 		    run->exit_reason,
-@@ -199,9 +245,10 @@ int main(int argc, char *argv[])
- 	run->kvm_valid_regs = 0;
- 	run->kvm_dirty_regs = 0;
- 	run->s.regs.regs.rbx = 0xAAAA;
-+	vcpu_regs_get(vcpu, &regs);
- 	regs.rbx = 0xBAC0;
- 	vcpu_regs_set(vcpu, &regs);
--	rv = _vcpu_run(vcpu);
-+	vcpu_run(vcpu);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 		    "Unexpected exit reason: %u (%s),\n",
- 		    run->exit_reason,
-@@ -213,6 +260,19 @@ int main(int argc, char *argv[])
- 	TEST_ASSERT(regs.rbx == 0xBAC0 + 1,
- 		    "rbx guest value incorrect 0x%llx.",
- 		    regs.rbx);
-+}
-+
-+KVM_ONE_VCPU_TEST(sync_regs_test, clear_kvm_valid_regs)
-+{
-+	struct kvm_run *run = vcpu->run;
-+	struct kvm_regs regs;
-+
-+	run->kvm_valid_regs = TEST_SYNC_FIELDS;
-+	vcpu_run(vcpu);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
-+		    "Unexpected exit reason: %u (%s),\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
- 
- 	/* Clear kvm_valid_regs bits. Verify s.regs values are not overwritten
- 	 * with existing guest values but that guest values are overwritten
-@@ -221,7 +281,7 @@ int main(int argc, char *argv[])
- 	run->kvm_valid_regs = 0;
- 	run->kvm_dirty_regs = TEST_SYNC_FIELDS;
- 	run->s.regs.regs.rbx = 0xBBBB;
--	rv = _vcpu_run(vcpu);
-+	vcpu_run(vcpu);
- 	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
- 		    "Unexpected exit reason: %u (%s),\n",
- 		    run->exit_reason,
-@@ -233,8 +293,15 @@ int main(int argc, char *argv[])
- 	TEST_ASSERT(regs.rbx == 0xBBBB + 1,
- 		    "rbx guest value incorrect 0x%llx.",
- 		    regs.rbx);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int cap;
- 
--	kvm_vm_free(vm);
-+	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
-+	TEST_REQUIRE((cap & TEST_SYNC_FIELDS) == TEST_SYNC_FIELDS);
-+	TEST_REQUIRE(!(cap & INVALID_SYNC_FIELD));
- 
--	return 0;
-+	return test_harness_run(argc, argv);
- }
-
-base-commit: d663b8a285986072428a6a145e5994bc275df994
--- 
-
+> ---
+> v2: give a more concrete reason.
+> ---
+>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 66eb16fbe09f..956a6e494709 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -7697,9 +7697,10 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
+>   		bundle->surface_updates[planes_count].plane_info =
+>   			&bundle->plane_infos[planes_count];
+>   
+> -		fill_dc_dirty_rects(plane, old_plane_state, new_plane_state,
+> -				    new_crtc_state,
+> -				    &bundle->flip_addrs[planes_count]);
+> +		if (acrtc_state->stream->link->psr_settings.psr_feature_enabled)
+> +			fill_dc_dirty_rects(plane, old_plane_state,
+> +					    new_plane_state, new_crtc_state,
+> +					    &bundle->flip_addrs[planes_count]);
+>   
+>   		/*
+>   		 * Only allow immediate flips for fast updates that don't
