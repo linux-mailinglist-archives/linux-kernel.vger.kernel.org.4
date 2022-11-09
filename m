@@ -2,104 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCA5622AD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B617622ADB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiKILn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S230205AbiKILpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiKILnk (ORCPT
+        with ESMTP id S229557AbiKILpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:43:40 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5570731227
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:43:10 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id m6so16484220pfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODY7XT88Lb/pdMVorgr1Omr1Qh/cJGNYn8iuRKgv224=;
-        b=TQeFk8oIslS+EyBWdOSfSVTuEjBkH5kojK+B8JLwLu63A4au+NOj11SlJAA1xSSnts
-         ct2+ElU3SbvA/KJtVFIUK+NS9TJaDzKoTMM186g5a2tpJlFqPf8vWsHBndzu7+FNhhH+
-         YbV46mjcs5aSmOCbqznnKJ0GjKpmsFzpHIO1c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ODY7XT88Lb/pdMVorgr1Omr1Qh/cJGNYn8iuRKgv224=;
-        b=wgXJqo7o/eI9kVhxBOa90cXcOMfbTskx4VrKU0PLhgCD5zCx+RGAE7Th8xfYE5h0yI
-         d2/fAYab3VySnWp3Vdmgy3BzmdUVf1EnB0qjGkMZaYaNQwNyaxXP5YwdcihVTR0nBNmD
-         V5j72QaBt2n9xOycnAHoYepqhiUOeJQglieRecMLq8pWMNyh6nqyIGOMIb5LKQi51XX3
-         M9WmoaGgC0BHG25sEoBZaa6cqtLetmtK93N8WVGRAqfaOPVgD/PC1L2OMUCsmQ/eTHtd
-         HAUZcBl2JPF4slzD/svakRWD9aVreVdHcUmB8CpB0juGGabpyWY1rea9xEcE+vgNcwSl
-         USCQ==
-X-Gm-Message-State: ACrzQf3BGvVGyV5nCSWbcl71lQbclkbEj+m/gqayLz8N3vXQywF37zvF
-        kITA4P+L4zlqbKr+d5WmDLOuDjOr1vbzeOWBkgQ=
-X-Google-Smtp-Source: AMsMyM73mE2Qn0THhWKZ+B2kaOit8E5j+WJWTTZAQ4xn7qeVjcQkQ3W283GCgJZSHbaaudluG9eAQA==
-X-Received: by 2002:a63:1748:0:b0:46f:18be:4880 with SMTP id 8-20020a631748000000b0046f18be4880mr51454952pgx.128.1667994189740;
-        Wed, 09 Nov 2022 03:43:09 -0800 (PST)
-Received: from b0ad8707f47a ([220.253.112.46])
-        by smtp.gmail.com with ESMTPSA id mi3-20020a17090b4b4300b0020d3662cc77sm1010624pjb.48.2022.11.09.03.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 03:43:08 -0800 (PST)
-Date:   Wed, 9 Nov 2022 11:43:00 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 6.0 000/197] 6.0.8-rc1 review
-Message-ID: <20221109114300.GA3493079@b0ad8707f47a>
-References: <20221108133354.787209461@linuxfoundation.org>
+        Wed, 9 Nov 2022 06:45:47 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B5AE8F;
+        Wed,  9 Nov 2022 03:45:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IseUHcC0UR0gxynIRWnMMbp9tHRTS9eW34J38UxyWjU=; b=65NUPX0RvDsVrueYcOgQ7zBCQb
+        BLIqV8nXDfrEWhvGrM9f5QsjikIyWkDo5x/x1MEEAbMkrySdzoLR8HNRfYvxnZDd2RXwQfXvwe58W
+        /U6x/yKgRB2rU58XxtcCILJj4EmYsEpMjPtR8htfnwzDnTXDH8tjF2sAte35X037cXtn/RsM/fQNa
+        E/E5GVqjdjpqf82DsBexgwZplshJcdN5H5+XMi8cAQEdBTfJUsnzQVQlM66glUxrOgW7msZVqlGBP
+        vQRYnLEfCcLK4TgTrWV+8+lA3lgT3smY9x7bLjatty96OYySPJdfnKk1kHrUpA/BdYF5AIlEhv/L5
+        A2tVhbMA==;
+Received: from p200300ccff05c4001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff05:c400:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1osjWU-0000BT-N8; Wed, 09 Nov 2022 12:45:38 +0100
+Date:   Wed, 9 Nov 2022 12:45:36 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        alistair@alistair23.me
+Subject: Re: [PATCH v3] ARM: dts: imx: e60k02: Add touchscreen
+Message-ID: <20221109124536.5154cb03@aktux>
+In-Reply-To: <20221109092350.2ke6sbgbcp3wpelc@pengutronix.de>
+References: <20221108191543.1752080-1-andreas@kemnade.info>
+        <20221109092350.2ke6sbgbcp3wpelc@pengutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108133354.787209461@linuxfoundation.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 02:37:18PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.8 release.
-> There are 197 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, 9 Nov 2022 10:23:50 +0100
+Marco Felsch <m.felsch@pengutronix.de> wrote:
+
+> Hi Andreas,
 > 
-> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
-> Anything received after that time might be too late.
+> On 22-11-08, Andreas Kemnade wrote:
+> > Add the touchscreen now, since the driver is available.
+> > 
+> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > ---
+> > Changes in v3: no phandles pointing from dtsi to dts  
+> 
+> Thanks for this change...
+> 
+> > Changes in v2: fix pinmux naming
+> > 
+> >  arch/arm/boot/dts/e60k02.dtsi              |  9 ++++++++-
+> >  arch/arm/boot/dts/imx6sl-tolino-shine3.dts | 12 ++++++++++++
+> >  arch/arm/boot/dts/imx6sll-kobo-clarahd.dts | 12 ++++++++++++
+> >  3 files changed, 32 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm/boot/dts/e60k02.dtsi
+> > b/arch/arm/boot/dts/e60k02.dtsi index 935e2359f8df..99091db3ab2a
+> > 100644 --- a/arch/arm/boot/dts/e60k02.dtsi
+> > +++ b/arch/arm/boot/dts/e60k02.dtsi
+> > @@ -104,7 +104,14 @@ &i2c2 {
+> >  	clock-frequency = <100000>;
+> >  	status = "okay";
+> >  
+> > -	/* TODO: CYTTSP5 touch controller at 0x24 */
+> > +	cyttsp5: touchscreen@24 {
+> > +		compatible = "cypress,tt21000";
+> > +		reg = <0x24>;
+> > +		interrupt-parent = <&gpio5>;
+> > +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
+> > +		reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+> > +		vdd-supply = <&ldo5_reg>;
+> > +	};  
+> 
+> but we still have a cross-reference to the .dtsi file here. Therefore
+> I said to move the interrupt/reset-gpio into the dts file too. I know
+> this is a kind of a nitpick but I really don't like such
+> cross-references.
+> 
+hmm. &gpio5 references to imx6sl[l].dtsi, not dts, so what is the
+problem here?
+And we have this pattern all over the place.
 
-Hi Greg,
+What is different to the touchscreen that this pattern is not wanted
+here but
+accepted everywhere else? It is there for
+  - backlight
+  - irq of pmic
+  - reset/gpio-regulator of wifi
+  - leds
+  - keys
 
-6.0.8-rc1 tested.
+And you have also done some review work there.
 
-Run tested on:
-- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+Here I am caring a bit about readability since I have still to do
+maintenance work on this file, so I am a bit more concerned than that
+it a) just works and b) is being accepted upstream.
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos5422
+If it is not allowed to have common things in the e60k02.dtsi file, what
+about ditching that file alltogether and just have the two .dts files?
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+I personally prefer the v2 variant, but v3 is a compromise.
+
+For comparison, the feature-complete version used by postmarketOS is
+here:
+https://github.com/akemnade/linux/blob/kobo/drm-merged-5.19/arch/arm/boot/dts/e60k02.dtsi
+
+Regards,
+Andreas
