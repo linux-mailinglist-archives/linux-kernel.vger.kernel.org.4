@@ -2,96 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0551C623022
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA02E62303A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbiKIQZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 11:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
+        id S231827AbiKIQfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiKIQZu (ORCPT
+        with ESMTP id S229995AbiKIQew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 11:25:50 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2946119286;
-        Wed,  9 Nov 2022 08:25:50 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668011148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dS+4jgWIp3j9dZW4rFcYGh+sxLvaYK0P20ezcjFZXV4=;
-        b=QSJ6LNleWHA1RHSFfXDxaPCmn+jVt13MdBC439LXEnVNK/hFvPdwB5B398jBp60AT0pIQS
-        wkqvdpn5kNXVCgwTko1XfQm3JRQBr3TviBBKhxWn75PHzday7t36VquvGBZxeXzW4Mq903
-        GOSrp4WESbB4JPlcJS/Wpy8DjKYKhUT6t/c1h4omwmQRuTXbyzKc/XXcibunUtKGkKFP79
-        YJuAAUklyZ9CwQahkEIezqyCJr5OwWQkK/nbuN5T+oPHHAX+OkBoTY8Q+NZl46O8jaiajH
-        wEZFLs7VED6bVxf/7x4LDLExXVvd1qzAcqcrXCststE9EtbGwDQ8l63yV4xGDw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668011148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dS+4jgWIp3j9dZW4rFcYGh+sxLvaYK0P20ezcjFZXV4=;
-        b=lwdaORWqUif3kCYJceQQDzwyZjs2HDufqdzeXFV9iRm3q2ov1baXwSOqmazm7c/nIxYJ9M
-        cbqO7rZS1r9gftBA==
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Borislav Petkov <bp@suse.de>, Mike Galbraith <efault@gmx.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-RT <linux-rt-users@vger.kernel.org>
-Subject: Re: [RFC PATCH] x86: Drop fpregs lock before inheriting FPU
- permissions during clone
-In-Reply-To: <20221109113044.7ncdw6263o3msycl@techsingularity.net>
-References: <20221109113044.7ncdw6263o3msycl@techsingularity.net>
-Date:   Wed, 09 Nov 2022 17:25:47 +0100
-Message-ID: <87o7tg8584.ffs@tglx>
+        Wed, 9 Nov 2022 11:34:52 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5530A1A06F;
+        Wed,  9 Nov 2022 08:34:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=W2E4Ms9uc9J9Ds/fMfsOB8+k0By+V4+l9wVONX22uWE=; b=pA8lzr+rM2UmcM0MV2wVv0Kw4C
+        fyf9BHbCCg2RLB0h0MPAXyJR70KaGvc28usii6aQo4415C3/S/LcHMO0L+SEQTSbO/+RpvrrbfScD
+        0ydNos+7lUENHNS+21V+Mo82l7pniop4A4kl9lVI/WJUN/LNmCs88s8AwHc6XYSAr8b8=;
+Received: from p200300daa72ee100054f3c61b16ef6e7.dip0.t-ipconnect.de ([2003:da:a72e:e100:54f:3c61:b16e:f6e7] helo=localhost.localdomain)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1oso23-000l4N-2z; Wed, 09 Nov 2022 17:34:31 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 01/12] net: ethernet: mtk_eth_soc: account for vlan in rx header length
+Date:   Wed,  9 Nov 2022 17:34:15 +0100
+Message-Id: <20221109163426.76164-2-nbd@nbd.name>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221109163426.76164-1-nbd@nbd.name>
+References: <20221109163426.76164-1-nbd@nbd.name>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09 2022 at 11:30, Mel Gorman wrote:
->    BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-...
->   The splat comes from fpu_inherit_perms() being called under fpregs_lock(),
->   and us reaching the spin_lock_irq() therein due to fpu_state_size_dynamic()
->   returning true despite static key __fpu_state_size_dynamic having never
->   been enabled.
->
-> Mike's assessment looks correct. fpregs_lock on PREEMPT_RT disables
-> preemption only so the spin_lock_irq() in fpu_inherit_perms is unsafe
-> and converting siglock to raw spinlock would be an unwelcome change.
-> This problem exists since commit 9e798e9aa14c ("x86/fpu: Prepare fpu_clone()
-> for dynamically enabled features"). While the bug triggering is probably a
-> mistake for the affected machine and due to a bug that is not in mainline,
-> spin_lock_irq within a preempt_disable section on PREEMPT_RT is problematic.
->
-> In this specific context, it may not be necessary to hold fpregs_lock at
-> all. The lock is necessary when editing the FPU registers or a tasks fpstate
-> but in this case, the only write of any FP state in fpu_inherit_perms is
-> for the new child which is not running yet so it cannot context switch or
-> be borrowed by a kernel thread yet. Hence, fpregs_lock is not protecting
-> anything in the new child until clone() completes. The siglock still needs
-> to be acquired by fpu_inherit_perms as the read of the parents permissions
-> has to be serialised.
+The network stack assumes that devices can handle an extra VLAN tag without
+increasing the MTU
 
-That's correct and siglock is the real protection for the permissions.
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> This is not tested as I did not access to a machine with Intel's
-> eXtended Feature Disable (XFD) feature that enables the relevant path
-> in fpu_inherit_perms and the bug is against a non-mainline kernel.
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 589f27ddc401..3d7cdc1efbbc 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -29,7 +29,7 @@
+ #define MTK_TX_DMA_BUF_LEN_V2	0xffff
+ #define MTK_DMA_SIZE		512
+ #define MTK_MAC_COUNT		2
+-#define MTK_RX_ETH_HLEN		(ETH_HLEN + ETH_FCS_LEN)
++#define MTK_RX_ETH_HLEN		(VLAN_ETH_HLEN + ETH_FCS_LEN)
+ #define MTK_RX_HLEN		(NET_SKB_PAD + MTK_RX_ETH_HLEN + NET_IP_ALIGN)
+ #define MTK_DMA_DUMMY_DESC	0xffffffff
+ #define MTK_DEFAULT_MSG_ENABLE	(NETIF_MSG_DRV | \
+-- 
+2.38.1
 
-It's still entirely correct on mainline as there is no requirement to
-hold fpregs_lock in this case
-
-> Reported-by: Mike Galbraith <efault@gmx.de>
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
