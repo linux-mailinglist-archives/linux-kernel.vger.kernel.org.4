@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856B562268E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D94F0622698
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiKIJPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S230178AbiKIJQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiKIJOc (ORCPT
+        with ESMTP id S230164AbiKIJPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:14:32 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F91F22BE8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:13:16 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id g12so24731993lfh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KMMA/bjgoBoze1LBnX/Nw5JY8Hkox2bSDSTZbz1eJrE=;
-        b=c08bfG0K6FV5WBXfA0i8dHqn3m/UvjcC4mcPpcCpuSlOQkpY/zZ1y8A41xUb2hW8oB
-         7mVKjdcOXyUBBSHVbN5U4RdNXMFhuHdwt/oz4WTw0UiPgfd8LCpdK7INZDR6UpUPBt5u
-         AELkTxjBF3QK32F2zhR2+XXQLGZ5hwJtCPYAlE7zAtXSOhKFQd7/Mo+Ydpu7llA1i7uc
-         /x//WlN5Zp1ptbH3DT37ElmPIq9TCItaCa+XrMDdaEbLKAwqpXKbnMkwqd6wlI+0qVBf
-         2DjE7w+E/qrftf65Ljr/GNtLYACbPggteksGEoP+rm5iuiuWjoEku942u7XwgdqBRGg5
-         BbGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KMMA/bjgoBoze1LBnX/Nw5JY8Hkox2bSDSTZbz1eJrE=;
-        b=T6KLl/XipX+QLSc5aAx5/Wns7GBaCE0GTHtiyujpVpPrTbFWoIyrX/iW66YA6xoRdg
-         cO6ifK6QVboKJ8M+GOAQcqxOwceuOYHWGFCKePcmZRRXV08C6Ssrz3wS5AYMf4ACQufJ
-         6HcUbqVzzfdLDSUXaFpnKa9LtjiqI5k0xHev6+zVwXzMZRxy6tcVGnabcnVSAyo/oT1I
-         fiA++wsoNu7IGdPBE31XU3rI/Ap2/3CoTwMvN96V1tveHNl5gn7SkRw9603SA9ye25+2
-         PKLKtUrYvLLQgwnqFrzypSHcWBa06KdK91plr0PB6ol8CDmIDc/CX6nUyCNUJ2GuJ+zp
-         1t/A==
-X-Gm-Message-State: ANoB5pk2YvSeezLdV6f2YMGdnCT5UuR5fFF7FT9xta9C2EcGXksF5HgN
-        wmokhFpXKlXPVA+wuP6k1n516g==
-X-Google-Smtp-Source: AA0mqf5vhuG4o/ejG+r4xLBj3u2AOMhVSoR0l36Az9u/3vDm1C4FRmFMs6/18+41BqI2RQPGcKo4Gg==
-X-Received: by 2002:ac2:5f1c:0:b0:4b4:11bf:9067 with SMTP id 28-20020ac25f1c000000b004b411bf9067mr1846080lfq.175.1667985194965;
-        Wed, 09 Nov 2022 01:13:14 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id v21-20020a2e9255000000b002776ce08326sm2064318ljg.29.2022.11.09.01.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 01:13:14 -0800 (PST)
-Message-ID: <6707abae-39aa-0d1b-dc5e-cee1d87402ec@linaro.org>
-Date:   Wed, 9 Nov 2022 10:13:13 +0100
+        Wed, 9 Nov 2022 04:15:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957EB205C4;
+        Wed,  9 Nov 2022 01:14:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 324F261957;
+        Wed,  9 Nov 2022 09:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90769C43142;
+        Wed,  9 Nov 2022 09:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667985241;
+        bh=1W7y9ZW1Hi3m7nzUlgOvpMez/79lPrfWcH4WKvc4GYc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IoVQ87wHgCKhe7NJPYn1Q9n4firiWtp84exzCcBDRRMAcpZzefPsvJF282Un+alQ2
+         wgJExUecSE++y1Bh/7v7UfJiuSdWSMDZ8JUn3aEHMA8RBZN5D9O8aRrsJPxun09f1H
+         gpqyGB4UW5g3hH+QtGrpyDeNefrWH01ZY3cqMwets+JkHeolP8eKxiKBquy0u4oLi6
+         pRC+9A4zqnX2bQkC6HP1GwmcW4h4GULjmQJjTzm4TjIJXnGojZR1ZDCn+lWDeqjZhH
+         3PEzXX3d6hpRRuZt+pGOGFpvH0k5+rwP9JQdRrUM2V4MgzDrPxY7K4qyxF+iEQeylZ
+         f0BOir1l93BgQ==
+Received: by mail-lf1-f46.google.com with SMTP id d6so24734169lfs.10;
+        Wed, 09 Nov 2022 01:14:01 -0800 (PST)
+X-Gm-Message-State: ACrzQf1FjrfTxSsz99+6XWgqt7kFZ8S+KTmdknlXIe/Z0bgVy3OOi9HX
+        PZncVMs8Die7il4nR1aueQcuZWzLVmpZZGlI+Jo=
+X-Google-Smtp-Source: AMsMyM6nqNV8lABCm89TT5c/zWYEWvJqOcSZ+FOSDLV6ElwxEHIAXpfQWy3RsxJUbhi/BY42rofI3671iASHp2Xf1Vk=
+X-Received: by 2002:a05:6512:151b:b0:4af:e7d3:4a46 with SMTP id
+ bq27-20020a056512151b00b004afe7d34a46mr19965857lfb.583.1667985239507; Wed, 09
+ Nov 2022 01:13:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Patch v2 1/3] arm: exynos: Add new compatible string for
- Exynos3250 SoC.
-Content-Language: en-US
-To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, smitha.t@samsung.com
-References: <CGME20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8@epcas5p2.samsung.com>
- <20221109035507.69086-1-aakarsh.jain@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109035507.69086-1-aakarsh.jain@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <Y2rgVIbtuDsySzBr@makrotopia.org>
+In-Reply-To: <Y2rgVIbtuDsySzBr@makrotopia.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 9 Nov 2022 10:13:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG3UWUP-inYHNibJyuJfQwGzfQH8QvJqBNHZgyLc1a+6A@mail.gmail.com>
+Message-ID: <CAMj1kXG3UWUP-inYHNibJyuJfQwGzfQH8QvJqBNHZgyLc1a+6A@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] partitions/efi: add support for uImage.FIT sub-partitions
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 04:55, Aakarsh Jain wrote:
-> Since,MFC v7 support was added for Exynos5420 and Exynos
-> 3250 SoC with same compatible string "samsung,mfc-v7".As
-> both SoCs having different hardware properties and having
-> same compatible string for both SoCs doesn't seems to be correct.
-> New compatible is added for Exynos3250 SOC which will
-> differentiate the node properties for both SoCs which
-> support MFC v7.
-> 
-> Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+On Wed, 9 Nov 2022 at 00:05, Daniel Golle <daniel@makrotopia.org> wrote:
+>
+> Add new GUID allowing to parse uImage.FIT stored in a GPT partition
+> and map filesystem sub-image as sub-partitions.
+>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+
+I'm not sure I follow the logic here.
+
+You are adding uImage.FIT support as a pseudo-partition type right?
+And the only partition driver that supports it is GPT?
+
+Does that mean that all the other types would need a similar change to
+be able to detect these subvolumes?
+
 > ---
->  Documentation/devicetree/bindings/media/s5p-mfc.txt | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-
-Beside my previous comment, please include changelog. This is v2, right?
-
-You should consider joining something like:
-https://www.linaro.org/events/member-training-upstream-kernel-development/
-
-Best regards,
-Krzysztof
-
+>  block/partitions/efi.c | 9 +++++++++
+>  block/partitions/efi.h | 3 +++
+>  2 files changed, 12 insertions(+)
+>
+> diff --git a/block/partitions/efi.c b/block/partitions/efi.c
+> index 5e9be13a56a8..bf87893eabe4 100644
+> --- a/block/partitions/efi.c
+> +++ b/block/partitions/efi.c
+> @@ -716,6 +716,9 @@ int efi_partition(struct parsed_partitions *state)
+>         gpt_entry *ptes = NULL;
+>         u32 i;
+>         unsigned ssz = queue_logical_block_size(state->disk->queue) / 512;
+> +#ifdef CONFIG_FIT_PARTITION
+> +       u32 extra_slot = 65;
+> +#endif
+>
+>         if (!find_valid_gpt(state, &gpt, &ptes) || !gpt || !ptes) {
+>                 kfree(gpt);
+> @@ -749,6 +752,12 @@ int efi_partition(struct parsed_partitions *state)
+>                                 ARRAY_SIZE(ptes[i].partition_name));
+>                 utf16_le_to_7bit(ptes[i].partition_name, label_max, info->volname);
+>                 state->parts[i + 1].has_info = true;
+> +               /* If this is a U-Boot FIT volume it may have subpartitions */
+> +#ifdef CONFIG_FIT_PARTITION
+> +               if (!efi_guidcmp(ptes[i].partition_type_guid, PARTITION_LINUX_FIT_GUID))
+> +                       (void) parse_fit_partitions(state, start * ssz, size * ssz,
+> +                                                   &extra_slot, 127, 1);
+> +#endif
+>         }
+>         kfree(ptes);
+>         kfree(gpt);
+> diff --git a/block/partitions/efi.h b/block/partitions/efi.h
+> index 84b9f36b9e47..06c11f6ae398 100644
+> --- a/block/partitions/efi.h
+> +++ b/block/partitions/efi.h
+> @@ -51,6 +51,9 @@
+>  #define PARTITION_LINUX_LVM_GUID \
+>      EFI_GUID( 0xe6d6d379, 0xf507, 0x44c2, \
+>                0xa2, 0x3c, 0x23, 0x8f, 0x2a, 0x3d, 0xf9, 0x28)
+> +#define PARTITION_LINUX_FIT_GUID \
+> +    EFI_GUID( 0xcae9be83, 0xb15f, 0x49cc, \
+> +              0x86, 0x3f, 0x08, 0x1b, 0x74, 0x4a, 0x2d, 0x93)
+>
+>  typedef struct _gpt_header {
+>         __le64 signature;
+> --
+> 2.38.1
+>
