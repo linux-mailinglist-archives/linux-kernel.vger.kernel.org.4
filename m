@@ -2,62 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6F66226B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:18:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BEA6226B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiKIJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
+        id S229935AbiKIJS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKIJSy (ORCPT
+        with ESMTP id S229863AbiKIJSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Nov 2022 04:18:54 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1080E13E95;
-        Wed,  9 Nov 2022 01:18:47 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oshDc-00BxsQ-By; Wed, 09 Nov 2022 17:18:37 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 09 Nov 2022 17:18:36 +0800
-Date:   Wed, 9 Nov 2022 17:18:36 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     wangzhou1@hisilicon.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] crypto/hisilicon: Add null judgment to the callback
- interface
-Message-ID: <Y2twbHyQkTMoTz+O@gondor.apana.org.au>
-References: <20220930024320.29922-1-liulongfang@huawei.com>
- <YzZZTsIHLSkuufeb@gondor.apana.org.au>
- <717adf23-3080-5041-14ed-6ab5dcaddbf9@huawei.com>
- <Y1tTLAEi7ukUCCmB@gondor.apana.org.au>
- <a1229856-fbe4-9ae7-5789-332ed0af87eb@huawei.com>
- <Y2TWpyynYMyStKRX@gondor.apana.org.au>
- <d914a099-06ef-acfe-f394-f4790a821598@huawei.com>
- <Y2oodE+5us++mbSl@gondor.apana.org.au>
- <df561fbe-12eb-25b0-2173-a7ffb3bfd53a@huawei.com>
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05DA11A16
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:18:51 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7e8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 04B0A1EC03B9;
+        Wed,  9 Nov 2022 10:18:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667985530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=g3vb+dym2f7hDYWgaTPK/jkPVxUpW10raqA5lI2Jv7s=;
+        b=aNkdZugoSS1fHpFm22niFpo+q4nM6mDr0OGGKKVv+Vfr/rxHebAgArqtrATFfaQN1rKHJ3
+        xHHMEKZE7DnHkWS4g8DT0JPLC3cHP5OwWn8K23+GkLxFP2c1fhJ2y57y2YfrDnJkOXROvz
+        BFYFEHV6n89NZRvEgp642Nvww8xHDqg=
+Date:   Wed, 9 Nov 2022 10:18:44 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [v2 01/13] x86/microcode/intel: Prevent printing updated
+ microcode rev multiple times
+Message-ID: <Y2twdLlAu+BjQRPY@zn.tnic>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
+ <20221103175901.164783-2-ashok.raj@intel.com>
+ <Y2e4PgwAEXuFzoMd@zn.tnic>
+ <Y2kuixb0RU9BxKls@araj-dh-work>
+ <Y2lSyX+YS51dxAnr@zn.tnic>
+ <Y2rg7OYkhtTWQVNL@a4bf019067fa.jf.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <df561fbe-12eb-25b0-2173-a7ffb3bfd53a@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2rg7OYkhtTWQVNL@a4bf019067fa.jf.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 02:21:11PM +0800, liulongfang wrote:
->
-> The trigger method is to not call the function skcipher_request_set_callback()
-> when using the skcipher interface for encryption and decryption services.
+On Tue, Nov 08, 2022 at 03:06:20PM -0800, Ashok Raj wrote:
+> That's correct, my thought as well. Did you get a chance to review rest of
+> the patches?
 
-Yes but which function exactly? Please give the exact call path
-leading to this crash.
+Dave had a spot-on response to one of your colleagues pinging
+impatiently the same way:
 
-Cheers,
+"Things are a bit busy in the review queue at the moment. As always,
+we'd love help reviewing stuff. So, while you're waiting for us to
+review this, could you perhaps look around and find a series that's also
+hurting for review tags?"
+
+So how about you help out with review while waiting?
+
+Ashok, I'll say this only once: if you don't stop this impatient pinging
+and the private bullsh*t emails - them especially! - I will ignore you
+completely.
+
+We've documented it all:
+
+"You should receive comments within a week or so; if that does not
+happen, make sure that you have sent your patches to the right place.
+Wait for a minimum of one week before resubmitting or pinging reviewers
+- possibly longer during busy times like merge windows."
+
+And yes, those rules apply to you too.
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
