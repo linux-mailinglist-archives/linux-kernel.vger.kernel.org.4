@@ -2,251 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBEE6226AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DC76226B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiKIJSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S229561AbiKIJSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:18:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiKIJSC (ORCPT
+        with ESMTP id S229602AbiKIJSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:18:02 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA3722B29
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:17:47 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 392D35C005E;
-        Wed,  9 Nov 2022 04:17:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 09 Nov 2022 04:17:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1667985467; x=1668071867; bh=cL
-        9C5JMjfk8ahczXfQIOfuLjD6paSuh3KR3x+a4cAOQ=; b=fHZduUcX/bqH07s70d
-        KQjFOsjQQpsXexTu/qN9z9xW3RPKizY+oUmB5Qcv6SFOOp6fwAwlN36FiZQY6xGm
-        6f7qSqFJvo8/JWuC/+EX8x0uZQ3UrkwRhU4dg7VKPdpYetNFYbiEWqMBxi72UuUm
-        e1rRwI0greWcLRaTvHENLkgb+iLOMl3XJzWBXlMsAageWsaQutvVAIE0Nal3gL0f
-        jdRbCAVwZoAaNjj0rhzaF8x9HUJshL4xHw2okuDiqz8ulJCtvXiFtzzitINMxG6i
-        vJvSzMNDLM3mw35bxvdcoDazXzsUr+7oQ5QSW2hCrwAqlJz1UuBes4c9gcgaeo6N
-        d0fw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667985467; x=1668071867; bh=cL9C5JMjfk8ahczXfQIOfuLjD6pa
-        Suh3KR3x+a4cAOQ=; b=CwGbMWQBwEJCVGqWvMsWxs4v7MRu5VP86H5BF1iVjKwP
-        KxHKNpGpI0iQ3erWgG40WEtFuuhUC/dTsfitRUlZOLopDREgnMTIBTgIDSuVeEoR
-        MTUGiPK0rmx1kgDKkBP9cI7+Ck5nsuBMfbwcuJ3rZ5KJy0y7bJk2QkvUmnV0CGd9
-        rh8F9QeDUIiI5EZglYwipKmsoHnL20irb+yaK0us2UJBg7jr6gnbub5MQonLReJG
-        LpPuv8XUQYoT6RUxVANBpa+ve3kHn5082iRhMaosn9NfaiaHWNYQ/6nZBGXUYcE+
-        BqoFm47cz82uHTfTzC7cjjnmvn96GLxMmTvb5b5f/A==
-X-ME-Sender: <xms:OnBrY-P3II3uGeb-YxQGfp8f9DE8mdEQsqzYjhUWEbEudjZWl_HFLg>
-    <xme:OnBrY8-Z-VwhlDB3GxHT-A5_nZUa51Dk-voVbJibD_0QciTbFaukCHLYtq7FHeUkT
-    FA_Bgj_fsPrgb9HVrc>
-X-ME-Received: <xmr:OnBrY1TPqhphNGbIuwF7yBz57dynlZ0U8zu5SHubc3BuRZnEmWw53P0PsZllPWueqAia8g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgddtudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpehkihhrihhl
-    lhesshhhuhhtvghmohhvrdhnrghmvgenucggtffrrghtthgvrhhnpeehleevveejudejke
-    evueevteevfffhkeejgfehleethefhueejvdehieejgffhhfenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmoh
-    hvrdhnrghmvg
-X-ME-Proxy: <xmx:OnBrY-sqUw-CdRdWJvSRVOgFm-108ggDyMRnt2mBqQZqNaDsKJT2Kg>
-    <xmx:OnBrY2cs4NXGtXyWQ_esDDAn48PWUyOfLucB_GnMegSlz7-g8Vn1Gw>
-    <xmx:OnBrYy0OMjrwMfYfIjhFp9wKH6hrotAqPWcEthjamDKL71nNdmslrQ>
-    <xmx:O3BrY5URPPTWmyDs8bnCbVs07j2Q9GrVZAqpCDWgOrwhXwqtbCxrfA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Nov 2022 04:17:46 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id E57C810410A; Wed,  9 Nov 2022 12:17:42 +0300 (+03)
-Date:   Wed, 9 Nov 2022 12:17:42 +0300
-From:   kirill@shutemov.name
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        dave.hansen@intel.com, ak@linux.intel.com, andreyknvl@gmail.com,
-        ashok.raj@intel.com, bharata@amd.com, dave.hansen@linux.intel.com,
-        dvyukov@google.com, glider@google.com, hjl.tools@gmail.com,
-        jacob.jun.pan@linux.intel.com, kcc@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        peterz@infradead.org, rick.p.edgecombe@intel.com,
-        ryabinin.a.a@gmail.com, tarasmadan@google.com, x86@kernel.org
-Subject: Re: [PATCHv11.1 04/16] x86/mm: Handle LAM on context switch
-Message-ID: <20221109091742.tpqxho5kvdmrto3r@box.shutemov.name>
-References: <b778fcdd-5c20-e897-9d17-1a884172a826@intel.com>
- <20221107213558.27807-1-kirill.shutemov@linux.intel.com>
- <6782d309-5e4b-580c-fbbb-4388bda69bf3@kernel.org>
-MIME-Version: 1.0
+        Wed, 9 Nov 2022 04:18:44 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF66E9E;
+        Wed,  9 Nov 2022 01:18:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W40hLNSnoR6YiLEEr03QVwvd47ZijtaMOQeEA2RLMHqYgkI686fcqcKC1P+sCMaNKz3L7ZQEmbX+ZfM2g763BAwsDjHpLGGJe1Vhhnj0nybogSiXl86QkEKAatiwTFksgulQRllgCbuYsvoI+nXE8Kizr1bg8GSBGfvaYxMRVCqlmdSjulsSJ+bIialW6hK0fQDXy2rtgnIiig+ZuofX8sop4H4tPvhiwX+p6n9iduB9QJ4QbpXA66Jg3pyFp3GRVuNOY8RTKnXkZ67Qj0WTPn7d7qmfvGVbGtWr7/s60Pmt+Z8KbRvE+iT66xzbXDp4ztNSIpE7TUzl2pDiINDGCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=douqyBZfv+Xl4nKT2Lbjlfb/uCap1z5I5kgFZXjnArI=;
+ b=VroeNZ+KZhSIJToviWxozf/yuYVWg7sL0dnXXJ88gaOOiQCYQsru47JzM7aigJwbiTQaFs/W8ww0MhHRCN/r1PzJyZs6QM3/mKW8QbOuGvHwX4/3MGZjmNQi8PF44Zj2s9iZzbBIo7p/5ELFQce4XiDNmuMaOlshkyfU4/tQWxwJT7AYTOqUfypvSTdDHZks/WrP8SrfGLjDKpHCAhZztOp+j4Edyqt96TmKCgo057BFSHI8Qf/5bSuu+scUNgglzzfDFFOmjcqkZtjHf/8LUhu2LAZoxeIWhhDPefLfpBgNYUF76MJi1k+6ruDja7mn3wyy9VJD8Eij1j7MU09x7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=douqyBZfv+Xl4nKT2Lbjlfb/uCap1z5I5kgFZXjnArI=;
+ b=elQ8UN7DloM1u1qRfA/w0asn7kvlFCGuf5FKmQkTwlOmk1jtOLFa46wkX0lpt1DfjRfYAGneaeXSmk58eZrziMbaIyxAI/BT7ZVjHotQFhknAky/C+77EN5CBgd285HdoRPmhQFHFRu7I4dXdhJSFTzTwntvvUBomXubVQNZxQ1nz3OEWvwDhl3ZXIuYABslYx5fLf66f93j03p7fpF9rIDRptaVZaP6klWVIm+eQYk3Kc0LH2OEGtm0uRde9WMILPiIsUAoe0R4RB1o+tAVwUBDeW2fnFi7o4o2j0GvBDtbL0YyXHABgtVTNzFn1flytzgEpKbEQGkUek9/+eESwg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
+ by PA4PR04MB7773.eurprd04.prod.outlook.com (2603:10a6:102:cd::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Wed, 9 Nov
+ 2022 09:18:41 +0000
+Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
+ ([fe80::b7c1:3e11:9b46:28c9]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
+ ([fe80::b7c1:3e11:9b46:28c9%4]) with mapi id 15.20.5791.025; Wed, 9 Nov 2022
+ 09:18:41 +0000
+Date:   Wed, 9 Nov 2022 17:18:25 +0800
+From:   Chester Lin <clin@suse.com>
+To:     Andrei Stefanescu <andrei.stefanescu@nxp.com>
+Cc:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        dl-S32 <S32@nxp.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Larisa Ileana Grigore <larisa.grigore@nxp.com>,
+        Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
+        Radu Pirea <radu-nicolae.pirea@nxp.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Matthew Nunez <matthew.nunez@nxp.com>,
+        Phu Luu An <phu.luuan@nxp.com>,
+        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Chester Lin <clin@suse.com>
+Subject: Re: [PATCH 2/2] pinctrl: add NXP S32 SoC family support
+Message-ID: <Y2twYZmlJRxynHwK@linux-8mug>
+References: <20221031100843.14579-1-clin@suse.com>
+ <20221031100843.14579-3-clin@suse.com>
+ <AM9PR04MB8487C664E75EBA4D3678DD03E33F9@AM9PR04MB8487.eurprd04.prod.outlook.com>
+ <d3905a85-4746-09e8-ecf9-b39757bf6d85@suse.de>
+ <AM9PR04MB8487A41078460D1792CDA4DCE33E9@AM9PR04MB8487.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6782d309-5e4b-580c-fbbb-4388bda69bf3@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <AM9PR04MB8487A41078460D1792CDA4DCE33E9@AM9PR04MB8487.eurprd04.prod.outlook.com>
+X-ClientProxiedBy: TYAPR01CA0226.jpnprd01.prod.outlook.com
+ (2603:1096:404:11e::22) To VI1PR0402MB3439.eurprd04.prod.outlook.com
+ (2603:10a6:803:4::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB3439:EE_|PA4PR04MB7773:EE_
+X-MS-Office365-Filtering-Correlation-Id: 013ca8bd-a1c3-4dfe-7cb3-08dac2336463
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ydY4M/cjo+tNRlq8WotsIvXQlPfZ8SYg8d2hLJIjx0mn30qF+upnUPu2f4iMsNjcP8g6lr1EpYHtMa0zOTY+mvh61ARh5t3WSyfQaD3OvZGwce8ZeaRKujWq1gVQR56j/lUGuXPH92wrDWevpyllksc/WasB1kKsQYuef34mjIELuS5GXRXSzuYPPmOR8gZrEtXDE69h5AvrFATfysf4bTmhhPlwoGEpzEIwX6/QWcucMoLaK01wuP3z59pVMcxeuNXF3jy+yF3uLu8NQ5jlhGV/HY0g/d7xeiQRo/2SQEuqArhpwFb5Yo/fDHdGwcwrBBhrG2aeJzCYiH31DqD6sStbKtTrhkhvKnFxKlkVcMEI3A1gfLyChacPsiSoBF0CYA7/d++mbHeTRMfbBEZPKNsl6jiNPAmyzMdEuOee89dc9fZYmVQWU4650cgpGCymi8aVXscTImFe/9G1cgeHFJC12JCMpCnj+SzKV6uShV70jayK7LhL+b6i7eSr6qaiwDclIicrvyGBtgOg0cEbslE/ep7HjcjkSBA+q+5hxFXWvAenTMRe/+LNtfZilan/JODd+D+NAq99IUWGVn545SO1IpXbVQGBVfVq4ddQ11dcC9hklKZBnlBDs6po0nJUYudSV9dxG8mxKHQvzNsbd6+ZjRPcdcAiYWQUldU7NkAkd7sQvreO2x/RfzXnIPNU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(39860400002)(376002)(396003)(136003)(366004)(451199015)(6486002)(478600001)(107886003)(6666004)(41300700001)(86362001)(54906003)(33716001)(6916009)(4326008)(2906002)(8676002)(66556008)(316002)(66476007)(66946007)(6512007)(9686003)(26005)(5660300002)(4744005)(7416002)(186003)(8936002)(6506007)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VnchpE4j/hafiIntwCXNNUHBd7lVaN60jtnhk/1rT+OzWsFSi25ydPX2CqOz?=
+ =?us-ascii?Q?IITxriawiuFEre0caz7aaFoucw85CXxAo7oTWx/i2Zrb1OvL8jwqHPKORsCW?=
+ =?us-ascii?Q?Ayl+irF6++1v5ZEeZCGwqwJln3EeceZSZFAsuR1JTM2hGELzTBGLWBpcaplB?=
+ =?us-ascii?Q?1waodx2F41YZLkij678zIDVTfZc6kweibGfghuTbw3KthJVMm8zukjJdcEtA?=
+ =?us-ascii?Q?cxIbXByVQYD+huZxYE3Elq3+zDBQnXPJueIL6h+fp4pqHwo6RMNhvKT/+l29?=
+ =?us-ascii?Q?KEWIlgzih5ASJ4Omk8NQX4lw6yzI1fx6mKT+SWlueYnSXHCUgit2Rd1Mzbkg?=
+ =?us-ascii?Q?aWwaVIwb5hjdy2I7VtFLuwPT5x/zpMm29BUUa7UsIJ7IMjcqKZFUEJXEoTzr?=
+ =?us-ascii?Q?xdXI33sh5NiAngdL0e6g1VTGhmuXgu2+0/whun9viAF41L2lzu9aNqt3jnE0?=
+ =?us-ascii?Q?76NCa4MmQsXR15F7l7lGc6KssoAoJBzJkm7tjqGtZKotffgW3yVAlu+L8tbi?=
+ =?us-ascii?Q?3SBVt67sQMy4VkSVWNwCTgRpbDr8fLq1Issvk9zBZuM4ZMeQT8Q+pFuCgbwe?=
+ =?us-ascii?Q?UHnbnylH15jfzn0ezg6ClmxXRuwgEDWpNQIIFw2oEHOXbXcbAKB5ZQKFbVK2?=
+ =?us-ascii?Q?HmuJYF6Osgo83Mwqh7yQ7q2fckQ9qoe2eZByzfADQpDDTh/6QF7XpnTAqvEt?=
+ =?us-ascii?Q?e67q53l855pya844h/nIkg8H1Z9lToLcWN0oliE6llJUJjHpmIWg3t8ol7GO?=
+ =?us-ascii?Q?+CsDgQVw+2JS7IjzEVcfta2b6hy2JWA7wcRXJ26iJ6WDjbQKaxZnhYSG9C0C?=
+ =?us-ascii?Q?xQ0h2NzaipiXuSPb+aPisdT53GATnJc9vty5QuHWteuK/wzFqVctHv7i9hZb?=
+ =?us-ascii?Q?BDJcfh+xGIcDdVYBvTGRG0FyfR0qK8Hn/Mls+AJ6szqnneCyYZhop6wnrUJC?=
+ =?us-ascii?Q?GtdcRLSOVIatIxXFublQjqiNAqHZ+vSyQ2prjbIklOztkkSJid4RofWOq9Co?=
+ =?us-ascii?Q?DfDOMCSl1NFW8Hlf0LS7mk9RqiUKaG+1LQhbsV4xoAk8oAs0svatQ432JUXq?=
+ =?us-ascii?Q?tH6kft4NZVyzLrpCqojtaJD7TH25WDou+mgjh4yojSoAQ/bqiiNpRanjJHqu?=
+ =?us-ascii?Q?5sElunx+CPB0VrnZUOlW3dfiOPPZRwV3YXezVdJdq5zJukXuwVvq8anzF558?=
+ =?us-ascii?Q?HBtTAWyBSFpR0CZApWCWUiB6VVCOaZFPA6Ey/iO0Y5+zoGZpKydgf14V2CUH?=
+ =?us-ascii?Q?IUxp2knicjqBdLA7tIXBYV0Z4cqm0UH/etiGs3HAAcnVU6DxJPFuksWi2KQv?=
+ =?us-ascii?Q?iEdhTlJLoeH3epB9rhQ+ZNdAXa3JS6mIerSqvK37upyAs2Rs0S8kvI3YuRuC?=
+ =?us-ascii?Q?XEukAMRjvtGdNnXbKED2RfzEOm2SJ7ErVTI7sEEPghvEV71KWNnjrXRKgFhn?=
+ =?us-ascii?Q?E1+J4Ym4/iRJ5s6erWbU7YQcUZt5Mj35P+qDKU5I7BTvurp8kfPuIpsdmMJi?=
+ =?us-ascii?Q?Yy3pwoUNm6cZClDH42qbWoGbdotsmJrcs6wM06QtSiDNFJCzlf8pVgQG8oAy?=
+ =?us-ascii?Q?fdNrK3qLZG6Z4kTvhf0=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 013ca8bd-a1c3-4dfe-7cb3-08dac2336463
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 09:18:41.0958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s8IF259NYY7P8z/uCLe8R0CTlCqLzQpk0YdaI+3ziEZnMvPuwNKbFzhfgrlzYQ0k
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7773
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 07:54:35PM -0800, Andy Lutomirski wrote:
-> On 11/7/22 13:35, Kirill A. Shutemov wrote:
-> > Linear Address Masking mode for userspace pointers encoded in CR3 bits.
-> > The mode is selected per-process and stored in mm_context_t.
-> > 
-> > switch_mm_irqs_off() now respects selected LAM mode and constructs CR3
-> > accordingly.
-> > 
-> > The active LAM mode gets recorded in the tlb_state.
-> > 
+Hi Andrei and Andreas,
+On Wed, Nov 09, 2022 at 09:06:12AM +0000, Andrei Stefanescu wrote:
+> Hi Chester and Andreas,
 > 
-> > +static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
-> > +{
-> > +	return mm->context.lam_cr3_mask;
+> > @Andrei: Intentionally no (C) or (c) for Freescale? (column alignment)
 > 
-> READ_ONCE -- otherwise this has a data race and might generate sanitizer
-> complaints.
+> I now see that all files in these patches have the (C) present. All NXP, Freescale Copyright statements should not have the (C) symbol present.
+> 
+> Thank you and best regards,
+> Andrei
+> 
 
-Yep, thanks for pointing it out.
+Will fix in v2.
 
-> > +}
-> 
-> > @@ -491,6 +496,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
-> >   {
-> >   	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
-> >   	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
-> > +	unsigned long prev_lam = tlbstate_lam_cr3_mask();
-> > +	unsigned long new_lam = mm_lam_cr3_mask(next);
-> 
-> So I'm reading this again after drinking a cup of coffee.  new_lam is next's
-> LAM mask according to mm_struct (and thus can change asynchronously due to a
-> remote CPU).  prev_lam is based on tlbstate and can't change asynchronously,
-> at least not with IRQs off.
-> 
-> 
-> >   	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
-> >   	unsigned cpu = smp_processor_id();
-> >   	u64 next_tlb_gen;
-> > @@ -520,7 +527,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
-> >   	 * isn't free.
-> >   	 */
-> >   #ifdef CONFIG_DEBUG_VM
-> > -	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
-> > +	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid, prev_lam))) {
-> 
-> So is the only purpose of tlbstate_lam_cr3_mask() to enable this warning to
-> work?
-
-Right. And disabling CONFIG_DEBUG_VM leads to warning. See the fixup
-below.
-
-> >   		/*
-> >   		 * If we were to BUG here, we'd be very likely to kill
-> >   		 * the system so hard that we don't see the call trace.
-> > @@ -552,9 +559,15 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
-> >   	 * instruction.
-> >   	 */
-> >   	if (real_prev == next) {
-> > +		/* Not actually switching mm's */
-> >   		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
-> >   			   next->context.ctx_id);
-> > +		/*
-> > +		 * If this races with another thread that enables lam, 'new_lam'
-> > +		 * might not match 'prev_lam'.
-> > +		 */
-> > +
-> 
-> Indeed.
-> 
-> >   		/*
-> >   		 * Even in lazy TLB mode, the CPU should stay set in the
-> >   		 * mm_cpumask. The TLB shootdown code can figure out from
-> > @@ -622,15 +635,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
-> >   		barrier();
-> >   	}
-> 
-> > @@ -691,6 +705,10 @@ void initialize_tlbstate_and_flush(void)
-> >   	/* Assert that CR3 already references the right mm. */
-> >   	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
-> > +	/* LAM expected to be disabled in CR3 and init_mm */
-> > +	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
-> > +	WARN_ON(mm_lam_cr3_mask(&init_mm));
-> > +
-> 
-> I think the callers all have init_mm selected, but the rest of this function
-> is not really written with this assumption.  (But it does force ASID 0,
-> which is at least a bizarre thing to do for non-init-mm.)
-
-Hm. It uses tlb_gen of init_mm, so I assumed &init_mm == mm, but yeah it
-is not strictly correct.
-
-> What's the purpose of this warning?  I'm okay with keeping it, but maybe
-> also add a warning that fires if mm != &init_mm.
-
-Just to make sure we are in sane state. I can drop init_mm reference if it
-helps.
-
-The fixup based on your feedback:
-
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 1ab7ecf61659..6f5b58a5f951 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -94,7 +94,7 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
- #ifdef CONFIG_X86_64
- static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- {
--	return mm->context.lam_cr3_mask;
-+	return READ_ONCE(mm->context.lam_cr3_mask);
- }
- 
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 4380776b3c61..ab66a48f38ce 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -496,7 +496,6 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- {
- 	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
- 	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
--	unsigned long prev_lam = tlbstate_lam_cr3_mask();
- 	unsigned long new_lam = mm_lam_cr3_mask(next);
- 	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
- 	unsigned cpu = smp_processor_id();
-@@ -527,7 +526,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 	 * isn't free.
- 	 */
- #ifdef CONFIG_DEBUG_VM
--	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid, prev_lam))) {
-+	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid,
-+						   tlbstate_lam_cr3_mask()))) {
- 		/*
- 		 * If we were to BUG here, we'd be very likely to kill
- 		 * the system so hard that we don't see the call trace.
-@@ -565,7 +565,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
- 
- 		/*
- 		 * If this races with another thread that enables lam, 'new_lam'
--		 * might not match 'prev_lam'.
-+		 * might not match tlbstate_lam_cr3_mask().
- 		 */
- 
- 		/*
-@@ -705,9 +705,9 @@ void initialize_tlbstate_and_flush(void)
- 	/* Assert that CR3 already references the right mm. */
- 	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
- 
--	/* LAM expected to be disabled in CR3 and init_mm */
-+	/* LAM expected to be disabled */
- 	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
--	WARN_ON(mm_lam_cr3_mask(&init_mm));
-+	WARN_ON(mm_lam_cr3_mask(mm));
- 
- 	/*
- 	 * Assert that CR4.PCIDE is set if needed.  (CR4.PCIDE initialization
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Thanks,
+Chester
