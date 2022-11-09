@@ -2,106 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BAF6235A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6C962355A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiKIVSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S230080AbiKIVDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiKIVSr (ORCPT
+        with ESMTP id S229627AbiKIVDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:18:47 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2A2B490;
-        Wed,  9 Nov 2022 13:18:47 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 9 Nov 2022 16:03:37 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DC110077;
+        Wed,  9 Nov 2022 13:03:34 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N6yWT1901z4xGT;
-        Thu, 10 Nov 2022 08:18:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668028725;
-        bh=LHWZAqDQ0eQve8sGcLWdUoMHhSNzVDjTtR3sbW3De2Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=prvglTDMAegkM02nBDZ1YeRAAqnF4tJzq546w4V3QHsdhwHwGPsmjYWNlPi3klVOH
-         3gDPZav4UHV6CNSZZ1dQXR2KZVpRnpvXLE9lU3gGruxnw29uS0bneDdtBt+75C/3AY
-         EjIyELWP8WNI8Tz/aIm25HdSerrRbz6ma/bSYMdfA+gOE7e77jR/T4NM7jOvoe2mnB
-         ogJQ94zdnSJagR9HFpHuAALteh8vNUMz7DnKqwQAGsnxSn9r/h13fWJHNyNRI44ikW
-         B4JVKIVx8N3/C53PCl/eXsUlTNwOZ692LzY9UcVzZrVOJg7jBiM0z8RlNl4pCD8xpC
-         5A6F3En6YusLA==
-Date:   Thu, 10 Nov 2022 04:39:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Ismael Ferreras Morezuelas <swyterzone@gmail.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the bluetooth tree
-Message-ID: <20221110043926.66f76057@canb.auug.org.au>
+        by ms.lwn.net (Postfix) with ESMTPSA id 386BF735;
+        Wed,  9 Nov 2022 21:03:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 386BF735
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1668027811; bh=tffqkokSe67mEjaJEheehIb5oj8+UVSETr54rqR1I5Y=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=OEvea2ntLsCsP2YuOvADWmxNyc8iT1nYwb86B9vBilI6J+bCaxo11TcAdXxusMtdf
+         UAVGq7vYiflu3N1qq6keC5oHXY/AGEQ2beGVjmREKrTZ6sRENzvEpdgScVY48Q5FMj
+         tfyaWINKty5wI0EbQXs0I/aKfOUNRYBpxWh1GcQy4ij9aX7JnupZ8shgJ0vSVfAFdA
+         iiickS+3kUqr8hk9C560BbDGiw3oW74TF9Q71TigjzBhKsVnA0GgLWlBs0d6QsQF4u
+         rQc6Ta4lSt8xnA1l+V2RXHKr2EBrHlYFyaKQP1kcZ83PG0f1EB3HbqgghM96Fk4a+/
+         Qvz5C8MeKUgfw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-doc@vger.kernel.org
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs: admin-guide: hw_random: Make document title more
+ generic and concise
+In-Reply-To: <20221101160119.955997-1-j.neuschaefer@gmx.net>
+References: <20221101160119.955997-1-j.neuschaefer@gmx.net>
+Date:   Wed, 09 Nov 2022 14:03:30 -0700
+Message-ID: <87pmdvj0wt.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DVi7YdxXhup=riNYS8rky7F";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/DVi7YdxXhup=riNYS8rky7F
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> writes:
 
-Hi all,
+> The hw_random subsystem no longer works only on specific Intel chipsets;
+> make the title of hw_random.rst reflect this fact.
+>
+> While we're at it, also remove the words "Linux support for", since it's
+> clear from context that this is a document about Linux.
+>
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> ---
+>  Documentation/admin-guide/hw_random.rst | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-In commit
+Applied, thanks.
 
-  14026a4ed275 ("Bluetooth: btusb: Fix CSR clones again by re-adding ERR_DA=
-TA_REPORTING quirk")
-
-Fixes tags
-
-  Fixes: 63b1a7dd3 (Bluetooth: hci_sync: Remove HCI_QUIRK_BROKEN_ERR_DATA_R=
-EPORTING)
-  Fixes: e168f69008 (Bluetooth: btusb: Remove HCI_QUIRK_BROKEN_ERR_DATA_REP=
-ORTING for fake CSR)
-  Fixes: 766ae2422b (Bluetooth: hci_sync: Check LMP feature bit instead of =
-quirk)
-
-have this problem:
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
-Also, please keep all the commit message tags together at the end of
-the commit message.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DVi7YdxXhup=riNYS8rky7F
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNr5c4ACgkQAVBC80lX
-0GyvOgf/Y11VNYwsvDqYl1eDP0t3lqAXCXHYY+n+lPopPiRXENi1sQIgomM5qiGM
-RpOx65uk0hoLtveN96If4jzYXcVgPEfza+OeaGzFwz/PDcQ6S6gMgub45PU32tyT
-QToiuwcjqgYF3+aUzgGR8TfYejN4V9hw1dKDBiAODttyCW3bcgnBxRcs2J4nV0I6
-7AEYzb2gWY4hr0lQWad+o/H0SeuL9+qotRFEz3UIPa9kWluJFmtUtBTw6mo/1Q+S
-87uJ1wlY9/ETY7V3I2MQJmOhph+mlHComhgEJ7kk69Rg+vywEoxofHYBHLYPlsGD
-kST9k1eYNJSHjPJIMaJTFUPlBfCQrg==
-=sm3h
------END PGP SIGNATURE-----
-
---Sig_/DVi7YdxXhup=riNYS8rky7F--
+jon
