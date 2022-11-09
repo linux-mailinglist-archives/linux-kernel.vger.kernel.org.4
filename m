@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A676231CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417E56231CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbiKIRr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S231837AbiKIRrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbiKIRrA (ORCPT
+        with ESMTP id S231846AbiKIRrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Nov 2022 12:47:00 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4726562;
-        Wed,  9 Nov 2022 09:46:51 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so2532197pjs.4;
-        Wed, 09 Nov 2022 09:46:51 -0800 (PST)
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712367676;
+        Wed,  9 Nov 2022 09:46:52 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id l6so17422611pjj.0;
+        Wed, 09 Nov 2022 09:46:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CiF3YnCQsrF/gvWg4IJtalMbBErjLNwZf+63Zgv2mbg=;
-        b=hatPA4XtREHlwkvzVLI1nc18tp1XpKw8QO75TiIhdxakEb7zyL+K9819A20gtZd9Iz
-         iDOEzWXNwExj2Ok1R2tYpZCP516eHXzdIRpBJeIyao/q5PvPFA24rT0CXywDscN5zReG
-         bBFkRKyERzXOQ8AOnSIRkESnQjD1iHvV7zsvbW6Fr32vjxVta/8r//p8O5rq3tJ/wrwK
-         y0k4M/Zq6a+fBTysACsAAhiYerzTF7hMvbn3uzeFx3XODCf6UPnt8TV/PflZouKJT6oN
-         FdythhovjLJe836zD7bgZNpY+kbUnSQFK+9RfZ1PE8Ky70T+UadFOrw8e0QZkOgJUfI3
-         BtIA==
+        bh=qf7pwJ+tSfBXBsT3Fnhwy44UrI7lbOL4kA5MHT45Zio=;
+        b=Pdcq6EHiScmcD4rAn0pVStsuOUCS5frBTuOuSUYbRSYhCbYuA1wwygpj/cyCGCspBC
+         4pIEJpigZQbZ+dQFaksHOqxhREZ/HUzc+qlvxFL6cyYPre53fk91cTcoDnCy4Uy/uy8e
+         Hib0zvSKRklbBL5wfnHazsaAu/YUeR5vVehk3VvuQa+rcsFrR4lm54fLFi6YtuVcQB5q
+         9yOVCYHqVaWbYst3NRLNA0D/l1rzQ9K4CiWdRucyGUS9ON0tlTELaSj7s2zJuRutBQfB
+         7lW0uQLuwJOFH3+yEjRwZ93mvTDtMLLvOokiIm1esD7RwdT/S1AUJq8Ozo62lUoSdHZj
+         Rz3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=CiF3YnCQsrF/gvWg4IJtalMbBErjLNwZf+63Zgv2mbg=;
-        b=YJjNtRM18DeJS0XMU9CSn1NkzKCEn8PL2zUASK75fLUj/kbjglo5BP+Srz2UdaLGO1
-         wMbWzGbARPn5n//2z2yr4U4OcRaPF1/gI7gAVKKUJpW5jPNzTk5g7yAa8tKTDyY39HfF
-         N6YdoQepP2yBFG1bHzTKUwxV4+7yyxx0BrmRU+o1KH51kGnu36fLSSbErNJi/bSUkIf/
-         019lW837OIcXb8QMOStZQP3Xcd9hw4mHhZ5VFnoeZxLl4eBqk7/CHuJ60uhEmqgjATpI
-         8vvPNzSBGMk5QV6XPJI+SPI0R1563zEpm46UP6+2q3iyUD/ZvZGxRHgxqWkioIjAmT8J
-         iaHw==
-X-Gm-Message-State: ACrzQf3ff/NfI/wojz4TflpJQa7ZLs/uepISN+7flZBWbuge1GnJK/de
-        g9a5bP6Ey51LBgauELl7DWQ=
-X-Google-Smtp-Source: AMsMyM7vhuPkpcMYEZ3I53QqkQFf2afZjATrO7UAJPHR9aKBuBVthqp/ZOahDUpg+f/PhwjQivArQA==
-X-Received: by 2002:a17:90a:df91:b0:213:8a69:c504 with SMTP id p17-20020a17090adf9100b002138a69c504mr69026009pjv.82.1668016010394;
-        Wed, 09 Nov 2022 09:46:50 -0800 (PST)
+        bh=qf7pwJ+tSfBXBsT3Fnhwy44UrI7lbOL4kA5MHT45Zio=;
+        b=lq9RpoumCu9IcwMuT6RXy58Q5DF3O9duPG8JCxI60RHmurbi1NwvpZ/PcbERDdzeJ2
+         /Kokiicb2kky/VkiT19CBvQ3Uoxoohd269Ffuyh4yoDVTT1t8SJCa4ID4uAvOcSPRbGV
+         UgcPEEpyDzInmhwEoGkbtNoiGxGSWvo6qML/tPnsk+M7JQd9lfkJPaU/lybe06qs62o9
+         KRIPsJDAwTTSrdcANScXGbOV/Brdbu9Mr/5VuqZjLEh/7V1SSZU8N83jYuX/WPTdq3UX
+         WLBvpxAIhxk87Gr8nGZne+3G3Fp7vKBmDBbMmbjw69khnsmxND0wmCEjy7ZPoqt6v4MW
+         6pFQ==
+X-Gm-Message-State: ACrzQf3L2QcmATXd/n5Faqa/FCA0XXETz1+iyLeDXTvh9c+oPsicUezO
+        37IMgUU/Xq+DgkO9o2D/DNo=
+X-Google-Smtp-Source: AMsMyM5Q0pgxR/3dUuiJftmQ8Q2+O9QzRiEWhvcMDTBjcqDFZm9QZHUC92uzrxCdk4e1xo1SJAei4g==
+X-Received: by 2002:a17:902:7894:b0:188:6300:640f with SMTP id q20-20020a170902789400b001886300640fmr1043883pll.124.1668016011817;
+        Wed, 09 Nov 2022 09:46:51 -0800 (PST)
 Received: from balhae.corp.google.com ([2620:15c:2c1:200:fa05:f3cd:da75:3103])
-        by smtp.gmail.com with ESMTPSA id a10-20020a63cd4a000000b0043941566481sm7877909pgj.39.2022.11.09.09.46.49
+        by smtp.gmail.com with ESMTPSA id a10-20020a63cd4a000000b0043941566481sm7877909pgj.39.2022.11.09.09.46.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 09:46:50 -0800 (PST)
+        Wed, 09 Nov 2022 09:46:51 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         German Gomez <german.gomez@arm.com>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         James Clark <james.clark@arm.com>
-Subject: [PATCH 10/12] perf test: Replace brstack test workload
-Date:   Wed,  9 Nov 2022 09:46:33 -0800
-Message-Id: <20221109174635.859406-11-namhyung@kernel.org>
+Subject: [PATCH 11/12] perf test: Add 'datasym' test workload
+Date:   Wed,  9 Nov 2022 09:46:34 -0800
+Message-Id: <20221109174635.859406-12-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221109174635.859406-1-namhyung@kernel.org>
 References: <20221109174635.859406-1-namhyung@kernel.org>
@@ -81,119 +81,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So that it can get rid of requirement of a compiler.  Also rename the
-symbols to match with the perf test workload.
+The datasym workload is to check if perf mem command gets the data
+addresses precisely.  This is needed for data symbol test.
 
-Cc: German Gomez <german.gomez@arm.com>
+  $ perf test -w datasym
+
+I had to keep the buf1 in the data section, otherwise it could end
+up in the BSS and was mmaped as a separate //anon region, then it
+was not symbolized at all.  It needs to be fixed separately.
+
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/tests/shell/test_brstack.sh | 66 +++++---------------------
- 1 file changed, 12 insertions(+), 54 deletions(-)
+ tools/perf/tests/builtin-test.c      |  1 +
+ tools/perf/tests/tests.h             |  1 +
+ tools/perf/tests/workloads/Build     |  2 ++
+ tools/perf/tests/workloads/datasym.c | 24 ++++++++++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 tools/perf/tests/workloads/datasym.c
 
-diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
-index ec801cffae6b..a8a182dea25f 100755
---- a/tools/perf/tests/shell/test_brstack.sh
-+++ b/tools/perf/tests/shell/test_brstack.sh
-@@ -4,18 +4,12 @@
- # SPDX-License-Identifier: GPL-2.0
- # German Gomez <german.gomez@arm.com>, 2022
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index 69fa56939309..4c6ae59a4dfd 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -124,6 +124,7 @@ static struct test_workload *workloads[] = {
+ 	&workload__leafloop,
+ 	&workload__sqrtloop,
+ 	&workload__brstack,
++	&workload__datasym,
+ };
  
--# we need a C compiler to build the test programs
--# so bail if none is found
--if ! [ -x "$(command -v cc)" ]; then
--	echo "failed: no compiler, install gcc"
--	exit 2
--fi
--
- # skip the test if the hardware doesn't support branch stack sampling
- # and if the architecture doesn't support filter types: any,save_type,u
- perf record -b -o- -B --branch-filter any,save_type,u true > /dev/null 2>&1 || exit 2
+ static int num_subtests(const struct test_suite *t)
+diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
+index dc96f59cac2e..e15f24cfc909 100644
+--- a/tools/perf/tests/tests.h
++++ b/tools/perf/tests/tests.h
+@@ -205,5 +205,6 @@ DECLARE_WORKLOAD(thloop);
+ DECLARE_WORKLOAD(leafloop);
+ DECLARE_WORKLOAD(sqrtloop);
+ DECLARE_WORKLOAD(brstack);
++DECLARE_WORKLOAD(datasym);
  
- TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
-+TESTPROG="perf test -w brstack"
+ #endif /* TESTS_H */
+diff --git a/tools/perf/tests/workloads/Build b/tools/perf/tests/workloads/Build
+index c933cdcf91d1..ec3cb10c52ae 100644
+--- a/tools/perf/tests/workloads/Build
++++ b/tools/perf/tests/workloads/Build
+@@ -5,6 +5,8 @@ perf-y += thloop.o
+ perf-y += leafloop.o
+ perf-y += sqrtloop.o
+ perf-y += brstack.o
++perf-y += datasym.o
  
- cleanup() {
- 	rm -rf $TMPDIR
-@@ -23,57 +17,24 @@ cleanup() {
- 
- trap cleanup exit term int
- 
--gen_test_program() {
--	# generate test program
--	cat << EOF > $1
--#define BENCH_RUNS 999999
--int cnt;
--void bar(void) {
--}			/* return */
--void foo(void) {
--	bar();		/* call */
--}			/* return */
--void bench(void) {
--  void (*foo_ind)(void) = foo;
--  if ((cnt++) % 3)	/* branch (cond) */
--    foo();		/* call */
--  bar();		/* call */
--  foo_ind();		/* call (ind) */
--}
--int main(void)
--{
--  int cnt = 0;
--  while (1) {
--    if ((cnt++) > BENCH_RUNS)
--      break;
--    bench();		/* call */
--  }			/* branch (uncond) */
--  return 0;
--}
--EOF
--}
--
- test_user_branches() {
- 	echo "Testing user branch stack sampling"
- 
--	gen_test_program "$TEMPDIR/program.c"
--	cc -fno-inline -g "$TEMPDIR/program.c" -o $TMPDIR/a.out
--
--	perf record -o $TMPDIR/perf.data --branch-filter any,save_type,u -- $TMPDIR/a.out > /dev/null 2>&1
-+	perf record -o $TMPDIR/perf.data --branch-filter any,save_type,u -- ${TESTPROG} > /dev/null 2>&1
- 	perf script -i $TMPDIR/perf.data --fields brstacksym | xargs -n1 > $TMPDIR/perf.script
- 
- 	# example of branch entries:
--	# 	foo+0x14/bar+0x40/P/-/-/0/CALL
-+	# 	brstack_foo+0x14/brstack_bar+0x40/P/-/-/0/CALL
- 
- 	set -x
--	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/IND_CALL$"	$TMPDIR/perf.script
--	egrep -m1 "^foo\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
--	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/CALL$"	$TMPDIR/perf.script
--	egrep -m1 "^bench\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
--	egrep -m1 "^bar\+[^ ]*/foo\+[^ ]*/RET$"		$TMPDIR/perf.script
--	egrep -m1 "^foo\+[^ ]*/bench\+[^ ]*/RET$"	$TMPDIR/perf.script
--	egrep -m1 "^bench\+[^ ]*/bench\+[^ ]*/COND$"	$TMPDIR/perf.script
--	egrep -m1 "^main\+[^ ]*/main\+[^ ]*/UNCOND$"	$TMPDIR/perf.script
-+	egrep -m1 "^brstack_bench\+[^ ]*/brstack_foo\+[^ ]*/IND_CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^brstack_foo\+[^ ]*/brstack_bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^brstack_bench\+[^ ]*/brstack_foo\+[^ ]*/CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^brstack_bench\+[^ ]*/brstack_bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^brstack_bar\+[^ ]*/brstack_foo\+[^ ]*/RET$"		$TMPDIR/perf.script
-+	egrep -m1 "^brstack_foo\+[^ ]*/brstsack_bench\+[^ ]*/RET$"	$TMPDIR/perf.script
-+	egrep -m1 "^brstack_bench\+[^ ]*/brstack_bench\+[^ ]*/COND$"	$TMPDIR/perf.script
-+	egrep -m1 "^brstack\+[^ ]*/brstack\+[^ ]*/UNCOND$"		$TMPDIR/perf.script
- 	set +x
- 
- 	# some branch types are still not being tested:
-@@ -88,10 +49,7 @@ test_filter() {
- 
- 	echo "Testing branch stack filtering permutation ($filter,$expect)"
- 
--	gen_test_program "$TEMPDIR/program.c"
--	cc -fno-inline -g "$TEMPDIR/program.c" -o $TMPDIR/a.out
--
--	perf record -o $TMPDIR/perf.data --branch-filter $filter,save_type,u -- $TMPDIR/a.out > /dev/null 2>&1
-+	perf record -o $TMPDIR/perf.data --branch-filter $filter,save_type,u -- ${TESTPROG} > /dev/null 2>&1
- 	perf script -i $TMPDIR/perf.data --fields brstack | xargs -n1 > $TMPDIR/perf.script
- 
- 	# fail if we find any branch type that doesn't match any of the expected ones
+ CFLAGS_leafloop.o         = -g -O0 -fno-inline -fno-omit-frame-pointer
+ CFLAGS_brstack.o          = -g -O0 -fno-inline
++CFLAGS_datasym.o          = -g -O0 -fno-inline
+diff --git a/tools/perf/tests/workloads/datasym.c b/tools/perf/tests/workloads/datasym.c
+new file mode 100644
+index 000000000000..ddd40bc63448
+--- /dev/null
++++ b/tools/perf/tests/workloads/datasym.c
+@@ -0,0 +1,24 @@
++#include <linux/compiler.h>
++#include "../tests.h"
++
++typedef struct _buf {
++	char data1;
++	char reserved[55];
++	char data2;
++} buf __attribute__((aligned(64)));
++
++static buf buf1 = {
++	/* to have this in the data section */
++	.reserved[0] = 1,
++};
++
++static int datasym(int argc __maybe_unused, const char **argv __maybe_unused)
++{
++	for (;;) {
++		buf1.data1++;
++		buf1.data2 += buf1.data1;
++	}
++	return 0;
++}
++
++DEFINE_WORKLOAD(datasym);
 -- 
 2.38.1.431.g37b22c650d-goog
 
