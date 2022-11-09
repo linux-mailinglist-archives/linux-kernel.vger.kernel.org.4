@@ -2,203 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00E4623317
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FED62331B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbiKITAa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Nov 2022 14:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S231701AbiKITAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiKITA3 (ORCPT
+        with ESMTP id S231351AbiKITAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:00:29 -0500
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55E8193EA;
-        Wed,  9 Nov 2022 11:00:27 -0800 (PST)
-Received: by mail-oi1-f180.google.com with SMTP id n205so8732986oib.1;
-        Wed, 09 Nov 2022 11:00:27 -0800 (PST)
+        Wed, 9 Nov 2022 14:00:36 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6EA1A3B8;
+        Wed,  9 Nov 2022 11:00:34 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id gw22so17581271pjb.3;
+        Wed, 09 Nov 2022 11:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xAtfUGAzFgcNBnIbSWDsNJ1US/mY0mv1SDKeGTpMFnc=;
+        b=M12WA5jstlEU37vqEZqQvYN2fOKWK4EhddWc3WwseBsnDLnJ+3S+TA4+cBgWZAkuWw
+         qopSMSvT1UeUdPMsRY92q2lXMLvQTjYVtGrBhYVo02CFboXysPpn+gIsN4Pm13lG/WDz
+         WfL8pm149rlrh8YPSjfSFJCgvYT6eQDqlVD9/TFuYeGGvpwfMBC6YWqFYmyixVf4WggQ
+         dG9im4tAISZi9QibM7ivOvSwLHtDUId2eSHpbXWqZpkrTarSdZf8/GZqDZ77Wz0nfC1G
+         9oE/JKTn7QVfnWjIH8rQDII4fC83iaj0qwna/sMgKXwhGbVClqb4xhulZSWzZJj/Wi28
+         +X6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sMpsMLyiCgwuPwl0+GxzMfLoA8jDIII47LVKf8n7yz8=;
-        b=j6CV5pliJJwPBdqIq8jOy1cmkQzwKmq8fZUrtlU/7SWSuAnfQPQSDF2DEaAvxKmjf5
-         T36bHMnMkDraDbceA8PFcN+g7UWBAcZJJ/EiuXioGae2hZ4aiOcEnVB8tOYjqd1aOAim
-         lad21SunjRSs9FWOAlV4FQ25amY8Sz7sTM/vnlfF1HE1goW0XGzDIZZe+FczcAOVNhyx
-         5m77KaBdOwPv0aC1MCqJ8cpR65TCAva4gGowMnRtIR7ean/gdKtGerDS550d2LQlVkTF
-         XzevjYqtbB+YoqWM0dAgyQNtHltXksmBZidu3VnNpj7BtsJNNea/JtYgwmUIJCSBIa1A
-         EZIg==
-X-Gm-Message-State: ACrzQf3NmGlDnvvrTEhnFtZL/pae3W/m0G6XKXQrR6ApsVrhhts1Njtm
-        IHSte8Q2jgpMJzlNSeBc8SVBTo9HK10K+InH+dI=
-X-Google-Smtp-Source: AMsMyM4/QC5OTudpw+11FpWjsynsIC/pUi06eH6hsHduFUNI1wqH/RPpSPHP/zs6Nz9mq+91MEIMTe6VwZ79vWAALKE=
-X-Received: by 2002:aca:2805:0:b0:359:e340:d53 with SMTP id
- 5-20020aca2805000000b00359e3400d53mr31799603oix.209.1668020427039; Wed, 09
- Nov 2022 11:00:27 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xAtfUGAzFgcNBnIbSWDsNJ1US/mY0mv1SDKeGTpMFnc=;
+        b=x0hNSdcL/bxnbZQvYsLZmLqz7rWKB0JVC7G7nPlgv4WorG4dsSpwmnBaWLQjz0ldnD
+         qKC4MDqx3eKL2ju9QLAaskMFEmw6YY9mvU5WptTr/cTj6uJbXfqmjM6cChX5u4Sy4UNR
+         AP6xT4qk/FgrSdISNSajlbbCQNjPGj61ZEtlCBRYlPTVdXkRMqnSKAlKqH5MGlo/oOpp
+         Q7M9esOvdpOuSPqDDjI2Oh7XLcBssFUFUppSl4dCdJ+KjZr9WVAVQiZvtlr62EznKiPy
+         NuKIhCG+WBpFtrwfDc5iOBYSXDmhdLzSFrnb3sBO4yGpzPEiY3hylUa5BRgKIJu1Cu6/
+         8Mmw==
+X-Gm-Message-State: ACrzQf0Jv47J6XESzK0aFPLMX5+qodoLiB/4Iqil5va90OtOu87HM8UM
+        4cTMKCdyVP02jyf3gCzaJmY=
+X-Google-Smtp-Source: AMsMyM5EgFkoZv9A+1YW81vdlp0hVYvECWFfUwWH8to7ophfb+qijhzGq+eVO3KIW/KjFBqsgCn6IA==
+X-Received: by 2002:a17:90a:d493:b0:213:ce33:4a4d with SMTP id s19-20020a17090ad49300b00213ce334a4dmr56294701pju.140.1668020433698;
+        Wed, 09 Nov 2022 11:00:33 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:9f46:7242:26:f220])
+        by smtp.gmail.com with ESMTPSA id r29-20020aa79edd000000b0056e32a2b88esm8623930pfq.219.2022.11.09.11.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 11:00:32 -0800 (PST)
+Date:   Wed, 9 Nov 2022 11:00:29 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] gpiolib: consolidate GPIO lookups
+Message-ID: <Y2v4ze4y8qDThjrv@google.com>
+References: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
+ <20221031-gpiolib-swnode-v2-5-81f55af5fa0e@gmail.com>
+ <Y2uOEhib5dvIcobF@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20221109174635.859406-1-namhyung@kernel.org> <20221109174635.859406-2-namhyung@kernel.org>
- <Y2vz3zmn/jIFkCKp@kernel.org>
-In-Reply-To: <Y2vz3zmn/jIFkCKp@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 9 Nov 2022 11:00:15 -0800
-Message-ID: <CAM9d7ciQ1Co89oHc005SCgEfv3zATHQM6ZnHYTTgsF9uXpNLMg@mail.gmail.com>
-Subject: Re: [PATCH 01/12] perf test: Add -w/--workload option
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2uOEhib5dvIcobF@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+On Wed, Nov 09, 2022 at 01:25:06PM +0200, Andy Shevchenko wrote:
+> On Tue, Nov 08, 2022 at 04:26:50PM -0800, Dmitry Torokhov wrote:
+> > Ensure that all paths to obtain/look up GPIOD from generic
+> > consumer-visible APIs go through the new gpiod_find_and_request()
+> > helper, so that we can easily extend it with support for new firmware
+> > mechanisms.
+> > 
+> > The only exception is OF-specific [devm_]gpiod_get_from_of_node() API
+> > that is still being used by a couple of drivers and will be removed as
+> > soon as patches converting them to use generic fwnode/device APIs are
+> > accepted.
+> 
+> ...
+> 
+> > +static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
+> > +					      struct device *consumer,
+> > +					      const char *con_id,
+> > +					      unsigned int idx,
+> > +					      enum gpiod_flags *flags,
+> > +					      unsigned long *lookupflags)
+> >  {
+> > -	unsigned long lflags = GPIO_LOOKUP_FLAGS_DEFAULT;
+> 
+> > -	struct gpio_desc *desc = ERR_PTR(-ENODEV);
+> 
+> Not sure why this is needed. Now I see that else branch has been changed,
+> but looking closer to it, we can drop it completely, while leaving this
+> line untouched, correct?
 
-On Wed, Nov 9, 2022 at 10:39 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Wed, Nov 09, 2022 at 09:46:24AM -0800, Namhyung Kim escreveu:
-> > --- /dev/null
-> > +++ b/tools/perf/tests/workloads/noploop.c
-> > @@ -0,0 +1,32 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#include <stdlib.h>
-> > +#include <signal.h>
-> > +#include <unistd.h>
-> > +#include <linux/compiler.h>
-> > +#include "../tests.h"
+Yes. I believe removing an initializer and doing a series of if/else
+if/else was discussed and [soft] agreed-on in the previous review cycle,
+but I can change it back.
+
+I think we still need to have it return -ENOENT and not -ENODEV/-EINVAL
+so that we can fall back to GPIO lookup tables when dealing with an
+unsupported node type.
+
+> 
+> > -	int ret;
+> > +	struct gpio_desc *desc;
+> >  
+> > +	dev_dbg(consumer, "GPIO lookup for consumer %s in node '%pfw'\n",
+> > +		con_id, fwnode);
 > > +
-> > +static volatile int done;
-> > +
-> > +static void sighandler(int sig __maybe_unused)
-> > +{
-> > +     done = 1;
+> > +	/* Using device tree? */
+> >  	if (is_of_node(fwnode)) {
+> > -		desc = gpiod_get_from_of_node(to_of_node(fwnode),
+> > -					      propname, index,
+> > -					      dflags,
+> > -					      label);
+> > -		return desc;
+> > +		dev_dbg(consumer, "using device tree for GPIO lookup\n");
+> > +		desc = of_find_gpio(to_of_node(fwnode),
+> > +				    con_id, idx, lookupflags);
+> 
+> At least con_id can be placed on the previous line.
+
+OK, I made it all 1 line.
+
+> 
+> >  	} else if (is_acpi_node(fwnode)) {
+> > -		desc = acpi_node_get_gpiod(fwnode, propname, index,
+> > -					   &lflags, &dflags);
+> > -		if (IS_ERR(desc))
+> > -			return desc;
+> > +		dev_dbg(consumer, "using ACPI for GPIO lookup\n");
+> > +		desc = acpi_find_gpio(fwnode, con_id, idx, flags, lookupflags);
+> >  	} else {
+> > -		return ERR_PTR(-EINVAL);
+> > +		desc = ERR_PTR(-ENOENT);
+> >  	}
+> >  
+> > -	/* Currently only ACPI takes this path */
+> > +	return desc;
 > > +}
->
-> You forgot to do what was done in:
+> 
+> ...
+> 
+> > +	struct gpio_desc *desc = ERR_PTR(-ENOENT);
+> > +	unsigned long lookupflags;
+> > +	int ret;
+> 
+> > +	if (!IS_ERR_OR_NULL(fwnode))
+> 
+> I think this is superfluous check.
+> 
+> Now in the form of this series, you have only a single dev_dbg() that tries to
+> dereference it. Do we really need to have it there, since every branch has its
+> own dev_dbg() anyway?
 
-Oops, right.  Will fix in v2.
+As I mentioned, I like to keep this check to show the reader that we
+should only descend into gpiod_find_by_fwnode() if we have a valid
+fwnode. It is less about code generation and more about the intent.
+
+I did change the logging to remove extra dev_dbg(). We will lose message
+when dealing with unsupported node type, but that should not really
+happen in practice.
+
+> 
+> > +		desc = gpiod_find_by_fwnode(fwnode, consumer, con_id, idx,
+> > +					    &flags, &lookupflags);
+> 
+> > +
+> 
+> This blank line can be dropped after addressing above.
+> 
+> > +	if (gpiod_not_found(desc) && platform_lookup_allowed) {
+> > +		/*
+> > +		 * Either we are not using DT or ACPI, or their lookup did not
+> > +		 * return a result. In that case, use platform lookup as a
+> > +		 * fallback.
+> > +		 */
+> > +		dev_dbg(consumer, "using lookup tables for GPIO lookup\n");
+> > +		desc = gpiod_find(consumer, con_id, idx, &lookupflags);
+> > +	}
+> > +
+> > +	if (IS_ERR(desc)) {
+> > +		dev_dbg(consumer, "No GPIO consumer %s found\n", con_id);
+> > +		return desc;
+> > +	}
+> 
+> ...
+> 
+> > +	return gpiod_find_and_request(NULL, fwnode, con_id, index, flags, label,
+> > +				      false);
+> 
+> One line?
+
+OK :)
+
+> 
+> ...
+> 
+> > +	return gpiod_find_and_request(dev, fwnode, con_id, idx, flags, label,
+> > +				      true);
+> 
+> One line?
+
+OK.
 
 Thanks,
-Namhyung
 
-
->
-> 92ea0720ba9cf7f0 perf trace: Use sig_atomic_t to avoid undefined behaviour in a signal handler
-> 691768968f2a13eb perf top: Use sig_atomic_t to avoid undefined behaviour in a signal handler
-> 01513fdc18f395db perf stat: Use sig_atomic_t to avoid undefined behaviour in a signal handler
-> 057929f9d083e80c perf session: Change type to avoid undefined behaviour in a signal handler
-> 853596fb71f7c2f7 perf ftrace: Use sig_atomic_t to avoid UB
-> 7f3374299f9762ba perf daemon: Use sig_atomic_t to avoid UB
-> 8ed28c2b56b78442 perf record: Use sig_atomic_t for signal handlers
-> f3c9bd4e16a503cb perf build: Update to C standard to gnu11
->
-> To speed up the process here is one of those csets:
->
-> ⬢[acme@toolbox perf]$ git show 01513fdc18f395db
-> commit 01513fdc18f395dbcc924bc5e9962b12f86f947a
-> Author: Ian Rogers <irogers@google.com>
-> Date:   Mon Oct 24 11:19:11 2022 -0700
->
->     perf stat: Use sig_atomic_t to avoid undefined behaviour in a signal handler
->
->     Use sig_atomic_t for variables written/accessed in signal
->     handlers. This is undefined behavior as per:
->
->       https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
->
->     Signed-off-by: Ian Rogers <irogers@google.com>
->     Cc: Adrian Hunter <adrian.hunter@intel.com>
->     Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
->     Cc: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
->     Cc: German Gomez <german.gomez@arm.com>
->     Cc: Ingo Molnar <mingo@redhat.com>
->     Cc: Jiri Olsa <jolsa@kernel.org>
->     Cc: Leo Yan <leo.yan@linaro.org>
->     Cc: Mark Rutland <mark.rutland@arm.com>
->     Cc: Namhyung Kim <namhyung@kernel.org>
->     Cc: Peter Zijlstra <peterz@infradead.org>
->     Cc: Stephane Eranian <eranian@google.com>
->     Link: https://lore.kernel.org/r/20221024181913.630986-7-irogers@google.com
->     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
->
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index e52601a54b26d669..d5e1670bca204450 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -173,7 +173,7 @@ static struct target target = {
->
->  #define METRIC_ONLY_LEN 20
->
-> -static volatile pid_t          child_pid                       = -1;
-> +static volatile sig_atomic_t   child_pid                       = -1;
->  static int                     detailed_run                    =  0;
->  static bool                    transaction_run;
->  static bool                    topdown_run                     = false;
-> @@ -208,7 +208,7 @@ struct perf_stat {
->  static struct perf_stat                perf_stat;
->  #define STAT_RECORD            perf_stat.record
->
-> -static volatile int done = 0;
-> +static volatile sig_atomic_t done = 0;
->
->  static struct perf_stat_config stat_config = {
->         .aggr_mode              = AGGR_GLOBAL,
-> @@ -580,7 +580,7 @@ static void disable_counters(void)
->         }
->  }
->
-> -static volatile int workload_exec_errno;
-> +static volatile sig_atomic_t workload_exec_errno;
->
->  /*
->   * evlist__prepare_workload will send a SIGUSR1
-> @@ -1039,7 +1039,7 @@ static void print_counters(struct timespec *ts, int argc, const char **argv)
->         evlist__print_counters(evsel_list, &stat_config, &target, ts, argc, argv);
->  }
->
-> -static volatile int signr = -1;
-> +static volatile sig_atomic_t signr = -1;
->
->  static void skip_signal(int signo)
->  {
-> ⬢[acme@toolbox perf]$
->
-> > +
-> > +static int noploop(int argc, const char **argv)
-> > +{
-> > +     int sec = 1;
-> > +
-> > +     if (argc > 0)
-> > +             sec = atoi(argv[0]);
-> > +
-> > +     signal(SIGINT, sighandler);
-> > +     signal(SIGALRM, sighandler);
-> > +     alarm(sec);
-> > +
-> > +     while (!done)
-> > +             continue;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +DEFINE_WORKLOAD(noploop);
-> > --
-> > 2.38.1.431.g37b22c650d-goog
->
-> --
->
-> - Arnaldo
+-- 
+Dmitry
