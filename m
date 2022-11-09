@@ -2,95 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B284B622638
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AB6622627
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiKIJGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S230197AbiKIJDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiKIJFz (ORCPT
+        with ESMTP id S230123AbiKIJDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:05:55 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25901E3D8;
-        Wed,  9 Nov 2022 01:05:53 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N6fFb6fzvz15MTS;
-        Wed,  9 Nov 2022 17:05:39 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+        Wed, 9 Nov 2022 04:03:52 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AFD1263F;
+        Wed,  9 Nov 2022 01:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667984631; x=1699520631;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cZFDEG2cr14qKxNh523mmiNj6wQwNrxYPGzaxSddF8M=;
+  b=ATSGi6YmMJj9DmX8CJw7ilWYxfOh9l4RvwPePflrx7GZL0QJq+8YwD1c
+   SSaXcHV66k3Jt/8KBoJHhkqvf6C5CfmmK2cymQdqiSUWkInoGf25WPYNE
+   VTBdCKApVHRVkymFZh6Ieb7oRev6n+mMHA3fsTzgt0dOEk+QTFfczqDlW
+   gRwRb1hx42hfnB5GeJmv9aog7kaxWCNxkzu/HpkHt8ulJAYQqE8rPyOb7
+   olvhXxrs4WscBoMHXbrRMfYCjTN/bna4yRFt8XQgDQ7IvdBiGESHE2wQl
+   auLoHLaygco7zHnZlQqUQHuHTDX2pd7YlxZxPMytDUhS1bIFJfUQGAzqi
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="188289219"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Nov 2022 02:03:50 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 17:05:52 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 17:05:51 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-CC:     <johannes@sipsolutions.net>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH] wifi: cfg80211: Fix not unregister reg_pdev when load_builtin_regdb_keys() fails
-Date:   Wed, 9 Nov 2022 17:02:37 +0800
-Message-ID: <20221109090237.214127-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+ 15.1.2507.12; Wed, 9 Nov 2022 02:03:50 -0700
+Received: from den-her-m31857h.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 9 Nov 2022 02:03:47 -0700
+Message-ID: <3bd9fa1c7b3349e13803759a54e72521d62212a6.camel@microchip.com>
+Subject: Re: [PATCH net-next v5 0/8] Extend TC key support for Sparx5 IS2
+ VCAP
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Date:   Wed, 9 Nov 2022 10:03:46 +0100
+In-Reply-To: <20221108171103.73ca999b@kernel.org>
+References: <20221104141830.1527159-1-steen.hegelund@microchip.com>
+         <20221108171103.73ca999b@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In regulatory_init_db(), when it's going to return a error, reg_pdev
-should be unregistered. When load_builtin_regdb_keys() fails it doesn't
-do it and makes cfg80211 can't be reload with report:
+Hi Jacub,
 
-sysfs: cannot create duplicate filename '/devices/platform/regulatory.0'
- ...
- <TASK>
- dump_stack_lvl+0x79/0x9b
- sysfs_warn_dup.cold+0x1c/0x29
- sysfs_create_dir_ns+0x22d/0x290
- kobject_add_internal+0x247/0x800
- kobject_add+0x135/0x1b0
- device_add+0x389/0x1be0
- platform_device_add+0x28f/0x790
- platform_device_register_full+0x376/0x4b0
- regulatory_init+0x9a/0x4b2 [cfg80211]
- cfg80211_init+0x84/0x113 [cfg80211]
- ...
+On Tue, 2022-11-08 at 17:11 -0800, Jakub Kicinski wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On Fri, 4 Nov 2022 15:18:22 +0100 Steen Hegelund wrote:
+> > v5      Add support for a TC matchall filter with a single goto action
+> >         which will activate the lookups of the VCAP.  Removing this filter
+> >         will deactivate the VCAP lookups again.
+> 
+> There are conflicts applying this patch set to net-next now,
+> could you rebase + repost?
 
-Fixes: 90a53e4432b1 ("cfg80211: implement regdb signature checking")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- net/wireless/reg.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I will do that.
 
-diff --git a/net/wireless/reg.c b/net/wireless/reg.c
-index d5c7a5aa6853..da0cb5abc20f 100644
---- a/net/wireless/reg.c
-+++ b/net/wireless/reg.c
-@@ -4305,8 +4305,10 @@ static int __init regulatory_init_db(void)
- 		return -EINVAL;
- 
- 	err = load_builtin_regdb_keys();
--	if (err)
-+	if (err) {
-+		platform_device_unregister(reg_pdev);
- 		return err;
-+	}
- 
- 	/* We always try to get an update for the static regdomain */
- 	err = regulatory_hint_core(cfg80211_world_regdom->alpha2);
--- 
-2.17.1
+BR
+Steen
+
 
