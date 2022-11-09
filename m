@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD8D621296
-	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 14:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68120621455
+	for <lists+linux-kernel@lfdr.de>; Tue,  8 Nov 2022 15:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiKHNkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 08:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S234894AbiKHOAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 09:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbiKHNkY (ORCPT
+        with ESMTP id S234842AbiKHN77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 08:40:24 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FB24FFA9;
-        Tue,  8 Nov 2022 05:40:23 -0800 (PST)
+        Tue, 8 Nov 2022 08:59:59 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C67668289;
+        Tue,  8 Nov 2022 05:59:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667914823; x=1699450823;
+  t=1667915997; x=1699451997;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=mCrWiUUgRyQzKOt7u1k2+4v/CDZHlfBbvsBIQUniH0Y=;
-  b=Xw8uPR98boJ4dpAyO6VgIcmO/nRQWWILZkkbehV8+HpfvlImiqFyfn9y
-   EjTc0RRieookPpg/N7sS0bniVLLszqzVNBQ6fN4CoN2o0XI3R5wB3IRoV
-   sKO/bSaE90UAb1MnM6YWzJjxKKeaHqhCjmuCt3f6M4vViwf/LWxlf74bV
-   eSVfdeBeUtGD/DbVuOadWESbzZGTABdmklli2DmXu61fhJrSLMDVyttBy
-   qy+QRjDIUFtMW4KJE3K/9Gz4S5rMgemduNTPF5a5NqiwuL50C4ERCvwGB
-   PIxXRLhpuUbRSwTlB6wDIgN5mfDWV+yfsM5tvihE0DMktNunpHslJpF4l
+  bh=uiVXa/lYjKwCyK41WwxoRvtr6GZWe50v8inroEjyyfg=;
+  b=NhF7nEhQSwi81J2+z65AmGgEz4bhSad1kyylJqneO3SKE1fFjAZu80Bh
+   IbIiCRuAkpXJWFTpAMci6+p8pElWVGqnLwOxnXehDJETh5BJewlMnXKXG
+   5Z5e8GI4kTEZV67cFafKRoPHeOt/DrY3LLXedrS76ZOzkss13rZ/MBaiS
+   /SQ22SnIvSe8DWR9OA2xrOXRTPGi3UrIZLrI7lXm6EcWU3KnFDHL3MRO1
+   GIpj3BQbFAOz7jrH69o1JWVDyUSIc5UgbN7jtVzF/3zHftmy1zAW4MtxO
+   AFUw6vreLufLf0gTgCNQH8hk9//RivXgmQtXGeC8f/Yx2AcYQxjKxxCR6
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="396988770"
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="374969264"
 X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="396988770"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:40:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="811242719"
+   d="scan'208";a="374969264"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:59:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="705306050"
 X-IronPort-AV: E=Sophos;i="5.96,147,1665471600"; 
-   d="scan'208";a="811242719"
+   d="scan'208";a="705306050"
 Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:40:19 -0800
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 05:59:53 -0800
 From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
 To:     jic23@kernel.org, lars@metafoo.de
 Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
         jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
         rajat.khandelwal@intel.com,
         Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Subject: [PATCH v8] iio: temperature: Add driver support for Maxim MAX30208
-Date:   Wed,  9 Nov 2022 19:10:05 +0530
-Message-Id: <20221109134005.714233-1-rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v9] iio: temperature: Add driver support for Maxim MAX30208
+Date:   Wed,  9 Nov 2022 19:29:49 +0530
+Message-Id: <20221109135949.734180-1-rajat.khandelwal@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -67,6 +67,8 @@ Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
 
 Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
 ---
+
+v9: Repositioning register data
 
 v8:
 1. Returning time out if conversion fails to happen
@@ -169,7 +171,7 @@ index dd08e562ffe0..dfec8c6d3019 100644
  obj-$(CONFIG_MLX90614) += mlx90614.o
 diff --git a/drivers/iio/temperature/max30208.c b/drivers/iio/temperature/max30208.c
 new file mode 100644
-index 000000000000..1f8d76e0bc95
+index 000000000000..102eb2b77dbe
 --- /dev/null
 +++ b/drivers/iio/temperature/max30208.c
 @@ -0,0 +1,251 @@
@@ -198,14 +200,14 @@ index 000000000000..1f8d76e0bc95
 +#define MAX30208_FIFO_DATA_CNTR		0x07
 +#define MAX30208_FIFO_DATA		0x08
 +
++#define MAX30208_FIFO_CONFIG		0x0a
++#define MAX30208_FIFO_CONFIG_RO		BIT(1)
++
 +#define MAX30208_SYSTEM_CTRL		0x0c
 +#define MAX30208_SYSTEM_CTRL_RESET	0x01
 +
 +#define MAX30208_TEMP_SENSOR_SETUP	0x14
 +#define MAX30208_TEMP_SENSOR_SETUP_CONV	BIT(0)
-+
-+#define MAX30208_FIFO_CONFIG		0x0a
-+#define MAX30208_FIFO_CONFIG_RO		BIT(1)
 +
 +struct max30208_data {
 +	struct i2c_client *client;
