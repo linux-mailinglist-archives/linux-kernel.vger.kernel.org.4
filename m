@@ -2,196 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA845622E4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AF9622E50
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiKIOsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S230244AbiKIOsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiKIOsb (ORCPT
+        with ESMTP id S231670AbiKIOsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:48:31 -0500
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343A3B75;
-        Wed,  9 Nov 2022 06:48:25 -0800 (PST)
-Received: by mail-qv1-f49.google.com with SMTP id n18so12396062qvt.11;
-        Wed, 09 Nov 2022 06:48:25 -0800 (PST)
+        Wed, 9 Nov 2022 09:48:46 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3215186E6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:48:44 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v27so27615212eda.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:48:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7USN0G8Nj6bFP0DAG8wpDATUtQ4+Fo+i57WTNeIkt9o=;
+        b=NRt78M2Sb88BheBzAT20bUfEl8jig4axjLGE9cA4Lt1JAoMq4Kp2dRwmyJftLj+Aiz
+         JHHlO0YI2UjwVjPsI8Nep5TgZzvmeP1uvD0R9Zch0I38Q1dCIN54ZaXZRi5Bwm4n326w
+         owPJoFtjtzvynKQh3U1yx3zMtALznwO78lMrgqzHwN9SeFU4BE9+Yp4Y0wQWfHWdgwGJ
+         GUT9qMXOqexjc2b21CP5h0SDiefsKQuvsslSMYP9yRh1dWyR1gWDkShbMekAFnP4cKV+
+         /OcTddzVbBhYvuGTeG6Q+sgMfEeRmBl0hHWHJ1WrbEtP9RUyvtc5MsB8UmpPIZ+Uo4k5
+         0LNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wivt87LRUJv+IMWcTlOiEICiAr3gHOSSqbBgupcxf9A=;
-        b=31s4E95a3G3qY1b2h9KyfpdptPZsLUSdh0+O7GRhBqeg8LxFyyTF2CfaKwsqZbThr1
-         RoBTkIj0TUb8xq6PP3GRP1CeafdchU+A5zXitD3lXjnDSXsc2wVtySBpKG70Tq3QvYZP
-         l1qWzU5F+yUksk4r9dlWwu1+4ct9vjck1ry0By+8r1romi+eEg1SFaqsy1AxBK4bhEUY
-         FAOtryiHjCNCln3eyYo2GqtxsQyrBc7bo3Cfp2R6TGUiOjoBZqs0cMxQj7nfXM++x51H
-         H6m9iApI3kaLb3w6jykP/Omt/JbJ61Y2b4H5K2G4VrlhgJaYqXyqRo9Rje3iHQVkeBba
-         PzAg==
-X-Gm-Message-State: ACrzQf3CSBXXDUOAUG6OjWUPkEBV7MeNOly45CboPsJHXq1VZX8R9x12
-        C3racbzjWA26nPjrVqhlpurzAOZpUBCqLzsjn74=
-X-Google-Smtp-Source: AMsMyM6Xxkf1II4nkVA7jgVVxaAxHxUzGkbQIMeCFILdMSKennv6TFQcIUIDK5t2fXSlacho9ildVqA7n9peopX83hw=
-X-Received: by 2002:a0c:c684:0:b0:4bb:fc53:5ad9 with SMTP id
- d4-20020a0cc684000000b004bbfc535ad9mr46056330qvj.3.1668005304254; Wed, 09 Nov
- 2022 06:48:24 -0800 (PST)
+        bh=7USN0G8Nj6bFP0DAG8wpDATUtQ4+Fo+i57WTNeIkt9o=;
+        b=nTSSNjPUWhmBi6QE9TrovC10TivkFuscHH5TfB1KplZLvYB58vHcvs1w160DwI/o9T
+         GW9BkcW6bwHuLyhYld0v5od66urN8Ca/Taexqodr5ZzdOhPSS4fpc9prfUBoC6lqmiZ6
+         /O8UwVWXzgcPNUXIR6lhk6TulY7O8/E0ea3pwdbozG01Mqg0gqQ2r7wPFwS8yeyzHb7V
+         dW8qrxHY1HT3F+AmdMT4w/rnKujphX9GpOKb3FwoYLuoyJGa8+LH9yZ0/0ANyEwiqxSG
+         Mdn9s1AG9It7rUHhG85Zv7sbetoGYiynPdsTzNr+Yd0QJbyI/4VDQJIr/+lHgrbl1QF8
+         gBuw==
+X-Gm-Message-State: ACrzQf3OOo0xafpxFgTINhDG7ipLHgRSFt2Ak3HFrIeRcR7VkNk2RrBW
+        RwehpdozSzhHoT10GfjSo437Nobw3wz8vEXwA1dYww==
+X-Google-Smtp-Source: AMsMyM7561mKq4Buhe3zDStvs0P4R0k11DgxiwW71lUIvN+scEkFvD5qN931ug979+El3bYeMCLFhuO0FxQfFbUIUN8=
+X-Received: by 2002:aa7:d6d1:0:b0:463:ba50:e574 with SMTP id
+ x17-20020aa7d6d1000000b00463ba50e574mr42357603edr.158.1668005323470; Wed, 09
+ Nov 2022 06:48:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20221108030342.1127216-1-srinivas.pandruvada@linux.intel.com> <20221108030342.1127216-3-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20221108030342.1127216-3-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Nov 2022 15:48:13 +0100
-Message-ID: <CAJZ5v0jD-a__naERH3MsB1yDQwNkwKcL=aSP3JEdiD11s76gDA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] powercap: idle_inject: Add begin/end callbacks
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rui.zhang@intel.com, rafael@kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
+References: <20221109043845.16617-1-balamanikandan.gunasundar@microchip.com> <CAPDyKFo+FUAZ=1Vu4+503ch5_Wrw47BanTjdB=7J8XhRwczyqg@mail.gmail.com>
+In-Reply-To: <CAPDyKFo+FUAZ=1Vu4+503ch5_Wrw47BanTjdB=7J8XhRwczyqg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Nov 2022 15:48:32 +0100
+Message-ID: <CACRpkdYeJ0NuJr_RF10oMAEuhYTBfaLfHoZ=b3A2f4BqXkvzOQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: atmel-mci: Convert to gpio descriptors
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>,
+        ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, 3chas3@gmail.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 4:04 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> The actual CPU Idle percent can be different than what can be observed
-> from the hardware.
+On Wed, Nov 9, 2022 at 1:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> On Wed, 9 Nov 2022 at 05:39, Balamanikandan Gunasundar
+(...)
+> > --- a/drivers/mmc/host/atmel-mci.c
+> > +++ b/drivers/mmc/host/atmel-mci.c
+> > @@ -19,7 +19,8 @@
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_device.h>
+> > -#include <linux/of_gpio.h>
+> > +#include <linux/irq.h>
+> > +#include <linux/gpio/consumer.h>
 
-Can you expand this a bit, please?  It is not clear what the "CPU idle
-percent" and "observed from the hardware" phrases mean here.
+This is nice, but higher up the driver also #include <linux/gpio.h>
+so delete that line too, <linux/gpio/consumer.h> should be enough.
 
-> Since the objective for CPU Idle injection is for
-> thermal control, the idle percent observed by the hardware is more
-> relevant.
->
-> To account for hardware feedback the actual runtime/idle time should be
-> adjusted.
->
-> Add a capability to register a begin and end callback during call to
+> > -                       of_get_named_gpio(cnp, "cd-gpios", 0);
+> > +                       devm_gpiod_get_from_of_node(&pdev->dev, cnp,
+> > +                                                   "cd-gpios",
+> > +                                                   0, GPIOD_IN, "cd-gpios");
+(...)
+> >                 pdata->slot[slot_id].wp_pin =
+> > -                       of_get_named_gpio(cnp, "wp-gpios", 0);
+> > +                       devm_gpiod_get_from_of_node(&pdev->dev, cnp,
+> > +                                                   "wp-gpios",
+> > +                                                   0, GPIOD_IN, "wp-gpios");
 
-I would call them "prepare" and "complete" without the "idle_inject_" prefix.
+Hm. Dmitry is trying to get rid of of_get_named_gpio() I think.
 
-> idle_inject_register(). If they are not NULL, then begin callback is
-> called before calling play_idle_precise() and end callback is called
-> after play_idle_precise().
->
-> If begin callback is present and returns non 0 value then
-> play_idle_precise() is not called as it means there is some over
-> compensation.
+But I suppose we can migrate to fwnode later.
 
-This behavior needs to be documented somewhere other than the patch changelog.
+This is at least better than before so go with this for now.
 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  drivers/powercap/idle_inject.c    | 19 ++++++++++++++++++-
->  drivers/thermal/cpuidle_cooling.c |  2 +-
->  include/linux/idle_inject.h       |  4 +++-
->  3 files changed, 22 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-> index e73885bd9065..14968b0ff133 100644
-> --- a/drivers/powercap/idle_inject.c
-> +++ b/drivers/powercap/idle_inject.c
-> @@ -70,6 +70,8 @@ struct idle_inject_device {
->         unsigned int idle_duration_us;
->         unsigned int run_duration_us;
->         unsigned int latency_us;
-> +       int (*idle_inject_begin)(unsigned int cpu);
-> +       void (*idle_inject_end)(unsigned int cpu);
-
-The comment above needs to be updated.  Also please see the remark
-above regarding callback names.
-
->         unsigned long cpumask[];
->  };
->
-> @@ -132,6 +134,7 @@ static void idle_inject_fn(unsigned int cpu)
->  {
->         struct idle_inject_device *ii_dev;
->         struct idle_inject_thread *iit;
-> +       int ret;
->
->         ii_dev = per_cpu(idle_inject_device, cpu);
->         iit = per_cpu_ptr(&idle_inject_thread, cpu);
-> @@ -141,8 +144,18 @@ static void idle_inject_fn(unsigned int cpu)
->          */
->         iit->should_run = 0;
->
-> +       if (ii_dev->idle_inject_begin) {
-> +               ret = ii_dev->idle_inject_begin(cpu);
-> +               if (ret)
-> +                       goto skip;
-> +       }
-> +
->         play_idle_precise(READ_ONCE(ii_dev->idle_duration_us) * NSEC_PER_USEC,
->                           READ_ONCE(ii_dev->latency_us) * NSEC_PER_USEC);
-> +
-> +skip:
-> +       if (ii_dev->idle_inject_end)
-> +               ii_dev->idle_inject_end(cpu);
->  }
->
->  /**
-> @@ -302,7 +315,9 @@ static int idle_inject_should_run(unsigned int cpu)
->   * Return: NULL if memory allocation fails, idle injection control device
->   * pointer on success.
->   */
-> -struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
-> +struct idle_inject_device *idle_inject_register(struct cpumask *cpumask,
-> +                                               int (*idle_inject_begin)(unsigned int cpu),
-> +                                               void (*idle_inject_end)(unsigned int cpu))
-
-Instead of modifying this, I would add something like
-idle_inject_register_full() that will take the callback arguments and
-will be called internally by idle_inject_register().
-
->  {
->         struct idle_inject_device *ii_dev;
->         int cpu, cpu_rb;
-> @@ -315,6 +330,8 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
->         hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->         ii_dev->timer.function = idle_inject_timer_fn;
->         ii_dev->latency_us = UINT_MAX;
-> +       ii_dev->idle_inject_begin = idle_inject_begin;
-> +       ii_dev->idle_inject_end = idle_inject_end;
->
->         for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
->
-> diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
-> index 4f41102e8b16..e8b35b3b5767 100644
-> --- a/drivers/thermal/cpuidle_cooling.c
-> +++ b/drivers/thermal/cpuidle_cooling.c
-> @@ -184,7 +184,7 @@ static int __cpuidle_cooling_register(struct device_node *np,
->                 goto out;
->         }
->
-> -       ii_dev = idle_inject_register(drv->cpumask);
-> +       ii_dev = idle_inject_register(drv->cpumask, NULL, NULL);
-
-So this change would not be necessary any more.
-
->         if (!ii_dev) {
->                 ret = -EINVAL;
->                 goto out_kfree;
-> diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
-> index fb88e23a99d3..73f3414fafe2 100644
-> --- a/include/linux/idle_inject.h
-> +++ b/include/linux/idle_inject.h
-> @@ -11,7 +11,9 @@
->  /* private idle injection device structure */
->  struct idle_inject_device;
->
-> -struct idle_inject_device *idle_inject_register(struct cpumask *cpumask);
-> +struct idle_inject_device *idle_inject_register(struct cpumask *cpumask,
-> +                                               int (*idle_inject_begin)(unsigned int cpu),
-> +                                               void (*idle_inject_end)(unsigned int cpu));
->
->  void idle_inject_unregister(struct idle_inject_device *ii_dev);
->
-> --
+Yours,
+Linus Walleij
