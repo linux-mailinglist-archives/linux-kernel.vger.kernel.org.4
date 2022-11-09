@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67AE6226D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9205F6226D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiKIJYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S230118AbiKIJYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiKIJYR (ORCPT
+        with ESMTP id S230050AbiKIJYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:24:17 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8971C904
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:24:16 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id v81so18181775oie.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:24:16 -0800 (PST)
+        Wed, 9 Nov 2022 04:24:12 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E750B1AD8A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:24:10 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id k19so24842831lji.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:24:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9aoSzj5gFxWAAaDB9wA+hoVy7J4arsSLOOrNC4UGVPg=;
-        b=opMudCvE/uIcxq/mbzLqp6Usd8n7tmy8E0goFgUu1BbD32iPe2CKZjwkTqAy7o1BCd
-         8EzTT7m5Ouxrlf1jH8qJcOeiEybtjjXDCzzbcDSosBMzhV/dH0AsPUvMbMLixIXP1BKF
-         F3IHse1rYDvu0U9A9vKndRo8384wJIUpdZuE+DngltUsVnHJ2+vjBSPC3JkmIFYT5BIl
-         7ygUfcxHSpEQPFTu4ArGfKKkqtkigq2xFUlczC/1EEoi3Wu0N3Q/TjyYUX4aSmY6NbYG
-         ykenkvWEgSzbVwhJotI0hPJ/bzSxggLipq87CHL/tQ8FbFioei4J1zjCIZmqTp4RtKBx
-         lmjw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0gm5yfU9YziCMwLNsyVuPxY75pXMz7VSRfqIfnoUFvE=;
+        b=eAz2QvzAzn/m+Dfbq4RDigAZs9DY3fb/ppo0otCSBB0rL6JKxIhyMVX5z5qBd3TWR/
+         esfHXVQT5OwDFrlQbFBn5UWr2a6+Rfd+IxmecJWkbEJBIUvMivnslwveb9VDfXILW4xa
+         gY7l0U4qXQgwg0jG1+gtHBqYyce5aPFtHuwpGAxdPTs+n7j8fLlf+X8FRQfAtSxn8eGl
+         mCCYbC8giysrnBFstKTI+K/cdUyReS/wTi3X/bTofv+jc2IyXO92OFHqd4Fob3YEW4h8
+         5Z4EYgQs5XZ+KtqQwPwsX7otQWYOwDIF17QTI2Gkap78a2tTMVZwp906nXUjxpbCqf57
+         vYdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9aoSzj5gFxWAAaDB9wA+hoVy7J4arsSLOOrNC4UGVPg=;
-        b=GBLSXhE4OtThWztkRXX2xYsQwIgX8+UInFjYLFPowOfd9y5Je4I3+PRoznOVmRD7VS
-         I/KVp7j+lPKbkbW2CPp4A9TsYtrwx3dB+2D7R+ciB4/r9qx7Pst9aNIIJQF33M4BeQMa
-         cO3rnJB7Wwb5O7PClQ7urpX6i1emyub5QI5jxmsmLbVyh/CV86JG/fUrMNYRncAN6F+W
-         x6PUG2z0Azo0bh1tkBH9uAMM+S5QDlKD46x3nl+onK2ocLK2tqkAgf0p7djYuDBOsqhO
-         ryOQMwVgV61/A4qMqJaO7FgnfBHlmWKoiNwlHzR5LE2G10/Kei3NxSeX4htpt6CJE4Rg
-         NHYw==
-X-Gm-Message-State: ACrzQf0w+XDxVU2MN6CrbEC4wfdzmm88kJqFcjv3Y6BxUhXO8LxF4H5G
-        puoKoNdcf4xQRp8TxJEHzGXAjTuOeQVzrJO5rnM=
-X-Google-Smtp-Source: AMsMyM666Vl2iG/RCacDGcDpyIKxeGR42x8l3wbaEqUxXZXwmG4k8d3KEDmqlQ1ad4SknwzzmeqVXFoDw+JUINcqNmc=
-X-Received: by 2002:aca:e108:0:b0:345:a189:fea9 with SMTP id
- y8-20020acae108000000b00345a189fea9mr32923011oig.129.1667985856146; Wed, 09
- Nov 2022 01:24:16 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gm5yfU9YziCMwLNsyVuPxY75pXMz7VSRfqIfnoUFvE=;
+        b=B1XbCori7kdSjbJff6qXz4szq05pUm1Uw1K6B2qSAGrbRsDDI+7FDE7bINpVZa/ZRg
+         242MGlFG2yqTxq14UtR7WBvcZ2JUMtRlqZlVB5KtYXYjP/v95h18kBZZIr4xs2l02GN1
+         ll2wLzaTPKeZnSQ+oBCK1lV+AF37XRYM+zhNCWQG72BpGrhW73Qb4iMX+2ObdYiqKCcF
+         DQqeGWK4BV92qZQRVPhQku+FS94W/YKs53nRsnEX86WKoXoV+H0R/b4i6raT85RGVRCt
+         QEJjweEcJTYaXgdVPiol8Mid5194Ck7gGrF5FLNVWKKh6LGRXxk3Nta8t8Fqgj1HexRc
+         2rkw==
+X-Gm-Message-State: ACrzQf02gm5uzCIrPvMTsEQ96RJovQOFLYcumOTsrOqX1bvLCZS+rsOT
+        98FrgHB/nq2dYHQRq9Zz17hKs+1C52vqhg==
+X-Google-Smtp-Source: AMsMyM5UI1gFIlHma+VcJxWK8k5Kni7jsznGK0vbSHYejZElBiiGKVZcM7EDMrppBCrBZxji9Hvu6g==
+X-Received: by 2002:a2e:350d:0:b0:26d:e73c:e018 with SMTP id z13-20020a2e350d000000b0026de73ce018mr8186724ljz.391.1667985849333;
+        Wed, 09 Nov 2022 01:24:09 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id g19-20020a2ea4b3000000b0026de1bf528esm2084311ljm.119.2022.11.09.01.24.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 01:24:08 -0800 (PST)
+Message-ID: <a588a90e-a8ab-7b43-a14b-101bb9f590db@linaro.org>
+Date:   Wed, 9 Nov 2022 10:24:07 +0100
 MIME-Version: 1.0
-References: <20221109084142.226960-1-zyytlz.wz@163.com> <Y2to4/kH6Gu+ykpk@kroah.com>
-In-Reply-To: <Y2to4/kH6Gu+ykpk@kroah.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Wed, 9 Nov 2022 17:24:05 +0800
-Message-ID: <CAJedcCwzQj7pLzejX01PeuwL3a-DwRFmAEBLR-CR3_bAc0tx1g@mail.gmail.com>
-Subject: Re: [PATCH v6 RESEND] misc: sgi-gru: fix use-after-free error in
- gru_set_context_option, gru_fault and gru_handle_user_call_os
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, zhengyejian1@huawei.com,
-        dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, alex000young@gmail.com,
-        security@kernel.org, sivanich@hpe.com, lkp@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v8 2/2] dt-bindings: hpet: add loongson-2 hpet
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev
+References: <20221103065351.32603-1-zhuyinbo@loongson.cn>
+ <20221103065351.32603-2-zhuyinbo@loongson.cn>
+ <b0aed9f8-f82e-3d74-4299-4d77445c2170@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b0aed9f8-f82e-3d74-4299-4d77445c2170@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=889=E6=
-=97=A5=E5=91=A8=E4=B8=89 16:46=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Nov 09, 2022 at 04:41:42PM +0800, Zheng Wang wrote:
-> > Gts may be freed in gru_check_chiplet_assignment.
-> > The caller still use it after that, UAF happens.
-> >
-> > Fix it by introducing a return value to see if it's in error path or no=
-t.
-> > Free the gts in caller if gru_check_chiplet_assignment check failed.
-> >
-> > Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-> > Reported-by: Zheng Wang <hackerzheng666@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
->
-> Why the blank line?
+On 09/11/2022 10:19, Yinbo Zhu wrote:
+> Hi maintainer,
+> 
+> please help me merge it to upstream.
+> in addition, this patch need rely on 
+> "https://patchwork.kernel.org/project/linux-clk/list/?series=691497"
 
-> Sorry for the spelling problem, fixed it next version
+Why pinging for v8? Didn't you have v9 and v10?
 
-> And the kernel test robot didn't find this issue, right?
->
+Several of your Loongson patches had many build errors, pointed out by
+lkp. Therefore I have doubts that you test these extensively. This might
+be the reason why your patches float around...
 
-Yes, it helped with the test and found an unused variable. I added
-this line as the mail suggested
-("If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>").
+Best regards,
+Krzysztof
 
-Should I remove it?
-
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > Acked-by: Dimitri Sivanich <sivanich@hpe.com>
->
-> You can not have a reported-by and a signed-off-by for the same person
-> with different email addresses.  You do not need both if it is you, just
-> use the signed-off-by line.
->
-
-Thanks very much for your explaination. I'll send another patch as
-soon as possible.
-
-Best Regards,
-Zheng Wang
