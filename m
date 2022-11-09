@@ -2,124 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153E5622993
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0649A62299A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiKILGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S230229AbiKILGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiKILGW (ORCPT
+        with ESMTP id S230140AbiKILGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:06:22 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B311AF04
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:06:20 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id r12so25127929lfp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:06:20 -0800 (PST)
+        Wed, 9 Nov 2022 06:06:32 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7E22B3C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:06:31 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id i5-20020a1c3b05000000b003cfa97c05cdso1004809wma.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:06:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n8RAA/2JkoTGNyapGh2q9Beoc29YH7Z+Geb7XyNgR3w=;
-        b=lyopQQp5w5KQZH7Nz8eDdXrkpDTC7vbOta+N17UkBLBYc+WoSLfE91Tu/KsVyjQ1F0
-         ClMnjiwGz69CwKtcHBMWNGIEkfFEYRAY/2J08vBQN66S2Jg2EloEU/+8qWXUoo5h9Q4+
-         ULz0QPww49xX25fRPcr5URnv4bFT9rNbvtCu0HfTGbhT9UVJbzdaR2V5+Q/Fy3FK8s3L
-         6oT4xn9/iPIXMUuaf/BqBEw3unC9biw56oemYB1dK0CZGSORq54DcbCjCE4vx+OuIUTH
-         /QubpL38VRrY7cKVJTuts2m5Um0KrxV8wAkW7WxqzebqPYMuIzNJhnCf1VneV3HZQzbg
-         3DAw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bkxuXtDed4rc7dbRvY9+2yDzxFpGHl/JP9vCeNecjEQ=;
+        b=6DFmQR5sbsez/Ge+WY3V6ty840AoV8XrukBvGEINyWwWIa5Atsx6UQyioeb3ThYd1s
+         87Edyh3XI17NuhV9Xv1ikEJTOvzAwntA2hRBdcY1OQVe1wcWysR5z8K8257HmINhRMkF
+         +Ss0VI9GYh4W35My1qvSx8d9WAtR3C6MBL/8gaXeXMJIiBoSaZZvSInCKIktQmFb7wMb
+         JvW7wN/vhoLc0Tuik/alsqmt5DnR8guLjwad/Sd1H55rYZq4+J0qLGKO4zf2qCrKFnfJ
+         cbOxYBOTaoeSFMza9dYvOTuQ1glAgXey9AnoloQzoCu0IePxDHqlmajTlF7PGlacKPJP
+         bP9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n8RAA/2JkoTGNyapGh2q9Beoc29YH7Z+Geb7XyNgR3w=;
-        b=b3bvAY6FQenszLrrWEqAjfLEwvUBI+PsFj+KYu1gWJ/U8BHLdJ9iyo8+sQvF1+wKS9
-         FHKHqyi0JAt2KFBk4Bq8doe9+aGUM9YXRO3P0v0TFSKdbwHjWTD50xB4Ck9q/Bp7vqm/
-         k6w6EFPHogeyizDwYw7F7YmZxuC90STr+JeZZcriy3AFe4zAxwTuw5FZW+pY2X5Wld9w
-         BmFw4+mqZxWgLvzRx4efTBIS8EwmamDsenfT51APxaHAjo4sieuprMfSTSMfVOkZyGAk
-         wB9FYttRUNKugeDRCGRW4m0Zkvd1LYcbMDrVHrp6afBIQqzNtLaA+HlggXMDfybGZVeA
-         KZHA==
-X-Gm-Message-State: ACrzQf3wAVoMM3CrHDD4ZUhcMO4RanA+YDy3W7tUFfuVv1Brjj4zvynN
-        IXVdzVAVqLMgzLsY2JUzXd3Y7w==
-X-Google-Smtp-Source: AMsMyM7053TxcvJmmpde36tojf6fFo5DN2sahl4aQlEoMeEI0Z9V73RJn+15RtH4ssciWd+qNnylNQ==
-X-Received: by 2002:a05:6512:2290:b0:4a2:abab:a37c with SMTP id f16-20020a056512229000b004a2ababa37cmr19576788lfu.609.1667991978941;
-        Wed, 09 Nov 2022 03:06:18 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id br26-20020a056512401a00b00492c463526dsm2164102lfb.186.2022.11.09.03.06.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:06:18 -0800 (PST)
-Message-ID: <1a5b2c83-dad2-3683-d374-d431d2049b67@linaro.org>
-Date:   Wed, 9 Nov 2022 14:06:17 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bkxuXtDed4rc7dbRvY9+2yDzxFpGHl/JP9vCeNecjEQ=;
+        b=eBbPo9r1AB/JJswVQKkWCWelCKYxETN0IYgseDUAOEjXVYomnrkobl5nwCM/B298mT
+         D/k5rDlsVLTRcBCiJFuiCY3Od+aY6M/jJnPcN47AsJghBM/OiKX0cG7EXRFTyYb80F2m
+         +2IVINQ6qsdvyk3zclVouRlgPYRtoNcxNSrLz1SseOxqcqBgZv7/aE5cK12wYzTCuVvH
+         WFH6cND2ZFWOHNX4douPImxa2Z+3l56YsVMqDteY9r5uoekssR5j/d7E6+NLkKO0dt54
+         SHX7xXn8123emhuoT5g96rKde/6YmzUUhD1BZ69HA6JC9BO2IeAYfUG5eTl7OOIEGVrv
+         Jegw==
+X-Gm-Message-State: ACrzQf3HCIDzkUxkbYayY1HjHy7I2iRQ2ffDfRnQY/3l9iUsVR8FMEp7
+        jVodbm7v4nJKPu8296rThKb5bg==
+X-Google-Smtp-Source: AMsMyM5BvadxqH6GX2b2GSNjxZbt+RfSbJqqVZaOmo19Ouk7XqKsVYC0osO0pMhoMvRYcjnFslHO4Q==
+X-Received: by 2002:a05:600c:2e46:b0:3cf:8a34:2e98 with SMTP id q6-20020a05600c2e4600b003cf8a342e98mr23430198wmf.30.1667991989984;
+        Wed, 09 Nov 2022 03:06:29 -0800 (PST)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id r2-20020adfdc82000000b0022ae401e9e0sm12999034wrj.78.2022.11.09.03.06.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 03:06:29 -0800 (PST)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     akpm@linux-foundation.org, shuah@kernel.org
+Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Punit Agrawal <punit.agrawal@bytedance.com>
+Subject: [PATCH] selftests: proc: Fix proc-empty-vm build error on non x86_64
+Date:   Wed,  9 Nov 2022 11:06:21 +0000
+Message-Id: <20221109110621.1791999-1-punit.agrawal@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RESEND PATCH] dt-bindings: PCI: qcom,pcie-ep: correct
- qcom,perst-regs
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20221109105555.49557-1-krzysztof.kozlowski@linaro.org>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221109105555.49557-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 13:55, Krzysztof Kozlowski wrote:
-> qcom,perst-regs is an phandle array of one item with a phandle and its
-> arguments.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->   Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> index 977c976ea799..5aa590957ee4 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> @@ -47,8 +47,10 @@ properties:
->                    enable registers
->       $ref: "/schemas/types.yaml#/definitions/phandle-array"
->       items:
-> -      minItems: 3
-> -      maxItems: 3
-> +      - items:
-> +          - description: Syscon to TCSR system registers
-> +          - description: Perst enable offset
-> +          - description: Perst separateion enable offset
+The proc-empty-vm test is implemented for x86_64 and fails to build
+for other architectures. Rather then emitting a compiler error it
+would be preferable to only build the test on supported architectures.
 
-typo: separation.
+Mark proc-empty-vm as a test for x86_64 and customise to the Makefile
+to build it only when building for this target architecture.
 
-With that fixed:
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: 5bc73bb3451b ("proc: test how it holds up with mapping'less process")
+Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
+---
+ tools/testing/selftests/proc/Makefile | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
->   
->     interrupts:
->       items:
-
+diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
+index cd95369254c0..6b31439902af 100644
+--- a/tools/testing/selftests/proc/Makefile
++++ b/tools/testing/selftests/proc/Makefile
+@@ -1,14 +1,18 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++
++# When ARCH not overridden for crosscompiling, lookup machine
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++
+ CFLAGS += -Wall -O2 -Wno-unused-function
+ CFLAGS += -D_GNU_SOURCE
+ LDFLAGS += -pthread
+ 
+-TEST_GEN_PROGS :=
++TEST_GEN_PROGS_x86_64 += proc-empty-vm
++
+ TEST_GEN_PROGS += fd-001-lookup
+ TEST_GEN_PROGS += fd-002-posix-eq
+ TEST_GEN_PROGS += fd-003-kthread
+ TEST_GEN_PROGS += proc-loadavg-001
+-TEST_GEN_PROGS += proc-empty-vm
+ TEST_GEN_PROGS += proc-pid-vm
+ TEST_GEN_PROGS += proc-self-map-files-001
+ TEST_GEN_PROGS += proc-self-map-files-002
 -- 
-With best wishes
-Dmitry
+2.30.2
 
