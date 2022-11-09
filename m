@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F56A622E67
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3407622E7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiKIOwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
+        id S231816AbiKIOyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiKIOwC (ORCPT
+        with ESMTP id S231747AbiKIOyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:52:02 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCCB1115
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:52:00 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id u6so17279656plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XeOFALjP4//bjPWLGTjPjIDysDczrY32pqpS/JBJ2aM=;
-        b=dzc2j21Z19okNpdO/OG3vUOhmVC//w/sykljjJTVJPG9Bwyi9Dg3GqsAX8V6j4q58k
-         Jzwfq2I5a8tktAdnuywWGW1D71R0jq1CQ33O6h0k8v1xyqOyXQ3DCygTa//OdE/Qczuj
-         rqofOhdMAXa8nSHmLrpMM58HWgun+/+buQiLWVWtldZVCJmTabOe+ZnRO17Saux+xPep
-         B4WHFfFjQKAdQxVfx2SUIi5wzcNpl4jFEoY0GGSkYLz4YTh7MTk5rP/0URlZpNEz28pR
-         zW5z0xsNpW7DZheVbJBSS8hEvlzJnAa3Mii13K7mIT3MN/AGpE7PwpvmRlICa+umCy8E
-         gsaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XeOFALjP4//bjPWLGTjPjIDysDczrY32pqpS/JBJ2aM=;
-        b=OcL8d20UoTTh3vunO8hf9ejmZ4i5Vbm0M19nLKHgbsoWTs4cfHtEdpcPfUWsH7yAYq
-         Ub0QxMFz11i/hRn34yrZke3ZPJfxyZRKK1Iim2pZNVp81Kh/7HWmjajtRKN5sM4WUowS
-         5IkzZOFxyjSFAoXK2jDooHmu61wdbjRwYfCtN9jXy2GcThONpyZyEx7jzvWkug5W5yVp
-         KJfgfvamGO7+N43bLV7MJrhJexRNqooMN87n0pmh3/NDyBmNdWMftMTXdKOz3NOZ5szy
-         TVALd3/Wqw8DymlGigGMfGjyo4blkQx9ZhHZTzzRUcE2gGhl1rJtxJR++/P+ToRglhlD
-         u8lg==
-X-Gm-Message-State: ACrzQf2oOKpoBzrhVb30lMsNlhVIxZr8JJXlecuB6vRP8KJrz+evcBCe
-        5ZkxiNEvRU0eVKz8qUJRGE3+G/OxDenDkA==
-X-Google-Smtp-Source: AMsMyM7cS/NQlLGyLM98aZixQixRLTspiMLHh8S33ld8nKp+9Cn7QtIiI2O2s0Q+Rpwuhtg5XFXL5g==
-X-Received: by 2002:a17:902:b68b:b0:186:aee0:53ec with SMTP id c11-20020a170902b68b00b00186aee053ecmr62375926pls.90.1668005519533;
-        Wed, 09 Nov 2022 06:51:59 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170902710200b00176b3d7db49sm9224863pll.0.2022.11.09.06.51.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 06:51:58 -0800 (PST)
-Date:   Wed, 9 Nov 2022 14:51:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
-Message-ID: <Y2u+i1Qd9HkuwlGr@google.com>
-References: <20220919093453.71737-1-likexu@tencent.com>
- <20220919093453.71737-3-likexu@tencent.com>
- <Y1sKf/PgwHwtAibK@google.com>
- <107f4040-e4cd-82df-01bc-f0d6a22be053@gmail.com>
+        Wed, 9 Nov 2022 09:54:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677231DA57
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668005524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yAtqxD6uMe+sNbqq4ePJ7rwySMmDyFKal63j5GUG5Ss=;
+        b=Q/6rNdUMyOQg88HNteP4Z6/zpRycP7J0XtkF73Lp5DZAA5EcfvuQ9bkOtSvu3fT6Z+c1pL
+        2l66SGcTi4C9TuhsuAT8eQwwBEnQ57n5eL5PebKdmH79MvHH4yeuw9HOTX8G5g/MdzUsxl
+        PdbCUuJhQXAscBShjWILb8PY1+70d2c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-Cz_8y1XwOuOQt5ue4-h3zA-1; Wed, 09 Nov 2022 09:52:02 -0500
+X-MC-Unique: Cz_8y1XwOuOQt5ue4-h3zA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 955AB8564FD;
+        Wed,  9 Nov 2022 14:52:00 +0000 (UTC)
+Received: from virtlab511.virt.lab.eng.bos.redhat.com (virtlab511.virt.lab.eng.bos.redhat.com [10.19.152.198])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F0A2D1121320;
+        Wed,  9 Nov 2022 14:51:59 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     thomas.lendacky@amd.com, jmattson@google.com, seanjc@google.com
+Subject: [PATCH 11/11] x86, KVM: remove unnecessary argument to x86_virt_spec_ctrl and callers
+Date:   Wed,  9 Nov 2022 09:51:56 -0500
+Message-Id: <20221109145156.84714-12-pbonzini@redhat.com>
+In-Reply-To: <20221109145156.84714-1-pbonzini@redhat.com>
+References: <20221109145156.84714-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <107f4040-e4cd-82df-01bc-f0d6a22be053@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,17 +60,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022, Like Xu wrote:
-> On 28/10/2022 6:47 am, Sean Christopherson wrote:
-> > What happens if userspace sets X86_FEATURE_PERFCTR_CORE when its not supported?
-> > E.g. will KVM be coerced into taking a #GP on a non-existent counter?
-> 
-> I'm getting a bit tired of this generic issue, what does KVM need to do when
-> the KVM user space sets a capability that KVM doesn't support (like cpuid).
-> Should it change the guest cpuid audibly or silently ? Should it report an
-> error when the guest uses this unsupported capability at run time, or should
-> it just let the KVM report an error when user space setting the cpuid ?
+x86_virt_spec_ctrl only deals with the paravirtualized
+MSR_IA32_VIRT_SPEC_CTRL now and does not handle MSR_IA32_SPEC_CTRL
+anymore; remove the corresponding, unused argument.
 
-KVM should do nothing unless the bogus CPUID can be used to trigger unexpected
-and/or unwanted behavior in the kernel, which is why I asked if KVM might end up
-taking a #GP.
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/include/asm/spec-ctrl.h | 10 +++++-----
+ arch/x86/kernel/cpu/bugs.c       |  2 +-
+ arch/x86/kvm/svm/svm.c           |  4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/include/asm/spec-ctrl.h b/arch/x86/include/asm/spec-ctrl.h
+index 5393babc0598..cb0386fc4dc3 100644
+--- a/arch/x86/include/asm/spec-ctrl.h
++++ b/arch/x86/include/asm/spec-ctrl.h
+@@ -13,7 +13,7 @@
+  * Takes the guest view of SPEC_CTRL MSR as a parameter and also
+  * the guest's version of VIRT_SPEC_CTRL, if emulated.
+  */
+-extern void x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bool guest);
++extern void x86_virt_spec_ctrl(u64 guest_virt_spec_ctrl, bool guest);
+ 
+ /**
+  * x86_spec_ctrl_set_guest - Set speculation control registers for the guest
+@@ -24,9 +24,9 @@ extern void x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bo
+  * Avoids writing to the MSR if the content/bits are the same
+  */
+ static inline
+-void x86_spec_ctrl_set_guest(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl)
++void x86_spec_ctrl_set_guest(u64 guest_virt_spec_ctrl)
+ {
+-	x86_virt_spec_ctrl(guest_spec_ctrl, guest_virt_spec_ctrl, true);
++	x86_virt_spec_ctrl(guest_virt_spec_ctrl, true);
+ }
+ 
+ /**
+@@ -38,9 +38,9 @@ void x86_spec_ctrl_set_guest(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl)
+  * Avoids writing to the MSR if the content/bits are the same
+  */
+ static inline
+-void x86_spec_ctrl_restore_host(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl)
++void x86_spec_ctrl_restore_host(u64 guest_virt_spec_ctrl)
+ {
+-	x86_virt_spec_ctrl(guest_spec_ctrl, guest_virt_spec_ctrl, false);
++	x86_virt_spec_ctrl(guest_virt_spec_ctrl, false);
+ }
+ 
+ /* AMD specific Speculative Store Bypass MSR data */
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 6ec0b7ce7453..3e3230cccaa7 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -200,7 +200,7 @@ void __init check_bugs(void)
+  * MSR_IA32_SPEC_CTRL for SSBD.
+  */
+ void
+-x86_virt_spec_ctrl(u64 guest_spec_ctrl, u64 guest_virt_spec_ctrl, bool setguest)
++x86_virt_spec_ctrl(u64 guest_virt_spec_ctrl, bool setguest)
+ {
+ 	u64 guestval, hostval;
+ 	struct thread_info *ti = current_thread_info();
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index cf1aed25f4ab..9f88c8e6766e 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3984,7 +3984,7 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
+ 	 * being speculatively taken.
+ 	 */
+ 	if (!static_cpu_has(X86_FEATURE_V_SPEC_CTRL))
+-		x86_spec_ctrl_set_guest(svm->spec_ctrl, svm->virt_spec_ctrl);
++		x86_spec_ctrl_set_guest(svm->virt_spec_ctrl);
+ 
+ 	svm_vcpu_enter_exit(vcpu, spec_ctrl_intercepted);
+ 
+@@ -3992,7 +3992,7 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
+ 		reload_tss(vcpu);
+ 
+ 	if (!static_cpu_has(X86_FEATURE_V_SPEC_CTRL))
+-		x86_spec_ctrl_restore_host(svm->spec_ctrl, svm->virt_spec_ctrl);
++		x86_spec_ctrl_restore_host(svm->virt_spec_ctrl);
+ 
+ 	if (!sev_es_guest(vcpu->kvm)) {
+ 		vcpu->arch.cr2 = svm->vmcb->save.cr2;
+-- 
+2.31.1
+
