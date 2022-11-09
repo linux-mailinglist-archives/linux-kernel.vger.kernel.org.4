@@ -2,85 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49316229FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0F76229FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiKILPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S230335AbiKILPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:15:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiKILPB (ORCPT
+        with ESMTP id S229578AbiKILPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:15:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FA12E9F0;
-        Wed,  9 Nov 2022 03:14:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7418E619FA;
-        Wed,  9 Nov 2022 11:14:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83DD8C433B5;
-        Wed,  9 Nov 2022 11:13:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667992441;
-        bh=8fVsvvaNGj3y/jPyL1qz0mFE/iwEAcYJO3n8p9cc0Lk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eVlgrmUzCNOXPPw2lGCQVe5SK14nZtTGpJ+4IMELINPp+QfbUukL6cic5VvHclJUK
-         0SKoFAsh3nufqLsT8dqPOLgX9wilfILenbZoq11hm8M6rQ9LOzs+eJWIKCcwFU2aj+
-         q33I4H3IULsuE7Tmfq5cYOOxuGoG0HhLZXXjdXIIWSKmbOAwuFe0HhnvFvMMpf98n3
-         Wx/xPR9+nT+MZkpycWbYa46hE4AQOVHVQv5Ds/6jRSOvasjQLvQVNZv9/XzX0NK9dw
-         YmclLtTGnxSBBGLsb2gzJ0iX39s1EO7lj+M/ixN6Qe4HMmD+NMv1uF2loAwDxglBLN
-         ReMoVK3LCyJpQ==
-Message-ID: <21d373bc-c69b-866a-b6c2-58966f274eea@kernel.org>
-Date:   Wed, 9 Nov 2022 12:13:55 +0100
+        Wed, 9 Nov 2022 06:15:20 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67926252;
+        Wed,  9 Nov 2022 03:14:53 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id h21so10158949qtu.2;
+        Wed, 09 Nov 2022 03:14:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2LoQEn5/8EtgWAYYJZo0hd0ZjYLVH9VwKS+TlrTIk8U=;
+        b=zwUZbdy4a1Hlm8/4LWUX1PK3WOAYybBzupQ7ihYjU2gTT2Q28TDxCfhhpKCXjPFpDn
+         sVpbEk74sTXNfOu+kKKubadymyfnqwisH3OpZ//uEx9/DuXMyaPMDLMX0kozd2LC6IuV
+         NKb+LoYdu9FHWDmGZTmYM69tmaV+2fYDHoZT2Cu0P0VhBsKWD4syMG7BFpK7sWv0BnBP
+         m+ZmeLY4JTnm8v2dzTHQTTEk6IkUIMjS4pfxaOyTG1tDCGW5SBopBeLmjK0wSUykA2mE
+         yz8VQkcDRSAQOCOSshlqnQ9anblyBDHOUOe63w7E/Wuvp5M7psbw6pJjm0siA3Ekiejo
+         uvIg==
+X-Gm-Message-State: ACrzQf0SeKMn5I6EWYcIQVfCv+lMxQpyb8+sOrbgm1CR9VdLx5sjJZ3c
+        YuaxIi9lkQpBYbB2h7ZFcERQzN8e7T0r4AjuK3EQwh1q
+X-Google-Smtp-Source: AMsMyM5nuCDdu/kzC0URQJdfcaMgsRlSh9RigkZ48kqx1mrKcKMKMgQEFgO+YfQ0gFCzRqd3Fki+zuGBGYncCOV1EMA=
+X-Received: by 2002:ac8:690f:0:b0:3a5:4678:5b24 with SMTP id
+ bt15-20020ac8690f000000b003a546785b24mr865490qtb.411.1667992492912; Wed, 09
+ Nov 2022 03:14:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 3/7] arm64: dts: fsd: add sysreg device node
-Content-Language: en-US
-To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
-        wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        alim.akhtar@samsung.com
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sriranjani P <sriranjani.p@samsung.com>
-References: <20221021095833.62406-1-vivek.2311@samsung.com>
- <CGME20221021102628epcas5p1ecf91523d9db65b066bc4f2cb693ea45@epcas5p1.samsung.com>
- <20221021095833.62406-4-vivek.2311@samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20221021095833.62406-4-vivek.2311@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221109105114.32886-1-andriy.shevchenko@linux.intel.com> <20221109105114.32886-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221109105114.32886-2-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 9 Nov 2022 12:14:40 +0100
+Message-ID: <CAJZ5v0grw=PcbLcMmaUSU_spdh7W2tSAy0zyw=08H+Ak82NXNA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] resource: Convert DEFINE_RES_NAMED() to be
+ compound literal
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 11:58, Vivek Yadav wrote:
-> From: Sriranjani P <sriranjani.p@samsung.com>
-> 
-> Add SYSREG controller device node, which is available in PERIC and FSYS0
-> block of FSD SoC.
-> 
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Pankaj Kumar Dubey <pankaj.dubey@samsung.com>
-> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
+On Wed, Nov 9, 2022 at 11:50 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Currently DEFINE_RES_NAMED() can only be used to fill the static data.
+> In some cases it would be convenient to use it as right value in the
+> assignment operation. But it can't be done as is, because compiler has
+> no clue about the data layout. Converting it to be a compound literal
+> allows the above mentioned usage.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-You sent a v2 with correct CC list but I still would like to express
-here my disappointment that you ignored kernel CC rules. You are pushing
-SoC stuff bypassing SoC maintainers, so let's make it explicit for
-Patchwork:
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 
-NAK.
-
-Best regards,
-Krzysztof
-
+> ---
+>  include/linux/ioport.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/ioport.h b/include/linux/ioport.h
+> index 27642ca15d93..67d3fb2133b6 100644
+> --- a/include/linux/ioport.h
+> +++ b/include/linux/ioport.h
+> @@ -155,7 +155,7 @@ enum {
+>
+>  /* helpers to define resources */
+>  #define DEFINE_RES_NAMED(_start, _size, _name, _flags)                 \
+> -       {                                                               \
+> +(struct resource) {                                                    \
+>                 .start = (_start),                                      \
+>                 .end = (_start) + (_size) - 1,                          \
+>                 .name = (_name),                                        \
+> --
+> 2.35.1
+>
