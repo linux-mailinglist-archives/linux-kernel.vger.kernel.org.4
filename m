@@ -2,319 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D73B623A27
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0534C623B06
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 05:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbiKJDC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S232186AbiKJEmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 23:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbiKJDC0 (ORCPT
+        with ESMTP id S230323AbiKJEmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:02:26 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3F2A96B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 19:02:24 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id 63so927038ybq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 19:02:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YL3LX46XKYMbjgGL9jFDEJXEOeiqtDCe9nmJNdX8kI4=;
-        b=h6c8zckaVkExEbJMp0nh2SqDzRojVGz6m51ty7zXXHJL772po4nIPsp4KJqxtS/mRA
-         tbX/vpn+W+vKO6KBigpTS/Ce7GyhdyRTZvb3z4RKoOtBQHcPziSKs0tC2UieLrFxFcHx
-         m1BamyDQp+1sK6Iwk5y4pOHWg0zWZ++xRdFr/pke3XrRdiXnahucUgLDUrytrHrvWEqn
-         1Xy/2w3xEMUj/3pcYl8bqJKbZC5seo84/OEbYaXHV2QExa4e96Fa2S1sLuIBTeZcYvQY
-         nl/1BJe7E3X+4hS22+fzrViOoUrK5jBeJBdJiabXVdbSu558rGImir8QJPXdasHpXPyT
-         4/Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YL3LX46XKYMbjgGL9jFDEJXEOeiqtDCe9nmJNdX8kI4=;
-        b=4GsmAAXE+hL4Ftyhuf2uot7fCmTMsrM7p9kQ/YWnydB3k5+bKaSw30eEMJiriH4LB9
-         U+n2/W1KEW7rxnWc6+sM97nLSeWa4xC9sPAtQzPfPG6fkET+TbKfpA02zImkAUpqTldN
-         K5p44gT6w/8j+6zgQZxS7teg7mfE4wHdqt6UTWMAM8s4V96pP6r+xZhWzWTwZcqdQK64
-         509ja7kCAf/yTPDs1aNw8k0jPYZ6Y/BP6uIRPrzzN4sp6dY0L6TGmUVS26Dk0NFcYIYn
-         pzB52X458a7nF0pLDgPugUCIe2O+wavy1AyDmyB9m7EEmQRNZ7KRH2SOtmtkarWYsQED
-         ioKg==
-X-Gm-Message-State: ANoB5pkkUzR/P7cCtZKVn5c4R4cMrso3kUavQEOx7FMIUan/6yktMSAO
-        wKXMRC8t2UJrpZIRD1w31ufhbIClZAQGl1ETCwSy
-X-Google-Smtp-Source: AA0mqf5Uww+041R1DyFGTvzowgmI/f4Oo5kexBhef6PEdFk05t1u2NCtsEqP/8V5TYLlV7ec1slKXfMfbLdMCwx7tEQ=
-X-Received: by 2002:a25:32c8:0:b0:6dc:d157:3984 with SMTP id
- y191-20020a2532c8000000b006dcd1573984mr650817yby.49.1668049342909; Wed, 09
- Nov 2022 19:02:22 -0800 (PST)
+        Wed, 9 Nov 2022 23:42:50 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B72B25C61
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:42:46 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221110044240epoutp0198b7b8fe2e7f02125afc97aec9e915ae~mH4NFyKwi1280612806epoutp01B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:42:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221110044240epoutp0198b7b8fe2e7f02125afc97aec9e915ae~mH4NFyKwi1280612806epoutp01B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1668055360;
+        bh=0iuTAljZ4MdMyzBRe+jAGF2xaM1v4OcplEZ7HOuz478=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=JUgEMZtkrB4z8zjZXFo0c/18BR6fpACzYpNZedPC8CO1gPsum+PaNIZkMugnrmzEA
+         TgpeiYRiAtt6vsfy6A1wCxH9RhbkWkADhBwbtgz7IdIoE+QJbeL/0jGTEKaxv6+V0c
+         8g+KAk4Rl5Uuqvhmmy3kiVfAP+rwLHkaiMnX9SQ4=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221110044239epcas5p25b14d6b9ccc336e503ae2781ef045eee~mH4MBEr8A0567805678epcas5p23;
+        Thu, 10 Nov 2022 04:42:39 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4N78Mb3CLTz4x9Q9; Thu, 10 Nov
+        2022 04:42:35 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F9.6C.01710.B318C636; Thu, 10 Nov 2022 13:42:35 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20221109144433epcas5p3f2186f4dfc528612f75ff068a951758e~l8cbGAYIv2781627816epcas5p3V;
+        Wed,  9 Nov 2022 14:44:33 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221109144433epsmtrp2b75dce1a4b0995efdf10e6003d867bb1~l8cbEsLdp1757517575epsmtrp2d;
+        Wed,  9 Nov 2022 14:44:33 +0000 (GMT)
+X-AuditID: b6c32a49-a41ff700000006ae-c5-636c813bc755
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        84.68.18644.0DCBB636; Wed,  9 Nov 2022 23:44:32 +0900 (KST)
+Received: from FDSFTE308 (unknown [107.122.81.79]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221109144429epsmtip2387935d49e8a485fe7673123bad7cdc6~l8cX3GWr41983819838epsmtip2X;
+        Wed,  9 Nov 2022 14:44:29 +0000 (GMT)
+From:   "Aakarsh Jain" <aakarsh.jain@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Cc:     <m.szyprowski@samsung.com>, <andrzej.hajda@intel.com>,
+        <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <jernej.skrabec@gmail.com>,
+        <benjamin.gaignard@collabora.com>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <stanimir.varbanov@linaro.org>, <dillon.minfei@gmail.com>,
+        <david.plowman@raspberrypi.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <andi@etezian.org>,
+        <alim.akhtar@samsung.com>, <aswani.reddy@samsung.com>,
+        <pankaj.dubey@samsung.com>, <smitha.t@samsung.com>
+In-Reply-To: <5741e444-00b3-16f6-d012-f2b77cf8b0b2@linaro.org>
+Subject: RE: [Patch v2 1/3] arm: exynos: Add new compatible string for
+ Exynos3250 SoC.
+Date:   Wed, 9 Nov 2022 20:14:28 +0530
+Message-ID: <001101d8f449$c78f8010$56ae8030$@samsung.com>
 MIME-Version: 1.0
-References: <20221025184519.13231-1-casey@schaufler-ca.com>
- <20221025184519.13231-7-casey@schaufler-ca.com> <CAHC9VhQ039=X+0edudy64-fpw4C2SwWV_MucbYfXwFKduwnbWA@mail.gmail.com>
- <25913838-c116-ed14-bdc0-3dcc0ce7f67f@schaufler-ca.com>
-In-Reply-To: <25913838-c116-ed14-bdc0-3dcc0ce7f67f@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 9 Nov 2022 22:02:11 -0500
-Message-ID: <CAHC9VhRMUZvXxVezp+1AsHRiesW_wKcU+nzdMj2+nKDasphEpg@mail.gmail.com>
-Subject: Re: [PATCH v1 6/8] LSM: lsm_self_attr syscall for LSM self attributes
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQH93wRx5mB7au8KVEFSf1YZqxrmqQIInJ4oAoPuhXGtyGyWoA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA02TaVBbVRTH5+a95CVo6mOTa6SYvjoqIEuQ4MWytIVpH+oHZopMy9ShmfAk
+        DCGJWWqro4ZibUWk6rRKwiaF4kArtSmEpcECZRE6hTIiWEpCSuiwaa3EOlD6wYRHlW+/c87/
+        3LPcOXzM7zQh4uep9IxWJVNSPB/cei30xYgdhUp59PWqQOSssvJQ7cocB03XunHUc7mFQM1j
+        5Rj6fqCLi6p7h7motXsGR5fmPdFRkx1Hc9VNAC2YHTxUOn8HQ51LngyLa5yLfumo4KGSH1u4
+        6IdeO4HOTYxyUL3lEQedbfmbQMc7ewlkt1kB+uTTXs5OSF+ougDoNnsdoCfqljG63Wwn6Frb
+        Aoe2NH7Go6fGbTz6ct3H9PG+hzhd2twI6OLeCR7ttoTQQw/cRLowKz9BwchyGK2YUcnVOXmq
+        3ETqjX3ZKdnSuGhJhCQevUqJVbICJpFKfTM9Yk+e0rMCSnxYpjR4XOkynY6KSkrQqg16RqxQ
+        6/SJFKPJUWpiNZE6WYHOoMqNVDH61yTR0TFSj/BQvuL8rQmgqQg6Ypy3YEYw5l8M+HxIxsKW
+        svxi4MP3I68AaLvhwlljGcDV1eUNww1gU7kLFAPBesbY8AzhZT+yA8CqvrdZ0RyAN+8Vrot4
+        ZBScHirhegMBZB+AzuY7mNfAyGocjh+7z/MWF5BJ0OhO9qI/uR+WrD3tRZx8Hj4a9vE+IyTj
+        oWOyicuyLxw0zeJexshwWF+zhLH9iOHq3fp1TQC5Gx5rXyNYTRDsWy3Z0AwJ4NIsYjkVVjrb
+        uCz7w8WBZoJlEXTf6+SxLIeuswsbuUp40XYaZzkZdo1V4N42MTIUXuyIYt1b4ZmhJg5bdgv8
+        Ym2Ww/qFsK3qMb8AK6ZWNsoGw2vnz4EvAWXeNJl502TmTROY/6/2HcAbwTOMRleQy+ikGomK
+        ee+/35arCyxg/TzC0tqA3Xk/sgdw+KAHQD5GBQifeClf7ifMkR19n9Gqs7UGJaPrAVLPtr/C
+        RIFytee+VPpsSWx8dGxcXFxs/CtxEipIWFsWJvcjc2V6Jp9hNIz2cR6HLxAZOU0PZaceTNu2
+        mYq0qG7fYGt3ZgB1OLv5z5+NQ1YfZ9mem5HhDaaQ/m9PfZD2+d6qwqSJW8/6xyhv12Qq/kgJ
+        cQb3E+JE48iHJ98pnS66DWNCfwroDiN3DQZd5+3cflCQqljcMTtgC6+ZOeGKPvCP4SnXcw57
+        +zS/sjb5dzeqmw9K23/yRnuGNMU0YNo64kgZPdBl+K2/bvuVSr7ApXWVdaRwJ79ejLprPEFz
+        ieKxt8oydid8VP/r3BaNz2rXkP/Rv7JEUZIiSUarLWkqeIpKDRFZ91pf3zZydVHaRvtmSd59
+        UqpoKBf5XsKXD5Zc7Zr8ZteRxAZyxXEmM7BjOGLFcehlC4XrFDJJGKbVyf4FDEmUYacEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPIsWRmVeSWpSXmKPExsWy7bCSvO6FPdnJBlu2mVo8mLeNzWLxj+dM
+        FvcXf2axOLR5K7vFliuzmS2WHz/AajH/yDlWi+0HH7FYbHwBlL048y6LxfP56xgtXs66x2bR
+        9+Ihs8Xe10Admx5fY7W4vGsOm0XPhq2sFmuP3GW3WHr9IpPFsk1/mCwWbf3CbtG69wi7xd09
+        2xgtWtqOMDlIeKyZt4bRY8fdJYwe15d8YvbYOesuu8fiPS+ZPDat6mTzuHNtD5vH5iX1Hq1H
+        f7F49G1ZxejRdeQ6m8fnTXIep75+Zg/gjeKySUnNySxLLdK3S+DKWP/gGFvBFbGK6atlGhg7
+        hLsYOTkkBEwkrpx7xN7FyMUhJLCDUeLigRWsEAkZif9tx9ghbGGJlf+eQxU9ZZRY93c+C0iC
+        TUBf4v6pHlaQhIjASUaJ/jMtYA6zwGYWibWte1ggWg4ySpw/tZ6xi5GDg1PATqLhsz1It7BA
+        mMSzn91gYRYBFYk/57hAwrwClhL3bq1jhbAFJU7OfAK2jFlAW+Lpzadw9rKFr5khrlOQ+Pl0
+        GVi9iICTRNPO3+wQNeISR3/2ME9gFJ6FZNQsJKNmIRk1C0nLAkaWVYySqQXFuem5xYYFRnmp
+        5XrFibnFpXnpesn5uZsYwWlES2sH455VH/QOMTJxMB5ilOBgVhLh5dbIThbiTUmsrEotyo8v
+        Ks1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qBybrzj+yBnwmFmssCP156YMx8
+        1rPKt9i+LCNbm7v70syGD9dXqu1YPnNrA+v5Lxy6xdcLPz72OdjeeUZg+pI8lYYPmQ8uu9V3
+        M7XPLJ0vK1Yiwy+SwNW1d/vbRgae+TdVXbdOSUqL2z2N8/iFqrSYw3z+Ty7tCyqP95NOYz24
+        fH3M3oboP+taXurGqUd99z7pZj3hrVNVwQpFxe2rAm/wPmgS/6jLL5b8deWJj1aKb1s+6KU4
+        TJ+5v/h3QUB3LKNgyNtttY/P1WUXfmd4p7xng7lWv/s5L7GOTwvPzfuyvbPU+yX/3QaJ9pen
+        K7jnlQTs3Md82NFJ55Z3REVFacKuybxLTFgObti/1DrtJf8OJZbijERDLeai4kQAhMsipZID
+        AAA=
+X-CMS-MailID: 20221109144433epcas5p3f2186f4dfc528612f75ff068a951758e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8
+References: <CGME20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8@epcas5p2.samsung.com>
+        <20221109035507.69086-1-aakarsh.jain@samsung.com>
+        <5741e444-00b3-16f6-d012-f2b77cf8b0b2@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 8:32 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> On 11/9/2022 3:34 PM, Paul Moore wrote:
-> > On Tue, Oct 25, 2022 at 2:48 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> >> Create a system call lsm_self_attr() to provide the security
-> >> module maintained attributes of the current process. Historically
-> >> these attributes have been exposed to user space via entries in
-> >> procfs under /proc/self/attr.
-> >>
-> >> Attributes are provided as a collection of lsm_ctx structures
-> >> which are placed into a user supplied buffer. Each structure
-> >> identifys the security module providing the attribute, which
-> >> of the possible attributes is provided, the size of the
-> >> attribute, and finally the attribute value. The format of the
-> >> attribute value is defined by the security module, but will
-> >> always be \0 terminated. The ctx_len value will be larger than
-> >> strlen(ctx).
-> >>
-> >>         ------------------------------
-> >>         | unsigned int id            |
-> >>         ------------------------------
-> >>         | unsigned int flags         |
-> >>         ------------------------------
-> >>         | __kernel_size_t ctx_len    |
-> >>         ------------------------------
-> >>         | unsigned char ctx[ctx_len] |
-> >>         ------------------------------
-> >>         | unsigned int id            |
-> >>         ------------------------------
-> >>         | unsigned int flags         |
-> >>         ------------------------------
-> >>         | __kernel_size_t ctx_len    |
-> >>         ------------------------------
-> >>         | unsigned char ctx[ctx_len] |
-> >>         ------------------------------
-> >>
-> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> >> ---
-> >>  include/linux/syscalls.h |   2 +
-> >>  include/uapi/linux/lsm.h |  21 ++++++
-> >>  kernel/sys_ni.c          |   3 +
-> >>  security/Makefile        |   1 +
-> >>  security/lsm_syscalls.c  | 156 +++++++++++++++++++++++++++++++++++++++
-> >>  5 files changed, 183 insertions(+)
-> >>  create mode 100644 security/lsm_syscalls.c
-> > ..
-> >
-> >> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-> >> index 61e13b1b9ece..1d27fb5b7746 100644
-> >> --- a/include/uapi/linux/lsm.h
-> >> +++ b/include/uapi/linux/lsm.h
-> >> @@ -9,6 +9,27 @@
-> >>  #ifndef _UAPI_LINUX_LSM_H
-> >>  #define _UAPI_LINUX_LSM_H
-> >>
-> >> +#include <linux/types.h>
-> >> +#include <linux/unistd.h>
-> >> +
-> >> +/**
-> >> + * struct lsm_ctx - LSM context
-> >> + * @id: the LSM id number, see LSM_ID_XXX
-> >> + * @flags: context specifier and LSM specific flags
-> >> + * @ctx_len: the size of @ctx
-> >> + * @ctx: the LSM context, a nul terminated string
-> >> + *
-> >> + * @ctx in a nul terminated string.
-> >> + *     (strlen(@ctx) < @ctx_len) is always true.
-> >> + *     (strlen(@ctx) == @ctx_len + 1) is not guaranteed.
-> >> + */
-> > We can do better than this, or rather we *should* do better than this.
-> > One of the big advantages of creating a new API is we can fix some of
-> > the silly things we have had to do in the past, including the
-> > "sometimes" NUL terminator on strings.  For this LSM syscalls let's
-> > make a promise that all human readable strings will be properly NUL
-> > terminated;
->
-> It requires effort and buffer management to ensure that ctx_len == strlen(ctx)+1,
-> but if you think it's important, sure.
 
-I do, yes.  A safe, familiar, and consistent API is worth a little
-extra work.  Ensuring the human readable strings are always nul
-terminated is familiar to most everyone who has sat in from of a code
-editor, and making sure that the @ctx_len variable indicates the full
-length of the @ctx buffer (both for strings and binary blobs) provides
-a consistent way to manage the context, even if the application isn't
-aware of the exact LSM-specific format.
 
-> >  currently this includes all LSM contexts, and likely will
-> > remain that way forever for various reasons, but let's leave the door
-> > open for arbitrary blobs (see the "special" LSM ID discussion from
-> > earlier in the patchset).  With that in mind I might suggest the
-> > following:
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 09 November 2022 14:31
+> To: Aakarsh Jain <aakarsh.jain=40samsung.com>; linux-arm-
+> kernel=40lists.infradead.org; linux-media=40vger.kernel.org; linux-
+> kernel=40vger.kernel.org; devicetree=40vger.kernel.org
+> Cc: m.szyprowski=40samsung.com; andrzej.hajda=40intel.com;
+> mchehab=40kernel.org; hverkuil-cisco=40xs4all.nl;
+> ezequiel=40vanguardiasur.com.ar; jernej.skrabec=40gmail.com;
+> benjamin.gaignard=40collabora.com; krzysztof.kozlowski+dt=40linaro.org;
+> stanimir.varbanov=40linaro.org; dillon.minfei=40gmail.com;
+> david.plowman=40raspberrypi.com; mark.rutland=40arm.com;
+> robh+dt=40kernel.org; krzk+dt=40kernel.org; andi=40etezian.org;
+> alim.akhtar=40samsung.com; aswani.reddy=40samsung.com;
+> pankaj.dubey=40samsung.com; smitha.t=40samsung.com
+> Subject: Re: =5BPatch v2 1/3=5D arm: exynos: Add new compatible string fo=
+r
+> Exynos3250 SoC.
+>=20
+> On 09/11/2022 04:55, Aakarsh Jain wrote:
+> > Since,MFC v7 support was added for Exynos5420 and Exynos
+> > 3250 SoC with same compatible string =22samsung,mfc-v7=22.As both SoCs
+> > having different hardware properties and having same compatible string
+> > for both SoCs doesn't seems to be correct.
+> > New compatible is added for Exynos3250 SOC which will differentiate
+> > the node properties for both SoCs which support MFC v7.
 > >
-> >   /**
-> >    * struct lsm_ctx - LSM context
-> >    * @id: the LSM id number, see LSM_ID_XXX
-> >    * @flags: context specifier and LSM specific flags
-> >    * @ctx_len: the size of @ctx
-> >    * @ctx: the LSM context, see description
-> >    *
-> >    * For LSMs which provide human readable contexts @ctx will be a nul
-> >    * terminated string and @ctx_len will include the size of the string
-> >    * and the nul terminator, e.g. 'ctx_len == strlen(ctx) + 1'.  For LSMs
-> >    * which provide binary-only contexts @cts will be a binary blob with
-> >    * @ctx_len being the exact value of the blob.  The type of the @ctx,
-> >    * human readable string or binary, can be determined by inspecting
-> >    * both @id and @flags.
->
-> I'd go a touch further, defining LSM_ATTR_BINARY as a flag and demanding
-> that any attribute that isn't a nul terminated string be thus identified,
-> even if it is always binary. Thus, LSM_ATTR_CURRENT and LSM_ATTR_BINARY
-> together would be an error.
+> > Reviewed-by: Tommaso Merciai
+> <tommaso.merciai=40amarulasolutions.com>
+> > Suggested-by: Alim Akhtar <alim.akhtar=40samsung.com>
+> > Signed-off-by: Aakarsh Jain <aakarsh.jain=40samsung.com>
+> > ---
+> >  Documentation/devicetree/bindings/media/s5p-mfc.txt =7C 9 +++++----
+>=20
+> Use subject prefixes matching the subsystem (git log --oneline -- ...).
+>=20
+As with recent commits on Documentation/devicetree/bindings/media/s5p-mfc.t=
+xt with git log --oneline --  ,  subject prefix doesn't seems to be consist=
+ent.
 
-No, the class/format of the context (string or binary, and the LSM
-specific formatting for each) can be deduced from the LSM ID, @id, and
-if necessary the @flags field.  I don't want this API to explicitly
-prevent a binary LSM_ATTR_CURRENT if the rest of the system is
-modified to support it in the future.
+b1394dc151cb media: s5p-mfc: Adding initial support for MFC v10.10
+60641e22599a =5Bmedia=5D s5p-mfc: Use preallocated block allocator always f=
+or MFC v6+
+003611334d55 =5Bmedia=5D s5p-mfc: Add support for MFC v8 available in Exyno=
+s 5433 SoCs
+0da658704136 ARM: dts: convert to generic power domain bindings for exynos =
+DT
+77634289286a ARM: dts: Update clocks entry in MFC binding documentation
+2eae613b95a7 ARM: EXYNOS: Add MFC device tree support
 
-> >    *
-> >    * If a given LSM @id does not define a set of values for use in the
-> >    * @flags field, @flags MUST be set to zero.
-> >    */
-> >   struct lsm_ctx {
-> >     __u32 id;
-> >     __U32 flags;
-> >     __kernel_size_t ctx_len;
-> >     __u8 ctx[];
-> >   };
-> >
-> >> +struct lsm_ctx {
-> >> +       unsigned int            id;
-> >> +       unsigned int            flags;
-> >> +       __kernel_size_t         ctx_len;
-> >> +       unsigned char           ctx[];
-> >> +};
-> > I agree with Greg, we should be explicit about variable sizing, let's
-> > make sure everything in the UAPI header is defined in terms of
-> > __uXX/__sXX.  This includes strings as __u8 arrays.
-> >
-> > Also, I sorta despite the 'let's line all the struct fields up
-> > horizontally!' approach in struct/variable definitions.
->
-> Kids. Got no respect for tradition.
+Closest is ARM: dts.
+so what is your suggestion on this?
 
-I think you meant to say, "Kids.          Got no          respect
- for      tradition."
+Anyway we are in a process of converting this txt file to yaml .=20
 
-> >   I personally
-> > think it looks horrible and it clutters up future patches.  Please
-> > don't do this unless the individual file already does it, and since we
-> > are creating this new please don't :)
-> >
-> >> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
-> >> new file mode 100644
-> >> index 000000000000..da0fab7065e2
-> >> --- /dev/null
-> >> +++ b/security/lsm_syscalls.c
-> >> @@ -0,0 +1,156 @@
-> >> +// SPDX-License-Identifier: GPL-2.0-only
-> >> +/*
-> >> + * System calls implementing the Linux Security Module API.
-> >> + *
-> >> + *  Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
-> >> + *  Copyright (C) Intel Corporation
-> >> + */
-> >> +
-> >> +#include <asm/current.h>
-> >> +#include <linux/compiler_types.h>
-> >> +#include <linux/err.h>
-> >> +#include <linux/errno.h>
-> >> +#include <linux/security.h>
-> >> +#include <linux/stddef.h>
-> >> +#include <linux/syscalls.h>
-> >> +#include <linux/types.h>
-> >> +#include <linux/lsm_hooks.h>
-> >> +#include <uapi/linux/lsm.h>
-> >> +
-> >> +struct feature_map {
-> >> +       char *name;
-> >> +       int feature;
-> >> +};
-> >> +
-> >> +static const struct feature_map lsm_attr_names[] = {
-> >> +       { .name = "current",    .feature = LSM_ATTR_CURRENT, },
-> >> +       { .name = "exec",       .feature = LSM_ATTR_EXEC, },
-> >> +       { .name = "fscreate",   .feature = LSM_ATTR_FSCREATE, },
-> >> +       { .name = "keycreate",  .feature = LSM_ATTR_KEYCREATE, },
-> >> +       { .name = "prev",       .feature = LSM_ATTR_PREV, },
-> >> +       { .name = "sockcreate", .feature = LSM_ATTR_SOCKCREATE, },
-> >> +};
-> >> +
-> >> +/**
-> >> + * lsm_self_attr - Return current task's security module attributes
-> >> + * @ctx: the LSM contexts
-> >> + * @size: size of @ctx, updated on return
-> >> + * @flags: reserved for future use, must be zero
-> >> + *
-> >> + * Returns the calling task's LSM contexts. On success this
-> >> + * function returns the number of @ctx array elements. This value
-> >> + * may be zero if there are no LSM contexts assigned. If @size is
-> >> + * insufficient to contain the return data -E2BIG is returned and
-> >> + * @size is set to the minimum required size. In all other cases
-> >> + * a negative value indicating the error is returned.
-> >> + */
-> >> +SYSCALL_DEFINE3(lsm_self_attr,
-> >> +              struct lsm_ctx __user *, ctx,
-> >> +              size_t __user *, size,
-> >> +              int, flags)
-> > See my comments above about UAPI types, let's change this to something
-> > like this:
-> >
-> > [NOTE: I'm assuming it is safe to use __XXX types in syscall declarations?]
-> >
-> >   SYSCALL_DEFINE3(lsm_self_attr,
-> >                  struct lsm_ctx __user *, ctx,
-> >                  __kernel_size_t __user *, size,
-> >                  __u32, flags)
-> >
-> >> +{
-> >> +       struct lsm_ctx *final = NULL;
-> >> +       struct lsm_ctx *interum;
-> >> +       struct lsm_ctx *ip;
-> >> +       void *curr;
-> >> +       char **interum_ctx;
-> >> +       char *cp;
-> >> +       size_t total_size = 0;
-> >> +       int count = 0;
-> >> +       int attr;
-> >> +       int len;
-> >> +       int rc = 0;
-> >> +       int i;
-> > Ungh, reverse christmas trees ... I kinda hate it from a style
-> > perspective, enough to mention it here, but I'm not going to be petty
-> > enough to say "change it".
->
-> I really don't care. Last I saw reverse christmas tree was the officially
-> recommended style. I don't care one way or the other.
 
-I think it is one of those per-subsystem oddities like it or not.
+> This is a friendly reminder during the review process.
+>=20
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all reques=
+ted
+> changes or keep discussing them.
+>=20
+> Thank you.
+>=20
+> Best regards,
+> Krzysztof
 
-> >
-> > However, if you did want to flip it upside down (normal christmas
-> > tree?) during the respin I would be grateful ;)
-> >
+Thanks for the review.
 
--- 
-paul-moore.com
