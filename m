@@ -2,70 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE006230FA
+	by mail.lfdr.de (Postfix) with ESMTP id 42F316230F8
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiKIRCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S231474AbiKIRCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiKIRBN (ORCPT
+        with ESMTP id S229918AbiKIRBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:01:13 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D212E24F12;
-        Wed,  9 Nov 2022 08:59:35 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id v17so28091765edc.8;
-        Wed, 09 Nov 2022 08:59:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X6qC3u7TJCJ9WDjpawDLknUJdFq/gXX99rp9XUruyx4=;
-        b=RaIY/b1BcdnSf71S65QtqaF9vC+Ze5b9z5MN8vdB70KjGn6145Bq+mPgBFV1ZwUZG4
-         gMyTQ4oM5ctg8UPCNzdZxqfwtlaGG4aQljI2d+2cQQDjTpIimdM6UkrB7Y+GfF4xD8Ha
-         LT/7oXVoBiiqhpglRiXp+Tee3pTRkZqnBxHpP/HQg5twfq63hruMXDErjrYlVLE5jRMs
-         wSV1IgFdhJiHRPPHv/nu1LRIYvUnUG+t2rRD3U3gdKiw6ER6ohlZxYHemB3TIhSuBRmZ
-         vTpPuji5CPlP7dkB020qnV9OQMbFOXwhrjQxU5IasODsjiYNY2/4DQ0YIGFq5rpL9G5Q
-         NTkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X6qC3u7TJCJ9WDjpawDLknUJdFq/gXX99rp9XUruyx4=;
-        b=F7V1YD+mGIOgFk/3yFZIN92jyBx5U2PK3USozVNX2Wp/nr12dcNywxSmErGfqazeRa
-         WPb0HPa65IRXIT/D2b7OpPE7BjGEAxY/tWbTUnp18h16xOaWf/T4l/JY18gJfoJXY7RV
-         IusdOyhEXb10pK/6rLmEX0YHAZ9jzuPrzbbl26MXClsLuQEYGV5GBpMDHs5ocKnReF++
-         xrN98/4M6sfT5mL91mur0k/1querjI4mOoM65Ov401Bh3q+LSrqgOGC+iGCtJ6jqQU4F
-         iiHzSV9fqJFjP13WMiw84ZzW6cRr6sN2vGBbi5KiCbMzjwm/Jsn0sllcw4wa2WoFTnC3
-         wcnA==
-X-Gm-Message-State: ACrzQf20yyF1L8ZazeRXuvPWe0U0Wl0JjxmDVQVakr7OnHxU+CHliKnA
-        H3baK7wOKK/G6fCCTWah7g==
-X-Google-Smtp-Source: AMsMyM4FY5pa6wC/HNfGW1du6dUafsGlho/DlEOMXq1QxFkTr/XMBmamE1DYuzbjWYmMqGT4hSkdmw==
-X-Received: by 2002:aa7:cf0b:0:b0:461:2271:8559 with SMTP id a11-20020aa7cf0b000000b0046122718559mr60860684edy.92.1668013174332;
-        Wed, 09 Nov 2022 08:59:34 -0800 (PST)
-Received: from p183 ([46.53.251.133])
-        by smtp.gmail.com with ESMTPSA id n20-20020a05640204d400b004588ef795easm7245157edw.34.2022.11.09.08.59.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 08:59:33 -0800 (PST)
-Date:   Wed, 9 Nov 2022 19:59:31 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Punit Agrawal <punit.agrawal@bytedance.com>
-Cc:     akpm@linux-foundation.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: proc: Fix proc-empty-vm build error on non
- x86_64
-Message-ID: <Y2vcc00tszEg7Ljz@p183>
-References: <20221109110621.1791999-1-punit.agrawal@bytedance.com>
+        Wed, 9 Nov 2022 12:01:25 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C462791C;
+        Wed,  9 Nov 2022 09:00:01 -0800 (PST)
+Received: from frapeml500006.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N6rgx1tkYz67LGD;
+        Thu, 10 Nov 2022 00:55:41 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml500006.china.huawei.com (7.182.85.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 17:59:59 +0100
+Received: from localhost (10.45.145.27) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 16:59:55 +0000
+Date:   Wed, 9 Nov 2022 16:59:52 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+CC:     Shaokun Zhang <zhangshaokun@hisilicon.com>, <liuqi6124@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
+        <f.fangjian@huawei.com>, <prime.zeng@huawei.com>
+Subject: Re: [PATCH 1/3] drivers/perf: hisi: Fix some event id for
+ hisi-pcie-pmu
+Message-ID: <20221109165952.000053f3@Huawei.com>
+In-Reply-To: <20221025113242.58271-2-yangyicong@huawei.com>
+References: <20221025113242.58271-1-yangyicong@huawei.com>
+        <20221025113242.58271-2-yangyicong@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221109110621.1791999-1-punit.agrawal@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.45.145.27]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,20 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:06:21AM +0000, Punit Agrawal wrote:
-> The proc-empty-vm test is implemented for x86_64 and fails to build
-> for other architectures. Rather then emitting a compiler error it
-> would be preferable to only build the test on supported architectures.
+On Tue, 25 Oct 2022 19:32:40 +0800
+Yicong Yang <yangyicong@huawei.com> wrote:
 
-Ehh, can you just port it to whatever arch you're using?
-What's the address space on arm/arm64?
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> Some event id of hisi-pcie-pmu is incorrect, fix them.
+> 
+> Fixes: 8404b0fbc7fb ("drivers/perf: hisi: Add driver for HiSilicon PCIe PMU")
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+FWIW given these are magic value updates.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-	#ifdef __amd64__
-                munmap(NULL, ((size_t)1 << 47) - 4096);
-	#else
-	#error "implement 'unmap everything'"
-	#endif
 
-This program is almost arch-independent.
+> ---
+>  drivers/perf/hisilicon/hisi_pcie_pmu.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> index 21771708597d..071e63d9a9ac 100644
+> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
+> @@ -693,10 +693,10 @@ static struct attribute *hisi_pcie_pmu_events_attr[] = {
+>  	HISI_PCIE_PMU_EVENT_ATTR(rx_mrd_cnt, 0x10210),
+>  	HISI_PCIE_PMU_EVENT_ATTR(tx_mrd_latency, 0x0011),
+>  	HISI_PCIE_PMU_EVENT_ATTR(tx_mrd_cnt, 0x10011),
+> -	HISI_PCIE_PMU_EVENT_ATTR(rx_mrd_flux, 0x1005),
+> -	HISI_PCIE_PMU_EVENT_ATTR(rx_mrd_time, 0x11005),
+> -	HISI_PCIE_PMU_EVENT_ATTR(tx_mrd_flux, 0x2004),
+> -	HISI_PCIE_PMU_EVENT_ATTR(tx_mrd_time, 0x12004),
+> +	HISI_PCIE_PMU_EVENT_ATTR(rx_mrd_flux, 0x0804),
+> +	HISI_PCIE_PMU_EVENT_ATTR(rx_mrd_time, 0x10804),
+> +	HISI_PCIE_PMU_EVENT_ATTR(tx_mrd_flux, 0x0405),
+> +	HISI_PCIE_PMU_EVENT_ATTR(tx_mrd_time, 0x10405),
+>  	NULL
+>  };
+>  
 
-> +TEST_GEN_PROGS_x86_64 += proc-empty-vm
