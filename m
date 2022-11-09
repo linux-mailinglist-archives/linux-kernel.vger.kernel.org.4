@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BEF6237BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 436746237BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbiKIXxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S231273AbiKIXyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbiKIXxX (ORCPT
+        with ESMTP id S231891AbiKIXya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:53:23 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95A7642B;
-        Wed,  9 Nov 2022 15:53:20 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id y14so936739ejd.9;
-        Wed, 09 Nov 2022 15:53:20 -0800 (PST)
+        Wed, 9 Nov 2022 18:54:30 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A101E3CC;
+        Wed,  9 Nov 2022 15:54:29 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id p21so152638plr.7;
+        Wed, 09 Nov 2022 15:54:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=U5tKGqsesxNKEVPBejH+Kl9QFnk5O1iT9AjBkFsrSI8=;
-        b=lQgHFw0DkhUROstVnmSoX1ifIssqls/Qtaq/LwUT4tAXNb/2fuWwE0vXP8Q0RRevW4
-         wFgsKV6Ip/rpuNQLbSg480LydswTqXarkq+U8xL5/o+A4XHqIoUQiMAWSM1KU+/wHvtW
-         +QhTd6s7lGvwdjh3b0Nq4v64tXnGmk0mC2HqlSJQbF1hTuVGF83tyFZCb6rswNvczMOR
-         gh3KP4uC6I67Jwq/TeUOdePSPG1hMd6X+quDjp/D9dIcMj6kg4UolqAq35tn2TtDZsez
-         M4JVmFZxxfYmlgBRYLlwj/nKNr3HYxnXc5Ur3l8fMwID2xS01olvq+hcsYK0ZDzWEA8S
-         4kqQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=svbokUsTGvaKrPTYe+iV+83WUpl4LfGM9newrGHW2AY=;
+        b=NVJifqN9d/MXVsGOlKMwco45aTS6zns93fkFsZShX9ZakBfRXR6BgRtsfuWoo/nYjq
+         Yh1+8777EkMrFbzOSF0trrWXepsvxK9UHYJ6z3eqXQvtTV2kJ5s3iBLSyTkeiVioDz/e
+         XoJyGUaCRJbVvTIGht8jZSwfI/Zc6k+aFn9XEV+ZQMb0uxK0qeb5UxHU6aFYQdqDl+vS
+         n0rkWkRLu9XENITtJL4BlxBWeVQKebZXYnDcdBCwnTHMQS3hlOBDENGsK1aNmgwIednE
+         tm518RU7jeTzZmOAwl8dS/n8W/8RLsSBOlxBYJxGpDpu0FyIc7vEm9CNUV1qOmHG5xGo
+         u1tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5tKGqsesxNKEVPBejH+Kl9QFnk5O1iT9AjBkFsrSI8=;
-        b=46oiPjSgR4MBc74w1aAMEgCh8ww4RkyUXMk5mGsXePSVVA5t1JcSKbdb99KUCN/0dj
-         MvdeU2n3JfClu70lVUUn6z1ymcjnwHG89EXKLxfOvvgJesLnG0N4s2sxj6yvqoX9W9BN
-         JnEX2FdJ4coKOWAfCvLS3IiN/408K/gPZtUeyr6rbX7mnK122NgNZ9DTRMzinFLJuW8D
-         s8hZPpMGUB3B3Hm6YPAZKa3rudFwUhV4eUTLLqnYqfaE62YD5b+qtq1eSXiMo0/AJXxZ
-         LtIHm3eID9Z/PJu7hWHj2tVqUMoRp94IcVymvp0t7dAo9pT7UMvLvq1P6bL30M1tvZK+
-         MkYw==
-X-Gm-Message-State: ACrzQf1FCTNKJ/k/zxPR3JD4XY1vqivaiS43HpgkHerluBSnTggQlm+X
-        loQeL5yohQd4irsYdsLKDdi+zpH8pO9A9w==
-X-Google-Smtp-Source: AMsMyM67FdYv7Zv8Ro3BCuumnAkoVIuIRxgdlN7vymZ7C9zXcPmchG6jcyhFa1Nsd909ZM+6Q0lcHQ==
-X-Received: by 2002:a17:906:cc0f:b0:7ad:2da5:4711 with SMTP id ml15-20020a170906cc0f00b007ad2da54711mr57675577ejb.628.1668037999157;
-        Wed, 09 Nov 2022 15:53:19 -0800 (PST)
-Received: from krava ([83.240.62.198])
-        by smtp.gmail.com with ESMTPSA id l10-20020a1709066b8a00b0077d37a5d401sm6456822ejr.33.2022.11.09.15.53.18
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=svbokUsTGvaKrPTYe+iV+83WUpl4LfGM9newrGHW2AY=;
+        b=vBGvqLo/OCsYB5YGHdoolI37zT97hum31V6S+AASOrX/1OV/SPn/ZPPlgFUuKThnCH
+         1QK1ZEkUFu8vuv/E1PYunx5Fq+yHhshyONMobCzojIj7iMDcANLx5S8H61om9516lDzD
+         UFm2N1wHg7w+a6dyy5jhyTfiqvHSmDS29PNtNxhUQzzTaesRx0NzxXkeXDnulY8tUOnq
+         tqZin2uuMj5uwEpxTEOglpUIMjkuTCbKvXW30qsTPSZ1mZjNTapF40XONP9ZBvEFlPaj
+         8aVW50454gHqCLTZbDej5P/GqfRCRcwFOy6jwFPK7SeQe8oLKqiInuDxiAeU6zyGwtuD
+         z32Q==
+X-Gm-Message-State: ACrzQf3wGJr5v4RCWrDj4azmTofOH3dbZWewMp4QRN4lxMgrF/Ls5utS
+        DiWWK63YRfcsGiR/ZjLvvS0=
+X-Google-Smtp-Source: AMsMyM7D3r025gafHPKVPQGDKYgSA7UYST+0IdiwK3iAeEhbEXKL7jeVlwMhxRs4ZWAd6LrKzl22ug==
+X-Received: by 2002:a17:90a:c398:b0:214:6fd:90df with SMTP id h24-20020a17090ac39800b0021406fd90dfmr1226415pjt.35.1668038068786;
+        Wed, 09 Nov 2022 15:54:28 -0800 (PST)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id ij22-20020a170902ab5600b0017f36638010sm9576409plb.276.2022.11.09.15.54.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 15:53:18 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 10 Nov 2022 00:53:16 +0100
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Hao Sun <sunhao.th@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>
-Subject: Re: WARNING in bpf_bprintf_prepare
-Message-ID: <Y2w9bNhVlAs/PcNV@krava>
-References: <CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com>
- <Y1pqWPRmP0M+hcXf@krava>
- <CACkBjsbP-iw-gpnYN=Ormcu2zXAeOgjeptjGAFXNNJRRVhRAag@mail.gmail.com>
- <Y2J+n7SqmtfyA7ZM@krava>
- <Y2j6ivTwFmA0FtvY@krava>
- <CAADnVQKXcdVa-gDj2_QTrBuVea+KMuFUdabR--HCf7x6Vo6uXg@mail.gmail.com>
- <Y2uv/GjnSdr/ujOj@krava>
- <CAADnVQJp0ZrodRu8ZtvvtXk6KAbjxmwqD-nXgFAxNpNxN6JM=g@mail.gmail.com>
+        Wed, 09 Nov 2022 15:54:27 -0800 (PST)
+Date:   Wed, 9 Nov 2022 15:54:25 -0800
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zach O'Keefe <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        Paul Gofman <pgofman@codeweavers.com>
+Subject: Re: [PATCH v6 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y2w9sWZf5mlNV7Z3@gmail.com>
+References: <20221109102303.851281-1-usama.anjum@collabora.com>
+ <20221109102303.851281-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJp0ZrodRu8ZtvvtXk6KAbjxmwqD-nXgFAxNpNxN6JM=g@mail.gmail.com>
+In-Reply-To: <20221109102303.851281-3-usama.anjum@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -90,222 +93,357 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:41:54AM -0800, Alexei Starovoitov wrote:
-> On Wed, Nov 9, 2022 at 5:49 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Mon, Nov 07, 2022 at 12:49:01PM -0800, Alexei Starovoitov wrote:
-> > > On Mon, Nov 7, 2022 at 4:31 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > >
-> > > > On Wed, Nov 02, 2022 at 03:28:47PM +0100, Jiri Olsa wrote:
-> > > > > On Thu, Oct 27, 2022 at 07:45:16PM +0800, Hao Sun wrote:
-> > > > > > Jiri Olsa <olsajiri@gmail.com> 于2022年10月27日周四 19:24写道：
-> > > > > > >
-> > > > > > > On Thu, Oct 27, 2022 at 10:27:28AM +0800, Hao Sun wrote:
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > The following warning can be triggered with the C reproducer in the link.
-> > > > > > > > Syzbot also reported this several days ago, Jiri posted a patch that
-> > > > > > > > uses bpf prog `active` field to fix this by 05b24ff9b2cfab (bpf:
-> > > > > > > > Prevent bpf program recursion...) according to syzbot dashboard
-> > > > > > > > (https://syzkaller.appspot.com/bug?id=179313fb375161d50a98311a28b8e2fc5f7350f9).
-> > > > > > > > But this warning can still be triggered on 247f34f7b803
-> > > > > > > > (Linux-v6.1-rc2) that already merged the patch, so it seems that this
-> > > > > > > > still is an issue.
-> > > > > > > >
-> > > > > > > > HEAD commit: 247f34f7b803 Linux 6.1-rc2
-> > > > > > > > git tree: upstream
-> > > > > > > > console output: https://pastebin.com/raw/kNw8JCu5
-> > > > > > > > kernel config: https://pastebin.com/raw/sE5QK5HL
-> > > > > > > > C reproducer: https://pastebin.com/raw/X96ASi27
-> > > > > > >
-> > > > > > > hi,
-> > > > > > > right, that fix addressed that issue for single bpf program,
-> > > > > > > and it won't prevent if there are multiple programs hook on
-> > > > > > > contention_begin tracepoint and calling bpf_trace_printk,
-> > > > > > >
-> > > > > > > I'm not sure we can do something there.. will check
-> > > > > > >
-> > > > > > > do you run just the reproducer, or you load the server somehow?
-> > > > > > > I cannot hit the issue so far
-> > > > > > >
-> > > > > >
-> > > > > > Hi,
-> > > > > >
-> > > > > > Last email has format issues, resend it here.
-> > > > > >
-> > > > > > I built the kernel with the config in the link, which contains
-> > > > > > “CONFIG_CMDLINE="earlyprintk=serial net.ifnames=0
-> > > > > > sysctl.kernel.hung_task_all_cpu_backtrace=1 panic_on_warn=1 …”, and
-> > > > > > boot the kernel with normal qemu setup and then the warning can be
-> > > > > > triggered by executing the reproducer.
-> > > > > >
-> > > > > > Also, I’m willing to test the proposed patch if any.
-> > > > >
-> > > > > fyi I reproduced that.. will check if we can do anything about that
-> > > >
-> > > > I reproduced this with set of 8 programs all hooked to contention_begin
-> > > > tracepoint and here's what I think is happening:
-> > > >
-> > > > all programs (prog1 .. prog8) call just bpf_trace_printk helper and I'm
-> > > > running 'perf bench sched messaging' to load the machine
-> > > >
-> > > > at some point some contended lock triggers trace_contention_begin:
-> > > >
-> > > >   trace_contention_begin
-> > > >     __traceiter_contention_begin                                <-- iterates all functions attached to tracepoint
-> > > >       __bpf_trace_run(prog1)
-> > > >         prog1->active = 1
-> > > >         bpf_prog_run(prog1)
-> > > >           bpf_trace_printk
-> > > >             bpf_bprintf_prepare                                 <-- takes buffer 1 out of 3
-> > > >             raw_spin_lock_irqsave(trace_printk_lock)
-> > > >
-> > > >               # we have global single trace_printk_lock, so we will trigger
-> > > >               # its trace_contention_begin at some point
-> > > >
-> > > >               trace_contention_begin
-> > > >                 __traceiter_contention_begin
-> > > >                   __bpf_trace_run(prog1)
-> > > >                     prog1->active block                         <-- prog1 is already 'running', skipping the execution
-> > > >                   __bpf_trace_run(prog2)
-> > > >                     prog2->active = 1
-> > > >                     bpf_prog_run(prog2)
-> > > >                       bpf_trace_printk
-> > > >                         bpf_bprintf_prepare                     <-- takes buffer 2 out of 3
-> > > >                         raw_spin_lock_irqsave(trace_printk_lock)
-> > > >                           trace_contention_begin
-> > > >                             __traceiter_contention_begin
-> > > >                               __bpf_trace_run(prog1)
-> > > >                                 prog1->active block             <-- prog1 is already 'running', skipping the execution
-> > > >                               __bpf_trace_run(prog2)
-> > > >                                 prog2->active block             <-- prog2 is already 'running', skipping the execution
-> > > >                               __bpf_trace_run(prog3)
-> > > >                                  prog3->active = 1
-> > > >                                  bpf_prog_run(prog3)
-> > > >                                    bpf_trace_printk
-> > > >                                      bpf_bprintf_prepare        <-- takes buffer 3 out of 3
-> > > >                                      raw_spin_lock_irqsave(trace_printk_lock)
-> > > >                                        trace_contention_begin
-> > > >                                          __traceiter_contention_begin
-> > > >                                            __bpf_trace_run(prog1)
-> > > >                                              prog1->active block      <-- prog1 is already 'running', skipping the execution
-> > > >                                            __bpf_trace_run(prog2)
-> > > >                                              prog2->active block      <-- prog2 is already 'running', skipping the execution
-> > > >                                            __bpf_trace_run(prog3)
-> > > >                                              prog3->active block      <-- prog3 is already 'running', skipping the execution
-> > > >                                            __bpf_trace_run(prog4)
-> > > >                                              prog4->active = 1
-> > > >                                              bpf_prog_run(prog4)
-> > > >                                                bpf_trace_printk
-> > > >                                                  bpf_bprintf_prepare  <-- tries to take buffer 4 out of 3 -> WARNING
-> > > >
-> > > >
-> > > > the code path may vary based on the contention of the trace_printk_lock,
-> > > > so I saw different nesting within 8 programs, but all eventually ended up
-> > > > at 4 levels of nesting and hit the warning
-> > > >
-> > > > I think we could perhaps move the 'active' flag protection from program
-> > > > to the tracepoint level (in the patch below), to prevent nesting execution
-> > > > of the same tracepoint, so it'd look like:
-> > > >
-> > > >   trace_contention_begin
-> > > >     __traceiter_contention_begin
-> > > >       __bpf_trace_run(prog1) {
-> > > >         contention_begin.active = 1
-> > > >         bpf_prog_run(prog1)
-> > > >           bpf_trace_printk
-> > > >             bpf_bprintf_prepare
-> > > >             raw_spin_lock_irqsave(trace_printk_lock)
-> > > >               trace_contention_begin
-> > > >                 __traceiter_contention_begin
-> > > >                   __bpf_trace_run(prog1)
-> > > >                     blocked because contention_begin.active == 1
-> > > >                   __bpf_trace_run(prog2)
-> > > >                     blocked because contention_begin.active == 1
-> > > >                   __bpf_trace_run(prog3)
-> > > >                   ...
-> > > >                   __bpf_trace_run(prog8)
-> > > >                     blocked because contention_begin.active == 1
-> > > >
-> > > >             raw_spin_unlock_irqrestore
-> > > >             bpf_bprintf_cleanup
-> > > >
-> > > >         contention_begin.active = 0
-> > > >       }
-> > > >
-> > > >       __bpf_trace_run(prog2) {
-> > > >         contention_begin.active = 1
-> > > >         bpf_prog_run(prog2)
-> > > >           ...
-> > > >         contention_begin.active = 0
-> > > >       }
-> > > >
-> > > > do we need bpf program execution in nested tracepoints?
-> > > > we could actually allow 3 nesting levels for this case.. thoughts?
-> > > >
-> > > > thanks,
-> > > > jirka
-> > > >
-> > > >
-> > > > ---
-> > > > diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-> > > > index 6a13220d2d27..5a354ae096e5 100644
-> > > > --- a/include/trace/bpf_probe.h
-> > > > +++ b/include/trace/bpf_probe.h
-> > > > @@ -78,11 +78,15 @@
-> > > >  #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
-> > > >
-> > > >  #define __BPF_DECLARE_TRACE(call, proto, args)                         \
-> > > > +static DEFINE_PER_CPU(int, __bpf_trace_tp_active_##call);              \
-> > > >  static notrace void                                                    \
-> > > >  __bpf_trace_##call(void *__data, proto)                                        \
-> > > >  {                                                                      \
-> > > >         struct bpf_prog *prog = __data;                                 \
-> > > > -       CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));  \
-> > > > +                                                                       \
-> > > > +       if (likely(this_cpu_inc_return(__bpf_trace_tp_active_##call) == 1))             \
-> > > > +               CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));  \
-> > > > +       this_cpu_dec(__bpf_trace_tp_active_##call);                                     \
-> > > >  }
-> > >
-> > > This approach will hurt real use cases where
-> > > multiple and different raw_tp progs run on the same cpu.
-> >
-> > would the 2 levels of nesting help in here?
-> >
-> > I can imagine the change above would break use case where we want to
-> > trigger tracepoints in irq context that interrupted task that's already
-> > in the same tracepoint
-> >
-> > with 2 levels of nesting we would trigger that tracepoint from irq and
-> > would still be safe with bpf_bprintf_prepare buffer
+Hi Muhammad,
+
+Here are a few inline comments.
+
+On Wed, Nov 09, 2022 at 03:23:02PM +0500, Muhammad Usama Anjum wrote:
+> This IOCTL, PAGEMAP_SCAN can be used to get and/or clear the info about
+> page table entries. The following operations are supported in this ioctl:
+> - Get the information if the pages are soft-dirty, file mapped, present
+>   or swapped.
+> - Clear the soft-dirty PTE bit of the pages.
+> - Get and clear the soft-dirty PTE bit of the pages.
 > 
-> How would these 2 levels work?
+> Only the soft-dirty bit can be read and cleared atomically. struct
+> pagemap_sd_args is used as the argument of the IOCTL. In this struct:
+> - The range is specified through start and len.
+> - The output buffer and size is specified as vec and vec_len.
+> - The optional maximum requested pages are specified in the max_pages.
+> - The flags can be specified in the flags field. The PAGEMAP_SD_CLEAR
+>   and PAGEMAP_SD_NO_REUSED_REGIONS are supported.
+> - The masks are specified in rmask, amask, emask and return_mask.
+> 
+> This IOCTL can be extended to get information about more PTE bits.
+> 
+> This is based on a patch from Gabriel Krisman Bertazi.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes in v6:
+> - Rename variables and update comments
+> - Make IOCTL independent of soft_dirty config
+> - Change masks and bitmap type to _u64
+> - Improve code quality
+> 
+> Changes in v5:
+> - Remove tlb flushing even for clear operation
+> 
+> Changes in v4:
+> - Update the interface and implementation
+> 
+> Changes in v3:
+> - Tighten the user-kernel interface by using explicit types and add more
+>   error checking
+> 
+> Changes in v2:
+> - Convert the interface from syscall to ioctl
+> - Remove pidfd support as it doesn't make sense in ioctl
+> ---
+>  fs/proc/task_mmu.c            | 328 ++++++++++++++++++++++++++++++++++
+>  include/uapi/linux/fs.h       |  56 ++++++
+>  tools/include/uapi/linux/fs.h |  56 ++++++
+>  3 files changed, 440 insertions(+)
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 8235c536ac70..8d6a84ec5ef7 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -19,6 +19,9 @@
+>  #include <linux/shmem_fs.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/pkeys.h>
+> +#include <uapi/linux/fs.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/minmax.h>
+>  
+>  #include <asm/elf.h>
+>  #include <asm/tlb.h>
+> @@ -1775,11 +1778,336 @@ static int pagemap_release(struct inode *inode, struct file *file)
+>  	return 0;
+>  }
+>  
+> +#define PAGEMAP_OP_MASK		(PAGE_IS_SOFTDIRTY | PAGE_IS_FILE |	\
+> +				 PAGE_IS_PRESENT | PAGE_IS_SWAPPED)
+> +#define PAGEMAP_NONSD_OP_MASK	(PAGE_IS_FILE |	PAGE_IS_PRESENT | PAGE_IS_SWAPPED)
+> +#define PAGEMAP_SD_FLAGS	(PAGEMAP_SOFTDIRTY_CLEAR | PAGEMAP_NO_REUSED_REGIONS)
+> +#define IS_CLEAR_OP(a)		(a->flags & PAGEMAP_SOFTDIRTY_CLEAR)
+> +#define IS_GET_OP(a)		(a->vec)
+> +#define IS_SD_OP(a)		(a->flags & PAGEMAP_SD_FLAGS)
+> +
+> +struct pagemap_scan_private {
+> +	struct page_region *vec;
+> +	unsigned long vec_len;
+> +	unsigned long vec_index;
+> +	unsigned int max_pages;
+> +	unsigned int found_pages;
+> +	unsigned int flags;
+> +	unsigned long required_mask;
+> +	unsigned long anyof_mask;
+> +	unsigned long excluded_mask;
+> +	unsigned long return_mask;
+> +};
+> +
+> +static int pagemap_scan_pmd_test_walk(unsigned long start, unsigned long end, struct mm_walk *walk)
+> +{
+> +	struct pagemap_scan_private *p = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +
+> +	if (IS_GET_OP(p) && p->max_pages && (p->found_pages == p->max_pages))
+> +		return -1;
+> +
+> +	if (vma->vm_flags & VM_PFNMAP)
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> +
+> +static int add_to_out(bool sd, bool file, bool pres, bool swap, struct pagemap_scan_private *p,
+> +		      unsigned long addr, unsigned int len)
+> +{
+> +	unsigned long bitmap, cur = sd | file << 1 | pres << 2 | swap << 3;
 
-just using the active counter like below, but I haven't tested it yet
+Should we define contants for each of these bits?
 
-jirka
+> +	bool cpy = true;
+> +
+> +	if (p->required_mask)
+> +		cpy = ((p->required_mask & cur) == p->required_mask);
+> +	if (cpy && p->anyof_mask)
+> +		cpy = (p->anyof_mask & cur);
+> +	if (cpy && p->excluded_mask)
+> +		cpy = !(p->excluded_mask & cur);
+> +
+> +	bitmap = cur & p->return_mask;
+> +
+> +	if (cpy && bitmap) {
+> +		if ((p->vec_index) && (p->vec[p->vec_index - 1].bitmap == bitmap) &&
+> +		    (p->vec[p->vec_index - 1].start + p->vec[p->vec_index - 1].len * PAGE_SIZE ==
+> +		     addr)) {
 
+I think it is better to define a variable for p->vec_index - 1.
+nit: len can be in bytes rather than pages.
 
----
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 6a13220d2d27..ca5dd34478b7 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -78,11 +78,15 @@
- #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
- 
- #define __BPF_DECLARE_TRACE(call, proto, args)				\
-+static DEFINE_PER_CPU(int, __bpf_trace_tp_active_##call);		\
- static notrace void							\
- __bpf_trace_##call(void *__data, proto)					\
- {									\
- 	struct bpf_prog *prog = __data;					\
--	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
-+									\
-+	if (likely(this_cpu_inc_return(__bpf_trace_tp_active_##call) < 3))		\
-+		CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
-+	this_cpu_dec(__bpf_trace_tp_active_##call);					\
- }
- 
- #undef DECLARE_EVENT_CLASS
+> +			p->vec[p->vec_index - 1].len += len;
+> +			p->found_pages += len;
+> +		} else if (p->vec_index < p->vec_len) {
+> +			p->vec[p->vec_index].start = addr;
+> +			p->vec[p->vec_index].len = len;
+> +			p->found_pages += len;
+> +			p->vec[p->vec_index].bitmap = bitmap;
+> +			p->vec_index++;
+> +		} else {
+> +			return -ENOMEM;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long addr,
+> +				  unsigned long end, struct mm_walk *walk)
+> +{
+> +	struct pagemap_scan_private *p = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +	unsigned int len;
+> +	spinlock_t *ptl;
+> +	int ret = 0;
+> +	pte_t *pte;
+> +	bool dirty_vma = (p->flags & PAGEMAP_NO_REUSED_REGIONS) ?
+> +			 (false) : (vma->vm_flags & VM_SOFTDIRTY);
+> +
+> +	if ((walk->vma->vm_end < addr) || (p->max_pages && p->found_pages == p->max_pages))
+> +		return 0;
+> +
+> +	end = min(end, walk->vma->vm_end);
+> +
+> +	ptl = pmd_trans_huge_lock(pmd, vma);
+> +	if (ptl) {
+> +		if (dirty_vma || check_soft_dirty_pmd(vma, addr, pmd, false)) {
+> +			/*
+> +			 * Break huge page into small pages if operation needs to be performed is
+> +			 * on a portion of the huge page or the return buffer cannot store complete
+> +			 * data.
+> +			 */
+> +			if ((IS_CLEAR_OP(p) && (end - addr < HPAGE_SIZE))) {
+> +				spin_unlock(ptl);
+> +				split_huge_pmd(vma, pmd, addr);
+> +				goto process_smaller_pages;
+> +			}
+> +
+> +			if (IS_GET_OP(p)) {
+> +				len = (end - addr)/PAGE_SIZE;
+> +				if (p->max_pages && p->found_pages + len > p->max_pages)
+> +					len = p->max_pages - p->found_pages;
+> +
+> +				ret = add_to_out(dirty_vma ||
+> +						 check_soft_dirty_pmd(vma, addr, pmd, false),
+
+can we reuse a return code of the previous call of check_soft_dirty_pmd?
+
+> +						 vma->vm_file, pmd_present(*pmd), is_swap_pmd(*pmd),
+> +						 p, addr, len);
+> +			}
+> +			if (!ret && IS_CLEAR_OP(p))
+> +				check_soft_dirty_pmd(vma, addr, pmd, true);
+
+should we return a error in this case? We need to be sure that:
+* we stop waking page tables after this point.
+* return this error to the user-space if we are not able to add anything
+  in the vector.
+
+> +		}
+> +		spin_unlock(ptl);
+> +		return 0;
+> +	}
+> +
+> +process_smaller_pages:
+> +	if (pmd_trans_unstable(pmd))
+> +		return 0;
+> +
+> +	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+> +	for (; addr < end && !ret && (!p->max_pages || (p->found_pages < p->max_pages))
+> +	     ; pte++, addr += PAGE_SIZE) {
+> +		if (IS_GET_OP(p))
+> +			ret = add_to_out(dirty_vma || check_soft_dirty(vma, addr, pte, false),
+> +					 vma->vm_file, pte_present(*pte),
+> +					 is_swap_pte(*pte), p, addr, 1);
+> +		if (!ret && IS_CLEAR_OP(p))
+> +			check_soft_dirty(vma, addr, pte, true);
+> +	}
+> +	pte_unmap_unlock(pte - 1, ptl);
+> +	cond_resched();
+> +
+> +	return 0;
+> +}
+> +
+> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end, int depth,
+> +				 struct mm_walk *walk)
+> +{
+> +	struct pagemap_scan_private *p = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +	unsigned int len;
+> +	bool sd;
+> +
+> +	if (vma) {
+> +		/* Individual pages haven't been allocated and written */
+> +		sd = (p->flags & PAGEMAP_NO_REUSED_REGIONS) ? (false) :
+> +		     (vma->vm_flags & VM_SOFTDIRTY);
+> +
+> +		len = (end - addr)/PAGE_SIZE;
+> +		if (p->max_pages && p->found_pages + len > p->max_pages)
+> +			len = p->max_pages - p->found_pages;
+> +
+> +		add_to_out(sd, vma->vm_file, false, false, p, addr, len);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +#ifdef CONFIG_MEM_SOFT_DIRTY
+> +static int pagemap_scan_pre_vma(unsigned long start, unsigned long end, struct mm_walk *walk)
+> +{
+> +	struct pagemap_scan_private *p = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +	unsigned long end_cut = end;
+> +	int ret;
+> +
+> +	if (!(p->flags & PAGEMAP_NO_REUSED_REGIONS) && IS_CLEAR_OP(p) &&
+> +	    (vma->vm_flags & VM_SOFTDIRTY)) {
+> +		if (vma->vm_start < start) {
+> +			ret = split_vma(vma->vm_mm, vma, start, 1);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +		/* Calculate end_cut because of max_pages */
+> +		if (IS_GET_OP(p) && p->max_pages)
+> +			end_cut = min(start + (p->max_pages - p->found_pages) * PAGE_SIZE, end);
+> +
+> +		if (vma->vm_end > end_cut) {
+> +			ret = split_vma(vma->vm_mm, vma, end_cut, 0);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void pagemap_scan_post_vma(struct mm_walk *walk)
+> +{
+> +	struct pagemap_scan_private *p = walk->private;
+> +	struct vm_area_struct *vma = walk->vma;
+> +
+> +	if (!(p->flags & PAGEMAP_NO_REUSED_REGIONS) && IS_CLEAR_OP(p) &&
+> +	    (vma->vm_flags & VM_SOFTDIRTY)) {
+> +		vma->vm_flags &= ~VM_SOFTDIRTY;
+> +		vma_set_page_prot(vma);
+> +	}
+> +}
+> +#endif /* CONFIG_MEM_SOFT_DIRTY */
+> +
+> +static const struct mm_walk_ops pagemap_scan_ops = {
+> +	.test_walk = pagemap_scan_pmd_test_walk,
+> +	.pmd_entry = pagemap_scan_pmd_entry,
+> +	.pte_hole = pagemap_scan_pte_hole,
+> +
+> +#ifdef CONFIG_MEM_SOFT_DIRTY
+> +	/* Only for clearing SD bit over VMAs */
+> +	.pre_vma = pagemap_scan_pre_vma,
+> +	.post_vma = pagemap_scan_post_vma,
+> +#endif /* CONFIG_MEM_SOFT_DIRTY */
+> +};
+> +
+> +static long do_pagemap_sd_cmd(struct mm_struct *mm, struct pagemap_scan_arg *arg)
+> +{
+> +	struct mmu_notifier_range range;
+> +	unsigned long __user start, end;
+> +	struct pagemap_scan_private p;
+> +	int ret;
+> +
+> +	start = (unsigned long)untagged_addr(arg->start);
+> +	if ((!IS_ALIGNED(start, PAGE_SIZE)) || (!access_ok((void __user *)start, arg->len)))
+> +		return -EINVAL;
+> +
+> +	if (IS_GET_OP(arg) &&
+> +	    ((arg->vec_len == 0) || (!access_ok((struct page_region *)arg->vec, arg->vec_len))))
+> +		return -ENOMEM;
+> +
+> +#ifndef CONFIG_MEM_SOFT_DIRTY
+> +	if (IS_SD_OP(arg) || (arg->required_mask & PAGE_IS_SOFTDIRTY) ||
+> +	    (arg->anyof_mask & PAGE_IS_SOFTDIRTY))
+> +		return -EINVAL;
+> +#endif
+> +
+> +	if ((arg->flags & ~PAGEMAP_SD_FLAGS) || (arg->required_mask & ~PAGEMAP_OP_MASK) ||
+> +	    (arg->anyof_mask & ~PAGEMAP_OP_MASK) || (arg->excluded_mask & ~PAGEMAP_OP_MASK) ||
+> +	    (arg->return_mask & ~PAGEMAP_OP_MASK))
+> +		return -EINVAL;
+> +
+> +	if ((!arg->required_mask && !arg->anyof_mask && !arg->excluded_mask) || !arg->return_mask)
+> +		return -EINVAL;
+> +
+> +	if (IS_SD_OP(arg) && ((arg->required_mask & PAGEMAP_NONSD_OP_MASK) ||
+> +	     (arg->anyof_mask & PAGEMAP_NONSD_OP_MASK)))
+> +		return -EINVAL;
+> +
+> +	end = start + arg->len;
+> +	p.max_pages = arg->max_pages;
+> +	p.found_pages = 0;
+> +	p.flags = arg->flags;
+> +	p.required_mask = arg->required_mask;
+> +	p.anyof_mask = arg->anyof_mask;
+> +	p.excluded_mask = arg->excluded_mask;
+> +	p.return_mask = arg->return_mask;
+> +	p.vec_index = 0;
+> +	p.vec_len = arg->vec_len;
+> +
+> +	if (IS_GET_OP(arg)) {
+> +		p.vec = vzalloc(arg->vec_len * sizeof(struct page_region));
+
+I think we need to set a reasonable limit for vec_len to avoid large
+allocations on the kernel. We can consider to use kmalloc or kvmalloc
+here.
+
+Thanks,
+Andrei
