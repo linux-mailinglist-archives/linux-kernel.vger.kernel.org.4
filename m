@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314B7622F05
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:26:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CBE622F06
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbiKIP0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S232064AbiKIP02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbiKIP0P (ORCPT
+        with ESMTP id S232084AbiKIP0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:26:15 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E573F1902A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:26:14 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id m6so17040500pfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:26:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vrnwmHzGRO6yNJTxXbadmZQaycrPDTYK54ATPLG4n24=;
-        b=GedAx2Kx5P0BQ/6LFI1R2EYmG4w4We/Y2z0wmBT0KdDxKJap+R6NY7UG7xcQZDKHt8
-         dEuc+18FuuhuaGGLm+6gnXjSTv1Jybqa2QXLVlAY2SpnFXjSh1zALSd8O1LD+9GP7DgF
-         wyfLQFyKSJN72Cvs6uaMnFeHFoefqawjMteChAEP4Bzkq+8lekwvps6PHxXn/dZ1+8dL
-         mE6/pD3ozFbG25MkdGDHVpDhCiTkwcfVIgK5ZyzgqIyOnuynYFS8R1PdLU0wkNxW8rlr
-         vihT7XlQEvDZamdX4HM1YugWFSRu07/lfmdYMHifkbBLFwPKzEEpLIYFcpBL8UIFJT6Q
-         Z7TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vrnwmHzGRO6yNJTxXbadmZQaycrPDTYK54ATPLG4n24=;
-        b=jj6hgxS+inFhvxCsbtxL9fgGSkVC3appyvkExtMyn7cB4CiLcOs2W9pddkExIQpCYS
-         TzAL4E4rZVQNsb45pdcml2rJb27Dy6W6PglshhK1byppQuhdJMZaSLlx73o2p/UToBcp
-         zXAtIYG1/E/IY2oGcyBp8zfovyMc5frFZLu5e7soSJSgSgCm+HPWyPkdT1m8r2k9asQu
-         sSgZug3bqpi9Vc3mrUMTo7ctiCS/ycE3gvASrOiyOqld4GtI3e+uigvfPCKmZ05Z0xW0
-         tNTumymexvA00BDNgT4HJVjxWQDSq1Ld2xPHv1xKBaqUUnw9IuD+FlEkVEO5QINmNckn
-         03kg==
-X-Gm-Message-State: ANoB5pnLeu/3/ztXr5NgRKs9FqYg5vQkdF9aIn1AA2b1NA0G7tJk+mMd
-        AJTxWapfWAA0C0JxfQQ1T/cL7w==
-X-Google-Smtp-Source: AA0mqf5H21JxRaE5dbfKJQqRTwO/nDEl5Q5mFFXWxad60+bTfjFXV4lxtFEfJiXl8on6v8gyEdVzyA==
-X-Received: by 2002:a05:6a00:e8e:b0:56e:3400:fdcf with SMTP id bo14-20020a056a000e8e00b0056e3400fdcfmr17374435pfb.24.1668007574315;
-        Wed, 09 Nov 2022 07:26:14 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q8-20020a635048000000b00460a5c6304dsm7538297pgl.67.2022.11.09.07.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 07:26:13 -0800 (PST)
-Date:   Wed, 9 Nov 2022 15:26:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        thomas.lendacky@amd.com, jmattson@google.com
-Subject: Re: [PATCH 06/11] KVM: SVM: remove dead field from struct
- svm_cpu_data
-Message-ID: <Y2vGkkS/wXWZSMjw@google.com>
-References: <20221109145156.84714-1-pbonzini@redhat.com>
- <20221109145156.84714-7-pbonzini@redhat.com>
+        Wed, 9 Nov 2022 10:26:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC463BE05;
+        Wed,  9 Nov 2022 07:26:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8774361B91;
+        Wed,  9 Nov 2022 15:26:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60098C433D7;
+        Wed,  9 Nov 2022 15:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668007583;
+        bh=Pymxl7n2ZYnyw0RfNbgM6GPwZJA+tDvhsLK+AEj1BeY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TB7ExP5ufy4aISASgWuc05goswVICGpEEyRnvHQ4or/hixANtp2I5+tbwEr5fjdnQ
+         olZKSDmVszAsEw7exmnEZuMP6qBhD33QC+nsmUDlrZdhA2JmZPbbD/KbcLEpmlf3y5
+         L6FrDmNfgYg7ekPK5yaUYOyWkiuKAoqrYfuN6fjYXg3R4DyHsz80rdTqb/5oKnj6ZT
+         kMN1XKW/xATlZokeu6gzkLmxW1rIukitaluvjHlovSbShoG1j0JW6XErOPfZ2qKhQz
+         HAh3o+2+J1RLx2/tIWKVxjeiFjdoUL2JARn+FTF2Bzg4z8Z8Ic0e4bNvLhsVll33Cs
+         xIjccerdW8vPw==
+Date:   Wed, 9 Nov 2022 16:26:21 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Elliott <elliott@hpe.com>
+Subject: Re: [PATCH v6 0/2] rcu: Add RCU stall diagnosis information
+Message-ID: <20221109152621.GB298683@lothringen>
+References: <20221109093739.187-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221109145156.84714-7-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221109093739.187-1-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022, Paolo Bonzini wrote:
-> The "cpu" field of struct svm_cpu_data has been write-only since commit
-> 4b656b120249 ("KVM: SVM: force new asid on vcpu migration", 2009-08-05).
-> Remove it.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+Hi Zhen Lei,
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+On Wed, Nov 09, 2022 at 05:37:36PM +0800, Zhen Lei wrote:
+> v5 --> v6:
+> 1. When there are more than two continuous RCU stallings, correctly handle the
+>    value of the second and subsequent sampling periods. Update comments and
+>    document.
+>    Thanks to Elliott, Robert for the test.
+> 2. Change "rcu stall" to "RCU stall".
+> 
+> v4 --> v5:
+> 1. Resolve a git am conflict. No code change.
+> 
+> v3 --> v4:
+> 1. Rename rcu_cpu_stall_deep_debug to rcu_cpu_stall_cputime.
+> 
+> v2 --> v3:
+> 1. Fix the return type of kstat_cpu_irqs_sum()
+> 2. Add Kconfig option CONFIG_RCU_CPU_STALL_DEEP_DEBUG and boot parameter
+>    rcupdate.rcu_cpu_stall_deep_debug.
+> 3. Add comments and normalize local variable name
+> 
+> 
+> v1 --> v2:
+> 1. Fixed a bug in the code. If the rcu stall is detected by another CPU,
+>    kcpustat_this_cpu cannot be used.
+> @@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
+>         if (r->gp_seq != rdp->gp_seq)
+>                 return;
+> 
+> -       cpustat = kcpustat_this_cpu->cpustat;
+> +       cpustat = kcpustat_cpu(cpu).cpustat;
+> 2. Move the start point of statistics from rcu_stall_kick_kthreads() to
+>    rcu_implicit_dynticks_qs(), removing the dependency on irq_work.
+> 
+> v1:
+> In some extreme cases, such as the I/O pressure test, the CPU usage may
+> be 100%, causing RCU stall. In this case, the printed information about
+> current is not useful. Displays the number and usage of hard interrupts,
+> soft interrupts, and context switches that are generated within half of
+> the CPU stall timeout, can help us make a general judgment. In other
+> cases, we can preliminarily determine whether an infinite loop occurs
+> when local_irq, local_bh or preempt is disabled.
+
+That looks useful but I have to ask: what does it bring that the softlockup
+and hardlockup watchdog can not already solve?
+
+Thanks.
+
+> 
+> Zhen Lei (2):
+>   rcu: Add RCU stall diagnosis information
+>   doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
+> 
+>  Documentation/RCU/stallwarn.rst               | 88 +++++++++++++++++++
+>  .../admin-guide/kernel-parameters.txt         |  6 ++
+>  kernel/rcu/Kconfig.debug                      | 11 +++
+>  kernel/rcu/rcu.h                              |  1 +
+>  kernel/rcu/tree.c                             | 17 ++++
+>  kernel/rcu/tree.h                             | 19 ++++
+>  kernel/rcu/tree_stall.h                       | 29 ++++++
+>  kernel/rcu/update.c                           |  2 +
+>  8 files changed, 173 insertions(+)
+> 
+> -- 
+> 2.25.1
+> 
