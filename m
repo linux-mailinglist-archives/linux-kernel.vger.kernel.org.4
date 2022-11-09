@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE577622752
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB81622755
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiKIJlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:41:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S229950AbiKIJmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKIJl0 (ORCPT
+        with ESMTP id S229501AbiKIJmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:41:26 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58F1D2BF9;
-        Wed,  9 Nov 2022 01:41:24 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxvrfDdWtj2IUFAA--.12900S3;
-        Wed, 09 Nov 2022 17:41:23 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxDuLBdWtjYXwPAA--.42778S2;
-        Wed, 09 Nov 2022 17:41:22 +0800 (CST)
-Subject: Re: [PATCH v8 2/2] dt-bindings: hpet: add loongson-2 hpet
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev
-References: <20221103065351.32603-1-zhuyinbo@loongson.cn>
- <20221103065351.32603-2-zhuyinbo@loongson.cn>
- <b0aed9f8-f82e-3d74-4299-4d77445c2170@loongson.cn>
- <a588a90e-a8ab-7b43-a14b-101bb9f590db@linaro.org>
- <b20098b3-e833-7412-143e-4f39d344ff67@loongson.cn>
-Message-ID: <b0e18583-24d2-73c4-8d80-d06d2cd4824d@loongson.cn>
-Date:   Wed, 9 Nov 2022 17:41:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 9 Nov 2022 04:42:44 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D369FD04
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:42:43 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id 46-20020a9d0631000000b00666823da25fso9827741otn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:42:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qnCMPIlSjf4QEzzMc0Ok9DoXpH99ZITXVWKF8o6EGJ4=;
+        b=BFqKVT+YW0i3aM2EwcrETot5fZ8ibqJrup/8LAsxNY4tcG+yWJc40HpglNwRgltoNq
+         rUO7vd1b9ZTENoe/URe3f5gVVOIDxmCvQ6n7kcFAKfRUjQ/rauIz831uQT5ZRxej/XxU
+         ISmxVRscn+n21/3+vesvtSXOWvjW4UXCr7UBtO4Gf1xKjF2iSAUkaN7WFJVrmmif20Qq
+         ADo98+uo2gevyalviOKX29yFt3ymeksDVGxlHXxxfM42MAmak/OBJEzqbxu+HBV3KWcp
+         QJthNpFlu3JDqmR0M2xS/WG17WgyUPg1lYKUJPbjWefG4PL3r0+hed+EuFs0a3j8yN6a
+         b6NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qnCMPIlSjf4QEzzMc0Ok9DoXpH99ZITXVWKF8o6EGJ4=;
+        b=Pw/prP5ZC2LoX4C6iJbcoSpnPFWcdrv1zOgbWDKB/k+aOT+UBUiCuEp4l7rwXRdENe
+         pMuJH4bNHCpeCo6dZXJ0AMt91wQYaGeWl202S4Ivi4wgmxpezUZNKT82/MFJuYPzfgIT
+         OjrufDd99+TDzL6RaeXx3DwR+II3jj9XppxquuLlmp5Oy2OatYYWGbJzvRTiyZx/paPF
+         sWZolyfp1P/Xe4cPW5udBsBWr7+1TijDVfwpwi3wmBLcbn2ohZ9zMfaoLVXbeGM2F33K
+         uAkiRiEWmkqW5bNGthbR/2IHi4+QPNGEa2XLcJPKYhI2ZOmM5q1aA8afa3zE1hER4N5/
+         Ag+w==
+X-Gm-Message-State: ACrzQf2QLq7iVSILvkGDsxWtgP9ZvUPchzE7+3zMtLhd1wYClMgFvGQc
+        gDyqSQmYhtLk8s7pGWkFql3nu7N81dmRS9vDgp8=
+X-Google-Smtp-Source: AMsMyM4PDcRFYEBkXuz3zHjXBIKOauBzNNuACpOEi+qmaVvi8tuZvAiVZHAfS2YxmnPlXSTtFOMLZKeJN6t4bBmd1AU=
+X-Received: by 2002:a05:6830:628b:b0:660:d639:f380 with SMTP id
+ ce11-20020a056830628b00b00660d639f380mr28413976otb.181.1667986962949; Wed, 09
+ Nov 2022 01:42:42 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <b20098b3-e833-7412-143e-4f39d344ff67@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxDuLBdWtjYXwPAA--.42778S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7XFy3tw47AF4rGrWftry5urg_yoW3ArX_Xa
-        4qk3s3uF47uFyvqFs7tF9xu3srK3s8Jry8JrWrX3y3Wws0yrWDAws3G34Sv3WYqFWfCFnx
-        Cryqqw4ruFsIgjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        n7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVW8ZVWrXwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1P8n7UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109084142.226960-1-zyytlz.wz@163.com> <Y2to4/kH6Gu+ykpk@kroah.com>
+ <CAJedcCwzQj7pLzejX01PeuwL3a-DwRFmAEBLR-CR3_bAc0tx1g@mail.gmail.com> <Y2t0euEvZYQoCW42@kroah.com>
+In-Reply-To: <Y2t0euEvZYQoCW42@kroah.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Wed, 9 Nov 2022 17:42:31 +0800
+Message-ID: <CAJedcCwqem-Hj=1fF0XsEfyaeA-eAP6B9R_o1AC5trt2ap+Cdw@mail.gmail.com>
+Subject: Re: [PATCH v6 RESEND] misc: sgi-gru: fix use-after-free error in
+ gru_set_context_option, gru_fault and gru_handle_user_call_os
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, zhengyejian1@huawei.com,
+        dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, alex000young@gmail.com,
+        security@kernel.org, sivanich@hpe.com, lkp@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sorry, please ignore this ping in v8.
+> > Yes, it helped with the test and found an unused variable. I added
+> > this line as the mail suggested
+> > ("If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>").
+> >
+> > Should I remove it?
+>
+> If you submit a patch that just fixes the issue that the test robot
+> finds, yes, that needs to be there.  If you are fixing up a patch that
+> you submit based on the report, no, you do not.
+>
 
-在 2022/11/9 下午5:38, Yinbo Zhu 写道:
-> 
-> 
-> 在 2022/11/9 下午5:24, Krzysztof Kozlowski 写道:
->> On 09/11/2022 10:19, Yinbo Zhu wrote:
->>> Hi maintainer,
->>>
->>> please help me merge it to upstream.
->>> in addition, this patch need rely on
->>> "https://patchwork.kernel.org/project/linux-clk/list/?series=691497"
->>
->> Why pinging for v8? Didn't you have v9 and v10?
->>
->> Several of your Loongson patches had many build errors, pointed out by
->> lkp. Therefore I have doubts that you test these extensively. This might
->> be the reason why your patches float around...
->>
->> Best regards,
->> Krzysztof
-> Yes, thanks your remind.
-> and I have a compile test and function test about hpet in mainline linux 
-> tree 6.1-rc3.
->>
+Thanks for your illustration. I get it now.
+I sent another patch just now, which moved kernel test robot from
+reported-by tag to tested-by tag to show my respect.
 
+Best regards,
+
+Zheng Wang
