@@ -2,84 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382116235A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C766562359A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiKIVRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:17:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
+        id S231664AbiKIVRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:17:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKIVRm (ORCPT
+        with ESMTP id S231185AbiKIVRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:17:42 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A5431221;
-        Wed,  9 Nov 2022 13:17:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=c2Wy125HjX2W7gqEInmUWaHL+2Vak7X60gZ/uKVxsSs=; b=yTyMtQVIIuXac7UW27SjuG9FjG
-        FaNaEfZ1TQyT856V2r9PHoNMTj1OFga3j6sCeGL5vpTaladSMUcaUqlEh7FhPpGzmcgViQIE+XamI
-        57plJW0OSYsmvdILQmQY1Q/fNcPb2WEGHDp6RnEVFTvXds//du5ABC2lJNjVOqyXX1A704rNcdiHM
-        aHhVDPBY7FMDBohK5yGY1VIjFtEWemGGKAC1JVcG84zgDMzQiZempRpkBc4NYYMUhbJvIIxVGGvfi
-        XKzZ06LfYfF7ex2aqalbXQBI14ZikP4rfNEIAEAQmmt1pv0oSTTKxu6qp2CS1l45ct8nuw+AyhJWK
-        KjxiEKAg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ossRG-00HMpa-89; Wed, 09 Nov 2022 21:16:50 +0000
-Date:   Wed, 9 Nov 2022 13:16:50 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jann Horn <jannh@google.com>, Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        tangmeng <tangmeng@uniontech.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        David Gow <davidgow@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH next v2 0/6] exit: Put an upper limit on how often we can
- oops
-Message-ID: <Y2wYwsolgpRGPuMK@bombadil.infradead.org>
-References: <20221109194404.gonna.558-kees@kernel.org>
+        Wed, 9 Nov 2022 16:17:07 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8523134D;
+        Wed,  9 Nov 2022 13:17:05 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id p21so18273186plr.7;
+        Wed, 09 Nov 2022 13:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6o0JaodUdCinHCuijBKMPPDh4qNhM3W4CwZTMs5pShU=;
+        b=b7JdsqL98tFczElrzx45zPQRQqT+FLWQdW7GQ21VMf1VWbVkWvdPT7fPQVW9/YYGhj
+         fsJmZVTrJHZqpF5nrGm5JKasB3diwCu2Hs5yNW2C9n/rEZiCH7R7PnAEwZ/MGa/qzyIG
+         zfiOnumXidobU0/zuy474imLQWsj+TNcT1BwOR4wCZrc7nj9wEle1ahDUDnwTkt6UQJ1
+         bZGNJ9fqbFCNFUTDQDZYUF5tjtiVt+POwV9J5xnlurRxP4GFYN8l+xbrN6OKbV0N8j6j
+         kPz632gUkLxrLhg+OI3WB7b7hny2T7RaIKSOWnHn8CvNieatf9SjrSo7u+FU7dyzH4Jo
+         RWzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6o0JaodUdCinHCuijBKMPPDh4qNhM3W4CwZTMs5pShU=;
+        b=b3PLisN7Ncx58rTaBNLUZpurK7Peo+EAojgr7iioQ2yIi6iizKS3V22O63r4gOy4kb
+         o4CfwbvlQhkpMutY7JA9f7+paUGVPlSSVnSsK1mib/FVf/ojjqLqh2MfYRUP9xk/ylWW
+         CiS56JEg/zNqT5FKe7HNF+wcTuOCuLHfGs9cNia2P52wqsRHAjySRHMTYfX6Bt5MVITu
+         W2/72nLb+cT5EBJ5uuZ/YZKudNtbfejQNK8UI3p9hMVbog6gaMvUkj1OsyCmxJgrbFuR
+         RYUTP2km9yaJR2ivSvJ3VgpVX1O0t1JLoWgH+OBwTYEcek8NnGKcFTxJJCOgME983Rp9
+         daWQ==
+X-Gm-Message-State: ACrzQf0K+DeZsk1e++GTBesJ4+5GYDzHBL3XncL5yFdA5ge0zPOjJg/c
+        R11ujVEZewBDVJNQT1mSPe5tfQhfcJwZGIdqGig=
+X-Google-Smtp-Source: AMsMyM5vTjPHFhQ2vYKc1ap+Gnz9Xnoi5f6pFtOuhyEULsih6osIQH75MdocdJksgvBY7Bht8TwzxWn0ElldlUKBtUU=
+X-Received: by 2002:a17:902:da82:b0:186:ee5a:47c7 with SMTP id
+ j2-20020a170902da8200b00186ee5a47c7mr63072929plx.82.1668028625070; Wed, 09
+ Nov 2022 13:17:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109194404.gonna.558-kees@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz> <CA+CK2bD-uVGJ0=9uc7Lt5zwY+2PM2RTcfOhxEd65S7TvTrJULA@mail.gmail.com>
+ <87187c52-ae48-130b-6479-ae1023915bc1@suse.cz> <20221109155008.GC307514@darkstar.musicnaut.iki.fi>
+In-Reply-To: <20221109155008.GC307514@darkstar.musicnaut.iki.fi>
+From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Date:   Wed, 9 Nov 2022 22:16:53 +0100
+Message-ID: <CAGfqbt50b9rFEjbFPCZoQnNyBN+CAgBf6bxwpbr4z=tL_A97MQ@mail.gmail.com>
+Subject: Re: Deprecating and removing SLOB
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Tony Lindgren <tony@atomide.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,33 +94,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 12:00:43PM -0800, Kees Cook wrote:
+On Wednesday, 9 November 2022 16:50:08 CET Aaro Koskinen wrote:
 > Hi,
-> 
-> This builds on Jann's v1 patch[1]. Changes in v2:
-> - move sysctl into kernel/exit.c (where it belongs)
-> - expand Documentation slightly
-> 
-> New stuff in v2:
-> - expose oops_count to sysfs
-> - consolidate panic_on_warn usage
-> - introduce warn_limit
-> - expose warn_count to sysfs
-> 
-> [1] https://lore.kernel.org/lkml/20221107201317.324457-1-jannh@google.com
-> 
-> Jann Horn (1):
->   exit: Put an upper limit on how often we can oops
-> 
-> Kees Cook (5):
->   panic: Separate sysctl logic from CONFIG_SMP
->   exit: Expose "oops_count" to sysfs
->   panic: Consolidate open-coded panic_on_warn checks
->   panic: Introduce warn_limit
->   panic: Expose "warn_count" to sysfs
+>
+> On Wed, Nov 09, 2022 at 10:00:25AM +0100, Vlastimil Babka wrote:
+> > > On Tue, Nov 8, 2022 at 10:55 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+> > >> I believe SLOB can be removed because:
+> > >>
+> > >> - AFAIK nobody really uses it? It strives for minimal memory footprint
+> > >> by putting all objects together, which has its CPU performance costs
+> > >> (locking, lack of percpu caching, searching for free space...). I'm not
+> > >> aware of any "tiny linux" deployment that opts for this. For example,
+> > >> OpenWRT seems to use SLUB and the devices these days have e.g. 128MB
+> > >> RAM, not up to 16 MB anymore. I've heard anecdotes that the performance
+> > >> SLOB impact is too much for those who tried. Googling for
+> > >> "CONFIG_SLOB=y" yielded nothing useful.
+> > >
+> > > I am all for removing SLOB.
+> > >
+> > > There are some devices with configs where SLOB is enabled by default.
+> > > Perhaps, the owners/maintainers of those devices/configs should be
+> > > included into this thread:
+>
+> [...]
+>
+> > > arch/arm/configs/omap1_defconfig:CONFIG_SLOB=y
+>
+> I have been using SLUB on my OMAP1 boards with 32 MB RAM, because of
+> better debugging features and the memory footprint difference doesn't
+> really matter for my use cases. Looking at history why SLOB was added
+> there, it seems it came from 6cfce27c14aa ("omap1: Add omap1_defconfig")
+> when separate boards configs were merged, and SX1 board happened to have
+> SLOB in there. This board is nowadays only used in QEMU anyway.
+>
+> There are OMAP1 boards with only 16 MB, but support for those boards
+> will be removed. So from OMAP1 side, I don't think there is any real
+> need for SLOB anymore.
 
-For all:
+Moreover, I always had issues with availability of socket buffers during USB
+device setup when trying to use SLOB on Amstrad Delta based on OMAP1510,
+the least powerful OMAP1.  Then, +1 for SLOB removal.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
-  Luis
+Thanks,
+Janusz
