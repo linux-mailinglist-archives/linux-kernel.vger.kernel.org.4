@@ -2,84 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE5A622742
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A376622735
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiKIJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S230435AbiKIJjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiKIJk2 (ORCPT
+        with ESMTP id S230407AbiKIJiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:40:28 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAF69FF6;
-        Wed,  9 Nov 2022 01:40:22 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N6g1N1LbRz15MNg;
-        Wed,  9 Nov 2022 17:40:08 +0800 (CST)
-Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 9 Nov 2022 04:38:52 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF01F5B7;
+        Wed,  9 Nov 2022 01:38:44 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N6fwD709dzJnQM;
+        Wed,  9 Nov 2022 17:35:40 +0800 (CST)
+Received: from dggpemm500015.china.huawei.com (7.185.36.181) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 17:38:42 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500015.china.huawei.com
+ (7.185.36.181) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 17:40:20 +0800
-From:   ruanjinjie <ruanjinjie@huawei.com>
-To:     <jgg@ziepe.ca>, <yishaih@nvidia.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <kevin.tian@intel.com>,
-        <alex.williamson@redhat.com>, <cohuck@redhat.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] vfio/mlx5: use module_pci_driver
-Date:   Wed, 9 Nov 2022 17:37:03 +0800
-Message-ID: <20221109093703.3551036-1-ruanjinjie@huawei.com>
+ 2022 17:38:41 +0800
+From:   Wang ShaoBo <bobo.shaobowang@huawei.com>
+CC:     <marcel@holtmann.org>, <kuba@kernel.org>, <liwei391@huawei.com>,
+        <linux-bluetooth@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] Bluetooth: 6LoWPAN: add missing hci_dev_put() in get_l2cap_conn()
+Date:   Wed, 9 Nov 2022 17:37:26 +0800
+Message-ID: <20221109093726.3132203-1-bobo.shaobowang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500008.china.huawei.com (7.221.188.139)
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500015.china.huawei.com (7.185.36.181)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mlx5vf_pci_init and mlx5vf_pci_cleanup with module_init and module_exit
-calls can be replaced with the module_pci_driver call, as they are similar
-to what module_pci_driver does
+hci_get_route() takes reference, we should use hci_dev_put() to release
+it when not need anymore.
 
-Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+Fixes: 6b8d4a6a0314 ("Bluetooth: 6LoWPAN: Use connected oriented channel instead of fixed one")
+Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
 ---
- drivers/vfio/pci/mlx5/main.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+ net/bluetooth/6lowpan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
-index fd6ccb8454a2..457138b92f13 100644
---- a/drivers/vfio/pci/mlx5/main.c
-+++ b/drivers/vfio/pci/mlx5/main.c
-@@ -676,18 +676,7 @@ static struct pci_driver mlx5vf_pci_driver = {
- 	.driver_managed_dma = true,
- };
+diff --git a/net/bluetooth/6lowpan.c b/net/bluetooth/6lowpan.c
+index 215af9b3b589..c57d643afb10 100644
+--- a/net/bluetooth/6lowpan.c
++++ b/net/bluetooth/6lowpan.c
+@@ -972,6 +972,7 @@ static int get_l2cap_conn(char *buf, bdaddr_t *addr, u8 *addr_type,
+ 	hci_dev_lock(hdev);
+ 	hcon = hci_conn_hash_lookup_le(hdev, addr, *addr_type);
+ 	hci_dev_unlock(hdev);
++	hci_dev_put(hdev);
  
--static void __exit mlx5vf_pci_cleanup(void)
--{
--	pci_unregister_driver(&mlx5vf_pci_driver);
--}
--
--static int __init mlx5vf_pci_init(void)
--{
--	return pci_register_driver(&mlx5vf_pci_driver);
--}
--
--module_init(mlx5vf_pci_init);
--module_exit(mlx5vf_pci_cleanup);
-+module_pci_driver(mlx5vf_pci_driver);
- 
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Max Gurtovoy <mgurtovoy@nvidia.com>");
+ 	if (!hcon)
+ 		return -ENOENT;
 -- 
 2.25.1
 
