@@ -2,82 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B79D62226D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2070F62227C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiKIDJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 22:09:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S230172AbiKIDO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 22:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiKIDJ5 (ORCPT
+        with ESMTP id S229496AbiKIDOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 22:09:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F417E21
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:08:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667963339;
+        Tue, 8 Nov 2022 22:14:54 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3FF22B3B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:14:53 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667963691;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rk+G6bXxmyU0fpyJouoERPNPm9IAIKngr86zd/Y8mwM=;
-        b=UbWureG1R83cSXzai243vyNhbOi78rzI5hT0z+kc9Kixkhr25MR2RtPESZCEC5y367e7Dv
-        7JUzf7QcK5Vl1ECabsP1IMyUt8AGDgFtzyaijq5h8J1XMCjddYVcHRFPEIKOcU2xyYUOJP
-        N4rpZPAGHN+521zXKy7jL6cq++nkDtk=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-286-oaNYFiEnOqSZYz9Q1Aielw-1; Tue, 08 Nov 2022 22:08:57 -0500
-X-MC-Unique: oaNYFiEnOqSZYz9Q1Aielw-1
-Received: by mail-pj1-f70.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so436010pje.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 19:08:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rk+G6bXxmyU0fpyJouoERPNPm9IAIKngr86zd/Y8mwM=;
-        b=MSHhANv2O40hF7/qefNGmdR3dTcCb/LS6bx1zOOnuAALx9CN4wyqhv4CCTLCHNJpyZ
-         s3Ki1kI2uQS9YDhPSbdM8sy+7hpTCgNJJcLUvuwUrf5qs9sY0is2WhHgJDnli8onnhSf
-         7uspojcNLiU12WNhA/MCUP/vPZ5Y6ub7YbI0GMyJgXpsXYcfdRuM8y3zBXwMI6Cq37i1
-         D+BJ1nDARDX6ve7JBoZDzXzRV6/uVak2RPf2Yu5J06Jj9KBs0oAVmN7/mM51PLmBxNgQ
-         pz6HTjh/p64Nx24Z39KVi3jrt68ODVquMaPWRY5kticQzVdiFZMXrq90eMUtXoRdvFJX
-         xzBQ==
-X-Gm-Message-State: ACrzQf0jvuanei+kOv5J7J1LKVdq5T1clv/8AzcWI+FELCP/W2g5lQ/e
-        gPFS2nHz7sJVBsnEEhwK3WKHafHb7KXwkG0Gj5EgJNpJPYCqOjo9Hiicpmk4nXlToh7u1D2eBjb
-        cf3w2HxPfoVHQKSayCvfA2/7BuUs9LKAzJtZBRYQlXg9aTl7jy8lZG/uwJVbbG9uimAKHFj94rQ
-        ==
-X-Received: by 2002:a17:902:f707:b0:184:e44f:88cc with SMTP id h7-20020a170902f70700b00184e44f88ccmr58437341plo.42.1667963336732;
-        Tue, 08 Nov 2022 19:08:56 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6EuTZRq9zT6tdrqFnjzqb0DCbN1EkoOmwWtqVnpO/xkA4AJWWB/eXF7aqeWwxUnT7itNf/Lg==
-X-Received: by 2002:a17:902:f707:b0:184:e44f:88cc with SMTP id h7-20020a170902f70700b00184e44f88ccmr58437309plo.42.1667963336257;
-        Tue, 08 Nov 2022 19:08:56 -0800 (PST)
-Received: from [10.72.12.88] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902d2cf00b0018544ad1e8esm7751241plc.238.2022.11.08.19.08.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 19:08:55 -0800 (PST)
-Subject: Re: [PATCH v2] ceph: fix memory leak in mount error path when using
- test_dummy_encryption
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221108143421.30993-1-lhenriques@suse.de>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <215b729e-0af0-45d8-96af-3d3c319581c9@redhat.com>
-Date:   Wed, 9 Nov 2022 11:08:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        bh=DNSrYyuXAb9KkJUh6mgu5D2kNc+zrdhtGOh9S2mb3dc=;
+        b=h1Osu+8NiKcZcp0eGLs+ttEcyg0B9JyICcvybRpwWwsNJhGYbmyXr4ca+Jbm6z8SSuowjs
+        VvRRPPhrFbr1Mou9kTl4zyNQ1GMuHkK8bx1Ax9qkUwN3G1U/lBbb9ik1Ro0DFAIzsU6coB
+        qXgrYpVJGSCwEvlTjmlvrsiEcqA18QI=
 MIME-Version: 1.0
-In-Reply-To: <20221108143421.30993-1-lhenriques@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v1] arch/x86/mm/hugetlbpage.c: pud_huge() returns 0 when
+ using 2-level paging
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
+Date:   Wed, 9 Nov 2022 11:14:33 +0800
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        =?utf-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6C1AF1FE-40EC-4B0F-A899-5BAE4BB0EA4A@linux.dev>
+References: <20221107021010.2449306-1-naoya.horiguchi@linux.dev>
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,51 +61,74 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 08/11/2022 22:34, Luís Henriques wrote:
-> Because ceph_init_fs_context() will never be invoced in case we get a
-> mount error, destroy_mount_options() won't be releasing fscrypt resources
-> with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
-> an invocation to this function in the mount error path.
->
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
-> * Changes since v1:
->
-> As suggested by Xiubo, moved fscrypt free from ceph_get_tree() to
-> ceph_real_mount().
->
-> (Also used 'git format-patch' with '--base' so that the bots know what to
-> (not) do with this patch.)
->
->   fs/ceph/super.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-> index 2224d44d21c0..f10a076f47e5 100644
-> --- a/fs/ceph/super.c
-> +++ b/fs/ceph/super.c
-> @@ -1196,6 +1196,7 @@ static struct dentry *ceph_real_mount(struct ceph_fs_client *fsc,
->   
->   out:
->   	mutex_unlock(&fsc->client->mount_mutex);
-> +	ceph_fscrypt_free_dummy_policy(fsc);
->   	return ERR_PTR(err);
->   }
->   
->
-> base-commit: 8b9ee21dfceadd4cc35a87bbe7f0ad547cffa1be
-> prerequisite-patch-id: 34ba9e6b37b68668d261ddbda7858ee6f83c82fa
-> prerequisite-patch-id: 87f1b323c29ab8d0a6d012d30fdc39bc49179624
-> prerequisite-patch-id: c94f448ef026375b10748457a3aa46070aa7046e
->
-LGTM.
 
-Thanks Luis.
+> On Nov 7, 2022, at 10:10, Naoya Horiguchi <naoya.horiguchi@linux.dev> =
+wrote:
+>=20
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>=20
+> The following bug is reported to be triggered when starting X on =
+x86-32
+> system with i915:
+>=20
+>  [  225.777375] kernel BUG at mm/memory.c:2664!
+>  [  225.777391] invalid opcode: 0000 [#1] PREEMPT SMP
+>  [  225.777405] CPU: 0 PID: 2402 Comm: Xorg Not tainted 6.1.0-rc3-bdg+ =
+#86
+>  [  225.777415] Hardware name:  /8I865G775-G, BIOS F1 08/29/2006
+>  [  225.777421] EIP: __apply_to_page_range+0x24d/0x31c
+>  [  225.777437] Code: ff ff 8b 55 e8 8b 45 cc e8 0a 11 ec ff 89 d8 83 =
+c4 28 5b 5e 5f 5d c3 81 7d e0 a0 ef 96 c1 74 ad 8b 45 d0 e8 2d 83 49 00 =
+eb a3 <0f> 0b 25 00 f0 ff ff 81 eb 00 00 00 40 01 c3 8b 45 ec 8b 00 e8 =
+76
+>  [  225.777446] EAX: 00000001 EBX: c53a3b58 ECX: b5c00000 EDX: =
+c258aa00
+>  [  225.777454] ESI: b5c00000 EDI: b5900000 EBP: c4b0fdb4 ESP: =
+c4b0fd80
+>  [  225.777462] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: =
+00010202
+>  [  225.777470] CR0: 80050033 CR2: b5900000 CR3: 053a3000 CR4: =
+000006d0
+>  [  225.777479] Call Trace:
+>  [  225.777486]  ? i915_memcpy_init_early+0x63/0x63 [i915]
+>  [  225.777684]  apply_to_page_range+0x21/0x27
+>  [  225.777694]  ? i915_memcpy_init_early+0x63/0x63 [i915]
+>  [  225.777870]  remap_io_mapping+0x49/0x75 [i915]
+>  [  225.778046]  ? i915_memcpy_init_early+0x63/0x63 [i915]
+>  [  225.778220]  ? mutex_unlock+0xb/0xd
+>  [  225.778231]  ? i915_vma_pin_fence+0x6d/0xf7 [i915]
+>  [  225.778420]  vm_fault_gtt+0x2a9/0x8f1 [i915]
+>  [  225.778644]  ? lock_is_held_type+0x56/0xe7
+>  [  225.778655]  ? lock_is_held_type+0x7a/0xe7
+>  [  225.778663]  ? 0xc1000000
+>  [  225.778670]  __do_fault+0x21/0x6a
+>  [  225.778679]  handle_mm_fault+0x708/0xb21
+>  [  225.778686]  ? mt_find+0x21e/0x5ae
+>  [  225.778696]  exc_page_fault+0x185/0x705
+>  [  225.778704]  ? doublefault_shim+0x127/0x127
+>  [  225.778715]  handle_exception+0x130/0x130
+>  [  225.778723] EIP: 0xb700468a
+>=20
+> Recently pud_huge() got aware of non-present entry by commit =
+3a194f3f8ad0
+> ("mm/hugetlb: make pud_huge() and follow_huge_pud() aware of =
+non-present
+> pud entry") to handle some special states of gigantic page.  However, =
+it's
+> overlooked that pud_none() always returns false when running with =
+2-level
+> paging, and as a result pmd_huge() can return true pointlessly.
+>=20
+> Introduce "#if CONFIG_PGTABLE_LEVELS > 2" to pud_huge() to deal with =
+this.
+>=20
+> Fixes: 3a194f3f8ad0 ("mm/hugetlb: make pud_huge() and =
+follow_huge_pud() aware of non-present pud entry")
+> Reported-by: Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com>
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Cc: <stable@vger.kernel.org>
 
-Could I fold this into the previous commit ?
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-BRs
-
-- Xiubo
-
+Thanks.
 
