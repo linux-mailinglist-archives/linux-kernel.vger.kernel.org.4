@@ -2,165 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4336227F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BACEF622804
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiKIKGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
+        id S229794AbiKIKIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiKIKGU (ORCPT
+        with ESMTP id S229675AbiKIKIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:06:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37989F009;
-        Wed,  9 Nov 2022 02:06:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E0DD41F8D2;
-        Wed,  9 Nov 2022 10:06:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667988377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zNpDpEZXLt94VEJ8mUzOzUj6ooYgifJ9t78nlAa0rog=;
-        b=etxxpe6FqF/j1vzd/lvzJ6Hsq0hwVYYUklGqfdCvtrvng6XG7R8yfkcNZtDQR1AKKt3lDB
-        nxwDguxGGvYuKA4Y9ZP705Ml2FoHswF6TPZe7+8BiP/rdcYhfYHCPgVluhYArPuhQr0aT7
-        bI8y457jeCA+gALsosKPteiAQK/XZZw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667988377;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zNpDpEZXLt94VEJ8mUzOzUj6ooYgifJ9t78nlAa0rog=;
-        b=9teakqvrfc+HSn0KfqtDHaSb0+pT2QqHscpp/YmFg+20zJsTYucsDpi6bYjdKxQ6gAFsAk
-        4i1I1T5BaBIQ+SAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5C35139F1;
-        Wed,  9 Nov 2022 10:06:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iykzJ5l7a2OjCwAAMHmgww
-        (envelope-from <nstange@suse.de>); Wed, 09 Nov 2022 10:06:17 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
-Cc:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladis Dronov <vdronov@redhat.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] crypto: xts - restrict key lengths to approved
- values in FIPS mode
-References: <20221108142025.13461-1-nstange@suse.de>
-        <20221108142025.13461-2-nstange@suse.de>
-        <MW5PR84MB1842EEC44A8CB6594D4D0CD0AB3F9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-Date:   Wed, 09 Nov 2022 11:06:17 +0100
-In-Reply-To: <MW5PR84MB1842EEC44A8CB6594D4D0CD0AB3F9@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
-        (Robert Elliott's message of "Tue, 8 Nov 2022 20:34:10 +0000")
-Message-ID: <8735asfnmu.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Wed, 9 Nov 2022 05:08:18 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAE012A8C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:08:17 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id t25so45289604ejb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 02:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U+M6w+R6FHYw23U9WYJNoWQ39Q7v0W77OetkXqSRij8=;
+        b=QFR9DBBIlQOEM4cGA/+2bC5zT32JmpkmQGtfFPQb5d+KE2BGLOOlqvkeq/iqd6I+wA
+         g+5Bc0zHBCjc1izMsCvtMUD+MFeIF0pwD56JuGlRo6A0QLus9g2hP/M+euIovcu6or1j
+         RRz0ivnAYsbmfHDAKN3lpyZevihl1bh9wENq3j+Vmerwfw+58l0ZW/nCmftyVYTUXDBQ
+         5snC6zZEcng4jV83Vx7Ldw9RzeNN+/lQS/8aZ02imDa3SjlUMWlbEW6j4ngpTZIgoEgO
+         eCkc0UwTDCuhu9EZWR2C3d8Om5AgW6ssYlCFQE99crCezXpOCOGERq++9fPJtFR+fkLE
+         JEDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U+M6w+R6FHYw23U9WYJNoWQ39Q7v0W77OetkXqSRij8=;
+        b=JbnmM0ueLnnEorRGkN8IfnGybXG5G39wAJ+JZvGiHo8DfF5/v8Tk5aoRuHmDjXdnfW
+         A3g4RyK7J1adQGClYyVQpph0Np6vD7LP48crSENU8VBD36IG71tIc1A/vbiZl3vGVMzp
+         05te2NeyNPkioLl13UnbRVMslaatUKE4eUvEWIO9xxCmbqubHMVdNxBu7YO5IKZf7gL/
+         okD+eWcU+ec6Y2PwzmycB0GK7HBe3tZn5TYPWLLXLohpEDWERNSj64zz7Ds7mk2qW/jz
+         mvtVBAl+nJJT+tw0SwbCXb41AMCVXlIsELpmN93vdfC+x9khZu2+GJzNveY1r/JrUqk3
+         DEDQ==
+X-Gm-Message-State: ACrzQf075WAnYuSiEdbTjVlG8ludffdGSV8ZCmDW5bPvhnrRepKtiQ32
+        rQLpiKcsihhzY8f8vwfOrr0B3EBZ/tkl9OEh06nlKw==
+X-Google-Smtp-Source: AMsMyM5OiIZs8z5Y3H9IpF29+eHXkZ6InmKjC4u8rtHyJawxyBp7+yMNOQJc7IM4fr+9THbBoA8jOBF94crtkBiCdLQ=
+X-Received: by 2002:a17:907:c1e:b0:7ae:31a0:571e with SMTP id
+ ga30-20020a1709070c1e00b007ae31a0571emr24404336ejc.690.1667988495931; Wed, 09
+ Nov 2022 02:08:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+ <20221108142226.63161-7-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbVekP0kFpwexpb3NhqRSouNW7FhhRpSK0yRQTrJAGt4A@mail.gmail.com> <Y2t5ZXM0Oihz/LDK@smile.fi.intel.com>
+In-Reply-To: <Y2t5ZXM0Oihz/LDK@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Nov 2022 11:08:04 +0100
+Message-ID: <CACRpkda6uDOEXybduFbTe0yXzLMaQ8x0UORZAH-U0SOTWHkF-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] pinctrl: intel: Enumerate PWM device when
+ community has a capabilitty
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Elliott, Robert (Servers)" <elliott@hpe.com> writes:
+On Wed, Nov 9, 2022 at 10:56 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Wed, Nov 09, 2022 at 10:08:51AM +0100, Linus Walleij wrote:
 
->> diff --git a/include/crypto/xts.h b/include/crypto/xts.h
-> ...
->> @@ -35,6 +35,13 @@ static inline int xts_verify_key(struct crypto_skciph=
-er
->> *tfm,
->>  	if (keylen % 2)
->>  		return -EINVAL;
->>=20
->> +	/*
->> +	 * In FIPS mode only a combined key length of either 256 or
->> +	 * 512 bits is allowed, c.f. FIPS 140-3 IG C.I.
->> +	 */
->> +	if (fips_enabled && keylen !=3D 32 && keylen !=3D 64)
->> +		return -EINVAL;
->> +
->>  	/* ensure that the AES and tweak key are not identical */
->>  	if ((fips_enabled || (crypto_skcipher_get_flags(tfm) &
->>  			      CRYPTO_TFM_REQ_FORBID_WEAK_KEYS)) &&
->> --
->> 2.38.0
+> > I guess I can be convinced that this hack is the lesser evil :D
+> >
+> > What is it in the platform that makes this kind of hacks necessary?
 >
-> There's another function in the same file called xts_check_key()=20
-> that is used by some of the hardware drivers:
+> The PWM capability is discoverable by the looking for it in the pin
+> control IP MMIO, it's not a separate device, but a sibling (child?)
+> of the pin control, that's not a separate entity.
 
-Right, thanks for spotting.
+OK I get it.
 
-AFAICT, xts_check_key() is the older of the two variants,
-xts_verify_key() had been introduced with commit f1c131b45410 ("crypto:
-xts - Convert to skcipher"). There had initially only been a single
-call from generic crypto/xts.c and the main difference to
-xts_check_key() had been that it took a crypto_skcipher for its tfm
-argument rather than a plain crypto_tfm as xts_check_key() did.
+> Moreover, not every pin control _community_ has that capability (capabilities
+> are on the Community level and depends on ACPI representation of the
+> communities themself - single device or device per community - the PWM may or
+> may not be easily attached.
 
-It seems that over time, xts crypto drivers adopted the newer
-xts_verify_key() variant then.
+OK I think I understand it a bit, if ACPI thinks about the PWM
+as "some feature of the community" then that is how it is, we have
+this bad fit between device tree and Linux internals at times as well,
+then spawning a device from another one is the way to go, we need
+to consider the option that it is Linux that is weird at times, not the
+HW description.
 
+> What you are proposing is to invent at least two additional properties or so
+> for the pin control device description and then to support old platforms,
+> create a board file somewhere else, which will go through all pin control
+> devices, checks the capabilities, then embeds the properties via properties
+> (Either embedded into DSDT, if done in BIOS, or swnodes).
 >
-> arch/s390/crypto/paes_s390.c:    * xts_check_key verifies the key length =
-is not odd and makes
->  [that references it in the comment but actually calls xts_verify_key in =
-the code]
-> drivers/crypto/axis/artpec6_crypto.c:   ret =3D xts_check_key(&cipher->ba=
-se, key, keylen);
-> drivers/crypto/cavium/cpt/cptvf_algs.c: err =3D xts_check_key(tfm, key, k=
-eylen);
-> drivers/crypto/cavium/nitrox/nitrox_skcipher.c: ret =3D xts_check_key(tfm=
-, key, keylen);
-> drivers/crypto/ccree/cc_cipher.c:           xts_check_key(tfm, key, keyle=
-n)) {
-> drivers/crypto/marvell/octeontx/otx_cptvf_algs.c:       ret =3D xts_check=
-_key(crypto_skcipher_tfm(tfm), key, keylen);
-> drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c:     ret =3D xts_check=
-_key(crypto_skcipher_tfm(tfm), key, keylen);
-> drivers/crypto/atmel-aes.c:     err =3D xts_check_key(crypto_skcipher_tfm=
-(tfm), key, keylen);
+> Do I get you right?
 >
-> It already has one check qualified by fips_enabled:
->
->         /* ensure that the AES and tweak key are not identical */
->         if (fips_enabled && !crypto_memneq(key, key + (keylen / 2), keyle=
-n / 2))
->                 return -EINVAL;
->
-> Should that implement the same key length restrictions?
+> If so, in my opinion it's way more ugly and overkill that the current
+> approach.
 
-From a quick glance, all of the above drivers merely convert some
-crypto_skcipher to a crypto_tfm before passing it to xts_check_key().
+No I just wanted to understand things better. This small hack in the
+pin controller is way better than a bigger and widespread hack
+somewhere else.
 
-So I think these should all be made to call xts_verify_key() directly
-instead, the former xts_check_key() could then get dropped. But that's
-more of a cleanup IMO and would probably deserve a separate patch series
-on its own.
+> That said, I agree that this looks not nice, but that's all what
+> Mika and me can come up with to make all this as little ugly and
+> intrusive as possible.
 
-Thanks!
+I can live with it, rough consensus and running code.
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Nicolai
-
---=20
-SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
-rnberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-(HRB 36809, AG N=C3=BCrnberg)
+Yours,
+Linus Walleij
