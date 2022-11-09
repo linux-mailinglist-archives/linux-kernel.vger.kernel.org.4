@@ -2,249 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B80D6233F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04506623402
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiKITzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 14:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        id S231854AbiKIT56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbiKITz2 (ORCPT
+        with ESMTP id S230415AbiKIT54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:55:28 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF222F00A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:55:26 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id k22so17687599pfd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 11:55:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lhu0AaXEHpohB57ir2dSQXl6jTPxnwC4FKWIfCDgyuQ=;
-        b=KLrj/KYNV8XkhPS1iVxKu/aPMmyU1eZXY/F92davxqF98lFJkaDajitQpvLL4vIrUZ
-         RU7h9cdLzbmNLn0L1qXfQRwCmi310yFjxach5EiNriUwsj4QY8tSCN87JHeXJyddsuys
-         72M/pHU11niJlVMdwR5BejriAj5tTWIKSL3Zum9Kr5LjGnYIBB+KYcP7u+2Q/hzO4Ovc
-         tU1U6kuUmaW/d49VLzRNA0NrCOBTKDlZUJ48t/FF5HX9jTARqKnEoZUIP0SBy4fffs1f
-         QNQtfiVfaubbqysdwv5B8gG1PQb5SEDi45P+WAnFZXNK62PytNrCB9DDZsJJ9qdrmxMB
-         hRjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lhu0AaXEHpohB57ir2dSQXl6jTPxnwC4FKWIfCDgyuQ=;
-        b=vh3DKCEDNmgChnSGHaqVs3L0eOdyKwqmgBD0ONMpMNoOQ5WxfyIQXuN4W5+YdrePkV
-         E+x9+zYG0LMEZr2+9gOwBkHNCMSqyESGuWkmK3+gMiNa1c2TLfeFHotcdHpJFg1BBcOF
-         KopZgZ7lF/hymsWMcu58ynvu0bs0ZnuWDS0uNRPzWTu3pOj3wBKNrRjsFFBqU8toefjt
-         nTyiLKO7vEMcY+/OTP8qRkKGTMqW3P6VLYJgdb1P6SoYVwOIMrmRBNn0cpv0P6gRJJpw
-         rXyeNRk8clAL8Qp0oAsJSaVKXPAlwN+SujHB2LFWyxygFwLgHluPdfPHNj45sdjF50wY
-         TtZg==
-X-Gm-Message-State: ACrzQf3BJlcelD30qYbZxh5nJrMFjLfQa72CMtW4KYKFE5mtLhwXNU3P
-        ecW/QTMZLHtt/wy+U7ZiWY9Saw==
-X-Google-Smtp-Source: AMsMyM4yxxTSRBnPGND+4E6OHwiGrFVk5cgGXo5F+I0YpXul+RM44cAyB0NLsjogLjCA7A1w6czz7Q==
-X-Received: by 2002:a05:6a00:1482:b0:56c:6a9c:3d7 with SMTP id v2-20020a056a00148200b0056c6a9c03d7mr62529169pfu.0.1668023725592;
-        Wed, 09 Nov 2022 11:55:25 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id d14-20020a170902654e00b00172f6726d8esm9466969pln.277.2022.11.09.11.55.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 11:55:24 -0800 (PST)
-Date:   Wed, 09 Nov 2022 11:55:24 -0800 (PST)
-X-Google-Original-Date: Wed, 09 Nov 2022 11:55:21 PST (-0800)
-Subject:     Re: [PATCH v5 0/7] Add support for Renesas RZ/Five SoC
-In-Reply-To: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        geert+renesas@glider.be, magnus.damm@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        Conor Dooley <conor.dooley@microchip.com>, guoren@kernel.org,
-        anup@brainfault.org, Atish Patra <atishp@rivosinc.com>,
-        heinrich.schuchardt@canonical.com, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, prabhakar.csengg@gmail.com,
-        biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     prabhakar.csengg@gmail.com
-Message-ID: <mhng-563fb6cf-4505-4137-8da1-13f631e1c74f@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Nov 2022 14:57:56 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2C72F00A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:57:54 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9Jn7qf018415;
+        Wed, 9 Nov 2022 19:57:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=myHppXYv+tVrjK8QfFQ1K+zoLS6d5fd/tIEWHucmWbc=;
+ b=NgP3BElhz2a4MqmU3AftzIRIJIxvrIofv9r9Vycl3gzKfBHHt0T6RlDV5Tgswx8XAVvz
+ aJ1qRchBwnpfGBrpPJPbnX6aDeqRVLL2Z5xhczHEHdAsflD3BsoF4YV7skCP9OCMFF1u
+ LBdyXqcz2LwClHe1RDlNmvUU9Qnl6H3IDom9uQ+oTCRGqxR99/6YEU5cEZK1rrq5hf85
+ hsiO6EyMnUL9wXSH7IMhnFdEng3k7RzZx3PQESoA+p81b3adqrvuIHwz7MZgnPRJM9zB
+ jWp03uYYd0mbtWQD4fKj2fEKy6OY0B0Xp7fEti0O6O90BEw2G6WSZrg6DygaLDQjboHn eQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3krg8agcw6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 19:57:32 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A9JvV3H017108
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 9 Nov 2022 19:57:31 GMT
+Received: from [10.216.43.221] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 9 Nov 2022
+ 11:57:28 -0800
+Message-ID: <8d6f41f6-96ae-2f34-4bc7-58b63bf55159@quicinc.com>
+Date:   Thu, 10 Nov 2022 01:27:24 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: Query on handling some special Group0 interrupt in Linux
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <d7b70de6-cd7f-3724-3449-5b838a478277@quicinc.com>
+ <86tu38oupr.wl-maz@kernel.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <86tu38oupr.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: c7dfpCVaHnYeXp5bv-zRyFA7RAjDxaz1
+X-Proofpoint-ORIG-GUID: c7dfpCVaHnYeXp5bv-zRyFA7RAjDxaz1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ mlxlogscore=753 spamscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
+ suspectscore=0 adultscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211090150
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 09:59:14 PDT (-0700), prabhakar.csengg@gmail.com wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Hi All,
->
-> The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
-> 1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
-> as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
-> entry-class social infrastructure gateway control and industrial gateway
-> control.
->
-> This patch series adds initial SoC DTSi support for Renesas RZ/Five
-> (R9A07G043) SoC. Below is the list of IP blocks enabled in the initial
-> board DTS which can be used to boot via initramfs on RZ/Five SMARC EVK:
-> - AX45MP CPU
-> - CPG
-> - PINCTRL
-> - PLIC
-> - SCIF0
-> - SYSC
->
-> Useful links:
-> -------------
-> [0] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
-> [1] http://www.andestech.com/en/products-solutions/andescore-processors/riscv-ax45mp/
->
-> Patch series depends on the below patches (which are queued in the Renesas tree for v6.2):
-> ------------------------------------------------------------------------------------
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-dt-bindings-for-v6.2&id=c27ce08b806d606cd5cd0e8252d1ed2b729b5b55
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-dt-bindings-for-v6.2&id=7dd1d57c052e88f98b9e9145461b13bca019d108
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-arm-soc-for-v6.2&id=b3acbca3c80e612478b354e43c1480c3fc15873e
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-arm-dt-for-v6.2&id=49669da644cf000eb79dbede55bd04acf3f2f0a0
-> [4] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-arm-dt-for-v6.2&id=b9a0be2054964026aa58966ce9724b672f210835
->
-> v4 -> v5:
-> ---------
-> * Rebased patches on -next
-> * Included RB tags
-> * Dropped patches #1 and #4 (form v4) as they are queued up by Renesas trees
-> * Patch #7 from v4 was not needed anymore so dropped it
-> * Patches #4 and #5 are new
->
-> v4: https://lore.kernel.org/all/20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> v3: https://lore.kernel.org/lkml/20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> v2: https://lore.kernel.org/all/20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> v1: https://lore.kernel.org/lkml/20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
->
-> Below are the logs from RZ/Five SMARC EVK:
-> ------------------------------------------
->
-> / # uname -ra;
-> Linux (none) 6.1.0-rc2-00036-gbad82a074f62 #145 SMP Fri Oct 28 17:18:41 BST 2022 riscv64 GNU/Linux
-> / # cat /proc/cpuinfo;
-> processor       : 0
-> hart            : 0
-> isa             : rv64imafdc
-> mmu             : sv39
-> uarch           : andestech,ax45mp
-> mvendorid       : 0x31e
-> marchid         : 0x8000000000008a45
-> mimpid          : 0x500
->
-> / # for i in machine family soc_id revision; do echo -n "$i: ";cat /sys/devices/
-> soc0/$i; done
-> machine: Renesas SMARC EVK based on r9a07g043f01
-> family: RZ/Five
-> soc_id: r9a07g043
-> revision: 0
-> / #
-> / # cat /proc/interrupts
->            CPU0
->   1:          0  SiFive PLIC 412 Level     1004b800.serial:rx err
->   2:         16  SiFive PLIC 414 Level     1004b800.serial:rx full
->   3:        402  SiFive PLIC 415 Level     1004b800.serial:tx empty
->   4:          0  SiFive PLIC 413 Level     1004b800.serial:break
->   5:      41826  RISC-V INTC   5 Edge      riscv-timer
->   6:         10  SiFive PLIC 416 Level     1004b800.serial:rx ready
-> IPI0:         0  Rescheduling interrupts
-> IPI1:         0  Function call interrupts
-> IPI2:         0  CPU stop interrupts
-> IPI3:         0  IRQ work interrupts
-> IPI4:         0  Timer broadcast interrupts
-> / #
-> / # cat /proc/meminfo
-> MemTotal:         882252 kB
-> MemFree:          860848 kB
-> MemAvailable:     858608 kB
-> Buffers:               0 kB
-> Cached:             1796 kB
-> SwapCached:            0 kB
-> Active:                0 kB
-> Inactive:             72 kB
-> Active(anon):          0 kB
-> Inactive(anon):       72 kB
-> Active(file):          0 kB
-> Inactive(file):        0 kB
-> Unevictable:        1796 kB
-> Mlocked:               0 kB
-> SwapTotal:             0 kB
-> SwapFree:              0 kB
-> Dirty:                 0 kB
-> Writeback:             0 kB
-> AnonPages:           108 kB
-> Mapped:             1200 kB
-> Shmem:                 0 kB
-> KReclaimable:       6760 kB
-> Slab:              12360 kB
-> SReclaimable:       6760 kB
-> SUnreclaim:         5600 kB
-> KernelStack:         620 kB
-> PageTables:           32 kB
-> SecPageTables:         0 kB
-> NFS_Unstable:          0 kB
-> Bounce:                0 kB
-> WritebackTmp:          0 kB
-> CommitLimit:      441124 kB
-> Committed_AS:        592 kB
-> VmallocTotal:   67108864 kB
-> VmallocUsed:        1132 kB
-> VmallocChunk:          0 kB
-> Percpu:               84 kB
-> HugePages_Total:       0
-> HugePages_Free:        0
-> HugePages_Rsvd:        0
-> HugePages_Surp:        0
-> Hugepagesize:       2048 kB
-> Hugetlb:               0 kB
-> / #
-> / #
->
-> Cheers,
-> Prabhakar
->
-> Lad Prabhakar (7):
->   dt-bindings: riscv: Sort the CPU core list alphabetically
->   dt-bindings: riscv: Add Andes AX45MP core to the list
->   riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
->   riscv: dts: renesas: Add initial devicetree for Renesas RZ/Five SoC
->   riscv: dts: renesas: Add minimal DTS for Renesas RZ/Five SMARC EVK
->   MAINTAINERS: Add entry for Renesas RISC-V
->   riscv: configs: defconfig: Enable Renesas RZ/Five SoC
->
->  .../devicetree/bindings/riscv/cpus.yaml       | 11 ++-
->  MAINTAINERS                                   |  3 +-
->  arch/riscv/Kconfig.socs                       |  5 +
->  arch/riscv/boot/dts/Makefile                  |  1 +
->  arch/riscv/boot/dts/renesas/Makefile          |  2 +
->  arch/riscv/boot/dts/renesas/r9a07g043f.dtsi   | 57 ++++++++++++
->  .../boot/dts/renesas/r9a07g043f01-smarc.dts   | 27 ++++++
->  .../boot/dts/renesas/rzfive-smarc-som.dtsi    | 58 ++++++++++++
->  arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi | 91 +++++++++++++++++++
->  arch/riscv/configs/defconfig                  |  3 +
->  10 files changed, 252 insertions(+), 6 deletions(-)
->  create mode 100644 arch/riscv/boot/dts/renesas/Makefile
->  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043f.dtsi
->  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
->  create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
->  create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi
+Hi Marc,
 
-Geert was mentioning taking these though one of his trees, that works 
-for me so
+Thanks for your reply.
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On 11/9/2022 11:50 PM, Marc Zyngier wrote:
+> On Wed, 09 Nov 2022 16:20:35 +0000,
+> Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+>>
+>> Hi,
+>>
+>> I was working on a use case where both el2/el3 are implemented and we
+>> have a watchdog interrupt (SPI), which is used for detecting software
+>> hangs and cause device reset; If that interrupt's current cpu affinity
+>> is on a core, where interrupts are disabled, we won't be able to serve
+>> it or if this interrupt comes on a core which has interrupt enabled,
+>> calling panic() or with smp_send_stop(), we would not be able
+>> to know the call stack of the other cores which is running with
+>> interrupt disabled.
+>>
+>> I was thinking of configuring both a watchdog irq(SPI) and IPI_STOP
+>> (SGI) or any reserve IPI as an FIQ. And from the watchdog irq handler,
+>> I was thinking of calling panic() which eventually sends IPI_STOP(SGI
+>> FIQ) to all the cores. And with this we will able to dump all the core
+>> call stack.
+>>
+>> I am able to achieve this but wanted to know if this is acceptable to
+>> the community to support/allow such use cases like above and enable
+>> group0 interrupt from GIC for some special use cases.
+> 
+> For a start, we only deal with Group-1 interrupts in Linux. Group-0
+> interrupts are for the firmware, and we really don't want to see them
+> (this is consistent with your HW having EL3). 
 
-Happy to do a shared tag or whatever, but I think we can just skip that 
-here.  The only conflicts would be defconfig and Kconfig.socs, but I 
-don't think anything big is in the works for either -- unless Conor was 
-planning on re-spinning that Kconfig.socs rework?
+What is the downside of it we support this ? I see one of the 
+implementation here.
 
-Thanks!
+https://elixir.bootlin.com/linux/v6.0.7/source/drivers/irqchip/irq-apple-aic.c#L510
+
+>We also mask IRQ and FIQ at the same time, so this is a non-starter.
+This can be taken care if we support this.
+
+> 
+> If you want to be able to deliver an interrupt while the interrupts
+> are masked, what you are looking for is the NMI framework, for which
+> you can register SPIs as (pseudo-)NMI.
+
+Yes, kind of NMI.
+I have already looked into this.
+Since, in our system El2 is implemented and each physical interrupt get 
+routed to hypervisor and later vIrq comes to El1 and each interrupt 
+enable/disable call exercise pmr register trap can cause latency in
+regular run(like multiple VM).
+
+Since, some of the use-case could be special like i have mentioned
+in my initial mail where such interrupt will be fatal and system will
+get reset after that. I am not able to think of any other use case than
+this but can this not be considered as one of the feature.
+
+> 
+> This is of course assuming that you're using GICv3. If you're using an
+> older version of the architecture, we don't have a good solution for
+> you, unfortunately.
+> 
+
+we are using GICv3.
+
+> Thanks,
+> 
+> 	M.
+> 
+
+-Mukesh
