@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7C66231C3
+	by mail.lfdr.de (Postfix) with ESMTP id 7572B6231C4
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiKIRqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S230014AbiKIRqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKIRqk (ORCPT
+        with ESMTP id S231750AbiKIRql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:46:40 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8104564F9;
-        Wed,  9 Nov 2022 09:46:39 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id c2so17753997plz.11;
-        Wed, 09 Nov 2022 09:46:39 -0800 (PST)
+        Wed, 9 Nov 2022 12:46:41 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FCBE70;
+        Wed,  9 Nov 2022 09:46:40 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so2607445pjl.3;
+        Wed, 09 Nov 2022 09:46:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZI6aYo9FIIiIY/a14tjDWqXvcVQQ43A/4K5Y/rrZYfc=;
-        b=F9E/OjqspCVLP2Y8q39sBB1wbThQQJpuE3/xdKc1ijYnIth0Kw3KkXbT5D9sHfztW/
-         CXDqgugI/NJQMUtVn6gwRlq7ASFWNUy+MUrwXx8Qr0IG6xwRbdKgPxKbZTi4FKnNq1do
-         v0sWqq8qyJliUQCqO/cammVbhbysfxjgVGvZAKPsgpH0DJ8KSm/7/95llofx2QHO2Abn
-         xDN5zl8ZEE3e+yCTgPOuj95HUqsNpID4CpKPPcLfyS6D/8gbDyoyfMyQjkYlTd2XnN6l
-         0QItIWO8kEElM+DsCHAGPwZttnoYsmq3sbo3lUizzOUUrGMDxPJ+arofjsl3JE2J8H7M
-         7hsg==
+        bh=xt+WoBEPSCbce4SU7k7Lvd7WOnbPXIYlVffaFzdNGBU=;
+        b=jNWDt47UqufTjvRMGEX6BH/6RYZ0QfrGI7q6r3LGHQStZ91PZT32H/Lsxk1b8qtMgp
+         BfWKREETEGMNcMX+FTrnJM8SDogq+UD9OZhVqM/BhQ90+xShOz6T7NSOx3N2+AjHuoha
+         SwKCtSz5e6I7nsn/MJxadNzMMRYJ5YO0jCW/Lu2l0H4NU9fXLtFgBmPAg+yfhjI7KV5x
+         W7bQNx51aInbL6PBDFc+FZQvhQzX1ZNsC8Kqtai4W4WOWnmni53sSzBPJHbeaLwSaqqN
+         Iher7PbaBIgHn3DYXybYjlwh8qGv6kkKrzST9P9uJsCgbcqY5J6n01lXq0gGk06rNnsJ
+         YkTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ZI6aYo9FIIiIY/a14tjDWqXvcVQQ43A/4K5Y/rrZYfc=;
-        b=64YUhDiTMhXw0HNs9J2ABUV7fqSrXLHiuOvBHr6VUebjxsaznMfsSgVgvXCn/YtG/+
-         zQBryPxmdV618vjF4/6wbtX6lqC0rRtiK/4Xe1buDAPk3TiysZuFNxnRP2JRXNQlhylC
-         ruNiRcF7k0Rcjlx+EKwzryrphyDdjDkmKhE7Wfn+Fff6+uCmdyhbW/jCIepvz5S0J0Vq
-         d29YRJHKUNOL4yxGVDt27LoRDpx1QSAfSi293tq9zAQ0Miz+VyxP2YS6MDv+tMAcEApC
-         RaSyWlqMCqvwP190JlaJBF5SrmU0fnXWksnAeJn40xKP5RBwPHaO/YxI6bKkE+KfjvW9
-         S6OA==
-X-Gm-Message-State: ACrzQf23CsCJAWsdQpZuA5hquXptTI+exvMQ3kz5LN5GpaliS65O1zuG
-        xpNuHvMMilpAg7yCGcmMXhY=
-X-Google-Smtp-Source: AMsMyM6OgUp9L0V7Up/at1JaMzbdeB9wDAVuaKQFqAKRCx9KbAfqwmM1b0BQ+GzcCerkIE5bwhzIfQ==
-X-Received: by 2002:a17:90b:384e:b0:213:7c41:1018 with SMTP id nl14-20020a17090b384e00b002137c411018mr64623918pjb.63.1668015999046;
-        Wed, 09 Nov 2022 09:46:39 -0800 (PST)
+        bh=xt+WoBEPSCbce4SU7k7Lvd7WOnbPXIYlVffaFzdNGBU=;
+        b=Wfbk+Sg9FPuD0IaqAOu8PP2vZXZRRmVseS7a2GlzHSyrNtEg3yKX33utWBZqRtZJrM
+         jbxHbgXeaFYihYeF0r6blQMQsbdwDZg8HKaOTvZ7pC5xJBh9iY4Z94bk9qI2SsDEYrL+
+         yuV4NLFov5oB/yETtm6dqxIx56Telo14SzN9DQIa/Oal3hJz2cETEdvZbz0Qp3bif1qq
+         HOYY5bMa/Hz92ZC9Zh8RGLFDfpMbPypHgvasIEl8LBX/V9Har6CivrvfgC2DpoO+MwcX
+         QeGfDE2QHBMk7L+Vw/dl0S8x+H/h6kukvdMgGtmeDaoHHKEL/YlDUN7FUnvvF6Whytyd
+         UmXw==
+X-Gm-Message-State: ACrzQf07IFn4xIcdjdTIppz6rC8Khq+m6FmXxXBKoel1D4OtE11dmAQw
+        pokNNbA1HdgO/ZJp1ZSdWvQ=
+X-Google-Smtp-Source: AMsMyM5eKw3MZqfgT7AoSImT71gghgJhYFZP1LIIi1DTWZigWx36CBw7QluWBtOcrS7RSHr8MCX37w==
+X-Received: by 2002:a17:90a:4dce:b0:213:9d22:8870 with SMTP id r14-20020a17090a4dce00b002139d228870mr65397473pjl.7.1668016000181;
+        Wed, 09 Nov 2022 09:46:40 -0800 (PST)
 Received: from balhae.corp.google.com ([2620:15c:2c1:200:fa05:f3cd:da75:3103])
-        by smtp.gmail.com with ESMTPSA id a10-20020a63cd4a000000b0043941566481sm7877909pgj.39.2022.11.09.09.46.37
+        by smtp.gmail.com with ESMTPSA id a10-20020a63cd4a000000b0043941566481sm7877909pgj.39.2022.11.09.09.46.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 09:46:38 -0800 (PST)
+        Wed, 09 Nov 2022 09:46:39 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         German Gomez <german.gomez@arm.com>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         James Clark <james.clark@arm.com>
-Subject: [PATCH 01/12] perf test: Add -w/--workload option
-Date:   Wed,  9 Nov 2022 09:46:24 -0800
-Message-Id: <20221109174635.859406-2-namhyung@kernel.org>
+Subject: [PATCH 02/12] perf test: Replace pipe test workload with noploop
+Date:   Wed,  9 Nov 2022 09:46:25 -0800
+Message-Id: <20221109174635.859406-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221109174635.859406-1-namhyung@kernel.org>
 References: <20221109174635.859406-1-namhyung@kernel.org>
@@ -81,176 +81,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The -w/--workload option is to run a simple workload used by testing.
-This adds a basic framework to run the workloads and 'noploop' workload
-as an example.
+So that it can get rid of requirement of a compiler.
+Also define and use more local symbols to ease future changes.
 
-  $ perf test -w noploop
-
-The noploop does a loop doing nothing (NOP) for a second by default.
-It can have an optional argument to specify the time in seconds.
+  $ sudo ./perf test -v pipe
+   87: perf pipe recording and injection test                          :
+  --- start ---
+  test child forked, pid 748003
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.000 MB - ]
+      748014   748014       -1 |perf
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.000 MB - ]
+      99.83%  perf     perf                  [.] noploop
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.000 MB - ]
+      99.85%  perf     perf                  [.] noploop
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.160 MB /tmp/perf.data.2XYPdw (4007 samples) ]
+      99.83%  perf     perf                  [.] noploop
+  test child finished with 0
+  ---- end ----
+  perf pipe recording and injection test: Ok
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/tests/Build               |  2 ++
- tools/perf/tests/builtin-test.c      | 24 +++++++++++++++++++++
- tools/perf/tests/tests.h             | 22 +++++++++++++++++++
- tools/perf/tests/workloads/Build     |  3 +++
- tools/perf/tests/workloads/noploop.c | 32 ++++++++++++++++++++++++++++
- 5 files changed, 83 insertions(+)
- create mode 100644 tools/perf/tests/workloads/Build
- create mode 100644 tools/perf/tests/workloads/noploop.c
+ tools/perf/tests/shell/pipe_test.sh | 55 ++++++-----------------------
+ 1 file changed, 10 insertions(+), 45 deletions(-)
 
-diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-index 2064a640facb..11b69023011b 100644
---- a/tools/perf/tests/Build
-+++ b/tools/perf/tests/Build
-@@ -103,3 +103,5 @@ endif
- CFLAGS_attr.o         += -DBINDIR="BUILD_STR($(bindir_SQ))" -DPYTHON="BUILD_STR($(PYTHON_WORD))"
- CFLAGS_python-use.o   += -DPYTHONPATH="BUILD_STR($(OUTPUT)python)" -DPYTHON="BUILD_STR($(PYTHON_WORD))"
- CFLAGS_dwarf-unwind.o += -fno-optimize-sibling-calls
-+
-+perf-y += workloads/
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index 7122eae1d98d..ce641ccfcf81 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -118,6 +118,10 @@ static struct test_suite **tests[] = {
- 	arch_tests,
- };
+diff --git a/tools/perf/tests/shell/pipe_test.sh b/tools/perf/tests/shell/pipe_test.sh
+index 1b32b4f28391..8dd115dd35a7 100755
+--- a/tools/perf/tests/shell/pipe_test.sh
++++ b/tools/perf/tests/shell/pipe_test.sh
+@@ -2,68 +2,33 @@
+ # perf pipe recording and injection test
+ # SPDX-License-Identifier: GPL-2.0
  
-+static struct test_workload *workloads[] = {
-+	&workload__noploop,
-+};
-+
- static int num_subtests(const struct test_suite *t)
- {
- 	int num;
-@@ -475,6 +479,21 @@ static int perf_test__list(int argc, const char **argv)
- 	return 0;
- }
+-# skip if there's no compiler
+-if ! [ -x "$(command -v cc)" ]; then
+-	echo "failed: no compiler, install gcc"
+-	exit 2
+-fi
+-
+-file=$(mktemp /tmp/test.file.XXXXXX)
+ data=$(mktemp /tmp/perf.data.XXXXXX)
++prog="perf test -w noploop"
++task="perf"
++sym="noploop"
  
-+static int run_workload(const char *work, int argc, const char **argv)
-+{
-+	unsigned int i = 0;
-+	struct test_workload *twl;
-+
-+	for (i = 0; i < ARRAY_SIZE(workloads); i++) {
-+		twl = workloads[i];
-+		if (!strcmp(twl->name, work))
-+			return twl->func(argc, argv);
-+	}
-+
-+	pr_info("No workload found: %s\n", work);
-+	return -1;
-+}
-+
- int cmd_test(int argc, const char **argv)
- {
- 	const char *test_usage[] = {
-@@ -482,12 +501,14 @@ int cmd_test(int argc, const char **argv)
- 	NULL,
- 	};
- 	const char *skip = NULL;
-+	const char *workload = NULL;
- 	const struct option test_options[] = {
- 	OPT_STRING('s', "skip", &skip, "tests", "tests to skip"),
- 	OPT_INCR('v', "verbose", &verbose,
- 		    "be more verbose (show symbol address, etc)"),
- 	OPT_BOOLEAN('F', "dont-fork", &dont_fork,
- 		    "Do not fork for testcase"),
-+	OPT_STRING('w', "workload", &workload, "work", "workload to run for testing"),
- 	OPT_END()
- 	};
- 	const char * const test_subcommands[] = { "list", NULL };
-@@ -504,6 +525,9 @@ int cmd_test(int argc, const char **argv)
- 	if (argc >= 1 && !strcmp(argv[0], "list"))
- 		return perf_test__list(argc - 1, argv + 1);
+-cat <<EOF | cc -o ${file} -x c -
+-#include <signal.h>
+-#include <stdlib.h>
+-#include <unistd.h>
+-
+-volatile int done;
+-
+-void sigalrm(int sig) {
+-	done = 1;
+-}
+-
+-__attribute__((noinline)) void noploop(void) {
+-	while (!done)
+-		continue;
+-}
+-
+-int main(int argc, char *argv[]) {
+-	int sec = 1;
+-
+-	if (argc > 1)
+-		sec = atoi(argv[1]);
+-
+-	signal(SIGALRM, sigalrm);
+-	alarm(sec);
+-
+-	noploop();
+-	return 0;
+-}
+-EOF
+-
+-
+-if ! perf record -e task-clock:u -o - ${file} | perf report -i - --task | grep test.file; then
++if ! perf record -e task-clock:u -o - ${prog} | perf report -i - --task | grep ${task}; then
+ 	echo "cannot find the test file in the perf report"
+ 	exit 1
+ fi
  
-+	if (workload)
-+		return run_workload(workload, argc, argv);
-+
- 	symbol_conf.priv_size = sizeof(int);
- 	symbol_conf.sort_by_name = true;
- 	symbol_conf.try_vmlinux_path = true;
-diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-index 5bbb8f6a48fc..d315d0d6fc97 100644
---- a/tools/perf/tests/tests.h
-+++ b/tools/perf/tests/tests.h
-@@ -180,4 +180,26 @@ int test__arch_unwind_sample(struct perf_sample *sample,
- DECLARE_SUITE(vectors_page);
- #endif
+-if ! perf record -e task-clock:u -o - ${file} | perf inject -b | perf report -i - | grep noploop; then
++if ! perf record -e task-clock:u -o - ${prog} | perf inject -b | perf report -i - | grep ${sym}; then
+ 	echo "cannot find noploop function in pipe #1"
+ 	exit 1
+ fi
  
-+/*
-+ * Define test workloads to be used in test suites.
-+ */
-+typedef int (*workload_fnptr)(int argc, const char **argv);
-+
-+struct test_workload {
-+	const char	*name;
-+	workload_fnptr	func;
-+};
-+
-+#define DECLARE_WORKLOAD(work) \
-+	extern struct test_workload workload__##work
-+
-+#define DEFINE_WORKLOAD(work) \
-+struct test_workload workload__##work = {	\
-+	.name = #work,				\
-+	.func = work,				\
-+}
-+
-+/* The list of test workloads */
-+DECLARE_WORKLOAD(noploop);
-+
- #endif /* TESTS_H */
-diff --git a/tools/perf/tests/workloads/Build b/tools/perf/tests/workloads/Build
-new file mode 100644
-index 000000000000..f98e968d4633
---- /dev/null
-+++ b/tools/perf/tests/workloads/Build
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+perf-y += noploop.o
-diff --git a/tools/perf/tests/workloads/noploop.c b/tools/perf/tests/workloads/noploop.c
-new file mode 100644
-index 000000000000..9e4d8d024259
---- /dev/null
-+++ b/tools/perf/tests/workloads/noploop.c
-@@ -0,0 +1,32 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <stdlib.h>
-+#include <signal.h>
-+#include <unistd.h>
-+#include <linux/compiler.h>
-+#include "../tests.h"
-+
-+static volatile int done;
-+
-+static void sighandler(int sig __maybe_unused)
-+{
-+	done = 1;
-+}
-+
-+static int noploop(int argc, const char **argv)
-+{
-+	int sec = 1;
-+
-+	if (argc > 0)
-+		sec = atoi(argv[0]);
-+
-+	signal(SIGINT, sighandler);
-+	signal(SIGALRM, sighandler);
-+	alarm(sec);
-+
-+	while (!done)
-+		continue;
-+
-+	return 0;
-+}
-+
-+DEFINE_WORKLOAD(noploop);
+-perf record -e task-clock:u -o - ${file} | perf inject -b -o ${data}
+-if ! perf report -i ${data} | grep noploop; then
++perf record -e task-clock:u -o - ${prog} | perf inject -b -o ${data}
++if ! perf report -i ${data} | grep ${sym}; then
+ 	echo "cannot find noploop function in pipe #2"
+ 	exit 1
+ fi
+ 
+-perf record -e task-clock:u -o ${data} ${file}
+-if ! perf inject -b -i ${data} | perf report -i - | grep noploop; then
++perf record -e task-clock:u -o ${data} ${prog}
++if ! perf inject -b -i ${data} | perf report -i - | grep ${sym}; then
+ 	echo "cannot find noploop function in pipe #3"
+ 	exit 1
+ fi
+ 
+ 
+-rm -f ${file} ${data} ${data}.old
++rm -f ${data} ${data}.old
+ exit 0
 -- 
 2.38.1.431.g37b22c650d-goog
 
