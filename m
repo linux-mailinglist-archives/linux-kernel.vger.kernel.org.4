@@ -2,99 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAC9623493
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59160623499
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbiKIUaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S229578AbiKIUbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiKIUaR (ORCPT
+        with ESMTP id S230443AbiKIUa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:30:17 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D27FD14;
-        Wed,  9 Nov 2022 12:30:16 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Wed, 9 Nov 2022 15:30:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDD019018
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:30:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 54F3C735;
-        Wed,  9 Nov 2022 20:30:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 54F3C735
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1668025816; bh=wGLPC3XtH96GwGtDKrwRTD/1iXa52FW0QweS8oRlDpY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qPK2EAw6dWlpkSpiMikN2mqv/flF0gdhmOo0I65UF07hUN/3fkNicOnZJ3Di6YgZT
-         H++xz1PzHGmtMKxr3vwiRd3nz3pTeomlvgBuBREU5Kfbf/wXANOPlGfhjFlmE6Hj4R
-         IKxeiTvR5mPaD9Zs0GRX1jxy2G0hdpZTSdh7GamVLhcbcX/yskb5cGK7p8dI0kWMCy
-         VYaIB0xFaUJ/VjnD9HFW+w/kY2Zewc/+YkHov5Ns1R3CELH3LBAVvPW8XEaG4oOBzK
-         C/7Zn1ezGaCPMLD6iD9NDcOQ5CkxJSiXVNL5nRplKy3hpGj+NAF7H8y+NzA6FrU9Rl
-         +XFb5MAAR9xCw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs/sphinx: More depth in the rtd sidebar toc
-In-Reply-To: <20221108115707.1232621-1-daniel.vetter@ffwll.ch>
-References: <20221108115707.1232621-1-daniel.vetter@ffwll.ch>
-Date:   Wed, 09 Nov 2022 13:30:15 -0700
-Message-ID: <875yfnlvl4.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id CFF24B82004
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6098AC433C1;
+        Wed,  9 Nov 2022 20:30:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1668025852;
+        bh=penp5eGjlAzwEMHIlYfO2UthsDqmi4JE3eNVxwebGdU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QDtR/oMNFrNnuSC8rkqWQuyDgSXMdz7cE6sGNbUSY63i7rPywtVF2bs/QeWo1hR6D
+         E+ZSTT3gQ1V/p4cp0tg271dSgkqpaQYCwj4Hw+IDg1mhCSpAbyrGxAwL6Aja826eaJ
+         t6IFNeMUW7uI0RdE4bX2KpSOHjrhnD9sK5lLsPGY=
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+To:     Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: [PATCH 1/4] mm: introduce 'encoded' page pointers with embedded extra bits
+Date:   Wed,  9 Nov 2022 12:30:48 -0800
+Message-Id: <20221109203051.1835763-1-torvalds@linux-foundation.org>
+X-Mailer: git-send-email 2.38.1.284.gfd9468d787
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Vetter <daniel.vetter@ffwll.ch> writes:
+We already have this notion in parts of the MM code (see the mlock code
+with the LRU_PAGE and NEW_PAGE bits), but I'm going to introduce a new
+case, and I refuse to do the same thing we've done before where we just
+put bits in the raw pointer and say it's still a normal pointer.
 
-> We love to nest our documenation for good structure, but that means
-> the table of contents needs to keep up or you can't navigate them.
->
-> Realized this trying to find the drm property documentation, which
-> with some shuffling around disappeared. Why I didn't realize we can do
-> this earlier, no idea.
->
-> Since the relevant parts of the toc are only loaded if you're in the
-> right .html file there's no harm in going all the way to unlimited.
->
-> Note that this has no impact on the alabaster theme (which has a much
-> simpler sidebar toc which doesn't show the entire hierarchy, only
-> what's in the local rendered file) nor on the various :toctree:
-> rendered inline in the output.
->
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> ---
-> v2: Rebase onto linux-next, reword commit message to take into account
-> that alabaster is the default now.
-> ---
->  Documentation/conf.py | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/Documentation/conf.py b/Documentation/conf.py
-> index c715610d6297..a5c45df0bd83 100644
-> --- a/Documentation/conf.py
-> +++ b/Documentation/conf.py
-> @@ -296,6 +296,10 @@ if html_theme == 'sphinx_rtd_theme' or html_theme == 'sphinx_rtd_dark_mode':
->                  # Add color-specific RTD normal mode
->                  html_css_files.append('theme_rtd_colors.css')
->  
-> +        html_theme_options = {
-> +            'navigation_depth': -1,
-> +        }
-> +
->      except ImportError:
->          html_theme = 'alabaster'
+So this introduces a 'struct encoded_page' pointer that cannot be used
+for anything else than to encode a real page pointer and a couple of
+extra bits in the low bits.  That way the compiler can trivially track
+the state of the pointer and you just explicitly encode and decode the
+extra bits.
 
-Applied, thanks.
+Note that this makes the alignment of 'struct page' explicit even for
+the case where CONFIG_HAVE_ALIGNED_STRUCT_PAGE is not set.  That is
+entirely redundant in almost all cases, since the page structure already
+contains several word-sized entries.
 
-jon
+However, on m68k, the alignment of even 32-bit data is just 16 bits, and
+as such in theory the alignment of 'struct page' could be too.  So let's
+just make it very very explicit that the alignment needs to be at least
+32 bits, giving us a guarantee of two unused low bits in the pointer.
+
+Now, in practice, our page struct array is aligned much more than that
+anyway, even on m68k, and our existing code in mm/mlock.c obviously
+already depended on that.  But since the whole point of this change is
+to be careful about the type system when hiding extra bits in the
+pointer, let's also be explicit about the assumptions we make.
+
+NOTE! This is being very careful in another way too: it has a build-time
+assertion that the 'flags' added to the page pointer actually fit in the
+two bits.  That means that this helper must be inlined, and can only be
+used in contexts where the compiler can statically determine that the
+value fits in the available bits.
+
+Link: https://lore.kernel.org/all/Y2tKixpO4RO6DgW5@tuxmaker.boeblingen.de.ibm.com/
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Acked-by: Hugh Dickins <hughd@google.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+---
+ include/linux/mm_types.h | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 500e536796ca..0a38fcb08d85 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -67,7 +67,7 @@ struct mem_cgroup;
+ #ifdef CONFIG_HAVE_ALIGNED_STRUCT_PAGE
+ #define _struct_page_alignment	__aligned(2 * sizeof(unsigned long))
+ #else
+-#define _struct_page_alignment
++#define _struct_page_alignment	__aligned(sizeof(unsigned long))
+ #endif
+ 
+ struct page {
+@@ -241,6 +241,38 @@ struct page {
+ #endif
+ } _struct_page_alignment;
+ 
++/**
++ * struct encoded_page - a nonexistent type marking this pointer
++ *
++ * An 'encoded_page' pointer is a pointer to a regular 'struct page', but
++ * with the low bits of the pointer indicating extra context-dependent
++ * information. Not super-common, but happens in mmu_gather and mlock
++ * handling, and this acts as a type system check on that use.
++ *
++ * We only really have two guaranteed bits in general, although you could
++ * play with 'struct page' alignment (see CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
++ * for more.
++ *
++ * Use the supplied helper functions to endcode/decode the pointer and bits.
++ */
++struct encoded_page;
++#define ENCODE_PAGE_BITS 3ul
++static __always_inline struct encoded_page *encode_page(struct page *page, unsigned long flags)
++{
++	BUILD_BUG_ON(flags > ENCODE_PAGE_BITS);
++	return (struct encoded_page *)(flags | (unsigned long)page);
++}
++
++static inline unsigned long encoded_page_flags(struct encoded_page *page)
++{
++	return ENCODE_PAGE_BITS & (unsigned long)page;
++}
++
++static inline struct page *encoded_page_ptr(struct encoded_page *page)
++{
++	return (struct page *)(~ENCODE_PAGE_BITS & (unsigned long)page);
++}
++
+ /**
+  * struct folio - Represents a contiguous set of bytes.
+  * @flags: Identical to the page flags.
+-- 
+2.38.1.284.gfd9468d787
+
