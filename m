@@ -2,102 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C5F62330B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00E4623317
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiKISx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S230507AbiKITAa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Nov 2022 14:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiKISxd (ORCPT
+        with ESMTP id S229811AbiKITA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:53:33 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AF8D69
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:53:22 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id h133-20020a1c218b000000b003cf4d389c41so1907887wmh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kdPqoyAycB6pgUJuMzMPu8rx+xZgOcOan+fWmuoVt8A=;
-        b=AT43cV5BI+6lOtWe0fLdN0byEHao02SLceBCCuNbrsxSssZWdgMdHV8XbgvlzfqJ8s
-         j9ZmOm+3/vuslwAjMlVzki06YltbNwu8aOogTCaXpoNbXnzFpcL/dX4qsn06wlw/tQm5
-         KShnH1VRFvNjylcK31wwpwBYeq+Ax8def+OSMXPjECSFQ93Q2ZQe6onSL5wyAhEbYQa1
-         RxpNA+XN0al7dJ0yBIKLF4sLGPOC2n988MyUA+XLdJyMW9ffz6ERxW1f3G+co2ozjJa0
-         lMS6pj+H3YI1lqDrjp+8pWotGpefCP1orFMn9qFvhYV9Mr9cmI7LGWp6jtF3WOL4tt6X
-         6hyg==
+        Wed, 9 Nov 2022 14:00:29 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55E8193EA;
+        Wed,  9 Nov 2022 11:00:27 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id n205so8732986oib.1;
+        Wed, 09 Nov 2022 11:00:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kdPqoyAycB6pgUJuMzMPu8rx+xZgOcOan+fWmuoVt8A=;
-        b=V4PWzvuXIiqynRbw1f6+yVoEIhqr+N1GpzMvDwbrGFANd4U6KHQDfLDraNVZuZgDI4
-         JC501KE8ysRBwzvEdEhl02KIUj8UnvbTmUcakFdixe00AlmB1oUrLs9WcC8DT6JhNMce
-         VFl4iB7gOZ8nTGYemd40QdUH5YXJ41+C3nkbtYIMUKHXR2xeGC+o4kI7W2BGnwriS3iD
-         PNS74OBs+fDNphhHB1+GkY0L8Mwa+kBcI7+2TsKSM6S+tMROLgYhR+pPiGD0d8wfgVal
-         cV9SCAAxC6Mc3PNfoh8yCWqSJG3v2oinvfGfJ3oyCIC7A2qXki2Z/8TC6SyWWaV2eqB3
-         Pjzw==
-X-Gm-Message-State: ANoB5plevWKxAJ+j4aV9wl6X2ukEfG6RWQsrxCzxj8ZeZ4rP7V7qDUQ5
-        RsX2iGlmm6hM4qXNVgcMH7n9VQ95hywqsuANToVTEQ==
-X-Google-Smtp-Source: AA0mqf434Gt0mmlTBVl9f0K312YzqHufnNREe5hC1WhXil1S+ZC/776mJtyhLZGis6/nxbafTGi34A+JlFz9vGQdHm4=
-X-Received: by 2002:a7b:ce09:0:b0:3cf:ba0d:6553 with SMTP id
- m9-20020a7bce09000000b003cfba0d6553mr6407971wmc.112.1668020001136; Wed, 09
- Nov 2022 10:53:21 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sMpsMLyiCgwuPwl0+GxzMfLoA8jDIII47LVKf8n7yz8=;
+        b=j6CV5pliJJwPBdqIq8jOy1cmkQzwKmq8fZUrtlU/7SWSuAnfQPQSDF2DEaAvxKmjf5
+         T36bHMnMkDraDbceA8PFcN+g7UWBAcZJJ/EiuXioGae2hZ4aiOcEnVB8tOYjqd1aOAim
+         lad21SunjRSs9FWOAlV4FQ25amY8Sz7sTM/vnlfF1HE1goW0XGzDIZZe+FczcAOVNhyx
+         5m77KaBdOwPv0aC1MCqJ8cpR65TCAva4gGowMnRtIR7ean/gdKtGerDS550d2LQlVkTF
+         XzevjYqtbB+YoqWM0dAgyQNtHltXksmBZidu3VnNpj7BtsJNNea/JtYgwmUIJCSBIa1A
+         EZIg==
+X-Gm-Message-State: ACrzQf3NmGlDnvvrTEhnFtZL/pae3W/m0G6XKXQrR6ApsVrhhts1Njtm
+        IHSte8Q2jgpMJzlNSeBc8SVBTo9HK10K+InH+dI=
+X-Google-Smtp-Source: AMsMyM4/QC5OTudpw+11FpWjsynsIC/pUi06eH6hsHduFUNI1wqH/RPpSPHP/zs6Nz9mq+91MEIMTe6VwZ79vWAALKE=
+X-Received: by 2002:aca:2805:0:b0:359:e340:d53 with SMTP id
+ 5-20020aca2805000000b00359e3400d53mr31799603oix.209.1668020427039; Wed, 09
+ Nov 2022 11:00:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20221105045704.2315186-1-vipinsh@google.com> <20221105045704.2315186-5-vipinsh@google.com>
- <874jv8p7c5.fsf@ovpn-194-83.brq.redhat.com>
-In-Reply-To: <874jv8p7c5.fsf@ovpn-194-83.brq.redhat.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Wed, 9 Nov 2022 10:52:45 -0800
-Message-ID: <CAHVum0eYbQJvXY_TVyjadAYVrAcwXSEyJhpddkcBSohj+i+LqA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] KVM: selftests: Make Hyper-V guest OS ID common
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, seanjc@google.com,
-        pbonzini@redhat.com
-Cc:     dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20221109174635.859406-1-namhyung@kernel.org> <20221109174635.859406-2-namhyung@kernel.org>
+ <Y2vz3zmn/jIFkCKp@kernel.org>
+In-Reply-To: <Y2vz3zmn/jIFkCKp@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 9 Nov 2022 11:00:15 -0800
+Message-ID: <CAM9d7ciQ1Co89oHc005SCgEfv3zATHQM6ZnHYTTgsF9uXpNLMg@mail.gmail.com>
+Subject: Re: [PATCH 01/12] perf test: Add -w/--workload option
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 5:48 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> Vipin Sharma <vipinsh@google.com> writes:
->
-> > Make guest OS ID calculation common to all hyperv tests and similar to
-> > hv_generate_guest_id().
->
-> A similar (but without hv_linux_guest_id()) patch is present in my
-> Hyper-V TLB flush update:
->
-> https://lore.kernel.org/kvm/20221101145426.251680-32-vkuznets@redhat.com/
->
+Hi Arnaldo,
 
-After getting feedback from David, I decided to remove
-LINUX_VERSION_CODE in v2. Our patches are functionally identical now.
+On Wed, Nov 9, 2022 at 10:39 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Wed, Nov 09, 2022 at 09:46:24AM -0800, Namhyung Kim escreveu:
+> > --- /dev/null
+> > +++ b/tools/perf/tests/workloads/noploop.c
+> > @@ -0,0 +1,32 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#include <stdlib.h>
+> > +#include <signal.h>
+> > +#include <unistd.h>
+> > +#include <linux/compiler.h>
+> > +#include "../tests.h"
+> > +
+> > +static volatile int done;
+> > +
+> > +static void sighandler(int sig __maybe_unused)
+> > +{
+> > +     done = 1;
+> > +}
+>
+> You forgot to do what was done in:
 
-@Sean, Paolo, Vitaly
-Should I be rebasing my v2 on top of TLB flush patch series and remove
-patch 4 and 5 from my series? I am not sure how these situations are
-handled.
+Oops, right.  Will fix in v2.
 
-@Vitaly
-Are you planning to send v14?
+Thanks,
+Namhyung
 
-If yes, then for v13 Patch 31 (KVM: selftests: Move HYPERV_LINUX_OS_ID
-definition to a common header) will you keep it same or will you
-modify it to add  HYPERV_LINUX_OS_ID  in hyperv_clock.c and
-hyperv_svm_test.c?
 
-If not, then I can add a patch in my series to change those two files
-if I end up rebasing on top of your series.
+>
+> 92ea0720ba9cf7f0 perf trace: Use sig_atomic_t to avoid undefined behaviour in a signal handler
+> 691768968f2a13eb perf top: Use sig_atomic_t to avoid undefined behaviour in a signal handler
+> 01513fdc18f395db perf stat: Use sig_atomic_t to avoid undefined behaviour in a signal handler
+> 057929f9d083e80c perf session: Change type to avoid undefined behaviour in a signal handler
+> 853596fb71f7c2f7 perf ftrace: Use sig_atomic_t to avoid UB
+> 7f3374299f9762ba perf daemon: Use sig_atomic_t to avoid UB
+> 8ed28c2b56b78442 perf record: Use sig_atomic_t for signal handlers
+> f3c9bd4e16a503cb perf build: Update to C standard to gnu11
+>
+> To speed up the process here is one of those csets:
+>
+> ⬢[acme@toolbox perf]$ git show 01513fdc18f395db
+> commit 01513fdc18f395dbcc924bc5e9962b12f86f947a
+> Author: Ian Rogers <irogers@google.com>
+> Date:   Mon Oct 24 11:19:11 2022 -0700
+>
+>     perf stat: Use sig_atomic_t to avoid undefined behaviour in a signal handler
+>
+>     Use sig_atomic_t for variables written/accessed in signal
+>     handlers. This is undefined behavior as per:
+>
+>       https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
+>
+>     Signed-off-by: Ian Rogers <irogers@google.com>
+>     Cc: Adrian Hunter <adrian.hunter@intel.com>
+>     Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>     Cc: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+>     Cc: German Gomez <german.gomez@arm.com>
+>     Cc: Ingo Molnar <mingo@redhat.com>
+>     Cc: Jiri Olsa <jolsa@kernel.org>
+>     Cc: Leo Yan <leo.yan@linaro.org>
+>     Cc: Mark Rutland <mark.rutland@arm.com>
+>     Cc: Namhyung Kim <namhyung@kernel.org>
+>     Cc: Peter Zijlstra <peterz@infradead.org>
+>     Cc: Stephane Eranian <eranian@google.com>
+>     Link: https://lore.kernel.org/r/20221024181913.630986-7-irogers@google.com
+>     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+>
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index e52601a54b26d669..d5e1670bca204450 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -173,7 +173,7 @@ static struct target target = {
+>
+>  #define METRIC_ONLY_LEN 20
+>
+> -static volatile pid_t          child_pid                       = -1;
+> +static volatile sig_atomic_t   child_pid                       = -1;
+>  static int                     detailed_run                    =  0;
+>  static bool                    transaction_run;
+>  static bool                    topdown_run                     = false;
+> @@ -208,7 +208,7 @@ struct perf_stat {
+>  static struct perf_stat                perf_stat;
+>  #define STAT_RECORD            perf_stat.record
+>
+> -static volatile int done = 0;
+> +static volatile sig_atomic_t done = 0;
+>
+>  static struct perf_stat_config stat_config = {
+>         .aggr_mode              = AGGR_GLOBAL,
+> @@ -580,7 +580,7 @@ static void disable_counters(void)
+>         }
+>  }
+>
+> -static volatile int workload_exec_errno;
+> +static volatile sig_atomic_t workload_exec_errno;
+>
+>  /*
+>   * evlist__prepare_workload will send a SIGUSR1
+> @@ -1039,7 +1039,7 @@ static void print_counters(struct timespec *ts, int argc, const char **argv)
+>         evlist__print_counters(evsel_list, &stat_config, &target, ts, argc, argv);
+>  }
+>
+> -static volatile int signr = -1;
+> +static volatile sig_atomic_t signr = -1;
+>
+>  static void skip_signal(int signo)
+>  {
+> ⬢[acme@toolbox perf]$
+>
+> > +
+> > +static int noploop(int argc, const char **argv)
+> > +{
+> > +     int sec = 1;
+> > +
+> > +     if (argc > 0)
+> > +             sec = atoi(argv[0]);
+> > +
+> > +     signal(SIGINT, sighandler);
+> > +     signal(SIGALRM, sighandler);
+> > +     alarm(sec);
+> > +
+> > +     while (!done)
+> > +             continue;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +DEFINE_WORKLOAD(noploop);
+> > --
+> > 2.38.1.431.g37b22c650d-goog
+>
+> --
+>
+> - Arnaldo
