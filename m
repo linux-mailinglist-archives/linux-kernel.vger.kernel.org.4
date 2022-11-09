@@ -2,168 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90933622EDB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4913622EDF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiKIPRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:17:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S231951AbiKIPRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbiKIPQz (ORCPT
+        with ESMTP id S231786AbiKIPRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:16:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 517581CB24
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:16:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3766C1FB;
-        Wed,  9 Nov 2022 07:17:00 -0800 (PST)
-Received: from [10.57.1.94] (unknown [10.57.1.94])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C8903F73D;
-        Wed,  9 Nov 2022 07:16:51 -0800 (PST)
-Message-ID: <b89d6578-6ca5-ae16-9016-4727eb2501fb@arm.com>
-Date:   Wed, 9 Nov 2022 15:16:49 +0000
+        Wed, 9 Nov 2022 10:17:18 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123341CB24
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:17:17 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id 21so27751109edv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=zmk97Y1kdEfRXSICOIciCIHq7hoxuKuixGqwic5cTfk=;
+        b=G5u5ThYOa6f4LBfVwmSz0Xdx6p1KPsHYVzfgSk+1l86gw9PMHcvYa95FrHg9JLQZvb
+         rMeiTBNObWYfkWNf3YkBx5xo2f4K7gbvG6vE/mbQU04HXMNWtUdiZ9/ZbvI4dAYSK/D4
+         MilAR7oPTPVwtifeJeHy4icRa8fIF1oGMt8x8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zmk97Y1kdEfRXSICOIciCIHq7hoxuKuixGqwic5cTfk=;
+        b=VufodK6MvpNqDUUKa9zvYpuP0gQOIKbbUht217hLZu1XsrWt/xm5ca8qguV1c3ym+I
+         jgIrKBtw/whJUcbkFLxSLU72awefuJhfsh0xZ4fEGP3NoFDTspxVhOdHGUkmBUPo3zIy
+         t6htVAVcIKl+z/XaZywWvh1PUnL55it11eunb5CS8QEAVmyAy7e8hB8vc22lsaRWTyp8
+         0+MYZWz4Kdhs59ttOw571oIj8Irax5Yn/RmHw4WQwjAfc74JcyK12HWOMH+gqpiTqSTR
+         2K+ZFDX4YEvztrc2j5TbqcCygMK+Ebo8SiI0woIs/LbJR50dcggNE+K/BVpC776Si5Wo
+         Hj1Q==
+X-Gm-Message-State: ACrzQf0M/tGk4jlFX/h6MKLAP6i4o2Plfmn+hRGwiEYACIJ0gs2THU42
+        SgeyMTa62DAnyBrEQG2Y91k4qQ==
+X-Google-Smtp-Source: AMsMyM4oHMA5tVDz5uvuip1U/hr3qjR0S6qrCCZR9UIVYEPFWRI0FsI/J+oSLEqtEXfLjAEgG3qZCg==
+X-Received: by 2002:a05:6402:5159:b0:462:3e9f:a0a4 with SMTP id n25-20020a056402515900b004623e9fa0a4mr58897624edd.313.1668007035636;
+        Wed, 09 Nov 2022 07:17:15 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:7487:46db:8e12:c768])
+        by smtp.gmail.com with ESMTPSA id v19-20020aa7dbd3000000b00463c5c32c6esm7052320edt.89.2022.11.09.07.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 07:17:15 -0800 (PST)
+Subject: [PATCH v2 0/1] i2c: Restore power status of device if probe fail or device is removed
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 16/26] drm: panfrost: Remove #ifdef guards for PM related
- functions
-Content-Language: en-GB
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-References: <20221107175106.360578-1-paul@crapouillou.net>
- <20221107175256.360839-1-paul@crapouillou.net>
- <20221107175256.360839-6-paul@crapouillou.net>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20221107175256.360839-6-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAHHEa2MC/22MwQrDIBBEfyXsuVtUKMGe+h+lh9Vs4kKioI2hBP+90nNPwxtm3gmFs3CB+3BC5i
+ pFUuxgLgP4QHFhlKkzGGWM1sqiGI8HSWUktuPMpGftbtD3jgqjyxR96I+4r2svg5R3yp+fv+oez3+q
+ qlEhT6Mia521anr4kNMm+3ZNeYFXa+0LfQr6zaoAAAA=
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 09 Nov 2022 16:17:05 +0100
+Message-Id: <20221109-i2c-waive-v2-0-07550bf2dacc@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Hidenori Kobayashi <hidenorik@google.com>,
+        linux-i2c@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1143; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=RCoBAuMZW6/BLIikAeMUt8nhyD2JRoUp6FKyTIqVRCU=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBja8RznD661Rd7HbrTWcJXxIJZgpI6o1QaSLYeFN7C
+ 1L0SqvyJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2vEcwAKCRDRN9E+zzrEiJqlD/
+ 4ki+JPH9bMz8acI0THadDEURL4tP5dToSmi0oS41v5I9+i9x4y5qJSKx2QUGtpwzh23DtpNuJF3TQS
+ F3pUJm8Aw8BP3mBBPls71shgcBCxP9t38czPzUgi9Q803yTqoONn5wdexcKm+MpovKvLGozMqP1YN5
+ L5ejDI6qwq7ALNbre7kU2ZqOM4bTEDV623tWeqDQxgDy5+HX9b8YSgYgMLjbqPCHYdTvxb8YujzH8i
+ mSVnOXWKDVF3A4R/3myHLDNo12U/gEUkhtHNtY2AB6IVw/anNxKaNNzPN8C8KZP21zlqvkVuYMC5At
+ GuWLTp+w6mezdt8zi/7v0iK1ypcRPQNCswbaYF87MXZpgh8VbAP9xgxsT3fnZg8yI9mogLgOI40Dn3
+ SR64JcGanNhyC1aIlJHXNew3vr1+WwmO/+0sE0d41ga0UpSDtQ1CQ2XMSUKC9xPQ8GY064qL+jfu26
+ LzBSwB8OEXZwRml2Wuc9wyM2fQcsrii3fPtSem0WUs/APgKP4tL0L468LveCbh71NcP+BF+HmHZ2B5
+ u4S9wT1tz6NH5buSpWg4VIRptHWkNzy/ujE8DORi7OLnRb0t78cytGcLjTYZZ6Gxr9+PekFILnJPOT
+ USGbwN1rpeBv0VCtUFmdIavVaz7uO5dxW4XOl4FD4exRKm7u7s9gIxQftFPQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 17:52, Paul Cercueil wrote:
-> Use the EXPORT_GPL_RUNTIME_DEV_PM_OPS() and pm_ptr() macros to handle
-> the PM callbacks.
-> 
-> These macros allow the PM functions to be automatically dropped by the
-> compiler when CONFIG_PM is disabled, without having to use #ifdef
-> guards.
-> 
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+We have discovered that some power lines were always on even if the devices
+on that power line was not used.
 
-Reviewed-by: Steven Price <steven.price@arm.com>
+This happens because we failed to probe a device on the i2c bus, and the
+ACPI Power Resource were never turned off.
 
-> ---
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-> Cc: Steven Price <steven.price@arm.com>
-> Cc: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-> ---
->  drivers/gpu/drm/panfrost/panfrost_device.c | 10 ++++++----
->  drivers/gpu/drm/panfrost/panfrost_device.h |  4 ++--
->  drivers/gpu/drm/panfrost/panfrost_drv.c    |  7 +------
->  3 files changed, 9 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.c b/drivers/gpu/drm/panfrost/panfrost_device.c
-> index ee612303f076..fa1a086a862b 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_device.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_device.c
-> @@ -6,6 +6,7 @@
->  #include <linux/reset.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/regulator/consumer.h>
->  
->  #include "panfrost_device.h"
-> @@ -400,8 +401,7 @@ void panfrost_device_reset(struct panfrost_device *pfdev)
->  	panfrost_job_enable_interrupts(pfdev);
->  }
->  
-> -#ifdef CONFIG_PM
-> -int panfrost_device_resume(struct device *dev)
-> +static int panfrost_device_resume(struct device *dev)
->  {
->  	struct panfrost_device *pfdev = dev_get_drvdata(dev);
->  
-> @@ -411,7 +411,7 @@ int panfrost_device_resume(struct device *dev)
->  	return 0;
->  }
->  
-> -int panfrost_device_suspend(struct device *dev)
-> +static int panfrost_device_suspend(struct device *dev)
->  {
->  	struct panfrost_device *pfdev = dev_get_drvdata(dev);
->  
-> @@ -423,4 +423,6 @@ int panfrost_device_suspend(struct device *dev)
->  
->  	return 0;
->  }
-> -#endif
-> +
-> +EXPORT_GPL_RUNTIME_DEV_PM_OPS(panfrost_pm_ops, panfrost_device_suspend,
-> +			      panfrost_device_resume, NULL);
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h b/drivers/gpu/drm/panfrost/panfrost_device.h
-> index 8b25278f34c8..d9ba68cffb77 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_device.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_device.h
-> @@ -7,6 +7,7 @@
->  
->  #include <linux/atomic.h>
->  #include <linux/io-pgtable.h>
-> +#include <linux/pm.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/spinlock.h>
->  #include <drm/drm_device.h>
-> @@ -172,8 +173,7 @@ int panfrost_device_init(struct panfrost_device *pfdev);
->  void panfrost_device_fini(struct panfrost_device *pfdev);
->  void panfrost_device_reset(struct panfrost_device *pfdev);
->  
-> -int panfrost_device_resume(struct device *dev);
-> -int panfrost_device_suspend(struct device *dev);
-> +extern const struct dev_pm_ops panfrost_pm_ops;
->  
->  enum drm_panfrost_exception_type {
->  	DRM_PANFROST_EXCEPTION_OK = 0x00,
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> index 2fa5afe21288..fa619fe72086 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> @@ -676,17 +676,12 @@ static const struct of_device_id dt_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, dt_match);
->  
-> -static const struct dev_pm_ops panfrost_pm_ops = {
-> -	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
-> -	SET_RUNTIME_PM_OPS(panfrost_device_suspend, panfrost_device_resume, NULL)
-> -};
-> -
->  static struct platform_driver panfrost_driver = {
->  	.probe		= panfrost_probe,
->  	.remove		= panfrost_remove,
->  	.driver		= {
->  		.name	= "panfrost",
-> -		.pm	= &panfrost_pm_ops,
-> +		.pm	= pm_ptr(&panfrost_pm_ops),
->  		.of_match_table = dt_match,
->  	},
->  };
+This patch tries to fix this issue.
 
+To: Wolfram Sang <wsa@kernel.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomasz Figa <tfiga@chromium.org>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Hidenori Kobayashi <hidenorik@google.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+---
+Changes in v2:
+- Cover also device remove
+- Link to v1: https://lore.kernel.org/r/20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org
+
+---
+Ricardo Ribalda (1):
+      i2c: Restore initial power state when we are done.
+
+ drivers/i2c/i2c-core-base.c | 7 ++++---
+ include/linux/i2c.h         | 3 +++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+---
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
+change-id: 20221109-i2c-waive-ae97fea1f1b5
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
