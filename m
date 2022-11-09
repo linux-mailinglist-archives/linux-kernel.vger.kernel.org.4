@@ -2,61 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671C3622CB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A6B622CB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 14:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiKINrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 08:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
+        id S230149AbiKINr2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Nov 2022 08:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiKINrC (ORCPT
+        with ESMTP id S229551AbiKINrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 08:47:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0921D13FB3;
-        Wed,  9 Nov 2022 05:47:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B73C3B81EC4;
-        Wed,  9 Nov 2022 13:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FE1C433C1;
-        Wed,  9 Nov 2022 13:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668001619;
-        bh=T8ZpCfeDrYRnXim+EtribWm92PpPSXe5RMsnfAotB4g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yilDZTQVRk/dQ6ZjPzjqvsk7gjmJ/ywI9HPUjKi20aCPrjgXYmUwjckntNGsnqPeV
-         OVgTzAcVyN1BnZ3Ofu/6wLcRP7+Msh6bQ75oLO7maLPj9bNjjKgnASzOY7FMZb/WBo
-         ziaNbBLpVAhRioTwS6CD7/5TLkPzIquE2AJTNFDI=
-Date:   Wed, 9 Nov 2022 14:46:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nayna Jain <nayna@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        linux-efi@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, Dov Murik <dovmurik@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH 2/4] fs: define a firmware security filesystem named
- fwsecurityfs
-Message-ID: <Y2uvUFQ9S2oaefSY@kroah.com>
-References: <20221106210744.603240-1-nayna@linux.ibm.com>
- <20221106210744.603240-3-nayna@linux.ibm.com>
+        Wed, 9 Nov 2022 08:47:24 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F148817054;
+        Wed,  9 Nov 2022 05:47:22 -0800 (PST)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6mVM4snzzmVmJ;
+        Wed,  9 Nov 2022 21:47:07 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 21:47:19 +0800
+Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
+ lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2375.031;
+ Wed, 9 Nov 2022 13:47:18 +0000
+From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+To:     ruanjinjie <ruanjinjie@huawei.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "kevin.tian@intel.com" <kevin.tian@intel.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH -next] vfio/mlx5: use module_pci_driver
+Thread-Topic: [PATCH -next] vfio/mlx5: use module_pci_driver
+Thread-Index: AQHY9B9JATTBSKrWTEWcdf6z7LJE4a42mwjw
+Date:   Wed, 9 Nov 2022 13:47:18 +0000
+Message-ID: <3f95546cfb8a43d8b33b9b5e32203289@huawei.com>
+References: <20221109093703.3551036-1-ruanjinjie@huawei.com>
+In-Reply-To: <20221109093703.3551036-1-ruanjinjie@huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.202.227.178]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221106210744.603240-3-nayna@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,32 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 04:07:42PM -0500, Nayna Jain wrote:
-> securityfs is meant for Linux security subsystems to expose policies/logs
-> or any other information. However, there are various firmware security
-> features which expose their variables for user management via the kernel.
-> There is currently no single place to expose these variables. Different
-> platforms use sysfs/platform specific filesystem(efivarfs)/securityfs
-> interface as they find it appropriate. Thus, there is a gap in kernel
-> interfaces to expose variables for security features.
-> 
-> Define a firmware security filesystem (fwsecurityfs) to be used by
-> security features enabled by the firmware. These variables are platform
-> specific. This filesystem provides platforms a way to implement their
->  own underlying semantics by defining own inode and file operations.
-> 
-> Similar to securityfs, the firmware security filesystem is recommended
-> to be exposed on a well known mount point /sys/firmware/security.
-> Platforms can define their own directory or file structure under this path.
-> 
-> Example:
-> 
-> # mount -t fwsecurityfs fwsecurityfs /sys/firmware/security
 
-Why not juset use securityfs in /sys/security/firmware/ instead?  Then
-you don't have to create a new filesystem and convince userspace to
-mount it in a specific location?
 
-thanks,
+> -----Original Message-----
+> From: ruanjinjie
+> Sent: 09 November 2022 09:37
+> To: jgg@ziepe.ca; yishaih@nvidia.com; Shameerali Kolothum Thodi
+> <shameerali.kolothum.thodi@huawei.com>; kevin.tian@intel.com;
+> alex.williamson@redhat.com; cohuck@redhat.com; kvm@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Cc: ruanjinjie <ruanjinjie@huawei.com>
+> Subject: [PATCH -next] vfio/mlx5: use module_pci_driver
+> 
+> mlx5vf_pci_init and mlx5vf_pci_cleanup with module_init and module_exit
+> calls can be replaced with the module_pci_driver call, as they are similar
+> to what module_pci_driver does
 
-greg k-h
+There is already a patch out there,
+https://lore.kernel.org/kvm/20220922123507.11222-1-shangxiaojing@huawei.com/
+
+Thanks,
+Shameer
+
+> Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+> ---
+>  drivers/vfio/pci/mlx5/main.c | 13 +------------
+>  1 file changed, 1 insertion(+), 12 deletions(-)
+> 
+> diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
+> index fd6ccb8454a2..457138b92f13 100644
+> --- a/drivers/vfio/pci/mlx5/main.c
+> +++ b/drivers/vfio/pci/mlx5/main.c
+> @@ -676,18 +676,7 @@ static struct pci_driver mlx5vf_pci_driver = {
+>  	.driver_managed_dma = true,
+>  };
+> 
+> -static void __exit mlx5vf_pci_cleanup(void)
+> -{
+> -	pci_unregister_driver(&mlx5vf_pci_driver);
+> -}
+> -
+> -static int __init mlx5vf_pci_init(void)
+> -{
+> -	return pci_register_driver(&mlx5vf_pci_driver);
+> -}
+> -
+> -module_init(mlx5vf_pci_init);
+> -module_exit(mlx5vf_pci_cleanup);
+> +module_pci_driver(mlx5vf_pci_driver);
+> 
+>  MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Max Gurtovoy <mgurtovoy@nvidia.com>");
+> --
+> 2.25.1
+
