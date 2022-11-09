@@ -2,117 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4ECB623378
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F9C62337B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:30:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiKITaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 14:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        id S231219AbiKITaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:30:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiKITaN (ORCPT
+        with ESMTP id S229551AbiKITau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:30:13 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969EFA474;
-        Wed,  9 Nov 2022 11:30:12 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id e15so10964122qts.1;
-        Wed, 09 Nov 2022 11:30:12 -0800 (PST)
+        Wed, 9 Nov 2022 14:30:50 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1775926558;
+        Wed,  9 Nov 2022 11:30:49 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id l6so17676969pjj.0;
+        Wed, 09 Nov 2022 11:30:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lnle8lMV56XQau4jCvU7SPGxEKG97XKxs8od3dMkLCg=;
+        b=DQGYIMyN6k+qRFSIQdQrSA7Fxg32QuZXoUzGz4iaueCclRKOjcztwpQsBBRReaah3r
+         6B2r7RbW5+cFnlfiZ2hhFVHtbk96NVP5cGMm54/wz8KEW+f3FGoDImOLMtOOL5Fc8b21
+         15eg5pmOteR++0WTIJmWhvzf3YX0l6LVWD6cEZKNO8/3U4dGkEFpyQs8nu0hurptIG2P
+         HRnDi5fwAYl7o5lyb/kXcIv3XSkEZFqcJbCk0reQLXwYvYzwETAmqEE7JhAmwDs8NXwC
+         /tj96wu9SpQy7wh5i9IoCQDf8HDeL7QOYJdVmLZaBb6DFmAxmS9CjAIU0w1EZWHWBJqJ
+         bG+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2Dad91m4JdqavDny1NSm8MrvniHzGm/e+1gZ5ERythI=;
-        b=UZk+pdHTM2cRyt1R5hFJoUrnPsMxn6lGq4XjxUIqDrhxI7xOFsEMbITaa6yJV/CJNQ
-         CPPfpXzioMizpuz4W4zvbyvyfWOagLxF4/5XLPw34JiGf1naE/HZzv6l8n30QawVwehR
-         oTivL8fkU3He4r3Vbk5fuxZJ6BKp0ZhN5VGdBeD/Yimrx6OrLdvpROl0fidn+iuI+/VA
-         A2TmvjpT5k0edYfUdEZuJ1IF09zaWZGbtN0PI1MVMp/JYJSKQld82IoIKSQ+gSsaBS9C
-         BOWy6PbqnzdsUqC83XLzorSyFbt+pNqpmjYo6rLO/0xvi32vO12kliFaGnpO785lyfyh
-         KVbQ==
-X-Gm-Message-State: ACrzQf1bEywJGfHB/OqdB48Ze03tIbItW8UpneU9Dt62LeWeslhgVR87
-        R3MGuD+1xKIW5iVuVlnMBpij0Z6/WKaJMJ7gNys=
-X-Google-Smtp-Source: AMsMyM7NOjN2Zy0q7508HKVoeHqnitZBBNrkXL8QY20vxqMIbnjZV+T+DEUJ2smumypFXTCU6Ugr73SduA5MeoWuqQ4=
-X-Received: by 2002:a05:622a:4c07:b0:3a5:27ec:6dd3 with SMTP id
- ey7-20020a05622a4c0700b003a527ec6dd3mr41130537qtb.411.1668022211771; Wed, 09
- Nov 2022 11:30:11 -0800 (PST)
+        bh=Lnle8lMV56XQau4jCvU7SPGxEKG97XKxs8od3dMkLCg=;
+        b=fEPZUAtPa9LFPVW102CS8Kl23BWz96orUUp1WcD2FopmG5I0ZM7fMb1aWBolC3utcW
+         ZIMB3212q3k6BBN7J7CLMwV9bBOAJPzBnYCv94yHySncBpLNtBwSrQas0bk/dtRGgvfJ
+         1/LZ0xp7WUsHt/dAia0g64gNX8nDkzt37N/NUFRzidxRtl2zxzIAZN9dnn3Gkqpw1Kv0
+         ZcsjLjgqbFQRwYAAVGtnFbz0+KY6nn+PNK8vxCfc3IrZ/PjZjRnjgJDA0xynUo88MPMB
+         Fc43ADdHPZj56qnrLhkWRHx2zZyDbDcB3PDHW+grdkp87gLAPJAfj78GsMOQlMfKQrCa
+         ZglA==
+X-Gm-Message-State: ACrzQf3StDiVmpP9b4x9he4WvUYynJQLDs3CLc1Aje4/53GCym/azrIu
+        Y5nb8huAI9weMHJIPiaL2Os=
+X-Google-Smtp-Source: AMsMyM7DJdU+TvsxX46ZY2ZEetPtW7U6l3W9hejmCFjFzrC44et5WLIKh21yjZ31aFU5hNJy8dVSHQ==
+X-Received: by 2002:a17:902:9b88:b0:188:620d:90fc with SMTP id y8-20020a1709029b8800b00188620d90fcmr32387279plp.61.1668022248374;
+        Wed, 09 Nov 2022 11:30:48 -0800 (PST)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:9f46:7242:26:f220])
+        by smtp.gmail.com with ESMTPSA id l2-20020a170902f68200b00186ac4b21cfsm9567462plg.230.2022.11.09.11.30.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 11:30:47 -0800 (PST)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: [PATCH v3 0/6] Add support for software nodes to gpiolib
+Date:   Wed,  9 Nov 2022 11:30:38 -0800
+Message-Id: <20221031-gpiolib-swnode-v3-0-0282162b0fa4@gmail.com>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-References: <20221017130910.2307118-1-linux@roeck-us.net> <20221102185030.GA2026081@roeck-us.net>
-In-Reply-To: <20221102185030.GA2026081@roeck-us.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Nov 2022 20:30:00 +0100
-Message-ID: <CAJZ5v0h_treX+uL_D8=b0NOyVU56W=wCQyKu3oMz7nGaWT_MUw@mail.gmail.com>
-Subject: Re: [PATCH 0/9] thermal/core: Protect thermal device operations
- against removal
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.11.0-dev-28747
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
-
-Sorry for the delay.
-
-On Wed, Nov 2, 2022 at 7:50 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Hi,
->
-> On Mon, Oct 17, 2022 at 06:09:01AM -0700, Guenter Roeck wrote:
-> > Accesses to thermal zones, and with it to thermal zone device operations,
-> > are still possible after the thermal zone device has been unregistered.
-> > For example, thermal_zone_get_temp() can be called from temp_show()
-> > in thermal_sysfs.c if the sysfs attribute was opened before the thermal
-> > device was unregistered. This is problematic and may result in crashes
-> > since the operations data structure and the underlying code may be gone
-> > when the calls are made.
-> >
-> > The following series solves the problem by protecting accesses to thermal
-> > device operations with the thermal device mutex, and by verifying that the
-> > thermal device is still registered after the mutex has been acquired.
-> >
-> > This was previously sent as RFC/RFT as single patch [1]. The code was reworked
-> > to match thermal subsystem changes made between v6.0 and v6.1, and it was
-> > split into several patches to simplify review.
-> >
->
-> Any thoughts / comments / feedback on this series ?
-
-I have reviewed the series now and haven't found any major issues in it.
-
-I've posted some minor comments in separate replies to individual
-patches.  If they are addressed, I can queue up the series for 6.2.
-
-Cheers!
-
-
-> > [1] https://lore.kernel.org/linux-pm/20221004033936.1047691-1-linux@roeck-us.net/
-> >
-> > ----------------------------------------------------------------
-> > Guenter Roeck (9):
-> >       thermal/core: Destroy thermal zone device mutex in release function
-> >       thermal/core: Delete device under thermal device zone lock
-> >       thermal/core: Ensure that thermal device is registered in thermal_zone_get_temp
-> >       thermal/core: Move parameter validation from __thermal_zone_get_temp to thermal_zone_get_temp
-> >       thermal/core: Introduce locked version of thermal_zone_device_update
-> >       thermal/core: Protect hwmon accesses to thermal operations with thermal zone mutex
-> >       thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
-> >       thermal/core: Remove thermal_zone_set_trips()
-> >       thermal/core: Protect thermal device operations against thermal device removal
-> >
-> >  drivers/thermal/thermal_core.c    | 76 ++++++++++++++++++++++++--------------
-> >  drivers/thermal/thermal_core.h    |  3 +-
-> >  drivers/thermal/thermal_helpers.c | 65 ++++++++++++++++++++++-----------
-> >  drivers/thermal/thermal_hwmon.c   | 14 +++++--
-> >  drivers/thermal/thermal_sysfs.c   | 77 +++++++++++++++++++++++++++++++++------
-> >  5 files changed, 169 insertions(+), 66 deletions(-)
+This series attempts to add support for software nodes to gpiolib, using=0D
+software node references. This allows us to convert more drivers to the=0D
+generic device properties and drop support for custom platform data.=0D
+=0D
+To describe a GPIO via software nodes we can create the following data=0D
+items:=0D
+=0D
+/* Node representing the GPIO controller/GPIO bank */=0D
+static const struct software_node gpio_bank_b_node =3D {=0D
+        .name =3D "B",=0D
+};=0D
+=0D
+/*=0D
+ * Properties that will be assigned to a software node assigned to=0D
+ * the device that used platform data.=0D
+ */=0D
+static const struct property_entry simone_key_enter_props[] =3D {=0D
+        PROPERTY_ENTRY_U32("linux,code", KEY_ENTER),=0D
+        PROPERTY_ENTRY_STRING("label", "enter"),=0D
+        PROPERTY_ENTRY_REF("gpios", &gpio_bank_b_node, 123, GPIO_ACTIVE_LOW=
+),=0D
+        { }=0D
+};=0D
+=0D
+The code in gpiolib handling software nodes uses the name in the=0D
+software node representing GPIO controller to locate the actual instance=0D
+of GPIO controller.=0D
+=0D
+To: Linus Walleij <linus.walleij@linaro.org>=0D
+To: Bartosz Golaszewski <brgl@bgdev.pl>=0D
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>=0D
+Cc: linux-gpio@vger.kernel.org=0D
+Cc: linux-kernel@vger.kernel.org=0D
+Cc: linux-acpi@vger.kernel.org=0D
+=0D
+---=0D
+Changes in v3:=0D
+- Addressed more Andy's comments=0D
+- Link to v2: https://lore.kernel.org/r/20221031-gpiolib-swnode-v2-0-81f55a=
+f5fa0e@gmail.com=0D
+=0D
+Changes in v2:=0D
+- reworked the series to be independent of other in-flight patches.=0D
+  That meant keeping devm_gpiod_get_from_of_node() for now.=0D
+- removed handling of secondary nodes, it deserves a separate patch=0D
+  series=0D
+- fixed refcounting when handling swnodes (Andy)=0D
+- added include/linux/gpio/property.h with PROPERTY_ENTRY_GPIO (Andy)=0D
+- addressed most of the rest of Andy's comments=0D
+- collected reviewed-by and acked-by=0D
+- Link to v1: https://lore.kernel.org/r/20221031-gpiolib-swnode-v1-0-a0ab48=
+d229c7@gmail.com=0D
+=0D
+---=0D
+Dmitry Torokhov (6):=0D
+      gpiolib: of: change of_find_gpio() to accept device node=0D
+      gpiolib: acpi: change acpi_find_gpio() to accept firmware node=0D
+      gpiolib: acpi: teach acpi_find_gpio() to handle data-only nodes=0D
+      gpiolib: acpi: avoid leaking ACPI details into upper gpiolib layers=0D
+      gpiolib: consolidate GPIO lookups=0D
+      gpiolib: add support for software nodes=0D
+=0D
+ drivers/gpio/Makefile         |   1 +=0D
+ drivers/gpio/gpiolib-acpi.c   | 132 +++++++++++++++-----------=0D
+ drivers/gpio/gpiolib-acpi.h   |  54 +----------=0D
+ drivers/gpio/gpiolib-of.c     |   7 +-=0D
+ drivers/gpio/gpiolib-of.h     |   4 +-=0D
+ drivers/gpio/gpiolib-swnode.c | 123 +++++++++++++++++++++++++=0D
+ drivers/gpio/gpiolib-swnode.h |  14 +++=0D
+ drivers/gpio/gpiolib.c        | 209 ++++++++++++++++----------------------=
+----=0D
+ include/linux/gpio/property.h |  11 +++=0D
+ 9 files changed, 315 insertions(+), 240 deletions(-)=0D
+---=0D
+base-commit: b6fc3fddade7a194bd141a49f2689e50f796ef46=0D
+change-id: 20221031-gpiolib-swnode-948203f49b23=0D
+=0D
+-- =0D
+Dmitry=0D
+=0D
