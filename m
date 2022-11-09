@@ -2,139 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A37622DF5
+	by mail.lfdr.de (Postfix) with ESMTP id BC76F622DF6
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiKIOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S231545AbiKIOaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbiKIOaS (ORCPT
+        with ESMTP id S231582AbiKIOaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:30:18 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E450209A6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:30:17 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id f7so27487446edc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:30:17 -0800 (PST)
+        Wed, 9 Nov 2022 09:30:19 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B0B1FF80
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:30:15 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id h9so26089426wrt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:30:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p2exQy+rK75dSnSRHEgsdoD6BiAMCjOGrIjHxqTi8vw=;
-        b=La/BxWHk8ROJTnqh+alVNyjVhDtcjF54svcmA4LRv5ein3C1o6WooKgtVzjD9KPM+S
-         lHsePGRdzx09xAaL1RA/cLSmw863sKTjbadSWQgBaBSgUaf3dQ4lk8K+TicfLTF6QAmA
-         zfdBo1VSmOO/dtBWyXlaDGhAeR8IdoN9i18q0=
+        d=newflow-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vo11uu4DSeW8ZK4DwYcDKmvR71O5Aat/tdt0OHm+WUA=;
+        b=d52SUfDTiHHWbHkxmrWzeX4EZD0PcIIoihIf+y7uCTLiwCBsDtMxQEHTDRUpAi94Po
+         WPvPgD77JWsZYKH24C6Fd2EYPtI+h0sU4/rflae/S0ObH1Ft7zpspIMiHx9gHYWW0cG1
+         m6Suob3SnMup3jLvtYxNasWZP2wSm0tklHwk2Gw4ivZDoF8lD4bCSSC1YSyAmJR91EeH
+         2QZdNqOle/Z1d15Jm+XeMk/bSlD0oaKXX9W55FIvbqKR8MhamMpUW+pQZ00sM0csXngo
+         em/OaABzCihf3fthX//h55YbLjvhNxVmNXhpF7+VVN+H3VG4Z5FUcsVsO5Uh83Edltcq
+         6/yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p2exQy+rK75dSnSRHEgsdoD6BiAMCjOGrIjHxqTi8vw=;
-        b=aS91x3CGOkzh3fbRzc0B04LgpjDWjsO1DFxyYf6S+dYQiPPRRiwy5BoMi7qopJqbF5
-         l6Omgvc7Mb22llA5VW1bnTgAaO7NDsZIciDT8BcO9WJVA509/FPKZBSmb/oF44JWNNHy
-         yUXW8ufvtKFVyG1h3BjTP5HJPvvwTNFHr0/uhnPOb8l4D3E1XCe9IVJhORPl+nktov64
-         r4tTlPfGOfg+iPmS67uVrhUL9nN4qYB079B86m77dQozCBvGX5RleE+xNjLNGV2klDel
-         OZiM1K0CKWQeBijENfpMfvg7byC1E56Mz+U5tOrtP2D067pIYw7lXFdyxjSkk9IIusFA
-         MQvA==
-X-Gm-Message-State: ACrzQf1kyLI+fchJ2MIlIzVTnXRAaSJm0alXk6Y3dPsB05a9mw/5aRJY
-        UqSVtmCpSIhfxHdfI61TH5bz1Q==
-X-Google-Smtp-Source: AMsMyM7aUwjCf+C8yDIHmZIsPvh34XMRkaxpyHP0OUKIZ+Uab+LY9HrEA0Z2wS9nOpwxuzB2oFmtUg==
-X-Received: by 2002:a05:6402:241d:b0:463:e963:5149 with SMTP id t29-20020a056402241d00b00463e9635149mr1002227eda.219.1668004215769;
-        Wed, 09 Nov 2022 06:30:15 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:7487:46db:8e12:c768])
-        by smtp.gmail.com with ESMTPSA id d25-20020aa7c1d9000000b0044dbecdcd29sm7020389edp.12.2022.11.09.06.30.15
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vo11uu4DSeW8ZK4DwYcDKmvR71O5Aat/tdt0OHm+WUA=;
+        b=Lk6gOUemvKIKAF+YhvNXq3g6e/7ku0S91lazjdOTcEdHPtxxoVQpvQkppCoV6ETs7f
+         oV+M89og1wcSRkvhiJy3W8r1Okb3zkJPoPIG1nKBtIgilPmxX6MTk0ClsEIr9nJMrGKc
+         1tgBzb0VCNTvh4GIALGzXPVi8ya3JbwYe9gn76jPwEeQ0B8Ycd/b/jXxaC0ENOS5v1VF
+         oMpy21AZWzPX+8qOyZkhAKIzsK91CNxl5W+CxpeVT8N2xXJT1GBYyyRvz4QMPK3DMt+W
+         tFNYWFQlC6lQf0r9fL8oHuX7kUjmvHnmEON+X9qBMwfmQ4kN8TUWIKwjDlR6Wz5gGDcp
+         nwMg==
+X-Gm-Message-State: ACrzQf05nKeWiCTAC5avmqXru9YXZeThwn2remEy1/AKp0S9TiikKBrZ
+        guPxRiFlH0BOiX6ItFckfi/n6Q==
+X-Google-Smtp-Source: AMsMyM4vAXG3tZg7uoEv6z8jskNBZ6CMB6f7jijrMtfuFlz0Yy9pooOeLdagB8aQ9SxLOfW2JriiKA==
+X-Received: by 2002:adf:f411:0:b0:234:f58a:d5f6 with SMTP id g17-20020adff411000000b00234f58ad5f6mr38578377wro.304.1668004214158;
+        Wed, 09 Nov 2022 06:30:14 -0800 (PST)
+Received: from mpfj-unity.. ([94.12.112.226])
+        by smtp.gmail.com with ESMTPSA id v18-20020adfe292000000b00228dbf15072sm13331922wri.62.2022.11.09.06.30.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 06:30:15 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 09 Nov 2022 15:29:48 +0100
-Subject: [PATCH v1 1/1] i2c: Restore initial power state on probe failure
+        Wed, 09 Nov 2022 06:30:13 -0800 (PST)
+From:   Mark Jackson <mpfj@newflow.co.uk>
+To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Mark Jackson <mpfj@newflow.co.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: Update Nanobone DTS
+Date:   Wed,  9 Nov 2022 14:30:03 +0000
+Message-Id: <20221109143003.81463-1-mpfj@newflow.co.uk>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221109-i2c-waive-v1-1-ed70a99b990d@chromium.org>
-References: <20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org>
-In-Reply-To: <20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org>
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Hidenori Kobayashi <hidenorik@google.com>,
-        linux-i2c@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1884; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=1/gktLwGWXSrMTHDXZfZ00iimvdmig+4+JGVMAVIz7Q=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBja7lzqyjfbDUAGMHNNT7NQ7twdE6AbLSE7O8hZuYl
- tEjAuk6JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2u5cwAKCRDRN9E+zzrEiHo6EA
- CQYTIX9z3Ju3O8mosQxqNKSgBYv9P8StVftkoZPRbyuDFjYgXctjFV4Z3esFDbQDEIbpotXxS1AYE+
- pIFtqDLl0kz4MROqac1FgiQVtQ3NOfjE8Pb4Xc/SbuJ3LMPC66NJ5nPqZIaEDw5dpWPgJ0Qy0GxgdI
- sdgyWKjJfAJHNtCkV+f/Ek7qyoAnv/t5f+1aLB2hY2QbX7fagaw5qii5YYJgkzqW4WuW5tgvLjYFTu
- OWFK7fW5Hiexp+X0+qp2DIaNSn1UWT89GitU8HjuwQLH0K/hIxAFZc1BJawoguqJq+WzZXvcor2QgJ
- dj2aYF99PWcVr5aHRmSXJD9Y+eey5Y3DVl21dWEunTkCFRWApG+Gy2u8aly27bEliBpAc7frOpxkmg
- /cTIkVz4POeUQhxe6WZCNIxpM+c7TIINyb92oJsK4424lI0Zlx96oktkcZ/WgRIm8QtoDrQ+O+D98u
- Zwz8fRcnih9Mo1aM0K/2v1Ai5UfaYb69lYZruludBz7Kx2XKTcWZPbKuoASt4d9Gp+0nkmMkPln3TY
- XZJLgc9mr22X65Y7uJvFmBw6CaoOv9PP4Qsl5jxizY0fT8oEQY9/kxe2F4ilrrAUqfM30FUP0uxIc4
- 1QEEA8M9mhE9S+XP7mwlduSRzsIpoIBm8EejZDtsZy6skz2ddhJWdnfGMzjw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-power off a device that it has not powered on previously.
+Update Nanobone DTS file as follows:-
+- Fix GPIO settings for RTS/CTS pins on UART3 & 4
+- Enable RS485 mode for UART3 & 4
+- Enable LM75 temperature sensor
+- Fix GPIO settings for MMC pins
+- Enable USB
+---
+ arch/arm/boot/dts/am335x-nano.dts | 33 +++++++++++++++++++++++++------
+ 1 file changed, 27 insertions(+), 6 deletions(-)
 
-For devices operating in "full_power" mode, the first call to
-`i2c_acpi_waive_d0_probe` will return 0, which means that the device
-will be turned on with `dev_pm_domain_attach`.
-
-If probe fails, the second call to `i2c_acpi_waive_d0_probe` will return
-1, which means that the device will not be turned off. This is, it will
-be left in a different power state. Lets fix it.
-
-Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index b4edf10e8fd0..be59c40f5beb 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
- {
- 	struct i2c_client	*client = i2c_verify_client(dev);
- 	struct i2c_driver	*driver;
-+	bool do_power_on;
- 	int status;
+diff --git a/arch/arm/boot/dts/am335x-nano.dts b/arch/arm/boot/dts/am335x-nano.dts
+index b6f2567bd65a..1f613e879c53 100644
+--- a/arch/arm/boot/dts/am335x-nano.dts
++++ b/arch/arm/boot/dts/am335x-nano.dts
+@@ -120,8 +120,8 @@ AM33XX_PADCONF(AM335X_PIN_SPI0_D0, PIN_OUTPUT, MUX_MODE1)		/* spi0_d0.uart2_txd
  
- 	if (!client)
-@@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
- 	if (status < 0)
- 		goto err_clear_wakeup_irq;
+ 	uart3_pins: uart3_pins {
+ 		pinctrl-single,pins = <
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA10, PIN_INPUT_PULLUP, MUX_MODE6)	/* lcd_data10.uart3_ctsn */
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA11, PIN_OUTPUT, MUX_MODE6)		/* lcd_data11.uart3_rtsn */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA10, PIN_INPUT_PULLUP, MUX_MODE7)	/* lcd_data10.gpio2[16] */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA11, PIN_OUTPUT, MUX_MODE7)		/* lcd_data11.gpio2[17] */
+ 			AM33XX_PADCONF(AM335X_PIN_SPI0_CS1, PIN_INPUT, MUX_MODE1)		/* spi0_cs1.uart3_rxd */
+ 			AM33XX_PADCONF(AM335X_PIN_ECAP0_IN_PWM0_OUT, PIN_OUTPUT, MUX_MODE1)		/* ecap0_in_pwm0_out.uart3_txd */
+ 		>;
+@@ -129,8 +129,8 @@ AM33XX_PADCONF(AM335X_PIN_ECAP0_IN_PWM0_OUT, PIN_OUTPUT, MUX_MODE1)		/* ecap0_in
  
--	status = dev_pm_domain_attach(&client->dev,
--				      !i2c_acpi_waive_d0_probe(dev));
-+	do_power_on = !i2c_acpi_waive_d0_probe(dev);
-+	status = dev_pm_domain_attach(&client->dev, do_power_on);
- 	if (status)
- 		goto err_clear_wakeup_irq;
+ 	uart4_pins: uart4_pins {
+ 		pinctrl-single,pins = <
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_INPUT_PULLUP, MUX_MODE6)	/* lcd_data12.uart4_ctsn */
+-			AM33XX_PADCONF(AM335X_PIN_LCD_DATA13, PIN_OUTPUT, MUX_MODE6)		/* lcd_data13.uart4_rtsn */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_INPUT_PULLUP, MUX_MODE7)	/* lcd_data12.gpio0[8] */
++			AM33XX_PADCONF(AM335X_PIN_LCD_DATA13, PIN_OUTPUT, MUX_MODE7)		/* lcd_data13.gpio0[9] */
+ 			AM33XX_PADCONF(AM335X_PIN_UART0_CTSN, PIN_INPUT, MUX_MODE1)		/* uart0_ctsn.uart4_rxd */
+ 			AM33XX_PADCONF(AM335X_PIN_UART0_RTSN, PIN_OUTPUT, MUX_MODE1)		/* uart0_rtsn.uart4_txd */
+ 		>;
+@@ -188,12 +188,22 @@ &uart3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart3_pins>;
+ 	status = "okay";
++	rts-gpio = <&gpio2 17 GPIO_ACTIVE_HIGH>;
++	rs485-rts-active-high;
++	rs485-rx-during-tx;
++	rs485-rts-delay = <1 1>;
++	linux,rs485-enabled-at-boot-time;
+ };
  
-@@ -585,7 +586,7 @@ static int i2c_device_probe(struct device *dev)
- err_release_driver_resources:
- 	devres_release_group(&client->dev, client->devres_group_id);
- err_detach_pm_domain:
--	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-+	dev_pm_domain_detach(&client->dev, do_power_on);
- err_clear_wakeup_irq:
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-
+ &uart4 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart4_pins>;
+ 	status = "okay";
++	rts-gpio = <&gpio0 9 GPIO_ACTIVE_HIGH>;
++	rs485-rts-active-high;
++	rs485-rx-during-tx;
++	rs485-rts-delay = <1 1>;
++	linux,rs485-enabled-at-boot-time;
+ };
+ 
+ &uart5 {
+@@ -220,6 +230,12 @@ tps: tps@24 {
+ 		reg = <0x24>;
+ 	};
+ 
++	lm75@48 {
++		compatible = "lm75";
++		reg = <0x48>;
++		status = "okay";
++	};
++
+ 	eeprom@53 {
+ 		compatible = "microchip,24c02", "atmel,24c02";
+ 		reg = <0x53>;
+@@ -403,8 +419,13 @@ &mmc1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&mmc1_pins>;
+ 	bus-width = <4>;
+-	cd-gpios = <&gpio3 8 0>;
+-	wp-gpios = <&gpio3 18 0>;
++	cd-debounce-delay-ms = <5>;
++	cd-gpios = <&gpio3 8 GPIO_ACTIVE_LOW>;
++	wp-gpios = <&gpio3 18 GPIO_ACTIVE_HIGH>;
++};
++
++&usb0 {
++	dr_mode = "host";
+ };
+ 
+ #include "tps65217.dtsi"
 -- 
-b4 0.11.0-dev-d93f8
+2.34.1
+
