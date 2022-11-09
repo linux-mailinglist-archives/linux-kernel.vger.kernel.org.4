@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7CD622D41
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0906622D36
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiKIONS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S230415AbiKIOKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiKIONQ (ORCPT
+        with ESMTP id S230375AbiKIOKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:13:16 -0500
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A1D11A0D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:13:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=uieGFSRlWfEudDPWzmLqa4FntHsQ1l9cOOh88HONQ+I=; b=XSNoEIfzs5COdh7u2/RQYNh5SC
-        gYIomJ7/I61w0V5mrGKK7L2CrQ3Ev26u7S8NOpeMVOdXI4B17U5eXuo3CAodWNX6nTbJfCagJMvv4
-        Dq2yjLybIPLqy87sNXPPFnYuQu8vcZ8qYweBfe9Pawv0uAn8z1JhMK5HcEMSSKg5daPD3qv/t1kED
-        48XyzrYBUTsNO5ABRfYUUeVbl9Wlr0tkQnn4UTGwve/OR/aOWmbHcqVaGPA/Kyk67Z0Uk2A53X4pG
-        8Y8elO/1Byq0lJ5AL9fKkmpRHFYXXlG0QzsbhrrtylC3XWbrSJ7XkQ8ii+pw9jwXdKsNb4MSBVFK7
-        mC7xLDFg==;
-Received: from [2a01:799:95a:cb00:81e6:f8f5:7f80:f3bd] (port=60889)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oslm9-0004IU-Hy; Wed, 09 Nov 2022 15:09:57 +0100
-Message-ID: <d44f5edb-52d4-851a-9746-5c4d49d603f4@tronnes.org>
-Date:   Wed, 9 Nov 2022 15:09:50 +0100
+        Wed, 9 Nov 2022 09:10:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A4F1740F;
+        Wed,  9 Nov 2022 06:10:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5B26B81EC6;
+        Wed,  9 Nov 2022 14:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7CE03C433D7;
+        Wed,  9 Nov 2022 14:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668003019;
+        bh=W5B0br3K6HCYwePGGXnYroApfXp5GQlbN8ymTiCxYOA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=XUezKhRhRGTNNu8YZXjwkvRVLAJ4EIbGdk9b66D7pvHS8yxGzDPSSrwhYuQn9Oe7Y
+         nTuYVcdWf4EkPFWlgHv7g7oIJWqgbLtc+eR+/RLKYSCZjSu1knrtxpJ0JXk1Nx+sSh
+         eo8H7wLrFcQdgvzFB41lCBcLmthOCdj0fXqqHUwMqabWX2uMY0p9p8KWtWglNMwYuO
+         1YGWQLC3cdOSyH4Uf09QsAAMacnTTJCb9EBg4P7TkO/I91nfVYRhpicqReULLGx3UZ
+         DW3/iMMMVZEYpUtUD/76O3E2iEsHHGu5PLLNtdcg7KCnOKl41B5yRaiL5iskjTLvbO
+         lZkb31rra/tDw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69BFBC395F8;
+        Wed,  9 Nov 2022 14:10:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 15/23] drm/modes: Introduce more named modes
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>
-Cc:     Phil Elwell <phil@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
- <20220728-rpi-analog-tv-properties-v7-15-7072a478c6b3@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v7-15-7072a478c6b3@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Subject: Re: [PATCH 00/26] rxrpc: Increasing SACK size and moving away from
+ softirq, part 1
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166800301942.27724.14016792120529272515.git-patchwork-notify@kernel.org>
+Date:   Wed, 09 Nov 2022 14:10:19 +0000
+References: <166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk>
+In-Reply-To: <166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,123 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This series was applied to netdev/net-next.git (master)
+by David Howells <dhowells@redhat.com>:
 
-Den 07.11.2022 15.16, skrev Maxime Ripard:
-> Now that we can easily extend the named modes list, let's add a few more
-> analog TV modes that were used in the wild, and some unit tests to make
-> sure it works as intended.
+On Tue, 08 Nov 2022 22:17:51 +0000 you wrote:
+> AF_RXRPC has some issues that need addressing:
 > 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>  (1) The SACK table has a maximum capacity of 255, but for modern networks
+>      that isn't sufficient.  This is hard to increase in the upstream code
+>      because of the way the application thread is coupled to the softirq
+>      and retransmission side through a ring buffer.  Adjustments to the rx
+>      protocol allows a capacity of up to 8192, and having a ring
+>      sufficiently large to accommodate that would use an excessive amount
+>      of memory as this is per-call.
 > 
-> ---
-> Changes in v6:
-> - Renamed the tests to follow DRM test naming convention
-> 
-> Changes in v5:
-> - Switched to KUNIT_ASSERT_NOT_NULL
-> ---
->  drivers/gpu/drm/drm_modes.c                     |  2 +
->  drivers/gpu/drm/tests/drm_client_modeset_test.c | 54 +++++++++++++++++++++++++
->  2 files changed, 56 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-> index 49441cabdd9d..17c5b6108103 100644
-> --- a/drivers/gpu/drm/drm_modes.c
-> +++ b/drivers/gpu/drm/drm_modes.c
-> @@ -2272,7 +2272,9 @@ struct drm_named_mode {
->  
->  static const struct drm_named_mode drm_named_modes[] = {
->  	NAMED_MODE("NTSC", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC),
-> +	NAMED_MODE("NTSC-J", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC_J),
->  	NAMED_MODE("PAL", 13500, 720, 576, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL),
-> +	NAMED_MODE("PAL-M", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL_M),
->  };
->  
->  static int drm_mode_parse_cmdline_named_mode(const char *name,
-> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> index fdfe9e20702e..b3820d25beca 100644
-> --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
-> @@ -133,6 +133,32 @@ static void drm_test_pick_cmdline_named_ntsc(struct kunit *test)
->  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_ntsc_480i(drm), mode));
->  }
->  
-> +static void drm_test_pick_cmdline_named_ntsc_j(struct kunit *test)
-> +{
-> +	struct drm_client_modeset_test_priv *priv = test->priv;
-> +	struct drm_device *drm = priv->drm;
-> +	struct drm_connector *connector = &priv->connector;
-> +	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
-> +	struct drm_display_mode *mode;
-> +	const char *cmdline = "NTSC-J";
-> +	int ret;
-> +
-> +	KUNIT_ASSERT_TRUE(test,
-> +			  drm_mode_parse_command_line_for_connector(cmdline,
-> +								    connector,
-> +								    cmdline_mode));
-> +
-> +	mutex_lock(&drm->mode_config.mutex);
-> +	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
-> +	mutex_unlock(&drm->mode_config.mutex);
-> +	KUNIT_ASSERT_GT(test, ret, 0);
-> +
-> +	mode = drm_connector_pick_cmdline_mode(connector);
-> +	KUNIT_ASSERT_NOT_NULL(test, mode);
-> +
-> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_ntsc_480i(drm), mode));
-> +}
-> +
->  static void drm_test_pick_cmdline_named_pal(struct kunit *test)
->  {
->  	struct drm_client_modeset_test_priv *priv = test->priv;
-> @@ -159,10 +185,38 @@ static void drm_test_pick_cmdline_named_pal(struct kunit *test)
->  	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_pal_576i(drm), mode));
->  }
->  
-> +static void drm_test_pick_cmdline_named_pal_m(struct kunit *test)
-> +{
-> +	struct drm_client_modeset_test_priv *priv = test->priv;
-> +	struct drm_device *drm = priv->drm;
-> +	struct drm_connector *connector = &priv->connector;
-> +	struct drm_cmdline_mode *cmdline_mode = &connector->cmdline_mode;
-> +	struct drm_display_mode *mode;
-> +	const char *cmdline = "PAL-M";
-> +	int ret;
-> +
-> +	KUNIT_ASSERT_TRUE(test,
-> +			  drm_mode_parse_command_line_for_connector(cmdline,
-> +								    connector,
-> +								    cmdline_mode));
-> +
-> +	mutex_lock(&drm->mode_config.mutex);
-> +	ret = drm_helper_probe_single_connector_modes(connector, 1920, 1080);
-> +	mutex_unlock(&drm->mode_config.mutex);
-> +	KUNIT_ASSERT_GT(test, ret, 0);
-> +
-> +	mode = drm_connector_pick_cmdline_mode(connector);
-> +	KUNIT_ASSERT_NOT_NULL(test, mode);
-> +
-> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(drm_mode_analog_ntsc_480i(drm), mode));
-> +}
-> +
+> [...]
 
-There are 4 named mode tests that are almost identical, should probably
-use KUNIT_ARRAY_PARAM like in the parser tests.
+Here is the summary with links:
+  - [net-next,01/26] net, proc: Provide PROC_FS=n fallback for proc_create_net_single_write()
+    https://git.kernel.org/netdev/net-next/c/c3d96f690a79
+  - [net-next,02/26] rxrpc: Trace setting of the request-ack flag
+    https://git.kernel.org/netdev/net-next/c/4d843be56ba6
+  - [net-next,03/26] rxrpc: Split call timer-expiration from call timer-set tracepoint
+    https://git.kernel.org/netdev/net-next/c/334dfbfc5a71
+  - [net-next,04/26] rxrpc: Track highest acked serial
+    https://git.kernel.org/netdev/net-next/c/589a0c1e0ac3
+  - [net-next,05/26] rxrpc: Add stats procfile and DATA packet stats
+    https://git.kernel.org/netdev/net-next/c/b015424695f0
+  - [net-next,06/26] rxrpc: Record statistics about ACK types
+    https://git.kernel.org/netdev/net-next/c/f2a676d10038
+  - [net-next,07/26] rxrpc: Record stats for why the REQUEST-ACK flag is being set
+    https://git.kernel.org/netdev/net-next/c/f7fa52421f76
+  - [net-next,08/26] rxrpc: Fix ack.bufferSize to be 0 when generating an ack
+    https://git.kernel.org/netdev/net-next/c/8889a711f9b4
+  - [net-next,09/26] net: Change the udp encap_err_rcv to allow use of {ip,ipv6}_icmp_error()
+    https://git.kernel.org/netdev/net-next/c/42fb06b391ac
+  - [net-next,10/26] rxrpc: Use the core ICMP/ICMP6 parsers
+    https://git.kernel.org/netdev/net-next/c/b6c66c4324e7
+  - [net-next,11/26] rxrpc: Call udp_sendmsg() directly
+    https://git.kernel.org/netdev/net-next/c/ed472b0c8783
+  - [net-next,12/26] rxrpc: Remove unnecessary header inclusions
+    https://git.kernel.org/netdev/net-next/c/23b237f32592
+  - [net-next,13/26] rxrpc: Remove the flags from the rxrpc_skb tracepoint
+    https://git.kernel.org/netdev/net-next/c/27f699ccb89d
+  - [net-next,14/26] rxrpc: Remove call->tx_phase
+    https://git.kernel.org/netdev/net-next/c/a11e6ff961a0
+  - [net-next,15/26] rxrpc: Define rxrpc_txbuf struct to carry data to be transmitted
+    https://git.kernel.org/netdev/net-next/c/02a1935640f8
+  - [net-next,16/26] rxrpc: Allocate ACK records at proposal and queue for transmission
+    https://git.kernel.org/netdev/net-next/c/72f0c6fb0579
+  - [net-next,17/26] rxrpc: Clean up ACK handling
+    https://git.kernel.org/netdev/net-next/c/530403d9ba1c
+  - [net-next,18/26] rxrpc: Split the rxrpc_recvmsg tracepoint
+    https://git.kernel.org/netdev/net-next/c/faf92e8d53f5
+  - [net-next,19/26] rxrpc: Clone received jumbo subpackets and queue separately
+    https://git.kernel.org/netdev/net-next/c/d4d02d8bb5c4
+  - [net-next,20/26] rxrpc: Get rid of the Rx ring
+    https://git.kernel.org/netdev/net-next/c/5d7edbc9231e
+  - [net-next,21/26] rxrpc: Don't use a ring buffer for call Tx queue
+    https://git.kernel.org/netdev/net-next/c/a4ea4c477619
+  - [net-next,22/26] rxrpc: Remove call->lock
+    https://git.kernel.org/netdev/net-next/c/4e76bd406d6e
+  - [net-next,23/26] rxrpc: Save last ACK's SACK table rather than marking txbufs
+    https://git.kernel.org/netdev/net-next/c/d57a3a151660
+  - [net-next,24/26] rxrpc: Remove the rxtx ring
+    https://git.kernel.org/netdev/net-next/c/6869ddb87d47
+  - [net-next,25/26] rxrpc: Fix congestion management
+    https://git.kernel.org/netdev/net-next/c/1fc4fa2ac93d
+  - [net-next,26/26] rxrpc: Allocate an skcipher each time needed rather than reusing
+    https://git.kernel.org/netdev/net-next/c/30d95efe06e1
 
-This patchset has been going on for a long time now so it can be fixed
-later if you don't want to do it now:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
 
->  static struct kunit_case drm_test_pick_cmdline_tests[] = {
->  	KUNIT_CASE(drm_test_pick_cmdline_res_1920_1080_60),
->  	KUNIT_CASE(drm_test_pick_cmdline_named_ntsc),
-> +	KUNIT_CASE(drm_test_pick_cmdline_named_ntsc_j),
->  	KUNIT_CASE(drm_test_pick_cmdline_named_pal),
-> +	KUNIT_CASE(drm_test_pick_cmdline_named_pal_m),
->  	{}
->  };
->  
-> 
