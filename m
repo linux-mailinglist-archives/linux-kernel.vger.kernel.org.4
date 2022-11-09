@@ -2,90 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CC4622F9F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3014622FA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiKIQFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 11:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S231185AbiKIQH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiKIQFs (ORCPT
+        with ESMTP id S229518AbiKIQH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 11:05:48 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFC421268;
-        Wed,  9 Nov 2022 08:05:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668009947; x=1699545947;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DUDgxCo8gHkX29vLar7UjmY10ZyQHpxE5MRL+xpehOw=;
-  b=TVUao97su6HaOMrMMCXMMOAfzAmdFKt0RWaMM11QltuT1j+GF4d5v0ha
-   WYGEfUieZII02nCryby7XnVzLza1WzyPR3rt1EKXjjy6le5d+PhVG/4Xm
-   mRyHQA0l0NKx3ZDiUVaf0zE/tXkDkwu7FcKnqGmQgLTvJwmhvTSnoJOeO
-   T2Ak6Y4Rj/dGAgU/DHvoggLC50JH/DyFCURdlEKHW1Xb+FN12n/BY2+e7
-   ZU2In2Zq8O/4RlARnQBBgtEHQeMEnaQW6o+bT9A563y0VMup0odxv0Rd7
-   61znW/wYChynQk+Xs9l6JxKB2NxBWvJZOBEqXw+LB0j5uw/gjk5v+r6kZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="312817957"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="312817957"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 08:05:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="669999464"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="669999464"
-Received: from ktan43-mobl2.amr.corp.intel.com (HELO [10.213.170.218]) ([10.213.170.218])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 08:05:45 -0800
-Message-ID: <e5acf9e3-20b9-00b3-8d5f-687d47ccd49c@linux.intel.com>
-Date:   Wed, 9 Nov 2022 10:05:44 -0600
+        Wed, 9 Nov 2022 11:07:28 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB6120F53
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:07:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1668010046;
+  x=1699546046;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YgabzxKTXgysBcMfO1IfjanutclXzioMtt7d8m0oLoE=;
+  b=Nqxhv9yhr1XAjrbDa00ZEOjdWBPN8fNZS/NnhGET3Qc4do3kQYAv/OOx
+   9ze8XChcC6Lcx9mZmNcRlM7hfmr5pPo1jAFHzQVSyRNb1eXJUBh2Qgfc4
+   2l1H4rifEtd9XwcQEpAUEida8KxedmV416sTfKkanLKORBxEUTgrmbs6R
+   Ej5ovwFTCoCfck/dgaLHTr4aFRBpqxcyimh7wzrC5LRYKvq1qJdgO9H3R
+   Vo+kDULP+XbgwZqsSN4deM7kHE1I/YbkBj6dYMCjlbbXd0huHpXVVHbc7
+   OeSgIVEVFjQJ6PNYET8MWj56H7CVsP69+F3khraBGhzqwVgPeC4T+2YFq
+   g==;
+From:   =?UTF-8?q?Ludvig=20P=C3=A4rsson?= <ludvig.parsson@axis.com>
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+CC:     <kernel@axis.com>,
+        =?UTF-8?q?Ludvig=20P=C3=A4rsson?= <ludvig.parsson@axis.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        <op-tee@lists.trustedfirmware.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tee: optee: Populate child nodes in probe function
+Date:   Wed, 9 Nov 2022 17:07:08 +0100
+Message-ID: <20221109160708.507481-1-ludvig.parsson@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH] soundwire: intel: Initialize clock stop timeout
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     stable@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, bard.liao@intel.com
-References: <20221020015624.1703950-1-yung-chuan.liao@linux.intel.com>
- <Y1u855YZ/B3Q+FiI@matsya>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <Y1u855YZ/B3Q+FiI@matsya>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently there is no dependency between the "linaro,scmi-optee" driver
+and the tee_core. If the scmi-optee driver gets probed before the
+tee_bus_type is initialized, then we will get an unwanted error print.
 
+This patch enables putting scmi-optee nodes as children to the optee
+node in devicetree, which indirectly creates the missing dependency.
 
-On 10/28/22 06:28, Vinod Koul wrote:
-> On 20-10-22, 09:56, Bard Liao wrote:
->> From: Sjoerd Simons <sjoerd@collabora.com>
->>
->> The bus->clk_stop_timeout member is only initialized to a non-zero value
->> during the codec driver probe. This can lead to corner cases where this
->> value remains pegged at zero when the bus suspends, which results in an
->> endless loop in sdw_bus_wait_for_clk_prep_deprep().
->>
->> Corner cases include configurations with no codecs described in the
->> firmware, or delays in probing codec drivers.
->>
->> Initializing the default timeout to the smallest non-zero value avoid this
->> problem and allows for the existing logic to be preserved: the
->> bus->clk_stop_timeout is set as the maximum required by all codecs
->> connected on the bus.
-> 
-> Applied to fixes, thanks
+Signed-off-by: Ludvig Pärsson <ludvig.parsson@axis.com>
+---
+ drivers/tee/optee/smc_abi.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks Vinod, was this sent to Greg/Linus? the last pull request I see
-was for 6.1-rc1.
-Arch Linux cherry-picked this patch but other distros did not, so quite
-a few users are left with no audio card.
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index a1c1fa1a9c28..be6f02fd5a7f 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -1533,6 +1533,11 @@ static int optee_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		goto err_disable_shm_cache;
+ 
++	/* Populate any dependent child node (if any) */
++	rc = devm_of_platform_populate(&pdev->dev);
++	if (rc)
++		goto err_disable_shm_cache;
++
+ 	pr_info("initialized driver\n");
+ 	return 0;
+ 
+-- 
+2.30.2
+
