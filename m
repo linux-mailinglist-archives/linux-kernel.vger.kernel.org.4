@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007A062373F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8F7623749
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiKIXII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S231996AbiKIXKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiKIXIF (ORCPT
+        with ESMTP id S231366AbiKIXJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:08:05 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21F1647D;
-        Wed,  9 Nov 2022 15:08:04 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so98010wmb.0;
-        Wed, 09 Nov 2022 15:08:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LwVitJc+OKf+8w4wSRaaZOyHv8YAZ//3DtpKET00R7I=;
-        b=hBckYn0WxZvQCSKJBFl3QcweKiTVzJiGEsjEaBhtXNElu3i8fx7xHVayMhZ/82qZWz
-         Vw1DDRQpFx7OXW7pGWHrN6na6/ByAgBzax4W9/viPKIiJTtedoVNn0iLUB4jBLeIUU9l
-         Ad1AHLLzd1eTEdb2Vq7bCkUK+1s61+bY1VZFLx/28sWvBPZcZBUa/5kIPRnmhyH8KsrE
-         mmX0w3c1XIL2xypjVCrGVdZAMhiaSkjAx+4U6/03FzWoW63P5OsspCyPxf4YR7nZaZR7
-         QG4NZR52xZe6IeJELNJ2cKzhvyJ5X/YqvryHyqAveQO6o8sUHcvV+yUSJ+bYRotzLoGo
-         ETTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LwVitJc+OKf+8w4wSRaaZOyHv8YAZ//3DtpKET00R7I=;
-        b=Z5P0liubnN9mEcParV88Gk3OYvn4EtGB5mdlu48WiT2LRODmAEYX7HYW2slKxIx/Rf
-         CbOkEch+Iy10M8VsUSeMI3vflZ0g5/LKQ11bbGkQH4N3SM8wPPydiX3S98KU6ODA7Nba
-         naPzmp/QmWatD2k1f94BkmVJ/C31A/IdiwueDse+cvf3hCm4PA1LdJ0lmYZg0rslBZ7R
-         yce0x9r4josomYG/TpCE0jL+jKRX7kpz4sFr52d1imnkj6AbIqkJ51saGv0QmMfiSDxf
-         YY16hbu9r9WR3enURUriRmN5rlyT5rz2A9AAv9u6yMOpZJlopQ6TxKdmsWSDZEyy4KmH
-         WIiw==
-X-Gm-Message-State: ACrzQf20NuRnytmycNv42D617G3w0HEGKW59Fk38AnLSfJhNbnK7BAFS
-        PUFehU59JXzsgnYCRcBDLTA=
-X-Google-Smtp-Source: AMsMyM4AJxypXUVf/EsY503k79RpGyRHyzcplzZwHSA1aIE3JjDY7Zwoj701g6KVLOuJRL8C9m3FXg==
-X-Received: by 2002:a05:600c:4b27:b0:3cf:8ec7:b8f with SMTP id i39-20020a05600c4b2700b003cf8ec70b8fmr23266575wmp.69.1668035283125;
-        Wed, 09 Nov 2022 15:08:03 -0800 (PST)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id fc18-20020a05600c525200b003b49bd61b19sm3288752wmb.15.2022.11.09.15.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 15:08:02 -0800 (PST)
-Date:   Thu, 10 Nov 2022 01:07:59 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] dt-bindings: net: dsa: qca8k: utilize
- shared dsa.yaml
-Message-ID: <20221109230759.gw7prntz7i5lxwiq@skbuf>
-References: <20221104045204.746124-1-colin.foster@in-advantage.com>
- <20221104045204.746124-1-colin.foster@in-advantage.com>
- <20221104045204.746124-3-colin.foster@in-advantage.com>
- <20221104045204.746124-3-colin.foster@in-advantage.com>
+        Wed, 9 Nov 2022 18:09:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE112A40E;
+        Wed,  9 Nov 2022 15:09:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9503461D1F;
+        Wed,  9 Nov 2022 23:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA487C43470;
+        Wed,  9 Nov 2022 23:09:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668035398;
+        bh=jr17mFKpsW2i8xVCNI4y+k87mzG/8DXMLZLvqNoTp4c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QFLVSPjBGWRiiGUTDBSelwI+hMsi0aVHrecfBsmwLUwev0zISa/qzDC0PAL2dJtpr
+         MRhpQ+RO1LjpXcMxcyqr8OY1/dMM2prjLH8F0BkLr/Bc0/8pv1uiK8cbDla0C5Id6B
+         cjcWfc5DUWLYYY6wtFqlfik8OtezMYz6Pp9ro7qfkR9/dXzGrChXA+XuCG3mO/zqNW
+         YXzajQH3gOzFpJNPOIyP5W8No6CTLwtPwBJBdZoomF3zmEPuq+CI4ZNkGRU5ggN/N4
+         5E7v32djTDtkLiIEHJ2wb4vnosAxkXWxkzMv+Bqs+Dg3U+sb5GAnyTm9maXWftH3ez
+         6giGSOKIamf7Q==
+Date:   Wed, 9 Nov 2022 17:09:56 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Robert Richter <rrichter@amd.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v3 6/9] cxl/pci: Do not ignore PCI config read errors in
+ match_add_dports()
+Message-ID: <20221109230956.GA581201@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104045204.746124-3-colin.foster@in-advantage.com>
- <20221104045204.746124-3-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221109104059.766720-7-rrichter@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 09:52:00PM -0700, Colin Foster wrote:
-> The dsa.yaml binding contains duplicated bindings for address and size
-> cells, as well as the reference to dsa-port.yaml. Instead of duplicating
-> this information, remove the reference to dsa-port.yaml and include the
-> full reference to dsa.yaml.
+On Wed, Nov 09, 2022 at 11:40:56AM +0100, Robert Richter wrote:
+> The link capabilities of a PCI device are read when enumerating its
+> dports. This is done by reading the PCI config space. If that fails
+> port enumeration ignores that error. However, reading the PCI config
+> space should reliably work.
 > 
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> Suggested-by: Vladimir Oltean <olteanv@gmail.com>
+> To reduce some complexity to the code flow when factoring out parts of
+> the code in match_add_dports() for later reuse, change this to throw
+> an error.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 > ---
+>  drivers/cxl/core/pci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> v1 -> v2
->   * Add #address-cells and #size-cells to the switch layer. They aren't
->     part of dsa.yaml.
+> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> index 0dbbe8d39b07..8271b8abde7a 100644
+> --- a/drivers/cxl/core/pci.c
+> +++ b/drivers/cxl/core/pci.c
+> @@ -47,7 +47,7 @@ static int match_add_dports(struct pci_dev *pdev, void *data)
+>  		return 0;
+>  	if (pci_read_config_dword(pdev, pci_pcie_cap(pdev) + PCI_EXP_LNKCAP,
+>  				  &lnkcap))
 
-I'm afraid this is not the correct resolution to the warnings you saw.
-There is no reason to have #address-cells = <1> under the "switch" node,
-since none of that node's children have a unit address (see: "ports", "mdio").
-The schema example is wrong, please fix that.
+You didn't change this, but I recommend using
+pcie_capability_read_dword() when reading the PCIe Capability.  It
+takes care of some annoying corner cases like devices that don't
+implement Link Cap and the different versions of the PCIe Capability.
+
+> -		return 0;
+> +		return -ENXIO;
+>  
+>  	rc = cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
+>  	if (rc)
+> -- 
+> 2.30.2
+> 
