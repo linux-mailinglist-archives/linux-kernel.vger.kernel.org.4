@@ -2,247 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46929622941
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD64862294D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiKIKyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S229851AbiKIKza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiKIKxl (ORCPT
+        with ESMTP id S229865AbiKIKzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:53:41 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3684D29C96;
-        Wed,  9 Nov 2022 02:53:12 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DB383580373;
-        Wed,  9 Nov 2022 05:53:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 09 Nov 2022 05:53:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667991187; x=
-        1667998387; bh=rFpYMyteGOfAqhSkg+1Bq7UwfUr5hnbTR+ptZFTnXBQ=; b=d
-        9rjnj7HnOCP1X+SeQUgsQ3IucDnvzVGLm2dELGG3KHGc2Jaz/S56DblOlUBpxzB4
-        F8quqM+/7OFrlXJn61DnRvwbQIZE/xZR2lNx7cP/SAXozs7KtEYdwt02SrGKK7o1
-        us2EVYHqbSj7KNt7xi1NhBc9wKAP8MfhUM0qaadptAb+neoi1BJ6o1QmkqU02Yfe
-        0berZ0jxZQyBFqCfBIp+3sxuin8dyghdLbYvan6AnvyFPiMh0OpKlO0Q873v29v6
-        40IUtYpj5tqlPVfpABde2xwOgYTe4Z5iqblUUuTOjmN5BKyv6bKPG374pPg/EJaH
-        zFSsQ9oCcIk4mHkKvPhAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667991187; x=
-        1667998387; bh=rFpYMyteGOfAqhSkg+1Bq7UwfUr5hnbTR+ptZFTnXBQ=; b=p
-        RvaZdegoo2TmyzmHQIkCS03rw/7QVrFwy+X8QhAzFw/G6qH9r4J8ABXk7q+j013D
-        ry+b+FzVgm0cS7diKNbZIv8W01PzwZlHlybUaFDwHWe++fB9Op0H6BXbZfkn22Hb
-        HvbxHtoCFEWsveHrV0TtYwlGYDxy/N64quV1biXWdpdhxuqaEoVLtJHi4MSKcD71
-        QIwwAaG97ix6C0FRIJAb1kYZvY5gxrN6RnsFwtHkfpGM26U/bkbi4xxQnTAt3imD
-        yTtVN1SLm0l2gXP7IeFVD2+1W71uoDjiXRfgUjYx78vkchBd4D0CxIUrqYHRYOde
-        vbFo6b6W4+xzk/AGPivkg==
-X-ME-Sender: <xms:kYZrY-tLlhO6ZUAX9-k6sQ88O6bV79mbri2Vu76BsCNU2WtceqQM4g>
-    <xme:kYZrYzeRzW2Xx9j5Vy5SrsKV1Axlb9W7IJm4to7NCoXBCQ2mA7sktDRmLvppOlH7N
-    Ko8eEGURV2x6lC8hQM>
-X-ME-Received: <xmr:kYZrY5yWEvlS3RcwFJ1Q8cnZOAMPeg8WoMGw9hs3jjQWSwoi2Bl17bow8ZYnQgjDaEptl70M9As3mQrrybOu4MsyWITW4LGGQ4fSrvKPerqqkA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgddvtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeelleefieelleetteefvdeikeeffeffvefhtdevgfehveduveehjedvvdei
-    ledtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:kYZrY5O07SRD6puA3358osiXrtuSMFdGVdRTIqNB_Y1j0e2kCrf3cA>
-    <xmx:kYZrY--4OXcwxilx3M7PefuYPOE7Q-cNXA_rzfVHe3YNDICUyK2Sxw>
-    <xmx:kYZrYxUU9d6D9QOR4wgnmfdDTJak7SCgP6L9mst33jeFoqJvvYx3Lg>
-    <xmx:k4ZrYzEPHAcIp0kQHYqoCO6CcZhqHoAWErXk2GU8pNi2CThqinPAvA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Nov 2022 05:53:03 -0500 (EST)
-Date:   Wed, 9 Nov 2022 11:53:01 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 56/65] clk: ingenic: cgu: Switch to determine_rate
-Message-ID: <20221109105301.ueus7o3b75j5yeff@houat>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-56-f6736dec138e@cerno.tech>
- <80VTKR.CE8RVN8M3ZYK3@crapouillou.net>
- <20221104145946.orsyrhiqvypisl5j@houat>
- <IOEVKR.TWFKJND2FJ473@crapouillou.net>
+        Wed, 9 Nov 2022 05:55:12 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2065.outbound.protection.outlook.com [40.107.244.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E0027B08;
+        Wed,  9 Nov 2022 02:53:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ichvlteQ81usLGug8hCU0l8UR5TS3j0eSqOpDCaKH4KYd7qNB2JaYh572geu8h5OUn0Al6xNUwbSe1j1gKfoA+1bslGQC4qiBUBfX/Jlrty1dppEhkfk8H+SeoNPJkGrBe2i7AcPlR/XW3sg2Xfj82ShFGkSUoq4GR+J6X4W2Mj5oBLFbBa58bVr330W5xLCc2gqSb4RivC/PO5QqmvH9rZ7gXU1NWeXKjuZHZMvRXNJoVhnKlQX9ARb9p/pJj0po6z1ES738xFhbdzcCDu79xmOzuo8hlDcKE1EdLfBjNF8iED5d+4yvddwWNmb4y8WC+RwIxzzdaH9Ejb9klRsLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Nou3G/I/oT8qgiy+yc6G5RSH2BLYdgNdK4NkhSbQjqE=;
+ b=eNCsVbITkMNPOKkM+MRDVYqlqmJLf364RmhxDlBD+FccWSZR7K1461GHAIu98ao8lQJ1x9YX0JKOfBh78bCybR6Egp2eXQI98BngTrD+AL7mIejT7T8BOdw/Ir6rvFHp8w7mP7I/SJb+/6c5OiIET3AqnGJkVOY54jV9k6xwgrhTWiaXxb9KkZxyagqsjDjXuqAwaM+toQSvA9GbHm8PhriT8r0PTq3gFxrsxHds9UvReEB55YfpVso0mxMwBER/MxQ23FtH1Pj/sCgxxwBLmaVgPHfSTF+iwiRtvbwK0lqUkJwn5vB1LSSLzIqdgT4O9qPVHanwbv+n4DgdKSxQvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nou3G/I/oT8qgiy+yc6G5RSH2BLYdgNdK4NkhSbQjqE=;
+ b=leJCpBzRo86GoOOkVMstqP/i1Y4usonqQFjZfHBS3t6ZUfLagcnSIgW/wb0kPlSOTuAad1nlhZ8lCQYKX/PPpgPpp1arY6QSOzGpQp1LGf4nvjYXIA5zGpSGgeNNEO47ETsgtx8pw4l9UOj/krCNUuXsSJ1woaSswq+zDxZGbPI3ItnyU4jt+Q0PtqigfT48ige9sS+ZP3F1Vmkgn5IEhTqu8delHdgp2M+S0aP6sRxkYqOeNFrDtgHJP3xGT4vRZRGMidkdc41VtEQQbLS7aHM3CoCC14mz5ij4wIatPIpv+JtFMqy3ifVRM49LV9JKDioHIGbYOC8tAELBqkEfNA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ PH7PR12MB6609.namprd12.prod.outlook.com (2603:10b6:510:213::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
+ 2022 10:53:51 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::1912:a3a8:1a8d:a960]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::1912:a3a8:1a8d:a960%5]) with mapi id 15.20.5791.026; Wed, 9 Nov 2022
+ 10:53:51 +0000
+Message-ID: <44a040d5-529e-e4d6-4745-15a6d59a04f2@nvidia.com>
+Date:   Wed, 9 Nov 2022 10:53:45 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] soc/tegra: fuse: use platform info with soc revision
+Content-Language: en-US
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Kartik <kkartik@nvidia.com>, thierry.reding@gmail.com,
+        digetx@gmail.com, ndesaulniers@google.com, ulf.hansson@linaro.org,
+        arnd@arndb.de, skamble@nvidia.com, windhl@126.com,
+        sumitg@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1667975179-11136-1-git-send-email-kkartik@nvidia.com>
+ <62cc53ae-a615-e138-e22c-fe3a4018efde@nvidia.com>
+In-Reply-To: <62cc53ae-a615-e138-e22c-fe3a4018efde@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P265CA0003.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2ad::6) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <IOEVKR.TWFKJND2FJ473@crapouillou.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|PH7PR12MB6609:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85e8cc6c-2d73-4730-aa53-08dac240b00c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RUFi0hWZf4S2Rj2njref3wE3fP4PhformOB+EzvDy8OUYKpFN+Vp6dPIIoGL1JkQJe1igtCSKIubRZK8jqyPWnWWL5ImXMZZVEz/Eek7YYickaOFqhl0AjvohE6NaD+IB0arvx7Jb/s9mwYRotm1R8MGcmikE/uCyEoxT5OUX2C6gAVlzFv8Wli2pXf/OiDcrJR1al3a3Kd73GI3hiY1Oy7qswlc1dUPs13FqVR7TdbJBM5p76jIyyYNQRTKEu//33G53z2jaTQyVJQzZptiIGxbFdUmZjuK7a4LLohGlQm/Cy4MRCE3UFCBRNORc8H/UP0PD+Ib55Q/m9UTPWWpoNWhfCTwd9gJmIdHMv9CXQxHOKtc2dRsIibxu+Av7d0cZPPCrKhXowvYxkSJivnZTlsTpNQosPziPPdZpcIcWMeX64Im6dFimAmRty6PvaJc0e+Xh4fjiGWt5effMglz3+7cZndZ7eYX06mB+FWcDwWxFrAKYRaoWXyuAxKSLMODqrCGmGZ+20WPEMnoISkz3qn/1VxNcFOgyRUG7AiA6Va1N67w36iQ5TmjFxlzZpomVqmcdDEBODPkmRFfaqPGWFeAWvYf40vcJTAGo8TusAIFgNGn274QU3Gon2ZjtuG8LNm823GWw41NTwwtATASg027/Nup47NroOd9UuNaSnOAez5P3gyM+8VQSjxyG1AmKkuap4x1/WoFxAS0B3dDjN+f9balA1z0xKUTIMzBo8pa6g0oYK/DWLkmL8yuqRrX4p4E7fynjfHxAi60YJKMMPcq88oFBtW1CnHHKR5dK7g9aQ/wQaEPRxuOEcUdMgnS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199015)(5660300002)(186003)(2616005)(8936002)(41300700001)(2906002)(921005)(31696002)(86362001)(36756003)(83380400001)(38100700002)(316002)(6486002)(6666004)(66946007)(66556008)(31686004)(478600001)(6512007)(66476007)(8676002)(6506007)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnJvQ2pjcVBuTXBQdVhhR0xFWTMveWd5ckc3ZTFyZGRDQVNYeFlsYXRrWWZp?=
+ =?utf-8?B?UTloekhKOVYxNVdQbDh1MEswTGhxTDc4VWdtL1hRemZqYXZMTEpNTFVtQjV4?=
+ =?utf-8?B?VXJ0ZnlJL0ZMV3lpUTFhSHA3S2R4M1NWVHBHS1NQUVhwaUhBYmJFVDVsY0VW?=
+ =?utf-8?B?b3VPN0ZlaGZ6OVVLbi9XeUxEMU12U2RvZVJOZ2kzL201Ykh3bWRSNHFiZlJH?=
+ =?utf-8?B?TjFyM0ZwL1g3emZhR3pPaXkrRk5RaE9wakxWRU13SklNbGpHSDZZN0l5Vlc4?=
+ =?utf-8?B?SWR6aXVHQVRRN3VjUytpYXNZUVFhRjBTVzFlREpLSWZYWjJBeUF6b2l4OGls?=
+ =?utf-8?B?S2xkVmJsenlPbWRLWGVJVFFXTkVMQWhIRE9hQzBLL1pMSTVEeEtDNFh5NFBk?=
+ =?utf-8?B?ZHdhODFqZVdMcmJmUVY1TFNqZXc0VXViYVBtcjlESE95UzhNVXo4OWdCc1JM?=
+ =?utf-8?B?RmpJY3IvV1ZtZFg5RHpDK1l1cDY2T3RUTDZ6N2o4eWNsTCtDNk5iZ2VnN2Jn?=
+ =?utf-8?B?eFlOM2wySzUya3NodzFIVlJMMlBGMWtzU1pmUkMvb1BjdnU5OTBNN2pMMTNQ?=
+ =?utf-8?B?MHptZjUxTGl4RFM5dFpMdGpKWisray9FYzI4QmJzUUxyN2c0WlI2Z1F4Y2Fw?=
+ =?utf-8?B?eS9OSzhMdFRqNU9NbkhOVHJvTjZkL3hkVWFpZk5RdCtLVERMdWI4d2xGaWNh?=
+ =?utf-8?B?YmJTMFlaVzVjM3lRc0tJM3FjTmVXTGdFTittNjQ1NWJGWWFkNlFRMVRrSUI0?=
+ =?utf-8?B?MFVLNTRlamd0dm03Slg3dUY1Z1VzREQ4aUtuZTFRaVJUN2VTVEdrNW1YSFYv?=
+ =?utf-8?B?V1BOTXBWSFY4ZDZtYzlXWnVDYzkvcnh4MndUKy9ERGF2Zm9nQjZCK0VVY1Jk?=
+ =?utf-8?B?ZXdURFBSSXpXeTRkeDduQVUzUWx3WHh5WTg0NjRrZytGaURNUUpPYzZ1d3hW?=
+ =?utf-8?B?bDB5NVlhS1FsM3loWEFjVDZvTW1wUHcwMHYySzdMYzZZcytNNDZicWJKZGQw?=
+ =?utf-8?B?YVp5cnVTSlVRQk9PczZkMjBpd0lIb3BzaDdTOVlDRUQvdTZDTkt5QVRNZU5V?=
+ =?utf-8?B?ODUwRE9xajIyK0hpdlgxUys0Nkp0UUVRc2dld3VYbGVuU1E0bEtCVnExRFZW?=
+ =?utf-8?B?UzJoaW9wcWxWR2pKM3VDRktUNXA0aDdUSCs1bUhocG9PT1diUHdjYk4wRUI3?=
+ =?utf-8?B?dGF6Y3daMExYQncyUUk0UTNJUng4MUlmdVJjWTFMcXRPc0lNSlZWeTViZEVO?=
+ =?utf-8?B?N0dnd0dQZVphUUZsKzZxUXdUbVhac25UU012bjNSNGlDZm55cTR6emE3NEZr?=
+ =?utf-8?B?bU5oaFlTTFpjMWpQaTJYVXhZM2s1ZTlQTGhjRXdHc1lQS0c5cnhxZXQ2UzRB?=
+ =?utf-8?B?amNFV0IzYW10MThxNXZEVEhrdllFN0MrOC9tU2R1S2VaNThSSGI0RTJnWkNT?=
+ =?utf-8?B?ZUFScGRwYUJJQTRSQkl5cFVZcCtFbUNoekZCd1Fzb0Q5dWc1anBYcDhxMlJL?=
+ =?utf-8?B?VjlpeTVaZWdHRlBneUh4MlI3bTc0ZlBNdGpZT242YW83ZnZLdXpuN3p4bGJo?=
+ =?utf-8?B?Tnd6NEkzRHZ2SUl6K2hxTllTc1RhRTF1M0tCeUZUTXRpSm1nR0IrYjA5Qit3?=
+ =?utf-8?B?QjBnREMzU2ZIUjVsU3JqaUN2UTVnTHdDa1U4WC9JYldYemJ3bzFqQ2kvVWUr?=
+ =?utf-8?B?R01tSWxJWjZKK1RVa2o3QVU2dHRaNEYya25oOWVkUmxyWDZGT0dOb0xXeTk1?=
+ =?utf-8?B?TkVnby9uY0NkOUlDZXFIUStCMElQVmI2a2VNVnFrQWxtZ1cxN2h0MWExSXZ5?=
+ =?utf-8?B?K0liQk9qeVdHSWxvckI3QkpjQjZwblpVbnJNU3JJcHpmd016QlJIV1RVMWdo?=
+ =?utf-8?B?VmIvK0tOZlZ5czZTN05hS292YmF6cmR6THFsWnZHL284aEJ6dm40RUhUcndQ?=
+ =?utf-8?B?RnkxTDlhYldVUkxUeHRvOXQ3bEdud3BSTjMwblgyTkJNK09XVHNSdkR6YlZJ?=
+ =?utf-8?B?V0hvVEdnMy9DRzQ2ci9BaU1oSHZIQjFUYjlqeEx2dStVVVNNSDVYaVN5bzV0?=
+ =?utf-8?B?TFhnK2RmWXEreStNQXBiRnRRRXNmcmVBZVY1dlMzNUs2akhkYm41TjVLNnhr?=
+ =?utf-8?B?c1ZLcVRIMHhNV3c3RUpwc3hCQkJFSVc1YU9NL0QvdEp5ZjZJNzZFNGllMjlB?=
+ =?utf-8?B?MnhMajd1eEZKWTNmd09TeVdYYXQrZGhyTE10RVIzNjVJNVJBdVNEUGdDaU94?=
+ =?utf-8?B?UVd0SDRoeXduUEFySzFSYUFLbkZBPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85e8cc6c-2d73-4730-aa53-08dac240b00c
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 10:53:51.6005
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8Vo5qYibFRpdKrOiqebBgwu/OC8T8BBqIBiLGvrXXf8c2xkM2nVCkv01so/vjUwt02TYxPE7Dev5IpZFjA9xdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6609
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
 
-On Sat, Nov 05, 2022 at 10:33:54AM +0000, Paul Cercueil wrote:
-> Hi Maxime,
->=20
-> Le ven. 4 nov. 2022 =E0 15:59:46 +0100, Maxime Ripard <maxime@cerno.tech>=
- a
-> =E9crit :
-> > Hi Paul,
-> >=20
-> > On Fri, Nov 04, 2022 at 02:31:20PM +0000, Paul Cercueil wrote:
-> > >  Le ven. 4 nov. 2022 =E0 14:18:13 +0100, Maxime Ripard
-> > > <maxime@cerno.tech> a
-> > >  =E9crit :
-> > >  > The Ingenic CGU clocks implements a mux with a set_parent hook,
-> > > but
-> > >  > doesn't provide a determine_rate implementation.
-> > >  >
-> > >  > This is a bit odd, since set_parent() is there to, as its name
-> > > implies,
-> > >  > change the parent of a clock. However, the most likely candidate
-> > > to
-> > >  > trigger that parent change is a call to clk_set_rate(), with
-> > >  > determine_rate() figuring out which parent is the best suited for
-> > > a
-> > >  > given rate.
-> > >  >
-> > >  > The other trigger would be a call to clk_set_parent(), but it's
-> > > far less
-> > >  > used, and it doesn't look like there's any obvious user for that
-> > > clock.
-> > >  >
-> > >  > So, the set_parent hook is effectively unused, possibly because
-> > > of an
-> > >  > oversight. However, it could also be an explicit decision by the
-> > >  > original author to avoid any reparenting but through an explicit
-> > > call to
-> > >  > clk_set_parent().
-> > >  >
-> > >  > The driver does implement round_rate() though, which means that
-> > > we can
-> > >  > change the rate of the clock, but we will never get to change the
-> > >  > parent.
-> > >  >
-> > >  > However, It's hard to tell whether it's been done on purpose or
-> > > not.
-> > >  >
-> > >  > Since we'll start mandating a determine_rate() implementation,
-> > > let's
-> > >  > convert the round_rate() implementation to a determine_rate(),
-> > > which
-> > >  > will also make the current behavior explicit. And if it was an
-> > >  > oversight, the clock behaviour can be adjusted later on.
-> > >=20
-> > >  So it's partly on purpose, partly because I didn't know about
-> > >  .determine_rate.
-> > >=20
-> > >  There's nothing odd about having a lonely .set_parent callback; in
-> > > my case
-> > >  the clocks are parented from the device tree.
-> > >=20
-> > >  Having the clocks driver trigger a parent change when requesting a
-> > > rate
-> > >  change sounds very dangerous, IMHO. My MMC controller can be
-> > > parented to the
-> > >  external 48 MHz oscillator, and if the card requests 50 MHz, it
-> > > could switch
-> > >  to one of the PLLs. That works as long as the PLLs don't change
-> > > rate, but if
-> > >  one is configured as driving the CPU clock, it becomes messy.
-> > >  The thing is, the clocks driver has no way to know whether or not
-> > > it is
-> > >  "safe" to use a designated parent.
-> > >=20
-> > >  For that reason, in practice, I never actually want to have a clock
-> > >  re-parented - it's almost always a bad idea vs. sticking to the
-> > > parent clock
-> > >  configured in the DTS.
-> >=20
-> > Yeah, and this is totally fine. But we need to be explicit about it. The
-> > determine_rate implementation I did in all the patches is an exact
-> > equivalent to the round_rate one if there was one. We will never ask to
-> > change the parent.
-> >=20
-> > Given what you just said, I would suggest to set the
-> > CLK_SET_RATE_NO_REPARENT flag as well.
->=20
-> But that would introduce policy into the driver...
+On 09/11/2022 10:51, Jon Hunter wrote:
+> 
+> 
+> On 09/11/2022 06:26, Kartik wrote:
+>> Tegra pre-silicon platforms do not have chip revisions. This makes the
+>> revision soc attribute meaningless on these platforms.
+>>
+>> Instead, populate the revision soc attribute with
+>> "platform name + chip revision" for Silicon. For pre-silicon platforms
+>> populate it with "platform name" instead.
+>>
+>> Signed-off-by: Kartik <kkartik@nvidia.com>
+>> ---
+>> v1->v2:
+>>   * Updated commit message.
+>>
+>>   drivers/soc/tegra/fuse/fuse-tegra.c    | 23 +++++++++++++++++++++--
+>>   drivers/soc/tegra/fuse/tegra-apbmisc.c |  1 +
+>>   include/soc/tegra/fuse.h               | 15 +++++++++++++++
+>>   3 files changed, 37 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c 
+>> b/drivers/soc/tegra/fuse/fuse-tegra.c
+>> index ea25a1dcafc2..a20c9e0105dc 100644
+>> --- a/drivers/soc/tegra/fuse/fuse-tegra.c
+>> +++ b/drivers/soc/tegra/fuse/fuse-tegra.c
+>> @@ -35,6 +35,19 @@ static const char 
+>> *tegra_revision_name[TEGRA_REVISION_MAX] = {
+>>       [TEGRA_REVISION_A04]     = "A04",
+>>   };
+>> +static const char *tegra_platform_name[TEGRA_PLATFORM_MAX] = {
+>> +    [TEGRA_PLATFORM_SILICON]            = "Silicon",
+>> +    [TEGRA_PLATFORM_QT]                = "QT",
+>> +    [TEGRA_PLATFORM_SYSTEM_FPGA]            = "System FPGA",
+>> +    [TEGRA_PLATFORM_UNIT_FPGA]            = "Unit FPGA",
+>> +    [TEGRA_PLATFORM_ASIM_QT]            = "Asim QT",
+>> +    [TEGRA_PLATFORM_ASIM_LINSIM]            = "Asim Linsim",
+>> +    [TEGRA_PLATFORM_DSIM_ASIM_LINSIM]        = "Dsim Asim Linsim",
+>> +    [TEGRA_PLATFORM_VERIFICATION_SIMULATION]    = "Verification 
+>> Simulation",
+>> +    [TEGRA_PLATFORM_VDK]                = "VDK",
+>> +    [TEGRA_PLATFORM_VSP]                = "VSP",
+>> +};
+>> +
+>>   static const struct of_device_id car_match[] __initconst = {
+>>       { .compatible = "nvidia,tegra20-car", },
+>>       { .compatible = "nvidia,tegra30-car", },
+>> @@ -370,8 +383,14 @@ struct device * __init 
+>> tegra_soc_device_register(void)
+>>           return NULL;
+>>       attr->family = kasprintf(GFP_KERNEL, "Tegra");
+>> -    attr->revision = kasprintf(GFP_KERNEL, "%s",
+>> -        tegra_revision_name[tegra_sku_info.revision]);
+>> +    if (tegra_is_silicon()) {
+> 
+> curly braces are not needed.
+> 
+>> +        attr->revision = kasprintf(GFP_KERNEL, "%s %s",
+>> +                       tegra_platform_name[tegra_sku_info.platform],
+> 
+> Do we need to include platform here? Can't we just print the revision?
 
-I'm not sure why you're bringing policies into that discussion. There's
-plenty of policy in the driver already, and the current code doesn't do
-something that the old wasn't doing (implicitly).
+Actually, printing something like "Silicon A02" here is fine. No need to 
+change.
 
-And there's plenty of policies in drivers in general. Whether you limit
-the rate or not, whether you allow reparenting or not, even the
-CLK_SET_RATE_NO_REPARENT flag mentioned above is a policy decision set
-by drivers.
+Jon
 
-> The fact that I don't want the MMC parented to the PLLs, doesn't mean
-> that it's an invalid configuration per se.
-
-Sure, and that's another policy :)
-
-Maxime
+-- 
+nvpublic
