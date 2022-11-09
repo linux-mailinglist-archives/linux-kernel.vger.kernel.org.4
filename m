@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F7B622E39
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5770B622E3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiKIOo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        id S231653AbiKIOpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiKIOox (ORCPT
+        with ESMTP id S231648AbiKIOpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:44:53 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111811A222
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:44:52 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bk15so26029424wrb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:44:51 -0800 (PST)
+        Wed, 9 Nov 2022 09:45:12 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB454186EB;
+        Wed,  9 Nov 2022 06:45:10 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so2035504pjc.3;
+        Wed, 09 Nov 2022 06:45:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=newflow-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+4S3lC7F0fSjRbh6HcH66tCyyW86t0VmiX9/wXKqMoo=;
-        b=1+XBqG7xzylQDBCu7YxHXE8VL0EVu96uyJM5I2UvIQwuFNcDnBigTS2Nz38LxeoX8Q
-         8FNH0rIDV/qFBnk+toSdVgATZJ/4SxeODjXERcP3+WVkszWUpVU/qZSHY9GWfJ4kIJcy
-         pDDdZiF2qXsjkFNh8p9Nr0Gq0Ud4bV1M5uUUWI8Osk7QuXKYKynC6bfhY3748Ly7YNxV
-         XzRbGsgfYT8v38vkmInhNTjyB4nl4pt2Xe0EiX2IzkLyRF/ANjP39Hxq1jxcik0nBmCY
-         I618RpRfw/tfWJkYrDIXZxX5aexxppW4wj2UDz6IGl/by9JXxpULW7s4tP4+PzO+CJcq
-         AQwQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EykLsHeIVHRO9PdnUtJ+KSnyFBk98kvT0QI6KNtiYAM=;
+        b=KY2/9r6gj3wAKeO3IF1EWjaba52UxmHK7IyTetfWSTQ0g/GquJI1io9+dDzeqEX2d0
+         /Jg91Hb9l6hMY5QwO1WrIYZ/0kB4p5v8NWfCk45jdGZ4xsLw9QGl5wkCL7KGhIygT6P5
+         dJx5RDofgTF9Hs581wMo4Tdp4WorRLiOV0IPKb3YVJKnWKwRhXrZuAV6gOifD6+HyYzp
+         E1d0bGFnr6rfZlGqH+rf3Oy6AhITS5cnOMN8Wrn4yujAvrhK/frV+M1t8FPhaqUKN9Ly
+         DphomHbeFAenzmq2L8gwWEUpvJqSq8Tv4DCW1Aadj6dhOF0isLt1gBFBy5mhLhHLm8LZ
+         f9Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+4S3lC7F0fSjRbh6HcH66tCyyW86t0VmiX9/wXKqMoo=;
-        b=T0kmPewH1xGmsK0DuS9d5vkpbRAk9wJMCR+cPou/j1CbPDquRIFav5DgCT6xMUAlod
-         C/FHm5hwBZ+PYo0NVdvjjgUJ0ffHEVNWl12RVQI6iV99OecscZ4TDErSD/hfzKC3xCf5
-         heDAq805N/D+sdY7lTuekmku6TFaXHVOs0lbzIPDdzwLb8CDH7Jc59tWio3ISOFH06YJ
-         YZctObNtTWDd5BjUPYM75+Y+2mTr6lQ/4urapbcT1SWaGWbxZQ1LMF5tUZkF0w9LYLL9
-         CnpUMVzrVPkoJIeUe0ufy+OUg3jo+OHVmkTSppvKFC71tTBCy/cJPeSoNdKgHt+9gW4q
-         bfVg==
-X-Gm-Message-State: ACrzQf2m4Yf/epTB5oa8zFYHg5FPIBD1MEOUSAcU8KfTCP48U06Hmqhg
-        Zy5XaYtRKohXuK0PJnrSskhO83v4uJMVaMOxE6D9Bw==
-X-Google-Smtp-Source: AMsMyM7dQfVhmqXthQiVXOuuOOe3liFCrH8mG/c5x+iaHJFcZcDUAk5OUhkkcEKaHdLw4+kYLs+O03pXs8OuqiJ4POY=
-X-Received: by 2002:a05:6000:1c1a:b0:236:8321:d875 with SMTP id
- ba26-20020a0560001c1a00b002368321d875mr38870978wrb.45.1668005090702; Wed, 09
- Nov 2022 06:44:50 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EykLsHeIVHRO9PdnUtJ+KSnyFBk98kvT0QI6KNtiYAM=;
+        b=sF4wJweDvX126OiLs1pnIpJ622HSBAiwW71UMu7JQw3KSPt1SZMdwOeLbkWTe3m1kd
+         07ZQkvakoZc4dfjJDvU2ui+Fow2TwYcl042GhlD/fTMQtG6wA5nMfxMj3GgW6MxFr3D7
+         gNHJ/3vJT8Ohjb3Fs8SYE6VIw7iburEfl8eHP3Yg3i7uyS+uC5x4dNTUXVbI4fu2seaJ
+         TAVUgQvcNq3rdrWZoTd++mESaEdwifUDFqCFnc4VvzIUsB0BDyT4lU7otFcrXIFVvt6v
+         qCeGbYmEz4Y2g3dBHxChfR0xi3lwjlWyAkChrgUFvuTLxWpTTA+94LEXQB8Us5C6c54P
+         n/1w==
+X-Gm-Message-State: ACrzQf186FOPX8cYPP1rAX3dikw3MfdIWRp6A7ys1LHnxzEDSZ9xm/6R
+        Z+4TvOoEjpBK211TqiEeEwA=
+X-Google-Smtp-Source: AMsMyM6E7S+hpcuxPPqJZtWasCHQscNqdTaG7NTDnsR8LPQezPNjV+jphpzTTWJL8371/qdiPRIXvg==
+X-Received: by 2002:a17:90a:d084:b0:213:8cf1:4d34 with SMTP id k4-20020a17090ad08400b002138cf14d34mr64036139pju.150.1668005110411;
+        Wed, 09 Nov 2022 06:45:10 -0800 (PST)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b001870533c443sm9149511plk.236.2022.11.09.06.45.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 06:45:09 -0800 (PST)
+Message-ID: <47514c0a-7d5b-5a0b-6bb5-d5c96d163838@gmail.com>
+Date:   Wed, 9 Nov 2022 23:45:06 +0900
 MIME-Version: 1.0
-References: <20221004143901.130935-1-mpfj@newflow.co.uk> <CAAbcLfiCoa=-20cydPG9=42G9npaeBOCRXPPPTwkNFU-3yGoCg@mail.gmail.com>
- <20221108194742.0d9340f4@aktux> <Y2tYoHSFdJzrp9MW@atomide.com>
-In-Reply-To: <Y2tYoHSFdJzrp9MW@atomide.com>
-From:   Mark Jackson <mpfj@newflow.co.uk>
-Date:   Wed, 9 Nov 2022 14:44:39 +0000
-Message-ID: <CAAbcLfgYr1gfHNSycDc142aPuNUzxvhQ0GTyvExmMLa36e1nWg@mail.gmail.com>
-Subject: Re: [PATCH] Update Nanobone
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Andreas Kemnade <andreas@kemnade.info>,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] docs/driver-api/miscellaneous: Remove kernel-doc of
+ serial_core.c
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <4e54c76a-138a-07e0-985a-dd83cb622208@gmail.com>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <4e54c76a-138a-07e0-985a-dd83cb622208@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,27 +77,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 at 07:37, Tony Lindgren <tony@atomide.com> wrote:
->
-> The separate defconfig should not be needed. Please send any defconfig
-> changes to multi_v7_defconfig or omap2plu_defconfig as separate patches.
->
-> Note that you can run make savedefconfig first to produce a minimal diff.
-> Then if adding device drivers, please add them as loadable modules where
-> possible.
+Hi Jon,
 
-But using the omap2plus_defconfig increases my kernel to 4.7MB
+On Wed, 2 Nov 2022 20:48:01 +0900, Akira Yokosawa wrote:
+> Since merge of tty-6.0-rc1, "make htmldocs" with Sphinx >=3.1 emits
+> a bunch of warnings indicating duplicate kernel-doc comments from
+> drivers/tty/serial/serial_core.c.
+> 
+> This is due to the kernel-doc directive for serial_core.c in
+> serial/drivers.rst added in the merge. It conflicts with an existing
+> kernel-doc directive in miscellaneous.rst.
+> 
+> Remove the latter directive and resolve the duplicates.
+> 
+> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+> Fixes: 607ca0f742b7 ("Merge tag 'tty-6.0-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty")
+> Cc: stable@vger.kernel.org # 6.0
+> Cc: Jiri Slaby <jslaby@suse.cz>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> Hi Jiri,
+> 
+> I've seeing the increased warnings of duplicates from "make htmldocs"
+> since the 6.0 merge window. They look like (partial):
+> 
+> /linux/Documentation/driver-api/serial/driver.rst:111: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:111.
+> Declaration is '.. c:function:: void uart_write_wakeup(struct uart_port *port)'.
+> /linux/Documentation/driver-api/serial/driver.rst:111: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:111.
+> Declaration is '.. c:None:: struct uart_port *port'.
+> /linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
+> Declaration is '.. c:function:: void uart_update_timeout(struct uart_port *port, unsigned int cflag, unsigned int baud)'.
+> /linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
+> Declaration is '.. c:None:: struct uart_port *port'.
+> /linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
+> Declaration is '.. c:None:: unsigned int cflag'.
+> /linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
+> Declaration is '.. c:None:: unsigned int baud'.
+> /linux/Documentation/driver-api/serial/driver.rst:376: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:376.
+> 
+> These warning messages are not easy to track down, as there is an
+> unresolved issue in Sphinx's C domain parser who can't handle a
+> function and a struct of the same name and causes duplicates in a
+> later stage of Sphinx processing.
+> 
+> But the warnings shown above turned out to be true duplicates.
+> 
+> There is a not-clearly-documented rule in including kernel-doc
+> comments into .rst files. Any kernel-doc comment can be included
+> at most once in the whole documentation tree. Otherwise, you can't
+> be sure of which target a cross-reference points to.
+> 
+> As I don't have full context of these kernel-doc comments, this is
+> meant as a band-aide patch, especially the reference to
+> serial/driver.rst added at the bottom.
+> 
+> If I can get acks from you and/or Greg, I'd like Jon to take the
+> fix, as this issue affects the -doc tree most.
 
-My "custom" one has been specifically designed for the NANO platform
-and currently sits at about 3.7MB (which nicely fits into the ~4MB memory
-bank allocated to the kernel)
+Jon, Greg has added this to his tty tree and (hopefully) it will
+soon land Linus' tree (v6.1-rcX).
+I'll ask you a back-merge once it happens.
 
-Hence the use of my custom defconfig.
+        Thanks, Akira
 
-I don't have modules enabled as the platform functionality is pretty fixed.
-
-The defconfig I posted was created using savedefconfig.
-Is it still wrong ?
-
-Cheers
-Mark J.
+> 
+> Thanks,
+> Akira
+> 
+> --
+>  Documentation/driver-api/miscellaneous.rst | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/miscellaneous.rst b/Documentation/driver-api/miscellaneous.rst
+> index 304ffb146cf9..4a5104a368ac 100644
+> --- a/Documentation/driver-api/miscellaneous.rst
+> +++ b/Documentation/driver-api/miscellaneous.rst
+> @@ -16,12 +16,11 @@ Parallel Port Devices
+>  16x50 UART Driver
+>  =================
+>  
+> -.. kernel-doc:: drivers/tty/serial/serial_core.c
+> -   :export:
+> -
+>  .. kernel-doc:: drivers/tty/serial/8250/8250_core.c
+>     :export:
+>  
+> +See serial/driver.rst for related APIs.
+> +
+>  Pulse-Width Modulation (PWM)
+>  ============================
+>  
+> 
+> base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
