@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B50C623634
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A39623638
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiKIVzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S232020AbiKIV4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKIVzt (ORCPT
+        with ESMTP id S229657AbiKIV4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:55:49 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE1F2E1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:55:48 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q71so17344308pgq.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 13:55:48 -0800 (PST)
+        Wed, 9 Nov 2022 16:56:45 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BA06346;
+        Wed,  9 Nov 2022 13:56:45 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso3819wmo.1;
+        Wed, 09 Nov 2022 13:56:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MYg5m0atdOw1dxzpeo8zRV+fGD2ca4bGE4Ou9GGosT8=;
-        b=JZ1aEngmeUjTyS0jGftdK9sfnEOYpywxOW8vTmF8M0XKg9fIbQuh88iEUN4HWiDTpf
-         A0/olhVTqMj7brak4I2mXLsGDwPy6JAx5FLbQBPvQEdUeyQ7xBrtLcRDZeW/+Lusmxyq
-         aBZ1phYnJM92P5aZydE4CN8ZeEweeBV1NhHomh4QmorYskOPi/biYyznZ4JOe6jL6DYM
-         LZkjuA58DlrdPniBGroEmCvgVhV471Xfyh/vKM+YMQ1RDY9MaYEiDKDcyPsw3XHDjb0k
-         L0eMUyDs8Fk6lojVIlwefH6yUd1QHdATMh1Vmj3iNbefWC1MhR5MMUNE25A9TWkNAiac
-         3Nyg==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMX4DRvwtEMePU5sRSpDG5gedWnxapEXoFXk22Q8saU=;
+        b=Z5eNhi2d30QFuY64nbtXbY1au90WnIkGV+Z6HXlVfActSNG429aEnKHoZI3CejovyN
+         72eLffvBdHLN1n/tp83MKaCDHzqnSYEUe1RT3H6tQFzHFASJzY8nOBjU3g4jaeCE3vYZ
+         LRSC5cACRX1SkeuyPI/SVEkbq3BQf+ar7+xdfiFNT+XKD2InNRr9PVib8nPmZh9WVXEL
+         5ybIhSv7YH0YpQmcM22d/wdnFE7681ZJxCaey/7XfhpbTLoPS+nVXCec3YSMzGndOgsp
+         cLJq1205cQSuHMmheVq3DwSKatUVGgGQ72beJtsTc7dtJVPJqlkZBds2ABdNY5PxHHvf
+         S55w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MYg5m0atdOw1dxzpeo8zRV+fGD2ca4bGE4Ou9GGosT8=;
-        b=tBwi+GeF6HKBqkY0MF6uQhKijrsPnGiBIABx22I14DfrvTPTX1/vHPOiWlpAc1HZ7P
-         GebQYX5lGIVYQYXsrRLSgQs3XtfZP3SYVHXDkEJd65lgXI+vDb/1RuGSvJQ0+rFDapjw
-         wHvPTJVkop8XOmiOGptXD+p47Au2M6jinv5tJwCj29ZTgE1UUFjH9ZU6f450LkHLbwkR
-         bsViqO7OcngMlyb53XLlznTIa0JeKpxc4GbKqDQCv9OTY7TRzUcjriREKCUlMU9nxzd1
-         c+H+AcqzL1evTXW6EcKbGlE6c/w29MvePizjXP9KFlFIYAB4bWrl/bgEHJiddwUyur7/
-         Ik5g==
-X-Gm-Message-State: ACrzQf1nttD/3tFdP5R+cVIj4lArpazKA83ifXR8s+jpGr/OgkCk/VmV
-        W3SGg4mZpmwnhyJFOPegxE0=
-X-Google-Smtp-Source: AMsMyM5hw6qls3PUCHGF6uCN29DcI1jmEzoJ4z1WkLKabSqkaQDHErMVb3uAq5TMH+SGFZF7o2YneA==
-X-Received: by 2002:a63:8741:0:b0:470:ef2:6f11 with SMTP id i62-20020a638741000000b004700ef26f11mr34654684pge.455.1668030947625;
-        Wed, 09 Nov 2022 13:55:47 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:8514:5da3:d38f:7bd])
-        by smtp.gmail.com with ESMTPSA id om8-20020a17090b3a8800b00216df8f03fdsm1682431pjb.50.2022.11.09.13.55.46
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OMX4DRvwtEMePU5sRSpDG5gedWnxapEXoFXk22Q8saU=;
+        b=dp7OCAamwthas2hDgG9OI/ZY8IRHAOvcG/Jpl4gyCkkISQHvWQx1RQQdG0dV9L+Lah
+         Ra8JPtBu811RFYbXo0eZ+7tB6hj8VkmKEzV+SO9p/xk9TjJZLxnZbdSU3ZW9sD19SVvN
+         F1CnkIpJH4aURyxjEXM6kSqqHpM2qhCOARcZV7em5DqeAPI/pErIkHm8h16BTXxjDBjO
+         mBKOHviIk0GqZHeM7AQS+Tqj10A8gPnZRLMvbX23jQ8rCaW9Ft7Jc1bu1epY3NyA/OTQ
+         utZV9XL8YwSqP4iWO9h++ouwgsDjdXxpEOxsWtB2oS2Ie33NssV6I9JtaPJCfJSk+RsZ
+         o/Mg==
+X-Gm-Message-State: ACrzQf1l6CUmDRu4FahZWGCyA8dou9AUl3lZZMQA0MfScnctHyDRbaGU
+        49Oqk4kOmHOkwG/bDN/yzrY=
+X-Google-Smtp-Source: AMsMyM7JdYNHD1k8HwE/oPHPnToLXsSm+MaJFh8hI5qAtMm2kNk3IvdZa/+MFu4pz1UnfuEFVDTutw==
+X-Received: by 2002:a05:600c:3488:b0:3cf:88b4:7394 with SMTP id a8-20020a05600c348800b003cf88b47394mr27916168wmq.75.1668031003442;
+        Wed, 09 Nov 2022 13:56:43 -0800 (PST)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id z15-20020a5d4c8f000000b00236a16c00ffsm13833721wrs.43.2022.11.09.13.56.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 13:55:47 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 9 Nov 2022 13:55:45 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ngupta@vflare.org,
-        senozhatsky@chromium.org, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com
-Subject: Re: [PATCH v3 3/5] zsmalloc: Add a LRU to zs_pool to keep track of
- zspages in LRU order
-Message-ID: <Y2wh4b3oMaknNqGP@google.com>
-References: <20221108193207.3297327-1-nphamcs@gmail.com>
- <20221108193207.3297327-4-nphamcs@gmail.com>
+        Wed, 09 Nov 2022 13:56:42 -0800 (PST)
+Date:   Wed, 9 Nov 2022 23:56:40 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v2 08/11] of: property: Add device link support
+ for PCS
+Message-ID: <20221109215640.snoos6ti62vkxapj@skbuf>
+References: <20221103210650.2325784-1-sean.anderson@seco.com>
+ <20221103210650.2325784-9-sean.anderson@seco.com>
+ <20221107201010.GA1525628-robh@kernel.org>
+ <20221107202223.ihdk4ubbqpro5w5y@skbuf>
+ <7caf2d6a-3be9-4261-9e92-db55fe161f7e@seco.com>
+ <CAL_JsqKw=1iP6KUj=c6stgCMo7V6hGO9iB+MgixA5tiackeNnA@mail.gmail.com>
+ <CAGETcx-=Z4wo8JaYJN=SjxirbgRoRvobN8zxm+BSHjwouHzeJg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221108193207.3297327-4-nphamcs@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAGETcx-=Z4wo8JaYJN=SjxirbgRoRvobN8zxm+BSHjwouHzeJg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 11:32:05AM -0800, Nhat Pham wrote:
-> This helps determines the coldest zspages as candidates for writeback.
+On Tue, Nov 08, 2022 at 12:56:15PM -0800, Saravana Kannan wrote:
+> > > Last time [1], Saravana suggested to move this to the end of the series to
+> > > avoid such problems. FWIW, I just tried booting a LS1046A with the
+> > > following patches applied
+> > >
+> > > 01/11 (compatibles) 05/11 (device) 08/11 (link) 09/11 (consumer)
+> > > =================== ============== ============ ================
+> > > Y                   N              Y            N
+> > > Y                   Y              Y            Y
+> > > Y                   Y              Y            N
+> > > N                   Y              Y            N
+> > > N                   N              Y            N
+> > >
+> > > and all interfaces probed each time. So maybe it is safe to pick
+> > > this patch.
+> >
+> > Maybe? Just take it with the rest of the series.
+> >
+> > Acked-by: Rob Herring <robh@kernel.org>
 > 
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  mm/zsmalloc.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index 326faa751f0a..600c40121544 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -239,6 +239,9 @@ struct zs_pool {
->  	/* Compact classes */
->  	struct shrinker shrinker;
-> 
-> +	/* List tracking the zspages in LRU order by most recently added object */
-> +	struct list_head lru;
-> +
->  #ifdef CONFIG_ZSMALLOC_STAT
->  	struct dentry *stat_dentry;
->  #endif
-> @@ -260,6 +263,10 @@ struct zspage {
->  	unsigned int freeobj;
->  	struct page *first_page;
->  	struct list_head list; /* fullness list */
-> +
-> +	/* links the zspage to the lru list in the pool */
-> +	struct list_head lru;
+> Let's have Vladimir ack this. I'm not sure if it's fully safe yet. I
+> haven't done the necessary fixes for phy-handle yet, but I don't know
+> how pcs-handle and pcsphy-handle are used or if none of their uses
+> will hit the chicken and egg problem that some uses of phy-handle hit.
 
-Please put the LRU logic under config ZSMALLOC_LRU since we don't need
-the additional logic to others.
+I can confirm that on today's net-next, the driver owning the pcs-handle
+will probe even if the PCS driver is missing. With the mention that it
+only does so after the driver_deferred_probe_timeout, which also in
+today's net-next is by default 10 seconds if CONFIG_MODULES=y.
