@@ -2,138 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7283E622BB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 762F4622BBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiKIMid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:38:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
+        id S229601AbiKIMjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKIMia (ORCPT
+        with ESMTP id S229995AbiKIMjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:38:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415485F5D;
-        Wed,  9 Nov 2022 04:38:27 -0800 (PST)
-Date:   Wed, 09 Nov 2022 12:38:24 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667997505;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LK9EehdZiIwa5K6hobz+g0DwtgtF0AoOZ+vJ/cDRSTQ=;
-        b=X8v+aomFyx+6qc64lsUgqcWnLs18jl2WeFenLKsSMchrZ0ZxEvrz5EIwyc1IMAF2F5FW8T
-        HISO1hwgxFBtBZrXHIBVMed5aw0Znht/g3wMWyJwB2hLuI77hhVsqy4OuawYnFqpHynSDE
-        hcPW7bh9bRoad7sPsnXFPd2AoJjZLPDMK4DNLRZJ16RbxR/Gn6CwZZLztAjll5nVpgqSDU
-        9G8ZkGuEB/OWYS4odt5stkzvMkrEM1O2LbJ3mzgyyzYN9fxBTP3g2JOBYfc2wnY7VxPlFp
-        wyD1EhhyBCH+RihPn7sdKXCXK41AXPOm+90Wz1hZCURg46G9vlAyqmJh2b2DHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667997505;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LK9EehdZiIwa5K6hobz+g0DwtgtF0AoOZ+vJ/cDRSTQ=;
-        b=j8vSZZIKZIusfpm1+LokwLrBq+BhGrnFw5Vz30eY0DGuBIWuHzDlq8YVklpsW54ZJU46ge
-        7PNcUTWq56EgKUCw==
-From:   "tip-bot2 for Andrew Cooper" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/fpu] x86/fpu/xstate: Fix XSTATE_WARN_ON() to emit relevant
- diagnostics
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220810221909.12768-1-andrew.cooper3@citrix.com>
-References: <20220810221909.12768-1-andrew.cooper3@citrix.com>
+        Wed, 9 Nov 2022 07:39:10 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0C81FCDA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 04:39:09 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id h193so16091495pgc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 04:39:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JbeI3A0Vt6enTtuFXcI9CQHp5arPu0B2KdkJZJ6hYho=;
+        b=TYLegCo3QkgS/lNGtjh5JSXfYlyIiHx5kLI5I7sLgZUfeS9XEeUna8PUJjeBo8S3wq
+         bV+ONX9Ggeu63IH6vx6AwexfEweTySjz7AHwMCRpfnyco7Pq9p8nQzG9/lzmaC78xgmc
+         HghkDCK/YPUlwMgwahMzj61FYtD8kmKrLFfF5gVPXgm5e3H02X68Q1b1HIjb9mlBZdZC
+         xAoZiT1l29DOxVnE+NLFvSj8/oOY9n9XGDMne+ykYBTbdtc1CHmhJ8Of/KGzgWvm5ibG
+         ej0B8m68lhUGFzmpktuu3XjqkURy9zvxa1t1dTC5jQdeLEoMq+1iY0t7BdXR9BHqrPWm
+         yQyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JbeI3A0Vt6enTtuFXcI9CQHp5arPu0B2KdkJZJ6hYho=;
+        b=y3xIrLaF4Tyr1JoQUA+V+fl2Fod+mOw/Up5qii0s/wdECk9c2MlgRO5+bKKn2qHAqu
+         LBWMw2YfAchME7TTr14j0WLWb3P2L6sDGuOdBXrURCQRhGM0XEl5aT1jpP8u8IHGy8bm
+         jCPI/SJuddfhKltAQBFjBeFtaNjRShKI4smlkT1c8GqAOCSNWtn7FFRuu0qkh3bd439T
+         bJPu/rT+6I6YHTFBV2A1ObnUzCsc+9NtwP7BNL5dQ5LNRT2Drn2Q7xtmIrI/Ix4Jfm1i
+         hacvjCmnQen9GLmVeZarQrvwT0VXMqmW/UuSaCkYzPtkgVt2VKySCbDPD7PuPJUPgMq6
+         wgJQ==
+X-Gm-Message-State: ACrzQf01rDgqm9Srveo4AydwrvnOmgrJcdH/e2ZjTFEnpjByUBt+UD8B
+        z7ZfHVRBtgAWIHXdOvLDad9dltBQwIZOLlTGkj2r6Q==
+X-Google-Smtp-Source: AMsMyM6UyIRss8vbFTKZjYYAqIFAYkG7jrBpMim1fLdx9aWNF17I3eISGGbimjJbrByhxboTKPRD9qEql+EhFwCeIKs=
+X-Received: by 2002:a63:464d:0:b0:441:5968:cd0e with SMTP id
+ v13-20020a63464d000000b004415968cd0emr53539683pgk.595.1667997548655; Wed, 09
+ Nov 2022 04:39:08 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <166799750447.4906.6850685710564265854.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109043845.16617-1-balamanikandan.gunasundar@microchip.com>
+In-Reply-To: <20221109043845.16617-1-balamanikandan.gunasundar@microchip.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 9 Nov 2022 13:38:32 +0100
+Message-ID: <CAPDyKFo+FUAZ=1Vu4+503ch5_Wrw47BanTjdB=7J8XhRwczyqg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: atmel-mci: Convert to gpio descriptors
+To:     Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, 3chas3@gmail.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/fpu branch of tip:
++ Linus W
 
-Commit-ID:     48280042f2c6e3ac2cfb1d8b752ab4a7e0baea24
-Gitweb:        https://git.kernel.org/tip/48280042f2c6e3ac2cfb1d8b752ab4a7e0baea24
-Author:        Andrew Cooper <andrew.cooper3@citrix.com>
-AuthorDate:    Wed, 10 Aug 2022 23:19:09 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 09 Nov 2022 13:28:31 +01:00
+On Wed, 9 Nov 2022 at 05:39, Balamanikandan Gunasundar
+<balamanikandan.gunasundar@microchip.com> wrote:
+>
+> Replace the legacy GPIO APIs with gpio descriptor consumer interface.
+>
+> To maintain backward compatibility, we rely on the "cd-inverted"
+> property to manage the invertion flag instead of GPIO property.
+>
+> Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>
 
-x86/fpu/xstate: Fix XSTATE_WARN_ON() to emit relevant diagnostics
+I added Linus W, to get some feedback from the expert in this area.
 
-"XSAVE consistency problem" has been reported under Xen, but that's the extent
-of my divination skills.
+Kind regards
+Uffe
 
-Modify XSTATE_WARN_ON() to force the caller to provide relevant diagnostic
-information, and modify each caller suitably.
-
-For check_xstate_against_struct(), this removes a double WARN() where one will
-do perfectly fine.
-
-CC stable as this has been wonky debugging for 7 years and it is good to
-have there too.
-
-Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220810221909.12768-1-andrew.cooper3@citrix.com
----
- arch/x86/kernel/fpu/xstate.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index 59e543b..c2dde46 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -440,8 +440,8 @@ static void __init __xstate_dump_leaves(void)
- 	}
- }
- 
--#define XSTATE_WARN_ON(x) do {							\
--	if (WARN_ONCE(x, "XSAVE consistency problem, dumping leaves")) {	\
-+#define XSTATE_WARN_ON(x, fmt, ...) do {					\
-+	if (WARN_ONCE(x, "XSAVE consistency problem: " fmt, ##__VA_ARGS__)) {	\
- 		__xstate_dump_leaves();						\
- 	}									\
- } while (0)
-@@ -554,8 +554,7 @@ static bool __init check_xstate_against_struct(int nr)
- 	    (nr >= XFEATURE_MAX) ||
- 	    (nr == XFEATURE_PT_UNIMPLEMENTED_SO_FAR) ||
- 	    ((nr >= XFEATURE_RSRVD_COMP_11) && (nr <= XFEATURE_RSRVD_COMP_16))) {
--		WARN_ONCE(1, "no structure for xstate: %d\n", nr);
--		XSTATE_WARN_ON(1);
-+		XSTATE_WARN_ON(1, "No structure for xstate: %d\n", nr);
- 		return false;
- 	}
- 	return true;
-@@ -598,12 +597,13 @@ static bool __init paranoid_xstate_size_valid(unsigned int kernel_size)
- 		 * XSAVES.
- 		 */
- 		if (!xsaves && xfeature_is_supervisor(i)) {
--			XSTATE_WARN_ON(1);
-+			XSTATE_WARN_ON(1, "Got supervisor feature %d, but XSAVES not advertised\n", i);
- 			return false;
- 		}
- 	}
- 	size = xstate_calculate_size(fpu_kernel_cfg.max_features, compacted);
--	XSTATE_WARN_ON(size != kernel_size);
-+	XSTATE_WARN_ON(size != kernel_size,
-+		       "size %u != kernel_size %u\n", size, kernel_size);
- 	return size == kernel_size;
- }
- 
+> ---
+>  drivers/mmc/host/atmel-mci.c | 79 ++++++++++++++++++------------------
+>  include/linux/atmel-mci.h    |  4 +-
+>  2 files changed, 41 insertions(+), 42 deletions(-)
+>
+> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
+> index 67b2cd166e56..1df90966e104 100644
+> --- a/drivers/mmc/host/atmel-mci.c
+> +++ b/drivers/mmc/host/atmel-mci.c
+> @@ -19,7 +19,8 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> -#include <linux/of_gpio.h>
+> +#include <linux/irq.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/seq_file.h>
+> @@ -389,8 +390,8 @@ struct atmel_mci_slot {
+>  #define ATMCI_CARD_NEED_INIT   1
+>  #define ATMCI_SHUTDOWN         2
+>
+> -       int                     detect_pin;
+> -       int                     wp_pin;
+> +       struct gpio_desc        *detect_pin;
+> +       struct gpio_desc        *wp_pin;
+>         bool                    detect_is_active_high;
+>
+>         struct timer_list       detect_timer;
+> @@ -638,7 +639,11 @@ atmci_of_init(struct platform_device *pdev)
+>                         pdata->slot[slot_id].bus_width = 1;
+>
+>                 pdata->slot[slot_id].detect_pin =
+> -                       of_get_named_gpio(cnp, "cd-gpios", 0);
+> +                       devm_gpiod_get_from_of_node(&pdev->dev, cnp,
+> +                                                   "cd-gpios",
+> +                                                   0, GPIOD_IN, "cd-gpios");
+> +               if (IS_ERR(pdata->slot[slot_id].detect_pin))
+> +                       pdata->slot[slot_id].detect_pin = NULL;
+>
+>                 pdata->slot[slot_id].detect_is_active_high =
+>                         of_property_read_bool(cnp, "cd-inverted");
+> @@ -647,7 +652,11 @@ atmci_of_init(struct platform_device *pdev)
+>                         of_property_read_bool(cnp, "non-removable");
+>
+>                 pdata->slot[slot_id].wp_pin =
+> -                       of_get_named_gpio(cnp, "wp-gpios", 0);
+> +                       devm_gpiod_get_from_of_node(&pdev->dev, cnp,
+> +                                                   "wp-gpios",
+> +                                                   0, GPIOD_IN, "wp-gpios");
+> +               if (IS_ERR(pdata->slot[slot_id].wp_pin))
+> +                       pdata->slot[slot_id].wp_pin = NULL;
+>         }
+>
+>         return pdata;
+> @@ -1511,8 +1520,8 @@ static int atmci_get_ro(struct mmc_host *mmc)
+>         int                     read_only = -ENOSYS;
+>         struct atmel_mci_slot   *slot = mmc_priv(mmc);
+>
+> -       if (gpio_is_valid(slot->wp_pin)) {
+> -               read_only = gpio_get_value(slot->wp_pin);
+> +       if (slot->wp_pin) {
+> +               read_only = gpiod_get_value(slot->wp_pin);
+>                 dev_dbg(&mmc->class_dev, "card is %s\n",
+>                                 read_only ? "read-only" : "read-write");
+>         }
+> @@ -1525,8 +1534,8 @@ static int atmci_get_cd(struct mmc_host *mmc)
+>         int                     present = -ENOSYS;
+>         struct atmel_mci_slot   *slot = mmc_priv(mmc);
+>
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> -               present = !(gpio_get_value(slot->detect_pin) ^
+> +       if (slot->detect_pin) {
+> +               present = !(gpiod_get_raw_value(slot->detect_pin) ^
+>                             slot->detect_is_active_high);
+>                 dev_dbg(&mmc->class_dev, "card is %spresent\n",
+>                                 present ? "" : "not ");
+> @@ -1639,8 +1648,8 @@ static void atmci_detect_change(struct timer_list *t)
+>         if (test_bit(ATMCI_SHUTDOWN, &slot->flags))
+>                 return;
+>
+> -       enable_irq(gpio_to_irq(slot->detect_pin));
+> -       present = !(gpio_get_value(slot->detect_pin) ^
+> +       enable_irq(gpiod_to_irq(slot->detect_pin));
+> +       present = !(gpiod_get_raw_value(slot->detect_pin) ^
+>                     slot->detect_is_active_high);
+>         present_old = test_bit(ATMCI_CARD_PRESENT, &slot->flags);
+>
+> @@ -2241,9 +2250,9 @@ static int atmci_init_slot(struct atmel_mci *host,
+>         dev_dbg(&mmc->class_dev,
+>                 "slot[%u]: bus_width=%u, detect_pin=%d, "
+>                 "detect_is_active_high=%s, wp_pin=%d\n",
+> -               id, slot_data->bus_width, slot_data->detect_pin,
+> +               id, slot_data->bus_width, desc_to_gpio(slot_data->detect_pin),
+>                 slot_data->detect_is_active_high ? "true" : "false",
+> -               slot_data->wp_pin);
+> +               desc_to_gpio(slot_data->wp_pin));
+>
+>         mmc->ops = &atmci_ops;
+>         mmc->f_min = DIV_ROUND_UP(host->bus_hz, 512);
+> @@ -2279,51 +2288,43 @@ static int atmci_init_slot(struct atmel_mci *host,
+>
+>         /* Assume card is present initially */
+>         set_bit(ATMCI_CARD_PRESENT, &slot->flags);
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> -               if (devm_gpio_request(&host->pdev->dev, slot->detect_pin,
+> -                                     "mmc_detect")) {
+> -                       dev_dbg(&mmc->class_dev, "no detect pin available\n");
+> -                       slot->detect_pin = -EBUSY;
+> -               } else if (gpio_get_value(slot->detect_pin) ^
+> -                               slot->detect_is_active_high) {
+> +       if (slot->detect_pin) {
+> +               if (gpiod_get_raw_value(slot->detect_pin) ^
+> +                   slot->detect_is_active_high) {
+>                         clear_bit(ATMCI_CARD_PRESENT, &slot->flags);
+>                 }
+> +       } else {
+> +               dev_dbg(&mmc->class_dev, "no detect pin available\n");
+>         }
+>
+> -       if (!gpio_is_valid(slot->detect_pin)) {
+> +       if (!slot->detect_pin) {
+>                 if (slot_data->non_removable)
+>                         mmc->caps |= MMC_CAP_NONREMOVABLE;
+>                 else
+>                         mmc->caps |= MMC_CAP_NEEDS_POLL;
+>         }
+>
+> -       if (gpio_is_valid(slot->wp_pin)) {
+> -               if (devm_gpio_request(&host->pdev->dev, slot->wp_pin,
+> -                                     "mmc_wp")) {
+> -                       dev_dbg(&mmc->class_dev, "no WP pin available\n");
+> -                       slot->wp_pin = -EBUSY;
+> -               }
+> -       }
+> +       if (!slot->wp_pin)
+> +               dev_dbg(&mmc->class_dev, "no WP pin available\n");
+>
+>         host->slot[id] = slot;
+>         mmc_regulator_get_supply(mmc);
+> -       mmc_pwrseq_alloc(slot->mmc);
+>         mmc_add_host(mmc);
+>
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> +       if (slot->detect_pin) {
+>                 int ret;
+>
+>                 timer_setup(&slot->detect_timer, atmci_detect_change, 0);
+>
+> -               ret = request_irq(gpio_to_irq(slot->detect_pin),
+> -                               atmci_detect_interrupt,
+> -                               IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
+> -                               "mmc-detect", slot);
+> +               ret = request_irq(gpiod_to_irq(slot->detect_pin),
+> +                                 atmci_detect_interrupt,
+> +                                 IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
+> +                                 "mmc-detect", slot);
+>                 if (ret) {
+>                         dev_dbg(&mmc->class_dev,
+>                                 "could not request IRQ %d for detect pin\n",
+> -                               gpio_to_irq(slot->detect_pin));
+> -                       slot->detect_pin = -EBUSY;
+> +                               gpiod_to_irq(slot->detect_pin));
+> +                       slot->detect_pin = NULL;
+>                 }
+>         }
+>
+> @@ -2342,10 +2343,8 @@ static void atmci_cleanup_slot(struct atmel_mci_slot *slot,
+>
+>         mmc_remove_host(slot->mmc);
+>
+> -       if (gpio_is_valid(slot->detect_pin)) {
+> -               int pin = slot->detect_pin;
+> -
+> -               free_irq(gpio_to_irq(pin), slot);
+> +       if (slot->detect_pin) {
+> +               free_irq(gpiod_to_irq(slot->detect_pin), slot);
+>                 del_timer_sync(&slot->detect_timer);
+>         }
+>
+> diff --git a/include/linux/atmel-mci.h b/include/linux/atmel-mci.h
+> index 1491af38cc6e..017e7d8f6126 100644
+> --- a/include/linux/atmel-mci.h
+> +++ b/include/linux/atmel-mci.h
+> @@ -26,8 +26,8 @@
+>   */
+>  struct mci_slot_pdata {
+>         unsigned int            bus_width;
+> -       int                     detect_pin;
+> -       int                     wp_pin;
+> +       struct gpio_desc        *detect_pin;
+> +       struct gpio_desc        *wp_pin;
+>         bool                    detect_is_active_high;
+>         bool                    non_removable;
+>  };
+> --
+> 2.25.1
+>
