@@ -2,223 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA12622AFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A113D622AFF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiKILyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S229617AbiKILzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiKILyf (ORCPT
+        with ESMTP id S229530AbiKILzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:54:35 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9E162CE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:54:34 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id f5so46014230ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QbjdwZrO7CchEGO52zV1EUktiYbcH8urhzFHSgEULX8=;
-        b=icI6//b9KXQ9JyGkkWGolJBXMaLR5OOL0QzWOOUfc8Nv1c7/dHXb+Vp595R1bPKzRe
-         WDpWoHdjrjlIpSO7FF0zBnHnEtFRTOyQuPJ6ygGucJNbQAWzriyHTLAqD5FRAHJ/04Ub
-         a8FGSqIsvRGiC1/j+Qb3WSwi14RvbW73qGVSw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QbjdwZrO7CchEGO52zV1EUktiYbcH8urhzFHSgEULX8=;
-        b=xsWRE4kSet675iOPSU8V5oHD90CeykUzs/QwsbcaGSjqAEZN07MC+uKSXibM9oE0Wn
-         LQyNP2NeMMkqKrkAOoRdY2QC615mKCQfMbWMiqxWW4GNJSC7rQrZSyzU2vWk5HbKwwyw
-         a8J/klCDxS/03nFGqDCPyJiPxQgkc+s9ZooYdPXpHmQe2ux8hihmJmpQQd+6EHueJQT3
-         4GbH10XFkkFNaHkTFZWKXTRPqmABz9Xve8ANeRP+FkYppZnaEHiPeXgbZ1rgsLUEdsrU
-         led16a8SupX3nUdGgPqYiPh1EHQZF6CtSK0csOJPcnoCdxTaGlhTo5F7xrgabPorqWgr
-         1PaA==
-X-Gm-Message-State: ACrzQf1Olfuzn/rmt13TVqBdJCWAQuhUS4nZqSjAbftwHyDOndaUC9Lg
-        t0yoWanVhP5tAy+9pixDCVUSUg==
-X-Google-Smtp-Source: AMsMyM7tJboAJn8/zR1Qol4Ci1YxaGiHmLXPdkvLdXrkiCVD2g8z27QU1BOeWL9thcN1Q2vhSiMnWw==
-X-Received: by 2002:a17:907:7da9:b0:7ad:f381:b9f7 with SMTP id oz41-20020a1709077da900b007adf381b9f7mr40990549ejc.729.1667994873103;
-        Wed, 09 Nov 2022 03:54:33 -0800 (PST)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id g18-20020a17090604d200b0073dc5bb7c32sm5864101eja.64.2022.11.09.03.54.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 03:54:32 -0800 (PST)
-Date:   Wed, 9 Nov 2022 12:54:29 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Won Chung <wonchung@google.com>
-Cc:     bleung@google.com, pmalani@chromium.org,
-        heikki.krogerus@linux.intel.com, imre.deak@intel.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        jani.nikula@linux.intel.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] drm/sysfs: Link DRM connectors to corresponding
- Type-C connectors
-Message-ID: <Y2uU9YUZYqbL4uB7@phenom.ffwll.local>
-Mail-Followup-To: Won Chung <wonchung@google.com>, bleung@google.com,
-        pmalani@chromium.org, heikki.krogerus@linux.intel.com,
-        imre.deak@intel.com, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-        jani.nikula@linux.intel.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221108185004.2263578-1-wonchung@google.com>
+        Wed, 9 Nov 2022 06:55:13 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F201B1DF14;
+        Wed,  9 Nov 2022 03:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667994912; x=1699530912;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=7MoJf6hwU/jiZpPsHcDpL18qbN8uRxN5JFzI/TAVayo=;
+  b=he4neB0pCjBcjmR6/6dK4lvhIcapUWnXS+QXOkd3pvro2c+408rL+WgA
+   YnL6htWbEQ7MtDR1VqTFyy3VlnrB9TL3Lj4f0lcVv7DjCoO0q6rR9zxFH
+   dHMPIoXJCGO5f/ZJnixA33NNUI0KxekURgy+PWoJ41jZiyl4+hN47fXCC
+   P2JgwvkoT6nJrr+cvHctDrBbOugwbNERnolBCa30JAbolGcHhxiCPFqqO
+   u8jfaAuuW70o4BQWIu8ERYQslvYlJlgyumj7KJyfohz+wN031yH3bfy+Z
+   849TQS1e2gvKsKYHV4rTa3jbCW83wLTXvMobOeQOhwKrrKaqj4MNXGENL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="375234356"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="375234356"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 03:55:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="614663390"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="614663390"
+Received: from jsanche3-mobl1.ger.corp.intel.com ([10.251.219.48])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 03:55:10 -0800
+Date:   Wed, 9 Nov 2022 13:55:07 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     delisun <delisun@pateo.com.cn>
+cc:     linux@armlinux.org.uk,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: pl011: Do not clear RX FIFO & RX interrupt in
+ unthrottle.
+In-Reply-To: <20221109105822.332011-1-delisun@pateo.com.cn>
+Message-ID: <b4de808e-333-e1f9-b047-1ecadb29838e@linux.intel.com>
+References: <20221109105822.332011-1-delisun@pateo.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108185004.2263578-1-wonchung@google.com>
-X-Operating-System: Linux phenom 5.19.0-2-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 06:50:04PM +0000, Won Chung wrote:
-> Create a symlink pointing to USB Type-C connector for DRM connectors
-> when they are created. The link will be created only if the firmware is
-> able to describe the connection beween the two connectors.
-> 
-> Currently, even if a display uses a USB Type-C port, there is no way for
-> the userspace to find which port is used for which display. With the
-> symlink, display information would be accessible from Type-C connectors
-> and port information would be accessible from DRM connectors.
-> Associating the two subsystems, userspace would have potential to expose
-> and utilize more complex information, such as bandwidth used for a
-> specific USB Type-C port.
-> 
-> Signed-off-by: Won Chung <wonchung@google.com>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
-> Changes from v3:
-> - Append to the commit message on why this patch is needed
-> 
-> Changes from v2:
-> - Resend the patch to dri-devel list
-> 
-> Changes from v1:
-> - Fix multiple lines to single line
+On Wed, 9 Nov 2022, delisun wrote:
 
-We seem to be spinning wheels a bit here (or at least I'm missing a lot of
-important information from this series alone) with already at v4 but the
-fundamentals not answered:
-
-- where's the usb side of this, and anything we need to do in drivers?
-  This should all be one series, or if that's too big, then a link in the
-  cover letter for where to find all the other pieces
-
-- since I'm guessing this is for cros, will this also work on standard
-  acpi x86 that are built for windows? arm with dt? Might be answered with
-  the full picture
-
-- you say this helps userspace, but how? Best way here is to just point at
-  the userspace change set that makes use of this link, code explains
-  concepts much more precisely than lots of words, and it's also easier to
-  review for corner cases that might be missed. That link also needs to be
-  in the commit message/cover letter somewhere, so people can find it.
-
-In principle nothing against the idea, seems reasonable (but I'm also not
-sure what exact problem it's solving) - but all the detail work to make
-this work than an RFP to kick of some discussion is missing. And I think
-it's not even enough to really kick off a discussion as-is since there's
-really no user of this at all (in-kernel or userspace) linked.
-
-Cheers, Daniel
-
+> Clearing the RX FIFO will cause data loss.
+> Copy the pl011_enabl_interrupts implementation, and remove the clear
+> interrupt and FIFO part of the code.
 > 
-> 
->  drivers/gpu/drm/drm_sysfs.c | 40 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-> index 430e00b16eec..6a9904fa9186 100644
-> --- a/drivers/gpu/drm/drm_sysfs.c
-> +++ b/drivers/gpu/drm/drm_sysfs.c
-> @@ -11,12 +11,14 @@
->   */
->  
->  #include <linux/acpi.h>
-> +#include <linux/component.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/export.h>
->  #include <linux/gfp.h>
->  #include <linux/i2c.h>
->  #include <linux/kdev_t.h>
-> +#include <linux/property.h>
->  #include <linux/slab.h>
->  
->  #include <drm/drm_connector.h>
-> @@ -95,6 +97,34 @@ static char *drm_devnode(struct device *dev, umode_t *mode)
->  	return kasprintf(GFP_KERNEL, "dri/%s", dev_name(dev));
->  }
->  
-> +static int typec_connector_bind(struct device *dev,
-> +	struct device *typec_connector, void *data)
-> +{
-> +	int ret;
-> +
-> +	ret = sysfs_create_link(&dev->kobj, &typec_connector->kobj, "typec_connector");
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = sysfs_create_link(&typec_connector->kobj, &dev->kobj, "drm_connector");
-> +	if (ret)
-> +		sysfs_remove_link(&dev->kobj, "typec_connector");
-> +
-> +	return ret;
-> +}
-> +
-> +static void typec_connector_unbind(struct device *dev,
-> +	struct device *typec_connector, void *data)
-> +{
-> +	sysfs_remove_link(&typec_connector->kobj, "drm_connector");
-> +	sysfs_remove_link(&dev->kobj, "typec_connector");
-> +}
-> +
-> +static const struct component_ops typec_connector_ops = {
-> +	.bind = typec_connector_bind,
-> +	.unbind = typec_connector_unbind,
-> +};
-> +
->  static CLASS_ATTR_STRING(version, S_IRUGO, "drm 1.1.0 20060810");
->  
->  /**
-> @@ -355,6 +385,13 @@ int drm_sysfs_connector_add(struct drm_connector *connector)
->  	if (connector->ddc)
->  		return sysfs_create_link(&connector->kdev->kobj,
->  				 &connector->ddc->dev.kobj, "ddc");
-> +
-> +	if (dev_fwnode(kdev)) {
-> +		r = component_add(kdev, &typec_connector_ops);
-> +		if (r)
-> +			drm_err(dev, "failed to add component\n");
-> +	}
-> +
->  	return 0;
->  
->  err_free:
-> @@ -367,6 +404,9 @@ void drm_sysfs_connector_remove(struct drm_connector *connector)
->  	if (!connector->kdev)
->  		return;
->  
-> +	if (dev_fwnode(connector->kdev))
-> +		component_del(connector->kdev, &typec_connector_ops);
-> +
->  	if (connector->ddc)
->  		sysfs_remove_link(&connector->kdev->kobj, "ddc");
->  
-> -- 
-> 2.37.3.998.g577e59143f-goog
-> 
+
+You should add Fixes tag.
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+ i.
+
+
+> Signed-off-by: delisun <delisun@pateo.com.cn>
+> ---
+>  drivers/tty/serial/amba-pl011.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+> index 5cdced39eafd..08034e5dcec0 100644
+> --- a/drivers/tty/serial/amba-pl011.c
+> +++ b/drivers/tty/serial/amba-pl011.c
+> @@ -1828,8 +1828,17 @@ static void pl011_enable_interrupts(struct uart_amba_port *uap)
+>  static void pl011_unthrottle_rx(struct uart_port *port)
+>  {
+>  	struct uart_amba_port *uap = container_of(port, struct uart_amba_port, port);
+> +	unsigned long flags;
+>  
+> -	pl011_enable_interrupts(uap);
+> +	spin_lock_irqsave(&uap->port.lock, flags);
+> +
+> +	uap->im = UART011_RTIM;
+> +	if (!pl011_dma_rx_running(uap))
+> +		uap->im |= UART011_RXIM;
+> +
+> +	pl011_write(uap->im, uap, REG_IMSC);
+> +
+> +	spin_unlock_irqrestore(&uap->port.lock, flags);
+
