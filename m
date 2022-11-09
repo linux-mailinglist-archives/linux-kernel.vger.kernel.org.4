@@ -2,212 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7407B622D3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9501622D4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiKIOMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
+        id S230505AbiKIOSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiKIOL7 (ORCPT
+        with ESMTP id S230421AbiKIOSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:11:59 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAB065D5;
-        Wed,  9 Nov 2022 06:11:56 -0800 (PST)
-Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6n2T0021zHvkG;
-        Wed,  9 Nov 2022 22:11:28 +0800 (CST)
-Received: from [10.136.108.160] (10.136.108.160) by
- kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 22:11:53 +0800
-Subject: [PATCH] USB: gadget: Fix use-after-free during usb config switch
-To:     =?UTF-8?B?6Jab5rab?= <xuetao09@huawei.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Caiyadong <caiyadong@huawei.com>,
-        xuhaiyang <xuhaiyang5@hisilicon.com>,
-        <suzhuangluan@hisilicon.com>
-References: <20221109125315.2959-1-xuetao09@huawei.com>
-From:   jiantao zhang <water.zhangjiantao@huawei.com>
-Message-ID: <eba9e5db-a31f-8061-ed87-bf4c426e4e8d@huawei.com>
-Date:   Wed, 9 Nov 2022 22:11:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Wed, 9 Nov 2022 09:18:16 -0500
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4F6EE40
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:18:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=1vFrU
+        VtFiFbmRLFApIq8kFzfhMdctO7y36+7evW3UJg=; b=Kyz3ui1ZPYvSnQ/8L8Ocp
+        dRgmM/8U4tRVTFuB7esraCPNJ4LQ1kjGfPkqFDmWEFyYiaFipjaFYMCtQUKTHVVC
+        FpYEUroVl3kR4u17A987wfKGsUg8TbNkJOi0DX/E6kRh/eR+d0eJ/cobdgjCiEwv
+        BPVWk+GeFQUA17hKQDqYbQ=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp5 (Coremail) with SMTP id HdxpCgBH8MtftmtjmFBzqg--.35328S2;
+        Wed, 09 Nov 2022 22:17:04 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
+        lkp@intel.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v9] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Wed,  9 Nov 2022 22:17:01 +0800
+Message-Id: <20221109141701.237407-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20221109125315.2959-1-xuetao09@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.136.108.160]
-X-ClientProxiedBy: dggpeml100015.china.huawei.com (7.185.36.168) To
- kwepemi500002.china.huawei.com (7.221.188.171)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgBH8MtftmtjmFBzqg--.35328S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKryxXr13Xr47uryDZw1DZFb_yoW7Ww4fpa
+        1jg3409rW3XF4avr47ta1kXFW3CaykJFW5Gr9rG3s5ur4rAFs8GryDtas0qr4DZrW0qF42
+        yr4rtF9I93Z0vaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR7xhLUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQgC0U1aEDeEyBwAAsu
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> In the process of switching USB config from rndis to other config,
-> if function gadget->ops->pullup() return an error,it will inevitably
-> cause a system panic(use after free).
->
-> Analysis as follows:
-> =====================================================================
-> (1) write /config/usb_gadget/g1/UDC "none"   (init.usb.configfs.rc:2)
->
-> gether_disconnect+0x2c/0x1f8           (dev->port_usb = NULL)
-> rndis_disable+0x4c/0x74
-> composite_disconnect+0x74/0xb0
-> configfs_composite_disconnect+0x60/0x7c
-> usb_gadget_disconnect+0x70/0x124
-> usb_gadget_unregister_driver+0xc8/0x1d8
-> gadget_dev_desc_UDC_store+0xec/0x1e4
->
-> In general, pointer dev->port will be set to null.
-> In function usb_gadget_disconnect(),gadget->udc->driver->disconnect()
-> will not be called when gadget->ops->pullup() return an error, therefore,
-> pointer dev->port will not be set to NULL.
-> If pointer dev->port_usb is not null, it will cause an exception of using
-> the freed memory in step3.
->
-> (2) rm /config/usb_gadget/g1/configs/b.1/f1    (init.usb.configfs.rc:8)
->      (f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
->
-> rndis_deregister+0x28/0x54        (kfree(params))
-> rndis_free+0x44/0x7c              (kfree(rndis))
-> usb_put_function+0x14/0x1c
-> config_usb_cfg_unlink+0xc4/0xe0
-> configfs_unlink+0x124/0x1c8
-> vfs_unlink+0x114/0x1dc
->
-> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
->      (init.usb.configfs.rc:11)
->
-> Call trace:
-> panic+0x1fc/0x3d0
-> die+0x29c/0x2a8
-> die_kernel_fault+0x60/0x90
-> do_page_fault+0xa8/0x46c
-> do_mem_abort+0x3c/0xac
-> el1_abort+0x3c/0x58
-> el1_sync_handler+0x40/0x78
-> el1_sync+0x84/0x140
-> 0xffffff801138f880    (params->resp_avail is an illegal function pointer)
-> rndis_close+0x28/0x34 (->rndis_indicate_status_msg-> params->resp_avail())
-> eth_stop+0x74/0x110   (if dev->port_usb != NULL, call rndis_close)
-> __dev_close_many+0x134/0x194
-> dev_close_many+0x48/0x194
-> rollback_registered_many+0x118/0x814
-> unregister_netdevice_queue+0xe0/0x168
-> unregister_netdev+0x20/0x30
-> gether_cleanup+0x1c/0x38
-> rndis_free_inst+0x2c/0x58
-> usb_put_function_instance+0x20/0x34
-> rndis_attr_release+0xc/0x14
-> kref_put+0x74/0xb8
-> config_item_put+0x14/0x1c
-> configfs_rmdir+0x314/0x374
-> vfs_rmdir+0xa4/0x15c
->
-> In step3,function pointer params->resp_avail() is a wild pointer
-> becase pointer params has been freed in step2.
->
->      Free mem stack(in step2):
->      usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
->
->      use-after-free stack(in step3):
->      eth_stop -> rndis_close -> rndis_signal_disconnect ->
->      rndis_indicate_status_msg -> params->resp_avail()
->
-> In function eth_stop(), if pointer dev->port_usb is NULL, function
-> rndis_close() will not be called.
->
-> If gadget->ops->pullup() return an error in step),dev->port_usb will
-> not be set to null. So, a panic will be caused in step3.
-> =======================================================================
->
-> Through above analysis, i think gadget->udc->driver->disconnect() need
-> to be called even if gadget->udc->driver->disconnect() return an error.
->
-> This reverts commit 0a55187a1ec8c03d0619e7ce41d10fdc39cff036
->
-> I think this change is a code optimization, not a solution to specific
-> problem. And i think this problem is caused by this change,revert it can
-> solve this problem.
->
-> Of course, my understanding may be inaccurate.There may be a better
-> solution to this problem. If possible, please give some suggestions,
-> thanks.
->
-> Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
-> callback from usb_gadget_disconnect())
->
-> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-> Signed-off-by: TaoXue <xuetao09@huawei.com>
-> ---
->   drivers/usb/gadget/udc/core.c | 20 +++++++++++---------
->   1 file changed, 11 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index c63c0c2cf649..b502b2ac4824 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -707,9 +707,6 @@ EXPORT_SYMBOL_GPL(usb_gadget_connect);
->    * as a disconnect (when a VBUS session is active).  Not all systems
->    * support software pullup controls.
->    *
-> - * Following a successful disconnect, invoke the ->disconnect() callback
-> - * for the current gadget driver so that UDC drivers don't need to.
-> - *
->    * Returns zero on success, else negative errno.
->    */
->   int usb_gadget_disconnect(struct usb_gadget *gadget)
-> @@ -734,13 +731,8 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
->   	}
->   
->   	ret = gadget->ops->pullup(gadget, 0);
-> -	if (!ret) {
-> +	if (!ret)
->   		gadget->connected = 0;
-> -		mutex_lock(&udc_lock);
-> -		if (gadget->udc->driver)
-> -			gadget->udc->driver->disconnect(gadget);
-> -		mutex_unlock(&udc_lock);
-> -	}
->   
->   out:
->   	trace_usb_gadget_disconnect(gadget, ret);
-> @@ -1532,6 +1524,11 @@ static void gadget_unbind_driver(struct device *dev)
->   	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
->   
->   	usb_gadget_disconnect(gadget);
-> +
-> +	mutex_lock(&udc_lock);
-> +	udc->driver->disconnect(udc->gadget);
-> +	mutex_unlock(&udc_lock);
-> +
->   	usb_gadget_disable_async_callbacks(udc);
->   	if (gadget->irq)
->   		synchronize_irq(gadget->irq);
-> @@ -1626,6 +1623,11 @@ static ssize_t soft_connect_store(struct device *dev,
->   		usb_gadget_connect(udc->gadget);
->   	} else if (sysfs_streq(buf, "disconnect")) {
->   		usb_gadget_disconnect(udc->gadget);
-> +
-> +		mutex_lock(&udc_lock);
-> +		udc->driver->disconnect(udc->gadget);
-> +		mutex_unlock(&udc_lock);
-> +
->   		usb_gadget_udc_stop(udc);
->   	} else {
->   		dev_err(dev, "unsupported command '%s'\n", buf);
+In some bad situation, the gts may be freed gru_check_chiplet_assignment.
+The call chain can be gru_unload_context->gru_free_gru_context->gts_drop
+and kfree finally. However, the caller didn't know if the gts is freed
+or not and use it afterwards. This will trigger a Use after Free bug.
+
+Fix it by introducing a return value to see if it's in error path or not.
+Free the gts in caller if gru_check_chiplet_assignment check failed.
+
+Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Acked-by: Dimitri Sivanich <sivanich@hpe.com>
+---
+v9:
+- rewrite changelog and add comment in the code to make it more clear
+
+v8:
+- remove tested-by tag suggested by Greg
+
+v7:
+- fix some spelling problems suggested by Greg, change kernel test robot from reported-by tag to tested-by tag
+
+v6:
+- remove unused var checked by kernel test robot
+
+v5:
+- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+
+v4:
+- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+
+v3:
+- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
+
+v2:
+- commit message changes suggested by Greg
+
+v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
+---
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 22 ++++++++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 31 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..bdd515d33225 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret)
++		goto err;
+ 
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+ 	gru_unlock_gts(gts);
+ 	return ret;
++err:
++	gru_unlock_gts(gts);
++	gru_unload_context(gts, 1);
++	return -EINVAL;
+ }
+ 
+ /*
+@@ -874,7 +880,11 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			if (gru_check_context_placement(gts)) {
++				gru_unlock_gts(gts);
++				gru_unload_context(gts, 1);
++				return -EINVAL;
++			}
+ 		}
+ 		break;
+ 	case sco_gseg_owner:
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 6706ef3c5977..816def778078 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -726,15 +727,23 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 * references. Pthread apps use non-owner references to the CBRs.
+ 	 */
+ 	gru = gts->ts_gru;
++	/*
++	 * If gru or gts->ts_tgid_owner isn't initialized properly, return
++	 * success is fine, for it's not a deadly error. The related variable
++	 * can be reconfigure in other function.The caller is responsible
++	 * for their inspection, and reinitialization if needed.
++	 */
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
++
++	return ret;
+ }
+ 
+ 
+@@ -934,7 +943,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	if (gru_check_context_placement(gts)) {
++		preempt_enable();
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return VM_FAULT_NOPAGE;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 8c52776db234..640daf1994df 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
+-- 
+2.25.1
+
