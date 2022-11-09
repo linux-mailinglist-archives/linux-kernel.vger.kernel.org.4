@@ -2,127 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7260A622885
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0314262288A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiKIKdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        id S230087AbiKIKfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKIKdU (ORCPT
+        with ESMTP id S229593AbiKIKfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:33:20 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D8B6263F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:33:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1B231FB;
-        Wed,  9 Nov 2022 02:33:24 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3FB4C3F534;
-        Wed,  9 Nov 2022 02:33:17 -0800 (PST)
-Message-ID: <33fcfe74-f6c7-f85c-5a8d-51efdecfa0ab@arm.com>
-Date:   Wed, 9 Nov 2022 11:33:07 +0100
+        Wed, 9 Nov 2022 05:35:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B352F193FE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667990088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3J441/GDgv6cN9YzwYIw/Qlxf96gs8QTcgGQhe6EZYE=;
+        b=SLHXDNu6OP/hwicW+P/ENpnWFs+Mz+dcKNKk/uRn4/tzJyoK1XvhbYks2GephIYj8hNXq6
+        +LHEhuT+cBeAPGOeVMjvzy/x+nPxb1IBM7YtKTdn180hhZc/4MdYc7rL21uLmuoSX6v9HE
+        BsxFlN9aSuaVnnyONcmPpu3Qk+MGYz4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-483-z3L8k4LoMuCvb5CYWw9tCw-1; Wed, 09 Nov 2022 05:34:47 -0500
+X-MC-Unique: z3L8k4LoMuCvb5CYWw9tCw-1
+Received: by mail-wm1-f69.google.com with SMTP id z15-20020a1c4c0f000000b003cf6f80007cso419344wmf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 02:34:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3J441/GDgv6cN9YzwYIw/Qlxf96gs8QTcgGQhe6EZYE=;
+        b=X2FJkQMOMK3xhuhujGdaVlzqud4nVHs8Z2nG7nrW7PwAuUSfx+e2P2BPIie4CphSlE
+         AVZnHcBuMtQqDmlenOFMPgW0xEk4BUgrMde4ukstwC9l4Ml90b7kSPS5X4o7MDQsAqbf
+         OC2bKjtkb5sh6uKkKOQswrItOf3aoPrHUzzFaCUn4CGQhR+jhNtJLpi8WxCdSlpK3lNj
+         1BBXW8O0VOfh+YLkjtaqUS+pwr8+vh4MdRuY/H1VT7QqfCk39WKvkHF5tfk6/P/8D8/k
+         W+HyPsJQH2s2BsKEKHAqV3EsIBhsMSaspbeqvsGzV6Xq3Hkn+6C8WxBnnjFr+pqvh/Q5
+         p+Eg==
+X-Gm-Message-State: ACrzQf2qLHhXAgMcrY7uznwcN5jQ5hzzloEeMFzPtPTGeecVXjyy5iVh
+        7Ar4Pt+0KfHymy1R3yfOZXI3qY1j+l5vqg8fK4WNEOO22qv8ukDpf7/StnFvUlQng3UkhU6sg6x
+        ffQMPvdWXStVp7LHIh+VLLRsU
+X-Received: by 2002:a1c:f214:0:b0:3be:4e7c:1717 with SMTP id s20-20020a1cf214000000b003be4e7c1717mr40707871wmc.171.1667990086099;
+        Wed, 09 Nov 2022 02:34:46 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5KUj/gYNJcSIhtdNPjm0EteMyf5apuMBhpsiXhBbhX54nb3tAFmta3JZlLl0rVB/VwRx9Lrw==
+X-Received: by 2002:a1c:f214:0:b0:3be:4e7c:1717 with SMTP id s20-20020a1cf214000000b003be4e7c1717mr40707846wmc.171.1667990085742;
+        Wed, 09 Nov 2022 02:34:45 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:b000:3b0e:74a3:bc8:9937? (p200300cbc704b0003b0e74a30bc89937.dip0.t-ipconnect.de. [2003:cb:c704:b000:3b0e:74a3:bc8:9937])
+        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003c6f426467fsm1194121wmq.40.2022.11.09.02.34.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 02:34:45 -0800 (PST)
+Message-ID: <9c167d01-ef09-ec4e-b4a1-2fff62bf01fe@redhat.com>
+Date:   Wed, 9 Nov 2022 11:34:43 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/9] sched/uclamp: Fix relationship between uclamp and
- migration margin
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
 Content-Language: en-US
-To:     Qais Yousef <qais.yousef@arm.com>, Ingo Molnar <mingo@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>
-References: <20220804143609.515789-1-qais.yousef@arm.com>
- <20220804143609.515789-2-qais.yousef@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220804143609.515789-2-qais.yousef@arm.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zach O'Keefe <zokeefe@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Peter Enderborg <peter.enderborg@sony.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        Paul Gofman <pgofman@codeweavers.com>
+References: <20221109102303.851281-1-usama.anjum@collabora.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info about
+ PTEs
+In-Reply-To: <20221109102303.851281-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/08/2022 16:36, Qais Yousef wrote:
+On 09.11.22 11:23, Muhammad Usama Anjum wrote:
+> Changes in v6:
+> - Updated the interface and made cosmetic changes
+> 
+> Original Cover Letter in v5:
+> Hello,
+> 
+> This patch series implements IOCTL on the pagemap procfs file to get the
+> information about the page table entries (PTEs). The following operations
+> are supported in this ioctl:
+> - Get the information if the pages are soft-dirty, file mapped, present
+>    or swapped.
+> - Clear the soft-dirty PTE bit of the pages.
+> - Get and clear the soft-dirty PTE bit of the pages atomically.
+> 
+> Soft-dirty PTE bit of the memory pages can be read by using the pagemap
+> procfs file. The soft-dirty PTE bit for the whole memory range of the
+> process can be cleared by writing to the clear_refs file. There are other
+> methods to mimic this information entirely in userspace with poor
+> performance:
+> - The mprotect syscall and SIGSEGV handler for bookkeeping
+> - The userfaultfd syscall with the handler for bookkeeping
+> Some benchmarks can be seen here[1]. This series adds features that weren't
+> present earlier:
+> - There is no atomic get soft-dirty PTE bit status and clear operation
+>    possible.
+> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
+> 
+> Historically, soft-dirty PTE bit tracking has been used in the CRIU
+> project. The procfs interface is enough for finding the soft-dirty bit
+> status and clearing the soft-dirty bit of all the pages of a process.
+> We have the use case where we need to track the soft-dirty PTE bit for
+> only specific pages on demand. We need this tracking and clear mechanism
+> of a region of memory while the process is running to emulate the
+> getWriteWatch() syscall of Windows. This syscall is used by games to
+> keep track of dirty pages to process only the dirty pages.
+> 
+> The information related to pages if the page is file mapped, present and
+> swapped is required for the CRIU project[2][3]. The addition of the
+> required mask, any mask, excluded mask and return masks are also required
+> for the CRIU project[2].
+> 
+> The IOCTL returns the addresses of the pages which match the specific masks.
+> The page addresses are returned in struct page_region in a compact form.
+> The max_pages is needed to support a use case where user only wants to get
+> a specific number of pages. So there is no need to find all the pages of
+> interest in the range when max_pages is specified. The IOCTL returns when
+> the maximum number of the pages are found. The max_pages is optional. If
+> max_pages is specified, it must be equal or greater than the vec_size.
+> This restriction is needed to handle worse case when one page_region only
+> contains info of one page and it cannot be compacted. This is needed to
+> emulate the Windows getWriteWatch() syscall.
+> 
+> Some non-dirty pages get marked as dirty because of the kernel's
+> internal activity (such as VMA merging as soft-dirty bit difference isn't
+> considered while deciding to merge VMAs). The dirty bit of the pages is
+> stored in the VMA flags and in the per page flags. If any of these two bits
+> are set, the page is considered to be soft dirty. Suppose you have cleared
+> the soft dirty bit of half of VMA which will be done by splitting the VMA
+> and clearing soft dirty bit flag in the half VMA and the pages in it. Now
+> kernel may decide to merge the VMAs again. So the half VMA becomes dirty
+> again. This splitting/merging costs performance. The application receives
+> a lot of pages which aren't dirty in reality but marked as dirty.
+> Performance is lost again here. Also sometimes user doesn't want the newly
+> allocated memory to be marked as dirty. PAGEMAP_NO_REUSED_REGIONS flag
+> solves both the problems. It is used to not depend on the soft dirty flag
+> in the VMA flags. So VMA splitting and merging doesn't happen. It only
+> depends on the soft dirty bit of the individual pages. Thus by using this
+> flag, there may be a scenerio such that the new memory regions which are
+> just created, doesn't look dirty when seen with the IOCTL, but look dirty
+> when seen from procfs. This seems okay as the user of this flag know the
+> implication of using it.
 
-[...]
+Please separate that part out from the other changes; I am still not 
+convinced that we want this and what the semantical implications are.
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 52dc9d6f811e..00c2de800685 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4254,6 +4254,129 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
->  	trace_sched_util_est_se_tp(&p->se);
->  }
->  
-> +static inline int util_fits_cpu(unsigned long util,
-> +				unsigned long uclamp_min,
-> +				unsigned long uclamp_max,
-> +				int cpu)
-> +{
-> +	unsigned long capacity_orig, capacity_orig_thermal;
-> +	unsigned long capacity = capacity_of(cpu);
-> +	bool fits, uclamp_max_fits;
-> +
-> +	/*
-> +	 * Check if the real util fits without any uclamp boost/cap applied.
-> +	 */
-> +	fits = fits_capacity(util, capacity);
-> +
-> +	if (!uclamp_is_used())
-> +		return fits;
-> +
-> +	/*
-> +	 * We must use capacity_orig_of() for comparing against uclamp_min and
-> +	 * uclamp_max. We only care about capacity pressure (by using
-> +	 * capacity_of()) for comparing against the real util.
-> +	 *
-> +	 * If a task is boosted to 1024 for example, we don't want a tiny
-> +	 * pressure to skew the check whether it fits a CPU or not.
-> +	 *
-> +	 * Similarly if a task is capped to capacity_orig_of(little_cpu), it
-> +	 * should fit a little cpu even if there's some pressure.
-> +	 *
-> +	 * Only exception is for thermal pressure since it has a direct impact
-> +	 * on available OPP of the system.
-> +	 *
-> +	 * We honour it for uclamp_min only as a drop in performance level
-> +	 * could result in not getting the requested minimum performance level.
-> +	 *
-> +	 * For uclamp_max, we can tolerate a drop in performance level as the
-> +	 * goal is to cap the task. So it's okay if it's getting less.
-> +	 *
-> +	 * In case of capacity inversion, which is not handled yet, we should
-> +	 * honour the inverted capacity for both uclamp_min and uclamp_max all
-> +	 * the time.
-> +	 */
-> +	capacity_orig = capacity_orig_of(cpu);
-> +	capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
+Let's take a look at an example: can_change_pte_writable()
 
-Did you and Vincent agreed at the end to use `cap_orig - _instantaneous_
-thermal pressure` (1) here?
+	/* Do we need write faults for softdirty tracking? */
+	if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
+		return false;
 
-Last email in v1 from Vincent on this one was
-https://lkml.kernel.org/r/20220722151300.GA30193@vingu-book :
+We care about PTE softdirty tracking, if it is enabled for the VMA. 
+Tracking is enabled if: vma_soft_dirty_enabled()
 
-"Using capacity_orig_of(cpu) - thermal_load_avg(rq_of(cpu)) seems like
-a simple solution to cover thermal mitigation".
+	/*
+	 * Soft-dirty is kind of special: its tracking is enabled when
+	 * the vma flags not set.
+	 */
+	return !(vma->vm_flags & VM_SOFTDIRTY);
 
-And there is no Acked-By/Reviewed-By so far.
+Consequently, if VM_SOFTDIRTY is set, we are not considering the 
+soft_dirty PTE bits accordingly.
 
-We use (1) in feec() to cater for the thermal throttling (thermal
-restricting policy->max) schedutil takes into account immediately when
-asking for frequency (performance). EAS and schedutil should see the
-same thing.
 
-Do you want to use the same in util_fits_cpu() since it's used in feec()?
+I'd suggest moving forward without this controversial 
+PAGEMAP_NO_REUSED_REGIONS functionality for now, and preparing it as a 
+clear add-on we can discuss separately.
 
-[...]
+-- 
+Thanks,
+
+David / dhildenb
+
