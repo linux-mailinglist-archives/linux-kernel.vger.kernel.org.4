@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C08623449
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2FA62344E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbiKIUMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S231599AbiKIUNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:13:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKIUM3 (ORCPT
+        with ESMTP id S229561AbiKIUNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:12:29 -0500
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E93A1704C;
-        Wed,  9 Nov 2022 12:12:28 -0800 (PST)
-Received: by mail-oi1-f169.google.com with SMTP id m204so20022722oib.6;
-        Wed, 09 Nov 2022 12:12:28 -0800 (PST)
+        Wed, 9 Nov 2022 15:13:53 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1254218B32
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:13:52 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id l127so20031502oia.8
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:13:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yB6HYvhBN3RVAfByHn6Mj6M7PU8T8ZuDtIlSesRugqE=;
+        b=VtxYfuoGycTMs/QNDj9C6posySpJrMmYbilDidHZq1CwdThPJ/+bdO/MJdPm02wVdU
+         5iEOsZO1oFUxuaFqMobK45DfcdHrKECbAoOali2jJsGPjr6GpXh3T2y5aOfg7+j3qpnF
+         562x3bIoj/U+6gKdODz4stYBWXhNYu1gqL/TC2crukFXRf8ErgkxOGm6eBjsoK49zMVG
+         kRiIy6SaKG9aPrbVhXh8KqW5wuSAd/otKoZwOSAnayoPx+fqPGgCXOxSCelrVw+ezn/p
+         /PRt62ouWHWm2RxCTUkUXjh9HsdrjjLOfTN+kTCDdr6XTL9fZ/+/LAfZ1FRUQ9fELiEt
+         NZsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xKyoW91hK5fByGjPEcYj0VDNd5HSZ4pg0JWOuFNomI4=;
-        b=fukkBlCRsx816Cc51AuFwGgbHo7kHovR4y8vBeEdBbzPaa0DbdPOlPvkKwxdgLNPk+
-         +h7QTdDLEx/TpncfaBNgFAtHYZ+C8s1oBRGb9BrH5zrmM/EfC8qJmqeyPdiEOCwCbw0U
-         qkUdj/S0rTuh5ilOGM6MmGlvWUh+0hg2yeCU+rXdP0Fax9UNqEk65Zyuo+zmrmLnax8l
-         HnYIS0eJ0SzAVQgwYDOBug9WIgoRnv30HEJeH0/Y/rcooc2eye1ROMgPh6fsehunEwoq
-         Z12nuhE2FQtvHvXc38u67c7Jy6+wnv8nKd8ZFPT00jcKrqk+aqZkqI/lPFUGxUUPrTZb
-         9yAA==
-X-Gm-Message-State: ACrzQf39B1tubrN4I1QRBTw8qHa0dmYE3qLzHxdxmwfwCkG2ZMndPu8q
-        u/5Tr/GoNrRczobvrBFeWWhRnpW72f4oBj4n55Q=
-X-Google-Smtp-Source: AMsMyM6y7F6nDZtPrY8YdsjcnlNjYOkHvwEGRMxS351hhvHi3/f0JuPiZqMxbJxCFtuD2Mq5XpFtFUNBFTcY85/83G4=
-X-Received: by 2002:aca:2805:0:b0:359:e340:d53 with SMTP id
- 5-20020aca2805000000b00359e3400d53mr31926337oix.209.1668024747822; Wed, 09
- Nov 2022 12:12:27 -0800 (PST)
+        bh=yB6HYvhBN3RVAfByHn6Mj6M7PU8T8ZuDtIlSesRugqE=;
+        b=14hJK0AQTzDQ32pVNCPfuHImY2JK0unzyCrBlwqJCyjyKabO15vNUyfAbVuSRirRjS
+         sqcrEXRLwErIyZsTGBwUcgj6uUF3ID63O+p0YApVYffXL64muwWDz1SwatSjkSDZvZb7
+         rPBf2fu4CY1twTt+LkkOmkQX8OUqpqzjKyvDkNAXH1XY36clx3fYO6LugTWqbN+n2JAL
+         2pd7AlY89GrAC2RV+qBL5ARqlUCfggLmEJedSUOqJ3HAniF+qY3v14OUCDeIIIEVLi6t
+         XNGTrTjXeDZm4V1FGTiY/4Loodt3uK7fllbecQoZb4X3Rmev/w8eulqdkeHOxiG9dvwd
+         wv2A==
+X-Gm-Message-State: ACrzQf0+AYBdGM6YMQUz3o4DlRmMidAFq7YEcw+pzdHrZ2sBO1PZ8IEU
+        9ej3HGc6dywHO4WOJSsM0u/UZn42H578T6aGc9kV
+X-Google-Smtp-Source: AMsMyM5BiojzHXd3s4SlDdTvp7SrcHcpqQ50w/EPBngyxCmha1b/OAMd3Pgv35j8TsHD4WyA9o3YivK76j3kF8CPULE=
+X-Received: by 2002:a05:6808:1441:b0:35a:4a2d:673b with SMTP id
+ x1-20020a056808144100b0035a4a2d673bmr19974152oiv.172.1668024831341; Wed, 09
+ Nov 2022 12:13:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20221109184914.1357295-1-irogers@google.com> <20221109184914.1357295-9-irogers@google.com>
-In-Reply-To: <20221109184914.1357295-9-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 9 Nov 2022 12:12:16 -0800
-Message-ID: <CAM9d7cgpcVcUZo6ExLWis2Pu4V0FXdsNx+ZoKUWrOYqgqyZTiQ@mail.gmail.com>
-Subject: Re: [PATCH v2 08/14] tools lib perf: Add missing install headers
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Stephane Eranian <eranian@google.com>
+References: <CAHC9VhSSafrkW4VbTVoAUJmjFQdCwPTGDqTP8yBnLBqc7rW7iQ@mail.gmail.com>
+ <CAHk-=wj_6Df1NAMs14S0OOqX1Z=460j-mfwn_qm-7EK1eK76qw@mail.gmail.com> <20221109143834.GB24561@mail.hallyn.com>
+In-Reply-To: <20221109143834.GB24561@mail.hallyn.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 9 Nov 2022 15:13:40 -0500
+Message-ID: <CAHC9VhQgEej_yKXRJFtLHUQkL8hGrBYqRPye5SwBz_SU+2eK2A@mail.gmail.com>
+Subject: Re: [GIT PULL] LSM fixes for v6.1 (#1)
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 10:50 AM Ian Rogers <irogers@google.com> wrote:
+On Wed, Nov 9, 2022 at 9:38 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> On Mon, Oct 31, 2022 at 12:22:29PM -0700, Linus Torvalds wrote:
+> > On Mon, Oct 31, 2022 at 4:07 AM Paul Moore <paul@paul-moore.com> wrote:
+> > >
+> > > A single patch to the capabilities code to fix a potential memory leak
+> > > in the xattr allocation error handling.  Please apply for v6.1-rcX.
+> >
+> > Pulled.
+> >
+> > However, I react to the strange test condition. Sure, it's
+> > pre-existing, but does it really make sense?
+> >
+> > It does
+> >
+> > +       if (ret < 0 || !tmpbuf) {
+> > +               size = ret;
+> > +               goto out_free;
+> > +       }
+> >
+> > and how the heck can 'tmpbuf' be NULL if vfs_getxattr_alloc() succeeded?
 >
-> Headers necessary for the perf build. Note, internal headers are also
-> installed as these are necessary for the build.
+> I had to go through the history a bit - the !tmpbuf check was added
+>
+> https://www.spinics.net/lists/stable/msg463010.html
+>
+> because of a gcc warning.  Perhaps there's a better way to tell gcc
+> that it can't remain NULL if ret was < 0 ?
 
-Yeah, it's sad we are using those internal headers in perf.
-Ideally libperf provides callbacks to associate private data
-to each public data structure (e.g. evsel, evlist, etc).  And
-external users just use public APIs only.
+Ooof, that's ugly, but thanks for digging it up.  As it turns out I
+happen to be working on a patch for vfs_getxattr_alloc() to fix the
+return value type right now, but it looks like I'll leave that gcc
+hack in place ... although I might leave a comment about it so the
+next person doesn't have to wonder.
 
-But that would be a major change.
+> > I think that's not only impossible in the first place, but if it *was*
+> > possible, then that
+> >
+> >                 size = ret;
+> >                goto out_free;
+> >
+> > would be wrong, because this function would return success even if it
+> > wasn't successful.
+> >
+> > That whole "cast to int, and then cast back to size_t" also smells of
+> > some serious confusion in the return value handling. It looks to me
+> > like vfs_getxattr_alloc() fundamentally returns an 'int', not a
+> > 'ssize_t', just by looking at the ->get function. But it just all
+> > looks weird.
+> >
+> > So this code has all kinds of oddities.
+> >
+> >                Linus
 
-Thanks,
-Namhyung
-
-
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/perf/Makefile | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-> index 21df023a2103..1badc0a04676 100644
-> --- a/tools/lib/perf/Makefile
-> +++ b/tools/lib/perf/Makefile
-> @@ -189,13 +189,21 @@ install_lib: libs
->
->  install_headers:
->         $(call QUIET_INSTALL, headers) \
-> +               $(call do_install,include/perf/bpf_perf.h,$(prefix)/include/perf,644); \
->                 $(call do_install,include/perf/core.h,$(prefix)/include/perf,644); \
->                 $(call do_install,include/perf/cpumap.h,$(prefix)/include/perf,644); \
->                 $(call do_install,include/perf/threadmap.h,$(prefix)/include/perf,644); \
->                 $(call do_install,include/perf/evlist.h,$(prefix)/include/perf,644); \
->                 $(call do_install,include/perf/evsel.h,$(prefix)/include/perf,644); \
->                 $(call do_install,include/perf/event.h,$(prefix)/include/perf,644); \
-> -               $(call do_install,include/perf/mmap.h,$(prefix)/include/perf,644);
-> +               $(call do_install,include/perf/mmap.h,$(prefix)/include/perf,644); \
-> +               $(call do_install,include/internal/cpumap.h,$(prefix)/include/internal,644); \
-> +               $(call do_install,include/internal/evlist.h,$(prefix)/include/internal,644); \
-> +               $(call do_install,include/internal/evsel.h,$(prefix)/include/internal,644); \
-> +               $(call do_install,include/internal/lib.h,$(prefix)/include/internal,644); \
-> +               $(call do_install,include/internal/mmap.h,$(prefix)/include/internal,644); \
-> +               $(call do_install,include/internal/threadmap.h,$(prefix)/include/internal,644); \
-> +               $(call do_install,include/internal/xyarray.h,$(prefix)/include/internal,644);
->
->  install_pkgconfig: $(LIBPERF_PC)
->         $(call QUIET_INSTALL, $(LIBPERF_PC)) \
-> --
-> 2.38.1.431.g37b22c650d-goog
->
+-- 
+paul-moore.com
