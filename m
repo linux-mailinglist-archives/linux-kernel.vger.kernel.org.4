@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9814D622730
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BC862272F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbiKIJii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S230014AbiKIJig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiKIJib (ORCPT
+        with ESMTP id S230212AbiKIJia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:38:31 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B31C26DD;
-        Wed,  9 Nov 2022 01:38:29 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N6fzC3D8hz15MWF;
-        Wed,  9 Nov 2022 17:38:15 +0800 (CST)
+        Wed, 9 Nov 2022 04:38:30 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E56E5F8C;
+        Wed,  9 Nov 2022 01:38:28 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6fz93D0WzmVjL;
+        Wed,  9 Nov 2022 17:38:13 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 17:38:25 +0800
+ 15.1.2375.31; Wed, 9 Nov 2022 17:38:26 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -38,9 +38,9 @@ To:     "Paul E . McKenney" <paulmck@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         Robert Elliott <elliott@hpe.com>
-Subject: [PATCH v6 1/2] rcu: Add RCU stall diagnosis information
-Date:   Wed, 9 Nov 2022 17:37:37 +0800
-Message-ID: <20221109093739.187-2-thunder.leizhen@huawei.com>
+Subject: [PATCH v6 2/2] doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
+Date:   Wed, 9 Nov 2022 17:37:38 +0800
+Message-ID: <20221109093739.187-3-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20221109093739.187-1-thunder.leizhen@huawei.com>
 References: <20221109093739.187-1-thunder.leizhen@huawei.com>
@@ -59,229 +59,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because RCU CPU stall warnings are driven from the scheduling-clock
-interrupt handler, a workload consisting of a very large number of
-short-duration hardware interrupts can result in misleading stall-warning
-messages.  On systems supporting only a single level of interrupts,
-that is, where interrupts handlers cannot be interrupted, this can
-produce misleading diagnostics.  The stack traces will show the
-innocent-bystander interrupted task, not the interrupts that are
-at the very least exacerbating the stall.
+This commit doucments how to quickly determine the bug causing a given
+RCU CPU stall fault warning based on the output information provided
+by CONFIG_RCU_CPU_STALL_CPUTIME=y.
 
-This situation can be improved by displaying the number of interrupts
-and the CPU time that they have consumed.  Diagnosing other types
-of stalls can be eased by also providing the count of softirqs and
-the CPU time that they consumed as well as the number of context
-switches and the task-level CPU time consumed.
-
-Consider the following output given this change:
-
-rcu: INFO: rcu_preempt self-detected stall on CPU
-rcu:     0-....: (1250 ticks this GP) <omitted>
-rcu:          hardirqs   softirqs   csw/system
-rcu:  number:      624         45            0
-rcu: cputime:       69          1         2425   ==> 2500(ms)
-
-This output shows that the number of hard and soft interrupts is small,
-there are no context switches, and the system takes up a lot of time. This
-indicates that the current task is looping with preemption disabled.
-
-The impact on system performance is negligible because snapshot is
-recorded only once for all continuous RCU stalls.
-
-This added debugging information is suppressed by default and can be
-enabled by building the kernel with CONFIG_RCU_CPU_STALL_CPUTIME=y or
-by booting with rcupdate.rcu_cpu_stall_cputime=1.
+[ paulmck: Apply wordsmithing. ]
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- .../admin-guide/kernel-parameters.txt         |  6 ++++
- kernel/rcu/Kconfig.debug                      | 11 +++++++
- kernel/rcu/rcu.h                              |  1 +
- kernel/rcu/tree.c                             | 17 +++++++++++
- kernel/rcu/tree.h                             | 19 ++++++++++++
- kernel/rcu/tree_stall.h                       | 29 +++++++++++++++++++
- kernel/rcu/update.c                           |  2 ++
- 7 files changed, 85 insertions(+)
+ Documentation/RCU/stallwarn.rst | 88 +++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a465d5242774af8..2729f3ad11d108b 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5082,6 +5082,12 @@
- 			rcupdate.rcu_cpu_stall_timeout to be used (after
- 			conversion from seconds to milliseconds).
+diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+index dfa4db8c0931eaf..5e24e849290a286 100644
+--- a/Documentation/RCU/stallwarn.rst
++++ b/Documentation/RCU/stallwarn.rst
+@@ -390,3 +390,91 @@ for example, "P3421".
  
-+	rcupdate.rcu_cpu_stall_cputime= [KNL]
-+			Provide statistics on the cputime and count of
-+			interrupts and tasks during the sampling period. For
-+			multiple continuous RCU stalls, all sampling periods
-+			begin at half of the first RCU stall timeout.
+ It is entirely possible to see stall warnings from normal and from
+ expedited grace periods at about the same time during the same run.
 +
- 	rcupdate.rcu_expedited= [KNL]
- 			Use expedited grace-period primitives, for
- 			example, synchronize_rcu_expedited() instead
-diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-index 1b0c41d490f0588..025566a9ba44667 100644
---- a/kernel/rcu/Kconfig.debug
-+++ b/kernel/rcu/Kconfig.debug
-@@ -95,6 +95,17 @@ config RCU_EXP_CPU_STALL_TIMEOUT
- 	  says to use the RCU_CPU_STALL_TIMEOUT value converted from
- 	  seconds to milliseconds.
- 
-+config RCU_CPU_STALL_CPUTIME
-+	bool "Provide additional RCU stall debug information"
-+	depends on RCU_STALL_COMMON
-+	default n
-+	help
-+	  Collect statistics during the sampling period, such as the number of
-+	  (hard interrupts, soft interrupts, task switches) and the cputime of
-+	  (hard interrupts, soft interrupts, kernel tasks) are added to the
-+	  RCU stall report. For multiple continuous RCU stalls, all sampling
-+	  periods begin at half of the first RCU stall timeout.
++RCU_CPU_STALL_CPUTIME
++=====================
 +
- config RCU_TRACE
- 	bool "Enable tracing for RCU"
- 	depends on DEBUG_KERNEL
-diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-index 96122f203187f39..4844dec36bddb48 100644
---- a/kernel/rcu/rcu.h
-+++ b/kernel/rcu/rcu.h
-@@ -231,6 +231,7 @@ extern int rcu_cpu_stall_ftrace_dump;
- extern int rcu_cpu_stall_suppress;
- extern int rcu_cpu_stall_timeout;
- extern int rcu_exp_cpu_stall_timeout;
-+extern int rcu_cpu_stall_cputime;
- int rcu_jiffies_till_stall_check(void);
- int rcu_exp_jiffies_till_stall_check(void);
- 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index ed93ddb8203d42c..e1ff23b2a14d71d 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -866,6 +866,23 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
- 			rdp->rcu_iw_gp_seq = rnp->gp_seq;
- 			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
- 		}
++In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
++rcupdate.rcu_cpu_stall_cputime=1, the following additional information
++is supplied with each RCU CPU stall warning::
 +
-+		if (rcu_cpu_stall_cputime && rdp->snap_record.gp_seq != rdp->gp_seq) {
-+			u64 *cpustat;
-+			struct rcu_snap_record *rsrp;
++rcu:          hardirqs   softirqs   csw/system
++rcu:  number:      624         45            0
++rcu: cputime:       69          1         2425   ==> 2500(ms)
 +
-+			cpustat = kcpustat_cpu(rdp->cpu).cpustat;
++These statistics are collected during the sampling period. The values
++in row "number:" are the number of hard interrupts, number of soft
++interrupts, and number of context switches on the stalled CPU. The
++first three values in row "cputime:" indicate the CPU time in
++milliseconds consumed by hard interrupts, soft interrupts, and tasks
++on the stalled CPU.  The last number is the measurement interval, again
++in milliseconds.  Because user-mode tasks normally do not cause RCU CPU
++stalls, these tasks are typically kernel tasks, which is why only the
++system CPU time are considered.
 +
-+			rsrp = &rdp->snap_record;
-+			rsrp->cputime_irq     = cpustat[CPUTIME_IRQ];
-+			rsrp->cputime_softirq = cpustat[CPUTIME_SOFTIRQ];
-+			rsrp->cputime_system  = cpustat[CPUTIME_SYSTEM];
-+			rsrp->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
-+			rsrp->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
-+			rsrp->nr_csw = nr_context_switches_cpu(rdp->cpu);
-+			rsrp->jiffies = jiffies;
-+			rsrp->gp_seq = rdp->gp_seq;
-+		}
- 	}
- 
- 	return 0;
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index fcb5d696eb1700d..192536916f9a607 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -158,6 +158,23 @@ union rcu_noqs {
- 	u16 s; /* Set of bits, aggregate OR here. */
- };
- 
-+/*
-+ * Record the snapshot of the core stats at half of the first RCU stall timeout.
-+ * The member gp_seq is used to ensure that all members are updated only once
-+ * during the sampling period. The snapshot is taken only if this gp_seq is not
-+ * equal to rdp->gp_seq.
-+ */
-+struct rcu_snap_record {
-+	unsigned long	gp_seq;		/* Track rdp->gp_seq counter */
-+	u64		cputime_irq;	/* Accumulated cputime of hard irqs */
-+	u64		cputime_softirq;/* Accumulated cputime of soft irqs */
-+	u64		cputime_system; /* Accumulated cputime of kernel tasks */
-+	unsigned long	nr_hardirqs;	/* Accumulated number of hard irqs */
-+	unsigned int	nr_softirqs;	/* Accumulated number of soft irqs */
-+	unsigned long long nr_csw;	/* Accumulated number of task switches */
-+	unsigned long   jiffies;	/* Track jiffies value */
-+};
++The sampling period is shown as follows:
++|<------------first timeout---------->|<-----second timeout----->|
++|<--half timeout-->|<--half timeout-->|                          |
++|                  |<--first period-->|                          |
++|                  |<-----------second sampling period---------->|
++|                  |                  |                          |
++|          sampling time point    1st-stall                  2nd-stall
 +
- /* Per-CPU data for read-copy update. */
- struct rcu_data {
- 	/* 1) quiescent-state and grace-period handling : */
-@@ -262,6 +279,8 @@ struct rcu_data {
- 	short rcu_onl_gp_flags;		/* ->gp_flags at last online. */
- 	unsigned long last_fqs_resched;	/* Time of last rcu_resched(). */
- 	unsigned long last_sched_clock;	/* Jiffies of last rcu_sched_clock_irq(). */
-+	struct rcu_snap_record snap_record; /* Snapshot of core stats at half of */
-+					    /* the first RCU stall timeout */
- 
- 	long lazy_len;			/* Length of buffered lazy callbacks. */
- 	int cpu;
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index 5653560573e22d6..7b6afb9c7b96dbe 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -428,6 +428,33 @@ static bool rcu_is_rcuc_kthread_starving(struct rcu_data *rdp, unsigned long *jp
- 	return j > 2 * HZ;
- }
- 
-+static void print_cpu_stat_info(int cpu)
-+{
-+	u64 *cpustat;
-+	struct rcu_snap_record *rsrp;
-+	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
 +
-+	if (!rcu_cpu_stall_cputime)
-+		return;
++The following describes four typical scenarios:
 +
-+	rsrp = &rdp->snap_record;
-+	if (rsrp->gp_seq != rdp->gp_seq)
-+		return;
++1. A CPU looping with interrupts disabled.::
 +
-+	cpustat = kcpustat_cpu(cpu).cpustat;
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:        0          0            0
++   rcu: cputime:        0          0            0   ==> 2500(ms)
 +
-+	pr_err("         hardirqs   softirqs   csw/system\n");
-+	pr_err(" number: %8ld %10d %12lld\n",
-+		kstat_cpu_irqs_sum(cpu) - rsrp->nr_hardirqs,
-+		kstat_cpu_softirqs_sum(cpu) - rsrp->nr_softirqs,
-+		nr_context_switches_cpu(cpu) - rsrp->nr_csw);
-+	pr_err("cputime: %8lld %10lld %12lld   ==> %lld(ms)\n",
-+		div_u64(cpustat[CPUTIME_IRQ] - rsrp->cputime_irq, NSEC_PER_MSEC),
-+		div_u64(cpustat[CPUTIME_SOFTIRQ] - rsrp->cputime_softirq, NSEC_PER_MSEC),
-+		div_u64(cpustat[CPUTIME_SYSTEM] - rsrp->cputime_system, NSEC_PER_MSEC),
-+		jiffies64_to_msecs(jiffies - rsrp->jiffies));
-+}
++   Because interrupts have been disabled throughout the measurement
++   interval, there are no interrupts and no context switches.
++   Furthermore, because CPU time consumption was measured using interrupt
++   handlers, the system CPU consumption is misleadingly measured as zero.
++   This scenario will normally also have "(0 ticks this GP)" printed on
++   this CPU's summary line.
 +
- /*
-  * Print out diagnostic information for the specified stalled CPU.
-  *
-@@ -484,6 +511,8 @@ static void print_cpu_stall_info(int cpu)
- 	       data_race(rcu_state.n_force_qs) - rcu_state.n_force_qs_gpstart,
- 	       rcuc_starved ? buf : "",
- 	       falsepositive ? " (false positive?)" : "");
++2. A CPU looping with bottom halves disabled.
 +
-+	print_cpu_stat_info(cpu);
- }
- 
- /* Complain about starvation of grace-period kthread.  */
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index 738842c4886b235..aec76ccbe1e343b 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -508,6 +508,8 @@ int rcu_cpu_stall_timeout __read_mostly = CONFIG_RCU_CPU_STALL_TIMEOUT;
- module_param(rcu_cpu_stall_timeout, int, 0644);
- int rcu_exp_cpu_stall_timeout __read_mostly = CONFIG_RCU_EXP_CPU_STALL_TIMEOUT;
- module_param(rcu_exp_cpu_stall_timeout, int, 0644);
-+int rcu_cpu_stall_cputime __read_mostly = IS_ENABLED(CONFIG_RCU_CPU_STALL_CPUTIME);
-+module_param(rcu_cpu_stall_cputime, int, 0644);
- #endif /* #ifdef CONFIG_RCU_STALL_COMMON */
- 
- // Suppress boot-time RCU CPU stall warnings and rcutorture writer stall
++   This is similar to the previous example, but with non-zero number of
++   and CPU time consumed by hard interrupts, along with non-zero CPU
++   time consumed by in-kernel execution.::
++
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:      624          0            0
++   rcu: cputime:       49          0         2446   ==> 2500(ms)
++
++   The fact that there are zero softirqs gives a hint that these were
++   disabled, perhaps via local_bh_disable().  It is of course possible
++   that there were no softirqs, perhaps because all events that would
++   result in softirq execution are confined to other CPUs.  In this case,
++   the diagnosis should continue as shown in the next example.
++
++3. A CPU looping with preemption disabled.
++
++   Here, only the number of context switches is zero.::
++
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:      624         45            0
++   rcu: cputime:       69          1         2425   ==> 2500(ms)
++
++   This situation hints that the stalled CPU was looping with preemption
++   disabled.
++
++4. No looping, but massive hard and soft interrupts.::
++
++   rcu:          hardirqs   softirqs   csw/system
++   rcu:  number:       xx         xx            0
++   rcu: cputime:       xx         xx            0   ==> 2500(ms)
++
++   Here, the number and CPU time of hard interrupts are all non-zero,
++   but the number of context switches and the in-kernel CPU time consumed
++   are zero. The number and cputime of soft interrupts will usually be
++   non-zero, but could be zero, for example, if the CPU was spinning
++   within a single hard interrupt handler.
++
++   If this type of RCU CPU stall warning can be reproduced, you can
++   narrow it down by looking at /proc/interrupts or by writing code to
++   trace each interrupt, for example, by referring to show_interrupts().
 -- 
 2.25.1
 
