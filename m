@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C5062301C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A480C623021
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiKIQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 11:25:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S230012AbiKIQZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:25:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbiKIQZ1 (ORCPT
+        with ESMTP id S231384AbiKIQZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 11:25:27 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9488819286
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:25:24 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9EDLMk024619;
-        Wed, 9 Nov 2022 10:24:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=4LdghTqwuCMPOdU9Ut4ETkmJT6zVE1bHF4jdVG2J6p8=;
- b=HD5wmr87wcyfInGnCIRbw6/GHA355PIbu6DG//AUXQK33MInwvfY9G0OibcchpC8x4Hg
- fzgx/AAvFzf6NqN3yVvIXOSKjQHUKM/wkeJr5pQHpL9qtguXbGgo5Zdy4PoYs4eMAvyW
- GTN6JO5w5+pqAvoqEkRi/bd43hHX5/ZlniRVJAeFfmSj0nABTvhBZD7sSbWcN3mqxyBO
- 3X0MYm9uW6ZGJ8qLgeSxll618SHDUp6R+oCv5z3hc20EwMLKCSyCGl+5GqpFkRW7/j1Y
- ZC95ytAUS8zDe5cnbzaOYzHnCE/0YwqZry98qDh+zngmoDfsDHdEDZ6o8aUuDMUB0fI8 0g== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3knn81nj0m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 10:24:14 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.15; Wed, 9 Nov
- 2022 10:24:12 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.15 via Frontend Transport; Wed, 9 Nov 2022 10:24:12 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id ADF88B12;
-        Wed,  9 Nov 2022 16:24:12 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 16:24:12 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Chancel Liu <chancel.liu@nxp.com>
-CC:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <luca.ceresoli@bootlin.com>, <ojeda@kernel.org>,
-        <cmo@melexis.com>, <u.kleine-koenig@pengutronix.de>,
-        <xiaolei.wang@windriver.com>, <steve@sk2.org>,
-        <chi.minghao@zte.com.cn>, <patches@opensource.cirrus.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <shengjiu.wang@nxp.com>
-Subject: Re: [PATCH v2] ASoC: wm8962: Wait for updated value of
- WM8962_CLOCKING1 register
-Message-ID: <20221109162412.GG10437@ediswmail.ad.cirrus.com>
-References: <20221109121354.123958-1-chancel.liu@nxp.com>
+        Wed, 9 Nov 2022 11:25:44 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D5C1A048;
+        Wed,  9 Nov 2022 08:25:42 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 05DEBC000B;
+        Wed,  9 Nov 2022 16:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668011141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=md+3BvVMOqhbT4Mg1/eofVo42NnM0QIADOtucHcIgg4=;
+        b=gF6sAue/cSpFVYdCzn6XaeoAMUvRAr/BsmC8fZpflEJ6rq4f51Dmw+AsyA3tEdtFLjGgrj
+        tPnOphPVGbtNot0izJb5ZAo1Sf1hW3VhIwbn2e/cZQKg79XWffb6+IGIaejZo/roXifsR2
+        Gjcp0vNbtMLQFSNeprS5gc5f0fD+0+RuzrqzJQn92RUAf30+elKjORYPND6L7fiZz8xNmE
+        iwEFgC5dbi+ZqX6ppxaEOT6gN6skuFspwDI90hy2rGq2TvbFBAOGIpwJ0IxDUIU8yj4WoX
+        U83Zl2D9Gv0tfnRoCaCjtAuSDgllp61yxa8WXAOTDfpRlVrHqOiPCR9CApmHPg==
+Date:   Wed, 9 Nov 2022 17:25:37 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: Re: [PATCH 23/23] staging: media: tegra-video: add tegra20 variant
+Message-ID: <20221109172537.0c48f66c@booty>
+In-Reply-To: <20221109141852.729246-24-luca.ceresoli@bootlin.com>
+References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
+        <20221109141852.729246-24-luca.ceresoli@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221109121354.123958-1-chancel.liu@nxp.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: OB147xjjz1wIV99wseqVZ6HmdeMEacsz
-X-Proofpoint-GUID: OB147xjjz1wIV99wseqVZ6HmdeMEacsz
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-Spam-Score: 400
+X-GND-Status: SPAM
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 08:13:54PM +0800, Chancel Liu wrote:
-> DSPCLK_DIV field in WM8962_CLOCKING1 register is used to generate
-> correct frequency of LRCLK and BCLK. Sometimes the read-only value
-> can't be updated timely after enabling SYSCLK. This results in wrong
-> calculation values. Delay is introduced here to wait for newest value
-> from register. The time of the delay should be at least 500~1000us
-> according to test.
-> 
-> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
-> ---
+On Wed,  9 Nov 2022 15:18:52 +0100
+luca.ceresoli@bootlin.com wrote:
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> +static int tegra20_vi_enable(struct tegra_vi *vi, bool on)
+> +{
+> +	/* from arch/arm/mach-tegra/iomap.h */
+> +	const phys_addr_t TEGRA_APB_MISC_BASE = 0x70000000;
+> +	const unsigned long reg_offset = 0x42c;
+> +	void __iomem *apb_misc;
+> +	u32 val;
+> +
+> +	apb_misc = ioremap(TEGRA_APB_MISC_BASE, PAGE_SIZE);
+> +	if (!apb_misc)
+> +		apb_misc = ERR_PTR(-ENOENT);
+> +	if (IS_ERR(apb_misc))
+> +		return dev_err_probe(vi->dev, PTR_ERR(apb_misc), "cannot access APB_MISC");
+> +
+> +	val = readl(apb_misc + reg_offset);
+> +	writel(val | (!!on), apb_misc + reg_offset);
 
-Thanks,
-Charles
+Sorry, there is a mistake here, the bit should be set to 0 when
+on==false, but this code does not do that. This will be fixed in v2.
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
