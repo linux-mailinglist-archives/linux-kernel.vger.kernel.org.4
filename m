@@ -2,136 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E85622451
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C084462244D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiKIHBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 02:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S229584AbiKIG7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 01:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKIHBH (ORCPT
+        with ESMTP id S229537AbiKIG65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 02:01:07 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF2517A8E;
-        Tue,  8 Nov 2022 23:01:06 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id r18so15426027pgr.12;
-        Tue, 08 Nov 2022 23:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JbeXqCLYOBAkSu17j1Ax0Kt+U7TED+WWpiIs96MmSJQ=;
-        b=ETQb1tI1n+hbxllKBl6w8Mzyr7cXZO/XD+x0ciAoyUVLYi8hvbbWAMwRBbk+lPUh/w
-         PCA94vr5XLHgQYfaTLUfkBwneUE/weZaQB5w1p2mFJQJeeiWlKZhDoOyakxO1YTFTnTt
-         v11r3VFzj1zLLAk+kP4tS+nTjpVxvy+StKqvKTdbKzGWYo0CnM5r2igLKQj3X6CvzphC
-         Ns0AAzcbmL/GK7jzrouVpuQnCA+63fQPF8S061YvoOn80+H2fb2BXzeWO0MA0lpMGQuz
-         b+NFxF/BgQ12eDG/5fITtPjlhVDeyN0K3POf8hCLZR5Yufx1U6nzBQp4zckMbDukYrlQ
-         fMVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JbeXqCLYOBAkSu17j1Ax0Kt+U7TED+WWpiIs96MmSJQ=;
-        b=U/nsEXkBsqZh5F/s2GPFellFRtQvYF9fPjFvmpb7cdSE9VJtHVZt0TV4a55a1OUHWk
-         Lqur5ThFPbptqZr6bsNndhkQJmqhbNioOmamYhRcb4HwFNVluouHjkvwo4esBRzT5csY
-         4xHLO9GSHVekOFYc+zS3aXE5GJTV3eqqM8pqku3jlno1YCddewfsEt5/KjEfSZ61m1Mb
-         dTixtI0Q8nNw9ltOuqgbLDUBaxNV8Me+gdNlprrAssiblutdS0zWZa04LNas2nHlm1mn
-         EU+Y5n1aAcOavGuf7pPJpVaCZl8KTo0EeSA+TzZE08Re2vZtKLqJNrbHM+HmQh7Yvkgb
-         yPTQ==
-X-Gm-Message-State: ACrzQf0luMkWmU347xHUqkrGSwpegA9xDQW0OukKtsaGpIqhKPr0EZsH
-        wlhw/iIdczcwshRWdXAxlZY=
-X-Google-Smtp-Source: AMsMyM795gszhK4X1M96+Do8Mj4ERULjT+qjBrDIXvIiGLRDDaHXLJtpBwdSnxCUjX6nA+ExwUhWig==
-X-Received: by 2002:a05:6a00:234c:b0:56c:f6e6:976 with SMTP id j12-20020a056a00234c00b0056cf6e60976mr59755657pfj.32.1667977265677;
-        Tue, 08 Nov 2022 23:01:05 -0800 (PST)
-Received: from localhost ([36.152.119.226])
-        by smtp.gmail.com with ESMTPSA id z25-20020aa79499000000b0056ca3569a66sm7476726pfk.129.2022.11.08.23.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 23:01:05 -0800 (PST)
-Date:   Wed, 9 Nov 2022 07:00:45 +0000
-From:   Wei Gong <gongwei833x@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
-Message-ID: <20221109064807.GA903798@zander>
-References: <20221109043617.GA900761@zander>
- <20221109051234.GA532217@bhelgaas>
+        Wed, 9 Nov 2022 01:58:57 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250CF63B1
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 22:58:54 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6bR32l0gzmVcf;
+        Wed,  9 Nov 2022 14:58:39 +0800 (CST)
+Received: from huawei.com (10.67.175.21) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 14:58:51 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <joseph.qi@linux.alibaba.com>
+CC:     <jlbec@evilplan.org>, <linux-kernel@vger.kernel.org>,
+        <lizetao1@huawei.com>, <mark@fasheh.com>,
+        <ocfs2-devel@oss.oracle.com>, <srinivas.eeda@oracle.com>
+Subject: [PATCH v2] ocfs2: fix memory leak in ocfs2_mount_volume()
+Date:   Wed, 9 Nov 2022 15:46:27 +0800
+Message-ID: <20221109074627.2303950-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <05c24286-427d-e572-aa70-8f1d882b9602@linux.alibaba.com>
+References: <05c24286-427d-e572-aa70-8f1d882b9602@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109051234.GA532217@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.21]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 11:12:34PM -0600, Bjorn Helgaas wrote:
-> On Wed, Nov 09, 2022 at 04:36:17AM +0000, Wei Gong wrote:
-> > O Tue, Nov 08, 2022 at 01:02:35PM -0500, Michael S. Tsirkin wrote:
-> > > On Tue, Nov 08, 2022 at 11:58:53AM -0600, Bjorn Helgaas wrote:
-> > > > On Tue, Nov 08, 2022 at 10:19:07AM -0500, Michael S. Tsirkin wrote:
-> > > > > On Tue, Nov 08, 2022 at 09:02:28AM -0600, Bjorn Helgaas wrote:
-> > > > > > On Tue, Nov 08, 2022 at 08:53:00AM -0600, Bjorn Helgaas wrote:
-> > > > > > > On Wed, Oct 26, 2022 at 02:11:21AM -0400, Michael S. Tsirkin wrote:
-> > > > > > > > virtio uses the same driver for VFs and PFs.
-> > > > > > > > Accordingly, pci_device_is_present is used to detect
-> > > > > > > > device presence. This function isn't currently working
-> > > > > > > > properly for VFs since it attempts reading device and
-> > > > > > > > vendor ID.
-> > > > > > > 
-> > > > > > > > As VFs are present if and only if PF is present,
-> > > > > > > > just return the value for that device.
-> > > > > > > 
-> > > > > > > VFs are only present when the PF is present *and* the PF
-> > > > > > > has VF Enable set.  Do you care about the possibility that
-> > > > > > > VF Enable has been cleared?
-> > > > 
-> > > > I think you missed this question.
-> > > 
-> > > I was hoping Wei will answer that, I don't have the hardware.
-> > 
-> > In my case I don't care that VF Enable has been cleared.
-> 
-> OK, let me rephrase that :)
-> 
-> I think pci_device_is_present(VF) should return "false" if the PF is
-> present but VFs are disabled.
+There is a memory leak reported by kmemleak:
 
-I agree.
+  unreferenced object 0xffff88810cc65e60 (size 32):
+    comm "mount.ocfs2", pid 23753, jiffies 4302528942 (age 34735.105s)
+    hex dump (first 32 bytes):
+      10 00 00 00 00 00 00 00 00 01 01 01 01 01 01 01  ................
+      01 01 01 01 01 01 01 01 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      [<ffffffff8170f73d>] __kmalloc+0x4d/0x150
+      [<ffffffffa0ac3f51>] ocfs2_compute_replay_slots+0x121/0x330 [ocfs2]
+      [<ffffffffa0b65165>] ocfs2_check_volume+0x485/0x900 [ocfs2]
+      [<ffffffffa0b68129>] ocfs2_mount_volume.isra.0+0x1e9/0x650 [ocfs2]
+      [<ffffffffa0b7160b>] ocfs2_fill_super+0xe0b/0x1740 [ocfs2]
+      [<ffffffff818e1fe2>] mount_bdev+0x312/0x400
+      [<ffffffff819a086d>] legacy_get_tree+0xed/0x1d0
+      [<ffffffff818de82d>] vfs_get_tree+0x7d/0x230
+      [<ffffffff81957f92>] path_mount+0xd62/0x1760
+      [<ffffffff81958a5a>] do_mount+0xca/0xe0
+      [<ffffffff81958d3c>] __x64_sys_mount+0x12c/0x1a0
+      [<ffffffff82f26f15>] do_syscall_64+0x35/0x80
+      [<ffffffff8300006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-> 
-> If you think it should return "true" when the PF is present and VFs
-> are disabled, we should explain why.
+This call stack is related to two problems. Firstly, the ocfs2 super uses
+"replay_map" to trace online/offline slots, in order to recover offline
+slots during recovery and mount. But when ocfs2_truncate_log_init()
+returns an error in ocfs2_mount_volume(), the memory of "replay_map"
+will not be freed in error handling path. Secondly, the memory of
+"replay_map" will not be freed if d_make_root() returns an error in
+ocfs2_fill_super(). But the memory of "replay_map" will be freed normally
+when completing recovery and mount in ocfs2_complete_mount_recovery().
 
-I don't think it should return "true" when the PF is present and VFS
-are disabled.
+Fix the first problem by adding error handling path to free "replay_map"
+when ocfs2_truncate_log_init() fails. And fix the second problem by
+calling ocfs2_free_replay_slots(osb) in the error handling path
+"out_dismount". In addition, since ocfs2_free_replay_slots() is static,
+it is necessary to remove its static attribute and declare it in header
+file.
 
-I think pci_device_is_present(VF) should return "true" if the PF is
-present and VFs are enabled.
-In the current implementation, it cannot correctly judge whether the
-VF is present.
-When the PF is present and VFs are enabled, I think it should return
-"true", but in fact it returns "false"
+Fixes: 9140db04ef18 ("ocfs2: recover orphans in offline slots during recovery and mount")
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+v1 was posted at: https://lore.kernel.org/all/20221108152516.1189165-1-lizetao1@huawei.com/
+v1 -> v2: Rename the label "out_truncate_log" to "out_check_volume"
 
-Through your comments, I realize that this patch is inaccurate in
-judging whether VF present in the case of "the PF is present and 
-VFs are disabled"
+ fs/ocfs2/journal.c | 2 +-
+ fs/ocfs2/journal.h | 1 +
+ fs/ocfs2/super.c   | 5 ++++-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-Thinks,
-Wei
+diff --git a/fs/ocfs2/journal.c b/fs/ocfs2/journal.c
+index 126671e6caed..3fb98b4569a2 100644
+--- a/fs/ocfs2/journal.c
++++ b/fs/ocfs2/journal.c
+@@ -157,7 +157,7 @@ static void ocfs2_queue_replay_slots(struct ocfs2_super *osb,
+ 	replay_map->rm_state = REPLAY_DONE;
+ }
+ 
+-static void ocfs2_free_replay_slots(struct ocfs2_super *osb)
++void ocfs2_free_replay_slots(struct ocfs2_super *osb)
+ {
+ 	struct ocfs2_replay_map *replay_map = osb->replay_map;
+ 
+diff --git a/fs/ocfs2/journal.h b/fs/ocfs2/journal.h
+index 969d0aa28718..41c382f68529 100644
+--- a/fs/ocfs2/journal.h
++++ b/fs/ocfs2/journal.h
+@@ -150,6 +150,7 @@ int ocfs2_recovery_init(struct ocfs2_super *osb);
+ void ocfs2_recovery_exit(struct ocfs2_super *osb);
+ 
+ int ocfs2_compute_replay_slots(struct ocfs2_super *osb);
++void ocfs2_free_replay_slots(struct ocfs2_super *osb);
+ /*
+  *  Journal Control:
+  *  Initialize, Load, Shutdown, Wipe a journal.
+diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
+index 42c993e53924..0b0e6a132101 100644
+--- a/fs/ocfs2/super.c
++++ b/fs/ocfs2/super.c
+@@ -1159,6 +1159,7 @@ static int ocfs2_fill_super(struct super_block *sb, void *data, int silent)
+ out_dismount:
+ 	atomic_set(&osb->vol_state, VOLUME_DISABLED);
+ 	wake_up(&osb->osb_mount_event);
++	ocfs2_free_replay_slots(osb);
+ 	ocfs2_dismount_volume(sb, 1);
+ 	goto out;
+ 
+@@ -1822,12 +1823,14 @@ static int ocfs2_mount_volume(struct super_block *sb)
+ 	status = ocfs2_truncate_log_init(osb);
+ 	if (status < 0) {
+ 		mlog_errno(status);
+-		goto out_system_inodes;
++		goto out_check_volume;
+ 	}
+ 
+ 	ocfs2_super_unlock(osb, 1);
+ 	return 0;
+ 
++out_check_volume:
++	ocfs2_free_replay_slots(osb);
+ out_system_inodes:
+ 	if (osb->local_alloc_state == OCFS2_LA_ENABLED)
+ 		ocfs2_shutdown_local_alloc(osb);
+-- 
+2.25.1
 
-> 
-> We would also need to fix the commit log, because "VFs are present if
-> and only if PF is present" is not actually true.  "VFs are present
-> only if PF is present" is true, but "VFs are present if PF is present"
-> is not.
-> 
-> Bjorn
