@@ -2,94 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E56622F4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75C0622F53
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiKIPqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S231923AbiKIPrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiKIPql (ORCPT
+        with ESMTP id S231960AbiKIPq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:46:41 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24F810FD3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:46:40 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso2275999pjc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:46:40 -0800 (PST)
+        Wed, 9 Nov 2022 10:46:59 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A44A1D644
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:46:56 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id r3so21467848yba.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:46:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xZ2A0m4TgBzszRDy9z9vcXOFUGK9jfh5OUJcLxvh/h0=;
-        b=LDvkCn3rxHci73vfoao/encxzaYvwC+2pzLmEgA/IFDUofNyHB8092Sen50KULTiTA
-         dkcRHp+EhqjHTdPFRNtFLyTdeHCH/7sk/QMTMt2X8UlodrGObVqKyOnRBhibjutc20nD
-         jsjEQCYlQtnXEWUB2HxkS9BBRVztNTIPcxD6FqAjgTUs8vc5epRGrFQR2u0XdnUtfPJm
-         z8eRsHgHIhkztpekuFrxNpkiBpGf13PoYvNcXSGyoyfvvaoYNm4fOEdzNSW3vtM6R+Uw
-         g90uu6XQkcCiN15cBJ+kgz/fMk7jISkFLWeNHCDlQWg7DFPZXas/BzLACOEY/HyDWy34
-         rYgw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+db+5Z9ir7Cyd5yAhiscv5NRodvbCYjVQnMRArw9osk=;
+        b=vjaTfhZqXUBAEwNj/ZgtOMYYqfk+85ZTZOEhAGlRKCZEIj4s7pLHGwM6jXl3TAXA+l
+         l6l+62k+u+fawUq+NOl10enWS6+qhIJYfsJdkBLbN1ItDfIdeoxF5UIMaSpzfC3Ja2lb
+         wb9Z5V8zeO+0fhUyF3ymzmtdSqFLUZvyHlA5MEijisce4GcjqguvQ459E0tZkDM+3P4V
+         PSP5kpQHxZVgq+K5Xg8Mf6Zub+xuDj3AdK6Uv9/LKupUCPCibMdk7xRpmXzXKzSTjkKZ
+         3ERtenjh6FmwNlgXdlBcFeArChsbJQGU4rqTokQSapalbqZ0NyzhQZvPWzPzZc4FzI3g
+         Smpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xZ2A0m4TgBzszRDy9z9vcXOFUGK9jfh5OUJcLxvh/h0=;
-        b=hHpkDgLMsgL3doNgv8CLUOBmE+HzIVz3/hw4qTNKzsDxdInm+CS836JH72RyBsGpKf
-         BB9gW1uNbI1N8Ez5EbTLM2VktYtCJd0PyUkNeRxdQ+XHvczjPbYec0UuQSXeNWzf3TsB
-         nx2sSbKIHL9n2i4KO/Tg6AfTwX9w2ojweVQXPcnybmP34mVWUeSx/u676XEsaWaxuQvU
-         YlVj0bugKagYvOfgeCONbh0fAEOL1n432FVOvt5SnnMCUUM8IwnD7hjUikArsfnT05S1
-         7jc3UEHcXaV3d0nPJ2tmYx4D18ZfQdag4dfavPMMqaDSjLAkdc2rP07X0M98+8ozMjiN
-         VLOg==
-X-Gm-Message-State: ACrzQf2kEK2wbUWf4ooDJofTl7ZZiaeAPTsn7aLWH+Nax85kguVLEFfo
-        ZB6N1CAqC0GxhQNoX5zYcii6Ti8p8jGvkA==
-X-Google-Smtp-Source: AMsMyM5I67vMBpnvc+5aW9RaOItLwDL+K5Rvx5TdNxohisuykvfikm1Y1KaH1SNTaKXf271XZhPnsw==
-X-Received: by 2002:a17:90a:7523:b0:213:8a69:c502 with SMTP id q32-20020a17090a752300b002138a69c502mr63282627pjk.153.1668008799945;
-        Wed, 09 Nov 2022 07:46:39 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709027e4100b0017f5ba1fffasm9171714pln.297.2022.11.09.07.46.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 07:46:39 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 9 Nov 2022 05:46:37 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
-Subject: Re: [PATCH] fs/kernfs: Fix lockdep warning in kernfs_active()
-Message-ID: <Y2vLXWvZ9uwaVICx@slm.duckdns.org>
-References: <0000000000002473fd05eca7540a@google.com>
- <20221109120415.55759-1-zhouchengming@bytedance.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+db+5Z9ir7Cyd5yAhiscv5NRodvbCYjVQnMRArw9osk=;
+        b=OrTZQCeHSpN7sH6yMD5Mn7GotmVcR3HvT/FOJBiI6RttSI3gS5PET7noSiVYT5sbDt
+         zvnd7DHHHzkOyvdTMObNYOoF0300mjFLWjOF8a32noyQVlT0BuodSzLrXWEh8BDXASBo
+         vxT58RcA6Hl+1+pI/6V6yKjj8D66O/ZEj0Bu9pNzPtGTvWxRTftC/1Fi+K3Y+IhS2i6Q
+         EQYTucd/yaukVctccvP7kJhqYs2Tmx2Nu3JJ0C8utEpX7AaLQQov6zAYNTshFX+8KG0F
+         2AuEIOkXigYeCK4dp8v6ZoQTLY2draMrYjjlFRRpZAUinVv73FXY+JReJ/RqT1/3DRIP
+         jbWA==
+X-Gm-Message-State: ACrzQf0MbkJkdnbmwj6FU0UjbHNafZD7qFW0Dl8zeqm9+nr2TObO0yYw
+        4CaY4nXPZwBBVCHefaOXnXJk2iS+aSUMp8n28zk9gp/cATunww==
+X-Google-Smtp-Source: AMsMyM7QSOPHgH1HzsMpetlXtet8fhrPzU7Fp5FnD4HjiTTq1nkptf1jD3guHJXHhlcmMMI/F0PXzi6A7FgFAIWxGaM=
+X-Received: by 2002:a5b:142:0:b0:6c4:8a9:e4d2 with SMTP id c2-20020a5b0142000000b006c408a9e4d2mr1093482ybp.164.1668008815284;
+ Wed, 09 Nov 2022 07:46:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109120415.55759-1-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221108133328.351887714@linuxfoundation.org>
+In-Reply-To: <20221108133328.351887714@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 9 Nov 2022 21:16:44 +0530
+Message-ID: <CA+G9fYudWjUPHjsQG-Fhc=DoxeEfg2+5ZOS4rAFktTcZ-G_hfg@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/40] 4.14.299-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 08:04:15PM +0800, Chengming Zhou wrote:
-> syzbot found a lockdep warning in kernfs_find_and_get_node_by_id(),
-> bisected to the commit c25491747b21 ("kernfs: Add KERNFS_REMOVING flags"),
-> which didn't hold kernfs_rwsem before call kernfs_active(kn).
-> 
-> Since kernfs_find_and_get_node_by_id() doesn't have to get active count
-> of kn, only need to get a stable refcount of kn, so it should be enough
-> to just check kn has been KERNFS_ACTIVATED.
-> 
-> Reported-by: syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
-> Fixes: c25491747b21 ("kernfs: Add KERNFS_REMOVING flags")
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+On Tue, 8 Nov 2022 at 19:14, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.299 release.
+> There are 40 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.299-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Acked-by: Tejun Heo <tj@kernel.org>
 
-Thanks.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
-tejun
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.14.299-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 85bb1cff28dd862a007c7d7eaada3e4f669566e2
+* git describe: v4.14.298-41-g85bb1cff28dd
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14.298-41-g85bb1cff28dd
+
+## Test Regressions (compared to v4.14.297)
+
+## Metric Regressions (compared to v4.14.297)
+
+## Test Fixes (compared to v4.14.297)
+
+## Metric Fixes (compared to v4.14.297)
+
+## Test result summary
+total: 111619, pass: 93601, fail: 1960, skip: 15138, xfail: 920
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 313 total, 308 passed, 5 failed
+* arm64: 53 total, 50 passed, 3 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 41 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 20 total, 19 passed, 1 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 51 total, 50 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
