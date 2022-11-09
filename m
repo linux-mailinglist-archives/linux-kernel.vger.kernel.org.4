@@ -2,154 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B72622EC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFDE622ECD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbiKIPJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S231902AbiKIPNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:13:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbiKIPJb (ORCPT
+        with ESMTP id S231841AbiKIPNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:09:31 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1A81CB24;
-        Wed,  9 Nov 2022 07:09:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1668006569;
-        bh=JEJysdOirf9b1qalbUU8Yx+Cw0Eu6WznZk97FtOqlTs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ovXcExtRmcK8u+r/oQWKDojSsbEI+lGG949UMreX0oANwWktQFsc5YqvTvaWYKdcV
-         cWkP7wQL5qfofI9Ki36j7WctaX4iAVoUZgIPsXa+AwJVVjjv9vghWbKLm9Yghj1rSg
-         C0MG+pKKaEJMM8qgNUcINXIv6w8DmfC+4BJshlSiO0qs0c8VvjxbmmhJkcmovvVwnj
-         uNhPzXCBpEFC6Czcb93bohOF3Cng144ViIMfGoda1NdfqZ7lqNCUkErPuVf3c+GdBv
-         FMS/ck79UxdQYh50q9otR1Vw+6bV9uCgMY+1Rhbalm07oXHyAwnXnArcteGaeZOSUC
-         9rTjHH2LhidIA==
-Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N6pKN3TpczgLh;
-        Wed,  9 Nov 2022 10:09:28 -0500 (EST)
-Message-ID: <a438952f-7002-1ed6-18a7-708178a97ba4@efficios.com>
-Date:   Wed, 9 Nov 2022 10:09:36 -0500
+        Wed, 9 Nov 2022 10:13:40 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AC0A81115B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:13:38 -0800 (PST)
+Received: (qmail 511709 invoked by uid 1000); 9 Nov 2022 10:13:37 -0500
+Date:   Wed, 9 Nov 2022 10:13:37 -0500
+From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+To:     jiantao zhang <water.zhangjiantao@huawei.com>
+Cc:     =?utf-8?B?6Jab5rab?= <xuetao09@huawei.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Caiyadong <caiyadong@huawei.com>,
+        xuhaiyang <xuhaiyang5@hisilicon.com>, suzhuangluan@hisilicon.com
+Subject: Re: [PATCH] USB: gadget: Fix use-after-free during usb config switch
+Message-ID: <Y2vDoeEY48egxrvW@rowland.harvard.edu>
+References: <20221109125315.2959-1-xuetao09@huawei.com>
+ <eba9e5db-a31f-8061-ed87-bf4c426e4e8d@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v5 08/24] sched: Introduce per memory space current
- virtual cpu id
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Chris Kennelly <ckennelly@google.com>
-References: <20221103200359.328736-1-mathieu.desnoyers@efficios.com>
- <20221103200359.328736-9-mathieu.desnoyers@efficios.com>
- <Y2t2DcHHLVB3tDfw@hirez.programming.kicks-ass.net>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <Y2t2DcHHLVB3tDfw@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eba9e5db-a31f-8061-ed87-bf4c426e4e8d@huawei.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-09 04:42, Peter Zijlstra wrote:
-> On Thu, Nov 03, 2022 at 04:03:43PM -0400, Mathieu Desnoyers wrote:
-> 
->> +void sched_vcpu_exit_signals(struct task_struct *t)
->> +{
->> +	struct mm_struct *mm = t->mm;
->> +	unsigned long flags;
->> +
->> +	if (!mm)
->> +		return;
->> +	local_irq_save(flags);
->> +	mm_vcpu_put(mm, t->mm_vcpu);
->> +	t->mm_vcpu = -1;
->> +	t->mm_vcpu_active = 0;
->> +	local_irq_restore(flags);
->> +}
->> +
->> +void sched_vcpu_before_execve(struct task_struct *t)
->> +{
->> +	struct mm_struct *mm = t->mm;
->> +	unsigned long flags;
->> +
->> +	if (!mm)
->> +		return;
->> +	local_irq_save(flags);
->> +	mm_vcpu_put(mm, t->mm_vcpu);
->> +	t->mm_vcpu = -1;
->> +	t->mm_vcpu_active = 0;
->> +	local_irq_restore(flags);
->> +}
->> +
->> +void sched_vcpu_after_execve(struct task_struct *t)
->> +{
->> +	struct mm_struct *mm = t->mm;
->> +	unsigned long flags;
->> +
->> +	WARN_ON_ONCE((t->flags & PF_KTHREAD) || !t->mm);
->> +
->> +	local_irq_save(flags);
->> +	t->mm_vcpu = mm_vcpu_get(mm);
->> +	t->mm_vcpu_active = 1;
->> +	local_irq_restore(flags);
->> +	rseq_set_notify_resume(t);
->> +}
-> 
->> +static inline void mm_vcpu_put(struct mm_struct *mm, int vcpu)
->> +{
->> +	lockdep_assert_irqs_disabled();
->> +	if (vcpu < 0)
->> +		return;
->> +	spin_lock(&mm->vcpu_lock);
->> +	__cpumask_clear_cpu(vcpu, mm_vcpumask(mm));
->> +	spin_unlock(&mm->vcpu_lock);
->> +}
->> +
->> +static inline int mm_vcpu_get(struct mm_struct *mm)
->> +{
->> +	int ret;
->> +
->> +	lockdep_assert_irqs_disabled();
->> +	spin_lock(&mm->vcpu_lock);
->> +	ret = __mm_vcpu_get(mm);
->> +	spin_unlock(&mm->vcpu_lock);
->> +	return ret;
->> +}
-> 
-> 
-> This:
-> 
-> 	local_irq_disable()
-> 	spin_lock()
-> 
-> thing is a PREEMPT_RT anti-pattern.
-> 
-> At the very very least this should then be raw_spin_lock(), not in the
-> least because you're calling this from under rq->lock, which itself is a
-> raw_spin_lock_t.
+Was this supposed to be an actual patch submission?  It doesn't look 
+like it, because each line of the email begins with "> ".
 
-Very good point, will fix using raw_spinlock_t.
+On Wed, Nov 09, 2022 at 10:11:51PM +0800, jiantao zhang wrote:
+> > In the process of switching USB config from rndis to other config,
+> > if function gadget->ops->pullup() return an error,it will inevitably
+> > cause a system panic(use after free).
+> > 
+> > Analysis as follows:
+> > =====================================================================
+> > (1) write /config/usb_gadget/g1/UDC "none"   (init.usb.configfs.rc:2)
+> > 
+> > gether_disconnect+0x2c/0x1f8           (dev->port_usb = NULL)
+> > rndis_disable+0x4c/0x74
+> > composite_disconnect+0x74/0xb0
+> > configfs_composite_disconnect+0x60/0x7c
+> > usb_gadget_disconnect+0x70/0x124
+> > usb_gadget_unregister_driver+0xc8/0x1d8
+> > gadget_dev_desc_UDC_store+0xec/0x1e4
+> > 
+> > In general, pointer dev->port will be set to null.
+> > In function usb_gadget_disconnect(),gadget->udc->driver->disconnect()
+> > will not be called when gadget->ops->pullup() return an error, therefore,
+> > pointer dev->port will not be set to NULL.
+> > If pointer dev->port_usb is not null, it will cause an exception of using
+> > the freed memory in step3.
 
-Thanks,
+Good point.
 
-Mathieu
+...
+> > Through above analysis, i think gadget->udc->driver->disconnect() need
+> > to be called even if gadget->udc->driver->disconnect() return an error.
 
-> 
+You mean "even if gadget->ops->pullup() returns an error".  That seems 
+reasonable.  The only reason for the ->pullup callback to fail is if the 
+hardware doesn't support it, but gadget drivers sometimes need to be 
+unloaded regardless of the hardware's capabilities.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+> > This reverts commit 0a55187a1ec8c03d0619e7ce41d10fdc39cff036
 
+But this is not reasonable.  You should change the code so that it does 
+what you want: Make it call driver->disconnect() even if ops->pullup() 
+returns an error.  Don't revert an entire commit just because of one 
+side effect.
+
+> > I think this change is a code optimization, not a solution to specific
+> > problem. And i think this problem is caused by this change,revert it can
+> > solve this problem.
+
+That commit was not just a code optimization.  It did fix a problem: 
+Some UDCs would not call driver->disconnect() because they expected the 
+core to make the call for them.
+
+> > Of course, my understanding may be inaccurate.There may be a better
+> > solution to this problem. If possible, please give some suggestions,
+> > thanks.
+
+Simply move the lines which grab the mutex and do the callback after 
+the "if" statement, so that they will run regardless of what 
+ops->pullup() returns.
+
+Alan Stern
+
+> > Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
+> > callback from usb_gadget_disconnect())
+> > 
+> > Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+> > Signed-off-by: TaoXue <xuetao09@huawei.com>
+> > ---
+> >   drivers/usb/gadget/udc/core.c | 20 +++++++++++---------
+> >   1 file changed, 11 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> > index c63c0c2cf649..b502b2ac4824 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -707,9 +707,6 @@ EXPORT_SYMBOL_GPL(usb_gadget_connect);
+> >    * as a disconnect (when a VBUS session is active).  Not all systems
+> >    * support software pullup controls.
+> >    *
+> > - * Following a successful disconnect, invoke the ->disconnect() callback
+> > - * for the current gadget driver so that UDC drivers don't need to.
+> > - *
+> >    * Returns zero on success, else negative errno.
+> >    */
+> >   int usb_gadget_disconnect(struct usb_gadget *gadget)
+> > @@ -734,13 +731,8 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
+> >   	}
+> >   	ret = gadget->ops->pullup(gadget, 0);
+> > -	if (!ret) {
+> > +	if (!ret)
+> >   		gadget->connected = 0;
+> > -		mutex_lock(&udc_lock);
+> > -		if (gadget->udc->driver)
+> > -			gadget->udc->driver->disconnect(gadget);
+> > -		mutex_unlock(&udc_lock);
+> > -	}
+> >   out:
+> >   	trace_usb_gadget_disconnect(gadget, ret);
+> > @@ -1532,6 +1524,11 @@ static void gadget_unbind_driver(struct device *dev)
+> >   	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+> >   	usb_gadget_disconnect(gadget);
+> > +
+> > +	mutex_lock(&udc_lock);
+> > +	udc->driver->disconnect(udc->gadget);
+> > +	mutex_unlock(&udc_lock);
+> > +
+> >   	usb_gadget_disable_async_callbacks(udc);
+> >   	if (gadget->irq)
+> >   		synchronize_irq(gadget->irq);
+> > @@ -1626,6 +1623,11 @@ static ssize_t soft_connect_store(struct device *dev,
+> >   		usb_gadget_connect(udc->gadget);
+> >   	} else if (sysfs_streq(buf, "disconnect")) {
+> >   		usb_gadget_disconnect(udc->gadget);
+> > +
+> > +		mutex_lock(&udc_lock);
+> > +		udc->driver->disconnect(udc->gadget);
+> > +		mutex_unlock(&udc_lock);
+> > +
+> >   		usb_gadget_udc_stop(udc);
+> >   	} else {
+> >   		dev_err(dev, "unsupported command '%s'\n", buf);
