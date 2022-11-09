@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDA56236BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 23:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CE96236BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 23:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiKIWnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 17:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S231864AbiKIWnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 17:43:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiKIWm7 (ORCPT
+        with ESMTP id S232180AbiKIWnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 17:42:59 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679D91B9CC;
-        Wed,  9 Nov 2022 14:42:57 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id k7so45350pll.6;
-        Wed, 09 Nov 2022 14:42:57 -0800 (PST)
+        Wed, 9 Nov 2022 17:43:00 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332E51D652;
+        Wed,  9 Nov 2022 14:42:59 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id k7so45404pll.6;
+        Wed, 09 Nov 2022 14:42:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vb0Gs488yvsxkSMkYVmJzJWdckJ7k6xbmeU+rrY4bs0=;
-        b=o814sDfrZd0iixpQ/zwFRvuqLuGxqhGS8tNbUNhT14+GIvjsr7fRW8qHjomICh/BKx
-         oNUSXtVpudNvDeZFPQgBmzpDk/Z9fLtidJjqOkciv7yt4oqQds9NVc0PQtJovrIO+pJD
-         M12bmMaCXsPgWQqZcjrI30P3LpjOJiu8e8RWV4o6DDTl5CFKITDZFiQGgkoK3yv1bm6n
-         tH6/ONZ+nzgIItL0mr0ajpL4XTHdu68AzB57PJcKsefcA+I8WXk8JG7Tojdmk2X3NdKV
-         TERT7I6Q7YguaXAH6aXDVpuZyufhLp5DPvR1uz1c9WQXmUW4dAL9MOn7Z7xrHGG+1g4T
-         glEg==
+        bh=L0G2DVVUMf7cHKHLQzDr07aNL++y343oa2P66Ro/wtY=;
+        b=Yg7m1C87ehGWJ0w9aL96YvWkzYmmCr+af4ui+VJ5BMmxIV2ip9zdJ7eHn6Hxamxhl7
+         Y9YSTagO8x/N4V2I6ds6OyC94yanCRqY7fO75z4KTnmzHMpzRKip1zXjjAdrIisA1o0D
+         Ah70biHSSNT6Z5VIHPDYFxnAKjoVlYPkZJLN148s+Hk1lx4J71Hc13q6d+/bQ0Vj5Br+
+         U2/5FsW7jxyXdkDHvolMddQZiq6502jUHvY1Q45TJC1zvQnx3mICJmC3JUgyV3eam+kY
+         B/y48BY6yHPcDWzM3nPIxEUWlM+ACoslnTDnXXbzmjcgCOM0delXajF/RWMTZiZIVgpb
+         OsMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vb0Gs488yvsxkSMkYVmJzJWdckJ7k6xbmeU+rrY4bs0=;
-        b=Yh+QhYHYTwoOrFfHGkeaXYf3sYLNvPMQ+fXpuAVYMbtcfxMmtLDBnoRI1z+rGDfOx9
-         102xvoA7fY9/64eiY+rJCAFfVuTf/Ah9HmbZh1X5TatG7NxZQAaGMLR31W8CdAeigCMV
-         fPj/YStpy98viGLVW9XGsFIEJeyctLTOSueJ02GW0JDeGAyPswft0NCU53htHyXXwXx0
-         uSQS6T8QUKoj1Z4DWVj/I6V9IL7BtU5nXALKxIlU1sl0x1WAPOUBBJL304kwy/xV3r2Y
-         BW6wG7NLp/4niTcLyNLcVF97yN1Eul//XBGhFgmXOKdDGm8GsDNkq96gBWRrc874secz
-         T3OQ==
-X-Gm-Message-State: ACrzQf2ngm4Ui7IR9q9P+FNAMqAQG/ZBQM35EhA0LSKLnlpApK0l34M2
-        HrXrvaFH91wReGG+NXwa4co=
-X-Google-Smtp-Source: AMsMyM7xvKjfaOnavQ4pZs96UPh6JtAjcrIYune70gaATIWK69KTslB4zqQP6cZTZEOhvlf57qXJKw==
-X-Received: by 2002:a17:902:d38d:b0:186:9fc5:6c13 with SMTP id e13-20020a170902d38d00b001869fc56c13mr62900281pld.73.1668033776751;
-        Wed, 09 Nov 2022 14:42:56 -0800 (PST)
+        bh=L0G2DVVUMf7cHKHLQzDr07aNL++y343oa2P66Ro/wtY=;
+        b=oCFh/8/2l5HtuaERJOjUiEt1tDzalRJeUpUbY4ndYPaYV0RK/sVZXLJTxFB95D0f0C
+         qJJQXSbXKfuxDUMsqXb0CEfNAQ5TYt0BDcUIXBP4+VZsnakXS88zon/FRFWVH3iNEhvf
+         DU5QhZ8NJg8joMJWo/rhpCQSJIKx9qHUJ+Kld2qJH3h/Rz5V+cxiv67VFsfebfRDziUo
+         h/Qa/Q9BnIt+MKVNsKt5EgHDeD6622/L32cw/TtV1tsaO+mNr32iTVEB9xJNCffdi/OE
+         2lALmN4kldWxqVwr/mAy2muA6nmv7kJ7L4rzh3S+lYJD8kDQx61W5mk0vmf7dOJa84JP
+         TMtg==
+X-Gm-Message-State: ACrzQf2Kq10Jpsb2pHn4hDVkS+6/Tqv63DQYXxodDOsntqsZGvUpkF9t
+        AYwBynRNJjRhvCSF6xKAWLA=
+X-Google-Smtp-Source: AMsMyM61KxZswexhsZBY5bwcQnS4oyux6d1zp+O1TPaSPkgFxuH4rRDgEfogMkt4J4r6K4IxX7xC7Q==
+X-Received: by 2002:a17:90a:74cb:b0:213:9b4c:ecc2 with SMTP id p11-20020a17090a74cb00b002139b4cecc2mr65576018pjl.154.1668033778453;
+        Wed, 09 Nov 2022 14:42:58 -0800 (PST)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:6af4:9e55:5482:c0de])
-        by smtp.gmail.com with ESMTPSA id k17-20020a63ff11000000b0046f9f4a2de6sm7995042pgi.74.2022.11.09.14.42.55
+        by smtp.gmail.com with ESMTPSA id k17-20020a63ff11000000b0046f9f4a2de6sm7995042pgi.74.2022.11.09.14.42.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 14:42:56 -0800 (PST)
+        Wed, 09 Nov 2022 14:42:57 -0800 (PST)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Kalle Valo <kvalo@kernel.org>, Tony Lindgren <tony@atomide.com>
 Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-omap@vger.kernel.org
-Subject: [PATCH v2 2/3] wifi: wl1251: drop support for platform data
-Date:   Wed,  9 Nov 2022 14:42:49 -0800
-Message-Id: <20221109224250.2885119-2-dmitry.torokhov@gmail.com>
+Subject: [PATCH v2 3/3] wifi: wl1251: switch to using gpiod API
+Date:   Wed,  9 Nov 2022 14:42:50 -0800
+Message-Id: <20221109224250.2885119-3-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221109224250.2885119-1-dmitry.torokhov@gmail.com>
 References: <20221109224250.2885119-1-dmitry.torokhov@gmail.com>
@@ -72,234 +72,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove support for configuring the device via platform data because
-there are no users of wl1251_platform_data left in the mainline kernel.
+Switch the driver from legacy gpio API to the newer gpiod API.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- MAINTAINERS                                   |  1 -
- drivers/net/wireless/ti/Kconfig               |  8 ----
- .../net/wireless/ti/wilink_platform_data.c    | 35 ---------------
- drivers/net/wireless/ti/wl1251/sdio.c         |  8 +---
- drivers/net/wireless/ti/wl1251/spi.c          | 15 ++-----
- drivers/net/wireless/ti/wlcore/spi.c          |  1 -
- include/linux/wl12xx.h                        | 44 -------------------
- 7 files changed, 4 insertions(+), 108 deletions(-)
- delete mode 100644 drivers/net/wireless/ti/wilink_platform_data.c
- delete mode 100644 include/linux/wl12xx.h
+ drivers/net/wireless/ti/wl1251/spi.c    | 63 +++++++++++++------------
+ drivers/net/wireless/ti/wl1251/wl1251.h |  1 -
+ 2 files changed, 34 insertions(+), 30 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 03ae061c5f6f..e51716599335 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20724,7 +20724,6 @@ W:	https://wireless.wiki.kernel.org/en/users/Drivers/wl12xx
- W:	https://wireless.wiki.kernel.org/en/users/Drivers/wl1251
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/luca/wl12xx.git
- F:	drivers/net/wireless/ti/
--F:	include/linux/wl12xx.h
- 
- TIMEKEEPING, CLOCKSOURCE CORE, NTP, ALARMTIMER
- M:	John Stultz <jstultz@google.com>
-diff --git a/drivers/net/wireless/ti/Kconfig b/drivers/net/wireless/ti/Kconfig
-index 7c0b17a76fe2..3fcd9e395f72 100644
---- a/drivers/net/wireless/ti/Kconfig
-+++ b/drivers/net/wireless/ti/Kconfig
-@@ -18,12 +18,4 @@ source "drivers/net/wireless/ti/wl18xx/Kconfig"
- # keep last for automatic dependencies
- source "drivers/net/wireless/ti/wlcore/Kconfig"
- 
--config WILINK_PLATFORM_DATA
--	bool "TI WiLink platform data"
--	depends on WLCORE_SDIO || WL1251_SDIO
--	default y
--	help
--	Small platform data bit needed to pass data to the sdio modules.
--
--
- endif # WLAN_VENDOR_TI
-diff --git a/drivers/net/wireless/ti/wilink_platform_data.c b/drivers/net/wireless/ti/wilink_platform_data.c
-deleted file mode 100644
-index 1de6a62d526f..000000000000
---- a/drivers/net/wireless/ti/wilink_platform_data.c
-+++ /dev/null
-@@ -1,35 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * This file is part of wl12xx
-- *
-- * Copyright (C) 2010-2011 Texas Instruments, Inc.
-- */
--
--#include <linux/module.h>
--#include <linux/err.h>
--#include <linux/wl12xx.h>
--
--static struct wl1251_platform_data *wl1251_platform_data;
--
--int __init wl1251_set_platform_data(const struct wl1251_platform_data *data)
--{
--	if (wl1251_platform_data)
--		return -EBUSY;
--	if (!data)
--		return -EINVAL;
--
--	wl1251_platform_data = kmemdup(data, sizeof(*data), GFP_KERNEL);
--	if (!wl1251_platform_data)
--		return -ENOMEM;
--
--	return 0;
--}
--
--struct wl1251_platform_data *wl1251_get_platform_data(void)
--{
--	if (!wl1251_platform_data)
--		return ERR_PTR(-ENODEV);
--
--	return wl1251_platform_data;
--}
--EXPORT_SYMBOL(wl1251_get_platform_data);
-diff --git a/drivers/net/wireless/ti/wl1251/sdio.c b/drivers/net/wireless/ti/wl1251/sdio.c
-index c9a4e9a43400..301bd0043a43 100644
---- a/drivers/net/wireless/ti/wl1251/sdio.c
-+++ b/drivers/net/wireless/ti/wl1251/sdio.c
-@@ -12,7 +12,6 @@
- #include <linux/mmc/sdio_func.h>
- #include <linux/mmc/sdio_ids.h>
- #include <linux/platform_device.h>
--#include <linux/wl12xx.h>
- #include <linux/irq.h>
- #include <linux/pm_runtime.h>
- #include <linux/of.h>
-@@ -197,7 +196,6 @@ static int wl1251_sdio_probe(struct sdio_func *func,
- 	struct wl1251 *wl;
- 	struct ieee80211_hw *hw;
- 	struct wl1251_sdio *wl_sdio;
--	const struct wl1251_platform_data *wl1251_board_data;
- 	struct device_node *np = func->dev.of_node;
- 
- 	hw = wl1251_alloc_hw();
-@@ -225,11 +223,7 @@ static int wl1251_sdio_probe(struct sdio_func *func,
- 	wl->if_priv = wl_sdio;
- 	wl->if_ops = &wl1251_sdio_ops;
- 
--	wl1251_board_data = wl1251_get_platform_data();
--	if (!IS_ERR(wl1251_board_data)) {
--		wl->irq = wl1251_board_data->irq;
--		wl->use_eeprom = wl1251_board_data->use_eeprom;
--	} else if (np) {
-+	if (np) {
- 		wl->use_eeprom = of_property_read_bool(np, "ti,wl1251-has-eeprom");
- 		wl->irq = of_irq_get(np, 0);
- 		if (wl->irq == -EPROBE_DEFER) {
 diff --git a/drivers/net/wireless/ti/wl1251/spi.c b/drivers/net/wireless/ti/wl1251/spi.c
-index 9df38726e8b0..08d9814b49c1 100644
+index 08d9814b49c1..29292f06bd3d 100644
 --- a/drivers/net/wireless/ti/wl1251/spi.c
 +++ b/drivers/net/wireless/ti/wl1251/spi.c
-@@ -12,7 +12,6 @@
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2008 Nokia Corporation
+  */
+ 
++#include <linux/err.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/module.h>
+@@ -12,15 +13,19 @@
  #include <linux/swab.h>
  #include <linux/crc7.h>
  #include <linux/spi/spi.h>
--#include <linux/wl12xx.h>
- #include <linux/gpio.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
  #include <linux/of.h>
- #include <linux/of_gpio.h>
-@@ -226,16 +225,13 @@ static const struct wl1251_if_operations wl1251_spi_ops = {
+-#include <linux/of_gpio.h>
+ #include <linux/regulator/consumer.h>
  
- static int wl1251_spi_probe(struct spi_device *spi)
+ #include "wl1251.h"
+ #include "reg.h"
+ #include "spi.h"
+ 
++struct wl1251_spi {
++	struct spi_device *spi;
++	struct gpio_desc *power_gpio;
++};
++
+ static irqreturn_t wl1251_irq(int irq, void *cookie)
  {
--	struct wl1251_platform_data *pdata = dev_get_platdata(&spi->dev);
+ 	struct wl1251 *wl;
+@@ -34,13 +39,9 @@ static irqreturn_t wl1251_irq(int irq, void *cookie)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static struct spi_device *wl_to_spi(struct wl1251 *wl)
+-{
+-	return wl->if_priv;
+-}
+-
+ static void wl1251_spi_reset(struct wl1251 *wl)
+ {
++	struct wl1251_spi *wl_spi = wl->if_priv;
+ 	u8 *cmd;
+ 	struct spi_transfer t;
+ 	struct spi_message m;
+@@ -60,7 +61,7 @@ static void wl1251_spi_reset(struct wl1251 *wl)
+ 	t.len = WSPI_INIT_CMD_LEN;
+ 	spi_message_add_tail(&t, &m);
+ 
+-	spi_sync(wl_to_spi(wl), &m);
++	spi_sync(wl_spi->spi, &m);
+ 
+ 	wl1251_dump(DEBUG_SPI, "spi reset -> ", cmd, WSPI_INIT_CMD_LEN);
+ 
+@@ -69,6 +70,7 @@ static void wl1251_spi_reset(struct wl1251 *wl)
+ 
+ static void wl1251_spi_wake(struct wl1251 *wl)
+ {
++	struct wl1251_spi *wl_spi = wl->if_priv;
+ 	struct spi_transfer t;
+ 	struct spi_message m;
+ 	u8 *cmd = kzalloc(WSPI_INIT_CMD_LEN, GFP_KERNEL);
+@@ -112,7 +114,7 @@ static void wl1251_spi_wake(struct wl1251 *wl)
+ 	t.len = WSPI_INIT_CMD_LEN;
+ 	spi_message_add_tail(&t, &m);
+ 
+-	spi_sync(wl_to_spi(wl), &m);
++	spi_sync(wl_spi->spi, &m);
+ 
+ 	wl1251_dump(DEBUG_SPI, "spi init -> ", cmd, WSPI_INIT_CMD_LEN);
+ 
+@@ -128,6 +130,7 @@ static void wl1251_spi_reset_wake(struct wl1251 *wl)
+ static void wl1251_spi_read(struct wl1251 *wl, int addr, void *buf,
+ 			    size_t len)
+ {
++	struct wl1251_spi *wl_spi = wl->if_priv;
+ 	struct spi_transfer t[3];
+ 	struct spi_message m;
+ 	u8 *busy_buf;
+@@ -157,7 +160,7 @@ static void wl1251_spi_read(struct wl1251 *wl, int addr, void *buf,
+ 	t[2].len = len;
+ 	spi_message_add_tail(&t[2], &m);
+ 
+-	spi_sync(wl_to_spi(wl), &m);
++	spi_sync(wl_spi->spi, &m);
+ 
+ 	/* FIXME: check busy words */
+ 
+@@ -168,6 +171,7 @@ static void wl1251_spi_read(struct wl1251 *wl, int addr, void *buf,
+ static void wl1251_spi_write(struct wl1251 *wl, int addr, void *buf,
+ 			     size_t len)
+ {
++	struct wl1251_spi *wl_spi = wl->if_priv;
+ 	struct spi_transfer t[2];
+ 	struct spi_message m;
+ 	u32 *cmd;
+@@ -190,7 +194,7 @@ static void wl1251_spi_write(struct wl1251 *wl, int addr, void *buf,
+ 	t[1].len = len;
+ 	spi_message_add_tail(&t[1], &m);
+ 
+-	spi_sync(wl_to_spi(wl), &m);
++	spi_sync(wl_spi->spi, &m);
+ 
+ 	wl1251_dump(DEBUG_SPI, "spi_write cmd -> ", cmd, sizeof(*cmd));
+ 	wl1251_dump(DEBUG_SPI, "spi_write buf -> ", buf, len);
+@@ -208,8 +212,10 @@ static void wl1251_spi_disable_irq(struct wl1251 *wl)
+ 
+ static int wl1251_spi_set_power(struct wl1251 *wl, bool enable)
+ {
+-	if (gpio_is_valid(wl->power_gpio))
+-		gpio_set_value(wl->power_gpio, enable);
++	struct wl1251_spi *wl_spi = wl->if_priv;
++
++	if (wl_spi->power_gpio)
++		gpiod_set_value_cansleep(wl_spi->power_gpio, enable);
+ 
+ 	return 0;
+ }
+@@ -227,12 +233,19 @@ static int wl1251_spi_probe(struct spi_device *spi)
+ {
  	struct device_node *np = spi->dev.of_node;
  	struct ieee80211_hw *hw;
++	struct wl1251_spi *wl_spi;
  	struct wl1251 *wl;
  	int ret;
  
--	if (!np && !pdata) {
--		wl1251_error("no platform data");
-+	if (!np)
+ 	if (!np)
  		return -ENODEV;
--	}
  
++	wl_spi = devm_kzalloc(&spi->dev, sizeof(*wl_spi), GFP_KERNEL);
++	if (!wl_spi)
++		return -ENOMEM;
++
++	wl_spi->spi = spi;
++
  	hw = wl1251_alloc_hw();
  	if (IS_ERR(hw))
-@@ -259,14 +255,9 @@ static int wl1251_spi_probe(struct spi_device *spi)
+ 		return PTR_ERR(hw);
+@@ -241,7 +254,7 @@ static int wl1251_spi_probe(struct spi_device *spi)
+ 
+ 	SET_IEEE80211_DEV(hw, &spi->dev);
+ 	spi_set_drvdata(spi, wl);
+-	wl->if_priv = spi;
++	wl->if_priv = wl_spi;
+ 	wl->if_ops = &wl1251_spi_ops;
+ 
+ 	/* This is the only SPI value that we need to set here, the rest
+@@ -257,25 +270,17 @@ static int wl1251_spi_probe(struct spi_device *spi)
+ 
+ 	wl->use_eeprom = of_property_read_bool(np, "ti,wl1251-has-eeprom");
+ 
+-	wl->power_gpio = of_get_named_gpio(np, "ti,power-gpio", 0);
+-	if (wl->power_gpio == -EPROBE_DEFER) {
+-		ret = -EPROBE_DEFER;
+-		goto out_free;
+-	}
+-
+-	if (gpio_is_valid(wl->power_gpio)) {
+-		ret = devm_gpio_request_one(&spi->dev, wl->power_gpio,
+-					GPIOF_OUT_INIT_LOW, "wl1251 power");
+-		if (ret) {
++	wl_spi->power_gpio = devm_gpiod_get_optional(&spi->dev, "ti,power",
++						     GPIOD_OUT_LOW);
++	ret = PTR_ERR_OR_ZERO(wl_spi->power_gpio);
++	if (ret) {
++		if (ret != -EPROBE_DEFER)
+ 			wl1251_error("Failed to request gpio: %d\n", ret);
+-			goto out_free;
+-		}
+-	} else {
+-		wl1251_error("set power gpio missing in platform data");
+-		ret = -ENODEV;
  		goto out_free;
  	}
  
--	if (np) {
--		wl->use_eeprom = of_property_read_bool(np, "ti,wl1251-has-eeprom");
--		wl->power_gpio = of_get_named_gpio(np, "ti,power-gpio", 0);
--	} else if (pdata) {
--		wl->power_gpio = pdata->power_gpio;
--		wl->use_eeprom = pdata->use_eeprom;
--	}
-+	wl->use_eeprom = of_property_read_bool(np, "ti,wl1251-has-eeprom");
++	gpiod_set_consumer_name(wl_spi->power_gpio, "wl1251 power");
++
+ 	wl->irq = spi->irq;
+ 	if (wl->irq < 0) {
+ 		wl1251_error("irq missing in platform data");
+diff --git a/drivers/net/wireless/ti/wl1251/wl1251.h b/drivers/net/wireless/ti/wl1251/wl1251.h
+index 23ae07dd4c2e..83adbc3c25dc 100644
+--- a/drivers/net/wireless/ti/wl1251/wl1251.h
++++ b/drivers/net/wireless/ti/wl1251/wl1251.h
+@@ -262,7 +262,6 @@ struct wl1251 {
+ 	void *if_priv;
+ 	const struct wl1251_if_operations *if_ops;
  
-+	wl->power_gpio = of_get_named_gpio(np, "ti,power-gpio", 0);
- 	if (wl->power_gpio == -EPROBE_DEFER) {
- 		ret = -EPROBE_DEFER;
- 		goto out_free;
-diff --git a/drivers/net/wireless/ti/wlcore/spi.c b/drivers/net/wireless/ti/wlcore/spi.c
-index 7eae1ec2eb2b..2d2edddc77bd 100644
---- a/drivers/net/wireless/ti/wlcore/spi.c
-+++ b/drivers/net/wireless/ti/wlcore/spi.c
-@@ -14,7 +14,6 @@
- #include <linux/swab.h>
- #include <linux/crc7.h>
- #include <linux/spi/spi.h>
--#include <linux/wl12xx.h>
- #include <linux/platform_device.h>
- #include <linux/of_irq.h>
- #include <linux/regulator/consumer.h>
-diff --git a/include/linux/wl12xx.h b/include/linux/wl12xx.h
-deleted file mode 100644
-index 03d61f1d23ab..000000000000
---- a/include/linux/wl12xx.h
-+++ /dev/null
-@@ -1,44 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * This file is part of wl12xx
-- *
-- * Copyright (C) 2009 Nokia Corporation
-- *
-- * Contact: Luciano Coelho <luciano.coelho@nokia.com>
-- */
--
--#ifndef _LINUX_WL12XX_H
--#define _LINUX_WL12XX_H
--
--#include <linux/err.h>
--
--struct wl1251_platform_data {
 -	int power_gpio;
--	/* SDIO only: IRQ number if WLAN_IRQ line is used, 0 for SDIO IRQs */
--	int irq;
--	bool use_eeprom;
--};
--
--#ifdef CONFIG_WILINK_PLATFORM_DATA
--
--int wl1251_set_platform_data(const struct wl1251_platform_data *data);
--
--struct wl1251_platform_data *wl1251_get_platform_data(void);
--
--#else
--
--static inline
--int wl1251_set_platform_data(const struct wl1251_platform_data *data)
--{
--	return -ENOSYS;
--}
--
--static inline
--struct wl1251_platform_data *wl1251_get_platform_data(void)
--{
--	return ERR_PTR(-ENODATA);
--}
--
--#endif
--
--#endif
+ 	int irq;
+ 	bool use_eeprom;
+ 
 -- 
 2.38.1.431.g37b22c650d-goog
 
