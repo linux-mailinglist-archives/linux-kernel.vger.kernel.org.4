@@ -2,206 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BC062214A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 02:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891C262214C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 02:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiKIBUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 20:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S229814AbiKIBWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 20:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKIBUQ (ORCPT
+        with ESMTP id S229452AbiKIBWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 20:20:16 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E99A5EF86
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 17:20:15 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j132-20020a25238a000000b006da635e2073so1937373ybj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 17:20:15 -0800 (PST)
+        Tue, 8 Nov 2022 20:22:05 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4D45F85D
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 17:22:04 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so453729pjs.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 17:22:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=j6fE8FxgLYcEMehZwA0N2DtD/pkodntXjTOaWzFjwNs=;
-        b=G82DxUUKkFjF1wncsDmqTkLHk/sd6bqbbW7zwR50cMvz+RdKCgOeSxk0UULEPJJNlr
-         yMFSXKPE5k0lRGeJ6fqMnnb4rJ+NU4TCxBZp5EG9ZI12XRc/trq3ERWA7PaDo+9OKeOy
-         PFGL2GoKlGQsaUFuJLOzc3SJOsY49x1KRsslIVE4nBisGr9OFBwpn2SVR3y2cdyQf0sS
-         van/mFWpqxXYXMlRbZpW5XE0SdzmxdYZqUhgRSjDNXTE80xPVue+l88ks6IE8eUqCjQY
-         xuGJC8AmyFZeE5+GKBreMsUuXpJorjREReJishdpfBFsIK2RltclZPvJd36HgBZx9bzi
-         h5TA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X/7LWEJz0+L5ZmpQmdaQTLywAe07bO1jBNMRgwCToFg=;
+        b=JC3ABDrxqqlvCMQDvshcXI7nRZ2IAs+p1gg9FcQkt4gMOI9VtHZp/D/ggc8GJnMbX3
+         57F+7cto25IxlIv67TdOLlFXUpyGUJ8+EOqmQqRAtQvOBoQi58h9QNCO775JiLmnaA/P
+         pQLrbKtIGYQLLa//xuwYo1MAQiTjan98e3oRk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j6fE8FxgLYcEMehZwA0N2DtD/pkodntXjTOaWzFjwNs=;
-        b=T9vYdK8CCFCsW6wfW9fi58kgxikZ5QLDsSms099ucyWKam3mFLvKIFisuV/iy2HyQg
-         z+3uERdKp5Ph/uQmaw+UlzHNQPCA+6AFaCT9D+9CRyJejwLyoX8/Mo0oIqVWrPOVP0xm
-         Dyp+D1b6WB3P+Mz6qEVp2ZhTJ2FFSw8qc3aZNa8XjRQxX0VdVe8a3cLg5WCIsDomqXSn
-         r9iWePPFIU24o+bJgAA0sMfhghj9MRIdJz2TdUiC3sRHBTtOfXWvo7WqjaL1/sGh1qh0
-         dGio/HubftQ9WeuLoAbeXAUSHsnX2l299SV+KAGgKYaHFlqpYuj+eY7tHTkcu+p9EHrO
-         qe/w==
-X-Gm-Message-State: ACrzQf2Oy+GrMLnaGFohsHdKUhiJR7sDNX/+ifLeoB7+QLbR6oTLsJ3q
-        eSiMtHpLUBwWtIXa2e2qVGzG+brO1pPimg==
-X-Google-Smtp-Source: AMsMyM72KpCDzxmSblP6ZCKZ9EceK0P0lmfreJqtFk2a010bAeguR4EBWdc+isdNeOitpfoDrDjHc1GCOx1abg==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a0d:c486:0:b0:370:2f43:e848 with SMTP id
- g128-20020a0dc486000000b003702f43e848mr54229772ywd.361.1667956814847; Tue, 08
- Nov 2022 17:20:14 -0800 (PST)
-Date:   Wed,  9 Nov 2022 01:20:11 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221109012011.881058-1-shakeelb@google.com>
-Subject: [PATCH v2] percpu_counter: add percpu_counter_sum_all interface
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X/7LWEJz0+L5ZmpQmdaQTLywAe07bO1jBNMRgwCToFg=;
+        b=im9qz2mNSMFcBqXmmhJl0qh8OHzfXRFHV7+mwih9E+wGr5wzGK4tSNM8cfTR8GDTuN
+         7/1v6fDrnDorAXKcB1gFfPaJJQuq4DvirFFXnbN986P/XTU69aeH05thkX1MynVOImVI
+         l2XgQDWOYsV0YJz94VQym4/P5qXsVqmoxHAlZeeh7ZKT3RR1ZqtCeChP2JnAXeLkvnFM
+         NgRpylwiIycQXQ8A7SaqUpJh/VlCyFBrw1eHMT8dUxns/DZyMKRIkwyvWpB6vT1DkLb0
+         RkMFfAGmnD3LjMmSjX4MwEWnzAvPzgNj3gV9MLPTiXV3WkXVwV9rjdT+p+9rrE54WEbA
+         Djkg==
+X-Gm-Message-State: ACrzQf0nvngegeLzDcmUkhUl3eYHx6upOyf5zAc0Oq1jho1K4z/Cp6eq
+        ZGueWSZ/vIjQJFLuClM5XL3er/womiYtxg==
+X-Google-Smtp-Source: AMsMyM79wV03PeOCgAWiXl4AktoLEnB0mGs99UWHXE5f72dWr3bJFMGh0MaQKuBmpYynGlRLpU9/BQ==
+X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id mr19-20020a17090b239300b00213ecb22e04mr47944640pjb.100.1667956924038;
+        Tue, 08 Nov 2022 17:22:04 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:953c:d63a:4da6:1064])
+        by smtp.gmail.com with ESMTPSA id 21-20020a170902c11500b00174c1855cd9sm7545805pli.267.2022.11.08.17.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 17:22:03 -0800 (PST)
+Date:   Tue, 8 Nov 2022 17:22:01 -0800
+From:   Brian Norris <briannorris@chromium.org>
+To:     Felix Kuehling <felix.kuehling@amd.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Xinhui <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 1/2] drm/amdgpu: Move racy global PMU list into device
+Message-ID: <Y2sAucYLR4FsGIfc@google.com>
+References: <20221028224813.1466450-1-briannorris@chromium.org>
+ <6e237301-9c30-a463-0f28-5279e655646a@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e237301-9c30-a463-0f28-5279e655646a@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The percpu_counter is used for scenarios where performance is more
-important than the accuracy. For percpu_counter users, who want more
-accurate information in their slowpath, percpu_counter_sum is provided
-which traverses all the online CPUs to accumulate the data. The reason
-it only needs to traverse online CPUs is because percpu_counter does
-implement CPU offline callback which syncs the local data of the
-offlined CPU.
+On Tue, Nov 08, 2022 at 11:50:04AM -0500, Felix Kuehling wrote:
+> While you're making the pmu list per-device, I'd suggest removing adev from
+> the pmu entry because it is now redundant. The device is implied by the list
+> that the entry is on. Instead, add an adev parameter to
+> init_pmu_entry_by_type_and_add. Or you could move the list_add_tail to
+> amdgpu_pmu_init and remove "_and_add" from the function name.
 
-However there is a small race window between the online CPUs traversal
-of percpu_counter_sum and the CPU offline callback. The offline callback
-has to traverse all the percpu_counters on the system to flush the CPU
-local data which can be a lot. During that time, the CPU which is going
-offline has already been published as offline to all the readers. So, as
-the offline callback is running, percpu_counter_sum can be called for
-one counter which has some state on the CPU going offline. Since
-percpu_counter_sum only traverses online CPUs, it will skip that
-specific CPU and the offline callback might not have flushed the state
-for that specific percpu_counter on that offlined CPU.
+Sorry if I'm being naive here, but does that mean trying to navigate the
+list pointers to move from a 'pmu_entry' to an 'adev'
+(list_first_entry(), etc.)? There are quite a few cases where we're
+trying to go between 'pmu_entry' and 'adev'. I guess I could turn that
+into a mini helper.
 
-Normally this is not an issue because percpu_counter users can deal with
-some inaccuracy for small time window. However a new user i.e. mm_struct
-on the cleanup path wants to check the exact state of the percpu_counter
-through check_mm(). For such users, this patch introduces
-percpu_counter_sum_all() which traverses all possible CPUs and it is
-used in fork.c:check_mm() to avoid the potential race.
+I'll also need to scrounge around a bit to see if I have an amdgpu
+system around that actually supports PMU. I realized the one I tested on
+doesn't actually hit this code path... and this would be getting a
+little less obvious/trivial.
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
-Changes since v1:
-- Only call percpu_counter_sum_all() if percpu_counter_sum() gives
-  non-zero value in check_mm().
+> Other than that, the patch looks good to me.
 
+Thanks for looking!
 
- include/linux/percpu_counter.h |  6 ++++++
- kernel/fork.c                  |  5 +++++
- lib/percpu_counter.c           | 29 +++++++++++++++++++++++------
- 3 files changed, 34 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/percpu_counter.h b/include/linux/percpu_counter.h
-index bde6c4c1f405..a3aae8d57a42 100644
---- a/include/linux/percpu_counter.h
-+++ b/include/linux/percpu_counter.h
-@@ -45,6 +45,7 @@ void percpu_counter_set(struct percpu_counter *fbc, s64 amount);
- void percpu_counter_add_batch(struct percpu_counter *fbc, s64 amount,
- 			      s32 batch);
- s64 __percpu_counter_sum(struct percpu_counter *fbc);
-+s64 percpu_counter_sum_all(struct percpu_counter *fbc);
- int __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch);
- void percpu_counter_sync(struct percpu_counter *fbc);
- 
-@@ -193,6 +194,11 @@ static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
- 	return percpu_counter_read(fbc);
- }
- 
-+static inline s64 percpu_counter_sum_all(struct percpu_counter *fbc)
-+{
-+	return percpu_counter_read(fbc);
-+}
-+
- static inline bool percpu_counter_initialized(struct percpu_counter *fbc)
- {
- 	return true;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9c32f593ef11..9f7fe3541897 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -758,6 +758,11 @@ static void check_mm(struct mm_struct *mm)
- 	for (i = 0; i < NR_MM_COUNTERS; i++) {
- 		long x = percpu_counter_sum(&mm->rss_stat[i]);
- 
-+		if (likely(!x))
-+			continue;
-+
-+		/* Making sure this is not due to race with CPU offlining. */
-+		x = percpu_counter_sum_all(&mm->rss_stat[i]);
- 		if (unlikely(x))
- 			pr_alert("BUG: Bad rss-counter state mm:%p type:%s val:%ld\n",
- 				 mm, resident_page_types[i], x);
-diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
-index ed610b75dc32..42f729c8e56c 100644
---- a/lib/percpu_counter.c
-+++ b/lib/percpu_counter.c
-@@ -117,11 +117,8 @@ void percpu_counter_sync(struct percpu_counter *fbc)
- }
- EXPORT_SYMBOL(percpu_counter_sync);
- 
--/*
-- * Add up all the per-cpu counts, return the result.  This is a more accurate
-- * but much slower version of percpu_counter_read_positive()
-- */
--s64 __percpu_counter_sum(struct percpu_counter *fbc)
-+static s64 __percpu_counter_sum_mask(struct percpu_counter *fbc,
-+			      const struct cpumask *cpu_mask)
- {
- 	s64 ret;
- 	int cpu;
-@@ -129,15 +126,35 @@ s64 __percpu_counter_sum(struct percpu_counter *fbc)
- 
- 	raw_spin_lock_irqsave(&fbc->lock, flags);
- 	ret = fbc->count;
--	for_each_online_cpu(cpu) {
-+	for_each_cpu(cpu, cpu_mask) {
- 		s32 *pcount = per_cpu_ptr(fbc->counters, cpu);
- 		ret += *pcount;
- 	}
- 	raw_spin_unlock_irqrestore(&fbc->lock, flags);
- 	return ret;
- }
-+
-+/*
-+ * Add up all the per-cpu counts, return the result.  This is a more accurate
-+ * but much slower version of percpu_counter_read_positive()
-+ */
-+s64 __percpu_counter_sum(struct percpu_counter *fbc)
-+{
-+	return __percpu_counter_sum_mask(fbc, cpu_online_mask);
-+}
- EXPORT_SYMBOL(__percpu_counter_sum);
- 
-+/*
-+ * This is slower version of percpu_counter_sum as it traverses all possible
-+ * cpus. Use this only in the cases where accurate data is needed in the
-+ * presense of CPUs getting offlined.
-+ */
-+s64 percpu_counter_sum_all(struct percpu_counter *fbc)
-+{
-+	return __percpu_counter_sum_mask(fbc, cpu_possible_mask);
-+}
-+EXPORT_SYMBOL(percpu_counter_sum_all);
-+
- int __percpu_counter_init(struct percpu_counter *fbc, s64 amount, gfp_t gfp,
- 			  struct lock_class_key *key)
- {
--- 
-2.38.1.431.g37b22c650d-goog
-
+Brian
