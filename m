@@ -2,131 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7B56223BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87796223DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiKIGOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 01:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S229560AbiKIGRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 01:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKIGOP (ORCPT
+        with ESMTP id S229448AbiKIGRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 01:14:15 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF53315;
-        Tue,  8 Nov 2022 22:14:14 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id b11so15808363pjp.2;
-        Tue, 08 Nov 2022 22:14:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MhA2GM0MmHVgF5w//IL35OcuY4H3+4INJfbT7ZD2bYs=;
-        b=TjZ8RFq/eIuwO/6zg8DWofiyQBOyrb0Ence+A7Yi6MeNz+Gy96a/7h6aR54BKoD1UI
-         fHVUNoXlH/QoP+shqZgFFGBD/wHpuNc9pTTYWNHIFpXxq0ti0zekCenfRxFMXCPY24db
-         ak5lbljB9t2PXOhqKyt0Mf021sPQw/oGasFJW8RuE6Rv9XtTCAuXCFFte+YsfZ994xo8
-         SIi3uir0P8qP37sU7TLu4Luehk4EQkS3bjJ3KBAfHSi6IuNUYcTwO1J9hj0gz57WqWUt
-         5Drs7DVeuiS+LK+TbV27iiWlDpjXdoHSF3gFh/EXXcSshtPL5Ip6FyrGhcGARkRNSARk
-         PtHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MhA2GM0MmHVgF5w//IL35OcuY4H3+4INJfbT7ZD2bYs=;
-        b=rTFCHQqETuN9K2hrLpPwG6Lel3Xffv76BUbIqqeY1xmfw5HJUX+T3DDLeuAcsSXDVv
-         ykW2YSEHyYIgQULClW9H4wRGaOduOyvWKUn9gCy2GRdnH0N6IJ0YIyakiEpZSE9D+4kG
-         rGLQIEvaA27xZxDtK1A/imdsT4K1a00SVZqYKp+rjj2W699Fkk54iplRQk+mdBZhjuFI
-         5Y2a2TiysZBD97xWlcC8Jmd/pPcHm3ltbAqsI9wn6rw64T6Ya1GjsKMToDUzGWZQqkui
-         YeZzE9pyRDCQmnASPIzOVEpy5UOZZYt7NdR7sB2/6eXWaaaAOkK6yWleA+EOFDmr9VIA
-         itHA==
-X-Gm-Message-State: ACrzQf0enBoEnJU1Q4DIicmerMGkyA4qWw01gtZCWZAa/mVierE3E0Hn
-        6GS53AIFV7QijhCyV+yXpYE=
-X-Google-Smtp-Source: AMsMyM5AT+y3PXBkhKAlIdJXBwNV7ifDm/jY7CsUvEEIQ/tlI8ze9ACYcaox/LQdFwkIXrXxTBHfiA==
-X-Received: by 2002:a17:90a:c201:b0:216:ab2c:25b with SMTP id e1-20020a17090ac20100b00216ab2c025bmr29885616pjt.45.1667974454355;
-        Tue, 08 Nov 2022 22:14:14 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902d2cf00b0018544ad1e8esm8131460plc.238.2022.11.08.22.14.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 22:14:13 -0800 (PST)
-Date:   Wed, 9 Nov 2022 15:14:05 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v2 3/3] mm, printk: introduce new format %pGt for page_type
-Message-ID: <Y2tFLQ/w9siSwy+M@hyeyoo>
-References: <20221106140355.294845-1-42.hyeyoo@gmail.com>
- <20221106140355.294845-4-42.hyeyoo@gmail.com>
- <c038e06504733e8dc6830f082c8522c60895fd8e.camel@perches.com>
+        Wed, 9 Nov 2022 01:17:51 -0500
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2056.outbound.protection.outlook.com [40.107.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF7A315;
+        Tue,  8 Nov 2022 22:17:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hEH7On1+i77WMiD7yLLec0bzmM0n9DxaeGLyy0OVc5OXmTjO2owlmusrFHA15Lnv59LxiPzPG0ZsgRM7CbYBjtaaGCdJIW39OvaUKJjws6NRG7GB8aUwAoJZXmUe2H+LemdbOEbX5ToagiQlUaMWXnvXwBu1w+weZWcbdYHvaL0G28+TcvTzqSdTtj9S5gy7F7zmJLJlTx7eIYEDbxthssedVnXbHkWvKTdL7p+PKI8M1JSnwwGpGBOMWEF61WK4W18lphmI7xdWe6K+RVCo39OQzckPajFa5QcFAACqzobuPThsWXGgOndJKtJsakWcVza7giOH7UsnjpHmjLYOHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HxwfGjTDzhc6uLTkzDcKivfIX5jmLCO9vHrFSfST8GM=;
+ b=TcFoaQbYWGQIwThdSKIheYTqBYTpR/4L8/2wUKisns74BW4dIUwzFhmcYN0FFr5tgP29y1n7mU2I1FsPS+0nUhsqbTjjCcgGRPyhUaprZ3TUoxfO4Etuq4ceF8i0rNa6QoE7rLVUXzT9YAso4nn0t8I7qK9leOgl4Ioy+SUVeqE8s3g51Oxupvvqq22SpCnrTS3hk47PrWsZQn/eGWm68c0TvhqYCMAbu7e+4pGQG6gjC2XMJKx9dkkXsmQClzEtHA1T8zIpv8WjgVOcWnFuvJwypvDbrYZ9JLxFuiMjOsOukcyGcvysZNi86JnnUOiopaSO657Er+crX3tRsnYIBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HxwfGjTDzhc6uLTkzDcKivfIX5jmLCO9vHrFSfST8GM=;
+ b=usRtWKsTep2UMJJ8BxF/4mMErLclS3HQUhm4AGdcp6hMhIEKCE68+6bdncKk7Ls+UqxRCRvh13+jaQeKZpYNafdJnNz4Bl89R5H/gLfK/N34w9zQHTHVvNYknGTgrvi8osqQ8C8O/JAViW5yIgZG8KMVaHn+ywKyUgx3Cq9rtQcKk1RvAu4RH6OaULSaJMSfYJwwcbT5eB3oKAmpmvbjs7LIY24/yq94SGQZugl+5MPwMSNblor9kv+RRNZcxhIHHvA+5RsGQq8L/cbvE/gjPP/MvD5nB7Kw/RazVKlb3uxNJfvQjImeU0HIO0+EiwuDzCNLYN9EORF8H+3sshrWaw==
+Received: from MW2PR16CA0023.namprd16.prod.outlook.com (2603:10b6:907::36) by
+ DM4PR12MB6398.namprd12.prod.outlook.com (2603:10b6:8:b5::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5791.27; Wed, 9 Nov 2022 06:17:48 +0000
+Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:907:0:cafe::79) by MW2PR16CA0023.outlook.office365.com
+ (2603:10b6:907::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24 via Frontend
+ Transport; Wed, 9 Nov 2022 06:17:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 06:17:48 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 8 Nov 2022
+ 22:17:38 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
+ 22:17:38 -0800
+Received: from kkartik-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Tue, 8 Nov 2022 22:17:33 -0800
+From:   Kartik <kkartik@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <kkartik@nvidia.com>, <digetx@gmail.com>,
+        <ndesaulniers@google.com>, <ulf.hansson@linaro.org>,
+        <arnd@arndb.de>, <skamble@nvidia.com>, <windhl@126.com>,
+        <sumitg@nvidia.com>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] soc/tegra: fuse: use platform info with soc revision
+Date:   Wed, 9 Nov 2022 11:47:31 +0530
+Message-ID: <1667974651-10893-1-git-send-email-kkartik@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c038e06504733e8dc6830f082c8522c60895fd8e.camel@perches.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT033:EE_|DM4PR12MB6398:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6357ba5d-b77e-43cc-5d3c-08dac21a1fa1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EirPi1bdh64xMGcrPwXRpHLX/CNmSfp97XzYgjgb8FT9zChXFVbJ2Dr630Ni8Jtw2aBxLtHi+ekU08Ipyaq84TMObm0Y1pmLo84QUFUaGbfZlfA2PUZu8/v600p/G5miluTx/tPbua7vuAQooofE+v5ogQur4DYr1CulcwrYuTmqxfxdUvictcY0E2vNDbyvP8GtLW8ZnWdJK4+3MJ90Gu5lutGtHORKzijcz2Lvevil0oIvska4sgrZQqSwjhHudEcb5a5YUWm2sjJTmKluavlQqbw1d9bWOmtBR2v2WazJ5fMKyYew3xY1yl9Wy/fV9RWRHP6dBrF+So/v/QJgG8kZPEKdbWr3suTWfDbTNspyswJUeR213dJNv/2RgB8JbbX58IvaP/ZssEDuhzDA8xlT45TNeexwPHMkJyw7QUNXFhkd0hy1mBXHwUPhJP1w027oEfIQhUwzW4xW9J7hfhTM4j0WbXhsC6iFi4iHf4Jqw9eYcCGUJF4bTdi5xpEZmLgVNMFMFNETjuWAnPQJwct2Ee0EM+b6VpapxjAH2xK0HHe2Y9gzkB6Og+Zrd8l1+lfy0FY76IsA3flLOBN8PQiUl8+SaJ5sHLXVdcQXtWX9sNsULYX3US6PMmGM67NGhvRpQu2mJi5qxPUd/1V+xh0UPPlYmW8rnFFgwGo6/D25BNHc5p8AoTHds1THTeZdRlOYOdDlKB8AYJt7uW1YrBrCvtutCYPSZqhEpNXpcLXSiKCaZXBStTiLkdJT7SGu7YPdUh2h6iDMoK4sp29olFVhq7iFXPALbeZAfIyr3nY=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(82310400005)(478600001)(7636003)(110136005)(921005)(356005)(316002)(7696005)(47076005)(2906002)(40480700001)(26005)(8676002)(70586007)(70206006)(82740400003)(86362001)(2616005)(36756003)(8936002)(41300700001)(5660300002)(186003)(83380400001)(426003)(40460700003)(336012)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 06:17:48.0859
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6357ba5d-b77e-43cc-5d3c-08dac21a1fa1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6398
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 10:04:25AM -0800, Joe Perches wrote:
-> On Sun, 2022-11-06 at 23:03 +0900, Hyeonggon Yoo wrote:
-> > dump_page() uses %pGp format to print 'flags' field of struct page.
-> > As some page flags (e.g. PG_buddy, see page-flags.h for more details)
-> > are set in page_type field, introduce %pGt format which provides
-> > human readable output of page_type. And use it in dump_page().
-> []
-> > diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> []
-> > @@ -2056,6 +2056,28 @@ char *format_page_flags(char *buf, char *end, unsigned long flags)
-> >  	return buf;
-> >  }
-> >  
-> > +static
+Tegra pre-silicon platforms does not have chip revisions. This makes
+"revision" soc attribute obsolete on these platforms.
 
-Thanks for looking at this.
+Populate "revision" soc attribute with "platform name + chip revision"
+for Silicon. For pre-silicon platforms populate it with "platform name"
+instead.
 
-> 
-> noinline_for_stack ?
+Signed-off-by: Kartik <kkartik@nvidia.com>
+---
+ drivers/soc/tegra/fuse/fuse-tegra.c    | 23 +++++++++++++++++++++--
+ drivers/soc/tegra/fuse/tegra-apbmisc.c |  1 +
+ include/soc/tegra/fuse.h               | 15 +++++++++++++++
+ 3 files changed, 37 insertions(+), 2 deletions(-)
 
-May I ask why,
-Does it have issues related to stack consumption?
-To Be Honest I'm a bit unsure what is purpose of this attribute.
-
-> > +char *format_page_type(char *buf, char *end, unsigned int page_type)
-> > +{
-> > +	if (!(page_type & PAGE_TYPE_BASE))
-> > +		return string(buf, end, "no type for user-mapped page", default_str_spec);
-> 
-> Might be better with something like '%pGt: no type..."
-
-Will try something like "0x32()" when it has no type because it is
-mapped to userspace.
-
+diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
+index ea25a1dcafc2..a20c9e0105dc 100644
+--- a/drivers/soc/tegra/fuse/fuse-tegra.c
++++ b/drivers/soc/tegra/fuse/fuse-tegra.c
+@@ -35,6 +35,19 @@ static const char *tegra_revision_name[TEGRA_REVISION_MAX] = {
+ 	[TEGRA_REVISION_A04]     = "A04",
+ };
+ 
++static const char *tegra_platform_name[TEGRA_PLATFORM_MAX] = {
++	[TEGRA_PLATFORM_SILICON]			= "Silicon",
++	[TEGRA_PLATFORM_QT]				= "QT",
++	[TEGRA_PLATFORM_SYSTEM_FPGA]			= "System FPGA",
++	[TEGRA_PLATFORM_UNIT_FPGA]			= "Unit FPGA",
++	[TEGRA_PLATFORM_ASIM_QT]			= "Asim QT",
++	[TEGRA_PLATFORM_ASIM_LINSIM]			= "Asim Linsim",
++	[TEGRA_PLATFORM_DSIM_ASIM_LINSIM]		= "Dsim Asim Linsim",
++	[TEGRA_PLATFORM_VERIFICATION_SIMULATION]	= "Verification Simulation",
++	[TEGRA_PLATFORM_VDK]				= "VDK",
++	[TEGRA_PLATFORM_VSP]				= "VSP",
++};
++
+ static const struct of_device_id car_match[] __initconst = {
+ 	{ .compatible = "nvidia,tegra20-car", },
+ 	{ .compatible = "nvidia,tegra30-car", },
+@@ -370,8 +383,14 @@ struct device * __init tegra_soc_device_register(void)
+ 		return NULL;
+ 
+ 	attr->family = kasprintf(GFP_KERNEL, "Tegra");
+-	attr->revision = kasprintf(GFP_KERNEL, "%s",
+-		tegra_revision_name[tegra_sku_info.revision]);
++	if (tegra_is_silicon()) {
++		attr->revision = kasprintf(GFP_KERNEL, "%s %s",
++					   tegra_platform_name[tegra_sku_info.platform],
++					   tegra_revision_name[tegra_sku_info.revision]);
++	} else {
++		attr->revision = kasprintf(GFP_KERNEL, "%s",
++					   tegra_platform_name[tegra_sku_info.platform]);
++	}
+ 	attr->soc_id = kasprintf(GFP_KERNEL, "%u", tegra_get_chip_id());
+ 	attr->custom_attr_group = fuse->soc->soc_attr_group;
+ 
+diff --git a/drivers/soc/tegra/fuse/tegra-apbmisc.c b/drivers/soc/tegra/fuse/tegra-apbmisc.c
+index 3351bd872ab2..4591c5bcb690 100644
+--- a/drivers/soc/tegra/fuse/tegra-apbmisc.c
++++ b/drivers/soc/tegra/fuse/tegra-apbmisc.c
+@@ -156,6 +156,7 @@ void __init tegra_init_revision(void)
+ 	}
+ 
+ 	tegra_sku_info.sku_id = tegra_fuse_read_early(FUSE_SKU_INFO);
++	tegra_sku_info.platform = tegra_get_platform();
+ }
+ 
+ void __init tegra_init_apbmisc(void)
+diff --git a/include/soc/tegra/fuse.h b/include/soc/tegra/fuse.h
+index 977c334136e9..a63de5da8124 100644
+--- a/include/soc/tegra/fuse.h
++++ b/include/soc/tegra/fuse.h
+@@ -34,6 +34,20 @@ enum tegra_revision {
+ 	TEGRA_REVISION_MAX,
+ };
+ 
++enum tegra_platform {
++	TEGRA_PLATFORM_SILICON = 0,
++	TEGRA_PLATFORM_QT,
++	TEGRA_PLATFORM_SYSTEM_FPGA,
++	TEGRA_PLATFORM_UNIT_FPGA,
++	TEGRA_PLATFORM_ASIM_QT,
++	TEGRA_PLATFORM_ASIM_LINSIM,
++	TEGRA_PLATFORM_DSIM_ASIM_LINSIM,
++	TEGRA_PLATFORM_VERIFICATION_SIMULATION,
++	TEGRA_PLATFORM_VDK,
++	TEGRA_PLATFORM_VSP,
++	TEGRA_PLATFORM_MAX,
++};
++
+ struct tegra_sku_info {
+ 	int sku_id;
+ 	int cpu_process_id;
+@@ -47,6 +61,7 @@ struct tegra_sku_info {
+ 	int gpu_speedo_id;
+ 	int gpu_speedo_value;
+ 	enum tegra_revision revision;
++	enum tegra_platform platform;
+ };
+ 
+ #ifdef CONFIG_ARCH_TEGRA
 -- 
-Thanks,
-Hyeonggon
+2.17.1
+
