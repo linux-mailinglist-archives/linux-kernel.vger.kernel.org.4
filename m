@@ -2,120 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D359F622A11
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDB4622A18
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiKILRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S230208AbiKILRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiKILRB (ORCPT
+        with ESMTP id S230410AbiKILR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:17:01 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A5CD2
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:16:59 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id d3so25258306ljl.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:16:59 -0800 (PST)
+        Wed, 9 Nov 2022 06:17:29 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7666ACCB
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:17:26 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bs21so25262360wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:17:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4rsVLg9MNVYcsu7j/AVDjA3CpudFe+3V/rIcx//bM/8=;
-        b=B/CmR1XUEcS5WLZWLUVsjGgsF4fuXr92HkbkYKQNxq0ZqHv4kcXVa5/bwWgEDUIY5Z
-         /+5gl1MCszn9Jk/348pjFi68PPnWaXHHSvlVZH7gtjqYmaDq/TzzcJTIqI5+I4JMwPmw
-         LejMH2rkXFIWB+YtpkZrRHE1D3/yzthxVfF0nhGKUUvdpLcIT9OYfPPPVdbsN8ggYh6W
-         +zAbKxXfWsskneRQp2FiZAvwBdiHGCTxPCaWBAYRWXANCnXHM8U7F+OwDeNrqJJt98gG
-         hVjaiXXsSPVqrhw/APyr2cH28j8D9k+run4gELf3d8EuL3LfR1EUf69Y6FHGgmlFw1Fn
-         0NPg==
+        bh=7TZMakybPbFpJRwcj0rnyGA7xSqmp4zgniSRZniIZK4=;
+        b=LRilL4EzGUCsJsnSGNtname1ZH8ux5mPJ4lajTQNHrRYgpNwgqJkahrTdoidPpPYLm
+         6audM/v7q3gRxeD/LG4GhKbK5K1m/tVJqIlEi5sitI3hWO792xHbEA4rMtIRdOw1isIT
+         V9nG1+0zGrEayoWgbDOtw0mPldsATOnLk+t5hSKElDdTIS0uWKJYAUi/K9a+6iFREIBF
+         krx3OvjTVEpEORdBTSdUA+eSm5MlfE2tN5pbvaZB8Mx4hBZCJCX5uRIHkO9iPpNTx1wR
+         dzrEpM9XWI9wZAKQJBvTmESoQtMvfgFfoIoZqTGnWO0aW3a8QZ3PkMWjQgoGAAt5pNE+
+         iMsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4rsVLg9MNVYcsu7j/AVDjA3CpudFe+3V/rIcx//bM/8=;
-        b=InTYS320x+GVdEP4yO8u2bB9yIlwr0/39blEVkd0hsyC6XPecns/y95q5YfJDsHuZi
-         mm8XZB0lNFyZjv020gRFumR/SdZoSqoYpn0yZmsM2odHWzTG2x4cvwOPnajaJtD5bLqg
-         bnW33AmPHCjDGJEmTapZi2h9xHpTpmYOU+SEL+ZV3bLUA2ytJPga6ppx1/HtjXqSJV0E
-         JP6SuZwNt/MIGWscybhDVUP7Jc+qX3i2O2Gx6rGl5J+hB3JHjOc8ReKZP6bt5ceFc28D
-         YP4pIQrguHtHTdX3CrZJe8xU/PbqBkKucz6ocehakGbALn7j3cieavrChYjlc5InlsrG
-         PEgg==
-X-Gm-Message-State: ACrzQf0YFoid9kce94e3Uv6KozizCbU4TB7MdoE8lZCwwff6DZqrNqKW
-        kZT0y0AHG9GXweBwJgd6qp5Zgw==
-X-Google-Smtp-Source: AMsMyM6sOcBec1Du0eXhO+Yr7RRND9y3KXBX470kt/YbaN8UFxrkx/2eswIcD7gcwZsEB3IdXHxgzw==
-X-Received: by 2002:a05:651c:54b:b0:277:2f02:8da8 with SMTP id q11-20020a05651c054b00b002772f028da8mr21780310ljp.73.1667992617922;
-        Wed, 09 Nov 2022 03:16:57 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id bp9-20020a056512158900b004b19f766b07sm2187362lfb.91.2022.11.09.03.16.56
+        bh=7TZMakybPbFpJRwcj0rnyGA7xSqmp4zgniSRZniIZK4=;
+        b=BkUYiUb7T6l5HzpleCeTtE2HfoSI3YMXY60CP0e0pJNhzZHwjoychR8UO0tx8kDvrJ
+         QuC/lR1p1zSY14WpON2yXj+LcOeWUGkHyZ8B5abkBUiQGi5k7zqI81W222O4GSy41qNG
+         vaYI5DaNs7aO6jtNMhtwKxuzyD8iUha6V7F787fZ6SSbFjgoH+deZE+u6xFWvP0+/RGH
+         iYMH7b6yTdhcA8p9MWEiKq3hlvWeEjXXK8AAawwizK/GhakNQDKQs6DhJrE5FCp6qPXg
+         L6pHYdFiaJ+5i7T2y5keDrZGkxjmmResa9xNh3SK2peETFC00Lqox3kcbQwTW1ek1kFL
+         BC9A==
+X-Gm-Message-State: ACrzQf1sYqv0UZ3jlDHBnWsMT8nUj/B2pIla0Y2vee/zTywskhJ3505x
+        xnet1aRSEubqbzB5OZX4LE4=
+X-Google-Smtp-Source: AMsMyM5bEoKB4dIgSpobvcGXsYW/wLVEIpxJASmQ2OWpQrS8ziAUG9I39ARZMJ8PEfcr9AZ7ecv+Pw==
+X-Received: by 2002:a5d:5710:0:b0:236:cdd4:4cf4 with SMTP id a16-20020a5d5710000000b00236cdd44cf4mr33946566wrv.376.1667992644821;
+        Wed, 09 Nov 2022 03:17:24 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id bp4-20020a5d5a84000000b0023677081f3asm12946407wrb.42.2022.11.09.03.17.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:16:57 -0800 (PST)
-Message-ID: <953916b4-5c00-29a3-11a8-015911d23f69@linaro.org>
-Date:   Wed, 9 Nov 2022 12:16:56 +0100
+        Wed, 09 Nov 2022 03:17:23 -0800 (PST)
+Message-ID: <8502e61e-7040-0f73-9f27-60985fb2283d@gmail.com>
+Date:   Wed, 9 Nov 2022 12:17:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/6] arm64: dts: fsd: add sysreg device node
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v13,0/3] Add dpi output format control for MT8186
+To:     =?UTF-8?B?WGlubGVpIExlZSAo5p2O5piV56OKKQ==?= 
+        <Xinlei.Lee@mediatek.com>,
+        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>
+Cc:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <1666577099-3859-1-git-send-email-xinlei.lee@mediatek.com>
+ <c9228b64-c786-fa24-ff96-376eacfb1816@gmail.com>
+ <b69311d4d39eae54d1120760532a83bb62213277.camel@mediatek.com>
 Content-Language: en-US
-To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-References: <20221109100928.109478-1-vivek.2311@samsung.com>
- <CGME20221109100254epcas5p48c574876756f899875df8ac71464ce11@epcas5p4.samsung.com>
- <20221109100928.109478-4-vivek.2311@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109100928.109478-4-vivek.2311@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <b69311d4d39eae54d1120760532a83bb62213277.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 11:09, Vivek Yadav wrote:
-> From: Sriranjani P <sriranjani.p@samsung.com>
+Hi Xinlei,
+
+On 09/11/2022 03:40, Xinlei Lee (李昕磊) wrote:
+> On Tue, 2022-11-08 at 19:27 +0100, Matthias Brugger wrote:
+>> Hi Xinlei,
+>> 
+>> Somehow b4 broke with your thread but I was able to apply patch 1 and
+>> 2 by hand.
+>> 
+>> Thanks
+>> Matthias
+>> 
+>> On 24/10/2022 04:04, xinlei.lee@mediatek.com wrote:
+>> > From: Xinlei Lee <xinlei.lee@mediatek.com>
+>> > 
+>> > Base on the branch of linus/master v6.1 rc1.
+>> > 
+>> > Change since v12:
+>> > 1. Add MT8186_ prefix to variables added in mt8186-mmsys.h file.
+>> > 
+>> > Change since v11:
+>> > 1. Rebase on v6.1-rc1. Change nothing.
+>> > 
+>> > Change since v10:
+>> > 1. Modify patch title and add review tag.
+>> > 
+>> > Change since v9:
+>> > 1. Modify the location of the mmsys_dev member variable.
+>> > 
+>> > Change since v8:
+>> > 1. Modified the title and some description information.
+>> > 
+>> > Changes since v7:
+>> > 1. This series is based on the following patch:
+>> >     [1] soc: mediatek: Add mmsys func to adapt to dpi output for
+>> > MT8186
+>> >     
+>> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/1663161662-1598-2-git-send-email-xinlei.lee@mediatek.com/__;!!CTRNKA9wMg0ARbw!3tXTL3P6SgcP8Q_rcyCro64dxIXE6VuVbcNftU0ZnX6TNtU1akXwd96YfnoJs_fEig$
+>> >  
+>> > 2. Modify the DPI_FORMAT_MASK macro definition to GENMASK(1, 0);
+>> > 3. Add all settings to mtk_mmsys_ddp_dpi_fmt_config;
+>> > 4. Modify the commit title to Add mt8186 dpi compatibles and
+>> > platform
+>> > data.
+>> > 
+>> > Changes since v6:
+>> > 1. Different from other ICs, when mt8186 DPI changes the output
+>> > format,
+>> > the mmsys_base+400 register needs to be set to be valid at the same
+>> > time.
+>> >     In this series, all the situations that mmsys need to be set up
+>> > are
+>> > perfected (not necessarily used in practice).
+>> > 2. Put the value that controls the mmsys function in mtk-mmsys.h.
+>> > 3. Encountered the sink ic switched between dual edge and single
+>> > edge,
+>> > perfected setting and clearing mmsys bit operations in mtk_dpi.c.
+>> > 
+>> > Changes since v5:
+>> > 1. Separate the patch that adds edge_cfg_in_mmsys from the patch
+>> > that
+>> > adds mt8186 dpi support.
+>> > 2. Move the mmsys register definition to mmsys driver.
+>> >   
+>> > Changes since v4:
+>> > 1. This series of cancellations is based on the following patches:
+>> >     [1] Add MediaTek SoC(vdosys1) support for mt8195
+>> >     
+>> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/cover/20220711075245.10492-1-nancy.lin@mediatek.com/__;!!CTRNKA9wMg0ARbw!3tXTL3P6SgcP8Q_rcyCro64dxIXE6VuVbcNftU0ZnX6TNtU1akXwd96Yfnqv0_QYpg$
+>> >  
+>> >     [2] Add MediaTek SoC DRM (vdosys1) support for mt8195
+>> >     
+>> > https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/cover/20220804072827.22383-1-nancy.lin@mediatek.com/__;!!CTRNKA9wMg0ARbw!3tXTL3P6SgcP8Q_rcyCro64dxIXE6VuVbcNftU0ZnX6TNtU1akXwd96YfnoZMZ_peA$
+>> >  
+>> > 2. Added mtk_mmsys_update_bits function in mtk-mmsys.c;
+>> > 3. MMSYS 0x400 register is modified to
+>> > MT8186_MMSYS_DPI_OUTPUT_FORMAT;
+>> > 4. Fix formatting issues.
+>> > 
+>> > Changes since v3:
+>> > 1. Fix formatting issues;
+>> > 2. Modify the edge output control name & description;
+>> > 3. Fix the threading problem.
+>> > 
+>> > Changes since v2:
+>> > 1. Modify key nouns in the description;
+>> > 2. Add the label of jitao to Co-developed-by;
+>> > 3. Macro definition address lowercase problem and function naming;
+>> > 4. Add missing a description of this property in the mtk_dpi_conf.
+>> > 
+>> > Change since v1:
+>> > 1. Modify mt8186 compatiable location.
+>> > 2. Modify MT8186_DPI_OUTPUT_FORMAT name.
+>> > 
+>> > When MT8186 outputs dpi signal, it is necessary to add dual edge
+>> > output
+>> > format control in mmsys.
+>> > 
+>> > Xinlei Lee (3):
+>> >    soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_config
+>> > func
+>> >    drm: mediatek: Set dpi format in mmsys
+>> >    drm: mediatek: Add mt8186 dpi compatibles and platform data
+>> > 
+>> >   drivers/gpu/drm/mediatek/mtk_dpi.c     | 32
+>> > ++++++++++++++++++++++++++
+>> >   drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 ++
+>> >   drivers/soc/mediatek/mt8186-mmsys.h    |  8 ++++---
+>> >   drivers/soc/mediatek/mtk-mmsys.c       | 27 +++++++++++++++++--
+>> > ---
+>> >   include/linux/soc/mediatek/mtk-mmsys.h |  7 ++++++
+>> >   5 files changed, 67 insertions(+), 9 deletions(-)
+>> > 
 > 
-> Add SYSREG controller device node, which is available in PERIC and FSYS0
-> block of FSD SoC.
-> > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Pankaj Kumar Dubey <pankaj.dubey@samsung.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-
-Drop Cc list from commit msgs. Instead use get_maintainers.pl.
-
-> Signed-off-by: Sriranjani P <sriranjani.p@samsung.com>
-> ---
->  arch/arm64/boot/dts/tesla/fsd.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> Hi Matthias:
 > 
-> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> index f35bc5a288c2..3d8ebbfc27f4 100644
-> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-> @@ -518,6 +518,16 @@
->  				"dout_cmu_fsys1_shared0div4";
->  		};
->  
-> +		sysreg_peric: system-controller@14030000 {
-> +			compatible = "tesla,sysreg_peric", "syscon";
-> +			reg = <0x0 0x14030000 0x0 0x1000>;
+> Is your problem solved?
+> 
+> I tried to pull the series in link[1] to the kernel 6.1-rc1 version,
+> the patches are all successfully applied, and the patch in link[1]
+> looks complete.
+> 
+> If you still think there is something wrong, please let me know and I
+> can send a new version to try to fix it.
 
-Put it next  to the other system-controller node (and ordered by unit
-address against it).
+Everything is fine, no worries.
 
-Best regards,
-Krzysztof
+Thanks for asking.
+Matthias
 
+> 
+> [1]:
+> https://patchwork.kernel.org/project/linux-mediatek/cover/1666577099-3859-1-git-send-email-xinlei.lee@mediatek.com/
+> 
+> Best Regards!
+> xinlei
+> 
+> ************* MEDIATEK Confidentiality Notice
+>   ********************
+> The information contained in this e-mail message (including any
+> attachments) may be confidential, proprietary, privileged, or otherwise
+> exempt from disclosure under applicable laws. It is intended to be
+> conveyed only to the designated recipient(s). Any use, dissemination,
+> distribution, printing, retaining or copying of this e-mail (including its
+> attachments) by unintended recipient(s) is strictly prohibited and may
+> be unlawful. If you are not an intended recipient of this e-mail, or believe
+>   
+> that you have received this e-mail in error, please notify the sender
+> immediately (by replying to this e-mail), delete any and all copies of
+> this e-mail (including any attachments) from your system, and do not
+> disclose the content of this e-mail to any other person. Thank you!
