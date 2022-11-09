@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F89623275
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B40623279
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiKISbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S231173AbiKISdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiKISbb (ORCPT
+        with ESMTP id S231136AbiKISdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:31:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1DD388E
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:31:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA03E61BFA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:31:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8993C433D6;
-        Wed,  9 Nov 2022 18:31:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668018690;
-        bh=7YsIIkDfc2VGjUqMDpp1L/swZBDll/zllPEW8lEiIVg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a4P3Ko/fGVlBFyl/nTnm0CJQOqgiQvlVrRq48N6qb/d9977MOrBXvxnW49/yC23RM
-         1AVfemAEfhE3mPaXTsLTSwzadqdEkzop2XksRID6AbJaspLlRV/sWU64B6nFF3QUb0
-         YoX/dBk+yBfgxhdmF75V6YI/kCQtzxmQwruCa4vBI5h63UJcrjlFuZmItvJOFSn9Ls
-         yPEIk5SM7QeRzZMglGm0G17hNGHX8Ujrm3QrN4MwV6ipMIu6AtCYYlvlfwamkcUeq1
-         dR6RHqoF8dx9V+EBmrXHMPLZ9iiPg8uEQx6q3K4z8ItErd4xZpthSAXfNryMFKgYIb
-         SnOatZS3SiSUQ==
-Date:   Wed, 9 Nov 2022 18:31:25 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: Re: [PATCH] regmap-irq: Use the new num_config_regs property in
- regmap_add_irq_chip_fwnode
-Message-ID: <Y2vx/WwCwWhay+W+@sirena.org.uk>
-References: <20221107202114.823975-1-y.oudjana@protonmail.com>
+        Wed, 9 Nov 2022 13:33:03 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E171F61E;
+        Wed,  9 Nov 2022 10:33:03 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id mi9so12870041qvb.8;
+        Wed, 09 Nov 2022 10:33:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sMY7PupaY7AZJjDpU6LlRsSZwx2BK6otcOqvPzvh8zI=;
+        b=HalMxlAJq4g4Sfsn6Fa0+SPtqdbL7YjWjVMQ+bOPuGWhhi/TIWdK6eD4KAHxW46Xil
+         hXI0SOcPYPzlgVBVWY7VmHWm8rJ/M/eHHPWG4/ZIVtOO1yfQMp1Ljp/9LijIk9SyD8z1
+         kssi1QU2S+ggTdpjvnfU+fum1viU9REywIgc7yESWLCK5yVj1cDLNtsIlOh7hPfkU9Mz
+         ej9OPWvt0C6HsPwFAhuYLH2TDX+2RqUCylAO4KvWPwzMylx+jRiOFRP+vSpJQK+hOnen
+         nsYfq6P5bsD7X28/26op6khhvHiC8kBGxyPA2QNzFDzHggHKahZpCA5clNH2iJjDlbuE
+         6ghg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMY7PupaY7AZJjDpU6LlRsSZwx2BK6otcOqvPzvh8zI=;
+        b=cLeFdOKXPLbL4wH2v44Yj3U10i1lkW5IRqinZSoH0D3mgD1dn36f5AvHJglGHqI3lH
+         hF3iWEwyfrUSVCAP2koIeMZiaf2idrl/o3+ncMSsQi07lakvo02RVmqn7XwG3b+bBjPZ
+         Qxccu1OR9iNzMuzfhBZdLAXd50ZQoYxf0K35MOeLu1WRsAlC6c3SL1nHObJaKHQu14HS
+         PxefxKD1JC+K+K3IApYFYaldN++EM8wfVujdtXW48E8+ISLhxKib4QEchHgET7oy78t8
+         OqxdIBME6jDdG/X4isjneOT+w1wMG7v3r9sLQxo1QiWL+SQ+oZ6eoHKD3H9csqyYG00l
+         t0mw==
+X-Gm-Message-State: ACrzQf1ewh/+iI3fgCHNVr0xUqK7uQ50ShHFEi+YQNA9i17G4OydPvn2
+        hobxbGTVKf0in0D7+R9S8vc=
+X-Google-Smtp-Source: AMsMyM7izbtZBEaCtvBqW1849eyHVHe6zFq4aajTAz/1C6e4+RnYKL5+rBgUBMwQat+Pz1t3emfvDg==
+X-Received: by 2002:a05:6214:ac7:b0:4bb:61e7:18eb with SMTP id g7-20020a0562140ac700b004bb61e718ebmr55694952qvi.55.1668018782275;
+        Wed, 09 Nov 2022 10:33:02 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bt12-20020ac8690c000000b003999d25e772sm10117236qtb.71.2022.11.09.10.32.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 10:33:01 -0800 (PST)
+Message-ID: <1279d213-93bb-6faa-5697-f56d6d8aa293@gmail.com>
+Date:   Wed, 9 Nov 2022 10:32:55 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eBkwuCEkbanFir9M"
-Content-Disposition: inline
-In-Reply-To: <20221107202114.823975-1-y.oudjana@protonmail.com>
-X-Cookie: Today is what happened to yesterday.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5.10 000/117] 5.10.154-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221109082223.141145957@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221109082223.141145957@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/9/22 00:26, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.154 release.
+> There are 117 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Nov 2022 08:21:58 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
---eBkwuCEkbanFir9M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested with 
+BMIPS_GENERIC:
 
-On Mon, Nov 07, 2022 at 11:21:14PM +0300, Yassine Oudjana wrote:
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-> [   39.199374] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> [   39.199383] Mem abort info:
-> [   39.199390]   ESR = 0x0000000096000004
-> [   39.199397]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [   39.199408]   SET = 0, FnV = 0
-> [   39.199415]   EA = 0, S1PTW = 0
-
-Please think hard before including complete backtraces in upstream
-reports, they are very large and contain almost no useful information
-relative to their size so often obscure the relevant content in your
-message. If part of the backtrace is usefully illustrative (it often is
-for search engines if nothing else) then it's usually better to pull out
-the relevant sections.
-
---eBkwuCEkbanFir9M
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNr8fwACgkQJNaLcl1U
-h9D0SQf/eEkGZYYb+75Q/W1PvQOGLzVGiwxb95t5dOcikD2BdW2VaNwLsLqELKSJ
-hsT1HFEIsOlfDqjxHFqUL8lnUfWwOD/1MTMP18e42k5acl1yNUiFV6jddYULHiw4
-ZvVtzLpz6Tcev36ROX0r5uwlCdFeNjz5UXvLnlqCExROYeVZeS1EJzMqBNKq+HiY
-zLWPk2PQwO9RlRF2yrU/LpiPx3J0kTR9pelc6mbOfruSQBAZjo5VjL7QXqqlaFDD
-+2h977wZu0Ot1O+kP8VEFer9KycDmFq3EnjAlh0DsW/Tm4Lgr9o+a7yeNDGVNNDg
-ZDlH7+vtwyK8aD0oENbYx0Beg2aSTQ==
-=/LBd
------END PGP SIGNATURE-----
-
---eBkwuCEkbanFir9M--
