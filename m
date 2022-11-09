@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DD66232FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E306232FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbiKISvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S230182AbiKISvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiKISuj (ORCPT
+        with ESMTP id S231728AbiKISu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:50:39 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B51222B5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:50:33 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id m4-20020a258004000000b006cbf32f7ed8so17326241ybk.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:50:33 -0800 (PST)
+        Wed, 9 Nov 2022 13:50:58 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC992D744
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:50:42 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-37010fefe48so170584707b3.19
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:50:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lT5QMmKiixUc4hOkx2B5agh6ifSSv8GoT3OYojEFayc=;
-        b=J5iBygppWMyynh3fjd0h1zimuLLVXPLRICNwzhaTkhTCHnJ60j86AFaw/f1brpqElJ
-         OEnHLiYHfWemhwcN5jxIbJxJOEmbZB1bZu6qV+GB3URAJAroxMSJsNboaLLx75pLWFY4
-         NnLVvhzppfjD2+S4VNkt8wChsyw5+8/Bhz+kEOKVTu6SG4VAHP9zNdmUfTPO4bG1luwk
-         CBFaCLcPIZfEBdeRvmSItRq/n4SZckWr3K3IX24HNN+IEsR3wCx5ZpZHzBE2sogc5wRf
-         vs2/QeeLSCSvXEaexqvlkFi8GhQp2CBE/eieS1MsnzxjxRc5C6uVIQGMCmWg4Yvx/WTL
-         7qaw==
+        bh=muU+zEa3MJNYALn8xXqWOElORRD713Llcp74WiFN9WY=;
+        b=SfPv1cgUAbM/buANqiprCgGiNsnWrnfOHq4RL0cN1i7tIknjj9leomXlYxLDSVNuYi
+         KGNT6FIsAm3iDJ4vXSKRmVObWHx+JiX2ZA/IiAJO/esQO+QSgqIVK9iUM8Nlmv0seYSP
+         TS3aO2Qz2gTm0tn3IVsDKHy/vTzTXQ+QRXHl/iEH3HzC5cNpLBY1MatIrtCfk1rHs6Q8
+         l9sucyEqfmzlNk1up39LnceSWq85r65lR+l2wg5je/37gXF7BqycJ+IJGC9NR7jQfu/A
+         hVXCCu+VJZMo4iVHw7ppwfxiDCZK+XD/m4RqQAWE378WqleTl85BJ3w/olOhHEvSu6mr
+         sBng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lT5QMmKiixUc4hOkx2B5agh6ifSSv8GoT3OYojEFayc=;
-        b=HI+rTKoZlzBE06vpx3s4D1p51x7+T92WJj/09IiNfYBIJcsEFMXfidFpV958KI9Qt5
-         Jc4UahIihibhPm2tHDnYoPFHSOSbh8T1HY01L6gPM2RUQq8NyNlp9d3HbEq8RVnSCaF+
-         s8A0msoskeEv3GBNdlSvLAVuecXOH5yuSxIvcbgdGM0GjmEWqro2CR76uEJCZzHzuM8A
-         aLCgpj3SwF3XiObf63NSXZKbMXioBlVB4CWniVzeHscsNjEk3uYvDAzKok6+lSt+IdK+
-         CQETd+9iMomfp4JwJAEh9kIaZiFgVecMBfiTjm0+ufjH5VtsmdO3OtY/FXh6NYHWKl7G
-         IpOg==
-X-Gm-Message-State: ACrzQf3zqrc/5m/Qj3zZujUAQSQZ5RvMVPu8We1QAiNGtbNrhq3sbod1
-        bx5c7OzVubwdwukhMbZswUZF2gn9+zxE
-X-Google-Smtp-Source: AMsMyM4N/f2ycS6qQcmparzQwYVX6dleyP6/S0ma7Cd+HCsCnLDoZE6zuY8W1FFoHP1q5N61W1lqeBMzgilI
+        bh=muU+zEa3MJNYALn8xXqWOElORRD713Llcp74WiFN9WY=;
+        b=yQ0YHqxzRdbf5w3yDDuEY+7GlPWsPHpjqBY80QPbbAXt2YJ9O1zlxeZK4mplfmAYfc
+         GpaNB1exVPkCLj+Kiyx7+LfCL2ob+GXHAyzopFv5yuK9bki6HJeDwacXNLh27Hg+NCgU
+         6gKESzvlcbvo5xNHbZDR4FDBQ0uFdGPozSmhdMvmbKwe98sf2YG7ll/2r/QtisiwJjlc
+         K6LsDKv/XRDLQkKI7sOy270soBCxo95GHGxGW3+dmDhO6MF+SlYLVljSDqbPx5t91pVA
+         N0yEcYQflPKSj2sdwTkaLOr+++X2wZH6xllR4igQZtu2/QGQEn0FlylUKW+21rFIkBrs
+         Y9jg==
+X-Gm-Message-State: ACrzQf3seQP/TrRxyv32fLZWNEzU9sxMCMIph+pHzPuSE+Ricm4SxEJJ
+        8BfhP6VDkh218LAXGEyojtDMf+RMc9Co
+X-Google-Smtp-Source: AMsMyM5VWH92X5x0mD0J/Z9Zva+Ay7U+TFc0wKads0Lk8BgNsaWmfFvVlDOquMCWWccuwBfIlLFJAXnT9Y8j
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b06f:a254:5ce9:c442])
- (user=irogers job=sendgmr) by 2002:a25:af12:0:b0:6cb:b5d7:d64d with SMTP id
- a18-20020a25af12000000b006cbb5d7d64dmr60679393ybh.510.1668019832763; Wed, 09
- Nov 2022 10:50:32 -0800 (PST)
-Date:   Wed,  9 Nov 2022 10:49:08 -0800
+ (user=irogers job=sendgmr) by 2002:a25:6757:0:b0:6cf:f079:62f with SMTP id
+ b84-20020a256757000000b006cff079062fmr37251446ybc.23.1668019841501; Wed, 09
+ Nov 2022 10:50:41 -0800 (PST)
+Date:   Wed,  9 Nov 2022 10:49:09 -0800
 In-Reply-To: <20221109184914.1357295-1-irogers@google.com>
-Message-Id: <20221109184914.1357295-9-irogers@google.com>
+Message-Id: <20221109184914.1357295-10-irogers@google.com>
 Mime-Version: 1.0
 References: <20221109184914.1357295-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v2 08/14] tools lib perf: Add missing install headers
+Subject: [PATCH v2 09/14] tool lib symbol: Add Makefile/Build
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -71,7 +71,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +79,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Headers necessary for the perf build. Note, internal headers are also
-installed as these are necessary for the build.
+Add sufficient Makefile for libsymbol to be built as a dependency and
+header files installed.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/Makefile | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ tools/lib/symbol/Build    |   1 +
+ tools/lib/symbol/Makefile | 115 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 116 insertions(+)
+ create mode 100644 tools/lib/symbol/Build
+ create mode 100644 tools/lib/symbol/Makefile
 
-diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-index 21df023a2103..1badc0a04676 100644
---- a/tools/lib/perf/Makefile
-+++ b/tools/lib/perf/Makefile
-@@ -189,13 +189,21 @@ install_lib: libs
- 
- install_headers:
- 	$(call QUIET_INSTALL, headers) \
-+		$(call do_install,include/perf/bpf_perf.h,$(prefix)/include/perf,644); \
- 		$(call do_install,include/perf/core.h,$(prefix)/include/perf,644); \
- 		$(call do_install,include/perf/cpumap.h,$(prefix)/include/perf,644); \
- 		$(call do_install,include/perf/threadmap.h,$(prefix)/include/perf,644); \
- 		$(call do_install,include/perf/evlist.h,$(prefix)/include/perf,644); \
- 		$(call do_install,include/perf/evsel.h,$(prefix)/include/perf,644); \
- 		$(call do_install,include/perf/event.h,$(prefix)/include/perf,644); \
--		$(call do_install,include/perf/mmap.h,$(prefix)/include/perf,644);
-+		$(call do_install,include/perf/mmap.h,$(prefix)/include/perf,644); \
-+		$(call do_install,include/internal/cpumap.h,$(prefix)/include/internal,644); \
-+		$(call do_install,include/internal/evlist.h,$(prefix)/include/internal,644); \
-+		$(call do_install,include/internal/evsel.h,$(prefix)/include/internal,644); \
-+		$(call do_install,include/internal/lib.h,$(prefix)/include/internal,644); \
-+		$(call do_install,include/internal/mmap.h,$(prefix)/include/internal,644); \
-+		$(call do_install,include/internal/threadmap.h,$(prefix)/include/internal,644); \
-+		$(call do_install,include/internal/xyarray.h,$(prefix)/include/internal,644);
- 
- install_pkgconfig: $(LIBPERF_PC)
- 	$(call QUIET_INSTALL, $(LIBPERF_PC)) \
+diff --git a/tools/lib/symbol/Build b/tools/lib/symbol/Build
+new file mode 100644
+index 000000000000..9b9a9c78d3c9
+--- /dev/null
++++ b/tools/lib/symbol/Build
+@@ -0,0 +1 @@
++libsymbol-y += kallsyms.o
+diff --git a/tools/lib/symbol/Makefile b/tools/lib/symbol/Makefile
+new file mode 100644
+index 000000000000..4c1d6b53032d
+--- /dev/null
++++ b/tools/lib/symbol/Makefile
+@@ -0,0 +1,115 @@
++# SPDX-License-Identifier: GPL-2.0
++include ../../scripts/Makefile.include
++include ../../scripts/utilities.mak		# QUIET_CLEAN
++
++ifeq ($(srctree),)
++srctree := $(patsubst %/,%,$(dir $(CURDIR)))
++srctree := $(patsubst %/,%,$(dir $(srctree)))
++srctree := $(patsubst %/,%,$(dir $(srctree)))
++#$(info Determined 'srctree' to be $(srctree))
++endif
++
++CC ?= $(CROSS_COMPILE)gcc
++AR ?= $(CROSS_COMPILE)ar
++LD ?= $(CROSS_COMPILE)ld
++
++MAKEFLAGS += --no-print-directory
++
++INSTALL = install
++
++
++# Use DESTDIR for installing into a different root directory.
++# This is useful for building a package. The program will be
++# installed in this directory as if it was the root directory.
++# Then the build tool can move it later.
++DESTDIR ?=
++DESTDIR_SQ = '$(subst ','\'',$(DESTDIR))'
++
++LIBFILE = $(OUTPUT)libsymbol.a
++
++CFLAGS := $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
++CFLAGS += -ggdb3 -Wall -Wextra -std=gnu11 -U_FORTIFY_SOURCE -fPIC
++
++ifeq ($(DEBUG),0)
++ifeq ($(CC_NO_CLANG), 0)
++  CFLAGS += -O3
++else
++  CFLAGS += -O6
++endif
++endif
++
++ifeq ($(DEBUG),0)
++  CFLAGS += -D_FORTIFY_SOURCE
++endif
++
++# Treat warnings as errors unless directed not to
++ifneq ($(WERROR),0)
++  CFLAGS += -Werror
++endif
++
++CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++
++CFLAGS += -I$(srctree)/tools/lib
++CFLAGS += -I$(srctree)/tools/include
++
++RM = rm -f
++
++SYMBOL_IN := $(OUTPUT)libsymbol-in.o
++
++ifeq ($(LP64), 1)
++  libdir_relative = lib64
++else
++  libdir_relative = lib
++endif
++
++prefix ?=
++libdir = $(prefix)/$(libdir_relative)
++
++# Shell quotes
++libdir_SQ = $(subst ','\'',$(libdir))
++
++all:
++
++export srctree OUTPUT CC LD CFLAGS V
++include $(srctree)/tools/build/Makefile.include
++include $(srctree)/tools/scripts/Makefile.include
++
++all: fixdep $(LIBFILE)
++
++$(SYMBOL_IN): FORCE
++	$(MAKE) $(build)=libsymbol V=1
++
++$(LIBFILE): $(SYMBOL_IN)
++	$(QUIET_AR)$(RM) $@ && $(AR) rcs $@ $(SYMBOL_IN)
++
++define do_install_mkdir
++	if [ ! -d '$(DESTDIR_SQ)$1' ]; then             \
++		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$1'; \
++	fi
++endef
++
++define do_install
++	if [ ! -d '$(DESTDIR_SQ)$2' ]; then             \
++		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$2'; \
++	fi;                                             \
++	$(INSTALL) $1 $(if $3,-m $3,) '$(DESTDIR_SQ)$2'
++endef
++
++install_lib: $(LIBFILE)
++	$(call QUIET_INSTALL, $(LIBFILE)) \
++		$(call do_install_mkdir,$(libdir_SQ)); \
++		cp -fpR $(LIBFILE) $(DESTDIR)$(libdir_SQ)
++
++install_headers:
++	$(call QUIET_INSTALL, headers) \
++		$(call do_install,kallsyms.h,$(prefix)/include/symbol,644);
++
++install: install_lib install_headers
++
++clean:
++	$(call QUIET_CLEAN, libsymbol) $(RM) $(LIBFILE); \
++	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
++
++FORCE:
++
++.PHONY: clean FORCE
 -- 
 2.38.1.431.g37b22c650d-goog
 
