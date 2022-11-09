@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70E0622EFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08B4622F03
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbiKIPZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S232066AbiKIP0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiKIPZt (ORCPT
+        with ESMTP id S232051AbiKIP0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:25:49 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3BA2DDB
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:25:48 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so2174978pji.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:25:48 -0800 (PST)
+        Wed, 9 Nov 2022 10:26:03 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2608012A80
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:26:03 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id y13so16996034pfp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:26:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rp+1lx+FWBGvp1Xrs2hIQiVvxWYkY1FvZMZLEL/FwE0=;
-        b=Y77a3zKqdZRf7diXlm3O31pEh/kZgqy7eVWwCKzcuLgQaUuxn5a/pfJYYQS6utyaca
-         ppF5vk+V0PwQXTGyqOrdz6ANLgpN2BWwQrBnSoPKYm5GcdNvlkmaWWDab2X/6c+h5Hp8
-         IbLz/mRLkeDPKrZbp5LBXTnXcoHhpgZNbet8PC+mddfGgQI9P0dQFnZoRt0Fs4nYDx/t
-         QLV0MhuE9WUW86WUmubRN5CCAiVGMKqqg0s5+AbeCg1DXc22KSxrorUvsn3l8Mc9AS6x
-         Gk/PDQST2Zu9aSkOktE1QtS0A1vrRg/e3Sj06h0nkhgLdUm4qX9vdq7XQB/47ZV+2RgS
-         dYxQ==
+        bh=dELGs8lFRhRaHJurL/yZVZlax0Y+v7s3J7dg0eRKV4k=;
+        b=Y+Ifwx/7OLxCXv53GjMR+eJdVbpvTnf9UsjASEoSsT0akKjYfiXkbswrLQ6UAsiDgB
+         2NLZDl2L7HSraQtsuYKMmtSsPyNPyoRNIYDrxdoQ7huuT7rzB34LSmve3zFYq3yK5KeX
+         3ALWfSFR+9Z3RRAu/6tw0WzQutMKVUIET91Ehfe+W8m8aCWh2qVWE0hDGbkuDWbsqdnB
+         7hMgHtyhZAuqalkS+4YMIdSyuqnxXB5OH4key1xIjtVlU/PqpaT4qqqXfFg6t7Lr0IJQ
+         eLaYIP9DfQTM75TtDPldfxyEeQRpWIaaMuZdgeTTkRLReGtfZE3Eez2MVHTpHYqxdSDG
+         9A0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rp+1lx+FWBGvp1Xrs2hIQiVvxWYkY1FvZMZLEL/FwE0=;
-        b=CJmT2JvJBjNLLF+SH+xdExyH62Ons4OlByv2RIxKyXccMKqjWrJQTFyjewG/N6tBhD
-         7c6kmRxZAcS/dIRYKTv09jg1FV5MZd+WgASgI5eZSc4vrd8ONp7Ic/BsiP6+YPM3APii
-         cxPH6bEkSOfn6i7X1Hw2cDaayXYS7yYiWOz9pcSSMUXYsHkru+99Aptxm24QMalyTCky
-         iZkLAdUoX4Fb8V8z/dgWW0SU/Yp1uF4Svbvpws9onv9iz+8CNMjyTL1gH1PiRc6aJdj0
-         ArqxMMz37HebjRkqN6hTYuv8eagwk17/PqdHbmqEKvusqnrKc4Vo9Yld5Gx4QX8tG15R
-         Ydjg==
-X-Gm-Message-State: ACrzQf3ciji3k500rCAF82WFhKxfR9EWmChjudmb6VcFDyr1wRTHrLia
-        jet2pOLUKzKz//0A1rNtO29KGg==
-X-Google-Smtp-Source: AMsMyM55pKnPSGRFYNOdBqVC54AssWJl/EMz1je0gdCgBf7K1JU4s7TVylkYFnjJ0F0AxtmfZ7jFYA==
-X-Received: by 2002:a17:902:8345:b0:188:5dbc:5c9b with SMTP id z5-20020a170902834500b001885dbc5c9bmr32424205pln.118.1668007548142;
-        Wed, 09 Nov 2022 07:25:48 -0800 (PST)
+        bh=dELGs8lFRhRaHJurL/yZVZlax0Y+v7s3J7dg0eRKV4k=;
+        b=izb+8ezjHF6DJZZsCnZkWexF/HHLodeUfv4KTWjATNCk/WDai2Moj5Eg3IfB712gov
+         KFLttMZ/g7JmPJaDzM1lHRYLO5H7652oNk53GfIsjj1jigOZvgfSYr18i9rLCQ8/SJa+
+         ZwEy6/haurQWv3i9PmdvKR5JkFMazAj671e0g+FkdevsT+llfCXjRMUKoz6Szw3mfKpw
+         wzlSlusNf9NZXldvx60cnVmB4LqsNhLezizUnio8fjzZ5VugTLST56w+/bXNsoSw76Lh
+         TNwiyBk2ElnKg6qMeZhY2SWGsgvf0rT2JlHj3DWX50YQBYGhVH51lPvHis2Er8lTwHau
+         SNWA==
+X-Gm-Message-State: ACrzQf1Z9j8DwsXPwb4yuel7A78vfKpIiz20OLTEFhUCjEJ22dXoO5R6
+        SeOFD60sLfmDC0MhE86AtHPqdFbMrRPrDg==
+X-Google-Smtp-Source: AMsMyM5FcbuWJITIeMGOy3l2z/mJAO/r8SFo2iBbogk+aLSKJ6ApQB+AxMMIc02/tES7dbhmwmQmUw==
+X-Received: by 2002:a05:6a00:27a0:b0:56e:8a72:3726 with SMTP id bd32-20020a056a0027a000b0056e8a723726mr28874267pfb.46.1668007562517;
+        Wed, 09 Nov 2022 07:26:02 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id q17-20020aa79611000000b00565c860bf83sm8453738pfg.150.2022.11.09.07.25.47
+        by smtp.gmail.com with ESMTPSA id w15-20020a1709026f0f00b00181f8523f60sm9194581plk.225.2022.11.09.07.26.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 07:25:47 -0800 (PST)
-Date:   Wed, 9 Nov 2022 15:25:44 +0000
+        Wed, 09 Nov 2022 07:26:02 -0800 (PST)
+Date:   Wed, 9 Nov 2022 15:25:58 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        thomas.lendacky@amd.com, jmattson@google.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 04/11] KVM: SVM: retrieve VMCB from assembly
-Message-ID: <Y2vGeFbOI8h/WiUV@google.com>
+        thomas.lendacky@amd.com, jmattson@google.com
+Subject: Re: [PATCH 05/11] KVM: SVM: remove unused field from struct vcpu_svm
+Message-ID: <Y2vGhtLAyr80QLcR@google.com>
 References: <20221109145156.84714-1-pbonzini@redhat.com>
- <20221109145156.84714-5-pbonzini@redhat.com>
+ <20221109145156.84714-6-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221109145156.84714-5-pbonzini@redhat.com>
+In-Reply-To: <20221109145156.84714-6-pbonzini@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,28 +74,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, Nov 09, 2022, Paolo Bonzini wrote:
-> Continue moving all accesses to struct vcpu_svm directly in vmenter.S.
-> This limits the confusion due to different registers used for
-> argument passing in 32- and 64-bit ABIs.
+> The pointer to svm_cpu_data in struct vcpu_svm looks interesting from
+> the point of view of accessing it after vmexit, when the GSBASE is still
+> containing the guest value.  However, despite existing since the very
+> first commit of drivers/kvm/svm.c (commit 6aa8b732ca01, "[PATCH] kvm:
+> userspace interface", 2006-12-10), it was never set to anything.
 > 
-> It is not strictly necessary for __svm_sev_es_vcpu_run, but staying
-
-It's not strictly necessary at all ;-)
-
-__svm_sev_es_vcpu_run()
-
-> consistent is a good idea since it makes __svm_sev_es_vcpu_run a
-
-__svm_sev_es_vcpu_run()
-
-> stripped version of _svm_vcpu_run.
-
-Missed an underscore.  And parantheses.
-
-> No functional change intended.
+> Ignore the opportunity to fix a 16 year old "bug" and delete it; doing
+> things the "harder" way makes it possible to remove more old cruft.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: a149180fbcf3 ("x86: Add magic AMD return-thunk")
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
 
