@@ -2,81 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EEF6228FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954C8622902
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiKIKuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
+        id S229508AbiKIKvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiKIKtx (ORCPT
+        with ESMTP id S229690AbiKIKu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:49:53 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC8C13F70
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:49:52 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id t62so18334530oib.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 02:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4NsaOOaEbhTsCVVYI+imS+ix3gQSDTV7dTnALQ6Ga9U=;
-        b=YP82DL7J4NFI+2KLEppBy2zLWR1lg9ddBPulUyiwsoHLRXVhpsck0FiaX9hrton5g/
-         Ow6brV9HvQEnKZvnehqufXGX1u0fDrdL58J6aWnuJS9V6DyahRG4qVUM4p+5ROzxIBcN
-         vipCkPggN2BpZRb3H+TUZIPEYRYvwHiHdLe1rbGU8AEx4mmgvatAYXmgR052jUAcOgMH
-         /B9hfWeB0cC2H0V1paCfBbfmIdGWkwJAsenVwiHaKXlCE4IzvsvE4lGcLfPzoxgvC3AL
-         mqHxrpiYJl1ql8XBs/pZqJm3YJlWwjnMnRDYDN/dPTpOL06xp+beZfqcN7FTEc9IDcwR
-         tPUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4NsaOOaEbhTsCVVYI+imS+ix3gQSDTV7dTnALQ6Ga9U=;
-        b=22hYr1Wy53MYFbb/7yL+q0dDv5NALS7wV9B7rFtgGNxNUlLX2weLWt1vmSVwcpUmit
-         LjFTzI5sfFdq8sVPzUVBDwmP8oRLbc8wczYnbPyuvfZ6YhMtRTsSuy4ZmerYQgqZNmwe
-         zkeiwYkH+/0lrr6PlN1c8o/6fSlQg4lvzj1JauyLf3nyI9nBPRUvV/p7dZwsdREwhQyz
-         7Qu5cKSk3f1uaoqEvYVSwkdEyET+zZU4B1aVmLillvlLs95xM00me9KFxuj4l/u2Mc9j
-         7W0/xupFPqNKEl0KbMKnTZBoCSAO1+8K9Ao1OEblettKhxZe/vVZxZ7We+6wLQV1hUVs
-         W1JQ==
-X-Gm-Message-State: ACrzQf3Fatej147NAboVeYpuILL5HclS05G5rK6y/XqHQD70IJmUWwHk
-        MVAYOL/ewETM4yCzdWV1SHUNdmQ0t1CvBxGkykM=
-X-Google-Smtp-Source: AMsMyM6hrOwW4b2zlSmtPuSRCEESGtqcO/NYKT0Q6xTum2dXvWvY1hgQbuF/O01ifu7uHETF7WuYIEyM5TRwpQhddGY=
-X-Received: by 2002:aca:e108:0:b0:345:a189:fea9 with SMTP id
- y8-20020acae108000000b00345a189fea9mr33040190oig.129.1667990991555; Wed, 09
- Nov 2022 02:49:51 -0800 (PST)
+        Wed, 9 Nov 2022 05:50:57 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47349249;
+        Wed,  9 Nov 2022 02:50:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667991056; x=1699527056;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=unCM/Qt3pgMcDj4CtsPmEJc8BHMjVTV5v1XWbrtVPsY=;
+  b=e6oV0IHn8pWl8OVgka/QNakN/6CM7ohPLOHTNJUwRC+zrG4Bmxj7qVLq
+   CxqQpEGX3yd7gNjs3uOW7gOj3oTaHrNgcHD9jcXoYSx1i9Bmedv3C6gkE
+   A+gR5Zt1kQ4YidhdqaoNVTujzDTJ22TLfybXL2ZT9rfy9g8otmxh4PSR4
+   DWzJ8zpsBvFv8KJDBY5pH15VuylqsxC8sQtCnOuzC8ImrXkg9VIPAdxDX
+   cNG5n42FTd9SOamzb+GyH1MUHO1BDRd+nbH9jS9HCZ5CyTBIPymgNBqXM
+   GrzIh6gdDhmPLxFyXQiQ0X9nrf24hqszUigfE5NmbNUR3+U7L7fHLustV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="397239951"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="397239951"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 02:50:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="779300605"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="779300605"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Nov 2022 02:50:54 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 16570155; Wed,  9 Nov 2022 12:51:17 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-acpi@vger.kernel.org
+Subject: [PATCH v1 1/2] resource: Replace printk(KERN_WARNING) by pr_warn()
+Date:   Wed,  9 Nov 2022 12:51:13 +0200
+Message-Id: <20221109105114.32886-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221109093347.228761-1-zyytlz.wz@163.com> <Y2t8E597OQ8nk4D1@kroah.com>
-In-Reply-To: <Y2t8E597OQ8nk4D1@kroah.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Wed, 9 Nov 2022 18:49:40 +0800
-Message-ID: <CAJedcCyf=_WrPm=1gMks0p04k=wYYAgHKMA=oZR5ozod1rgP5g@mail.gmail.com>
-Subject: Re: [PATCH v7] misc: sgi-gru: fix use-after-free error in
- gru_set_context_option, gru_fault and gru_handle_user_call_os
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, zhengyejian1@huawei.com,
-        dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, alex000young@gmail.com,
-        security@kernel.org, sivanich@hpe.com, lkp@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The kernel robot did not provide a tested-by comment for this as they
-> did not test it.
->
-> Please never add tags that the person does not submit to you.
->
+Replace printk(KERN_WARNING) by pr_warn().
 
-Okay, I will remove the related tag righe now.
+While at it, use %pa for the resource_size_t variables.
 
-Best regards,
-Zheng Wang
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ kernel/resource.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
+
+diff --git a/kernel/resource.c b/kernel/resource.c
+index 4c5e80b92f2f..ab32b015bd50 100644
+--- a/kernel/resource.c
++++ b/kernel/resource.c
+@@ -888,7 +888,7 @@ void insert_resource_expand_to_fit(struct resource *root, struct resource *new)
+ 		if (conflict->end > new->end)
+ 			new->end = conflict->end;
+ 
+-		printk("Expanded resource %s due to conflict with %s\n", new->name, conflict->name);
++		pr_info("Expanded resource %s due to conflict with %s\n", new->name, conflict->name);
+ 	}
+ 	write_unlock(&resource_lock);
+ }
+@@ -1283,9 +1283,7 @@ void __release_region(struct resource *parent, resource_size_t start,
+ 
+ 	write_unlock(&resource_lock);
+ 
+-	printk(KERN_WARNING "Trying to free nonexistent resource "
+-		"<%016llx-%016llx>\n", (unsigned long long)start,
+-		(unsigned long long)end);
++	pr_warn("Trying to free nonexistent resource <%pa-%pa>\n", &start, &end);
+ }
+ EXPORT_SYMBOL(__release_region);
+ 
+@@ -1658,6 +1656,7 @@ __setup("reserve=", reserve_setup);
+ int iomem_map_sanity_check(resource_size_t addr, unsigned long size)
+ {
+ 	struct resource *p = &iomem_resource;
++	resource_size_t end = addr + size - 1;
+ 	int err = 0;
+ 	loff_t l;
+ 
+@@ -1667,12 +1666,12 @@ int iomem_map_sanity_check(resource_size_t addr, unsigned long size)
+ 		 * We can probably skip the resources without
+ 		 * IORESOURCE_IO attribute?
+ 		 */
+-		if (p->start >= addr + size)
++		if (p->start > end)
+ 			continue;
+ 		if (p->end < addr)
+ 			continue;
+ 		if (PFN_DOWN(p->start) <= PFN_DOWN(addr) &&
+-		    PFN_DOWN(p->end) >= PFN_DOWN(addr + size - 1))
++		    PFN_DOWN(p->end) >= PFN_DOWN(end))
+ 			continue;
+ 		/*
+ 		 * if a resource is "BUSY", it's not a hardware resource
+@@ -1683,10 +1682,8 @@ int iomem_map_sanity_check(resource_size_t addr, unsigned long size)
+ 		if (p->flags & IORESOURCE_BUSY)
+ 			continue;
+ 
+-		printk(KERN_WARNING "resource sanity check: requesting [mem %#010llx-%#010llx], which spans more than %s %pR\n",
+-		       (unsigned long long)addr,
+-		       (unsigned long long)(addr + size - 1),
+-		       p->name, p);
++		pr_warn("resource sanity check: requesting [mem %pa-%pa], which spans more than %s %pR\n",
++			&addr, &end, p->name, p);
+ 		err = -1;
+ 		break;
+ 	}
+-- 
+2.35.1
+
