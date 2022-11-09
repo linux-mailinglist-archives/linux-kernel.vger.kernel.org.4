@@ -2,116 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7225162261A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 464E4622621
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiKIJBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
+        id S230207AbiKIJC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:02:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiKIJBe (ORCPT
+        with ESMTP id S230249AbiKIJCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:01:34 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9004A1E3D7
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:01:31 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id c25so24734039ljr.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:01:31 -0800 (PST)
+        Wed, 9 Nov 2022 04:02:17 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E571205C1
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:02:09 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bj12so44802979ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:02:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=koi87UBrY+4VbIvBhOaMl54U0jWmVKM7mhP4eLxgcCM=;
-        b=pYyHtrWUHIUnG+wcIiuyl8Eb4xpHSKWAbbm2UUGW+KAXP1NEZ5VG6w+KCCeVZDMvA6
-         xG0Afks2KDaRV8ZceEPEFN2cR6hlLiyqaBnfwVmfNfAm0mqPCqTf16Bui1CL0AzeI/jl
-         UJrBkDY3mWGCs41//YNt9kXSV1nlSqVf/qU/d1xdI3CDV5Ysz6Ns/LQ2zTF+LAm4cAD3
-         /Kt6hF2qRXx8UuklDBKOVfGgBSUX5aTqm6iE338qmimwzVn3HSyK4MyERUePThBrL95T
-         RSBHm+AvgOeYlCqvCQSudofFWbQfRZ71UE4pZnExgvX9GUlfeqJeBP/uT6sz1rRTtfKh
-         iMJA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsAe+kA3GdQnBF2aWolv9MYAcxJCda0oHD5FhlDiJLE=;
+        b=j9Nc3MpEbBnwzwg5UEaLqwNu1nsGIMUF3a8z9HJDehUlUeryWFOnEFfE3Bbu6Y6l8o
+         tDgNmvBYbNahlU2sPytXWqPqjGNyQhrQsT5z84ORPZN896DSxrbH6QCRuAUbuLAMDq26
+         qXVH9l70TndqhSFEqFs0l963Ufs1kOcH/eP0rro65enDrRzyp1WDUq6r1uj17Bh0rbkj
+         PnUZCTVhCVqs87+NbiQMf/XPqdYnkyljsYv7ArOA9Cgubf7rWluUbu9AnkzrbsaeLRJc
+         UWX+Sjlf/pQktjsSSUmW6BWfn8ov6qxzK7D5ZT5YrgHZVAzIRYxpoQD220mJ7opf8L+M
+         dIQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=koi87UBrY+4VbIvBhOaMl54U0jWmVKM7mhP4eLxgcCM=;
-        b=EPj+bTT2K3Pnp2PQPe6UgjClYsn/KwIf73UoYW8fsH2ZFZ++vuFOJ0C8zCf1rOvI0h
-         HmsOu4fav0EAuojW0V+MyExUUYbx8dgfwOQ2YDd+YHqkCUOAwUCGY40NhPPtS28hKIos
-         vV/vGwbdZCyL+i5/UEyg5rt507VDALckeF/Ls0DVasEy+iXrq5RGWMnZyL3BgQWJqBL6
-         8ZYvBfy3J8Xqw4s8mgNI52WCk91frJfj5ArvcaJfxN8eIdN+XnwYnrRrcOw5VGX6Z3jP
-         rtX69oNDfi+YZ97XaJt/dfI+E+TAqB7gsDlgaxP5vI2mNnZa1GkDOrTVFmWhnL8UtkHH
-         6N7g==
-X-Gm-Message-State: ACrzQf2b+P6gNc34JERjpjv/zyU4kDdVma1YLrowAJIHhJPy8oQWoNow
-        kfQhA35dKt6M3/HuBUihwZjI7A==
-X-Google-Smtp-Source: AMsMyM68gD6nF6Ys++aTB+8/odStmcWWdBR+jCLTj5ELwjEBJoftvdDjO2Ka2/JTTfzis+5UjDtBQg==
-X-Received: by 2002:a2e:9a88:0:b0:26f:c489:883e with SMTP id p8-20020a2e9a88000000b0026fc489883emr7498644lji.281.1667984489818;
-        Wed, 09 Nov 2022 01:01:29 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id b2-20020a05651c032200b0026bf43a4d72sm2062535ljp.115.2022.11.09.01.01.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 01:01:29 -0800 (PST)
-Message-ID: <5741e444-00b3-16f6-d012-f2b77cf8b0b2@linaro.org>
-Date:   Wed, 9 Nov 2022 10:01:28 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nsAe+kA3GdQnBF2aWolv9MYAcxJCda0oHD5FhlDiJLE=;
+        b=nAYE2h7A0yI49TJPDEDtXdiqV+A+5l0YrkT1M0+bZR48ZYVG+A3h4UyNJbZn6nLoaM
+         dYz7WCG2LP0CurWO+uZY+yAm3oQzx2DoHPxGsDvYHX/7YrPue6V1Z8JE6LMI9IAsH1di
+         mOQsDiHoTPH12QgKtZdsqnTJgquWG/1j7ztCmHZwjAPcVABrmtdUPXLkpSDZ77no58HL
+         4G7VdI5iZ++T+kxbo7lxsiTVGh6vaObsn/2qUi/4l/4ERbB2I4BC7vdU4YJs1QPw/QGD
+         8D4kFpM9JC1fO93tqH1aSzsWvhpxUvy88rE4+sNCRIV8wunnJIn5DV4CKb8cKKNV82hL
+         1dgQ==
+X-Gm-Message-State: ACrzQf04BsEF7RX4rwN4rFuV8UGC+xTWDQ/NX+yMpRivtp3i6YLwWy/d
+        tMakRgFA2RUYeZYEwPwPg5BhIpq0jRbRZABhUQ1V2Q==
+X-Google-Smtp-Source: AMsMyM6ISJx2BFO7Ll0CuuSSmC9yDaAZCLn3kbu6cGtsl2P5ZyLimjSH+pon5taEHzKDD5DmZkLJlkesHDVhMsZW0V8=
+X-Received: by 2002:a17:906:95d1:b0:7ad:9891:8756 with SMTP id
+ n17-20020a17090695d100b007ad98918756mr1130133ejy.203.1667984527623; Wed, 09
+ Nov 2022 01:02:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Patch v2 1/3] arm: exynos: Add new compatible string for
- Exynos3250 SoC.
-Content-Language: en-US
-To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, smitha.t@samsung.com
-References: <CGME20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8@epcas5p2.samsung.com>
- <20221109035507.69086-1-aakarsh.jain@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109035507.69086-1-aakarsh.jain@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Nov 2022 10:01:56 +0100
+Message-ID: <CACRpkdbt41kLsU7ds+PmaxSb=WbBrqpSmzvjXH98vXg85Mc3xQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] pinctrl: intel: Enable PWM optional feature
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 04:55, Aakarsh Jain wrote:
-> Since,MFC v7 support was added for Exynos5420 and Exynos
-> 3250 SoC with same compatible string "samsung,mfc-v7".As
-> both SoCs having different hardware properties and having
-> same compatible string for both SoCs doesn't seems to be correct.
-> New compatible is added for Exynos3250 SOC which will
-> differentiate the node properties for both SoCs which
-> support MFC v7.
-> 
-> Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
-> ---
->  Documentation/devicetree/bindings/media/s5p-mfc.txt | 9 +++++----
+On Tue, Nov 8, 2022 at 3:22 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
+> I would like to route this via Intel pin control tree with issuing
+> an immutable branch for both PINCTRL and PWM subsystems, but I'm
+> open for other suggestions.
 
-This is a friendly reminder during the review process.
+I'm fine with this approach if it works for Uwe.
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-Best regards,
-Krzysztof
-
+Yours,
+Linus Walleij
