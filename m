@@ -2,208 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87796223DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78AA6223E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 07:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiKIGRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 01:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S229601AbiKIGTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 01:19:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKIGRv (ORCPT
+        with ESMTP id S229448AbiKIGT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 01:17:51 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2056.outbound.protection.outlook.com [40.107.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF7A315;
-        Tue,  8 Nov 2022 22:17:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hEH7On1+i77WMiD7yLLec0bzmM0n9DxaeGLyy0OVc5OXmTjO2owlmusrFHA15Lnv59LxiPzPG0ZsgRM7CbYBjtaaGCdJIW39OvaUKJjws6NRG7GB8aUwAoJZXmUe2H+LemdbOEbX5ToagiQlUaMWXnvXwBu1w+weZWcbdYHvaL0G28+TcvTzqSdTtj9S5gy7F7zmJLJlTx7eIYEDbxthssedVnXbHkWvKTdL7p+PKI8M1JSnwwGpGBOMWEF61WK4W18lphmI7xdWe6K+RVCo39OQzckPajFa5QcFAACqzobuPThsWXGgOndJKtJsakWcVza7giOH7UsnjpHmjLYOHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HxwfGjTDzhc6uLTkzDcKivfIX5jmLCO9vHrFSfST8GM=;
- b=TcFoaQbYWGQIwThdSKIheYTqBYTpR/4L8/2wUKisns74BW4dIUwzFhmcYN0FFr5tgP29y1n7mU2I1FsPS+0nUhsqbTjjCcgGRPyhUaprZ3TUoxfO4Etuq4ceF8i0rNa6QoE7rLVUXzT9YAso4nn0t8I7qK9leOgl4Ioy+SUVeqE8s3g51Oxupvvqq22SpCnrTS3hk47PrWsZQn/eGWm68c0TvhqYCMAbu7e+4pGQG6gjC2XMJKx9dkkXsmQClzEtHA1T8zIpv8WjgVOcWnFuvJwypvDbrYZ9JLxFuiMjOsOukcyGcvysZNi86JnnUOiopaSO657Er+crX3tRsnYIBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HxwfGjTDzhc6uLTkzDcKivfIX5jmLCO9vHrFSfST8GM=;
- b=usRtWKsTep2UMJJ8BxF/4mMErLclS3HQUhm4AGdcp6hMhIEKCE68+6bdncKk7Ls+UqxRCRvh13+jaQeKZpYNafdJnNz4Bl89R5H/gLfK/N34w9zQHTHVvNYknGTgrvi8osqQ8C8O/JAViW5yIgZG8KMVaHn+ywKyUgx3Cq9rtQcKk1RvAu4RH6OaULSaJMSfYJwwcbT5eB3oKAmpmvbjs7LIY24/yq94SGQZugl+5MPwMSNblor9kv+RRNZcxhIHHvA+5RsGQq8L/cbvE/gjPP/MvD5nB7Kw/RazVKlb3uxNJfvQjImeU0HIO0+EiwuDzCNLYN9EORF8H+3sshrWaw==
-Received: from MW2PR16CA0023.namprd16.prod.outlook.com (2603:10b6:907::36) by
- DM4PR12MB6398.namprd12.prod.outlook.com (2603:10b6:8:b5::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.27; Wed, 9 Nov 2022 06:17:48 +0000
-Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:0:cafe::79) by MW2PR16CA0023.outlook.office365.com
- (2603:10b6:907::36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24 via Frontend
- Transport; Wed, 9 Nov 2022 06:17:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 06:17:48 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 8 Nov 2022
- 22:17:38 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 8 Nov 2022
- 22:17:38 -0800
-Received: from kkartik-desktop.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Tue, 8 Nov 2022 22:17:33 -0800
-From:   Kartik <kkartik@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <kkartik@nvidia.com>, <digetx@gmail.com>,
-        <ndesaulniers@google.com>, <ulf.hansson@linaro.org>,
-        <arnd@arndb.de>, <skamble@nvidia.com>, <windhl@126.com>,
-        <sumitg@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] soc/tegra: fuse: use platform info with soc revision
-Date:   Wed, 9 Nov 2022 11:47:31 +0530
-Message-ID: <1667974651-10893-1-git-send-email-kkartik@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Wed, 9 Nov 2022 01:19:27 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F1319033
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 22:19:25 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R261e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VUMT3zM_1667974761;
+Received: from 30.221.128.156(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VUMT3zM_1667974761)
+          by smtp.aliyun-inc.com;
+          Wed, 09 Nov 2022 14:19:22 +0800
+Message-ID: <05c24286-427d-e572-aa70-8f1d882b9602@linux.alibaba.com>
+Date:   Wed, 9 Nov 2022 14:19:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT033:EE_|DM4PR12MB6398:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6357ba5d-b77e-43cc-5d3c-08dac21a1fa1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EirPi1bdh64xMGcrPwXRpHLX/CNmSfp97XzYgjgb8FT9zChXFVbJ2Dr630Ni8Jtw2aBxLtHi+ekU08Ipyaq84TMObm0Y1pmLo84QUFUaGbfZlfA2PUZu8/v600p/G5miluTx/tPbua7vuAQooofE+v5ogQur4DYr1CulcwrYuTmqxfxdUvictcY0E2vNDbyvP8GtLW8ZnWdJK4+3MJ90Gu5lutGtHORKzijcz2Lvevil0oIvska4sgrZQqSwjhHudEcb5a5YUWm2sjJTmKluavlQqbw1d9bWOmtBR2v2WazJ5fMKyYew3xY1yl9Wy/fV9RWRHP6dBrF+So/v/QJgG8kZPEKdbWr3suTWfDbTNspyswJUeR213dJNv/2RgB8JbbX58IvaP/ZssEDuhzDA8xlT45TNeexwPHMkJyw7QUNXFhkd0hy1mBXHwUPhJP1w027oEfIQhUwzW4xW9J7hfhTM4j0WbXhsC6iFi4iHf4Jqw9eYcCGUJF4bTdi5xpEZmLgVNMFMFNETjuWAnPQJwct2Ee0EM+b6VpapxjAH2xK0HHe2Y9gzkB6Og+Zrd8l1+lfy0FY76IsA3flLOBN8PQiUl8+SaJ5sHLXVdcQXtWX9sNsULYX3US6PMmGM67NGhvRpQu2mJi5qxPUd/1V+xh0UPPlYmW8rnFFgwGo6/D25BNHc5p8AoTHds1THTeZdRlOYOdDlKB8AYJt7uW1YrBrCvtutCYPSZqhEpNXpcLXSiKCaZXBStTiLkdJT7SGu7YPdUh2h6iDMoK4sp29olFVhq7iFXPALbeZAfIyr3nY=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(136003)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(82310400005)(478600001)(7636003)(110136005)(921005)(356005)(316002)(7696005)(47076005)(2906002)(40480700001)(26005)(8676002)(70586007)(70206006)(82740400003)(86362001)(2616005)(36756003)(8936002)(41300700001)(5660300002)(186003)(83380400001)(426003)(40460700003)(336012)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 06:17:48.0859
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6357ba5d-b77e-43cc-5d3c-08dac21a1fa1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6398
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH] ocfs2: fix memory leak in ocfs2_mount_volume()
+To:     Li Zetao <lizetao1@huawei.com>, mark@fasheh.com,
+        jlbec@evilplan.org, srinivas.eeda@oracle.com
+Cc:     ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org
+References: <20221108152516.1189165-1-lizetao1@huawei.com>
+Content-Language: en-US
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20221108152516.1189165-1-lizetao1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tegra pre-silicon platforms does not have chip revisions. This makes
-"revision" soc attribute obsolete on these platforms.
+Hi,
 
-Populate "revision" soc attribute with "platform name + chip revision"
-for Silicon. For pre-silicon platforms populate it with "platform name"
-instead.
+Thanks for so detailed analysis.
+The patch almost looks good. A minor improvement, please see my
+comments inline.
 
-Signed-off-by: Kartik <kkartik@nvidia.com>
----
- drivers/soc/tegra/fuse/fuse-tegra.c    | 23 +++++++++++++++++++++--
- drivers/soc/tegra/fuse/tegra-apbmisc.c |  1 +
- include/soc/tegra/fuse.h               | 15 +++++++++++++++
- 3 files changed, 37 insertions(+), 2 deletions(-)
+On 11/8/22 11:25 PM, Li Zetao wrote:
+> There is a memory leak reported by kmemleak:
+> 
+>   unreferenced object 0xffff88810cc65e60 (size 32):
+>     comm "mount.ocfs2", pid 23753, jiffies 4302528942 (age 34735.105s)
+>     hex dump (first 32 bytes):
+>       10 00 00 00 00 00 00 00 00 01 01 01 01 01 01 01  ................
+>       01 01 01 01 01 01 01 01 00 00 00 00 00 00 00 00  ................
+>     backtrace:
+>       [<ffffffff8170f73d>] __kmalloc+0x4d/0x150
+>       [<ffffffffa0ac3f51>] ocfs2_compute_replay_slots+0x121/0x330 [ocfs2]
+>       [<ffffffffa0b65165>] ocfs2_check_volume+0x485/0x900 [ocfs2]
+>       [<ffffffffa0b68129>] ocfs2_mount_volume.isra.0+0x1e9/0x650 [ocfs2]
+>       [<ffffffffa0b7160b>] ocfs2_fill_super+0xe0b/0x1740 [ocfs2]
+>       [<ffffffff818e1fe2>] mount_bdev+0x312/0x400
+>       [<ffffffff819a086d>] legacy_get_tree+0xed/0x1d0
+>       [<ffffffff818de82d>] vfs_get_tree+0x7d/0x230
+>       [<ffffffff81957f92>] path_mount+0xd62/0x1760
+>       [<ffffffff81958a5a>] do_mount+0xca/0xe0
+>       [<ffffffff81958d3c>] __x64_sys_mount+0x12c/0x1a0
+>       [<ffffffff82f26f15>] do_syscall_64+0x35/0x80
+>       [<ffffffff8300006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> 
+> This call stack is related to two problems. Firstly, the ocfs2 super uses
+> "replay_map" to trace online/offline slots, in order to recover offline
+> slots during recovery and mount. But when ocfs2_truncate_log_init()
+> returns an error in ocfs2_mount_volume(), the memory of "replay_map"
+> will not be freed in error handling path. Secondly, the memory of
+> "replay_map" will not be freed if d_make_root() returns an error in
+> ocfs2_fill_super(). But the memory of "replay_map" will be freed normally
+> when completing recovery and mount in ocfs2_complete_mount_recovery().
+> 
+> Fix the first problem by adding error handling path to free "replay_map"
+> when ocfs2_truncate_log_init() fails. And fix the second problem by
+> calling ocfs2_free_replay_slots(osb) in the error handling path
+> "out_dismount". In addition, since ocfs2_free_replay_slots() is static,
+> it is necessary to remove its static attribute and declare it in header
+> file.
+> 
+> Fixes: 9140db04ef18 ("ocfs2: recover orphans in offline slots during recovery and mount")
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
+> ---
+>  fs/ocfs2/journal.c | 2 +-
+>  fs/ocfs2/journal.h | 1 +
+>  fs/ocfs2/super.c   | 5 ++++-
+>  3 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ocfs2/journal.c b/fs/ocfs2/journal.c
+> index 126671e6caed..3fb98b4569a2 100644
+> --- a/fs/ocfs2/journal.c
+> +++ b/fs/ocfs2/journal.c
+> @@ -157,7 +157,7 @@ static void ocfs2_queue_replay_slots(struct ocfs2_super *osb,
+>  	replay_map->rm_state = REPLAY_DONE;
+>  }
+>  
+> -static void ocfs2_free_replay_slots(struct ocfs2_super *osb)
+> +void ocfs2_free_replay_slots(struct ocfs2_super *osb)
+>  {
+>  	struct ocfs2_replay_map *replay_map = osb->replay_map;
+>  
+> diff --git a/fs/ocfs2/journal.h b/fs/ocfs2/journal.h
+> index 969d0aa28718..41c382f68529 100644
+> --- a/fs/ocfs2/journal.h
+> +++ b/fs/ocfs2/journal.h
+> @@ -150,6 +150,7 @@ int ocfs2_recovery_init(struct ocfs2_super *osb);
+>  void ocfs2_recovery_exit(struct ocfs2_super *osb);
+>  
+>  int ocfs2_compute_replay_slots(struct ocfs2_super *osb);
+> +void ocfs2_free_replay_slots(struct ocfs2_super *osb);
+>  /*
+>   *  Journal Control:
+>   *  Initialize, Load, Shutdown, Wipe a journal.
+> diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
+> index 42c993e53924..f8041aebe4ee 100644
+> --- a/fs/ocfs2/super.c
+> +++ b/fs/ocfs2/super.c
+> @@ -1159,6 +1159,7 @@ static int ocfs2_fill_super(struct super_block *sb, void *data, int silent)
+>  out_dismount:
+>  	atomic_set(&osb->vol_state, VOLUME_DISABLED);
+>  	wake_up(&osb->osb_mount_event);
+> +	ocfs2_free_replay_slots(osb);
+>  	ocfs2_dismount_volume(sb, 1);
+>  	goto out;
+>  
+> @@ -1822,12 +1823,14 @@ static int ocfs2_mount_volume(struct super_block *sb)
+>  	status = ocfs2_truncate_log_init(osb);
+>  	if (status < 0) {
+>  		mlog_errno(status);
+> -		goto out_system_inodes;
+> +		goto out_truncate_log;
+>  	}
+>  
+>  	ocfs2_super_unlock(osb, 1);
+>  	return 0;
+>  
+> +out_truncate_log:
 
-diff --git a/drivers/soc/tegra/fuse/fuse-tegra.c b/drivers/soc/tegra/fuse/fuse-tegra.c
-index ea25a1dcafc2..a20c9e0105dc 100644
---- a/drivers/soc/tegra/fuse/fuse-tegra.c
-+++ b/drivers/soc/tegra/fuse/fuse-tegra.c
-@@ -35,6 +35,19 @@ static const char *tegra_revision_name[TEGRA_REVISION_MAX] = {
- 	[TEGRA_REVISION_A04]     = "A04",
- };
- 
-+static const char *tegra_platform_name[TEGRA_PLATFORM_MAX] = {
-+	[TEGRA_PLATFORM_SILICON]			= "Silicon",
-+	[TEGRA_PLATFORM_QT]				= "QT",
-+	[TEGRA_PLATFORM_SYSTEM_FPGA]			= "System FPGA",
-+	[TEGRA_PLATFORM_UNIT_FPGA]			= "Unit FPGA",
-+	[TEGRA_PLATFORM_ASIM_QT]			= "Asim QT",
-+	[TEGRA_PLATFORM_ASIM_LINSIM]			= "Asim Linsim",
-+	[TEGRA_PLATFORM_DSIM_ASIM_LINSIM]		= "Dsim Asim Linsim",
-+	[TEGRA_PLATFORM_VERIFICATION_SIMULATION]	= "Verification Simulation",
-+	[TEGRA_PLATFORM_VDK]				= "VDK",
-+	[TEGRA_PLATFORM_VSP]				= "VSP",
-+};
-+
- static const struct of_device_id car_match[] __initconst = {
- 	{ .compatible = "nvidia,tegra20-car", },
- 	{ .compatible = "nvidia,tegra30-car", },
-@@ -370,8 +383,14 @@ struct device * __init tegra_soc_device_register(void)
- 		return NULL;
- 
- 	attr->family = kasprintf(GFP_KERNEL, "Tegra");
--	attr->revision = kasprintf(GFP_KERNEL, "%s",
--		tegra_revision_name[tegra_sku_info.revision]);
-+	if (tegra_is_silicon()) {
-+		attr->revision = kasprintf(GFP_KERNEL, "%s %s",
-+					   tegra_platform_name[tegra_sku_info.platform],
-+					   tegra_revision_name[tegra_sku_info.revision]);
-+	} else {
-+		attr->revision = kasprintf(GFP_KERNEL, "%s",
-+					   tegra_platform_name[tegra_sku_info.platform]);
-+	}
- 	attr->soc_id = kasprintf(GFP_KERNEL, "%u", tegra_get_chip_id());
- 	attr->custom_attr_group = fuse->soc->soc_attr_group;
- 
-diff --git a/drivers/soc/tegra/fuse/tegra-apbmisc.c b/drivers/soc/tegra/fuse/tegra-apbmisc.c
-index 3351bd872ab2..4591c5bcb690 100644
---- a/drivers/soc/tegra/fuse/tegra-apbmisc.c
-+++ b/drivers/soc/tegra/fuse/tegra-apbmisc.c
-@@ -156,6 +156,7 @@ void __init tegra_init_revision(void)
- 	}
- 
- 	tegra_sku_info.sku_id = tegra_fuse_read_early(FUSE_SKU_INFO);
-+	tegra_sku_info.platform = tegra_get_platform();
- }
- 
- void __init tegra_init_apbmisc(void)
-diff --git a/include/soc/tegra/fuse.h b/include/soc/tegra/fuse.h
-index 977c334136e9..a63de5da8124 100644
---- a/include/soc/tegra/fuse.h
-+++ b/include/soc/tegra/fuse.h
-@@ -34,6 +34,20 @@ enum tegra_revision {
- 	TEGRA_REVISION_MAX,
- };
- 
-+enum tegra_platform {
-+	TEGRA_PLATFORM_SILICON = 0,
-+	TEGRA_PLATFORM_QT,
-+	TEGRA_PLATFORM_SYSTEM_FPGA,
-+	TEGRA_PLATFORM_UNIT_FPGA,
-+	TEGRA_PLATFORM_ASIM_QT,
-+	TEGRA_PLATFORM_ASIM_LINSIM,
-+	TEGRA_PLATFORM_DSIM_ASIM_LINSIM,
-+	TEGRA_PLATFORM_VERIFICATION_SIMULATION,
-+	TEGRA_PLATFORM_VDK,
-+	TEGRA_PLATFORM_VSP,
-+	TEGRA_PLATFORM_MAX,
-+};
-+
- struct tegra_sku_info {
- 	int sku_id;
- 	int cpu_process_id;
-@@ -47,6 +61,7 @@ struct tegra_sku_info {
- 	int gpu_speedo_id;
- 	int gpu_speedo_value;
- 	enum tegra_revision revision;
-+	enum tegra_platform platform;
- };
- 
- #ifdef CONFIG_ARCH_TEGRA
--- 
-2.17.1
+I'd like define this label as 'out_check_volume', to indicate that it's
+the entry to do cleanup work of ocfs2_check_volume().
 
+Other looks good to me.
+
+Thanks,
+Joseph
+
+> +	ocfs2_free_replay_slots(osb);
+>  out_system_inodes:
+>  	if (osb->local_alloc_state == OCFS2_LA_ENABLED)
+>  		ocfs2_shutdown_local_alloc(osb);
