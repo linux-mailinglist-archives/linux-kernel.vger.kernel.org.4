@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC366229CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141306229D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiKILLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:11:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S229566AbiKILMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiKILLE (ORCPT
+        with ESMTP id S229540AbiKILMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:11:04 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA1C28718
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:11:03 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id z24so25225584ljn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:11:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RBYC2sQin+8K6ysS38BCoDSJAXb+ifX+8YqSQIM6ZNE=;
-        b=PT7IdvLowfx3KdqSMDXmaDTaWI+owL9r4MbPbtgI8uN1LsJa/SsSKSbfdvPpsFUz+b
-         qrbzfspBUTgop+tdztUoMusYGwyj55hlUTJ5Qicgmz90ixY8sRUQsCtg3EAicRj62vXL
-         GguVtP+Cfc1lmZ/pKjjifXO3oLmYZcauuvtHXOt+SHTkQxNl9mkzI2iemqICbMGk2NjS
-         ZQPAJT4JF9F9vUfhc+GtIkG3vVbJAUFnffwzMeOwSBqRh6rgbcLpNKBF28m4zwd7sgLP
-         I6CG1teRO/3/moE3b3GKMxNDH0HGAkTEwpcPcS4iCpmRRIGzEoww9wZZnTmjcCc3Hl+R
-         t6ug==
+        Wed, 9 Nov 2022 06:12:17 -0500
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48D722B3C;
+        Wed,  9 Nov 2022 03:12:16 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id 8so10712107qka.1;
+        Wed, 09 Nov 2022 03:12:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBYC2sQin+8K6ysS38BCoDSJAXb+ifX+8YqSQIM6ZNE=;
-        b=5qNDKgWAGW1Ixyq+3f+v7ma4/qT0t1OUc2mVsm3e9swykAVd8A9IuHRBc2kDBDft+I
-         SrlQdL61wuJapBkBpVnrqZ5zxj+C3nkbAHWAsOOPSWontV8wQvvGVKIqO4ISTVA/Jear
-         SSqyETkBZ6eA/12+AIMjp8JcwOriIEXIelWZocnFA7BkU7NXYMWrHN2X3XDwHdqPIjwH
-         PWdqyIdPEA8KblRyO/P0rfSU7OA2IcmkTJvlDKrrAe0xtrJqh1qzM8wKeYD4nzGsbrlb
-         832yf2m0jM1zL/bEaNRcRXsUWCnIkrV3rASExU+swxHZuU4INT+QmH63MXUD3thimLxg
-         9hkg==
-X-Gm-Message-State: ACrzQf2BZqDXFjGN5C/aP20/oT0m+t69dwHH9/DbdjAHMg4c+LXMU5CI
-        46wsj8hBz6Y5lV/Z9G98plmOXw==
-X-Google-Smtp-Source: AMsMyM7UtzPEqp3da7BV+7So92Og/3kSdtsDjfAfnH8rib/01LUvRanVw1xriRs6aLAVUpLm3c/8KA==
-X-Received: by 2002:a05:651c:88b:b0:26e:261:5052 with SMTP id d11-20020a05651c088b00b0026e02615052mr19368472ljq.182.1667992261625;
-        Wed, 09 Nov 2022 03:11:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id r26-20020ac25c1a000000b00497a879e552sm2154796lfp.291.2022.11.09.03.11.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:11:01 -0800 (PST)
-Message-ID: <fe9b3e7f-c852-5f5e-1d3b-d30218ee497a@linaro.org>
-Date:   Wed, 9 Nov 2022 12:11:00 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aRbEPLJDZs00e0naDlA/9gKuzLlGHl7wDAqA6Ym3dJc=;
+        b=eSE5PitczGGXN10zAj1NFg/AWoup7K38NcHNTSkaklzTGsBF5u/XPMWyYwtheXAIGy
+         GJIX/2VPXMhhGRe1YrEjFa+EFUju1V2T4aAxHFoAfvCHEkSJoWnwJIvtAfhdZghRu77U
+         R1EctkHNs6G+k3QbJTcJik0nSza4WOtbov+jgRAR0qu8MRqiTJMsfaQ9MjrwKcayQen9
+         8xyyoFn/8DMIqZNIYKFq+9A97wsnhpGcHklr1dTXp4yJxz1WBm9fs9bHiOvCyYAuw8I2
+         /5MxfwbwR6fw6LQH4MfBIIu4u75IRPufGVKopMJqzJFvYOOpKpLdD/IOIx0qegEJwVSv
+         nZRg==
+X-Gm-Message-State: ACrzQf2WxxW58qxjJBfJbxz6dq4SpOFpsryVbyIEE4QHKZlobLlIM6HP
+        Rhj/eATei/hEUm7sso9x5WSpQ+t3HgsVIyZuidCZkdEY
+X-Google-Smtp-Source: AMsMyM6akL5ZYpwLHjQtcFwxu8an9ECUD+COd60a2CfbtiGIUC1/jYR8pwCptfIsLRqMhrNOVsaRCnlQXAXyGpC8NQ4=
+X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
+ j22-20020a05620a147600b006fa4c6783ecmr30970439qkl.23.1667992335697; Wed, 09
+ Nov 2022 03:12:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/6] dt-bindings: can: mcan: Add ECC functionality to
- message ram
-Content-Language: en-US
-To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-References: <20221109100928.109478-1-vivek.2311@samsung.com>
- <CGME20221109100249epcas5p142a0a9f7e822c466f7ca778cd341e6d9@epcas5p1.samsung.com>
- <20221109100928.109478-3-vivek.2311@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109100928.109478-3-vivek.2311@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221109105114.32886-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221109105114.32886-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 9 Nov 2022 12:12:03 +0100
+Message-ID: <CAJZ5v0gxM80EKiiMJKkN6t1CVgf1=6yYA3D4=TfOHVh1chaJuw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] resource: Replace printk(KERN_WARNING) by pr_warn()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 11:09, Vivek Yadav wrote:
-> Whenever the data is transferred or stored on message ram, there are
-> inherent risks of it being lost or corruption known as single-bit errors.
-> 
-> ECC constantly scans data as it is processed to the message ram, using a
-> method known as parity checking and raise the error signals for corruption.
-> 
-> Add error correction code config property to enable/disable the
-> error correction code (ECC) functionality for Message RAM used to create
-> valid ECC checksums.
-> 
-> Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
+On Wed, Nov 9, 2022 at 11:51 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Replace printk(KERN_WARNING) by pr_warn().
+>
+> While at it, use %pa for the resource_size_t variables.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+This is Greg's stuff I think.
+
 > ---
->  .../bindings/net/can/bosch,m_can.yaml         | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> index 26aa0830eea1..91dc458ec33f 100644
-> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> @@ -50,6 +50,12 @@ properties:
->        - const: hclk
->        - const: cclk
->  
-> +  tesla,mram-ecc-cfg:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
-> +      Handle to system control region that contains the ECC INIT register
-> +      and register offset to the ECC INIT register.
+>  kernel/resource.c | 17 +++++++----------
+>  1 file changed, 7 insertions(+), 10 deletions(-)
+>
+> diff --git a/kernel/resource.c b/kernel/resource.c
+> index 4c5e80b92f2f..ab32b015bd50 100644
+> --- a/kernel/resource.c
+> +++ b/kernel/resource.c
+> @@ -888,7 +888,7 @@ void insert_resource_expand_to_fit(struct resource *root, struct resource *new)
+>                 if (conflict->end > new->end)
+>                         new->end = conflict->end;
+>
+> -               printk("Expanded resource %s due to conflict with %s\n", new->name, conflict->name);
+> +               pr_info("Expanded resource %s due to conflict with %s\n", new->name, conflict->name);
+>         }
+>         write_unlock(&resource_lock);
+>  }
+> @@ -1283,9 +1283,7 @@ void __release_region(struct resource *parent, resource_size_t start,
+>
+>         write_unlock(&resource_lock);
+>
+> -       printk(KERN_WARNING "Trying to free nonexistent resource "
+> -               "<%016llx-%016llx>\n", (unsigned long long)start,
+> -               (unsigned long long)end);
+> +       pr_warn("Trying to free nonexistent resource <%pa-%pa>\n", &start, &end);
+>  }
+>  EXPORT_SYMBOL(__release_region);
+>
+> @@ -1658,6 +1656,7 @@ __setup("reserve=", reserve_setup);
+>  int iomem_map_sanity_check(resource_size_t addr, unsigned long size)
+>  {
+>         struct resource *p = &iomem_resource;
+> +       resource_size_t end = addr + size - 1;
 
-That's not way to describe syscon phandle. Property name is ok. For the
-rest look at:
-https://elixir.bootlin.com/linux/v5.18-rc1/source/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml#L42
+And this change could be mentioned in the changelog too.
 
-Anyway, this looks like SoC-specific hack, so it does not really fit to
-the driver. You have to think of something generic.
-
-
-Best regards,
-Krzysztof
-
+>         int err = 0;
+>         loff_t l;
+>
+> @@ -1667,12 +1666,12 @@ int iomem_map_sanity_check(resource_size_t addr, unsigned long size)
+>                  * We can probably skip the resources without
+>                  * IORESOURCE_IO attribute?
+>                  */
+> -               if (p->start >= addr + size)
+> +               if (p->start > end)
+>                         continue;
+>                 if (p->end < addr)
+>                         continue;
+>                 if (PFN_DOWN(p->start) <= PFN_DOWN(addr) &&
+> -                   PFN_DOWN(p->end) >= PFN_DOWN(addr + size - 1))
+> +                   PFN_DOWN(p->end) >= PFN_DOWN(end))
+>                         continue;
+>                 /*
+>                  * if a resource is "BUSY", it's not a hardware resource
+> @@ -1683,10 +1682,8 @@ int iomem_map_sanity_check(resource_size_t addr, unsigned long size)
+>                 if (p->flags & IORESOURCE_BUSY)
+>                         continue;
+>
+> -               printk(KERN_WARNING "resource sanity check: requesting [mem %#010llx-%#010llx], which spans more than %s %pR\n",
+> -                      (unsigned long long)addr,
+> -                      (unsigned long long)(addr + size - 1),
+> -                      p->name, p);
+> +               pr_warn("resource sanity check: requesting [mem %pa-%pa], which spans more than %s %pR\n",
+> +                       &addr, &end, p->name, p);
+>                 err = -1;
+>                 break;
+>         }
+> --
+> 2.35.1
+>
