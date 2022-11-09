@@ -2,107 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD8362245A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 101CF622461
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbiKIHE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 02:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S229764AbiKIHFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 02:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKIHEZ (ORCPT
+        with ESMTP id S229528AbiKIHFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 02:04:25 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3E11DDFF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 23:04:22 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id j12so16276345plj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 23:04:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSRw6nfdCPaMCQzx3jE+HEvjxFnji+/pTOoyXTdquzQ=;
-        b=K1QccXq8zGYDQPCT01fpavRZS+3GR2LdhwmxeSruUTnDnGDZJVASHd65B4QgmtE0aF
-         4giOK3TrfRJWZTQRYUpBAqE3zxCJj1t45z5MDUvPYFY+GJGY/qOvlnwo4sByTsSaqIMk
-         E+1wQYCdJm1XCWoA7I/VtEs1Nvv7XKuj6lgdxQoLTq7d2COGG9+Z4aIKwpSmb/kbJ8im
-         HfejMODT3G4QL2GWSCFSWYvkPqDetayUE9cca77CR8PMz9JeREcBM/6lvsfNV4LznYsV
-         XnQXD4zPWtYkF37R4NYV0CY6xYh/sZNDMGRQ+7HtLQxqliQIDlpOgzBpXyProExchux+
-         F48g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zSRw6nfdCPaMCQzx3jE+HEvjxFnji+/pTOoyXTdquzQ=;
-        b=Vod1EZ6jmY5QSITJdvlBH/ilNu3tu5WZEBEnuCxZOVMYQmrtTZZs78miWxTm2sBkrN
-         KWn8RfKKY58TXwp9bCRoWrXvUGW68Hug+KSYFwyksbpryHT91yStwxcTkyMUz2cIdNd0
-         aM/3GQqdvqwGwmCAB09nZAIpdnpSNfLbSCl1d8+Ky4R1KkDfdfBGeK5LwddS7ZE1sFer
-         ULJK3Jymp14jGjypgA9tFeRB/6g+2SUePel0UUSHxppmqFD5TSKBgav+6Ht17iTm4J/X
-         tzW834iNMSBPqyvGRF2dvyESevFo5aKGYmHAhMBPTZZ4hMCwnbgE+zVmrtVFM+XRAuGg
-         t/og==
-X-Gm-Message-State: ACrzQf0qbLj1I/KegIrkWxX5jNO0vWvJoe+QEUdKiQUL8d53EzVSsSix
-        TUzA7FFZhyJYie/w3FBNxoNnleROe8lUPxD3
-X-Google-Smtp-Source: AMsMyM4himXTZ1Oet6yD4mIg1+GbxpQRrGdlz9D2+SGVHbyEDjyVUAA42XAzqGBUnhGiWspjN1323w==
-X-Received: by 2002:a17:902:db12:b0:187:4736:f780 with SMTP id m18-20020a170902db1200b001874736f780mr37864396plx.145.1667977461892;
-        Tue, 08 Nov 2022 23:04:21 -0800 (PST)
-Received: from xuchao.. ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id x11-20020aa7940b000000b0056bf29c9ba3sm7788696pfo.146.2022.11.08.23.04.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 23:04:21 -0800 (PST)
-From:   Chao Xu <amos.xuchao@gmail.com>
-X-Google-Original-From: Chao Xu <Chao.Xu9@zeekrlife.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Chao Xu <Chao.Xu9@zeekrlife.com>
-Subject: [PATCH] mm/vmscan: simplify the nr assignment logic for pages to scan
-Date:   Wed,  9 Nov 2022 15:04:16 +0800
-Message-Id: <20221109070416.620887-1-Chao.Xu9@zeekrlife.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 9 Nov 2022 02:05:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B691DDFF;
+        Tue,  8 Nov 2022 23:05:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E7D2618CF;
+        Wed,  9 Nov 2022 07:05:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556FDC433D6;
+        Wed,  9 Nov 2022 07:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667977500;
+        bh=XzQzAuHjMD8nBRIb31jLyO9Oa4GaBmvEgA5C2VJmaN4=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=k/ydLQoIbZWatztSOcT/Raq90pz5OsPJrv0HIOEK2jN5S9hBjdpccfehM7U+KCbfH
+         yWYMA+UIJhfV7Z4mAj8efIpyQ8gpcEHegbN/LFZf8JWRriRPmXkyIyir2CSbAJdkMJ
+         iCZErYNBscSFtlwSqXcvd3rRbXHXtOFf4QOwpPCDDCcC7xciTSvo3BmzY1oc5LD7h4
+         3eG5ylw5FCE5FV/ByRK8j0qcJhPrJSXeYdYKCPBK0nfKIvpx/vg0fJpiPkO1g8iHFj
+         iC6HmlzOuBrrw2kUCP3YC64y/T1w/CQJpxB4L0puSJRjXm34f/bfMwk+M8/5dcWsn9
+         O63NJDqUoVVIg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] ath9k: Remove unused variable mismatch
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221104140723.226857-1-colin.i.king@gmail.com>
+References: <20221104140723.226857-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166797749534.13342.6777832158964184769.kvalo@kernel.org>
+Date:   Wed,  9 Nov 2022 07:04:58 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default the assignment logic of anonymouns or file inactive
-pages and active pages to scan using the same duplicated code
-snippet. To simplify the logic, merge the same part.
+Colin Ian King <colin.i.king@gmail.com> wrote:
 
-Signed-off-by: Chao Xu <Chao.Xu9@zeekrlife.com>
----
- mm/vmscan.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+> Variable mismatch is just being incremented and it's never used anywhere
+> else. The variable and the increment are redundant so remove it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 04d8b88e5216..df3c0cbe381f 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -5932,14 +5932,11 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
- 		 * scan target and the percentage scanning already complete
- 		 */
- 		lru = (lru == LRU_FILE) ? LRU_BASE : LRU_FILE;
--		nr_scanned = targets[lru] - nr[lru];
--		nr[lru] = targets[lru] * (100 - percentage) / 100;
--		nr[lru] -= min(nr[lru], nr_scanned);
--
--		lru += LRU_ACTIVE;
--		nr_scanned = targets[lru] - nr[lru];
--		nr[lru] = targets[lru] * (100 - percentage) / 100;
--		nr[lru] -= min(nr[lru], nr_scanned);
-+		for ( ; lru <= lru + LRU_ACTIVE; lru++) {
-+			nr_scanned = targets[lru] - nr[lru];
-+			nr[lru] = targets[lru] * (100 - percentage) / 100;
-+			nr[lru] -= min(nr[lru], nr_scanned);
-+		}
- 
- 		scan_adjusted = true;
- 	}
+Patch applied to ath-next branch of ath.git, thanks.
+
+dc45398446be wifi: ath9k: Remove unused variable mismatch
+
 -- 
-2.34.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20221104140723.226857-1-colin.i.king@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
