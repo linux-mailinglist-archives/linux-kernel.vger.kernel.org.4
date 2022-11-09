@@ -2,211 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591066220F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 01:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF7A6220FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 01:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiKIArM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 19:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S229911AbiKIAxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 19:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiKIArH (ORCPT
+        with ESMTP id S229574AbiKIAxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 19:47:07 -0500
-Received: from esa2.hc3370-68.iphmx.com (esa2.hc3370-68.iphmx.com [216.71.145.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A6B4E42C
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 16:47:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1667954826;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=AipsgjdqL99VUaX2D3NeL2gaTpaACKbX/jdIlOfvHeI=;
-  b=ZfsImSEGt3+xCHgABcBLVOyFrG5bIrE3JU8U+zvjOzz0QwgiZDjCN8Tn
-   0ra4KwScUW1751wDu+yG/rp8MG1FDOeHrbd9iIRQj6JzgzLrzqenaJq+Z
-   1dF1IjnqKBv3lj+wDDXtM9XwZi3Hqb69Mn8yRwE5Vxu54GjE34nnmo1Ib
-   I=;
-X-IronPort-RemoteIP: 104.47.70.102
-X-IronPort-MID: 84454601
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:QKTQ/Kqu3yI0IfGHbTY3kBxuDqBeBmIsZRIvgKrLsJaIsI4StFCzt
- garIBmEbq6JN2XyftElboSyoEwHuJGGz99jSVA4/yw2RSgW95uZCYyVIHmrMnLJJKUvbq7FA
- +Y2MYCccZ9uHhcwgj/3b9ANeFEljfngqoLUUbKCYWYpAFc+E0/NsDo788YhmIlknNOlNA2Ev
- NL2sqX3NUSsnjV5KQr40YrawP9UlKm06W1wUmAWP6gR5gaHzylNV/rzGInqR5fGatgMdgKFb
- 76rIIGRpgvx4xorA9W5pbf3GmVirmn6ZFXmZtJ+AsBOszAazsAA+v9T2Mk0MC+7vw6hjdFpo
- OihgLTrIesf0g8gr8xGO/VQO3kW0aSrY9YrK1Dn2SCY5xWun3cBX5yCpaz5VGEV0r8fPI1Ay
- RAXAG8/bVeBqfD1/LyYa/tV2IckfJGxIbpK7xmMzRmBZRonabbqZvySoPV+g3I3jM0IGuvCb
- c0EbzYpdA7HfxBEJlYQDtQ5gfusgX78NTZfrTp5p4JuuzSVkFM3j+CraYKPEjCJbZw9ckKwj
- 2TK5WnmRDodM8SS02Gt+XOwnO7f2yj8Xer+EZXoqqI33APLnwT/DjUqVmn4sOiX0XeweOhcc
- 0wM0BMRgvEboRnDot7VGkfQTGS/lhQEc9NUEuA8uEeBx8L8+w+GD25CTSNEYcZgu9IuWTUC0
- l6PgsOvBDpzvbnTQnWYnp+IojeiESwUK3IefygCTBtD79SLiIQyiB3IZsxuHK68kpv+HjSY6
- zyDsiV4h7wVlsMN/6G6+03XxTOqupXNCAUy423/TjL7xgB0foioY8qv81ezxfZYJa6LX0WGp
- j4PnM32xPoHA5iAkASOTf8LEbXv4OyKWBXEiEBiG7E8/Cvr8GzLVYBc7T55KUtkGtwJdT/gf
- AnYvgY5zJtSOma6KKx6eYS8D+w0wqX6U9foTPbZapxJeJcZXAuG+jx+IFaV937inVJqkqwlP
- 5qfN8G2Ah4yBa1hzTeyAfwb3LMnwSYWwWLVWIC9zhK73L7Yb3mQIZ8MNkeJaOE+qqyDpQjHt
- ddQM8aRyhxEeOn/ZDTHt48VMV0Oa3M8APjLR9d/c+eCJk9sHj4nAvqImbc5IdU9xeJSi/vC+
- Wy7VglA0l3jiHbbKAKMLHd+dLfoWpU5pnU+VcAxAWuVN7EYSd7HxM8im1EfJNHLKMQLISZIc
- sQ4
-IronPort-HdrOrdr: A9a23:oUkXk6mL3dUUAgr1MKa/gMzKwGPpDfOPimdD5ihNYBxZY6Wkfp
- +V8cjzhCWftN9OYhodcIi7SdK9qXO1z+8X3WGIVY3SETUOy1HYVr2KirGSjwEIeheOvNK1sJ
- 0NT0EQMqyWMbEXt6fHCUyDYq4dKbq8ge+VbIXlvhFQpGhRAskOgTuRSDzra3GeLzM2Z6bRYa
- Dsgvav0ADQHEj/AP7aOlA1G8z44/HbnpPvZhALQzQ97hOVsD+u4LnmVzCFwxY3SVp0sPYf2F
- mAtza8yrSosvm9xBOZ/XTU9Y5qlNzozcYGLNCQi/ISNi7nhm+TFcRcsvy5zXMISdOUmRMXee
- r30lMd1gNImjTsl1SO0FnQMs/boXATAjHZuAalaDDY0LHErXoBerZ8bMRiA1XkAgMbza9BOO
- gg5RPni7NHSRzHhyjz/N7OSlVjkVe1u2MrlaoJg2VYSpZ2Us4ZkWUzxjIjLH47JlON1Kk3VO
- 11SM3M7vdfdl2XK3jfo2l02dSpGnA+BA2PTEQOstGcl2E+pgEz82IIgMgE2nsQ/pM0TJdJo+
- zCL6RzjblLCssbd7h0CusNSda+TmbNXRXPOmSPJkmPLtBOB1vd75rspLkl7uCjf5IFiJM0hZ
- TaSVtd8XU/fkr/YPf+qKGjMiq9NVlVcQ6duf22vaIJy4EUbICbQRGrWRQpj9aqpekZD4nSR+
- uzUagmccPeEQ==
-X-IronPort-AV: E=Sophos;i="5.96,149,1665460800"; 
-   d="scan'208";a="84454601"
-Received: from mail-bn7nam10lp2102.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.102])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Nov 2022 19:46:00 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OrBCY4F+Q1PoH1TP8XIfvGGoAa3AUFuYY3n5BYx1Ca/gjDka/Pl7Ebaw3qb2rj8D8a/zJZmVclb0enc/MmhkMfJ7Fq7o+U3xqj+uglqXtHMX7RldHAyb8SSYOPC/zDjO8OOuOa93gkuBxVnFNlf3WtktOHNSZ5xEU7axSZbl9JdeRCDLWPRfFgy4241aUJWSCE2qKPfiX5nwfOxJubSOBGB/eU40N4r6qSQxzicBmSzxEvuYw3HzNK3TJoyqCPMWJVNOmO+se4bGfihhkingUXmmneO1jCdU7ceNsTNBnsNzfVnMkfKdaNnJbMP//stEl+9LkapknPVQzZMGPMFdQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AipsgjdqL99VUaX2D3NeL2gaTpaACKbX/jdIlOfvHeI=;
- b=B1z6o+orTb9i9D9IUhthV2qFWnc2TP/TbK/JP3cVLhySU6Ijb2T+7ZBhfhBQSNX2NhJ//Ogdrldmgr5JCcUiX0PsdRJNaJXbsLHAFCq3i2HamTAWtTF4QOwxrXjNDvNIDPnjIhQD5g3iP+d4tZLMc9Xnbqk/FFTNnqSymCDcbqt8o1B0zKQ21PgvUn11W80xlMuJn+npncDjGaPMlQeYhMpaYn8mRcHQK6TPZ7V1IC6pcx7c3oebkSMTA7kQbP5cw1aqNxh1aPnmx/KG6NBgTeYC8GogtS37Gw5MZuN5RYZo9qbgZ+ICouRZGNs0GuG/uMrkYGgAKbKrKsMtZaAI2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
+        Tue, 8 Nov 2022 19:53:49 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCC619C39
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 16:53:47 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id b185so15281716pfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 16:53:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AipsgjdqL99VUaX2D3NeL2gaTpaACKbX/jdIlOfvHeI=;
- b=wxG9Tw8XtugyjkBvcLSpRV/kXvveid7dPw9it06RsEODEE54kH3FX8cTJEeEx/J+Doaxeu0x4FOBg/TLtT1YiMB6UQrOp5Hb/KiYSzpTLCxwg8XoVZ+NaGWX56ucWWi4g3ejeZ8Uk6YWUOpmy1DB8tOMcvp+fGL+s/msNdlHx5c=
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
- by DM4PR03MB6157.namprd03.prod.outlook.com (2603:10b6:5:398::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
- 2022 00:45:58 +0000
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::1328:69bd:efac:4d44]) by BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::1328:69bd:efac:4d44%3]) with mapi id 15.20.5791.027; Wed, 9 Nov 2022
- 00:45:58 +0000
-From:   Andrew Cooper <Andrew.Cooper3@citrix.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        "antonio.gomez.iglesias@linux.intel.com" 
-        <antonio.gomez.iglesias@linux.intel.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: Re: [PATCH 2/3] x86/cpu/amd: Add feature bit for MSR_AMD64_LS_CFG
- enumeration
-Thread-Topic: [PATCH 2/3] x86/cpu/amd: Add feature bit for MSR_AMD64_LS_CFG
- enumeration
-Thread-Index: AQHYxwEcA7jcOm8DjU6Z/y36WK/AeK41uOuAgABCaICAAAVEAIAAGqmA
-Date:   Wed, 9 Nov 2022 00:45:58 +0000
-Message-ID: <1ee02d57-21a7-b18e-6cf9-0667445a6fb3@citrix.com>
-References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <034c7f5ac243ee7b40ba1a8cc3f9b10b1e380674.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <Y2qlyfRKgIc4KVcx@zn.tnic> <20221108225141.aikng7veemp25p62@desk>
- <Y2rh6FN+gbD6Vbzj@zn.tnic>
-In-Reply-To: <Y2rh6FN+gbD6Vbzj@zn.tnic>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR03MB3623:EE_|DM4PR03MB6157:EE_
-x-ms-office365-filtering-correlation-id: 2a0c463d-7f89-4dac-b9f0-08dac1ebc486
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v4amtePLv8GJd4U9ScVqapCgXxoVXZ4qoLeMdQnPbsJeA0DGyPSFrnYoYWIsIkN8cZ0Pao0eMd16iyi09GhVhV784QDbQj8uzJhAjb97VujTKEFKnGKYAFt6Ycwteuz+mywDDVZjHWiYZ8WTOCAqPc1SfacTYj/ZBsK1DFBCK/E0a02H9r2oMzuLjt2jqIcnYYTQQdiOFJ/nBp7eAdWGRUtNndkIPviLsPTgMfrSKq85sBcTfZLDayx+lygD+281r2LF/xrL8r2K4uWNV+zUTg5ATy5l6Imp2H2DM0pPLqcym1BLonBJLf2X5uB1s8yfxycT4IOhGY0Ch+F0pjOwPU62hHiPNJ95i1B+XLPL/nerdczgfTk7Q7VbMpgStEVFC+L/w927BtbCfxRB8PTR3qodqKg27kN+/6TcJHmjjUzWSqQiOsxRpbJqd3ZgQ67OhUHAtQa2UmdROdNflmiKmldDIO9XsWPjW2ivtJ4LNI2SnFI352SKhOpIvu8gklM+Yx61RLOqftu9SMePIkKPWbGDdLzmtkhjyNQMi4/Mh6fktT4Lz/bpNifzaOSXXAEYZc/+pcD8EEw2Zl/vDN+QdVcAeA0KBvYwSJslRhGjoa4OfxU04+u+Xt6NARJv44Ekm3SOnGIwI+5SlwhnqJ7s5WztTtlKjcFYIZc6591HzWZgRyFXGHp1r9O42dyG64vZ1PEg0MyOg6dsPax1l28sEFa/E/cOOlP5PsHLohEWbx9hKj71sIdC7giBuuajff9bp3wX0xTYENbJXnUWR5oK00FP08crdRu/e09RiLASkPYlYoPF+ez3NoVK3RmeMfJCqAjoA3VOCdOzblSJyNUz/nIVVbEE1ZFi8BN4wGUYWd4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(366004)(376002)(346002)(451199015)(966005)(6486002)(71200400001)(122000001)(38070700005)(107886003)(478600001)(31686004)(91956017)(53546011)(316002)(66446008)(2616005)(64756008)(6506007)(76116006)(6512007)(66556008)(4326008)(66476007)(26005)(8676002)(66946007)(36756003)(41300700001)(8936002)(5660300002)(7416002)(38100700002)(82960400001)(2906002)(186003)(4744005)(31696002)(86362001)(83380400001)(110136005)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YkJLKy81UGNYaEg1Q0ZKVjFMbG9vZXh0d2xrS2d3V0hJc1liQjU5WUFkRkZo?=
- =?utf-8?B?UjhKMjNoV2xLbFl6aG9uRWpnellPQmJLTlZhbzNhSjcwWWRhR3ZBai9PNG1t?=
- =?utf-8?B?WGxZKzErdmp5WnpKV3ZIbFdUTW8yL2F0NGkrNjE4RysvUlhXRTlGWEVQRHUw?=
- =?utf-8?B?dDBrUVlwUThMZGZEcXVQQkdzdW1RSmFUM250ZkNjSVZDTVJlL1YzcWtYOEhX?=
- =?utf-8?B?NTB0dHo3NHhMYkVVTXMvelFOY1J3WlM2UHZxbHhLbVdVMzZEM1F4MW1qSC9h?=
- =?utf-8?B?VHM5Z3dicFNnWlZ6NE54WXRRS0dzcFczNlpTQ1RoSFNjQzFNYm9WSy93dHJL?=
- =?utf-8?B?NmRrZTlZMnh1N0swZnFuRGlPQlhIZDlDa0VCRG1QOUk3TWFLeGJDWElzMkto?=
- =?utf-8?B?dnMvdy9yY3JZSDMwbEhHQXYwKzVrVXhxVWdNc0lBbGNmUFhnblhMU01HYUht?=
- =?utf-8?B?dWR1OGEybkxDdDltWjNYZ0xkeGNpRHlRL3B2MkdIUlpuVDFqb0VEeEI4Y2wv?=
- =?utf-8?B?dW1sdi9lck50eHhBdkdxZUJSVEQybUtCWHE1bVdlVUVPWlo2RDNnR2JWNGd5?=
- =?utf-8?B?QTllVFhwRVQ0RlZINDZVN1htdTY3Q09yYjNRcjZYcFhvSDJLejZhZnZyKzQ0?=
- =?utf-8?B?UTFsVEVhTUc0dXZCYkJaN2d6YytsUk1wWURzQkI1T3RZdmQxOXVrS242UExL?=
- =?utf-8?B?MytqZVNxWlVseWpJTTVVWjZBWWYvUDU4NzZEaXhOREJJb0NNVFducllnbTNJ?=
- =?utf-8?B?enBPcGNIQ3daVXZKYm8wYWtYMHY5SEphelFOcC9jQ3BPU2VNQU1HeXZPOXFw?=
- =?utf-8?B?K3pRNGVLUEFtY2xSZmx6ZGV3KzRvWDkwTnVZKzJEZlZSRGZHNlFoVDk5OTVC?=
- =?utf-8?B?STM4b0pJdW42OCtCUktJUm80ejROZFIwN1NWSkZlQTdlVnFkVmZqQmhNdndt?=
- =?utf-8?B?NEd4b0lKTFpFWjRqZGRORjZ3Z0RCZEppem5rMmtXVTZrRGoyVFdxN1VrUkw0?=
- =?utf-8?B?NThUbmZxLzloNWY4MWh3MG5LdmQyOVliQ2w4SEgranFJVHROOURTZ2xmSGRQ?=
- =?utf-8?B?RUhPTUExS0haUlhlNEZFbFQ2bms2R205SlhmUDlTdm0vQTF4NEpJckNudHha?=
- =?utf-8?B?M0MxemVRR1ZqZU5kK25tRG0xYnpjY3M5U1JZRmV1a0o3OFFFaWNQdU5vMFZ3?=
- =?utf-8?B?MVhrSXVQQURvYVBvSnY4TzU4WVkya0Yzcmx4SmMzeG5IdzJ1RVcxUm5lSEdF?=
- =?utf-8?B?czRHekZjRXo1bHgyZzQxd0dKcGRYT2g0Zmd2TTQraFJuSi91eFBNNC9Qb2hV?=
- =?utf-8?B?ZzFMZnFRNVoza3BJT2llWU5UUDk0UHVMQjU2dDc2a0d3ZzRJeE1IMHZyRmdE?=
- =?utf-8?B?MitZV2k1ZmJHN0ZLby8xUzZGd2VVRHp0ckNzY2ZPWnVhZHJXQUVscGlXcDEz?=
- =?utf-8?B?Rm5sWTRRK2pPWXdTRzZPV2ljaDduVnNjVkNXcXZDaEkxMTBwSmt1M2duODlk?=
- =?utf-8?B?c2puR2ZGVnhqZUJXYU16aElCRjRLeG9mWTdnSmdmUjZnR3pUOUFtT21IZ21z?=
- =?utf-8?B?U0NaeUpqRnBFdENrL3B5cWE0TzdscTVHZjlrNVZDU0lXejFCRC95VHZSeVhh?=
- =?utf-8?B?WTBYRjZ4bCsvN3lIZytnakxxd3ZCYjdxYXBzbmtWa1ZYbjFIN2tsTzVxVVhM?=
- =?utf-8?B?S2VDOTA4UE80alNzYkdKcVA1NkM3MWdadENqMFpmNkduTndTTE4yYXNOZFZm?=
- =?utf-8?B?S1BMeU80TnVhSHM2UWJ4TXhMK2tJenQvclAzTEdhb3ZSTFV1bFNiZTRVbkFj?=
- =?utf-8?B?d0NVZ2xGd2dTbjhWdXJ5SlZHYiswTy93Q0llSlE5eFBac0FCSTFKUXI1TjZh?=
- =?utf-8?B?NlFwZzBlcExhZi8xSlY1SmxxT1RUcXF0ejNHUDVlNzNLS2t3UGdEbEtMVHox?=
- =?utf-8?B?aDlGK0tKMXhzN09XWTlVcWNiOFFSUWx6OVdEOWx4NFpyNmNicGJtSGYrQ25Y?=
- =?utf-8?B?a0tGUTFoUlA5OXcwYWpjME54eWpneGpYVENZcWliM0cwQ1pKNzcrQ3R0Yy96?=
- =?utf-8?B?b1ZUV003UGo3cWVIeGF0ZG1VclRlL1owZW5YT3R6cHVHNkUxZjN3UkNXRDJa?=
- =?utf-8?Q?ILrdDo9i5d9l0qd4V4VdX+UQH?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A21455616F4D2349AABF77FE06CBAD81@namprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lSPwRWjaEF/LeVzWwfEyhyHq6my7W3G8KqemGhh/zlQ=;
+        b=KTXPFBq0j8DL7aghY2zF3UtVyVdwG5tWKkoRKkfPk2CGL/kZCHevjQLUilekZPEA4k
+         nK3vxdNv20fVQapDOb6SKuM7Gwbmp1NRWJuFoGVsf7f2ayP3r4VW9EnVw9+Zclqj0gDS
+         PsZpj9JFHXdN0WgSjKhVAqYdJtY/hVJE5uljMFPEHRe2RmDwnQPkSYwyEXJy69jGMjff
+         LhBQVbeQ0pJR2qx9d+eKj7np6bSovO5y7TYBPqhFr8sTitEBIM2Ci2+Zpl0PQqczXsOm
+         yiIE85Avse/JxmLgmtfUaPiOVAMCFJT+unGLlnR3mhlEyrIuk9vt4BOh+/qNiLGq+xV2
+         vUdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lSPwRWjaEF/LeVzWwfEyhyHq6my7W3G8KqemGhh/zlQ=;
+        b=IUNV34QLwMbww7LcJ3J6avAXPK4uidVDrDggViejIRN6+2tSR4Oy05mWFs3uxsmokL
+         zSALfeLHm8MYFyQPcNTH5677Y5Ik2D+0jiTF5OHuYjJ8Jsym79HojJUHc7MJF1H28Vf+
+         9mlo8KViLkttL/FOiGtn8eHJ+NVV+AISferDpzvmybD6O98DSsZyor8ygh9R6O7DIH/1
+         Vno+Fv5HIE8VJMO5Y34zOYXCB3ftP8kN9UIZMA4snrZTd0Y2ad8RkX7vUekXkNGVkRgk
+         NSQvRKoV81nA3k6TPk146Uoa8aCwbEu+w+TZ0OX/r69ILGO4KmvDQpO5Ha/cmjSgvAKk
+         x3oQ==
+X-Gm-Message-State: ACrzQf2XU9fHtzR3Du2K9Zk9KTexbaaxDNlDZmQwO4XHD3jyL3ceQHo0
+        9+nPPuYX2ZG4KuHfCf2IN6RbQHwvK4SCUQ==
+X-Google-Smtp-Source: AMsMyM4Yhi4/gggSnC74XQ5ZkcpZGD6bO98vhJvQj1gcS0CktwwTLuXp5UqTwzwaAUVm48YIp3WoPA==
+X-Received: by 2002:a63:185c:0:b0:46f:4a36:9a6f with SMTP id 28-20020a63185c000000b0046f4a369a6fmr48790934pgy.22.1667955227179;
+        Tue, 08 Nov 2022 16:53:47 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902780500b00186b06963f9sm7482264pll.180.2022.11.08.16.53.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 16:53:46 -0800 (PST)
+Date:   Wed, 9 Nov 2022 00:53:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        nathan@kernel.org, thomas.lendacky@amd.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org,
+        jmattson@google.com, stable@vger.kernel.org
+Subject: Re: [PATCH v2 4/8] KVM: SVM: retrieve VMCB from assembly
+Message-ID: <Y2r6FqZyT4XxUkYB@google.com>
+References: <20221108151532.1377783-1-pbonzini@redhat.com>
+ <20221108151532.1377783-5-pbonzini@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a0c463d-7f89-4dac-b9f0-08dac1ebc486
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2022 00:45:58.4673
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sVaWb+n2cBIT8Po10Gi5iU4WT9ofGttIa6CUE0NrnxpNy/I6N8kYYY5Sy8eagMYNyMU6XxOAgzfl8LyOIPNAvHCDR3tM6CFcoLZ2OlNJoz4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR03MB6157
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8nC9O1np0SJJrVJV"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221108151532.1377783-5-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDgvMTEvMjAyMiAyMzoxMCwgQm9yaXNsYXYgUGV0a292IHdyb3RlOg0KPiBPbiBUdWUsIE5v
-diAwOCwgMjAyMiBhdCAwMjo1MTo0MVBNIC0wODAwLCBQYXdhbiBHdXB0YSB3cm90ZToNCj4+IExv
-b2tpbmcgYXQgYnNwX2luaXRfYW1kKCkgdGhpcyBmZWF0dXJlIGJpdCB3aWxsIG9ubHkgYmUgc2V0
-IG9uIEFNRA0KPj4gZmFtaWxpZXMgMHgxNS0weDE3LiBBbmRyZXcgbWVudGlvbmVkIHRoYXQgdGhl
-IE1TUiBMU19DRkcgaXMgcHJlc2VudCBvbg0KPj4gQU1EIGZhbWlseSA+PSAweDEwICYmIGZhbWls
-eSA8PSAweDE4Lg0KPiBEbyB5b3UgbmVlZCB0byBzYXZlIHRoYXQgTVNSIG9uIHRob3NlIGZhbWls
-aWVzPw0KPg0KPiBPciBkbyAweDE1LTB4MTggc3VmZmljZT8NCj4NCj4gWWVzLCAweDE4IGJlY2F1
-c2UgdGhhdCdzIEh5Z29uIGFuZCB0aGF0IGRvZXMgaXRzIG93biBkZXRlY3Rpb24uDQo+DQo+IFNv
-LCBkbyB5b3UgbmVlZCB0byBzYXZlIGl0IG9uIGZhbWlsaWVzIDB4MTAtMHgxND8NCg0KaHR0cHM6
-Ly93d3cuYW1kLmNvbS9zeXN0ZW0vZmlsZXMvZG9jdW1lbnRzL3NvZnR3YXJlLXRlY2huaXF1ZXMt
-Zm9yLW1hbmFnaW5nLXNwZWN1bGF0aW9uLnBkZsKgDQpNaXRpZ2F0aW9uIEctMi4NCg0KVGhlIE1T
-UiBleGlzdHMgb24gRmFtIDEwLzEyLzE0LzE1LzE2LzE3LCBhbmQgaW4gYWxsIGNhc2VzIHRoZQ0K
-TEZFTkNFX0RJU1BBVENIIGJpdCB3YW50cyBzZXR0aW5nIGlmIG5vdCBhbHJlYWR5IHNldC4NCg0K
-VGhlIE1TUiBpcyBtaXNzaW5nIG9uIEZhbSAwZi8xMSBidXQgdGhlc2UgcGFydHMgYWxyZWFkeSBo
-YXZlIHRoZSB3YW50ZWQNCmJlaGF2aW91ci4NCg0KfkFuZHJldw0K
+
+--8nC9O1np0SJJrVJV
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+On Tue, Nov 08, 2022, Paolo Bonzini wrote:
+> This is needed in order to keep the number of arguments to 3 or less,
+> after adding hsave_pa and spec_ctrl_intercepted.  32-bit builds only
+> support passing three arguments in registers, fortunately all other
+> data is reachable from the vcpu_svm struct.
+
+Is it actually a problem if parameters are passed on the stack?  The assembly
+code mostly creates a stack frame, i.e. %ebp can be used to pull values off the
+stack.
+
+I dont think it will matter in the end (more below), but hypothetically if we
+ended up with
+
+  void __svm_vcpu_run(struct kvm_vcpu *vcpu, unsigned long vmcb_pa,
+		      unsigned long gsave_pa, unsigned long hsave_pa,
+		      bool spec_ctrl_intercepted);
+
+then the asm prologue would be something like:
+
+	/*
+	 * Save @vcpu, @gsave_pa, @hsave_pa, and @spec_ctrl_intercepted, all of
+	 * which are needed after VM-Exit.
+	 */
+	push %_ASM_ARG1
+	push %_ASM_ARG3
+
+  #ifdef CONFIG_X86_64
+	push %_ASM_ARG4
+	push %_ASM_ARG5
+  #else
+	push %_ASM_ARG4_EBP(%ebp)
+	push %_ASM_ARG5_EBP(%ebp)
+  #endif
+
+which is a few extra memory accesses, especially for 32-bit, but no one cares
+about 32-bit and I highly doubt a few extra PUSH+POP instructions will be noticeable.
+
+Threading in yesterday's conversation...
+
+> > What about adding dedicated structs to hold the non-regs params for VM-Enter and
+> > VMRUN?  Grabbing stuff willy-nilly in the assembly code makes the flows difficult
+> > to read as there's nothing in the C code that describes what fields are actually
+> > used.
+>
+> What fields are actually used is (like with any other function)
+> "potentially all, you'll have to read the source code and in fact you
+> can just read asm-offsets.c instead".  What I mean is, I cannot offhand
+> see or remember what fields are touched by svm_prepare_switch_to_guest,
+> why would __svm_vcpu_run be any different?
+
+It's different because if it were a normal C function, it would simply take
+@vcpu, and maybe @spec_ctrl_intercepted to shave cycles after CLGI.  But because
+it's assembly and doesn't have to_svm() readily available (among other restrictions),
+__svm_vcpu_run() ends up taking a mishmash of parameters, which for me makes it
+rather difficult to understand what to expect.
+
+Oooh, and after much staring I realized that the address of the host save area
+is passed in because grabbing it after VM-Exit can't work.  That's subtle, and
+passing it in isn't strictly necessary; there's no reason the assembly code can't
+grab it and stash it on the stack.
+
+What about killing a few birds with one stone?  Move the host save area PA to
+its own per-CPU variable, and then grab that from assembly as well.  Then it's
+a bit more obvious why the address needs to be saved on the stack across VMRUN,
+and my whining about the prototype being funky goes away.  __svm_vcpu_run() and
+__svm_sev_es_vcpu_run() would have identical prototypes too.
+
+Attached patches would slot in early in the series.  Tested SVM and SME-enabled
+kernels, didn't test the SEV-ES bits.
+
+--8nC9O1np0SJJrVJV
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-KVM-SVM-Add-a-helper-to-convert-a-SME-aware-PA-back-.patch"
+
+From 59a4b14ec509e30e614beaa20ceb920c181e3739 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 8 Nov 2022 15:25:41 -0800
+Subject: [PATCH 1/2] KVM: SVM: Add a helper to convert a SME-aware PA back to
+ a struct page
+
+Add __sme_pa_to_page() to pair with __sme_page_pa() and use it to replace
+open coded equivalents, including for "iopm_base", which previously
+avoided having to do __sme_clr() by storing the raw PA in the global
+variable.
+
+Opportunistically convert __sme_page_pa() to a helper to provide type
+safety.
+
+No functional change intended.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/svm/svm.c |  9 ++++-----
+ arch/x86/kvm/svm/svm.h | 16 +++++++++++++++-
+ 2 files changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 58f0077d9357..bb7427fd1242 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1065,8 +1065,7 @@ static void svm_hardware_unsetup(void)
+ 	for_each_possible_cpu(cpu)
+ 		svm_cpu_uninit(cpu);
+ 
+-	__free_pages(pfn_to_page(iopm_base >> PAGE_SHIFT),
+-	get_order(IOPM_SIZE));
++	__free_pages(__sme_pa_to_page(iopm_base), get_order(IOPM_SIZE));
+ 	iopm_base = 0;
+ }
+ 
+@@ -1243,7 +1242,7 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+ 	if (!kvm_hlt_in_guest(vcpu->kvm))
+ 		svm_set_intercept(svm, INTERCEPT_HLT);
+ 
+-	control->iopm_base_pa = __sme_set(iopm_base);
++	control->iopm_base_pa = iopm_base;
+ 	control->msrpm_base_pa = __sme_set(__pa(svm->msrpm));
+ 	control->int_ctl = V_INTR_MASKING_MASK;
+ 
+@@ -1443,7 +1442,7 @@ static void svm_vcpu_free(struct kvm_vcpu *vcpu)
+ 
+ 	sev_free_vcpu(vcpu);
+ 
+-	__free_page(pfn_to_page(__sme_clr(svm->vmcb01.pa) >> PAGE_SHIFT));
++	__free_page(__sme_pa_to_page(svm->vmcb01.pa));
+ 	__free_pages(virt_to_page(svm->msrpm), get_order(MSRPM_SIZE));
+ }
+ 
+@@ -4970,7 +4969,7 @@ static __init int svm_hardware_setup(void)
+ 
+ 	iopm_va = page_address(iopm_pages);
+ 	memset(iopm_va, 0xff, PAGE_SIZE * (1 << order));
+-	iopm_base = page_to_pfn(iopm_pages) << PAGE_SHIFT;
++	iopm_base = __sme_page_pa(iopm_pages);
+ 
+ 	init_msrpm_offsets();
+ 
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 6a7686bf6900..9a2567803006 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -24,7 +24,21 @@
+ 
+ #include "kvm_cache_regs.h"
+ 
+-#define __sme_page_pa(x) __sme_set(page_to_pfn(x) << PAGE_SHIFT)
++/*
++ * Helpers to convert to/from physical addresses for pages whose address is
++ * consumed directly by hardware.  Even though it's a physical address, SVM
++ * often restricts the address to the natural width, hence 'unsigned long'
++ * instead of 'hpa_t'.
++ */
++static inline unsigned long __sme_page_pa(struct page *page)
++{
++	return __sme_set(page_to_pfn(page) << PAGE_SHIFT);
++}
++
++static inline struct page *__sme_pa_to_page(unsigned long pa)
++{
++	return pfn_to_page(__sme_clr(pa) >> PAGE_SHIFT);
++}
+ 
+ #define	IOPM_SIZE PAGE_SIZE * 3
+ #define	MSRPM_SIZE PAGE_SIZE * 2
+
+base-commit: 88cd4a037496682f164e7ae8dac13cd4ec8edc2b
+-- 
+2.38.1.431.g37b22c650d-goog
+
+
+--8nC9O1np0SJJrVJV
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0002-KVM-SVM-Snapshot-host-save-area-PA-in-dedicated-per-.patch"
+
+From e9a4f9af27d7d384dc36ad66a9856f9decb8ce02 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 8 Nov 2022 15:32:58 -0800
+Subject: [PATCH 2/2] KVM: SVM: Snapshot host save area PA in dedicated per-CPU
+ variable
+
+Track the SME-aware physical address of the host save area outside of
+"struct svm_cpu_data" so that a future patch can easily reference the
+address from assembly code.
+
+The "overhead" of always allocating the per-CPU data is more or less
+meaningless in the grand scheme.  And when KVM AMD is built as a module,
+it's actually more costly (by a single pointer) to dynamically allocate
+the struct, as the per-CPU data is allocated only when the module is
+loaded.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/svm/svm.c | 30 ++++++++++++++++--------------
+ arch/x86/kvm/svm/svm.h |  2 +-
+ 2 files changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index bb7427fd1242..8fc02bef4f85 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -246,6 +246,7 @@ struct kvm_ldttss_desc {
+ } __attribute__((packed));
+ 
+ DEFINE_PER_CPU(struct svm_cpu_data *, svm_data);
++DEFINE_PER_CPU(unsigned long, svm_host_save_area_pa);
+ 
+ /*
+  * Only MSR_TSC_AUX is switched via the user return hook.  EFER is switched via
+@@ -597,7 +598,7 @@ static int svm_hardware_enable(void)
+ 
+ 	wrmsrl(MSR_EFER, efer | EFER_SVME);
+ 
+-	wrmsrl(MSR_VM_HSAVE_PA, __sme_page_pa(sd->save_area));
++	wrmsrl(MSR_VM_HSAVE_PA, per_cpu(svm_host_save_area_pa, me));
+ 
+ 	if (static_cpu_has(X86_FEATURE_TSCRATEMSR)) {
+ 		/*
+@@ -653,12 +654,13 @@ static void svm_cpu_uninit(int cpu)
+ 
+ 	per_cpu(svm_data, cpu) = NULL;
+ 	kfree(sd->sev_vmcbs);
+-	__free_page(sd->save_area);
++	__free_page(__sme_pa_to_page(per_cpu(svm_host_save_area_pa, cpu)));
+ 	kfree(sd);
+ }
+ 
+ static int svm_cpu_init(int cpu)
+ {
++	struct page *host_save_area;
+ 	struct svm_cpu_data *sd;
+ 	int ret = -ENOMEM;
+ 
+@@ -666,20 +668,20 @@ static int svm_cpu_init(int cpu)
+ 	if (!sd)
+ 		return ret;
+ 	sd->cpu = cpu;
+-	sd->save_area = alloc_page(GFP_KERNEL | __GFP_ZERO);
+-	if (!sd->save_area)
+-		goto free_cpu_data;
+ 
+ 	ret = sev_cpu_init(sd);
+ 	if (ret)
+-		goto free_save_area;
++		goto free_cpu_data;
++
++	host_save_area = alloc_page(GFP_KERNEL | __GFP_ZERO);
++	if (!host_save_area)
++		goto free_cpu_data;
+ 
+ 	per_cpu(svm_data, cpu) = sd;
++	per_cpu(svm_host_save_area_pa, cpu) = __sme_page_pa(host_save_area);
+ 
+ 	return 0;
+ 
+-free_save_area:
+-	__free_page(sd->save_area);
+ free_cpu_data:
+ 	kfree(sd);
+ 	return ret;
+@@ -1449,7 +1451,6 @@ static void svm_vcpu_free(struct kvm_vcpu *vcpu)
+ static void svm_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+-	struct svm_cpu_data *sd = per_cpu(svm_data, vcpu->cpu);
+ 
+ 	if (sev_es_guest(vcpu->kvm))
+ 		sev_es_unmap_ghcb(svm);
+@@ -1461,10 +1462,13 @@ static void svm_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+ 	 * Save additional host state that will be restored on VMEXIT (sev-es)
+ 	 * or subsequent vmload of host save area.
+ 	 */
+-	vmsave(__sme_page_pa(sd->save_area));
++	vmsave(per_cpu(svm_host_save_area_pa, vcpu->cpu));
+ 	if (sev_es_guest(vcpu->kvm)) {
+ 		struct sev_es_save_area *hostsa;
+-		hostsa = (struct sev_es_save_area *)(page_address(sd->save_area) + 0x400);
++		struct page *hostsa_page;
++
++		hostsa_page = __sme_pa_to_page(per_cpu(svm_host_save_area_pa, vcpu->cpu));
++		hostsa = (struct sev_es_save_area *)(page_address(hostsa_page) + 0x400);
+ 
+ 		sev_es_prepare_switch_to_guest(hostsa);
+ 	}
+@@ -3920,8 +3924,6 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
+ 	if (sev_es_guest(vcpu->kvm)) {
+ 		__svm_sev_es_vcpu_run(vmcb_pa);
+ 	} else {
+-		struct svm_cpu_data *sd = per_cpu(svm_data, vcpu->cpu);
+-
+ 		/*
+ 		 * Use a single vmcb (vmcb01 because it's always valid) for
+ 		 * context switching guest state via VMLOAD/VMSAVE, that way
+@@ -3932,7 +3934,7 @@ static noinstr void svm_vcpu_enter_exit(struct kvm_vcpu *vcpu)
+ 		__svm_vcpu_run(vmcb_pa, (unsigned long *)&vcpu->arch.regs);
+ 		vmsave(svm->vmcb01.pa);
+ 
+-		vmload(__sme_page_pa(sd->save_area));
++		vmload(per_cpu(svm_host_save_area_pa, vcpu->cpu));
+ 	}
+ 
+ 	guest_state_exit_irqoff();
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 9a2567803006..d9ec8ea69a56 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -303,7 +303,6 @@ struct svm_cpu_data {
+ 	u32 min_asid;
+ 	struct kvm_ldttss_desc *tss_desc;
+ 
+-	struct page *save_area;
+ 	struct vmcb *current_vmcb;
+ 
+ 	/* index = sev_asid, value = vmcb pointer */
+@@ -311,6 +310,7 @@ struct svm_cpu_data {
+ };
+ 
+ DECLARE_PER_CPU(struct svm_cpu_data *, svm_data);
++DECLARE_PER_CPU(unsigned long, svm_host_save_area_pa);
+ 
+ void recalc_intercepts(struct vcpu_svm *svm);
+ 
+-- 
+2.38.1.431.g37b22c650d-goog
+
+
+--8nC9O1np0SJJrVJV--
