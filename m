@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5742D62224A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D42262224C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiKICy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 21:54:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S230010AbiKICys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 21:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiKICyX (ORCPT
+        with ESMTP id S229900AbiKICyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:54:23 -0500
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC1C26563;
-        Tue,  8 Nov 2022 18:54:21 -0800 (PST)
-Received: by mail-pf1-f177.google.com with SMTP id k22so15485913pfd.3;
-        Tue, 08 Nov 2022 18:54:21 -0800 (PST)
+        Tue, 8 Nov 2022 21:54:47 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7592322BD2;
+        Tue,  8 Nov 2022 18:54:46 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso9451123otb.2;
+        Tue, 08 Nov 2022 18:54:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZI91qSyXBgg5eWntb5w7n4ZnK6DuW9VOjYf9yRXokSE=;
+        b=cXMFmMvjmVjDuBDmuK1SNRh4KiUO3IUSV0k3dSyNVmXOiQOr6uUqKMJPmTd9eASZw4
+         sWVyHI0WnT8Lort3i7atOLWQSrj4PFbSAiLTO4rn2EYzgDwq0HCdaFqtzdgtE0+DLNbA
+         hc+fTdnAwIZiO5SSzfOu64mG56V+9/V0hZ9AS9xUUYiKCuexjhViEpDJcbGBfEz8JoXZ
+         LRTFv+b06lpAP+jDhr7SFsIPLIXdXc9mtMJ4kBLKz8A0nRpoS9iXftewIs9CDxov0Hfa
+         /fiV+lziClyW6UPeXY8Cl+j5TN/nXmGwjPzxd1DN5fE11FwSXZOsFD1KzhqvORx/dol5
+         gTww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fyorhJCTSS6+0hPMlFzpEuVOTIRf/zjd/ug2ks95Ljg=;
-        b=VH2QJB4mWw1oJX4ZZX5RCSix1QLp65AequtuiRgCqcmHhhpf2s5dtZdv81bvHLu4ag
-         NbEeMLCXB9wvcavGrhfRTNhjJS2QEuCtcQATO63oqNOeObM+e6dYjWLfF1t9gKBxlt3Q
-         AxdwN2GzxljwZIyA1FsNSAQxx9TVzdTP4l5ypCsmq8gcyFyqpcqA6lSkZ9QJvCoJlTqR
-         CeNtybsHzh0ZCeO+f/uMQBhTcxeoWzmAaITzZqxsF0Lk6QuXvPoI632nUAf5j/Qe4yLr
-         /UZHs6EEvSaUb35a/6hu/hXdnYBr/KA+xrW/NCyU2W25jfsWy1IVw/RZ/IGnhhWcNpQ8
-         Fd+A==
-X-Gm-Message-State: ACrzQf2DW8hJhtGDmWcyP9OGXL7LcapwNDcCwxhiOsW4mYNx4C7dQz92
-        c1d9JkFRjyMbr2EYtCmjBBc=
-X-Google-Smtp-Source: AMsMyM4prXtxl5s44uI/6xJLoeTZiIab88g/7ZFG+phWqVdgqrZxR8gRhNLQ5JxArDib8u7lOPzCUg==
-X-Received: by 2002:a63:d60e:0:b0:46f:8979:30ba with SMTP id q14-20020a63d60e000000b0046f897930bamr47702265pgg.332.1667962460883;
-        Tue, 08 Nov 2022 18:54:20 -0800 (PST)
-Received: from [172.20.3.206] (69-170-33-158.static-ip.telepacific.net. [69.170.33.158])
-        by smtp.gmail.com with ESMTPSA id ij26-20020a170902ab5a00b0017f6c9622b9sm7627594plb.183.2022.11.08.18.54.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 18:54:20 -0800 (PST)
-Message-ID: <65f5d26b-b0af-f9c6-e77c-e82ac969e9f9@grimberg.me>
-Date:   Wed, 9 Nov 2022 04:54:18 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZI91qSyXBgg5eWntb5w7n4ZnK6DuW9VOjYf9yRXokSE=;
+        b=fVN0dXR89wuEb5eRi++MjM1YB6leYDkC90SEDhmfKfOOo1BKlEywZRI+PfstNh4fZZ
+         Sc4t5FgjHNNomy5X/IAAvr9GhiZjd1aJ939UZ9zbBvtI/urSXpKTSsSNRzowz1WLleuV
+         /9VbY9zFdV2MtL8sDNVb3fUAp2GS/7lsNh2rlHrbbuaCaJJxxHZW7mrQvG5bvCW8ODSA
+         EJfwYgup6g0ALhffSnjoCdDmmAhKI+BUzy+z78qtJ25qCLARrfvx7gYxsna7S0mVd0wz
+         Ck4g59PYG78YB/4bhR8jU2tuUgOFWvRGjLrP2ajGjs0gjGpkmrgDqW5MIVGLZORSSN8N
+         4edg==
+X-Gm-Message-State: ACrzQf2ApXcUy7Bt31VnTZjzwxE00u0w7nWgl2+dWh4kR90WCzIuVQq1
+        r79zHEXra5oAQSRCuT7FP74=
+X-Google-Smtp-Source: AMsMyM5GNCN92gKAwahnOWtJcYJg8dzgcv5QRL2staVnafL0b7uBDsOXWSq4dS4g96zgJpsJk1RoeA==
+X-Received: by 2002:a9d:4690:0:b0:66c:5830:426c with SMTP id z16-20020a9d4690000000b0066c5830426cmr23853563ote.144.1667962485744;
+        Tue, 08 Nov 2022 18:54:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o84-20020acaf057000000b0035485b54caesm4177955oih.28.2022.11.08.18.54.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 18:54:45 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 8 Nov 2022 18:54:44 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 5.15 000/144] 5.15.78-rc1 review
+Message-ID: <20221109025444.GB2033086@roeck-us.net>
+References: <20221108133345.346704162@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: nvme-pci: NULL pointer dereference in nvme_dev_disable() on
- linux-next
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Gerd Bayer <gbayer@linux.ibm.com>
-Cc:     Jens Axboe <axboe@fb.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-References: <fad4d2d5e24eabe1a4fcab75c5d080a6229dc88b.camel@linux.ibm.com>
- <20221108074846.GA22674@lst.de>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20221108074846.GA22674@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108133345.346704162@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-> Below is the minimal fix.  I'll see if I sort out the mess that is
-> probe/reset failure vs ->remove a bit better, though.
+On Tue, Nov 08, 2022 at 02:37:57PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.78 release.
+> There are 144 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-> index f94b05c585cbc..577bacdcfee08 100644
-> --- a/drivers/nvme/host/core.c
-> +++ b/drivers/nvme/host/core.c
-> @@ -5160,6 +5160,8 @@ EXPORT_SYMBOL_GPL(nvme_start_freeze);
->   
->   void nvme_stop_queues(struct nvme_ctrl *ctrl)
->   {
-> +	if (!ctrl->tagset)
-> +		return;
->   	if (!test_and_set_bit(NVME_CTRL_STOPPED, &ctrl->flags))
->   		blk_mq_quiesce_tagset(ctrl->tagset);
->   	else
-> @@ -5169,6 +5171,8 @@ EXPORT_SYMBOL_GPL(nvme_stop_queues);
->   
->   void nvme_start_queues(struct nvme_ctrl *ctrl)
->   {
-> +	if (!ctrl->tagset)
-> +		return;
->   	if (test_and_clear_bit(NVME_CTRL_STOPPED, &ctrl->flags))
->   		blk_mq_unquiesce_tagset(ctrl->tagset);
->   }
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+> 
 
-Can we do that in the pci driver and not here?
+Build results:
+	total: 159 pass: 159 fail: 0
+Qemu test results:
+	total: 489 pass: 489 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
