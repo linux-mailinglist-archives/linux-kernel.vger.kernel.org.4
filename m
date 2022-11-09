@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3698362324A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC55562324C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiKISUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
+        id S230031AbiKISU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKISUi (ORCPT
+        with ESMTP id S230253AbiKISUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:20:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F7324F17;
-        Wed,  9 Nov 2022 10:20:37 -0800 (PST)
+        Wed, 9 Nov 2022 13:20:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDDE2792B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:20:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CCF961C28;
-        Wed,  9 Nov 2022 18:20:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF291C433C1;
-        Wed,  9 Nov 2022 18:20:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2EDFDB81F68
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C903EC433D7;
+        Wed,  9 Nov 2022 18:20:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668018036;
-        bh=lHGIXa/gzMZc3tKmxe07xLxCc5ENdiRStUxmf+RJ76E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aDq7gFkVLaBFz3piUo2ROtjM7vxyTK0VgBb5MXkNJgRAbmWlBmTQAiI41f+1Fq2qu
-         hkBF5vneS+6G0CgV0oggBnfm/bAMNfaMfflzjPZ8cCLyMC+11/bbC0LaTWC8z9KShf
-         KEvyGPmr1uvvOjajknE8coL4wgOAepw9wtS7ip9S9Ed8mf7iJ/Z8fkvVZbYim3DyHw
-         /CjzIqaQe8NMx0OCe2GRwOsKL4SZ42DEtNbTPZSJ03z7K5ixHbjnvnlvVElMzKTUAE
-         hQKRXQgFBEbHSRD6K2dYHJ/IssE5VQhMrtpOw/7P2lXAzoDqsuMLK67aCu4bO3UtAn
-         f/7fnsVKFTauA==
-Date:   Wed, 9 Nov 2022 20:20:31 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     netdev@vger.kernel.org, sassmann@redhat.com,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Patryk Piotrowski <patryk.piotrowski@intel.com>,
-        SlawomirX Laba <slawomirx.laba@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] iavf: Do not restart Tx queues after reset task
- failure
-Message-ID: <Y2vvbwkvAIOdtZaA@unreal>
-References: <20221108102502.2147389-1-ivecera@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108102502.2147389-1-ivecera@redhat.com>
+        s=k20201202; t=1668018050;
+        bh=f5WlHtCUdeO7PC5hRQWApPE/3DDUhlTy4X6KcKfHhRw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q8tEza9EH03A9jm31HJ+DkmPpQ/zxCBOtWGbsvKF++IJQ7LfDuBwHHvcZahw1AfJa
+         l4RkvQI/Y7D9iScCHGejKiI3z/OAWV2+T+DvpEUnHU6F6hDueaMTA0TzlrziC6Iliv
+         xHMOQBscXmFvnlbB7R/6F63XR0fbski+pqCOnE01nTDi2BlXkrONvNmwJJ3KO33UiE
+         ryHrdwkGxQ93COXutnPLtpNoNISqXRnYiNlgrjqn8mOh9ZzmvUQ1HyvWPgHcPRwNUn
+         0GNnqGKFZLjYzXMA9UHI0PbBXlQwauCnQLNp9c0ErKwj0DcNIqP4ZT1+TI2dOsnFSp
+         JxA56lW2a1Xpg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ospgu-004ynk-I5;
+        Wed, 09 Nov 2022 18:20:48 +0000
+Date:   Wed, 09 Nov 2022 18:20:48 +0000
+Message-ID: <86tu38oupr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: Query on handling some special Group0 interrupt in Linux
+In-Reply-To: <d7b70de6-cd7f-3724-3449-5b838a478277@quicinc.com>
+References: <d7b70de6-cd7f-3724-3449-5b838a478277@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_mojha@quicinc.com, linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,34 +66,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 11:25:02AM +0100, Ivan Vecera wrote:
-> After commit aa626da947e9 ("iavf: Detach device during reset task")
-> the device is detached during reset task and re-attached at its end.
-> The problem occurs when reset task fails because Tx queues are
-> restarted during device re-attach and this leads later to a crash.
-
-<...>
-
-> +	if (netif_running(netdev)) {
-> +		/* Close device to ensure that Tx queues will not be started
-> +		 * during netif_device_attach() at the end of the reset task.
-> +		 */
-> +		rtnl_lock();
-> +		dev_close(netdev);
-> +		rtnl_unlock();
-> +	}
-
-Sorry for my naive question, I see this pattern a lot (including RDMA), 
-so curious. Everyone checks netif_running() outside of rtnl_lock, while
-dev_close() changes state bit __LINK_STATE_START. Shouldn't rtnl_lock()
-placed before netif_running()?
-
-Thanks
-
-> +
->  	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
->  reset_finish:
->  	rtnl_lock();
-> -- 
-> 2.37.4
+On Wed, 09 Nov 2022 16:20:35 +0000,
+Mukesh Ojha <quic_mojha@quicinc.com> wrote:
 > 
+> Hi,
+> 
+> I was working on a use case where both el2/el3 are implemented and we
+> have a watchdog interrupt (SPI), which is used for detecting software
+> hangs and cause device reset; If that interrupt's current cpu affinity
+> is on a core, where interrupts are disabled, we won't be able to serve
+> it or if this interrupt comes on a core which has interrupt enabled,
+> calling panic() or with smp_send_stop(), we would not be able
+> to know the call stack of the other cores which is running with
+> interrupt disabled.
+> 
+> I was thinking of configuring both a watchdog irq(SPI) and IPI_STOP
+> (SGI) or any reserve IPI as an FIQ. And from the watchdog irq handler,
+> I was thinking of calling panic() which eventually sends IPI_STOP(SGI
+> FIQ) to all the cores. And with this we will able to dump all the core
+> call stack.
+> 
+> I am able to achieve this but wanted to know if this is acceptable to
+> the community to support/allow such use cases like above and enable
+> group0 interrupt from GIC for some special use cases.
+
+For a start, we only deal with Group-1 interrupts in Linux. Group-0
+interrupts are for the firmware, and we really don't want to see them
+(this is consistent with your HW having EL3). We also mask IRQ and FIQ
+at the same time, so this is a non-starter.
+
+If you want to be able to deliver an interrupt while the interrupts
+are masked, what you are looking for is the NMI framework, for which
+you can register SPIs as (pseudo-)NMI.
+
+This is of course assuming that you're using GICv3. If you're using an
+older version of the architecture, we don't have a good solution for
+you, unfortunately.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
