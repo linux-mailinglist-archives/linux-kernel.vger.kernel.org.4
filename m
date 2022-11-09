@@ -2,123 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2FA62344E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521CB623462
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiKIUNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:13:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S229967AbiKIURn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKIUNx (ORCPT
+        with ESMTP id S231512AbiKIURa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:13:53 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1254218B32
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:13:52 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id l127so20031502oia.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:13:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yB6HYvhBN3RVAfByHn6Mj6M7PU8T8ZuDtIlSesRugqE=;
-        b=VtxYfuoGycTMs/QNDj9C6posySpJrMmYbilDidHZq1CwdThPJ/+bdO/MJdPm02wVdU
-         5iEOsZO1oFUxuaFqMobK45DfcdHrKECbAoOali2jJsGPjr6GpXh3T2y5aOfg7+j3qpnF
-         562x3bIoj/U+6gKdODz4stYBWXhNYu1gqL/TC2crukFXRf8ErgkxOGm6eBjsoK49zMVG
-         kRiIy6SaKG9aPrbVhXh8KqW5wuSAd/otKoZwOSAnayoPx+fqPGgCXOxSCelrVw+ezn/p
-         /PRt62ouWHWm2RxCTUkUXjh9HsdrjjLOfTN+kTCDdr6XTL9fZ/+/LAfZ1FRUQ9fELiEt
-         NZsQ==
+        Wed, 9 Nov 2022 15:17:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1481DA67
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:16:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668024997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NLOxLVFZV4zQpDgDTPUVeEgHz0GzCmM4oZzrRys5s/c=;
+        b=LmNPjTI/dAOVoM9UODV98NXgijS0S1/hkyKNW36O9PfOVMUzxdTulKNgnGr5XYcZ2BGguG
+        NmoXZGTTx1268Wr32B5iI7VxHdbC8McQxIak5fiTEtekgu3o9062nzphqerkv2/samnVbL
+        QkQehK2rtm/wNUxk7L3ySoJah2+p9YI=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-43-kvnTg5NSNWa6PQyGAsP3fQ-1; Wed, 09 Nov 2022 15:16:35 -0500
+X-MC-Unique: kvnTg5NSNWa6PQyGAsP3fQ-1
+Received: by mail-il1-f198.google.com with SMTP id k3-20020a92c243000000b0030201475a6bso8418ilo.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:16:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yB6HYvhBN3RVAfByHn6Mj6M7PU8T8ZuDtIlSesRugqE=;
-        b=14hJK0AQTzDQ32pVNCPfuHImY2JK0unzyCrBlwqJCyjyKabO15vNUyfAbVuSRirRjS
-         sqcrEXRLwErIyZsTGBwUcgj6uUF3ID63O+p0YApVYffXL64muwWDz1SwatSjkSDZvZb7
-         rPBf2fu4CY1twTt+LkkOmkQX8OUqpqzjKyvDkNAXH1XY36clx3fYO6LugTWqbN+n2JAL
-         2pd7AlY89GrAC2RV+qBL5ARqlUCfggLmEJedSUOqJ3HAniF+qY3v14OUCDeIIIEVLi6t
-         XNGTrTjXeDZm4V1FGTiY/4Loodt3uK7fllbecQoZb4X3Rmev/w8eulqdkeHOxiG9dvwd
-         wv2A==
-X-Gm-Message-State: ACrzQf0+AYBdGM6YMQUz3o4DlRmMidAFq7YEcw+pzdHrZ2sBO1PZ8IEU
-        9ej3HGc6dywHO4WOJSsM0u/UZn42H578T6aGc9kV
-X-Google-Smtp-Source: AMsMyM5BiojzHXd3s4SlDdTvp7SrcHcpqQ50w/EPBngyxCmha1b/OAMd3Pgv35j8TsHD4WyA9o3YivK76j3kF8CPULE=
-X-Received: by 2002:a05:6808:1441:b0:35a:4a2d:673b with SMTP id
- x1-20020a056808144100b0035a4a2d673bmr19974152oiv.172.1668024831341; Wed, 09
- Nov 2022 12:13:51 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NLOxLVFZV4zQpDgDTPUVeEgHz0GzCmM4oZzrRys5s/c=;
+        b=0uCR15u8AO6nIyhaTl4Sl0nScJbAunQBrHXHktLX8mv0wWVx5Qa0Pvfert53mwPdp3
+         chpNXy3GCPYxjBWjgbHWRWgThTDsis7NzYe20hYEYhJ8cxUki7A0hiAOhU3SAYelN9Df
+         rp5kYh8UKRm7q3hBb6dkquB0OVDxVGMtQ7YsIExE+oRDsDrOpNayU7Nw2RNDCF4Izjof
+         guHI9BGH0xhQj0QKgwWIawLOlo3CPtSauB4tlY+yv8yCA6BFxWnHF/lN4yF6PFzliaRs
+         jYxiss+Kj6aDCsxPzySJB32zd99YUBhAY/7HyS2QwjK0N2hGiB0J7ZANUyag2ToDL1PA
+         kd6g==
+X-Gm-Message-State: ACrzQf2IH9obluI+5HWXgZtooRkprQ1RWn/RkVce6H0KbBYCcJKGFF8J
+        0/gn3ftoeAqkpQgKmXfhJ+7+rvqulI5HbQLFgQhfOCcb6tzodB5AAcvm7ogNqFfUtgGOpTcyGL2
+        DkXehf5Cd76fhfl/b7mUQu9Wf
+X-Received: by 2002:a02:b90e:0:b0:375:afa6:ad1 with SMTP id v14-20020a02b90e000000b00375afa60ad1mr13614028jan.288.1668024995267;
+        Wed, 09 Nov 2022 12:16:35 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6gzjCuqJ1aA3BafM719bcGvXRLswKT7STqsQHrDo3cNgtfnX8AghXAYSnm4DwyTRlE/cER8g==
+X-Received: by 2002:a02:b90e:0:b0:375:afa6:ad1 with SMTP id v14-20020a02b90e000000b00375afa60ad1mr13614020jan.288.1668024995032;
+        Wed, 09 Nov 2022 12:16:35 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id s27-20020a02cc9b000000b00363dee286edsm5154294jap.60.2022.11.09.12.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 12:16:34 -0800 (PST)
+Date:   Wed, 9 Nov 2022 13:16:32 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, Stefan Roese <sr@denx.de>,
+        Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] PCI: Work around PCIe link training failures
+Message-ID: <20221109131632.6a059bd9.alex.williamson@redhat.com>
+In-Reply-To: <20221109050418.GA529724@bhelgaas>
+References: <alpine.DEB.2.21.2211090014500.15287@angie.orcam.me.uk>
+        <20221109050418.GA529724@bhelgaas>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <CAHC9VhSSafrkW4VbTVoAUJmjFQdCwPTGDqTP8yBnLBqc7rW7iQ@mail.gmail.com>
- <CAHk-=wj_6Df1NAMs14S0OOqX1Z=460j-mfwn_qm-7EK1eK76qw@mail.gmail.com> <20221109143834.GB24561@mail.hallyn.com>
-In-Reply-To: <20221109143834.GB24561@mail.hallyn.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 9 Nov 2022 15:13:40 -0500
-Message-ID: <CAHC9VhQgEej_yKXRJFtLHUQkL8hGrBYqRPye5SwBz_SU+2eK2A@mail.gmail.com>
-Subject: Re: [GIT PULL] LSM fixes for v6.1 (#1)
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 9:38 AM Serge E. Hallyn <serge@hallyn.com> wrote:
-> On Mon, Oct 31, 2022 at 12:22:29PM -0700, Linus Torvalds wrote:
-> > On Mon, Oct 31, 2022 at 4:07 AM Paul Moore <paul@paul-moore.com> wrote:
-> > >
-> > > A single patch to the capabilities code to fix a potential memory leak
-> > > in the xattr allocation error handling.  Please apply for v6.1-rcX.
-> >
-> > Pulled.
-> >
-> > However, I react to the strange test condition. Sure, it's
-> > pre-existing, but does it really make sense?
-> >
-> > It does
-> >
-> > +       if (ret < 0 || !tmpbuf) {
-> > +               size = ret;
-> > +               goto out_free;
-> > +       }
-> >
-> > and how the heck can 'tmpbuf' be NULL if vfs_getxattr_alloc() succeeded?
->
-> I had to go through the history a bit - the !tmpbuf check was added
->
-> https://www.spinics.net/lists/stable/msg463010.html
->
-> because of a gcc warning.  Perhaps there's a better way to tell gcc
-> that it can't remain NULL if ret was < 0 ?
+On Tue, 8 Nov 2022 23:04:18 -0600
+Bjorn Helgaas <helgaas@kernel.org> wrote:
 
-Ooof, that's ugly, but thanks for digging it up.  As it turns out I
-happen to be working on a patch for vfs_getxattr_alloc() to fix the
-return value type right now, but it looks like I'll leave that gcc
-hack in place ... although I might leave a comment about it so the
-next person doesn't have to wonder.
+> [+cc Alex, in case he has any reset-related comments]
+> 
+> On Wed, Nov 09, 2022 at 02:57:57AM +0000, Maciej W. Rozycki wrote:
+> > Hi Bjorn,
+> > 
+> >  Thank you for coming back to this patch series.  I'll try to address your 
+> > concerns, but it may take a little.  The reason is I'm currently on site 
+> > at my lab until the end of the week and barring my day job, etc. I want to 
+> > focus on items to do (and I do have a bunch) that require local hardware 
+> > access.  The issue concerned with this patch series does not, so I'll get 
+> > to looking into it in more depth hopefully from next week.  For the time 
+> > being however please see below.
+> > 
+> > On Thu, 3 Nov 2022, Bjorn Helgaas wrote:
+> >   
+> > > > > > Also check for a 2.5GT/s speed restriction the firmware may have already 
+> > > > > > arranged and lift it too with ports of devices known to continue working 
+> > > > > > afterwards, currently the ASM2824 only, that already report their data 
+> > > > > > link being up.  
+> > > > > 
+> > > > > This quirk is run at boot-time and resume-time.  What happens after a
+> > > > > Secondary Bus Reset, as is done by pci_reset_secondary_bus()?  
+> > > > 
+> > > > Flipping SBR bit can be done on any PCI-to-PCI bridge device and in this
+> > > > topology there are following: PCIe Root Port, ASMedia PCIe Switch
+> > > > Upstream Port, ASMedia PCIe Switch Downstream Port, Pericom PCIe Switch
+> > > > Upstream Port, Pericom PCIe Switch Downstream Port.
+> > > > (Maciej, I hope that this is whole topology and there is not some other
+> > > > device of PCI-to-PCI bridge type in your setup; please correct me)  
+> > 
+> >  There is actually a PCIe-to-PCI bridge device further downstream (device 
+> > 0000:08:00.0 in the listings below; bus 09 is conventional PCI), but it 
+> > doesn't matter for the issue concerned; the issue triggers whether the 
+> > bridge module has been plugged or not.
+> >   
+> > > > Bjorn, to make it clear, on which device you mean to issue secondary bus
+> > > > reset?  
+> > > 
+> > > IIUC, the problem is observed on the link between the ASM2824
+> > > downstream port and the PI7C9X2G304 upstream port, so my question is
+> > > about asserting SBR on the ASM2824 downstream port.  I think that
+> > > should cause the link between ASM2824 and PI7C9X2G304 to go down and
+> > > back up.  
+> > 
+> >  That would be my expectation as well.  Is there a reliable way to request
+> > that however without actually writing a piece of code to do so from inside 
+> > the kernel?  Sadly our documentation is vague on the matter, in particular 
+> > Documentation/ABI/testing/sysfs-bus-pci, but here's what I have obtained:
+> > 
+> > # lspci -t
+> > -[0000:00]---00.0-[01-0b]----00.0-[02-0b]--+-00.0-[03]--
+> >                                            +-02.0-[04]----00.0
+> >                                            +-03.0-[05-09]----00.0-[06-09]--+-01.0-[07]--+-00.0
+> >                                            |                               |            \-00.3
+> >                                            |                               \-02.0-[08-09]----00.0-[09]--+-01.0
+> >                                            |                                                            \-02.0
+> >                                            +-04.0-[0a]----00.0
+> >                                            \-08.0-[0b]--+-00.0
+> >                                                         \-00.1
+> > # for name in /sys/bus/pci/devices/0000\:??\:??.?/reset_method; do echo "$(basename $(dirname $name)): $(cat $name)"; done
+> > 0000:01:00.0: pm bus
+> > 0000:02:00.0: pm bus
+> > 0000:02:02.0: pm
+> > 0000:02:03.0: pm
+> > 0000:02:04.0: pm
+> > 0000:02:08.0: pm
+> > 0000:04:00.0: bus
+> > 0000:05:00.0: bus
+> > 0000:06:01.0: bus
+> > 0000:07:00.0: bus
+> > 0000:08:00.0: bus
+> > 0000:09:01.0: pm bus
+> > 0000:0a:00.0: flr bus
+> > 0000:0b:00.0: pm bus
+> > 0000:0b:00.1: pm
+> > # 
+> > 
+> > (mind that the problematic link is between 0000:02:03.0 and 0000:05:00.0), 
+> > and then:
+> > 
+> > # echo 1 >/sys/bus/pci/devices/0000\:05\:00.0/reset
+> > -sh: echo: write error: Inappropriate ioctl for device
+> > # 
+> > 
+> > (which I gather is supposed to poke at 0000:02:03.0's SBR) so it doesn't 
+> > seem to be effective.    
+> 
+> 05:00.0 supports the "bus" method, i.e., pci_reset_bus_function(),
+> which tries pci_dev_reset_slot_function() followed by
+> pci_parent_bus_reset().  Both of them return -ENOTTY if the device
+> (05:00.0) has a secondary bus ("dev->subordinate"), so I think nothing
+> happens here.
 
-> > I think that's not only impossible in the first place, but if it *was*
-> > possible, then that
-> >
-> >                 size = ret;
-> >                goto out_free;
-> >
-> > would be wrong, because this function would return success even if it
-> > wasn't successful.
-> >
-> > That whole "cast to int, and then cast back to size_t" also smells of
-> > some serious confusion in the return value handling. It looks to me
-> > like vfs_getxattr_alloc() fundamentally returns an 'int', not a
-> > 'ssize_t', just by looking at the ->get function. But it just all
-> > looks weird.
-> >
-> > So this code has all kinds of oddities.
-> >
-> >                Linus
+Right, the pci-sysfs reset attribute is only meant for a reset scope
+limited to the device, we'd need something to call pci_reset_bus() to
+commit to the whole hierarchy, which is not something we typically do.
+vfio-pci will only bind to endpoint devices, so it shouldn't provide an
+interface to inject a bus reset here either.
 
--- 
-paul-moore.com
+Based on the fact that there's a pericom switch in play here, I'll just
+note that I think this is the same device with other link speed issues
+as well:
+
+https://lore.kernel.org/all/20161026180140.23495.27388.stgit@gimli.home/
+
+This fell off my plate some time ago, but as noted there, enabling ACS
+when the upstream and downstream ports run at different link rates
+exposes errata where packets are queued and not delivered within the
+switch.
+
+Could enabling ACS on this device be contributing to the issue here,
+for example triggering the Asmedia downstream port to get into this
+link reseting issue?  A test with
+pci=disable_acs_redir=0000:06:01.0;0000:06:02.0 could be interesting
+assuming this occurs on an platform that has an IOMMU, ie. calls
+pci_request_acs().  Thanks,
+
+Alex
+
