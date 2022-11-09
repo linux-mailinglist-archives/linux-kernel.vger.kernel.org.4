@@ -2,98 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5BF622B1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 087DF622B43
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiKIMHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S229979AbiKIMQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiKIMHP (ORCPT
+        with ESMTP id S229954AbiKIMP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:07:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A1C2CDED;
-        Wed,  9 Nov 2022 04:07:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 9 Nov 2022 07:15:57 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6730F13F9B;
+        Wed,  9 Nov 2022 04:15:55 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 4df0423be24a156a; Wed, 9 Nov 2022 13:15:52 +0100
+Received: from kreacher.localnet (unknown [213.134.163.195])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 957F7B81E1F;
-        Wed,  9 Nov 2022 12:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25BAC433C1;
-        Wed,  9 Nov 2022 12:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667995632;
-        bh=EcGvod2J7G0EVeowczE6d3P4Q6057Dkap40V5xBec00=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zhKNOILCuudrEnFWLLop6f5k4YkSkLQ82UcZOVQ58SS6C4kIHy+JSor41RVjo7lHi
-         152dPz1nRbJWOBqqjcmDGsf+TtU7tFs8OaSPtlFovWOJ8Vvrb6hBnUIyU5LkujaiH5
-         TynH0AUHYF+1G+HNQeGX98y1RwieMqf6c1UFiIXg=
-Date:   Wed, 9 Nov 2022 13:07:08 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, kgugala@antmicro.com, mholenko@antmicro.com,
-        joel@jms.id.au, david.abdurachmanov@sifive.com,
-        florent@enjoy-digital.fr
-Subject: Re: [PATCH v1 1/3] serial: liteuart: cosmetic changes
-Message-ID: <Y2uX7GJYOmaGvRR2@kroah.com>
-References: <20221107171500.2537938-1-gsomlo@gmail.com>
- <20221107171500.2537938-2-gsomlo@gmail.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id C650766EBA7;
+        Wed,  9 Nov 2022 13:15:51 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: [PATCH v2 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from cmos_do_probe()
+Date:   Wed, 09 Nov 2022 13:07:08 +0100
+Message-ID: <4803444.31r3eYUQgx@kreacher>
+In-Reply-To: <5640233.DvuYhMxLoT@kreacher>
+References: <5640233.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107171500.2537938-2-gsomlo@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.195
+X-CLIENT-HOSTNAME: 213.134.163.195
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgdefiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeifedrudelheenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduleehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghl
+ rdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 12:14:58PM -0500, Gabriel Somlo wrote:
-> Make some cosmetic/stylistic (non-functional) improvements:
-> 
-> 1. Use a DRV_NAME macro to avoid hard-coding "liteuart" in multiple
-> locations throughout the source file
-> 
-> 2. Use bit numbers instead of magic constants for event flags
-> 
-> 3. Remove stub uart_ops methods that are not called unconditionally
-> from serial_core; Document stubs that are required by serial_core
-> 
-> 4. Don't set unused port->regshift and port->iobase fields gratuitously
-> during probe()
-> 
-> 5. Improve coding style in liteuart_init()
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-When you list different things you do in a single patch, that means you
-should break this up into individual patches.
+Notice that cmos_wake_setup() is the only user of acpi_rtc_info and it
+can operate on the cmos_rtc variable directly, so it need not set the
+platform_data pointer before cmos_do_probe() is called.  Instead, it
+can be called by cmos_do_probe() in the case when the platform_data
+pointer is not set to implement the default behavior (which is to use
+the FADT information as long as ACPI support is enabled).
 
-Please do that here, this should be at least 5 patches.
+Modify the code accordingly.
+
+While at it, drop a comment that doesn't really match the code it is
+supposed to be describing.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+No changes since v1.
+
+---
+ drivers/rtc/rtc-cmos.c |   47 ++++++++++++++++++++++-------------------------
+ 1 file changed, 22 insertions(+), 25 deletions(-)
+
+Index: linux-pm/drivers/rtc/rtc-cmos.c
+===================================================================
+--- linux-pm.orig/drivers/rtc/rtc-cmos.c
++++ linux-pm/drivers/rtc/rtc-cmos.c
+@@ -744,6 +744,8 @@ static irqreturn_t cmos_interrupt(int ir
+ 		return IRQ_NONE;
+ }
+ 
++static void cmos_wake_setup(struct device *dev);
++
+ #ifdef	CONFIG_PNP
+ #define	INITSECTION
+ 
+@@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
+ 		if (info->address_space)
+ 			address_space = info->address_space;
+ 
+-		if (info->rtc_day_alarm && info->rtc_day_alarm < 128)
+-			cmos_rtc.day_alrm = info->rtc_day_alarm;
+-		if (info->rtc_mon_alarm && info->rtc_mon_alarm < 128)
+-			cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+-		if (info->rtc_century && info->rtc_century < 128)
+-			cmos_rtc.century = info->rtc_century;
++		cmos_rtc.day_alrm = info->rtc_day_alarm;
++		cmos_rtc.mon_alrm = info->rtc_mon_alarm;
++		cmos_rtc.century = info->rtc_century;
+ 
+ 		if (info->wake_on && info->wake_off) {
+ 			cmos_rtc.wake_on = info->wake_on;
+ 			cmos_rtc.wake_off = info->wake_off;
+ 		}
++	} else {
++		cmos_wake_setup(dev);
+ 	}
+ 
++	if (cmos_rtc.day_alrm >= 128)
++		cmos_rtc.day_alrm = 0;
++
++	if (cmos_rtc.mon_alrm >= 128)
++		cmos_rtc.mon_alrm = 0;
++
++	if (cmos_rtc.century >= 128)
++		cmos_rtc.century = 0;
++
+ 	cmos_rtc.dev = dev;
+ 	dev_set_drvdata(dev, &cmos_rtc);
+ 
+@@ -1275,13 +1285,6 @@ static void use_acpi_alarm_quirks(void)
+ static inline void use_acpi_alarm_quirks(void) { }
+ #endif
+ 
+-/* Every ACPI platform has a mc146818 compatible "cmos rtc".  Here we find
+- * its device node and pass extra config data.  This helps its driver use
+- * capabilities that the now-obsolete mc146818 didn't have, and informs it
+- * that this board's RTC is wakeup-capable (per ACPI spec).
+- */
+-static struct cmos_rtc_board_info acpi_rtc_info;
+-
+ static void cmos_wake_setup(struct device *dev)
+ {
+ 	if (acpi_disabled)
+@@ -1289,26 +1292,23 @@ static void cmos_wake_setup(struct devic
+ 
+ 	use_acpi_alarm_quirks();
+ 
+-	acpi_rtc_info.wake_on = rtc_wake_on;
+-	acpi_rtc_info.wake_off = rtc_wake_off;
++	cmos_rtc.wake_on = rtc_wake_on;
++	cmos_rtc.wake_off = rtc_wake_off;
+ 
+-	/* workaround bug in some ACPI tables */
++	/* ACPI tables bug workaround. */
+ 	if (acpi_gbl_FADT.month_alarm && !acpi_gbl_FADT.day_alarm) {
+ 		dev_dbg(dev, "bogus FADT month_alarm (%d)\n",
+ 			acpi_gbl_FADT.month_alarm);
+ 		acpi_gbl_FADT.month_alarm = 0;
+ 	}
+ 
+-	acpi_rtc_info.rtc_day_alarm = acpi_gbl_FADT.day_alarm;
+-	acpi_rtc_info.rtc_mon_alarm = acpi_gbl_FADT.month_alarm;
+-	acpi_rtc_info.rtc_century = acpi_gbl_FADT.century;
++	cmos_rtc.day_alrm = acpi_gbl_FADT.day_alarm;
++	cmos_rtc.mon_alrm = acpi_gbl_FADT.month_alarm;
++	cmos_rtc.century = acpi_gbl_FADT.century;
+ 
+-	/* NOTE:  S4_RTC_WAKE is NOT currently useful to Linux */
+ 	if (acpi_gbl_FADT.flags & ACPI_FADT_S4_RTC_WAKE)
+ 		dev_info(dev, "RTC can wake from S4\n");
+ 
+-	dev->platform_data = &acpi_rtc_info;
+-
+ 	/* RTC always wakes from S1/S2/S3, and often S4/STD */
+ 	device_init_wakeup(dev, 1);
+ }
+@@ -1359,8 +1359,6 @@ static int cmos_pnp_probe(struct pnp_dev
+ {
+ 	int irq, ret;
+ 
+-	cmos_wake_setup(&pnp->dev);
+-
+ 	if (pnp_port_start(pnp, 0) == 0x70 && !pnp_irq_valid(pnp, 0)) {
+ 		irq = 0;
+ #ifdef CONFIG_X86
+@@ -1468,7 +1466,6 @@ static int __init cmos_platform_probe(st
+ 	int irq, ret;
+ 
+ 	cmos_of_init(pdev);
+-	cmos_wake_setup(&pdev->dev);
+ 
+ 	if (RTC_IOMAPPED)
+ 		resource = platform_get_resource(pdev, IORESOURCE_IO, 0);
 
 
 
-> 
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> ---
->  drivers/tty/serial/liteuart.c | 38 +++++++++--------------------------
->  1 file changed, 10 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index 4c0604325ee9..4b9cca249828 100644
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -18,6 +18,8 @@
->  #include <linux/tty_flip.h>
->  #include <linux/xarray.h>
->  
-> +#define DRV_NAME "liteuart"
-
-Just use KBUILD_MODNAME please.
-
-thanks,
-
-greg k-h
