@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3530562341D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D79AD623421
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbiKIUBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S232064AbiKIUBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiKIUAz (ORCPT
+        with ESMTP id S230415AbiKIUA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:00:55 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A9913D6F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:00:52 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso2861638pjg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:00:52 -0800 (PST)
+        Wed, 9 Nov 2022 15:00:57 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FED72AE24
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:00:54 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id b11so17708279pjp.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:00:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kQKFx/3OVEr8FOcVZmOutyPL+4wZ1FyB719efe5yfh8=;
-        b=Eaj/SO41QTj6LK1PYYV3lOKLMoZSqh+R0yOIIew/1/tAcK612AxIrryq13QPOM+mG3
-         cIGmAGV1hA0JT7z/XcIG7pfVNECt7JsEuq8IzQEpG+xbwBgzHHge111qfOUOpF/DODDh
-         gd9NKs/G/CVQXIRMjB5VA6NVlRIODdQVSaQVw=
+        bh=/UYGWVP+2kBbzi2iV4I0WWEoZudfeo1pQ1Ba/UKdZ3A=;
+        b=Al9IUPioLVhF5aUYYmkVtzrhkkI5wmxiVaQ31mvEBzjeJfi8pW+OvoGceYUnEAui4l
+         ZJLlkqQKqQWC2KF3997axm5+kzh3obM2aom1tQR9B2Ym9X8BhF9d9LpBxMDWeuw12+hg
+         KPthUHOrt24jG8LjP6wtzdgAQ857NclAmm1L4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kQKFx/3OVEr8FOcVZmOutyPL+4wZ1FyB719efe5yfh8=;
-        b=8Lmsj8eCguhaA+PlDi/IYidNkxYxKMlQ3WLyDTIuzPmCpI9RPuVt4l02+Fs0t/8Tm+
-         JxmzDldVOsRjuj+BtYOhoqazJJt0C+QlEB4pO1jxoqeb9ImlZqRoWY9+H0SMksPy4e9D
-         GbMo88zADtHvAQFVPyE8DdlJO/u+UrpHmdRQdkmajdwb70MUj6sonFeBUkouRS0TaHO1
-         Bq2hukPZQ43H2vMUJ/13PdG+bRwGPyuZSGwoPZTg5sMMNpkdX1QdzjsFawD82Oy58Ou/
-         3LBRJh+a2+K/nlTBdr68l0aBpup4dWl6z80xqVcRJfbtAFiya2Tr0Z0rv7p/ufO68WAf
-         Swjg==
-X-Gm-Message-State: ACrzQf1oexDGD5Z9B8b5GJqqilDOb/EcfL2vRQi9FG+wYyJNzBoaAp8j
-        cyvaXAfoI9TW54BZRQyPrB+LZg==
-X-Google-Smtp-Source: AMsMyM6mufCgxjvUeKez7jB4G5EOHeMUc1Hxuif7xwxUrr+40nx9N84+xIx/MS0AbRJyF1rMX+hmwA==
-X-Received: by 2002:a17:902:7283:b0:188:612b:1d31 with SMTP id d3-20020a170902728300b00188612b1d31mr31950444pll.81.1668024052270;
-        Wed, 09 Nov 2022 12:00:52 -0800 (PST)
+        bh=/UYGWVP+2kBbzi2iV4I0WWEoZudfeo1pQ1Ba/UKdZ3A=;
+        b=wm+nqFv75N834PpdUNRWfarcUaHiTYuLa6XPkYMXVzd903E6df71nZLOynXh4WmxUZ
+         mfVpEIP9T7nQoZOvnBKfPn/1uCmByCtuaR63rN4mv95+hyu759TRobEWRuteILclXZRq
+         6FImrXntyOr73Zi9mbi3j+LSN+0lREfUh8JJaiS0lQPipGra/56di2oOsLzwbG9SmLNL
+         /ot7oHCA52feFNAGOdYyWNCf7zOp2f0rS4DklGJ/MkEn9ZyiP1Akuyzh+HK+IVlpw/2g
+         wjzGhgQfEuRHTXrNxImcHQzb4XAhf7KGOMQUHW1gV+38qvlMeWXBz2s5rEw0ehTnrPLM
+         3gYg==
+X-Gm-Message-State: ACrzQf0abmFpMdZqx1iDBZl6ClGp26l1mveqsOF9IHu9GLzams3NUrny
+        34+TtDofZ0mC6qKLP9yLO2bvPg==
+X-Google-Smtp-Source: AMsMyM7LaEdlGS+MabxmO85Gn0ysyq3v1L2PjhWfgRyvBliSgVbai4V+CzcTzJ2ZUHN27GIBAj6bPw==
+X-Received: by 2002:a17:903:1211:b0:178:9353:9e42 with SMTP id l17-20020a170903121100b0017893539e42mr61056479plh.45.1668024053928;
+        Wed, 09 Nov 2022 12:00:53 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bd5-20020a17090b0b8500b0020d9306e735sm1629847pjb.20.2022.11.09.12.00.51
+        by smtp.gmail.com with ESMTPSA id jf9-20020a170903268900b001868bf6a7b8sm9480282plb.146.2022.11.09.12.00.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 09 Nov 2022 12:00:51 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
 To:     Jann Horn <jannh@google.com>
 Cc:     Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg KH <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linuxfoundation.org>,
         Seth Jenkins <sethjenkins@google.com>,
@@ -60,8 +62,7 @@ Cc:     Kees Cook <keescook@chromium.org>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Tiezhu Yang <yangtiezhu@loongson.cn>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>, Marco Elver <elver@google.com>,
+        Marco Elver <elver@google.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -89,14 +90,14 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
         kasan-dev@googlegroups.com, linux-mm@kvack.org,
         linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2 2/6] exit: Put an upper limit on how often we can oops
-Date:   Wed,  9 Nov 2022 12:00:45 -0800
-Message-Id: <20221109200050.3400857-2-keescook@chromium.org>
+Subject: [PATCH v2 3/6] exit: Expose "oops_count" to sysfs
+Date:   Wed,  9 Nov 2022 12:00:46 -0800
+Message-Id: <20221109200050.3400857-3-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221109194404.gonna.558-kees@kernel.org>
 References: <20221109194404.gonna.558-kees@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5361; i=keescook@chromium.org; h=from:subject; bh=+f/+Dg4RjhhWvYSeTOZHt0meJbZX9qmj9YfRzK8RgiI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjbAbvj62Q9JcvPPd6ZZiW3RZKbMkJ9KitwgH9cwUs jkYefu2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY2wG7wAKCRCJcvTf3G3AJtTYEA Coz/20jIancS/LGuMA+yU7vBUbp90sWb4OB9OEWj+5Z8KSUdedxGwouUYlMeNAAlL/7NDkKSvNpUDC JmGbJON8OKVCS8idIB9lACwcVavVx18L/YCJvzSwTvQTdXDOhMSjrS4Ouyyt2MSQiCpru6xUvwlGCm DOXU4YlA5cqVJ9CA/Uwq1U23IVAQOTldToR9GH19lq+0Kmr19P0jQha/rl5uarCKr5BU0XTqW6QKT2 k4cPF3Fjb65aiz0I3G2gW8SrPW4AANI3jJyhQT1+m32izI7gqs4Dz/h4jq9RSfF9rXjBXmBceJfnnb UmjaXMhmVJvPnAB7UXA5/tUz5h4PnWMb4WIyWqS8K3Rjppw81sgG0S3FEKk317d7y/ucXUDBwAIdbZ QqQI+ijh8zAw6m4pa1PHMgJxjN1nvqzNRip6eiShoPrpJrNKHlVZMseoUe+ytcD0IXZlr5VZgMlSnR MvmYVYavcUj4497v/0Zh4lg22PSKybYSsACuCv/g6jWagGfwMiDf+qOK4fNpn6eI5Jk9v4/vqg9zTj iEwg/2zCSXBGZsM3rMMyuud3hH9sMkmyKANOQvl4zbB3ghuT0gVX9Vt4Sb+innAy0kHTbvs2+F4XSh VvkhTOPJ5bFVFdiIqQFVx3jLysoYcUAkK3oXCThGbXsbm9fTKpWY3lnzNiVA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2891; h=from:subject; bh=qMx/IsiWcmyqv4bprAvLa4Z+pu9RdmRiuPSjG1ZzTgs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjbAbwo1/8yglxqkQYwl/TzoU05jno2OXdm4rO0Khj SNJWKvmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY2wG8AAKCRCJcvTf3G3AJn+dEA CRtODMqBP7kZcO5j9TwUU+pK8X2SSatj9G4jVKq5CV0wprk1khK5tQp/daoG01CBFuBi8pywh0MToC qWOJ91xSfQ/agiOTbGd07lX6ERIsGg7OnwthRfzrrgbStqJTaL9Ei56cH358dNkLxqP13ai260fQ6r pGCtPIHQ1HKjN+2ZUwXbMdVQSryY9wEfEV0qELbRCKol1wPOJqQI4EF7LMJjAQVqM/5YSDZVWAKoc1 PozfKT/HCo/8/vCKUyH29aaFklAEtl4yqgamCcr97ZuLklQn7lUhd4EMHF5P+iCsqaHKTxW4+2dRbK IZddqBIugKXp5xwXEUgHTjd9CD3spRwYJThUf4qTQjCMTceS+KunCfAMfDs4gvwgiJKXrmfViqcDvj Boo6O8+t+Dx84XTCh4iCcOUuSm/WrgINQCwCQn+kDHxUaVnwIVG7d1EfHIdb9f/3Ipt74/drWWYQLN eMz+nYK3J0JnqPAfoh/QdRk7t2ojlnwEAXhRsS7g2YLDfKIHCLyvaC0SEuynhHyX1umjMm3G5rEsp7 jjFeQESAFmjYAUoak8T6n6jnl0Q0e/0N0/Yi+jTgf5WnBJ27ID/Oqs2EFlBosDJ3WwuxdK4lZEp1q9 5pPeP4jLcdy3SOY/cdO3S74h5jopYa5+mufuWL4X4p7060Tps+iGxoxMR1IA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -109,143 +110,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+Since Oops count is now tracked and is a fairly interesting signal, add
+the entry /sys/kernel/oops_count to expose it to userspace.
 
-Many Linux systems are configured to not panic on oops; but allowing an
-attacker to oops the system **really** often can make even bugs that look
-completely unexploitable exploitable (like NULL dereferences and such) if
-each crash elevates a refcount by one or a lock is taken in read mode, and
-this causes a counter to eventually overflow.
-
-The most interesting counters for this are 32 bits wide (like open-coded
-refcounts that don't use refcount_t). (The ldsem reader count on 32-bit
-platforms is just 16 bits, but probably nobody cares about 32-bit platforms
-that much nowadays.)
-
-So let's panic the system if the kernel is constantly oopsing.
-
-The speed of oopsing 2^32 times probably depends on several factors, like
-how long the stack trace is and which unwinder you're using; an empirically
-important one is whether your console is showing a graphical environment or
-a text console that oopses will be printed to.
-In a quick single-threaded benchmark, it looks like oopsing in a vfork()
-child with a very short stack trace only takes ~510 microseconds per run
-when a graphical console is active; but switching to a text console that
-oopses are printed to slows it down around 87x, to ~45 milliseconds per
-run.
-(Adding more threads makes this faster, but the actual oops printing
-happens under &die_lock on x86, so you can maybe speed this up by a factor
-of around 2 and then any further improvement gets eaten up by lock
-contention.)
-
-It looks like it would take around 8-12 days to overflow a 32-bit counter
-with repeated oopsing on a multi-core X86 system running a graphical
-environment; both me (in an X86 VM) and Seth (with a distro kernel on
-normal hardware in a standard configuration) got numbers in that ballpark.
-
-12 days aren't *that* short on a desktop system, and you'd likely need much
-longer on a typical server system (assuming that people don't run graphical
-desktop environments on their servers), and this is a *very* noisy and
-violent approach to exploiting the kernel; and it also seems to take orders
-of magnitude longer on some machines, probably because stuff like EFI
-pstore will slow it down a ton if that's active.
-
-[Moved sysctl into kernel/exit.c -kees]
-
-Signed-off-by: Jann Horn <jannh@google.com>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20221107201317.324457-1-jannh@google.com
 ---
- Documentation/admin-guide/sysctl/kernel.rst |  8 ++++
- kernel/exit.c                               | 42 +++++++++++++++++++++
- 2 files changed, 50 insertions(+)
+ .../ABI/testing/sysfs-kernel-oops_count       |  6 +++++
+ MAINTAINERS                                   |  1 +
+ kernel/exit.c                                 | 22 +++++++++++++++++--
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-oops_count
 
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index 98d1b198b2b4..09f3fb2f8585 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -667,6 +667,14 @@ This is the default behavior.
- an oops event is detected.
- 
- 
-+oops_limit
-+==========
-+
-+Number of kernel oopses after which the kernel should panic when
-+``panic_on_oops`` is not set. Setting this to 0 or 1 has the same effect
-+as setting ``panic_on_oops=1``.
-+
-+
- osrelease, ostype & version
- ===========================
- 
+diff --git a/Documentation/ABI/testing/sysfs-kernel-oops_count b/Documentation/ABI/testing/sysfs-kernel-oops_count
+new file mode 100644
+index 000000000000..156cca9dbc96
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-kernel-oops_count
+@@ -0,0 +1,6 @@
++What:		/sys/kernel/oops_count
++Date:		November 2022
++KernelVersion:	6.2.0
++Contact:	Linux Kernel Hardening List <linux-hardening@vger.kernel.org>
++Description:
++		Shows how many times the system has Oopsed since last boot.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1cd80c113721..0a1e95a58e54 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11106,6 +11106,7 @@ M:	Kees Cook <keescook@chromium.org>
+ L:	linux-hardening@vger.kernel.org
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
++F:	Documentation/ABI/testing/sysfs-kernel-oops_count
+ F:	include/linux/overflow.h
+ F:	include/linux/randomize_kstack.h
+ F:	mm/usercopy.c
 diff --git a/kernel/exit.c b/kernel/exit.c
-index 35e0a31a0315..892f38aeb0a4 100644
+index 892f38aeb0a4..4bffef9f3f46 100644
 --- a/kernel/exit.c
 +++ b/kernel/exit.c
-@@ -72,6 +72,33 @@
- #include <asm/unistd.h>
- #include <asm/mmu_context.h>
+@@ -67,6 +67,7 @@
+ #include <linux/io_uring.h>
+ #include <linux/kprobes.h>
+ #include <linux/rethook.h>
++#include <linux/sysfs.h>
  
-+/*
-+ * The default value should be high enough to not crash a system that randomly
-+ * crashes its kernel from time to time, but low enough to at least not permit
-+ * overflowing 32-bit refcounts or the ldsem writer count.
-+ */
-+static unsigned int oops_limit = 10000;
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -99,6 +100,25 @@ static __init int kernel_exit_sysctls_init(void)
+ late_initcall(kernel_exit_sysctls_init);
+ #endif
+ 
++static atomic_t oops_count = ATOMIC_INIT(0);
 +
-+#if CONFIG_SYSCTL
-+static struct ctl_table kern_exit_table[] = {
-+	{
-+		.procname       = "oops_limit",
-+		.data           = &oops_limit,
-+		.maxlen         = sizeof(oops_limit),
-+		.mode           = 0644,
-+		.proc_handler   = proc_douintvec,
-+	},
-+	{ }
-+};
-+
-+static __init int kernel_exit_sysctls_init(void)
++#ifdef CONFIG_SYSFS
++static ssize_t oops_count_show(struct kobject *kobj, struct kobj_attribute *attr,
++			       char *page)
 +{
-+	register_sysctl_init("kernel", kern_exit_table);
++	return sysfs_emit(page, "%d\n", atomic_read(&oops_count));
++}
++
++static struct kobj_attribute oops_count_attr = __ATTR_RO(oops_count);
++
++static __init int kernel_exit_sysfs_init(void)
++{
++	sysfs_add_file_to_group(kernel_kobj, &oops_count_attr.attr, NULL);
 +	return 0;
 +}
-+late_initcall(kernel_exit_sysctls_init);
++late_initcall(kernel_exit_sysfs_init);
 +#endif
 +
  static void __unhash_process(struct task_struct *p, bool group_dead)
  {
  	nr_threads--;
-@@ -874,6 +901,8 @@ void __noreturn do_exit(long code)
+@@ -901,8 +921,6 @@ void __noreturn do_exit(long code)
  
  void __noreturn make_task_dead(int signr)
  {
-+	static atomic_t oops_count = ATOMIC_INIT(0);
-+
+-	static atomic_t oops_count = ATOMIC_INIT(0);
+-
  	/*
  	 * Take the task off the cpu after something catastrophic has
  	 * happened.
-@@ -897,6 +926,19 @@ void __noreturn make_task_dead(int signr)
- 		preempt_count_set(PREEMPT_ENABLED);
- 	}
- 
-+	/*
-+	 * Every time the system oopses, if the oops happens while a reference
-+	 * to an object was held, the reference leaks.
-+	 * If the oops doesn't also leak memory, repeated oopsing can cause
-+	 * reference counters to wrap around (if they're not using refcount_t).
-+	 * This means that repeated oopsing can make unexploitable-looking bugs
-+	 * exploitable through repeated oopsing.
-+	 * To make sure this can't happen, place an upper bound on how often the
-+	 * kernel may oops without panic().
-+	 */
-+	if (atomic_inc_return(&oops_count) >= READ_ONCE(oops_limit))
-+		panic("Oopsed too often (oops_limit is %d)", oops_limit);
-+
- 	/*
- 	 * We're taking recursive faults here in make_task_dead. Safest is to just
- 	 * leave this task alone and wait for reboot.
 -- 
 2.34.1
 
