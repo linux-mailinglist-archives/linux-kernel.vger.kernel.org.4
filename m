@@ -2,89 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B704622DC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D16622DC2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbiKIOXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S231514AbiKIOXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:23:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbiKIOW4 (ORCPT
+        with ESMTP id S231506AbiKIOXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:22:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEF61F9D0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:21:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60B6EB81F05
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 14:21:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B39C433D6;
-        Wed,  9 Nov 2022 14:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668003659;
-        bh=qZkVydHoGkCBeu5yERvjFg6CPgR0Y609bznL/hnuNW8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PHSFKgQtE+uEL8VluDAAZHtHR4M24OhfOyDN8vxeFXT8qPp1s8ELqg5WvFlgVD0tk
-         8cMaEJRCpVku604D579wca05kDnvey5MrSFJ95Vrs9h08UWQG4YQZj0qJBK+2vAQu4
-         2pG540SowMzHpmK7Rv5BlFQ6f9nTZbRbciuthpd4=
-Date:   Wed, 9 Nov 2022 15:20:55 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yureka <yuka@yuka.dev>
-Cc:     samuel.thibault@ens-lyon.org, w.d.hubbs@gmail.com,
-        chris@the-brannons.com, speakup@linux-speakup.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] speakup: remove usage of non-standard u_char
-Message-ID: <Y2u3Rx30Zp39cFq0@kroah.com>
-References: <9b7e4894-deec-39ba-bb7c-3c6d6427fa1d@yuka.dev>
+        Wed, 9 Nov 2022 09:23:07 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B583D220EE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:21:13 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D2171FB;
+        Wed,  9 Nov 2022 06:21:15 -0800 (PST)
+Received: from [10.57.3.250] (unknown [10.57.3.250])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53B2B3F73D;
+        Wed,  9 Nov 2022 06:21:06 -0800 (PST)
+Message-ID: <fb49ffe2-41aa-18b5-41bd-db8c7414b899@arm.com>
+Date:   Wed, 9 Nov 2022 15:21:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b7e4894-deec-39ba-bb7c-3c6d6427fa1d@yuka.dev>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Crash with PREEMPT_RT on aarch64 machine
+Content-Language: en-US
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     Jan Kara <jack@suse.cz>, Mark Rutland <mark.rutland@arm.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+References: <20221103115444.m2rjglbkubydidts@quack3>
+ <Y2U+Je+LICO2HkNY@linutronix.de> <20221107135636.biouna36osqc4rik@quack3>
+ <Y2kf6tcX47Cl7q0W@linutronix.de>
+ <359cc93a-fce0-5af2-0fd5-81999fad186b@redhat.com>
+ <Y2o1NAE7d6Tf5ILt@FVFF77S0Q05N.cambridge.arm.com>
+ <20221108174529.pp4qqi2mhpzww77p@quack3>
+ <Y2t4+6MwVZEhoV5n@FVFF77S0Q05N.cambridge.arm.com>
+ <20221109110133.txft66ukwfw2ifkj@quack3>
+ <9ca45a07-00ba-9afd-2e25-7bab6cefab0e@arm.com>
+In-Reply-To: <9ca45a07-00ba-9afd-2e25-7bab6cefab0e@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 02:17:43AM +0200, Yureka wrote:
-> From: Yureka Lilian <yuka@yuka.dev>
-> 
-> This code is included in the build tools makemapdata and genmap, and it
-> expects that libc exposes a definition of u_char. But u_char is not
-> defined in either C or POSIX standards, and some systems don't have it.
-> Namely this breaks the build on hosts using musl libc, because musl only
-> exposes u_char if _GNU_SOURCE is defined.
-> 
-> Signed-off-by: Yureka Lilian <yuka@yuka.dev>
-> ---
->  drivers/accessibility/speakup/utils.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
-> index 4bf2ee8ac..4ce9a12f7 100644
-> --- a/drivers/accessibility/speakup/utils.h
-> +++ b/drivers/accessibility/speakup/utils.h
-> @@ -54,7 +54,7 @@ static inline int oops(const char *msg, const char *info)
->  
->  static inline struct st_key *hash_name(char *name)
->  {
-> -   u_char *pn = (u_char *)name;
-> +   unsigned char *pn = (unsigned char *)name;
->     int hash = 0;
->  
->     while (*pn) {
-> -- 
-> 2.37.3
 
-This patch is corrupted and can not be applied.  Please fix up and add
-the proper cc: stable tag when you resend it.
 
-thanks,
+On 11/9/22 14:52, Pierre Gondois wrote:
+> 
+> 
+> On 11/9/22 12:01, Jan Kara wrote:
+>> On Wed 09-11-22 09:55:07, Mark Rutland wrote:
+>>> On Tue, Nov 08, 2022 at 06:45:29PM +0100, Jan Kara wrote:
+>>>> On Tue 08-11-22 10:53:40, Mark Rutland wrote:
+>>>>> On Mon, Nov 07, 2022 at 11:49:01AM -0500, Waiman Long wrote:
+>>>>>> On 11/7/22 10:10, Sebastian Andrzej Siewior wrote:
+>>>>>>> + locking, arm64
+>>>>>>>
+>>>>>>> On 2022-11-07 14:56:36 [+0100], Jan Kara wrote:
+>>>>>>>>> spinlock_t and raw_spinlock_t differ slightly in terms of locking.
+>>>>>>>>> rt_spin_lock() has the fast path via try_cmpxchg_acquire(). If you
+>>>>>>>>> enable CONFIG_DEBUG_RT_MUTEXES then you would force the slow path which
+>>>>>>>>> always acquires the rt_mutex_base::wait_lock (which is a raw_spinlock_t)
+>>>>>>>>> while the actual lock is modified via cmpxchg.
+>>>>>>>> So I've tried enabling CONFIG_DEBUG_RT_MUTEXES and indeed the corruption
+>>>>>>>> stops happening as well. So do you suspect some bug in the CPU itself?
+>>>>>>> If it is only enabling CONFIG_DEBUG_RT_MUTEXES (and not whole lockdep)
+>>>>>>> then it looks very suspicious.
+>>>>>>> CONFIG_DEBUG_RT_MUTEXES enables a few additional checks but the main
+>>>>>>> part is that rt_mutex_cmpxchg_acquire() + rt_mutex_cmpxchg_release()
+>>>>>>> always fail (and so the slowpath under a raw_spinlock_t is done).
+>>>>>>>
+>>>>>>> So if it is really the fast path (rt_mutex_cmpxchg_acquire()) then it
+>>>>>>> somehow smells like the CPU is misbehaving.
+>>>>>>>
+>>>>>>> Could someone from the locking/arm64 department check if the locking in
+>>>>>>> RT-mutex (rtlock_lock()) is correct?
+>>>>>>>
+>>>>>>> rtmutex locking uses try_cmpxchg_acquire(, ptr, ptr) for the fastpath
+>>>>>>> (and try_cmpxchg_release(, ptr, ptr) for unlock).
+>>>>>>> Now looking at it again, I don't see much difference compared to what
+>>>>>>> queued_spin_trylock() does except the latter always operates on 32bit
+>>>>>>> value instead a pointer.
+>>>>>>
+>>>>>> Both the fast path of queued spinlock and rt_spin_lock are using
+>>>>>> try_cmpxchg_acquire(), the only difference I saw is the size of the data to
+>>>>>> be cmpxchg'ed. qspinlock uses 32-bit integer whereas rt_spin_lock uses
+>>>>>> 64-bit pointer. So I believe it is more on how the arm64 does cmpxchg. I
+>>>>>> believe there are two different ways of doing it depending on whether LSE
+>>>>>> atomics is available in the platform. So exactly what arm64 system is being
+>>>>>> used here and what hardware capability does it have?
+>>>>>
+>>>>>   From the /proc/cpuinfo output earlier, this is a Neoverse N1 system, with the
+>>>>> LSE atomics. Assuming the kernel was built with support for atomics in-kernel
+>>>>> (which is selected by default), it'll be using the LSE version.
+>>>>
+>>>> So I was able to reproduce the corruption both with LSE atomics enabled &
+>>>> disabled in the kernel. It seems the problem takes considerably longer to
+>>>> reproduce with LSE atomics enabled but it still does happen.
+>>>>
+>>>> BTW, I've tried to reproduced the problem on another aarch64 machine with
+>>>> CPU from a different vendor:
+>>>>
+>>>> processor       : 0
+>>>> BogoMIPS        : 200.00
+>>>> Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm jscvt fcma dcpop asimddp asimdfhm
+>>>> CPU implementer : 0x48
+>>>> CPU architecture: 8
+>>>> CPU variant     : 0x1
+>>>> CPU part        : 0xd01
+>>>> CPU revision    : 0
+>>>>
+>>>> And there the problem does not reproduce. So might it be a genuine bug in
+>>>> the CPU implementation?
+>>>
+>>> Perhaps, though I suspect it's more likely that we have an ordering bug in the
+>>> kernel code, and it shows up on CPUs with legitimate but more relaxed ordering.
+>>> We've had a couple of those show up on Apple M1, so it might be worth trying on
+>>> one of those.
+>>>
+>>> How easy is this to reproduce? What's necessary?
+>>
+>> As Pierre writes, on Ampere Altra machine running dbench benchmark on XFS
+>> filesystem triggers this relatively easily (it takes it about 10 minutes to
+>> trigger without atomics and about 30 minutes to trigger with the atomics
+>> enabled).
+>>
+>> Running the benchmark on XFS somehow seems to be important, we didn't see
+>> the crash happen on ext4 (which may just mean it is less frequent on ext4
+>> and didn't trigger in our initial testing after which we've started to
+>> investigate crashes with XFS).
+>>
+>> 								Honza
+> 
+> It was possible to reproduce on an Ampere eMAG. It takes < 1min to reproduce
+> once dbench is launched and seems more likely to trigger with the previous diff
+> applied. It even sometimes triggers without launching dbench on the Altra.
+> 
+> /proc/cpuinfo for eMAG:
+>     processor       : 0
+>     BogoMIPS        : 80.00
+>     Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+>     CPU implementer : 0x50
+>     CPU architecture: 8
+>     CPU variant     : 0x3
+>     CPU part        : 0x000
+>     CPU revision    : 2
+> 
 
-greg k-h
+I misread the logs, the issue was not reproduced on the eMAG,
+Sorry for the noise.
