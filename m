@@ -2,204 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2116222D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CDF6222C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiKIDuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 22:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
+        id S229770AbiKIDsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 22:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiKIDug (ORCPT
+        with ESMTP id S229549AbiKIDsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 22:50:36 -0500
-X-Greylist: delayed 136 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Nov 2022 19:50:18 PST
-Received: from p3plsmtpa12-04.prod.phx3.secureserver.net (p3plsmtpa12-04.prod.phx3.secureserver.net [68.178.252.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF2424978
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:50:18 -0800 (PST)
-Received: from b1ack ([183.15.91.189])
-        by :SMTPAUTH: with ESMTPSA
-        id sc4BoeVsGvZSHsc4Eobf01; Tue, 08 Nov 2022 20:48:00 -0700
-X-CMAE-Analysis: v=2.4 cv=KIScTnJo c=1 sm=1 tr=0 ts=636b22f1
- a=T8SDJmazftFS371Os7amgg==:117 a=T8SDJmazftFS371Os7amgg==:17
- a=IkcTkHD0fZMA:10 a=NEAV23lmAAAA:8 a=8XuHljR6AAAA:8 a=pGLkceISAAAA:8
- a=VwQbUJbxAAAA:8 a=_twTT5zqAAAA:8 a=iEMgYgck2XEmVY7No8UA:9 a=QEXdDO2ut3YA:10
- a=zb2z3UklSVnEaoLbSHUe:22 a=AjGcO6oz07-iQ99wixmX:22 a=ILoXdGDbYT3DTB7Z0gVI:22
-X-SECURESERVER-ACCT: dhu@hodcarrier.org
-Date:   Wed, 9 Nov 2022 03:47:54 +0000
-From:   Du Huanpeng <dhu@hodcarrier.org>
-To:     Kelvin Cheung <keguang.zhang@gmail.com>
-Cc:     Sean Anderson <seanga2@gmail.com>, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@codeaurora.org>,
-        Yang Ling <gnaygnil@gmail.com>
-Subject: Re: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
-Message-ID: <Y2si6jgQCW0ZKf+E@b1ack>
-References: <20220419051114.1569291-1-seanga2@gmail.com>
- <CAJhJPsUM=LrgrKcoA8xT=4JWt8uxjn6yDxP9vjuZmvb4WvjPZQ@mail.gmail.com>
+        Tue, 8 Nov 2022 22:48:19 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81815FD8;
+        Tue,  8 Nov 2022 19:48:17 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VULrpXB_1667965683;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VULrpXB_1667965683)
+          by smtp.aliyun-inc.com;
+          Wed, 09 Nov 2022 11:48:15 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zirong Lang <zlang@redhat.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH] xfs: account extra freespace btree splits for multiple allocations
+Date:   Wed,  9 Nov 2022 11:48:02 +0800
+Message-Id: <20221109034802.40322-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJhJPsUM=LrgrKcoA8xT=4JWt8uxjn6yDxP9vjuZmvb4WvjPZQ@mail.gmail.com>
-X-CMAE-Envelope: MS4xfLGcmHTsJ9sx9GHRNSc9s0ZJVQ+gAsUMvfWLXibo+NUKZCcQNvz2TFw3Z0vQeFs43jPk+OoSNn+MSJ3vjGHX7Pskt3X23V6O1s7CXYMrgtUsgJll7VFQ
- ZMEhMlcE/v0PXrIC+ec1XTqf0ZTkKyo78dEJrSPYmwdZKp6Tu9dVkT7u+JJjDhdkXW730qCPvXr5gt6P1JKC9U3dFhY6TnrqztTp2TD73JzLjUjIM1EQ3A+l
- /VLl/nLD4thCWYKusIg8W+UgssMBukQtAFg1I1XNZnzijUM+daeKb8KtAsmI3kRMcFJKT13jgWxRYZIfLDHIj4zbx+LTywFOsoMnEZeWlPQx9U8UdigB8gas
- L3gsLiQ9TsjooU/ZX5/qfor09CA6E/aSDBnutREGCw1wl1VwS24=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:36:02AM +0800, Kelvin Cheung wrote:
-Hi,
-> Sean, Du,
-> I saw you are discussing the PLL rate calculation issue.
-> My question is whether the upstream kernel works on your ls1c300?
-> For me, it never works, even the earliest version which LS1C support was merged.
-> After the kernel is loaded by PMON, there is no console output at all.
-> I also confirm this issue with Yang.
-> BTW, my board is 1C300B.
-> Are your board is different from me? Or your bootloader?
-the upstream kernel works for my board(1C300B v3.42) with diferent config,
-1. base on the loongson1c_defconfig
-  $ make loongson1c_defconfig
+There is a long standing issue which could cause fs shutdown due to
+inode extent-to-btree conversion failure right after an extent
+allocation in the same AG, which is absolutely unexpected due to the
+proper minleft reservation in the previous allocation.  Brian once
+addressed one of the root cause [1], however, such symptom can still
+occur after the commit is merged as reported [2], and our cloud
+environment is also suffering from this issue.
 
-2. change some options
-  $ make menuconfig
-disable:
-	# CONFIG_RTC_DRV_LOONGSON1 is not set
-enable:
-	CONFIG_BLK_DEV_INITRD=y
-	CONFIG_INITRAMFS_SOURCE="rootfs.cpio"
-(or try this: https://github.com/hodcarrier/linux/blob/loongson-ls1c300b/arch/mips/configs/ls1c300_defconfig)
+From the description of the commit [1], I found that Zirong has an
+in-house stress test reproducer for this issue, therefore I asked him
+to reproduce again and he confirmed that such issue can still be
+reproduced on RHEL 9 in several days.
 
-3. prepare rootfs.cpio and place it to
-  $ cp rootfs.cpio linux/
+Thanks to him, after adding some debugging code to dump the current
+transaction log items, I think the root cause is as below:
 
-4. load the kernel image by pmon from TFTP server
-  PMON> set al "tftp://192.168.1.253/vmlinuz"
-  PMON> set append "earlycon=uart,0x1fe48000,ttyS2,115200 console=ttyS2,115200 root=/dev/ram0 rw mem=128M init=linuxrc"
+  1. xfs_bmapi_allocate() with the following condition:
+     freeblks: 18304 pagf_flcount: 6
+     reservation: 18276 need (min_free): 6
+     args->minleft: 1
+     available = freeblks + agflcount - reservation - need - minleft
+               = 18304 + min(6, 6) - 18276 - 6 - 1 = 27
+     The first allocation check itself is ok, and args->maxlen = 27
+     here
 
-or try my homebrew buildroot:
-  $ git clone https://github.com/hodcarrier/buildroot.git
-  $ cd buildroot
-  $ make loongson_ls1c300_defconfig
-  $ make
-  $ ls output/images/vmlinuz
+     At this time, AG 3 also has the following state:
+     1st:64  last:69  cnt:6  longest:6395
 
-load the vmlinuz image like above steps[4].
+     AGFL has the following state:
+     64:547 65:167 66:1651 67:2040807 68:783 69:604
 
-> 
-> Thanks!
-> 
-> Sean Anderson <seanga2@gmail.com> 于2022年4月19日周二 13:11写道：
-> >
-> > While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
-> > noticed the following calculation, which is copied from
-> > drivers/clk/loongson1/clk-loongson1c.c:
-> >
-> > ulong ls1c300_pll_get_rate(struct clk *clk)
-> > {
-> >         unsigned int mult;
-> >         long long parent_rate;
-> >         void *base;
-> >         unsigned int val;
-> >
-> >         parent_rate = clk_get_parent_rate(clk);
-> >         base = (void *)clk->data;
-> >
-> >         val = readl(base + START_FREQ);
-> >         mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
-> >         return (mult * parent_rate) / 4;
-> > }
-> >
-> > I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
-> > for the PLL. The datasheet has the following to say:
-> >
-> > START_FREQ 位    缺省值      描述
-> > ========== ===== =========== ====================================
-> > FRAC_N     23:16 0           PLL 倍频系数的小数部分
-> >
-> >                  由          PLL 倍频系数的整数部分
-> > M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
-> >                  配置
-> >
-> > which according to google translate means
-> >
-> > START_FREQ Bits  Default       Description
-> > ========== ===== ============= ================================================
-> > FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
-> >
-> >                  Depends on    Integer part of PLL multiplication factor
-> > M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
-> >                  configuration  recommended not to exceed 100)
-> >
-> > So just based on this description, I would expect that the formula to be
-> > something like
-> >
-> >         rate = parent * (255 * M_PLL + FRAC_N) / 255 / 4
-> >
-> > However, the datasheet also gives the following formula:
-> >
-> >         rate = parent * (M_PLL + FRAC_N) / 4
-> >
-> > which is what the Linux driver has implemented. I find this very unusual.
-> > First, the datasheet specifically says that these fields are the integer and
-> > fractional parts of the multiplier. Second, I think such a construct does not
-> > easily map to traditional PLL building blocks. Implementing this formula in
-> > hardware would likely require an adder, just to then set the threshold of a
-> > clock divider.
-> >
-> > I think it is much more likely that the first formula is correct. The author of
-> > the datasheet may think of a multiplier of (say) 3.14 as
-> >
-> >         M_PLL = 3
-> >         FRAC_N = 0.14
-> >
-> > which together sum to the correct multiplier, even though the actual value
-> > stored in FRAC_N would be 36.
-> >
-> > I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
-> > no difference in the formulae. The following patch is untested, but I suspect
-> > it will fix this issue. I would appreciate if anyone with access to the
-> > hardware could measure the output of the PLL (or one of its derived clocks) and
-> > determine the correct formula.
-> >
-> > [1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
-> >
-> > Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-> > Signed-off-by: Sean Anderson <seanga2@gmail.com>
-> > ---
-> >
-> >  drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-> > index 703f87622cf5..2b98a116c1ea 100644
-> > --- a/drivers/clk/loongson1/clk-loongson1c.c
-> > +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> > @@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
-> >         u32 pll, rate;
-> >
-> >         pll = __raw_readl(LS1X_CLK_PLL_FREQ);
-> > -       rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
-> > +       rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
-> >         rate *= OSC;
-> > -       rate >>= 2;
-> > +       rate >>= 10;
-> >
-> >         return rate;
-> >  }
-> > --
-> > 2.35.1
-> >
-> 
-> 
-> -- 
-> Best regards,
-> 
-> Kelvin Cheung
+  2. Tried to get 27 blocks from this AG, but in order to finish such
+     allocation, it had to need a new btree block for cntbt (so take
+     another free block from agfl).  It can be seen with a new AGF
+     recorded in the transaction:
+      blkno 62914177, len 1, map_size 1
+      00000000: 58 41 47 46 00 00 00 01 00 00 00 03 00 27 ff f0  XAGF.........'..
+      00000010: 00 00 00 09 00 00 00 07 00 00 00 00 00 00 00 02  ................
+      00000020: 00 00 00 02 00 00 00 00 00 00 00 41 00 00 00 45  ...........A...E
+      00000030: 00 00 00 05 00 00 47 65 00 00 18 fb 00 00 00 09  ......Ge........
+      00000040: 75 dc c1 b5 1a 45 40 2a 80 50 72 f0 59 6e 62 66  u....E@*.Pr.Ynbf
+
+      It can be parsed as:
+      agf 3  flfirst: 65 (0x41) fllast: 69 (0x45) cnt: 5
+      freeblks 18277
+
+  3. agfl 64 (agbno 547, daddr 62918552) was then written as a cntbt
+     block, which can also be seen in a log item as below:
+       type#011= 0x123c
+       flags#011= 0x8
+      blkno 62918552, len 8, map_size 1
+      00000000: 41 42 33 43 00 00 00 fd 00 1f 23 e4 ff ff ff ff  AB3C......#.....
+      00000010: 00 00 00 00 03 c0 0f 98 00 00 00 00 00 00 00 00  ................
+      00000020: 75 dc c1 b5 1a 45 40 2a 80 50 72 f0 59 6e 62 66  u....E@*.Pr.Ynbf
+      ...
+
+  4. Finally, the following inode extent to btree allocation fails
+     as below:
+     kernel: ------------[ cut here ]------------
+     WARNING: CPU: 15 PID: 49290 at fs/xfs/libxfs/xfs_bmap.c:717 xfs_bmap_extents_to_btree+0xc51/0x1050 [xfs]
+     ...
+     XFS (sda2): agno 3 agflcount 5 freeblks 18277 reservation 18276 6
+
+     since freeblks = 18304 - 27 = 18277, but with another agfl
+     block allocated (pagf_flcount from 6 to 5), the inequality will
+     not be satisfied:
+
+     available = freeblks + agflcount - reservation - need - minleft
+               = 18277 + min(5, 6) - 18276 - 6 - 0 = 0   < 1
+
+  Full current transaction log item dump can be fetched from [3].
+
+As a short-term solution, the following allocations (e.g. allocation
+for inode extent-to-btree conversion) can be recorded in order to count
+more blocks to reserve for safely freespace btree splits so that it
+will shorten available and args->maxlen to
+     available = freeblks + agflcount - reservation - need - minleft
+               = 18304 + min(6, 6) - 18276 - 6*2 - 1 = 21
+     args->maxlen = 21
+in the first allocation, and the following conversion should then
+succeed.  At least, it's easy to be backported and do hotfix.
+
+In the long term, args->total and args->minleft have be revisited
+although it could cause more refactoring.
+
+[1] commit 1ca89fbc48e1 ("xfs: don't account extra agfl blocks as available")
+    https://lore.kernel.org/r/20190327145000.10756-1-bfoster@redhat.com
+[2] https://lore.kernel.org/r/20220105071052.GD20464@templeofstupid.com
+[3] https://lore.kernel.org/linux-xfs/Y2RevDyoeJZSpiat@B-P7TQMD6M-0146.local/2-dmesg.log.xz
+Reported-by: Zirong Lang <zlang@redhat.com>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+Previous discussion is at:
+https://lore.kernel.org/linux-xfs/202211040048.FeUQMLE6-lkp@intel.com/T/#mfcfac181079ddaa5a22eecb74db56534fc4ff918
+
+ fs/xfs/libxfs/xfs_alloc.c | 9 +++++++--
+ fs/xfs/libxfs/xfs_alloc.h | 1 +
+ fs/xfs/libxfs/xfs_bmap.c  | 2 ++
+ 3 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/fs/xfs/libxfs/xfs_alloc.c b/fs/xfs/libxfs/xfs_alloc.c
+index 6261599bb389..684c67310175 100644
+--- a/fs/xfs/libxfs/xfs_alloc.c
++++ b/fs/xfs/libxfs/xfs_alloc.c
+@@ -2630,7 +2630,12 @@ xfs_alloc_fix_freelist(
+ 		goto out_agbp_relse;
+ 	}
+ 
+-	need = xfs_alloc_min_freelist(mp, pag);
++	/*
++	 * Also need to fulfill freespace btree splits by reservaing more
++	 * blocks to perform multiple allocations from a single AG and
++	 * transaction if needed.
++	 */
++	need = xfs_alloc_min_freelist(mp, pag) * (1 + args->postallocs);
+ 	if (!xfs_alloc_space_available(args, need, flags |
+ 			XFS_ALLOC_FLAG_CHECK))
+ 		goto out_agbp_relse;
+@@ -2654,7 +2659,7 @@ xfs_alloc_fix_freelist(
+ 		xfs_agfl_reset(tp, agbp, pag);
+ 
+ 	/* If there isn't enough total space or single-extent, reject it. */
+-	need = xfs_alloc_min_freelist(mp, pag);
++	need = xfs_alloc_min_freelist(mp, pag) * (1 + args->postallocs);
+ 	if (!xfs_alloc_space_available(args, need, flags))
+ 		goto out_agbp_relse;
+ 
+diff --git a/fs/xfs/libxfs/xfs_alloc.h b/fs/xfs/libxfs/xfs_alloc.h
+index 2c3f762dfb58..be7f15d6a40d 100644
+--- a/fs/xfs/libxfs/xfs_alloc.h
++++ b/fs/xfs/libxfs/xfs_alloc.h
+@@ -73,6 +73,7 @@ typedef struct xfs_alloc_arg {
+ 	int		datatype;	/* mask defining data type treatment */
+ 	char		wasdel;		/* set if allocation was prev delayed */
+ 	char		wasfromfl;	/* set if allocation is from freelist */
++	bool		postallocs;	/* number of post-allocations */
+ 	struct xfs_owner_info	oinfo;	/* owner of blocks being allocated */
+ 	enum xfs_ag_resv_type	resv;	/* block reservation to use */
+ #ifdef DEBUG
+diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
+index 49d0d4ea63fc..ed92c6a314b6 100644
+--- a/fs/xfs/libxfs/xfs_bmap.c
++++ b/fs/xfs/libxfs/xfs_bmap.c
+@@ -3497,6 +3497,7 @@ xfs_bmap_exact_minlen_extent_alloc(
+ 	args.alignment = 1;
+ 	args.minalignslop = 0;
+ 
++	args.postallocs = 1;
+ 	args.minleft = ap->minleft;
+ 	args.wasdel = ap->wasdel;
+ 	args.resv = XFS_AG_RESV_NONE;
+@@ -3658,6 +3659,7 @@ xfs_bmap_btalloc(
+ 		args.alignment = 1;
+ 		args.minalignslop = 0;
+ 	}
++	args.postallocs = 1;
+ 	args.minleft = ap->minleft;
+ 	args.wasdel = ap->wasdel;
+ 	args.resv = XFS_AG_RESV_NONE;
+-- 
+2.24.4
+
