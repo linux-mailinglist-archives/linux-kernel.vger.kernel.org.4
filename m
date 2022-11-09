@@ -2,115 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2136225AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBEC6224F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiKIInL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S229638AbiKIHzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 02:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKIInE (ORCPT
+        with ESMTP id S229492AbiKIHzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:43:04 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AD3186D3;
-        Wed,  9 Nov 2022 00:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667983383; x=1699519383;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=S7xex32Cpwhkia59yekaOvOun7fKL5h5EceHgPZVwgg=;
-  b=cg1FXu7rKeZ1dSxShFqZS3SdYhWyjxW48c4+47eMTfGJsHm2SER9IRh5
-   lmm4mB5FhL7L5ikQxEV1i+4ipiCPkSS88fVFnkOLkdiU7idlO4DnBphjA
-   E1atKqJiA+gFxEllX7SVPvEHrJi/4zbZX5PGc6p8ELhfRDikMP1nXsERe
-   3nU8lMqtMKavKe0qStdVQZokuhCVQfowufrQ+t3Rv8s40DXClbHuz+vzJ
-   lSDb6RcrxHpYtGub6hB3pYHnK1N9Z43JL08UVdZzxVYXSTpJMbCCpArYG
-   OK0qFZl1u0eyusg8B9MHtdtQVLPVxnZ4x3w6E+Jr9B9mtALvlOsb+0iRD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="308544201"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="308544201"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 00:43:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="631182832"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="631182832"
-Received: from skxmcp01.bj.intel.com ([10.240.193.86])
-  by orsmga007.jf.intel.com with ESMTP; 09 Nov 2022 00:43:01 -0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] KVM: nVMX: Simplify the setting of SECONDARY_EXEC_ENABLE_VMFUNC for nested.
-Date:   Wed,  9 Nov 2022 15:54:13 +0800
-Message-Id: <20221109075413.1405803-3-yu.c.zhang@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221109075413.1405803-1-yu.c.zhang@linux.intel.com>
-References: <20221109075413.1405803-1-yu.c.zhang@linux.intel.com>
+        Wed, 9 Nov 2022 02:55:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBED1B7B2;
+        Tue,  8 Nov 2022 23:55:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC403B81D12;
+        Wed,  9 Nov 2022 07:55:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57778C433C1;
+        Wed,  9 Nov 2022 07:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667980536;
+        bh=t1X8tGhPnTqhrxpV3kqt4S1VIJabTvUnGc+aFkHBdgo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NTX5AVlssCn5Xtu7RtHEcJvX4iGC7mnlFhxqFZkwcuqiQEJf8b4iMNHC4OnobBH6w
+         nC+CCTnP11NXxnD8uCFQyHqBki+Tp43wS9iwTv8Du8EgdKDV78/UvK67cI44aTM53M
+         8fITbQmcmTdK0677AEv4+A3Z2inbRrz9azRD/fhVUDy2Aavsa8Vyb0kbHpH7kiOfVp
+         OF8UUP6gp6Gmm07lbkt7NbwDY9rYgaNVmohNM5TRoDaokOHahxkBaqHoWFWjzYg1fj
+         yi3l1b5O7fiYYrEW9Fy2A6C8VtKwWssbPpsRDqtcZWERHq40qj9mIoU4QlZoDX7iZk
+         Tl+H9u9dIv5Iw==
+Date:   Wed, 9 Nov 2022 13:25:27 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] cpufreq: qcom-hw: Add CPU clock provider support
+Message-ID: <20221109075527.GD4651@thinkpad>
+References: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
+ <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
+ <Y2qfmFVK665b1Nbw@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2qfmFVK665b1Nbw@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Values of base settings for nested proc-based VM-Execution control MSR come
-from the ones for non-nested. And for SECONDARY_EXEC_ENABLE_VMFUNC flag,
-KVM currently a) first mask off it from vmcs_conf->cpu_based_2nd_exec_ctrl;
-b) then check it against the same source; c) and reset it again if host has
-it.
+On Tue, Nov 08, 2022 at 06:27:36PM +0000, Matthias Kaehlcke wrote:
+> Hi,
+> 
+> On Tue, Nov 08, 2022 at 09:10:37PM +0530, Manivannan Sadhasivam wrote:
+> > Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
+> > cores. But this relationship is not represented with the clk framework
+> > so far.
+> > 
+> > So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
+> > clock producer/consumer relationship cleaner and is also useful for CPU
+> > related frameworks like OPP to know the frequency at which the CPUs are
+> > running.
+> > 
+> > The clock frequency provided by the driver is for each frequency domain.
+> > We cannot get the frequency of each CPU core because, not all platforms
+> > support per-core DCVS feature.
+> > 
+> > Also the frequency supplied by the driver is the actual frequency that
+> > comes out of the EPSS/OSM block after the DCVS operation. This frequency is
+> > not same as what the CPUFreq framework has set but it is the one that gets
+> > supplied to the CPUs after throttling by LMh.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
+> >  1 file changed, 43 insertions(+)
+> > 
+> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > index 5e0598730a04..86bb11de347f 100644
+> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > @@ -4,6 +4,7 @@
+> >   */
+> >  
+> >  #include <linux/bitfield.h>
+> > +#include <linux/clk-provider.h>
+> >  #include <linux/cpufreq.h>
+> >  #include <linux/init.h>
+> >  #include <linux/interconnect.h>
+> > @@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
+> >  	bool cancel_throttle;
+> >  	struct delayed_work throttle_work;
+> >  	struct cpufreq_policy *policy;
+> > +	struct clk_hw cpu_clk;
+> >  
+> >  	bool per_core_dcvs;
+> >  
+> > @@ -615,8 +617,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
+> >  	.ready		= qcom_cpufreq_ready,
+> >  };
+> >  
+> > +static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+> > +{
+> > +	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
+> > +
+> > +	return qcom_lmh_get_throttle_freq(data);
+> > +}
+> > +
+> > +static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
+> > +	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
+> > +};
+> > +
+> >  static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+> >  {
+> > +	struct clk_hw_onecell_data *clk_data;
+> >  	struct device *dev = &pdev->dev;
+> >  	struct device *cpu_dev;
+> >  	struct clk *clk;
+> > @@ -659,8 +673,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+> >  
+> >  	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
+> >  
+> > +	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
+> > +	if (!clk_data)
+> > +		return -ENOMEM;
+> > +
+> > +	clk_data->num = num_domains;
+> > +
+> >  	for (i = 0; i < num_domains; i++) {
+> >  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
+> > +		struct clk_init_data init = {};
+> > +		const char *clk_name;
+> >  		struct resource *res;
+> >  		void __iomem *base;
+> >  
+> > @@ -672,6 +694,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+> >  
+> >  		data->base = base;
+> >  		data->res = res;
+> > +
+> > +		/* Register CPU clock for each frequency domain */
+> > +		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
+> > +		init.name = clk_name;
+> 
+> nit: 'clk_name' isn't really needed, the result of devm_kasprintf() could be
+> assigned directly to 'init.name'. 'init' could be renamed to 'clk_init' if
+> the purpose of using 'clk_name' is to make clear that this is the name of a
+> clock.
+> 
 
-So just simplify this, by not masking off SECONDARY_EXEC_ENABLE_VMFUNC in
-the first place.
+Ack.
 
-No functional change.
+Thanks,
+Mani
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
----
- arch/x86/kvm/vmx/nested.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+> > +		init.flags = CLK_GET_RATE_NOCACHE;
+> > +		init.ops = &qcom_cpufreq_hw_clk_ops;
+> > +		data->cpu_clk.init = &init;
+> > +
+> > +		ret = devm_clk_hw_register(dev, &data->cpu_clk);
+> > +		if (ret < 0) {
+> > +			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
+> > +			return ret;
+> > +		}
+> > +
+> > +		clk_data->hws[i] = &data->cpu_clk;
+> > +	}
+> > +
+> > +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
+> > +	if (ret < 0) {
+> > +		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
+> > +		return ret;
+> >  	}
+> >  
+> >  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
+> > -- 
+> > 2.25.1
+> > 
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 1acb81c2be11..2bad79985c10 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6806,6 +6806,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
- 		SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY |
- 		SECONDARY_EXEC_RDRAND_EXITING |
- 		SECONDARY_EXEC_ENABLE_INVPCID |
-+		SECONDARY_EXEC_ENABLE_VMFUNC |
- 		SECONDARY_EXEC_RDSEED_EXITING |
- 		SECONDARY_EXEC_XSAVES |
- 		SECONDARY_EXEC_TSC_SCALING;
-@@ -6837,18 +6838,13 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
- 				SECONDARY_EXEC_ENABLE_PML;
- 			msrs->ept_caps |= VMX_EPT_AD_BIT;
- 		}
--	}
- 
--	if (cpu_has_vmx_vmfunc()) {
--		msrs->secondary_ctls_high |=
--			SECONDARY_EXEC_ENABLE_VMFUNC;
- 		/*
--		 * Advertise EPTP switching unconditionally
--		 * since we emulate it
-+		 * Advertise EPTP switching irrespective of hardware support,
-+		 * KVM emulates it in software so long as VMFUNC is supported.
- 		 */
--		if (enable_ept)
--			msrs->vmfunc_controls =
--				VMX_VMFUNC_EPTP_SWITCHING;
-+		if (cpu_has_vmx_vmfunc())
-+			msrs->vmfunc_controls = VMX_VMFUNC_EPTP_SWITCHING;
- 	}
- 
- 	/*
 -- 
-2.17.1
-
+மணிவண்ணன் சதாசிவம்
