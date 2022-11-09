@@ -2,215 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDD2623394
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2E162339D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiKITdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 14:33:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S229551AbiKITjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKITdu (ORCPT
+        with ESMTP id S229774AbiKITjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:33:50 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81925205F0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:33:49 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id q9so17640769pfg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 11:33:49 -0800 (PST)
+        Wed, 9 Nov 2022 14:39:00 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B70818B15
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:38:58 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id k8so27504520wrh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 11:38:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=U4DkEzEtBe2JcgpJpdzfIHYEWHr6N+Oh8ZXNq3BSMWg=;
-        b=pV87xTYkuKmnTa2vxu8D5pLdflMlriwYB3Q2RC1dflAXxQEh2lQY8aPM4MCkpLL31x
-         E6FmriSZVLl+sTHhvwPS2ooVmmM/xy2z7PYSbPYQIujoJ/Lra1BmiAYkXOPq4skWmxFn
-         QgxNAws2ldtUsw9Bh1eoBoHoFzwzR4mcbs/MH76nBZlIgGevydbUQ1lnz5k96quhclww
-         QmQhKzR0xgwb6M4NVomwiR8+JK6YPATsL2MW5PORCaoc3q6dkXOGVd5rYfe3VrUjvFUk
-         cnSfAU2iL89kl9cr2IgTrxe8VwpNhwxN7/oWuYm90LUx7ZwsZd1uZ7QEDzBxtdxb86Jk
-         ue8w==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lh0nRP77OHPBfFy0WBZz6D0tz7ScfvXWOpoB+unsGmE=;
+        b=XT5OpEcAC2vJgaagUXubYidHz4EnH3vTp6IDL5PXT/hagaNDKVWsad3/AIWLbzAo4O
+         DOZvmdDpzRdb9mDIAOX/leK0v0Loqn6EjUleKllNnVU9SNVmKhZyeuk6dooCovbH96RT
+         CzDzEJhC0rrOhNDVbegsmz4PKxwEnIDkwN6yVGZyS7iq+Je/iYCbGsTpjhytvVkb73OW
+         xq9jPQJvhurPCa8tm9dYvd9LyvD5kdRBULt7I/gfW4r6nVKorAQ7unv9pQEHXiHBXgWS
+         WC2JdSp4cRic5ooJPTufmSc7PpqeRU29ZluZPNdQw9wBCq6qfQk2sq1Nv9NPZ74qvZmI
+         zDGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U4DkEzEtBe2JcgpJpdzfIHYEWHr6N+Oh8ZXNq3BSMWg=;
-        b=b5bt8lZDKZ18OI+r6V1gPnBZR+JjDnc2L3YUNR84KGuf1ptI/I5Xke9lLQATr6LddR
-         QpCU1K3q1NE5H99hf3GPleO3LuurNH65GNdN0iGDDtOtd4T98KiTK5tK1ed/xapL+w4W
-         BKnYMgtEiDiuPPcvwO87ofFSUTeKm90q1xcsxU8Y3QszJ1V9nYg5ZMWifqygc5fEu5su
-         yH1+Pn4S6ouc3AJMB03QspAPOiEGc0QZq+6O9pov7iP678rqvoeXv8Azal4z9F9wiVBc
-         4sys5cQHQZv3hVMidWbdXCET7QqjYtK8oS2qQwHcqzK1PxHRi3h/K5wFZCD5KooH9oEP
-         LNWg==
-X-Gm-Message-State: ACrzQf1FmMglDUavkYx0PDq+Bd7YwmoGeuhuD3cOcfYqkqKKgxMJzAKo
-        vDtnWACT6A9Hlx83OTY7v/ZjO1nI954J17xsohI=
-X-Google-Smtp-Source: AMsMyM52IFvjmrYHEa2r/R0M50zkDifHeDnKoA8xPaJYMFdAoli+lVG8Qxx0zoLYKwMwSViznYzEc2C8s2qExVlRS4I=
-X-Received: by 2002:a63:6d8a:0:b0:46f:57e9:f933 with SMTP id
- i132-20020a636d8a000000b0046f57e9f933mr53556492pgc.195.1668022428975; Wed, 09
- Nov 2022 11:33:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lh0nRP77OHPBfFy0WBZz6D0tz7ScfvXWOpoB+unsGmE=;
+        b=OICGtmQstKUTZ9+hfo0ZtnPTE8Pcgvgn15uHGyg8Fa+qxDUQQt115hjtgNmkJgEzGm
+         /ktqacYnX996UR0CRsFghmQKaiLeCVPQg4BVCKk4JniiqmBPW3q7eF9i2PjC5J7FKUdl
+         Purl9JKO29hWA7Go2HJYDc2hQcQ6aR7/viVFtlZAsGv37KTUguX1N4TPKBUYqita8PAl
+         yzS4BmT9AVEtbMQQ7JWbYONg/rCQm0c0tjiaLnH5S007LDYZP0ksq7jLYqxxXJINvt72
+         RSNQ317tr/Z9W5xf6y+MOoFKSVjRfrz+iqbJF2xVQ2pqSGun2bJDILJ6FknFBq/gFeWt
+         ZCCA==
+X-Gm-Message-State: ACrzQf01+Pbh9PsSsAjmyRrRHZH7ptnYLf9KRaf/el7pmN5CqiUW3zwI
+        5znC/OZfhYzj5WLg0IxFvQ0HDQ==
+X-Google-Smtp-Source: AMsMyM5Vv6j8+WGVmZnNA7DjnX36A/WyWoPzubWciasWpvIGo6jVmLL7077josfOvY5BLIa/A7nRRQ==
+X-Received: by 2002:a5d:6088:0:b0:236:bd20:2d07 with SMTP id w8-20020a5d6088000000b00236bd202d07mr36906705wrt.165.1668022736766;
+        Wed, 09 Nov 2022 11:38:56 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b4d7:0:bc6a:614e:fac7:5a4c? ([2a02:6b6a:b4d7:0:bc6a:614e:fac7:5a4c])
+        by smtp.gmail.com with ESMTPSA id p33-20020a05600c1da100b003c71358a42dsm3352830wms.18.2022.11.09.11.38.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 11:38:55 -0800 (PST)
+Message-ID: <d39f639b-cd5c-15f4-e6cb-5e2525992acf@bytedance.com>
+Date:   Wed, 9 Nov 2022 19:38:55 +0000
 MIME-Version: 1.0
-References: <20221108184357.55614-1-shy828301@gmail.com> <20221108184357.55614-3-shy828301@gmail.com>
- <Y2rU6BHD9eePn8IN@dhcp22.suse.cz>
-In-Reply-To: <Y2rU6BHD9eePn8IN@dhcp22.suse.cz>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 9 Nov 2022 11:33:35 -0800
-Message-ID: <CAHbLzkqCccE9TqgtaDw44UNSZf+PvdFp6a9gSaD_qrV4up8g7Q@mail.gmail.com>
-Subject: Re: [mm-unstable v3 PATCH 3/3] mm: replace VM_WARN_ON to pr_warn if
- the node is offline with __GFP_THISNODE
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     zokeefe@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [v2 0/6] KVM: arm64: implement vcpu_is_preempted check
+Content-Language: en-US
+To:     Punit Agrawal <punit.agrawal@bytedance.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
+        bagasdotme@gmail.com, fam.zheng@bytedance.com, liangma@liangbit.com
+References: <20221104062105.4119003-1-usama.arif@bytedance.com>
+ <87wn861v3x.fsf@stealth>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <87wn861v3x.fsf@stealth>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 2:15 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 08-11-22 10:43:57, Yang Shi wrote:
-> > Syzbot reported the below splat:
-> >
-> > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node
-> > include/linux/gfp.h:221 [inline]
-> > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-> > hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-> > alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > Modules linked in:
-> > CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted
-> > 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 10/11/2022
-> > RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> > RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc
-> > ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9
-> > 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> > RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> > RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> > RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> > R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> > FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000)
-> > knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
-> >  hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
-> >  madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
-> >  madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
-> >  madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
-> >  do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
-> >  do_madvise mm/madvise.c:1432 [inline]
-> >  __do_sys_madvise mm/madvise.c:1432 [inline]
-> >  __se_sys_madvise mm/madvise.c:1430 [inline]
-> >  __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f6b48a4eef9
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89
-> > f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-> > f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-> > RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
-> > RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
-> > RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
-> > R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
-> >  </TASK>
-> >
-> > It is because khugepaged allocates pages with __GFP_THISNODE, but the
-> > preferred node is bogus.  The previous patch fixed the khugepaged
-> > code to avoid allocating page from non-existing node.  But it is still
-> > racy against memory hotremove.  There is no synchronization with the
-> > memory hotplug so it is possible that memory gets offline during a
-> > longer taking scanning.
-> >
-> > So this warning still seems not quite helpful because:
-> >   * There is no guarantee the node is online for __GFP_THISNODE context
-> >     for all the callsites.
-> >   * Kernel just fails the allocation regardless the warning, and it looks
-> >     all callsites handle the allocation failure gracefully.
-> >
-> > Although while the warning has helped to identify a buggy code, it is not
-> > safe in general and this warning could panic the system with panic-on-warn
-> > configuration which tends to be used surprisingly often.  So replace
-> > VM_WARN_ON to pr_warn().  And the warning will be triggered if
-> > __GFP_NOWARN is set since the allocator would print out warning for such
-> > case if __GFP_NOWARN is not set.
-> >
-> > Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-> > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > Suggested-by: Michal Hocko <mhocko@suse.com>
-> > Cc: Zach O'Keefe <zokeefe@google.com>
->
-> Acked-by: Michal Hocko <mhocko@suse.com>
->
-> minor nit
->
-> > ---
-> > v3: * Reverted the old commit from mm-unstable which remove the VM_WARN
-> >       (patch 1/3).
-> >     * Incorporated the suggestion from Michal to use pr_warn.
-> >
-> > v2: * Added patch 1/2.
-> >     * Reworded the commit log per Michal.
-> >
-> >  include/linux/gfp.h | 14 ++++++++++++--
-> >  1 file changed, 12 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> > index ef4aea3b356e..60a1c70ec85c 100644
-> > --- a/include/linux/gfp.h
-> > +++ b/include/linux/gfp.h
-> > @@ -210,6 +210,16 @@ alloc_pages_bulk_array_node(gfp_t gfp, int nid, unsigned long nr_pages, struct p
-> >       return __alloc_pages_bulk(gfp, nid, NULL, nr_pages, NULL, page_array);
-> >  }
-> >
-> > +static inline void warn_if_node_offline(int nid, gfp_t gfp_mask)
-> > +{
-> > +     gfp_t gfp = gfp_mask & (__GFP_THISNODE|__GFP_NOWARN);
->
-> I would use rather this_node or similarly descriptive name. gfp sounds
 
-this_node sounds good to me.
 
-> like a pasm but this is only a subset of it. If you really want to
-> improve the readability then you can restructure the condition a bit
+On 07/11/2022 18:24, Punit Agrawal wrote:
+> Hi Usama,
+> 
+> Usama Arif <usama.arif@bytedance.com> writes:
+> 
+>> This patchset adds support for vcpu_is_preempted in arm64, which allows the guest
+>> to check if a vcpu was scheduled out, which is useful to know incase it was
+>> holding a lock. vcpu_is_preempted can be used to improve
+>> performance in locking (see owner_on_cpu usage in mutex_spin_on_owner,
+>> mutex_can_spin_on_owner, rtmutex_spin_on_owner and osq_lock) and scheduling
+>> (see available_idle_cpu which is used in several places in kernel/sched/fair.c
+>> for e.g. in wake_affine to determine which CPU can run soonest):
+>>
+>> This patchset shows improvement on overcommitted hosts (vCPUs > pCPUS), as waiting
+>> for preempted vCPUs reduces performance.
+>>
+>> This patchset is inspired from the para_steal_clock implementation and from the
+>> work originally done by Zengruan Ye:
+>> https://lore.kernel.org/linux-arm-kernel/20191226135833.1052-1-yezengruan@huawei.com/.
+>>
+>> All the results in the below experiments are done on an aws r6g.metal instance
+>> which has 64 pCPUs.
+>>
+>> The following table shows the index results of UnixBench running on a 128 vCPU VM
+>> with (6.0.0+vcpu_is_preempted) and without (6.0.0 base) the patchset.
+>> TestName                                6.0.0 base  6.0.0+vcpu_is_preempted    % improvement for vcpu_is_preempted
+>> Dhrystone 2 using register variables    187761      191274.7                   1.871368389
+>> Double-Precision Whetstone              96743.6     98414.4                    1.727039308
+>> Execl Throughput                        689.3       10426                      1412.548963
+>> File Copy 1024 bufsize 2000 maxblocks   549.5       3165                       475.978162
+>> File Copy 256 bufsize 500 maxblocks     400.7       2084.7                     420.2645371
+>> File Copy 4096 bufsize 8000 maxblocks   894.3       5003.2                     459.4543218
+>> Pipe Throughput                         76819.5     78601.5                    2.319723508
+>> Pipe-based Context Switching            3444.8      13414.5                    289.4130283
+>> Process Creation                        301.1       293.4                      -2.557289937
+>> Shell Scripts (1 concurrent)            1248.1      28300.6                    2167.494592
+>> Shell Scripts (8 concurrent)            781.2       26222.3                    3256.669227
+>> System Call Overhead                    3426        3729.4                     8.855808523
+>>
+>> System Benchmarks Index Score           3053        11534                      277.7923354
+>>
+>> This shows a 277% overall improvement using these patches.
+>>
+>> The biggest improvement is in the shell scripts benchmark, which forks a lot of processes.
+>> This acquires rwsem lock where a large chunk of time is spent in base 6.0.0 kernel.
+>> This can be seen from one of the callstack of the perf output of the shell
+>> scripts benchmark on 6.0.0 base (pseudo NMI enabled for perf numbers below):
+>> - 33.79% el0_svc
+>>     - 33.43% do_el0_svc
+>>        - 33.43% el0_svc_common.constprop.3
+>>           - 33.30% invoke_syscall
+>>              - 17.27% __arm64_sys_clone
+>>                 - 17.27% __do_sys_clone
+>>                    - 17.26% kernel_clone
+>>                       - 16.73% copy_process
+>>                          - 11.91% dup_mm
+>>                             - 11.82% dup_mmap
+>>                                - 9.15% down_write
+>>                                   - 8.87% rwsem_down_write_slowpath
+>>                                      - 8.48% osq_lock
+>>
+>> Just under 50% of the total time in the shell script benchmarks ends up being
+>> spent in osq_lock in the base 6.0.0 kernel:
+>>    Children      Self  Command   Shared Object        Symbol
+>>     17.19%    10.71%  sh      [kernel.kallsyms]  [k] osq_lock
+>>      6.17%     4.04%  sort    [kernel.kallsyms]  [k] osq_lock
+>>      4.20%     2.60%  multi.  [kernel.kallsyms]  [k] osq_lock
+>>      3.77%     2.47%  grep    [kernel.kallsyms]  [k] osq_lock
+>>      3.50%     2.24%  expr    [kernel.kallsyms]  [k] osq_lock
+>>      3.41%     2.23%  od      [kernel.kallsyms]  [k] osq_lock
+>>      3.36%     2.15%  rm      [kernel.kallsyms]  [k] osq_lock
+>>      3.28%     2.12%  tee     [kernel.kallsyms]  [k] osq_lock
+>>      3.16%     2.02%  wc      [kernel.kallsyms]  [k] osq_lock
+>>      0.21%     0.13%  looper  [kernel.kallsyms]  [k] osq_lock
+>>      0.01%     0.00%  Run     [kernel.kallsyms]  [k] osq_lock
+>>
+>> and this comes down to less than 1% total with 6.0.0+vcpu_is_preempted kernel:
+>>    Children      Self  Command   Shared Object        Symbol
+>>       0.26%     0.21%  sh      [kernel.kallsyms]  [k] osq_lock
+>>       0.10%     0.08%  multi.  [kernel.kallsyms]  [k] osq_lock
+>>       0.04%     0.04%  sort    [kernel.kallsyms]  [k] osq_lock
+>>       0.02%     0.01%  grep    [kernel.kallsyms]  [k] osq_lock
+>>       0.02%     0.02%  od      [kernel.kallsyms]  [k] osq_lock
+>>       0.01%     0.01%  tee     [kernel.kallsyms]  [k] osq_lock
+>>       0.01%     0.00%  expr    [kernel.kallsyms]  [k] osq_lock
+>>       0.01%     0.01%  looper  [kernel.kallsyms]  [k] osq_lock
+>>       0.00%     0.00%  wc      [kernel.kallsyms]  [k] osq_lock
+>>       0.00%     0.00%  rm      [kernel.kallsyms]  [k] osq_lock
+>>
+>> To make sure, there is no change in performance when vCPUs < pCPUs, UnixBench
+>> was run on a 32 CPU VM. The kernel with vcpu_is_preempted implemented
+>> performed 0.9% better overall than base kernel, and the individual benchmarks
+>> were within +/-2% improvement over 6.0.0 base.
+>> Hence the patches have no negative affect when vCPUs < pCPUs.
+>>
+>>
+>> The other method discussed in https://lore.kernel.org/linux-arm-kernel/20191226135833.1052-1-yezengruan@huawei.com/
+>> was pv conditional yield by Marc Zyngier and Will Deacon to reduce vCPU reschedule
+>> if the vCPU will exit immediately.
+>> (https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm64/pvcy).
+>> The patches were ported to 6.0.0 kernel and tested with UnixBench with a 128 vCPU VM:
+>>
+>> TestName                                6.0.0 base  6.0.0+pvcy      % improvement for pvcy
+>> Dhrystone 2 using register variables    187761      183128          -2.467498575
+>> Double-Precision Whetstone              96743.6     96645           -0.101918887
+>> Execl Throughput                        689.3       1019.8          47.9471928
+>> File Copy 1024 bufsize 2000 maxblocks   549.5       2029.7          269.3721565
+>> File Copy 256 bufsize 500 maxblocks     400.7       1439.4          259.2213626
+>> File Copy 4096 bufsize 8000 maxblocks   894.3       3434.1          283.9986582
+>> Pipe Throughput                         76819.5     74268.8         -3.320380893
+>> Pipe-based Context Switching            3444.8      5963.3          73.11019508
+>> Process Creation                        301.1       163.2           -45.79873796
+>> Shell Scripts (1 concurrent)            1248.1      1859.7          49.00248378
+>> Shell Scripts (8 concurrent)            781.2       1171            49.89759345
+>> System Call Overhead                    3426        3194.4          -6.760070053
+>>
+>> System Benchmarks Index Score           3053        4605            50.83524402
+>>
+>> pvcy shows a smaller overall improvement (50%) compared to vcpu_is_preempted (277%).
+>> Host side flamegraph analysis shows that ~60% of the host time when using pvcy
+>> is spent in kvm_handle_wfx, compared with ~1.5% when using vcpu_is_preempted,
+>> hence vcpu_is_preempted shows a larger improvement.
+>>
+>> It might be that pvcy can be used in combination with vcpu_is_preempted, but this
+>> series is to start a discussion on vcpu_is_preempted as it shows a much bigger
+>> improvement in performance and its much easier to review vcpu_is_preempted standalone.
+> 
+> Looking at both the patchsets - this one and the pvcy, it looks to me
+> that vcpu_is_preempted() and the pvcy patches are somewhat
+> orthogonal. The former is optimizing mutex and rwsem in their optimistic
+> spinning phase while the latter is going after spinlocks (via wfe).
+> 
+> Unless I'm missing something the features are not necessarily comparable
+> on the same workloads - unixbench is probably mutex heavy and doesn't
+> show as much benefit with just the pvcy changes. I wonder if it's easy
+> to have both the features enabled to see this in effect.
+> 
+> I've left some comments on the patches; but no need to respin just
+> yet. Let's see if there is any other feedback.
+> 
+> Thanks,
+> Punit
+> 
 
-Just because I thought "if (gfp_mask & (__GFP_THISNODE|__GFP_NOWARN))
-!= (__GFP_THISNODE|__GFP_NOWARN))" is too long, so I added gfp to
-store the intermediate result.
+There was a small bug in v2, where pv_lock_init was called too early in 
+the boot in setup_arch, hence pvlock_vcpu_state was not initialized for 
+vCPU 0 (the state was initialized for vCPUs 1-127 during secondary core 
+boot, hence the rest of the vCPUs were using pvlock correctly). I will 
+send the next revision making it an early_initcall along with addressing 
+Punits' comments, but will wait for further comments on v2 before 
+sending it. I have tested it with early_initcall and didnt see a 
+significant change in performance (which is expected as only 1 out of 
+128 vCPUs wasnt using pvlock correctly).
 
->
->         if (gfp_mask & (__GFP_THISNODE|__GFP_NOWARN)) != (__GFP_THISNODE|__GFP_NOWARN))
->                 return;
->
->         if (node_online(nid))
->                 return;
->
->         pr_warn("%pGg allocation from offline node %d\n", &gfp, nid);
->         dump_stack();
->
-> > +
-> > +     if ((gfp == (__GFP_THISNODE|__GFP_NOWARN)) && !node_online(nid)) {
-> > +             pr_warn("%pGg allocation from offline node %d\n", &gfp, nid);
-> > +             dump_stack();
-> > +     }
-> > +}
-> > +
-> --
-> Michal Hocko
-> SUSE Labs
+I tried pvcy+vcpu_is_preempted patches together and I see a slight 
+reduction in performance over pvcy only.
+As a summary, with the above changes to move to early_initcall included 
+the overall Unixbench score improvements are:
+
+Change over 6.0.0 base kernel                 % improvement over base
+vcpu_is_preempted                             279%
+pvcy                                          51%
+pvcy+vcpu_is_preempted                        37%
+
+Thanks,
+Usama
+
+
+> [...]
+> 
