@@ -2,126 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123CA62249D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B57D6224A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiKIH3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 02:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S229893AbiKIHae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 02:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiKIH3O (ORCPT
+        with ESMTP id S229447AbiKIHa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 02:29:14 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8189E18B2D
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 23:29:13 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id D237A3200A7F;
-        Wed,  9 Nov 2022 02:29:11 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 09 Nov 2022 02:29:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1667978951; x=
-        1668065351; bh=Y+tyaEBih80W2PuGeaW2YLdpAhYiqh+fKlidiOE/JTw=; b=R
-        CCCfO7aCaxtMo7n2n9xH1Zoh2dSxsI/jM9rXNeoLbqt4XHUhbG2myELW4X0hdEZg
-        YOqiTqzgdMXFzRx7KdbxzNyPYs5tkE8G1DLmkZ7qTN9mJLRkbg+FNHxRYOZYhp+w
-        Na/R7oR/3ehJxoPNwbRbXUDaQJQeqzvSn9JKZx6lXK7dylRYDKoFpD1q4dmOShEB
-        6/n3bpvXKEA7ChOrZv8NAD+R00tjXUmRAZcG5IANvO4VcWsDpBWY54+su7Q0ElYq
-        04U7nDgqfMr2V4HptcsIsZS2CmXAStFi1bA5nJON3nhwaPcinjWIvkVh/GX+uC0M
-        fPR7k3DbmA+opkOIbvJuQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1667978951; x=
-        1668065351; bh=Y+tyaEBih80W2PuGeaW2YLdpAhYiqh+fKlidiOE/JTw=; b=K
-        zcz9n797AinRAhTKB0htbmJHPn6+f1kLFKoK4DBprPCsCZJI45kBjUju0h7XMp2n
-        Tjai2Xb1yhsTKyPeLajuwOVanT+FKzJfjS5K4BeOBnJEN9YCwlpyqPV0fB1Lxo6f
-        FWRZhcJ5PDHDetcK/mdI8bv7drCCh9rTOp2/o5Zh1m149pvorNb2ZQG9LBhrQ42V
-        UufTlIs5kjhAVdgFzbER7LcrqwUzb5OKxhGKTcJNYlu2uLTYwcNClqZrYw+RbJve
-        Hf32A/Tm8PqSdNtYCaRGZ4MKP965ETkDs/xsBsewXEhgzmeVv8ux4KlPoLKaWi9x
-        K6WvdVAHrAOW+BtfS32zA==
-X-ME-Sender: <xms:x1ZrY74mAndKj1WDK0T2ZLvFe9n7ofwvxAxl_MAcyHetGU1r-5P7Kw>
-    <xme:x1ZrYw5P113-AVne0zyDLM8WovZbG-y8NxIekup9JuG_lXX7i2h4qFRfBaQ3rX1TX
-    DriXUd4uBF9cNQyA0Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedugdduuddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:x1ZrYyeV-2EImwTyZNjWZHuna-iQsxS_20cSBC9eOqpOSv8JRGRMpg>
-    <xmx:x1ZrY8L39laD6xh0WsLWEl2Xdry2YU1WqcwT7P4EC4a44ipU8ZDBfw>
-    <xmx:x1ZrY_KN28hy6wE3GMRZdp9Ubxco7Lt7WUlIBi1jXBqX-UEFPKEJAA>
-    <xmx:x1ZrY5AJlNn4a43jAJ0l74OuELQgoajkscolSjPj78vQrMMwmBeaZg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F12A8B60086; Wed,  9 Nov 2022 02:29:10 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <06c4f370-715d-4c66-ad43-143b652af5ff@app.fastmail.com>
-In-Reply-To: <20221108232228.1177199-1-nfraprado@collabora.com>
-References: <20221108232228.1177199-1-nfraprado@collabora.com>
-Date:   Wed, 09 Nov 2022 08:28:50 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     =?UTF-8?Q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= 
-        <nfraprado@collabora.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Marcel Ziswiler" <marcel.ziswiler@toradex.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        "Shawn Guo" <shawnguo@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
-        "Will Deacon" <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/13] arm64: defconfig: Enable missing kconfigs for
- mt8183-kukui-jacuzzi-juniper
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Nov 2022 02:30:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6F818E29
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 23:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667978972;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YdtRIseNPT2+jZuZBXjbMtl4QnJDXpGj49sikX6Ctrg=;
+        b=b/O3GJsjV/IUZiyM4/iHG7PXpAmzY3mArGaM17v9NgqcVhZt0uuKJPnNTezoX0bOjIGvcH
+        v3EiSTz51h9dJ0nUzydGwu8GjKVR5lQ9UFCyjlVsmoJ6iXHiwNbewSCRjEVEUopknoMwap
+        5IC0AAjoI52fK1eLoSEzpHuq5WiuS4w=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-673-5ivj01nnPIe5hzgyuaOYgg-1; Wed, 09 Nov 2022 02:29:31 -0500
+X-MC-Unique: 5ivj01nnPIe5hzgyuaOYgg-1
+Received: by mail-wm1-f71.google.com with SMTP id x10-20020a05600c420a00b003cfa33f2e7cso3841007wmh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 23:29:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YdtRIseNPT2+jZuZBXjbMtl4QnJDXpGj49sikX6Ctrg=;
+        b=PREhSg6h3+A+F6bI+xnwdaDzIFm5N5ud1u+5YnwqaZqnxPSnABsEL+lhdv92lRxHQO
+         4+Lw/x65Q/z3tv5Ne2/4HiWY7idcp5YM52Q9/gGswKWowWX/UCJAA4Zm6AQMM/I81o44
+         nvNiKjQ94zUX0yUVgEDakryIju2K+vPBDe2c5mpZsvDTQ1CQ68Xsu7QL+1WaImyREAU/
+         eKzkJSq8XcSxWGN4t9ZNdIODzLFeJ5SZvNN9ZFvWZt5KCEgIScxFT8xsAw/bT9LeAEUp
+         rgJn16RXO9O3PvgUS/ztcwkgElU0RgZYMe0dZSlchndcup1YdbCBBtZHUlloUyT4cVK5
+         P3Jg==
+X-Gm-Message-State: ACrzQf25HVGwyOng42eGRcWs6Jzt/5PHLn1jvLxLxQo7WLKL4HI9sCca
+        JQd1PTVuHWEr63KqZ7P2Pyyatt/v6WMUmBfM+REDS+8lBkEAJDlF4mlB0imi3GDFufBJQRacU/O
+        RL0d56xA+689EmPlccmz+6EIN
+X-Received: by 2002:a05:6000:1a46:b0:236:9cb4:f2a7 with SMTP id t6-20020a0560001a4600b002369cb4f2a7mr37306604wry.141.1667978970269;
+        Tue, 08 Nov 2022 23:29:30 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6lZrksHKbpKvgOL8qujWYkFgNg3u58w4jQeAHHstRZ695iSsZmVkU1mrU0juQJVtjl8RA1Ow==
+X-Received: by 2002:a05:6000:1a46:b0:236:9cb4:f2a7 with SMTP id t6-20020a0560001a4600b002369cb4f2a7mr37306583wry.141.1667978969917;
+        Tue, 08 Nov 2022 23:29:29 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id l16-20020adfe590000000b002365cd93d05sm12198397wrm.102.2022.11.08.23.29.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 23:29:29 -0800 (PST)
+Message-ID: <f09c1b91-647e-3547-1914-59a7e785cc95@redhat.com>
+Date:   Wed, 9 Nov 2022 08:29:28 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Reply-To: eric.auger@redhat.com
+Subject: Re: [RFC] vhost: Clear the pending messages on
+ vhost_init_device_iotlb()
+Content-Language: en-US
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, eric.auger.pro@gmail.com,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterx@redhat.com
+References: <20221107203431.368306-1-eric.auger@redhat.com>
+ <20221107153924-mutt-send-email-mst@kernel.org>
+ <b8487793-d7b8-0557-a4c2-b62754e14830@redhat.com>
+ <20221107180022-mutt-send-email-mst@kernel.org>
+ <CACGkMEsYyH5P2h6XkBgrW4O-xJXxdzzRa1+T2zjJ07OHiYObVA@mail.gmail.com>
+ <20221108035142-mutt-send-email-mst@kernel.org>
+ <CACGkMEtFhmgKrKwTT8MdQG26wbi20Z5cTn69ycBtE17V+Kupuw@mail.gmail.com>
+ <20221108041820-mutt-send-email-mst@kernel.org>
+ <7105abc8-85d1-63a4-7f77-a2b3e0177b6f@redhat.com>
+ <CACGkMEuX-_+fce_rmc-DsBEfa84d1Kxxe2tE_REae2_JrqBWjw@mail.gmail.com>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <CACGkMEuX-_+fce_rmc-DsBEfa84d1Kxxe2tE_REae2_JrqBWjw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022, at 00:22, N=C3=ADcolas F. R. A. Prado wrote:
-> mt8183-kukui-jacuzzi-juniper is one of the devices set up to run tests
-> on KernelCI, but several of its drivers are currently disabled in the
-> defconfig. This series enables all the missing kconfigs on the defconf=
-ig
-> to get everything probing on that machine so that it can be fully test=
-ed
-> by KernelCI.
+Hi Jason,
 
-The changes all look fine, but I would recommend not separating it
-out into 13 patches when you are doing just one thing here.=20
+On 11/9/22 04:44, Jason Wang wrote:
+> On Tue, Nov 8, 2022 at 6:17 PM Eric Auger <eric.auger@redhat.com> wrote:
+>> Hi Michael, Jason,
+>>
+>> On 11/8/22 10:31, Michael S. Tsirkin wrote:
+>>> On Tue, Nov 08, 2022 at 05:13:50PM +0800, Jason Wang wrote:
+>>>> On Tue, Nov 8, 2022 at 4:56 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>>>>> On Tue, Nov 08, 2022 at 11:09:36AM +0800, Jason Wang wrote:
+>>>>>> On Tue, Nov 8, 2022 at 7:06 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>>>>>>> On Mon, Nov 07, 2022 at 10:10:06PM +0100, Eric Auger wrote:
+>>>>>>>> Hi Michael,
+>>>>>>>> On 11/7/22 21:42, Michael S. Tsirkin wrote:
+>>>>>>>>> On Mon, Nov 07, 2022 at 09:34:31PM +0100, Eric Auger wrote:
+>>>>>>>>>> When the vhost iotlb is used along with a guest virtual iommu
+>>>>>>>>>> and the guest gets rebooted, some MISS messages may have been
+>>>>>>>>>> recorded just before the reboot and spuriously executed by
+>>>>>>>>>> the virtual iommu after the reboot. Despite the device iotlb gets
+>>>>>>>>>> re-initialized, the messages are not cleared. Fix that by calling
+>>>>>>>>>> vhost_clear_msg() at the end of vhost_init_device_iotlb().
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Eric Auger <eric.auger@redhat.com>
+>>>>>>>>>> ---
+>>>>>>>>>>  drivers/vhost/vhost.c | 1 +
+>>>>>>>>>>  1 file changed, 1 insertion(+)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+>>>>>>>>>> index 40097826cff0..422a1fdee0ca 100644
+>>>>>>>>>> --- a/drivers/vhost/vhost.c
+>>>>>>>>>> +++ b/drivers/vhost/vhost.c
+>>>>>>>>>> @@ -1751,6 +1751,7 @@ int vhost_init_device_iotlb(struct vhost_dev *d, bool enabled)
+>>>>>>>>>>    }
+>>>>>>>>>>
+>>>>>>>>>>    vhost_iotlb_free(oiotlb);
+>>>>>>>>>> +  vhost_clear_msg(d);
+>>>>>>>>>>
+>>>>>>>>>>    return 0;
+>>>>>>>>>>  }
+>>>>>>>>> Hmm.  Can't messages meanwhile get processes and affect the
+>>>>>>>>> new iotlb?
+>>>>>>>> Isn't the msg processing stopped at the moment this function is called
+>>>>>>>> (VHOST_SET_FEATURES)?
+>>>>>>>>
+>>>>>>>> Thanks
+>>>>>>>>
+>>>>>>>> Eric
+>>>>>>> It's pretty late here I'm not sure.  You tell me what prevents it.
+>>>>>> So the proposed code assumes that Qemu doesn't process device IOTLB
+>>>>>> before VHOST_SET_FEAETURES. Consider there's no reset in the general
+>>>>>> vhost uAPI,  I wonder if it's better to move the clear to device code
+>>>>>> like VHOST_NET_SET_BACKEND. So we can clear it per vq?
+>>>>> Hmm this makes no sense to me. iommu sits between backend
+>>>>> and frontend. Tying one to another is going to backfire.
+>>>> I think we need to emulate what real devices are doing. Device should
+>>>> clear the page fault message during reset, so the driver won't read
+>>>> anything after reset. But we don't have a per device stop or reset
+>>>> message for vhost-net. That's why the VHOST_NET_SET_BACKEND came into
+>>>> my mind.
+>>> That's not a reset message. Userspace can switch backends at will.
+>>> I guess we could check when backend is set to -1.
+>>> It's a hack but might work.
+>>>
+>>>>> I'm thinking more along the lines of doing everything
+>>>>> under iotlb_lock.
+>>>> I think the problem is we need to find a proper place to clear the
+>>>> message. So I don't get how iotlb_lock can help: the message could be
+>>>> still read from user space after the backend is set to NULL.
+>>>>
+>>>> Thanks
+>>> Well I think the real problem is this.
+>>>
+>>> vhost_net_set_features does:
+>>>
+>>>         if ((features & (1ULL << VIRTIO_F_ACCESS_PLATFORM))) {
+>>>                 if (vhost_init_device_iotlb(&n->dev, true))
+>>>                         goto out_unlock;
+>>>         }
+>>>
+>>>
+>>> so we get a new iotlb each time features are set.
+>>>
+>>> But features can be changes while device is running.
+>>> E.g.
+>>>       VHOST_F_LOG_ALL
+>>>
+>>>
+>>> Let's just say this hack of reusing feature bits for backend
+>>> was not my brightest idea :(
+>>>
+>> Isn't vhost_init_device_iotlb() racy then, as d->iotlb is first updated with niotlb and later d->vqs[i]->iotlb is updated with niotlb. What does garantee this is done atomically?
+>>
+>> Shouldn't we hold the dev->mutex to make all the sequence atomic and
+>> include vhost_clear_msg()?  Can't the vhost_clear_msg() take the dev lock?
+> It depends on where we want to place the vhost_clear_msg(), e.g in
+> most of the device ioctl, the dev->mutex has been held.
 
-As a general rule, if you keep saying the same things in each
-patch description, it is usually an indication that they should
-be combined. Similarly, if you find describing unrelated changes
-("also, ..."), that would be an indication that patches should
-be split up.
+OK, I will double check and respin accordingly
 
-> Given that all kconfigs added in the series are to enable support for a
-> MediaTek platform, it seems reasonable for it to be applied through the
-> MediaTek tree, but the commits themselves are independent (apart from
-> MTK_CMDQ and MTK_SVS) and could be applied separately.
+Eric
+>
+> Thanks
+>
+>> Thanks
+>>
+>> Eric
+>>
+>>>
+>>>
+>>>>>
+>>>>>>> BTW vhost_init_device_iotlb gets enabled parameter but ignores
+>>>>>>> it, we really should drop that.
+>>>>>> Yes.
+>>>>>>
+>>>>>>> Also, it looks like if features are set with VIRTIO_F_ACCESS_PLATFORM
+>>>>>>> and then cleared, iotlb is not properly cleared - bug?
+>>>>>> Not sure, old IOTLB may still work. But for safety, we need to disable
+>>>>>> device IOTLB in this case.
+>>>>>>
+>>>>>> Thanks
+>>>>>>
+>>>>>>>>>> --
+>>>>>>>>>> 2.37.3
 
-Agreed, merging this through the Mediatek tree is the preferred way.
-
-     Arnd
