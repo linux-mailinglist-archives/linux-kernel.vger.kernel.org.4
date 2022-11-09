@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBAD62354C
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2CC62354E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiKIVBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S230262AbiKIVBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiKIVAz (ORCPT
+        with ESMTP id S230512AbiKIVA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:00:55 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED00930F78;
-        Wed,  9 Nov 2022 12:59:31 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 9C053735;
-        Wed,  9 Nov 2022 20:59:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9C053735
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1668027571; bh=hoB/n5Y+UJ+AWFbI6oAkTagIGsPeSuHx16WFyuj7V4s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DC4rAh/4/pUCFgAGKmaXa+Wwk1K2ucK2kG3/xjKPLeUxP+GqMmeBahxqH5iz3imOx
-         MfkhuexTWLTZOEE1JUCOyfpHqi6IUFZ4RcHq85i+mN9FoCQS+3a6MI+SXZyoC9/Zsj
-         Vih30P6RY2lLPDzF56EXkbNuMEW4ki/rA2oXL5tSVFL1JIEhZ8996IeiHJAX/cZvLd
-         k4aTFv8v2Rz/Wc52Hf6uQWu5P1ctCtY1/xYxPlqtLmIwJ/PplQyah3PndgFMp11S6h
-         dmO1nIhx+PqRtcx/wIaWKIFFIgVqN5dfYHqDuxhZfM3LAMf8G1YxHwl+VaHW4DHU2r
-         5pN8204AC8UBA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] debugfs: small Documentation cleaning
-In-Reply-To: <20221104003835.29472-1-rdunlap@infradead.org>
-References: <20221104003835.29472-1-rdunlap@infradead.org>
-Date:   Wed, 09 Nov 2022 13:59:31 -0700
-Message-ID: <87y1sjj13g.fsf@meer.lwn.net>
+        Wed, 9 Nov 2022 16:00:57 -0500
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5CD317DA;
+        Wed,  9 Nov 2022 12:59:53 -0800 (PST)
+Received: by mail-pg1-f179.google.com with SMTP id 78so17219813pgb.13;
+        Wed, 09 Nov 2022 12:59:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VHNdxjB2vbkPuh8ywKXBoD9bI2A/2MU0vQL/ydHZo+4=;
+        b=PlNGhFg8DG8XBuJikCLyzpRTrTkLGNaeU3NJ4up2LhTqNrs1kWjSa+MBsyu3XK1zoj
+         nbA7DA5vSxCm/0QwMNW/EWGOVkxzMIrBMSsx6rxJYjV5gZh429URQBDbUw5q8Tm1rWUV
+         EcKK51Yk/Vr4fXvvaSQnu4HdT7YvKW1FaHM5yTiv9y2XFfVMdWqNu32psgwMldKB3DRj
+         fb2BwAXOz38YtsOi9Pvfp8EIeOckWhWLh8g/f5j52ZNptR+GhyLY9OMyHWBpxrryVc5j
+         f6qF547BspSFddTUMNraXi9MG9aVID3sxFJHj/zYxYOhjBjEMiGd/k2lz/X4MRpfbHhs
+         +36g==
+X-Gm-Message-State: ACrzQf1Twyapji/mVhBwxoj0vgw68o7uIQYSLRTwm5pksWjX3BDvR2Ba
+        xiuPv4mYBlu5ItUkk1wgdls=
+X-Google-Smtp-Source: AMsMyM62kMPNoyJDZgwdKKsxEk4j1aMpr65AK0xZCww1ROwtLXDwkgW6kIMV+m6QN1ONTXR2WuG7bA==
+X-Received: by 2002:aa7:988b:0:b0:56e:6d41:b167 with SMTP id r11-20020aa7988b000000b0056e6d41b167mr33632016pfl.70.1668027593139;
+        Wed, 09 Nov 2022 12:59:53 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:68b6:5dae:a00c:c3b? ([2620:15c:211:201:68b6:5dae:a00c:c3b])
+        by smtp.gmail.com with ESMTPSA id q8-20020a635048000000b00460a5c6304dsm7769722pgl.67.2022.11.09.12.59.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 12:59:52 -0800 (PST)
+Message-ID: <c1acceb1-8824-1d2a-8096-76ad5f17312d@acm.org>
+Date:   Wed, 9 Nov 2022 12:59:49 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 03/16] ufs: core: Introduce Multi-circular queue
+ capability
+Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1668022680.git.quic_asutoshd@quicinc.com>
+ <aa223196f80538f061cac6245fd690d34f12f4b2.1668022680.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <aa223196f80538f061cac6245fd690d34f12f4b2.1668022680.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
+On 11/9/22 11:41, Asutosh Das wrote:
+> +/* UFSHC 4.0 compliant HC support this mode, refer param_set_mcq_mode() */
+> +static bool mcq_mode = true;
 
-> Fix punctuation in a parenthetical phrase.
-> Add 2 article adjectives and change one from "an" to "a".
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> ---
->  Documentation/filesystems/debugfs.rst |    8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+Please rename both the variable and the kernel module parameter 
+"mcq_mode" into "use_mcq_mode".
 
-Applied, thanks.
+> +module_param_cb(mcq_mode, &mcq_mode_ops, &mcq_mode, 0644);
+> +MODULE_PARM_DESC(mcq_mode, "Disable MCQ mode for UFSHCI 4.0 controllers");
 
-jon
+The description of this parameter is confusing since it suggests that 
+setting this parameter to 1 disables MCQ mode.
+
+Thanks,
+
+Bart.
