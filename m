@@ -2,59 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5D46231F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A276231FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbiKISC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:02:27 -0500
+        id S231373AbiKISDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:03:09 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiKISCQ (ORCPT
+        with ESMTP id S230148AbiKISCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:02:16 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF1B61F638
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:59:26 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C772C1FB;
-        Wed,  9 Nov 2022 09:59:32 -0800 (PST)
-Received: from [10.1.197.38] (eglon.cambridge.arm.com [10.1.197.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 790773F703;
-        Wed,  9 Nov 2022 09:59:25 -0800 (PST)
-Message-ID: <8325a442-92c1-4170-1862-3bc891a8d6af@arm.com>
-Date:   Wed, 9 Nov 2022 17:59:03 +0000
+        Wed, 9 Nov 2022 13:02:21 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8E427CF5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:01:07 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id cg5so10772660qtb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:01:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JRzIGvRnX1544Be7qGWYKxjG2G0UEG52dC2pZ/P5njY=;
+        b=Q2jYdJ6BbKHuyhyzDPeRs1/ZAg/T1ka3/R6bWojOn+Omzgy5Dj4jKfPUPoXigYRz80
+         U1uLTzqZSA0bShmbIh2qSyRbsyOr3g9pSkEB6QlT4emsVFcwnugFBjwDaP89EpUhOqYg
+         XC/lT32oxBfKrKZtT6su0wEqn9DzOp1W7zPnY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JRzIGvRnX1544Be7qGWYKxjG2G0UEG52dC2pZ/P5njY=;
+        b=Y8CQ0dJTPRvXPdPjnlLGd7PQZvixBzhAVfDzPYZsoGqw8SF98Rhhd6HSYnduGM6VcW
+         TmLJ/26XbCvsnCy/MxaSSvcJTbzth8wIi/oLFDkWRCt2/+m0wZij4L1NgmIFRBWS20c/
+         nkvpnOLYWjeJFijf2j4Ksb2I6vQLlQQDe9HmPE+ysYUmZu3kFz3fu8nJ3fSs5itSaPaU
+         5qXbVo/XJaYPBn/ohzVvfNTqpMbgrf3jbsIcHiiijcjBmbFmlZCWVVzQpLRUXNz8IkH+
+         9pVm+cqbvlUP7AFUiSHmKYFfRkZ+pg6Y4ZPnR9mLbx/FLBNCv1CygSubAwAVmo1ONruT
+         l15Q==
+X-Gm-Message-State: ANoB5pkzJOzK+qTPelr2uNU032gbnIj5PumYmn98LSjIGzZ9OAKAH9pZ
+        bKzaTyZm8Cl1pIGuRGlmX6hUW9sk9fseRw==
+X-Google-Smtp-Source: AA0mqf5e+s4FZs6WpAjXPz7lesydcqg/uePd0f7J1CwxC9UtQHQ4h5kpYzVkQo4kbP8pD5b7csUzYg==
+X-Received: by 2002:ac8:5c07:0:b0:3a5:946e:8b7e with SMTP id i7-20020ac85c07000000b003a5946e8b7emr11261883qti.385.1668016865342;
+        Wed, 09 Nov 2022 10:01:05 -0800 (PST)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id l5-20020ac848c5000000b003a5689134afsm10014203qtr.36.2022.11.09.10.01.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 10:01:03 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id 129so21884952ybb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 10:01:03 -0800 (PST)
+X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
+ t15-20020a056902124f00b0066ee3da487emr62350908ybu.310.1668016862980; Wed, 09
+ Nov 2022 10:01:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
-Content-Language: en-GB
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Newman <peternewman@google.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Gaurang Upasani <gupasani@google.com>
-References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
- <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com>
- <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
- <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com>
- <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
- <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
- <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com>
- <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
- <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com>
- <09029c7a-489a-7054-1ab5-01fa879fb42f@intel.com>
- <f80299a4-7eaf-46a0-89e6-b9f5385f183c@arm.com>
- <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
+ <20221108194139.57604-1-torvalds@linux-foundation.org> <Y2tKixpO4RO6DgW5@tuxmaker.boeblingen.de.ibm.com>
+In-Reply-To: <Y2tKixpO4RO6DgW5@tuxmaker.boeblingen.de.ibm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 9 Nov 2022 10:00:46 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiqUpnAzD74H7wCvJ+L9jK+wY=H=8BiFFNkWP21r9uoUQ@mail.gmail.com>
+Message-ID: <CAHk-=wiqUpnAzD74H7wCvJ+L9jK+wY=H=8BiFFNkWP21r9uoUQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] mm: introduce 'encoded' page pointers with embedded
+ extra bits
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,203 +78,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+On Tue, Nov 8, 2022 at 10:38 PM Alexander Gordeev
+<agordeev@linux.ibm.com> wrote:
+>
+> On Tue, Nov 08, 2022 at 11:41:36AM -0800, Linus Torvalds wrote:
+>
+> > +static inline struct encoded_page *encode_page(struct page *page, unsigned long flags)
+> > +{
+>
+> Any reaction in case ((flags & ~ENCODE_PAGE_BITS) != 0)?
 
-On 08/11/2022 21:28, Reinette Chatre wrote:
-> On 11/3/2022 10:06 AM, James Morse wrote:
->> (I've not got to the last message in this part of the thread yes - I'm out of time this
->> week, back Monday!)
->>
->> On 21/10/2022 21:09, Reinette Chatre wrote:
->>> On 10/19/2022 6:57 AM, James Morse wrote:
->>>> On 17/10/2022 11:15, Peter Newman wrote:
->>>>> On Wed, Oct 12, 2022 at 6:55 PM James Morse <james.morse@arm.com> wrote:
-> 
-> ...
-> 
->>>>> If there are a lot more PARTIDs than PMGs, then it would fit well with a
->>>>> user who never creates child MON groups. In case the number of MON
->>>>> groups gets ahead of the number of CTRL_MON groups and you've run out of
->>>>> PMGs, perhaps you would just try to allocate another PARTID and program
->>>>> the same partitioning configuration before giving up.
->>>>
->>>> User-space can choose to do this.
->>>> If the kernel tries to be clever and do this behind user-space's back, it needs to
->>>> allocate two monitors for this secretly-two-control-groups, and always sum the counters
->>>> before reporting them to user-space.
->>
->>> If I understand this scenario correctly, the kernel is already doing this.
->>> As implemented in mon_event_count() the monitor data of a CTRL_MON group is
->>> the sum of the parent CTRL_MON group and all its child MON groups.
->>
->> That is true. MPAM has an additional headache here as it needs to allocate a monitor in
->> order to read the counters. If there are enough monitors for each CLOSID*RMID to have one,
->> then MPAM can export the counter files in the same way RDT does.
->>
->> While there are systems that have enough monitors, I don't think this is going to be the
->> norm. To allow systems that don't have a surfeit of monitors to use the counters, I plan
->> to export the values from resctrl_arch_rmid_read() via perf. (but only for bandwidth counters)
+Heh. I've actually had three different implementations for that during
+the development series, and I think I even posted them all at one
+point or another (although usually just as attachments). And none of
+them are good.
 
-> This sounds related to the way monitoring was done in earlier kernels. This was
-> long before I become involved with this work. Unfortunately I am not familiar with
-> all the history involved that ended in it being removed from the kernel.
+Those three trivial versions are: (a) use VM_BUG_ON(), (b) just
+silently mask the bits and (c) just silently add them.
 
-Yup, I'm aware there is some history to this. It's not appropriate for the llc_occupancy
-counter as that reports state, instead of events.
+And (c) is that least annoying option that this latest patch uses,
+because both (a) and (b) are just nasty.
 
+Basically, all users are locally trivial to verify statically, so
+VM_BUG_ON() is just conceptually wrong and generates extra pointless
+code. And the silent masking - if it makes any difference - is just
+another version of "just silently add the bits": regardless of whether
+it clears them or not, it does the wrong thing if the bits don't fit.
 
-> Looks like
-> this was around v4.6, here is a sample commit that may help point to what was done:
-> 
-> commit 33c3cc7acfd95968d74247f1a4e1b0727a07ed43
-> Author: Vikas Shivappa <vikas.shivappa@linux.intel.com>
-> Date:   Thu Mar 10 15:32:09 2016 -0800
-> 
->     perf/x86/mbm: Add Intel Memory B/W Monitoring enumeration and init
-> 
-> 
-> Looking at some history there even seems to have been some work surrounding
-> "rotating" of RMIDs that seem related to what you mention above:
-> 
-> commit bff671dba7981195a644a5dc210d65de8ae2d251
-> Author: Matt Fleming <matt.fleming@intel.com>
-> Date:   Fri Jan 23 18:45:47 2015 +0000
-> 
->     perf/x86/intel: Perform rotation on Intel CQM RMIDs
-> 
->     There are many use cases where people will want to monitor more tasks
->     than there exist RMIDs in the hardware, meaning that we have to perform
->     some kind of multiplexing.
-> ...
-> 
+So there are three bad options, I've gone back and forth between them
+all, and I chose the least offensive one that is "invisible", in that
+it at least doesn't do any extra pointless work.
 
-Thanks - this one was new. (I can't see how that would work reliably!)
+Now, there are two non-offensive options too, and I actually
+considered, but never implemented them. They both fix the problem
+properly, by making it a *buildtime* check, but they have other
+issues.
 
-The perf stuff is a way off, but it is an influence on how some of the MPAM monitoring
-stuff has been done.
+There's two ways to just make it a build-time check, and it's
+annoyingly _close_ to being usable, but not quite there.
 
-Initial support will only be for systems that have enough hardware monitors for each
-control/monitor group to have one. This is the simplest to support in software, but is
-costly for the hardware.
+One is simply to require that the flags argument is always a plain
+constant, and simply using BUILD_BUG_ON().
 
+I actually almost went down that path - one of the things I considered
+was to not add a 'flags' argument to __tlb_remove_page() at all, but
+instead just have separate __tlb_remove_page() and
+__tlb_remove_page_dirty() functions.
 
->> The problem is moving a group of tasks around N groups requires N monitors to be
->> allocated, and stay allocated until those groups pass through limbo. The perf stuff can't
->> allocate more monitors once its started.
->>
->> Even without perf, the only thing that limits the list of other counters that have to be
->> read is the number of PARTID*PMG. It doesn't look like a very sensible design.
->>
->>
->>>> If monitors are a contended resource, then you may be unable to monitor the
->>>> secretly-two-control-groups group once the kernel has done this.
->>>
->>> I am not viewing this as "secretly-two-control-groups" - there would still be
->>> only one parent CTRL_MON group that dictates all the allocations. MON groups already
->>> have a CLOSID (PARTID) property but at this time it is always identical to the parent
->>> CTRL_MON group. The difference introduced is that some of the child MON groups
->>> may have a different CLOSID (PARTID) from the parent.
->>>
->>>>
->>>> I don't think the kernel should try to be too clever here.
->>
->>> That is a fair concern but it may be worth exploring as it seems to address
->>> a few ABI concerns and user space seems to be eyeing using a future "num_closid"
->>> info as a check of "RDT/PQoS" vs "MPAM".
->>
->> I think the solution to all this is:
->>  * Add rename support to move a monitor group between two control groups.
->>  ** On x86, this is guaranteed to preserve the RMID, so the destination counter continues
->> unaffected.
->>  ** On arm64, the PARTID is also relevant to the monitors, so the old counters will
->> continue to count.
+That would have meant that the argument to __tlb_remove_page_size
+would have always been a built-time constant, and then it would be
+trivial to just have that BUILD_BUG_ON(). Problem solved.
 
-> This looks like the solution to me also.
+But it turns out that it's just nasty, particularly with different
+configurations wanting different rules for what the dirty bit is. So
+forcing it to some constant value was really not acceptable.
 
-Great. I've had a stab at implementing it so we can have a more concrete discussion.
+The thing that I actually *wanted* to do, but didn't actually dare,
+was to just say "I will trust the compiler to do the value range
+tracking".
 
+Because *technically* our BUILD_BUG_ON() doesn't need a compile-time
+constant. Because our implementation of BUILD_BUG_ON() is not the
+garbage that the compiler gives us in "_Static_assert()" that really
+requires a syntactically pure integer constant expression.
 
-> The details of the arm64 support is not clear to me though. The destination
-> group may not have enough PMG to host the new group so failures need to be
-> handled.
+So the kernel version of BUILD_BUG_ON() is actually something much
+smarter: it depends on the compiler actually *optimizing* the
+expression, and it's only that optimized value that needs to be
+determined at compile-time to be either true or false. You can use
+things like inline functions etc, just as long as the end result is
+obvious enough that the compiler ends up saying "ok, that's never the
+case".
 
-> As you mention also, the old counters will continue to count.
-> I assume that you mean the hardware will still have a record of the occupancy
-> and that needs some time to dissipate?
+And *if* the compiler does any kind of reasonable range analysis, then a
 
-Yes,
+        BUILD_BUG_ON(flags > ENCODE_PAGE_BITS);
 
+should actually work. In theory.
 
-> I assume this would fall under the
-> limbo handling so in some scenarios (for example the just moved monitor
-> group used the last PMG) it may take some time for the source control
-> group to allow a new monitor group?
+In practice? Not so much.
 
-Yup!
+Because while the argument isn't constant (not even in the caller),
+the compiler *should* be smart enough to see that in the use in
+mm/memory.c, 'flags' is always that
 
+        unsigned int delay_rmap;
 
-> The new counters will also not reflect the task's history.
+which then gets initialized to
 
-Indeed. I anticipate user-space is sampling this file periodically, otherwise it can't
-calculate a MB/s from the raw byte-count. I don't think losing the history is problem.
+        delay_rmap = 0;
 
-The state before the change being lost could be a problem, but this is a difference with
-the way MPAM works. I think its best to just expose this property to user-space, as I
-don't think its feasible to work around.
+and conditionally set to '1' later. So it's not a *constant*, but the
+compiler can see that the value of flags is clearly never larger than
+ENCODE_PAGE_BITS.
 
-User-space would probably ignore the counter for a period of time after the move, as
-depending on where the regulation is happening, it may take a little while for the CLOSID
-change to take effect.
+But right now the compiler cannot track that over the non-inline
+function in __tlb_remove_page_size().
 
+Maybe if the 'encode_page()' was done in the caller, and
+__tlb_remove_page_size() were to just take an encoded_page as the
+argument, then the compiler would always only see this all through
+inlined functions, and it would work.
 
-> Moving an arm64  monitor group may thus have a few surprises for user
-> space while sounding complex to support. Would adding all this additional
-> support be worth it if the guidance to user space is to instead create many
-> control groups in such a control-group-rich environment?
+But even if it were to work for me (I never tried), I'd have been much
+too worried that some other compiler version, with some other config
+options, on some other architecture, wouldn't make the required
+optimizations.
 
-I'd prefer it didn't exist at all, but if there are reasons to support it on x86, I'd like
-the MPAM support to be as similar as possible. I'm willing to accept (advertised!) noise
-in the counters, but a whole missing syscall is a harder sell.
+We do require compiler optimizations to be on for 'BUILD_BUG_ON()' to
+do anything at all:
 
+   #ifdef __OPTIMIZE__
+   # define __compiletime_assert(condition, msg, prefix, suffix)           \
+   ..
+   #else
+   # define __compiletime_assert(condition, msg, prefix, suffix) do {
+} while (0)
+   #endif
 
->> Whether this old counters keep counting needs exposing to user-space so that it is aware.
-> 
-> Could you please elaborate? Do old counters not always keep counting?
+and we have a lot of places that depend on BUILD_BUG_ON() to do basic
+constant folding and other fairly simple optimizations.
 
-Its not new - but the expectation is the mv/rename support does this atomically without
-glitching/resetting the counters. Because of that new expectation, I think it needs
-exposing to user-space.
+But while I think a BUILD_BUG_ON() would be the right thing to do
+here, I do not feel confident enough to really put that to the test.
 
-Something should be indicated to user-space so it knows it can move monitor groups around,
-otherwise its another 'try it and see'.
-
-
->> To solve Peter's use-case, we also need:
->>  * to expose how many new groups can be created at each level.
->>    This is because MPAM doesn't have a property like num_rmid.
-
-> Unfortunately num_rmid is part of the user space interface. While MPAM
-> does not have "RMIDs" it seems that num_rmid can still be relevant
-> based on what it is described to represent in Documentation/x86/resctrl.rst:
-> "This is the upper bound for how many "CTRL_MON" + "MON" groups can
-> be created." 
-
-I agree it can't be removed, and MPAM systems will need to put a value there.
-The problem is 'rmid' has a well known definition, even if the kernel documentation is
-nuanced.
-
-This might be contentious, but ideally I'd 'deprecate' num_rmid, and split it into two
-properties that don't reference an architecture. (Obviously the files have to stay for at
-least the next 10 years!)
-
-
->> Combined, these should solve the cases Peter describes. User-space can determine if the
->> platform is control-group-rich or monitor-group-rich, and build the corresponding
->> structure to make best use of the resources.
-> 
-> Sounds good to me.
-
-
-Thanks,
-
-James
+              Linus
