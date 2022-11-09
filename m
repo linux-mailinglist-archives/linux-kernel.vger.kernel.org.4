@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0526D623354
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70770623357
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiKITT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 14:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S231603AbiKITTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKITTZ (ORCPT
+        with ESMTP id S229657AbiKITTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:19:25 -0500
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4433A1B3;
-        Wed,  9 Nov 2022 11:19:24 -0800 (PST)
-Received: by mail-qv1-f44.google.com with SMTP id w10so12973631qvr.3;
-        Wed, 09 Nov 2022 11:19:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jrQi34q0LM/jTR2NDgEHPDmLWCBKJGinUDccPqdXWHU=;
-        b=Up1sbGyJNBxWO+//y5q8mnIyXHUcud8smVX1Rj1dyIlxZX1D9XKdT0jHyLNNqM/6M5
-         p9Anfg3GYi3s4Q2Qi/u/RWS/tGBnF0VIBIZuojfmTSwY2ZlIeiPSFBAfQJXTIrYJbPrZ
-         Madh00eDH6wvuCX4B4x7OzdJxxbNmiyrLY87k91w04/ixAy0i54PN5P2Hcoi5UK0BJ7H
-         NhB0dywZqSWQt2CI98QFeeWjNcw40RN2oYxD1mbxoqhP1sXpLoWChzy/COSGpTZExGbe
-         Jg1SX0G0irtBJYrAQeNgYafiVFGJHeYlw/gWGIKkwIX2TTR71ztnDCF7Rb2X3yrxhBuY
-         XnIA==
-X-Gm-Message-State: ACrzQf1f++5YRi0CP8aVt6LfyX/qTMgYevH5r/LfGnr8NTVMA3dz4zQt
-        W2+uqbbIMQHjXMlcj0uvBD5vDrYuBDUKQCeZjrs=
-X-Google-Smtp-Source: AMsMyM4HHJ65z2pm+kE7cDgrVxcJl9RsLdlSFyrJPMX1bR9dvZjbdlJdotYGJwL+3bJGt2OLzgIJInNlX/ZI/nS44cw=
-X-Received: by 2002:a0c:c684:0:b0:4bb:fc53:5ad9 with SMTP id
- d4-20020a0cc684000000b004bbfc535ad9mr47289132qvj.3.1668021563859; Wed, 09 Nov
- 2022 11:19:23 -0800 (PST)
+        Wed, 9 Nov 2022 14:19:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9634EA1B3
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:19:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5115CB81F60
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 19:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B427DC433C1;
+        Wed,  9 Nov 2022 19:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668021585;
+        bh=KjkKpABDy8OeBeVkXUOWJR/+NxgUIP0eVBrO0CIT2pg=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=O7wiuRzJgFuqH/LSvl6UcOtawT2jlc4AtjpSI1SQ9Bbh0Wv0YDrx2B13Q1LA2Pu+h
+         EsR+Jum1+/cfBQ6+cPuQiUwwv/HPN+ip+HdXlybqhnyUWm+Db3PBUg0nPlC5MdQopi
+         RJ4xAZd8Cghqg8V2MdG2muGzdFzJULKnpoVo6tZp385JXrhmpGw4U36HCJdHyi1kNY
+         6qzv6jXZl6TOvpJvYqZwQUNUM7lqTT/zfw2r+OvVZ1Z6V/kaLv8K4LNRGD/p9PjbWn
+         naUMJU2xuQelSVtJ6wUegtPVMRlYSK6amfowqnPN03YCBoEo81ZhqBS+abpRXC2efH
+         4V2wUGIdmiLHQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org
+In-Reply-To: <20221109170849.273719-1-olivier.moysan@foss.st.com>
+References: <20221109170849.273719-1-olivier.moysan@foss.st.com>
+Subject: Re: [PATCH] ASoC: stm32: dfsdm: manage cb buffers cleanup
+Message-Id: <166802158345.681172.6341903177442237519.b4-ty@kernel.org>
+Date:   Wed, 09 Nov 2022 19:19:43 +0000
 MIME-Version: 1.0
-References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-7-linux@roeck-us.net>
-In-Reply-To: <20221017130910.2307118-7-linux@roeck-us.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Nov 2022 20:19:13 +0100
-Message-ID: <CAJZ5v0hMbzEdLecy_OWquOqdauBc1nsN7Q9mPkt2tOU4nEpHVw@mail.gmail.com>
-Subject: Re: [PATCH 6/9] thermal/core: Protect hwmon accesses to thermal
- operations with thermal zone mutex
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> In preparation to protecting access to thermal operations against thermal
-> zone device removal, protect hwmon accesses to thermal zone operations
-> with the thermal zone mutex. After acquiring the mutex, ensure that the
-> thermal zone device is registered before proceeding.
->
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/thermal/thermal_hwmon.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
-> index f53f4ceb6a5d..33bfbaed4236 100644
-> --- a/drivers/thermal/thermal_hwmon.c
-> +++ b/drivers/thermal/thermal_hwmon.c
-> @@ -77,11 +77,19 @@ temp_crit_show(struct device *dev, struct device_attribute *attr, char *buf)
->         int temperature;
->         int ret;
->
-> +       mutex_lock(&tz->lock);
-> +
-> +       if (!device_is_registered(&tz->device)) {
-> +               ret = -ENODEV;
-> +               goto unlock;
-> +       }
-> +
->         ret = tz->ops->get_crit_temp(tz, &temperature);
+On Wed, 9 Nov 2022 18:08:49 +0100, Olivier Moysan wrote:
+> Ensure that resources allocated by iio_channel_get_all_cb()
+> are released on driver unbind.
+> 
+> 
 
-Again, I would do it this way:
+Applied to
 
-        if (device_is_registered(&tz->device))
-                ret = tz->ops->get_crit_temp(tz, &temperature);
-        else
-                ret = -ENODEV;
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-And I wouldn't change the code below (the ternary operator is out of
-fashion in particular).
+Thanks!
 
-> -       if (ret)
-> -               return ret;
->
-> -       return sprintf(buf, "%d\n", temperature);
-> +unlock:
-> +       mutex_unlock(&tz->lock);
-> +
-> +       return ret ? ret : sprintf(buf, "%d\n", temperature);
->  }
->
->
-> --
+[1/1] ASoC: stm32: dfsdm: manage cb buffers cleanup
+      commit: 7d945b046be3d2605dbb1806e73095aadd7ae129
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
