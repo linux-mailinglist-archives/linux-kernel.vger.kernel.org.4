@@ -2,93 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E93622F63
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09466622F6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiKIPxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:53:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S230264AbiKIPyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 10:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiKIPxq (ORCPT
+        with ESMTP id S229714AbiKIPyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:53:46 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E886E0A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:53:40 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id ml12so12573196qvb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sk2rRztWdJEYKEIMTq5A+Go4tOahbOq/6iV58v2FweA=;
-        b=T+N+TL4RWsLhyuBSFtNrfgXKzUzVxDn6urT2Vlc2kkdGVPRzCfvFzEeWrIm6V+dlHt
-         KOFeR0bRP75lWMjIKUVbMohw+OImYxCZ3Y4DMrPzPU76FwhFQoClQUiZZ4/wi8l6yGz6
-         OvMy0I7n2Z/PMVyzqILHLM+e4IcFnlPG3XwchiOoxD4V15joIbbCZSIlQTxkTdcABKzI
-         8+r/KJfbjuCK1q4mpLEZyXeph+FPyVJztyiczmZBcI7OU1AqqhKEKvG6rw5LFFNBZj1g
-         7SA2+SBFTCSsPqayJZkcSTyBPg2wdxLtwlrSCdLQxfI/zElX3iKwww5481ZtCVEQEU1/
-         xiOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sk2rRztWdJEYKEIMTq5A+Go4tOahbOq/6iV58v2FweA=;
-        b=aQ44DbPCj+tDdnCqVxzv1muRGoslZw69uYOEMoXO3HWa/jkLTXNJDA74cvyB6CFesy
-         Iss5hlK0wKUKpRlD9aeWGn0AYsS4tYZ5+SzAB6dQcEysX8/SsqrP58/lwcz/IIvrzbsK
-         gpBEZ/Au6PJ22tBqCl2pFQgs+7/Wv917qcJloHeEv43xpEz9hxaxhntH0NmjqdcMg6ZR
-         /b/UdTojToMbAPNa1nRaCkVNhrfvlvuv0IgMsQgRC3pfHgDY2GE7R1pGbMTI6TfAo+Jg
-         m5vuHssFxfR0dBP7YB++EhpF4hA42RbQyJS0+8uYNnR/oDPY6Fk2+QTcxVRLdLjLaS3N
-         Ywpw==
-X-Gm-Message-State: ACrzQf1w8A3uLCm0FjmHEQiCBLXlG6nmQVH511tqFbyVMt69lQfvU4Yk
-        BgHzFwjePmkC+WNhfrPr2K02/w==
-X-Google-Smtp-Source: AMsMyM6hLe/bWjTqpZ703+C5WeszH/T+nBegFkICCNxyXoFrJeAnSB8JYRQ+ZfGcz6od8FqccV6+xg==
-X-Received: by 2002:a05:6214:da7:b0:4bb:d8a2:cc2f with SMTP id h7-20020a0562140da700b004bbd8a2cc2fmr52846832qvh.119.1668009189021;
-        Wed, 09 Nov 2022 07:53:09 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-3663-3884-f85a-44bb.res6.spectrum.com. [2603:7000:c01:2716:3663:3884:f85a:44bb])
-        by smtp.gmail.com with ESMTPSA id u127-20020a379285000000b006faeecef56fsm5629435qkd.68.2022.11.09.07.53.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 07:53:08 -0800 (PST)
-Date:   Wed, 9 Nov 2022 10:53:12 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Wed, 9 Nov 2022 10:54:16 -0500
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4584DC7B;
+        Wed,  9 Nov 2022 07:54:15 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.west.internal (Postfix) with ESMTP id 34A082B06016;
+        Wed,  9 Nov 2022 10:54:11 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 09 Nov 2022 10:54:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1668009250; x=1668016450; bh=H8
+        kAV/CE2ghhRaBccYp9I0jjnZy3RFX2eXZbgxEIOcI=; b=jYsBBMC74+WS9Qdasq
+        wMNLHIGiDVSgrzZY0ZZcOhQaSoY9+jgaNfcBHvli2fxtPvKu/o752qZIoecJm9t7
+        q3iK4BRv4zhO+tj/o1rg3+gpNd17oVbQdEOep/3lxK88bw32ivYQGgQhE3llAfdW
+        bFNPr2KasrDPoDYt9pA2ewg/lTaftbbXjXt1wMzGaicVGOxM4RZnMZ9u/DrgVCU5
+        GSsg8BfpxtW1s3tqj/jJYib9h7nXO9ZxDy75XeqKoX/qaoX0tREp1DZwsTxDFYG7
+        Jfn8TOxfsH54SipmyGUjIeySSH/AeP84n/0fS7FQBYJ4IuXQbLWdwdvOcFk/0s2v
+        RyHg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668009250; x=1668016450; bh=H8kAV/CE2ghhRaBccYp9I0jjnZy3
+        RFX2eXZbgxEIOcI=; b=sJn22iXFueTNEANRK/zyJZClFypl1maVA2Uvf4doanX8
+        QzbyCtmWFsSSFmz+vplYCXT0E165iQBG9su9MAVamut1B+PbE6+WRbQ67esTdM4f
+        0UwEziQwhkK+ARLr/aYvrQE0+Rdf5wsj9PHYPHjMGhiJZaFAXq7G2pslVuJi2iqm
+        73XLjGpcQ4oGp0z9/WPaeUSniOfei31oJZek9LqZwxRu0u808EUTgX7b6/cazaQ1
+        0EFL9wKepNeWfs00YaNOODjRSWG4xaxonYoL2DN4lNsTC3usU8yAMtB3MvkvWr4o
+        11gWkmOKqdD7fCMmdCdgQ9628fPgm9JR6InJHVeUYQ==
+X-ME-Sender: <xms:Ic1rY0EVG3F5LakisuAUrAOLmZVsE35ulRvyUmYllPKHKW4mPcyTWA>
+    <xme:Ic1rY9WOgrsfkD1DaJRXPGEs_wRp4kjBFxcPaLenEnjP3D5wkZF4F2UDEecMxFc7u
+    U2-TP3k0gK_SqA7Ge8>
+X-ME-Received: <xmr:Ic1rY-KGpnx0srAAs2HbQ8HWjzXNxQMUOjovPclU15PcKcP2JaNzmXxZEjckHs6Rzq3S9Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgdekudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:Ic1rY2HmUUl-sJKqyvgSao6VrbrsACcsh7Tq1tDm6bcqZTu-jtXUpw>
+    <xmx:Ic1rY6UBiogYMYGuiPP6gbHe10QEnFpJi2cMBzmKOOapBGA7HYsrrQ>
+    <xmx:Ic1rY5ONPzs7lY30EH-lC7PaXTcRtZYaTMnv18x_sh2CjcYjCZYFkQ>
+    <xmx:Is1rY3llS2AO7Kt1-eytrKad3FIIcb8_wYMoBLb-RZabFlJAYZIsvh8iQnY>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Nov 2022 10:54:08 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 7FF36103D85; Wed,  9 Nov 2022 18:54:04 +0300 (+03)
+Date:   Wed, 9 Nov 2022 18:54:04 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Hugh Dickins <hughd@google.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Subject: Re: [PATCH 4/4] mm: delay page_remove_rmap() until after the TLB has
- been flushed
-Message-ID: <Y2vM6FFQX5GlOyBs@cmpxchg.org>
-References: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
- <20221108194139.57604-4-torvalds@linux-foundation.org>
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 0/8] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20221109155404.istawiyvwr3yffag@box.shutemov.name>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <CAGtprH-av3K6YxUbz1cAsQp4w2ce35UrfBF-u7Q_qCuTNMdvzQ@mail.gmail.com>
+ <20221108004141.GF1063309@ls.amr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221108194139.57604-4-torvalds@linux-foundation.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221108004141.GF1063309@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All 4 patches look good to me from an MM and cgroup point of view.
+On Mon, Nov 07, 2022 at 04:41:41PM -0800, Isaku Yamahata wrote:
+> On Thu, Nov 03, 2022 at 05:43:52PM +0530,
+> Vishal Annapurve <vannapurve@google.com> wrote:
+> 
+> > On Tue, Oct 25, 2022 at 8:48 PM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > >
+> > > This patch series implements KVM guest private memory for confidential
+> > > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > > TDX-protected guest memory, machine check can happen which can further
+> > > crash the running host system, this is terrible for multi-tenant
+> > > configurations. The host accesses include those from KVM userspace like
+> > > QEMU. This series addresses KVM userspace induced crash by introducing
+> > > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > > via a fd-based approach, but it can never access the guest memory
+> > > content.
+> > >
+> > > The patch series touches both core mm and KVM code. I appreciate
+> > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > > reviews are always welcome.
+> > >   - 01: mm change, target for mm tree
+> > >   - 02-08: KVM change, target for KVM tree
+> > >
+> > > Given KVM is the only current user for the mm part, I have chatted with
+> > > Paolo and he is OK to merge the mm change through KVM tree, but
+> > > reviewed-by/acked-by is still expected from the mm people.
+> > >
+> > > The patches have been verified in Intel TDX environment, but Vishal has
+> > > done an excellent work on the selftests[4] which are dedicated for this
+> > > series, making it possible to test this series without innovative
+> > > hardware and fancy steps of building a VM environment. See Test section
+> > > below for more info.
+> > >
+> > >
+> > > Introduction
+> > > ============
+> > > KVM userspace being able to crash the host is horrible. Under current
+> > > KVM architecture, all guest memory is inherently accessible from KVM
+> > > userspace and is exposed to the mentioned crash issue. The goal of this
+> > > series is to provide a solution to align mm and KVM, on a userspace
+> > > inaccessible approach of exposing guest memory.
+> > >
+> > > Normally, KVM populates secondary page table (e.g. EPT) by using a host
+> > > virtual address (hva) from core mm page table (e.g. x86 userspace page
+> > > table). This requires guest memory being mmaped into KVM userspace, but
+> > > this is also the source where the mentioned crash issue can happen. In
+> > > theory, apart from those 'shared' memory for device emulation etc, guest
+> > > memory doesn't have to be mmaped into KVM userspace.
+> > >
+> > > This series introduces fd-based guest memory which will not be mmaped
+> > > into KVM userspace. KVM populates secondary page table by using a
+> > 
+> > With no mappings in place for userspace VMM, IIUC, looks like the host
+> > kernel will not be able to find the culprit userspace process in case
+> > of Machine check error on guest private memory. As implemented in
+> > hwpoison_user_mappings, host kernel tries to look at the processes
+> > which have mapped the pfns with hardware error.
+> > 
+> > Is there a modification needed in mce handling logic of the host
+> > kernel to immediately send a signal to the vcpu thread accessing
+> > faulting pfn backing guest private memory?
+> 
+> mce_register_decode_chain() can be used.  MCE physical address(p->mce_addr)
+> includes host key id in addition to real physical address.  By searching used
+> hkid by KVM, we can determine if the page is assigned to guest TD or not. If
+> yes, send SIGBUS.
+> 
+> kvm_machine_check() can be enhanced for KVM specific use.  This is before
+> memory_failure() is called, though.
+> 
+> any other ideas?
 
-And with the pte still locked over rmap, we can continue with the
-removal of the cgroup-specific locking and rely on native MM
-synchronization, which is great as well.
+That's too KVM-centric. It will not work for other possible user of
+restricted memfd.
 
-Thanks,
-Johannes
+I tried to find a way to get it right: we need to get restricted memfd
+code info about corrupted page so it can invalidate its users. On the next
+request of the page the user will see an error. In case of KVM, the error
+will likely escalate to SIGBUS.
+
+The problem is that core-mm code that handles memory failure knows nothing
+about restricted memfd. It only sees that the page belongs to a normal
+memfd.
+
+AFAICS, there's no way to get it intercepted from the shim level. shmem
+code has to be patches. shmem_error_remove_page() has to call into
+restricted memfd code.
+
+Hugh, are you okay with this? Or maybe you have a better idea?
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
