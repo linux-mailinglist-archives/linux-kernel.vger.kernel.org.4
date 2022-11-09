@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986826222A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF0D6222A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiKIDgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 22:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S230140AbiKIDgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 22:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiKIDgj (ORCPT
+        with ESMTP id S230225AbiKIDgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 22:36:39 -0500
+        Tue, 8 Nov 2022 22:36:50 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D6C10EF
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:35:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03C3E6B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:35:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667964945;
+        s=mimecast20190719; t=1667964950;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iF0b5s+98G4TrJkekhHZ+dOQgcRNsa+t4EO2IaaGQDs=;
-        b=eR125MQmuJgx7Cyp7Wadha+T2RJ6LdUhev3C/Vj5uWsTolWQL65AcZB9XCcZ8T/nGOH6gM
-        OSBWJsJvu8sVRqH5KKZ9bDBGyXX6BRq3fFNLbgXyRGbgj1XmoBZMekwU+2CX+ddJGv1eT/
-        bX1GkPqDcMjVzPYCODde2JZzBNJ2jKk=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nbbRgpejA7sfz74mbd3BvkH0wE+DwK1tqMCX8jqv3XU=;
+        b=aZurhOccs5cRnATbUB1fQe7BgguZbfchyoBFhCrjWO98ny2dKAbYXIK2PGibilgent5joM
+        sKQe6jnsdvfEjDP6Pzunc4PPbuLMlHlm7r0veQ9dd8VG205F40f6WfxSnLNEemO27evoQf
+        zBvuG4BzPM5481rwf8fgWrL+MAKXdy4=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-Sgm9KCncMEipjdTeGIl6GQ-1; Tue, 08 Nov 2022 22:35:42 -0500
-X-MC-Unique: Sgm9KCncMEipjdTeGIl6GQ-1
+ us-mta-451-vGWf6ADhPLuE-5SDkR8Wmw-1; Tue, 08 Nov 2022 22:35:46 -0500
+X-MC-Unique: vGWf6ADhPLuE-5SDkR8Wmw-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14B98101A528;
-        Wed,  9 Nov 2022 03:35:42 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5C8AA101A52A;
+        Wed,  9 Nov 2022 03:35:46 +0000 (UTC)
 Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-86.pek2.redhat.com [10.72.12.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C33B10197;
-        Wed,  9 Nov 2022 03:35:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D78E610197;
+        Wed,  9 Nov 2022 03:35:42 +0000 (UTC)
 From:   Baoquan He <bhe@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
         stephen.s.brennan@oracle.com, urezki@gmail.com, hch@infradead.org,
         Baoquan He <bhe@redhat.com>
-Subject: [PATCH RFC 0/3] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
-Date:   Wed,  9 Nov 2022 11:35:31 +0800
-Message-Id: <20221109033535.269229-1-bhe@redhat.com>
+Subject: [PATCH RFC 1/3] mm/vmalloc.c: add used_map into vmap_block to track space of vmap_block
+Date:   Wed,  9 Nov 2022 11:35:32 +0800
+Message-Id: <20221109033535.269229-2-bhe@redhat.com>
+In-Reply-To: <20221109033535.269229-1-bhe@redhat.com>
+References: <20221109033535.269229-1-bhe@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -59,76 +62,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Problem:
-***
-Stephen reported vread() will skip vm_map_ram areas when reading out
-/proc/kcore with drgn utility. Please see below link to get more about
-it:
+In one vmap_block area, there could be three types of regions: used
+region which is allocated through vb_alloc(), dirty region which is
+freed through vb_free() and free region. Among them, only used region
+has available data, while there's no way to track those used regions
+currently.
 
-  /proc/kcore reads 0's for vmap_block
-  https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
+Here, add bitmap field used_map into vmap_block, and set/clear it during
+allocation or freeing regions of vmap_block area.
 
-Root cause:
-***
-The normal vmalloc API uses struct vmap_area to manage the virtual
-kernel area allocated and associate a vm_struct to store more information
-and passed out. However, area reserved through vm_map_ram() interface
-doesn't allocate vm_struct to bind with. So the current code in vread()
-will skip the vm_map_ram area by 'if (!va->vm)' conditional checking.
+This is a preparatoin for later use.
 
-Solution:
-***
-There are two types of vm_map_ram area. One is the whole vmap_area being
-reserved and mapped at one time; the other is the whole vmap_area with
-VMAP_BLOCK_SIZE size being reserved at one time, while mapped into split
-regions with smaller size several times.
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+ mm/vmalloc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-In patch 1 and 2, add flags into struct vmap_area to mark these two types
-of vm_map_ram area, meanwhile add bitmap field used_map into struct
-vmap_block to mark those regions being used to differentiate with dirty
-and free regions.
-
-With the help of above vmap_area->flags and vmap_block->used_map, we can
-recognize them in vread() and handle them respectively.
-
-Test:
-***
-I don't know what system has vm_map_ram() area. So just pass compiling
-test and execute "makedumpfile --mem-usage /proc/kcore" to guarantee it
-won't impact the old kcore reading.
-
-	[root@ibm-x3950x6-01 ~]# free -h
-	               total        used        free      shared  buff/cache   available
-	Mem:           3.9Ti       3.6Gi       3.9Ti       7.0Mi       497Mi       3.9Ti
-	Swap:          8.0Gi          0B       8.0Gi
-	[root@ibm-x3950x6-01 ~]# makedumpfile --mem-usage /proc/kcore
-	The kernel version is not supported.
-	The makedumpfile operation may be incomplete.
-	
-	TYPE		PAGES			EXCLUDABLE	DESCRIPTION
-	----------------------------------------------------------------------
-	ZERO		327309          	yes		Pages filled with zero
-	NON_PRI_CACHE	81750           	yes		Cache pages without private flag
-	PRI_CACHE	83981           	yes		Cache pages with private flag
-	USER		12735           	yes		User process pages
-	FREE		1055688908      	yes		Free pages
-	KERN_DATA	17464385        	no		Dumpable kernel data 
-	
-	page size:		4096            
-	Total pages on system:	1073659068      
-	Total size on system:	4397707542528    Byte
-
-
-Baoquan He (3):
-  mm/vmalloc.c: add used_map into vmap_block to track space of
-    vmap_block
-  mm/vmalloc.c: add flags to mark vm_map_ram area
-  mm/vmalloc.c: allow vread() to read out vm_map_ram areas
-
- include/linux/vmalloc.h |  1 +
- mm/vmalloc.c            | 81 +++++++++++++++++++++++++++++++++++++----
- 2 files changed, 75 insertions(+), 7 deletions(-)
-
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index ccaa461998f3..5d3fd3e6fe09 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1896,6 +1896,7 @@ struct vmap_block {
+ 	spinlock_t lock;
+ 	struct vmap_area *va;
+ 	unsigned long free, dirty;
++	DECLARE_BITMAP(used_map, VMAP_BBMAP_BITS);
+ 	unsigned long dirty_min, dirty_max; /*< dirty range */
+ 	struct list_head free_list;
+ 	struct rcu_head rcu_head;
+@@ -1972,10 +1973,12 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+ 	vb->va = va;
+ 	/* At least something should be left free */
+ 	BUG_ON(VMAP_BBMAP_BITS <= (1UL << order));
++	bitmap_zero(vb->used_map, VMAP_BBMAP_BITS);
+ 	vb->free = VMAP_BBMAP_BITS - (1UL << order);
+ 	vb->dirty = 0;
+ 	vb->dirty_min = VMAP_BBMAP_BITS;
+ 	vb->dirty_max = 0;
++	bitmap_set(vb->used_map, 0, (1UL << order));
+ 	INIT_LIST_HEAD(&vb->free_list);
+ 
+ 	vb_idx = addr_to_vb_idx(va->va_start);
+@@ -2081,6 +2084,7 @@ static void *vb_alloc(unsigned long size, gfp_t gfp_mask)
+ 		pages_off = VMAP_BBMAP_BITS - vb->free;
+ 		vaddr = vmap_block_vaddr(vb->va->va_start, pages_off);
+ 		vb->free -= 1UL << order;
++		bitmap_set(vb->used_map, pages_off, (1UL << order));
+ 		if (vb->free == 0) {
+ 			spin_lock(&vbq->lock);
+ 			list_del_rcu(&vb->free_list);
+@@ -2114,6 +2118,9 @@ static void vb_free(unsigned long addr, unsigned long size)
+ 	order = get_order(size);
+ 	offset = (addr & (VMAP_BLOCK_SIZE - 1)) >> PAGE_SHIFT;
+ 	vb = xa_load(&vmap_blocks, addr_to_vb_idx(addr));
++	spin_lock(&vb->lock);
++	bitmap_clear(vb->used_map, offset, (1UL << order));
++	spin_unlock(&vb->lock);
+ 
+ 	vunmap_range_noflush(addr, addr + size);
+ 
 -- 
 2.34.1
 
