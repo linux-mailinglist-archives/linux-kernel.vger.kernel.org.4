@@ -2,142 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F173622A41
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C65622A46
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiKILUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
+        id S231261AbiKILVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbiKILUm (ORCPT
+        with ESMTP id S229723AbiKILUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:20:42 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C76625C48
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:20:41 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id u11so25264390ljk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:20:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=88yTM1uJKEU4nUryrFzcHBneq7U0QfCFix/2TI4Onpk=;
-        b=DfkZOEZylfFUnSWpURoh/sz7HSBi78Kh0RQ7SssObIac18QqVqnmtclaK6tpj9/Czv
-         JBWGdhgT+SmtmlSSh92nInbwROaBgh3JSgt7eTSJ3jxcKHn5yrKoqvmWar3FimbjYLwQ
-         F/tFC4zzeXf4IKywa7ksSp2XWOHlyVcSU6Ytd7CWzdcfGWDzlr5X6oBCnZZFcdo4yKcm
-         SH617uPem+06DdgPb0Vl7tv7YF/FY7A4OkmnNPUblYpuSijCVUdOrMUgYwohWfqAQciM
-         P4fgTN0iJypSm6BI6nmFPhOQjUf37bzOiz5SxHWS9NozP+K7ucNmD4TX4Id5KQU5N7eT
-         ysOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=88yTM1uJKEU4nUryrFzcHBneq7U0QfCFix/2TI4Onpk=;
-        b=UrYrV+/Nzfhj8h+wETQ71GuN4WdEQt1de1lHUjjXI4qVCloKTgF1yCPyn9EO5UU592
-         oXSxAcq1sMkWiopqiTwo7AXSst+PiIjxzsPLMlm7cC0lAzAjKnhSEhAyGd/iRoMJQ/E5
-         7GNYnZ8ndyc6tYCURD7Vpni5tqwzT/XKtjGUyxInfkh11P1oOKW+6jvWAugFRi2qCJ8c
-         ft71iRoNVTF7R1GaXqeaqJYxe3oL3E9rQYQHuLgQhgc2+1lcDwKrA9Slv8vn3cu3jocp
-         G+y9WihLIt7mcvi+gxUwrjs857FSz8ZF+HbmlJ4j05Dx4EbOanASKImrW1fe28Ppu0/o
-         dY9Q==
-X-Gm-Message-State: ACrzQf1qjiNGlVIyKCyymNhk5EaBY6SVXqtAKvaBNw4pth+0EOLhQFQa
-        LYmporrFH3hFwQHTCBj9ySk/Ew==
-X-Google-Smtp-Source: AMsMyM7gOlyu5kF/XFyAzve3EYtqXVo+h9qSupfEhKOd0KIj7d1NxKjvrTEy/mIcW1/4AID0bhfUSA==
-X-Received: by 2002:a2e:6e13:0:b0:26d:f70e:3415 with SMTP id j19-20020a2e6e13000000b0026df70e3415mr7962169ljc.216.1667992839869;
-        Wed, 09 Nov 2022 03:20:39 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id bd22-20020a05651c169600b0027703e09b71sm2066440ljb.64.2022.11.09.03.20.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 03:20:39 -0800 (PST)
-Message-ID: <a9901cbd-8af3-04aa-12f5-df7c563f873a@linaro.org>
-Date:   Wed, 9 Nov 2022 12:20:38 +0100
+        Wed, 9 Nov 2022 06:20:51 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673512098E;
+        Wed,  9 Nov 2022 03:20:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667992850; x=1699528850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XKfhN57F5ActHbVyfh0PVl+GnpyqZMZV64TrYNRFF8w=;
+  b=YJq1t1dnIij8CP9fISPFsbZIcjopSv0iYwaRxdS2gpHqrRohGfyZSalT
+   Oh4UfoLSPOk0s/6K0Saz/Wx1qazhTWMVxLBCH+anQH5FWiqovEjm8ldXG
+   NKlG2OP5HwFxrU8u/dTGNKg54I7jh/hyqn+c7Mw2O0d31Px5OeNljmBp4
+   AhWLWuIp20PinN6sB2zrmLXZweFzmb632ic0Lg2POPgwNAAEyKPgW86cj
+   AAUn0GOTWFgVQnFcngY4p499NxuPScgnF5l3CFH4atRrwAX3pVMrHajoo
+   Qu1ofnWzqwrfjftN30u7PhcZg6NL0O8A9if2KkLz5GZ4UcxjJMdzpbgd9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="309663830"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="309663830"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 03:20:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="761849526"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="761849526"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 09 Nov 2022 03:20:48 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1osj8Q-009iPq-2L;
+        Wed, 09 Nov 2022 13:20:46 +0200
+Date:   Wed, 9 Nov 2022 13:20:46 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] gpiolib: add support for software nodes
+Message-ID: <Y2uNDmRefzPvUu3P@smile.fi.intel.com>
+References: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
+ <20221031-gpiolib-swnode-v2-6-81f55af5fa0e@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 5/6] can: m_can: Add ECC functionality for message RAM
-Content-Language: en-US
-To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-References: <20221109100928.109478-1-vivek.2311@samsung.com>
- <CGME20221109100302epcas5p276282a3a320649661939dcb893765fbf@epcas5p2.samsung.com>
- <20221109100928.109478-6-vivek.2311@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109100928.109478-6-vivek.2311@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031-gpiolib-swnode-v2-6-81f55af5fa0e@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 11:09, Vivek Yadav wrote:
-> Whenever MCAN Buffers and FIFOs are stored on message ram, there are
-> inherent risks of corruption known as single-bit errors.
+On Tue, Nov 08, 2022 at 04:26:51PM -0800, Dmitry Torokhov wrote:
+> Now that static device properties understand notion of child nodes and
+> references, let's teach gpiolib to handle them:
 > 
-> Enable error correction code (ECC) data integrity check for Message RAM
-> to create valid ECC checksums.
+> - GPIOs are represented as a references to software nodes representing
+>   gpiochip
+> - references must have 2 arguments - GPIO number within the chip and
+>   GPIO flags (GPIO_ACTIVE_LOW/GPIO_ACTIVE_HIGH, etc)
+> - a new PROPERTY_ENTRY_GPIO() macro is supplied to ensure the above
+> - name of the software node representing gpiochip must match label of
+>   the gpiochip, as we use it to locate gpiochip structure at runtime
 > 
-> ECC uses a respective number of bits, which are added to each word as a
-> parity and that will raise the error signal on the corruption in the
-> Interrupt Register(IR).
+> The following illustrates use of software nodes to describe a "System"
+> button that is currently specified via use of gpio_keys_platform_data
+> in arch/mips/alchemy/board-mtx1.c. It follows bindings specified in
+> Documentation/devicetree/bindings/input/gpio-keys.yaml.
 > 
-> This indicates either bit error detected and Corrected(BEC) or No bit
-> error detected when reading from Message RAM.
+> static const struct software_node mxt1_gpiochip2_node = {
+> 	.name = "alchemy-gpio2",
+> };
 > 
-> Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
-> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
+> static const struct property_entry mtx1_gpio_button_props[] = {
+> 	PROPERTY_ENTRY_U32("linux,code", BTN_0),
+> 	PROPERTY_ENTRY_STRING("label", "System button"),
+> 	PROPERTY_ENTRY_GPIO("gpios", &mxt1_gpiochip2_node, 7, GPIO_ACTIVE_LOW),
+> 	{ }
+> };
+> 
+> Similarly, arch/arm/mach-tegra/board-paz00.c can be converted to:
+> 
+> static const struct software_node tegra_gpiochip_node = {
+> 	.name = "tegra-gpio",
+> };
+> 
+> static struct property_entry wifi_rfkill_prop[] __initdata = {
+> 	PROPERTY_ENTRY_STRING("name", "wifi_rfkill"),
+> 	PROPERTY_ENTRY_STRING("type", "wlan"),
+> 	PROPERTY_ENTRY_GPIO("reset-gpios",
+> 			    &tegra_gpiochip_node, 25, GPIO_ACTIVE_HIGH);
+> 	PROPERTY_ENTRY_GPIO("shutdown-gpios",
+> 			    &tegra_gpiochip_node, 85, GPIO_ACTIVE_HIGH);
+> 	{ },
+> };
+> 
+> static struct platform_device wifi_rfkill_device = {
+> 	.name	= "rfkill_gpio",
+> 	.id	= -1,
+> };
+> 
+> ...
+> 
+> 	software_node_register(&tegra_gpiochip_node);
+> 	device_create_managed_software_node(&wifi_rfkill_device.dev,
+> 					    wifi_rfkill_prop, NULL);
 
-(...)
+...
 
->  
-> +static int m_can_plat_init(struct m_can_classdev *cdev)
+> +static struct gpio_chip *swnode_get_chip(struct fwnode_handle *fwnode)
 > +{
-> +	struct  m_can_ecc_regmap *ecc_cfg = &cdev->ecc_cfg_sys;
-> +	struct device_node *np = cdev->dev->of_node;
-> +	int ret = 0;
+> +	const struct software_node *chip_node;
+> +	struct gpio_chip *chip;
 > +
-> +	if (cdev->mram_cfg_flag != ECC_ENABLE) {
-> +		/* Initialize mcan message ram */
-> +		ret = m_can_init_ram(cdev);
+> +	chip_node = to_software_node(fwnode);
+> +	if (!chip_node || !chip_node->name)
+> +		return ERR_PTR(-EINVAL);
+
+> +	chip = gpiochip_find((void *)chip_node->name,
+> +			     swnode_gpiochip_match_name);
+
+One line?
+
+> +	if (!chip)
+> +		return ERR_PTR(-EPROBE_DEFER);
 > +
-> +		if (ret)
-> +			return ret;
+> +	return chip;
+
+As below you can use Elvis here as well, up to you.
+
+	return chip ?: ERR_PTR(...);
+
+> +}
+
+...
+
+> +	desc = gpiochip_get_desc(chip, args.args[0]);
+> +	*flags = args.args[1]; /* We expect native GPIO flags */
 > +
-> +		cdev->mram_cfg_flag = ECC_ENABLE;
+> +	pr_debug("%s: parsed '%s' property of node '%pfwP[%d]' - status (%d)\n",
+> +		 __func__, propname, fwnode, idx, PTR_ERR_OR_ZERO(desc));
+
+%pe ?
+
+> +	return desc;
+
+...
+
+> +	while (fwnode_property_get_reference_args(fwnode, propname, NULL,
+> +						  0, count, &args) == 0) {
+
+I would move 0 to the previous line.
+
+> +		fwnode_handle_put(args.fwnode);
+> +		count++;
 > +	}
+
+...
+
+>  int gpiod_count(struct device *dev, const char *con_id)
+>  {
+> -	const struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
+> -	int count = -ENOENT;
+> +	struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
+
+Why dropping const?
+
+> +	int count;
+
+Why this change is needed?
+
+>  	if (is_of_node(fwnode))
+>  		count = of_gpio_get_count(dev, con_id);
+>  	else if (is_acpi_node(fwnode))
+>  		count = acpi_gpio_count(dev, con_id);
+> +	else if (is_software_node(fwnode))
+> +		count = swnode_gpio_count(fwnode, con_id);
+> +	else
+> +		count = -ENOENT;
+
+...
+
+> +#include <dt-bindings/gpio/gpio.h>
+
+Not sure why we have this here.
+
+> +#include <linux/property.h>
 > +
-> +	if (ecc_cfg->ecc_cfg_flag != ECC_ENABLE) {
-> +		/* configure error code check for mram */
-> +		if (!ecc_cfg->syscon) {
-> +			ecc_cfg->syscon =
-> +			syscon_regmap_lookup_by_phandle_args(np,
-> +							     "tesla,mram-ecc-cfg"
-> +							     , 1,
+> +#define PROPERTY_ENTRY_GPIO(_name_, _chip_node_, _idx_, _flags_) \
+> +	PROPERTY_ENTRY_REF(_name_, _chip_node_, _idx_, _flags_)
 
-, goes to previous line
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> +							     &ecc_cfg->reg);
-> +		}
-> +
-> +		if (IS_ERR(ecc_cfg->syscon)) {
-> +			dev_err(cdev->dev, "couldn't get the syscon reg!\n");
-
-Didn't you just break all platforms using ECC?
-
-Best regards,
-Krzysztof
 
