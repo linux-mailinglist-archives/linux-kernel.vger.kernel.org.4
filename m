@@ -2,121 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979946235D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48016235D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiKIV2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S231867AbiKIVaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKIV2s (ORCPT
+        with ESMTP id S229447AbiKIVax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:28:48 -0500
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B27F647B;
-        Wed,  9 Nov 2022 13:28:48 -0800 (PST)
-Received: by mail-pf1-f171.google.com with SMTP id k15so17899349pfg.2;
-        Wed, 09 Nov 2022 13:28:48 -0800 (PST)
+        Wed, 9 Nov 2022 16:30:53 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226497659;
+        Wed,  9 Nov 2022 13:30:52 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso2226978wmo.1;
+        Wed, 09 Nov 2022 13:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=InpZuUPAqdLNRZfUvkFqKxqkR/PtlXfF3L7vmxZzkAM=;
+        b=o2OxATjDf+ddXmI+ZuHWylIuDNXI/Q3lJI1hgIb5Hw1zNvqU8sPS3yrHEj7/xH1kJr
+         KnAIyHlE9RRxhLvGurvT8fOf4SLmodCrLFbhfUUoVN1LmNfsbqy3x+GKEurhn51cYcTO
+         4ygzySO3nm6rCI1FHC7Hyw6CQ/+RdEOOt9XS0vOjpWrvTcouSr129TH53UlUc/S229CZ
+         /v6Tp0nQvfIjfHNGt3yvUtp0bwAd4qnNwfYYB/7c5itgkPlxoaUIK+UTTw3paZq88+Y9
+         sKFxzKzj76BXyW5DUAhZi1FgFSjghhu384isFZpqFoL1GJNQ5sHjDSrZty5WFYJyulRg
+         QeGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LdAQJWTrd4JcStydM8JyAFPJqn01KyaOFQuGdHMw6I=;
-        b=cxNNchvItesiBGWnOyJntZLzwXh9jVnFEjyhhemzF4UkqAtGrwJC3N3UYHNJybkORU
-         etjValgJK6zfk1y79D3T5l04arqngCQf+JIpKhAMG8A6uDOEoQOFxH13Z7MR5a9RV7TL
-         HBACwHAdgZpYMWxVKn/BZ/Oh3cP/5ykFr4Zln7UbZleZwT8NoG4/4F7mMY9AMnL1ndME
-         Qh+4vKYGwqWWWzTUuRodg5aANlVOE+ysXmtDuZW9LbyOmtIZOA6+X58+JA3VJMrPVUGN
-         IUAftbNPU3RR7MCevMp5MQCLVdrbTT9JpGtHnRStaeH6S4QL/VY8zywGX245j2gl/KAH
-         1vFw==
-X-Gm-Message-State: ACrzQf0v0tP7hDCy3KR2anYh9rKNMNNM0c/bDK5Q7AYtP0sdoheewlZK
-        EJGv7v4opEE4lJB3Zl+957E=
-X-Google-Smtp-Source: AMsMyM7g2PdQbZkjCGHGNaX4mYqFciebR+sudQXUYX1ncYUZRYIY31kzYCyf2dbiHsvlJWf4LKCBLA==
-X-Received: by 2002:a05:6a00:22d6:b0:56d:39a2:14ae with SMTP id f22-20020a056a0022d600b0056d39a214aemr57482266pfj.80.1668029327769;
-        Wed, 09 Nov 2022 13:28:47 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:68b6:5dae:a00c:c3b? ([2620:15c:211:201:68b6:5dae:a00c:c3b])
-        by smtp.gmail.com with ESMTPSA id k92-20020a17090a4ce500b00211d5f93029sm1655557pjh.24.2022.11.09.13.28.45
+        bh=InpZuUPAqdLNRZfUvkFqKxqkR/PtlXfF3L7vmxZzkAM=;
+        b=YdmoCSfwE9vZa0UnyO1C65/rsiRRNdGW5IIDoIvwAaDzw+Be/XHkAeLMtNbtn6zlQo
+         5nS3Gz/sinKE1itiFDgrIoA3Od8clv9x+yRg0ct6bcJnivPAu77w1EnbuEY6LnR/SUZu
+         A9oVj32iQ0I3RCHfizrff0h/kl2FY5lwlI6j/plVpqPJ5ASW/9cO6krSm9WfDn4oAEC6
+         8W1EUumx5xB16JVdloMn4z3gh4hyosk3jaFZ3M1U3qlNYZQmB2jI4UEDWLEGiDSXPAb2
+         /55J0vtY+RRfUvCLGYqIyimWeE8vQlRMrEgk+ga8JjDlUylN+FZR6t8cROBmp91ufbYx
+         kgBw==
+X-Gm-Message-State: ACrzQf3T1sGfG5LitNRi4aLX/kTMblfCGSZaFPr/ArayVPlOcUMlnnPK
+        H1DeH74XTeGOOZwq6CP8lGw=
+X-Google-Smtp-Source: AMsMyM7Xg0MQAqTploaku9/TLb3oH1G1wJzYoLJf+jJZ3pmA1+Corva73B/qa9wvKlcZ7YytJnh4qg==
+X-Received: by 2002:a05:600c:491c:b0:3cf:7336:8704 with SMTP id f28-20020a05600c491c00b003cf73368704mr34363578wmp.101.1668029450528;
+        Wed, 09 Nov 2022 13:30:50 -0800 (PST)
+Received: from 168.52.45.77 (201.ip-51-68-45.eu. [51.68.45.201])
+        by smtp.gmail.com with ESMTPSA id e8-20020a5d5948000000b0023657e1b97esm14304813wri.11.2022.11.09.13.30.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 13:28:46 -0800 (PST)
-Message-ID: <d934fe3b-df58-838f-a5cb-f26c05500609@acm.org>
-Date:   Wed, 9 Nov 2022 13:28:44 -0800
+        Wed, 09 Nov 2022 13:30:49 -0800 (PST)
+Message-ID: <ac1d556f-fe51-1644-0e49-f7b8cf628969@gmail.com>
+Date:   Wed, 9 Nov 2022 22:30:46 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 07/16] ufs: core: mcq: Calculate queue depth
+User-Agent: nano 6.4
+Subject: Re: [PATCH 3/3] Bluetooth: btusb: Add a parameter to let users
+ disable the fake CSR force-suspend hack
 Content-Language: en-US
-To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
-        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
-        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
-        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1668022680.git.quic_asutoshd@quicinc.com>
- <fb85bf2b7dd3126b3168ce4613481365da291db5.1668022680.git.quic_asutoshd@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <fb85bf2b7dd3126b3168ce4613481365da291db5.1668022680.git.quic_asutoshd@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, luiz.von.dentz@intel.com,
+        quic_zijuhu@quicinc.com, hdegoede@redhat.com,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, Jack <ostroffjh@users.sourceforge.net>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+References: <20221029202454.25651-1-swyterzone@gmail.com>
+ <20221029202454.25651-3-swyterzone@gmail.com>
+ <CABBYNZKnw+b+KE2=M=gGV+rR_KBJLvrxRrtEc8x12W6PY=LKMw@mail.gmail.com>
+From:   Swyter <swyterzone@gmail.com>
+In-Reply-To: <CABBYNZKnw+b+KE2=M=gGV+rR_KBJLvrxRrtEc8x12W6PY=LKMw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_HELO_IP_MISMATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/22 11:41, Asutosh Das wrote:
-> +int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hba)
-> +{
-> +	int mac;
-> +
-> +	/* Mandatory to implement get_hba_mac() */
-> +	mac = ufshcd_mcq_vops_get_hba_mac(hba);
-> +	if (mac < 0) {
-> +		dev_err(hba->dev, "Failed to get mac, err=%d\n", mac);
-> +		return mac;
-> +	}
-> +
-> +	/*  MAC is a 0 based value. */
-> +	mac += 1;
+On 09/11/2022 21:49, Luiz Augusto von Dentz wrote:
+> Hi Ismael,
+> 
+> On Sat, Oct 29, 2022 at 1:25 PM Ismael Ferreras Morezuelas
+> <swyterzone@gmail.com> wrote:
+>>
+>> A few users have reported that their cloned Chinese dongle doesn't
+>> work well with the hack Hans de Goede added, that tries this
+>> off-on mechanism as a way to unfreeze them.
+>>
+>> It's still more than worthwhile to have it, as in the vast majority
+>> of cases it either completely brings dongles to life or just resets
+>> them harmlessly as it already happens during normal USB operation.
+>>
+>> This is nothing new and the controllers are expected to behave
+>> correctly. But yeah, go figure. :)
+>>
+>> For that unhappy minority we can easily handle this edge case by letting
+>> users disable it via our «btusb.disable_fake_csr_forcesuspend_hack=1» kernel option.
+> 
+> Don't really like the idea of adding module parameter for device
+> specific problem.
 
-Please make ufshcd_mcq_vops_get_hba_mac() return a 1-based value. The 
-0-based convention is useful for bit-constrained device registers but is 
-confusing when not reading from a hardware register.
+It's not for a single device, it's for a whole class of unnamed devices
+that are currently screwed even after all this.
 
-> +	/*
-> +	 * max. value of bqueuedepth = 256, mac is host dependent.
-> +	 * It is mandatory for UFS device to define bQueueDepth if
-> +	 * shared queuing architecture is enabled.
-> +	 */
-> +	return min_t(int, mac, hba->dev_info.bqueuedepth);
 
-According to the UFS specification bQueueDepth is zero if there is one 
-queue per logical unit inside the device. Should a warning statement be 
-added that reports a complaint if bQueueDepth == 0 since the above code 
-does not support bQueueDepth == 0? I'm not sure whether any UFS devices 
-exist that use per-LU queuing.
+>> -               ret = pm_runtime_suspend(&data->udev->dev);
+>> -               if (ret >= 0)
+>> -                       msleep(200);
+>> -               else
+>> -                       bt_dev_warn(hdev, "CSR: Couldn't suspend the device for our Barrot 8041a02 receive-issue workaround");
+>> +                       ret = pm_runtime_suspend(&data->udev->dev);
+>> +                       if (ret >= 0)
+>> +                               msleep(200);
+>> +                       else
+>> +                               bt_dev_warn(hdev, "CSR: Couldn't suspend the device for our Barrot 8041a02 receive-issue workaround");
+> 
+> Is this specific to Barrot 8041a02? Why don't we add a quirk then?
+> 
 
-> +static int ufs_qcom_get_hba_mac(struct ufs_hba *hba)
-> +{
-> +	/* Default is 32, but Qualcomm HC supports upto 64 */
+We don't know how specific it is, we suspect the getting stuck thing happens with Barrot controllers,
+but in this world of lasered-out counterfeit chip IDs you can never be sure. Unless someone decaps them.
 
-I think that "default is 32" should be left out since the code that 
-reads the MAC register has been removed.
+Hans added that name because it's the closest thing we have, but this applies to a lot of chips.
+So much that now we do the hack by default, for very good reasons.
 
-Additionally, please change "upto" into "up to".
+So please reconsider, this closes the gap.
 
-Thanks,
+With this last patch we go from ~+90% to almost ~100%, as the rest of generic quirks we added
+don't really hurt; even if a particular dongle only needs a few of the zoo of quirks we set,
+it's alright if we vaccinate them against all of these, except some are "allergic"
+against this particular "vaccine". Let people skip this one. :-)
 
-Bart.
+You know how normal BT controllers are utterly and inconsistently broken, now imagine you have a whole host
+of vendors reusing a VID/PID/version/subversion, masking as a CSR for bizarre reasons to avoid paying
+any USB-IF fees, or whatever. That's what we are fighting against here.
