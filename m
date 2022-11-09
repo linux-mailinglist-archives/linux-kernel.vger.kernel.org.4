@@ -2,166 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1D4623799
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3DE6237B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 00:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiKIXkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 18:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
+        id S231939AbiKIXtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 18:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKIXkq (ORCPT
+        with ESMTP id S231908AbiKIXte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 18:40:46 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2047.outbound.protection.outlook.com [40.107.237.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FE819016;
-        Wed,  9 Nov 2022 15:40:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GUL8AIUveIcwUPEBnlYgaqx775DGnC2Y8WzoR/NdONyj73hLR0v8MRGPZuf3q1Igz2vC+1oBty0U2cFQHvqzkryVX6GSJ00rvT+GX1cb+ftTazNNdkeH1PNWBsm2LiRA2+nv5mWUxY0MM3fRWOYofDyizaeP/aSCRxyLEk72APm2GN7eS9EnPJpmGpjFPz7XjLXMNzEQbk7LB23F4w1XHPSjnwbkcJTjLnUro4jGpDOr8Ebm2YoR2visJyBS53Vpo+BfIXUnKRzYMrmAvmzuV3ekGuB+kvEJE0vUnkrQYwkT+uloqFdvOyogfEJZy4ZuEYlmUK1r2MAkFCrGYkYiLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cTfm7foHzCbZec/7hfj3S/VVh0uBxftPFvfC08+naRA=;
- b=PXrIjWG+kGOZIDW6+I1+VXlOiLlxDxpgrH7l4goLrqr3ec0no1OGaYERKphMTVeLb0K+c3xHwW7EIuHBgoxbV/b1o8i2HFgN1OC/0zX2G5sIJZZSBjgy2aOaX+TOZzk1CXK0Lgc39rgnkHKVPIXz1npeLIuhoGXnj5dM2fCeJK5V1ITSrmwxlj0D6fjMJ/hLMgLFSQQ/hYChanhYFchP/08GAPxWhhCm6T0q6SsDtwbGYvqurlz6NH0GeyzevWmoVp8rB8tvb2+vw/Bcl8e8Hu7Zn13GTSCwWfFSZXjDMGohHGWMMH2pj4leyF7UtqMHQ2gjCZ02JjTemarF9Nudrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cTfm7foHzCbZec/7hfj3S/VVh0uBxftPFvfC08+naRA=;
- b=PzXXQG3dMT6z0wM+NhyxcZILOabVAhowSoDHELgQdgQA/8QhcXlCntygEkOrCLYjGEkeHXNOKknwu7+Q/S2k36E1A5BPgX5PWZIXLHlRif9XuMBRFof2lhcWMJI7Muc9jOncFSPwvOQ760Wahug+WBhixNhk6TwnCqzKA0ULoXQ=
-Received: from BN7PR06CA0061.namprd06.prod.outlook.com (2603:10b6:408:34::38)
- by BL1PR12MB5301.namprd12.prod.outlook.com (2603:10b6:208:31f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
- 2022 23:39:22 +0000
-Received: from BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:34:cafe::8e) by BN7PR06CA0061.outlook.office365.com
- (2603:10b6:408:34::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27 via Frontend
- Transport; Wed, 9 Nov 2022 23:39:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT023.mail.protection.outlook.com (10.13.177.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 23:39:22 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 17:39:19 -0600
-Date:   Wed, 9 Nov 2022 17:39:04 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-CC:     <luto@kernel.org>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, <seanjc@google.com>, <pbonzini@redhat.com>,
-        <jgross@suse.com>, <tiala@microsoft.com>, <kirill@shutemov.name>,
-        <jiangshan.ljs@antgroup.com>, <peterz@infradead.org>,
-        <ashish.kalra@amd.com>, <srutherford@google.com>,
-        <akpm@linux-foundation.org>, <anshuman.khandual@arm.com>,
-        <pawan.kumar.gupta@linux.intel.com>, <adrian.hunter@intel.com>,
-        <daniel.sneddon@linux.intel.com>,
-        <alexander.shishkin@linux.intel.com>, <sandipan.das@amd.com>,
-        <ray.huang@amd.com>, <brijesh.singh@amd.com>,
-        <thomas.lendacky@amd.com>, <venu.busireddy@oracle.com>,
-        <sterritt@google.com>, <tony.luck@intel.com>,
-        <samitolvanen@google.com>, <fenghua.yu@intel.com>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-hyperv@vger.kernel.org>, <linux-arch@vger.kernel.org>
-Subject: Re: [RFC PATCH 01/17] x86/boot: Check boot param's cc_blob_address
- for direct boot mode
-Message-ID: <20221109233904.scct4fih3b3kvnyk@amd.com>
-References: <20221109205353.984745-1-ltykernel@gmail.com>
- <20221109205353.984745-2-ltykernel@gmail.com>
+        Wed, 9 Nov 2022 18:49:34 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3971D642B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 15:49:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668037773; x=1699573773;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=c/DQyuJrqj3A3rcH2mu7EKu6GdPoG+wZ+dPrb8sqJoU=;
+  b=jaDx7RvJNLpbeYu02K0LaPlHBJtujD2Ybxs47h6/3W0BlpbMfmBJC+yl
+   zSmNAx++T/UGtDSCn6jEKeGu5i7jXw0xbz4nC+yl0d/amSr66iebKwQHL
+   LZsIkKeq3ycXeJ2nRj1Vj58M2EwC2XvjiK6z3r1/8l5sByPXs2vpgSbxc
+   GPaRLSjRVss8Q2el3lol1/LUQa/t4PIV2T6/7aRHZrBP1cY4myMj+LvOV
+   NLiIxdRtEVPHYuxZL+0HnBKxQm2CmHoK7hRHmK8zkvJj9C92tDkwXuM3K
+   ej4wjFkPy58qcB9/aw6PR7aSgWcrJNHqidDXyNnZkyXdp2clG+Vt4iPkD
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="309869207"
+X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
+   d="scan'208";a="309869207"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 15:49:21 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="700568161"
+X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
+   d="scan'208";a="700568161"
+Received: from junxiaochang.bj.intel.com ([10.238.135.52])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 15:49:18 -0800
+From:   Junxiao Chang <junxiao.chang@intel.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, pierre-louis.bossart@linux.intel.com,
+        kai.vehmanen@linux.intel.com, furong.zhou@intel.com,
+        cezary.rojewski@intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, junxiao.chang@intel.com
+Subject: [PATCH] ASoC: hdac_hda: fix hda pcm buffer overflow issue
+Date:   Thu, 10 Nov 2022 07:40:23 +0800
+Message-Id: <20221109234023.3111035-1-junxiao.chang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221109205353.984745-2-ltykernel@gmail.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT023:EE_|BL1PR12MB5301:EE_
-X-MS-Office365-Filtering-Correlation-Id: dad9e2f2-0aad-4603-29c6-08dac2aba106
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fMGiyX0jM+C6sm/vkH//j6P/FZJ63m5OaSaYgkfzdn5qDPq1OqPVMyT1kxq0dCg8VHEotdo+9Vy2Cww3MlYhyumo5HLqPjLtNF+gB+42g5mxzmb/HIgqKNOKWNIb4wIt7Gaug3h44tnrjXyIAdzkXs+M/IfY3GHAw+LuP7Q0e7ULwt4AeZXhhIPu+/o8yk+jq8SsXFDE0S9M/876gynqF5ZhoB9Yk0xM3k8CPRX4xr65wIrV00S3RpalA+6JfDLABjjFiAGFNEhJ/PLaRIC4BjtJO6gRgo6gqNj2E7lLpTfKTZbnxOoO+ACCP479kYiOfT8UGSvUp6vCPBMEeedzlplS4DJLYtCfDVG0YMbjW0UwWduFku27bc/87F/FNr/0iV17aC5gD5AQuNjcE6T1jr+iTvT/ElCrlMwstk26t9kZW8PxsghoRj3ylcvczntQa75MFRRbKsfmQXYwMtnv50xKtZbSg0FRu84lZMFe0BObS9NZpLR9vdxUVeV3t/rK2qELjsa04hZ1BehU/tgARJSQlARxE5AV5HSTPolO+VkwiYLGb8E0O8jKD2dLkrZiD+pl+AaD+i1lhPL1pDKG9/vt0EaMFrlYPpSeLmeBtQP8yqoUBajcASsyHOo8nW7cs+OjdASKljEoKpSdu4kTyBYjB7h04wny65ZLlgQJSZxG9BEVzKcaoXp16f2R5VDfSsifyM4RibOVlnr9DXnHZOg+sk8P65eAkHYjksieIi7+YwaC0IisrlPID4jtwS5zzCGBnlRm+Zd4fW4wis8dEKDqxXqFh/FBwpZ5d+GtCJQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(376002)(136003)(451199015)(46966006)(36840700001)(40470700004)(81166007)(82740400003)(356005)(36756003)(36860700001)(86362001)(40480700001)(6666004)(316002)(40460700003)(45080400002)(54906003)(6916009)(70206006)(478600001)(7406005)(4326008)(70586007)(8936002)(2906002)(82310400005)(8676002)(7416002)(5660300002)(47076005)(426003)(336012)(41300700001)(44832011)(26005)(83380400001)(1076003)(186003)(16526019)(2616005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 23:39:22.2609
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dad9e2f2-0aad-4603-29c6-08dac2aba106
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5301
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 03:53:36PM -0500, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
-> 
-> Hypervisor may pass cc blob address directly into boot param's cc
-> blob address in the direct boot mode. Check cc blcb hdr magic first
-> in the sev_enable() and use it as cc blob address if check successfully.
-> 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  arch/x86/boot/compressed/sev.c | 27 ++++++++++++++++++++-------
->  1 file changed, 20 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index c93930d5ccbd..960968f8bf75 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -272,17 +272,24 @@ static void enforce_vmpl0(void)
->  
->  void sev_enable(struct boot_params *bp)
->  {
-> +	struct cc_blob_sev_info *cc_info;
->  	unsigned int eax, ebx, ecx, edx;
->  	struct msr m;
->  	bool snp;
->  
->  	/*
-> -	 * bp->cc_blob_address should only be set by boot/compressed kernel.
-> -	 * Initialize it to 0 to ensure that uninitialized values from
-> -	 * buggy bootloaders aren't propagated.
-> +	 * bp->cc_blob_address should only be set by boot/compressed
-> +	 * kernel and hypervisor with direct boot mode. Initialize it
-> +	 * to 0 after checking in order to ensure that uninitialized
-> +	 * values from buggy bootloaders aren't propagated.
->  	 */
-> -	if (bp)
-> -		bp->cc_blob_address = 0;
-> +	if (bp) {
-> +		cc_info = (struct cc_blob_sev_info *)(unsigned long)
-> +			bp->cc_blob_address;
-> +
-> +		if (cc_info->magic != CC_BLOB_SEV_HDR_MAGIC)
-> +			bp->cc_blob_address = 0;
+When KASAN is enabled, below log might be dumped with Intel EHL hardware:
+[   48.583597] ==================================================================
+[   48.585921] BUG: KASAN: slab-out-of-bounds in hdac_hda_dai_hw_params+0x20a/0x22b [snd_soc_hdac_hda]
+[   48.587995] Write of size 4 at addr ffff888103489708 by task pulseaudio/759
 
-It doesn't seem great to rely on SEV_HDR_MAGIC to determine whether
-bp->cc_blob_address is valid or not since it is only a 32-bit value.
+[   48.589237] CPU: 2 PID: 759 Comm: pulseaudio Tainted: G     U      E     5.15.71-intel-ese-standard-lts #9
+[   48.591272] Hardware name: Intel Corporation Elkhart Lake Embedded Platform/ElkhartLake LPDDR4x T3 CRB, BIOS EHLSFWI1.R00.4251.A01.2206130432 06/13/2022
+[   48.593010] Call Trace:
+[   48.593648]  <TASK>
+[   48.593852]  dump_stack_lvl+0x34/0x48
+[   48.594404]  print_address_description.constprop.0+0x1f/0x140
+[   48.595174]  ? hdac_hda_dai_hw_params+0x20a/0x22b [snd_soc_hdac_hda]
+[   48.595868]  ? hdac_hda_dai_hw_params+0x20a/0x22b [snd_soc_hdac_hda]
+[   48.596519]  kasan_report.cold+0x7f/0x11b
+[   48.597003]  ? hdac_hda_dai_hw_params+0x20a/0x22b [snd_soc_hdac_hda]
+[   48.597885]  hdac_hda_dai_hw_params+0x20a/0x22b [snd_soc_hdac_hda]
 
-Would it be possible to use a setup_data entry of type SETUP_CC_BLOB
-in bp->hdr.setup_data instead? There's already handling for that in
-find_cc_blob_setup_data() so it should "just work".
+HDAC_LAST_DAI_ID is last index id, pcm buffer array size should
+be +1 to avoid out of bound access.
 
--Mike
+Fixes: 608b8c36c371 ("ASoC: hdac_hda: add support for HDMI/DP as a HDA codec")
+Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Junxiao Chang <junxiao.chang@intel.com>
+Signed-off-by: Furong Zhou <furong.zhou@intel.com>
+---
+ sound/soc/codecs/hdac_hda.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/codecs/hdac_hda.h b/sound/soc/codecs/hdac_hda.h
+index fc19c34ca00e5..b65560981abb2 100644
+--- a/sound/soc/codecs/hdac_hda.h
++++ b/sound/soc/codecs/hdac_hda.h
+@@ -14,7 +14,7 @@ enum {
+ 	HDAC_HDMI_1_DAI_ID,
+ 	HDAC_HDMI_2_DAI_ID,
+ 	HDAC_HDMI_3_DAI_ID,
+-	HDAC_LAST_DAI_ID = HDAC_HDMI_3_DAI_ID,
++	HDAC_DAI_ID_NUM
+ };
+ 
+ struct hdac_hda_pcm {
+@@ -24,7 +24,7 @@ struct hdac_hda_pcm {
+ 
+ struct hdac_hda_priv {
+ 	struct hda_codec *codec;
+-	struct hdac_hda_pcm pcm[HDAC_LAST_DAI_ID];
++	struct hdac_hda_pcm pcm[HDAC_DAI_ID_NUM];
+ 	bool need_display_power;
+ };
+ 
+-- 
+2.25.1
+
