@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2906622704
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B116226FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiKIJbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S229791AbiKIJad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbiKIJbA (ORCPT
+        with ESMTP id S229794AbiKIJab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:31:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C990A14086
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667986203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q81R0xjwZq+Uqwnnq1xIVaWYwdB8y5Gee+dkpFHuQEI=;
-        b=gsDfjVF4RmUQEb45hXAxQcPXmJ/7EMld1sBgGeX+8YpBlTJX1ae50Nk8U3BpK3q0tMyH/5
-        4FhpeLEvlu/SCulXEa2Shi32OqgoaHQj0na1VN/PlEGUn8VI0e2PWzA9kDBz+U08cHBa8K
-        3qTWOuzyaYYFwCDw5G37shb3SIlsMeU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-674-WGF4U5bUMYyhnlyuzxwEdg-1; Wed, 09 Nov 2022 04:30:01 -0500
-X-MC-Unique: WGF4U5bUMYyhnlyuzxwEdg-1
-Received: by mail-wm1-f71.google.com with SMTP id ay40-20020a05600c1e2800b003cf8aa16377so7819014wmb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:30:01 -0800 (PST)
+        Wed, 9 Nov 2022 04:30:31 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D870B21839
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:30:29 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id h9so24883500wrt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:30:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=arSu8EjGp6kA++ItJ0wO/WnkofR8z/rNEykvkpXBJ50=;
+        b=yZBDzbz0h9un5E3vrjqfV4P2GNvhI0JdpLkEhHJhKIZmoPBRPNWV2ReJt+Hyaru4Yy
+         f4aq3664dXl46TdVfLHj+Wi2AQEg3/MG96nWhY+JvG+KD8pzyYtDxs3IYAYcD9ZwAUvK
+         ZwQX/l6pNtevIi08pwIsZSblcpxED76k2uGRUHL2rt7XWrlJTLE6cEWSrzY0/10q4A4f
+         7k0SLtkw9sgizvUdPm/J84Tw1eWi1ybjMF3y7br33j3v4o0oMe7VmCs065YzUE02K3ze
+         sRVT8CN/FmRNcMpdDpfJFD9jGLtafMchVVZ6lJfYU3BphvfmXC31uKEcHKApQzluxOAt
+         LpkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q81R0xjwZq+Uqwnnq1xIVaWYwdB8y5Gee+dkpFHuQEI=;
-        b=5H2HcCXnXhmr9d9payFkuvQ7rkVNNOGy+iUAktra8xg4nmij10u0yeqwS3FqK+bPxX
-         7qiFOCW4asmkvgsYEGgvztq7rAHWs7sUcU/BaHqm5Py48vh+kD5DrOkg3fvbTNblOcp2
-         REaf5i6zIRs3J7PcAh803lFNyRjb0TcdbZKe7qdrFWX6T5KP8/uVddPLziB0LBv8RHrz
-         rB/6TRkrqc5ejfjeTFCnm3go3XHsCRCnyd7ABaD47gcc3Z3DV9v4jo74LZsuP0sL3+RB
-         kyd37kNMXQApDXkJzCdGuXWkDLNPus32U1GmRsCADG/MS2owVEgDg6oTFwM1hsc9nq5u
-         x8Sw==
-X-Gm-Message-State: ACrzQf1NX26LMPNdFB69Pj8Ae1Ay5y1grdBOsToRqDmfqZFx+Un/Ubvj
-        kL8Jp9SNuEMPXL+SU2aH6WVQ3FvIUgGERPSKg4r4wWlr7+85nPNfAr5Qrowuq3HENKAvOhQB2LK
-        jtMSgL3H+uRowhMX9TIPMreLw
-X-Received: by 2002:a05:600c:48a7:b0:3cf:8025:c899 with SMTP id j39-20020a05600c48a700b003cf8025c899mr29896508wmp.26.1667986200745;
-        Wed, 09 Nov 2022 01:30:00 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM65t7+LWnDL71R+3AhoHt5oj9qYOtk7HdQRv2DlwJcYLMkAaWkALyOAg1gZGKJPkzQQ4ug7qg==
-X-Received: by 2002:a05:600c:48a7:b0:3cf:8025:c899 with SMTP id j39-20020a05600c48a700b003cf8025c899mr29896496wmp.26.1667986200542;
-        Wed, 09 Nov 2022 01:30:00 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id q189-20020a1c43c6000000b003cf483ee8e0sm975366wma.24.2022.11.09.01.29.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 01:30:00 -0800 (PST)
-Message-ID: <85d7b64a-cdb0-d63b-ec4a-8d6920071fef@redhat.com>
-Date:   Wed, 9 Nov 2022 10:29:59 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=arSu8EjGp6kA++ItJ0wO/WnkofR8z/rNEykvkpXBJ50=;
+        b=JQXGjFlb0axg+GyEoA3YgkWVmdu5lqLygQ0b8X3A/xVx4ZJVSPUlMZLopP1LGNSu89
+         O65zlxiWhYopFmH9mdykj4pC7zE0lVeBoJnTHn6eqdhHqtiH5/Vx3TFCjWS/s5CwFl+9
+         xMoCr4cskuTcqNLyu+z4czd/tUS5bTQqlPh0ScfyJLvZLk/mAvl+CnPJqx2ySQ1KRNHm
+         XcG5j7R/wVGZhMywaVKtIHG/99VFkNvc9t7sTABN/Uym1G/WPfiUJULZ8+VM0X5GTF4p
+         GsUbXU3tJc7WieV20Tmk0Bs8/16z+bYMxIzhSyNFQlOtr6vhd/+9/FuSJRQ4v3/CBT00
+         uJZQ==
+X-Gm-Message-State: ACrzQf12zLe4teO61x1FhNTZOw/SsOgcB85dv1LAeQkm7+R4kbudQ79d
+        dv/0pu3lqT5eFA2k7z04/2OvzRELtH3SMg==
+X-Google-Smtp-Source: AMsMyM5x9AbzcfJTv8gnCL3hUGI7jzocRPxbpCXZ0IGEvTtcdR2N0DLZC1KF/sJIdpuGnW4ev2W9gA==
+X-Received: by 2002:a5d:47aa:0:b0:236:79cc:6d5f with SMTP id 10-20020a5d47aa000000b0023679cc6d5fmr38397312wrb.391.1667986228452;
+        Wed, 09 Nov 2022 01:30:28 -0800 (PST)
+Received: from baylibre-ThinkPad-T14s-Gen-2i.. (254.31.102.84.rev.sfr.net. [84.102.31.254])
+        by smtp.gmail.com with ESMTPSA id g12-20020adffc8c000000b0022cd96b3ba6sm14547919wrr.90.2022.11.09.01.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 01:30:27 -0800 (PST)
+From:   Julien Panis <jpanis@baylibre.com>
+To:     nm@ti.com, vigneshr@ti.com, afd@ti.com, kristo@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] AM62x watchdog support
+Date:   Wed,  9 Nov 2022 10:30:24 +0100
+Message-Id: <20221109093026.103790-1-jpanis@baylibre.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 7/8] KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to
- assembly
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        nathan@kernel.org, thomas.lendacky@amd.com,
-        andrew.cooper3@citrix.com, peterz@infradead.org,
-        jmattson@google.com, stable@vger.kernel.org
-References: <20221108151532.1377783-1-pbonzini@redhat.com>
- <20221108151532.1377783-8-pbonzini@redhat.com> <Y2r+/UYNeZ7ljYXC@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y2r+/UYNeZ7ljYXC@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/22 02:14, Sean Christopherson wrote:
->>
->> +.macro RESTORE_SPEC_CTRL_BODY
-> 
-> Can we split these into separate macros?  It's a bit more typing, but it's not
-> immediately obvious that these are two independent chunks (I was expecting a JMP
-> from the 800 section into the 900 section).
-> 
-> E.g. RESTORE_GUEST_SPEC_CTRL_BODY and RESTORE_HOST_SPEC_CTRL_BODY
+This patch series adds support for AM62x watchdog.
 
-Sure, I had it like that in an earlier version.  I didn't see much 
-benefit but it is indeed a bit more readable if you order the macros like
+Changes since v0:
+	- Mark MCU & WKUP watchdogs as reserved
+Link: https://lore.kernel.org/all/20220630070826.11074-1-jpanis@baylibre.com/
 
-.macro RESTORE_GUEST_SPEC_CTRL
-.macro RESTORE_GUEST_SPEC_CTRL_BODY
-.macro RESTORE_HOST_SPEC_CTRL
-.macro RESTORE_HOST_SPEC_CTRL_BODY
+Changes since v1:
+	- Rebase patch to v6.1-rc3
+Link: https://lore.kernel.org/all/20220718122328.251602-1-jpanis@baylibre.com/
 
->> +800:
->
-> Ugh, the multiple users makes it somewhat ugly, but rather than arbitrary numbers,
-> what about using named labels to make it easier to understand the branches?
+Changes since v2:
+	- Rebase patch to v6.1-rc4
+	- Moved wkup_rti0 status ('reserved') into 'k3-am62-wakeup.dtsi'
+Link: https://lore.kernel.org/all/20221103181440.232727-1-jpanis@baylibre.com/
 
-I think it's okay if we separate the macros.
+Julien Panis (2):
+  arm64: dts: ti: k3-am62: add watchdog nodes
+  arm64: dts: ti: k3-am625-sk: mark MCU watchdog as reserved
 
-Paolo
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi   | 45 ++++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi    |  9 +++++
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 11 ++++++
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts     |  5 +++
+ 4 files changed, 70 insertions(+)
+
+
+base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
+-- 
+2.37.3
 
