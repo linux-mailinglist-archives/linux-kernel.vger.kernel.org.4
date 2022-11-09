@@ -2,126 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045C6622714
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E33622719
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:34:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiKIJcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37696 "EHLO
+        id S230148AbiKIJe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbiKIJco (ORCPT
+        with ESMTP id S229573AbiKIJeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:32:44 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE7122B04;
-        Wed,  9 Nov 2022 01:32:43 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0F76F1F8FB;
-        Wed,  9 Nov 2022 09:32:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667986362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UBBqLayw5d+VJ/DV0NpEfW4laSWX61hqXZ6+3KMLDyU=;
-        b=yRFM5fbUC8yXfKcJU04FlyfXwmYi+MZbJWuNpegESaXvxXD5XvyDobgfcxLbqb5enmBu+q
-        oyJSqwbH/G4VJb40ivcIWNR5rs5l5cwMl2HHR1lRkMJY8YSB0Z17LQk9UM56uYxyzcB2Df
-        D7ZOOOmLdhnTSCG6ENL0kn/L7qLeQTw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667986362;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UBBqLayw5d+VJ/DV0NpEfW4laSWX61hqXZ6+3KMLDyU=;
-        b=BF7JYehH2mYZm8BFWYUVhQFrvRwgvRbKNd3+/IWLijbf3wF1UlyA8X8p8X5oGtWk/1UIgR
-        4/luNjqKRYS9+8CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A30FD1331F;
-        Wed,  9 Nov 2022 09:32:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id du3UJLlza2MEdwAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 09 Nov 2022 09:32:41 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 2f4229d2;
-        Wed, 9 Nov 2022 09:33:39 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 09:33:39 +0000
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ceph: fix memory leak in mount error path when using
- test_dummy_encryption
-Message-ID: <Y2tz8zQPlTWtfOdw@suse.de>
-References: <20221108143421.30993-1-lhenriques@suse.de>
- <215b729e-0af0-45d8-96af-3d3c319581c9@redhat.com>
+        Wed, 9 Nov 2022 04:34:25 -0500
+Received: from mail-m972.mail.163.com (mail-m972.mail.163.com [123.126.97.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4A6695B5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:34:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=9lxWE
+        MuliLRNKOwma+a4Lvb7lCkvcQgNph0GNJHVx+s=; b=Iq01/Td0oQscnGpU/ysFU
+        plqtoDlLXKdPArrLC/0z3vSBBw3qOdaB4y8InXaxE7Sq9aRfBI14r2QXz183LJ6J
+        FoAqLYCcZzvfDX43hFHuw6fUHCsYCcLHaXJOglMcMOOHJ5chRbeVdcP9g2wHGs1D
+        3xju4XMd74CHlRpPelkVrY=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp2 (Coremail) with SMTP id GtxpCgAn1+r7c2tjhcSDrw--.48340S2;
+        Wed, 09 Nov 2022 17:33:48 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
+        lkp@intel.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v7] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Wed,  9 Nov 2022 17:33:47 +0800
+Message-Id: <20221109093347.228761-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <215b729e-0af0-45d8-96af-3d3c319581c9@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GtxpCgAn1+r7c2tjhcSDrw--.48340S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4xtF4UKF4rXFyfAF4rAFb_yoWrtw4rpa
+        1jg3409rW3JF4a9F47ta1kXFW3Ca48JFW5Gr9rt34ruw4rAF45GryDtas0qr4DurW0qa1a
+        yr4rtF9I93Z0ga7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziWCJPUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBy0U1Xl4vID2AAAsc
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:08:49AM +0800, Xiubo Li wrote:
-> 
-> On 08/11/2022 22:34, Luís Henriques wrote:
-> > Because ceph_init_fs_context() will never be invoced in case we get a
-> > mount error, destroy_mount_options() won't be releasing fscrypt resources
-> > with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
-> > an invocation to this function in the mount error path.
-> > 
-> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > ---
-> > * Changes since v1:
-> > 
-> > As suggested by Xiubo, moved fscrypt free from ceph_get_tree() to
-> > ceph_real_mount().
-> > 
-> > (Also used 'git format-patch' with '--base' so that the bots know what to
-> > (not) do with this patch.)
-> > 
-> >   fs/ceph/super.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-> > index 2224d44d21c0..f10a076f47e5 100644
-> > --- a/fs/ceph/super.c
-> > +++ b/fs/ceph/super.c
-> > @@ -1196,6 +1196,7 @@ static struct dentry *ceph_real_mount(struct ceph_fs_client *fsc,
-> >   out:
-> >   	mutex_unlock(&fsc->client->mount_mutex);
-> > +	ceph_fscrypt_free_dummy_policy(fsc);
-> >   	return ERR_PTR(err);
-> >   }
-> > 
-> > base-commit: 8b9ee21dfceadd4cc35a87bbe7f0ad547cffa1be
-> > prerequisite-patch-id: 34ba9e6b37b68668d261ddbda7858ee6f83c82fa
-> > prerequisite-patch-id: 87f1b323c29ab8d0a6d012d30fdc39bc49179624
-> > prerequisite-patch-id: c94f448ef026375b10748457a3aa46070aa7046e
-> > 
-> LGTM.
-> 
-> Thanks Luis.
-> 
-> Could I fold this into the previous commit ?
+Gts may be freed in gru_check_chiplet_assignment.
+The caller still use it after that, UAF happens.
 
-Yes, sure.  I'm fine with that.
+Fix it by introducing a return value to see if it's in error path or not.
+Free the gts in caller if gru_check_chiplet_assignment check failed.
 
-Cheers,
---
-Luís
+Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Acked-by: Dimitri Sivanich <sivanich@hpe.com>
+Tested-by: kernel test robot <lkp@intel.com>
+---
+v7:
+- fix some spelling problems suggested by Greg, change kernel test robot from reported-by tag to tested-by tag
+
+v6:
+- remove unused var checked by kernel test robot
+
+v5:
+- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+
+v4:
+- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+
+v3:
+- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
+
+v2:
+- commit message changes suggested by Greg
+
+v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
+---
+ drivers/misc/sgi-gru/grufault.c  | 14 ++++++++++++--
+ drivers/misc/sgi-gru/grumain.c   | 16 ++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 25 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..bdd515d33225 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -656,7 +656,9 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
+ 
+-	gru_check_context_placement(gts);
++	ret = gru_check_context_placement(gts);
++	if (ret)
++		goto err;
+ 
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -677,6 +679,10 @@ int gru_handle_user_call_os(unsigned long cb)
+ exit:
+ 	gru_unlock_gts(gts);
+ 	return ret;
++err:
++	gru_unlock_gts(gts);
++	gru_unload_context(gts, 1);
++	return -EINVAL;
+ }
+ 
+ /*
+@@ -874,7 +880,11 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			if (gru_check_context_placement(gts)) {
++				gru_unlock_gts(gts);
++				gru_unload_context(gts, 1);
++				return -EINVAL;
++			}
+ 		}
+ 		break;
+ 	case sco_gseg_owner:
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..beba69fc3cd7 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
+ {
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -727,14 +728,16 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 */
+ 	gru = gts->ts_gru;
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
++
++	return ret;
+ }
+ 
+ 
+@@ -934,7 +937,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	if (gru_check_context_placement(gts)) {
++		preempt_enable();
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return VM_FAULT_NOPAGE;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..f4a5a787685f 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
+-- 
+2.25.1
+
