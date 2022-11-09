@@ -2,153 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78838622E2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B7B622E36
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbiKIOmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S230392AbiKIOoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiKIOmK (ORCPT
+        with ESMTP id S230210AbiKIOoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:42:10 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8765914D1D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:42:06 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id k19so26102871lji.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:42:06 -0800 (PST)
+        Wed, 9 Nov 2022 09:44:11 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20E2186EB;
+        Wed,  9 Nov 2022 06:44:09 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id l190so16732400vsc.10;
+        Wed, 09 Nov 2022 06:44:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=899l+c/XtH99xaccvHTLVoe+jcl0BTwhY2TnnCFqLNM=;
-        b=Az7odDo6dAll2WS21pj6xbA5tgTltd8bZGosqRjhAU/DzXrEF6WzD4007Z+BNkJpW7
-         Uia94bgTw+YOQ9e8vNy/AUOnW5kfs4WoIKCRuYLkVBzp+nPk+10oF/T1RQ6Lngh8Vvo+
-         D9AqPqP6BeppOnf3sFdXIvmZ4+p6GBzt9/rlfFYq/15/SWsa2JKse3nJkZTD/7FPsP8c
-         iI1rWd03aypjHFocxZ2GKqhbfbP4LoS4/1+EY45nERQIE8dbMNYeqBpYwD33l35VVzak
-         TgJG/u82ggphCxbn6RkrepuNVVUL/6LF0wVii+bv/BsmrAJMKtWWOXBvqyZ9BEcf7tUc
-         BHMA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pd3oCLn1GKk4PquKayZllpj3KkafLGWk7nWdgAL1e1Q=;
+        b=SNhfXW7DsOWLFsYLC55azBYl0sk5kMq1wYeALdVSIOTR7CrbGXE7cLcER54edpbFAV
+         Ufq/ULlrBM0UDVysT4m8CR/bpjJBFlk7mp7Auy1UTJjj4VqXMJS0Nk6U01U9vwbsphTN
+         2fAPwt2XlJGDvDBHBAiy5UI5Ck3mkhhu0QuA6v34pyiDaIi8o2uULuSvjxJhiVfX+hnp
+         AYZXnRPWtl7mai2DLNS/FkTK6AhfYub9PjmHQ2J7bamLOOdpCOpR+80dYdakFlf153ZW
+         qKxR9brYh5DjBfs7L3qSHK0iHmex012ILrNfKN6NxlHzYsRIzdQ/A9kFs9q9Uq54j8zt
+         N89w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=899l+c/XtH99xaccvHTLVoe+jcl0BTwhY2TnnCFqLNM=;
-        b=vnjUqrwriiAELv8NHtCElpFgxDcCR4l69Jkp5Y7LoRJwM3pxBxbhtoFzpaZca1vGHh
-         XSFr+rZuvyrPXicmG1nK6U9KTk+x1JNwxL5KyYxSJhivRdHWUnXv62VNV0Qh/Zpb1HAH
-         VKV3qzFEORkaGItys1XQtlUD5uMbW1PzLqBCdJTqrGkUpQmWjEOIW2T6R1kGWsFLF7xJ
-         7P9dl+qFemo8/XWGXmCGj/flTtfecPFXZC8cyqX/qZ/pKvvfZRhYbiRU/sqVXbHknS2Y
-         6nJ77miBcBK9IoWXv66kNhYui3t0p4tVt+15vADegHB2OT0gU3BooDjNCsSBgviakTCl
-         oTDQ==
-X-Gm-Message-State: ACrzQf1M9BNe/+6eiBxhx3c443SiXtswcmtAAFcW9i5KbjFKbAZm9FId
-        mXia6oQjlePlFOAXp3oLqd78qA==
-X-Google-Smtp-Source: AMsMyM65KJ5cVonuq2Hh0wXFJThu1u/Vcg4bXrIM8SKT0BplJd2QE0M1dRsmzE/Z+QthmAukpXIj8Q==
-X-Received: by 2002:a2e:a801:0:b0:261:91a3:bc44 with SMTP id l1-20020a2ea801000000b0026191a3bc44mr20087296ljq.497.1668004924957;
-        Wed, 09 Nov 2022 06:42:04 -0800 (PST)
-Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id q10-20020a056512210a00b004a478c2f4desm2235229lfr.163.2022.11.09.06.42.03
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 09 Nov 2022 06:42:04 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sm6375-pdx225: Enable SD card slot
-Date:   Wed,  9 Nov 2022 15:41:53 +0100
-Message-Id: <20221109144153.53630-4-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20221109144153.53630-1-konrad.dybcio@linaro.org>
-References: <20221109144153.53630-1-konrad.dybcio@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pd3oCLn1GKk4PquKayZllpj3KkafLGWk7nWdgAL1e1Q=;
+        b=DakOjKjHGO6hsJb/lBn/lBdN7h3ZHl9R8m0TFP/uHlgth1Myks8C9f1NcY2e9I6nvr
+         TJl5N1WDdNHdoXR3Rm8qISBScM0lp9neOu+Fxt/3ROVvgbxIYKBdPZpDHlRyq0T+JhR+
+         uLM54bhKd4OGN67f8SfI75wmAoQSDMlvnGFTfYBSVVq+pZlVsvuCLfnrova9CLf6oNRG
+         WjnaAlV7sTv/+UC2WqGVNhl4RTKOgQzkEUKnRSOO885/r8e0IZ+bRO88PA/WDDG1CVZ4
+         F1YcDlaSw+5p2Z4JFg4ySNApaujcyUUsucKlNzhWuZTuyv8HNwmBLvhSX950rW6GJm7a
+         3Ffg==
+X-Gm-Message-State: ACrzQf2cxEUwzysJbycnQTFv1NzuUjP3PbIPPEphLYn0mlVxKbwxDJ2z
+        OGiU+UKW2a7STtdgzKRvKpyf8i0bWIST+ZelwYQ/BQt6
+X-Google-Smtp-Source: AMsMyM4RFlhx8Oigq3QssJQ8TvCY/9/mUUXM9K82HK3ax46rGx/SbmF1FLe/QBfFZPFztNFikj8AhihgjxZ+AN5UPKA=
+X-Received: by 2002:a67:dc18:0:b0:3aa:4149:510c with SMTP id
+ x24-20020a67dc18000000b003aa4149510cmr31149048vsj.20.1668005048879; Wed, 09
+ Nov 2022 06:44:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221026093710.449809-1-pawell@cadence.com>
+In-Reply-To: <20221026093710.449809-1-pawell@cadence.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Wed, 9 Nov 2022 22:43:06 +0800
+Message-ID: <CAL411-qwmC8xuZUtrrVjtiiyaD-aLamO6GJAeMbLd1X73UDSmQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set SDHCI VMMC/VQMMC to <=2v96 and allow load setting by the SDHCI
-driver, as required by this use case.
+On Wed, Oct 26, 2022 at 5:37 PM Pawel Laszczak <pawell@cadence.com> wrote:
+>
+> During handling Clear Halt Endpoint Feature request driver invokes
 
-Configure the SD Card Detect pin, enable the SDHCI2 controller and
-assign it the aforementioned regulators.
+Add "," between request and driver. Otherwise, it is okay for me.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Changes since v1:
-- remove stray newline
-- pick up r-b
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
- .../qcom/sm6375-sony-xperia-murray-pdx225.dts | 33 +++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+Peter
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-index 33083f18755b..7cf71b8bcac5 100644
---- a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-+++ b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-@@ -153,7 +153,8 @@ pm6125_l4: l4 {
- 
- 		pm6125_l5: l5 {
- 			regulator-min-microvolt = <1650000>;
--			regulator-max-microvolt = <3050000>;
-+			regulator-max-microvolt = <2960000>;
-+			regulator-allow-set-load;
- 		};
- 
- 		pm6125_l6: l6 {
-@@ -235,7 +236,8 @@ pm6125_l21: l21 {
- 
- 		pm6125_l22: l22 {
- 			regulator-min-microvolt = <2704000>;
--			regulator-max-microvolt = <3544000>;
-+			regulator-max-microvolt = <2960000>;
-+			regulator-allow-set-load;
- 		};
- 
- 		pm6125_l23: l23 {
-@@ -302,6 +304,33 @@ &qupv3_id_1 {
- 	status = "okay";
- };
- 
-+&sdc2_off_state {
-+	sd-cd-pins {
-+		pins = "gpio94";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+};
-+
-+&sdc2_on_state {
-+	sd-cd-pins {
-+		pins = "gpio94";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&sdhc_2 {
-+	status = "okay";
-+
-+	vmmc-supply = <&pm6125_l22>;
-+	vqmmc-supply = <&pm6125_l5>;
-+
-+	cd-gpios = <&tlmm 94 GPIO_ACTIVE_HIGH>;
-+};
-+
- &tlmm {
- 	gpio-reserved-ranges = <13 4>;
- 
--- 
-2.38.1
-
+> Reset Endpoint command. Because this command has some issue with
+> transition endpoint from Running to Idle state the driver must
+> stop the endpoint by using Stop Endpoint command.
+>
+> cc: <stable@vger.kernel.org>
+> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
+>  drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
+>  2 files changed, 6 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index e2e7d16f43f4..0576f9b0e4aa 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+>
+>         trace_cdnsp_ep_halt(value ? "Set" : "Clear");
+>
+> -       if (value) {
+> -               ret = cdnsp_cmd_stop_ep(pdev, pep);
+> -               if (ret)
+> -                       return ret;
+> +       ret = cdnsp_cmd_stop_ep(pdev, pep);
+> +       if (ret)
+> +               return ret;
+>
+> +       if (value) {
+>                 if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_STOPPED) {
+>                         cdnsp_queue_halt_endpoint(pdev, pep->idx);
+>                         cdnsp_ring_cmd_db(pdev);
+> @@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+>
+>                 pep->ep_state |= EP_HALTED;
+>         } else {
+> -               /*
+> -                * In device mode driver can call reset endpoint command
+> -                * from any endpoint state.
+> -                */
+>                 cdnsp_queue_reset_ep(pdev, pep->idx);
+>                 cdnsp_ring_cmd_db(pdev);
+>                 ret = cdnsp_wait_for_cmd_compl(pdev);
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index 25e5e51cf5a2..aa79bce89d8a 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+>         u32 ep_state = GET_EP_CTX_STATE(pep->out_ctx);
+>         int ret = 0;
+>
+> -       if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED) {
+> +       if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED ||
+> +           ep_state == EP_STATE_HALTED) {
+>                 trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
+>                 goto ep_stopped;
+>         }
+> --
+> 2.25.1
+>
