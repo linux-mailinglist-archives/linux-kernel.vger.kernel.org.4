@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A59623467
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBCE623472
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiKIUSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        id S229967AbiKIUWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiKIUSg (ORCPT
+        with ESMTP id S230307AbiKIUW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:18:36 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1321208F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:18:35 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id k7so18141571pll.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:18:35 -0800 (PST)
+        Wed, 9 Nov 2022 15:22:29 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1531B1D335
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 12:22:29 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-13d9a3bb27aso3279fac.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 12:22:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cI3lUlhNIUjbfjuHUsmnI8mgnTlKOQ5ksWoB1aZ25PM=;
-        b=I/sKcQmUEyb0tEKrHj8+eSvdMgVOjUSOJzzCTBgX0yoWL/41RrqP2bA4vnPAcXbX+c
-         rY5bH8T4DwWdyZ8UlWy1UOf8IVecObSOi1lx1LKLYDZD0YLUO2Ezy3UR4A0LHwjtu1nV
-         hvWM/FC8AMHcAn+T2+UCaATt9nzBb+vIFzSV0j5cYFWM905zx2JDjUi0BEZWR77ZFOvc
-         Zz8S829QSFppQN1P9UJ33W5UeAQD7Ignw8ef64F3S8DfP5h1yl/DV2bF+CUCYjR63A9Q
-         iQpKHRbUVDnkYlJS9LQySmFQWvskk7GbgTlrI51ljwDIyeZFE/8bq9N4IVWiJyRFXRvP
-         hHtA==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DkZEBtgDxLwh8xU3neb1FAkv2BmAFLuGBlDLcfKRoW8=;
+        b=vnj1SQDl8mqR3MmD7DqMUdNfi9EUJZvJILOHciyG+VNOp6U0W8rfmn1+Xt31N+DcQi
+         vDOnwVOnau8LUSczoJ0WHV2krITQHPokBhbZJC4BIkUnl+t4Dat/K/WTsgm/5X4H7YWQ
+         zFVnHpsYmAev6RqZbkyoPpbxfEtuuC5V3kacc7B9jDIVJ86H3JkUSioH5iFiZXPAsk9u
+         +2/qR/DZ7H515xlu6tv/Rw8xxaQ8v68Mmf2Mn0Ren3VUaznJd1IL/5goc6xepZl65XJt
+         fP0AgfYdfvqQpcEsC69in5ywcxiT3s9Q3QxNfKI3qY3mYeuTNkzps4sk3UzAOewW8GKp
+         JWqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cI3lUlhNIUjbfjuHUsmnI8mgnTlKOQ5ksWoB1aZ25PM=;
-        b=VHy/SSmV+0jYUDWVQK7WUoFhovjZfx8S/FkSOH8ozkaCdeGt5wA9MO458H1N60VzCL
-         QWntxNJp0dgBgvxLzCT5ZaL6dem0NbhzOiLQX4CK3OdHEK8G0UUoV7deRMFmeRIGjFup
-         D5lfq4hs/jZv2nDQizHjWc2Gqc8ekW1f6aAEfV4pJmJHvjJkLb2U6aXcsvWL4Fdry3Nr
-         mC6whP40CRMo9RUQyKcoFYAznSH1IuUnXGViHXOpNbebLkNicm0bcIfusGOxEq+stD4J
-         ibYQ9lymGxhQbenvLvHVPScM2wL53eJloSJ0+A/mF05hVwz4Gdau5VxEX8rs53+Ak7IU
-         Yc0A==
-X-Gm-Message-State: ACrzQf1JIVAER87wndn2BwG/0L8iS5hPnLOeyrswlU2BXYpq6kQLX9/7
-        mWr7jdXKNCd3QWJLNfSDdtdx6Q==
-X-Google-Smtp-Source: AMsMyM5/JJAytHYqYPrgQlMiY0Tf1CQA9n0tiCdPhmj3Tbrh9L04om7B+5j4lSj5vG+P9Qxn3cN1wA==
-X-Received: by 2002:a17:90a:ab8e:b0:213:ef84:3bb9 with SMTP id n14-20020a17090aab8e00b00213ef843bb9mr53223205pjq.241.1668025115017;
-        Wed, 09 Nov 2022 12:18:35 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id s7-20020a17090b070700b002137030f652sm1649564pjz.12.2022.11.09.12.18.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 12:18:34 -0800 (PST)
-Date:   Wed, 9 Nov 2022 20:18:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, pbonzini@redhat.com,
-        dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] KVM: selftests: Make Hyper-V guest OS ID common
-Message-ID: <Y2wLF+YcYX3cKhFe@google.com>
-References: <20221105045704.2315186-1-vipinsh@google.com>
- <20221105045704.2315186-5-vipinsh@google.com>
- <874jv8p7c5.fsf@ovpn-194-83.brq.redhat.com>
- <CAHVum0eYbQJvXY_TVyjadAYVrAcwXSEyJhpddkcBSohj+i+LqA@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkZEBtgDxLwh8xU3neb1FAkv2BmAFLuGBlDLcfKRoW8=;
+        b=MWhopa3xeVdFvsTpRWd/V/A8mCEC/JEl9IoBdKbK1HxrAlg0fp7kEmYgalAL4HpvwY
+         EV2YxYf4+3Hq0pBrvzaiFj1Z2bAtLJ5+7wo0wHCLMk4OLxGspg2ozpyEGryktYyTvqqI
+         o6sknMSmPVF5sdL5ey0cKp/Ag/dGYg7ecUUtHpjdk8j8Oyd+gj+BI/54XBgr967L1OJE
+         cnVN0pYDX8H/VKa7SD+iOFeFezCzsVocvZYYKFxS/+I/9hMGALmT1H2h2134ap6QfUCG
+         IMx9HhzLG3pnpIsFmyOY9lgdvZ7RSB8Cotzf7UyOL/ZA0uJsROTrQ+SJhdqSsreMFK4J
+         hyFQ==
+X-Gm-Message-State: ACrzQf2SyuBIkuppnHy8Fmrsp4F3IZqKCR7Rx5LC8qO5OOR2USvhvUI4
+        SBdYiA1N2KqTx6auyZcURQ3eYEvYdrM7otdMkVEQsmIGyBE9
+X-Google-Smtp-Source: AMsMyM4PhU2aWuL/hCnXMmV01mOurB3yfd1swJ4U7viOAdtWTL7HzwxBLnJkoFMtxmc+5Qwsw+/v3/n+uTUZ8vvCy4s=
+X-Received: by 2002:a05:6870:f299:b0:13b:ad21:934d with SMTP id
+ u25-20020a056870f29900b0013bad21934dmr36758992oap.172.1668025345426; Wed, 09
+ Nov 2022 12:22:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0eYbQJvXY_TVyjadAYVrAcwXSEyJhpddkcBSohj+i+LqA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+References: <CAHC9VhSSafrkW4VbTVoAUJmjFQdCwPTGDqTP8yBnLBqc7rW7iQ@mail.gmail.com>
+ <CAHk-=wj_6Df1NAMs14S0OOqX1Z=460j-mfwn_qm-7EK1eK76qw@mail.gmail.com>
+ <20221109143834.GB24561@mail.hallyn.com> <CAHC9VhQgEej_yKXRJFtLHUQkL8hGrBYqRPye5SwBz_SU+2eK2A@mail.gmail.com>
+In-Reply-To: <CAHC9VhQgEej_yKXRJFtLHUQkL8hGrBYqRPye5SwBz_SU+2eK2A@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 9 Nov 2022 15:22:14 -0500
+Message-ID: <CAHC9VhS9h2ZL=JZOoNK7Q+TDU7BSq3Jk2BqZ0nZExCfTvkuUuQ@mail.gmail.com>
+Subject: Re: [GIT PULL] LSM fixes for v6.1 (#1)
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,28 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022, Vipin Sharma wrote:
-> On Wed, Nov 9, 2022 at 5:48 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+On Wed, Nov 9, 2022 at 3:13 PM Paul Moore <paul@paul-moore.com> wrote:
+> On Wed, Nov 9, 2022 at 9:38 AM Serge E. Hallyn <serge@hallyn.com> wrote:
+> > On Mon, Oct 31, 2022 at 12:22:29PM -0700, Linus Torvalds wrote:
+> > > On Mon, Oct 31, 2022 at 4:07 AM Paul Moore <paul@paul-moore.com> wrote:
+> > > >
+> > > > A single patch to the capabilities code to fix a potential memory leak
+> > > > in the xattr allocation error handling.  Please apply for v6.1-rcX.
+> > >
+> > > Pulled.
+> > >
+> > > However, I react to the strange test condition. Sure, it's
+> > > pre-existing, but does it really make sense?
+> > >
+> > > It does
+> > >
+> > > +       if (ret < 0 || !tmpbuf) {
+> > > +               size = ret;
+> > > +               goto out_free;
+> > > +       }
+> > >
+> > > and how the heck can 'tmpbuf' be NULL if vfs_getxattr_alloc() succeeded?
 > >
-> > Vipin Sharma <vipinsh@google.com> writes:
+> > I had to go through the history a bit - the !tmpbuf check was added
 > >
-> > > Make guest OS ID calculation common to all hyperv tests and similar to
-> > > hv_generate_guest_id().
+> > https://www.spinics.net/lists/stable/msg463010.html
 > >
-> > A similar (but without hv_linux_guest_id()) patch is present in my
-> > Hyper-V TLB flush update:
-> >
-> > https://lore.kernel.org/kvm/20221101145426.251680-32-vkuznets@redhat.com/
-> >
-> 
-> After getting feedback from David, I decided to remove
-> LINUX_VERSION_CODE in v2. Our patches are functionally identical now.
-> 
-> @Sean, Paolo, Vitaly
-> Should I be rebasing my v2 on top of TLB flush patch series and remove
-> patch 4 and 5 from my series? I am not sure how these situations are
-> handled.
+> > because of a gcc warning.  Perhaps there's a better way to tell gcc
+> > that it can't remain NULL if ret was < 0 ?
+>
+> Ooof, that's ugly, but thanks for digging it up.  As it turns out I
+> happen to be working on a patch for vfs_getxattr_alloc() to fix the
+> return value type right now, but it looks like I'll leave that gcc
+> hack in place ... although I might leave a comment about it so the
+> next person doesn't have to wonder.
 
-In this case, unless Paolo is NOT planning on merging Vitaly's series for 6.2, I
-would just wait for Vitaly's series to get pushed to kvm/queue.  I'm banking on
-Paolo going on a queueing spree soon ;-)
+Actually, it looks like there are other similar conditions, e.g.
+evm_is_immutable(), without such a check and my compiler (gcc v12.2.0)
+seems okay with it; presumably they fixed the compiler bug?
+
+I guess I'll leave the hack in place for commoncap.c but not propagate
+it elsewhere.
+
+-- 
+paul-moore.com
