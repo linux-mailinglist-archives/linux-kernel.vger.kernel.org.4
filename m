@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7B36225EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6073162261D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiKIIyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S230196AbiKIJB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiKIIyS (ORCPT
+        with ESMTP id S230197AbiKIJBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:54:18 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28054DFA9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:54:17 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id m22so7647861eji.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 00:54:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VyQHSn8deMiEOwsj51SgZgqSSVUV+0wlM/SBBhvxXc=;
-        b=GGNJehiWYL3Gp9ason0FhcmYFESsPZpn5AFN7kOkMr08+QsRUS2FYSSA2163xbbAy9
-         sCm29EjadnyYCJ4qo8t89xcOSC2HM12RyoQ5svx82KfhKXzZ9wRk3eRUyGBS5EcWdG8h
-         aqfOggWQ/Gd6ZUZqof0BJE7Z54seYus3yAs3AV9K9daY+opQn6X+1lMCc0h83OXtOCvY
-         hFX6xhxESF3PK/cL5PyaD+KFCF1BSPnHXfOtA3SAk8B4pcNyG48j6ZCEyegRKKZG9S2N
-         G7u6uDtfPEOtLaTMcTrFhecWinnHQ0xN+2czhYEKXJFc4xe+whvIhxqi6rGtCyyUiCH3
-         WhSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9VyQHSn8deMiEOwsj51SgZgqSSVUV+0wlM/SBBhvxXc=;
-        b=2QRSCa1PU6g1IE4P7ir8787rgzVS5dCSQb28BG8+E+0sl26o0uLbj3OeQy0CuzfiDs
-         iQt6vc2EIST9Mq29VdCLrLUqSNwWtg9q2g+73zljwWTI7l2peCK24Z+5dFQCMx9Z3Si8
-         nJFPrFOrGoxDW+rgOpTHrA63gIYhsyb4S3Cse3vmKuiFg4r4fIOdivZ6OzyesFNuoiF1
-         jncBs3DUIP29sBzK3z6EzavrVivS4FS9qm2Zhzqd6hrYctYgVGvIqxnV9Rg5ENVagpTr
-         XQpZ8l/riXXd1lBnf+bbdWycZ7j4vgEEstRPW0LSGrM/2gIDpuy9BiEET/Cd5oD/94xf
-         gY+w==
-X-Gm-Message-State: ACrzQf0BY3HsVVDq9bt4MJyg9L7TUfRw8EeQGfN3tcHdi1vexFa7os2/
-        gfytZBXHLqNnYX4A/r/xqUVaFR/AnJaIPddlLLJ1RlFFoDU=
-X-Google-Smtp-Source: AMsMyM56WEU7+qzjtVJGqMNooERxqHsIu3s18Kbye5GziPmoTH7Ul/AX4W2U11ncDwVCDDoKRS1Y+Yth0GDg5i6F7JU=
-X-Received: by 2002:a17:907:c1e:b0:7ae:31a0:571e with SMTP id
- ga30-20020a1709070c1e00b007ae31a0571emr24211009ejc.690.1667984055694; Wed, 09
- Nov 2022 00:54:15 -0800 (PST)
+        Wed, 9 Nov 2022 04:01:40 -0500
+X-Greylist: delayed 355 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 01:01:39 PST
+Received: from mail.forcemindbiz.com (mail.forcemindbiz.com [38.242.205.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8909B1E706
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:01:39 -0800 (PST)
+Received: by mail.forcemindbiz.com (Postfix, from userid 1001)
+        id E3A99301B20; Wed,  9 Nov 2022 09:55:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=forcemindbiz.com;
+        s=mail; t=1667984142;
+        bh=dqbL4I2PbKQDd8D+BmP5Ia+tOlRQnYhmr+yxRmvobYw=;
+        h=Date:From:To:Subject:From;
+        b=6rO7ysDn2y78sod8j+rxdnT87Hw1SLF7032kHDTrGLu5rE9B5xQ6qPdlfInASuyzb
+         5zM9bfZNJtFMcVsLM08o30D2JmUZdgY7HXPI8kYeo8dUXekGTVS2zXddJdkpH60F4z
+         orMt23rqhwi5GI7MHDhaaH8dTgmgCG4PMt1ObkHR8OlN54DSDvAq5fFRCI70ZMHaFl
+         Dvd/X+gY0Mn9d1WAWIJZk/MOBZZnkaqC2uFx3gGS7kU8/AdIRGXDanxBnDZj/8KZPD
+         Pj78o3zIMCsPqZXqq6AX6+XffDznHclyUYiNCP4D/fLlzEti8zWPiLHvndwAA/OA/y
+         MVmQLUmvCr6BQ==
+Received: by mail.forcemindbiz.com for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:55:27 GMT
+Message-ID: <20221109084501-0.1.2t.81zk.0.kht0e5baeq@forcemindbiz.com>
+Date:   Wed,  9 Nov 2022 08:55:27 GMT
+From:   "Antonio Valverde" <antonio.valverde@forcemindbiz.com>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Servicio de la flota
+X-Mailer: mail.forcemindbiz.com
 MIME-Version: 1.0
-References: <20221107071511.2764628-1-Mr.Bossman075@gmail.com> <20221107071511.2764628-8-Mr.Bossman075@gmail.com>
-In-Reply-To: <20221107071511.2764628-8-Mr.Bossman075@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Nov 2022 09:54:04 +0100
-Message-ID: <CACRpkdZ5do2Y6UESif+Cu_teCvfCH8gtg8DiE1H-aR3gNK3pfw@mail.gmail.com>
-Subject: Re: [PATCH v1 7/7] ARM: dts: imx: Update i.MXRT1050.dtsi compatibles
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     linux-imx@nxp.com, robh+dt@kernel.org, sboyd@kernel.org,
-        shawnguo@kernel.org, kernel@pengutronix.de, festevam@gmail.com,
-        aisheng.dong@nxp.com, stefan@agner.ch, gregkh@linuxfoundation.org,
-        arnd@arndb.de, linux@armlinux.org.uk, abel.vesa@nxp.com,
-        dev@lynxeye.de, marcel.ziswiler@toradex.com, tharvey@gateworks.com,
-        leoyang.li@nxp.com, fugang.duan@nxp.com,
-        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,
+        URIBL_DBL_SPAM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: forcemindbiz.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [38.242.205.154 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: forcemindbiz.com]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [38.242.205.154 listed in bl.score.senderscore.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 8:15 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
+Buenos d=C3=ADas:
 
-> Remove unused compatibles from i.MXRT1050.dtsi.
-> Change GPT clock-names to match documentation.
->
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Le escribo para hablarle sobre una de las mejores herramientas GPS en el =
+mercado.
 
-I applied patches 1-6 to the pinctrl tree, this one seems independent
-and possibly should not even be applied as I understand it.
+La herramienta, que me gustar=C3=ADa presentarle brevemente, dispone de m=
+uchas funciones =C3=BAtiles para su trabajo, que optimizan los procesos d=
+e transporte y le ayudan a realizar tareas de campo de manera m=C3=A1s ef=
+iciente.
 
-Yours,
-Linus Walleij
+=C2=BFQuiere conocer los detalles?
+
+
+Atentamente,
+Antonio Valverde
