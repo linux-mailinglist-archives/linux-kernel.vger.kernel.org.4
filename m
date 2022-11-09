@@ -2,200 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774A262277D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2D4622786
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiKIJuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S230218AbiKIJuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiKIJuN (ORCPT
+        with ESMTP id S229818AbiKIJuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:50:13 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48FDA13E1B;
-        Wed,  9 Nov 2022 01:50:12 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Dx_7fSd2tjcIYFAA--.16162S3;
-        Wed, 09 Nov 2022 17:50:10 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxmFfQd2tjon0PAA--.24649S2;
-        Wed, 09 Nov 2022 17:50:08 +0800 (CST)
-Subject: Re: [PATCH v10 2/2] dt-bindings: hpet: add loongson-2 hpet
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221103131202.12481-1-zhuyinbo@loongson.cn>
- <20221103131202.12481-2-zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <c1def742-c10b-beaf-9a77-bd5eed253154@loongson.cn>
-Date:   Wed, 9 Nov 2022 17:50:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 9 Nov 2022 04:50:52 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3091409F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:50:51 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id r3so20389247yba.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:50:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u1s0y43ZpuBvyMz8zkFJk/Bh36z/uSELIAuni6JBmQc=;
+        b=JPd7ilXsPlRk4baOLUUijHuKIyTl3/LkY19HBwIEdcPGxVD7UWC0QfT+/h59P4GMXl
+         /jMRH/n87zn90m4V+iDrQ+g6sDP9+P8g9XEjxvXDzMVzca7NMmSe7JVowTOeTX58xiWW
+         wLAooVlLv/HAqv/eeKYp1NTlV1i9YJvebRNDje3qNHv1GZkzWcWYZb6hmAmIUEUfuaHZ
+         fa3odSDQpoxob5fr+wgFLsFKqVKIDU/wEokhS3bkZYkuzBw2c6Zf+COJhtU6tO+sIBdi
+         2KG0u0YgqDbUEwh+Jdn093/xNsg2t1AIdnRTiiSaJqsZ0VXNCCY540aXVlXwFoHUGa1u
+         j4pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u1s0y43ZpuBvyMz8zkFJk/Bh36z/uSELIAuni6JBmQc=;
+        b=s6vh9jfH7zjeAsF2yKxUKLJJawU00W8xQCj9gImSGwB5kGMdAlLh2GeMbR/skBlrhi
+         Ng7MdAZatjhAAEB5pDC/5Vnt5rR0M9jbsqsg1kM9rzzczSHU7SpBA87fHGK8GakL2lQH
+         va5QDFavLsrQj5NV16flh0bCOnd0ZL/qlllRz+IJJC5eH5tyTq0/j72atFXQECNpVlPH
+         k6uAmXnAaGcKoWJ/Vg9ikHcZXQ1eA6cgmMePCQk9Z9Gjjoef/KpI3QundnM0CNxR5rSc
+         /BMrMaHkiIT2hGQ0IvfdomFQIlhL53ZujaqdXDRI8TCctrIwt/MWU0RMvsjaw6UpOibT
+         6akQ==
+X-Gm-Message-State: ACrzQf2OVNJiBpVvmXleYLYmzoohcvh/8YGHXX+KcuLKAmrHL7LzRMHW
+        FB9EizEVgnacLMK0F8wO0t/4DVHpJVrS6RX1E4u8pw==
+X-Google-Smtp-Source: AMsMyM6dkuMqghj0uHvukWdGg3PdhBt611a+v+y58uFqFWHNYeTTvF6FQvlSllfCNOxBqavxYJXF1yL0LTemQ3FuRps=
+X-Received: by 2002:a05:6902:10ca:b0:671:3616:9147 with SMTP id
+ w10-20020a05690210ca00b0067136169147mr56611236ybu.105.1667987450132; Wed, 09
+ Nov 2022 01:50:50 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20221103131202.12481-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxmFfQd2tjon0PAA--.24649S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWw4DtFykKr17uF4fCF4UJwb_yoWrXFy8pa
-        nrCFZ3Gr47JF1fu39xKFyIkFn8Z34rAF9Fgr17K34UGryDXF1UXF1I9a4DZrZxGrWxWayI
-        qFySkw18KayqyrJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bgxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCa
-        FVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2
-        AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7_-PUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
+ <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com> <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
+ <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com> <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
+ <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
+ <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com> <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
+ <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com> <09029c7a-489a-7054-1ab5-01fa879fb42f@intel.com>
+ <f80299a4-7eaf-46a0-89e6-b9f5385f183c@arm.com> <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
+In-Reply-To: <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Wed, 9 Nov 2022 10:50:38 +0100
+Message-ID: <CALPaoCidd+WwGTyE3D74LhoL13ce+EvdTmOnyPrQN62j+zZ1fg@mail.gmail.com>
+Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     James Morse <james.morse@arm.com>, Tony Luck <tony.luck@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Gaurang Upasani <gupasani@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi maintainer,
+Hi Reinette,
 
-please help me merge it to upstream.
+On Tue, Nov 8, 2022 at 10:28 PM Reinette Chatre
+<reinette.chatre@intel.com> wrote:
+> On 11/3/2022 10:06 AM, James Morse wrote:
+> > That is true. MPAM has an additional headache here as it needs to allocate a monitor in
+> > order to read the counters. If there are enough monitors for each CLOSID*RMID to have one,
+> > then MPAM can export the counter files in the same way RDT does.
+> >
+> > While there are systems that have enough monitors, I don't think this is going to be the
+> > norm. To allow systems that don't have a surfeit of monitors to use the counters, I plan
+> > to export the values from resctrl_arch_rmid_read() via perf. (but only for bandwidth counters)
+>
+> This sounds related to the way monitoring was done in earlier kernels. This was
+> long before I become involved with this work. Unfortunately I am not familiar with
+> all the history involved that ended in it being removed from the kernel. Looks like
+> this was around v4.6, here is a sample commit that may help point to what was done:
 
-In addition, this patch need rely on 
-"https://patchwork.kernel.org/project/linux-clk/list/?series=691497"
+Sort of related, this is a problem we have to work around on AMD
+implementations that I will be sharing a patch for soon.
 
-Thanks,
-Yinbo.
+Note the second paragraph at the top of page 13:
 
-ÔÚ 2022/11/3 ÏÂÎç9:12, Yinbo Zhu Ð´µÀ:
-> Add the Loongson-2 High Precision Event Timer (HPET) binding
-> with DT schema format using json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Change in v10:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
->                  2. This patch need rely on clock patch, which patchwork
-> 		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-> Change in v9:
->                  1. This patch need rely on clock patch, which patchwork
-> 		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-> 		2. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v8:
->                  1. This patch need rely on clock patch, which patchwork
-> 		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-> 		2. Add all history change log information.
-> Change in v7:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v6:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v5:
-> 		1. Replace string loongson2/Loongson2 with Loongson-2/loongson-2.
-> 		2. Add the patch review information.
-> Change in v4:
->                  1. Fixup the clock-names that replace apb-clk with apb.
->                  2. This patch need rely on clock patch, which patchwork
->                     link was "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
-> Change in v3:
-> 		1. Update dts that base on common clock framework.
-> Change in v2:
-> 		1. Drop the  "hpet0" label.
-> 		2. Modify the hpet node name to timer.
-> 
->   .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
->   MAINTAINERS                                   |  1 +
->   2 files changed, 51 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-> new file mode 100644
-> index 000000000000..30685c8fbead
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/loongson,ls2k-hpet.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson-2 High Precision Event Timer (HPET)
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-hpet
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: SoC apb clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: apb
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/loongson,ls2k-clk.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    timer@1fe24000 {
-> +        compatible = "loongson,ls2k-hpet";
-> +        reg = <0x1fe24000 0x15f>;
-> +        clocks = <&clk LOONGSON2_APB_CLK>;
-> +        clock-names = "apb";
-> +        interrupt-parent = <&liointc0>;
-> +        interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 52519695a458..939af260fe0f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12030,6 +12030,7 @@ LOONGSON-2 SOC SERIES HPET DRIVER
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-kernel@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
->   F:	drivers/clocksource/loongson2_hpet.c
->   
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> 
+https://developer.amd.com/wp-content/resources/56375_1.00.pdf
 
+AMD QoS often provides less counters than RMIDs, but the architecture
+promises there will be at least as many counters in a QoS domain as
+CPUs. Using this we can permanently pin RMIDs to CPUs and read the
+counters on every task switch to implement MBM RMIDs in software.
+
+This has the caveats that evictions while one task is running could have
+resulted from a previous task on the current CPU, but will be counted
+against the new task's software-RMID, and that CMT doesn't work.
+
+I will propose making this available as a mount option for cloud container
+use cases which need to monitor a large number of tasks on B/W counter-poor
+systems, and of course don't need CMT.
+
+> [...]
+>
+> > I think the solution to all this is:
+> >  * Add rename support to move a monitor group between two control groups.
+> >  ** On x86, this is guaranteed to preserve the RMID, so the destination counter continues
+> > unaffected.
+> >  ** On arm64, the PARTID is also relevant to the monitors, so the old counters will
+> > continue to count.
+>
+> This looks like the solution to me also.
+>
+> The details of the arm64 support is not clear to me though. The destination
+> group may not have enough PMG to host the new group so failures need to be
+> handled. As you mention also, the old counters will continue to count.
+> I assume that you mean the hardware will still have a record of the occupancy
+> and that needs some time to dissipate? I assume this would fall under the
+> limbo handling so in some scenarios (for example the just moved monitor
+> group used the last PMG) it may take some time for the source control
+> group to allow a new monitor group? The new counters will also not
+> reflect the task's history.
+>
+> Moving an arm64  monitor group may thus have a few surprises for user
+> space while sounding complex to support. Would adding all this additional
+> support be worth it if the guidance to user space is to instead create many
+> control groups in such a control-group-rich environment?
+>
+> > Whether this old counters keep counting needs exposing to user-space so that it is aware.
+>
+> Could you please elaborate? Do old counters not always keep counting?
+
+Based on this, is it even worth it to allocate PMGs given that the
+systems James has seen so far only have a single PMG bit? All this will
+get us is the ability to create a single child mon_group in each control
+group. This seems too limiting for the feature to be useful.
+
+-Peter
