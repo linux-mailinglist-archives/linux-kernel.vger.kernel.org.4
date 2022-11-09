@@ -2,182 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D3962251D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164B862251F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiKIIM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:12:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
+        id S229777AbiKIINW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKIIM1 (ORCPT
+        with ESMTP id S229516AbiKIINS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:12:27 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B53F61902F;
-        Wed,  9 Nov 2022 00:12:25 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxPLfoYGtjvIAFAA--.6049S3;
-        Wed, 09 Nov 2022 16:12:24 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxR1fmYGtjdHAPAA--.24419S2;
-        Wed, 09 Nov 2022 16:12:22 +0800 (CST)
-Subject: Re: [PATCH v10 2/2] dt-bindings: thermal: add loongson-2 thermal
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 9 Nov 2022 03:13:18 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7EE1902F;
+        Wed,  9 Nov 2022 00:13:17 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A64331F8C4;
+        Wed,  9 Nov 2022 08:13:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667981595; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iZ41zAxuFab1VbpZbOqMuhHV5p0NUYaSK2sGuoKt9j4=;
+        b=A39M7ugjky4HJHQHpgupgCpSL4sIzdbSNnEklOL1SK2k8fgTBZ0UquiKGpX2rsgBpG5RKd
+        fiWl+ZiIHC1FiY5c5gjE2ZFIKCevpdQ/RaPk3QCEmR1nQV6KTg/HAY0deZ95bnD5JxnHpP
+        9qW8VmwXRjZZy3Ymanng8AOAF0PFh8o=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B9CAB2C141;
+        Wed,  9 Nov 2022 08:13:13 +0000 (UTC)
+Date:   Wed, 9 Nov 2022 09:13:11 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Joe Perches <joe@perches.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221103083407.4039-1-zhuyinbo@loongson.cn>
- <20221103083407.4039-2-zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <fba09a98-1938-eeae-bf2c-c13200982af7@loongson.cn>
-Date:   Wed, 9 Nov 2022 16:12:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+Subject: Re: [RFC v2 3/3] mm, printk: introduce new format %pGt for page_type
+Message-ID: <Y2thF8NS4DX69Uq7@alley>
+References: <20221106140355.294845-1-42.hyeyoo@gmail.com>
+ <20221106140355.294845-4-42.hyeyoo@gmail.com>
+ <c038e06504733e8dc6830f082c8522c60895fd8e.camel@perches.com>
+ <Y2tFLQ/w9siSwy+M@hyeyoo>
 MIME-Version: 1.0
-In-Reply-To: <20221103083407.4039-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxR1fmYGtjdHAPAA--.24419S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWryxZw1xXw1DWF13CF17ZFb_yoW5ury3pF
-        4kC3Z8Cr4vvF17uanIkFyxCrs0vrn5tF9rZr4Igwn8Kr98t34ft3y7K3WDZ393ury8WFW7
-        ZFy09r4UCF1DArJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        ba8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
-        IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7IU8SzuJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2tFLQ/w9siSwy+M@hyeyoo>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi maintainer
-
-please help merge this patch to upstream.
-
-Thanks,
-Yinbo.
-
-ÔÚ 2022/11/3 ÏÂÎç4:34, Yinbo Zhu Ð´µÀ:
-> Add the Loongson-2 thermal binding with DT schema format using
-> json-schema.
+On Wed 2022-11-09 15:14:05, Hyeonggon Yoo wrote:
+> On Sun, Nov 06, 2022 at 10:04:25AM -0800, Joe Perches wrote:
+> > On Sun, 2022-11-06 at 23:03 +0900, Hyeonggon Yoo wrote:
+> > > dump_page() uses %pGp format to print 'flags' field of struct page.
+> > > As some page flags (e.g. PG_buddy, see page-flags.h for more details)
+> > > are set in page_type field, introduce %pGt format which provides
+> > > human readable output of page_type. And use it in dump_page().
+> > []
+> > > diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+> > []
+> > > @@ -2056,6 +2056,28 @@ char *format_page_flags(char *buf, char *end, unsigned long flags)
+> > >  	return buf;
+> > >  }
+> > >  
+> > > +static
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Change in v10:
-> 		1. Add all history change log information.
-> Change in v9:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v8:
->                  1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
-> Change in v7:
-> 		1. Split the modification of patch 3 and merge it into this patch.
-> Change in v6:
-> 		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
-> 		   when compile the yaml.
-> Change in v5:
-> 		1. Keep use same quotes "'" in all places.
-> Change in v4:
-> 		1. Fixup the compatible.
-> 		2. Update the binding file name.
-> 		3. Include irq.h to fix compile issue.
-> Change in v3:
-> 		1. Remove the sensor id.
-> 		2. Remove the interrupt-parent in thermal required property.
-> 		3. Update the thermal binding file name.
-> 		4. Fixup the commit log information.
-> Change in v2:
-> 		1. Add description and type about the "id".	
-> 		2. Make the filename was based on compatible.
+> Thanks for looking at this.
 > 
->   .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
->   MAINTAINERS                                   |  1 +
->   2 files changed, 44 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> new file mode 100644
-> index 000000000000..c0637e2d6d57
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Thermal sensors on Loongson-2 SoCs
-> +
-> +maintainers:
-> +  - zhanghongchen <zhanghongchen@loongson.cn>
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - '#thermal-sensor-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    thermal: thermal-sensor@1fe01500 {
-> +        compatible = "loongson,ls2k-thermal";
-> +        reg = <0x1fe01500 0x30>;
-> +        interrupt-parent = <&liointc0>;
-> +        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 37ab451d9258..3aff8b8723b1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12015,6 +12015,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-pm@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->   F:	drivers/thermal/loongson2_thermal.c
->   
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> 
+> > 
+> > noinline_for_stack ?
 
+Honestly, I do not like much adding this without numbers. It has been added
+to some functions in vsprintf.c long time ago because it reduced
+the stack usage. But I think that it is a compiler and an architecture
+specific. And it is not clear if it would really help in this
+particular case.
+
+Feel free to omit it.
+
+Best Regards,
+Petr
