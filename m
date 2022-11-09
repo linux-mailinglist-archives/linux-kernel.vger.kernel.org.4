@@ -2,219 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0ED622DE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95B4622DE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbiKIO2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:28:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S231374AbiKIO31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiKIO2X (ORCPT
+        with ESMTP id S231269AbiKIO3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:28:23 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB8910D2
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:28:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BBDFE228F4;
-        Wed,  9 Nov 2022 14:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668004099; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u2xkKJq1iZsD6H4gomAlOFSM/WEi/FOicLRRE3V7xGE=;
-        b=p2fROSMJbpxVV3sePxL6KHZqxZ+mihM6SYFUJ7fOf/FEL9EIbDkhQYKiUgSBMHG4aKegRK
-        GKP6hlhNt3NddSfnuLoe7PDmKS+DFRHhNTOAWsZ0n9sWNz2BJzNunhI5k10SV+9IP3+RKt
-        r3/FNDPlFG7QwNNJmCO+q1CdiEjJRaY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668004099;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u2xkKJq1iZsD6H4gomAlOFSM/WEi/FOicLRRE3V7xGE=;
-        b=fbT9ZNCcWnxNk/wLrFctypgAIo4Nsq3q1rHKra8m4TGM+m/A4dKyJTWVEkvZ5fH4cLl1qI
-        TBqypbme//cYeMAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 73403139F1;
-        Wed,  9 Nov 2022 14:28:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id veZRGwO5a2NnKgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 09 Nov 2022 14:28:19 +0000
-Message-ID: <09074855-f0ee-8e4f-a190-4fad583953c3@suse.cz>
-Date:   Wed, 9 Nov 2022 15:28:19 +0100
+        Wed, 9 Nov 2022 09:29:24 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED10DAE6D;
+        Wed,  9 Nov 2022 06:29:23 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A9EH0YO017321;
+        Wed, 9 Nov 2022 14:29:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=5X7c70HwpdKGqwrRi8VHe8cooQgIi0KkuKnzwyodgvM=;
+ b=AztfFATKJ9gBhJ2s3YPOSWJEjrUYaVqCeX2HaB7lRE4uM8NSob0wet0cuaTk7LjMMd49
+ 5Lundsa1bo+igHKlRN+TYxSs/e42pGop9KY5xhYv2mn95GCdTeKWrKECEyMIKiEcnP5o
+ 59y1dEBoPt+7FN/QOT5tkAupvuej5SrVa+4CN+yZihmTVH18eKtwPqtVGgNQtPiHWjrb
+ Ufh6xbAOG9p4D393M8baLqCVYz5+cmY2O9iT6fLyJGSwPnIDIH3JP17YOoPKPT/qAuGi
+ Yx5IrRiCva1k+6CR3PgdImmgp0GQkeGNwoXrnmkDvbDJUUHCMXBMNQ9W601ZiYar+1Lj Xg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3krdu2raj3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 14:29:10 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A9ELLcj013876;
+        Wed, 9 Nov 2022 14:29:07 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kngqddsb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 14:29:07 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A9ET4Pi2163334
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Nov 2022 14:29:04 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 967E5A4040;
+        Wed,  9 Nov 2022 14:29:04 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 26448A404D;
+        Wed,  9 Nov 2022 14:29:04 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Nov 2022 14:29:04 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] iommu/s390: Further improvements
+Date:   Wed,  9 Nov 2022 15:28:58 +0100
+Message-Id: <20221109142903.4080275-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 7NYYePf_vI1X_VvKDgz3RyRoILvutN1J
+X-Proofpoint-GUID: 7NYYePf_vI1X_VvKDgz3RyRoILvutN1J
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v7 1/3] mm/slub: only zero requested size of buffer for
- kzalloc when debug enabled
-Content-Language: en-US
-To:     Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-References: <20221021032405.1825078-1-feng.tang@intel.com>
- <20221021032405.1825078-2-feng.tang@intel.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221021032405.1825078-2-feng.tang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ bulkscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=652
+ suspectscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211090107
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/22 05:24, Feng Tang wrote:
-> kzalloc/kmalloc will round up the request size to a fixed size
-> (mostly power of 2), so the allocated memory could be more than
-> requested. Currently kzalloc family APIs will zero all the
-> allocated memory.
-> 
-> To detect out-of-bound usage of the extra allocated memory, only
-> zero the requested part, so that redzone sanity check could be
-> added to the extra space later.
-> 
-> For kzalloc users who will call ksize() later and utilize this
-> extra space, please be aware that the space is not zeroed any
-> more when debug is enabled. (Thanks to Kees Cook's effort to
-> sanitize all ksize() user cases [1], this won't be a big issue).
-> 
-> [1]. https://lore.kernel.org/all/20220922031013.2150682-1-keescook@chromium.org/#r
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> ---
->  mm/slab.c |  7 ++++---
->  mm/slab.h | 18 ++++++++++++++++--
->  mm/slub.c | 10 +++++++---
->  3 files changed, 27 insertions(+), 8 deletions(-)
-> 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index a5486ff8362a..4594de0e3d6b 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3253,7 +3253,8 @@ slab_alloc_node(struct kmem_cache *cachep, struct list_lru *lru, gfp_t flags,
->  	init = slab_want_init_on_alloc(flags, cachep);
->  
->  out:
-> -	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init);
-> +	slab_post_alloc_hook(cachep, objcg, flags, 1, &objp, init,
-> +				cachep->object_size);
->  	return objp;
->  }
->  
-> @@ -3506,13 +3507,13 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->  	 * Done outside of the IRQ disabled section.
->  	 */
->  	slab_post_alloc_hook(s, objcg, flags, size, p,
-> -				slab_want_init_on_alloc(flags, s));
-> +			slab_want_init_on_alloc(flags, s), s->object_size);
->  	/* FIXME: Trace call missing. Christoph would like a bulk variant */
->  	return size;
->  error:
->  	local_irq_enable();
->  	cache_alloc_debugcheck_after_bulk(s, flags, i, p, _RET_IP_);
-> -	slab_post_alloc_hook(s, objcg, flags, i, p, false);
-> +	slab_post_alloc_hook(s, objcg, flags, i, p, false, s->object_size);
->  	kmem_cache_free_bulk(s, i, p);
->  	return 0;
->  }
-> diff --git a/mm/slab.h b/mm/slab.h
-> index 0202a8c2f0d2..8b4ee02fc14a 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -720,12 +720,26 @@ static inline struct kmem_cache *slab_pre_alloc_hook(struct kmem_cache *s,
->  
->  static inline void slab_post_alloc_hook(struct kmem_cache *s,
->  					struct obj_cgroup *objcg, gfp_t flags,
-> -					size_t size, void **p, bool init)
-> +					size_t size, void **p, bool init,
-> +					unsigned int orig_size)
->  {
-> +	unsigned int zero_size = s->object_size;
->  	size_t i;
->  
->  	flags &= gfp_allowed_mask;
->  
-> +	/*
-> +	 * For kmalloc object, the allocated memory size(object_size) is likely
-> +	 * larger than the requested size(orig_size). If redzone check is
-> +	 * enabled for the extra space, don't zero it, as it will be redzoned
-> +	 * soon. The redzone operation for this extra space could be seen as a
-> +	 * replacement of current poisoning under certain debug option, and
-> +	 * won't break other sanity checks.
-> +	 */
-> +	if (kmem_cache_debug_flags(s, SLAB_STORE_USER) &&
+Hi All,
 
-Shouldn't we check SLAB_RED_ZONE instead? Otherwise a debugging could be
-specified so that SLAB_RED_ZONE is set but SLAB_STORE_USER?
+This series of patches improves the s390 IOMMU driver. These improvements help
+existing IOMMU users, mainly vfio-pci, but at the same time are also in
+preparation of converting s390 to use the common DMA API implementation in
+drivers/iommu/dma-iommu.c instead of its platform specific DMA API in
+arch/s390/pci/pci_dma.c that sidesteps the IOMMU driver to control the same
+hardware interface directly.
 
-> +	    (s->flags & SLAB_KMALLOC))
-> +		zero_size = orig_size;
-> +
->  	/*
->  	 * As memory initialization might be integrated into KASAN,
->  	 * kasan_slab_alloc and initialization memset must be
-> @@ -736,7 +750,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
->  	for (i = 0; i < size; i++) {
->  		p[i] = kasan_slab_alloc(s, p[i], flags, init);
->  		if (p[i] && init && !kasan_has_integrated_init())
-> -			memset(p[i], 0, s->object_size);
-> +			memset(p[i], 0, zero_size);
->  		kmemleak_alloc_recursive(p[i], s->object_size, 1,
->  					 s->flags, flags);
->  		kmsan_slab_alloc(s, p[i], flags);
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 12354fb8d6e4..17292c2d3eee 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3395,7 +3395,11 @@ static __always_inline void *slab_alloc_node(struct kmem_cache *s, struct list_l
->  	init = slab_want_init_on_alloc(gfpflags, s);
->  
->  out:
-> -	slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init);
-> +	/*
-> +	 * When init equals 'true', like for kzalloc() family, only
-> +	 * @orig_size bytes will be zeroed instead of s->object_size
+Among the included changes patch 1 improves the robustness of switching IOMMU
+domains and patch 2 adds the I/O TLB operations necessary for the DMA API
+conversion. Patches 3, 4, and 5 aim to improve performance with patch 5 being
+the most intrusive by removing the I/O translation table lock and using atomic
+updates instead.
 
-s/will be/might be/ because it depends on the debugging?
+This series is based on the s390 branch of Joerg's IOMMU tree[0] that includes
+the latest s390 IOMMU fixes. It is available for easy testing in the
+iommu_improve_v2 branch with signed tag s390_iommu_improve_v2 of my
+git.kernel.org tree[1].
 
-> +	 */
-> +	slab_post_alloc_hook(s, objcg, gfpflags, 1, &object, init, orig_size);
->  
->  	return object;
->  }
-> @@ -3852,11 +3856,11 @@ int kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
->  	 * Done outside of the IRQ disabled fastpath loop.
->  	 */
->  	slab_post_alloc_hook(s, objcg, flags, size, p,
-> -				slab_want_init_on_alloc(flags, s));
-> +			slab_want_init_on_alloc(flags, s), s->object_size);
->  	return i;
->  error:
->  	slub_put_cpu_ptr(s->cpu_slab);
-> -	slab_post_alloc_hook(s, objcg, flags, i, p, false);
-> +	slab_post_alloc_hook(s, objcg, flags, i, p, false, s->object_size);
->  	kmem_cache_free_bulk(s, i, p);
->  	return 0;
->  }
+Best regards,
+Niklas Schnelle
+
+Changes sinve v1:
+- If an IOTLB flush fails for one device don't skip the flush for other devices.
+  This is also needed when RCU readers try to flush a detached device. (Jason)
+- Free a domain's IOMMU translation table via call_rcu() (Jason)
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git/log/?h=s390
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/
+
+Niklas Schnelle (5):
+  iommu/s390: Make attach succeed even if the device is in error state
+  iommu/s390: Add I/O TLB ops
+  iommu/s390: Use RCU to allow concurrent domain_list iteration
+  iommu/s390: Optimize IOMMU table walking
+  s390/pci: use lock-free I/O translation updates
+
+ arch/s390/include/asm/pci.h |   4 +-
+ arch/s390/kvm/pci.c         |   6 +-
+ arch/s390/pci/pci.c         |  13 +--
+ arch/s390/pci/pci_dma.c     |  77 +++++++++------
+ drivers/iommu/s390-iommu.c  | 184 ++++++++++++++++++++++++------------
+ 5 files changed, 185 insertions(+), 99 deletions(-)
+
+-- 
+2.34.1
 
