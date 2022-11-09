@@ -2,68 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25786234B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCFA6234BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 21:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbiKIUjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 15:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S231387AbiKIUkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 15:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKIUjw (ORCPT
+        with ESMTP id S229561AbiKIUkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 15:39:52 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8106917A92;
-        Wed,  9 Nov 2022 12:39:51 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Wed, 9 Nov 2022 15:40:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8749417050;
+        Wed,  9 Nov 2022 12:40:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 23FE6735;
-        Wed,  9 Nov 2022 20:39:51 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 23FE6735
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1668026391; bh=10w+VI1YIATg4JMAlFUPmIWEJWr+aNG6o3y5mkVQN3s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZS4CQtz8oEbXaCvKm8LDsY49NhTZhfCMUDZH8xESSgEdok5uJynuKkErf04J4U6MC
-         jFKjFcyCj2DKmCytVseuu20Vc2MIUgNSVnMj/8+KuFhNLIdJs2NaJ9Q1GgFANFSvo+
-         maH4iri6Ha3Cj2II9fIzCrTJYS4FekYk9g5kUuo7Yp9qYp2Jk8QbrFzPaPCxWWo2xE
-         BtO4Aju4kWuq6HAjCM7yDuKhSFt7Br4seDdgun+WtMqId6YlUW3ZsEfhC0T2d9ojew
-         ehMMRoduuCtSwGTEKC3byBNWqRqip5VRetZEqRoLNdHdpr+uFxgwu7265NQUkunpbu
-         uSwmU3QwnKJJA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Rui Li <me@lirui.org>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>
-Cc:     Wu XiangCheng <wu.xiangcheng@linux.dev>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rui Li <me@lirui.org>
-Subject: Re: [PATCH] docs/zh_CN: Add userspace-api/futex2 Chinese translation
-In-Reply-To: <20221105041741.288094-1-me@lirui.org>
-References: <20221105041741.288094-1-me@lirui.org>
-Date:   Wed, 09 Nov 2022 13:39:50 -0700
-Message-ID: <87k043kgkp.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B01FB82014;
+        Wed,  9 Nov 2022 20:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C06F9C433C1;
+        Wed,  9 Nov 2022 20:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668026415;
+        bh=gFXaWwnz3S2Q6E6pSl0SQOVhUbhyhH/QZEAB2acSXp0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CaHMOjRh56/L7NNW/2Ivj8mESYwRNhq5HL8/zMaRQLXnY1kwIMNz6rAHV7IcZ4W0M
+         AaONCJ3d4FBsGVClC/6UUGZDSb3JNRhsr1fqzsCfAZFhfsICLSrCtwk1FUoz/nkcNP
+         2z5rSwGC1WaSDNFKUyPCczztDaOrXq8akcXmYliaQy8vQWS9z4T1wqKpcSYXuGjeLL
+         w16Wc8JJiG8huBhkDeH8HdTqX5Zw3g3BEgkLQFd8s4Hgk2ly7rmQ1KTaRcJj6x3TuB
+         mZvz6ac8eCez8gk24yQi1P6JQNiccCJCecqJY6zKk0Opbz5+XwHlR+POwsnFBFqCWQ
+         zLBbBpoUrc2QQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 973FBC395FE;
+        Wed,  9 Nov 2022 20:40:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] selftests/bpf: Fix casting error when cross-compiling
+ test_verifier for 32-bit platforms
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166802641561.13002.14650540365573417178.git-patchwork-notify@kernel.org>
+Date:   Wed, 09 Nov 2022 20:40:15 +0000
+References: <20221108121945.4104644-1-pulehui@huaweicloud.com>
+In-Reply-To: <20221108121945.4104644-1-pulehui@huaweicloud.com>
+To:     Pu Lehui <pulehui@huaweicloud.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, eddyz87@gmail.com, pulehui@huawei.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rui Li <me@lirui.org> writes:
+Hello:
 
-> Translate the following documents into Chinese:
->
-> - userspace-api/futex2.rst
->
-> Signed-off-by: Rui Li <me@lirui.org>
-> ---
->  .../zh_CN/userspace-api/futex2.rst            | 80 +++++++++++++++++++
->  .../zh_CN/userspace-api/index.rst             |  2 +-
->  2 files changed, 81 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/translations/zh_CN/userspace-api/futex2.rst
+This patch was applied to bpf/bpf.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-Applied, thanks.
+On Tue,  8 Nov 2022 20:19:45 +0800 you wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> When cross-compiling test_verifier for 32-bit platforms, the casting error is shown below:
+> 
+> test_verifier.c:1263:27: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+>  1263 |  info.xlated_prog_insns = (__u64)*buf;
+>       |                           ^
+> cc1: all warnings being treated as errors
+> 
+> [...]
 
-jon
+Here is the summary with links:
+  - [bpf] selftests/bpf: Fix casting error when cross-compiling test_verifier for 32-bit platforms
+    https://git.kernel.org/bpf/bpf/c/0811664da064
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
