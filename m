@@ -2,212 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDDD6233EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B80D6233F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 20:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiKITuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 14:50:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S231416AbiKITzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 14:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiKITuW (ORCPT
+        with ESMTP id S231899AbiKITz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 14:50:22 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799AF643F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:50:21 -0800 (PST)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 561616601615;
-        Wed,  9 Nov 2022 19:50:16 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668023419;
-        bh=Am2BB1j8T2ilLUNl75Tl9cl3+vw221TjiqNaMkrQsQY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jzN0JHKBBpzF2JNU3AkqAN9n8Hib9ajBfdzfecKJ25B9nUAKSOBPaasCE6vjTl97N
-         uN1e/jFXl/uBe7W8c82VxOdm0ApC+994P08LjT7P/m+ZJIfZNgWrB7++PxLOfqsIu0
-         059fxI9gA0rSHq1lcrIwCPxI01iCCxDQjWP73GBkNasvS4WPAbpRYzy1IbPUMhtoEh
-         9rpWOP8+DWz61mA7k7CDc7xbh2uHOqJgUtQviVWkVjeLvA/rpFAuTZOPyH9h+6sdB/
-         Uk0rNZRPQUYIwqu3BNb6LWeh/DoeInm83r05y51IkM3M3ck6QAgIVy/+2rxiSptcXF
-         G1ddugxzCzgYA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: defconfig: Enable missing configs for mt8183-jacuzzi-juniper
-Date:   Wed,  9 Nov 2022 14:50:12 -0500
-Message-Id: <20221109195012.1231059-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Wed, 9 Nov 2022 14:55:28 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF222F00A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 11:55:26 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id k22so17687599pfd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 11:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lhu0AaXEHpohB57ir2dSQXl6jTPxnwC4FKWIfCDgyuQ=;
+        b=KLrj/KYNV8XkhPS1iVxKu/aPMmyU1eZXY/F92davxqF98lFJkaDajitQpvLL4vIrUZ
+         RU7h9cdLzbmNLn0L1qXfQRwCmi310yFjxach5EiNriUwsj4QY8tSCN87JHeXJyddsuys
+         72M/pHU11niJlVMdwR5BejriAj5tTWIKSL3Zum9Kr5LjGnYIBB+KYcP7u+2Q/hzO4Ovc
+         tU1U6kuUmaW/d49VLzRNA0NrCOBTKDlZUJ48t/FF5HX9jTARqKnEoZUIP0SBy4fffs1f
+         QNQtfiVfaubbqysdwv5B8gG1PQb5SEDi45P+WAnFZXNK62PytNrCB9DDZsJJ9qdrmxMB
+         hRjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lhu0AaXEHpohB57ir2dSQXl6jTPxnwC4FKWIfCDgyuQ=;
+        b=vh3DKCEDNmgChnSGHaqVs3L0eOdyKwqmgBD0ONMpMNoOQ5WxfyIQXuN4W5+YdrePkV
+         E+x9+zYG0LMEZr2+9gOwBkHNCMSqyESGuWkmK3+gMiNa1c2TLfeFHotcdHpJFg1BBcOF
+         KopZgZ7lF/hymsWMcu58ynvu0bs0ZnuWDS0uNRPzWTu3pOj3wBKNrRjsFFBqU8toefjt
+         nTyiLKO7vEMcY+/OTP8qRkKGTMqW3P6VLYJgdb1P6SoYVwOIMrmRBNn0cpv0P6gRJJpw
+         rXyeNRk8clAL8Qp0oAsJSaVKXPAlwN+SujHB2LFWyxygFwLgHluPdfPHNj45sdjF50wY
+         TtZg==
+X-Gm-Message-State: ACrzQf3BJlcelD30qYbZxh5nJrMFjLfQa72CMtW4KYKFE5mtLhwXNU3P
+        ecW/QTMZLHtt/wy+U7ZiWY9Saw==
+X-Google-Smtp-Source: AMsMyM4yxxTSRBnPGND+4E6OHwiGrFVk5cgGXo5F+I0YpXul+RM44cAyB0NLsjogLjCA7A1w6czz7Q==
+X-Received: by 2002:a05:6a00:1482:b0:56c:6a9c:3d7 with SMTP id v2-20020a056a00148200b0056c6a9c03d7mr62529169pfu.0.1668023725592;
+        Wed, 09 Nov 2022 11:55:25 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id d14-20020a170902654e00b00172f6726d8esm9466969pln.277.2022.11.09.11.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 11:55:24 -0800 (PST)
+Date:   Wed, 09 Nov 2022 11:55:24 -0800 (PST)
+X-Google-Original-Date: Wed, 09 Nov 2022 11:55:21 PST (-0800)
+Subject:     Re: [PATCH v5 0/7] Add support for Renesas RZ/Five SoC
+In-Reply-To: <20221028165921.94487-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        geert+renesas@glider.be, magnus.damm@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        Conor Dooley <conor.dooley@microchip.com>, guoren@kernel.org,
+        anup@brainfault.org, Atish Patra <atishp@rivosinc.com>,
+        heinrich.schuchardt@canonical.com, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, prabhakar.csengg@gmail.com,
+        biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     prabhakar.csengg@gmail.com
+Message-ID: <mhng-563fb6cf-4505-4137-8da1-13f631e1c74f@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable missing configs in the arm64 defconfig to get all devices probing
-on the mt8183-kukui-jacuzzi-juniper machine.
+On Fri, 28 Oct 2022 09:59:14 PDT (-0700), prabhakar.csengg@gmail.com wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Hi All,
+>
+> The RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP Single)
+> 1.0 GHz, 16-bit DDR3L/DDR4 interface. And it also has many interfaces such
+> as Gbit-Ether, CAN, and USB 2.0, making it ideal for applications such as
+> entry-class social infrastructure gateway control and industrial gateway
+> control.
+>
+> This patch series adds initial SoC DTSi support for Renesas RZ/Five
+> (R9A07G043) SoC. Below is the list of IP blocks enabled in the initial
+> board DTS which can be used to boot via initramfs on RZ/Five SMARC EVK:
+> - AX45MP CPU
+> - CPG
+> - PINCTRL
+> - PLIC
+> - SCIF0
+> - SYSC
+>
+> Useful links:
+> -------------
+> [0] https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rz-mpus/rzfive-risc-v-general-purpose-microprocessors-risc-v-cpu-core-andes-ax45mp-single-10-ghz-2ch-gigabit-ethernet
+> [1] http://www.andestech.com/en/products-solutions/andescore-processors/riscv-ax45mp/
+>
+> Patch series depends on the below patches (which are queued in the Renesas tree for v6.2):
+> ------------------------------------------------------------------------------------
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-dt-bindings-for-v6.2&id=c27ce08b806d606cd5cd0e8252d1ed2b729b5b55
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-dt-bindings-for-v6.2&id=7dd1d57c052e88f98b9e9145461b13bca019d108
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-arm-soc-for-v6.2&id=b3acbca3c80e612478b354e43c1480c3fc15873e
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-arm-dt-for-v6.2&id=49669da644cf000eb79dbede55bd04acf3f2f0a0
+> [4] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/commit/?h=renesas-arm-dt-for-v6.2&id=b9a0be2054964026aa58966ce9724b672f210835
+>
+> v4 -> v5:
+> ---------
+> * Rebased patches on -next
+> * Included RB tags
+> * Dropped patches #1 and #4 (form v4) as they are queued up by Renesas trees
+> * Patch #7 from v4 was not needed anymore so dropped it
+> * Patches #4 and #5 are new
+>
+> v4: https://lore.kernel.org/all/20220920184904.90495-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> v3: https://lore.kernel.org/lkml/20220915181558.354737-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> v2: https://lore.kernel.org/all/20220815151451.23293-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> v1: https://lore.kernel.org/lkml/20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+>
+> Below are the logs from RZ/Five SMARC EVK:
+> ------------------------------------------
+>
+> / # uname -ra;
+> Linux (none) 6.1.0-rc2-00036-gbad82a074f62 #145 SMP Fri Oct 28 17:18:41 BST 2022 riscv64 GNU/Linux
+> / # cat /proc/cpuinfo;
+> processor       : 0
+> hart            : 0
+> isa             : rv64imafdc
+> mmu             : sv39
+> uarch           : andestech,ax45mp
+> mvendorid       : 0x31e
+> marchid         : 0x8000000000008a45
+> mimpid          : 0x500
+>
+> / # for i in machine family soc_id revision; do echo -n "$i: ";cat /sys/devices/
+> soc0/$i; done
+> machine: Renesas SMARC EVK based on r9a07g043f01
+> family: RZ/Five
+> soc_id: r9a07g043
+> revision: 0
+> / #
+> / # cat /proc/interrupts
+>            CPU0
+>   1:          0  SiFive PLIC 412 Level     1004b800.serial:rx err
+>   2:         16  SiFive PLIC 414 Level     1004b800.serial:rx full
+>   3:        402  SiFive PLIC 415 Level     1004b800.serial:tx empty
+>   4:          0  SiFive PLIC 413 Level     1004b800.serial:break
+>   5:      41826  RISC-V INTC   5 Edge      riscv-timer
+>   6:         10  SiFive PLIC 416 Level     1004b800.serial:rx ready
+> IPI0:         0  Rescheduling interrupts
+> IPI1:         0  Function call interrupts
+> IPI2:         0  CPU stop interrupts
+> IPI3:         0  IRQ work interrupts
+> IPI4:         0  Timer broadcast interrupts
+> / #
+> / # cat /proc/meminfo
+> MemTotal:         882252 kB
+> MemFree:          860848 kB
+> MemAvailable:     858608 kB
+> Buffers:               0 kB
+> Cached:             1796 kB
+> SwapCached:            0 kB
+> Active:                0 kB
+> Inactive:             72 kB
+> Active(anon):          0 kB
+> Inactive(anon):       72 kB
+> Active(file):          0 kB
+> Inactive(file):        0 kB
+> Unevictable:        1796 kB
+> Mlocked:               0 kB
+> SwapTotal:             0 kB
+> SwapFree:              0 kB
+> Dirty:                 0 kB
+> Writeback:             0 kB
+> AnonPages:           108 kB
+> Mapped:             1200 kB
+> Shmem:                 0 kB
+> KReclaimable:       6760 kB
+> Slab:              12360 kB
+> SReclaimable:       6760 kB
+> SUnreclaim:         5600 kB
+> KernelStack:         620 kB
+> PageTables:           32 kB
+> SecPageTables:         0 kB
+> NFS_Unstable:          0 kB
+> Bounce:                0 kB
+> WritebackTmp:          0 kB
+> CommitLimit:      441124 kB
+> Committed_AS:        592 kB
+> VmallocTotal:   67108864 kB
+> VmallocUsed:        1132 kB
+> VmallocChunk:          0 kB
+> Percpu:               84 kB
+> HugePages_Total:       0
+> HugePages_Free:        0
+> HugePages_Rsvd:        0
+> HugePages_Surp:        0
+> Hugepagesize:       2048 kB
+> Hugetlb:               0 kB
+> / #
+> / #
+>
+> Cheers,
+> Prabhakar
+>
+> Lad Prabhakar (7):
+>   dt-bindings: riscv: Sort the CPU core list alphabetically
+>   dt-bindings: riscv: Add Andes AX45MP core to the list
+>   riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
+>   riscv: dts: renesas: Add initial devicetree for Renesas RZ/Five SoC
+>   riscv: dts: renesas: Add minimal DTS for Renesas RZ/Five SMARC EVK
+>   MAINTAINERS: Add entry for Renesas RISC-V
+>   riscv: configs: defconfig: Enable Renesas RZ/Five SoC
+>
+>  .../devicetree/bindings/riscv/cpus.yaml       | 11 ++-
+>  MAINTAINERS                                   |  3 +-
+>  arch/riscv/Kconfig.socs                       |  5 +
+>  arch/riscv/boot/dts/Makefile                  |  1 +
+>  arch/riscv/boot/dts/renesas/Makefile          |  2 +
+>  arch/riscv/boot/dts/renesas/r9a07g043f.dtsi   | 57 ++++++++++++
+>  .../boot/dts/renesas/r9a07g043f01-smarc.dts   | 27 ++++++
+>  .../boot/dts/renesas/rzfive-smarc-som.dtsi    | 58 ++++++++++++
+>  arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi | 91 +++++++++++++++++++
+>  arch/riscv/configs/defconfig                  |  3 +
+>  10 files changed, 252 insertions(+), 6 deletions(-)
+>  create mode 100644 arch/riscv/boot/dts/renesas/Makefile
+>  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043f.dtsi
+>  create mode 100644 arch/riscv/boot/dts/renesas/r9a07g043f01-smarc.dts
+>  create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc-som.dtsi
+>  create mode 100644 arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi
 
-The devices enabled are: ATH10K SDIO wireless adapter, Elan touchscreen,
-cr50 TPM, MediaTek SPI controller, JPEG video decoder, ANX7625 DSI/DPI
-to DP bridge (used for the internal display), MT8183 sound cards, SCP
-co-processor, MediaTek Global Command Engine (controlled by CMDQ
-driver), MediaTek Smart Voltage Scaling (SVS) engine, CCI frequency
-and voltage scaling, AUXADC thermal sensors.
+Geert was mentioning taking these though one of his trees, that works 
+for me so
 
-All symbols are enabled as modules with the exception of SPI, which is
-enabled as builtin since on some platforms like mt8195-cherry, the
-ChromeOS Embedded Controller is connected through SPI and it is
-responsible for the regulators powering the MMC controller used for the
-SD card, and thus SPI support is required for booting.
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-By enabling the support for all of this machine's devices on the
-defconfig we make it effortless to test the relevant hardware both by
-developers as well as CI systems like KernelCI.
+Happy to do a shared tag or whatever, but I think we can just skip that 
+here.  The only conflicts would be defconfig and Kconfig.socs, but I 
+don't think anything big is in the works for either -- unless Conor was 
+planning on re-spinning that Kconfig.socs rework?
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
----
-Related KernelCI links:
-[1] https://github.com/kernelci/kernelci-core/pull/1352
-[2] https://github.com/kernelci/bootrr/pull/22
-
-v1: https://lore.kernel.org/all/20221108232228.1177199-1-nfraprado@collabora.com
-
-Changes in v2:
-- Squashed all commits into a single one
-
- arch/arm64/configs/defconfig | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 226bb30ea7e2..14ce97d78662 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -392,6 +392,7 @@ CONFIG_USB_NET_PLUSB=m
- CONFIG_USB_NET_MCS7830=m
- CONFIG_ATH10K=m
- CONFIG_ATH10K_PCI=m
-+CONFIG_ATH10K_SDIO=m
- CONFIG_ATH10K_SNOC=m
- CONFIG_WCN36XX=m
- CONFIG_ATH11K=m
-@@ -412,6 +413,7 @@ CONFIG_KEYBOARD_CROS_EC=y
- CONFIG_INPUT_TOUCHSCREEN=y
- CONFIG_TOUCHSCREEN_ATMEL_MXT=m
- CONFIG_TOUCHSCREEN_GOODIX=m
-+CONFIG_TOUCHSCREEN_ELAN=m
- CONFIG_TOUCHSCREEN_EDT_FT5X06=m
- CONFIG_INPUT_MISC=y
- CONFIG_INPUT_PM8941_PWRKEY=y
-@@ -462,6 +464,10 @@ CONFIG_IPMI_HANDLER=m
- CONFIG_IPMI_DEVICE_INTERFACE=m
- CONFIG_IPMI_SI=m
- CONFIG_TCG_TPM=y
-+CONFIG_TCG_TIS=m
-+CONFIG_TCG_TIS_SPI=m
-+CONFIG_TCG_TIS_SPI_CR50=y
-+CONFIG_TCG_TIS_I2C_CR50=m
- CONFIG_TCG_TIS_I2C_INFINEON=y
- CONFIG_I2C_CHARDEV=y
- CONFIG_I2C_MUX=y
-@@ -505,6 +511,7 @@ CONFIG_SPI_IMX=m
- CONFIG_SPI_FSL_DSPI=y
- CONFIG_SPI_MESON_SPICC=m
- CONFIG_SPI_MESON_SPIFC=m
-+CONFIG_SPI_MT65XX=y
- CONFIG_SPI_ORION=y
- CONFIG_SPI_PL022=y
- CONFIG_SPI_ROCKCHIP=y
-@@ -617,6 +624,7 @@ CONFIG_BRCMSTB_THERMAL=m
- CONFIG_EXYNOS_THERMAL=y
- CONFIG_TEGRA_SOCTHERM=m
- CONFIG_TEGRA_BPMP_THERMAL=m
-+CONFIG_GENERIC_ADC_THERMAL=m
- CONFIG_QCOM_TSENS=y
- CONFIG_QCOM_SPMI_ADC_TM5=m
- CONFIG_QCOM_SPMI_TEMP_ALARM=m
-@@ -701,6 +709,7 @@ CONFIG_USB_VIDEO_CLASS=m
- CONFIG_V4L_PLATFORM_DRIVERS=y
- CONFIG_SDR_PLATFORM_DRIVERS=y
- CONFIG_V4L_MEM2MEM_DRIVERS=y
-+CONFIG_VIDEO_MEDIATEK_JPEG=m
- CONFIG_VIDEO_QCOM_CAMSS=m
- CONFIG_VIDEO_QCOM_VENUS=m
- CONFIG_VIDEO_RCAR_ISP=m
-@@ -763,6 +772,7 @@ CONFIG_DRM_SII902X=m
- CONFIG_DRM_SIMPLE_BRIDGE=m
- CONFIG_DRM_THINE_THC63LVD1024=m
- CONFIG_DRM_TI_SN65DSI86=m
-+CONFIG_DRM_ANALOGIX_ANX7625=m
- CONFIG_DRM_I2C_ADV7511=m
- CONFIG_DRM_I2C_ADV7511_AUDIO=y
- CONFIG_DRM_CDNS_MHDP8546=m
-@@ -805,6 +815,9 @@ CONFIG_SND_SOC_IMX_SGTL5000=m
- CONFIG_SND_SOC_IMX_SPDIF=m
- CONFIG_SND_SOC_FSL_ASOC_CARD=m
- CONFIG_SND_SOC_IMX_AUDMIX=m
-+CONFIG_SND_SOC_MT8183=m
-+CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=m
-+CONFIG_SND_SOC_MT8183_DA7219_MAX98357A=m
- CONFIG_SND_MESON_AXG_SOUND_CARD=m
- CONFIG_SND_MESON_GX_SOUND_CARD=m
- CONFIG_SND_SOC_QCOM=m
-@@ -1113,6 +1126,7 @@ CONFIG_ARM_SMMU_V3=y
- CONFIG_MTK_IOMMU=y
- CONFIG_QCOM_IOMMU=y
- CONFIG_REMOTEPROC=y
-+CONFIG_MTK_SCP=m
- CONFIG_QCOM_Q6V5_ADSP=m
- CONFIG_QCOM_Q6V5_MSS=m
- CONFIG_QCOM_Q6V5_PAS=m
-@@ -1130,8 +1144,10 @@ CONFIG_RASPBERRYPI_POWER=y
- CONFIG_FSL_DPAA=y
- CONFIG_FSL_MC_DPIO=y
- CONFIG_FSL_RCPM=y
-+CONFIG_MTK_CMDQ=m
- CONFIG_MTK_DEVAPC=m
- CONFIG_MTK_PMIC_WRAP=y
-+CONFIG_MTK_SVS=m
- CONFIG_QCOM_AOSS_QMP=y
- CONFIG_QCOM_COMMAND_DB=y
- CONFIG_QCOM_CPR=y
-@@ -1182,6 +1198,7 @@ CONFIG_ARCH_TEGRA_234_SOC=y
- CONFIG_TI_SCI_PM_DOMAINS=y
- CONFIG_ARM_IMX_BUS_DEVFREQ=m
- CONFIG_ARM_IMX8M_DDRC_DEVFREQ=m
-+CONFIG_ARM_MEDIATEK_CCI_DEVFREQ=m
- CONFIG_EXTCON_PTN5150=m
- CONFIG_EXTCON_USB_GPIO=y
- CONFIG_EXTCON_USBC_CROS_EC=y
-@@ -1189,6 +1206,7 @@ CONFIG_RENESAS_RPCIF=m
- CONFIG_IIO=y
- CONFIG_EXYNOS_ADC=y
- CONFIG_MAX9611=m
-+CONFIG_MEDIATEK_MT6577_AUXADC=m
- CONFIG_QCOM_SPMI_VADC=m
- CONFIG_QCOM_SPMI_ADC5=m
- CONFIG_ROCKCHIP_SARADC=m
--- 
-2.38.1
-
+Thanks!
