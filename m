@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC322622DF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A37622DF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiKIOaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S231528AbiKIOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbiKIOaR (ORCPT
+        with ESMTP id S231580AbiKIOaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:30:17 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ED11F9F4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:30:16 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id 13so47179796ejn.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:30:16 -0800 (PST)
+        Wed, 9 Nov 2022 09:30:18 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E450209A6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:30:17 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id f7so27487446edc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:30:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=N96rWukkzzft84T2ilUpjkniGJmFniZsxB7jb54ifXs=;
-        b=NUQruEBYuKGoATQoEgq8HnQG7zmavO8XD1UrtBSLzg8JU522IgpPOEXmqcF4u0Ez5v
-         FBMEDkmVUu9wjt/3Ew9uAOCPrOlaNYbTsAfsDYXE+SPqBP+oh8kv9+hq7VU9ZZjR7ljQ
-         9rZGRPv6nzYTlfPZ0UlpecP7Lq8FdNJsBerVM=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p2exQy+rK75dSnSRHEgsdoD6BiAMCjOGrIjHxqTi8vw=;
+        b=La/BxWHk8ROJTnqh+alVNyjVhDtcjF54svcmA4LRv5ein3C1o6WooKgtVzjD9KPM+S
+         lHsePGRdzx09xAaL1RA/cLSmw863sKTjbadSWQgBaBSgUaf3dQ4lk8K+TicfLTF6QAmA
+         zfdBo1VSmOO/dtBWyXlaDGhAeR8IdoN9i18q0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N96rWukkzzft84T2ilUpjkniGJmFniZsxB7jb54ifXs=;
-        b=XBhy7HfkirSLIo4CdcsvCJNV/xcuQDyKpQRYe3iI09r0HVcuVkQjR3nRypMTfCP8gk
-         S8DoVFppWlk1PeEReDzybhmVNUQfyS3Ba/iGmuNDc4aN5Skgmzsd4RgJUrkC/MrPupdH
-         4NHcMlKu8N31OTdO8VKCr//W0NU679WosRwtvqOLKYmxydxdxjohFK9io01SoYqJucWy
-         ao7lGDU9yDaXj5aFIxZb92IH8+/OR1WT3dtayzdPO6DMv4Hz85sMHdPdD21kKHmJw8YY
-         n0GzVDYW/ZkCevdI3ciPJWr3UCjVA1l/HlM9Sbyfn2hgXAdYQ7kDWsUguY3fraQY1L63
-         ioxw==
-X-Gm-Message-State: ACrzQf3bTMgXkZfRekFXN1kFY5nObzOcywxm/G+FF8sFQJCn42raVPeK
-        aF5QrSqmMujETlXUMCmqImJBjA==
-X-Google-Smtp-Source: AMsMyM4ljNakYGb8FEwYQ+ua0vOjv8/+n3jDbN6hIZptU4+jxoR/3FXruQkLjWdo4N8Xgm8mp6JuCw==
-X-Received: by 2002:a17:906:6a02:b0:7ae:2793:aa19 with SMTP id qw2-20020a1709066a0200b007ae2793aa19mr29371804ejc.265.1668004214873;
-        Wed, 09 Nov 2022 06:30:14 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p2exQy+rK75dSnSRHEgsdoD6BiAMCjOGrIjHxqTi8vw=;
+        b=aS91x3CGOkzh3fbRzc0B04LgpjDWjsO1DFxyYf6S+dYQiPPRRiwy5BoMi7qopJqbF5
+         l6Omgvc7Mb22llA5VW1bnTgAaO7NDsZIciDT8BcO9WJVA509/FPKZBSmb/oF44JWNNHy
+         yUXW8ufvtKFVyG1h3BjTP5HJPvvwTNFHr0/uhnPOb8l4D3E1XCe9IVJhORPl+nktov64
+         r4tTlPfGOfg+iPmS67uVrhUL9nN4qYB079B86m77dQozCBvGX5RleE+xNjLNGV2klDel
+         OZiM1K0CKWQeBijENfpMfvg7byC1E56Mz+U5tOrtP2D067pIYw7lXFdyxjSkk9IIusFA
+         MQvA==
+X-Gm-Message-State: ACrzQf1kyLI+fchJ2MIlIzVTnXRAaSJm0alXk6Y3dPsB05a9mw/5aRJY
+        UqSVtmCpSIhfxHdfI61TH5bz1Q==
+X-Google-Smtp-Source: AMsMyM7aUwjCf+C8yDIHmZIsPvh34XMRkaxpyHP0OUKIZ+Uab+LY9HrEA0Z2wS9nOpwxuzB2oFmtUg==
+X-Received: by 2002:a05:6402:241d:b0:463:e963:5149 with SMTP id t29-20020a056402241d00b00463e9635149mr1002227eda.219.1668004215769;
+        Wed, 09 Nov 2022 06:30:15 -0800 (PST)
 Received: from alco.roam.corp.google.com ([2620:0:1059:10:7487:46db:8e12:c768])
-        by smtp.gmail.com with ESMTPSA id d25-20020aa7c1d9000000b0044dbecdcd29sm7020389edp.12.2022.11.09.06.30.14
+        by smtp.gmail.com with ESMTPSA id d25-20020aa7c1d9000000b0044dbecdcd29sm7020389edp.12.2022.11.09.06.30.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 06:30:14 -0800 (PST)
-Subject: [PATCH v1 0/1] i2c: Restore power status of device if probe fails
+        Wed, 09 Nov 2022 06:30:15 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 09 Nov 2022 15:29:48 +0100
+Subject: [PATCH v1 1/1] i2c: Restore initial power state on probe failure
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIAFu5a2MC/w3LQQqAIBBA0avErBtwhAi7zWhjDoiBki2ku+fywf8DmlSVBscyoErXpneZoHWBkL
- hcgnpOgzXWEhmHagO+rF2Qxe1RmCL5DWbvuQn6yiWkeZQn5+/7Adt+K05gAAAA
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 09 Nov 2022 15:29:47 +0100
-Message-Id: <20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org>
+Message-Id: <20221109-i2c-waive-v1-1-ed70a99b990d@chromium.org>
+References: <20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org>
+In-Reply-To: <20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org>
 To:     Tomasz Figa <tfiga@chromium.org>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
@@ -64,58 +65,76 @@ Cc:     linux-kernel@vger.kernel.org,
         Hidenori Kobayashi <hidenorik@google.com>,
         linux-i2c@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=961; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=xbF/MIUAKcQD4clS31BaNJtsnvcssnr11NYtRC214vo=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBja7liJtRWY4suMhjLbNI+ldyebAoNrPAn2LUdX8j9
- Uvtt7lOJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2u5YgAKCRDRN9E+zzrEiJM4EA
- CcSqPambhLY9adGX94xkF46+nnAl704+gj6irsEN3zkkNVyfOrjYjxk5pZF0888rRnySyB5SSwxiv2
- mH6WduT2kfnm1Kb1/CU8XJ+kM5yZJPEEsZJ85ZTQZuuqONVfPaIar7LcfO+MxjHjEOpu00yJ80fClX
- diCewkAjl18jlmBuIliVjGDHoiQ73ZIVP0laKz7/OcYT9kbAwBpStcHrklzCOyxoxyoRiWi88xuIfp
- yvKpPUEkyXbk7vvJAXb3uOjFEBoTon9enLRX17HuI6nXrCJc2GjZ3SnJNlQFWsaHPYTUTm2HoydSHW
- 7AZBLEQvSWY5P2zQJCXSUD4x/fjfuAx3hx8viF0nDm1s83+Z/OeJ+hpop6rSIVmA+vWU3aXM0Z3Tnh
- 2RD5fH36rK6VFe4pAu2SwUvueSfEIaO8V3nrHpejcHAKnDnU3tTVJRySfq1FeTAGplTJCi575zH2oG
- 5a9xtXh26OP4zzZG/EWPjEPxBdHqDaJ5kp9jUvPF4Figpt5Z1bfN4bx0PdOA/AnGoCkgwMINgvR8da
- hYo6+tao7Pcuj9fv2GXO0yQRL1GDuGJ2fketb+bM9L3wuYaKlO1/JqK3Bu8vWbKCNIWYZaII7ZXk6R
- P+mZbpBId7dnB93XawBMIcjeYjfqD3hq8GuZsJtxDC6flN7ECRdhkKnNeUsQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1884; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=1/gktLwGWXSrMTHDXZfZ00iimvdmig+4+JGVMAVIz7Q=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBja7lzqyjfbDUAGMHNNT7NQ7twdE6AbLSE7O8hZuYl
+ tEjAuk6JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2u5cwAKCRDRN9E+zzrEiHo6EA
+ CQYTIX9z3Ju3O8mosQxqNKSgBYv9P8StVftkoZPRbyuDFjYgXctjFV4Z3esFDbQDEIbpotXxS1AYE+
+ pIFtqDLl0kz4MROqac1FgiQVtQ3NOfjE8Pb4Xc/SbuJ3LMPC66NJ5nPqZIaEDw5dpWPgJ0Qy0GxgdI
+ sdgyWKjJfAJHNtCkV+f/Ek7qyoAnv/t5f+1aLB2hY2QbX7fagaw5qii5YYJgkzqW4WuW5tgvLjYFTu
+ OWFK7fW5Hiexp+X0+qp2DIaNSn1UWT89GitU8HjuwQLH0K/hIxAFZc1BJawoguqJq+WzZXvcor2QgJ
+ dj2aYF99PWcVr5aHRmSXJD9Y+eey5Y3DVl21dWEunTkCFRWApG+Gy2u8aly27bEliBpAc7frOpxkmg
+ /cTIkVz4POeUQhxe6WZCNIxpM+c7TIINyb92oJsK4424lI0Zlx96oktkcZ/WgRIm8QtoDrQ+O+D98u
+ Zwz8fRcnih9Mo1aM0K/2v1Ai5UfaYb69lYZruludBz7Kx2XKTcWZPbKuoASt4d9Gp+0nkmMkPln3TY
+ XZJLgc9mr22X65Y7uJvFmBw6CaoOv9PP4Qsl5jxizY0fT8oEQY9/kxe2F4ilrrAUqfM30FUP0uxIc4
+ 1QEEA8M9mhE9S+XP7mwlduSRzsIpoIBm8EejZDtsZy6skz2ddhJWdnfGMzjw==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have discovered that some power lines were always on even if the devices
-on that power line was not used.
+A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
+power off a device that it has not powered on previously.
 
-This happens because we failed to probe a device on the i2c bus, and the
-ACPI Power Resource were never turned off.
+For devices operating in "full_power" mode, the first call to
+`i2c_acpi_waive_d0_probe` will return 0, which means that the device
+will be turned on with `dev_pm_domain_attach`.
 
-This patch tries to fix this issue.
+If probe fails, the second call to `i2c_acpi_waive_d0_probe` will return
+1, which means that the device will not be turned off. This is, it will
+be left in a different power state. Lets fix it.
 
-To: Wolfram Sang <wsa@kernel.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Tomasz Figa <tfiga@chromium.org>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Hidenori Kobayashi <hidenorik@google.com>
-Cc: linux-i2c@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
----
-Ricardo Ribalda (1):
-      i2c: Restore initial power state on probe failure
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index b4edf10e8fd0..be59c40f5beb 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
+ {
+ 	struct i2c_client	*client = i2c_verify_client(dev);
+ 	struct i2c_driver	*driver;
++	bool do_power_on;
+ 	int status;
+ 
+ 	if (!client)
+@@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
+ 	if (status < 0)
+ 		goto err_clear_wakeup_irq;
+ 
+-	status = dev_pm_domain_attach(&client->dev,
+-				      !i2c_acpi_waive_d0_probe(dev));
++	do_power_on = !i2c_acpi_waive_d0_probe(dev);
++	status = dev_pm_domain_attach(&client->dev, do_power_on);
+ 	if (status)
+ 		goto err_clear_wakeup_irq;
+ 
+@@ -585,7 +586,7 @@ static int i2c_device_probe(struct device *dev)
+ err_release_driver_resources:
+ 	devres_release_group(&client->dev, client->devres_group_id);
+ err_detach_pm_domain:
+-	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
++	dev_pm_domain_detach(&client->dev, do_power_on);
+ err_clear_wakeup_irq:
+ 	dev_pm_clear_wake_irq(&client->dev);
+ 	device_init_wakeup(&client->dev, false);
 
- drivers/i2c/i2c-core-base.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
----
-base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
-change-id: 20221109-i2c-waive-ae97fea1f1b5
-
-Best regards,
 -- 
-Ricardo Ribalda <ribalda@chromium.org>
+b4 0.11.0-dev-d93f8
