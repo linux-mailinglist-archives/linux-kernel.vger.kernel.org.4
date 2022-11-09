@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D13622951
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAADB622959
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 11:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiKIK4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 05:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39482 "EHLO
+        id S229591AbiKIK55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 05:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiKIK4A (ORCPT
+        with ESMTP id S230413AbiKIK5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 05:56:00 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F2529CB8;
-        Wed,  9 Nov 2022 02:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667991276; x=1699527276;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kZDUrGxLZXD8ZS03E/DY8j/TP1l3/jEAXlKHEYjBUD8=;
-  b=NZOhVjsvKITQbu1GuC4+LuuWB+b1AK/FeoxM1QTVN5Cx89U3HNl7PIaE
-   UV3w6NF3f726ICqheZVsuBh2WnmNLT7+/aaJwFpI4KoOWrc3xEWQtZSjQ
-   uuCr1Qhju/F/Ld/FdlXBlf9XbbwaWpf3t1T5FLxnDuGtgOxq4lrxE3OJC
-   qzY6qXzN3tovqMLro2hEk9Q7vJPp0ulN5QOigk70pwMOTTOC3+ubKeGob
-   kxJ4HIzoq2td7lHM0iUG29G5UQa3r1Wk4xCl+TU72i3hzIl9a/MJeC44A
-   VYCq4VUr+2X/X8Ejvks91o1Mj87tPng89JFndzGZzJ0YCHBqNPrwu7AtN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="309658674"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="309658674"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 02:54:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="811591459"
-X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
-   d="scan'208";a="811591459"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 09 Nov 2022 02:54:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1osij0-009huC-0s;
-        Wed, 09 Nov 2022 12:54:30 +0200
-Date:   Wed, 9 Nov 2022 12:54:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     chengwei <larry.lai@yunjingtech.com>, lee@kernel.org, pavel@ucw.cz,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-leds@vger.kernel.org, GaryWang@aaeon.com.tw,
-        musa.lin@yunjingtech.com, jack.chang@yunjingtech.com,
-        noah.hung@yunjingtech.com, Javier Arteaga <javier@emutex.com>,
-        Nicola Lunghi <nicola.lunghi@emutex.com>
-Subject: Re: [PATCH V3 2/3] pinctrl: Add support pin control for UP board
- CPLD/FPGA
-Message-ID: <Y2uG5jrYeadqMNav@smile.fi.intel.com>
-References: <20221109090957.13167-1-larry.lai@yunjingtech.com>
- <20221109090957.13167-3-larry.lai@yunjingtech.com>
- <CACRpkdZQ7FCtLPEioWXn+MXQhnpuu-EY+CjhEeKqBe=Bvq777g@mail.gmail.com>
+        Wed, 9 Nov 2022 05:57:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6113AD
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 02:57:14 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A99MKB5002368;
+        Wed, 9 Nov 2022 10:55:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type : subject :
+ from : in-reply-to : date : cc : message-id : references : to :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Z7Wf8ct09eK4ViEpf0UW9mV2GGqYyKN0h7Q7fnU9dGE=;
+ b=gMDBSra28bcQSjhQQDXY1vmIIUhCka/8xHoepmERMd5eZmus44RRWtsO4AbELOpJQIZ+
+ T3m4gg/oQyoa/v320Noutcs3jfEFBuMEToHoxiqiO3Y9JIAW3eL5Faskl8qkyZjbjmUa
+ DfSP1YOMG7w1UsYZFNJwT7rQlKooQtAXC/pNaboVYU7cHtolv02DtKrEb/96xN+iRdpy
+ K3Iy9MHGFBnU0Sp+3LHjhpctuOb6yE6n2l8WSRQGeeznPu0EsyYQnLxU5GWVlghzVtYO
+ ctzmhvjDuknvC2QZqZxH1u5kIjnCZ86dADUNb8+EOGSXBHp+foqkebnYg+qrkGVTbGLN YA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kr7ns5my7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 10:55:55 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A9ApkVG001934;
+        Wed, 9 Nov 2022 10:55:53 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3kngpgm1gr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Nov 2022 10:55:53 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A9AuTrB43057444
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Nov 2022 10:56:29 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4943E11C04C;
+        Wed,  9 Nov 2022 10:55:51 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2620411C04A;
+        Wed,  9 Nov 2022 10:55:50 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.28.188])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Nov 2022 10:55:49 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Subject: Re: [6.1.0-rc3-next-20221104] Boot failure - kernel BUG at
+ mm/memblock.c:519
+From:   Sachin Sant <sachinp@linux.ibm.com>
+In-Reply-To: <4fee7f2b0e99e256465ef6e7656c6349@linux.dev>
+Date:   Wed, 9 Nov 2022 16:25:39 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Message-Id: <74979021-D386-4402-BD70-167531C7405B@linux.ibm.com>
+References: <e00989c4a69943cb4f60fc7ffaa06f8c@linux.dev>
+ <Y2oLYB7Tu7J91tVm@linux.ibm.com>
+ <E2499567-0D0F-44DA-AC68-1E279009A6DE@linux.ibm.com>
+ <58779468e28e026a1aa30a42ca7e8aec@linux.dev>
+ <4fee7f2b0e99e256465ef6e7656c6349@linux.dev>
+To:     Yajun Deng <yajun.deng@linux.dev>
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UP7PTNYWFa0FnyjErRmc0w-n1JP_k0J8
+X-Proofpoint-GUID: UP7PTNYWFa0FnyjErRmc0w-n1JP_k0J8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkdZQ7FCtLPEioWXn+MXQhnpuu-EY+CjhEeKqBe=Bvq777g@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_04,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 mlxlogscore=979 bulkscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211090077
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 10:27:59AM +0100, Linus Walleij wrote:
-> On Wed, Nov 9, 2022 at 10:11 AM chengwei <larry.lai@yunjingtech.com> wrote:
 
-...
 
-> > +config PINCTRL_UPBOARD
-> > +       tristate "UP board FPGA pin controller"
-> > +       depends on ACPI
-> > +       depends on MFD_UPBOARD_FPGA
-> > +       depends on X86
+> On 09-Nov-2022, at 3:55 PM, Yajun Deng <yajun.deng@linux.dev> wrote:
 > 
-> This is Andy territory as it is x86 and ACPI but...
+> November 9, 2022 6:03 PM, "Yajun Deng" <yajun.deng@linux.dev> wrote:
+> 
+>> Hey Mike,
+>> 
+> Sorry, this email should be sent to Sachin but not Mike. 
+> Please forgive my confusion. So:
+> 
+> Hey Sachin,
+> Can you help me test the attached file? 
+> Please use this new patch instead of the one in memblock tree.
 
-It seems they forgot paying the respect to the reviewers by Cc'ing them.
+Thanks for the fix. With the updated patch kernel boots correctly.
 
-...
+Tested-by: Sachin Sant <sachinp@linux.ibm.com <mailto:sachinp@linux.ibm.com>>
 
-> So this looks like it should be uncommented and used or deleted?
-> It just looks unfinished, and this patch is not an RFC.
-
-I'm wondering why it has v3 and not RFC in the Subject. So, no need to spend
-time right now in reviewing this.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+- Sachin
 
