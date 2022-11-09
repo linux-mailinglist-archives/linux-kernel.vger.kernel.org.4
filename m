@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FF0623198
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B09162319F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiKIRjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
+        id S231717AbiKIRkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbiKIRi7 (ORCPT
+        with ESMTP id S230244AbiKIRkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:38:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4797C77A;
-        Wed,  9 Nov 2022 09:38:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8323E61B8D;
-        Wed,  9 Nov 2022 17:38:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC570C433C1;
-        Wed,  9 Nov 2022 17:38:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668015535;
-        bh=Jhd6aCma2Qjlqkwlxvewothq3IuiiBcixDdKQqWZQoY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OqHLVc+YYMqqaL3t7XggSXyYKPMyrjib1stj/zXTNiZn4hsSg52BCI1dm18P7Q7H4
-         7tbUR/ESyED4uHx8geKe9OSBhNFx6KuLHtkYAcvoulAvCT9E0jlBfUOKkROcb6+GkN
-         goCG0aemFGOfx7wXDNHMot0CS1lZO7wHvPDorHpR4CUWa7L9eoWzAma78QdzAicZxp
-         m1hxyhoDt6hPPrH84dcpgNDxSvskaaNbh23jyrOSm9xfFQEXdzR4+T5Ge3hMwgla+m
-         RsWcoUJagoIdZdhKqLm+8Hejby7fR53WBXpZMZ9olYj/1Iw1Ry+dgnPR2YCx343vha
-         iI38/RafASC+w==
-Date:   Wed, 9 Nov 2022 17:38:49 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s.nawrocki@samsung.com,
-        perex@perex.cz, tiwai@suse.com, pankaj.dubey@samsung.com,
-        alim.akhtar@samsung.com, rcsekar@samsung.com,
-        aswani.reddy@samsung.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 2/6] ASoC: samsung: i2s: configure PSR from sound card
-Message-ID: <Y2vlqatX7dfPJ3Zi@sirena.org.uk>
-References: <20221014102151.108539-1-p.rajanbabu@samsung.com>
- <CGME20221014104857epcas5p2a275a1d606ca066227228d13bcf5b120@epcas5p2.samsung.com>
- <20221014102151.108539-3-p.rajanbabu@samsung.com>
- <Y0lPz91gbovAub9D@sirena.org.uk>
- <04a101d8e523$30804b80$9180e280$@samsung.com>
- <Y1KIT4nk7C8SQ45x@sirena.org.uk>
- <01ba01d8f332$44eb3810$cec1a830$@samsung.com>
+        Wed, 9 Nov 2022 12:40:08 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CBFFCF7;
+        Wed,  9 Nov 2022 09:40:07 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id k2so48821340ejr.2;
+        Wed, 09 Nov 2022 09:40:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fS35qcO+3i+yhgDgBY53vbObhAkvDaFM3P89fHFHH9w=;
+        b=VmPlQ8XxPbRAjyiuyAV7Ol91xALQXQUcdVYb9y6teAiErG0FMloo8tViVc+H9vgcvD
+         GTqU7y8E5zDQXVGAeq39o94z+qP+b+ytThDTjNQgGRl7sYhKtjFEZTXKeXZClCm8EryQ
+         bqRZfQc0qWNNWebO546uFSgyCdvNadjb7lvwOLackyj2twAnIYzeeg2XC7T8D7ymkTWN
+         0vf8aSlifrq6t0zUg7Abl2HGo7PEdvcnHeoH1HCBIoSBugyepc1cEvLx4JOFBSkxd5K7
+         hBEsb+Cbk8nr8OOHnPWOiKxa0o7RlfV/64XtjCE67rh3cITZWodyblFx2TbnkS2NTAH2
+         u4hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fS35qcO+3i+yhgDgBY53vbObhAkvDaFM3P89fHFHH9w=;
+        b=C9CnFsvhaTbb2aUEXXGyDRGeyNCq7eHp6KGLkMwgsjVQnfi2T/06kL1QdZjx8YcAk0
+         lPRcUvtYmYGvk7JLuhvTls4l2dCDzZzrcBZnW7yQfM/W6aTC52Us2tmgHQatF1nEZ9TX
+         FpxWT7evsojTGxpMrCRM0lHm66cFGaMxM51BmLHwtZ4TUEN8sb+mCioMUJKoaVpUeglc
+         d3tya8aOyQp7S6qH8sjpbQBVGJhSYMGb7Bfek8fz9636O+qxxLooUfgpHUdw9MyzVyt8
+         hBs77GeStlJWTO0I3G/trXGzCl4kd2LnVmecPA2YrbEpEdpnv8a3QtwGmvTsCfRlHHN0
+         tbzg==
+X-Gm-Message-State: ANoB5plMMS9UdVo3SNe97OP5a0rPzjQp1c8Nh1AxCmqEYmiYIsYd9PvG
+        iKNwpkehJupXbfalmPQ05kLnKDyoRcg=
+X-Google-Smtp-Source: AA0mqf4EqGjkNVg2cvyJugGf0H/v8jUfhqn2abLvKNW8GivQKU2zdRsA1XO+uz+uTHNu+/Rkv7s/9w==
+X-Received: by 2002:a17:907:1ca7:b0:7ad:9227:5288 with SMTP id nb39-20020a1709071ca700b007ad92275288mr5895265ejc.62.1668015605391;
+        Wed, 09 Nov 2022 09:40:05 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id w19-20020a1709064a1300b007ad9adabcd4sm6057348eju.213.2022.11.09.09.40.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 09:40:04 -0800 (PST)
+Date:   Wed, 9 Nov 2022 18:40:02 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 0/6] pinctrl: intel: Enable PWM optional feature
+Message-ID: <Y2vl8qXwGOXaky/a@orome>
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vJpVlYaVMgKIVLqK"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pOi3QDJEMNTlIz2b"
 Content-Disposition: inline
-In-Reply-To: <01ba01d8f332$44eb3810$cec1a830$@samsung.com>
-X-Cookie: Sign here without admitting guilt.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,112 +80,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---vJpVlYaVMgKIVLqK
+--pOi3QDJEMNTlIz2b
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 08, 2022 at 10:53:40AM +0530, Padmanabhan Rajanbabu wrote:
+On Tue, Nov 08, 2022 at 04:22:20PM +0200, Andy Shevchenko wrote:
+> This is a continuation of the previously applied PWM LPSS cleanup series.
+> Now, we would like to enable PWM optional feature that may be embedded
+> into Intel pin control IPs (starting from Sky Lake platforms).
+>=20
+> I would like to route this via Intel pin control tree with issuing
+> an immutable branch for both PINCTRL and PWM subsystems, but I'm
+> open for other suggestions.
 
-> > > We can overcome this scenario to an extent if we can get a flexibility
-> > > to Configure both PSR as well as RFS.
+I don't have any objections for this to go through the Intel tree as
+long as Uwe is happy with this. Most of this is just reworking existing
+things and the stub additions look good to me, so:
 
-> > Why does it make sense for the machine driver to worry about this rather
-> > than having the I2S controller driver configure the clock tree?
+Acked-by: Thierry Reding <thierry.reding@gmail.com>
 
-> _____           |                  __
-> |=20
-> |         |	        |	             |   \
-> |
-> |CMU|	        |	             |     \
-> |
-> |FSD  |-  |---|-|--------->|       \        _________    _________
-> |
-> |___  |    |    | |op_clk0|         |      |               |     |
-> |             |
-> 	  |    | |	             |MUX|----|  PSR       |----|  RFS
-> |--cdclk  |
-> 	  |    | |              |         |      |_______|     |_______|
-> |
-> 	  |    | |--------->|        /
-> |
-> 	  |    |  op_clk1 |      /
-> |
-> 	  |    | 	             |_ /
-> |
-> 	  |    |___________________________________________|
-> 	  |
-> 	  |-----> To other FSD SoC Peripherals
-
-> In FSD I2S, the clock source is not an independent source but a common cl=
-ock
-> source being shared by many IPs in the same domain.
-
-> Changing the clock tree will impact other IPs in the domain as they are
-> dependent on the same source for functionality.
-
-I'm not sure I follow.  Perhaps your diagram is unclear but it looks
-like PSR and RFS are both after a mux which appears to select which
-clock is going to be used by the I2S controller?  The usage by other
-clocks appears to be upstream of the mux and dividers.
-
-> We can understand your point to bring the PSR changes under the I2S CPU D=
-AI
-> driver by adding a separate compatible and data for the FSD SoC. But If we
-> take
-> the example of existing sound cards such as sound/soc/samsung/tm2_wm5110.=
-c,
-> the op_clk is supplied via external audio pll to the controller and PLL
-> configuration
-> is taken care by the sound card. Since the configuration of PLL is more
-> specific to
-> the tm2 platform, it makes use of the flexibility of changing the RFS and
-> BFS
-> using the sysclk and clkdiv hooks provided by exynos7-i2s CPU DAI along w=
-ith
-> PLL tuning for precise sampling frequency.
-
-The big reason for the clocking control (and indeed having a custom
-machine driver) with the WM5110 is that it has multiple clocks to
-control and a good deal of flexibility with placing them in clock
-domains and so on which have power and performance impacts.  It's
-frankly a bit unclear to me if the CPU I2S controller even needs the
-bitclock configuring given that the clocks are being driven by the CODEC
-there, but regardless it's not clear to me why the I2S controller would
-need anything other than the input clock to the block configuring?=20
-
-> Similar to the above example, the choice of clock source under discussion=
- is
-> not a
-> limitation of exynos7-i2s controller, but instead is a limitation on the =
-FSD
-> SoC.
-> By using the proposed change, we can ensure that the exynos CPU DAI driver
-> is
-> giving additional hooks similar to existing hooks for BFS, RFS and CDCLK
-> direction
-> so that sound cards can use snd_soc_dai_set_sysclk and
-> snd_soc_dai_set_clkdiv
-> to customize the same.
-
-I'm still not seeing anything that articulates why pushing the
-configuration of the dividers within the block into the machine driver
-solves a problem here.  Again, what's the upside to configuring clocks
-that are purely within the block?
-
---vJpVlYaVMgKIVLqK
+--pOi3QDJEMNTlIz2b
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNr5agACgkQJNaLcl1U
-h9Aa8wf6AtuTJerKp9o05gCs7egH+tVbReZ3DrGcTxoejtlSSUPw7JySho88VBSn
-VxEx9NUF+oL1nxUZOSbSmPdZfVD0uysuFnoenUvCf0VYOR2MhRVqXJH8huPDaDYG
-7In86Zog3gWu4bCGkKaxLRAxUkf7Jp+46bDbZiE8a0TOFZbGL5WNJoj56xVs3ZR7
-UHF08nRupMRBdLi8iE4T4mn7+/F8L5S3bXFUlZNc74eeVo91rfARXb1xVUtse39x
-bJK0QMRx3RgA7vpnCDftzk4bYvVY7Gf8CGIvLMGMQpHE8Y5YNZicdhah47hEVPvB
-3gPf+6fw/Qxa4oCotwNGY8B/yaXyPA==
-=P1ty
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNr5fAACgkQ3SOs138+
+s6EXTBAAhbQKYq85APX7HgdxOftsNMR6LQ7jXDMabYNTZgOvOk3E1B/jvMyaibfM
+pnQHQ/k/1WC4BUCZhdf9jl4ZOdeeo5P3M1UopeBuN0/yxnGteomPg8NIH+ZoaHEw
+4YYE5pI2m50VnvmwUk+9lv3Tq3reueRpgm7d1DL2ZwulSOiYZW5O3aDcOl2xBQ21
+Rf+TkP6ViLuLAuf34JGvPiPYJ0lvt7wbznKv2GfuNM8rULEwpFs4NOG/xsRh4DCg
+BZzGGiz6G08WOF69/yrmCujoOs0kI9ngTejdGffyrrnxCf9o/8sI6EaXrI8Csfbz
+nks7ylQnamqPnlmUMMfpvbaNHnH6iYBUZZlAsxd+uNsBTbdPcuVHsmlGX1TlMcCR
+426mqg4OBD7biUdvMfyeWlS/RLguYZ8REiYrMAXHY6kcnrRgq75fbOtszeOZiNdA
+BB6nTaOVFC/WwNAzR0AyZg04Yf0iT+tncgC5G0H09NDt9VIq2mzQH8knKDslSWou
+Ouh/ONk3LP2+9V4DkY9T56Gv+Ta2AsEWm2JyRDgCCQ6Cr4ZdwQmHFrOzKzaKsdjH
+rzczXgnNZnPjHulo65ELLVCDIEosSROWUUQDBDtOFbdsj/GLWSZ+wepE/Tq/Q24A
+ai5FKWk4EQWCAYCnw9HejACdRGK5C76rtThsz59Fkd3JjCpY5jA=
+=aEKE
 -----END PGP SIGNATURE-----
 
---vJpVlYaVMgKIVLqK--
+--pOi3QDJEMNTlIz2b--
