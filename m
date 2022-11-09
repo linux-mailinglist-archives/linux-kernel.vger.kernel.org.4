@@ -2,299 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791966227BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CC56227BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiKIJ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S230140AbiKIJ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiKIJ5L (ORCPT
+        with ESMTP id S230214AbiKIJ5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:57:11 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3648D23BE1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:57:07 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso882920wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:57:07 -0800 (PST)
+        Wed, 9 Nov 2022 04:57:24 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6F9240B3;
+        Wed,  9 Nov 2022 01:57:22 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id f27so45265186eje.1;
+        Wed, 09 Nov 2022 01:57:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hsfhxs1hYrONLDNG0hq6h1vR8M+W0oashll6Jl8JPxI=;
-        b=lNxoH6I6bNsajHKLUCqLi8yzFj+xh/SJ9Jm0xwLFtM1a4+vh/pKpBOq7bD5zrQ0DWa
-         QDh/od+nbvxdulmA/f4sitrLQ92IZV1lb7P/VhT4qi7IiHf87lmivZBEMlXu6vVP+Q5q
-         MlCpoYKk+XcMfQLU1AZlxaZGU/VSzjTwnGw7OvLPX57pZlGwI4iv3jsk6hIqqd9xvVNV
-         EjQ3EOzaOSKJAd5hRdo1Rnqk6MygyFYIc6VDqROoyLeC2INOy5eiJmUNnrYF3hkuilUf
-         4OKYJqryGmZqNXuy8o55rPxjozhGmlJfhZ/V07cmoaNlrudgORnzGWyE7bysb4y704WW
-         OwbA==
+        bh=nL5z1Js6hyAcZrzyFU0BOmZNXRwS5uMdz4l6yylknWc=;
+        b=JTFpGXxocV3WCUC3KPauTR1lExSPlX6xdVTo7SaZ3bR1BmKgPMEIl8IbuUqUcG802T
+         LM/OAauC87Wj1PB+oGYWAYG7K3FnlSHsdcHW07k8t8cDSezMiVo9fsQqQRTxHybBFy+W
+         FLoUuIPFesQsz7f7lRGKwbvkr5b0c5yTOOY6JaFLc54me/FV7tQfO5C8yx0lL3n7LyRE
+         5zeEx/nCJDV7Lg4dB45nEJowvJrPBqabsRTYFYhdgso9tQPdrySZfOCLii5CGXdE3Rgn
+         Z0WPg/HCMxUqe8ISGixYIyyNXuV+bcfceFA/OAqYkKr7fwDqcat0yIgaFwHgqTzdWSzv
+         WbGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hsfhxs1hYrONLDNG0hq6h1vR8M+W0oashll6Jl8JPxI=;
-        b=rKhYF9hDafx7RXyirxAuu1KTiH4xaav0DS4GL0QRcbhOySxmdBJhr8Nr6dGmvUYkC7
-         QmAUx+CVsrYE5pHQWilPTt1CGWH/ji3TRIXkr90UAJuofb4cCfLNLA0t9FCPYYq7lEmg
-         uOZpz2+ghSKwh5PSucy1vCGh4cSt2M7bI6MmWVyarEWZiOjnZBwKCI0Hbbh53Giq0JiH
-         V/U0LFtY1WvsiT5k5kxaSJlCWaRNYRHfvvprasKKrDkXEZVUP3NV/3ZHLrL4P/DiYykM
-         UBifKrO2cr8QtfiSSN3xYxQPi3IcYQ7VA8bDuO5yA+6jJTJp4pjNkZi0k/pEqrx/PdGv
-         UORA==
-X-Gm-Message-State: ACrzQf0Rm+CWTEFQ0N6ccI0odoYLdbLMSkWV43eO7ELxOecEUDPpdcJ7
-        /Vu9/PBa8aIMlmpz86x/31JM5Q==
-X-Google-Smtp-Source: AMsMyM66qL6/Z5tH6JpI1VqRleHOIsZAYvyin14QrXAPew92l2qjEFHEDpwMfYhbJrYWDZqb4k1TYw==
-X-Received: by 2002:a05:600c:1609:b0:3cf:4dc4:5a99 with SMTP id m9-20020a05600c160900b003cf4dc45a99mr40114474wmn.67.1667987826262;
-        Wed, 09 Nov 2022 01:57:06 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id t17-20020a05600c199100b003b4fdbb6319sm1094033wmq.21.2022.11.09.01.57.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 01:57:05 -0800 (PST)
-Message-ID: <e72c458b-458d-17f7-7c63-a486de0996f1@linaro.org>
-Date:   Wed, 9 Nov 2022 09:57:04 +0000
+        bh=nL5z1Js6hyAcZrzyFU0BOmZNXRwS5uMdz4l6yylknWc=;
+        b=cRtuF6WNEmQtSu7YJaXqlVFjwpdmoZdWt/SQ1xDp4GX2SzNdjRyKmFOEuIFTis+L1p
+         0h+3mL1Nk8lNu31Wh+Yq+MyG17+pqUMexxMwR7zxuxwG9zhYausCJjEv/ZasKmGA49nh
+         pGcO2fdFC3XFRmJt5UNzkBYDNJ0gPN6liZ9rzZcO1aCHPbtC9XA/bi/jqLgXlEzzowV1
+         fNxgzSv4u8+RUkD5SJ3eTNrWMSk8w20m8tQ0F56sT9PH1wQf0UfYRG5g0pdnMM+kCV2G
+         zUAUUjNjfTvZb6ysFAZ3UvEaRVX6BtUF685rAn+gDV1u3vtEvhXCZ8wrmHSl4GcyFpPk
+         JOZw==
+X-Gm-Message-State: ACrzQf2pvJfcLcJUBgPyLStShQMjtFCyCf5LFB4FdIieYsWd6JFoVB2d
+        GZWDJGo6cQKkdzzDCJGgdRg=
+X-Google-Smtp-Source: AMsMyM5uFFRc5skbmGh0Z8d+QcefJmP/NWF5aU2IwgfknwLbB/WeaF0mHX1Y0WzRXxAS1r+U0SWQdg==
+X-Received: by 2002:a17:906:3b91:b0:7a5:e944:9e48 with SMTP id u17-20020a1709063b9100b007a5e9449e48mr1149141ejf.109.1667987840266;
+        Wed, 09 Nov 2022 01:57:20 -0800 (PST)
+Received: from leonid-Inspiron-3421 (93-172-204-39.bb.netvision.net.il. [93.172.204.39])
+        by smtp.gmail.com with ESMTPSA id gg3-20020a170906e28300b0077d6f628e14sm5666716ejb.83.2022.11.09.01.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 01:57:19 -0800 (PST)
+Date:   Wed, 9 Nov 2022 11:57:17 +0200
+From:   Leonid Ravich <lravich@gmail.com>
+To:     jgg@ziepe.ca, leon@kernel.org, mhiramat@kernel.org,
+        linux-rdma@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] IB/MAD: fix might sleep in atomic
+Message-ID: <Y2t5feomyznrVj7V@leonid-Inspiron-3421>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/3] dt-bindings: slimbus: convert bus description to
- DT schema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20221026164315.39038-1-krzysztof.kozlowski@linaro.org>
- <20221026164315.39038-2-krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221026164315.39038-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sleep in TR_assign not allowd
 
+WARNING: CPU: 0 PID: 1888000 at kernel/trace/ring_buffer.c:2492 rb_commit+0xc1/0x220
+CPU: 0 PID: 1888000 Comm: kworker/u9:0 Kdump: loaded Tainted: G           OE    --------- -  - 4.18.0-305.3.1.el8.x86_64 #1
+l: Hardware name: Red Hat KVM, BIOS 1.13.0-2.module_el8.3.0+555+a55c8938 04/01/2014
+l: Workqueue: ib-comp-unb-wq ib_cq_poll_work [ib_core]
+l: RIP: 0010:rb_commit+0xc1/0x220
+l: RSP: 0000:ffffa8ac80f9bca0 EFLAGS: 00010202
+l: RAX: ffff8951c7c01300 RBX: ffff8951c7c14a00 RCX: 0000000000000246
+l: RDX: ffff8951c707c000 RSI: ffff8951c707c57c RDI: ffff8951c7c14a00
+l: RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+l: R10: ffff8951c7c01300 R11: 0000000000000001 R12: 0000000000000246
+l: R13: 0000000000000000 R14: ffffffff964c70c0 R15: 0000000000000000
+l: FS:  0000000000000000(0000) GS:ffff8951fbc00000(0000) knlGS:0000000000000000
+l: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+l: CR2: 00007f20e8f39010 CR3: 000000002ca10005 CR4: 0000000000170ef0
+l: Call Trace:
+l:  ring_buffer_unlock_commit+0x1d/0xa0
+l:  trace_buffer_unlock_commit_regs+0x3b/0x1b0
+l:  trace_event_buffer_commit+0x67/0x1d0
+l:  trace_event_raw_event_ib_mad_recv_done_handler+0x11c/0x160 [ib_core]
+l:  ib_mad_recv_done+0x48b/0xc10 [ib_core]
+l:  ? trace_event_raw_event_cq_poll+0x6f/0xb0 [ib_core]
+l:  __ib_process_cq+0x91/0x1c0 [ib_core]
+l:  ib_cq_poll_work+0x26/0x80 [ib_core]
+l:  process_one_work+0x1a7/0x360
+l:  ? create_worker+0x1a0/0x1a0
+l:  worker_thread+0x30/0x390
+l:  ? create_worker+0x1a0/0x1a0
+l:  kthread+0x116/0x130
+l:  ? kthread_flush_work_fn+0x10/0x10
+l:  ret_from_fork+0x35/0x40
+l: ---[ end trace 78ba8509d3830a16 ]---
 
-On 26/10/2022 17:43, Krzysztof Kozlowski wrote:
-> Convert the SLIMbus bus description bindings to DT Schema.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Leonid Ravich <lravich@gmail.com>
+---
+ drivers/infiniband/core/mad.c |  3 ---
+ include/trace/events/ib_mad.h | 13 ++++---------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/infiniband/core/mad.c b/drivers/infiniband/core/mad.c
+index 1893aa613ad7..3937b40b93c1 100644
+--- a/drivers/infiniband/core/mad.c
++++ b/drivers/infiniband/core/mad.c
+@@ -59,7 +59,6 @@ static void create_mad_addr_info(struct ib_mad_send_wr_private *mad_send_wr,
+ 			  struct ib_mad_qp_info *qp_info,
+ 			  struct trace_event_raw_ib_mad_send_template *entry)
+ {
+-	u16 pkey;
+ 	struct ib_device *dev = qp_info->port_priv->device;
+ 	u32 pnum = qp_info->port_priv->port_num;
+ 	struct ib_ud_wr *wr = &mad_send_wr->send_wr;
+@@ -69,8 +68,6 @@ static void create_mad_addr_info(struct ib_mad_send_wr_private *mad_send_wr,
+ 
+ 	/* These are common */
+ 	entry->sl = attr.sl;
+-	ib_query_pkey(dev, pnum, wr->pkey_index, &pkey);
+-	entry->pkey = pkey;
+ 	entry->rqpn = wr->remote_qpn;
+ 	entry->rqkey = wr->remote_qkey;
+ 	entry->dlid = rdma_ah_get_dlid(&attr);
+diff --git a/include/trace/events/ib_mad.h b/include/trace/events/ib_mad.h
+index 59363a083ecb..d92691c78cff 100644
+--- a/include/trace/events/ib_mad.h
++++ b/include/trace/events/ib_mad.h
+@@ -49,7 +49,6 @@ DECLARE_EVENT_CLASS(ib_mad_send_template,
+ 		__field(int,            retries_left)
+ 		__field(int,            max_retries)
+ 		__field(int,            retry)
+-		__field(u16,            pkey)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -89,7 +88,7 @@ DECLARE_EVENT_CLASS(ib_mad_send_template,
+ 		  "hdr : base_ver 0x%x class 0x%x class_ver 0x%x " \
+ 		  "method 0x%x status 0x%x class_specific 0x%x tid 0x%llx " \
+ 		  "attr_id 0x%x attr_mod 0x%x  => dlid 0x%08x sl %d "\
+-		  "pkey 0x%x rpqn 0x%x rqpkey 0x%x",
++		  "rpqn 0x%x rqpkey 0x%x",
+ 		__entry->dev_index, __entry->port_num, __entry->qp_num,
+ 		__entry->agent_priv, be64_to_cpu(__entry->wrtid),
+ 		__entry->retries_left, __entry->max_retries,
+@@ -100,7 +99,7 @@ DECLARE_EVENT_CLASS(ib_mad_send_template,
+ 		be16_to_cpu(__entry->class_specific),
+ 		be64_to_cpu(__entry->tid), be16_to_cpu(__entry->attr_id),
+ 		be32_to_cpu(__entry->attr_mod),
+-		be32_to_cpu(__entry->dlid), __entry->sl, __entry->pkey,
++		be32_to_cpu(__entry->dlid), __entry->sl,
+ 		__entry->rqpn, __entry->rqkey
+ 	)
+ );
+@@ -204,7 +203,6 @@ TRACE_EVENT(ib_mad_recv_done_handler,
+ 		__field(u16,            wc_status)
+ 		__field(u32,            slid)
+ 		__field(u32,            dev_index)
+-		__field(u16,            pkey)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -224,9 +222,6 @@ TRACE_EVENT(ib_mad_recv_done_handler,
+ 		__entry->slid = wc->slid;
+ 		__entry->src_qp = wc->src_qp;
+ 		__entry->sl = wc->sl;
+-		ib_query_pkey(qp_info->port_priv->device,
+-			      qp_info->port_priv->port_num,
+-			      wc->pkey_index, &__entry->pkey);
+ 		__entry->wc_status = wc->status;
+ 	),
+ 
+@@ -234,7 +229,7 @@ TRACE_EVENT(ib_mad_recv_done_handler,
+ 		  "base_ver 0x%02x class 0x%02x class_ver 0x%02x " \
+ 		  "method 0x%02x status 0x%04x class_specific 0x%04x " \
+ 		  "tid 0x%016llx attr_id 0x%04x attr_mod 0x%08x " \
+-		  "slid 0x%08x src QP%d, sl %d pkey 0x%04x",
++		  "slid 0x%08x src QP%d, sl %d",
+ 		__entry->dev_index, __entry->port_num, __entry->qp_num,
+ 		__entry->wc_status,
+ 		__entry->length,
+@@ -244,7 +239,7 @@ TRACE_EVENT(ib_mad_recv_done_handler,
+ 		be16_to_cpu(__entry->class_specific),
+ 		be64_to_cpu(__entry->tid), be16_to_cpu(__entry->attr_id),
+ 		be32_to_cpu(__entry->attr_mod),
+-		__entry->slid, __entry->src_qp, __entry->sl, __entry->pkey
++		__entry->slid, __entry->src_qp, __entry->sl
+ 	)
+ );
+ 
+-- 
+2.34.1
 
-Applied all thanks,
-
---srini
-> ---
->   .../devicetree/bindings/slimbus/bus.txt       | 60 ------------
->   .../bindings/slimbus/slim-ngd-qcom-ctrl.txt   |  2 -
->   .../bindings/slimbus/slim-qcom-ctrl.txt       |  3 -
->   .../devicetree/bindings/slimbus/slimbus.yaml  | 95 +++++++++++++++++++
->   4 files changed, 95 insertions(+), 65 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/slimbus/bus.txt
->   create mode 100644 Documentation/devicetree/bindings/slimbus/slimbus.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/slimbus/bus.txt b/Documentation/devicetree/bindings/slimbus/bus.txt
-> deleted file mode 100644
-> index bbe871f82a8b..000000000000
-> --- a/Documentation/devicetree/bindings/slimbus/bus.txt
-> +++ /dev/null
-> @@ -1,60 +0,0 @@
-> -SLIM(Serial Low Power Interchip Media Bus) bus
-> -
-> -SLIMbus is a 2-wire bus, and is used to communicate with peripheral
-> -components like audio-codec.
-> -
-> -Required property for SLIMbus controller node:
-> -- compatible	- name of SLIMbus controller
-> -
-> -Child nodes:
-> -Every SLIMbus controller node can contain zero or more child nodes
-> -representing slave devices on the bus. Every SLIMbus slave device is
-> -uniquely determined by the enumeration address containing 4 fields:
-> -Manufacturer ID, Product code, Device index, and Instance value for
-> -the device.
-> -If child node is not present and it is instantiated after device
-> -discovery (slave device reporting itself present).
-> -
-> -In some cases it may be necessary to describe non-probeable device
-> -details such as non-standard ways of powering up a device. In
-> -such cases, child nodes for those devices will be present as
-> -slaves of the SLIMbus controller, as detailed below.
-> -
-> -Required property for SLIMbus child node if it is present:
-> -- reg		- Should be ('Device index', 'Instance ID') from SLIMbus
-> -		  Enumeration  Address.
-> -		  Device Index Uniquely identifies multiple Devices within
-> -		  a single Component.
-> -		  Instance ID Is for the cases where multiple Devices of the
-> -		  same type or Class are attached to the bus.
-> -
-> -- compatible	-"slimMID,PID". The textual representation of Manufacturer ID,
-> -	 	  Product Code, shall be in lower case hexadecimal with leading
-> -		  zeroes suppressed
-> -
-> -Optional property for SLIMbus child node if it is present:
-> -- slim-ifc-dev	- Should be phandle to SLIMBus Interface device.
-> -		  Required for devices which deal with streams.
-> -
-> -SLIMbus example for Qualcomm's slimbus manager component:
-> -
-> -	slim@28080000 {
-> -		compatible = "qcom,apq8064-slim", "qcom,slim";
-> -		reg = <0x28080000 0x2000>,
-> -		interrupts = <0 33 0>;
-> -		clocks = <&lcc SLIMBUS_SRC>, <&lcc AUDIO_SLIMBUS_CLK>;
-> -		clock-names = "iface", "core";
-> -		#address-cells = <2>;
-> -		#size-cell = <0>;
-> -
-> -		codec_ifd: ifd@0,0{
-> -			compatible = "slim217,60";
-> -			reg = <0 0>;
-> -		};
-> -
-> -		codec: wcd9310@1,0{
-> -			compatible = "slim217,60";
-> -			reg = <1 0>;
-> -			slim-ifc-dev  = <&codec_ifd>;
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/slimbus/slim-ngd-qcom-ctrl.txt b/Documentation/devicetree/bindings/slimbus/slim-ngd-qcom-ctrl.txt
-> index e94a2ad3a710..7c3d9eb6af5d 100644
-> --- a/Documentation/devicetree/bindings/slimbus/slim-ngd-qcom-ctrl.txt
-> +++ b/Documentation/devicetree/bindings/slimbus/slim-ngd-qcom-ctrl.txt
-> @@ -5,8 +5,6 @@ with SLIMBus slaves directly over the bus using messaging interface and
->   communicating with master component residing on ADSP for bandwidth and
->   data-channel management
->   
-> -Please refer to slimbus/bus.txt for details of the common SLIMBus bindings.
-> -
->   - compatible:
->   	Usage: required
->   	Value type: <stringlist>
-> diff --git a/Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt b/Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt
-> index 922dcb8ff24a..6d955e129f90 100644
-> --- a/Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt
-> +++ b/Documentation/devicetree/bindings/slimbus/slim-qcom-ctrl.txt
-> @@ -4,9 +4,6 @@ master component.
->   
->   Required properties:
->   
-> - - #address-cells - refer to Documentation/devicetree/bindings/slimbus/bus.txt
-> - - #size-cells	- refer to Documentation/devicetree/bindings/slimbus/bus.txt
-> -
->    - reg : Offset and length of the register region(s) for the device
->    - reg-names : Register region name(s) referenced in reg above
->   	 Required register resource entries are:
-> diff --git a/Documentation/devicetree/bindings/slimbus/slimbus.yaml b/Documentation/devicetree/bindings/slimbus/slimbus.yaml
-> new file mode 100644
-> index 000000000000..22513fb7c59a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/slimbus/slimbus.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/slimbus/slimbus.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SLIM (Serial Low Power Interchip Media) bus
-> +
-> +maintainers:
-> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> +
-> +description:
-> +  SLIMbus is a 2-wire bus, and is used to communicate with peripheral
-> +  components like audio-codec.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^slim(@.*|-[0-9a-f])*$"
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^.*@[0-9a-f]+,[0-9a-f]+$":
-> +    type: object
-> +    description: |
-> +      Every SLIMbus controller node can contain zero or more child nodes
-> +      representing slave devices on the bus. Every SLIMbus slave device is
-> +      uniquely determined by the enumeration address containing 4 fields::
-> +      Manufacturer ID, Product code, Device index, and Instance value for the
-> +      device.
-> +
-> +      If child node is not present and it is instantiated after device
-> +      discovery (slave device reporting itself present).
-> +
-> +      In some cases it may be necessary to describe non-probeable device
-> +      details such as non-standard ways of powering up a device. In such cases,
-> +      child nodes for those devices will be present as slaves of the SLIMbus
-> +      controller.
-> +
-> +    properties:
-> +      compatible:
-> +        pattern: "^slim[0-9a-f]+,[0-9a-f]+$"
-> +
-> +      reg:
-> +        maxItems: 1
-> +        description: |
-> +          Pair of (device index, instande ID), where::
-> +           - Device index, which uniquely identifies multiple devices within a
-> +             single component.
-> +           - Instance ID, can be used for the cases where multiple devices of
-> +             the same type or class are attached to the bus.
-> +
-> +    required:
-> +      - compatible
-> +      - reg
-> +
-> +    additionalProperties: true
-> +
-> +required:
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +additionalProperties: true
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-msm8960.h>
-> +    #include <dt-bindings/clock/qcom,lcc-msm8960.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    soc {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +
-> +        slim@28080000 {
-> +            compatible = "qcom,apq8064-slim", "qcom,slim";
-> +            reg = <0x28080000 0x2000>, <0x80207c 4>;
-> +            reg-names = "ctrl", "slew";
-> +            interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
-> +            clocks = <&lcc SLIMBUS_SRC>, <&lcc AUDIO_SLIMBUS_CLK>;
-> +            clock-names = "iface", "core";
-> +            #address-cells = <2>;
-> +            #size-cells = <0>;
-> +
-> +            audio-codec@1,0 {
-> +                compatible = "slim217,60";
-> +                reg = <1 0>;
-> +            };
-> +        };
-> +    };
