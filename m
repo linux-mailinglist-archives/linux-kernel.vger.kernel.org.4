@@ -2,239 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6116231E3
+	by mail.lfdr.de (Postfix) with ESMTP id 6AECB6231E4
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbiKIRuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S230390AbiKIRuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiKIRt7 (ORCPT
+        with ESMTP id S230075AbiKIRt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:49:59 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AE8F3F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:49:58 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id o70so21858176yba.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:49:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nq3AzpSRBbWcICYu5OOeBkyYd+yGYnaz3Om02KfDufg=;
-        b=teqnQjgJGkhIgyaoI/H3ihIHnGnvmRfpKjzWT/eIh5e86b1smDThothvnsgT0DLFZx
-         cc6MtETRvrqW+CdsTeIRQnDjHXZiCL72XnI/0meYsqXREcm1J6vL9QcS26Eml6G0GVyM
-         rsFsRjT+GqzQ7PNfU8+lIaX5AsS4dkRL9fWLYTrNxhmKFOF2zZzwvRg7D5vtIpCSGAJ4
-         O4oTQjxXRbVY4WmLdEJFnBxLNkSgEkd2i1F0DTZU8tjZvFjfpXYVlYZXT8LXEJaLxBO3
-         MJk+Wu3EtZpk/f2H46rPqv/EHtq+TVuhpv5lN8MBUUwg6Qy+QeSmwkbuE9tFfQOvXZfp
-         SRBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nq3AzpSRBbWcICYu5OOeBkyYd+yGYnaz3Om02KfDufg=;
-        b=fEhcWjmnMYixVhWApl0gDuYb2H07N3aQMID1AINRhfN36dYhyUOlHs0RvKstKT8grq
-         Oz02x4hmVUa1Q8EVZKejGVLXDk3oxqFo0u5lAtymzfBT2F2oa/q3GjGpWla8MxADJtbe
-         MCCJcTdC6DOZJ19DQguL37drzDi5CQ9Gg2Ua0R1loY0T2Pehre2rhY1asq26YoZLnwTZ
-         P6ROPQUQppT0tgHk1ppm7xPHICGQ/LXAzgsU5PgcSuOHTZbOYgftX0SE5OwwAGDXF5LD
-         rbZ79+OjDdTpsfcrmBnazBP67CZKYIn0FrHq1WcHNy8k6ADzGRfIl9v+FEgghFnoe3nA
-         AUNQ==
-X-Gm-Message-State: ANoB5pn/9go6ry8cKnzZcMILww1vZKdb3w6+UvIvACaAV1X0Rfk2zQ9U
-        MQR2fEkZNgcSZif+cQT6Ja1KvC0WjrJIjMY87tYDpw==
-X-Google-Smtp-Source: AA0mqf4HrEeB7pUDS2yONj40k/dJn+sjGfhpvj208P6V9Xk0LjM3/shvsSss1MxGD9ehfC2xfXziIcOJ9WRKKznx8XY=
-X-Received: by 2002:a05:6902:b16:b0:6d6:9455:d6c5 with SMTP id
- ch22-20020a0569020b1600b006d69455d6c5mr18075586ybb.164.1668016197143; Wed, 09
- Nov 2022 09:49:57 -0800 (PST)
+        Wed, 9 Nov 2022 12:49:57 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7DDC760;
+        Wed,  9 Nov 2022 09:49:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668016195; x=1699552195;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JIWJ4EH85m/Zy1AYOZ16tTErIMHKa3lrdAajfeCmHqw=;
+  b=WsoNPzVUL6v5pNcVjp+eB0HxVF3eBzGP0xB1FfGAKg6vewr2HvNjAsAW
+   t3XFD8/uJBjP1+ZIl4Sh3ad869qjgw6cBMBHmdY3slWWl6Arsfr3FhK6l
+   nnCD5/hc2CfEvdoeWBfAZRGOfiv/k37Yg3kWblt+YBtZHy8ac0D/8vWf7
+   bSURGiYaiTAronVQm6Z5oC0+ECq9BYwGPpq1dOvWSFp7+orwYftPw/TbQ
+   0GJVRubNKfTlcPaCKYTzt1RWaDH8li5Gj78bpQlMAxigsqlguZ3Od9Y8y
+   kUiSIO9sJIRcN8DasxOPRzukyQ7jZYi3z2UealS+lWzkkgJ4mvaGhwIc5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="337791858"
+X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
+   d="scan'208";a="337791858"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 09:49:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="779436272"
+X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
+   d="scan'208";a="779436272"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Nov 2022 09:49:53 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ospCx-009r8Q-0t;
+        Wed, 09 Nov 2022 19:49:51 +0200
+Date:   Wed, 9 Nov 2022 19:49:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 0/6] pinctrl: intel: Enable PWM optional feature
+Message-ID: <Y2voPgNfdQ+Sc4nS@smile.fi.intel.com>
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+ <Y2vl8qXwGOXaky/a@orome>
 MIME-Version: 1.0
-References: <20221109082223.141145957@linuxfoundation.org>
-In-Reply-To: <20221109082223.141145957@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 9 Nov 2022 23:19:45 +0530
-Message-ID: <CA+G9fYun_sLLwxS5v1=9d9TtRu3m+uYNM+FN+ZHq9BmrS_s74w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/117] 5.10.154-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2vl8qXwGOXaky/a@orome>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 at 13:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.154 release.
-> There are 117 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 11 Nov 2022 08:21:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, Nov 09, 2022 at 06:40:02PM +0100, Thierry Reding wrote:
+> On Tue, Nov 08, 2022 at 04:22:20PM +0200, Andy Shevchenko wrote:
+> > This is a continuation of the previously applied PWM LPSS cleanup series.
+> > Now, we would like to enable PWM optional feature that may be embedded
+> > into Intel pin control IPs (starting from Sky Lake platforms).
+> > 
+> > I would like to route this via Intel pin control tree with issuing
+> > an immutable branch for both PINCTRL and PWM subsystems, but I'm
+> > open for other suggestions.
+> 
+> I don't have any objections for this to go through the Intel tree as
+> long as Uwe is happy with this.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+So far Uwe acknowledged patch 2 only, hopefully he will have time to go
+thru the rest.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Most of this is just reworking existing
+> things and the stub additions look good to me, so:
+> 
+> Acked-by: Thierry Reding <thierry.reding@gmail.com>
 
-## Build
-* kernel: 5.10.154-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 69a0227f6bd671ba8efa071c58d9f127932e25f2
-* git describe: v5.10.153-118-g69a0227f6bd6
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.153-118-g69a0227f6bd6
+Thank you!
 
-## Test Regressions (compared to v5.10.153-118-ga2b01d6ae5a1)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-## Metric Regressions (compared to v5.10.153-118-ga2b01d6ae5a1)
 
-## Test Fixes (compared to v5.10.153-118-ga2b01d6ae5a1)
-
-## Metric Fixes (compared to v5.10.153-118-ga2b01d6ae5a1)
-
-## Test result summary
-total: 147758, pass: 124924, fail: 3289, skip: 19119, xfail: 426
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 149 total, 148 passed, 1 failed
-* arm64: 47 total, 45 passed, 2 failed
-* i386: 37 total, 35 passed, 2 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 28 total, 23 passed, 5 failed
-* riscv: 12 total, 12 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 40 total, 38 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
