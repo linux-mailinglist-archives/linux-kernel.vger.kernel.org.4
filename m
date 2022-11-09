@@ -2,49 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5A362253D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4EE622540
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiKIIXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        id S229777AbiKIIXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKIIXJ (ORCPT
+        with ESMTP id S229533AbiKIIXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:23:09 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 631511D0DE;
-        Wed,  9 Nov 2022 00:23:08 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 09 Nov 2022 17:23:07 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id C175620584CE;
-        Wed,  9 Nov 2022 17:23:07 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 9 Nov 2022 17:23:07 +0900
-Received: from [10.213.109.193] (unknown [10.213.109.193])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 8032AB62A4;
-        Wed,  9 Nov 2022 17:23:07 +0900 (JST)
-Message-ID: <b12340ed-3707-c950-1812-fdb9becebb56@socionext.com>
-Date:   Wed, 9 Nov 2022 17:23:08 +0900
+        Wed, 9 Nov 2022 03:23:50 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F8F5FD6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:23:49 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id p16so10277745wmc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 00:23:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1aYtp8rKKFj6AMeEh8TgKPoMz3+QrQuPeMrc+lG2dC4=;
+        b=CgVAeDwHGGqjX9pPwdf50j6laHJDZQEpjWOLA+xKGBUAg7h+8blHA3XYE+A4H6hy1I
+         +1dKSYtKGZUuAl+U9Z0WfHgdyBZUvv9EzmvnG1ytRtExRhNWemLhbSmYN7VfeAGhepYx
+         U7rN1/9hE5+K+sGZigDzLFL7ujbKcztqQxkyIAxYSeQCEq2CWvKXsIfVZ+dzQwytVxHm
+         /enmgz1Fm6oegStPmknZqLuUrCtU4jyv1J+g+ubkBgU15W01xBdlc31YPr08Z+nBt3Mh
+         umPmuVYBzhjNej5bjPy6kldig6wZnM02W4P2ZIMdQO5MXwK4fBQcYQSJ9CeltH8XObBN
+         aWPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1aYtp8rKKFj6AMeEh8TgKPoMz3+QrQuPeMrc+lG2dC4=;
+        b=5i1m/jtKBXjDVdFjm2AXPhjntUm8WMx9mPVOH4rblDEFzuFTQINYKzosMRvK31oOaw
+         2/gjToQN3/Pu5l02Vj7ZucGmFpcWaH3iloA4b+kD9KIdB/1S+TGUM0bmEPHoWkUVhFna
+         UExB3FyrNmRiCC/uYlHTBtlna+tp+kznAq7nQf/h5sMTeJe7hFJ9Oou6fZQzJR2eFlh5
+         UtHriPcrylvS2/UH0EFBUssOItUf4RrQOktaSG1lbSQm9ytJ6L2kFdqqdsh05nYYgClg
+         eOBHCq5+5wf8jtn6wrX/dvj26UVZw2GNHGT1CSkfA3Qb/o4XxFABmHb4ilg+L5BDp9g4
+         GJOg==
+X-Gm-Message-State: ACrzQf2Yhb3JGesLoYGH0ugRVWLYy0lNjzbBmqU5/TbYgaugBmJlgB8a
+        K2rbyF31Xs1PWa9mJoiJXZWHTw==
+X-Google-Smtp-Source: AMsMyM7BZMkF3omfYJ0Pcs634CeYkMyiilQRZafhDBqMckyxB1fq4QFZDXT0nt9VVI7CEIw/1HMRhg==
+X-Received: by 2002:a7b:c7d1:0:b0:3cf:6b10:ca8d with SMTP id z17-20020a7bc7d1000000b003cf6b10ca8dmr873390wmk.44.1667982228087;
+        Wed, 09 Nov 2022 00:23:48 -0800 (PST)
+Received: from ash.lan ([167.98.0.196])
+        by smtp.gmail.com with ESMTPSA id h1-20020adffd41000000b0022da3977ec5sm12408609wrs.113.2022.11.09.00.23.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 00:23:47 -0800 (PST)
+Date:   Wed, 9 Nov 2022 08:23:46 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+Subject: Re: [PATCH printk v3 12/40] tty: serial: kgdboc: document
+ console_lock usage
+Message-ID: <20221109082346.2jtw2i6asli5qohk@ash.lan>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-13-john.ogness@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4/4] mmc: f-sdh30: Add compatible string for Socionext
- F_SDH30_E51
-To:     Jassi Brar <jaswinder.singh@linaro.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221108082533.21384-1-hayashi.kunihiko@socionext.com>
- <20221108082533.21384-5-hayashi.kunihiko@socionext.com>
- <CAJe_ZhfMq1ET+TonauySxfCUv2n=xrsEf9T4o9zePwS5feeGMg@mail.gmail.com>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <CAJe_ZhfMq1ET+TonauySxfCUv2n=xrsEf9T4o9zePwS5feeGMg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107141638.3790965-13-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,42 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jassi-san,
+On Mon, Nov 07, 2022 at 03:22:10PM +0106, John Ogness wrote:
+> kgdboc_earlycon_init() uses the console_lock to ensure that no consoles
+> are unregistered until the kgdboc_earlycon is setup. This is necessary
+> because the trapping of the exit() callback assumes that the exit()
+> callback is not called before the trap is setup.
+>
+> Explicitly document this non-typical console_lock usage.
+>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-On 2022/11/09 1:03, Jassi Brar wrote:
-> On Tue, 8 Nov 2022 at 02:25, Kunihiko Hayashi
-> <hayashi.kunihiko@socionext.com> wrote:
-> ....
->> @@ -228,6 +229,7 @@ static int sdhci_f_sdh30_remove(struct platform_device
->> *pdev)
->>   #ifdef CONFIG_OF
->>   static const struct of_device_id f_sdh30_dt_ids[] = {
->>          { .compatible = "fujitsu,mb86s70-sdhci-3.0" },
->> +       { .compatible = "socionext,f-sdh30-e51-mmc" },
->>
-> This also needs to be specified in the dt bindings, not just in the driver.
-> And if this patchset is for the "e51-mmc" type controller, introduce
-> the compatible first and apply the changes for that controller.
-
-I understand.
-I need to confirm if the extend operations in this patch depend on
-new F_SDH30_E51 or common with original F_SDH30.
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
->> @@ -258,4 +260,5 @@ module_platform_driver(sdhci_f_sdh30_driver);
->>   MODULE_DESCRIPTION("F_SDH30 SD Card Controller driver");
->>   MODULE_LICENSE("GPL v2");
->>   MODULE_AUTHOR("FUJITSU SEMICONDUCTOR LTD.");
->> +MODULE_AUTHOR("Socionext Inc.");
->>
-> Socionext now is what Fujitsu was when this code was written, so this
-> addition seems ok.
-> So may be add it as
->      MODULE_AUTHOR("FUJITSU SEMICONDUCTOR LTD., SOCIONEXT INC.");
-Although I'm confused how to write this, I'll write it that way.
-
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+Daniel.
