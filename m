@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B3F622767
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA7D62275C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiKIJqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S229791AbiKIJos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiKIJqO (ORCPT
+        with ESMTP id S229508AbiKIJoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:46:14 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D8322BE4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:46:13 -0800 (PST)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6g864XHkzmVpD;
-        Wed,  9 Nov 2022 17:45:58 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 17:46:11 +0800
-From:   Wang Wensheng <wangwensheng4@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <rostedt@goodmis.org>,
-        <mhiramat@kernel.org>, <mark.rutland@arm.com>
-CC:     <xuqiang36@huawei.com>, <weiyongjun1@huawei.com>,
-        <wangwensheng4@huawei.com>
-Subject: [PATCH -next 3/3] ftrace: Delete unused variable ftrace_update_time
-Date:   Wed, 9 Nov 2022 09:44:34 +0000
-Message-ID: <20221109094434.84046-4-wangwensheng4@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221109094434.84046-1-wangwensheng4@huawei.com>
-References: <20221109094434.84046-1-wangwensheng4@huawei.com>
+        Wed, 9 Nov 2022 04:44:46 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBB422BE4;
+        Wed,  9 Nov 2022 01:44:45 -0800 (PST)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667987084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kPAk+3cLOj2C0i9syAj3cq39vfGjg5hFSD8YkhVNKCk=;
+        b=KGQPt3BuMB8UxOiIeFc+7+g3uFtm5Q+FCy0D1VPuuhLPP7wqeYjclkvf1RZxSMfB6ZYBCt
+        O5f5FF0udqPW6CI/S0q6BcPp+Y5RSQoTsPStReWTA85+wKkTrJjAgTbSEAeoXsA3kVvFE7
+        PEXiLJdpH/khQx7aMlU8mUKl1Y4fvdVWoa8Ty7z8J5eH3ft0N/k/3y6tPQqkXFUeFJWakU
+        WtOA5VwvhTYQ/TBB3pnQwMlyenIw21lmNsyYhrjRRERT4DVCo4owgVakHWDZhAnMSIzOfY
+        kwrI2VjoZ+EHwYrhzKzN6fxSAY1G9IMwfNLmcCELUTNB4I5Se7wkQhlDwQTqeg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667987084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kPAk+3cLOj2C0i9syAj3cq39vfGjg5hFSD8YkhVNKCk=;
+        b=LsawK0XIGHqnjIumlhGVKLy3i3Z9JVErl5RyBoTCpwhm33D+5Tr+t5xSfti/otQSEWiBov
+        Du2+ohG3YC9rpIDQ==
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+Subject: Re: [PATCH printk v3 36/40] tty: serial: kgdboc: use
+ console_list_lock for list traversal
+In-Reply-To: <20221109090631.wbtar2ho45x5yanl@ash.lan>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-37-john.ogness@linutronix.de>
+ <20221109090631.wbtar2ho45x5yanl@ash.lan>
+Date:   Wed, 09 Nov 2022 10:50:43 +0106
+Message-ID: <87tu388nsk.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ftrace_update_time is not used anywhere else after initialization. So
-delete it together with its initial code.
+On 2022-11-09, Daniel Thompson <daniel.thompson@linaro.org> wrote:
+>> @@ -463,9 +476,14 @@ static void kgdboc_earlycon_pre_exp_handler(void)
+>>  	 * serial drivers might be OK with this, print a warning once per
+>>  	 * boot if we detect this case.
+>>  	 */
+>> -	for_each_console(con)
+>> +	cookie = console_srcu_read_lock();
+>> +	for_each_console_srcu(con) {
+>>  		if (con == kgdboc_earlycon_io_ops.cons)
+>> -			return;
+>> +			break;
+>> +	}
+>> +	console_srcu_read_unlock(cookie);
+>> +	if (con)
+>> +		return;
+>
+> This change isn't mentioned in the patch description.
 
-Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
----
- kernel/trace/ftrace.c | 6 ------
- 1 file changed, 6 deletions(-)
+I will move this change into its own separate patch.
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 43a958b28022..3e102c44b117 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -3110,7 +3110,6 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
- 	return 0;
- }
- 
--static u64		ftrace_update_time;
- unsigned long		ftrace_update_tot_cnt;
- unsigned long		ftrace_number_of_pages;
- unsigned long		ftrace_number_of_groups;
-@@ -3130,13 +3129,10 @@ static int ftrace_update_code(struct module *mod, struct ftrace_page *new_pgs)
- 	bool init_nop = ftrace_need_init_nop();
- 	struct ftrace_page *pg;
- 	struct dyn_ftrace *p;
--	u64 start, stop;
- 	unsigned long update_cnt = 0;
- 	unsigned long rec_flags = 0;
- 	int i;
- 
--	start = ftrace_now(raw_smp_processor_id());
--
- 	/*
- 	 * When a module is loaded, this function is called to convert
- 	 * the calls to mcount in its text to nops, and also to create
-@@ -3173,8 +3169,6 @@ static int ftrace_update_code(struct module *mod, struct ftrace_page *new_pgs)
- 		}
- 	}
- 
--	stop = ftrace_now(raw_smp_processor_id());
--	ftrace_update_time = stop - start;
- 	ftrace_update_tot_cnt += update_cnt;
- 
- 	return 0;
--- 
-2.17.1
+    tty: serial: kgdboc: use srcu console list iterator
 
+    Use srcu console list iteration for safe console list traversal.
+
+Thanks.
+
+John
