@@ -2,89 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD143623046
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D425C62304A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiKIQgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 11:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S229898AbiKIQiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbiKIQfT (ORCPT
+        with ESMTP id S229967AbiKIQhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 11:35:19 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB032494F;
-        Wed,  9 Nov 2022 08:35:08 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A9GTqLE028995;
-        Wed, 9 Nov 2022 16:34:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RntDMw5xqUv2PusgpyxEjzB7JxSqBHT4WmfZXV2PjDE=;
- b=iAasq3X3Fkm9dsexjIzY2UkVn0+LS9v4gqxUWlD42p/tK8OOs3MD2rTG+wOAd5x7dsS5
- CnCGLDDescuyZKqRHkfpgvsJ4zoXMg50MaEwghJCTIn/PBFwSa4cQVHT+TlZsDzAV1IJ
- Rbglz5z2aCYGEx4yHasFJvPmaNTi/deTQ6vNSq9XuwGhEZb/DZdgdHRHDekrT9sRixT3
- lIfzSi5/KH3VlawETVesJ1xk7t28b/Nqa9aHbiQBekhlfJdUOdaEJ9tm/wvaiZYMe+rz
- j7TgD/DDmx2Fi2rzmZ0NryD0ixVKdCKRpA/nLZKId6+OBPk+PBEeFpnyTbwPwNQDIFDN uQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3krfrpr0jj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 16:34:54 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2A9GUQVp025176;
-        Wed, 9 Nov 2022 16:34:54 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kngwm0ytu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 16:34:54 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A9GYrim028490;
-        Wed, 9 Nov 2022 16:34:53 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 2A9GYrLn028489
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 16:34:53 +0000
-Received: from [10.110.45.55] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 9 Nov 2022
- 08:34:52 -0800
-Message-ID: <4e81efea-23f1-e52c-b0b4-abf445ed5f15@quicinc.com>
-Date:   Wed, 9 Nov 2022 08:34:51 -0800
+        Wed, 9 Nov 2022 11:37:54 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F225C1AF15
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:37:52 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id h12so26446528ljg.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 08:37:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=igRKNWyl8eDcyN8ADQ2CerDEG1C252RVqSCCLSg5/ao=;
+        b=c8cubEf64QS6Q+U7fjrB+sIgZfWpFGaA+TPPDL5rMINY4WnVsrYg+9VxrJGUnDXAj4
+         rbypuF9VW/blvVOH6DlIlBmSa9Rwnll/hVweaPQAt47UdGom8Mpn8X/W36GkafxS0OYJ
+         uTMVTwDlWWmZnefNk8kkYKgcNSmsp229Fxfdcb0vJqTH7Js/rnR5sYK8bonAf+0o4Uhl
+         YCH72dy/hTASWhV1oFZWe7iX6wgdm/EEOJkRDmK9pbzLGGfsHn52tEOXoMl9ukQjWCP7
+         aZFGOX7aErHbMVFB7mea/c15hZt3IR3WaicKMIUMbuVjsouDXd++DKA8b7VObhnfIPIE
+         GJng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=igRKNWyl8eDcyN8ADQ2CerDEG1C252RVqSCCLSg5/ao=;
+        b=zQTjy6NOsY9ITn/w3Zyhmuy9fOCjgs1J5VASNJiZJBYDZtpwi+uHhdoWA9LMJNJeZX
+         FlxiRAvBWWDYMb7gbYGaTeFXLEIVPF5sTtJAGHpIZ6d1SiwepqOYPVAWcnGp45qpS5eo
+         5IUovEKCU91U+cSy1qIJJvuv3RfcKPUs7k2orNQ/6MAGdgY9Az5qlWedASTb5HbCxXdF
+         6bgyDNj+e5x0S2fRjSSR9V6aZ0BJaK2Q1BuGpkqHsHtrbLBxbNJnd82zB/V8hsL+fSEr
+         SUaKGlh+AVh+X1//MBsJd4H5e6SPPjHeCfO4HdstwcBtFGppYRlQNAIVyRDgQMhYHV1e
+         YhqQ==
+X-Gm-Message-State: ACrzQf0fbhkwCYFwLj19nb4TY5qNUmjEc1KiYiEaIxpkHgn9osy0t+wU
+        B4X/i4KGRuLKOF+6RwjtNuGLkw==
+X-Google-Smtp-Source: AMsMyM5nTgoZ2joUXWj6vhYWVGTA6I/LsWqnQ2kSEQTKAr2tKLCopqfnlSgbt4Ji+5RZx9Eyw6R4rw==
+X-Received: by 2002:a05:651c:12c8:b0:277:75bb:429f with SMTP id 8-20020a05651c12c800b0027775bb429fmr6576554lje.387.1668011869798;
+        Wed, 09 Nov 2022 08:37:49 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id p1-20020a2e8041000000b00277129b4a10sm2222091ljg.86.2022.11.09.08.37.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 08:37:49 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ASoC: codecs: wsa883x: Use proper shutdown GPIO values
+Date:   Wed,  9 Nov 2022 17:37:40 +0100
+Message-Id: <20221109163740.1158785-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] wifi: ath10k: Fix resource leak in ath10k_pci_init()
-Content-Language: en-US
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, <kvalo@kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <rmani@qti.qualcomm.com>
-CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221108133858.53308-1-xiujianfeng@huawei.com>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20221108133858.53308-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Ohkn7-XpSZ17OwMxEJ7nooLsjNdfRHkF
-X-Proofpoint-GUID: Ohkn7-XpSZ17OwMxEJ7nooLsjNdfRHkF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 clxscore=1011 mlxscore=0 bulkscore=0 phishscore=0
- adultscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211090125
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,60 +73,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/2022 5:38 AM, Xiu Jianfeng wrote:
-> When ath10k_ahb_init() fails, it does not unregister ath10k_pci_driver,
-> which will cause a resource leak issue, call pci_unregister_driver() in
-> the error path to fix this issue.
-> 
-> Fixes: 0b523ced9a3c ("ath10k: add basic skeleton to support ahb")
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->   drivers/net/wireless/ath/ath10k/pci.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
-> index e56c6a6b1379..22f8f8b20762 100644
-> --- a/drivers/net/wireless/ath/ath10k/pci.c
-> +++ b/drivers/net/wireless/ath/ath10k/pci.c
-> @@ -3800,8 +3800,10 @@ static int __init ath10k_pci_init(void)
->   		       ret);
->   
->   	ret = ath10k_ahb_init();
-> -	if (ret)
-> +	if (ret) {
->   		printk(KERN_ERR "ahb init failed: %d\n", ret);
-> +		pci_unregister_driver(&ath10k_pci_driver);
-> +	}
->   
->   	return ret;
->   }
+The shutdown GPIO is active_low (sd_n), but this depends on actual board
+layout.  Linux drivers should only care about logical state, where high
+(1) means shutdown and low (0) means do not shutdown.
 
-imo neither the existing code nor the modified code is correct.
+Invert the GPIO to match logical value.
 
-the driver is attempting to register to support two different buses.
+Fixes: 43b8c7dc85a1 ("ASoC: codecs: add wsa883x amplifier support")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ sound/soc/codecs/wsa883x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-if either of these is successful then ath10k_pci_init() should return 0 
-so that hardware attached to the successful bus can be probed and supported.
-
-only if both of these are unsuccessful should ath10k_pci_init() return 
-an errno.
-
-so I suggest
-	int ret1, ret2;
-
-	ret1 = pci_register_driver(&ath10k_pci_driver);
-	if (ret1)
-		printk(KERN_ERR "failed to register ath10k pci driver: %d\n",
-		       ret1);
-
-	ret2 = ath10k_ahb_init();
-	if (ret2)
-		printk(KERN_ERR "ahb init failed: %d\n", ret2);
-
-	if (ret1 && ret2)
-		return ret1;
-
-	/* registered to at least one bus */
-	return 0;
-}
+diff --git a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
+index c7b10bbfba7e..77a7dd3cf495 100644
+--- a/sound/soc/codecs/wsa883x.c
++++ b/sound/soc/codecs/wsa883x.c
+@@ -1392,7 +1392,7 @@ static int wsa883x_probe(struct sdw_slave *pdev,
+ 	}
+ 
+ 	wsa883x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
+-						GPIOD_FLAGS_BIT_NONEXCLUSIVE);
++						GPIOD_FLAGS_BIT_NONEXCLUSIVE | GPIOD_OUT_HIGH);
+ 	if (IS_ERR(wsa883x->sd_n)) {
+ 		dev_err(&pdev->dev, "Shutdown Control GPIO not found\n");
+ 		ret = PTR_ERR(wsa883x->sd_n);
+@@ -1411,7 +1411,7 @@ static int wsa883x_probe(struct sdw_slave *pdev,
+ 	pdev->prop.simple_clk_stop_capable = true;
+ 	pdev->prop.sink_dpn_prop = wsa_sink_dpn_prop;
+ 	pdev->prop.scp_int1_mask = SDW_SCP_INT1_BUS_CLASH | SDW_SCP_INT1_PARITY;
+-	gpiod_direction_output(wsa883x->sd_n, 1);
++	gpiod_direction_output(wsa883x->sd_n, 0);
+ 
+ 	wsa883x->regmap = devm_regmap_init_sdw(pdev, &wsa883x_regmap_config);
+ 	if (IS_ERR(wsa883x->regmap)) {
+-- 
+2.34.1
 
