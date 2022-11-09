@@ -2,94 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CBB622635
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EF0622630
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiKIJFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        id S230218AbiKIJE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:04:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiKIJFl (ORCPT
+        with ESMTP id S230212AbiKIJES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:05:41 -0500
-Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821241E3D8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:05:36 -0800 (PST)
-Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
-        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id C64728032CF3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:05:25 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id E060C100423E3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:03:53 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id sgzxougm2huWGsgzxoILjW; Wed, 09 Nov 2022 09:03:53 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Bbodbph2 c=1 sm=1 tr=0 ts=636b6cf9
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=9xFQ1JgjjksA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XF9yyKrz5CgvEO/mCLtvKhJ7/hpe/DZmnh/fTLbwhvU=; b=CMImFe6PvahZ3kiz7lHSi1Tamm
-        NOAjZXdGyqu/Y6t2NbZnz37aD+zCHHo8Az5fzkNIf6+3c1V7QsGPY8QjiFhb3Lj0x4nxeq5+Is5tO
-        euoJWW+JV/8KGQBxxMgKRKpM2FldAz0S9ZBaZmNv/zOTda8+OYFN+uI0MUyxJPLt+6mXX0l4Im3ga
-        Y1IU7IDstMMekgw+HgMcMHQo3Rl7SvSgU52Pb5wroMCicTY4c8TV9IeAObArFUSPoOiwXq+jL8HUa
-        PN+U/Kh4FTBkb/43Jrob4JEbsT5Dg1V4yP7/+9fxHMc+VwFwF0e25xJeF4u0T9qoMBX8S5mkzpt4e
-        klOGxZnQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:57196 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1osgzw-003QVI-P6;
-        Wed, 09 Nov 2022 02:03:52 -0700
-Subject: Re: [PATCH 5.15 000/144] 5.15.78-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221108133345.346704162@linuxfoundation.org>
-In-Reply-To: <20221108133345.346704162@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <9aa147b7-32ba-96b0-4f58-da25ab09e1de@w6rz.net>
-Date:   Wed, 9 Nov 2022 01:03:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 9 Nov 2022 04:04:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9DE19C2D;
+        Wed,  9 Nov 2022 01:04:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2607B81D46;
+        Wed,  9 Nov 2022 09:04:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B212C433D7;
+        Wed,  9 Nov 2022 09:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667984655;
+        bh=dH7Ry1CIVTZgyI9KDAD7GwQOyjSCd95V0RbPoon0Nc4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aX27582WOVXNU1jj0FQfgLz8r3Yp9vvPY4KtxtEXh+a/GDU3sWTVgpeZfpqnW4tdk
+         KOrP4RnySArPB0V2V28mCiKe+K55D28CiZTS89Ip0pGDJRWR9wrJrJ4I1GPclPgmZa
+         JUjxjOPw+yA06lGWQcbEnstdabNQB3x0VKGsKa6wgtYWtx0EmSCeky7MKrUoHXdKq7
+         am7b1p9AnemOG9o/u96or6eQEu2BWfDnD1g3Opk8Dg+TEINLXc93XQBLBJkYVZmouO
+         CPOvHn0hi9wsPA+cd2/k3DsmbcqiDDOLRF54HAoHUjLzM1y+NzizH7lVpGV0ZvKotI
+         AgZW7YTKiy3QA==
+Message-ID: <5758c2af-c2c5-dfbe-c7d8-036bbdaf71c7@kernel.org>
+Date:   Wed, 9 Nov 2022 10:04:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 5/7] dt-bindings: watchdog: mediatek: Convert mtk-wdt
+ to json-schema
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1osgzw-003QVI-P6
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:57196
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
+ <20221108033209.22751-6-allen-kh.cheng@mediatek.com>
+ <585a9cbb-4df4-1c06-ecfa-3b9442f1a5e2@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <585a9cbb-4df4-1c06-ecfa-3b9442f1a5e2@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,26 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 5:37 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.78 release.
-> There are 144 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.78-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 08/11/2022 11:50, Matthias Brugger wrote:
+> 
+> 
+> On 08/11/2022 04:32, Allen-KH Cheng wrote:
+>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>
+>> Convert the MediaTek watchdog bindings to schema.
+>>
+>> The original binding only had 4 without a fallback but there is a reset
+>> controller on the "mediatek,mt7986-wdt", "mediatek,mt8186-wdt",
+>> "mediatek,mt8188-wdt" and "mediatek,mt8195-wdt" Since there is no reset
+>> controller for the mt6589, we remove "mediatek,mt6589-wdt" as a
+>> fallback.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Co-developed-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> As I'm put as the maintainer:
+> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> Shall I take that through my tree or shall it go through the watchdog tree?
+> 
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+In general, bindings should go via subsystem trees (so watchdog), just
+like drivers. However this got Guenter's review tag, so usually it means
+also an ack... Dunno... :)
 
-Tested-by: Ron Economos <re@w6rz.net>
+Best regards,
+Krzysztof
 
