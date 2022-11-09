@@ -2,200 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED4A62248A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030E462248F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 08:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiKIHWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 02:22:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
+        id S229852AbiKIHWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 02:22:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiKIHV6 (ORCPT
+        with ESMTP id S229846AbiKIHWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 02:21:58 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A9F186C6;
-        Tue,  8 Nov 2022 23:21:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 63B302242C;
-        Wed,  9 Nov 2022 07:21:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667978514; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mOiktVdrV4FzsqcU1nSNFLn0ByE//8QCCs526i9+tdw=;
-        b=R1l/1TFh6sMmFMPwyCvCEKxkAHXsSyy0W7weV1U2T3tB++6a36ziIES4xMy264jy9R9rZr
-        oxFmHHHeDLHHeFaDv4s+3xjl24MVotvkY9NplTfZ1WhxQMs1NA+RcBW889OSjeUgah0ufi
-        v3FtB+BNTGpIXgIg8vUe75hTAXf9PWY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F09C21331F;
-        Wed,  9 Nov 2022 07:21:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zv1vORFVa2PcLgAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 09 Nov 2022 07:21:53 +0000
-Message-ID: <820ab144-5841-e3d9-88ec-52093f42be74@suse.com>
-Date:   Wed, 9 Nov 2022 08:21:53 +0100
+        Wed, 9 Nov 2022 02:22:38 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34591D658
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 23:22:36 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id fz10so9956545qtb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 23:22:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EA4gK75UEv7H68JgXPxHNB0fDjmSTaahOFdjo3XrFNA=;
+        b=g3l5uvyAvcAJvLdmk27RhvDggwIp0i4mpHA/5oGRdOk8dIqPnK10UtRDF3VF6a/HDv
+         8n8QVq7TfTxz5eDCoTeARxhY+OOopb8sA1iJES6/XJs0df3Mo1Zi2dpUoEIhUZaZYM8P
+         fr+gcQkDlWxXtm1dyGddsvP6lPISBFMtzx1hV8VqFED0sJoosNw/f3URUv2UCp4WHlyd
+         raC7J5PNcgYp07SusQWOMS+7Slih5X9Ls6k6qum/6tNp5mRhi/Kfwh6CBNIjgQc1bYey
+         nnHcBdKMP10EaGiNqY4M4LPOf+AhydaWSPpApsgILduFC2aRAdA4nEZBDSCKvZhRcdCR
+         Aorw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EA4gK75UEv7H68JgXPxHNB0fDjmSTaahOFdjo3XrFNA=;
+        b=5sORK0iHW0pvYxMJInb618PfeIBWUycMKm4ITDCyVI6UlADlmskY1c5x9ekR2vEQ+V
+         Qm5H1QynLC7hN6j4a7DhavazEDx4SDgAyR0gazPpWimeTW3Z3HNgGCwZkEGwn8QsGmVn
+         1kvZOLywNO2goU4zs50HrbuRlATUzuagxCgv1TBLwl8gj99VrfEX/QoR+EKhRiW7ir2h
+         Oj9BkpwTcLXzrDcK3jrO3o9QGarGr5KzK9JkhFrhuOPyO2Dv8jfeIinFUP0MPQpVvl1L
+         XV5lSNhc9tMtF9PUd7LO1Fi5UmPmyPxSN1JNAm6nFyqw7NApu3Qx23C3i4XOZdOxKr6J
+         OFmg==
+X-Gm-Message-State: ANoB5pkIIE4xkk/5nLyju6nsoo+HU21LnG5NfKzIG0fEFeEyr6h4UkcO
+        vnU7xtGK2CRMy4IPO5ZRaqONicNo6rk/eDUhXuU=
+X-Google-Smtp-Source: AA0mqf6Bq8H/a3oW2aQP8DBJuI2chSLhNJPP2yxLmIgM74bfU6Pjkdnd+5hWjTC1pyJUbXghNArbOOXfk94hIxvDdgA=
+X-Received: by 2002:a05:622a:1c1:b0:3a5:8416:690d with SMTP id
+ t1-20020a05622a01c100b003a58416690dmr12974134qtw.61.1667978555763; Tue, 08
+ Nov 2022 23:22:35 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] x86/paravirt: use common macro for creating simple asm
- paravirt functions
-Content-Language: en-US
-To:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Cc:     Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20221020091950.6741-1-jgross@suse.com>
- <7f620a41-c68d-20ad-cdde-cd545c772014@csail.mit.edu>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <7f620a41-c68d-20ad-cdde-cd545c772014@csail.mit.edu>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------shouL010u3Mr0e0Q9VFIBCgV"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAFCwf13uLj=P6u6FAcY8M5qAXoaBdb+Ha-TYj0j2FAZnFAPFYg@mail.gmail.com>
+ <CAFCwf12yRUG4593ozJMEwaaJBKyWqXTTCjef9O_fzWdQBxVrtw@mail.gmail.com>
+ <Y2kAcCu4z2LUMN7u@nvidia.com> <CAFCwf10K-dTu455QfOK8i6thismY-FUN2Rws830EGiqOcGWFgA@mail.gmail.com>
+ <Y2kDzPswkKyZyRpS@nvidia.com> <CAFCwf10A=-bj2nR8WasNxyQQ07D24Je04tzKxqv2X_XnA0BUSQ@mail.gmail.com>
+ <Y2kRvyR8VrZrO/1H@nvidia.com> <CAFCwf12E4K7bpLcDvTtG1mKxoy1JnchXGCKDvcKAayCFvGWXXQ@mail.gmail.com>
+ <Y2kyvswuCsO0x1/2@nvidia.com> <CAPM=9twxu3v4voSukrkror1BrajShRLY9CFxYWpL2rwK7fMiKQ@mail.gmail.com>
+ <Y2pLYxW8p0QeiV+3@nvidia.com>
+In-Reply-To: <Y2pLYxW8p0QeiV+3@nvidia.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Wed, 9 Nov 2022 17:22:23 +1000
+Message-ID: <CAPM=9ty6oX9wp7XD6qgZxaXs8HRAtVioWAO-_GSr3Lf0m4NXtA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
+ new major
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Oded Gabbay <ogabbay@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        stanislaw.gruszka@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------shouL010u3Mr0e0Q9VFIBCgV
-Content-Type: multipart/mixed; boundary="------------X9YsFQnwdhkVRWzIiGnpsMmR";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>,
- linux-kernel@vger.kernel.org, x86@kernel.org,
- virtualization@lists.linux-foundation.org, kvm@vger.kernel.org
-Cc: Alexey Makhalov <amakhalov@vmware.com>,
- VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Wanpeng Li <wanpengli@tencent.com>, Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-ID: <820ab144-5841-e3d9-88ec-52093f42be74@suse.com>
-Subject: Re: [PATCH] x86/paravirt: use common macro for creating simple asm
- paravirt functions
-References: <20221020091950.6741-1-jgross@suse.com>
- <7f620a41-c68d-20ad-cdde-cd545c772014@csail.mit.edu>
-In-Reply-To: <7f620a41-c68d-20ad-cdde-cd545c772014@csail.mit.edu>
+On Tue, 8 Nov 2022 at 22:28, Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> On Tue, Nov 08, 2022 at 06:33:23AM +1000, Dave Airlie wrote:
+>
+> > At plumbers we decided a direction, I think the direction is good, if
+> > there is refactoring to be done, I'd rather it was done in tree with a
+> > clear direction.
+> >
+> > Coming in now and saying we should go down a different path isn't
+> > really helpful. We need to get rolling on this, we have drivers that
+> > want to land somewhere now, which means we need to just get a
+> > framework in place, leveraging drm code is the way to do it.
+>
+> It is not a different path, at plumbers we decided accel should try to
+> re-use parts of DRM that make sense. I think that should be done by
+> making those DRM parts into libraries that can be re-used, not by
+> trying to twist DRM into something weird.
 
---------------X9YsFQnwdhkVRWzIiGnpsMmR
-Content-Type: multipart/mixed; boundary="------------jfhg0fn1IeRuyYfJsUea8HcA"
+There isn't much twisting here, the thing is this is just the code for sharing,
+there isn't going to be mountains more. This code gives accel drivers access
+to a lot of things. Refactoring it out will take a year or so, and I don't think
+buys us anything.
 
---------------jfhg0fn1IeRuyYfJsUea8HcA
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+>
+> If this thing needs special major/minor numbers, it's own class, its
+> own debufs, sysfs, etc, then it should not be abusing the DRM struct
+> device infrastructure to create that very basic kernel infrastructure.
+>
+> Somehow we ended up with the worst of both worlds. If you want to to
+> be DRM then it should just be DRM and we shouldn't see all this core
+> infrastructue code for debugfs/sysfs/cdevs/etc in thes patches at all.
 
-T24gMDkuMTEuMjIgMDY6MTYsIFNyaXZhdHNhIFMuIEJoYXQgd3JvdGU6DQo+IEhpIEp1ZXJn
-ZW4sDQo+IA0KPiBTb3JyeSBmb3IgdGhlIGRlbGF5IGluIHJldmlld2luZyB0aGlzIHBhdGNo
-IQ0KPiANCj4gT24gMTAvMjAvMjIgMjoxOSBBTSwgSnVlcmdlbiBHcm9zcyB3cm90ZToNCj4+
-IFRoZXJlIGFyZSBzb21lIHBhcmF2aXJ0IGFzc2VtYmxlciBmdW5jdGlvbnMgd2hpY2ggYXJl
-IHNoYXJpbmcgYSBjb21tb24NCj4+IHBhdHRlcm4uIEludHJvZHVjZSBhIG1hY3JvIERFRklO
-RV9QQVJBVklSVF9BU00oKSBmb3IgY3JlYXRpbmcgdGhlbS4NCj4+DQo+PiBUaGUgZXhwbGlj
-aXQgX3BhcmF2aXJ0X25vcCgpIHByb3RvdHlwZSBpbiBwYXJhdmlydC5jIGlzbid0IG5lZWRl
-ZCwgYXMNCj4+IGl0IGlzIGluY2x1ZGVkIGluIHBhcmF2aXJ0X3R5cGVzLmggYWxyZWFkeS4N
-Cj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+
-DQo+IA0KPiBJIGp1c3Qgd2FudGVkIHRvIG1ha2UgYSBub3RlIHRoYXQgdGhlIHBhcnQgb2Yg
-dGhpcyBwYXRjaCB0aGF0J3Mgbm90DQo+IHB1cmVseSBjbGVhbnVwIGlzIHRoZSBhZGRpdGlv
-biBvZiB0aGUgYWxpZ25tZW50IChfX0FMSUdOX1NUUikgdG8NCj4gX19yYXdfY2FsbGVlX3Nh
-dmVfX19rdm1fdmNwdV9pc19wcmVlbXB0ZWQoKSwgX3BhcmF2aXJ0X25vcCgpIGFuZA0KPiBw
-YXJhdmlydF9yZXQwKCkuIE1heWJlIHRoYXQncyB3b3J0aCBjYWxsaW5nIG91dCBpbiB0aGUg
-Y29tbWl0IG1lc3NhZ2U/DQoNCkkgY2FuIGRvIHRoYXQuDQoNCj4gDQo+IFJldmlld2VkLWJ5
-OiBTcml2YXRzYSBTLiBCaGF0IChWTXdhcmUpIDxzcml2YXRzYUBjc2FpbC5taXQuZWR1Pg0K
-DQpUaGFua3MsDQoNCg0KSnVlcmdlbg0KDQo=
---------------jfhg0fn1IeRuyYfJsUea8HcA
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+We can refactor this out even clearer in the long run if it needs to,
+but you are overly focusing on the small picture of these patches and
+not the larger sharing this enables.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+At this point I'm going to be merging close to what we have here, so
+we can move forward with getting some drivers lined up.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------jfhg0fn1IeRuyYfJsUea8HcA--
-
---------------X9YsFQnwdhkVRWzIiGnpsMmR--
-
---------------shouL010u3Mr0e0Q9VFIBCgV
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmNrVREFAwAAAAAACgkQsN6d1ii/Ey9U
-Rgf/Zq+VgQpFg5PaBWO2ax7z0+KDg190mK5cblc3e9kxb5St4UYyiqEpwDNLoxKDgf+GV1u1+2Ve
-z8dfHbgpAOqF+/uElP5xGW9s4j+yJR6KlmQvU/6svODqTAKHx1GAokKvJ4sPJix57X6sBayhZc5d
-5k/ilfPVEtUscAZgbHPwXfeRINkYS/ClnvMM3n/S/bIXK2hTGTUzpZnissnQY/QiZ1JXNACOk3RO
-TDHYyNxzHM77v5MCe06J2tq5/d7h0gQbFokqnHb7u/CSe68kk53NWeuDM0bN9NjJEwg4tg0JZEla
-ZQG8wbWFCWb1bHCOQQ0yss3bM46+TyHhu/VcB96aMA==
-=hZOn
------END PGP SIGNATURE-----
-
---------------shouL010u3Mr0e0Q9VFIBCgV--
+Dave.
