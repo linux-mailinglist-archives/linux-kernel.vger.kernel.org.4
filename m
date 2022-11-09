@@ -2,130 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAAE622DFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC238622E02
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbiKIOdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
+        id S229573AbiKIOeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:34:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiKIOd2 (ORCPT
+        with ESMTP id S231329AbiKIOd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:33:28 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2057.outbound.protection.outlook.com [40.107.95.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3734C278;
-        Wed,  9 Nov 2022 06:33:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=odDWdPj2P0/sB+XmILtX0guIrMk9lBEUtq6fpz9wkkBkUMpndwKtmwt5r8uolteSgfqmK++LSLOpDBMjSMgg+C0HuTtRFDYAfWCSF5DbYvOfdryU352RPL/S9MaXJ6VoJ/w5tCzjC2q4fGD9bkM+vP7x2ho859Ci3hwB3IzQb+FqbBMcgbbeSZTGhHDVjHO+s9AkSLMyikynybSXaiyp209bqbmI/0tSXC06CJO2q1Iobl8D6sDXNw0Fq7Ijolb8Db5cCghXHbh60xuzc3Fr1Y7q3LuG0nO8K+LYOaIEkvA4zRYiPbV375P/cH+jfs6DZSGJlO03H7Qs5ZKkDFnfLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KKgQ6iJyANVMJgIf5TzSYl3F1CQ1ZNtBrS76tEfr43A=;
- b=UvvhU7pEwZkQA4vaYagd4UeePd+ILOaY6VzOs0Lxo2g1UfzEV8j0GLMy01NEZrrw5lGF6/7BAD/FdUAUCMD+5fFzMCPz/5ezTA1rQEoVuEMm9yiFoghXJZEbB9ldh89k2bsVZfIfjp3HSbKsSRxcZmIHyeNziuaCMDv5cnHvTUexDbqoA2gev9Y5QrE3nUmc1hYXXityXh1Z75KPMo/jndN1Yb7yGOkSQ6+hBxhBKdMHTvrbzXIeHVFkqEJXVSe3lnLF0aI0s31v48BMDkATnUaB4fUQtCqUg5F5Wp110enMen5H7O1B4suxXrnXG5u9cX1rUBJgr/sajNRFkp15Wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KKgQ6iJyANVMJgIf5TzSYl3F1CQ1ZNtBrS76tEfr43A=;
- b=UoIxT9buvPMbfvUNT/1Ms1fy8GllfUAeHt1o4iSfpxKbQ4Cd8Cn/MrCmsij66YFm7ru+qYJS6aNrnI/QYhnWIgmd4z72Ftk60EtsdlsqrcP7qkdrsYK51ZwHWuOjidsnTOr/CB/LEHn2yVdpL/7vvyiK+tQta2ykNFTVzhObxIk=
-Received: from MW4PR04CA0217.namprd04.prod.outlook.com (2603:10b6:303:87::12)
- by CY8PR12MB7242.namprd12.prod.outlook.com (2603:10b6:930:59::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Wed, 9 Nov
- 2022 14:33:23 +0000
-Received: from CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:87:cafe::d6) by MW4PR04CA0217.outlook.office365.com
- (2603:10b6:303:87::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27 via Frontend
- Transport; Wed, 9 Nov 2022 14:33:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT115.mail.protection.outlook.com (10.13.174.211) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 14:33:23 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 08:33:20 -0600
-Date:   Wed, 9 Nov 2022 15:33:17 +0100
-From:   Robert Richter <rrichter@amd.com>
-To:     "Verma, Vishal L" <vishal.l.verma@intel.com>
-CC:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Subject: Re: [PATCH v2 07/12] cxl: Remove dev_is_cxl_root_child() check in
- devm_cxl_enumerate_ports()
-Message-ID: <Y2u6La0znt7Jky9D@rric.localdomain>
-References: <20221018132341.76259-1-rrichter@amd.com>
- <20221018132341.76259-8-rrichter@amd.com>
- <6352303b266c_24ac29423@dwillia2-mobl3.amr.corp.intel.com.notmuch>
- <552e105ca749fae4517ef053b0439cb3eecd1e4c.camel@intel.com>
+        Wed, 9 Nov 2022 09:33:59 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409E862E8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:33:57 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id j16so25808225lfe.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:33:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FnUPYP2h27BzISDsj7V+1I2jQhwKwLDiGh3xRv0iTSc=;
+        b=e/2T/j7hPCweP+e8pMtGK+rUEdcrLHT6n9wFz0MQPEpsv/HxClr3AbCtH1HNS1OVyY
+         C8N88+/NTcCalaM4Ikd5y92MnzKts1kU3t2yj4YroD0oxoAZiIh4Q4oRDsTDi5tSv+Ho
+         5Y9Zs8ULIh5v2nOrpScHWWMp/ZWUILWlihbmswT6KeJL9T657RQyAGVzPXAvtNW+LP81
+         uPby8OkdS34THfrtU1hcezi1ddtibJX8LbfqVCFRL2dZJd7zmmP1Kbgsf/Apj5/oOYAy
+         FfIf1IXGdypWvKrByafg0seytW8QfGLwy0bUr1e/r8f99zFmVa7f0eFTH1C1nsS4PIVm
+         GBYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FnUPYP2h27BzISDsj7V+1I2jQhwKwLDiGh3xRv0iTSc=;
+        b=TDkPTuMjb8UXcSisl8dla1ei9KyZFUzBCIAQONTZnOaBTzWJcAmm/0IWZPQ5QcHvQ2
+         zzEWvCWe1dkWukyp7wfy6Uc3i9SDzLwrzoDIl1A03zr04xA5y5DeQKMym5QWakeAmOG/
+         CFPhY9144MHeXwSVt2JgQ8XhxHyi9wX2rZMqkR2ecCfobYNMjNC/5dJ4csyRw2oA9lDL
+         AqPS/TFXpB4+5dxYnr+hg1seHZLbRxzi/V4h+ZwoOJjT0o7oV/3dU/LBBEGxeVOJg+cC
+         +4dvoMvEFSFnQgLyNSj75ioH9GuCyP94aM3mfEHxpfMGK7Qv9mVTmCgY+Qef0xYVffBA
+         Uytg==
+X-Gm-Message-State: ACrzQf245uEIpH5E+/jJrwiWMM4RNgxlKSiZq4/0lKWPODDm6T3vDqV1
+        /QGM/zL6h6nBnaXcX79rhxZ/DQ==
+X-Google-Smtp-Source: AMsMyM7XVLQwoA9r8OJtwaF9vPBXBxQiqp/yQiOjMX6umhm8vGRj4xNfxRcCIHOY4Gs2LZQtVqfWHA==
+X-Received: by 2002:a05:6512:3b95:b0:4a4:798d:c9a6 with SMTP id g21-20020a0565123b9500b004a4798dc9a6mr20449661lfv.463.1668004435520;
+        Wed, 09 Nov 2022 06:33:55 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id w21-20020a194915000000b004a8b9c68728sm2247669lfa.105.2022.11.09.06.33.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 06:33:54 -0800 (PST)
+Message-ID: <58c2ca66-94cf-292a-5973-cb2add0ab964@linaro.org>
+Date:   Wed, 9 Nov 2022 15:33:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <552e105ca749fae4517ef053b0439cb3eecd1e4c.camel@intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT115:EE_|CY8PR12MB7242:EE_
-X-MS-Office365-Filtering-Correlation-Id: 197573b0-56b3-4096-6b7a-08dac25f5b27
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KWsjtorf6nYg5cP0+N4cuTNY2TM+gOXluZXyJuktpMEzGJt/4MBzOqLSPlOECK/uEmRXGLA+0+8S1hddRPbAbjkR9TAI/qbzUQFqF4TTVGJ3p4vKtUneO1ObALl78NxwvSokIAT/F4rnX7wItjBfRMvVpAA5yGwJvgBZ0jkN9sviQQQx9Y+Hcm5TZKJdV86zOcIsRXkALo+l2n6nU6WInrOz/QBeBNoTGp7s886xOXT3WfHytUE6jUG4Kk6CbcGSxYb7ncCl8YMy/H7lw7vwI2PnPWhry2O/RNn6nU+kgwB/hrQepQ2Ix0UxwBzVT7rjDhLQzfrU/9+2Srz5y6Uwvi2+mBVqovyeHDcsxReMxyXtl8tny2aPSQ/TRAX54VFR6j8QPcMO5apLoIAcbg73QQDmb9p39YzC8+qdYGXSKLaWgjdUwNrE7ZYsgD06VaitvaC4uit5nHhA3rWIGtuvXMvVtFpO7oNuEKdi6ULD0AMw9YkeKOIJ6DP+0yYp+Qmk3grD7SyJxoi9vTAMWToR8q2B5KNsH70b8No5iP5CU5fT285wFFOcnUgmczEW04mIXmKDFTqlWJsCkIqH8848P3MqVYVc7pUSLjLF/MTE9c7WR7EUqaIrl1q0Dyr7v0jhOsmZ/zlH5nbybpeXfbYn3V1lcOMznuiEx0h3P98uGwknPhbJU500sIehn42Bd/t9s2+TCHBYIa+S405UllxHi8rRHG5GrUPGfK0P++rkLsgcX66urK45MkPnpTkSQRDzBaAFDUX1rqjmM+qC/yp7HJ7zkiA0OULtgM5oH4ehVyJAfjFhivcp3hmkSALmluUFT/wa9+dRqPxMB5YRwwya0w==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(376002)(451199015)(36840700001)(40470700004)(46966006)(2906002)(4744005)(82310400005)(7696005)(70586007)(5660300002)(7416002)(186003)(55016003)(426003)(16526019)(54906003)(47076005)(41300700001)(6916009)(8936002)(8676002)(966005)(478600001)(316002)(36860700001)(9686003)(356005)(336012)(40460700003)(40480700001)(6666004)(4326008)(26005)(53546011)(81166007)(82740400003)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 14:33:23.1775
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 197573b0-56b3-4096-6b7a-08dac25f5b27
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT115.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7242
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ARM: dts: Update Nanobone DTS
+Content-Language: en-US
+To:     Mark Jackson <mpfj@newflow.co.uk>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221109143003.81463-1-mpfj@newflow.co.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221109143003.81463-1-mpfj@newflow.co.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vishal,
+On 09/11/2022 15:30, Mark Jackson wrote:
+> Update Nanobone DTS file as follows:-
 
-On 21.10.22 06:32:33, Verma, Vishal L wrote:
-> I was waiting to post the cxl-cli patches for this until the kernel
-> discussion settles - but maybe this topology layout is settled enough?
+Drop trailing dash.
+
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
+
+> - Fix GPIO settings for RTS/CTS pins on UART3 & 4
+> - Enable RS485 mode for UART3 & 4
+> - Enable LM75 temperature sensor
+> - Fix GPIO settings for MMC pins
+> - Enable USB
+
+Split patch per logical changes so your subject summarizes the change,
+not just "update".
+
+Missing Signed-off-by, so you also did not run checkpatch. Please run
+scripts/checkpatch.pl and fix reported warnings.
+
+> ---
+>  arch/arm/boot/dts/am335x-nano.dts | 33 +++++++++++++++++++++++++------
+>  1 file changed, 27 insertions(+), 6 deletions(-)
 > 
-> In the meanwhile I've pushed a branch with these fixups here:
-> https://github.com/pmem/ndctl/tree/vv/rch-support
+> diff --git a/arch/arm/boot/dts/am335x-nano.dts b/arch/arm/boot/dts/am335x-nano.dts
+> index b6f2567bd65a..1f613e879c53 100644
+> --- a/arch/arm/boot/dts/am335x-nano.dts
+> +++ b/arch/arm/boot/dts/am335x-nano.dts
+> @@ -120,8 +120,8 @@ AM33XX_PADCONF(AM335X_PIN_SPI0_D0, PIN_OUTPUT, MUX_MODE1)		/* spi0_d0.uart2_txd
+>  
+>  	uart3_pins: uart3_pins {
+>  		pinctrl-single,pins = <
+> -			AM33XX_PADCONF(AM335X_PIN_LCD_DATA10, PIN_INPUT_PULLUP, MUX_MODE6)	/* lcd_data10.uart3_ctsn */
+> -			AM33XX_PADCONF(AM335X_PIN_LCD_DATA11, PIN_OUTPUT, MUX_MODE6)		/* lcd_data11.uart3_rtsn */
+> +			AM33XX_PADCONF(AM335X_PIN_LCD_DATA10, PIN_INPUT_PULLUP, MUX_MODE7)	/* lcd_data10.gpio2[16] */
+> +			AM33XX_PADCONF(AM335X_PIN_LCD_DATA11, PIN_OUTPUT, MUX_MODE7)		/* lcd_data11.gpio2[17] */
+>  			AM33XX_PADCONF(AM335X_PIN_SPI0_CS1, PIN_INPUT, MUX_MODE1)		/* spi0_cs1.uart3_rxd */
+>  			AM33XX_PADCONF(AM335X_PIN_ECAP0_IN_PWM0_OUT, PIN_OUTPUT, MUX_MODE1)		/* ecap0_in_pwm0_out.uart3_txd */
+>  		>;
+> @@ -129,8 +129,8 @@ AM33XX_PADCONF(AM335X_PIN_ECAP0_IN_PWM0_OUT, PIN_OUTPUT, MUX_MODE1)		/* ecap0_in
+>  
+>  	uart4_pins: uart4_pins {
+>  		pinctrl-single,pins = <
+> -			AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_INPUT_PULLUP, MUX_MODE6)	/* lcd_data12.uart4_ctsn */
+> -			AM33XX_PADCONF(AM335X_PIN_LCD_DATA13, PIN_OUTPUT, MUX_MODE6)		/* lcd_data13.uart4_rtsn */
+> +			AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_INPUT_PULLUP, MUX_MODE7)	/* lcd_data12.gpio0[8] */
+> +			AM33XX_PADCONF(AM335X_PIN_LCD_DATA13, PIN_OUTPUT, MUX_MODE7)		/* lcd_data13.gpio0[9] */
+>  			AM33XX_PADCONF(AM335X_PIN_UART0_CTSN, PIN_INPUT, MUX_MODE1)		/* uart0_ctsn.uart4_rxd */
+>  			AM33XX_PADCONF(AM335X_PIN_UART0_RTSN, PIN_OUTPUT, MUX_MODE1)		/* uart0_rtsn.uart4_txd */
+>  		>;
+> @@ -188,12 +188,22 @@ &uart3 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&uart3_pins>;
+>  	status = "okay";
 
-I sent out the v3 series today, patch #1 contains the change of the
-port's reference device. You need to adopt the ndctl patches for this.
-To find the alias in sysfs, you need to lookup the firmware_node
-instead of the physical_node. I would suggest to change the
-implemenation to just check for both entries.
+Status is the last property.
 
-Thanks,
+> +	rts-gpio = <&gpio2 17 GPIO_ACTIVE_HIGH>;
+> +	rs485-rts-active-high;
+> +	rs485-rx-during-tx;
+> +	rs485-rts-delay = <1 1>;
+> +	linux,rs485-enabled-at-boot-time;
+>  };
+>  
+>  &uart4 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&uart4_pins>;
+>  	status = "okay";
 
--Robert
+Ditto
+
+> +	rts-gpio = <&gpio0 9 GPIO_ACTIVE_HIGH>;
+> +	rs485-rts-active-high;
+> +	rs485-rx-during-tx;
+> +	rs485-rts-delay = <1 1>;
+> +	linux,rs485-enabled-at-boot-time;
+>  };
+>  
+>  &uart5 {
+> @@ -220,6 +230,12 @@ tps: tps@24 {
+>  		reg = <0x24>;
+>  	};
+>  
+> +	lm75@48 {
+
+Generic node names, so probably "temperature-sensor". Check existing
+sources.
+
+> +		compatible = "lm75";
+> +		reg = <0x48>;
+> +		status = "okay";
+
+No need, drop.
+
+
+Best regards,
+Krzysztof
+
