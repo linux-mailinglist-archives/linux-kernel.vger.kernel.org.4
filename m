@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E229B62256B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB35F6225C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiKII2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:28:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S229533AbiKIItL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiKII14 (ORCPT
+        with ESMTP id S229868AbiKIItH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:27:56 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DDF1B9F5;
-        Wed,  9 Nov 2022 00:27:55 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N6dPs10w4zRp7v;
-        Wed,  9 Nov 2022 16:27:45 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 16:27:53 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <pavel@ucw.cz>, Wang Yufen <wangyufen@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 13/13] leds: rt8515: Fix devm vs. non-devm ordering
-Date:   Wed, 9 Nov 2022 16:48:14 +0800
-Message-ID: <1667983694-15040-14-git-send-email-wangyufen@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
-References: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
+        Wed, 9 Nov 2022 03:49:07 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7071916585
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:49:06 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id b2so44830438eja.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 00:49:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t6EfFhYH21wXCx5kjRB3VR+RjAOXhDuqMYuEWR7pfrc=;
+        b=Nv7TuRYLaRfjIJzC6Ibfw2k09vxMwaZUw45xYAICJVBRgjbKOKg8PUDAQG2g6d8HJi
+         t3pRsguCdxuipvLzx/0kRwuRJ/DG4SSvIuzTQHtUAJTnMywRLHL/PXt8UYYTsOB7ALyg
+         BQZ9ocCaax4iGoUDpLJ6QXNKRZDL7RVGCaBkwgQwePtVY3amGCcBqLVTItoKRHSgpmQB
+         q0PTk8/L3xeNCBKUOFkI3tNolnWCJ7IPG6Drl7RKCIv/3hmqJ9vA5R/rpLgLO6CFazxy
+         REOPyLV2fG236cF/HQWDda+X47ZFZ2W6zCDiJnpJOF41PUgxFx680dNyvZLLT7mM12xA
+         IkBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t6EfFhYH21wXCx5kjRB3VR+RjAOXhDuqMYuEWR7pfrc=;
+        b=ZQJj8JaL+vlR5o3VcXt0/dll70UMCdgCiac/+WHK/jWBfb+MexC0lWNQOphR/HtzS6
+         c92c7Onf6pB9S0uiM5k3Bd6zSTAi08KB2A6ItHpJ0FL2QE54SMUSceD15ouDFwkDB+jD
+         Iv/b9fh/3oODRAGRVlTPgWE6nlKFFt6hMibV7WYK+U19jTCFTmhxMHXkB0Qsa498Ac1e
+         1Z4o3tNgccK3vPnK3D9W7h+cQn8k35J7DgwPLAE8g4r/2otwwkJ5TkoXvs3tHOBZ9qJ/
+         zzsT/wvbTORgcKwZknTEgmWSoTjmL3WT1IBGPhQv5E/7mJPKssaoFXqBmi3hCfPpduz2
+         AMYg==
+X-Gm-Message-State: ACrzQf0MUQd5pfOcM/hajgHZKL47ckYGhIgGVkqqPV/FlRyVnSGWUGJ0
+        Il4B0uj8jXzUVWlpLGK+4oKbWURZeH6uw1mSrtroHA==
+X-Google-Smtp-Source: AMsMyM7nxsdRqbV99dDWXx3gc/r8zrl4uOIAkQi5rHuFSGiwieq/RYyQHXEPHnWl7E/GjBRB/NOZh8cH3d+9Df2IBdQ=
+X-Received: by 2002:a17:907:c1e:b0:7ae:31a0:571e with SMTP id
+ ga30-20020a1709070c1e00b007ae31a0571emr24200210ejc.690.1667983745034; Wed, 09
+ Nov 2022 00:49:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221105084905.9596-1-linux@fw-web.de> <20221105084905.9596-2-linux@fw-web.de>
+ <166765939131.4158830.8416727494529058690.robh@kernel.org>
+ <trinity-c732b826-2a12-4ab1-aaac-294ac5524926-1667660774779@3c-app-gmx-bap26>
+ <CACRpkdZsP-aj6hcD2sOB8ypVqdxwC8dWOo0d52qnDpxppUwNAA@mail.gmail.com> <6752A6BE-3750-4195-821A-917205F59258@public-files.de>
+In-Reply-To: <6752A6BE-3750-4195-821A-917205F59258@public-files.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Nov 2022 09:48:53 +0100
+Message-ID: <CACRpkda+yxwUhPSZ1EFHJJRFONKW63caBb_X1qPVVKxSA+QNhg@mail.gmail.com>
+Subject: Re: Re: [PATCH v1 1/4] dt-bindings: pinctrl: mt7986: add generic
+ bias-pull* support
+To:     frank-w@public-files.de
+Cc:     Rob Herring <robh@kernel.org>, Frank Wunderlich <linux@fw-web.de>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sean Wang <sean.wang@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When non-devm resources are allocated they mustn't be followed by devm
-allocations, otherwise it will break the tear down ordering and might
-lead to crashes or other bugs during ->remove() stage. Fix this by
-wrapping mutex_destroy() call with devm_add_action_or_reset().
+On Wed, Nov 9, 2022 at 9:46 AM Frank Wunderlich <frank-w@public-files.de> wrote:
+> Am 9. November 2022 09:38:03 MEZ schrieb Linus Walleij <linus.walleij@linaro.org>:
+> >On Sat, Nov 5, 2022 at 4:06 PM Frank Wunderlich <frank-w@public-files.de> wrote:
+> >
+>
+> >That patch in turn says it needs another patch first.
+> >
+> >Now I am utterly confused, it is really hard to follow these trains
+> >of patches depending on and breaking each other left and right...
+> >
+> >Can you please tell me which patches I need to apply and
+> >in which order?
+>
+> Sorry, picked the wrong link. Put all pinctrl patches together into this series to make it easier to follow (but v2 because v1 was for changing only mmc pinctrl and to have no conflicts or "broken" commits):
+>
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=692462
 
-Fixes: e1c6edcbea13 ("leds: rt8515: Add Richtek RT8515 LED driver")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/leds/flash/leds-rt8515.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Thanks I figured it out I think, even managed to apply it now!
 
-diff --git a/drivers/leds/flash/leds-rt8515.c b/drivers/leds/flash/leds-rt8515.c
-index 44904fde..f2d92ea 100644
---- a/drivers/leds/flash/leds-rt8515.c
-+++ b/drivers/leds/flash/leds-rt8515.c
-@@ -273,6 +273,11 @@ static void rt8515_determine_max_intensity(struct rt8515 *rt,
- 	*max_intensity_setting = max_intensity;
- }
- 
-+static void rt8515_mutex_destroy(void *lock)
-+{
-+	mutex_destroy(lock);
-+}
-+
- static int rt8515_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -338,13 +343,16 @@ static int rt8515_probe(struct platform_device *pdev)
- 	led->flags |= LED_CORE_SUSPENDRESUME | LED_DEV_CAP_FLASH;
- 
- 	mutex_init(&rt->lock);
-+	ret = devm_add_action_or_reset(dev, rt8515_mutex_destroy,
-+				       &rt->lock);
-+	if (ret)
-+		return ret;
- 
- 	platform_set_drvdata(pdev, rt);
- 
- 	ret = devm_led_classdev_flash_register_ext(dev, fled, &init_data);
- 	if (ret) {
- 		fwnode_handle_put(child);
--		mutex_destroy(&rt->lock);
- 		dev_err(dev, "can't register LED %s\n", led->name);
- 		return ret;
- 	}
-@@ -373,7 +381,6 @@ static int rt8515_remove(struct platform_device *pdev)
- 
- 	rt8515_v4l2_flash_release(rt);
- 	del_timer_sync(&rt->powerdown_timer);
--	mutex_destroy(&rt->lock);
- 
- 	return 0;
- }
--- 
-1.8.3.1
-
+Yours,
+Linus Walleij
