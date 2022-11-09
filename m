@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA06F622652
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241DA622653
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 10:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiKIJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 04:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
+        id S230328AbiKIJKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 04:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbiKIJJX (ORCPT
+        with ESMTP id S230318AbiKIJJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 04:09:23 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A2A14D08
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:09:04 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id q9so45079328ejd.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 01:09:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nZcMBYbQMjldT4jC+RhNUKxz04c9G3hEjCKTpoC7vbg=;
-        b=FageLjlZK2WZoj8juYOD9YLr+nPY2UYc4UrpUYhREtKyt+KyVpgc/2r1E6Ulg9GtIM
-         vdyo4QlEoawvzBTI4GJaiyzSxf1NOkUQYU5lSUD1n/xR2pyy4AfqHrSKhRcktE0WAWYa
-         Hc1xjH9NVPhbwFwQ5mI01trK+0fiPflauvvkR2uREdT4vU49peuB7TnUSao93hbXYfMj
-         cmlZOxBKiWniUfrzD3IC7y6UUF169DGu7tAII1SU2d46H6KRhkeDbH8cklGtzOBXs2aG
-         njXhDqFqlKUvcbvBCAD4j+DKsJyG/TWoqtegowcBaJnVT0PJPZzmQuQV+vDbH0jg478g
-         eTSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nZcMBYbQMjldT4jC+RhNUKxz04c9G3hEjCKTpoC7vbg=;
-        b=Awh6oGJOMmZgWD3+cm90eG72/dfulwIa6KyNSE4fmwPC7kPfTU9ASo9WMEPNHXLOo2
-         dc/EcOQSAk5e44qafOTvAL+7tgj2prooYq8nDtDg7p9dRR+XamwT3sX0GU2l6A6iB7tj
-         fNyu3/3TFEaYhPpQ57WuV7wkzybuCA6e233yyl862wwnMNsTkoM33lUNn0dAn32d2CRR
-         TgC+NAFGZL5OSTdui19Rk1tXZpQcCRvkTDuFsi63LbKSwRwRfwZSCS+4vra4OQE1SBnE
-         EgGniGbX/Z4WoZsyYniRvkFdHzbyB4grqNxixFpUuA7lFe8qkRNnwIwg3egDZuKVxt9v
-         Lm2Q==
-X-Gm-Message-State: ACrzQf0CN+1cgSHVDDET/hb/pX3UKojiI65rWxyrulb9/NBvYubkSnb0
-        dGZA5b5C2LHtrTgoPj9pkxMzBYeR+iYLc+FQ7ep7eg==
-X-Google-Smtp-Source: AMsMyM7Ffw6Xyta7TIuWJ0V9kBSj6DtO1Hw1mhv0q6xWxTB6nphGzVJ3kWpUp4HdDFHIf7BavRy7NQo9PuRvtZRw9Nc=
-X-Received: by 2002:a17:907:c1e:b0:7ae:31a0:571e with SMTP id
- ga30-20020a1709070c1e00b007ae31a0571emr24253156ejc.690.1667984943106; Wed, 09
- Nov 2022 01:09:03 -0800 (PST)
+        Wed, 9 Nov 2022 04:09:51 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE416566
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 01:09:44 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 130EE21EEA;
+        Wed,  9 Nov 2022 09:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667984983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4rvDAE7ynxS4SjgRq0+PnY4oQgJkKPVoUhifdSQ0G1U=;
+        b=whCkYGYSHp8sgZjH9YqktwAltZO443vH+z259yTeU7m8iS//oeQzr7TDv+/WSAbd00jT48
+        cnXkzYDrzg5BKnm9BwJo/y52Tcysccd4bRJgdDp1sUaxoxGVHDbWlHdRnu4VsBhasCB21/
+        NIdWXlfyA6Md1lvtGbCxhqDrzp3hdmI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667984983;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4rvDAE7ynxS4SjgRq0+PnY4oQgJkKPVoUhifdSQ0G1U=;
+        b=Fck9nHcqZ3rxPvaT0Al6ILtulSRwDpOlOPrcv08aV3PNYDXlHD6maHkGJUFvjoRd6OGHJo
+        X+H7/cRV4t+lXXDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CBB9D1331F;
+        Wed,  9 Nov 2022 09:09:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gLsHMVZua2PuaQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 09 Nov 2022 09:09:42 +0000
+Message-ID: <1823fa9f-f67d-9581-0e6f-55f0c050fcc6@suse.cz>
+Date:   Wed, 9 Nov 2022 10:09:42 +0100
 MIME-Version: 1.0
-References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com> <20221108142226.63161-7-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221108142226.63161-7-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Nov 2022 10:08:51 +0100
-Message-ID: <CACRpkdbVekP0kFpwexpb3NhqRSouNW7FhhRpSK0yRQTrJAGt4A@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] pinctrl: intel: Enumerate PWM device when
- community has a capabilitty
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: Deprecating and removing SLOB
+Content-Language: en-US
+To:     Yosry Ahmed <yosryahmed@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz>
+ <Y2qkIrk+a9v7tAQZ@P9FQF9L96D.lan>
+ <CAJD7tkaqrz8sGqgbyfQHU_NM3O=a_0bqSHB0gGYRB7Kj+w_05w@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <CAJD7tkaqrz8sGqgbyfQHU_NM3O=a_0bqSHB0gGYRB7Kj+w_05w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,54 +88,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 3:22 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On 11/8/22 21:13, Yosry Ahmed wrote:
+> On Tue, Nov 8, 2022 at 10:47 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+>>
+>> On Tue, Nov 08, 2022 at 04:55:29PM +0100, Vlastimil Babka wrote:
+>> > Hi,
+>> >
+>> > as we all know, we currently have three slab allocators. As we discussed at
+>> > LPC [1], it is my hope that one of these allocators has a future, and two of
+>> > them do not.
+>> >
+>> > The unsurprising reasons include code maintenance burden, other features
+>> > compatible with only a subset of allocators (or more effort spent on the
+>> > features), blocking API improvements (more on that below), and my inability
+>> > to pronounce SLAB and SLUB in a properly distinguishable way, without
+>> > resorting to spelling out the letters.
+>> >
+>> > I think (but may be proven wrong) that SLOB is the easier target of the two
+>> > to be removed, so I'd like to focus on it first.
+>>
+>> Great!
+>>
+>> SLOB is not supported by the kernel memory accounting code, so if we'll
+>> deprecate SLOB, we can remove all those annoying ifndefs.
+>>
+>> But I wonder if we can deprecate SLAB too? Or at least use the moment to
+>> ask every non-SLUB user on why they can't/don't want to use SLUB.
+>> Are there any known advantages of SLAB over SLUB?
 
-> Some of the Communities may have PWM capability. In such cases,
-> enumerate PWM device via respective driver. User is still responsible
-> for setting correct pin muxing for the line that needs to output the
-> signal.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Yeah it was my plan to inquire about SLAB next, once SLOB's fate is settled,
+as I did expect greater resistance there. My hope is that if there are still
+workloads that benefit from SLAB's percpu arrays, we could e.g. add
+(per-cache opt-in) percpu arrays to SLUB, as that would be still better than
+having two different complete implementations.
 
-So:
+> We use SLAB at Google, but I am not the right person to answer the
+> question of why we can't/don't use SLUB. Adding Greg here who recently
+> looked into this and might have answers. I see David is already
+> tagged, he might have a good answer as well.
 
-> +#include <linux/platform_data/x86/pwm-lpss.h>
-(...)
-> +static int intel_pinctrl_probe_pwm(struct intel_pinctrl *pctrl,
-> +                                  struct intel_community *community)
-> +{
-> +       static const struct pwm_lpss_boardinfo info = {
-> +               .clk_rate = 19200000,
-> +               .npwm = 1,
-> +               .base_unit_bits = 22,
-> +               .bypass = true,
-> +       };
-> +       struct pwm_lpss_chip *pwm;
-> +
-> +       if (!(community->features & PINCTRL_FEATURE_PWM))
-> +               return 0;
-> +
-> +       pwm = pwm_lpss_probe(pctrl->dev, community->regs + PWMC, &info);
-> +       if (IS_ERR(pwm) && PTR_ERR(pwm) != -ENODEV)
-> +               return PTR_ERR(pwm);
+Yeah, Google folks were indeed against removing SLAB due to such workloads
+in the past discussions.
 
-This is alike a boardfile embedded into the pin control driver.
+>>
+>> Also, for memory-constrained users we might want to add some guide on how
+>> to configure SLUB to minimize the memory footprint.
+>>
+>> Thank you!
+>>
+>> Roman
+>>
 
-It's a bit backwards since we usually go the other direction, i.e. probe
-a PWM driver or whatever and then that driver request its resources
-that are assigned from e.g. DT or ACPI, and in this case that would
-mean it request its pin control handle and the pins get set up.
-
-I guess I can be convinced that this hack is the lesser evil :D
-
-What is it in the platform that makes this kind of hacks necessary?
-Inconsistent description in ACPI or is the PWM device simply
-missing from the DSDT (or whatever is the right form in ACPI)
-in already shipped devices that need it?
-
-Or is it simply impossible to describe the PWM device in ACPI?
-
-Yours,
-Linus Walleij
