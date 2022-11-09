@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E95622DAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85523622DB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiKIOV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
+        id S231576AbiKIOWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:22:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbiKIOVL (ORCPT
+        with ESMTP id S231440AbiKIOVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:21:11 -0500
+        Wed, 9 Nov 2022 09:21:13 -0500
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EA8233BF;
-        Wed,  9 Nov 2022 06:20:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB11423BD6;
+        Wed,  9 Nov 2022 06:20:15 -0800 (PST)
 Received: from booty.fritz.box (unknown [77.244.183.192])
         (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id B5EE6FF80D;
-        Wed,  9 Nov 2022 14:20:06 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 37FB6FF814;
+        Wed,  9 Nov 2022 14:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668003609;
+        t=1668003611;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=htGRYXVJHCm+VjabaduYJWZ2LBkEOdCNwzZfPxcpLAk=;
-        b=dIFQPstrZBE9F39CDeMweJNRNdwH9ovs1sNOXltT4zqaZEY7cfZc6BySALsx3umUd4nfrQ
-        JjowYHiwMbJb3gR8NkfOQQ/jrjo5Ch0thJyUXxc3bPJ1HFCeGMpICQYXjQJvTa9ZC9CdOn
-        rWu5Fg0xArIN52xsjhbDh+lnQe+5+wfuBoGP2TkMruFyOma6t9om7bvBqQJQVL/3cWFJhY
-        uqvc97cyA2x8dSH3snjEb/v2+kj/3Nc96Hvl7AELJ1rLHvPrqPxBlicYyg9ISwT52S9xMV
-        XgkKsV+iO0g+VAmVHlXxPoaLvGdX41eYHY3gaKDHZ6gvNEqOIxplqHPF76Mzew==
+        bh=ip9bY6YtCyentpwiI3F4YXAllQWzlsRpRMRpuGovH+Q=;
+        b=Lr4nREZOfO+LFPK3DCjfLBoqjPwcJMm0VPhDXTEdDRxLmH+lBToivka/UFWywVGmbD5SUa
+        +6DuJxmUMe/q4dNgwBg1mRPc8f+lGDJYhwdFV1mZi0f1P1V7dLymPgM1+uFDddAOjzIFO/
+        5wNFy1+Iesd50jZ8Hdyy3EXny1sapeVpGDRQDItYeGTEEswF2IlxsoQt/pNZmAM4nEWIB1
+        kBL/eGrRml71m5H8yWHsZKDYHsCguA7qsAxL1gRpYWL8Wgo/5YNmFeCt4//iIA24EjeKy/
+        R05LZwXvYa8Vgg0VCU/XW9YQeeILJzWotjDUIUq4+Lph4RH9xLzvR5N/zyAkFA==
 From:   luca.ceresoli@bootlin.com
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Richard Leitner <richard.leitner@skidata.com>
-Subject: [PATCH 19/23] staging: media: tegra-video: add syncpts for Tegra20 to struct tegra_vi
-Date:   Wed,  9 Nov 2022 15:18:48 +0100
-Message-Id: <20221109141852.729246-20-luca.ceresoli@bootlin.com>
+Subject: [PATCH 20/23] staging: media: tegra-video: add hooks for planar YUV and H/V flip
+Date:   Wed,  9 Nov 2022 15:18:49 +0100
+Message-Id: <20221109141852.729246-21-luca.ceresoli@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
 References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
@@ -68,43 +68,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-In preparation to implement Tegra20 parallel video capture, add variables
-to hold the required syncpt.
+Tegra20 supports planar YUV422 capture, which can be implemented by writing
+U and V base address registers in addition to the "main" base buffer
+address register.
+
+It also supports H and V flip, which among others requires to write the
+start address (i.e. the 1st offset to write, at the end of the buffer or
+line) in more registers for Y and, for planar formats, U and V.
+
+Add minimal hooks in VI to allow per-SoC optional support to those
+features:
+
+ - variables in struct tegra_vi for the U and V buffer base offsets
+ - variables in struct tegra_vi for the Y, U and V buffer start offsets
+ - an optional per-soc VI operation to compute those values on queue setup
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/staging/media/tegra-video/vi.h | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/staging/media/tegra-video/vi.c |  4 ++++
+ drivers/staging/media/tegra-video/vi.h | 14 ++++++++++++++
+ 2 files changed, 18 insertions(+)
 
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 854ffb4b5617..ebb502a45e96 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -92,6 +92,7 @@ tegra_get_format_by_fourcc(struct tegra_vi *vi, u32 fourcc)
+ /*
+  * videobuf2 queue operations
+  */
++
+ static int tegra_channel_queue_setup(struct vb2_queue *vq,
+ 				     unsigned int *nbuffers,
+ 				     unsigned int *nplanes,
+@@ -107,6 +108,9 @@ static int tegra_channel_queue_setup(struct vb2_queue *vq,
+ 	sizes[0] = chan->format.sizeimage;
+ 	alloc_devs[0] = chan->vi->dev;
+ 
++	if (chan->vi->ops->channel_queue_setup)
++		chan->vi->ops->channel_queue_setup(chan);
++
+ 	return 0;
+ }
+ 
 diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
-index 8fadca33bcc9..ba563cd17296 100644
+index ba563cd17296..a23ee8800d33 100644
 --- a/drivers/staging/media/tegra-video/vi.h
 +++ b/drivers/staging/media/tegra-video/vi.h
-@@ -117,11 +117,13 @@ struct tegra_vi {
-  * @vi: Tegra video input device structure
-  * @frame_start_sp: host1x syncpoint pointer to synchronize programmed capture
-  *		start condition with hardware frame start events through host1x
-- *		syncpoint counters.
-+ *		syncpoint counters. (Tegra210)
-  * @mw_ack_sp: host1x syncpoint pointer to synchronize programmed memory write
-  *		ack trigger condition with hardware memory write done at end of
-- *		frame through host1x syncpoint counters.
-+ *		frame through host1x syncpoint counters. (Tegra210)
-  * @sp_incr_lock: protects cpu syncpoint increment.
-+ * @out_sp: host1x syncpoint pointer for frame sync (Tegra20)
-+ * @next_out_sp_idx: next expected value for @out_sp (Tegra20)
+@@ -47,6 +47,7 @@ struct tegra_vi_channel;
+  * @channel_host1x_syncpt_free: free all synchronization points
+  * @vi_fmt_align: modify `pix` to fit the hardware alignment
+  *		requirements and fill image geometry
++ * @channel_queue_setup: additional operations at the end of vb2_ops::queue_setup
+  * @vi_start_streaming: starts media pipeline, subdevice streaming, sets up
+  *		VI for capture and runs capture start and capture finish
+  *		kthreads for capturing frames to buffer and returns them back.
+@@ -58,6 +59,7 @@ struct tegra_vi_ops {
+ 	int (*channel_host1x_syncpt_init)(struct tegra_vi_channel *chan);
+ 	void (*channel_host1x_syncpt_free)(struct tegra_vi_channel *chan);
+ 	void (*vi_fmt_align)(struct v4l2_pix_format *pix, unsigned int bpp);
++	void (*channel_queue_setup)(struct tegra_vi_channel *chan);
+ 	int (*vi_start_streaming)(struct vb2_queue *vq, u32 count);
+ 	void (*vi_stop_streaming)(struct vb2_queue *vq);
+ };
+@@ -148,6 +150,12 @@ struct tegra_vi {
+  * @queue: vb2 buffers queue
+  * @sequence: V4L2 buffers sequence number
   *
-  * @kthread_start_capture: kthread to start capture of single frame when
-  *		vb buffer is available. This thread programs VI CSI hardware
-@@ -173,6 +175,8 @@ struct tegra_vi_channel {
- 	struct host1x_syncpt *mw_ack_sp[GANG_PORTS_MAX];
- 	/* protects the cpu syncpoint increment */
- 	spinlock_t sp_incr_lock[GANG_PORTS_MAX];
-+	struct host1x_syncpt *out_sp;
-+	u32 next_out_sp_idx;
++ * @addr_offset_u: U plane base address, relative to buffer base address (only for planar)
++ * @addr_offset_v: V plane base address, relative to buffer base address (only for planar)
++ * @start_offset:   1st Y byte to write, relative to buffer base address (for H/V flip)
++ * @start_offset_u: 1st U byte to write, relative to buffer base address (for H/V flip)
++ * @start_offset_v: 1st V byte to write, relative to buffer base address (for H/V flip)
++ *
+  * @capture: list of queued buffers for capture
+  * @start_lock: protects the capture queued list
+  * @done: list of capture done queued buffers
+@@ -188,6 +196,12 @@ struct tegra_vi_channel {
+ 	struct vb2_queue queue;
+ 	u32 sequence;
  
- 	struct task_struct *kthread_start_capture;
- 	wait_queue_head_t start_wait;
++	unsigned int addr_offset_u;
++	unsigned int addr_offset_v;
++	unsigned int start_offset;
++	unsigned int start_offset_u;
++	unsigned int start_offset_v;
++
+ 	struct list_head capture;
+ 	/* protects the capture queued list */
+ 	spinlock_t start_lock;
 -- 
 2.34.1
 
