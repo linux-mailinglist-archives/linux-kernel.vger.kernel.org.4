@@ -2,130 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8C8622B65
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A50B1622B67
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 13:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiKIMTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 07:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S230011AbiKIMTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 07:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiKIMTI (ORCPT
+        with ESMTP id S229896AbiKIMTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 07:19:08 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4699360E0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 04:19:07 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id d20so25450842ljc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 04:19:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ye8sH1zl6sSv9DGDAjB1eEzXhmWboI2vsCHxYwdnJz0=;
-        b=ZybYS6nV5FlcTXdHMLqh4gUjeCEABntLlbBDQEVcOAR1CZiPzbrwizoLaTkmEBRDoB
-         nlxOmUVmwDcNHB9sx27cVU8h2xk0UuRyv8dTsTHL9ZhMRfRnb9jKGr0RuovM/JgfmAZl
-         lxUPM4QzTpDcZJfxMpf8n0omxEYk42BKMKNGGmQufJ1+vfgNulurWPIvCC68Cx18q6FC
-         T/9FEZngmNYLRa7CRlwPJF260cUIr5/s/iQbWzhjlPFaNHvracynMpdkxg60nTsk4pTw
-         UOc2Ls4pdJy6SmAR/FlX0w9/udujOo3QWnowkPJB/m+iwAFzn6yvCl4FfqCRAi/j0vPp
-         gpng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ye8sH1zl6sSv9DGDAjB1eEzXhmWboI2vsCHxYwdnJz0=;
-        b=kFQO4Hcr/ZEM8J3dygVayUld6LhCh6gh0zq3z7weOXKr+BXiO8jMlLXohCKT7rZ+Mz
-         k3jQu3UU8MNhP3FIvjKrc+wxBedBplpAkdURYx/EfvrU+b4z+u1BF0Je4Tart48waT/f
-         U+nZwOHi7puYMrHuX/RUigIq3mz44nvFtaqWdDAzZgrICKN00b3pfC+HQr02GI/fryzB
-         ESOkbIcc9YP6Po/oPrlmiVHu/fNlywfRYSKrequp83GTGT7EEkm6ckkC/dsGZr5sfiHt
-         RJHT6i8lXNxcT8viUINaeg9NrCym7ocRNXm2kaR9pavuctr0RiWD5o2+ns5WNvhoRn7l
-         WApA==
-X-Gm-Message-State: ANoB5pnzAtVPh0L80YeGaNDIHsJ7xS7GISlC9u8B86iqSdplK1ch8B+3
-        tHrNy3Z9EHk3DW5ORX4UTAMqRw==
-X-Google-Smtp-Source: AA0mqf6Qt3W69twHjBbljDgjSSNO7IveTjCXXa66ab4tN+ev2MwpKhm0I2pTcRY2KRSEbjJplOS3zQ==
-X-Received: by 2002:a2e:544d:0:b0:278:ba60:d4f0 with SMTP id y13-20020a2e544d000000b00278ba60d4f0mr1986815ljd.351.1667996345347;
-        Wed, 09 Nov 2022 04:19:05 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id c15-20020a056512238f00b004979da67114sm2192382lfv.255.2022.11.09.04.19.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 04:19:04 -0800 (PST)
-Message-ID: <414280e3-6954-6832-10fa-66cdcdbfac18@linaro.org>
-Date:   Wed, 9 Nov 2022 15:19:04 +0300
+        Wed, 9 Nov 2022 07:19:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0A02612E;
+        Wed,  9 Nov 2022 04:19:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667996374; x=1699532374;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=bCkzJnJGlqi2Ptd+wmfFB6aY/2jG6IDmsgal7Led+7Q=;
+  b=k8cctlNhz6shQhnGSiOBlWPYWgohVe1CuxXkIPReg56FEZVQwFCyhQcN
+   L8tYU8jCc5CIvUVE9SKh6VvnhM+JuQVYRIvPw1v8DqqJQ+yzX9HoEnLvL
+   7xBHyg0D7tz3JLeLgzQs2GgoTWqWFj/rNWASY1lnfc36/OT3o3SFHTA5k
+   NIeTwBrdN4aBqhILQoWX61fUzzRbW8fvUqDkq+hnxX0oO0uPidgdBIgsL
+   53XCYnr6UsehsFEL0cicaiVL1o+fsVkRUf7pQ47XdxKpZbRqYxKsjtm+0
+   YPnBs0AuRGNlYQPjGP5qx3wd5d1BnRlUISRGcVLGwxqzD7o2oKqRmCwlK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312123326"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="312123326"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 04:19:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="881911295"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="881911295"
+Received: from jsanche3-mobl1.ger.corp.intel.com ([10.251.219.48])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 04:19:25 -0800
+Date:   Wed, 9 Nov 2022 14:19:21 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Sherry Sun <sherry.sun@nxp.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-imx@nxp.com
+Subject: Re: [PATCH 2/2] tty: serial: fsl_lpuart: improve lpuart32 registers
+ clearing when shutdown
+In-Reply-To: <20221109104515.17266-3-sherry.sun@nxp.com>
+Message-ID: <9e682825-3420-fbe3-eb9d-8e864430363a@linux.intel.com>
+References: <20221109104515.17266-1-sherry.sun@nxp.com> <20221109104515.17266-3-sherry.sun@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/4] drm/msm/disp/dpu1: pin 1 crtc to 1 encoder
-Content-Language: en-GB
-To:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
-References: <1667996206-4153-1-git-send-email-quic_kalyant@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1667996206-4153-1-git-send-email-quic_kalyant@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 15:16, Kalyan Thota wrote:
-> Pin each crtc with one encoder. This arrangement will
-> disallow crtc switching between encoders and also will
-> facilitate to advertise certain features on crtc based
-> on encoder type.
-> 
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 7a5fabc..552a89c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -798,19 +798,19 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
->   	max_crtc_count = min(max_crtc_count, primary_planes_idx);
->   
->   	/* Create one CRTC per encoder */
-> +	encoder = list_first_entry(&(dev)->mode_config.encoder_list,
-> +		struct drm_encoder, head);
+On Wed, 9 Nov 2022, Sherry Sun wrote:
 
-Please use drm_for_each_encoder() here.
+> Need to clear the UARTSTAT and UARTMODIR registers when shutdown the
+> uart port, also clear the Rx/Tx DMA enable bits and loopback
+> configuration bit.
 
->   	for (i = 0; i < max_crtc_count; i++) {
->   		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
-> -		if (IS_ERR(crtc)) {
-> +		if (IS_ERR(crtc) || IS_ERR_OR_NULL(encoder)) {
+This lacks answer to "Why?" question. Think about somebody not as familiar 
+with the HW as you are looking back to this very commit message like 5 
+years from now and wondering why this change was made.
 
-Why? Not to mention that the OR_NULL part is quite frequently a mistake.
+Preferrably make a separate change out of all these four changes if the 
+answers to why question are different.
 
->   			ret = PTR_ERR(crtc);
->   			return ret;
->   		}
->   		priv->crtcs[priv->num_crtcs++] = crtc;
-> +		encoder->possible_crtcs = 1 << drm_crtc_index(crtc);
-> +		encoder = list_next_entry(encoder, head);
->   	}
->   
-> -	/* All CRTCs are compatible with all encoders */
-> -	drm_for_each_encoder(encoder, dev)
-> -		encoder->possible_crtcs = (1 << priv->num_crtcs) - 1;
-> -
->   	return 0;
->   }
->   
+It would also help in deciding whether Fixes tag is necessary or not 
+since you didn't seem to include.
 
 -- 
-With best wishes
-Dmitry
+ i.
 
+> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> ---
+>  drivers/tty/serial/fsl_lpuart.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index f5a0a14fa366..43d9d6a6e94a 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -1771,11 +1771,22 @@ static void lpuart32_shutdown(struct uart_port *port)
+>  
+>  	spin_lock_irqsave(&port->lock, flags);
+>  
+> +	/* clear statue */
+> +	temp = lpuart32_read(&sport->port, UARTSTAT);
+> +	lpuart32_write(&sport->port, temp, UARTSTAT);
+> +
+> +	/* disable Rx/Tx DMA */
+> +	temp = lpuart32_read(port, UARTBAUD);
+> +	temp &= ~(UARTBAUD_TDMAE | UARTBAUD_RDMAE);
+> +	lpuart32_write(port, temp, UARTBAUD);
+> +
+>  	/* disable Rx/Tx and interrupts */
+>  	temp = lpuart32_read(port, UARTCTRL);
+>  	temp &= ~(UARTCTRL_TE | UARTCTRL_RE | UARTCTRL_ILIE |
+> -			UARTCTRL_TIE | UARTCTRL_TCIE | UARTCTRL_RIE);
+> +			UARTCTRL_TIE | UARTCTRL_TCIE | UARTCTRL_RIE |
+> +			UARTCTRL_LOOPS);
+>  	lpuart32_write(port, temp, UARTCTRL);
+> +	lpuart32_write(port, 0, UARTMODIR);
+>  
+>  	spin_unlock_irqrestore(&port->lock, flags);
+>  
+> 
