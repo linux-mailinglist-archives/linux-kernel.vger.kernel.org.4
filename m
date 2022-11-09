@@ -2,89 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F76F6225E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640656225E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 09:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiKIIxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 03:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
+        id S229552AbiKIIxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 03:53:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiKIIww (ORCPT
+        with ESMTP id S229638AbiKIIxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 03:52:52 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F01021DA47;
-        Wed,  9 Nov 2022 00:52:50 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 0562180FB;
-        Wed,  9 Nov 2022 08:43:03 +0000 (UTC)
-Date:   Wed, 9 Nov 2022 10:52:48 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Allison Randal <allison@lohutok.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liang He <windhl@126.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
+        Wed, 9 Nov 2022 03:53:32 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BDCA1A6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 00:53:29 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id z14so24684670wrn.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 00:53:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0DHcT+Y2+Evz3/8OMKTYcOlVO9N2ompFadCy9jc0xdc=;
+        b=C1ayd+PfAXcBibE0GRYzIWMnweoIvV4AeXXNReB9Slc5N5Xfctpkdp90jTkFDuEjdb
+         PxoSdZEbj3HcRPTZDnG+hfMJD8XpTS1wV5qRqp3taNSZ4zLzGbOlbXlXBNqSqAMCzrVG
+         Th4SFnZ9F4Kk6H8RgjP7Lqy43B2DrNijSWfQYp4STSspdDi4UZN0AVzmVtYocSaxG0R4
+         VLxw1+8td7zhBnhSxKJrW34HvrHrpdqywpyCORWKBsBI7ixbsGWrD5VJmFAF5rL5OzXM
+         m6SLKgr+Zbt+JfI9/4VQD51YgFYXIXlWbP23WiYRvW7B9/1qYJGeYZDnt0uYqK7FrIc5
+         W/6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0DHcT+Y2+Evz3/8OMKTYcOlVO9N2ompFadCy9jc0xdc=;
+        b=R6iZNDy/YCB3AqU8XjWeRFUom8DX/wA3O3AFO7Y701oq6N/BUkLcND5RccCjVPNY6Q
+         3LcACMvRVZ4+oDtOfzKPqnsZImU/Qu4fDdg+nf9dF958toK6jj5kCrAe6av5RGfhUgsZ
+         uZK/vk03fH+I6jirQ/AsTGFHfJ8L3b2EqYxUgCVmCxtECgcadMkuy4pgzky06U4IBCxa
+         46LKx23zCHbGP/YvImewrpMvTeW6Q+ks9kfkK+7IKnvClKG5WiXGOEtacPrqW8FOJv9C
+         OQ0JV9apWVWDtKKOuU3uMpubEas+2dJAs/1ByWSQp1c3YdxQCCB4JKPQXczaWu6SNAxl
+         VjKQ==
+X-Gm-Message-State: ACrzQf0aB8pyVDCtWKAB6b91anBIbK8eLJne4zpV3/H77r/hFm1oxOhL
+        e9kpf5Q44IbajzPbdpo8/6XB8A==
+X-Google-Smtp-Source: AMsMyM5w8NGS+4HLk/Hvm9+leAF0TAcvPzz63+wBmJDLaVT9nbGoxmGT+y0AiJRrHiCXNGi5PIk3+Q==
+X-Received: by 2002:a5d:544b:0:b0:236:68dc:8f54 with SMTP id w11-20020a5d544b000000b0023668dc8f54mr35791522wrv.504.1667984007881;
+        Wed, 09 Nov 2022 00:53:27 -0800 (PST)
+Received: from ash.lan ([167.98.0.196])
+        by smtp.gmail.com with ESMTPSA id z9-20020a5d6409000000b00228d67db06esm12541214wru.21.2022.11.09.00.53.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 00:53:27 -0800 (PST)
+Date:   Wed, 9 Nov 2022 08:53:25 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-clk@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] clk: ti: add of_ti_clk_register() helper
-Message-ID: <Y2tqYDo5rxnffuWc@atomide.com>
-References: <20221106154612.3474940-1-dario.binacchi@amarulasolutions.com>
- <Y2thuiR3UVEeLCQO@atomide.com>
- <Y2tiHNLPiAwV6oEn@atomide.com>
- <CABGWkvrEGKTrwMgedzE1Oj0F+Fgpmzm6sB4hs7wcNn3xKPUupQ@mail.gmail.com>
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net
+Subject: Re: [PATCH printk v3 15/40] kdb: use srcu console list iterator
+Message-ID: <20221109085325.wiub564iqnewvczb@ash.lan>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-16-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABGWkvrEGKTrwMgedzE1Oj0F+Fgpmzm6sB4hs7wcNn3xKPUupQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107141638.3790965-16-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Dario Binacchi <dario.binacchi@amarulasolutions.com> [221109 08:28]:
-> Hi Tony,
-> 
-> On Wed, Nov 9, 2022 at 9:17 AM Tony Lindgren <tony@atomide.com> wrote:
-> >
-> > * Tony Lindgren <tony@atomide.com> [221109 08:06]:
-> > > * Dario Binacchi <dario.binacchi@amarulasolutions.com> [221106 17:36]:
-> > > > The ti_clk_register() function is always called with the parameter of
-> > > > type struct device set to NULL, since the functions from which it is
-> > > > called always have a parameter of type struct device_node. Adding this
-> > > > helper will allow you to register a TI clock to the common clock
-> > > > framework by taking advantage of the facilities provided by the
-> > > > struct device_node type.
-> > >
-> > > Makes sense to me.
-> > >
-> > > Do you have a patch to make use of this I can test with?
-> >
-> > I mean a patch to convert the ti_clk_register() callers to use this or
-> > what's your plan?
-> 
-> The first patch that calls this function is the second one in this
-> series "clk: ti: dra7-atl: don't allocate` parent_names' variable ".
-> Since I don't have the dra7 hardware, I have indirectly tested it on a
-> beaglebone (gate clock driver) board. To do this I also
-> had to add the of_ti_clk_register_omap_hw() helper. In the case of the
-> dra7-atl driver it was not necessary because the setup
-> function calls the ti_clk_register() directly.
-> If you think it makes sense, I can do 1 or more patches that replace
-> ti_clk_register() and ti_clk_register_omap_hw() with their
-> counterparts of_ti_clk_register[_omap_hw]. And I could test this
-> further series on the beaglebone board.
+On Mon, Nov 07, 2022 at 03:22:13PM +0106, John Ogness wrote:
+> Guarantee safe iteration of the console list by using SRCU.
+>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> ---
+>  kernel/debug/kdb/kdb_io.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
+> index 550fe8b456ec..ed8289ce4fcb 100644
+> --- a/kernel/debug/kdb/kdb_io.c
+> +++ b/kernel/debug/kdb/kdb_io.c
+> @@ -545,6 +545,7 @@ static void kdb_msg_write(const char *msg, int msg_len)
+>  {
+>  	struct console *c;
+>  	const char *cp;
+> +	int cookie;
+>  	int len;
+>
+>  	if (msg_len == 0)
+> @@ -558,7 +559,15 @@ static void kdb_msg_write(const char *msg, int msg_len)
+>  		cp++;
+>  	}
+>
+> -	for_each_console(c) {
+> +	/*
+> +	 * The console_srcu_read_lock() only provides safe console list
+> +	 * traversal. The use of the ->write() callback relies on all other
+> +	 * CPUs being stopped at the moment and console drivers being able to
+> +	 * handle reentrance when @oops_in_progress is set. (Note that there
+> +	 * is no guarantee for either criteria.)
+> +	 */
 
-Yeah if you can please post one more patch separately replacing the old
-users that would be great.
+The debugger entry protocol does ensure that other CPUs are either
+stopped or unresponsive. In the case where the other CPU is unresponsive
+(e.g. timed out after being asked to stop) then there is a "real" printk()
+issued prior to any of the above interference with the console system to
+the developer driving the debugger gets as much clue as we can offer them
+about what is going on (typically this is emitted from regular interrupt
+context).
 
-Regards,
+Given this comment is part of the debugger code then for the
+oops_in_progress hack it might be more helpful to describe what
+the developer in front the debugger needs to do to have the most
+reliable debug session possible.
 
-Tony
+  There is no guarantee that every console drivers can handle reentrance
+  in this way; the developer deploying the debugger is responsible for
+  ensuring that the console drivers they have selected handle reentrance
+  appropriately.
+
+
+Daniel.
+
+
+> +	cookie = console_srcu_read_lock();
+> +	for_each_console_srcu(c) {
+>  		if (!console_is_enabled(c))
+>  			continue;
+>  		if (c == dbg_io_ops->cons)
+> @@ -577,6 +586,7 @@ static void kdb_msg_write(const char *msg, int msg_len)
+>  		--oops_in_progress;
+>  		touch_nmi_watchdog();
+>  	}
+> +	console_srcu_read_unlock(cookie);
+>  }
+>
+>  int vkdb_printf(enum kdb_msgsrc src, const char *fmt, va_list ap)
+> --
+> 2.30.2
+>
