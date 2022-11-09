@@ -2,75 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C8E6221DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B546221DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiKICRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 21:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
+        id S229894AbiKICRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 21:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiKICRv (ORCPT
+        with ESMTP id S229452AbiKICRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:17:51 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7FC54B36;
-        Tue,  8 Nov 2022 18:17:50 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id d3so23767607ljl.1;
-        Tue, 08 Nov 2022 18:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XpP+//w19I82QVMgBBw3grNzgACxsqDv57GGmoQMP9M=;
-        b=BXtcKlfmMQwNn3M2yfxc50TfM7MhWZ83PJ+rxKReoQ2mz+BINIQUWvhSoQ3AGi3tm+
-         RuVEm4sy+3hX2m9v+neyp/pf+Xa9ZmbWdjUw4d4FLQT3oNH1no6yyYY5Sg+2/iCYGBw/
-         mNOnfF3ntiIg9Oi/Xdzn+vXUr+HmcTJhIrEjk8jmdTPLbpXgAk5RBanTrGKLHfnXgSnP
-         iVbpub1Pb46h+BYGXn6b6LTZfCBY3sGKM9w8rfF6bfkzg9YoQfQBey9s4WuUeApn9stz
-         KTlAeZQNRyLLDjrSWvGdQ9aW9J8ZW8SmHXs0SR28u2cyRaoXCkUUeU3fNsMXZycKpJ7R
-         wGmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XpP+//w19I82QVMgBBw3grNzgACxsqDv57GGmoQMP9M=;
-        b=6C9jiOK3fJoIP4nHzlUs+sKVwOFzfZ/aj7a2bdr6vpgHSZ3MuzvMblXsIDVHaoiq8w
-         Ejva5mtsb8AWnmq2LiZulgUQ0oPfe5GeS/MpF6oe+0Q0degGNwqbxITa5KGS4Ku2NJqN
-         TKXP1RnlBwxqyEXdkgTXRwSLrIRAfwPcQM9+7f/3LC68HLX0zarPwSc2+QvRebwhlNYG
-         SnOffewHJ01sLLgjGeu3vWE4Rp1sc+sDyJqeeyNxA9eq9RS7kXQlH7stbWJlQmJOyvOc
-         7hq3pVoZK6NMIVHH0xlRmr2eYfIv8hK2qkHJWAZjSemjhzIjlYJU7Fyd2ZiUkEl4wsmn
-         FCbw==
-X-Gm-Message-State: ACrzQf3Mydo6NtO5CJP0jgUCPxnhF38juuEbXRJhJYrHzJnnUofEtBzT
-        F9Q0+mUAl0adGLZUiYggKORZY8dRePPtMWZMqAg=
-X-Google-Smtp-Source: AMsMyM59PxKl5WTaImkmYE9uscX168LbQ9y6Fm4x/hj9xGZ+83bs+k7P9VWn1Yaq9urmsgSkrujADB8fQmnr84kVkdo=
-X-Received: by 2002:a2e:950e:0:b0:26f:a6db:67b8 with SMTP id
- f14-20020a2e950e000000b0026fa6db67b8mr20036757ljh.74.1667960268768; Tue, 08
- Nov 2022 18:17:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20221109015818.194927-1-jiucheng.xu@amlogic.com> <20221109015818.194927-2-jiucheng.xu@amlogic.com>
-In-Reply-To: <20221109015818.194927-2-jiucheng.xu@amlogic.com>
-From:   Chris Healy <cphealy@gmail.com>
-Date:   Tue, 8 Nov 2022 18:17:37 -0800
-Message-ID: <CAFXsbZqn7KrUvasp5wWvNRo4aEM-Ohmd4nEt8Es95Z44vMUBiQ@mail.gmail.com>
-Subject: Re: [PATCH v9 2/4] docs/perf: Add documentation for the Amlogic G12
- DDR PMU
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        Tue, 8 Nov 2022 21:17:50 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2098.outbound.protection.outlook.com [40.107.113.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7451568C43;
+        Tue,  8 Nov 2022 18:17:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ixejYV/ymzTkO7LSZOiUS89Gw6NRqFuNLn4yUygY9RA8FHNd2No5yAY58XofYs/ghRWyEYhWEHLI8OiXBqFlU5AqZ3+XGiAfZQw0iaksv2KXl8gyTfGSGwjso3vH2W48qqPohrDYFemUkhlOROzZdfEOjYPSna7UTchTtbWd8est4BuiYFhwKtonnpiRX7ezcvrr6c19rG1G3dj3+hlf2zPOCFyN3Px31BtnkXH2TIH1YBdyCyNOeKPfTltGBZvdtZmDNyXzytSvP088rO+kkQ+rIZl7vKfDPeAm1f/F1iHJdpibDK+vffLQLbWqHqVMGKagJ+RuNvFKVDFjllU35Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BjfoeW6WTRWvS/pELj/l5FsNdDP9K2INR41BH3avPg4=;
+ b=JNebguiYeNR3Yu57TaDrwsEQfqkHX/eC6NVNTLg7ooXoL2/5V4z1bHWi7ZqOFeM4AAplNh1wu13r0+dJy0sOVbVtiijKduOXpvoYoi5Omtl3+MXHJQLVbFWlXoT5neUswxMAmq6XDINUP1iwOzjQKgZbvTIVvRIvWvgFoc6h10R4/VflgBfPYPmehBQgc9lvXBRadhObvF1SYsGbXthQzi/e0lrC7BGDO37djgSAgSxTeLXUo0EkpyqoS+ne7jDlUUzbXnU3P+NO5PpOhssi14PNdab1AfqIJhrfyc1/Q3Had56Hu0eH0UUbm3qwZujzLxd+Ij1T7DgEOhLNpJX1+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BjfoeW6WTRWvS/pELj/l5FsNdDP9K2INR41BH3avPg4=;
+ b=WrkqfOFysiafbK0DKFfn9yvLyhDjZSEk3PwiaTrVdYIGHdMznI+5gmUsKNdnCWtoCO4eFzpSiHbzvMpvBt4tOyxIL0HY5ESquDCCskRz1ZsciFGiki9dzQrieMdycZ1eBuMbhLBA7iZmT273l4QyiKSlJHNufbhpGTVEPppqYHg=
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ (2603:1096:404:8028::13) by OS3PR01MB5767.jpnprd01.prod.outlook.com
+ (2603:1096:604:b5::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Wed, 9 Nov
+ 2022 02:17:45 +0000
+Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::cd89:4a4b:161e:b78d]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
+ ([fe80::cd89:4a4b:161e:b78d%9]) with mapi id 15.20.5791.027; Wed, 9 Nov 2022
+ 02:17:45 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v6 17/20] PCI: dwc: Introduce generic resources getter
+Thread-Topic: [PATCH v6 17/20] PCI: dwc: Introduce generic resources getter
+Thread-Index: AQHY8vD0ArOnmyVAxke/JMPI7hs1ua412tJQ
+Date:   Wed, 9 Nov 2022 02:17:45 +0000
+Message-ID: <TYBPR01MB534178751E369DA4C031AE77D83E9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
+ <20221107204934.32655-18-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20221107204934.32655-18-Sergey.Semin@baikalelectronics.ru>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|OS3PR01MB5767:EE_
+x-ms-office365-filtering-correlation-id: f1c28314-6357-470f-430e-08dac1f89720
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GFegrc8iG+MlXV9NCOJ3zZIG+Q7V4eO53Pl2k2XHS7rK5t8eAFlrLwzmUUS/q/KIIjD6yA6fbiAgl4W+kbDjINMp12/GXnEPtLrA3AdnClPdZ2up6TPK8qAMN3KETS1xMDEk2DyinbkMz8ekteYdlJyrBSWk9lNSDu/eadiAu7JzvyFgExljYM2m0NhoOFQfYKqdFnFyYJVYeWXTfu/a/7DnmQEX9WNDfNSqVbOvJeWWR5VGJkVzcdgqPUJnLd7Qb6J8XFuX72g4gqNZ5QOe2jKLzhAW7sf7Zj+7afeJvuZMlL/FFeaqnv/ZQ2YZ0atz5yx2LFGImR+s8N00xNw54WzxN76YlApZzz3+yT6p7DWjHIf/a7TAQLIYangVY1cDkXdrjFETVBTNJYUm0METVWXWwAxkDg2ZsqM5Y9aBwEAyKna24CQ/NaNIa8+qNUUEI7blvua9lnUXckBt6zQbAQQz7Nb9b9Mc1EOqSkvYWHolAZZBmhIWfhSOM3ytcprk4JgHmZQfZXwYWQCrfibKuj0pwtd8HtfP5qnAXiP1y3qG5tMVoLj1gvIJUZ5imXJO5D7oCpW07yLBasqsgAH3L/GnbhSB8KMfIuuJZ3GVnR7UdaJKc7ThPHwjqDo4gH4N5Jp+NH1o3+0lB5VXuVieB43S9CRnf18cHkmNA6OjnqnwWj1hFq1MQ24VQnTaWLWxW2XbNjP+y/XA46tGN6K/I979eNrcXYgCJngbXVx4a59Keg/f5oLCfwtHZ/VFoLtRtyZ2oOVtmp3yJtI8EGmKuO0Ur5JSkFBD5Okmgw6Pskr9gqFTxoptJRSQ8uDysl2w
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(346002)(136003)(366004)(451199015)(83380400001)(86362001)(33656002)(122000001)(38100700002)(921005)(38070700005)(478600001)(55016003)(5660300002)(76116006)(66946007)(41300700001)(8936002)(7416002)(71200400001)(52536014)(8676002)(66446008)(66556008)(110136005)(54906003)(4326008)(64756008)(66476007)(316002)(186003)(9686003)(2906002)(6506007)(7696005)(41533002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?X0c9IW8JmyM5SJmheG0XME3IcPZWneUpEvKhDp2SmG3I0Ki+2bZOldsQDy?=
+ =?iso-8859-2?Q?QZBEcZ/st0a9pttT3Pg29JksmLJ7x16+8wm4N1Zf59pM+hZI4qAGFMxPrY?=
+ =?iso-8859-2?Q?Jyg/NwfmZFVF7CuzZYlLIiqJXP073lTD/1SIDBwMRjPhLMwIpa+rKDHo5c?=
+ =?iso-8859-2?Q?L22WtuNYxvNkXlOmM7uk/tQKPBe7fhVqibW5+GuByoQz4dhE0gkzriyXbW?=
+ =?iso-8859-2?Q?7hqZkrOSMPmzQAc6n3TTQ5+9jIp6Fr0i+D05c2ylOqlXuL4hUxtazHE092?=
+ =?iso-8859-2?Q?EUndSx4yg4sci8NVBVwDpb5JFSc3h15tRx4C0GUJH7Y8FTflIpm6+0y96e?=
+ =?iso-8859-2?Q?j7ILx2En3QeapwSxAlGcblPT7V2SGH311SJogYIAjCrbu5YTACQQH77OsA?=
+ =?iso-8859-2?Q?W8ct1ftlQD1PyL+m/KielKSwzX5vMSn9h1u3om0n2C8/AaQrzWffM2q4q3?=
+ =?iso-8859-2?Q?DDud/NCC5zuGcjIhTNcmo6r+OspJa2v+2D/YCdtVh2s/aMCapUlfdhUdYC?=
+ =?iso-8859-2?Q?0sMDpmhZJ5NmbCujO7Fxlar7N0Wyzy4EfoCJZl3irvwilAf/9K+TRkLrTF?=
+ =?iso-8859-2?Q?gdg4ExIu4lcc1DGNNV2aGtJIUeZpJVD3NtGVPvHBWrJOjTHVGRwKGudJVM?=
+ =?iso-8859-2?Q?Vq/iyiSvuNuq/OJ+DafB6OMQJhO1g9I//1a8R8LaBFmGn6i1I81sil+Y2Y?=
+ =?iso-8859-2?Q?Wx5ioBNB5YmlFV919tBsgPDh9BOp1qgab+1RA5m06kRYKMRuo+dpCWR/Bm?=
+ =?iso-8859-2?Q?0BCEPsAJSmH8kysbQ453YFQIIBByunHBKWiP8/4qiZV62H+qQ3M579UCVv?=
+ =?iso-8859-2?Q?AdZsrz9+jismVU6fZVBT7S9/3N3mfIpDiWPAMciv9ngOniP+StS3dvONaP?=
+ =?iso-8859-2?Q?rDf0RGBeBlMddxOeTCB57qSZErCHfo0wHJhreU+QJfgIkPy04DJZBQI7XA?=
+ =?iso-8859-2?Q?7XYacgzymAzLxQ/9BfVPG+gmxFL5FxC4LguqUk5kkUT9eZsaWxGniKo21G?=
+ =?iso-8859-2?Q?SI/4v8bqnJ0011Dl3qCVwdSRVUCzBnMcJS1+7OuzarjAuDoL6Dd+YTGKRW?=
+ =?iso-8859-2?Q?SYCjscJ1UEK/2MvQ8o7bUFo+IFKVCCtaNXd11mJ4+SuTEIxDHSqCCnl4kF?=
+ =?iso-8859-2?Q?GyHht7RS0Mqfz3ZJ/ttIa5b2TmcSOKTOQ+lNBfIe5BsXb0XPNnpEvNQ2fk?=
+ =?iso-8859-2?Q?HQURfFL8w9E/SGbUF5M4XMP1wtyA7pRm76bfXHBnYDf8uj9EP3mnMxylbn?=
+ =?iso-8859-2?Q?8p/tv5YejO87wsiId05Zer/a7JXzl7LacOw2v+n6cQtKlsgS0xewVwY7nK?=
+ =?iso-8859-2?Q?L6MhSojD46nbn/QFtLIgnZwI3Bm+n7dhhF2hKqvw6hQAE5ef7vcdUGOFY5?=
+ =?iso-8859-2?Q?6LnKpiBccBinnx8eqdwQePqyxSfI8calEAUY/S9rUsLF6SeHR06/viCea6?=
+ =?iso-8859-2?Q?ydGjm+hmQN0v7uZsC/r9RNcCnebdd6KXXIydU2IrvDsg4YBhzLpuICAV6v?=
+ =?iso-8859-2?Q?Ivph8CQ1bxpmC1tNQ87d3E9GBOGFhuTLJ8jh84NRVupNEkY+cF/k+bvIcd?=
+ =?iso-8859-2?Q?KVpO0Ki5v1RjpfNoYHIN/iYSZfzzMMlN4xX3zM7UTHZxIqmc8l2ipuaj+6?=
+ =?iso-8859-2?Q?hz6QR8D0kHNeDobIWo6vKMZ5aFqiuwsdbusGhHRUaijU4owSxPxI076on+?=
+ =?iso-8859-2?Q?EVyWnm6TL+aqZkEP5OYSdryR4VXIZTuhYiHORfsnYDAp5JHxzwTNiL7KO+?=
+ =?iso-8859-2?Q?W5Xw=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1c28314-6357-470f-430e-08dac1f89720
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2022 02:17:45.7245
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +H+At0/8imdgMD7duhnrRybDsK3s3wke7WMkpD2sVGT9uMZuRp1QNDHxT+Wf4/+KL2Ou5FpEXnS/OpKz1jPZRjiGNeZZrsSQcoe8yY69HhW89m24DczhiGoNXHCOepiP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB5767
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,143 +138,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Chris Healy <healych@amazon.com>
+Hi Serge,
 
-On Tue, Nov 8, 2022 at 5:58 PM Jiucheng Xu <jiucheng.xu@amlogic.com> wrote:
->
-> Add a user guide to show how to use DDR PMU to
-> monitor DDR bandwidth on Amlogic G12 SoC
->
-> Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+> From: Serge Semin, Sent: Tuesday, November 8, 2022 5:50 AM
+>=20
+> Currently the DW PCIe Root Port and Endpoint CSR spaces are retrieved in
+> the separate parts of the DW PCIe core driver. It doesn't really make
+> sense since the both controller types have identical set of the core CSR
+> regions: DBI, DBI CS2 and iATU/eDMA. Thus we can simplify the DW PCIe Hos=
+t
+> and EP initialization methods by moving the platform-specific registers
+> space getting and mapping into a common method. It gets to be even more
+> justified seeing the CSRs base address pointers are preserved in the
+> common DW PCIe descriptor. Note all the OF-based common DW PCIe settings
+> initialization will be moved to the new method too in order to have a
+> single function for all the generic platform properties handling in singl=
+e
+> place.
+>=20
+> A nice side-effect of this change is that the pcie-designware-host.c and
+> pcie-designware-ep.c drivers are cleaned up from all the direct dw_pcie
+> storage modification, which makes the DW PCIe core, Root Port and Endpoin=
+t
+> modules more coherent.
+>=20
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+>=20
 > ---
-> Changes v8 -> v9:
->   - No change
->
-> Changes v7 -> v8:
->   - No change
->
-> Changes v6 -> v7:
->   - Drop the Reported-by tag
->   - Fix spelling error
->
-> Changes v5 -> v6:
->   - No change
->
-> Changes v4 -> v5:
->   - Fix building warning
->
-> Changes v3 -> v4:
->   - No change
->
-> Changes v2 -> v3:
->   - Rename doc name from aml-ddr-pmu.rst to meson-ddr-pmu.rst
->
-> Changes v1 -> v2:
->   - Nothing was changed
+>=20
+> Changelog v3:
+> - This is a new patch created on v3 lap of the series.
+>=20
+> Changelog v4:
+> - Convert the method name from dw_pcie_get_res() to
+>   dw_pcie_get_resources(). (@Bjorn)
 > ---
->  Documentation/admin-guide/perf/index.rst      |  1 +
->  .../admin-guide/perf/meson-ddr-pmu.rst        | 70 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  3 files changed, 72 insertions(+)
->  create mode 100644 Documentation/admin-guide/perf/meson-ddr-pmu.rst
->
-> diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-> index 69b23f087c05..997a28e156c1 100644
-> --- a/Documentation/admin-guide/perf/index.rst
-> +++ b/Documentation/admin-guide/perf/index.rst
-> @@ -17,3 +17,4 @@ Performance monitor support
->     xgene-pmu
->     arm_dsu_pmu
->     thunderx2-pmu
-> +   meson-ddr-pmu
-> diff --git a/Documentation/admin-guide/perf/meson-ddr-pmu.rst b/Documentation/admin-guide/perf/meson-ddr-pmu.rst
-> new file mode 100644
-> index 000000000000..15e93a751ced
-> --- /dev/null
-> +++ b/Documentation/admin-guide/perf/meson-ddr-pmu.rst
-> @@ -0,0 +1,70 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===========================================================
-> +Amlogic SoC DDR Bandwidth Performance Monitoring Unit (PMU)
-> +===========================================================
-> +
-> +There is a bandwidth monitor inside the DRAM controller. The monitor includes
-> +4 channels which can count the read/write request of accessing DRAM individually.
-> +It can be helpful to show if the performance bottleneck is on DDR bandwidth.
-> +
-> +Currently, this driver supports the following 5 Perf events:
-> +
-> ++ meson_ddr_bw/total_rw_bytes/
-> ++ meson_ddr_bw/chan_1_rw_bytes/
-> ++ meson_ddr_bw/chan_2_rw_bytes/
-> ++ meson_ddr_bw/chan_3_rw_bytes/
-> ++ meson_ddr_bw/chan_4_rw_bytes/
-> +
-> +meson_ddr_bw/chan_{1,2,3,4}_rw_bytes/ events are the channel related events.
-> +Each channel support using keywords as filter, which can let the channel
-> +to monitor the individual IP module in SoC.
-> +
-> +The following keywords are the filter:
-> +
-> ++ arm             - DDR access request from CPU
-> ++ vpu_read1       - DDR access request from OSD + VPP read
-> ++ gpu             - DDR access request from 3D GPU
-> ++ pcie            - DDR access request from PCIe controller
-> ++ hdcp            - DDR access request from HDCP controller
-> ++ hevc_front      - DDR access request from HEVC codec front end
-> ++ usb3_0          - DDR access request from USB3.0 controller
-> ++ hevc_back       - DDR access request from HEVC codec back end
-> ++ h265enc         - DDR access request from HEVC encoder
-> ++ vpu_read2       - DDR access request from DI read
-> ++ vpu_write1      - DDR access request from VDIN write
-> ++ vpu_write2      - DDR access request from di write
-> ++ vdec            - DDR access request from legacy codec video decoder
-> ++ hcodec          - DDR access request from H264 encoder
-> ++ ge2d            - DDR access request from ge2d
-> ++ spicc1          - DDR access request from SPI controller 1
-> ++ usb0            - DDR access request from USB2.0 controller 0
-> ++ dma             - DDR access request from system DMA controller 1
-> ++ arb0            - DDR access request from arb0
-> ++ sd_emmc_b       - DDR access request from SD eMMC b controller
-> ++ usb1            - DDR access request from USB2.0 controller 1
-> ++ audio           - DDR access request from Audio module
-> ++ sd_emmc_c       - DDR access request from SD eMMC c controller
-> ++ spicc2          - DDR access request from SPI controller 2
-> ++ ethernet        - DDR access request from Ethernet controller
-> +
-> +
-> +The following command is to show the total DDR bandwidth:
-> +
-> +  .. code-block:: bash
-> +
-> +      perf stat -a -e meson_ddr_bw/total_rw_bytes/ -I 1000 sleep 10
-> +
-> +This command will print the total DDR bandwidth per second.
-> +
-> +The following commands are to show how to use filter parameters:
-> +
-> +  .. code-block:: bash
-> +
-> +      perf stat -a -e meson_ddr_bw/chan_1_rw_bytes,arm=1/ -I 1000 sleep 10
-> +      perf stat -a -e meson_ddr_bw/chan_2_rw_bytes,gpu=1/ -I 1000 sleep 10
-> +      perf stat -a -e meson_ddr_bw/chan_3_rw_bytes,arm=1,gpu=1/ -I 1000 sleep 10
-> +
-> +The 1st command show how to use channel 1 to monitor the DDR bandwidth from ARM.
-> +The 2nd command show using channel 2 to get the DDR bandwidth of GPU.
-> +The 3rd command show using channel 3 to monitor the sum of ARM and GPU.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index eb63b9cbc149..5ed563368a48 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1055,6 +1055,7 @@ M:        Jiucheng Xu <jiucheng.xu@amlogic.com>
->  L:     linux-amlogic@lists.infradead.org
->  S:     Supported
->  W:     http://www.amlogic.com
-> +F:     Documentation/admin-guide/perf/meson-ddr-pmu.rst
->  F:     drivers/perf/amlogic/
->  F:     include/soc/amlogic/
->
-> --
-> 2.25.1
->
+>  .../pci/controller/dwc/pcie-designware-ep.c   | 26 +------
+>  .../pci/controller/dwc/pcie-designware-host.c | 15 +---
+>  drivers/pci/controller/dwc/pcie-designware.c  | 75 ++++++++++++++-----
+>  drivers/pci/controller/dwc/pcie-designware.h  |  3 +
+>  4 files changed, 65 insertions(+), 54 deletions(-)
+>=20
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pc=
+i/controller/dwc/pcie-designware-ep.c
+> index 237bb01d7852..80a64b63c055 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> @@ -13,8 +13,6 @@
+>  #include <linux/pci-epc.h>
+>  #include <linux/pci-epf.h>
+>=20
+> -#include "../../pci.h"
+> -
+>  void dw_pcie_ep_linkup(struct dw_pcie_ep *ep)
+>  {
+>  	struct pci_epc *epc =3D ep->epc;
+> @@ -688,29 +686,14 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  	struct dw_pcie *pci =3D to_dw_pcie_from_ep(ep);
+>  	struct device *dev =3D pci->dev;
+>  	struct platform_device *pdev =3D to_platform_device(dev);
+> -	struct device_node *np =3D dev->of_node;
+
+Removing this np causes the following build error if CONFIG_PCIE_DW_EP is e=
+nabled:
+---
+  CC      drivers/pci/controller/dwc/pcie-designware-ep.o
+drivers/pci/controller/dwc/pcie-designware-ep.c: In function 'dw_pcie_ep_in=
+it':
+drivers/pci/controller/dwc/pcie-designware-ep.c:751:35: error: 'np' undecla=
+red (first use in this function); did you mean 'ep'?
+  751 |         ret =3D of_property_read_u8(np, "max-functions", &epc->max_=
+functions);
+      |                                   ^~
+      |                                   ep
+drivers/pci/controller/dwc/pcie-designware-ep.c:751:35: note: each undeclar=
+ed identifier is reported only once for each function it appears in
+---
+
+So, we should keep the np or use "dev->of_node" to the of_property_read_u8(=
+).
+
+Best regards,
+Yoshihiro Shimoda
+
