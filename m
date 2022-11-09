@@ -2,143 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C986623246
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3698362324A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 19:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiKISUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 13:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S230251AbiKISUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 13:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKISUJ (ORCPT
+        with ESMTP id S229517AbiKISUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 13:20:09 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20619.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::619])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BCB1FFAB
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 10:20:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mG4d8U5Ohs9QJhUcHfAyNEsjcMjw3ro9OFouZjAwRu+3Jctj6c7THao6V9o2EkBkJBqAet+o4ZIMES3jdetK0QvNLTekhoW2fUUma1tvF64I9KzNJqhr0P8RMj+FbQO2iz38nKbOub19M876yfQNRP/tF9llPg+vYdSLqIPb7dyr1/X72FkNZ4ku/4ROlfTcdBoi9gTGgvXFjdrghKWSyMxxD4hcac9NPVjYuBH7i+tnZ30XXzR7jLSQDRleun9hiYItHRasvRATfCytYbFrD7Bn/OY83lf/JdPFl+Hq+zb1cbmuu42SbJtiaplAdsGcszYHhihLglEgw+T6hkB2qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IGeok/wWfvdo7M5b8nIFNKz0dMXnz4uaTsigUy2pkGw=;
- b=QZW9hcGvNS28naoBjYMgDdgMhk5KHG/NaLRbLlx7Mw103Q1OBTy2xi5tEtHyKcb0lS1D6obpA+QNyUwZgEXCRe44ip1U+zo23l1GUgrJHeeF+X6dk8m3sYKgChTXmR+jb6kJzgGpxYFJfNw6tmGUSPNdNFm2DvHsh6sleKfw4ytsOhICvnI0UKFYIdYn5cWP0xvJyc+tEu4QW+rVA5ZHyGyOIZTH7k97sbdi3WKJjZfbrS3e4dLqzczKMHJzzABDSDJGQqLf3pQHxx8gSe4GdnWw2AtfIIchE3i3TVZFnH2eJXFdM/byA0LZEdLE6LLDdS8N8xYoQ+1qmJGOYE6ECg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IGeok/wWfvdo7M5b8nIFNKz0dMXnz4uaTsigUy2pkGw=;
- b=Ca2+W3a2zP/EWGVgyqm5l1UYd7pF/D0Oi7f3Ijy5OSyLCug9fxEMuC7plSx6Ic67eyjaaGXARMTFZt5KOVnX9luHK1JyGwvQzL5pAfGjARvMNvcdgm/7uku0qU8GAA1cKwlFX9qWQ9WhftX11qraBPhYN0s9w2RWozz7GCh8eV4=
-Received: from MW4PR03CA0134.namprd03.prod.outlook.com (2603:10b6:303:8c::19)
- by CY8PR12MB7338.namprd12.prod.outlook.com (2603:10b6:930:52::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Wed, 9 Nov
- 2022 18:20:05 +0000
-Received: from CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8c:cafe::6e) by MW4PR03CA0134.outlook.office365.com
- (2603:10b6:303:8c::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27 via Frontend
- Transport; Wed, 9 Nov 2022 18:20:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT012.mail.protection.outlook.com (10.13.175.192) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.12 via Frontend Transport; Wed, 9 Nov 2022 18:20:04 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 12:20:01 -0600
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        "Roman Li" <roman.li@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/amd/display: only fill dirty rectangles when PSR is enabled
-Date:   Wed, 9 Nov 2022 13:20:09 -0500
-Message-ID: <20221109182010.171534-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 9 Nov 2022 13:20:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F7324F17;
+        Wed,  9 Nov 2022 10:20:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CCF961C28;
+        Wed,  9 Nov 2022 18:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF291C433C1;
+        Wed,  9 Nov 2022 18:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668018036;
+        bh=lHGIXa/gzMZc3tKmxe07xLxCc5ENdiRStUxmf+RJ76E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aDq7gFkVLaBFz3piUo2ROtjM7vxyTK0VgBb5MXkNJgRAbmWlBmTQAiI41f+1Fq2qu
+         hkBF5vneS+6G0CgV0oggBnfm/bAMNfaMfflzjPZ8cCLyMC+11/bbC0LaTWC8z9KShf
+         KEvyGPmr1uvvOjajknE8coL4wgOAepw9wtS7ip9S9Ed8mf7iJ/Z8fkvVZbYim3DyHw
+         /CjzIqaQe8NMx0OCe2GRwOsKL4SZ42DEtNbTPZSJ03z7K5ixHbjnvnlvVElMzKTUAE
+         hQKRXQgFBEbHSRD6K2dYHJ/IssE5VQhMrtpOw/7P2lXAzoDqsuMLK67aCu4bO3UtAn
+         f/7fnsVKFTauA==
+Date:   Wed, 9 Nov 2022 20:20:31 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     netdev@vger.kernel.org, sassmann@redhat.com,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Patryk Piotrowski <patryk.piotrowski@intel.com>,
+        SlawomirX Laba <slawomirx.laba@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] iavf: Do not restart Tx queues after reset task
+ failure
+Message-ID: <Y2vvbwkvAIOdtZaA@unreal>
+References: <20221108102502.2147389-1-ivecera@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT012:EE_|CY8PR12MB7338:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbf720c9-ee66-4adf-1362-08dac27f0677
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VLQy3eDGdCehxIBWbVgHgCrOvrZcN4KS6eC9lPueCp8ra/GZrsaJ2bSKFs7qYfJgbWi91IbZCLQ+DzbMbpuaZIbYI00ZmabD/LX+fIkf9aFRZY3TVaGoMyvLzS00fLmYYjxFNixAIxV+nv+A4UAn5HjiRZCNWSszO61ZP7VU3oI8QuRo/IYhMonXdr9r7pT0fgu31LSWkjrLLzauWGZVpzdE4d+uLBY0MwgDo1mmyeOihw6hfsNu1RHm9DfwuQJ9iyInXai5wkyA5TqVM6PhngSc0YqJ9KkdfMhMIXF61kGSuyPDBrwDZz1bocsAv8CKAzBa6rmvMKOYfPWohN1w2T99zdpEzYSkQ5ziRuXJhAYvtfMFlXd0EbP97sU+b+UA8OIFtR67nZrgqmacP/KGAPU/7eLgPpZzwzwm8/xRFlS9i10nZ6u+mho4Slq3e0KCHSVg6VzveafO+dO6veJYRY5wURef4f6nA+lsSeMQMiEy6fepqSAu7rs7YGTKXYIOAfdqb8SAZHVVwV+yy/NvqO2VHAo7wHZRNbHPS9Je6YHW5rA8Oy2jik/jkoM18d77DpRhGpBAU4mCREw72VCiLSkJyUwN83I34sbZLdkHSfmSXBO2IN4Ng6vvByTLng0kLPc9xjsqvrXiy4ROZ2+pHSWIgLymh9b21YitjMpr1XydQXtLAXCdy7ZJUeNi1ReB86xH+yHvDFIIhRtEVLbR8hUDBh5BN8xLZsDZfITkH3vE1Zhov9DDrpMdASDzlx8pEt3dxQ3Lsmi2W5jdGR07OxwWtnMgXTh0mcTuGbV7JFgtOwl0qMSDr+TD7A8hpukmyAX9kGtYT6RXH2UzdR/PhVgSToFeOFbWQFgEFRws8w4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(86362001)(26005)(7696005)(478600001)(36860700001)(8936002)(316002)(41300700001)(36756003)(6916009)(54906003)(2616005)(1076003)(8676002)(16526019)(40460700003)(83380400001)(426003)(47076005)(336012)(186003)(40480700001)(70206006)(82310400005)(44832011)(5660300002)(2906002)(70586007)(82740400003)(4326008)(81166007)(356005)(14143004)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2022 18:20:04.9886
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbf720c9-ee66-4adf-1362-08dac27f0677
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7338
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108102502.2147389-1-ivecera@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we are calling fill_dc_dirty_rects() even if PSR isn't
-supported by the relevant link in amdgpu_dm_commit_planes(), this is
-undesirable especially because when drm.debug is enabled we are printing
-messages in fill_dc_dirty_rects() that are only useful for debugging PSR
-(and confusing otherwise). So, we can instead limit the filling of dirty
-rectangles to only when PSR is enabled.
+On Tue, Nov 08, 2022 at 11:25:02AM +0100, Ivan Vecera wrote:
+> After commit aa626da947e9 ("iavf: Detach device during reset task")
+> the device is detached during reset task and re-attached at its end.
+> The problem occurs when reset task fails because Tx queues are
+> restarted during device re-attach and this leads later to a crash.
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
-v2: give a more concrete reason.
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+<...>
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 66eb16fbe09f..956a6e494709 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -7697,9 +7697,10 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
- 		bundle->surface_updates[planes_count].plane_info =
- 			&bundle->plane_infos[planes_count];
- 
--		fill_dc_dirty_rects(plane, old_plane_state, new_plane_state,
--				    new_crtc_state,
--				    &bundle->flip_addrs[planes_count]);
-+		if (acrtc_state->stream->link->psr_settings.psr_feature_enabled)
-+			fill_dc_dirty_rects(plane, old_plane_state,
-+					    new_plane_state, new_crtc_state,
-+					    &bundle->flip_addrs[planes_count]);
- 
- 		/*
- 		 * Only allow immediate flips for fast updates that don't
--- 
-2.38.1
+> +	if (netif_running(netdev)) {
+> +		/* Close device to ensure that Tx queues will not be started
+> +		 * during netif_device_attach() at the end of the reset task.
+> +		 */
+> +		rtnl_lock();
+> +		dev_close(netdev);
+> +		rtnl_unlock();
+> +	}
 
+Sorry for my naive question, I see this pattern a lot (including RDMA), 
+so curious. Everyone checks netif_running() outside of rtnl_lock, while
+dev_close() changes state bit __LINK_STATE_START. Shouldn't rtnl_lock()
+placed before netif_running()?
+
+Thanks
+
+> +
+>  	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
+>  reset_finish:
+>  	rtnl_lock();
+> -- 
+> 2.37.4
+> 
