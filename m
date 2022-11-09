@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01AC6235B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA006235BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbiKIVXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:23:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S230262AbiKIVXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:23:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiKIVXP (ORCPT
+        with ESMTP id S231842AbiKIVXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:23:15 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0377613DFF;
-        Wed,  9 Nov 2022 13:23:13 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A9LMqWK025525;
-        Wed, 9 Nov 2022 15:22:52 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668028972;
-        bh=taVfVIDYMNui3PEkZ8ZkZTWHd9u49AI3RyPfz1lTqew=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=h5oEPMDmpTO1wG6MMKLW4W2EohTvJl1Gyonx8dyzknsBlTKPYvgTxWKueHLQogesJ
-         DhDI4l3OFT6whlqpFGQMbU4RQ2f/r3cqs1kiX+VVP+O8W9nD2vOh1u4TyircQZFK1m
-         OFXxPqXA+NcD3jdelGa2x39eh6cFVwagyIz3A/YM=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A9LMpMp003342
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Nov 2022 15:22:51 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 9 Nov
- 2022 15:22:51 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 9 Nov 2022 15:22:51 -0600
-Received: from [128.247.81.39] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A9LMpcl058121;
-        Wed, 9 Nov 2022 15:22:51 -0600
-Message-ID: <d54ccc35-8670-15b7-ecd3-e77772001c81@ti.com>
-Date:   Wed, 9 Nov 2022 15:22:51 -0600
+        Wed, 9 Nov 2022 16:23:36 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02873B852
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:23:34 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id h132so12345585oif.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 13:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6osH2CHG24SjyK30ZoBUndUFe6RAe9+84/GlrRsbBnM=;
+        b=iQ2chr+X2kRuB01a+ZYYy/UQFv+aDzlpR+2R1eF5XkDVs+1B8ppV+Csc3qP+NOILZX
+         KTCi+X9EXlUHeYL1hIVPuMh1DMQr1RvjvJXu71kE2iziI8MNeOI56xaEknzffVHTbskr
+         rsBCLlWHIWeshq1WxeK9zwvp3NdnZDYc/iGf7mSv643pEnMuEUwREHOgrUtj8MOsy5MK
+         JA0jPGCpb8Xpmv7rLLSNyXaX7Ri5QofSzhRYovs1MOM6569AJWUdOBQhTSozlc/tzwVi
+         KBddeiJLSwZzr1KdbDDBlnDs4DDEuo8I1MoTg5HhRs7dcLsV9Srot3IuP69IJvRCP8zJ
+         /plg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6osH2CHG24SjyK30ZoBUndUFe6RAe9+84/GlrRsbBnM=;
+        b=YxP/r3FUsEYZvTJoPHjzOlmdEz1zvZlw1EzE/Zsyz5YvstJYK24O5mkNH/2eL6PqWH
+         nexsrWakKB3NFpSs6kxUiu8PfnKQWuD/pImoZIS7ovbMy2Loy5BAo7PzTzuYvToAYC5b
+         YMLZsQVaw89nWCY5svnhhD48vSHJLwz8NWfuMuvOPkdWd1jqDw9zu6tXkdlLj8fdForF
+         cRJYILf9wvPoqmRAJrNsdH3LDsv898bE15g2WCk87EDJ/tUdA60kCxeKRenR637ysvuS
+         adjbDXTJGBGo5jZIY5T5m+7o4S0MzeeZFU3KKdZ5qLhP8tYfBoBhrmYuNCfuTgj2s7ZW
+         jZCQ==
+X-Gm-Message-State: ACrzQf3Y/IntFET1uNhcZ5D4Lsi+hercL3A/c5ynr/2ScNpdkl9ln4lo
+        Nl1GUEv1ZmofZmFgiZZh/L3+0cV6+sdo5rA/Au007Q==
+X-Google-Smtp-Source: AMsMyM7oeyA6T8YvG0AE/+9cMNUnq1sl/0vB7ZmbqimmBPi2qfR8pJSuAFElhfnxqh850sWuHg3fblWAYbw3XtrrRUE=
+X-Received: by 2002:aca:6007:0:b0:35a:1bda:d213 with SMTP id
+ u7-20020aca6007000000b0035a1bdad213mr27166493oib.181.1668029013158; Wed, 09
+ Nov 2022 13:23:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 2/2] arm64: dts: ti: k3-am625-sk: mark MCU watchdog as
- reserved
-Content-Language: en-US
-To:     Julien Panis <jpanis@baylibre.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221109093026.103790-1-jpanis@baylibre.com>
- <20221109093026.103790-3-jpanis@baylibre.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221109093026.103790-3-jpanis@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221107145436.276079-1-pbonzini@redhat.com> <20221107145436.276079-8-pbonzini@redhat.com>
+ <CALMp9eRDehmWC1gZmSjxjwCvm4VXf_FnR-MiFkHxkTn4_DJ4aA@mail.gmail.com> <81f7dc5c-c45d-76fc-d9e8-4f3f65c29c12@redhat.com>
+In-Reply-To: <81f7dc5c-c45d-76fc-d9e8-4f3f65c29c12@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 9 Nov 2022 13:23:22 -0800
+Message-ID: <CALMp9eSrifYwOyPzs3UiUnM7o3iRead5-m5ta4tMo+72Td1y5A@mail.gmail.com>
+Subject: Re: [PATCH 7/8] KVM: SVM: move MSR_IA32_SPEC_CTRL save/restore to assembly
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        nathan@kernel.org, thomas.lendacky@amd.com,
+        andrew.cooper3@citrix.com, peterz@infradead.org, seanjc@google.com,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,62 +71,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/22 3:30 AM, Julien Panis wrote:
-> MCU wdt is typically used by M4F.
-> 
-
-See it's this "typically" part I'm concerned about.
-
-It depends on the firmware which peripherals will be used. The firmware
-doesn't communicate this to Linux, and Linux doesn't give the firmware
-permissions to use one of these peripherals.
-
-We only keep from stepping on the firmware by changing device tree to
-never use peripherals that are often used by firmware, and that is not a
-hardware description, nor complete when a remote core firmware can use any
-device in our systems.
-
-What happens when I change firmware? How do we power sequence this? Who
-controls the clocks and clock parents if shared for this peripheral?
-
-I'm thinking we can used something like "application nodes"[0] here. These
-are basically DT nodes for a specific firmware application. The nodes
-describe the firmware and all hardware it uses (in the linked example,
-the remote core to run on, DMAs, SRAM, PHYs). All these devices are under
-exclusive control of the application node. So while Linux will still
-handle power/clock/state control, no driver will be bound. This also
-handles the power sequencing question above, sub-devices need to be active
-before starting the firmware, and firmware needs to go down before the
-controlled peripherals.
-
-These nodes could be loaded/unloaded as DT overlays, along with the
-firmware. So resources are only "reserved" for firmware when
-the firmware is actually active.
-
-Thoughts?
-
-Andrew
-
-[0] https://www.spinics.net/lists/netdev/msg823883.html
-
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> ---
->   arch/arm64/boot/dts/ti/k3-am625-sk.dts | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-> index 93a5f0817efc..089970b304cf 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-> @@ -503,6 +503,11 @@ &main_mcan0 {
->   	status = "disabled";
->   };
->   
-> +&mcu_rti0 {
-> +	/* MCU RTI0 is used by M4F firmware */
-> +	status = "reserved";
-> +};
-> +
->   &epwm0 {
->   	status = "disabled";
->   };
+On Mon, Nov 7, 2022 at 11:08 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 11/7/22 19:45, Jim Mattson wrote:
+> >> +.macro RESTORE_GUEST_SPEC_CTRL
+> >> +       /* No need to do anything if SPEC_CTRL is unset or V_SPEC_CTRL is set */
+> >> +       ALTERNATIVE_2 "jmp 999f", \
+> >> +               "", X86_FEATURE_MSR_SPEC_CTRL, \
+> >> +               "jmp 999f", X86_FEATURE_V_SPEC_CTRL
+> >> +
+> >> +       /*
+> >> +        * SPEC_CTRL handling: if the guest's SPEC_CTRL value differs from the
+> >> +        * host's, write the MSR.
+> >> +        *
+> >> +        * IMPORTANT: To avoid RSB underflow attacks and any other nastiness,
+> >> +        * there must not be any returns or indirect branches between this code
+> >> +        * and vmentry.
+> >> +        */
+> >> +       movl SVM_spec_ctrl(%_ASM_DI), %eax
+> >> +       cmp PER_CPU_VAR(x86_spec_ctrl_current), %eax
+> >> +       je 999f
+> >> +       mov $MSR_IA32_SPEC_CTRL, %ecx
+> >> +       xor %edx, %edx
+> >> +       wrmsr
+> >> +999:
+> >> +
+> >> +.endm
+> >> +
+> >> +.macro RESTORE_HOST_SPEC_CTRL
+> >> +       /* No need to do anything if SPEC_CTRL is unset or V_SPEC_CTRL is set */
+> >> +       ALTERNATIVE_2 "jmp 999f", \
+> >> +               "", X86_FEATURE_MSR_SPEC_CTRL, \
+> >> +               "jmp 999f", X86_FEATURE_V_SPEC_CTRL
+> >> +
+> >> +       mov $MSR_IA32_SPEC_CTRL, %ecx
+> >> +
+> >> +       /*
+> >> +        * Load the value that the guest had written into MSR_IA32_SPEC_CTRL,
+> >> +        * if it was not intercepted during guest execution.
+> >> +        */
+> >> +       cmpb $0, (%_ASM_SP)
+> >> +       jnz 998f
+> >> +       rdmsr
+> >> +       movl %eax, SVM_spec_ctrl(%_ASM_DI)
+> >> +998:
+> >> +
+> >> +       /* Now restore the host value of the MSR if different from the guest's.  */
+> >> +       movl PER_CPU_VAR(x86_spec_ctrl_current), %eax
+> >> +       cmp SVM_spec_ctrl(%_ASM_DI), %eax
+> >> +       je 999f
+> >> +       xor %edx, %edx
+> >> +       wrmsr
+> >> +999:
+> >> +
+> >> +.endm
+> >> +
+> >> +
+> >
+> > It seems unfortunate to have the unconditional branches in the more
+> > common cases.
+>
+> One way to do it could be something like
+>
+> .macro RESTORE_HOST_SPEC_CTRL
+>         ALTERNATIVE_2 "", \
+>                 "jmp 900f", X86_FEATURE_MSR_SPEC_CTRL, \
+>                 "", X86_FEATURE_V_SPEC_CTRL \
+> 901:
+> .endm
+>
+> .macro RESTORE_SPEC_CTRL_BODY \
+> 800:
+>         /* restore guest spec ctrl ... */
+>         jmp 801b
+>
+> 900:
+>         /* save guest spec ctrl + restore host ... */
+>         jmp 901b
+> .endm
+>
+> The cmp/je pair can also jump back to 801b/901b.
+>
+> What do you think?  I'll check if objtool is happy and if so include it
+> in v2.
+>
+> Paolo
+>
+This seems reasonable, if you trust a direct branch prior to the IBPB.
