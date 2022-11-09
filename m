@@ -2,114 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09F26231E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6116231E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiKIRuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:50:01 -0500
+        id S231535AbiKIRuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:50:08 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiKIRtw (ORCPT
+        with ESMTP id S230014AbiKIRt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:49:52 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491DBBD5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:49:51 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id a5so28236102edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:49:51 -0800 (PST)
+        Wed, 9 Nov 2022 12:49:59 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AE8F3F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:49:58 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id o70so21858176yba.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:49:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t7G5Hy6eG2eiNE9V/IOufFYHzNedVTwrudCjfMCx5Fk=;
-        b=JGwfZAm56VMEEpaVEjBbiKtXAgZPn/x0vOsk4hnEB8erudvAHaVFZd+BAd4yDKvOJn
-         ijtOYe6Mu7ciFKCIpw4N8koUxQg8krvJvptQnsVsd/GJYfGhxXQvoKMKk7Hj2LZeCh+N
-         87TH4Qs/B4iVSSd3cm3ZiTtApZQYC7H/Jc2TU=
+        bh=Nq3AzpSRBbWcICYu5OOeBkyYd+yGYnaz3Om02KfDufg=;
+        b=teqnQjgJGkhIgyaoI/H3ihIHnGnvmRfpKjzWT/eIh5e86b1smDThothvnsgT0DLFZx
+         cc6MtETRvrqW+CdsTeIRQnDjHXZiCL72XnI/0meYsqXREcm1J6vL9QcS26Eml6G0GVyM
+         rsFsRjT+GqzQ7PNfU8+lIaX5AsS4dkRL9fWLYTrNxhmKFOF2zZzwvRg7D5vtIpCSGAJ4
+         O4oTQjxXRbVY4WmLdEJFnBxLNkSgEkd2i1F0DTZU8tjZvFjfpXYVlYZXT8LXEJaLxBO3
+         MJk+Wu3EtZpk/f2H46rPqv/EHtq+TVuhpv5lN8MBUUwg6Qy+QeSmwkbuE9tFfQOvXZfp
+         SRBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=t7G5Hy6eG2eiNE9V/IOufFYHzNedVTwrudCjfMCx5Fk=;
-        b=P4J1qla0f/VbPiypShBt3kFBYouoqtnyNMrGN07/Ov2Pp6xIRJWQHBOheCWHOYg71V
-         av0jfche5KGdf/4uSpy9n8fy2Bdw27tbB61XBgwKlQcKmETIMEK3rJiJAnuvY5VjBjBX
-         fvBYsomcyZqqtwo/vzyG+TIM+R9Ms/1TX4551ule4Y7G/5w7b9LyyILb9OjOL+CYSYVu
-         JSRhC9CZJh5tRX9jSMK/nyGQ9ny2l4sJ71xIUyAl03Q748Emnwh/jrXLZ6IETPeIGWhZ
-         z3kD/8fpLwygFiuAoOrvVM50sH7QQerTQsCSTpk+fkv+m2I0a5RWNxJnScbR4FkxwE5g
-         S7aQ==
-X-Gm-Message-State: ACrzQf26is75fJTtXlhc/cK7eMK2vj7/8skMCMopn81s72buqQtm58uM
-        wZ3ZRtjTE+k49ipBG8PPKARSH3uXP4ouvy9E
-X-Google-Smtp-Source: AMsMyM5bqJkWApc3AKYxKD9LfIYnAfGUqxAc7z5X4G+qiY9USGLbjViUawb9Zxpxw+g0sT1FZQ494Q==
-X-Received: by 2002:a05:6402:28b5:b0:461:c6e9:8cc with SMTP id eg53-20020a05640228b500b00461c6e908ccmr61602971edb.170.1668016189605;
-        Wed, 09 Nov 2022 09:49:49 -0800 (PST)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id m17-20020a170906581100b007933047f923sm6092784ejq.118.2022.11.09.09.49.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 09:49:47 -0800 (PST)
-Received: by mail-wr1-f44.google.com with SMTP id o4so26936170wrq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:49:47 -0800 (PST)
-X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id
- g12-20020adfd1ec000000b00236880f2adfmr39916313wrd.617.1668016186615; Wed, 09
- Nov 2022 09:49:46 -0800 (PST)
+        bh=Nq3AzpSRBbWcICYu5OOeBkyYd+yGYnaz3Om02KfDufg=;
+        b=fEhcWjmnMYixVhWApl0gDuYb2H07N3aQMID1AINRhfN36dYhyUOlHs0RvKstKT8grq
+         Oz02x4hmVUa1Q8EVZKejGVLXDk3oxqFo0u5lAtymzfBT2F2oa/q3GjGpWla8MxADJtbe
+         MCCJcTdC6DOZJ19DQguL37drzDi5CQ9Gg2Ua0R1loY0T2Pehre2rhY1asq26YoZLnwTZ
+         P6ROPQUQppT0tgHk1ppm7xPHICGQ/LXAzgsU5PgcSuOHTZbOYgftX0SE5OwwAGDXF5LD
+         rbZ79+OjDdTpsfcrmBnazBP67CZKYIn0FrHq1WcHNy8k6ADzGRfIl9v+FEgghFnoe3nA
+         AUNQ==
+X-Gm-Message-State: ANoB5pn/9go6ry8cKnzZcMILww1vZKdb3w6+UvIvACaAV1X0Rfk2zQ9U
+        MQR2fEkZNgcSZif+cQT6Ja1KvC0WjrJIjMY87tYDpw==
+X-Google-Smtp-Source: AA0mqf4HrEeB7pUDS2yONj40k/dJn+sjGfhpvj208P6V9Xk0LjM3/shvsSss1MxGD9ehfC2xfXziIcOJ9WRKKznx8XY=
+X-Received: by 2002:a05:6902:b16:b0:6d6:9455:d6c5 with SMTP id
+ ch22-20020a0569020b1600b006d69455d6c5mr18075586ybb.164.1668016197143; Wed, 09
+ Nov 2022 09:49:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221109055132.609-1-quic_sibis@quicinc.com> <20221109055132.609-2-quic_sibis@quicinc.com>
-In-Reply-To: <20221109055132.609-2-quic_sibis@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 9 Nov 2022 09:49:34 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Xpee30TR-+TsJnPkhuAaOEx0cmBVpUgrpMxGGyJ7CcaA@mail.gmail.com>
-Message-ID: <CAD=FV=Xpee30TR-+TsJnPkhuAaOEx0cmBVpUgrpMxGGyJ7CcaA@mail.gmail.com>
-Subject: Re: [PATCH V3 2/2] arm64: dts: qcom: sc7280: Add Google Herobrine
- WIFI SKU dts fragment
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, jinghung.chen3@hotmail.com,
-        agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@somainline.org
+References: <20221109082223.141145957@linuxfoundation.org>
+In-Reply-To: <20221109082223.141145957@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 9 Nov 2022 23:19:45 +0530
+Message-ID: <CA+G9fYun_sLLwxS5v1=9d9TtRu3m+uYNM+FN+ZHq9BmrS_s74w@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/117] 5.10.154-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 9 Nov 2022 at 13:57, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.154 release.
+> There are 117 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 11 Nov 2022 08:21:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Tue, Nov 8, 2022 at 9:52 PM Sibi Sankar <quic_sibis@quicinc.com> wrote:
->
-> The Google Herobrine WIFI SKU can save 256M by not having modem/mba/rmtfs
-> memory regions defined. Add the dts fragment and mark all the board files
-> appropriately.
->
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->
-> v2:
->  * Mark the WIFI SKUs of Evoker/Villager-r1
->  * Misc. Fixes [Doug]
->
-> Instead of just having remoteproc_mpss node disabled, we go ahead and
-> delete it on wifi only SKUs. This is done to avoid the dtbs_check
-> failures that we would end of getting if we delete the memory-region
-> property present in the node (since it's a required property). I'll
-> send a follow up patch with IPA node enabled only on LTE SKUs as soon
-> as I verify that it doesn't have any impact on suspend/resume.
->
->  .../boot/dts/qcom/sc7280-chrome-common.dtsi   | 15 --------
->  .../dts/qcom/sc7280-herobrine-evoker-lte.dts  |  4 +-
->  .../boot/dts/qcom/sc7280-herobrine-evoker.dts |  2 +-
->  .../dts/qcom/sc7280-herobrine-evoker.dtsi     |  1 +
->  .../dts/qcom/sc7280-herobrine-lte-sku.dtsi    | 19 ++++++++++
->  .../qcom/sc7280-herobrine-villager-r1-lte.dts |  4 +-
->  .../dts/qcom/sc7280-herobrine-villager-r1.dts | 31 +---------------
->  .../qcom/sc7280-herobrine-villager-r1.dtsi    | 37 +++++++++++++++++++
->  .../dts/qcom/sc7280-herobrine-wifi-sku.dtsi   | 11 ++++++
->  9 files changed, 77 insertions(+), 47 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dtsi
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-wifi-sku.dtsi
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.10.154-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 69a0227f6bd671ba8efa071c58d9f127932e25f2
+* git describe: v5.10.153-118-g69a0227f6bd6
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.153-118-g69a0227f6bd6
+
+## Test Regressions (compared to v5.10.153-118-ga2b01d6ae5a1)
+
+## Metric Regressions (compared to v5.10.153-118-ga2b01d6ae5a1)
+
+## Test Fixes (compared to v5.10.153-118-ga2b01d6ae5a1)
+
+## Metric Fixes (compared to v5.10.153-118-ga2b01d6ae5a1)
+
+## Test result summary
+total: 147758, pass: 124924, fail: 3289, skip: 19119, xfail: 426
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 47 total, 45 passed, 2 failed
+* i386: 37 total, 35 passed, 2 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 28 total, 23 passed, 5 failed
+* riscv: 12 total, 12 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 40 total, 38 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
