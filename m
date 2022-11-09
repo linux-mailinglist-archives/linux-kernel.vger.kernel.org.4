@@ -2,377 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C3C622DEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC322622DF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 15:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiKIO3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 09:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S231478AbiKIOaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 09:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiKIO3c (ORCPT
+        with ESMTP id S231573AbiKIOaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 09:29:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DA91D660;
-        Wed,  9 Nov 2022 06:29:30 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A9ES939006282;
-        Wed, 9 Nov 2022 14:29:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=+BistWnd4z+7A7K5tuip7U85T3+3GQn4XSKxpGUsq+Y=;
- b=GgxzX9u3+/yTAhAytmryq7bBadgpmDsleLlsa3zdJJS6/y8PgshW24B4ynlvBWjF7IaO
- FovsyRMBbtLYxASrLSitY3/VWAclQRbeGxMGTraa1RdctrpIxGhZ2dTh7ga6DRV5ZTKb
- iRWeJuJ0gXF/wj3WNI+xiA35QLRSk4OLTG795zH+XcD3XrvmsP+bncnIkLB9HXhEdOLC
- pcIuFrD6u3P1MTHntQnO3i4G7GcnedfNUeemJqupO1VbpBwlDHqnNZgZcUqSqaxHaZAV
- MzV+cper85wIFRjIw+DU4s/Hby8h/vcHIkkANK7bpxus4a60DdfijP8awdInN0q5kkFG vw== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kre03g0j5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 14:29:12 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A9ELak8032332;
-        Wed, 9 Nov 2022 14:29:10 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3kngpgm7y6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Nov 2022 14:29:10 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A9ET7Ok39125570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Nov 2022 14:29:07 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E243A4040;
-        Wed,  9 Nov 2022 14:29:07 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9EA5BA4053;
-        Wed,  9 Nov 2022 14:29:06 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Nov 2022 14:29:06 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] s390/pci: use lock-free I/O translation updates
-Date:   Wed,  9 Nov 2022 15:29:03 +0100
-Message-Id: <20221109142903.4080275-6-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221109142903.4080275-1-schnelle@linux.ibm.com>
-References: <20221109142903.4080275-1-schnelle@linux.ibm.com>
+        Wed, 9 Nov 2022 09:30:17 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ED11F9F4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 06:30:16 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id 13so47179796ejn.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 06:30:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=N96rWukkzzft84T2ilUpjkniGJmFniZsxB7jb54ifXs=;
+        b=NUQruEBYuKGoATQoEgq8HnQG7zmavO8XD1UrtBSLzg8JU522IgpPOEXmqcF4u0Ez5v
+         FBMEDkmVUu9wjt/3Ew9uAOCPrOlaNYbTsAfsDYXE+SPqBP+oh8kv9+hq7VU9ZZjR7ljQ
+         9rZGRPv6nzYTlfPZ0UlpecP7Lq8FdNJsBerVM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N96rWukkzzft84T2ilUpjkniGJmFniZsxB7jb54ifXs=;
+        b=XBhy7HfkirSLIo4CdcsvCJNV/xcuQDyKpQRYe3iI09r0HVcuVkQjR3nRypMTfCP8gk
+         S8DoVFppWlk1PeEReDzybhmVNUQfyS3Ba/iGmuNDc4aN5Skgmzsd4RgJUrkC/MrPupdH
+         4NHcMlKu8N31OTdO8VKCr//W0NU679WosRwtvqOLKYmxydxdxjohFK9io01SoYqJucWy
+         ao7lGDU9yDaXj5aFIxZb92IH8+/OR1WT3dtayzdPO6DMv4Hz85sMHdPdD21kKHmJw8YY
+         n0GzVDYW/ZkCevdI3ciPJWr3UCjVA1l/HlM9Sbyfn2hgXAdYQ7kDWsUguY3fraQY1L63
+         ioxw==
+X-Gm-Message-State: ACrzQf3bTMgXkZfRekFXN1kFY5nObzOcywxm/G+FF8sFQJCn42raVPeK
+        aF5QrSqmMujETlXUMCmqImJBjA==
+X-Google-Smtp-Source: AMsMyM4ljNakYGb8FEwYQ+ua0vOjv8/+n3jDbN6hIZptU4+jxoR/3FXruQkLjWdo4N8Xgm8mp6JuCw==
+X-Received: by 2002:a17:906:6a02:b0:7ae:2793:aa19 with SMTP id qw2-20020a1709066a0200b007ae2793aa19mr29371804ejc.265.1668004214873;
+        Wed, 09 Nov 2022 06:30:14 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:7487:46db:8e12:c768])
+        by smtp.gmail.com with ESMTPSA id d25-20020aa7c1d9000000b0044dbecdcd29sm7020389edp.12.2022.11.09.06.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 06:30:14 -0800 (PST)
+Subject: [PATCH v1 0/1] i2c: Restore power status of device if probe fails
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -NJ252kKyB_6gvm23IRyInYhFsCRGi_E
-X-Proofpoint-ORIG-GUID: -NJ252kKyB_6gvm23IRyInYhFsCRGi_E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- bulkscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0
- mlxscore=0 suspectscore=0 malwarescore=0 clxscore=1015 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211090107
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-b4-tracking: H4sIAFu5a2MC/w3LQQqAIBBA0avErBtwhAi7zWhjDoiBki2ku+fywf8DmlSVBscyoErXpneZoHWBkL
+ hcgnpOgzXWEhmHagO+rF2Qxe1RmCL5DWbvuQn6yiWkeZQn5+/7Adt+K05gAAAA
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 09 Nov 2022 15:29:47 +0100
+Message-Id: <20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Hidenori Kobayashi <hidenorik@google.com>,
+        linux-i2c@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=961; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=xbF/MIUAKcQD4clS31BaNJtsnvcssnr11NYtRC214vo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBja7liJtRWY4suMhjLbNI+ldyebAoNrPAn2LUdX8j9
+ Uvtt7lOJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2u5YgAKCRDRN9E+zzrEiJM4EA
+ CcSqPambhLY9adGX94xkF46+nnAl704+gj6irsEN3zkkNVyfOrjYjxk5pZF0888rRnySyB5SSwxiv2
+ mH6WduT2kfnm1Kb1/CU8XJ+kM5yZJPEEsZJ85ZTQZuuqONVfPaIar7LcfO+MxjHjEOpu00yJ80fClX
+ diCewkAjl18jlmBuIliVjGDHoiQ73ZIVP0laKz7/OcYT9kbAwBpStcHrklzCOyxoxyoRiWi88xuIfp
+ yvKpPUEkyXbk7vvJAXb3uOjFEBoTon9enLRX17HuI6nXrCJc2GjZ3SnJNlQFWsaHPYTUTm2HoydSHW
+ 7AZBLEQvSWY5P2zQJCXSUD4x/fjfuAx3hx8viF0nDm1s83+Z/OeJ+hpop6rSIVmA+vWU3aXM0Z3Tnh
+ 2RD5fH36rK6VFe4pAu2SwUvueSfEIaO8V3nrHpejcHAKnDnU3tTVJRySfq1FeTAGplTJCi575zH2oG
+ 5a9xtXh26OP4zzZG/EWPjEPxBdHqDaJ5kp9jUvPF4Figpt5Z1bfN4bx0PdOA/AnGoCkgwMINgvR8da
+ hYo6+tao7Pcuj9fv2GXO0yQRL1GDuGJ2fketb+bM9L3wuYaKlO1/JqK3Bu8vWbKCNIWYZaII7ZXk6R
+ P+mZbpBId7dnB93XawBMIcjeYjfqD3hq8GuZsJtxDC6flN7ECRdhkKnNeUsQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I/O translation tables on s390 use 8 byte page table entries and tables
-which are allocated lazily but only freed when the entire I/O
-translation table is torn down. Also each IOVA can at any time only
-translate to one physical address Furthermore I/O table accesses by the
-IOMMU hardware are cache coherent. With a bit of care we can thus use
-atomic updates to manipulate the translation table without having to use
-a global lock at all. This is done analogous to the existing I/O
-translation table handling code used on Intel and AMD x86 systems.
+We have discovered that some power lines were always on even if the devices
+on that power line was not used.
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+This happens because we failed to probe a device on the i2c bus, and the
+ACPI Power Resource were never turned off.
+
+This patch tries to fix this issue.
+
+To: Wolfram Sang <wsa@kernel.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomasz Figa <tfiga@chromium.org>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Hidenori Kobayashi <hidenorik@google.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
 ---
- arch/s390/include/asm/pci.h |  1 -
- arch/s390/pci/pci_dma.c     | 74 ++++++++++++++++++++++---------------
- drivers/iommu/s390-iommu.c  | 37 +++++++------------
- 3 files changed, 58 insertions(+), 54 deletions(-)
+Ricardo Ribalda (1):
+      i2c: Restore initial power state on probe failure
 
-diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-index e4c3e4e04d30..b248694e0024 100644
---- a/arch/s390/include/asm/pci.h
-+++ b/arch/s390/include/asm/pci.h
-@@ -157,7 +157,6 @@ struct zpci_dev {
- 
- 	/* DMA stuff */
- 	unsigned long	*dma_table;
--	spinlock_t	dma_table_lock;
- 	int		tlb_refresh;
- 
- 	spinlock_t	iommu_bitmap_lock;
-diff --git a/arch/s390/pci/pci_dma.c b/arch/s390/pci/pci_dma.c
-index dee825ee7305..ea478d11fbd1 100644
---- a/arch/s390/pci/pci_dma.c
-+++ b/arch/s390/pci/pci_dma.c
-@@ -63,37 +63,55 @@ static void dma_free_page_table(void *table)
- 	kmem_cache_free(dma_page_table_cache, table);
- }
- 
--static unsigned long *dma_get_seg_table_origin(unsigned long *entry)
-+static unsigned long *dma_get_seg_table_origin(unsigned long *rtep)
- {
-+	unsigned long old_rte, rte;
- 	unsigned long *sto;
- 
--	if (reg_entry_isvalid(*entry))
--		sto = get_rt_sto(*entry);
--	else {
-+	rte = READ_ONCE(*rtep);
-+	if (reg_entry_isvalid(rte)) {
-+		sto = get_rt_sto(rte);
-+	} else {
- 		sto = dma_alloc_cpu_table();
- 		if (!sto)
- 			return NULL;
- 
--		set_rt_sto(entry, virt_to_phys(sto));
--		validate_rt_entry(entry);
--		entry_clr_protected(entry);
-+		set_rt_sto(&rte, virt_to_phys(sto));
-+		validate_rt_entry(&rte);
-+		entry_clr_protected(&rte);
-+
-+		old_rte = cmpxchg(rtep, ZPCI_TABLE_INVALID, rte);
-+		if (old_rte != ZPCI_TABLE_INVALID) {
-+			/* Somone else was faster, use theirs */
-+			dma_free_cpu_table(sto);
-+			sto = get_rt_sto(old_rte);
-+		}
- 	}
- 	return sto;
- }
- 
--static unsigned long *dma_get_page_table_origin(unsigned long *entry)
-+static unsigned long *dma_get_page_table_origin(unsigned long *step)
- {
-+	unsigned long old_ste, ste;
- 	unsigned long *pto;
- 
--	if (reg_entry_isvalid(*entry))
--		pto = get_st_pto(*entry);
--	else {
-+	ste = READ_ONCE(*step);
-+	if (reg_entry_isvalid(ste)) {
-+		pto = get_st_pto(ste);
-+	} else {
- 		pto = dma_alloc_page_table();
- 		if (!pto)
- 			return NULL;
--		set_st_pto(entry, virt_to_phys(pto));
--		validate_st_entry(entry);
--		entry_clr_protected(entry);
-+		set_st_pto(&ste, virt_to_phys(pto));
-+		validate_st_entry(&ste);
-+		entry_clr_protected(&ste);
-+
-+		old_ste = cmpxchg(step, ZPCI_TABLE_INVALID, ste);
-+		if (old_ste != ZPCI_TABLE_INVALID) {
-+			/* Somone else was faster, use theirs */
-+			dma_free_page_table(pto);
-+			pto = get_st_pto(old_ste);
-+		}
- 	}
- 	return pto;
- }
-@@ -117,19 +135,24 @@ unsigned long *dma_walk_cpu_trans(unsigned long *rto, dma_addr_t dma_addr)
- 	return &pto[px];
- }
- 
--void dma_update_cpu_trans(unsigned long *entry, phys_addr_t page_addr, int flags)
-+void dma_update_cpu_trans(unsigned long *ptep, phys_addr_t page_addr, int flags)
- {
-+	unsigned long pte;
-+
-+	pte = READ_ONCE(*ptep);
- 	if (flags & ZPCI_PTE_INVALID) {
--		invalidate_pt_entry(entry);
-+		invalidate_pt_entry(&pte);
- 	} else {
--		set_pt_pfaa(entry, page_addr);
--		validate_pt_entry(entry);
-+		set_pt_pfaa(&pte, page_addr);
-+		validate_pt_entry(&pte);
- 	}
- 
- 	if (flags & ZPCI_TABLE_PROTECTED)
--		entry_set_protected(entry);
-+		entry_set_protected(&pte);
- 	else
--		entry_clr_protected(entry);
-+		entry_clr_protected(&pte);
-+
-+	xchg(ptep, pte);
- }
- 
- static int __dma_update_trans(struct zpci_dev *zdev, phys_addr_t pa,
-@@ -137,18 +160,14 @@ static int __dma_update_trans(struct zpci_dev *zdev, phys_addr_t pa,
- {
- 	unsigned int nr_pages = PAGE_ALIGN(size) >> PAGE_SHIFT;
- 	phys_addr_t page_addr = (pa & PAGE_MASK);
--	unsigned long irq_flags;
- 	unsigned long *entry;
- 	int i, rc = 0;
- 
- 	if (!nr_pages)
- 		return -EINVAL;
- 
--	spin_lock_irqsave(&zdev->dma_table_lock, irq_flags);
--	if (!zdev->dma_table) {
--		rc = -EINVAL;
--		goto out_unlock;
--	}
-+	if (!zdev->dma_table)
-+		return -EINVAL;
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		entry = dma_walk_cpu_trans(zdev->dma_table, dma_addr);
-@@ -173,8 +192,6 @@ static int __dma_update_trans(struct zpci_dev *zdev, phys_addr_t pa,
- 			dma_update_cpu_trans(entry, page_addr, flags);
- 		}
- 	}
--out_unlock:
--	spin_unlock_irqrestore(&zdev->dma_table_lock, irq_flags);
- 	return rc;
- }
- 
-@@ -558,7 +575,6 @@ int zpci_dma_init_device(struct zpci_dev *zdev)
- 	WARN_ON(zdev->s390_domain);
- 
- 	spin_lock_init(&zdev->iommu_bitmap_lock);
--	spin_lock_init(&zdev->dma_table_lock);
- 
- 	zdev->dma_table = dma_alloc_cpu_table();
- 	if (!zdev->dma_table) {
-diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-index 2b9a3e3bc606..ed33c6cce083 100644
---- a/drivers/iommu/s390-iommu.c
-+++ b/drivers/iommu/s390-iommu.c
-@@ -20,7 +20,6 @@ struct s390_domain {
- 	struct iommu_domain	domain;
- 	struct list_head	devices;
- 	unsigned long		*dma_table;
--	spinlock_t		dma_table_lock;
- 	spinlock_t		list_lock;
- 	struct rcu_head		rcu;
- };
-@@ -62,7 +61,6 @@ static struct iommu_domain *s390_domain_alloc(unsigned domain_type)
- 	s390_domain->domain.geometry.aperture_start = 0;
- 	s390_domain->domain.geometry.aperture_end = ZPCI_TABLE_SIZE_RT - 1;
- 
--	spin_lock_init(&s390_domain->dma_table_lock);
- 	spin_lock_init(&s390_domain->list_lock);
- 	INIT_LIST_HEAD_RCU(&s390_domain->devices);
- 
-@@ -265,14 +263,10 @@ static int s390_iommu_validate_trans(struct s390_domain *s390_domain,
- 				     unsigned long nr_pages, int flags)
- {
- 	phys_addr_t page_addr = pa & PAGE_MASK;
--	unsigned long irq_flags, i;
- 	unsigned long *entry;
-+	unsigned long i;
- 	int rc;
- 
--	if (!nr_pages)
--		return 0;
--
--	spin_lock_irqsave(&s390_domain->dma_table_lock, irq_flags);
- 	for (i = 0; i < nr_pages; i++) {
- 		entry = dma_walk_cpu_trans(s390_domain->dma_table, dma_addr);
- 		if (unlikely(!entry)) {
-@@ -283,7 +277,6 @@ static int s390_iommu_validate_trans(struct s390_domain *s390_domain,
- 		page_addr += PAGE_SIZE;
- 		dma_addr += PAGE_SIZE;
- 	}
--	spin_unlock_irqrestore(&s390_domain->dma_table_lock, irq_flags);
- 
- 	return 0;
- 
-@@ -296,7 +289,6 @@ static int s390_iommu_validate_trans(struct s390_domain *s390_domain,
- 			break;
- 		dma_update_cpu_trans(entry, 0, ZPCI_PTE_INVALID);
- 	}
--	spin_unlock_irqrestore(&s390_domain->dma_table_lock, irq_flags);
- 
- 	return rc;
- }
-@@ -304,14 +296,10 @@ static int s390_iommu_validate_trans(struct s390_domain *s390_domain,
- static int s390_iommu_invalidate_trans(struct s390_domain *s390_domain,
- 				       dma_addr_t dma_addr, unsigned long nr_pages)
- {
--	unsigned long irq_flags, i;
- 	unsigned long *entry;
-+	unsigned long i;
- 	int rc = 0;
- 
--	if (!nr_pages)
--		return 0;
--
--	spin_lock_irqsave(&s390_domain->dma_table_lock, irq_flags);
- 	for (i = 0; i < nr_pages; i++) {
- 		entry = dma_walk_cpu_trans(s390_domain->dma_table, dma_addr);
- 		if (unlikely(!entry)) {
-@@ -321,7 +309,6 @@ static int s390_iommu_invalidate_trans(struct s390_domain *s390_domain,
- 		dma_update_cpu_trans(entry, 0, ZPCI_PTE_INVALID);
- 		dma_addr += PAGE_SIZE;
- 	}
--	spin_unlock_irqrestore(&s390_domain->dma_table_lock, irq_flags);
- 
- 	return rc;
- }
-@@ -363,7 +350,8 @@ static phys_addr_t s390_iommu_iova_to_phys(struct iommu_domain *domain,
- 					   dma_addr_t iova)
- {
- 	struct s390_domain *s390_domain = to_s390_domain(domain);
--	unsigned long *sto, *pto, *rto, flags;
-+	unsigned long *rto, *sto, *pto;
-+	unsigned long ste, pte, rte;
- 	unsigned int rtx, sx, px;
- 	phys_addr_t phys = 0;
- 
-@@ -376,16 +364,17 @@ static phys_addr_t s390_iommu_iova_to_phys(struct iommu_domain *domain,
- 	px = calc_px(iova);
- 	rto = s390_domain->dma_table;
- 
--	spin_lock_irqsave(&s390_domain->dma_table_lock, flags);
--	if (rto && reg_entry_isvalid(rto[rtx])) {
--		sto = get_rt_sto(rto[rtx]);
--		if (sto && reg_entry_isvalid(sto[sx])) {
--			pto = get_st_pto(sto[sx]);
--			if (pto && pt_entry_isvalid(pto[px]))
--				phys = pto[px] & ZPCI_PTE_ADDR_MASK;
-+	rte = READ_ONCE(rto[rtx]);
-+	if (reg_entry_isvalid(rte)) {
-+		sto = get_rt_sto(rte);
-+		ste = READ_ONCE(sto[sx]);
-+		if (reg_entry_isvalid(ste)) {
-+			pto = get_st_pto(ste);
-+			pte = READ_ONCE(pto[px]);
-+			if (pt_entry_isvalid(pte))
-+				phys = pte & ZPCI_PTE_ADDR_MASK;
- 		}
- 	}
--	spin_unlock_irqrestore(&s390_domain->dma_table_lock, flags);
- 
- 	return phys;
- }
+ drivers/i2c/i2c-core-base.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+---
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
+change-id: 20221109-i2c-waive-ae97fea1f1b5
+
+Best regards,
 -- 
-2.34.1
-
+Ricardo Ribalda <ribalda@chromium.org>
