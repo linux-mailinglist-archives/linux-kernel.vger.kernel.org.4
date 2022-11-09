@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE536236E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 23:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBED6236E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 23:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbiKIW52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 17:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
+        id S231862AbiKIW6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 17:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKIW51 (ORCPT
+        with ESMTP id S230073AbiKIW6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 17:57:27 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FB61EED1;
-        Wed,  9 Nov 2022 14:57:24 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6BDBAFF802;
-        Wed,  9 Nov 2022 22:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668034642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4qutKClpaMtj7cgQ2BDKv2YC/ArzsyxTBFqjgebWdeE=;
-        b=Wj1QADdKc4kzuieut1F0r5KxBkYYWxjNrJNQK9hOurYpohcXx3snCxMxmQoMuBlHDO7Usd
-        bAuP4MhygFBfrCrUc222hussBxd4Gw+jKFZezkTx0u0q4dq5TsEbPpSrCJfHsoAwBHfrLC
-        B6cdwRgshTy65gyZ8qh6N9yKmBCxckwyuzvikA1Pwkgn4R1++tcKrvbeCrnOE/staWDqk5
-        GFsE2D0Y4f4iY+mKn1/rHBnnDgYnT+0Ti1f8dUOQgUG4BD21C5VwaX3CYsjR1Hz2ESw3JF
-        tU6xpxAePf4T5DIt/cu4ZSu+e+ivp1Lxz63RNurtq4QE2EXMM5pylre+etBRrg==
-Date:   Wed, 9 Nov 2022 23:57:20 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Pavel Machek <pavel@ucw.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
- documentation
-Message-ID: <Y2wwUOJ0KZdt1tZ6@mail.local>
-References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
- <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
- <20221109222916.GA2985917-robh@kernel.org>
+        Wed, 9 Nov 2022 17:58:54 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A228411451
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 14:58:52 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 136so35721pga.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 14:58:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDNaO5GVqWCFNqmsXm32rt4v9sxjyK3oGfqu/+wwt6c=;
+        b=pk/WOT2/oE/kdnN1HZZJjYFxrzFI47NqpiPgMp/AXm7p5iuk/wKp0P3kEiyPaz8vIn
+         cvUr5FM3hFIOu18uuUie8pLmULDvWLoKDolxiA5flfdgk6OqHPquAaFu/KDswiiqJrQj
+         75t8VpRVFztfzv7geZRLW2abdGPYy8va1txjpSQAcR2te70tSl2Yle8bR7K3rql56dg1
+         wgIQ/PoVG/PEjBXcJLSYoc9YLsQau4msuXMCNA2NWNLJ7k5isx5m38t/mE9CqkvKTtS0
+         g8vMldUVSfzX5pJv803/2hJv5nWBFeno8l7F+q+tOq4KiYYp/wKo9TeANWzYQj3qpAbM
+         EfPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vDNaO5GVqWCFNqmsXm32rt4v9sxjyK3oGfqu/+wwt6c=;
+        b=m/i+v5dXYZplVVzZ1alUJJq5Se3dXpqzHmMemvVye49Df0e//pB7FLanxfjGKUyio8
+         dTuaZOLlk3O1kbZS4pMmBYjRuCnZq+cVavy6Bat/1eIjNad5EVujOiKnV5NdEUyedDmT
+         y8+vqgr3WMPjTsW+D3l9xA9ekAojopjGNmZNSe/gXkBYV6ozefhqXttBhuBdSHbyFRm0
+         3nQyXx4zZUXl+yiIyXB/cF+IFqbAdzLK3FmbYfkUB5nwW8lo89FQVkLtg+GQiVWJVeJU
+         ZEDdV3jWftLR63dqfJLavd7Hex1G79Pq3oWyGiKmFuBXgdi8ZLzbpLCfTKOygjIQi1h7
+         hcSg==
+X-Gm-Message-State: ACrzQf2nSH4GtG5Sj4EmfE5ksIT98meEmq5nkM08oHbLrxpNLY3z2moG
+        rkWOErMb09FEKxJv8fr3S3tefntZLlJpEIND/C74xCF0pIA=
+X-Google-Smtp-Source: AMsMyM5u+ntcxBzLGuXwikCeQmoqmVxy58cxGcaiR3M8TfoH3UF/t5qebt7H8vYH/iUWCQNNP04bziH8lsIWtiVnoQw=
+X-Received: by 2002:a65:4c8e:0:b0:46f:75bb:905a with SMTP id
+ m14-20020a654c8e000000b0046f75bb905amr52541069pgt.495.1668034731985; Wed, 09
+ Nov 2022 14:58:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109222916.GA2985917-robh@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221109170341.36785-1-steffen.kothe@skothe.de>
+In-Reply-To: <20221109170341.36785-1-steffen.kothe@skothe.de>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 9 Nov 2022 14:58:15 -0800
+Message-ID: <CAGETcx9fx3TcgeD+pMyp+LuGfd=hOo5_Weeii2W1Mbd1T2Ua0Q@mail.gmail.com>
+Subject: Re: [PATCH] scripts: dev-needs.sh: Enforce bash usage
+To:     Steffen Kothe <steffen.kothe@skothe.de>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,88 +67,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 16:29:16-0600, Rob Herring wrote:
-> On Tue, Nov 08, 2022 at 07:43:37PM +0100, Alexandre Mergnat wrote:
-> > - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
-> > - Add mediatek,mt6357-rtc compatible.
-> > - Add maintainer
-> > - Remove the .txt binding file
-> > 
-> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
-> >  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
-> >  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
-> >  3 files changed, 41 insertions(+), 32 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> > index 0088442efca1..79aaf21af8e9 100644
-> > --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> > +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> > @@ -33,7 +33,7 @@ Optional subnodes:
-> >  		- compatible: "mediatek,mt6331-rtc"
-> >  		- compatible: "mediatek,mt6358-rtc"
-> >  		- compatible: "mediatek,mt6397-rtc"
-> > -	For details, see ../rtc/rtc-mt6397.txt
-> > +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
-> >  - regulators
-> >  	Required properties:
-> >  		- compatible: "mediatek,mt6323-regulator"
-> > diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> > new file mode 100644
-> > index 000000000000..bb48c0150f95
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> > @@ -0,0 +1,40 @@
-> > + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek MT6397/MT6366/MT6358/MT6357/MT6323 RTC
-> > +
-> > +maintainers:
-> > +  - Alexandre Mergnat <amergnat@baylibre.com>
-> > +
-> > +description: |
-> > +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
-> > +  as a type of multi-function device (MFD). The RTC can be configured and set up
-> > +  with PMIC wrapper bus which is a common resource shared with the other
-> > +  functions found on the same PMIC.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt6323-rtc
-> > +      - mediatek,mt6357-rtc
-> > +      - mediatek,mt6358-rtc
-> > +      - mediatek,mt6366-rtc
-> > +      - mediatek,mt6397-rtc
-> 
-> As this is only a compatible string, just fold this into the MFD schema 
-> doc.
+On Wed, Nov 9, 2022 at 9:04 AM Steffen Kothe <steffen.kothe@skothe.de> wrote:
+>
+> Calling the script from a system which does not invoke bash
+> by default causes a return with a syntax error like:
+>
+>         ./dev-needs.sh: 6: Syntax error: "(" unexpected
+>
+> /bin/sh invokes on most distributions a symbolic link to a
+> default shell like dash (Debian) or bash (Ubuntu).
+>
+> Since the script depends on bash syntax, enforce the same by
+> default to prevent syntax errors caused by wrong shell type usage.
 
-Actually, it probably also supports the start-year property
+I wrote this so that it can run on an Android target that runs toybox.
+Sadly toybox doesn't like have /bin/bash. This will break my use case.
+So I'll have to Nak this.
 
-> 
-> > +
-> > +additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +
-> > +examples:
-> > +  - |
-> > +    pmic {
-> > +        compatible = "mediatek,mt6397";
-> > +
-> > +        rtc {
-> > +               compatible = "mediatek,mt6397-rtc";
-> > +        };
-> > +    };
+I'm open to other ideas though as I'd like to this to work in as many
+cases as possible. Should we just add a wrapper that has /bin/bash and
+then sources this file?
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Also looks like multiple #! lines aren't supported by bash, so we
+can't add multiple lines either.
+
+-Saravana
+
+>
+> Signed-off-by: Steffen Kothe <steffen.kothe@skothe.de>
+> ---
+>  scripts/dev-needs.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/dev-needs.sh b/scripts/dev-needs.sh
+> index 454cc304fb448..46537859727bc 100755
+> --- a/scripts/dev-needs.sh
+> +++ b/scripts/dev-needs.sh
+> @@ -1,4 +1,4 @@
+> -#! /bin/sh
+> +#! /bin/bash
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Copyright (c) 2020, Google LLC. All rights reserved.
+>  # Author: Saravana Kannan <saravanak@google.com>
+> --
+> 2.30.2
+>
+>
