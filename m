@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB301622AF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD94622AF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 12:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiKILwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 06:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S231206AbiKILw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 06:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiKILvd (ORCPT
+        with ESMTP id S231266AbiKILve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 06:51:33 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB19532052
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:51:26 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id j12so16858313plj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:51:26 -0800 (PST)
+        Wed, 9 Nov 2022 06:51:34 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D243C6C0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 03:51:28 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id y203so16466393pfb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 03:51:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ylEXai1pRtcdgY4n/dSSiM2pUBQ7klnnGwSEjhZhHnw=;
-        b=Y8CaZZpNNRXSN720dhEH8GJYbNFPJnj7qu6nXjDoVmEhFp1S6sV0e5ZQD+4UJySJNP
-         6DPd+IsRr86SFqTWAIdYjHgWtQNzwRPeddZW8CfJIS+alIOMUtWqfLZYH9fKJUQ8sb1r
-         Q+bjOa0eFHIPuVVvPiHll8unqEXUpibFpPrb4=
+        bh=0dJwSSVWle5wAKsSMx0YgyDVQ6OL2lYtX7lIC3B32aM=;
+        b=HPHG6Yl1KI8mjO7OGpNfDk9YjeU3vICc9sLqJbjbfAmOJLAc5WywPSQFJB18fJuCwG
+         7+L+GS+xMO9FXwYZsNZrYXG+YjRzsXJIVihSbtuJ/zBxUltuJrhH3vDMFNUNPYo4NYGb
+         4jwiks5wtyeCwT4bKKf8lTT4cLaN0kL0Hrfnc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ylEXai1pRtcdgY4n/dSSiM2pUBQ7klnnGwSEjhZhHnw=;
-        b=yP/JPLUG3nxMOcGN+YjqM2DUdnq5grjqKASyLSzdh59RFwgE3obtmNG/GwfzjG4QDR
-         S1xSasJnw/zcOELUr7X0/3gMpOc2QcMD9v/1/RtodQg/lzfpjXlzXkeBOpA/q8Yn5TG6
-         LxAjL3wZOzZ0P/lum7CayVi9v6kob/bWGqJtp+vghHYyg2TSNQbfGIeFot2B9s2tqU1m
-         MSKb0ROJZ/4JRyPChoQgZybOSr+/3FuOSntm/5QQoX1uMhsKCKBT1G3JPWAo4jI9Mqc2
-         uZP5i0rXeHnHPvTO5Cea3FMf7NmwTi5/ggULgjNbJJSUX6ifvfEDO4baBuuo40Kwuf9v
-         QPoA==
-X-Gm-Message-State: ACrzQf1Z2gF9UCx1Blrld2FBY7YNuGefpXSaK8ezPBWiMotM5Z4o6mAd
-        ONC09i8ge+HQDNPebLljSz7bjw==
-X-Google-Smtp-Source: AMsMyM7uMF0Rz+8FL9QxtxgFBHi/+RsBUmvD/klEYsmwj83jE4uQ0gTGXKrZehLIcGHB3AaAGJSvPw==
-X-Received: by 2002:a17:902:d708:b0:187:2721:68ca with SMTP id w8-20020a170902d70800b00187272168camr50203566ply.92.1667994685692;
-        Wed, 09 Nov 2022 03:51:25 -0800 (PST)
+        bh=0dJwSSVWle5wAKsSMx0YgyDVQ6OL2lYtX7lIC3B32aM=;
+        b=uYwzmr6F9g/Ebk0PvuK0cW0or9RLB4R+ytUZjyxQDABSJqsIb3z9OIOqbF0bE18cza
+         hiQDIjN3dLz28A63BZ1Wn6VajKBQ3W6H+7f6UpKK+7xNPKGfyA5CqfFrLQBGZ4dV4Kao
+         dUs9W8jsC/FNufGEyo0sMdFAuZu6o4gfDY/STS1I3HcPndX4ysneE7tXVCF9OS+ZpdeA
+         kN3032R/WNgyLVidgCH++jRObmfTMQ1UYY6Sfsk6rgN9MHWnlGWI4ifdq0eWJ1lz0SVB
+         BUOFPusIFMWT4UMOjpJ1I3NM6eZVn8uPq7Gm/c5Hco7GpcGWXGHUYCpfMwtPDkCg+evE
+         DVvA==
+X-Gm-Message-State: ACrzQf3EpIdJ60CKqP5ADZMLPgmdjjjOoxNkWNUEagWPdKM4x/js+60r
+        Wfx+ifkgmWszTheeEfi6GohIpg==
+X-Google-Smtp-Source: AMsMyM4qP0VAZ/9g6k/1c2ELzDcyARTP25CtfOUKLGpwh2OuBRIs5q2CH788dxqVBNgKjab/wWnGJg==
+X-Received: by 2002:a63:5a63:0:b0:42f:e143:80d4 with SMTP id k35-20020a635a63000000b0042fe14380d4mr53000571pgm.456.1667994688240;
+        Wed, 09 Nov 2022 03:51:28 -0800 (PST)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:61f1:44d3:3f47:2cdb])
-        by smtp.gmail.com with ESMTPSA id f5-20020a655505000000b00434760ee36asm7292311pgr.16.2022.11.09.03.51.23
+        by smtp.gmail.com with ESMTPSA id f5-20020a655505000000b00434760ee36asm7292311pgr.16.2022.11.09.03.51.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 03:51:25 -0800 (PST)
+        Wed, 09 Nov 2022 03:51:27 -0800 (PST)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Minchan Kim <minchan@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -54,9 +54,9 @@ Cc:     Nitin Gupta <ngupta@vflare.org>,
         Suleiman Souhlal <suleiman@google.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv5 12/13] zram: add incompressible writeback
-Date:   Wed,  9 Nov 2022 20:50:46 +0900
-Message-Id: <20221109115047.2921851-13-senozhatsky@chromium.org>
+Subject: [PATCHv5 13/13] zram: Add incompressible flag to read_block_state()
+Date:   Wed,  9 Nov 2022 20:50:47 +0900
+Message-Id: <20221109115047.2921851-14-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221109115047.2921851-1-senozhatsky@chromium.org>
 References: <20221109115047.2921851-1-senozhatsky@chromium.org>
@@ -71,81 +71,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for incompressible pages writeback:
+Add a new flag to zram block state that shows if the page
+is incompressible: that none of the algorithm (including
+secondary ones) could compress it.
 
-  echo incompressible > /sys/block/zramX/writeback
-
+Suggested-by: Minchan Kim <minchan@kernel.org>
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- Documentation/admin-guide/blockdev/zram.rst |  7 ++++++-
- drivers/block/zram/zram_drv.c               | 18 ++++++++++++------
- 2 files changed, 18 insertions(+), 7 deletions(-)
+ Documentation/admin-guide/blockdev/zram.rst | 11 +++++++----
+ drivers/block/zram/zram_drv.c               |  6 ++++--
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
 diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
-index d898b7ace33d..f14c8c2e42f3 100644
+index f14c8c2e42f3..e4551579cb12 100644
 --- a/Documentation/admin-guide/blockdev/zram.rst
 +++ b/Documentation/admin-guide/blockdev/zram.rst
-@@ -348,8 +348,13 @@ this can be accomplished with::
+@@ -497,10 +497,11 @@ pages of the process with*pagemap.
+ If you enable the feature, you could see block state via
+ /sys/kernel/debug/zram/zram0/block_state". The output is as follows::
  
-         echo huge_idle > /sys/block/zramX/writeback
+-	  300    75.033841 .wh..
+-	  301    63.806904 s....
+-	  302    63.806919 ..hi.
+-	  303    62.801919 ....r
++	  300    75.033841 .wh...
++	  301    63.806904 s.....
++	  302    63.806919 ..hi..
++	  303    62.801919 ....r.
++	  304   146.781902 ..hi.n
  
-+If a user chooses to writeback only incompressible pages (pages that none of
-+algorithms can compress) this can be accomplished with::
-+
-+	echo incompressible > /sys/block/zramX/writeback
-+
- If an admin wants to write a specific page in zram device to the backing device,
--they could write a page index into the interface.
-+they could write a page index into the interface::
+ First column
+ 	zram's block index.
+@@ -519,6 +520,8 @@ Third column
+ 		idle page
+ 	r:
+ 		recompressed page (secondary compression algorithm)
++	n:
++		none (including secondary) of algorithms could compress it
  
- 	echo "page_index=1251" > /sys/block/zramX/writeback
- 
+ First line of above example says 300th block is accessed at 75.033841sec
+ and the block's state is huge so it is written back to the backing
 diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 89d25f60b33e..2e4ef1ba1973 100644
+index 2e4ef1ba1973..3447df3ca75e 100644
 --- a/drivers/block/zram/zram_drv.c
 +++ b/drivers/block/zram/zram_drv.c
-@@ -648,10 +648,10 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
+@@ -949,14 +949,16 @@ static ssize_t read_block_state(struct file *file, char __user *buf,
  
- #define PAGE_WB_SIG "page_index="
+ 		ts = ktime_to_timespec64(zram->table[index].ac_time);
+ 		copied = snprintf(kbuf + written, count,
+-			"%12zd %12lld.%06lu %c%c%c%c%c\n",
++			"%12zd %12lld.%06lu %c%c%c%c%c%c\n",
+ 			index, (s64)ts.tv_sec,
+ 			ts.tv_nsec / NSEC_PER_USEC,
+ 			zram_test_flag(zram, index, ZRAM_SAME) ? 's' : '.',
+ 			zram_test_flag(zram, index, ZRAM_WB) ? 'w' : '.',
+ 			zram_test_flag(zram, index, ZRAM_HUGE) ? 'h' : '.',
+ 			zram_test_flag(zram, index, ZRAM_IDLE) ? 'i' : '.',
+-			zram_get_priority(zram, index) ? 'r' : '.');
++			zram_get_priority(zram, index) ? 'r' : '.',
++			zram_test_flag(zram, index,
++				       ZRAM_INCOMPRESSIBLE) ? 'n' : '.');
  
--#define PAGE_WRITEBACK 0
--#define HUGE_WRITEBACK (1<<0)
--#define IDLE_WRITEBACK (1<<1)
--
-+#define PAGE_WRITEBACK			0
-+#define HUGE_WRITEBACK			(1<<0)
-+#define IDLE_WRITEBACK			(1<<1)
-+#define INCOMPRESSIBLE_WRITEBACK	(1<<2)
- 
- static ssize_t writeback_store(struct device *dev,
- 		struct device_attribute *attr, const char *buf, size_t len)
-@@ -672,6 +672,8 @@ static ssize_t writeback_store(struct device *dev,
- 		mode = HUGE_WRITEBACK;
- 	else if (sysfs_streq(buf, "huge_idle"))
- 		mode = IDLE_WRITEBACK | HUGE_WRITEBACK;
-+	else if (sysfs_streq(buf, "incompressible"))
-+		mode = INCOMPRESSIBLE_WRITEBACK;
- 	else {
- 		if (strncmp(buf, PAGE_WB_SIG, sizeof(PAGE_WB_SIG) - 1))
- 			return -EINVAL;
-@@ -734,11 +736,15 @@ static ssize_t writeback_store(struct device *dev,
- 			goto next;
- 
- 		if (mode & IDLE_WRITEBACK &&
--			  !zram_test_flag(zram, index, ZRAM_IDLE))
-+		    !zram_test_flag(zram, index, ZRAM_IDLE))
- 			goto next;
- 		if (mode & HUGE_WRITEBACK &&
--			  !zram_test_flag(zram, index, ZRAM_HUGE))
-+		    !zram_test_flag(zram, index, ZRAM_HUGE))
- 			goto next;
-+		if (mode & INCOMPRESSIBLE_WRITEBACK &&
-+		    !zram_test_flag(zram, index, ZRAM_INCOMPRESSIBLE))
-+			goto next;
-+
- 		/*
- 		 * Clearing ZRAM_UNDER_WB is duty of caller.
- 		 * IOW, zram_free_page never clear it.
+ 		if (count <= copied) {
+ 			zram_slot_unlock(zram, index);
 -- 
 2.38.1.431.g37b22c650d-goog
 
