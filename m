@@ -2,106 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333B962356B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA034623597
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 22:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiKIVJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 16:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S231602AbiKIVRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 16:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKIVJL (ORCPT
+        with ESMTP id S231185AbiKIVRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 16:09:11 -0500
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6CB12D38;
-        Wed,  9 Nov 2022 13:09:10 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-13c569e5ff5so167791fac.6;
-        Wed, 09 Nov 2022 13:09:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8s7hI8Zud53E/E/LGzGpSycc8sTlYS9S0JeTQWZw1BE=;
-        b=UHhYLXYYLO1vALkxjqk8LTf/bWb4DbFoNd83qCLsc97RTJ7itzyGWBOttTrSf4sTvZ
-         0ZORPOanaOShPT7r7KOlh1P4To5VGCSGvtUbAsv3JhvNSeT5RBdoI1E/zSjNAVto1smY
-         ljSA3ppVJuK/dYIMtWHPNlHMqTCgNbEMUGkX81lqbeT6xxQyRKuGWrHLxf0ck+huyM/Y
-         IfDikbJ4GRiF43J/QJWaP4fqevx0s9tZaE2IlKbARobBysjSde37p9SN81ltrQQsjFvF
-         KhiaCqmwm4CcukXukG2jo8DPCjCUuKGCspN+vU6LY1nrk+/nvXQ444sWIm9Bl/eQ12y2
-         Brlg==
-X-Gm-Message-State: ACrzQf0jpeJBGMM/LMThJREY4aUqUn92dy3uLVgvubj7LLFINIhxS0oV
-        0U+greTtCxOdMF+MF+VB4A==
-X-Google-Smtp-Source: AMsMyM5pyAb0lxvqFEiih871wsejSy/ryTVCST1bIhwXfBgU1eV0o3m98wEwHeZxJ1wdpmrhvz7RAA==
-X-Received: by 2002:a05:6871:401:b0:13b:c222:456 with SMTP id d1-20020a056871040100b0013bc2220456mr47300571oag.234.1668028149580;
-        Wed, 09 Nov 2022 13:09:09 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g20-20020a4ab814000000b00480fd9f311esm4583432oop.13.2022.11.09.13.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 13:09:09 -0800 (PST)
-Received: (nullmailer pid 2868041 invoked by uid 1000);
-        Wed, 09 Nov 2022 21:09:10 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Wed, 9 Nov 2022 16:17:03 -0500
+X-Greylist: delayed 358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 13:17:00 PST
+Received: from smtp-4.b-tu.de (smtp-4.b-tu.de [141.43.208.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D616231221
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 13:17:00 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp-4.b-tu.de (Postfix) with ESMTP id 4N6yLV2z53zGsZnW;
+        Wed,  9 Nov 2022 22:10:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=b-tu.de; h=
+        content-transfer-encoding:content-type:content-type:mime-version
+        :x-mailer:message-id:subject:subject:from:from:date:date
+        :received:received; s=smtp; t=1668028256; x=1668892257; bh=P4rW3
+        JoP+8noNBW4QOWFMnNFqANdUsIam1OlFgKyq+4=; b=pnbckGjVvB0bVgOSZtwK2
+        pQIgepZeS9OVLSMdbntzTZtQ/QfigasOtX9u8l0kPcfZNfK+UDjG4X9FEV/7ACul
+        pU27rPEeHse03dLaKfAt4HlvxND9u1J2keO3qseGsqH3DEf/Ltu5QV/AbCG4+taY
+        6XeyDouEY94Pl+fbsnQaYE=
+X-Virus-Scanned: by AMaViS (at smtp-4.b-tu.de)
+Received: from smtp-4.b-tu.de ([127.0.0.1])
+        by localhost (smtp-4.b-tu.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id UcF6QBYdIPq7; Wed,  9 Nov 2022 22:10:56 +0100 (CET)
+Received: from rosh (ipsec233.vpn.tu-cottbus.de [141.43.177.233])
+        (Authenticated sender: dikarill@b-tu.de)
+        by smtp-4.b-tu.de (Postfix) with ESMTPSA id 4N6yLM5xCHzGsZnV;
+        Wed,  9 Nov 2022 22:10:51 +0100 (CET)
+Date:   Wed, 9 Nov 2022 22:10:49 +0100
+From:   Ilya Dikariev <dikarill@b-tu.de>
+To:     Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] drivers/clocksource/arm_arch_timer: Tighten Allwinner arch
+ timer workaround
+Message-ID: <20221109221049.4bf3c5bb@rosh>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        Will Deacon <will@kernel.org>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        patches@linaro.org, andersson@kernel.org
-In-Reply-To: <20221109111236.46003-2-konrad.dybcio@linaro.org>
-References: <20221109111236.46003-1-konrad.dybcio@linaro.org>
- <20221109111236.46003-2-konrad.dybcio@linaro.org>
-Message-Id: <166802788099.2832919.14556738707192792770.robh@kernel.org>
-Subject: Re: [PATCH 01/10] dt-bindings: arm-smmu: Allow up to 3 power-domains
-Date:   Wed, 09 Nov 2022 15:09:10 -0600
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As we know, the Allwinner A64 SoC has a buggy RCU time unit. The
+workaround named UNKNOWN1 was not sufficient to cover some more buggy
+bunches of this SoC. This workaround diminish the mask to 8 bits instead
+of 9.
 
-On Wed, 09 Nov 2022 12:12:26 +0100, Konrad Dybcio wrote:
-> Some SMMUs require that a vote is held on as much as 3 separate PDs
-> (hello Qualcomm). Allow it in bindings.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+An example run of timer test tool https://github.com/smaeul/timer-tools
+on PinePhone device (owns the A64 SoC) gives following result on a non
+patched kernel (cut off):
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running parallel counter test...
+0: Failed after 5507 reads (0.003578 s)
+0: 0x0000000c8272cbf1 -> 0x0000000c8272ccff -> 0x0000000c8272cc0e (     0.011 ms)
+2: Failed after 14518 reads (0.009248 s)
+2: 0x0000000c827513f1 -> 0x0000000c82751300 -> 0x0000000c8275140e (    -0.010 ms)
+3: Failed after 14112 reads (0.008730 s)
+3: 0x0000000c8274f3f2 -> 0x0000000c8274f300 -> 0x0000000c8274f40d (    -0.010 ms)
+1: Failed after 12030 reads (0.008409 s)
+1: 0x0000000c8274abf1 -> 0x0000000c8274acff -> 0x0000000c8274ac0f (     0.011 ms)
+1: 0x0000000c827759f2 -> 0x0000000c82775aff -> 0x0000000c82775a0e (     0.011 ms)
+0: 0x0000000c8277a9f2 -> 0x0000000c8277aaff -> 0x0000000c8277aa0d (     0.011 ms)
+2: 0x0000000c8278f3f1 -> 0x0000000c8278f300 -> 0x0000000c8278f40e (    -0.010 ms)
+0: 0x0000000c82785ff2 -> 0x0000000c82784300 -> 0x0000000c8278600d (    -0.309 ms)
 
-yamllint warnings/errors:
+After the proposed patch applied the test runs
+correctly (~2 hours of testing with a tool above without fails)
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iommu/arm,smmu.example.dtb: iommu@d00000: power-domains: [[4294967295, 0]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+Signed-off-by: Ilya Dikariev <dikarill@b-tu.de>
+---
+ drivers/clocksource/arm_arch_timer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+index a7ff77550e17..3019faa263f5 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -371,7 +371,7 @@ static u64 notrace arm64_858921_read_cntvct_el0(void)
+ 	do {								\
+ 		_val = read_sysreg(reg);				\
+ 		_retries--;						\
+-	} while (((_val + 1) & GENMASK(8, 0)) <= 1 && _retries);	\
++	} while (((_val + 1) & GENMASK(7, 0)) <= 1 && _retries);	\
+ 									\
+ 	WARN_ON_ONCE(!_retries);					\
+ 	_val;								\
+-- 
+2.25.1
