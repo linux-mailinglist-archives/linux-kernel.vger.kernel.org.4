@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDAA622F88
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 16:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A64622F8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 17:01:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiKIP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 10:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S230443AbiKIQBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 11:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiKIP7Y (ORCPT
+        with ESMTP id S230031AbiKIQBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 10:59:24 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CC31AF0F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 07:59:20 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id kt23so47843259ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 07:59:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kMpz0htQ7/MGd5vuDayKM00Lvv56YDt4hT+zhs8g2Ss=;
-        b=DxPii1rwpWX2KNM5w6aU83V4P3pvCEWJ+OmIRRU67Ed9ghnzy/dQxWPypq6nc8KYq2
-         7z7ReF/5u/9goEHI9sjm6aqEfwD3Dm0+URnSHRERstVHqeWod2vS+lnqtEkfyWsAZKtk
-         RbTK7hh0N0Re5P+xD3+fdpgA9OnxaGC2bHWncjxstBmqbtuEI1xxQ2WvdJ9Nde5cdEed
-         OBTx0QZTjNsnnXcrsODJBHWQn5QAwF32qdWc5/k9Garax/RG6gxVZ/Irrcj3nPj4nBFR
-         aUy7nvaFnOg+YVvqk+UtIGsHLPWWKo4Fup4GJZ7ULRJOzKiMKf68sAaaeC+jplrU44PQ
-         LKRQ==
+        Wed, 9 Nov 2022 11:01:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DDB213
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 08:00:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668009647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rxaPjG6OItFswovLs9/tKd4BEce49DAd1HWNvmXM51Q=;
+        b=PdyVzINs/h8XepMsm7lN8kzeEEOq8wxuvENm1fZEtlrOsei4e8JPvLe24RxNqGPsSAjWIL
+        FjVltDKToG4YY+4j7aiLsY0Jco3HszOfsvZUkGAmEYU7+A/DZXA4t8QOBqNw9Xfh1Ot4no
+        HuTmXOQP+7oaDDSY7af4FgyrVJ6NL3g=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-613-_zkuW6BHOamCF2BW1uPLuA-1; Wed, 09 Nov 2022 11:00:46 -0500
+X-MC-Unique: _zkuW6BHOamCF2BW1uPLuA-1
+Received: by mail-wm1-f72.google.com with SMTP id v188-20020a1cacc5000000b003cf76c4ae66so1215486wme.7
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 08:00:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kMpz0htQ7/MGd5vuDayKM00Lvv56YDt4hT+zhs8g2Ss=;
-        b=jzYhNzyhcKQmSXtBohpPrA8TnuSDlTqLlmLaAVgKJMyGKC015d5QtMFjUHGY4qd3wj
-         iJ676Keq6B8c/awaXaleF0kqEeDJYuHn96WjnwywDZMYlUgdj1NDXWDkEbP8i7bQgsv1
-         QCSp45gZl31HDcjgIbLhxlVfYYBz5IV5wkGuBw+1aTknJVAu5htMG9qchc9xtP6t+6A8
-         vcnvg0kgtbfrkIc0DMlimPEBVvAfWsuw57drzmEBM86Hy40e2E+84Y9fpx9bIVQWh5QY
-         obceySUxtp6R7yhLAorQwi+5ZEIf+15tCoLzfmFgJkU5sy8FLMtZm1VtWh7tICGLMeTs
-         FnRg==
-X-Gm-Message-State: ACrzQf0xjGoG2KRL0grgKAWqbysuomKIL2puz8Fr+G0L75B68Hj9WLA8
-        Rc0yKma0026mowXBoD0HPksk+KDaVH9YuAxgnBmUFA==
-X-Google-Smtp-Source: AMsMyM6KcsdIruaq2XMS8h3WG9IGI3ifDSKwPpa34n/XxwnANIIvZR1obFMCRGMiLLfgo0+LTXJDaGAweOynKOsEtMc=
-X-Received: by 2002:a17:906:7048:b0:7ae:db2:f10a with SMTP id
- r8-20020a170906704800b007ae0db2f10amr1136400ejj.709.1668009558671; Wed, 09
- Nov 2022 07:59:18 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rxaPjG6OItFswovLs9/tKd4BEce49DAd1HWNvmXM51Q=;
+        b=RLB08yXS+dG2bsbQoy9JsYpOTHtzbUrMLp4EF6L4Fr53OhnRtpFXB5yqL4kIyHx6u+
+         WlgfyxA3Q+Hu3pg5Eva/c5oLjWd3wFwgManV9UVfHhN+LABjUXLqF/vh9Hd/I81jDLmv
+         NjGEwIxRsw6pmyjLypDuDe2yhqc2d9sDOllGZ2DYik0lt7chyAzPljQr65SkaSVK33ro
+         sJ9Pl2MxCkpbNkJSnHb5fu2oMBkXLiksJWQ7y3aELuHkH62ntZ5PW8OXOtKGszcPIrgc
+         Q6EQp+rqa5vKXTdCx7nFtNk8WsEYh9efEjkzBjQhlCFVArpLcaDDd5po1E7VNaMbRqJ0
+         YzoQ==
+X-Gm-Message-State: ACrzQf36nwj+XPu72BBfSZZbcMHmBz+lGZssXDkpjWYb5L2ZTRFZsJNm
+        skfYVVBsbpDCFqPqE0Bz/5aFKMKGtW14BTilo1lZWdRbcaa0EfW9d2VJu3/Zv65YOR93n9aViY3
+        wRAS2PRGSsvENYugtQ1Nch4fY
+X-Received: by 2002:a5d:5d87:0:b0:22a:bbc5:5afe with SMTP id ci7-20020a5d5d87000000b0022abbc55afemr38780210wrb.235.1668009645030;
+        Wed, 09 Nov 2022 08:00:45 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM7Dbm4ElXICqWUfwTCQpO3eKpk/li4KpKb46iTDW7C9OI3JxhQpR5RK/+b9DlLq/UDO0ZEopQ==
+X-Received: by 2002:a5d:5d87:0:b0:22a:bbc5:5afe with SMTP id ci7-20020a5d5d87000000b0022abbc55afemr38780188wrb.235.1668009644750;
+        Wed, 09 Nov 2022 08:00:44 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id v13-20020adfe28d000000b0022e3538d305sm15950500wri.117.2022.11.09.08.00.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 08:00:44 -0800 (PST)
+Message-ID: <56cf95b1-68b9-8685-e5af-67eebf046686@redhat.com>
+Date:   Wed, 9 Nov 2022 17:00:43 +0100
 MIME-Version: 1.0
-References: <20221107201317.324457-1-jannh@google.com> <3e2f7e2cb4f6451a9ef5d0fb9e1f6080@AcuMS.aculab.com>
- <CAG48ez3AGh-R+deQMbNPt6PCQazOz8a96skW+qP3_HmUaANmmQ@mail.gmail.com>
- <d88999d8e9ec486bb1a0f75911457985@AcuMS.aculab.com> <CAG48ez3UO03RRMxxj-ZAcw5vhjhPYeoN1DB82s2SAiYm-qWmYw@mail.gmail.com>
-In-Reply-To: <CAG48ez3UO03RRMxxj-ZAcw5vhjhPYeoN1DB82s2SAiYm-qWmYw@mail.gmail.com>
-From:   Seth Jenkins <sethjenkins@google.com>
-Date:   Wed, 9 Nov 2022 10:59:07 -0500
-Message-ID: <CALxfFW4RQmLf9QRdP8VUH0fZU_vUsCqXfxRtjeu6g7QvKAGOmQ@mail.gmail.com>
-Subject: Re: [PATCH] exit: Put an upper limit on how often we can oops
-To:     Jann Horn <jannh@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Kees Cook <keescook@chromium.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "kernel-hardening@lists.openwall.com" 
-        <kernel-hardening@lists.openwall.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 07/11] KVM: SVM: do not allocate struct svm_cpu_data
+ dynamically
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        thomas.lendacky@amd.com, jmattson@google.com
+References: <20221109145156.84714-1-pbonzini@redhat.com>
+ <20221109145156.84714-8-pbonzini@redhat.com> <Y2vOEkJDwlmJ2hv9@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y2vOEkJDwlmJ2hv9@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'll add to this by noting that it is highly oops dependent. Depending
-on what locks and refcounts you had taken at the moment you oops'd, it
-may not be possible to clean up the process e.g. if you're holding
-your own mmap lock at the moment you oops you're liable to deadlock in
-__mmput. But there are certainly empirical cases (not all too isolated
-ones) where the kernel really *is* able to clean up the entire
-process.
+On 11/9/22 16:58, Sean Christopherson wrote:
+> At some point we should replace the vcpu->cpu usage with this_cpu_ptr().  All of
+> the code that does per_cpu_ptr(&svm_data, vcpu->cpu) is doomed if vcpu->cpu isn't
+> the current CPU.
+
+Yes, I agree with all your other comments but I think they're better 
+done in next.
+
+Paolo
+
