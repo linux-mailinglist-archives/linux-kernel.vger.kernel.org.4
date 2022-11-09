@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E1F623139
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60BF623141
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 18:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiKIRSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 12:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        id S231527AbiKIRTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 12:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiKIRSI (ORCPT
+        with ESMTP id S229590AbiKIRTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 12:18:08 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111B5BE0A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:18:08 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id b124so19489300oia.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 09:18:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YnbAgRc0SG1is4s9YE7B1B7B3OnFjSAdcO6sCa2yLhk=;
-        b=NOT09UVJK5f0mTzSZl8ZOPwyuPGXRWjmBVrVvfniY7Vt0gyJKBcHiwKfYkhfLeKmtj
-         OI3DaOYheHrS3CZvaW2gWokRkcJAZd70Ha+jybu39TSrG7q1qR6o6IwVOaek3tfS5eP4
-         rZZ9jKSAPO1phT0S1aj/kql08aCdsCcpM4ieDUiUP5WjfA+wn3YrUYyID2hUto44AH+w
-         iXEQolL+iQQBIK4nu3+Ekmbnyqpl4rhTzOZzZmtfXDcnfJKyHvLalhN5AXbTMX9Rvlxo
-         2gOxAVPYXbw3Y3elFa0Tmw7Ie6n1hVNO8Nuk1t+TLqPoX4NfWZQWlmVLGOk+hCgyh5h2
-         0uNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YnbAgRc0SG1is4s9YE7B1B7B3OnFjSAdcO6sCa2yLhk=;
-        b=DMuk9tIbg8WQO7hJUT2PlopiIYlr/HtEtBdedTTIrZuQb1+LuO8eLIGPjLIAydLku6
-         +6HkKCiRYsSuIJX4u3swmU+vkHbobYqLuciaNbiE2FEGTDf7b7W4y8kKoasYRxqrsivJ
-         qoKr76UW9xwLTFnAHUSY8kP8RvDZ+phKPWSv4DZ2aqk95HYpyS8U2/CeTMmFw2vda5Ua
-         u0Q/oc/oDg6nfLyHME7sYEU0KFyCpqGNpJftVRv0c+L2U0ssQd1WEtmhgMSO9OmRE3K1
-         6dx0jAN853VUPY7Vr7YkTJnJwHuny3Sn1FkjFQXJ6ymGl/qqN07qpIw0YtORDaaFuNPa
-         tr/w==
-X-Gm-Message-State: ACrzQf2Q5MK27JkefsVwTfdcaCIABacjFTWiL+U4s1kExtaWfMhzJU6K
-        kmHwoax2h9iz1SWZ1Mbv7nk=
-X-Google-Smtp-Source: AMsMyM7LBsKqFCrAhqRYjQytYpTyHbWZMCi2oiu7E5nfZFygmwpCSzk2lQddELwc+dRT799FEp9apg==
-X-Received: by 2002:aca:ac82:0:b0:359:d662:5bfb with SMTP id v124-20020acaac82000000b00359d6625bfbmr33911565oie.218.1668014287353;
-        Wed, 09 Nov 2022 09:18:07 -0800 (PST)
-Received: from x-VJFE44F11X-XXXXXX.cardume.local ([177.134.206.108])
-        by smtp.gmail.com with ESMTPSA id q5-20020a9d6645000000b0066c15490a55sm5471674otm.19.2022.11.09.09.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 09:18:06 -0800 (PST)
-From:   Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
-To:     perex@perex.cz
-Cc:     tiwai@suse.com, tcrawford@system76.com,
-        sbinding@opensource.cirrus.com, kai.heng.feng@canonical.com,
-        tangmeng@uniontech.com, tanureal@opensource.cirrus.com,
-        p.jungkamp@gmx.net, wse@tuxedocomputers.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        edson.drosdeck@gmail.com
-Subject: [PATCH] ALSA: hda/realtek: Add Positivo C6300 model quirk
-Date:   Wed,  9 Nov 2022 13:17:32 -0400
-Message-Id: <20221109171732.5417-1-edson.drosdeck@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 9 Nov 2022 12:19:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C2EA25C8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 09:19:12 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 004BD1FB;
+        Wed,  9 Nov 2022 09:19:18 -0800 (PST)
+Received: from [10.1.197.38] (eglon.cambridge.arm.com [10.1.197.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2DDD3F703;
+        Wed,  9 Nov 2022 09:19:08 -0800 (PST)
+Message-ID: <54bbb5b1-6d04-6d45-d6c9-45e714928cf4@arm.com>
+Date:   Wed, 9 Nov 2022 17:18:59 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 18/18] x86/resctrl: Separate arch and fs resctrl locks
+Content-Language: en-GB
+To:     Peter Newman <peternewman@google.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, xingxin.hx@openanolis.org,
+        baolin.wang@linux.alibaba.com
+References: <20221021131204.5581-1-james.morse@arm.com>
+ <20221021131204.5581-19-james.morse@arm.com>
+ <CALPaoCjTzzdqtEoqSWv-w=Fvq-dLLjvt8VJrP_RzmijLTD5=2w@mail.gmail.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <CALPaoCjTzzdqtEoqSWv-w=Fvq-dLLjvt8VJrP_RzmijLTD5=2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,25 +59,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Positivo Master C6300 (1849:a233) require quirk for anabling headset-mic
+Hi Peter,
 
-Signed-off-by: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+On 31/10/2022 14:21, Peter Newman wrote:
+> On Fri, Oct 21, 2022 at 3:13 PM James Morse <james.morse@arm.com> wrote:
+>>
+>> MPAM's monitors have an overflow interrupt, so it needs to be possible
+>> to walk the domains list in irq context. RCU is ideal for this,
+>> but some paths need to be able to sleep to allocate memory.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 701a72ec5629..7875566d6183 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9608,6 +9608,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x511f, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
- 	SND_PCI_QUIRK(0x17aa, 0x9e54, "LENOVO NB", ALC269_FIXUP_LENOVO_EAPD),
- 	SND_PCI_QUIRK(0x1849, 0x1233, "ASRock NUC Box 1100", ALC233_FIXUP_NO_AUDIO_JACK),
-+	SND_PCI_QUIRK(0x1849, 0xa233, "Positivo Master C6300", ALC269_FIXUP_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x19e5, 0x3204, "Huawei MACH-WX9", ALC256_FIXUP_HUAWEI_MACH_WX9_PINS),
- 	SND_PCI_QUIRK(0x19e5, 0x320f, "Huawei WRT-WX9 ", ALC256_FIXUP_ASUS_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1b35, 0x1235, "CZC B20", ALC269_FIXUP_CZC_B20),
--- 
-2.37.2
+> I'm curious about this requirement. There are already counters which can
+> overflow on Intel, but we've been able to detect overflows soon enough
+> by checking at a reasonable interval. Are we expecting MSCs to have
+> counters that overflow so quickly that the overflows need to be handled
+> directly in IRQ context vs being able to run a threaded handler before
+> the second overflow?
 
+Ultimately, I don't know. MPAM has three sizes of counter, 31, 44 and 63.
+I think its entirely possible someone builds a system with an inconvenient size for the
+way they use it - but this wasn't how I anticipated this getting used...
+
+
+> It seems like MBM would be really intrusive if it could cause the system
+> to process overflow IRQs at a high rate.
+
+... I agree ..
+
+
+> Also is the overflow interrupt handler in one of your MPAM preview
+> branches? I was only able to find an error IRQ handler in
+> mpam/snapshot/v6.0:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/tree/drivers/platform/mpam/mpam_devices.c?h=mpam/snapshot/v6.0#n1813
+
+Because there probably won't be enough monitors to expose the free-running resctrl files,
+I anticipate that most use of the memory bandwidth counters will be via perf, which gives
+MPAM the start/stop calls it needs to allocate and free a monitor.
+
+The PMU driver gets asked to read the counters in IRQ context, see __perf_event_read()
+called via smp_call_function_single(). (I'm sure there are others).
+
+This is the first reason why the domain list needs to be protected by something like RCU.
+
+Perf also has a sampling mode, where it sets the value to overflow after a specific number
+of events, and times how long that takes to occur. (I haven't completely got my head round
+it yet) In this mode, the MPAM driver would need to invoke the PMU driver to read the
+counters in IRQ context.
+
+I haven't written the overflow  interrupt code yet because I've got no access to a
+platform (virtual or otherwise) with working counters, so couldn't possibly test it. (See
+also, the 44 and 63 bit counter support!)
+
+I was being lazy with the commit message and only describing the last case. Is the
+future-plot-arc important? It would result in a bit of a brain-dump/essay in the commit
+message.
+
+
+Thanks,
+
+James
