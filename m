@@ -2,272 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7005662226A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B79D62226D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 04:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiKIDIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 22:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
+        id S230172AbiKIDJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 22:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiKIDIl (ORCPT
+        with ESMTP id S229735AbiKIDJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 22:08:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B56291704B;
-        Tue,  8 Nov 2022 19:08:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 719F11FB;
-        Tue,  8 Nov 2022 19:08:45 -0800 (PST)
-Received: from [10.162.42.10] (unknown [10.162.42.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D633B3F73D;
-        Tue,  8 Nov 2022 19:08:34 -0800 (PST)
-Message-ID: <c0401131-e0b4-7a25-8590-58402acb1e5b@arm.com>
-Date:   Wed, 9 Nov 2022 08:38:31 +0530
+        Tue, 8 Nov 2022 22:09:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F417E21
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 19:08:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667963339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rk+G6bXxmyU0fpyJouoERPNPm9IAIKngr86zd/Y8mwM=;
+        b=UbWureG1R83cSXzai243vyNhbOi78rzI5hT0z+kc9Kixkhr25MR2RtPESZCEC5y367e7Dv
+        7JUzf7QcK5Vl1ECabsP1IMyUt8AGDgFtzyaijq5h8J1XMCjddYVcHRFPEIKOcU2xyYUOJP
+        N4rpZPAGHN+521zXKy7jL6cq++nkDtk=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-286-oaNYFiEnOqSZYz9Q1Aielw-1; Tue, 08 Nov 2022 22:08:57 -0500
+X-MC-Unique: oaNYFiEnOqSZYz9Q1Aielw-1
+Received: by mail-pj1-f70.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so436010pje.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 19:08:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rk+G6bXxmyU0fpyJouoERPNPm9IAIKngr86zd/Y8mwM=;
+        b=MSHhANv2O40hF7/qefNGmdR3dTcCb/LS6bx1zOOnuAALx9CN4wyqhv4CCTLCHNJpyZ
+         s3Ki1kI2uQS9YDhPSbdM8sy+7hpTCgNJJcLUvuwUrf5qs9sY0is2WhHgJDnli8onnhSf
+         7uspojcNLiU12WNhA/MCUP/vPZ5Y6ub7YbI0GMyJgXpsXYcfdRuM8y3zBXwMI6Cq37i1
+         D+BJ1nDARDX6ve7JBoZDzXzRV6/uVak2RPf2Yu5J06Jj9KBs0oAVmN7/mM51PLmBxNgQ
+         pz6HTjh/p64Nx24Z39KVi3jrt68ODVquMaPWRY5kticQzVdiFZMXrq90eMUtXoRdvFJX
+         xzBQ==
+X-Gm-Message-State: ACrzQf0jvuanei+kOv5J7J1LKVdq5T1clv/8AzcWI+FELCP/W2g5lQ/e
+        gPFS2nHz7sJVBsnEEhwK3WKHafHb7KXwkG0Gj5EgJNpJPYCqOjo9Hiicpmk4nXlToh7u1D2eBjb
+        cf3w2HxPfoVHQKSayCvfA2/7BuUs9LKAzJtZBRYQlXg9aTl7jy8lZG/uwJVbbG9uimAKHFj94rQ
+        ==
+X-Received: by 2002:a17:902:f707:b0:184:e44f:88cc with SMTP id h7-20020a170902f70700b00184e44f88ccmr58437341plo.42.1667963336732;
+        Tue, 08 Nov 2022 19:08:56 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6EuTZRq9zT6tdrqFnjzqb0DCbN1EkoOmwWtqVnpO/xkA4AJWWB/eXF7aqeWwxUnT7itNf/Lg==
+X-Received: by 2002:a17:902:f707:b0:184:e44f:88cc with SMTP id h7-20020a170902f70700b00184e44f88ccmr58437309plo.42.1667963336257;
+        Tue, 08 Nov 2022 19:08:56 -0800 (PST)
+Received: from [10.72.12.88] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170902d2cf00b0018544ad1e8esm7751241plc.238.2022.11.08.19.08.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 19:08:55 -0800 (PST)
+Subject: Re: [PATCH v2] ceph: fix memory leak in mount error path when using
+ test_dummy_encryption
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221108143421.30993-1-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <215b729e-0af0-45d8-96af-3d3c319581c9@redhat.com>
+Date:   Wed, 9 Nov 2022 11:08:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V5 6/7] arm64/perf: Add BRBE driver
+In-Reply-To: <20221108143421.30993-1-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, peterz@infradead.org,
-        acme@kernel.org, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com
-Cc:     Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Ingo Molnar <mingo@redhat.com>
-References: <20221107062514.2851047-1-anshuman.khandual@arm.com>
- <20221107062514.2851047-7-anshuman.khandual@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20221107062514.2851047-7-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/7/22 11:55, Anshuman Khandual wrote:
-> +void arm64_pmu_brbe_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-> +{
-> +	u64 brbinf;
-> +	int idx;
-> +
-> +	if (brbe_disabled(cpuc))
-> +		return;
-> +
-> +	set_brbe_paused();
-> +	for (idx = 0; idx < cpuc->brbe_nr; idx++) {
-> +		select_brbe_bank_index(idx);
-> +		brbinf = get_brbinf_reg(idx);
-> +		/*
-> +		 * There are no valid entries anymore on the buffer.
-> +		 * Abort the branch record processing to save some
-> +		 * cycles and also reduce the capture/process load
-> +		 * for the user space as well.
-> +		 */
-> +		if (brbe_invalid(brbinf))
-> +			break;
-> +
-> +		if (brbe_valid(brbinf)) {
-> +			cpuc->branches->brbe_entries[idx].from =  get_brbsrc_reg(idx);
-> +			cpuc->branches->brbe_entries[idx].to =  get_brbtgt_reg(idx);
-> +		} else if (brbe_source(brbinf)) {
-> +			cpuc->branches->brbe_entries[idx].from =  get_brbsrc_reg(idx);
-> +			cpuc->branches->brbe_entries[idx].to = 0;
-> +		} else if (brbe_target(brbinf)) {
-> +			cpuc->branches->brbe_entries[idx].from = 0;
-> +			cpuc->branches->brbe_entries[idx].to =  get_brbtgt_reg(idx);
-> +		}
-> +		capture_brbe_flags(cpuc, event, brbinf, idx);
-> +	}
-> +	cpuc->branches->brbe_stack.nr = idx;
-> +	cpuc->branches->brbe_stack.hw_idx = -1ULL;
-> +	process_branch_aborts(cpuc);
-> +}
 
-The following additional changes are required to ensure that BRBE remains "un-paused" after
-processing the branch records inside PMU interrupt handler. Without this change, there will
-PMU interrupts without valid branch records, reducing branch stack sample collection during
-given workload execution. I will fold this into the BRBE driver.
+On 08/11/2022 22:34, Luís Henriques wrote:
+> Because ceph_init_fs_context() will never be invoced in case we get a
+> mount error, destroy_mount_options() won't be releasing fscrypt resources
+> with fscrypt_free_dummy_policy().  This will result in a memory leak.  Add
+> an invocation to this function in the mount error path.
+>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+> * Changes since v1:
+>
+> As suggested by Xiubo, moved fscrypt free from ceph_get_tree() to
+> ceph_real_mount().
+>
+> (Also used 'git format-patch' with '--base' so that the bots know what to
+> (not) do with this patch.)
+>
+>   fs/ceph/super.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+> index 2224d44d21c0..f10a076f47e5 100644
+> --- a/fs/ceph/super.c
+> +++ b/fs/ceph/super.c
+> @@ -1196,6 +1196,7 @@ static struct dentry *ceph_real_mount(struct ceph_fs_client *fsc,
+>   
+>   out:
+>   	mutex_unlock(&fsc->client->mount_mutex);
+> +	ceph_fscrypt_free_dummy_policy(fsc);
+>   	return ERR_PTR(err);
+>   }
+>   
+>
+> base-commit: 8b9ee21dfceadd4cc35a87bbe7f0ad547cffa1be
+> prerequisite-patch-id: 34ba9e6b37b68668d261ddbda7858ee6f83c82fa
+> prerequisite-patch-id: 87f1b323c29ab8d0a6d012d30fdc39bc49179624
+> prerequisite-patch-id: c94f448ef026375b10748457a3aa46070aa7046e
+>
+LGTM.
 
-diff --git a/drivers/perf/arm_pmu_brbe.c b/drivers/perf/arm_pmu_brbe.c
-index ce1aa4171481..c8154ddd341d 100644
---- a/drivers/perf/arm_pmu_brbe.c
-+++ b/drivers/perf/arm_pmu_brbe.c
-@@ -429,6 +429,7 @@ void arm64_pmu_brbe_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-        cpuc->branches->brbe_stack.nr = idx;
-        cpuc->branches->brbe_stack.hw_idx = -1ULL;
-        process_branch_aborts(cpuc);
-+       clr_brbe_paused();
- }
- 
- void arm64_pmu_brbe_reset(struct pmu_hw_events *cpuc)
-diff --git a/drivers/perf/arm_pmu_brbe.h b/drivers/perf/arm_pmu_brbe.h
-index 22c4b25b1777..33da6fc9aefa 100644
---- a/drivers/perf/arm_pmu_brbe.h
-+++ b/drivers/perf/arm_pmu_brbe.h
-@@ -257,3 +257,11 @@ static inline void set_brbe_paused(void)
-        write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-        isb();
- }
-+
-+static inline void clr_brbe_paused(void)
-+{
-+       u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-+
-+       write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-+       isb();
-+}
+Thanks Luis.
 
-For example:
+Could I fold this into the previous commit ?
 
-./perf record -j any,u,k,save_type ls
-./perf report -D | grep branch
+BRs
 
-Before this change -
+- Xiubo
 
-# cat out | grep "branch stack: nr:64" | wc -l
-4
-# cat out | grep "branch stack: nr:0" | wc -l
-57
-# perf report -D | grep branch
 
-... branch stack: nr:64
-... branch stack: nr:0
-... branch stack: nr:64
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:64
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:64
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-... branch stack: nr:0
-
-But after this change -
-
-$ cat out | grep "branch stack: nr:64" | wc -l
-107
-# cat out | grep "branch stack: nr:0" | wc -l
-0
-$ perf report -D | grep branch
-
-.......................
-
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-... branch stack: nr:64
-
-.......................
-
-- Anshuman
