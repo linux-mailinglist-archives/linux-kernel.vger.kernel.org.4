@@ -2,75 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F70622259
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB400622207
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiKIC6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 21:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S229989AbiKICnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 21:43:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKIC6f (ORCPT
+        with ESMTP id S229492AbiKICnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:58:35 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAFC1175;
-        Tue,  8 Nov 2022 18:58:34 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id n83so17525847oif.11;
-        Tue, 08 Nov 2022 18:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JV+c3N5MDzaK4Gv+svglNBxHNYLyHGNN1rocCPcj0H4=;
-        b=AvZOHmcv4zbDrrZL7ahTl61qth4Dm1U2tGx11kkpcU+NPFg3TJ0njg9u5vd6KxHaEY
-         CPeOR7ZAcYpPMtwle5czuaBFV9tPMoW+3olgrLf4HEM8xyGnP38IBDmG1JPuJ035O5X7
-         /9yca8aVxMZAcVUQhxGo4br4BLV0cujsuUzQRv8czQlhbhy30MhvHexUYTkJ6mEJOfiV
-         1GTi/7lmYQ2bwDpagzr+zl4NbXWfaY+rpvptC4ezLU++AylWL/Vnvm1kTLmdD0t9fpsZ
-         GutLk+0c4UoYmZdN5xN1O0MRtEvjnwSk0lH0PK1grWZeVuq6vwZgXmD4jSsNyISYI5Ni
-         KKwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JV+c3N5MDzaK4Gv+svglNBxHNYLyHGNN1rocCPcj0H4=;
-        b=zo/o7sYdeRF/VONv5cdaas95/iTuY9tQglJjh68wy50vLE97nzaQA+M/pZQ5pW9wvh
-         4yi4R/CxEUtH4u5yQNyLhDxS48VlIfWwZ8LkZi91nRLwMqCfPjjAahn83B1aJnaTygD8
-         BNYXbodyTQvu4Hs7Pr7Gv78rLdrNYqkpjpoVxB+wiVJRZFyFZ7U9+gCgZM9M6QrEFY3X
-         6pVmKHYdchZl4bHZCFS9GL7Lfs5HMq6jdAneaMEuprKg4/uES2DwyfF3q7WhQs/pO/uA
-         QXCu0S0lj3UEXpal4mfqauzR0dYtiGV9tU9GrByz00rRD4RH0aj0CzW0PZr0KSnJnUXa
-         MQFQ==
-X-Gm-Message-State: ACrzQf3YublLvpyhOy1WURGcs9pIxZfUp6ekaU7SgtarPIAQXpyUokPu
-        2TNXM5WQnUI4dM10y/AN68s=
-X-Google-Smtp-Source: AMsMyM6oX7ebOxq9tPaEGMlYZSltK6HMyCIAy/Xesh5OdqZodzl8xmKAb5jlN5vjelXrXgNic3ku5A==
-X-Received: by 2002:a05:6808:2120:b0:35a:57da:74b4 with SMTP id r32-20020a056808212000b0035a57da74b4mr15245083oiw.213.1667962713495;
-        Tue, 08 Nov 2022 18:58:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i4-20020aca3b04000000b00353fe4fb4casm4120379oia.48.2022.11.08.18.58.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 18:58:33 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 8 Nov 2022 18:58:32 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 4.9 00/30] 4.9.333-rc1 review
-Message-ID: <20221109025832.GG2033086@roeck-us.net>
-References: <20221108133326.715586431@linuxfoundation.org>
+        Tue, 8 Nov 2022 21:43:50 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196E5FD14;
+        Tue,  8 Nov 2022 18:43:49 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N6Thl1zc8zpWDb;
+        Wed,  9 Nov 2022 10:40:07 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 10:43:47 +0800
+Received: from build.huawei.com (10.175.101.6) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 10:43:47 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Doug Gilbert <dgilbert@interlog.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wenchao Hao <haowenchao@huawei.com>
+Subject: [RFC PATCH 0/5] scsi:scsi_debug:Add error injection for single lun
+Date:   Wed, 9 Nov 2022 10:59:45 -0500
+Message-ID: <20221109155950.3536976-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108133326.715586431@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +52,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 02:38:48PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.333 release.
-> There are 30 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
-> Anything received after that time might be too late.
-> 
+The original error injection mechanism was based on scsi_host which
+could not inject fault for a single SCSI device.
 
-Build results:
-	total: 164 pass: 164 fail: 0
-Qemu test results:
-	total: 395 pass: 395 fail: 0
+This patchset provides the ability to inject errors for a single
+SCSI device. Now we supports inject timeout errors, queuecommand
+errors, and hostbyte, driverbyte, statusbyte, and sense data for
+specific SCSI Command
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+The first patch add an sysfs interface to add and inquiry single
+device's error injection info; the second patch defined how to remove
+an injection which has been added. The following 3 patches use the
+injection info and generate the related error type.
 
-Guenter
+Wenchao Hao (5):
+  scsi:scsi_debug: Add sysfs interface to manager single devices' error inject
+  scsi:scsi_debug: Add interface to remove injection which has been added
+  scsi:scsi_debug: make command timeout if timeout error is injected
+  scsi:scsi_debug: Return failed value for specific command's queuecommand
+  scsi:scsi_debug: fail specific scsi command with result and sense data
+
+ drivers/scsi/scsi_debug.c | 295 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 295 insertions(+)
+
+-- 
+2.35.3
+
