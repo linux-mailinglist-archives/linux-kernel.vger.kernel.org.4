@@ -2,123 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA939622223
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC2562223C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Nov 2022 03:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiKICsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Nov 2022 21:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S230096AbiKICup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Nov 2022 21:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiKICsE (ORCPT
+        with ESMTP id S229867AbiKICuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Nov 2022 21:48:04 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD691A830
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Nov 2022 18:48:03 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id c15so9739817qtw.8
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Nov 2022 18:48:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=POLyPFhcRrWc7CPsHxZIScHcqeGIL/i1T9EVfkZiKf8=;
-        b=kVdePAWSoLRynI3q+9txnpRyNNJrqvi1yKkDnmec2nkuV78lLp+hy7GL6+AllmN0Wo
-         nWGHzPLEtXHk5WzwzOXs0PR/63yzNjCrqGyj/mlvL6o/IfyQMuKaPX7tX5e3U3O4a268
-         FSGA6cIo00JcVlUDFhOopAuMqrZHay6HtLizo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=POLyPFhcRrWc7CPsHxZIScHcqeGIL/i1T9EVfkZiKf8=;
-        b=qJkEr6yUUBufXeS/NsisjB3QQG/d5xS7gb1dF7twx2YIcaOn9Y697/3k9mfkcUDAd+
-         DvXoKZQnb9Q2Gx8mfhfk+4Wf0I0QdRTpw52jBdxgmBfDO3+vWJ9qKts9mayBEcp3jPX3
-         g7SOf348QaMAypql8MOwUBde9kGsQeNaLLIT1/G2AaMvzqPKE73LaS4m9o7LC03+5OfN
-         JhlPfXMuvsKY+/HaFix0wMRXxxh7dj+dDk3DdxvT2oWPn+gxTtbJkWoLxJfFqHmFk8ZH
-         e2qcC6Lg5mBuvPE1DGA9OgWURTOldv/fHq1XI9YTXjN6wwEwDmUEF3Ofl3KA5m6Z7ohF
-         khxQ==
-X-Gm-Message-State: ACrzQf2rNVI9Qu5UJ/YAC+ia8YFJLciBehvIN59juWyTLvMAKXNn0knx
-        mK0KPhYF8hMiwaIwY0XEjFhVRQ==
-X-Google-Smtp-Source: AMsMyM4x/Mu1ps7RCJybA4u3yokDOI9jloyiI2QhvENo/y8MSQEctIM69iqH68lc+UgPTxswLlhiEQ==
-X-Received: by 2002:a05:622a:408d:b0:3a5:533b:5421 with SMTP id cg13-20020a05622a408d00b003a5533b5421mr23458856qtb.442.1667962082883;
-        Tue, 08 Nov 2022 18:48:02 -0800 (PST)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id w13-20020a05620a444d00b006cbc00db595sm10498011qkp.23.2022.11.08.18.48.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 18:48:02 -0800 (PST)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, paulmck@kernel.org, urezki@gmail.com,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v2] rcu/kfree: Do not request RCU when not needed
-Date:   Wed,  9 Nov 2022 02:47:58 +0000
-Message-Id: <20221109024758.2644936-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+        Tue, 8 Nov 2022 21:50:35 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B62F1F9DD;
+        Tue,  8 Nov 2022 18:50:34 -0800 (PST)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1667962230;
+        bh=sRBb1yoX5FkhrIkmhhnkMlMgMwZoHsWyWpPUUDhCe1A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ak7T7+oRpA3erDu1wQ3UgJ9+njLjl0ooywpMrO9E2TQReGV77M6io1GeUyqJ5PjKz
+         KsFSLoEJBCcoKbzoaBQj2DZUdon7iKxJ3a1ecUWBtEl0Q8VwU1zB2MUSQh3oib1U4I
+         Be939Vqs0G3jizW1V4dcRC4kcVxgKCxzow/spxBs=
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2 0/3] certs: Prevent spurious errors on repeated blacklisting
+Date:   Wed,  9 Nov 2022 03:50:16 +0100
+Message-Id: <20221109025019.1855-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1667962214; l=1370; s=20211113; h=from:subject; bh=sRBb1yoX5FkhrIkmhhnkMlMgMwZoHsWyWpPUUDhCe1A=; b=/FQehqL8oo8cDEvahT+bddamTe3EHhG1k4Xm2iu/e0fdzh+kZ3cQJr+iQWeiWRrEF0sxCWqO/6Z7 0noAI3i7CYaMUGKPSch6B469ssLVsPrwFF2X98m1zrCHluYkpWDD
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ChromeOS, using this with the increased timeout, we see that we almost always
-never need to initiate a new grace period. Testing also shows this frees large
-amounts of unreclaimed memory, under intense kfree_rcu() pressure.
+When the blacklist keyring was changed to allow updates from the root
+user it gained an ->update() function that disallows all updates.
+When the a hash is blacklisted multiple times from the builtin or
+firmware-provided blacklist this spams prominent logs during boot:
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
-v1->v2: Same logic but use polled grace periods instead of sampling gp_seq.
+[    0.890814] blacklist: Problem blacklisting hash (-13)
 
- kernel/rcu/tree.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+This affects the firmware of various vendors. Reported have been at least:
+* Samsung: https://askubuntu.com/questions/1436856/
+* Acer: https://ubuntuforums.org/showthread.php?t=2478840
+* MSI: https://forum.archlabslinux.com/t/blacklist-problem-blacklisting-hash-13-errors-on-boot/6674/7
+* Micro-Star: https://bbs.archlinux.org/viewtopic.php?id=278860
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 591187b6352e..ed41243f7a49 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
- 
- /**
-  * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
-+ * @gp_snap: The GP snapshot recorded at the last scheduling of monitor work.
-  * @head: List of kfree_rcu() objects not yet waiting for a grace period
-  * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
-  * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
-@@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
- 	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
- 	raw_spinlock_t lock;
- 	struct delayed_work monitor_work;
-+	unsigned long gp_snap;
- 	bool initialized;
- 	int count;
- 
-@@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
- 			mod_delayed_work(system_wq, &krcp->monitor_work, delay);
- 		return;
- 	}
-+	krcp->gp_snap = get_state_synchronize_rcu();
- 	queue_delayed_work(system_wq, &krcp->monitor_work, delay);
- }
- 
-@@ -3217,7 +3220,10 @@ static void kfree_rcu_monitor(struct work_struct *work)
- 			// be that the work is in the pending state when
- 			// channels have been detached following by each
- 			// other.
--			queue_rcu_work(system_wq, &krwp->rcu_work);
-+			if (poll_state_synchronize_rcu(krcp->gp_snap))
-+				queue_work(system_wq, &krwp->rcu_work.work);
-+			else
-+				queue_rcu_work(system_wq, &krwp->rcu_work);
- 		}
- 	}
- 
+This series is an extension of the following single patch:
+https://lore.kernel.org/all/20221104014704.3469-1-linux@weissschuh.net/
+
+Only the first patch has been marked for stable as otherwise the whole of
+key_create() would need to be applied to stable.
+
+Thomas Weißschuh (3):
+  certs: log more information on blacklist error
+  KEYS: Add key_create()
+  certs: don't try to update blacklist keys
+
+ certs/blacklist.c   |  23 ++++---
+ include/linux/key.h |   8 +++
+ security/keys/key.c | 149 +++++++++++++++++++++++++++++++++-----------
+ 3 files changed, 133 insertions(+), 47 deletions(-)
+
+
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
 -- 
-2.38.1.431.g37b22c650d-goog
-
+2.38.1
 
