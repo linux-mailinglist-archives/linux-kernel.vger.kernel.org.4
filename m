@@ -2,202 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA90623978
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E7C62398C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiKJCEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        id S232529AbiKJCF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbiKJCDo (ORCPT
+        with ESMTP id S232483AbiKJCF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:03:44 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A1023BD0;
-        Wed,  9 Nov 2022 18:03:05 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N74qG4nl5z15MWN;
-        Thu, 10 Nov 2022 10:02:50 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 10:03:03 +0800
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 10:03:03 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <zhengyejian1@huawei.com>
-Subject: [PATCH v2] tracing: Optimize event type allocation with IDA
-Date:   Thu, 10 Nov 2022 10:03:19 +0800
-Message-ID: <20221110020319.1259291-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Nov 2022 21:05:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF792E69D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668045846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XUbS7kkdkTb1FJ8Puq8bD35jK/Y5vjFwMtJetj4Fh+E=;
+        b=hJ9EPbSkXeZegd3Lt9IbOTQ6fMnnnIH0u2MVft6Ta1JCyO3DR9jsbdybYCdEyNt/lCgrm8
+        WbyeQWb+LIHUIjV67amsDTzFrth9uDmt8zEp/+3LFoSDoVnjNiSrq7xr8lzoT9bO1k2Qk2
+        dqNArU4/qhBPGcEh8ANykuCXszTHuy8=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-1-wXGjWhpOO-qsb45VwPGesQ-1; Wed, 09 Nov 2022 21:04:04 -0500
+X-MC-Unique: wXGjWhpOO-qsb45VwPGesQ-1
+Received: by mail-oi1-f199.google.com with SMTP id p204-20020aca42d5000000b00354da838ce9so149525oia.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 18:04:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XUbS7kkdkTb1FJ8Puq8bD35jK/Y5vjFwMtJetj4Fh+E=;
+        b=5hI8QRXHjOaIglmHUoccg6GmFNQnQ09JXrXmb29b6md/ic1wU/r4xFQKxIrOgieQLu
+         cwSFIhFEdK2zuvQ2aeIe/2bbSX15XpZp1O41HHT+MufOJv66/cI/6InA5SFr1+9Hi8pG
+         O6/P81po+ZPgGR1JeXV9XhlSs1lSpWXAcBa5fUm7jWzdUhvNxpWDjFK8xp9yX6GAsZTT
+         j0NRyZSfngLzKgGB8uxuDEjbrszH6D2EOSr8/v8yeKiESsh4pEinh630xQIriKKO1Vxf
+         qdFgSP47JGxCSfpFb2yERCqPCkgwWfUtV2vjTpzlZ0vq+JffICRwLEn+FUEc7jGWtMdD
+         ZCXg==
+X-Gm-Message-State: ACrzQf3mQC6Ir6u8FRspBtzFYv9UVmgMRhdwTl6VWTIGNU4mQb8Y5cq4
+        7FpLyiR47x/k4H1s+0UjuIEywAfQOdWbCseYFQGbjjIl8B76XoxMFctnfSgByZjXj/GA9suqrgN
+        18MeC5tTmxVxX5yncAgF3GtZzw7rgHLmDWIsRSON6
+X-Received: by 2002:a9d:604f:0:b0:66c:64d6:1bb4 with SMTP id v15-20020a9d604f000000b0066c64d61bb4mr984592otj.201.1668045842957;
+        Wed, 09 Nov 2022 18:04:02 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM45UkiwIqipZjueepL0FmRYOH9f819x2rJtJU36H2CB7TpfTuSLZCNIGl3lRKPzdZ9V6etpqCxhc4a3+nN7pxg=
+X-Received: by 2002:a9d:604f:0:b0:66c:64d6:1bb4 with SMTP id
+ v15-20020a9d604f000000b0066c64d61bb4mr984589otj.201.1668045842684; Wed, 09
+ Nov 2022 18:04:02 -0800 (PST)
 MIME-Version: 1.0
+References: <20221109154213.146789-1-sgarzare@redhat.com>
+In-Reply-To: <20221109154213.146789-1-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 10 Nov 2022 10:03:50 +0800
+Message-ID: <CACGkMEu8qVjDwBmsow17ct6QtgPd-Bch7Z7jKiHveicGPVrrvg@mail.gmail.com>
+Subject: Re: [PATCH] vhost-vdpa: fix potential memory leak during the release
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, eperezma@redhat.com,
+        netdev@vger.kernel.org, kvm@vger.kernel.org,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit 060fa5c83e67 ("tracing/events: reuse trace event ids after
- overflow"), trace events with dynamic type are linked up in list
-'ftrace_event_list' through field 'trace_event.list'. Then when max
-event type number used up, it's possible to reuse type number of some
-freed one by traversing 'ftrace_event_list'.
+On Wed, Nov 9, 2022 at 11:42 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>
+> Before commit 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
+> we call vhost_vdpa_iotlb_unmap(v, iotlb, 0ULL, 0ULL - 1) during the
+> release to free all the resources allocated when processing user IOTLB
+> messages through vhost_vdpa_process_iotlb_update().
+> That commit changed the handling of IOTLB a bit, and we accidentally
+> removed some code called during the release.
+>
+> We partially fixed with commit 037d4305569a ("vhost-vdpa: call
+> vhost_vdpa_cleanup during the release") but a potential memory leak is
+> still there as showed by kmemleak if the application does not send
+> VHOST_IOTLB_INVALIDATE or crashes:
+>
+>   unreferenced object 0xffff888007fbaa30 (size 16):
+>     comm "blkio-bench", pid 914, jiffies 4294993521 (age 885.500s)
+>     hex dump (first 16 bytes):
+>       40 73 41 07 80 88 ff ff 00 00 00 00 00 00 00 00  @sA.............
+>     backtrace:
+>       [<0000000087736d2a>] kmem_cache_alloc_trace+0x142/0x1c0
+>       [<0000000060740f50>] vhost_vdpa_process_iotlb_msg+0x68c/0x901 [vhost_vdpa]
+>       [<0000000083e8e205>] vhost_chr_write_iter+0xc0/0x4a0 [vhost]
+>       [<000000008f2f414a>] vhost_vdpa_chr_write_iter+0x18/0x20 [vhost_vdpa]
+>       [<00000000de1cd4a0>] vfs_write+0x216/0x4b0
+>       [<00000000a2850200>] ksys_write+0x71/0xf0
+>       [<00000000de8e720b>] __x64_sys_write+0x19/0x20
+>       [<0000000018b12cbb>] do_syscall_64+0x3f/0x90
+>       [<00000000986ec465>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Let's fix calling vhost_vdpa_iotlb_unmap() on the whole range in
+> vhost_vdpa_remove_as(). We move that call before vhost_dev_cleanup()
+> since we need a valid v->vdev.mm in vhost_vdpa_pa_unmap().
+> vhost_iotlb_reset() call can be removed, since vhost_vdpa_iotlb_unmap()
+> on the whole range removes all the entries.
+>
+> The kmemleak log reported was observed with a vDPA device that has `use_va`
+> set to true (e.g. VDUSE). This patch has been tested with both types of
+> devices.
+>
+> Fixes: 037d4305569a ("vhost-vdpa: call vhost_vdpa_cleanup during the release")
+> Fixes: 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 
-As instead, using IDA to manage available type numbers can make codes
-simpler and then the field 'trace_event.list' can be dropped.
+Acked-by: Jason Wang <jasowang@redhat.com>
 
-Since 'struct trace_event' is used in static tracepoints, drop
-'trace_event.list' can make vmlinux smaller. Local test with about 2000
-tracepoints, vmlinux reduced about 64KB:
-  before：-rwxrwxr-x 1 root root 76669448 Nov  8 17:14 vmlinux
-  after： -rwxrwxr-x 1 root root 76604176 Nov  8 17:15 vmlinux
-
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- include/linux/trace_events.h |  1 -
- kernel/trace/trace_output.c  | 66 +++++++++---------------------------
- 2 files changed, 16 insertions(+), 51 deletions(-)
-
-Changes since v1:
-  - Explicitly include linux/idr.h as suggested by Masami Hiramatsu
-    Link: https://lore.kernel.org/lkml/20221109222650.ce6c22e231345f6852f6956f@kernel.org/#t
-
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 20749bd9db71..bb2053246d6a 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -136,7 +136,6 @@ struct trace_event_functions {
- 
- struct trace_event {
- 	struct hlist_node		node;
--	struct list_head		list;
- 	int				type;
- 	struct trace_event_functions	*funcs;
- };
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 67f47ea27921..f0ba97121345 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -11,6 +11,7 @@
- #include <linux/kprobes.h>
- #include <linux/sched/clock.h>
- #include <linux/sched/mm.h>
-+#include <linux/idr.h>
- 
- #include "trace_output.h"
- 
-@@ -21,8 +22,6 @@ DECLARE_RWSEM(trace_event_sem);
- 
- static struct hlist_head event_hash[EVENT_HASHSIZE] __read_mostly;
- 
--static int next_event_type = __TRACE_LAST_TYPE;
--
- enum print_line_t trace_print_bputs_msg_only(struct trace_iterator *iter)
- {
- 	struct trace_seq *s = &iter->seq;
-@@ -688,38 +687,23 @@ struct trace_event *ftrace_find_event(int type)
- 	return NULL;
- }
- 
--static LIST_HEAD(ftrace_event_list);
-+static DEFINE_IDA(trace_event_ida);
- 
--static int trace_search_list(struct list_head **list)
-+static void free_trace_event_type(int type)
- {
--	struct trace_event *e = NULL, *iter;
--	int next = __TRACE_LAST_TYPE;
--
--	if (list_empty(&ftrace_event_list)) {
--		*list = &ftrace_event_list;
--		return next;
--	}
-+	if (type >= __TRACE_LAST_TYPE)
-+		ida_free(&trace_event_ida, type);
-+}
- 
--	/*
--	 * We used up all possible max events,
--	 * lets see if somebody freed one.
--	 */
--	list_for_each_entry(iter, &ftrace_event_list, list) {
--		if (iter->type != next) {
--			e = iter;
--			break;
--		}
--		next++;
--	}
-+static int alloc_trace_event_type(void)
-+{
-+	int next;
- 
--	/* Did we used up all 65 thousand events??? */
--	if (next > TRACE_EVENT_TYPE_MAX)
-+	/* Skip static defined type numbers */
-+	next = ida_alloc_range(&trace_event_ida, __TRACE_LAST_TYPE,
-+			       TRACE_EVENT_TYPE_MAX, GFP_KERNEL);
-+	if (next < 0)
- 		return 0;
--
--	if (e)
--		*list = &e->list;
--	else
--		*list = &ftrace_event_list;
- 	return next;
- }
- 
-@@ -761,28 +745,10 @@ int register_trace_event(struct trace_event *event)
- 	if (WARN_ON(!event->funcs))
- 		goto out;
- 
--	INIT_LIST_HEAD(&event->list);
--
- 	if (!event->type) {
--		struct list_head *list = NULL;
--
--		if (next_event_type > TRACE_EVENT_TYPE_MAX) {
--
--			event->type = trace_search_list(&list);
--			if (!event->type)
--				goto out;
--
--		} else {
--
--			event->type = next_event_type++;
--			list = &ftrace_event_list;
--		}
--
--		if (WARN_ON(ftrace_find_event(event->type)))
-+		event->type = alloc_trace_event_type();
-+		if (!event->type)
- 			goto out;
--
--		list_add_tail(&event->list, list);
--
- 	} else if (WARN(event->type > __TRACE_LAST_TYPE,
- 			"Need to add type to trace.h")) {
- 		goto out;
-@@ -819,7 +785,7 @@ EXPORT_SYMBOL_GPL(register_trace_event);
- int __unregister_trace_event(struct trace_event *event)
- {
- 	hlist_del(&event->node);
--	list_del(&event->list);
-+	free_trace_event_type(event->type);
- 	return 0;
- }
- 
--- 
-2.25.1
+> ---
+>  drivers/vhost/vdpa.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 166044642fd5..b08e07fc7d1f 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -65,6 +65,10 @@ static DEFINE_IDA(vhost_vdpa_ida);
+>
+>  static dev_t vhost_vdpa_major;
+>
+> +static void vhost_vdpa_iotlb_unmap(struct vhost_vdpa *v,
+> +                                  struct vhost_iotlb *iotlb,
+> +                                  u64 start, u64 last);
+> +
+>  static inline u32 iotlb_to_asid(struct vhost_iotlb *iotlb)
+>  {
+>         struct vhost_vdpa_as *as = container_of(iotlb, struct
+> @@ -135,7 +139,7 @@ static int vhost_vdpa_remove_as(struct vhost_vdpa *v, u32 asid)
+>                 return -EINVAL;
+>
+>         hlist_del(&as->hash_link);
+> -       vhost_iotlb_reset(&as->iotlb);
+> +       vhost_vdpa_iotlb_unmap(v, &as->iotlb, 0ULL, 0ULL - 1);
+>         kfree(as);
+>
+>         return 0;
+> @@ -1162,14 +1166,14 @@ static void vhost_vdpa_cleanup(struct vhost_vdpa *v)
+>         struct vhost_vdpa_as *as;
+>         u32 asid;
+>
+> -       vhost_dev_cleanup(&v->vdev);
+> -       kfree(v->vdev.vqs);
+> -
+>         for (asid = 0; asid < v->vdpa->nas; asid++) {
+>                 as = asid_to_as(v, asid);
+>                 if (as)
+>                         vhost_vdpa_remove_as(v, asid);
+>         }
+> +
+> +       vhost_dev_cleanup(&v->vdev);
+> +       kfree(v->vdev.vqs);
+>  }
+>
+>  static int vhost_vdpa_open(struct inode *inode, struct file *filep)
+> --
+> 2.38.1
+>
 
