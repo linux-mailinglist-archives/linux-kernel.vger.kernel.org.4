@@ -2,126 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E539624DB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B97624DB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbiKJWm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
+        id S231181AbiKJWo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 17:44:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiKJWm4 (ORCPT
+        with ESMTP id S229547AbiKJWoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:42:56 -0500
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0695C4D5FD;
-        Thu, 10 Nov 2022 14:42:49 -0800 (PST)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4N7cL13cW2z9s5L;
-        Thu, 10 Nov 2022 22:42:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1668120169; bh=eTsOkKe/z7V7znmebzl1yS6PW79TQnuYs70ipR6XOX0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bSY4JhCbi9Tx+/NWJZrwXXrDDpzhNYCNAt800P/WsY86vmxiWODSbepF/nFgzQwvw
-         DlRhCp43wZbfqYRg6mqk6KY3PRFE/wIwmT7foZR/E2hMEpRfBk/4T9nWR8MW9fE9Jc
-         PxURx8lFxamlBgQUwige45ZlywBbGDtG67aKb8Ik=
-X-Riseup-User-ID: D0416B78300ACD8DC25C7A895C562117F7327F20D997EA8817293B54645C267E
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4N7cKz3tTWz1yQc;
-        Thu, 10 Nov 2022 22:42:47 +0000 (UTC)
-Message-ID: <167bf351-97e7-f26a-37c7-b8446f16e087@riseup.net>
-Date:   Thu, 10 Nov 2022 19:42:44 -0300
+        Thu, 10 Nov 2022 17:44:25 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30024509E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:44:24 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id q71so2932931pgq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LuSKrl+/DV5Kj4welJmVDK8XOamSFjC5ydfR3wdWhcU=;
+        b=nesWlNg6phzKngSp4sCx7/sF3vGW7h63W0IURGzR1Xjy4EQPpEMaC4d9lchWGizDU4
+         OxAMm/ZBTwTwTKz1Rki4j815EMVa0uvOSDKXtK68D8YsJ4OyuUqbanVTNQoipTMHCAhw
+         vVANyA7GzNRWY8iqZ5xK4K0Cfz5JjcHVb4VWxfAg7MvsJ4sqgoqSOUqZ+7i/dAS2jukX
+         s/XJe4C5rGw1sJTk1oR+q/1EDU69yN06QixBRhFp9DWs4bYlsh1pDYdHbEi7YZdCPv3M
+         n3HnqjqHPMcylqrlg7MkWqCFrZhpA7TAf4Om3Q1dLwQUMfdMMeOYT6Cwbjerl7H1n4lV
+         oLgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LuSKrl+/DV5Kj4welJmVDK8XOamSFjC5ydfR3wdWhcU=;
+        b=dpSLkJbPPsBiL5zgwBMN/f07LqL3AjvNn6Bd+dkuutjaxBJnG6/07oDoacAS0diPJi
+         MruCIlgzJLs6/Vdbso41AYX8M5Yp9sVbRcF646cU2gZ00/Y1OvvEvoRQMv7GcDuLrQQl
+         uA7cBMEW/aUR7xPcxQIVDLO8LG93cycHDcDqlRQvGCSc4BYDTI/3nWN84+HU8qUCuxOP
+         rHbA+Y0jN9c8EQciS1441ANqP/M/EGxLmnMrzwbzpXoxCOnv5IZy+4KrokZ6WOZsDbu9
+         fwUAoRJdWyLo6s+85D620vCxlVsBvm6Es8/NlnL8kpPRtofjYqK0M6OFSNQ8J9zrAdEz
+         aoMA==
+X-Gm-Message-State: ACrzQf3xfiYeyxYLSVQ0ToRmxYacpJMyU6spsf/ViFjvlDan2ugVB4BO
+        1Tm89OPw+ZP+iAewkXDPvV6ErjeN+gI=
+X-Google-Smtp-Source: AMsMyM5ZlSfxNkT1wVmc6LzBzQEpADhgMFuyx8d2PgN/uZc+KwMjCEbWZw0xeb1TP2N0EJQB632OWA==
+X-Received: by 2002:a62:d401:0:b0:56b:676e:1815 with SMTP id a1-20020a62d401000000b0056b676e1815mr3880392pfh.66.1668120264246;
+        Thu, 10 Nov 2022 14:44:24 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:8c0b:3260:c81c:119d])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b00180daa59314sm198221pls.125.2022.11.10.14.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 14:44:23 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 10 Nov 2022 14:44:22 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
+Message-ID: <Y21+xp52OQYi/qjQ@google.com>
+References: <20221031054108.541190-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] HID: uclogic: Standardize test name prefix
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221110174955.398885-1-jose.exposito89@gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20221110174955.398885-1-jose.exposito89@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031054108.541190-1-senozhatsky@chromium.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi José,
-
-On 11/10/22 14:49, José Expósito wrote:
-> Commit 961bcdf956a4 ("drm/tests: Change "igt_" prefix to "drm_test_"")
-> introduced a new naming convention for the KUnit tests present in the
-> DRM subsystem: "drm_test_<module>_<test name>".
->> This naming convention is very convenient because it allows to easily
-> run all subsystem tests or all driver tests using kunit.py's wildcards.
+On Mon, Oct 31, 2022 at 02:40:59PM +0900, Sergey Senozhatsky wrote:
+> 	Hello,
 > 
-> Follow the naming conventions used in the DRM subsystem adapted to the
-> HID subsystem: "hid_test_<module>_<test name>".
-> 
-> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> 	Some use-cases and/or data patterns may benefit from
+> larger zspages. Currently the limit on the number of physical
+> pages that are linked into a zspage is hardcoded to 4. Higher
+> limit changes key characteristics of a number of the size
+> classes, improving compactness of the pool and redusing the
+> amount of memory zsmalloc pool uses. More on this in 0002
+> commit message.
 
-It is great to see this coming to other subsystems!
+Hi Sergey,
 
-Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+I think the idea that break of fixed subpages in zspage is
+really good start to optimize further. However, I am worry
+about introducing per-pool config this stage. How about
+to introduce just one golden value for the zspage size?
+order-3 or 4 in Kconfig with keeping default 2?
 
-Best Regards,
-- Maíra Canal
-
-> ---
->  drivers/hid/hid-uclogic-params-test.c | 4 ++--
->  drivers/hid/hid-uclogic-rdesc-test.c  | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-uclogic-params-test.c b/drivers/hid/hid-uclogic-params-test.c
-> index 57ef5d3e4b74..bfa7ccb7d1e8 100644
-> --- a/drivers/hid/hid-uclogic-params-test.c
-> +++ b/drivers/hid/hid-uclogic-params-test.c
-> @@ -136,7 +136,7 @@ static void uclogic_parse_ugee_v2_desc_case_desc(struct uclogic_parse_ugee_v2_de
->  KUNIT_ARRAY_PARAM(uclogic_parse_ugee_v2_desc, uclogic_parse_ugee_v2_desc_cases,
->  		  uclogic_parse_ugee_v2_desc_case_desc);
->  
-> -static void uclogic_parse_ugee_v2_desc_test(struct kunit *test)
-> +static void hid_test_uclogic_parse_ugee_v2_desc(struct kunit *test)
->  {
->  	int res;
->  	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
-> @@ -175,7 +175,7 @@ static void uclogic_parse_ugee_v2_desc_test(struct kunit *test)
->  }
->  
->  static struct kunit_case hid_uclogic_params_test_cases[] = {
-> -	KUNIT_CASE_PARAM(uclogic_parse_ugee_v2_desc_test,
-> +	KUNIT_CASE_PARAM(hid_test_uclogic_parse_ugee_v2_desc,
->  			 uclogic_parse_ugee_v2_desc_gen_params),
->  	{}
->  };
-> diff --git a/drivers/hid/hid-uclogic-rdesc-test.c b/drivers/hid/hid-uclogic-rdesc-test.c
-> index 3971a0854c3e..b429c541bf2f 100644
-> --- a/drivers/hid/hid-uclogic-rdesc-test.c
-> +++ b/drivers/hid/hid-uclogic-rdesc-test.c
-> @@ -187,7 +187,7 @@ static void uclogic_template_case_desc(struct uclogic_template_case *t,
->  KUNIT_ARRAY_PARAM(uclogic_template, uclogic_template_cases,
->  		  uclogic_template_case_desc);
->  
-> -static void uclogic_template_test(struct kunit *test)
-> +static void hid_test_uclogic_template(struct kunit *test)
->  {
->  	__u8 *res;
->  	const struct uclogic_template_case *params = test->param_value;
-> @@ -203,7 +203,7 @@ static void uclogic_template_test(struct kunit *test)
->  }
->  
->  static struct kunit_case hid_uclogic_rdesc_test_cases[] = {
-> -	KUNIT_CASE_PARAM(uclogic_template_test, uclogic_template_gen_params),
-> +	KUNIT_CASE_PARAM(hid_test_uclogic_template, uclogic_template_gen_params),
->  	{}
->  };
->  
+And then we make more efforts to have auto tune based on
+the wasted memory and the number of size classes on the
+fly. A good thing to be able to achieve is we have indirect
+table(handle <-> zpage) so we could move the object anytime
+so I think we could do better way in the end.
