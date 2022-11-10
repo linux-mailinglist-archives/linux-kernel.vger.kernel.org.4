@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFDE624E38
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632D4624E39
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiKJXIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 18:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S230507AbiKJXKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 18:10:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiKJXIP (ORCPT
+        with ESMTP id S229528AbiKJXKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 18:08:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F7A1DA41;
-        Thu, 10 Nov 2022 15:08:14 -0800 (PST)
+        Thu, 10 Nov 2022 18:10:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDAD43AC0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 15:10:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D7C161B89;
-        Thu, 10 Nov 2022 23:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55593C433C1;
-        Thu, 10 Nov 2022 23:08:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79440619EB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C0B52C433B5;
+        Thu, 10 Nov 2022 23:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668121693;
-        bh=c/H+SRQDywVylukBno5yzc5O9o1JiQF0nc6WN+K5JPM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=g3hpCfbKPUBcxYC0z3qscirzviTmLo89FWRgKpnMcooBErVZVZ9QJjmDSqMLzJnnO
-         9i1jCTdCVV9/RsN/2wOXd5xktNoAOZ+g7Ri4eyPWfrO0Lcyxl5pQYb1dLlY5uLkMrB
-         1zMdUGY6vMzNRcZH8pd8U9yAmDNev6J6etzWWvjbUa0p16YyaU+ftKEq8qbpg7rxn3
-         MaPQzo3aRsUcaE97hOQEdtvE31urPl6Er2BTnDfIfmFN9XzQUVCpwAWKpPNDYOIYDD
-         mDrob6CXjB2Od8MM8sFikTLE2GpuPWWiDl9O46SUGLGS3lIR5x7lCAd8ZBN16IPjfP
-         GTuNKH2XcZRbQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 03B1C5C13DD; Thu, 10 Nov 2022 15:08:07 -0800 (PST)
-Date:   Thu, 10 Nov 2022 15:08:06 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
-Subject: Re: RCU stall on 6.1-rc4 (and some previous releases) related to
- ftrace
-Message-ID: <20221110230806.GN725751@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
+        s=k20201202; t=1668121814;
+        bh=VyvqkhmfvPygyTuScNJXZ35iPK4Sj22wV1/y+Ggp/tY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CZvIgXJw+6iu2XihbXFAwtthepV+oKFqSYWpHYaHwqWiiEG/FB7GjbR4D2OI3vzpN
+         +Ss9/h41QNNo6PVu7Y+kgEpy//esBa/jsxJb+ksTFNRSWA9daoPJOHDWWlE4d1Mthx
+         zsouWiinAh9AtpYBE6tghOWBDckik4HHjrvbP3PO3ibZ7QcoN8WRgx6DSxq9t/RDuX
+         tQ34eRnZoIjdiHAjEzWbYYttx8efwn9Wh1Pu15UZB2iW8PbrlnsxP+Rc/6jbfpOE4L
+         h1ygdob3L0Z72ZHi/C0nNWy3z7knbO7LbnT2dQZMIqL8Yp7ZfvUnyDIASt5gXy25On
+         g2LMp+zrsmGAQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6FA4C395F8;
+        Thu, 10 Nov 2022 23:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1] riscv: fix reserved memory setup
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <166812181467.9076.159650897116586866.git-patchwork-notify@kernel.org>
+Date:   Thu, 10 Nov 2022 23:10:14 +0000
+References: <20221107151524.3941467-1-conor.dooley@microchip.com>
+In-Reply-To: <20221107151524.3941467-1-conor.dooley@microchip.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        daire.mcnamara@microchip.com, anup@brainfault.org,
+        atishp@rivosinc.com, mick@ics.forth.gr,
+        linux-kernel@vger.kernel.org,
+        valentina.fernandezalanis@microchip.com, e.shatokhin@yadro.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,102 +60,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 06:25:41PM -0300, Guilherme G. Piccoli wrote:
-> Hi folks, I've noticed some RCU stalls when enabling ftrace filtering in
-> 6.1-rc4 (also 6.1-rc3 and I guess I've seen this before, but only in
-> 6.0+). Here is the full dmesg: https://termbin.com/4xo6 , see below for
-> a small snippet of the stall [0].
-> 
-> I've briefly talked to Steve on IRC, and he mentioned that my kernel
-> seemed to have PREEMPT_VOLUNTARY=y (and indeed, this is the case - see
-> the full config here: https://termbin.com/t48d), saying that maybe
-> adding a cond_resched() in the loop would help.
-> 
-> So, I've cooked a small hack (see the patch attached) and it seems to
-> work. Steve: lemme know if you want to send it (since it's your idea and
-> maybe my hack is not covering all cases), or if you prefer, I can work a
-> commit message and send myself.
-> 
-> Any other advice / tests required, please lemme me know and I'll be glad
-> in contributing.
+Hello:
 
-I will let others give feedback on the commit log, signoffs, and so
-on.  From an RCU CPU stall warning perspective:
+This patch was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
-
-> Cheers,
+On Mon, 7 Nov 2022 15:15:25 +0000 you wrote:
+> Currently, RISC-V sets up reserved memory using the "early" copy of the
+> device tree. As a result, when trying to get a reserved memory region
+> using of_reserved_mem_lookup(), the pointer to reserved memory regions
+> is using the early, pre-virtual-memory address which causes a kernel
+> panic when trying to use the buffer's name:
 > 
+>  Unable to handle kernel paging request at virtual address 00000000401c31ac
+>  Oops [#1]
+>  Modules linked in:
+>  CPU: 0 PID: 0 Comm: swapper Not tainted 6.0.0-rc1-00001-g0d9d6953d834 #1
+>  Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+>  epc : string+0x4a/0xea
+>   ra : vsnprintf+0x1e4/0x336
+>  epc : ffffffff80335ea0 ra : ffffffff80338936 sp : ffffffff81203be0
+>   gp : ffffffff812e0a98 tp : ffffffff8120de40 t0 : 0000000000000000
+>   t1 : ffffffff81203e28 t2 : 7265736572203a46 s0 : ffffffff81203c20
+>   s1 : ffffffff81203e28 a0 : ffffffff81203d22 a1 : 0000000000000000
+>   a2 : ffffffff81203d08 a3 : 0000000081203d21 a4 : ffffffffffffffff
+>   a5 : 00000000401c31ac a6 : ffff0a00ffffff04 a7 : ffffffffffffffff
+>   s2 : ffffffff81203d08 s3 : ffffffff81203d00 s4 : 0000000000000008
+>   s5 : ffffffff000000ff s6 : 0000000000ffffff s7 : 00000000ffffff00
+>   s8 : ffffffff80d9821a s9 : ffffffff81203d22 s10: 0000000000000002
+>   s11: ffffffff80d9821c t3 : ffffffff812f3617 t4 : ffffffff812f3617
+>   t5 : ffffffff812f3618 t6 : ffffffff81203d08
+>  status: 0000000200000100 badaddr: 00000000401c31ac cause: 000000000000000d
+>  [<ffffffff80338936>] vsnprintf+0x1e4/0x336
+>  [<ffffffff80055ae2>] vprintk_store+0xf6/0x344
+>  [<ffffffff80055d86>] vprintk_emit+0x56/0x192
+>  [<ffffffff80055ed8>] vprintk_default+0x16/0x1e
+>  [<ffffffff800563d2>] vprintk+0x72/0x80
+>  [<ffffffff806813b2>] _printk+0x36/0x50
+>  [<ffffffff8068af48>] print_reserved_mem+0x1c/0x24
+>  [<ffffffff808057ec>] paging_init+0x528/0x5bc
+>  [<ffffffff808031ae>] setup_arch+0xd0/0x592
+>  [<ffffffff8080070e>] start_kernel+0x82/0x73c
 > 
-> Guilherme
-> 
-> 
-> [0]
-> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-....
-> } 6 jiffies s: 1289 root: 0x2/.
-> rcu: blocking rcu_node structures (internal RCU debug):
-> Sending NMI from CPU 4 to CPUs 1:
-> NMI backtrace for cpu 1
-> [...]
-> RIP: 0010:find_kallsyms_symbol+0x85/0x1a0
-> [...]
-> Call Trace:
->  <TASK>
->  ? get_refcyc_per_delivery.constprop.0+0x200/0x200 [amdgpu]
->  module_address_lookup+0x63/0xc0
->  ? get_refcyc_per_delivery.constprop.0+0x200/0x200 [amdgpu]
->  kallsyms_lookup_buildid+0xb6/0x130
->  ftrace_match_record+0x43/0xf0
->  ? match_records+0x210/0x3b0
->  ? __kmem_cache_alloc_node+0x165/0x260
->  match_records+0x13a/0x3b0
->  ftrace_process_regex.isra.0+0x101/0x120
->  ftrace_filter_write+0x57/0x90
-> [...]
-> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-....
-> } 25 jiffies s: 1289 root: 0x2/.
-> rcu: blocking rcu_node structures (internal RCU debug):
-> Sending NMI from CPU 4 to CPUs 1:
-> [...]
-> RIP: 0010:find_kallsyms_symbol+0x8f/0x1a0
-> [...]
-> Call Trace:
->  <TASK>
->  ? dcn21_dmcu_create+0xd0/0xd0 [amdgpu]
->  module_address_lookup+0x63/0xc0
->  ? dcn21_dmcu_create+0xd0/0xd0 [amdgpu]
->  kallsyms_lookup_buildid+0xb6/0x130
->  ftrace_match_record+0x43/0xf0
->  ? match_records+0x210/0x3b0
->  ? __kmem_cache_alloc_node+0x165/0x260
->  match_records+0x13a/0x3b0
->  ftrace_process_regex.isra.0+0x101/0x120
->  ftrace_filter_write+0x57/0x90
 > [...]
 
-> From 45fda369a49d0e59689e4a6b9babc12598265825 Mon Sep 17 00:00:00 2001
-> From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-> Date: Thu, 10 Nov 2022 16:42:17 -0300
-> Subject: [PATCH] ftrace/hack: Add cond_resched() to prevent RCU stall
-> 
-> Suggestion from Steve on IRC
-> ---
->  kernel/trace/ftrace.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 7dc023641bf1..8c2c04b2eb52 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -4184,6 +4184,7 @@ match_records(struct ftrace_hash *hash, char *func, int len, char *mod)
->  		if (rec->flags & FTRACE_FL_DISABLED)
->  			continue;
->  
-> +		cond_resched();
->  		if (ftrace_match_record(rec, &func_g, mod_match, exclude_mod)) {
->  			ret = enter_record(hash, rec, clear_filter);
->  			if (ret < 0) {
-> -- 
-> 2.38.0
-> 
+Here is the summary with links:
+  - [v1] riscv: fix reserved memory setup
+    https://git.kernel.org/riscv/c/50e63dd8ed92
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
