@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E506241FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9A4624201
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbiKJMKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        id S230498AbiKJMK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiKJMKA (ORCPT
+        with ESMTP id S230219AbiKJMKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:10:00 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E110B51
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:09:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1668082197;
-  x=1699618197;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=WSR6XpqRh8FaedVQOxTlNFGrN/2SLbCYEUeIl/JJCws=;
-  b=e0VPgmOnAdDfclHPeQHvoJjlWIaSUCMDabsMfHPgnTvW6YPDmr2+DCBv
-   Z43SqFYYQ4QPck8JoUFFiEdCwcu+U7jQWA9LL/J0f2PYYJbijW9qUAe2E
-   sU33XvgnasvquntRK/mppJgzdnU2/ouRwN9pDx59ot+X9VJ3mEsZLF5Nu
-   4zBapVS54qvrJCNnUbDkCWRwmhZUvuPjXeAfeqkYYurkYWj25RVufN2q0
-   xmE4vmHc/NQFn7kSGg2MN8qSmw4IbDjsmoAbN5xwXipliIswxySx2nyRm
-   3DKq7qwTuCFkfNemGLwZO5HMc575wCFnHtfvkGklgZTmXYDRy8xYNL8CN
-   A==;
-From:   =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>
-To:     "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>
-CC:     "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
-Subject: Re: [PATCH] tee: optee: Populate child nodes in probe function
-Thread-Topic: [PATCH] tee: optee: Populate child nodes in probe function
-Thread-Index: AQHY9FVbeqfP3YVtpkqNWltUYufXla437AcAgAAVOIA=
-Date:   Thu, 10 Nov 2022 12:09:53 +0000
-Message-ID: <df564dc6ffbddcae12bd345b7a0525e586aba5ed.camel@axis.com>
-References: <20221109160708.507481-1-ludvig.parsson@axis.com>
-         <CAFA6WYPxTET4mUQ4YHosbPN1o0UthP6PU=t8bAp91GZL+5rjRA@mail.gmail.com>
-In-Reply-To: <CAFA6WYPxTET4mUQ4YHosbPN1o0UthP6PU=t8bAp91GZL+5rjRA@mail.gmail.com>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.0.5.60]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BD84F61765274040A96E8796E067C595@exhub.se.axis.com>
-Content-Transfer-Encoding: base64
+        Thu, 10 Nov 2022 07:10:15 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B87F71F2D;
+        Thu, 10 Nov 2022 04:10:08 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7LHj1v5yz15MNp;
+        Thu, 10 Nov 2022 20:09:53 +0800 (CST)
+Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 20:10:06 +0800
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 20:10:06 +0800
+Message-ID: <4c4cb2a5-c029-1815-e06a-f6d055ed5912@huawei.com>
+Date:   Thu, 10 Nov 2022 20:10:05 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 3/3] mailbox: pcc: fix 'pcc_chan_count' when fail to
+ initialize PCC
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
+        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
+        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
+        <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
+        <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>
+References: <20221110015034.7943-1-lihuisong@huawei.com>
+ <20221110015034.7943-4-lihuisong@huawei.com>
+ <20221110104415.gk3asb5yc26slcs7@bogus>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20221110104415.gk3asb5yc26slcs7@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTExLTEwIGF0IDE2OjIzICswNTMwLCBTdW1pdCBHYXJnIHdyb3RlOg0KPiBP
-biBXZWQsIDkgTm92IDIwMjIgYXQgMjE6MzcsIEx1ZHZpZyBQw6Ryc3NvbiA8bHVkdmlnLnBhcnNz
-b25AYXhpcy5jb20+DQo+IHdyb3RlOg0KPiA+IA0KPiA+IEN1cnJlbnRseSB0aGVyZSBpcyBubyBk
-ZXBlbmRlbmN5IGJldHdlZW4gdGhlICJsaW5hcm8sc2NtaS1vcHRlZSINCj4gPiBkcml2ZXINCj4g
-PiBhbmQgdGhlIHRlZV9jb3JlLiBJZiB0aGUgc2NtaS1vcHRlZSBkcml2ZXIgZ2V0cyBwcm9iZWQg
-YmVmb3JlIHRoZQ0KPiA+IHRlZV9idXNfdHlwZSBpcyBpbml0aWFsaXplZCwgdGhlbiB3ZSB3aWxs
-IGdldCBhbiB1bndhbnRlZCBlcnJvcg0KPiA+IHByaW50Lg0KPiA+IA0KPiANCj4gV2hhdCBlcnJv
-ciBwcmludCBkbyB5b3Ugb2JzZXJ2ZT8gSSBzdXBwb3NlIHRoaXMgY2FzZSBpcyBhbHJlYWR5DQo+
-IGhhbmRsZWQgYnkgc2NtaSBvcHRlZSBkcml2ZXIgdmlhIC1FUFJPQkVfREVGRVIuDQo+IA0KPiAt
-U3VtaXQNCj4gDQpIaSBTdW1pdCwNCg0KVGhlIGVycm9yIHByaW50IGlzIGluIGRyaXZlcl9yZWdp
-c3RlcigpLg0KDQpUaGlzIGlzIGtpbmQgb2Ygd2hhdCBoYXBwZW5zOg0Kc2NtaV9kcml2ZXJfaW5p
-dCgpDQpzY21pX3Byb2JlKCkNCiAgICBzY21pX29wdGVlX2xpbmtfc3VwcGxpZXIoKQ0KICAgICAg
-ICBzY21pX29wdGVlX2luaXQoKQ0KICAgICAgICAgICAgZHJpdmVyX3JlZ2lzdGVyKCkgPC0tLSBw
-cl9lcnIoKSBpZiB0ZWVfYnVzX3R5cGUgaXMgbm90DQppbml0aWFsaXplZA0KdGVlX2luaXQoKSA8
-LS0tIHRlZV9idXNfdHlwZSBnZXRzIGluaXRpYWxpemVkIGhlcmUNCg0KVGhlIHNjbWlfb3B0ZWVf
-bGlua19zdXBwbGllcigpIHdpbGwgYWx3YXlzIHJldHVybiAtRVBST0JFX0RFRkVSIHRoZQ0KZmly
-c3QgdGltZSBiZWNhdXNlIHNjbWlfb3B0ZWVfcHJpdmF0ZSBpcyBpbml0aWFsaXplZCBpbg0Kc2Nt
-aV9vcHRlZV9zZXJ2aWNlX3Byb2JlLCB3aGljaCBpcyBvbmx5IGNhbGxlZCBhZnRlciB0aGUgZHJp
-dmVyIGlzDQpyZWdpc3RlcmVkIGluIHNjbWlfb3B0ZWVfaW5pdC4gUmlnaHQgbm93IHRoZSBkcml2
-ZXJfcmVnaXN0ZXIgZmFpbHMNCmJlY2F1c2UgdGVlX2J1c190eXBlIGlzIG5vdCBpbml0aWFsaXpl
-ZCB3aGljaCBpcyBwcmludGluZyB0aGUgdW53YW50ZWQNCmVycm9yIHByaW50LiBBbm90aGVyIHNp
-ZGUgZWZmZWN0IG9mIHRoaXMgaXMgdGhhdA0Kc2NtaV9vcHRlZV9saW5rX3N1cHBsaWVyKCkgd2ls
-bCByZXR1cm4gLUVQUk9CRV9ERUZFUiBhIHNlY29uZCB0aW1lLCBhbmQNCnNjbWlfcHJvYmUgd2ls
-bCBiZSBzdWNjZXNzZnVsIHRoZSB0aGlyZCB0aW1lIGluc3RlYWQgb2YgdGhlIHNlY29uZA0KdGlt
-ZS4NCg0KQlIsDQpMdWR2aWcNCg0KPiA+IFRoaXMgcGF0Y2ggZW5hYmxlcyBwdXR0aW5nIHNjbWkt
-b3B0ZWUgbm9kZXMgYXMgY2hpbGRyZW4gdG8gdGhlDQo+ID4gb3B0ZWUNCj4gPiBub2RlIGluIGRl
-dmljZXRyZWUsIHdoaWNoIGluZGlyZWN0bHkgY3JlYXRlcyB0aGUgbWlzc2luZw0KPiA+IGRlcGVu
-ZGVuY3kuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTHVkdmlnIFDDpHJzc29uIDxsdWR2aWcu
-cGFyc3NvbkBheGlzLmNvbT4NCj4gPiAtLS0NCj4gPiDCoGRyaXZlcnMvdGVlL29wdGVlL3NtY19h
-YmkuYyB8IDUgKysrKysNCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCj4g
-PiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90ZWUvb3B0ZWUvc21jX2FiaS5jDQo+ID4gYi9k
-cml2ZXJzL3RlZS9vcHRlZS9zbWNfYWJpLmMNCj4gPiBpbmRleCBhMWMxZmExYTljMjguLmJlNmYw
-MmZkNWE3ZiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3RlZS9vcHRlZS9zbWNfYWJpLmMNCj4g
-PiArKysgYi9kcml2ZXJzL3RlZS9vcHRlZS9zbWNfYWJpLmMNCj4gPiBAQCAtMTUzMyw2ICsxNTMz
-LDExIEBAIHN0YXRpYyBpbnQgb3B0ZWVfcHJvYmUoc3RydWN0DQo+ID4gcGxhdGZvcm1fZGV2aWNl
-ICpwZGV2KQ0KPiA+IMKgwqDCoMKgwqDCoMKgIGlmIChyYykNCj4gPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgZ290byBlcnJfZGlzYWJsZV9zaG1fY2FjaGU7DQo+ID4gDQo+ID4gK8Kg
-wqDCoMKgwqDCoCAvKiBQb3B1bGF0ZSBhbnkgZGVwZW5kZW50IGNoaWxkIG5vZGUgKGlmIGFueSkg
-Ki8NCj4gPiArwqDCoMKgwqDCoMKgIHJjID0gZGV2bV9vZl9wbGF0Zm9ybV9wb3B1bGF0ZSgmcGRl
-di0+ZGV2KTsNCj4gPiArwqDCoMKgwqDCoMKgIGlmIChyYykNCj4gPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBnb3RvIGVycl9kaXNhYmxlX3NobV9jYWNoZTsNCj4gPiArDQo+ID4gwqDC
-oMKgwqDCoMKgwqAgcHJfaW5mbygiaW5pdGlhbGl6ZWQgZHJpdmVyXG4iKTsNCj4gPiDCoMKgwqDC
-oMKgwqDCoCByZXR1cm4gMDsNCj4gPiANCj4gPiAtLQ0KPiA+IDIuMzAuMg0KPiA+IA0KDQo=
+
+在 2022/11/10 18:44, Sudeep Holla 写道:
+> On Thu, Nov 10, 2022 at 09:50:34AM +0800, Huisong Li wrote:
+>> Currently, 'pcc_chan_count' is a non-zero value if PCC subspaces are parsed
+>> successfully and subsequent processes is failure during initializing PCC
+>> process. This may cause that pcc_mbox_request_channel() can still be
+>> executed successfully , which will misleads the caller that this channel is
+>> available.
+>>
+>> Fixes: ce028702ddbc ("mailbox: pcc: Move bulk of PCCT parsing into pcc_mbox_probe")
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> ---
+>>   drivers/mailbox/pcc.c | 11 ++++++++---
+>>   1 file changed, 8 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+>> index 7cee37dd3b73..47d70c5884e3 100644
+>> --- a/drivers/mailbox/pcc.c
+>> +++ b/drivers/mailbox/pcc.c
+>> @@ -294,6 +294,7 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
+>>   		pr_err("Channel not found for idx: %d\n", subspace_id);
+>>   		return ERR_PTR(-EBUSY);
+>>   	}
+>> +
+> Spurious/not needed change ?
+Ack
+>
+>>   	dev = chan->mbox->dev;
+>>   
+>>   	spin_lock_irqsave(&chan->lock, flags);
+>> @@ -735,7 +736,8 @@ static int __init pcc_init(void)
+>>   
+>>   	if (ret) {
+>>   		pr_debug("ACPI PCC probe failed.\n");
+>> -		return -ENODEV;
+>> +		ret = -ENODEV;
+>> +		goto out;
+> Not needed, we don't set pcc_chan_count if the probe failed.
+You are right. will fix it in v2, thanks.
+>
+>>   	}
+>>   
+>>   	pcc_pdev = platform_create_bundle(&pcc_mbox_driver,
+>> @@ -743,10 +745,13 @@ static int __init pcc_init(void)
+>>   
+>>   	if (IS_ERR(pcc_pdev)) {
+>>   		pr_debug("Err creating PCC platform bundle\n");
+>> -		return PTR_ERR(pcc_pdev);
+>> +		ret = PTR_ERR(pcc_pdev);
+> You just need to set pcc_chan_count to 0 here, so no need for goto.
+Ack
+>
