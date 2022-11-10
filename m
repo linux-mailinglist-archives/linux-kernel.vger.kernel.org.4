@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2A8624308
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD2562430F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiKJNP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
+        id S230324AbiKJNRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:17:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKJNP5 (ORCPT
+        with ESMTP id S229797AbiKJNRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:15:57 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8957B31DCC;
-        Thu, 10 Nov 2022 05:15:56 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id v1so2180858wrt.11;
-        Thu, 10 Nov 2022 05:15:56 -0800 (PST)
+        Thu, 10 Nov 2022 08:17:30 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28F731DCC;
+        Thu, 10 Nov 2022 05:17:29 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id k8so2238891wrh.1;
+        Thu, 10 Nov 2022 05:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SJihVigxc3YBQCdD/qaXAkslKdIoK8zbFHIY6LxE+sk=;
-        b=EYgiAWcjV27JiZUmxRn5Tr2Ji8RqFCHAaiTBcThLsYWgWQxcfP+hAU4CMPTlb0iEmE
-         xQUX+NrxXcwNXhQIAexVwZ1J0DmstP1eLy+x65HkZ1rsSiv2ZowF++0Q29UJffbyPfCx
-         MgIGDRzt0mBWhWPGW3NJuEkculyGnj0CRLcgZj/AEqcRYBK5I7EjgP9++qd6kO9hHon+
-         iTtuAPt1uONNQztNkn6ixMF8aaONJYtc2JiD8QrSgYVonz7w0gZM3P8/vfL93YZvgs/A
-         IZe5xEAHJk8RsDegi8Dz3YjXNMLU4Oz24RK6HhOCu5OIg87zRKKgnTW/sjovl0AsdGp2
-         7nUw==
+        bh=3AuGOL+RtsyjgtlhQ1twOTD3QDsCayIE+ZhoLatVnh8=;
+        b=RV5fqXf/02xSU+of/wRNHSNDfokXIgvuEIDtcu2kKeQXudcWKZP7riIIAQARrusvVh
+         Lkq1O6makjoEtKWWLpH1hPAcpXDsKZB+UvgoZRacC+SDPk0Xil24mAG+ydEyT5jp6XUa
+         mhIR1h+1GF9Ms/9qw9vu/rgLJ7G6JVZxmyncSJUiUnKJ9+jNcscqpvoMhAhilt9hp6YQ
+         ED2C03XV/n45iW+2+TFaMrPtEpbW5pxd3OtVcrc5/4Q/SEEqJdpbI5IuMiHdv8ZuDOBG
+         HdM9FM9X0fkSZOdhZIEM8Vxx4dfH5iVq5dgJd4zL90MLpcDGOWmm55pqsy1VPIyUXZmV
+         Vnpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SJihVigxc3YBQCdD/qaXAkslKdIoK8zbFHIY6LxE+sk=;
-        b=zDASaen/HP3Bnvohg32H6ev8ArdoqzfX0FrA1FmT/oX10YxH/+CHzFBQW3NipmjG8a
-         tr3d6/RMYsdqShSFUzZsTQKK03YV5bX0BppVZ0b8tOJPEQmbaPJZq2oFaxxSlZrC4/vq
-         wSbUokBJYqKW9WOxc9Gfo1+5OaHN/tdLnm47oMZSrUGvfpzm9mhPEKPfpQeZYWaGOIQ+
-         0HdZjgWAVfzcGKGDVCNRibWOKiS3+IRjTFTHvgcgRjGoU1PWmPBysuW9Eq59kcG4m74j
-         Idxh2o/PFo+6TxskDP78tV3rAffnjXojDNz1Rxsyf78ONynDQ3xdxeR3su0mZoE6hRu4
-         fiuA==
-X-Gm-Message-State: ACrzQf2XBS9Uf8lMLchHeaP/3rEnXmcjHVCrJXECpuxwLbppzNjTNR92
-        xBBWsTWQeMlpq3WtX0CPOe4=
-X-Google-Smtp-Source: AMsMyM5g4mhTFAFCs2FPncVjkJu2yntcuKmfiDvf/4whVmdZ2/hBYfOyLbb4MJ1Nb6H9pW2fAAPuzw==
-X-Received: by 2002:a5d:650c:0:b0:236:49d9:8e83 with SMTP id x12-20020a5d650c000000b0023649d98e83mr41300085wru.714.1668086155058;
-        Thu, 10 Nov 2022 05:15:55 -0800 (PST)
+        bh=3AuGOL+RtsyjgtlhQ1twOTD3QDsCayIE+ZhoLatVnh8=;
+        b=cf6hMEG95ER7by9T1o/V7KqhDfkSqIAz9ckk0z7NpMkbls8CRsn46I4uGnRTEIBQNz
+         6qlThvOpfF5mTXaWvt+1ymVm3jgvs5cX98dcDTyXOOkdy6W7FomcLr9u0zHOsdgApszb
+         113y6io+vgJez4VG0NbOBFZKNrtJA/BznIWDGlgeaISs4+Ub13AIh2TW097I+YCub+Tz
+         LrS2UsushgIqOd6cOGBDgSR03HSQzXcYoSHYo5aaiRGVfCdSe3tlT4LmjdV5S533rVOo
+         y7T8eM7jrP0siOsLi25uSvXqmGCae5Gj92eM7t27co8QN8F3Rj7fdQ2YN9p7VT0AHOkW
+         xU6w==
+X-Gm-Message-State: ACrzQf2TG2kYqesfLy0tsdR6nCLhCMuXREH9MtwZXSPdrNSEBw2GFI3d
+        QQy0KTdNtBqrqq+zVqKH1u4=
+X-Google-Smtp-Source: AMsMyM5u8zbufjcwPB7JaqlJrtf4ezpLmiDlsEYr4/cyk2dW/70P5nxD22butpKFtIHBptJAMs4Xxw==
+X-Received: by 2002:a5d:4b11:0:b0:236:4e3c:7720 with SMTP id v17-20020a5d4b11000000b002364e3c7720mr1020738wrq.674.1668086248134;
+        Thu, 10 Nov 2022 05:17:28 -0800 (PST)
 Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c358b00b003cf47fdead5sm5688374wmq.30.2022.11.10.05.15.53
+        by smtp.gmail.com with ESMTPSA id z3-20020a05600c0a0300b003c83465ccbfsm5916631wmp.35.2022.11.10.05.17.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 05:15:53 -0800 (PST)
-Message-ID: <a77e722d-6354-c670-281d-f10217c73927@gmail.com>
-Date:   Thu, 10 Nov 2022 14:15:52 +0100
+        Thu, 10 Nov 2022 05:17:26 -0800 (PST)
+Message-ID: <6def7161-d428-a822-59c4-d6012310379e@gmail.com>
+Date:   Thu, 10 Nov 2022 14:17:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH v3 0/3] mediatek: pwrap: Add mt8365 pwrap support
+Subject: Re: [PATCH v2] arm64: dts: mt7986: fix trng node name
 Content-Language: en-US
-To:     fchiby@baylibre.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        "Zhiyong . Tao" <zhiyong.tao@mediatek.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Sen Chu <sen.chu@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     Frank Wunderlich <linux@fw-web.de>,
         linux-mediatek@lists.infradead.org
-References: <20221031093401.22916-1-fchiby@baylibre.com>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sam Shih <sam.shih@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20221027151022.5541-1-linux@fw-web.de>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221031093401.22916-1-fchiby@baylibre.com>
+In-Reply-To: <20221027151022.5541-1-linux@fw-web.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,31 +83,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 31/10/2022 10:33, fchiby@baylibre.com wrote:
-> From: Fadwa CHIBY <fchiby@baylibre.com>
+On 27/10/2022 17:10, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Hello,
+> Binding requires node name to be rng not trng:
 > 
-> MT8365 requires an extra 2 clocks to be enabled to behave correctly.
-> This series contains patches adding the support of mt8365 pwrap.
+> trng@1020f000: $nodename:0: 'trng@1020f000' does not match '^rng@[0-9a-f]+$'
 > 
-> changes in v3:
-> - Modify "sys" and "tmr" descriptions to be more generic.
-> Changes in v2 :
-> - Rebase on top of linux-next/master
-> - Link to v1 "https://lore.kernel.org/linux-arm-kernel/20220530135522.762560-1-fparent@baylibre.com/"
-> 
-> Regards,
-> Fadwa CHIBY
-> 
-> Fabien Parent (3):
->    dt-bindings: soc: mediatek: pwrap: add MT8365 SoC bindings
->    soc: mediatek: pwrap: add support for sys & tmr clocks
->    soc: mediatek: pwrap: add mt8365 SoC support
-> 
->   .../bindings/soc/mediatek/pwrap.txt           |   3 +
->   drivers/soc/mediatek/mtk-pmic-wrap.c          | 114 +++++++++++++++++-
->   2 files changed, 113 insertions(+), 4 deletions(-)
-> 
+> Fixes: 50137c150f5f ("arm64: dts: mediatek: add basic mt7986 support")
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Whole series applied, thanks!
+Applied, thanks
+
+> ---
+>   arch/arm64/boot/dts/mediatek/mt7986a.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> index 72e0d9722e07..226648f48df2 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> @@ -168,7 +168,7 @@ sgmiisys1: syscon@10070000 {
+>   			#clock-cells = <1>;
+>   		};
+>   
+> -		trng: trng@1020f000 {
+> +		trng: rng@1020f000 {
+>   			compatible = "mediatek,mt7986-rng",
+>   				     "mediatek,mt7623-rng";
+>   			reg = <0 0x1020f000 0 0x100>;
