@@ -2,63 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13421624444
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A08624446
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiKJO3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S231392AbiKJO3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiKJO2n (ORCPT
+        with ESMTP id S230224AbiKJO2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:28:43 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F92625EE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:28:40 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1B6911F9F0;
-        Thu, 10 Nov 2022 14:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668090519; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        Thu, 10 Nov 2022 09:28:54 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3769911802;
+        Thu, 10 Nov 2022 06:28:53 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id ECB5922B12;
+        Thu, 10 Nov 2022 14:28:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668090531; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XmURArnxcG2DBVBmhfZJ9se8qGoCeEY03n+z1EX2pm0=;
-        b=mH71tTawOS56tumMmlyNBL2KHVe+3HDDriY6K/rAK5O3x8F5qIWKCNdO1WVvFsr32JoNc1
-        9SLXQFhOcZZzTuGLnSyA9rwPZVuhu4JFkrHAqWxHV7V4jp92jEXRXVz0EQ9jNSG+TmlTbj
-        Mq1PlFzPqHGdlEofKI4OqyTXV1etNHs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668090519;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XmURArnxcG2DBVBmhfZJ9se8qGoCeEY03n+z1EX2pm0=;
-        b=Exn7NPMvKhJRKCgxzoyo+gVzVDSNAemsTS9Q/b2rtUNGmjW5FnpcePAjoGPRBymVPnCQ43
-        Ah1YsQ3Tvmvh9FCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=H0GZSNavtvfiBTr63JLFzqLihqxh4Gfxr36RVbsC3rQ=;
+        b=cTDYtzyhFg035ctkz0LdQthTVJou3yEs4PvANKV4oinyBa0AdulfjDN9tkbXrSZsqzPwz7
+        LM7fmtQ8bMNrj3hwvXb5z7CTBP0ecMgGu7gzxrMwXKJ7PzAXWrDHhpIRn1SM5C/VbjF8GC
+        ny1Lzd4Tp5cHl7rKXpIipEXQtT3tbLo=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B7281332F;
-        Thu, 10 Nov 2022 14:28:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 88h5ApcKbWP3IwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Thu, 10 Nov 2022 14:28:39 +0000
-Date:   Thu, 10 Nov 2022 15:28:38 +0100
-Message-ID: <87bkpeq3xl.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        yebin10@huawei.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: hda: fix potential memleak in 'add_widget_node'
-In-Reply-To: <20221110144539.2989354-1-yebin@huaweicloud.com>
-References: <20221110144539.2989354-1-yebin@huaweicloud.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+        by relay2.suse.de (Postfix) with ESMTPS id 962DE2C141;
+        Thu, 10 Nov 2022 14:28:51 +0000 (UTC)
+Date:   Thu, 10 Nov 2022 15:28:51 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH printk v3 25/40] efi: earlycon: use
+ console_is_registered()
+Message-ID: <Y20Ko0ezrpVpoxZR@alley>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-26-john.ogness@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107141638.3790965-26-john.ogness@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,18 +57,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 15:45:39 +0100,
-Ye Bin wrote:
+On Mon 2022-11-07 15:22:23, John Ogness wrote:
+> The CON_ENABLED status of a console is a runtime setting that does not
+> involve the console driver. Drivers must not assume that if the console
+> is disabled then proper hardware management is not needed. For the EFI
+> earlycon case, it is about remapping/unmapping memory for the
+> framebuffer.
 > 
-> From: Ye Bin <yebin10@huawei.com>
+> Use console_is_registered() instead of checking CON_ENABLED.
 > 
-> As 'kobject_add' may allocated memory for 'kobject->name' when return error.
-> And in this function, if call 'kobject_add' failed didn't free kobject.
-> So call 'kobject_put' to recycling resources.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Thanks, applied now.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-
-Takashi
+Best Regards,
+Petr
