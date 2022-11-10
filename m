@@ -2,199 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC238623EA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D05623EAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiKJJbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
+        id S229926AbiKJJcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:32:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKJJbb (ORCPT
+        with ESMTP id S229719AbiKJJcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:31:31 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722EBDEB8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:31:28 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 619335808B1;
-        Thu, 10 Nov 2022 04:31:24 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 10 Nov 2022 04:31:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1668072684; x=1668079884; bh=zo574ahzKe
-        u9Q28ZxFGvxFgTU3pvWe1Hlis4aMVeXeM=; b=KQ+fTudgcZW84HJJx3pYZjH6tt
-        uUQyF2KdNGYGmzcVKLjgNT1FFbuCUeXNgNV7nH4suH3fHjhIiDa8HgZud7+Amwrr
-        tPBR8eIF89Nra1y0g8nb6DVDuNr/ymTg1UJPG8rwKa1toduJYYJZy77KwZFcd4AC
-        eYH2Plh0zTNErDTBuAZ/oWRi94L9OOh5Wz0iB20ebBlWXXbTAbUw3a85ZQiXPwAp
-        42Ni4ltiv2qrPLlgC52lMFp+NyqJIYpPqPj08dwR3bPQnepWVOV7wNQqdwfJjqdh
-        mpCpeC50Mie+sGDRqUH/qHzeF7YBJMk/cZ7uP0gWJ7l8lz3EL7atfB5oE0mg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668072684; x=1668079884; bh=zo574ahzKeu9Q28ZxFGvxFgTU3pv
-        We1Hlis4aMVeXeM=; b=GusWAN9JhPa20ia1ZdZ5HcEY2lXQvjg6xUw3qGQINIZn
-        DkE5/aHfXGSNTXKhC8azwQLlMqAjKj1+dkh6OeJq6oT0CoZFp9SVIFqT2yn/SUPj
-        O14rzuMqfMYxFm8wYzTDQsmAHI2H7iBJ9Vbh6t3wLFnz95c0dSy6eeRTwj7ab7AN
-        mH17j225Q2ynprMxAVxkvwG0WFMWfplx9z2gIbHdThgHKpuvMwA/7JrNa1FkOYxG
-        2YSAgPUuVitdbimMq8B9Eq6MVI2O7quhKnNvk2ulaSZETvOKZNSJheGqErBL0rRF
-        /unRGPariOiO/nz540NT07bvtBqHPeTucJ+AfMfdiQ==
-X-ME-Sender: <xms:68RsYyJcgTRmtWb-WtinAgFLtYlPCFF-Reemycwz_8GM48TX8jU7yQ>
-    <xme:68RsY6LiKEdqzRptOx6mkQFmHVrypfcPuYhkEKPNKV9PhOmiKxcxZBhKMQOh-Sm9f
-    vy9mV4GrbBIiXMAnrg>
-X-ME-Received: <xmr:68RsYytjvmh5AhEk6FzoGAKAvoL4O6D6t_-ij2tliUW06tD0Jlqdzxfcxu4awC0icfOT999HhcprzUYvWZxogWcBWmeam_pUWEevFaGsT88lYg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggddtgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
-    ffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:68RsY3ZHsKBDeMnN6Tq2rfIR2Hkt0nOKAGJdXtmX5BJ49oN6fMHhCg>
-    <xmx:68RsY5Y1Tjxlu6fJVCQ6Kb8zOIisXGb0g_mJyy2LA4iDg4H6C6cbUQ>
-    <xmx:68RsYzAxoOxTLfO4tVvEFis9rgxU91ju_xMaq0fexnQmMMYRZ86tdA>
-    <xmx:7MRsY_6jaWOLDIo0li1lpKavJBZVv1VUqIhq_nB-9bfGOsI4OT8icA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Nov 2022 04:31:22 -0500 (EST)
-Date:   Thu, 10 Nov 2022 10:31:20 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Dom Cobley <dom@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org
-Subject: Re: [PATCH v7 14/23] drm/modes: Properly generate a drm_display_mode
- from a named mode
-Message-ID: <20221110093120.udcpeer5paqbhxzn@houat>
-References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
- <20220728-rpi-analog-tv-properties-v7-14-7072a478c6b3@cerno.tech>
- <9e9a8a48-89f2-35d4-b26f-afa7cc44f2f6@tronnes.org>
+        Thu, 10 Nov 2022 04:32:50 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948A3DEB8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:32:49 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id d6so2050525lfs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:32:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DLrGG9afZTRSq/VDs9kPoqEhvBwGphXAIRIsk/T03ro=;
+        b=q7EarRQldf8WBLHDdiSgrCFp0QRzCPuKTS33Qm5FyZoaCOJkYu8/Fdg/GjgeV3m0ku
+         k1jcAhFH1foaHlBzwo91kz9LXNQ5W9ySh3pWbCEMC4A/h1AXmQ+/kslHQStyby3gEsrx
+         BCExCT0zOpfMy2oZCkJiUD/wtgYjndrt0GyX37OzfrgE0ryJHDjy++GZqfGBy6/ad4cP
+         2kyE2TK5R3zRTLpXPJgxoGmX+Rjz9Jr+o7eNBhh5/7f2ZF+ZYXFKJXRxn5G1k/VMjq0B
+         n2Sk790N0pbz31ddPVTzdHkTXoC11yawP2yI0kv3X2NX37teF/LqaqJGdrEXMkRVw2Od
+         qPYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLrGG9afZTRSq/VDs9kPoqEhvBwGphXAIRIsk/T03ro=;
+        b=oWSgmVmhGaFaVH0RUOvJQvCSCOfQvlknwNKkYda+2Ffwgw98AshFN4NBSad5fXlW7V
+         JjAeit44ipSTPbp5G2PD5r+6MhAj9tDbV/g4q60aCjZgiNd600Nrk38hKJzyZqKO/cCI
+         aAmBC3vwNb9Ne4G1bWSFjAM5XdiILuJsfs+bugWBaJnIbEUuoCQGH/2LXaBpEn2pbGub
+         uf4BuCbJrL6m7jSx1rww1zrJgjPMS1DLh/1FNJ6EicT2ML3pxRySKRf5z7HWkypRea/l
+         Kgjx8xB2cvn8WZ3UQ4bwEjyDQqV1PhXwUJFrTQQSIsbmrhxg+J30rd3MayyRIl/j86B4
+         tojA==
+X-Gm-Message-State: ACrzQf3IJnszLy6M8+Oh/KCcqQ5mF+qNCe9yVWtTdHy6OOetrXF55BQ9
+        lmt0SuensVsCkF15P/lPiDor8g==
+X-Google-Smtp-Source: AMsMyM7JWZHzAntJ2SR05J8xHKjMaMhEk0eTyeVRZ5R76RAGSWOpQX0URiu6j77VxJEuKPVp3JsPsw==
+X-Received: by 2002:a05:6512:33cb:b0:4a2:9a62:bdd1 with SMTP id d11-20020a05651233cb00b004a29a62bdd1mr20566929lfg.105.1668072767918;
+        Thu, 10 Nov 2022 01:32:47 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id d23-20020a2e3317000000b0026df5232c7fsm2577263ljc.42.2022.11.10.01.32.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 01:32:47 -0800 (PST)
+Message-ID: <be450f51-6e1c-a3c1-904f-1f915f0dba5e@linaro.org>
+Date:   Thu, 10 Nov 2022 10:32:45 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oex33cdauyqtfxdp"
-Content-Disposition: inline
-In-Reply-To: <9e9a8a48-89f2-35d4-b26f-afa7cc44f2f6@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: qcom,adsp: Add SM6375 ADSP
+ and CDSP
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221109170822.58281-1-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221109170822.58281-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09/11/2022 18:08, Konrad Dybcio wrote:
+> Add entries for SM6375 ADSP and CDSP. They are effectively the same
+> as SM6350 ADSP and SM8150 CDSP respectively.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/remoteproc/qcom,adsp.yaml         | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
 
---oex33cdauyqtfxdp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Mon, Nov 07, 2022 at 06:49:57PM +0100, Noralf Tr=F8nnes wrote:
-> Den 07.11.2022 15.16, skrev Maxime Ripard:
-> > The framework will get the drm_display_mode from the drm_cmdline_mode it
-> > got by parsing the video command line argument by calling
-> > drm_connector_pick_cmdline_mode().
-> >=20
-> > The heavy lifting will then be done by the drm_mode_create_from_cmdline=
-_mode()
-> > function.
-> >=20
-> > In the case of the named modes though, there's no real code to make that
-> > translation and we rely on the drivers to guess which actual display mo=
-de
-> > we meant.
-> >=20
-> > Let's modify drm_mode_create_from_cmdline_mode() to properly generate t=
-he
-> > drm_display_mode we mean when passing a named mode.
-> >=20
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >=20
-> > ---
-> > Changes in v7:
-> > - Use tv_mode_specified in drm_mode_parse_command_line_for_connector
-> >=20
-> > Changes in v6:
-> > - Fix get_modes to return 0 instead of an error code
-> > - Rename the tests to follow the DRM test naming convention
-> >=20
-> > Changes in v5:
-> > - Switched to KUNIT_ASSERT_NOT_NULL
-> > ---
-> >  drivers/gpu/drm/drm_modes.c                     | 34 ++++++++++-
-> >  drivers/gpu/drm/tests/drm_client_modeset_test.c | 77 +++++++++++++++++=
-+++++++-
-> >  2 files changed, 109 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-> > index dc037f7ceb37..49441cabdd9d 100644
-> > --- a/drivers/gpu/drm/drm_modes.c
-> > +++ b/drivers/gpu/drm/drm_modes.c
-> > @@ -2497,6 +2497,36 @@ bool drm_mode_parse_command_line_for_connector(c=
-onst char *mode_option,
-> >  }
-> >  EXPORT_SYMBOL(drm_mode_parse_command_line_for_connector);
-> > =20
-> > +static struct drm_display_mode *drm_named_mode(struct drm_device *dev,
-> > +					       struct drm_cmdline_mode *cmd)
-> > +{
-> > +	struct drm_display_mode *mode;
-> > +	unsigned int i;
-> > +
-> > +	for (i =3D 0; i < ARRAY_SIZE(drm_named_modes); i++) {
-> > +		const struct drm_named_mode *named_mode =3D &drm_named_modes[i];
-> > +
-> > +		if (strcmp(cmd->name, named_mode->name))
-> > +			continue;
-> > +
-> > +		if (!cmd->tv_mode_specified)
-> > +			continue;
->=20
-> Only a named mode will set cmd->name, so is this check necessary?
+Best regards,
+Krzysztof
 
-Yeah, but (and even though it's not the case at the moment) there's no
-implication that a named mode will be about TV. We could use it for
-VGA/XGA/etc just as well, in which case we wouldn't have
-tv_mode_specified.
-
-Maxime
-
---oex33cdauyqtfxdp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2zE6AAKCRDj7w1vZxhR
-xa+3AQD3Cls+D1gczkUFXyeSrQvhKBS9sNlty/tRYGKYZr7sZwEAoGi/xB5TzWa4
-ZI9NnObyBqJX+FGvepRGg1OcTXOypw0=
-=6eNg
------END PGP SIGNATURE-----
-
---oex33cdauyqtfxdp--
