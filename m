@@ -2,147 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE0A624735
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BE262473E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbiKJQjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
+        id S232029AbiKJQma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbiKJQjL (ORCPT
+        with ESMTP id S231955AbiKJQm0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:39:11 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1517740933;
-        Thu, 10 Nov 2022 08:39:08 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id 187-20020a1c02c4000000b003cf9c3f3b80so3868808wmc.0;
-        Thu, 10 Nov 2022 08:39:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CEuLsZijDHIURQmlzbVFcv2ePl7fzXP5XewpwaGNPfE=;
-        b=q8Ednjpo9n4TB285iTt/y7Cr9qrUvZrfph6i5UnrSFU1JBMkI8ZZ62kTmvTdzGCA5o
-         KUnQLtCliqx1pKKF/IFta57PlH5bqgf7Ci41DxCYvxDbQIsAe48epCExiISbbCpPhYtN
-         nTMaYpeDKaXFrKT+kcaU4iGUh1u8XZ6lfyRB7T32aN/cNvQ2307zKg84gZ6EmzXBop9X
-         9JuD0VxRA+TrU2/3/9LrU4Fj5+77VoYPUfKqSEXRuE9kM/nJOR3JyIK/apsir0rVrEJ0
-         Nia7yc1wdO0G7Hc2rV9Y7kOooFVjKYxtCEwnRp4ImCPkbZSf0/9OKE/QFkRWM1Eez4qS
-         qTnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CEuLsZijDHIURQmlzbVFcv2ePl7fzXP5XewpwaGNPfE=;
-        b=m9K8Th7KEQfGDM0xbDCrBsAeVEOc7tJuJGjWBy/6bxxTvewvXt+tonY8Xey/+Q022H
-         FtU8W4zhlkY3h1PGhRtD+X9/nGhVTFqau2heLsxU/bQes9Ku+b6LPOzn889DCbD8CaJe
-         AwFA/9BWwcQg7GO59mC+aP8KiLKQhmoZKhz3pLe0h+a4nk5HI1oZCITgKaYF23BQefR3
-         pBrCJZz2zs2s3w6YbWf/fBkE0lGS2DJ25VSlPsSfugYf3lvqLFySYGPLGimRETVPud4B
-         JHBqaFyvnHBy/iO8bUqzEaG4GlG+n6n35Zk1CwDtnz41dSwNzf2fX00Bfpa9ncSPtE4v
-         sohg==
-X-Gm-Message-State: ACrzQf07hxdrPGRISbYACiMYny/pS1tWpe6HN5/PSaVkL/jp8aJQ0X1O
-        /RDgyCMOJxaRKNABuvYHK3M=
-X-Google-Smtp-Source: AMsMyM4vbGUsEHG0NKAE1xRIufXiEPYkN4XR+5oplPtvpQud17nl4IG9F6CmaQ8t+Feh+F01nsHssw==
-X-Received: by 2002:a05:600c:21c9:b0:3cf:7833:2940 with SMTP id x9-20020a05600c21c900b003cf78332940mr36973681wmj.35.1668098346718;
-        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
-Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id f24-20020a1cc918000000b003b4935f04a4sm128730wmb.5.2022.11.10.08.39.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: rockchip: Enable PCIe 2 on SOQuartz CM4IO
-Date:   Thu, 10 Nov 2022 17:38:45 +0100
-Message-Id: <20221110163845.42309-5-frattaroli.nicolas@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221110163845.42309-1-frattaroli.nicolas@gmail.com>
-References: <20221110163845.42309-1-frattaroli.nicolas@gmail.com>
+        Thu, 10 Nov 2022 11:42:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF6C13DDD;
+        Thu, 10 Nov 2022 08:42:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F1D4B82248;
+        Thu, 10 Nov 2022 16:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F75C433C1;
+        Thu, 10 Nov 2022 16:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668098537;
+        bh=e4hlEGbMvLPpDidaYvlKiHNZ2EtLaQnPxMUUsMUj+Lk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dK1EerY5otwPdRKe3gqKcZ432vrddg9S2SvsfGtDdMwfYA1rAyayYxRVO4Z3xHzK2
+         ctj1nX/Ilr2RQSgs/cP8cIFiFpDbYqKcHcDGx0mEZ6S9Q90Z2+xpH/77vWFkMxB2cM
+         2g/z6K7J3wYBW5jDNLdocut9Hf/AJ6DTA93yh4jxr0sPYr/W2cDGnw6XoGZzKi5PaV
+         0wqaxOVX9+jbIW4w/cocJejzSEnT+R0aAtyapmbU7pw/w3keg0UjRICG7bQBEfcmqV
+         r41xz3W6ubVz049VW8rXQxqK0mKsKbiKppFnwL7K0bfTxeWmTo6hn5c0jDFSRhj6ic
+         Tu5M/GeEgxbpA==
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: [PATCH v1 00/28] Rust core additions
+Date:   Thu, 10 Nov 2022 17:41:12 +0100
+Message-Id: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables the PCIe2 on the CM4IO board when paired with
-a SOQuartz CM4 System-on-Module board. combphy2 also needs to be
-enabled in this case to make the PHY work for this.
+This patch series is the first batch of changes to upstream the rest
+of the Rust support.
 
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 10 ++++++++++
- arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi    | 12 ++++++++++++
- 2 files changed, 22 insertions(+)
+In this instance, all the facilities introduced are part of the "Rust
+core". They do not interact with the C side in new major ways (no new
+C types used; only `strlen`, `memchr`, additional error codes and some
+more `printk` format strings).
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-index e00568a6be5c..4cf60be267ed 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
-@@ -30,6 +30,11 @@ vcc_5v: vcc-5v-regulator {
- 	};
- };
- 
-+/* phy for pcie */
-+&combphy2 {
-+	status = "okay";
-+};
-+
- &gmac1 {
- 	status = "okay";
- };
-@@ -105,6 +110,11 @@ &led_work {
- 	status = "okay";
- };
- 
-+&pcie2x1 {
-+	vpcie3v3-supply = <&vcc_3v3>;
-+	status = "okay";
-+};
-+
- &rgmii_phy1 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-index 1b975822effa..294354e95336 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-@@ -487,6 +487,12 @@ rgmii_phy1: ethernet-phy@0 {
- 	};
- };
- 
-+&pcie2x1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie_reset_h>;
-+	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
-+};
-+
- &pinctrl {
- 	bt {
- 		bt_enable_h: bt-enable-h {
-@@ -512,6 +518,12 @@ diy_led_enable_h: diy-led-enable-h {
- 		};
- 	};
- 
-+	pcie {
-+		pcie_reset_h: pcie-reset-h {
-+			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	pmic {
- 		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
+After this series, `str.rs` and `print.rs` are in sync with downstream
+and all remaining proc macros have been added. `error.rs` is fairly
+complete too, though a few more `pub(crate)` features will come later
+(to avoid leaving dead code in-between series).
+
+Note that a few temporary `#[allow(dead_code)]` attributes are used in
+order to have a bit more freedom organizing the patches while keeping
+all of them buildable without warnings/errors, but at the end of the
+series there is none remaining (of the temporary ones).
+
+Virtually all the code has been in linux-next for months and was part
+of the Rust patch series before the trimming down (i.e. up to v8).
+
+Each patch has been built-tested on a Rust-enabled `defconfig` with
+`CLIPPY=1` on the `all`, `rustfmtcheck`, `rustdoc` and `rusttest`
+targets.
+
+Björn Roy Baron (1):
+  rust: macros: add `concat_idents!` proc macro
+
+Finn Behrens (1):
+  rust: error: declare errors using macro
+
+Gary Guo (9):
+  rust: macros: add `#[vtable]` proc macro
+  rust: macros: take string literals in `module!`
+  rust: str: add `BStr` type
+  rust: str: add `b_str!` macro
+  rust: str: add `CStr` type
+  rust: str: implement several traits for `CStr`
+  rust: str: add `c_str!` macro
+  rust: add `build_error` crate
+  rust: build_assert: add `build_{error,assert}!` macros
+
+Miguel Ojeda (7):
+  rust: prelude: split re-exports into groups
+  rust: print: add more `pr_*!` levels
+  rust: print: add `pr_cont!` macro
+  rust: samples: add `rust_print` example
+  rust: alloc: add `RawVec::try_with_capacity_in()` constructor
+  rust: alloc: add `Vec::try_with_capacity{,_in}()` constructors
+  rust: static_assert: add `static_assert!` macro
+
+Milan Landaverde (1):
+  rust: str: add `CStr` unit tests
+
+Niklas Mohrin (1):
+  rust: std_vendor: add `dbg!` macro based on `std`'s one
+
+Viktor Garske (1):
+  rust: error: add codes from `errno-base.h`
+
+Wedson Almeida Filho (7):
+  rust: error: add `From` implementations for `Error`
+  rust: prelude: add `error::code::*` constant items
+  rust: str: add `Formatter` type
+  rust: str: add `CString` type
+  rust: str: add `fmt!` macro
+  rust: types: add `Either` type
+  rust: types: add `Opaque` type
+
+ lib/Kconfig.debug                 |  16 +
+ rust/Makefile                     |  22 +-
+ rust/alloc/raw_vec.rs             |  33 +-
+ rust/alloc/vec/mod.rs             |  89 +++++
+ rust/build_error.rs               |  24 ++
+ rust/exports.c                    |   5 +
+ rust/kernel/build_assert.rs       |  82 +++++
+ rust/kernel/error.rs              |  90 ++++-
+ rust/kernel/lib.rs                |   9 +
+ rust/kernel/prelude.rs            |  20 +-
+ rust/kernel/print.rs              | 214 +++++++++++-
+ rust/kernel/static_assert.rs      |  34 ++
+ rust/kernel/std_vendor.rs         | 160 +++++++++
+ rust/kernel/str.rs                | 532 +++++++++++++++++++++++++++++-
+ rust/kernel/types.rs              |  37 +++
+ rust/macros/concat_idents.rs      |  23 ++
+ rust/macros/helpers.rs            |  24 +-
+ rust/macros/lib.rs                | 108 +++++-
+ rust/macros/module.rs             |  10 +-
+ rust/macros/vtable.rs             |  95 ++++++
+ samples/rust/Kconfig              |  10 +
+ samples/rust/Makefile             |   1 +
+ samples/rust/rust_minimal.rs      |   8 +-
+ samples/rust/rust_print.rs        |  54 +++
+ scripts/generate_rust_analyzer.py |   8 +-
+ 25 files changed, 1666 insertions(+), 42 deletions(-)
+ create mode 100644 rust/build_error.rs
+ create mode 100644 rust/kernel/build_assert.rs
+ create mode 100644 rust/kernel/static_assert.rs
+ create mode 100644 rust/kernel/std_vendor.rs
+ create mode 100644 rust/kernel/types.rs
+ create mode 100644 rust/macros/concat_idents.rs
+ create mode 100644 rust/macros/vtable.rs
+ create mode 100644 samples/rust/rust_print.rs
+
+
+base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
 -- 
 2.38.1
 
