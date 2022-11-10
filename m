@@ -2,80 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B290624434
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA32562443D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiKJOZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:25:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
+        id S230476AbiKJO2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbiKJOZK (ORCPT
+        with ESMTP id S231175AbiKJO15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:25:10 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195C827DDC;
-        Thu, 10 Nov 2022 06:25:10 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id c15so963062qtw.8;
-        Thu, 10 Nov 2022 06:25:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PYrdIwlw/lJKu3AnvAKe/flDTUx8RRjiQQvOO8furMY=;
-        b=llbB5NAk5NEhzhrsh8ZeFXwW3N7uTFPMdeOX7LQRnU6QCk9njyjwVRsU6EVhxos+zi
-         QRY6C3NtR1MnJriUo96m5KOGuNnZanG0fusD0i/3lnQzpnt3A8q9bAPg+rjgoM9C7w4/
-         PZ20noXpsNzp2Vsi8wU6zhigA+PUVnjmdUzL+hp8wU4IjeDqCl81K4s+h8faDNRXKCfw
-         xGhETgt8NJkj30nyvqYPeAD0tmKAvAo/RnysorSXUcokqcoNbaeczMnWkQMpcAI6pQ6a
-         HwDVD509hLsBuuSrAawzX9XqodeN08TPIyLArC8lFmnUuTT19mun3B/3Q/n52FY2oI5J
-         Acew==
-X-Gm-Message-State: ACrzQf2fZhlsqW4aAx6pbvQghL6Y6jGc43s4u2tdaFi4gND/8VpO1v7Q
-        iLAWFLlC4hlFKQcQiACCYPdNFy6yYswUV8aeAWQ=
-X-Google-Smtp-Source: AMsMyM4FsPdzHNBl+WwP9MoBmdL61DTI6zZH2YMFXCRPO1hibDl0jdOsB052Yb46NanZ6Be+se6kG8vDk/J70gkqF2A=
-X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
- g21-20020ac87d15000000b003a5044987c3mr51914311qtb.357.1668090309233; Thu, 10
- Nov 2022 06:25:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-7-linux@roeck-us.net>
- <CAJZ5v0hMbzEdLecy_OWquOqdauBc1nsN7Q9mPkt2tOU4nEpHVw@mail.gmail.com> <20221110142149.GC2404288@roeck-us.net>
-In-Reply-To: <20221110142149.GC2404288@roeck-us.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Nov 2022 15:24:58 +0100
-Message-ID: <CAJZ5v0j4w_oTZHX4r9QpOV_VYmgc7+HTMS=mDFTgT4F1dp5pyg@mail.gmail.com>
-Subject: Re: [PATCH 6/9] thermal/core: Protect hwmon accesses to thermal
- operations with thermal zone mutex
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 09:27:57 -0500
+Received: from linderud.pw (linderud.dev [163.172.10.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD41E2B1B2;
+        Thu, 10 Nov 2022 06:27:54 -0800 (PST)
+Received: from linderud.pw (localhost [127.0.0.1])
+        by linderud.pw (Postfix) with ESMTP id A6D40C02F9;
+        Thu, 10 Nov 2022 15:27:21 +0100 (CET)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
+        s=linderud; t=1668090441;
+        bh=MhKGVo+uz4V4OaO6LB9aTH5ZhyCzEMz1L4b8NypmKFA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=pV7ZJs0wm6DoWbNjgQ+nre7AcLTDY9WVWraufktJu96LBq13zg+ORlj3eqac5P/jj
+         sMBlqx/H+vSyu4f9+/6sHDLHph7DIUisaViFST30qXOl37wOXwCbDWED1LfSVsN/Vj
+         fb3H/3D66XcvNAUJsXfEwbshrIio2ghp4UTkkF93hmuDYCqMBuhHI2yX8y9HPFUr47
+         9zoL+nAgNNl6cl4DE4UmXiR6JOsAciTVQIIj7CAXmJ2nUiNJRkHecOeeRHzzDLoMwc
+         eNYUzMBTy2ARfxxxEE1EmCXQCkjSH2zc68qZMwAn+/FxVFgQL0VFvAQitaHQ9JX3pR
+         oQQNY2tETyKeBoelslPOTZLwOsdRieO4fHXa5+xGMISfpMNnZdATUHfKtZWyRg3Jzv
+         8nwalYgLEzzoFg63OXIBgRXCa+NnRYAFg/8cBefxKTC6j5V1RAVCkd9lM6MTAPBA5z
+         C7CKZ/KqI12S8QMsTMkpiY7XvRcz+QfjQ//48NsSx1285pURq2enhfZB/qkkSB7Bfr
+         +QJXFonan9vGffFSrKM44TdAQQJ77s1oisLUJbqpyEBOVZwtZLX8siu3MF5Tpe4kqC
+         4tWOuNyJvVh2sVF4+oxM7FYePuyEkyfBN0qP0b6vhD9x6ib/ibVB2R5iEPEOXe2cdJ
+         SXdVZurOzBsJhlsvBextfyis=
+Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: morten)
+        by linderud.pw (Postfix) with ESMTPSA id 6DC1DC028C;
+        Thu, 10 Nov 2022 15:27:21 +0100 (CET)
+Date:   Thu, 10 Nov 2022 15:27:19 +0100
+From:   Morten Linderud <morten@linderud.pw>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Eric Snowberg <eric.snowberg@oracle.com>, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
+        dhowells@redhat.com, dwmw2@infradead.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        jarkko@kernel.org, jmorris@namei.org, serge@hallyn.com,
+        keescook@chromium.org, torvalds@linux-foundation.org,
+        weiyongjun1@huawei.com, nayna@linux.ibm.com, ebiggers@google.com,
+        nramas@linux.microsoft.com, lszubowi@redhat.com, jason@zx2c4.com,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 16/17] integrity: Trust MOK keys if MokListTrustedRT
+ found
+Message-ID: <20221110142719.k2dhn2ytucsn3wfr@framework>
+References: <20211124044124.998170-1-eric.snowberg@oracle.com>
+ <20211124044124.998170-17-eric.snowberg@oracle.com>
+ <20221110000129.kl6pjy5mafpuptbk@framework>
+ <CAMj1kXHcf_QptjHfFJxkUQrv=Lfg5=pkt2UTOZ5F-pffki-=-Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHcf_QptjHfFJxkUQrv=Lfg5=pkt2UTOZ5F-pffki-=-Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 3:21 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Wed, Nov 09, 2022 at 08:19:13PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> [ ... ]
+On Thu, Nov 10, 2022 at 08:42:08AM +0100, Ard Biesheuvel wrote:
+> On Thu, 10 Nov 2022 at 01:01, Morten Linderud <morten@linderud.pw> wrote:
 > >
-> > And I wouldn't change the code below (the ternary operator is out of
-> > fashion in particular).
+> > On Tue, Nov 23, 2021 at 11:41:23PM -0500, Eric Snowberg wrote:
+> > > A new Machine Owner Key (MOK) variable called MokListTrustedRT has been
+> > > introduced in shim. When this UEFI variable is set, it indicates the
+> > > end-user has made the decision themselves that they wish to trust MOK keys
+> > > within the Linux trust boundary.  It is not an error if this variable
+> > > does not exist. If it does not exist, the MOK keys should not be trusted
+> > > within the kernel.
 > >
->
-> I tried to introduce some consistency; the ternary operator is used
-> in some of the existing thermal code. Guess I went the wrong direction.
-> Never mind; I don't have a strong opinion either way.
-> I updated the series patches to no longer use ternary operators in
-> updated code, but I left existing code alone (changing that should not
-> be part of this patch set anyway).
+> > Hi Eric,
+> >
+> > I've been milling around on this patch-set for a while and I have a few issues
+> > with the description of the commit and what the code actually does.
+> >
+> > efi_mokvar_entry_find doesn't simply read an UEFI variable as the commit message
+> > suggests, it will look for the MOK variable loaded into the EFI configuration
+> > table. This implies we need this table setup in early boot to take usage of this
+> > patch set.
+> >
+> > The only bootloader that does setup this table, is the `shim` as described. But
+> > no other bootloader implements support for the MOK EFI configuration table.
+> >
+> 
+> Does any other bootloader implement support for the (volatile)
+> MokListTrustedRT variable?
+> 
 
-Thanks, that's what I would have done too.
+No. The efforts seems to be mostly focused on supporting a setup where shim
+boots grub. Anything besides this has never really been important for the people
+writing it.
+
+The main reason for the email is to try and figure out what the EFI
+configuration table adds to the threat model.
+
+> Note that this variable is intentionally volatile, and should be
+> rejected by the kernel if it is not. The point of these RT variables
+> or the config tables is that they can only be set at boot if a signed
+> and therefore trusted agent created them.
+
+So the only trusted agent currently is the shim? It claims to be a "trivial EFI
+application" but the interplay between mokutils and shim isn't documented and
+not trivial to understand.
+
+> Permitting non-volatile variables here defeats the purpose of secure
+> boot, which aims to prevent exploits from gaining persistence. It
+> would be bad if you could corrupt the trusted boot chain forever by
+> setting a variable once.
+
+Would this change if the variable could be read from the EFI configuration table
+or as an EFI variable? Instead of the current situation where we only support
+the configuration table?
+
+> > This effectively means that there is still no way for Machine Owners to load
+> > keys into the keyring, for things like module signing, without the shim present
+> > in the bootchain. I find this a bit weird.
+> >
+> > Is this an intentional design decision, or could other ways be supported as
+> > well?
+> >
+> 
+> Yes.
+
+I assume it's a yes to "intentional design decision", and my followup question
+to this would be to ask where it's documented?
+
+> If we are looking for a way to use EFI variables to inject additional
+> certificates into the keyring without the ability to authenticate
+> them, we should I'd strongly recommend that we disable that by default
+> and add a big fat warning that it is incompatible with the guarantees
+> secure boot aims to provide.
+
+The present features are all disabled by default I believe?
+
+Most of this seems to be knowledge residing between a few people that was
+present at the implementation, and as a user-space tool author comming into this
+10 years later, it's really hard to figure out how a lot of these decisions came
+to be.
+
+-- 
+Morten Linderud
+PGP: 9C02FF419FECBE16
