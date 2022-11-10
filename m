@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640DE62487A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFB762487C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiKJRk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
+        id S230342AbiKJRlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiKJRkT (ORCPT
+        with ESMTP id S229757AbiKJRlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:40:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4DD27CF5;
-        Thu, 10 Nov 2022 09:40:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EBF99CE2372;
-        Thu, 10 Nov 2022 17:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E8358C433D7;
-        Thu, 10 Nov 2022 17:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668102015;
-        bh=mCBZeu1UKfBTGKLzNtrd5QDJXxYz4sjgKPhxwROpVXc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=DVtgtd1rrsdiKHilhMtOnAkfnVRx1s5D8ViHpLr0dxq1PtCdCTp566TFSIXfedAGb
-         4ThZ8tqDbJi6rPbkFs/oR9ddAA/lcfF/wMw61AX+5VIj1Wd57s4oEH8lNt1yp16Sl7
-         olZVhv7qPNEMNVzkcBnyG6abO3bhzDX6uOT8bRPZlicG4Kfuq1xK/SqeRQJX8OWjVh
-         ObqysF+mZGZnsasAosR/vww33oNAiOMY3g4E4sd34vcpjMGJ4X2F7ik7Y4zl+PVXm7
-         peEIXd8wl6NnD/3NeqvwLD5pi1Yx8kKs9WaD8W241kIEMDmppBNkFSE21RfYp4EpQ6
-         86CC9jcxLCblw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA7ACE270F0;
-        Thu, 10 Nov 2022 17:40:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 10 Nov 2022 12:41:01 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C821627FD8;
+        Thu, 10 Nov 2022 09:41:00 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id v1so3303146wrt.11;
+        Thu, 10 Nov 2022 09:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Up6hiDVLuWAaCEN91nYS7vd27XRu7U8JIDCkwO+t6lI=;
+        b=E0uv4fSb9P0wlitTRStqfRsf0aV2OKoYbr14lqt/oMRU+SON8yHHC1Jk85u31a8szc
+         deN20WYp7dTMccJoFy1hk7/ZZ23WxWDYLAV3HGv7nelChydO9rkmKHkzlUJJC5ZPjg9X
+         se5IXrPIGDaZ9DfmfOFYaklSCcfxulgcauEAIXJpg/RRoOjYkHnrUPXv76g7c7YFFqVz
+         b310a6EnhQf2R1ekUr9quG72BQ+EcCx9RZVCUTXEq8rHGzNUYlYbT9Vr30ovG2ksBAVL
+         3XuKvcoRuTMyQuwvffx01qnVS4rZuq0hm9nAbeX0jF4MKTwFkva6BV26wtY6jt6s2co8
+         OE0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Up6hiDVLuWAaCEN91nYS7vd27XRu7U8JIDCkwO+t6lI=;
+        b=chqw6jA+QCF+kM77MVmwowI3wSCNK5f37BzEkmH8MdjGyYm6l/mVvurFjjhKkkglOs
+         GkHwTvhmoLsyAmVBiFvkQjhJOETtQahRe3mxkVd/FFYd85D4LQpWn5wFotSanx3vDaH2
+         iKGooo4PMi7g5bjl79g9zevIali/inOVBUpjHXVscxm+lvB9g5BeYJ8uiIkBNmlcZ0lh
+         Q/fCaPvgYFLFJ6J3cM4Txykzq6ZAiTwemsBHpEW//MxVY6dueIl+hA4qbTwYle6cQ1WX
+         ucQOdN5UUnFRkCR+G/NrkkMVJsTG65p2G4V2JBhGdgrEAwnps0Qqz1ItXrc/1djyaiCF
+         YPSA==
+X-Gm-Message-State: ANoB5pnB9yElhs5kipffc4zWkokK4366zadIQSFhkqBHa2icc+WrMKMN
+        CrquQVqF+AdpWTBC4/wNuYJyYdH8TF5gEg==
+X-Google-Smtp-Source: AA0mqf4wMA+98QzusmPHP9MzmidlM23GOI6GGkj5zD+NTQeANkRWYvlz5MW+idM0YOworZkVsW+Oog==
+X-Received: by 2002:a5d:6248:0:b0:23e:245b:edf1 with SMTP id m8-20020a5d6248000000b0023e245bedf1mr676186wrv.142.1668102059257;
+        Thu, 10 Nov 2022 09:40:59 -0800 (PST)
+Received: from localhost.localdomain ([94.73.35.109])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5d420a000000b0023682011c1dsm16268026wrq.104.2022.11.10.09.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 09:40:58 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, openglfreak@googlemail.com,
+        alex@alexyzhang.dev, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH 0/1] HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
+Date:   Thu, 10 Nov 2022 18:40:55 +0100
+Message-Id: <20221110174056.393697-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v1] ethtool: ethtool_get_drvinfo: populate drvinfo
- fields even if callback exits
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166810201482.23079.18183213158036664655.git-patchwork-notify@kernel.org>
-Date:   Thu, 10 Nov 2022 17:40:14 +0000
-References: <20221108035754.2143-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20221108035754.2143-1-mailhol.vincent@wanadoo.fr>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, huangguangbin2@huawei.com,
-        chenhao288@hisilicon.com, sean.anderson@seco.com, trix@redhat.com,
-        xiangxia.m.yue@gmail.com, wsa+renesas@sang-engineering.com,
-        marco@mebeim.net, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi everyone,
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+About 3 months ago, Torge Matthies sent a patch fixing an issue with
+his XP-Pen Star G640 [1].
 
-On Tue,  8 Nov 2022 12:57:54 +0900 you wrote:
-> If ethtool_ops::get_drvinfo() callback isn't set,
-> ethtool_get_drvinfo() will fill the ethtool_drvinfo::name and
-> ethtool_drvinfo::bus_info fields.
-> 
-> However, if the driver provides the callback function, those two
-> fields are not touched. This means that the driver has to fill these
-> itself.
-> 
-> [...]
+His patch changes the IS_INPUT_APPLICATION() macro to accept
+HID_DG_DIGITIZER. However, it looks like it is not being merged because
+of the possible side effects that changing that macro could generate.
 
-Here is the summary with links:
-  - [net-next,v1] ethtool: ethtool_get_drvinfo: populate drvinfo fields even if callback exits
-    https://git.kernel.org/netdev/net-next/c/edaf5df22cb8
+This patch aims to fix the same issue but using a more conservative
+approach hoping that the bug can be fixed.
 
-You are awesome, thank you!
+Torge, Alexander, could you test it and confirm that it fixes your
+issues, please?
+
+Thanks a lot in advance,
+José Expósito
+
+[1] https://lore.kernel.org/linux-input/20220804151832.30373-1-openglfreak@googlemail.com/
+
+José Expósito (1):
+  HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
+
+ drivers/hid/hid-uclogic-core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
