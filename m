@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2586247DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 561D76247E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbiKJRDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:03:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S231445AbiKJRDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiKJRDa (ORCPT
+        with ESMTP id S232308AbiKJRDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:03:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7092E9E4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:02:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668099748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oLqZ/8EEIHT45ui0RenFRFjR0vVGG5QYmadzBNdtDks=;
-        b=CLjvdkiUT8BZZ06m+LsRqjLor6CXUj/TsGvcgGNmvY+2DP14utTKRGQDTaS/Iq25d4P5/k
-        fdZzPjN1GkCzr/yUK5MlFYVTfLOe1fNCsLl1Zfo1bb+zCv7QrWr7+TYDG4MYTqSjxXxVmr
-        i+GkUIgjPR1sOSjXXC1owrHKHa6K4zw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-358-b9NSMlpuM7up6uwjgiCsFg-1; Thu, 10 Nov 2022 12:02:25 -0500
-X-MC-Unique: b9NSMlpuM7up6uwjgiCsFg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 10 Nov 2022 12:03:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1330E5599
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:03:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3AAEF8001B8;
-        Thu, 10 Nov 2022 17:02:25 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB9662024CC6;
-        Thu, 10 Nov 2022 17:02:24 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <166809951250.3381741.3113541135557341907.stgit@warthog.procyon.org.uk>
-References: <166809951250.3381741.3113541135557341907.stgit@warthog.procyon.org.uk>
-To:     willy@infradead.org
-Cc:     dhowells@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: Make some folio function arguments const
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3383015.1668099744.1@warthog.procyon.org.uk>
-Date:   Thu, 10 Nov 2022 17:02:24 +0000
-Message-ID: <3383016.1668099744@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9BD3B8224A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 17:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 76BF7C433C1;
+        Thu, 10 Nov 2022 17:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668099808;
+        bh=JqjcwJ5MnkAs4iuw3TTnpB8D3xFVrTblNg8QcKn1S+c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=CjlA8ADiLIvWSZtKHtK6S4PYRVnvblXkNwLqaF1+jV4TSElAMtPYYCAxh4nN0vbYw
+         s1h89+R5oa8EZ9VY98b8iCTyPnivdeda4AnvY4CxojhBY5y0my0I5wGGgTfJ0Fa2Xr
+         gXq39ueitCjRvVeDanp7LF1p9hdn6oS5EThuqS86a+YffSSZKSPc95HpjKtMfCLHrf
+         B4fUSsVaKRiB9iQT2EN3C2mt6/wG2u/1egRq+IgC665+So5m0xXtMqPzwthiEILM7e
+         aOKXwPUXsvqg0IfbAKOBWxrcbpEDLO9NWZb+hpR84h0NYdsvknLDte73lUzkB2is0F
+         H6pkUIBEPseEg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 609D8C395FD;
+        Thu, 10 Nov 2022 17:03:28 +0000 (UTC)
+Subject: Re: [GIT PULL]: Generic phy fixes for v6.1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y2zGjvUEs1402DEw@matsya>
+References: <Y2zGjvUEs1402DEw@matsya>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y2zGjvUEs1402DEw@matsya>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-fixes-6.1
+X-PR-Tracked-Commit-Id: 819b885cd886c193782891c4f51bbcab3de119a4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8395ee62b1b78a3d2789840bf6bf1a7c43deaa32
+Message-Id: <166809980839.1852.13706251158020656636.pr-tracker-bot@kernel.org>
+Date:   Thu, 10 Nov 2022 17:03:28 +0000
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Phy <linux-phy@lists.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
+The pull request you sent on Thu, 10 Nov 2022 15:08:22 +0530:
 
-> Mark the folio* argument to some of the folio accessor functions as a const
-> pointer.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git tags/phy-fixes-6.1
 
-Actually, disregard this please - it needs some work to make it compile again.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8395ee62b1b78a3d2789840bf6bf1a7c43deaa32
 
-David
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
