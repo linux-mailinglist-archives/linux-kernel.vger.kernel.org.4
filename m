@@ -2,108 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770396242C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35406242CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiKJNDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S229912AbiKJNEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:04:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiKJNDc (ORCPT
+        with ESMTP id S230152AbiKJNEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:03:32 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3041D5F;
-        Thu, 10 Nov 2022 05:03:30 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id q9so4938134ejd.0;
-        Thu, 10 Nov 2022 05:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uyUdvAvFfBedY8C4R1CoGalnnZqFS5BS9edNzqJV4LE=;
-        b=awdpZzgHXvaGozAEQ7Mhh+xLeFZETbddCE0K8LRU2+3No7vqY150um9E3Wv9NcyQ7s
-         nGL5IWErgErtYri2MC8wDzOo97mCzWnXKQMVZOAO3ANSJRNRptLrIMMMVt5h3dMmhosP
-         lnCBTnpC1EXf5R37OWxCzm+/OdrFkPgnmBLVrCfukeQVDFhk6SUbMb8BQqgftzxVQ5aS
-         q/WJZoX9lhFPZM33HVCqyZvBzUfTRizH/gyh5EsuPJXq0NKW1sxF4jS66WtXtFapcpce
-         zHG0OXZxJe7S+gC6gBK8lGmtIKrlLbLyzUuFFHREPxRi6PH0bYPHDftG1pcf8HQGJQFf
-         D1Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uyUdvAvFfBedY8C4R1CoGalnnZqFS5BS9edNzqJV4LE=;
-        b=PsI+2xCNUx6pKO7112l4GFsD6j8eXKLsgVUYSoKxCaqkbhmiYelk7i2cVIAY9w0Y78
-         JehgATYFfNOnuv8nuotO/jiSCefQsW6G759ulqD+TZL+xaRfpj9FvvLM7gmeDdpdYQFb
-         yO4OLKA4A4eeOZLek8WSpv2mTgbbCz66vd4YdhiV7pGnVvcoQPIbsfabeCbrNCkuKoRt
-         zlRQa2KHQJW/LiYeexPOguLx2exEe1U0fE+T0H2PP7YMXbzk38MWOQrfIZwPBMtMC4xQ
-         EKcdf0pCMMrNEoUGPSCS11ayLXdoXWs18xNy9QNeKramdIpUw4TeL6tox7hKZOiOeCB1
-         3EOw==
-X-Gm-Message-State: ACrzQf0w6016urg7W2/nIZn0gwofNiPD315CHYj3d1u0c/GMGAlfPFIw
-        DQxFcL/YBfJ0/BF4WL32f8wY3jACXUWkjQ==
-X-Google-Smtp-Source: AMsMyM7++wpVmQYXlt19QPfZpFWmMAEBnh2TTX2mVhSsGh06HveYGqp/+mmMQax4PgLmQurDWPpsgg==
-X-Received: by 2002:a17:906:79c4:b0:782:7790:f132 with SMTP id m4-20020a17090679c400b007827790f132mr2747677ejo.649.1668085409325;
-        Thu, 10 Nov 2022 05:03:29 -0800 (PST)
-Received: from skbuf ([188.27.184.197])
-        by smtp.gmail.com with ESMTPSA id l26-20020aa7c3da000000b0045bccd8ab83sm8622082edr.1.2022.11.10.05.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 05:03:28 -0800 (PST)
-Date:   Thu, 10 Nov 2022 15:03:25 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v4 4/4] net: dsa: microchip: ksz8: add MTU
- configuration support
-Message-ID: <20221110130325.eklhybumv7naehxe@skbuf>
-References: <20221110122225.1283326-1-o.rempel@pengutronix.de>
- <20221110122225.1283326-5-o.rempel@pengutronix.de>
+        Thu, 10 Nov 2022 08:04:10 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F2C554F4;
+        Thu, 10 Nov 2022 05:04:07 -0800 (PST)
+Message-ID: <77cb65e1-d032-b7e3-e806-c663be8daea3@lirui.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
+        t=1668085446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gBCxljvJFZuUWwu9LUQoEPabdUF1Vyq8pG5TY2+2zao=;
+        b=U1qf/fl688R5olFTaD1BjMcoJ3Z7QWUAvKs36aDEfOCdWIydp3wtyQH0GvLUiQRPIenWeH
+        phYjvBa5nYHKNDMCzSEj/kIZz1TYuvqr6+vM2Obu83d4NgcaSOem29Mf7lstM97E+R3TEK
+        irxJGV0OBOEAi1hnzdQgh+9OzX7elCfSQ5pDRBJu6boWLv88Xut5QlcNIu/FpbYQ40yEKo
+        0Yo2QvDrkAuTSVpxKzj9soa+zSi+918epmqRddFWiJlrRgiXIdwNASkHVkSskvtJg1kdtN
+        vs5RoTY9SDuKyImgdozrrKhT9xvaefYGFiax8biH+Kiu7cQNifVa7Gye8ekuNQ==
+Date:   Thu, 10 Nov 2022 21:03:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110122225.1283326-5-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] docs/zh_CN: Add userspace-api/futex2 Chinese translation
+Content-Language: en-US
+To:     Alex Shi <seakeel@gmail.com>
+Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Wu XiangCheng <wu.xiangcheng@linux.dev>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221105041741.288094-1-me@lirui.org>
+ <CAJy-Am=QiK-YuntZvbVyhVatY4t3b0CFkmi2c7PTX-gomS7MYw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Rui Li <me@lirui.org>
+In-Reply-To: <CAJy-Am=QiK-YuntZvbVyhVatY4t3b0CFkmi2c7PTX-gomS7MYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 01:22:25PM +0100, Oleksij Rempel wrote:
-> Make MTU configurable on KSZ87xx and KSZ88xx series of switches.
-> 
-> Before this patch, pre-configured behavior was different on different
-> switch series, due to opposite meaning of the same bit:
-> - KSZ87xx: Reg 4, Bit 1 - if 1, max frame size is 1532; if 0 - 1514
-> - KSZ88xx: Reg 4, Bit 1 - if 1, max frame size is 1514; if 0 - 1532
-> 
-> Since the code was telling "... SW_LEGAL_PACKET_DISABLE, true)", I
-> assume, the idea was to set max frame size to 1532.
-> 
-> With this patch, by setting MTU size 1500, both switch series will be
-> configured to the 1532 frame limit.
-> 
-> This patch was tested on KSZ8873.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
+On 2022/11/10 17:23, Alex Shi wrote:
+> On Sat, Nov 5, 2022 at 12:18 PM Rui Li <me@lirui.org> wrote:
+>> Translate the following documents into Chinese:
+>>
+>> - userspace-api/futex2.rst
+>>
+>> Signed-off-by: Rui Li <me@lirui.org>
+>> ---
+>>  .../zh_CN/userspace-api/futex2.rst            | 80 +++++++++++++++++++
+>>  .../zh_CN/userspace-api/index.rst             |  2 +-
+>>  2 files changed, 81 insertions(+), 1 deletion(-)
+>>  create mode 100644 Documentation/translations/zh_CN/userspace-api/futex2.rst
+>>
+>> diff --git a/Documentation/translations/zh_CN/userspace-api/futex2.rst b/Documentation/translations/zh_CN/userspace-api/futex2.rst
+>> new file mode 100644
+>> index 000000000000..04f9d62db1f7
+>> --- /dev/null
+>> +++ b/Documentation/translations/zh_CN/userspace-api/futex2.rst
+>> @@ -0,0 +1,80 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +.. include:: ../disclaimer-zh_CN.rst
+>> +
+>> +:Original: Documentation/userspace-api/futex2.rst
+>> +
+>> +:翻译:
+>> +
+>> + 李睿 Rui Li <me@lirui.org>
+>> +
+>> +======
+>> +futex2
+>> +======
+>> +
+>> +:作者: André Almeida <andrealmeid@collabora.com>
+>> +
+>> +futex，或者称为快速用户互斥锁（fast user mutex），是一组允许用户空间创建高性能同步
+>> +机制的系统调用，比如用户空间中的互斥锁，信号量和条件变量。C标准库，如glibc，使用它作
+>> +为实现更多高级接口的方式，如pthreads。
+>> +
+>> +futex2是初代futex系统调用的后续版本，旨在克服原有接口的限制。
+>> +
+>> +用户API
+>> +=======
+>> +
+>> +``futex_waitv()``
+>> +-----------------
+>> +
+>> +等待一个futex数组，可由其中任意一个唤醒::
+>> +
+>> +  futex_waitv(struct futex_waitv *waiters, unsigned int nr_futexes,
+>> +              unsigned int flags, struct timespec *timeout, clockid_t clockid)
+>> +
+>> +  struct futex_waitv {
+>> +        __u64 val;
+>> +        __u64 uaddr;
+>> +        __u32 flags;
+>> +        __u32 __reserved;
+>> +  };
+>> +
+>> +用户空间设置一个struct futex_waitv数组（最多128项），设置 ``uaddr`` 为等待的
+>> +地址， ``val`` 为期望值， ``flags`` 为指定的类型（如private）和futex的大小。
+>> +``__reserved`` 需要置为0，但是它可用作未来扩展。指向数组第一个元素的指针作为
+>> +``waiters`` 传递。如果 ``waiters`` 或任何的  ``uaddr`` 地址无效，将返回 ``-EFAULT`` 。
+>> +
+>> +如果用户空间拥有32位的指针，那么需要做显式转换来保证高位清零。 ``uintptr_t`` 设计
+>> +得很精巧，在32/64位的指针上都正常工作。
+>> +
+>> +``nr_futexes`` 指定了数组的大小。不在[1,128]区间内的值会使系统调用返回 ``-EINVAL`` 。
+>> +
+>> +系统调用的 ``flags`` 参数需要置0，但可用作未来扩展。
+>> +
+>> +对于每个 ``waiters`` 数组中的项，在 ``uaddr`` 的当前值会和 ``val`` 比较。如果
+>> +不一致，系统调用会撤销截至目前完成的所有工作，并返回 ``-EAGAIN`` 。如果所有测试
+>> +和验证都通过，系统调用会等待直到以下情况之一发生：
+>> +
+>> +- 指定的timeout超时，返回 ``-ETIMEOUT`` 。
+>> +- 一个信号被传递给睡眠中的任务，返回 ``-ERESTARTSYS`` 。
+>> +- 某个列表中的futex被唤醒，返回那个被唤醒的futex的索引。
+>> +
+>> +关于如何使用接口的例子可以在 ``tools/testing/selftests/futex/functional/futex_waitv.c``
+>> +中找到。
+>> +
+>> +超时
+>> +----
+>> +
+>> +``struct timespec *timeout`` 是一个指向绝对超时时间的可选参数。你需要在 ``clockid``
+>> +参数中指定要使用的时钟类型。支持 ``CLOCK_MONOTONIC`` 和 ``CLOCK_REALTIME`` 。这个
+>> +系统调用只接受64位的timespec结构体。
+>> +
+>> +futex的类型
+>> +-----------
+>> +
+>> +futex既可以是私有的也可以是共享的。私有用于多个进程共享同样的内存空间，并且futex的虚拟
+>> +地址对所有进程都是一样的。这允许在内核中进行优化。要使用私有futex，需要在futex标志中指定
+>> +``FUTEX_PRIVATE_FLAG`` 。对于那些不在同一内存空间共享的进程，可以让同一个futex拥有不同
+>> +的虚拟地址（例如使用基于文件的共享内存），这需要不同的内部机制来使得正确进入队列。这是默认
+>> +的行为，而且对私有futex和共享futex都适用。
+> Good job. Just "这需要不同的内部机制来使得正确进入队列" is a bit odd. could you repolish it?
+>
+> To others:
+> Reviewed-by: Alex Shi <alexs@kernel.org>
+>
+> Thanks
+>
+>> +
+>> +futex可以是不同的大小：8，16，32或64位。目前只支持32位大小的futex，并且需要通过 ``FUTEX_32``
+>> +标志指定。
+>> diff --git a/Documentation/translations/zh_CN/userspace-api/index.rst b/Documentation/translations/zh_CN/userspace-api/index.rst
+>> index dad5ba7cae6d..68b69b14b143 100644
+>> --- a/Documentation/translations/zh_CN/userspace-api/index.rst
+>> +++ b/Documentation/translations/zh_CN/userspace-api/index.rst
+>> @@ -28,6 +28,7 @@ Linux 内核用户空间API指南
+>>     seccomp_filter
+>>     ebpf/index
+>>     sysfs-platform_profile
+>> +   futex2
+>>
+>>  TODOList:
+>>
+>> @@ -40,7 +41,6 @@ TODOList:
+>>  * media/index
+>>  * netlink/index
+>>  * vduse
+>> -* futex2
+>>
+>>  .. only::  subproject and html
+>>
+>> --
+>> 2.30.2
+>>
+Thanks. I will think a better translation, and send updated one later.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+-- 
+Rui Li    0x77E6D821D7AE84FE
 
-As an extension to this patch set, you might also want to set
-ds->mtu_enforcement_ingress = true, to activate the bridge MTU
-normalization logic, since you have one MTU global to the entire switch.
