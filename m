@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3489A6244F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E04D6244F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbiKJPAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:00:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S230516AbiKJPAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiKJPAD (ORCPT
+        with ESMTP id S230445AbiKJPAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:00:03 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53B014D3C;
-        Thu, 10 Nov 2022 07:00:00 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7Pzh4BMTzqSH7;
-        Thu, 10 Nov 2022 22:56:16 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 22:59:58 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 22:59:57 +0800
-Message-ID: <3198e463-2002-dc08-6d27-d4d0468b6da8@huawei.com>
-Date:   Thu, 10 Nov 2022 22:59:56 +0800
+        Thu, 10 Nov 2022 10:00:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B1238B6;
+        Thu, 10 Nov 2022 07:00:19 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1BE611FD34;
+        Thu, 10 Nov 2022 15:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668092418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RgH7RP9708poSiKSHyKoZckyhGjc0rkuVUOBFq3s34M=;
+        b=kkrfcrooedaFwCfCVYG8Qcg1TIKUSiyl7N64pFltx8WSy5P0SKUG/YKPMCryfKn9VQSQNK
+        pLkie6bst7XLTMOgEBIyLtEB1N/OR3p3fDcWI16UUvy2qMiR39ISzWx+cxgayH4Xs1K4PR
+        mWr1G8GKZ42wHZGQ/2ZsMdpudwTZdIo=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E60A42C141;
+        Thu, 10 Nov 2022 15:00:17 +0000 (UTC)
+Date:   Thu, 10 Nov 2022 16:00:17 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
+Subject: Re: [PATCH printk v3 27/40] tty: serial: earlycon: use
+ console_is_registered()
+Message-ID: <Y20SAUcLYrcTKSxL@alley>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-28-john.ogness@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-Subject: Re: [PATCH] btrfs: qgroup: fix sleep from invalid context bug in
- update_qgroup_limit_item()
-To:     <dsterba@suse.cz>
-CC:     <clm@fb.com>, <josef@toxicpanda.com>, <dsterba@suse.com>,
-        <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
-References: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
- <20221110144630.GF5824@suse.cz>
-In-Reply-To: <20221110144630.GF5824@suse.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107141638.3790965-28-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have _no_ link to the report, I just reproduce it in my own qemu vm, 
-and _no_ c or syz repro.
+On Mon 2022-11-07 15:22:25, John Ogness wrote:
+> It is not reliable to check for CON_ENABLED in order to identify if a
+> console is registered. Use console_is_registered() instead.
+> 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-在 2022/11/10 22:46, David Sterba 写道:
-> On Thu, Nov 10, 2022 at 10:13:42PM +0800, ChenXiaoSong wrote:
->> Syzkaller reported BUG as follows:
-> 
-> Do you have link to the report? Or at least the identifier of the
-> report, there's some automation that recognizes Reported-by: syzbot-...
-> to close it once the patch is merged.
-> .
-> 
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
