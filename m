@@ -2,100 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD27623A47
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A88B623A42
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiKJDPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S232261AbiKJDNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiKJDPm (ORCPT
+        with ESMTP id S230388AbiKJDNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:15:42 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5676B1C911;
-        Wed,  9 Nov 2022 19:15:41 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N76Qp2cBJzHvbv;
-        Thu, 10 Nov 2022 11:15:14 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 11:15:39 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <kvalo@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <rmani@qti.qualcomm.com>
-CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] wifi: ath10k: Fix return value in ath10k_pci_init()
-Date:   Thu, 10 Nov 2022 11:12:28 +0800
-Message-ID: <20221110031228.247361-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 9 Nov 2022 22:13:20 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541CD1EEE8;
+        Wed,  9 Nov 2022 19:13:19 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id u6so414011plq.12;
+        Wed, 09 Nov 2022 19:13:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImFeFDYsXMyLunch28/Ff8jR4Jwu5RmwIqBQ6vLGVc0=;
+        b=dRaz9vRVAYvShoIJ09oknHoIh+W1Y7xjhgNT5ylWjuT9QyXtFvwK1zOckMEx3K0vGS
+         9jH4bqTLLa1QvUGiASffucoR2Rz+a1B6U4r3Ls1jA+gLrdaHN1K2hLIIk9V1sjyU83d0
+         9qGLIKyl8WxBM9fGmNsoO3RenC0qUsRorrY2MCH2MOCAwzZKTrt+Z85Xep9N6PRFk4Jx
+         XY22NKFo+Ep1XW9xuFOk6fRJnZBH2B0PzIdzJNbbwVe1i9ciQ90lRAjuSMmSw0zb6KtK
+         cxxpWmA6Yih5fhvsST0RnnAWz3V7idyMsNsiKGqVFkdG8COD1AP1GB4x6rG/y65u34jT
+         bYUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ImFeFDYsXMyLunch28/Ff8jR4Jwu5RmwIqBQ6vLGVc0=;
+        b=LOpvhcN+xd9YTL7oCKJLLCGKiclkuXI7Sjs0KhjKLjmkLRXZ34yXCxQXFbieFOyB8N
+         S5F+ik+ND95FMzzOmbLp+VMr822ZdzstawgMxP+gQyE3IEZzLyqwyTypgBKySoIwfbqX
+         rWXkwNprlgudztNrev5iK2F6PR5aTPqymGzK6LSYF0ZjtLXQgzhAJd/UQLC2E69BqObF
+         F+jlGkxjg0ZkEkAUPt33pclvQRhLMEWI2j2K5vxJBV9WIistrMqCUGGTrIXUIcLeNmqn
+         WMl0MWXE1xOmc1qPcJEXTOSgsjM7EIUuzNUUZv1S8LVwE8iHp+BQ69ZCEAmvEg62IC67
+         nsLg==
+X-Gm-Message-State: ACrzQf0UKkHS1QSf8CDP+oiCzzcxvpNgkLklD98MEL8/uOhmMrn9baOE
+        0d7r/0gjOY6DqozTQPpxWow=
+X-Google-Smtp-Source: AMsMyM4aNdMU5619CiFduYOvGSrpKG9czPIbjGu7rIUwd9KyD/fe2nOmjQvAwlJ4hmRiktCKyUke2w==
+X-Received: by 2002:a17:90a:e606:b0:212:f100:22e3 with SMTP id j6-20020a17090ae60600b00212f10022e3mr83094466pjy.83.1668049998899;
+        Wed, 09 Nov 2022 19:13:18 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id u7-20020a63ef07000000b004393c5a8006sm8179466pgh.75.2022.11.09.19.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 19:13:18 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] ceph: Fix NULL vs IS_ERR checking in ceph_getattr
+Date:   Thu, 10 Nov 2022 07:13:10 +0400
+Message-Id: <20221110031311.1629288-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.37.3.671.ge2130fe6da78.dirty
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver is attempting to register to support two different buses.
-if either of these is successful then ath10k_pci_init() should return 0
-so that hardware attached to the successful bus can be probed and
-supported. only if both of these are unsuccessful should ath10k_pci_init()
-return an errno.
+The ceph_lookup_inode() function return error pointers on error
+instead of NULL.
+Use IS_ERR() to check the return value to fix this.
 
-Fixes: 0b523ced9a3c ("ath10k: add basic skeleton to support ahb")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-
+Fixes: aa87052dd965 ("ceph: fix incorrectly showing the .snap size for stat")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
-v2: modify according to Jeff's suggestion, and change the commit message
-    and body as well.
----
- drivers/net/wireless/ath/ath10k/pci.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ fs/ceph/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
-index e56c6a6b1379..728d607289c3 100644
---- a/drivers/net/wireless/ath/ath10k/pci.c
-+++ b/drivers/net/wireless/ath/ath10k/pci.c
-@@ -3792,18 +3792,22 @@ static struct pci_driver ath10k_pci_driver = {
+diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+index 4af5e55abc15..bad9eeb6a1a5 100644
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@ -2492,7 +2492,7 @@ int ceph_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 			struct inode *parent;
  
- static int __init ath10k_pci_init(void)
- {
--	int ret;
-+	int ret1, ret2;
+ 			parent = ceph_lookup_inode(sb, ceph_ino(inode));
+-			if (!parent)
++			if (IS_ERR(parent))
+ 				return PTR_ERR(parent);
  
--	ret = pci_register_driver(&ath10k_pci_driver);
--	if (ret)
-+	ret1 = pci_register_driver(&ath10k_pci_driver);
-+	if (ret1)
- 		printk(KERN_ERR "failed to register ath10k pci driver: %d\n",
--		       ret);
-+		       ret1);
- 
--	ret = ath10k_ahb_init();
--	if (ret)
--		printk(KERN_ERR "ahb init failed: %d\n", ret);
-+	ret2 = ath10k_ahb_init();
-+	if (ret2)
-+		printk(KERN_ERR "ahb init failed: %d\n", ret2);
- 
--	return ret;
-+	if (ret1 && ret2)
-+		return ret1;
-+
-+	/* registered to at least one bus */
-+	return 0;
- }
- module_init(ath10k_pci_init);
- 
+ 			pci = ceph_inode(parent);
 -- 
-2.17.1
+2.37.3.671.ge2130fe6da78.dirty
 
