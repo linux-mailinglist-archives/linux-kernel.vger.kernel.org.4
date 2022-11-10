@@ -2,266 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30A6623B13
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 05:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFD7623B15
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 05:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiKJE6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 23:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S232209AbiKJE7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 23:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiKJE6F (ORCPT
+        with ESMTP id S229959AbiKJE7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 23:58:05 -0500
-Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084FE2B1B8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:58:03 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 94535604F2;
-        Thu, 10 Nov 2022 05:58:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1668056281; bh=HlvL/rNMDq0gNMxw710sjO64wRDrS6TgxRUpnupu38I=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=0gyCSUdMKFM7/HaDqgNAIxVbe0GeJdzYLmcTrWLVNAgtUnWrEbbsp8gxCpM6EfKIR
-         B2suD3Buy4E/DmLt8rO7KUgopoyfJzc/h0zTKlc+AwHzz/ZqZdb6a6IXjLWaHpZdT0
-         dEpucJDCgVa6vm5LO7g6I06kNVlI4fsY9ZSb6LdwaoxL1vJDoFAtgqhNDcZNKz6G7i
-         H7+U2dCotYRpn5cMxEntsL99YK5Lg33rtbbrUoDDLhxh0syKKDbSU+7mkUWJkYN9G8
-         C7ca1p+G2XO/+BqF4RRiDLCAhwyXoYwzIoxbx3ArWuKrTf5f9HOLf5QwzAKyLJqGzI
-         Le+UDUNc4aP0Q==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dH9FGErAijnm; Thu, 10 Nov 2022 05:57:59 +0100 (CET)
-Received: from [192.168.0.12] (unknown [188.252.198.82])
-        by domac.alu.hr (Postfix) with ESMTPSA id 28B72604ED;
-        Thu, 10 Nov 2022 05:57:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1668056279; bh=HlvL/rNMDq0gNMxw710sjO64wRDrS6TgxRUpnupu38I=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=DBA1udqa9mqHaT3DwI0uT9mYR1fE0K9RjIhNluC9QumdHd86yBIq7C+xzlxpafkf5
-         QQ6XRuykScoS6DR0eKqQQFKhyeJ8UFtILa2te4c73HVCNcq2epzPKBejGnu57unIb3
-         gN+nA7ZI56ExhrFcGoeqntIYl1XD/x9mQ5vFmFS7NVfzLzOTR5mcTOayTy9flzdNwb
-         blaT7Fc1mT8Jl9p1xxQr1XQOfLS3+W/M89Kv9cL1HP2fFr2JvX96LJZnRVP4Up4BKL
-         TubjdKKaQ4F77J/k5Pa61NDOSduFHIaVb/Z7M1jA0vKi0uADsZ9ldKvSDvB2ZovDid
-         iqfPCPnxxH/5A==
-Content-Type: multipart/mixed; boundary="------------h8kKATVYmCiv69Mc65GaI0TR"
-Message-ID: <a6b76ce0-0fb3-4434-cc3e-ab6f39fb1cf9@alu.unizg.hr>
-Date:   Thu, 10 Nov 2022 05:57:57 +0100
+        Wed, 9 Nov 2022 23:59:11 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCCC13D16
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 20:59:08 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so640463pjd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 20:59:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XusO0JlinNw/fq2i6/nKia7eGrTN0IevFNyt+4YvPQA=;
+        b=xYF+JhPfR1W8nnhThZP7aVc0ne8w7/DXH+jxsHwrhl4XP8K37F4e+bITlgTce4Us7I
+         WOZrbkBdTuxE+/vzgBLMuun0QVfyHKjukvZpiu4VbvdXnssyhyDScBLdTqqUUoQFFfnf
+         NmlMwPxD+vsjMmvsS2o3RkhvQidbchAsLX3MjdpNVHZ/0xooF1dTByiYtOeAR5E1v/GR
+         RTLRhVot30r2OCbJiQCUwKEjrGbVoek6z8KoQMajZQoLshAcnKghjCFcyiONiMNXX5TE
+         P1yM3y4bguvSD7kVR1gFwNb8zIc8IBkSfMtf2agmyQqrIZ/SRDet3nwmnr2pxZ1P9x1U
+         StSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XusO0JlinNw/fq2i6/nKia7eGrTN0IevFNyt+4YvPQA=;
+        b=O9oO/KGJwiPozstoHhvxLFZGK9kb58+jlCb1P7VjmBs6IYJElXgJOXstrRfLjO7Js7
+         6b49j4dIxDt0z1WzCYQacnCyI5HxwndeTcqRoA/eGNxWlBQC0Y18whlNEkEAJnTcMf4G
+         egaqpwuGa841t5uJlDbtyaKc3+j1LEh18c1VtYh98QJdd14DaarcbICPo7l3ehU52/af
+         UgoW9dZujq/1sjjgQ0xdP93EJjUgtoOpWfzZfoozZEUxAR8ccw0rj2/K+VjLTbs/9shp
+         6uMITesdr9BPzEgDhSBd8Sv7ggNz5Sn2cAxPsCz4aHxRj9c8ODGBwgDNGuSTRbafpTlO
+         Pq3w==
+X-Gm-Message-State: ACrzQf0HOpzCGquOhkjzXlj9nnTwjJARxEIHFWpjM5SbkDftv9xrlENG
+        SAlQ2hu9+0iYeRL/PGXVsD5o9w==
+X-Google-Smtp-Source: AMsMyM5nz6CdgSrMjRqzdcV0QA77/PPY2nwow4az34tvxntND5q4keQFCpNu0PncrilrCAmoa+4jUQ==
+X-Received: by 2002:a17:90b:378f:b0:213:acf2:13ba with SMTP id mz15-20020a17090b378f00b00213acf213bamr63916080pjb.25.1668056347963;
+        Wed, 09 Nov 2022 20:59:07 -0800 (PST)
+Received: from [10.251.254.250] ([71.18.255.70])
+        by smtp.gmail.com with ESMTPSA id b9-20020a1709027e0900b00187033cc287sm9941947plm.190.2022.11.09.20.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 20:59:07 -0800 (PST)
+Message-ID: <e4e74394-de03-cdce-63d7-f94f8e436b1b@bytedance.com>
+Date:   Thu, 10 Nov 2022 12:58:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: BUG: kworker + systemd-udevd memory leaks found in 6.1.0-rc4
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     linux-kernel@vger.kernel.org
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Tejun Heo <tj@kernel.org>,
-        Florian Mickler <florian@mickler.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        systemd-devel@lists.freedesktop.org
-References: <0d9c3f6c-3948-d5d1-bcc1-baf31141beaa@alu.unizg.hr>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH bpf-next v2 0/4] Add ftrace direct call for arm64
 Content-Language: en-US
-In-Reply-To: <0d9c3f6c-3948-d5d1-bcc1-baf31141beaa@alu.unizg.hr>
-X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DEAR_SOMETHING,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+To:     Florent Revest <revest@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Xu Kuohai <xukuohai@huaweicloud.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Guo Ren <guoren@kernel.org>
+References: <20220913162732.163631-1-xukuohai@huaweicloud.com>
+ <f1e14934-dc54-9bf7-501a-89affdb7371e@iogearbox.net>
+ <YzG51Jyd5zhvygtK@arm.com> <YzHk1zRf1Dp8YTEe@FVFF77S0Q05N>
+ <970a25e4-9b79-9e0c-b338-ed1a934f2770@huawei.com>
+ <YzR5WSLux4mmFIXg@FVFF77S0Q05N>
+ <2cb606b4-aa8b-e259-cdfd-1bfc61fd7c44@huawei.com>
+ <CABRcYmKPchvtkkgWhOJ6o3pHVqTWeenGawHfZ2ug8Akdh6NfnQ@mail.gmail.com>
+ <7f34d333-3b2a-aea5-f411-d53be2c46eee@huawei.com>
+ <20221005110707.55bd9354@gandalf.local.home>
+ <CABRcYmJGY6fp0CtUBYN8BjEDN=r42BPLSBcrxqu491bTRmfm7g@mail.gmail.com>
+ <20221005113019.18aeda76@gandalf.local.home>
+ <CABRcYmL0bDkgYP3tSwhZYaGUSbsUR3Gq85QCRiUAdXt65czzmg@mail.gmail.com>
+ <20221006122922.53802a5c@gandalf.local.home>
+ <CABRcYm+d=xY9nBCJo-6JW_=F41g4X32QM9WOPChaOTfs6d6KCA@mail.gmail.com>
+ <20221021203158.4464ac19d8b19b6da6a40852@kernel.org>
+ <CABRcYmKzwAFr_0NOxeWhXcCiT5wwi_qkm5Czc0C4CVCAs8stFw@mail.gmail.com>
+From:   wuqiang <wuqiang.matt@bytedance.com>
+In-Reply-To: <CABRcYmKzwAFr_0NOxeWhXcCiT5wwi_qkm5Czc0C4CVCAs8stFw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------h8kKATVYmCiv69Mc65GaI0TR
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+On 2022/10/22 00:49, Florent Revest wrote:
+> On Fri, Oct 21, 2022 at 1:32 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>> On Mon, 17 Oct 2022 19:55:06 +0200
+>> Florent Revest <revest@chromium.org> wrote:
+>>> Mark finished an implementation of his per-callsite-ops and min-args
+>>> branches (meaning that we can now skip the expensive ftrace's saving
+>>> of all registers and iteration over all ops if only one is attached)
+>>> - https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64-ftrace-call-ops-20221017
+>>>
+>>> And Masami wrote similar patches to what I had originally done to
+>>> fprobe in my branch:
+>>> - https://github.com/mhiramat/linux/commits/kprobes/fprobe-update
+>>>
+>>> So I could rebase my previous "bpf on fprobe" branch on top of these:
+>>> (as before, it's just good enough for benchmarking and to give a
+>>> general sense of the idea, not for a thorough code review):
+>>> - https://github.com/FlorentRevest/linux/commits/fprobe-min-args-3
+>>>
+>>> And I could run the benchmarks against my rpi4. I have different
+>>> baseline numbers as Xu so I ran everything again and tried to keep the
+>>> format the same. "indirect call" refers to my branch I just linked and
+>>> "direct call" refers to the series this is a reply to (Xu's work)
+>>
+>> Thanks for sharing the measurement results. Yes, fprobes/rethook
+>> implementation is just porting the kretprobes implementation, thus
+>> it may not be so optimized.
+>>
+>> BTW, I remember Wuqiang's patch for kretprobes.
+>>
+>> https://lore.kernel.org/all/20210830173324.32507-1-wuqiang.matt@bytedance.com/T/#u
+> 
+> Oh that's a great idea, thanks for pointing it out Masami!
+> 
+>> This is for the scalability fixing, but may possible to improve
+>> the performance a bit. It is not hard to port to the recent kernel.
+>> Can you try it too?
+> 
+> I rebased it on my branch
+> https://github.com/FlorentRevest/linux/commits/fprobe-min-args-3
+> 
+> And I got measurements again. Unfortunately it looks like this does not help :/
+> 
+> New benchmark results: https://paste.debian.net/1257856/
+> New perf report: https://paste.debian.net/1257859/
+> 
+> The fprobe based approach is still significantly slower than the
+> direct call approach.
 
-On 04. 11. 2022. 11:40, Mirsad Goran Todorovac wrote:
+FYI, a new version was released, basing on ring-array, which brings a 6.96%
+increase in throughput of 1-thread case for ARM64.
 
-> Dear Sirs,
->
-> When building a RPM 6.1.0-rc3 for AlmaLinux 8.6, I have enabled 
-> CONFIG_DEBUG_KMEMLEAK=y
-> and the result showed an unreferenced object in kworker process:
->
-> # cat /sys/kernel/debug/kmemleak
-> unreferenced object 0xffffa01dabff6100 (size 16):
->   comm "kworker/u12:4", pid 400, jiffies 4294894771 (age 5284.956s)
->   hex dump (first 16 bytes):
->     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
->   backtrace:
->     [<000000009ff951f6>] __kmem_cache_alloc_node+0x380/0x4e0
->     [<00000000451f4268>] __kmalloc_node_track_caller+0x55/0x150
->     [<0000000005472512>] kstrdup+0x36/0x70
->     [<000000002f797ac4>] kstrdup_const+0x28/0x30
->     [<00000000e3f86581>] kvasprintf_const+0x78/0xa0
->     [<00000000e15920f7>] kobject_set_name_vargs+0x23/0xa0
->     [<000000004158a6c0>] dev_set_name+0x53/0x70
->     [<000000001a120541>] memstick_check+0xff/0x384 [memstick]
->     [<00000000122bb894>] process_one_work+0x214/0x3f0
->     [<00000000fcf282cc>] worker_thread+0x34/0x3d0
->     [<0000000002409855>] kthread+0xed/0x120
->     [<000000007b02b4a3>] ret_from_fork+0x1f/0x30
-> unreferenced object 0xffffa01dabff6ec0 (size 16):
->   comm "kworker/u12:4", pid 400, jiffies 4294894774 (age 5284.944s)
->   hex dump (first 16 bytes):
->     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
->   backtrace:
->     [<000000009ff951f6>] __kmem_cache_alloc_node+0x380/0x4e0
->     [<00000000451f4268>] __kmalloc_node_track_caller+0x55/0x150
->     [<0000000005472512>] kstrdup+0x36/0x70
->     [<000000002f797ac4>] kstrdup_const+0x28/0x30
->     [<00000000e3f86581>] kvasprintf_const+0x78/0xa0
->     [<00000000e15920f7>] kobject_set_name_vargs+0x23/0xa0
->     [<000000004158a6c0>] dev_set_name+0x53/0x70
->     [<000000001a120541>] memstick_check+0xff/0x384 [memstick]
->     [<00000000122bb894>] process_one_work+0x214/0x3f0
->     [<00000000fcf282cc>] worker_thread+0x34/0x3d0
->     [<0000000002409855>] kthread+0xed/0x120
->     [<000000007b02b4a3>] ret_from_fork+0x1f/0x30
-> #
->
-> Please fing the build config and lshw output attached.
->
-> dmesg is useless, as it is filled with events like:
->
-> [ 6068.996120] evbug: Event. Dev: input4, Type: 1, Code: 31, Value: 0
-> [ 6068.996121] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
-> [ 6069.124145] evbug: Event. Dev: input4, Type: 4, Code: 4, Value: 458762
-> [ 6069.124149] evbug: Event. Dev: input4, Type: 1, Code: 34, Value: 1
-> [ 6069.124150] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
-> [ 6069.196003] evbug: Event. Dev: input4, Type: 4, Code: 4, Value: 458762
-> [ 6069.196007] evbug: Event. Dev: input4, Type: 1, Code: 34, Value: 0
-> [ 6069.196009] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
-> [ 6069.788129] evbug: Event. Dev: input4, Type: 4, Code: 4, Value: 458792
-> [ 6069.788133] evbug: Event. Dev: input4, Type: 1, Code: 28, Value: 1
-> [ 6069.788135] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
+https://lore.kernel.org/all/20221108071443.258794-1-wuqiang.matt@bytedance.com/
 
-This bug is confirmed in 6.1-rc4, among the "thermald" and "systemd-dev" 
-kernel memory leaks, potentially exposing race conditions or other more 
-serious bug.
+Could you share more details of the test ? I'll give it a try.
 
-The bug is now also confirmed and now manifested also in the Ubuntu 
-22.04 LTS jammy 6.1-rc4 build.
+>> Anyway, eventually, I would like to remove the current kretprobe
+>> based implementation and unify fexit hook with function-graph
+>> tracer. It should make more better perfromance on it.
+> 
+> That makes sense. :) How do you imagine the unified solution ?
+> Would both the fgraph and fprobe APIs keep existing but under the hood
+> one would be implemented on the other ? (or would one be gone ?) Would
+> we replace the rethook freelist with the function graph's per-task
+> shadow stacks ? (or the other way around ?))
 
-Here is the kmemleak output:
+How about a private pool designate for local cpu ? If the fprobed routine
+sticks to the same CPU when returning, the object allocation and reclaim
+can go a quick path, that should bring same performance as shadow stack.
+Otherwise the return of an object will go a slow path (slow as current
+freelist or objpool).
 
-unreferenced object 0xffff9242b13b3980 (size 64):
-   comm "kworker/5:3", pid 43106, jiffies 4305052439 (age 71828.792s)
-   hex dump (first 32 bytes):
-     80 8b a0 f0 42 92 ff ff 00 00 00 00 00 00 00 00 ....B...........
-     20 86 a0 f0 42 92 ff ff 00 00 00 00 00 00 00 00 ...B...........
-   backtrace:
-     [<00000000c5dea4db>] __kmem_cache_alloc_node+0x380/0x4e0
-     [<000000002b17af47>] kmalloc_node_trace+0x27/0xa0
-     [<000000004c09eee5>] xhci_alloc_command+0x6e/0x180
-     [<0000000099436a99>] xhci_alloc_command_with_ctx+0x1d/0x60
-     [<0000000070f45e17>] xhci_change_max_exit_latency+0x2e/0x1c0
-     [<000000001b13cf46>] xhci_disable_usb3_lpm_timeout+0x77/0xb0
-     [<00000000ff561da4>] usb_disable_link_state+0x53/0xd0
-     [<0000000068febd40>] usb_disable_lpm+0x82/0xc0
-     [<00000000dffec01f>] usb_unlocked_disable_lpm+0x2d/0x50
-     [<0000000061a59294>] usb_disable_device+0x12f/0x250
-     [<0000000044e2299d>] usb_set_configuration+0x65c/0x9a0
-     [<000000001af32470>] driver_set_config_work+0x78/0xa0
-     [<00000000320216c3>] process_one_work+0x214/0x3f0
-     [<00000000694e932f>] worker_thread+0x34/0x3d0
-     [<0000000002e30775>] kthread+0xed/0x120
-     [<00000000512e8066>] ret_from_fork+0x1f/0x30
-unreferenced object 0xffff9242f0a08620 (size 32):
-   comm "kworker/5:3", pid 43106, jiffies 4305052439 (age 71828.792s)
-   hex dump (first 32 bytes):
-     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
-     30 86 a0 f0 42 92 ff ff 30 86 a0 f0 42 92 ff ff 0...B...0...B...
-   backtrace:
-     [<00000000c5dea4db>] __kmem_cache_alloc_node+0x380/0x4e0
-     [<000000002b17af47>] kmalloc_node_trace+0x27/0xa0
-     [<00000000459908cf>] xhci_alloc_command+0xe6/0x180
-     [<0000000099436a99>] xhci_alloc_command_with_ctx+0x1d/0x60
-     [<0000000070f45e17>] xhci_change_max_exit_latency+0x2e/0x1c0
-     [<000000001b13cf46>] xhci_disable_usb3_lpm_timeout+0x77/0xb0
-     [<00000000ff561da4>] usb_disable_link_state+0x53/0xd0
-     [<0000000068febd40>] usb_disable_lpm+0x82/0xc0
-     [<00000000dffec01f>] usb_unlocked_disable_lpm+0x2d/0x50
-     [<0000000061a59294>] usb_disable_device+0x12f/0x250
-     [<0000000044e2299d>] usb_set_configuration+0x65c/0x9a0
-     [<000000001af32470>] driver_set_config_work+0x78/0xa0
-     [<00000000320216c3>] process_one_work+0x214/0x3f0
-     [<00000000694e932f>] worker_thread+0x34/0x3d0
-     [<0000000002e30775>] kthread+0xed/0x120
-     [<00000000512e8066>] ret_from_fork+0x1f/0x30
+>>> Note that I can't really make sense of the perf report with indirect
+>>> calls. it always reports it spent 12% of the time in
+>>> rethook_trampoline_handler but I verified with both a WARN in that
+>>> function and a breakpoint with a debugger, this function does *not*
+>>> get called when running this "bench trig-fentry" benchmark. Also it
+>>> wouldn't make sense for fprobe_handler to call it so I'm quite
+>>> confused why perf would report this call and such a long time spent
+>>> there. Anyone know what I could be missing here ?
+> 
+> I made slight progress on this. If I put the vmlinux file in the cwd
+> where I run perf report, the reports no longer contain references to
+> rethook_trampoline_handler. Instead, they have a few
+> 0xffff800008xxxxxx addresses under fprobe_handler. (like in the
+> pastebin I just linked)
+> 
+> It's still pretty weird because that range is the vmalloc area on
+> arm64 and I don't understand why anything under fprobe_handler would
+> execute there. However, I'm also definitely sure that these 12% are
+> actually spent getting buffers from the rethook memory pool because if
+> I replace rethook_try_get and rethook_recycle calls with the usage of
+> a dummy static bss buffer (for the sake of benchmarking the
+> "theoretical best case scenario") these weird perf report traces are
+> gone and the 12% are saved. https://paste.debian.net/1257862/
+> 
+> This is why I would be interested in seeing rethook's memory pool
+> reimplemented on top of something like
+> https://lwn.net/Articles/788923/ If we get closer to the performance
+> of the the theoretical best case scenario where getting a blob of
+> memory is ~free (and I think it could be the case with a per task
+> shadow stack like fgraph's), then a bpf on fprobe implementation would
+> start to approach the performances of a direct called trampoline on
+> arm64: https://paste.debian.net/1257863/
 
-Please find the complete kmemleak output attached:
-
-Thanks,
-Mirsad
-
---
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
---------------h8kKATVYmCiv69Mc65GaI0TR
-Content-Type: application/x-lrzip;
- name="thermald_systemd-dev_kworker.memleak.lrz"
-Content-Disposition: attachment;
- filename="thermald_systemd-dev_kworker.memleak.lrz"
-Content-Transfer-Encoding: base64
-
-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
-b0M1i1fnINVz0KylsEDss3UySdqKRsI=
-
---------------h8kKATVYmCiv69Mc65GaI0TR--
