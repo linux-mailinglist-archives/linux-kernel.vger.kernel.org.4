@@ -2,158 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E099462419E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB796241A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiKJLkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S230452AbiKJLkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiKJLkD (ORCPT
+        with ESMTP id S230359AbiKJLkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Nov 2022 06:40:03 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E81771F0D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:39:59 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id a5so2617151edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ck1BFgYQUoxfjthSY0Z/ICMvhRDs51HkE0D/E51e4wU=;
-        b=cLoqN/9Hw4WN89uoDoxpq9Ce/Ps341RBpybWaA/Ttn7dX0XjEZSpQMeE/cLupilSy+
-         h9M/AwRJwi+wD3lcUZtgCbl5J3Y1/4+a+UG987xrzyBKVQSsdTGx1Fm9p56BVwQCgeqw
-         ImbNP+V0cuLG09qZBqDEVWEBH4JmnDYapBzy20rI0QOEnuyEvU41wtqwWtHQ/Ku+SIq6
-         z/iAwWeg98cPs684u3jM1bZkrHRFlxBeM553WE2HZydhyBqAswoiUSyHfbMc8MScHPVp
-         jTxj/0bSYX2PEajd6PNI/IV0ZBru+l7g17Wn1GCvWMrBI6s8qLNSd3U7dwQx3hiin+sp
-         LiYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ck1BFgYQUoxfjthSY0Z/ICMvhRDs51HkE0D/E51e4wU=;
-        b=t6erFUGXw6C55Rq7X07mIwlT+aRiJTNVUh1uMARlARm4AUxQsqUI+7Sn2hKiUEqips
-         H+Aoh1E6PJHjdkibxWy7xCzuvQvluwmbC/0Bcl70xG5K3gzUonSZeLOBZJI1UO1Z1v+U
-         Ay6M7QC4MrM/6pnPiRCYoVG9I+uxhltU1ipuV5YtPac3GOVbHvaGgZny1piL1lN+e3rt
-         O0757ukKUZW0PPkbohhikyKWw5P8QU3YX8e5hJpGzYQUEb9NJsfz9Uz/wehISsMAd7ER
-         tCJAFH+thYzQd7oTdkJobdtr4xVnYjuBVsQlbL/xYRC7cowRa49DRRbs4e+HgfvG4lm4
-         BWKA==
-X-Gm-Message-State: ACrzQf3SMFd0RcvBgLsiG6wvtebmZTp8HjErk71FPYBcT3poI/gAmyVL
-        YIjFqDW0Sg8ZK5YLF0SZGYEEwi0SXsuwOqH7N7Wiiw==
-X-Google-Smtp-Source: AMsMyM6KPfAGNVILTJIJybxZbWNcNW1j294XPOEkghGZsATADMyuAh5FXMGRYiA9Y0UOLTHKSZCe9zdW3Mb4U369XWo=
-X-Received: by 2002:a05:6402:4002:b0:463:bc31:2604 with SMTP id
- d2-20020a056402400200b00463bc312604mr2100488eda.32.1668080397979; Thu, 10 Nov
- 2022 03:39:57 -0800 (PST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E61671F0A;
+        Thu, 10 Nov 2022 03:39:59 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7Kct693GzmVrL;
+        Thu, 10 Nov 2022 19:39:42 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 19:39:56 +0800
+Message-ID: <11b1c67e-ab07-5eed-0e2d-8c85f6a89725@huawei.com>
+Date:   Thu, 10 Nov 2022 19:39:56 +0800
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech> <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
-In-Reply-To: <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 10 Nov 2022 12:39:46 +0100
-Message-ID: <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v3] bpf: Initialize same number of free nodes for
+ each pcpu_freelist
+Content-Language: en-US
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+References: <20221110035039.54859-1-xukuohai@huawei.com>
+ <CAEf4BzYMExNVP353xUmkD=M7_QKDG8Ukm0T7D9aCZG=-GToiaA@mail.gmail.com>
+ <80252c82-9c34-aefe-8422-fa247092dcec@huawei.com>
+In-Reply-To: <80252c82-9c34-aefe-8422-fa247092dcec@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
-> > hook, but doesn't provide a determine_rate implementation.
-> >
-> > This is a bit odd, since set_parent() is there to, as its name implies,
-> > change the parent of a clock. However, the most likely candidate to
-> > trigger that parent change is a call to clk_set_rate(), with
-> > determine_rate() figuring out which parent is the best suited for a
-> > given rate.
-> >
-> > The other trigger would be a call to clk_set_parent(), but it's far less
-> > used, and it doesn't look like there's any obvious user for that clock.
->
-> If I recall correctly, that is the use case we did target for these
-> types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
+On 11/10/2022 2:23 PM, Xu Kuohai wrote:
+> On 11/10/2022 12:05 PM, Andrii Nakryiko wrote:
+>> On Wed, Nov 9, 2022 at 7:33 PM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>>
+>>> pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
+>>> free nodes for some CPUs, and then possibly one CPU with fewer nodes,
+>>> followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
+>>> and num_possible_cpus() == 32, CPU 0~27 each gets 9 free nodes, CPU 28 gets
+>>> 4 free nodes, CPU 29~31 get 0 free nodes, while in fact each CPU should get
+>>> 8 nodes equally.
+>>>
+>>> This patch initializes nr_elems / num_possible_cpus() free nodes for each
+>>> CPU firstly, then allocates the remaining free nodes by one for each CPU
+>>> until no free nodes left.
+>>>
+>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>>> Acked-by: Yonghong Song <yhs@fb.com>
+>>> ---
+>>> v3: Simplify code as suggested by Andrii
+>>> v2: Update commit message and add Yonghong's ack
+>>> ---
+>>>   kernel/bpf/percpu_freelist.c | 27 ++++++++++++++-------------
+>>>   1 file changed, 14 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
+>>> index b6e7f5c5b9ab..bd60070c079f 100644
+>>> --- a/kernel/bpf/percpu_freelist.c
+>>> +++ b/kernel/bpf/percpu_freelist.c
+>>> @@ -100,22 +100,23 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
+>>>                              u32 nr_elems)
+>>>   {
+>>>          struct pcpu_freelist_head *head;
+>>> -       int i, cpu, pcpu_entries;
+>>> +       unsigned int cpu, cpu_idx, i, j, n, m;
+>>>
+>>> -       pcpu_entries = nr_elems / num_possible_cpus() + 1;
+>>> -       i = 0;
+>>> +       n = nr_elems / num_possible_cpus();
+>>> +       m = nr_elems % num_possible_cpus();
+>>> +
+>>> +       cpu_idx = 0;
+>>>
+>>>          for_each_possible_cpu(cpu) {
+>>> -again:
+>>> -               head = per_cpu_ptr(s->freelist, cpu);
+>>> -               /* No locking required as this is not visible yet. */
+>>> -               pcpu_freelist_push_node(head, buf);
+>>> -               i++;
+>>> -               buf += elem_size;
+>>> -               if (i == nr_elems)
+>>> -                       break;
+>>> -               if (i % pcpu_entries)
+>>> -                       goto again;
+>>> +               j = min(n + (cpu_idx < m ? 1 : 0), nr_elems);
+>>
+>> why the min() here?
+>>
+> 
+> to avoid out-of-bounds in case nr_elems is less than the total number of CPUs,
+> seems not very necessary, but the original code avoids this as well, I just kept
+> the logic
+> 
 
-Hm I am trying to get that driver to work ... from time to time.
-It's just that ALSA SoC DT has changed to much that it turns out
-into a complete rewrite :/
+sorry, no out-of-bounds here, when nr_elems is less than the total number of CPUs,
+j will be 0 when cpu_idx >= m, will post v4
 
-So in sound/soc/ux500/mop500_ab8500.c
-I see this:
+>>> +               for (i = 0; i < j; i++) {
+>>> +                       head = per_cpu_ptr(s->freelist, cpu);
+>>> +                       /* No locking required as this is not visible yet. */
+>>> +                       pcpu_freelist_push_node(head, buf);
+>>> +                       buf += elem_size;
+>>> +               }
+>>> +               nr_elems -= j;
+>>> +               cpu_idx++;
+>>>          }
+>>>   }
+>>>
+>>> -- 
+>>> 2.30.2
+>>>
+>> .
+> 
+> 
+> .
 
-        status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
-        if (status)
-(...)
-
-and there is elaborate code to switch between "SYSCLK" and
-"ULPCLK" (ulta-low power clock). Just like you say... however
-a clock named SYSCLK or ULPCLK does not appear in the
-code in drivers/clk/ux500 or any DT bindings so... it seems to
-be non-working for the time being.
-
-Yours,
-Linus Walleij
