@@ -2,123 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED135624464
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B229B624468
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiKJOeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:34:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S230443AbiKJOel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiKJOeL (ORCPT
+        with ESMTP id S229567AbiKJOej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:34:11 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0140CCD9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:34:10 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id g12so2511767wrs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:34:09 -0800 (PST)
+        Thu, 10 Nov 2022 09:34:39 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF5FCC6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:34:38 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o7so1676154pjj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:34:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gFkJvxzDyOD+/g4BqrG+EdNY7BBRWgxbD/xVAB1He3Y=;
-        b=pXS6F2+ZpLbrs9x2zrEtCa9vpJLRzCrUpxOrepE3+zqpqWJWqYCgORRklE47sTAce8
-         AiMgQRHSRueP/KSqhE5JIrCH9gFP8CCCbpAv5QJOKOUcgakhGTFyyZ1BcMtti7+JYWk2
-         fDFdYy6Or5LyXJq+jPE7QksHvM3I1N6LFC8gpvi72JmZxvTmFDh49lD8v+bSSZEao/J+
-         QLpOUFKG2ik3AmF61TEn1i2rCpU+s0S2JOMgZ4+fAnQkO9sGDvQbawbd2i4Wxx4GUCt5
-         cIYhPPVpHMASGDHN88brICjcjnWSlx1gaOJYcA4KD/OYc3dVBxoUhx8iV4YEe/7zLgXx
-         uLqg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4naR2xBcDe88j8RrDO7aS/st7Z9xD3TqZu4x6dohykE=;
+        b=F0UMYn5USPzsikDqy/bJvgjGt7aKcJjJ2LtVWwGGQCzs4g1wcqpVTvDf/UJs3CernC
+         dK4b+fU7C/FenkqEvXqNiKo+CQ5C4gXBLc0jSlCKj97DhN0O+Xj0WK4ZfLlbV3CONKhl
+         c5hnJ6RQ0FutnInUqXLYQBN0ANb4cEMbFVkus=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gFkJvxzDyOD+/g4BqrG+EdNY7BBRWgxbD/xVAB1He3Y=;
-        b=79nNpp+EPsGl7zId07WJKZJuoz0vcEAk+n8EPX6k+qUnyRVSc+64rmjBEvGxrm8W8y
-         qt6g4IcxULK/y+3WVEbU+MskOAXuX4+8aW/Lah4uF8fQ5VpD5ZNX6q182cV4r1xwJt4C
-         VHCY5LmZt+wSpIfGXgzQhyKyQEAI64wZezthaDKCzjeyStn1XGRVTaLZlrDlYyrGY+QZ
-         kSsKv7Zm8+EzPeEdvsrlaKLdfig3Atz2iG67kO90jxu1mKiEYVsX9JYCXFRYSF6SOgx2
-         qppToyUMXedBHFWOyHeEv+nEWiNuxO5DB5sVpd5tSJlcEuEil1wL8T8oVWCChT8NVJnZ
-         jlCQ==
-X-Gm-Message-State: ACrzQf1D/Z9+9CnmbF38+3MxW/IAWW/2THKWjWu/sfVIk+QQPrhoQ2IP
-        JI3sgbBcM5lW2Xm7mWJEzGEEHA==
-X-Google-Smtp-Source: AMsMyM7dCWg8TonEZqnjcJKIcaSNz+ZbAC5sH2YRN4ytwIMarla1ANqQ6QffOhSgQekipZYBEfOt+A==
-X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id g12-20020adfd1ec000000b00236880f2adfmr42221342wrd.617.1668090848473;
-        Thu, 10 Nov 2022 06:34:08 -0800 (PST)
-Received: from localhost ([95.148.15.66])
-        by smtp.gmail.com with ESMTPSA id p9-20020a05600c468900b003cf75213bb9sm5648477wmo.8.2022.11.10.06.34.07
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4naR2xBcDe88j8RrDO7aS/st7Z9xD3TqZu4x6dohykE=;
+        b=MYAOZkuf2N8PTGP8/LAaDa64SJInCS7KqbkRrmY37lpqM8LDV9ClK61oclQ6gN1uKo
+         43vrQiWTVHCDXGQg4TdXf2MFteb2DNir3wDQbrWHbUXbuTaUHau/jNWT8wNTO8lrYBH/
+         La9SZ5eW50+jOTSAQVMOJ8JfXG3mipN0UISH24jyYauFTol7AOYNA2VfD4dWB9+VRcA0
+         PoXgqnyTA+niAE9TghkcuX6cg0YPC+ilTI4Jz6CsuRmXreOpDfA+E98EnGfVEGGUxx35
+         /n12m0DUnqck83NmZu0QOaZNP0xI+fXC5Z0fekK4bLHnD9X6qdnHcN/m8I5mfBkqG3h2
+         tcFA==
+X-Gm-Message-State: ACrzQf04g+Ym6U49tUvwbCHvYzfXdnPhWzVIHaql0ApXOrK5OTh24/Rd
+        8DpdEMqbT1/rX2EKE2R7vMr20w==
+X-Google-Smtp-Source: AMsMyM4q3FQariaZiCL4NdNu4LaNek6ASbXwbHj0w2pktetZMHoN12rDx3FnR1VA3Mu6E6NsSjdBkQ==
+X-Received: by 2002:a17:90a:c984:b0:20a:ac88:d39d with SMTP id w4-20020a17090ac98400b0020aac88d39dmr81779176pjt.13.1668090878111;
+        Thu, 10 Nov 2022 06:34:38 -0800 (PST)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:6ff1:37e4:b5b3:487e])
+        by smtp.gmail.com with ESMTPSA id iw17-20020a170903045100b00186a6b63525sm11234655plb.120.2022.11.10.06.34.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 06:34:07 -0800 (PST)
-From:   Punit Agrawal <punit.agrawal@bytedance.com>
+        Thu, 10 Nov 2022 06:34:37 -0800 (PST)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Punit Agrawal <punit.agrawal@bytedance.com>, shuah@kernel.org,
-        adobriyan@gmail.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2 1/2] selftests: proc: Fix
- proc-empty-vm build error on non x86_64
-References: <20221109221104.1797802-1-punit.agrawal@bytedance.com>
-        <20221109160243.0db030ca1cbae5f180af3855@linux-foundation.org>
-Date:   Thu, 10 Nov 2022 14:34:07 +0000
-In-Reply-To: <20221109160243.0db030ca1cbae5f180af3855@linux-foundation.org>
-        (Andrew Morton's message of "Wed, 9 Nov 2022 16:02:43 -0800")
-Message-ID: <8735aq280w.fsf@stealth>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        llvm@lists.linux.dev,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] zram: we should always zero out err variable in recompress loop
+Date:   Thu, 10 Nov 2022 23:34:23 +0900
+Message-Id: <20221110143423.3250790-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+In-Reply-To: <20221109115047.2921851-5-senozhatsky@chromium.org>
+References: <20221109115047.2921851-5-senozhatsky@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ drivers/block/zram/zram_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for taking a look.
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 171eccc2249d..9d33801e8ba8 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1891,7 +1891,7 @@ static ssize_t recompress_store(struct device *dev,
+ 
+ 	ret = len;
+ 	for (index = 0; index < nr_pages; index++) {
+-		int err;
++		int err = 0;
+ 
+ 		zram_slot_lock(zram, index);
+ 
+-- 
+2.38.1.431.g37b22c650d-goog
 
-Andrew Morton <akpm@linux-foundation.org> writes:
-
-> On Wed,  9 Nov 2022 22:11:03 +0000 Punit Agrawal <punit.agrawal@bytedance.com> wrote:
->
->> The proc-empty-vm test is implemented for x86_64 and fails to build
->> for other architectures. Rather then emitting a compiler error it
->> would be preferable to only build the test on supported architectures.
->
-> Why does it fail?  What would be involved in making it available
-> on other architectures?
-
-The test is written to fail building on architectures other than
-x86_64.
-
-    #ifdef __amd64__
-                    munmap(NULL, ((size_t)1 << 47) - 4096);
-    #else
-    #error "implement 'unmap everything'"
-    #endif
-
-I hit the build failure while semi-automating the running of tests on
-internal infrastructure. 
-
-I am not familiar with the issue being tested but after a bit of
-staring, it looks like there are two architecture dependent components
-to the tests -
-
-    1. TASK_SIZE / application memory layout - the test unmaps the
-       entire the user virtual address space. For this, it needs to know
-       the length to pass to munmap().
-
-       Although it's possible to add this per-architecture, I am not
-       sure if there is a way to discover the length passed to munmap().
-
-    2. How the vsyscall page (if implemented) is mapped - this
-       influences the known good values used for comparison in the test.
-
-       It doesn't look like vsyscall page is used on arm64 but I am not
-       sure about the situation with other architectures.
-
-(Alexey, please add if I've missed anything)
-
-Thanks,
-Punit
