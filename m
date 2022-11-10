@@ -2,110 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A24B623DB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA2D623DB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbiKJIoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:44:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
+        id S232868AbiKJIoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiKJIoV (ORCPT
+        with ESMTP id S229568AbiKJIo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:44:21 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81828275E6;
-        Thu, 10 Nov 2022 00:44:20 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7FfD2lFxzpWSg;
-        Thu, 10 Nov 2022 16:40:36 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 16:44:17 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 16:44:17 +0800
-Subject: Re: [PATCH] drivers: base: transport_class: fix possible memory leak
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lduncan@suse.com>,
-        <cleech@redhat.com>, <michael.christie@oracle.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <rafael@kernel.org>
-References: <20221110034809.17258-1-yangyingliang@huawei.com>
- <Y2yzwB0IuaVS3AVq@kroah.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <d509e930-779b-866e-9b1f-d58db6abfc43@huawei.com>
-Date:   Thu, 10 Nov 2022 16:44:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 10 Nov 2022 03:44:26 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2692E2935C;
+        Thu, 10 Nov 2022 00:44:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668069865; x=1699605865;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kBkbc2MQ9c/NiFCQRoAmN+okU0cL5VhONw3TYm+Zy/Q=;
+  b=hb93gx1CTv7oyCqCIBMIdyDEOccsHVuW92kzYNOJQvPtXxTT4x0USNYa
+   MP/TCtJKuanwyJkbYXnhA4veCH0UUoxNBYlJY6ArKOCyLsHToplHSj/v3
+   wAm1fs/PsDEqtFbAVTT/ywDA3fot/9aFWJxYWAxHUZ7gU+fPmuLPdBY7f
+   rYreYxdFDMixja+rhYF7TENw2xxQvuBZwMhB647Z1A8P/3XFXZP9sPIac
+   j6bv+ki4gC+HHQzX+XIg3dYELQkgDunGVUyCkh2CmILCxKIQRedopTCpF
+   sGhPL9lgSavHVqHYDFkw8pWud1eMgceEaUjpYwfmJ4+00UptUQjqW2teb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="308879708"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="308879708"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 00:44:24 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="779692262"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="779692262"
+Received: from shiningy-mobl1.ccr.corp.intel.com (HELO localhost) ([10.255.28.247])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 00:44:21 -0800
+Date:   Thu, 10 Nov 2022 16:44:19 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Liu Jingqi <jingqi.liu@intel.com>
+Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
+ _host_ supported value
+Message-ID: <20221110084418.t7iv5zlfgiu77gfn@linux.intel.com>
+References: <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
+ <Y2ABrnRzg729ZZNI@google.com>
+ <20221101101801.zxcjswoesg2gltri@linux.intel.com>
+ <Y2FePYteNrEfZ7D5@google.com>
+ <20221102085414.fk2xss74jvtzs6mr@linux.intel.com>
+ <Y2Px90RQydMUoiRH@google.com>
+ <20221107082714.fq3sw7qii4unlcn2@linux.intel.com>
+ <Y2kfCz02tQSUkMKS@google.com>
+ <20221108102120.qdlgqlgvdi6wi22u@linux.intel.com>
+ <Y2qhaSr/d2ds+nqD@google.com>
 MIME-Version: 1.0
-In-Reply-To: <Y2yzwB0IuaVS3AVq@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2qhaSr/d2ds+nqD@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+> 
+> No.  Again, KVM _should never_ manipulate VMX MSRs in response to CPUID changes.
+> Keeping the existing behavior would be done purely to maintain backwards
+> compability with existing userspace, not because it's strictly the right thing to do.
+> 
+> E.g. as a strawman, a weird userspace could do KVM_SET_MSRS => KVM_SET_CPUID =>
+> KVM_SET_CPUID, where the first KVM_SET_CPUID reset to a base config and the second
+> KVM_SET_CPUID incorporates "optional" features.  In that case, clearing bits in
+> the VMX MSRs on the first KVM_SET_CPUID would do the wrong thing if the second
+> KVM_SET_CPUID enabled the relevant features.
+> 
+> AFAIK, no userspace actually does something odd like that, whereas there are VMMs
+> that do KVM_SET_MSRS before KVM_SET_CPUID, e.g. disable a feature in VMX MSRs but
+> later enable the feature in CPUID for L1.  And so disabling features is likely
+> safe-ish, but enabling feature most definitely can cause problems for userspace.
+> 
+> Hrm, actually, there are likely older VMMs that never set VMX MSRs, and so dropping
+> the "enable features" code might not be safe either.  Grr.  The obvious solution
+> would be to add a quirk, but maybe we can avoid a quirk by skipping KVM's
+> misguided updates if userspace has set the MSR.  That should work for a userspace
+> that deliberately sets the MSR during setup, and for a userspace that blindly
+> migrates the MSR since the migrated value should already be correct/sane.
+> 
+Oh. Just saw your new selftest code, and fininally get your point(I hope
+so...).  Thanks!
 
-On 2022/11/10 16:18, Greg KH wrote:
-> On Thu, Nov 10, 2022 at 11:48:09AM +0800, Yang Yingliang wrote:
->> Current some drivers(like iscsi) call transport_register_device()
->> failed, they don't call transport_destroy_device() to release the
->> memory allocated in transport_setup_device(), because they don't
->> know what was done, it should be internal thing to release the
->> resource in register function. So fix this leak by calling destroy
->> function inside register function.
->>
->> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   include/linux/transport_class.h | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/transport_class.h b/include/linux/transport_class.h
->> index 63076fb835e3..f4835250bbfc 100644
->> --- a/include/linux/transport_class.h
->> +++ b/include/linux/transport_class.h
->> @@ -70,8 +70,15 @@ void transport_destroy_device(struct device *);
->>   static inline int
->>   transport_register_device(struct device *dev)
->>   {
->> +	int ret;
->> +
->>   	transport_setup_device(dev);
->> -	return transport_add_device(dev);
->> +	ret = transport_add_device(dev);
->> +	if (ret) {
->> +		transport_destroy_device(dev);
->> +	}
-> Please use scripts/checkpatch.pl on your patches before sending them out
-Sure, of course. :)
-> so you don't get grumpy maintainers asking you to use
-> scripts/checkpatch.pl on your patches :)
-I sent a fix patch to iscsi system earlier:
-https://patchwork.kernel.org/project/linux-scsi/patch/20221109092421.3111613-1-yangyingliang@huawei.com/
+> > BTW, I found my previous understanding of what vmx_adjust_secondary_exec_control()
+> > currently does was also wrong. It could also be used for EXITING controls. And
+> > for such flags(e.g., SECONDARY_EXEC_RDRAND_EXITING), values for the nested settings
+> > (vmx->nested.msrs.secondary_ctls_high) and for the L1 execution controls(*exec_control)
+> > could be opposite. So the statement:
+> > 	"1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
+> > 	 disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes."
+> > is wrong.
+> 
+> No, it's correct.  The EXITING controls are just inverted feature flags.  E.g. if
+> RDRAND is disabled in CPUID, KVM sets the EXITING control so that KVM intercepts
+> RDRAND in order to inject #UD.
+> 
+> 	[EXIT_REASON_RDRAND]                  = kvm_handle_invalid_op,
+> 
 
-Mike give his point in the mail, so I send a new patch keep iscsi 
-maintainers Cced.
+Well, suppose
+- cpu_has_vmx_rdrand() is true;
+- meanwhile guest_cpuid_has(vcpu, X86_FEATURE_RDRAND) is false.
 
-Thanks,
-Yang
->
-> thanks,
->
-> greg k-h
->
-> .
+And then, what vmx_adjust_secondary_exec_control() currently does is:
+1> keep the SECONDARY_EXEC_RDRAND_EXITING set in L1 secondary proc-
+based execution control.
+2> and then clear the SECONDARY_EXEC_RDRAND_EXITING in the high bits
+of IA32_VMX_PROCBASED_CTLS2 MSR for nested by
+        vmx->nested.msrs.secondary_ctls_high &= ~control;
+That means for L1 VMM, SECONDARY_EXEC_RDRAND_EXITING must be cleared
+in its(VMCS12's) secondary proc-based VM-execution control, even when
+rdrand is disabled in L1's and L2's CPUID.
+
+I wonder, for native environment, if an instruction is not supported,
+will the allowed 1-setting for its corresponding exiting feature in
+IA32_VMX_PROCBASED_CTLS2 MSR be set, or be cleared? Maybe it should
+be cleared, and executing such instruction in non-root will just get
+a #UD directly instead of triggering a VM-Exit?
+
+Note: I do not think this will cause any problem, just curious if L1
+VMM can observe a behavior that's not supposed to be in native scenario(
+only because what we are doing in KVM). 
+
+B.R.
+Yu
+
