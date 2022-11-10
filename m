@@ -2,168 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41ADA62396F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9AD623971
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232502AbiKJCCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
+        id S232519AbiKJCDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbiKJCA4 (ORCPT
+        with ESMTP id S232574AbiKJCCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:00:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D592ED7A;
-        Wed,  9 Nov 2022 17:59:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9EA8B80959;
-        Thu, 10 Nov 2022 01:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140B7C433D7;
-        Thu, 10 Nov 2022 01:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668045561;
-        bh=0+KljlocHurYx/De7VpZSIfHRyAIx3H1IOL6zcagU74=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XCxaFgXMpIKMJhI+lJAG8fmgidHpsl5/vkwVcFZ3pW6RmwGMOBxpGvktgHZLTyRdt
-         shNhUaj9oqStxaY4kW6YnmQYghJT6YZRiM4IXJtSCCD4NIOA+JpiBZEHfbrT7OnqP3
-         QMHjhQFYZ9iQVLgpJp4tPTxqT3yPDPcqtx7d6Mkq3HxHSQRAnHOuxOdfqkDaMgpuiT
-         fxbuGnB6SATgRju/u0mibiXK4OtP1udMQwTBgMZPzhBn/En+sU+QRL65PJQ6kKoONj
-         5ycgDWazfshy5M3QNo+D1WM6uwu/O9IF6mkQIx0WBKFq/d9nxpaPn7WCbUi2zO4/A6
-         m0ppQ6K0JBudg==
-Date:   Wed, 9 Nov 2022 17:59:20 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Chuang Wang <nashuiliang@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] net: tun: rebuild error handling in tun_get_user
-Message-ID: <20221109175908.593df5da@kernel.org>
-In-Reply-To: <20221107090940.686229-1-nashuiliang@gmail.com>
-References: <20221107090940.686229-1-nashuiliang@gmail.com>
+        Wed, 9 Nov 2022 21:02:07 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE192EF05
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:59:38 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id 11so308462iou.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 17:59:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PbW75S+tRPPiGdyoY3SVPUPsbPk7wXUtzpehNZARJL8=;
+        b=JlFStz2Zk0UsrmExFMWCby9tveb5FxDaIvBD0LfyI3hofXqZn2f2nFBxZK101BqrCP
+         XcOT8QhXuRt7e9pj/59OAiDVHEGlGeECKTo3MmLl31E+OivxAixW9C02zSb5B8GcKcPU
+         Mnq7KzhUV+8AHus6x9vyqfPLobuJOt16PODKg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbW75S+tRPPiGdyoY3SVPUPsbPk7wXUtzpehNZARJL8=;
+        b=UMFnSMs8JNbgPNaXIG1BnfiR4XB8UDLKfa8GTrTPhBlTDTprewDD3tXUN0OmH78c8p
+         TuYIxH5T6PJdRXFUXqwR92y+m/r6Aa7PtgRGe8DOx7FjhcnPb0TUWLIcEm8St/BaY+e6
+         uqSY7g1bjXpoSk59lSEmXMo7FObN9ffY/tCIprFQy7u2yBRISKdkTMpXEiLzLMxczhyA
+         NnxAnYhRWS5Z7wcZ7x3tdIWA+tuKE7CSztmkRrBEgnngAworu9BoiBd/hqZfCtVgfZGK
+         uHA6GW78tBXb/G9mAJfY/WSpTcB2QqsidTq9ACIzbNdv/I6fDhUiXYS7wayj4ijvnNv0
+         d54g==
+X-Gm-Message-State: ACrzQf2drjdZEnoJVMBLxNy7N1AFBXWBBk9Ia7Z81VgClO8GAWnfPMbA
+        0wZuoOMWSuBcO6FpP2S6EXM2pQ==
+X-Google-Smtp-Source: AMsMyM5c3dycfwbkRls4PsSnfsWYdiHC1WLvxp7ggFmrJlbC3hSbBdKVyjTWwpvjnUyCS003J79Yeg==
+X-Received: by 2002:a05:6638:1a8f:b0:375:1ad6:e860 with SMTP id ce15-20020a0566381a8f00b003751ad6e860mr2538742jab.191.1668045577587;
+        Wed, 09 Nov 2022 17:59:37 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id n2-20020a027102000000b00363ad31c149sm5284887jac.110.2022.11.09.17.59.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 17:59:37 -0800 (PST)
+Message-ID: <613fefce-632d-be3e-30d4-d1c5a3cf2618@linuxfoundation.org>
+Date:   Wed, 9 Nov 2022 18:59:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 4.9 00/30] 4.9.333-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, Shuah Khan <skhan@linuxfoundation.org>
+References: <20221108133326.715586431@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221108133326.715586431@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  7 Nov 2022 17:09:40 +0800 Chuang Wang wrote:
-> The error handling in tun_get_user is very scattered.
-> This patch unifies error handling, reduces duplication of code, and
-> makes the logic clearer.
+On 11/8/22 06:38, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.333 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.333-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-You're also making some functional changes tho, they at the very least
-need to be enumerated or preferably separate patches.
+Compiled and booted on my test system. No dmesg regressions.
 
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index 4bf2b268df4a..5ceec73baf98 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1742,11 +1742,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
->  	int good_linear;
->  	int copylen;
->  	bool zerocopy = false;
-> -	int err;
-> +	int err = 0;
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Don't zero-init the variables like this, instead...
-
->  	u32 rxhash = 0;
->  	int skb_xdp = 1;
->  	bool frags = tun_napi_frags_enabled(tfile);
-> -	enum skb_drop_reason drop_reason;
-> +	enum skb_drop_reason drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
->  
->  	if (!(tun->flags & IFF_NO_PI)) {
->  		if (len < sizeof(pi))
-> @@ -1808,11 +1808,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
->  		 */
->  		skb = tun_build_skb(tun, tfile, from, &gso, len, &skb_xdp);
-
-... use
-
-	err = PTR_ERR_OR_ZERO(skb);
-
-close to the jumps. It's safer to always init err before jumping.
-
->  		if (IS_ERR(skb)) {
-> -			dev_core_stats_rx_dropped_inc(tun->dev);
-> -			return PTR_ERR(skb);
-> +			err = PTR_ERR(skb);
-> +			goto drop;
->  		}
->  		if (!skb)
-> -			return total_len;
-> +			goto out;
-
->  	if (virtio_net_hdr_to_skb(skb, &gso, tun_is_little_endian(tun))) {
->  		atomic_long_inc(&tun->rx_frame_errors);
-> -		kfree_skb(skb);
-
-now we'll increment error and drop counters, that's not right.
-
-> -		if (frags) {
-> -			tfile->napi.skb = NULL;
-> -			mutex_unlock(&tfile->napi_mutex);
-> -		}
-> -
-> -		return -EINVAL;
-> +		err = -EINVAL;
-> +		goto drop;
->  	}
-
-> @@ -1952,8 +1932,8 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
->  
->  	rcu_read_lock();
->  	if (unlikely(!(tun->dev->flags & IFF_UP))) {
-> -		err = -EIO;
->  		rcu_read_unlock();
-> +		err = -EIO;
-
-this change is unnecessary, please refrain from making it
-
->  		drop_reason = SKB_DROP_REASON_DEV_READY;
->  		goto drop;
->  	}
-> @@ -2007,7 +1987,23 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
->  	if (rxhash)
->  		tun_flow_update(tun, rxhash, tfile);
->  
-> -	return total_len;
-> +	goto out;
-
-keep
-
-	return total_len;
-
-that's much easier to read, and there's no concern of err being
-uninitialized.
-
-> +
-> +drop:
-> +	if (err != -EAGAIN)
-> +		dev_core_stats_rx_dropped_inc(tun->dev);
-> +
-> +	if (!IS_ERR_OR_NULL(skb))
-> +		kfree_skb_reason(skb, drop_reason);
-> +
-> +unlock_frags:
-> +	if (frags) {
-> +		tfile->napi.skb = NULL;
-> +		mutex_unlock(&tfile->napi_mutex);
-> +	}
-> +
-> +out:
-> +	return err ?: total_len;
->  }
->  
->  static ssize_t tun_chr_write_iter(struct kiocb *iocb, struct iov_iter *from)
-
+thanks,
+-- Shuah
