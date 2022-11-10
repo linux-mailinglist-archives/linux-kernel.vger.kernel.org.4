@@ -2,121 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A81A6241C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E526241C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiKJLzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S230425AbiKJLyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiKJLzT (ORCPT
+        with ESMTP id S229528AbiKJLyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:55:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080A45D6B6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:54:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668081261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DBXYRpLp9moONU6VGCquLi5t9Eh718cfLlFyFi9l3CA=;
-        b=fAbtH5bEpWweISKPfGk0FD6NungyyK+939ASZxNfUsDkZ1ifeTtC6OuqWCxk62W3A6upAm
-        H0PwnJHVRdqHyTLHVDAx4JkdCIqSH8dpFoU+56879NI8qs1MznBH831gWE9N9IYfVVq2d6
-        rMh7Xlsw5Z8Eq20Xrbzly069NOkRl0o=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-590-CBsAB1dVMK252uL5g39_wQ-1; Thu, 10 Nov 2022 06:54:18 -0500
-X-MC-Unique: CBsAB1dVMK252uL5g39_wQ-1
-Received: by mail-qv1-f69.google.com with SMTP id ob9-20020a0562142f8900b004bba5363ad9so1279626qvb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:54:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DBXYRpLp9moONU6VGCquLi5t9Eh718cfLlFyFi9l3CA=;
-        b=rUuR76u30Ycj3y1fcyWyBXpkqAX8SZ3hGg6ylPMsfcQsx319Hh54J9V76hN9rCcSpZ
-         SSVKur1VgCiKtLI+wxILv/E6YJRsEuIS9C7fyPjQrEpS0/D9w24BvGjClRkEq24C2v3K
-         CGw4iI5D2aYXkDHVz7aYxtT8x1rbSG3WQ717Y8WuToiPgnPUWjETmLmD3qN/nu3sEn7B
-         a2rcPZgn8WTWLbUBv/mC7VbmO/C0dIMzPquBIuEgb2/V6WHWy5GIhDwZWPxiDcXY6zgx
-         c4JS+8ty1xqemG8EzCsB5O24lhBQ07p1LBZrnFFPMamLh988zIsda4840UE8vnXVOEgW
-         qEEw==
-X-Gm-Message-State: ACrzQf2VPr5xUfYigQXxBRltcoTySHoU5UEPCztmeLPC5mW5L7+XQUPN
-        8AkuhGJXpQt3+voX54noopoZeuCCItVFYQJW51ypcZczoocykSLcXd9dgdDj1Ej4rL/7aGtZO2n
-        8iI9UvTU4mPIERIbN7jknz9Ct
-X-Received: by 2002:ac8:4b5c:0:b0:3a5:3819:4f6c with SMTP id e28-20020ac84b5c000000b003a538194f6cmr38476103qts.115.1668081257433;
-        Thu, 10 Nov 2022 03:54:17 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5nK2/+RlTh1FXxmhK8+LIPkQeubcCUEzrXAdqnVRAT4J5njdAZps09YmsvbfRUfDGECJVtPQ==
-X-Received: by 2002:ac8:4b5c:0:b0:3a5:3819:4f6c with SMTP id e28-20020ac84b5c000000b003a538194f6cmr38476094qts.115.1668081257203;
-        Thu, 10 Nov 2022 03:54:17 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05620a2a1000b006ce3f1af120sm13196566qkp.44.2022.11.10.03.54.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 03:54:16 -0800 (PST)
-Message-ID: <4349bc93a5f2130a95305287141fde369245f921.camel@redhat.com>
-Subject: Re: [PATCH v2 RESEND 1/1] net: fec: add xdp and page pool statistics
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Shenwei Wang <shenwei.wang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Date:   Thu, 10 Nov 2022 12:54:13 +0100
-In-Reply-To: <20221109023147.242904-1-shenwei.wang@nxp.com>
-References: <20221109023147.242904-1-shenwei.wang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 10 Nov 2022 06:54:49 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13F15D6BA;
+        Thu, 10 Nov 2022 03:54:46 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AAAtpTw010867;
+        Thu, 10 Nov 2022 11:54:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=woRjAHpd4XAqnUkDVIfDaJmmBYAKKMYj4mzOsmIQnSc=;
+ b=naYgI37uxAWOur6q9ajwqpb8O2hK+dhoGiDbwMB2nL83R4CHVvraDxOC5/dHt/+N7ncN
+ jH2QoL+DlruOw7Xhfu9u/DpnbX2w4Ua/rAm5/5RBLp1QwOJHUksV/zUCQjngLAmwf9lQ
+ fRh9yRWiKUnz/OrDw5OJXGWOM0ZfjXcAD1Gbf5SFb55fI0GFpCDGl5ZvOz1wp0QOV8kX
+ Rkc9EGEPO6UN2YuEhpLHmWFpqQdJiwfoe0iJqCocSVB4xHCL4pisY2FFE35ToxJRFSFd
+ KgbFiyOR+uzk6fS5BcNPzrheSiPlfZI2vH8reTT8avsN54P7xeLR0jqUW9hHEeOv4bT2 hQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3krw8g0fp2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 11:54:35 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AABsYoZ011802
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 11:54:34 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 10 Nov
+ 2022 03:54:31 -0800
+Message-ID: <102b69e4-7b1b-23ef-c4f3-a91598546c97@quicinc.com>
+Date:   Thu, 10 Nov 2022 17:24:29 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] dmaengine: use devm_platform_get_and_ioremap_resource()
+Content-Language: en-US
+To:     <ye.xingchen@zte.com.cn>, <vkoul@kernel.org>
+CC:     <f.fainelli@gmail.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <rjui@broadcom.com>, <sbranden@broadcom.com>,
+        <dmaengine@vger.kernel.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <202211101726100208529@zte.com.cn>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <202211101726100208529@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qvlJFr4RzMseXCU8x6xHEzQQzDv7LZ4x
+X-Proofpoint-ORIG-GUID: qvlJFr4RzMseXCU8x6xHEzQQzDv7LZ4x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-10_08,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1011 mlxlogscore=808 suspectscore=0 mlxscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211100087
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-On Tue, 2022-11-08 at 20:31 -0600, Shenwei Wang wrote:
-> @@ -2685,9 +2738,16 @@ static void fec_enet_get_strings(struct net_device *netdev,
->  	int i;
->  	switch (stringset) {
->  	case ETH_SS_STATS:
-> -		for (i = 0; i < ARRAY_SIZE(fec_stats); i++)
-> -			memcpy(data + i * ETH_GSTRING_LEN,
-> -				fec_stats[i].name, ETH_GSTRING_LEN);
-> +		for (i = 0; i < ARRAY_SIZE(fec_stats); i++) {
-> +			memcpy(data, fec_stats[i].name, ETH_GSTRING_LEN);
-> +			data += ETH_GSTRING_LEN;
-> +		}
-> +		for (i = 0; i < ARRAY_SIZE(fec_xdp_stat_strs); i++) {
-> +			memcpy(data, fec_xdp_stat_strs[i], ETH_GSTRING_LEN);
-> +			data += ETH_GSTRING_LEN;
+On 11/10/2022 2:56 PM, ye.xingchen@zte.com.cn wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>   drivers/dma/bcm2835-dma.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
+> index 630dfbb01a40..1547f528a58e 100644
+> --- a/drivers/dma/bcm2835-dma.c
+> +++ b/drivers/dma/bcm2835-dma.c
+> @@ -902,8 +902,7 @@ static int bcm2835_dma_probe(struct platform_device *pdev)
+> 
+>   	dma_set_max_seg_size(&pdev->dev, 0x3FFFFFFF);
+> 
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	base = devm_ioremap_resource(&pdev->dev, res);
+> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>   	if (IS_ERR(base))
+>   		return PTR_ERR(base);
+> 
 
-The above triggers a warning:
+LGTM.
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-In function ‘fortify_memcpy_chk’,
-    inlined from ‘fec_enet_get_strings’ at ../drivers/net/ethernet/freescale/fec_main.c:2788:4:
-../include/linux/fortify-string.h:413:25: warning: call to ‘__read_overflow2_field’ declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-  413 |                         __read_overflow2_field(q_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-I think you can address it changing fec_xdp_stat_strs definition to:
-
-static const char fec_xdp_stat_strs[XDP_STATS_TOTAL][ETH_GSTRING_LEN] = { // ...
-
-Cheers,
-
-Paolo
-
+-Mukesh
