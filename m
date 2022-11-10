@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F88D62453D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5FB624541
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiKJPKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58932 "EHLO
+        id S229982AbiKJPLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiKJPKT (ORCPT
+        with ESMTP id S229541AbiKJPLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:10:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1663B27CF5;
-        Thu, 10 Nov 2022 07:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC846B8222C;
-        Thu, 10 Nov 2022 15:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 67D4AC433D6;
-        Thu, 10 Nov 2022 15:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668093015;
-        bh=pEgm6CnPHt3MYp/jsUpZiXwiuhhwWFJC99daNpvZqxE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=aFJ6Qo51PeQc3m/FkUMEETXYqMyWnDOm1USkiM3f8GA6hjhTCkO1KdiTEnNIAvvpe
-         QDkqi6BuBLFvUslt58x7OAzLldkMlMfxWrR8yRScuFTtCrHBIGeCwTQBLmSIOmh9bK
-         0TDzCXCJzoIP2JF1UVYZNazqTCs8mJqeM2Iv7L58+sfbAn7jUxy6zVq0sUoZMMRxNI
-         VBpWK2tpJvLYVskqY+HF7vIPw8HeroWLAABflt0v1fheKoS6aZKyiK/iHOMxqX57/L
-         Vc3uXxvk477hQ/77LAv5TYZ9oAQTlkgJhY+KKxbAcAnhtjHdmpJ4zalYOZ3etw5b/c
-         waroIk6KDm/Hg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51877E270C5;
-        Thu, 10 Nov 2022 15:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 10 Nov 2022 10:11:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C22727CF5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:10:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668093031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1aWxEK1TdYDii2f1EVjSrDIOIljR4IPqsIREqMrNiKk=;
+        b=hnMYgTVTSchbzJ4KoS/HYkhqJb/60Gc2+h4WOIgU7DTkZYkx3H5aD9yacuk6LKM0Tq3foR
+        082iOsyJqHlsYjpF4q+RHCsXxyUXke86HAQ38d/4mwr/l1Ww0gZ+6rpnnaPRi3bxazkPKe
+        tHgLWO7ot0jDIMvo0b/Bd9ucr5bV2mM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-572-1mNEiMYoMOWHlrxz4LELEA-1; Thu, 10 Nov 2022 10:10:29 -0500
+X-MC-Unique: 1mNEiMYoMOWHlrxz4LELEA-1
+Received: by mail-ej1-f69.google.com with SMTP id hp16-20020a1709073e1000b007adf5a83df7so1404061ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:10:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1aWxEK1TdYDii2f1EVjSrDIOIljR4IPqsIREqMrNiKk=;
+        b=WaaXjbXwIDV4d3fB1XvrcUztzw++WTCFUbyu+tdofL+bPYd4i85lB3MPrLBlK0cypY
+         9tg79a3qDFTacJHIOoPiUqgzq/uNgr1+khq7dGTO5cKO0UUSuM9yijE/077QAVQXGovF
+         qZvvxhi5zR7T6pYdl4WXpljr6naqL6z2EPxhnIiEDG5QAUfQFBJUcb8U0AJA/ctaK8cA
+         3FhGExCikTve4gGaBHkQbCq0Re8AXZjX9yHfD4gtoYBpdzkrXK1F067TGHaiLF9enOna
+         Lzy8iz0XskGdaKBAZF9AG4ha+aHpDYSbb4yOcbI61G9fhnUMfozzJ3GDTZaIOHgp3gmb
+         a6jQ==
+X-Gm-Message-State: ACrzQf1rqos6ZneTUd+OAlxC54IZgvzGLgVW/ePVHfIdKuFYM8Z6dyPq
+        w0s/goKilIEJ6ipbb9d8CO3rCG1QIrIz8kqANX0iKK30CBCb9g5VOTQUxyEnFwjd1qymoKpSoZq
+        PXhYVzZlopiBzaiyNRggzYnE4D4Lz3MDawtp1MK41
+X-Received: by 2002:a17:906:81c6:b0:7ae:7b1:df60 with SMTP id e6-20020a17090681c600b007ae07b1df60mr38174215ejx.87.1668093028292;
+        Thu, 10 Nov 2022 07:10:28 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM4XIaD23sHXbkgMz7JfNrC7DMaIxwyr/fbLQzR3FHOgbk5q60dF3e5AlG4GQ109n4AGNYSFAdCCMjjp17Z2dmE=
+X-Received: by 2002:a17:906:81c6:b0:7ae:7b1:df60 with SMTP id
+ e6-20020a17090681c600b007ae07b1df60mr38174207ejx.87.1668093028133; Thu, 10
+ Nov 2022 07:10:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: macvlan: fix memory leaks of macvlan_common_newlink
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166809301533.30495.18109627091458304827.git-patchwork-notify@kernel.org>
-Date:   Thu, 10 Nov 2022 15:10:15 +0000
-References: <20221109090735.690500-1-nashuiliang@gmail.com>
-In-Reply-To: <20221109090735.690500-1-nashuiliang@gmail.com>
-To:     Chuang W <nashuiliang@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, fgao@ikuai8.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221011145413.8025-1-aahringo@redhat.com> <931c87d8-5856-e393-7108-66275ee4099a@suse.cz>
+ <CAK-6q+ho0+mDP08yXvg7vupC-+GdUUY4zUHdfwU_7Q=B2VbQ-Q@mail.gmail.com> <8e4080f8-7021-1c02-56cf-a105a5141abd@suse.cz>
+In-Reply-To: <8e4080f8-7021-1c02-56cf-a105a5141abd@suse.cz>
+From:   Alexander Aring <aahringo@redhat.com>
+Date:   Thu, 10 Nov 2022 10:10:16 -0500
+Message-ID: <CAK-6q+jLQakekjTEQrzbmjKa6QnQDTziHjAg749qw=0ufmrFdQ@mail.gmail.com>
+Subject: Re: [PATCHv2] mm: slab: comment __GFP_ZERO case for kmem_cache_alloc
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, cluster-devel@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+On Thu, Nov 10, 2022 at 3:37 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+...
+>
+> So, I did the following, which IMHO resolves the misleading parts and also
+> mentions __GFP_ZERO. Sounds OK?
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/commit/?h=slab/for-6.2/cleanups&id=d6a3a7c3f65dfebcbc4872d5912d3465c8e8b051
+>
 
-On Wed,  9 Nov 2022 17:07:34 +0800 you wrote:
-> kmemleak reports memory leaks in macvlan_common_newlink, as follows:
-> 
->  ip link add link eth0 name .. type macvlan mode source macaddr add
->  <MAC-ADDR>
-> 
-> kmemleak reports:
-> 
-> [...]
+perfect, thanks!
 
-Here is the summary with links:
-  - net: macvlan: fix memory leaks of macvlan_common_newlink
-    https://git.kernel.org/netdev/net/c/23569b5652ee
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+- Alex
 
