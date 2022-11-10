@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36550623F1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B90623F20
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiKJJym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        id S229769AbiKJJz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiKJJyj (ORCPT
+        with ESMTP id S229554AbiKJJzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:54:39 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF3E66CAD;
-        Thu, 10 Nov 2022 01:54:38 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id s4so640147qtx.6;
-        Thu, 10 Nov 2022 01:54:38 -0800 (PST)
+        Thu, 10 Nov 2022 04:55:24 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4618C69DE7;
+        Thu, 10 Nov 2022 01:55:24 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id k2so776858qkk.7;
+        Thu, 10 Nov 2022 01:55:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=apaad6mmMC/hBO6ENkJzg34TPo62eDb6xWvAxgQ8q2k=;
-        b=gwLkEwMJ83iRaBIRuj8qrLigTcdTjN4+W1yKV/RxAQW0V4hFw3PByyRrzgOvPuu8Iz
-         730jH7aM+t/J+zhnNwMwDLTOpVKn6Y3hd899W2W9cFQVYD0cAlVa4quyctGUxkoS/DEf
-         FYFgy5q5xBS2dyHiiH0csiTRjX/BolwYYrXjeCSdcOu/4mpaBugDCPTvEsGDUT0Lj8gn
-         GeT0DlIVi2FqjgcVCPHdVXm5QJWxfOZJK7/2tTXHcOcrpqyz9jZLDsaBchapLYmX6x8f
-         6CNsIVKd05+Fn+zuM97toun4NAcuLiQQ0e603AkSt1X0+Z+yx8GQHhAtr+d+Q+mL02x/
-         sgwA==
+        bh=YQw1KJ5AWDcX1kLbPZYv1EymkpPJcZtJEdFtyQbRpsA=;
+        b=IHhUx/7uO9ULiSPOrRD75OiqqQq4dWCrNZA621PlpaeNxjDf1acz+5I4qcQkvyP/1q
+         ntVDqQFAoQsBWeuBd3Rg0Z5lg42wLxTI5LXOZdTK73OQR3JYVzUJXo5mIbtDsUSHuqr2
+         +/6HMgjyc5SznbOh9/e0KyRW7jl7pTniY7zxyojpwg551PQ66LC44RKmXTHpG+dhLkGd
+         b38hq3q47mWdIWMN+hO8l3Qndbo4IAt6s7UpFcTAsTb3AXlPDeLJm3YMdZD5v7EMpfNl
+         R6BTQee4OeM52FJiju/yn+epc1/JujZY+Ru92StcyJT73UjWIX7MEPTI/M4OrDB2EOhO
+         bkTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=apaad6mmMC/hBO6ENkJzg34TPo62eDb6xWvAxgQ8q2k=;
-        b=Y2bRBfUtYYdhyZhlq2KGx928IWeP2lyIJ14lM4LmR+Osi1y7LdkLA2D+OciKvYUhar
-         4Pgs0JpTOmPUBei6LULwKCSqh4JTuqslM1yAlIDSorJUwrpetGXt/phoi52xlJqzlsoB
-         /HkWIZasVvjQI0IpW5bkGlr3uzv+I9ePpWMvMA6p+qqGek3wPUtUYjvJ9R5K015Jujt1
-         4ypnwFgVMnzwMeNnacQFYZr3KjI/GnTJeBq5uNqJ62WRJaRPCiOWIISK1Fbkaj5f3GyT
-         M7n0HnSNju2cHklKzK/T4oy1KFVVq6OHEKqbPC8GcIxdyfghru1bdNgVum+sgmYTCbKN
-         yv+A==
-X-Gm-Message-State: ANoB5plJ3VzQDi/CzvsXj62jKwpzmDuXrme+iS8+Nu9BFwXblKFUldB0
-        RgI70QrX1LFMsp19YKF/r01EUoNFIm8MkVD5c60=
-X-Google-Smtp-Source: AA0mqf5EHK/W+Bz+DLFmNlYdzGihQ/Q4/OTfpkz6MoQT97k/xeaclw4u95WDUy8yyJIkOb7jnWCxfVst/AC53T2Kt78=
-X-Received: by 2002:a05:622a:1c1:b0:3a5:8416:690d with SMTP id
- t1-20020a05622a01c100b003a58416690dmr17512047qtw.61.1668074077602; Thu, 10
- Nov 2022 01:54:37 -0800 (PST)
+        bh=YQw1KJ5AWDcX1kLbPZYv1EymkpPJcZtJEdFtyQbRpsA=;
+        b=fJazREBEIfFjyN4mtRizmUWsafWyM5mdQHbKgW1R2e7J2c2DQePlNUMXuAkLjN8I89
+         24bS+IdH/blYSkerGcwwJsdg09apOhpsrAlsWqHfQG4NSccQThz9LNUjHaqzdFgbNSNV
+         OuH1eRO6RF1c2UMtyZoPOfbyCEg/JFb+yCQ3Cn9NYKwTJ5XYSCh8wubpL5Co8XyErlxU
+         dCPNiHD/ex4PORqNmY6nBdcsgtmV5jaMQ610GbzuhY0e6BqRFe78iMbW1o6urmSWiMiR
+         MvY8N0XTq0MK4uupJ+g3r0RB6yJfZbmmklWmr1HTM3cN1mQ0wP0QvYAFLGriemoXGD/h
+         HMHw==
+X-Gm-Message-State: ANoB5pn8q52e5YKw2zDbuSLQFR+NR3SGu0xCp1SL5ydPtKOud32q3KBn
+        K9L4/McXwO1QmEg/arWzLU9vvk1DgYxrhnbkjto=
+X-Google-Smtp-Source: AA0mqf4GbxuiT+PsQj+zMXsXu13wwCJnuO0NSB5qh5VrABmCjs/10yLeYfoLUIGav90FCLSqiEJGINLLB4DqqhxvDXQ=
+X-Received: by 2002:a37:46d3:0:b0:6fb:1454:e2b8 with SMTP id
+ t202-20020a3746d3000000b006fb1454e2b8mr4435749qka.383.1668074123297; Thu, 10
+ Nov 2022 01:55:23 -0800 (PST)
 MIME-Version: 1.0
 References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
- <20221108142226.63161-4-andriy.shevchenko@linux.intel.com> <20221110072144.2s37r52qcpi6utgh@pengutronix.de>
-In-Reply-To: <20221110072144.2s37r52qcpi6utgh@pengutronix.de>
+ <20221108142226.63161-2-andriy.shevchenko@linux.intel.com> <20221110070718.bqpam7h3hjf2hkip@pengutronix.de>
+In-Reply-To: <20221110070718.bqpam7h3hjf2hkip@pengutronix.de>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 10 Nov 2022 11:53:59 +0200
-Message-ID: <CAHp75VenLc-QfuD3rHPh=5nu_SqWvEnsePbNMsBA4R-Zs+nvrw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/6] pwm: lpss: Include headers we are direct user of
+Date:   Thu, 10 Nov 2022 11:54:46 +0200
+Message-ID: <CAHp75VcQ98Rxxq4Zw0AAp8rEtRg7oAb_eR_hyMFRx7AQnCifCw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] pwm: Add a stub for devm_pwmchip_add()
 To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -76,42 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 9:22 AM Uwe Kleine-K=C3=B6nig
+On Thu, Nov 10, 2022 at 9:07 AM Uwe Kleine-K=C3=B6nig
 <u.kleine-koenig@pengutronix.de> wrote:
-> On Tue, Nov 08, 2022 at 04:22:23PM +0200, Andy Shevchenko wrote:
-> > For the sake of integrity, include headers we are direct user of.
-> >
-> > While at it, move the struct pwm_lpss_chip to be after
-> > the struct pwm_lpss_boardinfo as the former uses pointer
-> > to the latter.
+> On Tue, Nov 08, 2022 at 04:22:21PM +0200, Andy Shevchenko wrote:
+
+...
+
+> > +static inline int devm_pwmchip_add(struct device *dev, struct pwm_chip=
+ *chip)
+> > +{
+> > +     return -EINVAL;
+> > +}
+> > +
 >
-> That part is fine.
->
-> > Replace device.h with a forward declaration in order to improve
-> > the compilation time due to reducing overhead of device.h parsing
-> > with entire train of dependencies.
->
-> Together with "For the sake of integrity, include headers we are direct
-> user of." this makes an a bit schizophrenic impression on me. You add
-> <linux/types.h> because the file is a direct user of it, but you drop
-> <linux/device.h> despite being a direct user.
+> I'm a bit surprised to see this returning -EINVAL and not -ENOSYS. But
+> that's in line with the other stubs, so:
 
-But we don't use device.h.
+Exactly my thoughts when I created such a change.
 
-> If you adapt the reasoning to something like:
->
-> Replace the inclusion of <linux/device.h> by a forward declaration of
-> struct device plus a (cheaper) #include of <linux/types.h> as
-> <linux/device.h> is an expensive include (measured in compiler effort).
+> Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Fine with me, thanks for the draft.
-
-> I could better live with it. I would even split this into two patches
-> then. (i.e. move struct pwm_lpss_chip vs the include and forward change)
-
-I think for this small change for a driver that hasn't been modified
-often it's fine to have them in one. But tell me if you are insisting
-on a split, I can do that.
+Thank you!
 
 --=20
 With Best Regards,
