@@ -2,62 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14495623BA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78B2623BA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiKJGLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S232328AbiKJGOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKJGL3 (ORCPT
+        with ESMTP id S229449AbiKJGOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:11:29 -0500
-Received: from out199-1.us.a.mail.aliyun.com (out199-1.us.a.mail.aliyun.com [47.90.199.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7185275FC
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 22:11:27 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VURd1rh_1668060673;
-Received: from localhost.localdomain(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VURd1rh_1668060673)
-          by smtp.aliyun-inc.com;
-          Thu, 10 Nov 2022 14:11:24 +0800
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [PATCH] virtio_pci: use PAGE_SIZE for pci vring align
-Date:   Thu, 10 Nov 2022 14:11:11 +0800
-Message-Id: <20221110061111.383076-1-xianting.tian@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 01:14:48 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5224D275FC;
+        Wed,  9 Nov 2022 22:14:44 -0800 (PST)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7BPN3MsFzHvdV;
+        Thu, 10 Nov 2022 14:14:16 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 14:14:41 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <max@enpas.org>, <wg@grandegger.com>, <mkl@pengutronix.de>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH] can: can327: fix potential skb leak when netdev is down
+Date:   Thu, 10 Nov 2022 14:14:37 +0800
+Message-ID: <20221110061437.411525-1-william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the comments of VIRTIO_PCI_VRING_ALIGN shows, we should use
-PAGE_SZIE not the hard code 4096.
+In can327_feed_frame_to_netdev(), it did not free the skb when netdev
+is down, and all callers of can327_feed_frame_to_netdev() did not free
+allocated skb too. That would trigger skb leak.
 
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+Fix it by adding kfree_skb() in can327_feed_frame_to_netdev() when netdev
+is down. Not tested, just compiled.
+
+Fixes: 43da2f07622f ("can: can327: CAN/ldisc driver for ELM327 based OBD-II adapters")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
 ---
- include/uapi/linux/virtio_pci.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/can327.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/virtio_pci.h b/include/uapi/linux/virtio_pci.h
-index f703afc7ad31..ed5f678c682b 100644
---- a/include/uapi/linux/virtio_pci.h
-+++ b/include/uapi/linux/virtio_pci.h
-@@ -90,7 +90,7 @@
+diff --git a/drivers/net/can/can327.c b/drivers/net/can/can327.c
+index 0aa1af31d0fe..17bca63f3dd3 100644
+--- a/drivers/net/can/can327.c
++++ b/drivers/net/can/can327.c
+@@ -263,8 +263,10 @@ static void can327_feed_frame_to_netdev(struct can327 *elm, struct sk_buff *skb)
+ {
+ 	lockdep_assert_held(&elm->lock);
  
- /* The alignment to use between consumer and producer parts of vring.
-  * x86 pagesize again. */
--#define VIRTIO_PCI_VRING_ALIGN		4096
-+#define VIRTIO_PCI_VRING_ALIGN		PAGE_SIZE
+-	if (!netif_running(elm->dev))
++	if (!netif_running(elm->dev)) {
++		kfree_skb(skb);
+ 		return;
++	}
  
- #endif /* VIRTIO_PCI_NO_LEGACY */
- 
+ 	/* Queue for NAPI pickup.
+ 	 * rx-offload will update stats and LEDs for us.
 -- 
-2.17.1
+2.25.1
 
