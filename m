@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AF7623A31
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B749623A37
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiKJDKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:10:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S231801AbiKJDLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiKJDKW (ORCPT
+        with ESMTP id S232167AbiKJDLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:10:22 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018A91EEE8
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 19:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668049821; x=1699585821;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=ShRX+hTWxgwzxN+xhIfLsN8tp5u8u7jmKdcv/JvaJv0=;
-  b=jYth3+RO1JrAJbN6XpWMXp6UDS8ZClstV8gAo25kxrEKCXbVBmyqxGLn
-   n3+lCjaWkDjKC3XSlZExqWgetojA3xgcxfB8VmIHqQDjbnnYnoMgopayn
-   yElZ8NSPC4hPesH/FVz6Ia+ti6TBK598AS82AG9d7jfxoP2zwAjaIyiwV
-   mGqn2oU2JPAkOGceoyH9m5SNdmo3h19H9Ktq93sfDydHF03zeylV/ALK0
-   7p2r42Bk8Uv7VkKGp6KOBAh4hGuMFGP2YLPQ8VKgEPOcA9pUvgyBgaTi/
-   Xk5zu6idS7792yde1K3V3/PWeWrF3dxLVYcgF+wGyp6uNaLBLGFoAYFNF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="312963960"
-X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
-   d="scan'208";a="312963960"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 19:10:20 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="614931300"
-X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
-   d="scan'208";a="614931300"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 19:10:18 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Wei Xu <weixugc@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/demotion: Fix NULL vs IS_ERR checking in
- memory_tier_init
-References: <20221110030751.1627266-1-linmq006@gmail.com>
-Date:   Thu, 10 Nov 2022 11:09:34 +0800
-In-Reply-To: <20221110030751.1627266-1-linmq006@gmail.com> (Miaoqian Lin's
-        message of "Thu, 10 Nov 2022 07:07:51 +0400")
-Message-ID: <874jv7wln5.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 9 Nov 2022 22:11:35 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E024F1D64D;
+        Wed,  9 Nov 2022 19:11:33 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N76L25jtpzHvZ2;
+        Thu, 10 Nov 2022 11:11:06 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 11:11:32 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 11:11:31 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH] fs: Clear a UBSAN shift-out-of-bounds warning
+Date:   Thu, 10 Nov 2022 11:10:24 +0800
+Message-ID: <20221110031024.204-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miaoqian Lin <linmq006@gmail.com> writes:
+UBSAN: shift-out-of-bounds in fs/locks.c:2572:16
+left shift of 1 by 63 places cannot be represented in type 'long long int'
 
-> The alloc_memory_type() function return error pointers on error
-> instead of NULL.
-> Use IS_ERR() to check the return value to fix this.
->
-> Fixes: 7b88bda3761b ("mm/demotion/dax/kmem: set node's abstract distance to MEMTIER_DEFAULT_DAX_ADISTANCE")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Switch the calculation method to ((quarter - 1) * 2 + 1) can help us
+eliminate this false positive.
 
-Thanks!
+On the other hand, the old implementation has problems with char and
+short types, although not currently involved.
+printf("%d: %x\n", sizeof(char),  INT_LIMIT(char));
+printf("%d: %x\n", sizeof(short), INT_LIMIT(short));
+1: ffffff7f
+2: ffff7fff
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ include/linux/fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  mm/memory-tiers.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> index fa8c9d07f9ce..ac0dae9e54bf 100644
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -645,7 +645,7 @@ static int __init memory_tier_init(void)
->  	 * than default DRAM tier.
->  	 */
->  	default_dram_type = alloc_memory_type(MEMTIER_ADISTANCE_DRAM);
-> -	if (!default_dram_type)
-> +	if (IS_ERR(default_dram_type))
->  		panic("%s() failed to allocate default DRAM tier\n", __func__);
->  
->  	/*
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index e654435f16512c1..88d42e2daed9f6c 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1131,7 +1131,7 @@ struct file_lock_context {
+ 
+ /* The following constant reflects the upper bound of the file/locking space */
+ #ifndef OFFSET_MAX
+-#define INT_LIMIT(x)	(~((x)1 << (sizeof(x)*8 - 1)))
++#define INT_LIMIT(x)	((((x)1 << (sizeof(x) * 8 - 2)) - 1) * 2  + 1)
+ #define OFFSET_MAX	INT_LIMIT(loff_t)
+ #define OFFT_OFFSET_MAX	INT_LIMIT(off_t)
+ #endif
+-- 
+2.25.1
+
