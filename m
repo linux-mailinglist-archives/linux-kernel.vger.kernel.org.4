@@ -2,146 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A696247E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C7F6247E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbiKJREP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        id S229923AbiKJRHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:07:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbiKJREA (ORCPT
+        with ESMTP id S229528AbiKJRHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:04:00 -0500
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A174205C7;
-        Thu, 10 Nov 2022 09:03:58 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id h132so2459519oif.2;
-        Thu, 10 Nov 2022 09:03:58 -0800 (PST)
+        Thu, 10 Nov 2022 12:07:07 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F601103
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:07:02 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id l2so1264813qtq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ubbarOXcJSoiOO1vSHMphFgY9bCn9vvRpDVnu6XQKUU=;
+        b=PksFq7iD685uoDRJMq6rY+iGqHTiL1ikguOWzuGTYafvRxjony6Y6Bfywqxj6zvydD
+         AP0cNio5T+3DfBmFpv3fZmACMaGGeKs7Y0UluG7y3SGfv7Bx7yHRUG6p+9xXjSg0AD0v
+         q+BR/VUdR6V6FfzRZ+gjqrgmDIPLTRSIzzGs0gwfT2GHR6X8oS1tQkHt454axI7UtbW/
+         tkl1hu/XU9MAmb7Q4RwGsdFiUIpByDv5bD3gFMz4E+ETHwMSz1wD0GAejzqTKMgSv7Cy
+         O93agI9dVum39Xxat+VMDL9mKYYGFEIuJ1r8ijTEE2jyFS40wpe2pcq49YM9PuWDQROF
+         HBKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZauaV7R0boEkRS/4cI0JRTPB10EksAIDg3xneN7uxuA=;
-        b=mrmnQAH/TSqD5tspRhyuaRj50Cdk9kcTc4wrbXA34h1Proi5fhLtbpA2iZlpqARLRr
-         UUMs591d/CKNvB9YrK2ZODty2244psctnFMUiOkXMytF/sm+ykk/NcY8XX9bNjrgpC/1
-         TSXXSktz5RyrBIAL3r3do/MNTyvx3/pr6+yooae7ez8dqC3O8il90/TuJnHCzX/XVhri
-         zfAef6wKt8TE95nP5nhp5lIDhQCOOamAQ2BxcdIKTPQMVapT9ZhMTBmjlHa/VarqNvhj
-         TYJh0AhwjKjRUTSFnBDEQhTAA9LpznqiKqhUeG9pGc9a8aGLxVncGL7pir7K8p1ZuFap
-         g5+w==
-X-Gm-Message-State: ACrzQf2qMLK9ILBIV8j+LKtIGQTKkGrdRbS+l2wlWhF4bvMiyXVbWx2V
-        yH682JfNIlKItepEpGyekA==
-X-Google-Smtp-Source: AMsMyM4Yp3iUigocKbqApqt4C7F98cB6rCXK14bs5kCUOlF50IIvWusqDG+oqGMm+h7ibPBmrFzsiw==
-X-Received: by 2002:a05:6808:1ab4:b0:35a:60a3:77d8 with SMTP id bm52-20020a0568081ab400b0035a60a377d8mr1436363oib.127.1668099837994;
-        Thu, 10 Nov 2022 09:03:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g37-20020a9d2da8000000b0066cacb8343bsm56352otb.41.2022.11.10.09.03.56
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ubbarOXcJSoiOO1vSHMphFgY9bCn9vvRpDVnu6XQKUU=;
+        b=a23d2PLqHRl0CEeTwvJ/Nbstu+LNTYYjya4bRheKM2c4LK8uLWQkaVoDw3ZOWA/dPm
+         YXxq1nuYzn3aW1Aq3FEhPWflswCJC2KHSMTAFFA2Y7qV3wk9dSjszSpt3ojmclTzMvXv
+         +GEV9LDNcT68f/ZT40T1yrPGpoG8/wcKEfn3VlRPyZ221frXRqqg6kwqgYXbHzRg38I5
+         izxDc1HfjVmQgKGrTCzvmPVog/cml+Ta8om9gQxQJ+o3k9CuPzqa+1yvKyigpZxb7u47
+         iOUawbvN82rXM35BFMC3Rh6AGxdGmiZfhcojvUr22P8crsxGL1Te0nMzu6l9HqNNxdFQ
+         glXg==
+X-Gm-Message-State: ACrzQf1gaJiDSIU6iqjqlGKxKfFechxrXQDVrOnUXAtlht84PxE8TAR/
+        k+c/TdV/2GDLm96rJ9pp69oADQ==
+X-Google-Smtp-Source: AMsMyM7Qvsr9aXyn8DNA3qATFnDI2/eR8b1YRY1ImtYV475CV8gRYuNlIKgLl8kbptCLI1it+R+YGA==
+X-Received: by 2002:ac8:538e:0:b0:3a5:49fa:3983 with SMTP id x14-20020ac8538e000000b003a549fa3983mr1242244qtp.436.1668100021220;
+        Thu, 10 Nov 2022 09:07:01 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id r16-20020ae9d610000000b006ee7e223bb8sm12904365qkk.39.2022.11.10.09.06.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 09:03:57 -0800 (PST)
-Received: (nullmailer pid 532546 invoked by uid 1000);
-        Thu, 10 Nov 2022 17:03:59 -0000
-Date:   Thu, 10 Nov 2022 11:03:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        linux-mtd@lists.infradead.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/17] Improve MTD bindings
-Message-ID: <20221110170359.GA528639-robh@kernel.org>
-References: <20221104164718.1290859-1-miquel.raynal@bootlin.com>
+        Thu, 10 Nov 2022 09:07:00 -0800 (PST)
+Message-ID: <03f6fd9ff6a757f6d1cb6cc552efcb0b94327104.camel@ndufresne.ca>
+Subject: Re: [RFC PATCH v6 02/11] media: v4l2: Extend pixel formats to unify
+ single/multi-planar handling (and more)
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Hsia-Jun Li <Randy.Li@synaptics.com>,
+        Helen Koike <helen.koike@collabora.com>
+Cc:     mchehab@kernel.org, hans.verkuil@cisco.com,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@iki.fi,
+        boris.brezillon@collabora.com, hiroh@chromium.org,
+        Brian.Starkey@arm.com, kernel@collabora.com,
+        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
+        frkoenig@chromium.org, stanimir.varbanov@linaro.org,
+        tfiga@chromium.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-media@vger.kernel.org
+Date:   Thu, 10 Nov 2022 12:06:59 -0500
+In-Reply-To: <708221e8-a805-c394-6958-6c7ec24bfe66@synaptics.com>
+References: <20210114180738.1758707-1-helen.koike@collabora.com>
+         <20210114180738.1758707-3-helen.koike@collabora.com>
+         <d0d1f74f-7e77-1b18-0529-dbbec8889584@xs4all.nl>
+         <577c56bf-146c-f34a-2028-075170076de7@collabora.com>
+         <708221e8-a805-c394-6958-6c7ec24bfe66@synaptics.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221104164718.1290859-1-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 05:47:01PM +0100, Miquel Raynal wrote:
-> Hello,
-> 
-> During a yaml conversion review, Krzysztof opened the discussion about
-> the links and references made between the different files in the mtd
-> bindings. I figured out some minimal changes might be needed to properly
-> reference everything correctly and ensure we constrain as much as
-> possible the existing bindings. That is what I tried to do here.
-> 
-> The idea is:
-> * partition.yaml defines one MTD partition
-> * parsers/*.yaml define partition parsers (mainly compatibles)
-> * mtd.yaml contains the generic definition of any mtd device (nand,
->   spi-nand, spi-nor, nor, sram, etc), in particular, it defines the
->   various partition formats (legacy and current) and references
->   partition.yaml as well as a list of all the possible parsers within a
->   "partitions" node.
-> * nand-chip.yaml, jedec,spi-nor, mtd-physmap.yaml all describe real
->   instances of mtd device, each of them with a different underlying
->   technology, they reference mtd.yaml 
-> * nand-controller.yaml has subnodes which reference nand-chip.yaml.
-> * Specific NAND controller bindings reference nand-controller.yaml.
-> 
-> I've tested each and every patch with the following command and it
-> worked fine:
-> $ make dt_binding_check -j10 DT_CHECKER_FLAG=-m DT_SCHEMA_FILES=mtd/
-> 
-> Comments welcome of course :-)
-> 
-> Cheers,
-> Miquèl
-> 
-> Changes in v2:
-> * Fixed all the missing references to partitions.txt.
-> * Created a proper partitions.yaml file to cut the logic
-> * Constrained #{address,size}-cells to 1 or 2.
-> * Used the description advised by Rob to list all the possible partition
->   parsers without having to actually duplicate the compatibles.
-> * Deprecated the #{address,size}-cells properties when relevant.
-> * Fixed a regex pattern to match all sram device node names (including
->   ones defined under memory-controllers.
-> * Added a comment on another "additionalProperties: true" situation.
-> * Dropped even more duplicated properties.
-> * Fixed a few typos (like s/phymap/physmap/).
-> * Changed qcom,smem-part partition type.
-> * Standardized the style in the various examples.
-> * Improved the nvmem-cells file as well.
-> * Added an example to the sunxi-nand bindings.
-> 
-> Miquel Raynal (17):
->   dt-bindings: mtd: Clarify all partition subnodes
->   dt-bindings: mtd: Remove useless file about partitions
->   dt-bindings: mtd: nand-chip: Reference mtd.yaml
->   dt-bindings: mtd: nand: Drop common properties already defined in
->     generic files
->   dt-bindings: mtd: nand: Standardize the child node name
->   dt-bindings: mtd: ingenic: Mark partitions in the controller node as
->     deprecated
->   dt-bindings: mtd: onenand: Mention the expected node name
->   dt-bindings: mtd: sunxi-nand: Add an example to validate the bindings
->   dt-bindings: mtd: spi-nor: Drop common properties
->   dt-bindings: mtd: physmap: Reuse the generic definitions
->   dt-bindings: mtd: partitions: Constrain the list of parsers
->   dt-bindings: mtd: partitions: Change qcom,smem-part partition type
->   dt-bindings: mtd: nvmem-cells: Fix example
->   dt-bindings: mtd: nvmem-cells: Inherit from MTD partitions
->   dt-bindings: mtd: Argue in favor of keeping additionalProperties set
->     to true
->   dt-bindings: mtd: Drop object types when referencing other files
->   dt-bindings: mtd: Standardize the style in the examples
+Le samedi 05 novembre 2022 =C3=A0 23:19 +0800, Hsia-Jun Li a =C3=A9crit=C2=
+=A0:
+> > > VIDIOC_ENUM_EXT_PIX_FMT would report NV12 and NV12M, while=20
+> > > VIDIOC_ENUM_FMT
+> > > would just report NV12M.
+> >=20
+> > If NV12 and NV12M are equivalent in Ext API, I don't see why we would
+> > report both (unless I'm missing something, which is probably the case).
+> >=20
+> > The idea was to deprecate the M-variants one day.
+> I was thinking the way in DRM API is better, always assuming it would=20
+> always in a multiple planes. The only problem is we don't have a way to=
+=20
+> let the allocator that allocate contiguous memory for planes when we=20
+> need to do that.
 
-Other than my comment on patch 13, for the series:
+Its not too late to allow this to be negotiated, but I would move this out =
+of
+the pixel format definition to stop the explosion of duplicate pixel format=
+s,
+which is a nightmare to deal with. If I simplify the discussion, we want to
+negotiate contiguity with the driver. The new FMT structure should have a
+CONTIGUOUS flag. So if userpace sets:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+  S_FMT(NV12, CONTIGUOUS)
+
+The driver can accepts, and return the unmodified structure, or may drop th=
+e
+CONTIGUOUS flag, which would mean its not supported. Could be the other way
+around too. As for allocation, if you have CONTIGUOUS flag set, userspace d=
+oes
+not have to export or map memory for each planes, as they are the same. We
+simply need to define the offset as relative to their allocation, which I t=
+hink
+is the most sensible thing.
+
+Nicolas
+
