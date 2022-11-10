@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9A4624201
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 803DA624208
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiKJMK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S230211AbiKJMLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiKJMKP (ORCPT
+        with ESMTP id S230054AbiKJMLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:10:15 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B87F71F2D;
-        Thu, 10 Nov 2022 04:10:08 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7LHj1v5yz15MNp;
-        Thu, 10 Nov 2022 20:09:53 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 20:10:06 +0800
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 20:10:06 +0800
-Message-ID: <4c4cb2a5-c029-1815-e06a-f6d055ed5912@huawei.com>
-Date:   Thu, 10 Nov 2022 20:10:05 +0800
+        Thu, 10 Nov 2022 07:11:48 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60D5F49
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:11:47 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b3so2854816lfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:11:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aUr5GXIjetvqmUBwd3OtcqUULVb7fxkMKk71ECylmYw=;
+        b=RzyNMkWzQlNRGMQ957yXWjjTYMYk7hzfCSHU1jaMZgEqtfEqUeKD7s0EqNNelwbla/
+         zLzofOCr1d5Lls5/HC4vMnMmmLeY+f9i+e7wJOJaKrQ2aLSDUh4E8GsXxebYXiNJfc/h
+         2qO+VAxgS21tYwsT+4DmnnVopOvBBJXtjoGdemSeN9paDBtp3q6woONXUXgTIm6vSzcC
+         4rmMFx2BrSQKf44mI+SGjjVAgceQpgFOcnP0cxVfAFnZeh+SWgtX+97s3O8kQ17CKE4C
+         b9GYlRXf6EFpJDv/5HF1D8GYBHt0AN29xspQ5xe5SMfNxU90aCukLPlFilxC1m7wic0x
+         5zcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aUr5GXIjetvqmUBwd3OtcqUULVb7fxkMKk71ECylmYw=;
+        b=BKme9FQUPdPev1vE2IHk6MaqX8+Pj8hduvmh6wvspuKVE5wWhkPOY5JUetSLaajdb7
+         MvHZVm/o/12MKE942W0ck4/JPYtrD+nKQCb9kC0x5MZZLA62bI8um9XPJvYbznC5iomO
+         eWghg7KR5X9ZbSWgFsL1d70cJ7v0F7722Vtch1jF2PSMIo6fzlP5Na7uNz0CVuDcJeMe
+         H7sbkGUnOS46GeT9WMSbB/dAyw6zIBJmRmPDruF/JRwESpIcURefAfvqIU3vFFqXdFg7
+         zR6UJg6W2cDsMFQ3tbjZEfLqDQll1jBgPAVrSLgpsyBH/A6qJvbrc8lbL62y4xr+s4R+
+         tl9Q==
+X-Gm-Message-State: ACrzQf0r6Vl++zVucTppP2RK25Q0sftC9RN8KxSn4b0B5LBLDuKNf/D6
+        HSt+O6LDH1+PMUu8pkOIW4CMng==
+X-Google-Smtp-Source: AMsMyM4PW+P3N9qX9jt9EOP+3xYgM36df0Ws9nuyGcbcwoI6cdOiJLl8jW4SGeWSSWFhsK9tt/83CQ==
+X-Received: by 2002:ac2:5f88:0:b0:4a7:8afe:b741 with SMTP id r8-20020ac25f88000000b004a78afeb741mr21323207lfe.15.1668082305520;
+        Thu, 10 Nov 2022 04:11:45 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id f10-20020a056512360a00b004ac088fdfd2sm2727049lfs.85.2022.11.10.04.11.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 04:11:44 -0800 (PST)
+Message-ID: <277004ed-3b6b-4ee5-39e4-beb75a272e60@linaro.org>
+Date:   Thu, 10 Nov 2022 13:11:42 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 3/3] mailbox: pcc: fix 'pcc_chan_count' when fail to
- initialize PCC
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
-        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
-        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
-        <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
-        <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>
-References: <20221110015034.7943-1-lihuisong@huawei.com>
- <20221110015034.7943-4-lihuisong@huawei.com>
- <20221110104415.gk3asb5yc26slcs7@bogus>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20221110104415.gk3asb5yc26slcs7@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/6] dt-bindings: Document the SYSREG specific
+ compatibles found on FSD SoC
+Content-Language: en-US
+To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
+        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, alim.akhtar@samsung.com,
+        linux-fsd@tesla.com, robh+dt@kernel.org
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        aswani.reddy@samsung.com, sriranjani.p@samsung.com
+References: <20221109100928.109478-1-vivek.2311@samsung.com>
+ <CGME20221109100245epcas5p38a01aed025f491d39a09508ebcdcef84@epcas5p3.samsung.com>
+ <20221109100928.109478-2-vivek.2311@samsung.com>
+ <709daf8b-a58e-9247-c5d8-f3be3e60fe70@linaro.org>
+ <000001d8f4f6$1c7e96e0$557bc4a0$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <000001d8f4f6$1c7e96e0$557bc4a0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/11/2022 12:18, Vivek Yadav wrote:
+>>> +maintainers:
+>>> +  - Alim Akhtar <alim.akhtar@samsung.com>
+>>> +
+>>> +description: |
+>>> +  This is a system control registers block, providing multiple low
+>>> +level
+>>> +  platform functions like board detection and identification,
+>>> +software
+>>> +  interrupt generation.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    oneOf:
+>>
+>> No need for oneOf.
+>>
+> Removing this results into dt_binding_check error, so this is required.
 
-在 2022/11/10 18:44, Sudeep Holla 写道:
-> On Thu, Nov 10, 2022 at 09:50:34AM +0800, Huisong Li wrote:
->> Currently, 'pcc_chan_count' is a non-zero value if PCC subspaces are parsed
->> successfully and subsequent processes is failure during initializing PCC
->> process. This may cause that pcc_mbox_request_channel() can still be
->> executed successfully , which will misleads the caller that this channel is
->> available.
+No, this is not required. You do not have more than one condition for oneOf.
+
+>>> +      - items:
+>>> +          - enum:
+>>> +              - tesla,sysreg_fsys0
+>>> +              - tesla,sysreg_peric
 >>
->> Fixes: ce028702ddbc ("mailbox: pcc: Move bulk of PCCT parsing into pcc_mbox_probe")
->> Signed-off-by: Huisong Li <lihuisong@huawei.com>
->> ---
->>   drivers/mailbox/pcc.c | 11 ++++++++---
->>   1 file changed, 8 insertions(+), 3 deletions(-)
+>> From where did you get underscores in compatibles?
 >>
->> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
->> index 7cee37dd3b73..47d70c5884e3 100644
->> --- a/drivers/mailbox/pcc.c
->> +++ b/drivers/mailbox/pcc.c
->> @@ -294,6 +294,7 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
->>   		pr_err("Channel not found for idx: %d\n", subspace_id);
->>   		return ERR_PTR(-EBUSY);
->>   	}
->> +
-> Spurious/not needed change ?
-Ack
->
->>   	dev = chan->mbox->dev;
->>   
->>   	spin_lock_irqsave(&chan->lock, flags);
->> @@ -735,7 +736,8 @@ static int __init pcc_init(void)
->>   
->>   	if (ret) {
->>   		pr_debug("ACPI PCC probe failed.\n");
->> -		return -ENODEV;
->> +		ret = -ENODEV;
->> +		goto out;
-> Not needed, we don't set pcc_chan_count if the probe failed.
-You are right. will fix it in v2, thanks.
->
->>   	}
->>   
->>   	pcc_pdev = platform_create_bundle(&pcc_mbox_driver,
->> @@ -743,10 +745,13 @@ static int __init pcc_init(void)
->>   
->>   	if (IS_ERR(pcc_pdev)) {
->>   		pr_debug("Err creating PCC platform bundle\n");
->> -		return PTR_ERR(pcc_pdev);
->> +		ret = PTR_ERR(pcc_pdev);
-> You just need to set pcc_chan_count to 0 here, so no need for goto.
-Ack
->
+> I have seen in MCAN Driver <drivers/net/can/m_can/m_can_platform.c> and also too many other yaml files.
+> Do you have any ref standard guideline of compatible which says underscore is not allowed.
+
+git grep compatible arch/arm64/boot/dts/exynos/ | grep _
+git grep compatible arch/arm/boot/dts/exynos* | grep _
+
+Both give 0 results. For few other SoCs there such cases but that's
+really, really exception. Drop underscores.
+
+
+Best regards,
+Krzysztof
+
