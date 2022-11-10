@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B578623A84
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD93623AAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:51:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiKJDdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S232371AbiKJDvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:51:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiKJDdu (ORCPT
+        with ESMTP id S229578AbiKJDvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:33:50 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED5E2DE0;
-        Wed,  9 Nov 2022 19:33:48 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N76qw23W8zmVTc;
-        Thu, 10 Nov 2022 11:33:32 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
- 2022 11:33:45 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH bpf-next v3] bpf: Initialize same number of free nodes for each pcpu_freelist
-Date:   Wed, 9 Nov 2022 22:50:39 -0500
-Message-ID: <20221110035039.54859-1-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 9 Nov 2022 22:51:50 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8722FC35;
+        Wed,  9 Nov 2022 19:51:49 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso480370otf.13;
+        Wed, 09 Nov 2022 19:51:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ggDLXS8C7H/fGONZ51hHpbZ+HaczVFYvC4iINiZo8+Y=;
+        b=3/lvNq3z2iklQMb1vktGUWm1a27Q/iHhGL7u2K0Uew3Ji2n496soe6L+xkZT/mF7Xg
+         V+JZky1sbast/XDTyiN5ajAAxxK5ekJ+VS7UT44jWYeuDRPo1yO9plx9RF0woSLOM3rI
+         rBI36p3OGacr8hYH+MmpryqFZ8AC2eE2vpL8n016qofcnXEEtb+UcUr9QlICmlzQkHbq
+         fFPJpf+PR+KwvSd+g5mpuiWfOLGZOJZz00X09oMiz5plPAmwhynfFnK90s+NAKAnQZ7C
+         5ttzEEHk4MfxR3yXwz1HtwPlOOq0i7yuSQOZUmZ7wTCH2nieq2w5mfDitAQFj5F6l/zF
+         RcOg==
+X-Gm-Message-State: ACrzQf1fj1vosGqExh7xZChgsWQEzBUIJ3to3kgXdJWvbqGsRzDA/WmY
+        aA26wIf07rwmpPa9z1BHiQ==
+X-Google-Smtp-Source: AMsMyM4jIqBTy5OSUbxEJJvNBC8mWaF73kdsvN0TVQ1mE7inCd/BtT6E6HpUnQqdQ1NoweSFTL+LxA==
+X-Received: by 2002:a9d:6a0d:0:b0:662:2138:f51b with SMTP id g13-20020a9d6a0d000000b006622138f51bmr1061856otn.73.1668052309167;
+        Wed, 09 Nov 2022 19:51:49 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y23-20020a9d6357000000b00660d9afc216sm5996281otk.17.2022.11.09.19.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 19:51:48 -0800 (PST)
+Received: (nullmailer pid 3436645 invoked by uid 1000);
+        Thu, 10 Nov 2022 03:51:50 -0000
+Date:   Wed, 9 Nov 2022 21:51:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Christian Eggers <ceggers@arri.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Robert Marko <robert.marko@sartura.hr>,
+        Cory Tusar <cory.tusar@pid1solutions.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH v3 1/6] dt-bindings: nvmem: Fix example
+Message-ID: <166805230789.3436553.2751149076603069326.robh@kernel.org>
+References: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
+ <20221104163833.1289857-2-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104163833.1289857-2-miquel.raynal@bootlin.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
-free nodes for some CPUs, and then possibly one CPU with fewer nodes,
-followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
-and num_possible_cpus() == 32, CPU 0~27 each gets 9 free nodes, CPU 28 gets
-4 free nodes, CPU 29~31 get 0 free nodes, while in fact each CPU should get
-8 nodes equally.
 
-This patch initializes nr_elems / num_possible_cpus() free nodes for each
-CPU firstly, then allocates the remaining free nodes by one for each CPU
-until no free nodes left.
+On Fri, 04 Nov 2022 17:38:28 +0100, Miquel Raynal wrote:
+> Despite not being listed nor required within the top level nvmem yaml
+> file, the "compatible" property is mandatory and is actually enforced by
+> all the nvmem provider bindings.
+> 
+> Unfortunately, the lack of compatible in the nvmem.yaml to level
+> description file lead to the example not matching anything and thus not
+> being checked at all.
+> 
+> Let's pick a compatible almost randomly (one which is already used with
+> the qfprom label) to make the example at least valid on a semantic
+> point of view and getting it checked.
+> 
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/nvmem/nvmem.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
-v3: Simplify code as suggested by Andrii
-v2: Update commit message and add Yonghong's ack
----
- kernel/bpf/percpu_freelist.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
-index b6e7f5c5b9ab..bd60070c079f 100644
---- a/kernel/bpf/percpu_freelist.c
-+++ b/kernel/bpf/percpu_freelist.c
-@@ -100,22 +100,23 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
- 			    u32 nr_elems)
- {
- 	struct pcpu_freelist_head *head;
--	int i, cpu, pcpu_entries;
-+	unsigned int cpu, cpu_idx, i, j, n, m;
- 
--	pcpu_entries = nr_elems / num_possible_cpus() + 1;
--	i = 0;
-+	n = nr_elems / num_possible_cpus();
-+	m = nr_elems % num_possible_cpus();
-+
-+	cpu_idx = 0;
- 
- 	for_each_possible_cpu(cpu) {
--again:
--		head = per_cpu_ptr(s->freelist, cpu);
--		/* No locking required as this is not visible yet. */
--		pcpu_freelist_push_node(head, buf);
--		i++;
--		buf += elem_size;
--		if (i == nr_elems)
--			break;
--		if (i % pcpu_entries)
--			goto again;
-+		j = min(n + (cpu_idx < m ? 1 : 0), nr_elems);
-+		for (i = 0; i < j; i++) {
-+			head = per_cpu_ptr(s->freelist, cpu);
-+			/* No locking required as this is not visible yet. */
-+			pcpu_freelist_push_node(head, buf);
-+			buf += elem_size;
-+		}
-+		nr_elems -= j;
-+		cpu_idx++;
- 	}
- }
- 
--- 
-2.30.2
-
+Acked-by: Rob Herring <robh@kernel.org>
