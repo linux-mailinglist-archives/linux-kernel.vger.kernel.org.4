@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F39624741
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76ADC624742
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbiKJQmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S232133AbiKJQmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbiKJQmd (ORCPT
+        with ESMTP id S232067AbiKJQmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:42:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923BD419BA;
-        Thu, 10 Nov 2022 08:42:32 -0800 (PST)
+        Thu, 10 Nov 2022 11:42:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1B743873;
+        Thu, 10 Nov 2022 08:42:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E06EB82248;
-        Thu, 10 Nov 2022 16:42:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E61E9C433D6;
-        Thu, 10 Nov 2022 16:42:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF77D61BCB;
+        Thu, 10 Nov 2022 16:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E308C433C1;
+        Thu, 10 Nov 2022 16:42:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668098550;
-        bh=QKUPnCuSt4qJQagjKlcEHWgf/R6XA/d08OIKtNrfC4A=;
+        s=k20201202; t=1668098553;
+        bh=AMkgQPuKRPM8nukZjM2ZwIbmA4VXBv+Y/FxTSShnnN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kFHRJ3LLht4uHqTvA2yMYuD/T2ka6ewc6LmTvqWp/68elWBdnjquvKyqAxmYBXycR
-         JyriAUY2Fen5o1iJDBbRbKP3Gh/RwSX5mD/geMGKy5yU936R9Jfif7tnxrHPIwXXZi
-         /Nrvl41iIzXpoTwzDxD7UpP6SpynDlu2ttxQzbpJ8r9tMGEO2zIQGAysutNJ5qpalX
-         HiURkpjwPpoALI/3J8kEr8nggzmSlt8QAOW7jc4BKbV5MuMVqAqj2W44PU2eBH7jFn
-         TGii7XSktwWnUtD+PnjNYXPrxGMzDYfrZv+KXdjsKOGnr3N5N8XBdhBbh/C5JXm1Pp
-         GoZG9rfnKihnA==
+        b=BSw+HTvTR1YTwG2L2/IDN14ICE8/eRnpXQ+wUaxgoRuAo4ky79Uzh1d9UoUkMGawo
+         hCR1elrv3JDcen+1T/eG56Yx3t5rjjMaVFoZILt42d7jiU1umM5Nkqs540U2+FdcMp
+         sIuRSVi2M5ahdmCmEX2qfXJhbrixMri2seWgjThtQyu+nZuMq6LfOotGIlJ6jvQzxQ
+         O64fBYUlUrGO/35w9YvADIUoIc3Nz4S5UnH7UuphAzbcLq+AgqtLzcgSE9e3mWflyE
+         mRf7b/MTzNouujFnULKfb2jG7VKPCv071P0Q4BgHT7DluNjmJYuRWp139XP8JGKdi6
+         o6O3MXqnfEmCw==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -40,12 +40,13 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
-Subject: [PATCH v1 04/28] rust: samples: add `rust_print` example
-Date:   Thu, 10 Nov 2022 17:41:16 +0100
-Message-Id: <20221110164152.26136-5-ojeda@kernel.org>
+Subject: [PATCH v1 05/28] rust: macros: add `concat_idents!` proc macro
+Date:   Thu, 10 Nov 2022 17:41:17 +0100
+Message-Id: <20221110164152.26136-6-ojeda@kernel.org>
 In-Reply-To: <20221110164152.26136-1-ojeda@kernel.org>
 References: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -56,108 +57,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add example to exercise the printing macros (`pr_*!`) introduced
-in the previous patches.
+From: Björn Roy Baron <bjorn3_gh@protonmail.com>
 
+This macro provides similar functionality to the unstable feature
+`concat_idents` without having to rely on it.
+
+For instance:
+
+    let x_1 = 42;
+    let x_2 = concat_idents!(x, _1);
+    assert!(x_1 == x_2);
+
+It has different behavior with respect to macro hygiene. Unlike
+the unstable `concat_idents!` macro, it allows, for example,
+referring to local variables by taking the span of the second
+macro as span for the output identifier.
+
+Signed-off-by: Björn Roy Baron <bjorn3_gh@protonmail.com>
+[Reworded, adapted for upstream and applied latest changes]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- samples/rust/Kconfig       | 10 +++++++
- samples/rust/Makefile      |  1 +
- samples/rust/rust_print.rs | 54 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+)
- create mode 100644 samples/rust/rust_print.rs
+ rust/macros/concat_idents.rs | 23 +++++++++++++++++++
+ rust/macros/lib.rs           | 44 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 rust/macros/concat_idents.rs
 
-diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
-index 841e0906e943..b0f74a81c8f9 100644
---- a/samples/rust/Kconfig
-+++ b/samples/rust/Kconfig
-@@ -20,6 +20,16 @@ config SAMPLE_RUST_MINIMAL
- 
- 	  If unsure, say N.
- 
-+config SAMPLE_RUST_PRINT
-+	tristate "Printing macros"
-+	help
-+	  This option builds the Rust printing macros sample.
-+
-+	  To compile this as a module, choose M here:
-+	  the module will be called rust_print.
-+
-+	  If unsure, say N.
-+
- config SAMPLE_RUST_HOSTPROGS
- 	bool "Host programs"
- 	help
-diff --git a/samples/rust/Makefile b/samples/rust/Makefile
-index 1daba5f8658a..03086dabbea4 100644
---- a/samples/rust/Makefile
-+++ b/samples/rust/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_SAMPLE_RUST_MINIMAL)		+= rust_minimal.o
-+obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust_print.o
- 
- subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)		+= hostprogs
-diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
+diff --git a/rust/macros/concat_idents.rs b/rust/macros/concat_idents.rs
 new file mode 100644
-index 000000000000..09f737790f3f
+index 000000000000..3b5a9dd70e8a
 --- /dev/null
-+++ b/samples/rust/rust_print.rs
-@@ -0,0 +1,54 @@
++++ b/rust/macros/concat_idents.rs
+@@ -0,0 +1,23 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! Rust printing macros sample.
++use proc_macro::{token_stream, Ident, TokenStream, TokenTree};
 +
-+use kernel::pr_cont;
-+use kernel::prelude::*;
++use crate::helpers::expect_punct;
 +
-+module! {
-+    type: RustPrint,
-+    name: b"rust_print",
-+    author: b"Rust for Linux Contributors",
-+    description: b"Rust printing macros sample",
-+    license: b"GPL",
-+}
-+
-+struct RustPrint;
-+
-+impl kernel::Module for RustPrint {
-+    fn init(_module: &'static ThisModule) -> Result<Self> {
-+        pr_info!("Rust printing macros sample (init)\n");
-+
-+        pr_emerg!("Emergency message (level 0) without args\n");
-+        pr_alert!("Alert message (level 1) without args\n");
-+        pr_crit!("Critical message (level 2) without args\n");
-+        pr_err!("Error message (level 3) without args\n");
-+        pr_warn!("Warning message (level 4) without args\n");
-+        pr_notice!("Notice message (level 5) without args\n");
-+        pr_info!("Info message (level 6) without args\n");
-+
-+        pr_info!("A line that");
-+        pr_cont!(" is continued");
-+        pr_cont!(" without args\n");
-+
-+        pr_emerg!("{} message (level {}) with args\n", "Emergency", 0);
-+        pr_alert!("{} message (level {}) with args\n", "Alert", 1);
-+        pr_crit!("{} message (level {}) with args\n", "Critical", 2);
-+        pr_err!("{} message (level {}) with args\n", "Error", 3);
-+        pr_warn!("{} message (level {}) with args\n", "Warning", 4);
-+        pr_notice!("{} message (level {}) with args\n", "Notice", 5);
-+        pr_info!("{} message (level {}) with args\n", "Info", 6);
-+
-+        pr_info!("A {} that", "line");
-+        pr_cont!(" is {}", "continued");
-+        pr_cont!(" with {}\n", "args");
-+
-+        Ok(RustPrint)
++fn expect_ident(it: &mut token_stream::IntoIter) -> Ident {
++    if let Some(TokenTree::Ident(ident)) = it.next() {
++        ident
++    } else {
++        panic!("Expected Ident")
 +    }
 +}
 +
-+impl Drop for RustPrint {
-+    fn drop(&mut self) {
-+        pr_info!("Rust printing macros sample (exit)\n");
-+    }
++pub(crate) fn concat_idents(ts: TokenStream) -> TokenStream {
++    let mut it = ts.into_iter();
++    let a = expect_ident(&mut it);
++    assert_eq!(expect_punct(&mut it), ',');
++    let b = expect_ident(&mut it);
++    assert!(it.next().is_none(), "only two idents can be concatenated");
++    let res = Ident::new(&(a.to_string() + &b.to_string()), b.span());
++    TokenStream::from_iter([TokenTree::Ident(res)])
++}
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index 91764bfb1f89..15555e7ff487 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -2,6 +2,7 @@
+ 
+ //! Crate for all kernel procedural macros.
+ 
++mod concat_idents;
+ mod helpers;
+ mod module;
+ 
+@@ -70,3 +71,46 @@ use proc_macro::TokenStream;
+ pub fn module(ts: TokenStream) -> TokenStream {
+     module::module(ts)
+ }
++
++/// Concatenate two identifiers.
++///
++/// This is useful in macros that need to declare or reference items with names
++/// starting with a fixed prefix and ending in a user specified name. The resulting
++/// identifier has the span of the second argument.
++///
++/// # Examples
++///
++/// ```ignore
++/// use kernel::macro::concat_idents;
++///
++/// macro_rules! pub_no_prefix {
++///     ($prefix:ident, $($newname:ident),+) => {
++///         $(pub(crate) const $newname: u32 = kernel::macros::concat_idents!($prefix, $newname);)+
++///     };
++/// }
++///
++/// pub_no_prefix!(
++///     binder_driver_return_protocol_,
++///     BR_OK,
++///     BR_ERROR,
++///     BR_TRANSACTION,
++///     BR_REPLY,
++///     BR_DEAD_REPLY,
++///     BR_TRANSACTION_COMPLETE,
++///     BR_INCREFS,
++///     BR_ACQUIRE,
++///     BR_RELEASE,
++///     BR_DECREFS,
++///     BR_NOOP,
++///     BR_SPAWN_LOOPER,
++///     BR_DEAD_BINDER,
++///     BR_CLEAR_DEATH_NOTIFICATION_DONE,
++///     BR_FAILED_REPLY
++/// );
++///
++/// assert_eq!(BR_OK, binder_driver_return_protocol_BR_OK);
++/// ```
++#[proc_macro]
++pub fn concat_idents(ts: TokenStream) -> TokenStream {
++    concat_idents::concat_idents(ts)
 +}
 -- 
 2.38.1
