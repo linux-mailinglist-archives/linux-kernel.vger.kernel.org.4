@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4D2623BBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C899623BCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiKJGYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
+        id S232479AbiKJG0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiKJGXu (ORCPT
+        with ESMTP id S232237AbiKJG0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:23:50 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B30F2B1AB;
-        Wed,  9 Nov 2022 22:23:49 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7Bc60S6Bz15MSy;
-        Thu, 10 Nov 2022 14:23:34 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 14:23:46 +0800
-Message-ID: <80252c82-9c34-aefe-8422-fa247092dcec@huawei.com>
-Date:   Thu, 10 Nov 2022 14:23:46 +0800
+        Thu, 10 Nov 2022 01:26:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14444CE4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 22:25:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668061554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cT7MIb473qqDDSVVXwyDEMmLSzN/VjsHwdjNL16ENvg=;
+        b=Ga+4bQp9WAodEm7h8aaUgB4q2MPgvZ+QRj7INJOZDfH5ghYceLC49NdHTEnZVL+kQmbJF5
+        K40SMMj5cmZ73BfWr/wHlrIVTKTk6e/e7aQ8d5ynwaBNnJ6pwgRen2uZTFtdYw6bQ6nNT4
+        58XEkgUKXljQAHUa8T1nVx90MjcbckI=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-103-IbdhP7PwNh6NJnpV64ohuw-1; Thu, 10 Nov 2022 01:25:52 -0500
+X-MC-Unique: IbdhP7PwNh6NJnpV64ohuw-1
+Received: by mail-ej1-f71.google.com with SMTP id xj11-20020a170906db0b00b0077b6ecb23fcso581245ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 22:25:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cT7MIb473qqDDSVVXwyDEMmLSzN/VjsHwdjNL16ENvg=;
+        b=gzWNsIuumlioyMAR3Sqv4qA7a6TSteu8JkarCgAyi11VQ0ankRMTQe1XdVsfMH7qii
+         xWB/EXMtmhn5F48DflN17gKHqE1hDeKQ19NZnVOK5SOxt9sHJxEtN8vqPxOXEjPD1E3k
+         j++ORzIVuCCuKWCTHlHxdl9IKYYKGVRzEOUxiuDKNafm8a2Enq2is5Ir5zSDpFgPwS60
+         RXHGvKrM0+MI1aLkI2oq8lE7EgrcpZiN1dDDpGJAUvoW3owBD8UmoYZsfkC3P5DJrDA6
+         Q9olWNZkxyK6RuuhFIIfZmMkaps3cny9FEepZ0WFsrG+jEqfiqBwCo0dE7QhGSMw90GE
+         fS/Q==
+X-Gm-Message-State: ACrzQf2IOOcQkXgwObbY4ZPgDdQqN8rVqHuN4p5HClC1LKSjjdyjioqz
+        8MW0JIaqdyT4y8bh5gVW5hfLVfg0OJ+yUcM/zVrf4Q1W1d9/i2+TnZjsjWg/bI4Jjcou7kiLwRQ
+        TwWIFG7FIg8UrBlalCBKp6sN4NxI6dnYZZqdW8h0i
+X-Received: by 2002:a17:906:8a54:b0:7ad:e517:1eb with SMTP id gx20-20020a1709068a5400b007ade51701ebmr45520142ejc.567.1668061551690;
+        Wed, 09 Nov 2022 22:25:51 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM7747G9NLhB7GE8qdR42UGnM94e4TCOGXhh6mmCvtRvV+rwu838gSmYF2yH5z1M0jPQd+NuaqydVuMzCLcQLhU=
+X-Received: by 2002:a17:906:8a54:b0:7ad:e517:1eb with SMTP id
+ gx20-20020a1709068a5400b007ade51701ebmr45520132ejc.567.1668061551543; Wed, 09
+ Nov 2022 22:25:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3] bpf: Initialize same number of free nodes for
- each pcpu_freelist
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-References: <20221110035039.54859-1-xukuohai@huawei.com>
- <CAEf4BzYMExNVP353xUmkD=M7_QKDG8Ukm0T7D9aCZG=-GToiaA@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CAEf4BzYMExNVP353xUmkD=M7_QKDG8Ukm0T7D9aCZG=-GToiaA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221110061111.383076-1-xianting.tian@linux.alibaba.com>
+In-Reply-To: <20221110061111.383076-1-xianting.tian@linux.alibaba.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 10 Nov 2022 14:25:36 +0800
+Message-ID: <CACGkMEtxEe=SdjgE=qm5_TNy-XrY0x9gRZFLNnrA+3JShfLtYw@mail.gmail.com>
+Subject: Re: [PATCH] virtio_pci: use PAGE_SIZE for pci vring align
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,80 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 12:05 PM, Andrii Nakryiko wrote:
-> On Wed, Nov 9, 2022 at 7:33 PM Xu Kuohai <xukuohai@huawei.com> wrote:
->>
->> pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
->> free nodes for some CPUs, and then possibly one CPU with fewer nodes,
->> followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
->> and num_possible_cpus() == 32, CPU 0~27 each gets 9 free nodes, CPU 28 gets
->> 4 free nodes, CPU 29~31 get 0 free nodes, while in fact each CPU should get
->> 8 nodes equally.
->>
->> This patch initializes nr_elems / num_possible_cpus() free nodes for each
->> CPU firstly, then allocates the remaining free nodes by one for each CPU
->> until no free nodes left.
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> Acked-by: Yonghong Song <yhs@fb.com>
->> ---
->> v3: Simplify code as suggested by Andrii
->> v2: Update commit message and add Yonghong's ack
->> ---
->>   kernel/bpf/percpu_freelist.c | 27 ++++++++++++++-------------
->>   1 file changed, 14 insertions(+), 13 deletions(-)
->>
->> diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
->> index b6e7f5c5b9ab..bd60070c079f 100644
->> --- a/kernel/bpf/percpu_freelist.c
->> +++ b/kernel/bpf/percpu_freelist.c
->> @@ -100,22 +100,23 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
->>                              u32 nr_elems)
->>   {
->>          struct pcpu_freelist_head *head;
->> -       int i, cpu, pcpu_entries;
->> +       unsigned int cpu, cpu_idx, i, j, n, m;
->>
->> -       pcpu_entries = nr_elems / num_possible_cpus() + 1;
->> -       i = 0;
->> +       n = nr_elems / num_possible_cpus();
->> +       m = nr_elems % num_possible_cpus();
->> +
->> +       cpu_idx = 0;
->>
->>          for_each_possible_cpu(cpu) {
->> -again:
->> -               head = per_cpu_ptr(s->freelist, cpu);
->> -               /* No locking required as this is not visible yet. */
->> -               pcpu_freelist_push_node(head, buf);
->> -               i++;
->> -               buf += elem_size;
->> -               if (i == nr_elems)
->> -                       break;
->> -               if (i % pcpu_entries)
->> -                       goto again;
->> +               j = min(n + (cpu_idx < m ? 1 : 0), nr_elems);
-> 
-> why the min() here?
-> 
+On Thu, Nov 10, 2022 at 2:14 PM Xianting Tian
+<xianting.tian@linux.alibaba.com> wrote:
+>
+> As the comments of VIRTIO_PCI_VRING_ALIGN shows, we should use
+> PAGE_SZIE not the hard code 4096.
+>
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> ---
+>  include/uapi/linux/virtio_pci.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/uapi/linux/virtio_pci.h b/include/uapi/linux/virtio_pci.h
+> index f703afc7ad31..ed5f678c682b 100644
+> --- a/include/uapi/linux/virtio_pci.h
+> +++ b/include/uapi/linux/virtio_pci.h
+> @@ -90,7 +90,7 @@
+>
+>  /* The alignment to use between consumer and producer parts of vring.
+>   * x86 pagesize again. */
 
-to avoid out-of-bounds in case nr_elems is less than the total number of CPUs,
-seems not very necessary, but the original code avoids this as well, I just kept
-the logic
+See the comment above, PAGE_SIZE varies among archs.
 
->> +               for (i = 0; i < j; i++) {
->> +                       head = per_cpu_ptr(s->freelist, cpu);
->> +                       /* No locking required as this is not visible yet. */
->> +                       pcpu_freelist_push_node(head, buf);
->> +                       buf += elem_size;
->> +               }
->> +               nr_elems -= j;
->> +               cpu_idx++;
->>          }
->>   }
->>
->> --
->> 2.30.2
->>
-> .
+Thanks
+
+> -#define VIRTIO_PCI_VRING_ALIGN         4096
+> +#define VIRTIO_PCI_VRING_ALIGN         PAGE_SIZE
+>
+>  #endif /* VIRTIO_PCI_NO_LEGACY */
+>
+> --
+> 2.17.1
+>
 
