@@ -2,125 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38FD623FAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33380623FB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbiKJKV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:21:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S229963AbiKJKYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiKJKVv (ORCPT
+        with ESMTP id S229517AbiKJKYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:21:51 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A35F13F20;
-        Thu, 10 Nov 2022 02:21:51 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id e129so1364578pgc.9;
-        Thu, 10 Nov 2022 02:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xIm/Oyzmfn3evXzwG3HkXqcHPzlLZjBFReRVxCcbrAk=;
-        b=XDhrPgcY1K4+93HyVhQPSTJ0vB/sm8roe8+cR0Hoov6m6lmmBaBQ1Cd2KwcXos6m8c
-         R7hlFZNR4mZEwWpR62nGHfj+4rH4SSDj4lSRrqxFj80256RqdHnaBmLp0zixOHADL9+y
-         hAIX/hXsGAcTybCd2Ig4k0sGOfMd0dmPcNAv8G/kZD8VjU3vJxtN2wULWzY/UOjvDdQZ
-         rhtrC/RpbCF1WGKHURiUm3u2UYygoEsiIH29Czty9U8QNeRsTBZXeXrgxKArXKNjvokH
-         +1MklRcBYNGBZwiuDHtIoJvyYZmko4vNSXqYF0QXgoVhWxtuezTrbzWFP5O51s83RQBc
-         3rZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xIm/Oyzmfn3evXzwG3HkXqcHPzlLZjBFReRVxCcbrAk=;
-        b=L68RDvxQm3IAsJFGXhRnLV6uVNwXhACB6L5g27sKTNb7GuS66ZXntHiUnNaXuragM1
-         7zjTc1x9SK8T16vERVwYoHWM5+4y49xOCsYbu/JaDWnYEzODcOjJH0Y1lVEgDob3jy7s
-         C7hEHkX+eSIID47zJmvhJxdZ3iLWIPDqUDSLjXdh4YCvH6Ek2dKCgrF/9YNzeAVOjsRF
-         5Y57hB7o7Up5OEPSSqeGeG8YK+pK+oEJDcf4Rsq3jsK2KkBEhTk1OlsskL+ZoP1MICWU
-         Io36mjDIwPTDmgDF6R0GMw1GtBFw/e6otlZFQbMHvXeb7owe6IJOXYr4C3fOz8ESC/WV
-         2Ctg==
-X-Gm-Message-State: ACrzQf1wGRg4TmmAFYdRpPX6NH+/GTaOrhF2s35Znle18Q3G7j7McZOJ
-        +mlKMEk9SlSSVVoPdhEBtww=
-X-Google-Smtp-Source: AMsMyM679F6jR6QYSI/kDqrmdS98OsEZraooCbgRxeiTKXz2BMl7xPF6j70DiRZEclSvLwuctAuMzA==
-X-Received: by 2002:aa7:9dd0:0:b0:56c:394d:c675 with SMTP id g16-20020aa79dd0000000b0056c394dc675mr2270370pfq.17.1668075710593;
-        Thu, 10 Nov 2022 02:21:50 -0800 (PST)
-Received: from localhost.localdomain ([110.147.198.134])
-        by smtp.gmail.com with ESMTPSA id y13-20020aa78f2d000000b0056ddd2b5e9bsm9741907pfr.41.2022.11.10.02.21.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 02:21:50 -0800 (PST)
-From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tcp: Add listening address to SYN flood message
-Date:   Thu, 10 Nov 2022 21:21:06 +1100
-Message-Id: <f847459dc0a0e2d8ffa1d290d06e0e4a226a6f39.1668075479.git.jamie.bainbridge@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 10 Nov 2022 05:24:39 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086E165CD;
+        Thu, 10 Nov 2022 02:24:35 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7Hsv63zFzpSsn;
+        Thu, 10 Nov 2022 18:20:51 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 18:24:33 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
+ 2022 18:24:32 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <lduncan@suse.com>, <cleech@redhat.com>,
+        <michael.christie@oracle.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <yangyingliang@huawei.com>
+Subject: [PATCH v2] drivers: base: transport_class: fix possible memory leak
+Date:   Thu, 10 Nov 2022 18:23:07 +0800
+Message-ID: <20221110102307.3492557-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SYN flood message prints the listening port number, but on a system
-with many processes bound to the same port on different IPs, it's
-impossible to tell which socket is the problem.
+Current some drivers(like iscsi) call transport_register_device()
+failed, they don't call transport_destroy_device() to release the
+memory allocated in transport_setup_device(), because they don't
+know what was done, it should be internal thing to release the
+resource in register function. So fix this leak by calling destroy
+function inside register function.
 
-Add the listen IP address to the SYN flood message. It might have been
-nicer to print the address first, but decades of monitoring tools are
-watching for the string "SYN flooding on port" so don't break that.
-
-Tested with each protcol's "any" address and a host address:
-
- Possible SYN flooding on port 9001. IP 0.0.0.0.
- Possible SYN flooding on port 9001. IP 127.0.0.1.
- Possible SYN flooding on port 9001. IP ::.
- Possible SYN flooding on port 9001. IP fc00::1.
-
-Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- net/ipv4/tcp_input.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+v1 -> v2:
+  fix code style.
+---
+ include/linux/transport_class.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 0640453fce54b6daae0861d948f3db075830daf6..fb86056732266fedc8ad574bbf799dbdd7a425a3 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -6831,9 +6831,19 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
- 		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
- 
- 	if (!queue->synflood_warned && syncookies != 2 &&
--	    xchg(&queue->synflood_warned, 1) == 0)
--		net_info_ratelimited("%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.\n",
--				     proto, sk->sk_num, msg);
-+	    xchg(&queue->synflood_warned, 1) == 0) {
-+#if IS_ENABLED(CONFIG_IPV6)
-+		if (sk->sk_family == AF_INET6) {
-+			net_info_ratelimited("%s: Possible SYN flooding on port %d. IP %pI6c. %s.  Check SNMP counters.\n",
-+					proto, sk->sk_num,
-+					&sk->sk_v6_rcv_saddr, msg);
-+		} else
-+#endif
-+		{
-+			net_info_ratelimited("%s: Possible SYN flooding on port %d. IP %pI4. %s.  Check SNMP counters.\n",
-+					proto, sk->sk_num, &sk->sk_rcv_saddr, msg);
-+		}
-+	}
- 
- 	return want_cookie;
+diff --git a/include/linux/transport_class.h b/include/linux/transport_class.h
+index 63076fb835e3..2efc271a96fa 100644
+--- a/include/linux/transport_class.h
++++ b/include/linux/transport_class.h
+@@ -70,8 +70,14 @@ void transport_destroy_device(struct device *);
+ static inline int
+ transport_register_device(struct device *dev)
+ {
++	int ret;
++
+ 	transport_setup_device(dev);
+-	return transport_add_device(dev);
++	ret = transport_add_device(dev);
++	if (ret)
++		transport_destroy_device(dev);
++
++	return ret;
  }
+ 
+ static inline void
 -- 
-2.38.1
+2.25.1
 
