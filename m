@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EB7623FB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A229623FB6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiKJKZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S230045AbiKJKY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:24:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiKJKYw (ORCPT
+        with ESMTP id S229517AbiKJKYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:24:52 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBDD663FA;
+        Thu, 10 Nov 2022 05:24:51 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDCD663C9;
         Thu, 10 Nov 2022 02:24:51 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id a27so656751qtw.10;
-        Thu, 10 Nov 2022 02:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s7OQDRdg/PBKb75GJhg597BiFzGJdloU/76dILAYuhQ=;
-        b=GVEyzN1eEbMQyQBN2auzyQXHH73BcHa5Fyfr5jepcgR2gPq6KEYPE5FR9JhvJmElyb
-         3FjOFTFg+RfCtXet32H7kvn8eSW+WZa2yFGHIkYKKjeCJgTjQDMOGWTvPguPuAwMtfDD
-         XAALI6jGkEC91xwDh04WLsnQkHoARIXhcSDQak3FygTVJ7nku8lXvq1Z2r68W3BR6GZ6
-         Nu4xI/mGAKSLe0WG19qR/03vYvuLVaSwIjzOR858paVaD2Vgle0dQUv86jCrIbt2VTns
-         T62p3Z+mslNJJ2bAYJRH3OHcKyZjulKCmKq4mCo9jlIbKHxdqu1P11OisilaDagcuvkd
-         Tk8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s7OQDRdg/PBKb75GJhg597BiFzGJdloU/76dILAYuhQ=;
-        b=s5Dcao/YK76j7uzFi1FoWjH9gPf2jOUMfT3QdhKMIZmBIYzkF5XjA6fHQ8fAuHJbkf
-         JJC7spVEWC2KYThU5vu95kIoURvUUomQZpX5vASlvP0xKSFQxpfeE2zUBUj5pdNFSxrR
-         s8o0Kq9VDsHFZhkihehnvQQGeF1xhyeGjxoKfUo1f9CiT5Z0A1avc2fGiEtE/e/20d11
-         IY2ULaGm7b88sv3qMCbbAo6ioIDxQXSM2gdShhk7nZGOv2rkGkIuEcigoKBz+rFhkNuB
-         VileK/8pcttEA4uNFn+/5+fZweK/7ina6vuYrXi4n4c+1SzgsNv7JHdwIiE6wWChm5nH
-         WeNw==
-X-Gm-Message-State: ACrzQf1eN8DVDKPA+u0ML2C4zE3qIJtByKysrrHDZOMgstdCsr/GuoEF
-        PPMXcYfXTIoYClQjObJ7rI22jftGlkHITtXNT7M=
-X-Google-Smtp-Source: AMsMyM717gn40X0LG0YAQOaEOSHzvkaHpEdAOnw0/rGnjLJcED5HZEScxpx7nTTlIhPrLJDUqkSH6Cz5vW2SKA6KO1s=
-X-Received: by 2002:ac8:7152:0:b0:3a5:2fa2:cd1a with SMTP id
- h18-20020ac87152000000b003a52fa2cd1amr40497653qtp.195.1668075890956; Thu, 10
- Nov 2022 02:24:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668075891; x=1699611891;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=iKkVMv/MthNvqNe7p7oH2Gt1AWFJXR5YZeKyC5YXt/g=;
+  b=G8uPkYNToj9VAsd5EalBT0E+bQu01yO33Jp1v1vrV0/mxrHJwYuA16Nd
+   lcNn79tzByVT/1I1PvUKs7BQDMKLgtuMLPPm7+mDiLgyIkiA8dACkp9mR
+   F8Z4bKQrFonRJu15g1WhDbL+C7UJDG5Nveofncf92pm+zCnIDztrrXjyi
+   g/Tg4Ei+jb7GWsHgFKTjxOLiRDgtkOw4JQKzjzw3g9LZzOKT1ayXsJt8/
+   9J0eODbCsFaTyTJd5zJMdu/JLPeFtG+bPq6MJLLtYMMWrzyKaykyH0u04
+   Mzc5M7aPJgfJZrZp6QC5cjiyKEudi58IFzOW1FsKq1PAqcawgMfSuBBIE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="290993879"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="290993879"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 02:24:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="631608328"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="631608328"
+Received: from albertmo-mobl2.ger.corp.intel.com ([10.249.43.248])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 02:24:48 -0800
+Date:   Thu, 10 Nov 2022 12:24:41 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     delisun <delisun@pateo.com.cn>
+cc:     linux@armlinux.org.uk,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] serial: pl011: Do not clear RX FIFO & RX interrupt in
+ unthrottle.
+In-Reply-To: <20221110020108.7700-1-delisun@pateo.com.cn>
+Message-ID: <ef8361c6-fce6-b874-ff1e-d81dd63dac14@linux.intel.com>
+References: <20221110020108.7700-1-delisun@pateo.com.cn>
 MIME-Version: 1.0
-References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
- <20221108142226.63161-4-andriy.shevchenko@linux.intel.com>
- <20221110072144.2s37r52qcpi6utgh@pengutronix.de> <CAHp75VenLc-QfuD3rHPh=5nu_SqWvEnsePbNMsBA4R-Zs+nvrw@mail.gmail.com>
- <20221110102025.2tqdb3v6ndg6vyqk@pengutronix.de>
-In-Reply-To: <20221110102025.2tqdb3v6ndg6vyqk@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 10 Nov 2022 12:24:14 +0200
-Message-ID: <CAHp75Vdmr8X1iWqtCZ3b1G+GE0KQFJDVr=f26v_2Y5G1AhRZMg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/6] pwm: lpss: Include headers we are direct user of
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-726188043-1668075890=:1867"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 12:20 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
-> On Thu, Nov 10, 2022 at 11:53:59AM +0200, Andy Shevchenko wrote:
-> > On Thu, Nov 10, 2022 at 9:22 AM Uwe Kleine-K=C3=B6nig
-> > <u.kleine-koenig@pengutronix.de> wrote:
-> > > On Tue, Nov 08, 2022 at 04:22:23PM +0200, Andy Shevchenko wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-...
+--8323329-726188043-1668075890=:1867
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
 
-> > > > Replace device.h with a forward declaration in order to improve
-> > > > the compilation time due to reducing overhead of device.h parsing
-> > > > with entire train of dependencies.
-> > >
-> > > Together with "For the sake of integrity, include headers we are dire=
-ct
-> > > user of." this makes an a bit schizophrenic impression on me. You add
-> > > <linux/types.h> because the file is a direct user of it, but you drop
-> > > <linux/device.h> despite being a direct user.
-> >
-> > But we don't use device.h.
->
-> What is the canonical header to provide struct device?
+On Thu, 10 Nov 2022, delisun wrote:
 
-But we don't use the struct device here. We use _pointer_ to a struct devic=
-e.
+> Clearing the RX FIFO will cause data loss.
+> Copy the pl011_enabl_interrupts implementation, and remove the clear
+> interrupt and FIFO part of the code.
+> 
+> Fixes: 211565b10099 ("serial: pl011: UPSTAT_AUTORTS requires .throttle/unthrottle")
+> Signed-off-by: delisun <delisun@pateo.com.cn>
+> ---
+>  drivers/tty/serial/amba-pl011.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
+> index 5cdced39eafd..08034e5dcec0 100644
+> --- a/drivers/tty/serial/amba-pl011.c
+> +++ b/drivers/tty/serial/amba-pl011.c
+> @@ -1828,8 +1828,17 @@ static void pl011_enable_interrupts(struct uart_amba_port *uap)
+>  static void pl011_unthrottle_rx(struct uart_port *port)
+>  {
+>  	struct uart_amba_port *uap = container_of(port, struct uart_amba_port, port);
+> +	unsigned long flags;
+>  
+> -	pl011_enable_interrupts(uap);
+> +	spin_lock_irqsave(&uap->port.lock, flags);
+> +
+> +	uap->im = UART011_RTIM;
+> +	if (!pl011_dma_rx_running(uap))
+> +		uap->im |= UART011_RXIM;
+> +
+> +	pl011_write(uap->im, uap, REG_IMSC);
+> +
+> +	spin_unlock_irqrestore(&uap->port.lock, flags);
+>  }
+>  
+>  static int pl011_startup(struct uart_port *port)
 
+Thanks.
 
---=20
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> 
+
+-- 
+ i.
+
+--8323329-726188043-1668075890=:1867--
