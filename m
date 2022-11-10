@@ -2,171 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC78B624C48
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773D3624C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiKJU7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S231299AbiKJVBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:01:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKJU7t (ORCPT
+        with ESMTP id S229961AbiKJVBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:59:49 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71175BF43;
-        Thu, 10 Nov 2022 12:59:48 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id b62so2768371pgc.0;
-        Thu, 10 Nov 2022 12:59:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ttnTp5vp2+AUQBRn+QGy/iRGXLK+0tabr5kkUXhWOgs=;
-        b=V6Q9AJjq/+dmrcYI7h+aulvTykjmhLd1RDGvAX9rhCqLvMzcJiQ8Bq6I4O8Zo+KbBU
-         v+S7axetyuIG5g85HmYt13h/reXa2j++X+JW5oqNALhMY7dxU1aadTzPRDRYCdqxNroz
-         KOTp3OLn+73So8MdZWAfOvC0Vxjh2c1pzAjcR6F+7kVKThpzp7508UVq1YyfTJnRt8bK
-         Z15Z8mnTMqIgtcmB5EwLk5l0oviHvJvodz4eh8a1vTrwnm3JUorhU+AHtzIoVbZ0aqQO
-         MniReX3X8yEvtBqyzq2JoLwiotAOZUmLFZYvLFsqLciS3BrALwofpQSyBf+i/ZU/pA1r
-         8bVQ==
+        Thu, 10 Nov 2022 16:01:05 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B155610E4;
+        Thu, 10 Nov 2022 13:01:04 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id l127so3123793oia.8;
+        Thu, 10 Nov 2022 13:01:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ttnTp5vp2+AUQBRn+QGy/iRGXLK+0tabr5kkUXhWOgs=;
-        b=ARIRPI6zELJrNmX9vFMCNlnZcY2td0X8/2B5k+FfcbAupiDJOsPMWgyGPIosqdcR1m
-         YjSULzqjLMlhENLCoooqE//fTm+acYFYB2ZGrWCvPmFFa4+WO7EkVoP8395Kvtmv4B1T
-         C2goHy9VxtvdPlQ49sBavOyxQLBWrOS59bttJBReyT2OpvlQZzPRsSvbZ1dyvsZgzWT8
-         wvmCL7NMSCT8i2L+a2s6NagEsVP8QHfJEOA9Pg0JD8/8IO7fwQtrYB1PO+23YGTclBXo
-         PmAw4n+WL6aikLPJbmMed9SzvX4Gta6h9Ur8YhssEGE1xru8ZSoi2S5ZexvWsDCE9I+z
-         lQpA==
-X-Gm-Message-State: ACrzQf0HoP/INcO7gvyl9E+9k3pkuPoTy7L2cbkeqziV/d9aRYIrhvJC
-        rd/6dU29AQOsct0kwZKqJd0=
-X-Google-Smtp-Source: AMsMyM6EHzt5LxVevsndFmHExWuuCQcz+zx1M9l033QaIuOyzvy5wN/9s8a4u75MaKHlbgvIrK8GaQ==
-X-Received: by 2002:aa7:9d02:0:b0:565:b4fe:de85 with SMTP id k2-20020aa79d02000000b00565b4fede85mr3495651pfp.81.1668113987711;
-        Thu, 10 Nov 2022 12:59:47 -0800 (PST)
-Received: from smtpclient.apple ([66.170.99.95])
-        by smtp.gmail.com with ESMTPSA id n17-20020aa79851000000b0052d4b0d0c74sm94457pfq.70.2022.11.10.12.59.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Nov 2022 12:59:47 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v8 1/2] hugetlb: don't delete vma_lock in hugetlb
- MADV_DONTNEED processing
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20221108011910.350887-2-mike.kravetz@oracle.com>
-Date:   Thu, 10 Nov 2022 12:59:45 -0800
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Peter Xu <peterx@redhat.com>, Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9BB0EA0C-6E7C-462B-8374-5BFEC34E8415@gmail.com>
-References: <20221108011910.350887-1-mike.kravetz@oracle.com>
- <20221108011910.350887-2-mike.kravetz@oracle.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IDqn8BDU2tLIVGpP/7JbZcQ8NuPGFYgE6/tTyJvpJB8=;
+        b=CCWjmICdl7mpNZ4sAYxuhzGImSJXo86/z7jNU8gXJ1yoaG8maQYNI6pajt+yADZUlE
+         z30NhFGt/lO1AAVdSBusR/3BgPCVAkjY6mznrL0cgXVGUAgzhPc6p89w86ezc0WupJuK
+         vdHTsvSep+laQZkkfQQyBt50ijJXe/jAeEjmn3OS002hgJY3rytRf2C2cC7zGILNUxZq
+         Y81vQDdGa7NIjVRVNrW+6InhE8SuUjmjQ8TD0IFnslqyyBX/RN80avW5W6JO1Xha+Ag8
+         dQ+gwr45gMtRg0dbZC3YIyHRWeyG3BYpLyzzOiI/B6ko/ht4u+GLlcfHUbnMUAb8aHqZ
+         HarQ==
+X-Gm-Message-State: ACrzQf3HfDGCrLoP9XQKaKxd5WtEcl6ARMOd4/mtB5z8YzXXPUTK51qv
+        ExJQR57CCteEP6x+kf2Mmw==
+X-Google-Smtp-Source: AMsMyM5YKvFMdUbdZPYOAHkKC93jpUw2ItMlN+pxG+7jwvZl9DyN0X7pMLBe9clIzRPUHibvryVqZw==
+X-Received: by 2002:aca:2105:0:b0:359:e9f6:e37d with SMTP id 5-20020aca2105000000b00359e9f6e37dmr2191361oiz.76.1668114063885;
+        Thu, 10 Nov 2022 13:01:03 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j18-20020a9d7392000000b0066c34486aa7sm243697otk.73.2022.11.10.13.01.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 13:01:03 -0800 (PST)
+Received: (nullmailer pid 975802 invoked by uid 1000);
+        Thu, 10 Nov 2022 21:01:04 -0000
+Date:   Thu, 10 Nov 2022 15:01:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 01/20] dt-bindings: imx6q-pcie: Fix clock names for
+ imx6sx and imx8mq
+Message-ID: <20221110210104.GA963064-robh@kernel.org>
+References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
+ <20221107204934.32655-2-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107204934.32655-2-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Nov 7, 2022, at 5:19 PM, Mike Kravetz <mike.kravetz@oracle.com> =
-wrote:
+On Mon, Nov 07, 2022 at 11:49:15PM +0300, Serge Semin wrote:
+> Originally as it was defined the legacy bindings the pcie_inbound_axi and
+> pcie_aux clock names were supposed to be used in the fsl,imx6sx-pcie and
+> fsl,imx8mq-pcie devices respectively. But the bindings conversion has been
+> incorrectly so now the fourth clock name is defined as "pcie_inbound_axi
+> for imx6sx-pcie, pcie_aux for imx8mq-pcie", which is completely wrong.
+> Let's fix that by conditionally apply the clock-names constraints based on
+> the compatible string content.
+> 
+> Fixes: 751ca492f131 ("dt-bindings: PCI: imx6: convert the imx pcie controller to dtschema")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> 
+> ---
+> 
+> Changelog v5:
+> - This is a new patch added on the v5 release of the patchset.
+> ---
+>  .../bindings/pci/fsl,imx6q-pcie.yaml          | 47 +++++++++++++++++--
+>  1 file changed, 42 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+> index 376e739bcad4..ebfe75f1576e 100644
+> --- a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+> @@ -16,6 +16,47 @@ description: |+
+>  
+>  allOf:
+>    - $ref: /schemas/pci/snps,dw-pcie.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: fsl,imx6sx-pcie
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: pcie
+> +            - const: pcie_bus
+> +            - const: pcie_phy
+> +            - const: pcie_inbound_axi
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: fsl,imx8mq-pcie
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: pcie
+> +            - const: pcie_bus
+> +            - const: pcie_phy
+> +            - const: pcie_aux
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          not:
+> +            contains:
+> +              enum:
+> +                - fsl,imx6sx-pcie
+> +                - fsl,imx8mq-pcie
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: pcie
+> +            - const: pcie_bus
+> +            - const: pcie_phy
+>  
+>  properties:
+>    compatible:
+> @@ -57,11 +98,7 @@ properties:
+>  
+>    clock-names:
+>      minItems: 3
+> -    items:
+> -      - const: pcie
+> -      - const: pcie_bus
+> -      - const: pcie_phy
+> -      - const: pcie_inbound_axi for imx6sx-pcie, pcie_aux for imx8mq-pcie
 
-> madvise(MADV_DONTNEED) ends up calling zap_page_range() to clear page
-> tables associated with the address range.  For hugetlb vmas,
-> zap_page_range will call __unmap_hugepage_range_final.  However,
-> __unmap_hugepage_range_final assumes the passed vma is about to be =
-removed
-> and deletes the vma_lock to prevent pmd sharing as the vma is on the =
-way
-> out.  In the case of madvise(MADV_DONTNEED) the vma remains, but the
-> missing vma_lock prevents pmd sharing and could potentially lead to =
-issues
-> with truncation/fault races.
+This should have been just 'enum: [ pcie_inbound_axi, pcie_aux ]'
 
-I understand the problem in general. Please consider my feedback as =
-partial
-though.
+And then do:
+
+  - if:
+      properties:
+        compatible:
+          contains:
+            const: fsl,imx8mq-pcie
+    then:
+      properties:
+        clock-names:
+          items:
+            - {}
+            - {}
+            - {}
+            - const: pcie_aux
 
 
-> @@ -5203,32 +5194,50 @@ void __unmap_hugepage_range_final(struct =
-mmu_gather *tlb,
-> 			  unsigned long end, struct page *ref_page,
-> 			  zap_flags_t zap_flags)
-> {
-> +	bool final =3D zap_flags & ZAP_FLAG_UNMAP;
-> +
-
-Not sure why caching final in local variable helps.
-
->=20
-> void unmap_hugepage_range(struct vm_area_struct *vma, unsigned long =
-start,
-> 			  unsigned long end, struct page *ref_page,
-> 			  zap_flags_t zap_flags)
-> {
-> +	struct mmu_notifier_range range;
-> 	struct mmu_gather tlb;
->=20
-> +	mmu_notifier_range_init(&range, MMU_NOTIFY_UNMAP, 0, vma, =
-vma->vm_mm,
-> +				start, end);
-> +	adjust_range_if_pmd_sharing_possible(vma, &range.start, =
-&range.end);
-> 	tlb_gather_mmu(&tlb, vma->vm_mm);
-> +
-> 	__unmap_hugepage_range(&tlb, vma, start, end, ref_page, =
-zap_flags);
-
-Is there a reason for not using range.start and range.end?
-
-It is just that every inconsistency is worrying=E2=80=A6
-
->=20
-> @@ -1734,6 +1734,9 @@ static void zap_page_range_single(struct =
-vm_area_struct *vma, unsigned long addr
-> 	lru_add_drain();
-> 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, =
-vma->vm_mm,
-> 				address, address + size);
-> +	if (is_vm_hugetlb_page(vma))
-> +		adjust_range_if_pmd_sharing_possible(vma, &range.start,
-> +							&range.end);
-> 	tlb_gather_mmu(&tlb, vma->vm_mm);
-> 	update_hiwater_rss(vma->vm_mm);
-> 	mmu_notifier_invalidate_range_start(&range);
-> @@ -1742,6 +1745,12 @@ static void zap_page_range_single(struct =
-vm_area_struct *vma, unsigned long addr
-> 	tlb_finish_mmu(&tlb);
-> }
->=20
-> +void zap_vma_range(struct vm_area_struct *vma, unsigned long address,
-> +		unsigned long size)
-> +{
-> +	__zap_page_range_single(vma, address, size, NULL);
-
-Ugh. So zap_vma_range() would actually be emitted as a wrapper function =
-that
-only calls __zap_page_range_single() (or worse __zap_page_range_single()
-which is large would be inlined), unless you use LTO.
-
-Another option is to declare __zap_page_range_size() in the header and =
-move
-this one to the header as inline wrapper.
-
+And then another if/then with 'maxItems: 3'
