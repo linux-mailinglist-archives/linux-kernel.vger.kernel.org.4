@@ -2,110 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A48262406D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D522A624074
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiKJKyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:54:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S229588AbiKJKz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKJKyL (ORCPT
+        with ESMTP id S229606AbiKJKzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:54:11 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CE96A6BE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:54:08 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id h193so1431826pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:54:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ObGRZiTarAaIfHsRhBfUd1xOV/SNv5tyh9Apxerny3Q=;
-        b=oexMQrRmLSjFekPJRi6je/FUBbkM4YeFmxxhcBhON0pu37ThWo+IPdNuzvTjg6y0YP
-         7zNjBx+cRDKTUI/JFWB4/vsMAaV/kfKzt3mDunyPvqPCM+iwHTb++jnS265Uq5H6uFis
-         7gsPWDFrYR8BfNvBkyGMDzxIJ+U0wE7heXNnxO2bMWAUQk8CCB4iaPHBhcRXKTtdXBeS
-         +3GNnwyIADU6nN3VV2dZup9a4PfxPTGQXMHjN4RD5xmUqA9Qwf1JYh/tr4wMhMPE3e4z
-         bb3JU1BilItUy2ymys5b4Y9J0scuLHOfzwa+BQr83cyPOLJbJ6CkBG2Fw1Yc6oYBOjKM
-         yp7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ObGRZiTarAaIfHsRhBfUd1xOV/SNv5tyh9Apxerny3Q=;
-        b=1dxfUOp/nNBdgSEhfi3W4G/lKZDpPDPWOfwJX0sjcszt34RnVh9JX8m8igWcKpxwdF
-         FVRMNV72Fh8QwFJymDy+tys53KwIN/e5jDYdRYCMtCj3G7owv5bLSyQEbaB8UCewRE+x
-         EXSluqsYRqU0MOOLgnlKToG2+seTGVzp/1bv1hyDZz/WiPMMWD32vE9GdRA4nVCzSG5s
-         +x7ws9bpetQlzEpRZDZOUVtH+Nj/Q8HMxNh6gxv1URYkVNflR7UxCtRat6K4hQDt+Xf3
-         Kd2hytqrFgxlvMucCTg/lTVuxitFqYKeOoPeBMjYQ5UJHt7TFpbMg49+sp3Cask5lN39
-         odyQ==
-X-Gm-Message-State: ACrzQf2hBXbvmTO7JfJedUmWRS4vRrN2v0tSwSj8zPHDwLS44xABqBkq
-        3kfXUpu8fivse5IGRaBWlEUKs3i0Y54tVR73wVigfg==
-X-Google-Smtp-Source: AMsMyM7dI9gA54nUfjMIk9YqHDBjDby6Fo9nOihS0OQy2U1EPNcMQZK54oWsFgEw9bVfo8w2vMsm6Hhgfm1xNX5+Zcg=
-X-Received: by 2002:a05:6a00:2489:b0:56d:2d20:d01e with SMTP id
- c9-20020a056a00248900b0056d2d20d01emr62023982pfv.65.1668077648303; Thu, 10
- Nov 2022 02:54:08 -0800 (PST)
+        Thu, 10 Nov 2022 05:55:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D3121247
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:54:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668077665;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NpgGU2I/tE+Cblp78lY33qKu10Xyg6kfJBT0/tIEJsk=;
+        b=Igge6aljXd5v4zr4eAF4ID5vY/4wmAbvVK9Vn9PzLKqXa8L0g+SVATkrQ6dR3wOlcIyJDn
+        CPbvTOxazJ8QjRRv4IownQ048NrYdxeheL4tvkVFpLOfySKROuDmPuLMJRVI9JBone0yXg
+        PQ9f0uV2HTmpZGSJJgglX3cGCb526ok=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-317-7OyvaXjfPfyzXgoyEastcg-1; Thu, 10 Nov 2022 05:54:22 -0500
+X-MC-Unique: 7OyvaXjfPfyzXgoyEastcg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6779F833AEF;
+        Thu, 10 Nov 2022 10:54:21 +0000 (UTC)
+Received: from [10.64.54.49] (vpn2-54-49.bne.redhat.com [10.64.54.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 44E19C1908A;
+        Thu, 10 Nov 2022 10:54:15 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v3 0/6] KVM: selftests: memslot_perf_test: aarch64
+ cleanup/fixes
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org, pbonzini@redhat.com,
+        ajones@ventanamicro.com, kvmarm@lists.linux.dev, shuah@kernel.org,
+        peterx@redhat.com, oliver.upton@linux.dev, seanjc@google.com,
+        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
+References: <20221020071209.559062-1-gshan@redhat.com>
+ <91d563b6-5f1c-5ecc-0a40-7d8838770b22@maciej.szmigiero.name>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <3903eeef-e037-9651-6041-0d16c29d67b0@redhat.com>
+Date:   Thu, 10 Nov 2022 18:54:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20221109160708.507481-1-ludvig.parsson@axis.com>
-In-Reply-To: <20221109160708.507481-1-ludvig.parsson@axis.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 10 Nov 2022 16:23:56 +0530
-Message-ID: <CAFA6WYPxTET4mUQ4YHosbPN1o0UthP6PU=t8bAp91GZL+5rjRA@mail.gmail.com>
-Subject: Re: [PATCH] tee: optee: Populate child nodes in probe function
-To:     =?UTF-8?Q?Ludvig_P=C3=A4rsson?= <ludvig.parsson@axis.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>, kernel@axis.com,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <91d563b6-5f1c-5ecc-0a40-7d8838770b22@maciej.szmigiero.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 at 21:37, Ludvig P=C3=A4rsson <ludvig.parsson@axis.com> =
-wrote:
->
-> Currently there is no dependency between the "linaro,scmi-optee" driver
-> and the tee_core. If the scmi-optee driver gets probed before the
-> tee_bus_type is initialized, then we will get an unwanted error print.
->
+Hi Marc,
 
-What error print do you observe? I suppose this case is already
-handled by scmi optee driver via -EPROBE_DEFER.
+On 10/25/22 7:18 AM, Maciej S. Szmigiero wrote:
+> On 20.10.2022 09:12, Gavin Shan wrote:
+>> kvm/selftests/memslots_perf_test doesn't work with 64KB-page-size-host
+>> and 4KB-page-size-guest on aarch64. In the implementation, the host and
+>> guest page size have been hardcoded to 4KB. It's ovbiously not working
+>> on aarch64 which supports 4KB, 16KB, 64KB individually on host and guest.
+>>
+>> This series tries to fix it. After the series is applied, the test runs
+>> successfully with 64KB-page-size-host and 4KB-page-size-guest.
+>>
+>>     # ./memslots_perf_tests -v -s 512
+>>
+>> Since we're here, the code is cleaned up a bit as PATCH[1-3] do. The
+>> other patches are fixes to handle the mismatched host/guest page
+>> sized.
+>>
+>> v1: https://lore.kernel.org/kvmarm/20221014071914.227134-1-gshan@redhat.com/T/#t
+>> v2: https://lore.kernel.org/kvmarm/20221018040454.405719-1-gshan@redhat.com/T/#t
+>>
+>> Changelog
+>> =========
+>> v3:
+>>    * Improved comments about MEM_TEST_MOVE_SIZE, which is set
+>>      to 64KB in PATCH[v3 4/6] and finally fixed to 192KB in
+>>      PATCH[v3 5/6].                                              (Maciej)
+>>    * Use size instead of pages to do the comparison in
+>>      test_memslot_move_prepare()                                 (Maciej)
+>>    * Use tools/include/linux/sizes.h instead of inventing
+>>      our own macros.                                             (Oliver)
+>> v2:
+>>    * Pick the smaller value between the ones specified by
+>>      user or probed from KVM_CAP_NR_MEMSLOTS in PATCH[v2 3/6]    (Maciej)
+>>    * Improved comments about MEM_TEST_MOVE_SIZE in
+>>      PATCH[v2 4/6]                                               (Maciej)
+>>    * Avoid mismatched guest page size after VM is started in
+>>      prepare_vm() in PATCH[v2 4/6]                               (Maciej)
+>>    * Fix condition to check MEM_TEST_{UNMAP, UNMAP_CHUNK}_SIZE
+>>      in check_memory_size() in PATCH[v2 4/6]                     (Maciej)
+>>    * Define base and huge page size in kvm_util_base.h in
+>>      PATCH[v2 5/6]                                               (Sean)
+>>    * Add checks on host/guest page size in check_memory_size()
+>>      and fail early if any of them exceeds 64KB in PATCH[v2 5/6] (Maciej)
+>>
+>>
+>> Gavin Shan (6):
+>>    KVM: selftests: memslot_perf_test: Use data->nslots in prepare_vm()
+>>    KVM: selftests: memslot_perf_test: Consolidate loop conditions in
+>>      prepare_vm()
+>>    KVM: selftests: memslot_perf_test: Probe memory slots for once
+>>    KVM: selftests: memslot_perf_test: Support variable guest page size
+>>    KVM: selftests: memslot_perf_test: Consolidate memory
+>>    KVM: selftests: memslot_perf_test: Report optimal memory slots
+>>
+> 
+> This patch set now looks good to me, so for the whole series:
+> Reviewed-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> 
 
--Sumit
+If possible, could you please merge this series to 'next' branch either?
+I hope it can be merged early because our downstream needs the fixes to
+make the test case work. It's definitely fine to wait for more comments,
+but I haven't receive any more comments in last month :)
 
-> This patch enables putting scmi-optee nodes as children to the optee
-> node in devicetree, which indirectly creates the missing dependency.
->
-> Signed-off-by: Ludvig P=C3=A4rsson <ludvig.parsson@axis.com>
-> ---
->  drivers/tee/optee/smc_abi.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-> index a1c1fa1a9c28..be6f02fd5a7f 100644
-> --- a/drivers/tee/optee/smc_abi.c
-> +++ b/drivers/tee/optee/smc_abi.c
-> @@ -1533,6 +1533,11 @@ static int optee_probe(struct platform_device *pde=
-v)
->         if (rc)
->                 goto err_disable_shm_cache;
->
-> +       /* Populate any dependent child node (if any) */
-> +       rc =3D devm_of_platform_populate(&pdev->dev);
-> +       if (rc)
-> +               goto err_disable_shm_cache;
-> +
->         pr_info("initialized driver\n");
->         return 0;
->
-> --
-> 2.30.2
->
+Thanks,
+Gavin
+
