@@ -2,812 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9C76245C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 457736245B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbiKJP1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:27:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S231137AbiKJP0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiKJP00 (ORCPT
+        with ESMTP id S231614AbiKJP0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:26:26 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7520C3E0AA;
-        Thu, 10 Nov 2022 07:26:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668093965; x=1699629965;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uVEELB1YyqMKjeqG9V1FnQgrVQfJATKXTJhI7/gvIHc=;
-  b=lQCBAyK5tAb/0/i/IC3Aqgn2JcgL0UQNv1iTikKTKkos1svGfop8npX4
-   AW6/PrMogRMLxMxGqgi12QLFGMrJC98ETH2Tu+OqV5YJpHkQ+Nu8UpDq5
-   LGgspsz65fQqOdwvnQucqWHGMDwoGi6x7fKyQZmu1N9YeNjOYw15atgaM
-   xnsuRTku4YYlEqQVut/51FADyeqfJLKe1L8LtQn65zTQR7xzyJOfkHjLq
-   daCLcumVYS5c8wDUzZ1ktxoFXoOYgqNx6kDI72hWI+9u2/BRN31NSZL6V
-   cEdPjqf+r378K9VuTxqJcmkfzRUPS9kSaqrCohHY8x3PbQdUe5O3GJ6L4
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="182897552"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Nov 2022 08:25:47 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 10 Nov 2022 08:25:40 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 10 Nov 2022 08:25:30 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <vkoul@kernel.org>
-CC:     <f.fainelli@gmail.com>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <lars@metafoo.de>, <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
-        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
-        <sean.wang@mediatek.com>, <matthias.bgg@gmail.com>,
-        <daniel@zonque.org>, <haojian.zhuang@gmail.com>,
-        <robert.jarzmik@free.fr>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
-        <green.wan@sifive.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@foss.st.com>, <wens@csie.org>,
-        <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
-        <ldewangan@nvidia.com>, <jonathanh@nvidia.com>,
-        <thierry.reding@gmail.com>, <peter.ujfalusi@gmail.com>,
-        <michal.simek@xilinx.com>, <tony@atomide.com>,
-        <krzysztof.kozlowski@linaro.org>, <trix@redhat.com>,
-        <radhey.shyam.pandey@xilinx.com>, <shravya.kumbham@xilinx.com>,
-        <harini.katakam@xilinx.com>, <swati.agarwal@amd.com>,
-        <dmaengine@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-sunxi@lists.linux.dev>, <linux-tegra@vger.kernel.org>,
-        <ye.xingchen@zte.com.cn>, <quic_mojha@quicinc.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v3] dmaengine: drivers: Use devm_platform_ioremap_resource()
-Date:   Thu, 10 Nov 2022 17:25:28 +0200
-Message-ID: <20221110152528.7821-1-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Nov 2022 10:26:20 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A9F3E080;
+        Thu, 10 Nov 2022 07:26:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1668093945; bh=3KlLEQb7IWTC+S751hHd5VTkqMQyRRQZBkiQMbL6Rjc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=gmyFgNjDriHqVPT4KLgTD+F/ig5VEqBJHAgVJx+Tq5aHtNYj9ri/wetSH3DiAXkiX
+         goKHhPTpTiSO1ymAVJbdSVarM2lCEn21lXU48RJz7Tgg31F3XxeQAAoiAaQsVx/4l4
+         w6uoaf46KknggE2HDkPWuWKcpRCb4I1pExKlod+Nbmg8dvOKGu1Vyor9M2SC0yNqzO
+         hhXl+rAUCU/+Cj0oERKEIG7ALloN56Uh2olLew/eUyaFdf//xaDKfs9ZQjNEeT6Uuk
+         fkJvhgKE3XmPxTuYU0NbJFwP75RyzAKJpIsDLlEdsT3ZywPGjuS53axwvukxofk4Kv
+         ORLhooYdY2fIA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from Venus.speedport.ip ([84.162.7.17]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MeU4y-1pRNj31YKi-00aZJR; Thu, 10
+ Nov 2022 16:25:45 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
+        LinoSanfilippo@gmx.de, lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: [PATCH v9 08/12] tpm, tpm: Implement usage counter for locality
+Date:   Thu, 10 Nov 2022 16:25:29 +0100
+Message-Id: <20221110152533.24243-9-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20221110152533.24243-1-LinoSanfilippo@gmx.de>
+References: <20221110152533.24243-1-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:TVTk0VgrwhN591otFJ9HqLORi9Da94m3kLRXwxfV8hnXxT8NjwS
+ hrptZSUJRDHt3ftVOCF5mnodhgHY///HjyuTruamk44wCEHaH5yAK4gSoOZqN4mCylcZzJz
+ iuhNJjbm2bDeOiGfEZOZzlH+HBsjEXQE0eg4JQmxoyAkxf0WUtP/mfAsHz3b2UzZwse2nJp
+ ayc9YAuuNpotKEJZTLzcQ==
+UI-OutboundReport: notjunk:1;M01:P0:6Xy56185HPY=;Nnn/ICEXtr9XICdfhGGsCmBWmAJ
+ zrYU52YGvBjihIVMRkXNwTB5CsQdbnja8ywNxCrRIFeyUshAkPxnqO49RAjqx+44cozD3dVKz
+ ka4tBbSXSaBeRQp3mFYbNzxwCA+vEhrA4MZ51JlzkJlDiUogHI9R8DYRrO5+Jx/An8UnC1NWB
+ r3ncEGyJYDA6GyVss3aFXqrYpH/QdwCatamBL27b2Z9llKlolgVBi34rBcaikn5RIdoODpaQK
+ 233t+nI8Ewb9S882oD7Sov8DP7TNyfGdlqVMVP+9h7u/JmD3MOnBscBctAC2qVPohgwOC8pRK
+ /ItyeEfxOpbDgfOIdJY75rAxh/hTWen14Dlw7PPehCGKvKhrAwPh/SbbXQGWZsv3oxGarEN3C
+ jfkzdzccf1HP5aZP3Z7ZBC3sr7l044JP36FLRqvWgm5241koArQNcHHlxyrXHwu42ilGg5dmG
+ BJWbrz617t37TCj/jAoKClWHQ59RMCCk+drB0CAEFMO8DYwPK2kmU3ltdcBqa3TZDFS+h2JUT
+ WcAnTyHEHhSulkJ34cIw+dsKnfW8syQNN3EJ4i/zrzOHkfn5HhqiEpbfdRTX/si/EQDFXlV3R
+ dVvna6qfN/ZYLAVcRl105rbSLDAlRC3yMQqkb2OH3JXJyQavPj4R3iXzs0LYtiBb+nmicoirt
+ grQLy0Ik+PxE2rumWTGoUsDHPIazswPaxp/cepTIdIFrIgN63HrIlVVEUKC1oQscwbM4CMAlH
+ hcu3HM7XeIWksqRh+X4E+3KmE40JSQfyTddPJs/Vw/+MoflFaKCsMyaQNx890zSa+oHgOYUvj
+ PcIKIHUUNAganRixL6iA2k99cC8GxiTZinvLhBgVeDdXILG5pXgXUA4hzOzqJUO0w8lKaH1cf
+ JGNaH5vGE8OA66ovG9YNXISt4AOwKS6pmwkNwTtCaBE6K53AcYqa1OHK+c0ZGXa4tdf2J2VRw
+ uBW0038w2T/PRBl9HFp3N+96h9c=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource() and devm_ioremap_resource() are wrapped up in the
-devm_platform_ioremap_resource() helper. Use the helper and get rid of the
-local variable for struct resource *. We now have a function call less.
-
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
-v3:
-- fix errors reported-by lkp@intel.com
-- lkp@intel.com built successfully few configs, all should be good now.
-
-v2:
-- rebase on dma/next. s3c24xx was removed, thus drop the changes for it.
-- collect Acked-by
-
- drivers/dma/bcm2835-dma.c                      |  4 +---
- drivers/dma/dma-axi-dmac.c                     |  4 +---
- drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c |  4 +---
- drivers/dma/fsl-edma.c                         |  8 +++-----
- drivers/dma/fsl-qdma.c                         | 10 +++-------
- drivers/dma/idma64.c                           |  4 +---
- drivers/dma/img-mdc-dma.c                      |  4 +---
- drivers/dma/imx-dma.c                          |  4 +---
- drivers/dma/imx-sdma.c                         |  4 +---
- drivers/dma/mcf-edma.c                         |  5 +----
- drivers/dma/mediatek/mtk-hsdma.c               |  4 +---
- drivers/dma/mmp_pdma.c                         |  4 +---
- drivers/dma/mmp_tdma.c                         |  4 +---
- drivers/dma/moxart-dma.c                       |  4 +---
- drivers/dma/mv_xor_v2.c                        |  7 ++-----
- drivers/dma/mxs-dma.c                          |  4 +---
- drivers/dma/nbpfaxi.c                          |  4 +---
- drivers/dma/pxa_dma.c                          |  4 +---
- drivers/dma/qcom/bam_dma.c                     |  4 +---
- drivers/dma/sf-pdma/sf-pdma.c                  |  4 +---
- drivers/dma/sh/usb-dmac.c                      |  4 +---
- drivers/dma/stm32-dmamux.c                     |  4 +---
- drivers/dma/stm32-mdma.c                       |  4 +---
- drivers/dma/sun4i-dma.c                        |  4 +---
- drivers/dma/sun6i-dma.c                        |  4 +---
- drivers/dma/tegra210-adma.c                    |  4 +---
- drivers/dma/ti/cppi41.c                        | 10 +++-------
- drivers/dma/ti/omap-dma.c                      |  4 +---
- drivers/dma/xilinx/zynqmp_dma.c                |  4 +---
- 29 files changed, 36 insertions(+), 100 deletions(-)
-
-diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
-index 630dfbb01a40..0807fb9eb262 100644
---- a/drivers/dma/bcm2835-dma.c
-+++ b/drivers/dma/bcm2835-dma.c
-@@ -878,7 +878,6 @@ static struct dma_chan *bcm2835_dma_xlate(struct of_phandle_args *spec,
- static int bcm2835_dma_probe(struct platform_device *pdev)
- {
- 	struct bcm2835_dmadev *od;
--	struct resource *res;
- 	void __iomem *base;
- 	int rc;
- 	int i, j;
-@@ -902,8 +901,7 @@ static int bcm2835_dma_probe(struct platform_device *pdev)
- 
- 	dma_set_max_seg_size(&pdev->dev, 0x3FFFFFFF);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
-diff --git a/drivers/dma/dma-axi-dmac.c b/drivers/dma/dma-axi-dmac.c
-index f30dabc99795..a812b9b00e6b 100644
---- a/drivers/dma/dma-axi-dmac.c
-+++ b/drivers/dma/dma-axi-dmac.c
-@@ -910,7 +910,6 @@ static int axi_dmac_probe(struct platform_device *pdev)
- {
- 	struct dma_device *dma_dev;
- 	struct axi_dmac *dmac;
--	struct resource *res;
- 	struct regmap *regmap;
- 	unsigned int version;
- 	int ret;
-@@ -925,8 +924,7 @@ static int axi_dmac_probe(struct platform_device *pdev)
- 	if (dmac->irq == 0)
- 		return -EINVAL;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dmac->base = devm_ioremap_resource(&pdev->dev, res);
-+	dmac->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(dmac->base))
- 		return PTR_ERR(dmac->base);
- 
-diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-index a183d93bd7e2..3dec8adfc4ea 100644
---- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-+++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-@@ -1365,7 +1365,6 @@ static int dw_probe(struct platform_device *pdev)
- {
- 	struct device_node *node = pdev->dev.of_node;
- 	struct axi_dma_chip *chip;
--	struct resource *mem;
- 	struct dw_axi_dma *dw;
- 	struct dw_axi_dma_hcfg *hdata;
- 	u32 i;
-@@ -1391,8 +1390,7 @@ static int dw_probe(struct platform_device *pdev)
- 	if (chip->irq < 0)
- 		return chip->irq;
- 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	chip->regs = devm_ioremap_resource(chip->dev, mem);
-+	chip->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(chip->regs))
- 		return PTR_ERR(chip->regs);
- 
-diff --git a/drivers/dma/fsl-edma.c b/drivers/dma/fsl-edma.c
-index 76cbf54aec58..e40769666e39 100644
---- a/drivers/dma/fsl-edma.c
-+++ b/drivers/dma/fsl-edma.c
-@@ -272,7 +272,6 @@ static int fsl_edma_probe(struct platform_device *pdev)
- 	const struct fsl_edma_drvdata *drvdata = NULL;
- 	struct fsl_edma_chan *fsl_chan;
- 	struct edma_regs *regs;
--	struct resource *res;
- 	int len, chans;
- 	int ret, i;
- 
-@@ -298,8 +297,7 @@ static int fsl_edma_probe(struct platform_device *pdev)
- 	fsl_edma->n_chans = chans;
- 	mutex_init(&fsl_edma->fsl_edma_mutex);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	fsl_edma->membase = devm_ioremap_resource(&pdev->dev, res);
-+	fsl_edma->membase = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(fsl_edma->membase))
- 		return PTR_ERR(fsl_edma->membase);
- 
-@@ -323,8 +321,8 @@ static int fsl_edma_probe(struct platform_device *pdev)
- 	for (i = 0; i < fsl_edma->drvdata->dmamuxs; i++) {
- 		char clkname[32];
- 
--		res = platform_get_resource(pdev, IORESOURCE_MEM, 1 + i);
--		fsl_edma->muxbase[i] = devm_ioremap_resource(&pdev->dev, res);
-+		fsl_edma->muxbase[i] = devm_platform_ioremap_resource(pdev,
-+								      1 + i);
- 		if (IS_ERR(fsl_edma->muxbase[i])) {
- 			/* on error: disable all previously enabled clks */
- 			fsl_disable_clocks(fsl_edma, i);
-diff --git a/drivers/dma/fsl-qdma.c b/drivers/dma/fsl-qdma.c
-index 045ead46ec8f..eddb2688f234 100644
---- a/drivers/dma/fsl-qdma.c
-+++ b/drivers/dma/fsl-qdma.c
-@@ -1119,7 +1119,6 @@ static int fsl_qdma_probe(struct platform_device *pdev)
- 	int ret, i;
- 	int blk_num, blk_off;
- 	u32 len, chans, queues;
--	struct resource *res;
- 	struct fsl_qdma_chan *fsl_chan;
- 	struct fsl_qdma_engine *fsl_qdma;
- 	struct device_node *np = pdev->dev.of_node;
-@@ -1183,18 +1182,15 @@ static int fsl_qdma_probe(struct platform_device *pdev)
- 		if (!fsl_qdma->status[i])
- 			return -ENOMEM;
- 	}
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	fsl_qdma->ctrl_base = devm_ioremap_resource(&pdev->dev, res);
-+	fsl_qdma->ctrl_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(fsl_qdma->ctrl_base))
- 		return PTR_ERR(fsl_qdma->ctrl_base);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	fsl_qdma->status_base = devm_ioremap_resource(&pdev->dev, res);
-+	fsl_qdma->status_base = devm_platform_ioremap_resource(pdev, 1);
- 	if (IS_ERR(fsl_qdma->status_base))
- 		return PTR_ERR(fsl_qdma->status_base);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
--	fsl_qdma->block_base = devm_ioremap_resource(&pdev->dev, res);
-+	fsl_qdma->block_base = devm_platform_ioremap_resource(pdev, 2);
- 	if (IS_ERR(fsl_qdma->block_base))
- 		return PTR_ERR(fsl_qdma->block_base);
- 	fsl_qdma->queue = fsl_qdma_alloc_queue_resources(pdev, fsl_qdma);
-diff --git a/drivers/dma/idma64.c b/drivers/dma/idma64.c
-index c33087c5cd02..cd9622f6e59c 100644
---- a/drivers/dma/idma64.c
-+++ b/drivers/dma/idma64.c
-@@ -627,7 +627,6 @@ static int idma64_platform_probe(struct platform_device *pdev)
- 	struct idma64_chip *chip;
- 	struct device *dev = &pdev->dev;
- 	struct device *sysdev = dev->parent;
--	struct resource *mem;
- 	int ret;
- 
- 	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
-@@ -638,8 +637,7 @@ static int idma64_platform_probe(struct platform_device *pdev)
- 	if (chip->irq < 0)
- 		return chip->irq;
- 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	chip->regs = devm_ioremap_resource(dev, mem);
-+	chip->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(chip->regs))
- 		return PTR_ERR(chip->regs);
- 
-diff --git a/drivers/dma/img-mdc-dma.c b/drivers/dma/img-mdc-dma.c
-index e4ea107ce78c..ad084552640f 100644
---- a/drivers/dma/img-mdc-dma.c
-+++ b/drivers/dma/img-mdc-dma.c
-@@ -886,7 +886,6 @@ static int img_mdc_runtime_resume(struct device *dev)
- static int mdc_dma_probe(struct platform_device *pdev)
- {
- 	struct mdc_dma *mdma;
--	struct resource *res;
- 	unsigned int i;
- 	u32 val;
- 	int ret;
-@@ -898,8 +897,7 @@ static int mdc_dma_probe(struct platform_device *pdev)
- 
- 	mdma->soc = of_device_get_match_data(&pdev->dev);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	mdma->regs = devm_ioremap_resource(&pdev->dev, res);
-+	mdma->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(mdma->regs))
- 		return PTR_ERR(mdma->regs);
- 
-diff --git a/drivers/dma/imx-dma.c b/drivers/dma/imx-dma.c
-index 65c6094ce063..80086977973f 100644
---- a/drivers/dma/imx-dma.c
-+++ b/drivers/dma/imx-dma.c
-@@ -1038,7 +1038,6 @@ static struct dma_chan *imxdma_xlate(struct of_phandle_args *dma_spec,
- static int __init imxdma_probe(struct platform_device *pdev)
- {
- 	struct imxdma_engine *imxdma;
--	struct resource *res;
- 	int ret, i;
- 	int irq, irq_err;
- 
-@@ -1049,8 +1048,7 @@ static int __init imxdma_probe(struct platform_device *pdev)
- 	imxdma->dev = &pdev->dev;
- 	imxdma->devtype = (uintptr_t)of_device_get_match_data(&pdev->dev);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	imxdma->base = devm_ioremap_resource(&pdev->dev, res);
-+	imxdma->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(imxdma->base))
- 		return PTR_ERR(imxdma->base);
- 
-diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-index fbea5f62dd98..3565066a54f5 100644
---- a/drivers/dma/imx-sdma.c
-+++ b/drivers/dma/imx-sdma.c
-@@ -2167,7 +2167,6 @@ static int sdma_probe(struct platform_device *pdev)
- 	const char *fw_name;
- 	int ret;
- 	int irq;
--	struct resource *iores;
- 	struct resource spba_res;
- 	int i;
- 	struct sdma_engine *sdma;
-@@ -2190,8 +2189,7 @@ static int sdma_probe(struct platform_device *pdev)
- 	if (irq < 0)
- 		return irq;
- 
--	iores = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	sdma->regs = devm_ioremap_resource(&pdev->dev, iores);
-+	sdma->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(sdma->regs))
- 		return PTR_ERR(sdma->regs);
- 
-diff --git a/drivers/dma/mcf-edma.c b/drivers/dma/mcf-edma.c
-index e12b754e6398..ebd8733f72ad 100644
---- a/drivers/dma/mcf-edma.c
-+++ b/drivers/dma/mcf-edma.c
-@@ -182,7 +182,6 @@ static int mcf_edma_probe(struct platform_device *pdev)
- 	struct fsl_edma_engine *mcf_edma;
- 	struct fsl_edma_chan *mcf_chan;
- 	struct edma_regs *regs;
--	struct resource *res;
- 	int ret, i, len, chans;
- 
- 	pdata = dev_get_platdata(&pdev->dev);
-@@ -210,9 +209,7 @@ static int mcf_edma_probe(struct platform_device *pdev)
- 
- 	mutex_init(&mcf_edma->fsl_edma_mutex);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	mcf_edma->membase = devm_ioremap_resource(&pdev->dev, res);
-+	mcf_edma->membase = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(mcf_edma->membase))
- 		return PTR_ERR(mcf_edma->membase);
- 
-diff --git a/drivers/dma/mediatek/mtk-hsdma.c b/drivers/dma/mediatek/mtk-hsdma.c
-index f7717c44b887..69cc61c0b262 100644
---- a/drivers/dma/mediatek/mtk-hsdma.c
-+++ b/drivers/dma/mediatek/mtk-hsdma.c
-@@ -896,7 +896,6 @@ static int mtk_hsdma_probe(struct platform_device *pdev)
- 	struct mtk_hsdma_device *hsdma;
- 	struct mtk_hsdma_vchan *vc;
- 	struct dma_device *dd;
--	struct resource *res;
- 	int i, err;
- 
- 	hsdma = devm_kzalloc(&pdev->dev, sizeof(*hsdma), GFP_KERNEL);
-@@ -905,8 +904,7 @@ static int mtk_hsdma_probe(struct platform_device *pdev)
- 
- 	dd = &hsdma->ddev;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	hsdma->base = devm_ioremap_resource(&pdev->dev, res);
-+	hsdma->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(hsdma->base))
- 		return PTR_ERR(hsdma->base);
- 
-diff --git a/drivers/dma/mmp_pdma.c b/drivers/dma/mmp_pdma.c
-index e8d71b35593e..ebdfdcbb4f7a 100644
---- a/drivers/dma/mmp_pdma.c
-+++ b/drivers/dma/mmp_pdma.c
-@@ -1022,7 +1022,6 @@ static int mmp_pdma_probe(struct platform_device *op)
- 	struct mmp_pdma_device *pdev;
- 	const struct of_device_id *of_id;
- 	struct mmp_dma_platdata *pdata = dev_get_platdata(&op->dev);
--	struct resource *iores;
- 	int i, ret, irq = 0;
- 	int dma_channels = 0, irq_num = 0;
- 	const enum dma_slave_buswidth widths =
-@@ -1037,8 +1036,7 @@ static int mmp_pdma_probe(struct platform_device *op)
- 
- 	spin_lock_init(&pdev->phy_lock);
- 
--	iores = platform_get_resource(op, IORESOURCE_MEM, 0);
--	pdev->base = devm_ioremap_resource(pdev->dev, iores);
-+	pdev->base = devm_platform_ioremap_resource(op, 0);
- 	if (IS_ERR(pdev->base))
- 		return PTR_ERR(pdev->base);
- 
-diff --git a/drivers/dma/mmp_tdma.c b/drivers/dma/mmp_tdma.c
-index a262e0eb4cc9..e956702932aa 100644
---- a/drivers/dma/mmp_tdma.c
-+++ b/drivers/dma/mmp_tdma.c
-@@ -639,7 +639,6 @@ static int mmp_tdma_probe(struct platform_device *pdev)
- 	enum mmp_tdma_type type;
- 	const struct of_device_id *of_id;
- 	struct mmp_tdma_device *tdev;
--	struct resource *iores;
- 	int i, ret;
- 	int irq = 0, irq_num = 0;
- 	int chan_num = TDMA_CHANNEL_NUM;
-@@ -663,8 +662,7 @@ static int mmp_tdma_probe(struct platform_device *pdev)
- 			irq_num++;
- 	}
- 
--	iores = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	tdev->base = devm_ioremap_resource(&pdev->dev, iores);
-+	tdev->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(tdev->base))
- 		return PTR_ERR(tdev->base);
- 
-diff --git a/drivers/dma/moxart-dma.c b/drivers/dma/moxart-dma.c
-index 7459382a8353..7565ad98ba66 100644
---- a/drivers/dma/moxart-dma.c
-+++ b/drivers/dma/moxart-dma.c
-@@ -563,7 +563,6 @@ static int moxart_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct device_node *node = dev->of_node;
--	struct resource *res;
- 	void __iomem *dma_base_addr;
- 	int ret, i;
- 	unsigned int irq;
-@@ -580,8 +579,7 @@ static int moxart_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dma_base_addr = devm_ioremap_resource(dev, res);
-+	dma_base_addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(dma_base_addr))
- 		return PTR_ERR(dma_base_addr);
- 
-diff --git a/drivers/dma/mv_xor_v2.c b/drivers/dma/mv_xor_v2.c
-index 113834e1167b..89790beba305 100644
---- a/drivers/dma/mv_xor_v2.c
-+++ b/drivers/dma/mv_xor_v2.c
-@@ -714,7 +714,6 @@ static int mv_xor_v2_resume(struct platform_device *dev)
- static int mv_xor_v2_probe(struct platform_device *pdev)
- {
- 	struct mv_xor_v2_device *xor_dev;
--	struct resource *res;
- 	int i, ret = 0;
- 	struct dma_device *dma_dev;
- 	struct mv_xor_v2_sw_desc *sw_desc;
-@@ -726,13 +725,11 @@ static int mv_xor_v2_probe(struct platform_device *pdev)
- 	if (!xor_dev)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	xor_dev->dma_base = devm_ioremap_resource(&pdev->dev, res);
-+	xor_dev->dma_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(xor_dev->dma_base))
- 		return PTR_ERR(xor_dev->dma_base);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	xor_dev->glob_base = devm_ioremap_resource(&pdev->dev, res);
-+	xor_dev->glob_base = devm_platform_ioremap_resource(pdev, 1);
- 	if (IS_ERR(xor_dev->glob_base))
- 		return PTR_ERR(xor_dev->glob_base);
- 
-diff --git a/drivers/dma/mxs-dma.c b/drivers/dma/mxs-dma.c
-index dc147cc2436e..acc4d53e4630 100644
---- a/drivers/dma/mxs-dma.c
-+++ b/drivers/dma/mxs-dma.c
-@@ -746,7 +746,6 @@ static int mxs_dma_probe(struct platform_device *pdev)
- 	struct device_node *np = pdev->dev.of_node;
- 	const struct mxs_dma_type *dma_type;
- 	struct mxs_dma_engine *mxs_dma;
--	struct resource *iores;
- 	int ret, i;
- 
- 	mxs_dma = devm_kzalloc(&pdev->dev, sizeof(*mxs_dma), GFP_KERNEL);
-@@ -763,8 +762,7 @@ static int mxs_dma_probe(struct platform_device *pdev)
- 	mxs_dma->type = dma_type->type;
- 	mxs_dma->dev_id = dma_type->id;
- 
--	iores = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	mxs_dma->base = devm_ioremap_resource(&pdev->dev, iores);
-+	mxs_dma->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(mxs_dma->base))
- 		return PTR_ERR(mxs_dma->base);
- 
-diff --git a/drivers/dma/nbpfaxi.c b/drivers/dma/nbpfaxi.c
-index a7063e9cd551..e72e8c10355e 100644
---- a/drivers/dma/nbpfaxi.c
-+++ b/drivers/dma/nbpfaxi.c
-@@ -1294,7 +1294,6 @@ static int nbpf_probe(struct platform_device *pdev)
- 	struct device_node *np = dev->of_node;
- 	struct nbpf_device *nbpf;
- 	struct dma_device *dma_dev;
--	struct resource *iomem;
- 	const struct nbpf_config *cfg;
- 	int num_channels;
- 	int ret, irq, eirq, i;
-@@ -1318,8 +1317,7 @@ static int nbpf_probe(struct platform_device *pdev)
- 	dma_dev = &nbpf->dma_dev;
- 	dma_dev->dev = dev;
- 
--	iomem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	nbpf->base = devm_ioremap_resource(dev, iomem);
-+	nbpf->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(nbpf->base))
- 		return PTR_ERR(nbpf->base);
- 
-diff --git a/drivers/dma/pxa_dma.c b/drivers/dma/pxa_dma.c
-index 22a392fe6d32..1b046d9a3a26 100644
---- a/drivers/dma/pxa_dma.c
-+++ b/drivers/dma/pxa_dma.c
-@@ -1346,7 +1346,6 @@ static int pxad_probe(struct platform_device *op)
- 	const struct of_device_id *of_id;
- 	const struct dma_slave_map *slave_map = NULL;
- 	struct mmp_dma_platdata *pdata = dev_get_platdata(&op->dev);
--	struct resource *iores;
- 	int ret, dma_channels = 0, nb_requestors = 0, slave_map_cnt = 0;
- 	const enum dma_slave_buswidth widths =
- 		DMA_SLAVE_BUSWIDTH_1_BYTE   | DMA_SLAVE_BUSWIDTH_2_BYTES |
-@@ -1358,8 +1357,7 @@ static int pxad_probe(struct platform_device *op)
- 
- 	spin_lock_init(&pdev->phy_lock);
- 
--	iores = platform_get_resource(op, IORESOURCE_MEM, 0);
--	pdev->base = devm_ioremap_resource(&op->dev, iores);
-+	pdev->base = devm_platform_ioremap_resource(op, 0);
- 	if (IS_ERR(pdev->base))
- 		return PTR_ERR(pdev->base);
- 
-diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-index 2ff787df513e..1e47d27e1f81 100644
---- a/drivers/dma/qcom/bam_dma.c
-+++ b/drivers/dma/qcom/bam_dma.c
-@@ -1237,7 +1237,6 @@ static int bam_dma_probe(struct platform_device *pdev)
- {
- 	struct bam_device *bdev;
- 	const struct of_device_id *match;
--	struct resource *iores;
- 	int ret, i;
- 
- 	bdev = devm_kzalloc(&pdev->dev, sizeof(*bdev), GFP_KERNEL);
-@@ -1254,8 +1253,7 @@ static int bam_dma_probe(struct platform_device *pdev)
- 
- 	bdev->layout = match->data;
- 
--	iores = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	bdev->regs = devm_ioremap_resource(&pdev->dev, iores);
-+	bdev->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(bdev->regs))
- 		return PTR_ERR(bdev->regs);
- 
-diff --git a/drivers/dma/sf-pdma/sf-pdma.c b/drivers/dma/sf-pdma/sf-pdma.c
-index 6b524eb6bcf3..d7d2dacac830 100644
---- a/drivers/dma/sf-pdma/sf-pdma.c
-+++ b/drivers/dma/sf-pdma/sf-pdma.c
-@@ -494,7 +494,6 @@ static void sf_pdma_setup_chans(struct sf_pdma *pdma)
- static int sf_pdma_probe(struct platform_device *pdev)
- {
- 	struct sf_pdma *pdma;
--	struct resource *res;
- 	int ret, n_chans;
- 	const enum dma_slave_buswidth widths =
- 		DMA_SLAVE_BUSWIDTH_1_BYTE | DMA_SLAVE_BUSWIDTH_2_BYTES |
-@@ -519,8 +518,7 @@ static int sf_pdma_probe(struct platform_device *pdev)
- 
- 	pdma->n_chans = n_chans;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	pdma->membase = devm_ioremap_resource(&pdev->dev, res);
-+	pdma->membase = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(pdma->membase))
- 		return PTR_ERR(pdma->membase);
- 
-diff --git a/drivers/dma/sh/usb-dmac.c b/drivers/dma/sh/usb-dmac.c
-index 5edaeb89d1e6..b14cf350b669 100644
---- a/drivers/dma/sh/usb-dmac.c
-+++ b/drivers/dma/sh/usb-dmac.c
-@@ -768,7 +768,6 @@ static int usb_dmac_probe(struct platform_device *pdev)
- 	const enum dma_slave_buswidth widths = USB_DMAC_SLAVE_BUSWIDTH;
- 	struct dma_device *engine;
- 	struct usb_dmac *dmac;
--	struct resource *mem;
- 	unsigned int i;
- 	int ret;
- 
-@@ -789,8 +788,7 @@ static int usb_dmac_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	/* Request resources. */
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dmac->iomem = devm_ioremap_resource(&pdev->dev, mem);
-+	dmac->iomem = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(dmac->iomem))
- 		return PTR_ERR(dmac->iomem);
- 
-diff --git a/drivers/dma/stm32-dmamux.c b/drivers/dma/stm32-dmamux.c
-index ee3cbbf51006..46b884d46188 100644
---- a/drivers/dma/stm32-dmamux.c
-+++ b/drivers/dma/stm32-dmamux.c
-@@ -179,7 +179,6 @@ static int stm32_dmamux_probe(struct platform_device *pdev)
- 	const struct of_device_id *match;
- 	struct device_node *dma_node;
- 	struct stm32_dmamux_data *stm32_dmamux;
--	struct resource *res;
- 	void __iomem *iomem;
- 	struct reset_control *rst;
- 	int i, count, ret;
-@@ -238,8 +237,7 @@ static int stm32_dmamux_probe(struct platform_device *pdev)
- 	}
- 	pm_runtime_get_noresume(&pdev->dev);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	iomem = devm_ioremap_resource(&pdev->dev, res);
-+	iomem = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(iomem))
- 		return PTR_ERR(iomem);
- 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index b9d4c843635f..84e7f4f4a800 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -1580,7 +1580,6 @@ static int stm32_mdma_probe(struct platform_device *pdev)
- 	struct stm32_mdma_device *dmadev;
- 	struct dma_device *dd;
- 	struct device_node *of_node;
--	struct resource *res;
- 	struct reset_control *rst;
- 	u32 nr_channels, nr_requests;
- 	int i, count, ret;
-@@ -1622,8 +1621,7 @@ static int stm32_mdma_probe(struct platform_device *pdev)
- 				       count);
- 	dmadev->nr_ahb_addr_masks = count;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dmadev->base = devm_ioremap_resource(&pdev->dev, res);
-+	dmadev->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(dmadev->base))
- 		return PTR_ERR(dmadev->base);
- 
-diff --git a/drivers/dma/sun4i-dma.c b/drivers/dma/sun4i-dma.c
-index f291b1b4db32..e86c8829513a 100644
---- a/drivers/dma/sun4i-dma.c
-+++ b/drivers/dma/sun4i-dma.c
-@@ -1144,15 +1144,13 @@ static irqreturn_t sun4i_dma_interrupt(int irq, void *dev_id)
- static int sun4i_dma_probe(struct platform_device *pdev)
- {
- 	struct sun4i_dma_dev *priv;
--	struct resource *res;
- 	int i, j, ret;
- 
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->base = devm_ioremap_resource(&pdev->dev, res);
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
-diff --git a/drivers/dma/sun6i-dma.c b/drivers/dma/sun6i-dma.c
-index b7557f437936..2f4bf72e7769 100644
---- a/drivers/dma/sun6i-dma.c
-+++ b/drivers/dma/sun6i-dma.c
-@@ -1283,7 +1283,6 @@ static int sun6i_dma_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
- 	struct sun6i_dma_dev *sdc;
--	struct resource *res;
- 	int ret, i;
- 
- 	sdc = devm_kzalloc(&pdev->dev, sizeof(*sdc), GFP_KERNEL);
-@@ -1294,8 +1293,7 @@ static int sun6i_dma_probe(struct platform_device *pdev)
- 	if (!sdc->cfg)
- 		return -ENODEV;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	sdc->base = devm_ioremap_resource(&pdev->dev, res);
-+	sdc->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(sdc->base))
- 		return PTR_ERR(sdc->base);
- 
-diff --git a/drivers/dma/tegra210-adma.c b/drivers/dma/tegra210-adma.c
-index ae39b52012b2..d1a84483f627 100644
---- a/drivers/dma/tegra210-adma.c
-+++ b/drivers/dma/tegra210-adma.c
-@@ -837,7 +837,6 @@ static int tegra_adma_probe(struct platform_device *pdev)
- {
- 	const struct tegra_adma_chip_data *cdata;
- 	struct tegra_adma *tdma;
--	struct resource	*res;
- 	int ret, i;
- 
- 	cdata = of_device_get_match_data(&pdev->dev);
-@@ -857,8 +856,7 @@ static int tegra_adma_probe(struct platform_device *pdev)
- 	tdma->nr_channels = cdata->nr_channels;
- 	platform_set_drvdata(pdev, tdma);
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	tdma->base_addr = devm_ioremap_resource(&pdev->dev, res);
-+	tdma->base_addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(tdma->base_addr))
- 		return PTR_ERR(tdma->base_addr);
- 
-diff --git a/drivers/dma/ti/cppi41.c b/drivers/dma/ti/cppi41.c
-index 695915dba707..c3555cfb0681 100644
---- a/drivers/dma/ti/cppi41.c
-+++ b/drivers/dma/ti/cppi41.c
-@@ -1039,7 +1039,6 @@ static int cppi41_dma_probe(struct platform_device *pdev)
- 	struct cppi41_dd *cdd;
- 	struct device *dev = &pdev->dev;
- 	const struct cppi_glue_infos *glue_info;
--	struct resource *mem;
- 	int index;
- 	int irq;
- 	int ret;
-@@ -1072,18 +1071,15 @@ static int cppi41_dma_probe(struct platform_device *pdev)
- 	if (index < 0)
- 		return index;
- 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, index);
--	cdd->ctrl_mem = devm_ioremap_resource(dev, mem);
-+	cdd->ctrl_mem = devm_platform_ioremap_resource(pdev, index);
- 	if (IS_ERR(cdd->ctrl_mem))
- 		return PTR_ERR(cdd->ctrl_mem);
- 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, index + 1);
--	cdd->sched_mem = devm_ioremap_resource(dev, mem);
-+	cdd->sched_mem = devm_platform_ioremap_resource(pdev, index + 1);
- 	if (IS_ERR(cdd->sched_mem))
- 		return PTR_ERR(cdd->sched_mem);
- 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, index + 2);
--	cdd->qmgr_mem = devm_ioremap_resource(dev, mem);
-+	cdd->qmgr_mem = devm_platform_ioremap_resource(pdev, index + 2);
- 	if (IS_ERR(cdd->qmgr_mem))
- 		return PTR_ERR(cdd->qmgr_mem);
- 
-diff --git a/drivers/dma/ti/omap-dma.c b/drivers/dma/ti/omap-dma.c
-index 27f5019bdc1e..02e1c08c596d 100644
---- a/drivers/dma/ti/omap-dma.c
-+++ b/drivers/dma/ti/omap-dma.c
-@@ -1658,7 +1658,6 @@ static int omap_dma_probe(struct platform_device *pdev)
- {
- 	const struct omap_dma_config *conf;
- 	struct omap_dmadev *od;
--	struct resource *res;
- 	int rc, i, irq;
- 	u32 val;
- 
-@@ -1666,8 +1665,7 @@ static int omap_dma_probe(struct platform_device *pdev)
- 	if (!od)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	od->base = devm_ioremap_resource(&pdev->dev, res);
-+	od->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(od->base))
- 		return PTR_ERR(od->base);
- 
-diff --git a/drivers/dma/xilinx/zynqmp_dma.c b/drivers/dma/xilinx/zynqmp_dma.c
-index 21472a5d7636..ce359058c638 100644
---- a/drivers/dma/xilinx/zynqmp_dma.c
-+++ b/drivers/dma/xilinx/zynqmp_dma.c
-@@ -890,7 +890,6 @@ static int zynqmp_dma_chan_probe(struct zynqmp_dma_device *zdev,
- 			   struct platform_device *pdev)
- {
- 	struct zynqmp_dma_chan *chan;
--	struct resource *res;
- 	struct device_node *node = pdev->dev.of_node;
- 	int err;
- 
-@@ -900,8 +899,7 @@ static int zynqmp_dma_chan_probe(struct zynqmp_dma_device *zdev,
- 	chan->dev = zdev->dev;
- 	chan->zdev = zdev;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	chan->regs = devm_ioremap_resource(&pdev->dev, res);
-+	chan->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(chan->regs))
- 		return PTR_ERR(chan->regs);
- 
--- 
-2.25.1
-
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCkltcGxlbWVu
+dCBhIHVzYWdlIGNvdW50ZXIgZm9yIHRoZSAoZGVmYXVsdCkgbG9jYWxpdHkgdXNlZCBieSB0aGUg
+VFBNIFRJUwpkcml2ZXI6ClJlcXVlc3QgdGhlIGxvY2FsaXR5IGZyb20gdGhlIFRQTSBpZiBpdCBo
+YXMgbm90IGJlZW4gY2xhaW1lZCB5ZXQsIG90aGVyd2lzZQpvbmx5IGluY3JlbWVudCB0aGUgY291
+bnRlci4gQWxzbyByZWxlYXNlIHRoZSBsb2NhbGl0eSBpZiB0aGUgY291bnRlciBpcyAwCm90aGVy
+d2lzZSBvbmx5IGRlY3JlbWVudCB0aGUgY291bnRlci4gU2luY2UgaW4gY2FzZSBvZiBTUEkgdGhl
+IHJlZ2lzdGVyCmFjY2Vzc2VzIGFyZSBsb2NrZWQgYnkgbWVhbnMgb2YgdGhlIFNQSSBidXMgbXV0
+ZXggdXNlIGEgc2xlZXBhYmxlIGxvY2sKKGkuZS4gYWxzbyBhIG11dGV4KSB0byBlbnN1cmUgdGhy
+ZWFkLXNhZmV0eSBvZiB0aGUgY291bnRlciB3aGljaCBtYXkgYmUKYWNjZXNzZWQgYnkgYm90aCBh
+IHVzZXJzcGFjZSB0aHJlYWQgYW5kIHRoZSBpbnRlcnJ1cHQgaGFuZGxlci4KCkJ5IGRvaW5nIHRo
+aXMgcmVmYWN0b3IgdGhlIG5hbWVzIG9mIHRoZSBhbWVuZGVkIGZ1bmN0aW9ucyB0byB1c2UgYSBt
+b3JlCmFwcHJvcHJpYXRlIHByZWZpeC4KClNpZ25lZC1vZmYtYnk6IExpbm8gU2FuZmlsaXBwbyA8
+bC5zYW5maWxpcHBvQGt1bmJ1cy5jb20+ClRlc3RlZC1ieTogTWljaGFlbCBOaWV3w7ZobmVyIDxs
+aW51eEBtbmlld29laG5lci5kZT4KLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5j
+IHwgNzUgKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tCiBkcml2ZXJzL2NoYXIvdHBt
+L3RwbV90aXNfY29yZS5oIHwgIDIgKwogMiBmaWxlcyBjaGFuZ2VkLCA1MyBpbnNlcnRpb25zKCsp
+LCAyNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNf
+Y29yZS5jIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuYwppbmRleCA0MzM2ZjdlYThj
+MmIuLmVjZGU2ODRhOGY4MCAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2Nv
+cmUuYworKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCkBAIC0xNjUsMTYgKzE2
+NSwyNyBAQCBzdGF0aWMgYm9vbCBjaGVja19sb2NhbGl0eShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAs
+IGludCBsKQogCXJldHVybiBmYWxzZTsKIH0KIAotc3RhdGljIGludCByZWxlYXNlX2xvY2FsaXR5
+KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCwgaW50IGwpCitzdGF0aWMgaW50IF9fdHBtX3Rpc19yZWxp
+bnF1aXNoX2xvY2FsaXR5KHN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYsIGludCBsKQoreworCXRw
+bV90aXNfd3JpdGU4KHByaXYsIFRQTV9BQ0NFU1MobCksIFRQTV9BQ0NFU1NfQUNUSVZFX0xPQ0FM
+SVRZKTsKKworCXJldHVybiAwOworfQorCitzdGF0aWMgaW50IHRwbV90aXNfcmVsaW5xdWlzaF9s
+b2NhbGl0eShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAsIGludCBsKQogewogCXN0cnVjdCB0cG1fdGlz
+X2RhdGEgKnByaXYgPSBkZXZfZ2V0X2RydmRhdGEoJmNoaXAtPmRldik7CiAKLQl0cG1fdGlzX3dy
+aXRlOChwcml2LCBUUE1fQUNDRVNTKGwpLCBUUE1fQUNDRVNTX0FDVElWRV9MT0NBTElUWSk7CisJ
+bXV0ZXhfbG9jaygmcHJpdi0+bG9jYWxpdHlfY291bnRfbXV0ZXgpOworCXByaXYtPmxvY2FsaXR5
+X2NvdW50LS07CisJaWYgKHByaXYtPmxvY2FsaXR5X2NvdW50ID09IDApCisJCV9fdHBtX3Rpc19y
+ZWxpbnF1aXNoX2xvY2FsaXR5KHByaXYsIGwpOworCW11dGV4X3VubG9jaygmcHJpdi0+bG9jYWxp
+dHlfY291bnRfbXV0ZXgpOwogCiAJcmV0dXJuIDA7CiB9CiAKLXN0YXRpYyBpbnQgcmVxdWVzdF9s
+b2NhbGl0eShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAsIGludCBsKQorc3RhdGljIGludCBfX3RwbV90
+aXNfcmVxdWVzdF9sb2NhbGl0eShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAsIGludCBsKQogewogCXN0
+cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYgPSBkZXZfZ2V0X2RydmRhdGEoJmNoaXAtPmRldik7CiAJ
+dW5zaWduZWQgbG9uZyBzdG9wLCB0aW1lb3V0OwpAQCAtMjE1LDYgKzIyNiwyMCBAQCBzdGF0aWMg
+aW50IHJlcXVlc3RfbG9jYWxpdHkoc3RydWN0IHRwbV9jaGlwICpjaGlwLCBpbnQgbCkKIAlyZXR1
+cm4gLTE7CiB9CiAKK3N0YXRpYyBpbnQgdHBtX3Rpc19yZXF1ZXN0X2xvY2FsaXR5KHN0cnVjdCB0
+cG1fY2hpcCAqY2hpcCwgaW50IGwpCit7CisJc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiA9IGRl
+dl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKKwlpbnQgcmV0ID0gMDsKKworCW11dGV4X2xvY2so
+JnByaXYtPmxvY2FsaXR5X2NvdW50X211dGV4KTsKKwlpZiAocHJpdi0+bG9jYWxpdHlfY291bnQg
+PT0gMCkKKwkJcmV0ID0gX190cG1fdGlzX3JlcXVlc3RfbG9jYWxpdHkoY2hpcCwgbCk7CisJaWYg
+KCFyZXQpCisJCXByaXYtPmxvY2FsaXR5X2NvdW50Kys7CisJbXV0ZXhfdW5sb2NrKCZwcml2LT5s
+b2NhbGl0eV9jb3VudF9tdXRleCk7CisJcmV0dXJuIHJldDsKK30KKwogc3RhdGljIHU4IHRwbV90
+aXNfc3RhdHVzKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIHsKIAlzdHJ1Y3QgdHBtX3Rpc19kYXRh
+ICpwcml2ID0gZGV2X2dldF9kcnZkYXRhKCZjaGlwLT5kZXYpOwpAQCAtNjgyLDcgKzcwNyw3IEBA
+IHN0YXRpYyBpbnQgcHJvYmVfaXRwbShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApCiAJaWYgKHZlbmRv
+ciAhPSBUUE1fVklEX0lOVEVMKQogCQlyZXR1cm4gMDsKIAotCWlmIChyZXF1ZXN0X2xvY2FsaXR5
+KGNoaXAsIDApICE9IDApCisJaWYgKHRwbV90aXNfcmVxdWVzdF9sb2NhbGl0eShjaGlwLCAwKSAh
+PSAwKQogCQlyZXR1cm4gLUVCVVNZOwogCiAJcmMgPSB0cG1fdGlzX3NlbmRfZGF0YShjaGlwLCBj
+bWRfZ2V0dGlja3MsIGxlbik7CkBAIC03MDMsNyArNzI4LDcgQEAgc3RhdGljIGludCBwcm9iZV9p
+dHBtKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAogb3V0OgogCXRwbV90aXNfcmVhZHkoY2hpcCk7
+Ci0JcmVsZWFzZV9sb2NhbGl0eShjaGlwLCBwcml2LT5sb2NhbGl0eSk7CisJdHBtX3Rpc19yZWxp
+bnF1aXNoX2xvY2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKIAogCXJldHVybiByYzsKIH0K
+QEAgLTc2Miw3ICs3ODcsNyBAQCBzdGF0aWMgaW50IHRwbV90aXNfZ2VuX2ludGVycnVwdChzdHJ1
+Y3QgdHBtX2NoaXAgKmNoaXApCiAJY2FwX3QgY2FwOwogCWludCByZXQ7CiAKLQlyZXQgPSByZXF1
+ZXN0X2xvY2FsaXR5KGNoaXAsIDApOworCXJldCA9IHRwbV90aXNfcmVxdWVzdF9sb2NhbGl0eShj
+aGlwLCAwKTsKIAlpZiAocmV0IDwgMCkKIAkJcmV0dXJuIHJldDsKIApAQCAtNzcxLDcgKzc5Niw3
+IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19nZW5faW50ZXJydXB0KHN0cnVjdCB0cG1fY2hpcCAqY2hp
+cCkKIAllbHNlCiAJCXJldCA9IHRwbTFfZ2V0Y2FwKGNoaXAsIFRQTV9DQVBfUFJPUF9USVNfVElN
+RU9VVCwgJmNhcCwgZGVzYywgMCk7CiAKLQlyZWxlYXNlX2xvY2FsaXR5KGNoaXAsIDApOworCXRw
+bV90aXNfcmVsaW5xdWlzaF9sb2NhbGl0eShjaGlwLCAwKTsKIAogCXJldHVybiByZXQ7CiB9CkBA
+IC03OTYsMzMgKzgyMSwzMyBAQCBzdGF0aWMgaW50IHRwbV90aXNfcHJvYmVfaXJxX3NpbmdsZShz
+dHJ1Y3QgdHBtX2NoaXAgKmNoaXAsIHUzMiBpbnRtYXNrLAogCX0KIAlwcml2LT5pcnEgPSBpcnE7
+CiAKLQlyYyA9IHJlcXVlc3RfbG9jYWxpdHkoY2hpcCwgMCk7CisJcmMgPSB0cG1fdGlzX3JlcXVl
+c3RfbG9jYWxpdHkoY2hpcCwgMCk7CiAJaWYgKHJjIDwgMCkKIAkJcmV0dXJuIHJjOwogCiAJcmMg
+PSB0cG1fdGlzX3JlYWQ4KHByaXYsIFRQTV9JTlRfVkVDVE9SKHByaXYtPmxvY2FsaXR5KSwKIAkJ
+CSAgICZvcmlnaW5hbF9pbnRfdmVjKTsKIAlpZiAocmMgPCAwKSB7Ci0JCXJlbGVhc2VfbG9jYWxp
+dHkoY2hpcCwgcHJpdi0+bG9jYWxpdHkpOworCQl0cG1fdGlzX3JlbGlucXVpc2hfbG9jYWxpdHko
+Y2hpcCwgcHJpdi0+bG9jYWxpdHkpOwogCQlyZXR1cm4gcmM7CiAJfQogCiAJcmMgPSB0cG1fdGlz
+X3dyaXRlOChwcml2LCBUUE1fSU5UX1ZFQ1RPUihwcml2LT5sb2NhbGl0eSksIGlycSk7CiAJaWYg
+KHJjIDwgMCkgewotCQlyZWxlYXNlX2xvY2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKKwkJ
+dHBtX3Rpc19yZWxpbnF1aXNoX2xvY2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKIAkJcmV0
+dXJuIHJjOwogCX0KIAogCXJjID0gdHBtX3Rpc19yZWFkMzIocHJpdiwgVFBNX0lOVF9TVEFUVVMo
+cHJpdi0+bG9jYWxpdHkpLCAmaW50X3N0YXR1cyk7CiAJaWYgKHJjIDwgMCkgewotCQlyZWxlYXNl
+X2xvY2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKKwkJdHBtX3Rpc19yZWxpbnF1aXNoX2xv
+Y2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKIAkJcmV0dXJuIHJjOwogCX0KIAogCS8qIENs
+ZWFyIGFsbCBleGlzdGluZyAqLwogCXJjID0gdHBtX3Rpc193cml0ZTMyKHByaXYsIFRQTV9JTlRf
+U1RBVFVTKHByaXYtPmxvY2FsaXR5KSwgaW50X3N0YXR1cyk7CiAJaWYgKHJjIDwgMCkgewotCQly
+ZWxlYXNlX2xvY2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKKwkJdHBtX3Rpc19yZWxpbnF1
+aXNoX2xvY2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKIAkJcmV0dXJuIHJjOwogCX0KIApA
+QCAtODMwLDExICs4NTUsMTEgQEAgc3RhdGljIGludCB0cG1fdGlzX3Byb2JlX2lycV9zaW5nbGUo
+c3RydWN0IHRwbV9jaGlwICpjaGlwLCB1MzIgaW50bWFzaywKIAlyYyA9IHRwbV90aXNfd3JpdGUz
+Mihwcml2LCBUUE1fSU5UX0VOQUJMRShwcml2LT5sb2NhbGl0eSksCiAJCQkgICAgIGludG1hc2sg
+fCBUUE1fR0xPQkFMX0lOVF9FTkFCTEUpOwogCWlmIChyYyA8IDApIHsKLQkJcmVsZWFzZV9sb2Nh
+bGl0eShjaGlwLCBwcml2LT5sb2NhbGl0eSk7CisJCXRwbV90aXNfcmVsaW5xdWlzaF9sb2NhbGl0
+eShjaGlwLCBwcml2LT5sb2NhbGl0eSk7CiAJCXJldHVybiByYzsKIAl9CiAKLQlyZWxlYXNlX2xv
+Y2FsaXR5KGNoaXAsIHByaXYtPmxvY2FsaXR5KTsKKwl0cG1fdGlzX3JlbGlucXVpc2hfbG9jYWxp
+dHkoY2hpcCwgcHJpdi0+bG9jYWxpdHkpOwogCWNsZWFyX2JpdChUUE1fVElTX0lSUV9URVNURUQs
+ICZwcml2LT5mbGFncyk7CiAKIAkvKiBHZW5lcmF0ZSBhbiBpbnRlcnJ1cHQgYnkgaGF2aW5nIHRo
+ZSBjb3JlIGNhbGwgdGhyb3VnaCB0bwpAQCAtOTcwLDggKzk5NSw4IEBAIHN0YXRpYyBjb25zdCBz
+dHJ1Y3QgdHBtX2NsYXNzX29wcyB0cG1fdGlzID0gewogCS5yZXFfY29tcGxldGVfbWFzayA9IFRQ
+TV9TVFNfREFUQV9BVkFJTCB8IFRQTV9TVFNfVkFMSUQsCiAJLnJlcV9jb21wbGV0ZV92YWwgPSBU
+UE1fU1RTX0RBVEFfQVZBSUwgfCBUUE1fU1RTX1ZBTElELAogCS5yZXFfY2FuY2VsZWQgPSB0cG1f
+dGlzX3JlcV9jYW5jZWxlZCwKLQkucmVxdWVzdF9sb2NhbGl0eSA9IHJlcXVlc3RfbG9jYWxpdHks
+Ci0JLnJlbGlucXVpc2hfbG9jYWxpdHkgPSByZWxlYXNlX2xvY2FsaXR5LAorCS5yZXF1ZXN0X2xv
+Y2FsaXR5ID0gdHBtX3Rpc19yZXF1ZXN0X2xvY2FsaXR5LAorCS5yZWxpbnF1aXNoX2xvY2FsaXR5
+ID0gdHBtX3Rpc19yZWxpbnF1aXNoX2xvY2FsaXR5LAogCS5jbGtfZW5hYmxlID0gdHBtX3Rpc19j
+bGtydW5fZW5hYmxlLAogfTsKIApAQCAtMTAwNSw2ICsxMDMwLDggQEAgaW50IHRwbV90aXNfY29y
+ZV9pbml0KHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiwgaW50
+IGlycSwKIAlwcml2LT50aW1lb3V0X21pbiA9IFRQTV9USU1FT1VUX1VTRUNTX01JTjsKIAlwcml2
+LT50aW1lb3V0X21heCA9IFRQTV9USU1FT1VUX1VTRUNTX01BWDsKIAlwcml2LT5waHlfb3BzID0g
+cGh5X29wczsKKwlwcml2LT5sb2NhbGl0eV9jb3VudCA9IDA7CisJbXV0ZXhfaW5pdCgmcHJpdi0+
+bG9jYWxpdHlfY291bnRfbXV0ZXgpOwogCiAJZGV2X3NldF9kcnZkYXRhKCZjaGlwLT5kZXYsIHBy
+aXYpOwogCkBAIC0xMDgzLDE0ICsxMTEwLDE0IEBAIGludCB0cG1fdGlzX2NvcmVfaW5pdChzdHJ1
+Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYsIGludCBpcnEsCiAKIAlp
+bnRtYXNrICY9IH5UUE1fR0xPQkFMX0lOVF9FTkFCTEU7CiAKLQlyYyA9IHJlcXVlc3RfbG9jYWxp
+dHkoY2hpcCwgMCk7CisJcmMgPSB0cG1fdGlzX3JlcXVlc3RfbG9jYWxpdHkoY2hpcCwgMCk7CiAJ
+aWYgKHJjIDwgMCkgewogCQlyYyA9IC1FTk9ERVY7CiAJCWdvdG8gb3V0X2VycjsKIAl9CiAKIAl0
+cG1fdGlzX3dyaXRlMzIocHJpdiwgVFBNX0lOVF9FTkFCTEUocHJpdi0+bG9jYWxpdHkpLCBpbnRt
+YXNrKTsKLQlyZWxlYXNlX2xvY2FsaXR5KGNoaXAsIDApOworCXRwbV90aXNfcmVsaW5xdWlzaF9s
+b2NhbGl0eShjaGlwLCAwKTsKIAogCXJjID0gdHBtX2NoaXBfc3RhcnQoY2hpcCk7CiAJaWYgKHJj
+KQpAQCAtMTEyNCwxMyArMTE1MSwxMyBAQCBpbnQgdHBtX3Rpc19jb3JlX2luaXQoc3RydWN0IGRl
+dmljZSAqZGV2LCBzdHJ1Y3QgdHBtX3Rpc19kYXRhICpwcml2LCBpbnQgaXJxLAogCQkgKiBwcm9w
+ZXIgdGltZW91dHMgZm9yIHRoZSBkcml2ZXIuCiAJCSAqLwogCi0JCXJjID0gcmVxdWVzdF9sb2Nh
+bGl0eShjaGlwLCAwKTsKKwkJcmMgPSB0cG1fdGlzX3JlcXVlc3RfbG9jYWxpdHkoY2hpcCwgMCk7
+CiAJCWlmIChyYyA8IDApCiAJCQlnb3RvIG91dF9lcnI7CiAKIAkJcmMgPSB0cG1fZ2V0X3RpbWVv
+dXRzKGNoaXApOwogCi0JCXJlbGVhc2VfbG9jYWxpdHkoY2hpcCwgMCk7CisJCXRwbV90aXNfcmVs
+aW5xdWlzaF9sb2NhbGl0eShjaGlwLCAwKTsKIAogCQlpZiAocmMpIHsKIAkJCWRldl9lcnIoZGV2
+LCAiQ291bGQgbm90IGdldCBUUE0gdGltZW91dHMgYW5kIGR1cmF0aW9uc1xuIik7CkBAIC0xMTUw
+LDExICsxMTc3LDExIEBAIGludCB0cG1fdGlzX2NvcmVfaW5pdChzdHJ1Y3QgZGV2aWNlICpkZXYs
+IHN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYsIGludCBpcnEsCiAJCQlkZXZfZXJyKCZjaGlwLT5k
+ZXYsIEZXX0JVRwogCQkJCQkiVFBNIGludGVycnVwdCBub3Qgd29ya2luZywgcG9sbGluZyBpbnN0
+ZWFkXG4iKTsKIAotCQkJcmMgPSByZXF1ZXN0X2xvY2FsaXR5KGNoaXAsIDApOworCQkJcmMgPSB0
+cG1fdGlzX3JlcXVlc3RfbG9jYWxpdHkoY2hpcCwgMCk7CiAJCQlpZiAocmMgPCAwKQogCQkJCWdv
+dG8gb3V0X2VycjsKIAkJCWRpc2FibGVfaW50ZXJydXB0cyhjaGlwKTsKLQkJCXJlbGVhc2VfbG9j
+YWxpdHkoY2hpcCwgMCk7CisJCQl0cG1fdGlzX3JlbGlucXVpc2hfbG9jYWxpdHkoY2hpcCwgMCk7
+CiAJCX0KIAl9CiAKQEAgLTEyMjEsMTMgKzEyNDgsMTMgQEAgaW50IHRwbV90aXNfcmVzdW1lKHN0
+cnVjdCBkZXZpY2UgKmRldikKIAkgKiBhbiBlcnJvciBjb2RlIGJ1dCBmb3IgdW5rbm93biByZWFz
+b24gaXQgaXNuJ3QgaGFuZGxlZC4KIAkgKi8KIAlpZiAoIShjaGlwLT5mbGFncyAmIFRQTV9DSElQ
+X0ZMQUdfVFBNMikpIHsKLQkJcmV0ID0gcmVxdWVzdF9sb2NhbGl0eShjaGlwLCAwKTsKKwkJcmV0
+ID0gdHBtX3Rpc19yZXF1ZXN0X2xvY2FsaXR5KGNoaXAsIDApOwogCQlpZiAocmV0IDwgMCkKIAkJ
+CXJldHVybiByZXQ7CiAKIAkJdHBtMV9kb19zZWxmdGVzdChjaGlwKTsKIAotCQlyZWxlYXNlX2xv
+Y2FsaXR5KGNoaXAsIDApOworCQl0cG1fdGlzX3JlbGlucXVpc2hfbG9jYWxpdHkoY2hpcCwgMCk7
+CiAJfQogCiAJcmV0dXJuIDA7CmRpZmYgLS1naXQgYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNf
+Y29yZS5oIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuaAppbmRleCAyZGVlZjExYzg4
+ZGIuLjEzYmRjZjM4ZTU2ZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2Nv
+cmUuaAorKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oCkBAIC05MSw2ICs5MSw4
+IEBAIGVudW0gdHBtX3Rpc19mbGFncyB7CiAKIHN0cnVjdCB0cG1fdGlzX2RhdGEgewogCXUxNiBt
+YW51ZmFjdHVyZXJfaWQ7CisJc3RydWN0IG11dGV4IGxvY2FsaXR5X2NvdW50X211dGV4OworCXVu
+c2lnbmVkIGludCBsb2NhbGl0eV9jb3VudDsKIAlpbnQgbG9jYWxpdHk7CiAJaW50IGlycTsKIAl1
+bnNpZ25lZCBpbnQgaW50X21hc2s7Ci0tIAoyLjM2LjEKCg==
