@@ -2,99 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D088623A4F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916E0623A51
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbiKJDTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S232357AbiKJDUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiKJDTo (ORCPT
+        with ESMTP id S230120AbiKJDUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:19:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CA3286E4;
-        Wed,  9 Nov 2022 19:19:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C2261D2E;
-        Thu, 10 Nov 2022 03:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27236C433D6;
-        Thu, 10 Nov 2022 03:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668050382;
-        bh=lEvNPQT64JP784ZbtlJ2vRiQt5VXmBZWy37oJLq+9Yk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lrc9jPwfm5wGLhnQjkl7vdG9A7eP3u7lsFf8egWyJF4miGX0qRqPnopIg0SHsKR37
-         ic+zwMLPgK6+Q61c7SnN28o7e4lx+TjvwPIuKqrmguV41f+ohZb6RcT5pfeAHsi7vl
-         OSvzBT7PlyaYFxCW6LUTi2h9XIMN2Knd7v7F9nLDGmn33FFA2IG6kq3r4d/eThHxsc
-         FKdkE6U38d3+2N2mlxwAMWe21fXR82N/yLpJ99xeL0kvxFPMh4X+bMMta3ISYXl7Dd
-         u6PWtqcB0RwTDyMic9P1HqLboUWP+uu6DEokI0tznZF3fh1kDTWJhH/amCzRMNLvtm
-         Na04cS58cmSPw==
-Date:   Wed, 9 Nov 2022 19:19:41 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        vigneshr@ti.com, srk@ti.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ethernet: ti: cpsw_ale: optimize
- cpsw_ale_restore()
-Message-ID: <20221109191941.6af4f71d@kernel.org>
-In-Reply-To: <20221108135643.15094-1-rogerq@kernel.org>
-References: <20221108135643.15094-1-rogerq@kernel.org>
+        Wed, 9 Nov 2022 22:20:30 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E2D2B180;
+        Wed,  9 Nov 2022 19:20:28 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1osy6N-00CPAa-1e; Thu, 10 Nov 2022 11:20:16 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 10 Nov 2022 11:20:15 +0800
+Date:   Thu, 10 Nov 2022 11:20:15 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     liulongfang <liulongfang@huawei.com>
+Cc:     wangzhou1@hisilicon.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto/hisilicon: Add null judgment to the callback
+ interface
+Message-ID: <Y2xt7/6WGN+uthpL@gondor.apana.org.au>
+References: <YzZZTsIHLSkuufeb@gondor.apana.org.au>
+ <717adf23-3080-5041-14ed-6ab5dcaddbf9@huawei.com>
+ <Y1tTLAEi7ukUCCmB@gondor.apana.org.au>
+ <a1229856-fbe4-9ae7-5789-332ed0af87eb@huawei.com>
+ <Y2TWpyynYMyStKRX@gondor.apana.org.au>
+ <d914a099-06ef-acfe-f394-f4790a821598@huawei.com>
+ <Y2oodE+5us++mbSl@gondor.apana.org.au>
+ <df561fbe-12eb-25b0-2173-a7ffb3bfd53a@huawei.com>
+ <Y2twbHyQkTMoTz+O@gondor.apana.org.au>
+ <32686c5b-04b2-7103-bf2e-113db2315ef4@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32686c5b-04b2-7103-bf2e-113db2315ef4@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  8 Nov 2022 15:56:43 +0200 Roger Quadros wrote:
-> If an entry was FREE then we don't have to restore it.
+On Thu, Nov 10, 2022 at 10:03:53AM +0800, liulongfang wrote:
+.
+> This problem occurs in the application code of the encryption usage scenario
+> (unfortunately, these codes are not open to the public and cannot be given to you),
 
-Motivation? Does it make the restore faster?
+Are you saying this requires out-of-tree kernel code to trigger?
 
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> ---
-> 
-> Patch depends on
-> https://lore.kernel.org/netdev/20221104132310.31577-3-rogerq@kernel.org/T/
-> 
->  drivers/net/ethernet/ti/cpsw_ale.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/ti/cpsw_ale.c b/drivers/net/ethernet/ti/cpsw_ale.c
-> index 0c5e783e574c..41bcf34a22f8 100644
-> --- a/drivers/net/ethernet/ti/cpsw_ale.c
-> +++ b/drivers/net/ethernet/ti/cpsw_ale.c
-> @@ -1452,12 +1452,15 @@ void cpsw_ale_dump(struct cpsw_ale *ale, u32 *data)
->  	}
->  }
->  
-> +/* ALE table should be cleared (ALE_CLEAR) before cpsw_ale_restore() */
+Then you should fix that out-of-tree code.
 
-Maybe my tree is old but I see we clear only if there is a netdev that
-needs to be opened but then always call ale_restore(). Is that okay?
-
-I'd also s/should/must/ 
-
->  void cpsw_ale_restore(struct cpsw_ale *ale, u32 *data)
->  {
-> -	int i;
-> +	int i, type;
->  
->  	for (i = 0; i < ale->params.ale_entries; i++) {
-> -		cpsw_ale_write(ale, i, data);
-> +		type = cpsw_ale_get_entry_type(data);
-> +		if (type != ALE_TYPE_FREE)
-> +			cpsw_ale_write(ale, i, data);
->  		data += ALE_ENTRY_WORDS;
->  	}
->  }
-
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
