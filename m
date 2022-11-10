@@ -2,123 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E83062409D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:02:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB1A624098
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiKJLCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S230121AbiKJLBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiKJLBy (ORCPT
+        with ESMTP id S229556AbiKJLBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:01:54 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206766C71C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:01:51 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-370547b8ca0so12389447b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:01:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bmHpbHS5doLrhzAjJPWJ0TWG+6ktMdA7UyRQfP5yVLQ=;
-        b=PLbZrq9bLdievV0a3Mb3BaXEmA0lIlXEss9RAzy1kIWFQcyoX58mVA9H25RToeQszv
-         5YvjuWvLH/5NrA6TyG40gt3N0kKc23/A76AT88SS5ZTAe2T4n9e5jWLXGZpGYLIXjEqQ
-         Khc8dLGZ8N7MaH3FLaoh08tpHLRjoS7QxA8kr5/5fJgId7Xy8vZ/wOwRGZwr9f6d4282
-         +pnfoWEXAiSc54Zb5MGIncElzoGgObabXLveU3e1AC2ar9FWmubdTRQJwgj+eSJ1gRxV
-         gbiBAeXoiiYsuVJihJyxE1Ps8zJ7mYhKmo3OErMbadxuKY3GcSaJWPGlaCt1AsgWghiJ
-         V5xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bmHpbHS5doLrhzAjJPWJ0TWG+6ktMdA7UyRQfP5yVLQ=;
-        b=ylbhNigC1YgHXL5lWvehp6Hg4CItJuOfwPD16Xohzw3Nox30usP9xV76rBj+Re2S1H
-         BxJ22UyQ0N0ijrB6TLdvnTMZcm8usp7EZNpC3HUeHsT7nWsPQDuGUleDJu0ocxJnL/R6
-         rpadoT42StlBUq1PsW9yBkjU4wu1ksezh8RZTK4GOGx94SbOnENgHU5hHOUF4Ox+tlUu
-         Gh6M482tNmrRbEQvKWaJbor7uJwgUUTGCc5jIx9rPV8BbAX6rP0dSu8EjGDVwA8AIqAd
-         SI2QwYhc2JaW6Xdt5/zs87vdVMgfV5FFMianWZfsrEmb/59ZsSQFXKteDPMK50Zfh2sq
-         s/5Q==
-X-Gm-Message-State: ACrzQf0zEzVN3KLG34Wo6PVcAar0KFjWCAqsdCunrVMAYSxN2wMRgJY2
-        SE7w6TYbu5tSM2n7HmRuCCADRVYE91Xjf0vBZi2eiQ==
-X-Google-Smtp-Source: AMsMyM4R1yv3ctd1jPaIemb0nxA+rY5vVqfKSKgK+YNO+lpbSGR7xqL6G42PREeei1JWOBTJSsRAC/uEYrLUaBmIUU0=
-X-Received: by 2002:a0d:da03:0:b0:368:5712:5795 with SMTP id
- c3-20020a0dda03000000b0036857125795mr61929838ywe.428.1668078109722; Thu, 10
- Nov 2022 03:01:49 -0800 (PST)
-MIME-Version: 1.0
-References: <00000000000058d01705ecddccb0@google.com> <CAG_fn=WAyOc+1GEC+P3PpTM2zLcLcepAX1pPXkj5C6aPyrDVUA@mail.gmail.com>
- <Y2lGu/QTIWNpzFI3@sol.localdomain> <CAG_fn=VQBv-sgPhT0gLVChAtMNx0F3RcQYDKdvhBL4mBpiDkFA@mail.gmail.com>
- <CAG_fn=VPvdHxQc3xm5xkqgFq3uo5oTU_w5vyMj-qQD7DvwQ4BA@mail.gmail.com> <Y2qUylpsZcJ7HF0Z@sol.localdomain>
-In-Reply-To: <Y2qUylpsZcJ7HF0Z@sol.localdomain>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 10 Nov 2022 12:01:13 +0100
-Message-ID: <CAG_fn=WVUmodhyY+bNyKWC6BM5gXaq3fguw70ngsjZWc4mXkPg@mail.gmail.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in pagecache_write
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     syzbot <syzbot+9767be679ef5016b6082@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+        Thu, 10 Nov 2022 06:01:36 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D130962CE;
+        Thu, 10 Nov 2022 03:01:35 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2AA9CjCt032607;
+        Thu, 10 Nov 2022 11:01:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=GdD9dZ9DG3YUE6VnCGcC1XtrAYtPWih2GZSB26eCFg4=;
+ b=Ikk8k4wxqRkYdFLyR9LeHOMHZpIOGbMiPwAIPXylD72To2QvhPKo30lecrqLufpDwRNL
+ KAGfNLirIk+5XRxAw1BKdpvLRGbE3CDv/1QgHt+TnDto0JqQpJB6ii+O5caAEVNBFXwz
+ /7PjCF81PzBUzxe29wD5bPHzg9Djgrn+OLyB9HKL7sCPPon5w+CkaZE2woPtWNfin2oL
+ Td1+HPekVPsBBDEXygP2N/XSQjTuHIMBaSwAsiZI8+NPXtNhSe2PtpqzaegFc6930Kkv
+ Yfp5EjlKAA9y4nJN8Hmlg4qNM+1gDk8BcyKcnufqJvrBq9OpfAxuPAois6zjwLTAR/F5 fw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3krxf9ar1y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 11:01:30 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AAAhnK7004770;
+        Thu, 10 Nov 2022 11:01:30 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3krxf9ar0m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 11:01:30 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AAAqq0j020160;
+        Thu, 10 Nov 2022 11:01:27 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 3kngmqn4qy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 11:01:27 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AAB1OLT197320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Nov 2022 11:01:24 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 600B1A4053;
+        Thu, 10 Nov 2022 11:01:24 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B133CA4051;
+        Thu, 10 Nov 2022 11:01:23 +0000 (GMT)
+Received: from li-7e0de7cc-2d9d-11b2-a85c-de26c016e5ad.ibm.com (unknown [9.171.16.172])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Nov 2022 11:01:23 +0000 (GMT)
+Message-ID: <31fcea80f54c5f53012489f29ebedba775672919.camel@linux.ibm.com>
+Subject: Re: [PATCH 5/5] s390/uaccess: add cmpxchg_user_key()
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+Date:   Thu, 10 Nov 2022 12:01:23 +0100
+In-Reply-To: <Y2womHanaMzETfwU@osiris>
+References: <20221012205609.2811294-1-scgl@linux.ibm.com>
+         <20221012205609.2811294-2-scgl@linux.ibm.com> <Y2J61LWSV+HolIeT@osiris>
+         <Y2J8axs+bcQ2dO/l@osiris>
+         <f604b6038c4a8bad5123e1f1f14b15c2190f28e9.camel@linux.ibm.com>
+         <Y2womHanaMzETfwU@osiris>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9SPW37mYrHRmqXz2ywNGmzPKwmqvIf5a
+X-Proofpoint-GUID: aQv6nTzK71vM5pzWW_2nJRhG863TYoNO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-10_07,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211100078
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 6:41 PM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Tue, Nov 08, 2022 at 10:08:36AM +0100, 'Alexander Potapenko' via syzka=
-ller-bugs wrote:
-> > > >
-> > > > Anyway, this patch doesn't hurt, I suppose.  Can please you send it=
- out as a
-> > > > formal patch to linux-ext4?  It would be easy for people to miss th=
-is patch
-> > > > buried in this thread.  Also, can you please send a patch to linux-=
-f2fs-devel
-> > > > for the same code in fs/f2fs/verity.c?
-> > >
-> > > Will do!
-> >
-> > Shall I also initialize fsdata here:
-> >
-> > $ git grep 'void \*fsdata;'
-> > fs/affs/file.c:         void *fsdata;
-> > fs/ext4/verity.c:               void *fsdata;
-> > fs/f2fs/verity.c:               void *fsdata;
-> > fs/hfs/extent.c:                void *fsdata;
-> > fs/hfsplus/extents.c:           void *fsdata;
-> > fs/ocfs2/mmap.c:        void *fsdata;
->
-> Yes, it looks like they all need this.  Except maybe ocfs2?  It's hard to=
- tell.
+On Wed, 2022-11-09 at 23:24 +0100, Heiko Carstens wrote:
+> On Wed, Nov 09, 2022 at 04:46:29PM +0100, Janis Schoetterl-Glausch wrote:
+> > On Wed, 2022-11-02 at 15:19 +0100, Heiko Carstens wrote:
+> > > +	case 1: {
+> > > +		unsigned int prev, tmp, shift;
+> > > +
+> > > +		shift = (3 ^ (address & 3)) << 3;
+> > > +		address ^= address & 3;
+> > > +		asm volatile(
+> > > +			"	spka	0(%[key])\n"
+> > > +			"	sacf	256\n"
+> > > +			"0:	l	%[prev],%[address]\n"
+> > > +			"1:	nr	%[prev],%[mask]\n"
+> > > +			"	lr	%[tmp],%[prev]\n"
+> > > +			"	or	%[prev],%[old]\n"
+> > > +			"	or	%[tmp],%[new]\n"
+> > > +			"2:	cs	%[prev],%[tmp],%[address]\n"
+> > > +			"3:	jnl	4f\n"
+> > > +			"	xr	%[tmp],%[prev]\n"
+> > > +			"	nr	%[tmp],%[mask]\n"
+> > 
+> > Are you only entertaining cosmetic changes to cmpxchg.h?
+> 
+> I fail to parse what you are trying to say. Please elaborate.
+> 
+> > The loop condition being imprecise seems non-ideal.
+> 
+> What exactly is imprecise?
 
-For ocfs2 the begin/end functions are always the same, so it's harder
-to mess fsdata up.
-Guess we can say for now that __ocfs2_page_mkwrite() never passes an
-uninitialized variable to another function.
+The loop retries the CS if bits outside the target byte changed instead
+of retrying until the target byte differs from the old value.
+So if you attempt to exchange (prev_left_0 old_byte prev_right_0) and 
+that fails because the word at the address is (prev_left_1 x prev_right_1)
+where both x != old_byte and one of the prev_*_1 values differs from the respective
+prev_*_0 value, the CS is retried. If there were a native 1 byte compare and swap,
+the exchange would just fail here. Instead the loop retries the CS until the margin
+values are stable and it can infer from that that the CS failed because of the target value.
+(Assuming that doesn't change to the old_byte value.)
 
-> - Eric
+It's not a problem, but it struck me as non-ideal, which is why for v2 I inverted the mask
+after using it to punch the hole for the old/new values.
+Then you can use it to test if bits inside the target byte differ.
 
+That's why I asked about cmpxchg.h. If you don't want non-cosmetic changes to the existing
+cmpxchg function and consistency of the new key checked function, then obviously the loop
+condition needs to be the same.
+> 
+> > > +			  [key] "a" (key),
+> > 
+> > Why did you get rid of the << 4 shift?
+> > That's inconsistent with the other uaccess functions that take an access key.
+> 
+> That's not only inconsistent, but also a bug.
+> Thank you for pointing this out. Will be fixed.
 
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Well, you could pass in the shifted key as argument, but yeah.
