@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB2E624149
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B958624152
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiKJLWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S229601AbiKJLYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiKJLWj (ORCPT
+        with ESMTP id S229575AbiKJLYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:22:39 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26EC701A4;
-        Thu, 10 Nov 2022 03:22:38 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AA9FLHi004698;
-        Thu, 10 Nov 2022 05:22:28 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=04hU+ISPUch+ZRCv1Q+3n72ZEEiUP6vT4o1xW8JdjnU=;
- b=SUaY1jm+sVK6BkEOlWU3D3VH0U9/7lNDlbBOvsEYO5LnA1S4mLKhL/rSyRTkv9hNFGOP
- +QGBlmNB1T+B6HeHCuIZhzJuGu/jPRgjStB5KTjfsi3vzjScBZp1AHd+p7eaGRLawSdo
- liMwGW3nDdlal0tsvcVlzfjE8g2gMSFgZzrMx4bubtG50XCK75hjw6M2UkF+iV1LEjBB
- yIE0veU2i8spbFLHlDOZ5dNYCbjIKqfgh3mnzlo5YAQQb4rfLDrWhUGf73Suklhx+p4U
- 78+hKeIsRcLxJou07Ct6sykUBhkAESkSQC4yNa+Elzo5H9AfySn6JIn3QZzvQ3b1fLxS fA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3knm8pek27-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 05:22:28 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.15; Thu, 10 Nov
- 2022 05:22:26 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.15 via Frontend
- Transport; Thu, 10 Nov 2022 05:22:27 -0600
-Received: from [198.90.251.111] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0C8C3476;
-        Thu, 10 Nov 2022 11:22:27 +0000 (UTC)
-Message-ID: <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
-Date:   Thu, 10 Nov 2022 11:22:26 +0000
+        Thu, 10 Nov 2022 06:24:09 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69664046B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:24:08 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id r203-20020a1c44d4000000b003cfa97c05cdso1437456wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:24:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Mo/HZpj8w38ANVpEVSro9TPOmrz4MXgGYRbhOeboqg=;
+        b=Btd6nmuMr4PsvGpdVwfteWzw4NkDlkaneWAUfCD8UO4/JuLHh9wcR+JtHPs+sPRpOy
+         KxyTIeppbNF955qujMWbr365v6mdM546i8zMJp3Z1bL51oAY3vyEvfY9QOMWpz8KGKb1
+         DYP/mdtmwLipFJeX2f+M4AeSNFiJQLlENqDuTLIDYo5v5lk8nNSoc9+YD+vUTII9noCq
+         0H9TOx7I28qDKwNjvlt+iWQMmFkKYq/4EkuBsOmeX7a+EbJ2ETLJFQLuisfEHx1SRB2V
+         73oZFS8m6J845TxgIJmkKdyBrikZvSicpAh5dE3A0Sj03nHCwF9SoD4HoqoEtySd0TBf
+         BeLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Mo/HZpj8w38ANVpEVSro9TPOmrz4MXgGYRbhOeboqg=;
+        b=553QwjWYTxJan+RtDBMrcbJY+YRvOSYg4+AYrAXexv33JPe474u2ah+x5ADCuWY00/
+         GhZjA5ziZoj1/AXdIaSePgSqj+VlIv7z3Et5OmU9cWX9214ZPWD0UrpSxMiyRbTMSI8x
+         FKLHphSnyXc5l+yw8/5pK3RhQh9u74arTLqFKCx8t8SPzpj81bv6Ow89sH2OQKmt9Sqq
+         sF3bSaGh8WsvsALuoGA21yKQEdkCIPq7Mz5Qbcr6qr+u/zg1Es1xp+v13HFQVYeAjqHp
+         nLm16r17Ys+QmD+AQm0Yl27ORFW+i4r0Rpye/g3XXfXMa9dJ8EkjAKjAVxNPwSuJ3409
+         TJgQ==
+X-Gm-Message-State: ANoB5pl1IiJoiuum9y8JB0NDNtRLbVI7eUo6gU5SPtB5zs4ZPYmx/ZtI
+        RwMXGaz/m7XhLJCsg0VuAQw=
+X-Google-Smtp-Source: AA0mqf7a4QVTKL4NLbGglhdl2KfKEyVq2aRSN6y8tzERBF/mhOqgcSzHi05o3QOaAIUS6GyjPH/GQg==
+X-Received: by 2002:a05:600c:3049:b0:3cf:a985:767d with SMTP id n9-20020a05600c304900b003cfa985767dmr14659772wmh.32.1668079447504;
+        Thu, 10 Nov 2022 03:24:07 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05600c19c600b003b497138093sm5312260wmq.47.2022.11.10.03.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 03:24:07 -0800 (PST)
+Date:   Thu, 10 Nov 2022 14:24:03 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Jacob Bai <jacob.bai.au@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] staging: rtl8192e: rename tables in r8192e_hwimg.c
+Message-ID: <Y2zfU+Cw0/odYATm@kadam>
+References: <cover.1668075486.git.jacob.bai.au@gmail.com>
+ <01eb4d9cb22be5f76aa39eedd406577cdfd9f486.1668075486.git.jacob.bai.au@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic
- CS48L31/32/33 codecs
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
-        <broonie@kernel.org>, <tglx@linutronix.de>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20221109165331.29332-1-rf@opensource.cirrus.com>
- <20221109165331.29332-10-rf@opensource.cirrus.com>
- <87mt8zutib.wl-maz@kernel.org>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <87mt8zutib.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: 8S_O80bx2UQ4PY8ndGbnWR4MbPtL4s5G
-X-Proofpoint-GUID: 8S_O80bx2UQ4PY8ndGbnWR4MbPtL4s5G
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01eb4d9cb22be5f76aa39eedd406577cdfd9f486.1668075486.git.jacob.bai.au@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 08:02, Marc Zyngier wrote:
-> On Wed, 09 Nov 2022 16:53:28 +0000,
-> Richard Fitzgerald <rf@opensource.cirrus.com> wrote:
->>
->> The Cirrus Logic CS48L31/32/33 audio codecs contain a programmable
->> interrupt controller with a variety of interrupt sources, including
->> GPIOs that can be used as interrupt inputs.
->>
->> This driver provides the handling for the interrupt controller. As the
->> codec is accessed via regmap, the generic regmap_irq functionality
->> is used to do most of the work.
->>
-> 
-> I cannot spot a shred of interrupt controller code in there. This
+Look at how these defines are used.  Take RTL8192E_PHY_REG_ARRAY_LEN
+as an example.
 
-It is providing support for handling an interrupt controller so that
-other drivers can bind to those interrupts. It's just that regmap
-provides a lot of generic implementation for SPI-connected interrupt
-controllers so we don't need to open-code all that in the
-irqchip driver.
+On Thu, Nov 10, 2022 at 09:35:10PM +1100, Jacob Bai wrote:
+> +u32 RTL8192E_PHY_REG_ARRAY[RTL8192E_PHY_REG_ARRAY_LEN] = {0x0,};
+> +#define RTL8192E_PHY_REG_ARRAY_LEN 1
+> +extern u32 RTL8192E_PHY_REG_ARRAY[RTL8192E_PHY_REG_ARRAY_LEN];
+> +#define PHY_REGArrayLength			RTL8192E_PHY_REG_ARRAY_LEN
 
-> belongs IMO to the MFD code.
+It's only used to create the PHY_REGArrayLength define.  Layers upon
+layers of indirection.  Get rid of the RTL8192E_PHY_REG_ARRAY_LEN
+completely just do:
 
-We did once put interrupt support in MFD for an older product line but
-the MFD maintainer doesn't like the MFD being a dumping-ground for
-random other functionality that have their own subsystems.
+#define PHY_REGArrayLength 1
 
->  It is also a direct copy of the existing
-> irq-madera.c code, duplicated for no obvious reason.
+Except get rid of that as well and use ARRAY_SIZE().
 
-It's not a duplicate. The register map of this device is different
-(different addressing, 32-bit registers not 16-bit)
+What I'm saying is don't send a v6 of this patch.  Just step back and
+try to figure out how to get rid of all this code instead of renaming
+the variable.s
 
-> 
-> 	M.
-> 
+regars,
+dan carpenter
+
