@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6A86239FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBDA623A04
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiKJCsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S232558AbiKJCth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbiKJCs2 (ORCPT
+        with ESMTP id S232549AbiKJCte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:48:28 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E192BE3D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:48:27 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id h193so442500pgc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 18:48:27 -0800 (PST)
+        Wed, 9 Nov 2022 21:49:34 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515C4B1E
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:49:33 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id v8so406285qkg.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 18:49:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e7eUyiQ6IzU2+8YpPxlxYGEz6hnrs4cMH/uVBORMyPA=;
-        b=hJj2r8CBurme6Ps/PCRGDQ3Ut2BotHl6PwfMBtsW7ln7DRdh0pA3cM5hiaEWBSqlVP
-         SY66mlbXOKxsctjgeY4XX4nHLI2vM3O2SKr6OqdnrVRYFEdos4rJ9QHklqnYLqaHG5aN
-         /WJeRVBHALT+4aBNRJ8FpvYsP2q+OydgmEW3BojR3++p3aWiGlb8agop3By+kFGHXJo2
-         oEsKLhzBRhbwc0fFfqJWkjRMUS1jm4kP+P/WCLgCaEpSyMurjI1dK61vyWeybyzTsmP7
-         80cfVi/G89288QVex5RaQ/VzondOZ4PCka2oSB8tOAWBYGu71bOhMV85fxIUh4Od3Oyo
-         YnnA==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6TexcarRbXmqxk9wL/ILQGc5M5ZNt/RsOVA+Ap3ji0g=;
+        b=RSnomFS+DpxFQ06pn86pqBbEYB/57ZUBxzIpuydZoXglzD5HpP3WFKoAo55bDZFkV/
+         7sKsp3at97zghtT7UozO7c2F2lPnSuGPgXU/Iy6AHVTMNYr+IKkshzzK81p5+zJ1z+zI
+         Vu1u0/CuV763qShcU1xpOasxEaGKn7sjbn6JjPDCM367Eu9SH/Eeb/sfGr58z6LlhmbC
+         9q+6m0y3FEUSM0vtlMDW2ixCYuJu6RlkrMUpbbXJC8xmHJYwFEfGIOXfcklPN2Cmpnln
+         CF8gy/JjUgWsfoiDcnfoEWnvMZYOAjHDmbVaezszHY8wwKDyFmJkq3iahqbami6YT1VA
+         1AYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=e7eUyiQ6IzU2+8YpPxlxYGEz6hnrs4cMH/uVBORMyPA=;
-        b=kGrymT7c9Nu4ODvd/Mk8EDIW/eP9GCBrHG1JuULqBEPbRSnifbyTBHcszwTuuGQ5Al
-         rT6DmdBr5JKtaUNdZPKPIJ/mC3WO0R6TqJHgg5uNYNvOV7Q1PPOPDdiIKXgZjrcl1RML
-         RB+vhnDtqHaCYwpLQL25RCxgdO1QyWBnDjbAztpl5+rSW/4r3D/PJT14araZiOQrwRUI
-         T/1F5zLjSwktEibVn1JksML++xjLwLPwR0O7cweVFn+oXhBS9XMg+aD6cb7JODsc6wiB
-         e+Qv9GQybMiLmVHHmxISsAqm4ypcw2enRRKtcVg1hAldXrR9FJ9ajPCjWpQk1npcOgNZ
-         XGYA==
-X-Gm-Message-State: ACrzQf1HQ3yZvmvkej6Swe5JPyWFB1l4aU0unl+LMVlg9uaUuBnDiqhY
-        aH4RcsLwR6vwCEQtY44o0kI=
-X-Google-Smtp-Source: AMsMyM52mojWHoQ9X8h45pTN2+QLha+lM23Z556YFa768OQUBcX3vm/KoCOk34Z0LACmhNVGf8hYJQ==
-X-Received: by 2002:a65:4b88:0:b0:44e:74d0:e843 with SMTP id t8-20020a654b88000000b0044e74d0e843mr1616131pgq.95.1668048506995;
-        Wed, 09 Nov 2022 18:48:26 -0800 (PST)
-Received: from [10.114.96.16] ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id ij26-20020a170902ab5a00b0017f6c9622b9sm9744756plb.183.2022.11.09.18.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 18:48:26 -0800 (PST)
-Message-ID: <7113d66a-9792-b026-cece-5c1b21dd989d@gmail.com>
-Date:   Thu, 10 Nov 2022 10:48:24 +0800
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6TexcarRbXmqxk9wL/ILQGc5M5ZNt/RsOVA+Ap3ji0g=;
+        b=vRV3/pTbKD+WejA4R4jb7xYO+/QNUXSZz2U7kfUDuowNFPUoumELpuRYsYBUAhC9E8
+         onCrcdz4cqIKHUW64lBcssWddRGFuAps1/Uf8Jd5AW4m3J6AS9iVKgO8SURhkbZifvhe
+         ipPqp3ebcWdHC8F4KBEVFp5WNbb6K0peB/y/cP/wpOxBN9co+k+LIoyLjAA2W6UiW+W2
+         e2n2jAWaqEsvL4wpumXl4DUBN2MRej0vXmfyOeQH4Wv4HhQkPIF4JKotYtXKlZvscOQZ
+         lOlGFxEybg49kww13V2Cqmp5240R+h5XWZuFppUWMPPcEFhlIXycnd9ezdcbL0QIpHBU
+         Mpog==
+X-Gm-Message-State: ANoB5plULJnEyf6OsRmHcaMWwyZtw6LW5E68Bk+T/oDA8t3NI6nrhIP8
+        8hDly7AsmAt23MPdmXZRHiIQlg==
+X-Google-Smtp-Source: AA0mqf5FmcgaLL3XZUshwPdzBGYydVkpziELkDAGxVKJRzGZg+afKWMa0WH0YqlRUzMlyR5uj1wGmQ==
+X-Received: by 2002:a37:de17:0:b0:6fa:d987:a574 with SMTP id h23-20020a37de17000000b006fad987a574mr13720155qkj.329.1668048572349;
+        Wed, 09 Nov 2022 18:49:32 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id h3-20020a05620a244300b006fa4cac54a4sm11271564qkn.133.2022.11.09.18.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 18:49:31 -0800 (PST)
+Date:   Wed, 9 Nov 2022 18:49:29 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 2/3] mm,thp,rmap: simplify compound page mapcount
+ handling
+In-Reply-To: <20221105195115.2d5yvvepdjsqjmmv@box>
+Message-ID: <7f9e1dfb-64f7-62a1-f35-988825303814@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com> <47ad693-717-79c8-e1ba-46c3a6602e48@google.com> <20221105195115.2d5yvvepdjsqjmmv@box>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] mm/vmscan: simplify the nr assignment logic for pages to
- scan
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Chao Xu <Chao.Xu9@zeekrlife.com>
-References: <20221109070416.620887-1-Chao.Xu9@zeekrlife.com>
- <20221109171952.826d991327e07319c5eb8cd3@linux-foundation.org>
-From:   Chao Xu <amos.xuchao@gmail.com>
-In-Reply-To: <20221109171952.826d991327e07319c5eb8cd3@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,41 +86,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 5 Nov 2022, Kirill A. Shutemov wrote:
+> On Wed, Nov 02, 2022 at 06:51:38PM -0700, Hugh Dickins wrote:
+> 
+> Thanks for doing this!
+> 
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-在 2022/11/10 9:19, Andrew Morton 写道:
-> On Wed,  9 Nov 2022 15:04:16 +0800 Chao Xu <amos.xuchao@gmail.com> wrote:
->
->> By default the assignment logic of anonymouns or file inactive
->> pages and active pages to scan using the same duplicated code
->> snippet. To simplify the logic, merge the same part.
->>
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -5932,14 +5932,11 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
->>   		 * scan target and the percentage scanning already complete
->>   		 */
->>   		lru = (lru == LRU_FILE) ? LRU_BASE : LRU_FILE;
->> -		nr_scanned = targets[lru] - nr[lru];
->> -		nr[lru] = targets[lru] * (100 - percentage) / 100;
->> -		nr[lru] -= min(nr[lru], nr_scanned);
->> -
->> -		lru += LRU_ACTIVE;
->> -		nr_scanned = targets[lru] - nr[lru];
->> -		nr[lru] = targets[lru] * (100 - percentage) / 100;
->> -		nr[lru] -= min(nr[lru], nr_scanned);
->> +		for ( ; lru <= lru + LRU_ACTIVE; lru++) {
-> The "lru++" implicitly assumes that LRU_ACTIVE=1.  That happens to be
-> the case, but a more accurate translation of the existing code would
-> use "lru += LRU_ACTIVE" here, yes?
-By default the value of LRU_ACTIVE is 1，but if someone change it one day, I
-use "lru++" maybe facing some exceptions, which is not robust. So I 
-agree with
-that "lru += LRU_ACTIVE" is appropriate instead of "lru++". I will send 
-a new patch.
->> +			nr_scanned = targets[lru] - nr[lru];
->> +			nr[lru] = targets[lru] * (100 - percentage) / 100;
->> +			nr[lru] -= min(nr[lru], nr_scanned);
->> +		}
->>   
->>   		scan_adjusted = true;
->>   	}
+Thanks!
+
+> 
+> And sorry again for PageDoubleMap() :/
+
+It did serve a real purpose, but I always found it hard to live with,
+and I'm glad that you're happy it's gone too :)
+
+> 
+> Minor nitpick and a question below.
+> 
+> > @@ -829,12 +829,20 @@ static inline int folio_entire_mapcount(struct folio *folio)
+> >  
+> >  /*
+> >   * Mapcount of compound page as a whole, does not include mapped sub-pages.
+> > - *
+> > - * Must be called only for compound pages.
+> > + * Must be called only on head of compound page.
+> >   */
+> > -static inline int compound_mapcount(struct page *page)
+> > +static inline int head_compound_mapcount(struct page *head)
+> >  {
+> > -	return folio_entire_mapcount(page_folio(page));
+> > +	return atomic_read(compound_mapcount_ptr(head)) + 1;
+> > +}
+> > +
+> > +/*
+> > + * Sum of mapcounts of sub-pages, does not include compound mapcount.
+> > + * Must be called only on head of compound page.
+> > + */
+> > +static inline int head_subpages_mapcount(struct page *head)
+> > +{
+> > +	return atomic_read(subpages_mapcount_ptr(head));
+> >  }
+> >  
+> >  /*
+> 
+> Any particular reason these two do not take struct folio as an input?
+> It would guarantee that it is non-tail page. It will not guarantee
+> large-folio, but it is something.
+
+The actual reason is that I first did this work in a pre-folio tree;
+and even now I am much more at ease with compound pages than folios.
+
+But when I looked to see if I ought to change them, found that the
+only uses are below in this header file, or in __dump_page() or in
+free_tail_pages_check() - low-level functions, page-oriented and
+obviously on head.  So I wasn't tempted to change them at all.
+
+> 
+> > @@ -1265,8 +1288,6 @@ void page_add_new_anon_rmap(struct page *page,
+> >  		VM_BUG_ON_PAGE(!PageTransHuge(page), page);
+> >  		/* increment count (starts at -1) */
+> >  		atomic_set(compound_mapcount_ptr(page), 0);
+> > -		atomic_set(compound_pincount_ptr(page), 0);
+> > -
+> 
+> It has to be initialized to 0 on allocation, right?
+
+That's right.  I was going to say that I'd commented on this in the
+commit message, but no, it looks like I only commented on the instance
+in hugepage_add_new_new_anon_rmap() (and added the "increment" comment
+line from here to there).
+
+I visited both those functions to add a matching subpages_mapcount
+initialization; then realized that the pincount addition had missed
+the point, initialization to 0 has already been done, and the
+compound_mapcount line is about incrementing from -1 to 0,
+not about initializing.
+
+There are similar places in mm/hugetlb.c, where I did add the
+subpages_mapcount initialization to the compound_pincount and
+compound_mapcount initializations: that's because I'm on shaky ground
+with hugetlb page lifecycle, and not so sure of their status there.
+
+Hugh
