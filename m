@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEE7624A6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830FA624A84
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiKJTQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 14:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S230184AbiKJTUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 14:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKJTQP (ORCPT
+        with ESMTP id S229757AbiKJTUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 14:16:15 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327812CE10;
-        Thu, 10 Nov 2022 11:16:14 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id z1so1738631qkl.9;
-        Thu, 10 Nov 2022 11:16:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qnf+7Iz/AC6v/1QCMpsQVXmtrt+7PcPrgj9ldvBanC4=;
-        b=CwQfgbI4DuFardVNcz0uqADSJZuog7DfOLMB0DlZyNtKNN+/AAvh2LRxwZmgilOF+X
-         I3JtdfoWwEbKsnfFl1ndsT7C54El7cEafRsjlAtAXO38NZfW3+qb142sIyialkF1EuJX
-         UD9EcBweatojlCkpb5Xr8x1O8QBTlj04tsUOUolfhW4n1y8HfrWjaYPTIuvl3/009lpJ
-         8VD2xtqbopwqA/5hMaE58taNq6ZXzAjlMiPwf3GB8QeNFLLnX62bkRAPOXaqF+xn+i1a
-         ef2xc9uWHo3hD/OChu60GI34be8uAb879KS9rVYmyuW06KnyaqoyjtPix72a54DCvkkP
-         PDDw==
+        Thu, 10 Nov 2022 14:20:32 -0500
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E642E0FA;
+        Thu, 10 Nov 2022 11:20:31 -0800 (PST)
+Received: by mail-qv1-f48.google.com with SMTP id c8so2082624qvn.10;
+        Thu, 10 Nov 2022 11:20:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qnf+7Iz/AC6v/1QCMpsQVXmtrt+7PcPrgj9ldvBanC4=;
-        b=oxvEp1pIXOyqHwlZjwPqOap7yZ5UEUw1zLsskIQ38QpN2dX7fmfZTUUmVx2kUTGTr8
-         eG22tZvF61G7opymYCyBcqVtC8Ql73PiRqjzba4VtBmiOwpiPREMIDuCSQU7xNqLYl47
-         C84uybc23mYSaiLpLQEz5Q6jTVNNq/KJEo6JHmd96LkHZJMSw6nPYL/ocNnMcSvOcdIn
-         Ydp4G0ixvM5hgmn3K2Ddr3F2EJbVi6H9gd9xUYd4Jsyoo+wc7jkFf5SJQpSta5c9+YOy
-         ZNRpuBc1m3zMYCkdy+ZQAfJQcC+ueR8BfJqEn7nnaPfzLg33O7Q25Yv3TbFVo8FT8BSm
-         bjnA==
-X-Gm-Message-State: ANoB5plIqbK16/XHvrSJL+SiBEc+VwzOrxkBeMtxhaqdznvTM02xKHd7
-        Ke6aqU5ULwpmEGRrnYabplo=
-X-Google-Smtp-Source: AA0mqf7OmccX74WLnA2RzCh82dTb3yr7TSHjjf0XJGJIW0Rg2zenvqckfbOPuy5mu6rqRnqBVu3XGA==
-X-Received: by 2002:a05:620a:1184:b0:6fb:176e:1dbe with SMTP id b4-20020a05620a118400b006fb176e1dbemr5159880qkk.249.1668107773309;
-        Thu, 10 Nov 2022 11:16:13 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id c8-20020a05620a268800b006eecc4a0de9sm76608qkp.62.2022.11.10.11.16.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 11:16:11 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0D82A27C0054;
-        Thu, 10 Nov 2022 14:16:10 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 10 Nov 2022 14:16:11 -0500
-X-ME-Sender: <xms:-k1tY1fkq_lUw8WWo0FO3vORGR060uvU_plUv0Q2gAIa_hHqkWbrAQ>
-    <xme:-k1tYzN_gPfyVlhC0FPrzsFfKamUsIYQGqcWDiRFMeSuKt_rtS560FOp1WahpLrzB
-    vI9vBwZEJTiw48neg>
-X-ME-Received: <xmr:-k1tY-hSYkjdj3_09XZqbuNlAQ1XOi0gS0nBWbkibMlZ_ZXP15fEosPJ6GYL>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggdduvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:-k1tY-8oHQtArzBVlmDg3PSp1VhU3-Tq9tE36EFd2u7sezkLFKd_pQ>
-    <xmx:-k1tYxvsyCjMkE-Ux7x1_Az9Nd5wkymXhkGQPzQuFc168Tj8sJII5A>
-    <xmx:-k1tY9Fld3VaVygwcT5qo2PTXo56DJMYZuFri-RuMo861WRbCeZXVQ>
-    <xmx:-k1tY3JjGlZ5BYdUkcDQgrSXsY5uDhGSYCZ5LIHiFkooMle3k_qsIQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Nov 2022 14:16:09 -0500 (EST)
-Date:   Thu, 10 Nov 2022 11:16:08 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Niklas Mohrin <dev@niklasmohrin.de>
-Subject: Re: [PATCH v1 23/28] rust: std_vendor: add `dbg!` macro based on
- `std`'s one
-Message-ID: <Y21N+GtGsqzaPSFp@Boquns-Mac-mini.local>
-References: <20221110164152.26136-1-ojeda@kernel.org>
- <20221110164152.26136-24-ojeda@kernel.org>
- <Y208lVCN3VweD5iI@Boquns-Mac-mini.local>
- <CANiq72kR3YZv65NYPx+H57XO7T85kioMWMZajRnk7f+ru-3x+w@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+YBGKTfu6TLq6OsvTGJR+t71TVt0vJcs9iDhz7OHA1o=;
+        b=h/TnhlQit3+0usG12PwpjxiOc/IYbJ4ADi73QrZbk1W3sLJJd+2DxuuHf4S/w2DbNA
+         8eqUI+lPEzIsAEJJEr72Qtr72A9BmYmgSTvGXOpkUiFnhmFOGIDNj42vpbTlRElsJDo8
+         ZC2WfCUjqe+QrTGcLmd0j5+asYKVvM5WlX51oceakKqQZ5jMkKC/kMoDUL+Dwpwg1ETM
+         hsJMRVJa9FUoGuY7wwJhN/zyO5ALWgetMzBiuPa/MrAd05BPyUxdqoFRbdk/jFZ+L8wE
+         KOmhOjcjluO4pMbGG0dTLV8DeOtuFtdYsZ3Lwk7WKPKQcejwRjH1EmTDbYWkLfZLv8Wa
+         xLIw==
+X-Gm-Message-State: ACrzQf1v9gOQUj3Rl6/DvY7GVS1qzgDFQJcmFAgWukCG0NJ2okcEo3fB
+        XnAbyN6fYH6qP9JrZRTEKmNcAQnkKrL+e/udBvYgjWS1
+X-Google-Smtp-Source: AMsMyM4xM18mDWQ0LwAfP6WGTfoheXlOQYA+bO6ijx+JQvmLhV27lg76GbEN1QhBxndCxvdihVHsKKErxaEF/KmDcsA=
+X-Received: by 2002:a05:6214:4517:b0:4b1:a9ac:21de with SMTP id
+ oo23-20020a056214451700b004b1a9ac21demr1706384qvb.119.1668108030271; Thu, 10
+ Nov 2022 11:20:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72kR3YZv65NYPx+H57XO7T85kioMWMZajRnk7f+ru-3x+w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1667792089-4904-1-git-send-email-TonyWWang-oc@zhaoxin.com>
+In-Reply-To: <1667792089-4904-1-git-send-email-TonyWWang-oc@zhaoxin.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Nov 2022 20:20:19 +0100
+Message-ID: <CAJZ5v0ggQOYdCEosCSFFd=09fsH6BbFSgwurDuoBhW+fRKSAqA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/acpi/cstate: Optimize ARB_DISABLE on Centaur CPUs
+To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, CobeChen@zhaoxin.com,
+        TimGuo@zhaoxin.com, LindaChai@zhaoxin.com, LeoLiu@zhaoxin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 08:14:17PM +0100, Miguel Ojeda wrote:
-> On Thu, Nov 10, 2022 at 7:02 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > and I'm almost convinced ;-) Better add the gist of discussion into
-> > comment/document/commit log? Users need to know when to use `dbg!` and
-> > when to use `pr_debug!`, right?
-> 
-> The docs talk about it a bit:
-> 
->     +/// Note that the macro is intended as a debugging tool and therefore you
->     +/// should avoid having uses of it in version control for long periods
->     +/// (other than in tests and similar).
-> 
-> That is the original wording from the standard library, but we can
-> definitely make the rules more concrete on our end with something
+On Mon, Nov 7, 2022 at 4:35 AM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
+>
+> On all recent Centaur platforms, ARB_DISABLE is handled by PMU
+> automatically while entering C3 type state. No need for OS to
+> issue the ARB_DISABLE, so set bm_control to zero to indicate that.
+>
+> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 
-Yeah, having some kernel contexts is better ;-)
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> like:
-> 
->     `dbg!` is intended as a temporary debugging tool to be used during
->     development. Therefore, avoid committing `dbg!` macro invocations
->     into the kernel tree.
-> 
->     For debug output that is intended to be kept, use `pr_debug!` and
->     similar facilities instead.
-> 
+Or x86 maintainers please let me know if you want me to take care of this.
 
-Look good to me, thank you!
+Thanks!
 
-Regards,
-Boqun
-
-> Cheers,
-> Miguel
+> ---
+> Changes in V2:
+>  - fix typo in comments.
+> ---
+>  arch/x86/kernel/acpi/cstate.c | 26 +++++++++++++++++---------
+>  1 file changed, 17 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
+> index 7945eae..da71679 100644
+> --- a/arch/x86/kernel/acpi/cstate.c
+> +++ b/arch/x86/kernel/acpi/cstate.c
+> @@ -52,17 +52,25 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
+>         if (c->x86_vendor == X86_VENDOR_INTEL &&
+>             (c->x86 > 0xf || (c->x86 == 6 && c->x86_model >= 0x0f)))
+>                         flags->bm_control = 0;
+> -       /*
+> -        * For all recent Centaur CPUs, the ucode will make sure that each
+> -        * core can keep cache coherence with each other while entering C3
+> -        * type state. So, set bm_check to 1 to indicate that the kernel
+> -        * doesn't need to execute a cache flush operation (WBINVD) when
+> -        * entering C3 type state.
+> -        */
+> +
+>         if (c->x86_vendor == X86_VENDOR_CENTAUR) {
+>                 if (c->x86 > 6 || (c->x86 == 6 && c->x86_model == 0x0f &&
+> -                   c->x86_stepping >= 0x0e))
+> -                       flags->bm_check = 1;
+> +                   c->x86_stepping >= 0x0e)) {
+> +                       /*
+> +                        * For all recent Centaur CPUs, the ucode will make sure that each
+> +                        * core can keep cache coherence with each other while entering C3
+> +                        * type state. So, set bm_check to 1 to indicate that the kernel
+> +                        * doesn't need to execute a cache flush operation (WBINVD) when
+> +                        * entering C3 type state.
+> +                        */
+> +                       flags->bm_check = 1;
+> +                       /*
+> +                        * For all recent Centaur platforms, ARB_DISABLE is a nop.
+> +                        * Set bm_control to zero to indicate that ARB_DISABLE is
+> +                        * not required while entering C3 type state.
+> +                        */
+> +                       flags->bm_control = 0;
+> +               }
+>         }
+>
+>         if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
+> --
+> 2.7.4
+>
