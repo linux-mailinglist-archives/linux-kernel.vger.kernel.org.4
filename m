@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A678462422D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F3E624235
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiKJMWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:22:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
+        id S230373AbiKJMWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiKJMVx (ORCPT
+        with ESMTP id S230511AbiKJMVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:21:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFE171F30;
-        Thu, 10 Nov 2022 04:21:52 -0800 (PST)
-Date:   Thu, 10 Nov 2022 12:21:50 -0000
+        Thu, 10 Nov 2022 07:21:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6388671F39;
+        Thu, 10 Nov 2022 04:21:54 -0800 (PST)
+Date:   Thu, 10 Nov 2022 12:21:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668082911;
+        s=2020; t=1668082912;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JYme4y0NdY1CFBDiAkYLwqCEg2kqXX9VkyPt73hmCKM=;
-        b=rjXl5id+SbTBLA4a1dW9CU2jXH3C03fyzlVvENQVPPj2aUJyAR0szdpHF8tnxwSuF4xBUW
-        rQeR4WYA16bUFy1fUK8P7g7EEz8SVFiyCcpYAYtpOjB574HeR7EeJCalCsARiAlrM4hemc
-        HB7miVUyd+pKesOAPhynhdMajH1jizN8nB8dGvMSeFSIHI2EvNN7gUoUymWWZsZ0EE4nxn
-        Jj7TSNa2RQEBsvvWB729k80Ugye3emZFvkDrlrhPz66QDObzDh4ziseOvJ++VBH2M1ZWuS
-        NkUnM8G1w6MwqHm+CkQAClBkRw6TYVJ2VVxuw/BQmBIJhmSa1Vy9+V6MdP3gFA==
+        bh=FXUGUmHVztvXiUFfSp49JyGGH77rTqfAQ5M+mn70WN0=;
+        b=LzFXk6Ds37LC6Na+1TnUv8xQ+mmNLtP6bvkrpMet29roROd6uK1UZ2eDSwOMbvc7g/Vtt5
+        qc9bPe3WpzRhOJknumC2O6ruixMsu6PXOL8OYAQwDCiF43wTQPe+dMHbpYDa66zKzl3g4c
+        FNAsePdDLGi/rFRNBMDcDrVZLSsvTWf4ohXW00XGu61BQuraXhG7/1ezjmN2Er2kB8ZjQL
+        7S/dnb0pQwQ4DG7VQfMdRWb64akuaDYStXTXtI+T/vaw6ovHWbRG9BVeuHouLOlclXbI7F
+        1WTg6RVp5aelEHPu6xt50TImqIiPh2354iAEBLANeJ6kq547Kn42O4GKFkTIpA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668082911;
+        s=2020e; t=1668082912;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JYme4y0NdY1CFBDiAkYLwqCEg2kqXX9VkyPt73hmCKM=;
-        b=yVGhYbTWKE9AURUpKMkhTriiEiOyjOsT/qGBkgBpWnMsQTN/ITQt4lZaHcSC6qykf1RM9U
-        vY2uX2OLcSsifdAw==
+        bh=FXUGUmHVztvXiUFfSp49JyGGH77rTqfAQ5M+mn70WN0=;
+        b=31r5zjYQW8oC1rn5Dm2YDyoJOS/4M9QwidvlDxdDkWzWk5eC8i/uqV/Dl6Y83uAoVGw4c7
+        a2cjm2JmM/Imp+AA==
 From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/mtrr: Let cache_aps_delayed_init replace
- mtrr_aps_delayed_init
+Subject: [tip: x86/cpu] x86/mtrr: Get rid of __mtrr_enabled bool
 Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221102074713.21493-12-jgross@suse.com>
-References: <20221102074713.21493-12-jgross@suse.com>
+In-Reply-To: <20221102074713.21493-11-jgross@suse.com>
+References: <20221102074713.21493-11-jgross@suse.com>
 MIME-Version: 1.0
-Message-ID: <166808291032.4906.11200342657381640879.tip-bot2@tip-bot2>
+Message-ID: <166808291144.4906.5479534942233014334.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,170 +65,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cpu branch of tip:
 
-Commit-ID:     955d0e0805912641230fb46c380aa625f78ecaca
-Gitweb:        https://git.kernel.org/tip/955d0e0805912641230fb46c380aa625f78ecaca
+Commit-ID:     2c15679e8687d5934e1a70fe50ce409bb8a2aba1
+Gitweb:        https://git.kernel.org/tip/2c15679e8687d5934e1a70fe50ce409bb8a2aba1
 Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Wed, 02 Nov 2022 08:47:08 +01:00
+AuthorDate:    Wed, 02 Nov 2022 08:47:07 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
 CommitterDate: Thu, 10 Nov 2022 13:12:45 +01:00
 
-x86/mtrr: Let cache_aps_delayed_init replace mtrr_aps_delayed_init
+x86/mtrr: Get rid of __mtrr_enabled bool
 
-In order to prepare decoupling MTRR and PAT replace the MTRR-specific
-mtrr_aps_delayed_init flag with a more generic cache_aps_delayed_init
-one.
+There is no need for keeping __mtrr_enabled as it can easily be replaced
+by testing mtrr_if to be not NULL.
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221102074713.21493-12-jgross@suse.com
+Link: https://lore.kernel.org/r/20221102074713.21493-11-jgross@suse.com
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- arch/x86/include/asm/cacheinfo.h |  2 ++
- arch/x86/include/asm/mtrr.h      |  2 --
- arch/x86/kernel/cpu/cacheinfo.c  | 12 ++++++++++++
- arch/x86/kernel/cpu/mtrr/mtrr.c  | 18 +++++-------------
- arch/x86/kernel/smpboot.c        |  5 +++--
- 5 files changed, 22 insertions(+), 17 deletions(-)
+ arch/x86/kernel/cpu/mtrr/mtrr.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/include/asm/cacheinfo.h b/arch/x86/include/asm/cacheinfo.h
-index 978bac7..e443fcc 100644
---- a/arch/x86/include/asm/cacheinfo.h
-+++ b/arch/x86/include/asm/cacheinfo.h
-@@ -13,5 +13,7 @@ void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu);
- void cache_disable(void);
- void cache_enable(void);
- void cache_cpu_init(void);
-+void set_cache_aps_delayed_init(bool val);
-+bool get_cache_aps_delayed_init(void);
- 
- #endif /* _ASM_X86_CACHEINFO_H */
-diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-index 986249a..5d31219 100644
---- a/arch/x86/include/asm/mtrr.h
-+++ b/arch/x86/include/asm/mtrr.h
-@@ -43,7 +43,6 @@ extern int mtrr_del(int reg, unsigned long base, unsigned long size);
- extern int mtrr_del_page(int reg, unsigned long base, unsigned long size);
- extern void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi);
- extern void mtrr_ap_init(void);
--extern void set_mtrr_aps_delayed_init(void);
- extern void mtrr_aps_init(void);
- extern void mtrr_bp_restore(void);
- extern int mtrr_trim_uncached_memory(unsigned long end_pfn);
-@@ -87,7 +86,6 @@ static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi)
- {
- }
- #define mtrr_ap_init() do {} while (0)
--#define set_mtrr_aps_delayed_init() do {} while (0)
- #define mtrr_aps_init() do {} while (0)
- #define mtrr_bp_restore() do {} while (0)
- #define mtrr_disable() do {} while (0)
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 31684bf..063d556 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -1137,3 +1137,15 @@ void cache_cpu_init(void)
- 	cache_enable();
- 	local_irq_restore(flags);
- }
-+
-+static bool cache_aps_delayed_init;
-+
-+void set_cache_aps_delayed_init(bool val)
-+{
-+	cache_aps_delayed_init = val;
-+}
-+
-+bool get_cache_aps_delayed_init(void)
-+{
-+	return cache_aps_delayed_init;
-+}
 diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index f671be9..15ee6d7 100644
+index a468be5..f671be9 100644
 --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
 +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -68,7 +68,6 @@ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
- static DEFINE_MUTEX(mtrr_mutex);
+@@ -59,11 +59,9 @@
+ #define MTRR_TO_PHYS_WC_OFFSET 1000
  
- u64 size_or_mask, size_and_mask;
--static bool mtrr_aps_delayed_init;
+ u32 num_var_ranges;
+-static bool __mtrr_enabled;
+-
+ static bool mtrr_enabled(void)
+ {
+-	return __mtrr_enabled;
++	return !!mtrr_if;
+ }
  
- static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
- 
-@@ -175,7 +174,8 @@ static int mtrr_rendezvous_handler(void *info)
- 	if (data->smp_reg != ~0U) {
- 		mtrr_if->set(data->smp_reg, data->smp_base,
- 			     data->smp_size, data->smp_type);
--	} else if (mtrr_aps_delayed_init || !cpu_online(smp_processor_id())) {
-+	} else if (get_cache_aps_delayed_init() ||
-+		   !cpu_online(smp_processor_id())) {
- 		cache_cpu_init();
+ unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
+@@ -755,18 +753,17 @@ void __init mtrr_bp_init(void)
+ 		}
  	}
- 	return 0;
-@@ -782,7 +782,7 @@ void __init mtrr_bp_init(void)
  
- void mtrr_ap_init(void)
- {
--	if (!memory_caching_control || mtrr_aps_delayed_init)
-+	if (!memory_caching_control || get_cache_aps_delayed_init())
- 		return;
- 
- 	/*
-@@ -816,14 +816,6 @@ void mtrr_save_state(void)
- 	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
- }
- 
--void set_mtrr_aps_delayed_init(void)
--{
--	if (!memory_caching_control)
--		return;
+-	if (mtrr_if) {
+-		__mtrr_enabled = true;
++	if (mtrr_enabled()) {
+ 		set_num_var_ranges(mtrr_if == &generic_mtrr_ops);
+ 		init_table();
+ 		if (mtrr_if == &generic_mtrr_ops) {
+ 			/* BIOS may override */
+-			__mtrr_enabled = get_mtrr_state();
 -
--	mtrr_aps_delayed_init = true;
--}
--
- /*
-  * Delayed MTRR initialization for all AP's
-  */
-@@ -837,11 +829,11 @@ void mtrr_aps_init(void)
- 	 * by doing set_mtrr_aps_delayed_init(), prior to this point. If not,
- 	 * then we are done.
- 	 */
--	if (!mtrr_aps_delayed_init)
-+	if (!get_cache_aps_delayed_init())
- 		return;
- 
- 	set_mtrr(~0U, 0, 0, 0);
--	mtrr_aps_delayed_init = false;
-+	set_cache_aps_delayed_init(false);
- }
- 
- void mtrr_bp_restore(void)
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 3f3ea02..13c71ab 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -58,6 +58,7 @@
- #include <linux/overflow.h>
- 
- #include <asm/acpi.h>
-+#include <asm/cacheinfo.h>
- #include <asm/desc.h>
- #include <asm/nmi.h>
- #include <asm/irq.h>
-@@ -1428,7 +1429,7 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
- 
- 	uv_system_init();
- 
--	set_mtrr_aps_delayed_init();
-+	set_cache_aps_delayed_init(true);
- 
- 	smp_quirk_init_udelay();
- 
-@@ -1439,7 +1440,7 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
- 
- void arch_thaw_secondary_cpus_begin(void)
- {
--	set_mtrr_aps_delayed_init();
-+	set_cache_aps_delayed_init(true);
- }
- 
- void arch_thaw_secondary_cpus_end(void)
+-			if (mtrr_enabled()) {
++			if (get_mtrr_state()) {
+ 				memory_caching_control |= CACHE_MTRR | CACHE_PAT;
+ 				changed_by_mtrr_cleanup = mtrr_cleanup(phys_addr);
+ 				cache_cpu_init();
++			} else {
++				mtrr_if = NULL;
+ 			}
+ 		}
+ 	}
