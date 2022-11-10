@@ -2,161 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BB6624024
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46386624027
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiKJKkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S229913AbiKJKmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiKJKjx (ORCPT
+        with ESMTP id S229649AbiKJKmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:39:53 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933036DCC1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:39:30 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DA9A458056F;
-        Thu, 10 Nov 2022 05:39:16 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 10 Nov 2022 05:39:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1668076756; x=1668083956; bh=PwYNjQU7tN
-        1yo0q4sJyp8vj8McI2niUCJnvMpuBPHGk=; b=gMEwj1DG8zmPKzu0+yKVKH03Kx
-        e61Uw+WzZJFD6Px2CZXRX4G8Zi1p345HVdtHMpL2qSi69lVddsisHKPl24rr+9bg
-        lGvcm/6s4418rzGhOVzqyYFIRAfqd78jO6Nquvf7uftvHVkyzs/ZtUUHMAhZC+lY
-        66vuWPK+QNeZS3cUQ+QsqHk1fz7JlL31pg0QxttYN1apTfI5afVpUdiyMT76DI26
-        Jz+sxMXE0BWHJR/rncIveXM3JVcyfoRqdhrJh/PwseUOeQL9nj1B6dONJiZTxLho
-        mUXnNvpd3chserPvH0/MJ+eV4zBNCHXdQV087G11xOMWGj0+VRhDikiOaMPg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668076756; x=1668083956; bh=PwYNjQU7tN1yo0q4sJyp8vj8McI2
-        niUCJnvMpuBPHGk=; b=Xr8BzRZUhOldcOGwtNOHvI/a7uNK4UnnPClBS8k80w93
-        xvmN0OyGFsgiH7IW0Tuj5UkmaBALc35OAZOOcZNJXjiuvH3xR60nmBg4PLwK9m0H
-        hbF6oU9ObO0B70aOAlx5O/yR+ms5tfjoYBy9VmhFPZjgKXCloSMn2qnysTWCUd5A
-        17gyfJJb4BD6sgVWQRF3ce+aQblKOswYUyCFH/tqMJLTGFiTldUr67P66ElddHbo
-        vUy9W7UEQ9DuMz4b/BG3kjbrszywd1S5t1vghMPIug3cb8uEFCR8Uy3VuGxWzXOO
-        /K2NCPzI5EtLZzEchkLyqu8gSeHN0k8GLSlmhpFVWQ==
-X-ME-Sender: <xms:1NRsYwnt67HzpCUxoHKGa8GXVoYc0jqd9m1B9rObiYGWp6nFWOWUaQ>
-    <xme:1NRsY_0erFK1brduwteUIU-Hp7-9iRiRnkQAIZcs6tjyrFUqzmUPO6_SwXPNWqDyM
-    Sx0yIUgocFOwWfMkAg>
-X-ME-Received: <xmr:1NRsY-rXvMVnrOmS6dMxDm_4zweyzwqx_V9Ql86FtDceeVgALEIxnaVTNEBp8-vDaCwvpCUm87TDgVbJcVCVbwsBv_4fq4C8s7leccFYHx4V7w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggddukecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:1NRsY8mW_xcrUMl01tyZqxps9tuooz_MljVOu7FQ0WdmWVhrvWN4Ig>
-    <xmx:1NRsY-2N22RsUf6ge37Rj9ckd6OVr8ICkwnPyJy7goyIq8GIGFLJQw>
-    <xmx:1NRsYzv4YBD0WjzP5ne_ugM6s3NalNJSVZ1o08jqUUR30dWn2lCMTA>
-    <xmx:1NRsY-Xz9Dv9rc9zHRnMZ0u8zaBF9EgKO8EHviC-JajdS5vx-BSq0Q>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Nov 2022 05:39:15 -0500 (EST)
-Date:   Thu, 10 Nov 2022 11:39:14 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Lukas Satin <luke.satin@gmail.com>
-Cc:     kfyatek+publicgit@gmail.com,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Dom Cobley <dom@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [Nouveau] [PATCH v7 22/23] drm/vc4: vec: Add support for more
- analog TV standards
-Message-ID: <20221110103914.hsft4tacop6zerem@houat>
-References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
- <20220728-rpi-analog-tv-properties-v7-22-7072a478c6b3@cerno.tech>
- <e0779ff5-3227-4a6f-1c0b-de2fbff99425@gmail.com>
- <CAEFVmOJ5A7+hUPwb3yUiVegJfUb_1-DGKu1YUCsF=hFTrjASzA@mail.gmail.com>
+        Thu, 10 Nov 2022 05:42:07 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676B0959F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:42:06 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id r76so1360988oie.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:42:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8B5mWkyToYr2vNuXzPC54pNDWrXFrhZfhiV/iv6BGu0=;
+        b=JB33/r+SZkDlxPzFsPYwQ2WEOFT8yzKm5+a++KartRyp+5FRuEE+U7kNqLzXfzEYbo
+         J5akQfuqHcv5g0XKBhh+nil+Caue50wOoUSo+BeHevkih4sOq+ONN+5pAxfAwXeDI3Pu
+         4UOHOMS71fJUzeJxANxjK8l+ojeVTGsXZv+iY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8B5mWkyToYr2vNuXzPC54pNDWrXFrhZfhiV/iv6BGu0=;
+        b=txvPLeiXkws66uHvtvw1+nI12bzgV/A7Yf02S9uaTQWtfPZLT+Stasdu7hu+DXaWz1
+         tg2WA/hUOQxJLFHWEbQUBsaxESy0GoqTPkRDFMJsg15JWyg8WESk2GSkxiq9VFDUovuY
+         uZCTwwSwYgS4ds+DuSLMP4BwtlA6QIsA5LHrpvntyVzmJ2zbapTjSEgtySR5GdeCVPmI
+         22rjPovFLlhntFuScHBcuL4B0Yfqy8b9XLBX3F2Xn8VNrVi19e4N95/OvodbJN1//aRk
+         jRRaHPUKyEHtOhnHfJabgT7bi6v+3dhjMORtK4Ln76DHmOwjn09lOGT/8dAaLLH4RZXK
+         EUWg==
+X-Gm-Message-State: ACrzQf2lh5gj3P6fGIu+xcYVgPglw7rDGzqWtdgojrXT2JQD3sKPTCU5
+        bceWtsfupRS76g4CnRj67KYv+4Ql6/n1SbfD
+X-Google-Smtp-Source: AMsMyM5kpX6CTOMBq9/hTrNMeKEaHKTiy3cH45SDPZVQM4d2mHYBvyClcitafesHFxkimFgZwf4TXw==
+X-Received: by 2002:aca:3d05:0:b0:35a:113d:6357 with SMTP id k5-20020aca3d05000000b0035a113d6357mr29727952oia.264.1668076925365;
+        Thu, 10 Nov 2022 02:42:05 -0800 (PST)
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com. [209.85.160.45])
+        by smtp.gmail.com with ESMTPSA id m8-20020a4aab88000000b00480816a5b8csm5050441oon.18.2022.11.10.02.42.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 02:42:04 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-13bef14ea06so1727940fac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:42:04 -0800 (PST)
+X-Received: by 2002:a05:6870:a901:b0:136:b801:e24c with SMTP id
+ eq1-20020a056870a90100b00136b801e24cmr37742224oab.60.1668076924149; Thu, 10
+ Nov 2022 02:42:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tnzcub77xclkt633"
-Content-Disposition: inline
-In-Reply-To: <CAEFVmOJ5A7+hUPwb3yUiVegJfUb_1-DGKu1YUCsF=hFTrjASzA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221110081259.947269-1-aichao@kylinos.cn>
+In-Reply-To: <20221110081259.947269-1-aichao@kylinos.cn>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 10 Nov 2022 11:41:52 +0100
+X-Gmail-Original-Message-ID: <CANiDSCs2BdgWOO=1K6k=Ow0gvrfnMj8RyoVfa5tb+00soUD=6w@mail.gmail.com>
+Message-ID: <CANiDSCs2BdgWOO=1K6k=Ow0gvrfnMj8RyoVfa5tb+00soUD=6w@mail.gmail.com>
+Subject: Re: [PATCH] media: uvcvideo: Fix bandwidth error for Alcor camera
+To:     Ai Chao <aichao@kylinos.cn>
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ai
 
---tnzcub77xclkt633
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for your patch
 
-On Wed, Nov 09, 2022 at 05:55:36PM +0100, Lukas Satin wrote:
-> That's great, I will test it on Ubuntu + Nouveau x86_64 and Batocera-Linu=
-x.
->=20
-> I'm not interested in Raspberry Pi. I see you have some commit in
-> RaspberryPi/Linux. Will this go to some Nouveau driver, so I can test it =
-on
-> x86_64 machine? I have some basic experience compiling Linux kernel (nvid=
-ia
-> driver) from 10 years ago.
+On Thu, 10 Nov 2022 at 09:15, Ai Chao <aichao@kylinos.cn> wrote:
+>
+> For Alcor Corp. Slave camera(1b17:6684), it support to
+> output compressed video data, and it return a wrong
+>  dwMaxPayloadTransferSize fields. This is a fireware issue,
 
-Nouveau is only marginally affected by this patch series. It could
-leverage the work done here, but it's not part of it and I won't plan to
-work on it.
+s/fireware/firmware/
 
-The RaspberryPi is mentioned because it's the platform that will benefit
-the most from it, and the main target of that series.
+> but the manufacturer cannot provide a const return fields
+> by the fireware. so we check the dwMaxPayloadTransferSize fields,
+> if it large than 0x1000, reset dwMaxPayloadTransferSize to 1024.
 
-> Scaling is not the way to go because I do this to not use scaling. I could
-> use 640x480 and scale 320x240 to that mode, right? That is what old
-> retrogaming laptop LCD screens do (you can even enable this in their BIOS=
-).
->=20
-> More appropriate is to preserve pixel ratio and have some border. So you
-> mostly select the closest resolution and live with small border on the
-> edge. Then you can crop it on analog TV using real world dials :-)
->=20
-> I joined Nouveau developer list here. I don't know why we have like 40
-> email recipients here and now we discuss Raspberry.
 
-Nouveau is marginally affected by it, so its mailing list is in Cc.
+Can you also provide the output of lsusb -d 1b17:6684 -v
 
-Maxime
+>
+> Signed-off-by: Ai Chao <aichao@kylinos.cn>
+> ---
+>  drivers/media/usb/uvc/uvc_video.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index d2eb9066e4dc..49226c3f423c 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -234,6 +234,14 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+>
+>                 ctrl->dwMaxPayloadTransferSize = bandwidth;
+>         }
+> +
+> +       /*Alcor Corp. Slave camera return wrong dwMaxPayloadTransferSize*/
+> +       if ((format->flags & UVC_FMT_FLAG_COMPRESSED) &&
+> +           (ctrl->dwMaxPayloadTransferSize > 0x1000) &&
+> +           (le16_to_cpu(stream->dev->udev->descriptor.idVendor) == 0x1b17) &&
+> +           (le16_to_cpu(stream->dev->udev->descriptor.idProduct) == 0x6684)) {
+> +               ctrl->dwMaxPayloadTransferSize = 1024;
+> +       }
 
---tnzcub77xclkt633
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+What happens to transfersize between 1024 and 0x1000  (4096), are they ok?
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2zU0gAKCRDj7w1vZxhR
-xZhQAQD+sOJEZ9yfkJ4NAahLIHPffYnG8gECF9ErZ3fNxaAKmwEA6FT7zmjsIGCG
-R+gFgqEc0dQ/i9Ysz13rPMufYrxEvww=
-=62QM
------END PGP SIGNATURE-----
+Instead of le16_to_cpu(stream->dev->udev->descriptor.idVendor) ==
+0x1b17) you can use usb_match_one_id
 
---tnzcub77xclkt633--
+Thanks!
+
+>  }
+>
+>  static size_t uvc_video_ctrl_size(struct uvc_streaming *stream)
+> --
+> 2.25.1
+>
+
+
+-- 
+Ricardo Ribalda
