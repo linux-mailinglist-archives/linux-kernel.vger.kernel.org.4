@@ -2,183 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD92623CA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A004623CA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbiKJH3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S232784AbiKJH3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232735AbiKJH3M (ORCPT
+        with ESMTP id S232459AbiKJH3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:29:12 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143F3326C4;
-        Wed,  9 Nov 2022 23:29:07 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7D3D3kjyzHvpN;
-        Thu, 10 Nov 2022 15:28:40 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 15:29:06 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 15:29:05 +0800
-Subject: Re: [PATCH v6 0/2] rcu: Add RCU stall diagnosis information
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-CC:     Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Robert Elliott <elliott@hpe.com>
-References: <20221109093739.187-1-thunder.leizhen@huawei.com>
- <20221109152621.GB298683@lothringen>
- <20221109155901.GA727034@paulmck-ThinkPad-P17-Gen-1>
- <20221109170317.GA300561@lothringen>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c8b7deaa-1d4f-0e73-269a-32d6105b89a7@huawei.com>
-Date:   Thu, 10 Nov 2022 15:29:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Thu, 10 Nov 2022 02:29:43 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A0C13E85;
+        Wed,  9 Nov 2022 23:29:42 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7D4N1M5bz4xGT;
+        Thu, 10 Nov 2022 18:29:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668065380;
+        bh=0I3H4V4YKqZP6S+Fe9HrjGaB0ZUQArhZIm8VwpuUsvg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EHNHgKNdgh39aQ3nhk8SQC0v5KnNP5COFUz5ZfXDb6XH06mnuCSGHmu/ibCZJ+ExP
+         6XwHrUVGAhbi0WddWHvT7wPkSmxNy74oySBOHklno4Znv/o4kyRmV8GjOSpnwowsTg
+         8lQIWmdg1PkHpIlotgJ0606hKs0bzc8ofpj1zQpAJDno0h/Ec2uMpnCh/Aiy8pd+z0
+         WrA1OF8jEfDXmPXFDl56YvHcuQVQ7Irqls7hWvTXV2VRvsBS4t4OqxiHpAvlfPcHcy
+         XLg1ohmV6qW8oVWN3CdLXmKR7i40Ex0yE6fpxNcW6x7RsCbfVEg9FTf6CoQmLoomb6
+         d3wcZvQfbJGBg==
+Date:   Thu, 10 Nov 2022 18:29:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the iommufd tree
+Message-ID: <20221110182938.40ce2651@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20221109170317.GA300561@lothringen>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/MVUTXbsDi83fKOnHfhreezG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/MVUTXbsDi83fKOnHfhreezG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2022/11/10 1:03, Frederic Weisbecker wrote:
-> On Wed, Nov 09, 2022 at 07:59:01AM -0800, Paul E. McKenney wrote:
->> On Wed, Nov 09, 2022 at 04:26:21PM +0100, Frederic Weisbecker wrote:
->>> Hi Zhen Lei,
->>>
->>> On Wed, Nov 09, 2022 at 05:37:36PM +0800, Zhen Lei wrote:
->>>> v5 --> v6:
->>>> 1. When there are more than two continuous RCU stallings, correctly handle the
->>>>    value of the second and subsequent sampling periods. Update comments and
->>>>    document.
->>>>    Thanks to Elliott, Robert for the test.
->>>> 2. Change "rcu stall" to "RCU stall".
->>>>
->>>> v4 --> v5:
->>>> 1. Resolve a git am conflict. No code change.
->>>>
->>>> v3 --> v4:
->>>> 1. Rename rcu_cpu_stall_deep_debug to rcu_cpu_stall_cputime.
->>>>
->>>> v2 --> v3:
->>>> 1. Fix the return type of kstat_cpu_irqs_sum()
->>>> 2. Add Kconfig option CONFIG_RCU_CPU_STALL_DEEP_DEBUG and boot parameter
->>>>    rcupdate.rcu_cpu_stall_deep_debug.
->>>> 3. Add comments and normalize local variable name
->>>>
->>>>
->>>> v1 --> v2:
->>>> 1. Fixed a bug in the code. If the rcu stall is detected by another CPU,
->>>>    kcpustat_this_cpu cannot be used.
->>>> @@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
->>>>         if (r->gp_seq != rdp->gp_seq)
->>>>                 return;
->>>>
->>>> -       cpustat = kcpustat_this_cpu->cpustat;
->>>> +       cpustat = kcpustat_cpu(cpu).cpustat;
->>>> 2. Move the start point of statistics from rcu_stall_kick_kthreads() to
->>>>    rcu_implicit_dynticks_qs(), removing the dependency on irq_work.
->>>>
->>>> v1:
->>>> In some extreme cases, such as the I/O pressure test, the CPU usage may
->>>> be 100%, causing RCU stall. In this case, the printed information about
->>>> current is not useful. Displays the number and usage of hard interrupts,
->>>> soft interrupts, and context switches that are generated within half of
->>>> the CPU stall timeout, can help us make a general judgment. In other
->>>> cases, we can preliminarily determine whether an infinite loop occurs
->>>> when local_irq, local_bh or preempt is disabled.
->>>
->>> That looks useful but I have to ask: what does it bring that the softlockup
->>> and hardlockup watchdog can not already solve?
->>
->> This is a good point.  One possible benefit is putting the needed information
->> in one spot, for example, in cases where the soft/hard lockup timeouts are
->> significantly different than the RCU CPU stall warning timeout.
-> 
-> Arguably, the hardlockup/softlockup detectors usually trigger after RCU stall,
-> unless all CPUs are caught into a hardlockup, in which case only the hardlockup
-> detector has a chance.
+After merging the iommufd tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-But not all ARCHs support hardlockup, such as s390. Maybe arm64.
+drivers/iommu/iommufd/device.c:1: warning: no structured comments found
+drivers/iommu/iommufd/main.c:1: warning: no structured comments found
 
-config HARDLOCKUP_DETECTOR
-        bool "Detect Hard Lockups"
-        depends on DEBUG_KERNEL && !S390
-        depends on HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_ARCH
+Introduced by commit
 
-> 
-> Anyway I would say that in this case just lower the delay for the lockup
-> detectors to consider the situation is a lockup?
+  f3873afb9d7e ("iommufd: Document overview of iommufd")
 
-In most architectures, CONFIG_SOFTLOCKUP_DETECTOR is not set by default.
-Otherwise 20 is less than 21.
+--=20
+Cheers,
+Stephen Rothwell
 
-Softlockups are bugs that cause the kernel to loop in kernel
-mode for more than 20 seconds, without giving other tasks a
-chance to run.
+--Sig_/MVUTXbsDi83fKOnHfhreezG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-config RCU_CPU_STALL_TIMEOUT
-	default 21
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsqGIACgkQAVBC80lX
+0GyRHQf/bz3pH/eniw+1wfKSy23gJgsvsILfTJw/PzN6VjqkCY/q6U7mkaYhdIXc
+BEIwizfW1cW27j2OlH1Nrd5JeviONnQ8QENeZzcLGoV5Spq3i6CA7GKNuvPLHNJb
+Mx+/G18ETV4bCaVSJC+BVw/yN1M4/Mx2MjRG+8HPDQC64moIfn9NimvbgzTa3wOV
+MH/1ns65677p6X0kPwNwbZqFBbxrjr1L+6Bjm+eXS057QDC1jpo3HbDiwWpNx7KG
+MnMZpB1+tEfoEkCJm8HUrW4dpI+W6XhxZSrc7wP8KUZ22w4I+mWoyIn8A9X6px3Q
+mDGveqphy1mfM9pqrz17aienlOrr/g==
+=gEEF
+-----END PGP SIGNATURE-----
 
-In short, hardlockup and softlockup are completely uncontrollable to RCU stall.
-
-> 
-> Thanks.
-> 
-> 
->>
->> Thoughts?
->>
->> 							Thanx, Paul
->>
->>> Thanks.
->>>
->>>>
->>>> Zhen Lei (2):
->>>>   rcu: Add RCU stall diagnosis information
->>>>   doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
->>>>
->>>>  Documentation/RCU/stallwarn.rst               | 88 +++++++++++++++++++
->>>>  .../admin-guide/kernel-parameters.txt         |  6 ++
->>>>  kernel/rcu/Kconfig.debug                      | 11 +++
->>>>  kernel/rcu/rcu.h                              |  1 +
->>>>  kernel/rcu/tree.c                             | 17 ++++
->>>>  kernel/rcu/tree.h                             | 19 ++++
->>>>  kernel/rcu/tree_stall.h                       | 29 ++++++
->>>>  kernel/rcu/update.c                           |  2 +
->>>>  8 files changed, 173 insertions(+)
->>>>
->>>> -- 
->>>> 2.25.1
->>>>
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+--Sig_/MVUTXbsDi83fKOnHfhreezG--
