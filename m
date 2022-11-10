@@ -2,60 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B964D6247C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137656247BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiKJQ7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
+        id S232694AbiKJQ7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:59:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbiKJQ7k (ORCPT
+        with ESMTP id S230315AbiKJQ7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:59:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ABA6272
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:58:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668099517;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=36ke+tu+rzNrTaQ8ipToLCK8AjSuu0u9J5kXXC26KEk=;
-        b=Qlf9arDlVNcgYGwIO17aPthc5njFdnaS5mF9XkYxdY3fGCmnDQfz+8tbEGtlCglJYrMX1w
-        l9F1M7fzHWuWWhS09E+j/Qc5z9O/0BnPrpHx6i6a/OnLnTtjEQoYmSKA4eHtj1M/T4+Pgd
-        IereF9cDVWP+vzxEBkrFP/eXAdW40ww=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-126-XI_2MemeMFWeyhqB7u1y4w-1; Thu, 10 Nov 2022 11:58:36 -0500
-X-MC-Unique: XI_2MemeMFWeyhqB7u1y4w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E32C93C025D1;
-        Thu, 10 Nov 2022 16:58:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4AE631121330;
-        Thu, 10 Nov 2022 16:58:35 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] mm: Make some folio function arguments const
-From:   David Howells <dhowells@redhat.com>
-To:     willy@infradead.org
-Cc:     dhowells@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 10 Nov 2022 16:58:32 +0000
-Message-ID: <166809951250.3381741.3113541135557341907.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Thu, 10 Nov 2022 11:59:03 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D9F11832
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:59:01 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id k7so1879140pll.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:59:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=++qaNnNL5OJX09F4SmymJbSNGTe4YNGKf8knlNeZLIM=;
+        b=LnpIznW50UbJYIR0PEtWeJYNJ+5rH6MIlZozMzFMTwSQvTcP33ucW9c9lQSevvLDXI
+         QyB5+yXhMZUDNlkwdSbDFjM7JR9S8ttOodJeLQApsp/g1X2g7iaiRMpztbbtLirGmHXP
+         Ok5MPlCZ4tZXNzdoN/5EaAFNU5i/kMEU+Pj6UbsvHwVNko95a9bIdjWXiNhQrkyCMZcF
+         1gbXxHeTac5BLcvPalQHTWFwjbFrO0re69/ZDM4/c7ATiGknmYZEnSteDE0eFOsuiUGv
+         o02wNWrUZNQBtGle02WgOsPhE6Inb5/XeEtyenAcor9m9bnEppDYL8UdqJt6p1agDB2o
+         ED2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=++qaNnNL5OJX09F4SmymJbSNGTe4YNGKf8knlNeZLIM=;
+        b=ekE+uwCCa1RplhDKZOVxd6t4IGoH10J3vz26DNPmzwuwkAmK1YDHZfB8uyoL93FeCT
+         zXi3rkYLpNeSaC0yjCWNOyhz2jewwDakmAvEDeVWj6qkKGEVuNEwJuBvzsdZ8XHBoHX4
+         KvrY4WbNxwKQBVEku10REG9Nqdj6Z6HY1j78g3ouhp1P5TlLjWIg4YsUkROxHnHgEkwu
+         TYRvNMfrmKmfAR/Y11vqaZ6QTmGD80xZM4uMeSp0deGNtgOLPrhPxC/FTlhkZW1kuIYd
+         a0NsYdaSxdXp9fj6HkcCHhVCMipDiqcl+EPRLZffNJ7OIxuz/sdopXdcYhHna+BQBxr+
+         BOoA==
+X-Gm-Message-State: ANoB5pmw8NcdC0GHSJ036hHEjNDEe8MsZ0tvVfeXuNQMks7v6W0GxGIf
+        LXgrnYJXEjmSxFLb6PUuZ6tiIA==
+X-Google-Smtp-Source: AA0mqf4HLI0425WgRwXjVOczy7lGJ1ZoFRhJMikRvyU6kmBBe6o5W1MVmVmeziJeqm75+QzM+47Lew==
+X-Received: by 2002:a17:902:6aca:b0:188:736c:befa with SMTP id i10-20020a1709026aca00b00188736cbefamr1100928plt.8.1668099540938;
+        Thu, 10 Nov 2022 08:59:00 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n63-20020a17090a5ac500b00200461cfa99sm3302123pji.11.2022.11.10.08.59.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 08:59:00 -0800 (PST)
+Date:   Thu, 10 Nov 2022 16:58:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Yao, Yuan" <yuan.yao@intel.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
+Message-ID: <Y20t0AMNqvtyOwp2@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-39-seanjc@google.com>
+ <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
+ <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,129 +112,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark the folio* argument to some of the folio accessor functions as a const
-pointer.
+On Thu, Nov 10, 2022, Huang, Kai wrote:
+> On Thu, 2022-11-10 at 01:33 +0000, Huang, Kai wrote:
+> > > @@ -9283,7 +9283,13 @@ static int
+> > > kvm_x86_check_processor_compatibility(struct kvm_x86_init_ops *ops)
+> > >  	int cpu = smp_processor_id();
+> > >  	struct cpuinfo_x86 *c = &cpu_data(cpu);
+> > >  
+> > > -	WARN_ON(!irqs_disabled());
+> > > +	/*
+> > > +	 * Compatibility checks are done when loading KVM and when enabling
+> > > +	 * hardware, e.g. during CPU hotplug, to ensure all online CPUs are
+> > > +	 * compatible, i.e. KVM should never perform a compatibility check
+> > > on
+> > > +	 * an offline CPU.
+> > > +	 */
+> > > +	WARN_ON(!irqs_disabled() && cpu_active(cpu));
+> > >  
+> > 
+> > Also, the logic of:
+> > 
+> > 	!irqs_disabled() && cpu_active(cpu)
+> > 
+> > is quite weird.
+> > 
+> > The original "WARN(!irqs_disabled())" is reasonable because in STARTING
+> > section
+> > the IRQ is indeed disabled.
+> > 
+> > But this doesn't make sense anymore after we move to ONLINE section, in which
+> > IRQ has already been enabled (see start_secondary()).  IIUC the WARN_ON()
+> > doesn't get exploded is purely because there's an additional cpu_active(cpu)
+> > check.
+> > 
+> > So, a more reasonable check should be something like:
+> > 
+> > 	WARN_ON(irqs_disabled() || cpu_active(cpu) || !cpu_online(cpu));
+> > 
+> > Or we can simply do:
+> > 
+> > 	WARN_ON(!cpu_online(cpu) || cpu_active(cpu));
+> > 
+> > (because I don't know whether it's possible IRQ can somehow get disabled in
+> > ONLINE section).
+> > 
+> > Btw above is purely based on code analysis, but I haven't done any test.
+> 
+> Hmm.. I wasn't thinking thoroughly.  I forgot CPU compatibility check also
+> happens on all online cpus when loading KVM.  For this case, IRQ is disabled and
+> cpu_active() is true.  For the hotplug case, IRQ is enabled but  cpu_active() is
+> false.
+> 
+> So WARN_ON(!irqs_disabled() && cpu_active(cpu)) looks reasonable.  Sorry for the
+> noise.  Just needed some time to connect the comment with the code.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
----
-
- include/linux/mm.h         |   20 ++++++++++----------
- include/linux/page-flags.h |    4 ++--
- 2 files changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7a7a287818ad..a069f6f70aed 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -711,7 +711,7 @@ int vma_is_stack_for_current(struct vm_area_struct *vma);
- struct mmu_gather;
- struct inode;
- 
--static inline unsigned int compound_order(struct page *page)
-+static inline unsigned int compound_order(const struct page *page)
- {
- 	if (!PageHead(page))
- 		return 0;
-@@ -727,7 +727,7 @@ static inline unsigned int compound_order(struct page *page)
-  *
-  * Return: The order of the folio.
-  */
--static inline unsigned int folio_order(struct folio *folio)
-+static inline unsigned int folio_order(const struct folio *folio)
- {
- 	if (!folio_test_large(folio))
- 		return 0;
-@@ -945,7 +945,7 @@ static inline void set_compound_order(struct page *page, unsigned int order)
- }
- 
- /* Returns the number of pages in this potentially compound page. */
--static inline unsigned long compound_nr(struct page *page)
-+static inline unsigned long compound_nr(const struct page *page)
- {
- 	if (!PageHead(page))
- 		return 1;
-@@ -1519,7 +1519,7 @@ static inline unsigned long page_to_section(const struct page *page)
-  *
-  * Return: The Page Frame Number of the first page in the folio.
-  */
--static inline unsigned long folio_pfn(struct folio *folio)
-+static inline unsigned long folio_pfn(const struct folio *folio)
- {
- 	return page_to_pfn(&folio->page);
- }
-@@ -1600,7 +1600,7 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
- 
- /* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
- #ifdef CONFIG_MIGRATION
--static inline bool is_longterm_pinnable_page(struct page *page)
-+static inline bool is_longterm_pinnable_page(const struct page *page)
- {
- #ifdef CONFIG_CMA
- 	int mt = get_pageblock_migratetype(page);
-@@ -1620,13 +1620,13 @@ static inline bool is_longterm_pinnable_page(struct page *page)
- 	return !is_zone_movable_page(page);
- }
- #else
--static inline bool is_longterm_pinnable_page(struct page *page)
-+static inline bool is_longterm_pinnable_page(const struct page *page)
- {
- 	return true;
- }
- #endif
- 
--static inline bool folio_is_longterm_pinnable(struct folio *folio)
-+static inline bool folio_is_longterm_pinnable(const struct folio *folio)
- {
- 	return is_longterm_pinnable_page(&folio->page);
- }
-@@ -1659,7 +1659,7 @@ static inline void set_page_links(struct page *page, enum zone_type zone,
-  *
-  * Return: A positive power of two.
-  */
--static inline long folio_nr_pages(struct folio *folio)
-+static inline long folio_nr_pages(const struct folio *folio)
- {
- 	if (!folio_test_large(folio))
- 		return 1;
-@@ -1701,7 +1701,7 @@ static inline struct folio *folio_next(struct folio *folio)
-  * it from being split.  It is not necessary for the folio to be locked.
-  * Return: The base-2 logarithm of the size of this folio.
-  */
--static inline unsigned int folio_shift(struct folio *folio)
-+static inline unsigned int folio_shift(const struct folio *folio)
- {
- 	return PAGE_SHIFT + folio_order(folio);
- }
-@@ -1714,7 +1714,7 @@ static inline unsigned int folio_shift(struct folio *folio)
-  * it from being split.  It is not necessary for the folio to be locked.
-  * Return: The number of bytes in this folio.
-  */
--static inline size_t folio_size(struct folio *folio)
-+static inline size_t folio_size(const struct folio *folio)
- {
- 	return PAGE_SIZE << folio_order(folio);
- }
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 0b0ae5084e60..89599570c895 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -243,7 +243,7 @@ static inline const struct page *page_fixed_fake_head(const struct page *page)
- }
- #endif
- 
--static __always_inline int page_is_fake_head(struct page *page)
-+static __always_inline int page_is_fake_head(const struct page *page)
- {
- 	return page_fixed_fake_head(page) != page;
- }
-@@ -782,7 +782,7 @@ static __always_inline bool folio_test_head(struct folio *folio)
- 	return test_bit(PG_head, folio_flags(folio, FOLIO_PF_ANY));
- }
- 
--static __always_inline int PageHead(struct page *page)
-+static __always_inline int PageHead(const struct page *page)
- {
- 	PF_POISONED_CHECK(page);
- 	return test_bit(PG_head, &page->flags) && !page_is_fake_head(page);
-
-
+No worries, more than once while working through this code, I've considered setting
+up one of those evidence boards from the movies with string and push pins to help
+connect all the dots.
