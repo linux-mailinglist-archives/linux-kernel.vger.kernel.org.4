@@ -2,200 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD23624395
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B065624396
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiKJNtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S231237AbiKJNtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiKJNtB (ORCPT
+        with ESMTP id S231261AbiKJNtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:49:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB3078305;
-        Thu, 10 Nov 2022 05:48:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB0C616C9;
-        Thu, 10 Nov 2022 13:48:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D22C433D6;
-        Thu, 10 Nov 2022 13:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668088134;
-        bh=HLCW/oVThSO/HT0jcBtzou5jddaCLsz7oAnPj/pj1qY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pf3LTfGbRx9Kxtd+jHy7mPo9An7qsAHa4fQ9AMdFSOGbU4hOdP0eiZa2vN8BOPnDv
-         lM6a3OUyiW9AXykmgeQkX7ZL3PADi8BQlcxH7ddKJCVmq2/aJr2kTsP3zrK16bPfkP
-         QI/pXbJwGYNVb3lx1pAQvwfPUFCD6gImdCpsExTA=
-Date:   Thu, 10 Nov 2022 14:48:51 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     jiantao zhang <water.zhangjiantao@huawei.com>
-Cc:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Caiyadong <caiyadong@huawei.com>, suzhuangluan@hisilicon.com,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-Subject: Re: [PATCH] USB: gadget: Fix use-after-free during usb config switch
-Message-ID: <Y20BQygg8AdHDt8T@kroah.com>
-References: <20221110130754.3904-1-xuetao09@huawei.com>
- <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
+        Thu, 10 Nov 2022 08:49:02 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A55FD33;
+        Thu, 10 Nov 2022 05:48:59 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id z26so2170013pff.1;
+        Thu, 10 Nov 2022 05:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LnFXtuVA4NYqbhGKoWGds6kgTIbomnPNzPXIEWeGMzA=;
+        b=Rq4WavHCZSENVhdgHs1/rY+/SSxB00ToA/rMllcLsCMKD3jblV1wXVIrhk2ITsU070
+         RtkJ73FaZqP4cCekNlMnzLDeEJMVpEcam5UTEI3l5piEzDvw15ZKf12sR6vlsuDgUld8
+         j9mba8Gin1SdeeRXVQdlIiSh/iANUo6iRoIwFxEJPwZHTK5Lv3pAutoSLLtlZJWub0NF
+         yNTUKp8MsqJvWQlAOwe+l8fZJBCk4LI98t2tE4Bm+iR+0md8yQRSHkYHRWvB+GI18oZD
+         nxz8njas6j+F7P959vRjlc77ladwwhBn+31PWTIA29/tuehfh5sFRLCVaz7FGP2khHbB
+         kwaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LnFXtuVA4NYqbhGKoWGds6kgTIbomnPNzPXIEWeGMzA=;
+        b=lZz6yjiuquF8ElEeELji8gv3drcuq6xejDweu5eSleJL2BoakG+apGOIWzazVpufx1
+         gThh/uax0C3KqhZocQyNM0sMKVI/EJCFVxOaGrIQCiQYzhU81izqXW9E3p5h7RhlGJ5k
+         uEK/O2tsGO1eXZRvPNetSMFsiQUX4BdR9AIPeeW//x7HDmBS+SbZqrsvVDdckjI5uEFb
+         VDWhXHQ9uEf6TA17fqwJcCBojxZfOEuY1RKr/woqlihdHrSLIFTb8zaGGq7HGZxzKJeF
+         w8cS6B1yaynrUlW4Z5K8h7VtuyFtlldowD9tQJBIJEQvZqrFKNcbkJ+S78deAgsa4cVt
+         GxOQ==
+X-Gm-Message-State: ACrzQf18vG/HgOu0NV1BW4WK8f5TzKyhllaiPGDFdFRSBSkfp3nMgfpH
+        aVP7T183YjkbiRGfwJKYw7I=
+X-Google-Smtp-Source: AMsMyM43/BE/K1xNrCRl0YtgPZEMGAS9AkDZFR+/Yilr+I8eGgX+HEWjonQeoiWTN1IlbV/xdOlmkw==
+X-Received: by 2002:a05:6a00:3497:b0:56b:6936:ddfb with SMTP id cp23-20020a056a00349700b0056b6936ddfbmr2688071pfb.15.1668088138958;
+        Thu, 10 Nov 2022 05:48:58 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id j9-20020a170902690900b0017a018221e2sm11236297plk.70.2022.11.10.05.48.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 05:48:58 -0800 (PST)
+Date:   Thu, 10 Nov 2022 22:48:52 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Matthew Wilcox <willy@infradead.org>, paulmck@kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        kernel test robot <yujie.liu@intel.com>
+Subject: Re: [PATCH v2 2/3] mm/migrate: make isolate_movable_page() skip slab
+ pages
+Message-ID: <Y20BRJmRzRVMzoJw@hyeyoo>
+References: <20221107170554.7869-1-vbabka@suse.cz>
+ <20221107170554.7869-3-vbabka@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107170554.7869-3-vbabka@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:20:17PM +0800, jiantao zhang wrote:
-> In the process of switching USB config from rndis to other config,
-> if the hardware does not support the ->pullup callback, or the
-> hardware encounters a low probability fault, both of them may cause
-> the ->pullup callback to fail, which will then cause a system panic
-> (use after free).
+On Mon, Nov 07, 2022 at 06:05:53PM +0100, Vlastimil Babka wrote:
+> In the next commit we want to rearrange struct slab fields to allow a larger
+> rcu_head. Afterwards, the page->mapping field will overlap with SLUB's "struct
+> list_head slab_list", where the value of prev pointer can become LIST_POISON2,
+> which is 0x122 + POISON_POINTER_DELTA.  Unfortunately the bit 1 being set can
+> confuse PageMovable() to be a false positive and cause a GPF as reported by lkp
+> [1].
 > 
-> The gadget drivers sometimes need to be unloaded regardless of the
-> hardware's behavior.
+> To fix this, make isolate_movable_page() skip pages with the PageSlab flag set.
+> This is a bit tricky as we need to add memory barriers to SLAB and SLUB's page
+> allocation and freeing, and their counterparts to isolate_movable_page().
 > 
-> Analysis as follows:
-> =======================================================================
-> (1) write /config/usb_gadget/g1/UDC "none" (init.usb.configfs.rc:2)
+> Based on my RFC from [2]. Added a comment update from Matthew's variant in [3]
+> and, as done there, moved the PageSlab checks to happen before trying to take
+> the page lock.
 > 
-> gether_disconnect+0x2c/0x1f8 (dev->port_usb = NULL)
-> rndis_disable+0x4c/0x74
-> composite_disconnect+0x74/0xb0
-> configfs_composite_disconnect+0x60/0x7c
-> usb_gadget_disconnect+0x70/0x124
-> usb_gadget_unregister_driver+0xc8/0x1d8
-> gadget_dev_desc_UDC_store+0xec/0x1e4
+> [1] https://lore.kernel.org/all/208c1757-5edd-fd42-67d4-1940cc43b50f@intel.com/
+> [2] https://lore.kernel.org/all/aec59f53-0e53-1736-5932-25407125d4d4@suse.cz/
+> [3] https://lore.kernel.org/all/YzsVM8eToHUeTP75@casper.infradead.org/
 > 
-> In function usb_gadget_disconnect(),The ->disconnect() callback will
-> not be called when gadget->ops->pullup() return an error, therefore,
-> pointer dev->port will not be set to NULL. If pointer dev->port_usb
-> is not null, it will cause an exception of use-after-free in step3.
-> 
-> (2) rm /config/usb_gadget/g1/configs/b.1/f1 (init.usb.configfs.rc:8)
-> (f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
-> 
-> rndis_deregister+0x28/0x54 (kfree(params))
-> rndis_free+0x44/0x7c (kfree(rndis))
-> usb_put_function+0x14/0x1c
-> config_usb_cfg_unlink+0xc4/0xe0
-> configfs_unlink+0x124/0x1c8
-> vfs_unlink+0x114/0x1dc
-> 
-> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
-> (init.usb.configfs.rc:11)
-> 
-> Call trace:
-> panic+0x1fc/0x3d0
-> die+0x29c/0x2a8
-> do_page_fault+0xa8/0x46c
-> do_mem_abort+0x3c/0xac
-> el1_sync_handler+0x40/0x78
-> 0xffffff801138f880 (params->resp_avail is an illegal func pointer)
-> rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
-> eth_stop+0x74/0x110 (if dev->port_usb != NULL, call rndis_close)
-> __dev_close_many+0x134/0x194
-> dev_close_many+0x48/0x194
-> rollback_registered_many+0x118/0x814
-> unregister_netdevice_queue+0xe0/0x168
-> unregister_netdev+0x20/0x30
-> gether_cleanup+0x1c/0x38
-> rndis_free_inst+0x2c/0x58
-> rndis_attr_release+0xc/0x14
-> kref_put+0x74/0xb8
-> config_item_put+0x14/0x1c
-> configfs_rmdir+0x314/0x374
-> 
-> In step3,function pointer params->resp_avail() is a wild pointer
-> becase pointer params has been freed in step2.
-> 
-> Free mem stack(in step2):
-> usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
-> 
-> use-after-free stack(in step3):
-> eth_stop -> rndis_close -> rndis_signal_disconnect ->
-> rndis_indicate_status_msg -> params->resp_avail()
-> 
-> In function eth_stop(), if pointer dev->port_usb is NULL, function
-> rndis_close() will not be called.
-> If gadget->ops->pullup() return an error in step1,dev->port_usb will
-> not be set to null. So, a panic will be caused in step3.
-> =======================================================================
-> Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
-> callback from usb_gadget_disconnect())
-> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-> Signed-off-by: TaoXue <xuetao09@huawei.com>
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 > ---
-> drivers/usb/gadget/udc/core.c | 12 ++++++------
-> 1 file changed, 6 insertions(+), 6 deletions(-)
+>  mm/migrate.c | 15 ++++++++++++---
+>  mm/slab.c    |  6 +++++-
+>  mm/slub.c    |  6 +++++-
+>  3 files changed, 22 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index c63c0c2cf649..bf9878e1a72a 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
-> }
-> ret = gadget->ops->pullup(gadget, 0);
-> - if (!ret) {
-> + if (!ret)
-> gadget->connected = 0;
-> - mutex_lock(&udc_lock);
-> - if (gadget->udc->driver)
-> - gadget->udc->driver->disconnect(gadget);
-> - mutex_unlock(&udc_lock);
-> - }
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 1379e1912772..959c99cff814 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -74,13 +74,22 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
+>  	if (unlikely(!get_page_unless_zero(page)))
+>  		goto out;
+>  
+> +	if (unlikely(PageSlab(page)))
+> +		goto out_putpage;
+> +	/* Pairs with smp_wmb() in slab freeing, e.g. SLUB's __free_slab() */
+> +	smp_rmb();
+>  	/*
+> -	 * Check PageMovable before holding a PG_lock because page's owner
+> -	 * assumes anybody doesn't touch PG_lock of newly allocated page
+> -	 * so unconditionally grabbing the lock ruins page's owner side.
+> +	 * Check movable flag before taking the page lock because
+> +	 * we use non-atomic bitops on newly allocated page flags so
+> +	 * unconditionally grabbing the lock ruins page's owner side.
+>  	 */
+>  	if (unlikely(!__PageMovable(page)))
+>  		goto out_putpage;
+> +	/* Pairs with smp_wmb() in slab allocation, e.g. SLUB's alloc_slab_page() */
+> +	smp_rmb();
+> +	if (unlikely(PageSlab(page)))
+> +		goto out_putpage;
 > +
-> + mutex_lock(&udc_lock);
-> + if (gadget->udc->driver)
-> + gadget->udc->driver->disconnect(gadget);
-> + mutex_unlock(&udc_lock);
-> out:
-> trace_usb_gadget_disconnect(gadget, ret);
-> 
+>  	/*
+>  	 * As movable pages are not isolated from LRU lists, concurrent
+>  	 * compaction threads can race against page migration functions
+> diff --git a/mm/slab.c b/mm/slab.c
+> index 59c8e28f7b6a..219beb48588e 100644
+> --- a/mm/slab.c
+> +++ b/mm/slab.c
+> @@ -1370,6 +1370,8 @@ static struct slab *kmem_getpages(struct kmem_cache *cachep, gfp_t flags,
+>  
+>  	account_slab(slab, cachep->gfporder, cachep, flags);
+>  	__folio_set_slab(folio);
+> +	/* Make the flag visible before any changes to folio->mapping */
+> +	smp_wmb();
+>  	/* Record if ALLOC_NO_WATERMARKS was set when allocating the slab */
+>  	if (sk_memalloc_socks() && page_is_pfmemalloc(folio_page(folio, 0)))
+>  		slab_set_pfmemalloc(slab);
+> @@ -1387,9 +1389,11 @@ static void kmem_freepages(struct kmem_cache *cachep, struct slab *slab)
+>  
+>  	BUG_ON(!folio_test_slab(folio));
+>  	__slab_clear_pfmemalloc(slab);
+> -	__folio_clear_slab(folio);
+>  	page_mapcount_reset(folio_page(folio, 0));
+>  	folio->mapping = NULL;
+> +	/* Make the mapping reset visible before clearing the flag */
+> +	smp_wmb();
+> +	__folio_clear_slab(folio);
+>  
+>  	if (current->reclaim_state)
+>  		current->reclaim_state->reclaimed_slab += 1 << order;
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 99ba865afc4a..5e6519d5169c 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -1800,6 +1800,8 @@ static inline struct slab *alloc_slab_page(gfp_t flags, int node,
+>  
+>  	slab = folio_slab(folio);
+>  	__folio_set_slab(folio);
+> +	/* Make the flag visible before any changes to folio->mapping */
+> +	smp_wmb();
+>  	if (page_is_pfmemalloc(folio_page(folio, 0)))
+>  		slab_set_pfmemalloc(slab);
+>  
+> @@ -2000,8 +2002,10 @@ static void __free_slab(struct kmem_cache *s, struct slab *slab)
+>  	int pages = 1 << order;
+>  
+>  	__slab_clear_pfmemalloc(slab);
+> -	__folio_clear_slab(folio);
+>  	folio->mapping = NULL;
+> +	/* Make the mapping reset visible before clearing the flag */
+> +	smp_wmb();
+> +	__folio_clear_slab(folio);
+>  	if (current->reclaim_state)
+>  		current->reclaim_state->reclaimed_slab += pages;
+>  	unaccount_slab(slab, order, s);
 > -- 
-> 2.17.1
-> 
+> 2.38.0
 
-Hi,
+This looks correct to me.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Just noting to myself to avoid confusion in the future:
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
+- When one sees PageSlab() == false, __PageMovable() == true should not be false positive
+  from slab page because resetting ->mapping is visible first and then it clears PG_slab.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+- When one sees __PageMoveable() == true for slab page, PageSlab() must be true because
+  setting PG_slab in slab allocation is visible first and then it writes to ->mapping field.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+I hope it's nicely reshaped after Matthew's frozen refcount series.
 
-thanks,
-
-greg k-h's patch email bot
+-- 
+Thanks,
+Hyeonggon
