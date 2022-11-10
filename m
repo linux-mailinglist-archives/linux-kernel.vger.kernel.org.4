@@ -2,137 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D80A623E3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:02:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C07B623E3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKJJCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S229687AbiKJJDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiKJJCs (ORCPT
+        with ESMTP id S229603AbiKJJDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:02:48 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA55D69DC8;
-        Thu, 10 Nov 2022 01:02:47 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 772DC3200980;
-        Thu, 10 Nov 2022 04:02:46 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 10 Nov 2022 04:02:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1668070966; x=1668157366; bh=q00moUI8K+
-        pOFD9ktwoRAAtmtSjS7qt/Tr5OG5EM1/8=; b=AwhCrceGKorlAVUjfyPbzW28FM
-        eeSS9lcVePIHpJy1ZkC23YhXvXAzXJm/XL5iETpQjPrXwFFBFQZzglNyJU1CtPkO
-        OJGOPVAIlJS37k9rJawHfyxrhIXaG53GCELC5pBUaidIUwAo9TGBaS+8dVB3fhkl
-        13ppaCl6h4DxJYeCd1xJZIxGkHKSzczq3q+nDRD+gMLDxLcLRFsRufXxzc9NIy9Y
-        3FWuiX55bh56q9X4Lge2aHy2A5GhiU909sLX5rwPjceEt78oSHEM1T9WuAHXm+Hy
-        q567cC6ruRvR7/OwLKB5d3tdLdYC8k1aw3Y6XovD7L3gR76ORY9k1FgZRkJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668070966; x=1668157366; bh=q00moUI8K+pOFD9ktwoRAAtmtSjS
-        7qt/Tr5OG5EM1/8=; b=sgH9PeCaA38pM4BH3FZX+t/rMdUT+fYgU+mHUXK6V7w/
-        xDpykZZ74JzPDSODRsqZIDYuL9WbJvcGzT5DrLc/Y6I4UacKkrNSS/Q2pcVwGp1W
-        iplpqWvNvLZY1JQl+595AQB2UtYm9SuZO40FwJRm6EKtHIw3qTfDC6pZNgUvSP8q
-        StWcv2PXkIAosUXdc/cDsHEVffLQ3J/lOEZsz/tqX4MTBiDoY9sGvRZInIacjqmK
-        L1A/qOdxMe7EvseH/x8KFQVis/cDQLkMxO9R23TVGDzuw+qxpbM07GoTZ0tIFjyl
-        DTSqi5Gv2IHxdeZ1oiKODr4HHOR7tIxVhxxo5XD7Cw==
-X-ME-Sender: <xms:Nb5sY2YcwuC4_kfJeNk8TsMohtQNJVNUxMUmIZhHsbrMIJlI8UCQng>
-    <xme:Nb5sY5bXJwL3cLG92641KVJWuTqX_9UAfLgmcJuhkSTJoOczJz9kcqwbwBjaWCjZC
-    Mqmp2DClNJiSHbka98>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeefgdduvdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepofgfggfkjghffffhvfev
-    ufgtsehttdertderredtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorg
-    hrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepleelheeffeehheefvddv
-    kedtvdeitefgvddtkefgtddulefgfedttddvjeehheelnecuffhomhgrihhnpehsohhurh
-    gtvghfohhrghgvrdhnvghtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehm
-    rghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Nb5sYw_nT4BGT3u4PbsoPlkWjT0v77Pjczi9Di-YwjbILsWkbyFzkw>
-    <xmx:Nb5sY4pHVLQbI5ckX7z9GFrptNWjaxKCznBxXUs_liRDOAY2kBGaoQ>
-    <xmx:Nb5sYxo2pFvlYAVJiKTRcGVHJJo2UUY3lW050faWm3XRw3gntD-N_g>
-    <xmx:Nr5sY1exkr4JUEIuXX4GvDoGK8d3Jm0ciiPGcpSyxmELJCmph32RSA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 909F8B60086; Thu, 10 Nov 2022 04:02:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <d9b1e753-3bdd-4b8f-935e-718b0b590ace@app.fastmail.com>
-In-Reply-To: <213cb0f3-10ce-45b1-aa5d-41d753a0cadd@app.fastmail.com>
-References: <20221109043845.16617-1-balamanikandan.gunasundar@microchip.com>
- <Y2vghlEEmE+Bdm0v@lunn.ch>
- <213cb0f3-10ce-45b1-aa5d-41d753a0cadd@app.fastmail.com>
-Date:   Thu, 10 Nov 2022 10:02:25 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andrew Lunn" <andrew@lunn.ch>,
-        "Balamanikandan Gunasundar" <balamanikandan.gunasundar@microchip.com>
-Cc:     "Ulf Hansson" <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        ludovic.desroches@microchip.com, 3chas3@gmail.com,
-        Netdev <netdev@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] mmc: atmel-mci: Convert to gpio descriptors
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 04:03:41 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAD033C;
+        Thu, 10 Nov 2022 01:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=euI2vGaCMOurHqYTryBqSzQToVvfrQztpsrGNy9bXsQ=; b=TP1THSpJ+c3gRZNp5f+dqEfJoe
+        wzxT9yY8Lb3IXEf6f3/b9Hr2C7XntmdicAQ7NQGD68PdDKXVGmbxIcs93VUmHmTD22kjI7o4pARUV
+        cLGKyOvQ7Krk5HXHofjIm5rBTLkPhVwpLR+IniSy1b28WkKzPNPloH90eaUjHX1L9UetEv+Xs7JZc
+        WyZvmgJ5SJSA/nWZoyMp8R5EO63PiUC01GKBKq6ZzO8xkDSGOiEULGYhqzdX/JFypgtER4Wnh/2DU
+        vHN4c/m8Tlp+xrb0tvJcm0LJfv6OFolPpM9Dd/bMHGJyWV3uUXZdiKdFH17yHsbaBj3lrHpHfUlqO
+        mKLxxmSQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ot3T8-00AF8u-Qq; Thu, 10 Nov 2022 09:03:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3169130013F;
+        Thu, 10 Nov 2022 10:03:30 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 146BA2016A1E7; Thu, 10 Nov 2022 10:03:30 +0100 (CET)
+Date:   Thu, 10 Nov 2022 10:03:30 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, kevin.tian@intel.com
+Subject: Re: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
+ for NMI/IRQ reinjection
+Message-ID: <Y2y+YgBUYuUHbPtd@hirez.programming.kicks-ass.net>
+References: <20221110061545.1531-1-xin3.li@intel.com>
+ <20221110061545.1531-6-xin3.li@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110061545.1531-6-xin3.li@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022, at 09:05, Arnd Bergmann wrote:
-> On Wed, Nov 9, 2022, at 18:16, Andrew Lunn wrote:
->> On Wed, Nov 09, 2022 at 10:08:45AM +0530, Balamanikandan Gunasundar wrote:
->>> Replace the legacy GPIO APIs with gpio descriptor consumer interface.
->>
->> I was wondering why you Cc: netdev and ATM. This clearly has nothing
->> to do with those lists.
->>
->> You well foul of
->>
->> M:	Chas Williams <3chas3@gmail.com>
->> L:	linux-atm-general@lists.sourceforge.net (moderated for non-subscribers)
->> L:	netdev@vger.kernel.org
->> S:	Maintained
->> W:	http://linux-atm.sourceforge.net
->> F:	drivers/atm/
->> F:	include/linux/atm*
->> F:	include/uapi/linux/atm*
->>
->> Maybe these atm* should be more specific so they don't match atmel :-)
->
-> The uapi headers look unambiguous to me, for the three headers in
-> include/linux/, only the atmdev.h is actually significant, while
-> linux/atm.h and linux/atm_tcp.h could each be folded into the one
-> C file that actually uses the contents.
+On Wed, Nov 09, 2022 at 10:15:44PM -0800, Xin Li wrote:
+> To eliminate dispatching NMI/IRQ through the IDT, add
+> kvm_vmx_reinject_nmi_irq(), which calls external_interrupt()
+> for IRQ reinjection.
+> 
+> Lastly replace calling a NMI/IRQ handler in an IDT descriptor
+> with calling kvm_vmx_reinject_nmi_irq().
+> 
+> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: Xin Li <xin3.li@intel.com>
 
-Actually the situation for the linux/atmel*.h headers is similar:
-most of them are only used in one file, and the linux/atmel-mci.h
-contents should just be moved into drivers/mmc/host/atmel-mci.c
-as part of Balamanikandan's patch, to allow further cleanups.
+Idem.
 
-linux/atmel-isc-media.h similarly can go into its drivers as a
-separate patch if desired.
 
-The linux/atmel-ssc.h could ideally be cleaned up to get moved
-into sound/soc/atmel/ along with drivers/misc/atmel-ssc.c.
-The atmel-scc driver is technically also used by
-sound/spi/at73c213.c, but that driver has been orphaned since
-2014, with commit 2e591e7b3ac2 ("ARM: at91: remove
-at91sam9261/at91sam9g10 legacy board support"), as nobody
-ever added DT probing support to it.
+> +#if IS_ENABLED(CONFIG_KVM_INTEL)
+> +/*
+> + * KVM VMX reinjects NMI/IRQ on its current stack, it's a sync
+> + * call thus the values in the pt_regs structure are not used in
+> + * executing NMI/IRQ handlers, except cs.RPL and flags.IF, which
+> + * are both always 0 in the VMX NMI/IRQ reinjection context. Thus
+> + * we simply allocate a zeroed pt_regs structure on current stack
+> + * to call external_interrupt().
+> + */
+> +void kvm_vmx_reinject_nmi_irq(u32 vector)
 
-      Arnd
+noinstr ?
+
+> +{
+> +	struct pt_regs irq_regs;
+> +
+> +	memset(&irq_regs, 0, sizeof(irq_regs));
+> +
+> +	if (vector == NMI_VECTOR)
+> +		return exc_nmi(&irq_regs);
+> +
+> +	external_interrupt(&irq_regs, vector);
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_vmx_reinject_nmi_irq);
+> +#endif
+
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 63247c57c72c..b457e4888468 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -46,6 +46,7 @@
+>  #include <asm/mshyperv.h>
+>  #include <asm/mwait.h>
+>  #include <asm/spec-ctrl.h>
+> +#include <asm/traps.h>
+>  #include <asm/virtext.h>
+>  #include <asm/vmx.h>
+>  
+> @@ -6758,15 +6759,11 @@ static void vmx_apicv_post_state_restore(struct kvm_vcpu *vcpu)
+>  	memset(vmx->pi_desc.pir, 0, sizeof(vmx->pi_desc.pir));
+>  }
+>  
+> -void vmx_do_interrupt_nmi_irqoff(unsigned long entry);
+> -
+> -static void handle_interrupt_nmi_irqoff(struct kvm_vcpu *vcpu,
+> -					unsigned long entry)
+> +static void handle_interrupt_nmi_irqoff(struct kvm_vcpu *vcpu, u32 vector)
+>  {
+> -	bool is_nmi = entry == (unsigned long)asm_exc_nmi_noist;
+> -
+> -	kvm_before_interrupt(vcpu, is_nmi ? KVM_HANDLING_NMI : KVM_HANDLING_IRQ);
+> -	vmx_do_interrupt_nmi_irqoff(entry);
+> +	kvm_before_interrupt(vcpu, vector == NMI_VECTOR ?
+> +				   KVM_HANDLING_NMI : KVM_HANDLING_IRQ);
+> +	kvm_vmx_reinject_nmi_irq(vector);
+>  	kvm_after_interrupt(vcpu);
+>  }
+>  
+> @@ -6792,7 +6789,6 @@ static void handle_nm_fault_irqoff(struct kvm_vcpu *vcpu)
+>  
+>  static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
+>  {
+> -	const unsigned long nmi_entry = (unsigned long)asm_exc_nmi_noist;
+>  	u32 intr_info = vmx_get_intr_info(&vmx->vcpu);
+>  
+>  	/* if exit due to PF check for async PF */
+> @@ -6806,20 +6802,19 @@ static void handle_exception_nmi_irqoff(struct vcpu_vmx *vmx)
+>  		kvm_machine_check();
+>  	/* We need to handle NMIs before interrupts are enabled */
+>  	else if (is_nmi(intr_info))
+> -		handle_interrupt_nmi_irqoff(&vmx->vcpu, nmi_entry);
+> +		handle_interrupt_nmi_irqoff(&vmx->vcpu, NMI_VECTOR);
+>  }
+>  
+>  static void handle_external_interrupt_irqoff(struct kvm_vcpu *vcpu)
+>  {
+>  	u32 intr_info = vmx_get_intr_info(vcpu);
+>  	unsigned int vector = intr_info & INTR_INFO_VECTOR_MASK;
+> -	gate_desc *desc = (gate_desc *)host_idt_base + vector;
+>  
+>  	if (KVM_BUG(!is_external_intr(intr_info), vcpu->kvm,
+>  	    "KVM: unexpected VM-Exit interrupt info: 0x%x", intr_info))
+>  		return;
+>  
+> -	handle_interrupt_nmi_irqoff(vcpu, gate_offset(desc));
+> +	handle_interrupt_nmi_irqoff(vcpu, vector);
+>  	vcpu->arch.at_instruction_boundary = true;
+>  }
+
+How does any of this work? You're calling into entry/noinstr code from a
+random context.
