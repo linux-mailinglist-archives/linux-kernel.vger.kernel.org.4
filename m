@@ -2,85 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C85624578
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8164262457F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiKJPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
+        id S231441AbiKJPTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiKJPSY (ORCPT
+        with ESMTP id S231431AbiKJPTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:18:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E65531EF3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:18:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A5B4619A3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 15:18:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18DBCC433C1;
-        Thu, 10 Nov 2022 15:18:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668093500;
-        bh=P1veQsKG59JRNLlKHFjt59W4QFwwnV8LOv0rq5XQ56w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PypWXxbwE2Wx2kOKCsexwtBMj8zgdFyua7vGiENW2rNoaz2AQR9Fu/UvXmZ6eAZql
-         MOITHP6LTJcUZA7uNxVFVBlHKMNIsYkNSRCVS6qLfHkV0/jxJHz7QMKhxY6Y/ZCtJn
-         P7bt0RGOpexvl/NMzf1Kmj3BF+w0tEkb3t37OcBt1eti/URlyqAYXrD5nO36iUSaTm
-         ixzfD732dRYISonQIEHuTx8Nq+1vEoAy7ejxrB3JYcotl+TrakRX4E1YGEp4XLFI31
-         q5xEWcjTqnlfP1M8aQqVp+48kEONe43RBIEh7Rnf0lcTHiqv3hKtL+gLTl+6fFt4ec
-         hwi8diJlyS4Xg==
-Date:   Thu, 10 Nov 2022 08:18:18 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCHv5 04/13] zram: Introduce recompress sysfs knob
-Message-ID: <Y20WOnvkJ3xL7hq/@dev-arch.thelio-3990X>
-References: <20221109115047.2921851-1-senozhatsky@chromium.org>
- <20221109115047.2921851-5-senozhatsky@chromium.org>
- <Y2z4DbuYgDJ/v8u+@dev-arch.thelio-3990X>
- <Y20LV+1jJMZ2FFnM@google.com>
- <Y20NAX4R6RgRpWnE@google.com>
+        Thu, 10 Nov 2022 10:19:16 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E655C2EF0B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:18:47 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id l11so3581693edb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6VwCgF4hFF5U/01CMcYx8VspG2pIsl2trPvqOv5dL9I=;
+        b=WNeRqSfluqeqzoleeeZHGwTdul0BoO3yfmaQ5TlEvwM9KtN/3x8eKBzpimvMkv+56H
+         BX/vgj4L0svnGZ6MZYxL8qa3mB+FF+YlBXhDWEWa2GKyNRsGJUEVcmFZABpAkMonU3gf
+         OTXGh4ss+WhSIXNI4sVu/hFmfT7dPHIGQaUoX717l++CPdXD/JhDZU4WCW65X5gLa0fn
+         36RTA+Wmw5AgtdssnebjQSGu0tQaYS44y/mX4GZfWc9bfHK7JR/8YteCVHwxBLyIPGFv
+         NE6i35Lqb0woHU6tmMLO0vjt3Aq/lOP09cFckrT/S97jgMY7KhzdjgggUase3PIzO+5j
+         UGdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6VwCgF4hFF5U/01CMcYx8VspG2pIsl2trPvqOv5dL9I=;
+        b=5/bl3dKO9ybxK3bnCIdwk2sBz26vvPaTG+ThhuibiluyHJ2QR6aY2AvcjMpL4tI6Nx
+         yxAP9B5l5Mf+1ojKW3hAhoZCrMbD1TAwkLRUaCqIAEvWDYWykcYzV/bH+Ck8vEDmNV+O
+         JMZZlxSc35T5qA+td3p/dN27y9FTKoq3Pdx7FQcY3+gyCmxj5fNuHM49S2Tu9CP5AwG7
+         YYq8t1vUSAHGKYGdNnlc2CmdUhNeUOvS2ivtbfVuFXPQfSlplVACZNfc99PN9WH3cZQa
+         Cvk6l/P+XkPlVGMo9HLkdyaVnhYz3iPQGzEhzn8U1XtqhhZnVOhWmqmMzoZ1rTXNew4x
+         s+kg==
+X-Gm-Message-State: ACrzQf2I1ecgVqdBVGXJ246xlJk0Q8GV6fK21MoxuQzMLSdWXpNGoTLq
+        swA8xrcURnSp0QRHTzXHgFfi9A==
+X-Google-Smtp-Source: AMsMyM6JVAg4toZj+0Ru5Vwcj0hROuP+eRUw9hdyComNcQ/IgB6GpZKskhywvOW/q+KzrQ1T90Qelw==
+X-Received: by 2002:a05:6402:b64:b0:461:60e8:7ac3 with SMTP id cb4-20020a0564020b6400b0046160e87ac3mr2377641edb.80.1668093525658;
+        Thu, 10 Nov 2022 07:18:45 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id mf16-20020a170906cb9000b0073c80d008d5sm7212255ejb.122.2022.11.10.07.18.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 07:18:45 -0800 (PST)
+Message-ID: <a5caff28-6dc8-aee8-2c25-1d3810ec8434@linaro.org>
+Date:   Thu, 10 Nov 2022 16:18:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y20NAX4R6RgRpWnE@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH] arm64: dts: qcom: sm7225-fairphone-fp4: Enable SD card
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221110151507.53650-1-luca.weiss@fairphone.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221110151507.53650-1-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 11:38:57PM +0900, Sergey Senozhatsky wrote:
-> On (22/11/10 23:31), Sergey Senozhatsky wrote:
-> > On (22/11/10 06:09), Nathan Chancellor wrote:
-> > [..]
-> > > drivers/block/zram/zram_drv.c:1894:10: note: initialize the variable 'err' to silence this warning
-> > >                 int err;
-> > >                        ^
-> > >                         = 0
-> > > 7 errors generated.
-> > > 
-> > > Is the fix just to initialize err to 0 as it suggests or should there be
-> > > a different fix?
-> > 
-> > Yes, that's the correct fix. Thanks for catching this. We had "err = 0"
-> > in v4 of this patch set, but it somehow didn't make it to v5.
+
+
+On 10/11/2022 16:15, Luca Weiss wrote:
+> Fairphone 4 uses sdhc_2 for the SD card, configure the pins for it and
+> enable it.
 > 
-> Nathan, I just sent a simple one-liner patch. If you don't mind,
-> may we ask Andrew to take it as a fixup (folded) patch?
+> The regulators which are exclusively used for SDHCI have their maximum
+> voltage decreased to what downstream sets on the consumer side, like on
+> many other platforms and allowed to set the load.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Yup, sounds like a plan to me, thanks for the quick response and fix!
-
-Cheers,
-Nathan
+Konrad
+>   .../boot/dts/qcom/sm7225-fairphone-fp4.dts    | 39 ++++++++++++++++++-
+>   1 file changed, 37 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> index 30c94fd4fe61..1cb14051ab1b 100644
+> --- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+> @@ -279,8 +279,12 @@ vreg_l5e: ldo5 {
+>   
+>   		vreg_l6e: ldo6 {
+>   			regulator-min-microvolt = <1700000>;
+> -			regulator-max-microvolt = <3544000>;
+> +			regulator-max-microvolt = <2950000>;
+>   			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +			regulator-allowed-modes =
+> +				<RPMH_REGULATOR_MODE_LPM
+> +				 RPMH_REGULATOR_MODE_HPM>;
+>   		};
+>   
+>   		vreg_l7e: ldo7 {
+> @@ -297,8 +301,12 @@ vreg_l8e: ldo8 {
+>   
+>   		vreg_l9e: ldo9 {
+>   			regulator-min-microvolt = <2700000>;
+> -			regulator-max-microvolt = <3544000>;
+> +			regulator-max-microvolt = <2960000>;
+>   			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> +			regulator-allow-set-load;
+> +			regulator-allowed-modes =
+> +				<RPMH_REGULATOR_MODE_LPM
+> +				 RPMH_REGULATOR_MODE_HPM>;
+>   		};
+>   
+>   		vreg_l10e: ldo10 {
+> @@ -424,6 +432,33 @@ &qupv3_id_1 {
+>   	status = "okay";
+>   };
+>   
+> +&sdc2_off_state {
+> +	sd-cd-pins {
+> +		pins = "gpio94";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
+> +
+> +&sdc2_on_state {
+> +	sd-cd-pins {
+> +		pins = "gpio94";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +};
+> +
+> +&sdhc_2 {
+> +	vmmc-supply = <&vreg_l9e>;
+> +	vqmmc-supply = <&vreg_l6e>;
+> +
+> +	cd-gpios = <&tlmm 94 GPIO_ACTIVE_LOW>;
+> +
+> +	status = "okay";
+> +};
+> +
+>   &tlmm {
+>   	gpio-reserved-ranges = <13 4>, <56 2>;
+>   };
