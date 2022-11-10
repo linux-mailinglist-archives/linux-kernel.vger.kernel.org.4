@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0782A623F50
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA5E623F55
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbiKJKDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S229747AbiKJKEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiKJKDo (ORCPT
+        with ESMTP id S229603AbiKJKEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:03:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6606B3AA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668074562;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2q1t7C25N3Vp3tFlEZLX1WD9ENHtLq/HGn/qVSycOr4=;
-        b=Jj3S01Wk1ZNn0S0GlVQL9VSMXbRYQK5uv7EO/jZp57I1j0YrXqSCNk+QXvaZN8IFUE/Wh8
-        hxsrTtvWBzDIFtgLXUN8Hcs2ZcfFh9eKmDQ4rABlJpGxHmh7x0qTKpoFLu+oRDwVqVQSQD
-        Rae/lYrRTdzxAr21YNzz/Nb/SXW/RiY=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-209-waU6EajgNoG2aLhBRrt5fQ-1; Thu, 10 Nov 2022 05:02:41 -0500
-X-MC-Unique: waU6EajgNoG2aLhBRrt5fQ-1
-Received: by mail-pl1-f200.google.com with SMTP id x18-20020a170902ec9200b001869f20da7eso1099421plg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:02:41 -0800 (PST)
+        Thu, 10 Nov 2022 05:04:13 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4376AECA;
+        Thu, 10 Nov 2022 02:04:12 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id z17so774468qki.11;
+        Thu, 10 Nov 2022 02:04:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2XV85RM2D5cPjJ+hWNkLRIR1G9UoikIDXt1LLlRhD8A=;
+        b=qwwP6pmhD2bq2AH8IBA0Rh1N4i9O/412YKIKLExn+zHrY9YTlyQ//cUDeOa7bjPHms
+         +L1q0CGTs3b/kyHb3g66t3mRyI49Wob8/nZF59DMBZbsgmzVUh8TFZTWN4Kpqt6+fD1h
+         V3UmjGtJDArMDjkrwQFtOgf3BSObX904yIe8Bs0B4JVQbs1Tko5/cq1yQO/Hd5LvzuG3
+         Xs31Uc41I0GCXlhGg42qUHe+w7n/LxEkGpkztdmPjg8vWRINNpRfsSvq/WZlGrqJKOmz
+         p5OdRwWsjqHlcgF9Vbbxsl29vcgwA5TAdIcfZ6zaTJPpk8Ktnz6TogamhZLEfHkBXZc0
+         C0yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2q1t7C25N3Vp3tFlEZLX1WD9ENHtLq/HGn/qVSycOr4=;
-        b=Pk+edqb3bRejsEX+0sEQOHjnjx3zkm+QxciObP1oyLmfYrXYLJUk1bDjNLoIWOrGnX
-         vuvDdIi5PE4282OI3ImZQ5YZfVTQ0TQg27tWzfXF6B+0TCKtifLp97Xu7ik9m3Hg60xs
-         gr7CavXhLD5N9moRWqS9UpvhqoVeMrNfiB2lRuBbxfZZX7570IV63DPHz/hTInznY5Wh
-         yHXoE7qAqDzyEtLhAsJcL5gXAwEigrVIzhRQV/DNbUtn+MpBMTyHGIt99xXSpgQJjx0I
-         wn1AC3NDAy9Tsp6lTMqYynCcFGQcXHzWC+o8oALoFyYcYRFXdnumtr7uUMEyg10UtIAD
-         sRew==
-X-Gm-Message-State: ANoB5pkP2HRHAonFrcLSMf94AA0Ds4nM426TdzkboEYsoHojPrQpx9DF
-        kxU276ed+cj+u3kJLkH+ceFFRv8pEoTM+9gJjufkDN8oCqMrcqp/X7dnukAUqytQem4F9aH+Anq
-        bbno8/zyXvPHAqdguDuThhvcmHb5TF/3hW4y2z+EmWVDWAp+03EjP231csJEvzrMQSvkCzr/fcm
-        +h
-X-Received: by 2002:a17:90a:64c5:b0:217:346c:6ed2 with SMTP id i5-20020a17090a64c500b00217346c6ed2mr31623569pjm.202.1668074560288;
-        Thu, 10 Nov 2022 02:02:40 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7FIh7WS8WC/aUKorNND7B0z1uT6DsvPJJ/B87AT2mIW3fRadQkmtnp/p6pMOxxrhW0OmWkQw==
-X-Received: by 2002:a17:90a:64c5:b0:217:346c:6ed2 with SMTP id i5-20020a17090a64c500b00217346c6ed2mr31623535pjm.202.1668074559631;
-        Thu, 10 Nov 2022 02:02:39 -0800 (PST)
-Received: from ovpn-194-83.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id m4-20020a63ed44000000b004388ba7e5a9sm8865479pgk.49.2022.11.10.02.02.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 02:02:38 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Vipin Sharma <vipinsh@google.com>, seanjc@google.com,
-        pbonzini@redhat.com
-Cc:     dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] KVM: selftests: Make Hyper-V guest OS ID common
-In-Reply-To: <CAHVum0eYbQJvXY_TVyjadAYVrAcwXSEyJhpddkcBSohj+i+LqA@mail.gmail.com>
-References: <20221105045704.2315186-1-vipinsh@google.com>
- <20221105045704.2315186-5-vipinsh@google.com>
- <874jv8p7c5.fsf@ovpn-194-83.brq.redhat.com>
- <CAHVum0eYbQJvXY_TVyjadAYVrAcwXSEyJhpddkcBSohj+i+LqA@mail.gmail.com>
-Date:   Thu, 10 Nov 2022 11:02:28 +0100
-Message-ID: <87v8nnnn4b.fsf@ovpn-194-83.brq.redhat.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2XV85RM2D5cPjJ+hWNkLRIR1G9UoikIDXt1LLlRhD8A=;
+        b=6Cg5nKkLOYq6GyGUJX2xs4trfrU4ijIP1DRQPnTUTuJ0mNs5o84ZOviyKumpZ53pMh
+         9uumbUBu5/JfSoVJsBngiiofj+pARstuQ52LhshjYi9f5kXBrZDJt+52p6tR1gY/zMni
+         4EW6AQ4Dv/DdhrPf40zPrcjF4joQqB60/ffUxN2r3aN0gH5TWpr8O6B/ckRh6XMefDq6
+         FOA9xElh9jIL+6S8T/mXvwOKT9VSBVgt9MAux7mGEYi/UxTu1IuKeJTnUoIKTGc3zkvI
+         00w5KqPoOYSXHpS+K4luNp4VKkEwzZq/w8PiMG0Va6rTCjbKQaYfBl5i+MdRbyLapsjC
+         TKSw==
+X-Gm-Message-State: ANoB5pn1BlVQYA473hZO8GP/hfUGqzDkm52TptrqbO14STLUtgTjHup8
+        CBRclg3yww/lq1YTFMNoLVOGfoRHUDtgko4t5h5VDj3A870bpPM4
+X-Google-Smtp-Source: AA0mqf4zHFh5SBbSfQrtRwY9yFVtZhCvvTx6CtptTUQguahvGhZiglgxtVq1RGQe3ciWfcFRPPydbqdMTqbrOAXLDaI=
+X-Received: by 2002:a37:8784:0:b0:6fb:25ba:3d32 with SMTP id
+ j126-20020a378784000000b006fb25ba3d32mr547170qkd.504.1668074651427; Thu, 10
+ Nov 2022 02:04:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+ <20221108142226.63161-7-andriy.shevchenko@linux.intel.com> <20221110074456.hgmu7d5mn5kndc66@pengutronix.de>
+In-Reply-To: <20221110074456.hgmu7d5mn5kndc66@pengutronix.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 10 Nov 2022 12:03:35 +0200
+Message-ID: <CAHp75Vcky+1jcjAtQ+RwcnK6TjWrsK8UMSa7hO3wmDL0Eb6beQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] pinctrl: intel: Enumerate PWM device when
+ community has a capabilitty
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,44 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vipin Sharma <vipinsh@google.com> writes:
+On Thu, Nov 10, 2022 at 9:45 AM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+> On Tue, Nov 08, 2022 at 04:22:26PM +0200, Andy Shevchenko wrote:
+> > Some of the Communities may have PWM capability. In such cases,
+> > enumerate PWM device via respective driver. User is still responsible
+> > for setting correct pin muxing for the line that needs to output the
+> > signal.
 
-> On Wed, Nov 9, 2022 at 5:48 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->>
->> Vipin Sharma <vipinsh@google.com> writes:
->>
->> > Make guest OS ID calculation common to all hyperv tests and similar to
->> > hv_generate_guest_id().
->>
->> A similar (but without hv_linux_guest_id()) patch is present in my
->> Hyper-V TLB flush update:
->>
->> https://lore.kernel.org/kvm/20221101145426.251680-32-vkuznets@redhat.com/
->>
->
-> After getting feedback from David, I decided to remove
-> LINUX_VERSION_CODE in v2. Our patches are functionally identical now.
->
-> @Sean, Paolo, Vitaly
-> Should I be rebasing my v2 on top of TLB flush patch series and remove
-> patch 4 and 5 from my series? I am not sure how these situations are
-> handled.
->
-> @Vitaly
-> Are you planning to send v14?
->
-> If yes, then for v13 Patch 31 (KVM: selftests: Move HYPERV_LINUX_OS_ID
-> definition to a common header) will you keep it same or will you
-> modify it to add  HYPERV_LINUX_OS_ID  in hyperv_clock.c and
-> hyperv_svm_test.c?
->
-> If not, then I can add a patch in my series to change those two files
-> if I end up rebasing on top of your series.
->
+...
 
-Rumor has it that v13 is going to be merged to kvm/queue soon so I have
-no plans for v14 at this point. Fingers crossed)
+> > +     pwm =3D pwm_lpss_probe(pctrl->dev, community->regs + PWMC, &info)=
+;
+> > +     if (IS_ERR(pwm) && PTR_ERR(pwm) !=3D -ENODEV)
+> > +             return PTR_ERR(pwm);
+>
+> Linus and Andy already agreed that this patch is ugly. I wonder if this
+> here would be a bit less ugly if you do:
+>
+>         if (IS_REACHABLE(...)) {
+>                 pwm =3D pwm_lpss_probe(...);
+>                 ...
+>
+>
+>         }
+>
+> and drop the check PTR_ERR(pwm) !=3D -ENODEV (which might have a differen=
+t
+> semantic than "the pwm driver isn't available").
 
--- 
-Vitaly
+I will think about it (in such case the comment against the previous
+patch makes more sense to me).
 
+Thank you for the review!
+
+--=20
+With Best Regards,
+Andy Shevchenko
