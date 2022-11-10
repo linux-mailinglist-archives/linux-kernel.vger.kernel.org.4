@@ -2,90 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E66624265
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62B4624278
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiKJMbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S229843AbiKJMk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiKJMbb (ORCPT
+        with ESMTP id S229588AbiKJMkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:31:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADB66BDD2;
-        Thu, 10 Nov 2022 04:31:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 10 Nov 2022 07:40:25 -0500
+X-Greylist: delayed 354 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Nov 2022 04:40:23 PST
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E28C22516;
+        Thu, 10 Nov 2022 04:40:23 -0800 (PST)
+Received: from mxde.zte.com.cn (unknown [10.35.20.121])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N7Lr30lsFz7BlX;
+        Thu, 10 Nov 2022 20:34:27 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4N7Lqn154lz9vSp3;
+        Thu, 10 Nov 2022 20:34:13 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N7Lqj53HbzdmYkl;
+        Thu, 10 Nov 2022 20:34:09 +0800 (CST)
+Received: from mxct.zte.com.cn (unknown [192.168.251.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N7Lqf3HpHz8RV7D;
+        Thu, 10 Nov 2022 20:34:06 +0800 (CST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CB761638;
-        Thu, 10 Nov 2022 12:31:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12594C433C1;
-        Thu, 10 Nov 2022 12:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668083489;
-        bh=2E5hv2r7AZmXX2yuakf8ltitF0UslUzE1kVGsGiQao4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=th656oem0Dt0plFopWGpua7+J9aYc6xJhWh6AyfWm0f8N+pchEWZ+ritDMtB87ByX
-         BTg+R8egYohS3vrbUlqy/Bv90ov22EUr0FinA8tVZ4P78OVSE6zAJurmPbH5n/RzOY
-         6D3YhO9aZ2yPAfA/7nCDHzsRmHDDg6O5SWDL6kvDd7ZE+FgTdkLIGtPSZ5M6y5qwBt
-         sxk9RosaH6UTDoQm2mLVREw7IAwZzo54/fnIAujXi9qm8da1u9+KPD99Qdt/7blrG1
-         Xjfv9Ex6N9Z6R8hD2neWJU5IJhzvVsqhyQRCYMcA9O3VZDnsw0i+IcP1eVKmQmk+2B
-         RCh/EUmC6Ry3Q==
-Date:   Thu, 10 Nov 2022 12:31:23 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, patches@linaro.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] regulator: qcom_smd: Fix PMR735a S3 regulator spec
-Message-ID: <Y2zvGxmUyl/kpieu@sirena.org.uk>
-References: <20221110121225.9216-1-konrad.dybcio@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7H6ScoooF8pWRyKa"
-Content-Disposition: inline
-In-Reply-To: <20221110121225.9216-1-konrad.dybcio@linaro.org>
-X-Cookie: Torque is cheap.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N7LqZ6MvLz4y0v3;
+        Thu, 10 Nov 2022 20:34:02 +0800 (CST)
+Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
+        by mse-fl1.zte.com.cn with SMTP id 2AACXwdd047492;
+        Thu, 10 Nov 2022 20:33:58 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp03[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Thu, 10 Nov 2022 20:34:01 +0800 (CST)
+Date:   Thu, 10 Nov 2022 20:34:01 +0800 (CST)
+X-Zmail-TransId: 2b05636cefb953b22096
+X-Mailer: Zmail v1.0
+Message-ID: <202211102034017058666@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <tyreld@linux.ibm.com>
+Cc:     <mpe@ellerman.id.au>, <npiggin@gmail.com>,
+        <christophe.leroy@csgroup.eu>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNjc2k6IGlibXZmYzogdXNlIHN5c2ZzX2VtaXQoKSB0byBpbnN0ZWFkIG9mIHNjbnByaW50Zigp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2AACXwdd047492
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 636CEFD2.000 by FangMail milter!
+X-FangMail-Envelope: 1668083667/4N7Lr30lsFz7BlX/636CEFD2.000/10.35.20.121/[10.35.20.121]/mxde.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 636CEFD2.000/4N7Lr30lsFz7BlX
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Xu Panda <xu.panda@zte.com.cn>
 
---7H6ScoooF8pWRyKa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Replace the open-code with sysfs_emit() to simplify the code.
 
-On Thu, Nov 10, 2022 at 01:12:25PM +0100, Konrad Dybcio wrote:
-> PMR735a has a wider range than previously defined. Fix it.
->=20
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> No Fixes tag, as the patch is only in -next, so the hash will change.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
+---
+ drivers/scsi/ibmvscsi/ibmvfc.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-No, it won't.
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index 1a0c0b7289d2..c412752ea140 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -3411,7 +3411,7 @@ static ssize_t ibmvfc_show_host_partition_name(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
 
---7H6ScoooF8pWRyKa
-Content-Type: application/pgp-signature; name="signature.asc"
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 			vhost->login_buf->resp.partition_name);
+ }
 
------BEGIN PGP SIGNATURE-----
+@@ -3421,7 +3421,7 @@ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNs7xoACgkQJNaLcl1U
-h9C5dAf+NZWkTN7Hnmen4YrXKFI0KUXn5uPN01YHixe4hTiQ9M4z8z8ZhDXWzum6
-MqQB01rohiGeEa2JCDVSWW2I0jtviqKF0NygjZacr3vTPogv5jt390gSSXQjhcfK
-tjIl3Ef4hFyAq4+n7RBJxZopkUCbP7oPiQd2vBonRRJ625T5Tf9TE/zdnVdDcNNJ
-0qk/V6zU6CUgxJd0M3G64MPCDgNnz1uSVzJMoRmKhe6GUDbzdy7rTr5vLty/BtIJ
-HeQpsorUZFOILsfU2+0K5vehR7AZ5mVcbBse0kPrMOrUb7SQ0malLadHISZGpxvo
-B6T6vyGxVTsn3mzoIJ4U5ooSOG65wg==
-=oiEz
------END PGP SIGNATURE-----
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 			vhost->login_buf->resp.device_name);
+ }
 
---7H6ScoooF8pWRyKa--
+@@ -3431,7 +3431,7 @@ static ssize_t ibmvfc_show_host_loc_code(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 			vhost->login_buf->resp.port_loc_code);
+ }
+
+@@ -3441,7 +3441,7 @@ static ssize_t ibmvfc_show_host_drc_name(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
++	return sysfs_emit(buf, "%s\n",
+ 			vhost->login_buf->resp.drc_name);
+ }
+
+@@ -3450,7 +3450,7 @@ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
+ {
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+-	return snprintf(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
++	return sysfs_emit(buf, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
+ }
+
+ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
+@@ -3458,7 +3458,7 @@ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
+ {
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+-	return snprintf(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
++	return sysfs_emit(buf, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
+ }
+
+ /**
+@@ -3479,7 +3479,7 @@ static ssize_t ibmvfc_show_log_level(struct device *dev,
+ 	int len;
+
+ 	spin_lock_irqsave(shost->host_lock, flags);
+-	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->log_level);
++	len = sysfs_emit(buf, "%d\n", vhost->log_level);
+ 	spin_unlock_irqrestore(shost->host_lock, flags);
+ 	return len;
+ }
+@@ -3517,7 +3517,7 @@ static ssize_t ibmvfc_show_scsi_channels(struct device *dev,
+ 	int len;
+
+ 	spin_lock_irqsave(shost->host_lock, flags);
+-	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->client_scsi_channels);
++	len = sysfs_emit(buf, "%d\n", vhost->client_scsi_channels);
+ 	spin_unlock_irqrestore(shost->host_lock, flags);
+ 	return len;
+ }
+-- 
+2.15.2
