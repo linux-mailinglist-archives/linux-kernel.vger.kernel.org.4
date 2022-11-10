@@ -2,87 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953A8624430
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AD462449C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiKJOYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
+        id S231220AbiKJOqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:46:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKJOYR (ORCPT
+        with ESMTP id S231199AbiKJOp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:24:17 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17BD27DD3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:24:15 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7PGd0w3Mz4f3w0x
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 22:24:09 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgD3GtiKCW1jxQ4yAQ--.5594S4;
-        Thu, 10 Nov 2022 22:24:12 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     yebin10@huawei.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: hda: fix potential memleak in 'add_widget_node'
-Date:   Thu, 10 Nov 2022 22:45:39 +0800
-Message-Id: <20221110144539.2989354-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 10 Nov 2022 09:45:57 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65261554F3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:45:56 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id h193so2029324pgc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:45:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vixtechnology.com; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P9x9mcXLURShJST1wNvTGAqFBywrHCpm5rFlPhpTc+w=;
+        b=GMbNXOtEWrHeewrlkFYFD+3pQBUsAd1MAKYqoKPaYbxhnXlOBCtOFquMsaLnS2Ppa7
+         6Py8ZsaBTsN5eIlfr6j+4lH3J4Bgcmq3WcEvnyLbeHzGf0b5HK/mmH2BcVRXNbUxxFDH
+         yTQl9sl9+SOVVApNy2FJP7G4eX7NzaJiDH2ws=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P9x9mcXLURShJST1wNvTGAqFBywrHCpm5rFlPhpTc+w=;
+        b=AdlfEeqzlM6uK+HMPUfVg6J735z4S6vsaClo9liKdK1mcZv7Y/Fidsco+4h9qqdOrX
+         A5J6CtBzA61E2NSpjtKwYABSV4AsRgUHifFzbbxbjZ+v80P0rGtKk06BcSd/LUPk/wNj
+         x3ivF9XolkWvEinJtuAk6vRnOHv5b8BYOT4Nt21ZN2X7AaBOlLiwRCyk34yNoA5h/GBp
+         XzjMmWVyem9vuJA63mrhx9D5DnXmP1hYOfc06gz05jesdEuPSWpdzSda5Kq/5EULZoW5
+         pOD6oCWB/yPIXcCJ16AhobYwf4w0szVwyzPIWSHS1PfMNywP4kuvTBjlmabyKp46GGyk
+         YoBQ==
+X-Gm-Message-State: ACrzQf2MDK3AZvs4jT4mP3QLLt9f86ZiD4sIQbGKQ0RW0NKP/QuXMICl
+        DJJz4yrGPgNQ3Sc/eeodJc7VWdfALb7gLL3B0GYsL0VUpsdfpWHvxknifNw/kpRQX46BSJzu0sg
+        DukWcfLwWY9qDNyJH
+X-Google-Smtp-Source: AMsMyM6I/k3FZUgvktdtEam/Lh8YsIC7clRwn3QTxwUOfPvYwqgdXnSJlJfRZbMs4yGNHXTdO6DPHQ==
+X-Received: by 2002:a63:1a60:0:b0:43c:9bcd:6c37 with SMTP id a32-20020a631a60000000b0043c9bcd6c37mr54232921pgm.125.1668091555699;
+        Thu, 10 Nov 2022 06:45:55 -0800 (PST)
+Received: from [192.168.1.110] (106-68-237-135.tpgi.com.au. [106.68.237.135])
+        by smtp.gmail.com with ESMTPSA id q8-20020a17090311c800b00186b5c1a715sm8737029plh.182.2022.11.10.06.45.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 06:45:55 -0800 (PST)
+Message-ID: <b6ac2692-3152-dfc4-5388-7986042970f0@vixtechnology.com>
+Date:   Thu, 10 Nov 2022 22:45:49 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3GtiKCW1jxQ4yAQ--.5594S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrKFy5Kw18trW7Kr43XFy7KFg_yoWfArg_GF
-        W8X3Z8uw1fGrnrK342yws5ZF4qgw43Aw18CrZayFnrAw47GrZ5trsrW3s0yr1UuFWSgFWU
-        uryqq34DtFyIkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbr8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WF
-        yUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] iio: light: apds9960: Fix iio_event_spec structures
+To:     Matt Ranostay <matt.ranostay@konsulko.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20221110101241.10576-1-subhajit.ghosh@vixtechnology.com>
+ <CAJCx=g=qRd+WaCLOHwnEjg1Myg4Ng=PK0sxcGgEG9VT+VpondA@mail.gmail.com>
+From:   Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>
+In-Reply-To: <CAJCx=g=qRd+WaCLOHwnEjg1Myg4Ng=PK0sxcGgEG9VT+VpondA@mail.gmail.com>
+Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
 
-As 'kobject_add' may allocated memory for 'kobject->name' when return error.
-And in this function, if call 'kobject_add' failed didn't free kobject.
-So call 'kobject_put' to recycling resources.
+>>                 .type =3D IIO_EV_TYPE_THRESH,
+>>                 .dir =3D IIO_EV_DIR_RISING,
+>> -               .mask_separate =3D BIT(IIO_EV_INFO_VALUE) |
+>> -                       BIT(IIO_EV_INFO_ENABLE),
+>> +               .mask_separate =3D BIT(IIO_EV_INFO_VALUE),
+>=20
+> Probably more concise to use the following, and you won't need to add
+> an additional item to the structs.
+>=20
+>    .mask_separate =3D BIT(IIO_EV_INFO_VALUE),
+>    .mask_shared_by_type =3D BIT(IIO_EV_INFO_ENABLE),
+>=20
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- sound/hda/hdac_sysfs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Above is the first thing I tried.
 
-diff --git a/sound/hda/hdac_sysfs.c b/sound/hda/hdac_sysfs.c
-index e47de49a32e3..62a9615dcf52 100644
---- a/sound/hda/hdac_sysfs.c
-+++ b/sound/hda/hdac_sysfs.c
-@@ -346,8 +346,10 @@ static int add_widget_node(struct kobject *parent, hda_nid_t nid,
- 		return -ENOMEM;
- 	kobject_init(kobj, &widget_ktype);
- 	err = kobject_add(kobj, parent, "%02x", nid);
--	if (err < 0)
-+	if (err < 0) {
-+		kobject_put(kobj);
- 		return err;
-+	}
- 	err = sysfs_create_group(kobj, group);
- 	if (err < 0) {
- 		kobject_put(kobj);
--- 
-2.31.1
+Current implementation:
 
+root@stm32mp1:~# ls -1 /sys/bus/iio/devices/iio:device0/events/
+in_intensity_clear_thresh_falling_en
+in_intensity_clear_thresh_falling_value
+in_intensity_clear_thresh_rising_en
+in_intensity_clear_thresh_rising_value
+
+in_proximity_thresh_falling_en
+in_proximity_thresh_falling_value
+in_proximity_thresh_rising_en
+in_proximity_thresh_rising_value
+
+
+First method (Which you are suggesting):
+.mask_separate =3D BIT(IIO_EV_INFO_VALUE),
+.mask_shared_by_type =3D BIT(IIO_EV_INFO_ENABLE),
+
+root@stm32mp1:~# ls -1 /sys/bus/iio/devices/iio:device0/events/
+in_intensity_clear_thresh_falling_value
+in_intensity_clear_thresh_rising_value
+in_intensity_thresh_falling_en
+in_intensity_thresh_rising_en
+
+The above says all channels with with the type IIO_INTENSITY has
+the same enable but we require this particular channel (in_intensity_clear)
+regardless of direction to have the same enable.
+Using mask_shared_by_dir and mask_shared_by_all does not provide the logica=
+l
+attribute name.=20
+
+
+This patch provides the below:
+
+root@stm32mp1:~# ls -1 /sys/bus/iio/devices/iio:device0/events/
+in_intensity_clear_thresh_either_en
+in_intensity_clear_thresh_falling_value
+in_intensity_clear_thresh_rising_value
+
+in_proximity_thresh_either_en
+in_proximity_thresh_falling_value
+in_proximity_thresh_rising_value
+
+Verified using iio_event_monitor:
+
+root@stm32mp1:~# ./iio_event_monitor /dev/iio:device0
+Event: time: 1647143384807582753, type: proximity, channel: 0, evtype: thre=
+sh, direction: either
+
+
+Regards
+Subhajit Ghosh
+
+--=20
+This email is confidential. If you have received this email in error please=
+=20
+notify=C2=A0us immediately by return email and delete this email and any=20
+attachments.=C2=A0Vix accepts no liability for any damage caused by this em=
+ail=20
+or any attachments due=C2=A0to viruses, interference, interception, corrupt=
+ion=20
+or unauthorised access.
