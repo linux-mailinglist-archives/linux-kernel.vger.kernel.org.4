@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351766239D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547476239D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiKJCfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:35:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S232187AbiKJChD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKJCfa (ORCPT
+        with ESMTP id S232213AbiKJCg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:35:30 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBA11FCDF;
-        Wed,  9 Nov 2022 18:35:27 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id k4so405695qkj.8;
-        Wed, 09 Nov 2022 18:35:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pq5RYqThuejD6uu/zb1QtnBMuQ23tJwERQM40gO3AZg=;
-        b=aWpQG6iJqjVOAGiBZ2SwELO2lY/Ryd55OCsGFVcsIoRfNzkMwFbM4mN3HyvSYohNOa
-         qD62ev8h9111DhGtLqJtyj1WQIvV1ZYH3tlve+SiFiyjJTGj9CsbgnLJNUox74YCIyeJ
-         4ARNysKO4W3BRx/6NyEG6UpB6p3TzM4V0Pdo1f/mHK9E+jUmCS3g5WbyvLkhyNDCsmaD
-         WT1NTwECQMXy6nne9Bxd6GtBPzzqsemDV4HDhKDNKoh+NolsB8yfk+GjyrkgNLM1JqHy
-         VdRoAFVcxf2XBT7IoQyK+so4dwPQgrLwOtFjHLuUMd8hokUUSqr3OjGY1sUFNUNHnNTC
-         8IBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pq5RYqThuejD6uu/zb1QtnBMuQ23tJwERQM40gO3AZg=;
-        b=lLr6a8J4iv70SzYhYhp8V5BmxBUgbIkjirDtAijda6yOGNNUmlamUbaqAKB4QOtX5b
-         mkCq+7yA0xUxnaR6b666LcxcitNL5KKHNoobSQbaROvI4XS0LbjWo/vT+KbkQF9+kPXj
-         TBX8Trtmaq13GIcSWcKW9mapwEspch0xGn6foHORxfAW4FqNCnT1zZVYW+WFMHWxlrBY
-         uYDpMI//a0hpGAgU6EXwZfRGsudSXomXnf0z21d+AtCE53Gfjq0wwsNZSuZHKuMB/kdK
-         ANTFyRBiS1lQYdWJUaVLshpJvL50ptqZZCxEorDbq341IZHP7Q7kM/BGlIM9nhVgompz
-         1Jlw==
-X-Gm-Message-State: ACrzQf2nQ+bTqLlYLR+yoH5+BitydDWHQdgw5EgA3KMjhIQ1GwV+26zH
-        0hRiF55jUmH/67IWDGSjYQ==
-X-Google-Smtp-Source: AMsMyM4UqWbbV6ac/62eJOlGAVPaF9OvO6/uWxec4gR3L0VsKQ+htizK7olz/zYi7P2JxkFoC3O9fw==
-X-Received: by 2002:a37:42cf:0:b0:6e8:3bad:729 with SMTP id p198-20020a3742cf000000b006e83bad0729mr45464657qka.742.1668047726211;
-        Wed, 09 Nov 2022 18:35:26 -0800 (PST)
-Received: from bytedance.attlocal.net ([130.44.212.155])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05620a40ca00b006fa12a74c53sm12288705qko.61.2022.11.09.18.35.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 18:35:25 -0800 (PST)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Leon Romanovsky <leon@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH net-next v6] net/sock: Introduce trace_sk_data_ready()
-Date:   Wed,  9 Nov 2022 18:34:58 -0800
-Message-Id: <20221110023458.2726-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Nov 2022 21:36:59 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D19201BD;
+        Wed,  9 Nov 2022 18:36:57 -0800 (PST)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N75W54m3ZzJnZQ;
+        Thu, 10 Nov 2022 10:33:53 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 10:36:54 +0800
+Message-ID: <f118d0b1-1bf2-b710-c3b4-2745c72f02b3@huawei.com>
+Date:   Thu, 10 Nov 2022 10:36:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2] gpiolib: fix memory leak in gpiochip_setup_dev
+Content-Language: en-US
+To:     Kent Gibson <warthog618@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        <linux@roeck-us.net>
+CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <linux-gpio@vger.kernel.org>, <liwei391@huawei.com>,
+        <yuancan@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <Y2ttmcV+PFDUZR3l@sol>
+ <20221109093120.3128541-1-zengheng4@huawei.com>
+ <Y2u9bLIohQ8eFTY1@smile.fi.intel.com> <Y2xTSyce8WfLdtge@sol>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <Y2xTSyce8WfLdtge@sol>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,735 +56,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
 
-As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
-callback implementations.  For example:
+On 2022/11/10 9:26, Kent Gibson wrote:
+> On Wed, Nov 09, 2022 at 04:47:08PM +0200, Andy Shevchenko wrote:
+>> On Wed, Nov 09, 2022 at 05:31:20PM +0800, Zeng Heng wrote:
+>>> gcdev_register & gcdev_unregister call device_add & device_del to
+>>> request/release source. But in device_add, the dev->p allocated by
+>>> device_private_init is not released by device_del.
+>> First of all, we refer to the functions like func().
+Thanks, it would be updated in next version.
+> Further to this, the description of the problem could be clearer -
+> it would be helpful to indicate the code path that triggers the problem
+> - it is gpiochip_sysfs_register() returning an error?
+>
+>>> So when calling gcdev_unregister to release gdev, it needs put_device
+>>> to release dev in the following.
+>>>
+>>> Otherwise, kmemleak would report memory leak such as below:
+>>>
+>>> unreferenced object 0xffff88810b406400 (size 512):
+>>>    comm "python3", pid 1682, jiffies 4295346908 (age 24.090s)
+>>>    hex dump (first 32 bytes):
+>>>      00 00 00 00 ad 4e ad de ff ff ff ff 00 00 00 00  .....N..........
+>>>      ff ff ff ff ff ff ff ff a0 5e 23 90 ff ff ff ff  .........^#.....
+>>>    backtrace:
+>> Second, read Submitting Patches on how to provide your backtraces in the
+>> message body.
 
-<...>
-  ksoftirqd/0-16  [000] ..s..  99.784482: sk_data_ready: family=10 protocol=58 func=sock_def_readable
-  ksoftirqd/0-16  [000] ..s..  99.784819: sk_data_ready: family=10 protocol=58 func=sock_def_readable
-<...>
+Thanks, it would be updated in next version.
 
-Suggested-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-v1-v5: https://lore.kernel.org/netdev/20220928221514.27350-1-yepeilin.cs@gmail.com/
+>>
+>>>      [<00000000a58ee5fe>] kmalloc_trace+0x22/0x110
+>>>      [<0000000045fe2058>] device_add+0xb34/0x1130
+>>>      [<00000000d778b45f>] cdev_device_add+0x83/0xe0
+>>>      [<0000000089f948ed>] gpiolib_cdev_register+0x73/0xa0
+>>>      [<00000000a3a8a316>] gpiochip_setup_dev+0x1c/0x70
+>>>      [<00000000787227b4>] gpiochip_add_data_with_key+0x10f6/0x1bf0
+>>>      [<000000009ac5742c>] devm_gpiochip_add_data_with_key+0x2e/0x80
+>>>      [<00000000bf2b23d9>] xra1403_probe+0x192/0x1b0 [gpio_xra1403]
+>>>      [<000000005b5ef2d4>] spi_probe+0xe1/0x140
+>>>      [<000000002b26f6f1>] really_probe+0x17c/0x3f0
+>>>      [<00000000dd2dad9c>] __driver_probe_device+0xe3/0x170
+>>>      [<000000005ca60d2a>] device_driver_attach+0x34/0x80
+>>>      [<00000000e9db90db>] bind_store+0x10b/0x1a0
+>>>      [<00000000e2650f8a>] drv_attr_store+0x49/0x70
+>>>      [<0000000080a80b2b>] sysfs_kf_write+0x8c/0xb0
+>>>      [<00000000a28b45b9>] kernfs_fop_write_iter+0x216/0x2e0
+>>>
+>>> unreferenced object 0xffff888100de9800 (size 512):
+>>>    comm "python3", pid 264, jiffies 4294737615 (age 33.514s)
+>>>    hex dump (first 32 bytes):
+>>>      00 00 00 00 ad 4e ad de ff ff ff ff 00 00 00 00  .....N..........
+>>>      ff ff ff ff ff ff ff ff a0 5e 63 a1 ff ff ff ff  .........^c.....
+>>>    backtrace:
+>>>      [<00000000bcc571d0>] kmalloc_trace+0x22/0x110
+>>>      [<00000000eeb06124>] device_add+0xb34/0x1130
+>>>      [<000000007e5cd2fd>] cdev_device_add+0x83/0xe0
+>>>      [<000000008f6bcd3a>] gpiolib_cdev_register+0x73/0xa0
+>>>      [<0000000012c93b24>] gpiochip_setup_dev+0x1c/0x70
+>>>      [<00000000a24b646a>] gpiochip_add_data_with_key+0x10f6/0x1bf0
+>>>      [<000000000c225212>] tpic2810_probe+0x16e/0x196 [gpio_tpic2810]
+>>>      [<00000000b52d04ff>] i2c_device_probe+0x651/0x680
+>>>      [<0000000058d3ff6b>] really_probe+0x17c/0x3f0
+>>>      [<00000000586f43d3>] __driver_probe_device+0xe3/0x170
+>>>      [<000000003f428602>] device_driver_attach+0x34/0x80
+>>>      [<0000000040e91a1b>] bind_store+0x10b/0x1a0
+>>>      [<00000000c1d990b9>] drv_attr_store+0x49/0x70
+>>>      [<00000000a23bfc22>] sysfs_kf_write+0x8c/0xb0
+>>>      [<00000000064e6572>] kernfs_fop_write_iter+0x216/0x2e0
+>>>      [<00000000026ce093>] vfs_write+0x658/0x810
+>>>
+>>> Because at the point of gpiochip_setup_dev here, where dev.release
+>>> does not set yet, calling put_device would cause the warning of
+>>> no release function and double-free in the following fault handler
+>>> route (when kfree dev_name). So directly calling kfree to release
+>>> dev->p here in case of memory leak.
+> Again, this could be clearer.  The dev->p is normally freed by
+> device_release() - why is that not happening in this case?
+> (as put_device() is never called in this path)
+>
+> The double free you see if you do call put_device() appears to be due to
+> different expectations as to the cleanup that gpiochip_setup_dev() will
+> perform on error, depending on where it is called. gpiochip_setup_devs()
+> assumes any cleanup is performed by gpiochip_setup_dev(), while
+> gpiochip_add_data_with_key() assumes that it hasn't performed any cleanup.
+>
+> Having gpiochip_setup_dev() perform its own cleanup makes the most sense
+> to me, so gpiochip_add_data_with_key() should be changed to allow for
+> that.
 
-change since v5:
-  - Rebase onto net-next
 
-change since v4:
-  - Add back tracepoint in iscsi_target_sk_data_ready()
+Right, the cleanup route of gpiochip_add_data_with_key() & 
+gpiochip_setup_dev()
 
-changes since v3:
-  - Avoid using __func__ everywhere (Leon Romanovsky)
-  - Delete tracepoint in iscsi_target_sk_data_ready()
+has to be considered comprehensively after any possible cases of fault 
+injections.
 
-change since v2:
-  - Fix modpost error for modules (kernel test robot)
 
-changes since v1:
-  - Move tracepoint into ->sk_data_ready() callback implementations
-    (Eric Dumazet)
-  - Fix W=1 warning (Jakub Kicinski)
+>> ...
+>>
+>>> @@ -539,6 +539,7 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
+>>>   
+>>>   err_remove_device:
+>>>   	gcdev_unregister(gdev);
+>>> +	kfree(gdev->dev.p);
+>>>   	return ret;
+>> Third, I do not believe it's a correct fix.
+>> Have you read comments around device_del() / etc.?
 
- drivers/infiniband/hw/erdma/erdma_cm.c   |  3 +++
- drivers/infiniband/sw/siw/siw_cm.c       |  5 +++++
- drivers/infiniband/sw/siw/siw_qp.c       |  3 +++
- drivers/nvme/host/tcp.c                  |  3 +++
- drivers/nvme/target/tcp.c                |  5 +++++
- drivers/scsi/iscsi_tcp.c                 |  3 +++
- drivers/soc/qcom/qmi_interface.c         |  3 +++
- drivers/target/iscsi/iscsi_target_nego.c |  2 ++
- drivers/xen/pvcalls-back.c               |  5 +++++
- fs/dlm/lowcomms.c                        |  5 +++++
- fs/ocfs2/cluster/tcp.c                   |  5 +++++
- include/trace/events/sock.h              | 24 ++++++++++++++++++++++++
- net/ceph/messenger.c                     |  4 ++++
- net/core/net-traces.c                    |  2 ++
- net/core/skmsg.c                         |  3 +++
- net/core/sock.c                          |  2 ++
- net/kcm/kcmsock.c                        |  3 +++
- net/mptcp/subflow.c                      |  3 +++
- net/qrtr/ns.c                            |  3 +++
- net/rds/tcp_listen.c                     |  2 ++
- net/rds/tcp_recv.c                       |  2 ++
- net/sctp/socket.c                        |  3 +++
- net/smc/smc_rx.c                         |  3 +++
- net/sunrpc/svcsock.c                     |  5 +++++
- net/sunrpc/xprtsock.c                    |  3 +++
- net/tipc/socket.c                        |  3 +++
- net/tipc/topsrv.c                        |  5 +++++
- net/tls/tls_sw.c                         |  3 +++
- net/xfrm/espintcp.c                      |  3 +++
- 29 files changed, 118 insertions(+)
+Yes, not only the comments I read, but also the device_del() implement code.
 
-diff --git a/drivers/infiniband/hw/erdma/erdma_cm.c b/drivers/infiniband/hw/erdma/erdma_cm.c
-index 74f6348f240a..771059a8eb7d 100644
---- a/drivers/infiniband/hw/erdma/erdma_cm.c
-+++ b/drivers/infiniband/hw/erdma/erdma_cm.c
-@@ -11,6 +11,7 @@
- /* Copyright (c) 2017, Open Grid Computing, Inc. */
- 
- #include <linux/workqueue.h>
-+#include <trace/events/sock.h>
- 
- #include "erdma.h"
- #include "erdma_cm.h"
-@@ -925,6 +926,8 @@ static void erdma_cm_llp_data_ready(struct sock *sk)
- {
- 	struct erdma_cep *cep;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock(&sk->sk_callback_lock);
- 
- 	cep = sk_to_cep(sk);
-diff --git a/drivers/infiniband/sw/siw/siw_cm.c b/drivers/infiniband/sw/siw/siw_cm.c
-index f88d2971c2c6..da530c0404da 100644
---- a/drivers/infiniband/sw/siw/siw_cm.c
-+++ b/drivers/infiniband/sw/siw/siw_cm.c
-@@ -16,6 +16,7 @@
- #include <net/tcp.h>
- #include <linux/inet.h>
- #include <linux/tcp.h>
-+#include <trace/events/sock.h>
- 
- #include <rdma/iw_cm.h>
- #include <rdma/ib_verbs.h>
-@@ -109,6 +110,8 @@ static void siw_rtr_data_ready(struct sock *sk)
- 	struct siw_qp *qp = NULL;
- 	read_descriptor_t rd_desc;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock(&sk->sk_callback_lock);
- 
- 	cep = sk_to_cep(sk);
-@@ -1216,6 +1219,8 @@ static void siw_cm_llp_data_ready(struct sock *sk)
- {
- 	struct siw_cep *cep;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock(&sk->sk_callback_lock);
- 
- 	cep = sk_to_cep(sk);
-diff --git a/drivers/infiniband/sw/siw/siw_qp.c b/drivers/infiniband/sw/siw/siw_qp.c
-index e6f634971228..81e9bbd9ebda 100644
---- a/drivers/infiniband/sw/siw/siw_qp.c
-+++ b/drivers/infiniband/sw/siw/siw_qp.c
-@@ -10,6 +10,7 @@
- #include <linux/llist.h>
- #include <asm/barrier.h>
- #include <net/tcp.h>
-+#include <trace/events/sock.h>
- 
- #include "siw.h"
- #include "siw_verbs.h"
-@@ -94,6 +95,8 @@ void siw_qp_llp_data_ready(struct sock *sk)
- {
- 	struct siw_qp *qp;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock(&sk->sk_callback_lock);
- 
- 	if (unlikely(!sk->sk_user_data || !sk_to_qp(sk)))
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index 9b47dcb2a7d9..bf03c12a7333 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -14,6 +14,7 @@
- #include <linux/blk-mq.h>
- #include <crypto/hash.h>
- #include <net/busy_poll.h>
-+#include <trace/events/sock.h>
- 
- #include "nvme.h"
- #include "fabrics.h"
-@@ -905,6 +906,8 @@ static void nvme_tcp_data_ready(struct sock *sk)
- {
- 	struct nvme_tcp_queue *queue;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 	queue = sk->sk_user_data;
- 	if (likely(queue && queue->rd_enabled) &&
-diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-index 6c1476e086ef..401b679abe90 100644
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -14,6 +14,7 @@
- #include <linux/inet.h>
- #include <linux/llist.h>
- #include <crypto/hash.h>
-+#include <trace/events/sock.h>
- 
- #include "nvmet.h"
- 
-@@ -1470,6 +1471,8 @@ static void nvmet_tcp_data_ready(struct sock *sk)
- {
- 	struct nvmet_tcp_queue *queue;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 	queue = sk->sk_user_data;
- 	if (likely(queue))
-@@ -1667,6 +1670,8 @@ static void nvmet_tcp_listen_data_ready(struct sock *sk)
- {
- 	struct nvmet_tcp_port *port;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 	port = sk->sk_user_data;
- 	if (!port)
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index 5fb1f364e815..8cee839cf4aa 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -36,6 +36,7 @@
- #include <scsi/scsi.h>
- #include <scsi/scsi_transport_iscsi.h>
- #include <trace/events/iscsi.h>
-+#include <trace/events/sock.h>
- 
- #include "iscsi_tcp.h"
- 
-@@ -170,6 +171,8 @@ static void iscsi_sw_tcp_data_ready(struct sock *sk)
- 	struct iscsi_tcp_conn *tcp_conn;
- 	struct iscsi_conn *conn;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 	conn = sk->sk_user_data;
- 	if (!conn) {
-diff --git a/drivers/soc/qcom/qmi_interface.c b/drivers/soc/qcom/qmi_interface.c
-index 57052726299d..820bdd9f8e46 100644
---- a/drivers/soc/qcom/qmi_interface.c
-+++ b/drivers/soc/qcom/qmi_interface.c
-@@ -12,6 +12,7 @@
- #include <linux/string.h>
- #include <net/sock.h>
- #include <linux/workqueue.h>
-+#include <trace/events/sock.h>
- #include <linux/soc/qcom/qmi.h>
- 
- static struct socket *qmi_sock_create(struct qmi_handle *qmi,
-@@ -569,6 +570,8 @@ static void qmi_data_ready(struct sock *sk)
- {
- 	struct qmi_handle *qmi = sk->sk_user_data;
- 
-+	trace_sk_data_ready(sk);
-+
- 	/*
- 	 * This will be NULL if we receive data while being in
- 	 * qmi_handle_release()
-diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
-index f2919319ad38..2962b0e02707 100644
---- a/drivers/target/iscsi/iscsi_target_nego.c
-+++ b/drivers/target/iscsi/iscsi_target_nego.c
-@@ -13,6 +13,7 @@
- #include <linux/slab.h>
- #include <linux/sched/signal.h>
- #include <net/sock.h>
-+#include <trace/events/sock.h>
- #include <scsi/iscsi_proto.h>
- #include <target/target_core_base.h>
- #include <target/target_core_fabric.h>
-@@ -384,6 +385,7 @@ static void iscsi_target_sk_data_ready(struct sock *sk)
- 	struct iscsit_conn *conn = sk->sk_user_data;
- 	bool rc;
- 
-+	trace_sk_data_ready(sk);
- 	pr_debug("Entering iscsi_target_sk_data_ready: conn: %p\n", conn);
- 
- 	write_lock_bh(&sk->sk_callback_lock);
-diff --git a/drivers/xen/pvcalls-back.c b/drivers/xen/pvcalls-back.c
-index d6f945fd4147..4a78fb1b88aa 100644
---- a/drivers/xen/pvcalls-back.c
-+++ b/drivers/xen/pvcalls-back.c
-@@ -14,6 +14,7 @@
- #include <net/inet_common.h>
- #include <net/inet_connection_sock.h>
- #include <net/request_sock.h>
-+#include <trace/events/sock.h>
- 
- #include <xen/events.h>
- #include <xen/grant_table.h>
-@@ -300,6 +301,8 @@ static void pvcalls_sk_data_ready(struct sock *sock)
- 	struct sock_mapping *map = sock->sk_user_data;
- 	struct pvcalls_ioworker *iow;
- 
-+	trace_sk_data_ready(sock);
-+
- 	if (map == NULL)
- 		return;
- 
-@@ -588,6 +591,8 @@ static void pvcalls_pass_sk_data_ready(struct sock *sock)
- 	unsigned long flags;
- 	int notify;
- 
-+	trace_sk_data_ready(sock);
-+
- 	if (mappass == NULL)
- 		return;
- 
-diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
-index 59f64c596233..08596b8e2204 100644
---- a/fs/dlm/lowcomms.c
-+++ b/fs/dlm/lowcomms.c
-@@ -54,6 +54,7 @@
- #include <net/ipv6.h>
- 
- #include <trace/events/dlm.h>
-+#include <trace/events/sock.h>
- 
- #include "dlm_internal.h"
- #include "lowcomms.h"
-@@ -507,6 +508,8 @@ static void lowcomms_data_ready(struct sock *sk)
- {
- 	struct connection *con;
- 
-+	trace_sk_data_ready(sk);
-+
- 	con = sock2con(sk);
- 	if (con && !test_and_set_bit(CF_READ_PENDING, &con->flags))
- 		queue_work(recv_workqueue, &con->rwork);
-@@ -514,6 +517,8 @@ static void lowcomms_data_ready(struct sock *sk)
- 
- static void lowcomms_listen_data_ready(struct sock *sk)
- {
-+	trace_sk_data_ready(sk);
-+
- 	if (!dlm_allow_conn)
- 		return;
- 
-diff --git a/fs/ocfs2/cluster/tcp.c b/fs/ocfs2/cluster/tcp.c
-index f660c0dbdb63..ba733be2a5e1 100644
---- a/fs/ocfs2/cluster/tcp.c
-+++ b/fs/ocfs2/cluster/tcp.c
-@@ -46,6 +46,7 @@
- #include <linux/net.h>
- #include <linux/export.h>
- #include <net/tcp.h>
-+#include <trace/events/sock.h>
- 
- #include <linux/uaccess.h>
- 
-@@ -585,6 +586,8 @@ static void o2net_data_ready(struct sock *sk)
- 	void (*ready)(struct sock *sk);
- 	struct o2net_sock_container *sc;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 	sc = sk->sk_user_data;
- 	if (sc) {
-@@ -645,6 +648,8 @@ static void o2net_state_change(struct sock *sk)
- static void o2net_register_callbacks(struct sock *sk,
- 				     struct o2net_sock_container *sc)
- {
-+	trace_sk_data_ready(sk);
-+
- 	write_lock_bh(&sk->sk_callback_lock);
- 
- 	/* accepted sockets inherit the old listen socket data ready */
-diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
-index 777ee6cbe933..d8685fdbeb0b 100644
---- a/include/trace/events/sock.h
-+++ b/include/trace/events/sock.h
-@@ -263,6 +263,30 @@ TRACE_EVENT(inet_sk_error_report,
- 		  __entry->error)
- );
- 
-+TRACE_EVENT(sk_data_ready,
-+
-+	TP_PROTO(const struct sock *sk),
-+
-+	TP_ARGS(sk),
-+
-+	TP_STRUCT__entry(
-+		__field(const void *, skaddr)
-+		__field(__u16, family)
-+		__field(__u16, protocol)
-+		__field(unsigned long, ip)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->skaddr = sk;
-+		__entry->family = sk->sk_family;
-+		__entry->protocol = sk->sk_protocol;
-+		__entry->ip = _RET_IP_;
-+	),
-+
-+	TP_printk("family=%u protocol=%u func=%ps",
-+		  __entry->family, __entry->protocol, (void *)__entry->ip)
-+);
-+
- #endif /* _TRACE_SOCK_H */
- 
- /* This part must be outside protection */
-diff --git a/net/ceph/messenger.c b/net/ceph/messenger.c
-index dfa237fbd5a3..75afedb48718 100644
---- a/net/ceph/messenger.c
-+++ b/net/ceph/messenger.c
-@@ -17,6 +17,7 @@
- #endif	/* CONFIG_BLOCK */
- #include <linux/dns_resolver.h>
- #include <net/tcp.h>
-+#include <trace/events/sock.h>
- 
- #include <linux/ceph/ceph_features.h>
- #include <linux/ceph/libceph.h>
-@@ -344,6 +345,9 @@ static void con_sock_state_closed(struct ceph_connection *con)
- static void ceph_sock_data_ready(struct sock *sk)
- {
- 	struct ceph_connection *con = sk->sk_user_data;
-+
-+	trace_sk_data_ready(sk);
-+
- 	if (atomic_read(&con->msgr->stopping)) {
- 		return;
- 	}
-diff --git a/net/core/net-traces.c b/net/core/net-traces.c
-index c40cd8dd75c7..ee7006bbe49b 100644
---- a/net/core/net-traces.c
-+++ b/net/core/net-traces.c
-@@ -61,3 +61,5 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(napi_poll);
- 
- EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_send_reset);
- EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_bad_csum);
-+
-+EXPORT_TRACEPOINT_SYMBOL_GPL(sk_data_ready);
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 1efdc47a999b..a84234393dde 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -8,6 +8,7 @@
- #include <net/sock.h>
- #include <net/tcp.h>
- #include <net/tls.h>
-+#include <trace/events/sock.h>
- 
- static bool sk_msg_try_coalesce_ok(struct sk_msg *msg, int elem_first_coalesce)
- {
-@@ -1210,6 +1211,8 @@ static void sk_psock_verdict_data_ready(struct sock *sk)
- {
- 	struct socket *sock = sk->sk_socket;
- 
-+	trace_sk_data_ready(sk);
-+
- 	if (unlikely(!sock || !sock->ops || !sock->ops->read_skb))
- 		return;
- 	sock->ops->read_skb(sk, sk_psock_verdict_recv);
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 4571914a4aa8..f0286f5844c2 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -3283,6 +3283,8 @@ void sock_def_readable(struct sock *sk)
- {
- 	struct socket_wq *wq;
- 
-+	trace_sk_data_ready(sk);
-+
- 	rcu_read_lock();
- 	wq = rcu_dereference(sk->sk_wq);
- 	if (skwq_has_sleeper(wq))
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index a5004228111d..ebcbce8ec133 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -28,6 +28,7 @@
- #include <net/netns/generic.h>
- #include <net/sock.h>
- #include <uapi/linux/kcm.h>
-+#include <trace/events/sock.h>
- 
- unsigned int kcm_net_id;
- 
-@@ -349,6 +350,8 @@ static void psock_data_ready(struct sock *sk)
- {
- 	struct kcm_psock *psock;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 
- 	psock = (struct kcm_psock *)sk->sk_user_data;
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index 437a283ba6ea..2025de8c00fd 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -26,6 +26,7 @@
- #include "mib.h"
- 
- #include <trace/events/mptcp.h>
-+#include <trace/events/sock.h>
- 
- static void mptcp_subflow_ops_undo_override(struct sock *ssk);
- 
-@@ -1356,6 +1357,8 @@ static void subflow_data_ready(struct sock *sk)
- 	struct sock *parent = subflow->conn;
- 	struct mptcp_sock *msk;
- 
-+	trace_sk_data_ready(sk);
-+
- 	msk = mptcp_sk(parent);
- 	if (state & TCPF_LISTEN) {
- 		/* MPJ subflow are removed from accept queue before reaching here,
-diff --git a/net/qrtr/ns.c b/net/qrtr/ns.c
-index 1990d496fcfc..97bfdf9fd028 100644
---- a/net/qrtr/ns.c
-+++ b/net/qrtr/ns.c
-@@ -12,6 +12,7 @@
- 
- #include "qrtr.h"
- 
-+#include <trace/events/sock.h>
- #define CREATE_TRACE_POINTS
- #include <trace/events/qrtr.h>
- 
-@@ -752,6 +753,8 @@ static void qrtr_ns_worker(struct work_struct *work)
- 
- static void qrtr_ns_data_ready(struct sock *sk)
- {
-+	trace_sk_data_ready(sk);
-+
- 	queue_work(qrtr_ns.workqueue, &qrtr_ns.work);
- }
- 
-diff --git a/net/rds/tcp_listen.c b/net/rds/tcp_listen.c
-index 7edf2e69d3fe..014fa24418c1 100644
---- a/net/rds/tcp_listen.c
-+++ b/net/rds/tcp_listen.c
-@@ -34,6 +34,7 @@
- #include <linux/gfp.h>
- #include <linux/in.h>
- #include <net/tcp.h>
-+#include <trace/events/sock.h>
- 
- #include "rds.h"
- #include "tcp.h"
-@@ -234,6 +235,7 @@ void rds_tcp_listen_data_ready(struct sock *sk)
- {
- 	void (*ready)(struct sock *sk);
- 
-+	trace_sk_data_ready(sk);
- 	rdsdebug("listen data ready sk %p\n", sk);
- 
- 	read_lock_bh(&sk->sk_callback_lock);
-diff --git a/net/rds/tcp_recv.c b/net/rds/tcp_recv.c
-index f4ee13da90c7..c00f04a1a534 100644
---- a/net/rds/tcp_recv.c
-+++ b/net/rds/tcp_recv.c
-@@ -33,6 +33,7 @@
- #include <linux/kernel.h>
- #include <linux/slab.h>
- #include <net/tcp.h>
-+#include <trace/events/sock.h>
- 
- #include "rds.h"
- #include "tcp.h"
-@@ -309,6 +310,7 @@ void rds_tcp_data_ready(struct sock *sk)
- 	struct rds_conn_path *cp;
- 	struct rds_tcp_connection *tc;
- 
-+	trace_sk_data_ready(sk);
- 	rdsdebug("data ready sk %p\n", sk);
- 
- 	read_lock_bh(&sk->sk_callback_lock);
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index 3e83963d1b8a..5d44d50e10bf 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -59,6 +59,7 @@
- #include <net/ipv6.h>
- #include <net/inet_common.h>
- #include <net/busy_poll.h>
-+#include <trace/events/sock.h>
- 
- #include <linux/socket.h> /* for sa_family_t */
- #include <linux/export.h>
-@@ -9241,6 +9242,8 @@ void sctp_data_ready(struct sock *sk)
- {
- 	struct socket_wq *wq;
- 
-+	trace_sk_data_ready(sk);
-+
- 	rcu_read_lock();
- 	wq = rcu_dereference(sk->sk_wq);
- 	if (skwq_has_sleeper(wq))
-diff --git a/net/smc/smc_rx.c b/net/smc/smc_rx.c
-index 17c5aee7ee4f..0a6e615f000c 100644
---- a/net/smc/smc_rx.c
-+++ b/net/smc/smc_rx.c
-@@ -15,6 +15,7 @@
- #include <linux/sched/signal.h>
- 
- #include <net/sock.h>
-+#include <trace/events/sock.h>
- 
- #include "smc.h"
- #include "smc_core.h"
-@@ -31,6 +32,8 @@ static void smc_rx_wake_up(struct sock *sk)
- {
- 	struct socket_wq *wq;
- 
-+	trace_sk_data_ready(sk);
-+
- 	/* derived from sock_def_readable() */
- 	/* called already in smc_listen_work() */
- 	rcu_read_lock();
-diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
-index 2fc98fea59b4..54ddae31249a 100644
---- a/net/sunrpc/svcsock.c
-+++ b/net/sunrpc/svcsock.c
-@@ -55,6 +55,7 @@
- #include <linux/sunrpc/stats.h>
- #include <linux/sunrpc/xprt.h>
- 
-+#include <trace/events/sock.h>
- #include <trace/events/sunrpc.h>
- 
- #include "socklib.h"
-@@ -310,6 +311,8 @@ static void svc_data_ready(struct sock *sk)
- {
- 	struct svc_sock	*svsk = (struct svc_sock *)sk->sk_user_data;
- 
-+	trace_sk_data_ready(sk);
-+
- 	if (svsk) {
- 		/* Refer to svc_setup_socket() for details. */
- 		rmb();
-@@ -687,6 +690,8 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
- {
- 	struct svc_sock	*svsk = (struct svc_sock *)sk->sk_user_data;
- 
-+	trace_sk_data_ready(sk);
-+
- 	if (svsk) {
- 		/* Refer to svc_setup_socket() for details. */
- 		rmb();
-diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
-index 915b9902f673..88758b51729b 100644
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -52,6 +52,7 @@
- #include <linux/uio.h>
- #include <linux/sched/mm.h>
- 
-+#include <trace/events/sock.h>
- #include <trace/events/sunrpc.h>
- 
- #include "socklib.h"
-@@ -1378,6 +1379,8 @@ static void xs_data_ready(struct sock *sk)
- {
- 	struct rpc_xprt *xprt;
- 
-+	trace_sk_data_ready(sk);
-+
- 	xprt = xprt_from_sock(sk);
- 	if (xprt != NULL) {
- 		struct sock_xprt *transport = container_of(xprt,
-diff --git a/net/tipc/socket.c b/net/tipc/socket.c
-index e902b01ea3cb..d07692b4010f 100644
---- a/net/tipc/socket.c
-+++ b/net/tipc/socket.c
-@@ -37,6 +37,7 @@
- 
- #include <linux/rhashtable.h>
- #include <linux/sched/signal.h>
-+#include <trace/events/sock.h>
- 
- #include "core.h"
- #include "name_table.h"
-@@ -2130,6 +2131,8 @@ static void tipc_data_ready(struct sock *sk)
- {
- 	struct socket_wq *wq;
- 
-+	trace_sk_data_ready(sk);
-+
- 	rcu_read_lock();
- 	wq = rcu_dereference(sk->sk_wq);
- 	if (skwq_has_sleeper(wq))
-diff --git a/net/tipc/topsrv.c b/net/tipc/topsrv.c
-index d92ec92f0b71..4386367e6928 100644
---- a/net/tipc/topsrv.c
-+++ b/net/tipc/topsrv.c
-@@ -43,6 +43,7 @@
- #include "bearer.h"
- #include <net/sock.h>
- #include <linux/module.h>
-+#include <trace/events/sock.h>
- 
- /* Number of messages to send before rescheduling */
- #define MAX_SEND_MSG_COUNT	25
-@@ -437,6 +438,8 @@ static void tipc_conn_data_ready(struct sock *sk)
- {
- 	struct tipc_conn *con;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 	con = sk->sk_user_data;
- 	if (connected(con)) {
-@@ -494,6 +497,8 @@ static void tipc_topsrv_listener_data_ready(struct sock *sk)
- {
- 	struct tipc_topsrv *srv;
- 
-+	trace_sk_data_ready(sk);
-+
- 	read_lock_bh(&sk->sk_callback_lock);
- 	srv = sk->sk_user_data;
- 	if (srv)
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 264cf367e265..8138730533f9 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -43,6 +43,7 @@
- 
- #include <net/strparser.h>
- #include <net/tls.h>
-+#include <trace/events/sock.h>
- 
- #include "tls.h"
- 
-@@ -2282,6 +2283,8 @@ static void tls_data_ready(struct sock *sk)
- 	struct tls_sw_context_rx *ctx = tls_sw_ctx_rx(tls_ctx);
- 	struct sk_psock *psock;
- 
-+	trace_sk_data_ready(sk);
-+
- 	tls_strp_data_ready(&ctx->strp);
- 
- 	psock = sk_psock_get(sk);
-diff --git a/net/xfrm/espintcp.c b/net/xfrm/espintcp.c
-index 29a540dcb5a7..e428312d3c54 100644
---- a/net/xfrm/espintcp.c
-+++ b/net/xfrm/espintcp.c
-@@ -6,6 +6,7 @@
- #include <net/espintcp.h>
- #include <linux/skmsg.h>
- #include <net/inet_common.h>
-+#include <trace/events/sock.h>
- #if IS_ENABLED(CONFIG_IPV6)
- #include <net/ipv6_stubs.h>
- #endif
-@@ -397,6 +398,8 @@ static void espintcp_data_ready(struct sock *sk)
- {
- 	struct espintcp_ctx *ctx = espintcp_getctx(sk);
- 
-+	trace_sk_data_ready(sk);
-+
- 	strp_data_ready(&ctx->strp);
- }
- 
--- 
-2.20.1
+Releasing the dev->p pointer is not the business with device_del(), but 
+it's relied on
+
+put_device() calling release function.
+
+Turning back here, the release function is not set yet at this point, 
+there is a gap
+
+between device_add() and set release function pointer.
+
+That's the reason why choose to free dev->p explicitly as the mail 
+mentioned above.
+
+> I agree - this is not the correct fix.  The correct fix is to trigger the
+> normal cleanup mechanism, so put_device().
+> The fact that that triggers a warning:
+>
+> "Device '%s' does not have a release() function, it is broken and must be
+> fixed. See Documentation/core-api/kobject.rst.\n"
+>
+> is an indicator that dev.release should be set earlier.
+> If gpiodevice_release() is not appropriate, or cannot be modified to deal
+> with the device state at that point, then an appropriate interim release
+> function should be set.
+>
+> And, as mentioned above, gpiochip_add_data_with_key() needs to be modified
+> to allow for gpiochip_setup_dev() cleaning up its own mess.
+>
+> That is my take, but that is just from perusing the code so I may be
+> totally off base.  Either way, an ACK/NACK on this from a maintainer or
+> other gpiolib expert would be helpful to expiditing a solution.
+>
+> Cheers,
+> Kent.
+
+Yes, exactly.
+
+Thanks to all,
+
+Zeng Heng
 
