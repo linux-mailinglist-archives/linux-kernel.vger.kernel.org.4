@@ -2,219 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A496239ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DF06239F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbiKJCpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
+        id S232498AbiKJCsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiKJCpl (ORCPT
+        with ESMTP id S230080AbiKJCr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:45:41 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD7519006;
-        Wed,  9 Nov 2022 18:45:39 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N75mP0JzZz15MNG;
-        Thu, 10 Nov 2022 10:45:25 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 10:45:38 +0800
-CC:     <yangyicong@hisilicon.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        <liuqi6124@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
-        <f.fangjian@huawei.com>, <prime.zeng@huawei.com>
-Subject: Re: [PATCH 3/3] drivers/perf: hisi: Add TLP filter support
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-References: <20221025113242.58271-1-yangyicong@huawei.com>
- <20221025113242.58271-4-yangyicong@huawei.com>
- <20221109170954.000036e2@Huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <8409f208-d976-ef25-07ad-0db693958112@huawei.com>
-Date:   Thu, 10 Nov 2022 10:45:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 9 Nov 2022 21:47:59 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A49218383;
+        Wed,  9 Nov 2022 18:47:58 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so514801pji.0;
+        Wed, 09 Nov 2022 18:47:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=q10kMqO7wD5+LyilXs9EBMLp1RqqU/ylxUmGyw7vlGQ=;
+        b=AtmgnlBC58rSmGhdBV4pIDmSNRF+ii046j/0oo5rHVD/b8pzMUAg92oCSRQHGPxneP
+         B64EA+RazQuqaCYoMpDYdko/hixkOY2UvBOE0gA/b5/Z7DZgOPQ+eLLzxLMs3Htcj9Wi
+         l1yinHu6QGIK2Wq2F3K2DE8SqXej4IwtUGFgBjL1rTtL7ls7jc0S3jF1MZzPElgtpnof
+         keuPjeqT0FmyP8FY3YZeR3iN2hRF22AmfBnVSXEH4noUoCvNJcfaqRDcPHTZLrl1vOCI
+         0RrWZRzMwqMQj0bTC7tpw66Ck5pfQ9LmofSO6XqiefidlQUfgWIpEfdT097UyQIoBYkQ
+         uatQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q10kMqO7wD5+LyilXs9EBMLp1RqqU/ylxUmGyw7vlGQ=;
+        b=SL6coFChFsmLuID3vc90OvQ/TZ3PJHrk4aZ6LpSBczYUf4hecq5D0TbmO3Anrdk2UD
+         TSMUfjrpTQE/JP7aIAMGusDnm0rzr7Yxjj1xsNqN7lOjtB/bFwUeCcCUcqzPGAwMStgo
+         QnAewpeEJjuJqWG6gQyefGI90W/Hrx+qHJHwwdQA/WBHKWoKJcub/wfEr4WbKud/pkfk
+         KKQmQZe33+cLfb7+yu5GHwivL8bKOxQ2sHtS4m+3CAscMJQBeK+4lypq9EjMa9pbBY+b
+         oK+/GMR9I5ER5dj3HoC9/x6zJs1had2acIDQNjxCMXaLJvLZa+55M5tz8b/5gVWww0iM
+         l5yA==
+X-Gm-Message-State: ACrzQf3sMh2r5umYNFqC5TIxV8x/rvZ6OuZVA4nS6r11We5xrd6Hk8fg
+        FFPtEn4iXxuP4a1OvtVsdIw=
+X-Google-Smtp-Source: AMsMyM7Q6GOgO8625CJmBv6MLgDZiliD84pRE6x81iRupjmdt0BBLRix7icwkCCWlCQ1o3E1f58fvg==
+X-Received: by 2002:a17:90a:7301:b0:213:8a08:2f18 with SMTP id m1-20020a17090a730100b002138a082f18mr66039871pjk.50.1668048478022;
+        Wed, 09 Nov 2022 18:47:58 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-25.three.co.id. [180.214.232.25])
+        by smtp.gmail.com with ESMTPSA id s30-20020a17090a69a100b00217cdc4b0a5sm1905248pjj.16.2022.11.09.18.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 18:47:57 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 52682103F55; Thu, 10 Nov 2022 09:47:52 +0700 (WIB)
+Date:   Thu, 10 Nov 2022 09:47:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Veerasenareddy Burru <vburru@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lironh@marvell.com, aayarekar@marvell.com, sedara@marvell.com,
+        sburla@marvell.com, linux-doc@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew@lunn.ch>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: Re: [PATCH net-next 1/8] octeon_ep_vf: Add driver framework and
+ device initialization
+Message-ID: <Y2xmWCJBiSsSDtMJ@debian.me>
+References: <20221108204209.23071-1-vburru@marvell.com>
+ <20221108204209.23071-2-vburru@marvell.com>
 MIME-Version: 1.0
-In-Reply-To: <20221109170954.000036e2@Huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FsnYKwZTeihymnoD"
+Content-Disposition: inline
+In-Reply-To: <20221108204209.23071-2-vburru@marvell.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/10 1:09, Jonathan Cameron wrote:
-> On Tue, 25 Oct 2022 19:32:42 +0800
-> Yicong Yang <yangyicong@huawei.com> wrote:
-> 
->> From: Yicong Yang <yangyicong@hisilicon.com>
->>
->> The PMU support to filter the TLP when counting the bandwidth with below
->> options:
->>
->> - only count the TLP headers
->> - only count the TLP payloads
->> - count both TLP headers and payloads
->>
->> In the current driver it's default to count the TLP payloads only, which
->> will have an implicity side effects that on the traffic only have header
->> only TLPs, we'll get no data.
->>
->> Make this user configuration through "len_mode" parameter and make it
->> default to count both TLP headers and payloads when user not specified.
->> Also update the documentation for it.
-> 
-> I suppose this filter option is useful.   Default of "both" makes sense.
-> 
-> A few minor suggestions inline.
-> 
-> Jonathan
-> 
->>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->> ---
->>  .../admin-guide/perf/hisi-pcie-pmu.rst        | 20 +++++++++++++++++++
->>  drivers/perf/hisilicon/hisi_pcie_pmu.c        | 14 ++++++++++++-
->>  2 files changed, 33 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
->> index bbe66480ff85..83a2ef11b1a0 100644
->> --- a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
->> +++ b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
->> @@ -104,3 +104,23 @@ when TLP length < threshold.
->>  Example usage of perf::
->>  
->>    $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,thr_len=0x4,thr_mode=1/ sleep 5
->> +
->> +4. TLP Length filter
->> +When counting bandwidth, the data can be composed of certain parts of TLP
->> +packets. You can specify it through "len_mode":
->> +
->> +- 2'b00: Reserved (Do not use this since the behaviour is undefined)
->> +- 2'b01: Bandwidth of TLP payloads
->> +- 2'b10: Bandwidth of TLP headers
->> +- 2'b11: Bandwidth of both TLP payloads and headers
-> 
-> We could describe this as a bitmap, but i think you are right in thinking
-> it is clearer to present it as 3 values as not always obvious that the bitmap
-> is controlling sum of two different things.
-> 
 
-I just to keep the style consistence with the existing doc and yes I also think
-it's clearer.
+--FsnYKwZTeihymnoD
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> +
->> +For example, "len_mode=2" means only counting the bandwidth of TLP headers
->> +and "len_mode=3" means the final bandwidth data is composed of both TLP
->> +headers and payloads. You need to carefully using this to avoid losing
->> +data.
-> 
-> I'm not sure this warning makes sense.  If user has set this filter then
-> they don't want to measure the types they haven't picked.  I would drop
-> the warning and example.  It is fairly obvious that no_counts == nothing
-> to count.
->  
+On Tue, Nov 08, 2022 at 12:41:52PM -0800, Veerasenareddy Burru wrote:
+> Add driver framework and device setup and initialization for Octeon
+> PCI Endpoint NIC VF.
+>=20
+> Add implementation to load module, initilaize, register network device,
+> cleanup and unload module.
+>
 
-Just hope users will not make it "len_mode=0" as it's reserved. Will drop it.
+s/initilaize/initialize/
 
->> For example you're likely to get no counts by "len_mode=1" if the TLPs
->> +on the traffic has no payload.
-> Drop this example.
-> 
+> diff --git a/Documentation/networking/device_drivers/ethernet/marvell/oct=
+eon_ep_vf.rst b/Documentation/networking/device_drivers/ethernet/marvell/oc=
+teon_ep_vf.rst
+> new file mode 100644
+> index 000000000000..258229610f3e
+> --- /dev/null
+> +++ b/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep_=
+vf.rst
+> @@ -0,0 +1,19 @@
+> +.. SPDX-License-Identifier: GPL-2.0+
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Linux kernel networking driver for Marvell's Octeon PCI Endpoint NIC VF
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Network driver for Marvell's Octeon PCI EndPoint NIC VF.
+> +Copyright (c) 2020 Marvell International Ltd.
+> +
+> +Overview
+> +=3D=3D=3D=3D=3D=3D=3D=3D
+> +This driver implements networking functionality of Marvell's Octeon PCI
+> +EndPoint NIC VF.
+> +
+> +Supported Devices
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Currently, this driver support following devices:
+> + * Network controller: Cavium, Inc. Device b203
+> + * Network controller: Cavium, Inc. Device b403
 
-ok.
+As kernel test robot has reported [1], you need to add the doc to toctree
+(index):
 
->> This config is optional, by default it'll
->> +be 2'b11.
-> 
-> Anything with a default is inherently optional, so could we just say
-> Default value if not specified is 2'b11.
-> 
+---- >8 ----
 
-ok, it'll be better.
+diff --git a/Documentation/networking/device_drivers/ethernet/index.rst b/D=
+ocumentation/networking/device_drivers/ethernet/index.rst
+index 5196905582c5b3..ccb7baf83b0ad9 100644
+--- a/Documentation/networking/device_drivers/ethernet/index.rst
++++ b/Documentation/networking/device_drivers/ethernet/index.rst
+@@ -39,6 +39,7 @@ Contents:
+    intel/ice
+    marvell/octeontx2
+    marvell/octeon_ep
++   marvell/octeon_ep_vf
+    mellanox/mlx5
+    microsoft/netvsc
+    neterion/s2io
 
-Will update the doc. Thanks for the comments!
+Thanks.
 
-Regards.
+[1] https://lore.kernel.org/linux-doc/202211092349.9UIWX9cD-lkp@intel.com/
 
->> +
->> +Example usage of perf::
->> +
->> +  $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,len_mode=0x1/ sleep 5
->> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
->> index 071e63d9a9ac..6fee0b6e163b 100644
->> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
->> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
->> @@ -47,10 +47,14 @@
->>  #define HISI_PCIE_EVENT_M		GENMASK_ULL(15, 0)
->>  #define HISI_PCIE_THR_MODE_M		GENMASK_ULL(27, 27)
->>  #define HISI_PCIE_THR_M			GENMASK_ULL(31, 28)
->> +#define HISI_PCIE_LEN_M			GENMASK_ULL(35, 34)
->>  #define HISI_PCIE_TARGET_M		GENMASK_ULL(52, 36)
->>  #define HISI_PCIE_TRIG_MODE_M		GENMASK_ULL(53, 53)
->>  #define HISI_PCIE_TRIG_M		GENMASK_ULL(59, 56)
->>  
->> +/* Default config of TLP length mode, will count both TLP headers and payloads */
->> +#define HISI_PCIE_LEN_M_DEFAULT		3ULL
->> +
->>  #define HISI_PCIE_MAX_COUNTERS		8
->>  #define HISI_PCIE_REG_STEP		8
->>  #define HISI_PCIE_THR_MAX_VAL		10
->> @@ -91,6 +95,7 @@ HISI_PCIE_PMU_FILTER_ATTR(thr_len, config1, 3, 0);
->>  HISI_PCIE_PMU_FILTER_ATTR(thr_mode, config1, 4, 4);
->>  HISI_PCIE_PMU_FILTER_ATTR(trig_len, config1, 8, 5);
->>  HISI_PCIE_PMU_FILTER_ATTR(trig_mode, config1, 9, 9);
->> +HISI_PCIE_PMU_FILTER_ATTR(len_mode, config1, 11, 10);
->>  HISI_PCIE_PMU_FILTER_ATTR(port, config2, 15, 0);
->>  HISI_PCIE_PMU_FILTER_ATTR(bdf, config2, 31, 16);
->>  
->> @@ -215,8 +220,8 @@ static void hisi_pcie_pmu_config_filter(struct perf_event *event)
->>  {
->>  	struct hisi_pcie_pmu *pcie_pmu = to_pcie_pmu(event->pmu);
->>  	struct hw_perf_event *hwc = &event->hw;
->> +	u64 port, trig_len, thr_len, len_mode;
->>  	u64 reg = HISI_PCIE_INIT_SET;
->> -	u64 port, trig_len, thr_len;
->>  
->>  	/* Config HISI_PCIE_EVENT_CTRL according to event. */
->>  	reg |= FIELD_PREP(HISI_PCIE_EVENT_M, hisi_pcie_get_real_event(event));
->> @@ -245,6 +250,12 @@ static void hisi_pcie_pmu_config_filter(struct perf_event *event)
->>  		reg |= HISI_PCIE_THR_EN;
->>  	}
->>  
->> +	len_mode = hisi_pcie_get_len_mode(event);
->> +	if (len_mode)
->> +		reg |= FIELD_PREP(HISI_PCIE_LEN_M, len_mode);
->> +	else
->> +		reg |= FIELD_PREP(HISI_PCIE_LEN_M, HISI_PCIE_LEN_M_DEFAULT);
->> +
->>  	hisi_pcie_pmu_writeq(pcie_pmu, HISI_PCIE_EVENT_CTRL, hwc->idx, reg);
->>  }
->>  
->> @@ -711,6 +722,7 @@ static struct attribute *hisi_pcie_pmu_format_attr[] = {
->>  	HISI_PCIE_PMU_FORMAT_ATTR(thr_mode, "config1:4"),
->>  	HISI_PCIE_PMU_FORMAT_ATTR(trig_len, "config1:5-8"),
->>  	HISI_PCIE_PMU_FORMAT_ATTR(trig_mode, "config1:9"),
->> +	HISI_PCIE_PMU_FORMAT_ATTR(len_mode, "config1:10-11"),
->>  	HISI_PCIE_PMU_FORMAT_ATTR(port, "config2:0-15"),
->>  	HISI_PCIE_PMU_FORMAT_ATTR(bdf, "config2:16-31"),
->>  	NULL
-> 
-> .
-> 
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--FsnYKwZTeihymnoD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2xmVAAKCRD2uYlJVVFO
+o7j3AP9tA3GJnGjSmoMKusz6T2S1/dgLZDOiHmhW5JhENELb1gEA+J+e7LaF0bx0
+M4WMyf2OipsDc/4KIJc1KERhqUEMjQk=
+=VjA0
+-----END PGP SIGNATURE-----
+
+--FsnYKwZTeihymnoD--
