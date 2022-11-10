@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241F26239A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8756239A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbiKJCMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S232289AbiKJCOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbiKJCM1 (ORCPT
+        with ESMTP id S231571AbiKJCOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:12:27 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F151114A;
-        Wed,  9 Nov 2022 18:12:27 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-367b8adf788so3674227b3.2;
-        Wed, 09 Nov 2022 18:12:27 -0800 (PST)
+        Wed, 9 Nov 2022 21:14:03 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0486713DD2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:14:02 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id 94-20020a9d0067000000b0066c8d13a33dso402158ota.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 18:14:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ynkdyHO9kNDgrMbUwYVxUanNmrJAAZIOnD1jKJ0SDB4=;
-        b=XVwVdE9C7IXuK9mEROqxay6qwoKuyzyc4NkMLeNdYI+Eybx5HnKpwj71/j6iElosEh
-         V1bwDKB4ws8zq4yCX9qfs0Q3db2KqLbVO88CeVxS/bzxpW6Rx7dtvxxn/JL0s7qbDS7e
-         umXyNwuYCl62bAsFO74yvoKq1qJBTocUQhck7qGFATJ5EOPLJ50PMJ5HTReowqAvdvg7
-         GTdTY0KvhSPUbn0ZwOWZVjh442FtGpuh/krLE1B2lsKuEZfTjDTqNgHmw7tNqSGiiNM3
-         Ei4KIr1UJdkHsazA06FQ4Vuc05j8ENeo0e/bFYoZ1Tpaa2cJYkb0BM2IH5KO9DD6d2dX
-         Ym1w==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PQ5gUxhZkoh4ZqQ1bcivI/3wrTPkC+2Pwjz27W6nqVY=;
+        b=hkWyuWg5OmCw+m8n+jU/hEL2SZEyvZZsF5o109BrS1bEC/oc1yxlIjRs8KNwa1Yt7L
+         KaI3Pns5MBH582GuIyu7ww++uOE1lZCVg6+DB7jA7Z2Hu8TvKX6OXLP1BCWXxMziU3Kx
+         PMpZtCvWfFdYvompuhsL+52Z/S7QXwAOKElAMH6wZWzsn9bBEGFlwV2ayA+ps6s9toZa
+         5E+9Fgqz8JgGH7RgDG0jGp3K5fWiHZyAOA98zdE2TOm1yj3SnirsFAF2KcAle/Xz6935
+         dKolrUkd+gRIuxCz0WTf2LmnM/J0Y2m5TdksjF8OhR33Of62sXNIuxOzRBMjUDdr/HEX
+         D26w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ynkdyHO9kNDgrMbUwYVxUanNmrJAAZIOnD1jKJ0SDB4=;
-        b=ruX9W+VIATgMYluD76QsU7ip7dLmjKw6/qf4WNCJI+fHRJ9R/6/cMREX3HAod/PLth
-         5M4ujlOttmNT/32r5j0ClQw+S34TKAkeXgfI34BXuYEAzyUQkdQAEETK5YWzJD3IE+lM
-         bo2AxuVli/AxCQyJIBPjaIJCCJC4XgyLc/u3TWQ6Vltn6Vm7GdvP4dBuOaDyWuAHrZcp
-         qf+xuP7pDNynvQeIgW4RExCD5RvxDzR+U3Z8YQ1qcN8686YEpskitKaQAOG+4SfreJae
-         XgLg24GVGaXDgaBk4YZaV0KpOEJHRzYC8JrIVmCSgIpXKLJNZBioxecGUICOe67vmo+k
-         oVCQ==
-X-Gm-Message-State: ACrzQf1ap1cro2938cgyfLm3g+cXoMe8J7EwUm7AaQeRwa8OdLBwnnZM
-        CzqnWhCUUX6dOBMsBrBgibNp8D6l/i2DqO4rJsE=
-X-Google-Smtp-Source: AMsMyM7qSy+AVeKvhprJ/L3ayV8Pzq+lwtJpi8RRDbRwUE/cVVo2js5e29hGH6uLfsz0eD6hFiV2LA3cPjOIWGF0/YE=
-X-Received: by 2002:a0d:ed44:0:b0:370:5d4f:b96d with SMTP id
- w65-20020a0ded44000000b003705d4fb96dmr53576042ywe.143.1668046346259; Wed, 09
- Nov 2022 18:12:26 -0800 (PST)
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PQ5gUxhZkoh4ZqQ1bcivI/3wrTPkC+2Pwjz27W6nqVY=;
+        b=qnqiPuT1xGUlGB8lbBJUm26eYM9ya0oCuMNVvFvCc0JwiU+78sLTbtf3q9UQRvMLvf
+         ZTfp1wFOOclYcWu9PuRhMRiMoMRlJVeNjSZZj7YgD0eKxG+6fR49MltkeM8WxcfjXUQg
+         nAmtQNScCK0EHWpn0XtsBxpMUEG1I0gyaNhPAeZ7hBBgGI9GqnOQ6zNKkK76n2tNItiC
+         sOJKyvhDKd+CCK4cQR6344tcQv/LI8rX0j+TO2aJlmhNEDaLymhLC8jGmeBR1mw1vrNE
+         t7hn+hI4BL9MZpMgILHMaZDP7/i9BBv+4Gyl9jpDg7RRXIUPxDQiVh8iKSRs8w5yhbrJ
+         dEow==
+X-Gm-Message-State: ACrzQf1BfJVNGQkUYWwKhur43qhg2HjzEn844LCqufEu9kWgDOYPbvQo
+        GSg6Fnn3SbqDaCvnYVmfGt8CnA==
+X-Google-Smtp-Source: AMsMyM4dcGqo0An9JN9vCjwoOpNHZTTIU7z3U6tVi3khgS8u3goRM6xFEtxLIwnDfEf20Yl+wAOCFw==
+X-Received: by 2002:a05:6830:6084:b0:65c:3942:e3bf with SMTP id by4-20020a056830608400b0065c3942e3bfmr18619123otb.49.1668046441175;
+        Wed, 09 Nov 2022 18:14:01 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id y5-20020a544d85000000b003509cc4ad4esm5258842oix.39.2022.11.09.18.13.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 18:14:00 -0800 (PST)
+Date:   Wed, 9 Nov 2022 18:13:50 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 1/3 fix] mm,hugetlb: use folio fields in second tail page:
+ fix
+In-Reply-To: <7f60bcac-a2e5-9c4b-8a8f-e972a93e116@google.com>
+Message-ID: <9e2cb6b-5b58-d3f2-b5ee-5f8a14e8f10@google.com>
+References: <5f52de70-975-e94f-f141-543765736181@google.com> <3818cc9a-9999-d064-d778-9c94c5911e6@google.com> <5bd8a365-e2c5-a721-1257-81ec4ae0c626@oracle.com> <3934b34-ae2f-2119-9a68-33e51e909795@google.com> <e5bd10cd-eb86-3a70-a0fe-21ba49b5ab25@oracle.com>
+ <7f60bcac-a2e5-9c4b-8a8f-e972a93e116@google.com>
 MIME-Version: 1.0
-References: <20221107090940.686229-1-nashuiliang@gmail.com> <20221109175908.593df5da@kernel.org>
-In-Reply-To: <20221109175908.593df5da@kernel.org>
-From:   Chuang W <nashuiliang@gmail.com>
-Date:   Thu, 10 Nov 2022 10:12:15 +0800
-Message-ID: <CACueBy4U-MBZx0JwTc0Z5G2iFjBu4wPtdW+bs0aZOr9_QQFv2w@mail.gmail.com>
-Subject: Re: [PATCH v1] net: tun: rebuild error handling in tun_get_user
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,119 +86,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, I will fix these issues and submit again.
+Per review comment from Sidhartha: prefix folio's page_1 and page_2 with
+double underscore, to underscore that they are fillers for alignment
+rather than directly usable members of the union (whereas the first
+"struct page page" is important for folio<->page conversions).
 
-On Thu, Nov 10, 2022 at 9:59 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon,  7 Nov 2022 17:09:40 +0800 Chuang Wang wrote:
-> > The error handling in tun_get_user is very scattered.
-> > This patch unifies error handling, reduces duplication of code, and
-> > makes the logic clearer.
->
-> You're also making some functional changes tho, they at the very least
-> need to be enumerated or preferably separate patches.
->
-> > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> > index 4bf2b268df4a..5ceec73baf98 100644
-> > --- a/drivers/net/tun.c
-> > +++ b/drivers/net/tun.c
-> > @@ -1742,11 +1742,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
-> >       int good_linear;
-> >       int copylen;
-> >       bool zerocopy = false;
-> > -     int err;
-> > +     int err = 0;
->
-> Don't zero-init the variables like this, instead...
->
-> >       u32 rxhash = 0;
-> >       int skb_xdp = 1;
-> >       bool frags = tun_napi_frags_enabled(tfile);
-> > -     enum skb_drop_reason drop_reason;
-> > +     enum skb_drop_reason drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
-> >
-> >       if (!(tun->flags & IFF_NO_PI)) {
-> >               if (len < sizeof(pi))
-> > @@ -1808,11 +1808,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
-> >                */
-> >               skb = tun_build_skb(tun, tfile, from, &gso, len, &skb_xdp);
->
-> ... use
->
->         err = PTR_ERR_OR_ZERO(skb);
->
-> close to the jumps. It's safer to always init err before jumping.
->
-> >               if (IS_ERR(skb)) {
-> > -                     dev_core_stats_rx_dropped_inc(tun->dev);
-> > -                     return PTR_ERR(skb);
-> > +                     err = PTR_ERR(skb);
-> > +                     goto drop;
-> >               }
-> >               if (!skb)
-> > -                     return total_len;
-> > +                     goto out;
->
-> >       if (virtio_net_hdr_to_skb(skb, &gso, tun_is_little_endian(tun))) {
-> >               atomic_long_inc(&tun->rx_frame_errors);
-> > -             kfree_skb(skb);
->
-> now we'll increment error and drop counters, that's not right.
->
-> > -             if (frags) {
-> > -                     tfile->napi.skb = NULL;
-> > -                     mutex_unlock(&tfile->napi_mutex);
-> > -             }
-> > -
-> > -             return -EINVAL;
-> > +             err = -EINVAL;
-> > +             goto drop;
-> >       }
->
-> > @@ -1952,8 +1932,8 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
-> >
-> >       rcu_read_lock();
-> >       if (unlikely(!(tun->dev->flags & IFF_UP))) {
-> > -             err = -EIO;
-> >               rcu_read_unlock();
-> > +             err = -EIO;
->
-> this change is unnecessary, please refrain from making it
->
-> >               drop_reason = SKB_DROP_REASON_DEV_READY;
-> >               goto drop;
-> >       }
-> > @@ -2007,7 +1987,23 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
-> >       if (rxhash)
-> >               tun_flow_update(tun, rxhash, tfile);
-> >
-> > -     return total_len;
-> > +     goto out;
->
-> keep
->
->         return total_len;
->
-> that's much easier to read, and there's no concern of err being
-> uninitialized.
->
-> > +
-> > +drop:
-> > +     if (err != -EAGAIN)
-> > +             dev_core_stats_rx_dropped_inc(tun->dev);
-> > +
-> > +     if (!IS_ERR_OR_NULL(skb))
-> > +             kfree_skb_reason(skb, drop_reason);
-> > +
-> > +unlock_frags:
-> > +     if (frags) {
-> > +             tfile->napi.skb = NULL;
-> > +             mutex_unlock(&tfile->napi_mutex);
-> > +     }
-> > +
-> > +out:
-> > +     return err ?: total_len;
-> >  }
-> >
-> >  static ssize_t tun_chr_write_iter(struct kiocb *iocb, struct iov_iter *from)
->
+Per review comment from Kirill: give folio's _flags_2 and _head_2 a line
+of documentation each, though both of them "Do not use" (I think _flags_1
+should be enough for now, and shouldn't recommend spilling to _flags_2).
+
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ include/linux/mm_types.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 5d28bbd19e3f..1b8db9b4a7e6 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -275,6 +275,8 @@ struct page {
+  * @_subpages_mapcount: Do not use directly, call folio_mapcount().
+  * @_pincount: Do not use directly, call folio_maybe_dma_pinned().
+  * @_folio_nr_pages: Do not use directly, call folio_nr_pages().
++ * @_flags_2: For alignment.  Do not use.
++ * @_head_2: Points to the folio.  Do not use.
+  * @_hugetlb_subpool: Do not use directly, use accessor in hugetlb.h.
+  * @_hugetlb_cgroup: Do not use directly, use accessor in hugetlb_cgroup.h.
+  * @_hugetlb_cgroup_rsvd: Do not use directly, use accessor in hugetlb_cgroup.h.
+@@ -330,7 +332,7 @@ struct folio {
+ 			unsigned int _folio_nr_pages;
+ #endif
+ 		};
+-		struct page page_1;
++		struct page __page_1;
+ 	};
+ 	union {
+ 		struct {
+@@ -341,7 +343,7 @@ struct folio {
+ 			void *_hugetlb_cgroup_rsvd;
+ 			void *_hugetlb_hwpoison;
+ 		};
+-		struct page page_2;
++		struct page __page_2;
+ 	};
+ };
+ 
+-- 
+2.35.3
+
