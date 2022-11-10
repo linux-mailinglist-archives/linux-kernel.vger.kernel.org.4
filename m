@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E5A623B91
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F14623B96
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiKJGBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:01:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
+        id S229921AbiKJGDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKJGBp (ORCPT
+        with ESMTP id S229449AbiKJGDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:01:45 -0500
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B1627B37
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 22:01:43 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id t0d8oFZvJTyout0d8ovHf5; Thu, 10 Nov 2022 07:01:41 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 10 Nov 2022 07:01:41 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <d975ae16-58b8-a844-7ffd-7fa06159311c@wanadoo.fr>
-Date:   Thu, 10 Nov 2022 07:01:38 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v10 1/2] thermal: loongson-2: add thermal management
- support
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 10 Nov 2022 01:03:21 -0500
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CF97248EC;
+        Wed,  9 Nov 2022 22:03:18 -0800 (PST)
+Received: from zju.edu.cn (unknown [10.12.77.33])
+        by mail-app4 (Coremail) with SMTP id cS_KCgAHCc0jlGxjOmznBw--.42812S4;
+        Thu, 10 Nov 2022 14:03:15 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20221103083407.4039-1-zhuyinbo@loongson.cn>
- <d634c8db-3036-08eb-24d2-568771b0e104@loongson.cn>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <d634c8db-3036-08eb-24d2-568771b0e104@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v1] io_uring: remove outdated comments of caching
+Date:   Thu, 10 Nov 2022 14:03:13 +0800
+Message-Id: <20221110060313.16303-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: cS_KCgAHCc0jlGxjOmznBw--.42812S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrtrW3Cw4kXF48Ary3uw4UArb_yoWkCrb_XF
+        ZxJrWkZayjyFsFk3yUCr40qrW2vw429F4xuF47JasrJa47AFZ5Cr4qyryfXr98Cw47Cr90
+        ka98KayfJr429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb28Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
+        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 09/11/2022 à 09:09, Yinbo Zhu a écrit :
-> Hi Rafael J.Wysocki,
-> 
-> I just have a verified on your tree about my patch again, it is okay,
-> if no other proplems, please help merge it to your tree and sync it to 
-> linux mainline tree.
-> 
-> Thanks,
-> Yinbo.
-> 
+Previous commit 13a99017ff19 ("io_uring: remove events caching
+atavisms") entirely removes the events caching optimization introduced 
+by commit 81459350d581 ("io_uring: cache req->apoll->events in
+req->cflags"). Hence the related comment should also be removed to avoid
+misunderstanding.
 
-Hi,
+Fixes: 13a99017ff19 ("io_uring: remove events caching atavisms")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ io_uring/poll.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-I've sent a few nits on v10, that you are obviously free to take into 
-account or not.
-
-However, one of these comments is about thermal_add_hwmon_sysfs() vs 
-devm_thermal_add_hwmon_sysfs() in loongson2_thermal_probe().
-
-IMHO, if I'm correct, at least this comment should be fixed.
-
-CJ
+diff --git a/io_uring/poll.c b/io_uring/poll.c
+index 0d9f49c575e0..74ba910c1f22 100644
+--- a/io_uring/poll.c
++++ b/io_uring/poll.c
+@@ -310,12 +310,7 @@ static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+ static void __io_poll_execute(struct io_kiocb *req, int mask)
+ {
+ 	io_req_set_res(req, mask, 0);
+-	/*
+-	 * This is useful for poll that is armed on behalf of another
+-	 * request, and where the wakeup path could be on a different
+-	 * CPU. We want to avoid pulling in req->apoll->events for that
+-	 * case.
+-	 */
++
+ 	if (req->opcode == IORING_OP_POLL_ADD)
+ 		req->io_task_work.func = io_poll_task_func;
+ 	else
+-- 
+2.38.1
 
