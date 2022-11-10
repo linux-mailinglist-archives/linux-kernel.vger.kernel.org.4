@@ -2,142 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D336238AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C96726238B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiKJBKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
+        id S232217AbiKJBMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbiKJBKN (ORCPT
+        with ESMTP id S232208AbiKJBMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:10:13 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306CE20BFD;
-        Wed,  9 Nov 2022 17:10:13 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id cl5so209880wrb.9;
-        Wed, 09 Nov 2022 17:10:13 -0800 (PST)
+        Wed, 9 Nov 2022 20:12:09 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B070322B06
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:12:07 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id q21so221794iod.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 17:12:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4BVg09/STu01lFVH/5ornDK9lnhrRi6lMKaTSST7mY=;
-        b=OhEWGto4w919H51dq8VGsWY55Xa5sr9ra83dNKq9q2PHuJcIFEWhdLeu6Nmx4IKD78
-         Pm0tEh//QsSxYdx/YMpvM54JdmjGnRfhppWVD4SMnO+YrchiWc3RWQqQX1eu9LQyocMC
-         ywOy7zEu+E3CKhDhExA6UERqCVDHff3e6nGEU=
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dRttdnBGDRc8zkuTurK+53sAbJg4J4HZIc55dFQ5x3I=;
+        b=bsSsaPYXbJ97VEFpT/xHPuJy5kbXi5DQ1kKtYYIsL6lSUtsM/boQmlhCm3gV91mijB
+         OBrQEDGphLBcLWNjs5JjibfMc/qsG7kVtak4TcgsNO+qHFy3iD3JZIA9sxqcgOFCbFFm
+         rBJ3zTOGT7vdI0MJbOEdjIHfD0VfqlFhui4jA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A4BVg09/STu01lFVH/5ornDK9lnhrRi6lMKaTSST7mY=;
-        b=iKFVltQur3Ob9lATaxM+RgGQARNVDi8iOKIa9h3bw6eWMQG/QhzwCa15SCGD7xciqs
-         KfY3fyH9QyVEmL2Jfghz10wT4hFGIA4Z6y1Ebwl9ZwscvVvaPHgElm6UZFuOZROLxOK/
-         462oJkkTNTg6clW53uAoKfEQAkoum0D7xHrbiws3FlXzuWLX8JqbwrTO6S/CMwYvjUS/
-         V4nlgeDBKKu9S+mzyHDIcVwEhOJLA8PjbKFYHArkEfMkd7qqL370LPx7+il0sClE5aEf
-         8CoxKvF33sn5tHkGfHVcifxCRxglCc/fkepEtsWRSdageOb6qalFd19dwjyzIBkOVtjC
-         fD9w==
-X-Gm-Message-State: ACrzQf3TE9Agyoo6416PQXFLusD1b2QJJYcbQaMf8al1xfJqamZzi3Me
-        UfmKIc7IgbFY1CElxeuId2w/e/PVUq56O5Z1+8w=
-X-Google-Smtp-Source: AMsMyM5LJOzcN7OYnZGg612UrhCC2fvKXD8pGOmgi9F+cP+iuoy+x5uJoVYfQmIT+MwA0acViOgoEFVUNteGj4XfT8U=
-X-Received: by 2002:a05:6000:1008:b0:236:60e8:3d40 with SMTP id
- a8-20020a056000100800b0023660e83d40mr39546819wrx.3.1668042611623; Wed, 09 Nov
- 2022 17:10:11 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dRttdnBGDRc8zkuTurK+53sAbJg4J4HZIc55dFQ5x3I=;
+        b=A7wyF+nrL9m6EbEx+eD8mRBbL4s7MGpP7zyVO3pJUwleDLpkWFDR1w6Xl//WxbC5cW
+         cFrQ+4MlyI7aZyCdHqntgI6oix1WsKvUXXkZw0QQflKqp3GxSeN+o0ipcWU8n7XxVnfO
+         rEM7IH6YhndgGWSlqDH7nIs62t9QlVFI/oEqsWQ6uwwoMyfF9dfpuaSXPBG5aBfL4tI2
+         hhv89lUDhAgW9yEriWIfnq2md3xzhMVLOLOedzEfm5rRGko5ht37ucFRBiRJljTJiMSB
+         vHAef0e3Gj9sofXE3snKvtt8RF5RM/eliFNaz8GMgnZO/ArVQaXy5yMPlkk38Ebuv2HZ
+         hEEA==
+X-Gm-Message-State: ACrzQf2m0rVYB+ZI6CK8NGHNyIDs58m0pv9Enf6D3UkntRVq+z1EfJUQ
+        4PAKLh/jF898HuMZabGNC7rUIg==
+X-Google-Smtp-Source: AMsMyM7BpwHMtKvGDw4KrXYY8bvFA5l/C+UxDe7zSUHzHLkY/2f2geG+qqOP0AJJnQeIIXAS4aWc2A==
+X-Received: by 2002:a05:6638:12c1:b0:342:a36a:b2b1 with SMTP id v1-20020a05663812c100b00342a36ab2b1mr36265428jas.275.1668042727063;
+        Wed, 09 Nov 2022 17:12:07 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id a65-20020a029447000000b003633748c95dsm5412250jai.163.2022.11.09.17.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 17:12:05 -0800 (PST)
+Message-ID: <84bf1608-dcb3-aae1-fe56-f2472c2d47a8@linuxfoundation.org>
+Date:   Wed, 9 Nov 2022 18:12:04 -0700
 MIME-Version: 1.0
-References: <20221107171500.2537938-1-gsomlo@gmail.com> <20221107171500.2537938-3-gsomlo@gmail.com>
-In-Reply-To: <20221107171500.2537938-3-gsomlo@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 10 Nov 2022 01:09:59 +0000
-Message-ID: <CACPK8XdGpGUispRcfgaVyE=18Wwg8GFHH7QJ6bcQLA5XDikSiQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] serial: liteuart: separate RX loop from poll timer
-To:     Gabriel Somlo <gsomlo@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/2] selftests: proc: Mark proc-pid-vm as x86_64 only
+Content-Language: en-US
+To:     Punit Agrawal <punit.agrawal@bytedance.com>,
+        akpm@linux-foundation.org, shuah@kernel.org
+Cc:     adobriyan@gmail.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221109221104.1797802-1-punit.agrawal@bytedance.com>
+ <20221109221104.1797802-2-punit.agrawal@bytedance.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221109221104.1797802-2-punit.agrawal@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 at 17:15, Gabriel Somlo <gsomlo@gmail.com> wrote:
->
-> Move the character-receive (RX) loop to its own dedicated function,
-> and (for now) call that from the poll timer, liteuart_timer().
->
-> This is in preparation for adding IRQ support to the receive path.
->
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+On 11/9/22 15:11, Punit Agrawal wrote:
+> The proc-pid-vm test does not have support for architectures other
+> than x86_64. Mark it as such in the Makefile and in the process remove
+> the special casing in the test itself.
+> 
+> Signed-off-by: Punit Agrawal <punit.agrawal@bytedance.com>
 > ---
->  drivers/tty/serial/liteuart.c | 25 +++++++++++++++----------
->  1 file changed, 15 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index 4b9cca249828..90a29ed79bff 100644
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -69,29 +69,34 @@ static struct uart_driver liteuart_driver = {
->  #endif
->  };
->
-> -static void liteuart_timer(struct timer_list *t)
-> +static void liteuart_rx_chars(struct uart_port *port)
->  {
-> -       struct liteuart_port *uart = from_timer(uart, t, timer);
-> -       struct uart_port *port = &uart->port;
->         unsigned char __iomem *membase = port->membase;
-> -       unsigned int flg = TTY_NORMAL;
-> -       int ch;
-> -       unsigned long status;
-> +       unsigned int status;
-> +       unsigned char ch;
+>   tools/testing/selftests/proc/Makefile      | 2 +-
+>   tools/testing/selftests/proc/proc-pid-vm.c | 9 ---------
+>   2 files changed, 1 insertion(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
+> index 743aaa0cdd52..db953c014bf8 100644
+> --- a/tools/testing/selftests/proc/Makefile
+> +++ b/tools/testing/selftests/proc/Makefile
+> @@ -11,7 +11,6 @@ TEST_GEN_PROGS += fd-001-lookup
+>   TEST_GEN_PROGS += fd-002-posix-eq
+>   TEST_GEN_PROGS += fd-003-kthread
+>   TEST_GEN_PROGS += proc-loadavg-001
+> -TEST_GEN_PROGS += proc-pid-vm
+>   TEST_GEN_PROGS += proc-self-map-files-001
+>   TEST_GEN_PROGS += proc-self-map-files-002
+>   TEST_GEN_PROGS += proc-self-syscall
+> @@ -29,6 +28,7 @@ TEST_GEN_PROGS += proc-multiple-procfs
+>   TEST_GEN_PROGS += proc-fsconfig-hidepid
+>   
+>   TEST_GEN_PROGS_x86_64 += proc-empty-vm
+> +TEST_GEN_PROGS_x86_64 += proc-pid-vm
 
-u32, u8, void __iomem * would be better kernel types to use here.
+Same comment as before. Add proc-pid-vm conditionally to
+TEST_GEN_PROGS
 
-You've also changed ch from a signed 32 to an unsigned 8.
-
->
->         while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
->                 ch = litex_read8(membase + OFF_RXTX);
->                 port->icount.rx++;
->
->                 /* necessary for RXEMPTY to refresh its value */
-> -               litex_write8(membase + OFF_EV_PENDING, EV_TX | EV_RX);
-> +               litex_write8(membase + OFF_EV_PENDING, EV_RX);
-
-You're no longer clearing EV_TX, but don't mention why (I understand
-why with the context of the other changes, so perhaps add something to
-this commit message).
-
-
->
->                 /* no overflow bits in status */
->                 if (!(uart_handle_sysrq_char(port, ch)))
-> -                       uart_insert_char(port, status, 0, ch, flg);
-> -
-> -               tty_flip_buffer_push(&port->state->port);
-> +                       uart_insert_char(port, status, 0, ch, TTY_NORMAL);
->         }
->
-> +       tty_flip_buffer_push(&port->state->port);
-> +}
-> +
-> +static void liteuart_timer(struct timer_list *t)
-> +{
-> +       struct liteuart_port *uart = from_timer(uart, t, timer);
-> +       struct uart_port *port = &uart->port;
-> +
-> +       liteuart_rx_chars(port);
-> +
->         mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
->  }
->
-> --
-> 2.37.3
->
+thanks,
+-- Shuah
