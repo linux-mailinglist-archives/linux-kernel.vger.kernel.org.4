@@ -2,70 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C76249D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708856249E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKJSoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 13:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S229531AbiKJSr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 13:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231610AbiKJSoF (ORCPT
+        with ESMTP id S230496AbiKJSrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 13:44:05 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4173E4E419;
-        Thu, 10 Nov 2022 10:44:02 -0800 (PST)
-Received: from letrec.thunk.org ([12.195.131.130])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2AAIhr4H032119
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 13:43:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1668105836; bh=OxV/wPBI/elvo9RqU1x8K/upLC1u9AVLuFEhDBZI3/0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=izNxFJcRuUt8w5tR0g+G2Rui48FmQk+fNvNBWGUSRQLAOfQyjwnh2zolSwJlw7wG7
-         Wa7K0kLrquhZoGtoKHAJ1HXzKXR77h5scPIup3RoGz+OEIK6KXvwoaCt8XcQjtEtyi
-         YRMhiH58DF+n/hatbQ8rOIV9Vb23bRcfcPXtywNha7qNfdyJw4+0AJXAOlN3bkNcfC
-         LrOJnzdaa597rR9Z6Mkv7fkAOUSZd83saq+nlY0Q1xO2Qnnfx9I7UK2p8J4k8HnXj6
-         vikyqACqQBCmBA8lasgQwb09ZMYDW01ZnYRSvqd2XynBa1h9Wl/zDamKye2Ay5IqSP
-         yAQGSKrGF9sww==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 624158C02C6; Thu, 10 Nov 2022 13:43:53 -0500 (EST)
-Date:   Thu, 10 Nov 2022 13:43:53 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Niels de Vos <ndevos@redhat.com>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        Marcel Lauhoff <marcel.lauhoff@suse.com>
-Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
-Message-ID: <Y21GaVgkoeWOPFO4@mit.edu>
-References: <20221110141225.2308856-1-ndevos@redhat.com>
- <Y20a/akbY8Wcy3qg@mit.edu>
- <Y20rDl45vSmdEo3N@ndevos-x1>
- <Y20/ynxvIqOyRbxK@mit.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y20/ynxvIqOyRbxK@mit.edu>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 13:47:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2257E4B98C;
+        Thu, 10 Nov 2022 10:47:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC4D661D70;
+        Thu, 10 Nov 2022 18:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E04DC433C1;
+        Thu, 10 Nov 2022 18:47:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668106069;
+        bh=Eb8pRz09JxZ+CgnpKwL02Ekng+XHb16ZA97L7PgePj0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rZrKGXf6VQAFdx7pZgdPTpJ7nfnCp6H/aZpbRWLpLqt5XKRMq+2KhxK2jHcyhwKZh
+         cX3rlSHWgKYfJLst6ABHXZdnIrIbDEVdUTA42yMXskWLlw0IOGPYcDOevnJzyP0bKI
+         f2mdMin+Pcf8JlrbhMJDvc7wWS0tEB5mE8cv7KWTfgBXEen1SyEgx4pI20nenZddTr
+         2BeSAQoZ/60di9DXhB92s2Im1ezzWIUjXSQolYUJP+YwC7pkSWlWafQ6vIQENbqRLk
+         llStIQswB7/fR6NtkKfnerHcV8t6uhRRCagQEqxMBOJYZIQ6dR+S9HP90eU6QtbWAv
+         D14jR138div4w==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1otCaY-005EAY-OI;
+        Thu, 10 Nov 2022 18:47:46 +0000
+Date:   Thu, 10 Nov 2022 18:47:20 +0000
+Message-ID: <87iljmve87.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <broonie@kernel.org>, <tglx@linutronix.de>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic CS48L31/32/33 codecs
+In-Reply-To: <05ae0e20-b472-f812-1afc-ef8c2a97cdeb@opensource.cirrus.com>
+References: <20221109165331.29332-1-rf@opensource.cirrus.com>
+        <20221109165331.29332-10-rf@opensource.cirrus.com>
+        <87mt8zutib.wl-maz@kernel.org>
+        <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
+        <86pmdvow5y.wl-maz@kernel.org>
+        <ef60cbdb-f506-7bd6-a8e1-c92b6963a0f4@opensource.cirrus.com>
+        <86k042q1uc.wl-maz@kernel.org>
+        <05ae0e20-b472-f812-1afc-ef8c2a97cdeb@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: rf@opensource.cirrus.com, lee@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, broonie@kernel.org, tglx@linutronix.de, alsa-devel@alsa-project.org, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 01:15:38PM -0500, Theodore Ts'o wrote:
-> On Thu, Nov 10, 2022 at 05:47:10PM +0100, Niels de Vos wrote:
-> > And, there actually are options like CONFIG_EXT4_FS_POSIX_ACL and
-> > CONFIG_EXT4_FS_SECURITY. Because these exist already, I did not expect
-> > too much concerns with proposing a CONFIG_EXT4_FS_ENCRYPTION...
+On Thu, 10 Nov 2022 16:31:06 +0000,
+Richard Fitzgerald <rf@opensource.cirrus.com> wrote:
 > 
-> Actually, I was thinking of getting rid of them, as we've already
-> gotten rid of EXT4_FS_POSIX_ACL....
+> On 10/11/2022 15:13, Marc Zyngier wrote:
+> > On Thu, 10 Nov 2022 13:00:50 +0000,
+> > Richard Fitzgerald <rf@opensource.cirrus.com> wrote:
+> >> 
+> >> On 10/11/2022 12:01, Marc Zyngier wrote:
+> >>> On Thu, 10 Nov 2022 11:22:26 +0000,
+> >>> Richard Fitzgerald <rf@opensource.cirrus.com> wrote:
+> >>>> 
+> >>>> On 10/11/2022 08:02, Marc Zyngier wrote:
+> >>>>> On Wed, 09 Nov 2022 16:53:28 +0000,
+> >>>>> Richard Fitzgerald <rf@opensource.cirrus.com> wrote:
+> >>>>>> 
+> >>>>>> The Cirrus Logic CS48L31/32/33 audio codecs contain a programmable
+> >>>>>> interrupt controller with a variety of interrupt sources, including
+> >>>>>> GPIOs that can be used as interrupt inputs.
+> >>>>>> 
+> >>>>>> This driver provides the handling for the interrupt controller. As the
+> >>>>>> codec is accessed via regmap, the generic regmap_irq functionality
+> >>>>>> is used to do most of the work.
+> >>>>>> 
+> >>>>> 
+> >>>>> I cannot spot a shred of interrupt controller code in there. This
+> >>>> 
+> >>>> It is providing support for handling an interrupt controller so that
+> >>>> other drivers can bind to those interrupts. It's just that regmap
+> >>>> provides a lot of generic implementation for SPI-connected interrupt
+> >>>> controllers so we don't need to open-code all that in the
+> >>>> irqchip driver.
+> >>> 
+> >>> And thus none of that code needs to live in drivers/irqchip.
+> >>> 
+> >>>> 
+> >>>>> belongs IMO to the MFD code.
+> >>>> 
+> >>>> We did once put interrupt support in MFD for an older product line but
+> >>>> the MFD maintainer doesn't like the MFD being a dumping-ground for
+> >>>> random other functionality that have their own subsystems.
+> >>> 
+> >>> I don't like this stuff either. All this code is a glorified set of
+> >>> interrupt handlers and #defines that only hide the lack of a proper DT
+> >>> binding to express the interrupt routing (it feels like looking at
+> >>> board files from 10 years ago).
+> >>> 
+> >> 
+> >> I didn't understand this. The whole purpose of this is to instantiate
+> >> Linux interrupts for the PIC interrupt sources so that other drivers
+> >> that want to use the interrupts from the CS48L32 PIC can use standard
+> >> kernel APIs or DT to bind against them.
+> > 
+> > There is zero standard APIs in this patch. Does cs48l32_request_irq()
+> > look standard to you? This whole thing makes a mockery of the
+> > interrupt model and of firmware-based interrupt description which we
+> > spent years to build.
+> > 
+> >> 
+> >> The four handlers registered within the driver are done here simply
+> >> because they don't belong to any particular child driver. Since they
+> >> are a fixed feature of the chip that we know we want to handle we may as
+> >> well just register them.
+> > 
+> > Again, they have no purpose in an interrupt controller driver.
+> > 
+> >> If we put them in the MFD with DT definitions it would make a
+> >> circular dependency between MFD and its child, which is not a great
+> >> situation. If it's these handlers that are bothering you, we could move
+> >> them to the audio driver.
+> > 
+> > And what's left? Nothing.
+> 
+> Ah, I see. You've missed that the bulk of the implementation re-uses
+> existing library code from regmap. It does say this in the commit
+> message.
+> 
+>   "the generic regmap_irq functionality is used to do most of the work."
+> 
+> and I've also said this in previous replies.
+> 
+> This is no way driver that does nothing. There's over 1000 lines of code
+> handling the PIC and dispatching its interrupts to other drivers that
+> want to bind to them. It's just that it makes no sense to duplicate 1300
+> lines of interrupt handling code from elsewhere when we can re-use that
+> by calling regmap_add_irq_chip(). That gives us all the interrupt-
+> controller-handling code in drivers/base/regmap/regmap-irq.c
+> 
+> Perhaps you could re-review this taking into account that
+> regmap_add_irq_chip() is significant.
 
-Sorry, I meant to say that we had gotten rid of EXT4_FS_XATTR.
+Read again what I have written. Having to expose a device-specific API
+for endpoint drivers to obtain their interrupts, and requiring them to
+know about some magic values that describe the interrupts source are
+not a acceptable constructs.
 
-	       	       	      	      	  - Ted
+We have firmware descriptions to expose interrupt linkages, and your
+HW is not special enough to deserve its own top level API. Yes, we
+accepted such drivers in the past, but it has to stop.
+
+Either you describe the internal structure of your device in DT or
+ACPI, and make all client drivers use the standard API, or you make
+this a codec library, purely specific to your device and only used by
+it. But the current shape is not something I'm prepared to accept.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
