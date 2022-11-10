@@ -2,161 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C602624BF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0914D624C03
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbiKJUfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
+        id S229591AbiKJUgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiKJUfQ (ORCPT
+        with ESMTP id S229667AbiKJUgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:35:16 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0874E41E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:15 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id ch8-20020a17090af40800b002140ba517b6so1629980pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=u6Cw0ZmfOshKtE4Fs73s8CsSsDU0YsFyudltt9Q+W64=;
-        b=F/+UCskf44ADzGslt/IGpWoJh4u6oVd2pp653aShhnTg9HGbG3ZOsV/FfEAlnWOv5l
-         xsKVf7wW/egGgeqeM0wcau4N13Ku8o7LmHx1T3stlAJ8yJvPcQ1cBg+QcQV9iwsd2e8E
-         HeVgQc8NwGhGuWRTVRY/EwK8DiqhRfwl3cwXbOB+JFTihHxEBUJbpnksAnzIm8pRoFIO
-         9hsDruJByPgnUprVEPZoDYLLHYmVnWC+FpwJdKXALBXK8nN4FiMI/iw3lGWT8Q5JcCeg
-         E8HLRuikgjnjtYd/4ZOd0xFNDQJuJrgDYUSkmPio/aXmZjRLhsZGIDceELpbs7rsc7cf
-         P7PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u6Cw0ZmfOshKtE4Fs73s8CsSsDU0YsFyudltt9Q+W64=;
-        b=LErW4KZWEDVZZ9Y/mLpinhOuYT5adKhTcDe+NO4mPd9aWlY/UJrCN3dJwkQ5XnO0Ic
-         x7F+3preOBYIjt7ouOMBMlszSUpbpfwdTBQWtb2WyeEueQ8/+tyzHomVvn+ZX2Zgqzz+
-         sFDukQWoSUy5CVp42+1vDd7thstpwBu5P0n9PI8mwAHe/QgCXTB8DM0+k2q3/r1c3YKu
-         whimpVhnnXXszJ5rd0d49jvsSjhl174H942howCjubQ4OoTdgXZuyyv1VzpVTgYDaWS2
-         94rdcktNAAivBNLtWxvtRZ4wF3S3UVE7WiURIwV6RrGxmox3zywkW67RhS9BHaHcuHJa
-         0O/g==
-X-Gm-Message-State: ACrzQf0VlqAdGjkqpGVV9K713CoJ5nIJfOiLfbe1tNYAuIyGPssR34ks
-        aPDVva7LyzlHU2WAgFeM8Ec2Kh98krg=
-X-Google-Smtp-Source: AMsMyM7vjPqvAsQewFeWzKk356hhUxKe3WeNFeH9NgriWh/GJdOOF5HI5op5QD6jNFKnHutO93ukwPXPHbM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:1595:0:b0:566:9f68:c0ad with SMTP id
- 143-20020a621595000000b005669f68c0admr3437397pfv.57.1668112515250; Thu, 10
- Nov 2022 12:35:15 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 10 Nov 2022 20:35:04 +0000
-In-Reply-To: <20221110203504.1985010-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20221110203504.1985010-1-seanjc@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221110203504.1985010-6-seanjc@google.com>
-Subject: [PATCH v2 5/5] x86/kasan: Populate shadow for shared chunk of the CPU
- entry area
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        Sean Christopherson <seanjc@google.com>,
-        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
-        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 15:36:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61BC51C05;
+        Thu, 10 Nov 2022 12:36:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1783B82366;
+        Thu, 10 Nov 2022 20:36:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD88DC433D6;
+        Thu, 10 Nov 2022 20:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668112582;
+        bh=bCmHFzNSY03F/mNbxzkAkXDoKUIb84vHMVmOs8FgiW4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sRGSRDPQ5WtN3//4aNfHkT0ms1AfziN5jFFdbrt66a9b/6jQjqbaM+SpuWNMsRmXe
+         JrOEMqk5HTdtkJL1eE8aIqXc6aXcdx6XgAOy3ChlncQJU54qH/xKEJTj9p2MW/9c+t
+         Lzg5U90CyCbG1ktMd/XGX9XGnjpaEya8qRdJuUvXjKpFhgMc2aFZU6b7kTKRsF7468
+         kcuG5KUcGg58Tr4f+fYnSnLllXaKAeeAl9e5PCXN2FC0i73vWq/KNxMlvEbvxNhDBI
+         TGKe8ZTRWksTmOfMqaPzQUB8dhl1DuYX0x5jZmRZR2+v3RApGVN7MzDt8v/GEsr/JL
+         PXN4axqNziG6Q==
+Date:   Thu, 10 Nov 2022 20:36:16 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, tglx@linutronix.de,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic
+ CS48L31/32/33 codecs
+Message-ID: <Y21gwGDb5CFft0kp@sirena.org.uk>
+References: <20221109165331.29332-1-rf@opensource.cirrus.com>
+ <20221109165331.29332-10-rf@opensource.cirrus.com>
+ <87mt8zutib.wl-maz@kernel.org>
+ <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
+ <86pmdvow5y.wl-maz@kernel.org>
+ <ef60cbdb-f506-7bd6-a8e1-c92b6963a0f4@opensource.cirrus.com>
+ <86k042q1uc.wl-maz@kernel.org>
+ <05ae0e20-b472-f812-1afc-ef8c2a97cdeb@opensource.cirrus.com>
+ <87iljmve87.wl-maz@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cLWr1cCMwWOX3sxh"
+Content-Disposition: inline
+In-Reply-To: <87iljmve87.wl-maz@kernel.org>
+X-Cookie: Torque is cheap.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Popuplate the shadow for the shared portion of the CPU entry area, i.e.
-the read-only IDT mapping, during KASAN initialization.  A recent change
-modified KASAN to map the per-CPU areas on-demand, but forgot to keep a
-shadow for the common area that is shared amongst all CPUs.
 
-Map the common area in KASAN init instead of letting idt_map_in_cea() do
-the dirty work so that it Just Works in the unlikely event more shared
-data is shoved into the CPU entry area.
+--cLWr1cCMwWOX3sxh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The bug manifests as a not-present #PF when software attempts to lookup
-an IDT entry, e.g. when KVM is handling IRQs on Intel CPUs (KVM performs
-direct CALL to the IRQ handler to avoid the overhead of INTn):
+On Thu, Nov 10, 2022 at 06:47:20PM +0000, Marc Zyngier wrote:
 
- BUG: unable to handle page fault for address: fffffbc0000001d8
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 16c03a067 P4D 16c03a067 PUD 0
- Oops: 0000 [#1] PREEMPT SMP KASAN
- CPU: 5 PID: 901 Comm: repro Tainted: G        W          6.1.0-rc3+ #410
- Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
- RIP: 0010:kasan_check_range+0xdf/0x190
-  vmx_handle_exit_irqoff+0x152/0x290 [kvm_intel]
-  vcpu_run+0x1d89/0x2bd0 [kvm]
-  kvm_arch_vcpu_ioctl_run+0x3ce/0xa70 [kvm]
-  kvm_vcpu_ioctl+0x349/0x900 [kvm]
-  __x64_sys_ioctl+0xb8/0xf0
-  do_syscall_64+0x2b/0x50
-  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> Read again what I have written. Having to expose a device-specific API
+> for endpoint drivers to obtain their interrupts, and requiring them to
+> know about some magic values that describe the interrupts source are
+> not a acceptable constructs.
 
-Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
-Reported-by: syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/mm/kasan_init_64.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+> We have firmware descriptions to expose interrupt linkages, and your
+> HW is not special enough to deserve its own top level API. Yes, we
+> accepted such drivers in the past, but it has to stop.
 
-diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
-index afc5e129ca7b..af82046348a0 100644
---- a/arch/x86/mm/kasan_init_64.c
-+++ b/arch/x86/mm/kasan_init_64.c
-@@ -341,7 +341,7 @@ void __init kasan_populate_shadow_for_vaddr(void *va, size_t size, int nid)
- 
- void __init kasan_init(void)
- {
--	unsigned long shadow_cea_begin, shadow_cea_end;
-+	unsigned long shadow_cea_begin, shadow_cea_per_cpu_begin, shadow_cea_end;
- 	int i;
- 
- 	memcpy(early_top_pgt, init_top_pgt, sizeof(early_top_pgt));
-@@ -384,6 +384,7 @@ void __init kasan_init(void)
- 	}
- 
- 	shadow_cea_begin = kasan_mem_to_shadow_align_down(CPU_ENTRY_AREA_BASE);
-+	shadow_cea_per_cpu_begin = kasan_mem_to_shadow_align_up(CPU_ENTRY_AREA_PER_CPU);
- 	shadow_cea_end = kasan_mem_to_shadow_align_up(CPU_ENTRY_AREA_BASE +
- 						      CPU_ENTRY_AREA_MAP_SIZE);
- 
-@@ -409,6 +410,15 @@ void __init kasan_init(void)
- 		kasan_mem_to_shadow((void *)VMALLOC_END + 1),
- 		(void *)shadow_cea_begin);
- 
-+	/*
-+	 * Populate the shadow for the shared portion of the CPU entry area.
-+	 * Shadows for the per-CPU areas are mapped on-demand, as each CPU's
-+	 * area is randomly placed somewhere in the 512GiB range and mapping
-+	 * the entire 512GiB range is prohibitively expensive.
-+	 */
-+	kasan_populate_early_shadow((void *)shadow_cea_begin,
-+				    (void *)shadow_cea_per_cpu_begin);
-+
- 	kasan_populate_early_shadow((void *)shadow_cea_end,
- 			kasan_mem_to_shadow((void *)__START_KERNEL_map));
- 
--- 
-2.38.1.431.g37b22c650d-goog
+> Either you describe the internal structure of your device in DT or
+> ACPI, and make all client drivers use the standard API, or you make
+> this a codec library, purely specific to your device and only used by
+> it. But the current shape is not something I'm prepared to accept.
 
+ACPI gets to be a lot of fun here, it's just not idiomatic to describe
+the internals of these devices in firmware there and a lot of the
+systems shipping this stuff are targeted at other OSs and system
+integrators are therefore not in the least worried about Linux
+preferences.  You'd need to look at having the MFD add additional
+description via swnode or something to try to get things going.  MFD
+does have support for that, though it's currently mainly used with
+devices that only have ACPI use (axp20x looks like the only potentially
+DT user, from the git history the swnode bits are apparently for use on
+ACPI systems).  That might get fragile in the DT case since you could
+have multiple sources for description of the same thing unless you do
+something like suppress the swnode stuff on DT systems.
+
+Given that swnode is basically DT written out in C code I'm not actually
+convinced it's that much of a win, unless someone writes some tooling to
+generate swnode data from DT files you're not getting the benefit of any
+of the schema validation work that's being done.  We'd also need to do
+some work for regulators to make sure that if we are parsing DT
+properties on ACPI systems we don't do so from _DSD since ACPI has
+strong ideas about how power works and we don't want to end up with
+systems with firmware providing mixed ACPI/DT models without a clear
+understanding of what we're geting into.
+
+I do also have other concerns in the purely DT case, especially with
+chip functions like the CODEC where there's a very poor mapping between
+physical IPs and how Linux is tending to describe things internally at
+the minute.  In particular these devices often have a clock tree
+portions of which can be visible and useful off chip but which tends to
+get lumped in with the audio IPs in our current code.  Ideally we'd
+describe that as a clock subdevice (or subdevices if that fits the
+hardware) using the clock bindings but then that has a bunch of knock on
+effects the way the code currently is which probably it's probably
+disproportionate to force an individual driver author to work through.
+OTOH the DT bindings should be OS neutral ABI so...
+
+--cLWr1cCMwWOX3sxh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNtYL8ACgkQJNaLcl1U
+h9Bdegf+M0O5xuz080mqCfkEStEVXEa7vgYTaXJ5kSDWE8EVR2JGupMqABM77ylJ
+E4ccbboETZSH5UmTskY7AeAGlD6u/n1jy2P8eluNxXMoQ9IS+qNpJgyKMfeKKRYE
+ZbqkECcs70AOIyOe5ntQS+sxpEDPlKsQvGkV+0rXiX2bMNVSpcst84eYr9bayPrV
+YBFdrEuMwCcCjH3tx+7pcaxaghZHX5r4MtZYjhR8kHZ28RN5eesTg1LsblDM5abo
+mWGOe/hrQocDzuUSl3WmPGoFJIKk5a+xcex4kO1/0CouI+b6Id4M06qMdU6cwoKv
+R9QO9gnPCJjkAFOWmx4hPA6ripXBqQ==
+=FGs4
+-----END PGP SIGNATURE-----
+
+--cLWr1cCMwWOX3sxh--
