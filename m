@@ -2,111 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344FC624600
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05874624606
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbiKJPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S230196AbiKJPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiKJPeM (ORCPT
+        with ESMTP id S229520AbiKJPen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:34:12 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1384AF13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:32:47 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ud5so5932824ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:32:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lLWyKRw2Ej5Lpfhe4CBr1qjwt8vEPyBuJa6C43wuPh8=;
-        b=OkyOgnKMAJGwRvPJAFhXDJESxbMLb1Fk0onxCfwxfvJg9rRma53fxA9Hi2o5w58I03
-         +8HpwRbWFlTbcs53Se/6vK/S1S2fRP2RwZiXmYjABU9SNbw54OVQbnE0QdpD81tMek/n
-         8wAr94Fchj/KpWbCevBtzdDELjSbHgxIu3NTs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lLWyKRw2Ej5Lpfhe4CBr1qjwt8vEPyBuJa6C43wuPh8=;
-        b=B7PxCw3kzNMRwNakpOecvU1Md86xIgR65/ibVKFQWUvVgiT27peUS9pt9wH1bTcIgT
-         BaWXM/RttBtLVZF0EKgp+z7FFsn6It1DYhwSLfMMl2jRAmSHSWyZph4iHImhUvmAX2tk
-         W2WxUtClR9KMrvpFjq9Zmevaq1CwtPprIeNmOzJG9577Esbs219JqRYQi94dauX8fTUF
-         o7BIx98PP5Cem2BY4EM6AYtGwhguLujCORO8Ohc09Oargoz1A2AUzrLRLhjwehd0d11u
-         9Xgj0AI6ckFd6aQcpQUDJPtpMBkzzyZhOLEzCfR5BiVjCAdcFRdsaizo2lDo4BFfHnYy
-         UaTw==
-X-Gm-Message-State: ACrzQf2WIlJc5upSHdKh1k+kDSeqphjWBlIw1rfB8KAtC5olNPz5p7gw
-        /NL2yT+Q99HZ32VBHW5Xo1o/z9uCD8WBl93/
-X-Google-Smtp-Source: AMsMyM5HiPZ7bSzRVn9EZ4gOOCm2wViH8hw50iyDkxpZfCGXDq/ZleeGCgXc0t67nKWVtGj1s1qJ2w==
-X-Received: by 2002:a17:906:a3ce:b0:7a1:b573:c99e with SMTP id ca14-20020a170906a3ce00b007a1b573c99emr3033990ejb.55.1668094364097;
-        Thu, 10 Nov 2022 07:32:44 -0800 (PST)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id o19-20020a170906769300b00722e50dab2csm7364780ejm.109.2022.11.10.07.32.38
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 07:32:38 -0800 (PST)
-Received: by mail-wm1-f48.google.com with SMTP id r203-20020a1c44d4000000b003cfa97c05cdso1958704wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:32:38 -0800 (PST)
-X-Received: by 2002:a05:600c:4486:b0:3cf:6e1d:f4a5 with SMTP id
- e6-20020a05600c448600b003cf6e1df4a5mr41251597wmo.85.1668094358585; Thu, 10
- Nov 2022 07:32:38 -0800 (PST)
+        Thu, 10 Nov 2022 10:34:43 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBB76307;
+        Thu, 10 Nov 2022 07:34:33 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id F11F01FB23;
+        Thu, 10 Nov 2022 15:34:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668094471; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bEnHdqT3DcxO4MFxMqMVX1EoQDRxqFNIevVZKsxI/LU=;
+        b=oeljd555OxLi7NkR4t4QIAONG3HeiofBo3qDfkpKApXXFzPPSuFTVvdTbmHaHfD+5pvN0K
+        k8yIVvOdjerAWOH9reqwqRHFL91yEnyVYozzgEqXgVyxW5DfV0oy7Mo1lpOEeNXWxzvdtS
+        HGPa2+4O2MEJLyq0fZ44v+PZcohZDgc=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A89862C141;
+        Thu, 10 Nov 2022 15:34:31 +0000 (UTC)
+Date:   Thu, 10 Nov 2022 16:34:31 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH printk v3 33/40] printk, xen: fbfront: create/use safe
+ function for forcing preferred
+Message-ID: <Y20aBwNWT19YDeib@alley>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-34-john.ogness@linutronix.de>
 MIME-Version: 1.0
-References: <20220831141622.39605-1-francesco.dolcini@toradex.com>
- <Y01kJbZjkwo1A8l1@francesco-nb.int.toradex.com> <Y2z4zoYU2rxrOKPC@francesco-nb.int.toradex.com>
-In-Reply-To: <Y2z4zoYU2rxrOKPC@francesco-nb.int.toradex.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 10 Nov 2022 07:32:26 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UHOdxmKFSapPshxyo0NW3UxsmzSXroe4riAFDWM6Si=w@mail.gmail.com>
-Message-ID: <CAD=FV=UHOdxmKFSapPshxyo0NW3UxsmzSXroe4riAFDWM6Si=w@mail.gmail.com>
-Subject: Re: [PATCH v1] drm/panel: simple: set bpc field for logic
- technologies displays
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     dri-devel@lists.freedesktop.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
-        linux-kernel@vger.kernel.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107141638.3790965-34-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon 2022-11-07 15:22:31, John Ogness wrote:
+> With commit 9e124fe16ff2("xen: Enable console tty by default in domU
+> if it's not a dummy") a hack was implemented to make sure that the
+> tty console remains the console behind the /dev/console device. The
+> main problem with the hack is that, after getting the console pointer
+> to the tty console, it is assumed the pointer is still valid after
+> releasing the console_sem. This assumption is incorrect and unsafe.
+> 
+> Make the hack safe by introducing a new function
+> console_force_preferred_locked() and perform the full operation
+> under the console_list_lock.
+> 
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -3457,6 +3458,43 @@ int unregister_console(struct console *console)
+>  }
+>  EXPORT_SYMBOL(unregister_console);
+>  
+> +/**
+> + * console_force_preferred_locked - force a registered console preferred
+> + * @con: The registered console to force preferred.
+> + *
+> + * Must be called under console_list_lock().
+> + */
+> +void console_force_preferred_locked(struct console *con)
+> +{
+> +	struct console *cur_pref_con;
+> +
+> +	if (!console_is_registered_locked(con))
+> +		return;
+> +
+> +	cur_pref_con = console_first();
+> +
+> +	/* Already preferred? */
+> +	if (cur_pref_con == con)
+> +		return;
+> +
+> +	hlist_del_init_rcu(&con->node);
 
-On Thu, Nov 10, 2022 at 5:13 AM Francesco Dolcini <francesco@dolcini.it> wrote:
->
-> On Mon, Oct 17, 2022 at 04:18:13PM +0200, Francesco Dolcini wrote:
-> > On Wed, Aug 31, 2022 at 04:16:22PM +0200, Francesco Dolcini wrote:
-> > > From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
-> > >
-> > > In case bpc is not set for a panel it then throws a WARN(). Add bpc to
-> > > the panels logictechno_lt170410_2whc and logictechno_lt161010_2nh.
-> > >
-> > > Fixes: 5728fe7fa539 ("drm/panel: simple: add display timings for logic technologies displays")
-> >
-> > Hello,
-> > just a gently ping on this. It applies cleanly on v6.1-rc1, anything I
-> > should do?
->
-> Hello Doug,
-> can you help on this patch? I am not sure who is supposed to pick this
-> small fix, but it looks like you recently took patches on
-> "drm/panel: simple:", so maybe you can help.
+We actually should re-initialize the node only after all existing
+console list walks are finished. Se we should use here:
 
-Sure. It looks fine to me so I don't mind applying it. I did a quick
-double-check and I was amused that the datasheet of the 800x480 screen
-claims that it can show 16.7M colors with an 18-bit interface. ;-)
+	hlist_del_rcu(&con->node);
 
-Pushed to drm-misc-fixes:
+> +
+> +	/*
+> +	 * Ensure that all SRCU list walks have completed so that the console
+> +	 * can be added to the beginning of the console list and its forward
+> +	 * list pointer can be re-initialized.
 
-876153ab068b drm/panel: simple: set bpc field for logic technologies displays
+The comment is right ;-)
+
+> +	 */
+> +	synchronize_srcu(&console_srcu);
+> +
+> +	con->flags |= CON_CONSDEV;
+> +	WARN_ON(!con->device);
+> +
+> +	/* Only the new head can have CON_CONSDEV set. */
+> +	WRITE_ONCE(cur_pref_con->flags, cur_pref_con->flags & ~CON_CONSDEV);
+
+As mentioned in the reply for 7th patch, I would prefer to hide this
+WRITE_ONCE into a wrapper, e.g. console_set_flag(). It might also
+check that the console_list_lock is taken...
+
+
+> +	hlist_add_behind_rcu(&con->node, console_list.first);
+> +}
+> +EXPORT_SYMBOL(console_force_preferred_locked);
+> +
+>  /*
+>   * Initialize the console device. This is called *early*, so
+>   * we can't necessarily depend on lots of kernel help here.
+
+Best Regards,
+Petr
