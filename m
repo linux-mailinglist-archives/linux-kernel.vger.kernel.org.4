@@ -2,101 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1FE623A45
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A053623A4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiKJDPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S232261AbiKJDSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:18:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiKJDPO (ORCPT
+        with ESMTP id S231611AbiKJDSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:15:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AFBCDED5;
-        Wed,  9 Nov 2022 19:15:13 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 261531FB;
-        Wed,  9 Nov 2022 19:15:19 -0800 (PST)
-Received: from [10.162.41.6] (unknown [10.162.41.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B0FE3F73D;
-        Wed,  9 Nov 2022 19:15:10 -0800 (PST)
-Message-ID: <73c40107-0d7a-d988-c817-7bba6d72c371@arm.com>
-Date:   Thu, 10 Nov 2022 08:45:07 +0530
+        Wed, 9 Nov 2022 22:18:05 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902462A95C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 19:18:04 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id j1-20020a4ad181000000b0049e6e8c13b4so101697oor.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 19:18:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ui4nz+rk4+cy7iX09mK3SZJkU54S/hpyEMWrZ+RjI2M=;
+        b=eC+RoKfhId/DMoP2yqdKWn4KQDV/bHSjRCDt/kWA5xOVi5nb2pPkI4mlgslo1JNknx
+         Tbc3SQ7t4elqvdUA3nUUCKvQbTL7ks+AB1IJ5XhKa2/de9c1Udet2zrq/4jLZG7GTcyo
+         qTJd5hnqSuyrRaevhIkhNKvsdvsYMK4tChfEz0tiplUuDiC5uC04CxKrOxSGi0hN2o+4
+         CO0OjAnj9tnmtB5qAC9vFShPdrrfEgCzNnfwl/zNEBCkbuZ9vTypUAhuhzEGgjMN41/b
+         UI8hKSlDuk0oJLzFvXx2H4VG88DRFWuETaRueen5S0NSNB5HmirGKvFdgsSm1yQjpbQW
+         TSGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ui4nz+rk4+cy7iX09mK3SZJkU54S/hpyEMWrZ+RjI2M=;
+        b=Za6A1pwa+xCpUpyoJrzjqeCpqIKqDHyZaKoVLoyVeqE4Jf3fnj97JFc5GeB7VSzr9h
+         BJM2M5IynDjMKLaHpERr2dGNWmtAuYnLNKjgetMTKF91DjhTe4kypwEWBvarsR7LxTzf
+         MaZRj1OcXqUZGwrRFGD6MCqoDqKx94Bfzjv1UPC9mfJdb31s1xMwNl97SNvSic2rOShd
+         9lhfHDehalcFTTdhR5dj4dura2aMbU7T2TV60pIgcWNrzjlOqh59pWn+wGg4pss/e5fv
+         EV52u9MTYSBNcTl2CJcrhm2e6sAkk3zQS+ynwFhKZskyGpYHbgsMqjcYO1XjnmC/l0Ft
+         msgQ==
+X-Gm-Message-State: ANoB5pnl5Qt9cyxA3FPd+fTGUAi6q5qVYgHkoEvNw1C8T30Y6oj6Qzvb
+        2lxUAxmXY28krVbf/lIfxVyzWLa3/ciKdEygvwOO
+X-Google-Smtp-Source: AA0mqf4jNyWHNPdiVFcHIrPF0+v2AoEgmnjHvVUr776+Z6yoxo2tMWAfX7sFLgPjynd2YPyaEA2X+YXWw2y/wJe591Q=
+X-Received: by 2002:a4a:ca8f:0:b0:49e:f01a:feaf with SMTP id
+ x15-20020a4aca8f000000b0049ef01afeafmr7560680ooq.81.1668050283850; Wed, 09
+ Nov 2022 19:18:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/2] arm64: errata: Workaround possible Cortex-A715
- [ESR|FAR]_ELx corruption
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
-References: <20221027023915.1318100-1-anshuman.khandual@arm.com>
- <20221027023915.1318100-3-anshuman.khandual@arm.com>
- <Y2v9EiNR40x/cCQm@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <Y2v9EiNR40x/cCQm@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221025184519.13231-1-casey@schaufler-ca.com>
+ <20221025184519.13231-8-casey@schaufler-ca.com> <CAHC9VhQ5Jrt3Ns+m7DFZ+_pP81AWqSx588HMZR+7MUuMfSZoig@mail.gmail.com>
+ <ea927e49-0099-df0a-d263-400782486b35@schaufler-ca.com>
+In-Reply-To: <ea927e49-0099-df0a-d263-400782486b35@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 9 Nov 2022 22:17:52 -0500
+Message-ID: <CAHC9VhQMfAix=KqpWGNg_2cryBJHyiFTzURQ1YuD_0SY92ZHsA@mail.gmail.com>
+Subject: Re: [PATCH v1 7/8] LSM: Create lsm_module_list system call
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 9, 2022 at 8:37 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> On 11/9/2022 3:35 PM, Paul Moore wrote:
+> > On Tue, Oct 25, 2022 at 2:48 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> >> Create a system call to report the list of Linux Security Modules
+> >> that are active on the system. The list is provided as an array
+> >> of LSM ID numbers.
+> >>
+> >> The calling application can use this list determine what LSM
+> >> specific actions it might take. That might include chosing an
+> >> output format, determining required privilege or bypassing
+> >> security module specific behavior.
+> >>
+> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> >> ---
+> >>  include/linux/syscalls.h |  1 +
+> >>  kernel/sys_ni.c          |  1 +
+> >>  security/lsm_syscalls.c  | 38 ++++++++++++++++++++++++++++++++++++++
+> >>  3 files changed, 40 insertions(+)
+> > ..
+> >
+> >> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
+> >> index da0fab7065e2..cd5db370b974 100644
+> >> --- a/security/lsm_syscalls.c
+> >> +++ b/security/lsm_syscalls.c
+> >> @@ -154,3 +154,41 @@ SYSCALL_DEFINE3(lsm_self_attr,
+> >>         kfree(final);
+> >>         return rc;
+> >>  }
+> >> +
+> >> +/**
+> >> + * lsm_module_list - Return a list of the active security modules
+> >> + * @ids: the LSM module ids
+> >> + * @size: size of @ids, updated on return
+> >> + * @flags: reserved for future use, must be zero
+> >> + *
+> >> + * Returns a list of the active LSM ids. On success this function
+> >> + * returns the number of @ids array elements. This value may be zero
+> >> + * if there are no LSMs active. If @size is insufficient to contain
+> >> + * the return data -E2BIG is returned and @size is set to the minimum
+> >> + * required size. In all other cases a negative value indicating the
+> >> + * error is returned.
+> >> + */
+> > Let's make a promise that for this syscall we will order the LSM IDs
+> > in the array in the same order as which they are configured/executed.
+>
+> Sure. Order registered, which can vary, as opposed to LSM ID order,
+> which cannot. That could be important to ensure that applications
+> that enforce the same policy as the kernel will hit the checks in
+> the same order as the kernel. That's how it is coded. It needs to
+> be documented.
 
+Yep.  One of the big reasons for documenting it this way is to ensure
+that we define the order as part of the API.
 
-On 11/10/22 00:48, Catalin Marinas wrote:
-> On Thu, Oct 27, 2022 at 08:09:15AM +0530, Anshuman Khandual wrote:
->> +#define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
->> +static inline pte_t ptep_modify_prot_start(struct vm_area_struct *vma,
->> +					   unsigned long addr,
->> +					   pte_t *ptep)
->> +{
->> +	pte_t pte = ptep_get_and_clear(vma->vm_mm, addr, ptep);
->>  
->> +	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
->> +		/*
->> +		 * Break-before-make (BBM) is required for all user space mappings
->> +		 * when the permission changes from executable to non-executable
->> +		 * in cases where cpu is affected with errata #2645198.
->> +		 */
->> +		if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
->> +			__flush_tlb_range(vma, addr, addr + PAGE_SIZE, PAGE_SIZE, false, 3);
-> 
-> Why not flush_tlb_page() here?
-> 
-> But more importantly, can we not use ptep_clear_flush() instead (and
-
-Something like ...
-
-ptep_modify_prot_start -
-
-if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-	if (pte_user_exec(READ_ONCE(*ptep)) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
-		return ptep_clear_flush(vma, addr, ptep);
-} else {
-	return ptep_get_and_clear(vma->vm_mm, addr, ptep);
-}
-
-> huge_ptep_clear_flush())? They return the pte and do the TLBI.
-
-huge_ptep_modify_prot_start -
-
-if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-	if (pte_user_exec(READ_ONCE(*ptep)) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
-		return huge_ptep_clear_flush(vma, addr, ptep);
-} else {
-	return huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
-}
-
-pte_user_exec(READ_ONCE(*ptep) should identify an user exec mapping even though
-ptep represents a cont PTE/PMD huge page ? OR should huge_ptep_get() helper be
-used instead ? Regardless, using [huge_]ptep_clear_flush() here seems better.
+-- 
+paul-moore.com
