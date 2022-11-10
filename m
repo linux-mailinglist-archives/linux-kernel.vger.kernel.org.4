@@ -2,152 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC3D624D88
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5B9624CFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiKJWMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S232012AbiKJV25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:28:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiKJWMj (ORCPT
+        with ESMTP id S231922AbiKJV2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:12:39 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA30450B6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:12:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Subject:From:Cc:To:MIME-Version:Date:Message-ID:Content-Type:
-        Sender:Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ehOVmf2BGJ/4XYcU1MULgCYiKF3gEtoi5LbwIzjFNf4=; b=i4gj0D5faVv1xOXerbvbwjpkVj
-        r+9WoDtYzORegVRsH57rIBoGtc+Vc03xnNWODx/W3d6llbjxDiR2FkSWRrLswGuLtg6xVOBBOJw/k
-        12XOiEi5Q1vv7IoXULOpx/CC5GNR2O7WEhPf55vJcpAzX/nmIryxGfsc4ZYeH4TKLtzblHv7HK3VC
-        tlbQPkCIuQCU+A2jXmAcFUjf4ejooOKCxUb3eTLXlltKYMMV7YlEue8Dy1DeMb8LnjQevP4eLLflp
-        QVt1EJbzmwWeDQAaFNusmsZF42GfviQfoMNPA9ab+l9ZAEzTULL6jPsWXWTxliix7IBtLb40z5XIs
-        va56zLkg==;
-Received: from [177.102.6.147] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1otF3R-00FllT-RH; Thu, 10 Nov 2022 22:25:46 +0100
-Content-Type: multipart/mixed; boundary="------------4sU3PuLspeCdCDuX0VcIUpqh"
-Message-ID: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
-Date:   Thu, 10 Nov 2022 18:25:41 -0300
+        Thu, 10 Nov 2022 16:28:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113159D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668115674;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D15edAydLnVTLab35CTaj6y/l/B1rXYhW6svf54p2rE=;
+        b=e3srHlVJD4WATsBO42i/PTF78ZnGOuvEzBJKIqtTk40B13nqWBM+OPDu5MUTBF3PRgFWOO
+        BJBRNH0BDh8kFFkKcu2BNeNdSAdDnWov74EafLqb75xe/qUIf8zYCBRHqAZ4iyz0y2ZpLe
+        QMTQKmcOWzZb/8XbdulDd9BgYJdljQQ=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-558-Ok3OKilTN2eynda0tkOhUw-1; Thu, 10 Nov 2022 16:27:53 -0500
+X-MC-Unique: Ok3OKilTN2eynda0tkOhUw-1
+Received: by mail-qt1-f199.google.com with SMTP id s14-20020a05622a1a8e00b00397eacd9c1aso2353419qtc.21
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:27:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D15edAydLnVTLab35CTaj6y/l/B1rXYhW6svf54p2rE=;
+        b=7g/KDNjSpgK/qXhyhzYdPfDIQRxXsisVtmskKufUzTUY6ac9Dx25aSmmRXL7HqZzRX
+         qb+/Wx1bqi+UeaNv9DFR1pg04eMNUlfFgPHfkqqb/46FZLRBrC633jcltMpDmqp8zbZA
+         Upz4y1/BK0sy2GJCBpHehzBAi+YAoISoI5uFYnSqgtIAgvJuvJbYwxOV08UUeHsgXLgh
+         XQikS4NjRWu4qcv8kGL2AqcqzO880PjMbV4ZfkqKPPrsZe3u6kYtKm8KDqcHyksjYycj
+         ABFTNSr8Ye6v4AZv2Ma44G9RZEWMO0m2OucGzT/A/I+WhENoLOhYnlscrPRKTAgzIaqC
+         zezA==
+X-Gm-Message-State: ACrzQf3LA5r34Sm9H0P4//WPGcCIuBOmQgyo7vB2iXTSQXuFekCBhHeB
+        t5Ddlf13J2VDFNuRbM+mvVB4E/6XdnfiwH6f6O6R9HjzwHdl5TrQ5AyLwONQCQ6QViW+hZyXtxC
+        dvR4iN6Ptg+m4kRRHmv72VJIS
+X-Received: by 2002:ac8:53ce:0:b0:3a5:122:fb79 with SMTP id c14-20020ac853ce000000b003a50122fb79mr1948886qtq.452.1668115672719;
+        Thu, 10 Nov 2022 13:27:52 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM4YgTRj2nHC6NVvXZhdEJ/UnFY/bgoDMZtxAZubI5MaeEgeSKEQau4bSHlu5U0LdokZQ5DbKg==
+X-Received: by 2002:ac8:53ce:0:b0:3a5:122:fb79 with SMTP id c14-20020ac853ce000000b003a50122fb79mr1948872qtq.452.1668115672499;
+        Thu, 10 Nov 2022 13:27:52 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id t19-20020ac865d3000000b003a527d29a41sm186487qto.75.2022.11.10.13.27.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 13:27:51 -0800 (PST)
+Date:   Thu, 10 Nov 2022 16:27:50 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v8 2/2] mm: remove zap_page_range and change callers to
+ use zap_vma_range
+Message-ID: <Y21s1uzkey6u4nyK@x1n>
+References: <20221108011910.350887-1-mike.kravetz@oracle.com>
+ <20221108011910.350887-3-mike.kravetz@oracle.com>
+ <7140E1D7-B1B9-4462-ADDA-E313A7A90A68@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Content-Language: en-US
-To:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Subject: RCU stall on 6.1-rc4 (and some previous releases) related to ftrace
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7140E1D7-B1B9-4462-ADDA-E313A7A90A68@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------4sU3PuLspeCdCDuX0VcIUpqh
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi, Nadav,
 
-Hi folks, I've noticed some RCU stalls when enabling ftrace filtering in
-6.1-rc4 (also 6.1-rc3 and I guess I've seen this before, but only in
-6.0+). Here is the full dmesg: https://termbin.com/4xo6 , see below for
-a small snippet of the stall [0].
+On Thu, Nov 10, 2022 at 01:09:43PM -0800, Nadav Amit wrote:
+> But, are the callers really able to guarantee that the ranges are all in a
+> single VMA? I am not familiar with the users, but how for instance
+> tcp_zerocopy_receive() can guarantee that no one did some mprotect() of some
+> sorts that caused the original VMA to be split?
 
-I've briefly talked to Steve on IRC, and he mentioned that my kernel
-seemed to have PREEMPT_VOLUNTARY=y (and indeed, this is the case - see
-the full config here: https://termbin.com/t48d), saying that maybe
-adding a cond_resched() in the loop would help.
+Let me try to answer this one for Mike..  We have two callers in tcp
+zerocopy code for this function:
 
-So, I've cooked a small hack (see the patch attached) and it seems to
-work. Steve: lemme know if you want to send it (since it's your idea and
-maybe my hack is not covering all cases), or if you prefer, I can work a
-commit message and send myself.
+tcp_zerocopy_vm_insert_batch_error[2095] zap_page_range(vma, *address, maybe_zap_len);
+tcp_zerocopy_receive[2237]     zap_page_range(vma, address, total_bytes_to_map);
 
-Any other advice / tests required, please lemme me know and I'll be glad
-in contributing.
+Both of them take the mmap lock for read, so firstly mprotect is not
+possible.
 
-Cheers,
+The 1st call has:
 
+	mmap_read_lock(current->mm);
 
-Guilherme
+	vma = vma_lookup(current->mm, address);
+	if (!vma || vma->vm_ops != &tcp_vm_ops) {
+		mmap_read_unlock(current->mm);
+		return -EINVAL;
+	}
+	vma_len = min_t(unsigned long, zc->length, vma->vm_end - address);
+	avail_len = min_t(u32, vma_len, inq);
+	total_bytes_to_map = avail_len & ~(PAGE_SIZE - 1);
+	if (total_bytes_to_map) {
+		if (!(zc->flags & TCP_RECEIVE_ZEROCOPY_FLAG_TLB_CLEAN_HINT))
+			zap_page_range(vma, address, total_bytes_to_map);
 
+Here total_bytes_to_map comes from avail_len <--- vma_len, which is a min()
+of the rest vma range.  So total_bytes_to_map will never go beyond the vma.
 
-[0]
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-....
-} 6 jiffies s: 1289 root: 0x2/.
-rcu: blocking rcu_node structures (internal RCU debug):
-Sending NMI from CPU 4 to CPUs 1:
-NMI backtrace for cpu 1
-[...]
-RIP: 0010:find_kallsyms_symbol+0x85/0x1a0
-[...]
-Call Trace:
- <TASK>
- ? get_refcyc_per_delivery.constprop.0+0x200/0x200 [amdgpu]
- module_address_lookup+0x63/0xc0
- ? get_refcyc_per_delivery.constprop.0+0x200/0x200 [amdgpu]
- kallsyms_lookup_buildid+0xb6/0x130
- ftrace_match_record+0x43/0xf0
- ? match_records+0x210/0x3b0
- ? __kmem_cache_alloc_node+0x165/0x260
- match_records+0x13a/0x3b0
- ftrace_process_regex.isra.0+0x101/0x120
- ftrace_filter_write+0x57/0x90
-[...]
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-....
-} 25 jiffies s: 1289 root: 0x2/.
-rcu: blocking rcu_node structures (internal RCU debug):
-Sending NMI from CPU 4 to CPUs 1:
-[...]
-RIP: 0010:find_kallsyms_symbol+0x8f/0x1a0
-[...]
-Call Trace:
- <TASK>
- ? dcn21_dmcu_create+0xd0/0xd0 [amdgpu]
- module_address_lookup+0x63/0xc0
- ? dcn21_dmcu_create+0xd0/0xd0 [amdgpu]
- kallsyms_lookup_buildid+0xb6/0x130
- ftrace_match_record+0x43/0xf0
- ? match_records+0x210/0x3b0
- ? __kmem_cache_alloc_node+0x165/0x260
- match_records+0x13a/0x3b0
- ftrace_process_regex.isra.0+0x101/0x120
- ftrace_filter_write+0x57/0x90
-[...]
---------------4sU3PuLspeCdCDuX0VcIUpqh
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-ftrace-hack-Add-cond_resched-to-prevent-RCU-stall.patch"
-Content-Disposition: attachment;
- filename*0="0001-ftrace-hack-Add-cond_resched-to-prevent-RCU-stall.patch"
-Content-Transfer-Encoding: base64
+The 2nd call uses maybe_zap_len as len, we need to look two layers of the
+callers, but ultimately it's something smaller than total_bytes_to_map we
+discussed.  Hopefully it proves 100% safety on tcp zerocopy.
 
-RnJvbSA0NWZkYTM2OWE0OWQwZTU5Njg5ZTRhNmI5YmFiYzEyNTk4MjY1ODI1IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiAiR3VpbGhlcm1lIEcuIFBpY2NvbGkiIDxncGljY29s
-aUBpZ2FsaWEuY29tPgpEYXRlOiBUaHUsIDEwIE5vdiAyMDIyIDE2OjQyOjE3IC0wMzAwClN1
-YmplY3Q6IFtQQVRDSF0gZnRyYWNlL2hhY2s6IEFkZCBjb25kX3Jlc2NoZWQoKSB0byBwcmV2
-ZW50IFJDVSBzdGFsbAoKU3VnZ2VzdGlvbiBmcm9tIFN0ZXZlIG9uIElSQwotLS0KIGtlcm5l
-bC90cmFjZS9mdHJhY2UuYyB8IDEgKwogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-CgpkaWZmIC0tZ2l0IGEva2VybmVsL3RyYWNlL2Z0cmFjZS5jIGIva2VybmVsL3RyYWNlL2Z0
-cmFjZS5jCmluZGV4IDdkYzAyMzY0MWJmMS4uOGMyYzA0YjJlYjUyIDEwMDY0NAotLS0gYS9r
-ZXJuZWwvdHJhY2UvZnRyYWNlLmMKKysrIGIva2VybmVsL3RyYWNlL2Z0cmFjZS5jCkBAIC00
-MTg0LDYgKzQxODQsNyBAQCBtYXRjaF9yZWNvcmRzKHN0cnVjdCBmdHJhY2VfaGFzaCAqaGFz
-aCwgY2hhciAqZnVuYywgaW50IGxlbiwgY2hhciAqbW9kKQogCQlpZiAocmVjLT5mbGFncyAm
-IEZUUkFDRV9GTF9ESVNBQkxFRCkKIAkJCWNvbnRpbnVlOwogCisJCWNvbmRfcmVzY2hlZCgp
-OwogCQlpZiAoZnRyYWNlX21hdGNoX3JlY29yZChyZWMsICZmdW5jX2csIG1vZF9tYXRjaCwg
-ZXhjbHVkZV9tb2QpKSB7CiAJCQlyZXQgPSBlbnRlcl9yZWNvcmQoaGFzaCwgcmVjLCBjbGVh
-cl9maWx0ZXIpOwogCQkJaWYgKHJldCA8IDApIHsKLS0gCjIuMzguMAoK
+-- 
+Peter Xu
 
---------------4sU3PuLspeCdCDuX0VcIUpqh--
