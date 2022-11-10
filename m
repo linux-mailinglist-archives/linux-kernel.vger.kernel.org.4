@@ -2,127 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6996244EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F316244ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiKJO6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S230247AbiKJO7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiKJO57 (ORCPT
+        with ESMTP id S229528AbiKJO7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:57:59 -0500
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5503B140EB;
-        Thu, 10 Nov 2022 06:57:58 -0800 (PST)
-Received: by mail-qk1-f179.google.com with SMTP id z30so1181994qkz.13;
-        Thu, 10 Nov 2022 06:57:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fDkz7bbVWR+GgxxGkF8vR//X45oBZt+X3AVSEGxGVU8=;
-        b=WgohCPeevFJ0279jZ5S9Lfh/4MV4XS6mU0N+pLLTk1DOUq8zehQG4RD57gxTse1g2j
-         OobK+jjzXrXgzzC48Qjrd8gH5HMTW8nogUYpRi3qKp6t3bk1kwclAqanRlDwe1WlSTYo
-         WDlv2ggzh3Im83boildgCn2uagwCZP8yxf0+IqNLjtMFNB/ZioRU2RcmAfZOHhMcRSqS
-         hgvNtC911/yDrtWM99WYjn2Pl+LDWnclG4wAba7xe95Zh3DlVV9GMGUu+eItACbkdrhq
-         uI9oQ9ZhOsr2/NSRYHvYaGkGqAsg3GSQvjApITs1Z/56UZ8RYAM6z97YuRMyJpxkLIbc
-         ENAg==
-X-Gm-Message-State: ACrzQf2DJX0eCFfyKb0WBD0/9iGB+RQhvyC+LQqHpa6c83jLypMnzYmT
-        4BU/MC9bj5MD8G+bYWmv+/O7gBJGpjsZJvvGEZPLJx1n
-X-Google-Smtp-Source: AMsMyM47eRjAfLOkZckNfJo2f4YcfTMlNMz7S4jLXyQo3C0XtTVcaHQmgGGmobmtLZtvyDyfRk8ne8iVGCNYr4nt11c=
-X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
- j22-20020a05620a147600b006fa4c6783ecmr35621745qkl.23.1668092277397; Thu, 10
- Nov 2022 06:57:57 -0800 (PST)
+        Thu, 10 Nov 2022 09:59:09 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C057C13D24
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:59:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1E821FB;
+        Thu, 10 Nov 2022 06:59:12 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C2153F703;
+        Thu, 10 Nov 2022 06:59:02 -0800 (PST)
+Message-ID: <48c178fc-108f-382b-e054-83e88ef9b01b@arm.com>
+Date:   Thu, 10 Nov 2022 15:59:01 +0100
 MIME-Version: 1.0
-References: <20221107175705.2207842-1-Perry.Yuan@amd.com> <20221107175705.2207842-3-Perry.Yuan@amd.com>
-In-Reply-To: <20221107175705.2207842-3-Perry.Yuan@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Nov 2022 15:57:46 +0100
-Message-ID: <CAJZ5v0hfy2RnCfgaXyX629GxwPyn3Nh4WcMg9cxAisVYELqrYA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/8] Documentation: amd-pstate: add EPP profiles introduction
-To:     Perry Yuan <Perry.Yuan@amd.com>
-Cc:     rafael.j.wysocki@intel.com, ray.huang@amd.com,
-        viresh.kumar@linaro.org, Deepak.Sharma@amd.com,
-        Mario.Limonciello@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
+ <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+ <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
+ <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
+ <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
+ <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
+ <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
+ <d2789d23-816b-11f1-d654-a7989f323ac8@arm.com>
+ <Y2z2/nhGfud7NIM8@hirez.programming.kicks-ass.net>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <Y2z2/nhGfud7NIM8@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 7:02 PM Perry Yuan <Perry.Yuan@amd.com> wrote:
->
-> The patch add AMD pstate EPP feature introduction and what EPP
-> preference supported for AMD processors.
->
-> User can get supported list from
-> energy_performance_available_preferences attribute file, or update
-> current profile to energy_performance_preference file
->
-> 1) See all EPP profiles
-> $ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
-> default performance balance_performance balance_power power
->
-> 2) Check current EPP profile
-> $ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference
-> performance
->
-> 3) Set new EPP profile
-> $ sudo bash -c "echo power > /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference"
->
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  Documentation/admin-guide/pm/amd-pstate.rst | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 8f3d30c5a0d8..78c6525d5a49 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -262,6 +262,25 @@ lowest non-linear performance in `AMD CPPC Performance Capability
->  <perf_cap_>`_.)
->  This attribute is read-only.
->
-> +``energy_performance_available_preferences``
-> +
-> +All the supported EPP preference could be selected, List of the strings that
-> +can be set to the ``energy_performance_preference`` attribute
-> +those different profiles represent different energy vs efficiency hints provided
-> +to low-level firmware
-> +however, the ``default`` represents the epp value is set by platform firmware
-> +This attribute is read-only.
-> +
-> +``energy_performance_preference``
-> +
-> +The current energy performance preference can be read from this attribute.
-> +and user can change current preference according to energy or performance needs
-> +Please get all support profiles list from
-> +``energy_performance_available_preferences`` attribute, all the profiles are
-> +integer values defined between 0 to 255 when EPP feature is enabled by platform
-> +firmware, if EPP feature is disabled, driver will ignore the written value
-> +This attribute is read-write.
-> +
->  Other performance and frequency values can be read back from
->  ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
->
-> --
+On 10/11/2022 14:05, Peter Zijlstra wrote:
+> On Thu, Nov 10, 2022 at 12:16:26PM +0100, Dietmar Eggemann wrote:
+>> On 07/11/2022 14:41, Peter Zijlstra wrote:
+>>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
+>>
+>> [...]
+>>
+>>> @@ -2956,13 +2958,26 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
+>>>   */
+>>>  static inline unsigned long cpu_util_cfs(int cpu)
+>>>  {
+>>> +	struct rq *rq = cpu_rq(cpu);
+>>>  	struct cfs_rq *cfs_rq;
+>>>  	unsigned long util;
+>>>  
+>>> -	cfs_rq = &cpu_rq(cpu)->cfs;
+>>> +	cfs_rq = &rq->cfs;
+>>>  	util = READ_ONCE(cfs_rq->avg.util_avg);
+>>>  
+>>>  	if (sched_feat(UTIL_EST)) {
+>>> +		if (sched_feat(UTIL_EST_FASTER)) {
+>>> +			struct task_struct *curr;
+>>> +
+>>> +			rcu_read_lock();
+>>> +			curr = rcu_dereference(rq->curr);
+>>> +			if (likely(curr->sched_class == &fair_sched_class)) {
+>>> +				u64 runtime = curr->se.sum_exec_runtime - curr->se.exec_start;
+>>
+>> Don't we and up with gigantic runtime numbers here?
+>>
+>> oot@juno:~# cat /proc/1676/task/1676/schedstat
+>> 36946300 1150620 11
+>> root@juno:~# cat /proc/1676/task/1676/sched
+>> rt-app (1676, #threads: 2)
+>> -------------------------------------------------------------------
+>> se.exec_start                                :         77766.964240 <- !
+>> se.vruntime                                  :           563.587883
+>> e.sum_exec_runtime                          :            36.946300  <- !
+>> se.nr_migrations                             :                    0
+>> ...
+>>
+>> I expect cpu_util_cfs() to be ~1024 almost all the time now.
+> 
+> Duh, obviously I meant to measure the runtime of the current activation
+> and messed up.
+> 
+> We don't appear to have the right information to compute this atm :/
 
-So the interface is the same as for intel_pstate AFAICS, which is
-good, because it is all consistent.
+This would be:
 
-However, there is some code duplication introduced in the subsequent
-patches and that may be a problem from the perspective of maintaining
-that consistency in the future.
+u64 now = rq_clock_task(rq);
+u64 runtime = now - curr->se.exec_start;
 
-Have you at least considered introducing a common EPP support header
-file that could be used by both intel_pstate and amd_pstate?
+but we don't hold the rq lock so we can't get `now`?
