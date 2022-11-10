@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C1E623CC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14035623CCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbiKJHiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S232450AbiKJHjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbiKJHij (ORCPT
+        with ESMTP id S232913AbiKJHi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:38:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B99119B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:38:38 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot28v-0001tJ-Hq; Thu, 10 Nov 2022 08:38:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot28t-003PEh-Dn; Thu, 10 Nov 2022 08:38:32 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot28t-00FaO3-9c; Thu, 10 Nov 2022 08:38:31 +0100
-Date:   Thu, 10 Nov 2022 08:38:31 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 5/6] pwm: lpss: Add pwm_lpss_probe() stub
-Message-ID: <20221110073831.ggudvgl6jzgbo2vb@pengutronix.de>
-References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
- <20221108142226.63161-6-andriy.shevchenko@linux.intel.com>
+        Thu, 10 Nov 2022 02:38:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9694CE04;
+        Wed,  9 Nov 2022 23:38:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C62161DB0;
+        Thu, 10 Nov 2022 07:38:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5653C433D6;
+        Thu, 10 Nov 2022 07:38:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668065934;
+        bh=6Hb2huiH9obJz8hEtiwK2CxoxvD5BS2sJQTW/SKbV94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fNROmp4QzpH/0wd7m2KVyaEQkF1PH1v9rBx/33WDmatJhUyBU72xBYfXXGn3Q+lbb
+         PuzzAUOqpzUu83xcd8+xdXrsjlOXINvMaisx+X8VjON/B7A5UqNNm2cSuOft/1oQwI
+         CWMUQdH0gfeOTSwjANuZ7QfAmapqZ6MwiUNW9X6SFJTmurHlxOZDXyUBJ9QBnZ9IXs
+         1tXI7rgxHo+eynssNYel1i2UQduMABsE/TtLtnYp8oJecVnJw86NbPoAJx+GIEjalV
+         XOydKfjQqyjAszjwoPAo4r1noj5hc0taTYOIi1FhRz2vyMXlhhCf4itl4yzuFTlhpZ
+         pHMyC1byEwuuQ==
+Date:   Thu, 10 Nov 2022 13:08:50 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Sandor Yu <Sandor.yu@nxp.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, robert.foss@linaro.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
+        tzimmermann@suse.de, lyude@redhat.com, javierm@redhat.com,
+        ville.syrjala@linux.intel.com, sam@ravnborg.org,
+        jani.nikula@intel.com, maxime@cerno.tech,
+        penguin-kernel@i-love.sakura.ne.jp, oliver.brown@nxp.com
+Subject: Re: [PATCH v3 04/10] phy: Add HDMI configuration options
+Message-ID: <Y2yqiuk13Jjbokum@matsya>
+References: <cover.1667911321.git.Sandor.yu@nxp.com>
+ <3edf9db8261e7f59dcd84a61a492d2483b1e9970.1667911321.git.Sandor.yu@nxp.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c2ikj363pkmkwzsq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221108142226.63161-6-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <3edf9db8261e7f59dcd84a61a492d2483b1e9970.1667911321.git.Sandor.yu@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,75 +64,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08-11-22, 21:00, Sandor Yu wrote:
+> Allow HDMI PHYs to be configured through the generic
+> functions through a custom structure added to the generic union.
+> 
+> The parameters added here are based on HDMI PHY
+> implementation practices.  The current set of parameters
+> should cover the potential users.
 
---c2ikj363pkmkwzsq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is there any dpendency b/w phy and hdmi, I dont see anything in cover..
 
-On Tue, Nov 08, 2022 at 04:22:25PM +0200, Andy Shevchenko wrote:
-> In case the PWM LPSS module is not provided, allow users to be
-> compiled with a help of a pwm_lpss_probe() stub.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Pls consider splitting the phy series ..
+
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
 > ---
->  include/linux/platform_data/x86/pwm-lpss.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/include/linux/platform_data/x86/pwm-lpss.h b/include/linux/p=
-latform_data/x86/pwm-lpss.h
-> index 296bd837ddbb..c868b396ed2c 100644
-> --- a/include/linux/platform_data/x86/pwm-lpss.h
-> +++ b/include/linux/platform_data/x86/pwm-lpss.h
-> @@ -4,6 +4,8 @@
->  #ifndef __PLATFORM_DATA_X86_PWM_LPSS_H
->  #define __PLATFORM_DATA_X86_PWM_LPSS_H
-> =20
-> +#include <linux/err.h>
-> +#include <linux/kconfig.h>
->  #include <linux/types.h>
-> =20
->  struct device;
-> @@ -27,7 +29,16 @@ struct pwm_lpss_boardinfo {
->  	bool other_devices_aml_touches_pwm_regs;
+>  include/linux/phy/phy-hdmi.h | 33 +++++++++++++++++++++++++++++++++
+>  include/linux/phy/phy.h      |  7 ++++++-
+>  2 files changed, 39 insertions(+), 1 deletion(-)
+>  create mode 100644 include/linux/phy/phy-hdmi.h
+> 
+> diff --git a/include/linux/phy/phy-hdmi.h b/include/linux/phy/phy-hdmi.h
+> new file mode 100644
+> index 000000000000..73a32eb535b0
+> --- /dev/null
+> +++ b/include/linux/phy/phy-hdmi.h
+> @@ -0,0 +1,33 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright 2022 NXP
+> + */
+> +
+> +#ifndef __PHY_HDMI_H_
+> +#define __PHY_HDMI_H_
+> +
+> +enum hdmi_phy_colorspace {
+> +	HDMI_PHY_COLORSPACE_RGB,
+> +	HDMI_PHY_COLORSPACE_YUV422,
+> +	HDMI_PHY_COLORSPACE_YUV444,
+> +	HDMI_PHY_COLORSPACE_YUV420,
+> +	HDMI_PHY_COLORSPACE_RESERVED4,
+> +	HDMI_PHY_COLORSPACE_RESERVED5,
+> +	HDMI_PHY_COLORSPACE_RESERVED6,
+> +};
+
+kernel-doc style comments here too please
+
+> +
+> +/**
+> + * struct phy_configure_opts_hdmi - HDMI configuration set
+> + * @pixel_clk_rate:	Pixel clock of video modes in KHz.
+> + * @bpc: Maximum bits per color channel.
+> + * @color_space: Colorspace in enum hdmi_phy_colorspace.
+> + *
+> + * This structure is used to represent the configuration state of a HDMI phy.
+> + */
+> +struct phy_configure_opts_hdmi {
+> +	unsigned int pixel_clk_rate;
+> +	unsigned int bpc;
+> +	enum hdmi_phy_colorspace color_space;
+> +};
+> +
+> +#endif /* __PHY_HDMI_H_ */
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index b1413757fcc3..6f6873ea7270 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -17,6 +17,7 @@
+>  #include <linux/regulator/consumer.h>
+>  
+>  #include <linux/phy/phy-dp.h>
+> +#include <linux/phy/phy-hdmi.h>
+>  #include <linux/phy/phy-lvds.h>
+>  #include <linux/phy/phy-mipi-dphy.h>
+>  
+> @@ -42,7 +43,8 @@ enum phy_mode {
+>  	PHY_MODE_MIPI_DPHY,
+>  	PHY_MODE_SATA,
+>  	PHY_MODE_LVDS,
+> -	PHY_MODE_DP
+> +	PHY_MODE_DP,
+> +	PHY_MODE_HDMI,
 >  };
-> =20
-> +#if IS_REACHABLE(CONFIG_PWM_LPSS)
->  struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *b=
-ase,
->  				     const struct pwm_lpss_boardinfo *info);
-> +#else
-> +static inline
-> +struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem *b=
-ase,
-> +				     const struct pwm_lpss_boardinfo *info)
-> +{
-> +	return ERR_PTR(-ENODEV);
+>  
+>  enum phy_media {
+> @@ -60,11 +62,14 @@ enum phy_media {
+>   *		the DisplayPort protocol.
+>   * @lvds:	Configuration set applicable for phys supporting
+>   *		the LVDS phy mode.
+> + * @hdmi:	Configuration set applicable for phys supporting
+> + *		the HDMI phy mode.
+>   */
+>  union phy_configure_opts {
+>  	struct phy_configure_opts_mipi_dphy	mipi_dphy;
+>  	struct phy_configure_opts_dp		dp;
+>  	struct phy_configure_opts_lvds		lvds;
+> +	struct phy_configure_opts_hdmi		hdmi;
+>  };
+>  
+>  /**
+> -- 
+> 2.34.1
 
-Would it be more consistent to return the same value as the pwmchip_add
-stub does?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---c2ikj363pkmkwzsq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNsqnQACgkQwfwUeK3K
-7Akn9wf9H/bc8ldHeuoeAwBk70DIIRDsgQ1NPv2mRbmhXfgZR4IffDdmU/OqZFPo
-jWCw2AUBKxMOMW8wzmhdYkUd183UYX0eAIvW1PFkuZk3shrGkiV/XMh2MVfR/8FT
-owv6sQ7VCcPWgy6fBkACC1hQy/7gdoyIUaRXySDwlBd0Krj3FMhYQHR1Wv1vhCrJ
-V4Grgfym9zH99n1cBFro6x3QW9KAx27W9yjCZoymuNnbHVpB7OnkvJrJNj/w4O59
-YPiuNjtVPZvmTZKvnpmOxFCHM+5VfWp0nhV4capqArNjD2pqSK8+f645Jkl6vgoe
-nnrEX+PYEGHdmCjmVcgVNeAXmWMiGQ==
-=LgpM
------END PGP SIGNATURE-----
-
---c2ikj363pkmkwzsq--
+-- 
+~Vinod
