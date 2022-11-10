@@ -2,218 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFF86238EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6309F6238F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbiKJBgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:36:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
+        id S232356AbiKJBg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiKJBgV (ORCPT
+        with ESMTP id S232330AbiKJBgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:36:21 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036B81EECB;
-        Wed,  9 Nov 2022 17:36:20 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N74DN1nQrzmVnl;
-        Thu, 10 Nov 2022 09:36:04 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 09:36:15 +0800
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 09:36:15 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <mhiramat@kernel.org>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rostedt@goodmis.org>, <zhengyejian1@huawei.com>
-Subject: Re: [PATCH] tracing: Optimize event type allocation with IDA
-Date:   Thu, 10 Nov 2022 09:36:28 +0800
-Message-ID: <20221110013628.1015451-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221109222650.ce6c22e231345f6852f6956f@kernel.org>
-References: <20221109222650.ce6c22e231345f6852f6956f@kernel.org>
+        Wed, 9 Nov 2022 20:36:54 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C4B23BD8;
+        Wed,  9 Nov 2022 17:36:53 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id y203so454320pfb.4;
+        Wed, 09 Nov 2022 17:36:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7oEB0lmZcsgH+1cJj1K5vcGagIGFkzSpM0f9u/agpKk=;
+        b=j5vAZZswxbBkHZzlL1ibLXLQbQGvK/q/voHBPTA1Ws2DdyIcIxirEPVoIIwi4/sXEE
+         6pddZ/yGus6geTiEG+0QBsLNJaFZiuRoroNmFDwac3SFK5jSBJJ1XsU1BVsBg4HcSgK8
+         r/SwCyk8LffYTykINyVSGMn4tWufX2ZbWeq4TX2XF2kw1yeCFOeyJy+0dE0tvsY29awC
+         O/Ok6itCX7IiW9utGLN1ra+3onkKIV9LsL7CAy28lBgBe5WcSqNh3SrrnzoYzi2rSaev
+         v9Rg7JfLrNfbxgEtzAIb122i3+gGXWIxqnswqCjYjom6IY3HrAqMEXWzMGDD0yfoDfap
+         dQ+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7oEB0lmZcsgH+1cJj1K5vcGagIGFkzSpM0f9u/agpKk=;
+        b=0ra0n48820Js5P7QwTUcCKkavO/QhdA8MBC9bNaDdhpO9TdHloI8+9TIM6tQKpLcqs
+         FZH+hQB9vWj4eDqv8uHKasD1npVOE5KRwg/T/7mro79gWv5KZkBnrXb6thXBDVr+TzUu
+         ccvywpYG4sjZ/xjuhN6K2NQbeUDL0tPuYxgP09M5IiVtKXGhUgZU8LHDgE4QRCvulPc+
+         1zdKgqaXmmFU6cx6IfPjPR8zYMu2M2xBhipp8JWrZx7+rfyLnb78Cf5ubLZzaayLPxAj
+         VPq2xYdtEZr0QaF18SlfXnqDf0Ml4SWrXnImC6jNXqrjFy0gA1iaMbiJ715VU9y32qkF
+         OD1w==
+X-Gm-Message-State: ACrzQf2s5VOV8lM47ts3HqJsMmRaf2mEkWq171eL0KyWP+Mwca9fjWn8
+        mxj+Ujruq2FkUcp/00wD8EE=
+X-Google-Smtp-Source: AMsMyM5pxt6O5G2t44hmX7bNcOIwJjfDwhc/Z1C5/sklTlOtzuBZmTn3pd4yijWcrTIVK+UNfOb4xA==
+X-Received: by 2002:aa7:83c8:0:b0:56d:8e07:4618 with SMTP id j8-20020aa783c8000000b0056d8e074618mr51245416pfn.33.1668044213225;
+        Wed, 09 Nov 2022 17:36:53 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-25.three.co.id. [180.214.232.25])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902bd0c00b001754fa42065sm9755598pls.143.2022.11.09.17.36.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 17:36:52 -0800 (PST)
+Message-ID: <0323ce55-bb9b-dd85-93e8-22ad3591b7f3@gmail.com>
+Date:   Thu, 10 Nov 2022 08:36:46 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] Documentation: media: Add ST VGXY61 driver documentation
+ to userspace API table of contents
+To:     Benjamin MUGNIER <benjamin.mugnier@foss.st.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-next@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Xavier Roumegue <xavier.roumegue@oss.nxp.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20221109100147.218947-1-bagasdotme@gmail.com>
+ <f0aee291-ce44-400b-be3a-dfe38c62e450@foss.st.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <f0aee291-ce44-400b-be3a-dfe38c62e450@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 22:26:50 +0900,
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> On Wed, 9 Nov 2022 11:23:52 +0800
-> Zheng Yejian <zhengyejian1@huawei.com> wrote:
+On 11/9/22 21:50, Benjamin MUGNIER wrote:
+> Hi Bagas,
 > 
-> > After commit 060fa5c83e67 ("tracing/events: reuse trace event ids after
-> >  overflow"), trace events with dynamic type are linked up in list
-> > 'ftrace_event_list' through field 'trace_event.list'. Then when max
-> > event type number used up, it's possible to reuse type number of some
-> > freed one by traversing 'ftrace_event_list'.
-> > 
-> > As instead, using IDA to manage available type numbers can make codes
-> > simpler and then the field 'trace_event.list' can be dropped.
-> > 
-> > Since 'struct trace_event' is used in static tracepoints, drop
-> > 'trace_event.list' can make vmlinux smaller. Local test with about 2000
-> > tracepoints, vmlinux reduced about 64KB:
-> >   before：-rwxrwxr-x 1 root root 76669448 Nov  8 17:14 vmlinux
-> >   after： -rwxrwxr-x 1 root root 76604176 Nov  8 17:15 vmlinux
-> > 
+> I already submitted this here:
+> https://www.spinics.net/lists/linux-media/msg221143.html
 > 
-> This looks good to me, I just have one comment below.
-
-Thanks!
-
-> 
-> > Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-> > ---
-> >  include/linux/trace_events.h |  1 -
-> >  kernel/trace/trace_output.c  | 65 +++++++++---------------------------
-> >  2 files changed, 15 insertions(+), 51 deletions(-)
-> > 
-> > diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-> > index 20749bd9db71..bb2053246d6a 100644
-> > --- a/include/linux/trace_events.h
-> > +++ b/include/linux/trace_events.h
-> > @@ -136,7 +136,6 @@ struct trace_event_functions {
-> >  
-> >  struct trace_event {
-> >	struct hlist_node		node;
-> > -	struct list_head		list;
-> >	int				type;
-> >	struct trace_event_functions	*funcs;
-> >  };
-> > diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-> > index 67f47ea27921..314d175dee3a 100644
-> > --- a/kernel/trace/trace_output.c
-> > +++ b/kernel/trace/trace_output.c
-> 
-> Please include linux/idr.h in this source file explicitly beause
-> IDA APIs are defined in it.
+> Thanks.
 > 
 
-I'll do it in v2.
+Oh, I don't see above! Thanks anyway.
 
-> Thank you,
-> 
-> > @@ -21,8 +21,6 @@ DECLARE_RWSEM(trace_event_sem);
-> >  
-> >  static struct hlist_head event_hash[EVENT_HASHSIZE] __read_mostly;
-> >  
-> > -static int next_event_type = __TRACE_LAST_TYPE;
-> > -
-> >  enum print_line_t trace_print_bputs_msg_only(struct trace_iterator *iter)
-> >  {
-> >	struct trace_seq *s = &iter->seq;
-> > @@ -688,38 +686,23 @@ struct trace_event *ftrace_find_event(int type)
-> >	return NULL;
-> >  }
-> >  
-> > -static LIST_HEAD(ftrace_event_list);
-> > +static DEFINE_IDA(trace_event_ida);
-> >  
-> > -static int trace_search_list(struct list_head **list)
-> > +static void free_trace_event_type(int type)
-> >  {
-> > -	struct trace_event *e = NULL, *iter;
-> > -	int next = __TRACE_LAST_TYPE;
-> > -
-> > -	if (list_empty(&ftrace_event_list)) {
-> > -		*list = &ftrace_event_list;
-> > -		return next;
-> > -	}
-> > +	if (type >= __TRACE_LAST_TYPE)
-> > +		ida_free(&trace_event_ida, type);
-> > +}
-> >  
-> > -	/*
-> > -	 * We used up all possible max events,
-> > -	 * lets see if somebody freed one.
-> > -	 */
-> > -	list_for_each_entry(iter, &ftrace_event_list, list) {
-> > -		if (iter->type != next) {
-> > -			e = iter;
-> > -			break;
-> > -		}
-> > -		next++;
-> > -	}
-> > +static int alloc_trace_event_type(void)
-> > +{
-> > +	int next;
-> >  
-> > -	/* Did we used up all 65 thousand events??? */
-> > -	if (next > TRACE_EVENT_TYPE_MAX)
-> > +	/* Skip static defined type numbers */
-> > +	next = ida_alloc_range(&trace_event_ida, __TRACE_LAST_TYPE,
-> > +			       TRACE_EVENT_TYPE_MAX, GFP_KERNEL);
-> > +	if (next < 0)
-> >		return 0;
-> > -
-> > -	if (e)
-> > -		*list = &e->list;
-> > -	else
-> > -		*list = &ftrace_event_list;
-> >	return next;
-> >  }
-> >  
-> > @@ -761,28 +744,10 @@ int register_trace_event(struct trace_event *event)
-> >	if (WARN_ON(!event->funcs))
-> >		goto out;
-> >  
-> > -	INIT_LIST_HEAD(&event->list);
-> > -
-> >	if (!event->type) {
-> > -		struct list_head *list = NULL;
-> > -
-> > -		if (next_event_type > TRACE_EVENT_TYPE_MAX) {
-> > -
-> > -			event->type = trace_search_list(&list);
-> > -			if (!event->type)
-> > -				goto out;
-> > -
-> > -		} else {
-> > -
-> > -			event->type = next_event_type++;
-> > -			list = &ftrace_event_list;
-> > -		}
-> > -
-> > -		if (WARN_ON(ftrace_find_event(event->type)))
-> > +		event->type = alloc_trace_event_type();
-> > +		if (!event->type)
-> >			goto out;
-> > -
-> > -		list_add_tail(&event->list, list);
-> > -
-> >	} else if (WARN(event->type > __TRACE_LAST_TYPE,
-> >			"Need to add type to trace.h")) {
-> >		goto out;
-> > @@ -819,7 +784,7 @@ EXPORT_SYMBOL_GPL(register_trace_event);
-> >  int __unregister_trace_event(struct trace_event *event)
-> >  {
-> >	hlist_del(&event->node);
-> > -	list_del(&event->list);
-> > +	free_trace_event_type(event->type);
-> >	return 0;
-> >  }
-> >  
-> > -- 
-> > 2.25.1
-> > 
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+PS: Please don't top post your reply; reply inline with appropriate
+context. I had to cut the whole context below your reply.
 
--- Best regards, Zheng Yejian
+-- 
+An old man doll... just what I always wanted! - Clara
+
