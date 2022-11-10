@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D0E624C63
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3D7624C66
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiKJVEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S230505AbiKJVE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbiKJVEI (ORCPT
+        with ESMTP id S229567AbiKJVE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:04:08 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57D443AFF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:07 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-13bef14ea06so3532602fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K2FSyx/7hf/Wl53aKBYclj6BZx3v4YrSE/GL1nVyZ+M=;
-        b=me6Oqd3J14Kjh53kFqMRs4MQFuNZ/MTfo+A2c7eVS1UU6VtwxGhDUHJLpLHnr3+UlL
-         XKuHrixc6HYsZJJIz0WZP5r7KiSP9DXC9AdZ3ndEgfy4VJSCpPbKgSPFgc5AKGO0X42d
-         TLCwHz0tbczFYtTaUJugKc97aNjhxhSZo7qvK3ZLwoofQ1bu7kQzUxAwG+TtEBha1r9v
-         MTrx8sgYeoMTyk2uZdT70RpHOO5Xu1Eu3zZNFAKJXR72dUI5VIyI1pvFtyD0rsLiJYS8
-         h6qMf2YMv5yaecUzm9M8N7GheOQ0og4L3M8pro70otwIwVnAEkhx+9YxVEpoQ56tKHmn
-         qL4w==
+        Thu, 10 Nov 2022 16:04:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D07DD9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668114241;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1QfUTLoo8KZyk/UmwYhDRfw7upAhiWcoYA8QgblVYZo=;
+        b=hyNLPTMjUrXewJBI4PsanyCrF9MudGC5rUKCzdwPQhEa0xCQH3mIGJzuq+Xk3plMzTLVjw
+        wXYl0n+80dKzlikyar8+PLSSJmK11Z2lTzjPX81O2tRwgxsEYB0rfeq3jiBs9qWgyJF+w3
+        mzV8pTbsjRdLozqvZDr5WF2NO+Bhe8Y=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-41-oCSOwqi-Md6tc4zUq1RO7g-1; Thu, 10 Nov 2022 16:04:00 -0500
+X-MC-Unique: oCSOwqi-Md6tc4zUq1RO7g-1
+Received: by mail-ed1-f71.google.com with SMTP id z15-20020a05640240cf00b00461b253c220so2295434edb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K2FSyx/7hf/Wl53aKBYclj6BZx3v4YrSE/GL1nVyZ+M=;
-        b=GbbuVpN2Mbv3BW15C9MKrDKwM0fKp0F4uqMYFI41ziTXyivOjS4YFdMjvqKrbiRfnm
-         9EXgWMktlJOHUT469B69xnCPzTiupjBBdMn1Jk6iT6ml1qjLf/Sw4/jq7OMfaP88Hdfz
-         nL6GFFyPwAO/0LNAlnALBrE5/Y/2QooeMiOREMT2VtCOJa43bY4PXmQ2H5ZIR5HhRMIh
-         muUKxv0og/NE7gysxXWA0dwvVTTJWmH4Q0OWX5jeDSaEAVfBAlB+hfj4odVki0knT7BH
-         EfDgO9DUkAJQ++hnn++kQxeMZLQIvYbk8qXaeGXE85f67tmC4++UUqPBQP89A2jMZf0m
-         QbmQ==
-X-Gm-Message-State: ACrzQf3PtTzaxmKE1I5VmAIWK0cKdrTjcJA1LI/DKh/IcF0HY9fmoSkc
-        B8zz/TOK4MhHumdBfLjasRUGmuHCTMxQ98PQe8plzA==
-X-Google-Smtp-Source: AMsMyM5FqivOusKyXCfu9CKG+fGkgjpfhMbFK+Zp84zmhABRLSR9WPRL3GWdUBKamriIvuAmpzwCer5gRb40d8y8Ilo=
-X-Received: by 2002:a05:6870:9727:b0:13d:a22b:3503 with SMTP id
- n39-20020a056870972700b0013da22b3503mr2092455oaq.233.1668114246723; Thu, 10
- Nov 2022 13:04:06 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1QfUTLoo8KZyk/UmwYhDRfw7upAhiWcoYA8QgblVYZo=;
+        b=DUrX/aLLEmfD8PLeGcryiReQbXP8T8gnvNuztc4aSSGL2JWMvTUt3SaCVdea3+m7EZ
+         g/dwlvwKVYZf6/WE7UJRa3PeuOSphygK7kb2CfoCG9gi5hjeu8hp2Q5FtDspJuDdn8+c
+         vVcEapJuCGVvaptwelfbTsgJehr7DyWALdOSozxuiix8fJu31sBv2kNc8wJBBeq1oojJ
+         n5EQXN2lrpbVR39Q+XYv84FgQWUnwJO8NTi5FTlRUez46ApUWPUo8TXYYMH4xrjblTeR
+         M36v83hzaByGwAg3m1/RRnNlZ2qdxU6lF6Ihw/01mR6DLTUJbJlRoKVQfikYD/7IKXs0
+         8bHg==
+X-Gm-Message-State: ACrzQf2ijtTqwa04gHA0oIto/eMjP8fsFzfMYXkN2ZXU0kh0A7jS37bp
+        DgqDu3STaVgYmN7zwy6dqKj/LE3ukU5N0a5JI3lLlNaPLMHmU5MFIpZcVgp2B8+1iMF2EY42nx4
+        TNjLAwP6Kt85Eu7PTE+f25Z7y
+X-Received: by 2002:a50:ec8f:0:b0:461:f919:caa4 with SMTP id e15-20020a50ec8f000000b00461f919caa4mr3484895edr.255.1668114239100;
+        Thu, 10 Nov 2022 13:03:59 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM60lzCeZXfSRx4OZ88TfurkkBOoWJgHUAZxFcNaBDri3o3LrZKlUiOtI33RvYqQwthK2FbxCg==
+X-Received: by 2002:a50:ec8f:0:b0:461:f919:caa4 with SMTP id e15-20020a50ec8f000000b00461f919caa4mr3484876edr.255.1668114238922;
+        Thu, 10 Nov 2022 13:03:58 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id oz36-20020a1709077da400b007ae4717bef1sm155820ejc.15.2022.11.10.13.03.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 13:03:58 -0800 (PST)
+Message-ID: <6798b3bc-125a-220d-3f37-71dcdf522f0d@redhat.com>
+Date:   Thu, 10 Nov 2022 22:03:57 +0100
 MIME-Version: 1.0
-References: <000000000000e915eb05ecf9dc4d@google.com> <Y2qjerZigLiO8YVw@zx2c4.com>
- <CACT4Y+a3bJmMf8JNm=SZYOKtgSVnOpY4+bgdT4ugLLhVV-NCEA@mail.gmail.com> <Y2rrZ8lIIMrKkb2Z@zx2c4.com>
-In-Reply-To: <Y2rrZ8lIIMrKkb2Z@zx2c4.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 10 Nov 2022 13:03:55 -0800
-Message-ID: <CACT4Y+Y+h_tNN0XT9fb0jYH7V4HvWR=D1R8qsduor9jDSSi80g@mail.gmail.com>
-Subject: Re: [syzbot] linux-next boot error: WARNING in kthread_should_stop
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     syzbot <syzbot+25aae26fb74bd5909706@syzkaller.appspotmail.com>,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux@dominikbrodowski.net, olivia@selenic.com,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 01/14] platform/x86/intel/ifs: Remove unused selection
+Content-Language: en-US, nl
+To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, ashok.raj@intel.com,
+        tony.luck@intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
+        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-2-jithu.joseph@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221107225323.2733518-2-jithu.joseph@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 at 15:51, Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > <syzkaller-bugs@googlegroups.com> wrote:
-> > >
-> > > Already fixed in the tree.
-> >
-> > Hi Jason,
-> >
-> > The latest commit touching this code in linux-next is this one. Is it
-> > the fixing commit?
-> >
-> > commit e0a37003ff0beed62e85a00e313b21764c5f1d4f
-> > Author:     Jason A. Donenfeld <Jason@zx2c4.com>
-> > CommitDate: Mon Nov 7 12:47:57 2022 +0100
-> >     hw_random: use add_hwgenerator_randomness() for early entropy
->
-> It's this one: https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=9807175c5515cea94f8ac6c157f20cc48c40465b
->
-> Couple hours more and there'll be a new linux-next with the fix.
->
-> Jason
+Hi,
 
-Let's tell syzbot about the fix so that it reports similar bugs in future:
+On 11/7/22 23:53, Jithu Joseph wrote:
+> CONFIG_INTEL_IFS_DEVICE is not used anywhere. The selection in
+> Kconfig is therefore pointless. Delete it.
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 
-#syz fix: hw_random: use add_hwgenerator_randomness() for early entropy
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+> ---
+>  drivers/platform/x86/intel/ifs/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/ifs/Kconfig b/drivers/platform/x86/intel/ifs/Kconfig
+> index c341a27cc1a3..89152d46deee 100644
+> --- a/drivers/platform/x86/intel/ifs/Kconfig
+> +++ b/drivers/platform/x86/intel/ifs/Kconfig
+> @@ -4,7 +4,6 @@ config INTEL_IFS
+>  	# Discussion on the list has shown that the sysfs API needs a bit
+>  	# more work, mark this as broken for now
+>  	depends on BROKEN
+> -	select INTEL_IFS_DEVICE
+>  	help
+>  	  Enable support for the In Field Scan capability in select
+>  	  CPUs. The capability allows for running low level tests via
+
