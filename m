@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5596248EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA716248F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:02:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiKJSBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 13:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S231422AbiKJSCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 13:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiKJSBQ (ORCPT
+        with ESMTP id S229724AbiKJSBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 13:01:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6CC4D5F2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 10:00:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BD73B822D7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 18:00:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64060C433C1;
-        Thu, 10 Nov 2022 18:00:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668103254;
-        bh=RG15lCfsSF3VLWo5w4AxBk8Klg/z3h9CDfelzjeZIo0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0n4nGSo/Nl3aiG4bJ2DBvlNIPrsc78Qowviz/BXV7cnjhqq0AZVnzaPMHg0qvQbRm
-         NNFCLfnBrgbMDqglu1wsZ/5jtW5QKo+k0Wvr9kgYcAxqrpa6X27M3nBtxkkLMrds6b
-         PaCef3JWPateWsHXz1CMzzXlDQKhKsPxjVQUsdcc=
-Date:   Thu, 10 Nov 2022 19:00:52 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     tj@kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
-Subject: Re: [PATCH] fs/kernfs: Fix lockdep warning in kernfs_active()
-Message-ID: <Y208VBO9cZ5VL88m@kroah.com>
-References: <0000000000002473fd05eca7540a@google.com>
- <20221109120415.55759-1-zhouchengming@bytedance.com>
+        Thu, 10 Nov 2022 13:01:50 -0500
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716694B997
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 10:01:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lohu.info;
+        s=biln2210; t=1668103301;
+        bh=SlKZRS1lnV0KZqSIMONQPMQ+02L/0r0w2Czs81QGpOA=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version;
+        b=AOZdFXH9VC8W13oLlIRa8q7kLnvmw6SdLHvt3kdpib6wdL6GjDp9vxWRh2ZPkUu7R
+         Jgzt2VGOjU4/yjPzcEEuYks3pLzBBYpahOe6dP360A9tQZuPxeTckW9dj/nrr67vm/
+         UQIgrGt+nznbKxU8vqi+pZtAs7k/qBsiZ8qgAlYc=
+X-QQ-mid: bizesmtpipv602t1668103299teab
+Received: from SJRobe ( [255.71.210.0])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 11 Nov 2022 02:01:38 +0800 (CST)
+X-QQ-SSF: 01100000000000G0Z000000A0000000
+X-QQ-FEAT: 6/K5pWSRdGpR3UVf1JxOSnQkX/poCupQgKpREd4A5pADjU64IITefWvTphgrl
+        5fVIyLcwfNiYPbYv+X5q4LWya9md6TQgGtwXRgbZSQyH8Sv7/Tt36PZ+qBCu6i4NlJNMgGW
+        zojol2zXra88TajMc0pVLgfeP6X8dI/QCVoMdKB4gR+cVehIWeKmE279OZVyAnOG1GI4xAw
+        9GVL3jFZLJaRW2u7y+PsrxIVZSSDSXAO4oNeeqQIRDDVimKerL/MRZr1bTD7zIGp9ARnnxp
+        I8rFx0L29ougzPQGCvhXtZ/uqtw1Ndd80Z8fetENGNwgqxGTdgRUBIFfzR9QfrkIoXFspGY
+        Jlw8ty3LOMjgm7Xv9qpnVijwyywSg==
+X-QQ-GoodBg: 0
+From:   "Soha Jin" <soha@lohu.info>
+To:     "'Greg KH'" <gregkh@linuxfoundation.org>
+Cc:     <rafael@kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Wende Tan'" <twd2.me@gmail.com>
+References: <0E39B15006ADC205+02a601d8d4f8$a00a09e0$e01e1da0$@lohu.info> <F789F6E98A6F9BF5+1d8501d8dc56$74036f70$5c0a4e50$@lohu.info> <Y0O5//6A3VvT7S5Z@kroah.com> <07EF40D2C259BC45+249601d8dc76$f05f03c0$d11d0b40$@lohu.info> <Y207JTskpwEUTD7X@kroah.com>
+In-Reply-To: <Y207JTskpwEUTD7X@kroah.com>
+Subject: RE: PING: [PATCH] platform: use fwnode_irq_get_byname instead of of_irq_get_byname to get irq
+Date:   Fri, 11 Nov 2022 02:01:37 +0800
+Message-ID: <B5F141EF604E5616+288101d8f52e$7ac2d800$70488800$@lohu.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109120415.55759-1-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGbqugtR3NtpzGFsVDN54JrNGFkNwLyBvmkAZL2edUBiUCZaQIrCAGurnE7meA=
+Content-Language: fr
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpipv:lohu.info:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_ILLEGAL_IP,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 08:04:15PM +0800, Chengming Zhou wrote:
-> syzbot found a lockdep warning in kernfs_find_and_get_node_by_id(),
-> bisected to the commit c25491747b21 ("kernfs: Add KERNFS_REMOVING flags"),
-> which didn't hold kernfs_rwsem before call kernfs_active(kn).
-> 
-> Since kernfs_find_and_get_node_by_id() doesn't have to get active count
-> of kn, only need to get a stable refcount of kn, so it should be enough
-> to just check kn has been KERNFS_ACTIVATED.
-> 
-> Reported-by: syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
-> Fixes: c25491747b21 ("kernfs: Add KERNFS_REMOVING flags")
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  fs/kernfs/dir.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-> index 6acd9c3d4cff..08f0f1570cd7 100644
-> --- a/fs/kernfs/dir.c
-> +++ b/fs/kernfs/dir.c
-> @@ -705,7 +705,13 @@ struct kernfs_node *kernfs_find_and_get_node_by_id(struct kernfs_root *root,
->  			goto err_unlock;
->  	}
->  
-> -	if (unlikely(!kernfs_active(kn) || !atomic_inc_not_zero(&kn->count)))
-> +	/*
-> +	 * ACTIVATED is protected with kernfs_mutex but it was clear when
-> +	 * @kn was added to idr and we just wanna see it set.  No need to
-> +	 * grab kernfs_mutex.
-> +	 */
-> +	if (unlikely(!(kn->flags & KERNFS_ACTIVATED) ||
-> +		     !atomic_inc_not_zero(&kn->count)))
->  		goto err_unlock;
->  
->  	spin_unlock(&kernfs_idr_lock);
-> -- 
-> 2.37.2
-> 
+Hello Greg,
 
-Shouldn't:
-	https://lore.kernel.org/r/Y0SwqBsZ9BMmZv6x@slm.duckdns.org fix this
-instead?
+> -----Original Message-----
+> From: 'Greg KH' <gregkh@linuxfoundation.org>
+> Sent: Friday, November 11, 2022 1:56 AM
+>=20
+> Your patch is corrupted and can not be applied :( You could have =
+tested this
+> by picking it up from lore.kernel.org and verified that it worked.
+>=20
+> Please fix your email client and send a new version.
+>=20
+> thanks,
+>=20
+> greg k-h
+
+I sent a PATCH v2* several days before. This patch's format should be
+good and I removed a meaningless if-branch.
+
+Regards,
+Soha
+
+* https://lore.kernel.org/all/20221028164120.2798-1-soha@lohu.info/
+
