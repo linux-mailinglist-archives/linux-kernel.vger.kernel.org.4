@@ -2,180 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C059C62483B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A76ED624844
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiKJRUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S231207AbiKJRWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiKJRUt (ORCPT
+        with ESMTP id S231296AbiKJRWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:20:49 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EABFCF594;
-        Thu, 10 Nov 2022 09:20:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailoo.org; s=mailo;
-        t=1668100832; bh=Kf0fNlGsDsRSuOjAAsDcc4gChjhmw9Z/lyP6jAa/dFA=;
-        h=X-EA-Auth:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding;
-        b=fajgFlZhaaiXbLn7jT1pv3w2mXklLWRyqmN/a7uwL6sTKPFR1nUih3YozHVx7gxc7
-         CePbAwQ6ITgrxFCG/mc1CSOLPgu3k4X1o+eJDA1s3RYvsQvaeLxbwY2JhQL+EWxTI1
-         T2JUlGfuHLFswsFU+MsQG6buMnfzLAD6yQ3tKbIA=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via proxy.mailoo.org [213.182.55.207]
-        Thu, 10 Nov 2022 18:20:31 +0100 (CET)
-X-EA-Auth: lcPdtQDwbd5WixXkQaMO8eww4IHjNcYBnAZRusvFKb7KqcKeV38ldXy9DypC7TYRab1ocfB4+uOgl1VWkSVrXkhWvjNPaZhZMTp/gIubwGY=
-From:   Vincent Knecht <vincent.knecht@mailoo.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 10 Nov 2022 12:22:05 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD1DD111;
+        Thu, 10 Nov 2022 09:22:04 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so2157783pjd.4;
+        Thu, 10 Nov 2022 09:22:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fKPBg3dEE3ONvrgo8OxipNMJGSe6htR6mmChvxzFuVo=;
+        b=iyPxjKE6Ywlg4nlJNhwKRzqahfHEJZ9dJ1f0pa3TiTtq8EhIJ2xxb4Q2nguwc0+IWN
+         2WDCcl5A50Z6sqens/SEddDDqSZrzbSkPT0Em4bFPBvp4LT/PievyVZXProlPVTIJee6
+         byz7YUlDJz2IiSWTUrzkGAvXM3qTjGsMtnrLW5n9vtlfwW3w3sO997qZiNfGyBpJtOeE
+         GGQ9scqMe1M+bNLfsZ/NFQ/XD0PkfeNP/M2qAYdLD+pD40/qyO1PgbD6+Jj+acvt3oel
+         dK1tqDOQEGJnpJ57tKAxQQ98F5eQMDPE2bkcvxN7RnpvM+cmJj4Z5M6Ddzb8rGK4BMRe
+         AePQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fKPBg3dEE3ONvrgo8OxipNMJGSe6htR6mmChvxzFuVo=;
+        b=zQ4is1gF/r2DgE1ZqzBscqzdy0efwNZye0fU1O+daWKrmLE4viF+pZbyL36cn/BQ6x
+         afeXFqdde1BwVvku373wkp9M5F9EXbKEiqo+Lh4o9IefO2qN5+KzVx1ePr3a8H/jqHvp
+         utBPuakyfP7oTCQBDca8lplGSIlLcy2Sd69DEw3blPFOchZKg+GawVPu3ZOqaaWrcQij
+         YWtiVliOBYHOx0FRTqWSSRTpREBf0qiiKi6znwD2qJsdTmSE52yen7P1b/n4OlePXunN
+         hFhlxDrcpUfpjmYA9fJHvCK5CmaekeloNoO40pxz1ZmQaHkgoH5UiqYL4pDnJYhnmbMZ
+         UbXQ==
+X-Gm-Message-State: ACrzQf1rzo+dpwgIN2cc1PkMrpTvBgwq61NkXbzHzIubt56UIAM8Ry8M
+        U/o3fM5pE2QuzyPjsTXmea0=
+X-Google-Smtp-Source: AMsMyM7T4tr+B+B6tXCg5ywMHodqh8ybBsmcgs6TTyD2x4T7k2qJ45GJl1+pMwnchZx7ke5ev9SbvQ==
+X-Received: by 2002:a17:90a:738c:b0:205:e1af:68d1 with SMTP id j12-20020a17090a738c00b00205e1af68d1mr1523564pjg.121.1668100923564;
+        Thu, 10 Nov 2022 09:22:03 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:6af4:9e55:5482:c0de])
+        by smtp.gmail.com with ESMTPSA id c18-20020a170902d49200b001801aec1f6bsm11610434plg.141.2022.11.10.09.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 09:22:02 -0800 (PST)
+Date:   Thu, 10 Nov 2022 09:21:59 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     w.david0@protonmail.com, stephan@gerhold.net,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v4 5/5] Input: msg2638 - Add support for msg2138 key events
-Date:   Thu, 10 Nov 2022 18:19:48 +0100
-Message-Id: <20221110171952.34207-6-vincent.knecht@mailoo.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221110171952.34207-1-vincent.knecht@mailoo.org>
-References: <20221110171952.34207-1-vincent.knecht@mailoo.org>
+Subject: Re: [PATCH v2 5/6] gpiolib: consolidate GPIO lookups
+Message-ID: <Y20zN8WpWamUQtWp@google.com>
+References: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
+ <20221031-gpiolib-swnode-v2-5-81f55af5fa0e@gmail.com>
+ <Y2uOEhib5dvIcobF@smile.fi.intel.com>
+ <Y2v4ze4y8qDThjrv@google.com>
+ <Y2z/0IUOQMSonASw@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2z/0IUOQMSonASw@smile.fi.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices with msg2138 have back/menu/home keys.
-Add support for them.
+On Thu, Nov 10, 2022 at 03:42:40PM +0200, Andy Shevchenko wrote:
+> On Wed, Nov 09, 2022 at 11:00:29AM -0800, Dmitry Torokhov wrote:
+> > On Wed, Nov 09, 2022 at 01:25:06PM +0200, Andy Shevchenko wrote:
+> > > On Tue, Nov 08, 2022 at 04:26:50PM -0800, Dmitry Torokhov wrote:
+> 
+> ...
+> 
+> > > > +static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
+> > > > +					      struct device *consumer,
+> > > > +					      const char *con_id,
+> > > > +					      unsigned int idx,
+> > > > +					      enum gpiod_flags *flags,
+> > > > +					      unsigned long *lookupflags)
+> > > >  {
+> > > > -	unsigned long lflags = GPIO_LOOKUP_FLAGS_DEFAULT;
+> > > 
+> > > > -	struct gpio_desc *desc = ERR_PTR(-ENODEV);
+> > > 
+> > > Not sure why this is needed. Now I see that else branch has been changed,
+> > > but looking closer to it, we can drop it completely, while leaving this
+> > > line untouched, correct?
+> > 
+> > Yes. I believe removing an initializer and doing a series of if/else
+> > if/else was discussed and [soft] agreed-on in the previous review cycle,
+> > but I can change it back.
+> > 
+> > I think we still need to have it return -ENOENT and not -ENODEV/-EINVAL
+> > so that we can fall back to GPIO lookup tables when dealing with an
+> > unsupported node type.
+> 
+> Right, okay, let's go with whatever variant you find better.
+> 
+> ...
+> 
+> > > > +	if (!IS_ERR_OR_NULL(fwnode))
+> > > 
+> > > I think this is superfluous check.
+> > > 
+> > > Now in the form of this series, you have only a single dev_dbg() that tries to
+> > > dereference it. Do we really need to have it there, since every branch has its
+> > > own dev_dbg() anyway?
+> > 
+> > As I mentioned, I like to keep this check to show the reader that we
+> > should only descend into gpiod_find_by_fwnode() if we have a valid
+> > fwnode. It is less about code generation and more about the intent.
+> 
+> Yes, but if fwnode is not found, we have a next check for that.
 
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
- drivers/input/touchscreen/msg2638.c | 53 +++++++++++++++++++++++++----
- 1 file changed, 47 insertions(+), 6 deletions(-)
+No, the check you are talking about is for the GPIO not being located.
+It does not have anything to do with fwnode validity. You are relying on
+intimate knowledge of gpiod_find_by_fwnode() implementation and the fact
+that in the current form it will withstand ERR_PTR-encoded or NULL
+fwnode.
 
-diff --git a/drivers/input/touchscreen/msg2638.c b/drivers/input/touchscreen/msg2638.c
-index 73e1b4d550fb..36069b30ab9b 100644
---- a/drivers/input/touchscreen/msg2638.c
-+++ b/drivers/input/touchscreen/msg2638.c
-@@ -29,6 +29,8 @@
- #define MSG2138_MAX_FINGERS		2
- #define MSG2638_MAX_FINGERS		5
- 
-+#define MAX_BUTTONS			4
-+
- #define CHIP_ON_DELAY_MS		15
- #define FIRMWARE_ON_DELAY_MS		50
- #define RESET_DELAY_MIN_US		10000
-@@ -72,6 +74,8 @@ struct msg2638_ts_data {
- 	struct regulator_bulk_data supplies[2];
- 	struct gpio_desc *reset_gpiod;
- 	int max_fingers;
-+	u32 keycodes[MAX_BUTTONS];
-+	int num_keycodes;
- };
- 
- static u8 msg2638_checksum(u8 *data, u32 length)
-@@ -85,6 +89,19 @@ static u8 msg2638_checksum(u8 *data, u32 length)
- 	return (u8)((-sum) & 0xFF);
- }
- 
-+static void msg2138_report_keys(struct msg2638_ts_data *msg2638, u8 keys)
-+{
-+	int i;
-+
-+	/* keys can be 0x00 or 0xff when all keys have been released */
-+	if (keys == 0xff)
-+		keys = 0;
-+
-+	for (i = 0; i < msg2638->num_keycodes; ++i)
-+		input_report_key(msg2638->input_dev, msg2638->keycodes[i],
-+				 !!(keys & BIT(i)));
-+}
-+
- static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
- {
- 	struct msg2638_ts_data *msg2638 = msg2638_handler;
-@@ -121,9 +138,12 @@ static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
- 	p0 = &touch_event.pkt[0];
- 	p1 = &touch_event.pkt[1];
- 
--	/* Ignore non-pressed finger data */
--	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF)
-+	/* Ignore non-pressed finger data, but check for key code */
-+	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF) {
-+		if (p1->xy_hi == 0xFF && p1->y_low == 0xFF)
-+			msg2138_report_keys(msg2638, p1->x_low);
- 		goto report;
-+	}
- 
- 	x = (((p0->xy_hi & 0xF0) << 4) | p0->x_low);
- 	y = (((p0->xy_hi & 0x0F) << 8) | p0->y_low);
-@@ -283,6 +303,7 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
- 	struct device *dev = &msg2638->client->dev;
- 	struct input_dev *input_dev;
- 	int error;
-+	int i;
- 
- 	input_dev = devm_input_allocate_device(dev);
- 	if (!input_dev) {
-@@ -299,6 +320,14 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
- 	input_dev->open = msg2638_input_open;
- 	input_dev->close = msg2638_input_close;
- 
-+	if (msg2638->num_keycodes) {
-+		input_dev->keycode = msg2638->keycodes;
-+		input_dev->keycodemax = msg2638->num_keycodes;
-+		input_dev->keycodesize = sizeof(msg2638->keycodes[0]);
-+		for (i = 0; i < msg2638->num_keycodes; i++)
-+			input_set_capability(input_dev, EV_KEY, msg2638->keycodes[i]);
-+	}
-+
- 	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_X);
- 	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_Y);
- 
-@@ -367,10 +396,16 @@ static int msg2638_ts_probe(struct i2c_client *client)
- 		return error;
- 	}
- 
--	error = msg2638_init_input_dev(msg2638);
--	if (error) {
--		dev_err(dev, "Failed to initialize input device: %d\n", error);
--		return error;
-+	msg2638->num_keycodes =
-+		of_property_read_variable_u32_array(dev->of_node, "linux,keycodes",
-+						    msg2638->keycodes, 0,
-+						    ARRAY_SIZE(msg2638->keycodes));
-+	if (msg2638->num_keycodes == -EINVAL) {
-+		msg2638->num_keycodes = 0;
-+	} else if (msg2638->num_keycodes < 0) {
-+		dev_err(dev, "Unable to parse linux,keycodes property: %d\n",
-+			msg2638->num_keycodes);
-+		return msg2638->num_keycodes;
- 	}
- 
- 	error = devm_request_threaded_irq(dev, client->irq,
-@@ -382,6 +417,12 @@ static int msg2638_ts_probe(struct i2c_client *client)
- 		return error;
- 	}
- 
-+	error = msg2638_init_input_dev(msg2638);
-+	if (error) {
-+		dev_err(dev, "Failed to initialize input device: %d\n", error);
-+		return error;
-+	}
-+
- 	return 0;
- }
- 
+I want to have the source code so clear in its intent so that I can be
+woken up in the middle of the night with a huge hangover and still be
+able to tell how it is supposed to behave.
+
+> I really don't
+> think we lose anything by dropping the check and gaining the code generation as
+> a side effect.
+
+This is cold path, happening only on startup. I am not saying that we
+want to make it slow unnecessarily, but a condition branch that might
+even get optimized out is not something we should be concerned here.
+
+Thanks.
+
 -- 
-2.38.1
-
-
-
+Dmitry
