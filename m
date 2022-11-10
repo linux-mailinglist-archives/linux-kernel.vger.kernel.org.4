@@ -2,80 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F156624385
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D3F624387
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiKJNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S231209AbiKJNsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKJNrZ (ORCPT
+        with ESMTP id S231203AbiKJNsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:47:25 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB3761745;
-        Thu, 10 Nov 2022 05:47:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=cBJxJE+HDCTGVW4nP1oD4Tm/AJ6zzyKfXe5KSUdkRHU=; b=b3JHN2a1QQU75g16Z74Sp/M/Yz
-        UuqDodapwtpdTRz7TJnM3ZhX7omPmz5CDRs7zDKOPSoTIEzflGhG2RJpVCVGHQifiFhdogAJXY0nK
-        j0IaCVtH8oqF8QIamwNYj/VtX8n9d+VacFYpzfao0O1A94ege3Vc/GShplMtBKes4KMo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ot7tf-0022JC-2O; Thu, 10 Nov 2022 14:47:11 +0100
-Date:   Thu, 10 Nov 2022 14:47:11 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] rxrpc: Fix missing IPV6 #ifdef
-Message-ID: <Y20A33ya17l/MqxU@lunn.ch>
-References: <166807341463.2904467.10141806642379634063.stgit@warthog.procyon.org.uk>
+        Thu, 10 Nov 2022 08:48:00 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88C16B236
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:47:58 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so4080298wmi.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:47:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jYeie/ZZSPiqzVcmz3SigR7Giv2tjj7giPYVI0G/E7k=;
+        b=ijXWAxem5lTKOYMl4Uihwu7Ix7IWDEene5SYiyg6yPx1m5qOEjycw2TplST+FxOVoa
+         0qLOgswgxdTHYoz8hzDAwwCrg2T0NA8TFO1mbnKIks0areBtVKTQ4ZbCL879SX7uPBMt
+         2ugCYEHFMlVfGQzlXQrRx/FuIBEE0uXjfST+CAksmVoqeKK0+yEKRaQwl+QKTpZG4821
+         HQGlY8xAoApEAcaVo2LX72xPeI+Ew1pyB+UE/+CDGCBVehy9MRblM20LLxNpjoHl/SIL
+         UhLN7l/82+5QjXxL5ZkO7OqGe4ra4SjbW7vA0TNDe6GonjHDTWOF8xlxw7SnpqAx5gyy
+         mCTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jYeie/ZZSPiqzVcmz3SigR7Giv2tjj7giPYVI0G/E7k=;
+        b=VgecDNDL1lfTjndyLYdS8PM7TvOLW4ydOUaOOp4tW0QD7ZkX/D5owWmL8USfDho2Oj
+         9MYUwiVCMy+1do5r0VBy/a/Vi4h1ApmKWyf/eg5VmT7Ko72e9hkVAcRPhwGWyc01lNA/
+         Jjkl2lHPTz4d201cFoWUDh7L6EdcAg2DDLEmDlccqn0xnf5phjRHTTPiPeiIP4ek1IID
+         Kzq/Z/juR7QYS8/VgocfDAvASeDCKoqiEapnWo92DRdI17VHqYAqgf2afBL8vBcXWgxW
+         cdfLP64/WaHn7JfaR0NF6o6MR/5CWppfsyfQKmbwIcnPTvvPbxR5cgx1Dl8Mraao7OCK
+         gTaA==
+X-Gm-Message-State: ACrzQf025EZwqL7tLaJnnsTmWpgqtRZ25aVeyY8H8gsPOZ3yFm8BosoG
+        KVu+RH+XKgvPd5tFoQsedHhtWz5eI8M=
+X-Google-Smtp-Source: AMsMyM5wZZolV5Ko0Lr4iFvKUS2cxb3BGICIu49AM+D2kZAEymvE0C9TZtyWklq/EpOgs/qY6rY6/w==
+X-Received: by 2002:a05:600c:414b:b0:3cf:94a5:6564 with SMTP id h11-20020a05600c414b00b003cf94a56564mr23266536wmm.65.1668088077197;
+        Thu, 10 Nov 2022 05:47:57 -0800 (PST)
+Received: from localhost.localdomain ([94.73.35.109])
+        by smtp.gmail.com with ESMTPSA id h2-20020a5d4302000000b0022ae0965a8asm15717060wrq.24.2022.11.10.05.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 05:47:56 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     mripard@kernel.org
+Cc:     emma@anholt.net, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v2 0/2] drm/vc4: hdmi: Fix pointer dereference before check
+Date:   Thu, 10 Nov 2022 14:47:50 +0100
+Message-Id: <20221110134752.238820-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166807341463.2904467.10141806642379634063.stgit@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:43:34AM +0000, David Howells wrote:
-> Fix rxrpc_encap_err_rcv() to make the call to ipv6_icmp_error conditional
-> on IPV6 support being enabled.
-> 
-> Fixes: b6c66c4324e7 ("rxrpc: Use the core ICMP/ICMP6 parsers")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: linux-afs@lists.infradead.org
-> cc: netdev@vger.kernel.org
-> ---
-> 
->  net/rxrpc/local_object.c |    2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
-> index a178f71e5082..25cdfcf7b415 100644
-> --- a/net/rxrpc/local_object.c
-> +++ b/net/rxrpc/local_object.c
-> @@ -33,7 +33,9 @@ static void rxrpc_encap_err_rcv(struct sock *sk, struct sk_buff *skb, int err,
->  {
->  	if (ip_hdr(skb)->version == IPVERSION)
->  		return ip_icmp_error(sk, skb, err, port, info, payload);
-> +#ifdef CONFIG_AF_RXRPC_IPV6
->  	return ipv6_icmp_error(sk, skb, err, port, info, payload);
-> +#endif
+v1 -> v2:
 
-Can this be if (IS_ENABLED(CONFIG_AF_RXRPC_IPV6) {} rather than
-#ifdef? It gives better build testing.
+As suggested by Maxime, I simplified a bit vc4_hdmi_supports_scrambling()
+making it receive a struct vc4_hdmi as argument instead of a struct
+drm_encoder.
 
-	Andrew
+Also, variables are initialized close to where they are used in the
+second patch.
+
+José Expósito (2):
+  drm/vc4: hdmi: Pass vc4_hdmi to vc4_hdmi_supports_scrambling()
+  drm/vc4: hdmi: Fix pointer dereference before check
+
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
+
