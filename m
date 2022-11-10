@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698F46245E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AEDE6245EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiKJPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
+        id S230381AbiKJPbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiKJPad (ORCPT
+        with ESMTP id S231547AbiKJPbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:30:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7B04044F;
-        Thu, 10 Nov 2022 07:29:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E7DBB82192;
-        Thu, 10 Nov 2022 15:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53EA3C433C1;
-        Thu, 10 Nov 2022 15:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668094143;
-        bh=b1tXEdAkG7FjFwcJznZTpiZu17tiittNuwu2BIgCp3U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qe4srMJqydGdXXK1KXUKd7JrqnhJl+z0eatx1nK/Ecm/ErzRKIS2BZ2ZwhyJeYTmx
-         veW26JSCd1QjWQ+7gg7hzR6tIL5G+55ALlPVG8UoECvZPlhle1wzIQnPg9/FCAVebR
-         YG/egHpEtYw//zAAEAn1iwpWPWMkAoEPDa+68OCO4JeCfNnVudn6I21uPPm7aQvslK
-         2UGnzEOE962gsPkRoPna2uLi2tfTWK5wp83ng45xYY+Une/tX6H1/D6jXOaAZo2ur0
-         rmJ8EoX5WvRGX8yDfvpJQyDktWOpmEYPFGhIREsGwb/iEXsLARwqMlP/BD54FVDkbv
-         jQkVymI/2wczg==
-Date:   Thu, 10 Nov 2022 16:28:55 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     mani@kernel.org, allenbh@gmail.com, bhelgaas@google.com,
-        dave.jiang@intel.com, helgaas@kernel.org, imx@lists.linux.dev,
-        jdmason@kudzu.us, kw@linux.com, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, ntb@lists.linux.dev
-Subject: Re: [PATCH v16 4/7] PCI: endpoint: pci-epf-vntb: remove unused field
- epf_db_phy
-Message-ID: <Y20Yt7T0bivqUvop@lpieralisi>
-References: <20221102141014.1025893-1-Frank.Li@nxp.com>
- <20221102141014.1025893-5-Frank.Li@nxp.com>
+        Thu, 10 Nov 2022 10:31:24 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C085B43852
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:29:24 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id 3so2505278vsh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:29:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hNTcc4uUyrsAoinmTB9zBCvvHRIc7Wk7WZeBLPZzrbQ=;
+        b=Hhv03m03FnrTEZtz1TMhaTpPL00vBQeMpx+rHK9v/0Sjyd2zUPpP/Zyzg5Ai+ztCcc
+         hfGDEdPH0XTwnYE39JDJ/wiNOiELaHB1cUrPPKYaiurtAG89ekvLr/P/Ir5d4LVLqDlk
+         tRH66draLRJSxApF8Z2vPvtoH4qAkKdTj+ZFO5y1/I2E/UvTvzxUf0qZDlEQnhlW+Loi
+         0Uyg8AQ51AlAvi6AlLlEpIWjE2/YJR4RtarVoy7FxxgvGJEBwfvmwkX8qdi6U+P5Fnw4
+         VmVzxQzBo2ZTzRFC5WN2+uJi3AhNy6xFicuIh9ehyHqCT/v42i0U47le6Ox8/qcg9DiN
+         ExfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hNTcc4uUyrsAoinmTB9zBCvvHRIc7Wk7WZeBLPZzrbQ=;
+        b=zkBE+DcfHAvgNrTZ0VZ5KWtv9qK3gV3Qa1zxpM3tNOX8CNObOdJbS60PX/gRntPNMm
+         XGzLLxorjqpi/Ts/HmUDnAhFa3IYDITwamSzQPZsXlasSe+k7QdHg5rXxfOXqDu2sRaE
+         hH+OU9eCmrFVEv5abBhSCFmBwr2lZHDJUn04I59yzq3DXChK8S30SE6cledUOtlR6UiM
+         xTlnPSOPd1moK0JXA9Ha9Kx9Ajd1ZCgJQbKIt16g3fRDlCxnkzmMm9yYJopE1rQVmXAC
+         LXkJGUivT//MikbhbiO77Rbt4FJ61+ZH5+5bEQLF0DoctNuhbwkzg16NvAdmcQTC+0fD
+         PStQ==
+X-Gm-Message-State: ACrzQf0bIgBmuq641ty/0k/8jGeoOrjTCh1ilvJyzb5/ARn60Mpdo8Wc
+        ycFs//4hczRC1ZEoJyLRYrFdV9N+EqQM61/8azmaKQ==
+X-Google-Smtp-Source: AMsMyM7hga4DZVrVdmNCedH4QHI0A1R/v4wKZuAtiP0aJ1cBE0kYZy6+soKo+MjNaCy7VAvRv1W5lNb+0121sUm5q04=
+X-Received: by 2002:a67:ab0a:0:b0:3a9:9953:6471 with SMTP id
+ u10-20020a67ab0a000000b003a999536471mr33712395vse.47.1668094163904; Thu, 10
+ Nov 2022 07:29:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102141014.1025893-5-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221108133853.61884-1-andriy.shevchenko@linux.intel.com>
+ <Y2z7IJv2IQy+Mlsh@orome> <Y20CZtHkaLmQj+IP@smile.fi.intel.com>
+In-Reply-To: <Y20CZtHkaLmQj+IP@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 10 Nov 2022 16:29:12 +0100
+Message-ID: <CAMRc=MeL=K3BEW+-G-Z49Sw1Z5CCSnbQxbS9qDyizWa7nQjDiw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] gpiolib: of: Prepare of_gpiochip_add() /
+ of_gpiochip_remove() for fwnode
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 10:10:11AM -0400, Frank Li wrote:
-> From: Frank Li <frank.li@nxp.com>
-> 
-> epf_db_phy is not used, so remove it
+On Thu, Nov 10, 2022 at 2:53 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Nov 10, 2022 at 02:22:40PM +0100, Thierry Reding wrote:
+> > On Tue, Nov 08, 2022 at 03:38:52PM +0200, Andy Shevchenko wrote:
+>
+> ...
+>
+> > > +   np = to_of_node(chip->fwnode);
+> >
+> > This breaks a number of GPIO controllers on Tegra where chip->fwnode
+> > ends up never getting set. I also see this break drivers like the MFD-
+> > based gpio-max77620, so I don't think this is anything specific to the
+> > Tegra drivers.
+> >
+> > Looking at how fwnode handling works, it seems like we're checking the
+> > wrong value here, since chip->fwnode is only for explicit overrides of
+> > the fwnode value.
+> >
+> > The below patch fixes the regression for me:
+>
+> Thank you! Can you submit it as a formal fix? (Also see below)
+> Of if Bart prefers I can respin fixed verison. Bart?
+>
 
-Sentences end with a period (.). I can fix these things but
-we can't spend our lives telling you how to write a commit log,
-check how they are written in the PCI subsystem and follow the
-pattern.
+Let's have a fix on top of your changes. Thierry: can you send the
+patch to the list?
 
-https://lore.kernel.org/all/20171026223701.GA25649@bhelgaas-glaptop.roam.corp.google.com
-
-> 
-> Signed-off-by: Frank Li <frank.li@nxp.com>
-> Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-> ---
->  drivers/pci/endpoint/functions/pci-epf-vntb.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> index 191924a83454..ee66101cb5c4 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> @@ -136,7 +136,6 @@ struct epf_ntb {
->  
->  	struct epf_ntb_ctrl *reg;
->  
-> -	phys_addr_t epf_db_phy;
->  	void __iomem *epf_db;
->  
->  	phys_addr_t vpci_mw_phy[MAX_MW];
-> -- 
-> 2.34.1
-> 
+Bart
