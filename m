@@ -2,173 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BA8623CDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1231F623CE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232364AbiKJHoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S232662AbiKJHpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKJHoD (ORCPT
+        with ESMTP id S232330AbiKJHpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:44:03 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55E265C2
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:44:02 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id a29so1597732lfj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 23:44:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5jfTJLbOMPdujf4x0+Dv265P0Iq2mzeM6nHnDg9MXeg=;
-        b=AXwl/poTGLi7lfFlrmGBXrzE66dtjO4OOVqM19FCmrI0ZwQk+LqY6zACq8/X3twNXw
-         Zkg4YXiiJBB7svvXzW+DAjry/BczhfMokjWFSHB9DdwBd+PCMlfrrd9BpSXLo1Azvqdw
-         IyoV4L60VRlmSScFkCcEblUj5Hjo0UjXGCglUEsuacHEFFZslnmknVAvccWKI2MwkxFE
-         exLejtP3Ua2z6/vAsau2/nrzgUQkskdDC0wqmI/DQbFn36KTlW3fGv0CX4V8EStT5apn
-         WEyDPLFJHfUS9yO3Yw6S9ZNG5y+7qsmLf9uCIJGhgOlqBllr7qwIN8DBCsS+xNk4LqnT
-         HKig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5jfTJLbOMPdujf4x0+Dv265P0Iq2mzeM6nHnDg9MXeg=;
-        b=b1IcExTyTRr2A5eUWLam4g2CDYTJx1gwogKCDg5ol6vUbx8C16HiVAyOwBARjk6o9h
-         CNffh0mze8uxj1VkXEOp8nHyStYavOtousPp5nv8g0dWIXggbWN7ZUTyt9C9rz6Z2C8t
-         TiHn4oKaXJmpJ2NYktK2XJ0oHvQJQcUcA245pA/qiUIGUSBiNYiQzYc/a+MBb47RFDNS
-         RqMcEr4s1f3x5Qlc8icOHtbqFeWNWaMVcMjSks+L3G7CHRgR0AKFkSgjwSvTVWADhOpi
-         NbOgtMCM7jezkoN9SRQZIITdLtK9VssYfFjMfITS7vBJGh9vGtZV2QcDmKWyNI8rzZYh
-         2QrA==
-X-Gm-Message-State: ANoB5pkZ/D5eggjmFc3nDTDcvFzBRpheoxfnyNZSM9nyUNa8LCoJpPAw
-        JbAmm+y0mwgMMULGFY3jUjn/mQ==
-X-Google-Smtp-Source: AA0mqf6rw5MRmht/n8jPYKogCphtvDWLgob4EoxUlawBLfCzM2NwRPQeACStT3Jcqs183rS14NBW8g==
-X-Received: by 2002:a05:6512:758:b0:4b4:ead:697c with SMTP id c24-20020a056512075800b004b40ead697cmr2859653lfs.25.1668066241090;
-        Wed, 09 Nov 2022 23:44:01 -0800 (PST)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id k4-20020a05651239c400b00499cf3e3edcsm1227599lfu.296.2022.11.09.23.43.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 23:44:00 -0800 (PST)
-Message-ID: <adf5f80a-17e5-1163-a93c-2759ae57d77d@linaro.org>
-Date:   Thu, 10 Nov 2022 10:43:59 +0300
+        Thu, 10 Nov 2022 02:45:03 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CAA65C2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:45:02 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot2F8-0002m0-1n; Thu, 10 Nov 2022 08:44:58 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot2F5-003PFR-PN; Thu, 10 Nov 2022 08:44:56 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot2F6-00FaOy-4w; Thu, 10 Nov 2022 08:44:56 +0100
+Date:   Thu, 10 Nov 2022 08:44:56 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 6/6] pinctrl: intel: Enumerate PWM device when
+ community has a capabilitty
+Message-ID: <20221110074456.hgmu7d5mn5kndc66@pengutronix.de>
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+ <20221108142226.63161-7-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
- support HBR3
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, quic_abhinavk@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
- <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
- <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
- <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
- <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
- <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
- <CAD=FV=XTOUjVAGFWZ6xTkcNOrCT1p73aU-=KJNYUOxsS-BQsyA@mail.gmail.com>
- <c5aedb31-3881-50e7-f747-e75b18c3f4b8@linaro.org>
- <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
- <60643572-4148-cea5-e64d-ec6534b0c407@linaro.org>
- <a4127ba2-5968-e8a9-da63-fd709aa01e7f@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <a4127ba2-5968-e8a9-da63-fd709aa01e7f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="e7dgaqdlxnsjz4iv"
+Content-Disposition: inline
+In-Reply-To: <20221108142226.63161-7-andriy.shevchenko@linux.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 02:47, Kuogee Hsieh wrote:
-> 
-> On 11/2/2022 11:04 AM, Dmitry Baryshkov wrote:
->> On 02/11/2022 20:28, Doug Anderson wrote:
->>> Hi,
->>>
->>> On Wed, Nov 2, 2022 at 10:23 AM Dmitry Baryshkov
->>> <dmitry.baryshkov@linaro.org> wrote:
->>>>
->>>>> 1. Someone figures out how to model this with the bridge chain and
->>>>> then we only allow HBR3 if we detect we've got a TCPC that supports
->>>>> it. This seems like the cleanest / best but feels like a long pole.
->>>>> Not only have we been trying to get the TCPC-modeled-as-a-bridge stuff
->>>>> landed for a long time but even when we do it we still don't have a
->>>>> solution for how to communicate the number of lanes and other stuff
->>>>> between the TCPC and the DP controller so we have to enrich the bridge
->>>>> interface.
->>>>
->>>> I think we'd need some OOB interface. For example for DSI interfaces we
->>>> have mipi_dsi_device struct to communicate such OOB data.
->>>>
->>>> Also take a note regarding data-lanes from my previous email.
->>>
->>> Right, we can somehow communicate the max link rate through the bridge
->>> chain to the DP controller in an OOB manner that would work.
->>
->> I'd note that our dp_panel has some notion of such OOB data. So do AUX 
->> drivers including the panel-edp. My suggestion would be to consider 
->> both of them while modelling the OOB data.
->>
->>>
->>>
->>>>> 2. We add in a DT property to the display controller node that says
->>>>> the max link rate for use on this board. This feels like a hack, but
->>>>> maybe it's not too bad. Certainly it would be incredibly simple to
->>>>> implement. Actually... ...one could argue that even if we later model
->>>>> the TCPC as a bridge that this property would still be valid / useful!
->>>>> You could certainly imagine that the SoC supports HBR3 and the TCPC
->>>>> supports HBR3 but that the board routing between the SoC and the TCPC
->>>>> is bad and only supports HBR2. In this case the only way out is
->>>>> essentially a "board constraint" AKA a DT property in the DP
->>>>> controller.
->>>>
->>>> We have been discussing similar topics with Abhinav. Krzysztof 
->>>> suggested
->>>> using link-frequencies property to provide max and min values.
-> 
-> questions,
-> 
-> 1)is Krzysztof suggested had been implemented?
 
-I can not parse this question, please excuse me.
+--e7dgaqdlxnsjz4iv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, Krzysztof suggested this being implemented as a link property, see 
-media/video-interfaces.txt.
+On Tue, Nov 08, 2022 at 04:22:26PM +0200, Andy Shevchenko wrote:
+> Some of the Communities may have PWM capability. In such cases,
+> enumerate PWM device via respective driver. User is still responsible
+> for setting correct pin muxing for the line that needs to output the
+> signal.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  drivers/pinctrl/intel/pinctrl-intel.c | 29 +++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>=20
+> diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/inte=
+l/pinctrl-intel.c
+> index 6e630e87fed6..6b685ff7041f 100644
+> --- a/drivers/pinctrl/intel/pinctrl-intel.c
+> +++ b/drivers/pinctrl/intel/pinctrl-intel.c
+> @@ -24,6 +24,8 @@
+>  #include <linux/pinctrl/pinctrl.h>
+>  #include <linux/pinctrl/pinmux.h>
+> =20
+> +#include <linux/platform_data/x86/pwm-lpss.h>
+> +
+>  #include "../core.h"
+>  #include "pinctrl-intel.h"
+> =20
+> @@ -49,6 +51,8 @@
+>  #define PADOWN_MASK(p)			(GENMASK(3, 0) << PADOWN_SHIFT(p))
+>  #define PADOWN_GPP(p)			((p) / 8)
+> =20
+> +#define PWMC				0x204
+> +
+>  /* Offset from pad_regs */
+>  #define PADCFG0				0x000
+>  #define PADCFG0_RXEVCFG_SHIFT		25
+> @@ -1502,6 +1506,27 @@ static int intel_pinctrl_pm_init(struct intel_pinc=
+trl *pctrl)
+>  	return 0;
+>  }
+> =20
+> +static int intel_pinctrl_probe_pwm(struct intel_pinctrl *pctrl,
+> +				   struct intel_community *community)
+> +{
+> +	static const struct pwm_lpss_boardinfo info =3D {
+> +		.clk_rate =3D 19200000,
+> +		.npwm =3D 1,
+> +		.base_unit_bits =3D 22,
+> +		.bypass =3D true,
+> +	};
+> +	struct pwm_lpss_chip *pwm;
+> +
+> +	if (!(community->features & PINCTRL_FEATURE_PWM))
+> +		return 0;
+> +
+> +	pwm =3D pwm_lpss_probe(pctrl->dev, community->regs + PWMC, &info);
+> +	if (IS_ERR(pwm) && PTR_ERR(pwm) !=3D -ENODEV)
+> +		return PTR_ERR(pwm);
 
-Moreover your implementation goes against both the existing definition 
-(array with the list of frequencies) and Krzysztof's suggested extension 
-(min and max). Listing just a single frequency goes against both these 
-suggestions. In case of DP we have a fixed set of frequencies. Thus I'd 
-suggest listing all supported frequencies instead.
+Linus and Andy already agreed that this patch is ugly. I wonder if this
+here would be a bit less ugly if you do:
 
-> 2) where is link property i can add link-frequencies?
+	if (IS_REACHABLE(...)) {
+		pwm =3D pwm_lpss_probe(...);
+		...
 
-link node. Create outbound graph node, add link-frequencies there. Also 
-as you are touching this part, please move the data-lanes property too.
 
-> 
-> 
->>>
->>> This sounds good to me and seems worth doing even if we eventually do 
->>> #1.
->>
->> And the bonus point is that it can be done easily.
->>
+	}
 
--- 
-With best wishes
-Dmitry
+and drop the check PTR_ERR(pwm) !=3D -ENODEV (which might have a different
+semantic than "the pwm driver isn't available").
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--e7dgaqdlxnsjz4iv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNsq/UACgkQwfwUeK3K
+7AketggAhXuuzr7oA2h+A09ZTVm5VyruBbM75FTg0Ufp7T5uCo5IqRC1ToC7wOaF
+LKiJGvBHC8I/wnOqSTlVIPYzlW8OBdZ5rgddWQj11P9pZAqb4hfNHDUNmWgn6p9V
+am1Wg+CUesObx+ghN3K+zpFSwJGk7x8uoIZ0YU7ONU0jKvipPTyKLs1VqOqD0pad
+XbGVi32RrcUXZPfPKf8g8xi8ILNodOS4wbKMXPXtPjuujLU3iwKfSey27RwiMqsb
++6E6QDh8R/E9F9lFsBn+vkU2bZCrihMLUrOwWIgmSZjcvRi0pwiGCtRT+SvBF1Ve
+IVbl0hHLGGeATSXF+/AeySnjYRr7fA==
+=zYJq
+-----END PGP SIGNATURE-----
+
+--e7dgaqdlxnsjz4iv--
