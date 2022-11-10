@@ -2,89 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDE1624353
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A1162436F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbiKJNf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S231149AbiKJNmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiKJNf0 (ORCPT
+        with ESMTP id S229881AbiKJNmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:35:26 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF50BD3;
-        Thu, 10 Nov 2022 05:35:25 -0800 (PST)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7N6522QKzqSH4;
-        Thu, 10 Nov 2022 21:31:41 +0800 (CST)
-Received: from [10.174.179.215] (10.174.179.215) by
- canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 21:35:22 +0800
-Subject: Re: [PATCH v2] phy: usb: sunplus: Fix memleak in update_disc_vol()
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     <vincent.sunplus@gmail.com>, <kishon@kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221108073430.29172-1-yuehaibing@huawei.com>
- <Y2yiGadmdSz/Ml3i@matsya>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <36697610-8cea-cebe-9aa0-1da15cc658b6@huawei.com>
-Date:   Thu, 10 Nov 2022 21:35:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Thu, 10 Nov 2022 08:42:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2101269DC1;
+        Thu, 10 Nov 2022 05:42:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE69616C9;
+        Thu, 10 Nov 2022 13:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C29CC4314D;
+        Thu, 10 Nov 2022 13:42:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668087758;
+        bh=4U7C9niDGrmfi8IMDATi6BtcBIfDiuOKvkxBiJpdV3w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SX98KqeYKns7KGfDa8dTp6G5wayF8iiATI9dVap4Wgzf6d34aTkI97ttMf366XE+1
+         R2U/r9UCn8XAghsEFSpznVYcqr8O4mENHj6OsaLq+Fq6HN0VtBRF5F87Flp3fz7U9W
+         nvj7W8/tSmA7L4xJk7dnUI98uInsIF93sAvIZzyrmOw4EtrC/VyKLAoiFVV/YaO0TE
+         juhdMKkkNBetHZgQdRAht04cUd+m9+wVS6uPEhlXh6VGR8enutToxoBG4kAhDSNlp5
+         DlWpLWUfxIYQqAAL+Tvyjtd7LpIsGuKzn/xSnrb8o9O8thutGRnRZK09gfgNgN9+Eq
+         peEprHo4LiCow==
+Received: by mail-ot1-f41.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so1118986oti.5;
+        Thu, 10 Nov 2022 05:42:38 -0800 (PST)
+X-Gm-Message-State: ANoB5pnWBy9BAXxk20tFsEN0BY67gjVYDapT6gIM593tu48kJBuI7gk4
+        OuMo+lFTvPK3Y89J5tQEN928W1r5MFyLCw97qQ==
+X-Google-Smtp-Source: AA0mqf4gARCZUERKvwgaAfgdC1LEqRRi5pu66mk1Uqd2ev+ik8AG7xmvItT3O8MQpM0VXWbeKoELJNlYq11nhVFHllU=
+X-Received: by 2002:a9d:58c3:0:b0:66d:2f7d:2a68 with SMTP id
+ s3-20020a9d58c3000000b0066d2f7d2a68mr4817252oth.40.1668087757150; Thu, 10 Nov
+ 2022 05:42:37 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y2yiGadmdSz/Ml3i@matsya>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220927152704.12018-1-jason-jh.lin@mediatek.com>
+ <20220927152704.12018-7-jason-jh.lin@mediatek.com> <30278e0f-88ec-069b-3469-56b3fb795702@gmail.com>
+In-Reply-To: <30278e0f-88ec-069b-3469-56b3fb795702@gmail.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Thu, 10 Nov 2022 21:42:25 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__vvjKASUJAGOvL=-WnAq-ji7sfyEEY7j49ty0P7Svvdw@mail.gmail.com>
+Message-ID: <CAAOTY__vvjKASUJAGOvL=-WnAq-ji7sfyEEY7j49ty0P7Svvdw@mail.gmail.com>
+Subject: Re: [PATCH v5 6/6] soc: mediatek: remove DDP_DOMPONENT_DITHER from enum
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        CK Hu <ck.hu@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/10 15:02, Vinod Koul wrote:
-> On 08-11-22, 15:34, YueHaibing wrote:
->> 'otp_v' is allocated in nvmem_cell_read(), it should be freed
->> before return.
-> 
-> Right!
-> 
->>
->> Fixes: 99d9ccd97385 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
->> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->> ---
->> v2: free otp_v before return
->> ---
->>  drivers/phy/sunplus/phy-sunplus-usb2.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
->> index e827b79f6d49..62d5cb5c7c9d 100644
->> --- a/drivers/phy/sunplus/phy-sunplus-usb2.c
->> +++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
->> @@ -105,6 +105,9 @@ static int update_disc_vol(struct sp_usbphy *usbphy)
->>  	val = (val & ~J_DISC) | set;
->>  	writel(val, usbphy->phy_regs + CONFIG7);
->>  
->> +	if (!IS_ERR(otp_v))
->> +		kfree(otp_v);
-> 
-> But that is not the case!
+Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2022=E5=B9=B411=E6=9C=
+=889=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A7:25=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+>
+>
+> On 27/09/2022 17:27, Jason-JH.Lin wrote:
+> > After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
+> > mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
+> >
+> > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> > Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> Chun-Kuan, I understand you will take this patch through your tree as it =
+depends
+> on DRM changes. We can also sync so that I take it once you merged the re=
+st of
+> the series. Having vdosys1 series around maybe that's better to avoid mer=
+ge
+> problems.
 
-Do you think I should changed the commit log like this:
+Hi, Matthias:
 
-'otp_v' is allocated by nvmem_cell_read(), it should be freed
-after usage in update_disc_vol().
+I do not hurry to merge patches. To prevent merge conflict, let's
+merge step by step.
+The drm patches depend on binding document patch, so I would wait for
+binding document merged.
+After drm patch merged, you could merge this patch.
 
+vdosys1 patches depend on vdosys0 patches, so just let it around.
 
-> 
+Regards,
+Chun-Kuang.
+
+>
+> Regards,
+> Matthias
+>
+> > ---
+> >   include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
+> >   1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc=
+/mediatek/mtk-mmsys.h
+> > index d2b02bb43768..16ac0e5847f0 100644
+> > --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> > +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> > @@ -16,8 +16,7 @@ enum mtk_ddp_comp_id {
+> >       DDP_COMPONENT_CCORR,
+> >       DDP_COMPONENT_COLOR0,
+> >       DDP_COMPONENT_COLOR1,
+> > -     DDP_COMPONENT_DITHER,
+> > -     DDP_COMPONENT_DITHER0 =3D DDP_COMPONENT_DITHER,
+> > +     DDP_COMPONENT_DITHER0,
+> >       DDP_COMPONENT_DITHER1,
+> >       DDP_COMPONENT_DP_INTF0,
+> >       DDP_COMPONENT_DP_INTF1,
