@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7086244DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AADDA6244D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiKJOxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
+        id S229790AbiKJOwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiKJOwx (ORCPT
+        with ESMTP id S229478AbiKJOwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:52:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6313326C8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:51:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668091914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=omYoFDdizbothqM1y6x7ltgbHGFmerjPUiCe70Zk9cs=;
-        b=h2sTpGQSNBuaPPdKiEUZtq7kb+gdyMBGd0mtV0q+K8zsy9tXlSA9ABmz63OA3zKbv7UngB
-        IoYTwWzY/ApqUkmzONY1DtfkA2mb9Oxio1+51aHuvDwGWvquMb7JNUzXxVrbreEfIWroha
-        LhRtE9NIx6L3t9NTqZgRhDL9UjT6CLs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-fovA9puiPdCfkCA7I0Rovg-1; Thu, 10 Nov 2022 09:51:51 -0500
-X-MC-Unique: fovA9puiPdCfkCA7I0Rovg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2ACFC381078F;
-        Thu, 10 Nov 2022 14:51:51 +0000 (UTC)
-Received: from p1.luc.cera.cz (ovpn-193-136.brq.redhat.com [10.40.193.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 15BAE2166B29;
-        Thu, 10 Nov 2022 14:51:47 +0000 (UTC)
-Date:   Thu, 10 Nov 2022 15:51:47 +0100
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     "Keller, Jacob E" <jacob.e.keller@intel.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "sassmann@redhat.com" <sassmann@redhat.com>,
-        "Piotrowski, Patryk" <patryk.piotrowski@intel.com>,
-        SlawomirX Laba <slawomirx.laba@intel.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] iavf: Do not restart Tx queues after reset task
- failure
-Message-ID: <20221110155147.1a2c57f6@p1.luc.cera.cz>
-In-Reply-To: <CO1PR11MB508996B0D00B5FE6187AF085D63E9@CO1PR11MB5089.namprd11.prod.outlook.com>
-References: <20221108102502.2147389-1-ivecera@redhat.com>
-        <Y2vvbwkvAIOdtZaA@unreal>
-        <CO1PR11MB508996B0D00B5FE6187AF085D63E9@CO1PR11MB5089.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 09:52:38 -0500
+Received: from second.openwall.net (second.openwall.net [193.110.157.125])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 53D1BFAD7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:52:34 -0800 (PST)
+Received: (qmail 18111 invoked from network); 10 Nov 2022 14:52:32 -0000
+Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
+  by localhost with SMTP; 10 Nov 2022 14:52:32 -0000
+Received: by pvt.openwall.com (Postfix, from userid 503)
+        id A17E0AB3A4; Thu, 10 Nov 2022 15:52:23 +0100 (CET)
+Date:   Thu, 10 Nov 2022 15:52:23 +0100
+From:   Solar Designer <solar@openwall.com>
+To:     wuqiang <wuqiang.matt@bytedance.com>
+Cc:     mhiramat@kernel.org, davem@davemloft.net,
+        anil.s.keshavamurthy@intel.com, naveen.n.rao@linux.ibm.com,
+        linux-kernel@vger.kernel.org, mattwu@163.com,
+        Adam Zabrocki <pi3@pi3.com.pl>
+Subject: Re: [PATCH v2] kprobes: kretprobe events missing on 2-core KVM guest
+Message-ID: <20221110145223.GA14731@openwall.com>
+References: <20221026003315.266d59d5c0780c2817be3a0d@kernel.org> <20221110081502.492289-1-wuqiang.matt@bytedance.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110081502.492289-1-wuqiang.matt@bytedance.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 20:11:55 +0000
-"Keller, Jacob E" <jacob.e.keller@intel.com> wrote:
-
-> > Sorry for my naive question, I see this pattern a lot (including RDMA),
-> > so curious. Everyone checks netif_running() outside of rtnl_lock, while
-> > dev_close() changes state bit __LINK_STATE_START. Shouldn't rtnl_lock()
-> > placed before netif_running()?  
+On Thu, Nov 10, 2022 at 04:15:02PM +0800, wuqiang wrote:
+> Default value of maxactive is set as num_possible_cpus() for nonpreemptable
+> systems. For a 2-core system, only 2 kretprobe instances would be allocated
+> in default, then these 2 instances for execve kretprobe are very likely to
+> be used up with a pipelined command.
 > 
-> Yes I think you're right. A ton of people check it without the lock but I think thats not strictly safe. Is dev_close safe to call when netif_running is false? Why not just remove the check and always call dev_close then.
+> Here's the testcase: a shell script was added to crontab, and the content
+> of the script is:
 > 
-> Thanks,
-> Jake
+>   #!/bin/sh
+>   do_something_magic `tr -dc a-z < /dev/urandom | head -c 10`
+> 
+> cron will trigger a series of program executions (4 times every hour). Then
+> events loss would be noticed normally after 3-4 hours of testings.
+> 
+> The issue is caused by a burst of series of execve requests. The best number
+> of kretprobe instances could be different case by case, and should be user's
+> duty to determine, but num_possible_cpus() as the default value is inadequate
+> especially for systems with small number of cpus.
+> 
+> This patch enables the logic for preemption as default, thus increases the
+> minimum of maxactive to 10 for nonpreemptable systems.
+> 
+> Signed-off-by: wuqiang <wuqiang.matt@bytedance.com>
 
-Check for a bit value (like netif_runnning()) is much cheaper than unconditionally
-taking global lock like RTNL.
+Reviewed-by: Solar Designer <solar@openwall.com>
 
-Ivan
+Thank you!
 
+> ---
+>  Documentation/trace/kprobes.rst |  3 +--
+>  kernel/kprobes.c                | 10 +++-------
+>  2 files changed, 4 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/trace/kprobes.rst b/Documentation/trace/kprobes.rst
+> index 48cf778a2468..fc7ce76eab65 100644
+> --- a/Documentation/trace/kprobes.rst
+> +++ b/Documentation/trace/kprobes.rst
+> @@ -131,8 +131,7 @@ For example, if the function is non-recursive and is called with a
+>  spinlock held, maxactive = 1 should be enough.  If the function is
+>  non-recursive and can never relinquish the CPU (e.g., via a semaphore
+>  or preemption), NR_CPUS should be enough.  If maxactive <= 0, it is
+> -set to a default value.  If CONFIG_PREEMPT is enabled, the default
+> -is max(10, 2*NR_CPUS).  Otherwise, the default is NR_CPUS.
+> +set to a default value: max(10, 2*NR_CPUS).
+>  
+>  It's not a disaster if you set maxactive too low; you'll just miss
+>  some probes.  In the kretprobe struct, the nmissed field is set to
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index a8b202f87e2d..1e80bddf2654 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -2212,11 +2212,7 @@ int register_kretprobe(struct kretprobe *rp)
+>  	rp->kp.post_handler = NULL;
+>  
+>  	/* Pre-allocate memory for max kretprobe instances */
+> -	if (rp->maxactive <= 0) {
+> -#ifdef CONFIG_PREEMPTION
+> +	if (rp->maxactive <= 0)
+>  		rp->maxactive = max_t(unsigned int, 10, 2*num_possible_cpus());
+> -#else
+> -		rp->maxactive = num_possible_cpus();
+> -#endif
+> -	}
+> +
+>  #ifdef CONFIG_KRETPROBE_ON_RETHOOK
+> --
+> 2.34.1
+
+Alexander
