@@ -2,187 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8345C624664
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33960624669
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiKJPz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        id S231734AbiKJPzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiKJPzZ (ORCPT
+        with ESMTP id S231732AbiKJPzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:55:25 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437531F2E4;
-        Thu, 10 Nov 2022 07:55:24 -0800 (PST)
-Received: from mercury (unknown [37.81.43.100])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 06029660292B;
-        Thu, 10 Nov 2022 15:55:20 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668095722;
-        bh=OX9OfRqc+VB9/F7DcCVWxUZz/S1CEOIqVmASyc7jTqw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=flO3EQr1yjtiYFwr9/yHXQBMSr/3+2JhQrULwbm3cePUFJElZSJZBMQf1Th5i9ku1
-         3PIKiePo3VL8cGZMdjB0nbyP3yPLFbjDpgVXKpfY5MNM2CtqOXEhQ9c4LI15PpVHTo
-         kLzLsqe3anEYPihKt561G4Xzv33XyEzm/K8bQ6hH2tAMH7pkuOxobuFp+DjMRdRZ4/
-         9+UBWqry3YkViBtFahNezoy3Fa6Qnp2itbh7wyQ5OClhHibrvzc9DKCFLaohlL66cX
-         eLNcECVdBMY/rii7fozyDgD7cjLcpWjvrTXSZGRQLO4Fdi+/LZaJVEsEyouBIvKeD6
-         Eum4QVNIhBR/w==
-Received: by mercury (Postfix, from userid 1000)
-        id 22759106B5DE; Thu, 10 Nov 2022 16:55:10 +0100 (CET)
-Date:   Thu, 10 Nov 2022 16:55:10 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony@atomide.com, philipp@uvos.xyz
-Subject: Re: [PATCH 1/3] power: cpcap-battery: Do not issue low signal too
- frequently
-Message-ID: <20221110155510.tobdbaabjoe7ugvl@mercury.elektranox.org>
-References: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1667647544-12945-2-git-send-email-ivo.g.dimitrov.75@gmail.com>
+        Thu, 10 Nov 2022 10:55:44 -0500
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FAE2DA98;
+        Thu, 10 Nov 2022 07:55:43 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id x21so1359531qkj.0;
+        Thu, 10 Nov 2022 07:55:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5GCcN4ergz49gV4k6gX4iuIWjU767EtX1RSbqmpJ7/k=;
+        b=qyItoG5fMIYF9OxwBsR0mZSua90KXQlK5ox8fxOZL264jhrBWa5kpEu6LZK1vge8ZN
+         PPSJaA7i6zX07oG7T0UI9BAlZZ1IceUENBAK8OCf+utrrXm60xiiSq19d7syXs2HbpiM
+         6q1BWXLvw9jtCsLzBVY0OiR1M+cOBgwsnAF/bs+K+Z8YMkvOfQ5PD/HJn9AVuG+e4lfg
+         cSIVmUIvBiD6GPf21mlRyjuAmQbTDgcRT+0p26RA/3/5W6/qtOkZEdxWefBccoQEmEXj
+         UZXQMfI45osnubeN7dXKJPdcG9hIse3ZVKW5c/FXXmN1oOCFhzdc9+xBOVA1+xVPg2Mb
+         o5jQ==
+X-Gm-Message-State: ACrzQf2pfmpbqqtOpKXAbb7YcyF+vBjBvMZHyTjqnkIHPerH5w5L6lXr
+        AvRfD7+b628FsWmITP9FOfQMrddmuJEsoWqQmxQ=
+X-Google-Smtp-Source: AMsMyM4tf00hWBjlp0FWPVGqv4gll6KoZ03N81DVFRxCBxNPlaipDW8yUmSgHkloBzEhGEOjob45aTPy2ZP1csKHL/I=
+X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
+ j22-20020a05620a147600b006fa4c6783ecmr35799979qkl.23.1668095742749; Thu, 10
+ Nov 2022 07:55:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4foyvbnipb47rca7"
-Content-Disposition: inline
-In-Reply-To: <1667647544-12945-2-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107175705.2207842-1-Perry.Yuan@amd.com> <20221107175705.2207842-2-Perry.Yuan@amd.com>
+ <64836554-7caa-9a3e-3832-a66e87c83bf9@amd.com> <CAJZ5v0ik68V6D2tipGH4tepaAmy5bpSy2nZUyAHn=Qia9SCLzA@mail.gmail.com>
+ <DM4PR12MB527881961B4BE3F74F503CFE9C019@DM4PR12MB5278.namprd12.prod.outlook.com>
+In-Reply-To: <DM4PR12MB527881961B4BE3F74F503CFE9C019@DM4PR12MB5278.namprd12.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Nov 2022 16:55:31 +0100
+Message-ID: <CAJZ5v0h3HLp8eLeLJXegSQxiiY-+d3eb8UHh1TE00f-EhBnwZg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] ACPI: CPPC: Add AMD pstate energy performance
+ preference cppc control
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 10, 2022 at 4:52 PM Yuan, Perry <Perry.Yuan@amd.com> wrote:
+>
+> [AMD Official Use Only - General]
+>
+>
+>
+> > -----Original Message-----
+> > From: Rafael J. Wysocki <rafael@kernel.org>
+> > Sent: Thursday, November 10, 2022 10:50 PM
+> > To: Limonciello, Mario <Mario.Limonciello@amd.com>; Yuan, Perry
+> > <Perry.Yuan@amd.com>
+> > Cc: rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>;
+> > viresh.kumar@linaro.org; Sharma, Deepak <Deepak.Sharma@amd.com>;
+> > Fontenot, Nathan <Nathan.Fontenot@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Huang, Shimmer
+> > <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Meng,
+> > Li (Jassmine) <Li.Meng@amd.com>; linux-pm@vger.kernel.org; linux-
+> > kernel@vger.kernel.org
+> > Subject: Re: [PATCH v3 1/8] ACPI: CPPC: Add AMD pstate energy
+> > performance preference cppc control
+> >
+> > Caution: This message originated from an External Source. Use proper
+> > caution when opening attachments, clicking links, or responding.
+> >
+> >
+> > On Mon, Nov 7, 2022 at 7:44 PM Limonciello, Mario
+> > <mario.limonciello@amd.com> wrote:
+> > >
+> > > On 11/7/2022 11:56, Perry Yuan wrote:
+> > > > Add the EPP(Energy Performance Preference) support for the AMD SoCs
+> > > > without the dedicated CPPC MSR, those SoCs need to add this cppc
+> > > > acpi functions to update EPP values and desired perf value.
+> > >
+> > > As far as I can tell this is generic code.  Although the reason you're
+> > > submitting it is for enabling AMD SoCs, the commit message should be
+> > > worded as such.
+> > >
+> > > >
+> > > > In order to get EPP worked, cppc_get_epp_caps() will query EPP
+> > > > preference value and cppc_set_epp_perf() will set EPP new value.
+> > > > Before the EPP works, pstate driver will use cppc_set_auto_epp() to
+> > > > enable EPP function from firmware firstly.
+> > >
+> > > This could more succinctly say:
+> > >
+> > > "Add support for setting and querying EPP preferences to the generic
+> > > CPPC driver.  This enables downstream drivers such as amd-pstate to
+> > > discover and use these values."
+> > >
+> > > >
+> > > > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> > > > ---
+> > > >   drivers/acpi/cppc_acpi.c | 126
+> > +++++++++++++++++++++++++++++++++++++++
+> > > >   include/acpi/cppc_acpi.h |  17 ++++++
+> > > >   2 files changed, 143 insertions(+)
+> > > >
+> > > > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> > > > index 093675b1a1ff..d9c38dee1f48 100644
+> > > > --- a/drivers/acpi/cppc_acpi.c
+> > > > +++ b/drivers/acpi/cppc_acpi.c
+> > > > @@ -1365,6 +1365,132 @@ int cppc_get_perf_ctrs(int cpunum, struct
+> > cppc_perf_fb_ctrs *perf_fb_ctrs)
+> > > >   }
+> > > >   EXPORT_SYMBOL_GPL(cppc_get_perf_ctrs);
+> > > >
+> > > > +/**
+> > > > + * cppc_get_epp_caps - Get the energy preference register value.
+> > > > + * @cpunum: CPU from which to get epp preference level.
+> > > > + * @perf_caps: Return address.
+> > > > + *
+> > > > + * Return: 0 for success, -EIO otherwise.
+> > > > + */
+> > > > +int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+> > > > +{
+> > > > +     struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
+> > > > +     struct cpc_register_resource *energy_perf_reg;
+> > > > +     u64 energy_perf;
+> > > > +
+> > > > +     if (!cpc_desc) {
+> > > > +             pr_warn("No CPC descriptor for CPU:%d\n", cpunum);
+> > > > +             return -ENODEV;
+> > > > +     }
+> > > > +
+> > > > +     energy_perf_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+> > > > +
+> > > > +     if (!CPC_SUPPORTED(energy_perf_reg))
+> > > > +             pr_warn("energy perf reg update is unsupported!\n");
+> > >
+> > > No need to add a explanation point at the end.
+> > >
+> > > As this is a per-CPU message I wonder if this would be better as
+> > > pr_warn_once()?  Othewrise some systems with large numbers of cores
+> > > might potentially show this message quite a few times.
+> >
+> > pr_info_once() would suffice IMO.
+>
+> Fixed in V4.
+>
+> >
+> > > > +
+> > > > +     if (CPC_IN_PCC(energy_perf_reg)) {
+> > > > +             int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+> > > > +             struct cppc_pcc_data *pcc_ss_data = NULL;
+> > > > +             int ret = 0;
+> > > > +
+> > > > +             if (pcc_ss_id < 0)
+> > > > +                     return -ENODEV;
+> > > > +
+> > > > +             pcc_ss_data = pcc_data[pcc_ss_id];
+> > > > +
+> > > > +             down_write(&pcc_ss_data->pcc_lock);
+> > > > +
+> > > > +             if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0) {
+> > > > +                     cpc_read(cpunum, energy_perf_reg, &energy_perf);
+> > > > +                     perf_caps->energy_perf = energy_perf;
+> > > > +             } else {
+> > > > +                     ret = -EIO;
+> > > > +             }
+> > > > +
+> > > > +             up_write(&pcc_ss_data->pcc_lock);
+> > > > +
+> > > > +             return ret;
+> > > > +     }
+> >
+> > What if CPC is not in PCC?
+> >
+> > Would returning 0 then work for all users?
+>
+> Fixed in V4
+>
+> >
+> > > > +
+> > > > +     return 0;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(cppc_get_epp_caps);
+> > > > +
+> > > > +int cppc_set_auto_epp(int cpu, bool enable) {
+> > > > +     int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+> > > > +     struct cpc_register_resource *auto_sel_reg;
+> > > > +     struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> > > > +     struct cppc_pcc_data *pcc_ss_data = NULL;
+> > > > +     int ret = -EINVAL;
+> > > > +
+> > > > +     if (!cpc_desc) {
+> > > > +             pr_warn("No CPC descriptor for CPU:%d\n", cpu);
+> > >
+> > > Is this actually warn worthy?  I would think it's fine a debug like we
+> > > have for the other _CPC missing messages.
+> > >
+> > > > +             return -EINVAL;
+> > > > +     }
+> > > > +
+> > > > +     auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+> > > > +
+> > > > +     if (CPC_IN_PCC(auto_sel_reg)) {
+> > > > +             if (pcc_ss_id < 0)
+> > > > +                     return -ENODEV;
+> > > > +
+> > > > +             ret = cpc_write(cpu, auto_sel_reg, enable);
+> > > > +             if (ret)
+> > > > +                     return ret;
+> > > > +
+> > > > +             pcc_ss_data = pcc_data[pcc_ss_id];
+> > > > +
+> > > > +             down_write(&pcc_ss_data->pcc_lock);
+> > > > +             /* after writing CPC, transfer the ownership of PCC to platform */
+> > > > +             ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> > > > +             up_write(&pcc_ss_data->pcc_lock);
+> > > > +             return ret;
+> > > > +     }
+> > > > +
+> > > > +     return cpc_write(cpu, auto_sel_reg, enable); }
+> > > > +EXPORT_SYMBOL_GPL(cppc_set_auto_epp);
+> > > > +
+> > > > +/*
+> > > > + * Set Energy Performance Preference Register value through
+> > > > + * Performance Controls Interface
+> > > > + */
+> > > > +int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+> > > > +{
+> > > > +     int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+> > > > +     struct cpc_register_resource *epp_set_reg;
+> > > > +     struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> > > > +     struct cppc_pcc_data *pcc_ss_data = NULL;
+> > > > +     int ret = -EINVAL;
+> > > > +
+> > > > +     if (!cpc_desc) {
+> > > > +             pr_warn("No CPC descriptor for CPU:%d\n", cpu);
+> > >
+> > > Is this actually warn worthy?  I would think it's fine a debug like we
+> > > have for the other _CPC missing messages.
+> > >
+> > > > +             return -EINVAL;
+> > > > +     }
+> > > > +
+> > > > +     epp_set_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+> > > > +
+> > > > +     if (CPC_IN_PCC(epp_set_reg)) {
+> > > > +             if (pcc_ss_id < 0)
+> > > > +                     return -ENODEV;
+> > > > +
+> > > > +             ret = cpc_write(cpu, epp_set_reg, perf_ctrls->energy_perf);
+> > > > +             if (ret)
+> > > > +                     return ret;
+> > > > +
+> > > > +             pcc_ss_data = pcc_data[pcc_ss_id];
+> > > > +
+> > > > +             down_write(&pcc_ss_data->pcc_lock);
+> > > > +             /* after writing CPC, transfer the ownership of PCC to platform */
+> > > > +             ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> > > > +             up_write(&pcc_ss_data->pcc_lock);
+> > >
+> > > cppc_set_auto_epp and cppc_set_epp_perf have nearly the same code in
+> > > the if block.  I wonder if it's worth having a static helper function
+> > > for this purpose that takes "reg" and "value" as arguments?
+> > >
+> > > > +     }
+> >
+> > And what about the non-PCC case here?
+>
+> I merge the  cppc_set_auto_epp and cppc_set_epp_perf in V4.
+> For the non-PCC case, we canno set the EPP value to FW, then just returned
+> Error code.  Is it Ok ?
 
---4foyvbnipb47rca7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Sat, Nov 05, 2022 at 01:25:42PM +0200, Ivaylo Dimitrov wrote:
-> It seems that low battery irq may be generated tens of times per second,
-> leading to userspace being flooded with unnecessary events.
->=20
-> Fix that by preventing such events being generated more than once every 30
-> seconds.
->=20
-> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-> ---
-
-Concept looks ok to me, but the code is slightly racy, since the
-thread is flushed before the IRQ is disabled in the remove routine.
-
->  drivers/power/supply/cpcap-battery.c | 27 ++++++++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/=
-cpcap-battery.c
-> index 4676560..8869067 100644
-> --- a/drivers/power/supply/cpcap-battery.c
-> +++ b/drivers/power/supply/cpcap-battery.c
-> @@ -137,6 +137,7 @@ struct cpcap_battery_ddata {
->  	struct power_supply *psy;
->  	struct cpcap_battery_config config;
->  	struct cpcap_battery_state_data state[CPCAP_BATTERY_STATE_NR];
-> +	struct delayed_work low_irq_work;
->  	u32 cc_lsb;		/* =CE=BCAms per LSB */
->  	atomic_t active;
->  	int charge_full;
-> @@ -914,9 +915,13 @@ static irqreturn_t cpcap_battery_irq_thread(int irq,=
- void *data)
->  		dev_info(ddata->dev, "Coulomb counter calibration done\n");
->  		break;
->  	case CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW:
-> -		if (latest->current_ua >=3D 0)
-> +		if (latest->current_ua >=3D 0 &&
-> +		    !delayed_work_pending((&ddata->low_irq_work))) {
->  			dev_warn(ddata->dev, "Battery low at %imV!\n",
->  				latest->voltage / 1000);
-> +			schedule_delayed_work(&ddata->low_irq_work, 30 * HZ);
-> +			disable_irq_nosync(d->irq);
-> +		}
->  		break;
->  	case CPCAP_BATTERY_IRQ_ACTION_POWEROFF:
->  		if (latest->current_ua >=3D 0 && latest->voltage <=3D 3200000) {
-> @@ -1087,6 +1092,21 @@ static int cpcap_battery_calibrate(struct cpcap_ba=
-ttery_ddata *ddata)
->  	return error;
->  }
-> =20
-> +static void cpcap_battery_lowbph_enable(struct work_struct *work)
-> +{
-> +	struct delayed_work *d_work =3D to_delayed_work(work);
-> +	struct cpcap_battery_ddata *ddata =3D container_of(d_work,
-> +			struct cpcap_battery_ddata, low_irq_work);
-> +	struct cpcap_interrupt_desc *d;
-> +
-> +	list_for_each_entry(d, &ddata->irq_list, node) {
-> +		if (d->action =3D=3D CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW)
-> +			break;
-> +	}
-> +
-> +	enable_irq(d->irq);
-> +}
-> +
->  #ifdef CONFIG_OF
->  static const struct of_device_id cpcap_battery_id_table[] =3D {
->  	{
-> @@ -1118,6 +1138,8 @@ static int cpcap_battery_probe(struct platform_devi=
-ce *pdev)
->  	if (!ddata)
->  		return -ENOMEM;
-> =20
-> +	INIT_DELAYED_WORK(&ddata->low_irq_work, cpcap_battery_lowbph_enable);
-
-use devm_delayed_work_autocancel() and put it directly before
-cpcap_battery_init_interrupts().
-
->  	cpcap_battery_detect_battery_type(ddata);
-> =20
->  	INIT_LIST_HEAD(&ddata->irq_list);
-> @@ -1185,6 +1207,9 @@ static int cpcap_battery_remove(struct platform_dev=
-ice *pdev)
->  	if (error)
->  		dev_err(&pdev->dev, "could not disable: %i\n", error);
-> =20
-> +	/* make sure to call enable_irq() if needed */
-> +	flush_delayed_work(&ddata->low_irq_work);
-
-and this can be dropped afterwards.
-
-> +
->  	return 0;
->  }
-
-Thanks,
-
--- Sebastian
-
---4foyvbnipb47rca7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNtHtoACgkQ2O7X88g7
-+ppZ6xAAjdiPS9r50NFa3FNvdWJvwj1rXMo07HX+eYS2XslwjSqtwJifAOZt+a4c
-ftp9FPZsEm2ct0ALlAOS6r5MngFiqJZOexeHWf3Fy1LZcNFUTLdGFNdISRM2ZUR+
-YSqU91kkcVB0dzQy/lNUwSvxNbtqntNz3AMGoYk3++TMby/JL1e1f/0aWh9D+18p
-wJJtPDAU1O1eM1/sTMIaiNO1ywcog/qjOiurZAkYE62vQDlaKUx8MiiWp5ngwIdO
-fDUuqv+LZJmeuAtitiwNR67C6F4wlrCN8/ju4sH2VGCVu1s1FafFKuqTkF+QcgyM
-tXavAWmR9z22bw5Xy3u1wFXcM1u8PWop3Q9N5CX4HBtS2SCp1IgdYoy4fQSlF0UW
-KUpkoYXdIkMSqc1zU4fT2Pns+DG8Szc6x46clyYMcohssGUwzX2zMdQeeE4d8dXq
-ybDLTM9E97mlL/aowh/CO1Vfw/A62zDbDdCshd9avbf8HEaOUCaeCtejkZY0gZWn
-f+LGdyT78lhaURrZ12eQQPUst3UIQ+MvhCl5h1uqDyKDauRiQRpW802pvu4i6ySj
-oZ+i2ByCkDF0TzHKhH1OG5WUrZ5NFdF2ltX65agJpmmTv5m+LD+3uRdVWY900BKm
-G4N4zqe/ItcOP+6br6dwMnA9vKxOplX0eB+2C+CsSWUcHYosypI=
-=vPuE
------END PGP SIGNATURE-----
-
---4foyvbnipb47rca7--
+Yes, if it cannot be updated, it should be treated the same way as
+unsupported IMV.
