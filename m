@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CF5623938
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E174D62392C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbiKJBxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S232277AbiKJBum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiKJBwu (ORCPT
+        with ESMTP id S231449AbiKJBuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:52:50 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136ADBC85;
-        Wed,  9 Nov 2022 17:52:50 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N74XB2WGqzJnZL;
-        Thu, 10 Nov 2022 09:49:46 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 09:52:48 +0800
-Received: from localhost.localdomain (10.28.79.22) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 09:52:47 +0800
-From:   Huisong Li <lihuisong@huawei.com>
-To:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <rafael@kernel.org>, <sudeep.holla@arm.com>,
-        <rafael.j.wysocki@intel.com>, <wanghuiqiang@huawei.com>,
-        <zhangzekun11@huawei.com>, <wangxiongfeng2@huawei.com>,
-        <tanxiaofei@huawei.com>, <guohanjun@huawei.com>,
-        <xiexiuqi@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <huangdaode@huawei.com>, <lihuisong@huawei.com>
-Subject: [PATCH 3/3] mailbox: pcc: fix 'pcc_chan_count' when fail to initialize PCC
-Date:   Thu, 10 Nov 2022 09:50:34 +0800
-Message-ID: <20221110015034.7943-4-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20221110015034.7943-1-lihuisong@huawei.com>
-References: <20221110015034.7943-1-lihuisong@huawei.com>
+        Wed, 9 Nov 2022 20:50:40 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDE727DDF
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:50:40 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id d3so378468ils.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 17:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c/phn+ucH2E5hiYwyWGqEcynq1CJyuXRI/MGTCfo55A=;
+        b=TfYZg884i8XgJmxMu0km7Lf0jW7T5OjXUFSTukx1NYoRMCMtUP8ChfOQPflNg/o47X
+         ULZPg3hCVBHRH7tpXlAAThHokoJYvodSqDlaDBRctKWKjgAGBRyeJmc9cswjnN3BB3mD
+         hNgZ90rezKSi2AgmwchVihmPgjk53vjqh0V+I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c/phn+ucH2E5hiYwyWGqEcynq1CJyuXRI/MGTCfo55A=;
+        b=m9VKGRrm4rnmYnw0d8hOcGA4N/kASTWjm4ZPJkd28pKoJOWtPap/6pqBmkAjdvR4ru
+         l/F3N2DSxma5NEZ2KOiLiFSG0zQopccmKZrGjI+i9nWR5Fngsq34o4wHguS+fAg9RFpd
+         +pdI4GWUlILJsd+BezWlGVavORNpHj8Mlu5auCYI9PWLMq4hlgGJnTaxqXLkvlwhiC+t
+         6xaqaCWArxgPSdDIMX9OTvdgFjEqs5vTFx8hW9F3hrx9YFS+9Ovpo5WRddv/2etkUMBW
+         kez3ReLNZAzaSq6wLPXp9bv2ZmIIwf5VUmP37IraSnyqs7L+Z7D9R94icArphvZ5q1xX
+         ztiw==
+X-Gm-Message-State: ACrzQf2LJ3IF1IcKZTUuXz1vgXOuevUpI6NJ5/Mo+Qb3ypKMRil6mFgF
+        JB86kwE1vL/6pX6ySoe/c/aD1w==
+X-Google-Smtp-Source: AMsMyM56Qd8pkxkQ9+Hc0MKeAlvKU8omVvSe5nU+nKpDdXeoy3SYIPKNvgyBxg7HYfv6Igi2r4k6+w==
+X-Received: by 2002:a92:c706:0:b0:300:f49f:29b2 with SMTP id a6-20020a92c706000000b00300f49f29b2mr14424142ilp.207.1668045039602;
+        Wed, 09 Nov 2022 17:50:39 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id o15-20020a056602124f00b006bba42f7822sm5990373iou.52.2022.11.09.17.50.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 17:50:39 -0800 (PST)
+Message-ID: <1bb739d5-4b5a-181e-b6aa-528beea8efda@linuxfoundation.org>
+Date:   Wed, 9 Nov 2022 18:50:38 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.79.22]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5.15 000/144] 5.15.78-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, Shuah Khan <skhan@linuxfoundation.org>
+References: <20221108133345.346704162@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221108133345.346704162@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, 'pcc_chan_count' is a non-zero value if PCC subspaces are parsed
-successfully and subsequent processes is failure during initializing PCC
-process. This may cause that pcc_mbox_request_channel() can still be
-executed successfully , which will misleads the caller that this channel is
-available.
+On 11/8/22 06:37, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.78 release.
+> There are 144 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.78-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Fixes: ce028702ddbc ("mailbox: pcc: Move bulk of PCCT parsing into pcc_mbox_probe")
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- drivers/mailbox/pcc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Compiled and booted on my test system. No dmesg regressions.
 
-diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
-index 7cee37dd3b73..47d70c5884e3 100644
---- a/drivers/mailbox/pcc.c
-+++ b/drivers/mailbox/pcc.c
-@@ -294,6 +294,7 @@ pcc_mbox_request_channel(struct mbox_client *cl, int subspace_id)
- 		pr_err("Channel not found for idx: %d\n", subspace_id);
- 		return ERR_PTR(-EBUSY);
- 	}
-+
- 	dev = chan->mbox->dev;
- 
- 	spin_lock_irqsave(&chan->lock, flags);
-@@ -735,7 +736,8 @@ static int __init pcc_init(void)
- 
- 	if (ret) {
- 		pr_debug("ACPI PCC probe failed.\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto out;
- 	}
- 
- 	pcc_pdev = platform_create_bundle(&pcc_mbox_driver,
-@@ -743,10 +745,13 @@ static int __init pcc_init(void)
- 
- 	if (IS_ERR(pcc_pdev)) {
- 		pr_debug("Err creating PCC platform bundle\n");
--		return PTR_ERR(pcc_pdev);
-+		ret = PTR_ERR(pcc_pdev);
-+		goto out;
- 	}
- 
--	return 0;
-+out:
-+	pcc_chan_count = 0;
-+	return ret;
- }
- 
- /*
--- 
-2.22.0
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah
