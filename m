@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F3B624618
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E75562463E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiKJPiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:38:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S231666AbiKJPoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKJPis (ORCPT
+        with ESMTP id S230019AbiKJPox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:38:48 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC58D7669;
-        Thu, 10 Nov 2022 07:38:46 -0800 (PST)
-Received: from letrec.thunk.org ([12.139.153.3])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2AAFccQA016649
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 10:38:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1668094721; bh=wUJSGl619gPmorbLlIEb7nTood/eoKaRGCcIqALdWs0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=A2yajZ6YCWkXUOOs2EAoqNS/mX+zuFXFrRpM50gtbgv+Gy9fEfhJQih4UjfHUZkr0
-         htWU3g6mtQBBl2ek1LwPh9sAYusMHZS+dCMCMbClppDeGt2jyYhG/rialwnoCvjGm/
-         S6d5fVttIOUtEivxIqOjvY01qjXbCAYHIHo+KyWmkkxhoN1I2DGTuJrtR9I/O4NlGg
-         d18pxAxQiP3+HfuQLWI4Wl/CcndxiA8uSyNEq4Mr6RbNLyeOVeKo2UiVVZDRV5egdU
-         ssx1t05Z4cUkfjpL6S3cP5AFgmF7CSYomuSTwo9htbd0gwTJJRYaqiu/TsTxDe7SkR
-         IMmILw8+py6cg==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 791BA8C022E; Thu, 10 Nov 2022 10:38:37 -0500 (EST)
-Date:   Thu, 10 Nov 2022 10:38:37 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Niels de Vos <ndevos@redhat.com>
-Cc:     linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        Marcel Lauhoff <marcel.lauhoff@suse.com>
-Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
-Message-ID: <Y20a/akbY8Wcy3qg@mit.edu>
-References: <20221110141225.2308856-1-ndevos@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110141225.2308856-1-ndevos@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 10:44:53 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF82252AE;
+        Thu, 10 Nov 2022 07:44:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668095093; x=1699631093;
+  h=from:to:cc:subject:date:message-id;
+  bh=nlKIOdil/fjz+KRNJqhEwk0FHnHiC1E0308KaAWp//Q=;
+  b=lQXaT+wVBq+DdxsZWlwSLJnUtUdz++OT2Rd7ntYVUHH/kl5uOTaogqWH
+   ymQY08A4EEmF/5g5kFtDiRbLmPNl8OYCXhOOiKdNBMeE8Ja/T19bPwE/f
+   Kqe/pIxQL0SwUeVzDwkopfjZ7jXETTvglzToDLT3HCrYL/9wkZzocoYU2
+   sNxom5psbgHYU8bwL6Bu1SkIdXVtrG9M8HQ+qFO2jJokxTT4UDIiYAM/v
+   IsF3OXY+6YhV50tXNB5QofksSf/uVDVjU24Ra+fHvnxtmkia+HOa77yF/
+   c87r/jlszqBilv15EUUgDkn2ypBnvXDGHzw5Lgx7dJxYUvADH3cvxnzy9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="308965149"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="308965149"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 07:44:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="762323092"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="762323092"
+Received: from kkgame-x299-aorus-gaming-3-pro.itwn.intel.com ([10.5.253.159])
+  by orsmga004.jf.intel.com with ESMTP; 10 Nov 2022 07:44:51 -0800
+From:   Kane Chen <kane.chen@intel.com>
+To:     linux-acpi@vger.kernel.org, rafael.j.wysocki@intel.com,
+        kane.chen@intel.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] ACPI: PM: Print full acpi path while adding power resource dev
+Date:   Thu, 10 Nov 2022 23:39:24 +0800
+Message-Id: <20221110153924.18258-1-kane.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 03:12:21PM +0100, Niels de Vos wrote:
-> While more filesystems are getting support for fscrypt, it is useful to
-> be able to disable fscrypt for a selection of filesystems, while
-> enabling it for others.
+While debugging boot time issue, it's hard to know what power
+resource device kernel is initializing.
 
-Could you say why you find it useful?  Is it because you are concerned
-about the increased binary size of a particular file system if fscrypt
-is enabled?  That hasn't been my experience, the hooks to call into
-fscrypt are small and don't add too much to any one particular file
-system; the bulk of the code is in fs/crypto.
+It's very helpful to print full path so that ppl don't
+need to guess what device is under init. Especially the system
+has more than 2 power resource have same name
 
-Is it because people are pushing buggy code that doesn't compile if
-you enable, say, CONFIG_FS_XXX and CONFIG_FSCRYPT at the same time?
+Before:
+[    0.194348] ACPI: PM: Power Resource [RTD3]
+[    0.274127] ACPI: PM: Power Resource [RTD3]
+[    0.275086] ACPI: PM: Power Resource [PR00]
+[    0.438261] ACPI: PM: Power Resource [PR01]
 
-Is it because a particular distribution doesn't want to support
-fscrypt with a particular file system?  If so, there have been plenty
-of file system features for say, ext4, xfs, and btrfs, which aren't
-supported by a distro, but there isn't a CONFIG_FS_XXX_YYY to disable
-that feature, nor have any distros requested such a thing --- which is
-good because it would be an explosion of new CONFIG parameters.
+After:
+[    0.204875] ACPI: \_SB_.PCI0.RP01.RTD3: [Power Resource]
+[    0.284273] ACPI: \_SB_.PCI0.RP08.RTD3: [Power Resource]
+[    0.285231] ACPI: \_SB_.PCI0.I2C3.H016.PR00: [Power Resource]
+[    0.446410] ACPI: \_SB_.PCI0.SPI1.CRFP.PR01: [Power Resource]
 
-Or is it something else?
+Signed-off-by: Kane Chen <kane.chen@intel.com>
+Change-Id: I075146e574aa0d5bfd2f97e3da5f73061af6888a
+---
+ drivers/acpi/power.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Note that nearly all of the file systems will only enable fscrypt if
-some file system feature flag enabls it.  So I'm not sure what's the
-motivation behind adding this configuration option.  If memory serves,
-early in the fscrypt development we did have per-file system CONFIG's
-for fscrypt, but we consciously removed it, just as we no longer have
-per-file system CONFIG's to enable or disable Posix ACL's or extended
-attributes, in the name of simplifying the kernel config.
+diff --git a/drivers/acpi/power.c b/drivers/acpi/power.c
+index f2588aba8421e..23507d29f0006 100644
+--- a/drivers/acpi/power.c
++++ b/drivers/acpi/power.c
+@@ -967,7 +967,7 @@ struct acpi_device *acpi_add_power_resource(acpi_handle handle)
+ 	if (acpi_power_get_state(resource, &state_dummy))
+ 		__acpi_power_on(resource);
+ 
+-	pr_info("%s [%s]\n", acpi_device_name(device), acpi_device_bid(device));
++	acpi_handle_info(handle, "New power resource\n");
+ 
+ 	result = acpi_tie_acpi_dev(device);
+ 	if (result)
+-- 
+2.17.1
 
-Cheers,
-
-						- Ted
