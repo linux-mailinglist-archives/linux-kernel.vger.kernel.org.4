@@ -2,105 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8C6623B18
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 06:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56FA623B20
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 06:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiKJFA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 00:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
+        id S229803AbiKJFIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 00:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKJFAw (ORCPT
+        with ESMTP id S229516AbiKJFIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 00:00:52 -0500
-Received: from out203-205-221-205.mail.qq.com (out203-205-221-205.mail.qq.com [203.205.221.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEA4165A6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 21:00:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1668056447;
-        bh=lQ05UohQZFPg34PCvRKS5qsX2szAvngpSSLP9PSdRMI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ehmt7HFhouq+7h+nJ37ndJASctGhep751nHTMvccRFKpGHQUe3P9uF1hfyDVDHCWx
-         Yi1zDx06Mhpecuvs1sKIlvvatKUf0AUJJr/w6+1vhTY1AUZrRvMFiqdxxNf3NF569L
-         Y4Dmm/4xOwjCkBNh15yf1BTPJWfHhn4cTZZoVz3M=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
-        id 2C8461A; Thu, 10 Nov 2022 13:00:44 +0800
-X-QQ-mid: xmsmtpt1668056444tr7a92mjm
-Message-ID: <tencent_B7D657EF5135C40D0303A1C3AC90CB0B9507@qq.com>
-X-QQ-XMAILINFO: NEq0i4SycP3bv+65xr1ALYKbv+MlBVuPbWw8eCgzgosWvCsW3Qh9AAkPtfDrYR
-         cn/12nGPzEyM23Gum3A0dRboExwLKrQuuFBSw4rvX750CGqPQwopCG6RehRRTNuDfZ+L0+l+btFs
-         ciK42iYGkWE7lHxq7hcDqK783c3h7Dl1BKuCB1kEbqfxtYGcAijglb/e8MC/Xp1aiQ5mLyOWzsFT
-         RT1wq6JBdtuzAkdTxKgJrs1EgQF6M7mnoDjF9JJwHZDa8xn2lzZ3H1uRB2T8HzF+kJYwxt6iKJsf
-         J+oBT5mc7pCnXJviLffP4/7bHcZD3q85jfKnU0hTqyC3zWcqt1Jkh/h+ScvROhBjzs51nArPgD5N
-         UuxOOzKS7YYjSr//GhiN9AX6Cj/bPNJBk84Q994UWoaM4kxNL3k3GqFmhVXmw/w1r9YkmlbYa8Fi
-         jrBRtqSsvUmeIeppVv4Gu8t5aqsGuw+SVf2rFKvxdnD189erxbyII/4x5XVOlRMTaWF16AoQb3kr
-         OGbPSy6fEHsHbNLKhBqEg3h56pAiIzt8NtQ98qEsWirCfxa1UtJBuBWhk6+64jVSAJNCnExIafXh
-         UH49Xc/udFxp/TjXlAgGSiZVdNGODkoo+mECpspb0REXGHQFy3x3Sd3AG1pr8Bb0aRDgBFq8qrNu
-         kfBV+3QP/1IIl3U46/jHnAfLWDEK/rIiPgdqQ7TyF3s2YDUBZGdwH79GnJFK1zmged9UGUob5OvX
-         YLZfMZgvOMls5432GQhITw0/+Ux6PWfshVczS7hory3G7p1HVmIaafgaBh/ApKY/+0yz86FesyfW
-         tS0dVNjG3loHnVwhYFT4EvGF8S1MLBCOwP4ME7KpXg+c2SGBHpNlt++uswHEhdEaR7Ji9fnDOt/q
-         K4c2PX4yr+opDfGYQPnFOGzN5Bb/TxcYW9qHsAli8syWhY/z5QbkVjle4xY2pU+88Bm6a+tHef02
-         6xwnuATAtD3HFguH5aFOfa4qCrVeAH1OY5kMbHbH33GQtqHvOYuwMas5wQXmPioaFJqlfmhic=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, rongtao@cestc.cn,
-        rtoax@foxmail.com, willy@infradead.org, wuchi.zero@gmail.com
-Subject: [PATCH] lib/radix-tree: Fix uninitialized variable compilation warning
-Date:   Thu, 10 Nov 2022 13:00:42 +0800
-X-OQ-MSGID: <20221110050042.88361-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221109162348.3dbde3a7942c303af012276c@linux-foundation.org>
-References: <20221109162348.3dbde3a7942c303af012276c@linux-foundation.org>
+        Thu, 10 Nov 2022 00:08:07 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A12C123
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 21:08:05 -0800 (PST)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N78wh3jVHzmV7B;
+        Thu, 10 Nov 2022 13:07:48 +0800 (CST)
+Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
+ 2022 13:08:02 +0800
+From:   ruanjinjie <ruanjinjie@huawei.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>, <sgarzare@redhat.com>,
+        <eperezma@redhat.com>, <gautam.dawar@xilinx.com>,
+        <elic@nvidia.com>, <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH v2] vdpa_sim: fix possible memory leak in vdpasim_net_init() and vdpasim_blk_init()
+Date:   Thu, 10 Nov 2022 13:04:46 +0800
+Message-ID: <20221110050446.3932031-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Inject fault while probing module, if device_register() fails in
+vdpasim_net_init() or vdpasim_blk_init(), but the refcount of kobject is
+not decreased to 0, the name allocated in dev_set_name() is leaked.
+Fix this by calling put_device(), so that name can be freed in
+callback function kobject_cleanup().
 
-We need to set an initial value for offset to eliminate compilation
-warning. And if the tree is empty, return NULL early.
+(vdpa_sim_net)
+unreferenced object 0xffff88807eebc370 (size 16):
+  comm "modprobe", pid 3848, jiffies 4362982860 (age 18.153s)
+  hex dump (first 16 bytes):
+    76 64 70 61 73 69 6d 5f 6e 65 74 00 6b 6b 6b a5  vdpasim_net.kkk.
+  backtrace:
+    [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+    [<ffffffff81731d53>] kstrdup+0x33/0x60
+    [<ffffffff83a5d421>] kobject_set_name_vargs+0x41/0x110
+    [<ffffffff82d87aab>] dev_set_name+0xab/0xe0
+    [<ffffffff82d91a23>] device_add+0xe3/0x1a80
+    [<ffffffffa0270013>] 0xffffffffa0270013
+    [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+    [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+    [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+    [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+    [<ffffffff83c4d505>] do_syscall_64+0x35/0x80
+    [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-How to reproduce warning:
+(vdpa_sim_blk)
+unreferenced object 0xffff8881070c1250 (size 16):
+  comm "modprobe", pid 6844, jiffies 4364069319 (age 17.572s)
+  hex dump (first 16 bytes):
+    76 64 70 61 73 69 6d 5f 62 6c 6b 00 6b 6b 6b a5  vdpasim_blk.kkk.
+  backtrace:
+    [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+    [<ffffffff81731d53>] kstrdup+0x33/0x60
+    [<ffffffff83a5d421>] kobject_set_name_vargs+0x41/0x110
+    [<ffffffff82d87aab>] dev_set_name+0xab/0xe0
+    [<ffffffff82d91a23>] device_add+0xe3/0x1a80
+    [<ffffffffa0220013>] 0xffffffffa0220013
+    [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+    [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+    [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+    [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+    [<ffffffff83c4d505>] do_syscall_64+0x35/0x80
+    [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-$ make -C tools/testing/radix-tree
-radix-tree.c: In function ‘radix_tree_tag_clear’:
-radix-tree.c:1046:17: warning: ‘offset’ may be used uninitialized in this function [-Wmaybe-uninitialized]
-1046 |                 node_tag_clear(root, parent, tag, offset);
-     |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
+Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 ---
- lib/radix-tree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2:
+- add fault inject message
+---
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 4 +++-
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/lib/radix-tree.c b/lib/radix-tree.c
-index 3c78e1e8b2ad..eee453b856b6 100644
---- a/lib/radix-tree.c
-+++ b/lib/radix-tree.c
-@@ -1029,10 +1029,10 @@ void *radix_tree_tag_clear(struct radix_tree_root *root,
- {
- 	struct radix_tree_node *node, *parent;
- 	unsigned long maxindex;
--	int offset;
-+	int offset = 0;
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+index c6db1a1baf76..f745926237a8 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+@@ -427,8 +427,10 @@ static int __init vdpasim_blk_init(void)
+ 	int ret;
  
- 	radix_tree_load_root(root, &node, &maxindex);
--	if (index > maxindex)
-+	if (index > maxindex || !node)
- 		return NULL;
+ 	ret = device_register(&vdpasim_blk_mgmtdev);
+-	if (ret)
++	if (ret) {
++		put_device(&vdpasim_blk_mgmtdev);
+ 		return ret;
++	}
  
- 	parent = NULL;
+ 	ret = vdpa_mgmtdev_register(&mgmt_dev);
+ 	if (ret)
+diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+index c3cb225ea469..11f5a121df24 100644
+--- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
++++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+@@ -305,8 +305,10 @@ static int __init vdpasim_net_init(void)
+ 	int ret;
+ 
+ 	ret = device_register(&vdpasim_net_mgmtdev);
+-	if (ret)
++	if (ret) {
++		put_device(&vdpasim_net_mgmtdev);
+ 		return ret;
++	}
+ 
+ 	ret = vdpa_mgmtdev_register(&mgmt_dev);
+ 	if (ret)
 -- 
-2.31.1
+2.25.1
 
