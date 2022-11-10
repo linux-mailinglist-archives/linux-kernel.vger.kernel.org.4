@@ -2,152 +2,569 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D381624C28
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA709624C2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbiKJUuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S231152AbiKJUu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKJUuA (ORCPT
+        with ESMTP id S231721AbiKJUuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:50:00 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11020021.outbound.protection.outlook.com [40.93.198.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030EB45A35;
-        Thu, 10 Nov 2022 12:49:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N7g60CCJv/NeBZy4ln8nXPZDAeSJZz/lGLD2tkmQ24cmM+yCiQq51Nc3ZVqM6T+YOH4fO7l8uistnw6VCf7e76HZOntViTUwPNNNB4F8+2Zx7NAa9k/7xK6I5whvKPgX9GGsd6FwmO5YVVujpHJjPVqBsxD2c984PYaovxtbFPnevB2oS/SE1VtHNQO4RnDI2wx+/RHyPtchYbzcQK0sUztaN5wnsg3INoaep+7dEXTTdN+LIszyY+gNyWZbpEOrJPaf+L7S+GK9ZJvZAEmKBa14yNwTR4YUIUUUmiPY+8O2+LlXF0u9vj5PhMe3FELl4Ohu0Rj3HXGIl5AVvYUWgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zyqxfsYfMxcsSkgWhmLt/sw6Xk/lbRfvYswAKDTymPc=;
- b=g5cEcew+IktRr5hmv4o1aflMnx0l0CIF/EoI25rCAuQ5pgeCrdkcOd8vwbEqzIcDfYVqteZrmi7MtXUcy4wjlOq8HXR+ns55EPycOPdDoNNEmHzJKq+FcyhWhnqHBcfPij6mRwfK2+Oqz+nXOYB8tVTS80bMyXTUlxQ4bM76RURNg+sQvkV+WeMZDf7jzvm/9sjxeWcFD3aMYFjeo62/dyBY/60gmnWNWqTKmhPzP8OOhdSkgVZEVhjAUPxtsGLIH1oqzjgg8EoqqGIlEcJ+8+on3w1OIAWUrH2nRJxKemmlgHkKGufwbhAHE3Xufke2+XJYZRp44vFv0h0+hMPmzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zyqxfsYfMxcsSkgWhmLt/sw6Xk/lbRfvYswAKDTymPc=;
- b=iB4zxprjR6nyHL+VeHdn4H1PTVG8m3Trkxpzj/eaOEYueTsCEvqcudB1fhZwXxNWR2JB0yh7pJjzPoQ45XMQGLjnL+GeqWqAIAyNLlH71nHdX4FtW+T9dsmyDSByo6y8i6ACsOpt7AxQhCQlaz+w3UKNnjs39ODAgPd8xEdhVf4=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by MW4PR21MB2060.namprd21.prod.outlook.com (2603:10b6:303:11f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.2; Thu, 10 Nov
- 2022 20:49:56 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::ac9b:6fe1:dca5:b817]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::ac9b:6fe1:dca5:b817%6]) with mapi id 15.20.5834.002; Thu, 10 Nov 2022
- 20:49:56 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
-        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        Boqun Feng <Boqun.Feng@microsoft.com>
-Subject: RE: [PATCH v3] PCI: hv: Only reuse existing IRTE allocation for
- Multi-MSI
-Thread-Topic: [PATCH v3] PCI: hv: Only reuse existing IRTE allocation for
- Multi-MSI
-Thread-Index: AQHY8J0alQKzFek9kkuOCBwYhpuQEq4vaxEQgAk84PA=
-Date:   Thu, 10 Nov 2022 20:49:56 +0000
-Message-ID: <SA1PR21MB13352616E4DC28DD0D9372ADBF019@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20221104222953.11356-1-decui@microsoft.com>
- <BYAPR21MB1688378A6403AC46FDF41B7CD73B9@BYAPR21MB1688.namprd21.prod.outlook.com>
-In-Reply-To: <BYAPR21MB1688378A6403AC46FDF41B7CD73B9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=35228208-0f21-4b36-b68f-17ffd3e36c8d;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-04T23:35:39Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|MW4PR21MB2060:EE_
-x-ms-office365-filtering-correlation-id: 111840dd-b682-4452-848b-08dac35d204f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kaqU5hKh08AxIXSrWKTDeRnkWlzeMePo3SGMFrL5Mj710k6XECQyXuga02vgef575OX5rwLLziTi6Rh6Dnn3L5NZRHefD+WL3p23gaI+fD0C96/fQKXtxal4TbFWWuQGARqWvmFtolPudbFRVaVuSYCcB74sYd28t+Lgx6wf14+3oo42lLVZgXnBowHGhZu0q150KiGZnDicxR0u1yvzYNRTOnPKKtSAAUtt6ivpCvMptf15n4FW34XWJcX5zVypV/z75Fk9f51DebqjBfHfHFXBlw4XFMWQxtIWc3aF+1e4cj8NlXdAVYDeOekgQTuKOBbpvKXCKxTmibAdO85rcUKpKOkjE0LZnH/GETIQ0Rn1Rxa0vRJHvppkGUIHAxhhNCHP2hZTtwVI1ZenbL35bA5if8nT1GQDsM9VG+SLUiE+GqCx6CMPCtv8RSRHZ3/e6qu2gfRGu/12PuRGN87y8xyIYKW9rTY4KN1kgN9whriN5PdsKpO6oF6ztWTj7U2Kys3JdMnBgzZ98iCY8Sv3uIM9UE7a/kdt6jlrCv5CNblwlrcqq5VkvJKtcXuE5ojhkVukr3LoGk2kgAdRiXGJX3hg/u7g8RjXmc5pGWIJRYn9+7o+u9N1UPH0Dkg6J/Or9Jw08FxrI/VB8rT1udm2b3y9XQfkRLxwUsrAb8CMAZiXq/rB7dvnYPD9Yw8ROo1L52OqDRaUrPdH5ao8QiWp2nablMa2Sa5/j+5GMKpxpX+GFvHpgIn++F+qgCdprpdrIBfPIVoL39yL3KFwRCYMSCG/AIVjXEOPfmeBJhj7oBfN+rgtPPHna0FbMU5Ai1/tq6yi1NUBC7WEytbeYx06vQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(376002)(136003)(346002)(451199015)(921005)(186003)(86362001)(82950400001)(26005)(38070700005)(38100700002)(122000001)(6506007)(10290500003)(4744005)(82960400001)(83380400001)(8990500004)(7416002)(2906002)(52536014)(5660300002)(8676002)(8936002)(66476007)(55016003)(7696005)(478600001)(64756008)(66556008)(41300700001)(76116006)(6636002)(110136005)(9686003)(316002)(66446008)(71200400001)(66946007)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4tnsrjM/XmLD6kUPhBr7p7ElGV1xGK0oRKiN8BR9oX/Wv+g3NCGxohiVxkch?=
- =?us-ascii?Q?LvXYlpBj1S9PrhmDw7BTRocE/IRcxYmYoKFHBDzc+TFYHW1skwODB5Kzdob5?=
- =?us-ascii?Q?b/HhcD8PcXMtWwJf7Ssbl77t4RBC5gM6DXuha8qO/B7hxiqki2SiyYUGqImS?=
- =?us-ascii?Q?dy4z3KTOCpR8uLgsjb6h8/+EzdIslimNZz7uIxe+45tEkeRbXFkCP3Owz0bm?=
- =?us-ascii?Q?UTzbE6imznnGhOLDlK/u+8KJsD1Yh24RfbFTr8OAXMdRcoRgq6aP3JT0kPv2?=
- =?us-ascii?Q?iZiRg+Nk3xgq0XGzF+JvWbCd9qz7zqD+4B5D0avJ1aS3b6UdfPz8oAkLL0rw?=
- =?us-ascii?Q?LNLsqYTkeIvGNcUuxyDLwF8NBZk+ZOdXfN0kO8PF5vQUrQNwKhfmJtF5tLlY?=
- =?us-ascii?Q?RuifDbq2axFMXK9uaHEoNighZPrwMuA4iRZUVhSSkAcc3uhVaGXbL7HIlpq9?=
- =?us-ascii?Q?wbFmFHrMFuFv5rtRInO4BIbj66/t+Jg+8042icCsOZ484E1B8OJl7H8CIknN?=
- =?us-ascii?Q?lv/HtkdQJP1vZAGrBHXWE3aIVTfF4VMSKObs/5JSVnz/Pah7cqXOaoNn15fe?=
- =?us-ascii?Q?m/X5N66a0w5ptlNsx6gsmjsFo13/pyMu5+Sesu7shre3nQYG365Ev+ErB1RS?=
- =?us-ascii?Q?EqNxxp8e6v9mWITIwkZXKbcxTvYHPWGorx2Xum2trcxKN6Yt0NoEP9NJ5LV0?=
- =?us-ascii?Q?ShrJRT/Kdz2dhWxGottQ1j71E6aC6j8y3YNuSbmC621su2AP/0TaRqNgZQtX?=
- =?us-ascii?Q?JBauCkTV+9DTxDoB+EZRl6UehDy9oIXD2mU0SVjv9zL2D6CnRSgkZLRX+VEs?=
- =?us-ascii?Q?WGaSGKqwA8P6BZ8avJyZrUM10mOxLwC9Z8qmAT7a/AUs094eO5MwQ6d+JCEI?=
- =?us-ascii?Q?Xu/rv0CieZiqOU7LEXaBc7TD6DJYUGhCwHIOC7vC6gYz8I9V86z3UimG8kyi?=
- =?us-ascii?Q?fvWU9YYGfuV4ZxzRqRda0quEUwVtlqlU4JhxRjljOknvOic7Ps7QOY6lBKBA?=
- =?us-ascii?Q?WNUJmFV/I8Rq87TNOkLY3UCxhCgjHzpaDw8DepZkuSTC2OihcOqQ2cCNWlm8?=
- =?us-ascii?Q?G6SG8+eJrgAiQbFAd4aKMuK18z378FBdvGDYn607EKUaH1TEUrRCGABXZWeq?=
- =?us-ascii?Q?tfLcc6Tn4zQQfaSfUMAR8yfPzwLPEu+jdaILJjA/iEdyW4YUrUid0Ciw8gWp?=
- =?us-ascii?Q?+qHVVVndjOxHv8JxzCmDaeDTXerNK4u9h2wIDKYAwzBMUsUZ/aJtoYCerRxm?=
- =?us-ascii?Q?CoVXzETM7mhHnzZNwZDydix2/Jjpmzx2g+nLniUKSExUd/UlPRcr4tQE0d2g?=
- =?us-ascii?Q?qp8qb5pzKsbEMzwfD6gvl35u0ztnefnFVn6ZOW5o8whxHpwP2HC45Gg6PEN7?=
- =?us-ascii?Q?VbcLszcLbIrXsCaaGrGslWPZ1mybsKL65sAlCvQcZaT25Tn+CgOaCHiMcQT5?=
- =?us-ascii?Q?PXjAZAKdlA9HDyZPw581mIArKYViEzFe11W31i8DMEzbswH/Nbo5eW4BCvu0?=
- =?us-ascii?Q?Jgns2WEQGgQ+2sluUSS6I6xKmyp7r5rjHmNdKRbtFGLsa0OIabXewi3gIiSv?=
- =?us-ascii?Q?pMChb0BivDxaYX5ssAn+RHdRaTFO0agWBdOK3BdE?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 10 Nov 2022 15:50:24 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A8845A3E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:50:22 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id q5so1610442ilt.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:50:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dUXti7KTkJdRMWD08GZ3ouWT9555xymOsXODMqYQkhY=;
+        b=PCIEDVxXXgCN/5FmUeF2UQzXwwNT2KEdKzB8FQ4oFrFDgcAvQdr3N0Wk8DE39bS9PX
+         vktIem+aTy7KjxJNJ9q9dPMzwSQPViW8AfgM2T6TlQHOBpUSMCXlQZXPEKBt6B003mWt
+         VQhFqZRac54zLqSivXn6vr/LNoKiDQF1DAbRyGUoOf+701bOeijzwx2r8cm6nKLo4cwx
+         CLtn1mH0KpfFp01zOganiOMxToPrzEmFBjvzMfFMEyaqARXTXp6rySqmGncv0nxDqJJG
+         bTHhwZFCl1VpYYpJM4S/iZTTMB27fxpUjgvgcSwUl2VxxLzd1l/G0h/0LBFEwnLBPeYL
+         FBeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dUXti7KTkJdRMWD08GZ3ouWT9555xymOsXODMqYQkhY=;
+        b=zPLKjIua+XDrBWWBw4OuLsxyhysdBAnK9i5Fr5sQPooZawg+H/3oU6unjkKmNw6Uh2
+         uogZPV8YErF4W2iARwnB11mjQ+NRdbsh0cBWzWA7b/yumIyqgFA2KSqfzpBJnpF/X/Mg
+         pTkj3QBA0rL0D+6c9K9cDRwz+lAMp6YcqCf9MfFZ0tqy/ij4Mm+aEfMpkyjwjbINrIEd
+         to771+VcSIk0Zj1gopYkXvYGOxL2WgeZRAWzaXD2LDFMeemX89zWRNrMCWg2OZWwU683
+         8p5xhwdaXduSDLlifjaEjRm8EjzkpixKp9Ry3cWfW3EW4Q2RI8IwzTZaCR90o9Vx+1er
+         q9NQ==
+X-Gm-Message-State: ACrzQf236wb1kCpS/UYmL09kRKTOiinWkOjULHFeBEawYnmMVkr0jjze
+        m548jm38pic2YmDbP0dRqzgrN+tPnk4JdDADiByfvQ==
+X-Google-Smtp-Source: AMsMyM5cR5DEfjmJ1KhHLsSOcHdZJnp77tRPM/Gb/FtJu8nKTgCLQk5cMqmoBO+80G7kw4GxqyMQDB3YSgDnD8jK11A=
+X-Received: by 2002:a92:d681:0:b0:300:f2cc:c6e3 with SMTP id
+ p1-20020a92d681000000b00300f2ccc6e3mr3311667iln.126.1668113421427; Thu, 10
+ Nov 2022 12:50:21 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 111840dd-b682-4452-848b-08dac35d204f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2022 20:49:56.7647
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LR3kiIba+h0ph3VzvqyQH3Y8xlfoojrFmhUwnQ2GhOrRGJG8HD5YPOZjnQW4GSfGWz/wuan6j5lAK7uYFifP1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB2060
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221013173442.GA1279972@p14s> <20221013180334.GB1279972@p14s>
+ <8807a9a6-d93d-aef5-15f4-88648a6ecbe2@quicinc.com> <CANLsYkx8Vcha9FpfRvJEkq2pd+mSYFeZQBXj65YoiSBv+WEY4A@mail.gmail.com>
+ <70828854-8427-8ce1-1535-e14261fd122d@quicinc.com> <420faf00-d59e-57c6-55a5-fae08a411517@foss.st.com>
+ <CANLsYkw1Ex0TfmG-tRhHJgn3LsdvNhS_6HjJXn=ogwcCOWbH_A@mail.gmail.com>
+ <414aacb1-e68b-a9a7-3b99-12bc56494f6f@quicinc.com> <20221102180350.GA1733006@p14s>
+ <4c3d38c9-a43e-97bd-c7f9-3d21240e9d0e@quicinc.com> <20221104155915.GC1873068@p14s>
+ <0f2b805c-5b01-138d-3e76-f6ed866be7ef@quicinc.com>
+In-Reply-To: <0f2b805c-5b01-138d-3e76-f6ed866be7ef@quicinc.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 10 Nov 2022 13:50:10 -0700
+Message-ID: <CANLsYkwxY_UPw4552XdM=jcGS7NGC1L9OsVYG_D9C4JFHXSE=Q@mail.gmail.com>
+Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
+To:     "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+Cc:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
+        linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_clew@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Sent: Friday, November 4, 2022 4:38 PM
-> > ...
-> >   Bjorn, Lorenzo, it would be great to have your Ack. The patch needs t=
-o go
-> >   through the Hyper-V tree because it's rebased to another hv_pci patch
-> >  (which only exists in the Hyper-V tree for now):
-> >       e70af8d040d2 ("PCI: hv: Fix the definition of vector in
-> >  hv_compose_msi_msg()")
-> >
-> >   BTW, Michael has some other hv_pci patches, which would also need go
-> >  through the Hyper-V tree:
-> >
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+I had a couple of good discussions with our power management expert
+and even then, the way forward isn't as clear as I would have liked.
+I am currently travelling and as such don't have the required time to
+go into greater details, something I will be doing next week.
 
-Hi Bjorn, Lorenzo, if you have no objection to the patch, I suggest Wei mer=
-ge
-it through the Hyper-V tree early next week.
+On Sun, 6 Nov 2022 at 18:14, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+>
+> Hi,
+> On 11/4/2022 11:59 PM, Mathieu Poirier wrote:
+> > On Thu, Nov 03, 2022 at 10:03:49AM +0800, Aiqun(Maria) Yu wrote:
+> >> On 11/3/2022 2:03 AM, Mathieu Poirier wrote:
+> >>> On Wed, Nov 02, 2022 at 06:53:49PM +0800, Aiqun(Maria) Yu wrote:
+> >>>> Hi,
+> >>>>
+> >>>> Let me think about this carefully.
+> >>>>
+> >>>> When in RPROC_RECOVERY_FAIL case we want to re-do the recovery process again
+> >>>> or just leave the pm_relax?
+> >>>
+> >>> Neither.
+> >>>
+> >>> When a recovery fail we don't want to call pm_relax().  The code in
+> >>> rproc_crash_handler_work() becomes:
+> >>>
+> >>>     if (rproc->state == RPROC_OFFLINE) {
+> >>>                   /* We have raced with rproc_shutdown() */
+> >>>                   pm_relax()
+> >>>             mutex_unlock(&rproc->lock);
+> >>>             return;
+> >>>           }
+> >>>
+> >>>     if (rproc->state == RPROC_CRASHED ||
+> >>>               rproc->state == RPROC_RECOVERY_FAILED) {
+> >>>             /* handle only the first crash detected */
+> >>>             mutex_unlock(&rproc->lock);
+> >>>             return;
+> >>>     }
+> >>>
+> >>>
+> >>> RPROC_RECOVERY_FAILED gets set in rproc_boot_recovery() if request_firmware() or
+> >>> rproc_start() fail.  Function rproc_trigger_recovery() needs to allow for the
+> >>> recovery the the remote processor is in RPROC_RECOVERY_FAILED state.  As such
+> >>> the condition becomes:
+> >>>
+> >>>           /* State could have changed before we got the mutex */
+> >>>     if (rproc->state != RPROC_CRASHED &&
+> >>>               rproc->state != RPROC_RECOVERY_FAILED)
+> >>>             goto unlock_mutex;
+> >>>
+> >>> Start with that and we can look at corner cases (if some exists) with a fresh
+> >>> patchset.  Note that I have not addressed the attach/detach() scenario in the
+> >>> above.
+> >>
+> >> If we didn't deal with the recovery failed case with correct pm_relax call,
+> >> it may left the device in a state that cannot enter to suspend state.
+> >
+> > That is what I am looking for.  We don't want to give the impression that
+> > everything is fine by allowing the device to suspend.  If the remote processor
+> > can't be recovered than it needs to be dealth with.
+> For the normal recovery failed case, it still need to do pm_relax to not
+> prevent the device goes to suspend. It is what in normal recovery failed
+> case we do in rproc_crash_handler_work as well.
+> rproc_crash_handler_work will not check the result of the
+> rproc_trigger_recovery return value, and will always do pm_relax.
+>
+> For current conconrency cornor case as well, it is better to consistant
+> with the current design of recovery fail senarios in normal cases.
+>
+> I personally agree that we shouldn't do nothing when it is a
+> RPROC_RECOVERY_FAILED senario when it is in rproc_crash_handler_work
+> check, because it maybe crash happened when it is trying to do the recovery.
+> So I suggested to do a continue try of trigger recovery again instead of
+> doing nothing and bail out if it is a RPROC_RECOVERY_FAILED state.
+>
+> >
+> >> Because first PROC_RECOVERY_FAIL case cannot ensure it have pm_relax called
+> >> before the second crash handler call pm_stay_awake or not.
+> >>
+> >
+> > I've been thinking about that part.  I don't think adding a wake_count to
+> > control calls to pm_stay_awake()/pm_relax() is the best way to go.  There is a
+> > similar count happening in the PM runtime subsystem and that is what we should
+> > be using.  I have asked a power management expert at Linaro for guidance with
+> > this matter.  I should be able to get back to you with a way forward by the end
+> > of next week.
+> >
+> Thx for the specific date provided as well. I will wait until your reply
+> for next patchset then.
+>
+> >> So, What about the atomic count along with pm_relax and pm_stay_awake ?
+> >>
+> >> struct rproc{
+> >> ...
+> >> atomic_t wake_count;
+> >> ...
+> >> }
+> >>
+> >> rproc_pm_stay_awake()
+> >> {
+> >>      atomic_inc(&wake_count);
+> >>      pm_stay_awake();
+> >> }
+> >>
+> >> rproc_pm_relax()
+> >> {
+> >>      if (atomic_dec_return(&wake_count) == 0)
+> >>              pm_stay_awake();
+> >> }
+> >>
+> >> can refer code like:
+> >>
+> >> rproc_report_crash()
+> >> {
+> >>      ...
+> >>      rproc_pm_stay_awake();
+> >>      queue_work();
+> >>      ...
+> >> }
+> >>
+> >> rproc_crash_handler_work()
+> >> {
+> >>      ...
+> >>      if (rproc->state == RPROC_OFFLINE || rproc->state == RPROC_CRASHED) {
+> >>                    /* We have raced with rproc_shutdown() */
+> >>                    rproc_pm_relax();
+> >>              mutex_unlock(&rproc->lock);
+> >>              return;
+> >>            }
+> >>      ...
+> >> }
+> >>
+> >>>
+> >>> Thanks,
+> >>> Mathieu
+> >>>
+> >>>>
+> >>>> recovery fail case 1:
+> >>>> |                                      |firstcrash interrupt issued
+> >>>> | second crashed interrupt issued      | rproc_report_crash()
+> >>>> | rproc_report_crash()                 |          pm_stay_awake()
+> >>>> |          pm_stay_awake()             |          queue_work()
+> >>>> |          queue_work()                |rproc_crash_handler_work()
+> >>>> |                                      |mutex_lock(&rproc->lock);
+> >>>> |                                      |rproc_stop()
+> >>>> |rproc_crash_handler_work()            |rproc->state = RPROC_OFFLINE;
+> >>>> |                                      |RPROC_RECOVERY_FAIL //new
+> >>>> |                                      |mutex_unlock(&rproc->lock);
+> >>>> |mutex_lock(&rproc->lock);             |pm_relax()
+> >>>> |if (rproc->state == RPROC_OFFLINE)    |
+> >>>> |return // shouldn't do pm_relax if RPROC_RECOVERY_FAIL?  |
+> >>>> |mutex_unlock(&rproc->lock);           |
+> >>>> |                                      |
+> >>>> |                                      |
+> >>>> |                                      |
+> >>>>
+> >>>> recovery fail case 2:
+> >>>> |                                      |firstcrash interrupt issued
+> >>>> |                                      | rproc_report_crash()
+> >>>> |                                      |          pm_stay_awake()
+> >>>> |                                      |          queue_work()
+> >>>> |                                      |rproc_crash_handler_work()
+> >>>> |                                      |mutex_lock(&rproc->lock);
+> >>>> |                                      |rproc_stop()
+> >>>> |                                      |rproc->state = RPROC_OFFLINE;
+> >>>> |                                      |RPROC_RECOVERY_FAIL //new
+> >>>> |                                      |mutex_unlock(&rproc->lock);
+> >>>> |                                      |pm_relax()
+> >>>> |
+> >>>> | second crashed interrupt issued      |
+> >>>> | rproc_report_crash()                 |
+> >>>> |          pm_stay_awake()             |
+> >>>> |          queue_work()                |
+> >>>> |pm_stay_awake()
+> >>>> |mutex_lock(&rproc->lock);
+> >>>> |if (rproc->state == RPROC_OFFLINE)    |
+> >>>> |return // still need do pm_relax if RPROC_RECOVERY_FAIL?  |
+> >>>> |mutex_unlock(&rproc->lock);           |
+> >>>> |                                      |
+> >>>> |                                      |
+> >>>> |                                      |
+> >>>>
+> >>>> Maybe I can have:
+> >>>> 1. the pm_stay_awake and pm_relax with count based and call with paired for
+> >>>> fix current concurency issue.
+> >>>> 2. RPROC_RECOVERY_FAIL can be another patch for continue try to do recovery
+> >>>> work.
+> >>>> 3. handle RPROC_DETACHED case.
+> >>>>
+> >>>> On 11/2/2022 4:11 AM, Mathieu Poirier wrote:
+> >>>>> On Fri, 28 Oct 2022 at 09:31, Arnaud POULIQUEN
+> >>>>> <arnaud.pouliquen@foss.st.com> wrote:
+> >>>>>>
+> >>>>>> Hi,
+> >>>>>>
+> >>>>>> On 10/24/22 05:17, Aiqun(Maria) Yu wrote:
+> >>>>>>> On 10/22/2022 3:34 AM, Mathieu Poirier wrote:
+> >>>>>>>> On Wed, 19 Oct 2022 at 23:52, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+> >>>>>>>>>
+> >>>>>>>>> On 10/14/2022 2:03 AM, Mathieu Poirier wrote:
+> >>>>>>>>>> On Thu, Oct 13, 2022 at 11:34:42AM -0600, Mathieu Poirier wrote:
+> >>>>>>>>>>> On Thu, Oct 13, 2022 at 09:40:09AM +0800, Aiqun(Maria) Yu wrote:
+> >>>>>>>>>>>> Hi Mathieu,
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> On 10/13/2022 4:43 AM, Mathieu Poirier wrote:
+> >>>>>>>>>>>>> Please add what has changed from one version to another, either in a cover
+> >>>>>>>>>>>>> letter or after the "Signed-off-by".  There are many examples on how to
+> >>>>>>>>>>>>> do that
+> >>>>>>>>>>>>> on the mailing list.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>> Thx for the information, will take a note and benefit for next time.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>>> On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
+> >>>>>>>>>>>>>> RPROC_OFFLINE state indicate there is no recovery process
+> >>>>>>>>>>>>>> is in progress and no chance to do the pm_relax.
+> >>>>>>>>>>>>>> Because when recovering from crash, rproc->lock is held and
+> >>>>>>>>>>>>>> state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+> >>>>>>>>>>>>>> and then unlock rproc->lock.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> You are correct - because the lock is held rproc->state should be set to
+> >>>>>>>>>>>>> RPROC_RUNNING
+> >>>>>>>>>>>>> when rproc_trigger_recovery() returns.  If that is not the case then
+> >>>>>>>>>>>>> something
+> >>>>>>>>>>>>> went wrong.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before
+> >>>>>>>>>>>>> returning,
+> >>>>>>>>>>>>> so we know the remote processor was stopped.  Therefore if rproc->state
+> >>>>>>>>>>>>> is set
+> >>>>>>>>>>>>> to RPROC_OFFLINE something went wrong in either request_firmware() or
+> >>>>>>>>>>>>> rproc_start().  Either way the remote processor is offline and the system
+> >>>>>>>>>>>>> probably
+> >>>>>>>>>>>>> in an unknown/unstable.  As such I don't see how calling pm_relax() can help
+> >>>>>>>>>>>>> things along.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>> PROC_OFFLINE is possible that rproc_shutdown is triggered and successfully
+> >>>>>>>>>>>> finished.
+> >>>>>>>>>>>> Even if it is multi crash rproc_crash_handler_work contention issue, and
+> >>>>>>>>>>>> last rproc_trigger_recovery bailed out with only
+> >>>>>>>>>>>> rproc->state==RPROC_OFFLINE, it is still worth to do pm_relax in pair.
+> >>>>>>>>>>>> Since the subsystem may still can be recovered with customer's next trigger
+> >>>>>>>>>>>> of rproc_start, and we can make each error out path clean with pm resources.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>>> I suggest spending time understanding what leads to the failure when
+> >>>>>>>>>>>>> recovering
+> >>>>>>>>>>>>> from a crash and address that problem(s).
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>> In current case, the customer's information is that the issue happened when
+> >>>>>>>>>>>> rproc_shutdown is triggered at similar time. So not an issue from error out
+> >>>>>>>>>>>> of rproc_trigger_recovery.
+> >>>>>>>>>>>
+> >>>>>>>>>>> That is a very important element to consider and should have been mentioned
+> >>>>>>>>>>> from
+> >>>>>>>>>>> the beginning.  What I see happening is the following:
+> >>>>>>>>>>>
+> >>>>>>>>>>> rproc_report_crash()
+> >>>>>>>>>>>              pm_stay_awake()
+> >>>>>>>>>>>              queue_work() // current thread is suspended
+> >>>>>>>>>>>
+> >>>>>>>>>>> rproc_shutdown()
+> >>>>>>>>>>>              rproc_stop()
+> >>>>>>>>>>>                      rproc->state = RPROC_OFFLINE;
+> >>>>>>>>>>>
+> >>>>>>>>>>> rproc_crash_handler_work()
+> >>>>>>>>>>>              if (rproc->state == RPROC_OFFLINE)
+> >>>>>>>>>>>                      return // pm_relax() is not called
+> >>>>>>>>>>>
+> >>>>>>>>>>> The right way to fix this is to add a pm_relax() in rproc_shutdown() and
+> >>>>>>>>>>> rproc_detach(), along with a very descriptive comment as to why it is needed.
+> >>>>>>>>>>
+> >>>>>>>>>> Thinking about this further there are more ramifications to consider.  Please
+> >>>>>>>>>> confirm the above scenario is what you are facing.  I will advise on how to
+> >>>>>>>>>> move
+> >>>>>>>>>> forward if that is the case.
+> >>>>>>>>>>
+> >>>>>>>>> Not sure if the situation is clear or not. So resend the email again.
+> >>>>>>>>>
+> >>>>>>>>> The above senario is what customer is facing. crash hanppened while at
+> >>>>>>>>> the same time shutdown is triggered.
+> >>>>>>>>
+> >>>>>>>> Unfortunately this is not enough details to address a problem as
+> >>>>>>>> complex as this one.
+> >>>>>>>>
+> >>>>>>>>> And the device cannto goes to suspend state after that.
+> >>>>>>>>> the subsystem can still be start normally after this.
+> >>>>>>>>
+> >>>>>>>> If the code flow I pasted above reflects the problem at hand, the
+> >>>>>>>> current patch will not be sufficient to address the issue.  If Arnaud
+> >>>>>>>> confirms my suspicions we will have to think about a better solution.
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>> Hi Mathiew,
+> >>>>>>>
+> >>>>>>> Could you pls have more details of any side effects other then power issue of
+> >>>>>>> the current senario?
+> >>>>>>> Why the current patch is not sufficient pls?
+> >>>>>>>
+> >>>>>>>
+> >>>>>>> Have the current senario in details with rproc->lock information in details:
+> >>>>>>>
+> >>>>>>> | subsystem crashed interrupt issued      | user trigger shutdown
+> >>>>>>> | rproc_report_crash()                    |
+> >>>>>>> |          pm_stay_awake()                |
+> >>>>>>> |          queue_work()                   |
+> >>>>>>> |                                         |rproc_shutdown
+> >>>>>>> |                                         |mutex_lock(&rproc->lock);
+> >>>>>>> |                                         |rproc_stop()
+> >>>>>>> |rproc_crash_handler_work()               |rproc->state = RPROC_OFFLINE;
+> >>>>>>> |                                         |mutex_unlock(&rproc->lock);
+> >>>>>>> |mutex_lock(&rproc->lock);                |
+> >>>>>>> |if (rproc->state == RPROC_OFFLINE)       |
+> >>>>>>> |return // pm_relax() is not called       |rproc_boot
+> >>>>>>> |mutex_unlock(&rproc->lock);              |
+> >>>>>>> |                                         |mutex_lock(&rproc->lock);
+> >>>>>>> |                                         |rproc_start()
+> >>>>>>> |                                         |mutex_unlock(&rproc->lock);
+> >>>>>>>
+> >>>>>>>
+> >>>>>>
+> >>>>>> Agree with Mathieu, this is not so simple.
+> >>>>>>
+> >>>>>
+> >>>>> Thanks for looking into this.
+> >>>>>
+> >>>>>> Here is my view  hoping I haven't missed a point in your discussion or
+> >>>>>> an other corner cases.
+> >>>>>>
+> >>>>>> I tried to analyze the issues (in what follows, the term "condition" means
+> >>>>>> the "if" condition in which Aiqun proposes to add the fix) :
+> >>>>>>
+> >>>>>> I can see 4 use cases with race condition
+> >>>>>>
+> >>>>>> 1) crash report while already one is treated (rproc_boot_recovery called)
+> >>>>>>         => not a real use case as if the remote processor is crashed we
+> >>>>>>                  should not have a second crash report
+> >>>>>>
+> >>>>>
+> >>>>> That part is of great concern to me.  *Theoretically* we should not
+> >>>>> get a new crash report while one has already been dispatched but the
+> >>>>> current code accounts for this scenario and as such the possibility
+> >>>>> can't be dismissed.  Therefore we need to expect rproc_report_crash()
+> >>>>> to be called multiple times before a single instance of
+> >>>>> rproc_boot_recovery() is scheduled.
+> >>>>
+> >>>>
+> >>>>>
+> >>>>>> 2) rproc_stop executed between the queuing of the crash work and the call of
+> >>>>>>      rproc_crash_handler_work
+> >>>>>>       => rproc->state = RPROC_OFFLINE
+> >>>>>>       => we enter in the "condition" and the pm_relax has to be called
+> >>>>>>       => This commit fix should solve this use case
+> >>>>>>
+> >>>>>> 3) rproc_detach executed between the queue of the crash work and the call of
+> >>>>>>      rproc_crash_handler_work
+> >>>>>>       => rproc->state = RPROC_DETACHED;
+> >>>>>>       => we don't go in "the condition" and issue because the recovery reattach
+> >>>>>>          to the remote processor
+> >>>>>>       => but pm_relax is called
+> >>>>>>       => probably need an extra fix to avoid to re-attach
+> >>>>>>
+> >>>>>> 4) crash report while already one is treated (rproc_attach_recovery called)
+> >>>>>>       this one corresponds to an auto reboot of the remote processor, with a
+> >>>>>>       new crash
+> >>>>>>       => rproc->state = RPROC_CRASHED or rproc->state = RPROC_DETACHED;
+> >>>>>>       4)a) rproc->state = RPROC_CRASHED if rproc->recovery_disabled = true
+> >>>>>>            => should call pm_relax if rproc->recovery_disabled = true
+> >>>>>>            => commit does not work for this use case
+> >>>>>>
+> >>>>>>       4)b) rproc->state = RPROC_DETACHED if recovery fails
+> >>>>>>           => error case with an unstable state
+> >>>>>>           => how to differentiate it from the use case 3) ?
+> >>>>>>           => introduce a RPROC_RECOVERY_FAIL state?
+> >>>>>>
+> >>>>>
+> >>>>> The case where a recovery fails needs to be considered and is the
+> >>>>> reason the original patch doesn't work.  Right now in
+> >>>>> rproc_crash_handler_work(), it is not possible to differentiate
+> >>>>> between a legitimate shutdown request (scenario #2 above) and a
+> >>>>> recovery that went wrong.  I think introducing RPROC_RECOVERY_FAIL
+> >>>>> would greatly simplify things.
+> >>>>>
+> >>>>> My initial evaluation had not considered the attach/detach scenarios -
+> >>>>> thanks for adding that in the mix.
+> >>>>>
+> >>>>> Aiqun, please send a new patchset that adds a new remote processor
+> >>>>> state, i.e RPROC_RECOVERY_FAIL.  There should also be another patch in
+> >>>>> that set that takes attach/detach scenarios into account.  The code
+> >>>>> between the v6.0 and v6.1 cycle has changed a lot in that area so make
+> >>>>> sure to properly rebase.
+> >>>>>
+> >>>> I will try.
+> >>>>
+> >>>>>>
+> >>>>>> Then pm_stay_awake is called when the crash work is queued.
+> >>>>>> It seems to me coherent to call the pm_relax in the work handler.
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>> Here is a quick and dirty patch (not tested) that should take into account the
+> >>>>>> main use cases ( except 1) and 4)b) )
+> >>>>>>
+> >>>>>> @@ -2009,8 +2009,18 @@ static void rproc_crash_handler_work(struct work_struct *work)
+> >>>>>>
+> >>>>>>            mutex_lock(&rproc->lock);
+> >>>>>>
+> >>>>>> -       if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+> >>>>>> +       if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE ||
+> >>>>>> +           rproc->state == RPROC_DETACHED) {
+> >>>>>>                    /* handle only the first crash detected */
+> >>>>>> +
+> >>>>>> +               /*
+> >>>>>> +                * call pm-relax in following use cases:
+> >>>>>> +                * - the remote processor has been stopped by the user
+> >>>>>> +                * - the remote processor is detached
+> >>>>>> +                + - the remote proc has an autonomous reset but recovery_disabled is true.
+> >>>>>> +                */
+> >>>>>> +               if(rproc->state != RPROC_CRASHED || rproc->recovery_disabled)
+> >>>>>> +                       pm_relax(rproc->dev.parent);
+> >>>>>>                    mutex_unlock(&rproc->lock);
+> >>>>>>                    return;
+> >>>>>>            }
+> >>>>>>
+> >>>>>> Regards,
+> >>>>>> Arnaud
+> >>>>>>
+> >>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>>>> Thanks,
+> >>>>>>>>>>>>> Mathieu
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>> When the state is in RPROC_OFFLINE it means separate request
+> >>>>>>>>>>>>>> of rproc_stop was done and no need to hold the wakeup source
+> >>>>>>>>>>>>>> in crash handler to recover any more.
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
+> >>>>>>>>>>>>>> ---
+> >>>>>>>>>>>>>>        drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
+> >>>>>>>>>>>>>>        1 file changed, 11 insertions(+)
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> diff --git a/drivers/remoteproc/remoteproc_core.c
+> >>>>>>>>>>>>>> b/drivers/remoteproc/remoteproc_core.c
+> >>>>>>>>>>>>>> index e5279ed9a8d7..6bc7b8b7d01e 100644
+> >>>>>>>>>>>>>> --- a/drivers/remoteproc/remoteproc_core.c
+> >>>>>>>>>>>>>> +++ b/drivers/remoteproc/remoteproc_core.c
+> >>>>>>>>>>>>>> @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct
+> >>>>>>>>>>>>>> work_struct *work)
+> >>>>>>>>>>>>>>               if (rproc->state == RPROC_CRASHED || rproc->state ==
+> >>>>>>>>>>>>>> RPROC_OFFLINE) {
+> >>>>>>>>>>>>>>                       /* handle only the first crash detected */
+> >>>>>>>>>>>>>>                       mutex_unlock(&rproc->lock);
+> >>>>>>>>>>>>>> +         /*
+> >>>>>>>>>>>>>> +          * RPROC_OFFLINE state indicate there is no recovery process
+> >>>>>>>>>>>>>> +          * is in progress and no chance to have pm_relax in place.
+> >>>>>>>>>>>>>> +          * Because when recovering from crash, rproc->lock is held and
+> >>>>>>>>>>>>>> +          * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+> >>>>>>>>>>>>>> +          * and then unlock rproc->lock.
+> >>>>>>>>>>>>>> +          * RPROC_OFFLINE is only an intermediate state in recovery
+> >>>>>>>>>>>>>> +          * process.
+> >>>>>>>>>>>>>> +          */
+> >>>>>>>>>>>>>> +         if (rproc->state == RPROC_OFFLINE)
+> >>>>>>>>>>>>>> +                 pm_relax(rproc->dev.parent);
+> >>>>>>>>>>>>>>                       return;
+> >>>>>>>>>>>>>>               }
+> >>>>>>>>>>>>>> --
+> >>>>>>>>>>>>>> 2.7.4
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> --
+> >>>>>>>>>>>> Thx and BRs,
+> >>>>>>>>>>>> Aiqun(Maria) Yu
+> >>>>>>>>>
+> >>>>>>>>>
+> >>>>>>>>> --
+> >>>>>>>>> Thx and BRs,
+> >>>>>>>>> Aiqun(Maria) Yu
+> >>>>>>>
+> >>>>>>>
+> >>>>
+> >>>>
+> >>>> --
+> >>>> Thx and BRs,
+> >>>> Aiqun(Maria) Yu
+> >>
+> >>
+> >> --
+> >> Thx and BRs,
+> >> Aiqun(Maria) Yu
+>
+>
+> --
+> Thx and BRs,
+> Aiqun(Maria) Yu
