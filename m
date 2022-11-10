@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1631623E64
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7718623E61
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiKJJPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S229770AbiKJJO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiKJJO6 (ORCPT
+        with ESMTP id S229759AbiKJJOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:14:58 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22B668ACE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:14:57 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id b2so3358195eja.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:14:57 -0800 (PST)
+        Thu, 10 Nov 2022 04:14:51 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F2268AE3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:14:50 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id j16so1958801lfe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:14:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4toneR5KKcUIRDRiCFMakjH8j8yCqCNqAI0j4/x8+4=;
-        b=sbnWxScSUVxpYlpBaYmPHODK7SFCvD3Yb5JP37A8gmtKph4XI6g6m6m8v2E006lQX/
-         Nxmx+44Ps9VHfEN7Qu70D2uJOahzh901ZCUYmdGgtUT0koJ0T6mZV7Wg/+FsVbxwatyd
-         inVpmy7imtQLOngTNw3XTGCbzvf2GNLFMN13FJjFuJcs0cWtX/VRn5BzndnuIuytV+EE
-         AGvpUmsLvkZnsExGx6+LJBF78utIG3RChW4tF0y2zh6FMW9wGWXr/JgHZbqpk470Rgtv
-         rgEBXIajf62NOOYPF4yXyQ1ERV0gqWjo6E4CsKF+UjjGIAD0vR3S16U5E6QW/Wi8yXEM
-         qyMg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aWtnQJaZ/DC2sr1Ii69yeGSZuxu9g3YJF6gE4/PvhMI=;
+        b=IyqPqR2HfrTjYWOP26a2uWXKScvs+iwrE2hWCYZOtcqow8xOBNXqf+yqpdAcyAihQD
+         anjFfES39Wc3rbVkiYr0dw8tXWiORSEIB6LB9Av6KxIEIIXU8aKRczr4YeFLum9y2JXS
+         zR+e2d+V6AWcV+qKg+Rsd23WST+VtCuejCJKGoVajT+GlAvyZ54/WoncChoty4k7JwZx
+         T7KnMY30EKzqIw7EAvu2ok1Y/jy8etdvMRJO0/26JnkksiPCkOcqCX6z3rksL41BndP+
+         PG+MEcDeEQetWgTjFZrzyHdRi1CetcvMt7QblGBfLIopVkr+IKtEmyt8TAT/F0Mzbmg2
+         p9Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e4toneR5KKcUIRDRiCFMakjH8j8yCqCNqAI0j4/x8+4=;
-        b=GUQ3Kl2aEV3aiCwxMhVaTnQyf2fg5BSeJ64yf5FOWYPgtHafm2INej5x4WmmjI/+Fh
-         SxSEPTFAzT95gpV0C7xdYPEm3M+0CGb9lqCVayVqoyTUVZ6rk+OwEluJCAP4yTjlnCnt
-         RRUsizfw88FufX2dwnk+Bl8Y+fcRxMYb2YfXcVBpcYTTBoLYCdNMbsy4FPSayflLRpsD
-         3IK5Fh6tZ3YGQKsCojf+9jRpGunjYXRG47u+kCNi8mQc/9AIM7O/z30qyMpBk/s07vFN
-         URNDMZidd8qtvEEZyEXSa2EW8hXdf872smBvMLvVU68Z8vWoWxPrOjDt7cWjSI6veGKD
-         JE2g==
-X-Gm-Message-State: ACrzQf3WFl+39XpCxxVhCdZUimFodyZocSM5lPzJWiEG9VLpTJtNTLCO
-        nI9cN+ctHbZq/KW+RYUSYW0RlFh3/Tr+zuIwv+MhtpgToTs=
-X-Google-Smtp-Source: AMsMyM6/ZHf6gPgIdBAluiNYH4JlXtPc16lEDs5ypS46T9Olt2mejODm+cIV4A/Xqo6dKlJdUc4r5Av2tyz8Kr28D2g=
-X-Received: by 2002:a17:906:95d1:b0:7ad:9891:8756 with SMTP id
- n17-20020a17090695d100b007ad98918756mr2535277ejy.203.1668071696498; Thu, 10
- Nov 2022 01:14:56 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aWtnQJaZ/DC2sr1Ii69yeGSZuxu9g3YJF6gE4/PvhMI=;
+        b=sAmWQJmnSGrJFeO+uHEbr5Xv5TDpdugDTGya0kisD3JExS84jzhnI1J5RxIzqApAtT
+         iJjWl6nTBWYpym6XUEPPkMGsO9grhdVXu9yiPxvKa3hyccalDg7MDN0kJ4IvXdaTEFgj
+         4/IBjxpxp2NrahkQthu5oiON2ifNCpjHYY6l03t61Ir7w9W0cJucNOQqGfFHgRUNeV92
+         aWib3KtHEQEtXfS9MoeglcR1bSoNUabnR5n42FX5nBIVTPf7a7rrCxN8gpdFIfzscFDF
+         TVjWL+5CURCGvzwXv8QWaPaIJPRbMCZKFDEjJgXmM4RMYMWv+CH1KIy5ZheoUkOBaJPw
+         d7SQ==
+X-Gm-Message-State: ACrzQf3/a/ZsVjHcozocz9tGyVpJi3fd15vIoxYsRv/ITnZrTBwMER2P
+        oiGN7hsDhOqEauOjyTphowlDIw==
+X-Google-Smtp-Source: AMsMyM5SWvMuCZ7I789cGHR6D4TMVXQwi09H6ESZ3ij9ZsmEcuca6j39FFLlvqiJP0mflZ0jTY7LuA==
+X-Received: by 2002:a05:6512:22d4:b0:4af:1f59:b6d0 with SMTP id g20-20020a05651222d400b004af1f59b6d0mr1294867lfu.314.1668071688997;
+        Thu, 10 Nov 2022 01:14:48 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id m3-20020a0565120a8300b00492dbf809e8sm2663338lfu.118.2022.11.10.01.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 01:14:48 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "B. Niedermayr" <benedikt.niedermayr@siemens.com>,
+        linux-next@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-hardening@vger.kernel.org, gustavo@embeddedor.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        rogerq@kernel.org, tony@atomide.com, linux-omap@vger.kernel.org
+Subject: Re: [PATCH] memory: omap-gpmc: fix coverity issue "Control flow issues"
+Date:   Thu, 10 Nov 2022 10:14:47 +0100
+Message-Id: <166807168409.17460.1069653454790290049.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221109102454.174320-1-benedikt.niedermayr@siemens.com>
+References: <20221109102454.174320-1-benedikt.niedermayr@siemens.com>
 MIME-Version: 1.0
-References: <20221110150951.1d9f0079@canb.auug.org.au>
-In-Reply-To: <20221110150951.1d9f0079@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 10 Nov 2022 10:14:45 +0100
-Message-ID: <CACRpkdY=d8jSY4G1UsZ_17xLZbJ976ey23Jzq0DN1EMiFJzLMg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pinctrl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 5:09 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, 9 Nov 2022 11:24:54 +0100, B. Niedermayr wrote:
+> From: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+> 
+> Assign a big positive integer instead of an negative integer to an
+> u32 variable. Also remove the check for ">= 0" which doesn't make sense
+> for unsigned integers.
+> 
+> 
+> [...]
 
-> After merging the pinctrl tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/pinctrl/pinctrl-loongson2.o
->
-> Caused by commit
->
->   6b88d921f848 ("pinctrl: pinctrl-loongson2: add pinctrl driver support")
->
-> I have used the pinctrl tree from next-20221108 again for today.
+Applied, thanks!
 
-Fixed this by taking out the patches and waiting for a new revision.
+[1/1] memory: omap-gpmc: fix coverity issue "Control flow issues"
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/10913c3c59ce04562230eee4a9d1b0d4e2808842
 
-Yours,
-Linus Walleij
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
