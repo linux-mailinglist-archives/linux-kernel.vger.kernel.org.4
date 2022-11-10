@@ -2,112 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434B86241F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1BC6241F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKJMIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S229938AbiKJMIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiKJMIA (ORCPT
+        with ESMTP id S229923AbiKJMIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:08:00 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16DC716CE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:07:58 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b3so2834319lfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:07:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wTZeoUecrKlOpac1f+l+tkMwOwFXx8RW3xq7DuV+DMM=;
-        b=OtYSVx109vXNxZR6GezrRVsY0MmmZtoobU4DmFkpd1Ns/JbNXoL923ZWlTehmQ/Gpf
-         GTvhutOnU9np1mi0Nbe6XMkBt4IVwB6F4GhrY3X8Tj6u8SlIjXLdS0KlybmYbPqs7sMs
-         rHLruuC6Gff6OvM0r+Bziqp/0OzwnEcnX52me9rqCd8FGDxtYxKZU7GKf56ef3EVOJaf
-         CrFEd8pOrgmPBuyu397MsrOUiNNfjQTIQ7OViY3RMaIKH3WWer9XbbI15Y4fdXNOM1Bt
-         AXOvD07WywGP+SD6TwhX1wAh1G9/fQHDTsIo7bYvmMgaNMh6iBE0iAbqwqvcu4upMys3
-         rbig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wTZeoUecrKlOpac1f+l+tkMwOwFXx8RW3xq7DuV+DMM=;
-        b=NSMO6Z4hVN49KmRy7X1F7dadA14QyTVBvuFLtDhNv9SzSTDGyatiX/mz7sPgyfrZcc
-         Ld94G/ElT4cNk+IR6bmZYXc/GaPawm1uR8foKDYXdvRzLaim1W2ElQJ5IY4+EWWynkqU
-         bi5MZV6TQgZm8QYgt4IZlCbULrZ0rp5R0h6kM6Dxq6x+wkq0Hkj8+ejlqVXcBbbNo3yy
-         wCSD2Wpe18Ryj+/bcStOq+Tka05pg1q6U3XMrZim0/UbjQYolhXjeTCSjyR4GKMEJhcF
-         Ev16oUojQkiAwKVP5jl4SGDwq8GTMONmtAoh5SHVCP4p7gc9t1r+XVUZhg+y8w0otmSm
-         7Q1A==
-X-Gm-Message-State: ACrzQf3D61UMctd5xt58yLKNiNizK6Tmfhz7zU4b6OEW3cQQPLRd0pfG
-        3agJ6FVZkaVlCHGqW0v55uZEng==
-X-Google-Smtp-Source: AMsMyM5Fy2ozvGSmP1vbjydCPG2UhS0gqPhZr248VdsYUlWeNBm//9YGxeKM10fZPGnjA3WXzapXsQ==
-X-Received: by 2002:a19:790d:0:b0:4a2:3d87:8d14 with SMTP id u13-20020a19790d000000b004a23d878d14mr1548113lfc.161.1668082077160;
-        Thu, 10 Nov 2022 04:07:57 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b004979db5aa5bsm2727460lfg.223.2022.11.10.04.07.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 04:07:56 -0800 (PST)
-Message-ID: <ae1ba550-4bee-4b3b-ba5e-716f4dba9917@linaro.org>
-Date:   Thu, 10 Nov 2022 13:07:54 +0100
+        Thu, 10 Nov 2022 07:08:15 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D3771F01
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:08:13 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7LFV3VvHz15MMt;
+        Thu, 10 Nov 2022 20:07:58 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 20:08:11 +0800
+CC:     <yangyicong@hisilicon.com>, <coresight@lists.linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <lpieralisi@kernel.org>,
+        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
+        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
+Subject: Re: [PATCH v12 2/2] Documentation: Add document for UltraSoc SMB
+ drivers
+To:     Junhao He <hejunhao3@huawei.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
+        <john.garry@huawei.com>
+References: <20221109135008.9485-1-hejunhao3@huawei.com>
+ <20221109135008.9485-3-hejunhao3@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <13e37836-b21c-662b-89b5-518fb091c612@huawei.com>
+Date:   Thu, 10 Nov 2022 20:08:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 03/10] arm64: dts: qcom: Add a device tree for PMK8350 on
- SID6
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        patches@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221109111236.46003-1-konrad.dybcio@linaro.org>
- <20221109111236.46003-4-konrad.dybcio@linaro.org>
- <CAA8EJprNszfyyN9HLYoRK2Y-yUU-NuGd0QacqJ3UhkDjpvokdg@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJprNszfyyN9HLYoRK2Y-yUU-NuGd0QacqJ3UhkDjpvokdg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20221109135008.9485-3-hejunhao3@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/11/9 21:50, Junhao He wrote:
+> From: Qi Liu <liuqi115@huawei.com>
+> 
+> This patch bring in documentation for UltraSoc SMB drivers.
+> It simply describes the device, sysfs interface and the
+> firmware bindings.
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> ---
+>  .../sysfs-bus-coresight-devices-ultra_smb     | 31 +++++++
+>  .../trace/coresight/ultrasoc-smb.rst          | 80 +++++++++++++++++++
+>  2 files changed, 111 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+>  create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+> new file mode 100644
+> index 000000000000..deaefd508105
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+> @@ -0,0 +1,31 @@
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/enable_sink
+> +Date:		November 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(RW) Add/remove a SMB device from a trace path. There can be
+> +		multiple sources for a single SMB device.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_size
+> +Date:		November 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the buffer size of each UltraSoc SMB device.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_status
+> +Date:		November 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the value held by UltraSoc SMB status register.
+> +		BIT(0) is zero means buffer is empty.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/read_pos
+> +Date:		November 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the value held by UltraSoc SMB Read Pointer register.
+> +
+> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/write_pos
+> +Date:		November 2022
+> +KernelVersion:	6.2
+> +Contact:	Junhao He <hejunhao3@huawei.com>
+> +Description:	(Read) Shows the value held by UltraSoc SMB Write Pointer register.
+> diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentation/trace/coresight/ultrasoc-smb.rst
+> new file mode 100644
+> index 000000000000..6d28ef0f6c88
+> --- /dev/null
+> +++ b/Documentation/trace/coresight/ultrasoc-smb.rst
+> @@ -0,0 +1,80 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +======================================
+> +UltraSoc - HW Assisted Tracing on SoC
+> +======================================
+> +   :Author:   Qi Liu <liuqi115@huawei.com>
+> +   :Date:     March 2022
+> +
+> +Introduction
+> +------------
+> +
+> +UltraSoc SMB is a per SCCL(Super CPU Cluster) hardware, and it provides a
+> +way to buffer and store CPU trace messages in a region of shared system
+> +memory. SMB is plugged as a coresight sink device and the corresponding
+> +trace generators (ETM) are plugged in as source devices.
+> +
+> +Sysfs files and directories
+> +---------------------------
+> +
+> +The SMB devices appear on the existing coresight bus alongside the other
+> +coresight devices::
+> +
+> +	$# ls /sys/bus/coresight/devices/
+> +	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
+> +
+> +The ``ultra_smb<N>`` named SMB associated with SCCL.::
+> +
+> +	$# ls /sys/bus/coresight/devices/ultra_smb0
+> +	enable_sink   mgmt
+> +	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
+> +	buf_size  buf_status  read_pos  write_pos
+> +
+> +*Key file items are:-*
+> +   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer register.
+> +   * ``write_pos``: Shows the value held by UltraSoc SMB Write Pointer register.
+> +   * ``buf_status``: Shows the value held by UltraSoc SMB status register.
+> +		     BIT(0) is zero means buffer is empty.
+> +   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
+> +
+> +Firmware Bindings
+> +---------------------------
+> +
+> +SMB device is only supported with ACPI, and ACPI binding of SMB device
+> +describes SMB device indentifier, resource information and graph structure.
+> +
+> +SMB is identified by ACPI HID "HISI03A1", resource of device is declared using
+> +the _CRS method. Each SMB must present two base address, the first one is the
+> +configuration base address of SMB device, the second one is the base address of
+> +shared system memory.
+> +
+> +examples::
+> +
+> +    Device(USMB) {                                               \
+> +      Name(_HID, "HISI03A1")                                     \
+> +      Name(_CRS, ResourceTemplate() {                            \
+> +          MEM_RESRC(0x95100000, 0x951FFFFF, 0x100000)            \
+> +          MEM_RESRC(0x50000000, 0x53FFFFFF, 0x4000000)           \
 
+I cannot find MEM_RESRC in ACPI Spec 6.4, any references? If it's a self defined macro just expand it here.
 
-On 10/11/2022 10:12, Dmitry Baryshkov wrote:
-> On Wed, 9 Nov 2022 at 14:12, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> PMK8350 is shipped on SID6 with some SoCs, for example with SM6375.
->> Add a DT with the SID changed to allow it to work.
->>
->> Unfortunately, the entire DT needs to be copied even if the diff is
->> very little, as the node names are not unique. Including pm6125 and
->> pmk8350 together for example, would make pmk8350 overwrite the pm6125
->> node, as both are defined as 'pmic@0'.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/pmk8350_sid6.dtsi | 73 ++++++++++++++++++++++
->>   1 file changed, 73 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/qcom/pmk8350_sid6.dtsi
-> 
-> Just to throw my 2c. If I was doing this myself, I'd allow pmk8350 to
-> receive external SID using the cpp #define (And to default to 0 if one
-> didn't use it).
-Hmm.. that's probably the least duplicative approach, but I'm not sure I
-want to see #ifdefs in DTs..
+btw, you need to cc linux-doc@vger.kernel.org.
 
-Konrad
-> 
-> 
-> 
+Thanks.
+
+> +      })                                                         \
+> +      Name(_DSD, Package() {                                     \
+> +        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
+> +	/* Use CoreSight Graph ACPI bindings to describe connections topology */
+> +        Package() {                                              \
+> +          0,                                                     \
+> +          1,                                                     \
+> +          Package() {                                            \
+> +            1,                                                   \
+> +            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
+> +            8,                                                   \
+> +            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
+> +            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
+> +            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
+> +            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
+> +            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
+> +            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
+> +            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
+> +            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
+> +          }                                                      \
+> +        }                                                        \
+> +      })                                                         \
+> +    }
 > 
