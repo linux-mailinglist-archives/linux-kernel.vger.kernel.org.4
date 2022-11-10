@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A760623BE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EFC623BED
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbiKJGfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:35:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
+        id S232504AbiKJGh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiKJGfc (ORCPT
+        with ESMTP id S231966AbiKJGh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:35:32 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0C62B26C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 22:35:30 -0800 (PST)
-X-UUID: 1fd1dcfed96446f39a9e257f6dd04a06-20221110
-X-CPASD-INFO: a0408637b65f4fd388b92b5f90b85330@qoBuUGVoYWeOVneyg6mvbVhpkmlijlW
-        1e2qCaGNjX1CVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3sHJuUGhkYw==
-X-CLOUD-ID: a0408637b65f4fd388b92b5f90b85330
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:161.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:253.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:2,DUF:7967,ACD:137,DCD:137,SL:0,EISP:0,AG:0,CFC:0.49,CFSR:0.068,UAT:0,R
-        AF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,
-        EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 1fd1dcfed96446f39a9e257f6dd04a06-20221110
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 1fd1dcfed96446f39a9e257f6dd04a06-20221110
-X-User: aichao@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-        (envelope-from <aichao@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1994489489; Thu, 10 Nov 2022 14:35:40 +0800
-From:   Ai Chao <aichao@kylinos.cn>
-To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org
-Cc:     linux-kernel@vger.kernel.org, aichao@kylinos.cn
-Subject: [PATCH] ALSA: usb-audio: add quirk to fix Hamedal C20 disconnect issue
-Date:   Thu, 10 Nov 2022 14:34:52 +0800
-Message-Id: <20221110063452.295110-1-aichao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Nov 2022 01:37:26 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196162CDD8;
+        Wed,  9 Nov 2022 22:37:21 -0800 (PST)
+X-UUID: 8429701aae5b4d2ca837270b1dd43d0b-20221110
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=84saUm07sHkS+69W4QOppbFpU/x8JAb9SSJ/c2QTrG4=;
+        b=FsCj7fpZ6foYA3h9EsTkPY4MaQVs2cUZRMrajoRaKhfF+U6sCelRP7XZKBydNScifut+LdlDsVcfObZGZY+R7BKdW4ycz+juVZbQFtnPp7a9FQRSohtvC/LiPNyqm4kFg6KgVuU7sg00F8OesAMM0Hsvi1dKi06pAb4zvxc7ljw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:37e0e4ae-9148-47b5-a5f9-aac346752e38,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:08b9265d-100c-4555-952b-a62c895efded,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 8429701aae5b4d2ca837270b1dd43d0b-20221110
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 858149190; Thu, 10 Nov 2022 14:37:19 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 10 Nov 2022 14:37:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 10 Nov 2022 14:37:17 +0800
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <matthias.bgg@gmail.com>
+CC:     <angelogioacchino.delregno@collabora.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v4 0/4] Add dp-intf and dp nodes
+Date:   Thu, 10 Nov 2022 14:37:12 +0800
+Message-ID: <20221110063716.25677-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For Hamedal C20, the current rate is different from the runtime rate,
-snd_usb_endpoint stop and close endpoint to resetting rate.
-if snd_usb_endpoint close the endpoint, sometimes usb will
-disconnect the device.
+This series add MediaTek dp-intf nodes and dp nodes.
+This series is based on linux-next-20220915.
 
-Signed-off-by: Ai Chao <aichao@kylinos.cn>
----
- sound/usb/endpoint.c | 3 ++-
- sound/usb/quirks.c   | 2 ++
- sound/usb/usbaudio.h | 3 +++
- 3 files changed, 7 insertions(+), 1 deletion(-)
+Changes for v4:
+1. Rebase to linux-next 20221109.
 
-diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
-index d0b8d61d1d22..310cd6fb0038 100644
---- a/sound/usb/endpoint.c
-+++ b/sound/usb/endpoint.c
-@@ -931,7 +931,8 @@ void snd_usb_endpoint_close(struct snd_usb_audio *chip,
- 	usb_audio_dbg(chip, "Closing EP 0x%x (count %d)\n",
- 		      ep->ep_num, ep->opened);
- 
--	if (!--ep->iface_ref->opened)
-+	if (!--ep->iface_ref->opened &&
-+		!(chip->quirk_flags & QUIRK_FLAG_IFACE_SKIP_CLOSE))
- 		endpoint_set_interface(chip, ep, false);
- 
- 	if (!--ep->opened) {
-diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index eadac586bcc8..a50e15be1229 100644
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -2185,6 +2185,8 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
- 		   QUIRK_FLAG_GENERIC_IMPLICIT_FB),
- 	DEVICE_FLG(0x2b53, 0x0031, /* Fiero SC-01 (firmware v1.1.0) */
- 		   QUIRK_FLAG_GENERIC_IMPLICIT_FB),
-+	DEVICE_FLG(0x0525, 0xa4ad, /* Hamedal C20 usb camero */
-+		   QUIRK_FLAG_IFACE_SKIP_CLOSE),
- 
- 	/* Vendor matches */
- 	VENDOR_FLG(0x045e, /* MS Lifecam */
-diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
-index 2c6575029b1c..e97141ef730a 100644
---- a/sound/usb/usbaudio.h
-+++ b/sound/usb/usbaudio.h
-@@ -170,6 +170,8 @@ extern bool snd_usb_skip_validation;
-  *  Apply the generic implicit feedback sync mode (same as implicit_fb=1 option)
-  * QUIRK_FLAG_SKIP_IMPLICIT_FB
-  *  Don't apply implicit feedback sync mode
-+ * QUIRK_FLAG_IFACE_SKIP_CLOSE
-+ *  Don't closed interface during setting sample rate
-  */
- 
- #define QUIRK_FLAG_GET_SAMPLE_RATE	(1U << 0)
-@@ -191,5 +193,6 @@ extern bool snd_usb_skip_validation;
- #define QUIRK_FLAG_SET_IFACE_FIRST	(1U << 16)
- #define QUIRK_FLAG_GENERIC_IMPLICIT_FB	(1U << 17)
- #define QUIRK_FLAG_SKIP_IMPLICIT_FB	(1U << 18)
-+#define QUIRK_FLAG_IFACE_SKIP_CLOSE	(1U << 19)
- 
- #endif /* __USBAUDIO_H */
+Changes for v3:
+1. Update commit message for "arm64: dts: mediatek: cherry: Add edptx and dptx support".
+
+Changes for v2:
+1. Update commit messages.
+2. reorder the place of "status = "disabled";"
+3. reorder the place of dp-intf.
+
+Bo-Chen Chen (4):
+  arm64: dts: mt8195: Add dp-intf nodes
+  arm64: dts: mt8195: Add edptx and dptx nodes
+  arm64: dts: mediatek: cherry: Add dp-intf ports
+  arm64: dts: mediatek: cherry: Add edptx and dptx support
+
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 86 +++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 48 +++++++++++
+ 2 files changed, 134 insertions(+)
+
 -- 
-2.25.1
+2.18.0
 
