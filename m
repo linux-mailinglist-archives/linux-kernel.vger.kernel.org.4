@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1BC6241F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B07ED6241F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiKJMIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S230054AbiKJMIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiKJMIP (ORCPT
+        with ESMTP id S230018AbiKJMIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:08:15 -0500
+        Thu, 10 Nov 2022 07:08:34 -0500
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D3771F01
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:08:13 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7LFV3VvHz15MMt;
-        Thu, 10 Nov 2022 20:07:58 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A83A0;
+        Thu, 10 Nov 2022 04:08:29 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7LFn4rY2z15MVx;
+        Thu, 10 Nov 2022 20:08:13 +0800 (CST)
+Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 20:08:11 +0800
-CC:     <yangyicong@hisilicon.com>, <coresight@lists.linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <lpieralisi@kernel.org>,
-        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
-        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
-Subject: Re: [PATCH v12 2/2] Documentation: Add document for UltraSoc SMB
- drivers
-To:     Junhao He <hejunhao3@huawei.com>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>,
-        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
-        <john.garry@huawei.com>
-References: <20221109135008.9485-1-hejunhao3@huawei.com>
- <20221109135008.9485-3-hejunhao3@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <13e37836-b21c-662b-89b5-518fb091c612@huawei.com>
-Date:   Thu, 10 Nov 2022 20:08:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+ 15.1.2375.31; Thu, 10 Nov 2022 20:08:27 +0800
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 20:08:26 +0800
+Message-ID: <ff852f4a-7d37-c947-139d-8882a3ebb9a3@huawei.com>
+Date:   Thu, 10 Nov 2022 20:08:25 +0800
 MIME-Version: 1.0
-In-Reply-To: <20221109135008.9485-3-hejunhao3@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 2/3] ACPI: PCC: add check for platform interrupt
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
+        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
+        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
+        <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
+        <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>
+References: <20221110015034.7943-1-lihuisong@huawei.com>
+ <20221110015034.7943-3-lihuisong@huawei.com>
+ <20221110103618.3vuyfdhcebf7ewmo@bogus>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20221110103618.3vuyfdhcebf7ewmo@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -57,150 +59,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/9 21:50, Junhao He wrote:
-> From: Qi Liu <liuqi115@huawei.com>
-> 
-> This patch bring in documentation for UltraSoc SMB drivers.
-> It simply describes the device, sysfs interface and the
-> firmware bindings.
-> 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> ---
->  .../sysfs-bus-coresight-devices-ultra_smb     | 31 +++++++
->  .../trace/coresight/ultrasoc-smb.rst          | 80 +++++++++++++++++++
->  2 files changed, 111 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
->  create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
-> new file mode 100644
-> index 000000000000..deaefd508105
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
-> @@ -0,0 +1,31 @@
-> +What:		/sys/bus/coresight/devices/ultra_smb<N>/enable_sink
-> +Date:		November 2022
-> +KernelVersion:	6.2
-> +Contact:	Junhao He <hejunhao3@huawei.com>
-> +Description:	(RW) Add/remove a SMB device from a trace path. There can be
-> +		multiple sources for a single SMB device.
-> +
-> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_size
-> +Date:		November 2022
-> +KernelVersion:	6.2
-> +Contact:	Junhao He <hejunhao3@huawei.com>
-> +Description:	(Read) Shows the buffer size of each UltraSoc SMB device.
-> +
-> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_status
-> +Date:		November 2022
-> +KernelVersion:	6.2
-> +Contact:	Junhao He <hejunhao3@huawei.com>
-> +Description:	(Read) Shows the value held by UltraSoc SMB status register.
-> +		BIT(0) is zero means buffer is empty.
-> +
-> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/read_pos
-> +Date:		November 2022
-> +KernelVersion:	6.2
-> +Contact:	Junhao He <hejunhao3@huawei.com>
-> +Description:	(Read) Shows the value held by UltraSoc SMB Read Pointer register.
-> +
-> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/write_pos
-> +Date:		November 2022
-> +KernelVersion:	6.2
-> +Contact:	Junhao He <hejunhao3@huawei.com>
-> +Description:	(Read) Shows the value held by UltraSoc SMB Write Pointer register.
-> diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentation/trace/coresight/ultrasoc-smb.rst
-> new file mode 100644
-> index 000000000000..6d28ef0f6c88
-> --- /dev/null
-> +++ b/Documentation/trace/coresight/ultrasoc-smb.rst
-> @@ -0,0 +1,80 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +UltraSoc - HW Assisted Tracing on SoC
-> +======================================
-> +   :Author:   Qi Liu <liuqi115@huawei.com>
-> +   :Date:     March 2022
-> +
-> +Introduction
-> +------------
-> +
-> +UltraSoc SMB is a per SCCL(Super CPU Cluster) hardware, and it provides a
-> +way to buffer and store CPU trace messages in a region of shared system
-> +memory. SMB is plugged as a coresight sink device and the corresponding
-> +trace generators (ETM) are plugged in as source devices.
-> +
-> +Sysfs files and directories
-> +---------------------------
-> +
-> +The SMB devices appear on the existing coresight bus alongside the other
-> +coresight devices::
-> +
-> +	$# ls /sys/bus/coresight/devices/
-> +	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
-> +
-> +The ``ultra_smb<N>`` named SMB associated with SCCL.::
-> +
-> +	$# ls /sys/bus/coresight/devices/ultra_smb0
-> +	enable_sink   mgmt
-> +	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
-> +	buf_size  buf_status  read_pos  write_pos
-> +
-> +*Key file items are:-*
-> +   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer register.
-> +   * ``write_pos``: Shows the value held by UltraSoc SMB Write Pointer register.
-> +   * ``buf_status``: Shows the value held by UltraSoc SMB status register.
-> +		     BIT(0) is zero means buffer is empty.
-> +   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
-> +
-> +Firmware Bindings
-> +---------------------------
-> +
-> +SMB device is only supported with ACPI, and ACPI binding of SMB device
-> +describes SMB device indentifier, resource information and graph structure.
-> +
-> +SMB is identified by ACPI HID "HISI03A1", resource of device is declared using
-> +the _CRS method. Each SMB must present two base address, the first one is the
-> +configuration base address of SMB device, the second one is the base address of
-> +shared system memory.
-> +
-> +examples::
-> +
-> +    Device(USMB) {                                               \
-> +      Name(_HID, "HISI03A1")                                     \
-> +      Name(_CRS, ResourceTemplate() {                            \
-> +          MEM_RESRC(0x95100000, 0x951FFFFF, 0x100000)            \
-> +          MEM_RESRC(0x50000000, 0x53FFFFFF, 0x4000000)           \
 
-I cannot find MEM_RESRC in ACPI Spec 6.4, any references? If it's a self defined macro just expand it here.
-
-btw, you need to cc linux-doc@vger.kernel.org.
-
-Thanks.
-
-> +      })                                                         \
-> +      Name(_DSD, Package() {                                     \
-> +        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
-> +	/* Use CoreSight Graph ACPI bindings to describe connections topology */
-> +        Package() {                                              \
-> +          0,                                                     \
-> +          1,                                                     \
-> +          Package() {                                            \
-> +            1,                                                   \
-> +            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
-> +            8,                                                   \
-> +            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
-> +            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
-> +            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
-> +            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
-> +            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
-> +            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
-> +            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
-> +            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
-> +          }                                                      \
-> +        }                                                        \
-> +      })                                                         \
-> +    }
-> 
+在 2022/11/10 18:36, Sudeep Holla 写道:
+> On Thu, Nov 10, 2022 at 09:50:33AM +0800, Huisong Li wrote:
+>> PCC Operation Region driver senses the completion of command by interrupt
+>> way. If platform can not generate an interrupt when a command complete,
+>> the caller never gets the desired result. So let's reject the setup of the
+>> PCC address space on platform that do not support interrupt mode.
+>>
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> ---
+>>   drivers/acpi/acpi_pcc.c | 47 +++++++++++++++++++++++++----------------
+>>   1 file changed, 29 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
+>> index 3e252be047b8..8efd08e469aa 100644
+>> --- a/drivers/acpi/acpi_pcc.c
+>> +++ b/drivers/acpi/acpi_pcc.c
+>> @@ -53,6 +53,7 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
+>>   	struct pcc_data *data;
+>>   	struct acpi_pcc_info *ctx = handler_context;
+>>   	struct pcc_mbox_chan *pcc_chan;
+>> +	static acpi_status ret;
+>>   
+>>   	data = kzalloc(sizeof(*data), GFP_KERNEL);
+>>   	if (!data)
+>> @@ -69,23 +70,35 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
+>>   	if (IS_ERR(data->pcc_chan)) {
+>>   		pr_err("Failed to find PCC channel for subspace %d\n",
+>>   		       ctx->subspace_id);
+>> -		kfree(data);
+>> -		return AE_NOT_FOUND;
+>> +		ret = AE_NOT_FOUND;
+>> +		goto request_channel_fail;
+>>   	}
+>>
+> Your patch seems to be not based on the upstream.
+> Commit f890157e61b8 ("ACPI: PCC: Release resources on address space setup
+> failure path") has addressed it already.
+I make this patch based on the commit f890157e61b8.
+Here is to unify the relese resources path.
+>
+>>   	pcc_chan = data->pcc_chan;
+>> +	if (!pcc_chan->mchan->mbox->txdone_irq) {
+>> +		pr_err("This channel-%d does not support interrupt.\n",
+>> +		       ctx->subspace_id);
+>> +		ret = AE_SUPPORT;
+>> +		goto request_channel_fail;
+>> +	}
+> Indeed, I supported only interrupt case and this approach is better than
+> checking it in handler atleast until we add support for polling based
+> transfers in future(hope that never happens, but you never know)
+Yes
+>
