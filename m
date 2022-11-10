@@ -2,98 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819C4624C17
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BF5624C1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiKJUn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:43:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S231996AbiKJUnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiKJUn1 (ORCPT
+        with ESMTP id S229667AbiKJUnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:43:27 -0500
-Received: from box.opentheblackbox.net (box.opentheblackbox.net [IPv6:2600:3c02::f03c:92ff:fee2:82bc])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE5DD46;
-        Thu, 10 Nov 2022 12:43:25 -0800 (PST)
-Received: from authenticated-user (box.opentheblackbox.net [172.105.151.37])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Thu, 10 Nov 2022 15:43:47 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AEC24BF6;
+        Thu, 10 Nov 2022 12:43:45 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.opentheblackbox.net (Postfix) with ESMTPSA id 734E23EBA5;
-        Thu, 10 Nov 2022 15:43:24 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pgazz.com; s=mail;
-        t=1668113004; bh=RQD/JlAkDQ6AgOYscQR7ABn1mU+bmv60xb1cB8ThUHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EfCRhXJz/nQnGqJCjdgccJImktHwnpeFZptG9gD6TAvtcIHUzzz/PLIdtEG7tjGm6
-         03lWayrdMmsdGtf2eBPqsOTudlx+fAme1X6chHeEre+jzmHRq41R0yEN/3+unZwAya
-         hA+5u2urOBY2wrqwFl172IjbBNot87ymFm/BHKLIa7XxgbWH/ftduhbyHaptnN3//1
-         O0wNkBJC2F8rJLkEvqgXqSdkg3dpgjEPZv383ZmzJWrUWvkIFimZ6ljnh3xqcS8MHS
-         dzjvUk49gsvRYiNbmWaYZKObnfRGu9jdgrc3WYZ9YmFG8rZVIdmpX02McEKAIOB6rR
-         MQBaEnnvAKpRQ==
-Date:   Thu, 10 Nov 2022 15:43:22 -0500
-From:   Paul Gazzillo <paul@pgazz.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1]: iio: light: rpr0521: add missing Kconfig
- dependencies
-Message-ID: <20221110204322.waygj3v466haadmr@device>
-References: <20221110144448.wexu6neb67krqhla@device>
- <Y20b8Ty71+qk8aDZ@smile.fi.intel.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id 867912CB;
+        Thu, 10 Nov 2022 20:43:44 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 867912CB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1668113024; bh=4LcTONyiLyLVkTe5BAYLb5ptVLcYspwd8D5C7sLwB8M=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=h7BymJ1j/R3RBMfanqMCdTq2mqwWNrmTz9Palwj0nxQv5pU5aJAqWtSeWjRh1gqpU
+         7BwwpJsqIL0SBZh+pPr5L3+2ZHTwZH5Y289j8n636i3q1k4FPYsJhHf+OVa+Ia4gZr
+         SmEjXO5y+m9lbnV7Uptk9d2C0T1aa/mXiRztzbcKaiRGehan9QvOSklRxAx0/I3VSi
+         x8kUM0ACr9dvN7oZa/SUn3+an9bD7/M5QKCfSz/btcZznV1JxMXvLadWxzbQKJ0/uU
+         SCaRVxi6BTXgBfME+psovLlFuQ2dcgLSvPnlmaHwM4yDLwMViPOvKWcETTkps2nVOG
+         8DlrEwm4ZbV7A==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the mm tree
+In-Reply-To: <e523ce8c-9c60-13de-7e91-a553de985838@infradead.org>
+References: <20221110183352.08cc2303@canb.auug.org.au>
+ <CAHk-=wiyYSrBiOKJEV3phOBDT7EMgdXCnDUrp57E8HGNT4SFdA@mail.gmail.com>
+ <e523ce8c-9c60-13de-7e91-a553de985838@infradead.org>
+Date:   Thu, 10 Nov 2022 13:43:43 -0700
+Message-ID: <87a64yh75s.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y20b8Ty71+qk8aDZ@smile.fi.intel.com>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,RCVD_IN_XBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-On 11/10/2022, Andy Shevchenko wrote:
-> On Thu, Nov 10, 2022 at 09:44:48AM -0500, Paul Gazzillo wrote:
-> 
-> >     CC      drivers/iio/light/rpr0521.o
-> >   drivers/iio/light/rpr0521.c: In function 'rpr0521_drdy_irq_thread':
-> 
-> These two lines can be removed.
+> Looks like scripts/kernel-doc is deficient in parsing
+>
+> struct encoded_page;
+>
+> without having any { ... }
+>
+> and it doesn't handle "typedef union" or "typedef struct". :(
 
-Will do.
+It's never needed to do that before...it's not often we document
+structure types that don't actually exist :)  kernel-doc wants to be
+able to check that all of the fields and such are documented, so it
+tries to parse the whole thing.
 
-> > (This bug was found with the help of a tool, krepair, that generates
-> > configuration files for commits: https://github.com/paulgazz/kmax)
-> 
-> I'm not sure we need this in the commit message. Do we have a tag for
-> the static analyzers?
+In this case, the right solution might be to just write kerneldoc
+comments for the accessor functions instead, since that's what will
+actually be used.
 
-I'll also remove this.
-
-> > The following patch ensures that the code controlled by IIO_BUFFER and
-> > IIO_TRIGGERED_BUFFER is available:
-> 
-> > Reported-by: Paul Gazzillo <paul@pgazz.com>
-> 
-> Without SoB this may not be anyhow proceeded. Please, read Submitting Patches
-> documentation and try again.
-> 
-> (Btw, Reported-by above contradicts the commit message that refers to the tool,
->  and not human)
-
-Apologies, I was confused about whether I or the maintainer fills that
-out.  Will submit a new version with SoB.
-
-Thanks!
-Paul
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+jon
