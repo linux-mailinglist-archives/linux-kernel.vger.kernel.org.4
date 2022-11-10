@@ -2,1059 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54464624638
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E171E62463B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiKJPnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S231650AbiKJPoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiKJPnn (ORCPT
+        with ESMTP id S231661AbiKJPoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:43:43 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A67A186FB;
-        Thu, 10 Nov 2022 07:43:40 -0800 (PST)
+        Thu, 10 Nov 2022 10:44:09 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF1B264AA;
+        Thu, 10 Nov 2022 07:44:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668095048; x=1699631048;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=+yLSzy8ySkxDugwjgI1gRWpsBxSADAzc8p/e+zfISGs=;
+  b=dG6HLerG6PzCK1jMfLmDqd/9VcoUTBE8v40S2V7Cbi64/pHm36OPu1hF
+   zNXorem6tN/ZmVewpz5Y3wiIqCwE6z0h+aBXK2XwZfJJahFsJiY/74DZ3
+   2vgzzuUbtBZ08W1mFUqnumy0tF9GGu19X2XTM9XFK4WtPfV3f9StRDtCh
+   FbT7uhA0kJRyi/xHzZG5gCJHt+Ei7dbbBg0HiO3s87ZaH7i0qQhCNjRXp
+   BkOp2QFkRI/YfilL/Ckgx82U3gKW0+ogF6PDDvgmQf4DqYiyNVbBrP+Tg
+   wFHK3Y/b95YJWbFZlj1TPiM9xtNdl1TPGXmmbarqCOo0MJQ2Vs3GvmORc
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="186357063"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Nov 2022 08:43:59 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 10 Nov 2022 08:43:59 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Thu, 10 Nov 2022 08:43:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DdFc0ZIMdkzPoe+7YCK8ZUY0z7kRHyUgTzn3VOAVMVn9SZwcA8tmao3UZH5dkXCk6WhcxuSFMNrhpqgdODPdrs7+jgprMtHsU0U1PoyqfCx2bcZPmeqHF4ZAVh+KsyoWHXBfbPRAfx1ef8lDGvHYrjRuCwGzCsXkLkxrUeFsSloF+ZZDNgz96wTem8TNykCrA/PPJJcYW0AkqS0ogKVywDvZFTq2pDjWDFWKc+wp3Rlf0LRlG7eiG/JuR3p9GwI54J8vKLVt30Ez2tA1wcAiM2Vjb8GgZz7wVcBNWlGVLSql5vFf3ASM9nsAD7wNzPT/THsjWYWtjUUhdr8GJMolnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+yLSzy8ySkxDugwjgI1gRWpsBxSADAzc8p/e+zfISGs=;
+ b=VCvTwnD80o9+Hxt0Q8OBGUE+atEbGZvsCwzSfjKFjYqNDIk/sgh7DTfCvh3+jzzClrfoi0OjK/n9cd12v71z68+JGI8IRgKYIhgiLK/RU/xQLPdbA8USzXNkudRhynT1dfT6iUlLe6i/WbqJhD+KdTS6vV1nd5UF55/zsR/8Cv7OKebCv9W72r/x0VPBy5u59UOwqerP8f4OU58xf1QWwv3TYmxckWIwy0GSepNM8cuJ9WJnD++LkgIIBh3tT2P/t1qgalWK7zvEaBUEz+gLb91/ercA8tUbB3BgT2rEO6jTyLnqhhTcyw2Vg1F5CDW3+FTa4MSZrnNIUrIj9V2MIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1668095020; x=1699631020;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FYLGaDnpSTa+hBky9y2DL/Rk7aM21JDVALYnKX5xEho=;
-  b=ejYJ1CJej1pNf7NyKMGQnfvEWhkBZn9QqAxtriXsl0RbMsUvwDraEFh4
-   30hjPOBCC3wLs/pVgty47MGtLLAcZAM11s3u1he3YUsgQfIqlII+AGoZH
-   4SDGUFmURHAYuk+/RFziiOjUNVeva+Lknk58zTmEKhNb9PImbG8NFZuwo
-   xJwZqgqANer2KXhIJuNIdwdA4+lYylGxekLaOu/7ldAFFIqJ8M5BzJ1JW
-   Tk5riPmVtk/rmX9wTHSo+qWz0q48IDR2D0yfb25s8eYNBJcrMPkwznAgp
-   N0OqvRH3EivLqfAcMknUG/D3BENi8BfKuLhwtJvAHfgOM5IUvoozPaMc4
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,154,1665439200"; 
-   d="scan'208";a="27286475"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 10 Nov 2022 16:43:38 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 10 Nov 2022 16:43:38 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 10 Nov 2022 16:43:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1668095018; x=1699631018;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FYLGaDnpSTa+hBky9y2DL/Rk7aM21JDVALYnKX5xEho=;
-  b=qCGG0K9WZb/kBudo6+SPe1g7idk15tmlDLagQZQXE1Lp+CH+gOGPv6YU
-   rjaMwxwUnKs0B3Zz2kxp86MBRmb4Tlc/rpNPXRDod3RQqsbqlsQJSHAFX
-   W2haAV0tMw6TW5EyI2V8GkP4ZEebT9UN+3ju5tsYLCIjV3J/dVQJ+fsKN
-   XWfYZDqfck2Oj6YDyH6uNOeX/nIjSmf0YYyU9ypylYWudJYIjHXM75IpM
-   aqjlPD2IVhUpt5RS90n4ywEc0Ai1iRbg5HOvtTcxLuZlewfW6wz+/vfbs
-   Z1hRLObv9ilVRzArrsZFXM1O3fAKkHELAZPv5s2GfFsZmx9RkrnATqLQ9
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,154,1665439200"; 
-   d="scan'208";a="27286474"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 10 Nov 2022 16:43:38 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B93C3280056;
-        Thu, 10 Nov 2022 16:43:37 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Sandor Yu <sandor.yu@nxp.com>
-Cc:     "jonas@kwiboo.se" <jonas@kwiboo.se>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+yLSzy8ySkxDugwjgI1gRWpsBxSADAzc8p/e+zfISGs=;
+ b=RjUg1ivMjL0/LSOaeHyxgCDBOC5Ldc9/6N5QcCa2Ah5FX7PBknG9ITX/Q6kcidfr2jXkJmZQokWVJPp/QjR8PmhVjLkoMspXERnFyR3t/DlformuWqUMLd/aHAWej+zUy2oGFpRCkw372APtw2WlGfhP3tudY6rrdwltDs8Dfgs=
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
+ PH0PR11MB4999.namprd11.prod.outlook.com (2603:10b6:510:37::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.13; Thu, 10 Nov 2022 15:43:53 +0000
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::626d:ef37:c13f:1c4b]) by DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::626d:ef37:c13f:1c4b%4]) with mapi id 15.20.5791.026; Thu, 10 Nov 2022
+ 15:43:53 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <ye.xingchen@zte.com.cn>, <vkoul@kernel.org>
+CC:     <f.fainelli@gmail.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <rjui@broadcom.com>, <sbranden@broadcom.com>,
+        <dmaengine@vger.kernel.org>,
+        <linux-rpi-kernel@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "andrzej.hajda@intel.com" <andrzej.hajda@intel.com>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "robert.foss@linaro.org" <robert.foss@linaro.org>,
-        "Laurent.pinchart@ideasonboard.com" 
-        <Laurent.pinchart@ideasonboard.com>,
-        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Oliver Brown <oliver.brown@nxp.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "sam@ravnborg.org" <sam@ravnborg.org>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "javierm@redhat. com" <javierm@redhat.com>,
-        "penguin-kernel@i-love.sakura.ne.jp" 
-        <penguin-kernel@i-love.sakura.ne.jp>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "p.yadav@ti.com" <p.yadav@ti.com>,
-        "maxime@cerno.tech" <maxime@cerno.tech>
-Subject: RE: [EXT] Re: [v2 06/10] drm: bridge: cadence: Add MHDP HDMI driver for i.MX8MQ
-Date:   Thu, 10 Nov 2022 16:43:33 +0100
-Message-ID: <4784052.31r3eYUQgx@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <PAXPR04MB944896907B3C8EFFAC1714A9F43E9@PAXPR04MB9448.eurprd04.prod.outlook.com>
-References: <cover.1667463263.git.Sandor.yu@nxp.com> <3205191.44csPzL39Z@steina-w> <PAXPR04MB944896907B3C8EFFAC1714A9F43E9@PAXPR04MB9448.eurprd04.prod.outlook.com>
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dmaengine: use devm_platform_get_and_ioremap_resource()
+Thread-Topic: [PATCH] dmaengine: use devm_platform_get_and_ioremap_resource()
+Thread-Index: AQHY9Rs8YesaX06/Y0WyG4XiEmLb3g==
+Date:   Thu, 10 Nov 2022 15:43:53 +0000
+Message-ID: <3f0622f8-f476-0c76-d033-373ba414abd8@microchip.com>
+References: <202211101726100208529@zte.com.cn>
+In-Reply-To: <202211101726100208529@zte.com.cn>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR11MB6479:EE_|PH0PR11MB4999:EE_
+x-ms-office365-filtering-correlation-id: dc22f8b9-98d8-4755-469d-08dac3325f08
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2MrGKY+9kgjvnCIgmAIZ3XMPiKVFFcbl7GlusWugLrTlNiyM1OE45wbEJDbKHx7sVhjmOeTN0/mEOHgHypWfK18pwcc4Hxce3rdEzfS8FQbaHwKnzGBSArS+9pdDtKxnYgidvPeIMWxbvxk+/m8GuN5joe4LD5iXnH9ra37nVuAFFW5um62YfQdo2egtdCtDk7EJ2+hZINtcwZCApZUEctd3p3zYOGx6JMSnGAOfeHDRIMtFZAp8ktmqDUe6E5lH49DFs7Yy+aBB52/YUbPm5e2FiHjt3ApnC7aOGWHoFQKCtqg6XDLaVIL/6haniIX0TiYsBDiofh8gDzXjx2X7YmxoxDJix0sbLqwpImn0UA40aWCztt8J5iMX0rKkwiacjAeRGovWNuCiTRJRursGuR2stlvJhJdSRJSNZK3oVh/LjZDErzzNbr+F9MXxLFKbnGLocfY0mgHaw5Gc8FL4EBXsDpZCwx5Tdc7mGa9XpeSItnFS9q9jHHpYn//XkBTPQ1aXyyEvWlbrGujrWnm/Rmhy6q57iCBHv71qzCDmu2iHWyD7FUHhQrDnNsTUMnmfAegPSP+lbDKCI3a0/rDr6W4J6lM7Cgz3W57FiSl8y9CBk/91qC3h8+Octj0H9yz58Vs6M4OrsYPjoi/oUKK6P1eGvDrdCQO6yrGpVKjpAjB97NvnepQncAUWTz/bz0EgE0xPICXu9RWISSJfPWAmg+ybT8Q4a7IVVmuIXKlM2nnGxMFhMD49/Fz0Wfyjw+vQOsMVQsHajiszcCS/Sx77MIAryJZ/T1IfE9eOfDztUl5em/e/Ix0IDTv+fFGfhQ0KeBnPni0k/CTHyNhC7AiE/WnxnRIl2iMie8Lq2ZFoHnokXWwWapCC037e56X4cmLuYsLK9d8OK9MAEYf1OUzEqQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(396003)(376002)(366004)(39860400002)(451199015)(71200400001)(83380400001)(31686004)(186003)(7416002)(6486002)(2906002)(86362001)(966005)(31696002)(38100700002)(64756008)(38070700005)(122000001)(478600001)(54906003)(110136005)(316002)(6506007)(91956017)(2616005)(53546011)(66446008)(5660300002)(66476007)(36756003)(66946007)(26005)(76116006)(6512007)(8676002)(66556008)(4326008)(8936002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WlpzQ3l5UVZHZTBwZjVVeDB1SURzWnhNQUoyTVIzeHpROUVzdDRuN25JOHBT?=
+ =?utf-8?B?L0pvVnlnQ3FuaXc3eFdvUzFkQlFQK09zQm54S3ptTGtPTW9ITjhVa1FKMzYv?=
+ =?utf-8?B?MkFYM3FkaHd1b1kwLzZNbzNYcmZadWc0Qnp0bzlua1A2U3hVVklqN2dFaWZS?=
+ =?utf-8?B?MzBSMU9rRVAvbXA5VGZmTDJJSTIvMVVPQ0toZmpuMG1NVmkwREcrM2tWd1Fn?=
+ =?utf-8?B?MWlmMkF0cVRuYlhVcENGbWRwbGMrVFZWSzBEcEJyNjU0aW1WZldVUjdmT1dO?=
+ =?utf-8?B?bE9Id3ZUbXZxSFlrVE8wRkpnOUV2Q3dHeEpaTXRtMm5wak9zbUgrdjVibVEv?=
+ =?utf-8?B?UDBhRnZ0bDc1aFpVdTZlcFA2OUNnT2g2MVB5b2dwTXBqNEFkdFc1U1pZaHdH?=
+ =?utf-8?B?YThrOXh6ZWdGdFE5cjhVemFtcjBiajZKZ0RsbGl4U3BvNldXN0kyM0ZlU0hp?=
+ =?utf-8?B?S1duQi9nYStLek9iUEEyK2NTSlE0cUZsU3lYNWhBZFlCbW9meHBlTVpsNDlM?=
+ =?utf-8?B?L2lYU0VEcldVTnk4clZCUXhueFBaQWlBSklybkJ5SEIzR1dlSVk0bXUzZUxj?=
+ =?utf-8?B?S3VYY0x4dXFKUXRTK3pLM1lpQzl2OFpEUDhFYW1keDFobDJXQi9aOTJTaUZo?=
+ =?utf-8?B?bXh2ZEdVVE96UlV0Wm43c3RlaDhxN1c3YWhXZTRFSGFQcndqTnFlZ0dCWDY2?=
+ =?utf-8?B?WWJ6YlFIQVVGSlMybnpXWVNZN2VIUkhObnBvT2k4eEhPYldMVWloMkVrOC9W?=
+ =?utf-8?B?WFJxU1ZnWSs4VzNkTHc5M2pxM0RWUEFNc3RpWjU5OHZ4V2VJNjNXRFphTDBv?=
+ =?utf-8?B?cVJPdGtCK3ViamI0b2NuTldoR3hqS3FQSTg1ekMwdkRPYnZ4UWduMlZFSkxF?=
+ =?utf-8?B?RHhBQTRLbTRnODJEbnordGN0TE83TmZseDZWVmRSL0Z6S0J6QnV4NkcvSEVH?=
+ =?utf-8?B?bGkwUUY4dytHU1N3MnN5d2w4Vzg0TUZINnVUSi9LRUlWSFBxQTlVTis1WExC?=
+ =?utf-8?B?REtsdTRjT2FSN2VLMkJUYjNMOEhqL2JRMk9XSUt6bTdHM0lwbUl3TjJibzVp?=
+ =?utf-8?B?ZUJ5c0lPdExkcmM1d3JGejZyVkJ6TFo3NFlYbnZjK1FjQ2RHZEhvdWRPenpm?=
+ =?utf-8?B?WklMeE54K204ZDlFcjV4RWV5VXNIdGoyNXg0aVJvR3k3bUFYU290bkw3N2ZK?=
+ =?utf-8?B?aG96YTE5cHNlQ2J2VURxbFVKWlR4aG40NGI0QjRTOHVuM1Q4QVA5K1M0eDRU?=
+ =?utf-8?B?a0JmTFJqekJmTFJxYTJEMlhPM2Y3d29GMnNOWHFrL2hkNFdEN3pxMUgvdDRp?=
+ =?utf-8?B?d2hxTFN3REg4cE0vUHFRS1kxQTViUk9FWE1zdTdLdFVOOHMvL3N1c2syTFBE?=
+ =?utf-8?B?cXMwR3RDOTY2NGk2dnorY3dZL2o2dUxlMlcyMTVFdTZSYWpPL0lLcFpCTE1U?=
+ =?utf-8?B?OVQ1NWZKdHl5Y0ZPUTAzSVU2NVhoaFBSaXlEU2VKeUxtZ1FoeGJPemxGM0pi?=
+ =?utf-8?B?VDFsUWtRUHVXei9zelFUbEEyNTFTU2d6WVRHaWhZVjFhZVo1TE9QQWtRdkF3?=
+ =?utf-8?B?ajdJU2RId0dldkZiS0d2RjdDWEpRUkZFYTYvNGw5cU4xcnp4MWVYcGNtQUxL?=
+ =?utf-8?B?cE1tSGg3OGxzRVdXOHJIeGFRbmo3TWEyaGc4WjBqQXAvcXhWcnIxMENuZ1dE?=
+ =?utf-8?B?M3dPRXpXSVE5c2RxWU1kZ1FzQVliblc2ejF0Mnp3SGFheGhWNXJRZTZVR3dp?=
+ =?utf-8?B?Z0dIM2hSZzg4MEdqZWU5NVBWNitReGZUK0x5Nlg4eXJwT0JMZXJaUEdkS296?=
+ =?utf-8?B?b01SNEZlSlJJU2N3MCtmbXhrVTl2OHhZSFAzMFFLYzFWWXpjbGM2QUpiQ1lM?=
+ =?utf-8?B?QVFpODR3MEtLQzZsU2hkRkcrQkhIeTFSemprQ1lVd2MrRm1NSEZWaXYwQkVy?=
+ =?utf-8?B?UkRaRzlWV3FFVUdTTExKMGd0d2RRRFVsZzNUTWY2ZjB0YzgyUEV2TW9yM1Ry?=
+ =?utf-8?B?K1hQa3A2L1VWN3VjVFdJZDVtZWFvUzcyNElGd0FzcmRnTzBDKzFaTkxBbDdo?=
+ =?utf-8?B?U2VTMkJPUnl1R3M0dXplRG5LdjZuWktIcGJxTU96aUNqUWRLaXBYelI3SGtN?=
+ =?utf-8?Q?JI6qSLBgaiVOlfkQ6GWiRMdM9?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E2DE2A52E124424DB4FD44EB0F65A018@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc22f8b9-98d8-4755-469d-08dac3325f08
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2022 15:43:53.6193
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pePejtrbfjow9eGaQktXmYkQH2ufH8wmGzLIEagEFBNZzsHp53iyBQyWMntDuRR1OlVs0IzgCIaTsUGRZKpC4Lm2aXpZAa4DCCTcnddOxeI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4999
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sandor,
-
-Am Mittwoch, 9. November 2022, 14:26:14 CET schrieb Sandor Yu:
-> Thanks for your comments.
->=20
->=20
-> > -----Original Message-----
-> > From: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > Sent: 2022=E5=B9=B411=E6=9C=888=E6=97=A5 21:17
-> > To: jonas@kwiboo.se; Sandor Yu <sandor.yu@nxp.com>
-> > Cc: dri-devel@lists.freedesktop.org; devicetree@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > linux-phy@lists.infradead.org; andrzej.hajda@intel.com;
-> > neil.armstrong@linaro.org; robert.foss@linaro.org;
-> > Laurent.pinchart@ideasonboard.com; jernej.skrabec@gmail.com;
-> > kishon@ti.com; vkoul@kernel.org; Oliver Brown <oliver.brown@nxp.com>;
-> > krzysztof.kozlowski+dt@linaro.org; sam@ravnborg.org;
-> > jani.nikula@intel.com;
- tzimmermann@suse.de; s.hauer@pengutronix.de;
-> > javierm@redhat.com;
-> > penguin-kernel@i-love.sakura.ne.jp; robh+dt@kernel.org; dl-linux-imx
-> > <linux-imx@nxp.com>; kernel@pengutronix.de; Sandor Yu
-> > <sandor.yu@nxp.com>; shawnguo@kernel.org; p.yadav@ti.com;
-> > maxime@cerno.tech
-> > Subject: [EXT] Re: [v2 06/10] drm: bridge: cadence: Add MHDP HDMI driver
-> > for i.MX8MQ
-> >=20
-> > Caution: EXT Email
-> >=20
-> > Hello,
-> >=20
-> > thanks for working on this and the updated version.
-> >=20
-> > Am Freitag, 4. November 2022, 07:44:56 CET schrieb Sandor Yu:
-> >=20
-> > > Add a new DRM HDMI bridge driver for Candence MHDP used in i.MX8MQ
-> > > SOC. MHDP IP could support HDMI or DisplayPort standards according
-> > > embedded Firmware running in the uCPU.
-> > >
-> > >
-> > >
-> > > For iMX8MQ SOC, the HDMI FW was loaded and activated by SOC ROM
-> >=20
-> > code.
-> >=20
-> > > Bootload binary included HDMI FW was required for the driver.
-> > >
-> > >
-> > >
-> > > Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
-> > > ---
-> > >=20
-> > >  drivers/gpu/drm/bridge/cadence/Kconfig        |   12 +
-> > >  .../gpu/drm/bridge/cadence/cdns-hdmi-core.c   | 1038
-> >=20
-> > +++++++++++++++++
-> >=20
-> > >  2 files changed, 1050 insertions(+)
-> > >  create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-hdmi-core.c
-> > >
-> > >
-> > >
-> > > diff --git a/drivers/gpu/drm/bridge/cadence/Kconfig
-> > > b/drivers/gpu/drm/bridge/cadence/Kconfig index
-> > > e79ae1af3765..377452d09992
-> > > 100644
-> > > --- a/drivers/gpu/drm/bridge/cadence/Kconfig
-> > > +++ b/drivers/gpu/drm/bridge/cadence/Kconfig
-
-[snip]
-
-> > > +static int cdns_hdmi_get_edid_block(void *data, u8 *edid,
-> > > +                       u32 block, size_t length) {
-> > > +     struct cdns_mhdp_device *mhdp =3D data;
-> > > +     u8 msg[2], reg[5], i;
-> > > +     int ret;
-> > > +
-> > > +     mutex_lock(&mhdp->mbox_mutex);
-> > > +
-> > > +     for (i =3D 0; i < 4; i++) {
-> >=20
-> >=20
-> > What is i? It is not used inside the loop.
->=20
-> EDID data read by HDMI firmware are not guarantee 100% successful.
-> Base on experiments, try 4 times if EDID read failed.
-
-Mh, 4 times sounds a bit too arbitrary to me. How about using a timeout in =
-ms,=20
-like 50ms, for retrying to read the EDID?
-
-[snip]
-
-> > > +static int cdns_mhdp_imx_probe(struct platform_device *pdev) {
-> > > +     struct device *dev =3D &pdev->dev;
-> > > +     struct cdns_mhdp_device *mhdp;
-> > > +     struct platform_device_info pdevinfo;
-> > > +     struct resource *res;
-> > > +     u32 reg;
-> > > +     int ret;
-> > > +
-> > > +     mhdp =3D devm_kzalloc(dev, sizeof(*mhdp), GFP_KERNEL);
-> > > +     if (!mhdp)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     mutex_init(&mhdp->lock);
-> > > +     mutex_init(&mhdp->mbox_mutex);
-> > > +
-> > > +     INIT_DELAYED_WORK(&mhdp->hotplug_work, hotplug_work_func);
-> > > +
-> > > +     res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > > +     if (!res)
-> > > +             return -ENODEV;
-> > > +     mhdp->regs =3D devm_ioremap(dev, res->start, resource_size(res)=
-);
-> > > +     if (IS_ERR(mhdp->regs))
-> > > +             return PTR_ERR(mhdp->regs);
-> >=20
-> >=20
-> > Please use devm_platform_get_and_ioremap_resource.
->=20
-> Both HDMI PHY driver and mhdp HDMI driver should access same APB base
-> register offset for mailbox.
- devm_ioremap_resource could not support such
-> feature.
-
-Oh I see, both remap the same range. To be honest I do not like this. Is th=
-ere=20
-a need to map overlapping ranges in both drivers? How can you avoid race=20
-conditions due to simultaneous accesses?
-
-> > > +     mhdp->phy =3D devm_of_phy_get_by_index(dev, pdev->dev.of_node,
-> >=20
-> > 0);
-> >=20
-> > > +     if (IS_ERR(mhdp->phy)) {
-> > > +             dev_err(dev, "no PHY configured\n");
-> > > +             return PTR_ERR(mhdp->phy);
-> > > +     }
-> >=20
-> >=20
-> > Please use dev_err_probe().
->=20
-> OK.
->=20
-> >=20
-> >=20
-> > > +     mhdp->irq[IRQ_IN] =3D platform_get_irq_byname(pdev, "plug_in");
-> > > +     if (mhdp->irq[IRQ_IN] < 0) {
-> > > +             dev_info(dev, "No plug_in irq number\n");
-> > > +             return -EPROBE_DEFER;
-> > > +     }
-> >=20
-> >=20
-> > Please use dev_err_probe().
->=20
-> OK.
->=20
-> >=20
-> >=20
-> > > +     mhdp->irq[IRQ_OUT] =3D platform_get_irq_byname(pdev,
-> >=20
-> > "plug_out");
-> >=20
-> > > +     if (mhdp->irq[IRQ_OUT] < 0) {
-> > > +             dev_info(dev, "No plug_out irq number\n");
-> > > +             return -EPROBE_DEFER;
-> > > +     }
-> >=20
-> >=20
-> > Please use dev_err_probe().
->=20
-> OK.
->=20
-> >=20
-> >=20
-> > > +     /*
-> > > +      * Wait for the KEEP_ALIVE "message" on the first 8 bits.
-> > > +      * Updated each sched "tick" (~2ms)
-> > > +      */
-> > > +     ret =3D readl_poll_timeout(mhdp->regs + KEEP_ALIVE, reg,
-> > > +                              reg & CDNS_KEEP_ALIVE_MASK,
-> >=20
-> > 500,
-> >=20
-> > > +                              CDNS_KEEP_ALIVE_TIMEOUT);
-> >=20
-> >=20
-> > This freezes my board TQMa8MQ
-> > (arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-
-> > mba8mx.dts) completly if this and the PHY driver are compiled in. I have
-> > "pd_ignore_unused clk_ignore_unused" passed to kernel command line, so I
-> > have no idea what's wrong here.
->=20
-> Here is the first time in the driver to access hdmi register when driver
-> probe.
- For imx8mq hdmi/dp, mdhp hdmi apb clock and core clock are managed
-> by ROM code, they are always on when device bootup. Could you dump the
-> clock tree without "pd_ignore_unused clk_ignore_unused" ?
-
-I noticed too this is the 1st access, so I have no idea what's wrong here.=
-=20
-Here is my /sys/kernel/debug/clk/clk_summary from using the regular DT with=
-out=20
-enabling 'dcss', 'hdmi_phy' and 'mhdp_hdmi':
-
-                                 enable  prepare  protect                  =
-             =20
-duty  hardware
-   clock                          count    count    count        rate  =20
-accuracy phase  cycle    enable
-=2D------------------------------------------------------------------------=
-=2D-----------------------------
- sys2_pll_out                         7        7        0  1000000000      =
-   =20
-0     0  50000         Y
-    sys_pll2_out_monitor              0        0        0  1000000000      =
-   =20
-0     0  50000         Y
-    sys2_pll_1000m                    0        0        0  1000000000      =
-   =20
-0     0  50000         Y
-    sys2_pll_500m                     1        2        0   500000000      =
-   =20
-0     0  50000         Y
-       audio_ahb                      0        1        0   500000000      =
-   =20
-0     0  50000         N
-          ipg_audio_root              0        1        0   250000000      =
-   =20
-0     0  50000         Y
-             sdma2_clk                0        2        0   250000000      =
-   =20
-0     0  50000         N
-             sai6_ipg_clk             0        0        0   250000000      =
-   =20
-0     0  50000         N
-             sai5_ipg_clk             0        0        0   250000000      =
-   =20
-0     0  50000         N
-             sai4_ipg_clk             0        0        0   250000000      =
-   =20
-0     0  50000         N
-             sai1_ipg_clk             0        0        0   250000000      =
-   =20
-0     0  50000         N
-       nand                           0        0        0   500000000      =
-   =20
-0     0  50000         N
-          nand_root_clk               0        0        0   500000000      =
-   =20
-0     0  50000         N
-       usb_bus                        2        2        0   500000000      =
-   =20
-0     0  50000         Y
-          usb2_ctrl_root_clk          1        1        0   500000000      =
-   =20
-0     0  50000         Y
-          usb1_ctrl_root_clk          1        1        0   500000000      =
-   =20
-0     0  50000         Y
-    sys2_pll_333m                     1        1        0   333333333      =
-   =20
-0     0  50000         Y
-       main_axi                       1        1        0   333333333      =
-   =20
-0     0  50000         Y
-    sys2_pll_250m                     2        2        0   250000000      =
-   =20
-0     0  50000         Y
-       pcie1_ctrl                     1        1        0   250000000      =
-   =20
-0     0  50000         Y
-          pcie1_root_clk              1        1        0   250000000      =
-   =20
-0     0  50000         Y
-       pcie2_ctrl                     1        1        0   250000000      =
-   =20
-0     0  50000         Y
-          pcie2_root_clk              1        1        0   250000000      =
-   =20
-0     0  50000         Y
-    sys2_pll_200m                     3        3        0   200000000      =
-   =20
-0     0  50000         Y
-       ecspi3                         0        0        0   200000000      =
-   =20
-0     0  50000         N
-          ecspi3_root_clk             0        0        0   200000000      =
-   =20
-0     0  50000         N
-       ecspi2                         1        1        0   200000000      =
-   =20
-0     0  50000         Y
-          ecspi2_root_clk             2        2        0   200000000      =
-   =20
-0     0  50000         Y
-       ecspi1                         1        1        0   200000000      =
-   =20
-0     0  50000         Y
-          ecspi1_root_clk             2        2        0   200000000      =
-   =20
-0     0  50000         Y
-       gic                            1        1        0   200000000      =
-   =20
-0     0  50000         Y
-       arm_m4_core                    0        0        0   200000000      =
-   =20
-0     0  50000         N
-    sys2_pll_166m                     0        0        0   166666666      =
-   =20
-0     0  50000         Y
-    sys2_pll_125m                     1        1        0   125000000      =
-   =20
-0     0  50000         Y
-       enet_ref                       1        1        0   125000000      =
-   =20
-0     0  50000         Y
-    sys2_pll_100m                     3        3        0   100000000      =
-   =20
-0     0  50000         Y
-       pcie1_phy                      1        1        0   100000000      =
-   =20
-0     0  50000         Y
-       pcie2_phy                      1        1        0   100000000      =
-   =20
-0     0  50000         Y
-       enet_timer                     1        1        0   100000000      =
-   =20
-0     0  50000         Y
-    sys2_pll_50m                      1        1        0    50000000      =
-   =20
-0     0  50000         Y
-       enet_phy                       1        1        0    50000000      =
-   =20
-0     0  50000         Y
- sys1_pll_out                         5        5        0   800000000      =
-   =20
-0     0  50000         Y
-    sys_pll1_out_monitor              0        0        0   800000000      =
-   =20
-0     0  50000         Y
-    sys1_pll_800m                     2        2        0   800000000      =
-   =20
-0     0  50000         Y
-       vpu_bus                        0        0        0   800000000      =
-   =20
-0     0  50000         N
-          vpu_dec_root_clk            0        0        0   800000000      =
-   =20
-0     0  50000         N
-       arm_a53_div                    0        0        0   800000000      =
-   =20
-0     0  50000         N
-       dram_apb                       1        1        0   160000000      =
-   =20
-0     0  50000         Y
-       noc                            1        1        0   800000000      =
-   =20
-0     0  50000         Y
-       disp_rtrm                      0        0        0   400000000      =
-   =20
-0     0  50000         N
-          disp_rtrm_root_clk          0        0        0   400000000      =
-   =20
-0     0  50000         N
-       disp_apb                       0        0        0   133333334      =
-   =20
-0     0  50000         N
-          disp_apb_root_clk           0        0        0   133333334      =
-   =20
-0     0  50000         N
-       disp_axi                       0        0        0   800000000      =
-   =20
-0     0  50000         N
-          disp_axi_root_clk           0        0        0   800000000      =
-   =20
-0     0  50000         N
-    sys1_pll_400m                     0        0        0   400000000      =
-   =20
-0     0  50000         Y
-       usdhc2                         0        0        0   400000000      =
-   =20
-0     0  50000         N
-          usdhc2_root_clk             0        0        0   400000000      =
-   =20
-0     0  50000         N
-       usdhc1                         0        0        0   400000000      =
-   =20
-0     0  50000         N
-          usdhc1_root_clk             0        0        0   400000000      =
-   =20
-0     0  50000         N
-    sys1_pll_266m                     1        1        0   266666666      =
-   =20
-0     0  50000         Y
-       nand_usdhc_bus                 0        0        0   266666666      =
-   =20
-0     0  50000         N
-          nand_usdhc_rawnand_clk       0        0        0   266666666     =
-    =20
-0     0  50000         N
-       enet_axi                       1        1        0   266666666      =
-   =20
-0     0  50000         Y
-          enet1_root_clk              2        2        0   266666666      =
-   =20
-0     0  50000         Y
-    sys1_pll_200m                     0        0        0   200000000      =
-   =20
-0     0  50000         Y
-    sys1_pll_160m                     0        0        0   160000000      =
-   =20
-0     0  50000         Y
-    sys1_pll_133m                     1        1        0   133333333      =
-   =20
-0     0  50000         Y
-       ahb                            9        4        0   133333333      =
-   =20
-0     0  50000         Y
-          ipg_root                    8        8        0    66666667      =
-   =20
-0     0  50000         Y
-             sdma1_clk                6        1        0    66666667      =
-   =20
-0     0  50000         Y
-             tmu_root_clk             1        1        0    66666667      =
-   =20
-0     0  50000         Y
-             sai3_ipg_clk             0        0        0    66666667      =
-   =20
-0     0  50000         N
-             sai2_ipg_clk             0        0        0    66666667      =
-   =20
-0     0  50000         N
-             ocotp_root_clk           0        0        0    66666667      =
-   =20
-0     0  50000         N
-             mu_root_clk              0        0        0    66666667      =
-   =20
-0     0  50000         N
-             gpio5_root_clk           1        1        0    66666667      =
-   =20
-0     0  50000         Y
-             gpio4_root_clk           1        1        0    66666667      =
-   =20
-0     0  50000         Y
-             gpio3_root_clk           1        1        0    66666667      =
-   =20
-0     0  50000         Y
-             gpio2_root_clk           1        1        0    66666667      =
-   =20
-0     0  50000         Y
-             gpio1_root_clk           1        1        0    66666667      =
-   =20
-0     0  50000         Y
-    sys1_pll_100m                     2        2        0   100000000      =
-   =20
-0     0  50000         Y
-       usb_phy_ref                    2        2        0   100000000      =
-   =20
-0     0  50000         Y
-          usb2_phy_root_clk           1        1        0   100000000      =
-   =20
-0     0  50000         Y
-          usb1_phy_root_clk           1        1        0   100000000      =
-   =20
-0     0  50000         Y
-       usb_core_ref                   2        2        0   100000000      =
-   =20
-0     0  50000         Y
-       qspi                           0        0        0   100000000      =
-   =20
-0     0  50000         N
-          qspi_root_clk               0        0        0   100000000      =
-   =20
-0     0  50000         N
-       dram_alt                       0        0        0   100000000      =
-   =20
-0     0  50000         N
-          dram_alt_root               0        0        0    25000000      =
-   =20
-0     0  50000         Y
-    sys1_pll_80m                      2        2        0    80000000      =
-   =20
-0     0  50000         Y
-       pcie1_aux                      1        1        0    10000000      =
-   =20
-0     0  50000         Y
-       pcie2_aux                      1        1        0    10000000      =
-   =20
-0     0  50000         Y
-       uart2                          0        0        0    80000000      =
-   =20
-0     0  50000         N
-          uart2_root_clk              0        0        0    80000000      =
-   =20
-0     0  50000         N
-       uart1                          0        0        0    80000000      =
-   =20
-0     0  50000         N
-          uart1_root_clk              0        0        0    80000000      =
-   =20
-0     0  50000         N
-    sys1_pll_40m                      0        0        0    40000000      =
-   =20
-0     0  50000         Y
-       wrclk                          0        0        0    40000000      =
-   =20
-0     0  50000         N
- dummy                                0        0        0           0      =
-   =20
-0     0  50000         Y
- clk-xtal25                           2        2        0    25000000      =
-   =20
-0     0  50000         Y
-    DIF3                              0        0        0   100000000      =
-   =20
-0     0  50000         Y
-    DIF2                              1        1        0   100000000      =
-   =20
-0     0  50000         Y
-    DIF1                              0        0        0   100000000      =
-   =20
-0     0  50000         Y
-    DIF0                              1        1        0   100000000      =
-   =20
-0     0  50000         Y
- clock                                0        0        0       32768      =
-   =20
-0     0  50000         Y
- clk_ext4                             0        0        0   133000000      =
-   =20
-0     0  50000         Y
- clk_ext3                             0        0        0   133000000      =
-   =20
-0     0  50000         Y
- clk_ext2                             0        0        0   133000000      =
-   =20
-0     0  50000         Y
- clk_ext1                             0        0        0   133000000      =
-   =20
-0     0  50000         Y
- hdmi_phy_27m                         0        0        0    27000000      =
-   =20
-0     0  50000         Y
- osc_27m                              0        0        0    27000000      =
-   =20
-0     0  50000         Y
- osc_25m                              7       11        0    25000000      =
-   =20
-0     0  50000         Y
-    gpt_3m                            0        0        0     3125000      =
-   =20
-0     0  50000         Y
-    csi2_esc                          0        0        0    25000000      =
-   =20
-0     0  50000         N
-    csi2_phy_ref                      0        0        0    25000000      =
-   =20
-0     0  50000         N
-    csi2_core                         0        0        0    25000000      =
-   =20
-0     0  50000         N
-       csi2_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    csi1_esc                          0        0        0    25000000      =
-   =20
-0     0  50000         N
-    csi1_phy_ref                      0        0        0    25000000      =
-   =20
-0     0  50000         N
-    csi1_core                         0        0        0    25000000      =
-   =20
-0     0  50000         N
-       csi1_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    dsi_ahb                           0        0        0    25000000      =
-   =20
-0     0  50000         N
-       dsi_ipg_div                    0        0        0    12500000      =
-   =20
-0     0  50000         Y
-    dsi_esc                           0        0        0    25000000      =
-   =20
-0     0  50000         N
-    dsi_dbi                           0        0        0    25000000      =
-   =20
-0     0  50000         N
-    dsi_phy_ref                       0        0        0    25000000      =
-   =20
-0     0  50000         N
-    dsi_core                          0        0        0    25000000      =
-   =20
-0     0  50000         N
-    clko2                             0        0        0    25000000      =
-   =20
-0     0  50000         N
-    clko1                             0        0        0    25000000      =
-   =20
-0     0  50000         N
-    wdog                              1        1        0    25000000      =
-   =20
-0     0  50000         Y
-       wdog3_root_clk                 0        0        0    25000000      =
-   =20
-0     0  50000         N
-       wdog2_root_clk                 0        0        0    25000000      =
-   =20
-0     0  50000         N
-       wdog1_root_clk                 1        1        0    25000000      =
-   =20
-0     0  50000         Y
-    gpt1                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       gpt1_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    pwm4                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       pwm4_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    pwm3                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       pwm3_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    pwm2                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       pwm2_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    pwm1                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       pwm1_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    uart4                             0        0        0    25000000      =
-   =20
-0     0  50000         N
-       uart4_root_clk                 0        0        0    25000000      =
-   =20
-0     0  50000         N
-    uart3                             1        1        0    25000000      =
-   =20
-0     0  50000         Y
-       uart3_root_clk                 4        4        0    25000000      =
-   =20
-0     0  50000         Y
-    i2c4                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       i2c4_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    i2c3                              0        1        0    25000000      =
-   =20
-0     0  50000         N
-       i2c3_root_clk                  0        1        0    25000000      =
-   =20
-0     0  50000         N
-    i2c2                              0        1        0    25000000      =
-   =20
-0     0  50000         N
-       i2c2_root_clk                  0        1        0    25000000      =
-   =20
-0     0  50000         N
-    i2c1                              0        1        0    25000000      =
-   =20
-0     0  50000         N
-       i2c1_root_clk                  0        1        0    25000000      =
-   =20
-0     0  50000         N
-    spdif2                            0        0        0    25000000      =
-   =20
-0     0  50000         N
-    spdif1                            0        0        0    25000000      =
-   =20
-0     0  50000         N
-    sai6                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       sai6_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    sai5                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       sai5_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    sai4                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       sai4_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    sai2                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       sai2_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    sai1                              0        0        0    25000000      =
-   =20
-0     0  50000         N
-       sai1_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    lcdif_pixel                       0        0        0    25000000      =
-   =20
-0     0  50000         N
-    disp_dc8000                       0        0        0    25000000      =
-   =20
-0     0  50000         N
-       disp_root_clk                  0        0        0    25000000      =
-   =20
-0     0  50000         N
-    disp_dtrc                         0        0        0    25000000      =
-   =20
-0     0  50000         N
-    noc_apb                           1        1        0    25000000      =
-   =20
-0     0  50000         Y
-    video2_pll1_ref_sel               0        0        0    25000000      =
-   =20
-0     0  50000         Y
-       video2_pll_out                 0        0        0    25000000      =
-   =20
-0     0  50000         Y
-          video_pll2_out_monitor       0        0        0    25000000     =
-    =20
-0     0  50000         Y
-    dram_pll1_ref_sel                 1        1        0    25000000      =
-   =20
-0     0  50000         Y
-       dram_pll_out                   2        2        0   800000000      =
-   =20
-0     0  50000         Y
-          dram_core_clk               1        1        0   800000000      =
-   =20
-0     0  50000         Y
-          dram_pll_out_monitor        0        0        0   800000000      =
-   =20
-0     0  50000         Y
-    sys3_pll1_ref_sel                 1        1        0    25000000      =
-   =20
-0     0  50000         Y
-       sys3_pll_out                   1        1        0    25000000      =
-   =20
-0     0  50000         Y
-          sys_pll3_out_monitor        0        0        0    25000000      =
-   =20
-0     0  50000         Y
-    video_pll1_ref_sel                0        0        0    25000000      =
-   =20
-0     0  50000         Y
-       video_pll1_bypass              0        0        0    25000000      =
-   =20
-0     0  50000         Y
-          video_pll1_out_monitor       0        0        0    25000000     =
-    =20
-0     0  50000         Y
-          video_pll1_out              0        0        0    25000000      =
-   =20
-0     0  50000         N
-             dc_pixel                 0        0        0     5000000      =
-   =20
-0     0  50000         N
-       video_pll1_ref_div             0        0        0     5000000      =
-   =20
-0     0  50000         Y
-          video_pll1                  0        0        0   650000000      =
-   =20
-0     0  50000         Y
-    audio_pll2_ref_sel                0        0        0    25000000      =
-   =20
-0     0  50000         Y
-       audio_pll2_ref_div             0        0        0     5000000      =
-   =20
-0     0  50000         Y
-          audio_pll2                  0        0        0   722534397      =
-   =20
-0     0  50000         Y
-             audio_pll2_bypass        0        0        0   722534397      =
-   =20
-0     0  50000         Y
-                audio_pll2_out_monitor       0        0        0   72253439=
-7         =20
-0     0  50000         Y
-                audio_pll2_out        0        0        0   722534397      =
-   =20
-0     0  50000         N
-    audio_pll1_ref_sel                0        0        0    25000000      =
-   =20
-0     0  50000         Y
-       audio_pll1_ref_div             0        0        0     5000000      =
-   =20
-0     0  50000         Y
-          audio_pll1                  0        0        0   786431998      =
-   =20
-0     0  50000         Y
-             audio_pll1_bypass        0        0        0   786431998      =
-   =20
-0     0  50000         Y
-                audio_pll1_out_monitor       0        0        0   78643199=
-8         =20
-0     0  50000         Y
-                audio_pll1_out        0        0        0   786431998      =
-   =20
-0     0  50000         N
-                   sai3               0        0        0    49152000      =
-   =20
-0     0  50000         N
-                      sai3_root_clk       0        0        0    49152000  =
-       =20
-0     0  50000         N
-                         pll          0        0        0   196608000      =
-   =20
-0     0  50000         Y
-                            codec_clkin       0        0        0   1966080=
-00         =20
-0     0  50000         Y
-                               nadc       0        0        0   196608000  =
-       =20
-0     0  50000         Y
-                                  madc       0        0        0   19660800=
-0         =20
-0     0  50000         Y
-                               ndac       0        0        0   196608000  =
-       =20
-0     0  50000         Y
-                                  mdac       0        0        0   19660800=
-0         =20
-0     0  50000         Y
-                                     bdiv         0        0        0  =20
-196608000          0     0  50000         Y
-    vpu_pll_ref_sel                   0        1        0    25000000      =
-   =20
-0     0  50000         Y
-       vpu_pll_ref_div                0        1        0     5000000      =
-   =20
-0     0  50000         Y
-          vpu_pll                     0        1        0   600000000      =
-   =20
-0     0  50000         Y
-             vpu_pll_bypass           0        1        0   600000000      =
-   =20
-0     0  50000         Y
-                vpu_pll_out_monitor       0        0        0   600000000  =
-       =20
-0     0  50000         Y
-                vpu_pll_out           0        2        0   600000000      =
-   =20
-0     0  50000         N
-                   vpu_g2             0        1        0   600000000      =
-   =20
-0     0  50000         N
-                      vpu_g2_root_clk       0        1        0   600000000=
-         =20
-0     0  50000         N
-                   vpu_g1             0        1        0   600000000      =
-   =20
-0     0  50000         N
-                      vpu_g1_root_clk       0        1        0   600000000=
-         =20
-0     0  50000         N
-    gpu_pll_ref_sel                   0        0        0    25000000      =
-   =20
-0     0  50000         Y
-       gpu_pll_ref_div                0        0        0     5000000      =
-   =20
-0     0  50000         Y
-          gpu_pll                     0        0        0   800000000      =
-   =20
-0     0  50000         Y
-             gpu_pll_bypass           0        0        0   800000000      =
-   =20
-0     0  50000         Y
-                gpu_pll_out_monitor       0        0        0   800000000  =
-       =20
-0     0  50000         Y
-                   pllout_monitor_sel       0        0        0   800000000=
-         =20
-0     0  50000         Y
-                      pllout_monitor_clk2       0        0        0  =20
-800000000          0     0  50000         N
-                gpu_pll_out           0        0        0   800000000      =
-   =20
-0     0  50000         N
-                   gpu_ahb            0        0        0   800000000      =
-   =20
-0     0  50000         N
-                   gpu_axi            0        0        0   800000000      =
-   =20
-0     0  50000         N
-                   gpu_shader         0        0        0   800000000      =
-   =20
-0     0  50000         N
-                   gpu_core           0        0        0   800000000      =
-   =20
-0     0  50000         N
-                      gpu_root_clk       0        0        0   800000000   =
-      =20
-0     0  50000         N
-    arm_pll_ref_sel                   1        1        0    25000000      =
-   =20
-0     0  50000         Y
-       arm_pll_ref_div                1        1        0     5000000      =
-   =20
-0     0  50000         Y
-          arm_pll                     1        1        0   800000000      =
-   =20
-0     0  50000         Y
-             arm_pll_bypass           1        1        0   800000000      =
-   =20
-0     0  50000         Y
-                arm_pll_out_monitor       0        0        0   800000000  =
-       =20
-0     0  50000         Y
-                arm_pll_out           1        1        0   800000000      =
-   =20
-0     0  50000         Y
-                   arm_a53_core       1        1        0   800000000      =
-   =20
-0     0  50000         Y
-                      arm             1        1        0   800000000      =
-   =20
-0     0  50000         Y
-                   vpu_core           0        0        0   800000000      =
-   =20
-0     0  50000         N
- ckil                                 2        2        0       32768      =
-   =20
-0     0  50000         Y
-
-Thanks and best regards
-Alexander
-
-
-
+T24gMTEvMTAvMjIgMTE6MjYsIHllLnhpbmdjaGVuQHp0ZS5jb20uY24gd3JvdGU6DQo+IFtZb3Ug
+ZG9uJ3Qgb2Z0ZW4gZ2V0IGVtYWlsIGZyb20geWUueGluZ2NoZW5AenRlLmNvbS5jbi4gTGVhcm4g
+d2h5IHRoaXMgaXMgaW1wb3J0YW50IGF0IGh0dHBzOi8vYWthLm1zL0xlYXJuQWJvdXRTZW5kZXJJ
+ZGVudGlmaWNhdGlvbiBdDQo+IA0KPiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtz
+IG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUN
+Cj4gDQo+IEZyb206IE1pbmdoYW8gQ2hpIDxjaGkubWluZ2hhb0B6dGUuY29tLmNuPg0KPiANCj4g
+Q29udmVydCBwbGF0Zm9ybV9nZXRfcmVzb3VyY2UoKSwgZGV2bV9pb3JlbWFwX3Jlc291cmNlKCkg
+dG8gYSBzaW5nbGUNCj4gY2FsbCB0byBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNv
+dXJjZSgpLCBhcyB0aGlzIGlzIGV4YWN0bHkNCj4gd2hhdCB0aGlzIGZ1bmN0aW9uIGRvZXMuDQoN
+CldvdWxkIHlvdSByZXZpZXcgbXkgdjMgaW5zdGVhZD8NCmh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
+L2xrbWwvMjAyMjExMTAxNTI1MjguNzgyMS0xLXR1ZG9yLmFtYmFydXNAbWljcm9jaGlwLmNvbS8N
+Cg0KVGhlIGludGVudGlvbiBpcyB0byBkbyB0aGlzIHNtYWxsIGNoYW5nZSBmb3IgYWxsIHRoZSBk
+bWEgZHJpdmVycyBpbiBhDQpzaW5nbGUgcGF0Y2gsIHNvIHRoYXQgd2UgZG9uJ3QgcG9sbHV0ZSB0
+aGUgY29tbWl0IGxvZy4NCg0KPiANCj4gUmVwb3J0ZWQtYnk6IFplYWwgUm9ib3QgPHplYWxjaUB6
+dGUuY29tLmNuPg0KPiBTaWduZWQtb2ZmLWJ5OiBNaW5naGFvIENoaSA8Y2hpLm1pbmdoYW9AenRl
+LmNvbS5jbj4NCj4gLS0tDQo+ICBkcml2ZXJzL2RtYS9iY20yODM1LWRtYS5jIHwgMyArLS0NCj4g
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL2RtYS9iY20yODM1LWRtYS5jIGIvZHJpdmVycy9kbWEvYmNtMjgz
+NS1kbWEuYw0KPiBpbmRleCA2MzBkZmJiMDFhNDAuLjE1NDdmNTI4YTU4ZSAxMDA2NDQNCj4gLS0t
+IGEvZHJpdmVycy9kbWEvYmNtMjgzNS1kbWEuYw0KPiArKysgYi9kcml2ZXJzL2RtYS9iY20yODM1
+LWRtYS5jDQo+IEBAIC05MDIsOCArOTAyLDcgQEAgc3RhdGljIGludCBiY20yODM1X2RtYV9wcm9i
+ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiANCj4gICAgICAgICBkbWFfc2V0X21h
+eF9zZWdfc2l6ZSgmcGRldi0+ZGV2LCAweDNGRkZGRkZGKTsNCj4gDQo+IC0gICAgICAgcmVzID0g
+cGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYsIElPUkVTT1VSQ0VfTUVNLCAwKTsNCj4gLSAgICAg
+ICBiYXNlID0gZGV2bV9pb3JlbWFwX3Jlc291cmNlKCZwZGV2LT5kZXYsIHJlcyk7DQo+ICsgICAg
+ICAgYmFzZSA9IGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKHBkZXYsIDAs
+ICZyZXMpOw0KPiAgICAgICAgIGlmIChJU19FUlIoYmFzZSkpDQo+ICAgICAgICAgICAgICAgICBy
+ZXR1cm4gUFRSX0VSUihiYXNlKTsNCj4gDQo+IC0tDQo+IDIuMjUuMQ0KPiANCj4gX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4gbGludXgtYXJtLWtlcm5l
+bCBtYWlsaW5nIGxpc3QNCj4gbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+
+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtl
+cm5lbA0KDQotLSANCkNoZWVycywNCnRhDQoNCg==
