@@ -2,162 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ED26248BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69756248C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiKJRyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S231476AbiKJRzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:55:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiKJRyQ (ORCPT
+        with ESMTP id S231492AbiKJRzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:54:16 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1BB49B51
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:54:15 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ft34so6835997ejc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfHz50Kg7kyBZpgLz1L+duIpLshaF3vQXrti1dXGZLQ=;
-        b=himkAUve95kura1F4xyrjgF2Ao9L01DaBYcsivT7aKJ5J4AF6ajPklOMnZ88snF8S/
-         Sm6FEemOqLF/MrgUC5yLIaXtMop2DLyIxPzRPUoUFaA5aKTYxAFSqWUMJk850gnqShNb
-         wE7XZ4ZD0YABNLuFjY+X3KglYL7nJG8JNkkvLu3QJtRk3djhDQghiY7LCQX3IS7glCq2
-         M3Z3rUTcmamKd9fp2ozIcuSHynhl1Xgi/GnqGciIWHpaSJNBKuTCOn3Ej65qPgsyN7ok
-         8FB28sjmPUx11WchT1uogNEcf84eSNHyyoLzumQXLDUlwM/q3BMdB2xufOMmSmbksCWm
-         YjnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kfHz50Kg7kyBZpgLz1L+duIpLshaF3vQXrti1dXGZLQ=;
-        b=Z3p3ZWAaFGjynWAOcDfzhiF0x741wZPPBzEXP16e4769CN/yF8+2qnvqDR4ISg4bcS
-         GURwMGWNW1PBo78cATLLKYcyyqURAJ4nmkoAYzkE30bd9psdx++rxdAszIwPZHM/eImT
-         3Ff6eZNo6x5V/DtCMbl9W+/7YlP9uSBuTm/78M73hM/1CJx4viit086AzM87gS7ngQMc
-         dnkrLwrNZwRvCPwx/Gulx9iCuaVpHqZE1LK3PGSpphI7YoZTbVStP6HhNfi16RlytH1K
-         AWQ0N/wfvuuITIrOtXsZ0080WpOwFhBkIkuWKCcs3KD6/gkAG2RuAAkMUtWEHNNDy4Q/
-         AoTg==
-X-Gm-Message-State: ACrzQf3utt0ODM9aByv6zra7g6wVxdVnpYKIPKAhKpDVoDWyDCI3WqCo
-        2JOOarK1MGWeFvCWfBXsJhxYPCsLBDhrhc/a5pd61A==
-X-Google-Smtp-Source: AMsMyM6vrGhmh/p4SKFqy2anpSAGg2zavB8DiqImU+Pk6mNYMjVBxK6TvhzwwuErIW2caX7ljkBnR/t2VrPytOoRZ6I=
-X-Received: by 2002:a17:906:b34b:b0:7ad:e8dd:837c with SMTP id
- cd11-20020a170906b34b00b007ade8dd837cmr3571084ejb.264.1668102853085; Thu, 10
- Nov 2022 09:54:13 -0800 (PST)
+        Thu, 10 Nov 2022 12:55:31 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9C049B76;
+        Thu, 10 Nov 2022 09:55:26 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4N7TyM1wSdz9sf0;
+        Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jXLMYtFygd4q; Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4N7TyM17Jrz9sdy;
+        Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 178428B783;
+        Thu, 10 Nov 2022 18:55:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id zBGArvrCFKJ5; Thu, 10 Nov 2022 18:55:22 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.235.195])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AC0E18B763;
+        Thu, 10 Nov 2022 18:55:22 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2AAHtAZM1214289
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 18:55:10 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2AAHsno81214183;
+        Thu, 10 Nov 2022 18:54:49 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: Check !irq instead of irq == NO_IRQ
+Date:   Thu, 10 Nov 2022 18:54:35 +0100
+Message-Id: <13feefdf6b240817944e6441e26a8ddc1d81ced1.1668102802.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20221107205754.2635439-1-cukie@google.com> <CAHC9VhTLBWkw2XzqdFx1LFVKDtaAL2pEfsmm+LEmS0OWM1mZgA@mail.gmail.com>
-In-Reply-To: <CAHC9VhTLBWkw2XzqdFx1LFVKDtaAL2pEfsmm+LEmS0OWM1mZgA@mail.gmail.com>
-From:   Jeffrey Vander Stoep <jeffv@google.com>
-Date:   Thu, 10 Nov 2022 18:54:00 +0100
-Message-ID: <CABXk95ChjusTneWJgj5a58CZceZv0Ay-P-FwBcH2o4rO0g2Ggw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] Add LSM access controls for io_uring_setup
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Gil Cukierman <cukie@google.com>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1668102873; l=3474; s=20211009; h=from:subject:message-id; bh=HSINWooMikwRFVroev1T+VEXiZDJXgGlJDwE6td7CO4=; b=BFY+D+aE9KXw68T8bTbQbKyTeD+BxEde04JEUxv2TMpy6Z+n98G9stn/vHtN+kpeN3PJtEWgnkvj KO/dsSJFDU5hhIp5qHP6naQaZzsB4yi0/T3PAMbceDNNcKH0RZ5K
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+NO_IRQ is a relic from the old days. It is not used anymore in core
+functions. By the way, function irq_of_parse_and_map() returns value 0
+on error.
 
-There are a few reasons why we want this particular hook.
+In some drivers, NO_IRQ is erroneously used to check the return of
+irq_of_parse_and_map().
 
-1.  It aligns well with how other resources are managed by selinux
-where access to the resource is the first control point (e.g. "create"
-for files, sockets, or bpf_maps, "prog_load" for bpf programs, and
-"open" for perf_event) and then additional functionality or
-capabilities require additional permissions.
-2. It aligns well with how resources are managed on Android. We often
-do not grant direct access to resources (like memory buffers). For
-example, a single domain on Android manages the loading of all bpf
-programs and the creation of all bpf maps. Other domains can be
-granted access to these only once they're created. We can enforce base
-properties with MAC, while allowing the system to manage and grant
-access to resources at run-time via DAC (e.g. using Android's
-permission model). This allows us to do better management and
-accounting of resources.
-3. Attack surface management. One of the primary uses of selinux on
-Android is to assess and limit attack surface (e.g.
-https://twitter.com/jeffvanderstoep/status/1422771606309335043) . As
-io_uring vulnerabilities have made their way through our vulnerability
-management system, it's become apparent that it's complicated to
-assess the impact. Is a use-after-free reachable? Creating
-proof-of-concept exploits takes a lot of time, and often functionality
-can be reached by multiple paths. How many of the known io_uring
-vulnerabilities would be gated by the existing checks? How many future
-ones will be gated by the existing checks? I don't know the answer to
-either of these questions and it's not obvious. I believe some of them
-currently are exploitable without any selinux permissions. But in any
-case, this hook makes that initial assessment simple and effective.
+It is not a real bug today because the only architectures using the
+drivers being fixed by this patch define NO_IRQ as 0, but there are
+architectures which define NO_IRQ as -1. If one day those
+architectures start using the non fixed drivers, there will be a
+problem.
 
-On Mon, Nov 7, 2022 at 10:17 PM Paul Moore <paul@paul-moore.com> wrote:
->
-> On Mon, Nov 7, 2022 at 3:58 PM Gil Cukierman <cukie@google.com> wrote:
-> >
-> > This patchset provides the changes required for controlling access to
-> > the io_uring_setup system call by LSMs. It does this by adding a new
-> > hook to io_uring. It also provides the SELinux implementation for a new
-> > permission, io_uring { setup }, using the new hook.
-> >
-> > This is important because existing io_uring hooks only support limiting
-> > the sharing of credentials and access to the sensitive uring_cmd file
-> > op. Users of LSMs may also want the ability to tightly control which
-> > callers can retrieve an io_uring capable fd from the kernel, which is
-> > needed for all subsequent io_uring operations.
->
-> It isn't immediately obvious to me why simply obtaining a io_uring fd
-> from io_uring_setup() would present a problem, as the security
-> relevant operations that are possible with that io_uring fd *should*
-> still be controlled by other LSM hooks.  Can you help me understand
-> what security issue you are trying to resolve with this control?
+Long time ago Linus advocated for not using NO_IRQ, see
+https://lkml.org/lkml/2005/11/21/221 . He re-iterated the same view
+recently in https://lkml.org/lkml/2022/10/12/622
 
+So test !irq instead of tesing irq == NO_IRQ.
 
-I think there are a few reasons why we want this particular hook.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/usb/host/ehci-grlib.c  | 2 +-
+ drivers/usb/host/ehci-ppc-of.c | 2 +-
+ drivers/usb/host/fhci-hcd.c    | 2 +-
+ drivers/usb/host/ohci-ppc-of.c | 2 +-
+ drivers/usb/host/uhci-grlib.c  | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-1.  It aligns well with how other resources are managed by selinux
-where access to the resource is the first control point (e.g. "create"
-for files, sockets, or bpf_maps, "prog_load" for bpf programs, and
-"open" for perf_event) and then additional functionality or
-capabilities require additional permissions.
-2. It aligns well with how resources are managed on Android. We often
-do not grant direct access to resources (like memory buffers). For
-example, a single domain on Android manages the loading of all bpf
-programs and the creation of all bpf maps. Other domains can be
-granted access to these only once they're created. We can enforce base
-properties with MAC, while allowing the system to manage and grant
-access to resources at run-time via DAC (e.g. using Android's
-permission model). This allows us to do better management and
-accounting of resources.
-3. Attack surface management. One of the primary uses of selinux on
-Android is to assess and limit attack surface (e.g.
-https://twitter.com/jeffvanderstoep/status/1422771606309335043) . As
-io_uring vulnerabilities have made their way through our vulnerability
-management system, it's become apparent that it's complicated to
-assess the impact. Is a use-after-free reachable? Creating
-proof-of-concept exploits takes a lot of time, and often functionality
-can be reached by multiple paths. How many of the known io_uring
-vulnerabilities would be gated by the existing checks? How many future
-ones will be gated by the existing checks? I don't know the answer to
-either of these questions and it's not obvious. This hook makes that
-initial assessment simple and effective.
->
+diff --git a/drivers/usb/host/ehci-grlib.c b/drivers/usb/host/ehci-grlib.c
+index a2c3b4ec8a8b..0717f2ccf49d 100644
+--- a/drivers/usb/host/ehci-grlib.c
++++ b/drivers/usb/host/ehci-grlib.c
+@@ -99,7 +99,7 @@ static int ehci_hcd_grlib_probe(struct platform_device *op)
+ 	hcd->rsrc_len = resource_size(&res);
+ 
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+ 			__FILE__);
+ 		rv = -EBUSY;
+diff --git a/drivers/usb/host/ehci-ppc-of.c b/drivers/usb/host/ehci-ppc-of.c
+index 28a19693c19f..62a0a193798c 100644
+--- a/drivers/usb/host/ehci-ppc-of.c
++++ b/drivers/usb/host/ehci-ppc-of.c
+@@ -119,7 +119,7 @@ static int ehci_hcd_ppc_of_probe(struct platform_device *op)
+ 	hcd->rsrc_len = resource_size(&res);
+ 
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+ 			__FILE__);
+ 		rv = -EBUSY;
+diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+index 95a44462bed0..64a64140c2fd 100644
+--- a/drivers/usb/host/fhci-hcd.c
++++ b/drivers/usb/host/fhci-hcd.c
+@@ -676,7 +676,7 @@ static int of_fhci_probe(struct platform_device *ofdev)
+ 
+ 	/* USB Host interrupt. */
+ 	usb_irq = irq_of_parse_and_map(node, 0);
+-	if (usb_irq == NO_IRQ) {
++	if (!usb_irq) {
+ 		dev_err(dev, "could not get usb irq\n");
+ 		ret = -EINVAL;
+ 		goto err_usb_irq;
+diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
+index 591f675cc930..f2f6c832ec98 100644
+--- a/drivers/usb/host/ohci-ppc-of.c
++++ b/drivers/usb/host/ohci-ppc-of.c
+@@ -120,7 +120,7 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
+ 	}
+ 
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
+ 			__FILE__);
+ 		rv = -EBUSY;
+diff --git a/drivers/usb/host/uhci-grlib.c b/drivers/usb/host/uhci-grlib.c
+index 3ef6d52839e5..907d5f01edfd 100644
+--- a/drivers/usb/host/uhci-grlib.c
++++ b/drivers/usb/host/uhci-grlib.c
+@@ -116,7 +116,7 @@ static int uhci_hcd_grlib_probe(struct platform_device *op)
+ 	hcd->rsrc_len = resource_size(&res);
+ 
+ 	irq = irq_of_parse_and_map(dn, 0);
+-	if (irq == NO_IRQ) {
++	if (!irq) {
+ 		printk(KERN_ERR "%s: irq_of_parse_and_map failed\n", __FILE__);
+ 		rv = -EBUSY;
+ 		goto err_usb;
+-- 
+2.37.1
 
->
-> --
-> paul-moore.com
