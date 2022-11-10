@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B42623A72
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ADB623A78
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbiKJDa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S232733AbiKJDay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiKJDaV (ORCPT
+        with ESMTP id S232688AbiKJDas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:30:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A341A225;
-        Wed,  9 Nov 2022 19:30:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8711B61D65;
-        Thu, 10 Nov 2022 03:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3FCAC4347C;
-        Thu, 10 Nov 2022 03:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668051018;
-        bh=YhDBP6aqc9PFkctA4gMXiqYT1uDDiUPBIpCi9juW/0w=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=RB5GPccg8QNzi3c3lXFpqUaPSr+3G0gvmAH7kh4ymXP3/3tSLoEAoXijz/FaIZbmr
-         7cE+KL1XoaN1sdQ/IFtdtmQMZL1klEA5T6a2WKRCf08ZO4k+/VBf8n7Ryghy9KPBq/
-         YlRKU88GFrTTqhQsiWYrszL3wwgttUZ5e29JM0XA8hwVj739K9JL7uiLUjfc4Gz1U2
-         ofUhBpWTCChKXUO5tp/iqOOrkTnjpdRIIZ+2WPVeSElHshkYwCHIC5vptvPQwzfXKf
-         vjvbwKvSEcLOg2fp+4jO4ClDWT6tYM7Z2GBFp9HJMx0fEYzkTbCiYB6ls4JY+oFRVn
-         hv5FvAme2br5Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B062CE21EFF;
-        Thu, 10 Nov 2022 03:30:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 9 Nov 2022 22:30:48 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9032EF48;
+        Wed,  9 Nov 2022 19:30:30 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N76mH6Rvvz4f3xbk;
+        Thu, 10 Nov 2022 11:30:23 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgDXgK9RcGxjApYHAQ--.34385S3;
+        Thu, 10 Nov 2022 11:30:26 +0800 (CST)
+Subject: Re: [PATCH] block, bfq: fix null pointer dereference in
+ bfq_bio_bfqg()
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "paolo.valente@linaro.org" <paolo.valente@linaro.org>
+Cc:     "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221108103434.2853269-1-yukuai1@huaweicloud.com>
+ <9e0d8652-adda-3d39-88cd-d735194d4083@nvidia.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <371bdeac-7841-af8b-cb45-03e49f8589bd@huaweicloud.com>
+Date:   Thu, 10 Nov 2022 11:30:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <9e0d8652-adda-3d39-88cd-d735194d4083@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 1/1] net: phy: dp83867: add TI PHY loopback
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166805101870.26797.14285445603030575804.git-patchwork-notify@kernel.org>
-Date:   Thu, 10 Nov 2022 03:30:18 +0000
-References: <20221108101527.612723-1-michael.wei.hong.sit@intel.com>
-In-Reply-To: <20221108101527.612723-1-michael.wei.hong.sit@intel.com>
-To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tee.min.tan@intel.com,
-        hong.aun.looi@intel.com, weifeng.voon@intel.com,
-        muhammad.husaini.zulkifli@intel.com, yi.fang.gan@intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CM-TRANSID: cCh0CgDXgK9RcGxjApYHAQ--.34385S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYy7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4II
+        rI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,28 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue,  8 Nov 2022 18:15:27 +0800 you wrote:
-> From: Tan Tee Min <tee.min.tan@linux.intel.com>
+在 2022/11/09 6:50, Chaitanya Kulkarni 写道:
 > 
-> The existing genphy_loopback() is not working for TI DP83867 PHY as it
-> will disable autoneg support while another side is still enabling autoneg.
-> This is causing the link is not established and results in timeout error
-> in genphy_loopback() function.
 > 
-> [...]
+> Please submit the block tests for this as this is clearly non-trivial
+> issue that needs to be tested every release ..
 
-Here is the summary with links:
-  - [net-next,1/1] net: phy: dp83867: add TI PHY loopback
-    https://git.kernel.org/netdev/net-next/c/13bd85580b85
+I wrote a c reporducer that is 100% reproducible in v5.10, I'll try to
+add a block test. However, it might take sometime because I'm not
+familar with blktests yet...
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thanks,
+Kuai
+> 
+> -ck
+> 
+> 
 
