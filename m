@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00065624D66
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51B4624D6C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiKJWDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S231298AbiKJWFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 17:05:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiKJWC7 (ORCPT
+        with ESMTP id S229531AbiKJWFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:02:59 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488D051C09
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:02:59 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3098646pjk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:02:59 -0800 (PST)
+        Thu, 10 Nov 2022 17:05:14 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C986219
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:05:14 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so3124393pji.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:05:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0hUxSNiyiP1FDxtyo/mybNyzLXRprRaysx2LPFaFTIg=;
-        b=iFKKKqEsH752Yu9uMRK7Rbwse7YpvoeLmOwrxmv4hOT0T4Qjibq/cSYYi89cBhCMJZ
-         GY2x49iXFuIz7pi02LbkQYc5NO8fA46+IjPy/oV/vYakFl3ap8hHgUHHLHi3KULiqg4M
-         6VLdVaPLHwJO4ppMmQ9dxvamh9PwVPz0X2o0c4Qx8RA+I4zF7Aqau9z9KlJGgzB/BnsU
-         TOZx/yAFYJBujkCLha1e3nseIptn2GnOMYWzDV6kiKja3rfnPJ3/ba7n0KhIoaXOkrpk
-         Y/8y2qhqr1Vo5RQIT+S6Q+bEAmOo5C/BP0PrA+h2tdNyaCQ5DXoD4MFG2VHUyUtX/CDQ
-         6FRA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a34ppdWbivNAxs0hZgRllXVIJs8hvYA2VZe5Kyhs1OM=;
+        b=P6vqEdFmeiejzHVbCjsfMpsQ29zuzTvwlvxMocFOI12tWCjBgBJRuRlA+3jh1ZXKMJ
+         pKwCFuHwJg0GAlwoZUSh+uPcDwx6PD7PMLM78itRlOqjv9aJ6DEiluMK2qYiBzIXn4ff
+         hPrcfEgTfO6Vnm2bGWzIyCbABoCOD/OOkD0GKHd8QfQaiX2UXizd45S+gUzReYaIso5K
+         +6EFD/K2fB668OQhEkpkTtm8DdTAcVBLQxxxLCfPnFsQ9BpxubAIuD9RGxjUG96z2hvs
+         C1sBF2PRjlxLQuF8ilQGh7Z8EhhwqXBhoEY5b76cHp7gHNRdprJR//0/dKheg/k4/s7U
+         AYhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0hUxSNiyiP1FDxtyo/mybNyzLXRprRaysx2LPFaFTIg=;
-        b=Lf9QRWTNsibXiFFei94vZhNJ8JF2ZnPIu5dvbcUJY6PDvhQTPWZs0hfSWZAw9S3UT4
-         hZ8++kfzy6LJD320cfv85yDESOU+2SrACR6+DRMRXCHxb6rCcIbnopYh+qM9RSL4pGzh
-         m3BupV2wTqBfZHilwRWjjhW0tDsIoltNB3c1qIIUwzgCO+KjlCCxC9c2jPpzBbF0L/jN
-         M4t3BE5HU/yhi7XWPAFMj5rC7R4++HxMrzpdlLyEk3060WPn0p1H2FI7yU/6mjvSUFfR
-         697ZbfBDsjPjHvzOlagmXSQMTV4n+XoEXkCUYAFlEPZgRpmm5czWqhEkp0+4b9S7gFDk
-         z7bA==
-X-Gm-Message-State: ACrzQf35pOTtMJ7ggpX6vA3skrIJt5jOZCpkSdsWaln5tRQ+ZCxR+rez
-        mtPEcU2f1XI9ULqTEuX5t8c=
-X-Google-Smtp-Source: AMsMyM7/Wb2clQiZC8X/DJgAfJ62LgZY7EjD+MfsEcrYj3vVkIYrcx05UVRdFV6YX8hh7tpx61/hgQ==
-X-Received: by 2002:a17:90b:1d4c:b0:210:a844:217c with SMTP id ok12-20020a17090b1d4c00b00210a844217cmr2298643pjb.150.1668117778506;
-        Thu, 10 Nov 2022 14:02:58 -0800 (PST)
-Received: from smtpclient.apple ([66.170.99.95])
-        by smtp.gmail.com with ESMTPSA id r17-20020a170903411100b00186c3727294sm141647pld.270.2022.11.10.14.02.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Nov 2022 14:02:57 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v8 2/2] mm: remove zap_page_range and change callers to
- use zap_vma_range
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <Y21s1uzkey6u4nyK@x1n>
-Date:   Thu, 10 Nov 2022 14:02:56 -0800
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C16276B9-F40A-4767-AB3A-8566FA61A8DF@gmail.com>
-References: <20221108011910.350887-1-mike.kravetz@oracle.com>
- <20221108011910.350887-3-mike.kravetz@oracle.com>
- <7140E1D7-B1B9-4462-ADDA-E313A7A90A68@gmail.com> <Y21s1uzkey6u4nyK@x1n>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a34ppdWbivNAxs0hZgRllXVIJs8hvYA2VZe5Kyhs1OM=;
+        b=ET3LFp/it4gu7f00CrmaUF3l8RtrQnAOXR9bZzBsk1pIgo2zSITcGZpwYc6sZnhZXM
+         CPsxIzKN0zn8QIyV3fnAtYGJBFwXxtYtRVtFupaStp+WYRvG1JUw+h+ekYcCUrsz6Kwb
+         PFgfC4VwSp3HQy6C+dI6bQBJ16VkP2xq9vL6Kb61ZFbgVCm7Ew+6gOtm81VtCAZoKE/E
+         Cd0rhqjo87CNi8HUdczPLY97/Y1+2q6xNIPRZ/KnXCFBOIfiV7d3zFJh5BgX7kifGg6j
+         fvkxCCodONDieJkAe1x5FeUUtGqXf4dr9JAyH2xLfwCK38ZBFN6ApY/hdE3zonS7ExFx
+         3DJQ==
+X-Gm-Message-State: ACrzQf1djPxEcaUGH+mVEAPNdi+ghilvZNr4sE5iO1WjIiEb4eIk7QRg
+        wVReLR3BBkmT/CeZ9EinVWwk44Tt/cjmaGtLqzH7pA==
+X-Google-Smtp-Source: AMsMyM5GZRwbXU2IPHXYp9E6tIoCnNMxsz/56yVCJT0f0ThtNxVVkvDuqpCVob8hLMLuQlSbW/bMatrnBQRCNPQoQx4=
+X-Received: by 2002:a17:902:7b98:b0:186:8558:ded2 with SMTP id
+ w24-20020a1709027b9800b001868558ded2mr2238985pll.95.1668117913389; Thu, 10
+ Nov 2022 14:05:13 -0800 (PST)
+MIME-Version: 1.0
+References: <20221108170103.3375832-1-nathan@kernel.org>
+In-Reply-To: <20221108170103.3375832-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 10 Nov 2022 14:05:01 -0800
+Message-ID: <CAKwvOdkzs3YrtE9MWMOF=ssxx_9gdXWak06OEcJhHr5z+j0mqg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: ACPI: Remove unused variables
+ 'acpi_cpufreq_online' and 'ret'
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,65 +72,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Nov 10, 2022, at 1:27 PM, Peter Xu <peterx@redhat.com> wrote:
+On Tue, Nov 8, 2022 at 9:01 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Clang warns:
+>
+>   drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
+>           acpi_cpufreq_online = ret;
+>                                 ^~~
+>   drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 'ret' to silence this warning
+>           int ret;
+>                 ^
+>                   = 0
+>   1 error generated.
+>
+> Both ret and acpi_cpufreq_online are now unused so they can be safely
+> removed, clearing up the warning.
+>
+> Fixes: 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1757
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-> Hi, Nadav,
->=20
-> On Thu, Nov 10, 2022 at 01:09:43PM -0800, Nadav Amit wrote:
->> But, are the callers really able to guarantee that the ranges are all =
-in a
->> single VMA? I am not familiar with the users, but how for instance
->> tcp_zerocopy_receive() can guarantee that no one did some mprotect() =
-of some
->> sorts that caused the original VMA to be split?
->=20
-> Let me try to answer this one for Mike..  We have two callers in tcp
-> zerocopy code for this function:
->=20
-> tcp_zerocopy_vm_insert_batch_error[2095] zap_page_range(vma, *address, =
-maybe_zap_len);
-> tcp_zerocopy_receive[2237]     zap_page_range(vma, address, =
-total_bytes_to_map);
->=20
-> Both of them take the mmap lock for read, so firstly mprotect is not
-> possible.
->=20
-> The 1st call has:
->=20
-> 	mmap_read_lock(current->mm);
->=20
-> 	vma =3D vma_lookup(current->mm, address);
-> 	if (!vma || vma->vm_ops !=3D &tcp_vm_ops) {
-> 		mmap_read_unlock(current->mm);
-> 		return -EINVAL;
-> 	}
-> 	vma_len =3D min_t(unsigned long, zc->length, vma->vm_end - =
-address);
-> 	avail_len =3D min_t(u32, vma_len, inq);
-> 	total_bytes_to_map =3D avail_len & ~(PAGE_SIZE - 1);
-> 	if (total_bytes_to_map) {
-> 		if (!(zc->flags & =
-TCP_RECEIVE_ZEROCOPY_FLAG_TLB_CLEAN_HINT))
-> 			zap_page_range(vma, address, =
-total_bytes_to_map);
->=20
-> Here total_bytes_to_map comes from avail_len <--- vma_len, which is a =
-min()
-> of the rest vma range.  So total_bytes_to_map will never go beyond the =
-vma.
->=20
-> The 2nd call uses maybe_zap_len as len, we need to look two layers of =
-the
-> callers, but ultimately it's something smaller than total_bytes_to_map =
-we
-> discussed.  Hopefully it proves 100% safety on tcp zerocopy.
+Thanks for the patch!
 
-Thanks Peter for the detailed explanation.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I had another look at the code and indeed it should not break. I am not =
-sure
-whether users who zero-copy receive and mprotect() part of the memory =
-would
-not be surprised, but I guess that=E2=80=99s a different story, which I =
-should
-further study at some point.=
+> ---
+>  drivers/cpufreq/acpi-cpufreq.c | 6 ------
+>  1 file changed, 6 deletions(-)
+>
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index c8fdfcf659e6..74ef0e05ff7b 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -953,12 +953,8 @@ static struct cpufreq_driver acpi_cpufreq_driver = {
+>         .attr           = acpi_cpufreq_attr,
+>  };
+>
+> -static enum cpuhp_state acpi_cpufreq_online;
+> -
+>  static void __init acpi_cpufreq_boost_init(void)
+>  {
+> -       int ret;
+> -
+>         if (!(boot_cpu_has(X86_FEATURE_CPB) || boot_cpu_has(X86_FEATURE_IDA))) {
+>                 pr_debug("Boost capabilities not present in the processor\n");
+>                 return;
+> @@ -966,8 +962,6 @@ static void __init acpi_cpufreq_boost_init(void)
+>
+>         acpi_cpufreq_driver.set_boost = set_boost;
+>         acpi_cpufreq_driver.boost_enabled = boost_state(0);
+> -
+> -       acpi_cpufreq_online = ret;
+>  }
+>
+>  static int __init acpi_cpufreq_init(void)
+>
+> base-commit: 21cdb6c18f85fe538ca8740bc79f11fbe08d0197
+> --
+> 2.38.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
