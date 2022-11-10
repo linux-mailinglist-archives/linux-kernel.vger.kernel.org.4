@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A053623A4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D088623A4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbiKJDSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S232335AbiKJDTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbiKJDSF (ORCPT
+        with ESMTP id S230120AbiKJDTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:18:05 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902462A95C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 19:18:04 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id j1-20020a4ad181000000b0049e6e8c13b4so101697oor.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 19:18:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ui4nz+rk4+cy7iX09mK3SZJkU54S/hpyEMWrZ+RjI2M=;
-        b=eC+RoKfhId/DMoP2yqdKWn4KQDV/bHSjRCDt/kWA5xOVi5nb2pPkI4mlgslo1JNknx
-         Tbc3SQ7t4elqvdUA3nUUCKvQbTL7ks+AB1IJ5XhKa2/de9c1Udet2zrq/4jLZG7GTcyo
-         qTJd5hnqSuyrRaevhIkhNKvsdvsYMK4tChfEz0tiplUuDiC5uC04CxKrOxSGi0hN2o+4
-         CO0OjAnj9tnmtB5qAC9vFShPdrrfEgCzNnfwl/zNEBCkbuZ9vTypUAhuhzEGgjMN41/b
-         UI8hKSlDuk0oJLzFvXx2H4VG88DRFWuETaRueen5S0NSNB5HmirGKvFdgsSm1yQjpbQW
-         TSGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ui4nz+rk4+cy7iX09mK3SZJkU54S/hpyEMWrZ+RjI2M=;
-        b=Za6A1pwa+xCpUpyoJrzjqeCpqIKqDHyZaKoVLoyVeqE4Jf3fnj97JFc5GeB7VSzr9h
-         BJM2M5IynDjMKLaHpERr2dGNWmtAuYnLNKjgetMTKF91DjhTe4kypwEWBvarsR7LxTzf
-         MaZRj1OcXqUZGwrRFGD6MCqoDqKx94Bfzjv1UPC9mfJdb31s1xMwNl97SNvSic2rOShd
-         9lhfHDehalcFTTdhR5dj4dura2aMbU7T2TV60pIgcWNrzjlOqh59pWn+wGg4pss/e5fv
-         EV52u9MTYSBNcTl2CJcrhm2e6sAkk3zQS+ynwFhKZskyGpYHbgsMqjcYO1XjnmC/l0Ft
-         msgQ==
-X-Gm-Message-State: ANoB5pnl5Qt9cyxA3FPd+fTGUAi6q5qVYgHkoEvNw1C8T30Y6oj6Qzvb
-        2lxUAxmXY28krVbf/lIfxVyzWLa3/ciKdEygvwOO
-X-Google-Smtp-Source: AA0mqf4jNyWHNPdiVFcHIrPF0+v2AoEgmnjHvVUr776+Z6yoxo2tMWAfX7sFLgPjynd2YPyaEA2X+YXWw2y/wJe591Q=
-X-Received: by 2002:a4a:ca8f:0:b0:49e:f01a:feaf with SMTP id
- x15-20020a4aca8f000000b0049ef01afeafmr7560680ooq.81.1668050283850; Wed, 09
- Nov 2022 19:18:03 -0800 (PST)
+        Wed, 9 Nov 2022 22:19:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CA3286E4;
+        Wed,  9 Nov 2022 19:19:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C2261D2E;
+        Thu, 10 Nov 2022 03:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27236C433D6;
+        Thu, 10 Nov 2022 03:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668050382;
+        bh=lEvNPQT64JP784ZbtlJ2vRiQt5VXmBZWy37oJLq+9Yk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lrc9jPwfm5wGLhnQjkl7vdG9A7eP3u7lsFf8egWyJF4miGX0qRqPnopIg0SHsKR37
+         ic+zwMLPgK6+Q61c7SnN28o7e4lx+TjvwPIuKqrmguV41f+ohZb6RcT5pfeAHsi7vl
+         OSvzBT7PlyaYFxCW6LUTi2h9XIMN2Knd7v7F9nLDGmn33FFA2IG6kq3r4d/eThHxsc
+         FKdkE6U38d3+2N2mlxwAMWe21fXR82N/yLpJ99xeL0kvxFPMh4X+bMMta3ISYXl7Dd
+         u6PWtqcB0RwTDyMic9P1HqLboUWP+uu6DEokI0tznZF3fh1kDTWJhH/amCzRMNLvtm
+         Na04cS58cmSPw==
+Date:   Wed, 9 Nov 2022 19:19:41 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        vigneshr@ti.com, srk@ti.com, linux-omap@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: ethernet: ti: cpsw_ale: optimize
+ cpsw_ale_restore()
+Message-ID: <20221109191941.6af4f71d@kernel.org>
+In-Reply-To: <20221108135643.15094-1-rogerq@kernel.org>
+References: <20221108135643.15094-1-rogerq@kernel.org>
 MIME-Version: 1.0
-References: <20221025184519.13231-1-casey@schaufler-ca.com>
- <20221025184519.13231-8-casey@schaufler-ca.com> <CAHC9VhQ5Jrt3Ns+m7DFZ+_pP81AWqSx588HMZR+7MUuMfSZoig@mail.gmail.com>
- <ea927e49-0099-df0a-d263-400782486b35@schaufler-ca.com>
-In-Reply-To: <ea927e49-0099-df0a-d263-400782486b35@schaufler-ca.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 9 Nov 2022 22:17:52 -0500
-Message-ID: <CAHC9VhQMfAix=KqpWGNg_2cryBJHyiFTzURQ1YuD_0SY92ZHsA@mail.gmail.com>
-Subject: Re: [PATCH v1 7/8] LSM: Create lsm_module_list system call
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 8:37 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> On 11/9/2022 3:35 PM, Paul Moore wrote:
-> > On Tue, Oct 25, 2022 at 2:48 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> >> Create a system call to report the list of Linux Security Modules
-> >> that are active on the system. The list is provided as an array
-> >> of LSM ID numbers.
-> >>
-> >> The calling application can use this list determine what LSM
-> >> specific actions it might take. That might include chosing an
-> >> output format, determining required privilege or bypassing
-> >> security module specific behavior.
-> >>
-> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> >> ---
-> >>  include/linux/syscalls.h |  1 +
-> >>  kernel/sys_ni.c          |  1 +
-> >>  security/lsm_syscalls.c  | 38 ++++++++++++++++++++++++++++++++++++++
-> >>  3 files changed, 40 insertions(+)
-> > ..
-> >
-> >> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
-> >> index da0fab7065e2..cd5db370b974 100644
-> >> --- a/security/lsm_syscalls.c
-> >> +++ b/security/lsm_syscalls.c
-> >> @@ -154,3 +154,41 @@ SYSCALL_DEFINE3(lsm_self_attr,
-> >>         kfree(final);
-> >>         return rc;
-> >>  }
-> >> +
-> >> +/**
-> >> + * lsm_module_list - Return a list of the active security modules
-> >> + * @ids: the LSM module ids
-> >> + * @size: size of @ids, updated on return
-> >> + * @flags: reserved for future use, must be zero
-> >> + *
-> >> + * Returns a list of the active LSM ids. On success this function
-> >> + * returns the number of @ids array elements. This value may be zero
-> >> + * if there are no LSMs active. If @size is insufficient to contain
-> >> + * the return data -E2BIG is returned and @size is set to the minimum
-> >> + * required size. In all other cases a negative value indicating the
-> >> + * error is returned.
-> >> + */
-> > Let's make a promise that for this syscall we will order the LSM IDs
-> > in the array in the same order as which they are configured/executed.
->
-> Sure. Order registered, which can vary, as opposed to LSM ID order,
-> which cannot. That could be important to ensure that applications
-> that enforce the same policy as the kernel will hit the checks in
-> the same order as the kernel. That's how it is coded. It needs to
-> be documented.
+On Tue,  8 Nov 2022 15:56:43 +0200 Roger Quadros wrote:
+> If an entry was FREE then we don't have to restore it.
 
-Yep.  One of the big reasons for documenting it this way is to ensure
-that we define the order as part of the API.
+Motivation? Does it make the restore faster?
 
--- 
-paul-moore.com
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+> 
+> Patch depends on
+> https://lore.kernel.org/netdev/20221104132310.31577-3-rogerq@kernel.org/T/
+> 
+>  drivers/net/ethernet/ti/cpsw_ale.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/ti/cpsw_ale.c b/drivers/net/ethernet/ti/cpsw_ale.c
+> index 0c5e783e574c..41bcf34a22f8 100644
+> --- a/drivers/net/ethernet/ti/cpsw_ale.c
+> +++ b/drivers/net/ethernet/ti/cpsw_ale.c
+> @@ -1452,12 +1452,15 @@ void cpsw_ale_dump(struct cpsw_ale *ale, u32 *data)
+>  	}
+>  }
+>  
+> +/* ALE table should be cleared (ALE_CLEAR) before cpsw_ale_restore() */
+
+Maybe my tree is old but I see we clear only if there is a netdev that
+needs to be opened but then always call ale_restore(). Is that okay?
+
+I'd also s/should/must/ 
+
+>  void cpsw_ale_restore(struct cpsw_ale *ale, u32 *data)
+>  {
+> -	int i;
+> +	int i, type;
+>  
+>  	for (i = 0; i < ale->params.ale_entries; i++) {
+> -		cpsw_ale_write(ale, i, data);
+> +		type = cpsw_ale_get_entry_type(data);
+> +		if (type != ALE_TYPE_FREE)
+> +			cpsw_ale_write(ale, i, data);
+>  		data += ALE_ENTRY_WORDS;
+>  	}
+>  }
+
