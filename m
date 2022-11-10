@@ -2,101 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C857A6242C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E68296242C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiKJNCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S230106AbiKJNCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:02:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiKJNCQ (ORCPT
+        with ESMTP id S230062AbiKJNCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:02:16 -0500
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3588725E9;
-        Thu, 10 Nov 2022 05:02:12 -0800 (PST)
-Received: by mail-qk1-f180.google.com with SMTP id z17so976398qki.11;
-        Thu, 10 Nov 2022 05:02:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zsfYp5SezvI3MFiQxEmlFhh5nmWcQ5tJ6YkRjK54Yks=;
-        b=J5jMbJ1GbKefOaYWZMpCbsrCxMXfDjPzyB5ZJ/WOnkPpjpqqB+BPbFt/dEQTOtGFem
-         2+w7z/IWX//gTzJeE2NaUKljlVOHVoiIbQr1ltE9gO8pw/x9kFP7hW6Lr05AzxPI46BP
-         BWdNzDCabRRH87uQwyq8CLUc9cKxpb89VmumwSrxBQlYBTGWne46l8ZY9k93x2jpmNf6
-         YFMVNtLej4QeMpL8PPPUvqe35qV5fVzBIgZ3aqViGfz2hoarS/VIhCoFHx0/O/cwLw5P
-         L6q6UQjiNhYlP2H3smgfZ+TBj86Q+qSSyRD1SvZ0+LjktLhmYh14brxXJF2jyZCw7XC8
-         r/xQ==
-X-Gm-Message-State: ACrzQf3EzMGIP/9UcSHBIzx1ZNptf8GsoeSoGQqZJf1ez5MBXyi+sxwH
-        zcsr4cLBVKYQfHTUMXAzxf/5jV+e8MMkGrLncfo=
-X-Google-Smtp-Source: AMsMyM4OVrGeZTrljL1VI+EAIhcce32gE+BmWfg9mU3oy4JLELw23BWbxtfUa68k/0KZqijNLfojC25ZrabY7qGYoSw=
-X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
- j22-20020a05620a147600b006fa4c6783ecmr35189800qkl.23.1668085321410; Thu, 10
- Nov 2022 05:02:01 -0800 (PST)
+        Thu, 10 Nov 2022 08:02:05 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE0C701B7;
+        Thu, 10 Nov 2022 05:02:02 -0800 (PST)
+Message-ID: <618523aa-58bf-229c-19ef-eb752937e9ad@lirui.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
+        t=1668085321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ATm4kAH7JE8hj5bSRwpeVJYUJXALD5eBvNbcqQ5KEok=;
+        b=i+KZWU8vL9h9Jzf74xxQxeAssbFKqevbDRdzEo3O8v6TVo9thSoMDoniwZ6tTlqMUBcMm8
+        hdRNAW0PfYZQJnUnBhTQEVvfRTi100MxNqJGyzN55/K+nALlg449uHSiUbNT4bRcqKQQg4
+        h2lY5PxPtpIJ8EgqQGcmrndfIknYC+nMZQf5OrQ+18Cfmh1OYwgikP22rQeFy1vU3C+c4O
+        ZICHZveYu+GHNpSpwC7JQGrHGOYAvAIs68ol5FDq0UVPeyeHuhJ+4jaCMqm9DOCUuwvab/
+        OsrB7mBr0UVoQw5zbruH7KTw/u5sG0/0yi9RZ9V8Vs7dedkFoZRB3LwYAfZyMQ==
+Date:   Thu, 10 Nov 2022 21:01:49 +0800
 MIME-Version: 1.0
-References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-6-linux@roeck-us.net>
- <CAJZ5v0hO9_95uD1qY8aBe094JWsxPrba2wk_PchKHmVqRj0CHw@mail.gmail.com> <20221110002549.GA3550654@roeck-us.net>
-In-Reply-To: <20221110002549.GA3550654@roeck-us.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Nov 2022 14:01:49 +0100
-Message-ID: <CAJZ5v0je2QSUhU8Knk9UsboGLRpk2sNqE6U4X6eGAe+NUxZt_Q@mail.gmail.com>
-Subject: Re: [PATCH 5/9] thermal/core: Introduce locked version of thermal_zone_device_update
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+Subject: Re: [PATCH] docs/zh_CN: Add userspace-api/accelerators/ocxl Chinese
+ translation
+To:     Wu XiangCheng <wu.xiangcheng@linux.dev>
+Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221110062609.377848-1-me@lirui.org>
+ <Y2zrKAZL38i48SA5@bobwxc.mipc>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Rui Li <me@lirui.org>
+In-Reply-To: <Y2zrKAZL38i48SA5@bobwxc.mipc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 1:25 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On 2022/11/10 20:14, Wu XiangCheng wrote:
+>> Translate the following documents into Chinese:
+>>
+>> - userspace-api/accelerators/ocxl.rst
+>>
+>> Signed-off-by: Rui Li <me@lirui.org>
+>> ---
+>>  .../zh_CN/userspace-api/accelerators/ocxl.rst | 168 ++++++++++++++++++
+>>  .../zh_CN/userspace-api/index.rst             |   2 +-
+>>  2 files changed, 169 insertions(+), 1 deletion(-)
+>>  create mode 100644 Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst
+>>
+>> diff --git a/Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst b/Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst
+>> new file mode 100644
+>> index 000000000000..274dcf4667db
+>> --- /dev/null
+>> +++ b/Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst
+>> @@ -0,0 +1,168 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +.. include:: ../../disclaimer-zh_CN.rst
+>> +
+>> +:Original: Documentation/userspace-api/accelerators/ocxl.rst
+>> +
+>> +:翻译:
+>> +
+>> + 李睿 Rui Li <me@lirui.org>
+>> +
+>> +=====================================
+>> +OpenCAPI （开放相干加速器处理器接口）
+>> +=====================================
+>> +
+>> +*OpenCAPI: Open Coherent Accelerator Processor Interface*
+>> +
+>> +OpenCAPI是处理器和加速器之间的一个接口，致力于达到低延迟和高带宽。该规范
+>> +由 `OpenCAPI Consortium <http://opencapi.org/>`_ 开发。
+>> +
+>> +它允许加速器（可以是FPGA、ASIC等）使用虚拟地址连贯地访问主机内存。一个OpenCAPI
+>> +设备也可以托管它自己的内存，并可以由主机访问。
+>> +
+>> +OpenCAPI在Linux中称为“ocxl”，它作为“cxl”的开放、处理器无关的演进，这么命
+> missed:
+> 	'cxl' (the driver for the IBM CAPI interface for powerpc)
 >
-> On Wed, Nov 09, 2022 at 08:15:17PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > In thermal_zone_device_set_mode(), the thermal zone mutex is released only
-> > > to be reacquired in the subsequent call to thermal_zone_device_update().
-> > >
-> > > Introduce __thermal_zone_device_update() as locked version of
-> >
-> > Did you mean "unlocked"?
-> >
-> No, I did mean "locked", as in "must be called with thermal zone device
-> mutex acquired".
+>> +名是为了避免与ISDN CAPI子系统相混淆。
+>> +
+>> +
+>> +高层视角
+>> +========
+>> +
+>> +OpenCAPI定义了一个在物理链路层上实现的数据链路层（TL）和传输层（TL）。任何
+>> +实现DL和TL的处理器或者设备都可以开始共享内存。
+>> +
+>> +::
+>> +
+>> +  +-----------+                         +-------------+
+>> +  |           |                         |             |
+>> +  |           |                         | Accelerated |
+>> +  | Processor |                         |  Function   |
+>> +  |           |  +--------+             |    Unit     |  +--------+
+>> +  |           |--| Memory |             |    (AFU)    |--| Memory |
+>> +  |           |  +--------+             |             |  +--------+
+>> +  +-----------+                         +-------------+
+>> +       |                                       |
+>> +  +-----------+                         +-------------+
+>> +  |    TL     |                         |    TLX      |
+>> +  +-----------+                         +-------------+
+>> +       |                                       |
+>> +  +-----------+                         +-------------+
+>> +  |    DL     |                         |    DLX      |
+>> +  +-----------+                         +-------------+
+>> +       |                                       |
+>> +       |                   PHY                 |
+>> +       +---------------------------------------+
+>> +
+>> +  Processor：处理器
+>> +  Memory：内存
+>> +  Accelerated Function Unit：加速函数单元
+>> +
+>> +
+>> +
+>> +设备发现
+>> +========
+>> +
+>> +OpenCAPI依赖一个在设备上实现的与PCI类似的配置空间。因此主机可以通过查询
+>> +配置空间来发现AFU。
+>> +
+>> +OpenCAPI设备在Linux中被当作PCI设备（有一些注意事项）。固件需要对硬件进行
+> 类PCI设备
 >
-> locked:
+>> +抽象，就好像它是一个PCI链路。许多已有的PCI架构被重用：在模拟标准PCI时，
+>> +设备被扫描并且BAR（基址寄存器）被分配。像“lspci”的命令因此可以被用于查看
+>> +哪些设备可用。
+>> +
+>> +配置空间定义了可以在物理适配器上可以被找到的AFU，比如它的名字、支持多少内
+>> +存上下文、内存映射IO（MMIO）区域的大小等。
+>> +
+>> +
+>> +
+>> +MMIO
+>> +====
+>> +
+>> +OpenCAPI为每个AFU定义了两个MMIO区域：
+>> +
+>> +* 全局MMIO区域，保存和整个AFU相关的寄存器。
+>> +* 每个进程的MMIO区域，对于每个上下文固定大小。
+>> +
+>> +
+>> +
+>> +AFU中断
+>> +=======
+>> +
+>> +OpenCAPI拥有AFU向主机进程发送中断的可能性。它通过定义在传输层的“intrp_req”
+>> +来完成，指定一个定义中断的64位对象句柄。
+>> +
+>> +驱动允许一个进程分配中断并获取可以传递给AFU的64位对象句柄。
+>> +
+>> +
+>> +
+>> +字符设备
+>> +========
+>> +
+>> +驱动为每个在物理设备上发现的AFU创建一个字符设备。一个物理设备可能拥有多个
+>> +函数，一个函数可以拥有多个AFU。不过编写这篇文档之时，只对导出一个AFU的设备
+>> +测试过。
+>> +
+>> +字符设备可以在 /dev/ocxl/ 中被找到，其命名为：
+>> +/dev/ocxl/<AFU 名称>.<位置>.<索引>
+>> +
+>> +<AFU 名称> 是一个最长20个字符的名称，和在AFU配置空间中找到的相同。
+>> +<位置>由驱动添加，可在系统有不止一个相同的OpenCAPI设备时帮助区分设备。
+>> +<索引>也是为了在少见情况下帮助区分AFU，即设备携带多个同样的AFU副本时。
+>> +
+>> +
+>> +
+>> +Sysfs 类
+>> +=========
+> Sysfs类
+> =======
 >
-> void __thermal_zone_device_update(struct thermal_zone_device *tz,
->                                   enum thermal_notify_event event)
-> {
->         ...
-> }
+>> +
+>> +添加了代表AFU的ocxl类。查看/sys/class/ocxl。布局在
+>> +Documentation/ABI/testing/sysfs-class-ocxl 中描述。
+>> +
+>> +
+>> +
+>> +用户API
+>> +=======
+>> +
+>> +开放
+> 打开
 >
-> unlocked:
 >
-> void thermal_zone_device_update(struct thermal_zone_device *tz,
->                                 enum thermal_notify_event event)
-> {
->         mutex_lock(&tz->lock);
->         if (device_is_registered(&tz->device))
->                 __thermal_zone_device_update(tz, event);
->         mutex_unlock(&tz->lock);
-> }
+> Thanks,
+>
+>
+Oops, thanks for correction. I will send updated one later.
 
-Thanks for the explanation.
+Thanks.
 
-> Should I phrase or explain it differently ?
+-- 
+Rui Li    0x77E6D821D7AE84FE
 
-I would rather say "bare" or something like that so it is all clear to
-people like me, but it is your call.
