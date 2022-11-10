@@ -2,585 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC8D623D07
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C613E623D09
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbiKJIBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S232664AbiKJICK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiKJIBG (ORCPT
+        with ESMTP id S232548AbiKJIBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:01:06 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD251C41F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:01:05 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id f126-20020a255184000000b006cb2aebd124so1153775ybb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5kJlT7ntgoYuCv4/yBaIZRIBzCyj+KBksQs6ck5uymo=;
-        b=fDaFqsnCmWfOp2sCyDZ2LXluglt+9BGNMH4fv3LPb752IiaQvNyMynq5/u3trO/Smi
-         tfXaDJ2X6KIcnFJ2Nu2wcLSWATosEnrNDsJM5GX8w+tzy2GF//YXWHuG6ADTj3O+e69h
-         /LqgVmJX3+Gix6KAlje0eQ2G6CZM9GYxpqTWzpduHnEmaCKcVcBH0Ne0bSd79d2y7xn1
-         yLhJxBn2FdrKj/jDI9l2z1W0pQibOQf936dhCJ9hxtVdTe8XJcHa40jJPp2HiCpuUiiF
-         jUZTY1uh8yLyx65sSHOjvCw0Oo936YiuN2Hmm8cBN+QMZ2CgXiUIF/VxGlYmihlUgsyD
-         SBGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5kJlT7ntgoYuCv4/yBaIZRIBzCyj+KBksQs6ck5uymo=;
-        b=DmEg9yOykQnJlUmkCERef5jAPKD6We11kLjXgVH8pkYIExHLE2aDjV1dZb23hF4n9G
-         1OoJHoFWy+fAv3JV/9NU7oK6y4vIy51YKo98MUntXUHw86ltPczrcoy8tjZtlLK7Z0KT
-         9L8bCx34hg4kUGbzDqfUMrzasAjRl7LwYLH/K0KYK1HvLQzLNlFHAf77cX07k1gkS/Vw
-         E2EgL6OkblpaG1pJtub4fsNz8Juqyry9dGX7ABtPke81FLvDlIafvc5eUGVRljfVs/1D
-         REDO7XMexQ/stDN4sf8cYbGPUp5lp2uT7iuGbR8SooppQou603OAY85b+C2Wa6SU1HYE
-         N3mg==
-X-Gm-Message-State: ACrzQf2rFk34VPgVvnB/MUqBrd3wTwsUiyQ4w2AG72LfXR5dx9oa6ra+
-        zfW/NfTVApsgXJIM7Ih345hi4Cc+YgXB1YTDJbM=
-X-Google-Smtp-Source: AMsMyM5TB9dKmbd/GJV7W+4DoGbisl/2Tak7uAyBsIXZkGqRStZcLUrtCLMtXOJGq2sLZptXxsB5iSidsFQeM1DXX0k=
-X-Received: from albertccwang.ntc.corp.google.com ([2401:fa00:fc:202:2c6f:5c28:5579:9e27])
- (user=albertccwang job=sendgmr) by 2002:a05:690c:601:b0:36b:b6f3:f0f4 with
- SMTP id bq1-20020a05690c060100b0036bb6f3f0f4mr1194837ywb.116.1668067264475;
- Thu, 10 Nov 2022 00:01:04 -0800 (PST)
-Date:   Thu, 10 Nov 2022 16:00:06 +0800
-In-Reply-To: <20221110080006.3563429-1-albertccwang@google.com>
-Message-Id: <20221110080006.3563429-4-albertccwang@google.com>
-Mime-Version: 1.0
-References: <20221110080006.3563429-1-albertccwang@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v2 3/3] usb: host: add the xhci offload hooks implementations
-From:   Albert Wang <albertccwang@google.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, howardyen@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Albert Wang <albertccwang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 03:01:43 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2042E9D8;
+        Thu, 10 Nov 2022 00:01:42 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2AA6cViV000492;
+        Thu, 10 Nov 2022 08:01:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=UfS2M5BskP/u3MZdbZOc3sjFjYUZ2k9IwakRV9/QwBM=;
+ b=Qy7Jxg20ogsjx2omGlC0V6AUHSb9V+teYfAXO1LY93oL+IzRU5g+umKmEzBK9NxE7kaN
+ w2lL4gjonOywQ2elSCSVesHJW9eDKlQQwOFqTUre5FiKWHtxpZmcAjE6SiMph2uv3pu9
+ W5zAuUuO63AsyGRjBSYjyVxsVd2omCNLqtXI4DVOwLrGIamJTKiTUcyR1SrewaDXY4su
+ OU/6CiYa2t2iCnPcTLIYtBYU8aVMTWKX10TFgPXISQFGOMW80eJ9Dm5DRRzunOs+Xfgq
+ lUFkDC21LageIWDv0TCRt+qYBnwV9XU4/LVh6mF9q3lZdDcL2igppniYD1tqSMyF3ZMS VQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3krupktjgj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 08:01:33 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AA7qifJ032580;
+        Thu, 10 Nov 2022 08:01:32 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3krcbr0t95-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 08:01:31 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AA81T2j7537228
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Nov 2022 08:01:29 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 823D952050;
+        Thu, 10 Nov 2022 08:01:29 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.109.241.54])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B759D5204E;
+        Thu, 10 Nov 2022 08:01:28 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: [6.1.0-rc4-next-20221109] Boot time warning kernel/module/main.c:852
+Message-Id: <06C70AFA-75C5-49A7-9EB4-27AF20A80EBB@linux.ibm.com>
+Date:   Thu, 10 Nov 2022 13:31:17 +0530
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>
+To:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dgJqpu82evfKmaqG3ZN2ugS6iyQKhdh3
+X-Proofpoint-GUID: dgJqpu82evfKmaqG3ZN2ugS6iyQKhdh3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-10_05,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1011 mlxscore=0
+ adultscore=0 spamscore=0 mlxlogscore=790 suspectscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211100056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the offload hooks implementations which are used in the xHCI driver
-for vendor offload function, and some functions will call to
-co-processor driver for further offload operations.
+While booting 6.1.0-rc4-next-20221109 next kernel on a IBM Power9 LPAR
+following warning is seen:
 
-Signed-off-by: Albert Wang <albertccwang@google.com>
-Signed-off-by: Howard Yen <howardyen@google.com>
----
-Changes in v2:
-- New in v2
+[ 8.808868] ------------[ cut here ]------------
+[ 8.808872] WARNING: CPU: 1 PID: 378 at kernel/module/main.c:852 =
+module_put+0x48/0x100
+[ 8.808881] Modules linked in: sr_mod(E) cdrom(E) sd_mod(E) sg(E) =
+lpfc(E) nvmet_fc(E) nvmet(E) ibmvscsi(E) scsi_transport_srp(E) =
+ibmveth(E) nvme_fc(E) nvme(E) nvme_fabrics(E) nvme_core(E) t10_pi(E) =
+scsi_transport_fc(E) crc64_rocksoft(E) crc64(E) tg3(E) fuse(E)
+[ 8.808912] sd 1:0:0:1: [sdc] Write Protect is off
+[ 8.808913] CPU: 1 PID: 378 Comm: kworker/1:3 Tainted: G E =
+6.1.0-rc4-next-20221109 #1
+[ 8.808916] Hardware name: IBM,8375-42A POWER9 (raw) 0x4e0202 0xf000005 =
+of:IBM,FW950.01 (VL950_047) hv:phyp pSeries
+[ 8.808924] Workqueue: kaluad alua_rtpg_work
+[ 8.808931] NIP: c000000000236c18 LR: c0000000009ee680 CTR: =
+00000000007088ec
+[ 8.808936] REGS: c000000007c37870 TRAP: 0700 Tainted: G E =
+(6.1.0-rc4-next-20221109)
+[ 8.808942] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: =
+88002884 XER: 20040007
+[ 8.808957] CFAR: c000000000236c04 IRQMASK: 0=20
+[ 8.808957] GPR00: c0000000009ee680 c000000007c37b10 c00000000137ec00 =
+c008000001d3a500=20
+[ 8.808957] GPR04: 0000000000000000 0000000000000000 0000000000000000 =
+00000000000000ff=20
+[ 8.808957] GPR08: 0000000000000001 0000000000000001 c008000001d3a8c0 =
+c0000000029674a8=20
+[ 8.808957] GPR12: 0000000000002000 c00000000d5cf300 c00000000018f3d8 =
+c000000003ce4d00=20
+[ 8.808957] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 8.808957] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[ 8.808957] GPR24: c0000000092b0e00 0000000000000000 c00000008ee81000 =
+c0000000092b0fc0=20
+[ 8.808957] GPR28: c000000007c37c10 c000000007c37c10 c008000001d3a500 =
+c00000008ee81000=20
+[ 8.809018] NIP [c000000000236c18] module_put+0x48/0x100
+[ 8.809024] sd 1:0:0:1: [sdc] Write cache: disabled, read cache: =
+enabled, supports DPO and FUA
+[ 8.809024] LR [c0000000009ee680] scsi_device_put+0x50/0x70
+[ 8.809035] Call Trace:
+[ 8.809038] [c000000007c37b10] [c000000007c37b50] 0xc000000007c37b50 =
+(unreliable)
+[ 8.809045] [c000000007c37b50] [c0000000009ee674] =
+scsi_device_put+0x44/0x70
+[ 8.809053] [c000000007c37b80] [c000000000a10c70] =
+alua_rtpg_work+0x210/0x920
+[ 8.809059] [c000000007c37c90] [c000000000182314] =
+process_one_work+0x2b4/0x5b0
+[ 8.809066] [c000000007c37d30] [c000000000182688] =
+worker_thread+0x78/0x600
+[ 8.809072] [c000000007c37dc0] [c00000000018f4f4] kthread+0x124/0x130
+[ 8.809079] [c000000007c37e10] [c00000000000cffc] =
+ret_from_kernel_thread+0x5c/0x64
+[ 8.809086] Instruction dump:
+[ 8.809090] f821ffc1 41820034 395e03c0 7c0004ac 7d205028 2c090001 =
+3929ffff 41c00010=20
+[ 8.809101] 7d20512d=20
+[ 8.809101] sd 1:0:0:1: [sdc] Preferred minimum I/O size 32768 bytes
+[ 8.809102] 40c2ffec 7c0004ac 79290fe2 <0b090000> 60000000 38210040 =
+ebc1fff0=20
+[ 8.809115] ---[ end trace 0000000000000000 ]=E2=80=94
 
- drivers/usb/host/xhci-offload-impl.c | 492 +++++++++++++++++++++++++++
- 1 file changed, 492 insertions(+)
- create mode 100644 drivers/usb/host/xhci-offload-impl.c
+-next-20221108 was good. Git bisect points to following
 
-diff --git a/drivers/usb/host/xhci-offload-impl.c b/drivers/usb/host/xhci-offload-impl.c
-new file mode 100644
-index 000000000000..90e546d63fbe
---- /dev/null
-+++ b/drivers/usb/host/xhci-offload-impl.c
-@@ -0,0 +1,492 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020 Google Corp.
-+ *
-+ * Author:
-+ *  Howard.Yen <howardyen@google.com>
-+ */
-+
-+#include <linux/dmapool.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/of.h>
-+#include <linux/of_reserved_mem.h>
-+#include <linux/pm_wakeup.h>
-+#include <linux/slab.h>
-+#include <linux/usb.h>
-+#include <linux/workqueue.h>
-+#include <linux/usb/hcd.h>
-+
-+#include "xhci.h"
-+#include "xhci-plat.h"
-+
-+enum usb_offload_op_mode {
-+	USB_OFFLOAD_STOP,
-+	USB_OFFLOAD_DRAM
-+};
-+
-+enum usb_state {
-+	USB_DISCONNECTED,
-+	USB_CONNECTED
-+};
-+
-+enum usb_offload_msg {
-+	SET_DCBAA_PTR,
-+	SETUP_DONE,
-+	SET_ISOC_TR_INFO,
-+	SYNC_CONN_STAT,
-+	SET_OFFLOAD_STATE
-+};
-+
-+struct conn_stat_args {
-+	u16 bus_id;
-+	u16 dev_num;
-+	u16 slot_id;
-+	u32 conn_stat;
-+};
-+
-+struct get_isoc_tr_info_args {
-+	u16 ep_id;
-+	u16 dir;
-+	u32 type;
-+	u32 num_segs;
-+	u32 seg_ptr;
-+	u32 max_packet;
-+	u32 deq_ptr;
-+	u32 enq_ptr;
-+	u32 cycle_state;
-+	u32 num_trbs_free;
-+};
-+
-+struct xhci_offload_data {
-+	struct xhci_hcd *xhci;
-+
-+	bool usb_accessory_enabled;
-+	bool usb_audio_offload;
-+	bool dt_direct_usb_access;
-+	bool offload_state;
-+
-+	enum usb_offload_op_mode op_mode;
-+};
-+
-+static struct xhci_offload_data *offload_data;
-+struct xhci_offload_data *xhci_get_offload_data(void)
-+{
-+	return offload_data;
-+}
-+
-+/*
-+ * Determine if an USB device is a compatible devices:
-+ *     True: Devices are audio class and they contain ISOC endpoint
-+ *    False: Devices are not audio class or they're audio class but no ISOC endpoint or
-+ *           they have at least one interface is video class
-+ */
-+static bool is_compatible_with_usb_audio_offload(struct usb_device *udev)
-+{
-+	struct usb_endpoint_descriptor *epd;
-+	struct usb_host_config *config;
-+	struct usb_host_interface *alt;
-+	struct usb_interface_cache *intfc;
-+	int i, j, k;
-+	bool is_audio = false;
-+
-+	config = udev->config;
-+	for (i = 0; i < config->desc.bNumInterfaces; i++) {
-+		intfc = config->intf_cache[i];
-+		for (j = 0; j < intfc->num_altsetting; j++) {
-+			alt = &intfc->altsetting[j];
-+
-+			if (alt->desc.bInterfaceClass == USB_CLASS_VIDEO) {
-+				is_audio = false;
-+				goto out;
-+			}
-+
-+			if (alt->desc.bInterfaceClass == USB_CLASS_AUDIO) {
-+				for (k = 0; k < alt->desc.bNumEndpoints; k++) {
-+					epd = &alt->endpoint[k].desc;
-+					if (usb_endpoint_xfer_isoc(epd)) {
-+						is_audio = true;
-+						break;
-+					}
-+				}
-+			}
-+		}
-+	}
-+
-+out:
-+	return is_audio;
-+}
-+
-+/*
-+ * check the usb device including the video class:
-+ *     True: Devices contain video class
-+ *    False: Device doesn't contain video class
-+ */
-+static bool is_usb_video_device(struct usb_device *udev)
-+{
-+	struct usb_host_config *config;
-+	struct usb_host_interface *alt;
-+	struct usb_interface_cache *intfc;
-+	int i, j;
-+	bool is_video = false;
-+
-+	if (!udev || !udev->config)
-+		return is_video;
-+
-+	config = udev->config;
-+
-+	for (i = 0; i < config->desc.bNumInterfaces; i++) {
-+		intfc = config->intf_cache[i];
-+		for (j = 0; j < intfc->num_altsetting; j++) {
-+			alt = &intfc->altsetting[j];
-+
-+			if (alt->desc.bInterfaceClass == USB_CLASS_VIDEO) {
-+				is_video = true;
-+				goto out;
-+			}
-+		}
-+	}
-+
-+out:
-+	return is_video;
-+}
-+
-+/*
-+ * This is the driver call to co-processor for offload operations.
-+ */
-+int offload_driver_call(enum usb_offload_msg msg, void *ptr)
-+{
-+	enum usb_offload_msg offload_msg;
-+	void *argptr;
-+
-+	offload_msg = msg;
-+	argptr = ptr;
-+
-+	return 0;
-+}
-+
-+static int xhci_sync_conn_stat(unsigned int bus_id, unsigned int dev_num, unsigned int slot_id,
-+				unsigned int conn_stat)
-+{
-+	struct conn_stat_args conn_args;
-+
-+	conn_args.bus_id = bus_id;
-+	conn_args.dev_num = dev_num;
-+	conn_args.slot_id = slot_id;
-+	conn_args.conn_stat = conn_stat;
-+
-+	return offload_driver_call(SYNC_CONN_STAT, &conn_args);
-+}
-+
-+static int usb_host_mode_state_notify(enum usb_state usb_state)
-+{
-+	return xhci_sync_conn_stat(0, 0, 0, usb_state);
-+}
-+
-+static int xhci_udev_notify(struct notifier_block *self, unsigned long action,
-+				void *dev)
-+{
-+	struct usb_device *udev = dev;
-+	struct xhci_offload_data *offload_data = xhci_get_offload_data();
-+
-+	switch (action) {
-+	case USB_DEVICE_ADD:
-+		if (is_compatible_with_usb_audio_offload(udev)) {
-+			dev_dbg(&udev->dev, "Compatible with usb audio offload\n");
-+			if (offload_data->op_mode == USB_OFFLOAD_DRAM) {
-+				xhci_sync_conn_stat(udev->bus->busnum, udev->devnum, udev->slot_id,
-+						    USB_CONNECTED);
-+			}
-+		}
-+		offload_data->usb_accessory_enabled = false;
-+		break;
-+	case USB_DEVICE_REMOVE:
-+		if (is_compatible_with_usb_audio_offload(udev) &&
-+		    (offload_data->op_mode == USB_OFFLOAD_DRAM)) {
-+			xhci_sync_conn_stat(udev->bus->busnum, udev->devnum, udev->slot_id,
-+					    USB_DISCONNECTED);
-+		}
-+		offload_data->usb_accessory_enabled = false;
-+		break;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block xhci_udev_nb = {
-+	.notifier_call = xhci_udev_notify,
-+};
-+
-+static int usb_audio_offload_init(struct xhci_hcd *xhci)
-+{
-+	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-+	struct xhci_offload_data *offload_data = xhci_get_offload_data();
-+	int ret;
-+	u32 out_val;
-+
-+	offload_data = kzalloc(sizeof(struct xhci_offload_data), GFP_KERNEL);
-+	if (!offload_data)
-+		return -ENOMEM;
-+
-+	if (!of_property_read_u32(dev->of_node, "offload", &out_val))
-+		offload_data->usb_audio_offload = (out_val == 1) ? true : false;
-+
-+	ret = of_reserved_mem_device_init(dev);
-+	if (ret) {
-+		dev_err(dev, "Could not get reserved memory\n");
-+		kfree(offload_data);
-+		return ret;
-+	}
-+
-+	offload_data->dt_direct_usb_access =
-+		of_property_read_bool(dev->of_node, "direct-usb-access") ? true : false;
-+	if (!offload_data->dt_direct_usb_access)
-+		dev_warn(dev, "Direct USB access is not supported\n");
-+
-+	offload_data->offload_state = true;
-+
-+	usb_register_notify(&xhci_udev_nb);
-+	offload_data->op_mode = USB_OFFLOAD_DRAM;
-+	offload_data->xhci = xhci;
-+
-+	return 0;
-+}
-+
-+static void usb_audio_offload_cleanup(struct xhci_hcd *xhci)
-+{
-+	struct xhci_offload_data *offload_data = xhci_get_offload_data();
-+
-+	offload_data->usb_audio_offload = false;
-+	offload_data->op_mode = USB_OFFLOAD_STOP;
-+	offload_data->xhci = NULL;
-+
-+	usb_unregister_notify(&xhci_udev_nb);
-+
-+	/* Notification for xhci driver removing */
-+	usb_host_mode_state_notify(USB_DISCONNECTED);
-+
-+	kfree(offload_data);
-+	offload_data = NULL;
-+}
-+
-+static bool is_offload_enabled(struct xhci_hcd *xhci,
-+		struct xhci_virt_device *vdev, unsigned int ep_index)
-+{
-+	struct usb_device *udev;
-+	struct xhci_offload_data *offload_data = xhci_get_offload_data();
-+	bool global_enabled = offload_data->op_mode != USB_OFFLOAD_STOP;
-+	struct xhci_ring *ep_ring;
-+
-+	if (vdev == NULL || vdev->eps[ep_index].ring == NULL)
-+		return global_enabled;
-+
-+	udev = vdev->udev;
-+
-+	if (global_enabled) {
-+		ep_ring = vdev->eps[ep_index].ring;
-+		if (offload_data->op_mode == USB_OFFLOAD_DRAM) {
-+			if (is_usb_video_device(udev))
-+				return false;
-+			else if (ep_ring->type == TYPE_ISOC)
-+				return offload_data->offload_state;
-+		}
-+	}
-+
-+	return false;
-+}
-+
-+static bool is_usb_bulk_transfer_enabled(struct xhci_hcd *xhci, struct urb *urb)
-+{
-+	struct xhci_offload_data *offload_data = xhci_get_offload_data();
-+	struct usb_endpoint_descriptor *desc = &urb->ep->desc;
-+	int ep_type = usb_endpoint_type(desc);
-+	struct usb_ctrlrequest *cmd;
-+	bool skip_bulk = false;
-+
-+	cmd = (struct usb_ctrlrequest *) urb->setup_packet;
-+
-+	if (ep_type == USB_ENDPOINT_XFER_CONTROL) {
-+		if (!usb_endpoint_dir_in(desc) && cmd->bRequest == 0x35)
-+			offload_data->usb_accessory_enabled = true;
-+		else
-+			offload_data->usb_accessory_enabled = false;
-+	}
-+
-+	if (ep_type == USB_ENDPOINT_XFER_BULK && !usb_endpoint_dir_in(desc))
-+		skip_bulk = offload_data->usb_accessory_enabled;
-+
-+	return skip_bulk;
-+}
-+
-+static int xhci_set_dcbaa_ptr(u64 dcbaa_ptr)
-+{
-+	return offload_driver_call(SET_DCBAA_PTR, &dcbaa_ptr);
-+}
-+
-+static int xhci_setup_done(void)
-+{
-+	return offload_driver_call(SETUP_DONE, NULL);
-+}
-+
-+static void alloc_dcbaa(struct xhci_hcd *xhci, gfp_t flags)
-+{
-+	dma_addr_t dma;
-+	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-+	struct xhci_offload_data *offload_data = xhci_get_offload_data();
-+
-+	if (offload_data->op_mode == USB_OFFLOAD_DRAM) {
-+		xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa),
-+						 &dma, flags);
-+		if (!xhci->dcbaa)
-+			return;
-+
-+		xhci->dcbaa->dma = dma;
-+		if (xhci_set_dcbaa_ptr(xhci->dcbaa->dma) != 0) {
-+			xhci_err(xhci, "Set DCBAA pointer failed\n");
-+			xhci->dcbaa = NULL;
-+			return;
-+		}
-+		xhci_setup_done();
-+
-+		xhci_dbg(xhci, "Set dcbaa_ptr=%llx to AoC\n", xhci->dcbaa->dma);
-+	} else {
-+		xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa),
-+						 &dma, flags);
-+		if (!xhci->dcbaa)
-+			return;
-+
-+		xhci->dcbaa->dma = dma;
-+	}
-+}
-+
-+static void free_dcbaa(struct xhci_hcd *xhci)
-+{
-+	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
-+
-+	if (!xhci->dcbaa)
-+		return;
-+
-+	dma_free_coherent(dev, sizeof(*xhci->dcbaa),
-+			  xhci->dcbaa, xhci->dcbaa->dma);
-+
-+	xhci->dcbaa = NULL;
-+}
-+
-+static int xhci_set_isoc_tr_info(u16 ep_id, u16 dir, struct xhci_ring *ep_ring)
-+{
-+	struct get_isoc_tr_info_args tr_info;
-+
-+	tr_info.ep_id = ep_id;
-+	tr_info.dir = dir;
-+	tr_info.num_segs = ep_ring->num_segs;
-+	tr_info.max_packet = ep_ring->bounce_buf_len;
-+	tr_info.type = ep_ring->type;
-+	tr_info.seg_ptr = ep_ring->first_seg->dma;
-+	tr_info.cycle_state = ep_ring->cycle_state;
-+	tr_info.num_trbs_free = ep_ring->num_trbs_free;
-+
-+	return offload_driver_call(SET_ISOC_TR_INFO, &tr_info);
-+}
-+
-+static struct xhci_ring *alloc_transfer_ring(struct xhci_hcd *xhci,
-+		u32 endpoint_type, enum xhci_ring_type ring_type,
-+		unsigned int max_packet, gfp_t mem_flags)
-+{
-+	struct xhci_ring *ep_ring;
-+	u16 dir;
-+
-+	ep_ring = xhci_ring_alloc(xhci, 1, 1, ring_type, max_packet, mem_flags);
-+	dir = endpoint_type == ISOC_IN_EP ? 0 : 1;
-+
-+	xhci_set_isoc_tr_info(0, dir, ep_ring);
-+
-+	return ep_ring;
-+}
-+
-+static void free_transfer_ring(struct xhci_hcd *xhci, struct xhci_virt_device *virt_dev,
-+				unsigned int ep_index)
-+{
-+	struct xhci_ring *ring, *new_ring;
-+	struct xhci_ep_ctx *ep_ctx;
-+	struct xhci_input_control_ctx *ctrl_ctx;
-+	u32 ep_type;
-+	u32 ep_is_added, ep_is_dropped;
-+
-+	ring = virt_dev->eps[ep_index].ring;
-+	new_ring = virt_dev->eps[ep_index].new_ring;
-+	ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->out_ctx, ep_index);
-+	ep_type = CTX_TO_EP_TYPE(le32_to_cpu(ep_ctx->ep_info2));
-+
-+	ctrl_ctx = xhci_get_input_control_ctx(virt_dev->in_ctx);
-+	if (!ctrl_ctx) {
-+		xhci_warn(xhci, "%s: Could not get input context, bad type.\n", __func__);
-+		return;
-+	}
-+	ep_is_added = EP_IS_ADDED(ctrl_ctx, ep_index);
-+	ep_is_dropped = EP_IS_DROPPED(ctrl_ctx, ep_index);
-+
-+	xhci_dbg(xhci, "%s: ep %u is added(0x%x), is dropped(0x%x)\n", __func__, ep_index,
-+		 ep_is_added, ep_is_dropped);
-+
-+	if (ring) {
-+		xhci_dbg(xhci, "%s: ep_index=%u, ep_type=%u, ring type=%u, new_ring=%pK\n",
-+			 __func__, ep_index, ep_type, ring->type, new_ring);
-+
-+		xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
-+
-+		virt_dev->eps[ep_index].ring = NULL;
-+
-+		if (ep_is_added == 0 && ep_is_dropped == 0)
-+			return;
-+	}
-+
-+	if (new_ring) {
-+		xhci_dbg(xhci, "%s: ep_index=%u, ep_type=%u, new_ring type=%u\n", __func__,
-+			ep_index, ep_type, new_ring->type);
-+
-+		xhci_ring_free(xhci, virt_dev->eps[ep_index].new_ring);
-+
-+		virt_dev->eps[ep_index].new_ring = NULL;
-+
-+		return;
-+	}
-+}
-+
-+static bool offload_skip_urb(struct xhci_hcd *xhci, struct urb *urb)
-+{
-+	struct xhci_virt_device *vdev = xhci->devs[urb->dev->slot_id];
-+	struct usb_endpoint_descriptor *desc = &urb->ep->desc;
-+	int ep_type = usb_endpoint_type(desc);
-+	unsigned int ep_index;
-+
-+	if (ep_type == USB_ENDPOINT_XFER_CONTROL)
-+		ep_index = (unsigned int)(usb_endpoint_num(desc)*2);
-+	else
-+		ep_index = (unsigned int)(usb_endpoint_num(desc)*2) +
-+			   (usb_endpoint_dir_in(desc) ? 1 : 0) - 1;
-+
-+	xhci_dbg(xhci, "%s: ep_index=%u, ep_type=%d\n", __func__, ep_index, ep_type);
-+
-+	if (is_offload_enabled(xhci, vdev, ep_index))
-+		return true;
-+
-+	if (is_usb_bulk_transfer_enabled(xhci, urb))
-+		return true;
-+
-+	return false;
-+}
-+
-+static struct xhci_offload_ops offload_ops = {
-+	.offload_init = usb_audio_offload_init,
-+	.offload_cleanup = usb_audio_offload_cleanup,
-+	.is_offload_enabled = is_offload_enabled,
-+	.alloc_dcbaa = alloc_dcbaa,
-+	.free_dcbaa = free_dcbaa,
-+	.alloc_transfer_ring = alloc_transfer_ring,
-+	.free_transfer_ring = free_transfer_ring,
-+	.usb_offload_skip_urb = offload_skip_urb,
-+};
-+
-+int xhci_offload_helper_init(void)
-+{
-+	return xhci_plat_register_offload_ops(&offload_ops);
-+}
--- 
-2.38.1.431.g37b22c650d-goog
+commit 0b25e17e9018a0ea68a9f0b4787672e8c68fa8d5
+Date:   Mon Oct 31 15:47:25 2022 -0700
+    scsi: alua: Move a scsi_device_put() call out of alua_check_vpd()
+
+Reverting this patch gets rid of the warning.
+
+- Sachin
 
