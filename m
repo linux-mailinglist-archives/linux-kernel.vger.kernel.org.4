@@ -2,163 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34F462464A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C43624651
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbiKJPqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:46:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
+        id S231701AbiKJPsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbiKJPql (ORCPT
+        with ESMTP id S231520AbiKJPsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:46:41 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38DD2CDCF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:46:39 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AAFbsNB011752;
-        Thu, 10 Nov 2022 16:46:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=Dqy9dYHsxt9AzTmF5WyUZLFE2yygm9hJF+Zgo8L1RJY=;
- b=3QoRxOAqokFH7cqxQ7p2j3qdCaQoq3PrlYExjHyn0x8lDlyE04KafHpVBq0zGaeKs2yl
- xUlf2FSGJO5XqP73atdvgQxtDcQkDHPY74BH/ITUEdoKc9FsT9L5Z+EzCoXwsnhEN5Zb
- ebJnv+XutgPZzzYNzLXOQomXAuUSVcgtgq2mArGoq8RcyM7vc7pkrFdLQdVUqodo/SNO
- v6k6I8pNAAqV9CqxnmK2INuIMZWKVzLwyzWozdu1MWWKWjiv+bbKIWQMFKocARdLgVid
- ulNPy+nBabNz4Of8pABkt5HwU/S4oqdqWa9l9CkRxb/lkeulSw+J48eo08Pfa/DuzRgN qA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ks443g1t1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 16:46:22 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 960A710002A;
-        Thu, 10 Nov 2022 16:46:17 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8F93422AFED;
-        Thu, 10 Nov 2022 16:46:17 +0100 (CET)
-Received: from localhost (10.252.15.206) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Thu, 10 Nov
- 2022 16:46:16 +0100
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Fabrice GASNIER <fabrice.gasnier@foss.st.com>,
-        Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v2 3/3] nvmem: stm32: detect bsec pta presence for STM32MP15x
-Date:   Thu, 10 Nov 2022 16:45:49 +0100
-Message-ID: <20221110164329.v2.3.I59210046e368cfc22bd3cca2afe1653674f8ece8@changeid>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221110154550.3220800-1-patrick.delaunay@foss.st.com>
-References: <20221110154550.3220800-1-patrick.delaunay@foss.st.com>
+        Thu, 10 Nov 2022 10:48:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F6793
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:48:37 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 43F6222999;
+        Thu, 10 Nov 2022 15:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668095316; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J3QJBtM4MnGOZMLT0ADfXmiVyB/zENfV6p3Drb9JBbs=;
+        b=zskpez+6BQephEy8Wiz2FE8+VfHE1YRC6JFOsQBrpgPQLxjLzEyyNfD4Qb/lumHY7QY1mG
+        H5J5YxQhfYbZKzWbK42esgKfIYy6gP1/FLU7/R4mGjTeakgOmouJJHt7Xo8WZW4gd8o29E
+        4BAwpaejFVK06fWHta3gQmw9Z5zuHpQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668095316;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J3QJBtM4MnGOZMLT0ADfXmiVyB/zENfV6p3Drb9JBbs=;
+        b=zwMcF9Q1r+FQdJIrJ4Nnhm384FgU1dof6X0sojrpKvcnpH0y+ET6p18GKsfQf0rTDs7J4u
+        CP++s1rqSCnW+hDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 047A813B58;
+        Thu, 10 Nov 2022 15:48:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yQlpAFQdbWPjUgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 10 Nov 2022 15:48:36 +0000
+Message-ID: <e2dd7c7c-b0b7-344a-de37-4624f5339bce@suse.cz>
+Date:   Thu, 10 Nov 2022 16:48:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.15.206]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-10_10,2022-11-09_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v7 3/3] mm/slub: extend redzone check to extra allocated
+ kmalloc space than requested
+Content-Language: en-US
+To:     Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+References: <20221021032405.1825078-1-feng.tang@intel.com>
+ <20221021032405.1825078-4-feng.tang@intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221021032405.1825078-4-feng.tang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On STM32MP15x SoC, the SMC backend is optional when OP-TEE is used;
-the PTA BSEC should be used as it is done on STM32MP13x platform,
-but the BSEC SMC can be also used: it is a legacy mode in OP-TEE,
-not recommended but used in previous OP-TEE firmware.
+On 10/21/22 05:24, Feng Tang wrote:
+> kmalloc will round up the request size to a fixed size (mostly power
+> of 2), so there could be a extra space than what is requested, whose
+> size is the actual buffer size minus original request size.
+> 
+> To better detect out of bound access or abuse of this space, add
+> redzone sanity check for it.
+> 
+> In current kernel, some kmalloc user already knows the existence of
+> the space and utilizes it after calling 'ksize()' to know the real
+> size of the allocated buffer. So we skip the sanity check for objects
+> which have been called with ksize(), as treating them as legitimate
+> users.
 
-The presence of OP-TEE is dynamically detected in STM32MP15x device tree
-and the supported NVMEM backend is dynamically detected:
-- PTA with stm32_bsec_pta_find
-- SMC with stm32_bsec_check
+Hm so once Kees's effort is finished and all ksize() users behave correctly,
+we can drop all that skip_orig_size_check() code, right?
 
-With OP-TEE but without PTA and SMC detection, the probe is deferred for
-STM32MP15x devices.
+> In some cases, the free pointer could be saved inside the latter
+> part of object data area, which may overlap the redzone part(for
+> small sizes of kmalloc objects). As suggested by Hyeonggon Yoo,
+> force the free pointer to be in meta data area when kmalloc redzone
+> debug is enabled, to make all kmalloc objects covered by redzone
+> check.
+> 
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-On STM32MP13x platform, only the PTA is supported with cfg->ta = true
-and this detection is skipped.
+Looks fine, but a suggestion below:
 
-Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
----
+> ---
+>  mm/slab.h        |  4 ++++
+>  mm/slab_common.c |  4 ++++
+>  mm/slub.c        | 51 ++++++++++++++++++++++++++++++++++++++++++++----
+>  3 files changed, 55 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/slab.h b/mm/slab.h
+> index 8b4ee02fc14a..1dd773afd0c4 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -885,4 +885,8 @@ void __check_heap_object(const void *ptr, unsigned long n,
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_SLUB_DEBUG
+> +void skip_orig_size_check(struct kmem_cache *s, const void *object);
+> +#endif
+> +
+>  #endif /* MM_SLAB_H */
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 33b1886b06eb..0bb4625f10a2 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1037,6 +1037,10 @@ size_t __ksize(const void *object)
+>  		return folio_size(folio);
+>  	}
+>  
+> +#ifdef CONFIG_SLUB_DEBUG
+> +	skip_orig_size_check(folio_slab(folio)->slab_cache, object);
+> +#endif
+> +
+>  	return slab_ksize(folio_slab(folio)->slab_cache);
+>  }
+>  
+> diff --git a/mm/slub.c b/mm/slub.c
+> index adff7553b54e..76581da6b9df 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -829,6 +829,17 @@ static inline void set_orig_size(struct kmem_cache *s,
+>  	if (!slub_debug_orig_size(s))
+>  		return;
+>  
+> +#ifdef CONFIG_KASAN_GENERIC
+> +	/*
+> +	 * KASAN could save its free meta data in object's data area at
+> +	 * offset 0, if the size is larger than 'orig_size', it will
+> +	 * overlap the data redzone in [orig_size+1, object_size], and
+> +	 * the check should be skipped.
+> +	 */
+> +	if (kasan_metadata_size(s, true) > orig_size)
+> +		orig_size = s->object_size;
+> +#endif
+> +
+>  	p += get_info_end(s);
+>  	p += sizeof(struct track) * 2;
+>  
+> @@ -848,6 +859,11 @@ static inline unsigned int get_orig_size(struct kmem_cache *s, void *object)
+>  	return *(unsigned int *)p;
+>  }
+>  
+> +void skip_orig_size_check(struct kmem_cache *s, const void *object)
+> +{
+> +	set_orig_size(s, (void *)object, s->object_size);
+> +}
+> +
+>  static void slab_bug(struct kmem_cache *s, char *fmt, ...)
+>  {
+>  	struct va_format vaf;
+> @@ -966,13 +982,27 @@ static __printf(3, 4) void slab_err(struct kmem_cache *s, struct slab *slab,
+>  static void init_object(struct kmem_cache *s, void *object, u8 val)
+>  {
+>  	u8 *p = kasan_reset_tag(object);
+> +	unsigned int orig_size = s->object_size;
+>  
+> -	if (s->flags & SLAB_RED_ZONE)
+> +	if (s->flags & SLAB_RED_ZONE) {
+>  		memset(p - s->red_left_pad, val, s->red_left_pad);
+>  
+> +		if (slub_debug_orig_size(s) && val == SLUB_RED_ACTIVE) {
+> +			orig_size = get_orig_size(s, object);
+> +
+> +			/*
+> +			 * Redzone the extra allocated space by kmalloc
+> +			 * than requested.
+> +			 */
+> +			if (orig_size < s->object_size)
+> +				memset(p + orig_size, val,
+> +				       s->object_size - orig_size);
 
-Changes in v2:
-- Added patch in the serie for BSEC PTA support on STM32MP15x
-  with dynamic detection of OP-TEE presence and SMC support (legacy mode)
+Wondering if we can remove this if - memset and instead below:
 
- drivers/nvmem/stm32-romem.c | 37 +++++++++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
+> +		}
+> +	}
+> +
+>  	if (s->flags & __OBJECT_POISON) {
+> -		memset(p, POISON_FREE, s->object_size - 1);
+> -		p[s->object_size - 1] = POISON_END;
+> +		memset(p, POISON_FREE, orig_size - 1);
+> +		p[orig_size - 1] = POISON_END;
+>  	}
+>  
+>  	if (s->flags & SLAB_RED_ZONE)
 
-diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-index 0a0e29d09b67..35997d581c9d 100644
---- a/drivers/nvmem/stm32-romem.c
-+++ b/drivers/nvmem/stm32-romem.c
-@@ -526,6 +526,31 @@ static int stm32_bsec_write(void *context, unsigned int offset, void *buf,
- 	return 0;
- }
- 
-+static bool stm32_bsec_smc_check(void)
-+{
-+	u32 val;
-+	int ret;
-+
-+	/* check that the OP-TEE support the BSEC SMC (legacy mode) */
-+	ret = stm32_bsec_smc(STM32_SMC_READ_SHADOW, 0, 0, &val);
-+
-+	return !ret;
-+}
-+
-+static bool optee_presence_check(void)
-+{
-+	struct device_node *np;
-+	bool tee_detected = false;
-+
-+	/* check that the OP-TEE node is present and available. */
-+	np = of_find_node_by_path("/firmware/optee");
-+	if (np && of_device_is_available(np))
-+		tee_detected = true;
-+	of_node_put(np);
-+
-+	return tee_detected;
-+}
-+
- static int stm32_romem_probe(struct platform_device *pdev)
- {
- 	const struct stm32_romem_cfg *cfg;
-@@ -561,14 +586,18 @@ static int stm32_romem_probe(struct platform_device *pdev)
- 	} else {
- 		priv->cfg.size = cfg->size;
- 		priv->lower = cfg->lower;
--		if (cfg->ta) {
-+		if (cfg->ta || optee_presence_check()) {
- 			priv->ta = stm32_bsec_pta_find(dev);
- 			/* wait for OP-TEE client driver to be up and ready */
--			if (!priv->ta)
--				return -EPROBE_DEFER;
-+			if (!priv->ta) {
-+				/* BSEC PTA is required or SMC not ready */
-+				if (cfg->ta || !stm32_bsec_smc_check())
-+					return -EPROBE_DEFER;
-+			}
- 			if (IS_ERR(priv->ta))
- 				return PTR_ERR(priv->ta);
--
-+		}
-+		if (priv->ta) {
- 			priv->cfg.reg_read = stm32_bsec_pta_read;
- 			priv->cfg.reg_write = stm32_bsec_pta_write;
- 		} else {
--- 
-2.25.1
+This continues by:
+    memset(p + s->object_size, val, s->inuse - s->object_size);
+Instead we could do this, no?
+    memset(p + orig_size, val, s->inuse - orig_size);
+
+> @@ -1120,6 +1150,7 @@ static int check_object(struct kmem_cache *s, struct slab *slab,
+>  {
+>  	u8 *p = object;
+>  	u8 *endobject = object + s->object_size;
+> +	unsigned int orig_size;
+>  
+>  	if (s->flags & SLAB_RED_ZONE) {
+>  		if (!check_bytes_and_report(s, slab, object, "Left Redzone",
+> @@ -1129,6 +1160,17 @@ static int check_object(struct kmem_cache *s, struct slab *slab,
+>  		if (!check_bytes_and_report(s, slab, object, "Right Redzone",
+>  			endobject, val, s->inuse - s->object_size))
+>  			return 0;
+> +
+> +		if (slub_debug_orig_size(s) && val == SLUB_RED_ACTIVE) {
+> +			orig_size = get_orig_size(s, object);
+> +
+> +			if (s->object_size > orig_size  &&
+> +				!check_bytes_and_report(s, slab, object,
+> +					"kmalloc Redzone", p + orig_size,
+> +					val, s->object_size - orig_size)) {
+> +				return 0;
+> +			}
+> +		}
+>  	} else {
+>  		if ((s->flags & SLAB_POISON) && s->object_size < s->inuse) {
+>  			check_bytes_and_report(s, slab, p, "Alignment padding",
+> @@ -4206,7 +4248,8 @@ static int calculate_sizes(struct kmem_cache *s)
+>  	 */
+>  	s->inuse = size;
+>  
+> -	if ((flags & (SLAB_TYPESAFE_BY_RCU | SLAB_POISON)) ||
+> +	if (slub_debug_orig_size(s) ||
+> +	    (flags & (SLAB_TYPESAFE_BY_RCU | SLAB_POISON)) ||
+>  	    ((flags & SLAB_RED_ZONE) && s->object_size < sizeof(void *)) ||
+>  	    s->ctor) {
+>  		/*
 
