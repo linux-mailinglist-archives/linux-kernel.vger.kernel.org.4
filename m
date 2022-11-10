@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398556245F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613D26245F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbiKJPce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S230043AbiKJPca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiKJPcO (ORCPT
+        with ESMTP id S231672AbiKJPcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:32:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1122D42F50;
-        Thu, 10 Nov 2022 07:30:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1502619B2;
-        Thu, 10 Nov 2022 15:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117F5C4314A;
-        Thu, 10 Nov 2022 15:30:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668094233;
-        bh=LxPoey/Txw9eEAsjMi8I7lrIBlKYQ+GUi78jSLCLmsw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X/8MmAQ4jzybDO0FM4EnvciY0o909vg7RORFRkthrlYFTQH/hYSUJP5KQ1UHS/aAh
-         5IjLCETD67uMhtSRZPFAWhe6aHAyo5cCjvFNv1P2q0PHs2Q7d6S9iAAdpDrsUdcsqg
-         6GE4uuSR3MxU07c0Oom2uDFZnxIvRDhEWaudlGfodGtTvdoXJC5xtPi+eTiquIgsVz
-         ja9QmMQiB7KHHw+psH3Je1bjKqnjze0b/XA4JsOTYT5U2blBIdMcQuxIS/yPN9K1bM
-         mzlQYs4u7edJlck0qSDrGzy+L18yAqVVPredbYqD0kSvVnSQe+qXksx3hdrExzeDRH
-         xdDUVZCZzAwdw==
-Received: by mail-lf1-f48.google.com with SMTP id c1so3934549lfi.7;
-        Thu, 10 Nov 2022 07:30:32 -0800 (PST)
-X-Gm-Message-State: ACrzQf15eZ9rnkAcSCeYQTGlyG8npzDDZyZJb+lSOYbqBlj5f3NrEpaz
-        wVYETrxgBQ5neAvZ1OmSU69H4IEEtJnQVAyHE8I=
-X-Google-Smtp-Source: AMsMyM4zvAX5sAETC9CI+cDlc2ACByQOg0lFOlzCPS65eEG++tMrkP/vj9NOXHY5hJrb5BSfltNUuM/SQvrZljQqoJc=
-X-Received: by 2002:ac2:4c47:0:b0:4a2:c07b:4b62 with SMTP id
- o7-20020ac24c47000000b004a2c07b4b62mr20875682lfk.426.1668094230829; Thu, 10
- Nov 2022 07:30:30 -0800 (PST)
+        Thu, 10 Nov 2022 10:32:02 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04132791D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:30:29 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id r14so3613615edc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:30:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j/r1odXsFicDjXczwHWptIWDrmeahFBrWNG3RXqZy30=;
+        b=x9T1gEbiNQ3mG6SXlpXDYzcFi0PN2sRkCm1E2MTtePfALasTJ2FQrdDDc8t7QTAEx6
+         H+GRnvhY7YTkqy0GLoeUYXLkSLs9XLtoOuF8voxUt2dx/wlSrh7va1i1rX9qP/fia7qa
+         bYCZvBP38Nq/1+sE9ugE2p05aqUaJw29OaOLSv1B9BY4NpghZyFr805gSUXwOO1mdBIV
+         PY52EQWNV5NXTifRIywbpDQiiPmGv+zn+biJs8cXeHhlFQygpWhF4SQMaVAFN2Gh+pg8
+         Hy/04pFh00D/7KbdXoul3vZnPD6PYpABK8EAK0wusQKAo9uYx2WtDbZYywFhbfGcVWo7
+         ppIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=j/r1odXsFicDjXczwHWptIWDrmeahFBrWNG3RXqZy30=;
+        b=yQqCpaASp2pQTH+7h90Qm/kpr+LN2NUM6OLW9Dq4WAeVCJir2e0pc7yDK8786UUM2u
+         5XID1SajVgbwlA+gDTXd00EYTPADIl757EbfBo8dlqcI+wS2yPgRLXbLG/AcvBhkCb1G
+         /LzhiWaPX0iD9VbPLCmlA6aOCuoS3XMrKjnl0NqExrQfPpy6KCcXZPBlaPV+FeRJLWHe
+         4VAik9s4PmqF1Po1Go60o7LqKb0NRZDMB16wTiMxhQkKQXp+vin5S2eQ40Ikg7s+5fa3
+         8dY//vZFvLgml1tYp+jClXE4f7BMVYRl486efSGEEh1RRCjBDDCH3R/O1bgY9/4dCCy2
+         gH5w==
+X-Gm-Message-State: ACrzQf1x6itnILEN/8zW7XPYwom3/fZcOp4FDsiucos7wuYe8fAAGAyC
+        OFQIyr2TVGjYLzXUqpLzewVAsA==
+X-Google-Smtp-Source: AMsMyM6h7XRJNoHUGOm9Ham1GCwmtJEKRec6pWlvmIctEXk8jPc4i2Oz8lPFYrIAgcYTlujmRMoFVQ==
+X-Received: by 2002:a05:6402:3408:b0:43c:2dd3:d86b with SMTP id k8-20020a056402340800b0043c2dd3d86bmr63263031edc.108.1668094228386;
+        Thu, 10 Nov 2022 07:30:28 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id q19-20020a17090676d300b007030c97ae62sm7246104ejn.191.2022.11.10.07.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 07:30:27 -0800 (PST)
+Message-ID: <c8a480c3-7bce-8e83-c0e6-6b29f32211d8@linaro.org>
+Date:   Thu, 10 Nov 2022 16:30:25 +0100
 MIME-Version: 1.0
-References: <20211124044124.998170-1-eric.snowberg@oracle.com>
- <20211124044124.998170-17-eric.snowberg@oracle.com> <20221110000129.kl6pjy5mafpuptbk@framework>
- <4A479B96-4B41-4323-9920-5A909423F998@oracle.com> <20221110150607.h4iaymkgc4f7kuue@framework>
- <47ae05f8d3a67ee5e1607ab8e718cc4b3e95cebb.camel@HansenPartnership.com>
-In-Reply-To: <47ae05f8d3a67ee5e1607ab8e718cc4b3e95cebb.camel@HansenPartnership.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 10 Nov 2022 16:30:19 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEv3raFtwMmA4gYX=Z5YBfJ5f9GP0L0Zo4FBabwTfhn8Q@mail.gmail.com>
-Message-ID: <CAMj1kXEv3raFtwMmA4gYX=Z5YBfJ5f9GP0L0Zo4FBabwTfhn8Q@mail.gmail.com>
-Subject: Re: [PATCH v8 16/17] integrity: Trust MOK keys if MokListTrustedRT found
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Morten Linderud <morten@linderud.pw>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "lszubowi@redhat.com" <lszubowi@redhat.com>,
-        "jason@zx2c4.com" <jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH] arm64: dts: qcom: sm8450: drop incorrect
+ spi-max-frequency
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221110152741.542024-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221110152741.542024-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,33 +78,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 16:27, James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> On Thu, 2022-11-10 at 16:06 +0100, Morten Linderud wrote:
-> > I'm not really sure what Peter means with "much more reliable"
-> > though.
->
-> It's that in-head knowledge you referred to.  You can't see the true
-> MoK variables because they're BootServices, meaning they're not visible
-> in the RunTime, which is why the shadow RT variables exist (this is a
-> security property: BS only variables can only be altered by trusted,
-> signed entities).  However lots of things can create RT variables so
-> you have to run through a sequence of checks on the RT shadows to try
-> to defeat clever attackers (like verifying the variable attributes),
-> because the chain of custody from BS to RT is not guaranteed.  If you
-> use a configuration table instead, that is BS only, the kernel (which
-> is also a trusted entity) has to pick it out before ExitBootServices,
-> so if the kernel has the table, you have a reliable chain of custody
-> for the entries.
->
 
-No config table are always accessible, also at runtime under the OS.
+On 10/11/2022 16:27, Krzysztof Kozlowski wrote:
+> spi-max-frequency is a property of SPI device, not the controller:
+>
+>    qcom/sm8450-hdk.dtb: geniqup@8c0000: spi@880000: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-But they are volatile so they can only have been created since the
-last reset of the system, so in that sense they are similar to the
-volatile RT variables aliases.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-The reason for preferring config tables is that you can access them
-much earlier, and without mapping the EFI runtime memory regions etc
-etc
+
+Konrad
+
+>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 7 -------
+>   1 file changed, 7 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 9bdda0163573..e9f34c102a6f 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -794,7 +794,6 @@ spi15: spi@880000 {
+>   				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_spi15_data_clk>, <&qup_spi15_cs>;
+> -				spi-max-frequency = <50000000>;
+>   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
+>   				interconnect-names = "qup-core", "qup-config";
+> @@ -834,7 +833,6 @@ spi16: spi@884000 {
+>   				interrupts = <GIC_SPI 583 IRQ_TYPE_LEVEL_HIGH>;
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_spi16_data_clk>, <&qup_spi16_cs>;
+> -				spi-max-frequency = <50000000>;
+>   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
+>   				interconnect-names = "qup-core", "qup-config";
+> @@ -874,7 +872,6 @@ spi17: spi@888000 {
+>   				interrupts = <GIC_SPI 584 IRQ_TYPE_LEVEL_HIGH>;
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_spi17_data_clk>, <&qup_spi17_cs>;
+> -				spi-max-frequency = <50000000>;
+>   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
+>   				interconnect-names = "qup-core", "qup-config";
+> @@ -914,7 +911,6 @@ spi18: spi@88c000 {
+>   				interrupts = <GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>;
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_spi18_data_clk>, <&qup_spi18_cs>;
+> -				spi-max-frequency = <50000000>;
+>   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
+>   				interconnect-names = "qup-core", "qup-config";
+> @@ -954,7 +950,6 @@ spi19: spi@890000 {
+>   				interrupts = <GIC_SPI 586 IRQ_TYPE_LEVEL_HIGH>;
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_spi19_data_clk>, <&qup_spi19_cs>;
+> -				spi-max-frequency = <50000000>;
+>   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
+>   				interconnect-names = "qup-core", "qup-config";
+> @@ -1007,7 +1002,6 @@ spi20: spi@894000 {
+>   				interrupts = <GIC_SPI 587 IRQ_TYPE_LEVEL_HIGH>;
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_spi20_data_clk>, <&qup_spi20_cs>;
+> -				spi-max-frequency = <50000000>;
+>   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
+>   				interconnect-names = "qup-core", "qup-config";
+> @@ -1047,7 +1041,6 @@ spi21: spi@898000 {
+>   				interrupts = <GIC_SPI 579 IRQ_TYPE_LEVEL_HIGH>;
+>   				pinctrl-names = "default";
+>   				pinctrl-0 = <&qup_spi21_data_clk>, <&qup_spi21_cs>;
+> -				spi-max-frequency = <50000000>;
+>   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
+>   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
+>   				interconnect-names = "qup-core", "qup-config";
