@@ -2,123 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3D7624C66
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEC8624C6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbiKJVE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S230303AbiKJVFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiKJVE4 (ORCPT
+        with ESMTP id S231368AbiKJVFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:04:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D07DD9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668114241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1QfUTLoo8KZyk/UmwYhDRfw7upAhiWcoYA8QgblVYZo=;
-        b=hyNLPTMjUrXewJBI4PsanyCrF9MudGC5rUKCzdwPQhEa0xCQH3mIGJzuq+Xk3plMzTLVjw
-        wXYl0n+80dKzlikyar8+PLSSJmK11Z2lTzjPX81O2tRwgxsEYB0rfeq3jiBs9qWgyJF+w3
-        mzV8pTbsjRdLozqvZDr5WF2NO+Bhe8Y=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-41-oCSOwqi-Md6tc4zUq1RO7g-1; Thu, 10 Nov 2022 16:04:00 -0500
-X-MC-Unique: oCSOwqi-Md6tc4zUq1RO7g-1
-Received: by mail-ed1-f71.google.com with SMTP id z15-20020a05640240cf00b00461b253c220so2295434edb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:00 -0800 (PST)
+        Thu, 10 Nov 2022 16:05:02 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335194E425
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:58 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so1809969otu.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:04:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MIrljlA1dEtBNb/SQwVUbOm8b8PLiK9imBoRLMqAwOM=;
+        b=5FoAs7dr/wOchaUTGl/b0nYwRXinDLnGoOv0h+fep/0JC0/sv1eoPL1n/efnv3SVsM
+         7yQzWdA35UMFnrCREAr5KLtOCGLLQW4fpxty2Vjv0m0ioH8N5d1ZZrTOSUqBkKuVl3Qm
+         FiUDd1g3SBIzV5cuMBl6MrqZ6pYJLnPWzHMlyG4uw4XzG5+AW+8vKGIDcpDvno1l1IaT
+         0nloMmE5CdKCabKhnx3cU0I6exqxxfDw09UgP/wIuag8fa/Dp77+51STHkdLpkI8A3UD
+         E4+pbPkOolbdSczwSEUjP0sTCi0FS/PmKtO53Fd0j9u0nDiYpwgcgPGCF4U6h7QbEJP5
+         sY+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1QfUTLoo8KZyk/UmwYhDRfw7upAhiWcoYA8QgblVYZo=;
-        b=DUrX/aLLEmfD8PLeGcryiReQbXP8T8gnvNuztc4aSSGL2JWMvTUt3SaCVdea3+m7EZ
-         g/dwlvwKVYZf6/WE7UJRa3PeuOSphygK7kb2CfoCG9gi5hjeu8hp2Q5FtDspJuDdn8+c
-         vVcEapJuCGVvaptwelfbTsgJehr7DyWALdOSozxuiix8fJu31sBv2kNc8wJBBeq1oojJ
-         n5EQXN2lrpbVR39Q+XYv84FgQWUnwJO8NTi5FTlRUez46ApUWPUo8TXYYMH4xrjblTeR
-         M36v83hzaByGwAg3m1/RRnNlZ2qdxU6lF6Ihw/01mR6DLTUJbJlRoKVQfikYD/7IKXs0
-         8bHg==
-X-Gm-Message-State: ACrzQf2ijtTqwa04gHA0oIto/eMjP8fsFzfMYXkN2ZXU0kh0A7jS37bp
-        DgqDu3STaVgYmN7zwy6dqKj/LE3ukU5N0a5JI3lLlNaPLMHmU5MFIpZcVgp2B8+1iMF2EY42nx4
-        TNjLAwP6Kt85Eu7PTE+f25Z7y
-X-Received: by 2002:a50:ec8f:0:b0:461:f919:caa4 with SMTP id e15-20020a50ec8f000000b00461f919caa4mr3484895edr.255.1668114239100;
-        Thu, 10 Nov 2022 13:03:59 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM60lzCeZXfSRx4OZ88TfurkkBOoWJgHUAZxFcNaBDri3o3LrZKlUiOtI33RvYqQwthK2FbxCg==
-X-Received: by 2002:a50:ec8f:0:b0:461:f919:caa4 with SMTP id e15-20020a50ec8f000000b00461f919caa4mr3484876edr.255.1668114238922;
-        Thu, 10 Nov 2022 13:03:58 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id oz36-20020a1709077da400b007ae4717bef1sm155820ejc.15.2022.11.10.13.03.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 13:03:58 -0800 (PST)
-Message-ID: <6798b3bc-125a-220d-3f37-71dcdf522f0d@redhat.com>
-Date:   Thu, 10 Nov 2022 22:03:57 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MIrljlA1dEtBNb/SQwVUbOm8b8PLiK9imBoRLMqAwOM=;
+        b=OWmJnoQBb5cFLmp6re+PFM3f/Da2h+VCLAtmx7mOo3nmrzOZ/dCTFgBUUeyBIA2UNP
+         z3dlrEWM8NA6TVDNtPM3YsAyeJ+5YIiqGxNh0GmeJbKTWtODNYtHZcmtuj3hXkAIDxdQ
+         TVXDtGs5/wWoAjCpP8+vKV7WZ5ebXaKRFxWNV35l3mGbiDbXZIZU6C2D3ujSqHI7B7YL
+         mYjVr6cPaaUchXyw5x/ED6PEfWmJtLqN1wZUCbW/opk0CAIPnMdet4DYvUHIt+XrKAWc
+         wg+SW+bzPD6w8tdklDW9N8OOSInTSADfnZfCkhsEzhb2fjBdI1f8fJYYlEjeLqpYX43M
+         BzmA==
+X-Gm-Message-State: ACrzQf0xjbJySc1YD1cQLO89pWZlsZGFAzPaK7Mt0gEczOn9c5oagz1q
+        vqFp3jJQ4b+1SL9icU8rLqlLmhjfm0MET5KYjB14
+X-Google-Smtp-Source: AMsMyM61pxTlWJ/CpIa/bZyF6jsToHWzHHVWCcQYEFS5vW6C2awDGiTfoblGb9FXRye+y2lGs2HToS5+l7V3lfn3fl8=
+X-Received: by 2002:a9d:71cb:0:b0:66c:3703:f04e with SMTP id
+ z11-20020a9d71cb000000b0066c3703f04emr2095693otj.287.1668114297404; Thu, 10
+ Nov 2022 13:04:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 01/14] platform/x86/intel/ifs: Remove unused selection
-Content-Language: en-US, nl
-To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, ashok.raj@intel.com,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
-        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-2-jithu.joseph@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221107225323.2733518-2-jithu.joseph@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107205754.2635439-1-cukie@google.com> <CAHC9VhTLBWkw2XzqdFx1LFVKDtaAL2pEfsmm+LEmS0OWM1mZgA@mail.gmail.com>
+ <CABXk95ChjusTneWJgj5a58CZceZv0Ay-P-FwBcH2o4rO0g2Ggw@mail.gmail.com>
+In-Reply-To: <CABXk95ChjusTneWJgj5a58CZceZv0Ay-P-FwBcH2o4rO0g2Ggw@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 10 Nov 2022 16:04:46 -0500
+Message-ID: <CAHC9VhRTWGuiMpJJiFrUpgsm7nQaNA-n1CYRMPS-24OLvzdA2A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] Add LSM access controls for io_uring_setup
+To:     Jeffrey Vander Stoep <jeffv@google.com>
+Cc:     Gil Cukierman <cukie@google.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Nov 10, 2022 at 12:54 PM Jeffrey Vander Stoep <jeffv@google.com> wrote:
+> On Mon, Nov 7, 2022 at 10:17 PM Paul Moore <paul@paul-moore.com> wrote:
+> >
+> > On Mon, Nov 7, 2022 at 3:58 PM Gil Cukierman <cukie@google.com> wrote:
+> > >
+> > > This patchset provides the changes required for controlling access to
+> > > the io_uring_setup system call by LSMs. It does this by adding a new
+> > > hook to io_uring. It also provides the SELinux implementation for a new
+> > > permission, io_uring { setup }, using the new hook.
+> > >
+> > > This is important because existing io_uring hooks only support limiting
+> > > the sharing of credentials and access to the sensitive uring_cmd file
+> > > op. Users of LSMs may also want the ability to tightly control which
+> > > callers can retrieve an io_uring capable fd from the kernel, which is
+> > > needed for all subsequent io_uring operations.
+> >
+> > It isn't immediately obvious to me why simply obtaining a io_uring fd
+> > from io_uring_setup() would present a problem, as the security
+> > relevant operations that are possible with that io_uring fd *should*
+> > still be controlled by other LSM hooks.  Can you help me understand
+> > what security issue you are trying to resolve with this control?
+>
+> I think there are a few reasons why we want this particular hook.
+>
+> 1.  It aligns well with how other resources are managed by selinux
+> where access to the resource is the first control point (e.g. "create"
+> for files, sockets, or bpf_maps, "prog_load" for bpf programs, and
+> "open" for perf_event) and then additional functionality or
+> capabilities require additional permissions.
 
-On 11/7/22 23:53, Jithu Joseph wrote:
-> CONFIG_INTEL_IFS_DEVICE is not used anywhere. The selection in
-> Kconfig is therefore pointless. Delete it.
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
+[NOTE: there were two reply sections in your email, and while similar,
+they were not identical; I've trimmed the other for the sake of
+clarity]
 
-Thanks, patch looks good to me:
+The resources you mention are all objects which contain some type of
+information (either user data, configuration, or program
+instructions), with the resulting fd being a handle to those objects.
+In the case of io_uring the fd is a handle to the io_uring
+interface/rings, which by itself does not contain any information
+which is not already controlled by other permissions.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+I/O operations which transfer data between the io_uring buffers and
+other system objects, e.g. IORING_OP_READV, are still subject to the
+same file access controls as those done by the application using
+syscalls.  Even the IORING_OP_OPENAT command goes through the standard
+VFS code path which means it will trigger the same access control
+checks as an open*() done by the application normally.
 
-Regards,
+The 'interesting' scenarios are those where the io_uring operation
+servicing credentials, aka personalities, differ from the task
+controlling the io_uring.  However in those cases we have the new
+io_uring controls to gate these delegated operations.  Passing an
+io_uring fd is subject to the fd/use permission like any other fd.
 
-Hans
+Although perhaps the most relevant to your request is the fact that
+the io_uring inode is created using the new(ish) secure anon inode
+interface which ensures that the creating task has permission to
+create an io_uring.  This io_uring inode label also comes into play
+when a task attempts to mmap() the io_uring rings, a critical part of
+the io_uring API.
 
-> ---
->  drivers/platform/x86/intel/ifs/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/intel/ifs/Kconfig b/drivers/platform/x86/intel/ifs/Kconfig
-> index c341a27cc1a3..89152d46deee 100644
-> --- a/drivers/platform/x86/intel/ifs/Kconfig
-> +++ b/drivers/platform/x86/intel/ifs/Kconfig
-> @@ -4,7 +4,6 @@ config INTEL_IFS
->  	# Discussion on the list has shown that the sysfs API needs a bit
->  	# more work, mark this as broken for now
->  	depends on BROKEN
-> -	select INTEL_IFS_DEVICE
->  	help
->  	  Enable support for the In Field Scan capability in select
->  	  CPUs. The capability allows for running low level tests via
+If I'm missing something you believe to be important, please share the details.
 
+> 2. It aligns well with how resources are managed on Android. We often
+> do not grant direct access to resources (like memory buffers).
+
+Accessing the io_uring buffers requires a task to mmap() the io_uring
+fd which is controlled by the normal SELinux mmap() access controls.
+
+> 3. Attack surface management. One of the primary uses of selinux on
+> Android is to assess and limit attack surface (e.g.
+> https://twitter.com/jeffvanderstoep/status/1422771606309335043) . As
+> io_uring vulnerabilities have made their way through our vulnerability
+> management system, it's become apparent that it's complicated to
+> assess the impact. Is a use-after-free reachable? Creating
+> proof-of-concept exploits takes a lot of time, and often functionality
+> can be reached by multiple paths. How many of the known io_uring
+> vulnerabilities would be gated by the existing checks? How many future
+> ones will be gated by the existing checks? I don't know the answer to
+> either of these questions and it's not obvious. This hook makes that
+> initial assessment simple and effective.
+
+It should be possible to deny access to io_uring via the anonymous
+inode labels, the mmap() controls, and the fd/use permission.  If you
+find a way to do meaningful work with an io_uring fd that can't be
+controlled via an existing permission check please let me know.
+
+--
+paul-moore.com
