@@ -2,163 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06B36243CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B8E6243D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiKJOFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:05:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S229719AbiKJOGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKJOFt (ORCPT
+        with ESMTP id S230183AbiKJOGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:05:49 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598CE6BDCF;
-        Thu, 10 Nov 2022 06:05:45 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so1151018otb.8;
-        Thu, 10 Nov 2022 06:05:45 -0800 (PST)
+        Thu, 10 Nov 2022 09:06:05 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE62478304
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:05:57 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j16so3392891lfe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:05:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mU1T17TmUMKJ1FQ3DqAQW105Hs0gFl2y7tVhnhRI/Pc=;
+        b=TB/vlAiX1GaWtQtKZx92rFo7cAYyi7aiddPgCvt8+fucqf+/SW3ZmGdWeNWdfad+kY
+         +ZPQT12nxPZrd/UJrsgOSzEKNWgsHWYZfs1ynhOkN2a1xER4lSEeuwU1V5ZWP3JRq0zJ
+         hTphh2uY4UQT4ihCMuRPzvE7JY9w6yGEx7vVBTU4F3Q3S1/REOL8szTSk/7YaDu+OfxZ
+         t7oPmrtLCOIjG59YpyjWMB2IHddqtpqXByi+/zMY2cRkDRmUKzVCcV9Xp2GTlqt+W1aR
+         V03dtiOcFoxLSYxjrDOL6jRL/CL8hR51BW/m9JRFWuasiJLE7Z5Mew5D50RGu1+eCJbW
+         C6ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SOZURf1rNwc3a/P6g5eCp63zwBi6WOS8mU3DMBFslXc=;
-        b=EGOEoe5/BZMCp84suTQ4pJJYpot4y2SZJFpnYauCIxtY8zxC/nIR6ZxYcdQlzLrFqN
-         ++uEQtxVu5tAlC3mR8JureWLs96ZUmL5hACgRxQfUyyBCAOjPjnEHn66NTbJisaVa0fv
-         HthW34tKQqaBvifjgzXDJGRF0cYvLHi0Tb+Fy1itdGv9lAJFQytjQtRatenh2jAGLv77
-         cj5qFAqdjFICJ2x/PlLFmM5Y7k+jHgEYlBR9YjGaZkZvz0U6ixXTIRlGOUscbBmyLtQw
-         gkmqdf5o6It1I67DwFswsrZ3+ZHUKDHx0PkMYEkY7kOq/yT4FdIs0/zODnU1RDRLFrFG
-         IwcA==
-X-Gm-Message-State: ACrzQf1vLipuf3jIm6S0xT0AAZsysqhJRqXM2HW3FFiQkqsSr01EbJ/Q
-        E3J8ggt5ppK+NHcG1FzuFg==
-X-Google-Smtp-Source: AMsMyM7riFDmy8iAvwWMHq5A9Ozuew2LUgztFrHrpOF9ybb5AN+vyazkFQqfB5NU1iVCZF+AE+FCWg==
-X-Received: by 2002:a05:6830:4113:b0:66c:3b12:82ab with SMTP id w19-20020a056830411300b0066c3b1282abmr31196465ott.172.1668089144035;
-        Thu, 10 Nov 2022 06:05:44 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g81-20020a9d12d7000000b0066c44b4f2d6sm6534981otg.43.2022.11.10.06.05.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 06:05:43 -0800 (PST)
-Received: (nullmailer pid 240905 invoked by uid 1000);
-        Thu, 10 Nov 2022 14:05:45 -0000
-Date:   Thu, 10 Nov 2022 08:05:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Christian Eggers <ceggers@arri.de>,
-        Cory Tusar <cory.tusar@pid1solutions.com>
-Subject: Re: [PATCH v3 6/6] dt-bindings: nvmem: add YAML schema for the ONIE
- tlv layout
-Message-ID: <20221110140545.GA221642-robh@kernel.org>
-References: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
- <20221104163833.1289857-7-miquel.raynal@bootlin.com>
- <20221110040055.GA3436769-robh@kernel.org>
- <20221110095034.7a80163a@xps-13>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mU1T17TmUMKJ1FQ3DqAQW105Hs0gFl2y7tVhnhRI/Pc=;
+        b=rE5ZXN236bsQbi9OpRWPlL7pge/nsph03cUfyn5X+7LNASRKIJCY+ktKeiEbH2YzZ2
+         7AnQSqF2F7ZygXF2hIyk6+lzX00qTUx2JIYbXBOzgwWRwgxKwRThtNjnfS3xXPR3zwtG
+         6gO5T+wWBoUozvNRTpswA9LGES+cGTt3skUoJgXaeiPTI5FsG0iduyTbTaYvH9RRw9IU
+         BbdPF1vX6aRlcTnnpH6s4VNknVJijV//VePKXhLlK0QyIjU4cyf+kA5Z2FsII5UYAXz6
+         TpIW3GxNZXeeoSdj8wC1lpV4a6AZhmzlOX6crgGJERZuXgTEuJKQqD2BOaw9IKmk6ado
+         ATNA==
+X-Gm-Message-State: ACrzQf2Vunj3Rga7rIW79LbDlYy4zXDsARr5z3Hm/GzbWfsq8/08XABB
+        5oGuuIYFq7NOVn4mZeyiGsPS/A==
+X-Google-Smtp-Source: AMsMyM5s03xz7K8V7wRjPw62PqrykcpGllOh53A5mlcV8u+2k6r4RX8HHjGD+srWOSlqw51wIIai/g==
+X-Received: by 2002:a05:6512:1303:b0:4ab:4bef:b3db with SMTP id x3-20020a056512130300b004ab4befb3dbmr24104861lfu.592.1668089156138;
+        Thu, 10 Nov 2022 06:05:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id bp9-20020a056512158900b004b19f766b07sm2776842lfb.91.2022.11.10.06.05.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 06:05:55 -0800 (PST)
+Message-ID: <f338976e-40eb-5171-c14d-952d07d67730@linaro.org>
+Date:   Thu, 10 Nov 2022 15:05:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110095034.7a80163a@xps-13>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next V2] dt-bindings: net: ethernet-controller: Add
+ ptp-hardware-clock
+Content-Language: en-US
+To:     "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>
+Cc:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yangbo.lu@nxp.com" <yangbo.lu@nxp.com>,
+        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
+        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
+        "Katakam, Harini" <harini.katakam@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+References: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
+ <cfbde0da-9939-e976-52c1-88577de7d4cb@linaro.org>
+ <MW5PR12MB559842AC3B0D4E539D653B3D87019@MW5PR12MB5598.namprd12.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <MW5PR12MB559842AC3B0D4E539D653B3D87019@MW5PR12MB5598.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:50:34AM +0100, Miquel Raynal wrote:
-> Hi Rob,
+On 10/11/2022 10:57, Gaddam, Sarath Babu Naidu wrote:
+>>>
+>>> +  ptp-hardware-clock:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description:
+>>> +      Specifies a reference to a node representing a IEEE1588 timer.
+>>
+>> Drop "Specifies a reference to". It's obvious from the schema.
+>>
+>> Aren't you expecting here some specific Devicetree node of IEEE1588 timer?
+>> IOW, you expect to point to timer, but what this timer must provide? How is
+>> this generic?
 > 
-> robh@kernel.org wrote on Wed, 9 Nov 2022 22:00:55 -0600:
-> 
-> > On Fri, Nov 04, 2022 at 05:38:33PM +0100, Miquel Raynal wrote:
-> > > Add a schema for the ONIE tlv NVMEM layout that can be found on any ONIE
-> > > compatible networking device.
-> > > 
-> > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > > ---
-> > >  .../bindings/nvmem/layouts/nvmem-layout.yaml  |   1 +
-> > >  .../nvmem/layouts/onie,tlv-layout.yaml        | 115 ++++++++++++++++++
-> > >  2 files changed, 116 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-> > > index f64ea2fa362d..8512ee538c4c 100644
-> > > --- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-> > > +++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-> > > @@ -19,6 +19,7 @@ description: |
-> > >  
-> > >  oneOf:
-> > >    - $ref: kontron,sl28-vpd.yaml
-> > > +  - $ref: onie,tlv-layout.yaml
-> > >  
-> > >  properties:
-> > >    compatible: true
-> > > diff --git a/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
-> > > new file mode 100644
-> > > index 000000000000..1d91277324ac
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
-> > > @@ -0,0 +1,115 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/nvmem/layouts/onie,tlv-layout.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: NVMEM layout of the ONIE tlv table
-> > > +
-> > > +maintainers:
-> > > +  - Miquel Raynal <miquel.raynal@bootlin.com>
-> > > +
-> > > +description:
-> > > +  Modern networking hardware implementing the Open Compute Project ONIE
-> > > +  infrastructure shall provide a non-volatile memory with a table whose the
-> > > +  content is well specified and gives many information about the manufacturer
-> > > +  (name, country of manufacture, etc) as well as device caracteristics (serial
-> > > +  number, hardware version, mac addresses, etc). The underlaying device type
-> > > +  (flash, EEPROM,...) is not specified. The exact location of each value is also
-> > > +  dynamic and should be discovered at run time because it depends on the
-> > > +  parameters the manufacturer decided to embed.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: onie,tlv-layout
-> > > +
-> > > +  product-name: true  
-> > 
-> > This is a node? If so, you need:
-> > 
-> > type: object
-> > additionalProperties: false
-> 
-> I thought referencing a schema under a property would be enough?
-> 
-> Indeed in nvmem.yaml we create the property nvmem-layout and make it
-> reference nvmem-layout.yaml. Then, in nvmem-layout.yaml:
-> 
-> 	 oneOf:
-> 	  - $ref: kontron,sl28-vpd.yaml
-> 	  - $ref: onie,tlv-layout.yaml
-> 
-> we reference the different layouts that may apply (very much like what
-> you proposed to list the mtd partition parsers, if I got it right).
-> 
-> Isn't it enough?
+> Thanks for review comments.
+>  Format can be as documented by users Documentation/devicetree/bindings/ptp/ members. The node should be accessible to derive the index but the format of the PTP clock node is upto the vendor.
 
-No. It is enough to allow the property, but nothing defines what it must 
-be (a node) and what the node contains in the case of empty nodes. Try 
-adding 'product-name = "foo";' and it won't warn.
+I am not sure what do you mean here. Anyway description might need
+something more specific.
 
-Rob
+> 
+> 
+>>
+>> In your commit msg you use multiple times "driver", so are you adding it only
+>> to satisfy Linux driver requirements? What about other drivers, e.g. on BSD
+>> or U-Boot?
+> 
+> AFAIK this is for Linux. It is not relevant to uboot as there's no PTP support there.
+
+And BSD? Bindings are not for Linux only. Please abstract from any OS
+specifics.
+
+Also your messages needs wrapping. Use mailing list reply style.
+
+Best regards,
+Krzysztof
+
