@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D7D624C1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4606624C22
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbiKJUqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S230173AbiKJUrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:47:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKJUq3 (ORCPT
+        with ESMTP id S229461AbiKJUrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:46:29 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA9E5F90
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:46:28 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id m6so3120477pfb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:46:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=94TsYS9Lhx3savK/i0rFKWoF2OB6Clo4zum9Q7WKAV8=;
-        b=QkagP8ACYR8CagjP1G4Y5wJdFJ+jYesXPOL5g2+j1fUnp1hkvLCMFRVI4ER/b/Z4mD
-         y4j1EEZ9lHH1umfNxhML7hgO8CrD6hGaW+rezADHqexqePWUNB/Xr2fjmDOWqnFkEUbv
-         X/wPF8DR34roo3Eytdk9XCQHJT80DCQ6LagvkAiE4uI7BLF3Q1hj/TsNvym4lH0/IidO
-         Hk3F/KyLZiM2zsutznNdhHeSDs1fdiHxGYAXVxzjG1VOPv/4hYjHDMNIlJkrO2xEsXO/
-         f6jcN4bd6HS1qoAJcUrknp8vuUgDY1k4ZKYNzLfqeCrrFYmyWg4m5Cqa4q/9NHVSDuWA
-         EA9Q==
+        Thu, 10 Nov 2022 15:47:17 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05A34E41E;
+        Thu, 10 Nov 2022 12:47:16 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-12c8312131fso3474023fac.4;
+        Thu, 10 Nov 2022 12:47:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=94TsYS9Lhx3savK/i0rFKWoF2OB6Clo4zum9Q7WKAV8=;
-        b=KtuMPqgYKEHQ1gMo1ETtDK4cvgSZ+qNbPbAip59VfhGFM+zNRNsCLNQ7mBb7mK/Wo9
-         eYMfl1nPvVm9MhWC00gOXg0x7JCwy4MKZFs3Ogn8QY6UTY9ZTMpwWDTcuMZNf+kFflh/
-         wfpSvg3uw9C4Cg2bqf1y511H7zc124OK+SCiTB0v0MYYjMZuSLq31kqIFlofgh+xdVtj
-         fENe0E9GPi3mZCEMa8htNnGVvSC6+4HFJayb9SPERa89W0M2IO3zW/ZqRNV4QpvPZbnA
-         tMEB2eNj5N/U2eeLeGWqdGGV+ynO3pDiTkirlDIOHXj9TT1FITQlbEYiUq7ug20vq7IA
-         BQuQ==
-X-Gm-Message-State: ACrzQf1jcJXTnxdARedKIWE5+Cg8wFZ5MEtqOXqtDUUbUdTVGc1t9Uzv
-        0s5lO2TFEAFha73i0yoJ24nSeX3llfDbdxTT7tvFsg==
-X-Google-Smtp-Source: AMsMyM6lWyNpiBMuUpIxE8MbdlCB9fhr4E+gnLs9ulGDCERUWsGS/HRwd7uPd6QgpzzzWpmoyYXNSBqYsniomAJw+RU=
-X-Received: by 2002:a05:6a00:1a4a:b0:56d:98e3:4df8 with SMTP id
- h10-20020a056a001a4a00b0056d98e34df8mr3400650pfv.37.1668113187475; Thu, 10
- Nov 2022 12:46:27 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2gwEUKSXC2q8W0MZ5VNX1K1et96Xer1LBkG1sO7qsX0=;
+        b=mnVkG66vPfhfaET2XeIzzWL6QZp2R5eBAaZu4oPGalR3UYLMUcJtF5d56yZUeGTbLR
+         BUFOC4zFa1GMx8zOSIFHxnW6IEG7YF0d4D9mhxlwtQ7Nb2fIqkmGSJfWzjeOgJUEL4YJ
+         xGC/J0E54fER6mYl+1JBY0lbqmLeJxtO0UbVyueW3L7hO5wcWUAMD29UuzpCGwkuJ4qI
+         KoZ1aMt+tH9Cix6i3KpH20TOSvVNe1Ib0dgCYXeTv5lKL24DpmA1wUbP0dG+YOTR1byK
+         7LMGsr+KQA5Esu/cA5EvkdYH0RWyRO1oUCg7nexyn1iza09bgKAs+Zo9kKitQr656wlt
+         2NXg==
+X-Gm-Message-State: ACrzQf1n7hGOYRdHAofHyyJOchyVkoFSNMtsUf3E852+NBYG+4ToRp49
+        AVuDw4oVxMU2ajbPTsr63A==
+X-Google-Smtp-Source: AMsMyM6VW4+1pCBMsQIl7KdJQQ0JAK3VklV+o63SprytCoT4uMUlVeBGulSY4AQyEuEe1248a3NsOQ==
+X-Received: by 2002:a05:6870:2895:b0:13c:c80:6b46 with SMTP id gy21-20020a056870289500b0013c0c806b46mr2102986oab.194.1668113236157;
+        Thu, 10 Nov 2022 12:47:16 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g14-20020a4adc8e000000b004768f725b7csm174425oou.23.2022.11.10.12.47.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 12:47:15 -0800 (PST)
+Received: (nullmailer pid 957786 invoked by uid 1000);
+        Thu, 10 Nov 2022 20:47:17 -0000
+Date:   Thu, 10 Nov 2022 14:47:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom,msm8660: convert to
+ dtschema
+Message-ID: <166811323446.957679.13923991485365016948.robh@kernel.org>
+References: <20221107185931.22075-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20221109000306.1407357-1-nathan@kernel.org>
-In-Reply-To: <20221109000306.1407357-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 10 Nov 2022 12:46:16 -0800
-Message-ID: <CAKwvOdkxLXLna0cfkA8ay54vU0NwMj2AFR8CZg3pgpvqOKeXjw@mail.gmail.com>
-Subject: Re: [PATCH] x86/vdso: Conditionally export __vdso_sgx_enter_enclave
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107185931.22075-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,61 +70,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 4:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Recently, ld.lld moved from '--undefined-version' to
-> '--no-undefined-version' as the default, which breaks building the vDSO
-> when CONFIG_X86_SGX is not set:
->
->   ld.lld: error: version script assignment of 'LINUX_2.6' to symbol '__vdso_sgx_enter_enclave' failed: symbol not defined
->
-> __vdso_sgx_enter_enclave is only included in the vDSO when
-> CONFIG_X86_SGX is set. Only export it if it will be present in the final
-> object, which clears up the error.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1756
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+On Mon, 07 Nov 2022 19:59:30 +0100, Krzysztof Kozlowski wrote:
+> Convert Qualcomm MSM8660 pin controller bindings to DT schema.  Keep the
+> parsing of pin configuration subnodes consistent with other Qualcomm
+> schemas (children named with '-state' suffix, their children with
+> '-pins').
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->
-> It would be nice if this could be picked up for an -rc release but I
-> won't argue otherwise.
+>  .../bindings/pinctrl/qcom,msm8660-pinctrl.txt |  96 --------------
+>  .../pinctrl/qcom,msm8660-pinctrl.yaml         | 125 ++++++++++++++++++
+>  2 files changed, 125 insertions(+), 96 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.txt
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8660-pinctrl.yaml
+> 
 
-Sounds like the lld change got reverted, so this is less urgent now,
-but the change still LGTM regardless. Thanks for the patch!
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Fixes: 8466436952017 ("x86/vdso: Implement a vDSO for Intel SGX enclave call")
-
-
->
-> Alternatively, we could add '--undefined-version' to the vDSO ldflags
-> but this does not seem unreasonable to me.
->
->  arch/x86/entry/vdso/vdso.lds.S | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/x86/entry/vdso/vdso.lds.S b/arch/x86/entry/vdso/vdso.lds.S
-> index 4bf48462fca7..e8c60ae7a7c8 100644
-> --- a/arch/x86/entry/vdso/vdso.lds.S
-> +++ b/arch/x86/entry/vdso/vdso.lds.S
-> @@ -27,7 +27,9 @@ VERSION {
->                 __vdso_time;
->                 clock_getres;
->                 __vdso_clock_getres;
-> +#ifdef CONFIG_X86_SGX
->                 __vdso_sgx_enter_enclave;
-> +#endif
->         local: *;
->         };
->  }
->
-> base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
-> --
-> 2.38.1
->
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Rob Herring <robh@kernel.org>
