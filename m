@@ -2,90 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633136246D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DD16246D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiKJQYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S231383AbiKJQZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiKJQYq (ORCPT
+        with ESMTP id S231367AbiKJQZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:24:46 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3F8DF49
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:24:46 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id q9so2650427pfg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:24:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WcMoIuzERReXkNIiGnXAzD6h4jC6olJQLjpcLn6f5Sc=;
-        b=NshAAGjbOWp2UaqB8yHIDc79FeUgA3+ARWkKcBBymxThMtu6ZEdv1EZtSczjZEBUvx
-         byGzK/Z5yaMCb+kt6Z3rcTecuNB9ZlAq2HKImDcRRN6prrOcTvKioth47J7L6l3f+oEH
-         QI4krkfeWg+5GU/8Mgnwg+DMg1g7TwuCaHki6dsyVQK/IpdZC4osFmJmQV4qPFbTdFgi
-         03uRKfCOnKag9zE1sHsnc2LbrVzflfQAZV92+/5UPRc+q8DW+x8opYnO/T9Z2CYtn+wv
-         h81oZhI8y3FBBFw9lB0lT+9V8q4bpXyCw9GflMU3rEV/5v7/sAI3Mv2i3l9V4fmLSUJZ
-         aEtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WcMoIuzERReXkNIiGnXAzD6h4jC6olJQLjpcLn6f5Sc=;
-        b=sX7RqjSe7B5LpLaGLG/R3nIImhF2NfV+fpVjwVi75k2bFcQ3cU3HPz35p40YSgm3Zv
-         GG+fe9ROUAaXn4ykgunhskdyl8kvy2hWhfLAuTCqRF55pvYhWN6Zh5ves4n1jKI4cYVo
-         odVisXTow+8u6jKs4eCJo8iJ9AZwXXFwBhvMnN4UfH6aABTZJVePyozT13d0riNu7OxY
-         UwNhmBWVcRCZqhy/zBNiQ0wLbZT3gWCO00l7PzL6v0mOIlKvuWG1K9x3jDdgZIX7T4/J
-         SPpwM4VeWvJvQL2p2Ef5ocpsO/UdkoXfNdnQD4HQSCDxgXTw14R2CV3WnlDPG/XwYI4Y
-         bhRw==
-X-Gm-Message-State: ACrzQf1ZPpDfew9YhI8HJ0K2tTU0Canbqhgd8n9BaOk0XZvcsPV7ez2s
-        H9XP78LmUd7INBd91IuVqLRKuA==
-X-Google-Smtp-Source: AMsMyM4sjlTERLuDr34bKS3XJQZnGMKmSIsHN7pN4gYnwG7sfGxHrUaLK08YhR6C4iMcmDzCIYGCMA==
-X-Received: by 2002:a62:5e06:0:b0:56b:e3f8:824f with SMTP id s6-20020a625e06000000b0056be3f8824fmr65425089pfb.84.1668097485605;
-        Thu, 10 Nov 2022 08:24:45 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w13-20020a1709027b8d00b00186c5e8b1d0sm11331800pll.149.2022.11.10.08.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:24:45 -0800 (PST)
-Date:   Thu, 10 Nov 2022 16:24:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xin Li <xin3.li@intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, pbonzini@redhat.com,
-        kevin.tian@intel.com
-Subject: Re: [RESEND PATCH 4/6] x86/traps: add external_interrupt() to
- dispatch external interrupts
-Message-ID: <Y20lyBl67GDZVOeB@google.com>
-References: <20221110061545.1531-1-xin3.li@intel.com>
- <20221110061545.1531-5-xin3.li@intel.com>
+        Thu, 10 Nov 2022 11:25:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6D1625C3;
+        Thu, 10 Nov 2022 08:25:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD9EF1FB;
+        Thu, 10 Nov 2022 08:25:07 -0800 (PST)
+Received: from monolith.localdoman (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EDE23F703;
+        Thu, 10 Nov 2022 08:25:00 -0800 (PST)
+Date:   Thu, 10 Nov 2022 16:24:57 +0000
+From:   Alexandru Elisei <alexandru.elisei@arm.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ardb@kernel.org,
+        linux-efi@vger.kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [BUG] rtc-efi: Error in efi.get_time() spams dmesg with error
+ message
+Message-ID: <Y20l2SozLJdWtqCh@monolith.localdoman>
+References: <Y2o1hdZK9GGDVJsS@monolith.localdoman>
+ <Y2rM/ud0JfX4QXJB@mail.local>
+ <Y2u+Z7uWfokQYwKt@monolith.localdoman>
+ <Y2wOH1X0tAWWY4zd@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221110061545.1531-5-xin3.li@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2wOH1X0tAWWY4zd@mail.local>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022, Xin Li wrote:
-> +__visible noinstr void external_interrupt(struct pt_regs *regs,
-> +					  unsigned int vector)
-> +{
-> +	unsigned int sysvec = vector - FIRST_SYSTEM_VECTOR;
-> +
-> +	BUG_ON(vector < FIRST_EXTERNAL_VECTOR);
+Hi,
 
-Why not return an error up the stack?  KVM and/or CPU bugs aren't unheard of.
-Dropping an IRQ obviously isn't ideal, but there's a non-zero chance that letting
-KVM WARN and kill the VM will keep the host alive and thus other VMs running.  A
-somewhat sophisticated setup might even react to the VM being killed by migrating
-other VMs off the system and initiating host maintenance.
+On Wed, Nov 09, 2022 at 09:31:27PM +0100, Alexandre Belloni wrote:
+> On 09/11/2022 14:51:19+0000, Alexandru Elisei wrote:
+> > Hi,
+> > 
+> > On Tue, Nov 08, 2022 at 10:41:18PM +0100, Alexandre Belloni wrote:
+> > > On 08/11/2022 10:55:15+0000, Alexandru Elisei wrote:
+> > > > Hi,
+> > > > 
+> > > > Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
+> > > > possible") exposed a firmware error on an Ampere Altra machine that was
+> > > > causing the machine to panic. Then commit 23715a26c8d8 ("arm64: efi:
+> > > > Recover from synchronous exceptions occurring in firmware") made the EFI
+> > > > exception non-fatal, and disabled runtime services when the exception
+> > > > happens. The interaction between those two patches are being discussed in a
+> > > > separate thread [1], but that should be orthogonal to this.
+> > > > 
+> > > > Now efi.get_time() fails and each time an error message is printed to
+> > > > dmesg, which happens several times a second and clutters dmesg
+> > > > unnecessarily, to the point it becomes unusable.
+> > > > 
+> > > > I was wondering if it would be possible to turn dev_err() into a
+> > > > dev_WARN_ONCE() or do something to avoid this issue. Tried to replace
+> > > > dev_err() with dev_err_ratelimited(), and the error message was displayed
+> > > > less often (about once per second), but dmesg was still being cluttered.
+> > > > 
+> > > 
+> > > The question this raise is what is actually trying to read the RTC this
+> > > often?
+> > > 
+> > > This should be read once at boot and maybe every time you wake up from
+> > > suspend but there is no real reason to read it multiple times per
+> > > seconds.
+> > 
+> > Reverted the commit the exposed the firmware bug, which means rtc-efi works as
+> > it should. Added these debug statements to check how many times efi_read_time()
+> > is called if there are no errors:
+> > 
+> > --- a/drivers/rtc/rtc-efi.c
+> > +++ b/drivers/rtc/rtc-efi.c
+> > @@ -154,6 +154,7 @@ static int efi_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+> >         return status == EFI_SUCCESS ? 0 : -EINVAL;
+> >  }
+> > 
+> > +static unsigned long i = 0;
+> >  static int efi_read_time(struct device *dev, struct rtc_time *tm)
+> >  {
+> >         efi_status_t status;
+> > @@ -162,6 +163,9 @@ static int efi_read_time(struct device *dev, struct rtc_time *tm)
+> > 
+> >         status = efi.get_time(&eft, &cap);
+> > 
+> > +       i++;
+> > +       pr_info("%s: Call number %lu\n", __func__, i);
+> > +
+> >         if (status != EFI_SUCCESS) {
+> >                 /* should never happen */
+> >                 dev_err(dev, "can't read time\n");
+> > 
+> > The function gets called 3 times, twice during boot and once after. I would say
+> > that efi_read_time() gets called so many times because it fails.
+> > 
+> 
+> It should really get called only once, at device registration when
+> CONFIG_RTC_HCTOSYS is set (which I despise):
+> https://elixir.bootlin.com/linux/latest/source/drivers/rtc/class.c#L431
+> 
+> Could you maybe use dump_stack() ?
+
+Made this change to the driver:
+
+--- a/drivers/rtc/rtc-efi.c
++++ b/drivers/rtc/rtc-efi.c
+@@ -160,6 +160,9 @@ static int efi_read_time(struct device *dev, struct rtc_time *tm)
+        efi_time_t eft;
+        efi_time_cap_t cap;
+
++       pr_info("efi_read_time()\n");
++       dump_stack();
++
+        status = efi.get_time(&eft, &cap);
+
+        if (status != EFI_SUCCESS) {
+
+I don't know if it makes a difference, but the driver is compiled in
+(CONFIG_RTC_DRV_EFI=y) instead of it being a module.
+
+For the case when there's no synchronous exception (so runtime services are
+available):
+
+[   16.106871] rtc_efi: efi_read_time()
+[   16.110461] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc4-00002-g5c5bcc194a43 #85
+[   16.118455] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   16.131221] Call trace:
+[   16.133657]  dump_backtrace.part.0+0xdc/0xf0
+[   16.137936]  show_stack+0x18/0x40
+[   16.141241]  dump_stack_lvl+0x68/0x84
+[   16.144902]  dump_stack+0x18/0x34
+[   16.148205]  efi_read_time+0x38/0xac
+[   16.151770]  __rtc_read_time+0x44/0x8c
+[   16.155515]  __rtc_read_alarm+0x27c/0x400
+[   16.159512]  __devm_rtc_register_device+0x100/0x300
+[   16.164378]  efi_rtc_probe+0xc4/0xf8
+[   16.167951]  platform_probe+0x68/0xe0
+[   16.171609]  really_probe+0xbc/0x2dc
+[   16.175174]  __driver_probe_device+0x78/0xe0
+[   16.179432]  driver_probe_device+0x3c/0x160
+[   16.183604]  __driver_attach+0x80/0x190
+[   16.187428]  bus_for_each_dev+0x70/0xd0
+[   16.191254]  driver_attach+0x24/0x30
+[   16.194817]  bus_add_driver+0x150/0x200
+[   16.198641]  driver_register+0x78/0x130
+[   16.202466]  __platform_driver_probe+0x58/0x11c
+[   16.206985]  efi_rtc_driver_init+0x24/0x30
+[   16.211070]  do_one_initcall+0x50/0x1c0
+[   16.214895]  kernel_init_freeable+0x214/0x280
+[   16.219245]  kernel_init+0x24/0x12c
+[   16.222725]  ret_from_fork+0x10/0x20
+[   16.226874] rtc-efi rtc-efi.0: registered as rtc0
+[   16.231577] rtc_efi: efi_read_time()
+[   16.235142] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc4-00002-g5c5bcc194a43 #85
+[   16.243133] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   16.255897] Call trace:
+[   16.258331]  dump_backtrace.part.0+0xdc/0xf0
+[   16.262589]  show_stack+0x18/0x40
+[   16.265893]  dump_stack_lvl+0x68/0x84
+[   16.269544]  dump_stack+0x18/0x34
+[   16.272847]  efi_read_time+0x38/0xac
+[   16.276411]  __rtc_read_time+0x44/0x8c
+[   16.280148]  rtc_read_time+0x3c/0x70
+[   16.283711]  __devm_rtc_register_device+0x16c/0x300
+[   16.288575]  efi_rtc_probe+0xc4/0xf8
+[   16.292139]  platform_probe+0x68/0xe0
+[   16.295790]  really_probe+0xbc/0x2dc
+[   16.299353]  __driver_probe_device+0x78/0xe0
+[   16.303611]  driver_probe_device+0x3c/0x160
+[   16.307783]  __driver_attach+0x80/0x190
+[   16.311607]  bus_for_each_dev+0x70/0xd0
+[   16.315431]  driver_attach+0x24/0x30
+[   16.318994]  bus_add_driver+0x150/0x200
+[   16.322817]  driver_register+0x78/0x130
+[   16.326642]  __platform_driver_probe+0x58/0x11c
+[   16.331160]  efi_rtc_driver_init+0x24/0x30
+[   16.335245]  do_one_initcall+0x50/0x1c0
+[   16.339069]  kernel_init_freeable+0x214/0x280
+[   16.343414]  kernel_init+0x24/0x12c
+[   16.346891]  ret_from_fork+0x10/0x20
+[   16.351038] rtc-efi rtc-efi.0: setting system clock to 2022-11-10T14:57:06 UTC (1668092226)
+[..]
+[   55.871457] rtc_efi: efi_read_time()
+[   55.871483] CPU: 20 PID: 1744 Comm: kworker/20:2 Not tainted 6.1.0-rc4-00002-g5c5bcc194a43 #85
+[   55.871495] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   55.871500] Workqueue: events rtc_timer_do_work
+[   55.871529] Call trace:
+[   55.871533]  dump_backtrace.part.0+0xdc/0xf0
+[   55.871553]  show_stack+0x18/0x40
+[   55.871560]  dump_stack_lvl+0x68/0x84
+[   55.871573]  dump_stack+0x18/0x34
+[   55.871578]  efi_read_time+0x38/0xac
+[   55.871584]  __rtc_read_time+0x44/0x8c
+[   55.871589]  rtc_timer_do_work+0x64/0x1c0
+[   55.871593]  process_one_work+0x1d0/0x320
+[   55.871604]  worker_thread+0x14c/0x444
+[   55.871610]  kthread+0x10c/0x110
+[   55.871617]  ret_from_fork+0x10/0x20
+
+Running a v6.1-rc4 kernel, after the EFI synchronous abort, so runtime services
+are disabled:
+
+[   55.547383] rtc_efi: efi_read_time()
+[   55.547394] CPU: 1 PID: 829 Comm: kworker/1:1 Tainted: G        W I        6.1.0-rc4-00001-gbd8082c3515b #86
+[   55.547397] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   55.547399] Workqueue: events rtc_timer_do_work
+[   55.547405] Call trace:
+[   55.547406]  dump_backtrace.part.0+0xdc/0xf0
+[   55.547411]  show_stack+0x18/0x40
+[   55.547414]  dump_stack_lvl+0x68/0x84
+[   55.547418]  dump_stack+0x18/0x34
+[   55.547420]  efi_read_time+0x38/0xac
+[   55.547422]  __rtc_read_time+0x44/0x8c
+[   55.547424]  rtc_timer_do_work+0x64/0x1c0
+[   55.547425]  process_one_work+0x1d0/0x320
+[   55.547429]  worker_thread+0x14c/0x444
+[   55.547432]  kthread+0x10c/0x110
+[   55.547435]  ret_from_fork+0x10/0x20
+[   55.547437] efi: EFI Runtime Services are disabled!
+[   55.547441] rtc-efi rtc-efi.0: can't read time
+[   56.522572] efi: EFI Runtime Services are disabled!
+[   56.522602] rtc_efi: efi_read_time()
+[   56.522607] CPU: 46 PID: 883 Comm: kworker/46:1 Tainted: G        W I        6.1.0-rc4-00001-gbd8082c3515b #86
+[   56.522620] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   56.522627] Workqueue: events rtc_timer_do_work
+[   56.522640] Call trace:
+[   56.522644]  dump_backtrace.part.0+0xdc/0xf0
+[   56.522658]  show_stack+0x18/0x40
+[   56.522670]  dump_stack_lvl+0x68/0x84
+[   56.522680]  dump_stack+0x18/0x34
+[   56.522689]  efi_read_time+0x38/0xac
+[   56.522696]  __rtc_read_time+0x44/0x8c
+[   56.522703]  rtc_timer_do_work+0x64/0x1c0
+[   56.522710]  process_one_work+0x1d0/0x320
+[   56.522721]  worker_thread+0x14c/0x444
+[   56.522731]  kthread+0x10c/0x110
+[   56.522740]  ret_from_fork+0x10/0x20
+[   56.522751] rtc-efi rtc-efi.0: can't read time
+[   56.527202] CPU: 46 PID: 883 Comm: kworker/46:1 Tainted: G        W I        6.1.0-rc4-00001-gbd8082c3515b #86
+[   56.527205] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   56.527207] Workqueue: events rtc_timer_do_work
+[   56.527209] Call trace:
+[   56.527210]  dump_backtrace.part.0+0xdc/0xf0
+[   56.527213]  show_stack+0x18/0x40
+[   56.527217]  dump_stack_lvl+0x68/0x84
+[   56.527219]  dump_stack+0x18/0x34
+[   56.527222]  efi_read_time+0x38/0xac
+[   56.527224]  __rtc_read_time+0x44/0x8c
+[   56.527226]  rtc_timer_do_work+0x64/0x1c0
+[   56.527227]  process_one_work+0x1d0/0x320
+[   56.527230]  worker_thread+0x14c/0x444
+[   56.527234]  kthread+0x10c/0x110
+[   56.527236]  ret_from_fork+0x10/0x20
+[   56.527239] rtc-efi rtc-efi.0: can't read time
+[   56.531689] rtc_efi: efi_read_time()
+[   56.531700] CPU: 61 PID: 900 Comm: kworker/61:1 Tainted: G        W I        6.1.0-rc4-00001-gbd8082c3515b #86
+[   56.531705] Hardware name: WIWYNN Mt.Jade Server System B81.03001.0005/Mt.Jade Motherboard, BIOS 1.08.20220218 (SCP: 1.08.20220218) 2022/02/18
+[   56.531708] Workqueue: events rtc_timer_do_work
+[   56.531714] Call trace:
+[   56.531716]  dump_backtrace.part.0+0xdc/0xf0
+[   56.531723]  show_stack+0x18/0x40
+[   56.531728]  dump_stack_lvl+0x68/0x84
+[   56.531732]  dump_stack+0x18/0x34
+[   56.531737]  efi_read_time+0x38/0xac
+[   56.531741]  __rtc_read_time+0x44/0x8c
+[   56.531743]  rtc_timer_do_work+0x64/0x1c0
+[   56.531747]  process_one_work+0x1d0/0x320
+[   56.531752]  worker_thread+0x14c/0x444
+[   56.531757]  kthread+0x10c/0x110
+[   56.531761]  ret_from_fork+0x10/0x20
+[   56.531768] rtc-efi rtc-efi.0: can't read time
+[..]
+
+I've removed the first two GetTime() calls that happens before runtime
+services become unavailable, they looked similar to the calls in the first
+scenario. Can provide full log if needed.
+
+Thanks,
+Alex
