@@ -2,191 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773D3624C4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC8A624C52
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbiKJVBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S230184AbiKJVBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiKJVBF (ORCPT
+        with ESMTP id S229961AbiKJVBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:01:05 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B155610E4;
-        Thu, 10 Nov 2022 13:01:04 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id l127so3123793oia.8;
-        Thu, 10 Nov 2022 13:01:04 -0800 (PST)
+        Thu, 10 Nov 2022 16:01:38 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E337CBF43
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:01:37 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13b103a3e5dso3529282fac.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:01:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uSbodY8FqZ0Ciim/vAb77VV4F9ElrHL2UVuKiq5ungA=;
+        b=YMGD8nMS55gvLSoZ8tKrtFoOZ/Ve6TrHy42MgIRNg7/fmubAxDJH5DG0RW10SxvOeP
+         DjTT4GnaBPcWIi5FHosoNTKOgkLUY73yZvvLd9GalbDMFolHEKGR8P2hdFUvIFmPB/SO
+         BrV90aXQ1eoZkI6c1yhjIGCApzY+hu3tS/DTZEU/Fg2s7BMNOWpnAvF4Cuip1vbjLDDi
+         Wi0Cf6JFPCLTbtm34QorcHgGhquebmcOqtlB6bTQLk4Mr7H+4Eba3Bf+AHWKYeyJTbOW
+         TJMserRFDaCMIXo5v2+5i1CgxrdLo/ul7beHcB3VpcJHaJjJRJj3Y82oz8ECPN2Z55/w
+         fCMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IDqn8BDU2tLIVGpP/7JbZcQ8NuPGFYgE6/tTyJvpJB8=;
-        b=CCWjmICdl7mpNZ4sAYxuhzGImSJXo86/z7jNU8gXJ1yoaG8maQYNI6pajt+yADZUlE
-         z30NhFGt/lO1AAVdSBusR/3BgPCVAkjY6mznrL0cgXVGUAgzhPc6p89w86ezc0WupJuK
-         vdHTsvSep+laQZkkfQQyBt50ijJXe/jAeEjmn3OS002hgJY3rytRf2C2cC7zGILNUxZq
-         Y81vQDdGa7NIjVRVNrW+6InhE8SuUjmjQ8TD0IFnslqyyBX/RN80avW5W6JO1Xha+Ag8
-         dQ+gwr45gMtRg0dbZC3YIyHRWeyG3BYpLyzzOiI/B6ko/ht4u+GLlcfHUbnMUAb8aHqZ
-         HarQ==
-X-Gm-Message-State: ACrzQf3HfDGCrLoP9XQKaKxd5WtEcl6ARMOd4/mtB5z8YzXXPUTK51qv
-        ExJQR57CCteEP6x+kf2Mmw==
-X-Google-Smtp-Source: AMsMyM5YKvFMdUbdZPYOAHkKC93jpUw2ItMlN+pxG+7jwvZl9DyN0X7pMLBe9clIzRPUHibvryVqZw==
-X-Received: by 2002:aca:2105:0:b0:359:e9f6:e37d with SMTP id 5-20020aca2105000000b00359e9f6e37dmr2191361oiz.76.1668114063885;
-        Thu, 10 Nov 2022 13:01:03 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j18-20020a9d7392000000b0066c34486aa7sm243697otk.73.2022.11.10.13.01.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 13:01:03 -0800 (PST)
-Received: (nullmailer pid 975802 invoked by uid 1000);
-        Thu, 10 Nov 2022 21:01:04 -0000
-Date:   Thu, 10 Nov 2022 15:01:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 01/20] dt-bindings: imx6q-pcie: Fix clock names for
- imx6sx and imx8mq
-Message-ID: <20221110210104.GA963064-robh@kernel.org>
-References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
- <20221107204934.32655-2-Sergey.Semin@baikalelectronics.ru>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uSbodY8FqZ0Ciim/vAb77VV4F9ElrHL2UVuKiq5ungA=;
+        b=RfFdCKHgh1+wX9nQM5Aoilns6QgVqcVn1HDWu7EV6nX3ngfrYIC8tBLqrBWtmgLHg9
+         lO92EHSCdENEXny8G0cGQ3UDl7hiTaXmJvgBiCe03pvcWNIXo5++EKKcBKpnWXpcFXxf
+         ASIuOF0Ux07RS+JjTzwBCM/wVMm0pTRD2lGzGpvmjbJsRaR6T5lt0bOa2m3CVrTAJV9y
+         1G413aDRTb3iypBX1BH0Sc95TfRbuZF+pmT5/qVLdmbSsFksVSwyqPVPe1L97NOBXGBr
+         MeWj+V2a04VQ4tBXEmce97cyaHSxqiTxt8ZNTrw0O4zPA6z4E3tFQwuNGNs4S5ujqXbN
+         FAWg==
+X-Gm-Message-State: ACrzQf12pB3fBPdAtxgoJzv2skBGLbAzvNeqVHLqOwkTMx+SAymWCiM0
+        p2NPbUkk4FiwavydGS2S0VKW832Garhit2ezGnOdqg==
+X-Google-Smtp-Source: AMsMyM5Lbc1uK8AP5uOpZgGwnsT6w5cfTgiZG9wE2H4u+6rVvgryo+vd5IZC988GgRuXQXR3iL+1Gj8CZ3j8fJF1g8o=
+X-Received: by 2002:a05:6870:ab84:b0:13c:7d1c:5108 with SMTP id
+ gs4-20020a056870ab8400b0013c7d1c5108mr2177638oab.282.1668114096980; Thu, 10
+ Nov 2022 13:01:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107204934.32655-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <mhng-9e6b4607-6bea-411c-b843-916c1e0798ee@palmerdabbelt-glaptop> <182c1d4e-a117-79d6-4dd1-8e3c8a447b4a@ghiti.fr>
+In-Reply-To: <182c1d4e-a117-79d6-4dd1-8e3c8a447b4a@ghiti.fr>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 10 Nov 2022 13:01:26 -0800
+Message-ID: <CACT4Y+YYAfTafFk7DE0B=qQFgkPXS7492AhBdY_CP1WdB8CGfA@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Bump COMMAND_LINE_SIZE value to 1024
+To:     Alex Ghiti <alex@ghiti.fr>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, macro@orcam.me.uk,
+        david.abdurachmanov@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-api@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 11:49:15PM +0300, Serge Semin wrote:
-> Originally as it was defined the legacy bindings the pcie_inbound_axi and
-> pcie_aux clock names were supposed to be used in the fsl,imx6sx-pcie and
-> fsl,imx8mq-pcie devices respectively. But the bindings conversion has been
-> incorrectly so now the fourth clock name is defined as "pcie_inbound_axi
-> for imx6sx-pcie, pcie_aux for imx8mq-pcie", which is completely wrong.
-> Let's fix that by conditionally apply the clock-names constraints based on
-> the compatible string content.
-> 
-> Fixes: 751ca492f131 ("dt-bindings: PCI: imx6: convert the imx pcie controller to dtschema")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> 
-> ---
-> 
-> Changelog v5:
-> - This is a new patch added on the v5 release of the patchset.
-> ---
->  .../bindings/pci/fsl,imx6q-pcie.yaml          | 47 +++++++++++++++++--
->  1 file changed, 42 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
-> index 376e739bcad4..ebfe75f1576e 100644
-> --- a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
-> @@ -16,6 +16,47 @@ description: |+
->  
->  allOf:
->    - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: fsl,imx6sx-pcie
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: pcie
-> +            - const: pcie_bus
-> +            - const: pcie_phy
-> +            - const: pcie_inbound_axi
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: fsl,imx8mq-pcie
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: pcie
-> +            - const: pcie_bus
-> +            - const: pcie_phy
-> +            - const: pcie_aux
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          not:
-> +            contains:
-> +              enum:
-> +                - fsl,imx6sx-pcie
-> +                - fsl,imx8mq-pcie
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: pcie
-> +            - const: pcie_bus
-> +            - const: pcie_phy
->  
->  properties:
->    compatible:
-> @@ -57,11 +98,7 @@ properties:
->  
->    clock-names:
->      minItems: 3
-> -    items:
-> -      - const: pcie
-> -      - const: pcie_bus
-> -      - const: pcie_phy
-> -      - const: pcie_inbound_axi for imx6sx-pcie, pcie_aux for imx8mq-pcie
+On Mon, 21 Jun 2021 at 00:11, Alex Ghiti <alex@ghiti.fr> wrote:
+>
+> Hi Palmer,
+>
+> Le 23/04/2021 =C3=A0 04:57, Palmer Dabbelt a =C3=A9crit :
+> > On Fri, 02 Apr 2021 11:33:30 PDT (-0700), macro@orcam.me.uk wrote:
+> >> On Fri, 2 Apr 2021, David Abdurachmanov wrote:
+> >>
+> >>> > > >  This macro is exported as a part of the user API so it must
+> >>> not depend on
+> >>> > > > Kconfig.  Also changing it (rather than say adding
+> >>> COMMAND_LINE_SIZE_V2 or
+> >>> > > > switching to an entirely new data object that has its dimension
+> >>> set in a
+> >>> > > > different way) requires careful evaluation as external binaries
+> >>> have and
+> >>> > > > will have the value it expands to compiled in, so it's a part
+> >>> of the ABI
+> >>> > > > too.
+> >>> > >
+> >>> > > Thanks, I didn't realize this was part of the user BI.  In that
+> >>> case we
+> >>> > > really can't chage it, so we'll have to sort out some other way
+> >>> do fix
+> >>> > > whatever is going on.
+> >>> > >
+> >>> > > I've dropped this from fixes.
+> >>> >
+> >>> > Does increasing COMMAND_LINE_SIZE break user-space binaries? I woul=
+d
+> >>> > expect it to work the same way as adding new enum values, or adding
+> >>> > fields at the end of versioned structs, etc.
+> >>> > I would assume the old bootloaders/etc will only support up to the
+> >>> > old, smaller max command line size, while the kernel will support
+> >>> > larger command line size, which is fine.
+> >>> > However, if something copies /proc/cmdline into a fixed-size buffer
+> >>> > and expects that to work, that will break... that's quite unfortuna=
+te
+> >>> > user-space code... is it what we afraid of?
+> >>> >
+> >>> > Alternatively, could expose the same COMMAND_LINE_SIZE, but interna=
+lly
+> >>> > support a larger command line?
+> >>>
+> >>> Looking at kernel commit history I see PowerPC switched from 512 to
+> >>> 2048, and I don't see complaints about the ABI on the mailing list.
+> >>>
+> >>> If COMMAND_LINE_SIZE is used by user space applications and we
+> >>> increase it there shouldn't be problems. I would expect things to
+> >>> work, but just get truncated boot args? That is the application will
+> >>> continue only to look at the initial 512 chars.
+> >>
+> >>  The macro is in an include/uapi header, so it's exported to the userl=
+and
+> >> and a part of the user API.  I don't know what the consequences are fo=
+r
+> >> the RISC-V port specifically, but it has raised my attention, and I th=
+ink
+> >> it has to be investigated.
+> >>
+> >>  Perhaps it's OK to change it after all, but you'd have to go through
+> >> known/potential users of this macro.  I guess there shouldn't be that
+> >> many
+> >> of them.
+> >>
+> >>  In any case it cannot depend on Kconfig, because the userland won't h=
+ave
+> >> access to the configuration, and then presumably wants to handle any a=
+nd
+> >> all.
+> >
+> > It kind of feels to me like COMMAND_LINE_SIZE shouldn't have been part
+> > of the UABI to begin with.  I sent a patch to remove it from the
+> > asm-generic UABI, let's see if anyone knows of a reason it should be UA=
+BI:
+> >
+> > https://lore.kernel.org/linux-arch/20210423025545.313965-1-palmer@dabbe=
+lt.com/T/#u
+>
+> Arnd seemed to agree with you about removing COMMAND_LINE_SIZE from the
+> UABI, any progress on your side?
 
-This should have been just 'enum: [ pcie_inbound_axi, pcie_aux ]'
-
-And then do:
-
-  - if:
-      properties:
-        compatible:
-          contains:
-            const: fsl,imx8mq-pcie
-    then:
-      properties:
-        clock-names:
-          items:
-            - {}
-            - {}
-            - {}
-            - const: pcie_aux
-
-
-And then another if/then with 'maxItems: 3'
+Was this ever merged? Don't see this even in linux-next.
