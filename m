@@ -2,119 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F95624711
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE55A624713
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbiKJQcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
+        id S231861AbiKJQcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiKJQbu (ORCPT
+        with ESMTP id S231670AbiKJQcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:31:50 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46707326E8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:31:39 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id y4so1818020plb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:31:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MUAtzipMT9CJ97I7UTXEAkc3gMdCNHKnDSpE96C8MlU=;
-        b=YfqB/W01G2YQNOotID47LmhV1fKHXkE5sJOkdpceIk5w8DTGaCfLdIe+sVpZqVL1cA
-         M4EFLu+jZ06e7jSLfFhdHZgsktyXvjdL9RbPFogaB7GFcyJkEmItBpaKq1pbyMwYlb5S
-         cFW98REZBmTm9YV/QlVS4plNATGqg22LyLP/g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MUAtzipMT9CJ97I7UTXEAkc3gMdCNHKnDSpE96C8MlU=;
-        b=2zeAc17ioCyEp32ihoEsTl3/s0AumpQUTgEM4IwiHpFXED1UZHmhWHSukgmxMpcaOA
-         YMFX898KjCHZWQPQoxw5IjOaDN3wChtMkj+XrC0pIntcLZw4wy41zuOREdlRLRIn1hPB
-         zOMB92q2xoOPQXRKyOrxreFGKQQRoXgXjOHbQMyrgp/DTJm0IvChimci80YLscGExk6J
-         P9aFuc3Uep1LJRa+bSSPVXi6juSsK4wqSim8r6aGo9B/WSS0lKoPOqwxRWQ0pEekWCpJ
-         B3bPLl7D8hxnl1tXSCqhBwVfdJUClhx3m5Tolzud/x0qumsUFPTfhVKfGNGM/RooJx5W
-         02og==
-X-Gm-Message-State: ACrzQf2cXgad4Q0rp7XvvcqOEcZKKhu0ZR88a2dPllvl+Wc64jlNQs3o
-        qOAAfN4Rgrk9p/eaSVMPaOiUcg==
-X-Google-Smtp-Source: AMsMyM4q0lr5QW4uT01XojI274hIU6SM8QThuo4QtFfn8vxazLsgnMat++r81ABFMvwTlGb4RIUNsg==
-X-Received: by 2002:a17:90b:378a:b0:213:803d:3389 with SMTP id mz10-20020a17090b378a00b00213803d3389mr75822533pjb.115.1668097898630;
-        Thu, 10 Nov 2022 08:31:38 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z12-20020a170903018c00b00180daa59314sm11492261plg.125.2022.11.10.08.31.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:31:38 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Thu, 10 Nov 2022 08:31:37 -0800
-To:     Benjamin Mugnier <benjamin.mugnier@foss.st.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        Shawn Tu <shawnx.tu@intel.com>, linux-media@vger.kernel.org,
-        Sylvain Petinot <sylvain.petinot@foss.st.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: vgxy61_detect_cut_version(): Control flow issues
-Message-ID: <202211100831.9C578C6@keescook>
+        Thu, 10 Nov 2022 11:32:09 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83163FBA3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:32:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NPEF063H+Y7JeJNfnAB1kp+fd1pLsT9ML+6VjdUPh7o=; b=mx+EY9COzoDzeuy2+0heRU2yNe
+        yzX/vmiC19SUiPXxXDe3Mld28kvj/feSddm0YDw9iYaoR6cFptf4oO6yG82v/riN6Wpid4/0SRwQl
+        zoOCHLqUuayVhzSFL6UbBwFSp6aZgG6Tb1dHoy0X72Ced80huuiy8/kMhkeaeH5LT47Jc4CoDZB1T
+        mA+DweHo/jN0Rlhgnyde/Z0ueQJn3iMdcvqFEG2W66SIEdiQxy2oinLi/WkRa3UmvD8cFjFfFsRPH
+        tp+x9oFo59yFei677vlB7qS8S/c2iCw3nDiN9eDPQftxhpdbchYaCJjS8hwCKiFm3t6iqIpCkjLS1
+        W2XpdHBQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1otASt-00CD9f-Ff; Thu, 10 Nov 2022 16:31:43 +0000
+Date:   Thu, 10 Nov 2022 16:31:43 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxcg.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        David Hildenbrand <david@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Yang Shi <shy828301@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Mina Almasry <almasrymina@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 4/3] mm,thp,rmap: handle the normal !PageCompound case
+ first
+Message-ID: <Y20nbz4ypWhwF38L@casper.infradead.org>
+References: <5f52de70-975-e94f-f141-543765736181@google.com>
+ <fca2f694-2098-b0ef-d4e-f1d8b94d318c@google.com>
+ <CAHk-=wiJfLx9dVJcQOhQsAseoPmLhpVvHgf4GYu6frfhmBAuMg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wiJfLx9dVJcQOhQsAseoPmLhpVvHgf4GYu6frfhmBAuMg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Wed, Nov 09, 2022 at 07:23:08PM -0800, Linus Torvalds wrote:
+> On Wed, Nov 9, 2022 at 6:18 PM Hugh Dickins <hughd@google.com> wrote:
+> >
+> > Commit ("mm,thp,rmap: lock_compound_mapcounts() on THP mapcounts")
+> > propagated the "if (compound) {lock} else if (PageCompound) {lock} else
+> > {atomic}" pattern throughout; but Linus hated the way that gives primacy
+> > to the uncommon case: switch to "if (!PageCompound) {atomic} else if
+> > (compound) {lock} else {lock}" throughout.
+> 
+> Side note, that 'compound' naming is also on my list of "I'm _really_
+> not a fan".
+> 
+> We actually have a completely different meaning for PageCompound()
+> than the meaning of 'compound' in the rmap functions, and those
+> functions literally mix those meanings if  not on the same line, then
+> at least right next to each other.
+> 
+> What 'rmap' actually means with 'compound' in the add/remove functions
+> is basically 'not PAGE_SIZE' as far as I can tell.
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221110 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+Ah.  I've been trying to understand what that 'compound' really means,
+and what the difference is to 'PageCompound()' and why we need both.
+Thanks!
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+> One reason I find the "compound" name so horrifying is that it is used
+> very much for HUGETLB pages, which I don't think end up ever being
+> marked as PageCompund(), and which are - for various historical
+> reasons - doubly confusing because they use a "pte_t" to describe
+> themselves, even when they are actually using a "pmd_t" or a "pud_t"
+> to actually map the page.
 
-  Thu Oct 27 14:37:38 2022 +0300
-    153e4ad44d60 ("media: i2c: Add driver for ST VGXY61 camera sensor")
+HugeTLB pages _are_ marked as Compound.  There's some fairly horrific
+code to manually make them compound when they have to be allocated
+piecemeal (because they're 1GB and too large for the page allocator).
 
-Coverity reported the following:
+>    To make things more confusing, some places use PageHeadHuge()
+> instead (but the folio version of said test is called
+> "folio_test_hugetlb()", just so that nobody could possibly ever accuse
+> the HUGETLB code to have consistency).
 
-*** CID 1527248:  Control flow issues  (NO_EFFECT)
-drivers/media/i2c/st-vgxy61.c:1651 in vgxy61_detect_cut_version()
-1645     static int vgxy61_detect_cut_version(struct vgxy61_dev *sensor)
-1646     {
-1647     	struct i2c_client *client = sensor->i2c_client;
-1648     	u16 device_rev;
-1649
-1650     	device_rev = vgxy61_read_reg(sensor, VGXY61_REG_REVISION);
-vvv     CID 1527248:  Control flow issues  (NO_EFFECT)
-vvv     This less-than-zero comparison of an unsigned value is never true. "device_rev < 0".
-1651     	if (device_rev < 0)
-1652     		return device_rev;
-1653
-1654     	switch (device_rev >> 8) {
-1655     	case 0xA:
-1656     		dev_dbg(&client->dev, "Cut1 detected\n");
+That one's my fault, but it's a reaction to all the times that I and
+others have got confused between PageHuge and PageTransHuge.  I suppose
+we could do a big sed s/PageHuge/PageHugeTLB/, but I'm hopeful the
+entire hugetlb codebase is either converted to folios or unified with
+THP handling.
 
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
+> I do wish the HUGETLB case didn't use 'pte' for its notion of how
+> HUGETLB entries are mapped, but that's literally how HUGETLB is
+> designed: it started life as a larger last-level pte.
+> 
+> It just means that it ends up being very confusing when from a page
+> table walk perspective, you're walking a pud or a pmd entry, and then
+> you see a 'pte_t' instead.
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527248 ("Control flow issues")
-Fixes: 153e4ad44d60 ("media: i2c: Add driver for ST VGXY61 camera sensor")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+Yes, one of the long-term things I want to try is making the hugetlb
+code use the pmd/pud types like the THP code does.
