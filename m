@@ -2,174 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E605623EBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C707623EF9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiKJJgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S229986AbiKJJrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKJJgp (ORCPT
+        with ESMTP id S229981AbiKJJr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:36:45 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FB267F60;
-        Thu, 10 Nov 2022 01:36:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668073004; x=1699609004;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bZGinb1GlB+jVorOK6luSyiTkDtoV7cUYIIAN1FmgDQ=;
-  b=e09k7bYG1C0/HJLdkFipjO67rgXaEyKiZfASTWz37A2yA7trbPyTkh7l
-   FR2BnlwcAxMFf+QRgI7VkrRZxUrPQBHyVnuJ+T3zVUVv038cDuehAT+wf
-   uzxqwdTI4lXdrFduj6bpWs2Rb3lgmgb/Gc+68DLo6933PkBm7YaKuvCzw
-   yXsA9RSy0PG/h8isyrtuY5RlZH+Kyp0JpFrbM0PHlb4lW8PGxnu4fpRh6
-   UswcRjX97cjmc0t782CR/CK4DIH22uBD3RH4WxEgbIxv/aQHwP2U65We7
-   O/Mu/PJFpdFD3tGDoat6dJpPHNG80dZh6MHkhcPsqvGB0xzGDcu2Sv5UK
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="188462126"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Nov 2022 02:36:43 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 10 Nov 2022 02:36:43 -0700
-Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 10 Nov 2022 02:36:41 -0700
-From:   Daniel Machon <daniel.machon@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <joe@perches.com>,
-        <daniel.machon@microchip.com>, <vladimir.oltean@nxp.com>,
-        <petrm@nvidia.com>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, "kernel test robot" <lkp@intel.com>
-Subject: [PATCH net-next] net: dcb: move getapptrust to separate function
-Date:   Thu, 10 Nov 2022 10:46:23 +0100
-Message-ID: <20221110094623.3395670-1-daniel.machon@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 10 Nov 2022 04:47:28 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89BC6AED5;
+        Thu, 10 Nov 2022 01:47:26 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7Gzc2ztzz9v7Gj;
+        Thu, 10 Nov 2022 17:40:44 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCHc3CNyGxjO3hSAA--.1123S2;
+        Thu, 10 Nov 2022 10:47:03 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v4 0/5] evm: Prepare for moving to the LSM infrastructure
+Date:   Thu, 10 Nov 2022 10:46:34 +0100
+Message-Id: <20221110094639.3086409-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwCHc3CNyGxjO3hSAA--.1123S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WF43ury7ury3Jr48Jw17trb_yoW3Ar1rpF
+        WfKF45Krn8AF9rWrWfCan7u3WSgrWrGrWUJa93Gw1UZ3Z8Grn2qr40yr45uas8XrWkJFna
+        qw12ywn8urn8AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBF1jj4FG6gABsX
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes a frame size warning, reported by kernel test robot.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
->> net/dcb/dcbnl.c:1230:1: warning: the frame size of 1244 bytes is
->> larger than 1024 bytes [-Wframe-larger-than=]
+One of the challenges that must be tackled to move IMA and EVM to the LSM
+infrastructure is to ensure that EVM is capable to correctly handle
+multiple stacked LSMs providing an xattr at file creation. At the moment,
+there are few issues that would prevent a correct integration. This patch
+set aims at solving them.
 
-The getapptrust part of dcbnl_ieee_fill is moved to a separate function,
-and the selector array is now dynamically allocated, instead of stack
-allocated.
+From the LSM infrastructure side, the LSM stacking feature added the
+possibility of registering multiple implementations of the security hooks,
+that are called sequentially whenever someone calls the corresponding
+security hook. However, security_inode_init_security() is currently limited
+to support one xattr provided by LSM and one by EVM.
+security_old_inode_init_security() can only support one xattr due to its
+API.
 
-Tested on microchip sparx5 driver.
+In addition, using the call_int_hook() macro causes some issues. According
+to the documentation in include/linux/lsm_hooks.h, it is a legitimate case
+that an LSM returns -EOPNOTSUPP when it does not want to provide an xattr.
+However, the loop defined in the macro would stop calling subsequent LSMs
+if that happens. In the case of security_old_inode_init_security(), using
+the macro would also cause a memory leak due to replacing the *value
+pointer, if multiple LSMs provide an xattr.
 
-Fixes: 6182d5875c33 ("net: dcb: add new apptrust attribute")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- net/dcb/dcbnl.c | 67 +++++++++++++++++++++++++++++++++----------------
- 1 file changed, 45 insertions(+), 22 deletions(-)
+From EVM side, the first operation to be done is to change the definition
+of evm_inode_init_security() to be compatible with the security hook
+definition. Unfortunately, the current definition does not provide enough
+information for EVM, as it must have visibility of all xattrs provided by
+LSMs to correctly calculate the HMAC. This patch set changes the security
+hook definition by replacing the name, value and len triple with the xattr
+array allocated by security_inode_init_security().
 
-diff --git a/net/dcb/dcbnl.c b/net/dcb/dcbnl.c
-index cec0632f96db..3f4d88c1ec78 100644
---- a/net/dcb/dcbnl.c
-+++ b/net/dcb/dcbnl.c
-@@ -1060,11 +1060,52 @@ static int dcbnl_build_peer_app(struct net_device *netdev, struct sk_buff* skb,
- 	return err;
- }
- 
-+static int dcbnl_getapptrust(struct net_device *netdev, struct sk_buff *skb)
-+{
-+	const struct dcbnl_rtnl_ops *ops = netdev->dcbnl_ops;
-+	int nselectors, err;
-+	u8 *selectors;
-+
-+	selectors = kzalloc(IEEE_8021QAZ_APP_SEL_MAX + 1, GFP_KERNEL);
-+	if (!selectors)
-+		return -ENOMEM;
-+
-+	err = ops->dcbnl_getapptrust(netdev, selectors, &nselectors);
-+
-+	if (!err) {
-+		struct nlattr *apptrust;
-+		int i;
-+
-+		err = -EMSGSIZE;
-+
-+		apptrust = nla_nest_start(skb, DCB_ATTR_DCB_APP_TRUST_TABLE);
-+		if (!apptrust)
-+			goto nla_put_failure;
-+
-+		for (i = 0; i < nselectors; i++) {
-+			enum ieee_attrs_app type =
-+				dcbnl_app_attr_type_get(selectors[i]);
-+			err = nla_put_u8(skb, type, selectors[i]);
-+			if (err) {
-+				nla_nest_cancel(skb, apptrust);
-+				goto nla_put_failure;
-+			}
-+		}
-+		nla_nest_end(skb, apptrust);
-+	}
-+
-+	err = 0;
-+
-+nla_put_failure:
-+	kfree(selectors);
-+	return err;
-+}
-+
- /* Handle IEEE 802.1Qaz/802.1Qau/802.1Qbb GET commands. */
- static int dcbnl_ieee_fill(struct sk_buff *skb, struct net_device *netdev)
- {
- 	const struct dcbnl_rtnl_ops *ops = netdev->dcbnl_ops;
--	struct nlattr *ieee, *app, *apptrust;
-+	struct nlattr *ieee, *app;
- 	struct dcb_app_type *itr;
- 	int dcbx;
- 	int err;
-@@ -1168,27 +1209,9 @@ static int dcbnl_ieee_fill(struct sk_buff *skb, struct net_device *netdev)
- 	nla_nest_end(skb, app);
- 
- 	if (ops->dcbnl_getapptrust) {
--		u8 selectors[IEEE_8021QAZ_APP_SEL_MAX + 1] = {0};
--		int nselectors, i;
--
--		apptrust = nla_nest_start(skb, DCB_ATTR_DCB_APP_TRUST_TABLE);
--		if (!apptrust)
--			return -EMSGSIZE;
--
--		err = ops->dcbnl_getapptrust(netdev, selectors, &nselectors);
--		if (!err) {
--			for (i = 0; i < nselectors; i++) {
--				enum ieee_attrs_app type =
--					dcbnl_app_attr_type_get(selectors[i]);
--				err = nla_put_u8(skb, type, selectors[i]);
--				if (err) {
--					nla_nest_cancel(skb, apptrust);
--					return err;
--				}
--			}
--		}
--
--		nla_nest_end(skb, apptrust);
-+		err = dcbnl_getapptrust(netdev, skb);
-+		if (err)
-+			return err;
- 	}
- 
- 	/* get peer info if available */
+Secondly, given that the place where EVM can fill an xattr is not provided
+anymore with the changed definition, EVM must know how many elements are in
+the xattr array. EVM can rely on the fact that the xattr array must be
+terminated with an element with name field set to NULL. If EVM is moved to
+the LSM infrastructure, the infrastructure will provide additional
+information.
+
+Casey suggested to use the reservation mechanism currently implemented for
+other security blobs, for xattrs. In this way,
+security_inode_init_security() can know after LSM initialization how many
+slots for xattrs should be allocated, and LSMs know the offset in the
+array from where they can start writing xattrs.
+
+One of the problem was that LSMs can decide at run-time, although they
+reserved a slot, to not use it (for example because they were not
+initialized). Given that the initxattrs() method implemented by filesystems
+expect that the array elements are contiguous, they would miss the slots
+after the one not being initialized. security_check_compact_xattrs() has
+been introduced to overcome this problem and also to check the correctness
+of the xattrs provided by the LSMs.
+
+This patch set has been tested by introducing several instances of a
+TestLSM (some providing an xattr, some not, one with a wrong implementation
+to see how the LSM infrastructure handles it, one providing multiple xattrs
+and another providing an xattr but in a disabled state). The patch is not
+included in this set but it is available here:
+
+https://github.com/robertosassu/linux/commit/e0eed5b271e44ded36b23713f9a5998810954843
+
+The test, added to ima-evm-utils, is available here:
+
+https://github.com/robertosassu/ima-evm-utils/blob/evm-multiple-lsms-v4-devel-v10/tests/evm_multiple_lsms.test
+
+The test takes a UML kernel built by Github Actions and launches it several
+times, each time with a different combination of LSMs. After boot, it first
+checks that there is an xattr for each LSM providing it, and then calculates
+the HMAC in user space and compares it with the HMAC calculated by EVM in
+kernel space.
+
+A test report can be obtained here:
+
+https://github.com/robertosassu/ima-evm-utils/actions/runs/3435348442/jobs/5727609718
+
+The patch set has been tested with both the SElinux and Smack test suites.
+Below, there is the summary of the test results:
+
+SELinux Test Suite result (without patches):
+Files=73, Tests=1346, 225 wallclock secs ( 0.43 usr  0.23 sys +  6.11 cusr 58.70 csys = 65.47 CPU)
+
+SELinux Test Suite result (with patches):
+Files=73, Tests=1346, 225 wallclock secs ( 0.44 usr  0.22 sys +  6.15 cusr 59.94 csys = 66.75 CPU)
+
+Smack Test Suite result (without patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Smack Test Suite result (with patches):
+95 Passed, 0 Failed, 100% Success rate
+
+The patch set has also been successfully tested with a WIP branch where
+IMA/EVM have been moved to the LSM infrastructure. It is available here:
+
+https://github.com/robertosassu/linux/commits/ima-evm-lsms-v1-devel-v8
+
+This is the patch that moves EVM to the LSM infrastructure:
+
+https://github.com/robertosassu/linux/commit/08ceb14a2ddfd334cb9d8703a4e1a86ee721b580
+
+The only trivial changes, after this patch set, would be to allocate one
+element less in the xattr array (because EVM will reserve its own xattr),
+and to simply remove the call to evm_inode_init_security().
+
+The test report when IMA and EVM are moved to the LSM infrastructure is
+available here:
+
+https://github.com/robertosassu/ima-evm-utils/actions/runs/3435500712/jobs/5727933607
+
+Changelog
+
+v3:
+- Don't free the xattr name in reiserfs_security_free()
+- Don't include fs_data parameter in inode_init_security hook
+- Don't change evm_inode_init_security(), as it will be removed if EVM is
+  stacked
+- Fix inode_init_security hook documentation
+- Drop lsm_find_xattr_slot(), use simple xattr reservation mechanism and
+  introduce security_check_compact_xattrs() to compact the xattr array
+- Don't allocate xattr array if LSMs didn't reserve any xattr
+- Return zero if initxattrs() is not provided to
+  security_inode_init_security(), -EOPNOTSUPP if value is not provided to
+  security_old_inode_init_security()
+- Request LSMs to fill xattrs if only value (not the triple) is provided to
+  security_old_inode_init_security(), to avoid unnecessary memory
+  allocation
+
+v2:
+- rewrite selinux_old_inode_init_security() to use
+  security_inode_init_security()
+- add lbs_xattr field to lsm_blob_sizes structure, to give the ability to
+  LSMs to reserve slots in the xattr array (suggested by Casey)
+- add new parameter base_slot to inode_init_security hook definition
+
+v1:
+- add calls to reiserfs_security_free() and initialize sec->value to NULL
+  (suggested by Tetsuo and Mimi)
+- change definition of inode_init_security hook, replace the name, value
+  and len triple with the xattr array (suggested by Casey)
+- introduce lsm_find_xattr_slot() helper for LSMs to find an unused slot in
+  the passed xattr array
+
+Roberto Sassu (5):
+  reiserfs: Add missing calls to reiserfs_security_free()
+  security: Rewrite security_old_inode_init_security()
+  security: Allow all LSMs to provide xattrs for inode_init_security
+    hook
+  evm: Align evm_inode_init_security() definition with LSM
+    infrastructure
+  evm: Support multiple LSMs providing an xattr
+
+ fs/reiserfs/namei.c                 |   4 +
+ fs/reiserfs/xattr_security.c        |   2 +-
+ include/linux/evm.h                 |  12 +--
+ include/linux/lsm_hook_defs.h       |   3 +-
+ include/linux/lsm_hooks.h           |  17 ++--
+ security/integrity/evm/evm.h        |   2 +
+ security/integrity/evm/evm_crypto.c |   9 +-
+ security/integrity/evm/evm_main.c   |  28 ++++--
+ security/security.c                 | 132 ++++++++++++++++++++++------
+ security/selinux/hooks.c            |  19 ++--
+ security/smack/smack_lsm.c          |  26 +++---
+ 11 files changed, 187 insertions(+), 67 deletions(-)
+
 -- 
-2.34.1
+2.25.1
 
