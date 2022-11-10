@@ -2,148 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DA0624D9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B9E624DA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiKJWZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        id S231396AbiKJWbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 17:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKJWZh (ORCPT
+        with ESMTP id S229586AbiKJWbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:25:37 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348531E725
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:25:37 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id 4so2779546pli.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:25:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W47FD2a5xAe7nFqoz3Hz5sg2zfn+k9i0H3yNcGRFzH0=;
-        b=fDROxbevb7z5jJz0NSNvAnBoNC1ZqC8s11YTdaOtbMg16ItiORRyT9i2n/pxJmdec/
-         gf+LwJgxGlV/ePtI6PCnJdVK0zWT2xd28cNmllkF9p/U4//MfEwWg4PZEWUeZtUMyEpx
-         UnoHLjYUsM8WgOAHfnj9OPLFJfCJF/n/kB13nir+CDFoDdlCm8vtGQDvMmeLEK8GJ7jx
-         qdIqyjen7XluJkO0DaYzWSY/WvfCQHjXK3mhY0cgP1kNg/UC/dkhRlkfI3h5QxyEg8+i
-         nFhKinzVJ5qvfi7aECKEYgz7S0yshUOIzD/0kuI21fNDNeZEojPv17hzDvrp+YeZs4CL
-         1ONA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W47FD2a5xAe7nFqoz3Hz5sg2zfn+k9i0H3yNcGRFzH0=;
-        b=208kQldDuoIzlGYPW58zzXEgclaAjFW1xkwHuljXsYiCGA207kA7etiKHLcS5AYmlR
-         GCszjBc+DdpEjY63DHZukkwR0gTDX4+2oqPy9azzCxTa20yrlvYvaNza0wD1FQc1Hm+q
-         WBV+t+T+BehA35HzfTEvtOctPnN4muckTXqe3pu7Q11F8LFTR+Uzoi/Tee1F/MqiidJz
-         LVXUWe+4fpuwzjZVmiqfMXQ33bt0lE37wi7U4g9E6EkDE5+7ljuE5PGMP6HU+ZNwobiG
-         hmePKTB3jRGH0rtR7vcFD4cfPdXh5EWYULgFvhDxKUk5ViAWSwOzi+TDXvyfJfkBBHDp
-         mB/Q==
-X-Gm-Message-State: ACrzQf3r9qzkmgmkJUDt5/nHlwH2STCMq5rCd6n51SmjcJoxY5Xg2WBe
-        FfFd/k3oJ6k7vVdcADJUJyQ=
-X-Google-Smtp-Source: AMsMyM70GK/pwQgFUBDgUO0VohqQWUqOs0IfJFQpXfFaPhdMxW6ffuk/Byzir7EVuLff3Bi/bWoZAA==
-X-Received: by 2002:a17:902:cf09:b0:172:7a15:9a61 with SMTP id i9-20020a170902cf0900b001727a159a61mr2313024plg.71.1668119136626;
-        Thu, 10 Nov 2022 14:25:36 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:8c0b:3260:c81c:119d])
-        by smtp.gmail.com with ESMTPSA id nm13-20020a17090b19cd00b0020087d7e778sm3562899pjb.37.2022.11.10.14.25.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 14:25:36 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 10 Nov 2022 14:25:34 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 4/9] zsmalloc: make huge class watermark zs_pool member
-Message-ID: <Y216Xq8V8InFQyms@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <20221031054108.541190-5-senozhatsky@chromium.org>
+        Thu, 10 Nov 2022 17:31:13 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E20F56554;
+        Thu, 10 Nov 2022 14:31:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ckYAbxaJX0FE8Tra3HuW7LsP7t9ODhY0IvtR+ncmsgw=; b=ovhF5zrWCtYwRWd0map5L3rP9S
+        ULuwT6k3vz7XX9YcVnv00raZit9RjhuDzHvp8RtGfApuIYgsm968LEldgM7IbE4U4seuynQcE0rox
+        633dO+HcsRyvID8hubiuWBcJDQWu7ZQVNOlWRY/1SSBTV+f7jVZU+IVRwdOkPxQMPCUA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1otG4A-0024Zo-7g; Thu, 10 Nov 2022 23:30:34 +0100
+Date:   Thu, 10 Nov 2022 23:30:34 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tcp: Add listening address to SYN flood message
+Message-ID: <Y217ikkZzXKKGix4@lunn.ch>
+References: <f847459dc0a0e2d8ffa1d290d06e0e4a226a6f39.1668075479.git.jamie.bainbridge@gmail.com>
+ <Y20Bxc1gQ8nrFsvA@lunn.ch>
+ <CAAvyFNg1F8ixrgy0YeL-TT5xLmk8N7dD=ZMLQ6VxsjHb_PU9bg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221031054108.541190-5-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAAvyFNg1F8ixrgy0YeL-TT5xLmk8N7dD=ZMLQ6VxsjHb_PU9bg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 02:41:03PM +0900, Sergey Senozhatsky wrote:
-> We will permit per-pool configuration of pages per-zspage value,
-> which changes characteristics of the classes and moves around
-> huge class size watermark. Thus huge class size needs to be
-> a per-pool variable.
-
-I think part of code in previous patch should move here since
-you are creating the feature in this patch:
-
-BTW, I am wondering we really need to jump the per-pool config
-option over global general golden ratio and/or smarter approach
-to optimize transparently depending on how much memory we have
-wasted.
-
+On Fri, Nov 11, 2022 at 08:20:18AM +1100, Jamie Bainbridge wrote:
+> On Fri, 11 Nov 2022 at 00:51, Andrew Lunn <andrew@lunn.ch> wrote:
+> >
+> > On Thu, Nov 10, 2022 at 09:21:06PM +1100, Jamie Bainbridge wrote:
+> > > The SYN flood message prints the listening port number, but on a system
+> > > with many processes bound to the same port on different IPs, it's
+> > > impossible to tell which socket is the problem.
+> > >
+> > > Add the listen IP address to the SYN flood message. It might have been
+> > > nicer to print the address first, but decades of monitoring tools are
+> > > watching for the string "SYN flooding on port" so don't break that.
+> > >
+> > > Tested with each protcol's "any" address and a host address:
+> > >
+> > >  Possible SYN flooding on port 9001. IP 0.0.0.0.
+> > >  Possible SYN flooding on port 9001. IP 127.0.0.1.
+> > >  Possible SYN flooding on port 9001. IP ::.
+> > >  Possible SYN flooding on port 9001. IP fc00::1.
+> > >
+> > > Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+> > > ---
+> > >  net/ipv4/tcp_input.c | 16 +++++++++++++---
+> > >  1 file changed, 13 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> > > index 0640453fce54b6daae0861d948f3db075830daf6..fb86056732266fedc8ad574bbf799dbdd7a425a3 100644
+> > > --- a/net/ipv4/tcp_input.c
+> > > +++ b/net/ipv4/tcp_input.c
+> > > @@ -6831,9 +6831,19 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
+> > >               __NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
+> > >
+> > >       if (!queue->synflood_warned && syncookies != 2 &&
+> > > -         xchg(&queue->synflood_warned, 1) == 0)
+> > > -             net_info_ratelimited("%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.\n",
+> > > -                                  proto, sk->sk_num, msg);
+> > > +         xchg(&queue->synflood_warned, 1) == 0) {
+> > > +#if IS_ENABLED(CONFIG_IPV6)
+> > > +             if (sk->sk_family == AF_INET6) {
+> >
+> > Can the IS_ENABLED() go inside the if? You get better build testing
+> > that way.
+> >
+> >      Andrew
 > 
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  mm/zsmalloc.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> Are you sure? Why would the IS_ENABLED() be inside of a condition
+> which isn't compiled in? If IPv6 isn't compiled in then the condition
+> would never evaluate as true, so seems pointless a pointless
+> comparison to make? People not compiling in IPv6 have explicitly asked
+> *not* to have their kernel filled with a bunch of "if (family ==
+> AF_INET6)" haven't they?
 > 
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index 5f79223e7bfe..d329bd673baa 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -178,7 +178,6 @@ static struct dentry *zs_stat_root;
->   * (see: fix_fullness_group())
->   */
->  static const int fullness_threshold_frac = 4;
-> -static size_t huge_class_size;
->  
->  struct size_class {
->  	spinlock_t lock;
-> @@ -227,6 +226,7 @@ struct zs_pool {
->  
->  	u32 num_size_classes;
->  	u32 min_alloc_size;
-> +	size_t huge_class_size;
->  
->  	struct zs_pool_stats stats;
->  
-> @@ -1350,7 +1350,7 @@ EXPORT_SYMBOL_GPL(zs_unmap_object);
->   */
->  size_t zs_huge_class_size(struct zs_pool *pool)
->  {
-> -	return huge_class_size;
-> +	return pool->huge_class_size;
->  }
->  EXPORT_SYMBOL_GPL(zs_huge_class_size);
->  
-> @@ -2262,8 +2262,8 @@ struct zs_pool *zs_create_pool(const char *name)
->  		 * endup in the huge class.
->  		 */
->  		if (pages_per_zspage != 1 && objs_per_zspage != 1 &&
-> -				!huge_class_size) {
-> -			huge_class_size = size;
-> +				!pool->huge_class_size) {
-> +			pool->huge_class_size = size;
->  			/*
->  			 * The object uses ZS_HANDLE_SIZE bytes to store the
->  			 * handle. We need to subtract it, because zs_malloc()
-> @@ -2273,7 +2273,7 @@ struct zs_pool *zs_create_pool(const char *name)
->  			 * class because it grows by ZS_HANDLE_SIZE extra bytes
->  			 * right before class lookup.
->  			 */
-> -			huge_class_size -= (ZS_HANDLE_SIZE - 1);
-> +			pool->huge_class_size -= (ZS_HANDLE_SIZE - 1);
->  		}
->  
->  		/*
-> -- 
-> 2.38.1.273.g43a17bfeac-goog
+> There are many other examples of this pattern of "IS_ENABLED()" first
+> and "if (family == AF_INET6)" inside it, but I can't see any of the
+> inverse which I think you're suggesting, see:
 > 
+>  grep -C1 -ERHn "IS_ENABLED\(CONFIG_IPV6\)" net | grep -C1 "family == AF_INET6"
+> 
+> Please let me know if I've misunderstood?
+
+So what i'm suggesting is
+
+               if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
+                       net_info_ratelimited("%s: Possible SYN flooding on port %d. IP %pI6c. %s.  Check SNMP counters.\n",
+                                       proto, sk->sk_num,
+                                       &sk->sk_v6_rcv_saddr, msg);
+		}
+
+The IS_ENABLED(CONFIG_IPV6) will evaluate to 0 at compile time, and
+the optimiser will throw away the whole lot since it can never be
+true. However, before the code gets to the optimiser, it first needs
+to compile. It will check you have the correct number of parameters
+for the string format, do the types match, do the structure members
+exist, etc. Anybody doing compile testing of a change, and they have
+IPV6 turned off, has a chance off getting errors reported when they
+have actually broken IPV6, but don't know it, because they are not
+compiling it.
+
+Now, IPV6 is one of those big options which i expect 0-day tests quite
+regularly. Using IF_ENABLED() like this brings more benefit from less
+used options which gets very little build testing, and so are often
+broke until somebody like Arnd runs builds with lots of random
+configs.
+
+	Andrew
