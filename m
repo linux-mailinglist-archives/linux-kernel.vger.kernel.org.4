@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D216F623C7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25C7623C80
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbiKJHQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S232492AbiKJHQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiKJHPb (ORCPT
+        with ESMTP id S232787AbiKJHQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:15:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FE2326DB;
-        Wed,  9 Nov 2022 23:15:26 -0800 (PST)
+        Thu, 10 Nov 2022 02:16:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D3031FB3;
+        Wed,  9 Nov 2022 23:15:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71C67B82089;
-        Thu, 10 Nov 2022 07:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE5F7C433C1;
-        Thu, 10 Nov 2022 07:15:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6799561D79;
+        Thu, 10 Nov 2022 07:15:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41228C433C1;
+        Thu, 10 Nov 2022 07:15:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668064524;
-        bh=FMlXsITEC3snOIBttDp0EAQyetj/yxbZhJt/Rk5EDxY=;
+        s=k20201202; t=1668064557;
+        bh=zkEbitGh6NuYdSKumNuvy2niopfYizRVWE/5Z5xVl1U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tz23sUAjvevM4LmlgxcCobtWnG1sYGF509oU8KAWaRIaF73/7BRuex1Cf+rAQ5CTv
-         ec52UF4vz4vd8xkY/PV+2HQCoxK4bjDrqGbllylaVZMbDE1H0S7kVCjn7MRzxKOqg0
-         TgKbn3abQiXdKTIZzq0YMwbkJkYLbONPLrsnGqyzhNkldpecdyTJXu8O5HX+S29OoO
-         mSYO1FZOmAWv3TxxfmNThq7gIwbIEvF81UOXyUP1UODWGdqh68mHsXuIdbMWqm6mUG
-         77r9EGIlbztS/ib+Veym3EuVr5jR5jCQYhk/omC/6Hyq964iy14tnWe5lnZsypKdl8
-         iPMlyYbqKzr/w==
-Date:   Thu, 10 Nov 2022 15:15:15 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Richard Zhu <hongxing.zhu@nxp.com>, marex@denx.de,
-        tharvey@gateworks.com, vkoul@kernel.org, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, alexander.stein@ew.tq-group.com,
-        richard.leitner@linux.dev, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v1] soc: imx: imx8mp-blk-ctrl: Add PCIe SYSPLL
- configurations
-Message-ID: <20221110071515.GC125525@dragon>
-References: <1666590189-1364-1-git-send-email-hongxing.zhu@nxp.com>
- <20221029084514.GT125525@dragon>
- <ae0fd778eb31416eedb248e2cd4faef576174937.camel@pengutronix.de>
+        b=dSgZ/lGN4y30dhemGiIjrjRTiFDJhKGw0dZ+XODNdI5UmHUgWpj9lmTKq/yfJHUCn
+         po1o/W0JJghhEOaAMkra8cQWYHe1sobakzIoDp6P8ons0loJ5nPlZvc3OdB4DAQUQN
+         jeo4uLSzeQi3nPGWlMkQbEmuaBYYJ8pwkoM1k97Qe4NzkSiCFxd1rjEPauY3arsJZq
+         Mcvp1tU+KtBR4iAmuT4t0gqmIe3rKKJb4FpoVwK/c0uClJ0udGtgRRYi7zrgXbv2OW
+         zLHAjYacQnn7n2OiEY0/Il/JSEKmgWnXIQUBuz21qcHLOmdXz9trVg/M+h8pLLJOHP
+         D5kDtgtbtkIlA==
+Date:   Thu, 10 Nov 2022 12:45:53 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, dmitry.baryshkov@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] phy: qcom-qmp-pcie: Fix high latency with 4x2 PHY
+ when ASPM is enabled
+Message-ID: <Y2ylKQvPhLEyRusv@matsya>
+References: <20221102081835.41892-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ae0fd778eb31416eedb248e2cd4faef576174937.camel@pengutronix.de>
+In-Reply-To: <20221102081835.41892-1-manivannan.sadhasivam@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,33 +55,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 09:44:41AM +0100, Lucas Stach wrote:
-> Hi Shawn, Richard,
-> 
-> Am Samstag, dem 29.10.2022 um 16:45 +0800 schrieb Shawn Guo:
-> > On Mon, Oct 24, 2022 at 01:43:09PM +0800, Richard Zhu wrote:
-> > > Add PCIe SYSPLL configurations, thus the internal SYSPLL can be used as
-> > > i.MX8MP PCIe reference clock.
-> > > 
-> > > The following properties of PHY dts node should be changed accordingly.
-> > >   - Set 'fsl,refclk-pad-mode' as '<IMX8_PCIE_REFCLK_PAD_OUTPUT>'.
-> > >   - Change 'clocks' to '<&clk IMX8MP_CLK_HSIO_ROOT>'.
-> > > 
-> > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> > 
-> > Applied, thanks!
-> 
-> Sorry for the late reply, but I'm not really happy with the fact that
-> the PLL is now unconditionally enabled, even though it is only needed
-> when there is no external reference clock source.
-> I fear that this will be hard to correct later on as the DT abstraction
-> is wrong, as IMX8MP_CLK_HSIO_ROOT is NOT the reference clock for the
-> PHY, but the PLL generated clock, which isn't properly exposed with
-> this series.
-> 
-> I'm not happy to see this going in in the current state and if not too
-> late would like to ask Shawn to remove it from the tree again.
+On 02-11-22, 13:48, Manivannan Sadhasivam wrote:
+> The PCIe QMP 4x2 RC PHY generates high latency when ASPM is enabled. This
+> seem to be fixed by clearing the QPHY_V5_20_PCS_PCIE_PRESET_P10_POST
+> register of the pcs_misc register space.
 
-Removed.
+Applied, thanks
 
-Shawn
+-- 
+~Vinod
