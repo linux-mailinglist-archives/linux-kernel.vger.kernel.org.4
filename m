@@ -2,149 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480E662450F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B59624518
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbiKJPFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S231153AbiKJPGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKJPFu (ORCPT
+        with ESMTP id S229651AbiKJPGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:05:50 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7750F657B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:05:47 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668092744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rUv5oWr627GyhN9qZmZPgShdj6dU+Hjacn/+CGmdi7o=;
-        b=XTW90QxKsDYXYe6doKgVnxi0GGGjYNbt1hVaabG+Ke2aRdW+gI/X1dLZE9AsuAfKOX/1MR
-        8HoFSFjAPbY0NDWYcWTKhV/sMCyp/6XVQMmvDDzK1E30YD0l9OZ5qJALkrL0Add/lcPTyL
-        j7xLpGsWh48hydwZ0hV5lGL5XK0SDxTHLpKwElbocaiNAjIk1t7kOLSVjW4441DF+az+O/
-        Dwi4bSpzKXbRlKmX/NFfgmTqlStqbiVWQctFil4Vy1j1fm3zbOKPC0u3+olIRLx33HmAb3
-        yttwhosiP3YhK0BTnnDSGHp0rynbPQECzjMUfvbQCtVDPk8fw2NcS+HulneQkA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668092744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rUv5oWr627GyhN9qZmZPgShdj6dU+Hjacn/+CGmdi7o=;
-        b=aK6O7+C53BYg5UVtHbqgB+OFyLWpDKzgrrVMYSfj3QcIK7xAECi7SLv4IXBvFZjS6pPLRL
-        CM8eOMyDBfqx/yCA==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v3 07/40] console: introduce console_is_enabled()
- wrapper
-In-Reply-To: <Y2qBVZQDYnxv1af0@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-8-john.ogness@linutronix.de>
- <Y2qBVZQDYnxv1af0@alley>
-Date:   Thu, 10 Nov 2022 16:11:43 +0106
-Message-ID: <87a64y6e9k.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 10:06:48 -0500
+Received: from linderud.pw (linderud.dev [163.172.10.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED97654A;
+        Thu, 10 Nov 2022 07:06:45 -0800 (PST)
+Received: from linderud.pw (localhost [127.0.0.1])
+        by linderud.pw (Postfix) with ESMTP id B5DA3C015B;
+        Thu, 10 Nov 2022 16:06:09 +0100 (CET)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linderud.pw;
+        s=linderud; t=1668092769;
+        bh=I1b2dWCqEXwMKJH2vHZvQa6XE/PkoH+lyJ1N5u9y6FQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=I4DQ05EXSWOhXclVgNBGO3WdLuLlRIgU7bBuzF2VrGd/gVA23cjXotKnUlCP8J4db
+         NSNHzOFSk0hjV/i0PN+VcdwFQ5XE0oirGaIcCHUxEtDosx3yicVQuw1+mIQ4LpjEMN
+         jfRUWLDQvSLej7JqybvsZAKFteMrsMLQDr/byy+zVHoM97zz/yMKGorcckPrDaql8f
+         CzUrl/+4NurAKiUjX+Ipk1H/hHAZlDMR0JwfNY12Z5JYvWEUusSB5SKnAWhiE7yfld
+         +CRIzFfWkQCMVEbJl6GQto7umB+B8T96tHrN/Ot7ZCuxsKJl/pTjrMRxTBtqgj+Zu7
+         qejWy9NFDZ7ct/9w+ivn4VhOPyTPu9jfH9xInfSHcupq7ckuYaxvmw372pj7ZthRPG
+         ktBxZEQzfTelTEYX52nNPIKHQDBjmlbOS7+5lcQdOemz0XHa6r84EgBix/vVJ/QsP7
+         oSvKgGG5E6a/uK9uXqWYMzLFHvQ+SNkFVehBQ0bnVZjuW8MvnOfKIyHKCCDvbjvmdA
+         SUW66V/QZGlxwdAGAonb9Fbh3uwZT4gcq/bLvShJLgNnk/OI+XinP2KLWwG+3il7BM
+         0mLF8KHU1l+zdUnB9dt5ydpALA7MaQF92McRKlh6sfYFbIQF5Eq/6bHdXPi42gw7dP
+         VVly4Wm2Y7u0E5U788Tnad3I=
+Received: from localhost (host-37-191-241-102.lynet.no [37.191.241.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: morten)
+        by linderud.pw (Postfix) with ESMTPSA id 7AF8AC0077;
+        Thu, 10 Nov 2022 16:06:09 +0100 (CET)
+Date:   Thu, 10 Nov 2022 16:06:07 +0100
+From:   Morten Linderud <morten@linderud.pw>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Eric Biggers <ebiggers@google.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "lszubowi@redhat.com" <lszubowi@redhat.com>,
+        "jason@zx2c4.com" <jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "pjones@redhat.com" <pjones@redhat.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>
+Subject: Re: [PATCH v8 16/17] integrity: Trust MOK keys if MokListTrustedRT
+ found
+Message-ID: <20221110150607.h4iaymkgc4f7kuue@framework>
+References: <20211124044124.998170-1-eric.snowberg@oracle.com>
+ <20211124044124.998170-17-eric.snowberg@oracle.com>
+ <20221110000129.kl6pjy5mafpuptbk@framework>
+ <4A479B96-4B41-4323-9920-5A909423F998@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4A479B96-4B41-4323-9920-5A909423F998@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-08, Petr Mladek <pmladek@suse.com> wrote:
->> --- a/kernel/printk/printk.c
->> +++ b/kernel/printk/printk.c
->> @@ -3021,7 +3021,7 @@ void console_stop(struct console *console)
->>  {
->>  	__pr_flush(console, 1000, true);
->>  	console_lock();
->> -	console->flags &= ~CON_ENABLED;
->> +	WRITE_ONCE(console->flags, console->flags & ~CON_ENABLED);
->
-> My first reaction is that using the atomic operation only for the
-> store side is suspicious. It is correct because the read is serialized
-> by console_lock(). But it is far from obvious why we need and can do
-> it this way.
+On Thu, Nov 10, 2022 at 12:54:43AM +0000, Eric Snowberg wrote:
+> 
+> 
+> > On Nov 9, 2022, at 5:01 PM, Morten Linderud <morten@linderud.pw> wrote:
+> > 
+> > On Tue, Nov 23, 2021 at 11:41:23PM -0500, Eric Snowberg wrote:
+> >> A new Machine Owner Key (MOK) variable called MokListTrustedRT has been
+> >> introduced in shim. When this UEFI variable is set, it indicates the
+> >> end-user has made the decision themselves that they wish to trust MOK keys
+> >> within the Linux trust boundary.  It is not an error if this variable
+> >> does not exist. If it does not exist, the MOK keys should not be trusted
+> >> within the kernel.
+> > 
+> > Hi Eric,
+> > 
+> > I've been milling around on this patch-set for a while and I have a few issues
+> > with the description of the commit and what the code actually does.
+> > 
+> > efi_mokvar_entry_find doesn't simply read an UEFI variable as the commit message
+> > suggests, it will look for the MOK variable loaded into the EFI configuration
+> > table. This implies we need this table setup in early boot to take usage of this
+> > patch set.
+> > 
+> > The only bootloader that does setup this table, is the `shim` as described. But
+> > no other bootloader implements support for the MOK EFI configuration table.
+> > 
+> > This effectively means that there is still no way for Machine Owners to load
+> > keys into the keyring, for things like module signing, without the shim present
+> > in the bootchain. I find this a bit weird.
+> > 
+> > Is this an intentional design decision, or could other ways be supported as
+> > well?
+> 
+> In v6 I had it as a RT variable, during the review a request was made [1] to just 
+> use the EFI configuration table.  If there are other boot loaders that want to use this,
+> I don’t see why the code in v6 couldn’t be added back.  If the configuration table isn’t
+> available, it could try reading the RT var next.
+> 
+> 1. https://patchwork.kernel.org/project/linux-integrity/patch/20210914211416.34096-13-eric.snowberg@oracle.com/#24453409
+> 
 
-The READ_ONCE()/WRITE_ONCE() usage is really about documenting data-race
-reads and the writes that they are racing with.
+If we could support both the EFI variables and the EFI configuration table setup
+it would hopefully be easier for others to implement the interface? I wouldn't
+mind trying to write a patch for that if others think it's a good idea.
 
-For WRITE_ONCE() the rule is:
+I'm not really sure what Peter means with "much more reliable" though.
 
-- If console->flags is modified for a registered console, it is done
-  under the console_list_lock and using WRITE_ONCE().
-
-If we use a wrapper for this rule, then we can also add the lockdep
-assertion that console_list_lock is held.
-
-
-For READ_ONCE() the rule is:
-
-- If console->flags is read for a registered console, then either
-  console_list_lock must be held _or_ it must be read via READ_ONCE().
-
-If we use wrappers here, then we can use lockdep assertion on
-console_list_lock for the non-READ_ONCE wrapper, and scru_read_lock
-assertion for the READ_ONCE wrapper.
-
-> It would deserve a comment. But there are several other writes.
-> Also it is not obvious why many other con->flags modifications
-> do not need this.
->
-> I think about hiding this into an API. We could also add some
-> checks that it is used the right way. Also it might make sense
-> to avoid using the READ_ONCE()/WRITE_ONCE by using
-> set_bit()/test_bit().
-
-I do not see any advantage of set_bit()/test_bit(). They have the
-disadvantage that they only work with 1 bit at a time. And there are
-multiple sites where more than 1 bit is set/tested. It is important that
-the multi-bit tests are simultaneous.
-
-READ_ONCE()/WRITE_ONCE() are perfectly fine for what we are doing. The
-writes (for registered consoles) are synchronized by the
-console_list_lock. There is no need to use atomic operations.
-
-> I would prefer to use the proposed API because it should make all
-> accesses more clear and safe. And most importantly, it would help use
-> to catch bugs.
->
-> But I do not resist on it. The patch looks correct and we could do
-> this later. I could live with it if we add some comments above the
-> WRITE_ONCE() calls.
-
-I do not want to do a full API replacement for all console->flags access
-in this series or at this time. I am concerned that it is taking us too
-far away from our current goal. Also, with the upcoming atomic/threaded
-model, all consoles need to be modified that want to use it anyway. So
-that would be a more appropriate time to require the use of new API's.
-
-For console_is_enabled() I will add the srcu_read_lock check. I suppose
-I should also name the function console_srcu_is_enabled().
-
-For the WRITE_ONCE() calls, I will add a static inline wrapper in
-printk.c that includes the lockdep console_list_lock assertion. Perhaps
-called console_srcu_write_flags(struct console *con, short flags).
-
-In console_srcu_write_flags() and console_srcu_is_enabled() I can
-document their relationship and when they are to be used. Both these
-functions are used rarely and should be considered the exception, not
-the rule.
-
-For code that is reading registered console->flags under the
-console_list_lock, I will leave the "normal access" as is. Just as I am
-leaving the "normal access" for non-registered console-flags as is. We
-can convert those to a new generic API later if we think it is really
-necessary.
-
-John
+-- 
+Morten Linderud
+PGP: 9C02FF419FECBE16
