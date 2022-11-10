@@ -2,66 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0671624BA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEE7624A6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbiKJUTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
+        id S230342AbiKJTQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 14:16:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiKJUTU (ORCPT
+        with ESMTP id S229463AbiKJTQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:19:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F12210
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:18:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668111501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NiJ2HBNWezODaxpp3yCP4FUVGKUbxvrWpzFHrRAxI0Q=;
-        b=c3hUwxzT7X4kGO2Ey1FTfhPkuIf5skCLCAhNCyMdR/ZOPSxoT0z0fwsCQA02FeIhBJtUdw
-        71hvku+gfvbPJBgYInDFcXKwV1BGUhfrvL+g5p0UvOWKSn8qbPXR2r5iyU9TmPYi7kSQl7
-        q3t/D/Oj+k8IKlhKS9CQvaKVArio6FQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-231-vSnFnYSJPpiHS_qT8FiEKg-1; Thu, 10 Nov 2022 15:18:18 -0500
-X-MC-Unique: vSnFnYSJPpiHS_qT8FiEKg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 646C8101A52A;
-        Thu, 10 Nov 2022 20:18:17 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EFBCB492B1B;
-        Thu, 10 Nov 2022 20:18:16 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 0432F416D897; Thu, 10 Nov 2022 16:15:56 -0300 (-03)
-Date:   Thu, 10 Nov 2022 16:15:56 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Aaron Tomlin <atomlin@redhat.com>, cl@linux.com,
-        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
-        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
-        atomlin@atomlin.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v8 3/5] mm/vmstat: Do not queue vmstat_update if tick is
- stopped
-Message-ID: <Y21N7HfB5/Gt26Oh@fuller.cnet>
-References: <20220924152227.819815-1-atomlin@redhat.com>
- <20220924152227.819815-4-atomlin@redhat.com>
- <20221024110311.GA1285913@lothringen>
- <Y2wCKjYIxN8Q/FQ+@fuller.cnet>
+        Thu, 10 Nov 2022 14:16:15 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327812CE10;
+        Thu, 10 Nov 2022 11:16:14 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id z1so1738631qkl.9;
+        Thu, 10 Nov 2022 11:16:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qnf+7Iz/AC6v/1QCMpsQVXmtrt+7PcPrgj9ldvBanC4=;
+        b=CwQfgbI4DuFardVNcz0uqADSJZuog7DfOLMB0DlZyNtKNN+/AAvh2LRxwZmgilOF+X
+         I3JtdfoWwEbKsnfFl1ndsT7C54El7cEafRsjlAtAXO38NZfW3+qb142sIyialkF1EuJX
+         UD9EcBweatojlCkpb5Xr8x1O8QBTlj04tsUOUolfhW4n1y8HfrWjaYPTIuvl3/009lpJ
+         8VD2xtqbopwqA/5hMaE58taNq6ZXzAjlMiPwf3GB8QeNFLLnX62bkRAPOXaqF+xn+i1a
+         ef2xc9uWHo3hD/OChu60GI34be8uAb879KS9rVYmyuW06KnyaqoyjtPix72a54DCvkkP
+         PDDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Qnf+7Iz/AC6v/1QCMpsQVXmtrt+7PcPrgj9ldvBanC4=;
+        b=oxvEp1pIXOyqHwlZjwPqOap7yZ5UEUw1zLsskIQ38QpN2dX7fmfZTUUmVx2kUTGTr8
+         eG22tZvF61G7opymYCyBcqVtC8Ql73PiRqjzba4VtBmiOwpiPREMIDuCSQU7xNqLYl47
+         C84uybc23mYSaiLpLQEz5Q6jTVNNq/KJEo6JHmd96LkHZJMSw6nPYL/ocNnMcSvOcdIn
+         Ydp4G0ixvM5hgmn3K2Ddr3F2EJbVi6H9gd9xUYd4Jsyoo+wc7jkFf5SJQpSta5c9+YOy
+         ZNRpuBc1m3zMYCkdy+ZQAfJQcC+ueR8BfJqEn7nnaPfzLg33O7Q25Yv3TbFVo8FT8BSm
+         bjnA==
+X-Gm-Message-State: ANoB5plIqbK16/XHvrSJL+SiBEc+VwzOrxkBeMtxhaqdznvTM02xKHd7
+        Ke6aqU5ULwpmEGRrnYabplo=
+X-Google-Smtp-Source: AA0mqf7OmccX74WLnA2RzCh82dTb3yr7TSHjjf0XJGJIW0Rg2zenvqckfbOPuy5mu6rqRnqBVu3XGA==
+X-Received: by 2002:a05:620a:1184:b0:6fb:176e:1dbe with SMTP id b4-20020a05620a118400b006fb176e1dbemr5159880qkk.249.1668107773309;
+        Thu, 10 Nov 2022 11:16:13 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id c8-20020a05620a268800b006eecc4a0de9sm76608qkp.62.2022.11.10.11.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 11:16:11 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0D82A27C0054;
+        Thu, 10 Nov 2022 14:16:10 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 10 Nov 2022 14:16:11 -0500
+X-ME-Sender: <xms:-k1tY1fkq_lUw8WWo0FO3vORGR060uvU_plUv0Q2gAIa_hHqkWbrAQ>
+    <xme:-k1tYzN_gPfyVlhC0FPrzsFfKamUsIYQGqcWDiRFMeSuKt_rtS560FOp1WahpLrzB
+    vI9vBwZEJTiw48neg>
+X-ME-Received: <xmr:-k1tY-hSYkjdj3_09XZqbuNlAQ1XOi0gS0nBWbkibMlZ_ZXP15fEosPJ6GYL>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggdduvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:-k1tY-8oHQtArzBVlmDg3PSp1VhU3-Tq9tE36EFd2u7sezkLFKd_pQ>
+    <xmx:-k1tYxvsyCjMkE-Ux7x1_Az9Nd5wkymXhkGQPzQuFc168Tj8sJII5A>
+    <xmx:-k1tY9Fld3VaVygwcT5qo2PTXo56DJMYZuFri-RuMo861WRbCeZXVQ>
+    <xmx:-k1tY3JjGlZ5BYdUkcDQgrSXsY5uDhGSYCZ5LIHiFkooMle3k_qsIQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Nov 2022 14:16:09 -0500 (EST)
+Date:   Thu, 10 Nov 2022 11:16:08 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Niklas Mohrin <dev@niklasmohrin.de>
+Subject: Re: [PATCH v1 23/28] rust: std_vendor: add `dbg!` macro based on
+ `std`'s one
+Message-ID: <Y21N+GtGsqzaPSFp@Boquns-Mac-mini.local>
+References: <20221110164152.26136-1-ojeda@kernel.org>
+ <20221110164152.26136-24-ojeda@kernel.org>
+ <Y208lVCN3VweD5iI@Boquns-Mac-mini.local>
+ <CANiq72kR3YZv65NYPx+H57XO7T85kioMWMZajRnk7f+ru-3x+w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2wCKjYIxN8Q/FQ+@fuller.cnet>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <CANiq72kR3YZv65NYPx+H57XO7T85kioMWMZajRnk7f+ru-3x+w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,107 +107,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 04:40:26PM -0300, Marcelo Tosatti wrote:
-> On Mon, Oct 24, 2022 at 01:03:11PM +0200, Frederic Weisbecker wrote:
-> > Lines: 94
-> > 
-> > On Sat, Sep 24, 2022 at 04:22:25PM +0100, Aaron Tomlin wrote:
-> > > From: Marcelo Tosatti <mtosatti@redhat.com>
-> > > 
-> > > From the vmstat shepherd, for CPUs that have the tick stopped, do not
-> > > queue local work to flush the per-CPU vmstats, since in that case the
-> > > flush is performed on return to userspace or when entering idle. Also
-> > > cancel any delayed work on the local CPU, when entering idle on nohz
-> > > full CPUs. Per-CPU pages can be freed remotely from housekeeping CPUs.
-> > > 
-> > > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > > ---
-> > >  mm/vmstat.c | 18 +++++++++++++-----
-> > >  1 file changed, 13 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/mm/vmstat.c b/mm/vmstat.c
-> > > index 472175642bd9..3b9a497965b4 100644
-> > > --- a/mm/vmstat.c
-> > > +++ b/mm/vmstat.c
-> > > @@ -29,6 +29,7 @@
-> > >  #include <linux/page_ext.h>
-> > >  #include <linux/page_owner.h>
-> > >  #include <linux/migrate.h>
-> > > +#include <linux/tick.h>
-> > >  
-> > >  #include "internal.h"
-> > >  
-> > > @@ -1990,19 +1991,23 @@ static void vmstat_update(struct work_struct *w)
-> > >   */
-> > >  void quiet_vmstat(void)
-> > >  {
-> > > +	struct delayed_work *dw;
-> > > +
-> > >  	if (system_state != SYSTEM_RUNNING)
-> > >  		return;
-> > >  
-> > >  	if (!is_vmstat_dirty())
-> > >  		return;
-> > >  
-> > > +	refresh_cpu_vm_stats(false);
-> > > +
-> > >  	/*
-> > > -	 * Just refresh counters and do not care about the pending delayed
-> > > -	 * vmstat_update. It doesn't fire that often to matter and canceling
-> > > -	 * it would be too expensive from this path.
-> > > -	 * vmstat_shepherd will take care about that for us.
-> > > +	 * If the tick is stopped, cancel any delayed work to avoid
-> > > +	 * interruptions to this CPU in the future.
-> > >  	 */
-> > > -	refresh_cpu_vm_stats(false);
-> > > +	dw = &per_cpu(vmstat_work, smp_processor_id());
-> > > +	if (delayed_work_pending(dw) && tick_nohz_tick_stopped())
-> > > +		cancel_delayed_work(dw);
-> > >  }
-> > >  
-> > >  /*
-> > > @@ -2024,6 +2029,9 @@ static void vmstat_shepherd(struct work_struct *w)
-> > >  	for_each_online_cpu(cpu) {
-> > >  		struct delayed_work *dw = &per_cpu(vmstat_work, cpu);
-> > >  
-> > > +		if (tick_nohz_tick_stopped_cpu(cpu))
-> > > +			continue;
-> > > +
-> > >  		if (!delayed_work_pending(dw) && per_cpu(vmstat_dirty, cpu))
-> > >  			queue_delayed_work_on(cpu, mm_percpu_wq, dw, 0);
-> > 
-> > All these checks are racy though. You may well eventually:
-> > 
-> > 1) Arm the timer after the CPU has entered in userspace
-> > 2) Not arm the timer when the CPU has entered the kernel
-> > 
-> > How about converting that to an IPI instead? This should be a good candidate
-> > for the future IPI deferment.
-> > 
-> > Another possible way to go is this:
-> > 
-> > 1) vmstat_shepherd completely ignores nohz_full CPUs
-> > 2) vmstat_work is only ever armed locally
-> > 3) A nohz_full CPU turning its local vmstat as dirty checks if vmstat_work is
-> >    pending. If not, queue it, possibly through a self IPI (IRQ_WORK) to get
-> >    away with current locking context.
+On Thu, Nov 10, 2022 at 08:14:17PM +0100, Miguel Ojeda wrote:
+> On Thu, Nov 10, 2022 at 7:02 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >
+> > and I'm almost convinced ;-) Better add the gist of discussion into
+> > comment/document/commit log? Users need to know when to use `dbg!` and
+> > when to use `pr_debug!`, right?
 > 
-> I'm afraid there might be workloads where local vmstat touch is a
-> hot-path.
+> The docs talk about it a bit:
 > 
-> > 3) Fold on idle if dirty
-> > 4) Fold on user enter and disarm vmstat_work if pending
-> > 
-> > Does that sound possible?
-> > 
-> > Thanks.
+>     +/// Note that the macro is intended as a debugging tool and therefore you
+>     +/// should avoid having uses of it in version control for long periods
+>     +/// (other than in tests and similar).
 > 
-> I guess so, but proper barriers would also work.
-> 
-> Do you have any particular reason for the 1-4 sequence above 
-> instead of barriers?
+> That is the original wording from the standard library, but we can
+> definitely make the rules more concrete on our end with something
 
-I think a per-CPU atomic variable might be necessary, not just barriers.
+Yeah, having some kernel contexts is better ;-)
 
-Thanks.
+> like:
+> 
+>     `dbg!` is intended as a temporary debugging tool to be used during
+>     development. Therefore, avoid committing `dbg!` macro invocations
+>     into the kernel tree.
+> 
+>     For debug output that is intended to be kept, use `pr_debug!` and
+>     similar facilities instead.
+> 
 
+Look good to me, thank you!
+
+Regards,
+Boqun
+
+> Cheers,
+> Miguel
