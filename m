@@ -2,69 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD0F6244D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175476244DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiKJOwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S230098AbiKJOxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiKJOwn (ORCPT
+        with ESMTP id S229719AbiKJOxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:52:43 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EB569DE1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:52:42 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EDD102270F;
-        Thu, 10 Nov 2022 14:52:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668091960; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FGAJ3kGAx9OCuMsDUI3cZV1jrujznV8zB1qxjRcC7lU=;
-        b=UIYdGp+5XjqeIFOCBbLQeohlzryKD6iW0JXrdVdr66mpsU9YIK/QsB2kJzfPpzMp09O7GT
-        1Awb8s8n1l+I+NuOz1Qz2fujKH5NG4epOZvIfoF0V8YnZiaURLJQjqfMMrTuoaJbRgef6f
-        15tCfS+2EYQ++uXvrFm3ll9Uf6IvFIw=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 35BD62C141;
-        Thu, 10 Nov 2022 14:52:40 +0000 (UTC)
-Date:   Thu, 10 Nov 2022 15:52:39 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH printk v3 26/40] tty: hvc: use console_is_registered()
-Message-ID: <Y20QN1URi41PS/Jh@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-27-john.ogness@linutronix.de>
+        Thu, 10 Nov 2022 09:53:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5559B388
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:53:25 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot8vh-0004vD-Ta; Thu, 10 Nov 2022 15:53:21 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot8vg-003TLt-58; Thu, 10 Nov 2022 15:53:21 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot8vg-00Ff2J-Dr; Thu, 10 Nov 2022 15:53:20 +0100
+Date:   Thu, 10 Nov 2022 15:53:20 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Steven Price <steven.price@arm.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] pwm: tegra: Fix 32 bit build
+Message-ID: <20221110145320.fwrdsymdfpdjyyga@pengutronix.de>
+References: <20221110114549.34121-1-steven.price@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jxpsqp66r5opvunj"
 Content-Disposition: inline
-In-Reply-To: <20221107141638.3790965-27-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221110114549.34121-1-steven.price@arm.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-07 15:22:24, John Ogness wrote:
-> It is not reliable to check for CON_ENABLED in order to identify if a
-> console is registered. Use console_is_registered() instead.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+--jxpsqp66r5opvunj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best Regards,
-Petr
+Hello,
+
+On Thu, Nov 10, 2022 at 11:45:48AM +0000, Steven Price wrote:
+> The value of NSEC_PER_SEC << PWM_DUTY_WIDTH doesn't fix within a 32 bit
+> integer causing a build warning/error (and the value truncated):
+>=20
+>   drivers/pwm/pwm-tegra.c: In function =E2=80=98tegra_pwm_config=E2=80=99:
+>   drivers/pwm/pwm-tegra.c:148:53: error: result of =E2=80=981000000000 <<=
+ 8=E2=80=99 requires 39 bits to represent, but =E2=80=98long int=E2=80=99 o=
+nly has 32 bits [-Werror=3Dshift-overflow=3D]
+>     148 |   required_clk_rate =3D DIV_ROUND_UP_ULL(NSEC_PER_SEC << PWM_DU=
+TY_WIDTH,
+>         |                                                     ^~
+>=20
+> Explicitly cast to a u64 to ensure the correct result.
+
+Hmm, ideally this should have popped up earlier :-\
+
+Anyhow:
+
+Reviewed-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+
+Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--jxpsqp66r5opvunj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNtEF0ACgkQwfwUeK3K
+7AkNFgf/daAqwCjFAGIZAWMCvJka1ChRqqw9pP8inKxOhs6EjG5YKgdNxb1+B2/h
+/uvx9A95NyONyEiL6AIms6U2sxCC/dhvF74zSZ+UXsiQ7JjMgsLk88BeO0HwJ04c
+xua1f1J1X3e0QL64NHjpu6W/7NW7OQcJLdRSx5vnkLjidziplNnrOVRRFqUNCqro
+w9Nr9wALXbmBoC1tcRaAXH5xvA1ymRWY3XcBlXAgWZjJ0/5ZQ6Vnisf5TYAjz48Q
+42ABRz5WqdiWoWx8E0/haDWwEK5U77mg8KrTeEG3vyCVEmcYvItQSqAs8kq/oE6n
+yulb0W62Dt+u3lfJmvw8duKQdsG4/w==
+=HlnY
+-----END PGP SIGNATURE-----
+
+--jxpsqp66r5opvunj--
