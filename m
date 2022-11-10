@@ -2,172 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7760624CC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC157624CCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiKJVSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S231817AbiKJVUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiKJVSk (ORCPT
+        with ESMTP id S231727AbiKJVUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:18:40 -0500
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3EB18362;
-        Thu, 10 Nov 2022 13:18:39 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so1831230otb.8;
-        Thu, 10 Nov 2022 13:18:39 -0800 (PST)
+        Thu, 10 Nov 2022 16:20:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC03612082
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:19:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668115157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RaDM9AF34T4yePmDmSyJsFxr2n24Jtip0IViwoic0/w=;
+        b=ToxQDIxJ0+11Q3+q76Au6pxuK/3u8w1LCoIeqjbsvbv0iheNa04yiZUEQiuvs9sEoABYO4
+        hSKWMaLPz0ATnOVWRNpY+X+HaD6l+HjcmdOm2dzcUjGvAWM7XSP8mg/mTvZLnhLc5eEzzo
+        VA4YG9USbfRSzojSAT70/tQTzDOF3+o=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-389-5oQ_T76HMAWx4SDa6I52aw-1; Thu, 10 Nov 2022 16:19:15 -0500
+X-MC-Unique: 5oQ_T76HMAWx4SDa6I52aw-1
+Received: by mail-ed1-f71.google.com with SMTP id z15-20020a05640240cf00b00461b253c220so2315248edb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:19:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FQYEV0yuvAFKXfXfXPWLe2h/Dtk7ZrvGn4iuEOi+yK4=;
-        b=qJ3vxkfEjKoN5+Ke1toOxv7oILl4xI8yVf7U1oTLC3rk2Re3kgd17n7VarYLnMHlUZ
-         RiioeOBID/jLZaWoouaJahqav3HIwxhAyov14wSG2St//FsAHymgYqDDT12RXJ3aW0BT
-         J/kZpZQ7PSdD/Fd7hbMDzRspQOQghygyT+ZciyZWaygf7FUqro9WUzISLc07bEa2Q9st
-         tPjDJWIRTElqlInW4Zqtmi/UxBs01IATs8nJkiktZ9lUKaGNlbK4s1hPcLDLWNvI49ln
-         1AI4ygcMatvTkZibysqGaqmFUqi+n4gP4DEKl3k8o2DaFZnW0kp81qFXOzulaNZBbFtO
-         giHg==
-X-Gm-Message-State: ACrzQf2IYGhWr9F5m5oQ+FkHIsmiiLJCzn4+AQMZ8DhCgabSHCS8WiqE
-        ejXWH11G+cGvVzD7XYqYGg==
-X-Google-Smtp-Source: AMsMyM7oQ4Ol1gBBxJonigdAuxDwjy/LR46XN4ccCYBY1im4NIoAy/a29peGtg/WLuJLCh8oS9VdPg==
-X-Received: by 2002:a9d:730c:0:b0:661:ab16:3623 with SMTP id e12-20020a9d730c000000b00661ab163623mr2151184otk.91.1668115118340;
-        Thu, 10 Nov 2022 13:18:38 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ek24-20020a056870f61800b0013b1301ce42sm329233oab.47.2022.11.10.13.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 13:18:37 -0800 (PST)
-Received: (nullmailer pid 1062808 invoked by uid 1000);
-        Thu, 10 Nov 2022 21:18:39 -0000
-Date:   Thu, 10 Nov 2022 15:18:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-kernel@vger.kernel.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v6 09/20] dt-bindings: PCI: dwc: Add
- interrupts/interrupt-names common properties
-Message-ID: <166811511627.1062682.15955440634711266362.robh@kernel.org>
-References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
- <20221107204934.32655-10-Sergey.Semin@baikalelectronics.ru>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RaDM9AF34T4yePmDmSyJsFxr2n24Jtip0IViwoic0/w=;
+        b=OudvsSG1MQ9Syw3mROzcTAiKGepfUF1rdigwD986a17Esf9HCYsmeqYa398qqZmXQa
+         icQFX/wKrmmvStQUSi+qHV+P1ri8q0a+4QhKL8cufE4oH21w7dVp+thXpjwh34B9CML9
+         HDIL28NGgigHoM28Iic0b4wKc7Ah9ocvpTw3p2oHw8sE3ZGl6OkVHDvokCDX7g5HB7Tf
+         jWcKSNISmYKbnwC/DmAg7wp30/dhdy95jgnVuM+5WxlpIPqC+Aok2Z5ley9WximYr654
+         WOYj2w1Noc6HXdtgaa821Gb5Xw38vIOLseeoqKUfKTEYurZDVPQKJkNfOxprCbXALHnR
+         ClKQ==
+X-Gm-Message-State: ACrzQf13C7YAie5pFq39mbi5UhQCPoxgVpetWesg12hwHGGgxxo+qgLk
+        ZO/+UigRYIbN1glcqk3m3PccV8TsWOM25LEfxTbffAu/7TSGRXN4/72Ar9dYHCXBsrB/USeWp4o
+        BsTGEDQtbV6ueMJMP8EHASez9
+X-Received: by 2002:a05:6402:545:b0:460:8384:e263 with SMTP id i5-20020a056402054500b004608384e263mr3472072edx.230.1668115154519;
+        Thu, 10 Nov 2022 13:19:14 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5TrfOU8xnS5qiH0IQ6ZsFuGN1gd1cTF742kGeaSBVauzyQN5NZpKi56ioRPBX0xA2mgumlTg==
+X-Received: by 2002:a05:6402:545:b0:460:8384:e263 with SMTP id i5-20020a056402054500b004608384e263mr3472056edx.230.1668115154339;
+        Thu, 10 Nov 2022 13:19:14 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id rl24-20020a170907217800b00770880dfc4fsm158693ejb.29.2022.11.10.13.19.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 13:19:13 -0800 (PST)
+Message-ID: <2446cc07-dc2b-d010-a8b4-93d867e8a6f3@redhat.com>
+Date:   Thu, 10 Nov 2022 22:19:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107204934.32655-10-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 11/14] platform/x86/intel/ifs: Remove reload sysfs
+ entry
+Content-Language: en-US, nl
+To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, ashok.raj@intel.com,
+        tony.luck@intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
+        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-12-jithu.joseph@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221107225323.2733518-12-jithu.joseph@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On Mon, 07 Nov 2022 23:49:23 +0300, Serge Semin wrote:
-> Currently the 'interrupts' and 'interrupt-names' properties are defined
-> being too generic to really describe any actual IRQ interface. Moreover
-> the DW PCIe End-point devices are left with no IRQ signals. All of that
-> can be fixed by adding the IRQ-related properties to the common DW PCIe
-> DT-schemas in accordance with the hardware reference manual. The DW PCIe
-> common DT-schema will contain the generic properties definitions with just
-> a number of entries per property, while the DW PCIe RP/EP-specific schemas
-> will have the particular number of items and the generic resource names
-> listed.
+On 11/7/22 23:53, Jithu Joseph wrote:
+> Reload sysfs entry will be replaced by current_batch, drop it.
 > 
-> Note since there are DW PCI-based vendor-specific DT-bindings with the
-> custom names assigned to the same IRQ resources we have no much choice but
-> to add them to the generic DT-schemas in order to have the schemas being
-> applicable for such devices. These names are marked as vendor-specific and
-> should be avoided being used in new bindings in favor of the generic
-> names.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Note without the next dtschema tool fix
-> 
-> --- a/lib.py 2022-09-29 15:17:13.100033810 +0300
-> +++ b/lib.py     2022-09-29 15:19:54.886172794 +0300
-> @@ -1307,7 +1307,7 @@
->  def format_error(filename, error, prefix="", nodename=None, verbose=False):
->      src = prefix + os.path.abspath(filename) + ':'
-> 
-> -    if error.linecol[0] >= 0:
-> +    if hasattr(error, 'linecol') and error.linecol[0] >= 0:
->          src = src + '%i:%i: ' % (error.linecol[0]+1, error.linecol[1]+1)
->      else:
->          src += ' '
-> @@ -1342,10 +1342,10 @@
->      else:
->          msg = error.message
-> 
-> -    if error.note:
-> +    if hasattr(error, 'note') and error.note:
->          msg += '\n\t' + prefix + 'hint: ' + error.note
-> 
-> -    if error.schema_file:
-> +    if hasattr(error, 'schema_file') and error.schema_file:
->          msg += '\n\t' + prefix + 'from schema $id: ' + error.schema_file
-> 
->      return src + msg
-> 
-> any DT-bindings error will cause the dt-schema script crash:
-> 
-> Traceback (most recent call last):
->   File "/home/fancer/.local/bin/dt-validate", line 175, in <module>
->     sg.check_trees(filename, testtree)
->   File "/home/fancer/.local/bin/dt-validate", line 122, in check_trees
->     self.check_subtree(dt, subtree, False, "/", "/", filename)
->   File "/home/fancer/.local/bin/dt-validate", line 111, in check_subtree
->     self.check_subtree(tree, value, disabled, name, fullname + name, filename)
->   File "/home/fancer/.local/bin/dt-validate", line 111, in check_subtree
->     self.check_subtree(tree, value, disabled, name, fullname + name, filename)
->   File "/home/fancer/.local/bin/dt-validate", line 106, in check_subtree
->     self.check_node(tree, subtree, disabled, nodename, fullname, filename)
->   File "/home/fancer/.local/bin/dt-validate", line 84, in check_node
->     print(dtschema.format_error(filename, error, nodename=nodename, verbose=verbose) +
->   File "/home/fancer/.local/lib/python3.8/site-packages/dtschema/lib.py", line 1332, in format_error
->     msg += '\n' + format_error(filename, suberror, prefix=prefix+"\t", nodename=nodename, verbose=verbose)
->   File "/home/fancer/.local/lib/python3.8/site-packages/dtschema/lib.py", line 1310, in format_error
->     if error.linecol[0] >= 0:
-> AttributeError: 'ValidationError' object has no attribute 'linecol'
-> 
-> Changelog v3:
-> - This is a new patch unpinned from the next one:
->   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
->   by the Rob' request. (@Rob)
-> 
-> Changelog v5:
-> - Add platform-specific interrupt names, but mark them as deprecated.
-> 
-> Changelog v6:
-> - Move the common interrupt-names definitions to the RP/EP schemas.
->   Thus drop the 'definitions' property. (@Rob)
-> - Drop the 'deprecated' keywords from the vendor-specific names. (@Rob)
-> ---
->  .../bindings/pci/snps,dw-pcie-common.yaml     | 19 ++++
->  .../bindings/pci/snps,dw-pcie-ep.yaml         | 52 +++++++++++
->  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 90 ++++++++++++++++++-
->  3 files changed, 158 insertions(+), 3 deletions(-)
-> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+> ---
+>  drivers/platform/x86/intel/ifs/sysfs.c | 29 --------------------------
+>  1 file changed, 29 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
+> index 65dd6fea5342..e077910c5d28 100644
+> --- a/drivers/platform/x86/intel/ifs/sysfs.c
+> +++ b/drivers/platform/x86/intel/ifs/sysfs.c
+> @@ -87,34 +87,6 @@ static ssize_t run_test_store(struct device *dev,
+>  
+>  static DEVICE_ATTR_WO(run_test);
+>  
+> -/*
+> - * Reload the IFS image. When user wants to install new IFS image
+> - */
+> -static ssize_t reload_store(struct device *dev,
+> -			    struct device_attribute *attr,
+> -			    const char *buf, size_t count)
+> -{
+> -	struct ifs_data *ifsd = ifs_get_data(dev);
+> -	bool res;
+> -
+> -
+> -	if (kstrtobool(buf, &res))
+> -		return -EINVAL;
+> -	if (!res)
+> -		return count;
+> -
+> -	if (down_interruptible(&ifs_sem))
+> -		return -EINTR;
+> -
+> -	ifs_load_firmware(dev);
+> -
+> -	up(&ifs_sem);
+> -
+> -	return ifsd->loaded ? count : -ENODEV;
+> -}
+> -
+> -static DEVICE_ATTR_WO(reload);
+> -
+>  /*
+>   * Display currently loaded IFS image version.
+>   */
+> @@ -136,7 +108,6 @@ static struct attribute *plat_ifs_attrs[] = {
+>  	&dev_attr_details.attr,
+>  	&dev_attr_status.attr,
+>  	&dev_attr_run_test.attr,
+> -	&dev_attr_reload.attr,
+>  	&dev_attr_image_version.attr,
+>  	NULL
+>  };
+
