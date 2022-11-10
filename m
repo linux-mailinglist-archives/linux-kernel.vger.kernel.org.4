@@ -2,167 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBA46242D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEF66242DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiKJNF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S230178AbiKJNGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiKJNFz (ORCPT
+        with ESMTP id S230180AbiKJNF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:05:55 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123FC73757
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id b21so1336937plc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
+        Thu, 10 Nov 2022 08:05:59 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1038F725CC;
+        Thu, 10 Nov 2022 05:05:58 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id p8so3067574lfu.11;
+        Thu, 10 Nov 2022 05:05:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
-        b=GVZ09h+ngHWOecbTC/uzghXW93HVi79Hc3aHUMBuHut0K+MRP4qjrmbxOsy9wAvyhh
-         CzAf4wAUsz2LX8ScnTSnBYBlU0zD4SfZXHjTGLx4odMNe2HTZmWoc8/O0MjERSTJDuKQ
-         9UeL9YNFV2iAuj4M769TxWHJzx0wEKM1UD/fL8Quarzgi8/jAHx03TmKPyEcNniVs1JP
-         E1bQ9YyT5yBnS4K6hTH0QDyjNMb9vjtJqKa6/m2IeBhMmf0jPp66hTlfQCyxBUHnorSo
-         4QxzB8BVVnzEGtFh63S81NhnvCx7MGrBaQEPEUdQo8KV1MCY/puvxsLONjSQ8GgFephe
-         xQuA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXSsQ43cxptIUGrnVbHJLQbqSy0z5WlgGe/E7rMDumo=;
+        b=GTADl5+ADYwPS3Z/F0wEmSZ5vBiBHx81HK2pdsyCIMsXocLkAg9wbZCNW0HVLROxzr
+         bjSQZsb+TniODMbCynU2wQePWOkoy+vXUzs2uy5Mh5fWviUPHAzNkW+2E9GRlrKfl6h0
+         +TQZt+yUb6go4BGpZwjHTpcqa8cpSBak5xZm4oKoWoo8cIw4Ayf8eAa4DOP+x7aIHt/a
+         f4OhrXKLHA5mI2bk2xANHeT1tQHJFnjDH2caql6s2JQTUoSZlzQVf7PlPHCSf8SqbCMP
+         yhpU7MVmsnvW2iIY0A+jyeH8tSOeAQ+D5ZDS2ZaZFmFs4FALm/qXWRJTpU/xFZcCP2zF
+         8vDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
-        b=izq2ccgy8zN8mMIpEkkbvIhm8QV8WDQNFV9xlQqOUvXT+q+0VY3AD/xzi0hDgwhmN0
-         G69mikGmbIjxuBFrryyBQnUUjV470TPRvQNTaCsunhA8tMJ2XSYgO1/13A+hwf1iVG31
-         4pw2Q7Nvz5+pF3PePrmpuN7VhK/ZNKUa8hR+Zl2GLFy1RuAaO5OXb4C2vAYR7siAgn2g
-         tUC4nqbgPAmYEPkIUj3Q0IBNkqW3gIr0WfRirt9aJADefj+YZCbFPho+iBN0BP5njTkB
-         KbpkdaoCfqYYJAzg/yYli0DRHi0sLAWm8bjzPSzf3zVtKRZ5yOekXnVWZGOImPT7yL68
-         j/zQ==
-X-Gm-Message-State: ACrzQf3BUkLa6vBe5WuV7PtjV6371SnKwNchDwp8VuaJlZbcvhV3m+71
-        x0p7MzroIwML4lOYXlUqIFH+ceA7uAbkK1PUbR9tRg==
-X-Google-Smtp-Source: AMsMyM4ntafpxKu1kZoVYdCyuwK4y2qgGm0PDcBHChl8r8c0pj7m0JmQ6SHmodBY/Un25AY0R73awNrQX1GtCyrtwGQ=
-X-Received: by 2002:a17:903:100c:b0:186:63a1:3b5d with SMTP id
- a12-20020a170903100c00b0018663a13b5dmr65965693plb.148.1668085553525; Thu, 10
- Nov 2022 05:05:53 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gXSsQ43cxptIUGrnVbHJLQbqSy0z5WlgGe/E7rMDumo=;
+        b=VwcjP72CiHTIKpyhtlE0yHLt5DxfE0ZBvOuv8q6ReREAf8Wnj/s+JJWlYlRyhxgP/t
+         s/jgz91CtlXas3H+9HRrz16gmaNmMohx+VXbYmxKpHryi9MoqkVuyDMVhDlmuBLmcg/y
+         sQKuYU4WaeGBTE+WGrY8JYpZ5OYdWQ4AmuD9zMldi+XGuhK/t6o3fA/vgl2gUddJw5Ap
+         xlcejA4iSkDDUf6n+///0vsxpZGH+Bniz4EpdgtlCxi4fHQBgz2IpUzz4rDldT+1U8dt
+         TXi6R77D98qI6pYh0esOL6sPhHN+7aiDII8qLeb1FsXhbYr01NIVouQGDrhKgO3/pfUw
+         rQcw==
+X-Gm-Message-State: ANoB5pmrC0ZO6dqo+eGLtN6ujS2i3MZhITjRrqcI4d2yZdH3yfnVKcSC
+        QmsBcfLFcMj9mvOY7R7/YbM=
+X-Google-Smtp-Source: AA0mqf62YWagAoYYXmqkjGcdev1AuYkfO2TQZlg7+FFf18TqalLgsqP+/ekBILmQbqV6u5viwUB5fg==
+X-Received: by 2002:ac2:4d91:0:b0:4b4:1208:4b2 with SMTP id g17-20020ac24d91000000b004b4120804b2mr1034514lfe.536.1668085556157;
+        Thu, 10 Nov 2022 05:05:56 -0800 (PST)
+Received: from pc636 (host-90-235-24-194.mobileonline.telia.com. [90.235.24.194])
+        by smtp.gmail.com with ESMTPSA id p3-20020a2e7403000000b002770e6c620bsm2584457ljc.106.2022.11.10.05.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 05:05:55 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Thu, 10 Nov 2022 14:05:53 +0100
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        paulmck@kernel.org, urezki@gmail.com
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y2z3Mb3u8bFZ12wY@pc636>
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
- <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com> <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-In-Reply-To: <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 10 Nov 2022 14:05:16 +0100
-Message-ID: <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
-Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109024758.2644936-1-joel@joelfernandes.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
+> On ChromeOS, using this with the increased timeout, we see that we almost always
+> never need to initiate a new grace period. Testing also shows this frees large
+> amounts of unreclaimed memory, under intense kfree_rcu() pressure.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+> v1->v2: Same logic but use polled grace periods instead of sampling gp_seq.
+> 
+>  kernel/rcu/tree.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 591187b6352e..ed41243f7a49 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+>  
+>  /**
+>   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
+> + * @gp_snap: The GP snapshot recorded at the last scheduling of monitor work.
+>   * @head: List of kfree_rcu() objects not yet waiting for a grace period
+>   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
+>   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
+> @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
+>  	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+>  	raw_spinlock_t lock;
+>  	struct delayed_work monitor_work;
+> +	unsigned long gp_snap;
+>  	bool initialized;
+>  	int count;
+>  
+> @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
+>  			mod_delayed_work(system_wq, &krcp->monitor_work, delay);
+>  		return;
+>  	}
+> +	krcp->gp_snap = get_state_synchronize_rcu();
+>  	queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+>  }
 >
-> On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
-> > >
-> > > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
-> > > hook, but doesn't provide a determine_rate implementation.
-> > >
-> > > This is a bit odd, since set_parent() is there to, as its name implies,
-> > > change the parent of a clock. However, the most likely candidate to
-> > > trigger that parent change is a call to clk_set_rate(), with
-> > > determine_rate() figuring out which parent is the best suited for a
-> > > given rate.
-> > >
-> > > The other trigger would be a call to clk_set_parent(), but it's far less
-> > > used, and it doesn't look like there's any obvious user for that clock.
-> >
-> > If I recall correctly, that is the use case we did target for these
-> > types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
->
-> Hm I am trying to get that driver to work ... from time to time.
-> It's just that ALSA SoC DT has changed to much that it turns out
-> into a complete rewrite :/
->
-> So in sound/soc/ux500/mop500_ab8500.c
-> I see this:
->
->         status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
->         if (status)
-> (...)
->
-> and there is elaborate code to switch between "SYSCLK" and
-> "ULPCLK" (ulta-low power clock). Just like you say... however
-> a clock named SYSCLK or ULPCLK does not appear in the
-> code in drivers/clk/ux500 or any DT bindings so... it seems to
-> be non-working for the time being.
+How do you guarantee a full grace period for objects which proceed
+to be placed into an input stream that is not yet detached?
 
-It's definitely not working, but the corresponding clocks ("ulpclk",
-"intclk", "audioclk", etc) are being registered in ab8500_reg_clks().
+>  
+> @@ -3217,7 +3220,10 @@ static void kfree_rcu_monitor(struct work_struct *work)
+>  			// be that the work is in the pending state when
+>  			// channels have been detached following by each
+>  			// other.
+> -			queue_rcu_work(system_wq, &krwp->rcu_work);
+> +			if (poll_state_synchronize_rcu(krcp->gp_snap))
+> +				queue_work(system_wq, &krwp->rcu_work.work);
+> +			else
+> +				queue_rcu_work(system_wq, &krwp->rcu_work);
+>  		}
+>
+Why do you want to queue a work over RCU-core?
 
-What seems to be missing is a DT conversion for these clocks, so they
-can be consumed properly. Right?
+1.
+call_rcu()
+   -> queue_work();
+      -> do reclaim
 
-Kind regards
-Uffe
+if it can be improved and simplified as:
+
+2.
+queue_work();
+    -> cond_synchronize_rcu(), do reclaim
+
+Could you please clarify it?
+
+--
+Uladzislau Rezki
