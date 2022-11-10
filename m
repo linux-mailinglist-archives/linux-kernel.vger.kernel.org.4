@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A140F624734
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE0A624735
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbiKJQjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S231998AbiKJQjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbiKJQjI (ORCPT
+        with ESMTP id S231956AbiKJQjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:39:08 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF813E0B5;
-        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so4328602wmi.1;
-        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
+        Thu, 10 Nov 2022 11:39:11 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1517740933;
+        Thu, 10 Nov 2022 08:39:08 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 187-20020a1c02c4000000b003cf9c3f3b80so3868808wmc.0;
+        Thu, 10 Nov 2022 08:39:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ijKNfiunV63AFU9RzYinLsQfMGW1tKqr0LKOgrxroKY=;
-        b=EMqGCre5J9kfTG9I5KlsFPNleC+UqzrVFOs6xP66CfIIafZnrfYSvi6ATfpMfinQP4
-         ilan3jK5keaNm+KMC8ZFADeyrmortKC4u3vkTRG4dzxYYrewbu4IWEa22PchUQswMfZ5
-         643kK9HiTLor8JKeFuBeeEjY7lgJCWkMRaIbpMQ2yTJVaKHfhnHYWo8y1mXEpS4R/EfK
-         NtL1acDDpJMqzbwGWF8pH3V9sZ4teyLaPkL+pSaIp+PpxMFPJ0amP0Zfc7Fngj0pQPVb
-         nT42eo9r46YkmdBZx0mtNAXbrUzh/Mhoxdnb8VA7l38mG5M0CywYdae6szuLHWxvdJ0F
-         qX7Q==
+        bh=CEuLsZijDHIURQmlzbVFcv2ePl7fzXP5XewpwaGNPfE=;
+        b=q8Ednjpo9n4TB285iTt/y7Cr9qrUvZrfph6i5UnrSFU1JBMkI8ZZ62kTmvTdzGCA5o
+         KUnQLtCliqx1pKKF/IFta57PlH5bqgf7Ci41DxCYvxDbQIsAe48epCExiISbbCpPhYtN
+         nTMaYpeDKaXFrKT+kcaU4iGUh1u8XZ6lfyRB7T32aN/cNvQ2307zKg84gZ6EmzXBop9X
+         9JuD0VxRA+TrU2/3/9LrU4Fj5+77VoYPUfKqSEXRuE9kM/nJOR3JyIK/apsir0rVrEJ0
+         Nia7yc1wdO0G7Hc2rV9Y7kOooFVjKYxtCEwnRp4ImCPkbZSf0/9OKE/QFkRWM1Eez4qS
+         qTnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ijKNfiunV63AFU9RzYinLsQfMGW1tKqr0LKOgrxroKY=;
-        b=TKiOEvRqJubWvfUqy+z5Ah/ZoNOplOMnL6vbwX9+/OsKIG7SJ6iJZ1T7mo7ZwgiEiA
-         /GgcwKanOmeCNWpPzgh/xJtSG6sts4A27NmGQ4Jg0oxCxVYCy4VBepWeEYuDGP7OfH6C
-         of5tVHo+B922P3r3+KqXPz9H7tpm3QA7rxDqxoRhHiYhv0a4EYECyK4JcuP3N/fzMppj
-         O9lE14yPp6S3sB3lPP5+CNDxZMoAvpIiWSvY2E3DWkAEMHcHe5F12XKCT+YExboiBBO7
-         Kt51d6QS5Y96NmAc4r30v8EvsmvmyqlMBOjvFam41vaN+tDMQ2US+6ED36w2HZSD4NE/
-         hN5g==
-X-Gm-Message-State: ANoB5pnGlSVlXRq9TSQd6Lhof4idIiR454fGcHAIUimKKqnctn0o0kHq
-        IKgG+DNyjRR11Tq7ZQxSQaE=
-X-Google-Smtp-Source: AA0mqf7qZFMjGuzFJyQg70wgGaO2wLzSY5qmfNk3w9AcE5UxI5946LDXcwJeH+PwqOwjCzNbtV5wQA==
-X-Received: by 2002:a05:600c:2d44:b0:3cf:aae0:8367 with SMTP id a4-20020a05600c2d4400b003cfaae08367mr14577034wmg.132.1668098344929;
-        Thu, 10 Nov 2022 08:39:04 -0800 (PST)
+        bh=CEuLsZijDHIURQmlzbVFcv2ePl7fzXP5XewpwaGNPfE=;
+        b=m9K8Th7KEQfGDM0xbDCrBsAeVEOc7tJuJGjWBy/6bxxTvewvXt+tonY8Xey/+Q022H
+         FtU8W4zhlkY3h1PGhRtD+X9/nGhVTFqau2heLsxU/bQes9Ku+b6LPOzn889DCbD8CaJe
+         AwFA/9BWwcQg7GO59mC+aP8KiLKQhmoZKhz3pLe0h+a4nk5HI1oZCITgKaYF23BQefR3
+         pBrCJZz2zs2s3w6YbWf/fBkE0lGS2DJ25VSlPsSfugYf3lvqLFySYGPLGimRETVPud4B
+         JHBqaFyvnHBy/iO8bUqzEaG4GlG+n6n35Zk1CwDtnz41dSwNzf2fX00Bfpa9ncSPtE4v
+         sohg==
+X-Gm-Message-State: ACrzQf07hxdrPGRISbYACiMYny/pS1tWpe6HN5/PSaVkL/jp8aJQ0X1O
+        /RDgyCMOJxaRKNABuvYHK3M=
+X-Google-Smtp-Source: AMsMyM4vbGUsEHG0NKAE1xRIufXiEPYkN4XR+5oplPtvpQud17nl4IG9F6CmaQ8t+Feh+F01nsHssw==
+X-Received: by 2002:a05:600c:21c9:b0:3cf:7833:2940 with SMTP id x9-20020a05600c21c900b003cf78332940mr36973681wmj.35.1668098346718;
+        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
 Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id f24-20020a1cc918000000b003b4935f04a4sm128730wmb.5.2022.11.10.08.39.03
+        by smtp.gmail.com with ESMTPSA id f24-20020a1cc918000000b003b4935f04a4sm128730wmb.5.2022.11.10.08.39.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:39:04 -0800 (PST)
+        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
 From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -57,9 +57,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] arm64: dts: rockchip: Enable HDMI sound on SOQuartz
-Date:   Thu, 10 Nov 2022 17:38:44 +0100
-Message-Id: <20221110163845.42309-4-frattaroli.nicolas@gmail.com>
+Subject: [PATCH 4/4] arm64: dts: rockchip: Enable PCIe 2 on SOQuartz CM4IO
+Date:   Thu, 10 Nov 2022 17:38:45 +0100
+Message-Id: <20221110163845.42309-5-frattaroli.nicolas@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221110163845.42309-1-frattaroli.nicolas@gmail.com>
 References: <20221110163845.42309-1-frattaroli.nicolas@gmail.com>
@@ -75,40 +75,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables the i2s0 node on SOQuartz, which is responsible
-for hdmi audio, and adds an hdmi-sound node to enable said audio.
+This patch enables the PCIe2 on the CM4IO board when paired with
+a SOQuartz CM4 System-on-Module board. combphy2 also needs to be
+enabled in this case to make the PHY work for this.
 
 Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts | 10 ++++++++++
+ arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi    | 12 ++++++++++++
+ 2 files changed, 22 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-index 0bfb0cea7d6b..1b975822effa 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-@@ -178,6 +178,10 @@ hdmi_out_con: endpoint {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+index e00568a6be5c..4cf60be267ed 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+@@ -30,6 +30,11 @@ vcc_5v: vcc-5v-regulator {
  	};
  };
  
-+&hdmi_sound {
++/* phy for pcie */
++&combphy2 {
 +	status = "okay";
 +};
 +
- &i2c0 {
+ &gmac1 {
  	status = "okay";
- 
-@@ -446,6 +450,10 @@ &i2c4 {
- 	status = "disabled";
+ };
+@@ -105,6 +110,11 @@ &led_work {
+ 	status = "okay";
  };
  
-+&i2s0_8ch {
++&pcie2x1 {
++	vpcie3v3-supply = <&vcc_3v3>;
 +	status = "okay";
 +};
 +
- /*
-  * i2s1_8ch is exposed on CM1 / Module1A
-  * pin 24 - i2s1_sdi1_m1
+ &rgmii_phy1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
+index 1b975822effa..294354e95336 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
+@@ -487,6 +487,12 @@ rgmii_phy1: ethernet-phy@0 {
+ 	};
+ };
+ 
++&pcie2x1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie_reset_h>;
++	reset-gpios = <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
++};
++
+ &pinctrl {
+ 	bt {
+ 		bt_enable_h: bt-enable-h {
+@@ -512,6 +518,12 @@ diy_led_enable_h: diy-led-enable-h {
+ 		};
+ 	};
+ 
++	pcie {
++		pcie_reset_h: pcie-reset-h {
++			rockchip,pins = <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
+ 	pmic {
+ 		pmic_int_l: pmic-int-l {
+ 			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
 -- 
 2.38.1
 
