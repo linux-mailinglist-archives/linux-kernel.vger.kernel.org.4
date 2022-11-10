@@ -2,649 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5388623886
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62E56238B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiKJBBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
+        id S232058AbiKJBNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiKJBBW (ORCPT
+        with ESMTP id S231801AbiKJBNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:01:22 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3BA5FF6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:01:19 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1668042073;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LZhDh1uahsd47jJNGhPV+SbjCcOYXWN6ABbFCp5N+hI=;
-        b=Em3jFLIpa/fvxtBYEUNC1CmNd8EWRhTpmCj1rzHgvSRFkCmHsawbvlrE4uF3fzaf6WgCtT
-        ++q2ndNi6unw0Djsvj8Hn5htfJxMnnT8/niQjl+AZInF2obyqKT+AQb9sC8Nsgdu1/bF2U
-        0zsZQJNJeeCXih8W/8f2rQgaMBbD3jY=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu
-Subject: [PATCH] KVM: arm64: Move arch-specific headers out of include/kvm/
-Date:   Thu, 10 Nov 2022 00:58:08 +0000
-Message-Id: <20221110005812.3381334-1-oliver.upton@linux.dev>
+        Wed, 9 Nov 2022 20:13:07 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8FE20BFD;
+        Wed,  9 Nov 2022 17:13:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668042784; x=1699578784;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=nXd/A7ACf4PzsVE/u6+t8YWewN/GUVrOnlshxev8U5Q=;
+  b=mLEua2NZe/vXvWfcI8rhKoDX42fQXm5lbSZFur9hiDXpLs9T+t1iA0Dd
+   nV7ql2gF7LtoMetO14GnS9feA4yquTls5Taf09V2m7ZnsY5gzy32MXVrP
+   /P4LRmYm/0JuGYoJKcXCepR+I/OUk/xGXv5vFVPsvUNXaDnavZnxDLMkd
+   76Wj9xEqiyRZq4bcxpn+VXedLtZ1U3lQte7NMogF1hpztEOVZUizEoPkK
+   VQgvAGGPZGx9LV1dkRTmiWfXe/kOPqZ9TjnFfsVrwu2Lgde2XYxSJoIvC
+   xpKCHWE1M+X9J60HqWt60na+KVgK04JNyEiIVyl4lLqk72sUhpTM1/ruh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="373285145"
+X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
+   d="scan'208";a="373285145"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 17:13:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="705938863"
+X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
+   d="scan'208";a="705938863"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Nov 2022 17:13:04 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 17:13:03 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 9 Nov 2022 17:13:03 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 9 Nov 2022 17:13:03 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.40) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 9 Nov 2022 17:13:03 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z8+7k48WhEvFE/k85kY2JmjdKdZeMHRe5S8+TMY9x7bwOXA0ye9R6I6e1ApjyllSIZBSnHQ8YGCRSXRiIgbjEMyZO2OHOjz9Q/5zalNqZxS7NO8TEBvnMzPc3wLF+KKzpAcLdHfuKiUuX5rgFpK0xR0JM/sK9t1TVdKr+WUHPEp64ukf0tDI5L2XVf1PsRHeJaiX2b+dvxDQLfi9efppCIaufb7MY5i1bvAOSyEODbec4h1kWJdFfE2qSAxt4xnUCS1cFZNZugucOykx+x16BrbNlzcf2Hn0Nj8TgeskBLDE4pbVlHQG69wzaiZq6sioYx/E759uLqjA1M90UQ8lxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J/DmpTX+zYZrmbEoqIVW9bBtCNaS0hywCusdPfnoQYY=;
+ b=YI6O1IXCFCUrlhqw9Uta9/zU2+JVCKFsKA1caaiKoi0WbDY42m+McMpFWauiXewywgQytzCmpwDAUX4VAPWwuwoSycf+80K5b3zLJBQmOdJO5bVhXdgvgIpzHGXMAzUoRNOA3HrTrWtTLiIAekRC5qv5+I0CVhidpuR7b/QiCUt0f9MW55m2gJJCk/uSr8KbEGBFvn+jXOiaHNZWuh8i6laYs7utmzClx/+O0rNkSPebOLjl9JSjhcH0tGPFaoeIi37D7fYJoUsztIcY4AuitPFVR9FjwoijUUQQpTOoyxBzRr1NZtvKL3enqL75hkFh0a7blaeYsax4B2aSqEk3NA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ SA2PR11MB4985.namprd11.prod.outlook.com (2603:10b6:806:111::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5791.27; Thu, 10 Nov 2022 01:12:59 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::dc06:6d36:dc8a:fe7f]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::dc06:6d36:dc8a:fe7f%7]) with mapi id 15.20.5813.012; Thu, 10 Nov 2022
+ 01:12:59 +0000
+Date:   Thu, 10 Nov 2022 08:50:10 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <pbonzini@redhat.com>
+Subject: Re: [PATCH] KVM: move memslot invalidation later than possible
+ failures
+Message-ID: <Y2xKwvq4nkwMO4T6@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20221108084416.11447-1-yan.y.zhao@intel.com>
+ <Y2qSwlN26qWi3ZqH@google.com>
+ <Y2tNGHF5Lbjk4DQV@yzhao56-desk.sh.intel.com>
+ <Y2xG1SY/kNULHFck@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y2xG1SY/kNULHFck@google.com>
+X-ClientProxiedBy: SI2PR04CA0004.apcprd04.prod.outlook.com
+ (2603:1096:4:197::22) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|SA2PR11MB4985:EE_
+X-MS-Office365-Filtering-Correlation-Id: 183af736-4da9-4957-a03c-08dac2b8b531
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z32RQ4yevovA79kgJ/BLJINrv/UB+nOn8qjHYEOPFcY+8tZMm1xLhaw37tIheqBttA0gB0Yd1UPcdHtiXBr95N9mNq52n39LMRi0gw7L3VJcHRfwJ2A26roYC4n+eFhZZPzLKoOEQv0KsgxrgrlNsedU2joVAG2xvBz181ZDJ3vHORfT9g+XFXm4lmSDXq2jYzyMRQcfhSch1PDjE1zms8fdR+bbu4IoKXJCJU/V4WUyFC+F+H0SoktuyUVENqN2LC5L/H7tf9VPcOQsMKGpv+34Xm/bvs2XDOAIXXLaB7XtMNrhbkYjymuDLCd24ooTfnuc93TP6rOdtn02oTUtE3vV7lblfaSr5BPx2ooI4PJLhAHZST1GokmySF74f/TCb9/+rjge7CtYbsz9UiXGYXt5j+/OCN8vFhcE+842EwaE9N75Dhe2ETfTBGDsXPrUAfF6s1BsnMYsr/knDcRJtJX58iuukesVbTZV3PBIYeC+WZ0mMyx5CCig40XzYBNdtd9ASvp7ISMbpn4VM1ncZ0JYFsJnJ/Kbu5TfJA1PLmw8W0kXJCsgwXDkrWHCaW+BCbCmqDZ7NPsqC/B3NXXPdk4nolfQbZBr+WwACLTXsP+oNj5JaHN7+tUx0VTKPKzvz3O2JG2l2fv6vQPilAi6/0ML+mLDm2Vt3NuQaClPSYJ7NZwneZ4JrQQNyNyqhHKM+riixRzUr8k0IwQGHWxswg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(366004)(346002)(136003)(396003)(451199015)(82960400001)(186003)(6506007)(5660300002)(2906002)(3450700001)(86362001)(6512007)(66946007)(66476007)(66556008)(4326008)(8676002)(38100700002)(83380400001)(8936002)(26005)(41300700001)(316002)(66899015)(6486002)(478600001)(6666004)(6916009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xHAVHKDmJ5Rq4Sp2BuEZ3x4zhUcqu3hkuIW47ZhGPfpuydpGPToO4vaTFi8c?=
+ =?us-ascii?Q?Nc839N+cWkmOoKRRUcjXg7/OaTiFcWLZXwDV/ozC8FBXkzZym6wonUblaSRH?=
+ =?us-ascii?Q?WbX6bHEyKI52ECwKerKd8Vmdh6vUP6yPOrIbQzIDNpTVGDPB0MmXi+CqvLob?=
+ =?us-ascii?Q?snPSzcHNGkvNB16tji84qfEXMxg4AuikqjhiV5DxwFDENsZ8Y2c9O2RFm3Yv?=
+ =?us-ascii?Q?/yD/JzLU8NWwXJHE1Vksu6d+hx/sI1ik9OzcaQP8zQnIzPFyAeNjOx21aD1F?=
+ =?us-ascii?Q?ZdyjnOowIMIsyzCc6J8pVNTO+gmFi/4JNdb0C8+Y9fJZts0JlGhcgJrrq08r?=
+ =?us-ascii?Q?oFNvMeSa+awgHyDQIxaP0uOaTNuHEYDWDD5umxwdXUdnl0qDoN+re/EZmhDN?=
+ =?us-ascii?Q?ciYdHqvcjo8UThtNmSkOfXEmgrsH0k6sVlscxUPZuDTsZqSGxNHtYYrAknHX?=
+ =?us-ascii?Q?zOChcamwuUpo8LlXn/+x4KDGFpPV9eNB5KmsAC/NHqU95tRaNgat4M8DFPbm?=
+ =?us-ascii?Q?YZ3CosNK6YR77Wv2MTmZ/GVeqvO7sFqn35CUISx0M7XwMToOgnuadbqXhxrm?=
+ =?us-ascii?Q?itoEr1BAdha+nIXh4nEXXOx4AX/hNa2xj60MDDYR7FqhDv5Fvjxgugv478TV?=
+ =?us-ascii?Q?gWlghNjy7bkCRpcMIlV6yMBPmRxB6IpTWahJdrczvh7Fnkytjrdh2vu4cE0L?=
+ =?us-ascii?Q?RdPOIHvS9AWKynYj7iihZVLEWErWz2qbjMpHQ06lHMEEjNVNdpBhpeDblLn+?=
+ =?us-ascii?Q?lMa0ETAbh0hzgnBxIY1ICY4uW5VD/+qUS3tc1wtItYAHmsMxB5uEotY752bw?=
+ =?us-ascii?Q?FQMgFRIqCj4wP/z/bkDDqcHSYHAs4FsUInQLj43ORjHdzoGm6KCESTKHMm8o?=
+ =?us-ascii?Q?0ipUR5y8eUFuOHz0gdqt35bjqTPTRDH6TKbhdV3si9OAfF0GYOrFGeSG2Snx?=
+ =?us-ascii?Q?VUaLh8w45T3L9avJyRP+5nJA2l1ssUeamPlTcWz4hCdi0CjlCEcq4Lz9bLo3?=
+ =?us-ascii?Q?4N0e+vFk6T8im5TkRdT4ODZPQwmN2CwxT+jMf1TWgsJ+nNW34gzBa304ft8N?=
+ =?us-ascii?Q?WJe+NaTxXiAdcZ9pDa1kB/1qXEFrGPwbpJpxrJg/VqRID4ZjYPlOOPYL6Qsw?=
+ =?us-ascii?Q?NnLue/IcgNKsZeN423/vG5iS0LUqYYtN08YLTVjCosNBTUE3DFL++AbbUMUq?=
+ =?us-ascii?Q?yf1DUXaynapSW5UeX/lD16Moiv4dstka7zB48y84NaxoEwCXUBLJZZNB1+it?=
+ =?us-ascii?Q?ROMH5OUP9W3a1ZMvV1FLsgJDMSx0KTB6S38WYEbqVjiniwGLX+C3VBWhfz8H?=
+ =?us-ascii?Q?/WNdCqcVju0bp8kO+9BzVpoa2sntIWY7cQuDh4xICNrsEV7xmytY5O084Cnk?=
+ =?us-ascii?Q?ZwawfPwemGeYpfNmxBf9THCqoC844H662qqdFby+ApukQWm8zZABB/9jxhrz?=
+ =?us-ascii?Q?A58CFr6OSWt3oiDPmccPr4KCGlFbXLmZs97zIx7IOUo+KPl2kW2p7f2ca6KS?=
+ =?us-ascii?Q?UvlEdOSep4f+HRKgyqmF6nQ4rJpAnm7H5OO+LTVv0XkV01vdLjEtTMjlWdrL?=
+ =?us-ascii?Q?OfJgpd1VAP9RNGh4/c95qXRvmZf6e4bsTNKMmhzVzjnOP4P/bWLiCBkJExC4?=
+ =?us-ascii?Q?cA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 183af736-4da9-4957-a03c-08dac2b8b531
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 01:12:59.7920
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: efTNiNgGnOQh396urO4f77YRJrajF2XeF1hD/uPIo73+/G657kLK42wqeI0j6GzuJYe3WDBjWGKgaA9KtwfMAQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4985
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Long ago in a galaxy far, far away, KVM was supported on both 32 bit and
-64 bit arm architectures. A considerable portion of the code was shared
-between these architectures, hence some headers needed to live in an
-arch-generic path.
+On Thu, Nov 10, 2022 at 12:33:25AM +0000, Sean Christopherson wrote:
+> On Wed, Nov 09, 2022, Yan Zhao wrote:
+> > On Tue, Nov 08, 2022 at 05:32:50PM +0000, Sean Christopherson wrote:
+> > > On Tue, Nov 08, 2022, Yan Zhao wrote:
+> > > > For memslot delete and move, kvm_invalidate_memslot() is required before
+> > > > the real changes committed.
+> > > > Besides swapping to an inactive slot, kvm_invalidate_memslot() will call
+> > > > kvm_arch_flush_shadow_memslot() and further kvm_page_track_flush_slot() in
+> > > > arch x86.
+> > > > And according to the definition in kvm_page_track_notifier_node, users can
+> > > > drop write-protection for the pages in the memory slot on receiving
+> > > > .track_flush_slot.
+> > > 
+> > > Ugh, that's a terrible API.  The entire page track API is a mess, e.g. KVMGT is
+> > > forced to grab its own references to KVM and also needs to manually acquire/release
+> > > mmu_lock in some flows but not others.
+> > > 
+> > > Anyways, this is a flaw in the page track API that should be fixed.  Flushing a
+> > > slot should not be overloaded to imply "this slot is gone", it should be a flush
+> > > command, no more, no less.
+> > hmm, but KVM also registers to the page track
+> > "node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;"
+> > And in kvm_mmu_invalidate_zap_pages_in_memslot, memslot (actaully all the shadow
+> > page tables) is zapped. And during the zap, unaccount_shadowed() will drop the
+> > write protection. But KVM is ok because the dropped write-protection can be
+> > rebuilt during rebuilding the shadow page table.
+> > So, for .track_flush_slot, it's expected that "users can drop write-protection
+> > for the pages in the memory slot", right?
+> 
+> No.  KVM isn't actually dropping write-protection, because for the internal KVM
+> case, KVM obliterates all of its page tables.
+> 
+> > > AFAICT, KVMGT never flushes anything, so fixing the bug should be a simple matter
+> > > of adding another hook that's invoked when the memory region change is committed.
+> > >
+> > Do you mean adding a new hook in page track, e.g. .track_slot_change?
+> > Then right before committing slot changes, call this interface to notify slot
+> > DELETE/MOVE?
+> > 
+> > Not only KVMGT, KVM can also be affected by this failure to MOVE if it wants to
+> > support below usecase:
+> > 1. KVM pre-populated a memslot
+> > 2. memslot MOVE happened
+> > 3. KVM pre-populates the new memslot (MOVE succeeds) or the old one (MOVE fails).
+> > So also add a new interface for the MOVE failure?
+> > 
+> > > That would allow KVMGT to fix another bug.  If a memory region is moved and the
+> > > new region partially overlaps the old region, KVMGT technically probably wants to
+> > > retain its write-protection scheme.  Though that's probably not worth supporting,
+> > > might be better to say "don't move memory regions if KVMGT is enabled", because
+> > > AFAIK there is no VMM that actually moves memory regions (KVM's MOVE support was
+> > > broken for years and no one noticed).
+> > >
+> > So, could we disable MOVE in KVM at all?
+> 
+> Ideally, yes.  Practically?  Dunno.  It's difficult to know whether or not there
+> are users out there.
+> 
+> > > Actually, given that MOVE + KVMGT probably doesn't work regardless of where the
+> > > region is moved to, maybe we can get away with rejecting MOVE if an external
+> > > page tracker cares about the slot in question.
+> > > 
+> > > > However, if kvm_prepare_memory_region() fails, the later
+> > > > kvm_activate_memslot() will only swap back the original slot, leaving
+> > > > previous write protection not recovered.
+> > > > 
+> > > > This may not be a problem for kvm itself as a page tracker user, but may
+> > > > cause problem to other page tracker users, e.g. kvmgt, whose
+> > > > write-protected pages are removed from the write-protected list and not
+> > > > added back.
+> > > > 
+> > > > So call kvm_prepare_memory_region first for meta data preparation before
+> > > > the slot invalidation so as to avoid failure and recovery.
+> > > 
+> > > IIUC, this is purely a theoretical bug and practically speaking can't be a problem
+> > > in practice, at least not without completely breaking KVMGT.
+> > > 
+> > > On DELETE, kvm_prepare_memory_region() will never fail on x86 (s390's ultravisor
+> > > protected VM case is the only scenario where DELETE can fail on any architecture).
+> > > The common code in kvm_prepare_memory_region() does nothing for DELETE, ditto for
+> > > kvm_arch_prepare_memory_region().
+> > But as long as with current code sequence, we can't relying on that
+> > kvm_prepare_memory_region() will never fail for DELETE.
+> > Or, we need to call kvm_prepare_memory_region() only for !DELETE to avoid future
+> > possible broken.
+> 
+> Agreed, I just don't want to touch the common memslots code unless it's necessary.
+Ok. Let me prepare a patch for it.
 
-KVM/arm64 is the only supported arm KVM port now. Sweep some remaining
-residue into the arch-specific include path.
+> 
+> > > And for MOVE, it can only fail in two scenarios: (1) the end gfn is beyond the
+> > > max gfn, i.e. userspace gave bad input or (2) the new memslot is unaligned but
+> > > the old memslot was not, and so KVM needs to allocate new metadata due to the new
+> > > memslot needed larger arrays.
+> > kvm_prepare_memory_region() can also fail for MOVE during live migration when
+> > memslot->dirty_bitmap allocation is failed in kvm_alloc_dirty_bitmap().
+> > and in x86, kvm_arch_prepare_memory_region() can also fail for MOVE if
+> > kvm_alloc_memslot_metadata() fails due to -ENOMEM. 
+> > BTW, I don't find the "(2) the new memslot is unaligned but the old memslot was not,
+> > and so KVM needs to allocate new metadata due to the new memslot needed
+> > larger arrays". 
+> > > 
+> > > As above MOVE is not handled correctly by KVMGT, so I highly doubt there is a VMM
+> > > that supports KVMGT and moves relevant memory regions, let alove does something
+> > > that can result in MOVE failing _and_ moves the memslot that KVMGT is shadowing.
+> > > 
+> > > Heh, and MOVE + KVM_MEM_LOG_DIRTY_PAGES is also arguably broken, as KVM reuses
+> > > the existing dirty bitmap but doesn't shift the dirty bits.  This is likely
+> > Do you mean, for the new slot in MOVE, the new dirty bitmap should be
+> > cleared? Otherwise, why shift is required, given mem->userspace_addr and npages
+> > are not changed and dirty_bitmap is indexed using rel_gfn 
+> > (rel_gfn = gfn - memslot->base_gfn) and both QEMU/KVM aligns the bitmap
+> > size to BITS_PER_LONG.
+> 
+> Oh, you're right.  I forgot that userspace would also be doing a gfn-relative
+> calculation in the ridiculously theoretically scenario that a memslot is moved
+> while it's being dirty-logged.
+> 
+> > > another combination that KVM can simply reject.
+> > > 
+> > > Assuming this is indeed purely theoretical, that should be called out in the
+> > > changelog.  Or as above, simply disallow MOVE in this case, which probably has
+> > > my vote.
+> > >
+> > Yes, currently it's a purely theoretical bug, as I'm not seeing MOVE is triggered
+> > in upstream QEMU.
+> > 
+> > <...>
+> > 
+> > > I'm not 100% sure that simply moving kvm_invalidate_memslot() is functionally
+> > > correct.  It might be, but there are so many subtleties in this code that I don't
+> > > want to change this ordering unless absolutely necessary, or at least not without
+> > > an in-depth analysis and a pile of tests.  E.g. it's possible one or more
+> > > architectures relies on unmapping, flushing, and invalidating the old region
+> > > prior to preparing the new region, e.g. to reuse arch memslot data.
+> > yes. what about just moving kvm_arch_flush_shadow_memslot() and
+> > kvm_arch_guest_memory_reclaimed() to later than kvm_arch_prepare_memory_region()?
+> 
+> I'm not dead set against tweaking the memslots flow, but I don't want to do so to
+> fix this extremely theoretical bug.  In other words, I want to fix this by giving
+> KVM-GT a more appropriate hook, not by shuffling common KVM code to fudge around
+> a poor KVM x86 API.
+> 
+> And if KVM-GT moves away from track_flush_slot(), we can delete the hook entirely
+> after cleaning up clean up another pile of ugly: KVM always registers a page-track
+> notifier because it relies on the track_flush_slot() call to invoke
+> kvm_mmu_invalidate_zap_pages_in_memslot(), even when KVM isn't tracking anything.
+> I'll send patches for this; if/when both land, track_flush_slot() can be deleted
+> on top.
+Ok. thanks. I'll watch and decide what to do based on your changes.
 
-No functional change intended.
-
-Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-Change-Id: Iec1caf5a426fba5003abff2dc7f814e0ba398e00
----
- MAINTAINERS                                              | 1 -
- .../arm64/include/asm/kvm_arch_timer.h                   | 5 +++--
- arch/arm64/include/asm/kvm_host.h                        | 7 +++----
- .../arm64/include/asm/kvm_hypercalls.h                   | 4 ++--
- .../kvm/arm_pmu.h => arch/arm64/include/asm/kvm_pmu.h    | 5 +++--
- .../kvm/arm_psci.h => arch/arm64/include/asm/kvm_psci.h  | 6 +++---
- .../kvm/arm_vgic.h => arch/arm64/include/asm/kvm_vgic.h  | 4 ++--
- arch/arm64/kvm/arch_timer.c                              | 5 ++---
- arch/arm64/kvm/arm.c                                     | 9 ++++-----
- arch/arm64/kvm/guest.c                                   | 2 +-
- arch/arm64/kvm/handle_exit.c                             | 3 +--
- arch/arm64/kvm/hyp/include/hyp/switch.h                  | 3 +--
- arch/arm64/kvm/hyp/nvhe/switch.c                         | 3 +--
- arch/arm64/kvm/hyp/vhe/switch.c                          | 3 +--
- arch/arm64/kvm/hypercalls.c                              | 5 ++---
- arch/arm64/kvm/irq.h                                     | 7 +++----
- arch/arm64/kvm/pmu-emul.c                                | 4 ++--
- arch/arm64/kvm/psci.c                                    | 5 ++---
- arch/arm64/kvm/pvtime.c                                  | 3 +--
- arch/arm64/kvm/reset.c                                   | 3 +--
- arch/arm64/kvm/trace_arm.h                               | 2 +-
- arch/arm64/kvm/trng.c                                    | 3 +--
- arch/arm64/kvm/vgic/vgic-debug.c                         | 2 +-
- arch/arm64/kvm/vgic/vgic-init.c                          | 2 +-
- arch/arm64/kvm/vgic/vgic-irqfd.c                         | 2 +-
- arch/arm64/kvm/vgic/vgic-kvm-device.c                    | 2 +-
- arch/arm64/kvm/vgic/vgic-mmio-v2.c                       | 2 +-
- arch/arm64/kvm/vgic/vgic-mmio-v3.c                       | 2 +-
- arch/arm64/kvm/vgic/vgic-mmio.c                          | 4 ++--
- arch/arm64/kvm/vgic/vgic-v2.c                            | 2 +-
- arch/arm64/kvm/vgic/vgic-v3.c                            | 4 ++--
- 31 files changed, 51 insertions(+), 63 deletions(-)
- rename include/kvm/arm_arch_timer.h => arch/arm64/include/asm/kvm_arch_timer.h (96%)
- rename include/kvm/arm_hypercalls.h => arch/arm64/include/asm/kvm_hypercalls.h (94%)
- rename include/kvm/arm_pmu.h => arch/arm64/include/asm/kvm_pmu.h (98%)
- rename include/kvm/arm_psci.h => arch/arm64/include/asm/kvm_psci.h (91%)
- rename include/kvm/arm_vgic.h => arch/arm64/include/asm/kvm_vgic.h (99%)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 379945f82a64..f7742e89e7b5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11218,7 +11218,6 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git
- F:	arch/arm64/include/asm/kvm*
- F:	arch/arm64/include/uapi/asm/kvm*
- F:	arch/arm64/kvm/
--F:	include/kvm/arm_*
- F:	tools/testing/selftests/kvm/*/aarch64/
- F:	tools/testing/selftests/kvm/aarch64/
- 
-diff --git a/include/kvm/arm_arch_timer.h b/arch/arm64/include/asm/kvm_arch_timer.h
-similarity index 96%
-rename from include/kvm/arm_arch_timer.h
-rename to arch/arm64/include/asm/kvm_arch_timer.h
-index cd6d8f260eab..8982845a59d8 100644
---- a/include/kvm/arm_arch_timer.h
-+++ b/arch/arm64/include/asm/kvm_arch_timer.h
-@@ -4,11 +4,12 @@
-  * Author: Marc Zyngier <marc.zyngier@arm.com>
-  */
- 
--#ifndef __ASM_ARM_KVM_ARCH_TIMER_H
--#define __ASM_ARM_KVM_ARCH_TIMER_H
-+#ifndef __ARM64_KVM_ARCH_TIMER_H
-+#define __ARM64_KVM_ARCH_TIMER_H
- 
- #include <linux/clocksource.h>
- #include <linux/hrtimer.h>
-+#include <linux/kvm.h>
- 
- enum kvm_arch_timers {
- 	TIMER_PTIMER,
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 45e2136322ba..e33ed7c09a28 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -25,16 +25,15 @@
- #include <asm/daifflags.h>
- #include <asm/fpsimd.h>
- #include <asm/kvm.h>
-+#include <asm/kvm_arch_timer.h>
- #include <asm/kvm_asm.h>
-+#include <asm/kvm_pmu.h>
-+#include <asm/kvm_vgic.h>
- 
- #define __KVM_HAVE_ARCH_INTC_INITIALIZED
- 
- #define KVM_HALT_POLL_NS_DEFAULT 500000
- 
--#include <kvm/arm_vgic.h>
--#include <kvm/arm_arch_timer.h>
--#include <kvm/arm_pmu.h>
--
- #define KVM_MAX_VCPUS VGIC_V3_MAX_CPUS
- 
- #define KVM_VCPU_MAX_FEATURES 7
-diff --git a/include/kvm/arm_hypercalls.h b/arch/arm64/include/asm/kvm_hypercalls.h
-similarity index 94%
-rename from include/kvm/arm_hypercalls.h
-rename to arch/arm64/include/asm/kvm_hypercalls.h
-index 1188f116cf4e..dfebe8dd8dcd 100644
---- a/include/kvm/arm_hypercalls.h
-+++ b/arch/arm64/include/asm/kvm_hypercalls.h
-@@ -1,8 +1,8 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /* Copyright (C) 2019 Arm Ltd. */
- 
--#ifndef __KVM_ARM_HYPERCALLS_H
--#define __KVM_ARM_HYPERCALLS_H
-+#ifndef __ARM64_KVM_HYPERCALLS_H
-+#define __ARM64_KVM_HYPERCALLS_H
- 
- #include <asm/kvm_emulate.h>
- 
-diff --git a/include/kvm/arm_pmu.h b/arch/arm64/include/asm/kvm_pmu.h
-similarity index 98%
-rename from include/kvm/arm_pmu.h
-rename to arch/arm64/include/asm/kvm_pmu.h
-index c0b868ce6a8f..04a1a1565d4a 100644
---- a/include/kvm/arm_pmu.h
-+++ b/arch/arm64/include/asm/kvm_pmu.h
-@@ -4,9 +4,10 @@
-  * Author: Shannon Zhao <shannon.zhao@linaro.org>
-  */
- 
--#ifndef __ASM_ARM_KVM_PMU_H
--#define __ASM_ARM_KVM_PMU_H
-+#ifndef __ARM64_KVM_PMU_H
-+#define __ARM64_KVM_PMU_H
- 
-+#include <linux/kvm.h>
- #include <linux/perf_event.h>
- #include <asm/perf_event.h>
- 
-diff --git a/include/kvm/arm_psci.h b/arch/arm64/include/asm/kvm_psci.h
-similarity index 91%
-rename from include/kvm/arm_psci.h
-rename to arch/arm64/include/asm/kvm_psci.h
-index 6e55b9283789..befec38c572a 100644
---- a/include/kvm/arm_psci.h
-+++ b/arch/arm64/include/asm/kvm_psci.h
-@@ -4,8 +4,8 @@
-  * Author: Marc Zyngier <marc.zyngier@arm.com>
-  */
- 
--#ifndef __KVM_ARM_PSCI_H__
--#define __KVM_ARM_PSCI_H__
-+#ifndef __ARM64_KVM_PSCI_H__
-+#define __ARM64_KVM_PSCI_H__
- 
- #include <linux/kvm_host.h>
- #include <uapi/linux/psci.h>
-@@ -39,4 +39,4 @@ static inline int kvm_psci_version(struct kvm_vcpu *vcpu)
- 
- int kvm_psci_call(struct kvm_vcpu *vcpu);
- 
--#endif /* __KVM_ARM_PSCI_H__ */
-+#endif /* __ARM64_KVM_PSCI_H__ */
-diff --git a/include/kvm/arm_vgic.h b/arch/arm64/include/asm/kvm_vgic.h
-similarity index 99%
-rename from include/kvm/arm_vgic.h
-rename to arch/arm64/include/asm/kvm_vgic.h
-index 4df9e73a8bb5..2a261ca9f8ea 100644
---- a/include/kvm/arm_vgic.h
-+++ b/arch/arm64/include/asm/kvm_vgic.h
-@@ -2,8 +2,8 @@
- /*
-  * Copyright (C) 2015, 2016 ARM Ltd.
-  */
--#ifndef __KVM_ARM_VGIC_H
--#define __KVM_ARM_VGIC_H
-+#ifndef __ARM64_KVM_VGIC_H
-+#define __ARM64_KVM_VGIC_H
- 
- #include <linux/bits.h>
- #include <linux/kvm.h>
-diff --git a/arch/arm64/kvm/arch_timer.c b/arch/arm64/kvm/arch_timer.c
-index bb24a76b4224..f99430a48e0e 100644
---- a/arch/arm64/kvm/arch_timer.c
-+++ b/arch/arm64/kvm/arch_timer.c
-@@ -14,11 +14,10 @@
- 
- #include <clocksource/arm_arch_timer.h>
- #include <asm/arch_timer.h>
-+#include <asm/kvm_arch_timer.h>
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_hyp.h>
--
--#include <kvm/arm_vgic.h>
--#include <kvm/arm_arch_timer.h>
-+#include <asm/kvm_vgic.h>
- 
- #include "trace.h"
- 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 94d33e296e10..6f0b56e7f8c7 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -36,14 +36,13 @@
- #include <asm/virt.h>
- #include <asm/kvm_arm.h>
- #include <asm/kvm_asm.h>
--#include <asm/kvm_mmu.h>
- #include <asm/kvm_emulate.h>
-+#include <asm/kvm_hypercalls.h>
-+#include <asm/kvm_mmu.h>
-+#include <asm/kvm_pmu.h>
-+#include <asm/kvm_psci.h>
- #include <asm/sections.h>
- 
--#include <kvm/arm_hypercalls.h>
--#include <kvm/arm_pmu.h>
--#include <kvm/arm_psci.h>
--
- static enum kvm_mode kvm_mode = KVM_MODE_DEFAULT;
- DEFINE_STATIC_KEY_FALSE(kvm_protected_mode_initialized);
- 
-diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-index 2ff13a3f8479..f60d7886df03 100644
---- a/arch/arm64/kvm/guest.c
-+++ b/arch/arm64/kvm/guest.c
-@@ -18,12 +18,12 @@
- #include <linux/string.h>
- #include <linux/vmalloc.h>
- #include <linux/fs.h>
--#include <kvm/arm_hypercalls.h>
- #include <asm/cputype.h>
- #include <linux/uaccess.h>
- #include <asm/fpsimd.h>
- #include <asm/kvm.h>
- #include <asm/kvm_emulate.h>
-+#include <asm/kvm_hypercalls.h>
- #include <asm/sigcontext.h>
- 
- #include "trace.h"
-diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-index e778eefcf214..cdfd7aef385e 100644
---- a/arch/arm64/kvm/handle_exit.c
-+++ b/arch/arm64/kvm/handle_exit.c
-@@ -15,13 +15,12 @@
- #include <asm/exception.h>
- #include <asm/kvm_asm.h>
- #include <asm/kvm_emulate.h>
-+#include <asm/kvm_hypercalls.h>
- #include <asm/kvm_mmu.h>
- #include <asm/debug-monitors.h>
- #include <asm/stacktrace/nvhe.h>
- #include <asm/traps.h>
- 
--#include <kvm/arm_hypercalls.h>
--
- #define CREATE_TRACE_POINTS
- #include "trace_handle_exit.h"
- 
-diff --git a/arch/arm64/kvm/hyp/include/hyp/switch.h b/arch/arm64/kvm/hyp/include/hyp/switch.h
-index 6cbbb6c02f66..d033fc531ada 100644
---- a/arch/arm64/kvm/hyp/include/hyp/switch.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
-@@ -16,8 +16,6 @@
- #include <linux/jump_label.h>
- #include <uapi/linux/psci.h>
- 
--#include <kvm/arm_psci.h>
--
- #include <asm/barrier.h>
- #include <asm/cpufeature.h>
- #include <asm/extable.h>
-@@ -26,6 +24,7 @@
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_hyp.h>
- #include <asm/kvm_mmu.h>
-+#include <asm/kvm_psci.h>
- #include <asm/fpsimd.h>
- #include <asm/debug-monitors.h>
- #include <asm/processor.h>
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index 8e9d49a964be..02a4f5d10de5 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -13,8 +13,6 @@
- #include <linux/jump_label.h>
- #include <uapi/linux/psci.h>
- 
--#include <kvm/arm_psci.h>
--
- #include <asm/barrier.h>
- #include <asm/cpufeature.h>
- #include <asm/kprobes.h>
-@@ -22,6 +20,7 @@
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_hyp.h>
- #include <asm/kvm_mmu.h>
-+#include <asm/kvm_psci.h>
- #include <asm/fpsimd.h>
- #include <asm/debug-monitors.h>
- #include <asm/processor.h>
-diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
-index 7acb87eaa092..fe3db6a1cbac 100644
---- a/arch/arm64/kvm/hyp/vhe/switch.c
-+++ b/arch/arm64/kvm/hyp/vhe/switch.c
-@@ -13,8 +13,6 @@
- #include <linux/percpu.h>
- #include <uapi/linux/psci.h>
- 
--#include <kvm/arm_psci.h>
--
- #include <asm/barrier.h>
- #include <asm/cpufeature.h>
- #include <asm/kprobes.h>
-@@ -22,6 +20,7 @@
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_hyp.h>
- #include <asm/kvm_mmu.h>
-+#include <asm/kvm_psci.h>
- #include <asm/fpsimd.h>
- #include <asm/debug-monitors.h>
- #include <asm/processor.h>
-diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-index c9f401fa01a9..6804075ce57f 100644
---- a/arch/arm64/kvm/hypercalls.c
-+++ b/arch/arm64/kvm/hypercalls.c
-@@ -5,9 +5,8 @@
- #include <linux/kvm_host.h>
- 
- #include <asm/kvm_emulate.h>
--
--#include <kvm/arm_hypercalls.h>
--#include <kvm/arm_psci.h>
-+#include <asm/kvm_hypercalls.h>
-+#include <asm/kvm_psci.h>
- 
- #define KVM_ARM_SMCCC_STD_FEATURES				\
- 	GENMASK(KVM_REG_ARM_STD_BMAP_BIT_COUNT - 1, 0)
-diff --git a/arch/arm64/kvm/irq.h b/arch/arm64/kvm/irq.h
-index 0d257de42c10..e79301e48938 100644
---- a/arch/arm64/kvm/irq.h
-+++ b/arch/arm64/kvm/irq.h
-@@ -3,14 +3,13 @@
-  * irq.h: in kernel interrupt controller related definitions
-  * Copyright (c) 2016 Red Hat, Inc.
-  *
-- * This header is included by irqchip.c. However, on ARM, interrupt
-- * controller declarations are located in include/kvm/arm_vgic.h since
-- * they are mostly shared between arm and arm64.
-+ * This header is included by irqchip.c. However, on arm64, interrupt
-+ * controller declarations are located in arch/arm64/include/asm/kvm_vgic.h
-  */
- 
- #ifndef __IRQ_H
- #define __IRQ_H
- 
--#include <kvm/arm_vgic.h>
-+#include <asm/kvm_vgic.h>
- 
- #endif
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index 0003c7d37533..c370ffe41076 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -12,8 +12,8 @@
- #include <linux/perf/arm_pmu.h>
- #include <linux/uaccess.h>
- #include <asm/kvm_emulate.h>
--#include <kvm/arm_pmu.h>
--#include <kvm/arm_vgic.h>
-+#include <asm/kvm_pmu.h>
-+#include <asm/kvm_vgic.h>
- 
- DEFINE_STATIC_KEY_FALSE(kvm_arm_pmu_available);
- 
-diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
-index 7fbc4c1b9df0..809710808b25 100644
---- a/arch/arm64/kvm/psci.c
-+++ b/arch/arm64/kvm/psci.c
-@@ -12,9 +12,8 @@
- 
- #include <asm/cputype.h>
- #include <asm/kvm_emulate.h>
--
--#include <kvm/arm_psci.h>
--#include <kvm/arm_hypercalls.h>
-+#include <asm/kvm_hypercalls.h>
-+#include <asm/kvm_psci.h>
- 
- /*
-  * This is an implementation of the Power State Coordination Interface
-diff --git a/arch/arm64/kvm/pvtime.c b/arch/arm64/kvm/pvtime.c
-index 78a09f7a6637..614b2e70b815 100644
---- a/arch/arm64/kvm/pvtime.c
-+++ b/arch/arm64/kvm/pvtime.c
-@@ -5,11 +5,10 @@
- #include <linux/kvm_host.h>
- #include <linux/sched/stat.h>
- 
-+#include <asm/kvm_hypercalls.h>
- #include <asm/kvm_mmu.h>
- #include <asm/pvclock-abi.h>
- 
--#include <kvm/arm_hypercalls.h>
--
- void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
- {
- 	struct kvm *kvm = vcpu->kvm;
-diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
-index 5ae18472205a..86321c968de7 100644
---- a/arch/arm64/kvm/reset.c
-+++ b/arch/arm64/kvm/reset.c
-@@ -17,12 +17,11 @@
- #include <linux/string.h>
- #include <linux/types.h>
- 
--#include <kvm/arm_arch_timer.h>
--
- #include <asm/cpufeature.h>
- #include <asm/cputype.h>
- #include <asm/fpsimd.h>
- #include <asm/ptrace.h>
-+#include <asm/kvm_arch_timer.h>
- #include <asm/kvm_arm.h>
- #include <asm/kvm_asm.h>
- #include <asm/kvm_emulate.h>
-diff --git a/arch/arm64/kvm/trace_arm.h b/arch/arm64/kvm/trace_arm.h
-index 33e4e7dd2719..a4028b46f22f 100644
---- a/arch/arm64/kvm/trace_arm.h
-+++ b/arch/arm64/kvm/trace_arm.h
-@@ -2,7 +2,7 @@
- #if !defined(_TRACE_ARM_ARM64_KVM_H) || defined(TRACE_HEADER_MULTI_READ)
- #define _TRACE_ARM_ARM64_KVM_H
- 
--#include <kvm/arm_arch_timer.h>
-+#include <asm/kvm_arch_timer.h>
- #include <linux/tracepoint.h>
- 
- #undef TRACE_SYSTEM
-diff --git a/arch/arm64/kvm/trng.c b/arch/arm64/kvm/trng.c
-index 99bdd7103c9c..b257d4eace50 100644
---- a/arch/arm64/kvm/trng.c
-+++ b/arch/arm64/kvm/trng.c
-@@ -4,10 +4,9 @@
- #include <linux/arm-smccc.h>
- #include <linux/kvm_host.h>
- 
-+#include <asm/kvm_hypercalls.h>
- #include <asm/kvm_emulate.h>
- 
--#include <kvm/arm_hypercalls.h>
--
- #define ARM_SMCCC_TRNG_VERSION_1_0	0x10000UL
- 
- /* Those values are deliberately separate from the generic SMCCC definitions. */
-diff --git a/arch/arm64/kvm/vgic/vgic-debug.c b/arch/arm64/kvm/vgic/vgic-debug.c
-index 78cde687383c..a75d423b6c2e 100644
---- a/arch/arm64/kvm/vgic/vgic-debug.c
-+++ b/arch/arm64/kvm/vgic/vgic-debug.c
-@@ -9,8 +9,8 @@
- #include <linux/interrupt.h>
- #include <linux/kvm_host.h>
- #include <linux/seq_file.h>
--#include <kvm/arm_vgic.h>
- #include <asm/kvm_mmu.h>
-+#include <asm/kvm_vgic.h>
- #include "vgic.h"
- 
- /*
-diff --git a/arch/arm64/kvm/vgic/vgic-init.c b/arch/arm64/kvm/vgic/vgic-init.c
-index f6d4f4052555..7adc0beae769 100644
---- a/arch/arm64/kvm/vgic/vgic-init.c
-+++ b/arch/arm64/kvm/vgic/vgic-init.c
-@@ -7,9 +7,9 @@
- #include <linux/interrupt.h>
- #include <linux/cpu.h>
- #include <linux/kvm_host.h>
--#include <kvm/arm_vgic.h>
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_mmu.h>
-+#include <asm/kvm_vgic.h>
- #include "vgic.h"
- 
- /*
-diff --git a/arch/arm64/kvm/vgic/vgic-irqfd.c b/arch/arm64/kvm/vgic/vgic-irqfd.c
-index 475059bacedf..c2005f85a614 100644
---- a/arch/arm64/kvm/vgic/vgic-irqfd.c
-+++ b/arch/arm64/kvm/vgic/vgic-irqfd.c
-@@ -5,8 +5,8 @@
- 
- #include <linux/kvm.h>
- #include <linux/kvm_host.h>
-+#include <asm/kvm_vgic.h>
- #include <trace/events/kvm.h>
--#include <kvm/arm_vgic.h>
- #include "vgic.h"
- 
- /**
-diff --git a/arch/arm64/kvm/vgic/vgic-kvm-device.c b/arch/arm64/kvm/vgic/vgic-kvm-device.c
-index edeac2380591..3d628f4916f3 100644
---- a/arch/arm64/kvm/vgic/vgic-kvm-device.c
-+++ b/arch/arm64/kvm/vgic/vgic-kvm-device.c
-@@ -6,7 +6,7 @@
-  * Author: Marc Zyngier <marc.zyngier@arm.com>
-  */
- #include <linux/kvm_host.h>
--#include <kvm/arm_vgic.h>
-+#include <asm/kvm_vgic.h>
- #include <linux/uaccess.h>
- #include <asm/kvm_mmu.h>
- #include <asm/cputype.h>
-diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v2.c b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-index e070cda86e12..682a5a86c512 100644
---- a/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-+++ b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-@@ -7,9 +7,9 @@
- #include <linux/kvm.h>
- #include <linux/kvm_host.h>
- #include <linux/nospec.h>
-+#include <asm/kvm_vgic.h>
- 
- #include <kvm/iodev.h>
--#include <kvm/arm_vgic.h>
- 
- #include "vgic.h"
- #include "vgic-mmio.h"
-diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v3.c b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-index 91201f743033..96a2a3460c3f 100644
---- a/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-+++ b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-@@ -8,8 +8,8 @@
- #include <linux/kvm.h>
- #include <linux/kvm_host.h>
- #include <linux/interrupt.h>
-+#include <asm/kvm_vgic.h>
- #include <kvm/iodev.h>
--#include <kvm/arm_vgic.h>
- 
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_arm.h>
-diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
-index b32d434c1d4a..046a65485ce9 100644
---- a/arch/arm64/kvm/vgic/vgic-mmio.c
-+++ b/arch/arm64/kvm/vgic/vgic-mmio.c
-@@ -9,9 +9,9 @@
- #include <linux/irq.h>
- #include <linux/kvm.h>
- #include <linux/kvm_host.h>
-+#include <asm/kvm_arch_timer.h>
-+#include <asm/kvm_vgic.h>
- #include <kvm/iodev.h>
--#include <kvm/arm_arch_timer.h>
--#include <kvm/arm_vgic.h>
- 
- #include "vgic.h"
- #include "vgic-mmio.h"
-diff --git a/arch/arm64/kvm/vgic/vgic-v2.c b/arch/arm64/kvm/vgic/vgic-v2.c
-index 645648349c99..2a803be83b4b 100644
---- a/arch/arm64/kvm/vgic/vgic-v2.c
-+++ b/arch/arm64/kvm/vgic/vgic-v2.c
-@@ -6,7 +6,7 @@
- #include <linux/irqchip/arm-gic.h>
- #include <linux/kvm.h>
- #include <linux/kvm_host.h>
--#include <kvm/arm_vgic.h>
-+#include <asm/kvm_vgic.h>
- #include <asm/kvm_mmu.h>
- 
- #include "vgic.h"
-diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
-index 826ff6f2a4e7..f904447fc740 100644
---- a/arch/arm64/kvm/vgic/vgic-v3.c
-+++ b/arch/arm64/kvm/vgic/vgic-v3.c
-@@ -5,10 +5,10 @@
- #include <linux/irqdomain.h>
- #include <linux/kvm.h>
- #include <linux/kvm_host.h>
--#include <kvm/arm_vgic.h>
-+#include <asm/kvm_asm.h>
- #include <asm/kvm_hyp.h>
- #include <asm/kvm_mmu.h>
--#include <asm/kvm_asm.h>
-+#include <asm/kvm_vgic.h>
- 
- #include "vgic.h"
- 
-
-base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
--- 
-2.38.1.431.g37b22c650d-goog
-
+Thanks
+Yan
