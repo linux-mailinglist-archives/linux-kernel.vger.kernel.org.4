@@ -2,73 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327B0623901
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E536238B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbiKJBkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S232217AbiKJBPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:15:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbiKJBki (ORCPT
+        with ESMTP id S231925AbiKJBPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:40:38 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29066643D;
-        Wed,  9 Nov 2022 17:40:38 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so247381wmb.0;
-        Wed, 09 Nov 2022 17:40:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vsRXxULf7WH/xl1mUfu+fpJdtkaXSivdXXajCmMxLvU=;
-        b=FNOuWwDb6Zsymll8tFpPyfGqRgdYSWOU4C5qgXqUvwvSE3PiTK7OmUb5lx9vsHgOLV
-         dILocjtv5ziPBDuU9eqo43jVRL9bM02JOD0mQhns6N6OeIATi7pnd1d7FKt6HKlDkskQ
-         vwf6aKJASb+IUmIc03jN35K+LnO3bBzGMVegYXIyWbIhLslwKCt/GB0ZIvKF5QT+yHXZ
-         lxAkdzE5ESAOJGbJBLExkrog4N5J/eJbupJYzByUxXjdyD17FE24EVskOwPVQuNm5N5u
-         P0NcGk6Xjnn6Tqz63nU3x6u6ZSG4j7X95sZ4N/n4o+f1krYfbS9TqAT0IvLkZEPn2Bv9
-         fMdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vsRXxULf7WH/xl1mUfu+fpJdtkaXSivdXXajCmMxLvU=;
-        b=7WxC/Xq/dkr2LtIRnhzacyj7QNtTerbLOYHKw51bJlEZPsJ65tvfWftV9n81mum9O2
-         SgzwSXYq4wykAuEqIBxdnVB2gfKJmkxpTovNT30nT2Vl7Z249viJNogHnXAK5jnL190E
-         koaX62TlVwNkq8H97jsDlB39SIhA1vwVwmUDuAenpzQxZxe6gtfykC/LH++GzKXyyPPp
-         oavNXFV1L6k3MXh78QLQyXBeWgxIM8ALs0yyVGx2o7qfpFDdCdE2DgByDu11TkiwcnVA
-         9gREjiNQn406Yw4Hcxy57p2KVT8xIRAjetWGkk4ydf0XhuBhrWqnLj/ZPidJTRuh4W4u
-         G7NA==
-X-Gm-Message-State: ACrzQf1GQTulTyPijLE+zNaP1o2JI1CzOhyxFgtbzSVpGE8DvUsHoJx4
-        0RX85fDyD1vUoHHaI7PfncVORHI8q18=
-X-Google-Smtp-Source: AMsMyM79nelurPIkMypnvhYXHKMiWzIllpkTFVJqzOxmImEzk0XFigxZp/n/3xaxchGOWxhRtBiYPw==
-X-Received: by 2002:a7b:cbc4:0:b0:3b4:fd67:d70d with SMTP id n4-20020a7bcbc4000000b003b4fd67d70dmr52246783wmi.98.1668044436487;
-        Wed, 09 Nov 2022 17:40:36 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05600c4d9000b003a6a3595edasm3078915wmp.27.2022.11.09.17.40.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 17:40:35 -0800 (PST)
-Date:   Thu, 10 Nov 2022 02:40:33 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Petlozu Pravareshwar <petlozup@nvidia.com>
-Cc:     jonathanh@nvidia.com, p.zabel@pengutronix.de,
-        dmitry.osipenko@collabora.com, ulf.hansson@linaro.org,
-        kkartik@nvidia.com, cai.huoqing@linux.dev, spatra@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] soc/tegra: pmc: Add IO Pad table for tegra234
-Message-ID: <Y2xWkRcsDo7FdAo4@orome>
-References: <20220930160213.2447099-1-petlozup@nvidia.com>
+        Wed, 9 Nov 2022 20:15:30 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A2520BFC
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:15:28 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N73mK03Gqz15MRD;
+        Thu, 10 Nov 2022 09:15:13 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 09:15:26 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 09:15:25 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <jack@suse.com>, <jack@suse.cz>, <yi.zhang@huawei.com>,
+        <yujie.liu@intel.com>, <hch@lst.de>, <akpm@linux-foundation.org>,
+        <bvanassche@acm.org>, <willy@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        <syzbot+908340a8367281960537@syzkaller.appspotmail.com>
+Subject: [PATCH] udf: Fix a slab-out-of-bounds write bug in udf_write_aext()
+Date:   Thu, 10 Nov 2022 01:40:52 +0000
+Message-ID: <20221110014052.3039100-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VqdMED4Jqe9W+ZGV"
-Content-Disposition: inline
-In-Reply-To: <20220930160213.2447099-1-petlozup@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,56 +53,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: ZhangPeng <zhangpeng362@huawei.com>
 
---VqdMED4Jqe9W+ZGV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Syzbot reported a slab-out-of-bounds write bug:
 
-On Fri, Sep 30, 2022 at 04:02:13PM +0000, Petlozu Pravareshwar wrote:
-> Add IO PAD table for tegra234 to allow configuring dpd mode
-> and switching the pins to 1.8V or 3.3V as needed.
->=20
-> In tegra234, DPD registers are reorganized such that there is
-> a DPD_REQ register and a DPD_STATUS register per pad group.
-> This change accordingly updates the PMC driver.
->=20
-> Signed-off-by: Petlozu Pravareshwar <petlozup@nvidia.com>
-> ---
-> v3->v4:
-> * Addressing the review comments from Thierry Reding.
-> v4->v5:
-> * Remove dpd request and status variables from "struct tegra_pmc_regs"
->   as they are no longer needed.
-> v5->v6:
-> * Fix compilation warning: unused variable.
-> ---
->  drivers/soc/tegra/pmc.c | 708 +++++++++++++++++++++++++---------------
->  1 file changed, 439 insertions(+), 269 deletions(-)
+loop0: detected capacity change from 0 to 2048
+==================================================================
+BUG: KASAN: slab-out-of-bounds in udf_write_aext+0x8bc/0x8f0
+fs/udf/inode.c:2103
+Write of size 4 at addr ffff8880777c63f8 by task syz-executor216/3611
 
-Applied, with slight fixups to the commit message.
+CPU: 0 PID: 3611 Comm: syz-executor216 Not tainted
+6.0.0-syzkaller-09589-g55be6084c8e0 #0
+Hardware name: Google Compute Engine/Google Compute Engine, BIOS
+Google 09/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ udf_write_aext+0x8bc/0x8f0 fs/udf/inode.c:2103
+ udf_add_entry+0xd03/0x2ac0 fs/udf/namei.c:482
+ udf_mkdir+0x145/0x650 fs/udf/namei.c:681
+ vfs_mkdir+0x489/0x740 fs/namei.c:4013
+ do_mkdirat+0x28c/0x310 fs/namei.c:4038
+ __do_sys_mkdir fs/namei.c:4058 [inline]
+ __se_sys_mkdir fs/namei.c:4056 [inline]
+ __x64_sys_mkdir+0xf2/0x140 fs/namei.c:4056
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fef3beda479
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89
+f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
+f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe952d4e28 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fef3beda479
+RDX: 00007fef3be986e3 RSI: 0000000000000000 RDI: 0000000020000000
+RBP: 00007fef3be999b0 R08: 00007ffe952d4d10 R09: 0000000000000000
+R10: 00007ffe952d4cf0 R11: 0000000000000246 R12: 00007fef3be99a40
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-Thanks,
-Thierry
+Allocated by task 3611:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:475 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+ kmalloc include/linux/slab.h:600 [inline]
+ kmalloc_array include/linux/slab.h:639 [inline]
+ kcalloc include/linux/slab.h:671 [inline]
+ udf_process_sequence+0xe9/0x4470 fs/udf/super.c:1689
+ udf_load_sequence fs/udf/super.c:1813 [inline]
+ udf_check_anchor_block+0x44b/0x640 fs/udf/super.c:1852
+ udf_scan_anchors+0x1b3/0x6d0 fs/udf/super.c:1885
+ udf_find_anchor fs/udf/super.c:1941 [inline]
+ udf_load_vrs+0x27b/0xbe0 fs/udf/super.c:2006
+ udf_fill_super+0x859/0x1a40 fs/udf/super.c:2184
+ mount_bdev+0x34d/0x410 fs/super.c:1400
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
---VqdMED4Jqe9W+ZGV
-Content-Type: application/pgp-signature; name="signature.asc"
+Freed by task 3611:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:45
+ kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
+ ____kasan_slab_free mm/kasan/common.c:367 [inline]
+ ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:329
+ kasan_slab_free include/linux/kasan.h:200 [inline]
+ slab_free_hook mm/slub.c:1759 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1785
+ slab_free mm/slub.c:3539 [inline]
+ kfree+0xe2/0x580 mm/slub.c:4567
+ udf_process_sequence+0x421/0x4470 fs/udf/super.c:1781
+ udf_load_sequence fs/udf/super.c:1813 [inline]
+ udf_check_anchor_block+0x44b/0x640 fs/udf/super.c:1852
+ udf_scan_anchors+0x1b3/0x6d0 fs/udf/super.c:1885
+ udf_find_anchor fs/udf/super.c:1941 [inline]
+ udf_load_vrs+0x27b/0xbe0 fs/udf/super.c:2006
+ udf_fill_super+0x859/0x1a40 fs/udf/super.c:2184
+ mount_bdev+0x34d/0x410 fs/super.c:1400
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
------BEGIN PGP SIGNATURE-----
+The buggy address belongs to the object at ffff8880777c6000
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 504 bytes to the right of
+ 512-byte region [ffff8880777c6000, ffff8880777c6200)
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNsVo4ACgkQ3SOs138+
-s6GgSQ//cK+0K+RzpZtbjZce876wvnZDxuOxhdSqTj4u4qnmlTOP+Hta28ATqWBZ
-LXJvXMkKz8GtMjJXo+IyktB6KUtP1AckPYen5fKYXxPlyXhE7gv+BU+69wmFG007
-N9kONoY5eWjbAOJwtB0OB5Xjz3EJafFEfRxHGqXuKpkezpy6nwPFtbyf/7ElEnBR
-wz3a9OGhTKsR6HXVquPJPV+a7TME7Gr/ViOvVoMzBfcbFqFMh7hrq3nGBvdCtPJj
-qsSHwyNhrp/hw6iywgXvUGKPtmGgYvtFkod/WX00e9UNLIpLDme6biE3MLL0NGhw
-OBNqR3tWRN07Xcdc0mg0UReWXiGi66LyXtrrRlsLDh4Q5TDKfqUtwTV0Yjv2UtpT
-fgKX+XQWyyI4xaNkjL5f7r84Mxe+lMqA1aS15RrMQAAeXv0GpQuqEShQJwvdjHLO
-7DRoLJ4wOuwpjY1vPKikRmfBjbtKxd2qozGj9W1MSeDOKAIPxj0rSYAcoZHi9HWM
-5396zpyp+wzsARqHPMd7bxzKTnFrAqh3//1ZmoqZmG1SZKkp+0d+bUHzoGcJJCXF
-ejV7lTuXtTnKIE6b3056VZuv2/0ZldI3SnW+bqZnvOOi0GI5l73iaVxYY+Uvwfd7
-ret5vYAgfLpnHcZxvddsjTBfRjv51sEwVVluv+o6xgWyHJezXFQ=
-=OYYT
------END PGP SIGNATURE-----
+The buggy address belongs to the physical page:
+page:ffffea0001ddf100 refcount:1 mapcount:0 mapping:0000000000000000
+index:0x0 pfn:0x777c4
+head:ffffea0001ddf100 order:2 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000001 ffff888011841c80
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask
+pid 2972, tgid 2972 (udevadm), ts 11705893480, free_ts 9906278250
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5549
+ alloc_pages+0x1a6/0x270 mm/mempolicy.c:2270
+ alloc_slab_page mm/slub.c:1829 [inline]
+ allocate_slab+0x27e/0x3d0 mm/slub.c:1974
+ new_slab mm/slub.c:2034 [inline]
+ ___slab_alloc+0x84f/0xe80 mm/slub.c:3036
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3123
+ slab_alloc_node mm/slub.c:3214 [inline]
+ slab_alloc mm/slub.c:3256 [inline]
+ kmem_cache_alloc_trace+0x323/0x3e0 mm/slub.c:3287
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ kernfs_fop_open+0x31a/0xec0 fs/kernfs/file.c:666
+ do_dentry_open+0x6cc/0x13f0 fs/open.c:882
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x1c92/0x28f0 fs/namei.c:3691
+ do_filp_open+0x1b6/0x400 fs/namei.c:3718
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __x64_sys_openat+0x13f/0x1f0 fs/open.c:1337
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1449 [inline]
+ free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1499
+ free_unref_page_prepare mm/page_alloc.c:3380 [inline]
+ free_unref_page+0x19/0x4d0 mm/page_alloc.c:3476
+ free_contig_range+0xb1/0x180 mm/page_alloc.c:9457
+ destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1031
+ debug_vm_pgtable+0x2945/0x29d6 mm/debug_vm_pgtable.c:1354
+ do_one_initcall+0xfe/0x650 init/main.c:1296
+ do_initcall_level init/main.c:1369 [inline]
+ do_initcalls init/main.c:1385 [inline]
+ do_basic_setup init/main.c:1404 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1623
+ kernel_init+0x1a/0x1d0 init/main.c:1512
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
 
---VqdMED4Jqe9W+ZGV--
+Memory state around the buggy address:
+ ffff8880777c6280: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880777c6300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8880777c6380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                                                                ^
+ ffff8880777c6400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8880777c6480: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+Writing to the address ptr will cause an out-of-bounds bug if the inode
+allocation type is ICBTAG_FLAG_AD_SHORT (or ICBTAG_FLAG_AD_LONG), the
+buffer head pointer is NULL, and iinfo->i_lenEAttr is 0. In this case,
+the address ptr is iinfo->i_data - sizeof(struct short_ad), and the
+out-of-bounds offset is the size of struct short_ad. This can be fixed
+by adding the size of struct short_ad (or struct long_ad) to the address
+ptr.
+
+Reported-by: syzbot+908340a8367281960537@syzkaller.appspotmail.com
+Fixes: 2c948b3f86e5 ("udf: Avoid IO in udf_clear_inode")
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+---
+ fs/udf/inode.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/fs/udf/inode.c b/fs/udf/inode.c
+index 8d06daed549f..abb3257b4c74 100644
+--- a/fs/udf/inode.c
++++ b/fs/udf/inode.c
+@@ -2090,10 +2090,15 @@ void udf_write_aext(struct inode *inode, struct extent_position *epos,
+ 	struct long_ad *lad;
+ 	struct udf_inode_info *iinfo = UDF_I(inode);
+ 
+-	if (!epos->bh)
++	if (!epos->bh) {
+ 		ptr = iinfo->i_data + epos->offset -
+ 			udf_file_entry_alloc_offset(inode) +
+ 			iinfo->i_lenEAttr;
++		if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_SHORT)
++			ptr = ptr + sizeof(struct short_ad);
++		else if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_LONG)
++			ptr = ptr + sizeof(struct long_ad);
++	}
+ 	else
+ 		ptr = epos->bh->b_data + epos->offset;
+ 
+-- 
+2.25.1
+
