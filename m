@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF0E624C35
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7A7624C3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232022AbiKJUxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S232027AbiKJUzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbiKJUxl (ORCPT
+        with ESMTP id S231426AbiKJUzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:53:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C96205C2;
-        Thu, 10 Nov 2022 12:53:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 10 Nov 2022 15:55:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A272424BF6;
+        Thu, 10 Nov 2022 12:55:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 685E5B82382;
-        Thu, 10 Nov 2022 20:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7196AC433C1;
-        Thu, 10 Nov 2022 20:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668113618;
-        bh=J6mfoht5qBrFBxrC6sH4TYOnxV6LF52emDjer2Ypdwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WH7TRMx7C5cotdLr9EDFhUqhQiizydM+OKkWtChuu54yxZ5+cbJaIDl2Ce3iPuuYL
-         Em5IoexpZDpO95CAG61oVilno/P4KjfrtR8/uHu76MjLwphcqSBVzlvSNLmTlc7kkq
-         qZPjPly3CfH5o5Rfhm7SKTXUJdxXq7uklbniD8dzy6M7W+ef5H2n5UA1+0vRHS+9Ke
-         O6MN4AD0yPgGVSeHg1LjyWiPssBp6xTQ8SukHR6UueTJNjA3HSYJK8AqljQLWtDZU9
-         vlC5DO9lZjAzQd1rxdBJBsYAifKnAxG9LviHCsPEUB4qMJLPVr0jVgGTxdEYB7NLD8
-         OK32ps9JyB2Ww==
-Date:   Thu, 10 Nov 2022 20:53:32 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
-        tglx@linutronix.de, maz@kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH 00/12] Add support for the Cirrus Logic CS48L32 audio
- codecs
-Message-ID: <Y21kzH4gDd6ZrpVm@sirena.org.uk>
-References: <20221109165331.29332-1-rf@opensource.cirrus.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 42D7F20136;
+        Thu, 10 Nov 2022 20:55:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668113700;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qVn09/fMcbu7gKxOIOXHM9CyA+qxoMo1sg5FRs3O4Ps=;
+        b=YEX4NQNtefIWGG6qovrbgjZGy7NEVntfw+YwnYbKxLY+jzvQ00MYRba8hwTwoTqLVlYPst
+        QYHxFSukuRiZHNTwDwn+SipsiVXIx3NORob70maWzoOG3XTlOlGtq6A0EfmiWfUMmEEoSD
+        51pC+NBZUD2irDrWfWx4Y30qNYO2x8k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668113700;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qVn09/fMcbu7gKxOIOXHM9CyA+qxoMo1sg5FRs3O4Ps=;
+        b=2E+9AEeYdCzoyprvx+8No5KjD2zXwT/gWZpPPZNWaN/Al8RerTurINu908YndX+kZQJacF
+        tMMltjyVEcdIQ5Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F17B01332F;
+        Thu, 10 Nov 2022 20:54:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X7vlOSNlbWNncwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 10 Nov 2022 20:54:59 +0000
+Date:   Thu, 10 Nov 2022 21:54:36 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     ChenXiaoSong <chenxiaosong2@huawei.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, zhangxiaoxu5@huawei.com
+Subject: Re: [PATCH] btrfs: qgroup: fix sleep from invalid context bug in
+ update_qgroup_limit_item()
+Message-ID: <20221110205436.GJ5824@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O8txgz163g9adksm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221109165331.29332-1-rf@opensource.cirrus.com>
-X-Cookie: Torque is cheap.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 10, 2022 at 10:13:42PM +0800, ChenXiaoSong wrote:
+> Syzkaller reported BUG as follows:
+> 
+>   BUG: sleeping function called from invalid context at
+>        include/linux/sched/mm.h:274
+>   Call Trace:
+>    <TASK>
+>    dump_stack_lvl+0xcd/0x134
+>    __might_resched.cold+0x222/0x26b
+>    kmem_cache_alloc+0x2e7/0x3c0
+>    update_qgroup_limit_item+0xe1/0x390
+>    btrfs_qgroup_inherit+0x147b/0x1ee0
+>    create_subvol+0x4eb/0x1710
+>    btrfs_mksubvol+0xfe5/0x13f0
+>    __btrfs_ioctl_snap_create+0x2b0/0x430
+>    btrfs_ioctl_snap_create_v2+0x25a/0x520
+>    btrfs_ioctl+0x2a1c/0x5ce0
+>    __x64_sys_ioctl+0x193/0x200
+>    do_syscall_64+0x35/0x80
+> 
+> Fix this by introducing __update_qgroup_limit_item() helper, allocate
+> memory outside of the spin lock.
+> 
+> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
 
---O8txgz163g9adksm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Added to misc-next, thanks.
 
-On Wed, Nov 09, 2022 at 04:53:19PM +0000, Richard Fitzgerald wrote:
+> +	path = btrfs_alloc_path();
 
->   regulator: arizona-micsupp: Don't hardcode use of ARIZONA defines
->   regulator: arizona-micsupp: Don't use a common regulator name
->   ASoC: wm_adsp: Allow client to hook into pre_run callback
-
-The regulator and ASoC bits look good.  It looks like this is going to
-need another spin for at least the DT and irqchip bits, I think it'd
-make sense to take the above cleanup patches for this release even if
-everything else misses it to cut down on future patch volume.  I'll
-leave it for a bit and do that unless someone has concerns, it's going
-to be easier than applying and sending pull requests.
-
---O8txgz163g9adksm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNtZMsACgkQJNaLcl1U
-h9D4zAf7BAdmu24FzKu8K/VatxXXCPdtwbu8htaSXj1JNOmeGwQq1PghD43yTI2D
-w09fTstt6knzfqx3NI991TN+bU4EQhXBRpYbRqoDiTMeB6Ov0X9GOiugQNuplkwO
-tAn56mY3y+59XOeqkq8V4dC8DcvRqoZqIgVqFjguhUtCgH1BURUXfa8dbChg3jsI
-HxTcpmlQCeQwGTypJC3B1v78Z9rlwMm2xlm3u4uxzEwWcFSUz1T7T+z90a/GzlL9
-1C/QqTZIllH+HbabJ4Hb1Jt1gdGNqi5ZmMghTSF5XRMkWQNDN9QwuJ2hLDZ8ti0k
-942m5A0H518y12xFzo3EJ0zJmx62Lg==
-=3Mhi
------END PGP SIGNATURE-----
-
---O8txgz163g9adksm--
+btrfs_alloc_path uses fixed GFP_NOFS flags for kmem_cache_alloc but that
+does not try to detect if it could sleep or not.
