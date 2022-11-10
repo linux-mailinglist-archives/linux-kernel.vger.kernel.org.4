@@ -2,74 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B2262445F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:33:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED135624464
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiKJOdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S230442AbiKJOeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:34:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiKJOdf (ORCPT
+        with ESMTP id S229567AbiKJOeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:33:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535E5F0F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:33:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF27F618F7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:33:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02142C433C1;
-        Thu, 10 Nov 2022 14:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668090811;
-        bh=+rHJIUa3DRKlQrklPQi153v0vgi/mtpzdYW9aIbOaa4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DYvHGydPUtMr6U9+8ypPRydeMyiPJGQ6rakj+r6k8Gx8fdAWdZBGFbQ2NyvB6AgCw
-         z70QISOT/2m0DOL++qT67fVZ10wD1BeQGqG++IviOGO9bvovEltqXjL2IF3wPm2EF9
-         PVKFwDyNCjUYkLiXpNSw1+5wLyRW4vw+V5KWFZko=
-Date:   Thu, 10 Nov 2022 15:33:28 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] virt: fsl_hypervisor: Replace NO_IRQ by 0
-Message-ID: <Y20LuAqHljYI4Bo8@kroah.com>
-References: <20dd37b96bac0a72caef28e7462b32c93487a516.1665033909.git.christophe.leroy@csgroup.eu>
- <bccb8729-7f0a-5f97-d1b1-5401ed9f3235@csgroup.eu>
+        Thu, 10 Nov 2022 09:34:11 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0140CCD9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:34:10 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id g12so2511767wrs.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:34:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gFkJvxzDyOD+/g4BqrG+EdNY7BBRWgxbD/xVAB1He3Y=;
+        b=pXS6F2+ZpLbrs9x2zrEtCa9vpJLRzCrUpxOrepE3+zqpqWJWqYCgORRklE47sTAce8
+         AiMgQRHSRueP/KSqhE5JIrCH9gFP8CCCbpAv5QJOKOUcgakhGTFyyZ1BcMtti7+JYWk2
+         fDFdYy6Or5LyXJq+jPE7QksHvM3I1N6LFC8gpvi72JmZxvTmFDh49lD8v+bSSZEao/J+
+         QLpOUFKG2ik3AmF61TEn1i2rCpU+s0S2JOMgZ4+fAnQkO9sGDvQbawbd2i4Wxx4GUCt5
+         cIYhPPVpHMASGDHN88brICjcjnWSlx1gaOJYcA4KD/OYc3dVBxoUhx8iV4YEe/7zLgXx
+         uLqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gFkJvxzDyOD+/g4BqrG+EdNY7BBRWgxbD/xVAB1He3Y=;
+        b=79nNpp+EPsGl7zId07WJKZJuoz0vcEAk+n8EPX6k+qUnyRVSc+64rmjBEvGxrm8W8y
+         qt6g4IcxULK/y+3WVEbU+MskOAXuX4+8aW/Lah4uF8fQ5VpD5ZNX6q182cV4r1xwJt4C
+         VHCY5LmZt+wSpIfGXgzQhyKyQEAI64wZezthaDKCzjeyStn1XGRVTaLZlrDlYyrGY+QZ
+         kSsKv7Zm8+EzPeEdvsrlaKLdfig3Atz2iG67kO90jxu1mKiEYVsX9JYCXFRYSF6SOgx2
+         qppToyUMXedBHFWOyHeEv+nEWiNuxO5DB5sVpd5tSJlcEuEil1wL8T8oVWCChT8NVJnZ
+         jlCQ==
+X-Gm-Message-State: ACrzQf1D/Z9+9CnmbF38+3MxW/IAWW/2THKWjWu/sfVIk+QQPrhoQ2IP
+        JI3sgbBcM5lW2Xm7mWJEzGEEHA==
+X-Google-Smtp-Source: AMsMyM7dCWg8TonEZqnjcJKIcaSNz+ZbAC5sH2YRN4ytwIMarla1ANqQ6QffOhSgQekipZYBEfOt+A==
+X-Received: by 2002:adf:d1ec:0:b0:236:880f:2adf with SMTP id g12-20020adfd1ec000000b00236880f2adfmr42221342wrd.617.1668090848473;
+        Thu, 10 Nov 2022 06:34:08 -0800 (PST)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id p9-20020a05600c468900b003cf75213bb9sm5648477wmo.8.2022.11.10.06.34.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 06:34:07 -0800 (PST)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Punit Agrawal <punit.agrawal@bytedance.com>, shuah@kernel.org,
+        adobriyan@gmail.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [External] Re: [PATCH v2 1/2] selftests: proc: Fix
+ proc-empty-vm build error on non x86_64
+References: <20221109221104.1797802-1-punit.agrawal@bytedance.com>
+        <20221109160243.0db030ca1cbae5f180af3855@linux-foundation.org>
+Date:   Thu, 10 Nov 2022 14:34:07 +0000
+In-Reply-To: <20221109160243.0db030ca1cbae5f180af3855@linux-foundation.org>
+        (Andrew Morton's message of "Wed, 9 Nov 2022 16:02:43 -0800")
+Message-ID: <8735aq280w.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bccb8729-7f0a-5f97-d1b1-5401ed9f3235@csgroup.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 01:25:14PM +0000, Christophe Leroy wrote:
-> Hi Greg,
-> 
-> Le 06/10/2022 à 07:27, Christophe Leroy a écrit :
-> > NO_IRQ is used to check the return of irq_of_parse_and_map().
-> > 
-> > On some architecture NO_IRQ is 0, on other architectures it is -1.
-> > 
-> > irq_of_parse_and_map() returns 0 on error, independent of NO_IRQ.
-> > 
-> > So use 0 instead of using NO_IRQ.
-> > 
-> > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> 
-> Do you plan to apply this patch, or is any change required ?
+Hi Andrew,
 
-It is in my review queue, give me time to catch up...
+Thanks for taking a look.
 
-thanks,
+Andrew Morton <akpm@linux-foundation.org> writes:
 
-greg k-h
+> On Wed,  9 Nov 2022 22:11:03 +0000 Punit Agrawal <punit.agrawal@bytedance.com> wrote:
+>
+>> The proc-empty-vm test is implemented for x86_64 and fails to build
+>> for other architectures. Rather then emitting a compiler error it
+>> would be preferable to only build the test on supported architectures.
+>
+> Why does it fail?  What would be involved in making it available
+> on other architectures?
+
+The test is written to fail building on architectures other than
+x86_64.
+
+    #ifdef __amd64__
+                    munmap(NULL, ((size_t)1 << 47) - 4096);
+    #else
+    #error "implement 'unmap everything'"
+    #endif
+
+I hit the build failure while semi-automating the running of tests on
+internal infrastructure. 
+
+I am not familiar with the issue being tested but after a bit of
+staring, it looks like there are two architecture dependent components
+to the tests -
+
+    1. TASK_SIZE / application memory layout - the test unmaps the
+       entire the user virtual address space. For this, it needs to know
+       the length to pass to munmap().
+
+       Although it's possible to add this per-architecture, I am not
+       sure if there is a way to discover the length passed to munmap().
+
+    2. How the vsyscall page (if implemented) is mapped - this
+       influences the known good values used for comparison in the test.
+
+       It doesn't look like vsyscall page is used on arm64 but I am not
+       sure about the situation with other architectures.
+
+(Alexey, please add if I've missed anything)
+
+Thanks,
+Punit
