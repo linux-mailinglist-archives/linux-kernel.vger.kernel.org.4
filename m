@@ -2,173 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F51A623BBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4D2623BBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbiKJGXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S230101AbiKJGYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiKJGW7 (ORCPT
+        with ESMTP id S232471AbiKJGXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:22:59 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5512EF4E;
-        Wed,  9 Nov 2022 22:22:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7BbD3G1Kz4xZ0;
-        Thu, 10 Nov 2022 17:22:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668061370;
-        bh=gmweExB1iS+T+b9aVwFAzpsdiF1p2TuESW4E973DwR0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n/0tSIZC5kw/ZKiqdnIz1roP5UoKo19hUAf7a61uarMSCcBiT4bVxjiZDVkNqF/hA
-         184LEbjUgSlvKpH6K0nNnTvopqqbd3ayoPzg9SK1BiYef0nQZ4BrZeK83japFMHXww
-         OnhyqBw27jGmqJtoVgwfx/2mdFOZ5OjDo98cOSio2NbA7+imd8uP4pgOk2yzUyqVYO
-         BAFczmyjz25V8izLcEzY4D8plmsVomlyeu9zwuRAZb9i5jU7EGOwFZBOqmtf8IFpSr
-         xzUMRfcG2mttp5AxrphKD8KbS7OAuQ2JyxBOXb4PIv27dkPK6Fo0Qr033Qk098bE+/
-         nnhymQVExneuA==
-Date:   Thu, 10 Nov 2022 17:22:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: linux-next: manual merge of the mm-stable tree with the block tree
-Message-ID: <20221110172246.32792d6a@canb.auug.org.au>
+        Thu, 10 Nov 2022 01:23:50 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B30F2B1AB;
+        Wed,  9 Nov 2022 22:23:49 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7Bc60S6Bz15MSy;
+        Thu, 10 Nov 2022 14:23:34 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 14:23:46 +0800
+Message-ID: <80252c82-9c34-aefe-8422-fa247092dcec@huawei.com>
+Date:   Thu, 10 Nov 2022 14:23:46 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/G8I5UT9GrY4iUkaFgTYRtJi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v3] bpf: Initialize same number of free nodes for
+ each pcpu_freelist
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+References: <20221110035039.54859-1-xukuohai@huawei.com>
+ <CAEf4BzYMExNVP353xUmkD=M7_QKDG8Ukm0T7D9aCZG=-GToiaA@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CAEf4BzYMExNVP353xUmkD=M7_QKDG8Ukm0T7D9aCZG=-GToiaA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/G8I5UT9GrY4iUkaFgTYRtJi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/10/2022 12:05 PM, Andrii Nakryiko wrote:
+> On Wed, Nov 9, 2022 at 7:33 PM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>
+>> pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
+>> free nodes for some CPUs, and then possibly one CPU with fewer nodes,
+>> followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
+>> and num_possible_cpus() == 32, CPU 0~27 each gets 9 free nodes, CPU 28 gets
+>> 4 free nodes, CPU 29~31 get 0 free nodes, while in fact each CPU should get
+>> 8 nodes equally.
+>>
+>> This patch initializes nr_elems / num_possible_cpus() free nodes for each
+>> CPU firstly, then allocates the remaining free nodes by one for each CPU
+>> until no free nodes left.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> Acked-by: Yonghong Song <yhs@fb.com>
+>> ---
+>> v3: Simplify code as suggested by Andrii
+>> v2: Update commit message and add Yonghong's ack
+>> ---
+>>   kernel/bpf/percpu_freelist.c | 27 ++++++++++++++-------------
+>>   1 file changed, 14 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
+>> index b6e7f5c5b9ab..bd60070c079f 100644
+>> --- a/kernel/bpf/percpu_freelist.c
+>> +++ b/kernel/bpf/percpu_freelist.c
+>> @@ -100,22 +100,23 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
+>>                              u32 nr_elems)
+>>   {
+>>          struct pcpu_freelist_head *head;
+>> -       int i, cpu, pcpu_entries;
+>> +       unsigned int cpu, cpu_idx, i, j, n, m;
+>>
+>> -       pcpu_entries = nr_elems / num_possible_cpus() + 1;
+>> -       i = 0;
+>> +       n = nr_elems / num_possible_cpus();
+>> +       m = nr_elems % num_possible_cpus();
+>> +
+>> +       cpu_idx = 0;
+>>
+>>          for_each_possible_cpu(cpu) {
+>> -again:
+>> -               head = per_cpu_ptr(s->freelist, cpu);
+>> -               /* No locking required as this is not visible yet. */
+>> -               pcpu_freelist_push_node(head, buf);
+>> -               i++;
+>> -               buf += elem_size;
+>> -               if (i == nr_elems)
+>> -                       break;
+>> -               if (i % pcpu_entries)
+>> -                       goto again;
+>> +               j = min(n + (cpu_idx < m ? 1 : 0), nr_elems);
+> 
+> why the min() here?
+> 
 
-Hi all,
+to avoid out-of-bounds in case nr_elems is less than the total number of CPUs,
+seems not very necessary, but the original code avoids this as well, I just kept
+the logic
 
-Today's linux-next merge of the mm-stable tree got a conflict in:
+>> +               for (i = 0; i < j; i++) {
+>> +                       head = per_cpu_ptr(s->freelist, cpu);
+>> +                       /* No locking required as this is not visible yet. */
+>> +                       pcpu_freelist_push_node(head, buf);
+>> +                       buf += elem_size;
+>> +               }
+>> +               nr_elems -= j;
+>> +               cpu_idx++;
+>>          }
+>>   }
+>>
+>> --
+>> 2.30.2
+>>
+> .
 
-  mm/hugetlb.c
-
-between commit:
-
-  0f0892356fa1 ("mm: allow multiple error returns in try_grab_page()")
-
-from the block tree and commit:
-
-  57a196a58421 ("hugetlb: simplify hugetlb handling in follow_page_mask")
-
-from the mm-stable tree.
-
-I fixed it up (I think - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc mm/hugetlb.c
-index 3373d24e4a97,fdb36afea2b2..000000000000
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@@ -6222,6 -6199,62 +6212,62 @@@ static inline bool __follow_hugetlb_mus
-  	return false;
-  }
- =20
-+ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
-+ 				unsigned long address, unsigned int flags)
-+ {
-+ 	struct hstate *h =3D hstate_vma(vma);
-+ 	struct mm_struct *mm =3D vma->vm_mm;
-+ 	unsigned long haddr =3D address & huge_page_mask(h);
-+ 	struct page *page =3D NULL;
-+ 	spinlock_t *ptl;
-+ 	pte_t *pte, entry;
-+=20
-+ 	/*
-+ 	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
-+ 	 * follow_hugetlb_page().
-+ 	 */
-+ 	if (WARN_ON_ONCE(flags & FOLL_PIN))
-+ 		return NULL;
-+=20
-+ retry:
-+ 	pte =3D huge_pte_offset(mm, haddr, huge_page_size(h));
-+ 	if (!pte)
-+ 		return NULL;
-+=20
-+ 	ptl =3D huge_pte_lock(h, mm, pte);
-+ 	entry =3D huge_ptep_get(pte);
-+ 	if (pte_present(entry)) {
-+ 		page =3D pte_page(entry) +
-+ 				((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
-+ 		/*
-+ 		 * Note that page may be a sub-page, and with vmemmap
-+ 		 * optimizations the page struct may be read only.
-+ 		 * try_grab_page() will increase the ref count on the
-+ 		 * head page, so this will be OK.
-+ 		 *
- -		 * try_grab_page() should always succeed here, because we hold
- -		 * the ptl lock and have verified pte_present().
-++		 * try_grab_page() should always be able to get the page here,
-++		 * because we hold the ptl lock and have verified pte_present().
-+ 		 */
- -		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
-++		if (try_grab_page(page, flags)) {
-+ 			page =3D NULL;
-+ 			goto out;
-+ 		}
-+ 	} else {
-+ 		if (is_hugetlb_entry_migration(entry)) {
-+ 			spin_unlock(ptl);
-+ 			__migration_entry_wait_huge(pte, ptl);
-+ 			goto retry;
-+ 		}
-+ 		/*
-+ 		 * hwpoisoned entry is treated as no_page_table in
-+ 		 * follow_page_mask().
-+ 		 */
-+ 	}
-+ out:
-+ 	spin_unlock(ptl);
-+ 	return page;
-+ }
-+=20
-  long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
-  			 struct page **pages, struct vm_area_struct **vmas,
-  			 unsigned long *position, unsigned long *nr_pages,
-
---Sig_/G8I5UT9GrY4iUkaFgTYRtJi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsmLYACgkQAVBC80lX
-0Gz9EQf+IvnQgbyxGzKmAduyxuE8/1KT+uNqxGq8qCbdawRXI4x3yg/PJB17Ims+
-zWDVSnHjTooysQuc+nhxJmzd8KoEJA/m+YEmRqNxfLCJkSCunoKM/0Q9CnA3Brqx
-V0bm+Mc/e7tDcUwffgSRbjPe7CulMG40HkwvBC3anjp+Ot+EdQ2QjlXMiaXcSl+O
-gU2eRlnNeEMica0/ll0ubWNzeM6O42+ArQtqa701+6pKR8dzNaxOCdOPdF2FXPJB
-jhLp4QFMyhaFkS5/PzYVzOu0m4PaVeXLYrFOEeCxx2ECvTQpeIZ7etdF6IXxGsp+
-b4JwdxV3TGdYHCWW8YbllZhGsYcLdQ==
-=E4g8
------END PGP SIGNATURE-----
-
---Sig_/G8I5UT9GrY4iUkaFgTYRtJi--
