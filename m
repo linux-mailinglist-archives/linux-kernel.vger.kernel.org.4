@@ -2,232 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014F162399D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241F26239A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232445AbiKJCMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
+        id S232323AbiKJCMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbiKJCLz (ORCPT
+        with ESMTP id S231571AbiKJCM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:11:55 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19A5FADE;
-        Wed,  9 Nov 2022 18:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668046314; x=1699582314;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=8fFD56dxzIdCVv7sUmDRDuXnXsJhFv8J8DlSg219eA0=;
-  b=c8CQ6hREqnmTCDW+y8wi8uKFgceSvfmsbfapCtbdi9dHpOtBC/8S2qmh
-   KQYnhqFtifCzqippSYt2V87IaXctXaDSKJwn1i70PPtUNb6B34H8ugS3j
-   34p4bnJQmlIvotoUc33mn2Ffpp9dDn06ajaRGcLJP2lbM07w6hB/jOvYI
-   DO40nhnn3Pj1Z7ebnWtzUlWuugqWadtd1koSV3bmHvUOYXhI3gZLVD+76
-   gCY2rvDWHu7bMtpYy2X69KjKrXX8dxUxJ98+5YkTTAZ9ZQFJF1NrswJk7
-   ILZwS5dM39yI5G/5IFerwdi4urYrOuXIitrlNCD0D5flEZ8ohQT7UXpzr
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="397479579"
-X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
-   d="scan'208";a="397479579"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 18:11:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="636985967"
-X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
-   d="scan'208";a="636985967"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga002.jf.intel.com with ESMTP; 09 Nov 2022 18:11:53 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 18:11:53 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 9 Nov 2022 18:11:53 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 9 Nov 2022 18:11:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PKc3f6O5ecXuYZQzw3MEZnn7OI7/Jpjo+rKK6XDOMP00wnWNjBfCAPgpj3xi27Hmhfpu5tSsRVpxsRJlhDdATa36st6NpPmw7CEMuF9iQ4e2A+taeKHjkAUWGA1cwWamnKn8siwymuoxmJTWCantQ2mOKA6xLhXZMbvLIDHbQssa9ltjurJ3j89gO8H16CIQHjEcH52uxVcQk0i3Eu1PkhX9HUV9a37vyk64pdUBMQCgfpqlqSrctgVFIuKCL/rC1Zb45V0mA+FyKJdN2ytviaSasnW64wk7W5l1XYqtJ/KsP3wy7pOKCzIOchFvx1APCdEaT6f3+yG4FFJb+qBXDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8fFD56dxzIdCVv7sUmDRDuXnXsJhFv8J8DlSg219eA0=;
- b=BNABpsuqK60KWpARF95uBpTo2mB/dpHjKrW+fjDBa5jjkcQTCdS6+P0ALGQHO4TTi9g1sGyjNUudFAtwWyD1QgTTbpSxgp8K/UEd90DV9Ow8Vtg4z7Hv4vq8uJkfiW9Wh48CGt3jBstM0l21bZtaOIQbcb1uBt4gcoqXmM7v+Og+b33RdPJkHbpzJlGIz8aE3/xjZO4Gt3QLP211v0aDpgMl7taoKfSU5aqQT2LFXUEMAzwAw73hzq5QgQqm35Op2AtU/rB/wLUJBVWlZQXPOIg9lj0jzYA16dZB8xEBnXzfGvW4xRy7DOp86R1FC436E+iqg/xUURS/jUJLG1y0sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by DM8PR11MB5623.namprd11.prod.outlook.com (2603:10b6:8:25::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Thu, 10 Nov
- 2022 02:11:47 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::6eb:99bf:5c45:a94b%3]) with mapi id 15.20.5791.026; Thu, 10 Nov 2022
- 02:11:47 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Yao, Yuan" <yuan.yao@intel.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
-Thread-Topic: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
-Thread-Index: AQHY7xJy2pUg1L4bCkib6AOkbzD9bK43arEAgAAKuoA=
-Date:   Thu, 10 Nov 2022 02:11:47 +0000
-Message-ID: <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
-         <20221102231911.3107438-39-seanjc@google.com>
-         <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
-In-Reply-To: <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM8PR11MB5623:EE_
-x-ms-office365-filtering-correlation-id: 02decdf7-040c-44a0-8c2c-08dac2c0ebbe
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PHf0NSzOjavqdxwx8nOmYNdz/VMIy/Qk0wSK6vxb0p+aVVqdI1VKftPdVBnvUWZ6e39In6Tz5p6lMZnXhvGoi3nCB8RiHR1oYOpCtaLYjSY6nXWqCJ1r5EepuOhoLEYDvvScq/CrB52+cMQOJrZ/D2zY6EbDEb+cTsb/WGU3JczZ5RnMNX1OP5LYYxjd/Ffxp5CfnZDSJgq8PMMrpheGg/m4iYVav6h0XxZwDMM45INioCyGVuu38K1sQD4U/AnCpdFlmt+PgMoN2vfkxQE50GvzySgLio622eip2reCEr7L+fjMQFOkV6jssK7g6MDY8v+KNg4MUfV7jKMrhwyUO/5YmUyQQjF2DcxbfJavIUsK0b11Ya9bi6V2kgi7yfVNUu9l2ryjP0L4o9Nqoz1N80TJcW25bFpomb4HDua6ujVF1CcDuMZRAN8lWlTgMKbGK4d1km4R9BxtImbV8Y3e5aePXwAbmVMFdQyA4ryu/BXaPsJD1+WLk2KsnKU6eRpZ6nNpcKaRwJbNDVBDNgZ8udDJTXjYaNddwRqXxVBqB94efHN0On1wH3Lwd+LY/DaAGXa+dw7QSPD/r7YPY/zpFpmGNx3S3h5a7Cks3TZLS137htewHBZ9YtI5ayrcA98veAB8zQkughZ1J+GGF7liuPI6Gxsu8Gx3Pjl728gq23gbvOXMfOakFtIA1RfbKyb+Nauk9iLSJfY4TkLMcomkrisx6bnBdonYiQrYHJhUaD0HEmGq3jDvpdguyqjAdp+2PG3s2lVGDWxKsw8NNMgsxpyMvgt5S0Cvtfs7gAdnXJ0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(366004)(376002)(39860400002)(396003)(451199015)(41300700001)(8936002)(5660300002)(7416002)(7406005)(66476007)(66556008)(36756003)(6506007)(2906002)(8676002)(66946007)(4326008)(91956017)(83380400001)(66446008)(54906003)(71200400001)(64756008)(76116006)(110136005)(316002)(4001150100001)(82960400001)(86362001)(2616005)(6486002)(38100700002)(122000001)(26005)(921005)(38070700005)(478600001)(186003)(6512007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TmdpZVdEeWh6bmIvSWVHeW5YSEl1QXRVaXdOVGNPVU1jajd5TVpXNFZHckZN?=
- =?utf-8?B?cWo3UnJ3eWtJaGE3bFdTeHk0N3E4T3JDUlRwZVl3QzR0b3JUaDFaQ0xJbDVu?=
- =?utf-8?B?c0htQWhrVUR4aVZBejdjUCswQmhQcklnUkMzSUQveGxmQnZMZmhZak9CekZ0?=
- =?utf-8?B?ajZQQ0FOYlVSUDkxQncvWlg3QkVLY0luNm9pek9TdkZMdGU4V1dkaG1hNXVG?=
- =?utf-8?B?aHh6SmV5R2ZqdFd3OFNzdjhWU0tKcXNZT24yTHJVWVYyUWNYNURsbjM2SGM5?=
- =?utf-8?B?VkR6TkpOdC9SNHY3cENKR1lqYTlOSzJ1clYyV3VVcm1DWlVuUEYvM08wcnF3?=
- =?utf-8?B?QUExNkw1TDJ2S2RvOTV4YmdWWVE0MVl1ZXlXUmh0WGdrbnloNnBrZyt1aWk5?=
- =?utf-8?B?enlYKzNDalN2TFVSc2dEK2pOVW41djBiWXlWRWN6Tko4NUx0R0R4L0YyK2dO?=
- =?utf-8?B?YVVDSGVTdDRYUEREdnF0a3A5TmNWTDFlbUgvVS81NGxKZzIybWZYMWZBRGlE?=
- =?utf-8?B?ZzdmU2h1Y0R3bFZabGlTUVU4YnVTTnk1TFNITkdRQUNuTmc5dDMzRzJHWkJ6?=
- =?utf-8?B?ZFkrbmZKYzZCbjE5OUtSWEJRODBVem5BSzZVQ21DTjlrblpxbDduQXljaTRI?=
- =?utf-8?B?Mkd1Vk5pbzcvRDlDbUFwUXhaaTcxSTJTL081azBhQjZlUSsvU0lVMTRjY1U1?=
- =?utf-8?B?WE12MHczcTZYdkpTcjF3YndlQmtBMVI0VndmMnFxeWpqa0hzRTRYUmZHcEFh?=
- =?utf-8?B?d2FiekRzYnNxZ1JRTnU0VzF3VU94MUNlS2FQY2UyTE8yMXc4SHpwWFloZDdH?=
- =?utf-8?B?UHRUZE1qNzRTcW1MaTBucjFBSUZYZ1BwSjVVWndzTXkxUlJZTlBYMG5WSVl0?=
- =?utf-8?B?MzhyOEdsVkdobzU4b29JbTZ6YkpIZ1Vtbm9mRmFZQk5qRHBoQThxQ0V6cGM2?=
- =?utf-8?B?U09mUEJaNDVvV3lGMHg4KzBYYVRiYXVOQXd4Qlc4UXY5dEVnTXJxbloxRkh6?=
- =?utf-8?B?U2tEV0czbVJTZDVESHRiamNMOXdva1k3L2VqL1YxRjZlR3pXbHFTQzQrZ1pU?=
- =?utf-8?B?Q3U2aWJteGZaUlpXZlBSaExwNXVBaUhOaTNEYVhSc3hkcnh1Yms2OEhYWG44?=
- =?utf-8?B?R2xFbGxTTlRQemtFbE5TV3FITmJSaVAxRHU2d3hGeXU0eU1RY0VsTG1HMzdN?=
- =?utf-8?B?YXgyd21KUFhyMUdyYmdUbFBqS0VzOXliUjNBbnRnWTFCdkowT1NocGR1Qy8y?=
- =?utf-8?B?K3VCOTY1dE5lK2ZLQnBqTk02VXAzYlRLMlUvdU11MjZRL2NnalJ0WFNrWEtC?=
- =?utf-8?B?RTRtRnIzWnZraVFoczV6SjVRMXUrMkROQnBDTEtQbGFYbk1iZHlxVmVPS0ZL?=
- =?utf-8?B?cER3VnhmcUQxeGtjMW9makE0T25maTc3a21KaVlFSzQxdFJBMml6V2JlelQr?=
- =?utf-8?B?VXU5d3BmVS9ySDM2WjRBSHFrR0RWL0tWUkdENVdKVnJzc3labUpoek05OWgw?=
- =?utf-8?B?Qk1HTGczbWlaMmZMYnl3U2xNQmQyTFpHKzc5am1UOWZuOUJ3VFhhai92TUtx?=
- =?utf-8?B?eDhBWDREWFUra0g0Q1pXL2N4S25Ca25iNXFNYjU2MzdxRFBOV2ZzQmZwWnRu?=
- =?utf-8?B?UWdOS0xkRFZLR2tLN3pVNzVjVnV1cXp1UUZMbWkxQUtaaytlUmJJL1hDZVhl?=
- =?utf-8?B?SWRENG5QMFJzSERTcTNmYUpSdmhDTWlRaWNQbHlvMDh4QU40aEFoaDJkc1dj?=
- =?utf-8?B?T1ozMXdNLzdjZk1NU1ZwcHVGWjZ6ajlsUUlZektxV1BqRkpjSW91TEI0Ujk5?=
- =?utf-8?B?bXpxcXVVRXpMSFJTSlpyYlRBSExxTzB4S3QzdnpLZEYwV1VYQWV1YjhHMS91?=
- =?utf-8?B?R3hrZ3lIR0ZwUmVneEdhTmVzWTVhbWdQWFZ0cmJBWG5CY3NNeTJlRGwwak83?=
- =?utf-8?B?UDEwTGR5VlU4eUlWSGk2Y3RDY3hOSnNsRDUwL09yL1dPbUVyWWs2Wk9hOGdQ?=
- =?utf-8?B?ZUJjd3M0VkVjR1ZYUk1wMHJuWnVRUWdnQjBRL20vaFVJNW9heUlmZFVHVzkw?=
- =?utf-8?B?YjZUQVNIbGRaZ084Slh2UlpOa3ZpZ3FIdmdSNGlRT0crMVVtOVJNMTdjTkFq?=
- =?utf-8?B?Um54Z2I0V3dtRkRhTk01YVhyem1WRGcycFJuUzkvQ25IbHVNSlM4cVhzcnYw?=
- =?utf-8?B?ZlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B4A2CA0E273F844484C40AD94BE99AB6@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 9 Nov 2022 21:12:27 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F151114A;
+        Wed,  9 Nov 2022 18:12:27 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-367b8adf788so3674227b3.2;
+        Wed, 09 Nov 2022 18:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ynkdyHO9kNDgrMbUwYVxUanNmrJAAZIOnD1jKJ0SDB4=;
+        b=XVwVdE9C7IXuK9mEROqxay6qwoKuyzyc4NkMLeNdYI+Eybx5HnKpwj71/j6iElosEh
+         V1bwDKB4ws8zq4yCX9qfs0Q3db2KqLbVO88CeVxS/bzxpW6Rx7dtvxxn/JL0s7qbDS7e
+         umXyNwuYCl62bAsFO74yvoKq1qJBTocUQhck7qGFATJ5EOPLJ50PMJ5HTReowqAvdvg7
+         GTdTY0KvhSPUbn0ZwOWZVjh442FtGpuh/krLE1B2lsKuEZfTjDTqNgHmw7tNqSGiiNM3
+         Ei4KIr1UJdkHsazA06FQ4Vuc05j8ENeo0e/bFYoZ1Tpaa2cJYkb0BM2IH5KO9DD6d2dX
+         Ym1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ynkdyHO9kNDgrMbUwYVxUanNmrJAAZIOnD1jKJ0SDB4=;
+        b=ruX9W+VIATgMYluD76QsU7ip7dLmjKw6/qf4WNCJI+fHRJ9R/6/cMREX3HAod/PLth
+         5M4ujlOttmNT/32r5j0ClQw+S34TKAkeXgfI34BXuYEAzyUQkdQAEETK5YWzJD3IE+lM
+         bo2AxuVli/AxCQyJIBPjaIJCCJC4XgyLc/u3TWQ6Vltn6Vm7GdvP4dBuOaDyWuAHrZcp
+         qf+xuP7pDNynvQeIgW4RExCD5RvxDzR+U3Z8YQ1qcN8686YEpskitKaQAOG+4SfreJae
+         XgLg24GVGaXDgaBk4YZaV0KpOEJHRzYC8JrIVmCSgIpXKLJNZBioxecGUICOe67vmo+k
+         oVCQ==
+X-Gm-Message-State: ACrzQf1ap1cro2938cgyfLm3g+cXoMe8J7EwUm7AaQeRwa8OdLBwnnZM
+        CzqnWhCUUX6dOBMsBrBgibNp8D6l/i2DqO4rJsE=
+X-Google-Smtp-Source: AMsMyM7qSy+AVeKvhprJ/L3ayV8Pzq+lwtJpi8RRDbRwUE/cVVo2js5e29hGH6uLfsz0eD6hFiV2LA3cPjOIWGF0/YE=
+X-Received: by 2002:a0d:ed44:0:b0:370:5d4f:b96d with SMTP id
+ w65-20020a0ded44000000b003705d4fb96dmr53576042ywe.143.1668046346259; Wed, 09
+ Nov 2022 18:12:26 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02decdf7-040c-44a0-8c2c-08dac2c0ebbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2022 02:11:47.0676
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hByuIVfhEWT4kJl35EcjgXjzPKbzGsj73dS2OqYua83XdA7DPtfoKNWaiWU3PT3Kd9Ltp4Ze7lClZzRMn6LIQw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5623
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107090940.686229-1-nashuiliang@gmail.com> <20221109175908.593df5da@kernel.org>
+In-Reply-To: <20221109175908.593df5da@kernel.org>
+From:   Chuang W <nashuiliang@gmail.com>
+Date:   Thu, 10 Nov 2022 10:12:15 +0800
+Message-ID: <CACueBy4U-MBZx0JwTc0Z5G2iFjBu4wPtdW+bs0aZOr9_QQFv2w@mail.gmail.com>
+Subject: Re: [PATCH v1] net: tun: rebuild error handling in tun_get_user
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTExLTEwIGF0IDAxOjMzICswMDAwLCBIdWFuZywgS2FpIHdyb3RlOg0KPiA+
-IEBAIC05MjgzLDcgKzkyODMsMTMgQEAgc3RhdGljIGludA0KPiA+IGt2bV94ODZfY2hlY2tfcHJv
-Y2Vzc29yX2NvbXBhdGliaWxpdHkoc3RydWN0IGt2bV94ODZfaW5pdF9vcHMgKm9wcykNCj4gPiDC
-oAlpbnQgY3B1ID0gc21wX3Byb2Nlc3Nvcl9pZCgpOw0KPiA+IMKgCXN0cnVjdCBjcHVpbmZvX3g4
-NiAqYyA9ICZjcHVfZGF0YShjcHUpOw0KPiA+IMKgDQo+ID4gLQlXQVJOX09OKCFpcnFzX2Rpc2Fi
-bGVkKCkpOw0KPiA+ICsJLyoNCj4gPiArCSAqIENvbXBhdGliaWxpdHkgY2hlY2tzIGFyZSBkb25l
-IHdoZW4gbG9hZGluZyBLVk0gYW5kIHdoZW4gZW5hYmxpbmcNCj4gPiArCSAqIGhhcmR3YXJlLCBl
-LmcuIGR1cmluZyBDUFUgaG90cGx1ZywgdG8gZW5zdXJlIGFsbCBvbmxpbmUgQ1BVcyBhcmUNCj4g
-PiArCSAqIGNvbXBhdGlibGUsIGkuZS4gS1ZNIHNob3VsZCBuZXZlciBwZXJmb3JtIGEgY29tcGF0
-aWJpbGl0eSBjaGVjaw0KPiA+IG9uDQo+ID4gKwkgKiBhbiBvZmZsaW5lIENQVS4NCj4gPiArCSAq
-Lw0KPiA+ICsJV0FSTl9PTighaXJxc19kaXNhYmxlZCgpICYmIGNwdV9hY3RpdmUoY3B1KSk7DQo+
-ID4gwqANCj4gDQo+IEFsc28sIHRoZSBsb2dpYyBvZjoNCj4gDQo+IAkhaXJxc19kaXNhYmxlZCgp
-ICYmIGNwdV9hY3RpdmUoY3B1KQ0KPiANCj4gaXMgcXVpdGUgd2VpcmQuDQo+IA0KPiBUaGUgb3Jp
-Z2luYWwgIldBUk4oIWlycXNfZGlzYWJsZWQoKSkiIGlzIHJlYXNvbmFibGUgYmVjYXVzZSBpbiBT
-VEFSVElORw0KPiBzZWN0aW9uDQo+IHRoZSBJUlEgaXMgaW5kZWVkIGRpc2FibGVkLg0KPiANCj4g
-QnV0IHRoaXMgZG9lc24ndCBtYWtlIHNlbnNlIGFueW1vcmUgYWZ0ZXIgd2UgbW92ZSB0byBPTkxJ
-TkUgc2VjdGlvbiwgaW4gd2hpY2gNCj4gSVJRIGhhcyBhbHJlYWR5IGJlZW4gZW5hYmxlZCAoc2Vl
-IHN0YXJ0X3NlY29uZGFyeSgpKS7CoCBJSVVDIHRoZSBXQVJOX09OKCkNCj4gZG9lc24ndCBnZXQg
-ZXhwbG9kZWQgaXMgcHVyZWx5IGJlY2F1c2UgdGhlcmUncyBhbiBhZGRpdGlvbmFsIGNwdV9hY3Rp
-dmUoY3B1KQ0KPiBjaGVjay4NCj4gDQo+IFNvLCBhIG1vcmUgcmVhc29uYWJsZSBjaGVjayBzaG91
-bGQgYmUgc29tZXRoaW5nIGxpa2U6DQo+IA0KPiAJV0FSTl9PTihpcnFzX2Rpc2FibGVkKCkgfHwg
-Y3B1X2FjdGl2ZShjcHUpIHx8ICFjcHVfb25saW5lKGNwdSkpOw0KPiANCj4gT3Igd2UgY2FuIHNp
-bXBseSBkbzoNCj4gDQo+IAlXQVJOX09OKCFjcHVfb25saW5lKGNwdSkgfHwgY3B1X2FjdGl2ZShj
-cHUpKTsNCj4gDQo+IChiZWNhdXNlIEkgZG9uJ3Qga25vdyB3aGV0aGVyIGl0J3MgcG9zc2libGUg
-SVJRIGNhbiBzb21laG93IGdldCBkaXNhYmxlZCBpbg0KPiBPTkxJTkUgc2VjdGlvbikuDQo+IA0K
-PiBCdHcgYWJvdmUgaXMgcHVyZWx5IGJhc2VkIG9uIGNvZGUgYW5hbHlzaXMsIGJ1dCBJIGhhdmVu
-J3QgZG9uZSBhbnkgdGVzdC4NCg0KSG1tLi4gSSB3YXNuJ3QgdGhpbmtpbmcgdGhvcm91Z2hseS4g
-IEkgZm9yZ290IENQVSBjb21wYXRpYmlsaXR5IGNoZWNrIGFsc28NCmhhcHBlbnMgb24gYWxsIG9u
-bGluZSBjcHVzIHdoZW4gbG9hZGluZyBLVk0uICBGb3IgdGhpcyBjYXNlLCBJUlEgaXMgZGlzYWJs
-ZWQgYW5kDQpjcHVfYWN0aXZlKCkgaXMgdHJ1ZS4gIEZvciB0aGUgaG90cGx1ZyBjYXNlLCBJUlEg
-aXMgZW5hYmxlZCBidXQgIGNwdV9hY3RpdmUoKSBpcw0KZmFsc2UuDQoNClNvIFdBUk5fT04oIWly
-cXNfZGlzYWJsZWQoKSAmJiBjcHVfYWN0aXZlKGNwdSkpIGxvb2tzIHJlYXNvbmFibGUuICBTb3Jy
-eSBmb3IgdGhlDQpub2lzZS4gIEp1c3QgbmVlZGVkIHNvbWUgdGltZSB0byBjb25uZWN0IHRoZSBj
-b21tZW50IHdpdGggdGhlIGNvZGUuDQo=
+Thanks, I will fix these issues and submit again.
+
+On Thu, Nov 10, 2022 at 9:59 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Mon,  7 Nov 2022 17:09:40 +0800 Chuang Wang wrote:
+> > The error handling in tun_get_user is very scattered.
+> > This patch unifies error handling, reduces duplication of code, and
+> > makes the logic clearer.
+>
+> You're also making some functional changes tho, they at the very least
+> need to be enumerated or preferably separate patches.
+>
+> > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> > index 4bf2b268df4a..5ceec73baf98 100644
+> > --- a/drivers/net/tun.c
+> > +++ b/drivers/net/tun.c
+> > @@ -1742,11 +1742,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+> >       int good_linear;
+> >       int copylen;
+> >       bool zerocopy = false;
+> > -     int err;
+> > +     int err = 0;
+>
+> Don't zero-init the variables like this, instead...
+>
+> >       u32 rxhash = 0;
+> >       int skb_xdp = 1;
+> >       bool frags = tun_napi_frags_enabled(tfile);
+> > -     enum skb_drop_reason drop_reason;
+> > +     enum skb_drop_reason drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+> >
+> >       if (!(tun->flags & IFF_NO_PI)) {
+> >               if (len < sizeof(pi))
+> > @@ -1808,11 +1808,11 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+> >                */
+> >               skb = tun_build_skb(tun, tfile, from, &gso, len, &skb_xdp);
+>
+> ... use
+>
+>         err = PTR_ERR_OR_ZERO(skb);
+>
+> close to the jumps. It's safer to always init err before jumping.
+>
+> >               if (IS_ERR(skb)) {
+> > -                     dev_core_stats_rx_dropped_inc(tun->dev);
+> > -                     return PTR_ERR(skb);
+> > +                     err = PTR_ERR(skb);
+> > +                     goto drop;
+> >               }
+> >               if (!skb)
+> > -                     return total_len;
+> > +                     goto out;
+>
+> >       if (virtio_net_hdr_to_skb(skb, &gso, tun_is_little_endian(tun))) {
+> >               atomic_long_inc(&tun->rx_frame_errors);
+> > -             kfree_skb(skb);
+>
+> now we'll increment error and drop counters, that's not right.
+>
+> > -             if (frags) {
+> > -                     tfile->napi.skb = NULL;
+> > -                     mutex_unlock(&tfile->napi_mutex);
+> > -             }
+> > -
+> > -             return -EINVAL;
+> > +             err = -EINVAL;
+> > +             goto drop;
+> >       }
+>
+> > @@ -1952,8 +1932,8 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+> >
+> >       rcu_read_lock();
+> >       if (unlikely(!(tun->dev->flags & IFF_UP))) {
+> > -             err = -EIO;
+> >               rcu_read_unlock();
+> > +             err = -EIO;
+>
+> this change is unnecessary, please refrain from making it
+>
+> >               drop_reason = SKB_DROP_REASON_DEV_READY;
+> >               goto drop;
+> >       }
+> > @@ -2007,7 +1987,23 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+> >       if (rxhash)
+> >               tun_flow_update(tun, rxhash, tfile);
+> >
+> > -     return total_len;
+> > +     goto out;
+>
+> keep
+>
+>         return total_len;
+>
+> that's much easier to read, and there's no concern of err being
+> uninitialized.
+>
+> > +
+> > +drop:
+> > +     if (err != -EAGAIN)
+> > +             dev_core_stats_rx_dropped_inc(tun->dev);
+> > +
+> > +     if (!IS_ERR_OR_NULL(skb))
+> > +             kfree_skb_reason(skb, drop_reason);
+> > +
+> > +unlock_frags:
+> > +     if (frags) {
+> > +             tfile->napi.skb = NULL;
+> > +             mutex_unlock(&tfile->napi_mutex);
+> > +     }
+> > +
+> > +out:
+> > +     return err ?: total_len;
+> >  }
+> >
+> >  static ssize_t tun_chr_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>
