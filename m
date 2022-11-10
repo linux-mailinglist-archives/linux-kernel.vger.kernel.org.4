@@ -2,104 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571E3624CCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D29624CCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbiKJVUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S231920AbiKJVUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiKJVUC (ORCPT
+        with ESMTP id S231670AbiKJVUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:20:02 -0500
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EB3BB4;
-        Thu, 10 Nov 2022 13:20:01 -0800 (PST)
-Received: by mail-wr1-f50.google.com with SMTP id w14so4030138wru.8;
-        Thu, 10 Nov 2022 13:20:01 -0800 (PST)
+        Thu, 10 Nov 2022 16:20:34 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C7657B4B;
+        Thu, 10 Nov 2022 13:20:30 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id y203so3163192pfb.4;
+        Thu, 10 Nov 2022 13:20:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EqwM4gwAeNfGSn+/i30R0momCaUlYOIuUeVEKpk6Aqw=;
+        b=lFA8i0GGzeYM4wrmg5464SiWgnCaVDIe63FDXcjVFkKLT3hUN4RSN/krm4vWh4+Ef2
+         IVv86gAn+c6kvVFUKiNleko3mRjq0Ozh6uzDTWDNfUCw1Sc4iWlereD5QrvAOwYYMpx8
+         x6BJSAWrBXpYlC0bdIr9YF+kmYSiixd54c6HGRVbZufmXQ4st20bmPrNuiu1qy7LlNZ9
+         pnx1ZL8h+ixmUANnnPysjB7lWUXdtyMlhy876AxHdFNT6lkzPALTS7ANgqNMznvtN1qx
+         WdHbI+F2Y9hLDLN7XJpZQMM8X6fRrMor9zi7LpQVRCcqYM1Q+U34Fe+JzdV8Jrl+F1lx
+         WNHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GGQnIXEIAxYBs4pZEA120RBnVil7XdWyPz26Nc7lr1s=;
-        b=kd0RWtcPJ5vn2eQMSWCosTG9lPurl5KbKT7wTlD1UUQTfjxIinV2wvBA6ZRY9JT7H/
-         kW56sx7Ej7tqECpZ/NXD8MvxHJ6LtLqS82b4aNQmDi1jH2jPfrBoGxktuK4nA/JDMahG
-         DKBNLiGWFm5/uZSy+dBYAOS1UMFxRJ39cVLhdbW3hph9Ws2GiVGL1fN75Y6VdzweSSum
-         3IB+nGOq0V5odkttaRAKqWrrZ/8spv4nGsG7bU5qscWLUSF74nHYA4UK8WK8XNGuo+9p
-         4asCs2fpMDnJ4M/LWct/FZkQdWu1VXBSUlaAdBZraRmZA/WgoGP4adgnVYKe0Gvc7HfA
-         rAag==
-X-Gm-Message-State: ACrzQf3/KOGazl9C57gvzbvvJDaivS7qswomnk+qDIseLNXgQCuOM5MG
-        Gsl1Twka+O8eh9cDqe5HZwB6uyiBSqs=
-X-Google-Smtp-Source: AMsMyM6kN4tNlAB9XgZVNBYkQvoSd0QdC3/mHTOGYurmfCOtCcaIv/AQpolDpAYXGaJWZilHVBv4cA==
-X-Received: by 2002:a5d:5710:0:b0:236:cdd4:4cf4 with SMTP id a16-20020a5d5710000000b00236cdd44cf4mr38255171wrv.376.1668115200006;
-        Thu, 10 Nov 2022 13:20:00 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm8367301wmo.0.2022.11.10.13.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 13:19:59 -0800 (PST)
-Date:   Thu, 10 Nov 2022 21:19:57 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Wei Liu <wei.liu@kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: [GIT PULL] Hyper-V fixes for 6.1-rc5
-Message-ID: <Y21q/c7CywEAdiDo@liuwe-devbox-debian-v2>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EqwM4gwAeNfGSn+/i30R0momCaUlYOIuUeVEKpk6Aqw=;
+        b=4j7Rgoqz7iW5VFNUZwCKFn8AWsHZ9iAvdiRoKIvEwmLNX8gk3SvyeoiSI9XDkyV2Th
+         spAWwmuAxtqSCiUo6mNw2yJwm+NS0glzrewsRzI25j4ZgNTCRl0e8f6ce0ScAbQeDkRX
+         mTNrogLzrexh8sCcrbPkzGt1SPQPGYuFT6KXrx5YmTW8B5F/UERAHUEst7D8mFFTKJsS
+         ZSbr9BdY0d0wp87QcyWTSno3lxP7mdsm9qecW1Vo7mkL8I59YpW9bSn6ECWYo7X7VmIw
+         RuHrQvD7HDnyKmKe4MV0mfwWclseS8efGqTTb8G4kQawfeNR/4AFQqJFNVv8RXHG7WjR
+         aybA==
+X-Gm-Message-State: ACrzQf0im49oLOQ4M8s6WKm+ZF6+/+amaIDxupNSCkbrUgAVoZb9iTk8
+        ffVK9yYwNEkzbMOAkOzRccJdNbZc6owhjGTVRE4=
+X-Google-Smtp-Source: AMsMyM5QV4gBZkBeX4WEs89XOexMNHYQNng5q1/u5pkwDePHJu3uFlhXxA4SzvHEvvISi9XC2WPpJ8xd46Ye2TW9Rj0=
+X-Received: by 2002:a63:1314:0:b0:46e:bb92:3de1 with SMTP id
+ i20-20020a631314000000b0046ebb923de1mr3322351pgl.240.1668115229756; Thu, 10
+ Nov 2022 13:20:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <f847459dc0a0e2d8ffa1d290d06e0e4a226a6f39.1668075479.git.jamie.bainbridge@gmail.com>
+ <Y20Bxc1gQ8nrFsvA@lunn.ch>
+In-Reply-To: <Y20Bxc1gQ8nrFsvA@lunn.ch>
+From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Date:   Fri, 11 Nov 2022 08:20:18 +1100
+Message-ID: <CAAvyFNg1F8ixrgy0YeL-TT5xLmk8N7dD=ZMLQ6VxsjHb_PU9bg@mail.gmail.com>
+Subject: Re: [PATCH] tcp: Add listening address to SYN flood message
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 11 Nov 2022 at 00:51, Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Thu, Nov 10, 2022 at 09:21:06PM +1100, Jamie Bainbridge wrote:
+> > The SYN flood message prints the listening port number, but on a system
+> > with many processes bound to the same port on different IPs, it's
+> > impossible to tell which socket is the problem.
+> >
+> > Add the listen IP address to the SYN flood message. It might have been
+> > nicer to print the address first, but decades of monitoring tools are
+> > watching for the string "SYN flooding on port" so don't break that.
+> >
+> > Tested with each protcol's "any" address and a host address:
+> >
+> >  Possible SYN flooding on port 9001. IP 0.0.0.0.
+> >  Possible SYN flooding on port 9001. IP 127.0.0.1.
+> >  Possible SYN flooding on port 9001. IP ::.
+> >  Possible SYN flooding on port 9001. IP fc00::1.
+> >
+> > Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+> > ---
+> >  net/ipv4/tcp_input.c | 16 +++++++++++++---
+> >  1 file changed, 13 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> > index 0640453fce54b6daae0861d948f3db075830daf6..fb86056732266fedc8ad574bbf799dbdd7a425a3 100644
+> > --- a/net/ipv4/tcp_input.c
+> > +++ b/net/ipv4/tcp_input.c
+> > @@ -6831,9 +6831,19 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
+> >               __NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
+> >
+> >       if (!queue->synflood_warned && syncookies != 2 &&
+> > -         xchg(&queue->synflood_warned, 1) == 0)
+> > -             net_info_ratelimited("%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.\n",
+> > -                                  proto, sk->sk_num, msg);
+> > +         xchg(&queue->synflood_warned, 1) == 0) {
+> > +#if IS_ENABLED(CONFIG_IPV6)
+> > +             if (sk->sk_family == AF_INET6) {
+>
+> Can the IS_ENABLED() go inside the if? You get better build testing
+> that way.
+>
+>      Andrew
 
-The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
+Are you sure? Why would the IS_ENABLED() be inside of a condition
+which isn't compiled in? If IPv6 isn't compiled in then the condition
+would never evaluate as true, so seems pointless a pointless
+comparison to make? People not compiling in IPv6 have explicitly asked
+*not* to have their kernel filled with a bunch of "if (family ==
+AF_INET6)" haven't they?
 
-  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
+There are many other examples of this pattern of "IS_ENABLED()" first
+and "if (family == AF_INET6)" inside it, but I can't see any of the
+inverse which I think you're suggesting, see:
 
-are available in the Git repository at:
+ grep -C1 -ERHn "IS_ENABLED\(CONFIG_IPV6\)" net | grep -C1 "family == AF_INET6"
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/hyperv/linux.git tags/hyperv-fixes-signed-20221110
+Please let me know if I've misunderstood?
 
-for you to fetch changes up to e70af8d040d2b7904dca93d942ba23fb722e21b1:
-
-  PCI: hv: Fix the definition of vector in hv_compose_msi_msg() (2022-11-03 15:50:28 +0000)
-
-----------------------------------------------------------------
-hyperv-fixes for v6.1-rc5
- - Fix TSC MSR write for root partition (Anirudh Rayabharam)
- - Fix definition of vector in pci-hyperv driver (Dexuan Cui)
- - A few other misc patches
-----------------------------------------------------------------
-Anirudh Rayabharam (2):
-      clocksource/drivers/hyperv: add data structure for reference TSC MSR
-      x86/hyperv: fix invalid writes to MSRs during root partition kexec
-
-Dexuan Cui (1):
-      PCI: hv: Fix the definition of vector in hv_compose_msi_msg()
-
-Jilin Yuan (1):
-      Drivers: hv: fix repeated words in comments
-
-Stephen Hemminger (1):
-      MAINTAINERS: remove sthemmin
-
-Zhao Liu (1):
-      x86/hyperv: Remove BUG_ON() for kmap_local_page()
-
- MAINTAINERS                         |  1 -
- arch/x86/hyperv/hv_init.c           | 19 ++++++++++---------
- drivers/clocksource/hyperv_timer.c  | 29 +++++++++++++++--------------
- drivers/hv/hv_balloon.c             |  2 +-
- drivers/pci/controller/pci-hyperv.c | 22 ++++++++++++++++------
- include/asm-generic/hyperv-tlfs.h   |  9 +++++++++
- 6 files changed, 51 insertions(+), 31 deletions(-)
+Jamie
