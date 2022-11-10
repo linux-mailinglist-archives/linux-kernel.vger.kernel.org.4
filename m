@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7258462485D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A56A62485F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiKJR26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S231419AbiKJR3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:29:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiKJR2w (ORCPT
+        with ESMTP id S231284AbiKJR26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:28:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADB71156;
-        Thu, 10 Nov 2022 09:28:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2052761D53;
-        Thu, 10 Nov 2022 17:28:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA40BC433C1;
-        Thu, 10 Nov 2022 17:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668101324;
-        bh=sENMuzY4sr/Mt+Bk+aCRj2lY72CbUnhjfFRJxImy25A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KZjfd5PhyhUj66YaQCxMlmBJynHn8W2peKPHltHHc+N7D6aO0/MSf0l03Qg2d77ch
-         YLq9+fKeIAuN3ohwutirv8enXifCudKDgWAcmdbWm+7Bn7ADdh83kUwPzglgE6I5si
-         8rOLPVIAp8VRpLuGlYxMi7rxedECQzEb274uo/qVtn1q6/i/k5TdzfplGYhzoBKNR9
-         uuqELUn5LWrO+0/ZOa+T9bi45XYLrHD6OjqFL5tgXnuyijm4hZ4wclteE6eA4GgQ8G
-         HQtJRSiZPlop+rDFsfuatnDU8EuZrgz/jnlrKWnTYfScB9ULsiYRtIagayuEvWFlP0
-         PDotxcgGSzM6g==
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
-        Disha Goel <disgoel@linux.vnet.ibm.com>,
-        Donglin Peng <dolinux.peng@gmail.com>,
-        James Clark <james.clark@arm.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [GIT PULL] perf tools fixes for v6.1: 2nd batch
-Date:   Thu, 10 Nov 2022 14:28:31 -0300
-Message-Id: <20221110172831.369713-1-acme@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        Thu, 10 Nov 2022 12:28:58 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37125FD1;
+        Thu, 10 Nov 2022 09:28:52 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7597960004;
+        Thu, 10 Nov 2022 17:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668101331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=14K4vkigpc+r6ifepskjAS5nboNCAI5rkQqWrxZ4Kk4=;
+        b=Nch2Lks2ASc+gcIGppOjqGRMldcSbvpuknlEY5fSStadYxm83tItBCL7GZd5OhSmPthfBI
+        9kOsD73/MAttirUbNSLg1CnPnINrWyF350weJQrjSRuHBGhy5a99LKRoMJF3ia2bLbI8L5
+        qcPShugX1vcYVz5l5LkTilgkNvZSnYGTjJJ8rOB0Kij/6dtlM/LGURVi2Y6hPvIlqbSsAJ
+        euFWoMT4ywWmPO2VY+yGzUNO59I/OpHp3ehrcm7JjxJwSbCl76uPspXNkcrYmCZzvGq9rV
+        C/zbmU349Z+6vcXWt0/9FetXgSHRG/ukAafFTKFNSNbbjha3XKBjuunQyn/Xqg==
+Date:   Thu, 10 Nov 2022 18:28:48 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-mtd@lists.infradead.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/17] dt-bindings: mtd: nvmem-cells: Fix example
+Message-ID: <20221110182848.492e4a6f@xps-13>
+In-Reply-To: <20221110165906.GA241353-robh@kernel.org>
+References: <20221104164718.1290859-1-miquel.raynal@bootlin.com>
+        <20221104164718.1290859-14-miquel.raynal@bootlin.com>
+        <20221110165906.GA241353-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Rob,
 
-	Please consider pulling,
+robh@kernel.org wrote on Thu, 10 Nov 2022 10:59:06 -0600:
 
-Best regards,
+> On Fri, Nov 04, 2022 at 05:47:14PM +0100, Miquel Raynal wrote:
+> > There is no such thing as a "ranges" property within an nvmem-cells
+> > node. There is no use of it, it is anyway not pictured anywhere that
+> > this is valid, so drop it from the example. =20
+>=20
+> For a memory mapped device such as parallel NOR flash. It would be=20
+> perfectly fine to translate a nvmem cell 'reg' address to a CPU address.=
+=20
+> If the partitions are not memory mapped, then it's a gray area. Whether=20
+> it makes sense to translate just to just the absolute offset of the=20
+> flash device, maybe or maybe not. At a minimum, 'ranges' just means=20
+> can translate to the parent address space. The Linux DT translate code=20
+> only supports the full translation to CPU addresses, but then it mainly=20
+> just supports creating resources.
 
-- Arnaldo
+Ah ok, I missed this possibility indeed, thanks for the explanation.
 
-The following changes since commit 59f2f4b8a757412fce372f6d0767bdb55da127a8:
+So I agree the commit log is wrong, but I guess the change itself
+is fine because the property should be declared/authorized in the
+schema. So here we have two options:
+1- Document the property
+2- Drop the property from the example
 
-  fs/userfaultfd: Fix maple tree iterator in userfaultfd_unregister() (2022-11-07 12:58:26 -0800)
+As we currently have no user upstream of this property I would argue we
+can keep dropping 'ranges' from the example, knowing of course that
+someone might come up some day and document it properly if it is
+needed. In this case I would update the commit message to:
 
-are available in the Git repository at:
+	dt-bindings: mtd: nvmem-cells: Drop range property from example
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tags/perf-tools-fixes-for-v6.1-2-2022-11-10
+	Memory mapped devices such as parallel NOR flash could make use
+	of the 'ranges' property to translate a nvmem 'reg' cell
+	address to a CPU address but in practice there is no upstream
+	user nor any declaration of this property being valid in this
+	case.
 
-for you to fetch changes up to 94d957ae513fc420d0a5a9bac815eb49ffebb56f:
+	In order to avoid warnings when constraining a bit more the
+	schema, let's drop the property from the example, knowing that
+	someone might actually properly define it some day.
 
-  perf tools: Add the include/perf/ directory to .gitignore (2022-11-08 18:54:41 -0300)
+Would you agree with this change?
 
-----------------------------------------------------------------
-perf tools fixes for v6.1: 2nd batch
-
-- Fix 'perf stat' crash with --per-node --metric-only in CSV mode, due
-  to the AGGR_NODE slot in the 'aggr_header_csv' array not being set.
-
-- Fix printing prefix in CSV output of 'perf stat' metrics in interval
-  mode (-I), where an extra separator was being added to the start of
-  some lines.
-
-- Fix skipping branch stack sampling 'perf test' entry, that was using
-  both --branch-any and --branch-filter, which can't be used together.
-
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-----------------------------------------------------------------
-Athira Rajeev (1):
-      perf stat: Fix printing os->prefix in CSV metrics output
-
-Donglin Peng (1):
-      perf tools: Add the include/perf/ directory to .gitignore
-
-James Clark (1):
-      perf test: Fix skipping branch stack sampling test
-
-Namhyung Kim (1):
-      perf stat: Fix crash with --per-node --metric-only in CSV mode
-
- tools/perf/.gitignore                  | 1 +
- tools/perf/tests/shell/test_brstack.sh | 5 ++++-
- tools/perf/util/parse-branch-options.c | 4 +++-
- tools/perf/util/stat-display.c         | 6 ++++--
- 4 files changed, 12 insertions(+), 4 deletions(-)
+Thanks,
+Miqu=C3=A8l
