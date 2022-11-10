@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320B7624484
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10370624486
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiKJOmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S230407AbiKJOmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:42:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiKJOmn (ORCPT
+        with ESMTP id S230238AbiKJOms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:42:43 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0E71DF2F;
-        Thu, 10 Nov 2022 06:42:42 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id p21so1538431plr.7;
-        Thu, 10 Nov 2022 06:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7yLIZFkTSqc8JisdFlEIXj5iNq4P/8xCE6V2QPliCmE=;
-        b=NF63hqIqdANdi411wVuVc/puJ88O1f4afrnaM2GxMcVxtLCFt3EBio24NSIWPGuECs
-         bRUdxJY3MEe8TS+pNTU9C/y9ui7VcKnH7qd4Ti/MPwwag68fyQw3W7ah3jnSvWefZsN2
-         C6jkHAFLf2IDLC1QTUzsGtLvOk8Hh7x0B8zi1GkirbiqnsxgyKjEezUjMAYqaviPNwSD
-         xttVONhrARgA8EisuZvKEkI6G6zNe7ABRx6qLGdCZGbvimmtgnMRf1XyPRIlCSjK1qQw
-         lMQQYU4AJr7jAKjF3xVkZ2MIdbKWZDDnh1uLO6ne5UHATqw9j0v0oEHHeZLUa7wk/sWx
-         bu2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yLIZFkTSqc8JisdFlEIXj5iNq4P/8xCE6V2QPliCmE=;
-        b=KNN7wSz8cf7evqv00xA/XRs4B3fVsHtE67gWcOOkKy/LUej4n7QdsjyZ8n8DbmRci7
-         YfiCXmIDj7xrpS3JlqODiOjPVO5+9320FMf083tpExfg1itPgYqa3DymBIpD00KPI6i1
-         iXUlhrymmBioirDf1QhLrY64K8UvFNXXb0NGtX4SAchE97459tAk8SP08FqoHypHxYEr
-         sMaQDYAowkBjltHq/GE+vQmC9YtJJFDGuBcqi0s6yEvc0EHeg8bmGdgtn8T7W/Q/CFim
-         hMGDTl+y/tg+Q24Ph5+QV6E+Fc3bVIbjSfo4OJD3LYU+v2+h0iUF/hvviKENdO3ENKdS
-         QUlg==
-X-Gm-Message-State: ACrzQf1v9M2MrUJUZ5QLoyfdYB3fiOHB7iTC+aOSJVInLsCI8/4yymkW
-        7yQKir60/ehQ34NknLGLtk8qykC+aBQ=
-X-Google-Smtp-Source: AMsMyM4GbwfWDTqDxsNtDlPRgCCm76wEiJdoPpKhw21r0AGo5eIYnud0jkFRUtaYqDQgJKeTXZo0Ug==
-X-Received: by 2002:a17:903:22c7:b0:187:190d:da89 with SMTP id y7-20020a17090322c700b00187190dda89mr59358479plg.68.1668091362174;
-        Thu, 10 Nov 2022 06:42:42 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:c0ce:1fc9:9b4c:5c3d? ([2600:8802:b00:4a48:c0ce:1fc9:9b4c:5c3d])
-        by smtp.gmail.com with ESMTPSA id b16-20020a170902d51000b0017a0f40fa19sm11384710plg.191.2022.11.10.06.42.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 06:42:41 -0800 (PST)
-Message-ID: <7472ad25-2d54-1e00-cc27-8f593cba9011@gmail.com>
-Date:   Thu, 10 Nov 2022 06:42:41 -0800
+        Thu, 10 Nov 2022 09:42:48 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60C019288;
+        Thu, 10 Nov 2022 06:42:46 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 83F191FB05;
+        Thu, 10 Nov 2022 14:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668091365; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QggOl6oet9gjyrUMq6KLf3FzSdMoYy/LwzCTm6J8+gA=;
+        b=ZMS072hGRT7Bf0y9PM16lWz0Q8PM65nd78eBvUC9sFc0C1kpezgASqxeIDMK8aTmA7+k+1
+        iYFDCN1izrUXQKtA2wb/YLjQSxzOThg5HHql5Iz3xnt8FvW44zm+MpzNTXDLKfVn/MuY7n
+        c7Q7OCw4Yfo5nWtlAIE6hJ8bG400Igk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 365111332F;
+        Thu, 10 Nov 2022 14:42:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zyNJDOUNbWMnLAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 10 Nov 2022 14:42:45 +0000
+Date:   Thu, 10 Nov 2022 15:42:43 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Lu Jialin <lujialin4@huawei.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] mm/memcontrol.c: drains percpu charge caches in
+ memory.reclaim
+Message-ID: <20221110144243.GA10562@blackbody.suse.cz>
+References: <20221110065316.67204-1-lujialin4@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v4 2/4] net: dsa: microchip: do not store max MTU
- for all ports
-Content-Language: en-US
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Arun.Ramadoss@microchip.com
-References: <20221110122225.1283326-1-o.rempel@pengutronix.de>
- <20221110122225.1283326-3-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221110122225.1283326-3-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
+Content-Disposition: inline
+In-Reply-To: <20221110065316.67204-1-lujialin4@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,13 +70,37 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--5vNYLRcllDrimb99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 11/10/2022 4:22 AM, Oleksij Rempel wrote:
-> If we have global MTU configuration, it is enough to configure it on CPU
-> port only.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Hello Jialin.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+On Thu, Nov 10, 2022 at 02:53:16PM +0800, Lu Jialin <lujialin4@huawei.com> wrote:
+> When user use memory.reclaim to reclaim memory, after drain percpu lru
+> caches, drain percpu charge caches for given memcg stock in the hope
+> of introducing more evictable pages.
+
+Do you have any data on materialization of this hope?
+
+IIUC, the stock is useful for batched accounting to page_counter but it
+doesn't represent real pages. I.e. your change may reduce the
+page_counter value but it would not release any pages. Or have I missed
+a way how it helps with the reclaim?
+
+Thanks,
+Michal
+
+--5vNYLRcllDrimb99
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY20N4QAKCRAkDQmsBEOq
+ubBKAQDp1xBK5/DkToOkWZCbNxS9WdDxDYDsi9+ZeCKLncwpHQD9HaNqQZdrxab3
+/hyNSLGsED0LyA/3PnNvyOufETMiWQ4=
+=jyz6
+-----END PGP SIGNATURE-----
+
+--5vNYLRcllDrimb99--
