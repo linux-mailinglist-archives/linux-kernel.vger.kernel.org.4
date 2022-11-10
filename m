@@ -2,49 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE4B6243A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CEF6243A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiKJNvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S231251AbiKJNxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiKJNvV (ORCPT
+        with ESMTP id S229851AbiKJNxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:51:21 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4151743E;
-        Thu, 10 Nov 2022 05:51:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=KLBqLgMW/J+kUYh//78nQLqBYL/YSG7r5+kbe5pMFp8=; b=wuATyY99/h3XOViGQ7CGKdEiNZ
-        oKj4Zk1EbyxMWcbViXKJVsYI+Z4UPKps8HBv8ztC0XMlXpOsg+KOceQxTQ7N8BJwn/6OiyA4lNRsW
-        A8kTMh0Tc+bB9gah9K5+Zf7/xO7l9ZfTKnomM81333QScgsq8t3Fp8O1D14ZljBW3u3s=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ot7xN-0022Le-Tn; Thu, 10 Nov 2022 14:51:01 +0100
-Date:   Thu, 10 Nov 2022 14:51:01 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tcp: Add listening address to SYN flood message
-Message-ID: <Y20Bxc1gQ8nrFsvA@lunn.ch>
-References: <f847459dc0a0e2d8ffa1d290d06e0e4a226a6f39.1668075479.git.jamie.bainbridge@gmail.com>
+        Thu, 10 Nov 2022 08:53:47 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607BAF592;
+        Thu, 10 Nov 2022 05:53:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668088426; x=1699624426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=z0Abq70Kn2U1rDgLG0Udj/GQ3BRJ3ke8UA44CN7SjzI=;
+  b=iOsgZ8oLZUITI/32aw9Cp2s7I152Udldny4C2l1MRqIpYMy8eFSCmwTe
+   7VsVGCqIh7MzAg76jd1ceUnmXl7g29nMxNDccRSMjfYtBTF01P+3Q1f3O
+   pahoejTNpuJq5jBTmTwuazR6HzwsTL1wjtYbAkz1olGY2UAkgMOB9p7VI
+   mQxpcya9o2uglaiQ6cb7UHt1Q0rII3giEF3OIAwRzHUU4Xreb37yW1OZ1
+   wTZBC0LiYpOu5kxSVJ5UITHWYuZ5o7dqP9wUkVqqdUZLis1GTfNIU32D2
+   wy19Rnuf9KmoXb06TYTcSDS5BhYf/c7MSa8UFDTZibU8/Wk+/434bPDg4
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="298808932"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="298808932"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 05:53:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="726389441"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="726389441"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 10 Nov 2022 05:53:44 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ot7zy-00A9tQ-2O;
+        Thu, 10 Nov 2022 15:53:42 +0200
+Date:   Thu, 10 Nov 2022 15:53:42 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 1/2] gpiolib: of: Prepare of_gpiochip_add() /
+ of_gpiochip_remove() for fwnode
+Message-ID: <Y20CZtHkaLmQj+IP@smile.fi.intel.com>
+References: <20221108133853.61884-1-andriy.shevchenko@linux.intel.com>
+ <Y2z7IJv2IQy+Mlsh@orome>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f847459dc0a0e2d8ffa1d290d06e0e4a226a6f39.1668075479.git.jamie.bainbridge@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+In-Reply-To: <Y2z7IJv2IQy+Mlsh@orome>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,43 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:21:06PM +1100, Jamie Bainbridge wrote:
-> The SYN flood message prints the listening port number, but on a system
-> with many processes bound to the same port on different IPs, it's
-> impossible to tell which socket is the problem.
-> 
-> Add the listen IP address to the SYN flood message. It might have been
-> nicer to print the address first, but decades of monitoring tools are
-> watching for the string "SYN flooding on port" so don't break that.
-> 
-> Tested with each protcol's "any" address and a host address:
-> 
->  Possible SYN flooding on port 9001. IP 0.0.0.0.
->  Possible SYN flooding on port 9001. IP 127.0.0.1.
->  Possible SYN flooding on port 9001. IP ::.
->  Possible SYN flooding on port 9001. IP fc00::1.
-> 
-> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-> ---
->  net/ipv4/tcp_input.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 0640453fce54b6daae0861d948f3db075830daf6..fb86056732266fedc8ad574bbf799dbdd7a425a3 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -6831,9 +6831,19 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
->  		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
->  
->  	if (!queue->synflood_warned && syncookies != 2 &&
-> -	    xchg(&queue->synflood_warned, 1) == 0)
-> -		net_info_ratelimited("%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.\n",
-> -				     proto, sk->sk_num, msg);
-> +	    xchg(&queue->synflood_warned, 1) == 0) {
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +		if (sk->sk_family == AF_INET6) {
+On Thu, Nov 10, 2022 at 02:22:40PM +0100, Thierry Reding wrote:
+> On Tue, Nov 08, 2022 at 03:38:52PM +0200, Andy Shevchenko wrote:
 
-Can the IS_ENABLED() go inside the if? You get better build testing
-that way.
+...
 
-     Andrew
+> > +	np = to_of_node(chip->fwnode);
+> 
+> This breaks a number of GPIO controllers on Tegra where chip->fwnode
+> ends up never getting set. I also see this break drivers like the MFD-
+> based gpio-max77620, so I don't think this is anything specific to the
+> Tegra drivers.
+> 
+> Looking at how fwnode handling works, it seems like we're checking the
+> wrong value here, since chip->fwnode is only for explicit overrides of
+> the fwnode value.
+> 
+> The below patch fixes the regression for me:
+
+Thank you! Can you submit it as a formal fix? (Also see below)
+Of if Bart prefers I can respin fixed verison. Bart?
+
+...
+
+> -       np = to_of_node(chip->fwnode);
+> +       np = to_of_node(chip->gpiodev->dev.fwnode);
+
+dev_fwnode(&chip->gpiodev->dev)
+
+...
+
+
+Your report makes me wonder if I can Cc you the patch that changes that logic,
+so you can help with a testing on OF platforms.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
