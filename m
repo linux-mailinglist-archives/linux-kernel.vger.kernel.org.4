@@ -2,273 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1BC62411F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25571624126
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiKJLNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
+        id S230380AbiKJLO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:14:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiKJLNu (ORCPT
+        with ESMTP id S230371AbiKJLOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:13:50 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA83B6471
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:13:47 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7JzQ6drFzJnKW;
-        Thu, 10 Nov 2022 19:10:42 +0800 (CST)
-Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 19:13:45 +0800
-Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
- (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
- 2022 19:13:44 +0800
-Subject: Re: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-References: <20221109135008.9485-1-hejunhao3@huawei.com>
- <20221109135008.9485-2-hejunhao3@huawei.com>
- <20221109165615.00006060@Huawei.com>
-CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <john.garry@huawei.com>, <coresight@lists.linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <lpieralisi@kernel.org>,
-        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
-        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
-From:   hejunhao <hejunhao3@huawei.com>
-Message-ID: <025f4daf-b5c6-e70e-977d-f475a6aae8ef@huawei.com>
-Date:   Thu, 10 Nov 2022 19:13:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Thu, 10 Nov 2022 06:14:49 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D16F34A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:14:22 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id 7so1883248ybp.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:14:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=w2bzJsB3PbL2X/ibwn3ezEZIfiFkuOTKtlMfImy68cw=;
+        b=SZpX7Q3VH7kdT2mdWoO/QbBXjTZrWo4vvC/LeRfeAISTPI9+3kKF6QzsnDSlTjhzsz
+         y01yoLLOAGTWPvGFzhGfBuYQOHteTyMuWJzvJLZ8YcJp4563rQJuqMyr9NtiJ1/RXc+5
+         6Zcv+KoRPnYi96FeLJOPtQ1wkq2uvuViyePYA2zNupq1V7SnJVDFLHs/ZXV0Nvqn0zTa
+         JHmbllz/nTATi0fRb7vfjhpD8bpJbN1Rw6PeDUyc+LLZavrgYj5ul2VLSnBKkWDgPgS+
+         BOLMSfKscmE8mG4ImjW3Leym5HYNAkY4LHVbevGDqRFC9E3u5mblGFNltT/zyubmcWRB
+         cO1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w2bzJsB3PbL2X/ibwn3ezEZIfiFkuOTKtlMfImy68cw=;
+        b=Bi+4B4btdQGj7WRk5Xp8BEp0mskmvoVcldvpcKkwpeGUI7NgICJ0RONLsHwuA5xDjJ
+         b1Pdn4355CNzQsKzrd7aF7pODIKkNkoN6KK222hjt3A12K9rBRn0k2LMKEUdcZTpFWDp
+         ZJjDOhCkkPKIJHCOyL5yGrsXvfSjlgwi8m3TWiXruPR/+z2/h4eqPRWV3keLiG+TXVV+
+         eDtdu5B8GxbdQKXzw4VJHE7Cng+oGOSahtJix0vFaRoVjvAvFtwEy7gTdoPB8cNcFJm1
+         6StFXTiAoDL3QtN+F5qCwK0vtqQTiZGbz33ktoarJw3/VUzVuSipk/7nYaakMGupBnC7
+         DWDA==
+X-Gm-Message-State: ANoB5pm1Vx/BmqEtBPjYoE8dg9Eo/oZ5tauiLj2PBpUXvc1n134xauH0
+        m7/MiMn8AlTsd96B3KmMH2plj5WBmkK+pa5x6DMLkZs6Ut8mig==
+X-Google-Smtp-Source: AA0mqf4HAlvllfiTAy8O9bwGOZY+LqHNa1fYXXmuHTN8m/MtWdK5qYiJCbTluraqvq+eDKvsSspGFDYmqQHDLvDcHGI=
+X-Received: by 2002:a05:6902:b16:b0:6d6:9455:d6c5 with SMTP id
+ ch22-20020a0569020b1600b006d69455d6c5mr20823348ybb.164.1668078860624; Thu, 10
+ Nov 2022 03:14:20 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20221109165615.00006060@Huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.44]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 10 Nov 2022 16:44:09 +0530
+Message-ID: <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
+Subject: x86: clang: acpi-cpufreq.c:970:24: error: variable 'ret' is
+ uninitialized when used here [-Werror,-Wuninitialized]
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[Please ignore email this if it is already reported]
 
-On 2022/11/10 0:56, Jonathan Cameron wrote:
-> On Wed, 9 Nov 2022 21:50:07 +0800
-> Junhao He <hejunhao3@huawei.com> wrote:
->
->> From: Qi Liu <liuqi115@huawei.com>
->>
->> This patch adds driver for UltraSoc SMB(System Memory Buffer)
->> device. SMB provides a way to buffer messages from ETM, and
->> store these "CPU instructions trace" in system memory.
->>
->> SMB is developed by UltraSoc technology, which is acquired by
->> Siemens, and we still use "UltraSoc" to name driver.
->>
->> Signed-off-by: Qi Liu <liuqi115@huawei.com>
->> Signed-off-by: Junhao He <hejunhao3@huawei.com>
->> Tested-by: JunHao He <hejunhao3@huawei.com>
-> Hi JunHao,
->
-> One trivial side effect of dropping the ACPI dependency.
->
-> Also, I think (at the cost of a slightly lengthening of lines)
-> you can rename the register fields to avoid any potential
-> confusion between GLB and LB registers.
->
-> With those fixed feel free to add
->
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->
-Hi Jonathan,
+Kernel build warning noticed on x86_64 with clang toolchain [1].
+Build failures noticed from next-20221108 .. next-20221110.
 
-Thanks for you comments!
-I will fix these in the next version.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Thanks.
->
-> ...
->
->> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c b/drivers/hwtracing/coresight/ultrasoc-smb.c
->> new file mode 100644
->> index 000000000000..ea2552a98d28
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> ...
->
->> +static const struct acpi_device_id ultrasoc_smb_acpi_match[] = {
->> +	{"HISI03A1", 0},
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(acpi, ultrasoc_smb_acpi_match);
->> +
->> +static struct platform_driver smb_driver = {
->> +	.driver = {
->> +		.name = "ultrasoc-smb",
->> +		.acpi_match_table = ACPI_PTR(ultrasoc_smb_acpi_match),
-> Now the driver build isn't dependent on CONFIG_ACPI
-> if !CONFIG_ACPI ACPI_PTR() doesn't reference the parameter.
-> As such you'll get unused warnings.
->
-> 1 options to fix this
-> a) Drop ACPI_PTR() and just have .acpi_match_data = ultrasoc_smb_acpi_match
-> b) ifdef magic around the acpi_match table.
->
-> In theory the first option results in bloat, but in this case I doubt we care.
-Ok, will fix it, as follows
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
+CC=clang
+drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is
+uninitialized when used here [-Werror,-Wuninitialized]
+        acpi_cpufreq_online = ret;
+                              ^~~
+drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable
+'ret' to silence this warning
+        int ret;
+               ^
+                = 0
+1 error generated.
 
-```
-#ifdef CONFIG_ACPI
-static const struct acpi_device_id ultrasoc_smb_acpi_match[] = {
-     {"HISI03A1", 0},
-     {}
-};
-MODULE_DEVICE_TABLE(acpi, ultrasoc_smb_acpi_match);
-#endif
-```
+tuxmake --runtime podman --target-arch x86_64 --toolchain
+clang-nightly --kconfig defconfig --kconfig-add
+https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
+--kconfig-add CONFIG_IGB=y --kconfig-add
+CONFIG_UNWINDER_FRAME_POINTER=y LLVM=1 LLVM_IAS=1
 
->> +		.suppress_bind_attrs = true,
->> +	},
->> +	.probe = smb_probe,
->> +	.remove = smb_remove,
->> +};
->> +module_platform_driver(smb_driver);
->> +
->> +MODULE_DESCRIPTION("UltraSoc SMB CoreSight driver");
->> +MODULE_LICENSE("Dual MIT/GPL");
->> +MODULE_AUTHOR("Jonathan Zhou <jonathan.zhouwen@huawei.com>");
->> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
->> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.h b/drivers/hwtracing/coresight/ultrasoc-smb.h
->> new file mode 100644
->> index 000000000000..2e2f9f8fe54b
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.h
->> @@ -0,0 +1,116 @@
->> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
->> +/*
->> + * Siemens System Memory Buffer driver.
->> + * Copyright(c) 2022, HiSilicon Limited.
->> + */
->> +
->> +#ifndef _ULTRASOC_SMB_H
->> +#define _ULTRASOC_SMB_H
->> +
->> +#include <linux/miscdevice.h>
->> +#include <linux/mutex.h>
->> +
->> +/* Offset of SMB global registers */
->> +#define SMB_GLB_CFG_REG		0x00
->> +#define SMB_GLB_EN_REG		0x04
->> +#define SMB_GLB_INT_REG		0x08
->> +
->> +/* Offset of SMB logical buffer registers */
->> +#define SMB_LB_CFG_LO_REG	0x40
->> +#define SMB_LB_CFG_HI_REG	0x44
->> +#define SMB_LB_INT_CTRL_REG	0x48
->> +#define SMB_LB_INT_STS_REG	0x4c
->> +#define SMB_LB_RD_ADDR_REG	0x5c
->> +#define SMB_LB_WR_ADDR_REG	0x60
->> +#define SMB_LB_PURGE_REG	0x64
->> +
->> +/* Set global config register */
->> +#define SMB_CFG_BURST_LEN_MSK	GENMASK(11, 4)
-> Given there are several CFG registers, possibly worth
-> prefix of SMB_GLB_CFG_ ...
-Sure, I will do that.
 
->> +#define SMB_CFG_IDLE_PRD_MSK	GENMASK(15, 12)
->> +#define SMB_CFG_MEM_WR_MSK	GENMASK(21, 16)
->> +#define SMB_CFG_MEM_RD_MSK	GENMASK(27, 22)
->> +#define SMB_GLB_CFG_DEFAULT	(FIELD_PREP(SMB_CFG_BURST_LEN_MSK, 0xf) | \
->> +				 FIELD_PREP(SMB_CFG_IDLE_PRD_MSK, 0xf) | \
->> +				 FIELD_PREP(SMB_CFG_MEM_WR_MSK, 0x3) | \
->> +				 FIELD_PREP(SMB_CFG_MEM_RD_MSK, 0x1b))
->> +
->> +/* Set global interrupt control register */
->> +#define SMB_INT_EN		BIT(0)
-> Again, multiple INT registers, so SMB_INT_GLB_* perhaps?
-Ok, will fix it.
 
->> +#define SMB_INT_PULSE		BIT(1) /* Interrupt type: 1 - Pulse */
->> +#define SMB_INT_ACT_H		BIT(2) /* Interrupt polarity: 1 - Active high */
->> +#define SMB_GLB_INT_CFG		(SMB_INT_EN | SMB_INT_PULSE | SMB_INT_ACT_H)
->> +
->> +/* Set logical buffer config register lower 32 bits */
->> +#define SMB_CFG_LO_EN		BIT(0)
-> SMB_LB_CFG_...
->
-> etc for other cases.
-Sure, I will do that.
+Build log:
+[1] https://builds.tuxbuild.com/2HLg3VgMgxRXBn31n6Ig7BFwSy9/
 
->> +#define SMB_CFG_LO_SINGLE_END	BIT(1)
->> +#define SMB_CFG_LO_INIT		BIT(8)
->> +#define SMB_CFG_LO_CONT		BIT(11)
->> +#define SMB_CFG_LO_FLOW_MSK	GENMASK(19, 16)
->> +#define SMB_LB_CFG_LO_DEFAULT	(SMB_CFG_LO_EN | SMB_CFG_LO_SINGLE_END | \
->> +				 SMB_CFG_LO_INIT | SMB_CFG_LO_CONT | \
->> +				 FIELD_PREP(SMB_CFG_LO_FLOW_MSK, 0xf))
->> +
->> +/* Set logical buffer config register upper 32 bits */
->> +#define SMB_CFG_HI_RANGE_UP_MSK	GENMASK(15, 8)
->> +#define SMB_LB_CFG_HI_DEFAULT	FIELD_PREP(SMB_CFG_HI_RANGE_UP_MSK, 0xff)
->> +
->> +/* Set logical buffer interrupt control register */
->> +#define SMB_INT_CTRL_EN			BIT(0)
->> +#define SMB_INT_CTRL_BUF_NOTE_MSK	GENMASK(11, 8)
->> +#define SMB_LB_INT_CTRL_CFG	(SMB_INT_CTRL_EN | \
->> +				 FIELD_PREP(SMB_INT_CTRL_BUF_NOTE_MSK, 0xf))
->> +
->> +#define SMB_LB_INT_STS_NOT_EMPTY_MSK	BIT(0)
->> +#define SMB_LB_STS_RESET_MSK		GENMASK(3, 0)
->> +#define SMB_LB_INT_BUF_STS_RESET	FIELD_PREP(SMB_LB_STS_RESET_MSK, 0xf)
->> +#define SMB_LB_PURGE_PURGED	BIT(0)
->> +#define SMB_GLB_EN_HW_ENABLE	BIT(0)
->> +
->> +#define SMB_REG_ADDR_RES	0
->> +#define SMB_BUF_ADDR_RES	1
->> +#define SMB_BUF_ADDR_LO_MSK	GENMASK(31, 0)
-> ...
->
->> +
->> +/**
->> + * struct smb_drv_data - specifics associated to an SMB component
->> + * @base:	Memory mapped base address for SMB component.
->> + * @csdev:	Component vitals needed by the framework.
->> + * @sdb:	Data buffer for SMB.
->> + * @miscdev:	Specifics to handle "/dev/xyz.smb" entry.
->> + * @mutex:	Control data access to one at a time.
->> + * @reading:	Synchronise user space access to SMB buffer.
->> + * @pid:	Process ID of the process being monitored by the
->> + *		session that is using this component.
->> + * @mode:	how this SMB is being used, perf mode or sysfs mode.
-> Trivial, but for consistency should be: How this...
-Yes, I will do that.
 
->> + */
->> +struct smb_drv_data {
->> +	void __iomem *base;
->> +	struct coresight_device	*csdev;
->> +	struct smb_data_buffer sdb;
->> +	struct miscdevice miscdev;
->> +	struct mutex mutex;
->> +	local_t reading;
->> +	pid_t pid;
->> +	u32 mode;
->> +};
->> +
->> +#endif
-> .
->
-Best regards,
-Junhao.
-
+--
+Linaro LKFT
+https://lkft.linaro.org
