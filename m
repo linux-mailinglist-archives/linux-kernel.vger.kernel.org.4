@@ -2,149 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910F1623E75
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF470623E78
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiKJJUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S229840AbiKJJVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKJJUm (ORCPT
+        with ESMTP id S229516AbiKJJVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:20:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D19968C64
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:20:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27D58B82130
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:20:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51241C433D6;
-        Thu, 10 Nov 2022 09:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668072038;
-        bh=YFRAfTm6C+ZlOBvYjh/2TEJ/OXnJuqoAVu8O5lNu85c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nqaZUNyYM4y7YBGqObEYLvylKeqrdjivkItSHQ3miPrURDYtxUHetCE4msgNAIxRg
-         i1LX8FHbwCY82rbnwRuQ3YwBtwrIESwmBcYfgwtQiIof9bjAdlHl9oth/IGraDOTJa
-         6hRvluun8cWZMVgdc2LQ7khi688enOLV+2PYbNmw=
-Date:   Thu, 10 Nov 2022 10:20:35 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     linux-kernel@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Tejun Heo <tj@kernel.org>,
-        Florian Mickler <florian@mickler.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        systemd-devel@lists.freedesktop.org
-Subject: Re: BUG: kworker + systemd-udevd memory leaks found in 6.1.0-rc4
-Message-ID: <Y2zCYwNNvQWppLWZ@kroah.com>
-References: <0d9c3f6c-3948-d5d1-bcc1-baf31141beaa@alu.unizg.hr>
- <a6b76ce0-0fb3-4434-cc3e-ab6f39fb1cf9@alu.unizg.hr>
+        Thu, 10 Nov 2022 04:21:17 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067286A683
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:21:16 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id f37so2017247lfv.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:21:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yEVHYkNLaKaVRtKWsEFztX3vRYcFwb5P6qHusc9rNXA=;
+        b=KKS49WTtT6lta72rnCAUh3ESikVI5Y3HIqrgfHLaR6EgHNzRi6kWmkWd0xpN2+xtwG
+         JqYhwOi9VC+J6UTA872LagXNkLUI3IR7fGMgAjsirHl7M/Z8AVS0yNglzllEJCLh2Gdy
+         k66k0GYtOCEbPCebeN1HpbjWZpGypiqvO/F7xRPwFNBglEPe3oaIrUjrJaBNUPTAY/tF
+         c7BsAL9PdmIXeDLtRnx+aTLXHbg4JhM8T1jA0RmsM2TJKe15uufVDi8JCn3uKT5Vb2MJ
+         LeGPFSsxDR2RceH6pMPLs7rpf8OC35hQdC73x28CrYCBueHXhbmB785cnvCne1ZPR3ZL
+         btWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yEVHYkNLaKaVRtKWsEFztX3vRYcFwb5P6qHusc9rNXA=;
+        b=24gx6ufUF0VTJs0s+poqHAFchz3wsHPLA/jVdIOFraGf5G45hQjijqNU2cs6s/guKb
+         ft1SSaaxgRWglOve1xvDhdFjR0G9rJVDpvpi5VacODiEq1RZ3FBpYMHRfuGjtsbs33tu
+         JSiC6OdzlDH2olpmw5WMyDlJng0kYQqbWcrihLTolWO617hZmLwTkmIe0ZGbpOQWFIc7
+         siKkLG80fnx1QxX8bNoD4XGA8L7Zjd+UQAtoVAF9hftTRP+J5ByW0WzFECGvKkdMyrVS
+         L0B6LKtkUmreXnZyxzpsaFf8moStUQ25m/hbsMnSzlnMXjtLcGE+8Fp36roGowq5cR1f
+         EfgA==
+X-Gm-Message-State: ACrzQf21guVmDmdl/QiPOE9c17thLgjRUW8onka7CQ5A2JGCG5Xkmd6y
+        I65D8rv1M12zrZ0A+lMWMvbktA==
+X-Google-Smtp-Source: AMsMyM5vi7JtYPxbKQOwE53mcnrQPH9NtIclvr731Cak0G2jNM4Icnn66SdEBCOP8civ5KxBNGKKyA==
+X-Received: by 2002:a05:6512:532:b0:4af:e7d3:9478 with SMTP id o18-20020a056512053200b004afe7d39478mr20269727lfc.102.1668072074365;
+        Thu, 10 Nov 2022 01:21:14 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id u8-20020a2e2e08000000b0026dcf81d804sm2592082lju.31.2022.11.10.01.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 01:21:13 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] ARM: dts: Cleanups for v6.2
+Date:   Thu, 10 Nov 2022 10:21:11 +0100
+Message-Id: <20221110092111.18581-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a6b76ce0-0fb3-4434-cc3e-ab6f39fb1cf9@alu.unizg.hr>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DEAR_SOMETHING,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 05:57:57AM +0100, Mirsad Goran Todorovac wrote:
-> On 04. 11. 2022. 11:40, Mirsad Goran Todorovac wrote:
-> 
-> > Dear Sirs,
-> > 
-> > When building a RPM 6.1.0-rc3 for AlmaLinux 8.6, I have enabled
-> > CONFIG_DEBUG_KMEMLEAK=y
-> > and the result showed an unreferenced object in kworker process:
-> > 
-> > # cat /sys/kernel/debug/kmemleak
-> > unreferenced object 0xffffa01dabff6100 (size 16):
-> >   comm "kworker/u12:4", pid 400, jiffies 4294894771 (age 5284.956s)
-> >   hex dump (first 16 bytes):
-> >     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
-> >   backtrace:
-> >     [<000000009ff951f6>] __kmem_cache_alloc_node+0x380/0x4e0
-> >     [<00000000451f4268>] __kmalloc_node_track_caller+0x55/0x150
-> >     [<0000000005472512>] kstrdup+0x36/0x70
-> >     [<000000002f797ac4>] kstrdup_const+0x28/0x30
-> >     [<00000000e3f86581>] kvasprintf_const+0x78/0xa0
-> >     [<00000000e15920f7>] kobject_set_name_vargs+0x23/0xa0
-> >     [<000000004158a6c0>] dev_set_name+0x53/0x70
-> >     [<000000001a120541>] memstick_check+0xff/0x384 [memstick]
-> >     [<00000000122bb894>] process_one_work+0x214/0x3f0
-> >     [<00000000fcf282cc>] worker_thread+0x34/0x3d0
-> >     [<0000000002409855>] kthread+0xed/0x120
-> >     [<000000007b02b4a3>] ret_from_fork+0x1f/0x30
-> > unreferenced object 0xffffa01dabff6ec0 (size 16):
-> >   comm "kworker/u12:4", pid 400, jiffies 4294894774 (age 5284.944s)
-> >   hex dump (first 16 bytes):
-> >     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
-> >   backtrace:
-> >     [<000000009ff951f6>] __kmem_cache_alloc_node+0x380/0x4e0
-> >     [<00000000451f4268>] __kmalloc_node_track_caller+0x55/0x150
-> >     [<0000000005472512>] kstrdup+0x36/0x70
-> >     [<000000002f797ac4>] kstrdup_const+0x28/0x30
-> >     [<00000000e3f86581>] kvasprintf_const+0x78/0xa0
-> >     [<00000000e15920f7>] kobject_set_name_vargs+0x23/0xa0
-> >     [<000000004158a6c0>] dev_set_name+0x53/0x70
-> >     [<000000001a120541>] memstick_check+0xff/0x384 [memstick]
-> >     [<00000000122bb894>] process_one_work+0x214/0x3f0
-> >     [<00000000fcf282cc>] worker_thread+0x34/0x3d0
-> >     [<0000000002409855>] kthread+0xed/0x120
-> >     [<000000007b02b4a3>] ret_from_fork+0x1f/0x30
-> > #
-> > 
-> > Please fing the build config and lshw output attached.
-> > 
-> > dmesg is useless, as it is filled with events like:
-> > 
-> > [ 6068.996120] evbug: Event. Dev: input4, Type: 1, Code: 31, Value: 0
-> > [ 6068.996121] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
-> > [ 6069.124145] evbug: Event. Dev: input4, Type: 4, Code: 4, Value: 458762
-> > [ 6069.124149] evbug: Event. Dev: input4, Type: 1, Code: 34, Value: 1
-> > [ 6069.124150] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
-> > [ 6069.196003] evbug: Event. Dev: input4, Type: 4, Code: 4, Value: 458762
-> > [ 6069.196007] evbug: Event. Dev: input4, Type: 1, Code: 34, Value: 0
-> > [ 6069.196009] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
-> > [ 6069.788129] evbug: Event. Dev: input4, Type: 4, Code: 4, Value: 458792
-> > [ 6069.788133] evbug: Event. Dev: input4, Type: 1, Code: 28, Value: 1
-> > [ 6069.788135] evbug: Event. Dev: input4, Type: 0, Code: 0, Value: 0
-> 
-> This bug is confirmed in 6.1-rc4, among the "thermald" and "systemd-dev"
-> kernel memory leaks, potentially exposing race conditions or other more
-> serious bug.
+Hi,
 
-How is a memory leak a race condition?
+Various cleanups missed or acked by maintainers.
 
-> The bug is now also confirmed and now manifested also in the Ubuntu 22.04
-> LTS jammy 6.1-rc4 build.
-> 
-> Here is the kmemleak output:
-> 
-> unreferenced object 0xffff9242b13b3980 (size 64):
->   comm "kworker/5:3", pid 43106, jiffies 4305052439 (age 71828.792s)
->   hex dump (first 32 bytes):
->     80 8b a0 f0 42 92 ff ff 00 00 00 00 00 00 00 00 ....B...........
->     20 86 a0 f0 42 92 ff ff 00 00 00 00 00 00 00 00 ...B...........
->   backtrace:
->     [<00000000c5dea4db>] __kmem_cache_alloc_node+0x380/0x4e0
->     [<000000002b17af47>] kmalloc_node_trace+0x27/0xa0
->     [<000000004c09eee5>] xhci_alloc_command+0x6e/0x180
+Best regards,
+Krzysztof
 
-This is a totally different backtrace from above, how are they related?
 
-This looks like a potential xhci issue.  Can you use 'git bisect' to
-track down the offending change that caused this?
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-thanks,
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-greg k-h
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.2
+
+for you to fetch changes up to 001b38cea30961e0f4e562a1872f2409a8024ff0:
+
+  dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename (2022-11-10 10:18:49 +0100)
+
+----------------------------------------------------------------
+Minor improvements in ARM DTS for v6.2
+
+1. Aspeed: fix qcom,dc-scm-v1-bmc compatible in the bindings.
+2. Marvell: include bindings in maintainers entry.
+3. Cleanup DTS according to bindings (panel endpoint unit address,
+   incorrect spi-max-frequency, generic node names).
+4. Few indentation fixes.
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (10):
+      ARM: dts: am335x: drop panel endpoint unit address
+      ARM: dts: sunplus: sp7021: drop incorrect spi-max-frequency
+      MAINTAINERS: ARM: marvell: include bindings
+      ARM: dts: aspeed: align SPI node name with dtschema
+      ARM: dts: ti: correct indentation
+      ARM: dts: armada: correct indentation
+      ARM: dts: kirkwood: correct indentation
+      ARM: dts: omap: correct indentation
+      ARM: dts: sunxi: correct indentation
+      dt-bindings: arm: aspeed: adjust qcom,dc-scm-v1-bmc compatible after rename
+
+ .../devicetree/bindings/arm/aspeed/aspeed.yaml     |  2 +-
+ MAINTAINERS                                        |  3 +
+ arch/arm/boot/dts/am335x-evm.dts                   |  2 +-
+ arch/arm/boot/dts/am335x-evmsk.dts                 |  2 +-
+ arch/arm/boot/dts/am335x-moxa-uc-2100-common.dtsi  | 10 ++--
+ arch/arm/boot/dts/am335x-moxa-uc-8100-common.dtsi  | 10 ++--
+ arch/arm/boot/dts/am335x-pepper.dts                |  4 +-
+ arch/arm/boot/dts/am3517-evm.dts                   | 16 +++---
+ arch/arm/boot/dts/armada-370-netgear-rn102.dts     | 10 ++--
+ arch/arm/boot/dts/armada-370-netgear-rn104.dts     | 10 ++--
+ arch/arm/boot/dts/armada-370-rd.dts                | 16 +++---
+ arch/arm/boot/dts/armada-370-synology-ds213j.dts   |  6 +-
+ arch/arm/boot/dts/armada-xp-netgear-rn2120.dts     | 10 ++--
+ .../boot/dts/aspeed-bmc-facebook-cloudripper.dts   |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-elbert.dts   |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-fuji.dts     |  2 +-
+ arch/arm/boot/dts/aspeed-bmc-facebook-wedge400.dts |  2 +-
+ .../boot/dts/ast2600-facebook-netbmc-common.dtsi   |  2 +-
+ arch/arm/boot/dts/kirkwood-b3.dts                  |  2 +-
+ arch/arm/boot/dts/kirkwood-db-88f6281.dts          |  2 +-
+ arch/arm/boot/dts/kirkwood-db-88f6282.dts          |  2 +-
+ arch/arm/boot/dts/kirkwood-dir665.dts              | 14 ++---
+ arch/arm/boot/dts/kirkwood-ds112.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-ds411.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-iconnect.dts            |  2 +-
+ arch/arm/boot/dts/kirkwood-km_common.dtsi          |  2 +-
+ arch/arm/boot/dts/kirkwood-l-50.dts                | 24 ++++----
+ arch/arm/boot/dts/kirkwood-laplug.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-linkstation.dtsi        |  2 +-
+ arch/arm/boot/dts/kirkwood-mplcec4.dts             | 16 +++---
+ arch/arm/boot/dts/kirkwood-mv88f6281gtw-ge.dts     |  2 +-
+ arch/arm/boot/dts/kirkwood-nas2big.dts             |  2 +-
+ arch/arm/boot/dts/kirkwood-net2big.dts             | 10 ++--
+ arch/arm/boot/dts/kirkwood-net5big.dts             | 10 ++--
+ .../boot/dts/kirkwood-netgear_readynas_nv+_v2.dts  | 12 ++--
+ arch/arm/boot/dts/kirkwood-nsa310.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-nsa320.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-nsa325.dts              |  2 +-
+ arch/arm/boot/dts/kirkwood-nsa3x0-common.dtsi      |  2 +-
+ arch/arm/boot/dts/kirkwood-rd88f6192.dts           | 60 ++++++++++----------
+ arch/arm/boot/dts/kirkwood-rd88f6281-z0.dts        |  2 +-
+ arch/arm/boot/dts/kirkwood-rd88f6281.dtsi          |  4 +-
+ arch/arm/boot/dts/kirkwood-rs212.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-synology.dtsi           |  2 +-
+ arch/arm/boot/dts/kirkwood-t5325.dts               |  2 +-
+ arch/arm/boot/dts/kirkwood-ts219.dtsi              |  4 +-
+ arch/arm/boot/dts/kirkwood.dtsi                    | 34 ++++++------
+ arch/arm/boot/dts/omap-gpmc-smsc911x.dtsi          |  6 +-
+ arch/arm/boot/dts/omap-gpmc-smsc9221.dtsi          |  6 +-
+ arch/arm/boot/dts/omap3-cm-t3517.dts               | 12 ++--
+ arch/arm/boot/dts/omap3-gta04.dtsi                 |  6 +-
+ arch/arm/boot/dts/omap3-ldp.dts                    |  2 +-
+ arch/arm/boot/dts/omap3-n900.dts                   | 38 ++++++-------
+ arch/arm/boot/dts/omap3-zoom3.dts                  | 44 +++++++--------
+ arch/arm/boot/dts/omap4-cpu-thermal.dtsi           | 24 ++++----
+ arch/arm/boot/dts/omap5-cm-t54.dts                 | 64 +++++++++++-----------
+ arch/arm/boot/dts/sunplus-sp7021.dtsi              |  3 -
+ arch/arm/boot/dts/sunxi-bananapi-m2-plus.dtsi      | 14 ++---
+ 58 files changed, 278 insertions(+), 278 deletions(-)
