@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8314E624757
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB782624758
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiKJQok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        id S232367AbiKJQon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbiKJQn5 (ORCPT
+        with ESMTP id S232211AbiKJQoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:43:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DFB47321;
-        Thu, 10 Nov 2022 08:43:20 -0800 (PST)
+        Thu, 10 Nov 2022 11:44:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFAF48742;
+        Thu, 10 Nov 2022 08:43:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9539FB82258;
-        Thu, 10 Nov 2022 16:43:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D687C433C1;
-        Thu, 10 Nov 2022 16:43:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A92FB8224F;
+        Thu, 10 Nov 2022 16:43:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24135C433D6;
+        Thu, 10 Nov 2022 16:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668098598;
-        bh=Z3Poal8/0sehEb7NLOgdH3l5JP1/vq7TUA9vjjBRHIM=;
+        s=k20201202; t=1668098601;
+        bh=VGz/Q7gY5LCscMIH+BUom4dYaRe94hPiAPnwG7cHlrU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JLFepvqhskfPiO9iSLzm0an7+SN+UMlAWx99yK/eHXyeVW2bZmLa5cfif0sVu9kbw
-         WFqYdTyDbQ85XqNWhZzwuvnRhBUEZWWEefvXDU6kFv3/RChF+U/SikwzuntqV6qJlK
-         e3zLr3B0QjaCQ9YRnHDZMm/0/rr1dhUtM6KG58Y3LD3Cv0knc0j8mKtQMq3Kosb8/5
-         0vrXxNLcocW5m4rz3TLhiJXIBGneTrap2b2acp+O5K73KzyfRQUZ/tjzWe65CPqWsV
-         5hztVAqrW3FioMbMiXR26ZeWvUvTcu7k7SstTfGM0j0ltAMEgXqNFRIDgYCKke6Jl0
-         s/IFAJzVZ/DqQ==
+        b=HurCQzjaTx4LXSUf0fsQCh5zspRKv/suYkpVIO8l7dXLwUCfRBtmyoxFxLHqBTlEC
+         tI3+A1Oh+VcLnNjO9B0fBuY+h4jiHHFXY0g2L4K3v+vsK3nQ3W92AgnWMTdK5I6IUb
+         OL3jrf2ccL3+PtY/e/P3Pd1/KhImoVq+8SMLBYRSb1mDSm19ZMORxQihNNSfR/cS/i
+         WjKbMwXa91am0kscJ0UQQwrL72rposHYxDuO2ZHtJDqKImrUvO/E9J9KjAOITc47xi
+         wL3wJy0UQc9z2Of54UowHj6Hvx1RigamLh/dK5TL4h6bb7oVlsBUhpTsaPvKJ3pT5/
+         4oClzLVvBIENw==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,10 +39,10 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Adam Bratschi-Kaye <ark.email@gmail.com>
-Subject: [PATCH v1 20/28] rust: str: add `Formatter` type
-Date:   Thu, 10 Nov 2022 17:41:32 +0100
-Message-Id: <20221110164152.26136-21-ojeda@kernel.org>
+        patches@lists.linux.dev
+Subject: [PATCH v1 21/28] rust: str: add `CString` type
+Date:   Thu, 10 Nov 2022 17:41:33 +0100
+Message-Id: <20221110164152.26136-22-ojeda@kernel.org>
 In-Reply-To: <20221110164152.26136-1-ojeda@kernel.org>
 References: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -58,92 +58,153 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wedson Almeida Filho <wedsonaf@gmail.com>
 
-Add the `Formatter` type, which leverages `RawFormatter`,
-but fails if callers attempt to write more than will fit
-in the buffer.
+Add the `CString` type, which is an owned string that is guaranteed
+to have exactly one `NUL` byte at the end, i.e. the owned equivalent
+to `CStr` introduced earlier.
 
-In order to so, implement the `RawFormatter::from_buffer()`
-constructor as well.
+It is used for interoperability with kernel APIs that take C strings.
 
-Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
+In order to do so, implement the `RawFormatter::new()` constructor
+and the `RawFormatter::bytes_written()` method as well.
+
 Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 [Reworded, adapted for upstream and applied latest changes]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/str.rs | 57 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ rust/kernel/str.rs | 91 +++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 89 insertions(+), 2 deletions(-)
 
 diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index 3fb73b888dce..db6473db31c6 100644
+index db6473db31c6..877148b77e71 100644
 --- a/rust/kernel/str.rs
 +++ b/rust/kernel/str.rs
-@@ -415,6 +415,23 @@ impl RawFormatter {
-         }
-     }
+@@ -2,6 +2,7 @@
  
-+    /// Creates a new instance of [`RawFormatter`] with the given buffer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
-+    /// for the lifetime of the returned [`RawFormatter`].
-+    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
-+        let pos = buf as usize;
-+        // INVARIANT: We ensure that `end` is never less then `buf`, and the safety requirements
-+        // guarantees that the memory region is valid for writes.
+ //! String representations.
+ 
++use alloc::vec::Vec;
+ use core::fmt::{self, Write};
+ use core::ops::{self, Deref, Index};
+ 
+@@ -393,13 +394,22 @@ mod tests {
+ /// is less than `end`.
+ pub(crate) struct RawFormatter {
+     // Use `usize` to use `saturating_*` functions.
+-    #[allow(dead_code)]
+     beg: usize,
+     pos: usize,
+     end: usize,
+ }
+ 
+ impl RawFormatter {
++    /// Creates a new instance of [`RawFormatter`] with an empty buffer.
++    fn new() -> Self {
++        // INVARIANT: The buffer is empty, so the region that needs to be writable is empty.
 +        Self {
-+            pos,
-+            beg: pos,
-+            end: pos.saturating_add(len),
++            beg: 0,
++            pos: 0,
++            end: 0,
 +        }
 +    }
 +
-     /// Returns the current insert position.
+     /// Creates a new instance of [`RawFormatter`] with the given buffer pointers.
      ///
-     /// N.B. It may point to invalid memory.
-@@ -448,3 +465,43 @@ impl fmt::Write for RawFormatter {
-         Ok(())
+     /// # Safety
+@@ -438,6 +448,11 @@ impl RawFormatter {
+     pub(crate) fn pos(&self) -> *mut u8 {
+         self.pos as _
+     }
++
++    /// Return the number of bytes written to the formatter.
++    pub(crate) fn bytes_written(&self) -> usize {
++        self.pos - self.beg
++    }
+ }
+ 
+ impl fmt::Write for RawFormatter {
+@@ -478,7 +493,6 @@ impl Formatter {
+     ///
+     /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
+     /// for the lifetime of the returned [`Formatter`].
+-    #[allow(dead_code)]
+     pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
+         // SAFETY: The safety requirements of this function satisfy those of the callee.
+         Self(unsafe { RawFormatter::from_buffer(buf, len) })
+@@ -505,3 +519,76 @@ impl fmt::Write for Formatter {
+         }
      }
  }
 +
-+/// Allows formatting of [`fmt::Arguments`] into a raw buffer.
++/// An owned string that is guaranteed to have exactly one `NUL` byte, which is at the end.
 +///
-+/// Fails if callers attempt to write more than will fit in the buffer.
-+pub(crate) struct Formatter(RawFormatter);
++/// Used for interoperability with kernel APIs that take C strings.
++///
++/// # Invariants
++///
++/// The string is always `NUL`-terminated and contains no other `NUL` bytes.
++///
++/// # Examples
++///
++/// ```
++/// use kernel::str::CString;
++///
++/// let s = CString::try_from_fmt(fmt!("{}{}{}", "abc", 10, 20)).unwrap();
++/// assert_eq!(s.as_bytes_with_nul(), "abc1020\0".as_bytes());
++///
++/// let tmp = "testing";
++/// let s = CString::try_from_fmt(fmt!("{tmp}{}", 123)).unwrap();
++/// assert_eq!(s.as_bytes_with_nul(), "testing123\0".as_bytes());
++///
++/// // This fails because it has an embedded `NUL` byte.
++/// let s = CString::try_from_fmt(fmt!("a\0b{}", 123));
++/// assert_eq!(s.is_ok(), false);
++/// ```
++pub struct CString {
++    buf: Vec<u8>,
++}
 +
-+impl Formatter {
-+    /// Creates a new instance of [`Formatter`] with the given buffer.
-+    ///
-+    /// # Safety
-+    ///
-+    /// The memory region starting at `buf` and extending for `len` bytes must be valid for writes
-+    /// for the lifetime of the returned [`Formatter`].
-+    #[allow(dead_code)]
-+    pub(crate) unsafe fn from_buffer(buf: *mut u8, len: usize) -> Self {
-+        // SAFETY: The safety requirements of this function satisfy those of the callee.
-+        Self(unsafe { RawFormatter::from_buffer(buf, len) })
++impl CString {
++    /// Creates an instance of [`CString`] from the given formatted arguments.
++    pub fn try_from_fmt(args: fmt::Arguments<'_>) -> Result<Self, Error> {
++        // Calculate the size needed (formatted string plus `NUL` terminator).
++        let mut f = RawFormatter::new();
++        f.write_fmt(args)?;
++        f.write_str("\0")?;
++        let size = f.bytes_written();
++
++        // Allocate a vector with the required number of bytes, and write to it.
++        let mut buf = Vec::try_with_capacity(size)?;
++        // SAFETY: The buffer stored in `buf` is at least of size `size` and is valid for writes.
++        let mut f = unsafe { Formatter::from_buffer(buf.as_mut_ptr(), size) };
++        f.write_fmt(args)?;
++        f.write_str("\0")?;
++
++        // SAFETY: The number of bytes that can be written to `f` is bounded by `size`, which is
++        // `buf`'s capacity. The contents of the buffer have been initialised by writes to `f`.
++        unsafe { buf.set_len(f.bytes_written()) };
++
++        // Check that there are no `NUL` bytes before the end.
++        // SAFETY: The buffer is valid for read because `f.bytes_written()` is bounded by `size`
++        // (which the minimum buffer size) and is non-zero (we wrote at least the `NUL` terminator)
++        // so `f.bytes_written() - 1` doesn't underflow.
++        let ptr = unsafe { bindings::memchr(buf.as_ptr().cast(), 0, (f.bytes_written() - 1) as _) };
++        if !ptr.is_null() {
++            return Err(EINVAL);
++        }
++
++        // INVARIANT: We wrote the `NUL` terminator and checked above that no other `NUL` bytes
++        // exist in the buffer.
++        Ok(Self { buf })
 +    }
 +}
 +
-+impl Deref for Formatter {
-+    type Target = RawFormatter;
++impl Deref for CString {
++    type Target = CStr;
 +
 +    fn deref(&self) -> &Self::Target {
-+        &self.0
-+    }
-+}
-+
-+impl fmt::Write for Formatter {
-+    fn write_str(&mut self, s: &str) -> fmt::Result {
-+        self.0.write_str(s)?;
-+
-+        // Fail the request if we go past the end of the buffer.
-+        if self.0.pos > self.0.end {
-+            Err(fmt::Error)
-+        } else {
-+            Ok(())
-+        }
++        // SAFETY: The type invariants guarantee that the string is `NUL`-terminated and that no
++        // other `NUL` bytes exist.
++        unsafe { CStr::from_bytes_with_nul_unchecked(self.buf.as_slice()) }
 +    }
 +}
 -- 
