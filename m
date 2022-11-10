@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACD962400F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFD662401E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiKJKi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S230219AbiKJKi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKJKiU (ORCPT
+        with ESMTP id S230011AbiKJKiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:38:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A5A6C700;
-        Thu, 10 Nov 2022 02:38:19 -0800 (PST)
+        Thu, 10 Nov 2022 05:38:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35EF317D2;
+        Thu, 10 Nov 2022 02:38:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9DA06124E;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A45BB82169;
+        Thu, 10 Nov 2022 10:38:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18736C43143;
         Thu, 10 Nov 2022 10:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D365C43470;
-        Thu, 10 Nov 2022 10:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668076698;
-        bh=pfUV1J44lGpPw0+uv/i2sIDx3ylSY0hXsbscaznXLnE=;
+        bh=sT1WvXvJ7c0JTRgR47Q1J4qASmlZRKoig4IMsKM5CJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R3Dag3jpoWkQHYgtrAk/4ljhvBTH3ehazPQrKJ+tFjD4oZE0UgdNuJsAO/RqMOwiE
-         qMJlekUJakGSVDxoCjbjc2lZOI8u238Vtqn0euvse4H6b62gcLrvHKwAEqEfI3EUVJ
-         DXHlOgVZxKg8shu4fQkgqQ3RUKGeRZHJCFbLex9kGpoJk+5aYO1bqK4AHgvkjQS9bd
-         amvxrESi1nXNUrJNUv+gAWLHfJU7wNSzjPF5jZbyCZZHC+QMw+Yc6FCAesxq7p62Lc
-         ju8e9EL5HoCF6LWhyxseslSb1VvRf1PyAcjs9ULBORgpBOv+06PRSbDzhWVFH1cQNM
-         bsFih8t7gMQ7w==
+        b=HVLp8+Wa65CvW5US91+WgIhKs5TS+ejJ4HpbkbuF5YMhW02n7ttlxs6VOhgTAjJvY
+         OLmXv2FZlwyCbJXj/gjNvctlm0z/pJUHHN9V5nDh93LPViIHooSPaWI5XLx2nRj/S9
+         qKwFAHpq2pyg76PE0ppJYKZDimLTOtplnSmkyTwa5wFlLTcEmiXCcVjoy1r5sYY2K3
+         xVuYZGYbcToIgOd0EjcIzpOrAfR2af8eq+LqrR56EMF+x7JbEDbMgJpJJWFEHX9eRL
+         iFEel2JF9Pr883tbQSNejj7wrd3vFDiwb+8io0wgtrE/zrioeb6LzQQLh6HPhDiI81
+         q/vlSQDG9Hjuw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ot4wR-0003LY-5A; Thu, 10 Nov 2022 11:37:51 +0100
+        id 1ot4wR-0003Lc-82; Thu, 10 Nov 2022 11:37:51 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -44,9 +44,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 5/9] arm64: dts: qcom: sc8280xp-crd: enable SDX55 modem
-Date:   Thu, 10 Nov 2022 11:35:54 +0100
-Message-Id: <20221110103558.12690-6-johan+linaro@kernel.org>
+Subject: [PATCH 6/9] arm64: dts: qcom: sc8280xp-crd: enable WiFi controller
+Date:   Thu, 10 Nov 2022 11:35:55 +0100
+Message-Id: <20221110103558.12690-7-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221110103558.12690-1-johan+linaro@kernel.org>
 References: <20221110103558.12690-1-johan+linaro@kernel.org>
@@ -61,7 +61,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the SDX55 modem connected to PCIe3.
+Enable the Qualcomm QCNFA765 Wireless Network Adapter connected to
+PCIe4.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
@@ -69,49 +70,49 @@ Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
  1 file changed, 65 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-index fd2bdfd1126b..5b9e37a16f9f 100644
+index 5b9e37a16f9f..ab5b0aadeead 100644
 --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
 +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-@@ -80,6 +80,22 @@ vreg_misc_3p3: regulator-misc-3p3 {
- 		regulator-boot-on;
+@@ -81,6 +81,22 @@ vreg_misc_3p3: regulator-misc-3p3 {
  		regulator-always-on;
  	};
-+
-+	vreg_wwan: regulator-wwan {
+ 
++	vreg_wlan: regulator-wlan {
 +		compatible = "regulator-fixed";
 +
-+		regulator-name = "VCC3B_WAN";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
++		regulator-name = "VCC_WLAN_3R9";
++		regulator-min-microvolt = <3900000>;
++		regulator-max-microvolt = <3900000>;
 +
-+		gpio = <&pmc8280_2_gpios 1 GPIO_ACTIVE_HIGH>;
++		gpio = <&pmr735a_gpios 1 GPIO_ACTIVE_HIGH>;
 +		enable-active-high;
 +
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&wwan_sw_en>;
++		pinctrl-0 = <&hastings_reg_en>;
 +
 +		regulator-boot-on;
 +	};
- };
++
+ 	vreg_wwan: regulator-wwan {
+ 		compatible = "regulator-fixed";
  
- &apps_rsc {
-@@ -211,6 +227,25 @@ &pcie2a_phy {
+@@ -246,6 +262,25 @@ &pcie3a_phy {
  	status = "okay";
  };
  
-+&pcie3a {
-+	perst-gpios = <&tlmm 151 GPIO_ACTIVE_LOW>;
-+	wake-gpios = <&tlmm 148 GPIO_ACTIVE_LOW>;
++&pcie4 {
++	perst-gpios = <&tlmm 141 GPIO_ACTIVE_LOW>;
++	wake-gpios = <&tlmm 139 GPIO_ACTIVE_LOW>;
 +
-+	vddpe-3v3-supply = <&vreg_wwan>;
++	vddpe-3v3-supply = <&vreg_wlan>;
 +
 +	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie3a_default>;
++	pinctrl-0 = <&pcie4_default>;
 +
 +	status = "okay";
 +};
 +
-+&pcie3a_phy {
++&pcie4_phy {
 +	vdda-phy-supply = <&vreg_l6d>;
 +	vdda-pll-supply = <&vreg_l4d>;
 +
@@ -121,41 +122,41 @@ index fd2bdfd1126b..5b9e37a16f9f 100644
  &pmc8280c_lpg {
  	status = "okay";
  };
-@@ -396,6 +431,13 @@ misc_3p3_reg_en: misc-3p3-reg-en-state {
+@@ -445,6 +480,13 @@ edp_bl_pwm: edp-bl-pwm-state {
  	};
  };
  
-+&pmc8280_2_gpios {
-+	wwan_sw_en: wwan-sw-en-state {
++&pmr735a_gpios {
++	hastings_reg_en: hastings-reg-en-state {
 +		pins = "gpio1";
 +		function = "normal";
 +	};
 +};
 +
- &pmc8280c_gpios {
- 	edp_bl_pwm: edp-bl-pwm-state {
- 		pins = "gpio8";
-@@ -456,6 +498,29 @@ wake-n-pins {
- 	       };
+ &tlmm {
+ 	gpio-reserved-ranges = <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+ 
+@@ -521,6 +563,29 @@ wake-n-pins {
+ 		};
  	};
  
-+	pcie3a_default: pcie3a-default-state {
++	pcie4_default: pcie4-default-state {
 +		clkreq-n-pins {
-+			pins = "gpio150";
-+			function = "pcie3a_clkreq";
++			pins = "gpio140";
++			function = "pcie4_clkreq";
 +			drive-strength = <2>;
 +			bias-pull-up;
 +		};
 +
 +		perst-n-pins {
-+			pins = "gpio151";
++			pins = "gpio141";
 +			function = "gpio";
 +			drive-strength = <2>;
 +			bias-pull-down;
 +		};
 +
 +		wake-n-pins {
-+			pins = "gpio148";
++			pins = "gpio139";
 +			function = "gpio";
 +			drive-strength = <2>;
 +			bias-pull-up;
