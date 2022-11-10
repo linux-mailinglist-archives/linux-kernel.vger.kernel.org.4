@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F152262478E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B50624792
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbiKJQua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S232599AbiKJQun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiKJQuI (ORCPT
+        with ESMTP id S232045AbiKJQuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:50:08 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD622A474
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:49:34 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id gw22so1992202pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:49:34 -0800 (PST)
+        Thu, 10 Nov 2022 11:50:12 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37686BE2C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:49:49 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id l6so2031688pjj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:49:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rPjVc+C4keVB9JNeySRKdiTbUPe13351AhOJe9TtZf8=;
-        b=OOR4bwRUplBbyMMh2BEwu+86VP3qxijSJnezQ7clymoLz9HUcLonm3WyVFc88kB5fY
-         O/E+L3vna3lCH6PwuGGALEpEbdqf//FCQPJXnQH0fruVZmuKpiXxpksMlHLNli5FBIVk
-         yHcqF3ftlcFWSWpaRO18yKIRlZ4MLKYwLTrjNA/qL4cv528Rj8wkmrotYw4AfXaxmJus
-         pcCX78Uh4a0+xqNPkY5yiRwsOaQfBATcwvX2XL8kq2aQkn5xXT0ESqE2s4sWnkM2XUP1
-         lN0YUhWFEsDiU77d2rUZObTRDQeLPD96HT9QdyztVtB+kfc9jl7KnKnrsPBskzRSRVH/
-         XRTg==
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wyrWfcByjJXJ5u7emZGohwKYRcoGGODByISYDFHgldU=;
+        b=SkZKW3Yo1le1fuMFEG+mH3AW0pGZzhfl1jquZr26xXoWgcpGUgwx/9i59trYLnbyNp
+         0fECbdTZThXTLRMivyi83uOwpVX+PQtcAkIY/lpHnBGqzgJ8HE/JGcY/yGpDr/tts6s8
+         fEUAZIy98nqHcvqsGCP73UaA5HAyPfN1MhCsc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rPjVc+C4keVB9JNeySRKdiTbUPe13351AhOJe9TtZf8=;
-        b=j1i39vbAZAKgRUfhuDpKp31mtmzkCWq9M4OzjptNm7Bd6o7ent+qZhVQl2nRP8irbN
-         2qfb9lQcko8rWAcocvCCDBX4zM0ivHCEogUrKYamUcJHIHdA6hRjzBku2gXYJEDXZHLp
-         xYp8LrAP8c+96pHQcS6Wd3sVPs2foqnfa9xsaRqraMpEMMoP7F+JCrCX0JZodQ+/vnd1
-         ua36WHZbWvMrEhLCv5wwaXhowh0/PbNO2DMJux60UjjHsNtDyNdX5CHAnUlX5HeP6L+e
-         Xnrt3ZSn/s2da5erI2NwMlVzGybuh0oAtWyOWJxE+6mM8eMHdL/fEFTpv1mJqREYJEmW
-         l9kQ==
-X-Gm-Message-State: ACrzQf1DQiBLAm94IlFpzXkrzudguq0fMR+LBhehW4Ql81FvTWWdk1JJ
-        wyjxAKHCKI87EsXb/0jLY9OcTg==
-X-Google-Smtp-Source: AMsMyM7nQN/gdgW0z481CkQ/WjHrrL4d++/kzaSXhuKO9UuGt09a3AowKSZBoBJ0HDICWxNrCbdrGA==
-X-Received: by 2002:a17:902:d50c:b0:187:460:bf9c with SMTP id b12-20020a170902d50c00b001870460bf9cmr65545589plg.4.1668098974180;
-        Thu, 10 Nov 2022 08:49:34 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c3-20020a17090a020300b00205d85cfb30sm3288107pjc.20.2022.11.10.08.49.33
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wyrWfcByjJXJ5u7emZGohwKYRcoGGODByISYDFHgldU=;
+        b=piQu0rlG7ntnw6dJGBrySdW8JPg6zAvm2IWVOwPNYiV1aSGJBWqxxavE2L5/DlpSk8
+         rXTL/+YhLoHBZHNzq+TY7ciqg+aKhcRpkB6YuHgsOyVizIC8Eaffso5K8ye8hNOvpPEJ
+         mw2BGakTGKlSVBrCs4KCRrp9eUXGNig8ueGJFJUQV+RX1lSCyHiinlH1iPcyutZgCic5
+         pvhP2/mGUf0DcLD5oZTEMZ88lrNj0BelprrLG2C6uPzaeSHjhKZQmNCcHwM1XKiJQWFn
+         kYBsFdWOIl82WZ3+u4wT4XtC8yy5EiBaFDmdFZp/gi9m9b2XDSM0w2oQw0xzEFia792J
+         BSTw==
+X-Gm-Message-State: ACrzQf0U3+BVNfOa6LJ8gfVYRqzZpZ/4Sso3jMmHXm9TA32p775BNce0
+        Ypxc4HrBiEkdqfSx+l0nlL0qKg==
+X-Google-Smtp-Source: AMsMyM4giYvP77sTPDWGk4iRexWkKdhko7Z9x8ZbVQ0+6fKkZQD8biAGSZtsNEYAUXSGiobU0OhdmQ==
+X-Received: by 2002:a17:902:e803:b0:187:3a52:d262 with SMTP id u3-20020a170902e80300b001873a52d262mr47366180plg.85.1668098988693;
+        Thu, 10 Nov 2022 08:49:48 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l14-20020a170903120e00b0016be834d54asm11586089plh.306.2022.11.10.08.49.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:49:33 -0800 (PST)
-Date:   Thu, 10 Nov 2022 16:49:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Robert Hoo <robert.hu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 37/44] KVM: Rename and move CPUHP_AP_KVM_STARTING to
- ONLINE section
-Message-ID: <Y20rmaU14rZFFCZI@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-38-seanjc@google.com>
- <301a8a33a5cbe5b4fd3efe03b05bb8410a46e9f5.camel@linux.intel.com>
+        Thu, 10 Nov 2022 08:49:48 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Thu, 10 Nov 2022 08:49:47 -0800
+To:     Ben Skeggs <bskeggs@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Lyude Paul <lyude@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        Dave Airlie <airlied@redhat.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Coverity: nvkm_dp_train(): Integer handling issues
+Message-ID: <202211100849.DDBADD2A6@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <301a8a33a5cbe5b4fd3efe03b05bb8410a46e9f5.camel@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022, Robert Hoo wrote:
-> > -static int kvm_starting_cpu(unsigned int cpu)
-> > +static int kvm_online_cpu(unsigned int cpu)
-> >  {
-> > +	int ret = 0;
-> > +
-> >  	raw_spin_lock(&kvm_count_lock);
-> > -	if (kvm_usage_count)
-> > +	/*
-> > +	 * Abort the CPU online process if hardware virtualization
-> > cannot
-> > +	 * be enabled. Otherwise running VMs would encounter
-> > unrecoverable
-> > +	 * errors when scheduled to this CPU.
-> > +	 */
-> > +	if (kvm_usage_count) {
-> > +		WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
-> > +
-> >  		hardware_enable_nolock(NULL);
-> > +		if (atomic_read(&hardware_enable_failed)) {
-> > +			atomic_set(&hardware_enable_failed, 0);
-> 
-> I see other places using this hardware_enable_failed with atomic_inc(),
-> should here use atomic_dec() instead of straightly set to 0?
+Hello!
 
-Meh, both options are flawed.  E.g. if hardware_enable_failed was left dangling
-(the WARN above), then atomic_dec() won't remedy the problem and KVM will reject
-onlining CPUs indefinitely.  Forcing the atomic back to '0' will remedy that
-particular issue, but could lead to problems if there are other bugs.
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20221110 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-> Though here is embraced by spin_lock, hardware_enable_nolock() can be
-> invoked in other places in parallel?
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
-Only because of a KVM bug, which gets fixed in the next patch:
+  Wed Nov 9 10:43:10 2022 +1000
+    8bb30c882334 ("drm/nouveau/disp: add method to trigger DP link retrain")
 
-  KVM: Disable CPU hotplug during hardware enabling
+Coverity reported the following:
+
+*** CID 1527267:  Integer handling issues  (NEGATIVE_RETURNS)
+drivers/gpu/drm/nouveau/nvkm/engine/disp/dp.c:458 in nvkm_dp_train()
+452     	u8  pwr;
+453
+454     	/* Retraining link?  Skip source configuration, it can mess up the active modeset. */
+455     	if (atomic_read(&outp->dp.lt.done)) {
+456     		for (rate = 0; rate < outp->dp.rates; rate++) {
+457     			if (outp->dp.rate[rate].rate == ior->dp.bw * 27000)
+vvv     CID 1527267:  Integer handling issues  (NEGATIVE_RETURNS)
+vvv     "ret" is passed to a parameter that cannot be negative.
+458     				return nvkm_dp_train_link(outp, ret);
+459     		}
+460     		WARN_ON(1);
+461     		return -EINVAL;
+462     	}
+463
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527267 ("Integer handling issues")
+Fixes: 8bb30c882334 ("drm/nouveau/disp: add method to trigger DP link retrain")
+
+Thanks for your attention!
+
+-- 
+Coverity-bot
