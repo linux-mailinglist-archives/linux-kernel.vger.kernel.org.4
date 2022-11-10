@@ -2,116 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACF06242E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C7A6242E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiKJNIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:08:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S230241AbiKJNIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiKJNIC (ORCPT
+        with ESMTP id S230223AbiKJNIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:08:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13581A225
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:07:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668085624;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8zMAudJpmdEKZtCKUy+05rwV5mHOrkDZJoA0XJ15CQ4=;
-        b=TRNF16fIQg+6rv+ss24naYjUwi8Ge9/bk1EP0EyBLmbMXJPVyKWUaEZBjJ6mw+6GFweXJy
-        Vo50vZSIY+LTYSXnLOWMeJamBmEcH3mod/u0eBh8eoqjeuxb3CA3RQfw7Xy5U/wnJTHyw1
-        KkYBDxPyKpzZXxksetqQIT95nmmHNLY=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-593-cGbnPU2eP5i03DTRt0QT7Q-1; Thu, 10 Nov 2022 08:07:03 -0500
-X-MC-Unique: cGbnPU2eP5i03DTRt0QT7Q-1
-Received: by mail-pg1-f197.google.com with SMTP id q63-20020a632a42000000b0045724b1dfb9so981413pgq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:07:02 -0800 (PST)
+        Thu, 10 Nov 2022 08:08:06 -0500
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C1C1A225
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:08:03 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id c8so1288632qvn.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:08:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8zMAudJpmdEKZtCKUy+05rwV5mHOrkDZJoA0XJ15CQ4=;
-        b=pjNrMsthvcVro2uMGXabWSNFajcnKItEhgGYbY1RXHe8PdvFudF1fmr1fUTrJMHmSX
-         KHPz9J0DSEWbN8FtQZwPRf2qEJZtHJWyFcbAWwHddNiAtmooCnUbpxDEPBriaCmkn4ke
-         wynRMtJQv3LITGj5I5GaE582wiCLU87AuRaBK9aKVsgMawxDaFUcH/2Xi+viUpwNUYj3
-         ygqoVcfFAHTV7BLO/IrEmSFSiq15C1wAMQRdcsZNypU5iJo2ErkkRbvJpqXbJEm0HoRv
-         GFsqFQ9CZImPM2g9lrIhOcG19Lv5n5RQOZSqpz91mA6iIjRaF4pEuNQ+anRAGwd4sxDD
-         TSnw==
-X-Gm-Message-State: ACrzQf2EDtjQ/tA7/OvmW9A07C4hsrdOxlFuIG1fv30VTRc1XcuFc1Vq
-        XwLga9SP5Vv5fmtyiacLR5jhQJU/fJKqeviCBYQ3MRhc3PaMjbh5h+urcU2aIDj6DcbEk8hNB3u
-        Bp6n31BEtKiKGSbK5q+zgMAtc
-X-Received: by 2002:a63:155b:0:b0:470:1a0b:ce3d with SMTP id 27-20020a63155b000000b004701a0bce3dmr34429930pgv.597.1668085621961;
-        Thu, 10 Nov 2022 05:07:01 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM4/ry76eNdJLG8wkw95+ZE+UZX4fN3mjnXvdaEyH+JPEN9B5VVng2ZratTCNQe1UctwEEQHtQ==
-X-Received: by 2002:a63:155b:0:b0:470:1a0b:ce3d with SMTP id 27-20020a63155b000000b004701a0bce3dmr34429912pgv.597.1668085621657;
-        Thu, 10 Nov 2022 05:07:01 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id lw5-20020a17090b180500b0020af2bab83fsm3081270pjb.23.2022.11.10.05.06.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 05:07:01 -0800 (PST)
-Message-ID: <d5f0dea1b9ce5f8d2187875adb1d73e747e21916.camel@redhat.com>
-Subject: Re: [PATCH net-next v5 3/3] net: ethernet: ti: am65-cpsw: Add
- support for SERDES configuration
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        linux@armlinux.org.uk, vladimir.oltean@nxp.com, vigneshr@ti.com,
-        nsekhar@ti.com
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srk@ti.com
-Date:   Thu, 10 Nov 2022 14:06:47 +0100
-In-Reply-To: <20221109042203.375042-4-s-vadapalli@ti.com>
-References: <20221109042203.375042-1-s-vadapalli@ti.com>
-         <20221109042203.375042-4-s-vadapalli@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wMoH4oExOgGPlBDG9nVH77ZD2bYk9EKd7RsG/Ihmq0E=;
+        b=KDK5MYkZSHWMEnvK7fiBfjP4zcf3g2yVUtIPEKAs74xyLSuVbENZPCgtAoczDJYF47
+         5qBdY4tqu0nevNCA/kYA6Se/yG5LDX/unq4C3r5PEFQO4/qoXhiDHNUhJzVIyNlZKCNq
+         p5GmW5j6VMecv2FJsjc4rt/uXJfVdgs1+/EsqOJ/XXo5sKDx5dFF63EUdB+PvE+x+umk
+         fVyjBdGB4o3YGpVik8g4qLI3vQzYO0VT0L7D704LlEz3KdHQ7MJUOcz6nF7sXFSdWtIS
+         lCKIe49TuAwB/3qVsNhikKsnGFJYfng70VxS+typK434HiyTmxwcmhvqvSVhCldGlldW
+         d7Ww==
+X-Gm-Message-State: ACrzQf3gtOErmBTUIedFfyoRmJQUCLc0UvTqZ6Frcw/ZJUaILm/2dr9g
+        eWbjq7JUKm+dsU3Y/jciSoRbI+DyMmNrRh8FT7Q=
+X-Google-Smtp-Source: AMsMyM5fBPX/p0pDbEKYLf1yJss9gIJdmLRGrejGDURJ1328LkxCzR3mgZbzX37sQ8TDRiJ4EGl+8PlwNYYnje5q0rI=
+X-Received: by 2002:a05:6214:f63:b0:4b8:c0bc:c43e with SMTP id
+ iy3-20020a0562140f6300b004b8c0bcc43emr59279158qvb.119.1668085682896; Thu, 10
+ Nov 2022 05:08:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221109140711.105222-1-gregkh@linuxfoundation.org>
+ <CAJZ5v0gv6L9Q+Nu3U0JAWqJk4MPt7kGVGiOAKuX5FcF=znyfTA@mail.gmail.com>
+ <Y2wXYxrr/qed/j//@google.com> <Y2zFtWcytaIRWNqu@kroah.com>
+In-Reply-To: <Y2zFtWcytaIRWNqu@kroah.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Nov 2022 14:07:51 +0100
+Message-ID: <CAJZ5v0jpm92CDHsH33aWNn97w5tpf-gust7ghkwdpmNbQf0ZDg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] driver core: remove devm_device_remove_groups()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hello,
+On Thu, Nov 10, 2022 at 10:34 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Nov 09, 2022 at 01:10:59PM -0800, Dmitry Torokhov wrote:
+> > On Wed, Nov 09, 2022 at 03:11:47PM +0100, Rafael J. Wysocki wrote:
+> > > On Wed, Nov 9, 2022 at 3:07 PM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > There is no in-kernel user of this function, so it is not needed anymore
+> > > > and can be removed.
+> > > >
+> > > > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > >
+> > > For both patches in the series:
+> > >
+> > > Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+> >
+> > I find it really weird to have an asymmetric core API...
+>
+> I'm working on fixing up that asymmetric-ness.  We have only one user of
+> devm_device_add_groups() and only a handful of devm_device_add_group()
+> left in the tree.
+>
+> But it turns out that no one ever called these functions anyway, so they
+> aren't needed even if we did keep the "add" functions.  So they should
+> be dropped no matter what.
 
-On Wed, 2022-11-09 at 09:52 +0530, Siddharth Vadapalli wrote:
-[...]
-
-> +static void am65_cpsw_disable_serdes_phy(struct am65_cpsw_common *common)
-> +{
-> +	struct device_node *node, *port_np;
-> +	struct device *dev = common->dev;
-> +	const char *name = "serdes-phy";
-> +	struct phy *phy;
-> +
-> +	node = of_get_child_by_name(dev->of_node, "ethernet-ports");
-> +
-> +	for_each_child_of_node(node, port_np) {
-> +		phy = devm_of_phy_get(dev, port_np, name);
-
-The above will try to allocate some memory and can fail. Even if the
-the following code will handle a NULL ptr, the phy will not be
-disabled.
-
-I think it's better if you cache the serdes phy ptr in
-am65_cpsw_init_serdes_phy() and you use such reference here, without
-resorting to devm_of_phy_get().
-
-Cheers,
-
-Paolo
-
+Totally agreed.
