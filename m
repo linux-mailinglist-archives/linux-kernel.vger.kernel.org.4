@@ -2,50 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E536238B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D34C623908
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiKJBPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S232329AbiKJBmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbiKJBPa (ORCPT
+        with ESMTP id S229806AbiKJBmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:15:30 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A2520BFC
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:15:28 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N73mK03Gqz15MRD;
-        Thu, 10 Nov 2022 09:15:13 +0800 (CST)
-Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 09:15:26 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 09:15:25 +0800
-From:   Peng Zhang <zhangpeng362@huawei.com>
-To:     <jack@suse.com>, <jack@suse.cz>, <yi.zhang@huawei.com>,
-        <yujie.liu@intel.com>, <hch@lst.de>, <akpm@linux-foundation.org>,
-        <bvanassche@acm.org>, <willy@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        <syzbot+908340a8367281960537@syzkaller.appspotmail.com>
-Subject: [PATCH] udf: Fix a slab-out-of-bounds write bug in udf_write_aext()
-Date:   Thu, 10 Nov 2022 01:40:52 +0000
-Message-ID: <20221110014052.3039100-1-zhangpeng362@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Nov 2022 20:42:33 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2042.outbound.protection.outlook.com [40.107.100.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9671D26ADF;
+        Wed,  9 Nov 2022 17:42:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Uq1dhCXP2mkojOzgAJEexJ7S8arJgDvfLRxKWpRwCW4xw6XJk6VMC/ln8cQxjnIe15qUNWO4xqpDC1zHlhLAzwqh++qIst1ZZNbSWYfspccqgnZLQDLTFMBAuFAf5XxBJpO6w70Zd2XRBSCJ34Px2nBQ7n+Jz1S+zQRy5uJedFA5e6i39KMoM5JiZNh4vbjawpNr3kE5BSR3q0Op2MZWYksayB4IN2aYfQ/hE3yyxRbqvJfN4bMdMuw6ALLYWftuurc/HAZApxSsiNpMoxutiKPg5duNO5o4D7QgfAKghWmJLT5jhUp3olsn1FLdb/ujEcUQB3JC29/biFuzWzIOTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WP6WE7OnGPFXUNA/vZK+CoBkzMLoe6wIpkhmqMtrkGk=;
+ b=hguoqZ0/Sf1uuchwF/x/BSaLEOjzWpG92EloBKSpYz5p6OLeYai+OLFUPmyQQs9z/6xuN2M0bWk9c96eJGtgOnoChPBlp/NvW4B4ewbqTtMr3cki76xmmUHNUlaiRrqEkGnpO5BziugH3GItsdbZbWxCkW4VzRxA6p1ZGSscd7P9A7jg32vK//u4lace94Whid2p6yL/vh1nOV5/CU34oWM7pwyiklbVf00fupEHZVg0T6CAVxCDfYsImMj1nFta9WKu8MRLbhnfmlozJNrTZBvqtjF+U9zHbYqvvBqjfN8o4Rsw+irloTd9ZQapyxq2NzkYjdoh5ODz7HP7WOJ3xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WP6WE7OnGPFXUNA/vZK+CoBkzMLoe6wIpkhmqMtrkGk=;
+ b=bbQd5E7YICo1+jYjOtszUGlFXe1s4rhM1kKuRa3cqNMYRoaw6Mn94Q+amyGWYenmhUs4SgcNQC7h5wJHzzwEt3YHWK0oa+QZeLHfGAo5C8CjZ7wQDNMxeYIKL6aFYYqkXOxqXovxyTDwRzMcUIwlEmDst0MIhA1++9bEUGCAf9Q=
+Received: from MW2PR2101CA0010.namprd21.prod.outlook.com (2603:10b6:302:1::23)
+ by BY5PR12MB4324.namprd12.prod.outlook.com (2603:10b6:a03:209::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Thu, 10 Nov
+ 2022 01:42:27 +0000
+Received: from CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:302:1:cafe::ea) by MW2PR2101CA0010.outlook.office365.com
+ (2603:10b6:302:1::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.2 via Frontend
+ Transport; Thu, 10 Nov 2022 01:42:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT028.mail.protection.outlook.com (10.13.175.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.12 via Frontend Transport; Thu, 10 Nov 2022 01:42:26 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 19:42:26 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
+ 2022 19:42:25 -0600
+Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
+ Transport; Wed, 9 Nov 2022 19:42:24 -0600
+From:   Lizhi Hou <lizhi.hou@amd.com>
+To:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
+        <frowand.list@gmail.com>, <helgaas@kernel.org>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, <clement.leger@bootlin.com>,
+        <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
+        <brian.xu@amd.com>, <stefano.stabellini@xilinx.com>,
+        <trix@redhat.com>
+Subject: [PATCH RFC V4 0/3] Generate device tree node for pci devices
+Date:   Wed, 9 Nov 2022 17:42:15 -0800
+Message-ID: <1668044538-27334-1-git-send-email-lizhi.hou@amd.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT028:EE_|BY5PR12MB4324:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4cf7d6ad-7ed9-407b-9530-08dac2bcd2a9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dI7UDeElEN3uNwL52+3wtjW0lfdfeGJE0u0fvx/EhR46QzJfH8ICO6iCUbYyLl9Qsz4vh/MP55VdMDlXYc/RwR7JeJuenaKNO5gMjBLQn2DiaTCE5lhwJuTDj+fTVIz5nEjznFXq0sFL4coVXP8DCS1RvJgzkTfX31H0VaWImhC+d3L9AD8Shesw0jqHWeNetoWtZ+qLzJyhJmksEn6xGlkpCkjomSTopm+iyBpIgfn6cXgTwdjf+oL0CkmuqrXPcucy/E9gjbzxWvMr7dRiqBQSnYzOleF73AawHdowNdcIIX/GTgoShs41XHEPL/4c4lCsyRYpEm6h/e23aCsSqA8TMTGP74YIxF+L6cbN9f2Inzo3D8L4XwPJ7Ga702MqdyefnNiNiE8RH5pR8wtXfh0UAOstRG07aTgwrLirSRwLHa3MbSuKYGABQAnYWdp2+dDosBO1FhKIpmdlrEGQgQJHFvTeC5jLSeMX+7grbwAK9s60a8ECWnqvTC7/mmRZMhEM5KJsvdFq95SaYyrA9kYRmg97w1GIySevD14X2ff97D0es2Xs4wOmj6iNC98ZXt5l8rg/JKv9zKaxh5N5RRR8DQq5NkGIGcQvKAlSE+WhN23rWW0VeL2Qy1WwXVHqjQij6hhI0UVAV87pZtHpKjl1JYkRMRnZ/okecFjd8wMuIFHlX+GbbS/rzla/tDizQjayojMTJAKcp4ImqrtMc+vH7KMjogo9meGPkShxgXhUrdt5/znO31WJsOCEzeiO4rAP6paTk1EZsJ85pYkhZA2idLu+aHB8yD9dtOAASx5pA+pwyu8zfjBgv5tEuSoAceiHci0r1XxuycykN2sRZfz5cv0CM8wIEi+CWT/+HkKmvp461Idr4aVP15NY1QAQ
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199015)(40470700004)(46966006)(36840700001)(36860700001)(86362001)(36756003)(316002)(40460700003)(8936002)(40480700001)(41300700001)(83380400001)(356005)(426003)(336012)(186003)(2616005)(81166007)(82740400003)(47076005)(82310400005)(5660300002)(966005)(54906003)(110136005)(478600001)(26005)(70206006)(44832011)(6666004)(70586007)(4326008)(8676002)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 01:42:26.8597
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cf7d6ad-7ed9-407b-9530-08dac2bcd2a9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4324
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,216 +104,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhangPeng <zhangpeng362@huawei.com>
+This patch series introduces OF overlay support for PCI devices which
+primarily addresses two use cases. First, it provides a data driven method
+to describe hardware peripherals that are present in a PCI endpoint and
+hence can be accessed by the PCI host. Second, it allows reuse of a OF
+compatible driver -- often used in SoC platforms -- in a PCI host based
+system.
 
-Syzbot reported a slab-out-of-bounds write bug:
+There are 2 series devices rely on this patch:
 
-loop0: detected capacity change from 0 to 2048
-==================================================================
-BUG: KASAN: slab-out-of-bounds in udf_write_aext+0x8bc/0x8f0
-fs/udf/inode.c:2103
-Write of size 4 at addr ffff8880777c63f8 by task syz-executor216/3611
+  1) Xilinx Alveo Accelerator cards (FPGA based device)
+  2) Microchip LAN9662 Ethernet Controller
 
-CPU: 0 PID: 3611 Comm: syz-executor216 Not tainted
-6.0.0-syzkaller-09589-g55be6084c8e0 #0
-Hardware name: Google Compute Engine/Google Compute Engine, BIOS
-Google 09/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- udf_write_aext+0x8bc/0x8f0 fs/udf/inode.c:2103
- udf_add_entry+0xd03/0x2ac0 fs/udf/namei.c:482
- udf_mkdir+0x145/0x650 fs/udf/namei.c:681
- vfs_mkdir+0x489/0x740 fs/namei.c:4013
- do_mkdirat+0x28c/0x310 fs/namei.c:4038
- __do_sys_mkdir fs/namei.c:4058 [inline]
- __se_sys_mkdir fs/namei.c:4056 [inline]
- __x64_sys_mkdir+0xf2/0x140 fs/namei.c:4056
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fef3beda479
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89
-f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe952d4e28 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fef3beda479
-RDX: 00007fef3be986e3 RSI: 0000000000000000 RDI: 0000000020000000
-RBP: 00007fef3be999b0 R08: 00007ffe952d4d10 R09: 0000000000000000
-R10: 00007ffe952d4cf0 R11: 0000000000000246 R12: 00007fef3be99a40
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+     Please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
 
-Allocated by task 3611:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:437 [inline]
- ____kasan_kmalloc mm/kasan/common.c:516 [inline]
- ____kasan_kmalloc mm/kasan/common.c:475 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
- kmalloc include/linux/slab.h:600 [inline]
- kmalloc_array include/linux/slab.h:639 [inline]
- kcalloc include/linux/slab.h:671 [inline]
- udf_process_sequence+0xe9/0x4470 fs/udf/super.c:1689
- udf_load_sequence fs/udf/super.c:1813 [inline]
- udf_check_anchor_block+0x44b/0x640 fs/udf/super.c:1852
- udf_scan_anchors+0x1b3/0x6d0 fs/udf/super.c:1885
- udf_find_anchor fs/udf/super.c:1941 [inline]
- udf_load_vrs+0x27b/0xbe0 fs/udf/super.c:2006
- udf_fill_super+0x859/0x1a40 fs/udf/super.c:2184
- mount_bdev+0x34d/0x410 fs/super.c:1400
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Normally, the PCI core discovers PCI devices and their BARs using the
+PCI enumeration process. However, the process does not provide a way to
+discover the hardware peripherals that are present in a PCI device, and
+which can be accessed through the PCI BARs. Also, the enumeration process
+does not provide a way to associate MSI-X vectors of a PCI device with the
+hardware peripherals that are present in the device. PCI device drivers
+often use header files to describe the hardware peripherals and their
+resources as there is no standard data driven way to do so. This patch
+series proposes to use flattened device tree blob to describe the
+peripherals in a data driven way. Based on previous discussion, using
+device tree overlay is the best way to unflatten the blob and populate
+platform devices. To use device tree overlay, there are three obvious
+problems that need to be resolved.
 
-Freed by task 3611:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:367 [inline]
- ____kasan_slab_free+0x166/0x1c0 mm/kasan/common.c:329
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1759 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1785
- slab_free mm/slub.c:3539 [inline]
- kfree+0xe2/0x580 mm/slub.c:4567
- udf_process_sequence+0x421/0x4470 fs/udf/super.c:1781
- udf_load_sequence fs/udf/super.c:1813 [inline]
- udf_check_anchor_block+0x44b/0x640 fs/udf/super.c:1852
- udf_scan_anchors+0x1b3/0x6d0 fs/udf/super.c:1885
- udf_find_anchor fs/udf/super.c:1941 [inline]
- udf_load_vrs+0x27b/0xbe0 fs/udf/super.c:2006
- udf_fill_super+0x859/0x1a40 fs/udf/super.c:2184
- mount_bdev+0x34d/0x410 fs/super.c:1400
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+First, we need to create a base tree for non-DT system such as x86_64. A
+patch series has been submitted for this:
+https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
+https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
 
-The buggy address belongs to the object at ffff8880777c6000
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 504 bytes to the right of
- 512-byte region [ffff8880777c6000, ffff8880777c6200)
+Second, a device tree node corresponding to the PCI endpoint is required
+for overlaying the flattened device tree blob for that PCI endpoint.
+Because PCI is a self-discoverable bus, a device tree node is usually not
+created for PCI devices. This series adds support to generate a device
+tree node for a PCI device which advertises itself using PCI quirks
+infrastructure.
 
-The buggy address belongs to the physical page:
-page:ffffea0001ddf100 refcount:1 mapcount:0 mapping:0000000000000000
-index:0x0 pfn:0x777c4
-head:ffffea0001ddf100 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000001 ffff888011841c80
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask
-pid 2972, tgid 2972 (udevadm), ts 11705893480, free_ts 9906278250
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5549
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2270
- alloc_slab_page mm/slub.c:1829 [inline]
- allocate_slab+0x27e/0x3d0 mm/slub.c:1974
- new_slab mm/slub.c:2034 [inline]
- ___slab_alloc+0x84f/0xe80 mm/slub.c:3036
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3123
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3256 [inline]
- kmem_cache_alloc_trace+0x323/0x3e0 mm/slub.c:3287
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kernfs_fop_open+0x31a/0xec0 fs/kernfs/file.c:666
- do_dentry_open+0x6cc/0x13f0 fs/open.c:882
- do_open fs/namei.c:3557 [inline]
- path_openat+0x1c92/0x28f0 fs/namei.c:3691
- do_filp_open+0x1b6/0x400 fs/namei.c:3718
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1449 [inline]
- free_pcp_prepare+0x5e4/0xd20 mm/page_alloc.c:1499
- free_unref_page_prepare mm/page_alloc.c:3380 [inline]
- free_unref_page+0x19/0x4d0 mm/page_alloc.c:3476
- free_contig_range+0xb1/0x180 mm/page_alloc.c:9457
- destroy_args+0xa8/0x646 mm/debug_vm_pgtable.c:1031
- debug_vm_pgtable+0x2945/0x29d6 mm/debug_vm_pgtable.c:1354
- do_one_initcall+0xfe/0x650 init/main.c:1296
- do_initcall_level init/main.c:1369 [inline]
- do_initcalls init/main.c:1385 [inline]
- do_basic_setup init/main.c:1404 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1623
- kernel_init+0x1a/0x1d0 init/main.c:1512
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+Third, we need to generate device tree nodes for PCI bridges since a child
+PCI endpoint may choose to have a device tree node created.
 
-Memory state around the buggy address:
- ffff8880777c6280: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8880777c6300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8880777c6380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                                                ^
- ffff8880777c6400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8880777c6480: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
+This patch series is made up of three patches.
 
-Writing to the address ptr will cause an out-of-bounds bug if the inode
-allocation type is ICBTAG_FLAG_AD_SHORT (or ICBTAG_FLAG_AD_LONG), the
-buffer head pointer is NULL, and iinfo->i_lenEAttr is 0. In this case,
-the address ptr is iinfo->i_data - sizeof(struct short_ad), and the
-out-of-bounds offset is the size of struct short_ad. This can be fixed
-by adding the size of struct short_ad (or struct long_ad) to the address
-ptr.
+The first patch is adding OF interface to create or destroy OF node
+dynamically.
 
-Reported-by: syzbot+908340a8367281960537@syzkaller.appspotmail.com
-Fixes: 2c948b3f86e5 ("udf: Avoid IO in udf_clear_inode")
-Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
----
- fs/udf/inode.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+The second patch introduces a kernel option, CONFIG_DYNAMIC_PCI_OF_NODEX.
+When the option is turned on, the kernel will generate device tree nodes
+for all PCI bridges unconditionally. The patch also shows how to use the
+PCI quirks infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device
+tree node for a device. Specifically, the patch generates a device tree
+node for Xilinx Alveo U50 PCIe accelerator device. The generated device
+tree nodes do not have any property.
 
-diff --git a/fs/udf/inode.c b/fs/udf/inode.c
-index 8d06daed549f..abb3257b4c74 100644
---- a/fs/udf/inode.c
-+++ b/fs/udf/inode.c
-@@ -2090,10 +2090,15 @@ void udf_write_aext(struct inode *inode, struct extent_position *epos,
- 	struct long_ad *lad;
- 	struct udf_inode_info *iinfo = UDF_I(inode);
- 
--	if (!epos->bh)
-+	if (!epos->bh) {
- 		ptr = iinfo->i_data + epos->offset -
- 			udf_file_entry_alloc_offset(inode) +
- 			iinfo->i_lenEAttr;
-+		if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_SHORT)
-+			ptr = ptr + sizeof(struct short_ad);
-+		else if (iinfo->i_alloc_type == ICBTAG_FLAG_AD_LONG)
-+			ptr = ptr + sizeof(struct long_ad);
-+	}
- 	else
- 		ptr = epos->bh->b_data + epos->offset;
- 
+The third patch adds basic properties ('reg', 'compatible' and
+'device_type') to the dynamically generated device tree nodes. More
+properties can be added in the future.
+
+Here is the example of device tree nodes generated within the ARM64 QEMU.
+# lspci -t    
+-[0000:00]-+-00.0
+           +-01.0-[01]--
+           +-01.1-[02]----00.0
+           +-01.2-[03]----00.0
+           +-01.3-[04]----00.0
+           +-01.4-[05]----00.0
+           +-01.5-[06]--
+           +-01.6-[07]--
+           +-01.7-[08]--
+           +-02.0-[09-0b]----00.0-[0a-0b]----00.0-[0b]--+-00.0
+           |                                            \-00.1
+           +-02.1-[0c]--
+           \-03.0-[0d-0e]----00.0-[0e]----01.0
+
+# tree /sys/firmware/devicetree/base/pcie\@10000000
+/sys/firmware/devicetree/base/pcie@10000000
+|-- #address-cells
+|-- #interrupt-cells
+|-- #size-cells
+|-- bus-range
+|-- compatible
+|-- device_type
+|-- dma-coherent
+|-- interrupt-map
+|-- interrupt-map-mask
+|-- linux,pci-domain
+|-- msi-parent
+|-- name
+|-- pci@1,0
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@1,1
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@1,2
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@1,3
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@1,4
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@1,5
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@1,6
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@1,7
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@2,0
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- pci@0,0
+|   |   |-- #address_cells
+|   |   |-- #size_cells
+|   |   |-- compatible
+|   |   |-- device_type
+|   |   |-- pci@0,0
+|   |   |   |-- #address_cells
+|   |   |   |-- #size_cells
+|   |   |   |-- compatible
+|   |   |   |-- dev@0,0
+|   |   |   |   |-- compatible
+|   |   |   |   `-- reg
+|   |   |   |-- dev@0,1
+|   |   |   |   |-- compatible
+|   |   |   |   `-- reg
+|   |   |   |-- device_type
+|   |   |   |-- ranges
+|   |   |   `-- reg
+|   |   |-- ranges
+|   |   `-- reg
+|   |-- ranges
+|   `-- reg
+|-- pci@2,1
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- ranges
+|   `-- reg
+|-- pci@3,0
+|   |-- #address_cells
+|   |-- #size_cells
+|   |-- compatible
+|   |-- device_type
+|   |-- pci@0,0
+|   |   |-- #address_cells
+|   |   |-- #size_cells
+|   |   |-- compatible
+|   |   |-- device_type
+|   |   |-- ranges
+|   |   `-- reg
+|   |-- ranges
+|   `-- reg
+|-- ranges
+`-- reg
+
+Changes since RFC v3:
+- Split the Xilinx Alveo U50 PCI quirk to a separate patch
+- Minor changes in commit description and code comment
+
+Changes since RFC v2:
+- Merged patch 3 with patch 2
+- Added OF interfaces of_changeset_add_prop_* and use them to create
+  properties.
+- Added '#address-cells', '#size-cells' and 'ranges' properties.
+
+Changes since RFC v1:
+- Added one patch to create basic properties.
+- To move DT related code out of PCI subsystem, replaced of_node_alloc()
+  with of_create_node()/of_destroy_node()
+
+Lizhi Hou (3):
+  of: dynamic: Add interfaces for creating device node dynamically
+  PCI: Create device tree node for selected devices
+  PCI: Add PCI quirks to generate device tree node for Xilinx Alveo U50
+
+ drivers/of/dynamic.c        | 187 ++++++++++++++++++++++++++
+ drivers/pci/Kconfig         |  12 ++
+ drivers/pci/Makefile        |   1 +
+ drivers/pci/bus.c           |   2 +
+ drivers/pci/msi/irqdomain.c |   6 +-
+ drivers/pci/of.c            |  71 ++++++++++
+ drivers/pci/of_property.c   | 256 ++++++++++++++++++++++++++++++++++++
+ drivers/pci/pci-driver.c    |   3 +-
+ drivers/pci/pci.h           |  19 +++
+ drivers/pci/quirks.c        |  11 ++
+ drivers/pci/remove.c        |   1 +
+ include/linux/of.h          |  24 ++++
+ 12 files changed, 590 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/pci/of_property.c
+
 -- 
-2.25.1
+2.17.1
 
