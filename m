@@ -2,278 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC825624E2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F273624E33
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiKJXCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 18:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S229962AbiKJXEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 18:04:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKJXB7 (ORCPT
+        with ESMTP id S229528AbiKJXEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 18:01:59 -0500
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0AD13DEE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 15:01:56 -0800 (PST)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4N7cm32bpSzDqPP;
-        Thu, 10 Nov 2022 23:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1668121316; bh=ii9US/7BKMJSswViF5HF5Uy5RI+c/CUVF4WZu52VlbA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cPHdzSv4GOsGXIr9Eb/R795dEV6YP+Wcvkl6eGsKWdtRgGwoVyMK/BV00Y1wmpt+x
-         VT5C3PbwkiIXp1CbE3h8tiXgWjaLkL2sz5jPGwP6N5FVDgP14RsM71DWbpx3QKM3DZ
-         fIOHgYLoOehEqRAfXsjVCDqO/bPzcTrfbpxvOqTI=
-X-Riseup-User-ID: 659E986C72ED052D274028EE1034DB3275D9FA4A0450B3B0042660F6D26D59E1
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4N7cls13Q1z1xx2;
-        Thu, 10 Nov 2022 23:01:44 +0000 (UTC)
-Message-ID: <28d35094-ac32-e589-274e-76f4b2408aec@riseup.net>
-Date:   Thu, 10 Nov 2022 20:01:42 -0300
+        Thu, 10 Nov 2022 18:04:44 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D031DA41;
+        Thu, 10 Nov 2022 15:04:43 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id u6so2783684plq.12;
+        Thu, 10 Nov 2022 15:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8PxXXft/nkkyC+qO3NZ0NZRsgWMaldSAxbQ9lxvKRGY=;
+        b=T6C7YIAMYHacLdrESecsyvPNePaxfqKM6ZzXAgY/O9enpon/fyk4AwNgl21buw2/tg
+         xmg6tTuw9bDi37AmyBpjGUQbxADCwvSk8/Cm7Q5ceUWvRAb3jTO8xLahRHhj13EQv2+C
+         L8roGgR/WnzAEfbC/SBSxdDo7OjR6NNkhheKPiuQQJxhZhhcVpC60ppB5Uocn9O26SNO
+         K7f01Uy0UWye2FRcS/mAfg3t/m/H7du4d81vo66lkm7yS2742p05r2+fFnuwWjSbTWse
+         rg/sN8qJQyOgFL/8eTz2ab00JzSmsiBefMNT6JbZs1bpZmwEKonlZa0TS0beQpAeJ0Eg
+         a1Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8PxXXft/nkkyC+qO3NZ0NZRsgWMaldSAxbQ9lxvKRGY=;
+        b=dQlmBTPnBUbRmea2h5O1TY5BTKTp07CuEk28CxoRTUZB55ie7FDlRoWWf7UOnGi0IY
+         MBRtX92ri6gDdtz43yHIF1Vh5kMQVjIdSLA/NLSQgSqRVzvriMuh0wnnL2MbL7FAeW+Z
+         AvadSU351VctUjnetQNUlNQ8s8pBWEm+31/rsLSo/zGVtoI11fMSRJKldDk1jwe2yFbE
+         3GANfhiOV1FtE6kh8bMeVhi+S+cMI4wjn25rF+/3p2nAAfLS51HEcH9lY0RiAL3+5R4x
+         bnPd6iDMuDbh1NaOg8v/iXmyOjnxQgHSNVs4XpVxUNPUro1OPL5o/bIUiBNiQS0Pxn9z
+         2o0A==
+X-Gm-Message-State: ACrzQf3KUGeDbbSQYA3O46ZcVPwpXW8embX3bPwqf26KZl8vNjIqbZ/R
+        KNbhso4fCJjB/UhYQFXgG00=
+X-Google-Smtp-Source: AMsMyM4KtyUZ+RLI3SgeEuwc5nKbDYT6Ih/qwJK99ZzTPQW52wv+CeCQTrbrzNKVmuN6P5egPGp+Gg==
+X-Received: by 2002:a17:90b:3d8d:b0:212:ccda:88bc with SMTP id pq13-20020a17090b3d8d00b00212ccda88bcmr2476638pjb.212.1668121483057;
+        Thu, 10 Nov 2022 15:04:43 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:8c0b:3260:c81c:119d])
+        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0018875b76945sm185565pll.274.2022.11.10.15.04.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 15:04:42 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Thu, 10 Nov 2022 15:04:40 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     ltp@lists.linux.it, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Martin Doucha <mdoucha@suse.cz>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
+Message-ID: <Y22DiF5Q5EDUIrZE@google.com>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <Y2l3vJb1y2Jynf50@google.com>
+ <Y2l89dt/t8M6+9go@pevik>
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 06/24] drm/modes: Add a function to generate analog
- display modes
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Ben Skeggs <bskeggs@redhat.com>
-Cc:     Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-References: <20220728-rpi-analog-tv-properties-v8-0-09ce1466967c@cerno.tech>
- <20220728-rpi-analog-tv-properties-v8-6-09ce1466967c@cerno.tech>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v8-6-09ce1466967c@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2l89dt/t8M6+9go@pevik>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
-
-On 11/10/22 08:07, Maxime Ripard wrote:
-> Multiple drivers (meson, vc4, sun4i) define analog TV 525-lines and
-> 625-lines modes in their drivers.
+On Mon, Nov 07, 2022 at 10:47:33PM +0100, Petr Vorel wrote:
+> Hi Minchan,
 > 
-> Since those modes are fairly standard, and that we'll need to use them
-> in more places in the future, it makes sense to move their definition
-> into the core framework.
+> > On Mon, Nov 07, 2022 at 08:11:35PM +0100, Petr Vorel wrote:
+> > > Hi all,
 > 
-> However, analog display usually have fairly loose timings requirements,
-> the only discrete parameters being the total number of lines and pixel
-> clock frequency. Thus, we created a function that will create a display
-> mode from the standard, the pixel frequency and the active area.
+> > > following bug is trying to workaround an error on ppc64le, where
+> > > zram01.sh LTP test (there is also kernel selftest
+> > > tools/testing/selftests/zram/zram01.sh, but LTP test got further
+> > > updates) has often mem_used_total 0 although zram is already filled.
 > 
-> Tested-by: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > Hi, Petr,
 > 
-> ---
-> Changes in v6:
-> - Fix typo
+> > Is it happening on only ppc64le?
+> I haven't seen it on other archs (x86_64, aarch64).
 > 
-> Changes in v4:
-> - Reworded the line length check comment
-> - Switch to HZ_PER_KHZ in tests
-> - Use previous timing to fill our mode
-> - Move the number of lines check earlier
-> ---
->  drivers/gpu/drm/drm_modes.c            | 474 +++++++++++++++++++++++++++++++++
->  drivers/gpu/drm/tests/Makefile         |   1 +
->  drivers/gpu/drm/tests/drm_modes_test.c | 145 ++++++++++
->  include/drm/drm_modes.h                |  17 ++
->  4 files changed, 637 insertions(+)
+> > Is it a new regression? What kernel version did you use?
+> Found on openSUSE kernel, which uses stable kernel releases 6.0.x.
+> It's probably much older, first I've seen it some years ago (I'm not able to find kernel version), but it was random. Now it's much more common.
 > 
-> diff --git a/drivers/gpu/drm/tests/drm_modes_test.c b/drivers/gpu/drm/tests/drm_modes_test.c
-> new file mode 100644
-> index 000000000000..afeda9f07859
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/drm_modes_test.c
-> @@ -0,0 +1,145 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Kunit test for drm_modes functions
-> + */
-> +
-> +#include <drm/drm_drv.h>
-> +#include <drm/drm_modes.h>
-> +
-> +#include <kunit/test.h>
-> +
-> +#include <linux/units.h>
-> +
-> +#include "drm_kunit_helpers.h"
-> +
-> +struct drm_modes_test_priv {
-> +	struct drm_device *drm;
-> +};
-> +
-> +static int drm_modes_test_init(struct kunit *test)
-> +{
-> +	struct drm_modes_test_priv *priv;
-> +
-> +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, priv);
-> +
-> +	priv->drm = drm_kunit_device_init(test, DRIVER_MODESET, "drm-modes-test");
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
-> +
-> +	test->priv = priv;
-> +
-> +	return 0;
-> +}
-> +
+> Test runs on VM (I can give qemu command or whatever you need to know about it)
+> I'll try to verify it on some bare metal ppc64le.
 
-As you did on the other tests, it would be nice to use the same naming
-convention as the other DRM tests. So, maybe change the "drm_modes"
-prefix to "drm_test_modes".
+Hi Petr and Martin,
 
-> +static void drm_modes_analog_tv_ntsc_480i(struct kunit *test)
-> +{
-> +	struct drm_modes_test_priv *priv = test->priv;
-> +	struct drm_display_mode *mode;
-> +
-> +	mode = drm_analog_tv_mode(priv->drm,
-> +				  DRM_MODE_TV_MODE_NTSC,
-> +				  13500 * HZ_PER_KHZ, 720, 480,
-> +				  true);
-> +	KUNIT_ASSERT_NOT_NULL(test, mode);
-> +
-> +	KUNIT_EXPECT_EQ(test, drm_mode_vrefresh(mode), 60);
-> +	KUNIT_EXPECT_EQ(test, mode->hdisplay, 720);
-> +
-> +	/* BT.601 defines hsync_start at 736 for 480i */
-> +	KUNIT_EXPECT_EQ(test, mode->hsync_start, 736);
-> +
-> +	/*
-> +	 * The NTSC standard expects a line to take 63.556us. With a
-> +	 * pixel clock of 13.5 MHz, a pixel takes around 74ns, so we
-> +	 * need to have 63556ns / 74ns = 858.
-> +	 *
-> +	 * This is also mandated by BT.601.
-> +	 */
-> +	KUNIT_EXPECT_EQ(test, mode->htotal, 858);
-> +
-> +	KUNIT_EXPECT_EQ(test, mode->vdisplay, 480);
-> +	KUNIT_EXPECT_EQ(test, mode->vtotal, 525);
-> +}
-> +
-> +static void drm_modes_analog_tv_ntsc_480i_inlined(struct kunit *test)
-> +{
-> +	struct drm_modes_test_priv *priv = test->priv;
-> +	struct drm_display_mode *expected, *mode;
-> +
-> +	expected = drm_analog_tv_mode(priv->drm,
-> +				      DRM_MODE_TV_MODE_NTSC,
-> +				      13500 * HZ_PER_KHZ, 720, 480,
-> +				      true);
-> +	KUNIT_ASSERT_NOT_NULL(test, expected);
-> +
-> +	mode = drm_mode_analog_ntsc_480i(priv->drm);
-> +	KUNIT_ASSERT_NOT_NULL(test, mode);
-> +
-> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected, mode));
-> +}
-> +
-> +static void drm_modes_analog_tv_pal_576i(struct kunit *test)
-> +{
-> +	struct drm_modes_test_priv *priv = test->priv;
-> +	struct drm_display_mode *mode;
-> +
-> +	mode = drm_analog_tv_mode(priv->drm,
-> +				  DRM_MODE_TV_MODE_PAL,
-> +				  13500 * HZ_PER_KHZ, 720, 576,
-> +				  true);
-> +	KUNIT_ASSERT_NOT_NULL(test, mode);
-> +
-> +	KUNIT_EXPECT_EQ(test, drm_mode_vrefresh(mode), 50);
-> +	KUNIT_EXPECT_EQ(test, mode->hdisplay, 720);
-> +
-> +	/* BT.601 defines hsync_start at 732 for 576i */
-> +	KUNIT_EXPECT_EQ(test, mode->hsync_start, 732);
-> +
-> +	/*
-> +	 * The PAL standard expects a line to take 64us. With a pixel
-> +	 * clock of 13.5 MHz, a pixel takes around 74ns, so we need to
-> +	 * have 64000ns / 74ns = 864.
-> +	 *
-> +	 * This is also mandated by BT.601.
-> +	 */
-> +	KUNIT_EXPECT_EQ(test, mode->htotal, 864);
-> +
-> +	KUNIT_EXPECT_EQ(test, mode->vdisplay, 576);
-> +	KUNIT_EXPECT_EQ(test, mode->vtotal, 625);
-> +}
-> +
-> +static void drm_modes_analog_tv_pal_576i_inlined(struct kunit *test)
-> +{
-> +	struct drm_modes_test_priv *priv = test->priv;
-> +	struct drm_display_mode *expected, *mode;
-> +
-> +	expected = drm_analog_tv_mode(priv->drm,
-> +				      DRM_MODE_TV_MODE_PAL,
-> +				      13500 * HZ_PER_KHZ, 720, 576,
-> +				      true);
-> +	KUNIT_ASSERT_NOT_NULL(test, expected);
-> +
-> +	mode = drm_mode_analog_pal_576i(priv->drm);
-> +	KUNIT_ASSERT_NOT_NULL(test, mode);
-> +
-> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected, mode));
-> +}
-> +
-> +static struct kunit_case drm_modes_analog_tv_tests[] = {
-> +	KUNIT_CASE(drm_modes_analog_tv_ntsc_480i),
-> +	KUNIT_CASE(drm_modes_analog_tv_ntsc_480i_inlined),
-> +	KUNIT_CASE(drm_modes_analog_tv_pal_576i),
-> +	KUNIT_CASE(drm_modes_analog_tv_pal_576i_inlined),
-> +	{ }
-> +};
-> +
-> +static struct kunit_suite drm_modes_analog_tv_test_suite = {
-> +	.name = "drm_modes_analog_tv",
-> +	.init = drm_modes_test_init,
-> +	.test_cases = drm_modes_analog_tv_tests,
-> +};
-> +
-> +kunit_test_suites(
-> +	&drm_modes_analog_tv_test_suite
-> +);
+Thanks for testing and meaning information.
 
-Considering that there is only one suite, you could use the
-kunit_test_suite macro instead.
+Could you tell how I could create VM to run ppc64le and run the test?
+I'd like to reproduce in my local to debug it.
 
-Best Regards,
-- Maíra Canal
-
-> +MODULE_LICENSE("GPL v2");
+Thanks!
