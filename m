@@ -2,69 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF1462393D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1316A623940
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbiKJBx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S232129AbiKJByN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiKJBxw (ORCPT
+        with ESMTP id S232024AbiKJByL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:53:52 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703A35F61
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:53:51 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id p12so333348plq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 17:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xZdzpZw/ENWxCqA4wlnghR1lTnm3T7o1w8LSdyqeUPk=;
-        b=UPkpteuWjTrqlV3M5V4vaPe9d6OavmhLwikc4tWfiwKfNaZiBFfi2Csm1ku7MY8H7J
-         etYkc1QOpDv5M3I2m7CaIQaPTSAjtZjJ1+4FecEorAglf6qbBU4PwGaHsNsA6CU27KMj
-         r36PtKU7hLfM2xTm3+dD9ROUl1J2y3eI4wc6x6DV2F5KnNWYWAXNvlE6AHlrz49FixPk
-         aS6rM/xac+GtY/4zzaLMzNQCnL1T/fjzBNpCqzxH0wGIgo2UhYgGV/BW4o88ZLxumsy9
-         590PrOqT54KiDdHsDWrsQljP9vn5yKgIMvj1gRu84glTTQ/9PvSkIZWWk/cJauVobT9T
-         9M2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xZdzpZw/ENWxCqA4wlnghR1lTnm3T7o1w8LSdyqeUPk=;
-        b=C4wAH1VjrxhlLqpHID5v9w0WZzr2G75i7YmwPMt/R51xhjxwP2DrLm62s2MOEcd8ix
-         OU/2eAh2clcNrizoR92rL5rcNFAQIa0XsTW65qTPjM3SgIg65FH8DO/8ZvXD1tsjVlii
-         Vli3kALcVMm9sHVXGza593krj0opc/yqhRvuDrAxfxjbtXm7fnH1A6nesCmnJOAzTjrR
-         YPGbLOifDuUtcjpesMrxAfsyu9VUHYBYnM45lUl84o+WFcLzvaQovkCd1E3K/rHeCg8Z
-         TuYPUbjMN317oW837Lt1OJaF6ynU2JF4xR9Qsa9CtKwdYowhckIWI6hTUU6Q4i8XjXRo
-         xpcw==
-X-Gm-Message-State: ACrzQf0swsCCz3nprnxvGQB1br2h1RC8lMTmKQRdhz5He/MRtxZa3MLx
-        5szll+l/+O2Ha67DJ1Fuy/PUbw==
-X-Google-Smtp-Source: AMsMyM6bFJovHbW/ieNf3ywfnz9QlzCJ2EdGSnCZT3CdD0YZxRb6o0ucoGNEwDnq375jB4W31r6Hfg==
-X-Received: by 2002:a17:902:bc83:b0:187:85a:28b4 with SMTP id bb3-20020a170902bc8300b00187085a28b4mr61860660plb.96.1668045230870;
-        Wed, 09 Nov 2022 17:53:50 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170903200500b00172cb8b97a8sm9792882pla.5.2022.11.09.17.53.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 17:53:50 -0800 (PST)
-Date:   Thu, 10 Nov 2022 01:53:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com
-Subject: Re: [PATCH] KVM: do not prepare new memslot for KVM_MR_DELETE
-Message-ID: <Y2xZq8Xn0Bk4de+R@google.com>
-References: <20221110012204.3919-1-yan.y.zhao@intel.com>
+        Wed, 9 Nov 2022 20:54:11 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C823A2982C;
+        Wed,  9 Nov 2022 17:54:07 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N74cw5wKgz15MW5;
+        Thu, 10 Nov 2022 09:53:52 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 09:54:05 +0800
+Subject: Re: [PATCH] wifi: ath10k: Fix resource leak in ath10k_pci_init()
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>, <kvalo@kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rmani@qti.qualcomm.com>
+CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221108133858.53308-1-xiujianfeng@huawei.com>
+ <4e81efea-23f1-e52c-b0b4-abf445ed5f15@quicinc.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <cd3194f8-3cad-ce12-602f-8651e99365ab@huawei.com>
+Date:   Thu, 10 Nov 2022 09:54:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110012204.3919-1-yan.y.zhao@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <4e81efea-23f1-e52c-b0b4-abf445ed5f15@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +52,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022, Yan Zhao wrote:
-> kvm_prepare_memory_region() is not useful for KVM_MR_DELETE,
-> and each kvm_arch_prepare_memory_region() does nothing more than returning
-> 0 for KVM_MR_DELETE.
+Hi,
 
-This is not true, s390 has an error path that fires in the DELETE case.
+在 2022/11/10 0:34, Jeff Johnson 写道:
+> On 11/8/2022 5:38 AM, Xiu Jianfeng wrote:
+>> When ath10k_ahb_init() fails, it does not unregister ath10k_pci_driver,
+>> which will cause a resource leak issue, call pci_unregister_driver() in
+>> the error path to fix this issue.
+>>
+>> Fixes: 0b523ced9a3c ("ath10k: add basic skeleton to support ahb")
+>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>> ---
+>>   drivers/net/wireless/ath/ath10k/pci.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/wireless/ath/ath10k/pci.c 
+>> b/drivers/net/wireless/ath/ath10k/pci.c
+>> index e56c6a6b1379..22f8f8b20762 100644
+>> --- a/drivers/net/wireless/ath/ath10k/pci.c
+>> +++ b/drivers/net/wireless/ath/ath10k/pci.c
+>> @@ -3800,8 +3800,10 @@ static int __init ath10k_pci_init(void)
+>>                  ret);
+>>       ret = ath10k_ahb_init();
+>> -    if (ret)
+>> +    if (ret) {
+>>           printk(KERN_ERR "ahb init failed: %d\n", ret);
+>> +        pci_unregister_driver(&ath10k_pci_driver);
+>> +    }
+>>       return ret;
+>>   }
+> 
+> imo neither the existing code nor the modified code is correct.
+> 
+> the driver is attempting to register to support two different buses.
+> 
+> if either of these is successful then ath10k_pci_init() should return 0 
+> so that hardware attached to the successful bus can be probed and 
+> supported.
+> 
+> only if both of these are unsuccessful should ath10k_pci_init() return 
+> an errno.
+> 
+> so I suggest
+>      int ret1, ret2;
+> 
+>      ret1 = pci_register_driver(&ath10k_pci_driver);
+>      if (ret1)
+>          printk(KERN_ERR "failed to register ath10k pci driver: %d\n",
+>                 ret1);
+> 
+>      ret2 = ath10k_ahb_init();
+>      if (ret2)
+>          printk(KERN_ERR "ahb init failed: %d\n", ret2);
+> 
+>      if (ret1 && ret2)
+>          return ret1;
+> 
+>      /* registered to at least one bus */
+>      return 0;
+> }
 
-	/* When we are protected, we should not change the memory slots */
-	if (kvm_s390_pv_get_handle(kvm))
-		return -EINVAL;
+Thanks, this is better. however, if pci_register_driver() returns 0
+while ath10k_ahb_init() returns error, it's better to unregister the
+first bus, here is my another proposal:
 
-	if (change == KVM_MR_DELETE || change == KVM_MR_FLAGS_ONLY)
-		return 0;
+         int ret;
 
+         ret = pci_register_driver(&ath10k_pci_driver);
+         if (ret) {
+                 printk(KERN_ERR "failed to register ath10k pci driver: 
+%d\n",
+                        ret);
+                 return ret;
+         }
 
-> So, just don't call into kvm_prepare_memory_region() to avoid unnecessary
-> error handling for KVM_MR_DELETE.
+         ret = ath10k_ahb_init();
+         if (ret) {
+                 printk(KERN_ERR "ahb init failed: %d\n", ret);
+                 pci_unregister_driver(&ath10k_pci_driver);
+                 return ret;
+         }
 
-Even if the s390 case didn't exit, I would still prefer keeping the code as is.
-I agree that a "dummy" call is somewhat confusing, but skipping the arch call
-for one operation is equally confusing and could easily lead to future bugs,
-e.g. if the order of changes were reversed and an s390 developer wasn't aware
-that s390's arch hook would be bypassed on memslot deletion.
+         return 0;
+
+If you agree, I will send v2 with this.
+
+> 
+> .
