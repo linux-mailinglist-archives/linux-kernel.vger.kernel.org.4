@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978CA623F73
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DAE623F76
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiKJKIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S230063AbiKJKIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:08:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiKJKIK (ORCPT
+        with ESMTP id S230046AbiKJKIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:08:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C45D6B39C;
-        Thu, 10 Nov 2022 02:08:08 -0800 (PST)
+        Thu, 10 Nov 2022 05:08:13 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3456B3B2;
+        Thu, 10 Nov 2022 02:08:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AA9EB8213F;
-        Thu, 10 Nov 2022 10:08:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B1E4C433C1;
-        Thu, 10 Nov 2022 10:08:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 19396CE21CB;
+        Thu, 10 Nov 2022 10:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73512C43142;
+        Thu, 10 Nov 2022 10:08:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668074885;
-        bh=MiaY7DJhi+fcXaSNy1/u+xMsWvH1dSzjh8nCFQMgDng=;
-        h=From:To:Cc:Subject:Date:From;
-        b=e6Yo7Cq07iOgyiB/oZmTK9Yzne+iLx+rSTZVJ+rmB4f1dtu6AVQpPjyw7vwgnUQ+I
-         sZb58YF11URMWkh3BYlr4GPVCrMB7W0gyAJfP1fwMebFrAGaa8kWyV6vo7iRx+0odH
-         DtbEt3lHojvD+4+g+h7cq/gCBiC60HDllQJ4WaiZXGqAWoLiBxflHIpzOQeZ2joQeM
-         7q/+3ule+QAIxwdhtBWQkCnxcjweLwBUUJKf4u0257ZcSXp4kXrlBL5D02QR1BAcyv
-         XGipVSqjcEyU37+jrEksgiv0Bqa1Uy94bI+7bW7gjNarQQTci1N/BBqMYwWfmTBSht
-         jVdioyIniWohw==
+        s=k20201202; t=1668074889;
+        bh=cO7MvZAFboqc+cy0W63vgXFYG+tP3ioVNkMJAPRxT6M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=snxztglUfCtPaJaOSyhWk/p0mXsIOkq5cSJPsvDAyutqBeMt5RiLfDa4dHOV7u0gq
+         zhitqU7YaAxUeFijh/EPjrKlvfE1bvn2dU/CXBBxTvPOaOPaZGYrZCxzxrZa/Ap+7C
+         d4L5CnNWyyqKpcCVJVap3ZeITDAzCA4Uu0c4bkIg2uWA2dc2I4UmAjzsU5hO+lTs9h
+         YIqTi9gtxVrs1ut/8PngOnR8uaesioSHHn+D/BSafzVP3XCIALS2DHBTa9Ra6lCV4u
+         EU4vXrz4QGeIVBi2ltWg9sl8S2uSPQmyE3RHrZOsd2yWgYcjxIXUNRKoF4vIrlKxS2
+         LIAy2WKiObfvg==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Stephen Boyd <sboyd@kernel.org>
@@ -40,11 +40,13 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: [PATCH v6 0/2] spmi: pmic-arb: Add support for PMIC v7
-Date:   Thu, 10 Nov 2022 15:37:53 +0530
-Message-Id: <20221110100755.4032505-1-vkoul@kernel.org>
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 1/2] dt-bindings: spmi: Add qcom,bus-id
+Date:   Thu, 10 Nov 2022 15:37:54 +0530
+Message-Id: <20221110100755.4032505-2-vkoul@kernel.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221110100755.4032505-1-vkoul@kernel.org>
+References: <20221110100755.4032505-1-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,43 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+For PMIC arbiter version 7 and beyond we need to define if we are using
+primary or secondary bus, so add a new property of qcom,bus-id
 
-Since Stephen has not been responding [1] or applying these patches, I would
-like to request you to review and apply them to char-misc (thru which spmi
-tree anyway merges). I have been trying to get this in since last
-Decemeber!
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+---
+ .../devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml   | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-The is version 6 of support for PMIC v7. I have added a new property
-qcom,bus-id for supporting v7 and then add driver changes for v7 of PMIC
-
-[1]:
-v5: https://lore.kernel.org/all/20220914165212.3705892-1-vkoul@kernel.org/
-v4: https://lore.kernel.org/all/20220914112139.3680354-1-vkoul@kernel.org/
-v3: https://lore.kernel.org/all/20220201134108.2677578-1-vkoul@kernel.org/
-v2: https://lore.kernel.org/all/20220131172450.2528065-1-vkoul@kernel.org/
-v1: https://lore.kernel.org/all/20211201072718.3969011-1-vkoul@kernel.org/
-
-Changes since v5:
- - rebase on linux-next
-
-Changes since v4:
- - Fix David name and email
- - remove trailing line in binding
-
-Changes since v3:
- - rebase on spmi/next
-
-David Collins (1):
-  spmi: pmic-arb: Add support for PMIC v7
-
-Vinod Koul (1):
-  dt-bindings: spmi: Add qcom,bus-id
-
- .../bindings/spmi/qcom,spmi-pmic-arb.yaml     |  10 +
- drivers/spmi/spmi-pmic-arb.c                  | 242 ++++++++++++++++--
- 2 files changed, 231 insertions(+), 21 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+index fee4f0eb4665..f983b4af6db9 100644
+--- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
++++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+@@ -85,6 +85,14 @@ properties:
+     description: >
+       which of the PMIC Arb provided channels to use for accesses
+ 
++  qcom,bus-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 1
++    description: >
++      SPMI bus instance. only applicable to PMIC arbiter version 7 and beyond.
++      Supported values, 0 = primary bus, 1 = secondary bus
++
+ required:
+   - compatible
+   - reg-names
+@@ -113,5 +121,7 @@ examples:
+ 
+         interrupt-controller;
+         #interrupt-cells = <4>;
++
++        qcom,bus-id = <0>;
+     };
+ 
 -- 
 2.37.3
 
