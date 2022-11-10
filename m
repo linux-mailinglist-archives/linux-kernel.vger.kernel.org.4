@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D001623B31
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 06:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CD8623B39
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 06:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiKJFWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 00:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S232222AbiKJFY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 00:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKJFWo (ORCPT
+        with ESMTP id S229484AbiKJFY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 00:22:44 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB1F2251B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 21:22:44 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-36cbcda2157so5920557b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 21:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OgojZt3szNIP5LGIhGbw6QUbtksVVJxnVOA5dfLkMwo=;
-        b=Ex6S07d+pfmojPN4/WYput06nIk1Gj4Yh6temAe9wBW2D0PfhwFnS5jJzc7Izw/D16
-         1P0mT9YmkcqmAi/ZuseETi+gmnn970XUMXZcZ1S+tumSHlwoyK9M8JvEiUhybUFHf4lm
-         DR1qyX/OhEph/KFD1F2KzfYgIyW3c4WrYvq/dOLQYx+PnkYnqu4n//E1n6r8FpiS+c62
-         N3zPHrHhWDqiOIDYCtL2su0/S2MGgsRdExQGDPryqOLd/fB/qrSHKFOducQ7/yKJBRu+
-         +zDF+I7Oh3QKAAgFR49+uw0sN9wL/9NCStBpiAFFIu/tI5sLRP9Stw4GQGq9qnKUezVi
-         HlYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OgojZt3szNIP5LGIhGbw6QUbtksVVJxnVOA5dfLkMwo=;
-        b=50iGLjF/TOIxOmT/pOo6+JBpYlvJfOSa1Dl4PeMwTGQvlClbGy9MxGZmS9ZHxStn7n
-         lVRsA8xJZo6dKOyGbMuRd2vMXMDp5TdIY/G/X9JmJVpN0gxJNr8NS7K6Zxa+IqxT+Jwi
-         wy3irjFxNPZ+tRo+Tq2uNsQZEHv50CDBd8LRQoptY5veH3mEPuce6AFd7r/q5eNx9CY+
-         FrW7Jk4dnz0O77pLoYyXdBmAW3+Yd0CcIlOQQhROZQcgVC4xM+zSMvn/nfOjK3ZCVtz8
-         O7arDHobxCYpKmSg+M8TKshF011u18LcCFWNifPhV79oKl6jH9ywMWmpKuMBo4OZbbkt
-         F7Mg==
-X-Gm-Message-State: ACrzQf0BXCIcGcjVz/9MtjvTaK9bHdme7nBoB7yI7Ky8E/62ylQK1E+H
-        1TEZEbcJsboox0OO+wjMcQKmcZSyY/YgFFd6Q9bbqrkRV74=
-X-Google-Smtp-Source: AMsMyM5802CMhEDXDmlJdA8Kq7VzU0ua7eJlKov8TRJ4hLyYaqez6Bh03ZuJMoOYNbHI0qLm37CWjXN9YZh+PMUFsZY=
-X-Received: by 2002:a0d:cd02:0:b0:341:a401:4630 with SMTP id
- p2-20020a0dcd02000000b00341a4014630mr59569528ywd.293.1668057763115; Wed, 09
- Nov 2022 21:22:43 -0800 (PST)
+        Thu, 10 Nov 2022 00:24:57 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE06275FC;
+        Wed,  9 Nov 2022 21:24:55 -0800 (PST)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1668057892;
+        bh=SIhRYzH//kwaIhdzxST5+Pe24phe7wR7IiS7fLDVIpw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EeFpj9ulPKz3ANUzNLdzFGp0I0wnfEyPM0MMNAaFFz/+nWhods7DWc9sKzj8tPZCI
+         2+j4VswE9Abb621YrWji9yDudR+qwgbNRDdM/ZL2k8Hg+cdrUZnz15yODHCmkbtHQs
+         AH3ueKjuGAVWaMaexKLAnNhPeprXY9QeN9yWLz4I=
+To:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, nbd@other.debian.org
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] nbd: automatically load module on genl access
+Date:   Thu, 10 Nov 2022 06:24:38 +0100
+Message-Id: <20221110052438.2188-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-From:   A <amit.general.misc@gmail.com>
-Date:   Thu, 10 Nov 2022 10:52:33 +0530
-Message-ID: <CAEq81z03GOTiME=q83B9L-fg3bG6Mu_0_Em67Y1DqTp_oj_fZg@mail.gmail.com>
-Subject: Submitting patches without using git.
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1668057875; l=727; i=linux@weissschuh.net; s=20211113; h=from:subject; bh=SIhRYzH//kwaIhdzxST5+Pe24phe7wR7IiS7fLDVIpw=; b=TamtngLw5uGYaOiLQpg88P6iUzWfM1ZrfLyQNTSb9ffqCXcn6aghwLYi7eM0GXA0YO6yiR2sr1Hs UqDN2rPwBKx/saBBKi9xXSwr5k8/LNpPVAGDlsq5M6JV4imnTuxh
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Instead of forcing the user to manually load the module do it
+automatically.
 
-Is learning git necessary to submit patches to linux kernel?
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ drivers/block/nbd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Can I do it without git?
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 5cffd96ef2d7..1c38a7ea9531 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -2328,6 +2328,7 @@ static struct genl_family nbd_genl_family __ro_after_init = {
+ 	.mcgrps		= nbd_mcast_grps,
+ 	.n_mcgrps	= ARRAY_SIZE(nbd_mcast_grps),
+ };
++MODULE_ALIAS_GENL_FAMILY(NBD_GENL_FAMILY_NAME);
+ 
+ static int populate_nbd_status(struct nbd_device *nbd, struct sk_buff *reply)
+ {
 
-I have used SVN, etc. but I found git a little bit complex.
+base-commit: f67dd6ce0723ad013395f20a3f79d8a437d3f455
+-- 
+2.38.1
 
-Amit
