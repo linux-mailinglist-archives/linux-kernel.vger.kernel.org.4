@@ -2,79 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D05623EAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F98623EAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiKJJcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S229936AbiKJJex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:34:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiKJJcu (ORCPT
+        with ESMTP id S229651AbiKJJev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:32:50 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948A3DEB8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:32:49 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id d6so2050525lfs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DLrGG9afZTRSq/VDs9kPoqEhvBwGphXAIRIsk/T03ro=;
-        b=q7EarRQldf8WBLHDdiSgrCFp0QRzCPuKTS33Qm5FyZoaCOJkYu8/Fdg/GjgeV3m0ku
-         k1jcAhFH1foaHlBzwo91kz9LXNQ5W9ySh3pWbCEMC4A/h1AXmQ+/kslHQStyby3gEsrx
-         BCExCT0zOpfMy2oZCkJiUD/wtgYjndrt0GyX37OzfrgE0ryJHDjy++GZqfGBy6/ad4cP
-         2kyE2TK5R3zRTLpXPJgxoGmX+Rjz9Jr+o7eNBhh5/7f2ZF+ZYXFKJXRxn5G1k/VMjq0B
-         n2Sk790N0pbz31ddPVTzdHkTXoC11yawP2yI0kv3X2NX37teF/LqaqJGdrEXMkRVw2Od
-         qPYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLrGG9afZTRSq/VDs9kPoqEhvBwGphXAIRIsk/T03ro=;
-        b=oWSgmVmhGaFaVH0RUOvJQvCSCOfQvlknwNKkYda+2Ffwgw98AshFN4NBSad5fXlW7V
-         JjAeit44ipSTPbp5G2PD5r+6MhAj9tDbV/g4q60aCjZgiNd600Nrk38hKJzyZqKO/cCI
-         aAmBC3vwNb9Ne4G1bWSFjAM5XdiILuJsfs+bugWBaJnIbEUuoCQGH/2LXaBpEn2pbGub
-         uf4BuCbJrL6m7jSx1rww1zrJgjPMS1DLh/1FNJ6EicT2ML3pxRySKRf5z7HWkypRea/l
-         Kgjx8xB2cvn8WZ3UQ4bwEjyDQqV1PhXwUJFrTQQSIsbmrhxg+J30rd3MayyRIl/j86B4
-         tojA==
-X-Gm-Message-State: ACrzQf3IJnszLy6M8+Oh/KCcqQ5mF+qNCe9yVWtTdHy6OOetrXF55BQ9
-        lmt0SuensVsCkF15P/lPiDor8g==
-X-Google-Smtp-Source: AMsMyM7JWZHzAntJ2SR05J8xHKjMaMhEk0eTyeVRZ5R76RAGSWOpQX0URiu6j77VxJEuKPVp3JsPsw==
-X-Received: by 2002:a05:6512:33cb:b0:4a2:9a62:bdd1 with SMTP id d11-20020a05651233cb00b004a29a62bdd1mr20566929lfg.105.1668072767918;
-        Thu, 10 Nov 2022 01:32:47 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id d23-20020a2e3317000000b0026df5232c7fsm2577263ljc.42.2022.11.10.01.32.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 01:32:47 -0800 (PST)
-Message-ID: <be450f51-6e1c-a3c1-904f-1f915f0dba5e@linaro.org>
-Date:   Thu, 10 Nov 2022 10:32:45 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: qcom,adsp: Add SM6375 ADSP
- and CDSP
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 10 Nov 2022 04:34:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9F760E88
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:34:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7DD960B89
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00617C433D6;
+        Thu, 10 Nov 2022 09:34:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668072888;
+        bh=rm+YM349AGgKvf8j+km7LK7pGzq8lNCsF5sAXrJZVts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WCvjBU0WyQhxo5Y6m2D0a6NWAyPOM80ZdDgXcTadCfabpsuAmjdSTELy5WDwTsYPy
+         oqihwvkY3YYbwBx5+dkli5vLhXXb+pJVafMaqq/xg86r+RqJ1i9GSq+f3aKrfeB49m
+         RqL3X8SYr1Jjc8rER/hk76j5dLHOqqb2lFFUenVc=
+Date:   Thu, 10 Nov 2022 10:34:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org
-References: <20221109170822.58281-1-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109170822.58281-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH 1/2] driver core: remove devm_device_remove_groups()
+Message-ID: <Y2zFtWcytaIRWNqu@kroah.com>
+References: <20221109140711.105222-1-gregkh@linuxfoundation.org>
+ <CAJZ5v0gv6L9Q+Nu3U0JAWqJk4MPt7kGVGiOAKuX5FcF=znyfTA@mail.gmail.com>
+ <Y2wXYxrr/qed/j//@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2wXYxrr/qed/j//@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,19 +52,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 18:08, Konrad Dybcio wrote:
-> Add entries for SM6375 ADSP and CDSP. They are effectively the same
-> as SM6350 ADSP and SM8150 CDSP respectively.
+On Wed, Nov 09, 2022 at 01:10:59PM -0800, Dmitry Torokhov wrote:
+> On Wed, Nov 09, 2022 at 03:11:47PM +0100, Rafael J. Wysocki wrote:
+> > On Wed, Nov 9, 2022 at 3:07 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > There is no in-kernel user of this function, so it is not needed anymore
+> > > and can be removed.
+> > >
+> > > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > 
+> > For both patches in the series:
+> > 
+> > Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../devicetree/bindings/remoteproc/qcom,adsp.yaml         | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
+> I find it really weird to have an asymmetric core API...
 
+I'm working on fixing up that asymmetric-ness.  We have only one user of
+devm_device_add_groups() and only a handful of devm_device_add_group()
+left in the tree.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+But it turns out that no one ever called these functions anyway, so they
+aren't needed even if we did keep the "add" functions.  So they should
+be dropped no matter what.
 
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
