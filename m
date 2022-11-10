@@ -2,165 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49167623FC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63257623FCE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiKJK3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S229601AbiKJKdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiKJK25 (ORCPT
+        with ESMTP id S229547AbiKJKdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:28:57 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528D717597;
-        Thu, 10 Nov 2022 02:28:56 -0800 (PST)
-X-UUID: 7a7447f8e655480c87afb969c20a1141-20221110
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=HqkJPympux788neVKo6gezW3XXH9EtJEN5xJj7k/X/8=;
-        b=gGLl2wKkFzuPbDAeqH5UDgwnWHMjEUxOVE/wbFUk0e+OMh/FIOeBM0iHgKshu8OvXahQqEVQYQLYtSfvRb297C6HxdPOxGr4AeClPlp1NQg+2YfnQiEKFAzR5e1pd0ZsqkZCBVTd1lxWliol3Kyuq6zQ4wm5cEEt4lCLSZQaPCE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:7f457f67-4551-4138-bb2b-032acf819926,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:62cd327,CLOUDID:bb692e5d-100c-4555-952b-a62c895efded,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 7a7447f8e655480c87afb969c20a1141-20221110
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2012159869; Thu, 10 Nov 2022 18:28:53 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 10 Nov 2022 18:28:51 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 10 Nov 2022 18:28:50 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Rob Herring <robh@kernel.org>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v2,3/3] arm64: dts: mt8195: Add video decoder node
-Date:   Thu, 10 Nov 2022 18:28:34 +0800
-Message-ID: <20221110102834.8946-3-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221110102834.8946-1-yunfei.dong@mediatek.com>
-References: <20221110102834.8946-1-yunfei.dong@mediatek.com>
+        Thu, 10 Nov 2022 05:33:05 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5286178A3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:33:04 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id i21so2380146edj.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:33:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=oFMauseen+ABgndLJ/pvPKOevrA3IhGI5Uq/VIXv6FA=;
+        b=OqVKUXXA348kFsLjvHj0vLxUJDIhYoP1ifKxr+a2mjZJvjKIPBSS3x7E/+mD8wvh1O
+         kCJi45/J9n7IBhuy1Gj5otkK1gEsBLKoqNs2UFDjeqil9XrXMgsBBNggfxATEHLci+EZ
+         qT7tcIlX6f6Q4duMF/RtntTJ+EwD+VoCi9yfI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oFMauseen+ABgndLJ/pvPKOevrA3IhGI5Uq/VIXv6FA=;
+        b=I/9xVN+RZ6NUT1fQ0bpDNNjtOhyiri0zAy7NkG7fVI749C0MRKF7Nukr1kGtNzHkqz
+         fnA3vx0atGt9iWPOV5/MjRNZPGhNoonJPM56axDbTXZ+ICA2ljXQXtN9aw5IqszwCAeg
+         HoYlT7UO81I+EA84HOb8hD5wDNj4OaV0ebtWw3Ypk5KXbqklbmOLI4p9dGp8XZTiZ+sr
+         rUzQJhMMB5QhFX8t7w96Ush+bfiRCR2Cfgtx8W54Bkc6iPCR+OBS3jCCgNehAfFLq0tZ
+         yB2TyOqfFJ/SDUF14T+OfN6uSnzS5fU7VRiEtNPMA4/Msn4E4X2KGCa1LoZZKMnact+p
+         OHYA==
+X-Gm-Message-State: ACrzQf0+YbxlmITwU31kaRLWPglHRPzR0DF0/mgMEOe4rIZDdpcyWwO2
+        SI/5vgae7RUjE54AkBHVpgyUp9biZ/sLrMVa
+X-Google-Smtp-Source: AMsMyM7vJbu1FFbed+q5wYXfj5Ro1KNH0Rn70pBSW2oSkWj7CK7TsNXmz81miAaKLaOak6B4ihs8Nw==
+X-Received: by 2002:aa7:d601:0:b0:460:21d2:e14c with SMTP id c1-20020aa7d601000000b0046021d2e14cmr1987293edr.3.1668076383324;
+        Thu, 10 Nov 2022 02:33:03 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:8565:42a1:677d:6677])
+        by smtp.gmail.com with ESMTPSA id o5-20020a170906768500b007a1d4944d45sm7137467ejm.142.2022.11.10.02.33.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 02:33:02 -0800 (PST)
+Subject: [PATCH v3 0/1] i2c: Restore power status of device if probe fail or device is removed
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-b4-tracking: H4sIAFDTbGMC/3WMwQrDIBBEfyV4rkUtIdhT/6P0sOomLiQKmlhKyL936bG0p2GGeW8XFQthFdduFw
+ UbVcqJy+XUCR8hTSgpcBdGGaO1spKMl0+ghhLQDiOCHrXrBf8dVJSuQPKRibTNM4+R6prL6+NvmuP+
+ S9W0VBLDoMBaZ60KNx9LXmhbzrlM4sGiZv7ChmE19L1yowng/Rd8HMcbDgyiN+cAAAA=
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 10 Nov 2022 11:32:48 +0100
+Message-Id: <20221109-i2c-waive-v3-0-d8651cb4b88d@chromium.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Hidenori Kobayashi <hidenorik@google.com>
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1330; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=M82E0oMA35H24/OwUFwrKs63mvZo7xgnzXo5zM2LJXw=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjbNNSwWMZYHSZT0P9hHJCObX0tWclR+ojzLBIWFjw
+ muqCxhqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2zTUgAKCRDRN9E+zzrEiIVFD/
+ 96FpLAsxQ/kKC+TsCzvHjm3ugGFVt5wxifhSQvzB7/NAAO0nRyGHtApfxVyLnEOgLp2fn3/db0kmap
+ aEcNfpAjz48H5QyL6t/DA5xYzVJJvgVtawFHvh65fdTJoLZIBnqcM/4nsspUG0v/Qt5X8/35q09ln/
+ 8Fe4lkBKsHa+ggiRChPaU7PJlD9GigihbVHKxrnjrTO4blA482EcCi08w14YEu2IvJqso+hepGMNqi
+ XpZzT6ncF+1tXwKuSqxI2gGipDkJ9f1lvn07JykrYd5Ga9QBIl4R/9fjtVw4Dy1Ki9IgUm0kbfoRPp
+ SmJzUB99ZPA892Yl0xKATe7v77XrZB4X8yGleBwCHEmIhMV+jXpYN9sN8rfc/v0yV2L5cHZzct0FrH
+ Fpj5hqNr0jwWm2uhoCns2+6DXuBahmFG7dxPViQ7U+HAkNqZ0d/Ri5By2NC8BN9N/9pEBt37GY/EGJ
+ MMdGq2rqMoom3S3/8brZduGkfSMxAjaNxcIm3TtSUwsaR7Ugd9rAI+Uz6uYfJKx1jUK88vjPvS1e+i
+ Mw/aBQp8NAV8Km63fUAMGOosAlaPLKEDJLMx6cSylvCytWX+UU8JWiukVh/aUzROFQ5wKsGXinMOG3
+ /kazf0TUk3ubySQf5743UUcU5rlVtvPHC0j62FBmWPE81REGwpYWa90awv5A==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add video decoder node to mt8195 device tree.
+We have discovered that some power lines were always on even if the devices
+on that power line was not used.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
-Compared with v1:
-- add description in yaml, and remove /* ... */ for each reg.
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 63 ++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+This happens because we failed to probe a device on the i2c bus, and the
+ACPI Power Resource were never turned off.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 905d1a90b406..3ef7eef02415 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -1874,6 +1874,69 @@
- 			power-domains = <&spm MT8195_POWER_DOMAIN_CAM>;
- 		};
- 
-+		video-codec@18000000 {
-+			compatible = "mediatek,mt8195-vcodec-dec";
-+			mediatek,scp = <&scp>;
-+			iommus = <&iommu_vdo M4U_PORT_L21_VDEC_MC_EXT>;
-+			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			reg = <0 0x18000000 0 0x1000>,
-+			      <0 0x18004000 0 0x1000>;
-+			ranges = <0 0 0 0x18000000 0 0x26000>;
-+			clocks = <&topckgen CLK_TOP_VDEC>,
-+			         <&topckgen CLK_TOP_UNIVPLL_D4>;
-+			clock-names = "vdec-sel", "top";
-+			assigned-clocks = <&topckgen CLK_TOP_VDEC>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-+
-+			vcodec-lat-soc@2000 {
-+				compatible = "mediatek,mtk-vcodec-lat-soc";
-+				reg = <0 0x2000 0 0x800>;
-+				iommus = <&iommu_vpp M4U_PORT_L23_VDEC_UFO_ENC_EXT>,
-+					 <&iommu_vpp M4U_PORT_L23_VDEC_RDMA_EXT>;
-+				clocks = <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LAT>;
-+				clock-names = "vdec-soc-vdec", "vdec-soc-lat";
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
-+			};
-+
-+			vcodec-lat@10000 {
-+				compatible = "mediatek,mtk-vcodec-lat";
-+				reg = <0 0x10000 0 0x800>;
-+				interrupts = <GIC_SPI 708 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD2_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_AVC_MC_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_PRED_RD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_TILE_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_WDMA_EXT>;
-+				clocks = <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LAT>;
-+				clock-names = "vdec-soc-vdec", "vdec-soc-lat";
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
-+			};
-+
-+			vcodec-core@25000 {
-+				compatible = "mediatek,mtk-vcodec-core";
-+				reg = <0 0x25000 0 0x1000>;
-+				interrupts = <GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu_vdo M4U_PORT_L21_VDEC_MC_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_UFO_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PP_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PRED_RD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PRED_WR_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PPWRAP_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_TILE_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_VLD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_VLD2_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_AVC_MV_EXT>;
-+				clocks = <&vdecsys CLK_VDEC_VDEC>, <&vdecsys CLK_VDEC_LAT>;
-+				clock-names = "vdec-vdec", "vdec-lat";
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
-+			};
-+		};
-+
- 		larb24: larb@1800d000 {
- 			compatible = "mediatek,mt8195-smi-larb";
- 			reg = <0 0x1800d000 0 0x1000>;
+This patch tries to fix this issue.
+
+To: Wolfram Sang <wsa@kernel.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomasz Figa <tfiga@chromium.org>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Hidenori Kobayashi <hidenorik@google.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+
+---
+Changes in v3:
+- Introduce full_power variable to make more clear what we are doing.
+- Link to v2: https://lore.kernel.org/r/20221109-i2c-waive-v2-0-07550bf2dacc@chromium.org
+
+Changes in v2:
+- Cover also device remove
+- Link to v1: https://lore.kernel.org/r/20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org
+
+---
+Ricardo Ribalda (1):
+      i2c: Restore initial power state when we are done.
+
+ drivers/i2c/i2c-core-base.c | 11 +++++++----
+ include/linux/i2c.h         |  3 +++
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+---
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
+change-id: 20221109-i2c-waive-ae97fea1f1b5
+
+Best regards,
 -- 
-2.18.0
-
+Ricardo Ribalda <ribalda@chromium.org>
