@@ -2,147 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA2D623DB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E294623DCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiKJIoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S231923AbiKJIsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiKJIo0 (ORCPT
+        with ESMTP id S229551AbiKJIss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:44:26 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2692E2935C;
-        Thu, 10 Nov 2022 00:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668069865; x=1699605865;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kBkbc2MQ9c/NiFCQRoAmN+okU0cL5VhONw3TYm+Zy/Q=;
-  b=hb93gx1CTv7oyCqCIBMIdyDEOccsHVuW92kzYNOJQvPtXxTT4x0USNYa
-   MP/TCtJKuanwyJkbYXnhA4veCH0UUoxNBYlJY6ArKOCyLsHToplHSj/v3
-   wAm1fs/PsDEqtFbAVTT/ywDA3fot/9aFWJxYWAxHUZ7gU+fPmuLPdBY7f
-   rYreYxdFDMixja+rhYF7TENw2xxQvuBZwMhB647Z1A8P/3XFXZP9sPIac
-   j6bv+ki4gC+HHQzX+XIg3dYELQkgDunGVUyCkh2CmILCxKIQRedopTCpF
-   sGhPL9lgSavHVqHYDFkw8pWud1eMgceEaUjpYwfmJ4+00UptUQjqW2teb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="308879708"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="308879708"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 00:44:24 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="779692262"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="779692262"
-Received: from shiningy-mobl1.ccr.corp.intel.com (HELO localhost) ([10.255.28.247])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 00:44:21 -0800
-Date:   Thu, 10 Nov 2022 16:44:19 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Liu Jingqi <jingqi.liu@intel.com>
-Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
- _host_ supported value
-Message-ID: <20221110084418.t7iv5zlfgiu77gfn@linux.intel.com>
-References: <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
- <Y2ABrnRzg729ZZNI@google.com>
- <20221101101801.zxcjswoesg2gltri@linux.intel.com>
- <Y2FePYteNrEfZ7D5@google.com>
- <20221102085414.fk2xss74jvtzs6mr@linux.intel.com>
- <Y2Px90RQydMUoiRH@google.com>
- <20221107082714.fq3sw7qii4unlcn2@linux.intel.com>
- <Y2kfCz02tQSUkMKS@google.com>
- <20221108102120.qdlgqlgvdi6wi22u@linux.intel.com>
- <Y2qhaSr/d2ds+nqD@google.com>
+        Thu, 10 Nov 2022 03:48:48 -0500
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C1C64C5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:48:47 -0800 (PST)
+Received: by mail-pj1-f52.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso5372908pjn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:48:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nj08uoQ5xO490n/iqA+9r1f6MFaSsf/Keu+IuBN/mxc=;
+        b=XpWP41kpmjmKSXKjFlnut5G83rx7+c/MCBMXktRV4IH/ufCROPotCD24wgCsTI4RSV
+         xqUWCzSixmsCdU1BkrPhveGZN1QWzaz84G4AkbQ1wrvtFPxCC+KPn3nJ+E8ugRLcdJPp
+         6ijjpOx838o86OGpfmxKFecwSQyjsuqCDTfDFHySES7MlGc6pgbMAihOckZJa14N3+yL
+         h9VDRPvvgYpptXNDI1Qoyo5DMJTnSpX3LHd/Mew31R1UpV9MTPPT0FTg3/PSfcL+Xv6G
+         HcVqWSTpC0VQTa62nGuL+Y2lNvSqGol/gd6qILqEDo+F7myPTDLnEPeMQzf9J2jGERi4
+         UjgA==
+X-Gm-Message-State: ACrzQf2doMGauvkhmJMo6tQg9sdKx07rtCBtpbXiHig3NXOCQ0qCsqSk
+        vXrz0bVCM60ON2puT+QC1mIlmoZZdBmyvCJ2ms0=
+X-Google-Smtp-Source: AMsMyM4/rxvFp8pqfGwJZsdJimYqWfkYUSxbisV3VoouRxT16X9f1iy+9n4YEmJzxdp6jMr+BSNbJGOtj09Hk7fZsyc=
+X-Received: by 2002:a17:90a:c917:b0:20a:a1a8:3719 with SMTP id
+ v23-20020a17090ac91700b0020aa1a83719mr1301526pjt.225.1668070126727; Thu, 10
+ Nov 2022 00:48:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2qhaSr/d2ds+nqD@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109212219.1598355-1-conor@kernel.org> <20221109212219.1598355-4-conor@kernel.org>
+In-Reply-To: <20221109212219.1598355-4-conor@kernel.org>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Thu, 10 Nov 2022 09:48:35 +0100
+Message-ID: <CANBLGcx6HM=G+PCth8Pg75zuHrQpF5M2HUNdr849ac4ZsbXu0A@mail.gmail.com>
+Subject: Re: [PATCH v1 3/4] MAINTAINERS: add an entry for StarFive devicetrees
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>, soc@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> No.  Again, KVM _should never_ manipulate VMX MSRs in response to CPUID changes.
-> Keeping the existing behavior would be done purely to maintain backwards
-> compability with existing userspace, not because it's strictly the right thing to do.
-> 
-> E.g. as a strawman, a weird userspace could do KVM_SET_MSRS => KVM_SET_CPUID =>
-> KVM_SET_CPUID, where the first KVM_SET_CPUID reset to a base config and the second
-> KVM_SET_CPUID incorporates "optional" features.  In that case, clearing bits in
-> the VMX MSRs on the first KVM_SET_CPUID would do the wrong thing if the second
-> KVM_SET_CPUID enabled the relevant features.
-> 
-> AFAIK, no userspace actually does something odd like that, whereas there are VMMs
-> that do KVM_SET_MSRS before KVM_SET_CPUID, e.g. disable a feature in VMX MSRs but
-> later enable the feature in CPUID for L1.  And so disabling features is likely
-> safe-ish, but enabling feature most definitely can cause problems for userspace.
-> 
-> Hrm, actually, there are likely older VMMs that never set VMX MSRs, and so dropping
-> the "enable features" code might not be safe either.  Grr.  The obvious solution
-> would be to add a quirk, but maybe we can avoid a quirk by skipping KVM's
-> misguided updates if userspace has set the MSR.  That should work for a userspace
-> that deliberately sets the MSR during setup, and for a userspace that blindly
-> migrates the MSR since the migrated value should already be correct/sane.
-> 
-Oh. Just saw your new selftest code, and fininally get your point(I hope
-so...).  Thanks!
+On Wed, 9 Nov 2022 at 22:23, Conor Dooley <conor@kernel.org> wrote:
+>
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> Emil looks after the downstream StarFive stuff, and agreed to look after
+> the upstream ones too.
+>
+> CC: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-> > BTW, I found my previous understanding of what vmx_adjust_secondary_exec_control()
-> > currently does was also wrong. It could also be used for EXITING controls. And
-> > for such flags(e.g., SECONDARY_EXEC_RDRAND_EXITING), values for the nested settings
-> > (vmx->nested.msrs.secondary_ctls_high) and for the L1 execution controls(*exec_control)
-> > could be opposite. So the statement:
-> > 	"1> For now, what vmx_adjust_secondary_exec_control() does, is to enable/
-> > 	 disable a feature in VMX MSR(and nVMX MSR) based on cpuid changes."
-> > is wrong.
-> 
-> No, it's correct.  The EXITING controls are just inverted feature flags.  E.g. if
-> RDRAND is disabled in CPUID, KVM sets the EXITING control so that KVM intercepts
-> RDRAND in order to inject #UD.
-> 
-> 	[EXIT_REASON_RDRAND]                  = kvm_handle_invalid_op,
-> 
+Thanks!
 
-Well, suppose
-- cpu_has_vmx_rdrand() is true;
-- meanwhile guest_cpuid_has(vcpu, X86_FEATURE_RDRAND) is false.
+Acked-by: Emil Renner Berthing <kernel@esmil.dk>
 
-And then, what vmx_adjust_secondary_exec_control() currently does is:
-1> keep the SECONDARY_EXEC_RDRAND_EXITING set in L1 secondary proc-
-based execution control.
-2> and then clear the SECONDARY_EXEC_RDRAND_EXITING in the high bits
-of IA32_VMX_PROCBASED_CTLS2 MSR for nested by
-        vmx->nested.msrs.secondary_ctls_high &= ~control;
-That means for L1 VMM, SECONDARY_EXEC_RDRAND_EXITING must be cleared
-in its(VMCS12's) secondary proc-based VM-execution control, even when
-rdrand is disabled in L1's and L2's CPUID.
-
-I wonder, for native environment, if an instruction is not supported,
-will the allowed 1-setting for its corresponding exiting feature in
-IA32_VMX_PROCBASED_CTLS2 MSR be set, or be cleared? Maybe it should
-be cleared, and executing such instruction in non-root will just get
-a #UD directly instead of triggering a VM-Exit?
-
-Note: I do not think this will cause any problem, just curious if L1
-VMM can observe a behavior that's not supposed to be in native scenario(
-only because what we are doing in KVM). 
-
-B.R.
-Yu
-
+> ---
+>  MAINTAINERS | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a57c90be001f..040d49af9bdb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19622,6 +19622,11 @@ M:     Ion Badulescu <ionut@badula.org>
+>  S:     Odd Fixes
+>  F:     drivers/net/ethernet/adaptec/starfire*
+>
+> +STARFIVE DEVICETREES
+> +M:     Emil Renner Berthing <kernel@esmil.dk>
+> +S:     Maintained
+> +F:     arch/riscv/boot/dts/starfive/
+> +
+>  STARFIVE JH7100 CLOCK DRIVERS
+>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>  S:     Maintained
+> --
+> 2.37.2
+>
