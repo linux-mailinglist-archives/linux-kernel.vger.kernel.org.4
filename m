@@ -2,107 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B66D62487E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEE4624883
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiKJRlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:41:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S229938AbiKJRnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiKJRlF (ORCPT
+        with ESMTP id S229701AbiKJRnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:41:05 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C573624973;
-        Thu, 10 Nov 2022 09:41:04 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bs21so3338800wrb.4;
-        Thu, 10 Nov 2022 09:41:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q30MdsvArEgZPhyUIGZqou5nUz1ampzE4lOdExQos5I=;
-        b=o2Vpt+YPvLhZHweh7xAdlR3+YrVGNhjp7NJmTPeDosfsOLlkBDscJ4Kd7LTBciMF2K
-         hd3vLMn3MTRljbMGeRPuZqSj7O7WdY8kPGUHjFO0awo7787oqIv1h14zgr62jBSbvKqK
-         os4lbL/cMqHdO6LMvThAmTy8oJukp8f7k6no9Fb/47tW+9edra2HMhElNFY1Y3Wr9SbF
-         JsCSCYqpkKm/e7EsXwWRTsAaz5N6UhisR+UG7FyGsj4OlYKOZSZ7/VpxqeJQnOvCIr7+
-         0kWltduRXMdIp6MBAVa2nY0kS2yz/aMyoilvkzHkqLF1kFk2VxVl4d+8Nrf66fwP5UXL
-         q70g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q30MdsvArEgZPhyUIGZqou5nUz1ampzE4lOdExQos5I=;
-        b=hfaiyUjHC9YsSkn4APzTYXhKTiHETH/icJXafNMWewyiqqiF6RENRbrDX4X79lBnPx
-         fa7SR3Tb5Em34l4WjAJPPh9qzST46C8TOPsu0jD7l21ROOZFkRAIDPQYLLpKunBTWNDh
-         7eV9d6rvgLqOPTpCY/2HvxsP2Cue2Lyc4YvbU8+gtA/8ULRrVTbfBBz1RLIjjTv4CFCL
-         go/ctf89iig8iw+LMcx/yl9tupq+997sFbcJ8tCDFkv42jXvc69NEZCzPXOVpNgDNKcK
-         pZNBsYzF80rHiPLE+FvKCecLGayGZWOlq2g6FCQ6dM7RhiCmsQIBjtFx17TkdxE+ZtvV
-         wS4Q==
-X-Gm-Message-State: ACrzQf25sH/4+QvTkjvhecXrPygOQ3YPO2Nx36Btk7i9NBLD2KUvu0lq
-        hb6g57c898WPYA/+T9Msh/iiLsbyMKIcnw==
-X-Google-Smtp-Source: AMsMyM5oFQ6QmBQ9pr5nV9+hLAIoMBYD2C3HMQlxM6yOu+E5xJ+UML6xiCEdkYUL+Ldel+LiKMtTeg==
-X-Received: by 2002:adf:e510:0:b0:235:de50:72ff with SMTP id j16-20020adfe510000000b00235de5072ffmr40259764wrm.100.1668102063125;
-        Thu, 10 Nov 2022 09:41:03 -0800 (PST)
-Received: from localhost.localdomain ([94.73.35.109])
-        by smtp.gmail.com with ESMTPSA id n10-20020a5d420a000000b0023682011c1dsm16268026wrq.104.2022.11.10.09.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 09:41:02 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, openglfreak@googlemail.com,
-        alex@alexyzhang.dev, linux-input@vger.kernel.org,
+        Thu, 10 Nov 2022 12:43:41 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AD32D76D;
+        Thu, 10 Nov 2022 09:43:38 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 59E57240007;
+        Thu, 10 Nov 2022 17:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668102217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uvDrMn2Uu/kHy2JQHhfB4c2SUZYxwuUXOR78mUDTGB0=;
+        b=FteiV1EecPiLO/9aQedbolmycxbn9ZZLYDNbM+TZ+/Jq+YC1yWLGYpLt+mZUsFyTZGSYdo
+        blXS/hgS0j1CKXUdFiFd3v9FnUdCwgMKrX4GxBuzok+QN8V/boNVhE6DIrx8JYnfTWHQRB
+        lKQ34bS7Cu9GVIeqLBYJsQql1RAN3QLmCbhPu3izr0DqMA9I9C3FqHsF4zZv0mGgN3a7/k
+        Y91cgpd6PRiLmow40vOvLAj6GYBVWa7vLCWFYjg/Pz87YdAIHTjthSb+TykLP5HZsv/kdB
+        kHUJlkk0ZWjS/tG3eJAeIceg9J7GVshq3M0jWZhnQn7Qjs3cL7IoA+lQr3WPCA==
+Date:   Thu, 10 Nov 2022 18:43:34 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH 1/1] HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
-Date:   Thu, 10 Nov 2022 18:40:56 +0100
-Message-Id: <20221110174056.393697-2-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221110174056.393697-1-jose.exposito89@gmail.com>
-References: <20221110174056.393697-1-jose.exposito89@gmail.com>
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christian Eggers <ceggers@arri.de>,
+        Cory Tusar <cory.tusar@pid1solutions.com>
+Subject: Re: [PATCH v3 6/6] dt-bindings: nvmem: add YAML schema for the ONIE
+ tlv layout
+Message-ID: <20221110184334.1cb531f6@xps-13>
+In-Reply-To: <20221110140545.GA221642-robh@kernel.org>
+References: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
+        <20221104163833.1289857-7-miquel.raynal@bootlin.com>
+        <20221110040055.GA3436769-robh@kernel.org>
+        <20221110095034.7a80163a@xps-13>
+        <20221110140545.GA221642-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f7d8e387d9ae ("HID: uclogic: Switch to Digitizer usage for
-styluses") changed the usage used in UCLogic from "Pen" to "Digitizer".
+Hi Rob,
 
-However, the IS_INPUT_APPLICATION() macro evaluates to false for
-HID_DG_DIGITIZER causing issues with the XP-Pen Star G640 tablet.
+robh@kernel.org wrote on Thu, 10 Nov 2022 08:05:45 -0600:
 
-Add the HID_QUIRK_HIDINPUT_FORCE quirk to bypass the
-IS_INPUT_APPLICATION() check.
+> On Thu, Nov 10, 2022 at 09:50:34AM +0100, Miquel Raynal wrote:
+> > Hi Rob,
+> >=20
+> > robh@kernel.org wrote on Wed, 9 Nov 2022 22:00:55 -0600:
+> >  =20
+> > > On Fri, Nov 04, 2022 at 05:38:33PM +0100, Miquel Raynal wrote: =20
+> > > > Add a schema for the ONIE tlv NVMEM layout that can be found on any=
+ ONIE
+> > > > compatible networking device.
+> > > >=20
+> > > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > > ---
+> > > >  .../bindings/nvmem/layouts/nvmem-layout.yaml  |   1 +
+> > > >  .../nvmem/layouts/onie,tlv-layout.yaml        | 115 ++++++++++++++=
+++++
+> > > >  2 files changed, 116 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts=
+/onie,tlv-layout.yaml
+> > > >=20
+> > > > diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-=
+layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.=
+yaml
+> > > > index f64ea2fa362d..8512ee538c4c 100644
+> > > > --- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.=
+yaml
+> > > > +++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.=
+yaml
+> > > > @@ -19,6 +19,7 @@ description: |
+> > > > =20
+> > > >  oneOf:
+> > > >    - $ref: kontron,sl28-vpd.yaml
+> > > > +  - $ref: onie,tlv-layout.yaml
+> > > > =20
+> > > >  properties:
+> > > >    compatible: true
+> > > > diff --git a/Documentation/devicetree/bindings/nvmem/layouts/onie,t=
+lv-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-l=
+ayout.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..1d91277324ac
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layo=
+ut.yaml
+> > > > @@ -0,0 +1,115 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/nvmem/layouts/onie,tlv-layout.y=
+aml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: NVMEM layout of the ONIE tlv table
+> > > > +
+> > > > +maintainers:
+> > > > +  - Miquel Raynal <miquel.raynal@bootlin.com>
+> > > > +
+> > > > +description:
+> > > > +  Modern networking hardware implementing the Open Compute Project=
+ ONIE
+> > > > +  infrastructure shall provide a non-volatile memory with a table =
+whose the
+> > > > +  content is well specified and gives many information about the m=
+anufacturer
+> > > > +  (name, country of manufacture, etc) as well as device caracteris=
+tics (serial
+> > > > +  number, hardware version, mac addresses, etc). The underlaying d=
+evice type
+> > > > +  (flash, EEPROM,...) is not specified. The exact location of each=
+ value is also
+> > > > +  dynamic and should be discovered at run time because it depends =
+on the
+> > > > +  parameters the manufacturer decided to embed.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: onie,tlv-layout
+> > > > +
+> > > > +  product-name: true   =20
+> > >=20
+> > > This is a node? If so, you need:
+> > >=20
+> > > type: object
+> > > additionalProperties: false =20
+> >=20
+> > I thought referencing a schema under a property would be enough?
+> >=20
+> > Indeed in nvmem.yaml we create the property nvmem-layout and make it
+> > reference nvmem-layout.yaml. Then, in nvmem-layout.yaml:
+> >=20
+> > 	 oneOf:
+> > 	  - $ref: kontron,sl28-vpd.yaml
+> > 	  - $ref: onie,tlv-layout.yaml
+> >=20
+> > we reference the different layouts that may apply (very much like what
+> > you proposed to list the mtd partition parsers, if I got it right).
+> >=20
+> > Isn't it enough? =20
+>=20
+> No. It is enough to allow the property, but nothing defines what it must=
+=20
+> be (a node) and what the node contains in the case of empty nodes. Try=20
+> adding 'product-name =3D "foo";' and it won't warn.
 
-Reported-by: Torge Matthies <openglfreak@googlemail.com>
-Reported-by: Alexander Zhang <alex@alexyzhang.dev>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-uclogic-core.c | 1 +
- 1 file changed, 1 insertion(+)
+There was a misunderstanding on my side. I thought your comment was
+about the nvmem-layout node. Actually you were commenting about all the
+sub-nodes defining nvmem-cells inside, so I'm fully aligned with your
+response.
 
-diff --git a/drivers/hid/hid-uclogic-core.c b/drivers/hid/hid-uclogic-core.c
-index 0fbc408c2607..7fa6fe04f1b2 100644
---- a/drivers/hid/hid-uclogic-core.c
-+++ b/drivers/hid/hid-uclogic-core.c
-@@ -192,6 +192,7 @@ static int uclogic_probe(struct hid_device *hdev,
- 	 * than the pen, so use QUIRK_MULTI_INPUT for all tablets.
- 	 */
- 	hdev->quirks |= HID_QUIRK_MULTI_INPUT;
-+	hdev->quirks |= HID_QUIRK_HIDINPUT_FORCE;
- 
- 	/* Allocate and assign driver data */
- 	drvdata = devm_kzalloc(&hdev->dev, sizeof(*drvdata), GFP_KERNEL);
--- 
-2.25.1
+However, if I understood it correctly, you basically said that:
 
+	property:
+	  $ref: foo.yaml
+
+is not the same as:
+
+	property:
+	  type: object
+	  $ref: foo.yaml
+
+If that's the case, then should we consider dropping this patch (which
+you agreed with in the first place)?
+
+https://lore.kernel.org/linux-mtd/20221104164718.1290859-17-miquel.raynal@b=
+ootlin.com/T/#u=20
+
+Thanks,
+Miqu=C3=A8l
