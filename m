@@ -2,89 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254BE624AA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC955624AAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiKJT3k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Nov 2022 14:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S229675AbiKJTaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 14:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKJT3f (ORCPT
+        with ESMTP id S229790AbiKJTaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 14:29:35 -0500
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA50865BE;
-        Thu, 10 Nov 2022 11:29:34 -0800 (PST)
-Received: by mail-qk1-f169.google.com with SMTP id s20so1774937qkg.5;
-        Thu, 10 Nov 2022 11:29:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eSVYD1v7K4BrYXK0u3SCv8ScBPQPneRqu4O2yg7mNMk=;
-        b=hOfwHCJ8qqoKe+v7P7aZ703GZ2iIDHpQQ+Pps1kT6xhyI9sED5nIMrTPW52goguAA8
-         zxJBNl7HEgS5OPbyCagcvXL1jDwfpLclPUqXNfo10IO0KIpuXQRAQ5MoonSMMWZZnD2l
-         l6eIP/suh/N8r7/zewstbbTNWzDrZHhIZ6kMWH0j4fByMKadsdRYAZSwLyQ8KGZ1iS4G
-         Hoy9rNVyxlSBobnddE2mySNynJWpIjM4kol7W2bnq1eZiWvvjHj9y10e77qUGRIgaU0g
-         IUQhI4PiOe9jKclc5joVfQ6gscewd/+LdxKNVOxe6oKsQlRXY6PdefSKL3U6dkU4g/v3
-         3WEA==
-X-Gm-Message-State: ACrzQf3lMl3+5Jc97ZT7dcpuNMzzva0+Q5s6HKALTVA4FqAn0rD613QZ
-        uJNkgH2GhGcuWwjLPT7VYOcXpKBGaa7a/EJpBYQ=
-X-Google-Smtp-Source: AMsMyM5yJg+cU512ZzXG5/3nSOncbL3I3fJWCtg6E2p/m23cKJFAo2qUEgBISuBpUEaeeGsY+SuWVG6ByDdKlTkJeLg=
-X-Received: by 2002:ae9:eb4a:0:b0:6fa:df0:f326 with SMTP id
- b71-20020ae9eb4a000000b006fa0df0f326mr1677320qkg.23.1668108573853; Thu, 10
- Nov 2022 11:29:33 -0800 (PST)
+        Thu, 10 Nov 2022 14:30:04 -0500
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E322445090;
+        Thu, 10 Nov 2022 11:30:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1668108602; x=1699644602;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=F8j7rbJQIIQX52u1GJETYu+bMfIQlP+FAxS1u/DeGzM=;
+  b=ssWb5ieUmLxoNXp+/jD1zV9qyXNaT+CLcSKX/dg9cx9atSP94s+nZpAP
+   UWi81MMW9FnaGfy3VvBtzqvtyleiueTzdkHcGO6mmm4d3YkQiwgLvuDG+
+   QRJabdFosPw28kUhFtv5f0ylrGrwbe9JQNWzxxqzM0KceEJUO/SyvFeEl
+   I=;
+X-IronPort-AV: E=Sophos;i="5.96,154,1665446400"; 
+   d="scan'208";a="278904848"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-6e7a78d7.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:30:00 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-6e7a78d7.us-east-1.amazon.com (Postfix) with ESMTPS id DEDC6820B0;
+        Thu, 10 Nov 2022 19:29:56 +0000 (UTC)
+Received: from EX19D035UWB004.ant.amazon.com (10.13.138.104) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Thu, 10 Nov 2022 19:29:54 +0000
+Received: from dev-dsk-grecojay-2b-e6934ae5.us-west-2.amazon.com
+ (10.43.161.14) by EX19D035UWB004.ant.amazon.com (10.13.138.104) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20; Thu, 10 Nov 2022
+ 19:29:54 +0000
+From:   Jay Greco <grecojay@amazon.com>
+To:     <linux-iio@vger.kernel.org>
+CC:     <jorcrous@amazon.com>, Jay Greco <grecojay@amazon.com>,
+        "Jean-Baptiste Maneyrol" <jmaneyrol@invensense.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] iio: imu: inv_icm42600: Add support for icm42631
+Date:   Thu, 10 Nov 2022 19:29:31 +0000
+Message-ID: <20221110192933.13616-1-grecojay@amazon.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20221110015034.7943-1-lihuisong@huawei.com> <20221110015034.7943-2-lihuisong@huawei.com>
- <20221110102528.6kuznowxtqkouvlb@bogus> <4f167ee7-ad50-d66c-8bd7-811fa0e83cfd@huawei.com>
-In-Reply-To: <4f167ee7-ad50-d66c-8bd7-811fa0e83cfd@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Nov 2022 20:29:23 +0100
-Message-ID: <CAJZ5v0h82m37Li3YOfP7_8aAS3ULwzunpWZJwRPncLooPqvE-g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mailbox: pcc: rename platform interrupt bit macro name
-To:     "lihuisong (C)" <lihuisong@huawei.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
-        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
-        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
-        wangkefeng.wang@huawei.com, huangdaode@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.14]
+X-ClientProxiedBy: EX13D17UWB004.ant.amazon.com (10.43.161.132) To
+ EX19D035UWB004.ant.amazon.com (10.13.138.104)
+X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 1:17 PM lihuisong (C) <lihuisong@huawei.com> wrote:
->
->
-> 在 2022/11/10 18:25, Sudeep Holla 写道:
-> > On Thu, Nov 10, 2022 at 09:50:32AM +0800, Huisong Li wrote:
-> >> Currently, the name of platform interrupt bit macro, ACPI_PCCT_DOORBELL,
-> >> is not very appropriate. The doorbell is generally considered as an action
-> >> when send mailbox data. Actually, the macro value comes from Platform
-> >> Interrupt in Platform Communications Channel Global Flags. If the bit is
-> >> '1', it means that the platform is capable of generating an interrupt to
-> >> indicate completion of a command.
-> >>
-> > This is touching ACPICA header file, so it must be submitted to ACPICA
-> > separately following the guidelines in the github and imported into the
-> > kernel.
-> Got it, thanks.
-> >
-> > However, I don't see any point in this change. Yes the language "doorbell"
-> > is not used in this particular context in the spec, but it is implicit from
-> > other parts. I am not opposing the change though if Rafael is OK and ACPICA
-> > project accepts it.
-> @Rafael, what do you think?
+This patch adds support for the invensense icm42631 as part of the
+inv_icm42600 family driver within the IIO subsystem. The patch series
+also includes the requisite changes to the dt-bindings documentation.
 
-Well, I wouldn't send a patch to make this change myself, but if you
-really care about it, please submit an upstream ACPICA pull request in
-the first place and we'll see.
+Changes in v2:
+- Fix documentation subject prefix per Krzysztof Kozlowski
+
+Changes in v1:
+- initial patch submission
+
+Jay Greco (2):
+  iio: imu: inv_icm42600: Add support for icm42631
+  dt-bindings: iio: imu: Add inv_icm42600 documentation
+
+ .../devicetree/bindings/iio/imu/invensense,icm42600.yaml     | 1 +
+ drivers/iio/imu/inv_icm42600/inv_icm42600.h                  | 2 ++
+ drivers/iio/imu/inv_icm42600/inv_icm42600_core.c             | 5 +++++
+ drivers/iio/imu/inv_icm42600/inv_icm42600_i2c.c              | 3 +++
+ drivers/iio/imu/inv_icm42600/inv_icm42600_spi.c              | 3 +++
+ 5 files changed, 14 insertions(+)
+
+-- 
+2.37.1
+
