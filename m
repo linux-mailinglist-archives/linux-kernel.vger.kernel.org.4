@@ -2,273 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D89D623830
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 01:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A355623833
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 01:33:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbiKJAbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 19:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
+        id S230243AbiKJAdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 19:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232217AbiKJAbX (ORCPT
+        with ESMTP id S231769AbiKJAdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 19:31:23 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4B62A247
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 16:31:09 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id z18so690610edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 16:31:09 -0800 (PST)
+        Wed, 9 Nov 2022 19:33:31 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E862733
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 16:33:30 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id d10so312339pfh.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 16:33:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/a0Y1PzPHK5lglbzGXwet9czSRIDakfOXe004kRMBhc=;
-        b=f/MMX38JG041+PK29JPLsroZLyZltlw88olsa6UAdoX/JQNLFoeo2dw1rMhQUropif
-         kbYbaGTvqoIzCVrPaM8lJxU4rDB+TwS6w2b5ZkwnZWiHvefTLJw2idJAiaWUjqvSjBNl
-         cmPA6Zz8zngD/30X8LfyXJWKjfmmHyI7FDzgg=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYi0GZGMn5TC2lhvPcFDZ9xBuACGkto6jmH1Czub6A0=;
+        b=tZq0PqDpfPR419ZFwAPi7cG9DySFU1sJP27XIuwOmJleanpv3u3VkHO1qgRiDgWY3v
+         zPh3/PpXfHtccFz+IpqYkwqh5wMudWF6fg2GhQBwO7WCK3FpqAwPSYUDvT6TgsxwRbyK
+         Vm3Apk+GRyikt6WvGWv0ILAUaxXJe2HMWPQuevLuz7cqe06ipSATYJ1WI50J0qSSzE9i
+         WeMsgD6/b4GKLWAcDenzB/dIVnG5+Xo5vvI8YC59XPRbBxCuSEUmPOmJF8dEiVGKpMEc
+         qoKY6Y2ruqguBRwXi0fX0PCz7p2YcvSrQoez19i4RcfuH84RIeRLjSiZC3QtC4NvVZCk
+         K31g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/a0Y1PzPHK5lglbzGXwet9czSRIDakfOXe004kRMBhc=;
-        b=I6qfbHsu0KNurUAiWJELa1VMcfONxRC7iQch1lvGohw6qFWJ6q0uiObC0zS6f68J/7
-         Q5A3WjaEA4skzLyUfazg1k+nY+TSg1sLlVSZM+LQlPtw2p9jzsPMgD+Bz9xk8u4BDNPW
-         8YjkkJDP97xWVEoxiKnv6B6hn+T6tX3GpSYBkLH6nRl00aX6cJDQZe3CtACb9K867cUd
-         cUX2gt5IBtQFN6jj90bbSgfHTUNPsOBv2MzNd5F8x1jaypm1FAoR9nGpf2c0E/zgpFCW
-         rBnKTVNJPpYOVYz3GGuFkHEd7eiPyAvcg9Fe47eTs0kWS07xkIvBK+HqQXdvWVqPSSac
-         vsSg==
-X-Gm-Message-State: ACrzQf0CAVQht043fRtJucx3pt47X8UPZFQ+M3aCHr6x0nE2rvdLExlK
-        cq56I7JdWse5kSvKdH5EilMpBO8tDpPC8A==
-X-Google-Smtp-Source: AMsMyM5uDrdpcq2Xof8gFSMTX3H4IhGZrI5f6XPTdvIDlefutFa1INteahsLvLo70yOCo8A08sZaew==
-X-Received: by 2002:a05:6402:22e5:b0:459:53dc:adc9 with SMTP id dn5-20020a05640222e500b0045953dcadc9mr1285055edb.166.1668040268279;
-        Wed, 09 Nov 2022 16:31:08 -0800 (PST)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id j2-20020a17090623e200b0078d957e65b6sm6429478ejg.23.2022.11.09.16.31.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 16:31:07 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id g12so123853wrs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 16:31:07 -0800 (PST)
-X-Received: by 2002:a05:6000:5c4:b0:236:cbbb:5576 with SMTP id
- bh4-20020a05600005c400b00236cbbb5576mr36808772wrb.591.1668040266953; Wed, 09
- Nov 2022 16:31:06 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xYi0GZGMn5TC2lhvPcFDZ9xBuACGkto6jmH1Czub6A0=;
+        b=v2MNm85bg+svQxZeBFkuwLdd7DJX0XTpxCRcd1L80GDPS8OKv83TORmVJx9Oo91tKA
+         I63hPnKrCLAXZNOntf3lp3eEhFbsfat+MjIxDLlXhQ0heUs1hUZvulvbyF2TJi2Y9Nlv
+         W3hGxA6iEHcoywwdMxM2RDNH5rN3sOqXfneJQgmBpDnl9STLjpE1yzKwuM4gz0IffkR9
+         N8MuNdNSfLNoMjCWkQP8f8Hgz+sc76Q7RRY0BiPngDRCXKHctVc1rW9jJT8sNbvStAit
+         R4oKQhlaQBdM4RQAo5ZFASQTy+ig81CXHliqy35xZqVsTFNbuP9HaW8KQOt201+U+LMh
+         bCPg==
+X-Gm-Message-State: ANoB5pmiFGBjE4DZCpS3WW+LZFN1dtf3US7QhZ5esZ7v6TlDT2AfHFWA
+        SFUEpY+vu91xheYXoj4pX7rRNQ==
+X-Google-Smtp-Source: AA0mqf6IwulYIdSeSlHYYMtf2wIm4fnBNI9XNM3Fo6I+UFyQMb2vfh07eq+i6gx1r32A8/HcZ+7yPw==
+X-Received: by 2002:a63:f347:0:b0:470:580a:cb7 with SMTP id t7-20020a63f347000000b00470580a0cb7mr986390pgj.73.1668040409296;
+        Wed, 09 Nov 2022 16:33:29 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 185-20020a6217c2000000b0056bc1d7816dsm9118261pfx.99.2022.11.09.16.33.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 16:33:28 -0800 (PST)
+Date:   Thu, 10 Nov 2022 00:33:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com
+Subject: Re: [PATCH] KVM: move memslot invalidation later than possible
+ failures
+Message-ID: <Y2xG1SY/kNULHFck@google.com>
+References: <20221108084416.11447-1-yan.y.zhao@intel.com>
+ <Y2qSwlN26qWi3ZqH@google.com>
+ <Y2tNGHF5Lbjk4DQV@yzhao56-desk.sh.intel.com>
 MIME-Version: 1.0
-References: <20221103180120.752659-1-evgreen@chromium.org> <20221103105558.v4.10.I504d456c7a94ef1aaa7a2c63775ce9690c3ad7ab@changeid>
- <202211041156.3D184961EE@keescook>
-In-Reply-To: <202211041156.3D184961EE@keescook>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Wed, 9 Nov 2022 16:30:30 -0800
-X-Gmail-Original-Message-ID: <CAE=gft7=fUJGHQF6WNYzi_mwnTr-xpjanfwpPdyYQrBtdxX9wA@mail.gmail.com>
-Message-ID: <CAE=gft7=fUJGHQF6WNYzi_mwnTr-xpjanfwpPdyYQrBtdxX9wA@mail.gmail.com>
-Subject: Re: [PATCH v4 10/11] PM: hibernate: Verify the digest encryption key
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2tNGHF5Lbjk4DQV@yzhao56-desk.sh.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 12:00 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Nov 03, 2022 at 11:01:18AM -0700, Evan Green wrote:
-> > We want to ensure that the key used to encrypt the digest was created by
-> > the kernel during hibernation. To do this we request that the TPM
-> > include information about the value of PCR 23 at the time of key
-> > creation in the sealed blob. On resume, we can make sure that the PCR
-> > information in the creation data blob (already certified by the TPM to
-> > be accurate) corresponds to the expected value. Since only
-> > the kernel can touch PCR 23, if an attacker generates a key themselves
-> > the value of PCR 23 will have been different, allowing us to reject the
-> > key and boot normally instead of resuming.
-> >
-> > Co-developed-by: Matthew Garrett <mjg59@google.com>
-> > Signed-off-by: Matthew Garrett <mjg59@google.com>
-> > Signed-off-by: Evan Green <evgreen@chromium.org>
-> >
-> > ---
-> > Matthew's original version of this patch is here:
-> > https://patchwork.kernel.org/project/linux-pm/patch/20210220013255.1083202-9-matthewgarrett@google.com/
-> >
-> > I moved the TPM2_CC_CERTIFYCREATION code into a separate change in the
-> > trusted key code because the blob_handle was being flushed and was no
-> > longer valid for use in CC_CERTIFYCREATION after the key was loaded. As
-> > an added benefit of moving the certification into the trusted keys code,
-> > we can drop the other patch from the original series that squirrelled
-> > the blob_handle away.
-> >
-> > Changes in v4:
-> >  - Local variable reordering (Jarkko)
-> >
-> > Changes in v3:
-> >  - Changed funky tag to Co-developed-by (Kees). Matthew, holler if you
-> >    want something different.
-> >
-> > Changes in v2:
-> >  - Fixed some sparse warnings
-> >  - Use CRYPTO_LIB_SHA256 to get rid of sha256_data() (Eric)
-> >  - Adjusted offsets due to new ASN.1 format, and added a creation data
-> >    length check.
-> >
-> >  kernel/power/snapenc.c | 67 ++++++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 65 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
-> > index 50167a37c5bf23..2f421061498246 100644
-> > --- a/kernel/power/snapenc.c
-> > +++ b/kernel/power/snapenc.c
-> > @@ -22,6 +22,12 @@ static struct tpm_digest known_digest = { .alg_id = TPM_ALG_SHA256,
-> >                  0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
-> >                  0x5f, 0x49}};
-> >
-> > +/* sha256(sha256(empty_pcr | known_digest)) */
-> > +static const char expected_digest[] = {0x2f, 0x96, 0xf2, 0x1b, 0x70, 0xa9, 0xe8,
-> > +     0x42, 0x25, 0x8e, 0x66, 0x07, 0xbe, 0xbc, 0xe3, 0x1f, 0x2c, 0x84, 0x4a,
-> > +     0x3f, 0x85, 0x17, 0x31, 0x47, 0x9a, 0xa5, 0x53, 0xbb, 0x23, 0x0c, 0x32,
-> > +     0xf3};
-> > +
-> >  /* Derive a key from the kernel and user keys for data encryption. */
-> >  static int snapshot_use_user_key(struct snapshot_data *data)
-> >  {
-> > @@ -486,7 +492,7 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
-> >  static int snapshot_create_kernel_key(struct snapshot_data *data)
-> >  {
-> >       /* Create a key sealed by the SRK. */
-> > -     char *keyinfo = "new\t32\tkeyhandle=0x81000000";
-> > +     char *keyinfo = "new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000";
-> >       const struct cred *cred = current_cred();
-> >       struct tpm_digest *digests = NULL;
-> >       struct key *key = NULL;
-> > @@ -613,6 +619,8 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
-> >
-> >       char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
-> >       const struct cred *cred = current_cred();
-> > +     struct trusted_key_payload *payload;
-> > +     char certhash[SHA256_DIGEST_SIZE];
-> >       struct tpm_digest *digests = NULL;
-> >       char *blobstring = NULL;
-> >       struct key *key = NULL;
-> > @@ -635,8 +643,10 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
-> >
-> >       digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
-> >                         GFP_KERNEL);
-> > -     if (!digests)
-> > +     if (!digests) {
-> > +             ret = -ENOMEM;
-> >               goto out;
-> > +     }
-> >
-> >       for (i = 0; i < chip->nr_allocated_banks; i++) {
-> >               digests[i].alg_id = chip->allocated_banks[i].alg_id;
-> > @@ -676,6 +686,59 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
-> >       if (ret != 0)
-> >               goto out;
-> >
-> > +     /* Verify the creation hash matches the creation data. */
-> > +     payload = key->payload.data[0];
-> > +     if (!payload->creation || !payload->creation_hash ||
-> > +         (payload->creation_len < 3) ||
->
-> Later accesses are reaching into indexes, 6, 8, 12, 14, etc. Shouldn't
-> this test be:
->
->             (payload->creation_len < 14 + SHA256_DIGEST_SIZE) ||
->
-Yikes, you're right.
+On Wed, Nov 09, 2022, Yan Zhao wrote:
+> On Tue, Nov 08, 2022 at 05:32:50PM +0000, Sean Christopherson wrote:
+> > On Tue, Nov 08, 2022, Yan Zhao wrote:
+> > > For memslot delete and move, kvm_invalidate_memslot() is required before
+> > > the real changes committed.
+> > > Besides swapping to an inactive slot, kvm_invalidate_memslot() will call
+> > > kvm_arch_flush_shadow_memslot() and further kvm_page_track_flush_slot() in
+> > > arch x86.
+> > > And according to the definition in kvm_page_track_notifier_node, users can
+> > > drop write-protection for the pages in the memory slot on receiving
+> > > .track_flush_slot.
+> > 
+> > Ugh, that's a terrible API.  The entire page track API is a mess, e.g. KVMGT is
+> > forced to grab its own references to KVM and also needs to manually acquire/release
+> > mmu_lock in some flows but not others.
+> > 
+> > Anyways, this is a flaw in the page track API that should be fixed.  Flushing a
+> > slot should not be overloaded to imply "this slot is gone", it should be a flush
+> > command, no more, no less.
+> hmm, but KVM also registers to the page track
+> "node->track_flush_slot = kvm_mmu_invalidate_zap_pages_in_memslot;"
+> And in kvm_mmu_invalidate_zap_pages_in_memslot, memslot (actaully all the shadow
+> page tables) is zapped. And during the zap, unaccount_shadowed() will drop the
+> write protection. But KVM is ok because the dropped write-protection can be
+> rebuilt during rebuilding the shadow page table.
+> So, for .track_flush_slot, it's expected that "users can drop write-protection
+> for the pages in the memory slot", right?
 
->
-> > +         (payload->creation_hash_len < SHA256_DIGEST_SIZE)) {
-> > +             ret = -EINVAL;
-> > +             goto out;
-> > +     }
-> > +
-> > +     sha256(payload->creation + 2, payload->creation_len - 2, certhash);
->
-> Why +2 offset?
+No.  KVM isn't actually dropping write-protection, because for the internal KVM
+case, KVM obliterates all of its page tables.
 
-The first two bytes are a __be16 size that isn't part of what the TPM hashes.
-
->
-> > +     if (memcmp(payload->creation_hash + 2, certhash, SHA256_DIGEST_SIZE) != 0) {
->
-> And if this is +2 also, shouldn't the earlier test be:
->
->         (payload->creation_hash_len - 2 != SHA256_DIGEST_SIZE)) {
-
-Oops, yes.
-
->
-> ?
->
-> > +     if (be32_to_cpu(*(__be32 *)&payload->creation[2]) != 1) {
-> > +             ret = -EINVAL;
-> > +             goto out;
-> > +     }
-> > +
-> > +     if (be16_to_cpu(*(__be16 *)&payload->creation[6]) != TPM_ALG_SHA256) {
-> > +             ret = -EINVAL;
-> > +             goto out;
-> > +     }
-> > +
-> > +     if (*(char *)&payload->creation[8] != 3) {
-> > +             ret = -EINVAL;
-> > +             goto out;
-> > +     }
-> > +
-> > +     /* PCR 23 selected */
-> > +     if (be32_to_cpu(*(__be32 *)&payload->creation[8]) != 0x03000080) {
-> > +             ret = -EINVAL;
-> > +             goto out;
-> > +     }
-> > +
-> > +     if (be16_to_cpu(*(__be16 *)&payload->creation[12]) !=
-> > +         SHA256_DIGEST_SIZE) {
-> > +             ret = -EINVAL;
-> > +             goto out;
-> > +     }
-> > +
-> > +     /* Verify PCR 23 contained the expected value when the key was created. */
-> > +     if (memcmp(&payload->creation[14], expected_digest,
-> > +                SHA256_DIGEST_SIZE) != 0) {
->
-> These various literals (2, 6, 8, 3, 8, 0x03000080, 12, 14) should be
-> explicit #defines so their purpose/meaning is more clear.
->
-> I can guess at it, but better to avoid the guessing. :)
-
-Ok, agreed it's a bit too hairy to manage this way. I can define a
-struct specific to this form of the response I'm expecting, then use
-struct fields like a proper C developer.
-
-
-
-
->
-> > +
-> > +             ret = -EINVAL;
-> > +             goto out;
-> > +     }
-> > +
-> >       data->key = key;
-> >       key = NULL;
+> > AFAICT, KVMGT never flushes anything, so fixing the bug should be a simple matter
+> > of adding another hook that's invoked when the memory region change is committed.
 > >
-> > --
-> > 2.38.1.431.g37b22c650d-goog
+> Do you mean adding a new hook in page track, e.g. .track_slot_change?
+> Then right before committing slot changes, call this interface to notify slot
+> DELETE/MOVE?
+> 
+> Not only KVMGT, KVM can also be affected by this failure to MOVE if it wants to
+> support below usecase:
+> 1. KVM pre-populated a memslot
+> 2. memslot MOVE happened
+> 3. KVM pre-populates the new memslot (MOVE succeeds) or the old one (MOVE fails).
+> So also add a new interface for the MOVE failure?
+> 
+> > That would allow KVMGT to fix another bug.  If a memory region is moved and the
+> > new region partially overlaps the old region, KVMGT technically probably wants to
+> > retain its write-protection scheme.  Though that's probably not worth supporting,
+> > might be better to say "don't move memory regions if KVMGT is enabled", because
+> > AFAIK there is no VMM that actually moves memory regions (KVM's MOVE support was
+> > broken for years and no one noticed).
 > >
->
-> --
-> Kees Cook
+> So, could we disable MOVE in KVM at all?
+
+Ideally, yes.  Practically?  Dunno.  It's difficult to know whether or not there
+are users out there.
+
+> > Actually, given that MOVE + KVMGT probably doesn't work regardless of where the
+> > region is moved to, maybe we can get away with rejecting MOVE if an external
+> > page tracker cares about the slot in question.
+> > 
+> > > However, if kvm_prepare_memory_region() fails, the later
+> > > kvm_activate_memslot() will only swap back the original slot, leaving
+> > > previous write protection not recovered.
+> > > 
+> > > This may not be a problem for kvm itself as a page tracker user, but may
+> > > cause problem to other page tracker users, e.g. kvmgt, whose
+> > > write-protected pages are removed from the write-protected list and not
+> > > added back.
+> > > 
+> > > So call kvm_prepare_memory_region first for meta data preparation before
+> > > the slot invalidation so as to avoid failure and recovery.
+> > 
+> > IIUC, this is purely a theoretical bug and practically speaking can't be a problem
+> > in practice, at least not without completely breaking KVMGT.
+> > 
+> > On DELETE, kvm_prepare_memory_region() will never fail on x86 (s390's ultravisor
+> > protected VM case is the only scenario where DELETE can fail on any architecture).
+> > The common code in kvm_prepare_memory_region() does nothing for DELETE, ditto for
+> > kvm_arch_prepare_memory_region().
+> But as long as with current code sequence, we can't relying on that
+> kvm_prepare_memory_region() will never fail for DELETE.
+> Or, we need to call kvm_prepare_memory_region() only for !DELETE to avoid future
+> possible broken.
+
+Agreed, I just don't want to touch the common memslots code unless it's necessary.
+
+> > And for MOVE, it can only fail in two scenarios: (1) the end gfn is beyond the
+> > max gfn, i.e. userspace gave bad input or (2) the new memslot is unaligned but
+> > the old memslot was not, and so KVM needs to allocate new metadata due to the new
+> > memslot needed larger arrays.
+> kvm_prepare_memory_region() can also fail for MOVE during live migration when
+> memslot->dirty_bitmap allocation is failed in kvm_alloc_dirty_bitmap().
+> and in x86, kvm_arch_prepare_memory_region() can also fail for MOVE if
+> kvm_alloc_memslot_metadata() fails due to -ENOMEM. 
+> BTW, I don't find the "(2) the new memslot is unaligned but the old memslot was not,
+> and so KVM needs to allocate new metadata due to the new memslot needed
+> larger arrays". 
+> > 
+> > As above MOVE is not handled correctly by KVMGT, so I highly doubt there is a VMM
+> > that supports KVMGT and moves relevant memory regions, let alove does something
+> > that can result in MOVE failing _and_ moves the memslot that KVMGT is shadowing.
+> > 
+> > Heh, and MOVE + KVM_MEM_LOG_DIRTY_PAGES is also arguably broken, as KVM reuses
+> > the existing dirty bitmap but doesn't shift the dirty bits.  This is likely
+> Do you mean, for the new slot in MOVE, the new dirty bitmap should be
+> cleared? Otherwise, why shift is required, given mem->userspace_addr and npages
+> are not changed and dirty_bitmap is indexed using rel_gfn 
+> (rel_gfn = gfn - memslot->base_gfn) and both QEMU/KVM aligns the bitmap
+> size to BITS_PER_LONG.
+
+Oh, you're right.  I forgot that userspace would also be doing a gfn-relative
+calculation in the ridiculously theoretically scenario that a memslot is moved
+while it's being dirty-logged.
+
+> > another combination that KVM can simply reject.
+> > 
+> > Assuming this is indeed purely theoretical, that should be called out in the
+> > changelog.  Or as above, simply disallow MOVE in this case, which probably has
+> > my vote.
+> >
+> Yes, currently it's a purely theoretical bug, as I'm not seeing MOVE is triggered
+> in upstream QEMU.
+> 
+> <...>
+> 
+> > I'm not 100% sure that simply moving kvm_invalidate_memslot() is functionally
+> > correct.  It might be, but there are so many subtleties in this code that I don't
+> > want to change this ordering unless absolutely necessary, or at least not without
+> > an in-depth analysis and a pile of tests.  E.g. it's possible one or more
+> > architectures relies on unmapping, flushing, and invalidating the old region
+> > prior to preparing the new region, e.g. to reuse arch memslot data.
+> yes. what about just moving kvm_arch_flush_shadow_memslot() and
+> kvm_arch_guest_memory_reclaimed() to later than kvm_arch_prepare_memory_region()?
+
+I'm not dead set against tweaking the memslots flow, but I don't want to do so to
+fix this extremely theoretical bug.  In other words, I want to fix this by giving
+KVM-GT a more appropriate hook, not by shuffling common KVM code to fudge around
+a poor KVM x86 API.
+
+And if KVM-GT moves away from track_flush_slot(), we can delete the hook entirely
+after cleaning up clean up another pile of ugly: KVM always registers a page-track
+notifier because it relies on the track_flush_slot() call to invoke
+kvm_mmu_invalidate_zap_pages_in_memslot(), even when KVM isn't tracking anything.
+I'll send patches for this; if/when both land, track_flush_slot() can be deleted
+on top.
