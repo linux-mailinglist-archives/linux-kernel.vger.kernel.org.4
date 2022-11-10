@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5A6624793
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5E4624797
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiKJQuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S232060AbiKJQvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbiKJQuN (ORCPT
+        with ESMTP id S232496AbiKJQuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:50:13 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587D51400C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:50:06 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so2036876pjl.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:50:06 -0800 (PST)
+        Thu, 10 Nov 2022 11:50:39 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BD19FD5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:50:37 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id m6so2751418pfb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:50:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVqd+PvgZXEgpR5oiDP8I3WYALDkF1kwCNnCVwq1mpo=;
-        b=KOrM7nTAXpp3ofHwJJRvDPycbrxwy/BUtfmO83XndSZ41PtDxOacBE0DrQFpxytI1Q
-         JJCh2k1V7GgfY+6JXBzLBO19fnq0I4c2Jxvx68eO/LtakOsggQNrDZKf2M8qFcI91F9P
-         1JIEUsrASBrRow9EergEBIaIRb3VyJeJht5a0=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ngpTqFXA20Qov7vlYrPcJjUI8sUR/quxgJrGzBa7LTQ=;
+        b=dFHHoN/Nh+VXrE9JsY3e3+fkRaRAvb1aGnzgeGfgDdwTgSMupLwM8ROA3+W4pYGjY0
+         5rtK6lElI+DgF0DyaiLvpiaAorCWCegKieghDDMY6o0ECE7iPV/tCP64EmRRyb1QKnLg
+         h1cjN79kb5l9jgix2MCBmxfqZYQuwhlkODvDz7ZvaH4sxe61Ml97iSmSMtvAoCeE4p6S
+         zdFuv8u4MZbd4uwMLlGMYvkNsSjoXRG5kz2GxfEgOPys7+fCqRAsVr0dupEjPva4LkLJ
+         QEyjxBRtbWEN1lQAedlvI4TNbWVV6gyxLgVr0x17HRSOYZcACGBuRj0/yzFNApiBrJr+
+         O6JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVqd+PvgZXEgpR5oiDP8I3WYALDkF1kwCNnCVwq1mpo=;
-        b=bccL0XSihygV8JOvNVhulZZKlyRr7U7+Y3TH3RKPh2E9llofv/Had5M6236uFaUPQD
-         AAc9RLYJzqcP5Y+fYvPJJy+F1zGZzMxz4iBRPEBeXCv4efOWc47ceSjr8WlY493/Jo+m
-         O6cMGT6F9dFvsaU+7TskPXnYmnQLUVcYOchrI6nrwrFrUgPY0FrLKSbz6eBIw0Zsmnl5
-         0yxhV/AZ53OPfcVo7pT4qsQ3bRpTH9IjWcH/kt1YtESCyErzLTpnamDmMzOxsUFSANd/
-         ySF4aYaXSg9TP1xKwSRZ5VMmVd19wvA95tOfy0qUjHExdhDkexs/dRNi7AwbiFjlyT9E
-         ixpA==
-X-Gm-Message-State: ACrzQf3NKcBGIulhxW7gY/G6wsWrRktGGtKGSgxInM3RT9JgaI6YzUiB
-        NIMjWNPSUYYRO7/4i2RRoPrXJA==
-X-Google-Smtp-Source: AMsMyM68qD69p1bOkhPUXlhFPk3ZndMHRyb1mJfNywAclXB2dk8dtu5d1uueCVKTxNOxV0ehqJ3EmA==
-X-Received: by 2002:a17:90b:4d91:b0:213:f1b:dab5 with SMTP id oj17-20020a17090b4d9100b002130f1bdab5mr65253209pjb.95.1668099005884;
-        Thu, 10 Nov 2022 08:50:05 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b0017f92246e4dsm11375728pli.181.2022.11.10.08.50.05
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ngpTqFXA20Qov7vlYrPcJjUI8sUR/quxgJrGzBa7LTQ=;
+        b=eT4AmBTzgukqGxB1enQhum72lY/oRBd5agHbi7/l/zO1IdfbsIB+sFyDBtoGvz2TPG
+         P7Yfrt3qblr8FDvwDlBHH37xW+Iq304cJGpVu7hzcB+jZogg89dyF8CV+bAAnjksFdVK
+         zZkrPtUx25TrOngfRWLFsOh4TactvpbbKzPhRJjKqfrigULDC0h4EyE+EyN6mj+4Jz//
+         u3auyBLRFQTm4lEhaLTtg79LFwlt4/bmxwjhr7vdvaqllZZae9Y/GykGDWoiq2yTy7Uy
+         fJMfRT6MsGoDEtRNh70LTFCZUFSGCYy7S1O/6+M7ch+45eDTIGbt+q5hINX9MNq2WRke
+         RHKQ==
+X-Gm-Message-State: ACrzQf3l7wSf24Sig3rtxAGeync4bg2Fd7dcyDYyDuTdVqG1LtsH5cUe
+        w5pFlV+6Gpd5D2a3NE7g+4pWMw==
+X-Google-Smtp-Source: AMsMyM41GjMawKBCP5Kop4vnrwekEGW/LOSR6lYqiErYbTmquFxjglLK4Ryhg/mdPPwnXrGhT3xNoQ==
+X-Received: by 2002:aa7:8d08:0:b0:56b:a4f6:e030 with SMTP id j8-20020aa78d08000000b0056ba4f6e030mr3031241pfe.85.1668099036440;
+        Thu, 10 Nov 2022 08:50:36 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m2-20020a170902db0200b00186f81bb3f0sm11518667plx.122.2022.11.10.08.50.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:50:05 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Thu, 10 Nov 2022 08:50:04 -0800
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Ilia Mirkin <imirkin@alum.mit.edu>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        "Nathan E. Egge" <unlord@xiph.org>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: nouveau_dp_irq(): Null pointer dereferences
-Message-ID: <202211100850.7A8DD75@keescook>
+        Thu, 10 Nov 2022 08:50:35 -0800 (PST)
+Date:   Thu, 10 Nov 2022 16:50:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Robert Hoo <robert.hu@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 32/44] KVM: x86: Unify pr_fmt to use module name for all
+ KVM modules
+Message-ID: <Y20r2NR9MaBbOGLn@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-33-seanjc@google.com>
+ <ff0e8701d02ee161d064f92c8b742c2cc061bce0.camel@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ff0e8701d02ee161d064f92c8b742c2cc061bce0.camel@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Thu, Nov 10, 2022, Robert Hoo wrote:
+> After this patch set, still find some printk()s left in arch/x86/kvm/*,
+> consider clean all of them up?
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221110 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
-
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
-
-  Mon Aug 31 19:10:08 2020 -0400
-    a0922278f83e ("drm/nouveau/kms/nv50-: Refactor and cleanup DP HPD handling")
-
-Coverity reported the following:
-
-*** CID 1527266:  Null pointer dereferences  (REVERSE_INULL)
-drivers/gpu/drm/nouveau/nouveau_dp.c:237 in nouveau_dp_irq()
-231     	struct nouveau_encoder *outp = find_encoder(connector, DCB_OUTPUT_DP);
-232     	struct nouveau_drm *drm = nouveau_drm(outp->base.base.dev);
-233     	struct nv50_mstm *mstm;
-234     	u64 hpd = 0;
-235     	int ret;
-236
-vvv     CID 1527266:  Null pointer dereferences  (REVERSE_INULL)
-vvv     Null-checking "outp" suggests that it may be null, but it has already been dereferenced on all paths leading to the check.
-237     	if (!outp)
-238     		return;
-239
-240     	mstm = outp->dp.mstm;
-241     	NV_DEBUG(drm, "service %s\n", connector->name);
-242
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527266 ("Null pointer dereferences")
-Fixes: a0922278f83e ("drm/nouveau/kms/nv50-: Refactor and cleanup DP HPD handling")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+Hmm, yeah, I suppose at this point it makes sense to tack on a patch to clean
+them up.
