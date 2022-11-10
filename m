@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227EE624632
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A052624636
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiKJPm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        id S231646AbiKJPmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:42:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiKJPmZ (ORCPT
+        with ESMTP id S231618AbiKJPmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:42:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5AE31211
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:42:24 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9h2-00053m-FT; Thu, 10 Nov 2022 16:42:16 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9h0-003Tql-HD; Thu, 10 Nov 2022 16:42:15 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9h0-00Ffwt-Id; Thu, 10 Nov 2022 16:42:14 +0100
-Date:   Thu, 10 Nov 2022 16:42:14 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-Subject: Re: [PATCH v6 10/10] pwm: dwc: use clock rate in hz to avoid
- rounding issues
-Message-ID: <20221110154214.pnv7rqsftomhqvmk@pengutronix.de>
-References: <20221020151610.59443-1-ben.dooks@sifive.com>
- <20221020151610.59443-11-ben.dooks@sifive.com>
+        Thu, 10 Nov 2022 10:42:47 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A8B2F00B;
+        Thu, 10 Nov 2022 07:42:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668094966; x=1699630966;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LC2L/hmMUfJwbVtlPTFkYwSMZRvvYUassvI7OZCmWqc=;
+  b=KspzCzQiDsgxq5mkegArXVd3MG6vnkurIz7X3MR1RlNjTYlMutCUN7/u
+   81WzGnF4NnQFL1UnLVp414x2uE/9NtsiGW0Rq6slDNEJAMsdF3af1cBtJ
+   DNOeWYItvsx1BZ6nfCuSmOPohmM8id7Ai2sCebDVui/fjOBhAZiY1PE+c
+   oSRaw19KuqYT75lfuoBaJxER/VjhMB0Cy7g7b91AunUwA1RvNH2AASMpq
+   O59XqSzKTUJFBDTkHcYMIny7U8z2z2l5Dr7unN38U8pRYdTZjJnTWeuj1
+   +r0jxiIEW2FMFlz+FvvW4e9AHLd/jKGp3J2XIFsSh2B7hNTLBX8JUDUB5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="291059792"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="291059792"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 07:42:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="882397801"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="882397801"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Nov 2022 07:42:43 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ot9hR-00ADQ5-1U;
+        Thu, 10 Nov 2022 17:42:41 +0200
+Date:   Thu, 10 Nov 2022 17:42:41 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Paul Gazzillo <paul@pgazz.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1]: iio: light: rpr0521: add missing Kconfig
+ dependencies
+Message-ID: <Y20b8Ty71+qk8aDZ@smile.fi.intel.com>
+References: <20221110144448.wexu6neb67krqhla@device>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b7hp3kqdeurp4e4j"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221020151610.59443-11-ben.dooks@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221110144448.wexu6neb67krqhla@device>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 10, 2022 at 09:44:48AM -0500, Paul Gazzillo wrote:
+> Steps to reproduce (v6.1-rc2, x86_64):
+> 
+> 1. make defconfig menuconfig
+> 2. Enable the driver:
+>     -> Device Drivers
+>       -> Industrial I/O support (IIO [=y])
+>         -> Light sensors
+>           -> ROHM RPR0521 ALS and proximity sensor driver
+> 3. make drivers/iio/light/rpr0521.o
+> 
+> Causes "implicit declaration of function" errors, e.g.,
 
---b7hp3kqdeurp4e4j
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>     CC      drivers/iio/light/rpr0521.o
+>   drivers/iio/light/rpr0521.c: In function 'rpr0521_drdy_irq_thread':
 
-Hello Ben,
+These two lines can be removed.
 
-On Thu, Oct 20, 2022 at 04:16:10PM +0100, Ben Dooks wrote:
-> As noted, the clock-rate when not a nice multiple of ns is probably
-> going to end up with inacurate caculations, as well as on a non pci
-> system the rate may change (although we've not put a clock rate
-> change notifier in this code yet) so we also add some quick checks
-> of the rate when we do any calculations with it.
->=20
-> Signed-off-by; Ben Dooks <ben.dooks@sifive.com>
-> Reported-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/pwm/pwm-dwc-of.c |  2 +-
->  drivers/pwm/pwm-dwc.c    | 29 ++++++++++++++++++++---------
->  drivers/pwm/pwm-dwc.h    |  2 +-
->  3 files changed, 22 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-dwc-of.c b/drivers/pwm/pwm-dwc-of.c
-> index c5b4351cc7b0..5f7f066859d4 100644
-> --- a/drivers/pwm/pwm-dwc-of.c
-> +++ b/drivers/pwm/pwm-dwc-of.c
-> @@ -50,7 +50,7 @@ static int dwc_pwm_plat_probe(struct platform_device *p=
-dev)
->  		return dev_err_probe(dev, PTR_ERR(dwc->clk),
->  				     "failed to get timer clock\n");
-> =20
-> -	dwc->clk_ns =3D NSEC_PER_SEC / clk_get_rate(dwc->clk);
-> +	dwc->clk_rate =3D clk_get_rate(dwc->clk);
+>   drivers/iio/light/rpr0521.c:434:3: error: implicit declaration of function
+>            'iio_trigger_poll_chained' [-Werror=implicit-function-declaration]
+>     434 |   iio_trigger_poll_chained(data->drdy_trigger0);
+>         |   ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Given that clk_ns is introduced only in this series, I suggest to make
-it right from the start.
+> (This bug was found with the help of a tool, krepair, that generates
+> configuration files for commits: https://github.com/paulgazz/kmax)
 
-Best regards
-Uwe
+I'm not sure we need this in the commit message. Do we have a tag for
+the static analyzers?
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> The following patch ensures that the code controlled by IIO_BUFFER and
+> IIO_TRIGGERED_BUFFER is available:
 
---b7hp3kqdeurp4e4j
-Content-Type: application/pgp-signature; name="signature.asc"
+> Reported-by: Paul Gazzillo <paul@pgazz.com>
 
------BEGIN PGP SIGNATURE-----
+Without SoB this may not be anyhow proceeded. Please, read Submitting Patches
+documentation and try again.
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNtG9MACgkQwfwUeK3K
-7AmxSQgAm6sDT3X6LYX+qAkF3XaQ+EHUYRfFAbPibXVQMzSy0B4wI645bVRO8U+s
-UxMklqwLH1YzxZoAUbPVJCaMM2e3vzv0znu3awzEekMwy4wHkUPAtsOiRFFn/NUh
-GLSMxSZKFiewfXKF1mro54sj5jU/zPW04lI36/uJ9/ezqqLthDCrFGezhRS3H07H
-lWs3934qFzFLATB9FliY6m0FgUG3+2lg3/+YJWV8DacPqp5pYfTZSHnpLRM1B9Jg
-8JDlbBz3bS/TKMMsIMrNS9tuXRlxzrZZliYqlz4i85K1vps2ODYZHFouY4IQ/b+i
-rp9n0o7KIXtcVtkWF238qWx6U8vaRg==
-=vCH3
------END PGP SIGNATURE-----
+(Btw, Reported-by above contradicts the commit message that refers to the tool,
+ and not human)
 
---b7hp3kqdeurp4e4j--
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
