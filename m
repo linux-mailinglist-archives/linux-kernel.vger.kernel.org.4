@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DAE623AA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33200623AA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbiKJDuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S232745AbiKJDuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbiKJDuT (ORCPT
+        with ESMTP id S232724AbiKJDuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:50:19 -0500
+        Wed, 9 Nov 2022 22:50:20 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 408FB2EF77;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F011AC77E;
         Wed,  9 Nov 2022 19:50:17 -0800 (PST)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxOdj3dGxjhbAFAA--.16415S3;
-        Thu, 10 Nov 2022 11:50:15 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8BxXbf4dGxji7AFAA--.8877S3;
+        Thu, 10 Nov 2022 11:50:16 +0800 (CST)
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9Vb1dGxjO_4PAA--.25722S3;
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9Vb1dGxjO_4PAA--.25722S4;
         Thu, 10 Nov 2022 11:50:15 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -30,17 +30,17 @@ Cc:     Mark Rutland <mark.rutland@arm.com>,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH v5 1/4] tools x86: Keep list sorted by number in unistd_{32,64}.h
-Date:   Thu, 10 Nov 2022 11:50:05 +0800
-Message-Id: <1668052208-14047-2-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v5 2/4] perf bench syscall: Introduce bench_syscall_common()
+Date:   Thu, 10 Nov 2022 11:50:06 +0800
+Message-Id: <1668052208-14047-3-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1668052208-14047-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1668052208-14047-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8Dx9Vb1dGxjO_4PAA--.25722S3
+X-CM-TRANSID: AQAAf8Dx9Vb1dGxjO_4PAA--.25722S4
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7AFyxurWrZw4Utr1rXw1kZrb_yoW8uF4fpF
-        ykCrWDta15KFWag34SyF18Gw17CFZ7ZrW8KFy5W3s5ZFySqw1xXr1xursxCryUXw4vya4U
-        Xa1xZw47WasrXw7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJFWruF1UCr18KF17Zr18Zrb_yoW5Wr43pF
+        9rAw4kJF4ruaya9r1fXF10gry5Jr97Cr15Kry293s5ZrWxt343tr47KF9IvF17u3yIka45
+        WFs3ZrWUWa1UXaUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
         bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
         1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
@@ -63,75 +63,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is better to keep list sorted by number in unistd_{32,64}.h,
-so that we can add more syscall number to a proper position.
+In the current code, there is only a basic syscall benchmark via
+getppid, this is not enough. Introduce bench_syscall_common() so
+that we can add more syscalls to benchmark.
 
 This is preparation for later patch, no functionality change.
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- tools/arch/x86/include/uapi/asm/unistd_32.h | 16 ++++++++--------
- tools/arch/x86/include/uapi/asm/unistd_64.h | 16 ++++++++--------
- 2 files changed, 16 insertions(+), 16 deletions(-)
+ tools/arch/x86/include/uapi/asm/unistd_32.h |  3 +++
+ tools/arch/x86/include/uapi/asm/unistd_64.h |  3 +++
+ tools/perf/bench/syscall.c                  | 29 +++++++++++++++++++++++++----
+ 3 files changed, 31 insertions(+), 4 deletions(-)
 
 diff --git a/tools/arch/x86/include/uapi/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
-index 60a89db..e1cc62d 100644
+index e1cc62d..4d8873a 100644
 --- a/tools/arch/x86/include/uapi/asm/unistd_32.h
 +++ b/tools/arch/x86/include/uapi/asm/unistd_32.h
-@@ -1,16 +1,16 @@
+@@ -1,4 +1,7 @@
  /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __NR_perf_event_open
--# define __NR_perf_event_open 336
-+#ifndef __NR_gettid
-+#define __NR_gettid 224
- #endif
- #ifndef __NR_futex
--# define __NR_futex 240
--#endif
--#ifndef __NR_gettid
--# define __NR_gettid 224
-+#define __NR_futex 240
- #endif
- #ifndef __NR_getcpu
--# define __NR_getcpu 318
-+#define __NR_getcpu 318
++#ifndef __NR_getppid
++#define __NR_getppid 64
 +#endif
-+#ifndef __NR_perf_event_open
-+#define __NR_perf_event_open 336
- #endif
- #ifndef __NR_setns
--# define __NR_setns 346
-+#define __NR_setns 346
+ #ifndef __NR_gettid
+ #define __NR_gettid 224
  #endif
 diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-index cb52a3a..ce8b7ab 100644
+index ce8b7ab..e29038a 100644
 --- a/tools/arch/x86/include/uapi/asm/unistd_64.h
 +++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-@@ -1,16 +1,16 @@
+@@ -1,4 +1,7 @@
  /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __NR_perf_event_open
--# define __NR_perf_event_open 298
-+#ifndef __NR_gettid
-+#define __NR_gettid 186
- #endif
- #ifndef __NR_futex
--# define __NR_futex 202
--#endif
--#ifndef __NR_gettid
--# define __NR_gettid 186
-+#define __NR_futex 202
- #endif
--#ifndef __NR_getcpu
--# define __NR_getcpu 309
-+#ifndef __NR_perf_event_open
-+#define __NR_perf_event_open 298
- #endif
- #ifndef __NR_setns
- #define __NR_setns 308
- #endif
-+#ifndef __NR_getcpu
-+#define __NR_getcpu 309
++#ifndef __NR_getppid
++#define __NR_getppid 110
 +#endif
+ #ifndef __NR_gettid
+ #define __NR_gettid 186
+ #endif
+diff --git a/tools/perf/bench/syscall.c b/tools/perf/bench/syscall.c
+index 9b75101..746fd71 100644
+--- a/tools/perf/bench/syscall.c
++++ b/tools/perf/bench/syscall.c
+@@ -30,25 +30,41 @@ static const char * const bench_syscall_usage[] = {
+ 	NULL
+ };
+ 
+-int bench_syscall_basic(int argc, const char **argv)
++static int bench_syscall_common(int argc, const char **argv, int syscall)
+ {
+ 	struct timeval start, stop, diff;
+ 	unsigned long long result_usec = 0;
++	const char *name = NULL;
+ 	int i;
+ 
+ 	argc = parse_options(argc, argv, options, bench_syscall_usage, 0);
+ 
+ 	gettimeofday(&start, NULL);
+ 
+-	for (i = 0; i < loops; i++)
+-		getppid();
++	for (i = 0; i < loops; i++) {
++		switch (syscall) {
++		case __NR_getppid:
++			getppid();
++			break;
++		default:
++			break;
++		}
++	}
+ 
+ 	gettimeofday(&stop, NULL);
+ 	timersub(&stop, &start, &diff);
+ 
++	switch (syscall) {
++	case __NR_getppid:
++		name = "getppid()";
++		break;
++	default:
++		break;
++	}
++
+ 	switch (bench_format) {
+ 	case BENCH_FORMAT_DEFAULT:
+-		printf("# Executed %'d getppid() calls\n", loops);
++		printf("# Executed %'d %s calls\n", loops, name);
+ 
+ 		result_usec = diff.tv_sec * 1000000;
+ 		result_usec += diff.tv_usec;
+@@ -79,3 +95,8 @@ int bench_syscall_basic(int argc, const char **argv)
+ 
+ 	return 0;
+ }
++
++int bench_syscall_basic(int argc, const char **argv)
++{
++	return bench_syscall_common(argc, argv, __NR_getppid);
++}
 -- 
 2.1.0
 
