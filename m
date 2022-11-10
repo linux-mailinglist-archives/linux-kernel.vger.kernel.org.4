@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE75623CF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF8C623CF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbiKJHxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S232859AbiKJHxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbiKJHxD (ORCPT
+        with ESMTP id S232756AbiKJHxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:53:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702D015FD5
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668066720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0BukYDFp+3V0lSdmBo/7OCIgvVdGhW19qZEuq21xG+s=;
-        b=W6glME9WiAPrprNL0sXtFDK8KsNiiob8nOPYcEIO0/dW0Y8trhVO/uL89W6MrT+xRaPEp9
-        evPqUEgZO7FAOX+404EgbIFP9z9J6Icq8L2wNYHKfKjGAvtmMn5BdYfi9ydRwNo6jaCX9B
-        lWEvAZ46IKwAlCOcsyHjPqR7z7bnfVQ=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-204-ElwaOskAPy-vMbKNpB629Q-1; Thu, 10 Nov 2022 02:51:59 -0500
-X-MC-Unique: ElwaOskAPy-vMbKNpB629Q-1
-Received: by mail-pf1-f200.google.com with SMTP id x8-20020aa79568000000b0056dd717e051so663860pfq.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 23:51:58 -0800 (PST)
+        Thu, 10 Nov 2022 02:53:19 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF82B222A7
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:53:17 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id o7so978814pjj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 23:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PqGMk/XG3aXOYy5I5CRkI+EonIV4UA20sJ/q6wzok1k=;
+        b=FyeL2pd+UI7MXNEwJAJnHcObNqlv4Pgl5irbsPLFqazAx9LxifF+ZVvX0et0i2Mqvi
+         3yanEqOnC31xYTPvCHqy455O0qghMpLaR3xe9vJCHAoAvW2T6QtRAen0zE4MS+2/oRnS
+         Rlc3yftINmKl66/RbSivrPodoOknR9NQNOAL4K44WBNq1ymUvUJ6LPqZYQ5his1dDIyi
+         ninZRiaML/1+W1mYvZdQC5bxdr6KzPCFYEtVyQQ+4a6RJavbe1G/DxUHbcD4GSDTbwqJ
+         kda8juosekbFWRJuEJRzYQZgpQqYnJZVCnZSuObz0KoNZCQ1rnP7UAmvMhikg7FoUcYc
+         8GtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0BukYDFp+3V0lSdmBo/7OCIgvVdGhW19qZEuq21xG+s=;
-        b=d3GS5WkbhlrIv2U7wA93+qQ60ni1mFSaxDcb4GEw/bhapDZU3BC+/BoI0mCAKpVmms
-         Wjem6t8D3i0yInpF6iqpgryNivt8tC9mFzKUNlYvjZolNDnSKY650EBCTIlpfWX8UWRL
-         9vZ9R/qDTGlGeGcRnovuUsXIWctIPeN0tS5NRnvydvsk7LznTiqf9U+Oqq6lVQy71wkY
-         zk+BAHhgS3sO1Yy1oIcNey+2HoecfVrOEeniHzJOun4x7d5eHqrw7oiw/fHScb5nRw4V
-         iLRQ7FafPbahh56BB/EvU5b0VODYbshKcaurDA93lE8cUBiJ8lxM7Qm/eK4WSa1XV2dN
-         GFqQ==
-X-Gm-Message-State: ACrzQf3m49ApiD1FcvL/IsKU52YL6CnRlqVUYxamITd+Cb/8Nkkh6lCt
-        k2PhPkqyCtgUtDa0lc68mBnLgGVYx8ddK8fl3sXFVStvXlHd/lktc0t2aKLFVMl+va3L45n2IoD
-        g930/YqrKWRwm0+DTMzPRn4rN
-X-Received: by 2002:a05:6a00:3017:b0:56c:d93a:ac5f with SMTP id ay23-20020a056a00301700b0056cd93aac5fmr2047774pfb.48.1668066716034;
-        Wed, 09 Nov 2022 23:51:56 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM62llp4+rX7BDLVjqGS33okh97ITleFTCr5eit2hngy1azqFGjBcv7rs8d1DCZ+cEAoJNFZhw==
-X-Received: by 2002:a05:6a00:3017:b0:56c:d93a:ac5f with SMTP id ay23-20020a056a00301700b0056cd93aac5fmr2047760pfb.48.1668066715600;
-        Wed, 09 Nov 2022 23:51:55 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id d10-20020a17090a628a00b0020669c8bd87sm2444283pjj.36.2022.11.09.23.51.49
+        bh=PqGMk/XG3aXOYy5I5CRkI+EonIV4UA20sJ/q6wzok1k=;
+        b=WkY9yuxoKOF9esC7jCisy75i/3E3UeuihWBb1M6jHeuLoe73I1TxpJLdXm0IqlRjbO
+         eFUKM2LhRhcg1F0yW8vhFSC1Wy3ITLaiOkw+WmTTeYwr3EKeL+CehNIBzxXNDA2il+0K
+         mv/PEDRhpYlkLEAz7dtPt1Izf20xwaoDLYnO6b3qhsZ8nF8UaoWIh9Qx/t3SHq73+Fy/
+         QU79bST/6iI1krFj4AHnzqkqedeIG+GtsTWGgPCYclMPPQaH6fjOl/eorQP4ld9VKBTA
+         W8VAXt7wWItPwJl7zmfEdhKMA2II3OeSRAmgNElnAyAanR6SNlgqF7O+szbrKkKnlgvo
+         2hfg==
+X-Gm-Message-State: ACrzQf0whkoObR78vYk+uKgKd3SQ2LmMLChwU05L/Db9zSWr7y5I//eg
+        06kvH/RHTaydU59x/R6m8cI=
+X-Google-Smtp-Source: AMsMyM4Pl7aUvQSZw9rdxm1t+NMgI3bo4cIXFh45xCB1cjpczgGo3FODOtf4fi/KRXBHLRINk4950Q==
+X-Received: by 2002:a17:90b:e86:b0:213:8092:e19a with SMTP id fv6-20020a17090b0e8600b002138092e19amr72906994pjb.56.1668066797156;
+        Wed, 09 Nov 2022 23:53:17 -0800 (PST)
+Received: from jacob-Ubuntu (126.224.215.218.sta.wbroadband.net.au. [218.215.224.126])
+        by smtp.gmail.com with ESMTPSA id o8-20020a655bc8000000b0046fb2a58f11sm8556376pgr.29.2022.11.09.23.53.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 23:51:55 -0800 (PST)
-Date:   Thu, 10 Nov 2022 08:51:42 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, eperezma@redhat.com,
-        netdev@vger.kernel.org, kvm@vger.kernel.org,
-        Gautam Dawar <gautam.dawar@xilinx.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: fix potential memory leak during the release
-Message-ID: <20221110075142.f6yr7wagqa33rjjn@sgarzare-redhat>
-References: <20221109154213.146789-1-sgarzare@redhat.com>
- <20221109124430-mutt-send-email-mst@kernel.org>
+        Wed, 09 Nov 2022 23:53:16 -0800 (PST)
+Date:   Thu, 10 Nov 2022 18:53:12 +1100
+From:   Jacob Bai <jacob.bai.au@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] staging: rtl8192e: rename r8192E_hwimg.c/h to
+ table.c/h
+Message-ID: <Y2yt6ERX3szKn2W7@jacob-Ubuntu>
+References: <cover.1667723306.git.jacob.bai.au@gmail.com>
+ <9bb563727915e3f3edd863837608336b99564462.1667723306.git.jacob.bai.au@gmail.com>
+ <Y2p0dNLBqiWFPzB9@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221109124430-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <Y2p0dNLBqiWFPzB9@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,63 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 12:47:19PM -0500, Michael S. Tsirkin wrote:
->On Wed, Nov 09, 2022 at 04:42:13PM +0100, Stefano Garzarella wrote:
->> Before commit 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
->> we call vhost_vdpa_iotlb_unmap(v, iotlb, 0ULL, 0ULL - 1) during the
->> release to free all the resources allocated when processing user IOTLB
->> messages through vhost_vdpa_process_iotlb_update().
->> That commit changed the handling of IOTLB a bit, and we accidentally
->> removed some code called during the release.
->>
->> We partially fixed with commit 037d4305569a ("vhost-vdpa: call
->> vhost_vdpa_cleanup during the release") but a potential memory leak is
->> still there as showed by kmemleak if the application does not send
->> VHOST_IOTLB_INVALIDATE or crashes:
->>
->>   unreferenced object 0xffff888007fbaa30 (size 16):
->>     comm "blkio-bench", pid 914, jiffies 4294993521 (age 885.500s)
->>     hex dump (first 16 bytes):
->>       40 73 41 07 80 88 ff ff 00 00 00 00 00 00 00 00  @sA.............
->>     backtrace:
->>       [<0000000087736d2a>] kmem_cache_alloc_trace+0x142/0x1c0
->>       [<0000000060740f50>] vhost_vdpa_process_iotlb_msg+0x68c/0x901 [vhost_vdpa]
->>       [<0000000083e8e205>] vhost_chr_write_iter+0xc0/0x4a0 [vhost]
->>       [<000000008f2f414a>] vhost_vdpa_chr_write_iter+0x18/0x20 [vhost_vdpa]
->>       [<00000000de1cd4a0>] vfs_write+0x216/0x4b0
->>       [<00000000a2850200>] ksys_write+0x71/0xf0
->>       [<00000000de8e720b>] __x64_sys_write+0x19/0x20
->>       [<0000000018b12cbb>] do_syscall_64+0x3f/0x90
->>       [<00000000986ec465>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>
->> Let's fix calling vhost_vdpa_iotlb_unmap() on the whole range in
->> vhost_vdpa_remove_as(). We move that call before vhost_dev_cleanup()
->> since we need a valid v->vdev.mm in vhost_vdpa_pa_unmap().
->> vhost_iotlb_reset() call can be removed, since vhost_vdpa_iotlb_unmap()
->> on the whole range removes all the entries.
->>
->> The kmemleak log reported was observed with a vDPA device that has `use_va`
->> set to true (e.g. VDUSE). This patch has been tested with both types of
->> devices.
->>
->> Fixes: 037d4305569a ("vhost-vdpa: call vhost_vdpa_cleanup during the release")
->> Fixes: 3d5698793897 ("vhost-vdpa: introduce asid based IOTLB")
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+On Tue, Nov 08, 2022 at 04:23:32PM +0100, Greg KH wrote:
+> On Sun, Nov 06, 2022 at 07:31:17PM +1100, Jacob Bai wrote:
+> > Same as other rtlwifi drivers, use table.c/h.
+> 
+> You say what you do here, but not why.
+> 
+> Why rename the file?  What's wrong with the existing name?  It's not
+> causing any problems, right?
+> 
+> thanks,
+> 
+> greg k-h
 >
->It's fine, just pls don't say "potential" here in the subject, let's
->avoid pleonasms
+No, it's not causing problems. As we are trying to move this driver out
+of staging folder, so I checked how current drivers naming
+files/variables, turns out they all named those two files as table.c/h.
+Maybe we can do the file renaming as the last step.
 
-Got it, I'll avoid in the future.
-
->- it's a memory leak, yes it triggers under some coditions
->but little is unconditional in this world :)
-
-Nothing could be more true :-)
-
->
->No need to repost.
->
-
-Thanks,
-Stefano
-
+Jacob
