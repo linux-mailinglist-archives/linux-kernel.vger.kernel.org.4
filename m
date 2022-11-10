@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEB262472B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D8D62472E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbiKJQiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S231905AbiKJQjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiKJQgx (ORCPT
+        with ESMTP id S231920AbiKJQjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:36:53 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9183F057;
-        Thu, 10 Nov 2022 08:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668098212; x=1699634212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X0nehVTwI3rF9wE0y2jLW9Y42uRXunpJ9jpEkFCIDdY=;
-  b=NEH0esm5u3215OLuRGYZ3Sr71BeHYL+QvS0D6iRoEDhiFZ8NG9CnGe3H
-   5oRK6UeYGWs6RJcw861dCIDzCet328Sqyg3LmvVHex1aHOQmaCCu63Xpe
-   ziIhJMXtl05JvCD0w7vc2XwlsXQlsaKJ4Mmx9sbMqNw4XnEjsYAbotj52
-   h/HCP6sRnsoTAPhbbAsG4v6CWsqBfaYFRiCHMEhCumI+RC1xfa2q35RrJ
-   5zUYpqAa8GXjPk8IhMQkIjgYpfaThIn/WcVQSP5lCFQEotkgdVdjV2Ht2
-   di+3j6L5QQZ4D2tlTBt116hkFWnJRt/RJp8qiY6SWuJv8LRKhJOUuxqOa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="310074307"
-X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="310074307"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 08:36:22 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="726447052"
-X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="726447052"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 08:36:22 -0800
-Date:   Thu, 10 Nov 2022 08:36:20 -0800
-From:   Tony Luck <tony.luck@intel.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, luto@kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, bagasdotme@gmail.com,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Melissa Wen <mwen@igalia.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Zebediah Figura <zfigura@codeweavers.com>,
-        Andre Almeida <andrealmeid@igalia.com>
-Subject: Re: [PATCH V3] x86/split_lock: Add sysctl to control the misery mode
-Message-ID: <Y20ohNc3xGtCd0Bj@agluck-desk3.sc.intel.com>
-References: <20221024200254.635256-1-gpiccoli@igalia.com>
+        Thu, 10 Nov 2022 11:39:05 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0621B4090E;
+        Thu, 10 Nov 2022 08:39:02 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so1523334wmi.3;
+        Thu, 10 Nov 2022 08:39:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPS72kHKQGCf5rLpmI57VmrB9xABKgUVDzpM2NFF7pk=;
+        b=ieZkuqknPgQ1qIuwdL7tqsFx53KlGtnhpSZWz6dyzv+0AX/WN4yTshjlzEsoDn0neA
+         j1cshfm7J9ra5YO7QcgFbbYZK1Qd/XoEm7USrlv7gKiTiuQdyrrEvpHPDq1g4wVNWL1T
+         tmMjvhI9GCczAPBSWZcfOo9G/EgPgLunGaXWSDErpRS8RHFKafxXJS6lhRnht1wi4oV2
+         1xoafM/fficGAsjqcMwQlPQMpM2RHDgSpj5OjhyrliRaCbs3qYn4QM9MEl2g4HWLlrwD
+         muIABmKwgDELkyPb57QWLmXVeWK8eepYw9GSr9aqQ85xm7mTsPmyVnc5PqihjVtwGhM5
+         lHpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JPS72kHKQGCf5rLpmI57VmrB9xABKgUVDzpM2NFF7pk=;
+        b=7hMv73ZiDD5Jry9Sl0aVaumF3w+wXvlKFxrrMguWHOX788i3X+ANap776E3JZpXimP
+         v/YTby6oaxZzOVVBsYiKnyxgLg2qhzJejweYgDwpIJCzsnT0RSKqaO8ynnIPGWcW3cq9
+         JwV5H/yz6eoGZRjTHE5LeUjToTDZAmc6NAqvoSoOYtzP2RKWsUjMTE1Pip7rKkFxwWV5
+         GlMLkGD4z2+8PZku4gMJ8c8K5+VQCJdPCi3cpWgJuZgYf17eq8Ne/3Bh4vxW5XBZHxn4
+         fi/AOMTlEaglMBj54b2pXpNJMH+nvehjVpAPB4/W/wEdGQqenzQXrTkjWa0wK9u+2LUt
+         2YDg==
+X-Gm-Message-State: ACrzQf32Xj7ZjmpAGVM6vek5VLPkZTjwZEW9vMfaMmTJnSdtMl8OE9/C
+        IGEpu8Bv4qGTJy3nFY/Ccp0=
+X-Google-Smtp-Source: AMsMyM4kWjP3Ps1lpVM2FnwvJjVD0UIUXoLYdRV7LJzafR4tqCx3dJxXZx4aVFIcbfv9CiCM85nmSw==
+X-Received: by 2002:a7b:cb49:0:b0:3b4:b08a:89b with SMTP id v9-20020a7bcb49000000b003b4b08a089bmr43457111wmj.173.1668098340528;
+        Thu, 10 Nov 2022 08:39:00 -0800 (PST)
+Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id f24-20020a1cc918000000b003b4935f04a4sm128730wmb.5.2022.11.10.08.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 08:39:00 -0800 (PST)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] Misc SOQuartz Enablement
+Date:   Thu, 10 Nov 2022 17:38:41 +0100
+Message-Id: <20221110163845.42309-1-frattaroli.nicolas@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024200254.635256-1-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 05:02:54PM -0300, Guilherme G. Piccoli wrote:
-> Commit b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
-> changed the way the split lock detector works when in "warn" mode;
-> basically, not only it shows the warn message, but also intentionally
-> introduces a slowdown (through sleeping plus serialization mechanism)
-> on such task. Based on discussions in [0], seems the warning alone
-> wasn't enough motivation for userspace developers to fix their
-> applications.
-> 
-> Happens that originally the proposal in [0] was to add a new mode
-> which would warns + slowdown the "split locking" task, keeping the
-> old warn mode untouched. In the end, that idea was discarded and
-> the regular/default "warn" mode now slowdowns the applications. This
-> is quite aggressive with regards proprietary/legacy programs that
-> basically are unable to properly run in kernel with this change.
-> While it is understandable that a malicious application could DoS
-> by split locking, it seems unacceptable to regress old/proprietary
-> userspace programs through a default configuration that previously
-> worked. An example of such breakage was reported in [1].
-> 
-> So let's add a sysctl to allow controlling the "misery mode" behavior,
-> as per Thomas suggestion on [2]. This way, users running legacy and/or
-> proprietary software are allowed to still execute them with a decent
-> performance while still observe the warning messages on kernel log.
+This series enables the following functionality on the SOQuartz CM4
+module, specifically when paired with the CM4IO board:
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
+ * GPU (patch 1)
+ * Video output (patch 2)
+ * HDMI (also patch 2)
+ * HDMI audio (patch 3)
+ * PCIe2 (patch 4), CM4IO board only
 
--Tony
+The last patch needs specific enablement per carrier board due to the
+power regulator the PCIe slot feeds on (3.3V specifically).
+
+Nicolas Frattaroli (4):
+  arm64: dts: rockchip: Enable GPU on SOQuartz CM4
+  arm64: dts: rockchip: Enable video output and HDMI on SOQuartz
+  arm64: dts: rockchip: Enable HDMI sound on SOQuartz
+  arm64: dts: rockchip: Enable PCIe 2 on SOQuartz CM4IO
+
+ .../boot/dts/rockchip/rk3566-soquartz-cm4.dts | 10 +++
+ .../boot/dts/rockchip/rk3566-soquartz.dtsi    | 72 +++++++++++++++++++
+ 2 files changed, 82 insertions(+)
+
+-- 
+2.38.1
+
