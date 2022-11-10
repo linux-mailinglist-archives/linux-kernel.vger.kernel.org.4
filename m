@@ -2,61 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27291624864
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AAF62486A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiKJRae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:30:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S229547AbiKJRe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKJRaa (ORCPT
+        with ESMTP id S229633AbiKJRe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:30:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89F6105
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:29:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668101373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xy6itbsEAp0E66lgRcrG4kD1bhigD79qgAawuv5aRhg=;
-        b=ieozxaHqeAJ7lPcl0HaedH/+ECoIl8MFRCNtb+Vhq3f53qhMj82HTeVH9283PPLj/9sasd
-        aICgSl1muAj1uLBJO4jJf0YnvKe3ExZbBHkGbnny/P1THWLd+2psEw1sR2JbrGccOd1qcX
-        rcuc5mdbtXuwaCv9xcE9oK/IuHr6Iv4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-S662UmyMO0Gwj1aXjIHGRg-1; Thu, 10 Nov 2022 12:29:30 -0500
-X-MC-Unique: S662UmyMO0Gwj1aXjIHGRg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 238E33C11042;
-        Thu, 10 Nov 2022 17:29:30 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 64B6C4A9256;
-        Thu, 10 Nov 2022 17:29:29 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] mm: Make some folio and page function arguments const and use
- bool
-From:   David Howells <dhowells@redhat.com>
-To:     willy@infradead.org
-Cc:     dhowells@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 10 Nov 2022 17:29:28 +0000
-Message-ID: <166810136860.3462948.16794726061248137027.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Thu, 10 Nov 2022 12:34:28 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF59A1A05A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:34:26 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so5354010pjk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:34:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4uOheR7r7m1kjkcyZ6oyIyEKRnuu3+TLL1zhKhAvKRI=;
+        b=mfo3+qZAwVGYMyvKBX3HHCLgBFY1howkNCLfeZpn90ReyRTMxtq7KEjcT7t5pd8Jur
+         ccc0iuLCKk09ZO0/G0gpuNYg2DCLLdNs+zs33V7XKAt9Mljwv/kGCnVgRi9pg4+XSxH7
+         /kx+2lqZkZOXOK0SfBhGvz2/UbseZh1aHhoalv9yH4Tiv3NTVHdbsn8beM9/T3x4Pqd9
+         UFbD4kVgz3atWrjQ3ufz/e+gxNTaorp4BmiZmqsSi4VGUfspd1Ek7uvhChGgJjXfN1lV
+         nUzeum4MuSEy4LOBm8LrVHIfQ/ADZXiOqKLnagR5qlM3NnzNRZCmYz4UsCDLLZhIRxhT
+         gD/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4uOheR7r7m1kjkcyZ6oyIyEKRnuu3+TLL1zhKhAvKRI=;
+        b=PogNjM3bWPLd4a0g7J+XB9sUdPjh7VLE46Utc3wsH8ve4xcqcNp9/f370Ijj7vmMOC
+         m+744NbptsbqG+nn0kUpYYmFjyXPArPPk7y5D6WDb0TEpuGOGn8dj7k+4zl/oBij4/Bb
+         iCt0d9SvF7r03Alx4xHlAVVQ1sa5TBvnB/QcgWgYNdSiLOzak2Eqw6YgDlpxDdBEnP/Q
+         +WTyeXaeMRPyXWu1RhZ4LR4Ls182bV5c+BpG2u+Lu7xikvkUXO9ptz9cUsxB8btqieoo
+         l2IzFYdO5SvgcIujr+y+kpsg+fLXIlUMGwtmTBK5SsPdZffDgc1k23LeBr92/fZHh0NH
+         hILQ==
+X-Gm-Message-State: ACrzQf1q25uDa8HgdEnp1LP3eqz68Au/fhfCBNSpK/s9FM/VKVwHNIEI
+        02jdVkY2w85c1nuZz+aYF/SjCboH6Cb9Qg==
+X-Google-Smtp-Source: AMsMyM5Ghv5NHHVY/JKK+E8hTrh/nqsWeFZLDQZeUl2dkUhPV7aiVhPj2m9O3qyxj0RSulo6af57yQ==
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id mw7-20020a17090b4d0700b001ef521cf051mr85630126pjb.164.1668101666364;
+        Thu, 10 Nov 2022 09:34:26 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p27-20020aa79e9b000000b0052d4cb47339sm10435527pfq.151.2022.11.10.09.34.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 09:34:25 -0800 (PST)
+Date:   Thu, 10 Nov 2022 17:34:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
+Subject: Re: [PATCH v2 3/3] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg
+ leaf 0x80000022
+Message-ID: <Y202HcmVLa0woaCF@google.com>
+References: <20220919093453.71737-1-likexu@tencent.com>
+ <20220919093453.71737-4-likexu@tencent.com>
+ <Y1sIHXX3HEJEXJm+@google.com>
+ <948ec6a5-3f30-e8c2-9629-12235f1e1367@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <948ec6a5-3f30-e8c2-9629-12235f1e1367@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,488 +77,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark the folio* argument to some of the folio accessor functions as a const
-pointer and similarly make some page* arguments to some page functions
-const.
+On Thu, Nov 10, 2022, Like Xu wrote:
+> On 28/10/2022 6:37 am, Sean Christopherson wrote:
+> > I'm not a fan of perf's unions, but I at least understand the value added for
+> > CPUID entries that are a bunch of multi-bit values.  However, this leaf appears
+> > to be a pure features leaf.  In which case a union just makes life painful.
+> > 
+> > Please add a CPUID_8000_0022_EAX kvm_only_cpuid_leafs entry (details in link[*]
+> > below) so that KVM can write sane code like
+> > 
+> > 	guest_cpuid_has(X86_FEATURE_AMD_PMU_V2)
+> > 
+> > and cpuid_entry_override() instead of manually filling in information.
+> > 
+> > where appropriate.
+> > 
+> > [*] https://lore.kernel.org/all/Y1AQX3RfM+awULlE@google.com
+> 
+> When someone is selling syntactic sugar in the kernel space, extra attention
+> needs to be paid to runtime performance (union) and memory footprint
+> (reverse_cpuid).
 
-Also switch the return values to bool rather than int where the test inside
-produces a bool.
+No.  Just no.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
----
+First off, this is more than syntactic sugar.  KVM has had multiple bugs in the
+past due to manually querying/filling CPUID entries.  The reverse-CPUID infrastructure
+guards against some of those bugs by limiting potential bugs to the leaf definition
+and the feature definition.  I.e. we only need to get the cpuid_leafs+X86_FEATURE_*
+definitions correct.
 
- include/linux/mm.h         |   20 ++++-----
- include/linux/page-flags.h |   99 ++++++++++++++++++++++++--------------------
- mm/hugetlb.c               |    8 ++--
- mm/page_alloc.c            |    4 +-
- 4 files changed, 70 insertions(+), 61 deletions(-)
+Second, this code is not remotely performance sensitive, and the memory footprint
+of the reverse_cpuid table is laughably small.  It's literally 8 bytes per entry
+FOR THE ENTIRE KERNEL.  And that's ignoring the fact that the table might even be
+optimized away entirely since it's really just a switch statement that doesn't
+use a helper function.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7a7a287818ad..a069f6f70aed 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -711,7 +711,7 @@ int vma_is_stack_for_current(struct vm_area_struct *vma);
- struct mmu_gather;
- struct inode;
- 
--static inline unsigned int compound_order(struct page *page)
-+static inline unsigned int compound_order(const struct page *page)
- {
- 	if (!PageHead(page))
- 		return 0;
-@@ -727,7 +727,7 @@ static inline unsigned int compound_order(struct page *page)
-  *
-  * Return: The order of the folio.
-  */
--static inline unsigned int folio_order(struct folio *folio)
-+static inline unsigned int folio_order(const struct folio *folio)
- {
- 	if (!folio_test_large(folio))
- 		return 0;
-@@ -945,7 +945,7 @@ static inline void set_compound_order(struct page *page, unsigned int order)
- }
- 
- /* Returns the number of pages in this potentially compound page. */
--static inline unsigned long compound_nr(struct page *page)
-+static inline unsigned long compound_nr(const struct page *page)
- {
- 	if (!PageHead(page))
- 		return 1;
-@@ -1519,7 +1519,7 @@ static inline unsigned long page_to_section(const struct page *page)
-  *
-  * Return: The Page Frame Number of the first page in the folio.
-  */
--static inline unsigned long folio_pfn(struct folio *folio)
-+static inline unsigned long folio_pfn(const struct folio *folio)
- {
- 	return page_to_pfn(&folio->page);
- }
-@@ -1600,7 +1600,7 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
- 
- /* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
- #ifdef CONFIG_MIGRATION
--static inline bool is_longterm_pinnable_page(struct page *page)
-+static inline bool is_longterm_pinnable_page(const struct page *page)
- {
- #ifdef CONFIG_CMA
- 	int mt = get_pageblock_migratetype(page);
-@@ -1620,13 +1620,13 @@ static inline bool is_longterm_pinnable_page(struct page *page)
- 	return !is_zone_movable_page(page);
- }
- #else
--static inline bool is_longterm_pinnable_page(struct page *page)
-+static inline bool is_longterm_pinnable_page(const struct page *page)
- {
- 	return true;
- }
- #endif
- 
--static inline bool folio_is_longterm_pinnable(struct folio *folio)
-+static inline bool folio_is_longterm_pinnable(const struct folio *folio)
- {
- 	return is_longterm_pinnable_page(&folio->page);
- }
-@@ -1659,7 +1659,7 @@ static inline void set_page_links(struct page *page, enum zone_type zone,
-  *
-  * Return: A positive power of two.
-  */
--static inline long folio_nr_pages(struct folio *folio)
-+static inline long folio_nr_pages(const struct folio *folio)
- {
- 	if (!folio_test_large(folio))
- 		return 1;
-@@ -1701,7 +1701,7 @@ static inline struct folio *folio_next(struct folio *folio)
-  * it from being split.  It is not necessary for the folio to be locked.
-  * Return: The base-2 logarithm of the size of this folio.
-  */
--static inline unsigned int folio_shift(struct folio *folio)
-+static inline unsigned int folio_shift(const struct folio *folio)
- {
- 	return PAGE_SHIFT + folio_order(folio);
- }
-@@ -1714,7 +1714,7 @@ static inline unsigned int folio_shift(struct folio *folio)
-  * it from being split.  It is not necessary for the folio to be locked.
-  * Return: The number of bytes in this folio.
-  */
--static inline size_t folio_size(struct folio *folio)
-+static inline size_t folio_size(const struct folio *folio)
- {
- 	return PAGE_SIZE << folio_order(folio);
- }
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 0b0ae5084e60..ee6604fcc1d1 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -243,7 +243,7 @@ static inline const struct page *page_fixed_fake_head(const struct page *page)
- }
- #endif
- 
--static __always_inline int page_is_fake_head(struct page *page)
-+static __always_inline bool page_is_fake_head(const struct page *page)
- {
- 	return page_fixed_fake_head(page) != page;
- }
-@@ -287,19 +287,19 @@ static inline unsigned long _compound_head(const struct page *page)
-  */
- #define folio_page(folio, n)	nth_page(&(folio)->page, n)
- 
--static __always_inline int PageTail(struct page *page)
-+static __always_inline bool PageTail(const struct page *page)
- {
- 	return READ_ONCE(page->compound_head) & 1 || page_is_fake_head(page);
- }
- 
--static __always_inline int PageCompound(struct page *page)
-+static __always_inline bool PageCompound(const struct page *page)
- {
- 	return test_bit(PG_head, &page->flags) ||
- 	       READ_ONCE(page->compound_head) & 1;
- }
- 
- #define	PAGE_POISON_PATTERN	-1l
--static inline int PagePoisoned(const struct page *page)
-+static inline bool PagePoisoned(const struct page *page)
- {
- 	return READ_ONCE(page->flags) == PAGE_POISON_PATTERN;
- }
-@@ -312,6 +312,15 @@ static inline void page_init_poison(struct page *page, size_t size)
- }
- #endif
- 
-+static const unsigned long *const_folio_flags(const struct folio *folio, unsigned n)
-+{
-+	const struct page *page = &folio->page;
-+
-+	VM_BUG_ON_PGFLAGS(PageTail(page), page);
-+	VM_BUG_ON_PGFLAGS(n > 0 && !test_bit(PG_head, &page->flags), page);
-+	return &page[n].flags;
-+}
-+
- static unsigned long *folio_flags(struct folio *folio, unsigned n)
- {
- 	struct page *page = &folio->page;
-@@ -377,9 +386,9 @@ static unsigned long *folio_flags(struct folio *folio, unsigned n)
-  * Macros to create function definitions for page flags
-  */
- #define TESTPAGEFLAG(uname, lname, policy)				\
--static __always_inline bool folio_test_##lname(struct folio *folio)	\
--{ return test_bit(PG_##lname, folio_flags(folio, FOLIO_##policy)); }	\
--static __always_inline int Page##uname(struct page *page)		\
-+static __always_inline bool folio_test_##lname(const struct folio *folio) \
-+{ return test_bit(PG_##lname, const_folio_flags(folio, FOLIO_##policy)); } \
-+static __always_inline bool Page##uname(const struct page *page)	\
- { return test_bit(PG_##lname, &policy(page, 0)->flags); }
- 
- #define SETPAGEFLAG(uname, lname, policy)				\
-@@ -414,14 +423,14 @@ static __always_inline void __ClearPage##uname(struct page *page)	\
- static __always_inline							\
- bool folio_test_set_##lname(struct folio *folio)			\
- { return test_and_set_bit(PG_##lname, folio_flags(folio, FOLIO_##policy)); } \
--static __always_inline int TestSetPage##uname(struct page *page)	\
-+static __always_inline bool TestSetPage##uname(struct page *page)	\
- { return test_and_set_bit(PG_##lname, &policy(page, 1)->flags); }
- 
- #define TESTCLEARFLAG(uname, lname, policy)				\
- static __always_inline							\
- bool folio_test_clear_##lname(struct folio *folio)			\
- { return test_and_clear_bit(PG_##lname, folio_flags(folio, FOLIO_##policy)); } \
--static __always_inline int TestClearPage##uname(struct page *page)	\
-+static __always_inline bool TestClearPage##uname(struct page *page)	\
- { return test_and_clear_bit(PG_##lname, &policy(page, 1)->flags); }
- 
- #define PAGEFLAG(uname, lname, policy)					\
-@@ -440,7 +449,7 @@ static __always_inline int TestClearPage##uname(struct page *page)	\
- 
- #define TESTPAGEFLAG_FALSE(uname, lname)				\
- static inline bool folio_test_##lname(const struct folio *folio) { return false; } \
--static inline int Page##uname(const struct page *page) { return 0; }
-+static inline bool Page##uname(const struct page *page) { return false; }
- 
- #define SETPAGEFLAG_NOOP(uname, lname)					\
- static inline void folio_set_##lname(struct folio *folio) { }		\
-@@ -456,13 +465,13 @@ static inline void __ClearPage##uname(struct page *page) {  }
- 
- #define TESTSETFLAG_FALSE(uname, lname)					\
- static inline bool folio_test_set_##lname(struct folio *folio)		\
--{ return 0; }								\
--static inline int TestSetPage##uname(struct page *page) { return 0; }
-+{ return false; }							\
-+static inline bool TestSetPage##uname(struct page *page) { return false; }
- 
- #define TESTCLEARFLAG_FALSE(uname, lname)				\
- static inline bool folio_test_clear_##lname(struct folio *folio)	\
--{ return 0; }								\
--static inline int TestClearPage##uname(struct page *page) { return 0; }
-+{ return false; }							\
-+static inline bool TestClearPage##uname(struct page *page) { return false; }
- 
- #define PAGEFLAG_FALSE(uname, lname) TESTPAGEFLAG_FALSE(uname, lname)	\
- 	SETPAGEFLAG_NOOP(uname, lname) CLEARPAGEFLAG_NOOP(uname, lname)
-@@ -538,13 +547,13 @@ PAGEFLAG_FALSE(HighMem, highmem)
- #endif
- 
- #ifdef CONFIG_SWAP
--static __always_inline bool folio_test_swapcache(struct folio *folio)
-+static __always_inline bool folio_test_swapcache(const struct folio *folio)
- {
- 	return folio_test_swapbacked(folio) &&
--			test_bit(PG_swapcache, folio_flags(folio, 0));
-+			test_bit(PG_swapcache, const_folio_flags(folio, 0));
- }
- 
--static __always_inline bool PageSwapCache(struct page *page)
-+static __always_inline bool PageSwapCache(const struct page *page)
- {
- 	return folio_test_swapcache(page_folio(page));
- }
-@@ -643,22 +652,22 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
-  */
- #define PAGE_MAPPING_DAX_COW	0x1
- 
--static __always_inline bool folio_mapping_flags(struct folio *folio)
-+static __always_inline bool folio_mapping_flags(const struct folio *folio)
- {
- 	return ((unsigned long)folio->mapping & PAGE_MAPPING_FLAGS) != 0;
- }
- 
--static __always_inline int PageMappingFlags(struct page *page)
-+static __always_inline bool PageMappingFlags(const struct page *page)
- {
- 	return ((unsigned long)page->mapping & PAGE_MAPPING_FLAGS) != 0;
- }
- 
--static __always_inline bool folio_test_anon(struct folio *folio)
-+static __always_inline bool folio_test_anon(const struct folio *folio)
- {
- 	return ((unsigned long)folio->mapping & PAGE_MAPPING_ANON) != 0;
- }
- 
--static __always_inline bool PageAnon(struct page *page)
-+static __always_inline bool PageAnon(const struct page *page)
- {
- 	return folio_test_anon(page_folio(page));
- }
-@@ -669,7 +678,7 @@ static __always_inline bool __folio_test_movable(const struct folio *folio)
- 			PAGE_MAPPING_MOVABLE;
- }
- 
--static __always_inline int __PageMovable(struct page *page)
-+static __always_inline bool __PageMovable(const struct page *page)
- {
- 	return ((unsigned long)page->mapping & PAGE_MAPPING_FLAGS) ==
- 				PAGE_MAPPING_MOVABLE;
-@@ -682,13 +691,13 @@ static __always_inline int __PageMovable(struct page *page)
-  * is found in VM_MERGEABLE vmas.  It's a PageAnon page, pointing not to any
-  * anon_vma, but to that page's node of the stable tree.
-  */
--static __always_inline bool folio_test_ksm(struct folio *folio)
-+static __always_inline bool folio_test_ksm(const struct folio *folio)
- {
- 	return ((unsigned long)folio->mapping & PAGE_MAPPING_FLAGS) ==
- 				PAGE_MAPPING_KSM;
- }
- 
--static __always_inline bool PageKsm(struct page *page)
-+static __always_inline bool PageKsm(const struct page *page)
- {
- 	return folio_test_ksm(page_folio(page));
- }
-@@ -708,9 +717,9 @@ u64 stable_page_flags(struct page *page);
-  * some of the bytes in it may be; see the is_partially_uptodate()
-  * address_space operation.
-  */
--static inline bool folio_test_uptodate(struct folio *folio)
-+static inline bool folio_test_uptodate(const struct folio *folio)
- {
--	bool ret = test_bit(PG_uptodate, folio_flags(folio, 0));
-+	bool ret = test_bit(PG_uptodate, const_folio_flags(folio, 0));
- 	/*
- 	 * Must ensure that the data we read out of the folio is loaded
- 	 * _after_ we've loaded folio->flags to check the uptodate bit.
-@@ -725,7 +734,7 @@ static inline bool folio_test_uptodate(struct folio *folio)
- 	return ret;
- }
- 
--static inline int PageUptodate(struct page *page)
-+static inline bool PageUptodate(const struct page *page)
- {
- 	return folio_test_uptodate(page_folio(page));
- }
-@@ -777,12 +786,12 @@ static inline bool test_set_page_writeback(struct page *page)
- 	return set_page_writeback(page);
- }
- 
--static __always_inline bool folio_test_head(struct folio *folio)
-+static __always_inline bool folio_test_head(const struct folio *folio)
- {
--	return test_bit(PG_head, folio_flags(folio, FOLIO_PF_ANY));
-+	return test_bit(PG_head, const_folio_flags(folio, FOLIO_PF_ANY));
- }
- 
--static __always_inline int PageHead(struct page *page)
-+static __always_inline bool PageHead(const struct page *page)
- {
- 	PF_POISONED_CHECK(page);
- 	return test_bit(PG_head, &page->flags) && !page_is_fake_head(page);
-@@ -798,7 +807,7 @@ CLEARPAGEFLAG(Head, head, PF_ANY)
-  *
-  * Return: True if the folio is larger than one page.
-  */
--static inline bool folio_test_large(struct folio *folio)
-+static inline bool folio_test_large(const struct folio *folio)
- {
- 	return folio_test_head(folio);
- }
-@@ -824,9 +833,9 @@ static inline void ClearPageCompound(struct page *page)
- #define PG_head_mask ((1UL << PG_head))
- 
- #ifdef CONFIG_HUGETLB_PAGE
--int PageHuge(struct page *page);
--int PageHeadHuge(struct page *page);
--static inline bool folio_test_hugetlb(struct folio *folio)
-+bool PageHuge(const struct page *page);
-+bool PageHeadHuge(const struct page *page);
-+static inline bool folio_test_hugetlb(const struct folio *folio)
- {
- 	return PageHeadHuge(&folio->page);
- }
-@@ -844,13 +853,13 @@ TESTPAGEFLAG_FALSE(HeadHuge, headhuge)
-  * hugetlbfs pages, but not normal pages. PageTransHuge() can only be
-  * called only in the core VM paths where hugetlbfs pages can't exist.
-  */
--static inline int PageTransHuge(struct page *page)
-+static inline bool PageTransHuge(const struct page *page)
- {
- 	VM_BUG_ON_PAGE(PageTail(page), page);
- 	return PageHead(page);
- }
- 
--static inline bool folio_test_transhuge(struct folio *folio)
-+static inline bool folio_test_transhuge(const struct folio *folio)
- {
- 	return folio_test_head(folio);
- }
-@@ -860,7 +869,7 @@ static inline bool folio_test_transhuge(struct folio *folio)
-  * and hugetlbfs pages, so it should only be called when it's known
-  * that hugetlbfs pages aren't involved.
-  */
--static inline int PageTransCompound(struct page *page)
-+static inline bool PageTransCompound(const struct page *page)
- {
- 	return PageCompound(page);
- }
-@@ -870,7 +879,7 @@ static inline int PageTransCompound(struct page *page)
-  * and hugetlbfs pages, so it should only be called when it's known
-  * that hugetlbfs pages aren't involved.
-  */
--static inline int PageTransTail(struct page *page)
-+static inline bool PageTransTail(const struct page *page)
- {
- 	return PageTail(page);
- }
-@@ -918,7 +927,7 @@ PAGEFLAG_FALSE(HasHWPoisoned, has_hwpoisoned)
-  * best effort only and inherently racy: there is no way to synchronize with
-  * failing hardware.
-  */
--static inline bool is_page_hwpoison(struct page *page)
-+static inline bool is_page_hwpoison(const struct page *page)
- {
- 	if (PageHWPoison(page))
- 		return true;
-@@ -945,13 +954,13 @@ static inline bool is_page_hwpoison(struct page *page)
- #define PageType(page, flag)						\
- 	((page->page_type & (PAGE_TYPE_BASE | flag)) == PAGE_TYPE_BASE)
- 
--static inline int page_has_type(struct page *page)
-+static inline bool page_has_type(const struct page *page)
- {
- 	return (int)page->page_type < PAGE_MAPCOUNT_RESERVE;
- }
- 
- #define PAGE_TYPE_OPS(uname, lname)					\
--static __always_inline int Page##uname(struct page *page)		\
-+static __always_inline bool Page##uname(const struct page *page)	\
- {									\
- 	return PageType(page, PG_##lname);				\
- }									\
-@@ -1011,11 +1020,11 @@ PAGE_TYPE_OPS(Table, table)
-  */
- PAGE_TYPE_OPS(Guard, guard)
- 
--extern bool is_free_buddy_page(struct page *page);
-+extern bool is_free_buddy_page(const struct page *page);
- 
- PAGEFLAG(Isolated, isolated, PF_ANY);
- 
--static __always_inline int PageAnonExclusive(struct page *page)
-+static __always_inline bool PageAnonExclusive(const struct page *page)
- {
- 	VM_BUG_ON_PGFLAGS(!PageAnon(page), page);
- 	VM_BUG_ON_PGFLAGS(PageHuge(page) && !PageHead(page), page);
-@@ -1080,12 +1089,12 @@ static __always_inline void __ClearPageAnonExclusive(struct page *page)
-  * Determine if a page has private stuff, indicating that release routines
-  * should be invoked upon it.
-  */
--static inline int page_has_private(struct page *page)
-+static inline bool page_has_private(const struct page *page)
- {
- 	return !!(page->flags & PAGE_FLAGS_PRIVATE);
- }
- 
--static inline bool folio_has_private(struct folio *folio)
-+static inline bool folio_has_private(const struct folio *folio)
- {
- 	return page_has_private(&folio->page);
- }
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 546df97c31e4..ac8bed42f276 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1886,10 +1886,10 @@ static bool prep_compound_gigantic_page_for_demote(struct page *page,
-  * transparent huge pages.  See the PageTransHuge() documentation for more
-  * details.
-  */
--int PageHuge(struct page *page)
-+bool PageHuge(const struct page *page)
- {
- 	if (!PageCompound(page))
--		return 0;
-+		return false;
- 
- 	page = compound_head(page);
- 	return page[1].compound_dtor == HUGETLB_PAGE_DTOR;
-@@ -1900,10 +1900,10 @@ EXPORT_SYMBOL_GPL(PageHuge);
-  * PageHeadHuge() only returns true for hugetlbfs head page, but not for
-  * normal or transparent huge pages.
-  */
--int PageHeadHuge(struct page *page_head)
-+bool PageHeadHuge(const struct page *page_head)
- {
- 	if (!PageHead(page_head))
--		return 0;
-+		return false;
- 
- 	return page_head[1].compound_dtor == HUGETLB_PAGE_DTOR;
- }
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 218b28ee49ed..81ccca8364bb 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -9586,13 +9586,13 @@ void __offline_isolated_pages(unsigned long start_pfn, unsigned long end_pfn)
- /*
-  * This function returns a stable result only if called under zone lock.
-  */
--bool is_free_buddy_page(struct page *page)
-+bool is_free_buddy_page(const struct page *page)
- {
- 	unsigned long pfn = page_to_pfn(page);
- 	unsigned int order;
- 
- 	for (order = 0; order < MAX_ORDER; order++) {
--		struct page *page_head = page - (pfn & ((1 << order) - 1));
-+		const struct page *page_head = page - (pfn & ((1 << order) - 1));
- 
- 		if (PageBuddy(page_head) &&
- 		    buddy_order_unsafe(page_head) >= order)
+> > With a proper CPUID_8000_0022_EAX, this becomes:
+> > 
+> > 		entry->ecx = entry->edx = 0;
+> > 		if (!enable_pmu || !kvm_cpu_cap_has(X86_FEATURE_AMD_PMU_V2)) {
+> > 			entry->eax = entry->ebx;
+> > 			break;
+> > 		}
+> > 
+> > 		cpuid_entry_override(entry, CPUID_8000_0022_EAX);
+> > 
+> > 		...
+> 
+> Then in this code block, we will have:
+> 
+> 	/* AMD PerfMon is only supported up to V2 in the KVM. */
+> 	entry->eax |= BIT(0);
 
+I can't tell exactly what you're suggesting, but if you're implying that you don't
+want to add CPUID_8000_0022_EAX, then NAK.  Open coding CPUID feature bit
+manipulations in KVM is not acceptable.
 
+If I'm misunderstanding and there's something that isn't handled by
+cpuid_entry_override(), then the correct way to force a CPUID feature bit is:
+
+	cpuid_entry_set(entry, X86_FEATURE_AMD_PMU_V2);
+
+> to cover AMD Perfmon V3+, any better move ?
+
+Huh?  If/when V3+ comes along, the above
+
+	cpuid_entry_override(entry, CPUID_8000_0022_EAX);
+
+will continue to do the right thing because KVM will (a) advertise V2 if it's
+supported in hardware and (b) NOT advertise V3+ because the relevant CPUID bit(s)
+will not be set in kvm_cpu_caps until KVM gains the necessary support.
