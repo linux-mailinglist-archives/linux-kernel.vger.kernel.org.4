@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B6E624A86
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BB0624A85
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiKJTUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 14:20:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S229757AbiKJTUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 14:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiKJTUf (ORCPT
+        with ESMTP id S230333AbiKJTUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 14:20:35 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2A97655
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 11:20:34 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so5729313pji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 11:20:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LYUlAFrEbyfFRH8XQ1Az8G9RGqh1QwMuiz/dtiN8PUg=;
-        b=MvSKq5bWzN6iI6UuSuvm3YAvtXT6zn4H/yiJ0PhNblomXhHUUyQldLaOMl2hmiAtht
-         4vTn1j1nCgmB/NkMlukrZlBS3ZB/lfBNG3BlcSF60mBiwodPbcZpMjcgGHuVY4mPlFT2
-         TyuDzxEYUER8BlVVv3iTIuVsfQT1NI8YxRMHfEY2R5US3B8GkY/Pr799VJ8WMdYFW6Zu
-         HJnL15REFVmPMtRTs//d7N8ohJElai+hUgNkU/n1y+J6SEDN08H14BoV1KjPjjp9ckxD
-         cQBy5KnSlVKwyIVqM0aS6eDnWSz3aHezbDv7CTDMrGtthSf1y0WSLptxj48xn9Gekhsn
-         S+JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LYUlAFrEbyfFRH8XQ1Az8G9RGqh1QwMuiz/dtiN8PUg=;
-        b=x7twaLdbKLeQAZcFKMJAnbLX2UFNUQK5RUirVg1ywMFjysQGUOrAhdC7X0Yxgm3TW9
-         8gquT3tdAvb0FCDE/23qAUI5pLkX9LZktHm44Idyr2NeIaJ1Neg4354bPw+n92rdxZaQ
-         dr1VaZuSE2ik3QZsIpIgP3H4mK9sPnNag7exeZEvUg+hkHUlaeQAu0Rk81Kp3FO2kBte
-         Zl+x7PWMY5MY0rmeqciUp0OgucjcsrfEO+9g+buOM+EhUTnsuxHP7TmTvWGqBtePyhB0
-         kCEXXTatYXqpX3foj9h7yHxkFRjL7dCWEqPpPzZ+cM7XF0jFyNdx9qCDq5n4ljvOc6uv
-         xQ0g==
-X-Gm-Message-State: ACrzQf3iruy/ZkJKJ26+nEKrLOcgHcUuexfeMeJEuhGemshx2nbBprfz
-        6bYSsf/0u2g8TgDjIHpYeklqXaROMfwIbM+kfN5ljg==
-X-Google-Smtp-Source: AMsMyM5hSSiWzErPvPA3UO7DgFkaf9f2Sepd2Zbsy5SC5dhC3RtgvlDO+Mh+fydAA//KMHRn8zV04d2f8ftKVmlnZsE=
-X-Received: by 2002:a17:902:7b98:b0:186:8558:ded2 with SMTP id
- w24-20020a1709027b9800b001868558ded2mr1798574pll.95.1668108033739; Thu, 10
- Nov 2022 11:20:33 -0800 (PST)
+        Thu, 10 Nov 2022 14:20:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3051218A;
+        Thu, 10 Nov 2022 11:20:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 91E8D1FB;
+        Thu, 10 Nov 2022 11:20:39 -0800 (PST)
+Received: from [10.1.28.168] (e127744.cambridge.arm.com [10.1.28.168])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DEED53F73D;
+        Thu, 10 Nov 2022 11:20:30 -0800 (PST)
+Subject: Re: [PATCH 10/12] perf test: Replace brstack test workload
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+References: <20221110181920.84900-1-namhyung@kernel.org>
+ <20221110181920.84900-11-namhyung@kernel.org>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <1036a42b-b438-67b2-c4ca-0e440d266d6d@arm.com>
+Date:   Thu, 10 Nov 2022 19:20:25 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
- <20221106095106.849154-2-mailhol.vincent@wanadoo.fr> <Y2jSMz4GtXGJk6rS@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y2jSMz4GtXGJk6rS@hirez.programming.kicks-ass.net>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 10 Nov 2022 11:20:21 -0800
-Message-ID: <CAKwvOdnDi9GmLL8iRDe1-LEnpbFWFPAsPqB5PWpnpGK8+0rYAw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] x86/asm/bitops: Replace __fls() by its generic
- builtin implementation
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-        llvm@lists.linux.dev, Borislav Petkov <bp@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20221110181920.84900-11-namhyung@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +55,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 1:39 AM Peter Zijlstra <peterz@infradead.org> wrote:
+Hi Namhyung, thanks for doing the refactor, it looks a lot cleaner
+
+On 10/11/2022 18:19, Namhyung Kim wrote:
+> So that it can get rid of requirement of a compiler.  Also rename the
+> symbols to match with the perf test workload.
 >
-> On Sun, Nov 06, 2022 at 06:51:05PM +0900, Vincent Mailhol wrote:
-> > The builtin implementation is better for two reasons:
-> >
-> >   1/ it saves two instructions on clang (a push and a stack pointer
-> >      decrement) because of a useless tentative to save rax.
+> Cc: German Gomez <german.gomez@arm.com>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/tests/shell/test_brstack.sh | 66 +++++---------------------
+>  1 file changed, 12 insertions(+), 54 deletions(-)
 >
-> I'm thinking this is the same old clang-sucks-at-"rm" constraints and
-> *really* should not be a reason to change things. Clang should get fixed
-> already.
+> diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
+> index ec801cffae6b..a8a182dea25f 100755
+> --- a/tools/perf/tests/shell/test_brstack.sh
+> +++ b/tools/perf/tests/shell/test_brstack.sh
+> @@ -4,18 +4,12 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # German Gomez <german.gomez@arm.com>, 2022
+>  
+> -# we need a C compiler to build the test programs
+> -# so bail if none is found
+> -if ! [ -x "$(command -v cc)" ]; then
+> -	echo "failed: no compiler, install gcc"
+> -	exit 2
+> -fi
+> -
+>  # skip the test if the hardware doesn't support branch stack sampling
+>  # and if the architecture doesn't support filter types: any,save_type,u
+>  perf record -b -o- -B --branch-filter any,save_type,u true > /dev/null 2>&1 || exit 2
+>  
+>  TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
+> +TESTPROG="perf test -w brstack"
+>  
+>  cleanup() {
+>  	rm -rf $TMPDIR
+> @@ -23,57 +17,24 @@ cleanup() {
+>  
+>  trap cleanup exit term int
+>  
+> -gen_test_program() {
+> -	# generate test program
+> -	cat << EOF > $1
+> -#define BENCH_RUNS 999999
+> -int cnt;
+> -void bar(void) {
+> -}			/* return */
+> -void foo(void) {
+> -	bar();		/* call */
+> -}			/* return */
+> -void bench(void) {
+> -  void (*foo_ind)(void) = foo;
+> -  if ((cnt++) % 3)	/* branch (cond) */
+> -    foo();		/* call */
+> -  bar();		/* call */
+> -  foo_ind();		/* call (ind) */
+> -}
+> -int main(void)
+> -{
+> -  int cnt = 0;
+> -  while (1) {
+> -    if ((cnt++) > BENCH_RUNS)
+> -      break;
+> -    bench();		/* call */
+> -  }			/* branch (uncond) */
+> -  return 0;
+> -}
+> -EOF
+> -}
+> -
+>  test_user_branches() {
+>  	echo "Testing user branch stack sampling"
+>  
+> -	gen_test_program "$TEMPDIR/program.c"
+> -	cc -fno-inline -g "$TEMPDIR/program.c" -o $TMPDIR/a.out
+> -
+> -	perf record -o $TMPDIR/perf.data --branch-filter any,save_type,u -- $TMPDIR/a.out > /dev/null 2>&1
+> +	perf record -o $TMPDIR/perf.data --branch-filter any,save_type,u -- ${TESTPROG} > /dev/null 2>&1
+>  	perf script -i $TMPDIR/perf.data --fields brstacksym | xargs -n1 > $TMPDIR/perf.script
+>  
+>  	# example of branch entries:
+> -	# 	foo+0x14/bar+0x40/P/-/-/0/CALL
+> +	# 	brstack_foo+0x14/brstack_bar+0x40/P/-/-/0/CALL
+>  
+>  	set -x
+> -	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/IND_CALL$"	$TMPDIR/perf.script
+> -	egrep -m1 "^foo\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+> -	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/CALL$"	$TMPDIR/perf.script
+> -	egrep -m1 "^bench\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+> -	egrep -m1 "^bar\+[^ ]*/foo\+[^ ]*/RET$"		$TMPDIR/perf.script
+> -	egrep -m1 "^foo\+[^ ]*/bench\+[^ ]*/RET$"	$TMPDIR/perf.script
+> -	egrep -m1 "^bench\+[^ ]*/bench\+[^ ]*/COND$"	$TMPDIR/perf.script
+> -	egrep -m1 "^main\+[^ ]*/main\+[^ ]*/UNCOND$"	$TMPDIR/perf.script
+> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_foo\+[^ ]*/IND_CALL$"	$TMPDIR/perf.script
+> +	egrep -m1 "^brstack_foo\+[^ ]*/brstack_bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_foo\+[^ ]*/CALL$"	$TMPDIR/perf.script
+> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+> +	egrep -m1 "^brstack_bar\+[^ ]*/brstack_foo\+[^ ]*/RET$"		$TMPDIR/perf.script
+> +	egrep -m1 "^brstack_foo\+[^ ]*/brstsack_bench\+[^ ]*/RET$"	$TMPDIR/perf.script
 
-Well messing up constant folding for all compilers absolutely should
-be a reason!
+Small typo here s/brstsack_bench/brstack_bench
 
-I did get a chance to speak with some colleagues more about this at
-the LLVM developer meeting during the past 2 days.  We have some ideas
-on approaches that might work.  There's some higher priority features
-we're working on first, but I suspect we'll be able to visit that
-issue soon.  It's a pretty tricky dance between instruction selection
-and register allocation.
+I think James was doing some BRBE work here, so probably best if he also gives his review/test tag.
 
->
-> >   2/ when used on constant expressions, the compiler is only able to
-> >      fold the builtin version (c.f. [2]).
-> >
-> > For those two reasons, replace the assembly implementation by its
-> > builtin counterpart.
-> >
-> > [1] https://elixir.bootlin.com/linux/v6.0/source/include/asm-generic/bitops/builtin-__fls.h
-> >
-> > [2] commit 146034fed6ee ("x86/asm/bitops: Use __builtin_ffs() to evaluate constant expressions")
->
-> I would much prefer consistently with 146034fed6ee.
+Acked-by: German Gomez <german.gomez@arm.com>
 
-The bottom of this file arch/x86/include/asm/bitops.h is full of
-#include <asm-generic/bitops/*.h>
-
--- 
-Thanks,
-~Nick Desaulniers
+> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_bench\+[^ ]*/COND$"	$TMPDIR/perf.script
+> +	egrep -m1 "^brstack\+[^ ]*/brstack\+[^ ]*/UNCOND$"		$TMPDIR/perf.script
+>  	set +x
+>  
+>  	# some branch types are still not being tested:
+> @@ -88,10 +49,7 @@ test_filter() {
+>  
+>  	echo "Testing branch stack filtering permutation ($filter,$expect)"
+>  
+> -	gen_test_program "$TEMPDIR/program.c"
+> -	cc -fno-inline -g "$TEMPDIR/program.c" -o $TMPDIR/a.out
+> -
+> -	perf record -o $TMPDIR/perf.data --branch-filter $filter,save_type,u -- $TMPDIR/a.out > /dev/null 2>&1
+> +	perf record -o $TMPDIR/perf.data --branch-filter $filter,save_type,u -- ${TESTPROG} > /dev/null 2>&1
+>  	perf script -i $TMPDIR/perf.data --fields brstack | xargs -n1 > $TMPDIR/perf.script
+>  
+>  	# fail if we find any branch type that doesn't match any of the expected ones
