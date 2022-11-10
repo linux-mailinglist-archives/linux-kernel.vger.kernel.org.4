@@ -2,117 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC034624140
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C9D624141
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiKJLTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S229814AbiKJLUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiKJLTd (ORCPT
+        with ESMTP id S229551AbiKJLUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:19:33 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1801097;
-        Thu, 10 Nov 2022 03:19:31 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 9D16F320098B;
-        Thu, 10 Nov 2022 06:19:28 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 10 Nov 2022 06:19:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1668079168; x=1668165568; bh=ifZN531fzx
-        PIHpouo1jQhbXOb4J2WZNSWkifMSSVh3E=; b=ne56sfpcT3artr2/7NJnzJEjN0
-        F5tkTkzDlaKG9724FgTB44TBUDWflpp8g2U6+t9akmZWmoZvP11n8dtdGFDGC+BK
-        jspUpHMXJc+CDwYyI1D37pZhQvw7qqrylbEj5fQYA1eDGxIPyudYJcGiC6wpBHCJ
-        teNuNk+JnrXlu0Q0yQkkGsAhRkA45VjVp1CvWkHXKAKOoaSzgjjIg6nGhwNz+rWg
-        bVedmmdGCb4nXyqHRuqwl6IwkMIb/vaHFZK5DDcg1vv5BuDGgG5CnHff83Gd1st/
-        HU9KWhxlUw8X9xiSRLz2lkUMcQ6G8g7JAJbdcE6+M+M1iyQPEDst9xKgeCgw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668079168; x=1668165568; bh=ifZN531fzxPIHpouo1jQhbXOb4J2
-        WZNSWkifMSSVh3E=; b=H7lRNj/NuqS2C1LPDQC7+8fZBQ5mfW/Lzab9TIbFiFQm
-        QshBT2TQikLFLZLp5VpLypf7IKh4stvWY2iCxnQvvSKWS7yBoO6xJfHbHyrQMXAy
-        5QBI8NU0Cv9B+r9vAJHB6igjSCRWHeqa+wvFYdDwxoqW4hJGihWq8pP1Fpe48LnU
-        ML2BEtWiCm1F5kKV4B//v2/nTrf+npWuclDoH/twG2ACoFOT2gK/rS+Xe0mvX5JB
-        NrOWHUmZlPecCijbTp5RuR+/9XlPW5xoYNqtMhJVH3aW7+00c2xasMlCWH+nmEfk
-        SyNMUJD6Rlc1GQ07+F9ZbKWEMrO+6+MaHFKpMSYqVg==
-X-ME-Sender: <xms:P95sY00hH0O2gdQJun6oM5iLKvBIbC8SheUITxBZi7xUMbi0mWYRfg>
-    <xme:P95sY_F3Hk3ggGbBC7p0gSp_0B1f3hG3uL43obHntxofpPIadVKJhP_IFtRBM7Tbx
-    iV8xBN5Oo5dfT1HCKk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QN5sY87vR70_oaYCYPgr-MC_Y17ufZphvA3nd4Yrw2VhwxOQjYv0Mw>
-    <xmx:QN5sY92a3zPY2aXwUKfazgi_vW_oEGuokHF-9fN4UVevnpCFyYe-Vw>
-    <xmx:QN5sY3FCV6FSx3U8shiRaBhJa1R6XxemA0mcoKSixNDwBf7osiOB7A>
-    <xmx:QN5sY23gSX2bWJKfm51kKplkjDoXgUfDR4fxeYOZoxmELriFdTFbfA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id DC451B60086; Thu, 10 Nov 2022 06:19:27 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <f22ea97e-9d76-4c8b-a0c9-698db6e69a9f@app.fastmail.com>
-In-Reply-To: <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
-References: <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
-Date:   Thu, 10 Nov 2022 12:19:07 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, llvm@lists.linux.dev
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>,
-        "Linux PM" <linux-pm@vger.kernel.org>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Stuart Hayes" <stuart.w.hayes@gmail.com>
-Subject: Re: x86: clang: acpi-cpufreq.c:970:24: error: variable 'ret' is uninitialized
- when used here [-Werror,-Wuninitialized]
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 06:20:39 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31476701AC
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:20:37 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so1256654pjd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:20:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z49xKikEzQNQPr/bNFHbKiPE/DwFrtp3Y9j7jeVw77k=;
+        b=iX+xAuTmnLGuv8l0IwwSc1GTTlXZyOByHxpRC33/REgVHdDbVhr2KjJKoJ3VJYqbhC
+         YOVWfEpAmZ/csMuCLCPmk6y1qRHmUtMJYQ3Ay40pQUTDM8RQoXsnW/ZLVwpPtTJI93wz
+         6Ra1gfAcrRKe6Xuf6RabDCnSDEJItsDDFtnRCs7i1EMyPTvukkUqd9yU4cxoV0Jhqn0W
+         cGvdIc/GirGpt8JW6XwtX37J+UdQwg6bBDcV8h8y1Ifh14OxnK2p7XKNIAUu/iKL1l6F
+         fCDYnLqlevf2Jpm11UnDh9JeSa6+6mIgFeCDhJg/nuziAYzfnv225OVRACTSCFSqfgTl
+         4tsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z49xKikEzQNQPr/bNFHbKiPE/DwFrtp3Y9j7jeVw77k=;
+        b=hW1BJRq99Oce5VCv7VOKmvlyUwzu+k8kW3dC9qoHuYaF2Ndh/tMJcQEb3hFWoTLLHS
+         Vj3hwxQbhmd0LMNhMIqm+7wgYLn+wmO/BWSpxA9kDojKRm+E2Rum4fapy0fhIVd9JEoQ
+         vkgc3feoiqmvEvWvo2Jq3LHC/6V+aCK/fnm3pTcIg0ns4FmJ4Ieyb1HBaBj/6UjyWZOm
+         BsM5SV7zLG/PklyvxghOixqpfxTI6HzhbWmcuVMUBbN93uBHh9++I3WvguxXDanpTD6R
+         BHen5rI55ZXz7p7ROyDHBgSBhxey9wCDFahQDZaC5ji6P86rIcpuO+9KAMt3B+rlAtr3
+         2oug==
+X-Gm-Message-State: ACrzQf16k+Z13sC1PO3wDicOJYo+LOs97UIswP+eVKf3GTm35HV7547u
+        EaiZc3Y4Vc02ON+tkQhzoRjcdQ==
+X-Google-Smtp-Source: AMsMyM4i9P445IT//4DKfgHdHfFeNUbcNPWZgoO/ONBRPhzIOcvxSoVe32zk2/qv3tMxtQBP12dqbw==
+X-Received: by 2002:a17:90a:b00a:b0:213:623:2c12 with SMTP id x10-20020a17090ab00a00b0021306232c12mr83959075pjq.153.1668079236300;
+        Thu, 10 Nov 2022 03:20:36 -0800 (PST)
+Received: from leoy-yangtze.lan (45.78.27.50.16clouds.com. [45.78.27.50])
+        by smtp.gmail.com with ESMTPSA id u7-20020a170902e5c700b00174d9bbeda4sm11023925plf.197.2022.11.10.03.20.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 03:20:33 -0800 (PST)
+Date:   Thu, 10 Nov 2022 19:20:28 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        German Gomez <german.gomez@arm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>
+Subject: Re: [PATCH 06/12] perf test: Replace arm callgraph fp test workload
+ with leafloop
+Message-ID: <Y2zeOZcNjRCnEAVZ@leoy-yangtze.lan>
+References: <20221109174635.859406-1-namhyung@kernel.org>
+ <20221109174635.859406-7-namhyung@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109174635.859406-7-namhyung@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022, at 12:14, Naresh Kamboju wrote:
-> [Please ignore email this if it is already reported]
->
-> Kernel build warning noticed on x86_64 with clang toolchain [1].
-> Build failures noticed from next-20221108 .. next-20221110.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-> ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
-> CC=clang
-> drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is
-> uninitialized when used here [-Werror,-Wuninitialized]
->         acpi_cpufreq_online = ret;
->                               ^~~
-> drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable
-> 'ret' to silence this warning
->         int ret;
->                ^
->                 = 0
-> 1 error generated.
+Hi Namyung,
 
-This is caused by 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs"),
-which removes the initialization of this variable.
+On Wed, Nov 09, 2022 at 09:46:29AM -0800, Namhyung Kim wrote:
+> So that it can get rid of requirement of a compiler.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  .../perf/tests/shell/test_arm_callgraph_fp.sh | 30 +------------------
+>  1 file changed, 1 insertion(+), 29 deletions(-)
+> 
+> diff --git a/tools/perf/tests/shell/test_arm_callgraph_fp.sh b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+> index ec108d45d3c6..9d6d1b2d99c5 100755
+> --- a/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+> +++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+> @@ -4,44 +4,16 @@
+>  
+>  lscpu | grep -q "aarch64" || exit 2
+>  
+> -if ! [ -x "$(command -v cc)" ]; then
+> -	echo "failed: no compiler, install gcc"
+> -	exit 2
+> -fi
+> -
+>  PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+> -TEST_PROGRAM_SOURCE=$(mktemp /tmp/test_program.XXXXX.c)
+> -TEST_PROGRAM=$(mktemp /tmp/test_program.XXXXX)
+> +TEST_PROGRAM="perf test -w leafloop"
+>  
+>  cleanup_files()
+>  {
+>  	rm -f $PERF_DATA
+> -	rm -f $TEST_PROGRAM_SOURCE
+> -	rm -f $TEST_PROGRAM
+>  }
+>  
+>  trap cleanup_files exit term int
+>  
+> -cat << EOF > $TEST_PROGRAM_SOURCE
+> -int a = 0;
+> -void leaf(void) {
+> -  for (;;)
+> -    a += a;
+> -}
+> -void parent(void) {
+> -  leaf();
+> -}
+> -int main(void) {
+> -  parent();
+> -  return 0;
+> -}
+> -EOF
+> -
+> -echo " + Compiling test program ($TEST_PROGRAM)..."
+> -
+> -CFLAGS="-g -O0 -fno-inline -fno-omit-frame-pointer"
+> -cc $CFLAGS $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
+> -
+>  # Add a 1 second delay to skip samples that are not in the leaf() function
+>  perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 --user-callchains -- $TEST_PROGRAM 2> /dev/null &
+>  PID=$!
 
-      Arnd
+I need to append below changes, otherwise the test will fail on Arm64:
+
+--- a/tools/perf/tests/shell/test_arm_callgraph_fp.sh
++++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+@@ -30,11 +30,11 @@ wait $PID
+ # program
+ #      728 leaf
+ #      753 parent
+-#      76c main
++#      76c leafloop
+ # ...
+ 
+ perf script -i $PERF_DATA -F comm,ip,sym | head -n4
+ perf script -i $PERF_DATA -F comm,ip,sym | head -n4 | \
+        awk '{ if ($2 != "") sym[i++] = $2 } END { if (sym[0] != "leaf" ||
+                                                       sym[1] != "parent" ||
+-                                                      sym[2] != "main") exit 1 }'
++                                                      sym[2] != "leafloop") exit 1 }'
+
+With appending above change, this patch looks good to me:
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+
+German, James, would you have chance to review this change?
+
+Thanks,
+Leo
