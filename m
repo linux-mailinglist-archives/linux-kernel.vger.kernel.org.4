@@ -2,200 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA6D624182
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019C9624183
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiKJLf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S230263AbiKJLf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiKJLfX (ORCPT
+        with ESMTP id S229870AbiKJLf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:35:23 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E9C716DC
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:35:21 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 140so307292pfz.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:35:21 -0800 (PST)
+        Thu, 10 Nov 2022 06:35:56 -0500
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811FD657CD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:35:55 -0800 (PST)
+Received: by mail-ej1-x64a.google.com with SMTP id sc40-20020a1709078a2800b007ae024e5e82so1031476ejc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:35:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=czhmg8w6fCMkXUIfJozgJqRjYjP3QZdO8mkjxxSqqg0=;
-        b=L34nsiKJho8HIN+dXht0sd19S/QtDAa/+T6+Sw+6OWNMJAtDXxS41Ujw15PQEwPMcb
-         /EjLTqGA8mWnL4NLPamcwr8UMIQV9Ny59VFkJ1iAJwp181hBXyl8ZPdfALs6lLNMQl33
-         yNP5RlK6Uk7Bh7H3zAX8oXNfWKveGKLAJ/j5doz9cD9cQZEbOO5Vzx8oyx7/8JxxztmP
-         /pEd4Bsul0YD/tFG3jJG1WMupni6WtB3JdlWiEwLE1paBoD1GB3N64KOYLordIK7H+pa
-         ogTShjdYNszYkUjhWBsFpYo1duTSmsALtRa0PDyu7kMv55i+M2Hhm8MJ04NYNp8i8AwZ
-         U4cA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jpQdIr8MN/KQIwACigO7iQHcDhsbP3Ee3zIRpQPEK1o=;
+        b=BdS5DojXBcJ/OgCf0l8c6arc3q1OeaTAXv3Uy1ty5TVvDwC0HX7pEDsrLLPvPBxy8Q
+         6tiW59sC/5j+SR3TzXGB6Pgz9sQpaerOtslUi/ofYKiyqHZX7/b16DDBPR0g2zkPft1I
+         gKxPQedEpYMCI6GODG0p718Pxs2BoIyzTBXMH96j23FpxFb6jIIjU6dZLx7KkfiLh7ZK
+         AG0CDGs67AgDIodUuACO2cWPs/CvG/y2GQHpf7is6flgF1JyWN9MCctmL/JOMnqI/fzh
+         htO6DEwe7xL4MmovUHgjG9Mvaup+R3yyVzhif4Dt4g3OKhJNf/BiKZrLDPkYhhFA0DjN
+         zeQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=czhmg8w6fCMkXUIfJozgJqRjYjP3QZdO8mkjxxSqqg0=;
-        b=JnZAyRjT5HJTbGWapk8Sn+h7Wj10Pm7BSQHx+CWyU8zDpaB85tOHIe5OnIBVgjNTcn
-         5/NfMezycUDoFANBRnRfr4gc9LdXOHA69IhTu7Q6P7QsBx64j9ey20Xxn1jNHew4XeIF
-         GaJ+23wNWlo022Ou60czZVX30khnyF1bzXrEqGJa4qJA/nDfSp55JdvzmKbHTfpRGwT1
-         7FNgEFKRYmtlKOmt0l361LkaLfzOQa+/lkOjKFOa0t3z8jIuediKsFAeMO6wNp4xg5+H
-         XnCug7s0Ht7BOaBCILeY1/oOoMCFTkGbeI6MS3mZh0LUv/WoJzuuR4NDnqSi9wSEQ1QK
-         LIvg==
-X-Gm-Message-State: ACrzQf2LeNS2Og+8DXrlI1LdPzTEpbte/7XRG0/h0bSRNRaPH8iMBUWY
-        3xp0cUN/F7qs5+KkRMyLnIdn
-X-Google-Smtp-Source: AMsMyM57AqT08jdCpsdF+MMkrOn2eIKJCwPLOpWN0N7vaxof6c0c5wHe7jTPTNPijNKQPM+L1HFCeg==
-X-Received: by 2002:a63:2c90:0:b0:439:ee2c:ab2f with SMTP id s138-20020a632c90000000b00439ee2cab2fmr57202235pgs.2.1668080121097;
-        Thu, 10 Nov 2022 03:35:21 -0800 (PST)
-Received: from thinkpad ([59.92.98.170])
-        by smtp.gmail.com with ESMTPSA id a19-20020aa794b3000000b0056c2e497ad6sm10287605pfl.93.2022.11.10.03.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 03:35:20 -0800 (PST)
-Date:   Thu, 10 Nov 2022 17:05:13 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] arm64: dts: qcom: sc8280xp-crd: enable WiFi
- controller
-Message-ID: <20221110113513.GA18247@thinkpad>
-References: <20221110103558.12690-1-johan+linaro@kernel.org>
- <20221110103558.12690-7-johan+linaro@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221110103558.12690-7-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jpQdIr8MN/KQIwACigO7iQHcDhsbP3Ee3zIRpQPEK1o=;
+        b=D9w0o7/kTNHrL6UrrJKLkAaDWsh1Hv8wZeQO0etnB8PFANvVCwGkMupD96QWw6GsHp
+         H7FMA6pccd8Md5rWQwVYULVdn2m6LCFOiWfWaohLMpL++KExJ5NOJkoFlA1xYNfjNqTM
+         jFKefILec34EZEzrS9UXCpIyNzdkw+wAirbNBE4vDqbX0X98wv5JPXAANsOySrUdvjyb
+         VCo9++96NEQuZCliiDtzaIQ9oBMSEL4GEUli2abPBGTw/9UJqkazd7rA/Bb3y4Mqe0bF
+         G9p3jkP+mrJwOIwUwU5HTX0wqqLjzKnnX/xLSa7txpxdSgLKHosS+mExMGJHGCVllxsw
+         uhWw==
+X-Gm-Message-State: ACrzQf2Day2Yq72EkMuNVdMvvg0BHgccyulLPuAZexZi1qQ2H2hFqN9Z
+        BJlvK5mQATmnHOTv8jg2YFYaC90dYy4=
+X-Google-Smtp-Source: AMsMyM5Wpq2hYUAuqWz1ozYNLgSCBs+6jjnjdfEkyB5OqXM4JKPfTlL3B70CVuNWA/k5s1z6YFE8U8wsLKw=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:4f3e:16fb:f499:bb9d])
+ (user=glider job=sendgmr) by 2002:aa7:ccd2:0:b0:462:73bd:3acb with SMTP id
+ y18-20020aa7ccd2000000b0046273bd3acbmr62699894edt.378.1668080154037; Thu, 10
+ Nov 2022 03:35:54 -0800 (PST)
+Date:   Thu, 10 Nov 2022 12:35:41 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221110113541.1844156-1-glider@google.com>
+Subject: [PATCH] Revert "kmsan: unpoison @tlb in arch_tlb_gather_mmu()"
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 11:35:55AM +0100, Johan Hovold wrote:
-> Enable the Qualcomm QCNFA765 Wireless Network Adapter connected to
-> PCIe4.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 65 +++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> index 5b9e37a16f9f..ab5b0aadeead 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> @@ -81,6 +81,22 @@ vreg_misc_3p3: regulator-misc-3p3 {
->  		regulator-always-on;
->  	};
->  
-> +	vreg_wlan: regulator-wlan {
-> +		compatible = "regulator-fixed";
-> +
-> +		regulator-name = "VCC_WLAN_3R9";
-> +		regulator-min-microvolt = <3900000>;
-> +		regulator-max-microvolt = <3900000>;
-> +
-> +		gpio = <&pmr735a_gpios 1 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&hastings_reg_en>;
+This reverts commit ac801e7e252c5588325e3c983c7d4167fc68c024.
 
-Hastings is the family name of QCA639x WLAN chipsets. I don't think it would be
-applicable here. Please use "wlan_reg_en" as that matches the convention used
-throughout this file.
+The patch in question was picked to -mm from the KMSAN v6 patch series
+(https://lore.kernel.org/linux-mm/20220905122452.2258262-1-glider@google.com/)
+and sneaked into mainline despite its removal from the v7 series
+(https://lore.kernel.org/linux-mm/20220915150417.722975-1-glider@google.com/)
 
-Thanks,
-Mani
+Currently KMSAN does not warn about origin chains hitting the maximum
+depth, so keeping @tlb poisoned won't result in any inconveniences.
 
-> +
-> +		regulator-boot-on;
-> +	};
-> +
->  	vreg_wwan: regulator-wwan {
->  		compatible = "regulator-fixed";
->  
-> @@ -246,6 +262,25 @@ &pcie3a_phy {
->  	status = "okay";
->  };
->  
-> +&pcie4 {
-> +	perst-gpios = <&tlmm 141 GPIO_ACTIVE_LOW>;
-> +	wake-gpios = <&tlmm 139 GPIO_ACTIVE_LOW>;
-> +
-> +	vddpe-3v3-supply = <&vreg_wlan>;
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pcie4_default>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&pcie4_phy {
-> +	vdda-phy-supply = <&vreg_l6d>;
-> +	vdda-pll-supply = <&vreg_l4d>;
-> +
-> +	status = "okay";
-> +};
-> +
->  &pmc8280c_lpg {
->  	status = "okay";
->  };
-> @@ -445,6 +480,13 @@ edp_bl_pwm: edp-bl-pwm-state {
->  	};
->  };
->  
-> +&pmr735a_gpios {
-> +	hastings_reg_en: hastings-reg-en-state {
-> +		pins = "gpio1";
-> +		function = "normal";
-> +	};
-> +};
-> +
->  &tlmm {
->  	gpio-reserved-ranges = <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
->  
-> @@ -521,6 +563,29 @@ wake-n-pins {
->  		};
->  	};
->  
-> +	pcie4_default: pcie4-default-state {
-> +		clkreq-n-pins {
-> +			pins = "gpio140";
-> +			function = "pcie4_clkreq";
-> +			drive-strength = <2>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		perst-n-pins {
-> +			pins = "gpio141";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		wake-n-pins {
-> +			pins = "gpio139";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-pull-up;
-> +		};
-> +	};
-> +
->  	qup0_i2c4_default: qup0-i2c4-default-state {
->  		pins = "gpio171", "gpio172";
->  		function = "qup4";
-> -- 
-> 2.37.4
-> 
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Eric Biggers <ebiggers@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Will Deacon <will@kernel.org>
+Signed-off-by: Alexander Potapenko <glider@google.com>
+---
+ mm/mmu_gather.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index add4244e5790d..a71924bd38c0d 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -1,7 +1,6 @@
+ #include <linux/gfp.h>
+ #include <linux/highmem.h>
+ #include <linux/kernel.h>
+-#include <linux/kmsan-checks.h>
+ #include <linux/mmdebug.h>
+ #include <linux/mm_types.h>
+ #include <linux/mm_inline.h>
+@@ -266,15 +265,6 @@ void tlb_flush_mmu(struct mmu_gather *tlb)
+ static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
+ 			     bool fullmm)
+ {
+-	/*
+-	 * struct mmu_gather contains 7 1-bit fields packed into a 32-bit
+-	 * unsigned int value. The remaining 25 bits remain uninitialized
+-	 * and are never used, but KMSAN updates the origin for them in
+-	 * zap_pXX_range() in mm/memory.c, thus creating very long origin
+-	 * chains. This is technically correct, but consumes too much memory.
+-	 * Unpoisoning the whole structure will prevent creating such chains.
+-	 */
+-	kmsan_unpoison_memory(tlb, sizeof(*tlb));
+ 	tlb->mm = mm;
+ 	tlb->fullmm = fullmm;
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.38.1.431.g37b22c650d-goog
+
