@@ -2,298 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33960624669
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2B462466D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbiKJPzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S230359AbiKJP6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiKJPzo (ORCPT
+        with ESMTP id S229688AbiKJP6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:55:44 -0500
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FAE2DA98;
-        Thu, 10 Nov 2022 07:55:43 -0800 (PST)
-Received: by mail-qk1-f172.google.com with SMTP id x21so1359531qkj.0;
-        Thu, 10 Nov 2022 07:55:43 -0800 (PST)
+        Thu, 10 Nov 2022 10:58:12 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171222B248;
+        Thu, 10 Nov 2022 07:58:11 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id n186so2227087oih.7;
+        Thu, 10 Nov 2022 07:58:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PqIxv0ykgX1dUcCkKNelcPiK/Dm8WOI9ANa20Luuz78=;
+        b=OeMN1rKkePk0RMijxlVlQsnyZva5JsgGdk5gD1Wmfp7zgg8+KrQGMefkBvzr+SwW44
+         s1wNFKq9I7T0DgF0Ai2dExVtOhu3yU7GanqxsRIjgwOPwxHpRDfA1UqoHu/qXI8osEey
+         uaCMOJc7hPOr9Bn5/DhUldUC4Jbj2aXb+ZHSIxC0ObYxXTACp84XRJcNR2XmXN7E+B82
+         ZSko+6Tnz/F1L0TlLzaIiJxfm4DcyLWSncUbNnI6LasnDYaOjXCc8cInixSvW/8FNbaW
+         gI8gssOFwptiwlEVmr09g2dgOVeOKPhdW7ei14S8gviE/FH2cBX0K2q2HIievlWtLBhO
+         NO9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5GCcN4ergz49gV4k6gX4iuIWjU767EtX1RSbqmpJ7/k=;
-        b=qyItoG5fMIYF9OxwBsR0mZSua90KXQlK5ox8fxOZL264jhrBWa5kpEu6LZK1vge8ZN
-         PPSJaA7i6zX07oG7T0UI9BAlZZ1IceUENBAK8OCf+utrrXm60xiiSq19d7syXs2HbpiM
-         6q1BWXLvw9jtCsLzBVY0OiR1M+cOBgwsnAF/bs+K+Z8YMkvOfQ5PD/HJn9AVuG+e4lfg
-         cSIVmUIvBiD6GPf21mlRyjuAmQbTDgcRT+0p26RA/3/5W6/qtOkZEdxWefBccoQEmEXj
-         UZXQMfI45osnubeN7dXKJPdcG9hIse3ZVKW5c/FXXmN1oOCFhzdc9+xBOVA1+xVPg2Mb
-         o5jQ==
-X-Gm-Message-State: ACrzQf2pfmpbqqtOpKXAbb7YcyF+vBjBvMZHyTjqnkIHPerH5w5L6lXr
-        AvRfD7+b628FsWmITP9FOfQMrddmuJEsoWqQmxQ=
-X-Google-Smtp-Source: AMsMyM4tf00hWBjlp0FWPVGqv4gll6KoZ03N81DVFRxCBxNPlaipDW8yUmSgHkloBzEhGEOjob45aTPy2ZP1csKHL/I=
-X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
- j22-20020a05620a147600b006fa4c6783ecmr35799979qkl.23.1668095742749; Thu, 10
- Nov 2022 07:55:42 -0800 (PST)
+        bh=PqIxv0ykgX1dUcCkKNelcPiK/Dm8WOI9ANa20Luuz78=;
+        b=AHWXkVZPeJb6RkT2os7S/0TUN3Zqyz5wBYtDyuOOCn1Y6B8E4kl/9rjnSacn/2eb9H
+         q4qafmjV0/6SSjYV951R8wA+DSxANGO88Nlm2vO4b3Vk8ZTxDiqbQ+XdnV+bs679uOY7
+         XHtoc/57X7QDsxj0o/hocrn0HsGX5miNjkV2ryMZO5N0AcvMUAHM2W6AAwI+oM3ebXeW
+         Hw66EuUkdRF0JSNE/lnb42/dR3bPY/6YBFU48zRpGgH/2kQHjnIBAlKQ1pEJqpd+r245
+         Nz+Vd3TdiuILlzaoBG4jhWsBfXmYcx5GL/o8oTgkW1Fy5bKocSnngeY8zHCL23c2UrYd
+         tAOQ==
+X-Gm-Message-State: ACrzQf0tdylFaP1LQK3ifiCakVOW5RlKDJVy+z0EoRAftvAPIyoHQtvH
+        5KA3USpLpvMHbKl5Eb+uX33E+CPGbS/lx0PC5+I=
+X-Google-Smtp-Source: AMsMyM5yu9fp0U9ivZ86w+s8zY9m83vob70VluIoUBlOY2mSDFVVApkRPdDlzgO7pSrJ207FPp7MAWV6dVAFZV4Y9dY=
+X-Received: by 2002:a05:6808:7dc:b0:34f:97ea:14d with SMTP id
+ f28-20020a05680807dc00b0034f97ea014dmr1581484oij.96.1668095890301; Thu, 10
+ Nov 2022 07:58:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20221107175705.2207842-1-Perry.Yuan@amd.com> <20221107175705.2207842-2-Perry.Yuan@amd.com>
- <64836554-7caa-9a3e-3832-a66e87c83bf9@amd.com> <CAJZ5v0ik68V6D2tipGH4tepaAmy5bpSy2nZUyAHn=Qia9SCLzA@mail.gmail.com>
- <DM4PR12MB527881961B4BE3F74F503CFE9C019@DM4PR12MB5278.namprd12.prod.outlook.com>
-In-Reply-To: <DM4PR12MB527881961B4BE3F74F503CFE9C019@DM4PR12MB5278.namprd12.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Nov 2022 16:55:31 +0100
-Message-ID: <CAJZ5v0h3HLp8eLeLJXegSQxiiY-+d3eb8UHh1TE00f-EhBnwZg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] ACPI: CPPC: Add AMD pstate energy performance
- preference cppc control
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <Y2tXzlBDxgg9WMl7@mail.google.com>
+In-Reply-To: <Y2tXzlBDxgg9WMl7@mail.google.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 10 Nov 2022 10:57:58 -0500
+Message-ID: <CADnq5_NJNa41y28-+PPjA6hUPrYGXc87K50LeiEYGnyGyackUQ@mail.gmail.com>
+Subject: Re: [PATCH] [next] drm/amdgpu: Replace one-element array with
+ flex-array member
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        Slark Xiao <slark_xiao@163.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 4:52 PM Yuan, Perry <Perry.Yuan@amd.com> wrote:
+On Wed, Nov 9, 2022 at 2:33 AM Paulo Miguel Almeida
+<paulo.miguel.almeida.rodenas@gmail.com> wrote:
 >
-> [AMD Official Use Only - General]
+> One-element arrays are deprecated, and we are replacing them with
+> flexible array members instead. So, replace one-element array with
+> flexible-array member in structs _ATOM_CONNECTOR_DEVICE_TAG_RECORD,
+> _ATOM_OBJECT_GPIO_CNTL_RECORD, _ATOM_BRACKET_LAYOUT_RECORD,
+> _ATOM_BRACKET_LAYOUT_RECORD, _ATOM_LEAKAGE_VOLTAGE_OBJECT_V3,
+> _ATOM_FUSION_SYSTEM_INFO_V3, _ATOM_I2C_DATA_RECORD,
+> _ATOM_I2C_DEVICE_SETUP_INFO, _ATOM_ASIC_MVDD_INFO and refactor the
+> rest of the code accordingly. While at it, removed a redundant casting.
 >
+> Important to mention is that doing a build before/after this patch results
+> in no binary output differences.
 >
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
 >
-> > -----Original Message-----
-> > From: Rafael J. Wysocki <rafael@kernel.org>
-> > Sent: Thursday, November 10, 2022 10:50 PM
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>; Yuan, Perry
-> > <Perry.Yuan@amd.com>
-> > Cc: rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>;
-> > viresh.kumar@linaro.org; Sharma, Deepak <Deepak.Sharma@amd.com>;
-> > Fontenot, Nathan <Nathan.Fontenot@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Huang, Shimmer
-> > <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Meng,
-> > Li (Jassmine) <Li.Meng@amd.com>; linux-pm@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: Re: [PATCH v3 1/8] ACPI: CPPC: Add AMD pstate energy
-> > performance preference cppc control
-> >
-> > Caution: This message originated from an External Source. Use proper
-> > caution when opening attachments, clicking links, or responding.
-> >
-> >
-> > On Mon, Nov 7, 2022 at 7:44 PM Limonciello, Mario
-> > <mario.limonciello@amd.com> wrote:
-> > >
-> > > On 11/7/2022 11:56, Perry Yuan wrote:
-> > > > Add the EPP(Energy Performance Preference) support for the AMD SoCs
-> > > > without the dedicated CPPC MSR, those SoCs need to add this cppc
-> > > > acpi functions to update EPP values and desired perf value.
-> > >
-> > > As far as I can tell this is generic code.  Although the reason you're
-> > > submitting it is for enabling AMD SoCs, the commit message should be
-> > > worded as such.
-> > >
-> > > >
-> > > > In order to get EPP worked, cppc_get_epp_caps() will query EPP
-> > > > preference value and cppc_set_epp_perf() will set EPP new value.
-> > > > Before the EPP works, pstate driver will use cppc_set_auto_epp() to
-> > > > enable EPP function from firmware firstly.
-> > >
-> > > This could more succinctly say:
-> > >
-> > > "Add support for setting and querying EPP preferences to the generic
-> > > CPPC driver.  This enables downstream drivers such as amd-pstate to
-> > > discover and use these values."
-> > >
-> > > >
-> > > > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> > > > ---
-> > > >   drivers/acpi/cppc_acpi.c | 126
-> > +++++++++++++++++++++++++++++++++++++++
-> > > >   include/acpi/cppc_acpi.h |  17 ++++++
-> > > >   2 files changed, 143 insertions(+)
-> > > >
-> > > > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> > > > index 093675b1a1ff..d9c38dee1f48 100644
-> > > > --- a/drivers/acpi/cppc_acpi.c
-> > > > +++ b/drivers/acpi/cppc_acpi.c
-> > > > @@ -1365,6 +1365,132 @@ int cppc_get_perf_ctrs(int cpunum, struct
-> > cppc_perf_fb_ctrs *perf_fb_ctrs)
-> > > >   }
-> > > >   EXPORT_SYMBOL_GPL(cppc_get_perf_ctrs);
-> > > >
-> > > > +/**
-> > > > + * cppc_get_epp_caps - Get the energy preference register value.
-> > > > + * @cpunum: CPU from which to get epp preference level.
-> > > > + * @perf_caps: Return address.
-> > > > + *
-> > > > + * Return: 0 for success, -EIO otherwise.
-> > > > + */
-> > > > +int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
-> > > > +{
-> > > > +     struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
-> > > > +     struct cpc_register_resource *energy_perf_reg;
-> > > > +     u64 energy_perf;
-> > > > +
-> > > > +     if (!cpc_desc) {
-> > > > +             pr_warn("No CPC descriptor for CPU:%d\n", cpunum);
-> > > > +             return -ENODEV;
-> > > > +     }
-> > > > +
-> > > > +     energy_perf_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
-> > > > +
-> > > > +     if (!CPC_SUPPORTED(energy_perf_reg))
-> > > > +             pr_warn("energy perf reg update is unsupported!\n");
-> > >
-> > > No need to add a explanation point at the end.
-> > >
-> > > As this is a per-CPU message I wonder if this would be better as
-> > > pr_warn_once()?  Othewrise some systems with large numbers of cores
-> > > might potentially show this message quite a few times.
-> >
-> > pr_info_once() would suffice IMO.
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/238
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
 >
-> Fixed in V4.
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> ---
 >
-> >
-> > > > +
-> > > > +     if (CPC_IN_PCC(energy_perf_reg)) {
-> > > > +             int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
-> > > > +             struct cppc_pcc_data *pcc_ss_data = NULL;
-> > > > +             int ret = 0;
-> > > > +
-> > > > +             if (pcc_ss_id < 0)
-> > > > +                     return -ENODEV;
-> > > > +
-> > > > +             pcc_ss_data = pcc_data[pcc_ss_id];
-> > > > +
-> > > > +             down_write(&pcc_ss_data->pcc_lock);
-> > > > +
-> > > > +             if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0) {
-> > > > +                     cpc_read(cpunum, energy_perf_reg, &energy_perf);
-> > > > +                     perf_caps->energy_perf = energy_perf;
-> > > > +             } else {
-> > > > +                     ret = -EIO;
-> > > > +             }
-> > > > +
-> > > > +             up_write(&pcc_ss_data->pcc_lock);
-> > > > +
-> > > > +             return ret;
-> > > > +     }
-> >
-> > What if CPC is not in PCC?
-> >
-> > Would returning 0 then work for all users?
->
-> Fixed in V4
->
-> >
-> > > > +
-> > > > +     return 0;
-> > > > +}
-> > > > +EXPORT_SYMBOL_GPL(cppc_get_epp_caps);
-> > > > +
-> > > > +int cppc_set_auto_epp(int cpu, bool enable) {
-> > > > +     int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
-> > > > +     struct cpc_register_resource *auto_sel_reg;
-> > > > +     struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> > > > +     struct cppc_pcc_data *pcc_ss_data = NULL;
-> > > > +     int ret = -EINVAL;
-> > > > +
-> > > > +     if (!cpc_desc) {
-> > > > +             pr_warn("No CPC descriptor for CPU:%d\n", cpu);
-> > >
-> > > Is this actually warn worthy?  I would think it's fine a debug like we
-> > > have for the other _CPC missing messages.
-> > >
-> > > > +             return -EINVAL;
-> > > > +     }
-> > > > +
-> > > > +     auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
-> > > > +
-> > > > +     if (CPC_IN_PCC(auto_sel_reg)) {
-> > > > +             if (pcc_ss_id < 0)
-> > > > +                     return -ENODEV;
-> > > > +
-> > > > +             ret = cpc_write(cpu, auto_sel_reg, enable);
-> > > > +             if (ret)
-> > > > +                     return ret;
-> > > > +
-> > > > +             pcc_ss_data = pcc_data[pcc_ss_id];
-> > > > +
-> > > > +             down_write(&pcc_ss_data->pcc_lock);
-> > > > +             /* after writing CPC, transfer the ownership of PCC to platform */
-> > > > +             ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
-> > > > +             up_write(&pcc_ss_data->pcc_lock);
-> > > > +             return ret;
-> > > > +     }
-> > > > +
-> > > > +     return cpc_write(cpu, auto_sel_reg, enable); }
-> > > > +EXPORT_SYMBOL_GPL(cppc_set_auto_epp);
-> > > > +
-> > > > +/*
-> > > > + * Set Energy Performance Preference Register value through
-> > > > + * Performance Controls Interface
-> > > > + */
-> > > > +int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
-> > > > +{
-> > > > +     int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
-> > > > +     struct cpc_register_resource *epp_set_reg;
-> > > > +     struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> > > > +     struct cppc_pcc_data *pcc_ss_data = NULL;
-> > > > +     int ret = -EINVAL;
-> > > > +
-> > > > +     if (!cpc_desc) {
-> > > > +             pr_warn("No CPC descriptor for CPU:%d\n", cpu);
-> > >
-> > > Is this actually warn worthy?  I would think it's fine a debug like we
-> > > have for the other _CPC missing messages.
-> > >
-> > > > +             return -EINVAL;
-> > > > +     }
-> > > > +
-> > > > +     epp_set_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
-> > > > +
-> > > > +     if (CPC_IN_PCC(epp_set_reg)) {
-> > > > +             if (pcc_ss_id < 0)
-> > > > +                     return -ENODEV;
-> > > > +
-> > > > +             ret = cpc_write(cpu, epp_set_reg, perf_ctrls->energy_perf);
-> > > > +             if (ret)
-> > > > +                     return ret;
-> > > > +
-> > > > +             pcc_ss_data = pcc_data[pcc_ss_id];
-> > > > +
-> > > > +             down_write(&pcc_ss_data->pcc_lock);
-> > > > +             /* after writing CPC, transfer the ownership of PCC to platform */
-> > > > +             ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
-> > > > +             up_write(&pcc_ss_data->pcc_lock);
-> > >
-> > > cppc_set_auto_epp and cppc_set_epp_perf have nearly the same code in
-> > > the if block.  I wonder if it's worth having a static helper function
-> > > for this purpose that takes "reg" and "value" as arguments?
-> > >
-> > > > +     }
-> >
-> > And what about the non-PCC case here?
->
-> I merge the  cppc_set_auto_epp and cppc_set_epp_perf in V4.
-> For the non-PCC case, we canno set the EPP value to FW, then just returned
-> Error code.  Is it Ok ?
+> Alex, I noticed a few structs in atombios.h that were not referenced. Is
+> there any appetite for removing them? Or is that one of those cases
+> where the structs are there should one driver ever need it?
 
-Yes, if it cannot be updated, it should be treated the same way as
-unsupported IMV.
+A lot of userspace tools use these tables and I'd like to keep the
+headers compatible.  Also, as I mentioned in the other thread, the
+atombios command tables often parse these tables when initializing the
+hardware so when you are debugging a command table, it helps to have
+the relevant structures defined so it's easier to understand what the
+command tables are doing.
+
+Alex
+
+
+>
+> Ex.:
+>         struct _ATOM_I2C_DATA_RECORD
+>         struct _ATOM_I2C_DEVICE_SETUP_INFO
+>         struct _ATOM_ASIC_MVDD_INFO
+> ---
+>  .../gpu/drm/amd/display/dc/bios/bios_parser.c    |  5 ++---
+>  drivers/gpu/drm/amd/include/atombios.h           | 16 ++++++++--------
+>  2 files changed, 10 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
+> index 39dd8b2dc254..6b9e64cd4379 100644
+> --- a/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
+> +++ b/drivers/gpu/drm/amd/display/dc/bios/bios_parser.c
+> @@ -2606,8 +2606,7 @@ static enum bp_result update_slot_layout_info(
+>
+>         for (;;) {
+>
+> -               record_header = (ATOM_COMMON_RECORD_HEADER *)
+> -                       GET_IMAGE(ATOM_COMMON_RECORD_HEADER, record_offset);
+> +               record_header = GET_IMAGE(ATOM_COMMON_RECORD_HEADER, record_offset);
+>                 if (record_header == NULL) {
+>                         result = BP_RESULT_BADBIOSTABLE;
+>                         break;
+> @@ -2621,7 +2620,7 @@ static enum bp_result update_slot_layout_info(
+>
+>                 if (record_header->ucRecordType ==
+>                         ATOM_BRACKET_LAYOUT_RECORD_TYPE &&
+> -                       sizeof(ATOM_BRACKET_LAYOUT_RECORD)
+> +                       struct_size(record, asConnInfo, 1)
+>                         <= record_header->ucRecordSize) {
+>                         record = (ATOM_BRACKET_LAYOUT_RECORD *)
+>                                 (record_header);
+> diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+> index 55ae93c1e365..60c44a8a067f 100644
+> --- a/drivers/gpu/drm/amd/include/atombios.h
+> +++ b/drivers/gpu/drm/amd/include/atombios.h
+> @@ -4733,7 +4733,7 @@ typedef struct  _ATOM_CONNECTOR_DEVICE_TAG_RECORD
+>    ATOM_COMMON_RECORD_HEADER   sheader;
+>    UCHAR                       ucNumberOfDevice;
+>    UCHAR                       ucReserved;
+> -  ATOM_CONNECTOR_DEVICE_TAG   asDeviceTag[1];         //This Id is same as "ATOM_DEVICE_XXX_SUPPORT", 1 is only for allocation
+> +  ATOM_CONNECTOR_DEVICE_TAG   asDeviceTag[];          //This Id is same as "ATOM_DEVICE_XXX_SUPPORT"
+>  }ATOM_CONNECTOR_DEVICE_TAG_RECORD;
+>
+>
+> @@ -4793,7 +4793,7 @@ typedef struct  _ATOM_OBJECT_GPIO_CNTL_RECORD
+>    ATOM_COMMON_RECORD_HEADER   sheader;
+>    UCHAR                       ucFlags;                // Future expnadibility
+>    UCHAR                       ucNumberOfPins;         // Number of GPIO pins used to control the object
+> -  ATOM_GPIO_PIN_CONTROL_PAIR  asGpio[1];              // the real gpio pin pair determined by number of pins ucNumberOfPins
+> +  ATOM_GPIO_PIN_CONTROL_PAIR  asGpio[];               // the real gpio pin pair determined by number of pins ucNumberOfPins
+>  }ATOM_OBJECT_GPIO_CNTL_RECORD;
+>
+>  //Definitions for GPIO pin state
+> @@ -4982,7 +4982,7 @@ typedef struct  _ATOM_BRACKET_LAYOUT_RECORD
+>    UCHAR                       ucWidth;
+>    UCHAR                       ucConnNum;
+>    UCHAR                       ucReserved;
+> -  ATOM_CONNECTOR_LAYOUT_INFO  asConnInfo[1];
+> +  ATOM_CONNECTOR_LAYOUT_INFO  asConnInfo[];
+>  }ATOM_BRACKET_LAYOUT_RECORD;
+>
+>
+> @@ -5161,7 +5161,7 @@ typedef struct  _ATOM_GPIO_VOLTAGE_OBJECT_V3
+>     UCHAR  ucPhaseDelay;                      // phase delay in unit of micro second
+>     UCHAR  ucReserved;
+>     ULONG  ulGpioMaskVal;                     // GPIO Mask value
+> -   VOLTAGE_LUT_ENTRY_V2 asVolGpioLut[1];
+> +   VOLTAGE_LUT_ENTRY_V2 asVolGpioLut[];
+>  }ATOM_GPIO_VOLTAGE_OBJECT_V3;
+>
+>  typedef struct  _ATOM_LEAKAGE_VOLTAGE_OBJECT_V3
+> @@ -5171,7 +5171,7 @@ typedef struct  _ATOM_LEAKAGE_VOLTAGE_OBJECT_V3
+>     UCHAR    ucLeakageEntryNum;               // indicate the entry number of LeakageId/Voltage Lut table
+>     UCHAR    ucReserved[2];
+>     ULONG    ulMaxVoltageLevel;
+> -   LEAKAGE_VOLTAGE_LUT_ENTRY_V2 asLeakageIdLut[1];
+> +   LEAKAGE_VOLTAGE_LUT_ENTRY_V2 asLeakageIdLut[];
+>  }ATOM_LEAKAGE_VOLTAGE_OBJECT_V3;
+>
+>
+> @@ -6599,7 +6599,7 @@ typedef struct _ATOM_FUSION_SYSTEM_INFO_V3
+>  typedef struct _ATOM_I2C_DATA_RECORD
+>  {
+>    UCHAR         ucNunberOfBytes;                                              //Indicates how many bytes SW needs to write to the external ASIC for one block, besides to "Start" and "Stop"
+> -  UCHAR         ucI2CData[1];                                                 //I2C data in bytes, should be less than 16 bytes usually
+> +  UCHAR         ucI2CData[];                                                  //I2C data in bytes, should be less than 16 bytes usually
+>  }ATOM_I2C_DATA_RECORD;
+>
+>
+> @@ -6610,14 +6610,14 @@ typedef struct _ATOM_I2C_DEVICE_SETUP_INFO
+>    UCHAR                              ucSSChipID;             //SS chip being used
+>    UCHAR                              ucSSChipSlaveAddr;      //Slave Address to set up this SS chip
+>    UCHAR                           ucNumOfI2CDataRecords;  //number of data block
+> -  ATOM_I2C_DATA_RECORD            asI2CData[1];
+> +  ATOM_I2C_DATA_RECORD            asI2CData[];
+>  }ATOM_I2C_DEVICE_SETUP_INFO;
+>
+>  //==========================================================================================
+>  typedef struct  _ATOM_ASIC_MVDD_INFO
+>  {
+>    ATOM_COMMON_TABLE_HEADER         sHeader;
+> -  ATOM_I2C_DEVICE_SETUP_INFO      asI2CSetup[1];
+> +  ATOM_I2C_DEVICE_SETUP_INFO      asI2CSetup[];
+>  }ATOM_ASIC_MVDD_INFO;
+>
+>  //==========================================================================================
+> --
+> 2.37.3
+>
