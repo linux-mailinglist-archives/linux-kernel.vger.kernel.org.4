@@ -2,130 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D581623F8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47013623F95
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiKJKNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S229527AbiKJKOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKJKNG (ORCPT
+        with ESMTP id S229710AbiKJKOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:13:06 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6B6E88
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:13:01 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so3784950wmi.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:13:01 -0800 (PST)
+        Thu, 10 Nov 2022 05:14:18 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DAF64A25
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:14:17 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id z17so784577qki.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:14:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vixtechnology.com; s=google;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=74dqQiWyLQjEOzWoO3Lrynyy+auSFuDxVLH1zUULTMU=;
-        b=T8GSEQH6ZHbWd8QVqxqpQ9ZUWHItXnpymEf1Jnd82S9OK467+z7t4NXF54DstpL3XI
-         IxrLCrxuIVO1Q2MKKEcBmPcC63l+Mn9G7O6+ka6M/gZIdtIrx9nV2bquketNx/5NC17R
-         rypjBAI6UrignKil62TaixvnOCsUerzq3FoFw=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MROv+ToXh8ryiyR2Mcd72J2oB24qvva8HoOx65uEfnw=;
+        b=JHKz0UX3sNsW9dh+Y6UMohkj8x7TLewUFGw+aCEZs8KbhGciz8bHucdInbV9AVhAue
+         IuJ16GHfz8vFwgTAv3c0LWh/rhHfoG+8DVPHhLOiMYKAs5j2cm/OvFFQBAtw+aUHv1oe
+         ykvxuIwZfY1Jy35F6uQai2CUkYfPxW30crjuSTw57uWnEA35nzJD9IyxZ52U6me5vFlF
+         /oami+J6UiP0CkbneAVaj6p4gzNmEYBkvK89ldTgolmdms9w9lEHSlOsDHFwzLhigp21
+         PmYUNKf+yP4lPbvRdpHpgERUZSy8ESkXAMnFDMkwjXVzhJcrhcHAyGZrrhWd2KVA4NIq
+         Ra7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=74dqQiWyLQjEOzWoO3Lrynyy+auSFuDxVLH1zUULTMU=;
-        b=zKIXc5mPQqmpN77YjdHQvu5gTTE5vXUVzbneQRT7i2XBwFfOa3PFGYJ0M0fivlIGqZ
-         r2PswFjVGw/jOTmEYfEOOO8HV6N3bFXAhHAX/2vZIk2Vkki4wCSTnNuE7kR+lJGILlUf
-         2Hcr13QL4KJYHEwHDyeZ9SNqhPVqZ1iCamN92z4GAMgSCiHDkDlN77lxv4l7kD/WTGtN
-         w6wF0npXaemw58cE5F1Z/WHofHFjnO02sQHLk3Hxjb+RhLmfrcnxxVgYVDbNO8S1hHgR
-         wwQQYrvkh3x1w0H6jSh3ypJkNhTajNk4sc8NnTWwChSdPElPrkr+hX9JIawkxqfPJxkY
-         SVdg==
-X-Gm-Message-State: ACrzQf2X1IQnRdS19veZKrL0VSsX7YY76H1Zla9fPBT++xgP/q69Y2ef
-        uBFsJm1vj7BXDr4DCUYr2Y670f121Y4GfUIKXW9Wzf6jE/EGgGnqkMQQhJxgsdI79gbVTk5pRQt
-        yEWMamluCyEjH4CdW1nM/rXLFt3I=
-X-Google-Smtp-Source: AMsMyM4ZJ8wKE8SSgPV1NSa71XMzLhL8b22sywS/8GyeAeVf8ahRtnHSDvVBPbqHUlBYKuzGlOr6Ig==
-X-Received: by 2002:a05:600c:3c82:b0:3b5:60a6:c80f with SMTP id bg2-20020a05600c3c8200b003b560a6c80fmr43691567wmb.199.1668075180017;
-        Thu, 10 Nov 2022 02:13:00 -0800 (PST)
-Received: from subhajit-ThinkPad-Yoga-370.vix.local ([124.148.245.238])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056000129100b002368a6deaf8sm15574055wrx.57.2022.11.10.02.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 02:12:59 -0800 (PST)
-From:   Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>
-To:     matt.ranostay@konsulko.com, jic23@kernel.org, lars@metafoo.de,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Cc:     Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>
-Subject: [PATCH] iio: light: apds9960: Fix iio_event_spec structures
-Date:   Thu, 10 Nov 2022 18:12:41 +0800
-Message-Id: <20221110101241.10576-1-subhajit.ghosh@vixtechnology.com>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MROv+ToXh8ryiyR2Mcd72J2oB24qvva8HoOx65uEfnw=;
+        b=RV6drL3p3C1/hvzBEDxGpiHRAzJ+rf7Ex71tEvpwhJAGSSqXeUu3PDmPQQlpXqrLOP
+         mNYWZ/SKzqak91HJg5/iiQN5IJteGPwErPUoNLeImB5LEspajphBPxvxzyzhhAKkzqiQ
+         pvXBprx8vMEwjrZIJrAG7TuBDI9uLzqMckPDPyYlh2NFLXp1bmJQLwcnilERVcffiNd3
+         iTTcRekRl4drv4NzUSxePl2ZO9dNoQUZ9Y4yiOp0MUACtnjyuTVyYSClA+t2GC1X28FR
+         EDHQXjZvGmj1oRo7a/W3yu4Guvf4tsFhP8nDHRQ4qc1XvvBVEiUKxI2F2894nGTYQE9/
+         ag2g==
+X-Gm-Message-State: ACrzQf03usPp4ci8L5Kcmo+OJzVcbVwRe/0GN9i9dbWZwkEonEzcsr6E
+        kOE2TWR0Hiic+UbIORnaHg+Bi9ZOtn6XIw==
+X-Google-Smtp-Source: AMsMyM7nyWanNqUFxUSk2u+rTgHu5Hoq0RXKFT7LEe1Txl2IRIN17/EUCAqazaXTg+Yi+rMRjb5eVg==
+X-Received: by 2002:a05:620a:200c:b0:6fa:4c1a:54e1 with SMTP id c12-20020a05620a200c00b006fa4c1a54e1mr34311275qka.113.1668075256555;
+        Thu, 10 Nov 2022 02:14:16 -0800 (PST)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05620a295000b006ce0733caebsm12968550qkp.14.2022.11.10.02.14.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 02:14:16 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id r3so1772086yba.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:14:16 -0800 (PST)
+X-Received: by 2002:a05:6902:1001:b0:6be:820d:a0de with SMTP id
+ w1-20020a056902100100b006be820da0demr63814060ybt.240.1668075255736; Thu, 10
+ Nov 2022 02:14:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+References: <Y2lw4Qc1uI+Ep+2C@fedora> <4281b354-d67d-2883-d966-a7816ed4f811@kernel.dk>
+ <Y2phEZKYuSmPL5B5@fedora> <93fa2da5-c81a-d7f8-115c-511ed14dcdbb@kernel.dk>
+In-Reply-To: <93fa2da5-c81a-d7f8-115c-511ed14dcdbb@kernel.dk>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 10 Nov 2022 11:13:38 +0100
+X-Gmail-Original-Message-ID: <CA+FuTSe=09sAafHnLLMdc0EJrcP0+xcKCqD+rfMtdfQdSQYBDw@mail.gmail.com>
+Message-ID: <CA+FuTSe=09sAafHnLLMdc0EJrcP0+xcKCqD+rfMtdfQdSQYBDw@mail.gmail.com>
+Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is only one interrupt enable option for both ALS low and high
-thresholds, and one for both Proximity low and high thresholds.
+On Tue, Nov 8, 2022 at 3:09 PM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> On 11/8/22 7:00 AM, Stefan Hajnoczi wrote:
+> > On Mon, Nov 07, 2022 at 02:38:52PM -0700, Jens Axboe wrote:
+> >> On 11/7/22 1:56 PM, Stefan Hajnoczi wrote:
+> >>> Hi Jens,
+> >>> NICs and storage controllers have interrupt mitigation/coalescing
+> >>> mechanisms that are similar.
+> >>
+> >> Yep
+> >>
+> >>> NVMe has an Aggregation Time (timeout) and an Aggregation Threshold
+> >>> (counter) value. When a completion occurs, the device waits until the
+> >>> timeout or until the completion counter value is reached.
+> >>>
+> >>> If I've read the code correctly, min_wait is computed at the beginning
+> >>> of epoll_wait(2). NVMe's Aggregation Time is computed from the first
+> >>> completion.
+> >>>
+> >>> It makes me wonder which approach is more useful for applications. With
+> >>> the Aggregation Time approach applications can control how much extra
+> >>> latency is added. What do you think about that approach?
+> >>
+> >> We only tested the current approach, which is time noted from entry, not
+> >> from when the first event arrives. I suspect the nvme approach is better
+> >> suited to the hw side, the epoll timeout helps ensure that we batch
+> >> within xx usec rather than xx usec + whatever the delay until the first
+> >> one arrives. Which is why it's handled that way currently. That gives
+> >> you a fixed batch latency.
+> >
+> > min_wait is fine when the goal is just maximizing throughput without any
+> > latency targets.
+>
+> That's not true at all, I think you're in different time scales than
+> this would be used for.
+>
+> > The min_wait approach makes it hard to set a useful upper bound on
+> > latency because unlucky requests that complete early experience much
+> > more latency than requests that complete later.
+>
+> As mentioned in the cover letter or the main patch, this is most useful
+> for the medium load kind of scenarios. For high load, the min_wait time
+> ends up not mattering because you will hit maxevents first anyway. For
+> the testing that we did, the target was 2-300 usec, and 200 usec was
+> used for the actual test. Depending on what the kind of traffic the
+> server is serving, that's usually not much of a concern. From your
+> reply, I'm guessing you're thinking of much higher min_wait numbers. I
+> don't think those would make sense. If your rate of arrival is low
+> enough that min_wait needs to be high to make a difference, then the
+> load is low enough anyway that it doesn't matter. Hence I'd argue that
+> it is indeed NOT hard to set a useful upper bound on latency, because
+> that is very much what min_wait is.
+>
+> I'm happy to argue merits of one approach over another, but keep in mind
+> that this particular approach was not pulled out of thin air AND it has
+> actually been tested and verified successfully on a production workload.
+> This isn't a hypothetical benchmark kind of setup.
 
-Signed-off-by: Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>
----
- drivers/iio/light/apds9960.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+Following up on the interrupt mitigation analogy. This also reminds
+somewhat of SO_RCVLOWAT. That sets a lower bound on received data
+before waking up a single thread.
 
-diff --git a/drivers/iio/light/apds9960.c b/drivers/iio/light/apds9960.c
-index 4141c0fa7bc4..df9ccbcf0ffe 100644
---- a/drivers/iio/light/apds9960.c
-+++ b/drivers/iio/light/apds9960.c
-@@ -223,14 +223,16 @@ static const struct iio_event_spec apds9960_pxs_event_spec[] = {
- 	{
- 		.type = IIO_EV_TYPE_THRESH,
- 		.dir = IIO_EV_DIR_RISING,
--		.mask_separate = BIT(IIO_EV_INFO_VALUE) |
--			BIT(IIO_EV_INFO_ENABLE),
-+		.mask_separate = BIT(IIO_EV_INFO_VALUE),
- 	},
- 	{
- 		.type = IIO_EV_TYPE_THRESH,
- 		.dir = IIO_EV_DIR_FALLING,
--		.mask_separate = BIT(IIO_EV_INFO_VALUE) |
--			BIT(IIO_EV_INFO_ENABLE),
-+		.mask_separate = BIT(IIO_EV_INFO_VALUE),
-+	},
-+	{
-+		.type = IIO_EV_TYPE_THRESH,
-+		.mask_separate = BIT(IIO_EV_INFO_ENABLE),
- 	},
- };
- 
-@@ -238,14 +240,16 @@ static const struct iio_event_spec apds9960_als_event_spec[] = {
- 	{
- 		.type = IIO_EV_TYPE_THRESH,
- 		.dir = IIO_EV_DIR_RISING,
--		.mask_separate = BIT(IIO_EV_INFO_VALUE) |
--			BIT(IIO_EV_INFO_ENABLE),
-+		.mask_separate = BIT(IIO_EV_INFO_VALUE),
- 	},
- 	{
- 		.type = IIO_EV_TYPE_THRESH,
- 		.dir = IIO_EV_DIR_FALLING,
--		.mask_separate = BIT(IIO_EV_INFO_VALUE) |
--			BIT(IIO_EV_INFO_ENABLE),
-+		.mask_separate = BIT(IIO_EV_INFO_VALUE),
-+	},
-+	{
-+		.type = IIO_EV_TYPE_THRESH,
-+		.mask_separate = BIT(IIO_EV_INFO_ENABLE),
- 	},
- };
- 
--- 
-2.34.1
-
-
--- 
-This email is confidential. If you have received this email in error please 
-notify us immediately by return email and delete this email and any 
-attachments. Vix accepts no liability for any damage caused by this email 
-or any attachments due to viruses, interference, interception, corruption 
-or unauthorised access.
+Would it be more useful to define a minevents event count, rather than
+a minwait timeout? That might give the same amount of preferred batch
+size, without adding latency when unnecessary, or having to infer a
+reasonable bound from expected event rate. Bounded still by the max
+timeout.
