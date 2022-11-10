@@ -2,179 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE414624DB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E539624DB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiKJWmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
+        id S231517AbiKJWm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 17:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiKJWl5 (ORCPT
+        with ESMTP id S230407AbiKJWm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:41:57 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A2849B4B;
-        Thu, 10 Nov 2022 14:41:56 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d20so2749727plr.10;
-        Thu, 10 Nov 2022 14:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4Qs9bEMZ3gDq4us7OrdRRiLVNWHDOmZfbfm48tPnck=;
-        b=qbRnu/4LZoqDMzfN1T1kE9YREn4aOucC9lhaWV9gbrwXT7sX/dmca+ETwg9QN60uej
-         p8/Lw/7Tfa456Y3swGCmPC7MqQ9wuo3x4IukSs7pmsB4ZnVsmSs6tCcwu9jjzAnodbID
-         5z6W2WyndMTL55lQSd6SEjmbeOvJ014Xw6UZzuJqQT+N0mn2hlEUwKTU3depJF9O3/yy
-         dxi0S3JnQZrzAGrA6eUWxlA+OBuyUHzpwHeNquZ6sfczJiRhHbx2YxTizx5S/KCtX6y3
-         o6jTHlJzo9M4Vm8OAmn/VAOTw2r0tZWDzXdgIMx8zflLzC5EOviXDk7Wu/i/68YDy2Ch
-         f8Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e4Qs9bEMZ3gDq4us7OrdRRiLVNWHDOmZfbfm48tPnck=;
-        b=NF81mlpqs9W/awISe20nct9Wxkzr0pKkCmr8LbBq0fowwV7WCApUSGnWmck/QrCSKj
-         SyacJ+50R3VXWCu/N24PNwKE23xRAFoB/V3OX1ofxIrUJdUAsrqI2+CMCQlwDc333yxa
-         vBfQhRyC0pYF5C9Hqf5QvdgJac4U9Frv6w0S1VBCZLX2Fai2GxhTYdvhIEcx39a5/WVk
-         o4XFwI0GUkIRTp0syp8JTaFJC5aBQwV/ilmVXC1vYGgVX9Wrx8yuKzvOTntoicxOGpvM
-         4ZA11zng4PDxcpA1tbmvxHGgEIhtJqOhxOcKDAQWQOm7aUfvq2eE3jt8gMBEgSGnHU61
-         h8XA==
-X-Gm-Message-State: ACrzQf195ICPz7ZTbXFKvUQh1jKEKuEf5NMkLXw998mdBq/8r80DgEYs
-        WntnwT1T48KCcA0rm33FuZI=
-X-Google-Smtp-Source: AMsMyM4nyW6+yaR60JXHJABSjQGw+eHKUCsaYHz+iJNpbD3jbsh6paIIOlj4vz9grbTk8YBdFHZ+aw==
-X-Received: by 2002:a17:902:8211:b0:183:7f67:25d7 with SMTP id x17-20020a170902821100b001837f6725d7mr2346968pln.164.1668120115608;
-        Thu, 10 Nov 2022 14:41:55 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:2eb5:1c59:61e8:a36d])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170902ced100b001868ed86a95sm188133plg.174.2022.11.10.14.41.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 14:41:54 -0800 (PST)
-Date:   Thu, 10 Nov 2022 14:41:51 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>
-Cc:     ludovic.desroches@microchip.com, ulf.hansson@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        3chas3@gmail.com, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org
-Subject: Re: [PATCH] mmc: atmel-mci: Convert to gpio descriptors
-Message-ID: <Y21+L01BcPQ35FYi@google.com>
-References: <20221109043845.16617-1-balamanikandan.gunasundar@microchip.com>
+        Thu, 10 Nov 2022 17:42:56 -0500
+Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0695C4D5FD;
+        Thu, 10 Nov 2022 14:42:49 -0800 (PST)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx0.riseup.net (Postfix) with ESMTPS id 4N7cL13cW2z9s5L;
+        Thu, 10 Nov 2022 22:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1668120169; bh=eTsOkKe/z7V7znmebzl1yS6PW79TQnuYs70ipR6XOX0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bSY4JhCbi9Tx+/NWJZrwXXrDDpzhNYCNAt800P/WsY86vmxiWODSbepF/nFgzQwvw
+         DlRhCp43wZbfqYRg6mqk6KY3PRFE/wIwmT7foZR/E2hMEpRfBk/4T9nWR8MW9fE9Jc
+         PxURx8lFxamlBgQUwige45ZlywBbGDtG67aKb8Ik=
+X-Riseup-User-ID: D0416B78300ACD8DC25C7A895C562117F7327F20D997EA8817293B54645C267E
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4N7cKz3tTWz1yQc;
+        Thu, 10 Nov 2022 22:42:47 +0000 (UTC)
+Message-ID: <167bf351-97e7-f26a-37c7-b8446f16e087@riseup.net>
+Date:   Thu, 10 Nov 2022 19:42:44 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109043845.16617-1-balamanikandan.gunasundar@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] HID: uclogic: Standardize test name prefix
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221110174955.398885-1-jose.exposito89@gmail.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20221110174955.398885-1-jose.exposito89@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Balamanikandan,
+Hi José,
 
-On Wed, Nov 09, 2022 at 10:08:45AM +0530, Balamanikandan Gunasundar wrote:
-> Replace the legacy GPIO APIs with gpio descriptor consumer interface.
+On 11/10/22 14:49, José Expósito wrote:
+> Commit 961bcdf956a4 ("drm/tests: Change "igt_" prefix to "drm_test_"")
+> introduced a new naming convention for the KUnit tests present in the
+> DRM subsystem: "drm_test_<module>_<test name>".
+>> This naming convention is very convenient because it allows to easily
+> run all subsystem tests or all driver tests using kunit.py's wildcards.
 > 
-> To maintain backward compatibility, we rely on the "cd-inverted"
-> property to manage the invertion flag instead of GPIO property.
+> Follow the naming conventions used in the DRM subsystem adapted to the
+> HID subsystem: "hid_test_<module>_<test name>".
 > 
-> Signed-off-by: Balamanikandan Gunasundar <balamanikandan.gunasundar@microchip.com>
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+
+It is great to see this coming to other subsystems!
+
+Reviewed-by: Maíra Canal <mairacanal@riseup.net>
+
+Best Regards,
+- Maíra Canal
+
 > ---
->  drivers/mmc/host/atmel-mci.c | 79 ++++++++++++++++++------------------
->  include/linux/atmel-mci.h    |  4 +-
->  2 files changed, 41 insertions(+), 42 deletions(-)
+>  drivers/hid/hid-uclogic-params-test.c | 4 ++--
+>  drivers/hid/hid-uclogic-rdesc-test.c  | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-> index 67b2cd166e56..1df90966e104 100644
-> --- a/drivers/mmc/host/atmel-mci.c
-> +++ b/drivers/mmc/host/atmel-mci.c
-> @@ -19,7 +19,8 @@
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> -#include <linux/of_gpio.h>
-> +#include <linux/irq.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/platform_device.h>
->  #include <linux/scatterlist.h>
->  #include <linux/seq_file.h>
-> @@ -389,8 +390,8 @@ struct atmel_mci_slot {
->  #define ATMCI_CARD_NEED_INIT	1
->  #define ATMCI_SHUTDOWN		2
+> diff --git a/drivers/hid/hid-uclogic-params-test.c b/drivers/hid/hid-uclogic-params-test.c
+> index 57ef5d3e4b74..bfa7ccb7d1e8 100644
+> --- a/drivers/hid/hid-uclogic-params-test.c
+> +++ b/drivers/hid/hid-uclogic-params-test.c
+> @@ -136,7 +136,7 @@ static void uclogic_parse_ugee_v2_desc_case_desc(struct uclogic_parse_ugee_v2_de
+>  KUNIT_ARRAY_PARAM(uclogic_parse_ugee_v2_desc, uclogic_parse_ugee_v2_desc_cases,
+>  		  uclogic_parse_ugee_v2_desc_case_desc);
 >  
-> -	int			detect_pin;
-> -	int			wp_pin;
-> +	struct gpio_desc        *detect_pin;
-> +	struct gpio_desc	*wp_pin;
->  	bool			detect_is_active_high;
+> -static void uclogic_parse_ugee_v2_desc_test(struct kunit *test)
+> +static void hid_test_uclogic_parse_ugee_v2_desc(struct kunit *test)
+>  {
+>  	int res;
+>  	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
+> @@ -175,7 +175,7 @@ static void uclogic_parse_ugee_v2_desc_test(struct kunit *test)
+>  }
 >  
->  	struct timer_list	detect_timer;
-> @@ -638,7 +639,11 @@ atmci_of_init(struct platform_device *pdev)
->  			pdata->slot[slot_id].bus_width = 1;
+>  static struct kunit_case hid_uclogic_params_test_cases[] = {
+> -	KUNIT_CASE_PARAM(uclogic_parse_ugee_v2_desc_test,
+> +	KUNIT_CASE_PARAM(hid_test_uclogic_parse_ugee_v2_desc,
+>  			 uclogic_parse_ugee_v2_desc_gen_params),
+>  	{}
+>  };
+> diff --git a/drivers/hid/hid-uclogic-rdesc-test.c b/drivers/hid/hid-uclogic-rdesc-test.c
+> index 3971a0854c3e..b429c541bf2f 100644
+> --- a/drivers/hid/hid-uclogic-rdesc-test.c
+> +++ b/drivers/hid/hid-uclogic-rdesc-test.c
+> @@ -187,7 +187,7 @@ static void uclogic_template_case_desc(struct uclogic_template_case *t,
+>  KUNIT_ARRAY_PARAM(uclogic_template, uclogic_template_cases,
+>  		  uclogic_template_case_desc);
 >  
->  		pdata->slot[slot_id].detect_pin =
-> -			of_get_named_gpio(cnp, "cd-gpios", 0);
-> +			devm_gpiod_get_from_of_node(&pdev->dev, cnp,
-> +						    "cd-gpios",
-> +						    0, GPIOD_IN, "cd-gpios");
-
-As I mentioned in another email, please use devm_fwnode_gpiod_get()
-instead of devm_gpiod_get_from_of_node() which is going away.
-
-> +		if (IS_ERR(pdata->slot[slot_id].detect_pin))
-> +			pdata->slot[slot_id].detect_pin = NULL;
-
-I think it would be much better if we had proper error handling and did
-something like:
-
-		err = PTR_ERR_OR_ZERO(pdata->slot[slot_id].detect_pin);
-		if (err) {
-			if (err != -ENOENT)
-				return ERR_PTR(err);
-			pdata->slot[slot_id].detect_pin = NULL;
-		}
-
-This will help with proper deferral handling.
-
+> -static void uclogic_template_test(struct kunit *test)
+> +static void hid_test_uclogic_template(struct kunit *test)
+>  {
+>  	__u8 *res;
+>  	const struct uclogic_template_case *params = test->param_value;
+> @@ -203,7 +203,7 @@ static void uclogic_template_test(struct kunit *test)
+>  }
 >  
->  		pdata->slot[slot_id].detect_is_active_high =
->  			of_property_read_bool(cnp, "cd-inverted");
-
-Instead of doing gpiod_set_value_raw() below I would recommend handling
-it here via gpiod_is_active_low() and gpiod_toggle_active_low() and
-removing the flag from atmel_mci_slot structure.
-
-
-> @@ -647,7 +652,11 @@ atmci_of_init(struct platform_device *pdev)
->  			of_property_read_bool(cnp, "non-removable");
+>  static struct kunit_case hid_uclogic_rdesc_test_cases[] = {
+> -	KUNIT_CASE_PARAM(uclogic_template_test, uclogic_template_gen_params),
+> +	KUNIT_CASE_PARAM(hid_test_uclogic_template, uclogic_template_gen_params),
+>  	{}
+>  };
 >  
->  		pdata->slot[slot_id].wp_pin =
-> -			of_get_named_gpio(cnp, "wp-gpios", 0);
-> +			devm_gpiod_get_from_of_node(&pdev->dev, cnp,
-> +						    "wp-gpios",
-> +						    0, GPIOD_IN, "wp-gpios");
-> +		if (IS_ERR(pdata->slot[slot_id].wp_pin))
-> +			pdata->slot[slot_id].wp_pin = NULL;
->  	}
->  
->  	return pdata;
-> @@ -1511,8 +1520,8 @@ static int atmci_get_ro(struct mmc_host *mmc)
->  	int			read_only = -ENOSYS;
->  	struct atmel_mci_slot	*slot = mmc_priv(mmc);
->  
-> -	if (gpio_is_valid(slot->wp_pin)) {
-> -		read_only = gpio_get_value(slot->wp_pin);
-> +	if (slot->wp_pin) {
-> +		read_only = gpiod_get_value(slot->wp_pin);
-
-Consider using "cansleep" variants.
-
-Thanks.
-
--- 
-Dmitry
