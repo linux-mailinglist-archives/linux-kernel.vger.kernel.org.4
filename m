@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED2062395B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5063762393A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbiKJBzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S232193AbiKJBxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiKJBy6 (ORCPT
+        with ESMTP id S232343AbiKJBxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:54:58 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3541A29CB7;
-        Wed,  9 Nov 2022 17:54:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668045297; x=1699581297;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JwR3352mQmtvv3jNZ1XhkuwmOLMITQeiSm1roomzunE=;
-  b=ZXfVE4Yb05m6NPFUCyDK6lApk9Au3uFRXaqPRw3PcRBn7gLzb4/ypK37
-   gXsqU4Rqta/XCPceGJ3Uk/hfHMGfC93jQptBayxaqXd9SuShtxqyN79sz
-   R95Ueb8jHURgnvG63OpUTYMZPYqYWdZbKPYrXg1mC2om3gnJ3jZ9FKSwk
-   T8LUsS7bw1G7ZvsN/1oJFI6wZsIC6XuacsO9gtiAsGVJtcfynbuHZ/dQT
-   soUprHNdHjlQ0SGLjy1RC1KHcoSzS/DUV2bhkN1cnbdnn8NsUtGrZM17/
-   /IUeSPhzi2JtHV3okZCDwMRAdxhBviKWhPybOQp591qf+mB5d5t7z9WqN
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="294522235"
-X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
-   d="scan'208";a="294522235"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 17:53:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="762100153"
-X-IronPort-AV: E=Sophos;i="5.96,152,1665471600"; 
-   d="scan'208";a="762100153"
-Received: from jiaxichen-precision-3650-tower.sh.intel.com ([10.239.159.75])
-  by orsmga004.jf.intel.com with ESMTP; 09 Nov 2022 17:53:30 -0800
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-To:     kvm@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/7] x86: KVM: Advertise PREFETCHIT0/1 CPUID to user space
-Date:   Thu, 10 Nov 2022 09:52:52 +0800
-Message-Id: <20221110015252.202566-8-jiaxi.chen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221110015252.202566-1-jiaxi.chen@linux.intel.com>
-References: <20221110015252.202566-1-jiaxi.chen@linux.intel.com>
+        Wed, 9 Nov 2022 20:53:22 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740132CE29
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:53:10 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id 7so354301ilg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 17:53:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yC4dnHY7IX8JIC8XVQZbHumkUsZcQ/kWMRWgfr+JpBc=;
+        b=cPu+0IEV9d0/djuPjK0FdyVGoNNNd5l0fDueRZ2ZuMZUktABBeyR+AM7VzWDbIN/os
+         7htA7QbLFMA/m8eJr9eeYwvKnIZ3z2Cdah5aa/rAnCZ0WXgIdMgtTU1iGmrTS8nscfm9
+         o3Q97lu1YnFe0o9Xs3kcxPq1vcbUA3hL5tIe8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yC4dnHY7IX8JIC8XVQZbHumkUsZcQ/kWMRWgfr+JpBc=;
+        b=J3XxDur0K/XHxh3BqOIOL6IMUxf8hMG+J8TIaIUtl+byMd2rUVgDqrSOPEjLSd3JzE
+         60IAWi4gApvyFuVg8VfKshASxKS7qG2nexj6tTRacupZUAybH2aWZnY3JEkTjXVwZlkc
+         MX0uYyLlVmnawszeGNI/kOlA7yKoGAOVkr95Wl1K5TjU/b1ygRbYZZjLOpLSvZP1gbqs
+         Xk0oYM0Rsrpq4dOLsuZF3qU6J8gFmhkFiMF6ZJHJjqIiCJ5gFYomq5uZe3N3HUUFOtCr
+         Oqq16gBD3aJ9qPgZMvq25fpNYmQyjLZDDNhSMzyZ80keU9Tq/hGcEcN6J4B4Yb1zJheF
+         8p1w==
+X-Gm-Message-State: ACrzQf3fGIxUFuq2uSMweIR1eP0pNB7VGCuetnWZhKmcA7kdD/X/SU2K
+        9uMU0Rl+PS6kfdB2aAB0L8nDdQ==
+X-Google-Smtp-Source: AMsMyM5tS49qktlapJt5vQ4mFB0UbdrVhfHSaPbzXiuGVqR+4AlIi2XLTYN6sOTOsNOqSqYisyJ4aA==
+X-Received: by 2002:a92:8e0c:0:b0:2ff:c5c8:792f with SMTP id c12-20020a928e0c000000b002ffc5c8792fmr32280658ild.313.1668045189839;
+        Wed, 09 Nov 2022 17:53:09 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id ck22-20020a0566383f1600b003636c5dcf29sm5235167jab.176.2022.11.09.17.53.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 17:53:09 -0800 (PST)
+Message-ID: <ef6bf02f-f0e6-fbc1-ea95-39a097974c2d@linuxfoundation.org>
+Date:   Wed, 9 Nov 2022 18:53:08 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5.10 000/117] 5.10.154-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, Shuah Khan <skhan@linuxfoundation.org>
+References: <20221109082223.141145957@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221109082223.141145957@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Latest Intel platform Granite Rapids has introduced a new instruction -
-PREFETCHIT0/1, which moves code to memory (cache) closer to the
-processor depending on specific hints.
+On 11/9/22 01:26, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.154 release.
+> There are 117 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Nov 2022 08:21:58 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-The bit definition:
-CPUID.(EAX=7,ECX=1):EDX[bit 14]
+Compiled and booted on my test system. No dmesg regressions.
 
-This CPUID is exposed to user space. Besides, there is no other VMX
-control for this instruction.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
----
- arch/x86/kvm/cpuid.c         | 2 +-
- arch/x86/kvm/reverse_cpuid.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 47ac2a502d91..9021a80b3553 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -662,7 +662,7 @@ void kvm_set_cpu_caps(void)
- 	);
- 
- 	kvm_cpu_cap_init_scattered(CPUID_7_1_EDX,
--		F(AVX_VNNI_INT8) | F(AVX_NE_CONVERT)
-+		F(AVX_VNNI_INT8) | F(AVX_NE_CONVERT) | F(PREFETCHITI)
- 	);
- 
- 	kvm_cpu_cap_mask(CPUID_D_1_EAX,
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index b8addd85b062..884aebe7b3c2 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -36,6 +36,7 @@ enum kvm_only_cpuid_leafs {
- /* Intel-defined sub-features, CPUID level 0x00000007:1 (EDX) */
- #define X86_FEATURE_AVX_VNNI_INT8       KVM_X86_FEATURE(CPUID_7_1_EDX, 4)
- #define X86_FEATURE_AVX_NE_CONVERT      KVM_X86_FEATURE(CPUID_7_1_EDX, 5)
-+#define X86_FEATURE_PREFETCHITI         KVM_X86_FEATURE(CPUID_7_1_EDX, 14)
- 
- struct cpuid_reg {
- 	u32 function;
--- 
-2.27.0
-
+thanks,
+-- Shuah
