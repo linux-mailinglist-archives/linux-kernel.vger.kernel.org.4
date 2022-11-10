@@ -2,136 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACF5623D35
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCC9623D38
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiKJIPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
+        id S232570AbiKJIRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbiKJIPr (ORCPT
+        with ESMTP id S232515AbiKJIRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:15:47 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8731B1D4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:15:46 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id f63so1098185pgc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1JiyZ1hWVATL+iuWQbgLK9dDD8NJ+KjIJFMCcv1dNws=;
-        b=4mmXT6czmfIGpWlJqlmQJ7kyF/U8tRAzRlYHJ596QLAPAp9RO1DzlieBk3D31YyM/d
-         39uaR6S/tt3G0VlYgbCVDLCPMfDTAF3l72d0FMLo4IvR5UYcvRdqOzNeB1aRq1pl/4DH
-         OyDjLIpaYko5MopKW5xaUzHz3Psva0fk6QsuyJQFpv+UTMZocZMLcdMUuvNRMu/D9+md
-         I+wfjbyBWBpsrKRjrBMHqykmNLdmmsNbtN245WNLTQU9eYqEa7XzaNFfxGsHkR9Sq36a
-         d07BN6IVsrDIAxgwt5kXNWG3oQIs8pLJYB7wn4Jwa9shFAzrqJaxZCI4YtFCMOOYK59M
-         Kl5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1JiyZ1hWVATL+iuWQbgLK9dDD8NJ+KjIJFMCcv1dNws=;
-        b=xQAt9Ll/IXQG+bR68nudItGLlLxMgEZPgESwt3YqiGDCg3INPjVUfpM8nQthfYeV6j
-         3Vs2onPhwaBxD+ZMZibc2BBDD0hNlHEs6JObWfT2x6cK8eTIkwSNrOBZCYoOcLznLGsk
-         7TMRc7eRl5Z0Hfb7sfK0xrUKd/NIkTH04Rc7R8YMJD3/Q6mmRWDPNbWr3cTSpahwEv59
-         UUGIapZdugjtcl2Q8pCgbVvN5qB5D7KstUEhrWMBeDrCCWLDdEvf/GE7xc0/jl30bYON
-         tej6oc+yZ24GrTa5c4hbt1WYir9kZcI33DCu690XIM26uhAvr2rc/iuDnMaPHt+93uCs
-         LlzA==
-X-Gm-Message-State: ACrzQf2nHObPkQSszE67WCUMaiF2mTZiurpWw5OwlTIfJ+c6OOkAgu3P
-        Yl7IBf1ESwSnJivy56xZgYIqlM93QB1l0Q==
-X-Google-Smtp-Source: AMsMyM49RJ67toFRhCK5l74gbe/MCd1OdOXjXKe+xYWQ/1ekvADyDWElPZmm7rtLujs+ij2U04rQYw==
-X-Received: by 2002:a63:7d4f:0:b0:470:399:c953 with SMTP id m15-20020a637d4f000000b004700399c953mr1864613pgn.263.1668068146139;
-        Thu, 10 Nov 2022 00:15:46 -0800 (PST)
-Received: from devtp.bytedance.net ([139.177.225.243])
-        by smtp.gmail.com with ESMTPSA id k5-20020a17090a7f0500b0020af2411721sm2496587pjl.34.2022.11.10.00.15.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 00:15:45 -0800 (PST)
-From:   wuqiang <wuqiang.matt@bytedance.com>
-To:     mhiramat@kernel.org, davem@davemloft.net,
-        anil.s.keshavamurthy@intel.com, naveen.n.rao@linux.ibm.com
-Cc:     solar@openwall.com, linux-kernel@vger.kernel.org, mattwu@163.com,
-        wuqiang <wuqiang.matt@bytedance.com>
-Subject: [PATCH v2] kprobes: kretprobe events missing on 2-core KVM guest
-Date:   Thu, 10 Nov 2022 16:15:02 +0800
-Message-Id: <20221110081502.492289-1-wuqiang.matt@bytedance.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221026003315.266d59d5c0780c2817be3a0d@kernel.org>
-References: <20221026003315.266d59d5c0780c2817be3a0d@kernel.org>
+        Thu, 10 Nov 2022 03:17:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F251C1E3ED;
+        Thu, 10 Nov 2022 00:17:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 806C261DAC;
+        Thu, 10 Nov 2022 08:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D934C433C1;
+        Thu, 10 Nov 2022 08:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668068229;
+        bh=3t+Q13FsA8tsZ4ZDqHHsAoIi2Lwy/wNBVaSft7+1wO4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cSorc7iftoAVXvzRm2ouSe0yHQN3w/rLb8roLlrV1+I4e0J0JQd8BKgvC1NBlnhbg
+         06Jaq2VFcKWrF6TOIufT9dsLmOv2VvomS1RiGlqnViEG3PaO1pH3KitqvZS4dSZe7A
+         tSj77MMle2enlbo6y4DHQ3QnIObfnUc9n4z6uBAQ=
+Date:   Thu, 10 Nov 2022 09:17:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Albert Wang <albertccwang@google.com>
+Cc:     mathias.nyman@intel.com, badhri@google.com, howardyen@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] usb: host: add the xhci offload hooks
+ implementations
+Message-ID: <Y2yzg2v2AL6MsKvy@kroah.com>
+References: <20221110080006.3563429-1-albertccwang@google.com>
+ <20221110080006.3563429-4-albertccwang@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110080006.3563429-4-albertccwang@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Default value of maxactive is set as num_possible_cpus() for nonpreemptable
-systems. For a 2-core system, only 2 kretprobe instances would be allocated
-in default, then these 2 instances for execve kretprobe are very likely to
-be used up with a pipelined command.
+On Thu, Nov 10, 2022 at 04:00:06PM +0800, Albert Wang wrote:
+> Add the offload hooks implementations which are used in the xHCI driver
+> for vendor offload function, and some functions will call to
+> co-processor driver for further offload operations.
 
-Here's the testcase: a shell script was added to crontab, and the content
-of the script is:
+Where is the users for these hooks?  We can't add code that doesn't have
+users as stated before.
 
-  #!/bin/sh
-  do_something_magic `tr -dc a-z < /dev/urandom | head -c 10`
+> Signed-off-by: Albert Wang <albertccwang@google.com>
+> Signed-off-by: Howard Yen <howardyen@google.com>
+> ---
+> Changes in v2:
+> - New in v2
+> 
+>  drivers/usb/host/xhci-offload-impl.c | 492 +++++++++++++++++++++++++++
+>  1 file changed, 492 insertions(+)
+>  create mode 100644 drivers/usb/host/xhci-offload-impl.c
+> 
+> diff --git a/drivers/usb/host/xhci-offload-impl.c b/drivers/usb/host/xhci-offload-impl.c
+> new file mode 100644
+> index 000000000000..90e546d63fbe
+> --- /dev/null
+> +++ b/drivers/usb/host/xhci-offload-impl.c
+> @@ -0,0 +1,492 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020 Google Corp.
 
-cron will trigger a series of program executions (4 times every hour). Then
-events loss would be noticed normally after 3-4 hours of testings.
+I don't think it's 2020 anymore :)
 
-The issue is caused by a burst of series of execve requests. The best number
-of kretprobe instances could be different case by case, and should be user's
-duty to determine, but num_possible_cpus() as the default value is inadequate
-especially for systems with small number of cpus.
+> + *
+> + * Author:
+> + *  Howard.Yen <howardyen@google.com>
+> + */
+> +
+> +#include <linux/dmapool.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/of.h>
+> +#include <linux/of_reserved_mem.h>
+> +#include <linux/pm_wakeup.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/usb/hcd.h>
+> +
+> +#include "xhci.h"
+> +#include "xhci-plat.h"
+> +
+> +enum usb_offload_op_mode {
+> +	USB_OFFLOAD_STOP,
+> +	USB_OFFLOAD_DRAM
+> +};
+> +
+> +enum usb_state {
+> +	USB_DISCONNECTED,
+> +	USB_CONNECTED
+> +};
+> +
+> +enum usb_offload_msg {
+> +	SET_DCBAA_PTR,
+> +	SETUP_DONE,
+> +	SET_ISOC_TR_INFO,
+> +	SYNC_CONN_STAT,
+> +	SET_OFFLOAD_STATE
+> +};
+> +
+> +struct conn_stat_args {
+> +	u16 bus_id;
+> +	u16 dev_num;
+> +	u16 slot_id;
+> +	u32 conn_stat;
+> +};
+> +
+> +struct get_isoc_tr_info_args {
+> +	u16 ep_id;
+> +	u16 dir;
+> +	u32 type;
+> +	u32 num_segs;
+> +	u32 seg_ptr;
+> +	u32 max_packet;
+> +	u32 deq_ptr;
+> +	u32 enq_ptr;
+> +	u32 cycle_state;
+> +	u32 num_trbs_free;
+> +};
+> +
+> +struct xhci_offload_data {
+> +	struct xhci_hcd *xhci;
+> +
+> +	bool usb_accessory_enabled;
+> +	bool usb_audio_offload;
+> +	bool dt_direct_usb_access;
+> +	bool offload_state;
+> +
+> +	enum usb_offload_op_mode op_mode;
+> +};
+> +
+> +static struct xhci_offload_data *offload_data;
+> +struct xhci_offload_data *xhci_get_offload_data(void)
+> +{
+> +	return offload_data;
+> +}
+> +
+> +/*
+> + * Determine if an USB device is a compatible devices:
+> + *     True: Devices are audio class and they contain ISOC endpoint
+> + *    False: Devices are not audio class or they're audio class but no ISOC endpoint or
+> + *           they have at least one interface is video class
+> + */
+> +static bool is_compatible_with_usb_audio_offload(struct usb_device *udev)
+> +{
+> +	struct usb_endpoint_descriptor *epd;
+> +	struct usb_host_config *config;
+> +	struct usb_host_interface *alt;
+> +	struct usb_interface_cache *intfc;
+> +	int i, j, k;
+> +	bool is_audio = false;
+> +
+> +	config = udev->config;
+> +	for (i = 0; i < config->desc.bNumInterfaces; i++) {
+> +		intfc = config->intf_cache[i];
+> +		for (j = 0; j < intfc->num_altsetting; j++) {
+> +			alt = &intfc->altsetting[j];
+> +
+> +			if (alt->desc.bInterfaceClass == USB_CLASS_VIDEO) {
+> +				is_audio = false;
+> +				goto out;
+> +			}
+> +
+> +			if (alt->desc.bInterfaceClass == USB_CLASS_AUDIO) {
+> +				for (k = 0; k < alt->desc.bNumEndpoints; k++) {
+> +					epd = &alt->endpoint[k].desc;
+> +					if (usb_endpoint_xfer_isoc(epd)) {
+> +						is_audio = true;
+> +						break;
+> +					}
+> +				}
+> +			}
+> +		}
+> +	}
+> +
+> +out:
+> +	return is_audio;
+> +}
+> +
+> +/*
+> + * check the usb device including the video class:
+> + *     True: Devices contain video class
+> + *    False: Device doesn't contain video class
+> + */
+> +static bool is_usb_video_device(struct usb_device *udev)
+> +{
+> +	struct usb_host_config *config;
+> +	struct usb_host_interface *alt;
+> +	struct usb_interface_cache *intfc;
+> +	int i, j;
+> +	bool is_video = false;
+> +
+> +	if (!udev || !udev->config)
+> +		return is_video;
+> +
+> +	config = udev->config;
+> +
+> +	for (i = 0; i < config->desc.bNumInterfaces; i++) {
+> +		intfc = config->intf_cache[i];
+> +		for (j = 0; j < intfc->num_altsetting; j++) {
+> +			alt = &intfc->altsetting[j];
+> +
+> +			if (alt->desc.bInterfaceClass == USB_CLASS_VIDEO) {
+> +				is_video = true;
+> +				goto out;
+> +			}
+> +		}
+> +	}
+> +
+> +out:
+> +	return is_video;
+> +}
+> +
+> +/*
+> + * This is the driver call to co-processor for offload operations.
+> + */
+> +int offload_driver_call(enum usb_offload_msg msg, void *ptr)
+> +{
+> +	enum usb_offload_msg offload_msg;
+> +	void *argptr;
+> +
+> +	offload_msg = msg;
+> +	argptr = ptr;
 
-This patch enables the logic for preemption as default, thus increases the
-minimum of maxactive to 10 for nonpreemptable systems.
+Don't just silence compiler warnings for no reason.
 
-Signed-off-by: wuqiang <wuqiang.matt@bytedance.com>
----
- Documentation/trace/kprobes.rst |  3 +--
- kernel/kprobes.c                | 10 +++-------
- 2 files changed, 4 insertions(+), 9 deletions(-)
+Again, this does not actually do anything at all.  So how can we accept
+this code?
 
-diff --git a/Documentation/trace/kprobes.rst b/Documentation/trace/kprobes.rst
-index 48cf778a2468..fc7ce76eab65 100644
---- a/Documentation/trace/kprobes.rst
-+++ b/Documentation/trace/kprobes.rst
-@@ -131,8 +131,7 @@ For example, if the function is non-recursive and is called with a
- spinlock held, maxactive = 1 should be enough.  If the function is
- non-recursive and can never relinquish the CPU (e.g., via a semaphore
- or preemption), NR_CPUS should be enough.  If maxactive <= 0, it is
--set to a default value.  If CONFIG_PREEMPT is enabled, the default
--is max(10, 2*NR_CPUS).  Otherwise, the default is NR_CPUS.
-+set to a default value: max(10, 2*NR_CPUS).
- 
- It's not a disaster if you set maxactive too low; you'll just miss
- some probes.  In the kretprobe struct, the nmissed field is set to
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index a8b202f87e2d..1e80bddf2654 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -2212,11 +2212,7 @@ int register_kretprobe(struct kretprobe *rp)
- 	rp->kp.post_handler = NULL;
- 
- 	/* Pre-allocate memory for max kretprobe instances */
--	if (rp->maxactive <= 0) {
--#ifdef CONFIG_PREEMPTION
-+	if (rp->maxactive <= 0)
- 		rp->maxactive = max_t(unsigned int, 10, 2*num_possible_cpus());
--#else
--		rp->maxactive = num_possible_cpus();
--#endif
--	}
-+
- #ifdef CONFIG_KRETPROBE_ON_RETHOOK
---
-2.34.1
+> +
+> +	return 0;
+> +}
+> +
+> +static int xhci_sync_conn_stat(unsigned int bus_id, unsigned int dev_num, unsigned int slot_id,
+> +				unsigned int conn_stat)
+> +{
+> +	struct conn_stat_args conn_args;
+> +
+> +	conn_args.bus_id = bus_id;
+> +	conn_args.dev_num = dev_num;
+> +	conn_args.slot_id = slot_id;
+> +	conn_args.conn_stat = conn_stat;
+> +
+> +	return offload_driver_call(SYNC_CONN_STAT, &conn_args);
+> +}
+> +
+> +static int usb_host_mode_state_notify(enum usb_state usb_state)
+> +{
+> +	return xhci_sync_conn_stat(0, 0, 0, usb_state);
+> +}
+> +
+> +static int xhci_udev_notify(struct notifier_block *self, unsigned long action,
+> +				void *dev)
+> +{
+> +	struct usb_device *udev = dev;
+> +	struct xhci_offload_data *offload_data = xhci_get_offload_data();
+> +
+> +	switch (action) {
+> +	case USB_DEVICE_ADD:
+> +		if (is_compatible_with_usb_audio_offload(udev)) {
+> +			dev_dbg(&udev->dev, "Compatible with usb audio offload\n");
+> +			if (offload_data->op_mode == USB_OFFLOAD_DRAM) {
+> +				xhci_sync_conn_stat(udev->bus->busnum, udev->devnum, udev->slot_id,
+> +						    USB_CONNECTED);
+> +			}
+> +		}
+> +		offload_data->usb_accessory_enabled = false;
+> +		break;
+> +	case USB_DEVICE_REMOVE:
+> +		if (is_compatible_with_usb_audio_offload(udev) &&
+> +		    (offload_data->op_mode == USB_OFFLOAD_DRAM)) {
+> +			xhci_sync_conn_stat(udev->bus->busnum, udev->devnum, udev->slot_id,
+> +					    USB_DISCONNECTED);
+> +		}
+> +		offload_data->usb_accessory_enabled = false;
+> +		break;
+> +	}
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block xhci_udev_nb = {
+> +	.notifier_call = xhci_udev_notify,
+> +};
+> +
+> +static int usb_audio_offload_init(struct xhci_hcd *xhci)
+> +{
+> +	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+> +	struct xhci_offload_data *offload_data = xhci_get_offload_data();
+> +	int ret;
+> +	u32 out_val;
+> +
+> +	offload_data = kzalloc(sizeof(struct xhci_offload_data), GFP_KERNEL);
+> +	if (!offload_data)
+> +		return -ENOMEM;
+> +
+> +	if (!of_property_read_u32(dev->of_node, "offload", &out_val))
+> +		offload_data->usb_audio_offload = (out_val == 1) ? true : false;
+> +
+> +	ret = of_reserved_mem_device_init(dev);
+> +	if (ret) {
+> +		dev_err(dev, "Could not get reserved memory\n");
+> +		kfree(offload_data);
+> +		return ret;
+> +	}
+> +
+> +	offload_data->dt_direct_usb_access =
+> +		of_property_read_bool(dev->of_node, "direct-usb-access") ? true : false;
+> +	if (!offload_data->dt_direct_usb_access)
+> +		dev_warn(dev, "Direct USB access is not supported\n");
+> +
+> +	offload_data->offload_state = true;
+> +
+> +	usb_register_notify(&xhci_udev_nb);
+> +	offload_data->op_mode = USB_OFFLOAD_DRAM;
+> +	offload_data->xhci = xhci;
+> +
+> +	return 0;
+> +}
+> +
+> +static void usb_audio_offload_cleanup(struct xhci_hcd *xhci)
+> +{
+> +	struct xhci_offload_data *offload_data = xhci_get_offload_data();
+> +
+> +	offload_data->usb_audio_offload = false;
+> +	offload_data->op_mode = USB_OFFLOAD_STOP;
+> +	offload_data->xhci = NULL;
+> +
+> +	usb_unregister_notify(&xhci_udev_nb);
+> +
+> +	/* Notification for xhci driver removing */
+> +	usb_host_mode_state_notify(USB_DISCONNECTED);
+> +
+> +	kfree(offload_data);
+> +	offload_data = NULL;
 
+Why are you setting a stack variable to NULL?
+
+Anyway, this looks much better overall than the previous submissions,
+but we need a real user of this code otherwise it can not be accepted.
+Please submit the driver that uses this api as part of your next
+submission.
+
+thanks,
+
+greg k-h
