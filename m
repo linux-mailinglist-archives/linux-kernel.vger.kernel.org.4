@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9AD623971
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA37623976
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiKJCDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:03:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S232520AbiKJCD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiKJCCH (ORCPT
+        with ESMTP id S232426AbiKJCC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:02:07 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE192EF05
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 17:59:38 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id 11so308462iou.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 17:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PbW75S+tRPPiGdyoY3SVPUPsbPk7wXUtzpehNZARJL8=;
-        b=JlFStz2Zk0UsrmExFMWCby9tveb5FxDaIvBD0LfyI3hofXqZn2f2nFBxZK101BqrCP
-         XcOT8QhXuRt7e9pj/59OAiDVHEGlGeECKTo3MmLl31E+OivxAixW9C02zSb5B8GcKcPU
-         Mnq7KzhUV+8AHus6x9vyqfPLobuJOt16PODKg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PbW75S+tRPPiGdyoY3SVPUPsbPk7wXUtzpehNZARJL8=;
-        b=UMFnSMs8JNbgPNaXIG1BnfiR4XB8UDLKfa8GTrTPhBlTDTprewDD3tXUN0OmH78c8p
-         TuYIxH5T6PJdRXFUXqwR92y+m/r6Aa7PtgRGe8DOx7FjhcnPb0TUWLIcEm8St/BaY+e6
-         uqSY7g1bjXpoSk59lSEmXMo7FObN9ffY/tCIprFQy7u2yBRISKdkTMpXEiLzLMxczhyA
-         NnxAnYhRWS5Z7wcZ7x3tdIWA+tuKE7CSztmkRrBEgnngAworu9BoiBd/hqZfCtVgfZGK
-         uHA6GW78tBXb/G9mAJfY/WSpTcB2QqsidTq9ACIzbNdv/I6fDhUiXYS7wayj4ijvnNv0
-         d54g==
-X-Gm-Message-State: ACrzQf2drjdZEnoJVMBLxNy7N1AFBXWBBk9Ia7Z81VgClO8GAWnfPMbA
-        0wZuoOMWSuBcO6FpP2S6EXM2pQ==
-X-Google-Smtp-Source: AMsMyM5c3dycfwbkRls4PsSnfsWYdiHC1WLvxp7ggFmrJlbC3hSbBdKVyjTWwpvjnUyCS003J79Yeg==
-X-Received: by 2002:a05:6638:1a8f:b0:375:1ad6:e860 with SMTP id ce15-20020a0566381a8f00b003751ad6e860mr2538742jab.191.1668045577587;
-        Wed, 09 Nov 2022 17:59:37 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id n2-20020a027102000000b00363ad31c149sm5284887jac.110.2022.11.09.17.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 17:59:37 -0800 (PST)
-Message-ID: <613fefce-632d-be3e-30d4-d1c5a3cf2618@linuxfoundation.org>
-Date:   Wed, 9 Nov 2022 18:59:36 -0700
+        Wed, 9 Nov 2022 21:02:59 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB3E2935A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:02:07 -0800 (PST)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N74p82bdpz15MWR;
+        Thu, 10 Nov 2022 10:01:52 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by dggpeml500024.china.huawei.com
+ (7.185.36.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
+ 2022 10:02:05 +0800
+From:   Yuan Can <yuancan@huawei.com>
+To:     <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <wsa+renesas@sang-engineering.com>, <benjamin.mugnier@foss.st.com>,
+        <dmitry.torokhov@gmail.com>, <cmo@melexis.com>,
+        <u.kleine-koenig@pengutronix.de>, <error27@gmail.com>,
+        <justinstitt@google.com>, <fancer.lancer@gmail.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <yuancan@huawei.com>
+Subject: [PATCH] eeprom: idt_89hpesx: Fix error handling in idt_init()
+Date:   Thu, 10 Nov 2022 02:00:30 +0000
+Message-ID: <20221110020030.47711-1-yuancan@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 4.9 00/30] 4.9.333-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, Shuah Khan <skhan@linuxfoundation.org>
-References: <20221108133326.715586431@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221108133326.715586431@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 06:38, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.333 release.
-> There are 30 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.333-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+A problem about idt_89hpesx create debugfs failed is triggered with the
+following log given:
 
-Compiled and booted on my test system. No dmesg regressions.
+ [ 4973.269647] debugfs: Directory 'idt_csr' with parent '/' already present!
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+The reason is that idt_init() returns i2c_add_driver() directly without
+checking its return value, if i2c_add_driver() failed, it returns without
+destroy the newly created debugfs, resulting the debugfs of idt_csr can
+never be created later.
 
-thanks,
--- Shuah
+ idt_init()
+   debugfs_create_dir() # create debugfs directory
+   i2c_add_driver()
+     driver_register()
+       bus_add_driver()
+         priv = kzalloc(...) # OOM happened
+   # return without destroy debugfs directory
+
+Fix by removing debugfs when i2c_add_driver() returns error.
+
+Fixes: cfad6425382e ("eeprom: Add IDT 89HPESx EEPROM/CSR driver")
+Signed-off-by: Yuan Can <yuancan@huawei.com>
+---
+ drivers/misc/eeprom/idt_89hpesx.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/misc/eeprom/idt_89hpesx.c b/drivers/misc/eeprom/idt_89hpesx.c
+index bb3ed352b95f..367054e0ced4 100644
+--- a/drivers/misc/eeprom/idt_89hpesx.c
++++ b/drivers/misc/eeprom/idt_89hpesx.c
+@@ -1566,12 +1566,20 @@ static struct i2c_driver idt_driver = {
+  */
+ static int __init idt_init(void)
+ {
++	int ret;
++
+ 	/* Create Debugfs directory first */
+ 	if (debugfs_initialized())
+ 		csr_dbgdir = debugfs_create_dir("idt_csr", NULL);
+ 
+ 	/* Add new i2c-device driver */
+-	return i2c_add_driver(&idt_driver);
++	ret = i2c_add_driver(&idt_driver);
++	if (ret) {
++		debugfs_remove_recursive(csr_dbgdir);
++		return ret;
++	}
++
++	return 0;
+ }
+ module_init(idt_init);
+ 
+-- 
+2.17.1
+
