@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BFC624CFD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A41624D0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbiKJV2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
+        id S232367AbiKJVcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbiKJV2f (ORCPT
+        with ESMTP id S232113AbiKJVcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:28:35 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B8F10B59;
-        Thu, 10 Nov 2022 13:28:33 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3023233pjk.1;
-        Thu, 10 Nov 2022 13:28:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=80I3arJoq2GrS2cZeP4yUcWNDKrQfchQjs2gAQ+Po1Q=;
-        b=kkwpINsNl2KamFdaIA8i5cwK+MyS/iW/atr4aE6Lt1JEM9hUlrN+crn+2jRCqkRWG6
-         MZdN2JLklsJbjDokxP000kp7jZD2YYo1qNImhAvicIvi2aZCqwQV2MiWGv1LlDTcyUSO
-         lUf/e4R498GCBixdP1qz3j/GJwT9PpFW1OyGKsqPzLfR9ir0+hqo3nICS8CZD7QjAAx+
-         6HwXWnBeowR41Un3FlbHoRkLAy1ieMe2gIGHq7J+9H4APhbDvDQoixPCimx7lw0eWljk
-         5usUz7URWDFUojHM7WQIc2Vm+1gwm2VuZVzE+dJLlbxAHpXnDYMgWvDy+p/SZOnP/U6z
-         /ZFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=80I3arJoq2GrS2cZeP4yUcWNDKrQfchQjs2gAQ+Po1Q=;
-        b=FdweV6Eqacl45N4CFxU7Hxugn551xI3ja0/oz/ZpvmaIumU7Dyrt3UqIU+dj8cfygg
-         jhHFWLhDXfNpnoV98p2DybvB3Y9Ul084G81ReaQ2nsCZyEYlUNm84ix12kSH8BqZbKDP
-         66bJMHTW1bhkz81HTOkbxU8ppqQAbhT2LihmrQG31bUSB3Izxp2xDJXiESqGRuKQcnJm
-         0gPDhRjFkO4NELv10TPtue7cTBt3mAnxYHckFsqSATTDUE0QMTgK9eyaJNCSvlQxA1xG
-         FA2+SlR390GWjAMDcWH4rrLreXN2/zJ77aXnvVWgquPv6MeEbDky87ZOOzNRtgeWtuaJ
-         ZvIA==
-X-Gm-Message-State: ACrzQf3nnSHW8ocDh+spVADuxi2RgK8J9PzsrBf288lwW7ziokGZKm/W
-        9I2s3dyFojw+fJjXJXqpvdg=
-X-Google-Smtp-Source: AMsMyM6AHXBx6OBeNoBiyE1b8AO/7FnghYsNzO2ZZKvU3O+Mdgo0L+OPUSN49TsnmMLfbSdK53UB5w==
-X-Received: by 2002:a17:902:b10a:b0:180:be71:6773 with SMTP id q10-20020a170902b10a00b00180be716773mr2165321plr.42.1668115713084;
-        Thu, 10 Nov 2022 13:28:33 -0800 (PST)
-Received: from smtpclient.apple ([66.170.99.95])
-        by smtp.gmail.com with ESMTPSA id w184-20020a6262c1000000b0056babe4fb8asm118031pfb.49.2022.11.10.13.28.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Nov 2022 13:28:32 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20221110203132.1498183-2-peterx@redhat.com>
-Date:   Thu, 10 Nov 2022 13:28:31 -0800
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>, stable@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <65FA2E7E-1F12-4919-BD79-11159934CF2C@gmail.com>
-References: <20221110203132.1498183-1-peterx@redhat.com>
- <20221110203132.1498183-2-peterx@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 16:32:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC013554F1;
+        Thu, 10 Nov 2022 13:32:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0A193CE250B;
+        Thu, 10 Nov 2022 21:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3442C433D6;
+        Thu, 10 Nov 2022 21:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668115961;
+        bh=X+IjlfiqIXTsy2UpCIUeFlBhZS6jWwbpzGFfAP5Hxfc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OpEdw6rMlptPdAg/70b0VExq+MmfIX0dgpOr7i8lt7DULlosQTzZZ9NdFEfqJTt9G
+         igjizIWFHPuz4NFFZnU3KdhIonjoFRmADOUVs8kXKxSYqT6g2wzEYfVqpGbu1KmA+Q
+         0F8uc2RsuN4RG3TOLnnoykO5qESxLp0TCdYC9nlLYtz0lkmkKYm6iet6EXl1vfBNet
+         ta83ArAmsrk4tuWdvJYb53dROi19T/GikkrbyaCmkfu54S57HI5ldAzyw/NYHgf0xu
+         4kY2323Vzsm+jEMJOM6NqO5Mx2J9THoRdLonVgf9dUwBaliEoJ3N9qUaZoZ9peZvBG
+         9bZl9K08peLIQ==
+Date:   Thu, 10 Nov 2022 15:32:39 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     JunDong Song <jundongsong1@gmail.com>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] PCI: dwc-host: Add a warning to prevent invalid
+ values
+Message-ID: <20221110213239.GA672651@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107153108.5770-1-jundongsong1@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Nov 10, 2022, at 12:31 PM, Peter Xu <peterx@redhat.com> wrote:
+The subject lines are not quite accurate.  The warning does nothing to
+*prevent* invalid values; it only warns about them.
 
-> Ives van Hoorne from codesandbox.io reported an issue regarding possible
-> data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
-> sympton is some read page got data mismatch from the snapshot child VMs.
+And it should say what *kind* of values we're talking about.
 
-symptom (if you care)
+Maybe:
 
-Other than that LGTM
+  PCI: dwc: Warn about invalid 'max-link-speed' from DT
+
+On Mon, Nov 07, 2022 at 11:31:07PM +0800, JunDong Song wrote:
+> of_pci_get_max_link_speed() may return a negative value,
+> causing the controller to not set the speed correctly.
+> Add a warning in case the driver engineer misses it.
+
+Rewrap this to fill 75 columns.
+
+I would probably squash these into a single patch since they're
+doing exactly the same thing to the host and endpoint cases.
+
+> Signed-off-by: JunDong Song <jundongsong1@gmail.com>
+> ---
+> 
+> When I use the pcie dwc driver, the controller speed is abnormal,
+> but it has not been detected because of the @max-link-speed error,
+> so I think I need to return an error or warning here.
+> 
+> Thanks.
+> 
+>  drivers/pci/controller/dwc/pcie-designware-ep.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> index 83ddb1902..573342601 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> @@ -739,8 +739,11 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  		return -ENOMEM;
+>  	ep->outbound_addr = addr;
+>  
+> -	if (pci->link_gen < 1)
+> +	if (pci->link_gen < 1) {
+>  		pci->link_gen = of_pci_get_max_link_speed(np);
+> +		if (unlikely(pci->link_gen < 0))
+
+Using "unlikely" here is unnecessary since this is not a performance
+path, and it's a distraction.
+
+> +			dev_warn(dev, "Failed to get max link speed\n");
+> +	}
+>  
+>  	epc = devm_pci_epc_create(dev, &epc_ops);
+>  	if (IS_ERR(epc)) {
+> -- 
+> 2.25.1
+> 
