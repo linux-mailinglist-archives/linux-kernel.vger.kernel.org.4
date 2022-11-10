@@ -2,83 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAE5624805
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE76662480B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiKJRLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
+        id S229776AbiKJROz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:14:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbiKJRLA (ORCPT
+        with ESMTP id S229559AbiKJROx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:11:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6503A4B99C;
-        Thu, 10 Nov 2022 09:11:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EF05B82262;
-        Thu, 10 Nov 2022 17:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72471C433C1;
-        Thu, 10 Nov 2022 17:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668100257;
-        bh=P8y8CmJlU1McSlaWZVB7GCSFqlAlNFeM9PX3F9Pd8os=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=P6gBEt2gyjfaimTUJQyL8IZ/tKscp3q3rD26rwLD3nqyOlMwSa3z+WoxfnuFoYLle
-         pafSGwemv1ZRlaoYejad//tDxt0XPA0GHRlVqw3yLahE/7FFYiZAaDPm2FGr3nPPMQ
-         idw8CKAZ2exFA62rIqoLOeeVPVSnAtPCErizURgUMSHog3XIc+S1iAaZeJNK1YYIA4
-         8pVcsqwKCYYJcNQoxxm3QHYySTCG96RSvsthF6XUr3wA8rV/frTnGii1lHQj8l82+p
-         qymNTKgP71JhVzbvbtD53ApNYHjA+IpFPb7H4ZNeIOz4L2ygU9oUW9j1dFi61bxGzu
-         h8q0tBtCcOwbQ==
-Date:   Thu, 10 Nov 2022 11:10:55 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Verma, Vishal L" <vishal.l.verma@intel.com>
-Cc:     "rrichter@amd.com" <rrichter@amd.com>,
-        "terry.bowman@amd.com" <terry.bowman@amd.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v3 9/9] cxl/acpi: Set ACPI's CXL _OSC to indicate CXL1.1
- support
-Message-ID: <20221110171055.GA627971@bhelgaas>
+        Thu, 10 Nov 2022 12:14:53 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42FC11463
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:14:51 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id k22so2765306pfd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=G6y6a9CCnRYcK46H9tBNyu9YqooXjHYmPole/YmAa0g=;
+        b=d213MsYkK2b4xOJ++g+Vc2Dmf98bR79dIvZY1iGpZwGGR2D/JMeTzCBQAki0Ma/7sP
+         qOZ4jHYEWAw1LP/GZsSYvejLpS87SylFjOIKS15bc7iO8ThVqw131oz8Sig6vKiVqN7B
+         vETConGN+zJPn4AaA3/P2h2nloNCJh4hwyrht1Qo8nT8BZAF8EJTkco7n4SJt0o/MwRa
+         WdTXr1hRz39oT92QPsXjmDo+r65QYRghYLjsLKxjZUFB8DV+lKf/eAycP93BoSs1KUmO
+         7lMlAhuu8evK2LbvjhQ3Xnn1ddmzjto9g6uJdWIrk2G4lBOaeb+iCbu4p46LO58vFUxR
+         Nkyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G6y6a9CCnRYcK46H9tBNyu9YqooXjHYmPole/YmAa0g=;
+        b=jtiy0FmjoqypMHpE+MOvrNIro85xXbYSlLSDY/oZWrqb3IQYATZ13L4neqlSyyVkEd
+         U3oeSfBVvnkwfN3W+6Sotdqhae+mFnUW3f0SIffcLvpG9alGB1G33y960piGdhYYovJ5
+         7VjYrv4vSL+snorOCwM8CxKVcYWFTzwmTPjnr4tMN3USdLZ7qv6vC5E7DgoTD7do4xWB
+         4KLPm72CE4wGzcxgUsnIZv/dloPSKW3z9PGNnJjVIplP1Ao8oaLNoFZFoaFpNszAXx1C
+         Fi1zKwsBimNw5uWY2m6nEA93joXgFa3QgPgh4ksWYAMeB2XL9voqyCvQsOiW5bRhBhhr
+         2dnQ==
+X-Gm-Message-State: ACrzQf2UDb5voXMtaikxKvY7eTYukxeSms4ZQo8zEsc18pJcbBFUojSE
+        xePETj6vmZQJzCFOkHrkc4A/Fxaw3eQ=
+X-Google-Smtp-Source: AMsMyM4rhkHvhurqjUrWSl+ZglLlGtHIn8Qc+yLmoEU0uKhK3iz4BZkWrVykWku1c/qyzEaV9xYkcw==
+X-Received: by 2002:a05:6a02:119:b0:463:cdc8:a3ff with SMTP id bg25-20020a056a02011900b00463cdc8a3ffmr2891803pgb.498.1668100491025;
+        Thu, 10 Nov 2022 09:14:51 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:6af4:9e55:5482:c0de])
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b00183c67844aesm11598853plr.22.2022.11.10.09.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 09:14:50 -0800 (PST)
+Date:   Thu, 10 Nov 2022 09:14:47 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] driver core: remove devm_device_remove_groups()
+Message-ID: <Y20xh1OpLGegZBRc@google.com>
+References: <20221109140711.105222-1-gregkh@linuxfoundation.org>
+ <CAJZ5v0gv6L9Q+Nu3U0JAWqJk4MPt7kGVGiOAKuX5FcF=znyfTA@mail.gmail.com>
+ <Y2wXYxrr/qed/j//@google.com>
+ <Y2zFtWcytaIRWNqu@kroah.com>
+ <CAJZ5v0jpm92CDHsH33aWNn97w5tpf-gust7ghkwdpmNbQf0ZDg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4d0da6a410ca49c1b70628a2a4814bdf2cbfce58.camel@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0jpm92CDHsH33aWNn97w5tpf-gust7ghkwdpmNbQf0ZDg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 12:51:02AM +0000, Verma, Vishal L wrote:
-> On Wed, 2022-11-09 at 17:35 -0600, Bjorn Helgaas wrote:
-
-> > I don't know the history, but OSC_CXL_1_1_PORT_REG_ACCESS_SUPPORT and
-> > OSC_CXL_2_0_PORT_DEV_REG_ACCESS_SUPPORT seem like sort of weird names
-> > since they don't match the spec at all ("RCD and RCH Port Register
-> > Access Supported" and "CXL VH Register Access Supported").
+On Thu, Nov 10, 2022 at 02:07:51PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Nov 10, 2022 at 10:34 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Nov 09, 2022 at 01:10:59PM -0800, Dmitry Torokhov wrote:
+> > > On Wed, Nov 09, 2022 at 03:11:47PM +0100, Rafael J. Wysocki wrote:
+> > > > On Wed, Nov 9, 2022 at 3:07 PM Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > There is no in-kernel user of this function, so it is not needed anymore
+> > > > > and can be removed.
+> > > > >
+> > > > > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > >
+> > > > For both patches in the series:
+> > > >
+> > > > Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+> > >
+> > > I find it really weird to have an asymmetric core API...
+> >
+> > I'm working on fixing up that asymmetric-ness.  We have only one user of
+> > devm_device_add_groups() and only a handful of devm_device_add_group()
+> > left in the tree.
+> >
+> > But it turns out that no one ever called these functions anyway, so they
+> > aren't needed even if we did keep the "add" functions.  So they should
+> > be dropped no matter what.
 > 
-> Ah the RCH/RCD and VH terminology was only introduced in the CXL-3.0
-> spec. When the above defines were added, the spec was at 2.0, and it
-> used the descriptions: "CXL 1.1 Port Register Access supported", and
-> "CXL 2.0 Port/Device Register Access supported" (Table 217 in 2.0).
+> Totally agreed.
 
-Haha, that's annoying :)  I didn't dig back through the old versions.
-I guess CXL folks can decide whether to keep the old names or update.
+OK, fair enough.
+
+Thanks.
+
+-- 
+Dmitry
