@@ -2,98 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2184C623F25
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7947623F28
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiKJJ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S229612AbiKJJ57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:57:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKJJ4B (ORCPT
+        with ESMTP id S229470AbiKJJ56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:56:01 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300BD6AEC2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:56:00 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a13so2325408edj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:56:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4wCbGbG0XrM7w+kv06NzA1NFafEK5Ay6mvkAvG1Irbo=;
-        b=wH0+X7HAiEfoTPv/cw0MpQw/nGK3BOONgJJGDPsOpJJBYFCb5nhi4/3MV0/74sWmNR
-         seBrReKYDAvE0bHF7mWQwWuLNyjK7aRc/88d8iBD9IO6v9X1sv1XQqe7M0kX00uJqp/q
-         O90fB1SLHC8VK0y3ISgKAJlaA98ymYoVgPBrP4jo6J9GpzABWVeMy8CCuWpupxy8KGrf
-         0BchaO/gbEMey9UDXRjfIZwbUN66eJIxTD0KBUQO9w4b1PCGOeYTUHa+QACtmeT6uAuq
-         Ycr25cmLknBXJHEOZqDGq16wxDpZyae+vS+7wNiRpcNh2Z2Kk/8bCoatWmfu1HzJg6IE
-         sRRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4wCbGbG0XrM7w+kv06NzA1NFafEK5Ay6mvkAvG1Irbo=;
-        b=OhaBWtOXyFtgjqZcqdZr0dc6M6AObItJ2tQqVdrJSJTbiXCNk3bsdmH2YvmgYrMVQI
-         I9Ag2alto5bG3OEDr/bukdQGmeLTyYB7+ahQ6OXBXD7Gj7wtuElSRMtdwqyraM/xidcH
-         TD90DJ+iaWa4nZy5gV0ZrWtKrkuUbJXCayUYENcMCvS12bxKfDeeySxMwHymTK8GONd4
-         WFY3OKpv8URx+k0k/ER0Z6cmuxdxiWEz9InKh9A6LwejJfSCAElfCO5GPAdcXgXERe+n
-         P9PJjMZ1eYzBNMirAXrAKtnR6ENH8v7rOB3zZn/x3i70UN9quaWDPXbgHXAURtGDzXZm
-         4CjA==
-X-Gm-Message-State: ACrzQf1GYB0EbpKGRt2NVDngu67+QF8drC+5otTwS4kzMzKj8onb7o0/
-        IJgUVWIpKUmW3punXtUG6utOT9y1aq4IAH9Ytkg1iA==
-X-Google-Smtp-Source: AMsMyM5cZ/UkzRZNR3jouDrvuXtMOeMkxDWyOAf+CSmF1OJ1+U7ARWviY9UBVXAY3JWyIYDxgHO9F9zkSR+Sm4i2KmU=
-X-Received: by 2002:aa7:c718:0:b0:462:ff35:95dc with SMTP id
- i24-20020aa7c718000000b00462ff3595dcmr61167568edq.32.1668074158763; Thu, 10
- Nov 2022 01:55:58 -0800 (PST)
+        Thu, 10 Nov 2022 04:57:58 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9FA6AED5;
+        Thu, 10 Nov 2022 01:57:56 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 2AA9WgmQ047730;
+        Thu, 10 Nov 2022 17:32:42 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 10 Nov
+ 2022 17:56:21 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
+        <zev@bewilderbeest.net>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] media: aspeed: Use v4l2_dbg to replace v4l2_warn to avoid log spam
+Date:   Thu, 10 Nov 2022 17:56:11 +0800
+Message-ID: <20221110095611.522-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221109155724.42354-1-andriy.shevchenko@linux.intel.com> <Y2vQgdzBl+MvoqQM@smile.fi.intel.com>
-In-Reply-To: <Y2vQgdzBl+MvoqQM@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 10 Nov 2022 10:55:47 +0100
-Message-ID: <CACRpkda=vhL_LKU1BjOBkJKPuFe5YOX8cAPpzU8SaRKRw1fq-Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] pinctrl: Move for_each_maps() to namespace and
- hide iterator inside
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 2AA9WgmQ047730
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 5:08 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Wed, Nov 09, 2022 at 05:57:24PM +0200, Andy Shevchenko wrote:
-> > First of all, while for_each_maps() is private to pin control subsystem
-> > it's still better to have it put into a namespace.
-> >
-> > Besides that, users are not relying on iterator variable, so hide it
-> > inside for-loop.
->
-> ...
->
-> > +#define for_each_pin_map(_maps_node_, _map_)                                         \
-> > +     list_for_each_entry(_maps_node_, &pinctrl_maps, node)                           \
-> > +             for (unsigned int __i = 0;                                              \
->
-> > +                  _map_ = &_maps_node_->maps[__i], __i < _maps_node_->num_maps;      \
->
-> Hmm... I think this is actually not okay, if we have maps be NULL and
-> num_maps = 0, KABOOM is guaranteed.
->
-> I will experiment and update this.
+If the host is powered off, there will be many warning log. To avoid the
+log spam in this condition, replace v4l2_warn with v4l2_dbg.
 
-OK
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ drivers/media/platform/aspeed/aspeed-video.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-> Meanwhile, Linus, do you think this change is useful?
+diff --git a/drivers/media/platform/aspeed/aspeed-video.c b/drivers/media/platform/aspeed/aspeed-video.c
+index cf76aeee8cb6..662465d13a0e 100644
+--- a/drivers/media/platform/aspeed/aspeed-video.c
++++ b/drivers/media/platform/aspeed/aspeed-video.c
+@@ -586,13 +586,13 @@ static int aspeed_video_start_frame(struct aspeed_video *video)
+ 	bool bcd_buf_need = (video->format != VIDEO_FMT_STANDARD);
+ 
+ 	if (video->v4l2_input_status) {
+-		v4l2_warn(&video->v4l2_dev, "No signal; don't start frame\n");
++		v4l2_dbg(1, debug, &video->v4l2_dev, "No signal; don't start frame\n");
+ 		return 0;
+ 	}
+ 
+ 	if (!(seq_ctrl & VE_SEQ_CTRL_COMP_BUSY) ||
+ 	    !(seq_ctrl & VE_SEQ_CTRL_CAP_BUSY)) {
+-		v4l2_warn(&video->v4l2_dev, "Engine busy; don't start frame\n");
++		v4l2_dbg(1, debug, &video->v4l2_dev, "Engine busy; don't start frame\n");
+ 		return -EBUSY;
+ 	}
+ 
+@@ -615,7 +615,7 @@ static int aspeed_video_start_frame(struct aspeed_video *video)
+ 				       struct aspeed_video_buffer, link);
+ 	if (!buf) {
+ 		spin_unlock_irqrestore(&video->lock, flags);
+-		v4l2_warn(&video->v4l2_dev, "No buffers; don't start frame\n");
++		v4l2_dbg(1, debug, &video->v4l2_dev, "No buffers; don't start frame\n");
+ 		return -EPROTO;
+ 	}
+ 
+@@ -796,7 +796,7 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
+ 			if (video->format == VIDEO_FMT_STANDARD &&
+ 			    list_is_last(&buf->link, &video->buffers)) {
+ 				empty = false;
+-				v4l2_warn(&video->v4l2_dev, "skip to keep last frame updated\n");
++				v4l2_dbg(1, debug, &video->v4l2_dev, "skip to keep last frame updated\n");
+ 			} else {
+ 				buf->vb.vb2_buf.timestamp = ktime_get_ns();
+ 				buf->vb.sequence = video->sequence++;
+@@ -1060,7 +1060,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 						      res_check(video),
+ 						      MODE_DETECT_TIMEOUT);
+ 		if (!rc) {
+-			v4l2_warn(&video->v4l2_dev, "Timed out; first mode detect\n");
++			v4l2_dbg(1, debug, &video->v4l2_dev, "Timed out; first mode detect\n");
+ 			clear_bit(VIDEO_RES_DETECT, &video->flags);
+ 			return;
+ 		}
+@@ -1081,7 +1081,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 						      MODE_DETECT_TIMEOUT);
+ 		clear_bit(VIDEO_RES_DETECT, &video->flags);
+ 		if (!rc) {
+-			v4l2_warn(&video->v4l2_dev, "Timed out; second mode detect\n");
++			v4l2_dbg(1, debug, &video->v4l2_dev, "Timed out; second mode detect\n");
+ 			return;
+ 		}
+ 
+@@ -1104,7 +1104,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 	} while (invalid_resolution && (tries++ < INVALID_RESOLUTION_RETRIES));
+ 
+ 	if (invalid_resolution) {
+-		v4l2_warn(&video->v4l2_dev, "Invalid resolution detected\n");
++		v4l2_dbg(1, debug, &video->v4l2_dev, "Invalid resolution detected\n");
+ 		return;
+ 	}
+ 
+@@ -1856,7 +1856,7 @@ static void aspeed_video_stop_streaming(struct vb2_queue *q)
+ 				!test_bit(VIDEO_FRAME_INPRG, &video->flags),
+ 				STOP_TIMEOUT);
+ 	if (!rc) {
+-		v4l2_warn(&video->v4l2_dev, "Timed out when stopping streaming\n");
++		v4l2_dbg(1, debug, &video->v4l2_dev, "Timed out when stopping streaming\n");
+ 
+ 		/*
+ 		 * Need to force stop any DMA and try and get HW into a good
 
-Even if just a name change, it makes things better by being more
-readable so yes :)
+base-commit: aae703b02f92bde9264366c545e87cec451de471
+prerequisite-patch-id: bf47e8ab2998acfbc32be5a4b7b5ae8a3ae4218b
+prerequisite-patch-id: bf82715983e08f2e810ff1a82ce644f5f9006cd9
+prerequisite-patch-id: 28a2040ef0235e5765f05d2fc5529bce2a0f4c6f
+prerequisite-patch-id: 7e761c779730536db8baf50db5fc8caf058e95af
+prerequisite-patch-id: c48ea20973fa35938a7d33a0e20d2900df48755f
+-- 
+2.25.1
 
-Yours,
-Linus Walleij
