@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25571624126
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D81A62412A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiKJLO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:14:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S230469AbiKJLPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:15:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiKJLOt (ORCPT
+        with ESMTP id S230343AbiKJLOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:14:49 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5D16F34A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:14:22 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id 7so1883248ybp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:14:22 -0800 (PST)
+        Thu, 10 Nov 2022 06:14:52 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85223701AD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:14:32 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id q1so1474866pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:14:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=w2bzJsB3PbL2X/ibwn3ezEZIfiFkuOTKtlMfImy68cw=;
-        b=SZpX7Q3VH7kdT2mdWoO/QbBXjTZrWo4vvC/LeRfeAISTPI9+3kKF6QzsnDSlTjhzsz
-         y01yoLLOAGTWPvGFzhGfBuYQOHteTyMuWJzvJLZ8YcJp4563rQJuqMyr9NtiJ1/RXc+5
-         6Zcv+KoRPnYi96FeLJOPtQ1wkq2uvuViyePYA2zNupq1V7SnJVDFLHs/ZXV0Nvqn0zTa
-         JHmbllz/nTATi0fRb7vfjhpD8bpJbN1Rw6PeDUyc+LLZavrgYj5ul2VLSnBKkWDgPgS+
-         BOLMSfKscmE8mG4ImjW3Leym5HYNAkY4LHVbevGDqRFC9E3u5mblGFNltT/zyubmcWRB
-         cO1A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bINLLU9PD1pEzI3atyU2ZEDrwA88CdhG/1pr/Rzw2KY=;
+        b=nsvQUFkPM65XhIKwogsU8yFQC96WEi+N/yF/Dm226uiIActc6A0bN6qqFIDPuQTlGJ
+         vSf3dKVDaWeHQI9uq4/xMdRAeTm9KCEMxaOSTLMPDh61pJ5qzfk3I9Mb0/Yb7rtMNGEs
+         CXJ9v7vfNey2imsN19gPKiwrgxV5UfhaYy6f7lp4iQgVkFkfj4rbRhY/58VL0NzyXjVb
+         OAV925LQimY7UTD1i+RDWzYd84ifVYVHZqfNO1DV05CbmgmLUbuJ0DmK0pAzSSO35/rf
+         1It/xD8LsK/bqdsfqwHPB64W4hjmHerEViFIRsarzGZxkQpv+rtH8wOPI2VwmPgozU8i
+         gFKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w2bzJsB3PbL2X/ibwn3ezEZIfiFkuOTKtlMfImy68cw=;
-        b=Bi+4B4btdQGj7WRk5Xp8BEp0mskmvoVcldvpcKkwpeGUI7NgICJ0RONLsHwuA5xDjJ
-         b1Pdn4355CNzQsKzrd7aF7pODIKkNkoN6KK222hjt3A12K9rBRn0k2LMKEUdcZTpFWDp
-         ZJjDOhCkkPKIJHCOyL5yGrsXvfSjlgwi8m3TWiXruPR/+z2/h4eqPRWV3keLiG+TXVV+
-         eDtdu5B8GxbdQKXzw4VJHE7Cng+oGOSahtJix0vFaRoVjvAvFtwEy7gTdoPB8cNcFJm1
-         6StFXTiAoDL3QtN+F5qCwK0vtqQTiZGbz33ktoarJw3/VUzVuSipk/7nYaakMGupBnC7
-         DWDA==
-X-Gm-Message-State: ANoB5pm1Vx/BmqEtBPjYoE8dg9Eo/oZ5tauiLj2PBpUXvc1n134xauH0
-        m7/MiMn8AlTsd96B3KmMH2plj5WBmkK+pa5x6DMLkZs6Ut8mig==
-X-Google-Smtp-Source: AA0mqf4HAlvllfiTAy8O9bwGOZY+LqHNa1fYXXmuHTN8m/MtWdK5qYiJCbTluraqvq+eDKvsSspGFDYmqQHDLvDcHGI=
-X-Received: by 2002:a05:6902:b16:b0:6d6:9455:d6c5 with SMTP id
- ch22-20020a0569020b1600b006d69455d6c5mr20823348ybb.164.1668078860624; Thu, 10
- Nov 2022 03:14:20 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bINLLU9PD1pEzI3atyU2ZEDrwA88CdhG/1pr/Rzw2KY=;
+        b=zZbM5jBgzdx+5kXnzowxsdT3Ul0PNtHtTFVDZ+JsGjtwNXhWK89RZiPwX8g1X3c7rb
+         geN/JkJplBTGGG3S3EbyvhWlQiIgyEVs/ARmwlDeqERP/sBNmCUKhZE8rO+h2yrUgfhe
+         JcjeX6mG1c+aUi1sqFTsU0kA4y7A8I6CHqsFiyxIv/8d8syB988+TS1GLyn+DAWFlDXm
+         UQxTPSFABYVSnf4pM0LVmc8V4px8Q4ICH+53Rip6tt2dBusGQaoFUzuqYCc57fB9sL1U
+         M3JLKMdoOT6pUIEYeirOlm5rZr49a+GLtfqp2cG5gKH/by14SQwsdpgwFoIZxLqjNlHu
+         Xr0w==
+X-Gm-Message-State: ACrzQf3dnyo/nBZw4iG+XkPVCgT3smxh3i5bawkJKja2/0Xink6urTPa
+        DrK3EJ5A+Bp1YV7F5SEVhlFJOFehCyBGFzbT2qFaKw==
+X-Google-Smtp-Source: AMsMyM7pNQARAbULI6QCzZi6RINV5taBDWPVxndnKjwvl2BvAbsPjPGxaHD5QBaBNVTFXQNULJkyAtUYpbUEcMd9T/A=
+X-Received: by 2002:a63:db42:0:b0:45c:9c73:d72e with SMTP id
+ x2-20020a63db42000000b0045c9c73d72emr53321246pgi.181.1668078871936; Thu, 10
+ Nov 2022 03:14:31 -0800 (PST)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 10 Nov 2022 16:44:09 +0530
-Message-ID: <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
-Subject: x86: clang: acpi-cpufreq.c:970:24: error: variable 'ret' is
- uninitialized when used here [-Werror,-Wuninitialized]
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, llvm@lists.linux.dev
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
+References: <20221110111140.1999538-1-sumit.garg@linaro.org>
+In-Reply-To: <20221110111140.1999538-1-sumit.garg@linaro.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 10 Nov 2022 16:44:20 +0530
+Message-ID: <CAFA6WYMKSjvgNgbf=cJXiTE3LitS-whtRbqJW1cdkHMJ1TsdUg@mail.gmail.com>
+Subject: Re: [PATCH] KEYS: trusted: tee: Make registered shm dependency explicit
+To:     keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     jejb@linux.ibm.com, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jerome Forissier <jerome.forissier@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,44 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Please ignore email this if it is already reported]
++ Jarkko (Apologies I accidently missed you while sending the original patch).
 
-Kernel build warning noticed on x86_64 with clang toolchain [1].
-Build failures noticed from next-20221108 .. next-20221110.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-make --silent --keep-going --jobs=8
-O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
-ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
-CC=clang
-drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is
-uninitialized when used here [-Werror,-Wuninitialized]
-        acpi_cpufreq_online = ret;
-                              ^~~
-drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable
-'ret' to silence this warning
-        int ret;
-               ^
-                = 0
-1 error generated.
-
-tuxmake --runtime podman --target-arch x86_64 --toolchain
-clang-nightly --kconfig defconfig --kconfig-add
-https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
---kconfig-add CONFIG_IGB=y --kconfig-add
-CONFIG_UNWINDER_FRAME_POINTER=y LLVM=1 LLVM_IAS=1
-
-
-
-Build log:
-[1] https://builds.tuxbuild.com/2HLg3VgMgxRXBn31n6Ig7BFwSy9/
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+On Thu, 10 Nov 2022 at 16:42, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> TEE trusted keys support depends on registered shared memory support
+> since the key buffers are needed to be registered with OP-TEE. So make
+> that dependency explicit to not register trusted keys support if
+> underlying implementation doesn't support registered shared memory.
+>
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> Tested-by: Jerome Forissier <jerome.forissier@linaro.org>
+> ---
+>  security/keys/trusted-keys/trusted_tee.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
+> index c8626686ee1b..ac3e270ade69 100644
+> --- a/security/keys/trusted-keys/trusted_tee.c
+> +++ b/security/keys/trusted-keys/trusted_tee.c
+> @@ -219,7 +219,8 @@ static int trusted_tee_get_random(unsigned char *key, size_t key_len)
+>
+>  static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
+>  {
+> -       if (ver->impl_id == TEE_IMPL_ID_OPTEE)
+> +       if (ver->impl_id == TEE_IMPL_ID_OPTEE &&
+> +           ver->gen_caps & TEE_GEN_CAP_REG_MEM)
+>                 return 1;
+>         else
+>                 return 0;
+> --
+> 2.34.1
+>
