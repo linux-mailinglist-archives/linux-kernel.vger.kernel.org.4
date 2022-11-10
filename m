@@ -2,113 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F273624E33
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFDE624E38
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiKJXEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 18:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S230419AbiKJXIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 18:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiKJXEo (ORCPT
+        with ESMTP id S230232AbiKJXIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 18:04:44 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D031DA41;
-        Thu, 10 Nov 2022 15:04:43 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id u6so2783684plq.12;
-        Thu, 10 Nov 2022 15:04:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8PxXXft/nkkyC+qO3NZ0NZRsgWMaldSAxbQ9lxvKRGY=;
-        b=T6C7YIAMYHacLdrESecsyvPNePaxfqKM6ZzXAgY/O9enpon/fyk4AwNgl21buw2/tg
-         xmg6tTuw9bDi37AmyBpjGUQbxADCwvSk8/Cm7Q5ceUWvRAb3jTO8xLahRHhj13EQv2+C
-         L8roGgR/WnzAEfbC/SBSxdDo7OjR6NNkhheKPiuQQJxhZhhcVpC60ppB5Uocn9O26SNO
-         K7f01Uy0UWye2FRcS/mAfg3t/m/H7du4d81vo66lkm7yS2742p05r2+fFnuwWjSbTWse
-         rg/sN8qJQyOgFL/8eTz2ab00JzSmsiBefMNT6JbZs1bpZmwEKonlZa0TS0beQpAeJ0Eg
-         a1Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8PxXXft/nkkyC+qO3NZ0NZRsgWMaldSAxbQ9lxvKRGY=;
-        b=dQlmBTPnBUbRmea2h5O1TY5BTKTp07CuEk28CxoRTUZB55ie7FDlRoWWf7UOnGi0IY
-         MBRtX92ri6gDdtz43yHIF1Vh5kMQVjIdSLA/NLSQgSqRVzvriMuh0wnnL2MbL7FAeW+Z
-         AvadSU351VctUjnetQNUlNQ8s8pBWEm+31/rsLSo/zGVtoI11fMSRJKldDk1jwe2yFbE
-         3GANfhiOV1FtE6kh8bMeVhi+S+cMI4wjn25rF+/3p2nAAfLS51HEcH9lY0RiAL3+5R4x
-         bnPd6iDMuDbh1NaOg8v/iXmyOjnxQgHSNVs4XpVxUNPUro1OPL5o/bIUiBNiQS0Pxn9z
-         2o0A==
-X-Gm-Message-State: ACrzQf3KUGeDbbSQYA3O46ZcVPwpXW8embX3bPwqf26KZl8vNjIqbZ/R
-        KNbhso4fCJjB/UhYQFXgG00=
-X-Google-Smtp-Source: AMsMyM4KtyUZ+RLI3SgeEuwc5nKbDYT6Ih/qwJK99ZzTPQW52wv+CeCQTrbrzNKVmuN6P5egPGp+Gg==
-X-Received: by 2002:a17:90b:3d8d:b0:212:ccda:88bc with SMTP id pq13-20020a17090b3d8d00b00212ccda88bcmr2476638pjb.212.1668121483057;
-        Thu, 10 Nov 2022 15:04:43 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:8c0b:3260:c81c:119d])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0018875b76945sm185565pll.274.2022.11.10.15.04.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 15:04:42 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 10 Nov 2022 15:04:40 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Petr Vorel <pvorel@suse.cz>
-Cc:     ltp@lists.linux.it, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Martin Doucha <mdoucha@suse.cz>,
-        Yang Xu <xuyang2018.jy@fujitsu.com>
-Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
-Message-ID: <Y22DiF5Q5EDUIrZE@google.com>
-References: <20221107191136.18048-1-pvorel@suse.cz>
- <Y2l3vJb1y2Jynf50@google.com>
- <Y2l89dt/t8M6+9go@pevik>
+        Thu, 10 Nov 2022 18:08:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F7A1DA41;
+        Thu, 10 Nov 2022 15:08:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D7C161B89;
+        Thu, 10 Nov 2022 23:08:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55593C433C1;
+        Thu, 10 Nov 2022 23:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668121693;
+        bh=c/H+SRQDywVylukBno5yzc5O9o1JiQF0nc6WN+K5JPM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=g3hpCfbKPUBcxYC0z3qscirzviTmLo89FWRgKpnMcooBErVZVZ9QJjmDSqMLzJnnO
+         9i1jCTdCVV9/RsN/2wOXd5xktNoAOZ+g7Ri4eyPWfrO0Lcyxl5pQYb1dLlY5uLkMrB
+         1zMdUGY6vMzNRcZH8pd8U9yAmDNev6J6etzWWvjbUa0p16YyaU+ftKEq8qbpg7rxn3
+         MaPQzo3aRsUcaE97hOQEdtvE31urPl6Er2BTnDfIfmFN9XzQUVCpwAWKpPNDYOIYDD
+         mDrob6CXjB2Od8MM8sFikTLE2GpuPWWiDl9O46SUGLGS3lIR5x7lCAd8ZBN16IPjfP
+         GTuNKH2XcZRbQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 03B1C5C13DD; Thu, 10 Nov 2022 15:08:07 -0800 (PST)
+Date:   Thu, 10 Nov 2022 15:08:06 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
+Subject: Re: RCU stall on 6.1-rc4 (and some previous releases) related to
+ ftrace
+Message-ID: <20221110230806.GN725751@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2l89dt/t8M6+9go@pevik>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 10:47:33PM +0100, Petr Vorel wrote:
-> Hi Minchan,
+On Thu, Nov 10, 2022 at 06:25:41PM -0300, Guilherme G. Piccoli wrote:
+> Hi folks, I've noticed some RCU stalls when enabling ftrace filtering in
+> 6.1-rc4 (also 6.1-rc3 and I guess I've seen this before, but only in
+> 6.0+). Here is the full dmesg: https://termbin.com/4xo6 , see below for
+> a small snippet of the stall [0].
 > 
-> > On Mon, Nov 07, 2022 at 08:11:35PM +0100, Petr Vorel wrote:
-> > > Hi all,
+> I've briefly talked to Steve on IRC, and he mentioned that my kernel
+> seemed to have PREEMPT_VOLUNTARY=y (and indeed, this is the case - see
+> the full config here: https://termbin.com/t48d), saying that maybe
+> adding a cond_resched() in the loop would help.
 > 
-> > > following bug is trying to workaround an error on ppc64le, where
-> > > zram01.sh LTP test (there is also kernel selftest
-> > > tools/testing/selftests/zram/zram01.sh, but LTP test got further
-> > > updates) has often mem_used_total 0 although zram is already filled.
+> So, I've cooked a small hack (see the patch attached) and it seems to
+> work. Steve: lemme know if you want to send it (since it's your idea and
+> maybe my hack is not covering all cases), or if you prefer, I can work a
+> commit message and send myself.
 > 
-> > Hi, Petr,
-> 
-> > Is it happening on only ppc64le?
-> I haven't seen it on other archs (x86_64, aarch64).
-> 
-> > Is it a new regression? What kernel version did you use?
-> Found on openSUSE kernel, which uses stable kernel releases 6.0.x.
-> It's probably much older, first I've seen it some years ago (I'm not able to find kernel version), but it was random. Now it's much more common.
-> 
-> Test runs on VM (I can give qemu command or whatever you need to know about it)
-> I'll try to verify it on some bare metal ppc64le.
+> Any other advice / tests required, please lemme me know and I'll be glad
+> in contributing.
 
-Hi Petr and Martin,
+I will let others give feedback on the commit log, signoffs, and so
+on.  From an RCU CPU stall warning perspective:
 
-Thanks for testing and meaning information.
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-Could you tell how I could create VM to run ppc64le and run the test?
-I'd like to reproduce in my local to debug it.
+> Cheers,
+> 
+> 
+> Guilherme
+> 
+> 
+> [0]
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-....
+> } 6 jiffies s: 1289 root: 0x2/.
+> rcu: blocking rcu_node structures (internal RCU debug):
+> Sending NMI from CPU 4 to CPUs 1:
+> NMI backtrace for cpu 1
+> [...]
+> RIP: 0010:find_kallsyms_symbol+0x85/0x1a0
+> [...]
+> Call Trace:
+>  <TASK>
+>  ? get_refcyc_per_delivery.constprop.0+0x200/0x200 [amdgpu]
+>  module_address_lookup+0x63/0xc0
+>  ? get_refcyc_per_delivery.constprop.0+0x200/0x200 [amdgpu]
+>  kallsyms_lookup_buildid+0xb6/0x130
+>  ftrace_match_record+0x43/0xf0
+>  ? match_records+0x210/0x3b0
+>  ? __kmem_cache_alloc_node+0x165/0x260
+>  match_records+0x13a/0x3b0
+>  ftrace_process_regex.isra.0+0x101/0x120
+>  ftrace_filter_write+0x57/0x90
+> [...]
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-....
+> } 25 jiffies s: 1289 root: 0x2/.
+> rcu: blocking rcu_node structures (internal RCU debug):
+> Sending NMI from CPU 4 to CPUs 1:
+> [...]
+> RIP: 0010:find_kallsyms_symbol+0x8f/0x1a0
+> [...]
+> Call Trace:
+>  <TASK>
+>  ? dcn21_dmcu_create+0xd0/0xd0 [amdgpu]
+>  module_address_lookup+0x63/0xc0
+>  ? dcn21_dmcu_create+0xd0/0xd0 [amdgpu]
+>  kallsyms_lookup_buildid+0xb6/0x130
+>  ftrace_match_record+0x43/0xf0
+>  ? match_records+0x210/0x3b0
+>  ? __kmem_cache_alloc_node+0x165/0x260
+>  match_records+0x13a/0x3b0
+>  ftrace_process_regex.isra.0+0x101/0x120
+>  ftrace_filter_write+0x57/0x90
+> [...]
 
-Thanks!
+> From 45fda369a49d0e59689e4a6b9babc12598265825 Mon Sep 17 00:00:00 2001
+> From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+> Date: Thu, 10 Nov 2022 16:42:17 -0300
+> Subject: [PATCH] ftrace/hack: Add cond_resched() to prevent RCU stall
+> 
+> Suggestion from Steve on IRC
+> ---
+>  kernel/trace/ftrace.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 7dc023641bf1..8c2c04b2eb52 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -4184,6 +4184,7 @@ match_records(struct ftrace_hash *hash, char *func, int len, char *mod)
+>  		if (rec->flags & FTRACE_FL_DISABLED)
+>  			continue;
+>  
+> +		cond_resched();
+>  		if (ftrace_match_record(rec, &func_g, mod_match, exclude_mod)) {
+>  			ret = enter_record(hash, rec, clear_filter);
+>  			if (ret < 0) {
+> -- 
+> 2.38.0
+> 
+
