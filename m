@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8326245A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4106245A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiKJPZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S231508AbiKJPZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:25:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiKJPZV (ORCPT
+        with ESMTP id S231504AbiKJPZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:25:21 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096883E086;
-        Thu, 10 Nov 2022 07:25:16 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id n205so2162506oib.1;
-        Thu, 10 Nov 2022 07:25:16 -0800 (PST)
+        Thu, 10 Nov 2022 10:25:33 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8FD3E0B5;
+        Thu, 10 Nov 2022 07:25:17 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id 46-20020a9d0631000000b00666823da25fso1324917otn.0;
+        Thu, 10 Nov 2022 07:25:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wERUdQdjWjh/WLWGcq6kXq7Y3fhhIRGrVPA3P4TVF/k=;
-        b=XlcvyvGdDoL7j/ld25ik8DutzpkV/ZhQe5SsKtayc7k0cH7McLdnpH7Rz7pb4os8oD
-         niAH3q9Vj29F3ImpOFH0sGgKWEE6/eIMu/okSj7HeY/3uoELTaanIlljr4Y5Eb/ct+29
-         yxxawZ7k9JCQvLD/X5LwkUsnrCt2xe0upzKAanbY3wUSqUyjcGc5VrMG80MiakGCxuro
-         8KVizuzoKSFN60Zns+Hp72DXGX0hS92YVnuhy6geIC/VupZQrDEZzW5a5k4ZnqoNaQs3
-         Q7hRrMtHLE3bz23jU24DnuURApm+NpuOA39YAji3BEj8bOsNR4SMWToYqk9fo4dKldjF
-         Q2Uw==
+        bh=GmjCJ069G5ZA0ck/PetkxKT25fldp2oH5LB83pWLxGg=;
+        b=pq817FLfAn/Vc+Gbr+dri0aLEbm7xOXgkMHfcYwLZWDsOkLu6cXfGVRcxqTpN/DjPd
+         kPgHYrUrrkMbgofm0bOpmslcKQjl27DfROxRDRPLmqszVVDoFXS5/9vlzwROSVEPFgOi
+         T+XnIY8JxHd1NTEMuao9sVo4VwLBUw54N6YJ1UV7FQa9YkJuMYoX+O9bQBm1GwMPyCWi
+         l4/YccSnq8KydeqH+40CIICdYCQQKfo7YWbTjpT/cM9mMRtKU7DHeSjuxTi9TUKwSjlj
+         wp95dLPLLXDtv/b9uOKVyu5EZS2ZYhwP1z4zoCfApIBN7DwhbHYLgBDgnVG+hK0UjOJp
+         XzZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wERUdQdjWjh/WLWGcq6kXq7Y3fhhIRGrVPA3P4TVF/k=;
-        b=dqVwZfHa/TptIOLp20WGPc1/aRpAJ17eb8ro9KE1cLNpk9B0HR8u0VMfLflj7wkO4X
-         W5RDmV+J+vw75cELf4FqaPxU7vB4BElsxyW/ypzxOqbmw51T4x1VKVeLti0pODCGFit2
-         ixkiPdNL/l2GjWKDSuaL8TTaLSx7OEsB0a9Ronn+/GWFtHSAqQ986Eo/nTXAizgOK5di
-         bym9RUsDRvJGfM4sL3R5/FPzuvFUkd736xTAkm77Sz6thSXEIUm4rdeC5IHGnaphkoPP
-         s4r4CkKHxVijVv8LBgcimqSUO6jWLqYcoVVqommLutSlvN4TruZHl0kAf6YxAn8xzJ9z
-         hA8g==
-X-Gm-Message-State: ACrzQf3MqNMNUitJaovDRcnsKQa81HgETDfsAJSdzxr8v68CDxcryPLG
-        SPAqfZZQ6Yw31W26CYdYskE=
-X-Google-Smtp-Source: AMsMyM5bzam3dy73MJhtfkSrDSyFw9k/AQHbFevLBsds752pwtCblgDMYIgHSXHmKJHhRFi5KzKDKQ==
-X-Received: by 2002:a05:6808:658:b0:343:4df6:c5d with SMTP id z24-20020a056808065800b003434df60c5dmr1574790oih.279.1668093915356;
-        Thu, 10 Nov 2022 07:25:15 -0800 (PST)
+        bh=GmjCJ069G5ZA0ck/PetkxKT25fldp2oH5LB83pWLxGg=;
+        b=bAzYPUA5lXbeHvziD9Z3ACiEt9mkMkht+u+AV38HsN1++ofaSU7R8k3ICSqfWouLn9
+         UjHIiy300zCF3kFGZj6Igrv3bTced4eDPdhGQa9cI3wKviQjc0Dv6PaatAJF36HUgW3h
+         pKDrspaT0hyn9QjBzjABo0xMno7PgSxxEXHXdZENIHkp11xHarBYNK22jg2LdSwXGcbc
+         p4/dP5xYGiOvE2CO+W9u1jrRaF8ZYaohJrTzbXGQi294sCsQg7KAFM3Cg+uXjfxabDna
+         m+SQsy1RGDFCvWMY7lqcFtd25zsm4Nij5+NY0iruXCKsD4Ag1CBxnZaDry6NBq0pfM2P
+         Zsbw==
+X-Gm-Message-State: ACrzQf0ukJUhbB6SlsHUW2GE/rVw5Ituz6+wAvgwSEhJNIKePSMVEqM5
+        pJR9x+P7xxewnKvASDjkyto=
+X-Google-Smtp-Source: AMsMyM7Cpy8eu01F6zW9zK8OBu5c/uNTzlGJaHmX7bjgdoQWsygkrOlz0VJ6lDBiKrdfTuJmcR/vcA==
+X-Received: by 2002:a05:6830:12:b0:66c:74a0:beeb with SMTP id c18-20020a056830001200b0066c74a0beebmr20826692otp.70.1668093916976;
+        Thu, 10 Nov 2022 07:25:16 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s16-20020a4adb90000000b0047f72b6988fsm5221123oou.45.2022.11.10.07.25.14
+        by smtp.gmail.com with ESMTPSA id f1-20020a056830204100b006619483182csm6454623otp.18.2022.11.10.07.25.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 07:25:14 -0800 (PST)
+        Thu, 10 Nov 2022 07:25:16 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -57,9 +57,9 @@ To:     "Rafael J . Wysocki" <rafael@kernel.org>,
 Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 7/9] thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
-Date:   Thu, 10 Nov 2022 07:24:58 -0800
-Message-Id: <20221110152500.3032655-8-linux@roeck-us.net>
+Subject: [PATCH v2 8/9] thermal/core: Remove thermal_zone_set_trips()
+Date:   Thu, 10 Nov 2022 07:24:59 -0800
+Message-Id: <20221110152500.3032655-9-linux@roeck-us.net>
 X-Mailer: git-send-email 2.36.2
 In-Reply-To: <20221110152500.3032655-1-linux@roeck-us.net>
 References: <20221110152500.3032655-1-linux@roeck-us.net>
@@ -76,207 +76,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Protect access to thermal operations against thermal zone removal by
-acquiring the thermal zone device mutex. After acquiring the mutex, check
-if the thermal zone device is registered and abort the operation if not.
-
-With this change, we can call __thermal_zone_device_update() instead of
-thermal_zone_device_update() from trip_point_temp_store() and from
-emul_temp_store(). Similar, we can call __thermal_zone_set_trips() instead
-of thermal_zone_set_trips() from trip_point_hyst_store().
+Since no callers of thermal_zone_set_trips() are left, remove the function.
+Document __thermal_zone_set_trips() instead. Explicitly state that the
+thermal zone lock must be held when calling the function, and that the
+pointer to the thermal zone must be valid.
 
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
-v2: Simplify error handling to avoid additional goto.
-    Do not use ternary operator in modified code.
-    Remove now unnecessary { } in emul_temp_store().
+v2: No change
 
- drivers/thermal/thermal_core.c  |  4 +-
- drivers/thermal/thermal_core.h  |  2 +
- drivers/thermal/thermal_sysfs.c | 79 +++++++++++++++++++++++++++------
- 3 files changed, 69 insertions(+), 16 deletions(-)
+ drivers/thermal/thermal_core.h    |  1 -
+ drivers/thermal/thermal_helpers.c | 34 ++++++++++++++-----------------
+ 2 files changed, 15 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 9facd9c5b70f..b8e3b262b2bd 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -403,8 +403,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
- 		pos->initialized = false;
- }
- 
--static void __thermal_zone_device_update(struct thermal_zone_device *tz,
--					 enum thermal_notify_event event)
-+void __thermal_zone_device_update(struct thermal_zone_device *tz,
-+				  enum thermal_notify_event event)
- {
- 	int count;
- 
 diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 1571917bd3c8..7b51b9a22e7e 100644
+index 7b51b9a22e7e..b834cb273429 100644
 --- a/drivers/thermal/thermal_core.h
 +++ b/drivers/thermal/thermal_core.h
-@@ -109,6 +109,8 @@ int thermal_register_governor(struct thermal_governor *);
- void thermal_unregister_governor(struct thermal_governor *);
- int thermal_zone_device_set_policy(struct thermal_zone_device *, char *);
- int thermal_build_list_of_policies(char *buf);
-+void __thermal_zone_device_update(struct thermal_zone_device *tz,
-+				  enum thermal_notify_event event);
+@@ -113,7 +113,6 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+ 				  enum thermal_notify_event event);
  
  /* Helpers */
- void thermal_zone_set_trips(struct thermal_zone_device *tz);
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index ec495c7dff03..e2e94294fbb2 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -92,7 +92,14 @@ trip_point_type_show(struct device *dev, struct device_attribute *attr,
- 	if (sscanf(attr->attr.name, "trip_point_%d_type", &trip) != 1)
- 		return -EINVAL;
+-void thermal_zone_set_trips(struct thermal_zone_device *tz);
+ void __thermal_zone_set_trips(struct thermal_zone_device *tz);
+ int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
  
--	result = tz->ops->get_trip_type(tz, trip, &type);
-+	mutex_lock(&tz->lock);
-+
-+	if (device_is_registered(dev))
-+		result = tz->ops->get_trip_type(tz, trip, &type);
-+	else
-+		result = -ENODEV;
-+
-+	mutex_unlock(&tz->lock);
- 	if (result)
- 		return result;
- 
-@@ -128,10 +135,17 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
- 	if (kstrtoint(buf, 10, &temperature))
- 		return -EINVAL;
- 
-+	mutex_lock(&tz->lock);
-+
-+	if (!device_is_registered(dev)) {
-+		ret = -ENODEV;
-+		goto unlock;
-+	}
-+
- 	if (tz->ops->set_trip_temp) {
- 		ret = tz->ops->set_trip_temp(tz, trip, temperature);
- 		if (ret)
--			return ret;
-+			goto unlock;
- 	}
- 
- 	if (tz->trips)
-@@ -140,16 +154,22 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
- 	if (tz->ops->get_trip_hyst) {
- 		ret = tz->ops->get_trip_hyst(tz, trip, &hyst);
- 		if (ret)
--			return ret;
-+			goto unlock;
- 	}
- 
- 	ret = tz->ops->get_trip_type(tz, trip, &type);
- 	if (ret)
--		return ret;
-+		goto unlock;
- 
- 	thermal_notify_tz_trip_change(tz->id, trip, type, temperature, hyst);
- 
--	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+
-+unlock:
-+	mutex_unlock(&tz->lock);
-+
-+	if (ret)
-+		return ret;
- 
- 	return count;
+diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+index 321f8020082d..56aa2e88f34f 100644
+--- a/drivers/thermal/thermal_helpers.c
++++ b/drivers/thermal/thermal_helpers.c
+@@ -147,6 +147,21 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
  }
-@@ -168,7 +188,14 @@ trip_point_temp_show(struct device *dev, struct device_attribute *attr,
- 	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip) != 1)
- 		return -EINVAL;
+ EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
  
--	ret = tz->ops->get_trip_temp(tz, trip, &temperature);
-+	mutex_lock(&tz->lock);
-+
-+	if (device_is_registered(dev))
-+		ret = tz->ops->get_trip_temp(tz, trip, &temperature);
-+	else
-+		ret = -ENODEV;
-+
-+	mutex_unlock(&tz->lock);
- 
- 	if (ret)
- 		return ret;
-@@ -193,6 +220,13 @@ trip_point_hyst_store(struct device *dev, struct device_attribute *attr,
- 	if (kstrtoint(buf, 10, &temperature))
- 		return -EINVAL;
- 
-+	mutex_lock(&tz->lock);
-+
-+	if (!device_is_registered(dev)) {
-+		ret = -ENODEV;
-+		goto unlock;
-+	}
-+
- 	/*
- 	 * We are not doing any check on the 'temperature' value
- 	 * here. The driver implementing 'set_trip_hyst' has to
-@@ -201,7 +235,10 @@ trip_point_hyst_store(struct device *dev, struct device_attribute *attr,
- 	ret = tz->ops->set_trip_hyst(tz, trip, temperature);
- 
- 	if (!ret)
--		thermal_zone_set_trips(tz);
-+		__thermal_zone_set_trips(tz);
-+
-+unlock:
-+	mutex_unlock(&tz->lock);
- 
- 	return ret ? ret : count;
++/**
++ * __thermal_zone_set_trips - Computes the next trip points for the driver
++ * @tz: a pointer to a thermal zone device structure
++ *
++ * The function computes the next temperature boundaries by browsing
++ * the trip points. The result is the closer low and high trip points
++ * to the current temperature. These values are passed to the backend
++ * driver to let it set its own notification mechanism (usually an
++ * interrupt).
++ *
++ * This function must be called with tz->lock held. Both tz and tz->ops
++ * must be valid pointers.
++ *
++ * It does not return a value
++ */
+ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+ {
+ 	int low = -INT_MAX;
+@@ -193,25 +208,6 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+ 		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
  }
-@@ -220,7 +257,14 @@ trip_point_hyst_show(struct device *dev, struct device_attribute *attr,
- 	if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip) != 1)
- 		return -EINVAL;
  
--	ret = tz->ops->get_trip_hyst(tz, trip, &temperature);
-+	mutex_lock(&tz->lock);
-+
-+	if (device_is_registered(dev))
-+		ret = tz->ops->get_trip_hyst(tz, trip, &temperature);
-+	else
-+		ret = -ENODEV;
-+
-+	mutex_unlock(&tz->lock);
- 
- 	return ret ? ret : sprintf(buf, "%d\n", temperature);
- }
-@@ -269,16 +313,23 @@ emul_temp_store(struct device *dev, struct device_attribute *attr,
- 	if (kstrtoint(buf, 10, &temperature))
- 		return -EINVAL;
- 
--	if (!tz->ops->set_emul_temp) {
--		mutex_lock(&tz->lock);
-+	mutex_lock(&tz->lock);
-+
-+	if (!device_is_registered(dev)) {
-+		ret = -ENODEV;
-+		goto unlock;
-+	}
-+
-+	if (!tz->ops->set_emul_temp)
- 		tz->emul_temperature = temperature;
--		mutex_unlock(&tz->lock);
--	} else {
-+	else
- 		ret = tz->ops->set_emul_temp(tz, temperature);
--	}
- 
- 	if (!ret)
--		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+		__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+
-+unlock:
-+	mutex_unlock(&tz->lock);
- 
- 	return ret ? ret : count;
- }
+-/**
+- * thermal_zone_set_trips - Computes the next trip points for the driver
+- * @tz: a pointer to a thermal zone device structure
+- *
+- * The function computes the next temperature boundaries by browsing
+- * the trip points. The result is the closer low and high trip points
+- * to the current temperature. These values are passed to the backend
+- * driver to let it set its own notification mechanism (usually an
+- * interrupt).
+- *
+- * It does not return a value
+- */
+-void thermal_zone_set_trips(struct thermal_zone_device *tz)
+-{
+-	mutex_lock(&tz->lock);
+-	__thermal_zone_set_trips(tz);
+-	mutex_unlock(&tz->lock);
+-}
+-
+ static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev,
+ 				       int target)
+ {
 -- 
 2.36.2
 
