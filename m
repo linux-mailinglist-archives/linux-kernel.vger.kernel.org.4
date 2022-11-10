@@ -2,209 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0726241FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E099462419E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbiKJMKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S230432AbiKJLkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiKJMKA (ORCPT
+        with ESMTP id S230366AbiKJLkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:10:00 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2064.outbound.protection.outlook.com [40.107.247.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2343E6AECE;
-        Thu, 10 Nov 2022 04:09:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D617CfwiVf+szqbjSKtqnOKwRtZn+YFXShmI/e68kkTd2gwoI72J2LQoZ1Ax6BfRepvg2fw1Z+3en+xG1Okt/vFvFDWaBxhvyqhqygvY+5E1X5KrGYnepExe9rdSmsLSNU8xjqpwGJFs/cv4AdxyfuD9ZrfwLiDjUdbVB1PUMxuTl9fuE6p4T8++rMzgrncLegrG4PDMhacoUD4gTWN+Dh0uD8IZqCQQVhBqqiAfHkos84Zv9ZKA2iCRclHXq/fq+6t99EWt6UtZsU8Ura1GBxKrLvF6iHsvOjtIZh4YU214UwBwol6s3RDmDpZ8xUfqG4FyevJC+WDC3n5qwmgU6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+2Re8Y9COKv4Xe3HECOet3HjC9ciO9Ls/P7GyxfLjyo=;
- b=NDVkavFceioKbAHXbbj7Hk0ZnFVipfpmdtyAJrlWasJ+BcT7/4AkU2ML+yR/mcqI5WUhbl88itfyIlV8sntTsSBcFrSb9JBUtynj7gRIxvFuEoIGNGf72/K1dhWwy3s3Ly74N9Edh9p1PUoVG6bPrKnD2j+HQBUbZycn0qHWoZmkfFY9jVOcOZBA6d4WWLNFqRvYUV3QrpX+kAP95njkXTyP5jMvlaaQ98m89qkjhvtBGGy0PZiXOklWVVGAc4Bmn9YqQmQA0NmIy1nFlpV1tDStLxcnqRP2G+kOlylw+6n0yk9L3Ec1+GWdSC+baU2bhUm9CC4dCUQKfbXEuDKpCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+2Re8Y9COKv4Xe3HECOet3HjC9ciO9Ls/P7GyxfLjyo=;
- b=E1B7aL5/tImUUeyaIhK9753NCv9kAGatiw6WioyTfDmDat9sAdcuZmLps+abGn3eipTMCT42fsJqy3dAnZVSb/A7PxBlOjQkH+BueYLwFNZwWRDw5GLmg3GUmOOL/EXrHgyTsPuj9VKebQO2Lx0dtnwzLVqBqvDpfF+WSSMSUqA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by DB8PR04MB7097.eurprd04.prod.outlook.com (2603:10a6:10:12a::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Thu, 10 Nov
- 2022 12:09:56 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::71f1:f7bb:5039:e55d]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::71f1:f7bb:5039:e55d%3]) with mapi id 15.20.5791.027; Thu, 10 Nov 2022
- 12:09:56 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH V2 3/3] tty: serial: fsl_lpuart: Use pm_ptr() to avoid need to make pm __maybe_unused
-Date:   Thu, 10 Nov 2022 19:38:59 +0800
-Message-Id: <20221110113859.8485-4-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221110113859.8485-1-sherry.sun@nxp.com>
-References: <20221110113859.8485-1-sherry.sun@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG3P274CA0016.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::28)
- To AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+        Thu, 10 Nov 2022 06:40:03 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E81771F0D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:39:59 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id a5so2617151edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ck1BFgYQUoxfjthSY0Z/ICMvhRDs51HkE0D/E51e4wU=;
+        b=cLoqN/9Hw4WN89uoDoxpq9Ce/Ps341RBpybWaA/Ttn7dX0XjEZSpQMeE/cLupilSy+
+         h9M/AwRJwi+wD3lcUZtgCbl5J3Y1/4+a+UG987xrzyBKVQSsdTGx1Fm9p56BVwQCgeqw
+         ImbNP+V0cuLG09qZBqDEVWEBH4JmnDYapBzy20rI0QOEnuyEvU41wtqwWtHQ/Ku+SIq6
+         z/iAwWeg98cPs684u3jM1bZkrHRFlxBeM553WE2HZydhyBqAswoiUSyHfbMc8MScHPVp
+         jTxj/0bSYX2PEajd6PNI/IV0ZBru+l7g17Wn1GCvWMrBI6s8qLNSd3U7dwQx3hiin+sp
+         LiYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ck1BFgYQUoxfjthSY0Z/ICMvhRDs51HkE0D/E51e4wU=;
+        b=t6erFUGXw6C55Rq7X07mIwlT+aRiJTNVUh1uMARlARm4AUxQsqUI+7Sn2hKiUEqips
+         H+Aoh1E6PJHjdkibxWy7xCzuvQvluwmbC/0Bcl70xG5K3gzUonSZeLOBZJI1UO1Z1v+U
+         Ay6M7QC4MrM/6pnPiRCYoVG9I+uxhltU1ipuV5YtPac3GOVbHvaGgZny1piL1lN+e3rt
+         O0757ukKUZW0PPkbohhikyKWw5P8QU3YX8e5hJpGzYQUEb9NJsfz9Uz/wehISsMAd7ER
+         tCJAFH+thYzQd7oTdkJobdtr4xVnYjuBVsQlbL/xYRC7cowRa49DRRbs4e+HgfvG4lm4
+         BWKA==
+X-Gm-Message-State: ACrzQf3SMFd0RcvBgLsiG6wvtebmZTp8HjErk71FPYBcT3poI/gAmyVL
+        YIjFqDW0Sg8ZK5YLF0SZGYEEwi0SXsuwOqH7N7Wiiw==
+X-Google-Smtp-Source: AMsMyM6KPfAGNVILTJIJybxZbWNcNW1j294XPOEkghGZsATADMyuAh5FXMGRYiA9Y0UOLTHKSZCe9zdW3Mb4U369XWo=
+X-Received: by 2002:a05:6402:4002:b0:463:bc31:2604 with SMTP id
+ d2-20020a056402400200b00463bc312604mr2100488eda.32.1668080397979; Thu, 10 Nov
+ 2022 03:39:57 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|DB8PR04MB7097:EE_
-X-MS-Office365-Filtering-Correlation-Id: 308a4a0f-2d37-48ed-1e01-08dac3147b0d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t7dYKwxhlKvPq0EW8av8QxDu4kIDlaUJHcvclTnhXw4g5Pp4nHPEnSWhwwI1Uwbmf1XVG39QkJ6d4Yrhi1XN3Sc5Hd7z+FqrY3ZUKkkU5lSXAQLXdAG+JqOodbXfgM2x2MXkLyaZvRamSlb+OXmt38acHAaXlbk1InrJWpVa7qV0aIOkI+GdPxg5cY1k7pPMV74qhfNuhRPnQLN9W9UZyEkDB4sKThC1BVWD4WH22bp9vsNgwA5lM2xDdTLUaYuSHP3jz3P3wduNIJVAHvj0BDmqoJ/alxvmnjQAaJDKNyQ6PIWyy3mCtk81f2ZaU9M3lKJG7Abh3hR5a8L3gb0ATIzs47s1JbQSnUF/N9FvLG4VSJGk9eG9YsSYhN8ujvCx8QRt+Sg4mlqueMCAVn6uk1gRVMywxk9MBdy2nmajbA5dnVQgd6VDK9buVcGOTFdLEMAw9v7AVILItcWtE4cWr3AEIGr8snYUeaL5iOX1kb1I5u22Ug7y7p1w0jbL8aoNUeExFUWMFwzG+9s7x2A4SUonoMoLlxXT8LKk+MzQqUjDctpb1PjS2LVWJCZ/HNeRoBiSPolyb6JCUVM67MVks7eWlsYkW+i9sfyULsIcng9plhPVm15E5Z+NBzQuMt0pdyBT8gwgqVk03wBExeCu+cQ0wHEv56sQ1PKDCSBuUnrZnrbuWZpPk62lCm9SCQqw6lZ3FALUDyGDtMQBTo+CJCh2WbkKW/CVoXATV7NhB5pv5hVb/q/if84jYTq1KwEg1bAekAXzHkyCnNO7d7It6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(376002)(39860400002)(396003)(451199015)(38100700002)(38350700002)(6486002)(478600001)(8936002)(2616005)(316002)(52116002)(6506007)(66476007)(6512007)(41300700001)(66556008)(66946007)(86362001)(36756003)(26005)(83380400001)(44832011)(8676002)(4326008)(186003)(1076003)(2906002)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?q/OlPs83pw3+h65Af608pw4PQR6vlBF/Ev35O94VlP0XjiJvDk48k+oz1TQd?=
- =?us-ascii?Q?xusw70FJiUEtsQGdRH8dRpjdn1t+iLIEZH0kS0uBeWRv6Pn7xMT2GPAn2+fl?=
- =?us-ascii?Q?HUj1TswhmcZIyqkbdfqyvEX2AqJw1Wh6BlSaeSoV++wcOn/+D3vxKPGhEXiA?=
- =?us-ascii?Q?nsnyEVdk2hVGGiVJAnvjnFTPMcFjDBHbr3giCckhQmdo+O1NfZYQ4bnEur+b?=
- =?us-ascii?Q?n11qYq47U5h2AuiX1eirF6M9UjWWmru1rEMMzwxhjveXcBROgfJ1D676Zn2W?=
- =?us-ascii?Q?HrJp1BU5G4RX/qTNYHGmRQJURw+1e0tzJWLid596mSdPLDygQJOXNdPEGe/6?=
- =?us-ascii?Q?ekEZJKCoxKq9ILjXzz3eDJ3h0u2/VHDT64mHxiObbxF9/i/+hJqSYxjRqBBp?=
- =?us-ascii?Q?o1I82AO6H/yu24bTD299ZPrkAHw7lAhe6TFTRmOvSd4SI8QS7dBzSh0m+Tt5?=
- =?us-ascii?Q?EClvphE/hkxwliDQaB7Iq8WThQnII8rT1/fZI5LNIfXKF4ot7tQYAAEch8ss?=
- =?us-ascii?Q?wY6akBphhsrtvbd+bfcDRLuB/yvHAxSZLOYf5G/td8ZgnvtgEDq2bH2ohMKr?=
- =?us-ascii?Q?jIi097UinnbwMX28TczwSHpDO7gNi1du4WZQ7zL96lS/7eGjLAmtubsxwerc?=
- =?us-ascii?Q?b2zK301+JeiVlrZiCvxC9Gy9l1HXs9ME7ytl1jBzPhUGBs06nhUjiGciuQSf?=
- =?us-ascii?Q?dPNvPFhmQaED1C525wOaPxayx6/9aNCHdJeb4WLhyfHDNh0XE3hLObJu5lKQ?=
- =?us-ascii?Q?FIfVtMRqQuHO4GDHic2U6QC+3mHWHU6vWDCs6dJNCaDJAeD/7ZFrWl7yfFoQ?=
- =?us-ascii?Q?CvZk25i/fXpXfuokXWrCKcvVFS6khG2h0PXkW+zj/iJt0YL8fHLhinyCBDHi?=
- =?us-ascii?Q?QTPE3iKI+5mEBNLXrkVOuehpeFPnEc3EMYCOfvDPaZ52hVok2V+WPDG2E56p?=
- =?us-ascii?Q?fWiEZkOciEn6M0w6czKm2JU7kn33abQAvgXfDBHdJfOJi3G11BHjlB6TOxz+?=
- =?us-ascii?Q?aZqDMKcn0mh+rcZq13Th1YT84RgzEOF8ioFQlThSLjkH5cVOuKyvbrJmPruk?=
- =?us-ascii?Q?Am0FrIH/OLfhtA0wDG4SiUdLwkLCBstwgFHgT/d8UjEjmgLeKQWtLAKpBAKz?=
- =?us-ascii?Q?RJymQ3ZCHbuNO1YaJ2aImJwxaU2Ndy/E/TqVcZXmpHZZIyzmr6yCaEUvvS87?=
- =?us-ascii?Q?CdJQogNjdAXer/B+AyRqUiQwYi/RF62tgkVHvcZWwL4RAbTtqQilQQIasxVt?=
- =?us-ascii?Q?w+B0rqX67KilGUbCu/uQx/UiJtJ5p+gzLS3qK43vTM5d0ktZCParJJlET/G7?=
- =?us-ascii?Q?tFQb4SniMOC8xdzyC4A+jV+nlCS/pPoKIKi+/H0CP54yeUxh8XnDD3SL2xcv?=
- =?us-ascii?Q?Ht3xkoAJaM/orR4D5CVdGmQKJ73L0vidAoz1QcU2+LbFkXKs07MUkYy4yMrG?=
- =?us-ascii?Q?0W1ZkDuu0kc6GyF3iFdfvvaFhcfJh8MXRZFbrsIp54bLts9ZRXQmEjuKQoGX?=
- =?us-ascii?Q?srZ0861DFwNnU/r+f2RB0cCy5llLoZOvxVaLSCDcpwU672Ot5a4RiLNvood2?=
- =?us-ascii?Q?j7DODLXF9ogQQfUw6juwN6OQ+bNZQG7DWWHpZuwj?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 308a4a0f-2d37-48ed-1e01-08dac3147b0d
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 12:09:55.9128
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xl6OAsw+7/qGX11zwBMBXK1UMjIgpLFTrFNa9njx1Nb8eR2yMx7pgKFi/IRdbZCjdZCAGC2aBIU6pdAsDO1Nww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7097
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech> <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
+In-Reply-To: <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 10 Nov 2022 12:39:46 +0100
+Message-ID: <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
+Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use pm_ptr() to remove the need to mark the pm functions as
-__maybe_unused when the kernel is built without CONFIG_PM support.
+On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
+> >
+> > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
+> > hook, but doesn't provide a determine_rate implementation.
+> >
+> > This is a bit odd, since set_parent() is there to, as its name implies,
+> > change the parent of a clock. However, the most likely candidate to
+> > trigger that parent change is a call to clk_set_rate(), with
+> > determine_rate() figuring out which parent is the best suited for a
+> > given rate.
+> >
+> > The other trigger would be a call to clk_set_parent(), but it's far less
+> > used, and it doesn't look like there's any obvious user for that clock.
+>
+> If I recall correctly, that is the use case we did target for these
+> types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
 
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
----
-Changes in V2:
-1. This patch is new added, remove the __maybe_unused as Ilpo suggested.
----
- drivers/tty/serial/fsl_lpuart.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Hm I am trying to get that driver to work ... from time to time.
+It's just that ALSA SoC DT has changed to much that it turns out
+into a complete rewrite :/
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 5b3962bb0de2..20e3027c1a55 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2819,7 +2819,7 @@ static int lpuart_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int __maybe_unused lpuart_runtime_suspend(struct device *dev)
-+static int lpuart_runtime_suspend(struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct lpuart_port *sport = platform_get_drvdata(pdev);
-@@ -2829,7 +2829,7 @@ static int __maybe_unused lpuart_runtime_suspend(struct device *dev)
- 	return 0;
- };
- 
--static int __maybe_unused lpuart_runtime_resume(struct device *dev)
-+static int lpuart_runtime_resume(struct device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct lpuart_port *sport = platform_get_drvdata(pdev);
-@@ -2888,7 +2888,7 @@ static bool lpuart_uport_is_active(struct lpuart_port *sport)
- 	return false;
- }
- 
--static int __maybe_unused lpuart_suspend_noirq(struct device *dev)
-+static int lpuart_suspend_noirq(struct device *dev)
- {
- 	struct lpuart_port *sport = dev_get_drvdata(dev);
- 	bool irq_wake = irqd_is_wakeup_set(irq_get_irq_data(sport->port.irq));
-@@ -2901,7 +2901,7 @@ static int __maybe_unused lpuart_suspend_noirq(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused lpuart_resume_noirq(struct device *dev)
-+static int lpuart_resume_noirq(struct device *dev)
- {
- 	struct lpuart_port *sport = dev_get_drvdata(dev);
- 	unsigned int val;
-@@ -2921,7 +2921,7 @@ static int __maybe_unused lpuart_resume_noirq(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused lpuart_suspend(struct device *dev)
-+static int lpuart_suspend(struct device *dev)
- {
- 	struct lpuart_port *sport = dev_get_drvdata(dev);
- 	unsigned long temp, flags;
-@@ -3017,7 +3017,7 @@ static void lpuart_console_fixup(struct lpuart_port *sport)
- 	}
- }
- 
--static int __maybe_unused lpuart_resume(struct device *dev)
-+static int lpuart_resume(struct device *dev)
- {
- 	struct lpuart_port *sport = dev_get_drvdata(dev);
- 	int ret;
-@@ -3042,11 +3042,11 @@ static int __maybe_unused lpuart_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops lpuart_pm_ops = {
--	SET_RUNTIME_PM_OPS(lpuart_runtime_suspend,
-+	RUNTIME_PM_OPS(lpuart_runtime_suspend,
- 			   lpuart_runtime_resume, NULL)
--	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(lpuart_suspend_noirq,
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(lpuart_suspend_noirq,
- 				      lpuart_resume_noirq)
--	SET_SYSTEM_SLEEP_PM_OPS(lpuart_suspend, lpuart_resume)
-+	SYSTEM_SLEEP_PM_OPS(lpuart_suspend, lpuart_resume)
- };
- 
- static struct platform_driver lpuart_driver = {
-@@ -3055,7 +3055,7 @@ static struct platform_driver lpuart_driver = {
- 	.driver		= {
- 		.name	= "fsl-lpuart",
- 		.of_match_table = lpuart_dt_ids,
--		.pm	= &lpuart_pm_ops,
-+		.pm	= pm_ptr(&lpuart_pm_ops),
- 	},
- };
- 
--- 
-2.17.1
+So in sound/soc/ux500/mop500_ab8500.c
+I see this:
 
+        status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
+        if (status)
+(...)
+
+and there is elaborate code to switch between "SYSCLK" and
+"ULPCLK" (ulta-low power clock). Just like you say... however
+a clock named SYSCLK or ULPCLK does not appear in the
+code in drivers/clk/ux500 or any DT bindings so... it seems to
+be non-working for the time being.
+
+Yours,
+Linus Walleij
