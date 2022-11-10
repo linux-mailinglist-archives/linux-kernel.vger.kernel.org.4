@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286EF624B8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F47624B82
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiKJURK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S231504AbiKJUQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiKJURG (ORCPT
+        with ESMTP id S229461AbiKJUQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:17:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A1054B0B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:16:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668111362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PkpNiTy02Kl92bzGrUkAFIk/Fo/N4N8FwYswcHibr9s=;
-        b=F75NC5ncTK85u2hlvmi4F7IcjisMee9DXcF+tsL62Z/TVM5kBnzK+c3pgmGV9ClA7nlRuq
-        uBr+x5LFMXFCtDzMdadB7jSgwTsogr7bNi4PQj70Gyu3TUHIARvTL0bjAA/cEouVpV+LOz
-        tCDHYN4dFydhPlx/qXTj6/vgQIG+dm4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-205-L2a2GMqIOT2YxmFR463SsA-1; Thu, 10 Nov 2022 15:16:01 -0500
-X-MC-Unique: L2a2GMqIOT2YxmFR463SsA-1
-Received: by mail-wm1-f72.google.com with SMTP id bi19-20020a05600c3d9300b003cf9d6c4016so3195393wmb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:16:00 -0800 (PST)
+        Thu, 10 Nov 2022 15:16:30 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D854145A07
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:16:28 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id k7so2463637pll.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6TElCG4eFIdf6STksjddJrggUNxP/AlOjbuXBcSw0mM=;
+        b=sfzP9GkS2N8sV3ZFlaibrEoEWCHxFt3EUEMFqZbOnqQ8cnYcdfZ9ooaPucSaV9CcYt
+         cEzu6kJyyn1csUNE8WY7Uqbk7bCr+BpjdH9bG5A9bgf9E8jI+3GSs5zyLT4whRZiMUIz
+         JSnePOQn60uFry3wLpyfIcBN5dF7HodqQcTWKLTkpFZlSxHzHCZTjXI9qQEX+xQEVw8l
+         N0BFXZdCdCT1a9N9u/UvWInBVNt54VW1JCtSmuqZ754zU5wksCz5D5Xr8krsAlIQny/d
+         QuG8R5DaZuP2ZdfFJl5LAw+PuqbNGAOPN4B4SJofHM7UFzQDAsGSuJQcYcShSzcrEecG
+         Jdng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PkpNiTy02Kl92bzGrUkAFIk/Fo/N4N8FwYswcHibr9s=;
-        b=5wppT97cIKoaotG+hGamdln9+3X34lfBgGWiwcVFdmSWpUSDr26nXxZ+pk3ZpySYd1
-         l7OU9aCjbJ//RR4e6u88Eult/W9emDNAsPeI95jOYuyFnmhvPnPCFuqcv46TqU+ykQNc
-         9OpGhrFzcqvCgsnIh0WY/FLk+Rqo9aFakxzavAWHDYh/teYZAJ6pKhUU4wCBUby2gMZ8
-         pNmYg4yRJ8tcCyG5hdHWxIF8L3qSW7qlYdpBv8Lg67i69+Zw/RNHew7WFw333qdxVJYm
-         ieIZLhJBxAS58RGX0cA9R3iqz5axTM5lsJbGt1WRsPSR3wfGWwMxiFC+KOrn7QC09vrZ
-         uBgw==
-X-Gm-Message-State: ACrzQf3GB9x6ia0Vo96DMXWBhXKilPXkivEd6vSJgUtXNbMfzyQS5b1z
-        s9Y5WGLg5dwxXnOOCEjpO4DRe5qlk4RH1IilhH6rqbb5at6DS4rPpuRFovhqV+zfF6FR82ZY0+u
-        5ZV5h+Kek2/T/S+Th3AsdHRMA
-X-Received: by 2002:a5d:59ae:0:b0:236:6861:a89d with SMTP id p14-20020a5d59ae000000b002366861a89dmr43774498wrr.437.1668111359830;
-        Thu, 10 Nov 2022 12:15:59 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6S3ENztY75wDSVKFfDNx9eFsb13CNbSGZAMisdkZIMlXDXXSCYTktknl3xbMoyl64iAmazgg==
-X-Received: by 2002:a5d:59ae:0:b0:236:6861:a89d with SMTP id p14-20020a5d59ae000000b002366861a89dmr43774490wrr.437.1668111359531;
-        Thu, 10 Nov 2022 12:15:59 -0800 (PST)
-Received: from redhat.com ([2.52.3.250])
-        by smtp.gmail.com with ESMTPSA id p16-20020adfe610000000b002364c77bc96sm86110wrm.33.2022.11.10.12.15.57
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6TElCG4eFIdf6STksjddJrggUNxP/AlOjbuXBcSw0mM=;
+        b=B0s9JBJ7PcneEVnALozeigAPe62uyhl70XNOHd8Q6FbXL7ntXmybEGcSiQhDgJGFNJ
+         1pdfGd0HURFlkV2YOKN8M5j329pijv1KgfHiys33Knw4MD+fWqFn5Fw25E9kAhYocXEK
+         Q/xBrZc/OQls44JZEYw2TBsTrlhXWOHzy8hiESra8HIseUIGg7PT0YJqbU0n5lMmFaYJ
+         uXDxuaDah917XPdiIzVvhndmww8grmaRc5sFkRMMD8QY6hbGZlHhOMWfuNnVb+3WDEVX
+         E167L0H3t3jwW2Ty6yTZmuj7EXpUGODxaInYmuLQKeDYPfGaaKU+534UNNA2zkV9uUFM
+         4xeg==
+X-Gm-Message-State: ACrzQf226k0+Sdm2i8Z4nGTrRTGgmXomj59qrmWyZycwt6G7pT4BEvSz
+        i7xljRWujejcrPE4xVu6M3Y38A==
+X-Google-Smtp-Source: AMsMyM668jd6+A/ewh9nZvDze5l7U6DAYz/tHcvu9BcXLhffErJqbrIv11eqIx4lwO+6RsL5KqCg1A==
+X-Received: by 2002:a17:90a:68cd:b0:212:ca89:41c9 with SMTP id q13-20020a17090a68cd00b00212ca8941c9mr1913900pjj.244.1668111388236;
+        Thu, 10 Nov 2022 12:16:28 -0800 (PST)
+Received: from localhost ([75.172.139.56])
+        by smtp.gmail.com with ESMTPSA id z1-20020aa79901000000b005360da6b26bsm50380pff.159.2022.11.10.12.16.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 12:15:58 -0800 (PST)
-Date:   Thu, 10 Nov 2022 15:15:55 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Wei Gong <gongwei833x@gmail.com>, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
-Message-ID: <20221110144700-mutt-send-email-mst@kernel.org>
-References: <20221108044819.GA861843@zander>
- <20221110193547.GA631336@bhelgaas>
+        Thu, 10 Nov 2022 12:16:27 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Andrew Davis <afd@ti.com>, jerome Neanne <jneanne@baylibre.com>,
+        Nishanth Menon <nm@ti.com>
+Cc:     Lee Jones <lee@kernel.org>, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, kristo@kernel.org,
+        dmitry.torokhov@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, tony@atomide.com,
+        vigneshr@ti.com, bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+        marcel.ziswiler@toradex.com, vkoul@kernel.org,
+        biju.das.jz@bp.renesas.com, arnd@arndb.de, jeff@labundy.com,
+        narmstrong@baylibre.com, msp@baylibre.com, j-keerthy@ti.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v6 4/6] mfd: tps65219: Add driver for TI TPS65219 PMIC
+In-Reply-To: <1231f3e6-61a7-ca3c-2fbb-679b583e0df1@ti.com>
+References: <20221011140549.16761-1-jneanne@baylibre.com>
+ <20221011140549.16761-5-jneanne@baylibre.com>
+ <Y1+q2Usm9ecicXqp@google.com>
+ <1383fd22-c720-811e-a2bb-be2151675089@baylibre.com>
+ <20221105000104.rtj3r6ufqwqmepon@keenly> <7heduewjp0.fsf@baylibre.com>
+ <5418ac3b-04d7-5e77-7612-c8f168e24621@ti.com>
+ <1267bf43-618c-7347-be3a-2792c656d9b6@baylibre.com>
+ <7hk042agn4.fsf@baylibre.com>
+ <1231f3e6-61a7-ca3c-2fbb-679b583e0df1@ti.com>
+Date:   Thu, 10 Nov 2022 12:16:27 -0800
+Message-ID: <7hfseqa7l0.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110193547.GA631336@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,127 +90,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 01:35:47PM -0600, Bjorn Helgaas wrote:
-> Hi Wei,
-> 
-> I can't quite parse this.  Is the problem that you had some virtio I/O
-> in progress, you wrote "0" to /sys/.../sriov_numvfs, and the virtio
-> I/O operation hangs?
+Andrew Davis <afd@ti.com> writes:
 
-I think so. I also think that just attempting to
-remove the module or to unbind the driver from it
-will have the same effect.
+> On 11/10/22 11:00 AM, Kevin Hilman wrote:
+>> jerome Neanne <jneanne@baylibre.com> writes:
+>>=20
+>>> On 09/11/2022 22:59, Andrew Davis wrote:
+>>>> On 11/7/22 3:14 PM, Kevin Hilman wrote:
+>>>>> Nishanth Menon <nm@ti.com> writes:
+>>>>>
+>>>>>> On 13:58-20221104, jerome Neanne wrote:
+>>>>>>>
+>>>>>> [...]
+>>>>>>
+>>>>>>>
+>>>>>>>>
+>>>>>>>> Can you try an compile with W=3D1 please.
+>>>>>>> This raise one warning on mfd:
+>>>>>>> drivers/mfd/tps65219.c:28:12: warning: =E2=80=98tps65219_soft_shutd=
+own=E2=80=99
+>>>>>>> defined but
+>>>>>>> not used [-Wunused-function]
+>>>>>>>  =C2=A0=C2=A0=C2=A0 28 | static int tps65219_soft_shutdown(struct t=
+ps65219 *tps)
+>>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~
+>>>>>>> soft_shutdown has been validated and is used in TI baseline even if=
+ not
+>>>>>>> hooked in upstream version further to this review:
+>>>>>>> https://lore.kernel.org/lkml/20220825150224.826258-5-msp@baylibre.c=
+om/
+>>>>>>>
+>>>>>>> It was a TI requirement to implement it...
+>>>>>>> Let me know if you want me to remove this function or if we can keep
+>>>>>>> it like
+>>>>>>> this.
+>>>>>>
+>>>>>> There are platforms without psci, correct? I think the comment was to
+>>>>>> drop the force override with system-power-controller property,
+>>>>>>
+>>>>>> if (!pm_power_off) {
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0tps65219_i2c_client =3D client;
+>>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0pm_power_off =3D &tps65219_pm_power_off;
+>>>>>> }
+>>>>>>
+>>>>>> Could still be valid for such platforms, no? I do see that the
+>>>>>> capability that the PMIC has - which is software shutdown is a valid
+>>>>>> feature that we support in many different PMIC drivers. Is'nt the jo=
+b of
+>>>>>> the driver to introduce the functionality in a manner that is
+>>>>>> appropriate to the OS framework?
+>>>>>
+>>>>> Yeah, I think Nishanth is right here.
+>>>>>
+>>>>> We should probably keep the `if (!pm_power_off)` part so the PMIC will
+>>>>> be used if PSCI is not, but it also allows an easy way to test/use the
+>>>>> PMIC
+>>>>> shutdown functionality downstream if needed.
+>>>>>
+>>>>
+>>>> Then should be using the sys-off handler API[0] so it doesn't block PS=
+CI
+>>>> which is also switching over[1].
+>>>>
+>>>> Andrew
+>>>>
+>>>> [0] https://lwn.net/Articles/894511/
+>>>> [1] https://www.spinics.net/lists/arm-kernel/msg1024127.html
+>>> Can we go for upstream with v7 without tps65219_soft_shutdown. Then if
+>>> everyone agrees with Andrew proposal, I'll submit a separate patch which
+>>> adds implementation of tps65219_soft_shutdown support through sys-off
+>>> handler.
+>>>
+>>> So that we are not blocking upstream in case further
+>>> discussions/alignment are required.
+>>=20
+>> Seems OK to me.  Nishanth?  Andrew?
+>>=20
+>> But I think you'll need to at least submit a v8 without the unused
+>> code/dead code that Lee pointed out.
+>>=20
+>
+> If you need the v8 anyway, then add support through sys-off in
+> that spin, should only be a couple lines of change.
 
-> Is there any indication to the user, e.g., softlockup oops?
-> 
-> More questions below.
-> 
-> On Tue, Nov 08, 2022 at 04:52:16AM +0000, Wei Gong wrote:
-> 
-> > according to sriov's protocol specification vendor_id and
-> > device_id field in all VFs return FFFFh when read
-> > so when vf devs is in the pci_device_is_present,it will be
-> > misjudged as surprise removeal
-> > 
-> > when io is issued on the vf, normally disable virtio_blk vf
-> > devs,at this time the disable opration will hang. and virtio
-> > blk dev io hang.
-> >
-> > task:bash            state:D stack:    0 pid: 1773 ppid:  1241 flags:0x00004002
-> > Call Trace:
-> >  <TASK>
-> >  __schedule+0x2ee/0x900
-> >  schedule+0x4f/0xc0
-> >  blk_mq_freeze_queue_wait+0x69/0xa0
-> >  ? wait_woken+0x80/0x80
-> >  blk_mq_freeze_queue+0x1b/0x20
-> >  blk_cleanup_queue+0x3d/0xd0
-> >  virtblk_remove+0x3c/0xb0 [virtio_blk]
-> >  virtio_dev_remove+0x4b/0x80
-> >  device_release_driver_internal+0x103/0x1d0
-> >  device_release_driver+0x12/0x20
-> >  bus_remove_device+0xe1/0x150
-> >  device_del+0x192/0x3f0
-> >  device_unregister+0x1b/0x60
-> >  unregister_virtio_device+0x18/0x30
-> >  virtio_pci_remove+0x41/0x80
-> >  pci_device_remove+0x3e/0xb0
-> >  device_release_driver_internal+0x103/0x1d0
-> >  device_release_driver+0x12/0x20
-> >  pci_stop_bus_device+0x79/0xa0
-> >  pci_stop_and_remove_bus_device+0x13/0x20
-> >  pci_iov_remove_virtfn+0xc5/0x130
-> >  ? pci_get_device+0x4a/0x60
-> >  sriov_disable+0x33/0xf0
-> >  pci_disable_sriov+0x26/0x30
-> >  virtio_pci_sriov_configure+0x6f/0xa0
-> >  sriov_numvfs_store+0x104/0x140
-> >  dev_attr_store+0x17/0x30
-> >  sysfs_kf_write+0x3e/0x50
-> >  kernfs_fop_write_iter+0x138/0x1c0
-> >  new_sync_write+0x117/0x1b0
-> >  vfs_write+0x185/0x250
-> >  ksys_write+0x67/0xe0
-> >  __x64_sys_write+0x1a/0x20
-> >  do_syscall_64+0x61/0xb0
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > RIP: 0033:0x7f21bd1f3ba4
-> > RSP: 002b:00007ffd34a24188 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-> > RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f21bd1f3ba4
-> > RDX: 0000000000000002 RSI: 0000560305040800 RDI: 0000000000000001
-> > RBP: 0000560305040800 R08: 000056030503fd50 R09: 0000000000000073
-> > R10: 00000000ffffffff R11: 0000000000000202 R12: 0000000000000002
-> > R13: 00007f21bd2de760 R14: 00007f21bd2da5e0 R15: 00007f21bd2d99e0
-> > 
-> > when virtio_blk is performing io, as long as there two stages of:
-> > 1. dispatch io. queue_usage_counter++;
-> > 2. io is completed after receiving the interrupt. queue_usage_counter--;
-> > 
-> > disable virtio_blk vfs:
-> >   if(!pci_device_is_present(pci_dev))
-> >     virtio_break_device(&vp_dev->vdev);
-> > virtqueue for vf devs will be marked broken.
-> > the interrupt notification io is end. Since it is judged that the
-> > virtqueue has been marked as broken, the completed io will not be
-> > performed.
-> > So queue_usage_counter will not be cleared.
-> > when the disk is removed at the same time, the queue will be frozen,
-> > and you must wait for the queue_usage_counter to be cleared.
-> > Therefore, it leads to the removeal of hang.
-> 
-> I want to follow along in the code, but I need some hints.
-> 
-> "queue_usage_counter" looks like it's supposed to be a symbol, but I
-> can't find it.
+Oops, my mistake.  I see v7 already has the dead code removed.  I got
+confused because this thread is on v6.
 
-I think it refers to q->q_usage_counter in blk core.
+IMO, I think v7 should be merged v7 (mfd part is already ack'd by Lee)
+and then Jerome will follow up with the support for sys-off as an
+additional series.
 
-> Where (which function) is the I/O dispatched and queue_usage_counter
-> incremented?  Where is queue_usage_counter decremented?
-> 
-> Prior to this change pci_device_is_present(VF) returned "false"
-> (because the VF Vendor ID is 0xffff); after the change it will return
-> "true" (because it will look at the PF Vendor ID instead).
-> 
-> Previously virtio_pci_remove() called virtio_break_device().  I guess
-> that meant the virtio I/O operation will never be completed?
-> 
-> But if we don't call virtio_break_device(), the virtio I/O operation
-> *will* be completed?
-> 
-> Bjorn
-
-It's completed anyway - nothing special happened at the device
-level - but driver does not detect it.
-
-Calling virtio_break_device will mark all queues as broken, as
-a result attempts to check whether operation completed
-will return false.
-
-This probably means we need to work on handling surprise removal
-better in virtio blk - since it looks like actual suprise
-removal will hang too. But that I think is a separate issue.
-
--- 
-MST
-
+Kevin
