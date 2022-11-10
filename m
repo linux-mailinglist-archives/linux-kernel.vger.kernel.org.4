@@ -2,51 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C372623C48
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CA5623C4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbiKJHC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S232677AbiKJHES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:04:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiKJHCz (ORCPT
+        with ESMTP id S229697AbiKJHEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:02:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7842250A;
-        Wed,  9 Nov 2022 23:02:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5160D61D7F;
-        Thu, 10 Nov 2022 07:02:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9EFC433C1;
-        Thu, 10 Nov 2022 07:02:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668063773;
-        bh=c67wxQgkF8UYfaGU9UNy+6DAoMPvP8sl9I7jtOccIh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=heV0AzmQL9bI7hPyjVlD00ezQQvqmjQCP3ZS3MwciDI+ipZ/tZBD6/u3j2BljmVQx
-         eJusoL9JoyI5QkhW8CEKG58gieAQHFYLnAF8+D/4S2f3JykMqYTOXPgX/JZMGI5kpc
-         JFTL0IkJQkDo+GUGd34/MM3b164w8Ycd4LOngosrtlI5Zh+rbU8tT1PhGzlqjEXfPA
-         6I3z+bpPAcxQWkuAIqWhMz6Tnq+bIxMPJn+Y4HgrNqt9/M5tdsjwolT8VbYKjqyuAD
-         EL97KQ/UpP4ZjsW8O5K8u6u0trtvFH70MFi0U37ZENhDflXK0HQctuDRYl1rsVilvU
-         9QN1Q66fpyyvg==
-Date:   Thu, 10 Nov 2022 12:32:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     vincent.sunplus@gmail.com, kishon@kernel.org,
-        linux-usb@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] phy: usb: sunplus: Fix memleak in update_disc_vol()
-Message-ID: <Y2yiGadmdSz/Ml3i@matsya>
-References: <20221108073430.29172-1-yuehaibing@huawei.com>
+        Thu, 10 Nov 2022 02:04:16 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF2414016;
+        Wed,  9 Nov 2022 23:04:15 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AA49Z6f026999;
+        Thu, 10 Nov 2022 07:04:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YQqA+Zr54sEBuZb86behYUeWIo4KfLafIhcEQ3Yb+ls=;
+ b=WBe1ydr1Vw/ZmYD6VOO5iAJoVSnnXwvijvS84VSydbHhEKYq/PCp9T1z48ZDwN2ubZ97
+ dVejhlVCbVm/aknEUxcqDuB0LrwUy6afoMdOO7zQYIziHQ+q2rceT5YklRiETfAMqqae
+ BKlLDl6EYNKQ2zuyRY42AB7wwKXRvDdw7tSbm+AwcYHJIWdwWNhHtbuGp8/CT3tjTK0f
+ PB5TIarHzJm4yPsYrDDQNWN/TNWbI+e8PnqiKTPrgaS1kU+XLREHiRrA6BvllIqwm2/z
+ 2uPURZgot6WbtuAZbWVOYmPrNR+Yd3ClyEEWoP/A9YyoQysOFcpCKCiNzFDFGxxjc9pG NQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3krg1y9xmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 07:04:04 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AA743RZ005928
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 07:04:03 GMT
+Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 9 Nov 2022
+ 23:03:56 -0800
+Message-ID: <7c616858-3de9-6de5-bfee-572bf0405ec1@quicinc.com>
+Date:   Thu, 10 Nov 2022 12:33:52 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221108073430.29172-1-yuehaibing@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V3 1/2] arm64: dts: qcom: sc7280: Mark all Qualcomm
+ reference boards as LTE
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+CC:     <jinghung.chen3@hotmail.com>, <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <konrad.dybcio@somainline.org>
+References: <20221109055132.609-1-quic_sibis@quicinc.com>
+ <CAD=FV=Wdrb27XCmj+VoNXtvFOYHGPkWXJujzZogzLK2ZMWgxTw@mail.gmail.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <CAD=FV=Wdrb27XCmj+VoNXtvFOYHGPkWXJujzZogzLK2ZMWgxTw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: t7PUGj6U1WPI_ZhzxEUn60uVGwbdbs3X
+X-Proofpoint-ORIG-GUID: t7PUGj6U1WPI_ZhzxEUn60uVGwbdbs3X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-09_06,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 spamscore=0 mlxlogscore=800
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211100053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,33 +83,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-11-22, 15:34, YueHaibing wrote:
-> 'otp_v' is allocated in nvmem_cell_read(), it should be freed
-> before return.
+Hey Doug,
 
-Right!
+Thanks for taking time to review the series.
 
+On 11/9/22 23:10, Doug Anderson wrote:
+> Hi,
 > 
-> Fixes: 99d9ccd97385 ("phy: usb: Add USB2.0 phy driver for Sunplus SP7021")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
-> v2: free otp_v before return
-> ---
->  drivers/phy/sunplus/phy-sunplus-usb2.c | 3 +++
->  1 file changed, 3 insertions(+)
+> On Tue, Nov 8, 2022 at 9:51 PM Sibi Sankar <quic_sibis@quicinc.com> wrote:
+>>
+>> When the modem node was re-located to a separate LTE source file
+>> "sc7280-herobrine-lte-sku.dtsi", some of the previous LTE users
+>> weren't marked appropriately. Fix this by marking all Qualcomm
+>> reference devices as LTE.
+>>
+>> Suggested-by: Douglas Anderson <dianders@chromium.org>
+>> Fixes: d42fae738f3a ("arm64: dts: qcom: Add LTE SKUs for sc7280-villager family")
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>> ---
+>>
+>> v3:
+>>   * Fix incorrect tag usage [Krzysztof]
+>>
+>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> index 4884647a8a95..ca09367abb6c 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> @@ -13,6 +13,7 @@
+>>   #include "pmk8350.dtsi"
+>>
+>>   #include "sc7280-chrome-common.dtsi"
+>> +#include "sc7280-herobrine-lte-sku.dtsi"
 > 
-> diff --git a/drivers/phy/sunplus/phy-sunplus-usb2.c b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> index e827b79f6d49..62d5cb5c7c9d 100644
-> --- a/drivers/phy/sunplus/phy-sunplus-usb2.c
-> +++ b/drivers/phy/sunplus/phy-sunplus-usb2.c
-> @@ -105,6 +105,9 @@ static int update_disc_vol(struct sp_usbphy *usbphy)
->  	val = (val & ~J_DISC) | set;
->  	writel(val, usbphy->phy_regs + CONFIG7);
->  
-> +	if (!IS_ERR(otp_v))
-> +		kfree(otp_v);
+> I think you need to _remove_ the include from the "idp.dts" file now,
+> right? Otherwise it gets included twice.
 
-But that is not the case!
+sry missed ^^, will fix it in the re-spin.
 
--- 
-~Vinod
+- Sibi
