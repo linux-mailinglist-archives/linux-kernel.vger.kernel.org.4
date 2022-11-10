@@ -2,84 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C2C624A4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE665624A51
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiKJTHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 14:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S231825AbiKJTIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 14:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKJTGK (ORCPT
+        with ESMTP id S230296AbiKJTHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 14:06:10 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5176E45A3C;
-        Thu, 10 Nov 2022 11:05:48 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id a27so1500012qtw.10;
-        Thu, 10 Nov 2022 11:05:48 -0800 (PST)
+        Thu, 10 Nov 2022 14:07:43 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D63659FC0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 11:06:22 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id b11so2453690pjp.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 11:06:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rokvtl75XxkOCdp16d0xR65MKlSaNsdfqv2851bbu3Q=;
-        b=NK4WtyUnA4cU9/Na3TW3AQ2+nwvFNrcLPvxRKE/NyAe9a0PSP/2jlAiAI64WJrDJwE
-         hYGHJ7vhrgiT96sX9LTyfpsGocf/aD3/tBq8+/Xg3+gePpAPsVmB1ci21XkuGtpCCXb5
-         y9qhhtC+pNic3NOzemZbHh2pEAAi/yKfNz6UVHuPPkv1HSnnS2h8SUmvy82sDYpY2HPG
-         el9f1Rij9Zrcy06YpV3h+7H/R+3/py31sxyFYaGwlx7p4vTXv7SUoZn9gC8mA4CYhZG6
-         +2XlPiLOUE7e5K8jeGok6SCDMhsWKcxLdWBozxd1Xvru3jk/8O9zV5yWm2Y6ht/BibXj
-         zYTg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8BOfwJyZkB5NeEkoK9HFl+Jpr8ENfJAqXI5cJXPbV58=;
+        b=nVYsd80hcxMv8ff6fLEa671TtzbPmVVCP1aPUXP0s6+BujlXVaze5aQociyjzmAnlW
+         5W4BpzMnVVqWD3kXN+QkmA4t42sP4n+cIQrhaQkxhE/T8UB51PRMjJwk4f/XxJTULlAF
+         0UX9NtEt9fcOSitjV6oaZxroCFZqPJ67lU7C1CqNAzDVpktF3ylxkr+XFKfC5tBGD+mo
+         GpVfjDW6xYl5VXv6oN4COhPIVZ1yKi9o+8ZBFzGkMcenCokt3/NuMFkE2S5wyvZDy26P
+         CzLzbhARvWXDpI4fowrGuZOZA4Kt3z+9+afVXuWt8ep5rdycTCXrZOIuwkgyfeBHc+WO
+         9Dyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rokvtl75XxkOCdp16d0xR65MKlSaNsdfqv2851bbu3Q=;
-        b=e7GN3QZpqgD3QZWJeDa0lQ6fptnZw9v1fnaxaNMVySVtLF38KyWWHsjBv1ypI3GILg
-         ddJTVyItBa/oS+oA32PfXl0aZqUjSoOE29+zJsMn20fIyn4XXIx3HMVjm+p7D1yMAaIS
-         xIj1hG6uWEP0NjNfFwVpHOOIo/mc/CN7XOBK5K+/7NiDuT6cA9Q66prCwjWKIc4izqEK
-         1kHqebsG7Khfo/3iRojOooRCcT24sS5xJweAbOdfBcycQ1I/CZp5ntB+Z4I2NYRt2QOs
-         fgRngdV31dUK2EYIRJHPjPaR3/0f+ykLr65J1NliFMGInbbmAg5WhONYsXoQqt7HWaS2
-         BW3A==
-X-Gm-Message-State: ACrzQf36YfKTOCg+zZiiNOkC5+UXmYTnclIMUD5uCUZpSxL8mYesG7Yh
-        n7kE9pD1a5yrD5Ftqf7RN/w=
-X-Google-Smtp-Source: AMsMyM5C+OzzE0m0MheuUF6pkJIuPd88S44wge8lT+izBl325Rfy03ls5do3rjxIpgQlO1jkcatpfA==
-X-Received: by 2002:ac8:5494:0:b0:3a5:6854:32fe with SMTP id h20-20020ac85494000000b003a5685432femr1466889qtq.655.1668107146861;
-        Thu, 10 Nov 2022 11:05:46 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x11-20020a05620a258b00b006e42a8e9f9bsm35258qko.121.2022.11.10.11.05.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 11:05:46 -0800 (PST)
-Message-ID: <4193aa1b-6836-08c0-58fd-5f53c66682da@gmail.com>
-Date:   Thu, 10 Nov 2022 11:05:42 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8BOfwJyZkB5NeEkoK9HFl+Jpr8ENfJAqXI5cJXPbV58=;
+        b=R8DsRY1ZCV1tMyE2RZZEtaXin96YgOrV6+Ex45DceO0aqse3rodGwqfgWNGNufdsBU
+         v0MrMHzRLHBIU+lCK1LR2RnPEnb4jN0nEwUJIFU6tjNnhDicVdIToR1UD/UyoJckWxN0
+         D7xLdM9MNJeWV0u4Lm4EZbXjINAbfXka5ldzrR1M4+HJgpOzKAvuGYNCrxwPPIR3Vj4w
+         aUh4QzP7lzoEAOkRrB9LaeIZknY3A5MrdOZX4AP8lJ7uN+zy1DQvkhmQkrCn31CtFQ91
+         9JCX+2gpmEnn50hhcyxN+TTBU8fUlJUsL8JduYxJ39ppEwbmRqYwxbc7p8i0cRLhlPUB
+         8fAw==
+X-Gm-Message-State: ACrzQf11Q4Ebx2jLNdzn7z8TrzNWfTgKNmdnhJzRAdi2o3uXOOcEMFcy
+        6KiwMyA/A2wOz9zRmZ2BE66u9zqDjwcFx1mXVWKIKw==
+X-Google-Smtp-Source: AMsMyM6LzgdK6gm66CyORfaEyT80odV+S0OASHc9uDM/+naRIEiC1LJkBIueaSZfN21OBm/dwxkjdGo74I31A4DX5Kg=
+X-Received: by 2002:a17:90a:c24a:b0:213:13aa:3e2a with SMTP id
+ d10-20020a17090ac24a00b0021313aa3e2amr82957783pjx.107.1668107181512; Thu, 10
+ Nov 2022 11:06:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] perf: Fix perf_event_{init,exit}_cpu stubs
-Content-Language: en-US
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, anand.gore@broadcom.com,
-        william.zhang@broadcom.com, Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
+References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr> <20221106095106.849154-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20221106095106.849154-2-mailhol.vincent@wanadoo.fr>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 10 Nov 2022 11:06:10 -0800
+Message-ID: <CAKwvOdnzx0Y-vmFsRS6=rCveqAJVn6hXEutdn_ow=jbtNeQcCA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] x86/asm/bitops: Replace __fls() by its generic
+ builtin implementation
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     x86@kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>
-References: <20221103224303.3910486-1-f.fainelli@gmail.com>
- <Y2UOQpniaV12E0P9@hirez.programming.kicks-ass.net>
- <c6852cb4-a929-2f42-bfcd-04c4aa99b4a5@gmail.com>
-In-Reply-To: <c6852cb4-a929-2f42-bfcd-04c4aa99b4a5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+        llvm@lists.linux.dev, Borislav Petkov <bp@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,57 +72,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/4/22 10:38, Florian Fainelli wrote:
-> 
-> 
-> On 11/4/2022 6:06 AM, Peter Zijlstra wrote:
->> On Thu, Nov 03, 2022 at 03:43:03PM -0700, Florian Fainelli wrote:
->>> The original commit that introduced those stubs was already at fault,
->>> but in the absence of a caller of perf_event_{init,exit}_cpu outside of
->>> code that is compiled regardless of CONFIG_PERF_EVENTS, the build
->>> failure cannot be observed. This was observed with the Android kernel to
->>> produce a build failure similar to this:
->>>
->>>      In file included from ./include/uapi/linux/posix_types.h:5,
->>>                       from ./include/uapi/linux/types.h:14,
->>>                       from ./include/linux/types.h:6,
->>>                       from ./include/linux/limits.h:6,
->>>                       from ./include/linux/kernel.h:7,
->>>                       from ./include/linux/sched/mm.h:5,
->>>                       from kernel/cpu.c:6:
->>>      kernel/cpu.c: In function 'random_and_perf_prepare_fusion':
->>>      ./include/linux/stddef.h:8:14: error: called object is not a 
->>> function or function pointer
->>>       #define NULL ((void *)0)
->>>                    ^
->>>      ./include/linux/perf_event.h:1607:29: note: in expansion of 
->>> macro 'NULL'
->>>       #define perf_event_init_cpu NULL
->>>                                   ^~~~
->>>      kernel/cpu.c:1686:2: note: in expansion of macro 
->>> 'perf_event_init_cpu'
->>>        perf_event_init_cpu(cpu);
->>>        ^~~~~~~~~~~~~~~~~~~
->>
->> What is the actual problem reported here? Did you see all the other NULL
->> assignments in cpuhp_hp_states ?
-> 
-> Anand reported to me that the following downstream commit in the Android 
-> common kernel repository:
-> 
-> https://android.googlesource.com/kernel/common/+/ca927bd22ad8bd26fd8dcebf3c7f2a093385d8ea
-> 
-> was resulting in the build failure above.
-> 
-> While this is an Android inflicted change and I still intend to get a 
-> fix there, upon closer look, the build failure could be experienced 
-> upstream as well with any code calling perf_event_{init,exit}_cpu() as a 
-> regular function call as opposed to being used as a function pointer.
-> 
-> This felt worthy of fixing in the upstream kernel, hence this patch.
+On Sun, Nov 6, 2022 at 1:51 AM Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
+>
+> Below snippet:
+>
+>   #include <linux/bitops.h>
+>
+>   unsigned int foo(unsigned long word)
+>   {
+>         return __fls(word);
+>   }
+>
+> produces this on GCC 12.1.0:
+>
+>   0000000000000000 <foo>:
+>      0: f3 0f 1e fa             endbr64
+>      4: e8 00 00 00 00          call   9 <foo+0x9>
+>      9: 53                      push   %rbx
+>      a: 48 89 fb                mov    %rdi,%rbx
+>      d: e8 00 00 00 00          call   12 <foo+0x12>
+>     12: 48 0f bd c3             bsr    %rbx,%rax
+>     16: 5b                      pop    %rbx
+>     17: 31 ff                   xor    %edi,%edi
+>     19: e9 00 00 00 00          jmp    1e <foo+0x1e>
+>
+> and that on clang 14.0.6:
+>
+>   0000000000000000 <foo>:
+>      0: f3 0f 1e fa             endbr64
+>      4: e8 00 00 00 00          call   9 <foo+0x9>
+>      9: 53                      push   %rbx
+>      a: 50                      push   %rax
+>      b: 48 89 fb                mov    %rdi,%rbx
+>      e: e8 00 00 00 00          call   13 <foo+0x13>
+>     13: 48 89 1c 24             mov    %rbx,(%rsp)
+>     17: 48 0f bd 04 24          bsr    (%rsp),%rax
+>     1c: 48 83 c4 08             add    $0x8,%rsp
+>     20: 5b                      pop    %rbx
+>     21: c3                      ret
+>
+> The implementation from <asm-generic/bitops/builtin-__fls.h> [1]
+> produces the exact same code on GCC and below code on clang:
+>
+>   0000000000000000 <foo>:
+>      0: f3 0f 1e fa             endbr64
+>      4: e8 00 00 00 00          call   9 <foo+0x9>
+>      9: 53                      push   %rbx
+>      a: 48 89 fb                mov    %rdi,%rbx
+>      d: e8 00 00 00 00          call   12 <foo+0x12>
+>     12: 48 0f bd c3             bsr    %rbx,%rax
+>     16: 5b                      pop    %rbx
+>     17: c3                      ret
+>
+> The builtin implementation is better for two reasons:
+>
+>   1/ it saves two instructions on clang (a push and a stack pointer
+>      decrement) because of a useless tentative to save rax.
+>
+>   2/ when used on constant expressions, the compiler is only able to
+>      fold the builtin version (c.f. [2]).
+>
+> For those two reasons, replace the assembly implementation by its
+> builtin counterpart.
+>
+> [1] https://elixir.bootlin.com/linux/v6.0/source/include/asm-generic/bitops/builtin-__fls.h
+>
+> [2] commit 146034fed6ee ("x86/asm/bitops: Use __builtin_ffs() to evaluate constant expressions")
+>
+> CC: Borislav Petkov <bp@suse.de>
+> CC: Nick Desaulniers <ndesaulniers@google.com>
+> CC: Yury Norov <yury.norov@gmail.com>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-No response meaning it's a don't care because upstream is not (yet?) 
-impacted?
+LGTM; thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>  arch/x86/include/asm/bitops.h | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
+> index 2edf68475fec..a31453d7686d 100644
+> --- a/arch/x86/include/asm/bitops.h
+> +++ b/arch/x86/include/asm/bitops.h
+> @@ -285,19 +285,7 @@ static __always_inline unsigned long variable_ffz(unsigned long word)
+>          (unsigned long)__builtin_ctzl(~word) : \
+>          variable_ffz(word))
+>
+> -/*
+> - * __fls: find last set bit in word
+> - * @word: The word to search
+> - *
+> - * Undefined if no set bit exists, so code should check against 0 first.
+> - */
+> -static __always_inline unsigned long __fls(unsigned long word)
+> -{
+> -       asm("bsr %1,%0"
+> -           : "=r" (word)
+> -           : "rm" (word));
+> -       return word;
+> -}
+> +#include <asm-generic/bitops/builtin-__fls.h>
+>
+>  #undef ADDR
+>
+> --
+> 2.37.4
+>
+
+
 -- 
-Florian
-
+Thanks,
+~Nick Desaulniers
