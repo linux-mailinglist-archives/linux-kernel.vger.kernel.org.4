@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00483624432
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B290624434
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbiKJOZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S231319AbiKJOZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKJOZI (ORCPT
+        with ESMTP id S231175AbiKJOZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:25:08 -0500
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6A29377
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:25:06 -0800 (PST)
-Received: by mail-vk1-xa2c.google.com with SMTP id r13so525692vkf.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:25:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8l2HBFTrpDnnIgcOQ592snBPjsf4RD70cv9dA6b7lHw=;
-        b=b6FeEIbwGLERqlXrAhntHxjPwc4hpS+h4tc/n+ldDt8a4OwxLKBSOQdS4a+nvyqis8
-         Piq+gweJsdW1kiNQavJCsd9E0fcCZrzv4UYPvgif4U8fABvEdDuFt6+T00sotrknfG49
-         BfHBmlkmZ2/xSPbL6kgfMZdUocYWWaKhMYa/sTbBlUczazGO7ekEBIjUuHM/J/nDInfL
-         LoWPN62ews5MRP+A4E07LfUul0RyEMwMtZhAq6PJzjJ8CPl8DEVLc15vupbIFex9AfNB
-         rNhKKv+V4o0vBPpJbH08NK0Q3xQtmb+dtxyls7if4h+heBZeZtl2uPpKk4dY6xuhrn+1
-         v3Gw==
+        Thu, 10 Nov 2022 09:25:10 -0500
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195C827DDC;
+        Thu, 10 Nov 2022 06:25:10 -0800 (PST)
+Received: by mail-qt1-f174.google.com with SMTP id c15so963062qtw.8;
+        Thu, 10 Nov 2022 06:25:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8l2HBFTrpDnnIgcOQ592snBPjsf4RD70cv9dA6b7lHw=;
-        b=R5z4KrMvSy3a55J2sJx/SC3mCnFtLCUYR84TP98gKJWcFpQTBRcjqW9FU1Iru524Mv
-         lIzFT9ijJl/cu4KF2yc/5s0XNQ+uofARaCQHp8sfvvhpLma0XGTb5HdWCzgPMblE/Vuk
-         VDpH72f2pRbaEBzP8qUriKLfd8ACa0ksBSTh1B7odKk6iZFcr2Xy1mWrIB5MZ/Rj524J
-         GO1un33rqCN9ZQvyE2k5r2sxTTuzEB/NyKFqHCEBHaeAXdk4WC/MGtpNdjjksHE/bhby
-         Vm5kistMSww5v/VoJ1KTJ+JA7baHBsyRxROtT351Tb5PgBVuu+ry1RHWAAh3t2ldMy3B
-         VLVA==
-X-Gm-Message-State: ACrzQf0G7Y9hhkQrC4sPNdP3OoLrx7NfbLI3sxOorxRc079OAAoZPc4s
-        tPqWK66pWdFcIFTPtjEX+tTSSyRc7LkVDKyxlF9Dyw==
-X-Google-Smtp-Source: AMsMyM5pIjsuekXRjCdKjRIEeTWrwBNiYMNUoJ4ZKJ8V9nzQigybl4K/UMPda0VjOe4syPWlj288QfpUh5P9kMN4tHA=
-X-Received: by 2002:a05:6122:2219:b0:3b8:7fbd:9554 with SMTP id
- bb25-20020a056122221900b003b87fbd9554mr12826647vkb.27.1668090305647; Thu, 10
- Nov 2022 06:25:05 -0800 (PST)
+        bh=PYrdIwlw/lJKu3AnvAKe/flDTUx8RRjiQQvOO8furMY=;
+        b=llbB5NAk5NEhzhrsh8ZeFXwW3N7uTFPMdeOX7LQRnU6QCk9njyjwVRsU6EVhxos+zi
+         QRY6C3NtR1MnJriUo96m5KOGuNnZanG0fusD0i/3lnQzpnt3A8q9bAPg+rjgoM9C7w4/
+         PZ20noXpsNzp2Vsi8wU6zhigA+PUVnjmdUzL+hp8wU4IjeDqCl81K4s+h8faDNRXKCfw
+         xGhETgt8NJkj30nyvqYPeAD0tmKAvAo/RnysorSXUcokqcoNbaeczMnWkQMpcAI6pQ6a
+         HwDVD509hLsBuuSrAawzX9XqodeN08TPIyLArC8lFmnUuTT19mun3B/3Q/n52FY2oI5J
+         Acew==
+X-Gm-Message-State: ACrzQf2fZhlsqW4aAx6pbvQghL6Y6jGc43s4u2tdaFi4gND/8VpO1v7Q
+        iLAWFLlC4hlFKQcQiACCYPdNFy6yYswUV8aeAWQ=
+X-Google-Smtp-Source: AMsMyM4FsPdzHNBl+WwP9MoBmdL61DTI6zZH2YMFXCRPO1hibDl0jdOsB052Yb46NanZ6Be+se6kG8vDk/J70gkqF2A=
+X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
+ g21-20020ac87d15000000b003a5044987c3mr51914311qtb.357.1668090309233; Thu, 10
+ Nov 2022 06:25:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20221107172921.514125-1-nfrayer@baylibre.com>
-In-Reply-To: <20221107172921.514125-1-nfrayer@baylibre.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 10 Nov 2022 15:24:54 +0100
-Message-ID: <CAMRc=Mfy-aQ==3Aug4kjdHb2Aa6X3d3MBdh62wBjE0FtCnZXkQ@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: davinci: add support of module build
-To:     Nicolas Frayer <nfrayer@baylibre.com>
-Cc:     j-keerthy@ti.com, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, glaroque@baylibre.com
+References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-7-linux@roeck-us.net>
+ <CAJZ5v0hMbzEdLecy_OWquOqdauBc1nsN7Q9mPkt2tOU4nEpHVw@mail.gmail.com> <20221110142149.GC2404288@roeck-us.net>
+In-Reply-To: <20221110142149.GC2404288@roeck-us.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Nov 2022 15:24:58 +0100
+Message-ID: <CAJZ5v0j4w_oTZHX4r9QpOV_VYmgc7+HTMS=mDFTgT4F1dp5pyg@mail.gmail.com>
+Subject: Re: [PATCH 6/9] thermal/core: Protect hwmon accesses to thermal
+ operations with thermal zone mutex
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 6:29 PM Nicolas Frayer <nfrayer@baylibre.com> wrote:
+On Thu, Nov 10, 2022 at 3:21 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> From: Guillaume La Roque <glaroque@baylibre.com>
+> On Wed, Nov 09, 2022 at 08:19:13PM +0100, Rafael J. Wysocki wrote:
+> > On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> [ ... ]
+> >
+> > And I wouldn't change the code below (the ternary operator is out of
+> > fashion in particular).
+> >
 >
-> Added module build support for the davinci gpio driver
->
-> Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
-> Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
-> ---
+> I tried to introduce some consistency; the ternary operator is used
+> in some of the existing thermal code. Guess I went the wrong direction.
+> Never mind; I don't have a strong opinion either way.
+> I updated the series patches to no longer use ternary operators in
+> updated code, but I left existing code alone (changing that should not
+> be part of this patch set anyway).
 
-Applied, thanks!
-
-Bart
+Thanks, that's what I would have done too.
