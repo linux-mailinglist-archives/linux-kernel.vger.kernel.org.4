@@ -2,213 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A1E624642
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB37862464D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbiKJPqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
+        id S231691AbiKJPqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiKJPqY (ORCPT
+        with ESMTP id S231617AbiKJPqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:46:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4C022B14;
-        Thu, 10 Nov 2022 07:46:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7ABFCB82224;
-        Thu, 10 Nov 2022 15:46:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6857AC433C1;
-        Thu, 10 Nov 2022 15:46:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="c5sSVGv6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668095176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Ps8DyLnWUFEOMzV5Hl0ko397uOHYl+uddPYlp1wLApA=;
-        b=c5sSVGv6D3cV3lHNPMTzl8p/lxxtl99+WBdwq8MiWaQvqdWmiWnsbgwBDBGUEM4HhVm0C2
-        GhC8wkz5IEFE0gm1h3tCP1+av16pMxsvH//4bYbufxRTzdJtM+bg65b1365iXrl19AZJoq
-        ME2zkmPmdY0Zoxg5O0T4TcXBcNuhOGk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd02204a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 10 Nov 2022 15:46:16 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ardb@kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jeremy Kerr <jk@ozlabs.org>,
-        Matthew Garrett <matthew.garrett@nebula.com>,
-        Lennart Poettering <lennart@poettering.net>
-Subject: [PATCH] efi: vars: allow passing fmode= and dmode= when mounting
+        Thu, 10 Nov 2022 10:46:42 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFBD2CDFF;
+        Thu, 10 Nov 2022 07:46:41 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AAFbJkN000805;
+        Thu, 10 Nov 2022 16:46:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=mloTfjScbE+KvHcb3ds6SBjdWfKRWzgGZsYJkOZEgeQ=;
+ b=b+chlpkhuPZ91bOcrI6Lcb+thXsZ1rgfj+XgCBdmuFWrU9vnnN6D1ZrO0bcDkOi7s9mC
+ gWc2wuW8q9/svQGKVTRGEwVDx70vGIhfsV6RGHhLPxvqczzvzpzxUbngbpnHHdGrWvCB
+ XWrNil8Vnhf27lkrtcqjqsmF1HcJkVIKrFj7Cz5cNJoDdMmcr358x7VpqgTSNVXM7oxM
+ DCY5+JA8z+VH+uG/Q1UtB/C45aroIo263c0YZgTI+2dBrv5eeqNsNXH02VCQtX3VtHR6
+ HJ/sDImndSf6UvGj3M/V/aumo1L0Ojf2Dq9Rgm5ncW13pkwOr3atLIZNzUPi6sUKfx6X 1g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ks43u01mh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 16:46:19 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D5788100034;
+        Thu, 10 Nov 2022 16:46:14 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CCD9F22AFED;
+        Thu, 10 Nov 2022 16:46:14 +0100 (CET)
+Received: from localhost (10.252.15.206) by SHFDAG1NODE3.st.com (10.75.129.71)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Thu, 10 Nov
+ 2022 16:46:14 +0100
+From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     Fabrice GASNIER <fabrice.gasnier@foss.st.com>,
+        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH v2 1/3] ARM: dts: stm32mp13: fix compatible for BSEC
 Date:   Thu, 10 Nov 2022 16:45:47 +0100
-Message-Id: <20221110154547.472519-1-Jason@zx2c4.com>
+Message-ID: <20221110164329.v2.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221110154550.3220800-1-patrick.delaunay@foss.st.com>
+References: <20221110154550.3220800-1-patrick.delaunay@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.252.15.206]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-10_10,2022-11-09_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The default wide-open permissions of efivarfs make the prospect of
-storing secrets there a bit sketchy. Currently systemd does this, and
-then pid 1 takes care of chmodding particular nodes. But this is limited
-and error-prone. Rather, allow passing an explicit dmode for directories
-and fmode for files.
+Use the correct compatible for stm32mp13 support.
 
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Jeremy Kerr <jk@ozlabs.org>
-Cc: Matthew Garrett <matthew.garrett@nebula.com>
-Suggested-by: Lennart Poettering <lennart@poettering.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+The BSEC driver for STM32MP15x is not compatible with STM32MP13x. For
+example the proprietary's smc STM32_SMC_BSEC is not supported in
+STM32MP13x OP-TEE, it is replaced by SM32MP BSEC Pseudo Trusted
+Application in OP-TEE to access to the secured IP BSEC on STM32MP13X SoC.
+
+The correct compatible is already used in U-Boot and in upstream is in
+progress for OP-TEE device tree.
+
+As the SoC STM32MP13X is not yet official and it is not available
+outside STMicroelectronics, it is the good time to break the DTS
+compatibility and to correct the error done in the introduction of
+STM32MP131.
+
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
 ---
- fs/efivarfs/internal.h |  5 ++++
- fs/efivarfs/super.c    | 60 ++++++++++++++++++++++++++++++++++++++----
- 2 files changed, 60 insertions(+), 5 deletions(-)
+This patch is already sent separately in:
+https://lore.kernel.org/all/20221017134437.1.I167a5efc1f8777cce14518c6fa38400ac684de3e@changeid/
+https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=685815
 
-diff --git a/fs/efivarfs/internal.h b/fs/efivarfs/internal.h
-index 8ebf3a6a8aa2..ea1ca322d247 100644
---- a/fs/efivarfs/internal.h
-+++ b/fs/efivarfs/internal.h
-@@ -24,6 +24,11 @@ struct efivar_entry {
- 	struct kobject kobj;
- };
+I create a serie for more efficient review.
+
+Patrick.
+
+(no changes since v1)
+
+Changes in v1:
+- update commit message to indicate DTS break reason.
+
+ arch/arm/boot/dts/stm32mp131.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
+index 2a9b3a5bba83..f034cbe0d5b2 100644
+--- a/arch/arm/boot/dts/stm32mp131.dtsi
++++ b/arch/arm/boot/dts/stm32mp131.dtsi
+@@ -522,7 +522,7 @@ rtc: rtc@5c004000 {
+ 		};
  
-+struct efivarfs_sb_info {
-+	umode_t dmode;
-+	umode_t fmode;
-+};
-+
- int efivar_init(int (*func)(efi_char16_t *, efi_guid_t, unsigned long, void *),
- 		void *data, bool duplicates, struct list_head *head);
- 
-diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-index 6780fc81cc11..45edbb1550e9 100644
---- a/fs/efivarfs/super.c
-+++ b/fs/efivarfs/super.c
-@@ -8,6 +8,7 @@
- #include <linux/efi.h>
- #include <linux/fs.h>
- #include <linux/fs_context.h>
-+#include <linux/fs_parser.h>
- #include <linux/module.h>
- #include <linux/pagemap.h>
- #include <linux/ucs2_string.h>
-@@ -107,6 +108,7 @@ static int efivarfs_callback(efi_char16_t *name16, efi_guid_t vendor,
- 			     unsigned long name_size, void *data)
- {
- 	struct super_block *sb = (struct super_block *)data;
-+	struct efivarfs_sb_info *sbi = sb->s_fs_info;
- 	struct efivar_entry *entry;
- 	struct inode *inode = NULL;
- 	struct dentry *dentry, *root = sb->s_root;
-@@ -144,7 +146,7 @@ static int efivarfs_callback(efi_char16_t *name16, efi_guid_t vendor,
- 	/* replace invalid slashes like kobject_set_name_vargs does for /sys/firmware/efi/vars. */
- 	strreplace(name, '/', '!');
- 
--	inode = efivarfs_get_inode(sb, d_inode(root), S_IFREG | 0644, 0,
-+	inode = efivarfs_get_inode(sb, d_inode(root), S_IFREG | sbi->fmode, 0,
- 				   is_removable);
- 	if (!inode)
- 		goto fail_name;
-@@ -187,6 +189,7 @@ static int efivarfs_destroy(struct efivar_entry *entry, void *data)
- 
- static int efivarfs_fill_super(struct super_block *sb, struct fs_context *fc)
- {
-+	struct efivarfs_sb_info *sbi = sb->s_fs_info;
- 	struct inode *inode = NULL;
- 	struct dentry *root;
- 	int err;
-@@ -202,7 +205,7 @@ static int efivarfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 	if (!efivar_supports_writes())
- 		sb->s_flags |= SB_RDONLY;
- 
--	inode = efivarfs_get_inode(sb, NULL, S_IFDIR | 0755, 0, true);
-+	inode = efivarfs_get_inode(sb, NULL, S_IFDIR | sbi->dmode, 0, true);
- 	if (!inode)
- 		return -ENOMEM;
- 	inode->i_op = &efivarfs_dir_inode_operations;
-@@ -226,12 +229,58 @@ static int efivarfs_get_tree(struct fs_context *fc)
- 	return get_tree_single(fc, efivarfs_fill_super);
- }
- 
-+enum {
-+	Opt_dmode,
-+	Opt_fmode,
-+};
-+
-+static const struct fs_parameter_spec efivarfs_parameters[] = {
-+	fsparam_u32oct("dmode",			Opt_dmode),
-+	fsparam_u32oct("fmode",			Opt_fmode),
-+	{}
-+};
-+
-+static int efivarfs_parse_param(struct fs_context *fc,
-+				struct fs_parameter *param)
-+{
-+	struct efivarfs_sb_info *sbi = fc->s_fs_info;
-+	struct fs_parse_result result;
-+	int opt;
-+
-+	opt = fs_parse(fc, efivarfs_parameters, param, &result);
-+	if (opt < 0)
-+		return opt;
-+
-+	switch (opt) {
-+	case Opt_dmode:
-+		sbi->dmode = result.uint_32;
-+		break;
-+	case Opt_fmode:
-+		sbi->fmode = result.uint_32;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static const struct fs_context_operations efivarfs_context_ops = {
- 	.get_tree	= efivarfs_get_tree,
-+	.parse_param	= efivarfs_parse_param,
- };
- 
- static int efivarfs_init_fs_context(struct fs_context *fc)
- {
-+	struct efivarfs_sb_info *sbi;
-+
-+	sbi = kzalloc(sizeof(*sbi), GFP_KERNEL);
-+	if (!sbi)
-+		return -ENOMEM;
-+	sbi->dmode = 0755;
-+	sbi->fmode = 0644;
-+	fc->s_fs_info = sbi;
-+
- 	fc->ops = &efivarfs_context_ops;
- 	return 0;
- }
-@@ -245,10 +294,11 @@ static void efivarfs_kill_sb(struct super_block *sb)
- }
- 
- static struct file_system_type efivarfs_type = {
--	.owner   = THIS_MODULE,
--	.name    = "efivarfs",
-+	.owner   	 = THIS_MODULE,
-+	.name    	 = "efivarfs",
- 	.init_fs_context = efivarfs_init_fs_context,
--	.kill_sb = efivarfs_kill_sb,
-+	.parameters	 = efivarfs_parameters,
-+	.kill_sb 	 = efivarfs_kill_sb,
- };
- 
- static __init int efivarfs_init(void)
+ 		bsec: efuse@5c005000 {
+-			compatible = "st,stm32mp15-bsec";
++			compatible = "st,stm32mp13-bsec";
+ 			reg = <0x5c005000 0x400>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
 -- 
-2.38.1
+2.25.1
 
