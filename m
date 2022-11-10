@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113EF624A47
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A651624A48
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbiKJTGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 14:06:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S231714AbiKJTGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 14:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiKJTFn (ORCPT
+        with ESMTP id S231462AbiKJTFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 14:05:43 -0500
+        Thu, 10 Nov 2022 14:05:44 -0500
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25EA5800D;
-        Thu, 10 Nov 2022 11:05:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D1151C29;
+        Thu, 10 Nov 2022 11:05:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668107126; x=1699643126;
+  t=1668107128; x=1699643128;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=F77gPSChHeNKN9pAevgHdvZvcF+m0wKhasT7l+mnn6Q=;
-  b=WHXjeoJbTA/GIbeijV7h5ZDgAzowUGv11pUlqvB+ZP0kWz+Dg6mSYsxf
-   aUP6PFBdzygWngyW2Atx4sb1doZ15qT5jrTR/w4RXh3/aw5AMvXCbklHd
-   v5xwRFqlVpCsd/5YERk3gzqsoks8HXkM8k/d1gcl5Nas8TM3UYpTcq3dc
-   ckKIFfYKJni1gQxHmkA7HyuJKiwvmf2QLLv59IgtQ8LgaJyq9fpLk69HW
-   9Cf1TpJV+ax+e9otSyGG5J6XaWzykqIftBDbRmFtsTOMP6HuJl3HP7knn
-   kYviktl692WrPWmfYuztRr+UunIHfEuu2dbqZ4HHcBzrMnbXM0gtkGXzX
+  bh=X0hTlSjzN6nRB0eAV3xdVOXDyE8Lzm/yx7DpFWSNwVY=;
+  b=kdTGeN939Bqu3tl9+52akaWrFF6hIQ2N/2yfkh5lgVmQLQxb31U3lYW+
+   ewacPWMWAIQdm4k4Q/8IV18xcKO2K4Iroxeol7Jw6R6UzK3kpUplZwuh2
+   +HRgjn+tsOERSXNcRozG6j4db5boMve1KWGjdPH33UPicnlme6ozo34fs
+   LHSmhBW0Vy1erqTjmguwfXx4C/sqTHmyBfgUeUl54vm6scYUa/jX0yjVW
+   XHAECWr0MJl7vYjn3/PoMh/IrdZ9Z5MXjSVGCxS/KzM2AaUYEA8OMIaJf
+   RAnlhZAp9OnZl8hJkUc3rpgGR3qC+e5Av8FGYmXNTOIBKUELBmj/8fgDn
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="375662123"
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="375662133"
 X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="375662123"
+   d="scan'208";a="375662133"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 10:58:09 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="882473446"
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 10:58:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="882473452"
 X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="882473446"
+   d="scan'208";a="882473452"
 Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.212.6.223])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 10:58:09 -0800
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 10:58:10 -0800
 From:   ira.weiny@intel.com
 To:     Dan Williams <dan.j.williams@intel.com>
 Cc:     Ira Weiny <ira.weiny@intel.com>,
@@ -48,9 +48,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
         linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-Subject: [PATCH 08/11] cxl/mem: Wire up event interrupts
-Date:   Thu, 10 Nov 2022 10:57:55 -0800
-Message-Id: <20221110185758.879472-9-ira.weiny@intel.com>
+Subject: [PATCH 09/11] cxl/test: Add generic mock events
+Date:   Thu, 10 Nov 2022 10:57:56 -0800
+Message-Id: <20221110185758.879472-10-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221110185758.879472-1-ira.weiny@intel.com>
 References: <20221110185758.879472-1-ira.weiny@intel.com>
@@ -67,350 +67,473 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-CXL device events are signaled via interrupts.  Each event log may have
-a different interrupt message number.  These message numbers are
-reported in the Get Event Interrupt Policy mailbox command.
+Facilitate testing basic Get/Clear Event functionality by creating
+multiple logs and generic events with made up UUID's.
 
-Add interrupt support for event logs.  Interrupts are allocated as
-shared interrupts.  Therefore, all or some event logs can share the same
-message number.
+Data is completely made up with data patterns which should be easy to
+spot in trace output.
 
-The driver must deal with the possibility that dynamic capacity is not
-yet supported by a device it sees.  Fallback and retry without dynamic
-capacity if the first attempt fails.
+A single sysfs entry resets the event data and triggers collecting the
+events for testing.
 
-Device capacity event logs interrupt as part of the informational event
-log.  Check the event status to see which log has data.
+Test traces are easy to obtain with a small script such as this:
+
+	#!/bin/bash -x
+
+	devices=`find /sys/devices/platform -name cxl_mem*`
+
+	# Turn on tracing
+	echo "" > /sys/kernel/tracing/trace
+	echo 1 > /sys/kernel/tracing/events/cxl/enable
+	echo 1 > /sys/kernel/tracing/tracing_on
+
+	# Generate fake interrupt
+	for device in $devices; do
+	        echo 1 > $device/event_trigger
+	done
+
+	# Turn off tracing and report events
+	echo 0 > /sys/kernel/tracing/tracing_on
+	cat /sys/kernel/tracing/trace
 
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
-Changes from RFC v2
-	Adjust to new irq 16 vector allocation
+Changes from RFC v2:
+	Adjust to simulate the event status register
+
+Changes from RFC:
+	Separate out the event code
+	Adjust for struct changes.
+	Clean up devm_cxl_mock_event_logs()
+	Clean up naming and comments
 	Jonathan
-		Remove CXL_INT_RES
-	Use irq threads to ensure mailbox commands are executed outside irq context
-	Adjust for optional Dynamic Capacity log
+		Remove dynamic allocation of event logs
+		Clean up comment
+		Remove unneeded xarray
+		Ensure event_trigger sysfs is valid prior to the driver
+		going active.
+	Dan
+		Remove the fill/reset event sysfs as these operations
+		can be done together
 ---
- drivers/cxl/core/mbox.c      |  53 +++++++++++++-
- drivers/cxl/cxlmem.h         |  31 ++++++++
- drivers/cxl/pci.c            | 133 +++++++++++++++++++++++++++++++++++
- include/uapi/linux/cxl_mem.h |   2 +
- 4 files changed, 217 insertions(+), 2 deletions(-)
+ drivers/cxl/core/mbox.c         |  31 +++--
+ drivers/cxl/cxlmem.h            |   1 +
+ tools/testing/cxl/test/Kbuild   |   2 +-
+ tools/testing/cxl/test/events.c | 222 ++++++++++++++++++++++++++++++++
+ tools/testing/cxl/test/events.h |   9 ++
+ tools/testing/cxl/test/mem.c    |  35 ++++-
+ 6 files changed, 286 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/cxl/test/events.c
+ create mode 100644 tools/testing/cxl/test/events.h
 
 diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index 879b228a98a0..1e6762af2a00 100644
+index 1e6762af2a00..2d74c0f2cbf7 100644
 --- a/drivers/cxl/core/mbox.c
 +++ b/drivers/cxl/core/mbox.c
-@@ -53,6 +53,8 @@ static struct cxl_mem_command cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] = {
- 	CXL_CMD(GET_SUPPORTED_LOGS, 0, CXL_VARIABLE_PAYLOAD, CXL_CMD_FLAG_FORCE_ENABLE),
- 	CXL_CMD(GET_EVENT_RECORD, 1, CXL_VARIABLE_PAYLOAD, 0),
- 	CXL_CMD(CLEAR_EVENT_RECORD, CXL_VARIABLE_PAYLOAD, 0, 0),
-+	CXL_CMD(GET_EVT_INT_POLICY, 0, 0x5, 0),
-+	CXL_CMD(SET_EVT_INT_POLICY, 0x5, 0, 0),
- 	CXL_CMD(GET_FW_INFO, 0, 0x50, 0),
- 	CXL_CMD(GET_PARTITION_INFO, 0, 0x20, 0),
- 	CXL_CMD(GET_LSA, 0x8, CXL_VARIABLE_PAYLOAD, 0),
-@@ -791,8 +793,8 @@ static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
- 				 &payload, sizeof(payload), NULL, 0);
+@@ -841,6 +841,24 @@ void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
  }
+ EXPORT_SYMBOL_NS_GPL(cxl_mem_get_records_log, CXL);
  
--static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
--				    enum cxl_event_log_type type)
-+void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-+			     enum cxl_event_log_type type)
- {
- 	struct cxl_get_event_payload payload;
- 	u16 pl_nr;
-@@ -837,6 +839,7 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
- 	} while (pl_nr > CXL_GET_EVENT_NR_RECORDS ||
- 		 payload.flags & CXL_GET_EVENT_FLAG_MORE_RECORDS);
- }
-+EXPORT_SYMBOL_NS_GPL(cxl_mem_get_records_log, CXL);
- 
++/* Direct call for mock testing */
++void __cxl_mem_get_event_records(struct cxl_dev_state *cxlds, u32 status)
++{
++	dev_dbg(cxlds->dev, "Reading event logs: %x\n", status);
++
++	if (status & CXLDEV_EVENT_STATUS_INFO)
++		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_INFO);
++	if (status & CXLDEV_EVENT_STATUS_WARN)
++		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_WARN);
++	if (status & CXLDEV_EVENT_STATUS_FAIL)
++		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
++	if (status & CXLDEV_EVENT_STATUS_FATAL)
++		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FATAL);
++	if (status & CXLDEV_EVENT_STATUS_DYNAMIC_CAP)
++		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_DYNAMIC_CAP);
++}
++EXPORT_SYMBOL_NS_GPL(__cxl_mem_get_event_records, CXL);
++
  /**
   * cxl_mem_get_event_records - Get Event Records from the device
-@@ -867,6 +870,52 @@ void cxl_mem_get_event_records(struct cxl_dev_state *cxlds)
+  * @cxlds: The device data for the operation
+@@ -855,18 +873,7 @@ void cxl_mem_get_event_records(struct cxl_dev_state *cxlds)
+ {
+ 	u32 status = readl(cxlds->regs.status + CXLDEV_DEV_EVENT_STATUS_OFFSET);
+ 
+-	dev_dbg(cxlds->dev, "Reading event logs: %x\n", status);
+-
+-	if (status & CXLDEV_EVENT_STATUS_INFO)
+-		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_INFO);
+-	if (status & CXLDEV_EVENT_STATUS_WARN)
+-		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_WARN);
+-	if (status & CXLDEV_EVENT_STATUS_FAIL)
+-		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
+-	if (status & CXLDEV_EVENT_STATUS_FATAL)
+-		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FATAL);
+-	if (status & CXLDEV_EVENT_STATUS_DYNAMIC_CAP)
+-		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_DYNAMIC_CAP);
++	__cxl_mem_get_event_records(cxlds, status);
  }
  EXPORT_SYMBOL_NS_GPL(cxl_mem_get_event_records, CXL);
  
-+int cxl_event_config_msgnums(struct cxl_dev_state *cxlds)
-+{
-+	struct cxl_event_interrupt_policy *policy = &cxlds->evt_int_policy;
-+	size_t policy_size = sizeof(*policy);
-+	bool retry = true;
-+	int rc;
-+
-+	policy->info_settings = CXL_INT_MSI_MSIX;
-+	policy->warn_settings = CXL_INT_MSI_MSIX;
-+	policy->failure_settings = CXL_INT_MSI_MSIX;
-+	policy->fatal_settings = CXL_INT_MSI_MSIX;
-+	policy->dyn_cap_settings = CXL_INT_MSI_MSIX;
-+
-+again:
-+	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_SET_EVT_INT_POLICY,
-+			       policy, policy_size, NULL, 0);
-+	if (rc < 0) {
-+		/*
-+		 * If the device does not support dynamic capacity it may fail
-+		 * the command due to an invalid payload.  Retry without
-+		 * dynamic capacity.
-+		 */
-+		if (retry) {
-+			retry = false;
-+			policy->dyn_cap_settings = 0;
-+			policy_size = sizeof(*policy) - sizeof(policy->dyn_cap_settings);
-+			goto again;
-+		}
-+		dev_err(cxlds->dev, "Failed to set event interrupt policy : %d",
-+			rc);
-+		memset(policy, CXL_INT_NONE, sizeof(*policy));
-+		return rc;
-+	}
-+
-+	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_EVT_INT_POLICY, NULL, 0,
-+			       policy, policy_size);
-+	if (rc < 0) {
-+		dev_err(cxlds->dev, "Failed to get event interrupt policy : %d",
-+			rc);
-+		return rc;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_NS_GPL(cxl_event_config_msgnums, CXL);
-+
- /**
-  * cxl_mem_get_partition_info - Get partition info
-  * @cxlds: The device data for the operation
 diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 03da4f8f74d3..4d9c3ea30c24 100644
+index 4d9c3ea30c24..77bcbaa16dd3 100644
 --- a/drivers/cxl/cxlmem.h
 +++ b/drivers/cxl/cxlmem.h
-@@ -179,6 +179,31 @@ struct cxl_endpoint_dvsec_info {
- 	struct range dvsec_range[2];
- };
- 
-+/**
-+ * Event Interrupt Policy
-+ *
-+ * CXL rev 3.0 section 8.2.9.2.4; Table 8-52
-+ */
-+enum cxl_event_int_mode {
-+	CXL_INT_NONE		= 0x00,
-+	CXL_INT_MSI_MSIX	= 0x01,
-+	CXL_INT_FW		= 0x02
-+};
-+#define CXL_EVENT_INT_MODE_MASK 0x3
-+#define CXL_EVENT_INT_MSGNUM(setting) (((setting) & 0xf0) >> 4)
-+struct cxl_event_interrupt_policy {
-+	u8 info_settings;
-+	u8 warn_settings;
-+	u8 failure_settings;
-+	u8 fatal_settings;
-+	u8 dyn_cap_settings;
-+} __packed;
-+
-+static inline bool cxl_evt_int_is_msi(u8 setting)
-+{
-+	return CXL_INT_MSI_MSIX == (setting & CXL_EVENT_INT_MODE_MASK);
-+}
-+
- /**
-  * struct cxl_dev_state - The driver device state
-  *
-@@ -246,6 +271,7 @@ struct cxl_dev_state {
- 
- 	resource_size_t component_reg_phys;
- 	u64 serial;
-+	struct cxl_event_interrupt_policy evt_int_policy;
- 
- 	struct xarray doe_mbs;
- 
-@@ -259,6 +285,8 @@ enum cxl_opcode {
- 	CXL_MBOX_OP_RAW			= CXL_MBOX_OP_INVALID,
- 	CXL_MBOX_OP_GET_EVENT_RECORD	= 0x0100,
- 	CXL_MBOX_OP_CLEAR_EVENT_RECORD	= 0x0101,
-+	CXL_MBOX_OP_GET_EVT_INT_POLICY	= 0x0102,
-+	CXL_MBOX_OP_SET_EVT_INT_POLICY	= 0x0103,
- 	CXL_MBOX_OP_GET_FW_INFO		= 0x0200,
- 	CXL_MBOX_OP_ACTIVATE_FW		= 0x0202,
- 	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
-@@ -539,7 +567,10 @@ int cxl_mem_create_range_info(struct cxl_dev_state *cxlds);
- struct cxl_dev_state *cxl_dev_state_create(struct device *dev);
- void set_exclusive_cxl_commands(struct cxl_dev_state *cxlds, unsigned long *cmds);
+@@ -569,6 +569,7 @@ void set_exclusive_cxl_commands(struct cxl_dev_state *cxlds, unsigned long *cmds
  void clear_exclusive_cxl_commands(struct cxl_dev_state *cxlds, unsigned long *cmds);
-+void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-+			     enum cxl_event_log_type type);
+ void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
+ 			     enum cxl_event_log_type type);
++void __cxl_mem_get_event_records(struct cxl_dev_state *cxlds, u32 status);
  void cxl_mem_get_event_records(struct cxl_dev_state *cxlds);
-+int cxl_event_config_msgnums(struct cxl_dev_state *cxlds);
+ int cxl_event_config_msgnums(struct cxl_dev_state *cxlds);
  #ifdef CONFIG_CXL_SUSPEND
- void cxl_mem_active_inc(void);
- void cxl_mem_active_dec(void);
-diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index e0d511575b45..64b2e2671043 100644
---- a/drivers/cxl/pci.c
-+++ b/drivers/cxl/pci.c
-@@ -458,6 +458,138 @@ static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
- 	cxlds->nr_irq_vecs = nvecs;
- }
+diff --git a/tools/testing/cxl/test/Kbuild b/tools/testing/cxl/test/Kbuild
+index 4e59e2c911f6..64b14b83d8d9 100644
+--- a/tools/testing/cxl/test/Kbuild
++++ b/tools/testing/cxl/test/Kbuild
+@@ -7,4 +7,4 @@ obj-m += cxl_mock_mem.o
  
-+struct cxl_event_irq_id {
-+	struct cxl_dev_state *cxlds;
-+	u32 status;
-+	unsigned int msgnum;
+ cxl_test-y := cxl.o
+ cxl_mock-y := mock.o
+-cxl_mock_mem-y := mem.o
++cxl_mock_mem-y := mem.o events.o
+diff --git a/tools/testing/cxl/test/events.c b/tools/testing/cxl/test/events.c
+new file mode 100644
+index 000000000000..a4816f230bb5
+--- /dev/null
++++ b/tools/testing/cxl/test/events.c
+@@ -0,0 +1,222 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright(c) 2022 Intel Corporation. All rights reserved.
++
++#include <cxlmem.h>
++#include <trace/events/cxl.h>
++
++#include "events.h"
++
++#define CXL_TEST_EVENT_CNT_MAX 15
++
++struct mock_event_log {
++	int cur_event;
++	int nr_events;
++	struct cxl_event_record_raw *events[CXL_TEST_EVENT_CNT_MAX];
 +};
 +
-+static irqreturn_t cxl_event_int_thread(int irq, void *id)
++struct mock_event_store {
++	struct cxl_dev_state *cxlds;
++	struct mock_event_log mock_logs[CXL_EVENT_TYPE_MAX];
++	u32 ev_status;
++};
++
++DEFINE_XARRAY(mock_dev_event_store);
++
++struct mock_event_log *find_event_log(struct device *dev, int log_type)
 +{
-+	struct cxl_event_irq_id *cxlid = id;
-+	struct cxl_dev_state *cxlds = cxlid->cxlds;
++	struct mock_event_store *mes = xa_load(&mock_dev_event_store,
++					       (unsigned long)dev);
 +
-+	if (cxlid->status & CXLDEV_EVENT_STATUS_INFO)
-+		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_INFO);
-+	if (cxlid->status & CXLDEV_EVENT_STATUS_WARN)
-+		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_WARN);
-+	if (cxlid->status & CXLDEV_EVENT_STATUS_FAIL)
-+		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
-+	if (cxlid->status & CXLDEV_EVENT_STATUS_FATAL)
-+		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FATAL);
-+	if (cxlid->status & CXLDEV_EVENT_STATUS_DYNAMIC_CAP)
-+		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_DYNAMIC_CAP);
-+
-+	return IRQ_HANDLED;
++	if (!mes || log_type >= CXL_EVENT_TYPE_MAX)
++		return NULL;
++	return &mes->mock_logs[log_type];
 +}
 +
-+static irqreturn_t cxl_event_int_handler(int irq, void *id)
++struct cxl_event_record_raw *get_cur_event(struct mock_event_log *log)
 +{
-+	struct cxl_event_irq_id *cxlid = id;
-+	struct cxl_dev_state *cxlds = cxlid->cxlds;
-+	u32 status = readl(cxlds->regs.status + CXLDEV_DEV_EVENT_STATUS_OFFSET);
-+
-+	if (cxlid->status & status)
-+		return IRQ_WAKE_THREAD;
-+	return IRQ_HANDLED;
++	return log->events[log->cur_event];
 +}
 +
-+static void cxl_free_event_irq(void *id)
++__le16 get_cur_event_handle(struct mock_event_log *log)
 +{
-+	struct cxl_event_irq_id *cxlid = id;
-+	struct pci_dev *pdev = to_pci_dev(cxlid->cxlds->dev);
-+
-+	pci_free_irq(pdev, cxlid->msgnum, id);
++	return cpu_to_le16(log->cur_event);
 +}
 +
-+static u32 log_type_to_status(enum cxl_event_log_type log_type)
++static bool log_empty(struct mock_event_log *log)
 +{
-+	switch (log_type) {
-+	case CXL_EVENT_TYPE_INFO:
-+		return CXLDEV_EVENT_STATUS_INFO | CXLDEV_EVENT_STATUS_DYNAMIC_CAP;
-+	case CXL_EVENT_TYPE_WARN:
-+		return CXLDEV_EVENT_STATUS_WARN;
-+	case CXL_EVENT_TYPE_FAIL:
-+		return CXLDEV_EVENT_STATUS_FAIL;
-+	case CXL_EVENT_TYPE_FATAL:
-+		return CXLDEV_EVENT_STATUS_FATAL;
-+	default:
-+		break;
-+	}
++	return log->cur_event == log->nr_events;
++}
++
++static int log_rec_left(struct mock_event_log *log)
++{
++	return log->nr_events - log->cur_event;
++}
++
++static void event_store_add_event(struct mock_event_store *mes,
++				  enum cxl_event_log_type log_type,
++				  struct cxl_event_record_raw *event)
++{
++	struct mock_event_log *log;
++
++	if (WARN_ON(log_type >= CXL_EVENT_TYPE_MAX))
++		return;
++
++	log = &mes->mock_logs[log_type];
++	if (WARN_ON(log->nr_events >= CXL_TEST_EVENT_CNT_MAX))
++		return;
++
++	log->events[log->nr_events] = event;
++	log->nr_events++;
++}
++
++int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
++{
++	struct cxl_get_event_payload *pl;
++	struct mock_event_log *log;
++	u8 log_type;
++
++	/* Valid request? */
++	if (cmd->size_in != sizeof(log_type))
++		return -EINVAL;
++
++	log_type = *((u8 *)cmd->payload_in);
++	if (log_type >= CXL_EVENT_TYPE_MAX)
++		return -EINVAL;
++
++	log = find_event_log(cxlds->dev, log_type);
++	if (!log || log_empty(log))
++		goto no_data;
++
++	pl = cmd->payload_out;
++	memset(pl, 0, sizeof(*pl));
++
++	pl->record_count = cpu_to_le16(1);
++
++	if (log_rec_left(log) > 1)
++		pl->flags |= CXL_GET_EVENT_FLAG_MORE_RECORDS;
++
++	memcpy(&pl->record[0], get_cur_event(log), sizeof(pl->record[0]));
++	pl->record[0].hdr.handle = get_cur_event_handle(log);
++	return 0;
++
++no_data:
++	/* Room for header? */
++	if (cmd->size_out < (sizeof(*pl) - sizeof(pl->record[0])))
++		return -EINVAL;
++
++	memset(cmd->payload_out, 0, cmd->size_out);
 +	return 0;
 +}
++EXPORT_SYMBOL_GPL(mock_get_event);
 +
-+static int cxl_request_event_irq(struct cxl_dev_state *cxlds,
-+				 enum cxl_event_log_type log_type,
-+				 u8 setting)
++/*
++ * Get and clear event only handle 1 record at a time as this is what is
++ * currently implemented in the main code.
++ */
++int mock_clear_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
++{
++	struct cxl_mbox_clear_event_payload *pl = cmd->payload_in;
++	struct mock_event_log *log;
++	u8 log_type = pl->event_log;
++
++	/* Don't handle more than 1 record at a time */
++	if (pl->nr_recs != 1)
++		return -EINVAL;
++
++	if (log_type >= CXL_EVENT_TYPE_MAX)
++		return -EINVAL;
++
++	log = find_event_log(cxlds->dev, log_type);
++	if (!log)
++		return 0; /* No mock data in this log */
++
++	/*
++	 * Test code only reported 1 event at a time.  So only support 1 event
++	 * being cleared.
++	 */
++	if (log->cur_event != le16_to_cpu(pl->handle[0])) {
++		dev_err(cxlds->dev, "Clearing events out of order\n");
++		return -EINVAL;
++	}
++
++	log->cur_event++;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(mock_clear_event);
++
++void cxl_mock_event_trigger(struct device *dev)
++{
++	struct mock_event_store *mes = xa_load(&mock_dev_event_store,
++					       (unsigned long)dev);
++	int i;
++
++	for (i = CXL_EVENT_TYPE_INFO; i < CXL_EVENT_TYPE_MAX; i++) {
++		struct mock_event_log *log;
++
++		log = find_event_log(dev, i);
++		if (log)
++			log->cur_event = 0;
++	}
++
++	__cxl_mem_get_event_records(mes->cxlds, mes->ev_status);
++}
++EXPORT_SYMBOL_GPL(cxl_mock_event_trigger);
++
++struct cxl_event_record_raw maint_needed = {
++	.hdr = {
++		.id = UUID_INIT(0xDEADBEEF, 0xCAFE, 0xBABE,
++				0xa5, 0x5a, 0xa5, 0x5a, 0xa5, 0xa5, 0x5a, 0xa5),
++		.length = sizeof(struct cxl_event_record_raw),
++		.flags[0] = CXL_EVENT_RECORD_FLAG_MAINT_NEEDED,
++		/* .handle = Set dynamically */
++		.related_handle = cpu_to_le16(0xa5b6),
++	},
++	.data = { 0xDE, 0xAD, 0xBE, 0xEF },
++};
++
++struct cxl_event_record_raw hardware_replace = {
++	.hdr = {
++		.id = UUID_INIT(0xBABECAFE, 0xBEEF, 0xDEAD,
++				0xa5, 0x5a, 0xa5, 0x5a, 0xa5, 0xa5, 0x5a, 0xa5),
++		.length = sizeof(struct cxl_event_record_raw),
++		.flags[0] = CXL_EVENT_RECORD_FLAG_HW_REPLACE,
++		/* .handle = Set dynamically */
++		.related_handle = cpu_to_le16(0xb6a5),
++	},
++	.data = { 0xDE, 0xAD, 0xBE, 0xEF },
++};
++
++u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds)
 +{
 +	struct device *dev = cxlds->dev;
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	struct cxl_event_irq_id *id;
-+	unsigned int msgnum = CXL_EVENT_INT_MSGNUM(setting);
-+	int irq;
++	struct mock_event_store *mes;
 +
-+	/* Disabled irq is not an error */
-+	if (!cxl_evt_int_is_msi(setting) || msgnum > cxlds->nr_irq_vecs) {
-+		dev_dbg(dev, "Event interrupt not enabled; %s %u %d\n",
-+			cxl_event_log_type_str(CXL_EVENT_TYPE_INFO),
-+			msgnum, cxlds->nr_irq_vecs);
++	mes = devm_kzalloc(dev, sizeof(*mes), GFP_KERNEL);
++	if (WARN_ON(!mes))
++		return 0;
++	mes->cxlds = cxlds;
++
++	if (xa_insert(&mock_dev_event_store, (unsigned long)dev, mes,
++		      GFP_KERNEL)) {
++		dev_err(dev, "Event store not available for %s\n",
++			dev_name(dev));
 +		return 0;
 +	}
 +
-+	id = devm_kzalloc(dev, sizeof(*id), GFP_KERNEL);
-+	if (!id)
-+		return -ENOMEM;
++	event_store_add_event(mes, CXL_EVENT_TYPE_INFO, &maint_needed);
++	mes->ev_status |= CXLDEV_EVENT_STATUS_INFO;
 +
-+	id->cxlds = cxlds;
-+	id->msgnum = msgnum;
-+	id->status = log_type_to_status(log_type);
++	event_store_add_event(mes, CXL_EVENT_TYPE_FATAL, &hardware_replace);
++	mes->ev_status |= CXLDEV_EVENT_STATUS_FATAL;
 +
-+	irq = pci_request_irq(pdev, id->msgnum, cxl_event_int_handler,
-+			      cxl_event_int_thread, id,
-+			      "%s:event-log-%s", dev_name(dev),
-+			      cxl_event_log_type_str(log_type));
-+	if (irq)
-+		return irq;
++	return mes->ev_status;
++}
++EXPORT_SYMBOL_GPL(cxl_mock_add_event_logs);
 +
-+	devm_add_action_or_reset(dev, cxl_free_event_irq, id);
++void cxl_mock_remove_event_logs(struct device *dev)
++{
++	struct mock_event_store *mes;
++
++	mes = xa_erase(&mock_dev_event_store, (unsigned long)dev);
++}
++EXPORT_SYMBOL_GPL(cxl_mock_remove_event_logs);
+diff --git a/tools/testing/cxl/test/events.h b/tools/testing/cxl/test/events.h
+new file mode 100644
+index 000000000000..5bebc6a0a01b
+--- /dev/null
++++ b/tools/testing/cxl/test/events.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <cxlmem.h>
++
++int mock_get_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
++int mock_clear_event(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
++u32 cxl_mock_add_event_logs(struct cxl_dev_state *cxlds);
++void cxl_mock_remove_event_logs(struct device *dev);
++void cxl_mock_event_trigger(struct device *dev);
+diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
+index e2f5445d24ff..333fa8527a07 100644
+--- a/tools/testing/cxl/test/mem.c
++++ b/tools/testing/cxl/test/mem.c
+@@ -8,6 +8,7 @@
+ #include <linux/sizes.h>
+ #include <linux/bits.h>
+ #include <cxlmem.h>
++#include "events.h"
+ 
+ #define LSA_SIZE SZ_128K
+ #define DEV_SIZE SZ_2G
+@@ -224,6 +225,12 @@ static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *
+ 	case CXL_MBOX_OP_GET_PARTITION_INFO:
+ 		rc = mock_partition_info(cxlds, cmd);
+ 		break;
++	case CXL_MBOX_OP_GET_EVENT_RECORD:
++		rc = mock_get_event(cxlds, cmd);
++		break;
++	case CXL_MBOX_OP_CLEAR_EVENT_RECORD:
++		rc = mock_clear_event(cxlds, cmd);
++		break;
+ 	case CXL_MBOX_OP_SET_LSA:
+ 		rc = mock_set_lsa(cxlds, cmd);
+ 		break;
+@@ -245,11 +252,27 @@ static void label_area_release(void *lsa)
+ 	vfree(lsa);
+ }
+ 
++static ssize_t event_trigger_store(struct device *dev,
++				   struct device_attribute *attr,
++				   const char *buf, size_t count)
++{
++	cxl_mock_event_trigger(dev);
++	return count;
++}
++static DEVICE_ATTR_WO(event_trigger);
++
++static struct attribute *cxl_mock_event_attrs[] = {
++	&dev_attr_event_trigger.attr,
++	NULL
++};
++ATTRIBUTE_GROUPS(cxl_mock_event);
++
+ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct cxl_memdev *cxlmd;
+ 	struct cxl_dev_state *cxlds;
++	u32 ev_status;
+ 	void *lsa;
+ 	int rc;
+ 
+@@ -281,11 +304,13 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
+ 
++	ev_status = cxl_mock_add_event_logs(cxlds);
++
+ 	cxlmd = devm_cxl_add_memdev(cxlds);
+ 	if (IS_ERR(cxlmd))
+ 		return PTR_ERR(cxlmd);
+ 
+-	cxl_mem_get_event_records(cxlds);
++	__cxl_mem_get_event_records(cxlds, ev_status);
+ 
+ 	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
+ 		rc = devm_cxl_add_nvdimm(dev, cxlmd);
+@@ -293,6 +318,12 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static int cxl_mock_mem_remove(struct platform_device *pdev)
++{
++	cxl_mock_remove_event_logs(&pdev->dev);
 +	return 0;
 +}
 +
-+static void cxl_event_irqsetup(struct cxl_dev_state *cxlds)
-+{
-+	struct device *dev = cxlds->dev;
-+	u8 setting;
-+
-+	if (cxl_event_config_msgnums(cxlds))
-+		return;
-+
-+	/*
-+	 * Dynamic Capacity shares the info message number
-+	 * Nothing to be done except check the status bit in the
-+	 * irq thread.
-+	 */
-+	setting = cxlds->evt_int_policy.info_settings;
-+	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_INFO, setting))
-+		dev_err(dev, "Failed to get interrupt for %s event log\n",
-+			cxl_event_log_type_str(CXL_EVENT_TYPE_INFO));
-+
-+	setting = cxlds->evt_int_policy.warn_settings;
-+	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_WARN, setting))
-+		dev_err(dev, "Failed to get interrupt for %s event log\n",
-+			cxl_event_log_type_str(CXL_EVENT_TYPE_WARN));
-+
-+	setting = cxlds->evt_int_policy.failure_settings;
-+	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_FAIL, setting))
-+		dev_err(dev, "Failed to get interrupt for %s event log\n",
-+			cxl_event_log_type_str(CXL_EVENT_TYPE_FAIL));
-+
-+	setting = cxlds->evt_int_policy.fatal_settings;
-+	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_FATAL, setting))
-+		dev_err(dev, "Failed to get interrupt for %s event log\n",
-+			cxl_event_log_type_str(CXL_EVENT_TYPE_FATAL));
-+}
-+
- static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
- 	struct cxl_register_map map;
-@@ -525,6 +657,7 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return rc;
+ static const struct platform_device_id cxl_mock_mem_ids[] = {
+ 	{ .name = "cxl_mem", },
+ 	{ },
+@@ -301,9 +332,11 @@ MODULE_DEVICE_TABLE(platform, cxl_mock_mem_ids);
  
- 	cxl_pci_alloc_irq_vectors(cxlds);
-+	cxl_event_irqsetup(cxlds);
+ static struct platform_driver cxl_mock_mem_driver = {
+ 	.probe = cxl_mock_mem_probe,
++	.remove = cxl_mock_mem_remove,
+ 	.id_table = cxl_mock_mem_ids,
+ 	.driver = {
+ 		.name = KBUILD_MODNAME,
++		.dev_groups = cxl_mock_event_groups,
+ 	},
+ };
  
- 	cxlmd = devm_cxl_add_memdev(cxlds);
- 	if (IS_ERR(cxlmd))
-diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
-index 7c1ad8062792..a8204802fcca 100644
---- a/include/uapi/linux/cxl_mem.h
-+++ b/include/uapi/linux/cxl_mem.h
-@@ -26,6 +26,8 @@
- 	___C(GET_SUPPORTED_LOGS, "Get Supported Logs"),                   \
- 	___C(GET_EVENT_RECORD, "Get Event Record"),                       \
- 	___C(CLEAR_EVENT_RECORD, "Clear Event Record"),                   \
-+	___C(GET_EVT_INT_POLICY, "Get Event Interrupt Policy"),           \
-+	___C(SET_EVT_INT_POLICY, "Set Event Interrupt Policy"),           \
- 	___C(GET_FW_INFO, "Get FW Info"),                                 \
- 	___C(GET_PARTITION_INFO, "Get Partition Information"),            \
- 	___C(GET_LSA, "Get Label Storage Area"),                          \
 -- 
 2.37.2
 
