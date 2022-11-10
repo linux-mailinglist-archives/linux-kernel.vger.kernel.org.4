@@ -2,131 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5491362460A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1807562460E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiKJPfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:35:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S231373AbiKJPfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiKJPfT (ORCPT
+        with ESMTP id S230470AbiKJPfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:35:19 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F867262C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:35:18 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9aD-0003yW-6P; Thu, 10 Nov 2022 16:35:13 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9aB-003Tpe-Li; Thu, 10 Nov 2022 16:35:12 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9aB-00FfXO-V9; Thu, 10 Nov 2022 16:35:11 +0100
-Date:   Thu, 10 Nov 2022 16:35:11 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-Subject: Re: [PATCH v6 04/10] pwm: dwc: move memory alloc to own function
-Message-ID: <20221110153511.6ymoier2sd3fmepy@pengutronix.de>
-References: <20221020151610.59443-1-ben.dooks@sifive.com>
- <20221020151610.59443-5-ben.dooks@sifive.com>
+        Thu, 10 Nov 2022 10:35:37 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF4A1F6;
+        Thu, 10 Nov 2022 07:35:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3A33021D3A;
+        Thu, 10 Nov 2022 15:35:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668094535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hWtIaU1eQyQNo9BJ4fdEyNYDXwH3zBNP0e+QOrpG3gA=;
+        b=j5meRBsGYfQc4z6YLiUuRzMOOd9NW+vai8VbzCrcd3PLQbd6Cdu9XfDmqHsiVJZ7HXzk8F
+        S6g2yfrjQZ2NqE5VNHPKBxAPOOagU5zLpGQhWGDDqSQUmO4RWRVdDbBRA1dlndAeUXJkIF
+        q0hRTW1KUphy7+E0VNm372dQi3lOkx8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668094535;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hWtIaU1eQyQNo9BJ4fdEyNYDXwH3zBNP0e+QOrpG3gA=;
+        b=RpAFpanbGxEqNzB1PuRmRoGhOz3MFp0TRzw491Ditpc6EsOdn5lTJf/owHe1veOeka0IW5
+        p2diGWN48n8g0rCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B88813B58;
+        Thu, 10 Nov 2022 15:35:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HprGAkcabWO4SwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 10 Nov 2022 15:35:35 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 71B97A0704; Thu, 10 Nov 2022 16:35:33 +0100 (CET)
+Date:   Thu, 10 Nov 2022 16:35:33 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Jan Kara <jack@suse.cz>, Gabriel Krisman Bertazi <krisman@suse.de>,
+        axboe@kernel.dk, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Liu Song <liusong@linux.alibaba.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up
+ queued tags
+Message-ID: <20221110153533.go5qs3psm75h27mx@quack3>
+References: <20221105231055.25953-1-krisman@suse.de>
+ <2a445c5c-fd15-c0bf-8655-2fb5bde3fe67@huaweicloud.com>
+ <20221110111636.ufgyp4tkbzexugk2@quack3>
+ <210f2c3d-0bc1-0a5f-964b-d75020d3d9fb@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o2njqqdvwz54sbmh"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221020151610.59443-5-ben.dooks@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <210f2c3d-0bc1-0a5f-964b-d75020d3d9fb@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
---o2njqqdvwz54sbmh
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu 10-11-22 21:18:19, Yu Kuai wrote:
+> 在 2022/11/10 19:16, Jan Kara 写道:
+> > Hi!
+> > 
+> > On Thu 10-11-22 17:42:49, Yu Kuai wrote:
+> > > 在 2022/11/06 7:10, Gabriel Krisman Bertazi 写道:
+> > > > +void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
+> > > >    {
+> > > > -	struct sbq_wait_state *ws;
+> > > > -	unsigned int wake_batch;
+> > > > -	int wait_cnt, cur, sub;
+> > > > -	bool ret;
+> > > > +	unsigned int wake_batch = READ_ONCE(sbq->wake_batch);
+> > > > +	struct sbq_wait_state *ws = NULL;
+> > > > +	unsigned int wakeups;
+> > > > -	if (*nr <= 0)
+> > > > -		return false;
+> > > > +	if (!atomic_read(&sbq->ws_active))
+> > > > +		return;
+> > > > -	ws = sbq_wake_ptr(sbq);
+> > > > -	if (!ws)
+> > > > -		return false;
+> > > > +	atomic_add(nr, &sbq->completion_cnt);
+> > > > +	wakeups = atomic_read(&sbq->wakeup_cnt);
+> > > > -	cur = atomic_read(&ws->wait_cnt);
+> > > >    	do {
+> > > > -		/*
+> > > > -		 * For concurrent callers of this, callers should call this
+> > > > -		 * function again to wakeup a new batch on a different 'ws'.
+> > > > -		 */
+> > > > -		if (cur == 0)
+> > > > -			return true;
+> > > > -		sub = min(*nr, cur);
+> > > > -		wait_cnt = cur - sub;
+> > > > -	} while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
+> > > > -
+> > > > -	/*
+> > > > -	 * If we decremented queue without waiters, retry to avoid lost
+> > > > -	 * wakeups.
+> > > > -	 */
+> > > > -	if (wait_cnt > 0)
+> > > > -		return !waitqueue_active(&ws->wait);
+> > > > +		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
+> > > > +			return;
+> > > 
+> > > Should it be considered that completion_cnt overflow and becomes
+> > > negtive?
+> > 
+> > Yes, the counters can (and will) certainly overflow but since we only care
+> > about (completion_cnt - wakeups), we should be fine - this number is always
+> > sane (and relatively small) and in the kernel we do compile with signed
+> > overflows being well defined.
+> 
+> I'm worried about this: for example, the extreme scenaro that there
+> is only one tag, currently there are only one infight rq and one thread
+> is waiting for tag. When the infight rq complete, if 'completion_cnt'
+> overflow to negative, then 'atomic_read(&sbq->completion_cnt) - wakeups
+> < wake_batch' will be passed unexpected, then will the thread never be
+> woken up if there are no new io issued ?
 
-Hello,
+Well but my point is that 'wakeups' is staying close to completion_cnt. So
+if completion_cnt wraps to INT_MIN, then 'wakeups' is close to INT_MAX and
+so completion_cnt - wakeups is going to wrap back and still result in a
+small number. That is simply how wrapping arithmetics works...
 
-On Thu, Oct 20, 2022 at 04:16:04PM +0100, Ben Dooks wrote:
-> In preparation for adding other bus support, move the allocation
-> of the pwm struct out of the main driver code.
->=20
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> ---
->  drivers/pwm/pwm-dwc.c | 24 +++++++++++++++++-------
->  1 file changed, 17 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-dwc.c b/drivers/pwm/pwm-dwc.c
-> index c706ef9a7ba1..61f11e0a9319 100644
-> --- a/drivers/pwm/pwm-dwc.c
-> +++ b/drivers/pwm/pwm-dwc.c
-> @@ -196,13 +196,29 @@ static const struct pwm_ops dwc_pwm_ops =3D {
->  	.owner =3D THIS_MODULE,
->  };
-> =20
-> +static struct dwc_pwm *dwc_pwm_alloc(struct device *dev)
-> +{
-> +	struct dwc_pwm *dwc;
-> +
-> +	dwc =3D devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
-> +	if (!dwc)
-> +		return NULL;
-> +
-> +	dwc->chip.dev =3D dev;
-> +	dwc->chip.ops =3D &dwc_pwm_ops;
-> +	dwc->chip.npwm =3D DWC_TIMERS_TOTAL;
-> +
-> +	dev_set_drvdata(dev, dwc);
-
-This was a pci_set_drvdata before. While it's common knowledge (and
-implicitly used in several code parts) that pci_set_drvdata(pdev, data)
-is just the same as dev_set_drvdata(&pdev->dev, data), it would be nice
-if the driver only used either dev_[sg]et_drvdata or pci_[sg]et_drvdata.
-
-Using the former in dwc_pwm_resume and dwc_pwm_suspend is even a tad
-shorter.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---o2njqqdvwz54sbmh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNtGiwACgkQwfwUeK3K
-7AnoPwgAkL+7zuinJe1IpOuGeYwe2mbuGFT36eazQa012oNwfGPR3bXmcmgFuoGf
-5xpqZFBZWpHZ5iQ9HsnM7sBUTgbbCHfr/3N1YU5h5lFBQvjSJM999duqGXoHeuvg
-uZaVGmy4bABTgU8fXB2xn1xN3vXDDb4htlYHp50uK8702AHM4jvnicnEE79ZkXHB
-q+nM+PCM+FqnMJnP1J6H7P9bQZdFBk80YlCQPO9oFXSu7ytGkWJ7pc33K2Z5o7xN
-NLkWqbxqivH2h55jjIPD2Zq5PpvVnKqnGqpntsHmcddogvKATg9GVlri+jgavYc9
-vQGJ/KDGnDvwh2uxZqPRk+7xgSEOfQ==
-=avP/
------END PGP SIGNATURE-----
-
---o2njqqdvwz54sbmh--
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
