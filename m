@@ -2,909 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53E16241EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434B86241F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiKJMGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S229882AbiKJMIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:08:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKJMG2 (ORCPT
+        with ESMTP id S229790AbiKJMIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:06:28 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB5970549
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:06:26 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7L6y2vd4zqSHR;
-        Thu, 10 Nov 2022 20:02:18 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 20:05:59 +0800
-CC:     <yangyicong@hisilicon.com>, <coresight@lists.linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <lpieralisi@kernel.org>,
-        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
-        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
-Subject: Re: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     Junhao He <hejunhao3@huawei.com>, <mathieu.poirier@linaro.org>,
-        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>,
-        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
-        <john.garry@huawei.com>
-References: <20221109135008.9485-1-hejunhao3@huawei.com>
- <20221109135008.9485-2-hejunhao3@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <c394c88a-8c81-fd03-f031-1ca3e2ca85ed@huawei.com>
-Date:   Thu, 10 Nov 2022 20:05:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 10 Nov 2022 07:08:00 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16DC716CE
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:07:58 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so2834319lfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wTZeoUecrKlOpac1f+l+tkMwOwFXx8RW3xq7DuV+DMM=;
+        b=OtYSVx109vXNxZR6GezrRVsY0MmmZtoobU4DmFkpd1Ns/JbNXoL923ZWlTehmQ/Gpf
+         GTvhutOnU9np1mi0Nbe6XMkBt4IVwB6F4GhrY3X8Tj6u8SlIjXLdS0KlybmYbPqs7sMs
+         rHLruuC6Gff6OvM0r+Bziqp/0OzwnEcnX52me9rqCd8FGDxtYxKZU7GKf56ef3EVOJaf
+         CrFEd8pOrgmPBuyu397MsrOUiNNfjQTIQ7OViY3RMaIKH3WWer9XbbI15Y4fdXNOM1Bt
+         AXOvD07WywGP+SD6TwhX1wAh1G9/fQHDTsIo7bYvmMgaNMh6iBE0iAbqwqvcu4upMys3
+         rbig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wTZeoUecrKlOpac1f+l+tkMwOwFXx8RW3xq7DuV+DMM=;
+        b=NSMO6Z4hVN49KmRy7X1F7dadA14QyTVBvuFLtDhNv9SzSTDGyatiX/mz7sPgyfrZcc
+         Ld94G/ElT4cNk+IR6bmZYXc/GaPawm1uR8foKDYXdvRzLaim1W2ElQJ5IY4+EWWynkqU
+         bi5MZV6TQgZm8QYgt4IZlCbULrZ0rp5R0h6kM6Dxq6x+wkq0Hkj8+ejlqVXcBbbNo3yy
+         wCSD2Wpe18Ryj+/bcStOq+Tka05pg1q6U3XMrZim0/UbjQYolhXjeTCSjyR4GKMEJhcF
+         Ev16oUojQkiAwKVP5jl4SGDwq8GTMONmtAoh5SHVCP4p7gc9t1r+XVUZhg+y8w0otmSm
+         7Q1A==
+X-Gm-Message-State: ACrzQf3D61UMctd5xt58yLKNiNizK6Tmfhz7zU4b6OEW3cQQPLRd0pfG
+        3agJ6FVZkaVlCHGqW0v55uZEng==
+X-Google-Smtp-Source: AMsMyM5Fy2ozvGSmP1vbjydCPG2UhS0gqPhZr248VdsYUlWeNBm//9YGxeKM10fZPGnjA3WXzapXsQ==
+X-Received: by 2002:a19:790d:0:b0:4a2:3d87:8d14 with SMTP id u13-20020a19790d000000b004a23d878d14mr1548113lfc.161.1668082077160;
+        Thu, 10 Nov 2022 04:07:57 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b004979db5aa5bsm2727460lfg.223.2022.11.10.04.07.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 04:07:56 -0800 (PST)
+Message-ID: <ae1ba550-4bee-4b3b-ba5e-716f4dba9917@linaro.org>
+Date:   Thu, 10 Nov 2022 13:07:54 +0100
 MIME-Version: 1.0
-In-Reply-To: <20221109135008.9485-2-hejunhao3@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH 03/10] arm64: dts: qcom: Add a device tree for PMK8350 on
+ SID6
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        patches@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221109111236.46003-1-konrad.dybcio@linaro.org>
+ <20221109111236.46003-4-konrad.dybcio@linaro.org>
+ <CAA8EJprNszfyyN9HLYoRK2Y-yUU-NuGd0QacqJ3UhkDjpvokdg@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJprNszfyyN9HLYoRK2Y-yUU-NuGd0QacqJ3UhkDjpvokdg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Junhao,
 
-On 2022/11/9 21:50, Junhao He wrote:
-> From: Qi Liu <liuqi115@huawei.com>
+
+On 10/11/2022 10:12, Dmitry Baryshkov wrote:
+> On Wed, 9 Nov 2022 at 14:12, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>> PMK8350 is shipped on SID6 with some SoCs, for example with SM6375.
+>> Add a DT with the SID changed to allow it to work.
+>>
+>> Unfortunately, the entire DT needs to be copied even if the diff is
+>> very little, as the node names are not unique. Including pm6125 and
+>> pmk8350 together for example, would make pmk8350 overwrite the pm6125
+>> node, as both are defined as 'pmic@0'.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   arch/arm64/boot/dts/qcom/pmk8350_sid6.dtsi | 73 ++++++++++++++++++++++
+>>   1 file changed, 73 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/pmk8350_sid6.dtsi
 > 
-> This patch adds driver for UltraSoc SMB(System Memory Buffer)
-> device. SMB provides a way to buffer messages from ETM, and
-> store these "CPU instructions trace" in system memory.
+> Just to throw my 2c. If I was doing this myself, I'd allow pmk8350 to
+> receive external SID using the cpp #define (And to default to 0 if one
+> didn't use it).
+Hmm.. that's probably the least duplicative approach, but I'm not sure I
+want to see #ifdefs in DTs..
+
+Konrad
 > 
-> SMB is developed by UltraSoc technology, which is acquired by
-> Siemens, and we still use "UltraSoc" to name driver.
 > 
-
-Some comments inline.
-
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> Tested-by: JunHao He <hejunhao3@huawei.com>
-> ---
->  drivers/hwtracing/coresight/Kconfig        |  11 +
->  drivers/hwtracing/coresight/Makefile       |   1 +
->  drivers/hwtracing/coresight/ultrasoc-smb.c | 635 +++++++++++++++++++++
->  drivers/hwtracing/coresight/ultrasoc-smb.h | 116 ++++
->  4 files changed, 763 insertions(+)
->  create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
->  create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
 > 
-> diff --git a/drivers/hwtracing/coresight/Kconfig b/drivers/hwtracing/coresight/Kconfig
-> index 45c1eb5dfcb7..cb17c207a728 100644
-> --- a/drivers/hwtracing/coresight/Kconfig
-> +++ b/drivers/hwtracing/coresight/Kconfig
-> @@ -201,4 +201,15 @@ config CORESIGHT_TRBE
->  
->  	  To compile this driver as a module, choose M here: the module will be
->  	  called coresight-trbe.
-> +
-> +config ULTRASOC_SMB
-> +	tristate "Ultrasoc system memory buffer drivers"
-> +	depends on ARM64 && CORESIGHT_LINKS_AND_SINKS
-> +	help
-> +	  This driver provides support for the Ultrasoc system memory buffer (SMB).
-> +	  SMB is responsible for receiving the trace data from Coresight ETM devices
-> +	  and storing them to a system buffer.
-> +
-> +	  To compile this driver as a module, choose M here: the module will be
-> +	  called ultrasoc-smb.
->  endif
-> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-> index b6c4a48140ec..344dba8d6ff8 100644
-> --- a/drivers/hwtracing/coresight/Makefile
-> +++ b/drivers/hwtracing/coresight/Makefile
-> @@ -27,3 +27,4 @@ obj-$(CONFIG_CORESIGHT_CTI) += coresight-cti.o
->  obj-$(CONFIG_CORESIGHT_TRBE) += coresight-trbe.o
->  coresight-cti-y := coresight-cti-core.o	coresight-cti-platform.o \
->  		   coresight-cti-sysfs.o
-> +obj-$(CONFIG_ULTRASOC_SMB) += ultrasoc-smb.o
-> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.c b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> new file mode 100644
-> index 000000000000..ea2552a98d28
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.c
-> @@ -0,0 +1,635 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * Siemens System Memory Buffer driver.
-> + * Copyright(c) 2022, HiSilicon Limited.
-> + */
-> +
-> +#include <linux/atomic.h>
-> +#include <linux/acpi.h>
-> +#include <linux/circ_buf.h>
-> +#include <linux/err.h>
-> +#include <linux/fs.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "coresight-etm-perf.h"
-> +#include "coresight-priv.h"
-> +#include "ultrasoc-smb.h"
-> +
-> +DEFINE_CORESIGHT_DEVLIST(sink_devs, "ultra_smb");
-> +
-> +#define ULTRASOC_SMB_DSM_UUID	"82ae1283-7f6a-4cbe-aa06-53e8fb24db18"
-> +
-> +static bool smb_buffer_is_empty(struct smb_drv_data *drvdata)
-> +{
-> +	u32 buf_status = readl(drvdata->base + SMB_LB_INT_STS_REG);
-> +
-> +	return !FIELD_PREP(SMB_LB_INT_STS_NOT_EMPTY_MSK, buf_status);
-
-Should be FIELD_GET() here?
-
-> +}
-> +
-> +static void smb_buffer_sync_status(struct smb_drv_data *drvdata)
-> +{
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +
-> +	sdb->wr_offset = readl(drvdata->base + SMB_LB_WR_ADDR_REG) - sdb->start_addr;
-> +	sdb->rd_offset = readl(drvdata->base + SMB_LB_RD_ADDR_REG) - sdb->start_addr;
-> +	sdb->full = sdb->wr_offset == sdb->rd_offset && !smb_buffer_is_empty(drvdata);
-
-Mistake here? Why to overwrite wr_offset?
-
-> +}
-> +
-> +static void smb_reset_buffer_status(struct smb_drv_data *drvdata)
-> +{
-> +	writel(SMB_LB_INT_BUF_STS_RESET, drvdata->base + SMB_LB_INT_STS_REG);
-
-You'll reset other fields of SMB_LB_INT_STS_REG since SMB_LB_INT_BUF_STS_RESET is only
-BIT [3, 0], if it's not intended I'd suggest to only update the necessary fields. So is
-other places.
-
-> +}
-> +
-> +/* Purge data remaining in hardware path in case them influence next trace */
-> +static void smb_purge_data(struct smb_drv_data *drvdata)
-> +{
-> +	writel(SMB_LB_PURGE_PURGED, drvdata->base + SMB_LB_PURGE_REG);
-> +}
-> +
-> +static void smb_update_data_size(struct smb_drv_data *drvdata)
-> +{
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +
-> +	smb_purge_data(drvdata);
-> +	smb_buffer_sync_status(drvdata);
-> +	if (sdb->full) {
-> +		sdb->data_size = sdb->buf_size;
-> +		return;
-> +	}
-> +
-> +	sdb->data_size = CIRC_CNT(sdb->wr_offset, sdb->rd_offset, sdb->buf_size);
-> +}
-> +
-> +static int smb_open(struct inode *inode, struct file *file)
-> +{
-> +	struct smb_drv_data *drvdata = container_of(file->private_data,
-> +					struct smb_drv_data, miscdev);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	if (local_read(&drvdata->reading)) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
-> +
-> +	if (atomic_read(drvdata->csdev->refcnt)) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
-> +
-> +	local_set(&drvdata->reading, 1);
-> +out:
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t smb_read(struct file *file, char __user *data, size_t len,
-> +			loff_t *ppos)
-> +{
-> +	struct smb_drv_data *drvdata = container_of(file->private_data,
-> +					struct smb_drv_data, miscdev);
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +	struct device *dev = &drvdata->csdev->dev;
-> +	ssize_t to_copy = 0;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	if (!sdb->data_size) {
-> +		smb_update_data_size(drvdata);
-> +		if (!sdb->data_size)
-> +			goto out;
-> +	}
-> +
-
-It'd be better to check this earlier in open().
-
-> +	to_copy = min(sdb->data_size, len);
-> +
-> +	/* Copy parts of trace data when read pointer wrap around SMB buffer */
-> +	if (sdb->rd_offset + to_copy > sdb->buf_size)
-> +		to_copy = sdb->buf_size - sdb->rd_offset;
-> +
-> +	if (copy_to_user(data, (void *)sdb->buf_base + sdb->rd_offset,
-> +			 to_copy)) {
-> +		dev_dbg(dev, "Failed to copy data to user\n");
-> +		to_copy = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	*ppos += to_copy;
-> +	sdb->data_size -= to_copy;
-> +	sdb->rd_offset += to_copy;
-> +	sdb->rd_offset %= sdb->buf_size;
-> +	writel(sdb->start_addr + sdb->rd_offset,
-> +	       drvdata->base + SMB_LB_RD_ADDR_REG);
-> +	dev_dbg(dev, "%zu bytes copied\n", to_copy);
-> +out:
-> +	if (!sdb->data_size)
-> +		smb_reset_buffer_status(drvdata);
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return to_copy;
-> +}
-> +
-> +static int smb_release(struct inode *inode, struct file *file)
-> +{
-> +	struct smb_drv_data *drvdata = container_of(file->private_data,
-> +					struct smb_drv_data, miscdev);
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +	local_set(&drvdata->reading, 0);
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct file_operations smb_fops = {
-> +	.owner		= THIS_MODULE,
-> +	.open		= smb_open,
-> +	.read		= smb_read,
-> +	.release	= smb_release,
-> +	.llseek		= no_llseek,
-> +};
-> +
-> +static ssize_t buf_size_show(struct device *dev, struct device_attribute *attr,
-> +			     char *buf)
-> +{
-> +	struct smb_drv_data *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "0x%lx\n", drvdata->sdb.buf_size);
-
-Need to update the data size before sysfs_emit().
-
-> +}
-> +static DEVICE_ATTR_RO(buf_size);
-> +
-> +static struct attribute *smb_sink_attrs[] = {
-> +	coresight_simple_reg32(read_pos, SMB_LB_RD_ADDR_REG),
-> +	coresight_simple_reg32(write_pos, SMB_LB_WR_ADDR_REG),
-> +	coresight_simple_reg32(buf_status, SMB_LB_INT_STS_REG),
-> +	&dev_attr_buf_size.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group smb_sink_group = {
-> +	.attrs = smb_sink_attrs,
-> +	.name = "mgmt",
-> +};
-> +
-> +static const struct attribute_group *smb_sink_groups[] = {
-> +	&smb_sink_group,
-> +	NULL
-> +};
-> +
-> +static void smb_enable_hw(struct smb_drv_data *drvdata)
-> +{
-> +	writel(SMB_GLB_EN_HW_ENABLE, drvdata->base + SMB_GLB_EN_REG);
-> +}
-> +
-> +static void smb_disable_hw(struct smb_drv_data *drvdata)
-> +{
-> +	writel(0x0, drvdata->base + SMB_GLB_EN_REG);
-> +}
-> +
-> +static void smb_enable_sysfs(struct coresight_device *csdev)
-> +{
-> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +
-> +	if (drvdata->mode != CS_MODE_DISABLED)
-> +		return;
-> +
-> +	smb_enable_hw(drvdata);
-> +	drvdata->mode = CS_MODE_SYSFS;
-> +}
-> +
-> +static int smb_enable_perf(struct coresight_device *csdev, void *data)
-> +{
-> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +	struct perf_output_handle *handle = data;
-> +	struct cs_buffers *buf = etm_perf_sink_config(handle);
-> +	pid_t pid;
-> +
-> +	if (!buf)
-> +		return -EINVAL;
-> +
-> +	/* Get a handle on the pid of the target process */
-> +	pid = buf->pid;
-> +
-> +	/* Device is already in used by other session */
-> +	if (drvdata->pid != -1 && drvdata->pid != pid)
-> +		return -EBUSY;
-> +
-> +	if (drvdata->pid == -1) {
-> +		smb_enable_hw(drvdata);
-> +		drvdata->pid = pid;
-> +		drvdata->mode = CS_MODE_PERF;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int smb_enable(struct coresight_device *csdev, u32 mode, void *data)
-> +{
-> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	/* Do nothing, the trace data is reading by other interface now */
-> +	if (local_read(&drvdata->reading)) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
-> +
-> +	/* Do nothing, the SMB is already enabled as other mode */
-> +	if (drvdata->mode != CS_MODE_DISABLED && drvdata->mode != mode) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
-> +
-> +	switch (mode) {
-> +	case CS_MODE_SYSFS:
-> +		smb_enable_sysfs(csdev);
-> +		break;
-> +	case CS_MODE_PERF:
-> +		ret = smb_enable_perf(csdev, data);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +	}
-> +
-> +	if (ret)
-> +		goto out;
-> +
-> +	atomic_inc(csdev->refcnt);
-> +
-> +	dev_dbg(&csdev->dev, "Ultrasoc SMB enabled\n");
-> +out:
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static int smb_disable(struct coresight_device *csdev)
-> +{
-> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	if (local_read(&drvdata->reading)) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
-> +
-> +	if (atomic_dec_return(csdev->refcnt)) {
-> +		ret = -EBUSY;
-> +		goto out;
-> +	}
-> +
-> +	/* Complain if we (somehow) got out of sync */
-> +	WARN_ON_ONCE(drvdata->mode == CS_MODE_DISABLED);
-
-Is there any conditions we can reach here? I see we always update
-drvdata->mode within the mutex's protection.
-
-> +
-> +	smb_disable_hw(drvdata);
-> +	smb_purge_data(drvdata);
-> +
-> +	/* Dissociate from the target process. */
-> +	drvdata->pid = -1;
-> +	drvdata->mode = CS_MODE_DISABLED;
-> +
-> +	dev_dbg(&csdev->dev, "Ultrasoc SMB disabled\n");
-> +out:
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static void *smb_alloc_buffer(struct coresight_device *csdev,
-> +			      struct perf_event *event, void **pages,
-> +			      int nr_pages, bool overwrite)
-> +{
-> +	struct cs_buffers *buf;
-> +	int node;
-> +
-> +	node = (event->cpu == -1) ? NUMA_NO_NODE : cpu_to_node(event->cpu);
-> +	buf = kzalloc_node(sizeof(struct cs_buffers), GFP_KERNEL, node);
-> +	if (!buf)
-> +		return NULL;
-> +
-> +	buf->snapshot = overwrite;
-> +	buf->nr_pages = nr_pages;
-> +	buf->data_pages = pages;
-> +	buf->pid = task_pid_nr(event->owner);
-> +
-> +	return buf;
-> +}
-> +
-> +static void smb_free_buffer(void *config)
-> +{
-> +	struct cs_buffers *buf = config;
-> +
-> +	kfree(buf);
-> +}
-> +
-> +static void smb_sync_perf_buffer(struct smb_drv_data *drvdata,
-> +				 struct cs_buffers *buf,
-> +				 unsigned long head,
-> +				 unsigned long data_size)
-> +{
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +	char **dst_pages = (char **)buf->data_pages;
-> +	unsigned long to_copy;
-> +	long pg_idx, pg_offset;
-> +
-> +	pg_idx = head >> PAGE_SHIFT;
-> +	pg_offset = head & (PAGE_SIZE - 1);
-> +
-> +	while (data_size) {
-> +		unsigned long pg_space = PAGE_SIZE - pg_offset;
-> +
-> +		/* Copy parts of trace data when read pointer wrap around */
-> +		if (sdb->rd_offset + pg_space > sdb->buf_size)
-> +			to_copy = sdb->buf_size - sdb->rd_offset;
-> +		else
-> +			to_copy = min(data_size, pg_space);
-> +
-> +		memcpy(dst_pages[pg_idx] + pg_offset,
-> +			      sdb->buf_base + sdb->rd_offset, to_copy);
-> +
-> +		pg_offset += to_copy;
-> +		if (pg_offset >= PAGE_SIZE) {
-> +			pg_offset = 0;
-> +			pg_idx++;
-> +			pg_idx %= buf->nr_pages;
-> +		}
-> +		data_size -= to_copy;
-> +		sdb->rd_offset += to_copy;
-> +		sdb->rd_offset %= sdb->buf_size;
-> +	}
-> +
-> +	sdb->data_size = 0;
-> +	writel(sdb->start_addr + sdb->rd_offset, drvdata->base + SMB_LB_RD_ADDR_REG);
-> +
-> +	/*
-> +	 * Data remained in link cannot be purged when SMB is full, so
-> +	 * synchronize the read pointer to write pointer, to make sure
-> +	 * these remained data won't influence next trace.
-> +	 */
-> +	if (sdb->full) {
-> +		smb_purge_data(drvdata);
-> +		writel(readl(drvdata->base + SMB_LB_WR_ADDR_REG),
-> +		       drvdata->base + SMB_LB_RD_ADDR_REG);
-> +	}
-> +	smb_reset_buffer_status(drvdata);
-> +}
-> +
-> +static unsigned long smb_update_buffer(struct coresight_device *csdev,
-> +				       struct perf_output_handle *handle,
-> +				       void *sink_config)
-> +{
-> +	struct smb_drv_data *drvdata = dev_get_drvdata(csdev->dev.parent);
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +	struct cs_buffers *buf = sink_config;
-> +	unsigned long data_size = 0;
-> +	bool lost = false;
-> +
-> +	if (!buf)
-> +		return 0;
-> +
-> +	mutex_lock(&drvdata->mutex);
-> +
-> +	/* Don't do anything if another tracer is using this sink. */
-> +	if (atomic_read(csdev->refcnt) != 1)
-> +		goto out;
-> +
-> +	smb_disable_hw(drvdata);
-> +	smb_update_data_size(drvdata);
-> +	data_size = sdb->data_size;
-> +
-> +	/*
-> +	 * The SMB buffer may be bigger than the space available in the
-> +	 * perf ring buffer (handle->size). If so advance the offset so
-> +	 * that we get the latest trace data.
-> +	 */
-> +	if (data_size > handle->size) {
-> +		sdb->rd_offset += data_size - handle->size;
-> +		sdb->rd_offset %= sdb->buf_size;
-> +		data_size = handle->size;
-> +		lost = true;
-> +	}
-> +
-> +	smb_sync_perf_buffer(drvdata, buf, handle->head, data_size);
-> +	if (!buf->snapshot && lost)
-> +		perf_aux_output_flag(handle, PERF_AUX_FLAG_TRUNCATED);
-> +
-> +	smb_enable_hw(drvdata);
-> +out:
-> +	mutex_unlock(&drvdata->mutex);
-> +
-> +	return data_size;
-> +}
-> +
-> +static const struct coresight_ops_sink smb_cs_ops = {
-> +	.enable		= smb_enable,
-> +	.disable	= smb_disable,
-> +	.alloc_buffer	= smb_alloc_buffer,
-> +	.free_buffer	= smb_free_buffer,
-> +	.update_buffer	= smb_update_buffer,
-> +};
-> +
-> +static const struct coresight_ops cs_ops = {
-> +	.sink_ops	= &smb_cs_ops,
-> +};
-> +
-> +static int smb_init_data_buffer(struct platform_device *pdev,
-> +				struct smb_data_buffer *sdb)
-> +{
-> +	struct resource *res;
-> +	void __iomem *base;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, SMB_BUF_ADDR_RES);
-> +	if (IS_ERR(res)) {
-> +		dev_err(&pdev->dev, "SMB device failed to get resource\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	sdb->start_addr = FIELD_PREP(SMB_BUF_ADDR_LO_MSK, res->start);
-
-also FIELD_GET()?
-
-> +	sdb->buf_size = resource_size(res);
-> +	if (sdb->buf_size == 0)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * This is a chunk of memory, use classic mapping with better
-> +	 * performance.
-> +	 */
-> +	base = devm_memremap(&pdev->dev, sdb->start_addr, sdb->buf_size,
-> +				MEMREMAP_WB);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	sdb->buf_base = base;
-> +
-> +	return 0;
-> +}
-> +
-> +static void smb_init_hw(struct smb_drv_data *drvdata)
-> +{
-> +	/* First disable SMB and clear the status of SMB buffer */
-> +	smb_reset_buffer_status(drvdata);
-> +	smb_disable_hw(drvdata);
-> +	smb_purge_data(drvdata);
-> +
-> +	writel(SMB_LB_CFG_LO_DEFAULT, drvdata->base + SMB_LB_CFG_LO_REG);
-> +	writel(SMB_LB_CFG_HI_DEFAULT, drvdata->base + SMB_LB_CFG_HI_REG);
-> +	writel(SMB_GLB_CFG_DEFAULT, drvdata->base + SMB_GLB_CFG_REG);
-> +	writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLB_INT_REG);
-> +	writel(SMB_LB_INT_CTRL_CFG, drvdata->base + SMB_LB_INT_CTRL_REG);
-> +}
-> +
-> +static int smb_register_sink(struct platform_device *pdev,
-> +			     struct smb_drv_data *drvdata)
-> +{
-> +	struct coresight_platform_data *pdata = NULL;
-> +	struct coresight_desc desc = { 0 };
-> +	int ret;
-> +
-> +	pdata = coresight_get_platform_data(&pdev->dev);
-> +	if (IS_ERR(pdata))
-> +		return PTR_ERR(pdata);
-> +
-> +	desc.type = CORESIGHT_DEV_TYPE_SINK;
-> +	desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_BUFFER;
-> +	desc.ops = &cs_ops;
-> +	desc.pdata = pdata;
-> +	desc.dev = &pdev->dev;
-> +	desc.groups = smb_sink_groups;
-> +	desc.name = coresight_alloc_device_name(&sink_devs, &pdev->dev);
-> +	if (!desc.name) {
-> +		dev_err(&pdev->dev, "Failed to alloc coresight device name");
-> +		return -ENOMEM;
-> +	}
-> +	desc.access = CSDEV_ACCESS_IOMEM(drvdata->base);
-> +
-> +	drvdata->csdev = coresight_register(&desc);
-> +	if (IS_ERR(drvdata->csdev))
-> +		return PTR_ERR(drvdata->csdev);
-> +
-> +	drvdata->miscdev.name = desc.name;
-> +	drvdata->miscdev.minor = MISC_DYNAMIC_MINOR;
-> +	drvdata->miscdev.fops = &smb_fops;
-> +	ret = misc_register(&drvdata->miscdev);
-> +	if (ret) {
-> +		coresight_unregister(drvdata->csdev);
-> +		dev_err(&pdev->dev, "Failed to register misc, ret=%d\n", ret);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static void smb_unregister_sink(struct smb_drv_data *drvdata)
-> +{
-> +	misc_deregister(&drvdata->miscdev);
-> +	coresight_unregister(drvdata->csdev);
-> +}
-> +
-> +static int smb_config_inport(struct device *dev, bool enable)
-> +{
-> +	u64 func = enable ? 1 : 0;
-> +	union acpi_object *obj;
-> +	guid_t guid;
-> +	u64 rev = 0;
-> +
-> +	/*
-> +	 * Using DSM calls to enable/disable ultrasoc hardwares on
-> +	 * tracing path, to prevent ultrasoc packet format being exposed.
-> +	 */
-> +	if (guid_parse(ULTRASOC_SMB_DSM_UUID, &guid)) {
-> +		dev_err(dev, "Get GUID failed\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	obj = acpi_evaluate_dsm(ACPI_HANDLE(dev), &guid, rev, func, NULL);
-> +	if (!obj)
-> +		dev_err(dev, "ACPI handle failed\n");
-> +	else
-> +		ACPI_FREE(obj);
-> +
-> +	return 0;
-> +}
-> +
-> +static int smb_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct smb_drv_data *drvdata;
-> +	int ret;
-> +
-> +	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-> +	if (!drvdata)
-> +		return -ENOMEM;
-> +
-> +	drvdata->base = devm_platform_ioremap_resource(pdev, SMB_REG_ADDR_RES);
-> +	if (IS_ERR(drvdata->base)) {
-> +		dev_err(dev, "Failed to ioremap resource\n");
-> +		return PTR_ERR(drvdata->base);
-> +	}
-> +
-> +	ret = smb_init_data_buffer(pdev, &drvdata->sdb);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to init buffer, ret = %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	smb_init_hw(drvdata);
-> +	mutex_init(&drvdata->mutex);
-> +	drvdata->pid = -1;
-> +
-> +	ret = smb_register_sink(pdev, drvdata);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register SMB sink\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = smb_config_inport(dev, true);
-> +	if (ret) {
-> +		smb_unregister_sink(drvdata);
-> +		return ret;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, drvdata);
-> +
-> +	return 0;
-> +}
-> +
-> +static int smb_remove(struct platform_device *pdev)
-> +{
-> +	struct smb_drv_data *drvdata = platform_get_drvdata(pdev);
-> +	int ret;
-> +
-> +	ret = smb_config_inport(&pdev->dev, false);
-> +	if (ret)
-> +		return ret;
-> +
-> +	smb_unregister_sink(drvdata);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct acpi_device_id ultrasoc_smb_acpi_match[] = {
-> +	{"HISI03A1", 0},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, ultrasoc_smb_acpi_match);
-> +
-> +static struct platform_driver smb_driver = {
-> +	.driver = {
-> +		.name = "ultrasoc-smb",
-> +		.acpi_match_table = ACPI_PTR(ultrasoc_smb_acpi_match),
-> +		.suppress_bind_attrs = true,
-> +	},
-> +	.probe = smb_probe,
-> +	.remove = smb_remove,
-> +};
-> +module_platform_driver(smb_driver);
-> +
-> +MODULE_DESCRIPTION("UltraSoc SMB CoreSight driver");
-> +MODULE_LICENSE("Dual MIT/GPL");
-> +MODULE_AUTHOR("Jonathan Zhou <jonathan.zhouwen@huawei.com>");
-> +MODULE_AUTHOR("Qi Liu <liuqi115@huawei.com>");
-> diff --git a/drivers/hwtracing/coresight/ultrasoc-smb.h b/drivers/hwtracing/coresight/ultrasoc-smb.h
-> new file mode 100644
-> index 000000000000..2e2f9f8fe54b
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/ultrasoc-smb.h
-> @@ -0,0 +1,116 @@
-> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> +/*
-> + * Siemens System Memory Buffer driver.
-> + * Copyright(c) 2022, HiSilicon Limited.
-> + */
-> +
-> +#ifndef _ULTRASOC_SMB_H
-> +#define _ULTRASOC_SMB_H
-> +
-> +#include <linux/miscdevice.h>
-> +#include <linux/mutex.h>
-> +
-> +/* Offset of SMB global registers */
-> +#define SMB_GLB_CFG_REG		0x00
-> +#define SMB_GLB_EN_REG		0x04
-> +#define SMB_GLB_INT_REG		0x08
-> +
-> +/* Offset of SMB logical buffer registers */
-> +#define SMB_LB_CFG_LO_REG	0x40
-> +#define SMB_LB_CFG_HI_REG	0x44
-> +#define SMB_LB_INT_CTRL_REG	0x48
-> +#define SMB_LB_INT_STS_REG	0x4c
-> +#define SMB_LB_RD_ADDR_REG	0x5c
-> +#define SMB_LB_WR_ADDR_REG	0x60
-> +#define SMB_LB_PURGE_REG	0x64
-> +
-> +/* Set global config register */
-> +#define SMB_CFG_BURST_LEN_MSK	GENMASK(11, 4)
-> +#define SMB_CFG_IDLE_PRD_MSK	GENMASK(15, 12)
-> +#define SMB_CFG_MEM_WR_MSK	GENMASK(21, 16)
-> +#define SMB_CFG_MEM_RD_MSK	GENMASK(27, 22)
-> +#define SMB_GLB_CFG_DEFAULT	(FIELD_PREP(SMB_CFG_BURST_LEN_MSK, 0xf) | \
-> +				 FIELD_PREP(SMB_CFG_IDLE_PRD_MSK, 0xf) | \
-> +				 FIELD_PREP(SMB_CFG_MEM_WR_MSK, 0x3) | \
-> +				 FIELD_PREP(SMB_CFG_MEM_RD_MSK, 0x1b))
-> +
-> +/* Set global interrupt control register */
-> +#define SMB_INT_EN		BIT(0)
-> +#define SMB_INT_PULSE		BIT(1) /* Interrupt type: 1 - Pulse */
-> +#define SMB_INT_ACT_H		BIT(2) /* Interrupt polarity: 1 - Active high */
-> +#define SMB_GLB_INT_CFG		(SMB_INT_EN | SMB_INT_PULSE | SMB_INT_ACT_H)
-> +
-> +/* Set logical buffer config register lower 32 bits */
-> +#define SMB_CFG_LO_EN		BIT(0)
-> +#define SMB_CFG_LO_SINGLE_END	BIT(1)
-> +#define SMB_CFG_LO_INIT		BIT(8)
-> +#define SMB_CFG_LO_CONT		BIT(11)
-> +#define SMB_CFG_LO_FLOW_MSK	GENMASK(19, 16)
-> +#define SMB_LB_CFG_LO_DEFAULT	(SMB_CFG_LO_EN | SMB_CFG_LO_SINGLE_END | \
-> +				 SMB_CFG_LO_INIT | SMB_CFG_LO_CONT | \
-> +				 FIELD_PREP(SMB_CFG_LO_FLOW_MSK, 0xf))
-> +
-> +/* Set logical buffer config register upper 32 bits */
-> +#define SMB_CFG_HI_RANGE_UP_MSK	GENMASK(15, 8)
-> +#define SMB_LB_CFG_HI_DEFAULT	FIELD_PREP(SMB_CFG_HI_RANGE_UP_MSK, 0xff)
-> +
-> +/* Set logical buffer interrupt control register */
-> +#define SMB_INT_CTRL_EN			BIT(0)
-> +#define SMB_INT_CTRL_BUF_NOTE_MSK	GENMASK(11, 8)
-> +#define SMB_LB_INT_CTRL_CFG	(SMB_INT_CTRL_EN | \
-> +				 FIELD_PREP(SMB_INT_CTRL_BUF_NOTE_MSK, 0xf))
-> +
-> +#define SMB_LB_INT_STS_NOT_EMPTY_MSK	BIT(0)
-> +#define SMB_LB_STS_RESET_MSK		GENMASK(3, 0)
-> +#define SMB_LB_INT_BUF_STS_RESET	FIELD_PREP(SMB_LB_STS_RESET_MSK, 0xf)
-> +#define SMB_LB_PURGE_PURGED	BIT(0)
-> +#define SMB_GLB_EN_HW_ENABLE	BIT(0)
-> +
-> +#define SMB_REG_ADDR_RES	0
-> +#define SMB_BUF_ADDR_RES	1
-> +#define SMB_BUF_ADDR_LO_MSK	GENMASK(31, 0)
-> +
-> +/**
-> + * struct smb_data_buffer - Details of the buffer used by SMB
-> + * @buf_base:	Memory mapped base address of SMB.
-> + * @start_addr:	SMB buffer start Physical address.
-> + * @buf_size:	Size of the buffer.
-> + * @data_size:	Size of Trace data copy to userspace.
-> + * @rd_offset:	Offset of the read pointer in the buffer.
-> + * @wr_offset:	Offset of the write pointer in the buffer.
-> + * @full:	Trace data overflow.
-> + */
-> +struct smb_data_buffer {
-> +	void __iomem *buf_base;
-
-The backend of buffer is a chunk of memory, so I guess we don't need
-this __iomem here.
-
-> +	u32 start_addr;
-
-Is u32 enough if we're running on a 64bit platform? You can use phys_addr_t
-instead since you comment it to be "start Physical address".
-
-> +	unsigned long buf_size;
-> +	unsigned long data_size;
-> +	unsigned long rd_offset;
-> +	unsigned long wr_offset;
-> +	bool full;
-> +};
-> +
-> +/**
-> + * struct smb_drv_data - specifics associated to an SMB component
-> + * @base:	Memory mapped base address for SMB component.
-> + * @csdev:	Component vitals needed by the framework.
-> + * @sdb:	Data buffer for SMB.
-> + * @miscdev:	Specifics to handle "/dev/xyz.smb" entry.
-> + * @mutex:	Control data access to one at a time.
-> + * @reading:	Synchronise user space access to SMB buffer.
-> + * @pid:	Process ID of the process being monitored by the
-> + *		session that is using this component.
-> + * @mode:	how this SMB is being used, perf mode or sysfs mode.
-> + */
-> +struct smb_drv_data {
-> +	void __iomem *base;
-> +	struct coresight_device	*csdev;
-> +	struct smb_data_buffer sdb;
-> +	struct miscdevice miscdev;
-> +	struct mutex mutex;
-> +	local_t reading;
-
-Why do we need to use local_t here? Considering the whole structure is
-already protected by the mutex, maybe a boolean is enough?
-
-Thanks.
+> 
