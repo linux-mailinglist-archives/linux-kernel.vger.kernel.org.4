@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D730624BEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E58A624BF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiKJUfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
+        id S231923AbiKJUfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbiKJUfJ (ORCPT
+        with ESMTP id S231881AbiKJUfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:35:09 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F54D4FF99
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:07 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36fc0644f51so26073497b3.17
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:07 -0800 (PST)
+        Thu, 10 Nov 2022 15:35:10 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E253A51C0F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:08 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id oo18-20020a17090b1c9200b0020bdba475afso4052961pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gTisTjUIrNkCCyr4cBDa7S6OIhSv9dwgO2DzrZiSE80=;
-        b=ZdCPwF6lspGNSSyrb0tpnZ31ekYKyax6xWK8BW5KDDlXZZE8z1sCV4DsiArEXI2rSa
-         lzjcNcnBDA9tVUoXbC7xjo8ugGIYBqVbdE1On6aHQn+fNnBs+ZFkKoAKjO4+Z+Lo8kJF
-         PvGRuaeOV4K8QyZ/xMAoo6gENYYZEYzzjIB8rExl42ltExZhXmyAHJVywDfCMJ8yHkJd
-         gqwTdKwGdfSRZfBnpMAsZoLmK29HKuDcl1g44LmaLhTxa/P+CfUPiyGwZ7430VZ2OPj6
-         7+dp3N8YxE6jK56BY/L1epDXCYyS59msTMmZWLhH9ADBag8FRftpWsEm1kExjwmEncLR
-         wpcA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=ORwfmj6kJY3MPYNwljMh0Ojz+sLVhyTdNLlUMLv1/pk=;
+        b=dPenHzAEbJW8kC8ElMo2seQwuBWhbPC+xdFHerkhEDaAFKmywZZmJt5EKYxFYx5PvA
+         ZmSN46xKFXiQ+Pp97CdEflEmOOgwFrIBLmkwqYRhzHE6W0scPyPsk0g6pP92RC/Ms9wg
+         woHe+rgbZW5FUymKr5zW6CoWWcEtiAQ3zG7XADhtXqsxKkXfPN6Thqvc4vg12tOaeb+Z
+         wBHu6IfhDia8qZ3HVCY2+V7n3w8UE+GKuXGOmdst2gOndCJ3rWo9fi3pSCWN+QAHJRq4
+         ujCkQcGcl63h8ZV0ZSYMEHo4r5MMH8TrJED7BWIrVPMrWFIyW5MApHTDpEWqRIhumVS/
+         IGCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gTisTjUIrNkCCyr4cBDa7S6OIhSv9dwgO2DzrZiSE80=;
-        b=uYw+BEAJnkStyyJv04QyQEj21Wi3rTIYmpJJ3PQYDfbLcBsHJxFoA8aKOztrUQzqES
-         NKFOoJxGjLfkgD7sP2J+A4IthjxNJxZ+SpMR8URfypDEuUcY/N2dEFdjN+5jt0Gft5oh
-         9ZP7golGq32+qAk+ebe78mw5LUrBzOequhh80/7DuIdq5bOhT/NXbDBELQrjVP4/MLTB
-         fIRtqhObyYK52x0DFHGWPMj+Gio55AUPbTdRyOjod4b2LT2qxbh4XWbgp5tpdg8WZBhf
-         PvqWytQUV2i0RMcvRG10r1ROS4Z0gGvQAOu8f+duxJMUxtDkbjbay3G0llObxWXrmSQO
-         4RCA==
-X-Gm-Message-State: ACrzQf149+LN0LS5QEFrC8PNtnUgnRd9dpU+5JzoXyQa6uusPZtRH+XC
-        c+8qOmaKFuOYwixEoLurlRqR4sLFp24=
-X-Google-Smtp-Source: AMsMyM7a/KLlNFU5uST2o2eu3B0kOY/YIhg8n1dkNBkyAPYMrl8Elb7/Fm8PpFxGkqZe5a9ILfpo0b70FyI=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ORwfmj6kJY3MPYNwljMh0Ojz+sLVhyTdNLlUMLv1/pk=;
+        b=uVIia9Ypxd0jvbeMe3hIxLaj7AnvRbu62OtrI1U3kMv8A99IaITsOiduphPUH6Ew9f
+         9B8HNx9Y1NbIqR2TRP2DFD0AhVDQ6DKBD4bjd+OLUpjFcGXVZnbc+p3KOKAyYFiU+X9K
+         t3sFlWnJ8hUlebohSdQUG1lA5iRMiDvUyeVcXvGzET4f4J4PtVAfak7SrvcZwHSlFGS/
+         dZ81iWOOyRLfD2mhxjilKy9xWLZVaM3x1GWBpCvs8LRgmADquSgv1pz7u3T8lpzDaGK7
+         Mg/Dd87UqN4rlfhwNDBT8tSc8P0ypbf3l4NkqMyRHteD/BcAfN/ypehaJQCLujZVAhh2
+         uVxg==
+X-Gm-Message-State: ACrzQf1zoY1or6cM2uihAQLV5Ma0MG5PZJ2xcJhJqrcyKUfsw34poMDM
+        ldU6Xvi8ACpgrlJS5CNq6Za9CH4NKKg=
+X-Google-Smtp-Source: AMsMyM5fLKb1rLHzXIfRwcSUTb4J0JSxCJOaAqeWcC8JblIxncIkbaH9LXt+i6VekSJ9dYeWY2bd3Jh2AcY=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:1181:0:b0:6bf:bd96:2b01 with SMTP id
- 123-20020a251181000000b006bfbd962b01mr62705133ybr.17.1668112506706; Thu, 10
- Nov 2022 12:35:06 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:902:9894:b0:185:57b6:13c3 with SMTP id
+ s20-20020a170902989400b0018557b613c3mr1968715plp.116.1668112508403; Thu, 10
+ Nov 2022 12:35:08 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 10 Nov 2022 20:34:59 +0000
+Date:   Thu, 10 Nov 2022 20:35:00 +0000
+In-Reply-To: <20221110203504.1985010-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20221110203504.1985010-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221110203504.1985010-1-seanjc@google.com>
-Subject: [PATCH v2 0/5] x86/kasan: Bug fixes for recent CEA changes
+Message-ID: <20221110203504.1985010-2-seanjc@google.com>
+Subject: [PATCH v2 1/5] x86/mm: Recompute physical address for every page of
+ per-CPU CEA mapping
 From:   Sean Christopherson <seanjc@google.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -79,35 +83,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Three fixes for the recent changes to how KASAN populates shadows for
-the per-CPU portion of the CPU entry areas.  The v1 versions were posted
-independently as I kept root causing issues after posting individual fixes.
+Recompute the physical address for each per-CPU page in the CPU entry
+area, a recent commit inadvertantly modified cea_map_percpu_pages() such
+that every PTE is mapped to the physical address of the first page.
 
-v2:
-  - Map the entire per-CPU area in one shot. [Andrey]
-  - Use the "early", i.e. read-only, variant to populate the shadow for
-    the shared portion (read-only IDT mapping) of the CEA. [Andrey]
+Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/mm/cpu_entry_area.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1:
-  - https://lore.kernel.org/all/20221104212433.1339826-1-seanjc@google.com
-  - https://lore.kernel.org/all/20221104220053.1702977-1-seanjc@google.com
-  - https://lore.kernel.org/all/20221104183247.834988-1-seanjc@google.com
-
-Sean Christopherson (5):
-  x86/mm: Recompute physical address for every page of per-CPU CEA
-    mapping
-  x86/mm: Populate KASAN shadow for entire per-CPU range of CPU entry
-    area
-  x86/kasan: Rename local CPU_ENTRY_AREA variables to shorten names
-  x86/kasan: Add helpers to align shadow addresses up and down
-  x86/kasan: Populate shadow for shared chunk of the CPU entry area
-
- arch/x86/mm/cpu_entry_area.c | 10 +++-----
- arch/x86/mm/kasan_init_64.c  | 50 +++++++++++++++++++++++-------------
- 2 files changed, 36 insertions(+), 24 deletions(-)
-
-
-base-commit: 0008712a508f72242d185142cfdbd0646a661a18
+diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
+index dff9001e5e12..d831aae94b41 100644
+--- a/arch/x86/mm/cpu_entry_area.c
++++ b/arch/x86/mm/cpu_entry_area.c
+@@ -97,7 +97,7 @@ cea_map_percpu_pages(void *cea_vaddr, void *ptr, int pages, pgprot_t prot)
+ 					early_pfn_to_nid(PFN_DOWN(pa)));
+ 
+ 	for ( ; pages; pages--, cea_vaddr+= PAGE_SIZE, ptr += PAGE_SIZE)
+-		cea_set_pte(cea_vaddr, pa, prot);
++		cea_set_pte(cea_vaddr, per_cpu_ptr_to_phys(ptr), prot);
+ }
+ 
+ static void __init percpu_setup_debug_store(unsigned int cpu)
 -- 
 2.38.1.431.g37b22c650d-goog
 
