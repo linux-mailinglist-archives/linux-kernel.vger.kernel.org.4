@@ -2,88 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2BB623D2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACF5623D35
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbiKJINZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S232574AbiKJIPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbiKJINY (ORCPT
+        with ESMTP id S232515AbiKJIPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:13:24 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2184118B26;
-        Thu, 10 Nov 2022 00:13:19 -0800 (PST)
-X-UUID: 7eef3482953a4f408d397b9d764f0dcd-20221110
-X-CPASD-INFO: 437978b74e51435bbdff1efacb0a72e6@fYNxWWRqkGdghXd9g3aAnIKVlpZhkYa
-        wpZxQkWVikVaVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3g3VxWWdmkg==
-X-CLOUD-ID: 437978b74e51435bbdff1efacb0a72e6
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:172.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:122.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:3,DUF:7983,ACD:137,DCD:137,SL:0,EISP:0,AG:0,CFC:0.577,CFSR:0.039,UAT:0,
-        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
-        ,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 7eef3482953a4f408d397b9d764f0dcd-20221110
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 7eef3482953a4f408d397b9d764f0dcd-20221110
-X-User: aichao@kylinos.cn
-Received: from localhost.localdomain [(112.64.161.44)] by mailgw
-        (envelope-from <aichao@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 82805009; Thu, 10 Nov 2022 16:13:31 +0800
-From:   Ai Chao <aichao@kylinos.cn>
-To:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        aichao@kylinos.cn
-Subject: [PATCH] media: uvcvideo: Fix bandwidth error for Alcor camera
-Date:   Thu, 10 Nov 2022 16:12:59 +0800
-Message-Id: <20221110081259.947269-1-aichao@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Nov 2022 03:15:47 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8731B1D4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:15:46 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id f63so1098185pgc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:15:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1JiyZ1hWVATL+iuWQbgLK9dDD8NJ+KjIJFMCcv1dNws=;
+        b=4mmXT6czmfIGpWlJqlmQJ7kyF/U8tRAzRlYHJ596QLAPAp9RO1DzlieBk3D31YyM/d
+         39uaR6S/tt3G0VlYgbCVDLCPMfDTAF3l72d0FMLo4IvR5UYcvRdqOzNeB1aRq1pl/4DH
+         OyDjLIpaYko5MopKW5xaUzHz3Psva0fk6QsuyJQFpv+UTMZocZMLcdMUuvNRMu/D9+md
+         I+wfjbyBWBpsrKRjrBMHqykmNLdmmsNbtN245WNLTQU9eYqEa7XzaNFfxGsHkR9Sq36a
+         d07BN6IVsrDIAxgwt5kXNWG3oQIs8pLJYB7wn4Jwa9shFAzrqJaxZCI4YtFCMOOYK59M
+         Kl5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1JiyZ1hWVATL+iuWQbgLK9dDD8NJ+KjIJFMCcv1dNws=;
+        b=xQAt9Ll/IXQG+bR68nudItGLlLxMgEZPgESwt3YqiGDCg3INPjVUfpM8nQthfYeV6j
+         3Vs2onPhwaBxD+ZMZibc2BBDD0hNlHEs6JObWfT2x6cK8eTIkwSNrOBZCYoOcLznLGsk
+         7TMRc7eRl5Z0Hfb7sfK0xrUKd/NIkTH04Rc7R8YMJD3/Q6mmRWDPNbWr3cTSpahwEv59
+         UUGIapZdugjtcl2Q8pCgbVvN5qB5D7KstUEhrWMBeDrCCWLDdEvf/GE7xc0/jl30bYON
+         tej6oc+yZ24GrTa5c4hbt1WYir9kZcI33DCu690XIM26uhAvr2rc/iuDnMaPHt+93uCs
+         LlzA==
+X-Gm-Message-State: ACrzQf2nHObPkQSszE67WCUMaiF2mTZiurpWw5OwlTIfJ+c6OOkAgu3P
+        Yl7IBf1ESwSnJivy56xZgYIqlM93QB1l0Q==
+X-Google-Smtp-Source: AMsMyM49RJ67toFRhCK5l74gbe/MCd1OdOXjXKe+xYWQ/1ekvADyDWElPZmm7rtLujs+ij2U04rQYw==
+X-Received: by 2002:a63:7d4f:0:b0:470:399:c953 with SMTP id m15-20020a637d4f000000b004700399c953mr1864613pgn.263.1668068146139;
+        Thu, 10 Nov 2022 00:15:46 -0800 (PST)
+Received: from devtp.bytedance.net ([139.177.225.243])
+        by smtp.gmail.com with ESMTPSA id k5-20020a17090a7f0500b0020af2411721sm2496587pjl.34.2022.11.10.00.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 00:15:45 -0800 (PST)
+From:   wuqiang <wuqiang.matt@bytedance.com>
+To:     mhiramat@kernel.org, davem@davemloft.net,
+        anil.s.keshavamurthy@intel.com, naveen.n.rao@linux.ibm.com
+Cc:     solar@openwall.com, linux-kernel@vger.kernel.org, mattwu@163.com,
+        wuqiang <wuqiang.matt@bytedance.com>
+Subject: [PATCH v2] kprobes: kretprobe events missing on 2-core KVM guest
+Date:   Thu, 10 Nov 2022 16:15:02 +0800
+Message-Id: <20221110081502.492289-1-wuqiang.matt@bytedance.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221026003315.266d59d5c0780c2817be3a0d@kernel.org>
+References: <20221026003315.266d59d5c0780c2817be3a0d@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For Alcor Corp. Slave camera(1b17:6684), it support to
-output compressed video data, and it return a wrong
- dwMaxPayloadTransferSize fields. This is a fireware issue,
-but the manufacturer cannot provide a const return fields
-by the fireware. so we check the dwMaxPayloadTransferSize fields,
-if it large than 0x1000, reset dwMaxPayloadTransferSize to 1024.
+Default value of maxactive is set as num_possible_cpus() for nonpreemptable
+systems. For a 2-core system, only 2 kretprobe instances would be allocated
+in default, then these 2 instances for execve kretprobe are very likely to
+be used up with a pipelined command.
 
-Signed-off-by: Ai Chao <aichao@kylinos.cn>
+Here's the testcase: a shell script was added to crontab, and the content
+of the script is:
+
+  #!/bin/sh
+  do_something_magic `tr -dc a-z < /dev/urandom | head -c 10`
+
+cron will trigger a series of program executions (4 times every hour). Then
+events loss would be noticed normally after 3-4 hours of testings.
+
+The issue is caused by a burst of series of execve requests. The best number
+of kretprobe instances could be different case by case, and should be user's
+duty to determine, but num_possible_cpus() as the default value is inadequate
+especially for systems with small number of cpus.
+
+This patch enables the logic for preemption as default, thus increases the
+minimum of maxactive to 10 for nonpreemptable systems.
+
+Signed-off-by: wuqiang <wuqiang.matt@bytedance.com>
 ---
- drivers/media/usb/uvc/uvc_video.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Documentation/trace/kprobes.rst |  3 +--
+ kernel/kprobes.c                | 10 +++-------
+ 2 files changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index d2eb9066e4dc..49226c3f423c 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -234,6 +234,14 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+diff --git a/Documentation/trace/kprobes.rst b/Documentation/trace/kprobes.rst
+index 48cf778a2468..fc7ce76eab65 100644
+--- a/Documentation/trace/kprobes.rst
++++ b/Documentation/trace/kprobes.rst
+@@ -131,8 +131,7 @@ For example, if the function is non-recursive and is called with a
+ spinlock held, maxactive = 1 should be enough.  If the function is
+ non-recursive and can never relinquish the CPU (e.g., via a semaphore
+ or preemption), NR_CPUS should be enough.  If maxactive <= 0, it is
+-set to a default value.  If CONFIG_PREEMPT is enabled, the default
+-is max(10, 2*NR_CPUS).  Otherwise, the default is NR_CPUS.
++set to a default value: max(10, 2*NR_CPUS).
  
- 		ctrl->dwMaxPayloadTransferSize = bandwidth;
- 	}
+ It's not a disaster if you set maxactive too low; you'll just miss
+ some probes.  In the kretprobe struct, the nmissed field is set to
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index a8b202f87e2d..1e80bddf2654 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -2212,11 +2212,7 @@ int register_kretprobe(struct kretprobe *rp)
+ 	rp->kp.post_handler = NULL;
+ 
+ 	/* Pre-allocate memory for max kretprobe instances */
+-	if (rp->maxactive <= 0) {
+-#ifdef CONFIG_PREEMPTION
++	if (rp->maxactive <= 0)
+ 		rp->maxactive = max_t(unsigned int, 10, 2*num_possible_cpus());
+-#else
+-		rp->maxactive = num_possible_cpus();
+-#endif
+-	}
 +
-+	/*Alcor Corp. Slave camera return wrong dwMaxPayloadTransferSize*/
-+	if ((format->flags & UVC_FMT_FLAG_COMPRESSED) &&
-+	    (ctrl->dwMaxPayloadTransferSize > 0x1000) &&
-+	    (le16_to_cpu(stream->dev->udev->descriptor.idVendor) == 0x1b17) &&
-+	    (le16_to_cpu(stream->dev->udev->descriptor.idProduct) == 0x6684)) {
-+		ctrl->dwMaxPayloadTransferSize = 1024;
-+	}
- }
- 
- static size_t uvc_video_ctrl_size(struct uvc_streaming *stream)
--- 
-2.25.1
+ #ifdef CONFIG_KRETPROBE_ON_RETHOOK
+--
+2.34.1
 
