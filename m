@@ -2,42 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34F562421B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18905624221
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiKJMSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:18:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S229890AbiKJMVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiKJMSi (ORCPT
+        with ESMTP id S229560AbiKJMVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:18:38 -0500
-Received: from outbound-smtp27.blacknight.com (outbound-smtp27.blacknight.com [81.17.249.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BCCBF5A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:18:36 -0800 (PST)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp27.blacknight.com (Postfix) with ESMTPS id ED845CAD79
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:18:33 +0000 (GMT)
-Received: (qmail 18955 invoked from network); 10 Nov 2022 12:18:33 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 10 Nov 2022 12:18:33 -0000
-Date:   Thu, 10 Nov 2022 12:18:31 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Borislav Petkov <bp@suse.de>, Mike Galbraith <efault@gmx.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-RT <linux-rt-users@vger.kernel.org>
-Subject: Re: [RFC PATCH] x86: Drop fpregs lock before inheriting FPU
- permissions during clone
-Message-ID: <20221110121831.ehke4sxsmlpl454e@techsingularity.net>
-References: <20221109113044.7ncdw6263o3msycl@techsingularity.net>
- <87o7tg8584.ffs@tglx>
+        Thu, 10 Nov 2022 07:21:10 -0500
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2921A2AE03;
+        Thu, 10 Nov 2022 04:21:07 -0800 (PST)
+Received: from zju.edu.cn (unknown [10.12.77.33])
+        by mail-app3 (Coremail) with SMTP id cC_KCgBXzqmw7GxjD9XhCA--.5792S4;
+        Thu, 10 Nov 2022 20:21:04 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v1] io_uring: update outdated comment of callbacks
+Date:   Thu, 10 Nov 2022 20:21:03 +0800
+Message-Id: <20221110122103.20120-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <87o7tg8584.ffs@tglx>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cC_KCgBXzqmw7GxjD9XhCA--.5792S4
+X-Coremail-Antispam: 1UD129KBjvdXoWruFW5ZrWUuw4kuF1kCw1rWFg_yoWfZFb_u3
+        yDXw4xWrn7Xr10kry5GFy0qr4Sk3sFkF10q3WxWrsrJa47ZaykK3yDZrykJrn5Xr47WFy7
+        CFs8Wa43Cw1IvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb7AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl6s0DM28EF7xvwVC2z280
+        aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07
+        x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18
+        McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+        1lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIE
+        Y20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,50 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 05:25:47PM +0100, Thomas Gleixner wrote:
-> On Wed, Nov 09 2022 at 11:30, Mel Gorman wrote:
-> >    BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> ...
-> >   The splat comes from fpu_inherit_perms() being called under fpregs_lock(),
-> >   and us reaching the spin_lock_irq() therein due to fpu_state_size_dynamic()
-> >   returning true despite static key __fpu_state_size_dynamic having never
-> >   been enabled.
-> >
-> > Mike's assessment looks correct. fpregs_lock on PREEMPT_RT disables
-> > preemption only so the spin_lock_irq() in fpu_inherit_perms is unsafe
-> > and converting siglock to raw spinlock would be an unwelcome change.
-> > This problem exists since commit 9e798e9aa14c ("x86/fpu: Prepare fpu_clone()
-> > for dynamically enabled features"). While the bug triggering is probably a
-> > mistake for the affected machine and due to a bug that is not in mainline,
-> > spin_lock_irq within a preempt_disable section on PREEMPT_RT is problematic.
-> >
-> > In this specific context, it may not be necessary to hold fpregs_lock at
-> > all. The lock is necessary when editing the FPU registers or a tasks fpstate
-> > but in this case, the only write of any FP state in fpu_inherit_perms is
-> > for the new child which is not running yet so it cannot context switch or
-> > be borrowed by a kernel thread yet. Hence, fpregs_lock is not protecting
-> > anything in the new child until clone() completes. The siglock still needs
-> > to be acquired by fpu_inherit_perms as the read of the parents permissions
-> > has to be serialised.
-> 
-> That's correct and siglock is the real protection for the permissions.
-> 
-> > This is not tested as I did not access to a machine with Intel's
-> > eXtended Feature Disable (XFD) feature that enables the relevant path
-> > in fpu_inherit_perms and the bug is against a non-mainline kernel.
-> 
-> It's still entirely correct on mainline as there is no requirement to
-> hold fpregs_lock in this case
-> 
-> > Reported-by: Mike Galbraith <efault@gmx.de>
-> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> 
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Previous commit ebc11b6c6b87 ("io_uring: clean io-wq callbacks") rename
+io_free_work() into io_wq_free_work() for consistency. This patch also
+updates relevant comment to avoid misunderstanding.
 
-Perfect, I'll rephase the changelog slightly and resend without RFC and
-all the x86 maintainers cc'd. Thanks Thomas!
+Fixes: ebc11b6c6b87 ("io_uring: clean io-wq callbacks")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ io_uring/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index ac8c488e3077..a1024b7fcc73 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1782,7 +1782,7 @@ void io_wq_submit_work(struct io_wq_work *work)
+ 	bool needs_poll = false;
+ 	int ret = 0, err = -ECANCELED;
+ 
+-	/* one will be dropped by ->io_free_work() after returning to io-wq */
++	/* one will be dropped by ->io_wq_free_work() after returning to io-wq */
+ 	if (!(req->flags & REQ_F_REFCOUNT))
+ 		__io_req_set_refcount(req, 2);
+ 	else
 -- 
-Mel Gorman
-SUSE Labs
+2.38.1
+
