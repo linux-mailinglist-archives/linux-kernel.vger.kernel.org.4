@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D481623CA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B74F1623C98
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbiKJH3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
+        id S232584AbiKJH13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232790AbiKJH3t (ORCPT
+        with ESMTP id S229793AbiKJH10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:29:49 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1984326E8;
-        Wed,  9 Nov 2022 23:29:47 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7D0z4DvSzJncj;
-        Thu, 10 Nov 2022 15:26:43 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 15:29:45 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 15:29:45 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
-CC:     <skhan@linuxfoundation.org>, <kieran.bingham@ideasonboard.com>,
-        <mchehab@kernel.org>, <hans.verkuil@cisco.com>,
-        <helen.koike@collabora.com>, <chenzhongjin@huawei.com>
-Subject: [PATCH] media: vimc: Fix wrong function called when vimc_init() fails
-Date:   Thu, 10 Nov 2022 15:26:33 +0800
-Message-ID: <20221110072633.210437-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 10 Nov 2022 02:27:26 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F7313D2F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:27:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=Bgg4kjG9SCmsiOPgzEcrTSKTn0lUunQ/8cf/4nUuORo=; b=gp6yRjU2+REAxrfSSzZ/z48U0g
+        hil0YhjVab1Wc89q898z8osT5fIczFPT67pi8LEv0jAxUVdya2bDJfln9qNzvHsKQNctdOG48FULN
+        vm8gKpMCobWK4+0LjYWC8vKACJ4YMEpv/CHddTH0BRLRvBFygzrcMSAcOqWUkp4StOdh35hHAN7nX
+        eZxR6hyM6S/ev9B5pQz15JwpBAWHfrien8wMqC/PVfN7+ldkXTZPG4fvRa9xTzyaC1d3SJkUg7yEg
+        WegSN8sSo+vMylutlVp6dF0+MQs7Y3+sPDvysQg/OenGwga8PVdU2U2JqSD0ntrzapT2atFArpXR8
+        rxtx3lbw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ot1y5-003mba-Va; Thu, 10 Nov 2022 07:27:22 +0000
+Message-ID: <68d969b7-1a86-3be6-86f2-a78e92af46a4@infradead.org>
+Date:   Wed, 9 Nov 2022 23:27:21 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: Submitting patches without using git.
+Content-Language: en-US
+To:     A <amit.general.misc@gmail.com>, linux-kernel@vger.kernel.org
+References: <CAEq81z03GOTiME=q83B9L-fg3bG6Mu_0_Em67Y1DqTp_oj_fZg@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAEq81z03GOTiME=q83B9L-fg3bG6Mu_0_Em67Y1DqTp_oj_fZg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In vimc_init(), when platform_driver_register(&vimc_pdrv) fails,
-platform_driver_unregister(&vimc_pdrv) is wrongly called rather than
-platform_device_unregister(&vimc_pdev), which causes kernel warning:
+Hi--
 
- Unexpected driver unregister!
- WARNING: CPU: 1 PID: 14517 at drivers/base/driver.c:270 driver_unregister+0x8f/0xb0
- RIP: 0010:driver_unregister+0x8f/0xb0
- Call Trace:
-  <TASK>
-  vimc_init+0x7d/0x1000 [vimc]
-  do_one_initcall+0xd0/0x4e0
-  do_init_module+0x1cf/0x6b0
-  load_module+0x65c2/0x7820
+On 11/9/22 21:22, A wrote:
+> Hi,
+> 
+> Is learning git necessary to submit patches to linux kernel?
 
-Fixes: 4a29b7090749 ("[media] vimc: Subdevices as modules")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- drivers/media/test-drivers/vimc/vimc-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No.
+Simple patches or small patch series don't need to use git.
+As patches become more complex, git could be more of an advantage.
 
-diff --git a/drivers/media/test-drivers/vimc/vimc-core.c b/drivers/media/test-drivers/vimc/vimc-core.c
-index 2ae7a0f11ebf..e82cfa5ffbf4 100644
---- a/drivers/media/test-drivers/vimc/vimc-core.c
-+++ b/drivers/media/test-drivers/vimc/vimc-core.c
-@@ -433,7 +433,7 @@ static int __init vimc_init(void)
- 	if (ret) {
- 		dev_err(&vimc_pdev.dev,
- 			"platform driver registration failed (err=%d)\n", ret);
--		platform_driver_unregister(&vimc_pdrv);
-+		platform_device_unregister(&vimc_pdev);
- 		return ret;
- 	}
- 
+> Can I do it without git?
+
+Sure. For me it's easiest to use 'git send-email', which doesn't require git,
+but I have also done it just using an email client (Thunderbird in my case).
+
+(git send-mail may require a separate software installation depending on your
+distro and its packaging.)
+
+
+> I have used SVN, etc. but I found git a little bit complex.
+
+
 -- 
-2.17.1
-
+~Randy
