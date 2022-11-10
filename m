@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613D26245F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 344FC624600
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiKJPca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S231617AbiKJPe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbiKJPcC (ORCPT
+        with ESMTP id S231590AbiKJPeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:32:02 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04132791D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:30:29 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id r14so3613615edc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:30:29 -0800 (PST)
+        Thu, 10 Nov 2022 10:34:12 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1384AF13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:32:47 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ud5so5932824ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:32:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j/r1odXsFicDjXczwHWptIWDrmeahFBrWNG3RXqZy30=;
-        b=x9T1gEbiNQ3mG6SXlpXDYzcFi0PN2sRkCm1E2MTtePfALasTJ2FQrdDDc8t7QTAEx6
-         H+GRnvhY7YTkqy0GLoeUYXLkSLs9XLtoOuF8voxUt2dx/wlSrh7va1i1rX9qP/fia7qa
-         bYCZvBP38Nq/1+sE9ugE2p05aqUaJw29OaOLSv1B9BY4NpghZyFr805gSUXwOO1mdBIV
-         PY52EQWNV5NXTifRIywbpDQiiPmGv+zn+biJs8cXeHhlFQygpWhF4SQMaVAFN2Gh+pg8
-         Hy/04pFh00D/7KbdXoul3vZnPD6PYpABK8EAK0wusQKAo9uYx2WtDbZYywFhbfGcVWo7
-         ppIw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLWyKRw2Ej5Lpfhe4CBr1qjwt8vEPyBuJa6C43wuPh8=;
+        b=OkyOgnKMAJGwRvPJAFhXDJESxbMLb1Fk0onxCfwxfvJg9rRma53fxA9Hi2o5w58I03
+         +8HpwRbWFlTbcs53Se/6vK/S1S2fRP2RwZiXmYjABU9SNbw54OVQbnE0QdpD81tMek/n
+         8wAr94Fchj/KpWbCevBtzdDELjSbHgxIu3NTs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=j/r1odXsFicDjXczwHWptIWDrmeahFBrWNG3RXqZy30=;
-        b=yQqCpaASp2pQTH+7h90Qm/kpr+LN2NUM6OLW9Dq4WAeVCJir2e0pc7yDK8786UUM2u
-         5XID1SajVgbwlA+gDTXd00EYTPADIl757EbfBo8dlqcI+wS2yPgRLXbLG/AcvBhkCb1G
-         /LzhiWaPX0iD9VbPLCmlA6aOCuoS3XMrKjnl0NqExrQfPpy6KCcXZPBlaPV+FeRJLWHe
-         4VAik9s4PmqF1Po1Go60o7LqKb0NRZDMB16wTiMxhQkKQXp+vin5S2eQ40Ikg7s+5fa3
-         8dY//vZFvLgml1tYp+jClXE4f7BMVYRl486efSGEEh1RRCjBDDCH3R/O1bgY9/4dCCy2
-         gH5w==
-X-Gm-Message-State: ACrzQf1x6itnILEN/8zW7XPYwom3/fZcOp4FDsiucos7wuYe8fAAGAyC
-        OFQIyr2TVGjYLzXUqpLzewVAsA==
-X-Google-Smtp-Source: AMsMyM6h7XRJNoHUGOm9Ham1GCwmtJEKRec6pWlvmIctEXk8jPc4i2Oz8lPFYrIAgcYTlujmRMoFVQ==
-X-Received: by 2002:a05:6402:3408:b0:43c:2dd3:d86b with SMTP id k8-20020a056402340800b0043c2dd3d86bmr63263031edc.108.1668094228386;
-        Thu, 10 Nov 2022 07:30:28 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id q19-20020a17090676d300b007030c97ae62sm7246104ejn.191.2022.11.10.07.30.27
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lLWyKRw2Ej5Lpfhe4CBr1qjwt8vEPyBuJa6C43wuPh8=;
+        b=B7PxCw3kzNMRwNakpOecvU1Md86xIgR65/ibVKFQWUvVgiT27peUS9pt9wH1bTcIgT
+         BaWXM/RttBtLVZF0EKgp+z7FFsn6It1DYhwSLfMMl2jRAmSHSWyZph4iHImhUvmAX2tk
+         W2WxUtClR9KMrvpFjq9Zmevaq1CwtPprIeNmOzJG9577Esbs219JqRYQi94dauX8fTUF
+         o7BIx98PP5Cem2BY4EM6AYtGwhguLujCORO8Ohc09Oargoz1A2AUzrLRLhjwehd0d11u
+         9Xgj0AI6ckFd6aQcpQUDJPtpMBkzzyZhOLEzCfR5BiVjCAdcFRdsaizo2lDo4BFfHnYy
+         UaTw==
+X-Gm-Message-State: ACrzQf2WIlJc5upSHdKh1k+kDSeqphjWBlIw1rfB8KAtC5olNPz5p7gw
+        /NL2yT+Q99HZ32VBHW5Xo1o/z9uCD8WBl93/
+X-Google-Smtp-Source: AMsMyM5HiPZ7bSzRVn9EZ4gOOCm2wViH8hw50iyDkxpZfCGXDq/ZleeGCgXc0t67nKWVtGj1s1qJ2w==
+X-Received: by 2002:a17:906:a3ce:b0:7a1:b573:c99e with SMTP id ca14-20020a170906a3ce00b007a1b573c99emr3033990ejb.55.1668094364097;
+        Thu, 10 Nov 2022 07:32:44 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id o19-20020a170906769300b00722e50dab2csm7364780ejm.109.2022.11.10.07.32.38
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 07:30:27 -0800 (PST)
-Message-ID: <c8a480c3-7bce-8e83-c0e6-6b29f32211d8@linaro.org>
-Date:   Thu, 10 Nov 2022 16:30:25 +0100
+        Thu, 10 Nov 2022 07:32:38 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id r203-20020a1c44d4000000b003cfa97c05cdso1958704wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:32:38 -0800 (PST)
+X-Received: by 2002:a05:600c:4486:b0:3cf:6e1d:f4a5 with SMTP id
+ e6-20020a05600c448600b003cf6e1df4a5mr41251597wmo.85.1668094358585; Thu, 10
+ Nov 2022 07:32:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450: drop incorrect
- spi-max-frequency
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221110152741.542024-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221110152741.542024-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220831141622.39605-1-francesco.dolcini@toradex.com>
+ <Y01kJbZjkwo1A8l1@francesco-nb.int.toradex.com> <Y2z4zoYU2rxrOKPC@francesco-nb.int.toradex.com>
+In-Reply-To: <Y2z4zoYU2rxrOKPC@francesco-nb.int.toradex.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 10 Nov 2022 07:32:26 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UHOdxmKFSapPshxyo0NW3UxsmzSXroe4riAFDWM6Si=w@mail.gmail.com>
+Message-ID: <CAD=FV=UHOdxmKFSapPshxyo0NW3UxsmzSXroe4riAFDWM6Si=w@mail.gmail.com>
+Subject: Re: [PATCH v1] drm/panel: simple: set bpc field for logic
+ technologies displays
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     dri-devel@lists.freedesktop.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        linux-kernel@vger.kernel.org,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,80 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On 10/11/2022 16:27, Krzysztof Kozlowski wrote:
-> spi-max-frequency is a property of SPI device, not the controller:
+On Thu, Nov 10, 2022 at 5:13 AM Francesco Dolcini <francesco@dolcini.it> wrote:
 >
->    qcom/sm8450-hdk.dtb: geniqup@8c0000: spi@880000: Unevaluated properties are not allowed ('spi-max-frequency' was unexpected
+> On Mon, Oct 17, 2022 at 04:18:13PM +0200, Francesco Dolcini wrote:
+> > On Wed, Aug 31, 2022 at 04:16:22PM +0200, Francesco Dolcini wrote:
+> > > From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
+> > >
+> > > In case bpc is not set for a panel it then throws a WARN(). Add bpc to
+> > > the panels logictechno_lt170410_2whc and logictechno_lt161010_2nh.
+> > >
+> > > Fixes: 5728fe7fa539 ("drm/panel: simple: add display timings for logic technologies displays")
+> >
+> > Hello,
+> > just a gently ping on this. It applies cleanly on v6.1-rc1, anything I
+> > should do?
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+> Hello Doug,
+> can you help on this patch? I am not sure who is supposed to pick this
+> small fix, but it looks like you recently took patches on
+> "drm/panel: simple:", so maybe you can help.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Sure. It looks fine to me so I don't mind applying it. I did a quick
+double-check and I was amused that the datasheet of the 800x480 screen
+claims that it can show 16.7M colors with an 18-bit interface. ;-)
 
+Pushed to drm-misc-fixes:
 
-Konrad
-
->   arch/arm64/boot/dts/qcom/sm8450.dtsi | 7 -------
->   1 file changed, 7 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 9bdda0163573..e9f34c102a6f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -794,7 +794,6 @@ spi15: spi@880000 {
->   				interrupts = <GIC_SPI 373 IRQ_TYPE_LEVEL_HIGH>;
->   				pinctrl-names = "default";
->   				pinctrl-0 = <&qup_spi15_data_clk>, <&qup_spi15_cs>;
-> -				spi-max-frequency = <50000000>;
->   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
->   				interconnect-names = "qup-core", "qup-config";
-> @@ -834,7 +833,6 @@ spi16: spi@884000 {
->   				interrupts = <GIC_SPI 583 IRQ_TYPE_LEVEL_HIGH>;
->   				pinctrl-names = "default";
->   				pinctrl-0 = <&qup_spi16_data_clk>, <&qup_spi16_cs>;
-> -				spi-max-frequency = <50000000>;
->   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
->   				interconnect-names = "qup-core", "qup-config";
-> @@ -874,7 +872,6 @@ spi17: spi@888000 {
->   				interrupts = <GIC_SPI 584 IRQ_TYPE_LEVEL_HIGH>;
->   				pinctrl-names = "default";
->   				pinctrl-0 = <&qup_spi17_data_clk>, <&qup_spi17_cs>;
-> -				spi-max-frequency = <50000000>;
->   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
->   				interconnect-names = "qup-core", "qup-config";
-> @@ -914,7 +911,6 @@ spi18: spi@88c000 {
->   				interrupts = <GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>;
->   				pinctrl-names = "default";
->   				pinctrl-0 = <&qup_spi18_data_clk>, <&qup_spi18_cs>;
-> -				spi-max-frequency = <50000000>;
->   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
->   				interconnect-names = "qup-core", "qup-config";
-> @@ -954,7 +950,6 @@ spi19: spi@890000 {
->   				interrupts = <GIC_SPI 586 IRQ_TYPE_LEVEL_HIGH>;
->   				pinctrl-names = "default";
->   				pinctrl-0 = <&qup_spi19_data_clk>, <&qup_spi19_cs>;
-> -				spi-max-frequency = <50000000>;
->   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
->   				interconnect-names = "qup-core", "qup-config";
-> @@ -1007,7 +1002,6 @@ spi20: spi@894000 {
->   				interrupts = <GIC_SPI 587 IRQ_TYPE_LEVEL_HIGH>;
->   				pinctrl-names = "default";
->   				pinctrl-0 = <&qup_spi20_data_clk>, <&qup_spi20_cs>;
-> -				spi-max-frequency = <50000000>;
->   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
->   				interconnect-names = "qup-core", "qup-config";
-> @@ -1047,7 +1041,6 @@ spi21: spi@898000 {
->   				interrupts = <GIC_SPI 579 IRQ_TYPE_LEVEL_HIGH>;
->   				pinctrl-names = "default";
->   				pinctrl-0 = <&qup_spi21_data_clk>, <&qup_spi21_cs>;
-> -				spi-max-frequency = <50000000>;
->   				interconnects = <&clk_virt MASTER_QUP_CORE_2 0 &clk_virt SLAVE_QUP_CORE_2 0>,
->   						<&system_noc MASTER_A2NOC_SNOC 0 &gem_noc SLAVE_LLCC 0>;
->   				interconnect-names = "qup-core", "qup-config";
+876153ab068b drm/panel: simple: set bpc field for logic technologies displays
