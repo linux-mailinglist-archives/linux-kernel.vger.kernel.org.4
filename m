@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AEA62456F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2227624583
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiKJPSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S231556AbiKJPTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiKJPSJ (ORCPT
+        with ESMTP id S231551AbiKJPTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:18:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD6F12615
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:17:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668093433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6CDOnJYMZah4WeGmtiqmew/mMyquYuFWazZX9Q40Hac=;
-        b=B7GCCQbmfuiRx2auHOnSL2kx6j7HIxHBNq/lKMblO7KLiwm19yilMjnJJM5t7nrYEI+NF+
-        zCcC9n/kdj5k01Creb0rFpI8LtgpcyTzG+3SJBHE6ZPQmzDTTvhc7PCM/mpHNyiir4tRbO
-        IeNUZhx9m5gtTV391vPRf1Hea4ZW6Nk=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-553-9_rZmloSNcWu0PtaFgKW6g-1; Thu, 10 Nov 2022 10:17:10 -0500
-X-MC-Unique: 9_rZmloSNcWu0PtaFgKW6g-1
-Received: by mail-qv1-f69.google.com with SMTP id b2-20020a0cfe62000000b004bbfb15297dso1651173qvv.19
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:17:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6CDOnJYMZah4WeGmtiqmew/mMyquYuFWazZX9Q40Hac=;
-        b=WWjwY9B6hgwdt1PXiLSdaoLbMqjmSHjGoDw0HwoNrz85ykKq6toNfRu/ECRN9As9Y9
-         FZmzRt98VsRiDz3WBIzCdV+Vbpczu8krCPjfaqj3Tdf/lzJJ8kmRfVRVPK8zT4Z6avcu
-         rs54MdWYI4FIEX/BGd6Lgdd1Pj5t4p7oNWJtHynsn1HhVQL0psHuWoHQQnruQGhpd76k
-         wLPw92ldxorRD/rNlGg+KU8Ag/qpe+5+StmyQe/RIpcJ9Ebr/prXBPRTtxJJBlX9TFza
-         yVlLSO3iltsBcn7SP0/emBXa/p9GKsV+hT5YWMgITnLmbuJ7HkXIst78Br/mKOJoKV4N
-         lwLQ==
-X-Gm-Message-State: ACrzQf2vynabYt7Xr3WCz9diXoX+wRPoi9b6z1pIQvPgebOy8oP4HQE5
-        nJ7Itasmh/i8AH6LuLp/TDTdQNGj+xj79OBwYhzWUoIU5cQI93swlyr7vZX7+mP7Ir94i3CmhIQ
-        ceA3S/NH5H7BNodQYOKFo3PyQ
-X-Received: by 2002:a05:620a:cc2:b0:6fa:2175:5fa7 with SMTP id b2-20020a05620a0cc200b006fa21755fa7mr44267847qkj.0.1668093427831;
-        Thu, 10 Nov 2022 07:17:07 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM5sZc0MPXl3k0/8piyAMxvk9MkH6fZqGYMI8ObhnZ5YYr0EEA2u8MpiOMTdbYs26mM5B7/hMg==
-X-Received: by 2002:a05:620a:cc2:b0:6fa:2175:5fa7 with SMTP id b2-20020a05620a0cc200b006fa21755fa7mr44267821qkj.0.1668093427556;
-        Thu, 10 Nov 2022 07:17:07 -0800 (PST)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05620a28d300b006ec771d8f89sm13621596qkp.112.2022.11.10.07.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 07:17:07 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>, peterx@redhat.com,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>
-Subject: [PATCH 2/2] mm/uffd: Sanity check write bit for uffd-wp protected ptes
-Date:   Thu, 10 Nov 2022 10:17:02 -0500
-Message-Id: <20221110151702.1478763-3-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221110151702.1478763-1-peterx@redhat.com>
-References: <20221110151702.1478763-1-peterx@redhat.com>
+        Thu, 10 Nov 2022 10:19:25 -0500
+Received: from out203-205-251-66.mail.qq.com (out203-205-251-66.mail.qq.com [203.205.251.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3947F1F9E4;
+        Thu, 10 Nov 2022 07:18:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1668093515;
+        bh=WKAaVON2ncuiTViXUV+2Pk+5RbBLa1ZdK2Z4ndXxZMQ=;
+        h=From:To:Cc:Subject:Date;
+        b=pQnqhmtIbEmvHoXq1aE7qIGgcoxR0pN4NNxRxH0jcN9BJiDKIktU4vI1nNJcxOQ4J
+         yAPWpU0lZrg9GEyhAwjNnLeFAVGVcvut9AYAiSUQSC46qmWDR7NoCUwWsoJZuFKq9n
+         QaT+IdFdI8hcbQjkiFZ++fqZg7gmQnoIhSWKX1c0=
+Received: from localhost.localdomain ([111.199.191.46])
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 4542142F; Thu, 10 Nov 2022 23:17:20 +0800
+X-QQ-mid: xmsmtpt1668093440tv75ycliw
+Message-ID: <tencent_3E0335A1CE2C91CB09159057B15138441F07@qq.com>
+X-QQ-XMAILINFO: M7uElAZZZMmFzi406KAbOEUgH0eGd75eD6bJqID8rYRD5CrJERuxDIF0WfeAdX
+         9jOU7DAdGKxOFYXWDsC34QRU938KhVZumwwYUl1gwPNEzU7lruJ7tCaDoPHmM4bpNm8osR4667+Z
+         /k0xfRURYd8v6yQY7rCqx0Fu61FNzR1YbMxA8ATQXtSn7ALy6buG6UrvEl7V8NaYtZiKCIHNVPFf
+         sk3knfOzCmB08uCnMTiQ99flslita/eYY48uVapJxPaJZeZLrgBUQEASa/U0Pb7VX2oukbX6J6hZ
+         mGAY/8uQts+kb++ROdfYYmYMC/R+d9TWWotPNNq5TYy9ubk/Fau7KiWSV2GMr5RSirHzqB3dmazv
+         kMDXbINCHqP+sCAt8XIVEpWkOXnulk5jZXvbF4XVAnPnfBIommDv2PfbF67JiMFp4ZnbrZPGHq7w
+         ZzhLln+LgOzLXtEIxpI/U6Vsi3hNUhsHQk137ooL/J/nXL+lXA7P+GzxVyXGnjgDgvYMI9CM6YFb
+         M2oBbRSykvzS05N/M9my/QjRSNdruDyzJKKZWnHcj6eMTSUUVJ4T7b4cGajdIBNVUtAoSpCrgh/p
+         mdvWA5Refy5skFGFWYYiyP9TpuVj2Ss3zuAFwwWgYZ/6ZroAaB+e+GXNumKDAWC/vFPO5aicSRIt
+         wHKvzBRuLScGua9PyYVF/y7CCgoQlZv94z67ak81fcff/I7TfSN3Uc5xRDXzFUQr3sWzTW8rzDC9
+         DUoh24GIhG02CdyvrDR9uJzYZi6caPyryWZEqdnUS49vynvYbIQjrmzAL8Y6uvvXeBicyLGNxLS9
+         73NLk70kim0EAnJ/nJdjnoM+U2QQrRxvHNAthjwJf9pwJqdf/rc4j83Js9YBMFtX3/LRKEy3wyQA
+         tes0k32SwsEIW8yR4lRkjgJXXgn7ISpgw+dH/BST3xf5RXavBc9IzfuTPBvrIpVySVTGZbYawyHh
+         OVM9y4GEYi6qel8XYDVNItlR06K4wHEwgM1G2rgu6uOCJShR3TWw==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     davem@davemloft.net
+Cc:     Rong Tao <rongtao@cestc.cn>, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
+        linux-kernel@vger.kernel.org (open list),
+        bpf@vger.kernel.org (open list:BPF [MISC])
+Subject: [PATCH] net/ipv4: Fix error: type name requires a specifier or qualifier
+Date:   Thu, 10 Nov 2022 23:17:12 +0800
+X-OQ-MSGID: <20221110151712.40621-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's add one sanity check for CONFIG_DEBUG_VM on the write bit in whatever
-chance we have when walking through the pgtables.  It can bring the error
-earlier even before the app notices the data was corrupted on the snapshot.
-Also it helps us to identify this is a wrong pgtable setup, so hopefully a
-great information to have for debugging too.
+From: Rong Tao <rongtao@cestc.cn>
 
-Wrapping with CONFIG_DEBUG_VM is not that useful considering we have that
-in many distros already, but still do that just in case some custom build
-doesn't want anything like it.
+since commit 5854a09b4957("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper")
+linux/in.h use __DECLARE_FLEX_ARRAY() macro, and sync to tools/ in commit
+036b8f5b8970("tools headers uapi: Update linux/in.h copy"), this macro
+define in linux/stddef.h, which introduced in commit 3080ea5553cc("stddef:
+Introduce DECLARE_FLEX_ARRAY() helper"), thus, stddef.h should be included
+in in.h, which resolves the compilation error below:
 
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
+How to reproduce this compilation error:
+
+$ make -C tools/testing/selftests/bpf/
+In file included from progs/bpf_flow.c:8:
+linux/in.h:199:3: error: type name requires a specifier or qualifier
+                __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+                ^
+linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+                __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+                                             ^
+2 errors generated.
+
+Same error occurs with cgroup_skb_sk_lookup_kern.c, connect_force_port4.c,
+connect_force_port6.c, etc. that contain the header linux/in.h.
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- arch/x86/include/asm/pgtable.h | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ include/uapi/linux/in.h       | 1 +
+ tools/include/uapi/linux/in.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 5059799bebe3..27fff6b14929 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -291,7 +291,21 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
- #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
- static inline int pte_uffd_wp(pte_t pte)
- {
--	return pte_flags(pte) & _PAGE_UFFD_WP;
-+	bool wp = pte_flags(pte) & _PAGE_UFFD_WP;
-+#ifdef CONFIG_DEBUG_VM
-+	/*
-+	 * Having write bit for wr-protect-marked present ptes is fatal,
-+	 * because it means the uffd-wp bit will be ignored and write will
-+	 * just go through.
-+	 *
-+	 * Use any chance of pgtable walking to verify this (e.g., when
-+	 * page swapped out or being migrated for all purposes). It means
-+	 * something is already wrong.  Tell the admin even before the
-+	 * process crashes. We also nail it with wrong pgtable setup.
-+	 */
-+	WARN_ON_ONCE(wp && pte_write(pte));
-+#endif
-+	return wp;
- }
+diff --git a/include/uapi/linux/in.h b/include/uapi/linux/in.h
+index f243ce665f74..07a4cb149305 100644
+--- a/include/uapi/linux/in.h
++++ b/include/uapi/linux/in.h
+@@ -20,6 +20,7 @@
+ #define _UAPI_LINUX_IN_H
  
- static inline pte_t pte_mkuffd_wp(pte_t pte)
+ #include <linux/types.h>
++#include <linux/stddef.h>
+ #include <linux/libc-compat.h>
+ #include <linux/socket.h>
+ 
+diff --git a/tools/include/uapi/linux/in.h b/tools/include/uapi/linux/in.h
+index f243ce665f74..07a4cb149305 100644
+--- a/tools/include/uapi/linux/in.h
++++ b/tools/include/uapi/linux/in.h
+@@ -20,6 +20,7 @@
+ #define _UAPI_LINUX_IN_H
+ 
+ #include <linux/types.h>
++#include <linux/stddef.h>
+ #include <linux/libc-compat.h>
+ #include <linux/socket.h>
+ 
 -- 
-2.37.3
+2.31.1
 
