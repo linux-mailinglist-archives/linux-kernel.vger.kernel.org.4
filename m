@@ -2,261 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5F962423D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAFC62423F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbiKJMWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S230258AbiKJMXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiKJMWE (ORCPT
+        with ESMTP id S230206AbiKJMXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:22:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB57C71F37;
-        Thu, 10 Nov 2022 04:22:01 -0800 (PST)
-Date:   Thu, 10 Nov 2022 12:21:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668082920;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YWlPPt79KZVQ4iVF+rQ2uLTDqlEKiYXb05/erd5wIAc=;
-        b=VpwwBNHRpHnNA4BGE4NdGw8XWqeKb1REdhKei2LYNiXafcuX/ADrPCCgjCADUn5TgwTZyx
-        VgbGZcIePDLD5QbTO1a8JkHzNzZGKPGXwE+js61QXWi7PMD05oA7auFF86+xqWNMDOb8YP
-        HqRQoLxIswSUVia9rDnk6TczEtTDIEhWSB+T/meWlVWoRYYInmKR0Z/TILUudQDrHFmzSI
-        1EN4VD7bjtHjZgomJsmcjO4snKVyxTagznI2VYpXkNLlMqvgx7QcmCyHhR7Cb2BjOCtH/X
-        49uM+hlHHTkQG4x9X+BvyuEPFXtU9B8Bft0fiCvVopNz4HRw6AMZwXYJwV+TQw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668082920;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YWlPPt79KZVQ4iVF+rQ2uLTDqlEKiYXb05/erd5wIAc=;
-        b=We81QvbcApQDduVHkfkDX2V5FHfEgUDy/l34TPBbG5nTAvZI2MIDh2Dq6IAG/G2Kflr8Be
-        +ws0lJP8llLPf+AA==
-From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/mtrr: Replace use_intel() with a local flag
-Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221102074713.21493-4-jgross@suse.com>
-References: <20221102074713.21493-4-jgross@suse.com>
-MIME-Version: 1.0
-Message-ID: <166808291924.4906.14811957457604547770.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 07:23:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D3725D3;
+        Thu, 10 Nov 2022 04:22:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C862615DD;
+        Thu, 10 Nov 2022 12:22:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC338C433D6;
+        Thu, 10 Nov 2022 12:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668082936;
+        bh=W91//Q5p/av6RqQ//BHWaHh0G2y0jMwAuKUaYxm/zQI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oAz2FFUVvmlMGTAq7rwzLBMcUJqKxwZ2ulWakIBuE2qQ4elYc2nRHTi3jF0KpVwp5
+         e692kQu1PFENjwd23Ruw5uk+Hr7RqCGUUC3/2a57ilujselmtn0viOJCNBpFWTx96N
+         JzRM3g1VzUX5DmxfXaRNZK449utkCVj7MZ3cHXoe0h8jUgfS5rV8ODUDHQLfKSdCPP
+         9g/nbtjMUoLb9NAALKD4rL4jVaGlgm5JLU9PrrzPb9P44sjqOPA6yIzJzY+7kwCF59
+         AdK6R7Csb21krOdImIG5T11e898KxAAkSKlmcsKaKqggugBfXKw4hZGNKOHAdGYruL
+         T55OcbMfZHErA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ot6ZR-0059I0-GV;
+        Thu, 10 Nov 2022 12:22:13 +0000
+Date:   Thu, 10 Nov 2022 12:22:12 +0000
+Message-ID: <86o7tfov7v.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] KVM: arm64: Allow userspace to trap SMCCC sub-ranges
+In-Reply-To: <20221110015327.3389351-3-oliver.upton@linux.dev>
+References: <20221110015327.3389351-1-oliver.upton@linux.dev>
+        <20221110015327.3389351-3-oliver.upton@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, rananta@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+On Thu, 10 Nov 2022 01:53:26 +0000,
+Oliver Upton <oliver.upton@linux.dev> wrote:
+> 
+> As the SMCCC (and related specifications) march towards an
+> 'everything and the kitchen sink' interface for interacting with a
+> system, it is less likely that KVM will implement every supported
+> feature.
+> 
+> Add a capability that allows userspace to trap hypercall ranges,
+> allowing the VMM to mix-and-match between calls handled in userspace vs.
+> KVM.
+> 
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+>  arch/arm64/include/asm/kvm_host.h |  5 ++++
+>  arch/arm64/include/uapi/asm/kvm.h | 15 ++++++++++
+>  arch/arm64/kvm/arm.c              | 10 +++++++
+>  arch/arm64/kvm/hypercalls.c       | 48 +++++++++++++++++++++++++++++++
+>  include/uapi/linux/kvm.h          |  1 +
+>  5 files changed, 79 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index e33ed7c09a28..cc3872f1900c 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -52,6 +52,9 @@
+>  
+>  #define KVM_HAVE_MMU_RWLOCK
+>  
+> +#define KVM_ARM_USER_HYPERCALL_FLAGS	\
+> +		GENMASK_ULL(KVM_ARM_USER_HYPERCALL_FLAGS_COUNT - 1, 0)
+> +
+>  /*
+>   * Mode of operation configurable with kvm-arm.mode early param.
+>   * See Documentation/admin-guide/kernel-parameters.txt for more information.
+> @@ -104,11 +107,13 @@ struct kvm_arch_memory_slot {
+>  /**
+>   * struct kvm_smccc_features: Descriptor of the hypercall services exposed to the guests
+>   *
+> + * @user_trap_bmap: Bitmap of SMCCC function ranges trapped to userspace
+>   * @std_bmap: Bitmap of standard secure service calls
+>   * @std_hyp_bmap: Bitmap of standard hypervisor service calls
+>   * @vendor_hyp_bmap: Bitmap of vendor specific hypervisor service calls
+>   */
+>  struct kvm_smccc_features {
+> +	unsigned long user_trap_bmap;
 
-Commit-ID:     45fa71f19a2d73f157d6892a8d677a738a0414fd
-Gitweb:        https://git.kernel.org/tip/45fa71f19a2d73f157d6892a8d677a738a0414fd
-Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Wed, 02 Nov 2022 08:47:00 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 10 Nov 2022 13:12:44 +01:00
+nit: I strongly object to the word 'trap'. By definition, this is a
+trap. The difference here is that you *forward* something to userspace
+instead of implementing it in the kernel.
 
-x86/mtrr: Replace use_intel() with a local flag
+>  	unsigned long std_bmap;
+>  	unsigned long std_hyp_bmap;
+>  	unsigned long vendor_hyp_bmap;
+> diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+> index 316917b98707..07fa3f597e61 100644
+> --- a/arch/arm64/include/uapi/asm/kvm.h
+> +++ b/arch/arm64/include/uapi/asm/kvm.h
+> @@ -370,6 +370,21 @@ enum {
+>  #endif
+>  };
+>  
+> +enum {
+> +	KVM_ARM_USER_HYPERCALL_OWNER_ARCH		= 0,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_CPU		= 1,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_SIP		= 2,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_OEM		= 3,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_STANDARD		= 4,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_STANDARD_HYP	= 5,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_VENDOR_HYP		= 6,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_TRUSTED_APP	= 7,
+> +	KVM_ARM_USER_HYPERCALL_OWNER_TRUSTED_OS		= 8,
+> +#ifdef __KERNEL__
+> +	KVM_ARM_USER_HYPERCALL_FLAGS_COUNT,
+> +#endif
+> +};
+> +
+>  /* Device Control API: ARM VGIC */
+>  #define KVM_DEV_ARM_VGIC_GRP_ADDR	0
+>  #define KVM_DEV_ARM_VGIC_GRP_DIST_REGS	1
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 6f0b56e7f8c7..6e8a222fc295 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -100,6 +100,13 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		r = 0;
+>  		set_bit(KVM_ARCH_FLAG_SYSTEM_SUSPEND_ENABLED, &kvm->arch.flags);
+>  		break;
+> +	case KVM_CAP_ARM_USER_HYPERCALLS:
+> +		if (cap->args[0] & ~KVM_ARM_USER_HYPERCALL_FLAGS)
+> +			return -EINVAL;
+> +
+> +		r = 0;
+> +		kvm->arch.smccc_feat.user_trap_bmap = cap->args[0];
+> +		break;
+>  	default:
+>  		r = -EINVAL;
+>  		break;
+> @@ -285,6 +292,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_ARM_PTRAUTH_GENERIC:
+>  		r = system_has_full_ptr_auth();
+>  		break;
+> +	case KVM_CAP_ARM_USER_HYPERCALLS:
+> +		r = KVM_ARM_USER_HYPERCALL_FLAGS;
+> +		break;
+>  	default:
+>  		r = 0;
+>  	}
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index 62ce45d0d957..22a23b12201d 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -92,6 +92,49 @@ static bool kvm_hvc_call_default_allowed(u32 func_id)
+>  	}
+>  }
+>  
+> +static bool kvm_hvc_call_user_trapped(struct kvm_vcpu *vcpu, u32 func_id)
+> +{
+> +	struct kvm *kvm = vcpu->kvm;
+> +	unsigned long *bmap = &kvm->arch.smccc_feat.user_trap_bmap;
+> +
+> +	switch (ARM_SMCCC_OWNER_NUM(func_id)) {
+> +	case ARM_SMCCC_OWNER_ARCH:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_ARCH, bmap);
+> +	case ARM_SMCCC_OWNER_CPU:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_CPU, bmap);
+> +	case ARM_SMCCC_OWNER_SIP:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_SIP, bmap);
+> +	case ARM_SMCCC_OWNER_OEM:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_OEM, bmap);
+> +	case ARM_SMCCC_OWNER_STANDARD:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_STANDARD, bmap);
+> +	case ARM_SMCCC_OWNER_STANDARD_HYP:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_STANDARD_HYP, bmap);
+> +	case ARM_SMCCC_OWNER_VENDOR_HYP:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_VENDOR_HYP, bmap);
+> +	case ARM_SMCCC_OWNER_TRUSTED_APP ... ARM_SMCCC_OWNER_TRUSTED_APP_END:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_TRUSTED_APP, bmap);
+> +	case ARM_SMCCC_OWNER_TRUSTED_OS ... ARM_SMCCC_OWNER_TRUSTED_OS_END:
+> +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_TRUSTED_OS, bmap);
+> +	default:
+> +		return false;
+> +	}
 
-In MTRR code use_intel() is only used in one source file, and the
-relevant use_intel_if member of struct mtrr_ops is set only in
-generic_mtrr_ops.
+You have multiple problems here:
 
-Replace use_intel() with a single flag in cacheinfo.c which can be
-set when assigning generic_mtrr_ops to mtrr_if. This allows to drop
-use_intel_if from mtrr_ops, while preparing to decouple PAT from MTRR.
-As another preparation for the PAT/MTRR decoupling use a bit for MTRR
-control and one for PAT control. For now set both bits together, this
-can be changed later.
+- the granularity is way too coarse. You want to express arbitrary
+  ranges, and not necessarily grab a whole owner range.
 
-As the new flag will be set only if mtrr_enabled is set, the test for
-mtrr_enabled can be dropped at some places.
+- you have now an overlap between ranges that are handled in the
+  kernel (PSCI, spectre mitigations) and ranges that userspace wants
+  to observe. Not good.
 
-  [ bp: Massage commit message. ]
+If we are going down this road, this can only be done at the
+*function* level. And userspace must know that the kernel will refuse
+to forward some ranges.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221102074713.21493-4-jgross@suse.com
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/include/asm/cacheinfo.h   |  5 +++++
- arch/x86/kernel/cpu/cacheinfo.c    |  3 +++
- arch/x86/kernel/cpu/mtrr/generic.c |  1 -
- arch/x86/kernel/cpu/mtrr/mtrr.c    | 28 +++++++++++++---------------
- arch/x86/kernel/cpu/mtrr/mtrr.h    |  2 --
- 5 files changed, 21 insertions(+), 18 deletions(-)
+So obviously, this cannot be a simple bitmap. Making it a radix tree
+(or an xarray, which is basically the same thing) could work. And the
+filtering request from userspace can be similar to what we have for
+the PMU filters.
 
-diff --git a/arch/x86/include/asm/cacheinfo.h b/arch/x86/include/asm/cacheinfo.h
-index 86b2e0d..c387396 100644
---- a/arch/x86/include/asm/cacheinfo.h
-+++ b/arch/x86/include/asm/cacheinfo.h
-@@ -2,6 +2,11 @@
- #ifndef _ASM_X86_CACHEINFO_H
- #define _ASM_X86_CACHEINFO_H
- 
-+/* Kernel controls MTRR and/or PAT MSRs. */
-+extern unsigned int memory_caching_control;
-+#define CACHE_MTRR 0x01
-+#define CACHE_PAT  0x02
-+
- void cacheinfo_amd_init_llc_id(struct cpuinfo_x86 *c, int cpu);
- void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu);
- 
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 6655683..32fb049 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -35,6 +35,9 @@ DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_llc_shared_map);
- /* Shared L2 cache maps */
- DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_l2c_shared_map);
- 
-+/* Kernel controls MTRR and/or PAT MSRs. */
-+unsigned int memory_caching_control __ro_after_init;
-+
- struct _cache_table {
- 	unsigned char descriptor;
- 	char cache_type;
-diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-index c8f8951..7bbaba4 100644
---- a/arch/x86/kernel/cpu/mtrr/generic.c
-+++ b/arch/x86/kernel/cpu/mtrr/generic.c
-@@ -917,7 +917,6 @@ int positive_have_wrcomb(void)
-  * Generic structure...
-  */
- const struct mtrr_ops generic_mtrr_ops = {
--	.use_intel_if		= 1,
- 	.set_all		= generic_set_all,
- 	.get			= generic_get_mtrr,
- 	.get_free_region	= generic_get_free_region,
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 2746cac..4209945 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -46,6 +46,7 @@
- #include <linux/syscore_ops.h>
- #include <linux/rcupdate.h>
- 
-+#include <asm/cacheinfo.h>
- #include <asm/cpufeature.h>
- #include <asm/e820/api.h>
- #include <asm/mtrr.h>
-@@ -119,11 +120,11 @@ static int have_wrcomb(void)
- }
- 
- /*  This function returns the number of variable MTRRs  */
--static void __init set_num_var_ranges(void)
-+static void __init set_num_var_ranges(bool use_generic)
- {
- 	unsigned long config = 0, dummy;
- 
--	if (use_intel())
-+	if (use_generic)
- 		rdmsr(MSR_MTRRcap, config, dummy);
- 	else if (is_cpu(AMD) || is_cpu(HYGON))
- 		config = 2;
-@@ -756,14 +757,16 @@ void __init mtrr_bp_init(void)
- 
- 	if (mtrr_if) {
- 		__mtrr_enabled = true;
--		set_num_var_ranges();
-+		set_num_var_ranges(mtrr_if == &generic_mtrr_ops);
- 		init_table();
--		if (use_intel()) {
-+		if (mtrr_if == &generic_mtrr_ops) {
- 			/* BIOS may override */
- 			__mtrr_enabled = get_mtrr_state();
- 
--			if (mtrr_enabled())
-+			if (mtrr_enabled()) {
- 				mtrr_bp_pat_init();
-+				memory_caching_control |= CACHE_MTRR | CACHE_PAT;
-+			}
- 
- 			if (mtrr_cleanup(phys_addr)) {
- 				changed_by_mtrr_cleanup = 1;
-@@ -786,10 +789,7 @@ void __init mtrr_bp_init(void)
- 
- void mtrr_ap_init(void)
- {
--	if (!mtrr_enabled())
--		return;
--
--	if (!use_intel() || mtrr_aps_delayed_init)
-+	if (!memory_caching_control || mtrr_aps_delayed_init)
- 		return;
- 
- 	/*
-@@ -825,9 +825,7 @@ void mtrr_save_state(void)
- 
- void set_mtrr_aps_delayed_init(void)
- {
--	if (!mtrr_enabled())
--		return;
--	if (!use_intel())
-+	if (!memory_caching_control)
- 		return;
- 
- 	mtrr_aps_delayed_init = true;
-@@ -838,7 +836,7 @@ void set_mtrr_aps_delayed_init(void)
-  */
- void mtrr_aps_init(void)
- {
--	if (!use_intel() || !mtrr_enabled())
-+	if (!memory_caching_control)
- 		return;
- 
- 	/*
-@@ -855,7 +853,7 @@ void mtrr_aps_init(void)
- 
- void mtrr_bp_restore(void)
- {
--	if (!use_intel() || !mtrr_enabled())
-+	if (!memory_caching_control)
- 		return;
- 
- 	mtrr_if->set_all();
-@@ -866,7 +864,7 @@ static int __init mtrr_init_finialize(void)
- 	if (!mtrr_enabled())
- 		return 0;
- 
--	if (use_intel()) {
-+	if (memory_caching_control & CACHE_MTRR) {
- 		if (!changed_by_mtrr_cleanup)
- 			mtrr_state_warn();
- 		return 0;
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
-index 2ac99e5..88b1c4b 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.h
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
-@@ -14,7 +14,6 @@ extern unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
- 
- struct mtrr_ops {
- 	u32	vendor;
--	u32	use_intel_if;
- 	void	(*set)(unsigned int reg, unsigned long base,
- 		       unsigned long size, mtrr_type type);
- 	void	(*set_all)(void);
-@@ -61,7 +60,6 @@ extern u64 size_or_mask, size_and_mask;
- extern const struct mtrr_ops *mtrr_if;
- 
- #define is_cpu(vnd)	(mtrr_if && mtrr_if->vendor == X86_VENDOR_##vnd)
--#define use_intel()	(mtrr_if && mtrr_if->use_intel_if == 1)
- 
- extern unsigned int num_var_ranges;
- extern u64 mtrr_tom2;
+> +}
+> +
+> +static void kvm_hvc_prepare_user_trap(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_run *run = vcpu->run;
+> +
+> +	run->exit_reason	= KVM_EXIT_HYPERCALL;
+> +	run->hypercall.nr	= smccc_get_function(vcpu);
+> +	run->hypercall.args[0]	= smccc_get_arg(vcpu, 1);
+> +	run->hypercall.args[1]	= smccc_get_arg(vcpu, 2);
+> +	run->hypercall.args[2]	= smccc_get_arg(vcpu, 3);
+> +	run->hypercall.args[3]	= smccc_get_arg(vcpu, 4);
+> +	run->hypercall.args[4]	= smccc_get_arg(vcpu, 5);
+> +	run->hypercall.args[5]	= smccc_get_arg(vcpu, 6);
+
+All of which is readily available through the ONE_REG interface. I'm
+mildly reluctant to expose another interface that disclose the same
+information (yes, I understand the performance impact).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
