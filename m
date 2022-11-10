@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3686241D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57276241DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiKJMBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:01:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52906 "EHLO
+        id S230364AbiKJMBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiKJMBF (ORCPT
+        with ESMTP id S229531AbiKJMBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:01:05 -0500
+        Thu, 10 Nov 2022 07:01:49 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5D71B1D0;
-        Thu, 10 Nov 2022 04:01:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635701B1D0;
+        Thu, 10 Nov 2022 04:01:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 231D6615D8;
-        Thu, 10 Nov 2022 12:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADDBC433C1;
-        Thu, 10 Nov 2022 12:01:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2B98615D8;
+        Thu, 10 Nov 2022 12:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B94C433C1;
+        Thu, 10 Nov 2022 12:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668081663;
-        bh=nJA6lVr6zgeitszBqXo+vCIv1PWS9CxH/k89lrSezzM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YwDUDPzxlqtjltIIWBWr8WtYZkATmN3l4/u1T//eXkcnmeOFo49LNvhT83dIufhj/
-         gOrTYoF49BrZYxvkQz8IuPVVXOzPdNl/H7xSnr8jdp+06HG1X4DAp8BTHF8FxM7c6e
-         LpAdRBQEgSEwAu5WBWa4ovqTZFWpZST8WbCpafllI+iYSXMKb5AZmZsYZO3Wm0lKFa
-         4qTvl2yhlL14iS1wk3GVbe8DosfgN/rIFEn1bs/xFSbFO5kq9OPjQQBhcbva4OT8Cf
-         tFWmMSkNazlukJ8zD+W0X6OjHOqImun/uRemLb1XrVQQq7lJPxcL1tNjxO/0CEufsk
-         o+2gSI6ggGyWg==
-Date:   Thu, 10 Nov 2022 12:00:57 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     andersson@kernel.org, linux-arm-msm@vger.kernel.org,
-        krzysztof.kozlowski@linaro.org, agross@kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, patches@linaro.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: regulator: qcom,smd: Document PMR735a
-Message-ID: <Y2zn+a7eL8PnGgWo@sirena.org.uk>
-References: <20221109110846.45789-1-konrad.dybcio@linaro.org>
- <166807822235.115312.17138185226634439165.b4-ty@kernel.org>
- <bf3e5725-8cf7-3a0e-aa9b-0b05a4507868@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1soP19EYi/kSFqKE"
-Content-Disposition: inline
-In-Reply-To: <bf3e5725-8cf7-3a0e-aa9b-0b05a4507868@linaro.org>
-X-Cookie: Torque is cheap.
+        s=k20201202; t=1668081708;
+        bh=eAMR77Nrs7OwqkdHrhBIYIqrtO/NNvfrQzOxfDePPfE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=J7p5ydwSOlvcNPWZZPzKtRSJTtX1kvDEbxD9h/oYP4eocx4WRWzmVe1EsUbUIMv/o
+         UOacVZRd141HlomFt2GXcwuHnPwZD3Nira5V6SKoEp5gQcIzLQmqDf56l/1b7qX7MJ
+         9Es3xgufJ3T+DaunZBXaOMdmkCpeTGnv3EzJTiYvrVoVsjk1cdq0CfJ9oeOeRmAPqd
+         VJMUTh1R5X98L4US8bWF3WxeeCD5d2fgR7mkxNjuBP8Mbto2i0bjm43oxAK/Kh46h0
+         HBqQ5iGSmied6aENk0wFZ0aV5q74da8knXpoJB2GsP7ZOlbeRfCFNauVc39wXXC6VO
+         D/8vsDALqAx0A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ot6Fd-00593c-VM;
+        Thu, 10 Nov 2022 12:01:46 +0000
+Date:   Thu, 10 Nov 2022 12:01:45 +0000
+Message-ID: <86pmdvow5y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <broonie@kernel.org>, <tglx@linutronix.de>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic CS48L31/32/33 codecs
+In-Reply-To: <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
+References: <20221109165331.29332-1-rf@opensource.cirrus.com>
+        <20221109165331.29332-10-rf@opensource.cirrus.com>
+        <87mt8zutib.wl-maz@kernel.org>
+        <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rf@opensource.cirrus.com, lee@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, broonie@kernel.org, tglx@linutronix.de, alsa-devel@alsa-project.org, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,39 +72,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 10 Nov 2022 11:22:26 +0000,
+Richard Fitzgerald <rf@opensource.cirrus.com> wrote:
+> 
+> On 10/11/2022 08:02, Marc Zyngier wrote:
+> > On Wed, 09 Nov 2022 16:53:28 +0000,
+> > Richard Fitzgerald <rf@opensource.cirrus.com> wrote:
+> >> 
+> >> The Cirrus Logic CS48L31/32/33 audio codecs contain a programmable
+> >> interrupt controller with a variety of interrupt sources, including
+> >> GPIOs that can be used as interrupt inputs.
+> >> 
+> >> This driver provides the handling for the interrupt controller. As the
+> >> codec is accessed via regmap, the generic regmap_irq functionality
+> >> is used to do most of the work.
+> >> 
+> > 
+> > I cannot spot a shred of interrupt controller code in there. This
+> 
+> It is providing support for handling an interrupt controller so that
+> other drivers can bind to those interrupts. It's just that regmap
+> provides a lot of generic implementation for SPI-connected interrupt
+> controllers so we don't need to open-code all that in the
+> irqchip driver.
 
---1soP19EYi/kSFqKE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+And thus none of that code needs to live in drivers/irqchip.
 
-On Thu, Nov 10, 2022 at 12:09:10PM +0100, Konrad Dybcio wrote:
-> On 10/11/2022 12:03, Mark Brown wrote:
+> 
+> > belongs IMO to the MFD code.
+> 
+> We did once put interrupt support in MFD for an older product line but
+> the MFD maintainer doesn't like the MFD being a dumping-ground for
+> random other functionality that have their own subsystems.
 
-> >     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+I don't like this stuff either. All this code is a glorified set of
+interrupt handlers and #defines that only hide the lack of a proper DT
+binding to express the interrupt routing (it feels like looking at
+board files from 10 years ago).
 
-> Please apply v2 instead:
+None of that belongs in the irqchip code.
 
-> https://lore.kernel.org/linux-arm-msm/20221110091736.3344-2-konrad.dybcio@linaro.org/T/#u
+> 
+> >  It is also a direct copy of the existing
+> > irq-madera.c code, duplicated for no obvious reason.
+> 
+> It's not a duplicate. The register map of this device is different
+> (different addressing, 32-bit registers not 16-bit)
 
-As the mail you are replying to says:
+And? How hard is it to implement an indirection containing the
+register map and the relevant callbacks? /roll-eyes
 
-> > If any updates are required or you are submitting further changes they
-> > should be sent as incremental updates against current git, existing
-> > patches will not be replaced.
+	M.
 
---1soP19EYi/kSFqKE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNs5/kACgkQJNaLcl1U
-h9C4Ewf/SHnnNEjZLkzNtk+rdcrPTtswUMrxgkedFWh/57GMkuA7p5zDjAXECpYm
-2ePQYgKNfj3XmtXOfS+q+rRBO1xmncS9l8gvo1jKesSPk8jGsQ9KanBmjT2wH+Gb
-yz2RCLDusrNm7rz18H5CcVR9fSMb+lCugjywrb2GlTnfyax8hA3RtnuYEg/8QA1R
-bqZTm6E2cvK75GVIV0uKdvX4w2fcA8WmPfrJrHdEZXYvrdmLJVZQHUuMILvDroJW
-ZJQvQGZ3BYn5DZFE8J/DbWhQHfbWoNUMHVGHbNYKiNXxLtjcSbYVfeQlzjVG6luN
-OckQVWFaQfYiVIbWjsk8LWfit2fRzA==
-=ApaU
------END PGP SIGNATURE-----
-
---1soP19EYi/kSFqKE--
+-- 
+Without deviation from the norm, progress is not possible.
