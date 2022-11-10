@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30DB62422A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F286762422B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbiKJMWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:22:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
+        id S231177AbiKJMWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiKJMVw (ORCPT
+        with ESMTP id S229697AbiKJMVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:21:52 -0500
+        Thu, 10 Nov 2022 07:21:53 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20966CA0D;
-        Thu, 10 Nov 2022 04:21:50 -0800 (PST)
-Date:   Thu, 10 Nov 2022 12:21:48 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE022AE03;
+        Thu, 10 Nov 2022 04:21:51 -0800 (PST)
+Date:   Thu, 10 Nov 2022 12:21:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668082909;
+        s=2020; t=1668082910;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=78b1088US8rujCnbgfiPCf4trk06P/JOFUYrMtVUufw=;
-        b=fO08zahsTMngj32AnurFl0pMLDSUJA6YtxyqMT3bEReWZI1OSUn2C5hDM9cIdpLMSH3+eW
-        GO9EL1tl1+tC/cgnJSWItcpaArjLx5VHA0Kt32uiPYzPxMSOVoawVwd4XCWqeKoMpPisBa
-        W2lKw8F8dqFn48809m+66lR9JORaOrjlqtgnJW0KjYoHXOy0TVUa3XheGBijbcinNF7xad
-        Lp2w/zCD1/qimelFCJ6ClT1L9mbJIRrXMoWKuPS6HCfSgzSmRy33bUp4dtk+WyO85SwEml
-        B01Ffd8N8Idw+6pyLy0fH8L1seZ7o3ot0XwBbC4URuEWtIuKhaxW4v9W78eICQ==
+        bh=fx8BolJ4Db1/lxoA9sH+WI4/m5NkYmQd8BF12q2o7HI=;
+        b=AtfMu3b9yUTxT2kigQSeATWqp1cdfoSYcxWavPE43XeIM0WwjjoZc+HX7L1/q/II3cZiY6
+        Kq4ZMBzy++/iazZVEe4WlitxbgweC/nlBYmfdx2Mlo3Nic8hNIfG0fp/BxLgedfJsFUIeT
+        n4wDayW9gRBp4QQ2tKN/IxMJtLeCVNAhvHihAxTlQ5+oWfFQCVsvhiXCc1He+sl9cr6vsM
+        SHF0PhFOuM7xRjP+Ch6hBBucEqs7F/fzztRiZ3jxZbY0DwgJ/OhrJ3PXZMNqygQw9+2Xrf
+        1I/JeruXXy8vcK0pH8ghxf1dJpqQSMrvI1zb9Re/yKgFWIqhkf04Zh4tVdNeVg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668082909;
+        s=2020e; t=1668082910;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=78b1088US8rujCnbgfiPCf4trk06P/JOFUYrMtVUufw=;
-        b=hB3WzlPKbnlbVopbzLmE+jxerleFxeoX328ZIEcZ8sjSplAFynxH3Qhq1DaBj1JELOJsYH
-        oo7BM+mTgC9n5fAA==
+        bh=fx8BolJ4Db1/lxoA9sH+WI4/m5NkYmQd8BF12q2o7HI=;
+        b=CvM6sTvtys7pzI49yiMO9bG/EYxl1dGUYr2+RRMXZagLJL5iGdBV4UnrqOUsSuSJV1atzk
+        1kcDcF08n2EVZ9AA==
 From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86: Decouple PAT and MTRR handling
+Subject: [tip: x86/cpu] x86/mtrr: Add a stop_machine() handler calling only
+ cache_cpu_init()
 Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221102074713.21493-14-jgross@suse.com>
-References: <20221102074713.21493-14-jgross@suse.com>
+In-Reply-To: <20221102074713.21493-13-jgross@suse.com>
+References: <20221102074713.21493-13-jgross@suse.com>
 MIME-Version: 1.0
-Message-ID: <166808290807.4906.5390493917864297840.tip-bot2@tip-bot2>
+Message-ID: <166808290920.4906.1225943810635030819.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,405 +66,391 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cpu branch of tip:
 
-Commit-ID:     adfe7512e1d0b2e83215b0ec56337d2df9f1032d
-Gitweb:        https://git.kernel.org/tip/adfe7512e1d0b2e83215b0ec56337d2df9f1032d
+Commit-ID:     0b9a6a8bedbfb38e7c6be4d119a267e6277307cc
+Gitweb:        https://git.kernel.org/tip/0b9a6a8bedbfb38e7c6be4d119a267e6277307cc
 Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Wed, 02 Nov 2022 08:47:10 +01:00
+AuthorDate:    Wed, 02 Nov 2022 08:47:09 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
 CommitterDate: Thu, 10 Nov 2022 13:12:45 +01:00
 
-x86: Decouple PAT and MTRR handling
+x86/mtrr: Add a stop_machine() handler calling only cache_cpu_init()
 
-Today, PAT is usable only with MTRR being active, with some nasty tweaks
-to make PAT usable when running as a Xen PV guest which doesn't support
-MTRR.
+Instead of having a stop_machine() handler for either a specific
+MTRR register or all state at once, add a handler just for calling
+cache_cpu_init() if appropriate.
 
-The reason for this coupling is that both PAT MSR changes and MTRR
-changes require a similar sequence and so full PAT support was added
-using the already available MTRR handling.
+Add functions for calling stop_machine() with this handler as well.
 
-Xen PV PAT handling can work without MTRR, as it just needs to consume
-the PAT MSR setting done by the hypervisor without the ability and need
-to change it. This in turn has resulted in a convoluted initialization
-sequence and wrong decisions regarding cache mode availability due to
-misguiding PAT availability flags.
-
-Fix all of that by allowing to use PAT without MTRR and by reworking
-the current PAT initialization sequence to match better with the newly
-introduced generic cache initialization.
-
-This removes the need of the recently added pat_force_disabled flag, so
-remove the remnants of the patch adding it.
+Add a generic replacement for mtrr_bp_restore() and a wrapper for
+mtrr_bp_init().
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221102074713.21493-14-jgross@suse.com
+Link: https://lore.kernel.org/r/20221102074713.21493-13-jgross@suse.com
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- arch/x86/include/asm/memtype.h  |   5 +-
- arch/x86/kernel/cpu/cacheinfo.c |   3 +-
- arch/x86/kernel/cpu/mtrr/mtrr.c |  12 +--
- arch/x86/kernel/setup.c         |  13 +---
- arch/x86/mm/pat/memtype.c       | 152 ++++++++++---------------------
- 5 files changed, 57 insertions(+), 128 deletions(-)
+ arch/x86/include/asm/cacheinfo.h |  5 +-
+ arch/x86/include/asm/mtrr.h      |  8 +---
+ arch/x86/kernel/cpu/cacheinfo.c  | 59 ++++++++++++++++++++-
+ arch/x86/kernel/cpu/common.c     |  3 +-
+ arch/x86/kernel/cpu/mtrr/mtrr.c  | 88 +-------------------------------
+ arch/x86/kernel/setup.c          |  3 +-
+ arch/x86/kernel/smpboot.c        |  4 +-
+ arch/x86/power/cpu.c             |  3 +-
+ 8 files changed, 74 insertions(+), 99 deletions(-)
 
-diff --git a/arch/x86/include/asm/memtype.h b/arch/x86/include/asm/memtype.h
-index 9ca760e..113b2fa 100644
---- a/arch/x86/include/asm/memtype.h
-+++ b/arch/x86/include/asm/memtype.h
-@@ -6,9 +6,8 @@
- #include <asm/pgtable_types.h>
+diff --git a/arch/x86/include/asm/cacheinfo.h b/arch/x86/include/asm/cacheinfo.h
+index e443fcc..a0ef46e 100644
+--- a/arch/x86/include/asm/cacheinfo.h
++++ b/arch/x86/include/asm/cacheinfo.h
+@@ -12,8 +12,11 @@ void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu);
  
- extern bool pat_enabled(void);
--extern void pat_disable(const char *reason);
--extern void pat_init(void);
--extern void init_cache_modes(void);
-+extern void pat_bp_init(void);
-+extern void pat_cpu_init(void);
+ void cache_disable(void);
+ void cache_enable(void);
+-void cache_cpu_init(void);
+ void set_cache_aps_delayed_init(bool val);
+ bool get_cache_aps_delayed_init(void);
++void cache_bp_init(void);
++void cache_bp_restore(void);
++void cache_ap_init(void);
++void cache_aps_init(void);
  
- extern int memtype_reserve(u64 start, u64 end,
- 		enum page_cache_mode req_pcm, enum page_cache_mode *ret_pcm);
+ #endif /* _ASM_X86_CACHEINFO_H */
+diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
+index 5d31219..f0eeaf6 100644
+--- a/arch/x86/include/asm/mtrr.h
++++ b/arch/x86/include/asm/mtrr.h
+@@ -25,13 +25,12 @@
+ 
+ #include <uapi/asm/mtrr.h>
+ 
+-void mtrr_bp_init(void);
+-
+ /*
+  * The following functions are for use by other drivers that cannot use
+  * arch_phys_wc_add and arch_phys_wc_del.
+  */
+ # ifdef CONFIG_MTRR
++void mtrr_bp_init(void);
+ extern u8 mtrr_type_lookup(u64 addr, u64 end, u8 *uniform);
+ extern void mtrr_save_fixed_ranges(void *);
+ extern void mtrr_save_state(void);
+@@ -42,8 +41,6 @@ extern int mtrr_add_page(unsigned long base, unsigned long size,
+ extern int mtrr_del(int reg, unsigned long base, unsigned long size);
+ extern int mtrr_del_page(int reg, unsigned long base, unsigned long size);
+ extern void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi);
+-extern void mtrr_ap_init(void);
+-extern void mtrr_aps_init(void);
+ extern void mtrr_bp_restore(void);
+ extern int mtrr_trim_uncached_memory(unsigned long end_pfn);
+ extern int amd_special_default_mtrr(void);
+@@ -85,8 +82,7 @@ static inline int mtrr_trim_uncached_memory(unsigned long end_pfn)
+ static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi)
+ {
+ }
+-#define mtrr_ap_init() do {} while (0)
+-#define mtrr_aps_init() do {} while (0)
++#define mtrr_bp_init() do {} while (0)
+ #define mtrr_bp_restore() do {} while (0)
+ #define mtrr_disable() do {} while (0)
+ #define mtrr_enable() do {} while (0)
 diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 4e155bd..c830f85 100644
+index 063d556..4e155bd 100644
 --- a/arch/x86/kernel/cpu/cacheinfo.c
 +++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -1133,7 +1133,7 @@ static void cache_cpu_init(void)
- 		mtrr_generic_set_state();
+@@ -15,6 +15,7 @@
+ #include <linux/capability.h>
+ #include <linux/sysfs.h>
+ #include <linux/pci.h>
++#include <linux/stop_machine.h>
  
- 	if (memory_caching_control & CACHE_PAT)
--		pat_init();
-+		pat_cpu_init();
+ #include <asm/cpufeature.h>
+ #include <asm/cacheinfo.h>
+@@ -1121,7 +1122,7 @@ void cache_enable(void) __releases(cache_disable_lock)
+ 	raw_spin_unlock(&cache_disable_lock);
+ }
  
- 	cache_enable();
- 	local_irq_restore(flags);
-@@ -1162,6 +1162,7 @@ static int cache_rendezvous_handler(void *unused)
- void __init cache_bp_init(void)
+-void cache_cpu_init(void)
++static void cache_cpu_init(void)
  {
- 	mtrr_bp_init();
-+	pat_bp_init();
+ 	unsigned long flags;
  
- 	if (memory_caching_control)
- 		cache_cpu_init();
+@@ -1149,3 +1150,59 @@ bool get_cache_aps_delayed_init(void)
+ {
+ 	return cache_aps_delayed_init;
+ }
++
++static int cache_rendezvous_handler(void *unused)
++{
++	if (get_cache_aps_delayed_init() || !cpu_online(smp_processor_id()))
++		cache_cpu_init();
++
++	return 0;
++}
++
++void __init cache_bp_init(void)
++{
++	mtrr_bp_init();
++
++	if (memory_caching_control)
++		cache_cpu_init();
++}
++
++void cache_bp_restore(void)
++{
++	if (memory_caching_control)
++		cache_cpu_init();
++}
++
++void cache_ap_init(void)
++{
++	if (!memory_caching_control || get_cache_aps_delayed_init())
++		return;
++
++	/*
++	 * Ideally we should hold mtrr_mutex here to avoid MTRR entries
++	 * changed, but this routine will be called in CPU boot time,
++	 * holding the lock breaks it.
++	 *
++	 * This routine is called in two cases:
++	 *
++	 *   1. very early time of software resume, when there absolutely
++	 *      isn't MTRR entry changes;
++	 *
++	 *   2. CPU hotadd time. We let mtrr_add/del_page hold cpuhotplug
++	 *      lock to prevent MTRR entry changes
++	 */
++	stop_machine_from_inactive_cpu(cache_rendezvous_handler, NULL,
++				       cpu_callout_mask);
++}
++
++/*
++ * Delayed cache initialization for all AP's
++ */
++void cache_aps_init(void)
++{
++	if (!memory_caching_control || !get_cache_aps_delayed_init())
++		return;
++
++	stop_machine(cache_rendezvous_handler, NULL, cpu_online_mask);
++	set_cache_aps_delayed_init(false);
++}
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 3e508f2..fd058b5 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -52,6 +52,7 @@
+ #include <asm/cpu.h>
+ #include <asm/mce.h>
+ #include <asm/msr.h>
++#include <asm/cacheinfo.h>
+ #include <asm/memtype.h>
+ #include <asm/microcode.h>
+ #include <asm/microcode_intel.h>
+@@ -1948,7 +1949,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_X86_32
+ 	enable_sep_cpu();
+ #endif
+-	mtrr_ap_init();
++	cache_ap_init();
+ 	validate_apic_and_package_id(c);
+ 	x86_spec_ctrl_setup_ap();
+ 	update_srbds_msr();
 diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 99b6973..8403daf 100644
+index 15ee6d7..99b6973 100644
 --- a/arch/x86/kernel/cpu/mtrr/mtrr.c
 +++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -725,7 +725,7 @@ void __init mtrr_bp_init(void)
- 		if (mtrr_if == &generic_mtrr_ops) {
- 			/* BIOS may override */
- 			if (get_mtrr_state()) {
--				memory_caching_control |= CACHE_MTRR | CACHE_PAT;
-+				memory_caching_control |= CACHE_MTRR;
- 				changed_by_mtrr_cleanup = mtrr_cleanup(phys_addr);
- 			} else {
- 				mtrr_if = NULL;
-@@ -733,16 +733,8 @@ void __init mtrr_bp_init(void)
- 		}
- 	}
+@@ -73,9 +73,6 @@ static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
  
--	if (!mtrr_enabled()) {
-+	if (!mtrr_enabled())
- 		pr_info("Disabled\n");
+ const struct mtrr_ops *mtrr_if;
+ 
+-static void set_mtrr(unsigned int reg, unsigned long base,
+-		     unsigned long size, mtrr_type type);
 -
--		/*
--		 * PAT initialization relies on MTRR's rendezvous handler.
--		 * Skip PAT init until the handler can initialize both
--		 * features independently.
--		 */
--		pat_disable("MTRRs disabled, skipping PAT initialization too.");
--	}
- }
+ void __init set_mtrr_ops(const struct mtrr_ops *ops)
+ {
+ 	if (ops->vendor && ops->vendor < X86_VENDOR_NUM)
+@@ -158,26 +155,8 @@ static int mtrr_rendezvous_handler(void *info)
+ {
+ 	struct set_mtrr_data *data = info;
  
- /**
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index e0e185e..aacaa96 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -1075,24 +1075,13 @@ void __init setup_arch(char **cmdline_p)
- 	max_pfn = e820__end_of_ram_pfn();
- 
- 	/* update e820 for memory not covered by WB MTRRs */
--	if (IS_ENABLED(CONFIG_MTRR))
--		cache_bp_init();
--	else
--		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
--
-+	cache_bp_init();
- 	if (mtrr_trim_uncached_memory(max_pfn))
- 		max_pfn = e820__end_of_ram_pfn();
- 
- 	max_possible_pfn = max_pfn;
- 
- 	/*
--	 * This call is required when the CPU does not support PAT. If
--	 * mtrr_bp_init() invoked it already via pat_init() the call has no
--	 * effect.
--	 */
--	init_cache_modes();
--
 -	/*
- 	 * Define random base addresses for memory sections after max_pfn is
- 	 * defined and before each memory section base is used.
- 	 */
-diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-index 66a209f..9aab17d 100644
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@ -43,6 +43,7 @@
- #include <linux/rbtree.h>
- 
- #include <asm/cacheflush.h>
-+#include <asm/cacheinfo.h>
- #include <asm/processor.h>
- #include <asm/tlbflush.h>
- #include <asm/x86_init.h>
-@@ -60,41 +61,34 @@
- #undef pr_fmt
- #define pr_fmt(fmt) "" fmt
- 
--static bool __read_mostly pat_bp_initialized;
- static bool __read_mostly pat_disabled = !IS_ENABLED(CONFIG_X86_PAT);
--static bool __initdata pat_force_disabled = !IS_ENABLED(CONFIG_X86_PAT);
--static bool __read_mostly pat_bp_enabled;
--static bool __read_mostly pat_cm_initialized;
-+static u64 __ro_after_init pat_msr_val;
- 
- /*
-  * PAT support is enabled by default, but can be disabled for
-  * various user-requested or hardware-forced reasons:
-  */
--void pat_disable(const char *msg_reason)
-+static void __init pat_disable(const char *msg_reason)
- {
- 	if (pat_disabled)
- 		return;
- 
--	if (pat_bp_initialized) {
--		WARN_ONCE(1, "x86/PAT: PAT cannot be disabled after initialization\n");
--		return;
+-	 * We use this same function to initialize the mtrrs during boot,
+-	 * resume, runtime cpu online and on an explicit request to set a
+-	 * specific MTRR.
+-	 *
+-	 * During boot or suspend, the state of the boot cpu's mtrrs has been
+-	 * saved, and we want to replicate that across all the cpus that come
+-	 * online (either at the end of boot or resume or during a runtime cpu
+-	 * online). If we're doing that, @reg is set to something special and on
+-	 * all the CPUs we do cache_cpu_init() (On the logical CPU that
+-	 * started the boot/resume sequence, this might be a duplicate
+-	 * cache_cpu_init()).
+-	 */
+-	if (data->smp_reg != ~0U) {
+-		mtrr_if->set(data->smp_reg, data->smp_base,
+-			     data->smp_size, data->smp_type);
+-	} else if (get_cache_aps_delayed_init() ||
+-		   !cpu_online(smp_processor_id())) {
+-		cache_cpu_init();
 -	}
--
- 	pat_disabled = true;
- 	pr_info("x86/PAT: %s\n", msg_reason);
-+
-+	memory_caching_control &= ~CACHE_PAT;
- }
- 
- static int __init nopat(char *str)
- {
- 	pat_disable("PAT support disabled via boot option.");
--	pat_force_disabled = true;
++	mtrr_if->set(data->smp_reg, data->smp_base,
++		     data->smp_size, data->smp_type);
  	return 0;
  }
- early_param("nopat", nopat);
  
- bool pat_enabled(void)
- {
--	return pat_bp_enabled;
-+	return !pat_disabled;
- }
- EXPORT_SYMBOL_GPL(pat_enabled);
- 
-@@ -192,7 +186,8 @@ enum {
- 
- #define CM(c) (_PAGE_CACHE_MODE_ ## c)
- 
--static enum page_cache_mode pat_get_cache_mode(unsigned pat_val, char *msg)
-+static enum page_cache_mode __init pat_get_cache_mode(unsigned int pat_val,
-+						      char *msg)
- {
- 	enum page_cache_mode cache;
- 	char *cache_mode;
-@@ -219,14 +214,12 @@ static enum page_cache_mode pat_get_cache_mode(unsigned pat_val, char *msg)
-  * configuration.
-  * Using lower indices is preferred, so we start with highest index.
-  */
--static void __init_cache_modes(u64 pat)
-+static void __init init_cache_modes(u64 pat)
- {
- 	enum page_cache_mode cache;
- 	char pat_msg[33];
- 	int i;
- 
--	WARN_ON_ONCE(pat_cm_initialized);
--
- 	pat_msg[32] = 0;
- 	for (i = 7; i >= 0; i--) {
- 		cache = pat_get_cache_mode((pat >> (i * 8)) & 7,
-@@ -234,34 +227,9 @@ static void __init_cache_modes(u64 pat)
- 		update_cache_mode_entry(i, cache);
- 	}
- 	pr_info("x86/PAT: Configuration [0-7]: %s\n", pat_msg);
--
--	pat_cm_initialized = true;
+@@ -247,19 +226,6 @@ static void set_mtrr_cpuslocked(unsigned int reg, unsigned long base,
+ 	stop_machine_cpuslocked(mtrr_rendezvous_handler, &data, cpu_online_mask);
  }
  
--#define PAT(x, y)	((u64)PAT_ ## y << ((x)*8))
--
--static void pat_bp_init(u64 pat)
+-static void set_mtrr_from_inactive_cpu(unsigned int reg, unsigned long base,
+-				      unsigned long size, mtrr_type type)
 -{
--	u64 tmp_pat;
+-	struct set_mtrr_data data = { .smp_reg = reg,
+-				      .smp_base = base,
+-				      .smp_size = size,
+-				      .smp_type = type
+-				    };
 -
--	if (!boot_cpu_has(X86_FEATURE_PAT)) {
--		pat_disable("PAT not supported by the CPU.");
--		return;
--	}
--
--	rdmsrl(MSR_IA32_CR_PAT, tmp_pat);
--	if (!tmp_pat) {
--		pat_disable("PAT support disabled by the firmware.");
--		return;
--	}
--
--	wrmsrl(MSR_IA32_CR_PAT, pat);
--	pat_bp_enabled = true;
--
--	__init_cache_modes(pat);
+-	stop_machine_from_inactive_cpu(mtrr_rendezvous_handler, &data,
+-				       cpu_callout_mask);
 -}
 -
--static void pat_ap_init(u64 pat)
-+void pat_cpu_init(void)
- {
- 	if (!boot_cpu_has(X86_FEATURE_PAT)) {
- 		/*
-@@ -271,30 +239,39 @@ static void pat_ap_init(u64 pat)
- 		panic("x86/PAT: PAT enabled, but not supported by secondary CPU\n");
+ /**
+  * mtrr_add_page - Add a memory type region
+  * @base: Physical base address of region in pages (in units of 4 kB!)
+@@ -761,7 +727,6 @@ void __init mtrr_bp_init(void)
+ 			if (get_mtrr_state()) {
+ 				memory_caching_control |= CACHE_MTRR | CACHE_PAT;
+ 				changed_by_mtrr_cleanup = mtrr_cleanup(phys_addr);
+-				cache_cpu_init();
+ 			} else {
+ 				mtrr_if = NULL;
+ 			}
+@@ -780,27 +745,6 @@ void __init mtrr_bp_init(void)
  	}
- 
--	wrmsrl(MSR_IA32_CR_PAT, pat);
-+	wrmsrl(MSR_IA32_CR_PAT, pat_msr_val);
  }
  
--void __init init_cache_modes(void)
-+/**
-+ * pat_bp_init - Initialize the PAT MSR value and PAT table
-+ *
-+ * This function initializes PAT MSR value and PAT table with an OS-defined
-+ * value to enable additional cache attributes, WC, WT and WP.
-+ *
-+ * This function prepares the calls of pat_cpu_init() via cache_cpu_init()
-+ * on all CPUs.
-+ */
-+void __init pat_bp_init(void)
- {
--	u64 pat = 0;
-+	struct cpuinfo_x86 *c = &boot_cpu_data;
-+#define PAT(p0, p1, p2, p3, p4, p5, p6, p7)			\
-+	(((u64)PAT_ ## p0) | ((u64)PAT_ ## p1 << 8) |		\
-+	((u64)PAT_ ## p2 << 16) | ((u64)PAT_ ## p3 << 24) |	\
-+	((u64)PAT_ ## p4 << 32) | ((u64)PAT_ ## p5 << 40) |	\
-+	((u64)PAT_ ## p6 << 48) | ((u64)PAT_ ## p7 << 56))
- 
--	if (pat_cm_initialized)
+-void mtrr_ap_init(void)
+-{
+-	if (!memory_caching_control || get_cache_aps_delayed_init())
 -		return;
- 
--	if (boot_cpu_has(X86_FEATURE_PAT)) {
--		/*
--		 * CPU supports PAT. Set PAT table to be consistent with
--		 * PAT MSR. This case supports "nopat" boot option, and
--		 * virtual machine environments which support PAT without
--		 * MTRRs. In specific, Xen has unique setup to PAT MSR.
--		 *
--		 * If PAT MSR returns 0, it is considered invalid and emulates
--		 * as No PAT.
--		 */
--		rdmsrl(MSR_IA32_CR_PAT, pat);
--	}
-+	if (!IS_ENABLED(CONFIG_X86_PAT))
-+		pr_info_once("x86/PAT: PAT support disabled because CONFIG_X86_PAT is disabled in the kernel.\n");
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_PAT))
-+		pat_disable("PAT not supported by the CPU.");
-+	else
-+		rdmsrl(MSR_IA32_CR_PAT, pat_msr_val);
-+
-+	if (!pat_msr_val) {
-+		pat_disable("PAT support disabled by the firmware.");
- 
--	if (!pat) {
- 		/*
- 		 * No PAT. Emulate the PAT table that corresponds to the two
- 		 * cache bits, PWT (Write Through) and PCD (Cache Disable).
-@@ -313,40 +290,17 @@ void __init init_cache_modes(void)
- 		 * NOTE: When WC or WP is used, it is redirected to UC- per
- 		 * the default setup in __cachemode2pte_tbl[].
- 		 */
--		pat = PAT(0, WB) | PAT(1, WT) | PAT(2, UC_MINUS) | PAT(3, UC) |
--		      PAT(4, WB) | PAT(5, WT) | PAT(6, UC_MINUS) | PAT(7, UC);
--	} else if (!pat_force_disabled && cpu_feature_enabled(X86_FEATURE_HYPERVISOR)) {
--		/*
--		 * Clearly PAT is enabled underneath. Allow pat_enabled() to
--		 * reflect this.
--		 */
--		pat_bp_enabled = true;
-+		pat_msr_val = PAT(WB, WT, UC_MINUS, UC, WB, WT, UC_MINUS, UC);
- 	}
- 
--	__init_cache_modes(pat);
+-
+-	/*
+-	 * Ideally we should hold mtrr_mutex here to avoid mtrr entries
+-	 * changed, but this routine will be called in cpu boot time,
+-	 * holding the lock breaks it.
+-	 *
+-	 * This routine is called in two cases:
+-	 *
+-	 *   1. very early time of software resume, when there absolutely
+-	 *      isn't mtrr entry changes;
+-	 *
+-	 *   2. cpu hotadd time. We let mtrr_add/del_page hold cpuhotplug
+-	 *      lock to prevent mtrr entry changes
+-	 */
+-	set_mtrr_from_inactive_cpu(~0U, 0, 0, 0);
 -}
 -
--/**
-- * pat_init - Initialize the PAT MSR and PAT table on the current CPU
-- *
-- * This function initializes PAT MSR and PAT table with an OS-defined value
-- * to enable additional cache attributes, WC, WT and WP.
-- *
-- * This function must be called on all CPUs using the specific sequence of
-- * operations defined in Intel SDM. mtrr_rendezvous_handler() provides this
-- * procedure for PAT.
+ /**
+  * mtrr_save_state - Save current fixed-range MTRR state of the first
+  *	cpu in cpu_online_mask.
+@@ -816,34 +760,6 @@ void mtrr_save_state(void)
+ 	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
+ }
+ 
+-/*
+- * Delayed MTRR initialization for all AP's
 - */
--void pat_init(void)
+-void mtrr_aps_init(void)
 -{
--	u64 pat;
--	struct cpuinfo_x86 *c = &boot_cpu_data;
+-	if (!memory_caching_control)
+-		return;
 -
--#ifndef CONFIG_X86_PAT
--	pr_info_once("x86/PAT: PAT support disabled because CONFIG_X86_PAT is disabled in the kernel.\n");
--#endif
+-	/*
+-	 * Check if someone has requested the delay of AP MTRR initialization,
+-	 * by doing set_mtrr_aps_delayed_init(), prior to this point. If not,
+-	 * then we are done.
+-	 */
+-	if (!get_cache_aps_delayed_init())
+-		return;
 -
--	if (pat_disabled)
-+	/*
-+	 * Xen PV doesn't allow to set PAT MSR, but all cache modes are
-+	 * supported.
-+	 */
-+	if (pat_disabled || cpu_feature_enabled(X86_FEATURE_XENPV)) {
-+		init_cache_modes(pat_msr_val);
- 		return;
-+	}
- 
- 	if ((c->x86_vendor == X86_VENDOR_INTEL) &&
- 	    (((c->x86 == 0x6) && (c->x86_model <= 0xd)) ||
-@@ -371,8 +325,7 @@ void pat_init(void)
- 		 * NOTE: When WT or WP is used, it is redirected to UC- per
- 		 * the default setup in __cachemode2pte_tbl[].
- 		 */
--		pat = PAT(0, WB) | PAT(1, WC) | PAT(2, UC_MINUS) | PAT(3, UC) |
--		      PAT(4, WB) | PAT(5, WC) | PAT(6, UC_MINUS) | PAT(7, UC);
-+		pat_msr_val = PAT(WB, WC, UC_MINUS, UC, WB, WC, UC_MINUS, UC);
- 	} else {
- 		/*
- 		 * Full PAT support.  We put WT in slot 7 to improve
-@@ -400,19 +353,14 @@ void pat_init(void)
- 		 * The reserved slots are unused, but mapped to their
- 		 * corresponding types in the presence of PAT errata.
- 		 */
--		pat = PAT(0, WB) | PAT(1, WC) | PAT(2, UC_MINUS) | PAT(3, UC) |
--		      PAT(4, WB) | PAT(5, WP) | PAT(6, UC_MINUS) | PAT(7, WT);
-+		pat_msr_val = PAT(WB, WC, UC_MINUS, UC, WB, WP, UC_MINUS, WT);
- 	}
- 
--	if (!pat_bp_initialized) {
--		pat_bp_init(pat);
--		pat_bp_initialized = true;
--	} else {
--		pat_ap_init(pat);
--	}
+-	set_mtrr(~0U, 0, 0, 0);
+-	set_cache_aps_delayed_init(false);
 -}
-+	memory_caching_control |= CACHE_PAT;
+-
+-void mtrr_bp_restore(void)
+-{
+-	if (!memory_caching_control)
+-		return;
+-
+-	cache_cpu_init();
+-}
+-
+ static int __init mtrr_init_finialize(void)
+ {
+ 	if (!mtrr_enabled())
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 216fee7..e0e185e 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -34,6 +34,7 @@
+ #include <asm/numa.h>
+ #include <asm/bios_ebda.h>
+ #include <asm/bugs.h>
++#include <asm/cacheinfo.h>
+ #include <asm/cpu.h>
+ #include <asm/efi.h>
+ #include <asm/gart.h>
+@@ -1075,7 +1076,7 @@ void __init setup_arch(char **cmdline_p)
  
-+	init_cache_modes(pat_msr_val);
- #undef PAT
-+}
+ 	/* update e820 for memory not covered by WB MTRRs */
+ 	if (IS_ENABLED(CONFIG_MTRR))
+-		mtrr_bp_init();
++		cache_bp_init();
+ 	else
+ 		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
  
- static DEFINE_SPINLOCK(memtype_lock);	/* protects memtype accesses */
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 13c71ab..1b61a48 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1445,7 +1445,7 @@ void arch_thaw_secondary_cpus_begin(void)
  
+ void arch_thaw_secondary_cpus_end(void)
+ {
+-	mtrr_aps_init();
++	cache_aps_init();
+ }
+ 
+ /*
+@@ -1488,7 +1488,7 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
+ 
+ 	nmi_selftest();
+ 	impress_friends();
+-	mtrr_aps_init();
++	cache_aps_init();
+ }
+ 
+ static int __initdata setup_possible_cpus = -1;
+diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+index bb176c7..754221c 100644
+--- a/arch/x86/power/cpu.c
++++ b/arch/x86/power/cpu.c
+@@ -23,6 +23,7 @@
+ #include <asm/fpu/api.h>
+ #include <asm/debugreg.h>
+ #include <asm/cpu.h>
++#include <asm/cacheinfo.h>
+ #include <asm/mmu_context.h>
+ #include <asm/cpu_device_id.h>
+ #include <asm/microcode.h>
+@@ -261,7 +262,7 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
+ 	do_fpu_end();
+ 	tsc_verify_tsc_adjust(true);
+ 	x86_platform.restore_sched_clock_state();
+-	mtrr_bp_restore();
++	cache_bp_restore();
+ 	perf_restore_debug_store();
+ 
+ 	c = &cpu_data(smp_processor_id());
