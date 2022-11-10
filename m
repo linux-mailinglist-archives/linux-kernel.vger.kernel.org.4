@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60CA62455C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEB762456A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbiKJPR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:17:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S231398AbiKJPSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiKJPRW (ORCPT
+        with ESMTP id S231393AbiKJPSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:17:22 -0500
+        Thu, 10 Nov 2022 10:18:04 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45C61E3E6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:16:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689021F603
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:17:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668093382;
+        s=mimecast20190719; t=1668093426;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tpp7Gwy/r5e/+H+feiypkA92ize6X+nNHLC4UW2XS1E=;
-        b=eSZp5a4Q6zsSOyKkFYubOCRQSvj22QDG0kt+JNhgKqXM4F+Iem2eMe2C7BnC8vTE5/hZKQ
-        MHEs1iEZ2wPjvAsvwOfY4LNAbS7D7jxf6ZMQc8GeiWJXUjJXffKuMXc5QvCGUlP6WstKrb
-        f/qkEn9An/f+7KRI+e5yCokmAIaIiZI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-h28TWhiMOxGbow6m0MWXzQ-1; Thu, 10 Nov 2022 10:16:18 -0500
-X-MC-Unique: h28TWhiMOxGbow6m0MWXzQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DEBA73C0F446;
-        Thu, 10 Nov 2022 15:16:17 +0000 (UTC)
-Received: from fedora (unknown [10.22.8.196])
-        by smtp.corp.redhat.com (Postfix) with SMTP id F1282112131B;
-        Thu, 10 Nov 2022 15:16:12 +0000 (UTC)
-Date:   Thu, 10 Nov 2022 12:16:11 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v17 1/3] x86/tdx: Add a wrapper to get TDREPORT from the
- TDX Module
-Message-ID: <20221110151611.shrdumi2t5a3obns@fedora>
-References: <20221104032355.227814-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7JBMRlhf9SKM85chgVsRyacqS8HRqg/wt0F6XTSTiUc=;
+        b=PoS7cdSoPGBjXaIoBfpa8RORfTEsjgyvcLRzqMhJRSXr25rXhXr95NOKGKWEHoojjOfQbX
+        UwZgv8vzOkiJXs6sH0PT5b72vrz+Frwv0AEYFSC+NyD4Yu2D0bMrzPiSltHa1YBp+lSX+a
+        tXTIn0ntfFDCCnqhZsEsCNDjsOW15pU=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-98--oy63Y1sMxGpnJToral-LA-1; Thu, 10 Nov 2022 10:17:05 -0500
+X-MC-Unique: -oy63Y1sMxGpnJToral-LA-1
+Received: by mail-qv1-f72.google.com with SMTP id mi12-20020a056214558c00b004bb63393567so1659100qvb.21
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:17:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7JBMRlhf9SKM85chgVsRyacqS8HRqg/wt0F6XTSTiUc=;
+        b=aNO4Pf9K02LAArxADzPbtygXhj35FriENZq9xh1Q/nzwb0cvm19kApjFUTHvfXzc8D
+         ywvJFInOYo+c/kvUYU+W53KCjmhBp19ZbBhZ1LHndl3O6iUmPnceUc1p3HmjOU1mYACH
+         GnE+PeUrtXLqm0LtI8XWWkSO+OIU5Booxl9d28P7yEzErpif/DbhUg0S7ZC1CEHpmrIr
+         rPVW+3z/5wxNC5fhqaE5atQlEMsJxvYXDb+LRo+LE481gL+yzFNKR2MEBFttKl7BJXTz
+         dlxID15Raw58KnFuW8vsDHF1xtqOhNZCcMyFlaPbroxEO9FCBrE7MBC3dPjJz3Z+04dG
+         ej8w==
+X-Gm-Message-State: ACrzQf3a5GdLBiSjVTCCwUeEdDoUg0iazAxeXbr3DNnDC2qKAw1QDlmi
+        nJBAnwgBy+c/TQ4Pt14QpKfqkAai7+zmngtbnGBYZgWU1TtkAgBVMrHhK4h+6eUsiu6BagFIkh1
+        4SRco7euPNKL+QcypZxM6cUsF
+X-Received: by 2002:a37:5384:0:b0:6f7:ee90:1618 with SMTP id h126-20020a375384000000b006f7ee901618mr48361039qkb.117.1668093424724;
+        Thu, 10 Nov 2022 07:17:04 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM4O0+0VOGYj/08gkBDb27xu1rPPMTTYo3xEiPt8asxX1C2xn5XiYCUAcd1upnf574Te4SkDLA==
+X-Received: by 2002:a37:5384:0:b0:6f7:ee90:1618 with SMTP id h126-20020a375384000000b006f7ee901618mr48361002qkb.117.1668093424292;
+        Thu, 10 Nov 2022 07:17:04 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05620a28d300b006ec771d8f89sm13621596qkp.112.2022.11.10.07.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 07:17:03 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>, peterx@redhat.com,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ives van Hoorne <ives@codesandbox.io>
+Subject: [PATCH 0/2] mm/migrate: Fix writable pte for read migration entry
+Date:   Thu, 10 Nov 2022 10:17:00 -0500
+Message-Id: <20221110151702.1478763-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,122 +80,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:23:53PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> To support TDX attestation, the TDX guest driver exposes an IOCTL
-> interface to allow userspace to get the TDREPORT from the TDX module
-> via TDG.MR.TDREPORT TDCALL.
-> 
-> In order to get the TDREPORT in the TDX guest driver, instead of using
-> a low level function like __tdx_module_call(), add a
-> tdx_mcall_get_report() wrapper function to handle it.
-> 
-> This is a preparatory patch for adding attestation support.
-> 
-> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-> ---
-> 
-> Changes since v16
->  * Added invalid operand error code support.
->  * Removed subtype param in tdx_mcall_get_report().
-> 
-> Changes since v15:
->  * None
-> 
-> Changes since v14:
->  * Instead of exporting __tdx_module_call(), added a new wrapper.
->  * Rebased on top of v6.1-rc1
-> 
->  arch/x86/coco/tdx/tdx.c    | 38 ++++++++++++++++++++++++++++++++++++++
->  arch/x86/include/asm/tdx.h |  2 ++
->  2 files changed, 40 insertions(+)
-> 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 928dcf7a20d9..17cf2e9d5849 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -5,6 +5,8 @@
->  #define pr_fmt(fmt)     "tdx: " fmt
->  
->  #include <linux/cpufeature.h>
-> +#include <linux/export.h>
-> +#include <linux/io.h>
->  #include <asm/coco.h>
->  #include <asm/tdx.h>
->  #include <asm/vmx.h>
-> @@ -15,6 +17,7 @@
->  /* TDX module Call Leaf IDs */
->  #define TDX_GET_INFO			1
->  #define TDX_GET_VEINFO			3
-> +#define TDX_GET_REPORT			4
->  #define TDX_ACCEPT_PAGE			6
->  
->  /* TDX hypercall Leaf IDs */
-> @@ -34,6 +37,10 @@
->  #define VE_GET_PORT_NUM(e)	((e) >> 16)
->  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
->  
-> +/* TDX Module call error codes */
-> +#define TDCALL_RETURN_CODE(a)	((a) >> 32)
-> +#define TDCALL_INVALID_OPERAND	0xc0000100
-> +
->  /*
->   * Wrapper for standard use of __tdx_hypercall with no output aside from
->   * return code.
-> @@ -98,6 +105,37 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->  		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
->  }
->  
-> +/**
-> + * tdx_mcall_get_report() - Wrapper for TDG.MR.REPORT TDCALL.
-> + * @reportdata: Address of the input buffer which contains
-> + *              user-defined REPORTDATA to be included into
-> + *              TDREPORT.
-> + * @tdreport: Address of the output buffer to store TDREPORT.
-> + *
-> + * Generate TDREPORT using "TDG.MR.REPORT" TDCALL. Refer to section
-> + * titled "TDG.MR.REPORT leaf" in the TDX Module 1.0 specification
-> + * for detailed information. It is used in the TDX guest driver
-> + * module to get the TDREPORT.
-> + *
-> + * Return 0 on success, -EINVAL for invalid operands, or -EIO on
-> + * other TDCALL failures.
-> + */
-> +int tdx_mcall_get_report(u8 *reportdata, u8 *tdreport)
-> +{
-> +	u64 ret;
-> +
-> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
-> +				virt_to_phys(reportdata), 0, 0, NULL);
-> +	if (ret) {
-> +		if (TDCALL_RETURN_CODE(ret) == TDCALL_INVALID_OPERAND)
-> +			return -EINVAL;
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_mcall_get_report);
-> +
->  static u64 get_cc_mask(void)
->  {
->  	struct tdx_module_output out;
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 020c81a7c729..eef9c0b7880e 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -67,6 +67,8 @@ void tdx_safe_halt(void);
->  
->  bool tdx_early_handle_ve(struct pt_regs *regs);
->  
-> +int tdx_mcall_get_report(u8 *reportdata, u8 *tdreport);
-> +
->  #else
->  
->  static inline void tdx_early_init(void) { };
-> -- 
-> 2.34.1
-> 
-> 
+This comes from a report from Ives on using uffd-wp on shmem.  More
+information can be found in patch 1 commit message.
 
-Acked-by: Wander Lairson Costa <wander@redhat.com>
+Patch 2 added some more sanity check when walking pgtables and when we
+convert the ptes into other forms e.g. for migration and swap.  It will
+make the error trigger even earlier than the user could notice, meanwhile
+nail down the case if it's a wrong pgtable setup.
+
+Ives, I only attached the reported-by tag for you but not tested-by because
+the fix patch (patch 1) has a slight change compared to what I sent you
+before, but hopefully it should also work for you.  If you want, feel free
+to reply directly here if the patch also works for you.
+
+We probably need patch 1 for stable (5.19+).  Please have a look, thanks.
+
+Peter Xu (2):
+  mm/migrate: Fix read-only page got writable when recover pte
+  mm/uffd: Sanity check write bit for uffd-wp protected ptes
+
+ arch/x86/include/asm/pgtable.h | 16 +++++++++++++++-
+ mm/migrate.c                   |  8 +++++++-
+ 2 files changed, 22 insertions(+), 2 deletions(-)
+
+-- 
+2.37.3
 
