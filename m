@@ -2,166 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB04624316
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9894A62431C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiKJNU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S229611AbiKJNWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:22:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKJNUY (ORCPT
+        with ESMTP id S229675AbiKJNWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:20:24 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8726B399;
-        Thu, 10 Nov 2022 05:20:22 -0800 (PST)
-Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7Mrk0CVMz15MPv;
-        Thu, 10 Nov 2022 21:20:06 +0800 (CST)
-Received: from [10.136.108.160] (10.136.108.160) by
- kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 21:20:19 +0800
-Subject: [PATCH] USB: gadget: Fix use-after-free during usb config switch
-References: <20221110130754.3904-1-xuetao09@huawei.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "colin.i.king@gmail.com" <colin.i.king@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Caiyadong <caiyadong@huawei.com>, <suzhuangluan@hisilicon.com>,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-From:   jiantao zhang <water.zhangjiantao@huawei.com>
-X-Forwarded-Message-Id: <20221110130754.3904-1-xuetao09@huawei.com>
-Message-ID: <6367c7db-1581-338d-3f9d-59c7e9eb4dc8@huawei.com>
-Date:   Thu, 10 Nov 2022 21:20:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Thu, 10 Nov 2022 08:22:45 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1EA716CE;
+        Thu, 10 Nov 2022 05:22:44 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so4825132ejb.13;
+        Thu, 10 Nov 2022 05:22:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/18V6DEHc1m62ka1bnYxz/SFLrQNISW3e95B0eVyUzc=;
+        b=L7BV7JuQOOcc6F2Jv0F5cWFQAlELaRgYGhpBgtfTvasDVYxIOCNO5h9Ysl47KyiD9r
+         aiVduYnZNtbHj9Aq6azLNlzsn18S521/vo/saE9Alqw/C4hswJpsY0rNpbfIIlcc1LbR
+         P2XGizUWbJfSXl31R4AvjZpK1F4AC+gtZ5SqpPE9XOiymYQtI8/KPc0j6yOcy/2+VTWO
+         BUQYO/okF3TWY5nJ2AyBrM0pWejZcb3oTn3xrEexlRH4Y7LpKoORzywudE9VIlDBGY1y
+         UIIaYgaLH/je/46GlgSdZ32JsvwU+WihVzBikJ8zdQzJ/tGnzHGjJC41dHbFLk6qhEli
+         Ra7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/18V6DEHc1m62ka1bnYxz/SFLrQNISW3e95B0eVyUzc=;
+        b=pIunYZwsbltKjFT18O5ZrzdUqWAahPUJm+NpsGGxmihIfvp6Z5c+xPj1jQEloQfJjn
+         TBtV2KokQ8Taxcbtws6iAXUigkkt++7oSM4+7bWNyJj1LpolPkrcOUCmp1RKwZxi+rJc
+         BNpVak8yklLWVwIwQC2HIQ+vP2hUe14qXwnesNgDthPf4omN6syar2kcpsWSHbsNW3ZF
+         VkLWyCXH4bJpAvgu8Qi6MoGHbzMOZ5RIdnaKleJgQQXGIP2veSSZg+zAwuBQmJEo0LCE
+         Lza4xOhqQg5uIzRlW7rGpzrMERS8ASWGIlj/qsJUZblJ5rHvq9SGGHqrwsTseix1YeSs
+         t01g==
+X-Gm-Message-State: ACrzQf0qxlj30GfPl0JlujpuvhTX5/HJpdMqmwpxGO2yxszEPNE33jRr
+        DYOOR9TfA8saaLqY+h/x/fg=
+X-Google-Smtp-Source: AMsMyM5u23u12SbRkdxyRIp1Xi4Wx+0pjLHXzzVURVBGzc+IWlAkTg5/ZsKut6rsISsUJqcy7GjegA==
+X-Received: by 2002:a17:906:444d:b0:7ad:eb7f:8697 with SMTP id i13-20020a170906444d00b007adeb7f8697mr41939612ejp.770.1668086563245;
+        Thu, 10 Nov 2022 05:22:43 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id f19-20020a1709064dd300b0077a1dd3e7b7sm7214132ejw.102.2022.11.10.05.22.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 05:22:42 -0800 (PST)
+Date:   Thu, 10 Nov 2022 14:22:40 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 1/2] gpiolib: of: Prepare of_gpiochip_add() /
+ of_gpiochip_remove() for fwnode
+Message-ID: <Y2z7IJv2IQy+Mlsh@orome>
+References: <20221108133853.61884-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20221110130754.3904-1-xuetao09@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.136.108.160]
-X-ClientProxiedBy: dggpeml500011.china.huawei.com (7.185.36.84) To
- kwepemi500002.china.huawei.com (7.221.188.171)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/mBCcUfC9k4UM3tz"
+Content-Disposition: inline
+In-Reply-To: <20221108133853.61884-1-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the process of switching USB config from rndis to other config,
-if the hardware does not support the ->pullup callback, or the
-hardware encounters a low probability fault, both of them may cause
-the ->pullup callback to fail, which will then cause a system panic
-(use after free).
 
-The gadget drivers sometimes need to be unloaded regardless of the
-hardware's behavior.
+--/mBCcUfC9k4UM3tz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Analysis as follows:
-=======================================================================
-(1) write /config/usb_gadget/g1/UDC "none" (init.usb.configfs.rc:2)
+On Tue, Nov 08, 2022 at 03:38:52PM +0200, Andy Shevchenko wrote:
+> GPIO library is getting rid of of_node, fwnode should be utilized instead.
+> Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> v2: added tag (Dmitry)
+>  drivers/gpio/gpiolib-of.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index be9c34cca322..000020eb78d8 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -1104,9 +1104,11 @@ static int of_gpiochip_add_pin_range(struct gpio_c=
+hip *chip) { return 0; }
+> =20
+>  int of_gpiochip_add(struct gpio_chip *chip)
+>  {
+> +	struct device_node *np;
+>  	int ret;
+> =20
+> -	if (!chip->of_node)
+> +	np =3D to_of_node(chip->fwnode);
+> +	if (!np)
 
-gether_disconnect+0x2c/0x1f8 (dev->port_usb = NULL)
-rndis_disable+0x4c/0x74
-composite_disconnect+0x74/0xb0
-configfs_composite_disconnect+0x60/0x7c
-usb_gadget_disconnect+0x70/0x124
-usb_gadget_unregister_driver+0xc8/0x1d8
-gadget_dev_desc_UDC_store+0xec/0x1e4
+This breaks a number of GPIO controllers on Tegra where chip->fwnode
+ends up never getting set. I also see this break drivers like the MFD-
+based gpio-max77620, so I don't think this is anything specific to the
+Tegra drivers.
 
-In function usb_gadget_disconnect(),The ->disconnect() callback will
-not be called when gadget->ops->pullup() return an error, therefore,
-pointer dev->port will not be set to NULL. If pointer dev->port_usb
-is not null, it will cause an exception of use-after-free in step3.
+Looking at how fwnode handling works, it seems like we're checking the
+wrong value here, since chip->fwnode is only for explicit overrides of
+the fwnode value.
 
-(2) rm /config/usb_gadget/g1/configs/b.1/f1 (init.usb.configfs.rc:8)
-(f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
+The below patch fixes the regression for me:
 
-rndis_deregister+0x28/0x54 (kfree(params))
-rndis_free+0x44/0x7c (kfree(rndis))
-usb_put_function+0x14/0x1c
-config_usb_cfg_unlink+0xc4/0xe0
-configfs_unlink+0x124/0x1c8
-vfs_unlink+0x114/0x1dc
+--- >8 ---
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 4be3c21aa718..760f018ae7de 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -1067,7 +1067,7 @@ int of_gpiochip_add(struct gpio_chip *chip)
+        struct device_node *np;
+        int ret;
 
-(3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
-(init.usb.configfs.rc:11)
+-       np =3D to_of_node(chip->fwnode);
++       np =3D to_of_node(chip->gpiodev->dev.fwnode);
+        if (!np)
+                return 0;
 
-Call trace:
-panic+0x1fc/0x3d0
-die+0x29c/0x2a8
-do_page_fault+0xa8/0x46c
-do_mem_abort+0x3c/0xac
-el1_sync_handler+0x40/0x78
-0xffffff801138f880 (params->resp_avail is an illegal func pointer)
-rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
-eth_stop+0x74/0x110 (if dev->port_usb != NULL, call rndis_close)
-__dev_close_many+0x134/0x194
-dev_close_many+0x48/0x194
-rollback_registered_many+0x118/0x814
-unregister_netdevice_queue+0xe0/0x168
-unregister_netdev+0x20/0x30
-gether_cleanup+0x1c/0x38
-rndis_free_inst+0x2c/0x58
-rndis_attr_release+0xc/0x14
-kref_put+0x74/0xb8
-config_item_put+0x14/0x1c
-configfs_rmdir+0x314/0x374
+--- >8 ---
 
-In step3,function pointer params->resp_avail() is a wild pointer
-becase pointer params has been freed in step2.
+That uses the GPIO device's fwnode, which can be chip->fwnode if
+chip->fwnode was explicitly specified. Otherwise this defaults to=20
 
-Free mem stack(in step2):
-usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
+See gpiochip_add_data_with_key() in drivers/gpio/gpiolib.c:
 
-use-after-free stack(in step3):
-eth_stop -> rndis_close -> rndis_signal_disconnect ->
-rndis_indicate_status_msg -> params->resp_avail()
+    677 |	/*
+    678 |	 * Assign fwnode depending on the result of the previous calls,
+    679 |	 * if none of them succeed, assign it to the parent's one.
+    680 |	 */
+    681 |	gdev->dev.fwnode =3D dev_fwnode(&gdev->dev) ?: fwnode;
 
-In function eth_stop(), if pointer dev->port_usb is NULL, function
-rndis_close() will not be called.
-If gadget->ops->pullup() return an error in step1,dev->port_usb will
-not be set to null. So, a panic will be caused in step3.
-=======================================================================
-Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
-callback from usb_gadget_disconnect())
-Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-Signed-off-by: TaoXue <xuetao09@huawei.com>
----
-drivers/usb/gadget/udc/core.c | 12 ++++++------
-1 file changed, 6 insertions(+), 6 deletions(-)
+Looks like this is only important to make sure gdev->dev.fwnode is valid
+for OF, for ACPI this should be a no-op.
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index c63c0c2cf649..bf9878e1a72a 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
-}
-ret = gadget->ops->pullup(gadget, 0);
-- if (!ret) {
-+ if (!ret)
-gadget->connected = 0;
-- mutex_lock(&udc_lock);
-- if (gadget->udc->driver)
-- gadget->udc->driver->disconnect(gadget);
-- mutex_unlock(&udc_lock);
-- }
-+
-+ mutex_lock(&udc_lock);
-+ if (gadget->udc->driver)
-+ gadget->udc->driver->disconnect(gadget);
-+ mutex_unlock(&udc_lock);
-out:
-trace_usb_gadget_disconnect(gadget, ret);
+Thierry
 
--- 
-2.17.1
+--/mBCcUfC9k4UM3tz
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNs+x4ACgkQ3SOs138+
+s6Fabw/9Ez3zRB8odDhkKTz+3aOmy7YcMqcp4oS2/TIuznqOTAEGk5yFId/rClH8
+zrborlaubJde/K9j2v8CjfyMg9Ev4sJa5OehZoWx+rRV7dtTG4PBjsfzMOO6Q40n
+308PRiQx5lTlJw4v6/qNb7TGDj4TxVf/EfP8YI/301Bmyc2NglRZsja9r//9ZnsW
+Ka2NFY+utfgIKYnCsWoix0qc9Xn/Be0F94TpwKiKwCwnPSkgWIEisGPhlKNv0RVh
+y7+DPV4KVlXJproeG8dH3g6R5zIEMJ87kI/AXKlKf6BV8IU6pjnYs8PjObClOHO+
+g+yyPvUfq1S4vNRqW3GLb8nnYlEp6H/dIJmbxm0PxdzLzuYf+TSkBlAWQv8VgTRi
+tvbIto4Q2pXjcnMvb7tYq/YFg0mo+Z/0dNMhyaUptjj+zFCpz73EvsLm6kQouIWG
+A3SSWeCabkEHWQqSgkGSbtmWwjxFyhJ5DDZkjkVU0U2wXw4lbnyn5+Pwpu+UBO/4
+4lJn3YglelJpYQKi4x9WS6ZFNte/u03Jk4hUP1JvE0M1T5g725lL4qyARa4CXCaY
+1KfrXQhekbDwX29PmiztWAya5YkCIp6zIVnVuvZtU9FKtaI6TDCanX1csVx0HY5A
+1DgF2X4xTxVRqMJyxpOAtu66saLz5X4LrFDOKlwMLTRcipp6W3A=
+=Mxfw
+-----END PGP SIGNATURE-----
+
+--/mBCcUfC9k4UM3tz--
