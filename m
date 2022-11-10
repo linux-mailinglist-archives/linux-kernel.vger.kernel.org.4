@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D29624CCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A198624CDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbiKJVUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:20:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S232256AbiKJVWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:22:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiKJVUe (ORCPT
+        with ESMTP id S231616AbiKJVW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:20:34 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C7657B4B;
-        Thu, 10 Nov 2022 13:20:30 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id y203so3163192pfb.4;
-        Thu, 10 Nov 2022 13:20:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EqwM4gwAeNfGSn+/i30R0momCaUlYOIuUeVEKpk6Aqw=;
-        b=lFA8i0GGzeYM4wrmg5464SiWgnCaVDIe63FDXcjVFkKLT3hUN4RSN/krm4vWh4+Ef2
-         IVv86gAn+c6kvVFUKiNleko3mRjq0Ozh6uzDTWDNfUCw1Sc4iWlereD5QrvAOwYYMpx8
-         x6BJSAWrBXpYlC0bdIr9YF+kmYSiixd54c6HGRVbZufmXQ4st20bmPrNuiu1qy7LlNZ9
-         pnx1ZL8h+ixmUANnnPysjB7lWUXdtyMlhy876AxHdFNT6lkzPALTS7ANgqNMznvtN1qx
-         WdHbI+F2Y9hLDLN7XJpZQMM8X6fRrMor9zi7LpQVRCcqYM1Q+U34Fe+JzdV8Jrl+F1lx
-         WNHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EqwM4gwAeNfGSn+/i30R0momCaUlYOIuUeVEKpk6Aqw=;
-        b=4j7Rgoqz7iW5VFNUZwCKFn8AWsHZ9iAvdiRoKIvEwmLNX8gk3SvyeoiSI9XDkyV2Th
-         spAWwmuAxtqSCiUo6mNw2yJwm+NS0glzrewsRzI25j4ZgNTCRl0e8f6ce0ScAbQeDkRX
-         mTNrogLzrexh8sCcrbPkzGt1SPQPGYuFT6KXrx5YmTW8B5F/UERAHUEst7D8mFFTKJsS
-         ZSbr9BdY0d0wp87QcyWTSno3lxP7mdsm9qecW1Vo7mkL8I59YpW9bSn6ECWYo7X7VmIw
-         RuHrQvD7HDnyKmKe4MV0mfwWclseS8efGqTTb8G4kQawfeNR/4AFQqJFNVv8RXHG7WjR
-         aybA==
-X-Gm-Message-State: ACrzQf0im49oLOQ4M8s6WKm+ZF6+/+amaIDxupNSCkbrUgAVoZb9iTk8
-        ffVK9yYwNEkzbMOAkOzRccJdNbZc6owhjGTVRE4=
-X-Google-Smtp-Source: AMsMyM5QV4gBZkBeX4WEs89XOexMNHYQNng5q1/u5pkwDePHJu3uFlhXxA4SzvHEvvISi9XC2WPpJ8xd46Ye2TW9Rj0=
-X-Received: by 2002:a63:1314:0:b0:46e:bb92:3de1 with SMTP id
- i20-20020a631314000000b0046ebb923de1mr3322351pgl.240.1668115229756; Thu, 10
- Nov 2022 13:20:29 -0800 (PST)
-MIME-Version: 1.0
-References: <f847459dc0a0e2d8ffa1d290d06e0e4a226a6f39.1668075479.git.jamie.bainbridge@gmail.com>
- <Y20Bxc1gQ8nrFsvA@lunn.ch>
-In-Reply-To: <Y20Bxc1gQ8nrFsvA@lunn.ch>
-From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Date:   Fri, 11 Nov 2022 08:20:18 +1100
-Message-ID: <CAAvyFNg1F8ixrgy0YeL-TT5xLmk8N7dD=ZMLQ6VxsjHb_PU9bg@mail.gmail.com>
-Subject: Re: [PATCH] tcp: Add listening address to SYN flood message
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
+        Thu, 10 Nov 2022 16:22:27 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C17331DFD;
+        Thu, 10 Nov 2022 13:22:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=7YOqTAIpTyPR6mQCHgQBNU1g+1Wa2tNkkOYC8pLG3QQ=; b=qd7tgTonse0varUI6g3+Doev/W
+        LPC7NVpe2PjeGWqkpFK8Ww8IA3E+Z7C4YCbql0i6iGv/qwdsH39sz3gL600IvbA1lyoMSM3H+moxD
+        zJZF66RkUEVUNc+r4VlWcErZGp1BNr8IV505BNT2RmQ0l/fTs9E5RK/BNnmqT+rOG4Q0=;
+Received: from p200300daa72ee10c199752172ce6dd7a.dip0.t-ipconnect.de ([2003:da:a72e:e10c:1997:5217:2ce6:dd7a] helo=Maecks.lan)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1otF03-0011Om-SI; Thu, 10 Nov 2022 22:22:15 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 1/4] net: dsa: add support for DSA rx offloading via metadata dst
+Date:   Thu, 10 Nov 2022 22:22:08 +0100
+Message-Id: <20221110212212.96825-2-nbd@nbd.name>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221110212212.96825-1-nbd@nbd.name>
+References: <20221110212212.96825-1-nbd@nbd.name>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 at 00:51, Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Thu, Nov 10, 2022 at 09:21:06PM +1100, Jamie Bainbridge wrote:
-> > The SYN flood message prints the listening port number, but on a system
-> > with many processes bound to the same port on different IPs, it's
-> > impossible to tell which socket is the problem.
-> >
-> > Add the listen IP address to the SYN flood message. It might have been
-> > nicer to print the address first, but decades of monitoring tools are
-> > watching for the string "SYN flooding on port" so don't break that.
-> >
-> > Tested with each protcol's "any" address and a host address:
-> >
-> >  Possible SYN flooding on port 9001. IP 0.0.0.0.
-> >  Possible SYN flooding on port 9001. IP 127.0.0.1.
-> >  Possible SYN flooding on port 9001. IP ::.
-> >  Possible SYN flooding on port 9001. IP fc00::1.
-> >
-> > Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-> > ---
-> >  net/ipv4/tcp_input.c | 16 +++++++++++++---
-> >  1 file changed, 13 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> > index 0640453fce54b6daae0861d948f3db075830daf6..fb86056732266fedc8ad574bbf799dbdd7a425a3 100644
-> > --- a/net/ipv4/tcp_input.c
-> > +++ b/net/ipv4/tcp_input.c
-> > @@ -6831,9 +6831,19 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
-> >               __NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
-> >
-> >       if (!queue->synflood_warned && syncookies != 2 &&
-> > -         xchg(&queue->synflood_warned, 1) == 0)
-> > -             net_info_ratelimited("%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.\n",
-> > -                                  proto, sk->sk_num, msg);
-> > +         xchg(&queue->synflood_warned, 1) == 0) {
-> > +#if IS_ENABLED(CONFIG_IPV6)
-> > +             if (sk->sk_family == AF_INET6) {
->
-> Can the IS_ENABLED() go inside the if? You get better build testing
-> that way.
->
->      Andrew
+If a metadata dst is present with the type METADATA_HW_PORT_MUX on a dsa cpu
+port netdev, assume that it carries the port number and that there is no DSA
+tag present in the skb data.
 
-Are you sure? Why would the IS_ENABLED() be inside of a condition
-which isn't compiled in? If IPv6 isn't compiled in then the condition
-would never evaluate as true, so seems pointless a pointless
-comparison to make? People not compiling in IPv6 have explicitly asked
-*not* to have their kernel filled with a bunch of "if (family ==
-AF_INET6)" haven't they?
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+---
+ net/core/flow_dissector.c |  4 +++-
+ net/dsa/dsa.c             | 19 ++++++++++++++++++-
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
-There are many other examples of this pattern of "IS_ENABLED()" first
-and "if (family == AF_INET6)" inside it, but I can't see any of the
-inverse which I think you're suggesting, see:
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index 25cd35f5922e..1f476abc25e1 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -972,11 +972,13 @@ bool __skb_flow_dissect(const struct net *net,
+ 		if (unlikely(skb->dev && netdev_uses_dsa(skb->dev) &&
+ 			     proto == htons(ETH_P_XDSA))) {
+ 			const struct dsa_device_ops *ops;
++			struct metadata_dst *md_dst = skb_metadata_dst(skb);
+ 			int offset = 0;
+ 
+ 			ops = skb->dev->dsa_ptr->tag_ops;
+ 			/* Only DSA header taggers break flow dissection */
+-			if (ops->needed_headroom) {
++			if (ops->needed_headroom &&
++			    (!md_dst || md_dst->type != METADATA_HW_PORT_MUX)) {
+ 				if (ops->flow_dissect)
+ 					ops->flow_dissect(skb, &proto, &offset);
+ 				else
+diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
+index 64b14f655b23..0b67622cf905 100644
+--- a/net/dsa/dsa.c
++++ b/net/dsa/dsa.c
+@@ -11,6 +11,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/sysfs.h>
+ #include <linux/ptp_classify.h>
++#include <net/dst_metadata.h>
+ 
+ #include "dsa_priv.h"
+ 
+@@ -216,6 +217,7 @@ static bool dsa_skb_defer_rx_timestamp(struct dsa_slave_priv *p,
+ static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
+ 			  struct packet_type *pt, struct net_device *unused)
+ {
++	struct metadata_dst *md_dst = skb_metadata_dst(skb);
+ 	struct dsa_port *cpu_dp = dev->dsa_ptr;
+ 	struct sk_buff *nskb = NULL;
+ 	struct dsa_slave_priv *p;
+@@ -229,7 +231,22 @@ static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
+ 	if (!skb)
+ 		return 0;
+ 
+-	nskb = cpu_dp->rcv(skb, dev);
++	if (md_dst && md_dst->type == METADATA_HW_PORT_MUX) {
++		unsigned int port = md_dst->u.port_info.port_id;
++
++		skb_dst_set(skb, NULL);
++		if (!skb_has_extensions(skb))
++			skb->slow_gro = 0;
++
++		skb->dev = dsa_master_find_slave(dev, 0, port);
++		if (likely(skb->dev)) {
++			dsa_default_offload_fwd_mark(skb);
++			nskb = skb;
++		}
++	} else {
++		nskb = cpu_dp->rcv(skb, dev);
++	}
++
+ 	if (!nskb) {
+ 		kfree_skb(skb);
+ 		return 0;
+-- 
+2.38.1
 
- grep -C1 -ERHn "IS_ENABLED\(CONFIG_IPV6\)" net | grep -C1 "family == AF_INET6"
-
-Please let me know if I've misunderstood?
-
-Jamie
