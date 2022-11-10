@@ -2,135 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ADE62489B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8980462489C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiKJRuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S231251AbiKJRuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiKJRuA (ORCPT
+        with ESMTP id S231214AbiKJRuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:50:00 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F723C6CE;
-        Thu, 10 Nov 2022 09:49:59 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 5so1609426wmo.1;
-        Thu, 10 Nov 2022 09:49:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BdBVXocSnFGsbcNId82TAu2zb7JGiMOw9Hh/Hs4GgV4=;
-        b=ISXDYr7ctt69RJPDy8JEQboP41ce+EvX64xL6JA+TXVs8P98ZbaC+bHMegKhnF/lLV
-         RjFUNJgXTmciOQSVKg2Iz34bUWZouKJgcLLfirX5fFFU28UkY25aWKAI8QvgrvGoh5Ev
-         5GvMop8qAIv2qWG2/ECQO44uLqxwzHEyDORrjI73S+11Ek0wgaELHS4E2JXqYX3ixuSl
-         XU2IWqspQ0IDR9heNvAze7+XHfJlgW7FJODVkeEuVnWw/oOiW4HH1hvTviuSmP1JPpcp
-         hYAi8/vQnX2g+7c/8T+fc0KZ/gOVBoCAVw4yuaVDfHOqOVFHdJJMcRqrHjNGNKc3aAMK
-         eaQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BdBVXocSnFGsbcNId82TAu2zb7JGiMOw9Hh/Hs4GgV4=;
-        b=rWn5VXw9Z7qXJa+Wh9chALf7K63CCXkgPgEYWzlW0jnKeYmLrk8viYYy407paBw31R
-         XPl8QcntuDUz2nlkraprUAyomXqNj0d/PStJzI7LynBmGrjjacdgPmrWLekyMDgOaFdM
-         VJEGn89ZWjPcJWhgLqmpBIDtx3JbzPf1OUV/lGo9uzqqf4C2IbF2LLkCg3z/9E7dYGgA
-         DZkybm7OK71CmmkYBZcLewklUM9tUARjeFZe73hoBGnBtV1UJmemZ5B8EUeYl2tQMzvu
-         l9fqKeWUdltI/59fpEiMOAxw7oYMS9/7km8aubAJLjElKP77G5+xarzD/d7Ae7ugfXPv
-         n8Gw==
-X-Gm-Message-State: ACrzQf3BW0npmchfxU3OxyafKN1bJv/mY93J336/lYEs5bC5eW943VwO
-        9pmPFK4q74lWDVo/frEYO2A=
-X-Google-Smtp-Source: AMsMyM5044apPm6teirK4PsKgHKiAs2Vk/tL5/9+MLuye+TGFQSqPZCI54PW38cMEs+v8tPU058ZmQ==
-X-Received: by 2002:a05:600c:a4b:b0:3b9:859d:7ed6 with SMTP id c11-20020a05600c0a4b00b003b9859d7ed6mr54719981wmq.169.1668102597818;
-        Thu, 10 Nov 2022 09:49:57 -0800 (PST)
-Received: from localhost.localdomain ([94.73.35.109])
-        by smtp.gmail.com with ESMTPSA id q19-20020a1ce913000000b003b49ab8ff53sm272113wmc.8.2022.11.10.09.49.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 09:49:57 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, mairacanal@riseup.net,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] HID: uclogic: Standardize test name prefix
+        Thu, 10 Nov 2022 12:50:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438382F670
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:50:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ADEDCCE2365
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 17:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ABA4C433D6;
+        Thu, 10 Nov 2022 17:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668102597;
+        bh=OVjUU7r1CsVN2aMCZg7F/ys5w7Y53PtBg4hEbIP71KI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P84HxD67ZT0G9k/UDyNL2wHXO3penxfkGPED5rdUIUBhckaJOY9oemuKGU1Atxdv0
+         PnXEOf6QVJBMlhJ1ncLnWV39gw023fjvCRrUGENcQXLWDbdPwIeiK/FVU6sA+jHxjT
+         uw4uBnHfWohUBeJqcdWTD2P2bMx7/nvT1TTS9MMA=
 Date:   Thu, 10 Nov 2022 18:49:55 +0100
-Message-Id: <20221110174955.398885-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linmq006@gmail.com
+Subject: Re: [PATCH] firmware: dmi-sysfs: Fix null-ptr-deref in
+ dmi_sysfs_register_handle
+Message-ID: <Y205w1j7lc1a5EPS@kroah.com>
+References: <20221017095342.2567-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017095342.2567-1-chenzhongjin@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 961bcdf956a4 ("drm/tests: Change "igt_" prefix to "drm_test_"")
-introduced a new naming convention for the KUnit tests present in the
-DRM subsystem: "drm_test_<module>_<test name>".
+On Mon, Oct 17, 2022 at 05:53:42PM +0800, Chen Zhongjin wrote:
+> KASAN reported a null-ptr-deref error:
+> 
+> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+> CPU: 0 PID: 1373 Comm: modprobe
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+> RIP: 0010:dmi_sysfs_entry_release
+> ...
+> Call Trace:
+>  <TASK>
+>  kobject_put
+>  dmi_sysfs_register_handle (drivers/firmware/dmi-sysfs.c:540) dmi_sysfs
+>  dmi_decode_table (drivers/firmware/dmi_scan.c:133)
+>  dmi_walk (drivers/firmware/dmi_scan.c:1115)
+>  dmi_sysfs_init (drivers/firmware/dmi-sysfs.c:149) dmi_sysfs
+>  do_one_initcall (init/main.c:1296)
+>  ...
+> Kernel panic - not syncing: Fatal exception
+> Kernel Offset: 0x4000000 from 0xffffffff81000000
+> ---[ end Kernel panic - not syncing: Fatal exception ]---
+> 
+> It is because previous patch added kobject_put() to release the memory
+> which will call  dmi_sysfs_entry_release() and list_del().
+> 
+> However, list_add_tail(entry->list) is called after the error block,
+> so the list_head is uninitialized and cannot be deleted.
+> 
+> Because entry is allocated by kzalloc() so the list.prev is NULL in
+> the error path. Check it in dmi_sysfs_entry_release() to avoid
+> deleting uninitialized list_head.
+> 
+> Fixes: 660ba678f999 ("firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle")
+> 
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>  drivers/firmware/dmi-sysfs.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+> index 66727ad3361b..f8815eeed00c 100644
+> --- a/drivers/firmware/dmi-sysfs.c
+> +++ b/drivers/firmware/dmi-sysfs.c
+> @@ -557,9 +557,12 @@ static void dmi_sysfs_entry_release(struct kobject *kobj)
+>  {
+>  	struct dmi_sysfs_entry *entry = to_entry(kobj);
+>  
+> -	spin_lock(&entry_list_lock);
+> -	list_del(&entry->list);
+> -	spin_unlock(&entry_list_lock);
+> +	if (entry->list.prev != NULL) {
 
-This naming convention is very convenient because it allows to easily
-run all subsystem tests or all driver tests using kunit.py's wildcards.
+You should not be poking around in a lock structure like this at all.
+Also the lock isn't held, so how do you know this is going to work?
 
-Follow the naming conventions used in the DRM subsystem adapted to the
-HID subsystem: "hid_test_<module>_<test name>".
+I suggest fixing up the original patch, perhaps reverting that instead?
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-uclogic-params-test.c | 4 ++--
- drivers/hid/hid-uclogic-rdesc-test.c  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+thanks,
 
-diff --git a/drivers/hid/hid-uclogic-params-test.c b/drivers/hid/hid-uclogic-params-test.c
-index 57ef5d3e4b74..bfa7ccb7d1e8 100644
---- a/drivers/hid/hid-uclogic-params-test.c
-+++ b/drivers/hid/hid-uclogic-params-test.c
-@@ -136,7 +136,7 @@ static void uclogic_parse_ugee_v2_desc_case_desc(struct uclogic_parse_ugee_v2_de
- KUNIT_ARRAY_PARAM(uclogic_parse_ugee_v2_desc, uclogic_parse_ugee_v2_desc_cases,
- 		  uclogic_parse_ugee_v2_desc_case_desc);
- 
--static void uclogic_parse_ugee_v2_desc_test(struct kunit *test)
-+static void hid_test_uclogic_parse_ugee_v2_desc(struct kunit *test)
- {
- 	int res;
- 	s32 desc_params[UCLOGIC_RDESC_PH_ID_NUM];
-@@ -175,7 +175,7 @@ static void uclogic_parse_ugee_v2_desc_test(struct kunit *test)
- }
- 
- static struct kunit_case hid_uclogic_params_test_cases[] = {
--	KUNIT_CASE_PARAM(uclogic_parse_ugee_v2_desc_test,
-+	KUNIT_CASE_PARAM(hid_test_uclogic_parse_ugee_v2_desc,
- 			 uclogic_parse_ugee_v2_desc_gen_params),
- 	{}
- };
-diff --git a/drivers/hid/hid-uclogic-rdesc-test.c b/drivers/hid/hid-uclogic-rdesc-test.c
-index 3971a0854c3e..b429c541bf2f 100644
---- a/drivers/hid/hid-uclogic-rdesc-test.c
-+++ b/drivers/hid/hid-uclogic-rdesc-test.c
-@@ -187,7 +187,7 @@ static void uclogic_template_case_desc(struct uclogic_template_case *t,
- KUNIT_ARRAY_PARAM(uclogic_template, uclogic_template_cases,
- 		  uclogic_template_case_desc);
- 
--static void uclogic_template_test(struct kunit *test)
-+static void hid_test_uclogic_template(struct kunit *test)
- {
- 	__u8 *res;
- 	const struct uclogic_template_case *params = test->param_value;
-@@ -203,7 +203,7 @@ static void uclogic_template_test(struct kunit *test)
- }
- 
- static struct kunit_case hid_uclogic_rdesc_test_cases[] = {
--	KUNIT_CASE_PARAM(uclogic_template_test, uclogic_template_gen_params),
-+	KUNIT_CASE_PARAM(hid_test_uclogic_template, uclogic_template_gen_params),
- 	{}
- };
- 
--- 
-2.25.1
-
+greg k-h
