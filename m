@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E515624BF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C7A624BF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiKJUfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S231998AbiKJUfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiKJUfL (ORCPT
+        with ESMTP id S231868AbiKJUfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:35:11 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38C56397
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:10 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id t3-20020a170902e84300b00186ab03043dso2075860plg.20
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:10 -0800 (PST)
+        Thu, 10 Nov 2022 15:35:13 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A051D30F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:12 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id nl16-20020a17090b385000b002138288fd51so4048050pjb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:35:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9x7ezoTY10MerxwSgds+z/5z/6k15MGNtHnWLn8Ah8=;
-        b=pY2zGdbHb7cw1f5XJ56nl3aps6H5XcgxKLQV4ftuzo3flY4sAjrnuFMHXN7m7Ce+Zj
-         d/xYoolxvxFqCZx0jgivinhEb8M7BMYJFnrtRdBmlzEhNQmy4pmZEl6disDUenuPmrUL
-         VOr74QV1qC/IfcXQ2jijKjsEGh8XiYgjLYN2Gkjt0J4WTpTd7A2eYjNoXMeR7Lka1cLr
-         5mW0bp8iysa5R33fjOmvrgWoM9nlAteckOgLOdohHRlscFFaA878N86pmSu10I4YciQ2
-         ZNk4w14WTzkuUs1T8RnaAwcm5ax48SYxJ4NSgMVFZQp5EmSTYwPHp/BCR9oXl5vWSZpe
-         CnrA==
+        bh=XS7y2dqHGNcxgJtQwV0riGq39Rt6nVME96ygRYhND24=;
+        b=Qw3kbAB+E1OduRUrhVsKsgtgd5I2wewKT6KoO0Y9ijqeZACVtTZ/XHViHG3gOPunM7
+         hLyU3uMXWnVPGcTkGBVwL0g3cCAymIbjfK6bWFPxJzUhdPfL+XW8u72DYtptNgO7bcGa
+         yMqpnFsksm9T3SeElwUPRO97HFhV/o+3xSs4idxDnalvW3kbPte5DJzgoLL5iVOB+M8Z
+         H8XB+oHbgeOb7qyL4eLJW2r+zMqVAuqFqcof546vGbBfA0G/NoV0LL8eghXlclaOpR9U
+         JZovawC8tI4gfPIoiOo5sS8BHPrMuWQNbZlRmFwyIRc4zdTeIlLrRa6R/b63gTdKr5aX
+         vLug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q9x7ezoTY10MerxwSgds+z/5z/6k15MGNtHnWLn8Ah8=;
-        b=4mzCUeU/IopYVKBJ2BJ+ibmJuSZ+rxyO11DC93hXGi7hMybLsEkZ/H7t2dQ5ArLWJ5
-         uEoUoQsvKR/2fFf0Gr7iQ8OdiBmr00MoOYqBafx9nu1xuqUGy8bPSm+hOfyDGBmBwgeI
-         pRSoRVuo5FLi9NnrC14oi0nkwjDbB+nHsb5DSLjeOhQv/FBFoqdxRJ2bGG0alDyo3MvA
-         qJ/i5vJ3v5+w6TPLFN5NaFUHGxib1jxEPjjkMiycyjPDQFwiYg+dNRSlFjwfgi6k/AZl
-         yaTq3yk+kvDUEZvRuQMPNCO7Krr6f0JqYgX1i89hkVe5Wene/QPX7Db3Cs2vetnoIWNe
-         Exnw==
-X-Gm-Message-State: ACrzQf0tZShRCut8yCTNmi7vSxNsQ8mXHKfTac7LUyvdcQWaW1EaIIXl
-        iCWdFgVpK2eavF4VAYaAyzup/V8bcyc=
-X-Google-Smtp-Source: AMsMyM5WDa/L7fl2CQVUhhkeBsLye7ckqkPvFm1dPWhph5OzJaQq0LzkWFefeFu0HWyhNehhLq5OiPLNpdQ=
+        bh=XS7y2dqHGNcxgJtQwV0riGq39Rt6nVME96ygRYhND24=;
+        b=EHR3Ccsk5jOHJ44KiQI2Zw4qbWcW6emunvLY/kn226sE+2j0QHJMJcEB71W2HReSV6
+         VeNIno1lx32uKjhXcsqH2fDQlc2818B5Yt9tFY3Rr+5KJaaUvr6kZHgU8Lmib79XTX/T
+         xhIZERQyKhJ9xRyhzzk2Lk7QKqBWmF7SvUmUuiZHi89b9jtygfPQcjdbJT6M7abEpvOU
+         9pFy9900h7RZ9rFRVY8OUToZc1CgsoEJdTl67/vY8Sf6qrvp4w7TP25G/U3KyBKh0MNh
+         /Nu3mG2gJpks7xlSwWzrKU5BapTCSzAsxi2JgOYZ2tfNZAw/ETl0Q1oZNo1lgrOvQ89/
+         rPUQ==
+X-Gm-Message-State: ACrzQf1nMAJinlVQSeelYyjcBfleeMJ71LMhJ2J/CcSBo8or/RAYXS1T
+        jabavgceWr3bJ+oQtiY3x1juYN0f63g=
+X-Google-Smtp-Source: AMsMyM7xIpANwIuE6PtwYsUVANO3G7fI/7sO65l5+QNYJs/NTYwlTdz2tpr7Q+pNYuWqAmERr4T+klbMLPQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:d510:b0:186:61a7:ae94 with SMTP id
- b16-20020a170902d51000b0018661a7ae94mr1897055plg.2.1668112510143; Thu, 10 Nov
- 2022 12:35:10 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:7523:b0:213:8a69:c502 with SMTP id
+ q32-20020a17090a752300b002138a69c502mr67876165pjk.153.1668112511765; Thu, 10
+ Nov 2022 12:35:11 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 10 Nov 2022 20:35:01 +0000
+Date:   Thu, 10 Nov 2022 20:35:02 +0000
 In-Reply-To: <20221110203504.1985010-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20221110203504.1985010-1-seanjc@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221110203504.1985010-3-seanjc@google.com>
-Subject: [PATCH v2 2/5] x86/mm: Populate KASAN shadow for entire per-CPU range
- of CPU entry area
+Message-ID: <20221110203504.1985010-4-seanjc@google.com>
+Subject: [PATCH v2 3/5] x86/kasan: Rename local CPU_ENTRY_AREA variables to
+ shorten names
 From:   Sean Christopherson <seanjc@google.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -83,105 +83,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Populate a KASAN shadow for the entire possible per-CPU range of the CPU
-entry area instead of requiring that each individual chunk map a shadow.
-Mapping shadows individually is error prone, e.g. the per-CPU GDT mapping
-was left behind, which can lead to not-present page faults during KASAN
-validation if the kernel performs a software lookup into the GDT.  The DS
-buffer is also likely affected.
+Rename the CPU entry area variables in kasan_init() to shorten their
+names, a future fix will reference the beginning of the per-CPU portion
+of the CPU entry area, and shadow_cpu_entry_per_cpu_begin is a bit much.
 
-The motivation for mapping the per-CPU areas on-demand was to avoid
-mapping the entire 512GiB range that's reserved for the CPU entry area,
-shaving a few bytes by not creating shadows for potentially unused memory
-was not a goal.
+No functional change intended.
 
-The bug is most easily reproduced by doing a sigreturn with a garbage
-CS in the sigcontext, e.g.
-
-  int main(void)
-  {
-    struct sigcontext regs;
-
-    syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-    syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
-    syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-
-    memset(&regs, 0, sizeof(regs));
-    regs.cs = 0x1d0;
-    syscall(__NR_rt_sigreturn);
-    return 0;
-  }
-
-to coerce the kernel into doing a GDT lookup to compute CS.base when
-reading the instruction bytes on the subsequent #GP to determine whether
-or not the #GP is something the kernel should handle, e.g. to fixup UMIP
-violations or to emulate CLI/STI for IOPL=3 applications.
-
-  BUG: unable to handle page fault for address: fffffbc8379ace00
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
-  PGD 16c03a067 P4D 16c03a067 PUD 15b990067 PMD 15b98f067 PTE 0
-  Oops: 0000 [#1] PREEMPT SMP KASAN
-  CPU: 3 PID: 851 Comm: r2 Not tainted 6.1.0-rc3-next-20221103+ #432
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-  RIP: 0010:kasan_check_range+0xdf/0x190
-  Call Trace:
-   <TASK>
-   get_desc+0xb0/0x1d0
-   insn_get_seg_base+0x104/0x270
-   insn_fetch_from_user+0x66/0x80
-   fixup_umip_exception+0xb1/0x530
-   exc_general_protection+0x181/0x210
-   asm_exc_general_protection+0x22/0x30
-  RIP: 0003:0x0
-  Code: Unable to access opcode bytes at 0xffffffffffffffd6.
-  RSP: 0003:0000000000000000 EFLAGS: 00000202
-  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00000000000001d0
-  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-  RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-  R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-  R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-   </TASK>
-
-Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
-Reported-by: syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com
-Suggested-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: kasan-dev@googlegroups.com
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/mm/cpu_entry_area.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/x86/mm/kasan_init_64.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
-index d831aae94b41..7c855dffcdc2 100644
---- a/arch/x86/mm/cpu_entry_area.c
-+++ b/arch/x86/mm/cpu_entry_area.c
-@@ -91,11 +91,6 @@ void cea_set_pte(void *cea_vaddr, phys_addr_t pa, pgprot_t flags)
- static void __init
- cea_map_percpu_pages(void *cea_vaddr, void *ptr, int pages, pgprot_t prot)
+diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
+index d1416926ad52..ad7872ae10ed 100644
+--- a/arch/x86/mm/kasan_init_64.c
++++ b/arch/x86/mm/kasan_init_64.c
+@@ -331,7 +331,7 @@ void __init kasan_populate_shadow_for_vaddr(void *va, size_t size, int nid)
+ void __init kasan_init(void)
  {
--	phys_addr_t pa = per_cpu_ptr_to_phys(ptr);
--
--	kasan_populate_shadow_for_vaddr(cea_vaddr, pages * PAGE_SIZE,
--					early_pfn_to_nid(PFN_DOWN(pa)));
--
- 	for ( ; pages; pages--, cea_vaddr+= PAGE_SIZE, ptr += PAGE_SIZE)
- 		cea_set_pte(cea_vaddr, per_cpu_ptr_to_phys(ptr), prot);
- }
-@@ -195,6 +190,9 @@ static void __init setup_cpu_entry_area(unsigned int cpu)
- 	pgprot_t tss_prot = PAGE_KERNEL;
- #endif
+ 	int i;
+-	void *shadow_cpu_entry_begin, *shadow_cpu_entry_end;
++	void *shadow_cea_begin, *shadow_cea_end;
  
-+	kasan_populate_shadow_for_vaddr(cea, CPU_ENTRY_AREA_SIZE,
-+					early_cpu_to_node(cpu));
-+
- 	cea_set_pte(&cea->gdt, get_cpu_gdt_paddr(cpu), gdt_prot);
+ 	memcpy(early_top_pgt, init_top_pgt, sizeof(early_top_pgt));
  
- 	cea_map_percpu_pages(&cea->entry_stack_page,
+@@ -372,16 +372,16 @@ void __init kasan_init(void)
+ 		map_range(&pfn_mapped[i]);
+ 	}
+ 
+-	shadow_cpu_entry_begin = (void *)CPU_ENTRY_AREA_BASE;
+-	shadow_cpu_entry_begin = kasan_mem_to_shadow(shadow_cpu_entry_begin);
+-	shadow_cpu_entry_begin = (void *)round_down(
+-			(unsigned long)shadow_cpu_entry_begin, PAGE_SIZE);
++	shadow_cea_begin = (void *)CPU_ENTRY_AREA_BASE;
++	shadow_cea_begin = kasan_mem_to_shadow(shadow_cea_begin);
++	shadow_cea_begin = (void *)round_down(
++			(unsigned long)shadow_cea_begin, PAGE_SIZE);
+ 
+-	shadow_cpu_entry_end = (void *)(CPU_ENTRY_AREA_BASE +
++	shadow_cea_end = (void *)(CPU_ENTRY_AREA_BASE +
+ 					CPU_ENTRY_AREA_MAP_SIZE);
+-	shadow_cpu_entry_end = kasan_mem_to_shadow(shadow_cpu_entry_end);
+-	shadow_cpu_entry_end = (void *)round_up(
+-			(unsigned long)shadow_cpu_entry_end, PAGE_SIZE);
++	shadow_cea_end = kasan_mem_to_shadow(shadow_cea_end);
++	shadow_cea_end = (void *)round_up(
++			(unsigned long)shadow_cea_end, PAGE_SIZE);
+ 
+ 	kasan_populate_early_shadow(
+ 		kasan_mem_to_shadow((void *)PAGE_OFFSET + MAXMEM),
+@@ -403,9 +403,9 @@ void __init kasan_init(void)
+ 
+ 	kasan_populate_early_shadow(
+ 		kasan_mem_to_shadow((void *)VMALLOC_END + 1),
+-		shadow_cpu_entry_begin);
++		shadow_cea_begin);
+ 
+-	kasan_populate_early_shadow(shadow_cpu_entry_end,
++	kasan_populate_early_shadow(shadow_cea_end,
+ 			kasan_mem_to_shadow((void *)__START_KERNEL_map));
+ 
+ 	kasan_populate_shadow((unsigned long)kasan_mem_to_shadow(_stext),
 -- 
 2.38.1.431.g37b22c650d-goog
 
