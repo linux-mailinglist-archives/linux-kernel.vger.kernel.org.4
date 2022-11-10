@@ -2,217 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68296242C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E281862436C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiKJNCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S231129AbiKJNme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiKJNCF (ORCPT
+        with ESMTP id S229881AbiKJNmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:02:05 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE0C701B7;
-        Thu, 10 Nov 2022 05:02:02 -0800 (PST)
-Message-ID: <618523aa-58bf-229c-19ef-eb752937e9ad@lirui.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lirui.org; s=key1;
-        t=1668085321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ATm4kAH7JE8hj5bSRwpeVJYUJXALD5eBvNbcqQ5KEok=;
-        b=i+KZWU8vL9h9Jzf74xxQxeAssbFKqevbDRdzEo3O8v6TVo9thSoMDoniwZ6tTlqMUBcMm8
-        hdRNAW0PfYZQJnUnBhTQEVvfRTi100MxNqJGyzN55/K+nALlg449uHSiUbNT4bRcqKQQg4
-        h2lY5PxPtpIJ8EgqQGcmrndfIknYC+nMZQf5OrQ+18Cfmh1OYwgikP22rQeFy1vU3C+c4O
-        ZICHZveYu+GHNpSpwC7JQGrHGOYAvAIs68ol5FDq0UVPeyeHuhJ+4jaCMqm9DOCUuwvab/
-        OsrB7mBr0UVoQw5zbruH7KTw/u5sG0/0yi9RZ9V8Vs7dedkFoZRB3LwYAfZyMQ==
-Date:   Thu, 10 Nov 2022 21:01:49 +0800
+        Thu, 10 Nov 2022 08:42:33 -0500
+X-Greylist: delayed 2543 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Nov 2022 05:42:31 PST
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8689D31379
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=CZcNVqk8g0KSBhUkHK8jBepdav+GnxjrdTrEFAD5npc=; b=hjFFxIsGFN79BXqIS1Crj19qI/
+        /s46Ipu4kc9GHOn8iSyndnI/QJZvzLmLk9GcEpZyVJUtPwmCiLITMSdQk9cCkfTJDUDgaQV+tAkdr
+        5v66hVVTrzJ3stkcqg9+u+g7OiXbRkIlBH22hub2aYlJjdc9uduRXMiLjVRA85U2V/tJwOH545Rw3
+        ZIFtBZNuS+EcLCR9xnzK56CejdPpXtLGrOSp+YZ5NwKVXMLGq31alJykB6OFr9n16/gpkWQw2TY5u
+        WnvgM/b7WAB0Zqh1v2LNXTkQX/Kow40L/0GoeeYVTPH1AY2FCSAvPP6M/7oSDYb6yA9gA0yFz+Pxb
+        yFc/5F+A==;
+Received: from [186.214.225.177] (helo=[192.168.15.50])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ot7A0-00FVOM-Nr; Thu, 10 Nov 2022 14:00:01 +0100
+Message-ID: <335b511f-ecfd-6e83-ef2e-7a74c8293b00@igalia.com>
+Date:   Thu, 10 Nov 2022 11:59:54 -0100
 MIME-Version: 1.0
-Subject: Re: [PATCH] docs/zh_CN: Add userspace-api/accelerators/ocxl Chinese
- translation
-To:     Wu XiangCheng <wu.xiangcheng@linux.dev>
-Cc:     Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221110062609.377848-1-me@lirui.org>
- <Y2zrKAZL38i48SA5@bobwxc.mipc>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 0/2] Balance mutex_init and mutex_destroy calls
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Rui Li <me@lirui.org>
-In-Reply-To: <Y2zrKAZL38i48SA5@bobwxc.mipc>
-Content-Type: text/plain; charset=UTF-8
+To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
+        Emma Anholt <emma@anholt.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        "Juan A . Suarez" <jasuarez@igalia.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221108175425.39819-1-mcanal@igalia.com>
+From:   Melissa Wen <mwen@igalia.com>
+In-Reply-To: <20221108175425.39819-1-mcanal@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/10 20:14, Wu XiangCheng wrote:
->> Translate the following documents into Chinese:
->>
->> - userspace-api/accelerators/ocxl.rst
->>
->> Signed-off-by: Rui Li <me@lirui.org>
->> ---
->>  .../zh_CN/userspace-api/accelerators/ocxl.rst | 168 ++++++++++++++++++
->>  .../zh_CN/userspace-api/index.rst             |   2 +-
->>  2 files changed, 169 insertions(+), 1 deletion(-)
->>  create mode 100644 Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst
->>
->> diff --git a/Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst b/Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst
->> new file mode 100644
->> index 000000000000..274dcf4667db
->> --- /dev/null
->> +++ b/Documentation/translations/zh_CN/userspace-api/accelerators/ocxl.rst
->> @@ -0,0 +1,168 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +.. include:: ../../disclaimer-zh_CN.rst
->> +
->> +:Original: Documentation/userspace-api/accelerators/ocxl.rst
->> +
->> +:翻译:
->> +
->> + 李睿 Rui Li <me@lirui.org>
->> +
->> +=====================================
->> +OpenCAPI （开放相干加速器处理器接口）
->> +=====================================
->> +
->> +*OpenCAPI: Open Coherent Accelerator Processor Interface*
->> +
->> +OpenCAPI是处理器和加速器之间的一个接口，致力于达到低延迟和高带宽。该规范
->> +由 `OpenCAPI Consortium <http://opencapi.org/>`_ 开发。
->> +
->> +它允许加速器（可以是FPGA、ASIC等）使用虚拟地址连贯地访问主机内存。一个OpenCAPI
->> +设备也可以托管它自己的内存，并可以由主机访问。
->> +
->> +OpenCAPI在Linux中称为“ocxl”，它作为“cxl”的开放、处理器无关的演进，这么命
-> missed:
-> 	'cxl' (the driver for the IBM CAPI interface for powerpc)
->
->> +名是为了避免与ISDN CAPI子系统相混淆。
->> +
->> +
->> +高层视角
->> +========
->> +
->> +OpenCAPI定义了一个在物理链路层上实现的数据链路层（TL）和传输层（TL）。任何
->> +实现DL和TL的处理器或者设备都可以开始共享内存。
->> +
->> +::
->> +
->> +  +-----------+                         +-------------+
->> +  |           |                         |             |
->> +  |           |                         | Accelerated |
->> +  | Processor |                         |  Function   |
->> +  |           |  +--------+             |    Unit     |  +--------+
->> +  |           |--| Memory |             |    (AFU)    |--| Memory |
->> +  |           |  +--------+             |             |  +--------+
->> +  +-----------+                         +-------------+
->> +       |                                       |
->> +  +-----------+                         +-------------+
->> +  |    TL     |                         |    TLX      |
->> +  +-----------+                         +-------------+
->> +       |                                       |
->> +  +-----------+                         +-------------+
->> +  |    DL     |                         |    DLX      |
->> +  +-----------+                         +-------------+
->> +       |                                       |
->> +       |                   PHY                 |
->> +       +---------------------------------------+
->> +
->> +  Processor：处理器
->> +  Memory：内存
->> +  Accelerated Function Unit：加速函数单元
->> +
->> +
->> +
->> +设备发现
->> +========
->> +
->> +OpenCAPI依赖一个在设备上实现的与PCI类似的配置空间。因此主机可以通过查询
->> +配置空间来发现AFU。
->> +
->> +OpenCAPI设备在Linux中被当作PCI设备（有一些注意事项）。固件需要对硬件进行
-> 类PCI设备
->
->> +抽象，就好像它是一个PCI链路。许多已有的PCI架构被重用：在模拟标准PCI时，
->> +设备被扫描并且BAR（基址寄存器）被分配。像“lspci”的命令因此可以被用于查看
->> +哪些设备可用。
->> +
->> +配置空间定义了可以在物理适配器上可以被找到的AFU，比如它的名字、支持多少内
->> +存上下文、内存映射IO（MMIO）区域的大小等。
->> +
->> +
->> +
->> +MMIO
->> +====
->> +
->> +OpenCAPI为每个AFU定义了两个MMIO区域：
->> +
->> +* 全局MMIO区域，保存和整个AFU相关的寄存器。
->> +* 每个进程的MMIO区域，对于每个上下文固定大小。
->> +
->> +
->> +
->> +AFU中断
->> +=======
->> +
->> +OpenCAPI拥有AFU向主机进程发送中断的可能性。它通过定义在传输层的“intrp_req”
->> +来完成，指定一个定义中断的64位对象句柄。
->> +
->> +驱动允许一个进程分配中断并获取可以传递给AFU的64位对象句柄。
->> +
->> +
->> +
->> +字符设备
->> +========
->> +
->> +驱动为每个在物理设备上发现的AFU创建一个字符设备。一个物理设备可能拥有多个
->> +函数，一个函数可以拥有多个AFU。不过编写这篇文档之时，只对导出一个AFU的设备
->> +测试过。
->> +
->> +字符设备可以在 /dev/ocxl/ 中被找到，其命名为：
->> +/dev/ocxl/<AFU 名称>.<位置>.<索引>
->> +
->> +<AFU 名称> 是一个最长20个字符的名称，和在AFU配置空间中找到的相同。
->> +<位置>由驱动添加，可在系统有不止一个相同的OpenCAPI设备时帮助区分设备。
->> +<索引>也是为了在少见情况下帮助区分AFU，即设备携带多个同样的AFU副本时。
->> +
->> +
->> +
->> +Sysfs 类
->> +=========
-> Sysfs类
-> =======
->
->> +
->> +添加了代表AFU的ocxl类。查看/sys/class/ocxl。布局在
->> +Documentation/ABI/testing/sysfs-class-ocxl 中描述。
->> +
->> +
->> +
->> +用户API
->> +=======
->> +
->> +开放
-> 打开
->
->
-> Thanks,
->
->
-Oops, thanks for correction. I will send updated one later.
 
-Thanks.
+On 11/8/22 16:54, Maíra Canal wrote:
+> This series introduces some changes to assure the correct resource release on
+> the V3D driver, especially the mutex. Currently, the V3D has no mutex_destroy()
+> calls, which means that a mutex is being instantiated, but it is not being
+> released by the end of its use.
+>
+> So, use the DRM-managed mutex_init variants when possible to manage the mutex
+> release and add mutex_destroy() calls when not possible.
+>
+> Best Regards,
+> - Maíra Canal
+>
+> v1 -> v2: https://lore.kernel.org/dri-devel/20221107224656.278135-1-mcanal@igalia.com/T/#m3c23e3f21fe6aaae51138c746c74e94b2a7b3bfc
+>
+> - Move mutex_destroy() to v3d_perfmon_put() (Daniel Vetter).
+> - Add mutex_destroy() on error case in v3d_perfmon_create_ioctl() (Daniel Vetter).
+> - Add Daniel Vetter's tags.
 
--- 
-Rui Li    0x77E6D821D7AE84FE
+Applied to drm-misc-next.
 
+Thanks,
+
+Melissa
+
+>
+> Maíra Canal (2):
+>    drm/v3d: switch to drmm_mutex_init
+>    drm/v3d: add missing mutex_destroy
+>
+>   drivers/gpu/drm/v3d/v3d_gem.c     | 17 +++++++++++++----
+>   drivers/gpu/drm/v3d/v3d_perfmon.c |  6 +++++-
+>   2 files changed, 18 insertions(+), 5 deletions(-)
+>
