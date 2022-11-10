@@ -2,77 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990CA624271
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F8D624281
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiKJMhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:37:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S229517AbiKJMoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiKJMhu (ORCPT
+        with ESMTP id S229453AbiKJMoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:37:50 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5220B6BDE7;
-        Thu, 10 Nov 2022 04:37:47 -0800 (PST)
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7LvZ678BzmV5c;
-        Thu, 10 Nov 2022 20:37:30 +0800 (CST)
-Received: from localhost.localdomain (10.108.234.58) by
- canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 20:37:45 +0800
-From:   Wang Boshi <wangboshi@huawei.com>
-To:     <viro@zeniv.linux.org.uk>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] fs: Delete group check before ACL
-Date:   Thu, 10 Nov 2022 20:37:44 +0800
-Message-ID: <20221110123744.10827-1-wangboshi@huawei.com>
-X-Mailer: git-send-email 2.29.2
+        Thu, 10 Nov 2022 07:44:05 -0500
+Received: from outbound-smtp06.blacknight.com (outbound-smtp06.blacknight.com [81.17.249.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5AD32BA9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:44:04 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp06.blacknight.com (Postfix) with ESMTPS id 1A9BFC2B68
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:44:03 +0000 (GMT)
+Received: (qmail 29824 invoked from network); 10 Nov 2022 12:44:02 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 10 Nov 2022 12:44:02 -0000
+Date:   Thu, 10 Nov 2022 12:44:00 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Borislav Petkov <bp@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        LKML <linux-kernel@vger.kernel.org>, Linux-X86 <x86@kernel.org>,
+        Linux-RT <linux-rt-users@vger.kernel.org>
+Subject: [PATCH] x86: Drop fpregs lock before inheriting FPU permissions
+Message-ID: <20221110124400.zgymc2lnwqjukgfh@techsingularity.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.108.234.58]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500008.china.huawei.com (7.192.105.151)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Skipping full file ACL checks without no Group permissions causes we
-can't deny access from specific users or groups which we ban according
-ACL_USER, ACL_GROUP and ACL_MASK rules, because they may pass due to
-Other permissions.
+Mike Galbraith reported the following against an old fork of preempt-rt
+but the same issue also applies to the current preempt-rt tree.
 
-Example:
-  date > test_file
-  setfacl -m u:1000:rwx,g:2000:rwx,u::rwx,g::rwx,o::rwx,m::0 test_file
-  capsh --groups=1000 --gid=1000 --uid=1000 -- -c "cat test_file"
-  capsh --groups=2000 --gid=2000 --uid=2000 -- -c "cat test_file"
+   BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+   in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: systemd
+   preempt_count: 1, expected: 0
+   RCU nest depth: 0, expected: 0
+   Preemption disabled at:
+   fpu_clone+0xfa/0x480
+   CPU: 6 PID: 1 Comm: systemd Tainted: G            E       (unreleased)
+   Call Trace:
+    <TASK>
+    dump_stack_lvl+0x45/0x5b
+    ? fpu_clone+0xfa/0x480
+    __might_resched+0x165/0x200
+    rt_spin_lock+0x2d/0x70
+    fpu_clone+0x32a/0x480
+    ? copy_thread+0xef/0x270
+    ? copy_process+0xd2c/0x1c00
+    ? shmem_alloc_inode+0x16/0x30
+    ? kmem_cache_alloc+0x120/0x2a0
+    ? kernel_clone+0x9b/0x460
+    ? __do_sys_clone+0x72/0xa0
+    ? do_syscall_64+0x58/0x80
+    ? __x64_sys_rt_sigprocmask+0x93/0xd0
+    ? syscall_exit_to_user_mode+0x18/0x40
+    ? do_syscall_64+0x67/0x80
+    ? syscall_exit_to_user_mode+0x18/0x40
+    ? do_syscall_64+0x67/0x80
+    ? syscall_exit_to_user_mode+0x18/0x40
+    ? do_syscall_64+0x67/0x80
+    ? exc_page_fault+0x6a/0x190
+    ? entry_SYSCALL_64_after_hwframe+0x61/0xcb
+    </TASK>
 
-Signed-off-by: Wang Boshi <wangboshi@huawei.com>
+  The splat comes from fpu_inherit_perms() being called under fpregs_lock(),
+  and us reaching the spin_lock_irq() therein due to fpu_state_size_dynamic()
+  returning true despite static key __fpu_state_size_dynamic having never
+  been enabled.
+
+Mike's assessment looks correct. fpregs_lock on a PREEMPT_RT kernel disables
+preemption so calling spin_lock_irq() in fpu_inherit_perms is unsafe. This
+problem exists since commit 9e798e9aa14c ("x86/fpu: Prepare fpu_clone()
+for dynamically enabled features"). Even though the original bug report
+should not have enabled the paths at all, the bug still exists.
+
+fpregs_lock is necessary when editing the FPU registers or a task's
+FP state but it is not necessary for fpu_inherit_perms. The only write
+of any FP state in fpu_inherit_perms is for the new child which is not
+running yet and cannot context switch or be borrowed by a kernel thread
+yet. Hence, fpregs_lock is not protecting anything in the new child until
+clone() completes and can be dropped earlier. The siglock still needs to
+be acquired by fpu_inherit_perms as the read of the parents permissions
+has to be serialised.
+
+Reported-by: Mike Galbraith <efault@gmx.de>
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- fs/namei.c | 2 +-
+ arch/x86/kernel/fpu/core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 578c2110df02..d5772a31b5fc 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -347,7 +347,7 @@ static int acl_permission_check(struct user_namespace *mnt_userns,
- 	}
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 3b28c5b25e12..d00db56a8868 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -605,9 +605,9 @@ int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal)
+ 	if (test_thread_flag(TIF_NEED_FPU_LOAD))
+ 		fpregs_restore_userregs();
+ 	save_fpregs_to_fpstate(dst_fpu);
++	fpregs_unlock();
+ 	if (!(clone_flags & CLONE_THREAD))
+ 		fpu_inherit_perms(dst_fpu);
+-	fpregs_unlock();
  
- 	/* Do we have ACL's? */
--	if (IS_POSIXACL(inode) && (mode & S_IRWXG)) {
-+	if (IS_POSIXACL(inode)) {
- 		int error = check_acl(mnt_userns, inode, mask);
- 		if (error != -EAGAIN)
- 			return error;
--- 
-2.29.2
-
+ 	/*
+ 	 * Children never inherit PASID state.
