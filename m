@@ -2,226 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F276624247
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1634624259
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiKJMYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
+        id S229605AbiKJM0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiKJMXk (ORCPT
+        with ESMTP id S229530AbiKJM0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:23:40 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E62778327
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:22:50 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ot6Zh-0000GX-Ak; Thu, 10 Nov 2022 13:22:29 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ot6Ze-003RqR-6W; Thu, 10 Nov 2022 13:22:27 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ot6Ze-005Ntd-4E; Thu, 10 Nov 2022 13:22:26 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Arun.Ramadoss@microchip.com
-Subject: [PATCH net-next v4 4/4] net: dsa: microchip: ksz8: add MTU configuration support
-Date:   Thu, 10 Nov 2022 13:22:25 +0100
-Message-Id: <20221110122225.1283326-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221110122225.1283326-1-o.rempel@pengutronix.de>
-References: <20221110122225.1283326-1-o.rempel@pengutronix.de>
+        Thu, 10 Nov 2022 07:26:50 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B105247;
+        Thu, 10 Nov 2022 04:26:49 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id j4so2989200lfk.0;
+        Thu, 10 Nov 2022 04:26:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBWGKY5TCpH3N2aAaFzNlY4Ec3j6NJwE2FJiVksSqjU=;
+        b=KsFjUK6L2YvmLNvcIsZqsenkxt5c7MAETbW0sqIVLJXRaiho8t/rqQ5C4bv3rjIGm1
+         KeJChIZKCh9aSqvAVtN8+xAdjmlLn4OF8wwbjKuzhi8ilWbK0hvwGhVu/O0N+/FBGCA8
+         wMMGrZHuAaTJ2VWZTz5h0QWkC5HiHBxSK8B5x5MYIWrOV1QQ6Tn5JDaihea+cJdPOJY1
+         +GR1rf6sVZyMLL5b33pHlv2DLdEop+tNdInqGAqd2piJc1SOfRLqnrBxtLWrD8Vq4b7N
+         atvNaf6VX5/mks426n8Lb1s0jtRSOKV3n4EFWN5E9mBxYoCTJux9RTT5jVXVTgiKNQIp
+         6Blw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cBWGKY5TCpH3N2aAaFzNlY4Ec3j6NJwE2FJiVksSqjU=;
+        b=VtjzaaH7Uhw2TuYZ3A6Vv1w4eaSOw/ZLp/naZ1SAo2z4Jc1zVfGopOu69r7bU7KtcM
+         BDS0M0cHprWw2KoP53X71ku7VkvdofpjvLRBORiroXZ29YMmhgrgWSH9K05drabi4B5r
+         QsVhUDHiV+48chFH8HUd7W9JzgxYzFN5SFI9z3eEPBog8nw7EZXNI4jw20KgQFrAdE2K
+         JgJeH8MAvFECvdgG+nTXrICEQp1gBB/Vg9Oi3JHrhqEgYoSZuvwUxjg9bc16kjW9WnjG
+         YQTD+/+2NJxGjYJKI9303pcIHYG8xcHHdg3gctg4P2Myt9+NLsrAxRIGvjkrJ5vci2oy
+         5ixw==
+X-Gm-Message-State: ACrzQf37QI5/IZhIoDCGJvXqrgWwoRHWMdyAjOkk1MicN9vU8a/PwKDc
+        UFQpC8OEZBhE5wLs6leAg9Maehk/M/5nDA==
+X-Google-Smtp-Source: AMsMyM6pAGRiXqJ28AUdihDAzdraAKjZwwLt+ZQ0nsnVwICGWaTOTdw8V/Al69afRI0sMye0LZIDAw==
+X-Received: by 2002:a19:660a:0:b0:4aa:9a70:bcca with SMTP id a10-20020a19660a000000b004aa9a70bccamr21009972lfc.520.1668083207733;
+        Thu, 10 Nov 2022 04:26:47 -0800 (PST)
+Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
+        by smtp.gmail.com with ESMTPSA id j23-20020a056512345700b00492d064e8f8sm2741049lfr.263.2022.11.10.04.26.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 04:26:47 -0800 (PST)
+Date:   Thu, 10 Nov 2022 15:26:44 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 09/20] dt-bindings: PCI: dwc: Add
+ interrupts/interrupt-names common properties
+Message-ID: <20221110122644.37eopjsjzewy4fvv@mobilestation>
+References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
+ <20221107204934.32655-10-Sergey.Semin@baikalelectronics.ru>
+ <TYBPR01MB5341E18D15BF78FFD6FA9782D83F9@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+ <20221108135218.v3jsla67372wt7ny@mobilestation>
+ <CAL_JsqLC04=JA6b0ezsm06-SUsEQix=hZLwTgVDuswa_+41qgg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqLC04=JA6b0ezsm06-SUsEQix=hZLwTgVDuswa_+41qgg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make MTU configurable on KSZ87xx and KSZ88xx series of switches.
+On Tue, Nov 08, 2022 at 04:32:22PM -0600, Rob Herring wrote:
+> On Tue, Nov 8, 2022 at 7:52 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+> >
+> > Hi Yoshihiro
+> >
+> > On Tue, Nov 08, 2022 at 12:40:54PM +0000, Yoshihiro Shimoda wrote:
+> > > Hi Serge,
+> > >
+> > > > From: Serge Semin, Sent: Tuesday, November 8, 2022 5:49 AM
+> > > >
+> > > > Currently the 'interrupts' and 'interrupt-names' properties are defined
+> > > > being too generic to really describe any actual IRQ interface. Moreover
+> > > > the DW PCIe End-point devices are left with no IRQ signals. All of that
+> > > > can be fixed by adding the IRQ-related properties to the common DW PCIe
+> > > > DT-schemas in accordance with the hardware reference manual. The DW PCIe
+> > > > common DT-schema will contain the generic properties definitions with just
+> > > > a number of entries per property, while the DW PCIe RP/EP-specific schemas
+> > > > will have the particular number of items and the generic resource names
+> > > > listed.
+> > > >
+> > > > Note since there are DW PCI-based vendor-specific DT-bindings with the
+> > > > custom names assigned to the same IRQ resources we have no much choice but
+> > > > to add them to the generic DT-schemas in order to have the schemas being
+> > > > applicable for such devices. These names are marked as vendor-specific and
+> > > > should be avoided being used in new bindings in favor of the generic
+> > > > names.
+> > > >
+> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > >
+> > > > ---
+> > > >
+> > > > Note without the next dtschema tool fix
+> > > >
+> > > > --- a/lib.py 2022-09-29 15:17:13.100033810 +0300
+> > > > +++ b/lib.py     2022-09-29 15:19:54.886172794 +0300
+> > >
+> >
+> > > JFYI.
+> > >
+> > > git am command could not work correctly by this lib.py file:
+> > > ---
+> > > Applying: dt-bindings: PCI: dwc: Add interrupts/interrupt-names common properties
+> > > error: lib.py: does not exist in index
+> > > Patch failed at 0001 dt-bindings: PCI: dwc: Add interrupts/interrupt-names common properties
+> > > ---
+> > >
+> > > If I used patch command and skipped the lib.py, it could apply this patch correctly.
+> >
+> > Got it. Thanks for the note. I'll either drop this part on the next
+> > patchset revision (hopefully Rob will do something about that by then)
+> > or make it less looking like a patch so git am wouldn't be confused.
+> 
+> Now fixed in main branch. Thanks for the report.
 
-Before this patch, pre-configured behavior was different on different
-switch series, due to opposite meaning of the same bit:
-- KSZ87xx: Reg 4, Bit 1 - if 1, max frame size is 1532; if 0 - 1514
-- KSZ88xx: Reg 4, Bit 1 - if 1, max frame size is 1514; if 0 - 1532
+Ok. I'll drop that chunk from v7 then.
 
-Since the code was telling "... SW_LEGAL_PACKET_DISABLE, true)", I
-assume, the idea was to set max frame size to 1532.
+-Sergey
 
-With this patch, by setting MTU size 1500, both switch series will be
-configured to the 1532 frame limit.
-
-This patch was tested on KSZ8873.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
----
- drivers/net/dsa/microchip/ksz8.h        |  1 +
- drivers/net/dsa/microchip/ksz8795.c     | 53 ++++++++++++++++++++++++-
- drivers/net/dsa/microchip/ksz8795_reg.h |  3 ++
- drivers/net/dsa/microchip/ksz_common.c  |  7 ++++
- drivers/net/dsa/microchip/ksz_common.h  |  4 ++
- 5 files changed, 66 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
-index 8582b4b67d98..ea05abfbd51d 100644
---- a/drivers/net/dsa/microchip/ksz8.h
-+++ b/drivers/net/dsa/microchip/ksz8.h
-@@ -57,5 +57,6 @@ int ksz8_reset_switch(struct ksz_device *dev);
- int ksz8_switch_detect(struct ksz_device *dev);
- int ksz8_switch_init(struct ksz_device *dev);
- void ksz8_switch_exit(struct ksz_device *dev);
-+int ksz8_change_mtu(struct ksz_device *dev, int port, int mtu);
- 
- #endif
-diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-index bd3b133e7085..d01bfd609130 100644
---- a/drivers/net/dsa/microchip/ksz8795.c
-+++ b/drivers/net/dsa/microchip/ksz8795.c
-@@ -76,6 +76,57 @@ int ksz8_reset_switch(struct ksz_device *dev)
- 	return 0;
- }
- 
-+static int ksz8863_change_mtu(struct ksz_device *dev, int frame_size)
-+{
-+	u8 ctrl2 = 0;
-+
-+	if (frame_size <= KSZ8_LEGAL_PACKET_SIZE)
-+		ctrl2 |= KSZ8863_LEGAL_PACKET_ENABLE;
-+	else if (frame_size > KSZ8863_NORMAL_PACKET_SIZE)
-+		ctrl2 |= KSZ8863_HUGE_PACKET_ENABLE;
-+
-+	return ksz_rmw8(dev, REG_SW_CTRL_2, KSZ8863_LEGAL_PACKET_ENABLE |
-+			KSZ8863_HUGE_PACKET_ENABLE, ctrl2);
-+}
-+
-+static int ksz8795_change_mtu(struct ksz_device *dev, int frame_size)
-+{
-+	u8 ctrl1 = 0, ctrl2 = 0;
-+	int ret;
-+
-+	if (frame_size > KSZ8_LEGAL_PACKET_SIZE)
-+		ctrl2 |= SW_LEGAL_PACKET_DISABLE;
-+	else if (frame_size > KSZ8863_NORMAL_PACKET_SIZE)
-+		ctrl1 |= SW_HUGE_PACKET;
-+
-+	ret = ksz_rmw8(dev, REG_SW_CTRL_1, SW_HUGE_PACKET, ctrl1);
-+	if (ret)
-+		return ret;
-+
-+	return ksz_rmw8(dev, REG_SW_CTRL_2, SW_LEGAL_PACKET_DISABLE, ctrl2);
-+}
-+
-+int ksz8_change_mtu(struct ksz_device *dev, int port, int mtu)
-+{
-+	u16 frame_size;
-+
-+	if (!dsa_is_cpu_port(dev->ds, port))
-+		return 0;
-+
-+	frame_size = mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
-+
-+	switch (dev->chip_id) {
-+	case KSZ8795_CHIP_ID:
-+	case KSZ8794_CHIP_ID:
-+	case KSZ8765_CHIP_ID:
-+		return ksz8795_change_mtu(dev, frame_size);
-+	case KSZ8830_CHIP_ID:
-+		return ksz8863_change_mtu(dev, frame_size);
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
- static void ksz8795_set_prio_queue(struct ksz_device *dev, int port, int queue)
- {
- 	u8 hi, lo;
-@@ -1233,8 +1284,6 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
- 	masks = dev->info->masks;
- 	regs = dev->info->regs;
- 
--	/* Switch marks the maximum frame with extra byte as oversize. */
--	ksz_cfg(dev, REG_SW_CTRL_2, SW_LEGAL_PACKET_DISABLE, true);
- 	ksz_cfg(dev, regs[S_TAIL_TAG_CTRL], masks[SW_TAIL_TAG_ENABLE], true);
- 
- 	p = &dev->ports[dev->cpu_port];
-diff --git a/drivers/net/dsa/microchip/ksz8795_reg.h b/drivers/net/dsa/microchip/ksz8795_reg.h
-index 77487d611824..7a57c6088f80 100644
---- a/drivers/net/dsa/microchip/ksz8795_reg.h
-+++ b/drivers/net/dsa/microchip/ksz8795_reg.h
-@@ -48,6 +48,9 @@
- #define NO_EXC_COLLISION_DROP		BIT(3)
- #define SW_LEGAL_PACKET_DISABLE		BIT(1)
- 
-+#define KSZ8863_HUGE_PACKET_ENABLE	BIT(2)
-+#define KSZ8863_LEGAL_PACKET_ENABLE	BIT(1)
-+
- #define REG_SW_CTRL_3			0x05
-  #define WEIGHTED_FAIR_QUEUE_ENABLE	BIT(3)
- 
-diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-index 49a5a236d958..f39b041765fb 100644
---- a/drivers/net/dsa/microchip/ksz_common.c
-+++ b/drivers/net/dsa/microchip/ksz_common.c
-@@ -172,6 +172,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
- 	.reset = ksz8_reset_switch,
- 	.init = ksz8_switch_init,
- 	.exit = ksz8_switch_exit,
-+	.change_mtu = ksz8_change_mtu,
- };
- 
- static void ksz9477_phylink_mac_link_up(struct ksz_device *dev, int port,
-@@ -2500,6 +2501,12 @@ static int ksz_max_mtu(struct dsa_switch *ds, int port)
- 	struct ksz_device *dev = ds->priv;
- 
- 	switch (dev->chip_id) {
-+	case KSZ8795_CHIP_ID:
-+	case KSZ8794_CHIP_ID:
-+	case KSZ8765_CHIP_ID:
-+		return KSZ8795_HUGE_PACKET_SIZE - VLAN_ETH_HLEN - ETH_FCS_LEN;
-+	case KSZ8830_CHIP_ID:
-+		return KSZ8863_HUGE_PACKET_SIZE - VLAN_ETH_HLEN - ETH_FCS_LEN;
- 	case KSZ8563_CHIP_ID:
- 	case KSZ9477_CHIP_ID:
- 	case KSZ9563_CHIP_ID:
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 5f404a444ce1..cb27f5a180c7 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -591,6 +591,10 @@ static inline int is_lan937x(struct ksz_device *dev)
- 
- #define PORT_SRC_PHY_INT		1
- 
-+#define KSZ8795_HUGE_PACKET_SIZE	2000
-+#define KSZ8863_HUGE_PACKET_SIZE	1916
-+#define KSZ8863_NORMAL_PACKET_SIZE	1536
-+#define KSZ8_LEGAL_PACKET_SIZE		1518
- #define KSZ9477_MAX_FRAME_SIZE		9000
- 
- /* Regmap tables generation */
--- 
-2.30.2
-
+> 
+> Rob
