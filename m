@@ -2,147 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24FF623917
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84547623919
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 02:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiKJBof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 20:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S232177AbiKJBop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 20:44:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231925AbiKJBo0 (ORCPT
+        with ESMTP id S232114AbiKJBok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 20:44:26 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA4DA275E2;
-        Wed,  9 Nov 2022 17:44:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A0CFD6E;
-        Wed,  9 Nov 2022 17:44:31 -0800 (PST)
-Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E2A0D3F703;
-        Wed,  9 Nov 2022 17:44:23 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Icenowy Zheng <uwu@icenowy.me>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Subject: [RFC PATCH 2/2] pinctrl: sunxi: Add support for the Allwinner V5 pin controller
-Date:   Thu, 10 Nov 2022 01:42:55 +0000
-Message-Id: <20221110014255.20711-3-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.35.5
-In-Reply-To: <20221110014255.20711-1-andre.przywara@arm.com>
-References: <20221110014255.20711-1-andre.przywara@arm.com>
+        Wed, 9 Nov 2022 20:44:40 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C0629812;
+        Wed,  9 Nov 2022 17:44:38 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N74Q93CvXz4xZ0;
+        Thu, 10 Nov 2022 12:44:33 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668044673;
+        bh=ZeWw/pBrhB5XCaM3DHaahIUrvIcAQKT78oFK3ZsAtwE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IH2hg/DjzipNOIhtHxwpaI18PCjBsH543SYeuD0BfL8wmI7OrFy2APF5aD/g0LGbn
+         jP239+BKg3h4niw3US8IDBG2+7szpiOWMqrk76rJcXpJNn+Fwcyafo6BeFq9CTe5Ik
+         ayycTGkynBBPX4RdHIay8W9jnDCdHP6WDcXG9LtNzhGMDO4jNcSBcsJgxcvRd1bR3V
+         5WNz9dXelReRq007SIMMUBuoGTg3cY3mbEjazjqIkz/3RSjaKlZWHRZdvjWqx3BNKt
+         tpmO+a5I+SFGSqYo4aLlUxiowvOHSYXWuH+ER3neJU5mD3eNtsRviSPr8ghyQMDgVS
+         hlvKEBu0PL/kQ==
+Date:   Thu, 10 Nov 2022 12:44:32 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     "GONG, Ruiqi" <gongruiqi1@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the selinux tree with Linus' tree
+Message-ID: <20221110124118.37e626fb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/whRV2wne/_eDbaPE.FvD4Ej";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Allwinner V5 contains pins in all 10 possible pin banks.
-Use the newly introduced DT based pinctrl driver to describe just the
-generic pinctrl properties, so advertise the number of pins per bank
-and the interrupt capabilities. The actual function/mux assignment is
-taken from the devicetree.
+--Sig_/whRV2wne/_eDbaPE.FvD4Ej
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Hi all,
+
+Today's linux-next merge of the selinux tree got conflicts in:
+
+  security/selinux/ss/services.c
+  security/selinux/ss/sidtab.c
+  security/selinux/ss/sidtab.h
+
+between commit:
+
+  abe3c631447d ("selinux: enable use of both GFP_KERNEL and GFP_ATOMIC in c=
+onvert_context()")
+
+from Linus' tree and commit:
+
+  048be156491f ("selinux: remove the sidtab context conversion indirect cal=
+ls")
+
+from the selinux tree.
+
+I fixed it up (see below) and applied the following merge fix patch
+as well and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 10 Nov 2022 12:38:01 +1100
+Subject: [PATCH] selinux: fix up for "selinux: enable use of both GFP_KERNEL
+ and GFP_ATOMIC in convert_context()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/pinctrl/sunxi/Kconfig            |  5 +++
- drivers/pinctrl/sunxi/Makefile           |  1 +
- drivers/pinctrl/sunxi/pinctrl-sun8i-v5.c | 52 ++++++++++++++++++++++++
- 3 files changed, 58 insertions(+)
- create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun8i-v5.c
+ security/selinux/ss/services.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/sunxi/Kconfig b/drivers/pinctrl/sunxi/Kconfig
-index a78fdbbdfc0c..6b8ea56c08fd 100644
---- a/drivers/pinctrl/sunxi/Kconfig
-+++ b/drivers/pinctrl/sunxi/Kconfig
-@@ -131,4 +131,9 @@ config PINCTRL_SUN50I_H616_R
- 	default ARM64 && ARCH_SUNXI
- 	select PINCTRL_SUNXI
- 
-+config PINCTRL_SUN8I_V5
-+	bool "Support for the Allwinner V5 PIO"
-+	default MACH_SUN8I
-+	select PINCTRL_SUNXI
-+
- endif
-diff --git a/drivers/pinctrl/sunxi/Makefile b/drivers/pinctrl/sunxi/Makefile
-index f5bad7a52951..5b289e18bd5a 100644
---- a/drivers/pinctrl/sunxi/Makefile
-+++ b/drivers/pinctrl/sunxi/Makefile
-@@ -21,6 +21,7 @@ obj-$(CONFIG_PINCTRL_SUN8I_A83T_R)	+= pinctrl-sun8i-a83t-r.o
- obj-$(CONFIG_PINCTRL_SUN8I_H3)		+= pinctrl-sun8i-h3.o
- obj-$(CONFIG_PINCTRL_SUN8I_H3_R)	+= pinctrl-sun8i-h3-r.o
- obj-$(CONFIG_PINCTRL_SUN8I_V3S)		+= pinctrl-sun8i-v3s.o
-+obj-$(CONFIG_PINCTRL_SUN8I_V5)		+= pinctrl-sun8i-v5.o
- obj-$(CONFIG_PINCTRL_SUN20I_D1)		+= pinctrl-sun20i-d1.o
- obj-$(CONFIG_PINCTRL_SUN50I_H5)		+= pinctrl-sun50i-h5.o
- obj-$(CONFIG_PINCTRL_SUN50I_H6)		+= pinctrl-sun50i-h6.o
-diff --git a/drivers/pinctrl/sunxi/pinctrl-sun8i-v5.c b/drivers/pinctrl/sunxi/pinctrl-sun8i-v5.c
-new file mode 100644
-index 000000000000..402b1c915e04
---- /dev/null
-+++ b/drivers/pinctrl/sunxi/pinctrl-sun8i-v5.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Allwinner V5 SoC pinctrl driver.
-+ *
-+ * Copyright (C) 2022 Arm Ltd.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/pinctrl/pinctrl.h>
-+
-+#include "pinctrl-sunxi.h"
-+
-+static const unsigned int v5_irq_bank_map[] = { 0, 1, 5, 6, 7 };
-+
-+static const u8 v5_irq_bank_muxes[SUNXI_PINCTRL_MAX_BANKS] =
-+/*       PA PB PC PD PE PF PG PH */
-+        { 6, 6, 0, 0, 0, 6, 6, 6 };
-+
-+static const u8 v5_nr_bank_pins[SUNXI_PINCTRL_MAX_BANKS] =
-+/*        PA  PB  PC  PD  PE  PF  PG  PH  PI  PJ */
-+        { 16, 11, 17, 23, 18,  7, 14, 16, 17, 18 };
-+
-+static struct sunxi_pinctrl_desc v5_pinctrl_data = {
-+	.irq_banks = ARRAY_SIZE(v5_irq_bank_map),
-+	.irq_bank_map = v5_irq_bank_map,
-+	.irq_read_needs_mux = true,
-+	.io_bias_cfg_variant = BIAS_VOLTAGE_PIO_POW_MODE_SEL,
-+};
-+
-+static int v5_pinctrl_probe(struct platform_device *pdev)
-+{
-+	return sunxi_pinctrl_dt_table_init(pdev, v5_nr_bank_pins,
-+					   v5_irq_bank_muxes,
-+					   &v5_pinctrl_data);
-+}
-+
-+static const struct of_device_id v5_pinctrl_match[] = {
-+	{ .compatible = "allwinner,sun8i-v5-pinctrl", },
-+	{}
-+};
-+
-+static struct platform_driver v5_pinctrl_driver = {
-+	.probe	= v5_pinctrl_probe,
-+	.driver	= {
-+		.name		= "sun8i-v5-pinctrl",
-+		.of_match_table	= v5_pinctrl_match,
-+	},
-+};
-+builtin_platform_driver(v5_pinctrl_driver);
--- 
-2.35.5
+diff --git a/security/selinux/ss/services.h b/security/selinux/ss/services.h
+index 6348c95ff0e5..c4301626487f 100644
+--- a/security/selinux/ss/services.h
++++ b/security/selinux/ss/services.h
+@@ -41,6 +41,7 @@ void services_compute_xperms_decision(struct extended_per=
+ms_decision *xpermd,
+ 				      struct avtab_node *node);
+=20
+ int services_convert_context(struct convert_context_args *args,
+-			     struct context *oldc, struct context *newc);
++			     struct context *oldc, struct context *newc,
++			     gfp_t gfp_flags);
+=20
+ #endif	/* _SS_SERVICES_H_ */
+--=20
+2.35.1
 
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc security/selinux/ss/services.c
+index 64a6a37dc36d,e63c4f942fd6..9086c4ea0255
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@@ -2014,18 -2008,20 +2008,21 @@@ static inline int convert_context_handl
+  	return 0;
+  }
+ =20
+- /*
+-  * Convert the values in the security context
+-  * structure `oldc' from the values specified
+-  * in the policy `p->oldp' to the values specified
+-  * in the policy `p->newp', storing the new context
+-  * in `newc'.  Verify that the context is valid
+-  * under the new policy.
++ /**
++  * services_convert_context - Convert a security context across policies.
++  * @args: populated convert_context_args struct
++  * @oldc: original context
++  * @newc: converted context
++  *
++  * Convert the values in the security context structure @oldc from the va=
+lues
++  * specified in the policy @args->oldp to the values specified in the pol=
+icy
++  * @args->newp, storing the new context in @newc, and verifying that the
++  * context is valid under the new policy.
+   */
+- static int convert_context(struct context *oldc, struct context *newc, vo=
+id *p,
+- 			   gfp_t gfp_flags)
++ int services_convert_context(struct convert_context_args *args,
+ -			     struct context *oldc, struct context *newc)
+++			     struct context *oldc, struct context *newc,
+++			     gfp_t gfp_flags)
+  {
+- 	struct convert_context_args *args;
+  	struct ocontext *oc;
+  	struct role_datum *role;
+  	struct type_datum *typdatum;
+@@@ -2034,10 -2030,8 +2031,8 @@@
+  	u32 len;
+  	int rc;
+ =20
+- 	args =3D p;
+-=20
+  	if (oldc->str) {
+ -		s =3D kstrdup(oldc->str, GFP_KERNEL);
+ +		s =3D kstrdup(oldc->str, gfp_flags);
+  		if (!s)
+  			return -ENOMEM;
+ =20
+diff --cc security/selinux/ss/sidtab.c
+index db5cce385bf8,1c3d2cda6b92..38d25173aebd
+--- a/security/selinux/ss/sidtab.c
++++ b/security/selinux/ss/sidtab.c
+@@@ -324,8 -327,8 +327,9 @@@ int sidtab_context_to_sid(struct sidta
+  			goto out_unlock;
+  		}
+ =20
+- 		rc =3D convert->func(context, &dst_convert->context,
+- 				   convert->args, GFP_ATOMIC);
++ 		rc =3D services_convert_context(convert->args,
+ -					      context, &dst_convert->context);
+++					      context, &dst_convert->context,
+++					      GFP_ATOMIC);
+  		if (rc) {
+  			context_destroy(&dst->context);
+  			goto out_unlock;
+@@@ -402,9 -405,9 +406,10 @@@ static int sidtab_convert_tree(union si
+  		}
+  		i =3D 0;
+  		while (i < SIDTAB_LEAF_ENTRIES && *pos < count) {
+- 			rc =3D convert->func(&esrc->ptr_leaf->entries[i].context,
+- 					   &edst->ptr_leaf->entries[i].context,
+- 					   convert->args, GFP_KERNEL);
++ 			rc =3D services_convert_context(convert->args,
++ 					&esrc->ptr_leaf->entries[i].context,
+ -					&edst->ptr_leaf->entries[i].context);
+++					&edst->ptr_leaf->entries[i].context,
+++					GFP_KERNEL);
+  			if (rc)
+  				return rc;
+  			(*pos)++;
+
+--Sig_/whRV2wne/_eDbaPE.FvD4Ej
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsV4AACgkQAVBC80lX
+0GxG8wgAjpoVgExpS7o4Qa1EtzUZR6HJL3a9ObVLvrknTaFsMOlv2EDDOyFlwVkk
+QWGYDuWQZhoRJSVgp9p0MtoeIA3peejO5gNw/89+rrvvu9c8rtxDhNFDEbzXBnjg
+7wDrjCe1nAqjiK35Lwxla6C5VJI7jsHGhUQxY/wroUz2PzXabb6vPREmN32L9a4l
+2dWNh2kierB58H/1Jm5SflnKNAPrGWIiVJVXl5h8bYMTcpdVO4wxsomy4KBxHL8E
+QIoZageiWr9xcr9d5r2gSjh5CBha+o9jmagL94uhuHCV8E7mkwU5Y+Pd5xTCHNek
+o398kb1nR1nZJDIRsrzIqHV4eOKcDw==
+=ffWS
+-----END PGP SIGNATURE-----
+
+--Sig_/whRV2wne/_eDbaPE.FvD4Ej--
