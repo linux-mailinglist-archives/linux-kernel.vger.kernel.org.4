@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CCA62475E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85AC624760
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiKJQpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
+        id S232625AbiKJQpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbiKJQo7 (ORCPT
+        with ESMTP id S232602AbiKJQpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:44:59 -0500
+        Thu, 10 Nov 2022 11:45:13 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BC010FE0;
-        Thu, 10 Nov 2022 08:43:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBA11EEF5;
+        Thu, 10 Nov 2022 08:43:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73137B82251;
-        Thu, 10 Nov 2022 16:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293CEC433B5;
-        Thu, 10 Nov 2022 16:43:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58B12B82248;
+        Thu, 10 Nov 2022 16:43:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B66C433D6;
+        Thu, 10 Nov 2022 16:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668098620;
-        bh=qGXfF0wUmE6bpAXFogr6UIGDaM64e+dQ9MKJUHRzQqM=;
+        s=k20201202; t=1668098623;
+        bh=YyjXthwblgrT88DPLFu+XIPGLqjTiZLg+Xpj0PN4MaE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JzTGAWvq1ESHwzE5/pnlpzv+kVN4jQdV0B7HZEKQ/UmLxon1vkKllZAhV1tMEcGBL
-         TjNhYhQ93oWavvSJQCrcp+aUEsO5yFkknl12Ak8++oIXZVVu+I41j9wAThrU43HkHP
-         vXIf/h8URsKzoDgUyMR5OZQ/awbNiuMyca0x9jorm7yZ5X3Pw5NoQyuhw+5P0Rf+4Q
-         KjUXEnopsOuDc92smLFfBJh4l3acvRr0CdfzyRSo14rrxUFbcxkeTULB5Ra47pyOUa
-         u9uTDs58hdBnt5F4SuN1CHWr6iceMyvVijdPgUTVTX5b1sg4iytGoJQ2t5hR/IX7AE
-         wy75gexKLrpoA==
+        b=QFqr9Y8X7Tigp18oliUFzjQmBK/C7AIWjnahKOX9XFUZZ5k9p85F+b9YrWQFAyT6R
+         kiHrrN4NzdKIK6lQ+4RjaJYDQgUlMiv0QuklOB8XekHJQ6Ysoy0dS4dtNvmrqvQhdv
+         l3dCz2qtsKyKXo7WA6yNgMjlYukM0Q1v076iwo2Jfao8Ae+HwmO5X4Wlx+yAcSb+dv
+         +N81e4BkTfSkXnSlRCTkczSZujt3Pnqb4yGsIwqE8iRK4++IDcFS+IE8QltD74JVUl
+         dDJnqLBcCYfVH1M8riwd/2iDGhBca/3oUv4BOxobeWiW/83LlxoWUiIwmTBA8QSC3p
+         sIndo9vYAzXeQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -40,9 +40,9 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
-Subject: [PATCH v1 27/28] rust: types: add `Either` type
-Date:   Thu, 10 Nov 2022 17:41:39 +0100
-Message-Id: <20221110164152.26136-28-ojeda@kernel.org>
+Subject: [PATCH v1 28/28] rust: types: add `Opaque` type
+Date:   Thu, 10 Nov 2022 17:41:40 +0100
+Message-Id: <20221110164152.26136-29-ojeda@kernel.org>
 In-Reply-To: <20221110164152.26136-1-ojeda@kernel.org>
 References: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -58,57 +58,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wedson Almeida Filho <wedsonaf@gmail.com>
 
-Introduce the new `types` module of the `kernel` crate with
-`Either` as its first type.
+Add the `Opaque` type, which is meant to be used with FFI objects
+that are never interpreted by Rust code, e.g.:
 
-`Either<L, R>` is a sum type that always holds either a value
-of type `L` (`Left` variant) or `R` (`Right` variant).
-
-For instance:
-
-    struct Executor {
-        queue: Either<BoxedQueue, &'static Queue>,
+    struct Waiter {
+        completion: Opaque<bindings::completion>,
+        next: *mut Waiter,
     }
+
+It has the advantage that the objects don't have to be
+zero-initialised before calling their init functions, making
+the code performance closer to C.
 
 Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
 [Reworded, adapted for upstream and applied latest changes]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/lib.rs   |  1 +
- rust/kernel/types.rs | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
- create mode 100644 rust/kernel/types.rs
+ rust/kernel/types.rs | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index a3abc110ff97..53040fa9e897 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -31,6 +31,7 @@ mod static_assert;
- #[doc(hidden)]
- pub mod std_vendor;
- pub mod str;
-+pub mod types;
- 
- #[doc(hidden)]
- pub use bindings;
 diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-new file mode 100644
-index 000000000000..3b0c44769708
---- /dev/null
+index 3b0c44769708..e84e51ec9716 100644
+--- a/rust/kernel/types.rs
 +++ b/rust/kernel/types.rs
-@@ -0,0 +1,12 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -2,6 +2,31 @@
+ 
+ //! Kernel types.
+ 
++use core::{cell::UnsafeCell, mem::MaybeUninit};
 +
-+//! Kernel types.
++/// Stores an opaque value.
++///
++/// This is meant to be used with FFI objects that are never interpreted by Rust code.
++#[repr(transparent)]
++pub struct Opaque<T>(MaybeUninit<UnsafeCell<T>>);
 +
-+/// A sum type that always holds either a value of type `L` or `R`.
-+pub enum Either<L, R> {
-+    /// Constructs an instance of [`Either`] containing a value of type `L`.
-+    Left(L),
++impl<T> Opaque<T> {
++    /// Creates a new opaque value.
++    pub const fn new(value: T) -> Self {
++        Self(MaybeUninit::new(UnsafeCell::new(value)))
++    }
 +
-+    /// Constructs an instance of [`Either`] containing a value of type `R`.
-+    Right(R),
++    /// Creates an uninitialised value.
++    pub const fn uninit() -> Self {
++        Self(MaybeUninit::uninit())
++    }
++
++    /// Returns a raw pointer to the opaque data.
++    pub fn get(&self) -> *mut T {
++        UnsafeCell::raw_get(self.0.as_ptr())
++    }
 +}
++
+ /// A sum type that always holds either a value of type `L` or `R`.
+ pub enum Either<L, R> {
+     /// Constructs an instance of [`Either`] containing a value of type `L`.
 -- 
 2.38.1
 
