@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7A8624B92
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDA6624B8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiKJUSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59226 "EHLO
+        id S230408AbiKJURR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:17:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiKJURx (ORCPT
+        with ESMTP id S231753AbiKJURL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:17:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A5945A07
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668111410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=93yVlCVIghUC8PyP5uVh+QvYFV+8lvAK0QrTwmcgxD8=;
-        b=gSU9jwqpMpkemLjm20fFm92fHIXP/YqK/LMcBrNFlSDwCgXcQNQXzObH95DDMDfWb9StJA
-        iQWQRPTYTnQbtLNay71b+AkQ4VZofk4O8NKS8M7yUd60GZBJWCrZqW+kxdyNwg3PpAaUX+
-        zazUvfVQ0MK59vJUVBNn2L6x3b6dYXw=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-612-hstrT8IJONyqSZLHydGqzQ-1; Thu, 10 Nov 2022 15:16:49 -0500
-X-MC-Unique: hstrT8IJONyqSZLHydGqzQ-1
-Received: by mail-io1-f70.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so1776756iob.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:16:49 -0800 (PST)
+        Thu, 10 Nov 2022 15:17:11 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6298C50F23
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:17:10 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id q93-20020a17090a1b6600b0021311ab9082so1617642pjq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:17:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mfKHaD6cbSSWqGqF29LX7wOSKlH4iPXYasLJXyiiA9w=;
+        b=tkvs+ltyClO5qEc6IGHzTNYPaZihZ8PgmqKo4goqrT68rhkjBPUygnE5AuO8BWe1el
+         7FUhPE+eH66r0qqBXbAbb6lX5ACmY7HiSrlfuZ4WqYtU4b5zJWJxgdHvXKOEGL1r8R/n
+         i2i7YxZYxP38iYqe+kpLXdSpS8K7K5QpuO2jJL47Jmez3zwA4cD0irRPyiIjd7LrtOkJ
+         N7uDnk56XBKSsw3tfAazvddriegp1lf+K38vcOB995hEF3+vd3WMXmHNQj7pdgoLbkjo
+         akrO1kUMwKF4X15RejEom5g+QYWN/dia9h75rwKZNbSkB0TdyC0O39li1Xw76nzQN0lX
+         RfIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=93yVlCVIghUC8PyP5uVh+QvYFV+8lvAK0QrTwmcgxD8=;
-        b=gx2rs0gTCK5WqKKXPCqBYRz9X0d+2/NHSEyWhnEQzOk4D1Bxq/YkQ6Fbe8X101RIaK
-         DunEurMg/MCTsWZd9zTJ4dx2RaFv7AxPqLAQEuT2IJW255iUewis9dZihOWgUVgbBlRm
-         yy+5w/XeOLgiNlpmYHKs8gzKJ1MLO1zIc5j+fJAX8A7NsDZi2l0bIqXSyOPcQxwlEbJq
-         0ll9xb8yu7idA9my33L6cAVChwiYQnaMDOvrs8H24B/G0ET1V3ivLJ0TJ4RQ3mF+paeU
-         o+KlQQ1fQEuMnh7/F+WGUDepVHbhR1WBcA4+CvltgKeoEImlYKraTq4yVXhgVMltQQ2l
-         xnDA==
-X-Gm-Message-State: ACrzQf1vtWmWWAfcPx8O/ehK/5Q8qLLCyhELJGuBP+JbHO1A1kaVJ/pp
-        k7x0674/b9Eto8fz0u7TDt1zNLIf/NG0UIBRT98ZmC/4lovpkPaNSZOyKsmhlf+NMmMFYI+QCLI
-        ZkwYk1exSuce3VIYn53Ts1WPi
-X-Received: by 2002:a05:6e02:686:b0:300:1113:3192 with SMTP id o6-20020a056e02068600b0030011133192mr3715970ils.70.1668111408544;
-        Thu, 10 Nov 2022 12:16:48 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6ztJC5t+zhnCg5yze6Ilpp7TK4Q+C4rdLSAX3gmiMajCmP1687ENJXELKVxcoTVNQf/LIjiw==
-X-Received: by 2002:a05:6e02:686:b0:300:1113:3192 with SMTP id o6-20020a056e02068600b0030011133192mr3715963ils.70.1668111408352;
-        Thu, 10 Nov 2022 12:16:48 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id i7-20020a0566022c8700b006bbea9f45cesm25981iow.38.2022.11.10.12.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 12:16:47 -0800 (PST)
-Date:   Thu, 10 Nov 2022 13:16:40 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for
- awilliam
-Message-ID: <20221110131640.6e00811f.alex.williamson@redhat.com>
-In-Reply-To: <20221013214636.30721-1-palmer@rivosinc.com>
-References: <20221013214636.30721-1-palmer@rivosinc.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:reply-to:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mfKHaD6cbSSWqGqF29LX7wOSKlH4iPXYasLJXyiiA9w=;
+        b=tXpg8eMFAecif9NumFb8z6UE6nfJRH9n2u33nKhoMlbo50xSSMULY8tJnVKYijKX11
+         xAOPL/SMrIK8MeLqyegneGXX5bY8RSUNHS4ig3a9ReEwnDh+RUdn9USatWi+W3B9G+qZ
+         LUiXaydk9SUQUUhu0u0vuEtB3TcVJghqorYq/lKFkPPg6FfY1QwiTx/fAQM9FtRR/AZd
+         od/iHeb9F6NFwRlBFsxeufdrKa8FdcqdzD//HYpQc9ccrTg6PNO2hLuYDp0qsPsLNUSI
+         hFi1iQ8X1r9rdtTQSgKZMvHhWkdWxShA+t1pAG1bkOKknq2udVxiVLcXFsqGp6fdNOaW
+         ZXxA==
+X-Gm-Message-State: ACrzQf3VZI2csQaThfRfykUbK8zI2NK+u1OGBS6qfA0NzYu1E5pkTpdK
+        8Nl9D7ZTxu44A0K4z+fII7RdOvJvdys=
+X-Google-Smtp-Source: AMsMyM6UrQV7x/ogAudTr1WEHqz0fZqaZkT3ac5o0dVZwQI/oLv8/RGEuVmI2RJ65xJ03sonZZrE8I9u9iM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:3102:b0:213:b853:5e45 with SMTP id
+ gc2-20020a17090b310200b00213b8535e45mr1908437pjb.97.1668111429969; Thu, 10
+ Nov 2022 12:17:09 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu, 10 Nov 2022 20:17:07 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221110201707.1976032-1-seanjc@google.com>
+Subject: [PATCH] x86/debug: Include percpu.h in debugreg.h to get
+ DECLARE_PER_CPU() et al
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,38 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 14:46:36 -0700
-Palmer Dabbelt <palmer@rivosinc.com> wrote:
+Include percpu.h to pick up the definition of DECLARE_PER_CPU() and
+friends instead of relying on the parent to provide the #include.  E.g.
+swapping the order of includes in arch/x86/kvm/vmx/nested.c (simulating
+KVM code movement being done for other purposes) results in build errors:
 
-> Github deprecated the git:// links about a year ago, so let's move to
-> the https:// URLs instead.
-> 
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
-> I've split these up by github username so folks can take them
-> independently, as some of these repos have been renamed at github and
-> thus need more than just a sed to fix them.
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3705c487450b..41a925931cc3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21305,7 +21305,7 @@ M:	Alex Williamson <alex.williamson@redhat.com>
->  R:	Cornelia Huck <cohuck@redhat.com>
->  L:	kvm@vger.kernel.org
->  S:	Maintained
-> -T:	git git://github.com/awilliam/linux-vfio.git
-> +T:	git https://github.com/awilliam/linux-vfio.git
->  F:	Documentation/driver-api/vfio.rst
->  F:	drivers/vfio/
->  F:	include/linux/vfio.h
+  In file included from arch/x86/kvm/vmx/nested.c:3:
+  arch/x86/include/asm/debugreg.h:9:32: error: unknown type name =E2=80=98c=
+pu_dr7=E2=80=99
+      9 | DECLARE_PER_CPU(unsigned long, cpu_dr7);
+        |                                ^~~~~~~
 
-Applied to vfio next branch for v6.2.  Thanks,
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/debugreg.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Alex
+diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugre=
+g.h
+index cfdf307ddc01..b049d950612f 100644
+--- a/arch/x86/include/asm/debugreg.h
++++ b/arch/x86/include/asm/debugreg.h
+@@ -2,8 +2,8 @@
+ #ifndef _ASM_X86_DEBUGREG_H
+ #define _ASM_X86_DEBUGREG_H
+=20
+-
+ #include <linux/bug.h>
++#include <linux/percpu.h>
+ #include <uapi/asm/debugreg.h>
+=20
+ DECLARE_PER_CPU(unsigned long, cpu_dr7);
+
+base-commit: 7420ae3bb977b46eab082f4964641f3ddc98ebaf
+--=20
+2.38.1.431.g37b22c650d-goog
 
