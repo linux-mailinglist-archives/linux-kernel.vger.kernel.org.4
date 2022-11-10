@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D29C62423B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5F962423D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiKJMWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
+        id S230028AbiKJMWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbiKJMWC (ORCPT
+        with ESMTP id S229920AbiKJMWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:22:02 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9866725C1;
-        Thu, 10 Nov 2022 04:22:00 -0800 (PST)
-Date:   Thu, 10 Nov 2022 12:21:58 -0000
+        Thu, 10 Nov 2022 07:22:04 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB57C71F37;
+        Thu, 10 Nov 2022 04:22:01 -0800 (PST)
+Date:   Thu, 10 Nov 2022 12:21:59 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668082919;
+        s=2020; t=1668082920;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fjQJS5f93wLG/tWeWmV/ra8od2ybqaIhClDun19QQFs=;
-        b=m9gAR3O89MkcO2X4NTCvFuBbvp8AKRIPQw3BEIzYvLHqaqHH6awGXaTffo37U5kxOCoMmV
-        5jRgTHkUpMXKzYD46ts7zgVOoRIJ0OgozhW5mdus3blD1pv25QgiA157b3uT76LpjT68Mk
-        eIEkY/5OznEMVqaBAnXnnT27xrj9Qm3nr2/O2nJj6YOT1ZPb0gd4KEfroJYLb2oIIb4u9R
-        GOl0bbRHOwHDw+YIMNWS3Hqkno05UOm4VLsuL8dFuNUvXVR09/45urMjH+7OBhWeJS61/6
-        jdMQ9CTn+sCSsdv6BHxdOKYlIEpez0zGmnuACUYfu4Abn2gTrDysg9qrbuTzSw==
+        bh=YWlPPt79KZVQ4iVF+rQ2uLTDqlEKiYXb05/erd5wIAc=;
+        b=VpwwBNHRpHnNA4BGE4NdGw8XWqeKb1REdhKei2LYNiXafcuX/ADrPCCgjCADUn5TgwTZyx
+        VgbGZcIePDLD5QbTO1a8JkHzNzZGKPGXwE+js61QXWi7PMD05oA7auFF86+xqWNMDOb8YP
+        HqRQoLxIswSUVia9rDnk6TczEtTDIEhWSB+T/meWlVWoRYYInmKR0Z/TILUudQDrHFmzSI
+        1EN4VD7bjtHjZgomJsmcjO4snKVyxTagznI2VYpXkNLlMqvgx7QcmCyHhR7Cb2BjOCtH/X
+        49uM+hlHHTkQG4x9X+BvyuEPFXtU9B8Bft0fiCvVopNz4HRw6AMZwXYJwV+TQw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668082919;
+        s=2020e; t=1668082920;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fjQJS5f93wLG/tWeWmV/ra8od2ybqaIhClDun19QQFs=;
-        b=CdjyMuoA5lEauYGxiCxHzOSrP+txf3D0HUG9aENSKHMM/FEl4XK/RCZS1unFyI1zlc3erZ
-        xNBdcMc64Q2gU+DA==
+        bh=YWlPPt79KZVQ4iVF+rQ2uLTDqlEKiYXb05/erd5wIAc=;
+        b=We81QvbcApQDduVHkfkDX2V5FHfEgUDy/l34TPBbG5nTAvZI2MIDh2Dq6IAG/G2Kflr8Be
+        +ws0lJP8llLPf+AA==
 From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/mtrr: Rename prepare_set() and post_set()
+Subject: [tip: x86/cpu] x86/mtrr: Replace use_intel() with a local flag
 Cc:     Juergen Gross <jgross@suse.com>, Borislav Petkov <bp@suse.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221102074713.21493-5-jgross@suse.com>
-References: <20221102074713.21493-5-jgross@suse.com>
+In-Reply-To: <20221102074713.21493-4-jgross@suse.com>
+References: <20221102074713.21493-4-jgross@suse.com>
 MIME-Version: 1.0
-Message-ID: <166808291816.4906.2479732754463397288.tip-bot2@tip-bot2>
+Message-ID: <166808291924.4906.14811957457604547770.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,190 +65,198 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cpu branch of tip:
 
-Commit-ID:     d5f66d5d10611978c3a93cc94a811d74e0cf6cbc
-Gitweb:        https://git.kernel.org/tip/d5f66d5d10611978c3a93cc94a811d74e0cf6cbc
+Commit-ID:     45fa71f19a2d73f157d6892a8d677a738a0414fd
+Gitweb:        https://git.kernel.org/tip/45fa71f19a2d73f157d6892a8d677a738a0414fd
 Author:        Juergen Gross <jgross@suse.com>
-AuthorDate:    Wed, 02 Nov 2022 08:47:01 +01:00
+AuthorDate:    Wed, 02 Nov 2022 08:47:00 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
 CommitterDate: Thu, 10 Nov 2022 13:12:44 +01:00
 
-x86/mtrr: Rename prepare_set() and post_set()
+x86/mtrr: Replace use_intel() with a local flag
 
-Rename the currently MTRR-specific functions prepare_set() and
-post_set() in preparation to move them. Make them non-static and put
-their prototypes into cacheinfo.h, where they will end after moving them
-to their final position anyway.
+In MTRR code use_intel() is only used in one source file, and the
+relevant use_intel_if member of struct mtrr_ops is set only in
+generic_mtrr_ops.
 
-Expand the comment before the functions with an introductory line and
-rename two related static variables, too.
+Replace use_intel() with a single flag in cacheinfo.c which can be
+set when assigning generic_mtrr_ops to mtrr_if. This allows to drop
+use_intel_if from mtrr_ops, while preparing to decouple PAT from MTRR.
+As another preparation for the PAT/MTRR decoupling use a bit for MTRR
+control and one for PAT control. For now set both bits together, this
+can be changed later.
+
+As the new flag will be set only if mtrr_enabled is set, the test for
+mtrr_enabled can be dropped at some places.
 
   [ bp: Massage commit message. ]
 
 Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221102074713.21493-5-jgross@suse.com
+Link: https://lore.kernel.org/r/20221102074713.21493-4-jgross@suse.com
 Signed-off-by: Borislav Petkov <bp@suse.de>
 ---
- arch/x86/include/asm/cacheinfo.h   |  3 ++-
- arch/x86/kernel/cpu/mtrr/generic.c | 43 ++++++++++++++---------------
- 2 files changed, 24 insertions(+), 22 deletions(-)
+ arch/x86/include/asm/cacheinfo.h   |  5 +++++
+ arch/x86/kernel/cpu/cacheinfo.c    |  3 +++
+ arch/x86/kernel/cpu/mtrr/generic.c |  1 -
+ arch/x86/kernel/cpu/mtrr/mtrr.c    | 28 +++++++++++++---------------
+ arch/x86/kernel/cpu/mtrr/mtrr.h    |  2 --
+ 5 files changed, 21 insertions(+), 18 deletions(-)
 
 diff --git a/arch/x86/include/asm/cacheinfo.h b/arch/x86/include/asm/cacheinfo.h
-index c387396..6159874 100644
+index 86b2e0d..c387396 100644
 --- a/arch/x86/include/asm/cacheinfo.h
 +++ b/arch/x86/include/asm/cacheinfo.h
-@@ -10,4 +10,7 @@ extern unsigned int memory_caching_control;
+@@ -2,6 +2,11 @@
+ #ifndef _ASM_X86_CACHEINFO_H
+ #define _ASM_X86_CACHEINFO_H
+ 
++/* Kernel controls MTRR and/or PAT MSRs. */
++extern unsigned int memory_caching_control;
++#define CACHE_MTRR 0x01
++#define CACHE_PAT  0x02
++
  void cacheinfo_amd_init_llc_id(struct cpuinfo_x86 *c, int cpu);
  void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu);
  
-+void cache_disable(void);
-+void cache_enable(void);
+diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
+index 6655683..32fb049 100644
+--- a/arch/x86/kernel/cpu/cacheinfo.c
++++ b/arch/x86/kernel/cpu/cacheinfo.c
+@@ -35,6 +35,9 @@ DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_llc_shared_map);
+ /* Shared L2 cache maps */
+ DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_l2c_shared_map);
+ 
++/* Kernel controls MTRR and/or PAT MSRs. */
++unsigned int memory_caching_control __ro_after_init;
 +
- #endif /* _ASM_X86_CACHEINFO_H */
+ struct _cache_table {
+ 	unsigned char descriptor;
+ 	char cache_type;
 diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
-index 7bbaba4..2f3fc28 100644
+index c8f8951..7bbaba4 100644
 --- a/arch/x86/kernel/cpu/mtrr/generic.c
 +++ b/arch/x86/kernel/cpu/mtrr/generic.c
-@@ -10,6 +10,7 @@
- #include <linux/mm.h>
+@@ -917,7 +917,6 @@ int positive_have_wrcomb(void)
+  * Generic structure...
+  */
+ const struct mtrr_ops generic_mtrr_ops = {
+-	.use_intel_if		= 1,
+ 	.set_all		= generic_set_all,
+ 	.get			= generic_get_mtrr,
+ 	.get_free_region	= generic_get_free_region,
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
+index 2746cac..4209945 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.c
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
+@@ -46,6 +46,7 @@
+ #include <linux/syscore_ops.h>
+ #include <linux/rcupdate.h>
  
- #include <asm/processor-flags.h>
 +#include <asm/cacheinfo.h>
  #include <asm/cpufeature.h>
- #include <asm/tlbflush.h>
+ #include <asm/e820/api.h>
  #include <asm/mtrr.h>
-@@ -396,9 +397,6 @@ print_fixed(unsigned base, unsigned step, const mtrr_type *types)
- 	}
+@@ -119,11 +120,11 @@ static int have_wrcomb(void)
  }
  
--static void prepare_set(void);
--static void post_set(void);
--
- static void __init print_mtrr_state(void)
+ /*  This function returns the number of variable MTRRs  */
+-static void __init set_num_var_ranges(void)
++static void __init set_num_var_ranges(bool use_generic)
  {
- 	unsigned int i;
-@@ -450,11 +448,11 @@ void __init mtrr_bp_pat_init(void)
- 	unsigned long flags;
+ 	unsigned long config = 0, dummy;
  
- 	local_irq_save(flags);
--	prepare_set();
-+	cache_disable();
+-	if (use_intel())
++	if (use_generic)
+ 		rdmsr(MSR_MTRRcap, config, dummy);
+ 	else if (is_cpu(AMD) || is_cpu(HYGON))
+ 		config = 2;
+@@ -756,14 +757,16 @@ void __init mtrr_bp_init(void)
  
- 	pat_init();
+ 	if (mtrr_if) {
+ 		__mtrr_enabled = true;
+-		set_num_var_ranges();
++		set_num_var_ranges(mtrr_if == &generic_mtrr_ops);
+ 		init_table();
+-		if (use_intel()) {
++		if (mtrr_if == &generic_mtrr_ops) {
+ 			/* BIOS may override */
+ 			__mtrr_enabled = get_mtrr_state();
  
--	post_set();
-+	cache_enable();
- 	local_irq_restore(flags);
- }
+-			if (mtrr_enabled())
++			if (mtrr_enabled()) {
+ 				mtrr_bp_pat_init();
++				memory_caching_control |= CACHE_MTRR | CACHE_PAT;
++			}
  
-@@ -687,7 +685,7 @@ static u32 deftype_lo, deftype_hi;
-  * NOTE: The CPU must already be in a safe state for MTRR changes, including
-  *       measures that only a single CPU can be active in set_mtrr_state() in
-  *       order to not be subject to races for usage of deftype_lo. This is
-- *       accomplished by taking set_atomicity_lock.
-+ *       accomplished by taking cache_disable_lock.
-  * RETURNS: 0 if no changes made, else a mask indicating what was changed.
+ 			if (mtrr_cleanup(phys_addr)) {
+ 				changed_by_mtrr_cleanup = 1;
+@@ -786,10 +789,7 @@ void __init mtrr_bp_init(void)
+ 
+ void mtrr_ap_init(void)
+ {
+-	if (!mtrr_enabled())
+-		return;
+-
+-	if (!use_intel() || mtrr_aps_delayed_init)
++	if (!memory_caching_control || mtrr_aps_delayed_init)
+ 		return;
+ 
+ 	/*
+@@ -825,9 +825,7 @@ void mtrr_save_state(void)
+ 
+ void set_mtrr_aps_delayed_init(void)
+ {
+-	if (!mtrr_enabled())
+-		return;
+-	if (!use_intel())
++	if (!memory_caching_control)
+ 		return;
+ 
+ 	mtrr_aps_delayed_init = true;
+@@ -838,7 +836,7 @@ void set_mtrr_aps_delayed_init(void)
   */
- static unsigned long set_mtrr_state(void)
-@@ -718,18 +716,19 @@ static unsigned long set_mtrr_state(void)
- 	return change_mask;
- }
- 
--
--static unsigned long cr4;
--static DEFINE_RAW_SPINLOCK(set_atomicity_lock);
--
- /*
-+ * Disable and enable caches. Needed for changing MTRRs and the PAT MSR.
-+ *
-  * Since we are disabling the cache don't allow any interrupts,
-  * they would run extremely slow and would only increase the pain.
-  *
-  * The caller must ensure that local interrupts are disabled and
-- * are reenabled after post_set() has been called.
-+ * are reenabled after cache_enable() has been called.
-  */
--static void prepare_set(void) __acquires(set_atomicity_lock)
-+static unsigned long saved_cr4;
-+static DEFINE_RAW_SPINLOCK(cache_disable_lock);
-+
-+void cache_disable(void) __acquires(cache_disable_lock)
+ void mtrr_aps_init(void)
  {
- 	unsigned long cr0;
+-	if (!use_intel() || !mtrr_enabled())
++	if (!memory_caching_control)
+ 		return;
  
-@@ -740,7 +739,7 @@ static void prepare_set(void) __acquires(set_atomicity_lock)
- 	 * changes to the way the kernel boots
- 	 */
+ 	/*
+@@ -855,7 +853,7 @@ void mtrr_aps_init(void)
  
--	raw_spin_lock(&set_atomicity_lock);
-+	raw_spin_lock(&cache_disable_lock);
- 
- 	/* Enter the no-fill (CD=1, NW=0) cache mode and flush caches. */
- 	cr0 = read_cr0() | X86_CR0_CD;
-@@ -757,8 +756,8 @@ static void prepare_set(void) __acquires(set_atomicity_lock)
- 
- 	/* Save value of CR4 and clear Page Global Enable (bit 7) */
- 	if (boot_cpu_has(X86_FEATURE_PGE)) {
--		cr4 = __read_cr4();
--		__write_cr4(cr4 & ~X86_CR4_PGE);
-+		saved_cr4 = __read_cr4();
-+		__write_cr4(saved_cr4 & ~X86_CR4_PGE);
- 	}
- 
- 	/* Flush all TLBs via a mov %cr3, %reg; mov %reg, %cr3 */
-@@ -776,7 +775,7 @@ static void prepare_set(void) __acquires(set_atomicity_lock)
- 		wbinvd();
- }
- 
--static void post_set(void) __releases(set_atomicity_lock)
-+void cache_enable(void) __releases(cache_disable_lock)
+ void mtrr_bp_restore(void)
  {
- 	/* Flush TLBs (no need to flush caches - they are disabled) */
- 	count_vm_tlb_event(NR_TLB_LOCAL_FLUSH_ALL);
-@@ -790,8 +789,8 @@ static void post_set(void) __releases(set_atomicity_lock)
+-	if (!use_intel() || !mtrr_enabled())
++	if (!memory_caching_control)
+ 		return;
  
- 	/* Restore value of CR4 */
- 	if (boot_cpu_has(X86_FEATURE_PGE))
--		__write_cr4(cr4);
--	raw_spin_unlock(&set_atomicity_lock);
-+		__write_cr4(saved_cr4);
-+	raw_spin_unlock(&cache_disable_lock);
- }
+ 	mtrr_if->set_all();
+@@ -866,7 +864,7 @@ static int __init mtrr_init_finialize(void)
+ 	if (!mtrr_enabled())
+ 		return 0;
  
- static void generic_set_all(void)
-@@ -800,7 +799,7 @@ static void generic_set_all(void)
- 	unsigned long flags;
+-	if (use_intel()) {
++	if (memory_caching_control & CACHE_MTRR) {
+ 		if (!changed_by_mtrr_cleanup)
+ 			mtrr_state_warn();
+ 		return 0;
+diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.h b/arch/x86/kernel/cpu/mtrr/mtrr.h
+index 2ac99e5..88b1c4b 100644
+--- a/arch/x86/kernel/cpu/mtrr/mtrr.h
++++ b/arch/x86/kernel/cpu/mtrr/mtrr.h
+@@ -14,7 +14,6 @@ extern unsigned int mtrr_usage_table[MTRR_MAX_VAR_RANGES];
  
- 	local_irq_save(flags);
--	prepare_set();
-+	cache_disable();
+ struct mtrr_ops {
+ 	u32	vendor;
+-	u32	use_intel_if;
+ 	void	(*set)(unsigned int reg, unsigned long base,
+ 		       unsigned long size, mtrr_type type);
+ 	void	(*set_all)(void);
+@@ -61,7 +60,6 @@ extern u64 size_or_mask, size_and_mask;
+ extern const struct mtrr_ops *mtrr_if;
  
- 	/* Actually set the state */
- 	mask = set_mtrr_state();
-@@ -808,7 +807,7 @@ static void generic_set_all(void)
- 	/* also set PAT */
- 	pat_init();
+ #define is_cpu(vnd)	(mtrr_if && mtrr_if->vendor == X86_VENDOR_##vnd)
+-#define use_intel()	(mtrr_if && mtrr_if->use_intel_if == 1)
  
--	post_set();
-+	cache_enable();
- 	local_irq_restore(flags);
- 
- 	/* Use the atomic bitops to update the global mask */
-@@ -839,7 +838,7 @@ static void generic_set_mtrr(unsigned int reg, unsigned long base,
- 	vr = &mtrr_state.var_ranges[reg];
- 
- 	local_irq_save(flags);
--	prepare_set();
-+	cache_disable();
- 
- 	if (size == 0) {
- 		/*
-@@ -858,7 +857,7 @@ static void generic_set_mtrr(unsigned int reg, unsigned long base,
- 		mtrr_wrmsr(MTRRphysMask_MSR(reg), vr->mask_lo, vr->mask_hi);
- 	}
- 
--	post_set();
-+	cache_enable();
- 	local_irq_restore(flags);
- }
- 
+ extern unsigned int num_var_ranges;
+ extern u64 mtrr_tom2;
