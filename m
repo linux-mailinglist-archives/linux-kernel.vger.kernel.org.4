@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810AA6239C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBF66239C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbiKJC1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S232550AbiKJC2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbiKJC1s (ORCPT
+        with ESMTP id S232537AbiKJC22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:27:48 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714DE25C51;
-        Wed,  9 Nov 2022 18:27:47 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N75Hm3lwfzpWMB;
-        Thu, 10 Nov 2022 10:24:04 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 10:27:45 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 10:27:44 +0800
-Subject: Re: [PATCH v6 0/2] rcu: Add RCU stall diagnosis information
-To:     <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>
-CC:     Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Robert Elliott <elliott@hpe.com>
-References: <20221109093739.187-1-thunder.leizhen@huawei.com>
- <20221109152621.GB298683@lothringen>
- <20221109155901.GA727034@paulmck-ThinkPad-P17-Gen-1>
- <20221109170317.GA300561@lothringen>
- <20221109172221.GD725751@paulmck-ThinkPad-P17-Gen-1>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <a48a3eb1-5fa4-4b6b-f7bf-e0bc589f7bf6@huawei.com>
-Date:   Thu, 10 Nov 2022 10:27:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 9 Nov 2022 21:28:28 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF53526D8;
+        Wed,  9 Nov 2022 18:28:27 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id h10so560717qvq.7;
+        Wed, 09 Nov 2022 18:28:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NkdQ/WurO1hHJLC7ybTckDQ6CYDmu0x+X2BkTGqE4BI=;
+        b=S0+CzsCYNuf5a4dVkXJDdCX7gLAVf6xn2OmbTgqn6mnRBgq1iW8/wQdY4L0QIBkiEy
+         LMZumXBDcLOk1temcUSCYpvHaDOIPETf3UwvimACcwlSsKuxd8h811eOrmREW0gCnz33
+         R7HljoooXAuRJlZyXCtcHMmqPWoL58ZEmvbYf/dpoU7N3i9TUbkEy8eMGtvqPCis6SCU
+         8NTNJciYqBaOL1/F6b/1bLvjuF+gck/H+/dd92Gj6k74NJDJiigsLXoSafWPCRBEy8r/
+         60fJj0CSbquEyJd7lAl1rdKX+jMpSCaWgDNp5fZRJ8UIkdNl/U089c4V2cLk8j2iAr+x
+         55+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NkdQ/WurO1hHJLC7ybTckDQ6CYDmu0x+X2BkTGqE4BI=;
+        b=crAWo/FoI/TiKrxZjbnTEIbB4SFdQvhK3az2gKsHxaiuudtMj8ymWo/tEzFaZ1hgvj
+         uf8W/XHfW5rNBjDpCpnFX+csE48h93wIV4upFaUzyeHKkaSLwbPS8wluxZqkF3u8BZDA
+         Hlh+rDQWgLl2lSjsLF4S+0Q61V7J+XDMwPK9PKc2Is/qLjE8i1dcuQij+Moz8X/bj+2n
+         LGaEnAOEo2SUsj3bKrNUpxvss5Q8FNrd9xNsaB/1MvARXtMJL5yAZWY91P2aVNlXuoeJ
+         s/2Ljyqaf9iXrZFQarbDKkOUHXiHfUJgMcVMSNiA6Klr/H2wV4ot/+Ed3cKUpozz3Ypf
+         7kNw==
+X-Gm-Message-State: ACrzQf0HdFNCVs+4TlJGIpOXgqLv6/bPg6GLwZoVtRvIJmp9K3lZkFpI
+        /GuHDtBCOChmH9/0F0jtJuaUfyaPLg==
+X-Google-Smtp-Source: AMsMyM4LiIM48wIeVmo+fjB8y1ZVFBSutKtr7j0ZEcLw2yGFGzGtiJLh6GpsyWJXYz/oPIv65FIP7Q==
+X-Received: by 2002:a0c:cb01:0:b0:4be:e9f3:6d0 with SMTP id o1-20020a0ccb01000000b004bee9f306d0mr32515278qvk.3.1668047307087;
+        Wed, 09 Nov 2022 18:28:27 -0800 (PST)
+Received: from bytedance ([130.44.212.155])
+        by smtp.gmail.com with ESMTPSA id l16-20020ac81490000000b003a57004313fsm10593330qtj.3.2022.11.09.18.28.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 18:28:26 -0800 (PST)
+Date:   Wed, 9 Nov 2022 18:28:22 -0800
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v5] net/sock: Introduce trace_sk_data_ready()
+Message-ID: <20221110022822.GA2463@bytedance>
+References: <20221012232121.27374-1-yepeilin.cs@gmail.com>
+ <20221014000058.30060-1-yepeilin.cs@gmail.com>
+ <Y0kDKpuJHPC36kal@unreal>
 MIME-Version: 1.0
-In-Reply-To: <20221109172221.GD725751@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y0kDKpuJHPC36kal@unreal>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,142 +80,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 14, 2022 at 09:35:22AM +0300, Leon Romanovsky wrote:
+> Please don't reply-to new patches and always send them as new threads
+> with links to previous versions in changelog.
 
+Sure, I can do that.  However, for example: 
 
-On 2022/11/10 1:22, Paul E. McKenney wrote:
-> On Wed, Nov 09, 2022 at 06:03:17PM +0100, Frederic Weisbecker wrote:
->> On Wed, Nov 09, 2022 at 07:59:01AM -0800, Paul E. McKenney wrote:
->>> On Wed, Nov 09, 2022 at 04:26:21PM +0100, Frederic Weisbecker wrote:
->>>> Hi Zhen Lei,
->>>>
->>>> On Wed, Nov 09, 2022 at 05:37:36PM +0800, Zhen Lei wrote:
->>>>> v5 --> v6:
->>>>> 1. When there are more than two continuous RCU stallings, correctly handle the
->>>>>    value of the second and subsequent sampling periods. Update comments and
->>>>>    document.
->>>>>    Thanks to Elliott, Robert for the test.
->>>>> 2. Change "rcu stall" to "RCU stall".
->>>>>
->>>>> v4 --> v5:
->>>>> 1. Resolve a git am conflict. No code change.
->>>>>
->>>>> v3 --> v4:
->>>>> 1. Rename rcu_cpu_stall_deep_debug to rcu_cpu_stall_cputime.
->>>>>
->>>>> v2 --> v3:
->>>>> 1. Fix the return type of kstat_cpu_irqs_sum()
->>>>> 2. Add Kconfig option CONFIG_RCU_CPU_STALL_DEEP_DEBUG and boot parameter
->>>>>    rcupdate.rcu_cpu_stall_deep_debug.
->>>>> 3. Add comments and normalize local variable name
->>>>>
->>>>>
->>>>> v1 --> v2:
->>>>> 1. Fixed a bug in the code. If the rcu stall is detected by another CPU,
->>>>>    kcpustat_this_cpu cannot be used.
->>>>> @@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
->>>>>         if (r->gp_seq != rdp->gp_seq)
->>>>>                 return;
->>>>>
->>>>> -       cpustat = kcpustat_this_cpu->cpustat;
->>>>> +       cpustat = kcpustat_cpu(cpu).cpustat;
->>>>> 2. Move the start point of statistics from rcu_stall_kick_kthreads() to
->>>>>    rcu_implicit_dynticks_qs(), removing the dependency on irq_work.
->>>>>
->>>>> v1:
->>>>> In some extreme cases, such as the I/O pressure test, the CPU usage may
->>>>> be 100%, causing RCU stall. In this case, the printed information about
->>>>> current is not useful. Displays the number and usage of hard interrupts,
->>>>> soft interrupts, and context switches that are generated within half of
->>>>> the CPU stall timeout, can help us make a general judgment. In other
->>>>> cases, we can preliminarily determine whether an infinite loop occurs
->>>>> when local_irq, local_bh or preempt is disabled.
->>>>
->>>> That looks useful but I have to ask: what does it bring that the softlockup
->>>> and hardlockup watchdog can not already solve?
->>>
->>> This is a good point.  One possible benefit is putting the needed information
->>> in one spot, for example, in cases where the soft/hard lockup timeouts are
->>> significantly different than the RCU CPU stall warning timeout.
->>
->> Arguably, the hardlockup/softlockup detectors usually trigger after RCU stall,
->> unless all CPUs are caught into a hardlockup, in which case only the hardlockup
->> detector has a chance.
->>
->> Anyway I would say that in this case just lower the delay for the lockup
->> detectors to consider the situation is a lockup?
-> 
-> Try it both ways and see how it works?  The rcutorture module parameters
-> stall_cpu and stall_cpu_irqsoff are easy ways to generate these sorts
-> of scenarios.
-> 
-> Actually, that does remind me of something.  Back when I was chasing
-> that interrupt storm, would this patch have helped me?  In that case, the
+  - I got a build error.
+  - I found on LKML some v1 patch developed by someone else that
+    introduced a similar error, by searching the error message.
+  - I wanted to know how v2 fixed that error in v1, but since v2 didn't
+    in-reply-to v1, it took me some extra seconds to find v2.
 
-Yes, this patch series originally addressed an RCU stall issue caused by an
-interruption storm. The serial port driver written by another project team
-failed to write the register in a specific condition. As a result, interrupts
-were repeatedly reported.
+Therefore, I think sometimes it's useful to keep all versions in one
+thread, especially when the set only contains one patch?
 
-> half-way point would have been reached while all online CPUs were spinning
-> with interrupts disabled and the incoming CPU was getting hammered with
-> continual scheduling-clock interrupts.  So I suspect that the answer is
-> "no" because the incoming CPU was not blocking the grace period.
+> > diff --git a/drivers/infiniband/hw/erdma/erdma_cm.c b/drivers/infiniband/hw/erdma/erdma_cm.c
+> > index f13f16479eca..084da6698080 100644
+> > --- a/drivers/infiniband/hw/erdma/erdma_cm.c
+> > +++ b/drivers/infiniband/hw/erdma/erdma_cm.c
+> > @@ -16,6 +16,7 @@
+> >  #include <linux/types.h>
+> >  #include <linux/workqueue.h>
+> >  #include <net/addrconf.h>
+> > +#include <trace/events/sock.h>
+> >  
+> >  #include <rdma/ib_user_verbs.h>
+> >  #include <rdma/ib_verbs.h>
+> > @@ -933,6 +934,8 @@ static void erdma_cm_llp_data_ready(struct sock *sk)
+> >  {
+> >  	struct erdma_cep *cep;
+> >  
+> > +	trace_sk_data_ready(sk);
+> > +
+> >  	read_lock(&sk->sk_callback_lock);
 > 
-> Instead of being snapshot halfway to the RCU CPU stall warning, should
-> the values be snapshot when the CPU notices the beginning or end of an
-> RCU grace period and when a CPU goes offline?
+> I see this pattern in all places and don't know if it is correct or not,
+> but you are calling to trace_sk_data_ready() at the beginning of
+> function and do it without taking sk_callback_lock.
 
-This won't work. Those normal counts that occurred before the failure
-have an impact on our analysis. For example, some software interrupts
-may have been generated before local_bh_disable() is called.
+Thanks for bringing this up, but I'm not sure it's an issue.  We already
+do similar thing, for example, in net/core/neighbour.c:
 
-> 
-> But that would not suffice, because detailed information would not have
-> been dumped for the incoming CPU.
-> 
-> However, the lack of context switches and interrupts on the rest of the
-> CPUs would likely have been a big cluebat, so there is that.  It might
-> be better to rework the warning at the beginning of rcu_sched_clock_irq()
-> to complain if more than (say) 10 scheduling-clock interrupts occur on
-> a given CPU during a single jiffy.
-> 
-> Independent of Zhen Lei patch.
-> 
-> Thoughts?
-> 
-> 							Thanx, Paul
-> 
->> Thanks.
->>
->>
->>>
->>> Thoughts?
->>>
->>> 							Thanx, Paul
->>>
->>>> Thanks.
->>>>
->>>>>
->>>>> Zhen Lei (2):
->>>>>   rcu: Add RCU stall diagnosis information
->>>>>   doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
->>>>>
->>>>>  Documentation/RCU/stallwarn.rst               | 88 +++++++++++++++++++
->>>>>  .../admin-guide/kernel-parameters.txt         |  6 ++
->>>>>  kernel/rcu/Kconfig.debug                      | 11 +++
->>>>>  kernel/rcu/rcu.h                              |  1 +
->>>>>  kernel/rcu/tree.c                             | 17 ++++
->>>>>  kernel/rcu/tree.h                             | 19 ++++
->>>>>  kernel/rcu/tree_stall.h                       | 29 ++++++
->>>>>  kernel/rcu/update.c                           |  2 +
->>>>>  8 files changed, 173 insertions(+)
->>>>>
->>>>> -- 
->>>>> 2.25.1
->>>>>
-> .
-> 
+static int __neigh_update(struct neighbour *neigh, const u8 *lladdr,
+			  u8 new, u32 flags, u32 nlmsg_pid,
+			  struct netlink_ext_ack *extack)
+{
+	bool gc_update = false, managed_update = false;
+	int update_isrouter = 0;
+	struct net_device *dev;
+	int err, notify = 0;
+	u8 old;
 
--- 
-Regards,
-  Zhen Lei
+	trace_neigh_update(neigh, lladdr, new, flags, nlmsg_pid);
+
+	write_lock_bh(&neigh->lock);
+
+Thanks,
+Peilin Ye
+
