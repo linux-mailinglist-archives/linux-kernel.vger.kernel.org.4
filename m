@@ -2,75 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298F4624E73
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4BE624E79
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiKJXaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 18:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S231472AbiKJXcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 18:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiKJXaH (ORCPT
+        with ESMTP id S229559AbiKJXb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 18:30:07 -0500
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6694E52897
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 15:30:06 -0800 (PST)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4N7dNX4dZwz9svR;
-        Thu, 10 Nov 2022 23:30:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1668123005; bh=fjuKmXRTkwtod6IBPhwlZ1iFXytpH70PXN+uyAnvcJU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bXuDGCl8gu5dbDhZxNCxNGU6m3awVbK/pl9drcFPGlU06RjvGwCTgKLdPJ+49/BLg
-         eSp0z/ipegAp4Gs5LVSt/xvRD8PtbyXf9jQHoIJsy9S/uYK9IxCXYXo7L1lle/OaAD
-         OiK5LcDol8WaOacjUFveKpKTPwQu8PeKxOV9ZZko=
-X-Riseup-User-ID: 6A1C41D0E4C101BEC78841C4EA042529A6EBD75A5D224DDA08027C25E4B89A87
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4N7dNM3v56z1yQc;
-        Thu, 10 Nov 2022 23:29:55 +0000 (UTC)
-Message-ID: <4e35ba53-ee3d-31b1-cf70-6d8279e25297@riseup.net>
-Date:   Thu, 10 Nov 2022 20:29:53 -0300
+        Thu, 10 Nov 2022 18:31:57 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DD549B68;
+        Thu, 10 Nov 2022 15:31:56 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1N8XU1-1p6B8a0nHF-014VMQ; Fri, 11
+ Nov 2022 00:31:30 +0100
+Message-ID: <48ac1a74-6349-ccf5-92ef-2189037122b8@gmx.com>
+Date:   Fri, 11 Nov 2022 07:31:22 +0800
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 17/24] drm/probe-helper: Provide a TV get_modes helper
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] btrfs: qgroup: fix sleep from invalid context bug in
+ update_qgroup_limit_item()
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Lyude Paul <lyude@redhat.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Ben Skeggs <bskeggs@redhat.com>
-Cc:     Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org
-References: <20220728-rpi-analog-tv-properties-v8-0-09ce1466967c@cerno.tech>
- <20220728-rpi-analog-tv-properties-v8-17-09ce1466967c@cerno.tech>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v8-17-09ce1466967c@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+To:     dsterba@suse.cz, ChenXiaoSong <chenxiaosong2@huawei.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, zhangxiaoxu5@huawei.com
+References: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
+ <20221110205436.GJ5824@twin.jikos.cz>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20221110205436.GJ5824@twin.jikos.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:4oCQ3HhMBayFOLppa1woHkyiYxsDNghBUDJexb3pxECSW3EXyva
+ gVka90317DNKpFBd+JXF4CiSdJ+rEYNLr6riZ208vsPAcYAzfm4C75CSVF4n/Z0lvcaEqCh
+ TXGU3Tlo8VpbtLfeYETjU45RCKqr41mpl1U8+lRvXjxdIspz/bf5S43d4a+qy3ByfDAr//0
+ Y/0y/zv3rXQm3xLntpkZQ==
+UI-OutboundReport: notjunk:1;M01:P0:NuTL+cAbFYU=;hJgHW4JcOvLOG7wP133Ss71eP1k
+ KgMDOWrv1/n4Zdfg5TkuDrzskod08rizKgti47UdtKVHanjI77qhYokUcEfifl2UGeji3wJbH
+ ZLD3SukPODEWNmQYpLYz9C4uwQ16M6QMCulVKvXoBlXi6IkkdRPuVIa/4OCDWTVKFxRmnvd1i
+ 5/Kdf2OkUuxvniWxdJoSIhA+DtVJYxRQtTrMuBuqk5ClggUzcz81im0KQKzVKlDj8D3zHG/S2
+ jF74ZZ1JUpoonyplus7CpJtySO7w7AjZ/XF9L1tBaVPkW6uWjxuo85L5qIaE6AnjzNfKgWiUA
+ cSjMT67NqpaRlGu4pw4JuOrkGLLkdizsUZhUojUbZEHCzjM4OFRQctwS7o/b7A7lx7yf52jGK
+ A8kOAmO764qgtuRACqGMfg2YsWA7N65RG5mza80sqtKaUXh+eqx0qaqmpNL0vyyo8OjN2RSZf
+ u/B36cJGqVTzd9B+Rkqf4aFDwBg4LUm5RMBh5ky/L6famRUu/8GPXB+2dX2WdVrpTlBrXBqKS
+ 9PNj/e3qp7pV6UhMO+SxFGBnhrZPk2Lm7aeCEyIkFjyRAsKv1wv4xYttvsaUfy0WhzVdl0Ptn
+ I9q+oNW2QXrzgkqc6ihfB6+XKYIXi+Ned2gxJJ7uFpZEXDbBe30zn6TSR/CGPKuYe42w5ddf7
+ GC+XTP0ZKlxP5uIJuiUzCulQFSdNh+JKUj8PX8uyqJJLoUU5BomIt+BHqXH0Wddkh4dxLqXIh
+ xcQtjTPb0uFYgplgcs5+YceGYDeY84S+XzESL3nJXvR5i/y3+yWi0UXaCZx5q11ih2hl+Qt6h
+ LYb46WPAqKFTJsrRemcnNkvlxDhsovBINJWZhP49Bteq54bpqTziDrUeJdTi8jVB9zI97C1OX
+ hDDmanqxnx4bONN1mwTmbu+TVFQYO+28w96NUfpEX4PYDpW8DZzY2bODldwBhOVF20CeIOgv4
+ KIgWRRsjzbsDJxE8xa7i32LsNf8=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,264 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
 
-On 11/10/22 08:07, Maxime Ripard wrote:
-> From: Noralf Trønnes <noralf@tronnes.org>
-> 
-> Most of the TV connectors will need a similar get_modes implementation
-> that will, depending on the drivers' capabilities, register the 480i and
-> 576i modes.
-> 
-> That implementation will also need to set the preferred flag and order
-> the modes based on the driver and users preferrence.
-> 
-> This is especially important to guarantee that a userspace stack such as
-> Xorg can start and pick up the preferred mode while maintaining a
-> working output.
-> 
-> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
-> Tested-by: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-> ---
-> Changes in v8:
-> - Remove unused tv_mode_support function
-> - Add unit tests
-> 
-> Changes in v7:
-> - Used Noralf's implementation
-> 
-> Changes in v6:
-> - New patch
-> ---
->  drivers/gpu/drm/drm_probe_helper.c            |  82 ++++++++++
->  drivers/gpu/drm/tests/Makefile                |   1 +
->  drivers/gpu/drm/tests/drm_probe_helper_test.c | 209 ++++++++++++++++++++++++++
->  include/drm/drm_probe_helper.h                |   1 +
->  4 files changed, 293 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_probe_helper_test.c b/drivers/gpu/drm/tests/drm_probe_helper_test.c
-> new file mode 100644
-> index 000000000000..4f295b39f746
-> --- /dev/null
-> +++ b/drivers/gpu/drm/tests/drm_probe_helper_test.c
-> @@ -0,0 +1,209 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Kunit test for drm_probe_helper functions
-> + */
-> +
-> +#include <drm/drm_atomic_state_helper.h>
-> +#include <drm/drm_connector.h>
-> +#include <drm/drm_device.h>
-> +#include <drm/drm_drv.h>
-> +#include <drm/drm_mode.h>
-> +#include <drm/drm_modes.h>
-> +#include <drm/drm_modeset_helper_vtables.h>
-> +#include <drm/drm_probe_helper.h>
-> +
-> +#include <kunit/test.h>
-> +
-> +#include "drm_kunit_helpers.h"
-> +
-> +static const struct drm_display_mode ntsc_mode = {
-> +	DRM_MODE("720x480i", 0, 13500,
-> +		 720, 736, 800, 858, 0,
-> +		 480, 486, 492, 525, 0,
-> +		 DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_INTERLACE)
-> +};
-> +
-> +static const struct drm_display_mode pal_mode = {
-> +	DRM_MODE("720x576i", 0, 13500,
-> +		 720, 732, 796, 864, 0,
-> +		 576, 581, 587, 625, 0,
-> +		 DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_INTERLACE)
-> +};
-> +
-> +struct drm_probe_helper_test_priv {
-> +	struct drm_device *drm;
-> +	struct drm_connector connector;
-> +};
-> +
-> +static const struct drm_connector_helper_funcs drm_probe_helper_connector_helper_funcs = {
-> +};
-> +
-> +static const struct drm_connector_funcs drm_probe_helper_connector_funcs = {
-> +	.atomic_destroy_state	= drm_atomic_helper_connector_destroy_state,
-> +	.atomic_duplicate_state	= drm_atomic_helper_connector_duplicate_state,
-> +	.reset			= drm_atomic_helper_connector_reset,
-> +};
-> +
-> +static int drm_probe_helper_test_init(struct kunit *test)
-> +{
-> +	struct drm_probe_helper_test_priv *priv;
-> +	struct drm_connector *connector;
-> +	int ret;
-> +
-> +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, priv);
-> +	test->priv = priv;
-> +
-> +	priv->drm = drm_kunit_device_init(test, DRIVER_MODESET | DRIVER_ATOMIC,
-> +					  "drm-probe-helper-test");
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
-> +
-> +	connector = &priv->connector;
-> +	ret = drmm_connector_init(priv->drm, connector,
-> +				  &drm_probe_helper_connector_funcs,
-> +				  DRM_MODE_CONNECTOR_Unknown,
-> +				  NULL);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	drm_connector_helper_add(connector, &drm_probe_helper_connector_helper_funcs);
-> +
-> +	return 0;
-> +}
-> +
-> +struct drm_connector_helper_tv_get_modes_test {
-> +	const char *name;
-> +	unsigned int supported_tv_modes;
-> +	enum drm_connector_tv_mode default_mode;
-> +	bool cmdline;
-> +	enum drm_connector_tv_mode cmdline_mode;
-> +	const struct drm_display_mode **expected_modes;
-> +	unsigned int num_expected_modes;
-> +};
-> +
-> +#define _TV_MODE_TEST(_name, _supported, _default, _cmdline, _cmdline_mode, ...) 			\
-> +	{												\
-> +		.name = _name,										\
-> +		.supported_tv_modes = _supported,							\
-> +		.default_mode = _default,								\
-> +		.cmdline = _cmdline,									\
-> +		.cmdline_mode = _cmdline_mode,								\
-> +		.expected_modes = (const struct drm_display_mode*[]) { __VA_ARGS__ }, 			\
-> +		.num_expected_modes = sizeof((const struct drm_display_mode*[]) { __VA_ARGS__ }) /	\
-> +				      (sizeof(const struct drm_display_mode*)),				\
-> +	}
-> +
-> +#define TV_MODE_TEST(_name, _supported, _default, ...)			\
-> +	_TV_MODE_TEST(_name, _supported, _default, false, 0, __VA_ARGS__)
-> +
-> +#define TV_MODE_TEST_CMDLINE(_name, _supported, _default, _cmdline, ...) \
-> +	_TV_MODE_TEST(_name, _supported, _default, true, _cmdline, __VA_ARGS__)
-> +
-> +static void
-> +drm_test_connector_helper_tv_get_modes_check(struct kunit *test)
-> +{
-> +	const struct drm_connector_helper_tv_get_modes_test *params = test->param_value;
-> +	struct drm_probe_helper_test_priv *priv = test->priv;
-> +	struct drm_connector *connector = &priv->connector;
-> +	struct drm_cmdline_mode *cmdline = &connector->cmdline_mode;
-> +	struct drm_display_mode *mode;
-> +	const struct drm_display_mode *expected;
-> +	size_t len;
-> +	int ret;
-> +
-> +	if (params->cmdline) {
-> +		cmdline->tv_mode_specified = true;
-> +		cmdline->tv_mode = params->cmdline_mode;
-> +	}
-> +
-> +	ret = drm_mode_create_tv_properties(priv->drm, params->supported_tv_modes);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	drm_object_attach_property(&connector->base,
-> +				   priv->drm->mode_config.tv_mode_property,
-> +		 		   params->default_mode);
-> +
-> +	mutex_lock(&priv->drm->mode_config.mutex);
-> +
-> +	ret = drm_connector_helper_tv_get_modes(connector);
-> +	KUNIT_EXPECT_EQ(test, ret, params->num_expected_modes);
-> +
-> +	list_for_each_entry(mode, &connector->probed_modes, head)
-> +		len++;
-> +	KUNIT_EXPECT_EQ(test, len, params->num_expected_modes);
-> +
-> +	if (params->num_expected_modes >= 1) {
-> +		mode = list_first_entry_or_null(&connector->probed_modes,
-> +						struct drm_display_mode, head);
-> +		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, mode);
-> +
-> +		expected = params->expected_modes[0];
-> +		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected);
-> +
-> +		KUNIT_EXPECT_TRUE(test, drm_mode_equal(mode, expected));
-> +		KUNIT_EXPECT_TRUE(test, mode->type & DRM_MODE_TYPE_PREFERRED);
-> +	}
-> +
-> +	if (params->num_expected_modes >= 2) {
-> +		mode = list_next_entry(mode, head);
-> +		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, mode);
-> +
-> +		expected = params->expected_modes[1];
-> +		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected);
-> +
-> +		KUNIT_EXPECT_TRUE(test, drm_mode_equal(mode, expected));
-> +		KUNIT_EXPECT_FALSE(test, mode->type & DRM_MODE_TYPE_PREFERRED);
-> +	}
-> +
-> +	mutex_unlock(&priv->drm->mode_config.mutex);
-> +}
-> +
-> +static const
-> +struct drm_connector_helper_tv_get_modes_test drm_connector_helper_tv_get_modes_tests[] = {
-> +	{ .name = "None" },
-> +	TV_MODE_TEST("PAL", BIT(DRM_MODE_TV_MODE_PAL), DRM_MODE_TV_MODE_PAL, &pal_mode),
-> +	TV_MODE_TEST("NTSC", BIT(DRM_MODE_TV_MODE_NTSC), DRM_MODE_TV_MODE_NTSC, &ntsc_mode),
-> +	TV_MODE_TEST("Both, NTSC Default",
-> +		     BIT(DRM_MODE_TV_MODE_NTSC) | BIT(DRM_MODE_TV_MODE_PAL),
-> +		     DRM_MODE_TV_MODE_NTSC,
-> +		     &ntsc_mode, &pal_mode),
-> +	TV_MODE_TEST("Both, PAL Default",
-> +		     BIT(DRM_MODE_TV_MODE_NTSC) | BIT(DRM_MODE_TV_MODE_PAL),
-> +		     DRM_MODE_TV_MODE_PAL,
-> +		     &pal_mode, &ntsc_mode),
-> +	TV_MODE_TEST_CMDLINE("Both, NTSC Default, with PAL on command-line",
-> +			     BIT(DRM_MODE_TV_MODE_NTSC) | BIT(DRM_MODE_TV_MODE_PAL),
-> +			     DRM_MODE_TV_MODE_NTSC,
-> +			     DRM_MODE_TV_MODE_PAL,
-> +			     &pal_mode, &ntsc_mode),
-> +	TV_MODE_TEST_CMDLINE("Both, PAL Default, with NTSC on command-line",
-> +			     BIT(DRM_MODE_TV_MODE_NTSC) | BIT(DRM_MODE_TV_MODE_PAL),
-> +			     DRM_MODE_TV_MODE_PAL,
-> +			     DRM_MODE_TV_MODE_NTSC,
-> +			     &ntsc_mode, &pal_mode),
-> +};
-> +
-> +static void
-> +drm_connector_helper_tv_get_modes_desc(const struct drm_connector_helper_tv_get_modes_test *t,
-> +				       char *desc)
-> +{
-> +	sprintf(desc, "%s", t->name);
-> +}
-> +KUNIT_ARRAY_PARAM(drm_connector_helper_tv_get_modes,
-> +		  drm_connector_helper_tv_get_modes_tests,
-> +		  drm_connector_helper_tv_get_modes_desc);
-> +
-> +static struct kunit_case drm_test_connector_helper_tv_get_modes_tests[] = {
-> +	KUNIT_CASE_PARAM(drm_test_connector_helper_tv_get_modes_check,
-> +			 drm_connector_helper_tv_get_modes_gen_params),
-> +	{ }
-> +};
-> +
-> +static struct kunit_suite drm_test_connector_helper_tv_get_modes_suite = {
-> +	.name = "drm_test_connector_helper_tv_get_modes",
-> +	.init = drm_probe_helper_test_init,
-> +	.test_cases = drm_test_connector_helper_tv_get_modes_tests,
-> +};
-> +
-> +kunit_test_suites(
-> +	&drm_test_connector_helper_tv_get_modes_suite
-> +);
 
-Considering that there is only one suite, you could use the
-kunit_test_suite macro instead.
+On 2022/11/11 04:54, David Sterba wrote:
+> On Thu, Nov 10, 2022 at 10:13:42PM +0800, ChenXiaoSong wrote:
+>> Syzkaller reported BUG as follows:
+>>
+>>    BUG: sleeping function called from invalid context at
+>>         include/linux/sched/mm.h:274
+>>    Call Trace:
+>>     <TASK>
+>>     dump_stack_lvl+0xcd/0x134
+>>     __might_resched.cold+0x222/0x26b
+>>     kmem_cache_alloc+0x2e7/0x3c0
+>>     update_qgroup_limit_item+0xe1/0x390
+>>     btrfs_qgroup_inherit+0x147b/0x1ee0
+>>     create_subvol+0x4eb/0x1710
+>>     btrfs_mksubvol+0xfe5/0x13f0
+>>     __btrfs_ioctl_snap_create+0x2b0/0x430
+>>     btrfs_ioctl_snap_create_v2+0x25a/0x520
+>>     btrfs_ioctl+0x2a1c/0x5ce0
+>>     __x64_sys_ioctl+0x193/0x200
+>>     do_syscall_64+0x35/0x80
+>>
+>> Fix this by introducing __update_qgroup_limit_item() helper, allocate
+>> memory outside of the spin lock.
+>>
+>> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> 
+> Added to misc-next, thanks.
 
-Moreover, it would be nice to run the checkpatch script on this test, as
-there are a couple of problems with the code style.
+Please remove it for now, the patch only addressed what MM layer 
+reports, it doesn't really solve the root cause, we're doing a tree 
+modification (btrfs_search_slot()), under a spinlock.
 
-Best Regards,
-- Maíra Canal
+I'm pretty sure there will be a v2 version to properly fix it.
+
+Thanks,
+Qu
+> 
+>> +	path = btrfs_alloc_path();
+> 
+> btrfs_alloc_path uses fixed GFP_NOFS flags for kmem_cache_alloc but that
+> does not try to detect if it could sleep or not.
