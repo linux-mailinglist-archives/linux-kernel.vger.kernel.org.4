@@ -2,98 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E294623DCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A6E623DE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiKJIsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:48:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S232694AbiKJIup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKJIss (ORCPT
+        with ESMTP id S232509AbiKJIum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:48:48 -0500
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C1C64C5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:48:47 -0800 (PST)
-Received: by mail-pj1-f52.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso5372908pjn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:48:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nj08uoQ5xO490n/iqA+9r1f6MFaSsf/Keu+IuBN/mxc=;
-        b=XpWP41kpmjmKSXKjFlnut5G83rx7+c/MCBMXktRV4IH/ufCROPotCD24wgCsTI4RSV
-         xqUWCzSixmsCdU1BkrPhveGZN1QWzaz84G4AkbQ1wrvtFPxCC+KPn3nJ+E8ugRLcdJPp
-         6ijjpOx838o86OGpfmxKFecwSQyjsuqCDTfDFHySES7MlGc6pgbMAihOckZJa14N3+yL
-         h9VDRPvvgYpptXNDI1Qoyo5DMJTnSpX3LHd/Mew31R1UpV9MTPPT0FTg3/PSfcL+Xv6G
-         HcVqWSTpC0VQTa62nGuL+Y2lNvSqGol/gd6qILqEDo+F7myPTDLnEPeMQzf9J2jGERi4
-         UjgA==
-X-Gm-Message-State: ACrzQf2doMGauvkhmJMo6tQg9sdKx07rtCBtpbXiHig3NXOCQ0qCsqSk
-        vXrz0bVCM60ON2puT+QC1mIlmoZZdBmyvCJ2ms0=
-X-Google-Smtp-Source: AMsMyM4/rxvFp8pqfGwJZsdJimYqWfkYUSxbisV3VoouRxT16X9f1iy+9n4YEmJzxdp6jMr+BSNbJGOtj09Hk7fZsyc=
-X-Received: by 2002:a17:90a:c917:b0:20a:a1a8:3719 with SMTP id
- v23-20020a17090ac91700b0020aa1a83719mr1301526pjt.225.1668070126727; Thu, 10
- Nov 2022 00:48:46 -0800 (PST)
+        Thu, 10 Nov 2022 03:50:42 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39616582;
+        Thu, 10 Nov 2022 00:50:40 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EFCE3C000D;
+        Thu, 10 Nov 2022 08:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668070239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y6R3bK3NsSGu68vXayq2WfqZZ9Uy4g07o50EORmeW7Q=;
+        b=iQD5zYRBxcME416I7SmtNcFWEd2Ph4AghuwHTrsvEXUIAUpSlSg63+vZgiqmM5hNxMR8kD
+        0hGaOe8ipcYTw7ZniV3/kObGtOMjBvfNC/quDAMx+xCK4oZyYMQBZ4W9Qy2WBQTOgzrdHo
+        bYkyH/TzoV9rKMm7Oz7Fa7JR5Cc5Q88I3f9LXEcfJimb+SXfZrAcB0z/4Cai3tmmh5MuVL
+        ibz6Pnh4/tidD4DXjMba6iidUVQ20l6pjDRF+q1BE7rzNUJPY43kbKyR+i6myw49N0Q1mo
+        ccgF5HnUdvNBVomT2QmPjhzobhX7WZyHqIm4CpZPr56IHXBv5/LXCfkGROnVCg==
+Date:   Thu, 10 Nov 2022 09:50:34 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Michael Walle <michael@walle.cc>,
+        linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christian Eggers <ceggers@arri.de>,
+        Cory Tusar <cory.tusar@pid1solutions.com>
+Subject: Re: [PATCH v3 6/6] dt-bindings: nvmem: add YAML schema for the ONIE
+ tlv layout
+Message-ID: <20221110095034.7a80163a@xps-13>
+In-Reply-To: <20221110040055.GA3436769-robh@kernel.org>
+References: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
+        <20221104163833.1289857-7-miquel.raynal@bootlin.com>
+        <20221110040055.GA3436769-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221109212219.1598355-1-conor@kernel.org> <20221109212219.1598355-4-conor@kernel.org>
-In-Reply-To: <20221109212219.1598355-4-conor@kernel.org>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Thu, 10 Nov 2022 09:48:35 +0100
-Message-ID: <CANBLGcx6HM=G+PCth8Pg75zuHrQpF5M2HUNdr849ac4ZsbXu0A@mail.gmail.com>
-Subject: Re: [PATCH v1 3/4] MAINTAINERS: add an entry for StarFive devicetrees
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>, soc@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 at 22:23, Conor Dooley <conor@kernel.org> wrote:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Emil looks after the downstream StarFive stuff, and agreed to look after
-> the upstream ones too.
->
-> CC: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Hi Rob,
 
-Thanks!
+robh@kernel.org wrote on Wed, 9 Nov 2022 22:00:55 -0600:
 
-Acked-by: Emil Renner Berthing <kernel@esmil.dk>
+> On Fri, Nov 04, 2022 at 05:38:33PM +0100, Miquel Raynal wrote:
+> > Add a schema for the ONIE tlv NVMEM layout that can be found on any ONIE
+> > compatible networking device.
+> >=20
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > ---
+> >  .../bindings/nvmem/layouts/nvmem-layout.yaml  |   1 +
+> >  .../nvmem/layouts/onie,tlv-layout.yaml        | 115 ++++++++++++++++++
+> >  2 files changed, 116 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/oni=
+e,tlv-layout.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layo=
+ut.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+> > index f64ea2fa362d..8512ee538c4c 100644
+> > --- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+> > +++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
+> > @@ -19,6 +19,7 @@ description: |
+> > =20
+> >  oneOf:
+> >    - $ref: kontron,sl28-vpd.yaml
+> > +  - $ref: onie,tlv-layout.yaml
+> > =20
+> >  properties:
+> >    compatible: true
+> > diff --git a/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-l=
+ayout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layou=
+t.yaml
+> > new file mode 100644
+> > index 000000000000..1d91277324ac
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.y=
+aml
+> > @@ -0,0 +1,115 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/nvmem/layouts/onie,tlv-layout.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: NVMEM layout of the ONIE tlv table
+> > +
+> > +maintainers:
+> > +  - Miquel Raynal <miquel.raynal@bootlin.com>
+> > +
+> > +description:
+> > +  Modern networking hardware implementing the Open Compute Project ONIE
+> > +  infrastructure shall provide a non-volatile memory with a table whos=
+e the
+> > +  content is well specified and gives many information about the manuf=
+acturer
+> > +  (name, country of manufacture, etc) as well as device caracteristics=
+ (serial
+> > +  number, hardware version, mac addresses, etc). The underlaying devic=
+e type
+> > +  (flash, EEPROM,...) is not specified. The exact location of each val=
+ue is also
+> > +  dynamic and should be discovered at run time because it depends on t=
+he
+> > +  parameters the manufacturer decided to embed.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: onie,tlv-layout
+> > +
+> > +  product-name: true =20
+>=20
+> This is a node? If so, you need:
+>=20
+> type: object
+> additionalProperties: false
 
-> ---
->  MAINTAINERS | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a57c90be001f..040d49af9bdb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19622,6 +19622,11 @@ M:     Ion Badulescu <ionut@badula.org>
->  S:     Odd Fixes
->  F:     drivers/net/ethernet/adaptec/starfire*
->
-> +STARFIVE DEVICETREES
-> +M:     Emil Renner Berthing <kernel@esmil.dk>
-> +S:     Maintained
-> +F:     arch/riscv/boot/dts/starfive/
-> +
->  STARFIVE JH7100 CLOCK DRIVERS
->  M:     Emil Renner Berthing <kernel@esmil.dk>
->  S:     Maintained
-> --
-> 2.37.2
->
+I thought referencing a schema under a property would be enough?
+
+Indeed in nvmem.yaml we create the property nvmem-layout and make it
+reference nvmem-layout.yaml. Then, in nvmem-layout.yaml:
+
+	 oneOf:
+	  - $ref: kontron,sl28-vpd.yaml
+	  - $ref: onie,tlv-layout.yaml
+
+we reference the different layouts that may apply (very much like what
+you proposed to list the mtd partition parsers, if I got it right).
+
+Isn't it enough?
+
+Then if you look below there is an "additionalProperties: false"
+defined.
+
+> > +
+> > +  part-number: true
+> > +
+
+[...]
+
+> > +  service-tag: true
+> > +
+> > +  vendor-extension: true
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +additionalProperties: false
+
+(here)
+
+> > +
+> > +examples:
+> > +  - |
+> > +    spi {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        eeprom@56 {
+> > +            compatible =3D "atmel,24c64";
+> > +            read-only;
+> > +            reg =3D <0x56>;
+> > +
+> > +            nvmem-layout {
+> > +                compatible =3D "onie,tlv-layout";
+> > +
+> > +                serial-number {
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +  - |
+> > +    spi {
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        flash@0 {
+> > +            compatible =3D "m25p80", "jedec,spi-nor";
+> > +            reg =3D <0>;
+> > +
+> > +            otp {
+> > +                compatible =3D "user-otp";
+> > +
+> > +                nvmem-layout {
+> > +                    compatible =3D "onie,tlv-layout";
+> > +
+> > +                    mac-address {
+> > +                        #nvmem-cell-cells =3D <1>;
+> > +                    };
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +...
+> > --=20
+> > 2.34.1
+> >=20
+> >  =20
+
+
+Thanks,
+Miqu=C3=A8l
