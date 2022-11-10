@@ -2,101 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D687B6243B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00483624432
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbiKJN5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S231251AbiKJOZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiKJN5h (ORCPT
+        with ESMTP id S229470AbiKJOZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:57:37 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FC6289;
-        Thu, 10 Nov 2022 05:57:36 -0800 (PST)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7NcR5ZDMzJnVv;
-        Thu, 10 Nov 2022 21:54:31 +0800 (CST)
-Received: from dggpeml500005.china.huawei.com (7.185.36.59) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 21:57:34 +0800
-Received: from huawei.com (10.175.112.125) by dggpeml500005.china.huawei.com
- (7.185.36.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
- 2022 21:57:33 +0800
-From:   Yongqiang Liu <liuyongqiang13@huawei.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>, <tobin@kernel.org>
-CC:     <zhangxiaoxu5@huawei.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] cpufreq: Init completion before kobject_init_and_add()
-Date:   Thu, 10 Nov 2022 14:23:07 +0000
-Message-ID: <20221110142307.981883-1-liuyongqiang13@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Nov 2022 09:25:08 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6A29377
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:25:06 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id r13so525692vkf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:25:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8l2HBFTrpDnnIgcOQ592snBPjsf4RD70cv9dA6b7lHw=;
+        b=b6FeEIbwGLERqlXrAhntHxjPwc4hpS+h4tc/n+ldDt8a4OwxLKBSOQdS4a+nvyqis8
+         Piq+gweJsdW1kiNQavJCsd9E0fcCZrzv4UYPvgif4U8fABvEdDuFt6+T00sotrknfG49
+         BfHBmlkmZ2/xSPbL6kgfMZdUocYWWaKhMYa/sTbBlUczazGO7ekEBIjUuHM/J/nDInfL
+         LoWPN62ews5MRP+A4E07LfUul0RyEMwMtZhAq6PJzjJ8CPl8DEVLc15vupbIFex9AfNB
+         rNhKKv+V4o0vBPpJbH08NK0Q3xQtmb+dtxyls7if4h+heBZeZtl2uPpKk4dY6xuhrn+1
+         v3Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8l2HBFTrpDnnIgcOQ592snBPjsf4RD70cv9dA6b7lHw=;
+        b=R5z4KrMvSy3a55J2sJx/SC3mCnFtLCUYR84TP98gKJWcFpQTBRcjqW9FU1Iru524Mv
+         lIzFT9ijJl/cu4KF2yc/5s0XNQ+uofARaCQHp8sfvvhpLma0XGTb5HdWCzgPMblE/Vuk
+         VDpH72f2pRbaEBzP8qUriKLfd8ACa0ksBSTh1B7odKk6iZFcr2Xy1mWrIB5MZ/Rj524J
+         GO1un33rqCN9ZQvyE2k5r2sxTTuzEB/NyKFqHCEBHaeAXdk4WC/MGtpNdjjksHE/bhby
+         Vm5kistMSww5v/VoJ1KTJ+JA7baHBsyRxROtT351Tb5PgBVuu+ry1RHWAAh3t2ldMy3B
+         VLVA==
+X-Gm-Message-State: ACrzQf0G7Y9hhkQrC4sPNdP3OoLrx7NfbLI3sxOorxRc079OAAoZPc4s
+        tPqWK66pWdFcIFTPtjEX+tTSSyRc7LkVDKyxlF9Dyw==
+X-Google-Smtp-Source: AMsMyM5pIjsuekXRjCdKjRIEeTWrwBNiYMNUoJ4ZKJ8V9nzQigybl4K/UMPda0VjOe4syPWlj288QfpUh5P9kMN4tHA=
+X-Received: by 2002:a05:6122:2219:b0:3b8:7fbd:9554 with SMTP id
+ bb25-20020a056122221900b003b87fbd9554mr12826647vkb.27.1668090305647; Thu, 10
+ Nov 2022 06:25:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500005.china.huawei.com (7.185.36.59)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107172921.514125-1-nfrayer@baylibre.com>
+In-Reply-To: <20221107172921.514125-1-nfrayer@baylibre.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 10 Nov 2022 15:24:54 +0100
+Message-ID: <CAMRc=Mfy-aQ==3Aug4kjdHb2Aa6X3d3MBdh62wBjE0FtCnZXkQ@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: davinci: add support of module build
+To:     Nicolas Frayer <nfrayer@baylibre.com>
+Cc:     j-keerthy@ti.com, linus.walleij@linaro.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, glaroque@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cpufreq_policy_alloc(), it will call uninitialed completion in
-cpufreq_sysfs_release() when kobject_init_and_add() fails. And
-that will cause a crash such as the following page fault in complete:
+On Mon, Nov 7, 2022 at 6:29 PM Nicolas Frayer <nfrayer@baylibre.com> wrote:
+>
+> From: Guillaume La Roque <glaroque@baylibre.com>
+>
+> Added module build support for the davinci gpio driver
+>
+> Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+> Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
+> ---
 
-BUG: unable to handle page fault for address: fffffffffffffff8
-[..]
-RIP: 0010:complete+0x98/0x1f0
-[..]
-Call Trace:
- kobject_put+0x1be/0x4c0
- cpufreq_online.cold+0xee/0x1fd
- cpufreq_add_dev+0x183/0x1e0
- subsys_interface_register+0x3f5/0x4e0
- cpufreq_register_driver+0x3b7/0x670
- acpi_cpufreq_init+0x56c/0x1000 [acpi_cpufreq]
- do_one_initcall+0x13d/0x780
- do_init_module+0x1c3/0x630
- load_module+0x6e67/0x73b0
- __do_sys_finit_module+0x181/0x240
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Applied, thanks!
 
-Fixes: 4ebe36c94aed ("cpufreq: Fix kobject memleak")
-Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
----
- drivers/cpufreq/cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 69b3d61852ac..7e56a42750ea 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1207,6 +1207,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
- 	if (!zalloc_cpumask_var(&policy->real_cpus, GFP_KERNEL))
- 		goto err_free_rcpumask;
- 
-+	init_completion(&policy->kobj_unregister);
- 	ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
- 				   cpufreq_global_kobject, "policy%u", cpu);
- 	if (ret) {
-@@ -1245,7 +1246,6 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
- 	init_rwsem(&policy->rwsem);
- 	spin_lock_init(&policy->transition_lock);
- 	init_waitqueue_head(&policy->transition_wait);
--	init_completion(&policy->kobj_unregister);
- 	INIT_WORK(&policy->update, handle_update);
- 
- 	policy->cpu = cpu;
--- 
-2.25.1
-
+Bart
