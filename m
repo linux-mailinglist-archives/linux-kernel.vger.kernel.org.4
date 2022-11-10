@@ -2,136 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A1162436F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E50624374
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiKJNmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S230527AbiKJNnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiKJNmk (ORCPT
+        with ESMTP id S231218AbiKJNm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:42:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2101269DC1;
-        Thu, 10 Nov 2022 05:42:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AEE69616C9;
-        Thu, 10 Nov 2022 13:42:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C29CC4314D;
-        Thu, 10 Nov 2022 13:42:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668087758;
-        bh=4U7C9niDGrmfi8IMDATi6BtcBIfDiuOKvkxBiJpdV3w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SX98KqeYKns7KGfDa8dTp6G5wayF8iiATI9dVap4Wgzf6d34aTkI97ttMf366XE+1
-         R2U/r9UCn8XAghsEFSpznVYcqr8O4mENHj6OsaLq+Fq6HN0VtBRF5F87Flp3fz7U9W
-         nvj7W8/tSmA7L4xJk7dnUI98uInsIF93sAvIZzyrmOw4EtrC/VyKLAoiFVV/YaO0TE
-         juhdMKkkNBetHZgQdRAht04cUd+m9+wVS6uPEhlXh6VGR8enutToxoBG4kAhDSNlp5
-         DlWpLWUfxIYQqAAL+Tvyjtd7LpIsGuKzn/xSnrb8o9O8thutGRnRZK09gfgNgN9+Eq
-         peEprHo4LiCow==
-Received: by mail-ot1-f41.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so1118986oti.5;
-        Thu, 10 Nov 2022 05:42:38 -0800 (PST)
-X-Gm-Message-State: ANoB5pnWBy9BAXxk20tFsEN0BY67gjVYDapT6gIM593tu48kJBuI7gk4
-        OuMo+lFTvPK3Y89J5tQEN928W1r5MFyLCw97qQ==
-X-Google-Smtp-Source: AA0mqf4gARCZUERKvwgaAfgdC1LEqRRi5pu66mk1Uqd2ev+ik8AG7xmvItT3O8MQpM0VXWbeKoELJNlYq11nhVFHllU=
-X-Received: by 2002:a9d:58c3:0:b0:66d:2f7d:2a68 with SMTP id
- s3-20020a9d58c3000000b0066d2f7d2a68mr4817252oth.40.1668087757150; Thu, 10 Nov
- 2022 05:42:37 -0800 (PST)
+        Thu, 10 Nov 2022 08:42:58 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954D76B23A;
+        Thu, 10 Nov 2022 05:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668087777; x=1699623777;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fTAuXuJ4jKin+JcE3huOPfi/0se7PcE3kuFaiJBuDfk=;
+  b=OrrVuKXXi+XOmoDwAgOYFIJRWmm8LFslRUJMgu/doWwzdM8TIu/+zT75
+   BRsotRJpL37k9D25Yx9gbJm2h6LqB5Kt1+gXdwYZ2PGvBsTTAQkw8YSqU
+   OJS2mxTixbl7mrRqVwfpulstOpvkQ3B5BNDls5Zdvl8vIfv3Jca3ct+Us
+   8k12Osojnjvzf1qv/ff0z+4E23CLaiaO2CC4GPaTNHMUcYOxCmZm54Yf/
+   YSfRMB70/OXpEm/bGd/CB1qS+p7aBInh/tgeFoQczFnAJSX2t3r3MGsTB
+   gzK3Sz6wNEgkIsQ36Fw60zr1phWwKrpPlbQWj9CNCKEYvuZQwWEsh4v9V
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="308932359"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="308932359"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 05:42:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="588177624"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="588177624"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 10 Nov 2022 05:42:42 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ot7pJ-00A9hz-12;
+        Thu, 10 Nov 2022 15:42:41 +0200
+Date:   Thu, 10 Nov 2022 15:42:40 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-acpi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] gpiolib: consolidate GPIO lookups
+Message-ID: <Y2z/0IUOQMSonASw@smile.fi.intel.com>
+References: <20221031-gpiolib-swnode-v2-0-81f55af5fa0e@gmail.com>
+ <20221031-gpiolib-swnode-v2-5-81f55af5fa0e@gmail.com>
+ <Y2uOEhib5dvIcobF@smile.fi.intel.com>
+ <Y2v4ze4y8qDThjrv@google.com>
 MIME-Version: 1.0
-References: <20220927152704.12018-1-jason-jh.lin@mediatek.com>
- <20220927152704.12018-7-jason-jh.lin@mediatek.com> <30278e0f-88ec-069b-3469-56b3fb795702@gmail.com>
-In-Reply-To: <30278e0f-88ec-069b-3469-56b3fb795702@gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Thu, 10 Nov 2022 21:42:25 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__vvjKASUJAGOvL=-WnAq-ji7sfyEEY7j49ty0P7Svvdw@mail.gmail.com>
-Message-ID: <CAAOTY__vvjKASUJAGOvL=-WnAq-ji7sfyEEY7j49ty0P7Svvdw@mail.gmail.com>
-Subject: Re: [PATCH v5 6/6] soc: mediatek: remove DDP_DOMPONENT_DITHER from enum
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2v4ze4y8qDThjrv@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2022=E5=B9=B411=E6=9C=
-=889=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A7:25=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
->
->
-> On 27/09/2022 17:27, Jason-JH.Lin wrote:
-> > After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
-> > mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
-> >
-> > Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> > Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
->
-> Chun-Kuan, I understand you will take this patch through your tree as it =
-depends
-> on DRM changes. We can also sync so that I take it once you merged the re=
-st of
-> the series. Having vdosys1 series around maybe that's better to avoid mer=
-ge
-> problems.
+On Wed, Nov 09, 2022 at 11:00:29AM -0800, Dmitry Torokhov wrote:
+> On Wed, Nov 09, 2022 at 01:25:06PM +0200, Andy Shevchenko wrote:
+> > On Tue, Nov 08, 2022 at 04:26:50PM -0800, Dmitry Torokhov wrote:
 
-Hi, Matthias:
+...
 
-I do not hurry to merge patches. To prevent merge conflict, let's
-merge step by step.
-The drm patches depend on binding document patch, so I would wait for
-binding document merged.
-After drm patch merged, you could merge this patch.
+> > > +static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
+> > > +					      struct device *consumer,
+> > > +					      const char *con_id,
+> > > +					      unsigned int idx,
+> > > +					      enum gpiod_flags *flags,
+> > > +					      unsigned long *lookupflags)
+> > >  {
+> > > -	unsigned long lflags = GPIO_LOOKUP_FLAGS_DEFAULT;
+> > 
+> > > -	struct gpio_desc *desc = ERR_PTR(-ENODEV);
+> > 
+> > Not sure why this is needed. Now I see that else branch has been changed,
+> > but looking closer to it, we can drop it completely, while leaving this
+> > line untouched, correct?
+> 
+> Yes. I believe removing an initializer and doing a series of if/else
+> if/else was discussed and [soft] agreed-on in the previous review cycle,
+> but I can change it back.
+> 
+> I think we still need to have it return -ENOENT and not -ENODEV/-EINVAL
+> so that we can fall back to GPIO lookup tables when dealing with an
+> unsupported node type.
 
-vdosys1 patches depend on vdosys0 patches, so just let it around.
+Right, okay, let's go with whatever variant you find better.
 
-Regards,
-Chun-Kuang.
+...
 
->
-> Regards,
-> Matthias
->
-> > ---
-> >   include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
-> >   1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc=
-/mediatek/mtk-mmsys.h
-> > index d2b02bb43768..16ac0e5847f0 100644
-> > --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> > +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> > @@ -16,8 +16,7 @@ enum mtk_ddp_comp_id {
-> >       DDP_COMPONENT_CCORR,
-> >       DDP_COMPONENT_COLOR0,
-> >       DDP_COMPONENT_COLOR1,
-> > -     DDP_COMPONENT_DITHER,
-> > -     DDP_COMPONENT_DITHER0 =3D DDP_COMPONENT_DITHER,
-> > +     DDP_COMPONENT_DITHER0,
-> >       DDP_COMPONENT_DITHER1,
-> >       DDP_COMPONENT_DP_INTF0,
-> >       DDP_COMPONENT_DP_INTF1,
+> > > +	if (!IS_ERR_OR_NULL(fwnode))
+> > 
+> > I think this is superfluous check.
+> > 
+> > Now in the form of this series, you have only a single dev_dbg() that tries to
+> > dereference it. Do we really need to have it there, since every branch has its
+> > own dev_dbg() anyway?
+> 
+> As I mentioned, I like to keep this check to show the reader that we
+> should only descend into gpiod_find_by_fwnode() if we have a valid
+> fwnode. It is less about code generation and more about the intent.
+
+Yes, but if fwnode is not found, we have a next check for that. I really don't
+think we lose anything by dropping the check and gaining the code generation as
+a side effect.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
