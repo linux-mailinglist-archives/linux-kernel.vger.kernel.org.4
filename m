@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDA6624B8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71868624B9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiKJURR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:17:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
+        id S231777AbiKJUSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiKJURL (ORCPT
+        with ESMTP id S231661AbiKJUR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:17:11 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6298C50F23
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:17:10 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id q93-20020a17090a1b6600b0021311ab9082so1617642pjq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:17:10 -0800 (PST)
+        Thu, 10 Nov 2022 15:17:59 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF9C4E432;
+        Thu, 10 Nov 2022 12:17:46 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id s206so3017929oie.3;
+        Thu, 10 Nov 2022 12:17:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mfKHaD6cbSSWqGqF29LX7wOSKlH4iPXYasLJXyiiA9w=;
-        b=tkvs+ltyClO5qEc6IGHzTNYPaZihZ8PgmqKo4goqrT68rhkjBPUygnE5AuO8BWe1el
-         7FUhPE+eH66r0qqBXbAbb6lX5ACmY7HiSrlfuZ4WqYtU4b5zJWJxgdHvXKOEGL1r8R/n
-         i2i7YxZYxP38iYqe+kpLXdSpS8K7K5QpuO2jJL47Jmez3zwA4cD0irRPyiIjd7LrtOkJ
-         N7uDnk56XBKSsw3tfAazvddriegp1lf+K38vcOB995hEF3+vd3WMXmHNQj7pdgoLbkjo
-         akrO1kUMwKF4X15RejEom5g+QYWN/dia9h75rwKZNbSkB0TdyC0O39li1Xw76nzQN0lX
-         RfIQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ou3PQ5Tt3CEALi9RmryRLch6D2GFqIr6CN6604+GjCk=;
+        b=I6C0pJQdn22XVI9xebvjdsrTN1M4+T5dC4bfR4jQw+Rvp/a9PB+0e+3OI0eHQrYw9y
+         V8N18WOwS/rRPB2aB7L8k5wJtyIKILEoHCHP++qGGXCDknZA7RlQFKwpSug3cQ3sbtQo
+         zA0YZ9msOeLyYH1RAHc+SBB8wqgXNyeQ2bw87tqsi7qGE3Jr7m77/GUTWd3Zmn3IMuWf
+         frGAIOTYj4fU+qsyjVNMWRcp+cXXmQ6i8ml4dYZlbiWPzjCOk+kjoMKceh/PMtHW7VEe
+         arJifUm0EnI6eyW3AP2+NC/v9BQG7SrYTM3qPApfy3M8hgd/TKuPk/Uah3/fEozntQg5
+         Cyew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:reply-to:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mfKHaD6cbSSWqGqF29LX7wOSKlH4iPXYasLJXyiiA9w=;
-        b=tXpg8eMFAecif9NumFb8z6UE6nfJRH9n2u33nKhoMlbo50xSSMULY8tJnVKYijKX11
-         xAOPL/SMrIK8MeLqyegneGXX5bY8RSUNHS4ig3a9ReEwnDh+RUdn9USatWi+W3B9G+qZ
-         LUiXaydk9SUQUUhu0u0vuEtB3TcVJghqorYq/lKFkPPg6FfY1QwiTx/fAQM9FtRR/AZd
-         od/iHeb9F6NFwRlBFsxeufdrKa8FdcqdzD//HYpQc9ccrTg6PNO2hLuYDp0qsPsLNUSI
-         hFi1iQ8X1r9rdtTQSgKZMvHhWkdWxShA+t1pAG1bkOKknq2udVxiVLcXFsqGp6fdNOaW
-         ZXxA==
-X-Gm-Message-State: ACrzQf3VZI2csQaThfRfykUbK8zI2NK+u1OGBS6qfA0NzYu1E5pkTpdK
-        8Nl9D7ZTxu44A0K4z+fII7RdOvJvdys=
-X-Google-Smtp-Source: AMsMyM6UrQV7x/ogAudTr1WEHqz0fZqaZkT3ac5o0dVZwQI/oLv8/RGEuVmI2RJ65xJ03sonZZrE8I9u9iM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:3102:b0:213:b853:5e45 with SMTP id
- gc2-20020a17090b310200b00213b8535e45mr1908437pjb.97.1668111429969; Thu, 10
- Nov 2022 12:17:09 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 10 Nov 2022 20:17:07 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221110201707.1976032-1-seanjc@google.com>
-Subject: [PATCH] x86/debug: Include percpu.h in debugreg.h to get
- DECLARE_PER_CPU() et al
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ou3PQ5Tt3CEALi9RmryRLch6D2GFqIr6CN6604+GjCk=;
+        b=tDN/ejIT2mbuDFjOoPQO9gTGJxU61D9NL+JBsfjuoPV+LRN5w+0Gn6ijVg/NsIemWo
+         /pkcVktSJYLpI+b4GEtjKCw4Ke4Ry0fBENRz7hDd6Tkb8jp48upJshRtK0RUyHEm7oEc
+         gH56UKTaIf0s4C0vdPbGGpzD4qKtTU2R66B8kyhfaaro7Pc0NXri5ukOPS3Xdf+1XmWA
+         UV/k315Gsc+qWMp02BJOxtWITbj9KBQFjirduyqEjBuHBdJWD/DqqUkuZFFDJ4FmNCn/
+         5II8Vk4rpQrsPAB3FBWpnmu7qy1yuZJrUaW34BGJPIt7Tl7oww+Tiw+/7TCZzdeg6oh6
+         4JxQ==
+X-Gm-Message-State: ACrzQf3Bxu8NkhKsL6DBmxak0EVyDJ/+daBFIKAjaP7musQm5W+YIrpt
+        xxuPd5fAy++izkGrNE+QJYI=
+X-Google-Smtp-Source: AMsMyM7Ne4sYytUBLN41y3GX5z+cLTd/c9obX4PJ1PtuE32PYo6OURFvkDhEtin5g3aL4jsXHsCZdA==
+X-Received: by 2002:a05:6808:18a4:b0:34e:1fe0:d6ba with SMTP id bi36-20020a05680818a400b0034e1fe0d6bamr1967829oib.275.1668111465725;
+        Thu, 10 Nov 2022 12:17:45 -0800 (PST)
+Received: from ?IPV6:2603:8081:2802:9dfb:2818:2051:efa7:d112? (2603-8081-2802-9dfb-2818-2051-efa7-d112.res6.spectrum.com. [2603:8081:2802:9dfb:2818:2051:efa7:d112])
+        by smtp.gmail.com with ESMTPSA id i13-20020aca2b0d000000b0035a9003b8edsm138271oik.40.2022.11.10.12.17.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 12:17:45 -0800 (PST)
+Message-ID: <d975895b-1ece-9944-8162-c7cc003b86dd@gmail.com>
+Date:   Thu, 10 Nov 2022 14:17:38 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: x86: clang: acpi-cpufreq.c:970:24: error: variable 'ret' is
+ uninitialized when used here [-Werror,-Wuninitialized]
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+References: <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
+ <f22ea97e-9d76-4c8b-a0c9-698db6e69a9f@app.fastmail.com>
+From:   stuart hayes <stuart.w.hayes@gmail.com>
+In-Reply-To: <f22ea97e-9d76-4c8b-a0c9-698db6e69a9f@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,39 +83,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include percpu.h to pick up the definition of DECLARE_PER_CPU() and
-friends instead of relying on the parent to provide the #include.  E.g.
-swapping the order of includes in arch/x86/kvm/vmx/nested.c (simulating
-KVM code movement being done for other purposes) results in build errors:
 
-  In file included from arch/x86/kvm/vmx/nested.c:3:
-  arch/x86/include/asm/debugreg.h:9:32: error: unknown type name =E2=80=98c=
-pu_dr7=E2=80=99
-      9 | DECLARE_PER_CPU(unsigned long, cpu_dr7);
-        |                                ^~~~~~~
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/debugreg.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 11/10/2022 5:19 AM, Arnd Bergmann wrote:
+> On Thu, Nov 10, 2022, at 12:14, Naresh Kamboju wrote:
+>> [Please ignore email this if it is already reported]
+>>
+>> Kernel build warning noticed on x86_64 with clang toolchain [1].
+>> Build failures noticed from next-20221108 .. next-20221110.
+>>
+>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>
+>> make --silent --keep-going --jobs=8
+>> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+>> ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
+>> CC=clang
+>> drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is
+>> uninitialized when used here [-Werror,-Wuninitialized]
+>>          acpi_cpufreq_online = ret;
+>>                                ^~~
+>> drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable
+>> 'ret' to silence this warning
+>>          int ret;
+>>                 ^
+>>                  = 0
+>> 1 error generated.
+> 
+> This is caused by 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs"),
+> which removes the initialization of this variable.
+> 
+>        Arnd
 
-diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugre=
-g.h
-index cfdf307ddc01..b049d950612f 100644
---- a/arch/x86/include/asm/debugreg.h
-+++ b/arch/x86/include/asm/debugreg.h
-@@ -2,8 +2,8 @@
- #ifndef _ASM_X86_DEBUGREG_H
- #define _ASM_X86_DEBUGREG_H
-=20
--
- #include <linux/bug.h>
-+#include <linux/percpu.h>
- #include <uapi/asm/debugreg.h>
-=20
- DECLARE_PER_CPU(unsigned long, cpu_dr7);
+Yes, I apologize for missing that.  A patch has already been submitted to
+fix this:
 
-base-commit: 7420ae3bb977b46eab082f4964641f3ddc98ebaf
---=20
-2.38.1.431.g37b22c650d-goog
-
+https://lore.kernel.org/lkml/20221108170103.3375832-1-nathan@kernel.org/
