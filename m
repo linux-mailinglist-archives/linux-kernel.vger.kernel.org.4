@@ -2,140 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D522A624074
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FC5624070
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiKJKz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
+        id S230330AbiKJKyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKJKzY (ORCPT
+        with ESMTP id S229588AbiKJKyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:55:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D3121247
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:54:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668077665;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NpgGU2I/tE+Cblp78lY33qKu10Xyg6kfJBT0/tIEJsk=;
-        b=Igge6aljXd5v4zr4eAF4ID5vY/4wmAbvVK9Vn9PzLKqXa8L0g+SVATkrQ6dR3wOlcIyJDn
-        CPbvTOxazJ8QjRRv4IownQ048NrYdxeheL4tvkVFpLOfySKROuDmPuLMJRVI9JBone0yXg
-        PQ9f0uV2HTmpZGSJJgglX3cGCb526ok=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-7OyvaXjfPfyzXgoyEastcg-1; Thu, 10 Nov 2022 05:54:22 -0500
-X-MC-Unique: 7OyvaXjfPfyzXgoyEastcg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6779F833AEF;
-        Thu, 10 Nov 2022 10:54:21 +0000 (UTC)
-Received: from [10.64.54.49] (vpn2-54-49.bne.redhat.com [10.64.54.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 44E19C1908A;
-        Thu, 10 Nov 2022 10:54:15 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v3 0/6] KVM: selftests: memslot_perf_test: aarch64
- cleanup/fixes
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org, pbonzini@redhat.com,
-        ajones@ventanamicro.com, kvmarm@lists.linux.dev, shuah@kernel.org,
-        peterx@redhat.com, oliver.upton@linux.dev, seanjc@google.com,
-        ricarkol@google.com, zhenyzha@redhat.com, shan.gavin@gmail.com
-References: <20221020071209.559062-1-gshan@redhat.com>
- <91d563b6-5f1c-5ecc-0a40-7d8838770b22@maciej.szmigiero.name>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <3903eeef-e037-9651-6041-0d16c29d67b0@redhat.com>
-Date:   Thu, 10 Nov 2022 18:54:13 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Thu, 10 Nov 2022 05:54:37 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBC0663E8;
+        Thu, 10 Nov 2022 02:54:36 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so4357831pjs.4;
+        Thu, 10 Nov 2022 02:54:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wSlAzuVnCNGSUlXQbzZGzIWM/iy3zKLuKxIrZxarYYk=;
+        b=avnF6/j7/eEtMnUiXI98jhufKz9qLU7W9lvwe0XqKZgJGkOBudUedMEg+OAMMlzuVt
+         Uro3uCD/3iUuFqzmSy3e8q9L2UgrSWEihshC+uvyMBb/hIM5WIsf+FQvwm0dn/GuOKIf
+         YkzjkyM5fhP0GwQmcnB0Xj1ew93bB6kYGCDNXZpxbQ0MAF1uet6l0EX+0ND6hEJVa4V2
+         /FsvYJ/WHpY8NOHx4fRRJCDRcuhW13rQJJhyB+FvTTZSn5xkEKGcPfqZSwhV+hBIKPLh
+         wkQueoCq087hTeEuswm+551VwWWKT7tnbnGJPVd3pakNo5hTpvYIGv6Tkc05qTTt4QCM
+         9sBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wSlAzuVnCNGSUlXQbzZGzIWM/iy3zKLuKxIrZxarYYk=;
+        b=7USV3UHUzTnA6dM9EBi7OD555dJ36FStGxC0WRV08LATfcdKtWTHeSSazJtsNPf3TX
+         XdHamcULVOLIHsxHih8eWfI+LlvPns1XvOJJw2t9ZtNCBlorDKremSwyruUrnUyf/cf/
+         tQOBZOVE84bs3GysV6K+joRc7zQCm/PW5YiuCXu3Q5bpdilT+IFL+Vqy62MNm7OxWZat
+         DFSqHju1t/G3mpnQkIgXPiTHfR/tAYtNYYttU2D9ipGDtRtkYCzZD67S//kCDiTh2Kq8
+         SnUCxFhKhWL2C8V88P0bEtvHXWp5ymjKx12Fx9lkIUiVtRk6gUIQzPuN6vClvMHb45E9
+         PpnA==
+X-Gm-Message-State: ACrzQf0AbIxXxySotWwte4XiwWqFN1p8iFsDLFqWFEvEm2PUa29FODQw
+        csSCGYXqqv5aXQ5FL/BS9/A=
+X-Google-Smtp-Source: AMsMyM7NW8xr9yRJcNLF/VvLlayFPt5C2CTqFmYGreAZiPi+07GLrTnbj7sQkmrWFEjQi01RzssmTg==
+X-Received: by 2002:a17:902:ebce:b0:186:9905:11bf with SMTP id p14-20020a170902ebce00b00186990511bfmr65533540plg.110.1668077675784;
+        Thu, 10 Nov 2022 02:54:35 -0800 (PST)
+Received: from [10.114.96.67] ([129.227.152.6])
+        by smtp.gmail.com with ESMTPSA id iw17-20020a170903045100b00186ae20e8dcsm10798520plb.271.2022.11.10.02.54.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 02:54:35 -0800 (PST)
+Message-ID: <39aef23b-877d-e49c-78ad-4b028aefc8cf@gmail.com>
+Date:   Thu, 10 Nov 2022 18:54:30 +0800
 MIME-Version: 1.0
-In-Reply-To: <91d563b6-5f1c-5ecc-0a40-7d8838770b22@maciej.szmigiero.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] block, bfq: do the all counting of pending-request if
+ CONFIG_BFQ_GROUP_IOSCHED is enabled
+To:     Yu Kuai <yukuai1@huaweicloud.com>, paolo.valente@linaro.org,
+        axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuwei.Guan@zeekrlife.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221109132914.438777-1-Yuwei.Guan@zeekrlife.com>
+ <52ccc3f0-a628-a9bf-f604-3b86dd34b006@huaweicloud.com>
+From:   Yuwei Guan <ssawgyw@gmail.com>
+In-Reply-To: <52ccc3f0-a628-a9bf-f604-3b86dd34b006@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
 
-On 10/25/22 7:18 AM, Maciej S. Szmigiero wrote:
-> On 20.10.2022 09:12, Gavin Shan wrote:
->> kvm/selftests/memslots_perf_test doesn't work with 64KB-page-size-host
->> and 4KB-page-size-guest on aarch64. In the implementation, the host and
->> guest page size have been hardcoded to 4KB. It's ovbiously not working
->> on aarch64 which supports 4KB, 16KB, 64KB individually on host and guest.
+On 2022/11/10 17:28, Yu Kuai wrote:
+> Hi,
+>
+> 在 2022/11/09 21:29, Yuwei Guan 写道:
+>> The 'bfqd->num_groups_with_pending_reqs' is used when
+>> CONFIG_BFQ_GROUP_IOSCHED is enabled, so let the variables and processes
+>> take effect when ONFIG_BFQ_GROUP_IOSCHED is enabled.
 >>
->> This series tries to fix it. After the series is applied, the test runs
->> successfully with 64KB-page-size-host and 4KB-page-size-guest.
+>> Cc: Yu Kuai <yukuai3@huawei.com>
+>> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+>> ---
+>>   block/bfq-iosched.c |  5 ++++-
+>>   block/bfq-iosched.h |  6 ++++++
+>>   block/bfq-wf2q.c    | 10 ++++++----
+>>   3 files changed, 16 insertions(+), 5 deletions(-)
 >>
->>     # ./memslots_perf_tests -v -s 512
->>
->> Since we're here, the code is cleaned up a bit as PATCH[1-3] do. The
->> other patches are fixes to handle the mismatched host/guest page
->> sized.
->>
->> v1: https://lore.kernel.org/kvmarm/20221014071914.227134-1-gshan@redhat.com/T/#t
->> v2: https://lore.kernel.org/kvmarm/20221018040454.405719-1-gshan@redhat.com/T/#t
->>
->> Changelog
->> =========
->> v3:
->>    * Improved comments about MEM_TEST_MOVE_SIZE, which is set
->>      to 64KB in PATCH[v3 4/6] and finally fixed to 192KB in
->>      PATCH[v3 5/6].                                              (Maciej)
->>    * Use size instead of pages to do the comparison in
->>      test_memslot_move_prepare()                                 (Maciej)
->>    * Use tools/include/linux/sizes.h instead of inventing
->>      our own macros.                                             (Oliver)
->> v2:
->>    * Pick the smaller value between the ones specified by
->>      user or probed from KVM_CAP_NR_MEMSLOTS in PATCH[v2 3/6]    (Maciej)
->>    * Improved comments about MEM_TEST_MOVE_SIZE in
->>      PATCH[v2 4/6]                                               (Maciej)
->>    * Avoid mismatched guest page size after VM is started in
->>      prepare_vm() in PATCH[v2 4/6]                               (Maciej)
->>    * Fix condition to check MEM_TEST_{UNMAP, UNMAP_CHUNK}_SIZE
->>      in check_memory_size() in PATCH[v2 4/6]                     (Maciej)
->>    * Define base and huge page size in kvm_util_base.h in
->>      PATCH[v2 5/6]                                               (Sean)
->>    * Add checks on host/guest page size in check_memory_size()
->>      and fail early if any of them exceeds 64KB in PATCH[v2 5/6] (Maciej)
->>
->>
->> Gavin Shan (6):
->>    KVM: selftests: memslot_perf_test: Use data->nslots in prepare_vm()
->>    KVM: selftests: memslot_perf_test: Consolidate loop conditions in
->>      prepare_vm()
->>    KVM: selftests: memslot_perf_test: Probe memory slots for once
->>    KVM: selftests: memslot_perf_test: Support variable guest page size
->>    KVM: selftests: memslot_perf_test: Consolidate memory
->>    KVM: selftests: memslot_perf_test: Report optimal memory slots
->>
-> 
-> This patch set now looks good to me, so for the whole series:
-> Reviewed-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> 
+>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>> index 2381cf220ba2..5a648433fd89 100644
+>> --- a/block/bfq-iosched.c
+>> +++ b/block/bfq-iosched.c
+>> @@ -6192,8 +6192,9 @@ static void bfq_completed_request(struct 
+>> bfq_queue *bfqq, struct bfq_data *bfqd)
+>>            * mechanism).
+>>            */
+>>           bfqq->budget_timeout = jiffies;
+>> -
+>> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>           bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
+>> +#endif
+>>           bfq_weights_tree_remove(bfqq);
+>>       }
+>
+> Thanks for the patch, this make sense. However, I prefer to
+> declare a empty function if the config is disabled instead of adding
+> "#ifdef" everywhere the function is called.
 
-If possible, could you please merge this series to 'next' branch either?
-I hope it can be merged early because our downstream needs the fixes to
-make the test case work. It's definitely fine to wait for more comments,
-but I haven't receive any more comments in last month :)
+Thanks a lot for reviewing. Get it, I will send v1 soon.
 
-Thanks,
-Gavin
-
+>
+> Thanks,
+> Kuai
+>>   @@ -7051,7 +7052,9 @@ static int bfq_init_queue(struct 
+>> request_queue *q, struct elevator_type *e)
+>>       bfqd->idle_slice_timer.function = bfq_idle_slice_timer;
+>>         bfqd->queue_weights_tree = RB_ROOT_CACHED;
+>> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>       bfqd->num_groups_with_pending_reqs = 0;
+>> +#endif
+>>         INIT_LIST_HEAD(&bfqd->active_list);
+>>       INIT_LIST_HEAD(&bfqd->idle_list);
+>> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+>> index 9fa89577322d..d6b9fad28a3b 100644
+>> --- a/block/bfq-iosched.h
+>> +++ b/block/bfq-iosched.h
+>> @@ -197,8 +197,10 @@ struct bfq_entity {
+>>       /* flag, set to request a weight, ioprio or ioprio_class 
+>> change  */
+>>       int prio_changed;
+>>   +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>       /* flag, set if the entity is counted in 
+>> groups_with_pending_reqs */
+>>       bool in_groups_with_pending_reqs;
+>> +#endif
+>>         /* last child queue of entity created (for non-leaf entities) */
+>>       struct bfq_queue *last_bfqq_created;
+>> @@ -491,6 +493,7 @@ struct bfq_data {
+>>        */
+>>       struct rb_root_cached queue_weights_tree;
+>>   +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>       /*
+>>        * Number of groups with at least one process that
+>>        * has at least one request waiting for completion. Note that
+>> @@ -538,6 +541,7 @@ struct bfq_data {
+>>        * with no request waiting for completion.
+>>        */
+>>       unsigned int num_groups_with_pending_reqs;
+>> +#endif
+>>         /*
+>>        * Per-class (RT, BE, IDLE) number of bfq_queues containing
+>> @@ -1074,8 +1078,10 @@ void bfq_requeue_bfqq(struct bfq_data *bfqd, 
+>> struct bfq_queue *bfqq,
+>>                 bool expiration);
+>>   void bfq_del_bfqq_busy(struct bfq_queue *bfqq, bool expiration);
+>>   void bfq_add_bfqq_busy(struct bfq_queue *bfqq);
+>> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>   void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq);
+>>   void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq);
+>> +#endif
+>>     /* --------------- end of interface of B-WF2Q+ ---------------- */
+>>   diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+>> index b02b53658ed4..a29187ecdc39 100644
+>> --- a/block/bfq-wf2q.c
+>> +++ b/block/bfq-wf2q.c
+>> @@ -1610,16 +1610,15 @@ void bfq_requeue_bfqq(struct bfq_data *bfqd, 
+>> struct bfq_queue *bfqq,
+>>                       bfqq == bfqd->in_service_queue, expiration);
+>>   }
+>>   +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>   void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>>   {
+>>       struct bfq_entity *entity = &bfqq->entity;
+>>         if (!entity->in_groups_with_pending_reqs) {
+>>           entity->in_groups_with_pending_reqs = true;
+>> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>           if (!(bfqq_group(bfqq)->num_queues_with_pending_reqs++))
+>>               bfqq->bfqd->num_groups_with_pending_reqs++;
+>> -#endif
+>>       }
+>>   }
+>>   @@ -1629,12 +1628,11 @@ void 
+>> bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>>         if (entity->in_groups_with_pending_reqs) {
+>>           entity->in_groups_with_pending_reqs = false;
+>> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>           if (!(--bfqq_group(bfqq)->num_queues_with_pending_reqs))
+>>               bfqq->bfqd->num_groups_with_pending_reqs--;
+>> -#endif
+>>       }
+>>   }
+>> +#endif
+>>     /*
+>>    * Called when the bfqq no longer has requests pending, remove it from
+>> @@ -1659,7 +1657,9 @@ void bfq_del_bfqq_busy(struct bfq_queue *bfqq, 
+>> bool expiration)
+>>       bfq_deactivate_bfqq(bfqd, bfqq, true, expiration);
+>>         if (!bfqq->dispatched) {
+>> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>           bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
+>> +#endif
+>>           /*
+>>            * Next function is invoked last, because it causes bfqq to be
+>>            * freed. DO NOT use bfqq after the next function invocation.
+>> @@ -1683,7 +1683,9 @@ void bfq_add_bfqq_busy(struct bfq_queue *bfqq)
+>>       bfqd->busy_queues[bfqq->ioprio_class - 1]++;
+>>         if (!bfqq->dispatched) {
+>> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>>           bfq_add_bfqq_in_groups_with_pending_reqs(bfqq);
+>> +#endif
+>>           if (bfqq->wr_coeff == 1)
+>>               bfq_weights_tree_add(bfqq);
+>>       }
+>>
+>
