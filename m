@@ -2,100 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFC2623FF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A50623FFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiKJKg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S229649AbiKJKgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKJKgY (ORCPT
+        with ESMTP id S229463AbiKJKgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:36:24 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61BA666C81;
-        Thu, 10 Nov 2022 02:36:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 551BA1FB;
-        Thu, 10 Nov 2022 02:36:29 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 629A43F534;
-        Thu, 10 Nov 2022 02:36:21 -0800 (PST)
-Date:   Thu, 10 Nov 2022 10:36:18 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Huisong Li <lihuisong@huawei.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, rafael.j.wysocki@intel.com,
-        Sudeep Holla <sudeep.holla@arm.com>, wanghuiqiang@huawei.com,
-        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
-        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
-        wangkefeng.wang@huawei.com, huangdaode@huawei.com
-Subject: Re: [PATCH 2/3] ACPI: PCC: add check for platform interrupt
-Message-ID: <20221110103618.3vuyfdhcebf7ewmo@bogus>
-References: <20221110015034.7943-1-lihuisong@huawei.com>
- <20221110015034.7943-3-lihuisong@huawei.com>
+        Thu, 10 Nov 2022 05:36:47 -0500
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382FF317D2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:36:44 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 825145801D6;
+        Thu, 10 Nov 2022 05:36:41 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 10 Nov 2022 05:36:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1668076601; x=1668083801; bh=nBoJDFkJJq
+        zsBQfR1N/+xj7J+//0xyFLrenyQ7PXUlg=; b=oS3gBOWS2Jkxc08ZKEglsrYDk5
+        cKoSW3lOwR6hOscSLcWtdwQdkOlP/wOOKMY+spb9ZfuuQxsfXbQ1HhSN79htTXhd
+        gS97dwGs07oLsfaMhUFMz7aVgBhFe1+uifQi5lXcJcJPFGnTO5J/JoKOqR87PvLo
+        50emMP6yDTes462ANMJ+jEROiS06NdWYY+3+70hms29SUSidQ+ppw5e8MmI8K7bH
+        MyTi3ywT0GYM7EdM5ErS2y5ME132kO3OiU22dmLY6kKpcO2BUxuO0PcnMw8gehxJ
+        h3MTY+oFW4kFlpGpP0EIGlJL/o4pUFMmGjTBJElA2g2gdpclJ9IYHyWZZCUQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668076601; x=1668083801; bh=nBoJDFkJJqzsBQfR1N/+xj7J+//0
+        xyFLrenyQ7PXUlg=; b=HApQSeuYUcYuSJ5s8TN27XYvDD3b8GZIL/aFBgp9/frU
+        PLhgMsdr02IUSU519noG8jNCnvfSoaM7OMQcFD2X83pKnQtCYz16GdWF1BGCVtow
+        JIdleYVFscWIjOad1aPMUUC84Nq0z+lIqehuim76Nz6g6c0xtbDPF5DDVfSpZ9x1
+        PZ2751Lz+PxzSln/cqRQjQ40TZAbfqLiwGDKYcYesmDuVX6OTzmtZsqbv3qT6vTt
+        NrGTvMQ9cvL3maIfr/HQpL3ArYL2ULFi00QfSr2oIb979KPqXWDTNgTpbDgwPBtL
+        5haKOaiVhWZM2LfUzJ8VvtpjM2Dkdn9AFU6GIh99qw==
+X-ME-Sender: <xms:ONRsY_eJtZFzx-Nz7276dwsiuVyMAlDW7p8a3v1KrTWLazd0m7cVKA>
+    <xme:ONRsY1PE6c2FKT89ERYgqpRBuIYe51wPO5rgXq5ko-BrZvnPr0JmIuEeyFHxFyvbx
+    vt_mOrpsnSpjBm9_i8>
+X-ME-Received: <xmr:ONRsY4iBz6D4m6IRMrixdAQC397qCye1w9VSqZyfA8iVYVKm7dmImFl1jqqBkIOp5rxf7dAWposWqH1KC8FdaZMapboDg2HMgbi8HWYxHirLKA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggddujecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
+    ffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:ONRsYw_D_YTVxteD8Lb3YrJ7VwdVKQ3TFJpbpqxq-NOpe1SQZE4s1g>
+    <xmx:ONRsY7tLY61OyW8sGbGg0QtQF4A8ELk41e1KjztvpSV5iGMyj-bl7A>
+    <xmx:ONRsY_Hcm4R050ci6hMzwKlvzRkYRYEHr2i4pSLaRxjtVJPxYVIvLQ>
+    <xmx:OdRsY9MuQDK0TzCBdeZlntmdJgeqWP-Ddzhb7k8-vZXhPgQSWVVZhw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Nov 2022 05:36:40 -0500 (EST)
+Date:   Thu, 10 Nov 2022 11:36:38 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>,
+        Karol Herbst <kherbst@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Dom Cobley <dom@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org
+Subject: Re: [PATCH v7 14/23] drm/modes: Properly generate a drm_display_mode
+ from a named mode
+Message-ID: <20221110103638.o3bomslhvb2sj43d@houat>
+References: <20220728-rpi-analog-tv-properties-v7-0-7072a478c6b3@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v7-14-7072a478c6b3@cerno.tech>
+ <9e9a8a48-89f2-35d4-b26f-afa7cc44f2f6@tronnes.org>
+ <85a607b4-2645-68c7-0898-08f7c6d064b9@tronnes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5srbqddj7e3dz2xw"
 Content-Disposition: inline
-In-Reply-To: <20221110015034.7943-3-lihuisong@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <85a607b4-2645-68c7-0898-08f7c6d064b9@tronnes.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:50:33AM +0800, Huisong Li wrote:
-> PCC Operation Region driver senses the completion of command by interrupt
-> way. If platform can not generate an interrupt when a command complete,
-> the caller never gets the desired result. So let's reject the setup of the
-> PCC address space on platform that do not support interrupt mode.
-> 
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> ---
->  drivers/acpi/acpi_pcc.c | 47 +++++++++++++++++++++++++----------------
->  1 file changed, 29 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/acpi/acpi_pcc.c b/drivers/acpi/acpi_pcc.c
-> index 3e252be047b8..8efd08e469aa 100644
-> --- a/drivers/acpi/acpi_pcc.c
-> +++ b/drivers/acpi/acpi_pcc.c
-> @@ -53,6 +53,7 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
->  	struct pcc_data *data;
->  	struct acpi_pcc_info *ctx = handler_context;
->  	struct pcc_mbox_chan *pcc_chan;
-> +	static acpi_status ret;
->  
->  	data = kzalloc(sizeof(*data), GFP_KERNEL);
->  	if (!data)
-> @@ -69,23 +70,35 @@ acpi_pcc_address_space_setup(acpi_handle region_handle, u32 function,
->  	if (IS_ERR(data->pcc_chan)) {
->  		pr_err("Failed to find PCC channel for subspace %d\n",
->  		       ctx->subspace_id);
-> -		kfree(data);
-> -		return AE_NOT_FOUND;
-> +		ret = AE_NOT_FOUND;
-> +		goto request_channel_fail;
->  	}
->
 
-Your patch seems to be not based on the upstream.
-Commit f890157e61b8 ("ACPI: PCC: Release resources on address space setup
-failure path") has addressed it already.
+--5srbqddj7e3dz2xw
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  	pcc_chan = data->pcc_chan;
-> +	if (!pcc_chan->mchan->mbox->txdone_irq) {
-> +		pr_err("This channel-%d does not support interrupt.\n",
-> +		       ctx->subspace_id);
-> +		ret = AE_SUPPORT;
-> +		goto request_channel_fail;
-> +	}
+On Tue, Nov 08, 2022 at 10:40:07AM +0100, Noralf Tr=F8nnes wrote:
+>=20
+>=20
+> Den 07.11.2022 18.49, skrev Noralf Tr=F8nnes:
+> >=20
+> >=20
+> > Den 07.11.2022 15.16, skrev Maxime Ripard:
+> >> The framework will get the drm_display_mode from the drm_cmdline_mode =
+it
+> >> got by parsing the video command line argument by calling
+> >> drm_connector_pick_cmdline_mode().
+> >>
+> >> The heavy lifting will then be done by the drm_mode_create_from_cmdlin=
+e_mode()
+> >> function.
+> >>
+> >> In the case of the named modes though, there's no real code to make th=
+at
+> >> translation and we rely on the drivers to guess which actual display m=
+ode
+> >> we meant.
+> >>
+> >> Let's modify drm_mode_create_from_cmdline_mode() to properly generate =
+the
+> >> drm_display_mode we mean when passing a named mode.
+> >>
+> >> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> >>
+> >> ---
+> >> Changes in v7:
+> >> - Use tv_mode_specified in drm_mode_parse_command_line_for_connector
+> >>
+> >> Changes in v6:
+> >> - Fix get_modes to return 0 instead of an error code
+> >> - Rename the tests to follow the DRM test naming convention
+> >>
+> >> Changes in v5:
+> >> - Switched to KUNIT_ASSERT_NOT_NULL
+> >> ---
+> >>  drivers/gpu/drm/drm_modes.c                     | 34 ++++++++++-
+> >>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 77 ++++++++++++++++=
+++++++++-
+> >>  2 files changed, 109 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+> >> index dc037f7ceb37..49441cabdd9d 100644
+> >> --- a/drivers/gpu/drm/drm_modes.c
+> >> +++ b/drivers/gpu/drm/drm_modes.c
+> >> @@ -2497,6 +2497,36 @@ bool drm_mode_parse_command_line_for_connector(=
+const char *mode_option,
+> >>  }
+> >>  EXPORT_SYMBOL(drm_mode_parse_command_line_for_connector);
+> >> =20
+> >> +static struct drm_display_mode *drm_named_mode(struct drm_device *dev,
+> >> +					       struct drm_cmdline_mode *cmd)
+> >> +{
+> >> +	struct drm_display_mode *mode;
+> >> +	unsigned int i;
+> >> +
+> >> +	for (i =3D 0; i < ARRAY_SIZE(drm_named_modes); i++) {
+> >> +		const struct drm_named_mode *named_mode =3D &drm_named_modes[i];
+> >> +
+> >> +		if (strcmp(cmd->name, named_mode->name))
+> >> +			continue;
+> >> +
+> >> +		if (!cmd->tv_mode_specified)
+> >> +			continue;
+> >=20
+> > Only a named mode will set cmd->name, so is this check necessary?
+> >=20
+> >> +
+> >> +		mode =3D drm_analog_tv_mode(dev,
+> >> +					  named_mode->tv_mode,
+> >> +					  named_mode->pixel_clock_khz * 1000,
+> >> +					  named_mode->xres,
+> >> +					  named_mode->yres,
+> >> +					  named_mode->flags & DRM_MODE_FLAG_INTERLACE);
+> >> +		if (!mode)
+> >> +			return NULL;
+> >> +
+> >> +		return mode;
+> >=20
+> > You can just return the result from drm_analog_tv_mode() directly.
+> >=20
+> > With those considered:
+> >=20
+> > Reviewed-by: Noralf Tr=F8nnes <noralf@tronnes.org>
+> >=20
+>=20
+> I forgot one thing, shouldn't the named mode test in
+> drm_connector_pick_cmdline_mode() be removed now that we have proper mode=
+s?
 
-Indeed, I supported only interrupt case and this approach is better than
-checking it in handler atleast until we add support for polling based
-transfers in future(hope that never happens, but you never know)
+Good catch, I've fixed it
 
--- 
-Regards,
-Sudeep
+Thanks!
+Maxime
+
+--5srbqddj7e3dz2xw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2zUNgAKCRDj7w1vZxhR
+xc5tAQDufFWQT96Lb6iVY5J8Lt2HGBq1P51c1tAQgPlz+FoRAQD+K3ZwbAaLO5em
+tFADsUq+cdoZA5xWmbM0RCAIK2hDkg4=
+=cS0b
+-----END PGP SIGNATURE-----
+
+--5srbqddj7e3dz2xw--
