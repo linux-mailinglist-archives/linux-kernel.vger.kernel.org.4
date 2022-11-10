@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33BB624733
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A140F624734
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiKJQjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:39:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S231989AbiKJQjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:39:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiKJQjG (ORCPT
+        with ESMTP id S231897AbiKJQjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:39:06 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B1441991;
-        Thu, 10 Nov 2022 08:39:04 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id t1so1483963wmi.4;
-        Thu, 10 Nov 2022 08:39:04 -0800 (PST)
+        Thu, 10 Nov 2022 11:39:08 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF813E0B5;
+        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so4328602wmi.1;
+        Thu, 10 Nov 2022 08:39:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ryja4COVOHIl0RDlGLdndcpFHG6CZ7IIZjln1Zob1wI=;
-        b=BLZJOyoXuVI6cjgESTBwZFBVdWRXXaAWplg4Uh7VZQmXzWYbQBFckHCrSZ3RmUy31o
-         5jdnQXtx4Z+HQAkEDm9JjGPPYUzagENkau4N777uZ2KuiveVjW5uJE+Pb9iYXFZHGBq1
-         i8d02fZLyXqNaZv/5nK+JdU44LIMdnyB+hl0qTXj3P9IA3ArA4WM83T0HomhR5dOUbyD
-         7Elq+j35UU32D7xs9cnubywoMW5UeLJST5ehdeY7twIFnvN369n3RLnfBLBLuYRKPalJ
-         swLXeDv/Ka0b5fd668hPSP0+HYtOVyTAuYrFZTxXhwPuzcqB3qswKkRyzLbP+gXkFWJj
-         YcYQ==
+        bh=ijKNfiunV63AFU9RzYinLsQfMGW1tKqr0LKOgrxroKY=;
+        b=EMqGCre5J9kfTG9I5KlsFPNleC+UqzrVFOs6xP66CfIIafZnrfYSvi6ATfpMfinQP4
+         ilan3jK5keaNm+KMC8ZFADeyrmortKC4u3vkTRG4dzxYYrewbu4IWEa22PchUQswMfZ5
+         643kK9HiTLor8JKeFuBeeEjY7lgJCWkMRaIbpMQ2yTJVaKHfhnHYWo8y1mXEpS4R/EfK
+         NtL1acDDpJMqzbwGWF8pH3V9sZ4teyLaPkL+pSaIp+PpxMFPJ0amP0Zfc7Fngj0pQPVb
+         nT42eo9r46YkmdBZx0mtNAXbrUzh/Mhoxdnb8VA7l38mG5M0CywYdae6szuLHWxvdJ0F
+         qX7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ryja4COVOHIl0RDlGLdndcpFHG6CZ7IIZjln1Zob1wI=;
-        b=pSFGysGjD0ylBpr2M/LXX2HJxZwTzlJoiROzHRdW/CabQXRMfu+06x1asSp9CuOfwJ
-         8X3Q+LEijOdQOHfTU0xDd91w0VURScODGT6JERtzlTrpBXiTgLUibk6/VP4kwyQSvNTJ
-         +GjwadODHMJal0Dwl5hCJPJb4lVkGpI3DE9XlAdgTmqnVM3xL3AGVvqYGNCfhu8U4t4k
-         uH9QHOew2eIUhsFxDz0RpaRq7b2hVJSFWamkknDoTxPyc2IR/MFwQb/YkboY3jjzxgmc
-         a3j7Ju6xG3ik4x1g/E7dEbtX3q2ZSjWCMOfzLsIBsJTajhu2oPeQMQa7wzBDLkYQUHvO
-         eBCw==
-X-Gm-Message-State: ACrzQf3O2luCV/pLk+RSqQjWDlHEtbgF7FF2AEyttHHgqmo41sHoi87K
-        rMa9mvuv2y79J+HOvyXLff4=
-X-Google-Smtp-Source: AMsMyM6jsF26ePp2sOngoBUlnVedO++lHRQA6eU6Uvp3knVI1RzhtwfviyZ1qK18HnEEy6ZWkeNGQA==
-X-Received: by 2002:a05:600c:2044:b0:3cf:570f:db5e with SMTP id p4-20020a05600c204400b003cf570fdb5emr49885420wmg.57.1668098343445;
-        Thu, 10 Nov 2022 08:39:03 -0800 (PST)
+        bh=ijKNfiunV63AFU9RzYinLsQfMGW1tKqr0LKOgrxroKY=;
+        b=TKiOEvRqJubWvfUqy+z5Ah/ZoNOplOMnL6vbwX9+/OsKIG7SJ6iJZ1T7mo7ZwgiEiA
+         /GgcwKanOmeCNWpPzgh/xJtSG6sts4A27NmGQ4Jg0oxCxVYCy4VBepWeEYuDGP7OfH6C
+         of5tVHo+B922P3r3+KqXPz9H7tpm3QA7rxDqxoRhHiYhv0a4EYECyK4JcuP3N/fzMppj
+         O9lE14yPp6S3sB3lPP5+CNDxZMoAvpIiWSvY2E3DWkAEMHcHe5F12XKCT+YExboiBBO7
+         Kt51d6QS5Y96NmAc4r30v8EvsmvmyqlMBOjvFam41vaN+tDMQ2US+6ED36w2HZSD4NE/
+         hN5g==
+X-Gm-Message-State: ANoB5pnGlSVlXRq9TSQd6Lhof4idIiR454fGcHAIUimKKqnctn0o0kHq
+        IKgG+DNyjRR11Tq7ZQxSQaE=
+X-Google-Smtp-Source: AA0mqf7qZFMjGuzFJyQg70wgGaO2wLzSY5qmfNk3w9AcE5UxI5946LDXcwJeH+PwqOwjCzNbtV5wQA==
+X-Received: by 2002:a05:600c:2d44:b0:3cf:aae0:8367 with SMTP id a4-20020a05600c2d4400b003cfaae08367mr14577034wmg.132.1668098344929;
+        Thu, 10 Nov 2022 08:39:04 -0800 (PST)
 Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id f24-20020a1cc918000000b003b4935f04a4sm128730wmb.5.2022.11.10.08.39.02
+        by smtp.gmail.com with ESMTPSA id f24-20020a1cc918000000b003b4935f04a4sm128730wmb.5.2022.11.10.08.39.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:39:03 -0800 (PST)
+        Thu, 10 Nov 2022 08:39:04 -0800 (PST)
 From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -57,9 +57,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] arm64: dts: rockchip: Enable video output and HDMI on SOQuartz
-Date:   Thu, 10 Nov 2022 17:38:43 +0100
-Message-Id: <20221110163845.42309-3-frattaroli.nicolas@gmail.com>
+Subject: [PATCH 3/4] arm64: dts: rockchip: Enable HDMI sound on SOQuartz
+Date:   Thu, 10 Nov 2022 17:38:44 +0100
+Message-Id: <20221110163845.42309-4-frattaroli.nicolas@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221110163845.42309-1-frattaroli.nicolas@gmail.com>
 References: <20221110163845.42309-1-frattaroli.nicolas@gmail.com>
@@ -75,90 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds and enables the necessary device tree nodes to
-enable video output and HDMI functionality on the SOQuartz module.
+This patch enables the i2s0 node on SOQuartz, which is responsible
+for hdmi audio, and adds an hdmi-sound node to enable said audio.
 
 Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 ---
- .../boot/dts/rockchip/rk3566-soquartz.dtsi    | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-index 6e99f049501c..0bfb0cea7d6b 100644
+index 0bfb0cea7d6b..1b975822effa 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
-@@ -4,6 +4,7 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/pinctrl/rockchip.h>
-+#include <dt-bindings/soc/rockchip,vop2.h>
- #include "rk3566.dtsi"
- 
- / {
-@@ -28,6 +29,17 @@ gmac1_clkin: external-gmac1-clock {
- 		#clock-cells = <0>;
+@@ -178,6 +178,10 @@ hdmi_out_con: endpoint {
  	};
- 
-+	hdmi-con {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_con_in: endpoint {
-+				remote-endpoint = <&hdmi_out_con>;
-+			};
-+		};
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 
-@@ -148,6 +160,24 @@ &gpu {
- 	status = "okay";
  };
  
-+&hdmi {
-+	avdd-0v9-supply = <&vdda0v9_image>;
-+	avdd-1v8-supply = <&vcca1v8_image>;
++&hdmi_sound {
 +	status = "okay";
-+};
-+
-+&hdmi_in {
-+	hdmi_in_vp0: endpoint {
-+		remote-endpoint = <&vp0_out_hdmi>;
-+	};
-+};
-+
-+&hdmi_out {
-+	hdmi_out_con: endpoint {
-+		remote-endpoint = <&hdmi_con_in>;
-+	};
 +};
 +
  &i2c0 {
  	status = "okay";
  
-@@ -619,3 +649,20 @@ &usb2phy0_otg {
- &usb_host0_xhci {
+@@ -446,6 +450,10 @@ &i2c4 {
  	status = "disabled";
  };
-+
-+&vop {
-+	assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>;
-+	assigned-clock-parents = <&pmucru PLL_HPLL>, <&cru PLL_VPLL>;
+ 
++&i2s0_8ch {
 +	status = "okay";
 +};
 +
-+&vop_mmu {
-+	status = "okay";
-+};
-+
-+&vp0 {
-+	vp0_out_hdmi: endpoint@ROCKCHIP_VOP2_EP_HDMI0 {
-+		reg = <ROCKCHIP_VOP2_EP_HDMI0>;
-+		remote-endpoint = <&hdmi_in_vp0>;
-+	};
-+};
+ /*
+  * i2s1_8ch is exposed on CM1 / Module1A
+  * pin 24 - i2s1_sdi1_m1
 -- 
 2.38.1
 
