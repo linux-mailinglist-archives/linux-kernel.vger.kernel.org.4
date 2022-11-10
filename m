@@ -2,117 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22697624B8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B3B624BC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiKJURI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:17:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S229946AbiKJU1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:27:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiKJURF (ORCPT
+        with ESMTP id S229461AbiKJU1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:17:05 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4584FF81;
-        Thu, 10 Nov 2022 12:17:03 -0800 (PST)
+        Thu, 10 Nov 2022 15:27:09 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45291C429;
+        Thu, 10 Nov 2022 12:27:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668111423; x=1699647423;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668112028; x=1699648028;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5PLnax8XorRp3Zie4kgXRfWwQFyg+n9E8n1hQRXSQwk=;
-  b=1Iglbzheq/lHp0o/cB+aDGpNc61GJ//KOICQj4gxnGJsUGS6jCE6isy6
-   OHrDWMcfGYJosZyPibHGrrbDldJojBnVsdsElMsmOsq+VQLA68XfgVQQu
-   7I/3RG7SUP/tCW3X9YRAEU8R9vfCJ0WOD/VqY25vzrUn4/ec3fe9hNfPc
-   xnItxYDppcJPaVPl1Ge6Saf8OxsTf5Tu3rBXraS2F+W1P7rx348nz58qp
-   lmQ44BI0ljPCynkLzuNZKwFLIBkUMy0pv+cstv2f7NaWt6ItgpMjJjuCB
-   mrKfjEljAU1pYTXyISYuvYf9fhQF737da7SXppQ+0AFB6aenqDPtALmAN
-   g==;
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=m+ZS3rOfRmRa8UfzE++QCfs9Vzmvg4hPfC+PSx0NcaM=;
+  b=AJSHeQxjBWLyJ8QssGw7kdJtThX5LMAVnpHq6co2s9Cxqkh2nzr+g+R4
+   vEfNCLTB7Afbbwr1lyPz4pM+qiGrAoGTWKgpszkb1OUaRdaKiYtjNqEi8
+   JGVpEBzz9IJVQtd4ONh9WNJmyHHKC9PkBCymP3ly/KSiQ4id737iFuhmX
+   8pS3CFO1qoRR8rZLeuZafe8PSxo5PvUWKskKU37B9ZsI00xUoNN38wcj6
+   feILyxHOvoo/7v5ydaoGMRFH+FJdaXUPgxWAAcc2UFLz412urDmPcXpRf
+   OXy/Pn0n3rlA2kecuJT3e7Sxm/BI3iQWu8rptPBpCE7kir1aBWthix2lU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309060811"
 X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="186424713"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Nov 2022 13:17:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 10 Nov 2022 13:17:01 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 10 Nov 2022 13:17:01 -0700
-Date:   Thu, 10 Nov 2022 21:21:47 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-CC:     Andrew Lunn <andrew@lunn.ch>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>,
-        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next v3 0/4] net: lan966x: Add xdp support
-Message-ID: <20221110202147.hkhfvvb55djob43x@soft-dev3-1>
-References: <20221109204613.3669905-1-horatiu.vultur@microchip.com>
- <20221110111747.1176760-1-alexandr.lobakin@intel.com>
- <Y20DT2XTTIlU/wbx@lunn.ch>
- <20221110162148.3533816-1-alexandr.lobakin@intel.com>
+   d="scan'208";a="309060811"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 12:27:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="637320121"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="637320121"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga002.jf.intel.com with SMTP; 10 Nov 2022 12:27:03 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Thu, 10 Nov 2022 22:27:02 +0200
+Date:   Thu, 10 Nov 2022 22:27:02 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bigeasy@linutronix.de, rjw@rjwysocki.net, oleg@redhat.com,
+        rostedt@goodmis.org, mingo@kernel.org, mgorman@suse.de,
+        intel-gfx@lists.freedesktop.org, tj@kernel.org,
+        Will Deacon <will@kernel.org>, dietmar.eggemann@arm.com,
+        ebiederm@xmission.com
+Subject: Re: [Intel-gfx] [PATCH v3 6/6] freezer, sched: Rewrite core freezer
+ logic
+Message-ID: <Y21elgaCwy3FNk70@intel.com>
+References: <Y1LVYaPCCP3BBS4g@intel.com>
+ <Y1drd2gzxUJWdz5F@intel.com>
+ <Y1e/Kd+1UQqeSwzY@hirez.programming.kicks-ass.net>
+ <Y1kMv1GpKwOSIt8f@intel.com>
+ <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
+ <Y1qC7d7QVJB8NCHt@intel.com>
+ <Y1q3gzbPUCvEMHGD@hirez.programming.kicks-ass.net>
+ <Y2Khj7n+tRq3r++O@intel.com>
+ <Y2LsUIfbUiy2Ar0r@hirez.programming.kicks-ass.net>
+ <Y2jwSwfRC3Q5x7Rm@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221110162148.3533816-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2jwSwfRC3Q5x7Rm@intel.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 11/10/2022 17:21, Alexander Lobakin wrote:
+On Mon, Nov 07, 2022 at 01:47:23PM +0200, Ville Syrjälä wrote:
+> On Wed, Nov 02, 2022 at 11:16:48PM +0100, Peter Zijlstra wrote:
+> > On Wed, Nov 02, 2022 at 06:57:51PM +0200, Ville Syrjälä wrote:
+> > > On Thu, Oct 27, 2022 at 06:53:23PM +0200, Peter Zijlstra wrote:
+> > > > On Thu, Oct 27, 2022 at 04:09:01PM +0300, Ville Syrjälä wrote:
+> > > > > On Wed, Oct 26, 2022 at 01:43:00PM +0200, Peter Zijlstra wrote:
+> > > > 
+> > > > > > Could you please give the below a spin?
+> > > > > 
+> > > > > Thanks. I've added this to our CI branch. I'll try to keep and eye
+> > > > > on it in the coming days and let you know if anything still trips.
+> > > > > And I'll report back maybe ~middle of next week if we haven't caught
+> > > > > anything by then.
+> > > > 
+> > > > Thanks!
+> > > 
+> > > Looks like we haven't caught anything since I put the patch in.
+> > > So the fix seems good.
+> > 
+> > While writing up the Changelog, it occured to me it might be possible to
+> > fix another way, could I bother you to also run the below patch for a
+> > bit?
+> 
+> I swapped in the new patch to the CI branch. I'll check back
+> after a few days.
 
-Hi,
+CI hasn't had anything new to report AFAICS, so looks like this
+version is good as well.
 
 > 
-> From: Andrew Lunn <andrew@lunn.ch>
-> Date: Thu, 10 Nov 2022 14:57:35 +0100
+> > 
+> > ---
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index cb2aa2b54c7a..daff72f00385 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -4200,6 +4200,40 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+> >  	return success;
+> >  }
+> >  
+> > +static bool __task_needs_rq_lock(struct task_struct *p)
+> > +{
+> > +	unsigned int state = READ_ONCE(p->__state);
+> > +
+> > +	/*
+> > +	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
+> > +	 * the task is blocked. Make sure to check @state since ttwu() can drop
+> > +	 * locks at the end, see ttwu_queue_wakelist().
+> > +	 */
+> > +	if (state == TASK_RUNNING || state == TASK_WAKING)
+> > +		return true;
+> > +
+> > +	/*
+> > +	 * Ensure we load p->on_rq after p->__state, otherwise it would be
+> > +	 * possible to, falsely, observe p->on_rq == 0.
+> > +	 *
+> > +	 * See try_to_wake_up() for a longer comment.
+> > +	 */
+> > +	smp_rmb();
+> > +	if (p->on_rq)
+> > +		return true;
+> > +
+> > +#ifdef CONFIG_SMP
+> > +	/*
+> > +	 * Ensure the task has finished __schedule() and will not be referenced
+> > +	 * anymore. Again, see try_to_wake_up() for a longer comment.
+> > +	 */
+> > +	smp_rmb();
+> > +	smp_cond_load_acquire(&p->on_cpu, !VAL);
+> > +#endif
+> > +
+> > +	return false;
+> > +}
+> > +
+> >  /**
+> >   * task_call_func - Invoke a function on task in fixed state
+> >   * @p: Process for which the function is to be invoked, can be @current.
+> > @@ -4217,28 +4251,12 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+> >  int task_call_func(struct task_struct *p, task_call_f func, void *arg)
+> >  {
+> >  	struct rq *rq = NULL;
+> > -	unsigned int state;
+> >  	struct rq_flags rf;
+> >  	int ret;
+> >  
+> >  	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
+> >  
+> > -	state = READ_ONCE(p->__state);
+> > -
+> > -	/*
+> > -	 * Ensure we load p->on_rq after p->__state, otherwise it would be
+> > -	 * possible to, falsely, observe p->on_rq == 0.
+> > -	 *
+> > -	 * See try_to_wake_up() for a longer comment.
+> > -	 */
+> > -	smp_rmb();
+> > -
+> > -	/*
+> > -	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
+> > -	 * the task is blocked. Make sure to check @state since ttwu() can drop
+> > -	 * locks at the end, see ttwu_queue_wakelist().
+> > -	 */
+> > -	if (state == TASK_RUNNING || state == TASK_WAKING || p->on_rq)
+> > +	if (__task_needs_rq_lock(p))
+> >  		rq = __task_rq_lock(p, &rf);
+> >  
+> >  	/*
 > 
-> > > Nice stuff! I hear time to time that XDP is for 10G+ NICs only, but
-> > > I'm not a fan of such, and this series proves once again XDP fits
-> > > any hardware ^.^
-> >
-> > The Freescale FEC recently gained XDP support. Many variants of it are
-> > Fast Ethernet only.
-> >
-> > What i found most interesting about that patchset was that the use of
-> > the page_ppol API made the driver significantly faster for the general
-> > case as well as XDP.
-> 
-> The driver didn't have any page recycling or page splitting logics,
-> while Page Pool recycles even pages from skbs if
-> skb_mark_for_recycle() is used, which is the case here. So it
-> significantly reduced the number of new page allocations for Rx, if
-> there still are any at all.
-> Plus, Page Pool allocates pages by bulks (of 16 IIRC), not one by
-> one, that reduces CPU overhead as well.
-
-Just to make sure that everything is clear, those results that I have
-shown in the cover letter are without any XDP programs on the
-interfaces. Because I thought that is the correct comparison of the
-results before and after all these changes.
-
-Once I add an XDP program on the interface the performance drops. The
-program will look for some ether types and always return XDP_PASS.
-
-These are the results when I have such a XDP program on the interface:
-[ ID] Interval           Transfer     Bitrate         Retr
-[  5]   0.00-10.01  sec   486 MBytes   408 Mbits/sec    0 sender
-[  5]   0.00-10.00  sec   483 MBytes   405 Mbits/sec      receiver
-
-> 
-> >
-> >      Andrew
-> 
-> Thanks,
-> Olek
+> -- 
+> Ville Syrjälä
+> Intel
 
 -- 
-/Horatiu
+Ville Syrjälä
+Intel
