@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F78C623C08
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AF7623C09
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiKJGlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S232634AbiKJGlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbiKJGl2 (ORCPT
+        with ESMTP id S232525AbiKJGl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:41:28 -0500
+        Thu, 10 Nov 2022 01:41:27 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD0D31DCE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C6D31DD4
         for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 22:41:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04315B820DC
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26A7CB820DD
         for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF23C433B5;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B83B2C43142;
         Thu, 10 Nov 2022 06:41:11 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1ot1Fz-009EeN-0S;
+        id 1ot1Fz-009Eev-12;
         Thu, 10 Nov 2022 01:41:47 -0500
-Message-ID: <20221110064146.981725531@goodmis.org>
+Message-ID: <20221110064147.158230501@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 10 Nov 2022 01:41:03 -0500
+Date:   Thu, 10 Nov 2022 01:41:04 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -38,10 +38,8 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Andrew Morton <akpm@linux-foundation.org>,
         Julia Lawall <Julia.Lawall@inria.fr>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH v6 2/6] clocksource/drivers/arm_arch_timer: Do not use timer namespace for
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH v6 3/6] clocksource/drivers/sp804: Do not use timer namespace for
  timer_shutdown() function
 References: <20221110064101.429013735@goodmis.org>
 MIME-Version: 1.0
@@ -62,69 +60,54 @@ of the functions to change the timer into the state is called
 "timer_shutdown()". This means that there can not be other functions
 called "timer_shutdown()" as the timer code owns the "timer_*" name space.
 
-Rename timer_shutdown() to arch_timer_shutdown() to avoid this conflict.
+Rename timer_shutdown() to evt_timer_shutdown() to avoid this conflict.
 
-Link: https://lkml.kernel.org/r/20221106212702.002251651@goodmis.org
-Link: https://lore.kernel.org/all/20221105060155.409832154@goodmis.org/
+Link: https://lkml.kernel.org/r/20221106212702.182883323@goodmis.org
+Link: https://lore.kernel.org/all/20221105060155.592778858@goodmis.org/
 
-Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Stephen Boyd <sboyd@kernel.org>
 Cc: Anna-Maria Gleixner <anna-maria@linutronix.de>
 Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Julia Lawall <Julia.Lawall@inria.fr>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-arm-kernel@lists.infradead.org
-Acked-by: Marc Zyngier <maz@kernel.org>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 Tested-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- drivers/clocksource/arm_arch_timer.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/clocksource/timer-sp804.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-index a7ff77550e17..9c3420a0d19d 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -687,8 +687,8 @@ static irqreturn_t arch_timer_handler_virt_mem(int irq, void *dev_id)
- 	return timer_handler(ARCH_TIMER_MEM_VIRT_ACCESS, evt);
+diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
+index e6a87f4af2b5..cd1916c05325 100644
+--- a/drivers/clocksource/timer-sp804.c
++++ b/drivers/clocksource/timer-sp804.c
+@@ -155,14 +155,14 @@ static irqreturn_t sp804_timer_interrupt(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
  }
  
--static __always_inline int timer_shutdown(const int access,
--					  struct clock_event_device *clk)
-+static __always_inline int arch_timer_shutdown(const int access,
-+					       struct clock_event_device *clk)
+-static inline void timer_shutdown(struct clock_event_device *evt)
++static inline void evt_timer_shutdown(struct clock_event_device *evt)
  {
- 	unsigned long ctrl;
- 
-@@ -701,22 +701,22 @@ static __always_inline int timer_shutdown(const int access,
- 
- static int arch_timer_shutdown_virt(struct clock_event_device *clk)
- {
--	return timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
+ 	writel(0, common_clkevt->ctrl);
  }
  
- static int arch_timer_shutdown_phys(struct clock_event_device *clk)
+ static int sp804_shutdown(struct clock_event_device *evt)
  {
--	return timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
+-	timer_shutdown(evt);
++	evt_timer_shutdown(evt);
+ 	return 0;
  }
  
- static int arch_timer_shutdown_virt_mem(struct clock_event_device *clk)
- {
--	return timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
- }
+@@ -171,7 +171,7 @@ static int sp804_set_periodic(struct clock_event_device *evt)
+ 	unsigned long ctrl = TIMER_CTRL_32BIT | TIMER_CTRL_IE |
+ 			     TIMER_CTRL_PERIODIC | TIMER_CTRL_ENABLE;
  
- static int arch_timer_shutdown_phys_mem(struct clock_event_device *clk)
- {
--	return timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
- }
- 
- static __always_inline void set_next_event(const int access, unsigned long evt,
+-	timer_shutdown(evt);
++	evt_timer_shutdown(evt);
+ 	writel(common_clkevt->reload, common_clkevt->load);
+ 	writel(ctrl, common_clkevt->ctrl);
+ 	return 0;
 -- 
 2.35.1
