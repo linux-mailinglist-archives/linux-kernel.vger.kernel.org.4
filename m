@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74E66241FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4761C6241FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbiKJMKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S230289AbiKJMKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:10:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiKJMJy (ORCPT
+        with ESMTP id S229724AbiKJMJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:09:54 -0500
+        Thu, 10 Nov 2022 07:09:55 -0500
 Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2072.outbound.protection.outlook.com [40.107.247.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F105F57;
-        Thu, 10 Nov 2022 04:09:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1028E5598;
+        Thu, 10 Nov 2022 04:09:54 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j0G75KE3ecpyYCfxvxeMa93D9criOC4I0EUbyuyeXPMb6lZw7D5L/pVgzRxDYsOR9oBR1kHJGWfEcqlBkRQC2xuE/OYPuhJLENam+i2OVfK32r1W2AQwjPiQ6TmphcvLSjeDo1S/7KPANHM4GVF5RCP23RTqqwCFToGqJY427tgfGb0nBAyXthj+TQy2EnM7vBMju1a4dA9P+bKJhU0eH/S5Icg29asC16/GqOLracrwWhVHagK2wv4LuYId+mM0+rme1SXSYYNcbMujnEHFNiWrHNxSiZyGdp4er02UdPRPGrTiJAs/PUJPQxsYDuiQuKW0bgsaJ3qXlDEXlf3IiQ==
+ b=Lv2aU0odGIGg+vk7j3YCr+DsqMrqDnxmwc9DzJs2KwiGXTu4PB5unhSF29sebunnFtezHO+F3nN9Mqisp6le5IXdnjUwkhQPWTJlri3Of01shR3E0+pksSI1+nmuOGbQEtyCtwU0twipm2jTDPAlZSxXdf+gUQPY1GGOVRtuUHxo8zD80vCOJfiB3F+KJ2LOtn8wsMWQWZw8oD9vrbS4A4y9EzmZs0BBbs1xfkG83rOhWBjH8tSKznPwKFUv+iz3kK5KcI00PAJishiGwJjB1YOPKo98nyI8+62QSDW/BKLsyP0crxKIVOo93ziLyd/QuvJOi6BXm/zvipckCb9Vzg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jIpt47kPPYoxgkCj5/ylsWolAtZd0zZBIjJDtcvg/x8=;
- b=aq9fPXpxjrOr9fnsm7Lauwg3J2mX4zii18BMhmNwUuvcH6nRkP7ycytmHcQgWiEDGILmz5DZFA1b8dTKBqHsJJTi375dn75zi5TXYkcFIzBmDB64HPb2KEytcn6V51rzzog2bzB3caFCpTo7oy++8nGCx2+xNPpWOcDg30kL3BLHXjw/v8mBrl//Wg3+39UxhwDeFxYcoS/HeBkk9v8W1yE1wBmDlkIXE8o6ypJhx5XVFMfhEq5AcSCLNTlz7WNSunSVnpW9a43UV/u0bIAjvTP57RwoxPBywlZvpK81yVXq2/av8WTm/MLPvniNpuO+xO3cvHBcB7Ox2JXwHni0Dg==
+ bh=fq5ouvCQ3ElcmR3ryx0nl31TuAcJBOFcoph7Uac9pL8=;
+ b=bRuh9OdrmkSLArmym3jAQzmco2i5SEP6IQIUsGGSo8YOy4HsjfGq73wFkLXR+fIRXP04nCxwNY0BKznFKbNYN6w9H3DFr7r6wENqAN/u35Xk2pR1l4ZkvX3WeTC6YRnxJqmBLZ15FnGU7/q8RX0Wf1uKHMXB61HJLHtGfS0jl31SKn2VWynjCtbI+HFchULWUT0A2NDDwUwMP0nrErAi0SxTDtzfM5y0GUfJ+DxI+8w7eb1GxRzp/17PU/h6oicxpwYPLLCU9nRNiHnQTpIuT4V9nD3SKCPhKTPoeZFQeWPErqX2yTL4laPM9Kskz7rrVX6USigO7d8eHcd9FpwEkQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jIpt47kPPYoxgkCj5/ylsWolAtZd0zZBIjJDtcvg/x8=;
- b=NDBHTvY053D26bQ3P3yCnQrA/FAqfu7T5+cBUEwTk54w+uE/sutkOP+uwYWI8pijAPZVnkbJiMHYNCDUYXs62KZS92nke8P/9Hatvu8JJeGP7EvdyA7Xei4ondFWzQiM8ba+cmy0Y2YQBFUIY+2dYTiJiX1LbhkUad4qsCRkSMI=
+ bh=fq5ouvCQ3ElcmR3ryx0nl31TuAcJBOFcoph7Uac9pL8=;
+ b=fsFZmhJlHloSpF1o5T3NfVa6p0vOyw5I5djs5+G0qtU1OVTjc7VBJ0yib28QtKVs5sXdgz5hK4lITLImanZ22EuHTB4JiPVtC+203CH/YmobPlUUhE+pBuRjYQcfEjQ66RQcMBGym8UkJbKyhSRPIw8froD+TLkObdzFJ/bJClM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
  by DB8PR04MB7097.eurprd04.prod.outlook.com (2603:10a6:10:12a::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Thu, 10 Nov
- 2022 12:09:49 +0000
+ 2022 12:09:52 +0000
 Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
  ([fe80::71f1:f7bb:5039:e55d]) by AS8PR04MB8404.eurprd04.prod.outlook.com
  ([fe80::71f1:f7bb:5039:e55d%3]) with mapi id 15.20.5791.027; Thu, 10 Nov 2022
- 12:09:49 +0000
+ 12:09:52 +0000
 From:   Sherry Sun <sherry.sun@nxp.com>
 To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
         ilpo.jarvinen@linux.intel.com
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-imx@nxp.com
-Subject: [PATCH V2 1/3] tty: serial: fsl_lpuart: enable wakeup source for lpuart
-Date:   Thu, 10 Nov 2022 19:38:57 +0800
-Message-Id: <20221110113859.8485-2-sherry.sun@nxp.com>
+Subject: [PATCH V2 2/3] tty: serial: fsl_lpuart: Add runtime pm support
+Date:   Thu, 10 Nov 2022 19:38:58 +0800
+Message-Id: <20221110113859.8485-3-sherry.sun@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221110113859.8485-1-sherry.sun@nxp.com>
 References: <20221110113859.8485-1-sherry.sun@nxp.com>
@@ -57,50 +57,50 @@ X-ClientProxiedBy: SG3P274CA0016.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|DB8PR04MB7097:EE_
-X-MS-Office365-Filtering-Correlation-Id: dfc4ec52-c21b-4d89-e556-08dac314773a
+X-MS-Office365-Filtering-Correlation-Id: a5410af7-f5e7-4b88-08a0-08dac314791d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AkM5/eceH4un1BOQAV12da/kOwodPJsUUuUxhfcY5sy04ydF+9osa6ORSbB2nawdabIjCBfOv/hjbtcD6MVfW8yJ/00mpGnikuxCvWxdusM6TqMveTSF5b6JvP8MxD+e6JmqadgueLcFlDIeb0WeROgW5mpmRRu1JQrugT5PFcwAi2VNLrDb/9VoJoCn2MAtqsDjhEaVBAZvjilAIAXRoMwtq8lJ42DembttyHch2G/vSnqeula1tcLG9+YwJxHwk0AUT/JEqD4UlPvcRxnyXgh/+0EDqItf9Ma2brxeKqhZjRcpHalhOW2D6O2yn7mMaiF45EUCr5LfaGmNtAwPiYiUpNUTROk2fxeXfkorPjKIi6TfT3lcZ4CDKKbHOJA1bMQIVt5kHiQV+dwO3iBY9EHeC4AeY5/FuaEdMA/t+eRVkvw0PAshoDbyNa1Gv2YzGCNebzvCRQmugvxMxX3ep4GV+6VlwpWeF2dwj1cMJSxYXaSyWLVlVUImQx9FlwrjPeCdYhMHyYIQtki9kkjxeVRRTJHWtk2MjDEYSeITM+hodpwXRWXQY6L9bbtSLwHePRxZ3vrYjGzH9suJubIOigRVVRdBmK8D+yXQvKxNa3V5t+FX4HFMqlkQ26BxvFddT/B0z4fElJW0BjgCIwqBggSzMwqdBkvO5CeTyHI6UsF5spv/Zl2XCsi+X+pxDrVknxe/NnpqIrYuZh7U+eE7QUJHpZvXuB/bjNDRx0jY0YNW2KS6+cosn7UfqaEMnVSd82+zUyaNMk3tTXUvEfk6y4aZJhHO5/1GO1truI+3ABc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(376002)(39860400002)(396003)(451199015)(38100700002)(38350700002)(6486002)(478600001)(6666004)(8936002)(2616005)(316002)(52116002)(6506007)(66476007)(6512007)(41300700001)(66556008)(66946007)(86362001)(36756003)(26005)(30864003)(83380400001)(44832011)(8676002)(4326008)(186003)(1076003)(2906002)(5660300002)(309714004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: uZqiHhnqbBAv2Z0XtAhpnSfUmj1sdUn6jQEZ+bx7d2SE988DnMPut7XNZDbGI5PA7IaH9ffjN/yBWXPHTvw8LYHuX8df598/G/8lU0CI4g2yx5AWvz/Ol7RYhNqOA2tQ2rqVeuXfkFRGwGUGpGfovsn7XUEtBRckV8bZywGfnu19za6zC7BitCXS6lts+lFz9uPSCOp0wekSwrwy2tKiVXpgFuy9MhkVJ5erjqfRCOl9kiREDraXDxWRjZKphz6zpiun/rscSRDwlXsLMUEJj9v/bZKysJdy10foHr+TjRm2NrUiGeif+nwjwI8tdG7c35jo1UTEFsHZZlfNHuQha1cxrS/I2+R6XfWzmrp84RwRYZY3BFERbqvpXNDB920+YO18uFQNOow+fk9IVIyLQvQMXMYvYLM2DMi07/JPNwDLTxsBFhLLKBhLmmUxgl11KHFT6CtszxSA6Mav4EeUwRQEHTkLvl8/X4zGTFnDtCeuyjZd+FTAqrrnM0o88MR4HeNZXx5OEdqCI6KgAg2wreVNbG8K6l6G9lrcWtwXCpZLOuHzJauakLNX29vcuXA0uAIOwSH4kptwVt60PXTsQNG6ywgz/BkpJjlvL3MjfeqZV9tCtdR5Gy0bhb7UEPTuVD89SmqO73Ch9IuG+yh86zbqjqQMdhis4orXWSla984Vpso5ydhUFuFAwMOdSbniY+T3grAbpGnDvAR1IkjbYByvYUhqee032XxE/cwysEknu7KRSlYa8mqWQ69DMcbV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(376002)(39860400002)(396003)(451199015)(38100700002)(38350700002)(6486002)(478600001)(8936002)(2616005)(316002)(52116002)(6506007)(66476007)(6512007)(41300700001)(66556008)(66946007)(86362001)(36756003)(26005)(83380400001)(44832011)(8676002)(4326008)(186003)(1076003)(2906002)(5660300002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?B6R/kCmzjMbIvkm+z/D4vUfJfa/Wzogr44U+gxmqK2i4DrSQ+ALgdhThI44D?=
- =?us-ascii?Q?p6t+ZtRE7xQZXib4FW746jmORwqT94/IaDrdiiPIFi53LW3Yp8gtO0v5tKij?=
- =?us-ascii?Q?ygRHtuqAOGRILdCpH0Ev5txZfittFQzEAv+1yo86fzChzOJ7/CjpJg6LNbRj?=
- =?us-ascii?Q?j1JMwkp4CL1JTIyUveev0oAZ+slA847ndCK9DeuzjjdjomJBX+dZE2vAFlPs?=
- =?us-ascii?Q?LtEKeGzBwYFhvenVg79+RwmOLoyAXWakly0/pv+8RoXyGXinW0sujU2QuEHL?=
- =?us-ascii?Q?Di0r7oLJ8rMed+rsNc28iJ+6u7prHSVAKkULIZddvUorkkvgFFpZeREC673Q?=
- =?us-ascii?Q?FrFq29H7VxcgmbYyAdNWKT30ALdw+5CvoG9P83Ou0sSId3M92omqmh+JaUi1?=
- =?us-ascii?Q?R9MjUP1esi0Eto4ORWhjKf760DeBC3aXUIYtPnJnch0F6MiFag5bfV3a5RBp?=
- =?us-ascii?Q?oyYL8gNHyhgPywWmb6WOJI7QuejhbYT1vUCdYpBnq+vdWYKcvapnI49cMgHg?=
- =?us-ascii?Q?3NC9Gj+kEKzhQxFTlYO1i8850CFzpoHAmfMfbvrDaIJTaXIR9xpZ1P3aegcA?=
- =?us-ascii?Q?VfHVZENBHwcJEbrt7uxru/6uRf1hdo+aeegCI/SkTnLbc1XlYAGWPCseuNN1?=
- =?us-ascii?Q?/QPYq8yOA6zB0UUSaDpuhaqqf188aPIWRQYhzDkgnXO/22nXglgG6iRZAyW2?=
- =?us-ascii?Q?FVx+I3uKzDZBDVX/CyAPP5CKElEnyQln39GVG84N8rk/6ZBZTh+Lff441och?=
- =?us-ascii?Q?IpGMBYc0fN8lLY4Qzt7umO7N8aiYxomhYLhWtmQiqYrh2M47P+j40EjZ0PSV?=
- =?us-ascii?Q?KhuvUZvm5sIWzkO8RFwnccsUkYVt7FaZBNntaMoEcbnWLYaeyODJD53DNgAn?=
- =?us-ascii?Q?/TAqDgbG+EGlG5O5FSG7vWxAeJPST9sPSeObdOmNb//uChHsI12ivEZHR4sm?=
- =?us-ascii?Q?xfkwMCgKs31O96vz4VCU7ShqqM1KOZgnHJWP469vQGt+xjNuNPRhKSrX4BBf?=
- =?us-ascii?Q?vM91pX4hD6byeno1swfDLSYfYCM/8JH04Af2q3e24sEtV6f03aen2Q/de5ES?=
- =?us-ascii?Q?I+5qPb2YXnmuwR/4vkC5UjenPWdUgMeEU3nAhF4sxAHA09fAxj1sZMpNqx5d?=
- =?us-ascii?Q?+SlgENvFiV4RgWJZxolHSyxSrmLmhroDVKLECk9IaOd7rQE6rmpoj8lOinXy?=
- =?us-ascii?Q?3Ae99O4efPaWP9zryTTCNiFYUhnI0nUHKb+sxfLdvRWT7pOPBNG6RcGZe/rr?=
- =?us-ascii?Q?rPzm8gVhoOxp6KoiSVRxZXaMRCkXb4dy2+HyeLSAQWn6149qTEt48XChshTo?=
- =?us-ascii?Q?UKBgQ1HMmoYTdBzJCwXU0hOaWddNa2nKodVbsDdCs1h9qbMWzdmSh7fMlhi+?=
- =?us-ascii?Q?zAb/c3zdHJs7CjzzOBP49zI6EK3JQRmzbycOVZQxCdyOhyWaJheUUOd0oYMe?=
- =?us-ascii?Q?wG47geenvG4s/KNXTr7xyo/zvOXpkcutsyQQD6gQFlQbUlTaM3rseKPoupNZ?=
- =?us-ascii?Q?D5wn7QeIfcr9BEIdEqg372dKPazAQT2HhbLdPDOsUf7YA9xnDxpFuSpmE/18?=
- =?us-ascii?Q?644xQ5Y9+97csOwzEKaPNS3MabmjFbAFRATJePfN?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pQVsp7XDB/U5CR+XBUzuSKpEqgZ67lSNvYjGzSe6/VEUwCRWSVJPdEyWdLGX?=
+ =?us-ascii?Q?EUFu3rn1/Le5EynGYbK4mDLDYzSpkoz1z2giKfxk6CfkB8vKX88/ayqXM7WO?=
+ =?us-ascii?Q?OgQQVTe6Z1O+KoZD1DsMTsyMIhwlVTraVV12jDW42Rk/wQVYCvz9v1xUF4Rl?=
+ =?us-ascii?Q?WTAQhoOi9mWL4mZArMHVmnPHoUrdBUk2Kfqg2Hgh/kAXgESu0elLdiEJPgp5?=
+ =?us-ascii?Q?acYR35jcbW4SO4SRF6jsrrqiKRXijsJtrha/G+mOVCJvPqsc8gufb6bBh8hR?=
+ =?us-ascii?Q?/8AwKRRvWTcjBKdPW0aQB1GEeHfSXXutP7eSa5882bNwme5jXXCOKsx+0CZJ?=
+ =?us-ascii?Q?TaoYqkHG7JHHz4IZ/q2a59MJEV8PriPfe1RlxgpDddL/ov7KUPaWPvadXZzq?=
+ =?us-ascii?Q?jsTcIMDXhleKcFYUfXhy1KlBg9YRuwE7GB1Db//HH1znxwGD4UgjfatOXbvK?=
+ =?us-ascii?Q?pQ7yejZBtCMblXeRO98I5Xxfqr4RddG/zfybwYM8vwuw2Lf6qBiTqFGGWlc0?=
+ =?us-ascii?Q?vyRwANOM01K2L673SF56I1bpraUePhoIvYH09aF89nVEUyPggRNO9+S5vNJ7?=
+ =?us-ascii?Q?IR90R69Sute0A9u0UBsneMpjZPeAub1NkOCuqcVzufkIxxQG2kLzV5oOm2rD?=
+ =?us-ascii?Q?2lAN1RRfBgpDEqHBioqstp3/MCNHn1EbYd11anCZMppKb4K61qA7rCMpTPEq?=
+ =?us-ascii?Q?nzZ+6fVnfdor+eMQgyaJBvm98y6QeIx5uz058bJ0QVNrj7jON+kuhdclksTc?=
+ =?us-ascii?Q?Z/mUxy8jJrYfGmMrVvnjOaGbpouHCwWW2jA4R8nQM94w2d+zXB7cbCOIisEo?=
+ =?us-ascii?Q?zCzTnecVbItcNJ1mYulzEJsyqGyRA3uk5hGbTr72N5vZgBJJ72sJxs1N1Oul?=
+ =?us-ascii?Q?OCZ+VPqr3cqvojxHWdptZ9zYsPQdwck0boNzbivaOeyKLhREcmNCxMicvp4h?=
+ =?us-ascii?Q?RzkIh7NWpbns0cI6Ligw4ekj6WR+msGYQLkYRsGegJjKFxI4w0XO8TMHuRpB?=
+ =?us-ascii?Q?h3KFQAigrS0xI/mXdGX7BDR/trDbmcHuldcNpJB/tyRHXLjPGhWKNMm3mo+g?=
+ =?us-ascii?Q?w5CU68ratKuxhMX3wuGgcaUNGQF4qVgKQIqJNYTFdRrY+VoeTUrtFG9fFExT?=
+ =?us-ascii?Q?BsxNKCw53rUCKYystFDSWoK6MgCwLwdqdRAD84g4vA/wBU7DrYKos0KGIuQI?=
+ =?us-ascii?Q?hg6wAG2wG/n+ROMWxxSapVyx4dQpPmqaQaQWEEUXZL3ysN5PaMIX1qZ+ba8g?=
+ =?us-ascii?Q?CNO7HSDUwBlePfkDypuEcPwUAWBz8dOHJ7+/YLlMnc0Fodv5q1A/SG2QIsyk?=
+ =?us-ascii?Q?JhA1NjuFzLu0DkLGPWKQPIo5bYmPR0PXcXRKXdglFzTZ3AOiWoAlTiqaNve8?=
+ =?us-ascii?Q?UHOnedo7eypZ48xa8XQCmNtkyfi4ybbWUOujAu9O61Sj9H4VvFJk3d00yzIB?=
+ =?us-ascii?Q?5bN6MNp6tUJtdBxcwB08dEiAcKxB1dFxz3ILhKDiEJKQr9hntBbo2j1ST2YZ?=
+ =?us-ascii?Q?0cgWM3WmSL3nFWiojtsagPyp+J3T+oTZXNzEM7/75JoHZ4LiK6PNehKthSDR?=
+ =?us-ascii?Q?wCdlo7mMsGDcRGpEV+YlsFjmpFXpQ/zR/dZx4qxM?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dfc4ec52-c21b-4d89-e556-08dac314773a
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5410af7-f5e7-4b88-08a0-08dac314791d
 X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 12:09:49.5813
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 12:09:52.7554
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q5LSEdUV81HZAqZOoBaH8yhQsF7Eh6NALB+MCP8ZpBDGpqrCuTR145UHLlshInaaxmzxh2R0druLG4e9vm51uQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: K/TTxZPLm7nRapraB2npy/ufO9WsPJ2Z7Vg7w+7z0k6MrvOpiQyCssAb1/cWw306N8aoFysmjKjp1wnStU3KQA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7097
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -112,394 +112,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LPUART supports both synchronous wakeup and asynchronous wakeup(wakeup
-the system when the UART clocks are shut-off), the synchronous wakeup is
-configured by UARTCTRL_RIE interrupt, and the asynchronous wakeup is
-configured by UARTBAUD_RXEDGIE interrupt.
-
-Add lpuart_uport_is_active() to determine if the uart port needs to get
-into the suspend states, also add lpuart_suspend_noirq() and
-lpuart_resume_noirq() to enable and disable the wakeup irq bits if the
-uart port needs to be set as wakeup source.
-
-When use lpuart with DMA mode, it still needs to switch to the cpu mode
-in .suspend() that enable cpu interrupts RIE and RXEDGIE as wakeup
-source, after system resume back, needs to setup DMA again, .resume()
-will share the HW setup code with .startup(), so abstract the same code
-to the api like lpuart32_hw_setup().
+Add runtime pm support to manage the lpuart clock.
 
 Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
 ---
 No change in V2.
 ---
- drivers/tty/serial/fsl_lpuart.c | 281 +++++++++++++++++++++++---------
- 1 file changed, 200 insertions(+), 81 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 60 +++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
 diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index ebbc0539c56e..2654d86f52a4 100644
+index 2654d86f52a4..5b3962bb0de2 100644
 --- a/drivers/tty/serial/fsl_lpuart.c
 +++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -18,6 +18,7 @@
- #include <linux/of.h>
+@@ -19,6 +19,7 @@
  #include <linux/of_device.h>
  #include <linux/of_dma.h>
-+#include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/consumer.h>
++#include <linux/pm_runtime.h>
  #include <linux/serial_core.h>
  #include <linux/slab.h>
  #include <linux/tty_flip.h>
-@@ -1628,10 +1629,23 @@ static void lpuart_rx_dma_startup(struct lpuart_port *sport)
- 	sport->lpuart_dma_rx_use = false;
- }
+@@ -233,6 +234,7 @@
  
-+static void lpuart_hw_setup(struct lpuart_port *sport)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&sport->port.lock, flags);
-+
-+	lpuart_setup_watermark_enable(sport);
-+
-+	lpuart_rx_dma_startup(sport);
-+	lpuart_tx_dma_startup(sport);
-+
-+	spin_unlock_irqrestore(&sport->port.lock, flags);
-+}
-+
- static int lpuart_startup(struct uart_port *port)
- {
- 	struct lpuart_port *sport = container_of(port, struct lpuart_port, port);
--	unsigned long flags;
- 	unsigned char temp;
+ /* Rx DMA timeout in ms, which is used to calculate Rx ring buffer size */
+ #define DMA_RX_TIMEOUT		(10)
++#define UART_AUTOSUSPEND_TIMEOUT	3000
  
- 	/* determine FIFO size and enable FIFO mode */
-@@ -1645,15 +1659,7 @@ static int lpuart_startup(struct uart_port *port)
- 					    UARTPFIFO_FIFOSIZE_MASK);
- 
- 	lpuart_request_dma(sport);
--
--	spin_lock_irqsave(&sport->port.lock, flags);
--
--	lpuart_setup_watermark_enable(sport);
--
--	lpuart_rx_dma_startup(sport);
--	lpuart_tx_dma_startup(sport);
--
--	spin_unlock_irqrestore(&sport->port.lock, flags);
-+	lpuart_hw_setup(sport);
- 
- 	return 0;
- }
-@@ -1676,10 +1682,25 @@ static void lpuart32_configure(struct lpuart_port *sport)
- 	lpuart32_write(&sport->port, temp, UARTCTRL);
- }
- 
-+static void lpuart32_hw_setup(struct lpuart_port *sport)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&sport->port.lock, flags);
-+
-+	lpuart32_setup_watermark_enable(sport);
-+
-+	lpuart_rx_dma_startup(sport);
-+	lpuart_tx_dma_startup(sport);
-+
-+	lpuart32_configure(sport);
-+
-+	spin_unlock_irqrestore(&sport->port.lock, flags);
-+}
-+
- static int lpuart32_startup(struct uart_port *port)
- {
- 	struct lpuart_port *sport = container_of(port, struct lpuart_port, port);
--	unsigned long flags;
- 	unsigned long temp;
- 
- 	/* determine FIFO size */
-@@ -1704,17 +1725,8 @@ static int lpuart32_startup(struct uart_port *port)
+ #define DRIVER_NAME	"fsl-lpuart"
+ #define DEV_NAME	"ttyLP"
+@@ -793,6 +795,20 @@ static void lpuart32_start_tx(struct uart_port *port)
  	}
- 
- 	lpuart_request_dma(sport);
-+	lpuart32_hw_setup(sport);
- 
--	spin_lock_irqsave(&sport->port.lock, flags);
--
--	lpuart32_setup_watermark_enable(sport);
--
--	lpuart_rx_dma_startup(sport);
--	lpuart_tx_dma_startup(sport);
--
--	lpuart32_configure(sport);
--
--	spin_unlock_irqrestore(&sport->port.lock, flags);
- 	return 0;
  }
  
-@@ -2778,97 +2790,204 @@ static int lpuart_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int __maybe_unused lpuart_suspend(struct device *dev)
-+static void serial_lpuart_enable_wakeup(struct lpuart_port *sport, bool on)
- {
--	struct lpuart_port *sport = dev_get_drvdata(dev);
--	unsigned long temp;
--	bool irq_wake;
-+	unsigned int val, baud;
- 
- 	if (lpuart_is_32(sport)) {
--		/* disable Rx/Tx and interrupts */
--		temp = lpuart32_read(&sport->port, UARTCTRL);
--		temp &= ~(UARTCTRL_TE | UARTCTRL_TIE | UARTCTRL_TCIE);
--		lpuart32_write(&sport->port, temp, UARTCTRL);
-+		val = lpuart32_read(&sport->port, UARTCTRL);
-+		baud = lpuart32_read(&sport->port, UARTBAUD);
-+		if (on) {
-+			/* set rx_watermark to 0 in wakeup source mode */
-+			lpuart32_write(&sport->port, 0, UARTWATER);
-+			val |= UARTCTRL_RIE;
-+			/* clear RXEDGIF flag before enable RXEDGIE interrupt */
-+			lpuart32_write(&sport->port, UARTSTAT_RXEDGIF, UARTSTAT);
-+			baud |= UARTBAUD_RXEDGIE;
-+		} else {
-+			val &= ~UARTCTRL_RIE;
-+			baud &= ~UARTBAUD_RXEDGIE;
-+		}
-+		lpuart32_write(&sport->port, val, UARTCTRL);
-+		lpuart32_write(&sport->port, baud, UARTBAUD);
- 	} else {
--		/* disable Rx/Tx and interrupts */
--		temp = readb(sport->port.membase + UARTCR2);
--		temp &= ~(UARTCR2_TE | UARTCR2_TIE | UARTCR2_TCIE);
--		writeb(temp, sport->port.membase + UARTCR2);
-+		val = readb(sport->port.membase + UARTCR2);
-+		if (on)
-+			val |= UARTCR2_RIE;
-+		else
-+			val &= ~UARTCR2_RIE;
-+		writeb(val, sport->port.membase + UARTCR2);
- 	}
-+}
- 
--	uart_suspend_port(&lpuart_reg, &sport->port);
-+static bool lpuart_uport_is_active(struct lpuart_port *sport)
++static void
++lpuart_uart_pm(struct uart_port *port, unsigned int state, unsigned int oldstate)
 +{
-+	struct tty_port *port = &sport->port.state->port;
-+	struct tty_struct *tty;
-+	struct device *tty_dev;
-+	int may_wake = 0;
- 
--	/* uart_suspend_port() might set wakeup flag */
--	irq_wake = irqd_is_wakeup_set(irq_get_irq_data(sport->port.irq));
-+	tty = tty_port_tty_get(port);
-+	if (tty) {
-+		tty_dev = tty->dev;
-+		may_wake = device_may_wakeup(tty_dev);
-+		tty_kref_put(tty);
++	switch (state) {
++	case UART_PM_STATE_OFF:
++		pm_runtime_mark_last_busy(port->dev);
++		pm_runtime_put_autosuspend(port->dev);
++		break;
++	default:
++		pm_runtime_get_sync(port->dev);
++		break;
 +	}
- 
--	if (sport->lpuart_dma_rx_use) {
--		/*
--		 * EDMA driver during suspend will forcefully release any
--		 * non-idle DMA channels. If port wakeup is enabled or if port
--		 * is console port or 'no_console_suspend' is set the Rx DMA
--		 * cannot resume as expected, hence gracefully release the
--		 * Rx DMA path before suspend and start Rx DMA path on resume.
--		 */
--		if (irq_wake) {
--			del_timer_sync(&sport->lpuart_timer);
--			lpuart_dma_rx_free(&sport->port);
--		}
-+	if ((tty_port_initialized(port) && may_wake) ||
-+	    (!console_suspend_enabled && uart_console(&sport->port)))
-+		return true;
-+
-+	return false;
 +}
 +
-+static int __maybe_unused lpuart_suspend_noirq(struct device *dev)
+ /* return TIOCSER_TEMT when transmitter is not busy */
+ static unsigned int lpuart_tx_empty(struct uart_port *port)
+ {
+@@ -2241,6 +2257,7 @@ static const struct uart_ops lpuart_pops = {
+ 	.startup	= lpuart_startup,
+ 	.shutdown	= lpuart_shutdown,
+ 	.set_termios	= lpuart_set_termios,
++	.pm		= lpuart_uart_pm,
+ 	.type		= lpuart_type,
+ 	.request_port	= lpuart_request_port,
+ 	.release_port	= lpuart_release_port,
+@@ -2265,6 +2282,7 @@ static const struct uart_ops lpuart32_pops = {
+ 	.startup	= lpuart32_startup,
+ 	.shutdown	= lpuart32_shutdown,
+ 	.set_termios	= lpuart32_set_termios,
++	.pm		= lpuart_uart_pm,
+ 	.type		= lpuart_type,
+ 	.request_port	= lpuart_request_port,
+ 	.release_port	= lpuart_release_port,
+@@ -2745,6 +2763,11 @@ static int lpuart_probe(struct platform_device *pdev)
+ 		handler = lpuart_int;
+ 	}
+ 
++	pm_runtime_use_autosuspend(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(&pdev->dev, UART_AUTOSUSPEND_TIMEOUT);
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_enable(&pdev->dev);
++
+ 	ret = lpuart_global_reset(sport);
+ 	if (ret)
+ 		goto failed_reset;
+@@ -2769,6 +2792,9 @@ static int lpuart_probe(struct platform_device *pdev)
+ failed_attach_port:
+ failed_get_rs485:
+ failed_reset:
++	pm_runtime_disable(&pdev->dev);
++	pm_runtime_set_suspended(&pdev->dev);
++	pm_runtime_dont_use_autosuspend(&pdev->dev);
+ 	lpuart_disable_clks(sport);
+ 	return ret;
+ }
+@@ -2787,9 +2813,30 @@ static int lpuart_remove(struct platform_device *pdev)
+ 	if (sport->dma_rx_chan)
+ 		dma_release_channel(sport->dma_rx_chan);
+ 
++	pm_runtime_disable(&pdev->dev);
++	pm_runtime_set_suspended(&pdev->dev);
++	pm_runtime_dont_use_autosuspend(&pdev->dev);
+ 	return 0;
+ }
+ 
++static int __maybe_unused lpuart_runtime_suspend(struct device *dev)
 +{
-+	struct lpuart_port *sport = dev_get_drvdata(dev);
-+	bool irq_wake = irqd_is_wakeup_set(irq_get_irq_data(sport->port.irq));
++	struct platform_device *pdev = to_platform_device(dev);
++	struct lpuart_port *sport = platform_get_drvdata(pdev);
 +
-+	if (lpuart_uport_is_active(sport))
-+		serial_lpuart_enable_wakeup(sport, !!irq_wake);
-+
-+	pinctrl_pm_select_sleep_state(dev);
++	lpuart_disable_clks(sport);
 +
 +	return 0;
-+}
++};
 +
-+static int __maybe_unused lpuart_resume_noirq(struct device *dev)
++static int __maybe_unused lpuart_runtime_resume(struct device *dev)
 +{
-+	struct lpuart_port *sport = dev_get_drvdata(dev);
-+	unsigned int val;
++	struct platform_device *pdev = to_platform_device(dev);
++	struct lpuart_port *sport = platform_get_drvdata(pdev);
 +
-+	pinctrl_pm_select_default_state(dev);
++	return lpuart_enable_clks(sport);
++};
 +
-+	if (lpuart_uport_is_active(sport)) {
-+		serial_lpuart_enable_wakeup(sport, false);
- 
--		/* Disable Rx DMA to use UART port as wakeup source */
-+		/* clear the wakeup flags */
- 		if (lpuart_is_32(sport)) {
--			temp = lpuart32_read(&sport->port, UARTBAUD);
--			lpuart32_write(&sport->port, temp & ~UARTBAUD_RDMAE,
--				       UARTBAUD);
--		} else {
--			writeb(readb(sport->port.membase + UARTCR5) &
--			       ~UARTCR5_RDMAS, sport->port.membase + UARTCR5);
-+			val = lpuart32_read(&sport->port, UARTSTAT);
-+			lpuart32_write(&sport->port, val, UARTSTAT);
+ static void serial_lpuart_enable_wakeup(struct lpuart_port *sport, bool on)
+ {
+ 	unsigned int val, baud;
+@@ -2935,6 +2982,10 @@ static int __maybe_unused lpuart_suspend(struct device *dev)
+ 			sport->dma_tx_in_progress = false;
+ 			dmaengine_terminate_all(sport->dma_tx_chan);
  		}
++	} else if (pm_runtime_active(sport->port.dev)) {
++		lpuart_disable_clks(sport);
++		pm_runtime_disable(sport->port.dev);
++		pm_runtime_set_suspended(sport->port.dev);
  	}
  
--	if (sport->lpuart_dma_tx_use) {
--		sport->dma_tx_in_progress = false;
--		dmaengine_terminate_all(sport->dma_tx_chan);
--	}
--
--	if (sport->port.suspended && !irq_wake)
--		lpuart_disable_clks(sport);
--
  	return 0;
- }
- 
--static int __maybe_unused lpuart_resume(struct device *dev)
-+static int __maybe_unused lpuart_suspend(struct device *dev)
+@@ -2969,12 +3020,19 @@ static void lpuart_console_fixup(struct lpuart_port *sport)
+ static int __maybe_unused lpuart_resume(struct device *dev)
  {
  	struct lpuart_port *sport = dev_get_drvdata(dev);
--	bool irq_wake = irqd_is_wakeup_set(irq_get_irq_data(sport->port.irq));
-+	unsigned long temp, flags;
++	int ret;
  
--	if (sport->port.suspended && !irq_wake)
--		lpuart_enable_clks(sport);
-+	uart_suspend_port(&lpuart_reg, &sport->port);
- 
--	if (lpuart_is_32(sport))
--		lpuart32_setup_watermark_enable(sport);
--	else
--		lpuart_setup_watermark_enable(sport);
-+	if (lpuart_uport_is_active(sport)) {
-+		spin_lock_irqsave(&sport->port.lock, flags);
-+		if (lpuart_is_32(sport)) {
-+			/* disable Rx/Tx and interrupts */
-+			temp = lpuart32_read(&sport->port, UARTCTRL);
-+			temp &= ~(UARTCTRL_TE | UARTCTRL_TIE | UARTCTRL_TCIE);
-+			lpuart32_write(&sport->port, temp, UARTCTRL);
-+		} else {
-+			/* disable Rx/Tx and interrupts */
-+			temp = readb(sport->port.membase + UARTCR2);
-+			temp &= ~(UARTCR2_TE | UARTCR2_TIE | UARTCR2_TCIE);
-+			writeb(temp, sport->port.membase + UARTCR2);
-+		}
-+		spin_unlock_irqrestore(&sport->port.lock, flags);
- 
--	if (sport->lpuart_dma_rx_use) {
--		if (irq_wake) {
--			if (!lpuart_start_rx_dma(sport))
--				rx_dma_timer_init(sport);
--			else
--				sport->lpuart_dma_rx_use = false;
-+		if (sport->lpuart_dma_rx_use) {
-+			/*
-+			 * EDMA driver during suspend will forcefully release any
-+			 * non-idle DMA channels. If port wakeup is enabled or if port
-+			 * is console port or 'no_console_suspend' is set the Rx DMA
-+			 * cannot resume as expected, hence gracefully release the
-+			 * Rx DMA path before suspend and start Rx DMA path on resume.
-+			 */
-+			del_timer_sync(&sport->lpuart_timer);
-+			lpuart_dma_rx_free(&sport->port);
-+
-+			/* Disable Rx DMA to use UART port as wakeup source */
-+			spin_lock_irqsave(&sport->port.lock, flags);
-+			if (lpuart_is_32(sport)) {
-+				temp = lpuart32_read(&sport->port, UARTBAUD);
-+				lpuart32_write(&sport->port, temp & ~UARTBAUD_RDMAE,
-+					       UARTBAUD);
-+			} else {
-+				writeb(readb(sport->port.membase + UARTCR5) &
-+				       ~UARTCR5_RDMAS, sport->port.membase + UARTCR5);
-+			}
-+			spin_unlock_irqrestore(&sport->port.lock, flags);
-+		}
-+
-+		if (sport->lpuart_dma_tx_use) {
-+			spin_lock_irqsave(&sport->port.lock, flags);
-+			if (lpuart_is_32(sport)) {
-+				temp = lpuart32_read(&sport->port, UARTBAUD);
-+				temp &= ~UARTBAUD_TDMAE;
-+				lpuart32_write(&sport->port, temp, UARTBAUD);
-+			} else {
-+				temp = readb(sport->port.membase + UARTCR5);
-+				temp &= ~UARTCR5_TDMAS;
-+				writeb(temp, sport->port.membase + UARTCR5);
-+			}
-+			spin_unlock_irqrestore(&sport->port.lock, flags);
-+			sport->dma_tx_in_progress = false;
-+			dmaengine_terminate_all(sport->dma_tx_chan);
- 		}
+ 	if (lpuart_uport_is_active(sport)) {
+ 		if (lpuart_is_32(sport))
+ 			lpuart32_hw_setup(sport);
+ 		else
+ 			lpuart_hw_setup(sport);
++	} else if (pm_runtime_active(sport->port.dev)) {
++		ret = lpuart_enable_clks(sport);
++		if (ret)
++			return ret;
++		pm_runtime_set_active(sport->port.dev);
++		pm_runtime_enable(sport->port.dev);
  	}
  
--	lpuart_tx_dma_startup(sport);
-+	return 0;
-+}
- 
--	if (lpuart_is_32(sport))
--		lpuart32_configure(sport);
-+static void lpuart_console_fixup(struct lpuart_port *sport)
-+{
-+	struct tty_port *port = &sport->port.state->port;
-+	struct uart_port *uport = &sport->port;
-+	struct ktermios termios;
-+
-+	/* i.MX7ULP enter VLLS mode that lpuart module power off and registers
-+	 * all lost no matter the port is wakeup source.
-+	 * For console port, console baud rate setting lost and print messy
-+	 * log when enable the console port as wakeup source. To avoid the
-+	 * issue happen, user should not enable uart port as wakeup source
-+	 * in VLLS mode, or restore console setting here.
-+	 */
-+	if (is_imx7ulp_lpuart(sport) && lpuart_uport_is_active(sport) &&
-+	    console_suspend_enabled && uart_console(&sport->port)) {
-+
-+		mutex_lock(&port->mutex);
-+		memset(&termios, 0, sizeof(struct ktermios));
-+		termios.c_cflag = uport->cons->cflag;
-+		if (port->tty && termios.c_cflag == 0)
-+			termios = port->tty->termios;
-+		uport->ops->set_termios(uport, &termios, NULL);
-+		mutex_unlock(&port->mutex);
-+	}
-+}
-+
-+static int __maybe_unused lpuart_resume(struct device *dev)
-+{
-+	struct lpuart_port *sport = dev_get_drvdata(dev);
-+
-+	if (lpuart_uport_is_active(sport)) {
-+		if (lpuart_is_32(sport))
-+			lpuart32_hw_setup(sport);
-+		else
-+			lpuart_hw_setup(sport);
-+	}
- 
-+	lpuart_console_fixup(sport);
- 	uart_resume_port(&lpuart_reg, &sport->port);
- 
- 	return 0;
+ 	lpuart_console_fixup(sport);
+@@ -2984,6 +3042,8 @@ static int __maybe_unused lpuart_resume(struct device *dev)
  }
  
--static SIMPLE_DEV_PM_OPS(lpuart_pm_ops, lpuart_suspend, lpuart_resume);
-+static const struct dev_pm_ops lpuart_pm_ops = {
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(lpuart_suspend_noirq,
-+				      lpuart_resume_noirq)
-+	SET_SYSTEM_SLEEP_PM_OPS(lpuart_suspend, lpuart_resume)
-+};
- 
- static struct platform_driver lpuart_driver = {
- 	.probe		= lpuart_probe,
+ static const struct dev_pm_ops lpuart_pm_ops = {
++	SET_RUNTIME_PM_OPS(lpuart_runtime_suspend,
++			   lpuart_runtime_resume, NULL)
+ 	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(lpuart_suspend_noirq,
+ 				      lpuart_resume_noirq)
+ 	SET_SYSTEM_SLEEP_PM_OPS(lpuart_suspend, lpuart_resume)
 -- 
 2.17.1
 
