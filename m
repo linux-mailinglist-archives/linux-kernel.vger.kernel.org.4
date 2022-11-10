@@ -2,95 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E281862436C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770396242C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiKJNme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S230136AbiKJNDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiKJNmd (ORCPT
+        with ESMTP id S230116AbiKJNDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:42:33 -0500
-X-Greylist: delayed 2543 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Nov 2022 05:42:31 PST
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8689D31379
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 05:42:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CZcNVqk8g0KSBhUkHK8jBepdav+GnxjrdTrEFAD5npc=; b=hjFFxIsGFN79BXqIS1Crj19qI/
-        /s46Ipu4kc9GHOn8iSyndnI/QJZvzLmLk9GcEpZyVJUtPwmCiLITMSdQk9cCkfTJDUDgaQV+tAkdr
-        5v66hVVTrzJ3stkcqg9+u+g7OiXbRkIlBH22hub2aYlJjdc9uduRXMiLjVRA85U2V/tJwOH545Rw3
-        ZIFtBZNuS+EcLCR9xnzK56CejdPpXtLGrOSp+YZ5NwKVXMLGq31alJykB6OFr9n16/gpkWQw2TY5u
-        WnvgM/b7WAB0Zqh1v2LNXTkQX/Kow40L/0GoeeYVTPH1AY2FCSAvPP6M/7oSDYb6yA9gA0yFz+Pxb
-        yFc/5F+A==;
-Received: from [186.214.225.177] (helo=[192.168.15.50])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1ot7A0-00FVOM-Nr; Thu, 10 Nov 2022 14:00:01 +0100
-Message-ID: <335b511f-ecfd-6e83-ef2e-7a74c8293b00@igalia.com>
-Date:   Thu, 10 Nov 2022 11:59:54 -0100
+        Thu, 10 Nov 2022 08:03:32 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3041D5F;
+        Thu, 10 Nov 2022 05:03:30 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id q9so4938134ejd.0;
+        Thu, 10 Nov 2022 05:03:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uyUdvAvFfBedY8C4R1CoGalnnZqFS5BS9edNzqJV4LE=;
+        b=awdpZzgHXvaGozAEQ7Mhh+xLeFZETbddCE0K8LRU2+3No7vqY150um9E3Wv9NcyQ7s
+         nGL5IWErgErtYri2MC8wDzOo97mCzWnXKQMVZOAO3ANSJRNRptLrIMMMVt5h3dMmhosP
+         lnCBTnpC1EXf5R37OWxCzm+/OdrFkPgnmBLVrCfukeQVDFhk6SUbMb8BQqgftzxVQ5aS
+         q/WJZoX9lhFPZM33HVCqyZvBzUfTRizH/gyh5EsuPJXq0NKW1sxF4jS66WtXtFapcpce
+         zHG0OXZxJe7S+gC6gBK8lGmtIKrlLbLyzUuFFHREPxRi6PH0bYPHDftG1pcf8HQGJQFf
+         D1Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uyUdvAvFfBedY8C4R1CoGalnnZqFS5BS9edNzqJV4LE=;
+        b=PsI+2xCNUx6pKO7112l4GFsD6j8eXKLsgVUYSoKxCaqkbhmiYelk7i2cVIAY9w0Y78
+         JehgATYFfNOnuv8nuotO/jiSCefQsW6G759ulqD+TZL+xaRfpj9FvvLM7gmeDdpdYQFb
+         yO4OLKA4A4eeOZLek8WSpv2mTgbbCz66vd4YdhiV7pGnVvcoQPIbsfabeCbrNCkuKoRt
+         zlRQa2KHQJW/LiYeexPOguLx2exEe1U0fE+T0H2PP7YMXbzk38MWOQrfIZwPBMtMC4xQ
+         EKcdf0pCMMrNEoUGPSCS11ayLXdoXWs18xNy9QNeKramdIpUw4TeL6tox7hKZOiOeCB1
+         3EOw==
+X-Gm-Message-State: ACrzQf0w6016urg7W2/nIZn0gwofNiPD315CHYj3d1u0c/GMGAlfPFIw
+        DQxFcL/YBfJ0/BF4WL32f8wY3jACXUWkjQ==
+X-Google-Smtp-Source: AMsMyM7++wpVmQYXlt19QPfZpFWmMAEBnh2TTX2mVhSsGh06HveYGqp/+mmMQax4PgLmQurDWPpsgg==
+X-Received: by 2002:a17:906:79c4:b0:782:7790:f132 with SMTP id m4-20020a17090679c400b007827790f132mr2747677ejo.649.1668085409325;
+        Thu, 10 Nov 2022 05:03:29 -0800 (PST)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id l26-20020aa7c3da000000b0045bccd8ab83sm8622082edr.1.2022.11.10.05.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 05:03:28 -0800 (PST)
+Date:   Thu, 10 Nov 2022 15:03:25 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v4 4/4] net: dsa: microchip: ksz8: add MTU
+ configuration support
+Message-ID: <20221110130325.eklhybumv7naehxe@skbuf>
+References: <20221110122225.1283326-1-o.rempel@pengutronix.de>
+ <20221110122225.1283326-5-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 0/2] Balance mutex_init and mutex_destroy calls
-Content-Language: en-US
-To:     =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        "Juan A . Suarez" <jasuarez@igalia.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221108175425.39819-1-mcanal@igalia.com>
-From:   Melissa Wen <mwen@igalia.com>
-In-Reply-To: <20221108175425.39819-1-mcanal@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110122225.1283326-5-o.rempel@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 10, 2022 at 01:22:25PM +0100, Oleksij Rempel wrote:
+> Make MTU configurable on KSZ87xx and KSZ88xx series of switches.
+> 
+> Before this patch, pre-configured behavior was different on different
+> switch series, due to opposite meaning of the same bit:
+> - KSZ87xx: Reg 4, Bit 1 - if 1, max frame size is 1532; if 0 - 1514
+> - KSZ88xx: Reg 4, Bit 1 - if 1, max frame size is 1514; if 0 - 1532
+> 
+> Since the code was telling "... SW_LEGAL_PACKET_DISABLE, true)", I
+> assume, the idea was to set max frame size to 1532.
+> 
+> With this patch, by setting MTU size 1500, both switch series will be
+> configured to the 1532 frame limit.
+> 
+> This patch was tested on KSZ8873.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> ---
 
-On 11/8/22 16:54, Maíra Canal wrote:
-> This series introduces some changes to assure the correct resource release on
-> the V3D driver, especially the mutex. Currently, the V3D has no mutex_destroy()
-> calls, which means that a mutex is being instantiated, but it is not being
-> released by the end of its use.
->
-> So, use the DRM-managed mutex_init variants when possible to manage the mutex
-> release and add mutex_destroy() calls when not possible.
->
-> Best Regards,
-> - Maíra Canal
->
-> v1 -> v2: https://lore.kernel.org/dri-devel/20221107224656.278135-1-mcanal@igalia.com/T/#m3c23e3f21fe6aaae51138c746c74e94b2a7b3bfc
->
-> - Move mutex_destroy() to v3d_perfmon_put() (Daniel Vetter).
-> - Add mutex_destroy() on error case in v3d_perfmon_create_ioctl() (Daniel Vetter).
-> - Add Daniel Vetter's tags.
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-Applied to drm-misc-next.
-
-Thanks,
-
-Melissa
-
->
-> Maíra Canal (2):
->    drm/v3d: switch to drmm_mutex_init
->    drm/v3d: add missing mutex_destroy
->
->   drivers/gpu/drm/v3d/v3d_gem.c     | 17 +++++++++++++----
->   drivers/gpu/drm/v3d/v3d_perfmon.c |  6 +++++-
->   2 files changed, 18 insertions(+), 5 deletions(-)
->
+As an extension to this patch set, you might also want to set
+ds->mtu_enforcement_ingress = true, to activate the bridge MTU
+normalization logic, since you have one MTU global to the entire switch.
