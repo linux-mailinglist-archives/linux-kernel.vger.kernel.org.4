@@ -2,99 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5206244E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6996244EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiKJO51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
+        id S230224AbiKJO6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:58:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiKJO5Y (ORCPT
+        with ESMTP id S229593AbiKJO57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:57:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8CB12629
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:57:23 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot8zV-0005Wm-6c; Thu, 10 Nov 2022 15:57:17 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot8zQ-003TM9-VH; Thu, 10 Nov 2022 15:57:13 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot8zR-00Ff2y-40; Thu, 10 Nov 2022 15:57:13 +0100
-Date:   Thu, 10 Nov 2022 15:57:12 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     ye.xingchen@zte.com.cn
-Cc:     linux@rempel-privat.de, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] i2c: imx: use devm_platform_get_and_ioremap_resource()
-Message-ID: <20221110145712.okxjbawfchp3tfje@pengutronix.de>
-References: <202211101723428058432@zte.com.cn>
+        Thu, 10 Nov 2022 09:57:59 -0500
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5503B140EB;
+        Thu, 10 Nov 2022 06:57:58 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id z30so1181994qkz.13;
+        Thu, 10 Nov 2022 06:57:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fDkz7bbVWR+GgxxGkF8vR//X45oBZt+X3AVSEGxGVU8=;
+        b=WgohCPeevFJ0279jZ5S9Lfh/4MV4XS6mU0N+pLLTk1DOUq8zehQG4RD57gxTse1g2j
+         OobK+jjzXrXgzzC48Qjrd8gH5HMTW8nogUYpRi3qKp6t3bk1kwclAqanRlDwe1WlSTYo
+         WDlv2ggzh3Im83boildgCn2uagwCZP8yxf0+IqNLjtMFNB/ZioRU2RcmAfZOHhMcRSqS
+         hgvNtC911/yDrtWM99WYjn2Pl+LDWnclG4wAba7xe95Zh3DlVV9GMGUu+eItACbkdrhq
+         uI9oQ9ZhOsr2/NSRYHvYaGkGqAsg3GSQvjApITs1Z/56UZ8RYAM6z97YuRMyJpxkLIbc
+         ENAg==
+X-Gm-Message-State: ACrzQf2DJX0eCFfyKb0WBD0/9iGB+RQhvyC+LQqHpa6c83jLypMnzYmT
+        4BU/MC9bj5MD8G+bYWmv+/O7gBJGpjsZJvvGEZPLJx1n
+X-Google-Smtp-Source: AMsMyM47eRjAfLOkZckNfJo2f4YcfTMlNMz7S4jLXyQo3C0XtTVcaHQmgGGmobmtLZtvyDyfRk8ne8iVGCNYr4nt11c=
+X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
+ j22-20020a05620a147600b006fa4c6783ecmr35621745qkl.23.1668092277397; Thu, 10
+ Nov 2022 06:57:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gocmzz3lynp2xdw6"
-Content-Disposition: inline
-In-Reply-To: <202211101723428058432@zte.com.cn>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221107175705.2207842-1-Perry.Yuan@amd.com> <20221107175705.2207842-3-Perry.Yuan@amd.com>
+In-Reply-To: <20221107175705.2207842-3-Perry.Yuan@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Nov 2022 15:57:46 +0100
+Message-ID: <CAJZ5v0hfy2RnCfgaXyX629GxwPyn3Nh4WcMg9cxAisVYELqrYA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/8] Documentation: amd-pstate: add EPP profiles introduction
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org, Deepak.Sharma@amd.com,
+        Mario.Limonciello@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 7, 2022 at 7:02 PM Perry Yuan <Perry.Yuan@amd.com> wrote:
+>
+> The patch add AMD pstate EPP feature introduction and what EPP
+> preference supported for AMD processors.
+>
+> User can get supported list from
+> energy_performance_available_preferences attribute file, or update
+> current profile to energy_performance_preference file
+>
+> 1) See all EPP profiles
+> $ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
+> default performance balance_performance balance_power power
+>
+> 2) Check current EPP profile
+> $ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference
+> performance
+>
+> 3) Set new EPP profile
+> $ sudo bash -c "echo power > /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference"
+>
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>  Documentation/admin-guide/pm/amd-pstate.rst | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+> index 8f3d30c5a0d8..78c6525d5a49 100644
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -262,6 +262,25 @@ lowest non-linear performance in `AMD CPPC Performance Capability
+>  <perf_cap_>`_.)
+>  This attribute is read-only.
+>
+> +``energy_performance_available_preferences``
+> +
+> +All the supported EPP preference could be selected, List of the strings that
+> +can be set to the ``energy_performance_preference`` attribute
+> +those different profiles represent different energy vs efficiency hints provided
+> +to low-level firmware
+> +however, the ``default`` represents the epp value is set by platform firmware
+> +This attribute is read-only.
+> +
+> +``energy_performance_preference``
+> +
+> +The current energy performance preference can be read from this attribute.
+> +and user can change current preference according to energy or performance needs
+> +Please get all support profiles list from
+> +``energy_performance_available_preferences`` attribute, all the profiles are
+> +integer values defined between 0 to 255 when EPP feature is enabled by platform
+> +firmware, if EPP feature is disabled, driver will ignore the written value
+> +This attribute is read-write.
+> +
+>  Other performance and frequency values can be read back from
+>  ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
+>
+> --
 
---gocmzz3lynp2xdw6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So the interface is the same as for intel_pstate AFAICS, which is
+good, because it is all consistent.
 
-On Thu, Nov 10, 2022 at 05:23:42PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->=20
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+However, there is some code duplication introduced in the subsequent
+patches and that may be a problem from the perspective of maintaining
+that consistency in the future.
 
-As res is used later, we cannot switch to
-devm_platform_ioremap_resource(), so the patch is fine.
-
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gocmzz3lynp2xdw6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNtEUUACgkQwfwUeK3K
-7AnaYAgAmhjSkv4KrIJ2g6QL8j81Wp8sZgaf/WPCJSZOqfALZok8OflVlj5bi4jh
-XPF4VFUdNPRZI4t0IwQlN0/QawnMlGAkHf4TQAWzOM5/W632zb9zTggP2evCBBp4
-5zY+omZJn/lizRGjU44+YqXGpu0KSIQJQmgzDDdx44139LgrjcA0vDaoG9ta1t7k
-YJEBYZCP2tloATV5Q4opK96MQEHvbKyDMRv0bPouBbEkauHkWO6bhaOthE1ZCzjW
-llaYYFyF0uFl1KruiZoZDHxPO30QR530W9V3pEcPlaxzihH82FTZuzxRgvbzed0q
-UfB7n1LsVMiujx25c1t0bJsaVYmiNg==
-=1TYz
------END PGP SIGNATURE-----
-
---gocmzz3lynp2xdw6--
+Have you at least considered introducing a common EPP support header
+file that could be used by both intel_pstate and amd_pstate?
