@@ -2,232 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3DC623E0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B8E623E1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiKJIzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        id S229669AbiKJI4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiKJIzi (ORCPT
+        with ESMTP id S229508AbiKJI4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:55:38 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFCEB73
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:55:36 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 10 Nov 2022 03:56:49 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3510A3F078;
+        Thu, 10 Nov 2022 00:56:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=l+TRjxo7IPalxZWdUpMe9P3L9tHl56uBoUPSHQDClug=; b=itZ6NJLr08T6NzZSXaCaokzqO7
+        nOoBXXdFOAhHkbIveoPKgHiz4exubCS5EHcbAl4GCqVtd6aq5aVGLEve9xeoBAWkz1h33SbmL6g5B
+        tNNvQRm0Eg53EpuKMxNRNTkhdz6ytqB+JhsMo8ATtae1cRXJGocWeNEHgBluPxA6VsPmQxXLoLFSV
+        Cmz4V54lT1BoIoJ+ThQ5n9LaGSebcHqEcaKbOphN2NHSRl6/1bCepiJgu4BJfZbbkrgS6LBEW8pvc
+        zXtpz0gyDbVY2Q0zEHXl1BGIVqEAAL//f2ASd0FD7Nu444FBU3ksT1OEjNuMvEpnvjac3Zq7kNkzh
+        Si/nDkzA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ot3Lu-00AF2Q-OK; Thu, 10 Nov 2022 08:56:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 53C282015D;
-        Thu, 10 Nov 2022 08:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668070535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrYORbb/2EGM8TKY6i8vkgmqI8qlKIOPW4j/QJZtm/c=;
-        b=gqwBsmCIZdDSjdReT8YRaS9pesOZFg/26yhH5tzthQyv++GeCkLR64K+3wFjVDvyF/19TM
-        t7VK4pec9wGumkwjhSxaBvRBI42VjssgnzDKGVsT8KW21Y005qQiq4Ku1MBLIt/f3Xew2q
-        J4vshkwUWYMtMt2bnUsf+jPcF4gEVSI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668070535;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrYORbb/2EGM8TKY6i8vkgmqI8qlKIOPW4j/QJZtm/c=;
-        b=Tkwl05EEIDknsMTrFPAw/Each/jJOrjVzFXkrNCbswBLSQP5i/jmUj4dHp+gU8Rx8Vb6lF
-        9e0ntPrMxLX4vqAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C25FB1346E;
-        Thu, 10 Nov 2022 08:55:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xSQdLoa8bGNOUQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 10 Nov 2022 08:55:34 +0000
-Message-ID: <93359ffb-4f88-408f-054b-879b88e09326@suse.de>
-Date:   Thu, 10 Nov 2022 09:55:33 +0100
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2E700300137;
+        Thu, 10 Nov 2022 09:56:01 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 11C02201A6C3D; Thu, 10 Nov 2022 09:56:01 +0100 (CET)
+Date:   Thu, 10 Nov 2022 09:56:01 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, kevin.tian@intel.com
+Subject: Re: [RESEND PATCH 2/6] x86/traps: add a system interrupt table for
+ system interrupt dispatch
+Message-ID: <Y2y8obdYDXo9vlH/@hirez.programming.kicks-ass.net>
+References: <20221110061545.1531-1-xin3.li@intel.com>
+ <20221110061545.1531-3-xin3.li@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v8 2/7] drm/shmem-helper: Don't use vmap_use_count for
- dma-bufs
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-References: <20221105232719.302619-1-dmitry.osipenko@collabora.com>
- <20221105232719.302619-3-dmitry.osipenko@collabora.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221105232719.302619-3-dmitry.osipenko@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------INGHqK60cD0J6bcyRsgC8CTQ"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110061545.1531-3-xin3.li@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------INGHqK60cD0J6bcyRsgC8CTQ
-Content-Type: multipart/mixed; boundary="------------i0b0biUqckSAOl60Afi3uhi9";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- Daniel Stone <daniel@fooishbar.org>,
- Tomeu Vizoso <tomeu.vizoso@collabora.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
- Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
- Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
- virtualization@lists.linux-foundation.org
-Message-ID: <93359ffb-4f88-408f-054b-879b88e09326@suse.de>
-Subject: Re: [PATCH v8 2/7] drm/shmem-helper: Don't use vmap_use_count for
- dma-bufs
-References: <20221105232719.302619-1-dmitry.osipenko@collabora.com>
- <20221105232719.302619-3-dmitry.osipenko@collabora.com>
-In-Reply-To: <20221105232719.302619-3-dmitry.osipenko@collabora.com>
+On Wed, Nov 09, 2022 at 10:15:41PM -0800, Xin Li wrote:
+> Upon receiving an external interrupt, KVM VMX reinjects it through
+> calling the interrupt handler in its IDT descriptor on the current
+> kernel stack, which essentially uses the IDT as an interrupt dispatch
+> table.
+> 
+> However the IDT is one of the lowest level critical data structures
+> between a x86 CPU and the Linux kernel, we should avoid using it
+> *directly* whenever possible, espeically in a software defined manner.
+> 
+> On x86, external interrupts are divided into the following groups
+>   1) system interrupts
+>   2) external device interrupts
+> With the IDT, system interrupts are dispatched through the IDT
+> directly, while external device interrupts are all routed to the
+> external interrupt dispatch function common_interrupt(), which
+> dispatches external device interrupts through a per-CPU external
+> interrupt dispatch table vector_irq.
+> 
+> To eliminate dispatching external interrupts through the IDT, add
+> a system interrupt handler table for dispatching a system interrupt
+> to its corresponding handler directly. Thus a software based dispatch
+> function will be:
+> 
+>   void external_interrupt(struct pt_regs *regs, u8 vector)
+>   {
+>     if (is_system_interrupt(vector))
+>       system_interrupt_handler_table[vector_to_sysvec(vector)](regs);
+>     else /* external device interrupt */
+>       common_interrupt(regs, vector);
+>   }
+> 
+> What's more, with the Intel FRED (Flexible Return and Event Delivery)
+> architecture, IDT, the hardware based event dispatch table, is gone,
+> and the Linux kernel needs to dispatch events to their handlers with
+> vector to handler mappings, the dispatch function external_interrupt()
+> is also needed.
+> 
+> Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> Signed-off-by: Xin Li <xin3.li@intel.com>
 
---------------i0b0biUqckSAOl60Afi3uhi9
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This is not a valid SOB, it would suggest hpa is the author, but he's
+not in in From.
 
-SGksDQoNCkkgaGF2ZSBhIGZldyBjb21tZW50cyB0aGF0IGFyZSBub3QgcmVhbGx5IHNvbWV0
-aGluZyBmb3IgdGhpcyBwYXRjaC4gSSdsbCANCmNvbW1lbnQgaXQgaGVyZSBhbnl3YXkgdG8g
-aGF2ZSB0aGVtIHBvc3RlZC4NCg0KQW0gMDYuMTEuMjIgdW0gMDA6Mjcgc2NocmllYiBEbWl0
-cnkgT3NpcGVua286DQo+IERNQS1idWYgY29yZSBoYXMgaXRzIG93biByZWZjb3VudGluZyBv
-ZiB2bWFwcywgdXNlIGl0IGluc3RlYWQgb2YgZHJtLXNobWVtDQo+IGNvdW50aW5nLiBUaGlz
-IGNoYW5nZSBwcmVwYXJlcyBkcm0tc2htZW0gZm9yIGFkZGl0aW9uIG9mIG1lbW9yeSBzaHJp
-bmtlcg0KPiBzdXBwb3J0IHdoZXJlIGRybS1zaG1lbSB3aWxsIHVzZSBhIHNpbmdsZSBkbWEt
-YnVmIHJlc2VydmF0aW9uIGxvY2sgZm9yDQo+IGFsbCBvcGVyYXRpb25zIHBlcmZvcm1lZCBv
-dmVyIGRtYS1idWZzLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRG1pdHJ5IE9zaXBlbmtvIDxk
-bWl0cnkub3NpcGVua29AY29sbGFib3JhLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUv
-ZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMgfCAzNSArKysrKysrKysrKysrKystLS0tLS0t
-LS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlv
-bnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1l
-bV9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jDQo+
-IGluZGV4IDM1MTM4ZjhhMzc1Yy4uODAxMDMzYjQ4ODkzIDEwMDY0NA0KPiAtLS0gYS9kcml2
-ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYw0KPiArKysgYi9kcml2ZXJzL2dw
-dS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYw0KPiBAQCAtMjkzLDI0ICsyOTMsMjIgQEAg
-c3RhdGljIGludCBkcm1fZ2VtX3NobWVtX3ZtYXBfbG9ja2VkKHN0cnVjdCBkcm1fZ2VtX3No
-bWVtX29iamVjdCAqc2htZW0sDQo+ICAgCXN0cnVjdCBkcm1fZ2VtX29iamVjdCAqb2JqID0g
-JnNobWVtLT5iYXNlOw0KPiAgIAlpbnQgcmV0ID0gMDsNCj4gICANCj4gLQlpZiAoc2htZW0t
-PnZtYXBfdXNlX2NvdW50KysgPiAwKSB7DQo+IC0JCWlvc3lzX21hcF9zZXRfdmFkZHIobWFw
-LCBzaG1lbS0+dmFkZHIpOw0KPiAtCQlyZXR1cm4gMDsNCj4gLQl9DQo+IC0NCj4gICAJaWYg
-KG9iai0+aW1wb3J0X2F0dGFjaCkgew0KDQpXZSBoYXZlIGEgbnVtYmVyIG9mIHN1Y2ggYnJh
-bmNoZXMgaW4gdmFyaW91cyBtZW1vcnkgbWFuYWdlcnMuIEF0IHNvbWUgDQpwb2ludCB3ZSBz
-aG91bGQgdGhpbmsgYWJvdXQgc29tZXRoaW5nIGxpa2UgYSBHRU0gRE1BLUJVRiBvYmplY3Qg
-KG9yIGF0IA0KbGVhc3Qgc29tZSBoZWxwZXJzKSB0aGF0IHJlcHJlc2VudHMgYW4gaW1wb3J0
-ZWQgYnVmZmVyLiBTdWNoIGEgdGluZyANCm1pZ2h0IGJlIHVzZWZ1bCB0byBhdm9pZCB0aGUg
-ZHVwbGljYXRpb24gYW5kIGJyYW5jaGluZyB0aGF0J3MgZ29pbmcgb24gDQpoZXJlIGFuZCBp
-biBvdGhlciBmdW5jdGlvbnMuDQoNCj4gICAJCXJldCA9IGRtYV9idWZfdm1hcChvYmotPmlt
-cG9ydF9hdHRhY2gtPmRtYWJ1ZiwgbWFwKTsNCj4gICAJCWlmICghcmV0KSB7DQo+ICAgCQkJ
-aWYgKFdBUk5fT04obWFwLT5pc19pb21lbSkpIHsNCg0KSSB0aGluayBpdCdzIE9LIHRvIGRy
-b3AgdGhpcyB0ZXN0IGZvciBpc19pb21lbS4gIEl0IHdhcyB1c2VmdWwgd2hlbiB3ZSANCmRp
-ZCBub3QgZGlzdGluZ3Vpc2ggYmV0d2VlbiBJL08gYW5kIHN5c3RlbSBtZW1vcnkgaW4gbW9z
-dCBvZiBvdXIgDQpoZWxwZXJzLiBCdXQgdGhhdCBzaG91bGQgaGF2ZSBiZWVuIHJlc29sdmVk
-IGJ5IG5vdyBhbmQgd2hhdGV2ZXIgY29kZSANCnN0aWxsIGRlcGVuZHMgb24gaXQgc2hvdWxk
-IGJlIHVwZGF0ZWQgYWNjb3JkaW5nbHkuIEFsbCBoZWxwZXJzIHVzZSANCmlvc3lzX21hcCBm
-dW5jdGlvbmFsaXR5IHRvIGFjY2VzcyB0aGUgbWVtb3J5Lg0KDQoNCj4gICAJCQkJZG1hX2J1
-Zl92dW5tYXAob2JqLT5pbXBvcnRfYXR0YWNoLT5kbWFidWYsIG1hcCk7DQo+IC0JCQkJcmV0
-ID0gLUVJTzsNCj4gLQkJCQlnb3RvIGVycl9wdXRfcGFnZXM7DQo+ICsJCQkJcmV0dXJuIC1F
-SU87DQo+ICAgCQkJfQ0KPiAtCQkJc2htZW0tPnZhZGRyID0gbWFwLT52YWRkcjsNCg0KVG8g
-cmVzb2x2ZSB0aGUgaXNfaW9tYXAgaXNzdWUsIHdlJ2QgaGF2ZSB0byBzdG9yZSB2YWRkciBh
-cyBzdHJ1Y3QgDQppb3N5c21fbWFwIHZhbHVlLg0KDQo+ICAgCQl9DQo+ICAgCX0gZWxzZSB7
-DQo+ICAgCQlwZ3Byb3RfdCBwcm90ID0gUEFHRV9LRVJORUw7DQo+ICAgDQo+ICsJCWlmIChz
-aG1lbS0+dm1hcF91c2VfY291bnQrKyA+IDApIHsNCj4gKwkJCWlvc3lzX21hcF9zZXRfdmFk
-ZHIobWFwLCBzaG1lbS0+dmFkZHIpOw0KPiArCQkJcmV0dXJuIDA7DQo+ICsJCX0NCj4gKw0K
-PiAgIAkJcmV0ID0gZHJtX2dlbV9zaG1lbV9nZXRfcGFnZXMoc2htZW0pOw0KPiAgIAkJaWYg
-KHJldCkNCj4gICAJCQlnb3RvIGVycl96ZXJvX3VzZTsNCj4gQEAgLTM3NiwxNSArMzc0LDE1
-IEBAIHN0YXRpYyB2b2lkIGRybV9nZW1fc2htZW1fdnVubWFwX2xvY2tlZChzdHJ1Y3QgZHJt
-X2dlbV9zaG1lbV9vYmplY3QgKnNobWVtLA0KPiAgIHsNCj4gICAJc3RydWN0IGRybV9nZW1f
-b2JqZWN0ICpvYmogPSAmc2htZW0tPmJhc2U7DQo+ICAgDQo+IC0JaWYgKFdBUk5fT05fT05D
-RSghc2htZW0tPnZtYXBfdXNlX2NvdW50KSkNCj4gLQkJcmV0dXJuOw0KPiAtDQo+IC0JaWYg
-KC0tc2htZW0tPnZtYXBfdXNlX2NvdW50ID4gMCkNCj4gLQkJcmV0dXJuOw0KPiAtDQo+ICAg
-CWlmIChvYmotPmltcG9ydF9hdHRhY2gpIHsNCj4gICAJCWRtYV9idWZfdnVubWFwKG9iai0+
-aW1wb3J0X2F0dGFjaC0+ZG1hYnVmLCBtYXApOw0KPiAgIAl9IGVsc2Ugew0KPiArCQlpZiAo
-V0FSTl9PTl9PTkNFKCFzaG1lbS0+dm1hcF91c2VfY291bnQpKQ0KPiArCQkJcmV0dXJuOw0K
-PiArDQo+ICsJCWlmICgtLXNobWVtLT52bWFwX3VzZV9jb3VudCA+IDApDQo+ICsJCQlyZXR1
-cm47DQo+ICsNCj4gICAJCXZ1bm1hcChzaG1lbS0+dmFkZHIpOw0KPiAgIAkJZHJtX2dlbV9z
-aG1lbV9wdXRfcGFnZXMoc2htZW0pOw0KPiAgIAl9DQo+IEBAIC02NDYsNyArNjQ0LDE0IEBA
-IHZvaWQgZHJtX2dlbV9zaG1lbV9wcmludF9pbmZvKGNvbnN0IHN0cnVjdCBkcm1fZ2VtX3No
-bWVtX29iamVjdCAqc2htZW0sDQo+ICAgCQkJICAgICAgc3RydWN0IGRybV9wcmludGVyICpw
-LCB1bnNpZ25lZCBpbnQgaW5kZW50KQ0KPiAgIHsNCj4gICAJZHJtX3ByaW50Zl9pbmRlbnQo
-cCwgaW5kZW50LCAicGFnZXNfdXNlX2NvdW50PSV1XG4iLCBzaG1lbS0+cGFnZXNfdXNlX2Nv
-dW50KTsNCj4gLQlkcm1fcHJpbnRmX2luZGVudChwLCBpbmRlbnQsICJ2bWFwX3VzZV9jb3Vu
-dD0ldVxuIiwgc2htZW0tPnZtYXBfdXNlX2NvdW50KTsNCj4gKw0KPiArCWlmIChzaG1lbS0+
-YmFzZS5pbXBvcnRfYXR0YWNoKQ0KPiArCQlkcm1fcHJpbnRmX2luZGVudChwLCBpbmRlbnQs
-ICJ2bWFwX3VzZV9jb3VudD0ldVxuIiwNCj4gKwkJCQkgIHNobWVtLT5iYXNlLmRtYV9idWYt
-PnZtYXBwaW5nX2NvdW50ZXIpOw0KPiArCWVsc2UNCj4gKwkJZHJtX3ByaW50Zl9pbmRlbnQo
-cCwgaW5kZW50LCAidm1hcF91c2VfY291bnQ9JXVcbiIsDQo+ICsJCQkJICBzaG1lbS0+dm1h
-cF91c2VfY291bnQpOw0KPiArDQoNCkhlcmUncyBhbm90aGVyIGNhc2Ugd2hlcmUgYSBHRU0g
-RE1BLUJVRiBvYmplY3QgbWlnaHQgYmVjb21lIGhlbHBmdWwuDQoNCkJlc3QgcmVnYXJkcw0K
-VGhvbWFzDQoNCj4gICAJZHJtX3ByaW50Zl9pbmRlbnQocCwgaW5kZW50LCAidmFkZHI9JXBc
-biIsIHNobWVtLT52YWRkcik7DQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0woZHJtX2dlbV9z
-aG1lbV9wcmludF9pbmZvKTsNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
-RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
-DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
-IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+> ---
+>  arch/x86/include/asm/traps.h |  8 ++++++
+>  arch/x86/kernel/traps.c      | 55 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 63 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
+> index 47ecfff2c83d..3dc63d753bda 100644
+> --- a/arch/x86/include/asm/traps.h
+> +++ b/arch/x86/include/asm/traps.h
+> @@ -47,4 +47,12 @@ void __noreturn handle_stack_overflow(struct pt_regs *regs,
+>  				      struct stack_info *info);
+>  #endif
+>  
+> +/*
+> + * How system interrupt handlers are called.
+> + */
+> +#define DECLARE_SYSTEM_INTERRUPT_HANDLER(f)			\
+> +	void f (struct pt_regs *regs __maybe_unused,		\
+> +		unsigned long vector __maybe_unused)
+> +typedef DECLARE_SYSTEM_INTERRUPT_HANDLER((*system_interrupt_handler));
+> +
+>  #endif /* _ASM_X86_TRAPS_H */
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index 178015a820f0..95dd917ef9ad 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -1444,6 +1444,61 @@ DEFINE_IDTENTRY_SW(iret_error)
+>  }
+>  #endif
+>  
+> +#define SYSV(x,y) [(x) - FIRST_SYSTEM_VECTOR] = (system_interrupt_handler)y
+> +
+> +#pragma GCC diagnostic push
+> +#pragma GCC diagnostic ignored "-Wcast-function-type"
 
---------------i0b0biUqckSAOl60Afi3uhi9--
-
---------------INGHqK60cD0J6bcyRsgC8CTQ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNsvIYFAwAAAAAACgkQlh/E3EQov+A/
-Tw//ZYrBzsRm/a9RnhIlqV27LiVx6btfHf+SNMWYv58P7yaZ6+h2OCa9h0pGWH5GiP9CI3P7TDRf
-8ztp1VjJE9z/d4xlFV2eVm+q+T7z/kLVyt50MnNKNM6yUhFFMxx923pBxGrLkTFUqIwIf3kwca+W
-kpOp3UQpZGDl6c6dt0SvIC/ek3dtGAMXZD4L6hMA537hsX3w8UEnYWy4UWCk3PH6Ic8y9ywistat
-/5dq6ils5evm+j5uInSpTQPexJA6kKi6to5D1fUgrGH+MdX+bsY7+nmB5F6YsJq7IfFGLrH7c7jP
-YmwnHvufRFw4ru+AhAJRg6djlxpSno6C4M3XFmcfVMuCpgOJsvJEWXUT/c8qNRGbpNH2xFPrAi9G
-rC+8hZ0DFPV0RsYrokewNwan2is3JNXng3hf2Opvu0JaYFBwKrYCs/XO7oQRdgvvycjbGsTGME1J
-gd0y/+aHYqcZTO5s8BvbGdcmdBOQnr52ioNmk8rL3VQ4PZlipQIwL0gfVdwhelIPbwBx5+yGmH59
-aU/yf7uX2/Rvs9SSZ05EiZU4fntYjo5VHViVRcH82BK3hRII1mbt6I7zYviOM2IYhuUN/yewcD69
-ZSBeJJg6v+iGyKiFb0Ym1yrlLok9sJuBiOUUY7uVqZtRKh5xd54Uv2lfhx4DHirfPeoDitrBAU+B
-uQ0=
-=QSh8
------END PGP SIGNATURE-----
-
---------------INGHqK60cD0J6bcyRsgC8CTQ--
+How does this not break CFI ?
