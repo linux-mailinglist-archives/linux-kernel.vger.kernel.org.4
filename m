@@ -2,81 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E876243DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C746243E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbiKJOKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S229996AbiKJOL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 09:11:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiKJOKv (ORCPT
+        with ESMTP id S229920AbiKJOLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:10:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BA01743E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668089390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4XYurhd29LYrxY7oxBugU/CFN4NBPGNybaFxAiF1pgs=;
-        b=Z2UN0DwyXSB2iq3elisnhmSIjuPk3HmHf1vKrN+t6Iu0nFBYm6e/Zsy+zNLBOKP38zX37C
-        kvYbjzisXHG7S0MeBzyYgtnRqIHfeIkcgjX/T1AiWydXNHmS2P8OyBiegiLOs4qdBjJIya
-        IPJDKBMzCY62E6qW/14k1X1RP6P4cwc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-HSyVkxo6OQGIbYTiO4TBFA-1; Thu, 10 Nov 2022 09:09:47 -0500
-X-MC-Unique: HSyVkxo6OQGIbYTiO4TBFA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5322B833A09;
-        Thu, 10 Nov 2022 14:09:47 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A81C40C83DD;
-        Thu, 10 Nov 2022 14:09:46 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Y20A33ya17l/MqxU@lunn.ch>
-References: <Y20A33ya17l/MqxU@lunn.ch> <166807341463.2904467.10141806642379634063.stgit@warthog.procyon.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] rxrpc: Fix missing IPV6 #ifdef
+        Thu, 10 Nov 2022 09:11:53 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B116CA3B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:11:51 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id f27so5349369eje.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpGOwIDC6RyqeqJOJZ70WfswIAfcOXcXcK09BiGwsdE=;
+        b=UZ7OEqL1nYcU4Ljq+dD0Msj9k4SekcMDGBhg6G0O/pmW/rAv17Ek2hWXT4/vB3CKu7
+         13MaltHhltvh488ph7fWPljkTi01LUPvFz3zNV8Yrwyd3R6b60S9DFAAmjhE5sYOXuss
+         cU6WeB617eP2bhP7WILKaHocbPlZLfYBfTBvI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mpGOwIDC6RyqeqJOJZ70WfswIAfcOXcXcK09BiGwsdE=;
+        b=Gj79xM1pya1PR26puZMZKQymU0N8GO9mb7r02OUmonzm8P5b8PIG+o+qKQ3MMv21eT
+         wJQ2cs4+KhjDgeApdKodtG3hLjpBGbDmlx0YU+DNy5EwJa/Wfsnx/rYYiAeGoQLNJ1OJ
+         SwO2pClMLPOOgjdQkCycG6owZ/gZk7e+dPB4LOWxywFQCzZzSUEO3hUBF5eDAmoeU2L4
+         rvAKtjbpHqgMweDrsCbTkQaJuh4y8LOpRnCTzt6vUIlBcp5x/cZTJAiCbjerSAs5fqZ5
+         ArctCtou7BHM2xovx5b6EpanWmUmH6zj5ZM+x/owoReTZjCIfeMYUWP9uWK+FNVukwb7
+         /f1Q==
+X-Gm-Message-State: ACrzQf2LkKhvt6aDjEMSSGXOG9DCpqTkJN6XBMUBD5lBNqvrhrMVyEov
+        6hxf0QclYTQloqa/ZoR8PPWKpw==
+X-Google-Smtp-Source: AMsMyM53O3xL6QToN1LIHbetQjNP2able8V85uBPifwCkuIVPahXwo9cSqrvK3+lI8b9rx7jKA9gmQ==
+X-Received: by 2002:a17:906:9b83:b0:730:b3ae:343 with SMTP id dd3-20020a1709069b8300b00730b3ae0343mr61811483ejc.670.1668089510192;
+        Thu, 10 Nov 2022 06:11:50 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:e41d:ff2f:a5fe:e81e])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1709063d2200b0076ff600bf2csm7308383ejf.63.2022.11.10.06.11.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 06:11:49 -0800 (PST)
+Subject: [PATCH v4 0/1] i2c: Restore power status of device if probe fail or device is removed
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3080952.1668089385.1@warthog.procyon.org.uk>
-Date:   Thu, 10 Nov 2022 14:09:45 +0000
-Message-ID: <3080953.1668089385@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAJ4GbWMC/3XNTQ7CIBAF4Ks0rMUALba48h7GBT/TQlIhAYsxTe/uxKVpV5M3me/NSgrkAIVcm5
+ VkqKGEFDF0p4ZYr+MENDjMRDAhOGeKBmHpW4cKVIPqR9B85EYSvDe6ADVZR+tRxGWecelDeaX8+fVX
+ juO+V1U5ZRRcz7RSRinmbtbn9AzL85zyRB5YVMUhFohZLyUzo3Da2h3cHuIWsRsuklvTmWH4/7xt2x exvo+FJAEAAA==
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 10 Nov 2022 15:11:42 +0100
+Message-Id: <20221109-i2c-waive-v4-0-e4496462833b@chromium.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Cc:     Hidenori Kobayashi <hidenorik@google.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1476; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=3UiRQb+QdR5Bl65LKAPmfm03Ffuf+eTUqFblaN3JJzE=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjbQahdbgFKzWCA2RDpUGQVY/z/fzxN6ntwcXuLyNp
+ B+dHg06JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY20GoQAKCRDRN9E+zzrEiDEHD/
+ 4uxwmNSBFLQ/VjTr+fSQsLdXZFC9iPjfRkpKG85yJklzBtR83sivSwkQk7wWUe5/5m3cIIPy+345ym
+ gGqDmsUGIulkr5NLScAGtcy/s8dmZvSZQeb+PJj344vG1qn9rkkwCcC4j+bM7KIFh6M50Ds6TZ6bVn
+ vDMcOebKWGsW99YlgB8vVMJ9wxGVV9Dp0wp7NDhj6neyt/iTmOpOmELgJKaVUi3YzQJaoxnOovo1hf
+ uFlxc3gh2blnLoDlwUQ0qwNux5hz0DpydtfzMTaamgyQP3wobZaAuSX4M3MB63WUt/3bmxkSbpDeqP
+ 2rGbHrggz0WHVoZuGEjMlgJsaD/Nuot0aZfYQRWA52m38TByjUn3CqFTXy2Yvf4L7KWPfOBNaczLB8
+ eNAP3fpwa3Zkj5jBdXs3QTvUCbRRxlv4BYiebBrNNILuwfYPqDKoz9WeowZWjlRBgeyqnYeMKc2KGz
+ 5xxmrUUayE/4OZ2pEJtFBgHB9ACk7MCraHhiT3hkJNE1VARKxFpFfZ18AQBt6LxxbqpnVqft5xPJUU
+ RPKBSLnVv1NA7eN3VFFlEMp0YVR0cwCGi2GORQr/Wz4iGDHKDcdwhgbLIIxDtUUA68mWD77UAqWYHu
+ xAwAtBtCz2UGQnotJZgm/hF0H4HVBXCTLzSBx8LON+E9qqypdGrLO09eyjhw==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Lunn <andrew@lunn.ch> wrote:
+We have discovered that some power lines were always on even if the devices
+on that power line was not used.
 
-> > +#ifdef CONFIG_AF_RXRPC_IPV6
-> >  	return ipv6_icmp_error(sk, skb, err, port, info, payload);
-> > +#endif
-> 
-> Can this be if (IS_ENABLED(CONFIG_AF_RXRPC_IPV6) {} rather than
-> #ifdef? It gives better build testing.
+This happens because we failed to probe a device on the i2c bus, and the
+ACPI Power Resource were never turned off.
 
-Sure.  Does it actually make that much of a difference?  I guess the
-declaration is there even if IPV6 is disabled.
+This patch tries to fix this issue.
 
-David
+To: Wolfram Sang <wsa@kernel.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Tomasz Figa <tfiga@chromium.org>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Hidenori Kobayashi <hidenorik@google.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
+---
+Changes in v4:
+- Rename full_power to do_power_on
+- Link to v3: https://lore.kernel.org/r/20221109-i2c-waive-v3-0-d8651cb4b88d@chromium.org
+
+Changes in v3:
+- Introduce full_power variable to make more clear what we are doing.
+- Link to v2: https://lore.kernel.org/r/20221109-i2c-waive-v2-0-07550bf2dacc@chromium.org
+
+Changes in v2:
+- Cover also device remove
+- Link to v1: https://lore.kernel.org/r/20221109-i2c-waive-v1-0-ed70a99b990d@chromium.org
+
+---
+Ricardo Ribalda (1):
+      i2c: Restore initial power state when we are done.
+
+ drivers/i2c/i2c-core-base.c | 11 +++++++----
+ include/linux/i2c.h         |  4 ++++
+ 2 files changed, 11 insertions(+), 4 deletions(-)
+---
+base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
+change-id: 20221109-i2c-waive-ae97fea1f1b5
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
