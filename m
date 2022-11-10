@@ -2,90 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8049F623CBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C46623CC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:38:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbiKJHga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S232891AbiKJHiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbiKJHg3 (ORCPT
+        with ESMTP id S232890AbiKJHiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:36:29 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B93FE081;
-        Wed,  9 Nov 2022 23:36:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7DDB74wdz4xYD;
-        Thu, 10 Nov 2022 18:36:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668065787;
-        bh=qx9k6n6kP12zH9txQP8+1Sse8k6uwgZ+ZDiaxpV4gzU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=e+vmPlv9JPuYKCh9WfloVEAml3KeBoSJhCrCQybVrcZV/9GCPiG62F6C2EfkOW4yB
-         g+nKxKEvybVE38g6PoGs/NRkU9F7ldqxlf1ruoLOBTw8eev1kaOKC+yZ5qV2Ouvw+5
-         0s7xNPlkHMsqZLyYcf3U9x6rdZHu8GunBj4YcOdeIrx6tJSce14gy2/1Js5Fao3CDc
-         6o0aqX1s2nrBxIVpQPfV2UNh1HfXJ+86SSCfEjCXsYrP2XYPV9v2eJ1WU2YGSvELPj
-         oeJuUSsfCZOPJgUcv5PNByT6jODwwj9eBH2qlspZBg/SHRyz7d4te6bRJqVHiBkHBo
-         SUDXYX3HTU3Aw==
-Date:   Thu, 10 Nov 2022 18:36:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20221110183625.63d54576@canb.auug.org.au>
+        Thu, 10 Nov 2022 02:38:05 -0500
+Received: from gw.atmark-techno.com (gw.atmark-techno.com [13.115.124.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AC0326F8
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:38:04 -0800 (PST)
+Received: from gw.atmark-techno.com (localhost [127.0.0.1])
+        by gw.atmark-techno.com (Postfix) with ESMTP id 0560B6013E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:38:03 +0900 (JST)
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+        by gw.atmark-techno.com (Postfix) with ESMTPS id 1D45F6013F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:38:01 +0900 (JST)
+Received: by mail-pj1-f69.google.com with SMTP id nl16-20020a17090b385000b002138288fd51so2950789pjb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 23:38:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hCjb7yV/CvXMOFsUMLrHBUd25VG/nQ2JHyjPko2pBBA=;
+        b=6IL1+uQrNQYMg4PsI9C/px3HEbxy2xedvw9FUC/oZdy2cT3CPRGi0dKI+vo6t8MOao
+         PbMjOcowQdib4WurQzTQulyJS4R8Epf4LMoRP9aLBCLcKYd6yuGVWa0VoTtoP3sQ8pyC
+         eSq/4nnG1Nydxm7pmJpdmtm17rRp1nuiTK30rFKylmlLtTX9/lO5JIJR6ru9mzE9qJP2
+         gpyeuuN/nW4wJltS5IjQ46DGDQoP97mDMXIJw4vY/SPPWjk1e9BWivbWSwyBKyMmnJco
+         rStH7EjdcOSPD1uIBfa6BT0auizA84+1yWsR8JJqTuqj5191KdyCtPNPWh30cYLSX0st
+         Dd/Q==
+X-Gm-Message-State: ACrzQf0PyIThOq2hIfGETy5Eek//oZ60lGRy76XfuDyuzVwXa9ZpkBA8
+        YXvyINxNq+juek/2BBIDhqMdgxc/Myb7EfmqrmTevrij1gJduJHAlWihERlKoOX3eEJzDP6TQZs
+        dtGxKbfbkb/sR6O3ahSnkJqgc7+bG
+X-Received: by 2002:aa7:83c8:0:b0:56d:8e07:4618 with SMTP id j8-20020aa783c8000000b0056d8e074618mr51964641pfn.33.1668065880053;
+        Wed, 09 Nov 2022 23:38:00 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5Lb2t86EbMFW9ZQ3kwu22IuMxG74UdO/YAYM+jzqoI78XZoQm20kFTU/Woblan8jqfRmomqA==
+X-Received: by 2002:aa7:83c8:0:b0:56d:8e07:4618 with SMTP id j8-20020aa783c8000000b0056d8e074618mr51964632pfn.33.1668065879804;
+        Wed, 09 Nov 2022 23:37:59 -0800 (PST)
+Received: from pc-zest.atmarktech (76.125.194.35.bc.googleusercontent.com. [35.194.125.76])
+        by smtp.gmail.com with ESMTPSA id p18-20020a170902ebd200b00176b63535adsm10381193plg.260.2022.11.09.23.37.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Nov 2022 23:37:59 -0800 (PST)
+Received: from martinet by pc-zest.atmarktech with local (Exim 4.96)
+        (envelope-from <martinet@pc-zest>)
+        id 1ot28M-001gKL-0J;
+        Thu, 10 Nov 2022 16:37:58 +0900
+Date:   Thu, 10 Nov 2022 16:37:47 +0900
+From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>, mizo@atmark-techno.com
+Subject: Re: [RFC PATCH 1/2] dt-bindings: net: h4-bluetooth: add new bindings
+ for hci_h4
+Message-ID: <Y2yqSxldXPdmkCpW@atmark-techno.com>
+References: <CAL_JsqKCb2ZA+CLTVnGBMjp6zu0yw-rSFjWRg2S3hA7S6h-XEA@mail.gmail.com>
+ <6a4f7104-8b6f-7dcd-a7ac-f866956e31d6@linaro.org>
+ <Y2rsQowbtvOdmQO9@atmark-techno.com>
+ <Y2tW8EMmhTpCwitM@atmark-techno.com>
+ <20221109220005.GA2930253-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KLDsslfk.jnzbjHrjTOgAS1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221109220005.GA2930253-robh@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/KLDsslfk.jnzbjHrjTOgAS1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Rob Herring wrote on Wed, Nov 09, 2022 at 04:00:05PM -0600:
+> Punting the issue to userspace is not a great solution...
 
-Hi all,
+I can definitely agree with that :)
 
-After merging the mm tree, today's linux-next build (htmldocs) produced
-this warning:
+Userspace has the advantage of being easy to shove ugly things under the
+rug, whereas I still have faint hope of keeping down the divergences we
+have with upstream kernel... But that's about it.
 
-include/linux/mm.h:1214: warning: cannot understand function prototype: 'ty=
-pedef union '
+If we can work out a solution here I'll be very happy.
 
-Introduced by commit
 
-  4a3df046c983 ("mm: teach release_pages() to take an array of encoded page=
- pointers too")
+Rob Herring wrote on Wed, Nov 09, 2022 at 04:00:05PM -0600:
+> > This actually hasn't taken long to bite us: while the driver does work,
+> > we get error messages early on before the firmware is loaded.
+> > (In hindsight, I probably should have waited a few days before sending
+> > this...)
+> > 
+> > 
+> > My current workaround is to return EPROBE_DEFER until we can find a
+> > netdev with a known name in the init namespace, but that isn't really
+> > something I'd consider upstreamable for obvious reasons (interfaces can
+> > be renamed or moved to different namespaces so this is inherently racy
+> > and it's just out of place in BT code)
+> 
+> Can't you just try to access the BT h/w in some way and defer when that 
+> fails?
 
---=20
+This is just a serial link; I've tried poking at it a bit before the
+firmware is loaded but mostly never got any reply, or while the driver
+sometimes got garbage back at some point (baudrate not matching with
+fresh boot default?)
+Either way, no reply isn't great -- just waiting a few ms for reply or
+not is not my idea of good design...
+
+> Or perhaps use fw_devlink to create a dependency on the wifi node. I'm 
+> not sure offhand how exactly you do that with a custom property.
+
+That sounds great if we can figure how to do that!
+From what I can see this doesn't look possible to express in pure
+devicetree, but I see some code initializing a fwnode manually in a
+constructor function with fwnode_init and a fwnode_operations vector
+that has .add_links, which in turn could add a link.
+... My problem at this point would be that I currently load the wireless
+driver as a module as it's vendor provided out of tree... (it's loaded
+through its pci alias, I guess it's udev checking depmod infos? not
+familiar how that part of autoloading really works...)
+
+But that makes me think that rather than defining the bluetooth serdev
+in dts early, I could try to have the wireless driver create it once
+it's ready? hmm...
+
+Let me sleep on that a bit and have another look at both fwnode
+(fw_devlink) and dynamic device creation.
+
+
 Cheers,
-Stephen Rothwell
+-- 
+Dominique
 
---Sig_/KLDsslfk.jnzbjHrjTOgAS1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsqfkACgkQAVBC80lX
-0GwPqwgAhwxVlXo20gWIYfLhLf6ydRypBcVCsDgDdvIp4MgxikPJOcFlQSvfAxa1
-PY4SJm1AE7wAHXz6dFegwLnQBcOAUH6eN+ShOI5XHj7RmGef4Ma8LpGWHVOb4wNt
-TYbFSO8ZTSVSPboUl3ZT9mixbdcCuxYj5mY3reHQBCAMqBhnjs0gmxoekcdYeTnx
-b6AHgxrnn6v//BdaXjP7Nf/bK4cR3bqGV3e411OlBNww9NpZjw2qGPX56VR7dgC4
-+NZKlvdfdb7xpQWhEb/Tr1AxcoLshX5k+aImeKIrAPHrC0wUX7qn6CW1WaFc/2og
-Vh9xaZ0HsqQPqmd3i6GOegbNyYY3Qg==
-=w+TJ
------END PGP SIGNATURE-----
-
---Sig_/KLDsslfk.jnzbjHrjTOgAS1--
