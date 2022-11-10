@@ -2,121 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A2786239CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351766239D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiKJCc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S231899AbiKJCfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:35:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKJCcZ (ORCPT
+        with ESMTP id S229516AbiKJCfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:32:25 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2072.outbound.protection.outlook.com [40.107.117.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E941B4AB
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 18:32:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RE5L1bgJ6VDsDGKGQ6RF4k4PfDpH6l05HveGh2MUo94HaDqxc2Ugy5TMYact9YoTrwFFmpVYzDdlI9+ZqRoGYnygE/UTLcGmrCcnB6Ez5NacfzsVp72CIhwsPZpENLVwMygOea7pgw//76PgJHNT/E4mbnn7hi3KK2gYySqoIWJUKUqoHjPXKrvAOTCQYfxH4uS+fmKtaU9ARdgw6e4TLRrljsVf4cMt2y1QQB0b03GQ9/T7XlVCLzEhfCwDoo6HpZF4tDXPhKeYv3NlaUZ943LmtdW4cwR9hdd17lcB+QmUtM7hINg7F42nkbj4EpLQtbHmX+akXk/Nhcy4KAbHOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jUa8qLOqTuBEbSrfq+ZFzyIuKvGuKpept6jinQ3tA8g=;
- b=P0i2ksICQuiMxCELttRsdDIYPLNn0Cg8HP54lJMVZqY0L1sPgKPo0GiQvRjft96ZRhXfQaNM+Ca9Np2WSVX9jqdT6AxWPqbuaYeqMw7HxIcqlj8bq/aicxpvYqKrUSMCzQgiFX5QDhqjP0TMyV1iZnXMNbQb7zWE3VJZmi0x0f5vqs3bLAa11ppw1fLGKw87NgKvR67sg37Xv6VqpYrWeHmy1SmNKLRcyMTDx5KqPAsjZ7lcaOWUJC1O6shox2N8m0ikyZ0z0Zy1kLWpvxSWOW9FBwgCpuRfKGrEJQyUe4fXjSjOfIEgoMTXjg0P6kGModXiV1BRXY0N+NgwXzAhmg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jUa8qLOqTuBEbSrfq+ZFzyIuKvGuKpept6jinQ3tA8g=;
- b=qRvdLbWWN6LYEEzA8zf0EM2/YY+jk23GPgVpTufckPOItZOuAClfSYMb2BRZJC03SIBPcJAYC+e7kwjq8hYN+46wvoyJfQUVag/nVMZ4ssylltJHdQ59PJ/wA1rLq2jxjzMg+BvV3tqL81iye7OGJb+c9RiB9R4beT61maQBTrI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
- SG2PR02MB4377.apcprd02.prod.outlook.com (2603:1096:0:8::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.12; Thu, 10 Nov 2022 02:32:17 +0000
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::31b6:afe9:43b5:aaca]) by SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::31b6:afe9:43b5:aaca%8]) with mapi id 15.20.5791.027; Thu, 10 Nov 2022
- 02:32:17 +0000
-Message-ID: <80630b6a-a7cf-be84-7f05-7b89a4a95757@oppo.com>
-Date:   Thu, 10 Nov 2022 10:32:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] f2fs: fix to enable compress for newly created file if
- extension matches
-To:     Chao Yu <chao@kernel.org>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221109110148.3674340-1-shengyong@oppo.com>
- <2a474126-ae64-ac31-9ba4-8d6b68f31bd6@kernel.org>
-From:   Sheng Yong <shengyong@oppo.com>
-In-Reply-To: <2a474126-ae64-ac31-9ba4-8d6b68f31bd6@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR01CA0034.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::9) To SI2PR02MB5148.apcprd02.prod.outlook.com
- (2603:1096:4:153::6)
+        Wed, 9 Nov 2022 21:35:30 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBA11FCDF;
+        Wed,  9 Nov 2022 18:35:27 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id k4so405695qkj.8;
+        Wed, 09 Nov 2022 18:35:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pq5RYqThuejD6uu/zb1QtnBMuQ23tJwERQM40gO3AZg=;
+        b=aWpQG6iJqjVOAGiBZ2SwELO2lY/Ryd55OCsGFVcsIoRfNzkMwFbM4mN3HyvSYohNOa
+         qD62ev8h9111DhGtLqJtyj1WQIvV1ZYH3tlve+SiFiyjJTGj9CsbgnLJNUox74YCIyeJ
+         4ARNysKO4W3BRx/6NyEG6UpB6p3TzM4V0Pdo1f/mHK9E+jUmCS3g5WbyvLkhyNDCsmaD
+         WT1NTwECQMXy6nne9Bxd6GtBPzzqsemDV4HDhKDNKoh+NolsB8yfk+GjyrkgNLM1JqHy
+         VdRoAFVcxf2XBT7IoQyK+so4dwPQgrLwOtFjHLuUMd8hokUUSqr3OjGY1sUFNUNHnNTC
+         8IBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pq5RYqThuejD6uu/zb1QtnBMuQ23tJwERQM40gO3AZg=;
+        b=lLr6a8J4iv70SzYhYhp8V5BmxBUgbIkjirDtAijda6yOGNNUmlamUbaqAKB4QOtX5b
+         mkCq+7yA0xUxnaR6b666LcxcitNL5KKHNoobSQbaROvI4XS0LbjWo/vT+KbkQF9+kPXj
+         TBX8Trtmaq13GIcSWcKW9mapwEspch0xGn6foHORxfAW4FqNCnT1zZVYW+WFMHWxlrBY
+         uYDpMI//a0hpGAgU6EXwZfRGsudSXomXnf0z21d+AtCE53Gfjq0wwsNZSuZHKuMB/kdK
+         ANTFyRBiS1lQYdWJUaVLshpJvL50ptqZZCxEorDbq341IZHP7Q7kM/BGlIM9nhVgompz
+         1Jlw==
+X-Gm-Message-State: ACrzQf2nQ+bTqLlYLR+yoH5+BitydDWHQdgw5EgA3KMjhIQ1GwV+26zH
+        0hRiF55jUmH/67IWDGSjYQ==
+X-Google-Smtp-Source: AMsMyM4UqWbbV6ac/62eJOlGAVPaF9OvO6/uWxec4gR3L0VsKQ+htizK7olz/zYi7P2JxkFoC3O9fw==
+X-Received: by 2002:a37:42cf:0:b0:6e8:3bad:729 with SMTP id p198-20020a3742cf000000b006e83bad0729mr45464657qka.742.1668047726211;
+        Wed, 09 Nov 2022 18:35:26 -0800 (PST)
+Received: from bytedance.attlocal.net ([130.44.212.155])
+        by smtp.gmail.com with ESMTPSA id g10-20020a05620a40ca00b006fa12a74c53sm12288705qko.61.2022.11.09.18.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 18:35:25 -0800 (PST)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Leon Romanovsky <leon@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH net-next v6] net/sock: Introduce trace_sk_data_ready()
+Date:   Wed,  9 Nov 2022 18:34:58 -0800
+Message-Id: <20221110023458.2726-1-yepeilin.cs@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|SG2PR02MB4377:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0166c029-f354-4d35-0226-08dac2c3c8ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xmefBSNCQe5B/WarykxjhVygVLX3+l4fgm/Myc5D5rMj9QJJssoNhFh6tdKVJn65Rfa8DPZbqwDHKHZIraHYTbRGc+Spoh87z9MPzLAQ8qp0LWuenWtfjPhOdSZYW/9mrC1ZMI15xnSgyE1E92z+Mn0qiBZTYMXwD1x0VxJ4td/qrRVsjMTIJssLulmB6hTZxAHgQX2IPhZBnQ3G9nM/dzirXUJ0wE4joB2YH28I3AhUanG7h82S8vPibx/wsaJFiMtvzkuNA4dgz+2ADhibPa4ReJZBdQ8N2bksyl+xafV32JnOlXfkuEhtJEc5fgcLWgqfkoOPxpl0YMEzuWj+zwSrVmNKpRRsMrVHSu/sfrsgyN339OPFRGqfpup1I5EWu3ob2duhHEzja9cIeWzixJFQ2puNdv6Bo0MQrdbBr8VJnrkTu6Ro/Z0+KTLTXySbaH6smqW9wx/EBonTT1t5TzeyhKw4CxJQsV7dTIAXiMJJJPNwsmMJ4ycSiyqEKJj6OJpumY1Bt1XdFn98tirEF+xNw92yU3oO8SdZyya1LCU0D+nH+N6jQQ7oXXmKLIyIGsQWMKqZyOYe3BkCMv/5KyuPjJUkCUte5HUFrdSlBDr7AN0AVhq8Qhc0yb8lk6IbR0Ii09gA0kUEUCPto4+GUUXk0vA0Yvk6IDAJ4OiXsxuJClRM53sv+/kDVNX7EsFXbPOlzWyvv2D5h8kBaVglUg62RCPDxao+ot0M/aToYy6GXG1+V56wjq0dtKaad+9IC7io/E+qRalXe3Fp1xjj0Oj2HT339HWDmAaMi69tOK4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(346002)(396003)(366004)(451199015)(478600001)(2906002)(186003)(2616005)(66556008)(8676002)(66946007)(4326008)(66476007)(6506007)(53546011)(8936002)(5660300002)(26005)(6512007)(41300700001)(83380400001)(31686004)(38100700002)(31696002)(86362001)(6486002)(6666004)(36756003)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c2U4VEQ1ZzN1TE80TE9nOS9FSU1iMnd1Z3hrcHY3OTg0MTlOdXBVYVFEU1hT?=
- =?utf-8?B?RlNaT2lVRE1nNWp1YzhxbktZK3pwY0IxZE1NVWF5dnNmVGgvZXVTUEhUVUxt?=
- =?utf-8?B?NGFRVDVmc3k0R0lLeDZtK3NaRDFRV3Ftb1VmRHpuOUxBZXplVmcydFl4Y2Fh?=
- =?utf-8?B?SWtic2ErR1lZRjBpcWdVeHEwNmx1L3g0NlpoV3psOGRPOTI1SExhblR4bmhT?=
- =?utf-8?B?b01MSytMWVU3cERQSE8wd0wxd0FJclBmVS80UHdneEtETDFWck1icHhONHFV?=
- =?utf-8?B?L1FUdmY3cGJ4dHVDTCtQWHVJZVRVTXp0TXNXMjVXUXVXQlFtaW1BUmVQOGxu?=
- =?utf-8?B?dnZ0Ni8yUFNWSkU5UkdCaEFCZkt6WVp6Nm50Y1J4UjdFZGs3a3JhaDJWVC8v?=
- =?utf-8?B?QmE1ajQrUzUzSVFiQmx2V1B0WlA3QUJRUTZOcnZ6YXhVN1VGb2dVRXdkSG5C?=
- =?utf-8?B?WVduOHBvQUxQeUQ5QVhDMXNKYTd3RitoY1BwL2VaVkpmcHZaaVVnbWdnY0Mz?=
- =?utf-8?B?Q211TUNReG9LRnhNenBRdlJ6RDZ6MW5Zc3R5QWExTDhQSW5oTkRySWtmaC9w?=
- =?utf-8?B?OTdiemFVblFneTY5aWpjQXc2bWZrK1NhYmJjYWJLOWRscW5wSUNzSVIxdUtr?=
- =?utf-8?B?RXovZlhLNEhRUDl2OEw2TkhjQmo2M3pDQjNMVVdTaFpoV3VIVEJ2cDVpL1Bv?=
- =?utf-8?B?S25sWUxSK2M4bXF6akVtbUppbkljVGF2OCtaNXhmUU5jdW90dGZsakZuQkcr?=
- =?utf-8?B?SFhFMlhFZ2JPZTVkM2dtMk9iRGdWYjdZVm52QVI4M3c4dGIxZ0lVT00vNWVv?=
- =?utf-8?B?RlVNL3owa1VmUlNIdWV6blRmbGgrNmc0cVY1NnpoT2gvNVlQSERUT1lUQTk5?=
- =?utf-8?B?Y2IwOEh1MEFPRk5tZCt2cFhaU25ISWlhcTlNdURsaTNQcGhzT01DQmtTWDR6?=
- =?utf-8?B?c0I0eFFHZzlleUxsdzRpL1BPdmNQL0J4T0oxSms2WElkbk1la2ptMzJGRFFt?=
- =?utf-8?B?TVdEbUlUQ0tuM2oyNFVNaVhubmRsZnZCMXBSMmI0cThac0dIWWxxa1ZUUWdD?=
- =?utf-8?B?MjdLeEdiUXBGKzZHYkZvWVFvb3VCTjRwbThpWXdBZ0hHWmh6eEdaSm9Da3ZJ?=
- =?utf-8?B?WWt0dS93bk1HMzZISXM3d3RHNHMzWTd4ZitNMlBjdkVtdjEvSE5yU0Jndm9S?=
- =?utf-8?B?R2ZBYnpTbkcvWExoK1RsdER0cUNXZmgrSWFHU1IzZFlSQ3FEL2pPcXhjRkdj?=
- =?utf-8?B?YWNLa085bFZkcnNUeFNRdHVGMGVkMDBWby96ZFl3NjAwUitvUml0VDBZaElU?=
- =?utf-8?B?Ry9kdFd2NjlPOGpCMXpjNFoyQ2pWTjBXUEhaVCs0a2VURktCUEwrQjB0YnFk?=
- =?utf-8?B?RmNSRE81V2xvd2t4T0lDdlZvbkxIZ2lLK2dhYktPckNYc1N4cXQwZzJWMXUw?=
- =?utf-8?B?eEMrRXlncUNSRUs4Vk9iZ1BJdkkwODZ3bHN6VkY4eFNMeS9oMzhKNW1YVWdo?=
- =?utf-8?B?bVNHcFlQcEJ3V3QwUUhYZSthUkNCSHJCekFhaGpEOEJvaUxlcjRCaXBtYllO?=
- =?utf-8?B?eU9tN3IrWmxEMWNHY1lCN0FvRlplWmQyUUh2VUtaUDJPcHliZHd5TkdHSi9v?=
- =?utf-8?B?b2VVc1ZjSXAvR09iRlk3R2JUOEVIdXdsdU1PS0JRNHVFS1h0eUw3bDNpbldt?=
- =?utf-8?B?cXdMZHpGc0lFWVlnbFFPU1ozK2krTGlncnJIalV2dTRJWnRuZ2MrNHdJbDVG?=
- =?utf-8?B?c25tVzVmWkQwbGMwTWpGNW1nYkZ1bEhQWDFiNjlHTE8ydGRrWlRHbVlmQ0tR?=
- =?utf-8?B?c0tNY0g5bVRIMDZZRXJ3dXZJR01sU2VwT0prcUpSRWJxdkpDeDhwcVFsR1h2?=
- =?utf-8?B?NGZaZW8zY3RoMGZySmV6ci84azVtaHBWbnNhU0NNakp2b3BDcnVmK2VwMWt0?=
- =?utf-8?B?NmI0WHo0UlBqRFRsYm8vV1lNemp0dGNUa0lNRW80Und5TnBVWTZxQ1dFbzFl?=
- =?utf-8?B?SDhCYThQcWZTTHFjRXkwc29HT1JUa2Vyci9DUnduRW05bHFHMzgxcHB3OTNz?=
- =?utf-8?B?Z2FyYVJ5dmhldklyd1JMUEdud2Zybm1pTzhoR3pKVmRaUlZBNmVMQkw1dllh?=
- =?utf-8?Q?1JIPqW6gViSfXndh83nDimhsS?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0166c029-f354-4d35-0226-08dac2c3c8ea
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 02:32:17.2942
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pGoa5VT6t5XQIsXdUgEAPT7XhV6roUbg2O4MyZRtTHL2SsTm8Vyzr87U1QmRpqxnzUuUSlVIJpaVd8d/mRa2fg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR02MB4377
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,71 +76,735 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Peilin Ye <peilin.ye@bytedance.com>
 
+As suggested by Cong, introduce a tracepoint for all ->sk_data_ready()
+callback implementations.  For example:
 
-在 2022/11/9 21:57, Chao Yu 写道:
-> On 2022/11/9 19:01, Sheng Yong wrote:
->> If compress_extension is set, and a newly created file matches the
->> extension, the file could be marked as compression file. However,
->> if inline_data is also enabled, there is no chance to check its
->> extension since f2fs_should_compress() always returns false.
->>
->> So if a new file is created (its inode has I_NEW flag and must have
->> no pin/atomic/swap flag), instead of calling f2fs_should_compress(),
->> checking its file type is enough here.
->>
->> Signed-off-by: Sheng Yong <shengyong@oppo.com>
->> ---
->>   fs/f2fs/namei.c | 7 ++++++-
->>   1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
->> index e104409c3a0e5..99dbd051ae0ba 100644
->> --- a/fs/f2fs/namei.c
->> +++ b/fs/f2fs/namei.c
->> @@ -295,9 +295,14 @@ static void set_compress_inode(struct 
->> f2fs_sb_info *sbi, struct inode *inode,
->>
->>          if (!f2fs_sb_has_compression(sbi) ||
->>                          F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
->> -                       !f2fs_may_compress(inode) ||
->>                          (!ext_cnt && !noext_cnt))
->>                  return;
->> +       if (inode->i_state & I_NEW) {
->> +               if (!S_ISREG(inode->i_mode))
->> +                       return;
->> +       } else if (!f2fs_may_compress(inode)) {
->> +               return;
->> +       }
-> 
-> How about moving set_compress_inode() into f2fs_new_inode()?
+<...>
+  ksoftirqd/0-16  [000] ..s..  99.784482: sk_data_ready: family=10 protocol=58 func=sock_def_readable
+  ksoftirqd/0-16  [000] ..s..  99.784819: sk_data_ready: family=10 protocol=58 func=sock_def_readable
+<...>
 
-Hi, Chao
+Suggested-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+v1-v5: https://lore.kernel.org/netdev/20220928221514.27350-1-yepeilin.cs@gmail.com/
 
-I prefer not to move it. Because set_compress_inode() needs 
-dentry->d_name as a parameter, but dentry is not passed to 
-f2fs_new_inode(). I think that's why it was called outside of 
-f2fs_new_inode() in the first place.
+change since v5:
+  - Rebase onto net-next
 
-thanks,
-shengyong
+change since v4:
+  - Add back tracepoint in iscsi_target_sk_data_ready()
 
-> 
->      if (f2fs_sb_has_compression(sbi)) {
->          /* Inherit the compression flag in directory */
->          if ((F2FS_I(dir)->i_flags & F2FS_COMPR_FL) &&
->                      f2fs_may_compress(inode))
->              set_compress_context(inode);
-> 
->          set_compress_inode(sbi, inode, name);
->      }
-> 
->      /* Should enable inline_data after compression set */
->      if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
->          set_inode_flag(inode, FI_INLINE_DATA);
-> 
->>
->>          f2fs_down_read(&sbi->sb_lock);
->>
->> -- 
->> 2.25.1
+changes since v3:
+  - Avoid using __func__ everywhere (Leon Romanovsky)
+  - Delete tracepoint in iscsi_target_sk_data_ready()
+
+change since v2:
+  - Fix modpost error for modules (kernel test robot)
+
+changes since v1:
+  - Move tracepoint into ->sk_data_ready() callback implementations
+    (Eric Dumazet)
+  - Fix W=1 warning (Jakub Kicinski)
+
+ drivers/infiniband/hw/erdma/erdma_cm.c   |  3 +++
+ drivers/infiniband/sw/siw/siw_cm.c       |  5 +++++
+ drivers/infiniband/sw/siw/siw_qp.c       |  3 +++
+ drivers/nvme/host/tcp.c                  |  3 +++
+ drivers/nvme/target/tcp.c                |  5 +++++
+ drivers/scsi/iscsi_tcp.c                 |  3 +++
+ drivers/soc/qcom/qmi_interface.c         |  3 +++
+ drivers/target/iscsi/iscsi_target_nego.c |  2 ++
+ drivers/xen/pvcalls-back.c               |  5 +++++
+ fs/dlm/lowcomms.c                        |  5 +++++
+ fs/ocfs2/cluster/tcp.c                   |  5 +++++
+ include/trace/events/sock.h              | 24 ++++++++++++++++++++++++
+ net/ceph/messenger.c                     |  4 ++++
+ net/core/net-traces.c                    |  2 ++
+ net/core/skmsg.c                         |  3 +++
+ net/core/sock.c                          |  2 ++
+ net/kcm/kcmsock.c                        |  3 +++
+ net/mptcp/subflow.c                      |  3 +++
+ net/qrtr/ns.c                            |  3 +++
+ net/rds/tcp_listen.c                     |  2 ++
+ net/rds/tcp_recv.c                       |  2 ++
+ net/sctp/socket.c                        |  3 +++
+ net/smc/smc_rx.c                         |  3 +++
+ net/sunrpc/svcsock.c                     |  5 +++++
+ net/sunrpc/xprtsock.c                    |  3 +++
+ net/tipc/socket.c                        |  3 +++
+ net/tipc/topsrv.c                        |  5 +++++
+ net/tls/tls_sw.c                         |  3 +++
+ net/xfrm/espintcp.c                      |  3 +++
+ 29 files changed, 118 insertions(+)
+
+diff --git a/drivers/infiniband/hw/erdma/erdma_cm.c b/drivers/infiniband/hw/erdma/erdma_cm.c
+index 74f6348f240a..771059a8eb7d 100644
+--- a/drivers/infiniband/hw/erdma/erdma_cm.c
++++ b/drivers/infiniband/hw/erdma/erdma_cm.c
+@@ -11,6 +11,7 @@
+ /* Copyright (c) 2017, Open Grid Computing, Inc. */
+ 
+ #include <linux/workqueue.h>
++#include <trace/events/sock.h>
+ 
+ #include "erdma.h"
+ #include "erdma_cm.h"
+@@ -925,6 +926,8 @@ static void erdma_cm_llp_data_ready(struct sock *sk)
+ {
+ 	struct erdma_cep *cep;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock(&sk->sk_callback_lock);
+ 
+ 	cep = sk_to_cep(sk);
+diff --git a/drivers/infiniband/sw/siw/siw_cm.c b/drivers/infiniband/sw/siw/siw_cm.c
+index f88d2971c2c6..da530c0404da 100644
+--- a/drivers/infiniband/sw/siw/siw_cm.c
++++ b/drivers/infiniband/sw/siw/siw_cm.c
+@@ -16,6 +16,7 @@
+ #include <net/tcp.h>
+ #include <linux/inet.h>
+ #include <linux/tcp.h>
++#include <trace/events/sock.h>
+ 
+ #include <rdma/iw_cm.h>
+ #include <rdma/ib_verbs.h>
+@@ -109,6 +110,8 @@ static void siw_rtr_data_ready(struct sock *sk)
+ 	struct siw_qp *qp = NULL;
+ 	read_descriptor_t rd_desc;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock(&sk->sk_callback_lock);
+ 
+ 	cep = sk_to_cep(sk);
+@@ -1216,6 +1219,8 @@ static void siw_cm_llp_data_ready(struct sock *sk)
+ {
+ 	struct siw_cep *cep;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock(&sk->sk_callback_lock);
+ 
+ 	cep = sk_to_cep(sk);
+diff --git a/drivers/infiniband/sw/siw/siw_qp.c b/drivers/infiniband/sw/siw/siw_qp.c
+index e6f634971228..81e9bbd9ebda 100644
+--- a/drivers/infiniband/sw/siw/siw_qp.c
++++ b/drivers/infiniband/sw/siw/siw_qp.c
+@@ -10,6 +10,7 @@
+ #include <linux/llist.h>
+ #include <asm/barrier.h>
+ #include <net/tcp.h>
++#include <trace/events/sock.h>
+ 
+ #include "siw.h"
+ #include "siw_verbs.h"
+@@ -94,6 +95,8 @@ void siw_qp_llp_data_ready(struct sock *sk)
+ {
+ 	struct siw_qp *qp;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock(&sk->sk_callback_lock);
+ 
+ 	if (unlikely(!sk->sk_user_data || !sk_to_qp(sk)))
+diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+index 9b47dcb2a7d9..bf03c12a7333 100644
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -14,6 +14,7 @@
+ #include <linux/blk-mq.h>
+ #include <crypto/hash.h>
+ #include <net/busy_poll.h>
++#include <trace/events/sock.h>
+ 
+ #include "nvme.h"
+ #include "fabrics.h"
+@@ -905,6 +906,8 @@ static void nvme_tcp_data_ready(struct sock *sk)
+ {
+ 	struct nvme_tcp_queue *queue;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 	queue = sk->sk_user_data;
+ 	if (likely(queue && queue->rd_enabled) &&
+diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
+index 6c1476e086ef..401b679abe90 100644
+--- a/drivers/nvme/target/tcp.c
++++ b/drivers/nvme/target/tcp.c
+@@ -14,6 +14,7 @@
+ #include <linux/inet.h>
+ #include <linux/llist.h>
+ #include <crypto/hash.h>
++#include <trace/events/sock.h>
+ 
+ #include "nvmet.h"
+ 
+@@ -1470,6 +1471,8 @@ static void nvmet_tcp_data_ready(struct sock *sk)
+ {
+ 	struct nvmet_tcp_queue *queue;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 	queue = sk->sk_user_data;
+ 	if (likely(queue))
+@@ -1667,6 +1670,8 @@ static void nvmet_tcp_listen_data_ready(struct sock *sk)
+ {
+ 	struct nvmet_tcp_port *port;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 	port = sk->sk_user_data;
+ 	if (!port)
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index 5fb1f364e815..8cee839cf4aa 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -36,6 +36,7 @@
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_transport_iscsi.h>
+ #include <trace/events/iscsi.h>
++#include <trace/events/sock.h>
+ 
+ #include "iscsi_tcp.h"
+ 
+@@ -170,6 +171,8 @@ static void iscsi_sw_tcp_data_ready(struct sock *sk)
+ 	struct iscsi_tcp_conn *tcp_conn;
+ 	struct iscsi_conn *conn;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 	conn = sk->sk_user_data;
+ 	if (!conn) {
+diff --git a/drivers/soc/qcom/qmi_interface.c b/drivers/soc/qcom/qmi_interface.c
+index 57052726299d..820bdd9f8e46 100644
+--- a/drivers/soc/qcom/qmi_interface.c
++++ b/drivers/soc/qcom/qmi_interface.c
+@@ -12,6 +12,7 @@
+ #include <linux/string.h>
+ #include <net/sock.h>
+ #include <linux/workqueue.h>
++#include <trace/events/sock.h>
+ #include <linux/soc/qcom/qmi.h>
+ 
+ static struct socket *qmi_sock_create(struct qmi_handle *qmi,
+@@ -569,6 +570,8 @@ static void qmi_data_ready(struct sock *sk)
+ {
+ 	struct qmi_handle *qmi = sk->sk_user_data;
+ 
++	trace_sk_data_ready(sk);
++
+ 	/*
+ 	 * This will be NULL if we receive data while being in
+ 	 * qmi_handle_release()
+diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
+index f2919319ad38..2962b0e02707 100644
+--- a/drivers/target/iscsi/iscsi_target_nego.c
++++ b/drivers/target/iscsi/iscsi_target_nego.c
+@@ -13,6 +13,7 @@
+ #include <linux/slab.h>
+ #include <linux/sched/signal.h>
+ #include <net/sock.h>
++#include <trace/events/sock.h>
+ #include <scsi/iscsi_proto.h>
+ #include <target/target_core_base.h>
+ #include <target/target_core_fabric.h>
+@@ -384,6 +385,7 @@ static void iscsi_target_sk_data_ready(struct sock *sk)
+ 	struct iscsit_conn *conn = sk->sk_user_data;
+ 	bool rc;
+ 
++	trace_sk_data_ready(sk);
+ 	pr_debug("Entering iscsi_target_sk_data_ready: conn: %p\n", conn);
+ 
+ 	write_lock_bh(&sk->sk_callback_lock);
+diff --git a/drivers/xen/pvcalls-back.c b/drivers/xen/pvcalls-back.c
+index d6f945fd4147..4a78fb1b88aa 100644
+--- a/drivers/xen/pvcalls-back.c
++++ b/drivers/xen/pvcalls-back.c
+@@ -14,6 +14,7 @@
+ #include <net/inet_common.h>
+ #include <net/inet_connection_sock.h>
+ #include <net/request_sock.h>
++#include <trace/events/sock.h>
+ 
+ #include <xen/events.h>
+ #include <xen/grant_table.h>
+@@ -300,6 +301,8 @@ static void pvcalls_sk_data_ready(struct sock *sock)
+ 	struct sock_mapping *map = sock->sk_user_data;
+ 	struct pvcalls_ioworker *iow;
+ 
++	trace_sk_data_ready(sock);
++
+ 	if (map == NULL)
+ 		return;
+ 
+@@ -588,6 +591,8 @@ static void pvcalls_pass_sk_data_ready(struct sock *sock)
+ 	unsigned long flags;
+ 	int notify;
+ 
++	trace_sk_data_ready(sock);
++
+ 	if (mappass == NULL)
+ 		return;
+ 
+diff --git a/fs/dlm/lowcomms.c b/fs/dlm/lowcomms.c
+index 59f64c596233..08596b8e2204 100644
+--- a/fs/dlm/lowcomms.c
++++ b/fs/dlm/lowcomms.c
+@@ -54,6 +54,7 @@
+ #include <net/ipv6.h>
+ 
+ #include <trace/events/dlm.h>
++#include <trace/events/sock.h>
+ 
+ #include "dlm_internal.h"
+ #include "lowcomms.h"
+@@ -507,6 +508,8 @@ static void lowcomms_data_ready(struct sock *sk)
+ {
+ 	struct connection *con;
+ 
++	trace_sk_data_ready(sk);
++
+ 	con = sock2con(sk);
+ 	if (con && !test_and_set_bit(CF_READ_PENDING, &con->flags))
+ 		queue_work(recv_workqueue, &con->rwork);
+@@ -514,6 +517,8 @@ static void lowcomms_data_ready(struct sock *sk)
+ 
+ static void lowcomms_listen_data_ready(struct sock *sk)
+ {
++	trace_sk_data_ready(sk);
++
+ 	if (!dlm_allow_conn)
+ 		return;
+ 
+diff --git a/fs/ocfs2/cluster/tcp.c b/fs/ocfs2/cluster/tcp.c
+index f660c0dbdb63..ba733be2a5e1 100644
+--- a/fs/ocfs2/cluster/tcp.c
++++ b/fs/ocfs2/cluster/tcp.c
+@@ -46,6 +46,7 @@
+ #include <linux/net.h>
+ #include <linux/export.h>
+ #include <net/tcp.h>
++#include <trace/events/sock.h>
+ 
+ #include <linux/uaccess.h>
+ 
+@@ -585,6 +586,8 @@ static void o2net_data_ready(struct sock *sk)
+ 	void (*ready)(struct sock *sk);
+ 	struct o2net_sock_container *sc;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 	sc = sk->sk_user_data;
+ 	if (sc) {
+@@ -645,6 +648,8 @@ static void o2net_state_change(struct sock *sk)
+ static void o2net_register_callbacks(struct sock *sk,
+ 				     struct o2net_sock_container *sc)
+ {
++	trace_sk_data_ready(sk);
++
+ 	write_lock_bh(&sk->sk_callback_lock);
+ 
+ 	/* accepted sockets inherit the old listen socket data ready */
+diff --git a/include/trace/events/sock.h b/include/trace/events/sock.h
+index 777ee6cbe933..d8685fdbeb0b 100644
+--- a/include/trace/events/sock.h
++++ b/include/trace/events/sock.h
+@@ -263,6 +263,30 @@ TRACE_EVENT(inet_sk_error_report,
+ 		  __entry->error)
+ );
+ 
++TRACE_EVENT(sk_data_ready,
++
++	TP_PROTO(const struct sock *sk),
++
++	TP_ARGS(sk),
++
++	TP_STRUCT__entry(
++		__field(const void *, skaddr)
++		__field(__u16, family)
++		__field(__u16, protocol)
++		__field(unsigned long, ip)
++	),
++
++	TP_fast_assign(
++		__entry->skaddr = sk;
++		__entry->family = sk->sk_family;
++		__entry->protocol = sk->sk_protocol;
++		__entry->ip = _RET_IP_;
++	),
++
++	TP_printk("family=%u protocol=%u func=%ps",
++		  __entry->family, __entry->protocol, (void *)__entry->ip)
++);
++
+ #endif /* _TRACE_SOCK_H */
+ 
+ /* This part must be outside protection */
+diff --git a/net/ceph/messenger.c b/net/ceph/messenger.c
+index dfa237fbd5a3..75afedb48718 100644
+--- a/net/ceph/messenger.c
++++ b/net/ceph/messenger.c
+@@ -17,6 +17,7 @@
+ #endif	/* CONFIG_BLOCK */
+ #include <linux/dns_resolver.h>
+ #include <net/tcp.h>
++#include <trace/events/sock.h>
+ 
+ #include <linux/ceph/ceph_features.h>
+ #include <linux/ceph/libceph.h>
+@@ -344,6 +345,9 @@ static void con_sock_state_closed(struct ceph_connection *con)
+ static void ceph_sock_data_ready(struct sock *sk)
+ {
+ 	struct ceph_connection *con = sk->sk_user_data;
++
++	trace_sk_data_ready(sk);
++
+ 	if (atomic_read(&con->msgr->stopping)) {
+ 		return;
+ 	}
+diff --git a/net/core/net-traces.c b/net/core/net-traces.c
+index c40cd8dd75c7..ee7006bbe49b 100644
+--- a/net/core/net-traces.c
++++ b/net/core/net-traces.c
+@@ -61,3 +61,5 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(napi_poll);
+ 
+ EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_send_reset);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(tcp_bad_csum);
++
++EXPORT_TRACEPOINT_SYMBOL_GPL(sk_data_ready);
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 1efdc47a999b..a84234393dde 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -8,6 +8,7 @@
+ #include <net/sock.h>
+ #include <net/tcp.h>
+ #include <net/tls.h>
++#include <trace/events/sock.h>
+ 
+ static bool sk_msg_try_coalesce_ok(struct sk_msg *msg, int elem_first_coalesce)
+ {
+@@ -1210,6 +1211,8 @@ static void sk_psock_verdict_data_ready(struct sock *sk)
+ {
+ 	struct socket *sock = sk->sk_socket;
+ 
++	trace_sk_data_ready(sk);
++
+ 	if (unlikely(!sock || !sock->ops || !sock->ops->read_skb))
+ 		return;
+ 	sock->ops->read_skb(sk, sk_psock_verdict_recv);
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 4571914a4aa8..f0286f5844c2 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -3283,6 +3283,8 @@ void sock_def_readable(struct sock *sk)
+ {
+ 	struct socket_wq *wq;
+ 
++	trace_sk_data_ready(sk);
++
+ 	rcu_read_lock();
+ 	wq = rcu_dereference(sk->sk_wq);
+ 	if (skwq_has_sleeper(wq))
+diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
+index a5004228111d..ebcbce8ec133 100644
+--- a/net/kcm/kcmsock.c
++++ b/net/kcm/kcmsock.c
+@@ -28,6 +28,7 @@
+ #include <net/netns/generic.h>
+ #include <net/sock.h>
+ #include <uapi/linux/kcm.h>
++#include <trace/events/sock.h>
+ 
+ unsigned int kcm_net_id;
+ 
+@@ -349,6 +350,8 @@ static void psock_data_ready(struct sock *sk)
+ {
+ 	struct kcm_psock *psock;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 
+ 	psock = (struct kcm_psock *)sk->sk_user_data;
+diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
+index 437a283ba6ea..2025de8c00fd 100644
+--- a/net/mptcp/subflow.c
++++ b/net/mptcp/subflow.c
+@@ -26,6 +26,7 @@
+ #include "mib.h"
+ 
+ #include <trace/events/mptcp.h>
++#include <trace/events/sock.h>
+ 
+ static void mptcp_subflow_ops_undo_override(struct sock *ssk);
+ 
+@@ -1356,6 +1357,8 @@ static void subflow_data_ready(struct sock *sk)
+ 	struct sock *parent = subflow->conn;
+ 	struct mptcp_sock *msk;
+ 
++	trace_sk_data_ready(sk);
++
+ 	msk = mptcp_sk(parent);
+ 	if (state & TCPF_LISTEN) {
+ 		/* MPJ subflow are removed from accept queue before reaching here,
+diff --git a/net/qrtr/ns.c b/net/qrtr/ns.c
+index 1990d496fcfc..97bfdf9fd028 100644
+--- a/net/qrtr/ns.c
++++ b/net/qrtr/ns.c
+@@ -12,6 +12,7 @@
+ 
+ #include "qrtr.h"
+ 
++#include <trace/events/sock.h>
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/qrtr.h>
+ 
+@@ -752,6 +753,8 @@ static void qrtr_ns_worker(struct work_struct *work)
+ 
+ static void qrtr_ns_data_ready(struct sock *sk)
+ {
++	trace_sk_data_ready(sk);
++
+ 	queue_work(qrtr_ns.workqueue, &qrtr_ns.work);
+ }
+ 
+diff --git a/net/rds/tcp_listen.c b/net/rds/tcp_listen.c
+index 7edf2e69d3fe..014fa24418c1 100644
+--- a/net/rds/tcp_listen.c
++++ b/net/rds/tcp_listen.c
+@@ -34,6 +34,7 @@
+ #include <linux/gfp.h>
+ #include <linux/in.h>
+ #include <net/tcp.h>
++#include <trace/events/sock.h>
+ 
+ #include "rds.h"
+ #include "tcp.h"
+@@ -234,6 +235,7 @@ void rds_tcp_listen_data_ready(struct sock *sk)
+ {
+ 	void (*ready)(struct sock *sk);
+ 
++	trace_sk_data_ready(sk);
+ 	rdsdebug("listen data ready sk %p\n", sk);
+ 
+ 	read_lock_bh(&sk->sk_callback_lock);
+diff --git a/net/rds/tcp_recv.c b/net/rds/tcp_recv.c
+index f4ee13da90c7..c00f04a1a534 100644
+--- a/net/rds/tcp_recv.c
++++ b/net/rds/tcp_recv.c
+@@ -33,6 +33,7 @@
+ #include <linux/kernel.h>
+ #include <linux/slab.h>
+ #include <net/tcp.h>
++#include <trace/events/sock.h>
+ 
+ #include "rds.h"
+ #include "tcp.h"
+@@ -309,6 +310,7 @@ void rds_tcp_data_ready(struct sock *sk)
+ 	struct rds_conn_path *cp;
+ 	struct rds_tcp_connection *tc;
+ 
++	trace_sk_data_ready(sk);
+ 	rdsdebug("data ready sk %p\n", sk);
+ 
+ 	read_lock_bh(&sk->sk_callback_lock);
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 3e83963d1b8a..5d44d50e10bf 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -59,6 +59,7 @@
+ #include <net/ipv6.h>
+ #include <net/inet_common.h>
+ #include <net/busy_poll.h>
++#include <trace/events/sock.h>
+ 
+ #include <linux/socket.h> /* for sa_family_t */
+ #include <linux/export.h>
+@@ -9241,6 +9242,8 @@ void sctp_data_ready(struct sock *sk)
+ {
+ 	struct socket_wq *wq;
+ 
++	trace_sk_data_ready(sk);
++
+ 	rcu_read_lock();
+ 	wq = rcu_dereference(sk->sk_wq);
+ 	if (skwq_has_sleeper(wq))
+diff --git a/net/smc/smc_rx.c b/net/smc/smc_rx.c
+index 17c5aee7ee4f..0a6e615f000c 100644
+--- a/net/smc/smc_rx.c
++++ b/net/smc/smc_rx.c
+@@ -15,6 +15,7 @@
+ #include <linux/sched/signal.h>
+ 
+ #include <net/sock.h>
++#include <trace/events/sock.h>
+ 
+ #include "smc.h"
+ #include "smc_core.h"
+@@ -31,6 +32,8 @@ static void smc_rx_wake_up(struct sock *sk)
+ {
+ 	struct socket_wq *wq;
+ 
++	trace_sk_data_ready(sk);
++
+ 	/* derived from sock_def_readable() */
+ 	/* called already in smc_listen_work() */
+ 	rcu_read_lock();
+diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
+index 2fc98fea59b4..54ddae31249a 100644
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@ -55,6 +55,7 @@
+ #include <linux/sunrpc/stats.h>
+ #include <linux/sunrpc/xprt.h>
+ 
++#include <trace/events/sock.h>
+ #include <trace/events/sunrpc.h>
+ 
+ #include "socklib.h"
+@@ -310,6 +311,8 @@ static void svc_data_ready(struct sock *sk)
+ {
+ 	struct svc_sock	*svsk = (struct svc_sock *)sk->sk_user_data;
+ 
++	trace_sk_data_ready(sk);
++
+ 	if (svsk) {
+ 		/* Refer to svc_setup_socket() for details. */
+ 		rmb();
+@@ -687,6 +690,8 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
+ {
+ 	struct svc_sock	*svsk = (struct svc_sock *)sk->sk_user_data;
+ 
++	trace_sk_data_ready(sk);
++
+ 	if (svsk) {
+ 		/* Refer to svc_setup_socket() for details. */
+ 		rmb();
+diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+index 915b9902f673..88758b51729b 100644
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -52,6 +52,7 @@
+ #include <linux/uio.h>
+ #include <linux/sched/mm.h>
+ 
++#include <trace/events/sock.h>
+ #include <trace/events/sunrpc.h>
+ 
+ #include "socklib.h"
+@@ -1378,6 +1379,8 @@ static void xs_data_ready(struct sock *sk)
+ {
+ 	struct rpc_xprt *xprt;
+ 
++	trace_sk_data_ready(sk);
++
+ 	xprt = xprt_from_sock(sk);
+ 	if (xprt != NULL) {
+ 		struct sock_xprt *transport = container_of(xprt,
+diff --git a/net/tipc/socket.c b/net/tipc/socket.c
+index e902b01ea3cb..d07692b4010f 100644
+--- a/net/tipc/socket.c
++++ b/net/tipc/socket.c
+@@ -37,6 +37,7 @@
+ 
+ #include <linux/rhashtable.h>
+ #include <linux/sched/signal.h>
++#include <trace/events/sock.h>
+ 
+ #include "core.h"
+ #include "name_table.h"
+@@ -2130,6 +2131,8 @@ static void tipc_data_ready(struct sock *sk)
+ {
+ 	struct socket_wq *wq;
+ 
++	trace_sk_data_ready(sk);
++
+ 	rcu_read_lock();
+ 	wq = rcu_dereference(sk->sk_wq);
+ 	if (skwq_has_sleeper(wq))
+diff --git a/net/tipc/topsrv.c b/net/tipc/topsrv.c
+index d92ec92f0b71..4386367e6928 100644
+--- a/net/tipc/topsrv.c
++++ b/net/tipc/topsrv.c
+@@ -43,6 +43,7 @@
+ #include "bearer.h"
+ #include <net/sock.h>
+ #include <linux/module.h>
++#include <trace/events/sock.h>
+ 
+ /* Number of messages to send before rescheduling */
+ #define MAX_SEND_MSG_COUNT	25
+@@ -437,6 +438,8 @@ static void tipc_conn_data_ready(struct sock *sk)
+ {
+ 	struct tipc_conn *con;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 	con = sk->sk_user_data;
+ 	if (connected(con)) {
+@@ -494,6 +497,8 @@ static void tipc_topsrv_listener_data_ready(struct sock *sk)
+ {
+ 	struct tipc_topsrv *srv;
+ 
++	trace_sk_data_ready(sk);
++
+ 	read_lock_bh(&sk->sk_callback_lock);
+ 	srv = sk->sk_user_data;
+ 	if (srv)
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 264cf367e265..8138730533f9 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -43,6 +43,7 @@
+ 
+ #include <net/strparser.h>
+ #include <net/tls.h>
++#include <trace/events/sock.h>
+ 
+ #include "tls.h"
+ 
+@@ -2282,6 +2283,8 @@ static void tls_data_ready(struct sock *sk)
+ 	struct tls_sw_context_rx *ctx = tls_sw_ctx_rx(tls_ctx);
+ 	struct sk_psock *psock;
+ 
++	trace_sk_data_ready(sk);
++
+ 	tls_strp_data_ready(&ctx->strp);
+ 
+ 	psock = sk_psock_get(sk);
+diff --git a/net/xfrm/espintcp.c b/net/xfrm/espintcp.c
+index 29a540dcb5a7..e428312d3c54 100644
+--- a/net/xfrm/espintcp.c
++++ b/net/xfrm/espintcp.c
+@@ -6,6 +6,7 @@
+ #include <net/espintcp.h>
+ #include <linux/skmsg.h>
+ #include <net/inet_common.h>
++#include <trace/events/sock.h>
+ #if IS_ENABLED(CONFIG_IPV6)
+ #include <net/ipv6_stubs.h>
+ #endif
+@@ -397,6 +398,8 @@ static void espintcp_data_ready(struct sock *sk)
+ {
+ 	struct espintcp_ctx *ctx = espintcp_getctx(sk);
+ 
++	trace_sk_data_ready(sk);
++
+ 	strp_data_ready(&ctx->strp);
+ }
+ 
+-- 
+2.20.1
+
