@@ -2,37 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29D3623BF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B77C8623BF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiKJGhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S232541AbiKJGhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbiKJGh3 (ORCPT
+        with ESMTP id S232509AbiKJGh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Nov 2022 01:37:29 -0500
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9B62CE09;
-        Wed,  9 Nov 2022 22:37:24 -0800 (PST)
-X-UUID: 84fcb39d4bea492493923d02ce175217-20221110
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3F42CE07;
+        Wed,  9 Nov 2022 22:37:23 -0800 (PST)
+X-UUID: 36bc58a447eb43bfa44a11f2f46079b6-20221110
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=IYNsu3+YhsLdxa/TdV8zExfZobnqiPHL5UL2NPZZAqU=;
-        b=YImq3n3hByXXLCJE79wAdUBeJXRNslKfuWyZiU0Yhz56pGZfe6ktluQcsUQYJNOZ9JSgY+wq9ErYcvZMLXS09af7XOo2Q0WOpg9re4otSaueCrQibWsK5vKokwS/KSGr0vgOGhke92EuRYeViY4JDKUWxaN/vCZLiogqvAplE8w=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=d7zkDnaWEabyE5XdwVr4ccYWpjzTXOcJn5mpauaL9LQ=;
+        b=eS+UP88zr6TB3FWCnaXYoj/F6JJavvVbvhcUzv2BzB5myEz8Op2N3A/LR/ec9+KeDufd8gCvmX7DTPexRKRW77B8FDM8as+40pnyXvmoO/mKudAJbp/5CQCmoe/he/dF15Zvn9qR+a0Eh9TpV8XhdnPSgWH3oYcMhnZ4nWxNcCA=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:7b107302-070d-47e8-8e77-fe11386b47ab,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:62cd327,CLOUDID:9e12e350-b7af-492d-8b40-b1032f90ce11,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 84fcb39d4bea492493923d02ce175217-20221110
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.12,REQID:b8dea487-a329-4893-9474-a8dc4b9bd756,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.12,REQID:b8dea487-a329-4893-9474-a8dc4b9bd756,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:62cd327,CLOUDID:6099de85-088c-4756-8f76-577be701e693,B
+        ulkID:221110143719DAY63BKH,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 36bc58a447eb43bfa44a11f2f46079b6-20221110
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1855394692; Thu, 10 Nov 2022 14:37:19 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 460132987; Thu, 10 Nov 2022 14:37:19 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Thu, 10 Nov 2022 14:37:18 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -48,9 +51,9 @@ CC:     <angelogioacchino.delregno@collabora.com>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v4 1/4] arm64: dts: mt8195: Add dp-intf nodes
-Date:   Thu, 10 Nov 2022 14:37:13 +0800
-Message-ID: <20221110063716.25677-2-rex-bc.chen@mediatek.com>
+Subject: [PATCH v4 2/4] arm64: dts: mt8195: Add edptx and dptx nodes
+Date:   Thu, 10 Nov 2022 14:37:14 +0800
+Message-ID: <20221110063716.25677-3-rex-bc.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221110063716.25677-1-rex-bc.chen@mediatek.com>
 References: <20221110063716.25677-1-rex-bc.chen@mediatek.com>
@@ -67,53 +70,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dp-intfs provide the pixel data to edptx and dptx. To support edptx
-and dptx, we need to add dp-intf0 and dp-intf1 nodes.
+In MT8195, we use edptx as the internal display interface and use
+dptx as the external display interface. Therefore, we need to add
+these nodes to support the internal display and the external display.
 
-Dp-intf0 is for edptx and dp-intf1 is for dptx.
+- Add dp calibration data in the efuse node.
+- Add edptx and dptx nodes for MT8195.
 
 Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 25 ++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 2edfc21ece56..c380738d10cb 100644
+index c380738d10cb..7acbef5a4517 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -2094,6 +2094,17 @@
- 			mediatek,gce-client-reg = <&gce0 SUBSYS_1c01XXXX 0x4000 0x1000>;
+@@ -1244,6 +1244,9 @@
+ 				reg = <0x189 0x2>;
+ 				bits = <7 5>;
+ 			};
++			dp_calibration: dp-data@1ac {
++				reg = <0x1ac 0x10>;
++			};
  		};
  
-+		dp_intf0: dp-intf@1c015000 {
-+			compatible = "mediatek,mt8195-dp-intf";
-+			reg = <0 0x1c015000 0 0x1000>;
-+			interrupts = <GIC_SPI 657 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&vdosys0  CLK_VDO0_DP_INTF0>,
-+				 <&vdosys0 CLK_VDO0_DP_INTF0_DP_INTF>,
-+				 <&apmixedsys CLK_APMIXED_TVDPLL1>;
-+			clock-names = "engine", "pixel", "pll";
+ 		u3phy2: t-phy@11c40000 {
+@@ -2205,5 +2208,27 @@
+ 			clock-names = "engine", "pixel", "pll";
+ 			status = "disabled";
+ 		};
++
++		edp_tx: edp-tx@1c500000 {
++			compatible = "mediatek,mt8195-edp-tx";
++			reg = <0 0x1c500000 0 0x8000>;
++			nvmem-cells = <&dp_calibration>;
++			nvmem-cell-names = "dp_calibration_data";
++			power-domains = <&spm MT8195_POWER_DOMAIN_EPD_TX>;
++			interrupts = <GIC_SPI 676 IRQ_TYPE_LEVEL_HIGH 0>;
++			max-linkrate-mhz = <8100>;
 +			status = "disabled";
 +		};
 +
- 		mutex: mutex@1c016000 {
- 			compatible = "mediatek,mt8195-disp-mutex";
- 			reg = <0 0x1c016000 0 0x1000>;
-@@ -2182,5 +2193,17 @@
- 			clock-names = "apb", "smi", "gals";
- 			power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
- 		};
-+
-+		dp_intf1: dp-intf@1c113000 {
-+			compatible = "mediatek,mt8195-dp-intf";
-+			reg = <0 0x1c113000 0 0x1000>;
-+			interrupts = <GIC_SPI 513 IRQ_TYPE_LEVEL_HIGH 0>;
-+			power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS1>;
-+			clocks = <&vdosys1 CLK_VDO1_DP_INTF0_MM>,
-+				 <&vdosys1 CLK_VDO1_DPINTF>,
-+				 <&apmixedsys CLK_APMIXED_TVDPLL2>;
-+			clock-names = "engine", "pixel", "pll";
++		dp_tx: dp-tx@1c600000 {
++			compatible = "mediatek,mt8195-dp-tx";
++			reg = <0 0x1c600000 0 0x8000>;
++			nvmem-cells = <&dp_calibration>;
++			nvmem-cell-names = "dp_calibration_data";
++			power-domains = <&spm MT8195_POWER_DOMAIN_DP_TX>;
++			interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH 0>;
++			max-linkrate-mhz = <8100>;
 +			status = "disabled";
 +		};
  	};
