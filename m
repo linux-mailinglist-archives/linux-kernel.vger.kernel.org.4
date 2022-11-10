@@ -2,62 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95022623E43
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D80A623E3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiKJJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S229682AbiKJJCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiKJJH1 (ORCPT
+        with ESMTP id S229588AbiKJJCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:07:27 -0500
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488EA686A0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:07:27 -0800 (PST)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id 90BF282AD8; Thu, 10 Nov 2022 09:01:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1668070867; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=bqYvpE7GLaKXXcJi2NUSdD09ioElNc5abH1vaTBVKZ/tSxiUAthLyNPUmMR9ZsCkq
-         HuoO1q8GSJios9bHnP3fD/NIRtejBXpM3sDCwcE8yXOPKbZ9MoRKAFNejNMqmS/J1G
-         68TSWKJlzdxfnbJ+Q/tD+mNQqTCf/2I9NfUUwJTZiW5unpuGb3ekuA1MJ6ukskujOX
-         UCWWwi4BmRGCFIhxqvDfJmqWXrovnADIfsGsx4CBFoVc1vw8szb1TYXsWk3JOwwYtx
-         6uHbZ8pOxwjkiQeM2E63aFlhB4C1jUFws3A6GQdfP1deAchrRsKjXGA2vuKXzq+Snr
-         h9U0XaLbzrrKg==
-Received: by mail.lokoho.com for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:00:54 GMT
-Message-ID: <20221110074500-0.1.26.5uec.0.nmhxd02pj5@lokoho.com>
-Date:   Thu, 10 Nov 2022 09:00:54 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 04:02:48 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA55D69DC8;
+        Thu, 10 Nov 2022 01:02:47 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 772DC3200980;
+        Thu, 10 Nov 2022 04:02:46 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 10 Nov 2022 04:02:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1668070966; x=1668157366; bh=q00moUI8K+
+        pOFD9ktwoRAAtmtSjS7qt/Tr5OG5EM1/8=; b=AwhCrceGKorlAVUjfyPbzW28FM
+        eeSS9lcVePIHpJy1ZkC23YhXvXAzXJm/XL5iETpQjPrXwFFBFQZzglNyJU1CtPkO
+        OJGOPVAIlJS37k9rJawHfyxrhIXaG53GCELC5pBUaidIUwAo9TGBaS+8dVB3fhkl
+        13ppaCl6h4DxJYeCd1xJZIxGkHKSzczq3q+nDRD+gMLDxLcLRFsRufXxzc9NIy9Y
+        3FWuiX55bh56q9X4Lge2aHy2A5GhiU909sLX5rwPjceEt78oSHEM1T9WuAHXm+Hy
+        q567cC6ruRvR7/OwLKB5d3tdLdYC8k1aw3Y6XovD7L3gR76ORY9k1FgZRkJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668070966; x=1668157366; bh=q00moUI8K+pOFD9ktwoRAAtmtSjS
+        7qt/Tr5OG5EM1/8=; b=sgH9PeCaA38pM4BH3FZX+t/rMdUT+fYgU+mHUXK6V7w/
+        xDpykZZ74JzPDSODRsqZIDYuL9WbJvcGzT5DrLc/Y6I4UacKkrNSS/Q2pcVwGp1W
+        iplpqWvNvLZY1JQl+595AQB2UtYm9SuZO40FwJRm6EKtHIw3qTfDC6pZNgUvSP8q
+        StWcv2PXkIAosUXdc/cDsHEVffLQ3J/lOEZsz/tqX4MTBiDoY9sGvRZInIacjqmK
+        L1A/qOdxMe7EvseH/x8KFQVis/cDQLkMxO9R23TVGDzuw+qxpbM07GoTZ0tIFjyl
+        DTSqi5Gv2IHxdeZ1oiKODr4HHOR7tIxVhxxo5XD7Cw==
+X-ME-Sender: <xms:Nb5sY2YcwuC4_kfJeNk8TsMohtQNJVNUxMUmIZhHsbrMIJlI8UCQng>
+    <xme:Nb5sY5bXJwL3cLG92641KVJWuTqX_9UAfLgmcJuhkSTJoOczJz9kcqwbwBjaWCjZC
+    Mqmp2DClNJiSHbka98>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeefgdduvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepofgfggfkjghffffhvfev
+    ufgtsehttdertderredtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorg
+    hrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvghrnhepleelheeffeehheefvddv
+    kedtvdeitefgvddtkefgtddulefgfedttddvjeehheelnecuffhomhgrihhnpehsohhurh
+    gtvghfohhrghgvrdhnvghtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehm
+    rghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Nb5sYw_nT4BGT3u4PbsoPlkWjT0v77Pjczi9Di-YwjbILsWkbyFzkw>
+    <xmx:Nb5sY4pHVLQbI5ckX7z9GFrptNWjaxKCznBxXUs_liRDOAY2kBGaoQ>
+    <xmx:Nb5sYxo2pFvlYAVJiKTRcGVHJJo2UUY3lW050faWm3XRw3gntD-N_g>
+    <xmx:Nr5sY1exkr4JUEIuXX4GvDoGK8d3Jm0ciiPGcpSyxmELJCmph32RSA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 909F8B60086; Thu, 10 Nov 2022 04:02:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <d9b1e753-3bdd-4b8f-935e-718b0b590ace@app.fastmail.com>
+In-Reply-To: <213cb0f3-10ce-45b1-aa5d-41d753a0cadd@app.fastmail.com>
+References: <20221109043845.16617-1-balamanikandan.gunasundar@microchip.com>
+ <Y2vghlEEmE+Bdm0v@lunn.ch>
+ <213cb0f3-10ce-45b1-aa5d-41d753a0cadd@app.fastmail.com>
+Date:   Thu, 10 Nov 2022 10:02:25 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Andrew Lunn" <andrew@lunn.ch>,
+        "Balamanikandan Gunasundar" <balamanikandan.gunasundar@microchip.com>
+Cc:     "Ulf Hansson" <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        ludovic.desroches@microchip.com, 3chas3@gmail.com,
+        Netdev <netdev@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] mmc: atmel-mci: Convert to gpio descriptors
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Thu, Nov 10, 2022, at 09:05, Arnd Bergmann wrote:
+> On Wed, Nov 9, 2022, at 18:16, Andrew Lunn wrote:
+>> On Wed, Nov 09, 2022 at 10:08:45AM +0530, Balamanikandan Gunasundar wrote:
+>>> Replace the legacy GPIO APIs with gpio descriptor consumer interface.
+>>
+>> I was wondering why you Cc: netdev and ATM. This clearly has nothing
+>> to do with those lists.
+>>
+>> You well foul of
+>>
+>> M:	Chas Williams <3chas3@gmail.com>
+>> L:	linux-atm-general@lists.sourceforge.net (moderated for non-subscribers)
+>> L:	netdev@vger.kernel.org
+>> S:	Maintained
+>> W:	http://linux-atm.sourceforge.net
+>> F:	drivers/atm/
+>> F:	include/linux/atm*
+>> F:	include/uapi/linux/atm*
+>>
+>> Maybe these atm* should be more specific so they don't match atmel :-)
+>
+> The uapi headers look unambiguous to me, for the three headers in
+> include/linux/, only the atmdev.h is actually significant, while
+> linux/atm.h and linux/atm_tcp.h could each be folded into the one
+> C file that actually uses the contents.
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Actually the situation for the linux/atmel*.h headers is similar:
+most of them are only used in one file, and the linux/atmel-mci.h
+contents should just be moved into drivers/mmc/host/atmel-mci.c
+as part of Balamanikandan's patch, to allow further cleanups.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+linux/atmel-isc-media.h similarly can go into its drivers as a
+separate patch if desired.
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+The linux/atmel-ssc.h could ideally be cleaned up to get moved
+into sound/soc/atmel/ along with drivers/misc/atmel-ssc.c.
+The atmel-scc driver is technically also used by
+sound/spi/at73c213.c, but that driver has been orphaned since
+2014, with commit 2e591e7b3ac2 ("ARM: at91: remove
+at91sam9261/at91sam9g10 legacy board support"), as nobody
+ever added DT probing support to it.
 
-
-Pozdrawiam
-Adam Charachuta
+      Arnd
