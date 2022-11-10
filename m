@@ -2,146 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160986248A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5596248A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiKJRvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S229794AbiKJRwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbiKJRul (ORCPT
+        with ESMTP id S231656AbiKJRwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:50:41 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8E24B9A4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:50:37 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id v1so3337746wrt.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:50:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eKRDIrK6+9JpxczLCDYf+I+TauedG4U/HEai4Cf8rvo=;
-        b=cai+412mPBIM/ZU05LnrpGJuBoUbQunUn+PqMS7ewH09C41D7pj4tPDKTiMzWcjVPt
-         pxlV3Rs2lT0I4VGRLZdYdHxEKOVWY1SV/Hp8tFBqOZnMOcTXIXiRGw16ooPxkxeGn1Cf
-         AdZQ0TmPKk3NAiFU8QU6PB5tms2YbQyUKyV7BY5HLibiiiiT19kwmGapDL3fBTSPgTvP
-         WZGIZvZiA8q7ovYLCGtWjjjVj/Cep8vzhSAAynNdz5yEQJOPma/acfgYk47KeOqpe4Zs
-         99qsBxxVIL5kCLDsXXxkjLxo2se2TrsrkQKD04e7jheo1vC+QzG2Z55YyXiviDx3+D/f
-         fjyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eKRDIrK6+9JpxczLCDYf+I+TauedG4U/HEai4Cf8rvo=;
-        b=CQ/o1scj8AZ0MPi/znrYv3yrSNM1kF3J3Qsen5a9G1+GAy9Jyp62xn9Mn5OphtIJ3N
-         D/7T4Arc3ECBgiLiYlEswfXwujRfdH+FwofYzhdFGjNuJnv9xxTc2fP0RfIC353fcBbK
-         2nmCKWLvARVNs4mm0rglbthSbtFEnbCKyuUW/irZWzYgd6xiQMQZBMYD7Og4jQrSClez
-         kwg+rGTgiQrm8qkshoJphl7UGje6wQGJ7PVO5aFS7CJotr0ZJdz6FilxqCtgBw/COpdH
-         Zbp9EQHFwD/1XSwqQfR0imIejzacTYiXgqhaa8Pai+C8f2Lae34KV0fCt+8qe6pyktHw
-         54pg==
-X-Gm-Message-State: ACrzQf2vRo2dHYGZaQiBEvrZVJ5q6cF3Mzbjz1RvhZzw/+CK1DciGof0
-        hdO+20lcVyj795D9oeJqcg53UA==
-X-Google-Smtp-Source: AMsMyM5IGRbkNN+AthkzYdgiG2JQjHzQp/HS6uoAnf4UivVS8Og33/kMW4SAboqWUahi2YHoXcTZLw==
-X-Received: by 2002:adf:f84c:0:b0:236:6e52:504 with SMTP id d12-20020adff84c000000b002366e520504mr40614748wrq.564.1668102635719;
-        Thu, 10 Nov 2022 09:50:35 -0800 (PST)
-Received: from localhost.localdomain ([2a01:e0a:f:6020:342a:468f:562a:9cc4])
-        by smtp.gmail.com with ESMTPSA id f6-20020a05600c4e8600b003cfc02ab8basm6514677wmq.33.2022.11.10.09.50.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 09:50:34 -0800 (PST)
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com
-Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v8 9/9] sched/fair: remove check_preempt_from_others
-Date:   Thu, 10 Nov 2022 18:50:09 +0100
-Message-Id: <20221110175009.18458-10-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221110175009.18458-1-vincent.guittot@linaro.org>
-References: <20221110175009.18458-1-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 12:52:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151AD4C25B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:51:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YHkKONJibhvjNjv81zfjAD0GNfHvwhyLGNgykGW7itI=; b=lyMIqoh0dE79Fn8DGd6awyT3Tm
+        bPM2YOY/RO9xJ6H6+ov7u/RH69/LjASOMOcsMExTH7hOsc7r3O58OUN6l94kUBg9MQqEkgEWZO2E4
+        hid8j/lVFyyLoOYRCo35XRuSBVwtTRxhWZ+jTzP4tjtqIDlFwKy9FZuVIqz1C6QcwyPVRDa7uNknN
+        0V7TPwKBXux3wDWmKyjaDkhdkUxphwouyLNAIv4lesatc4Tmp9tuvywyZntgRTh3cp39QwaTL44VZ
+        IERIDz4h9YUE/JEsZuaDuwV+yXJw7H+TmNukK4m11OPS0BLDZ9/+jzxpL2Nz2qW0Cuxc/8KWoM/LJ
+        TsFtRevg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1otBi5-00CGg7-TD; Thu, 10 Nov 2022 17:51:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EB1D2300C26;
+        Thu, 10 Nov 2022 18:51:22 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CEF102BB19235; Thu, 10 Nov 2022 18:51:22 +0100 (CET)
+Date:   Thu, 10 Nov 2022 18:51:22 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Message-ID: <Y206GnmFDU9QcgN5@hirez.programming.kicks-ass.net>
+References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
+ <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
+ <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
+ <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
+ <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
+ <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
+ <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
+ <d2789d23-816b-11f1-d654-a7989f323ac8@arm.com>
+ <Y2z2/nhGfud7NIM8@hirez.programming.kicks-ass.net>
+ <48c178fc-108f-382b-e054-83e88ef9b01b@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48c178fc-108f-382b-e054-83e88ef9b01b@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the dedicated latency list, we don't have to take care of this special
-case anymore as pick_next_entity checks for a runnable latency sensitive
-task.
+On Thu, Nov 10, 2022 at 03:59:01PM +0100, Dietmar Eggemann wrote:
+> On 10/11/2022 14:05, Peter Zijlstra wrote:
+> > On Thu, Nov 10, 2022 at 12:16:26PM +0100, Dietmar Eggemann wrote:
+> >> On 07/11/2022 14:41, Peter Zijlstra wrote:
+> >>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
+> >>
+> >> [...]
+> >>
+> >>> @@ -2956,13 +2958,26 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
+> >>>   */
+> >>>  static inline unsigned long cpu_util_cfs(int cpu)
+> >>>  {
+> >>> +	struct rq *rq = cpu_rq(cpu);
+> >>>  	struct cfs_rq *cfs_rq;
+> >>>  	unsigned long util;
+> >>>  
+> >>> -	cfs_rq = &cpu_rq(cpu)->cfs;
+> >>> +	cfs_rq = &rq->cfs;
+> >>>  	util = READ_ONCE(cfs_rq->avg.util_avg);
+> >>>  
+> >>>  	if (sched_feat(UTIL_EST)) {
+> >>> +		if (sched_feat(UTIL_EST_FASTER)) {
+> >>> +			struct task_struct *curr;
+> >>> +
+> >>> +			rcu_read_lock();
+> >>> +			curr = rcu_dereference(rq->curr);
+> >>> +			if (likely(curr->sched_class == &fair_sched_class)) {
+> >>> +				u64 runtime = curr->se.sum_exec_runtime - curr->se.exec_start;
+> >>
+> >> Don't we and up with gigantic runtime numbers here?
+> >>
+> >> oot@juno:~# cat /proc/1676/task/1676/schedstat
+> >> 36946300 1150620 11
+> >> root@juno:~# cat /proc/1676/task/1676/sched
+> >> rt-app (1676, #threads: 2)
+> >> -------------------------------------------------------------------
+> >> se.exec_start                                :         77766.964240 <- !
+> >> se.vruntime                                  :           563.587883
+> >> e.sum_exec_runtime                          :            36.946300  <- !
+> >> se.nr_migrations                             :                    0
+> >> ...
+> >>
+> >> I expect cpu_util_cfs() to be ~1024 almost all the time now.
+> > 
+> > Duh, obviously I meant to measure the runtime of the current activation
+> > and messed up.
+> > 
+> > We don't appear to have the right information to compute this atm :/
+> 
+> This would be:
+> 
+> u64 now = rq_clock_task(rq);
+> u64 runtime = now - curr->se.exec_start;
+> 
+> but we don't hold the rq lock so we can't get `now`?
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- kernel/sched/fair.c | 34 ++--------------------------------
- 1 file changed, 2 insertions(+), 32 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index fb4973a87f25..c2c75d531612 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -5801,35 +5801,6 @@ static int sched_idle_cpu(int cpu)
- }
- #endif
- 
--static void set_next_buddy(struct sched_entity *se);
--
--static void check_preempt_from_others(struct cfs_rq *cfs, struct sched_entity *se)
--{
--	struct sched_entity *next;
--
--	if (se->latency_offset >= 0)
--		return;
--
--	if (cfs->nr_running <= 1)
--		return;
--	/*
--	 * When waking from another class, we don't need to check to preempt at
--	 * wakeup and don't set next buddy as a candidate for being picked in
--	 * priority.
--	 * In case of simultaneous wakeup when current is another class, the
--	 * latency sensitive tasks lost opportunity to preempt non sensitive
--	 * tasks which woke up simultaneously.
--	 */
--
--	if (cfs->next)
--		next = cfs->next;
--	else
--		next = __pick_first_entity(cfs);
--
--	if (next && wakeup_preempt_entity(next, se) == 1)
--		set_next_buddy(se);
--}
--
- /*
-  * The enqueue_task method is called before nr_running is
-  * increased. Here we update the fair scheduling stats and
-@@ -5916,15 +5887,14 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
- 	if (!task_new)
- 		update_overutilized_status(rq);
- 
--	if (rq->curr->sched_class != &fair_sched_class)
--		check_preempt_from_others(cfs_rq_of(&p->se), &p->se);
--
- enqueue_throttle:
- 	assert_list_leaf_cfs_rq(rq);
- 
- 	hrtick_update(rq);
- }
- 
-+static void set_next_buddy(struct sched_entity *se);
-+
- /*
-  * The dequeue_task method is called before nr_running is
-  * decreased. We remove the task from the rbtree and
--- 
-2.17.1
-
+Not quite the same; that's the time since we got on-cpu last, but that's
+not the same as the runtime of this activation (it is when you discount
+preemption).
