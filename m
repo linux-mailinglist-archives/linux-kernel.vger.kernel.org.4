@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9655D623ED3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF65623ED6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiKJJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S229586AbiKJJmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKJJkz (ORCPT
+        with ESMTP id S229463AbiKJJmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:40:55 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1CC6A6B5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:40:54 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BB3141FE99;
-        Thu, 10 Nov 2022 09:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668073252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QqANZU+pw5gBuNdePRxF8GAA+MvsR3exid0Kwc/0Xo0=;
-        b=Oz3a1AeNtTRxZNZpnqPjGwghw2xra9e0bS75O1suM2Voh4lJCNJPFLk3OCjOd/1r/jbaxV
-        XVKcyCtPQQpPmRZXzPq/t7/gQ90qr3rjKBNetH10HADWZBD4VN258ekbcmpMDIi+Mi1h2A
-        Kxm/vbFYnz9YkSiQZRk2Vo0vybN3A1k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668073252;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QqANZU+pw5gBuNdePRxF8GAA+MvsR3exid0Kwc/0Xo0=;
-        b=aBuPR8nCMneM2ITwXNxurc082i7quPt/l0JvnOMktmWv3sp8xoeh2X+wSc+0v3J/RC69cw
-        G7mHUGno8hEOziDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8FC061346E;
-        Thu, 10 Nov 2022 09:40:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sJeGIiTHbGN4bAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 10 Nov 2022 09:40:52 +0000
-Message-ID: <e3fc40c9-6e4e-d8de-63ce-ce34d78fa883@suse.cz>
-Date:   Thu, 10 Nov 2022 10:40:52 +0100
+        Thu, 10 Nov 2022 04:42:42 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919BB6A6B5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:42:41 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id k5so1125249pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 01:42:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/htPiokpxlSzvGlhsl1Xj6H5P5GA8oJZklSjRGzFbNU=;
+        b=XjdXtaSK5s/7D9FH+toZO2ijN14GfQX1dLscjPMO8AqbFls34uR4G+iszwizNCO0sw
+         TwzBuAXDpwj7UXn605r7YIXF1+QsHQZGWfZU8A8967S33j07D7hOntOh7L+prgIv2K6n
+         IiRzefs3SzV1jo4O/56YJze/vhnhKWkYBq0GA+KgNuMVCldjpIikSEA7hoGkrJ3Evpjh
+         9ZXNRK9w3IcKUgqiri7+ikJsW068D38STgjrMZpz983Nc3N7rIpKW7KF/IiXjU0B47Ht
+         fXQETZdB9gGNywNq/wt4LWnVOeCrCe7TIR3TAF6h3LxIm6lbMeyzsWeNznBVVvKTjhuT
+         oC+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/htPiokpxlSzvGlhsl1Xj6H5P5GA8oJZklSjRGzFbNU=;
+        b=K2kI9XIn5NLPK1emP3c21B365zsdSlwBvlAZf06nbwX/Q5mkLzs4QUMmAYKPL26Spc
+         0YKTQ97DjhkHB5YrBCApYwk+um7G1AJit/e6C439aDZutEvWLS0k9sIb/gXv00BfaDK+
+         WVj7UnazeaK9tULpbjAE/2bl4rK9McXg3Ymw6fC+rbNVRxHUUyuIf9h+Y+tRsCjPbgwg
+         3Cafmdhr7x5Mynj+xry1XOT72svdEKUHuhbfnpMvopGoWny5bopyDOhFl3qK5NFiab0E
+         jjMb4plTIWSgiM9waglzzFCnKqVHun38H8V2cOk1So9ri8DVQiMF09N15r8bpzFleYdT
+         neIA==
+X-Gm-Message-State: ACrzQf2WeCoMTD+Q+YT7Ew/tfNzF2AojZq/lWlvlrhH7D7OfWL9qgHwf
+        LsyhI7biK9glsmAwYMrm13Lo/XlXfYLQYDXi7wA=
+X-Google-Smtp-Source: AMsMyM5g5oSkKqCPDCAkHyIUVgR7vf09CzPcQ+9SXZ5h/tjyPpIBGkrUkTtbQuwqr2omqw9GPWPnUtrnXbUetw/UeYA=
+X-Received: by 2002:a17:90a:d396:b0:214:2cff:fbb6 with SMTP id
+ q22-20020a17090ad39600b002142cfffbb6mr42134922pju.224.1668073361101; Thu, 10
+ Nov 2022 01:42:41 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] tools/vm/slabinfo: indicates the cause of the EACCES
- error
-Content-Language: en-US
-To:     Rong Tao <rtoax@foxmail.com>, akpm@linux-foundation.org
-Cc:     Rong Tao <rongtao@cestc.cn>,
-        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
-        Yuanzheng Song <songyuanzheng@huawei.com>,
-        linux-kernel@vger.kernel.org, Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-References: <tencent_C9D7A6D118445E036021CE2CB4CB4495E207@qq.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <tencent_C9D7A6D118445E036021CE2CB4CB4495E207@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a17:522:c816:b0:497:5791:afb9 with HTTP; Thu, 10 Nov 2022
+ 01:42:40 -0800 (PST)
+Reply-To: davidnelson7702626@gmail.com
+From:   mark odu <meles8888@gmail.com>
+Date:   Thu, 10 Nov 2022 10:42:40 +0100
+Message-ID: <CA++r-0xWCA713ou6e01UcbAtoz6+h8wACF2ZA=aMri5uKuB5OA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1044 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5018]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [davidnelson7702626[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [meles8888[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [meles8888[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/8/22 13:47, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> If you don't run slabinfo with a superuser, return 0 when read_slab_dir()
-> reads get_obj_and_str("slabs", &t), because fopen() fails (sometimes
-> EACCES), causing slabcache() to return directly, without any error during
-> this time, we should tell the user about the EACCES problem instead of
-> running successfully($?=0) without any error printing.
-> 
->  For example:
->  $ ./slabinfo
->  Permission denied, Try using superuser  <== What this submission did
->  $ sudo ./slabinfo
->  Name            Objects Objsize   Space Slabs/Part/Cpu  O/S O %Fr %Ef Flg
->  Acpi-Namespace     5950      48  286.7K         65/0/5   85 0   0  99
->  Acpi-Operand      13664      72  999.4K       231/0/13   56 0   0  98
->  ...
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-
-Thanks, added to slab.git slab/for-6.2/tools
-
-> ---
->  tools/vm/slabinfo.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/vm/slabinfo.c b/tools/vm/slabinfo.c
-> index 0fffaeedee76..cfaeaea71042 100644
-> --- a/tools/vm/slabinfo.c
-> +++ b/tools/vm/slabinfo.c
-> @@ -157,9 +157,11 @@ static unsigned long read_obj(const char *name)
->  {
->  	FILE *f = fopen(name, "r");
->  
-> -	if (!f)
-> +	if (!f) {
->  		buffer[0] = 0;
-> -	else {
-> +		if (errno == EACCES)
-> +			fatal("%s, Try using superuser\n", strerror(errno));
-> +	} else {
->  		if (!fgets(buffer, sizeof(buffer), f))
->  			buffer[0] = 0;
->  		fclose(f);
-
+Hello friend, I want to send money to you to enable me invest in your
+country get back to me if you are interested
