@@ -2,61 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E0E624DDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A21D8624E2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 00:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiKJW7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S230280AbiKJXBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 18:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbiKJW7T (ORCPT
+        with ESMTP id S231586AbiKJXBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:59:19 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363B013DEE;
-        Thu, 10 Nov 2022 14:59:18 -0800 (PST)
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MkHMP-1pH5zZ3ofB-00ke26; Thu, 10
- Nov 2022 23:58:53 +0100
-Message-ID: <335ddbf7-ea4b-157f-be77-a729d798fd03@gmx.com>
-Date:   Fri, 11 Nov 2022 06:58:46 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Content-Language: en-US
-To:     ChenXiaoSong <chenxiaosong2@huawei.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, zhangxiaoxu5@huawei.com
-References: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [PATCH] btrfs: qgroup: fix sleep from invalid context bug in
- update_qgroup_limit_item()
-In-Reply-To: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:QlNMiMZiZUFan1EzdvgSc1HGguCsA159G8Fjynzr0RNGiLeTacc
- +KLw8qcdSR1ySr9CQFfGVcd3Q6UA/9cw0CXUuWlLDYkHZaZVYvQlyyZKaxTt1d+0HOEmxS9
- cBzrVKOF5VRRIyHvk5hr3oFXSz3kVaXrwggSUmSuYX3Wfe4xZMkMVAW6hNL3jrBHoaIFx/L
- uRAp1I4tQEysMTCZHYNfg==
-UI-OutboundReport: notjunk:1;M01:P0:tnawMJDR8uw=;YBCekbcvs+F2j9JRDHtISyWP8LG
- LnBPVLam3d1T5+K0yo0yxQG7FQoe7+kGzvybYLfs4fu9bx9u67U/9GldDE0LPz8OfpwdUZJ54
- z8YcOS7oOtR3lJZufFTJh2FBVXos6nbQvGwfVqlT9MJb/BsZnTMCjCi8xDKhi8CmUQlc/LCGX
- qX1DcnOl8oloc37euepOH7s5khjWZNMkwNNniBO304zyiqFxjFDJMiibs73xq6ybg7SPpVRVY
- LVQM8Z0nancXpxhuFvRe2cUlm1sIkBVbywec93GoSiwiwitA2OQiqD/CdI3MKqnukBDHNxCFk
- WMzpNJFIOkWxKDC+4mpYzmcUa6f1z2VByZQq2Bo0df4cf6fCXC7nGl63nImxnCKuZqo++xaMI
- P3k5HKs2mLG7qveJW/swCWn3fDu7rjmN2hzyPKLuObpeqINRSa9lKg4Ssz1XxjTF1fjXoAcZO
- jzqVLzUd2NQUD2iNGQYphY5bh7qW7gjRQqc6yToZ2TtufuvVrk564d1PCMaV4/kAtU6ItH5Eg
- xGowvnotcmB/MLhKh4O1dONLIhh9FwKPGGanct/7gIHwCvfdEZ4bN010dm5AvL0Z6l18ADl/x
- Frkehq2I5vNGMA1g69UkL5aI1L5Or8YQUPSDbp7L4jB0SxZukaOvKEto8nhB9yIvAGNS8Gsb7
- AC8swQF5rP/llW6Pvy9B3vFVxREsMt08mdNHh9mavZAvoB8vj7DlpQF9ET4hb1bJx9Jjhhg/V
- 6s89d3PTArymWbJ1xniILoKkMTFJWkCN7a11flyaPztApnP8B6RuATRizb+gn9WA1pcrbfIcf
- VG3TXJ7F/LIIIxzTCzwelM8MxlcjiklZ8yWzfCeY2ZedB4WCmuie5ZG00TM09+CZlfLYsFcwE
- DU97K+Ab9rS35ccFuyA7/NhCMAII08SBjNTrlXp+bm+IAI3RcD3I+QDoXq20r0x1NUcBQU5Mr
- aGI4Afcc6okRdk9PzGwLSTdCwmk=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 18:01:12 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824815F84B;
+        Thu, 10 Nov 2022 15:01:09 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 437505C00DF;
+        Thu, 10 Nov 2022 18:01:06 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Thu, 10 Nov 2022 18:01:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668121266; x=
+        1668207666; bh=UKPaSMTeXe77X1VLSlbMaY688QZMhA56dV06akS0nEI=; b=J
+        QmGNoucBS4EB9kN1WZiOV7WjS0oh/yBxWSi9iqh994VShw8N7ccdEXdTiqyo7Ayc
+        CpT7Jytu36EnWUzHAVq/0cWU5emG3BrixWCr1y6K+HHPQKccGUXbVtMFcrgaQfVe
+        m0oA/ZoMfA/OoJ78ZKrNAA7GKPOwoweI6uCYMX5InRsSH/JGeAQiu1NBOVdHdXH7
+        4lPeBE2mX1wMj2wcA0PkU8MVoncVihIlkkCAVeQeaIibFZPLNC8TddHVJ6tBYWf4
+        0j8xCqSwA0lG1ARbs1qu//izLhkojqJzWSh58lJR/S8kFTxqsUZq6ERE8l6smWCf
+        Vt/A5cfPrBFX4V8z47klg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668121266; x=
+        1668207666; bh=UKPaSMTeXe77X1VLSlbMaY688QZMhA56dV06akS0nEI=; b=g
+        9HuPmYcvJBDaMQqo9ub73ZT03x7r/WTOghZDdbV5QA01MHFSGn/YeAZLou2LD8JF
+        42oGLlB8bSFatcYyHEGAZNCCkBIVNTQGyjhOf67JMPxUpkN/JzMKj2DWRferuziS
+        DPy2tDkpNk1qBfbO+G76CJdWvZJ4grw2peXo0x6WT878Iak1FLB9YMa07J9g3J6O
+        qS0EryYbTUpx0M985RPPHyVIofwSRhzYpfB+FVX56pbd+EBdBcpJrIYsM1Y3Bj8D
+        xX3F/gBEEkZP28dgQQQCcefVJ+FGsANlPqqPz7QldEk7JimVp9SZ9WKQ/Q02Pdt7
+        /9qtbBmbF0uc0+XRxeGNQ==
+X-ME-Sender: <xms:sYJtYw67NnirCw5ZQZ6pB4WNmATTJyUdmpBKFXUJqvR3ar1qvPByHA>
+    <xme:sYJtYx5VOjgif9j-MilEmL0KPuk-m1DkK_PHsnvsmvJvlTiLGfs3_e5Mj7B4gzvTU
+    AAq_8xfo2XAa9V44T4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeehgddthecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
+    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:sYJtY_eJV8yQp4hujJ8GeLKDX8nY4JG9P8NJtZ7W0QlaZTxv7j40og>
+    <xmx:sYJtY1IU0U2fuhISevuS_Owgm3YiBvavx2siXIjsGSWfLk0nDlZ1kg>
+    <xmx:sYJtY0IXIw5AT9qcpIjUKxwENRXi3EKhHlZ_cOIzmhCcRIHC-NEQ6g>
+    <xmx:soJtYxD-Zbec17pVMeIH7h0btg_89z2EjZWFp6piz4am3OwTy0bi8g>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7725A36A0073; Thu, 10 Nov 2022 18:01:05 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <e2323333-522c-4127-aaf0-90539fbd0cf4@app.fastmail.com>
+In-Reply-To: <20221110210731.GA672063@bhelgaas>
+References: <20221110210731.GA672063@bhelgaas>
+Date:   Thu, 10 Nov 2022 23:00:45 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>,
+        "Liu Peibao" <liupeibao@loongson.cn>
+Cc:     "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Jianmin Lv" <lvjianmin@loongson.cn>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4] PCI: loongson: Skip scanning unavailable child devices
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,138 +98,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/11/10 22:13, ChenXiaoSong wrote:
-> Syzkaller reported BUG as follows:
-> 
->    BUG: sleeping function called from invalid context at
->         include/linux/sched/mm.h:274
->    Call Trace:
->     <TASK>
->     dump_stack_lvl+0xcd/0x134
->     __might_resched.cold+0x222/0x26b
->     kmem_cache_alloc+0x2e7/0x3c0
->     update_qgroup_limit_item+0xe1/0x390
->     btrfs_qgroup_inherit+0x147b/0x1ee0
->     create_subvol+0x4eb/0x1710
->     btrfs_mksubvol+0xfe5/0x13f0
->     __btrfs_ioctl_snap_create+0x2b0/0x430
->     btrfs_ioctl_snap_create_v2+0x25a/0x520
->     btrfs_ioctl+0x2a1c/0x5ce0
->     __x64_sys_ioctl+0x193/0x200
->     do_syscall_64+0x35/0x80
-> 
-> Fix this by introducing __update_qgroup_limit_item() helper, allocate
-> memory outside of the spin lock.
-> 
-> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+=E5=9C=A82022=E5=B9=B411=E6=9C=8810=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =
+=E4=B8=8B=E5=8D=889:07=EF=BC=8CBjorn Helgaas=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Nov 08, 2022 at 02:42:40PM +0800, Liu Peibao wrote:
+>> The PCI Controller of 2k1000 could not mask devices by setting vender=
+ ID or
+>> device ID in configuration space header as invalid values. When there=
+ are
+>> pins shareable between the platform device and PCI device, if the pla=
+tform
+>> device is preferred, we should not scan this PCI device. In the above
+>> scene, add `status =3D "disabled"` property in DT node of this PCI de=
+vice.
+>>=20
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> ---
+>> V3 -> V4: 1. get rid of the masklist and search the status property
+>> 	  directly.
+>>           2. check the status property only when accessing the vendor=
+ ID.
+>> V2 -> V3: 1. use list_for_each_entry() for more clearly.
+>>           2. fix wrong use of sizeof().
+>> V1 -> V2: use existing property "status" instead of adding new proper=
+ty.
+>>=20
+>>  drivers/pci/controller/pci-loongson.c | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>=20
+>> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/cont=
+roller/pci-loongson.c
+>> index 05c50408f13b..efca0b3b5a29 100644
+>> --- a/drivers/pci/controller/pci-loongson.c
+>> +++ b/drivers/pci/controller/pci-loongson.c
+>> @@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct=
+ pci_bus *bus,
+>>  			return NULL;
+>>  	}
+>> =20
+>> +#ifdef CONFIG_OF
+>> +	/* Don't access disabled devices. */
+>> +	if (pci_is_root_bus(bus) && where =3D=3D PCI_VENDOR_ID) {
+>> +		struct device_node *dn;
+>> +
+>> +		dn =3D of_pci_find_child_device(bus->dev.of_node, devfn);
+>> +		if (dn && !of_device_is_available(dn))
+>> +			return NULL;
+>> +	}
+>> +#endif
+>
+> Looks nice and simple, thanks for trying this out.
 
-Unfortunately, __update_qgroup_limit_item() can still sleep.
-
-As it calls btrfs_search_slot(), which can lead to disk IO if the qgroup 
-tree is not cached.
+Should we make this into common PCI code?
+I guess Loongson won=E2=80=99t be the last platform having such problem.
 
 
-I believe the proper way is to either unlock the spinlock inside 
-btrfs_qgroup_inherit() (which needs extra scrutiny on the qgroup lock), 
-or delayed the limit item updates until we have unlocked the spinlock.
+>
+>>  	/* CFG0 can only access standard space */
+>>  	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
+>>  		return cfg0_map(priv, bus, devfn, where);
+>> --=20
+>> 2.20.1
+>>
 
-To me, the latter one seems more reasonable, as it's just one qgroup 
-(@dstgroup), and we're doing the same delayed work for sysfs interface 
-creation.
-
-Thanks,
-Qu
-
-> ---
->   fs/btrfs/qgroup.c | 35 ++++++++++++++++++++++++++---------
->   1 file changed, 26 insertions(+), 9 deletions(-)
-> 
-> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
-> index 9334c3157c22..99a61cc04b68 100644
-> --- a/fs/btrfs/qgroup.c
-> +++ b/fs/btrfs/qgroup.c
-> @@ -768,11 +768,11 @@ static int del_qgroup_item(struct btrfs_trans_handle *trans, u64 qgroupid)
->   	return ret;
->   }
->   
-> -static int update_qgroup_limit_item(struct btrfs_trans_handle *trans,
-> -				    struct btrfs_qgroup *qgroup)
-> +static int __update_qgroup_limit_item(struct btrfs_trans_handle *trans,
-> +				      struct btrfs_qgroup *qgroup,
-> +				      struct btrfs_path *path) >   {
->   	struct btrfs_root *quota_root = trans->fs_info->quota_root;
-> -	struct btrfs_path *path;
->   	struct btrfs_key key;
->   	struct extent_buffer *l;
->   	struct btrfs_qgroup_limit_item *qgroup_limit;
-> @@ -783,10 +783,6 @@ static int update_qgroup_limit_item(struct btrfs_trans_handle *trans,
->   	key.type = BTRFS_QGROUP_LIMIT_KEY;
->   	key.offset = qgroup->qgroupid;
->   
-> -	path = btrfs_alloc_path();
-> -	if (!path)
-> -		return -ENOMEM;
-> -
->   	ret = btrfs_search_slot(trans, quota_root, &key, path, 0, 1);
->   	if (ret > 0)
->   		ret = -ENOENT;
-> @@ -806,6 +802,21 @@ static int update_qgroup_limit_item(struct btrfs_trans_handle *trans,
->   	btrfs_mark_buffer_dirty(l);
->   
->   out:
-> +	return ret;
-> +}
-> +
-> +static int update_qgroup_limit_item(struct btrfs_trans_handle *trans,
-> +				    struct btrfs_qgroup *qgroup)
-> +{
-> +	struct btrfs_path *path;
-> +	int ret;
-> +
-> +	path = btrfs_alloc_path();
-> +	if (!path)
-> +		return -ENOMEM;
-> +
-> +	ret = __update_qgroup_limit_item(trans, qgroup, path);
-> +
->   	btrfs_free_path(path);
->   	return ret;
->   }
-> @@ -2860,6 +2871,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   	bool need_rescan = false;
->   	u32 level_size = 0;
->   	u64 nums;
-> +	struct btrfs_path *path;
->   
->   	/*
->   	 * There are only two callers of this function.
-> @@ -2935,6 +2947,11 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   		ret = 0;
->   	}
->   
-> +	path = btrfs_alloc_path();
-> +	if (!path) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
->   
->   	spin_lock(&fs_info->qgroup_lock);
->   
-> @@ -2950,8 +2967,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   		dstgroup->max_excl = inherit->lim.max_excl;
->   		dstgroup->rsv_rfer = inherit->lim.rsv_rfer;
->   		dstgroup->rsv_excl = inherit->lim.rsv_excl;
-> -
-> -		ret = update_qgroup_limit_item(trans, dstgroup);
-> +		ret = __update_qgroup_limit_item(trans, dstgroup, path);
->   		if (ret) {
->   			qgroup_mark_inconsistent(fs_info);
->   			btrfs_info(fs_info,
-> @@ -3053,6 +3069,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   
->   unlock:
->   	spin_unlock(&fs_info->qgroup_lock);
-> +	btrfs_free_path(path);
->   	if (!ret)
->   		ret = btrfs_sysfs_add_one_qgroup(fs_info, dstgroup);
->   out:
+--=20
+- Jiaxun
