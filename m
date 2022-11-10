@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98C2624132
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EAD624134
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiKJLQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
+        id S230210AbiKJLQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 06:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiKJLQc (ORCPT
+        with ESMTP id S229841AbiKJLQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:16:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A4297018A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 03:16:30 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39EBF1FB;
-        Thu, 10 Nov 2022 03:16:36 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11AEE3F534;
-        Thu, 10 Nov 2022 03:16:27 -0800 (PST)
-Message-ID: <d2789d23-816b-11f1-d654-a7989f323ac8@arm.com>
-Date:   Thu, 10 Nov 2022 12:16:26 +0100
+        Thu, 10 Nov 2022 06:16:41 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A36521E0D;
+        Thu, 10 Nov 2022 03:16:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3C1C31F90A;
+        Thu, 10 Nov 2022 11:16:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668078997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xHmb3oZbqQEN2yJ2OZBtB3fE443Vekbcfy5OMkh4FoU=;
+        b=faa5aXYuwYMSFIRpCm0mRYfKg/dMt92rAPxzwNsqqtNEQYdUYTbbEs/fWgbJGxApkqAVVi
+        QqwBbnDWPGk7EOIQ9wGWw8n6PGZvjsgz1ZwoTpvNV7YoOxqX6ergWgJsTaTABwTSCqTDGv
+        QYQ55us6gBk3Y3JrexkeVSCu4cWSU+4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668078997;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xHmb3oZbqQEN2yJ2OZBtB3fE443Vekbcfy5OMkh4FoU=;
+        b=WbGADlX1QvbVwk2hD1MKzKbt8f7UerQ+VGfdBWDd+6jjfCsO1U56p1159vLpTmPIE9I1Mt
+        fzjOHSxeLcdmSwCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A7B913B58;
+        Thu, 10 Nov 2022 11:16:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RlB6CpXdbGOZKwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 10 Nov 2022 11:16:37 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 985C7A0704; Thu, 10 Nov 2022 12:16:36 +0100 (CET)
+Date:   Thu, 10 Nov 2022 12:16:36 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Gabriel Krisman Bertazi <krisman@suse.de>, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Liu Song <liusong@linux.alibaba.com>, Jan Kara <jack@suse.cz>,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up
+ queued tags
+Message-ID: <20221110111636.ufgyp4tkbzexugk2@quack3>
+References: <20221105231055.25953-1-krisman@suse.de>
+ <2a445c5c-fd15-c0bf-8655-2fb5bde3fe67@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     Jian-Min Liu <jian-min.liu@mediatek.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan JMChen <jonathan.jmchen@mediatek.com>
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
- <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
- <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
- <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
- <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
- <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2a445c5c-fd15-c0bf-8655-2fb5bde3fe67@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/11/2022 14:41, Peter Zijlstra wrote:
-> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
+Hi!
 
-[...]
+On Thu 10-11-22 17:42:49, Yu Kuai wrote:
+> 在 2022/11/06 7:10, Gabriel Krisman Bertazi 写道:
+> > +void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
+> >   {
+> > -	struct sbq_wait_state *ws;
+> > -	unsigned int wake_batch;
+> > -	int wait_cnt, cur, sub;
+> > -	bool ret;
+> > +	unsigned int wake_batch = READ_ONCE(sbq->wake_batch);
+> > +	struct sbq_wait_state *ws = NULL;
+> > +	unsigned int wakeups;
+> > -	if (*nr <= 0)
+> > -		return false;
+> > +	if (!atomic_read(&sbq->ws_active))
+> > +		return;
+> > -	ws = sbq_wake_ptr(sbq);
+> > -	if (!ws)
+> > -		return false;
+> > +	atomic_add(nr, &sbq->completion_cnt);
+> > +	wakeups = atomic_read(&sbq->wakeup_cnt);
+> > -	cur = atomic_read(&ws->wait_cnt);
+> >   	do {
+> > -		/*
+> > -		 * For concurrent callers of this, callers should call this
+> > -		 * function again to wakeup a new batch on a different 'ws'.
+> > -		 */
+> > -		if (cur == 0)
+> > -			return true;
+> > -		sub = min(*nr, cur);
+> > -		wait_cnt = cur - sub;
+> > -	} while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
+> > -
+> > -	/*
+> > -	 * If we decremented queue without waiters, retry to avoid lost
+> > -	 * wakeups.
+> > -	 */
+> > -	if (wait_cnt > 0)
+> > -		return !waitqueue_active(&ws->wait);
+> > +		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
+> > +			return;
+> 
+> Should it be considered that completion_cnt overflow and becomes
+> negtive?
 
-> @@ -2956,13 +2958,26 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
->   */
->  static inline unsigned long cpu_util_cfs(int cpu)
->  {
-> +	struct rq *rq = cpu_rq(cpu);
->  	struct cfs_rq *cfs_rq;
->  	unsigned long util;
->  
-> -	cfs_rq = &cpu_rq(cpu)->cfs;
-> +	cfs_rq = &rq->cfs;
->  	util = READ_ONCE(cfs_rq->avg.util_avg);
->  
->  	if (sched_feat(UTIL_EST)) {
-> +		if (sched_feat(UTIL_EST_FASTER)) {
-> +			struct task_struct *curr;
-> +
-> +			rcu_read_lock();
-> +			curr = rcu_dereference(rq->curr);
-> +			if (likely(curr->sched_class == &fair_sched_class)) {
-> +				u64 runtime = curr->se.sum_exec_runtime - curr->se.exec_start;
+Yes, the counters can (and will) certainly overflow but since we only care
+about (completion_cnt - wakeups), we should be fine - this number is always
+sane (and relatively small) and in the kernel we do compile with signed
+overflows being well defined.
 
-Don't we and up with gigantic runtime numbers here?
-
-oot@juno:~# cat /proc/1676/task/1676/schedstat
-36946300 1150620 11
-root@juno:~# cat /proc/1676/task/1676/sched
-rt-app (1676, #threads: 2)
--------------------------------------------------------------------
-se.exec_start                                :         77766.964240 <- !
-se.vruntime                                  :           563.587883
-e.sum_exec_runtime                          :            36.946300  <- !
-se.nr_migrations                             :                    0
-...
-
-I expect cpu_util_cfs() to be ~1024 almost all the time now.
-
-> +				util = max_t(unsigned long, util,
-> +					     faster_est_approx(runtime * 2));
-> +			}
-> +			rcu_read_unlock();
-> +		}
->  		util = max_t(unsigned long, util,
->  			     READ_ONCE(cfs_rq->avg.util_est.enqueued));
->  	}
-
-[...]
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
