@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60D1624750
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 424BE624751
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiKJQoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:44:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S232473AbiKJQoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbiKJQn0 (ORCPT
+        with ESMTP id S232351AbiKJQn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:43:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4294385A;
-        Thu, 10 Nov 2022 08:43:00 -0800 (PST)
+        Thu, 10 Nov 2022 11:43:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A58E43AE2;
+        Thu, 10 Nov 2022 08:43:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA077B82251;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAF0C61BCB;
+        Thu, 10 Nov 2022 16:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 678EEC433D7;
         Thu, 10 Nov 2022 16:42:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88272C433B5;
-        Thu, 10 Nov 2022 16:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668098577;
-        bh=BvwkwmrbZC14+/ZpCX1HQjoc2T2Qpowc2X8TOjeQukE=;
+        s=k20201202; t=1668098580;
+        bh=H8GrOu07IRuGrUGFNBmi30U0LGPQsGBzhM2gPsNjUkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s791YN2UzC8dhtmjVNGRnI0TlhTl/C5cNWs9GU+8N/CMDuw3sUQPrw+9/ee8KnDtq
-         mMSuLzJmPNMiWBRTYbSSUnXLCQtLRoUuEzrO37LiXy6Z+M49S03NLaWfgpqAJ7dGgh
-         dz2Acl6UXWkPAqNeWejXTcFL7NAtRPti3g/PN416jMnL3g1Rn9bUr1iNCNtNk75HvL
-         US1JOiBnvbEJyP/Vb3XpgeL+fhv1QMd+DnvrRhSZK2lAZ9k5r+TB8pxuyMoaHQ2Woe
-         Sm2g/YYENLlz4ojLxVqaov38JdbUKh3LWPonkNSR3EhKCJynHtCFy/KZXLarJN7zvE
-         UL4DCRGqp3CFw==
+        b=V1fkxyBuVKLqkXCwarbt2nzk2Gmd07/5IZb172x8K6Iy7ZZK0piYHQxGtjJCvFZ8q
+         Egl+ANyi1jtSNOuoAVyMVUn7rSeKu62QUS8uG1yNeqdQ+kDrAWvp82GYOJx0YHKWck
+         lr/e+VWXG4RC7ejtRrDSGpYfNpXSBwAGrMQg7Bnb5C0xO19VpGmFTymLBid3wrPtx/
+         ZXk7aIs44xhFG4QWSt7kCoxPk9WwPBVZH9uM2K7i/1GcZ2hLuUh1wMR/+dmHhCwbMo
+         F+z3N+/Vf2dX4jP31xl7zMAda7Tv7tuUDo4lJ4/4IG64eaxObhRxbFOYk8xUTftZA2
+         9AvF7s5SKzNWQ==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -40,9 +40,9 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
-Subject: [PATCH v1 13/28] rust: alloc: add `Vec::try_with_capacity{,_in}()` constructors
-Date:   Thu, 10 Nov 2022 17:41:25 +0100
-Message-Id: <20221110164152.26136-14-ojeda@kernel.org>
+Subject: [PATCH v1 14/28] rust: str: add `BStr` type
+Date:   Thu, 10 Nov 2022 17:41:26 +0100
+Message-Id: <20221110164152.26136-15-ojeda@kernel.org>
 In-Reply-To: <20221110164152.26136-1-ojeda@kernel.org>
 References: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -56,141 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add `Vec::try_with_capacity()` and `Vec::try_with_capacity_in()` as
-the fallible versions of `Vec::with_capacity()` and
-`Vec::with_capacity_in()`, respectively.
+From: Gary Guo <gary@garyguo.net>
 
-The implementations follow the originals and use the previously
-added `RawVec::try_with_capacity_in()`.
+Add the `BStr` type, which is a byte string without UTF-8
+validity guarantee.
 
-In turn, `Vec::try_with_capacity()` will be used to implement
-the `CString` type (which wraps a `Vec<u8>`) in a later patch.
+It is simply an alias to `[u8]`, but has a more evident
+semantical meaning.
 
+Signed-off-by: Gary Guo <gary@garyguo.net>
+[Reworded, adapted for upstream and applied latest changes]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/alloc/raw_vec.rs |  1 -
- rust/alloc/vec/mod.rs | 89 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 89 insertions(+), 1 deletion(-)
+ rust/kernel/str.rs | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/rust/alloc/raw_vec.rs b/rust/alloc/raw_vec.rs
-index c342f3843972..eb77db5def55 100644
---- a/rust/alloc/raw_vec.rs
-+++ b/rust/alloc/raw_vec.rs
-@@ -135,7 +135,6 @@ impl<T, A: Allocator> RawVec<T, A> {
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index e45ff220ae50..3aa1a0cb9bf8 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -4,6 +4,11 @@
  
-     /// Like `try_with_capacity`, but parameterized over the choice of
-     /// allocator for the returned `RawVec`.
--    #[allow(dead_code)]
-     #[inline]
-     pub fn try_with_capacity_in(capacity: usize, alloc: A) -> Result<Self, TryReserveError> {
-         Self::try_allocate_in(capacity, AllocInit::Uninitialized, alloc)
-diff --git a/rust/alloc/vec/mod.rs b/rust/alloc/vec/mod.rs
-index 540787804cc2..8ac6c1e3b2a8 100644
---- a/rust/alloc/vec/mod.rs
-+++ b/rust/alloc/vec/mod.rs
-@@ -472,6 +472,48 @@ impl<T> Vec<T> {
-         Self::with_capacity_in(capacity, Global)
-     }
+ use core::fmt;
  
-+    /// Tries to construct a new, empty `Vec<T>` with the specified capacity.
-+    ///
-+    /// The vector will be able to hold exactly `capacity` elements without
-+    /// reallocating. If `capacity` is 0, the vector will not allocate.
-+    ///
-+    /// It is important to note that although the returned vector has the
-+    /// *capacity* specified, the vector will have a zero *length*. For an
-+    /// explanation of the difference between length and capacity, see
-+    /// *[Capacity and reallocation]*.
-+    ///
-+    /// [Capacity and reallocation]: #capacity-and-reallocation
-+    ///
-+    /// # Examples
-+    ///
-+    /// ```
-+    /// let mut vec = Vec::try_with_capacity(10).unwrap();
-+    ///
-+    /// // The vector contains no items, even though it has capacity for more
-+    /// assert_eq!(vec.len(), 0);
-+    /// assert_eq!(vec.capacity(), 10);
-+    ///
-+    /// // These are all done without reallocating...
-+    /// for i in 0..10 {
-+    ///     vec.push(i);
-+    /// }
-+    /// assert_eq!(vec.len(), 10);
-+    /// assert_eq!(vec.capacity(), 10);
-+    ///
-+    /// // ...but this may make the vector reallocate
-+    /// vec.push(11);
-+    /// assert_eq!(vec.len(), 11);
-+    /// assert!(vec.capacity() >= 11);
-+    ///
-+    /// let mut result = Vec::try_with_capacity(usize::MAX);
-+    /// assert!(result.is_err());
-+    /// ```
-+    #[inline]
-+    #[stable(feature = "kernel", since = "1.0.0")]
-+    pub fn try_with_capacity(capacity: usize) -> Result<Self, TryReserveError> {
-+        Self::try_with_capacity_in(capacity, Global)
-+    }
++/// Byte string without UTF-8 validity guarantee.
++///
++/// `BStr` is simply an alias to `[u8]`, but has a more evident semantical meaning.
++pub type BStr = [u8];
 +
-     /// Creates a `Vec<T>` directly from the raw components of another vector.
-     ///
-     /// # Safety
-@@ -617,6 +659,53 @@ impl<T, A: Allocator> Vec<T, A> {
-         Vec { buf: RawVec::with_capacity_in(capacity, alloc), len: 0 }
-     }
- 
-+    /// Tries to construct a new, empty `Vec<T, A>` with the specified capacity
-+    /// with the provided allocator.
-+    ///
-+    /// The vector will be able to hold exactly `capacity` elements without
-+    /// reallocating. If `capacity` is 0, the vector will not allocate.
-+    ///
-+    /// It is important to note that although the returned vector has the
-+    /// *capacity* specified, the vector will have a zero *length*. For an
-+    /// explanation of the difference between length and capacity, see
-+    /// *[Capacity and reallocation]*.
-+    ///
-+    /// [Capacity and reallocation]: #capacity-and-reallocation
-+    ///
-+    /// # Examples
-+    ///
-+    /// ```
-+    /// #![feature(allocator_api)]
-+    ///
-+    /// use std::alloc::System;
-+    ///
-+    /// let mut vec = Vec::try_with_capacity_in(10, System).unwrap();
-+    ///
-+    /// // The vector contains no items, even though it has capacity for more
-+    /// assert_eq!(vec.len(), 0);
-+    /// assert_eq!(vec.capacity(), 10);
-+    ///
-+    /// // These are all done without reallocating...
-+    /// for i in 0..10 {
-+    ///     vec.push(i);
-+    /// }
-+    /// assert_eq!(vec.len(), 10);
-+    /// assert_eq!(vec.capacity(), 10);
-+    ///
-+    /// // ...but this may make the vector reallocate
-+    /// vec.push(11);
-+    /// assert_eq!(vec.len(), 11);
-+    /// assert!(vec.capacity() >= 11);
-+    ///
-+    /// let mut result = Vec::try_with_capacity_in(usize::MAX, System);
-+    /// assert!(result.is_err());
-+    /// ```
-+    #[inline]
-+    #[stable(feature = "kernel", since = "1.0.0")]
-+    pub fn try_with_capacity_in(capacity: usize, alloc: A) -> Result<Self, TryReserveError> {
-+        Ok(Vec { buf: RawVec::try_with_capacity_in(capacity, alloc)?, len: 0 })
-+    }
-+
-     /// Creates a `Vec<T, A>` directly from the raw components of another vector.
-     ///
-     /// # Safety
+ /// Allows formatting of [`fmt::Arguments`] into a raw buffer.
+ ///
+ /// It does not fail if callers write past the end of the buffer so that they can calculate the
 -- 
 2.38.1
 
