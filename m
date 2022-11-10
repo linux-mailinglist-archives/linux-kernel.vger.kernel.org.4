@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D2C62475C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED8262475D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbiKJQpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S232571AbiKJQp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232209AbiKJQom (ORCPT
+        with ESMTP id S232370AbiKJQow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:44:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29A0BDC;
-        Thu, 10 Nov 2022 08:43:34 -0800 (PST)
+        Thu, 10 Nov 2022 11:44:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37C611804;
+        Thu, 10 Nov 2022 08:43:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 728D861BCD;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CCC1B82248;
+        Thu, 10 Nov 2022 16:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12ADCC433C1;
         Thu, 10 Nov 2022 16:43:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF050C433D6;
-        Thu, 10 Nov 2022 16:43:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668098613;
-        bh=q1b+8RZULo3LQ8zfqDuXjlyaAk2LL+pi89RJyIKKyOM=;
+        s=k20201202; t=1668098617;
+        bh=qf1L1f1lloAHjax2Q2sSNkOySbNmdgvi1HaQZKetkYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KcZWT59DhU6X0r5e+tq/lKETZqJggaXdtsuQ9zutkzK2+7s+T5StUs+YzFvBnACGg
-         ogTAKl6xIMpebuPXuCitVtNnY8VpWQxom9BtobATzy//M5CJ7ErFztIwV4oGqMPgqh
-         heo2ndpyQmPtJSLGr9aZAT38CVilEe5JPglAcFaL4wZ6Ca6eR8znyC158lz98eDUxk
-         6qlX1EMZ2qUdsieAYqPfgQk7lsiX0a3OdvRgwjWDh8Yg9J5NaJncHEchEV1+biGbKu
-         4dTuoyolV77dcXBFGKkXoARnoq3JYG/tvK2O7qhiP0iAtZghZ8UUPsBOrEindsgtIf
-         S7EeVmWJ2t9jg==
+        b=ecJ7IZZ3CrxyZ6SylQUbghb7oCf0y3MByU/BnTH3+lBMZugHYgzdnIkj2XVSnU9tz
+         FKd0FTLp6mZ5ZSnV3RWqJJPKUUSGld6FgOKKLKdWvLDnbNXZ+U/VN67IGN8LEAWXTR
+         /0+WBmoDU16OGhkN0v+SbKFHDrSe+8JAw39fTLkCTtrihKDHNa8V8/lxurXDlWaWsG
+         Nn99uEv/W8YwgQ4UZmuXGOlx2WpoO+MX1RsJcVlWZ6px4Hw24REgxHOY8J3PSWOOZm
+         zrn0FbGszPHkmY3Dj8maFV9Id3q62WcX+pP6kV7Rxl1E0aCnFF1SbArcBAwAt0uUTc
+         Cmf+R6kLpFG1w==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -40,9 +40,9 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
-Subject: [PATCH v1 25/28] rust: add `build_error` crate
-Date:   Thu, 10 Nov 2022 17:41:37 +0100
-Message-Id: <20221110164152.26136-26-ojeda@kernel.org>
+Subject: [PATCH v1 26/28] rust: build_assert: add `build_{error,assert}!` macros
+Date:   Thu, 10 Nov 2022 17:41:38 +0100
+Message-Id: <20221110164152.26136-27-ojeda@kernel.org>
 In-Reply-To: <20221110164152.26136-1-ojeda@kernel.org>
 References: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -58,196 +58,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Gary Guo <gary@garyguo.net>
 
-The `build_error` crate provides a function `build_error` which
-will panic at compile-time if executed in const context and,
-by default, will cause a build error if not executed at compile
-time and the optimizer does not optimise away the call.
+Add the `build_error!` and `build_assert!` macros which leverage
+the previously introduced `build_error` crate. Do so in a new
+module, called `build_assert`.
 
-The `CONFIG_RUST_BUILD_ASSERT_ALLOW` kernel option allows to
-relax the default build failure and convert it to a runtime
-check. If the runtime check fails, `panic!` will be called.
+The former fails the build if the code path calling it can possibly
+be executed. The latter asserts that a boolean expression is `true`
+at compile time.
 
-Its functionality will be exposed to users as a couple macros in
-the `kernel` crate in the following patch, thus some documentation
-here refers to them for simplicity.
+In particular, `build_assert!` can be used in some contexts where
+`static_assert!` cannot:
+
+    fn f1<const N: usize>() {
+        static_assert!(N > 1);` // Error.
+        build_assert!(N > 1);   // Build-time check.
+        assert!(N > 1);         // Run-time check.
+    }
+
+    #[inline]
+    fn f2(n: usize) {
+        static_assert!(n > 1);  // Error.
+        build_assert!(n > 1);   // Build-time check.
+        assert!(n > 1);         // Run-time check.
+    }
 
 Signed-off-by: Gary Guo <gary@garyguo.net>
 [Reworded, adapted for upstream and applied latest changes]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- lib/Kconfig.debug                 | 16 ++++++++++++++++
- rust/Makefile                     | 22 +++++++++++++++++-----
- rust/build_error.rs               | 24 ++++++++++++++++++++++++
- rust/exports.c                    |  5 +++++
- scripts/generate_rust_analyzer.py |  8 +++++++-
- 5 files changed, 69 insertions(+), 6 deletions(-)
- create mode 100644 rust/build_error.rs
+ rust/kernel/build_assert.rs | 82 +++++++++++++++++++++++++++++++++++++
+ rust/kernel/lib.rs          |  4 ++
+ rust/kernel/prelude.rs      |  2 +
+ 3 files changed, 88 insertions(+)
+ create mode 100644 rust/kernel/build_assert.rs
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 29280072dc0e..452c9f06c2bc 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2801,6 +2801,22 @@ config RUST_OVERFLOW_CHECKS
- 
- 	  If unsure, say Y.
- 
-+config RUST_BUILD_ASSERT_ALLOW
-+	bool "Allow unoptimized build-time assertions"
-+	depends on RUST
-+	help
-+	  Controls how are `build_error!` and `build_assert!` handled during build.
-+
-+	  If calls to them exist in the binary, it may indicate a violated invariant
-+	  or that the optimizer failed to verify the invariant during compilation.
-+
-+	  This should not happen, thus by default the build is aborted. However,
-+	  as an escape hatch, you can choose Y here to ignore them during build
-+	  and let the check be carried at runtime (with `panic!` being called if
-+	  the check fails).
-+
-+	  If unsure, say N.
-+
- endmenu # "Rust"
- 
- source "Documentation/Kconfig"
-diff --git a/rust/Makefile b/rust/Makefile
-index 7700d3853404..ff70c4c916f8 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -19,6 +19,12 @@ obj-$(CONFIG_RUST) += alloc.o bindings.o kernel.o
- always-$(CONFIG_RUST) += exports_alloc_generated.h exports_bindings_generated.h \
-     exports_kernel_generated.h
- 
-+ifdef CONFIG_RUST_BUILD_ASSERT_ALLOW
-+obj-$(CONFIG_RUST) += build_error.o
-+else
-+always-$(CONFIG_RUST) += build_error.o
-+endif
-+
- obj-$(CONFIG_RUST) += exports.o
- 
- # Avoids running `$(RUSTC)` for the sysroot when it may not be available.
-@@ -108,7 +114,7 @@ rustdoc-alloc: $(src)/alloc/lib.rs rustdoc-core rustdoc-compiler_builtins FORCE
- 	$(call if_changed,rustdoc)
- 
- rustdoc-kernel: private rustc_target_flags = --extern alloc \
--    --extern macros=$(objtree)/$(obj)/libmacros.so \
-+    --extern build_error --extern macros=$(objtree)/$(obj)/libmacros.so \
-     --extern bindings
- rustdoc-kernel: $(src)/kernel/lib.rs rustdoc-core rustdoc-macros \
-     rustdoc-compiler_builtins rustdoc-alloc $(obj)/libmacros.so \
-@@ -126,6 +132,9 @@ quiet_cmd_rustc_test_library = RUSTC TL $<
- 		-L$(objtree)/$(obj)/test \
- 		--crate-name $(subst rusttest-,,$(subst rusttestlib-,,$@)) $<
- 
-+rusttestlib-build_error: $(src)/build_error.rs rusttest-prepare FORCE
-+	$(call if_changed,rustc_test_library)
-+
- rusttestlib-macros: private rustc_target_flags = --extern proc_macro
- rusttestlib-macros: private rustc_test_library_proc = yes
- rusttestlib-macros: $(src)/macros/lib.rs rusttest-prepare FORCE
-@@ -216,9 +225,9 @@ rusttest-macros: $(src)/macros/lib.rs rusttest-prepare FORCE
- 	$(call if_changed,rustdoc_test)
- 
- rusttest-kernel: private rustc_target_flags = --extern alloc \
--    --extern macros --extern bindings
-+    --extern build_error --extern macros --extern bindings
- rusttest-kernel: $(src)/kernel/lib.rs rusttest-prepare \
--    rusttestlib-macros rusttestlib-bindings FORCE
-+    rusttestlib-build_error rusttestlib-macros rusttestlib-bindings FORCE
- 	$(call if_changed,rustc_test)
- 	$(call if_changed,rustc_test_library)
- 
-@@ -366,6 +375,9 @@ $(obj)/alloc.o: private rustc_target_flags = $(alloc-cfgs)
- $(obj)/alloc.o: $(src)/alloc/lib.rs $(obj)/compiler_builtins.o FORCE
- 	$(call if_changed_dep,rustc_library)
- 
-+$(obj)/build_error.o: $(src)/build_error.rs $(obj)/compiler_builtins.o FORCE
-+	$(call if_changed_dep,rustc_library)
-+
- $(obj)/bindings.o: $(src)/bindings/lib.rs \
-     $(obj)/compiler_builtins.o \
-     $(obj)/bindings/bindings_generated.rs \
-@@ -373,8 +385,8 @@ $(obj)/bindings.o: $(src)/bindings/lib.rs \
- 	$(call if_changed_dep,rustc_library)
- 
- $(obj)/kernel.o: private rustc_target_flags = --extern alloc \
--    --extern macros --extern bindings
--$(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o \
-+    --extern build_error --extern macros --extern bindings
-+$(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o $(obj)/build_error.o \
-     $(obj)/libmacros.so $(obj)/bindings.o FORCE
- 	$(call if_changed_dep,rustc_library)
- 
-diff --git a/rust/build_error.rs b/rust/build_error.rs
+diff --git a/rust/kernel/build_assert.rs b/rust/kernel/build_assert.rs
 new file mode 100644
-index 000000000000..0ff6b33059aa
+index 000000000000..659542393c09
 --- /dev/null
-+++ b/rust/build_error.rs
-@@ -0,0 +1,24 @@
++++ b/rust/kernel/build_assert.rs
+@@ -0,0 +1,82 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+//! Build-time error.
-+//!
-+//! This crate provides a function `build_error`, which will panic in
-+//! compile-time if executed in const context, and will cause a build error
-+//! if not executed at compile time and the optimizer does not optimise away the
-+//! call.
-+//!
-+//! It is used by `build_assert!` in the kernel crate, allowing checking of
-+//! conditions that could be checked statically, but could not be enforced in
-+//! Rust yet (e.g. perform some checks in const functions, but those
-+//! functions could still be called in the runtime).
++//! Build-time assert.
 +
-+#![no_std]
-+
-+/// Panics if executed in const context, or triggers a build error if not.
-+#[inline(never)]
-+#[cold]
-+#[export_name = "rust_build_error"]
-+#[track_caller]
-+pub const fn build_error(msg: &'static str) -> ! {
-+    panic!("{}", msg);
++/// Fails the build if the code path calling `build_error!` can possibly be executed.
++///
++/// If the macro is executed in const context, `build_error!` will panic.
++/// If the compiler or optimizer cannot guarantee that `build_error!` can never
++/// be called, a build error will be triggered.
++///
++/// # Examples
++///
++/// ```
++/// # use kernel::build_error;
++/// #[inline]
++/// fn foo(a: usize) -> usize {
++///     a.checked_add(1).unwrap_or_else(|| build_error!("overflow"))
++/// }
++///
++/// assert_eq!(foo(usize::MAX - 1), usize::MAX); // OK.
++/// // foo(usize::MAX); // Fails to compile.
++/// ```
++#[macro_export]
++macro_rules! build_error {
++    () => {{
++        $crate::build_error("")
++    }};
++    ($msg:expr) => {{
++        $crate::build_error($msg)
++    }};
 +}
-diff --git a/rust/exports.c b/rust/exports.c
-index bb7cc64cecd0..83e2a7070cae 100644
---- a/rust/exports.c
-+++ b/rust/exports.c
-@@ -19,3 +19,8 @@
- #include "exports_alloc_generated.h"
- #include "exports_bindings_generated.h"
- #include "exports_kernel_generated.h"
 +
-+// For modules using `rust/build_error.rs`.
-+#ifdef CONFIG_RUST_BUILD_ASSERT_ALLOW
-+EXPORT_SYMBOL_RUST_GPL(rust_build_error);
-+#endif
-diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
-index 75bb611bd751..ecc7ea9a4dcf 100755
---- a/scripts/generate_rust_analyzer.py
-+++ b/scripts/generate_rust_analyzer.py
-@@ -67,6 +67,12 @@ def generate_crates(srctree, objtree, sysroot_src):
-     )
-     crates[-1]["proc_macro_dylib_path"] = "rust/libmacros.so"
++/// Asserts that a boolean expression is `true` at compile time.
++///
++/// If the condition is evaluated to `false` in const context, `build_assert!`
++/// will panic. If the compiler or optimizer cannot guarantee the condition will
++/// be evaluated to `true`, a build error will be triggered.
++///
++/// [`static_assert!`] should be preferred to `build_assert!` whenever possible.
++///
++/// # Examples
++///
++/// These examples show that different types of [`assert!`] will trigger errors
++/// at different stage of compilation. It is preferred to err as early as
++/// possible, so [`static_assert!`] should be used whenever possible.
++/// ```ignore
++/// fn foo() {
++///     static_assert!(1 > 1); // Compile-time error
++///     build_assert!(1 > 1); // Build-time error
++///     assert!(1 > 1); // Run-time error
++/// }
++/// ```
++///
++/// When the condition refers to generic parameters or parameters of an inline function,
++/// [`static_assert!`] cannot be used. Use `build_assert!` in this scenario.
++/// ```
++/// fn foo<const N: usize>() {
++///     // `static_assert!(N > 1);` is not allowed
++///     build_assert!(N > 1); // Build-time check
++///     assert!(N > 1); // Run-time check
++/// }
++///
++/// #[inline]
++/// fn bar(n: usize) {
++///     // `static_assert!(n > 1);` is not allowed
++///     build_assert!(n > 1); // Build-time check
++///     assert!(n > 1); // Run-time check
++/// }
++/// ```
++#[macro_export]
++macro_rules! build_assert {
++    ($cond:expr $(,)?) => {{
++        if !$cond {
++            $crate::build_error(concat!("assertion failed: ", stringify!($cond)));
++        }
++    }};
++    ($cond:expr, $msg:expr) => {{
++        if !$cond {
++            $crate::build_error($msg);
++        }
++    }};
++}
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 9b83ef736298..a3abc110ff97 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -23,6 +23,7 @@ compile_error!("Missing kernel configuration for conditional compilation");
+ #[cfg(not(test))]
+ #[cfg(not(testlib))]
+ mod allocator;
++mod build_assert;
+ pub mod error;
+ pub mod prelude;
+ pub mod print;
+@@ -35,6 +36,9 @@ pub mod str;
+ pub use bindings;
+ pub use macros;
  
-+    append_crate(
-+        "build_error",
-+        srctree / "rust" / "build_error.rs",
-+        ["core", "compiler_builtins"],
-+    )
++#[doc(hidden)]
++pub use build_error::build_error;
 +
-     append_crate(
-         "bindings",
-         srctree / "rust"/ "bindings" / "lib.rs",
-@@ -78,7 +84,7 @@ def generate_crates(srctree, objtree, sysroot_src):
-     append_crate(
-         "kernel",
-         srctree / "rust" / "kernel" / "lib.rs",
--        ["core", "alloc", "macros", "bindings"],
-+        ["core", "alloc", "macros", "build_error", "bindings"],
-         cfg=cfg,
-     )
-     crates[-1]["source"] = {
+ /// Prefix to appear before log messages printed from within the `kernel` crate.
+ const __LOG_PREFIX: &[u8] = b"rust_kernel\0";
+ 
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index 178fe8e6cb6d..7a90249ee9b9 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -17,6 +17,8 @@ pub use alloc::{boxed::Box, vec::Vec};
+ 
+ pub use macros::{module, vtable};
+ 
++pub use super::build_assert;
++
+ pub use super::{dbg, pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr_notice, pr_warn};
+ 
+ pub use super::static_assert;
 -- 
 2.38.1
 
