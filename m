@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EB0624BC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 333A8624BCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiKJU31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:29:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S231802AbiKJU3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKJU3Z (ORCPT
+        with ESMTP id S229946AbiKJU3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:29:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF89EDB4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:28:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668112114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s3qJXkjwOhbGiwzYiY8uWUuyvmMsTBnM2XzNPe9LD9s=;
-        b=AFu1fihkMf4yAkIY7TX22vzAQeuKR7aUoMOIM9pzFEM13Xvk2q3QZRe+eTtRgtIR6xtuPJ
-        twKMb3OMQ3Aan8unZNR0/j+9djDYy4TeJ4YgAn8cwWkVGu87KpEOJ0MGOLutcexpXzbRVH
-        m7nWmyIV22nDRN7oTtxMiX2IQKt5SZI=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-414-GMM8V5iYOdiaA8Ue18gi3Q-1; Thu, 10 Nov 2022 15:28:33 -0500
-X-MC-Unique: GMM8V5iYOdiaA8Ue18gi3Q-1
-Received: by mail-qt1-f197.google.com with SMTP id g3-20020ac84b63000000b003a529c62a92so2236556qts.23
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:28:32 -0800 (PST)
+        Thu, 10 Nov 2022 15:29:39 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179F21CFFC;
+        Thu, 10 Nov 2022 12:29:34 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id k2so1875372qkk.7;
+        Thu, 10 Nov 2022 12:29:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ih5vbeDEAFzKplO982fNJrgyD80A/aFIEJ2OMUT2j4o=;
+        b=HOuepxNdSz8sxgRYf9mKW4vLXN5T3uEH0aRUCqJEv/AB62lWjI4i5TMKwNPOUhH/ed
+         7406HkAIQaMjQvrpGVc2HcPwB/dYW9ntnv5XnbCtGqyJWvJXVZm57N9mkC42v8I5Yg52
+         7BtW/4Xhsc7yzFn6GqAtLykuIS8YyFY9VUGF/FlyP5OMUbmDXHUCpmjcvXr/iCv5B/S2
+         c4z1/qCuzTgtb3eyL532GFYVzuOfKjhzmFOq5VsAqKNlnvF+tRFlBe5/R2M39yT9rNUT
+         8o9RnxIZjWJn0vKXvP99chZedwebr2VL7hf92RbGwYIcoSzMPpamrnW5fUQLiHEobpZu
+         zKxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s3qJXkjwOhbGiwzYiY8uWUuyvmMsTBnM2XzNPe9LD9s=;
-        b=YUhN6ARHhdcgT5WTyBoG5fe3/EgfprPEZbVMvqUC8jw8f81EoCyUYdQ4e30HIyfXs8
-         BHBfIBMBrHssxNSaZOJcGpx+jg096981tefWaTkfbx7VWZrBrt1zg0jRL/9Fop8mQctM
-         T8l5IPw5nCMZHN15LM0axBKn30YW52R35pYh5TRYinpFCdeuxtVJumfpgvyDVnOi9B3w
-         a+3qowrSoBQPNVMqbIy7RcDus/3IFIiknLph8Yx5L45Y1XlqdymkVhLJnMpL+2SEpXq0
-         dS8hgwKBLXZO0lHGTGLr6/kTj1rNDT/Iy3lBibmMPybD/YTB87PdhTKG69RGgq7Uxv2s
-         7jyA==
-X-Gm-Message-State: ACrzQf1rq3TfoOpY+uVau96xyqG5+gc/FEftx1YeDHMNkTFZK2yisLzt
-        sQBbnl6FcxZVf2oTP0an1RfS7/6DlbSzufBdEswcoFEGa3TtZwisX4LESI/e4ukajB/89gONIGV
-        iSM4pMzW2CtNyr9+cM7J57lsf
-X-Received: by 2002:a37:8246:0:b0:6f9:bc42:699a with SMTP id e67-20020a378246000000b006f9bc42699amr1741832qkd.496.1668112112502;
-        Thu, 10 Nov 2022 12:28:32 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6U7SlZJzxRPAjnUqO/P0jD8kNSK5YAVkzCKarP217RdqceVGneo5WmOtTIZWolo1PJX/v1Lg==
-X-Received: by 2002:a37:8246:0:b0:6f9:bc42:699a with SMTP id e67-20020a378246000000b006f9bc42699amr1741822qkd.496.1668112112298;
-        Thu, 10 Nov 2022 12:28:32 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id y201-20020a3764d2000000b006fa7b5ea2d1sm138582qkb.125.2022.11.10.12.28.31
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ih5vbeDEAFzKplO982fNJrgyD80A/aFIEJ2OMUT2j4o=;
+        b=3hNQGJRYPkJRdPXRrmGCZmqQWFUX5IXWpNJF7hyFPYNafUwN15pqsNzTeMKEFWZahQ
+         M5ydm3b2oI4gzm7ZK1DySaHfXa+FLo1NDBIyqPMIH+6LcgxnQbkp4yxGVSJKEZ+0RNLm
+         KSLCdRkbjXonEamVBkrU9B76j2PqTSE3jyT7z7jEdT+l++ZOi28Ro0H6Tio0rsT904SP
+         WEsmGS9lgL42ipuOlF49JqojrYLXXFBQtb8lcrT234yBEDat/KDL2VfEsdsqoHMrtZEh
+         Lful8iWmIatAZKg7MpHz6jOTEw09IyjzeRSUTdAuCR3Si0rFmwkcko1RpetwlSyxbBs9
+         0vRg==
+X-Gm-Message-State: ACrzQf3zaA4a17KhMK/nvzebbSohIVS1mhwtNdIaMwC3cEOLyGw13XmC
+        /XU5lhL/wfU95tkR6ztjc2SQvGmQ6y8eog==
+X-Google-Smtp-Source: AMsMyM70iuhbVvo3+cuEcWfteZfe6ZXwUOabi8j35ocMFTt8YEzGCaGRlyR5Wg24nm/WVJe/GJBktg==
+X-Received: by 2002:a37:e301:0:b0:6fa:4749:cb8c with SMTP id y1-20020a37e301000000b006fa4749cb8cmr1782662qki.335.1668112173211;
+        Thu, 10 Nov 2022 12:29:33 -0800 (PST)
+Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
+        by smtp.gmail.com with ESMTPSA id bq35-20020a05620a46a300b006bbf85cad0fsm207937qkb.20.2022.11.10.12.29.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 12:28:31 -0800 (PST)
-Date:   Thu, 10 Nov 2022 15:28:30 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>
-Subject: Re: [PATCH 2/2] mm/uffd: Sanity check write bit for uffd-wp
- protected ptes
-Message-ID: <Y21e7vvP54JrtkAp@x1n>
-References: <20221110151702.1478763-1-peterx@redhat.com>
- <20221110151702.1478763-3-peterx@redhat.com>
- <58FFF1A3-DC37-4D9F-ABF0-3C5DA519BFFB@gmail.com>
+        Thu, 10 Nov 2022 12:29:32 -0800 (PST)
+Date:   Thu, 10 Nov 2022 15:29:30 -0500
+From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org
+Subject: Re: [PATCH v2 6/7] serial: liteuart: separate RX loop from poll timer
+Message-ID: <Y21fKt+mGKvQ8yMF@glsvmlin.ini.cmu.edu>
+References: <20221110004450.772768-1-gsomlo@gmail.com>
+ <20221110004450.772768-7-gsomlo@gmail.com>
+ <1c902ee8-d33d-c2d0-7eef-719f59f3a64@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <58FFF1A3-DC37-4D9F-ABF0-3C5DA519BFFB@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1c902ee8-d33d-c2d0-7eef-719f59f3a64@linux.intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,26 +81,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 10:43:25AM -0800, Nadav Amit wrote:
-> On Nov 10, 2022, at 7:17 AM, Peter Xu <peterx@redhat.com> wrote:
+On Thu, Nov 10, 2022 at 01:01:47PM +0200, Ilpo Järvinen wrote:
+> On Wed, 9 Nov 2022, Gabriel Somlo wrote:
 > 
-> > +#ifdef CONFIG_DEBUG_VM
-> > +	/*
-> > +	 * Having write bit for wr-protect-marked present ptes is fatal,
-> > +	 * because it means the uffd-wp bit will be ignored and write will
-> > +	 * just go through.
-> > +	 *
-> > +	 * Use any chance of pgtable walking to verify this (e.g., when
-> > +	 * page swapped out or being migrated for all purposes). It means
-> > +	 * something is already wrong.  Tell the admin even before the
-> > +	 * process crashes. We also nail it with wrong pgtable setup.
-> > +	 */
-> > +	WARN_ON_ONCE(wp && pte_write(pte));
+> > Move the character-receive (RX) loop to its own dedicated function,
+> > and (for now) call that from the poll timer, liteuart_timer().
+> > 
+> > This is in preparation for adding IRQ support to the receive path.
+> > 
+> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> > ---
+> >  drivers/tty/serial/liteuart.c | 25 +++++++++++++++----------
+> >  1 file changed, 15 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> > index 047d5ad32e13..aa7052280197 100644
+> > --- a/drivers/tty/serial/liteuart.c
+> > +++ b/drivers/tty/serial/liteuart.c
+> > @@ -67,29 +67,34 @@ static struct uart_driver liteuart_driver = {
+> >  #endif
+> >  };
+> >  
+> > -static void liteuart_timer(struct timer_list *t)
+> > +static void liteuart_rx_chars(struct uart_port *port)
+> >  {
+> > -	struct liteuart_port *uart = from_timer(uart, t, timer);
+> > -	struct uart_port *port = &uart->port;
+> >  	unsigned char __iomem *membase = port->membase;
+> > -	unsigned int flg = TTY_NORMAL;
+> > -	int ch;
+> > -	unsigned long status;
+> > +	unsigned int status;
+> > +	unsigned char ch;
+> >  
+> >  	while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
+> >  		ch = litex_read8(membase + OFF_RXTX);
+> >  		port->icount.rx++;
+> >  
+> >  		/* necessary for RXEMPTY to refresh its value */
+> > -		litex_write8(membase + OFF_EV_PENDING, EV_TX | EV_RX);
+> > +		litex_write8(membase + OFF_EV_PENDING, EV_RX);
+> >  
+> >  		/* no overflow bits in status */
+> >  		if (!(uart_handle_sysrq_char(port, ch)))
+> > -			uart_insert_char(port, status, 0, ch, flg);
+> > -
+> > -		tty_flip_buffer_push(&port->state->port);
+> > +			uart_insert_char(port, status, 0, ch, TTY_NORMAL);
+> >  	}
+> >  
+> > +	tty_flip_buffer_push(&port->state->port);
 > 
-> How about VM_WARN_ON_ONCE() and no ifdef?
+> This change is doing extra stuff besides moving rx to a dedicated 
+> function.
+> 
+> I see no reason why those other changes couldn't be put into an entirely 
+> separate patch. Also, please described those changes properly in the 
+> commit message (answer the why? question).
+ 
+You're right, calling `tty_flip_buffer_push()` as each character is
+received is overkill, we only need to call it once per interrupt once
+all available characters have been received.
 
-Oops.. Will quickly respin, thanks.
+I forgot I noticed (and fixed) that as part of the move -- I'll split
+it out into its own separate patch (probably *before* moving all of rx
+to a dedicated function).
 
--- 
-Peter Xu
+Should show up in v3, once I also address all the other feedback I
+received.
 
+Thanks again for catching it!
+
+Cheers,
+-Gabriel
+
+> -- 
+>  i.
+> 
+> > +}
+> > +
+> > +static void liteuart_timer(struct timer_list *t)
+> > +{
+> > +	struct liteuart_port *uart = from_timer(uart, t, timer);
+> > +	struct uart_port *port = &uart->port;
+> > +
+> > +	liteuart_rx_chars(port);
+> > +
+> >  	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
+> >  }
+> >  
+> > 
+> 
+> 
