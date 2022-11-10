@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB97623FBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D842A623FC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiKJKZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
+        id S229948AbiKJK26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbiKJKZt (ORCPT
+        with ESMTP id S229463AbiKJK2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:25:49 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B6B6AED8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:25:46 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id s206so1377278oie.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:25:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8yWLRIQ1FY3LmIhSn1MHnoXz0lZOoO7FOYU1ST7sazE=;
-        b=bcXTc/tEWgATMrLXs5Oihrv02t4oX//l+oKYbadBd3V+1n0Z/HjGjI4x/1d3jAOwb2
-         EOjJ8GMQjEryqIaGO+AOCpLKWDB1OiAoZfxxMY7IHzPJNta+68vWeS0f5xsH5mSCdLtV
-         TLPuZ9NUEFjXlb18es2gwcsJf5prhDY36BUkQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8yWLRIQ1FY3LmIhSn1MHnoXz0lZOoO7FOYU1ST7sazE=;
-        b=yOeh/v79BTQ6h2pQWFX+5Hnt44k3lYwgtLGCb7Wvue7nKFEO5tP/4lM0KFtGtGXX44
-         DP/CHvcVqZPWKjsKCHnI58n+GGdOiJKnln70j9SEndfJjBfTzpUOMkiFK6kVTHkgsVEA
-         7pzqEMqaPipsN/U6DKFP7o9rl0fP3XWuSjgs6h2qJ6aGtrDvBHsCT4rMNoAfCgyJrQ52
-         R3AgejemJrykpZ09igDC3oF4JlGn9UzeDVimcGnej7YncV07XtRZCr4VgLQCyQuX0qig
-         KN1XZWybtzYrNGbkTcdSWoJiUVTQjI+dD+OcDUosiXJmuGNfCks5i7FcvcS44LGdU3L7
-         RlXA==
-X-Gm-Message-State: ACrzQf1MGY5tRReuPSx8Ee9OQSm4y4j/OpG+mBlyICixcIzBZ0NdNDdN
-        ojspTyJLUd5JwPZ7zSO/Ynmi48bugn7Hhc4A
-X-Google-Smtp-Source: AMsMyM6oLN/WoPXlTJEBOqKf0srP04uG4KNdgMPytTFe2rU2L2MrjXUJLLJd9jCKwjtGs0I9W7eQZQ==
-X-Received: by 2002:a05:6808:21a6:b0:35a:4210:6402 with SMTP id be38-20020a05680821a600b0035a42106402mr1163017oib.15.1668075945944;
-        Thu, 10 Nov 2022 02:25:45 -0800 (PST)
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com. [209.85.161.45])
-        by smtp.gmail.com with ESMTPSA id a7-20020a9d5c87000000b0066c495a651dsm6189850oti.38.2022.11.10.02.25.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 02:25:45 -0800 (PST)
-Received: by mail-oo1-f45.google.com with SMTP id s1-20020a4a81c1000000b0047d5e28cdc0so190232oog.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:25:44 -0800 (PST)
-X-Received: by 2002:a4a:a6c7:0:b0:498:260c:d780 with SMTP id
- i7-20020a4aa6c7000000b00498260cd780mr1260281oom.27.1668075943919; Thu, 10 Nov
- 2022 02:25:43 -0800 (PST)
+        Thu, 10 Nov 2022 05:28:55 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0532A178A3;
+        Thu, 10 Nov 2022 02:28:52 -0800 (PST)
+X-UUID: 9962ac843c3840c989f0afcd23038fb5-20221110
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9k9uk4PP+p/ezx83CEQ8H7xrIryZqMyMXaSUInDHGYI=;
+        b=dkrlsSzn0dYR4Sy5NY/+P8g6YTsQSXm9OLFHUV3vG7EhaW1e1/nL9Vyk3rQ/zixYGZ3+2at+9mEduT7jA4UeUHkZc49iyfoe+y4AAJo4ml0FlyEJgjL3uVi3B1pNFyn3EWOQq8k9U5XpvzNxds6d8f4aK43gAnXLspp9nTJ6988=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.13,REQID:69b481b4-2c77-474a-8f33-6c1ccccfd625,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
+        ION:release,TS:-55
+X-CID-META: VersionHash:d12e911,CLOUDID:4dbdea50-b7af-492d-8b40-b1032f90ce11,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9962ac843c3840c989f0afcd23038fb5-20221110
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 497916881; Thu, 10 Nov 2022 18:28:45 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 10 Nov 2022 18:28:43 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 10 Nov 2022 18:28:41 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Rob Herring <robh@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2,1/3] media: dt-bindings: media: mediatek: vcodec: Fix clock num not correctly
+Date:   Thu, 10 Nov 2022 18:28:32 +0800
+Message-ID: <20221110102834.8946-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221109-i2c-waive-v2-0-07550bf2dacc@chromium.org>
- <20221109-i2c-waive-v2-1-07550bf2dacc@chromium.org> <20221110092534.uzxfevcig4dllvb2@google.com>
-In-Reply-To: <20221110092534.uzxfevcig4dllvb2@google.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 10 Nov 2022 11:25:32 +0100
-X-Gmail-Original-Message-ID: <CANiDSCvYck1K8KVrKS+7TLYzi8Y_vA51iCTzGWStHAKac8CZXg@mail.gmail.com>
-Message-ID: <CANiDSCvYck1K8KVrKS+7TLYzi8Y_vA51iCTzGWStHAKac8CZXg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] i2c: Restore initial power state when we are done.
-To:     Hidenori Kobayashi <hidenorik@chromium.org>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,106 +75,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hidenori
+mt8195 and mt8192 have different clock numbers, can't write 'clocks' and
+'clock-names' with const value.
 
-On Thu, 10 Nov 2022 at 10:25, Hidenori Kobayashi <hidenorik@chromium.org> wrote:
->
-> Hi Ricardo,
->
-> On Wed, Nov 09, 2022 at 04:17:06PM +0100, Ricardo Ribalda wrote:
-> > A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-> > power off a device that it has not powered on previously.
-> >
-> > For devices operating in "full_power" mode, the first call to
-> > `i2c_acpi_waive_d0_probe` will return 0, which means that the device
-> > will be turned on with `dev_pm_domain_attach`.
-> >
-> > If probe fails or the device is removed the second call to
-> > `i2c_acpi_waive_d0_probe` will return 1, which means that the device
-> > will not be turned off. This is, it will be left in a different power
-> > state. Lets fix it.
-> >
-> > Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> >
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index b4edf10e8fd0..96623e0647bd 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -545,8 +545,9 @@ static int i2c_device_probe(struct device *dev)
-> >       if (status < 0)
-> >               goto err_clear_wakeup_irq;
-> >
-> > +     client->turn_off_on_remove = !i2c_acpi_waive_d0_probe(dev);
-> >       status = dev_pm_domain_attach(&client->dev,
-> > -                                   !i2c_acpi_waive_d0_probe(dev));
-> > +                                   client->turn_off_on_remove);
-> >       if (status)
-> >               goto err_clear_wakeup_irq;
-> >
-> > @@ -585,7 +586,7 @@ static int i2c_device_probe(struct device *dev)
-> >  err_release_driver_resources:
-> >       devres_release_group(&client->dev, client->devres_group_id);
-> >  err_detach_pm_domain:
-> > -     dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> > +     dev_pm_domain_detach(&client->dev, client->turn_off_on_remove);
-> >  err_clear_wakeup_irq:
-> >       dev_pm_clear_wake_irq(&client->dev);
-> >       device_init_wakeup(&client->dev, false);
-> > @@ -610,7 +611,7 @@ static void i2c_device_remove(struct device *dev)
-> >
-> >       devres_release_group(&client->dev, client->devres_group_id);
-> >
-> > -     dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> > +     dev_pm_domain_detach(&client->dev, client->turn_off_on_remove);
-> >
-> >       dev_pm_clear_wake_irq(&client->dev);
-> >       device_init_wakeup(&client->dev, false);
-> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> > index f7c49bbdb8a1..6b2dacb0bae1 100644
-> > --- a/include/linux/i2c.h
-> > +++ b/include/linux/i2c.h
-> > @@ -326,6 +326,8 @@ struct i2c_driver {
-> >   *   calls it to pass on slave events to the slave driver.
-> >   * @devres_group_id: id of the devres group that will be created for resources
-> >   *   acquired when probing this device.
-> > + * @turn_off_on_remove: Record if we have turned on the device before probing
-> > + *   so we can restore the initial state after remove/probe error.
-> >   *
-> >   * An i2c_client identifies a single device (i.e. chip) connected to an
-> >   * i2c bus. The behaviour exposed to Linux is defined by the driver
-> > @@ -355,6 +357,7 @@ struct i2c_client {
-> >       i2c_slave_cb_t slave_cb;        /* callback for slave mode      */
-> >  #endif
-> >       void *devres_group_id;          /* ID of probe devres group     */
-> > +     bool turn_off_on_remove;        /* power state when done        */
->
-> Can we have a different name that also makes sense for attach()?
-> To me, it's kind of hard to see immediately what the second argument to
-> attach() meant.
+Move 'assigned-clocks' and 'assigned-clock-parents' to parent node.
 
-I was trying to be super-clever and not adding a new variable. :P
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 119 +++++++++++-------
+ 1 file changed, 72 insertions(+), 47 deletions(-)
 
-Let me send a new version.
-
-Thanks for your review!
-
->
-> Since this is used for both power_on and power_off, I think something
-> more neutral would be easier to read? For example: power_flag?
->
-> Or I guess we could name it like full_power and provide a wrapper for
-> the detach() cases?
->
-> >  };
-> >  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
-> >
-> >
-> > --
-> > b4 0.11.0-dev-d93f8
-> >
-
-
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+index c4f20acdc1f8..794012853834 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
+@@ -89,23 +89,33 @@ properties:
+ 
+   ranges: true
+ 
++  clocks:
++    minItems: 1
++    maxItems: 5
++
++  clock-names:
++    minItems: 1
++    maxItems: 5
++
++  assigned-clocks:
++    maxItems: 1
++
++  assigned-clock-parents:
++    maxItems: 1
++
+ # Required child node:
+ patternProperties:
+-  '^vcodec-lat@[0-9a-f]+$':
++  '^vcodec-lat-soc@[0-9a-f]+$':
+     type: object
+ 
+     properties:
+       compatible:
+         enum:
+-          - mediatek,mtk-vcodec-lat
+           - mediatek,mtk-vcodec-lat-soc
+ 
+       reg:
+         maxItems: 1
+ 
+-      interrupts:
+-        maxItems: 1
+-
+       iommus:
+         minItems: 1
+         maxItems: 32
+@@ -114,22 +124,55 @@ patternProperties:
+           Refer to bindings/iommu/mediatek,iommu.yaml.
+ 
+       clocks:
++        minItems: 1
+         maxItems: 5
+ 
+       clock-names:
+-        items:
+-          - const: sel
+-          - const: soc-vdec
+-          - const: soc-lat
+-          - const: vdec
+-          - const: top
++        minItems: 1
++        maxItems: 5
+ 
+-      assigned-clocks:
++      power-domains:
+         maxItems: 1
+ 
+-      assigned-clock-parents:
++    required:
++      - compatible
++      - reg
++      - iommus
++      - clocks
++      - clock-names
++      - power-domains
++
++    additionalProperties: false
++
++  '^vcodec-lat@[0-9a-f]+$':
++    type: object
++
++    properties:
++      compatible:
++        enum:
++          - mediatek,mtk-vcodec-lat
++
++      reg:
++        maxItems: 1
++
++      interrupts:
+         maxItems: 1
+ 
++      iommus:
++        minItems: 1
++        maxItems: 32
++        description: |
++          List of the hardware port in respective IOMMU block for current Socs.
++          Refer to bindings/iommu/mediatek,iommu.yaml.
++
++      clocks:
++        minItems: 1
++        maxItems: 5
++
++      clock-names:
++        minItems: 1
++        maxItems: 5
++
+       power-domains:
+         maxItems: 1
+ 
+@@ -139,8 +182,6 @@ patternProperties:
+       - iommus
+       - clocks
+       - clock-names
+-      - assigned-clocks
+-      - assigned-clock-parents
+       - power-domains
+ 
+     additionalProperties: false
+@@ -166,15 +207,12 @@ patternProperties:
+           Refer to bindings/iommu/mediatek,iommu.yaml.
+ 
+       clocks:
++        minItems: 1
+         maxItems: 5
+ 
+       clock-names:
+-        items:
+-          - const: sel
+-          - const: soc-vdec
+-          - const: soc-lat
+-          - const: vdec
+-          - const: top
++        minItems: 1
++        maxItems: 5
+ 
+       assigned-clocks:
+         maxItems: 1
+@@ -188,12 +226,9 @@ patternProperties:
+     required:
+       - compatible
+       - reg
+-      - interrupts
+       - iommus
+       - clocks
+       - clock-names
+-      - assigned-clocks
+-      - assigned-clock-parents
+       - power-domains
+ 
+     additionalProperties: false
+@@ -205,17 +240,10 @@ required:
+   - mediatek,scp
+   - dma-ranges
+   - ranges
+-
+-if:
+-  properties:
+-    compatible:
+-      contains:
+-        enum:
+-          - mediatek,mtk-vcodec-lat
+-
+-then:
+-  required:
+-    - interrupts
++  - clocks
++  - clock-names
++  - assigned-clocks
++  - assigned-clock-parents
+ 
+ additionalProperties: false
+ 
+@@ -241,6 +269,11 @@ examples:
+             #size-cells = <2>;
+             ranges = <0 0 0 0x16000000 0 0x40000>;
+             reg = <0 0x16000000 0 0x1000>;		/* VDEC_SYS */
++            clocks = <&topckgen CLK_TOP_VDEC_SEL>,
++                <&topckgen CLK_TOP_MAINPLL_D4>;
++            clock-names = "sel", "top";
++            assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
++            assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
+             vcodec-lat@10000 {
+                 compatible = "mediatek,mtk-vcodec-lat";
+                 reg = <0 0x10000 0 0x800>;
+@@ -253,14 +286,10 @@ examples:
+                     <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
+                     <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
+                     <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
+-                clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+-                    <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
++                clocks = <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
+                     <&vdecsys_soc CLK_VDEC_SOC_LAT>,
+-                    <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
+-                    <&topckgen CLK_TOP_MAINPLL_D4>;
++                    <&vdecsys_soc CLK_VDEC_SOC_LARB1>;
+                 clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
+-                assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
+-                assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
+                 power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
+             };
+ 
+@@ -279,14 +308,10 @@ examples:
+                     <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
+                     <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
+                     <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
+-                clocks = <&topckgen CLK_TOP_VDEC_SEL>,
+-                    <&vdecsys CLK_VDEC_VDEC>,
++                clocks = <&vdecsys CLK_VDEC_VDEC>,
+                     <&vdecsys CLK_VDEC_LAT>,
+-                    <&vdecsys CLK_VDEC_LARB1>,
+-                    <&topckgen CLK_TOP_MAINPLL_D4>;
++                    <&vdecsys CLK_VDEC_LARB1>;
+                 clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
+-                assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
+-                assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
+                 power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
+             };
+         };
 -- 
-Ricardo Ribalda
+2.18.0
+
