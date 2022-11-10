@@ -2,97 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92DB624DC9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C90F624DCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiKJWsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:48:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
+        id S231841AbiKJWua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 17:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiKJWsg (ORCPT
+        with ESMTP id S230128AbiKJWuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:48:36 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5292213F6F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:48:35 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so3208752pji.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:48:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=myDk/lYGLu7o49r3666PllQAH7/uxJEgb7b7To5JD6U=;
-        b=Ou3dCUHB3cHz6ogbr6KnA15osAOsahg0uwLQ8OZhro5lFANuW2UnFbxtJ/vNBh8CiZ
-         tI13ggx275xQ1OG2j5LOu7k+w9coqzmAzps2KgizvZDJUt9hJ2TIHP0cSqHyGO7EVO2h
-         lisG6QbCT21i2+0huPRpK3VrJ966KjN3WdakH2ZUwsepsvk0fv/oQBGHtaZCCsKrzQTB
-         Plww51rLc7cXR/0Qc9wYdzwHg5zxIZTIE52LK4FVcUc/jx+I0n6xfWG9J4Wf4Z+agTVP
-         Aj+9lckvfvjdmalIHOsEoZdh41xGhsvHFOTh6QaXqozhEZDK92lzbBbM+K5ilx82Iu7U
-         BHfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=myDk/lYGLu7o49r3666PllQAH7/uxJEgb7b7To5JD6U=;
-        b=mOAHjFRvM31GDpo9IOHa+aiM2jcfYzefLyCkEDkHijGRfuH1pGhrzH207z51qRg+tr
-         AcL1BLxWe9NOnEJDGQq2X8gp3CXt9UvcpDTEFMbCIA7vQh7mp+oPGfUyXmrzz2Cn5TrF
-         x+ZLRq382IQp/c5r0ugltyRyy4tMmexoF0DIEIkBc0wKenMCP001oTKzsodPP56ym0G4
-         LjEtlo1+AdVAtWCn/hvfcCxl33cTgxxvOnKPxHNQTrZmszooMKGRjxlLxjd4jCSXJurH
-         ot6IIqP1zVlUuApeOoKKdLJI6O6UzM8xfH95TXjWMpTvrMXd6g8AzrlzhV3RH2dMJ2WD
-         DDRQ==
-X-Gm-Message-State: ANoB5pn1UxxLHYEvJZy5TBFuSdGtQSv2OZDL+tKhBs6x0BLtTi9cmpDB
-        p4WszcRf2EnDVaMUZdnxQxo=
-X-Google-Smtp-Source: AA0mqf4D2IAdlpJwCtBKx5pmIo5p/Y5r2PI+tyZId8kUXamyae8Zx1hu2Vj2at4GRfX8TIMB9R2zng==
-X-Received: by 2002:a17:90a:9486:b0:217:ff37:2fe9 with SMTP id s6-20020a17090a948600b00217ff372fe9mr1144237pjo.242.1668120514759;
-        Thu, 10 Nov 2022 14:48:34 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:8c0b:3260:c81c:119d])
-        by smtp.gmail.com with ESMTPSA id l2-20020a170902f68200b00186e2123506sm170934plg.300.2022.11.10.14.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 14:48:34 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 10 Nov 2022 14:48:32 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ngupta@vflare.org,
-        senozhatsky@chromium.org, akpm@linux-foundation.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v3 3/5] zsmalloc: Add a LRU to zs_pool to keep track of
- zspages in LRU order
-Message-ID: <Y21/wAkXt7IH/tXN@google.com>
-References: <Y2wh4b3oMaknNqGP@google.com>
- <20221110171831.19176-1-nphamcs@gmail.com>
+        Thu, 10 Nov 2022 17:50:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE18A51C1F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:50:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A977BB823D0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 22:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 54F7DC433C1;
+        Thu, 10 Nov 2022 22:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668120616;
+        bh=84QsudrNH/f0EHhVDmxqZ8qDJLJ+1IYEmL5AKFvoKtk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pCPWkmqNcfsMJl4O1gkVQ8F6luJk89T2Lbc7uJoT2r6rTUQRwP7asUngfqx+ISBdJ
+         0IP5feNKDjjBgFoOjNBiUfQGEUFGzdJFaTePr00xfMU7h03EZem/GaviLLmnO+Pcwb
+         5L0aavwxh6+MriXMoH9n8nKK1yv/z2A5cUvdxS6M7d4eZ04AGYdAqGfXUqH3nOEDKQ
+         GPK0S3SGy1o56N3aoO+N6IXo7v723pluqZYzUPPyDlCd1fGtxQOKJON2hHSYUQqHIc
+         RkOKbzjPsCqW3h5heV/sxXTOKg7HFd3WQPSxqthsdLnXvVawyhH/ezEQ6aW3yog126
+         KW0LXDKmeyZAw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D33CC395FD;
+        Thu, 10 Nov 2022 22:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110171831.19176-1-nphamcs@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] riscv: process: fix kernel info leakage
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <166812061618.32242.11997902319930265840.git-patchwork-notify@kernel.org>
+Date:   Thu, 10 Nov 2022 22:50:16 +0000
+References: <20221029113450.4027-1-jszhang@kernel.org>
+In-Reply-To: <20221029113450.4027-1-jszhang@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, guoren@kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:18:31AM -0800, Nhat Pham wrote:
-> > Please put the LRU logic under config ZSMALLOC_LRU since we don't need the
-> > additional logic to others.
+Hello:
+
+This patch was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Sat, 29 Oct 2022 19:34:50 +0800 you wrote:
+> thread_struct's s[12] may contain random kernel memory content, which
+> may be finally leaked to userspace. This is a security hole. Fix it
+> by clearing the s[12] array in thread_struct when fork.
 > 
-> I think the existing CONFIG_ZPOOL would be a good option for this purpose. It
-> should disable the LRU behavior for non-zswap use case (zram for e.g). The
-> eviction logic is also currently defined under this. What do you think,
-> Minchan?
+> As for kthread case, it's better to clear the s[12] array as well.
+> 
+> Fixes: 7db91e57a0ac ("RISC-V: Task implementation")
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> 
+> [...]
 
-That sounds good.
+Here is the summary with links:
+  - riscv: process: fix kernel info leakage
+    https://git.kernel.org/riscv/c/6510c78490c4
 
-Sergey and I are working to change zsmalloc zspage size.
-https://lore.kernel.org/linux-mm/20221031054108.541190-1-senozhatsky@chromium.org/
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Could you send a new version once we settle those change down
-in Andrew's tree to minimize conflict?
-(Feel free to join the review/discussion if you are also interested ;-))
 
-Thanks.
