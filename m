@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3A66245EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01CE6245FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiKJPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
+        id S231520AbiKJPdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbiKJPb1 (ORCPT
+        with ESMTP id S231396AbiKJPbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:31:27 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA80442F74
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 07:29:32 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9Ue-00035K-Vt; Thu, 10 Nov 2022 16:29:29 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9Ud-003ToJ-9n; Thu, 10 Nov 2022 16:29:28 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ot9Ud-00FfWJ-Ct; Thu, 10 Nov 2022 16:29:27 +0100
-Date:   Thu, 10 Nov 2022 16:29:27 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        jarkko.nikula@linux.intel.com,
-        William Salmon <william.salmon@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>
-Subject: Re: [PATCH v6 06/10] pwm: dwc: split pci out of core driver
-Message-ID: <20221110152927.olg3oqcnqvskbsli@pengutronix.de>
-References: <20221020151610.59443-1-ben.dooks@sifive.com>
- <20221020151610.59443-7-ben.dooks@sifive.com>
+        Thu, 10 Nov 2022 10:31:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E84DC4E;
+        Thu, 10 Nov 2022 07:30:01 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 123862293C;
+        Thu, 10 Nov 2022 15:30:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668094200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=AC0J52ThlGkm9MsN6oUTTnURzFVxgH77cQk9JrHiop8=;
+        b=H3MVxbgREkvughMWP3KzbE3izb04QQiCjBtdR4XOnb3ZLiTEIJhvWJlb386cV3D1nfaMOQ
+        JFI0LeZB10xHTwduG7RTZrKBg3Dw9gXsJkImJA/Ws9+p7IPxVZAFdA27LLGlzBqbIahNhZ
+        OBFmQ8xzb7ox9zXdBqdRmlVWZKyArfE=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 07B492C141;
+        Thu, 10 Nov 2022 15:30:00 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 0A74CDA96D; Thu, 10 Nov 2022 16:29:36 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.1-rc5
+Date:   Thu, 10 Nov 2022 16:29:36 +0100
+Message-Id: <cover.1668091779.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oazsnxqop6sntjj6"
-Content-Disposition: inline
-In-Reply-To: <20221020151610.59443-7-ben.dooks@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---oazsnxqop6sntjj6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+a few more regression fixes and regular fixes. Please pull, thanks.
 
-On Thu, Oct 20, 2022 at 04:16:06PM +0100, Ben Dooks wrote:
-> Moving towards adding non-pci support for the driver, move the pci
-> parts out of the core into their own module. This is partly due to
-> the module_driver() code only being allowed once in a module and also
-> to avoid a number of #ifdef if we build a single file in a system
-> without pci support.
->=20
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> ---
-> v6:
->  - put DWC_PERIOD_NS back to avoid bisect issues
-> v4:
->  - removed DWC_PERIOD_NS as not needed
-> ---
->  drivers/pwm/Kconfig       |  14 +++-
->  drivers/pwm/Makefile      |   1 +
->  drivers/pwm/pwm-dwc-pci.c | 133 ++++++++++++++++++++++++++++++++
->  drivers/pwm/pwm-dwc.c     | 158 +-------------------------------------
->  drivers/pwm/pwm-dwc.h     |  58 ++++++++++++++
->  5 files changed, 207 insertions(+), 157 deletions(-)
->  create mode 100644 drivers/pwm/pwm-dwc-pci.c
->  create mode 100644 drivers/pwm/pwm-dwc.h
->=20
-> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> index 3f3c53af4a56..a9f1c554db2b 100644
-> --- a/drivers/pwm/Kconfig
-> +++ b/drivers/pwm/Kconfig
-> @@ -175,15 +175,23 @@ config PWM_CROS_EC
->  	  Controller.
-> =20
->  config PWM_DWC
-> -	tristate "DesignWare PWM Controller"
-> -	depends on PCI || COMPILE_TEST
-> +	tristate "DesignWare PWM Controller core"
->  	depends on HAS_IOMEM
->  	help
-> -	  PWM driver for Synopsys DWC PWM Controller attached to a PCI bus.
-> +	  PWM driver for Synopsys DWC PWM Controller.
+- revert memory optimization for scrub blocks, this misses errors in
+  2nd and following blocks
 
-Currently pwm-dwc doesn't contain a driver but is only a library used by
-pwm-dwc-pci (and later the of driver). As such it doesn't make sense to
-be user-selectible, does it?
+- add exception for ENOMEM as reason for transaction abort to not print
+  stack trace, syzbot has reported many
 
-Best regards
-Uwe
+- zoned fixes:
+  - fix locking imbalance during scrub
+  - initialize zones for seeding device
+  - initialize zones for cloned device structures
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+- when looking up device, change assertion to a real check as some of
+  the search parameters can be passed by ioctl, reported by syzbot
 
---oazsnxqop6sntjj6
-Content-Type: application/pgp-signature; name="signature.asc"
+- fix error pointer check in self tests
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+The following changes since commit eb81b682b131642405a05c627ab08cf0967b3dd8:
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNtGNQACgkQwfwUeK3K
-7AmODAf+OiOp47FcKvUT/zCWveYL2ZpZfjCfl36p70Xbm8GQqNvqoLvgE78x56CU
-zsUoURfMiqgHWt1ibh0n/YL7EiK0SKVKwhtafr/MhxXhhbd27k3aHbQQL14E7dRb
-lVEjCVP3cu7y4JFFtR4AFzvGBButp6WokvMhgHraKlLpSZTh8fBvn3jYUw1ql39j
-iFsMQTMLMuSHDEIPIhq+Q1ieTMEy2/6odFPoLSLkSUpaxJB9gQUgL7VKrKYKhXgd
-OEXoQc1tSLbiJLCRfcb+nBwz6M/cuomYwOJEwnoHb9SQw8ZM76js6CBdrbe1DPcc
-35Ey4U7Qa/Wc2OlpAKmrB62Nii0oqw==
-=XGUC
------END PGP SIGNATURE-----
+  btrfs: fix inode reserve space leak due to nowait buffered write (2022-11-02 17:44:45 +0100)
 
---oazsnxqop6sntjj6--
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.1-rc4-tag
+
+for you to fetch changes up to c62f6bec53e63b11112e1ebce6bbaa39ce6f6706:
+
+  btrfs: zoned: fix locking imbalance on scrub (2022-11-07 14:35:25 +0100)
+
+----------------------------------------------------------------
+David Sterba (1):
+      btrfs: don't print stack trace when transaction is aborted due to ENOMEM
+
+Johannes Thumshirn (3):
+      btrfs: zoned: clone zoned device info when cloning a device
+      btrfs: zoned: initialize device's zone info for seeding
+      btrfs: zoned: fix locking imbalance on scrub
+
+Liu Shixin (1):
+      btrfs: fix match incorrectly in dev_args_match_device
+
+Qu Wenruo (1):
+      Revert "btrfs: scrub: use larger block size for data extent scrub"
+
+Zhang Xiaoxu (1):
+      btrfs: selftests: fix wrong error check in btrfs_free_dummy_root()
+
+ fs/btrfs/ctree.c             | 16 ++++++++++++++++
+ fs/btrfs/ctree.h             | 11 +++++++----
+ fs/btrfs/disk-io.c           |  4 +++-
+ fs/btrfs/scrub.c             |  9 +--------
+ fs/btrfs/tests/btrfs-tests.c |  2 +-
+ fs/btrfs/volumes.c           | 39 +++++++++++++++++++++++++++++----------
+ fs/btrfs/volumes.h           |  2 +-
+ fs/btrfs/zoned.c             | 40 ++++++++++++++++++++++++++++++++++++++++
+ fs/btrfs/zoned.h             | 11 +++++++++++
+ 9 files changed, 109 insertions(+), 25 deletions(-)
