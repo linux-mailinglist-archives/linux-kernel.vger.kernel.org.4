@@ -2,85 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79EC623C8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF8F623CA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbiKJHYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:24:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S232807AbiKJHbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiKJHYQ (ORCPT
+        with ESMTP id S232448AbiKJHbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:24:16 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461A32079;
-        Wed,  9 Nov 2022 23:24:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668065055; x=1699601055;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NpR3zgsRWqyqRv4WG8Mje9a0YXH5njFAug2x1iSvPYM=;
-  b=eFBe8wjzIaYjKj8U1SQr225WeXjvJ/cHOXQzl0lHiSWiGFjn6N0UYeEu
-   74QrR1fZ+CsU3TiTuneI/2gnkETV7jmdzw375B/e8xGQmu7M+5tPU/GIr
-   /HCbzA8FsPGjQ7GbqUj9ngcmY9ERRyy6O6JlDS9xm1aiNHzBLslFnaysu
-   jlVEEm+dwVOmAntmpUkBF4B0ewEIkW33mmCszTri1UdRKVSJI5A867o7H
-   4ANZkiPKkS6WCfHDLqFtei03W7WEG3Q/yz3M49ZxEW1PDt2yPnPQwYzba
-   Tm4yPxUBy8XvsznQafooEKmirbPSP5QC2JGUzEgI7/M+aZ50wfuCHTYe/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="309950674"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="309950674"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 23:24:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="614994605"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="614994605"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 23:24:13 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] srcu: Release early_srcu resources when no longer in use
-Date:   Thu, 10 Nov 2022 15:30:13 +0800
-Message-Id: <20221110073013.1302564-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Nov 2022 02:31:07 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D7C32061;
+        Wed,  9 Nov 2022 23:31:06 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id l14so992934wrw.2;
+        Wed, 09 Nov 2022 23:31:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8/dow2hr+K/Ps/4l2mFEzK5sJM1FFNyn+gsI/aO7eO4=;
+        b=ejjW8NpxCmMk59Fll40y5nfBo5eGvsyzWSfCUvEQHttAnj3UTYI+yns7e2t+lrqUko
+         rjbodonumcpbIOHPzT+NkqZkpqZalvYhz4M60Eb6u4UXxHiLGu++6SVC0dz2Vx+PwH7j
+         3Jf1PV3EHQCqXZABGHpew3OTNH/EHnDsyc8+HB6HYieLg6uRpwfz+534DK3gq4FaIBSW
+         w7JTJIdrY1YbNqJG7GFNP5MCIsJLW6R9lYkOYf5EQR387Ygzvd2xNA+J8YxtFGWmUN4K
+         q73z969yAo8FakFLXXWk+iQHbCmtOCHiedZzc8q9o7cBe7M+DoqkRCmZzpZj0/eidtbw
+         pCsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8/dow2hr+K/Ps/4l2mFEzK5sJM1FFNyn+gsI/aO7eO4=;
+        b=W5JNAhrSDIjTLssVsZZS2wa7xoCoEF/z5TVGJT0dG/jIjPX3bWdOsW48v6pqAOlDIi
+         OlxMZuZFDvigbY9ED/VfbVpn+Vd1Y7EJIatTI8stIs8qewalnwv/vvCcLMWtXHxysfS6
+         Md3MpY+7fhkd9lvmKS5JUU55saTcIW0Dyt4zgktMiv6HptoHDHaMSoyYJhsWDDSjtlOu
+         A/il5m/7t72vtG0nu5A5dp4SZkJjl2ofe4v2Px/eGCToffY8DacIarVHo5bg6aRwqYON
+         de50dns5c+y8J8rghqRyhw2N8KKwvvghOjVExLebULVrUjRo2b6k7XzfQGZlDl38HdjV
+         wDXA==
+X-Gm-Message-State: ACrzQf3wQ01nXJb3uwxQecgeNfUT25YGwVD7KZxZQ5FsSRURxxxBgwr3
+        5QuX3Mj8Zan9bPA/Bj9UfZYHUx0lAe8=
+X-Google-Smtp-Source: AMsMyM58b9in8nxGVUHqTWpUM5omfbM7Q/xvh7mppbSkxDOClpOqs5UeghFX9htgE2b0M++LTpS/3Q==
+X-Received: by 2002:a5d:6688:0:b0:238:3e06:9001 with SMTP id l8-20020a5d6688000000b002383e069001mr24032704wru.308.1668065464418;
+        Wed, 09 Nov 2022 23:31:04 -0800 (PST)
+Received: from [192.168.0.105] ([77.126.19.155])
+        by smtp.gmail.com with ESMTPSA id 26-20020a05600c029a00b003cf5ec79bf9sm4102754wmk.40.2022.11.09.23.31.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Nov 2022 23:31:03 -0800 (PST)
+Message-ID: <ba0c84f1-1d99-c0e4-111d-bbd14047ca0b@gmail.com>
+Date:   Thu, 10 Nov 2022 09:31:00 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2] net/mlx5e: Use kvfree() in mlx5e_accel_fs_tcp_create()
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     YueHaibing <yuehaibing@huawei.com>, borisp@nvidia.com,
+        saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, lkayal@nvidia.com,
+        tariqt@nvidia.com, markzhang@nvidia.com, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221108140614.12968-1-yuehaibing@huawei.com>
+ <febe8f20-626a-02d6-c8ed-f0dcf6cd607f@gmail.com>
+ <CANn89iKqm9=uyoymd9OvASjnazQVKVW1kwOxhpazxv_FGaVpFg@mail.gmail.com>
+Content-Language: en-US
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <CANn89iKqm9=uyoymd9OvASjnazQVKVW1kwOxhpazxv_FGaVpFg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the "rcupdate.rcu_self_test = 1" is set in bootargs and CONFIG_SRCU
-option is enabled, the early_srcu will be tested, currently, for TREE SRCU,
-if "srcutree.convert_to_big = 1" is set, the srcu_node structure will be
-allocated at invoke init_srcu_struct_fields() time, after the test is
-completed, the early_srcu will not be used.
-Therefore, this commit invoke cleanup_srcu_struct() to release srcu_node
-structure.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/update.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-index 738842c4886b..a05e23648c6b 100644
---- a/kernel/rcu/update.c
-+++ b/kernel/rcu/update.c
-@@ -589,6 +589,7 @@ static int rcu_verify_early_boot_tests(void)
- 			early_boot_test_counter++;
- 			srcu_barrier(&early_srcu);
- 			WARN_ON_ONCE(!poll_state_synchronize_srcu(&early_srcu, early_srcu_cookie));
-+			cleanup_srcu_struct(&early_srcu);
- 		}
- 	}
- 	if (rcu_self_test_counter != early_boot_test_counter) {
--- 
-2.25.1
+On 11/8/2022 9:45 PM, Eric Dumazet wrote:
+> On Tue, Nov 8, 2022 at 9:58 AM Tariq Toukan <ttoukan.linux@gmail.com> wrote:
+>>
+>>
+>>
+>> On 11/8/2022 4:06 PM, YueHaibing wrote:
+>>> 'accel_tcp' is allocted by kvzalloc(), which should freed by kvfree().
+>>>
+>>> Fixes: f52f2faee581 ("net/mlx5e: Introduce flow steering API")
+>>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>>> ---
+>>> v2: fix the same issue in mlx5e_accel_fs_tcp_destroy() and a commit log typo
+>>> ---
+>>>    drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c | 4 ++--
+>>>    1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c
+>>> index 285d32d2fd08..d7c020f72401 100644
+>>> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c
+>>> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/fs_tcp.c
+>>> @@ -365,7 +365,7 @@ void mlx5e_accel_fs_tcp_destroy(struct mlx5e_flow_steering *fs)
+>>>        for (i = 0; i < ACCEL_FS_TCP_NUM_TYPES; i++)
+>>>                accel_fs_tcp_destroy_table(fs, i);
+>>>
+>>> -     kfree(accel_tcp);
+>>> +     kvfree(accel_tcp);
+>>>        mlx5e_fs_set_accel_tcp(fs, NULL);
+>>>    }
+>>>
+>>> @@ -397,7 +397,7 @@ int mlx5e_accel_fs_tcp_create(struct mlx5e_flow_steering *fs)
+>>>    err_destroy_tables:
+>>>        while (--i >= 0)
+>>>                accel_fs_tcp_destroy_table(fs, i);
+>>> -     kfree(accel_tcp);
+>>> +     kvfree(accel_tcp);
+>>>        mlx5e_fs_set_accel_tcp(fs, NULL);
+>>>        return err;
+>>>    }
+>>
+>> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+>>
+>> Thanks for your patch.
+> 
+> Although this structure is 64 bytes... Not sure why kvmalloc() has
+> been used for this small chunk.
 
+It's a small chunk indeed. Unnecessary usage of kvmalloc.
+
+Although it's not critical (used only in slowpath), it'd be nice to 
+clean it up and directly call kzalloc, instead of aligning the kfree().
+
+YueHaibing, can you please submit a v3 for this?
+
+Regards,
+Tariq
