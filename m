@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1354624A67
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 20:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A41624BA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiKJTOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 14:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S231678AbiKJUUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:20:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKJTO3 (ORCPT
+        with ESMTP id S231703AbiKJUTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 14:14:29 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303BF2CE10;
-        Thu, 10 Nov 2022 11:14:29 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id i131so3290420ybc.9;
-        Thu, 10 Nov 2022 11:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t5QX7uHtfmZJBGSD9wRN2efgSKLRw72121V+CgaBiz8=;
-        b=Dn0rsxA4mZcz58cbzTH9lg6bXc5PfKPEKP71oiU39d38QwbWdljJRKX/K+4riEKErV
-         aQ/TPalbvCgPeJqEeQDmIJJ3NU8aW3wNOYL54ICglMFYm3ylqZ6ePMfdcxsFtBiolKJO
-         NHKRXyYTWXs5s7zHxB2EEgcDsamgHmPCfODhd/54lI+MZ8HjunHOmud3cu+16QEouZBQ
-         UX1S4L4FhcLWsUTRWSZr3xmH5vqUkzFElLj4pUGZBzlF4a9TaCkCLHshwHAOHY0jleC7
-         rl/COzXtS5c7w9UOM2fhDB3SRAQMSf6Pan160yAi9uNXuvQ+CqKQ6oPrf5ZlxzvBRZMN
-         dAhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t5QX7uHtfmZJBGSD9wRN2efgSKLRw72121V+CgaBiz8=;
-        b=15IrcJBiKGIxYj2xA7ZGeNNuprYS4q3nOaJxFwurdd2zWyhlYdCecSxnS1tSwHW9XO
-         R1vZjJ4L2B06kw9bd38NNY5xYypw0in7ALXDyTMzYfG27UFrSeT+xcP3bJXtmwVH/Ei6
-         QoqmobloTCHVKBXycEFiwd0NxbCyPKIUvljq7ID+Kf8FlagKYFrIAYYH9SjXGpSNtSQQ
-         WdGJkZWrterQFpv8mV62ZoHrf08zjXJS3wJpUUq4e5OFjC2P7phhomrzXNm8GIHuql9g
-         oQK99VQJ975TzO7Bt1lSD2VxLEr3d1zNN2Rsgg6I1YZIn1QW5IVJXPIIFmyY4y+pZVbg
-         cx3w==
-X-Gm-Message-State: ACrzQf3h2PoMZcKQxMPaKgHpIT4juJBs0gxbwjD/IQ2wXjujRfQjxHhB
-        3mYhH8uxJSWcv5xnBird30/OW5OSseqOf9Ams4LQV+WKeSQ=
-X-Google-Smtp-Source: AMsMyM6vpNwmXQB6URQ88jmewQp6LACCUdpXdONZgdbve2oZHi8cBcOo2qirgHGVTFWGHi7XeXb80pgjl/OTZPykb04=
-X-Received: by 2002:a25:76cb:0:b0:6d1:698e:31e5 with SMTP id
- r194-20020a2576cb000000b006d1698e31e5mr37654398ybc.328.1668107668358; Thu, 10
- Nov 2022 11:14:28 -0800 (PST)
+        Thu, 10 Nov 2022 15:19:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3388ADDC
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:18:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668111502;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iHxjGbbPF3OR4OiiEormRWEYr1pX7FfWuR3SwWTEAF0=;
+        b=Dci+UGyhcx6JyjOZjuoSdzKpM2ryRo6V6KwF9oWPbCOatiBCmPm5+X23heVEK61jqoOEyO
+        jcg/TzyOPsdo3I9iSRackv71EHpkDroKizDNehO7NjuGIROIuctcOm4e/cncDfnHPUJ783
+        PZ60EV5YRKYaR2NOf5Ee5hvAKHl0aWk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-E1yEEq9ANTebq2DuGE2AtQ-1; Thu, 10 Nov 2022 15:18:18 -0500
+X-MC-Unique: E1yEEq9ANTebq2DuGE2AtQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93A482999B49;
+        Thu, 10 Nov 2022 20:18:17 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EFC4A141511F;
+        Thu, 10 Nov 2022 20:18:16 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 029A8416D896; Thu, 10 Nov 2022 16:14:33 -0300 (-03)
+Date:   Thu, 10 Nov 2022 16:14:33 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Rafael Folco <rfolco@redhat.com>,
+        Aaron Tomlin <atomlin@redhat.com>, cl@linux.com,
+        tglx@linutronix.de, mingo@kernel.org, peterz@infradead.org,
+        pauld@redhat.com, neelx@redhat.com, oleksandr@natalenko.name,
+        atomlin@atomlin.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v8 4/5] tick/nohz_full: Ensure quiet_vmstat() is called
+ on exit to user-mode when the idle tick is stopped
+Message-ID: <Y21NmQr4vFejiMrn@fuller.cnet>
+References: <20220924152227.819815-1-atomlin@redhat.com>
+ <20220924152227.819815-5-atomlin@redhat.com>
+ <CAOr2xH5DjEy7agHYx=5+4cr+OeJz52HUeUttkF9ueS8JHbQMFg@mail.gmail.com>
+ <20221021145017.GA1265180@lothringen>
 MIME-Version: 1.0
-References: <20221110164152.26136-1-ojeda@kernel.org> <20221110164152.26136-24-ojeda@kernel.org>
- <Y208lVCN3VweD5iI@Boquns-Mac-mini.local>
-In-Reply-To: <Y208lVCN3VweD5iI@Boquns-Mac-mini.local>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 10 Nov 2022 20:14:17 +0100
-Message-ID: <CANiq72kR3YZv65NYPx+H57XO7T85kioMWMZajRnk7f+ru-3x+w@mail.gmail.com>
-Subject: Re: [PATCH v1 23/28] rust: std_vendor: add `dbg!` macro based on
- `std`'s one
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Niklas Mohrin <dev@niklasmohrin.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021145017.GA1265180@lothringen>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +70,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 7:02 PM Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> and I'm almost convinced ;-) Better add the gist of discussion into
-> comment/document/commit log? Users need to know when to use `dbg!` and
-> when to use `pr_debug!`, right?
+On Fri, Oct 21, 2022 at 04:50:17PM +0200, Frederic Weisbecker wrote:
+> On Tue, Sep 27, 2022 at 01:17:02PM -0300, Rafael Folco wrote:
+> > Tested this patch w/ nohz_full setup and oslat 8h run on isolated cpus, max
+> > latency is 7us versus 15us without the patch.
+> > Thanks.
+> 
+> What about the added overhead upon user enter?
+> That is my main worry. For people who want nohz_full for lowest latency
+> (or rather lowest noise) then it's a good add. But what if some people want
+> to use nohz_full for HPC and prefer faster syscalls over avoiding an interrupt
+> once in a while? (although arguably I never heard from users of such
+> workloads...)
+> 
+> Thanks.
 
-The docs talk about it a bit:
+The performance reduction on the mlock test below is only 2.6% (see below).
 
-    +/// Note that the macro is intended as a debugging tool and therefore you
-    +/// should avoid having uses of it in version control for long periods
-    +/// (other than in tests and similar).
+HPC programs would likely be heavy on accesses to userspace memory,
+and not so much on syscall performance at this scale?
 
-That is the original wording from the standard library, but we can
-definitely make the rules more concrete on our end with something
-like:
+Anyway, if this overhead turns out to be a problem for some HPC application
+(which you consider unlikely) a knob can be added to control the behaviour.
 
-    `dbg!` is intended as a temporary debugging tool to be used during
-    development. Therefore, avoid committing `dbg!` macro invocations
-    into the kernel tree.
+> > On Mon, Sep 26, 2022 at 8:02 PM Aaron Tomlin <atomlin@redhat.com> wrote:
+> > 
+> > > This patch ensures CPU-specific vmstat differentials do not remain
+> > > when the scheduling-tick is stopped and before exiting to user-mode
+> > > in the context of nohz_full only.
+> > >
+> > > A trivial test program was used to determine the impact of the proposed
+> > > changes and under vanilla. The mlock(2) and munlock(2) system calls was
+> > > used solely to modify vmstat item 'NR_MLOCK'. The following is an average
+> > > count of CPU-cycles across the aforementioned system calls:
+> > >
+> > >                                   Vanilla                 Modified
+> > >
+> > >   Cycles per syscall              8461                    8690    (+2.6%)
+> > >
+> > > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> > > ---
+> > >  include/linux/tick.h     |  5 +++--
+> > >  kernel/time/tick-sched.c | 15 +++++++++++++++
+> > >  2 files changed, 18 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/include/linux/tick.h b/include/linux/tick.h
+> > > index bfd571f18cfd..a2bbd6d32e33 100644
+> > > --- a/include/linux/tick.h
+> > > +++ b/include/linux/tick.h
+> > > @@ -11,7 +11,6 @@
+> > >  #include <linux/context_tracking_state.h>
+> > >  #include <linux/cpumask.h>
+> > >  #include <linux/sched.h>
+> > > -#include <linux/rcupdate.h>
+> > >
+> > >  #ifdef CONFIG_GENERIC_CLOCKEVENTS
+> > >  extern void __init tick_init(void);
+> > > @@ -272,6 +271,7 @@ static inline void tick_dep_clear_signal(struct
+> > > signal_struct *signal,
+> > >
+> > >  extern void tick_nohz_full_kick_cpu(int cpu);
+> > >  extern void __tick_nohz_task_switch(void);
+> > > +void __tick_nohz_user_enter_prepare(void);
+> > >  extern void __init tick_nohz_full_setup(cpumask_var_t cpumask);
+> > >  #else
+> > >  static inline bool tick_nohz_full_enabled(void) { return false; }
+> > > @@ -296,6 +296,7 @@ static inline void tick_dep_clear_signal(struct
+> > > signal_struct *signal,
+> > >
+> > >  static inline void tick_nohz_full_kick_cpu(int cpu) { }
+> > >  static inline void __tick_nohz_task_switch(void) { }
+> > > +static inline void __tick_nohz_user_enter_prepare(void) { }
+> > >  static inline void tick_nohz_full_setup(cpumask_var_t cpumask) { }
+> > >  #endif
+> > >
+> > > @@ -308,7 +309,7 @@ static inline void tick_nohz_task_switch(void)
+> > >  static inline void tick_nohz_user_enter_prepare(void)
+> > >  {
+> > >         if (tick_nohz_full_cpu(smp_processor_id()))
+> > > -               rcu_nocb_flush_deferred_wakeup();
+> > > +               __tick_nohz_user_enter_prepare();
+> > >  }
+> > >
+> > >  #endif
+> > > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> > > index b0e3c9205946..634cd0fac267 100644
+> > > --- a/kernel/time/tick-sched.c
+> > > +++ b/kernel/time/tick-sched.c
+> > > @@ -26,6 +26,7 @@
+> > >  #include <linux/posix-timers.h>
+> > >  #include <linux/context_tracking.h>
+> > >  #include <linux/mm.h>
+> > > +#include <linux/rcupdate.h>
+> > >
+> > >  #include <asm/irq_regs.h>
+> > >
+> > > @@ -519,6 +520,20 @@ void __tick_nohz_task_switch(void)
+> > >         }
+> > >  }
+> > >
+> > > +void __tick_nohz_user_enter_prepare(void)
+> > > +{
+> > > +       struct tick_sched *ts;
+> > > +
+> > > +       if (tick_nohz_full_cpu(smp_processor_id())) {
+> > > +               ts = this_cpu_ptr(&tick_cpu_sched);
+> > > +
+> > > +               if (ts->tick_stopped)
+> > > +                       quiet_vmstat();
+> > > +               rcu_nocb_flush_deferred_wakeup();
+> > > +       }
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(__tick_nohz_user_enter_prepare);
+> > > +
+> > >  /* Get the boot-time nohz CPU list from the kernel parameters. */
+> > >  void __init tick_nohz_full_setup(cpumask_var_t cpumask)
+> > >  {
+> > > --
+> > > 2.37.1
+> > >
+> > >
+> > >
+> > 
+> > -- 
+> > Folco
+> 
+> 
 
-    For debug output that is intended to be kept, use `pr_debug!` and
-    similar facilities instead.
-
-Cheers,
-Miguel
