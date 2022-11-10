@@ -2,146 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DB5623860
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 01:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10640623862
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 01:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbiKJArA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 19:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S231954AbiKJArX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 19:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbiKJAqy (ORCPT
+        with ESMTP id S231589AbiKJArV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 19:46:54 -0500
-Received: from sonic310-31.consmr.mail.ne1.yahoo.com (sonic310-31.consmr.mail.ne1.yahoo.com [66.163.186.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2595D11C1F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 16:46:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668041212; bh=NWxJETnwXYjxKfg4fLafZHWiwPHR0jx6GnpdSyGD2Ic=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=BwYwGeSiOQ4dC0HPYGXtriJMBWusJiz6MSezClRE3meWveMOtyBxOfby0cd2etR1rjIaAvnMPggBs/ibmij0hL/7vU+gRtzKmmSTnWKBuequtSpGu7mSY+ciUe1BiYPPXmFYhKryy6d3jcDgUpQ6pjzbTWz55oULtTD1rlzPQrPZp5hNYWRlkpDjC6rIU2zfE5m8FeXR7Oc5irHNqys14JsKe5lwSC69Q9RL0uznaYzruXqfp72pongth60rqv2vRk44DCtwfYJDew3vN97O7DGF45c+rnGZ5xfF5C3e0/k3vYcipibB+JQKoSeXLTabFa553sUX7guivI3whjcXLg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1668041212; bh=03dG7kZZ5H0uOusCmpH63c1g+z/CKS7yXQKFDoJvTTE=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=sSfq4abDkq9HvmACBFXuDUt6RUIxXGmHxTfpXRxgoM64NDSkqJtEDQeij9TT1E3l60TmDmnYt+3xDYYLEqaUdb3X11gK5leQUhmos7l2q4EnrjCPepkHdiKpixz878Px1FVPZq+mETjwTKKyBdQ/LnAayHxFWRFrrchBuFkcQufK4hJsH9XaLmdnLc2VqKNF9PqKNMJeKMejXLoCVRjRgskiNlJ1bXUrZKhTPB96vSVFPqjcDOb1iLMEhbY+Bje05b09MrMBXn7xe0RP+njJpR3IgcH6rRnu5/VN9IbMIUgGX/T825A4Cirin1E+PJicU+hRAb+vkK3sNGaRasKvSQ==
-X-YMail-OSG: yWgdWOMVM1kC6vUVU814MJjOpthQToDLQgPI4iW2iDcii6Ou5PoVG7k0F7VoyZo
- VlS1QQEht7uY6u_KABXjW_dy4FzlQhK5CY3d0BpYP6vW_sG12Z2GcHy33hbKVJhdMJXJlqvk9vCa
- XTW7ajzLKyO1HqqwJrT7.r41dW485BhJj6sQALG7m6IJyoaKcnlg4wO4J84LOgGnTjplmo9WTnQa
- iHYYnmEh5VpKPghkd6r5digtS4doUehpS7zL1qmcS6Nug1pKZrHtnwAnzuSjpFV8jO1HakXq_p0Z
- XLF26SbzBznQorj_bAJ4CszxIKPnNjwg6XEz7TFBUeZHBTuvib2jC6pQkhUOTNsmkgRioHSWJwbv
- wzhVgDZhanxk5fWASNb1b4Je5K1SbQb.hgoVCLtB1ltCFAEa59PAfTUm7Ibbh5w4vTKHoGVuPewj
- Fe.GcpkCNUxVKy_Q5oKTojv9BEDXVARM4yhy.B19LOfe_X.4Tg7bXADqb5DIPG9hcmNNZgxPg5cH
- 4Acx5u1fGsuH3VBq5ed.mcsswTI2tKMpaYyyrJOT4a6s8.Y23sGcZ5st_GZXmLgJgi7U.ad30Hsf
- 91GNsAuKtXead0oqKGRgyzI1cp3z97for.V1nnyLZJatlC6r6s8rfPT0OfdmiypI8BIlY6RlRtVH
- xmNDbHbxJFlOzCcyUijqL66w_f3cYPR486zSrkTECqL1PcRR7Djo_8I4BIlBqtPpc5qB2Pe907oC
- 7Z4qtzgeVBZ6u_pK2GvCR48J7qfl9GdWTsUFeH9ZJLOIhGQyUjbJScpKBt_T.4zSea8urMQCXo1i
- HZnw.ZCLV8IredvmNKsiHiu2EdT0.0tNKjFMpvohJlTqX4O8_mI8z.zSKTvRbCN.QP_Qo8fPkRDJ
- AMryCmzkoF7W1rXsx81pfRUA29sPYtvCBQw3V9o4hURbEliTVgHq8YNPtuXtM1YOLXf3JbI6w41g
- GO2xcQ7cDwlIdkAZ9IMWYGFgShTRnxFFN53kPWIOwvu9JYwCnPhwLtT.hlS8JlhOuY1sRmySunow
- Tco5Bw1o3FrYJaq4TqnpmCDKOLGtjDVVkVfCQq6Km9X9NOnTrk6PFBOPXASPoFE9WSM2KdxY6VXs
- VClpfafCyBjhhMiGtNidFd0GjxWQk10glcFNdBWqxI5LxvaAIX.vU_7d1jGSKGnZcR0.GUS1vna3
- HmTIyM36IvP5iUre_qiGcw2K6e7llHQB9oRLBSXmqIzqzw0HaOcJec3Bp5z62TrpFYfciCD4J.QV
- ym4yoNdqbfK93aZ70kTMuLfTZHT25e1Etq2dHwBJiSsdwAPc_Z8Bs73fXflSRcwbDq9_sAeUZwO0
- SY2vrvU8gjSoMxPpR6T8tou1KKbrnLFmxAifxQMe61mQwQdagHHt.Y.JAB5z7xxbfeIcE4HsBUtg
- YI_0MHKJRm9sHedwq5isKQRIAOvqAenFFvJxysWkzTO9WEBzps7okAXnPB8fUTvyJ_92JW7BaHgD
- HriMFgs8vEicKPUZ.I1KiadH40bSsmkIKabU2B_cLOynzwbNeaAKA36cjWuzsLURHufvauAh35Ze
- 2.PeZhWykvbSv0XZlZ7ZYBHyJexW1RKOeo_dHieHAjyZx8xy9lgmCFwIC9C0nAr189uyDtYSZNDU
- YSkymaEcbUPqLVUyoo1fgzdsHmeIMWnZIPVcJE73CHv4Ss5xJvOxlTnXWfq7l8MpGL2g_M57Nm.a
- AW07nw8d3OZ7qXniFNs4_biHfq93cvSJFRFe8uz1yZLxbYC4AuVdijg09_d7TGKW4pBQxVcQKgNr
- 00p7riqJLYLz6dYMSjMBUgSJZRnXJkMDehe2Fxxkps63zDjbzZ4hHZCnYdYOih.1PfY5Bms6xX4Z
- 7TEI3OihHb155emgbUV7HvdlfdPG_dKc04YEb6xRy69c9hnJ7xquKj.FhX7a_keyCgvPSpowGGnS
- qCJYdEm7cmihHkCNTcTiTMuEPDATScR2vE71Olb7tQ6g1r7ehNJZikXrkJKiSJxqZyLE0NDfQ8WV
- Yu0ioH3Y3tlLInGpdDXgfLvYEe3f3toh1zrU6hx9l4MwfIPuLQhjZfdWrIeNsPfWEHOx2BetGEHH
- ae0wOEWIdFBDbBeEqNsBP6RPrxvLtBt9q.qjVb0pAsB0NjB0aFIPl8XkWHN_ECYQOFUl.JD1wbS0
- o81cBnyle9FhTsM.DxHoFGQTzovggQSz8D_JrhtqQ4RS.tHurv.BaNWNj6tLrwt27NKS9YN_jke.
- mI3K7X11JhHK4GklHBXQS
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Thu, 10 Nov 2022 00:46:52 +0000
-Received: by hermes--production-bf1-5878955b5f-gz9tn (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a811e673c5d07df95e71cc480422bcf7;
-          Thu, 10 Nov 2022 00:46:51 +0000 (UTC)
-Message-ID: <b42a6fb2-ee6a-cb8f-aefb-ab671d39585a@schaufler-ca.com>
-Date:   Wed, 9 Nov 2022 16:46:48 -0800
+        Wed, 9 Nov 2022 19:47:21 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056091A074
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 16:47:20 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id e129so217613pgc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 16:47:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/WlMTzzYxLCfbTrYSvZzFuANyhJT73VD3EJkrRg4loI=;
+        b=H43n3VAOjOThipgQjnkLaVC2NH6hStQzzYEZkFgnAVSgHQZ/XRrMCy8iYICVF1elFF
+         ld1pWZemM6Xu/SmOJKZpTFHkr8Y3ZF4npblbamNZAgdx/BxRxv7SX/SSgGQdo90gMVXn
+         PpflD4DmpXDrmBjq6XcDllhoEDcre/5PR3IVINf508880Hkigw07fGEeRcHO52W0ZA8W
+         p8zwfDuIH1ijSqpG3baI7xlnX/Rg5lHvF6dzoKqCbkj7Cqw6R07pHDmcX3D0+l324tk3
+         pbj0p9vQ/IchwEjPKHH0uv1mbP6I+piaa2fvkwvszEtGE6iui1xZfkcLNWgTe6MCeZRt
+         oKZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/WlMTzzYxLCfbTrYSvZzFuANyhJT73VD3EJkrRg4loI=;
+        b=FrQeV2UyJw3VB2+IjbtVRka1vEsoFFxNC6XJS/Ijohc360Evh+1xi5b+/GQNHtQB93
+         shrTFR3GTGqYvUAfpD5rFoZ5kxIHPzKlrGFdUvYM9k6qmglfsBVr7AWlUVF4AkKul0ZD
+         a8+F1H2QBs2gkej9707myuSWM7uRFjJ04RsG6FC5kL0PtWU6oGVaB0JfggV6im8ovUS+
+         HxdA93MmfICRjrukVTGPAeCYB1FvX4imiyQ79KtSxZ/6o8xPSisXfNBjE4cZ0y48Mxup
+         Q/OGTjACCb16NoMYPRo6pwjdvXzspYMtgaMM6wgUsN5KDJ4CXAzVp6TEHASa81asxfcp
+         CR+A==
+X-Gm-Message-State: ACrzQf3V1ZWb1lXfrRW8e+2e1IAVMLM/5SE/ts7jIarafhtPb4rTK8Hf
+        hci0Vsw8SzUsZreaRIX0ioKS1A==
+X-Google-Smtp-Source: AMsMyM4b49fbS+pli3zniqFyqsTd1OixY35h1QeaEfJAF04Ul7am+lTaX/xiugrhDkeaV/6MBze22g==
+X-Received: by 2002:a63:ea04:0:b0:43a:b17f:cd12 with SMTP id c4-20020a63ea04000000b0043ab17fcd12mr53258802pgi.109.1668041239351;
+        Wed, 09 Nov 2022 16:47:19 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b0017f8094a52asm9724912plq.29.2022.11.09.16.47.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 16:47:18 -0800 (PST)
+Date:   Thu, 10 Nov 2022 00:47:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: Nested AVIC design (was:Re: [RFC PATCH v3 04/19] KVM: x86: mmu:
+ allow to enable write tracking externally)
+Message-ID: <Y2xKEgQOlQ3mVkUU@google.com>
+References: <20220427200314.276673-5-mlevitsk@redhat.com>
+ <YoZyWOh4NPA0uN5J@google.com>
+ <5ed0d0e5a88bbee2f95d794dbbeb1ad16789f319.camel@redhat.com>
+ <c22a18631c2067871b9ed8a9246ad58fa1ab8947.camel@redhat.com>
+ <Yt6/9V0S9of7dueW@google.com>
+ <7c4cf32dca42ab84bdb427a9e4862dbf5509f961.camel@redhat.com>
+ <YugLc5LLPJkt89z6@google.com>
+ <fe76ea902a38a10e2d8078fd9e5a71a0c7724d84.camel@redhat.com>
+ <YzYeTCsNfQWccKJ9@google.com>
+ <a80e2f92b4a93b00ad29f16944f2748eadbdda76.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/8] LSM: Add an LSM identifier for external use
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     casey.schaufler@intel.com, linux-security-module@vger.kernel.org,
-        jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net, casey@schaufler-ca.com
-References: <20221025184519.13231-1-casey@schaufler-ca.com>
- <20221025184519.13231-3-casey@schaufler-ca.com>
- <CAHC9VhQONd9zFJswcAsY9-xQcRhoYwXtwyo4zT5XsSPTEtvuRg@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhQONd9zFJswcAsY9-xQcRhoYwXtwyo4zT5XsSPTEtvuRg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20826 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a80e2f92b4a93b00ad29f16944f2748eadbdda76.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/2022 3:33 PM, Paul Moore wrote:
-> On Tue, Oct 25, 2022 at 2:45 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> Add an integer member "id" to the struct lsm_id. This value is
->> a unique identifier associated with each security module. The
->> values are defined in a new UAPI header file. Each existing LSM
->> has been updated to include it's LSMID in the lsm_id.
->>
->> The LSM ID values are sequential, with the oldest module
->> LSM_ID_CAPABILITY being the lowest value and the existing
->> modules numbered in the order they were included in the
->> main line kernel. The first 32 values (0 - 31) are reserved
->> for some as yet unknown but important use.
->>
->> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
->> ---
->>  include/linux/lsm_hooks.h    |  1 +
->>  include/uapi/linux/lsm.h     | 32 ++++++++++++++++++++++++++++++++
->>  security/apparmor/lsm.c      |  2 ++
->>  security/bpf/hooks.c         |  2 ++
->>  security/commoncap.c         |  2 ++
->>  security/landlock/setup.c    |  2 ++
->>  security/loadpin/loadpin.c   |  2 ++
->>  security/lockdown/lockdown.c |  2 ++
->>  security/safesetid/lsm.c     |  2 ++
->>  security/selinux/hooks.c     |  2 ++
->>  security/smack/smack_lsm.c   |  2 ++
->>  security/tomoyo/tomoyo.c     |  2 ++
->>  security/yama/yama_lsm.c     |  2 ++
->>  13 files changed, 55 insertions(+)
->>  create mode 100644 include/uapi/linux/lsm.h
-> Unless you're getting paid by the patch, I'd rather you combine
-> patches 1/8 and 2/8 into a single patch.  They are both pretty small,
-> very related, and I don't want to see 1/8 merged anywhere without 2/8.
+Sorry for the super slow reply, I don't have a good excuse other than I needed to
+take break from AVIC code...
 
-OK by me. One less compile+test cycle. It's nice to know there's some
-limit on patch granularity.
+On Mon, Oct 03, 2022, Maxim Levitsky wrote:
+> On Thu, 2022-09-29 at 22:38 +0000, Sean Christopherson wrote:
+> > On Mon, Aug 08, 2022, Maxim Levitsky wrote:
+> > > Hi Sean, Paolo, and everyone else who wants to review my nested AVIC work.
+> > 
+> > Before we dive deep into design details, I think we should first decide whether
+> > or not nested AVIC is worth pursing/supporting.
+> > 
+> >   - Rome has a ucode/silicon bug with no known workaround and no anticipated fix[*];
+> >     AMD's recommended "workaround" is to disable AVIC.
+> >   - AVIC is not available in Milan, which may or may not be related to the
+> >     aforementioned bug.
+> >   - AVIC is making a comeback on Zen4, but Zen4 comes with x2AVIC.
+> >   - x2APIC is likely going to become ubiquitous, e.g. Intel is effectively
+> >     requiring x2APIC to fudge around xAPIC bugs.
+> >   - It's actually quite realistic to effectively force the guest to use x2APIC,
+> >     at least if it's a Linux guest.  E.g. turn x2APIC on in BIOS, which is often
+> >     (always?) controlled by the host, and Linux will use x2APIC.
+> > 
+> > In other words, given that AVIC is well on its way to becoming a "legacy" feature,
+> > IMO there needs to be a fairly strong use case to justify taking on this much code
+> > and complexity.  ~1500 lines of code to support a feature that has historically
+> > been buggy _without_ nested support is going to require a non-trivial amount of
+> > effort to review, stabilize, and maintain.
+> > 
+> > [*] 1235 "Guest With AVIC (Advanced Virtual Interrupt Controller) Enabled May Fail
+> >     to Process IPI (Inter-Processor Interrupt) Until Guest Is Re-Scheduled" in
+> >     https://www.amd.com/system/files/TechDocs/56323-PUB_1.00.pdf
+> > 
+> 
+> I am afraid that you mixed things up:
+> 
+> You mistake is that x2avic is just a minor addition to AVIC. It is still for
+> all practical purposes the same feature.
 
->
->> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
->> index e383e468f742..dd4b4d95a172 100644
->> --- a/include/linux/lsm_hooks.h
->> +++ b/include/linux/lsm_hooks.h
->> @@ -1607,6 +1607,7 @@ struct security_hook_heads {
->>   */
->>  struct lsm_id {
->>         const char      *lsm;           /* Name of the LSM */
->> +       int             id;             /* LSM ID */
->>  };
-> At the very least let's define lsm_id::id as an 'unsigned int' type,
-> but since we are going to see the lsm_id::id token used as part of the
-> kernel ABI (likely not in this struct) I agree with Greg's comments
-> about making the size more explicit.  I would suggest __u32/u32 as
-> 32-bits should be plenty for this token.
->
-> Given the other upstream discussions we may want to do something
-> similar with lsm_id::lsm and __u8/u8.  I'm pretty sure I saw a similar
-> comment (by Greg?) elsewhere in this patchset when I was quickly
-> skimming these on my phone while away ...
+...
 
-Yes. The API friendly typing will be in the next revision.
+> Physid tables, apic backing pages, doorbell emulation, 
+> everything is pretty much unchanged.
 
-> --
-> paul-moore.com
+Ya, it finally clicked for me that KVM would needs to shadow the physical ID
+tables irrespective of x2APIC.
+
+I'm still very hesitant to support full virtualization of nested (x2)AVIC.  The
+complexity and amount of code is daunting, and nSVM has lower hanging fruit that
+we should pick before going after full nested (x2)AVIC, e.g. SVM's TLB flushing
+needs a serious overhaul.  And if we go through the pain for SVM, I think we'd
+probably want to come up with a solution that can be at least shared shared with
+VMX's IPI virtualization.
+
+As an intermediate step, can we expose (x2)AVIC to L2 without any shadowing?
+E.g. run all L2s with a single dummy physical ID table and emulate IPIs in KVM?
+
+If that works, that seems like a logical first step even if we want to eventually
+support nested IPI virtualization.
