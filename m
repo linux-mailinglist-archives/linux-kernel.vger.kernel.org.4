@@ -2,129 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803DA624208
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C2262420A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiKJMLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
+        id S230478AbiKJMMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:12:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbiKJMLs (ORCPT
+        with ESMTP id S230233AbiKJMMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:11:48 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60D5F49
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:11:47 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b3so2854816lfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:11:47 -0800 (PST)
+        Thu, 10 Nov 2022 07:12:35 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9365598
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:12:34 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id g12so2853075lfh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 04:12:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aUr5GXIjetvqmUBwd3OtcqUULVb7fxkMKk71ECylmYw=;
-        b=RzyNMkWzQlNRGMQ957yXWjjTYMYk7hzfCSHU1jaMZgEqtfEqUeKD7s0EqNNelwbla/
-         zLzofOCr1d5Lls5/HC4vMnMmmLeY+f9i+e7wJOJaKrQ2aLSDUh4E8GsXxebYXiNJfc/h
-         2qO+VAxgS21tYwsT+4DmnnVopOvBBJXtjoGdemSeN9paDBtp3q6woONXUXgTIm6vSzcC
-         4rmMFx2BrSQKf44mI+SGjjVAgceQpgFOcnP0cxVfAFnZeh+SWgtX+97s3O8kQ17CKE4C
-         b9GYlRXf6EFpJDv/5HF1D8GYBHt0AN29xspQ5xe5SMfNxU90aCukLPlFilxC1m7wic0x
-         5zcA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3m2vparsJ0IvTRoDQtc/C+sx5KcO7jtZEv/Wo5rLyfI=;
+        b=vYlOSEfSdDsa2OulOt0SwI1aMtr0j3/AxT1vf8GpEYJpd5DLlfJblTc0oGSh+aklLG
+         xJyc6JbYzpB/go8XbKOmiNIFCuxKpNh4iG/jicF4jHtoinXvPFEDGQh+4dKVG0UEHkKC
+         iuJmdurSeMa4YLIckEychviG4tbYJq655apEzjt+vBKNw8x8u635r9ILbJ2uLj0YHdDM
+         5+sqVmnKO+FpO/27A0znGhZ72kBKrUs6Zd507+lEvTEqtXqYzbmYVFDinyNFAXVORedT
+         Yee/EoH6E2Yu1WUumXbOOnQYuOx1QfNPN/uZientm8sA6qti5aAlC5rfemx72xFk83CA
+         Xu7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aUr5GXIjetvqmUBwd3OtcqUULVb7fxkMKk71ECylmYw=;
-        b=BKme9FQUPdPev1vE2IHk6MaqX8+Pj8hduvmh6wvspuKVE5wWhkPOY5JUetSLaajdb7
-         MvHZVm/o/12MKE942W0ck4/JPYtrD+nKQCb9kC0x5MZZLA62bI8um9XPJvYbznC5iomO
-         eWghg7KR5X9ZbSWgFsL1d70cJ7v0F7722Vtch1jF2PSMIo6fzlP5Na7uNz0CVuDcJeMe
-         H7sbkGUnOS46GeT9WMSbB/dAyw6zIBJmRmPDruF/JRwESpIcURefAfvqIU3vFFqXdFg7
-         zR6UJg6W2cDsMFQ3tbjZEfLqDQll1jBgPAVrSLgpsyBH/A6qJvbrc8lbL62y4xr+s4R+
-         tl9Q==
-X-Gm-Message-State: ACrzQf0r6Vl++zVucTppP2RK25Q0sftC9RN8KxSn4b0B5LBLDuKNf/D6
-        HSt+O6LDH1+PMUu8pkOIW4CMng==
-X-Google-Smtp-Source: AMsMyM4PW+P3N9qX9jt9EOP+3xYgM36df0Ws9nuyGcbcwoI6cdOiJLl8jW4SGeWSSWFhsK9tt/83CQ==
-X-Received: by 2002:ac2:5f88:0:b0:4a7:8afe:b741 with SMTP id r8-20020ac25f88000000b004a78afeb741mr21323207lfe.15.1668082305520;
-        Thu, 10 Nov 2022 04:11:45 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056512360a00b004ac088fdfd2sm2727049lfs.85.2022.11.10.04.11.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 04:11:44 -0800 (PST)
-Message-ID: <277004ed-3b6b-4ee5-39e4-beb75a272e60@linaro.org>
-Date:   Thu, 10 Nov 2022 13:11:42 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3m2vparsJ0IvTRoDQtc/C+sx5KcO7jtZEv/Wo5rLyfI=;
+        b=rqJFFLJdxxh2ja1e/rNr9eDyhrohrcYuqG5x2pBpwg2eHxyKbp+rGjhiDyn0jlHk1w
+         YYqELwlC+TkireeNN9VFLJLFFqt0MgsanmptGIIFsOle3GVNhT/e97Y42Ir1pFjcgJic
+         7z9lQXy2ujDRXuB4rQUUq0YHT8eYr+cD+3cdiCfs4tVRWuN25pD32pgQyjM+4wQP0WhG
+         w0LTRiQ1KEN55rDZQ6ZEYDXCfANVnAvkrwHzWQrIXwYDvmhFW2BT6iexfrfwFgwD2dPI
+         +t1SBk3p6OKD2zrb4V8vZH37hGDplkR9PDxAN7wliynNwPmbsEzbzuJchBHYQZP3/JUv
+         EBbQ==
+X-Gm-Message-State: ACrzQf1g2s5pBh6aZdzk+SQa6cDYg2yXuvCVoT1xORCd7SPF95Y8NB4a
+        hZOkDWXPOx6u3njUE6G7yafscg==
+X-Google-Smtp-Source: AMsMyM6SlvmEsSoFiqy4iwt0g1PZnQCNBN2X5qFIOknPJADNVl2vkQRJY+J9ghjykqYcOmyXwMB/Jg==
+X-Received: by 2002:ac2:47e1:0:b0:4af:5088:9576 with SMTP id b1-20020ac247e1000000b004af50889576mr21098188lfp.468.1668082352920;
+        Thu, 10 Nov 2022 04:12:32 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id y13-20020a19640d000000b004a91d1b3070sm2733423lfb.308.2022.11.10.04.12.30
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 10 Nov 2022 04:12:32 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] regulator: qcom_smd: Fix PMR735a S3 regulator spec
+Date:   Thu, 10 Nov 2022 13:12:25 +0100
+Message-Id: <20221110121225.9216-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/6] dt-bindings: Document the SYSREG specific
- compatibles found on FSD SoC
-Content-Language: en-US
-To:     Vivek Yadav <vivek.2311@samsung.com>, rcsekar@samsung.com,
-        krzysztof.kozlowski+dt@linaro.org, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-References: <20221109100928.109478-1-vivek.2311@samsung.com>
- <CGME20221109100245epcas5p38a01aed025f491d39a09508ebcdcef84@epcas5p3.samsung.com>
- <20221109100928.109478-2-vivek.2311@samsung.com>
- <709daf8b-a58e-9247-c5d8-f3be3e60fe70@linaro.org>
- <000001d8f4f6$1c7e96e0$557bc4a0$@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <000001d8f4f6$1c7e96e0$557bc4a0$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 12:18, Vivek Yadav wrote:
->>> +maintainers:
->>> +  - Alim Akhtar <alim.akhtar@samsung.com>
->>> +
->>> +description: |
->>> +  This is a system control registers block, providing multiple low
->>> +level
->>> +  platform functions like board detection and identification,
->>> +software
->>> +  interrupt generation.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>
->> No need for oneOf.
->>
-> Removing this results into dt_binding_check error, so this is required.
+PMR735a has a wider range than previously defined. Fix it.
 
-No, this is not required. You do not have more than one condition for oneOf.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+No Fixes tag, as the patch is only in -next, so the hash will change.
 
->>> +      - items:
->>> +          - enum:
->>> +              - tesla,sysreg_fsys0
->>> +              - tesla,sysreg_peric
->>
->> From where did you get underscores in compatibles?
->>
-> I have seen in MCAN Driver <drivers/net/can/m_can/m_can_platform.c> and also too many other yaml files.
-> Do you have any ref standard guideline of compatible which says underscore is not allowed.
+ drivers/regulator/qcom_smd-regulator.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-git grep compatible arch/arm64/boot/dts/exynos/ | grep _
-git grep compatible arch/arm/boot/dts/exynos* | grep _
-
-Both give 0 results. For few other SoCs there such cases but that's
-really, really exception. Drop underscores.
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+index 9eaae13fd385..9f2b58458841 100644
+--- a/drivers/regulator/qcom_smd-regulator.c
++++ b/drivers/regulator/qcom_smd-regulator.c
+@@ -686,6 +686,15 @@ static const struct regulator_desc pmic5_ftsmps520 = {
+ 	.ops = &rpm_smps_ldo_ops,
+ };
+ 
++static const struct regulator_desc pmic5_hfsmps515 = {
++	.linear_ranges = (struct linear_range[]) {
++		REGULATOR_LINEAR_RANGE(320000, 0, 235, 16000),
++	},
++	.n_linear_ranges = 1,
++	.n_voltages = 236,
++	.ops = &rpm_smps_ldo_ops,
++};
++
+ static const struct regulator_desc pms405_hfsmps3 = {
+ 	.linear_ranges = (struct linear_range[]) {
+ 		REGULATOR_LINEAR_RANGE(320000, 0, 215, 8000),
+@@ -1277,7 +1286,7 @@ static const struct rpm_regulator_data rpm_pmi8998_regulators[] = {
+ static const struct rpm_regulator_data rpm_pmr735a_regulators[] = {
+ 	{ "s1", QCOM_SMD_RPM_SMPE, 1, &pmic5_ftsmps520, "vdd_s1"},
+ 	{ "s2", QCOM_SMD_RPM_SMPE, 2, &pmic5_ftsmps520, "vdd_s2"},
+-	{ "s3", QCOM_SMD_RPM_SMPE, 3, &pms405_hfsmps3, "vdd_s3"},
++	{ "s3", QCOM_SMD_RPM_SMPE, 3, &pmic5_hfsmps515, "vdd_s3"},
+ 	{ "l1", QCOM_SMD_RPM_LDOE, 1, &pm660_nldo660, "vdd_l1_l2"},
+ 	{ "l2", QCOM_SMD_RPM_LDOE, 2, &pm660_nldo660, "vdd_l1_l2"},
+ 	{ "l3", QCOM_SMD_RPM_LDOE, 3, &pm660_nldo660, "vdd_l3"},
+-- 
+2.38.1
 
