@@ -2,214 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC353623AA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B578623A84
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbiKJDvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S232662AbiKJDdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbiKJDv1 (ORCPT
+        with ESMTP id S229974AbiKJDdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:51:27 -0500
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F5683055D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 19:51:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dVUyL
-        PAb6gzI8XbCZsHtM1m990u4NxC9ACv5+48r8FU=; b=H6IAlnfw97N8a0jybBX6g
-        WlUnO5UCHNTjlDnoS66xh/wpU/GkPHku4PsmOddjCGdYkO/Nj2FW05f1lMYUD2Yy
-        xerP56c2aRkcwf63A634OinsaL4RlWES2eDBcrVEK6dLz3GRxpuEmaIqbYl8QMme
-        zf6BIc2kIHTFtKFOIKEfxM=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by smtp5 (Coremail) with SMTP id HdxpCgBnhQ0KdWxj5kjlqg--.43429S2;
-        Thu, 10 Nov 2022 11:50:34 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
-        lkp@intel.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v10] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
-Date:   Thu, 10 Nov 2022 11:50:33 +0800
-Message-Id: <20221110035033.19498-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Nov 2022 22:33:50 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED5E2DE0;
+        Wed,  9 Nov 2022 19:33:48 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N76qw23W8zmVTc;
+        Thu, 10 Nov 2022 11:33:32 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
+ 2022 11:33:45 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH bpf-next v3] bpf: Initialize same number of free nodes for each pcpu_freelist
+Date:   Wed, 9 Nov 2022 22:50:39 -0500
+Message-ID: <20221110035039.54859-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgBnhQ0KdWxj5kjlqg--.43429S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKryxXr13Xr47uryDZw1DZFb_yoW7ZrWkpa
-        1jg34F9rW3JF4avrsrta18XFW3CFykJFW5Gr9rKw1rur4rAFs8GryDtas8tr4DZrW0qF42
-        yF4rtFnI93Z0vaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbCqRO1U10DhgeDLAAAss
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some bad situation, the gts may be freed gru_check_chiplet_assignment.
-The call chain can be gru_unload_context->gru_free_gru_context->gts_drop
-and kfree finally. However, the caller didn't know if the gts is freed
-or not and use it afterwards. This will trigger a Use after Free bug.
+pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
+free nodes for some CPUs, and then possibly one CPU with fewer nodes,
+followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
+and num_possible_cpus() == 32, CPU 0~27 each gets 9 free nodes, CPU 28 gets
+4 free nodes, CPU 29~31 get 0 free nodes, while in fact each CPU should get
+8 nodes equally.
 
-Fix it by introducing a return value to see if it's in error path or not.
-Free the gts in caller if gru_check_chiplet_assignment check failed.
+This patch initializes nr_elems / num_possible_cpus() free nodes for each
+CPU firstly, then allocates the remaining free nodes by one for each CPU
+until no free nodes left.
 
-Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Acked-by: Dimitri Sivanich <sivanich@hpe.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
-v10:
-- try again in gru_handle_user_call_osif gru_check_chiplet_assignment failed,
-  return success in gru_set_context_optionif we have unloaded gts, change the
-  comment, all suggested by Dimitri Sivanich.
-
-v9:
-- rewrite changelog and add comment in the code to make it more clear
-
-v8:
-- remove tested-by tag suggested by Greg
-
-v7:
-- fix some spelling problems suggested by Greg, change kernel test robot from reported-by tag to tested-by tag
-
-v6:
-- remove unused var checked by kernel test robot
-
-v5:
-- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
-
-v4:
-- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
-
-v3:
-- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
-
-v2:
-- commit message changes suggested by Greg
-
-v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
+v3: Simplify code as suggested by Andrii
+v2: Update commit message and add Yonghong's ack
 ---
- drivers/misc/sgi-gru/grufault.c  | 15 ++++++++++++---
- drivers/misc/sgi-gru/grumain.c   | 22 ++++++++++++++++++----
- drivers/misc/sgi-gru/grutables.h |  2 +-
- 3 files changed, 31 insertions(+), 8 deletions(-)
+ kernel/bpf/percpu_freelist.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
-index d7ef61e602ed..ff2970fbd644 100644
---- a/drivers/misc/sgi-gru/grufault.c
-+++ b/drivers/misc/sgi-gru/grufault.c
-@@ -647,7 +647,8 @@ int gru_handle_user_call_os(unsigned long cb)
- 	ucbnum = get_cb_number((void *)cb);
- 	if ((cb & (GRU_HANDLE_STRIDE - 1)) || ucbnum >= GRU_NUM_CB)
- 		return -EINVAL;
--
-+
-+again:
- 	gts = gru_find_lock_gts(cb);
- 	if (!gts)
- 		return -EINVAL;
-@@ -656,7 +657,11 @@ int gru_handle_user_call_os(unsigned long cb)
- 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
- 		goto exit;
- 
--	gru_check_context_placement(gts);
-+	if (gru_check_context_placement(gts)) {
-+		gru_unlock_gts(gts);
-+		gru_unload_context(gts, 1);
-+		goto again;
-+	}
- 
- 	/*
- 	 * CCH may contain stale data if ts_force_cch_reload is set.
-@@ -874,7 +879,11 @@ int gru_set_context_option(unsigned long arg)
- 		} else {
- 			gts->ts_user_blade_id = req.val1;
- 			gts->ts_user_chiplet_id = req.val0;
--			gru_check_context_placement(gts);
-+			if (gru_check_context_placement(gts)) {
-+				gru_unlock_gts(gts);
-+				gru_unload_context(gts, 1);
-+				return ret;
-+			}
- 		}
- 		break;
- 	case sco_gseg_owner:
-diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
-index 6706ef3c5977..5e5862e6ee6e 100644
---- a/drivers/misc/sgi-gru/grumain.c
-+++ b/drivers/misc/sgi-gru/grumain.c
-@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
-  * chiplet. Misassignment can occur if the process migrates to a different
-  * blade or if the user changes the selected blade/chiplet.
-  */
--void gru_check_context_placement(struct gru_thread_state *gts)
-+int gru_check_context_placement(struct gru_thread_state *gts)
+diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
+index b6e7f5c5b9ab..bd60070c079f 100644
+--- a/kernel/bpf/percpu_freelist.c
++++ b/kernel/bpf/percpu_freelist.c
+@@ -100,22 +100,23 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
+ 			    u32 nr_elems)
  {
- 	struct gru_state *gru;
-+	int ret = 0;
+ 	struct pcpu_freelist_head *head;
+-	int i, cpu, pcpu_entries;
++	unsigned int cpu, cpu_idx, i, j, n, m;
  
- 	/*
- 	 * If the current task is the context owner, verify that the
-@@ -726,15 +727,23 @@ void gru_check_context_placement(struct gru_thread_state *gts)
- 	 * references. Pthread apps use non-owner references to the CBRs.
- 	 */
- 	gru = gts->ts_gru;
-+	/*
-+	 * If gru or gts->ts_tgid_owner isn't initialized properly, return
-+	 * success to indicate that the caller does not need to unload the
-+	 * gru context.The caller is responsible for their inspection and
-+	 * reinitialization if needed.
-+	 */
- 	if (!gru || gts->ts_tgid_owner != current->tgid)
--		return;
-+		return ret;
- 
- 	if (!gru_check_chiplet_assignment(gru, gts)) {
- 		STAT(check_context_unload);
--		gru_unload_context(gts, 1);
-+		ret = -EINVAL;
- 	} else if (gru_retarget_intr(gts)) {
- 		STAT(check_context_retarget_intr);
- 	}
+-	pcpu_entries = nr_elems / num_possible_cpus() + 1;
+-	i = 0;
++	n = nr_elems / num_possible_cpus();
++	m = nr_elems % num_possible_cpus();
 +
-+	return ret;
++	cpu_idx = 0;
+ 
+ 	for_each_possible_cpu(cpu) {
+-again:
+-		head = per_cpu_ptr(s->freelist, cpu);
+-		/* No locking required as this is not visible yet. */
+-		pcpu_freelist_push_node(head, buf);
+-		i++;
+-		buf += elem_size;
+-		if (i == nr_elems)
+-			break;
+-		if (i % pcpu_entries)
+-			goto again;
++		j = min(n + (cpu_idx < m ? 1 : 0), nr_elems);
++		for (i = 0; i < j; i++) {
++			head = per_cpu_ptr(s->freelist, cpu);
++			/* No locking required as this is not visible yet. */
++			pcpu_freelist_push_node(head, buf);
++			buf += elem_size;
++		}
++		nr_elems -= j;
++		cpu_idx++;
+ 	}
  }
  
- 
-@@ -934,7 +943,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
- 	mutex_lock(&gts->ts_ctxlock);
- 	preempt_disable();
- 
--	gru_check_context_placement(gts);
-+	if (gru_check_context_placement(gts)) {
-+		preempt_enable();
-+		mutex_unlock(&gts->ts_ctxlock);
-+		gru_unload_context(gts, 1);
-+		return VM_FAULT_NOPAGE;
-+	}
- 
- 	if (!gts->ts_gru) {
- 		STAT(load_user_context);
-diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-index 8c52776db234..640daf1994df 100644
---- a/drivers/misc/sgi-gru/grutables.h
-+++ b/drivers/misc/sgi-gru/grutables.h
-@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
- extern int gru_user_unload_context(unsigned long arg);
- extern int gru_get_exception_detail(unsigned long arg);
- extern int gru_set_context_option(unsigned long address);
--extern void gru_check_context_placement(struct gru_thread_state *gts);
-+extern int gru_check_context_placement(struct gru_thread_state *gts);
- extern int gru_cpu_fault_map_id(void);
- extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
- extern void gru_flush_all_tlb(struct gru_state *gru);
 -- 
-2.25.1
+2.30.2
 
