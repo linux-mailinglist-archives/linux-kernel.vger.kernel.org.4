@@ -2,99 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A84623E2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3DC623E0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiKJJA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
+        id S229588AbiKJIzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:55:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKJJAY (ORCPT
+        with ESMTP id S229520AbiKJIzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:00:24 -0500
-X-Greylist: delayed 374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Nov 2022 01:00:22 PST
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DD169DE6;
-        Thu, 10 Nov 2022 01:00:22 -0800 (PST)
-Received: from mxde.zte.com.cn (unknown [10.35.20.121])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 10 Nov 2022 03:55:38 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFCEB73
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:55:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N7Fxp1jXkz1DyZ;
-        Thu, 10 Nov 2022 16:54:06 +0800 (CST)
-Received: from mxus.zte.com.cn (unknown [10.207.168.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 53C282015D;
+        Thu, 10 Nov 2022 08:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668070535; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UrYORbb/2EGM8TKY6i8vkgmqI8qlKIOPW4j/QJZtm/c=;
+        b=gqwBsmCIZdDSjdReT8YRaS9pesOZFg/26yhH5tzthQyv++GeCkLR64K+3wFjVDvyF/19TM
+        t7VK4pec9wGumkwjhSxaBvRBI42VjssgnzDKGVsT8KW21Y005qQiq4Ku1MBLIt/f3Xew2q
+        J4vshkwUWYMtMt2bnUsf+jPcF4gEVSI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668070535;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UrYORbb/2EGM8TKY6i8vkgmqI8qlKIOPW4j/QJZtm/c=;
+        b=Tkwl05EEIDknsMTrFPAw/Each/jJOrjVzFXkrNCbswBLSQP5i/jmUj4dHp+gU8Rx8Vb6lF
+        9e0ntPrMxLX4vqAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mxde.zte.com.cn (FangMail) with ESMTPS id 4N7FxX1vcHz9vXNx;
-        Thu, 10 Nov 2022 16:53:52 +0800 (CST)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N7FxT2m03z9tyD6;
-        Thu, 10 Nov 2022 16:53:49 +0800 (CST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N7FxN2Qx9z5BNS0;
-        Thu, 10 Nov 2022 16:53:44 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2AA8rQFa043755;
-        Thu, 10 Nov 2022 16:53:27 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 10 Nov 2022 16:53:29 +0800 (CST)
-Date:   Thu, 10 Nov 2022 16:53:29 +0800 (CST)
-X-Zmail-TransId: 2afa636cbc09ffffffffb2faccdb
-X-Mailer: Zmail v1.0
-Message-ID: <202211101653295187226@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <mturquette@baylibre.com>
-Cc:     <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <chi.minghao@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIXSBkbWFlbmdpbmU6IHVzZSBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AA8rQFa043755
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 636CBC2D.001 by FangMail milter!
-X-FangMail-Envelope: 1668070446/4N7Fxp1jXkz1DyZ/636CBC2D.001/10.35.20.121/[10.35.20.121]/mxde.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 636CBC2D.001/4N7Fxp1jXkz1DyZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C25FB1346E;
+        Thu, 10 Nov 2022 08:55:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xSQdLoa8bGNOUQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 10 Nov 2022 08:55:34 +0000
+Message-ID: <93359ffb-4f88-408f-054b-879b88e09326@suse.de>
+Date:   Thu, 10 Nov 2022 09:55:33 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v8 2/7] drm/shmem-helper: Don't use vmap_use_count for
+ dma-bufs
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+References: <20221105232719.302619-1-dmitry.osipenko@collabora.com>
+ <20221105232719.302619-3-dmitry.osipenko@collabora.com>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221105232719.302619-3-dmitry.osipenko@collabora.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------INGHqK60cD0J6bcyRsgC8CTQ"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------INGHqK60cD0J6bcyRsgC8CTQ
+Content-Type: multipart/mixed; boundary="------------i0b0biUqckSAOl60Afi3uhi9";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+ David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+ Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
+ <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Gustavo Padovan <gustavo.padovan@collabora.com>,
+ Daniel Stone <daniel@fooishbar.org>,
+ Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Rob Clark <robdclark@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ Qiang Yu <yuq825@gmail.com>, Steven Price <steven.price@arm.com>,
+ Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+ Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
+ virtualization@lists.linux-foundation.org
+Message-ID: <93359ffb-4f88-408f-054b-879b88e09326@suse.de>
+Subject: Re: [PATCH v8 2/7] drm/shmem-helper: Don't use vmap_use_count for
+ dma-bufs
+References: <20221105232719.302619-1-dmitry.osipenko@collabora.com>
+ <20221105232719.302619-3-dmitry.osipenko@collabora.com>
+In-Reply-To: <20221105232719.302619-3-dmitry.osipenko@collabora.com>
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+--------------i0b0biUqckSAOl60Afi3uhi9
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/dma/bcm2835-dma.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+SGksDQoNCkkgaGF2ZSBhIGZldyBjb21tZW50cyB0aGF0IGFyZSBub3QgcmVhbGx5IHNvbWV0
+aGluZyBmb3IgdGhpcyBwYXRjaC4gSSdsbCANCmNvbW1lbnQgaXQgaGVyZSBhbnl3YXkgdG8g
+aGF2ZSB0aGVtIHBvc3RlZC4NCg0KQW0gMDYuMTEuMjIgdW0gMDA6Mjcgc2NocmllYiBEbWl0
+cnkgT3NpcGVua286DQo+IERNQS1idWYgY29yZSBoYXMgaXRzIG93biByZWZjb3VudGluZyBv
+ZiB2bWFwcywgdXNlIGl0IGluc3RlYWQgb2YgZHJtLXNobWVtDQo+IGNvdW50aW5nLiBUaGlz
+IGNoYW5nZSBwcmVwYXJlcyBkcm0tc2htZW0gZm9yIGFkZGl0aW9uIG9mIG1lbW9yeSBzaHJp
+bmtlcg0KPiBzdXBwb3J0IHdoZXJlIGRybS1zaG1lbSB3aWxsIHVzZSBhIHNpbmdsZSBkbWEt
+YnVmIHJlc2VydmF0aW9uIGxvY2sgZm9yDQo+IGFsbCBvcGVyYXRpb25zIHBlcmZvcm1lZCBv
+dmVyIGRtYS1idWZzLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRG1pdHJ5IE9zaXBlbmtvIDxk
+bWl0cnkub3NpcGVua29AY29sbGFib3JhLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUv
+ZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmMgfCAzNSArKysrKysrKysrKysrKystLS0tLS0t
+LS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlv
+bnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1l
+bV9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZ2VtX3NobWVtX2hlbHBlci5jDQo+
+IGluZGV4IDM1MTM4ZjhhMzc1Yy4uODAxMDMzYjQ4ODkzIDEwMDY0NA0KPiAtLS0gYS9kcml2
+ZXJzL2dwdS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYw0KPiArKysgYi9kcml2ZXJzL2dw
+dS9kcm0vZHJtX2dlbV9zaG1lbV9oZWxwZXIuYw0KPiBAQCAtMjkzLDI0ICsyOTMsMjIgQEAg
+c3RhdGljIGludCBkcm1fZ2VtX3NobWVtX3ZtYXBfbG9ja2VkKHN0cnVjdCBkcm1fZ2VtX3No
+bWVtX29iamVjdCAqc2htZW0sDQo+ICAgCXN0cnVjdCBkcm1fZ2VtX29iamVjdCAqb2JqID0g
+JnNobWVtLT5iYXNlOw0KPiAgIAlpbnQgcmV0ID0gMDsNCj4gICANCj4gLQlpZiAoc2htZW0t
+PnZtYXBfdXNlX2NvdW50KysgPiAwKSB7DQo+IC0JCWlvc3lzX21hcF9zZXRfdmFkZHIobWFw
+LCBzaG1lbS0+dmFkZHIpOw0KPiAtCQlyZXR1cm4gMDsNCj4gLQl9DQo+IC0NCj4gICAJaWYg
+KG9iai0+aW1wb3J0X2F0dGFjaCkgew0KDQpXZSBoYXZlIGEgbnVtYmVyIG9mIHN1Y2ggYnJh
+bmNoZXMgaW4gdmFyaW91cyBtZW1vcnkgbWFuYWdlcnMuIEF0IHNvbWUgDQpwb2ludCB3ZSBz
+aG91bGQgdGhpbmsgYWJvdXQgc29tZXRoaW5nIGxpa2UgYSBHRU0gRE1BLUJVRiBvYmplY3Qg
+KG9yIGF0IA0KbGVhc3Qgc29tZSBoZWxwZXJzKSB0aGF0IHJlcHJlc2VudHMgYW4gaW1wb3J0
+ZWQgYnVmZmVyLiBTdWNoIGEgdGluZyANCm1pZ2h0IGJlIHVzZWZ1bCB0byBhdm9pZCB0aGUg
+ZHVwbGljYXRpb24gYW5kIGJyYW5jaGluZyB0aGF0J3MgZ29pbmcgb24gDQpoZXJlIGFuZCBp
+biBvdGhlciBmdW5jdGlvbnMuDQoNCj4gICAJCXJldCA9IGRtYV9idWZfdm1hcChvYmotPmlt
+cG9ydF9hdHRhY2gtPmRtYWJ1ZiwgbWFwKTsNCj4gICAJCWlmICghcmV0KSB7DQo+ICAgCQkJ
+aWYgKFdBUk5fT04obWFwLT5pc19pb21lbSkpIHsNCg0KSSB0aGluayBpdCdzIE9LIHRvIGRy
+b3AgdGhpcyB0ZXN0IGZvciBpc19pb21lbS4gIEl0IHdhcyB1c2VmdWwgd2hlbiB3ZSANCmRp
+ZCBub3QgZGlzdGluZ3Vpc2ggYmV0d2VlbiBJL08gYW5kIHN5c3RlbSBtZW1vcnkgaW4gbW9z
+dCBvZiBvdXIgDQpoZWxwZXJzLiBCdXQgdGhhdCBzaG91bGQgaGF2ZSBiZWVuIHJlc29sdmVk
+IGJ5IG5vdyBhbmQgd2hhdGV2ZXIgY29kZSANCnN0aWxsIGRlcGVuZHMgb24gaXQgc2hvdWxk
+IGJlIHVwZGF0ZWQgYWNjb3JkaW5nbHkuIEFsbCBoZWxwZXJzIHVzZSANCmlvc3lzX21hcCBm
+dW5jdGlvbmFsaXR5IHRvIGFjY2VzcyB0aGUgbWVtb3J5Lg0KDQoNCj4gICAJCQkJZG1hX2J1
+Zl92dW5tYXAob2JqLT5pbXBvcnRfYXR0YWNoLT5kbWFidWYsIG1hcCk7DQo+IC0JCQkJcmV0
+ID0gLUVJTzsNCj4gLQkJCQlnb3RvIGVycl9wdXRfcGFnZXM7DQo+ICsJCQkJcmV0dXJuIC1F
+SU87DQo+ICAgCQkJfQ0KPiAtCQkJc2htZW0tPnZhZGRyID0gbWFwLT52YWRkcjsNCg0KVG8g
+cmVzb2x2ZSB0aGUgaXNfaW9tYXAgaXNzdWUsIHdlJ2QgaGF2ZSB0byBzdG9yZSB2YWRkciBh
+cyBzdHJ1Y3QgDQppb3N5c21fbWFwIHZhbHVlLg0KDQo+ICAgCQl9DQo+ICAgCX0gZWxzZSB7
+DQo+ICAgCQlwZ3Byb3RfdCBwcm90ID0gUEFHRV9LRVJORUw7DQo+ICAgDQo+ICsJCWlmIChz
+aG1lbS0+dm1hcF91c2VfY291bnQrKyA+IDApIHsNCj4gKwkJCWlvc3lzX21hcF9zZXRfdmFk
+ZHIobWFwLCBzaG1lbS0+dmFkZHIpOw0KPiArCQkJcmV0dXJuIDA7DQo+ICsJCX0NCj4gKw0K
+PiAgIAkJcmV0ID0gZHJtX2dlbV9zaG1lbV9nZXRfcGFnZXMoc2htZW0pOw0KPiAgIAkJaWYg
+KHJldCkNCj4gICAJCQlnb3RvIGVycl96ZXJvX3VzZTsNCj4gQEAgLTM3NiwxNSArMzc0LDE1
+IEBAIHN0YXRpYyB2b2lkIGRybV9nZW1fc2htZW1fdnVubWFwX2xvY2tlZChzdHJ1Y3QgZHJt
+X2dlbV9zaG1lbV9vYmplY3QgKnNobWVtLA0KPiAgIHsNCj4gICAJc3RydWN0IGRybV9nZW1f
+b2JqZWN0ICpvYmogPSAmc2htZW0tPmJhc2U7DQo+ICAgDQo+IC0JaWYgKFdBUk5fT05fT05D
+RSghc2htZW0tPnZtYXBfdXNlX2NvdW50KSkNCj4gLQkJcmV0dXJuOw0KPiAtDQo+IC0JaWYg
+KC0tc2htZW0tPnZtYXBfdXNlX2NvdW50ID4gMCkNCj4gLQkJcmV0dXJuOw0KPiAtDQo+ICAg
+CWlmIChvYmotPmltcG9ydF9hdHRhY2gpIHsNCj4gICAJCWRtYV9idWZfdnVubWFwKG9iai0+
+aW1wb3J0X2F0dGFjaC0+ZG1hYnVmLCBtYXApOw0KPiAgIAl9IGVsc2Ugew0KPiArCQlpZiAo
+V0FSTl9PTl9PTkNFKCFzaG1lbS0+dm1hcF91c2VfY291bnQpKQ0KPiArCQkJcmV0dXJuOw0K
+PiArDQo+ICsJCWlmICgtLXNobWVtLT52bWFwX3VzZV9jb3VudCA+IDApDQo+ICsJCQlyZXR1
+cm47DQo+ICsNCj4gICAJCXZ1bm1hcChzaG1lbS0+dmFkZHIpOw0KPiAgIAkJZHJtX2dlbV9z
+aG1lbV9wdXRfcGFnZXMoc2htZW0pOw0KPiAgIAl9DQo+IEBAIC02NDYsNyArNjQ0LDE0IEBA
+IHZvaWQgZHJtX2dlbV9zaG1lbV9wcmludF9pbmZvKGNvbnN0IHN0cnVjdCBkcm1fZ2VtX3No
+bWVtX29iamVjdCAqc2htZW0sDQo+ICAgCQkJICAgICAgc3RydWN0IGRybV9wcmludGVyICpw
+LCB1bnNpZ25lZCBpbnQgaW5kZW50KQ0KPiAgIHsNCj4gICAJZHJtX3ByaW50Zl9pbmRlbnQo
+cCwgaW5kZW50LCAicGFnZXNfdXNlX2NvdW50PSV1XG4iLCBzaG1lbS0+cGFnZXNfdXNlX2Nv
+dW50KTsNCj4gLQlkcm1fcHJpbnRmX2luZGVudChwLCBpbmRlbnQsICJ2bWFwX3VzZV9jb3Vu
+dD0ldVxuIiwgc2htZW0tPnZtYXBfdXNlX2NvdW50KTsNCj4gKw0KPiArCWlmIChzaG1lbS0+
+YmFzZS5pbXBvcnRfYXR0YWNoKQ0KPiArCQlkcm1fcHJpbnRmX2luZGVudChwLCBpbmRlbnQs
+ICJ2bWFwX3VzZV9jb3VudD0ldVxuIiwNCj4gKwkJCQkgIHNobWVtLT5iYXNlLmRtYV9idWYt
+PnZtYXBwaW5nX2NvdW50ZXIpOw0KPiArCWVsc2UNCj4gKwkJZHJtX3ByaW50Zl9pbmRlbnQo
+cCwgaW5kZW50LCAidm1hcF91c2VfY291bnQ9JXVcbiIsDQo+ICsJCQkJICBzaG1lbS0+dm1h
+cF91c2VfY291bnQpOw0KPiArDQoNCkhlcmUncyBhbm90aGVyIGNhc2Ugd2hlcmUgYSBHRU0g
+RE1BLUJVRiBvYmplY3QgbWlnaHQgYmVjb21lIGhlbHBmdWwuDQoNCkJlc3QgcmVnYXJkcw0K
+VGhvbWFzDQoNCj4gICAJZHJtX3ByaW50Zl9pbmRlbnQocCwgaW5kZW50LCAidmFkZHI9JXBc
+biIsIHNobWVtLT52YWRkcik7DQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0woZHJtX2dlbV9z
+aG1lbV9wcmludF9pbmZvKTsNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
+IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
-index 630dfbb01a40..1547f528a58e 100644
---- a/drivers/dma/bcm2835-dma.c
-+++ b/drivers/dma/bcm2835-dma.c
-@@ -902,8 +902,7 @@ static int bcm2835_dma_probe(struct platform_device *pdev)
+--------------i0b0biUqckSAOl60Afi3uhi9--
 
- 	dma_set_max_seg_size(&pdev->dev, 0x3FFFFFFF);
+--------------INGHqK60cD0J6bcyRsgC8CTQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(&pdev->dev, res);
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
+-----BEGIN PGP SIGNATURE-----
 
--- 
-2.25.1
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNsvIYFAwAAAAAACgkQlh/E3EQov+A/
+Tw//ZYrBzsRm/a9RnhIlqV27LiVx6btfHf+SNMWYv58P7yaZ6+h2OCa9h0pGWH5GiP9CI3P7TDRf
+8ztp1VjJE9z/d4xlFV2eVm+q+T7z/kLVyt50MnNKNM6yUhFFMxx923pBxGrLkTFUqIwIf3kwca+W
+kpOp3UQpZGDl6c6dt0SvIC/ek3dtGAMXZD4L6hMA537hsX3w8UEnYWy4UWCk3PH6Ic8y9ywistat
+/5dq6ils5evm+j5uInSpTQPexJA6kKi6to5D1fUgrGH+MdX+bsY7+nmB5F6YsJq7IfFGLrH7c7jP
+YmwnHvufRFw4ru+AhAJRg6djlxpSno6C4M3XFmcfVMuCpgOJsvJEWXUT/c8qNRGbpNH2xFPrAi9G
+rC+8hZ0DFPV0RsYrokewNwan2is3JNXng3hf2Opvu0JaYFBwKrYCs/XO7oQRdgvvycjbGsTGME1J
+gd0y/+aHYqcZTO5s8BvbGdcmdBOQnr52ioNmk8rL3VQ4PZlipQIwL0gfVdwhelIPbwBx5+yGmH59
+aU/yf7uX2/Rvs9SSZ05EiZU4fntYjo5VHViVRcH82BK3hRII1mbt6I7zYviOM2IYhuUN/yewcD69
+ZSBeJJg6v+iGyKiFb0Ym1yrlLok9sJuBiOUUY7uVqZtRKh5xd54Uv2lfhx4DHirfPeoDitrBAU+B
+uQ0=
+=QSh8
+-----END PGP SIGNATURE-----
+
+--------------INGHqK60cD0J6bcyRsgC8CTQ--
