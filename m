@@ -2,220 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201C9624CC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7760624CC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKJVT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S231341AbiKJVSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiKJVT2 (ORCPT
+        with ESMTP id S229962AbiKJVSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:19:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30C5BB4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:18:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668115104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wyanxJQo8O8tyLYuJxAe30a/zahGnsdNcEvhKOiSFyw=;
-        b=GHj2IYVmQweUEQVMVPxQ/Xq9qvByR6v/ySQ8P7X4VikW4TeIvFK4YZm6s85Y6QKiBVJKv8
-        qvlVjbQQdPwkJ8K+hpEfN1a58rsbVFaUkzjheWFpCmmz7BqhY+j4JB43Pyyn1aOLtEyfbX
-        SCeLgD1UkEAeaAoRY4Rlr2Hdi9ZwH1k=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-86-LcYy-vYpOs6Ju_YOXTEf2g-1; Thu, 10 Nov 2022 16:18:23 -0500
-X-MC-Unique: LcYy-vYpOs6Ju_YOXTEf2g-1
-Received: by mail-ej1-f71.google.com with SMTP id hq18-20020a1709073f1200b007ade8dd3494so1902888ejc.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 13:18:23 -0800 (PST)
+        Thu, 10 Nov 2022 16:18:40 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3EB18362;
+        Thu, 10 Nov 2022 13:18:39 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id cb2-20020a056830618200b00661b6e5dcd8so1831230otb.8;
+        Thu, 10 Nov 2022 13:18:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyanxJQo8O8tyLYuJxAe30a/zahGnsdNcEvhKOiSFyw=;
-        b=BwOKvQq2jAD8obaFwTcCaoeWP4jVtE4j2dWcFq46+h/zDY6rAj1tm+V0bwd6gYPTcu
-         FpPA+C5nadz859wFn9XxlyucW51UlDaDKYKjbEbEHvo1HV0mh/D+6861fWgC4epBkt+/
-         69nSJs54sCJmKjIGCMK5cJpyVyzUtpQxIVwN6xg7+5VQaoRiQ1Yt1SOCG0kAag/POn0/
-         78R2gcZ5PvBgDLv5/6RY9qhsrGjb5DDUnmlm4eQ0NhZdKNprKD619gn0RE+vy4QOJz6h
-         ZP2vnL3f8jB7ghzQd9Dy3ICv7WEBl93o06WXeVbsrCIJiL8/jR/FGaBm5OzQQhtN+T4p
-         JFBA==
-X-Gm-Message-State: ACrzQf0xv0hZcWlIxxYCpFioybz4SXv5LO3GSL4WErRIiMmujI9fNNZl
-        WWefZlqu1m4EPDhEsbT5p31G0LikAsji0+p4yYLe9U+R11ST3kAeks4aQ3JyGyor6N/mjIQFlSG
-        N0zmcESRMSb2t3+nInAvtZraE
-X-Received: by 2002:a17:906:456:b0:78d:a01b:b474 with SMTP id e22-20020a170906045600b0078da01bb474mr3933787eja.8.1668115102168;
-        Thu, 10 Nov 2022 13:18:22 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM53PNvGGxh9kTmc1lDCcu/Wa92QTRpwzY7HGiOC2LyH6DTM8Gozdbedc89+dWdIY0l8HUk55Q==
-X-Received: by 2002:a17:906:456:b0:78d:a01b:b474 with SMTP id e22-20020a170906045600b0078da01bb474mr3933782eja.8.1668115101961;
-        Thu, 10 Nov 2022 13:18:21 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id bc22-20020a056402205600b0045bccd8ab83sm322006edb.1.2022.11.10.13.18.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 13:18:21 -0800 (PST)
-Message-ID: <ecf5632b-5fba-ad84-41be-a335b164809f@redhat.com>
-Date:   Thu, 10 Nov 2022 22:18:20 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FQYEV0yuvAFKXfXfXPWLe2h/Dtk7ZrvGn4iuEOi+yK4=;
+        b=qJ3vxkfEjKoN5+Ke1toOxv7oILl4xI8yVf7U1oTLC3rk2Re3kgd17n7VarYLnMHlUZ
+         RiioeOBID/jLZaWoouaJahqav3HIwxhAyov14wSG2St//FsAHymgYqDDT12RXJ3aW0BT
+         J/kZpZQ7PSdD/Fd7hbMDzRspQOQghygyT+ZciyZWaygf7FUqro9WUzISLc07bEa2Q9st
+         tPjDJWIRTElqlInW4Zqtmi/UxBs01IATs8nJkiktZ9lUKaGNlbK4s1hPcLDLWNvI49ln
+         1AI4ygcMatvTkZibysqGaqmFUqi+n4gP4DEKl3k8o2DaFZnW0kp81qFXOzulaNZBbFtO
+         giHg==
+X-Gm-Message-State: ACrzQf2IYGhWr9F5m5oQ+FkHIsmiiLJCzn4+AQMZ8DhCgabSHCS8WiqE
+        ejXWH11G+cGvVzD7XYqYGg==
+X-Google-Smtp-Source: AMsMyM7oQ4Ol1gBBxJonigdAuxDwjy/LR46XN4ccCYBY1im4NIoAy/a29peGtg/WLuJLCh8oS9VdPg==
+X-Received: by 2002:a9d:730c:0:b0:661:ab16:3623 with SMTP id e12-20020a9d730c000000b00661ab163623mr2151184otk.91.1668115118340;
+        Thu, 10 Nov 2022 13:18:38 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ek24-20020a056870f61800b0013b1301ce42sm329233oab.47.2022.11.10.13.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 13:18:37 -0800 (PST)
+Received: (nullmailer pid 1062808 invoked by uid 1000);
+        Thu, 10 Nov 2022 21:18:39 -0000
+Date:   Thu, 10 Nov 2022 15:18:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        linux-kernel@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v6 09/20] dt-bindings: PCI: dwc: Add
+ interrupts/interrupt-names common properties
+Message-ID: <166811511627.1062682.15955440634711266362.robh@kernel.org>
+References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
+ <20221107204934.32655-10-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 10/14] platform/x86/intel/ifs: Add metadata validation
-Content-Language: en-US, nl
-To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, ashok.raj@intel.com,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
-        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-11-jithu.joseph@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221107225323.2733518-11-jithu.joseph@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107204934.32655-10-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 11/7/22 23:53, Jithu Joseph wrote:
-> The data portion of IFS test image file contains a metadata
-> region containing possibly multiple metadata structures in
-> addition to test data and hashes.
+On Mon, 07 Nov 2022 23:49:23 +0300, Serge Semin wrote:
+> Currently the 'interrupts' and 'interrupt-names' properties are defined
+> being too generic to really describe any actual IRQ interface. Moreover
+> the DW PCIe End-point devices are left with no IRQ signals. All of that
+> can be fixed by adding the IRQ-related properties to the common DW PCIe
+> DT-schemas in accordance with the hardware reference manual. The DW PCIe
+> common DT-schema will contain the generic properties definitions with just
+> a number of entries per property, while the DW PCIe RP/EP-specific schemas
+> will have the particular number of items and the generic resource names
+> listed.
 > 
-> Introduce the layout of this meta_data structure and validate
-> the sanity of certain fields of the new image before loading.
+> Note since there are DW PCI-based vendor-specific DT-bindings with the
+> custom names assigned to the same IRQ resources we have no much choice but
+> to add them to the generic DT-schemas in order to have the schemas being
+> applicable for such devices. These names are marked as vendor-specific and
+> should be avoided being used in new bindings in favor of the generic
+> names.
 > 
-> Tweak references to IFS test image chunks to reflect the updated
-> layout of the test image.
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
 > ---
->  drivers/platform/x86/intel/ifs/ifs.h  |  2 +
->  drivers/platform/x86/intel/ifs/load.c | 53 +++++++++++++++++++++++++++
->  2 files changed, 55 insertions(+)
 > 
-> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-> index 3ff1d9aaeaa9..98ca91bdd5ca 100644
-> --- a/drivers/platform/x86/intel/ifs/ifs.h
-> +++ b/drivers/platform/x86/intel/ifs/ifs.h
-> @@ -196,6 +196,7 @@ union ifs_status {
->   * @valid_chunks: number of chunks which could be validated.
->   * @status: it holds simple status pass/fail/untested
->   * @scan_details: opaque scan status code from h/w
-> + * @cur_batch: number indicating the currently loaded test file
->   */
->  struct ifs_data {
->  	int	integrity_cap_bit;
-> @@ -205,6 +206,7 @@ struct ifs_data {
->  	int	valid_chunks;
->  	int	status;
->  	u64	scan_details;
-> +	int	cur_batch;
->  };
->  
->  struct ifs_work {
-> diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
-> index 7c0d8602817b..f361fd42a320 100644
-> --- a/drivers/platform/x86/intel/ifs/load.c
-> +++ b/drivers/platform/x86/intel/ifs/load.c
-> @@ -8,7 +8,23 @@
->  
->  #include "ifs.h"
->  
-> +struct meta_data {
-> +	unsigned int meta_type;		// metadata type
-> +	unsigned int meta_size;		// size of this entire struct including hdrs.
-> +	unsigned int test_type;		// IFS test type
-> +	unsigned int fusa_info;		// Fusa info
-> +	unsigned int total_images;	// Total number of images
-> +	unsigned int current_image;	// Current Image #
-> +	unsigned int total_chunks;	// Total number of chunks in this image
-> +	unsigned int starting_chunk;	// Starting chunk number in this image
-> +	unsigned int size_per_chunk;	// size of each chunk
-> +	unsigned int chunks_per_stride;	// number of chunks in a stride
-> +	unsigned int reserved[54];	// Align to 256 bytes for chunk alignment.
-> +};
-> +
->  #define IFS_HEADER_SIZE	(sizeof(struct microcode_header_intel))
-> +#define META_TYPE_IFS	1
-> +#define IFS_CHUNK_ALIGNMENT	256
->  static  struct microcode_header_intel *ifs_header_ptr;	/* pointer to the ifs image header */
->  static u64 ifs_hash_ptr;			/* Address of ifs metadata (hash) */
->  static u64 ifs_test_image_ptr;			/* 256B aligned address of test pattern */
-> @@ -129,6 +145,40 @@ static void copy_hashes_authenticate_chunks(struct work_struct *work)
->  	complete(&ifs_done);
->  }
->  
-> +static int validate_ifs_metadata(struct device *dev)
-> +{
-> +	struct ifs_data *ifsd = ifs_get_data(dev);
-> +	struct meta_data *ifs_meta;
-> +	char test_file[64];
-> +	int ret = -EINVAL;
-> +
-> +	snprintf(test_file, sizeof(test_file), "%02x-%02x-%02x-%02x.scan",
-> +		 boot_cpu_data.x86, boot_cpu_data.x86_model,
-> +		 boot_cpu_data.x86_stepping, ifsd->cur_batch);
-> +
-> +	ifs_meta = (struct meta_data *)ifs_find_meta_data(ifs_header_ptr, META_TYPE_IFS);
-> +	if (!ifs_meta) {
-> +		dev_err(dev, "IFS Metadata missing in file %s\n", test_file);
-> +		return ret;
-> +	}
-> +
-> +	ifs_test_image_ptr = (u64)ifs_meta + sizeof(struct meta_data);
-> +
-> +	/* Scan chunk start must be 256 byte aligned */
-> +	if (!IS_ALIGNED(ifs_test_image_ptr, IFS_CHUNK_ALIGNMENT)) {
-> +		dev_err(dev, "Scan pattern offset is not 256 byte aligned in %s\n", test_file);
-> +		return ret;
-> +	}
-> +
-> +	if (ifs_meta->current_image != ifsd->cur_batch) {
-> +		dev_warn(dev, "Mismatch between filename %s and batch metadata 0x%02x\n",
-> +			 test_file, ifs_meta->current_image);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * IFS requires scan chunks authenticated per each socket in the platform.
->   * Once the test chunk is authenticated, it is automatically copied to secured memory
-> @@ -145,6 +195,9 @@ static int scan_chunks_sanity_check(struct device *dev)
->  	if (!package_authenticated)
->  		return ret;
->  
-> +	ret = validate_ifs_metadata(dev);
-> +	if (ret)
-> +		return ret;
->  
->  	ifsd->loading_error = false;
->  	ifsd->loaded_version = ifs_header_ptr->rev;
+> Note without the next dtschema tool fix
+> 
+> --- a/lib.py 2022-09-29 15:17:13.100033810 +0300
+> +++ b/lib.py     2022-09-29 15:19:54.886172794 +0300
+> @@ -1307,7 +1307,7 @@
+>  def format_error(filename, error, prefix="", nodename=None, verbose=False):
+>      src = prefix + os.path.abspath(filename) + ':'
+> 
+> -    if error.linecol[0] >= 0:
+> +    if hasattr(error, 'linecol') and error.linecol[0] >= 0:
+>          src = src + '%i:%i: ' % (error.linecol[0]+1, error.linecol[1]+1)
+>      else:
+>          src += ' '
+> @@ -1342,10 +1342,10 @@
+>      else:
+>          msg = error.message
+> 
+> -    if error.note:
+> +    if hasattr(error, 'note') and error.note:
+>          msg += '\n\t' + prefix + 'hint: ' + error.note
+> 
+> -    if error.schema_file:
+> +    if hasattr(error, 'schema_file') and error.schema_file:
+>          msg += '\n\t' + prefix + 'from schema $id: ' + error.schema_file
+> 
+>      return src + msg
+> 
+> any DT-bindings error will cause the dt-schema script crash:
+> 
+> Traceback (most recent call last):
+>   File "/home/fancer/.local/bin/dt-validate", line 175, in <module>
+>     sg.check_trees(filename, testtree)
+>   File "/home/fancer/.local/bin/dt-validate", line 122, in check_trees
+>     self.check_subtree(dt, subtree, False, "/", "/", filename)
+>   File "/home/fancer/.local/bin/dt-validate", line 111, in check_subtree
+>     self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+>   File "/home/fancer/.local/bin/dt-validate", line 111, in check_subtree
+>     self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+>   File "/home/fancer/.local/bin/dt-validate", line 106, in check_subtree
+>     self.check_node(tree, subtree, disabled, nodename, fullname, filename)
+>   File "/home/fancer/.local/bin/dt-validate", line 84, in check_node
+>     print(dtschema.format_error(filename, error, nodename=nodename, verbose=verbose) +
+>   File "/home/fancer/.local/lib/python3.8/site-packages/dtschema/lib.py", line 1332, in format_error
+>     msg += '\n' + format_error(filename, suberror, prefix=prefix+"\t", nodename=nodename, verbose=verbose)
+>   File "/home/fancer/.local/lib/python3.8/site-packages/dtschema/lib.py", line 1310, in format_error
+>     if error.linecol[0] >= 0:
+> AttributeError: 'ValidationError' object has no attribute 'linecol'
+> 
+> Changelog v3:
+> - This is a new patch unpinned from the next one:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+>   by the Rob' request. (@Rob)
+> 
+> Changelog v5:
+> - Add platform-specific interrupt names, but mark them as deprecated.
+> 
+> Changelog v6:
+> - Move the common interrupt-names definitions to the RP/EP schemas.
+>   Thus drop the 'definitions' property. (@Rob)
+> - Drop the 'deprecated' keywords from the vendor-specific names. (@Rob)
+> ---
+>  .../bindings/pci/snps,dw-pcie-common.yaml     | 19 ++++
+>  .../bindings/pci/snps,dw-pcie-ep.yaml         | 52 +++++++++++
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 90 ++++++++++++++++++-
+>  3 files changed, 158 insertions(+), 3 deletions(-)
+> 
 
+Reviewed-by: Rob Herring <robh@kernel.org>
