@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D2D623A1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26738623A1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232594AbiKJC6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
+        id S232322AbiKJC74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiKJC6t (ORCPT
+        with ESMTP id S231726AbiKJC7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:58:49 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABE75F8F;
-        Wed,  9 Nov 2022 18:58:48 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f63so488230pgc.2;
-        Wed, 09 Nov 2022 18:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pvz205DnpMYHAC74hYEPtX/pc7K6R5jYdg5JQ8ou98w=;
-        b=om6xhvj1Dif40J0ma2nZNHqR4zbPBvrVJXZ2gRRs/6SCtI89feoKTCwzpw8RqyOQD/
-         nSm3tuwZD+pQhZiPQBybXayqS09vD5Pq4hGLjNbTPemO/8qkI2yKPr/MYeKBZTWeglRH
-         TyAzFN9AA/umJz67fnPXeoi5i+stD+OFlhTLgf0ZZUA6vfegZkjXwY9r7F9+y6ifAIte
-         tK5QlkD3KNSYSoSmdKaUHYCbhcF4Dcubi2oO0O5+qknx35O2haOuU5kPC1WWvt1iGoWi
-         +pLoBzKCFP4mP8ubtk9Qp81KZypLfrtudcndXrp059ti9ojw/H7O7SKsVXXCcPr1gC6D
-         t+6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pvz205DnpMYHAC74hYEPtX/pc7K6R5jYdg5JQ8ou98w=;
-        b=d51fQuRXHh1HfLdky2Wdn8kBUy7gW9SljoffMiG93xT4CpnZv8uMn9Y8AXo8yCpxCf
-         V2Fh9/vLpxVcX5qOcaIKoI0Li3B6/eislesO5nqtJc2uNkdI5f5yxqK7dmTffrVmJbf6
-         vJTIiz5nXMJuIFjMSRJfWd6YWjimwWnUjHUveHPIzqx+GJZHP/W9N1Ih3eYvxIo9U8kq
-         pyGTiM3v1C/KLMiP2CPSlyWOBODSoJZnc3Sq2lbpfWI+gi518yDmPx6bWxYB9B/psFjT
-         lPEx9lXCOV0HA9RMS4neTl92+RuC+dCiqahVayCXCndruw1sQdJC8WGfKktrKwAVQ0xp
-         fPOQ==
-X-Gm-Message-State: ACrzQf2vAcZBlRDc67do6lJ5DwsETAsoBFBcutd2Ns3BjPvKoy+Qsj0W
-        Ig9QVoWPwVKQ8+0yNB5TJjGb+jgeJ0JcmIlL
-X-Google-Smtp-Source: AMsMyM4XLyYu30PUcwOIp3OUIXUywgKftZPwtv2iyCqObaEGYOgvNy/y5V2TGA1z/vPttY2qjZFeYQ==
-X-Received: by 2002:a63:8641:0:b0:46e:c693:2e57 with SMTP id x62-20020a638641000000b0046ec6932e57mr52122180pgd.341.1668049127688;
-        Wed, 09 Nov 2022 18:58:47 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id iz5-20020a170902ef8500b00176a2d23d1asm9817368plb.56.2022.11.09.18.58.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 18:58:47 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] module: Fix NULL vs IS_ERR checking for module_get_next_page
-Date:   Thu, 10 Nov 2022 06:58:34 +0400
-Message-Id: <20221110025834.1624394-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.37.3.671.ge2130fe6da78.dirty
+        Wed, 9 Nov 2022 21:59:54 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBF795B1;
+        Wed,  9 Nov 2022 18:59:53 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N760p67W6zpWL9;
+        Thu, 10 Nov 2022 10:56:10 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 10:59:52 +0800
+Received: from [127.0.0.1] (10.174.178.94) by kwepemm600020.china.huawei.com
+ (7.193.23.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
+ 2022 10:59:50 +0800
+Message-ID: <6a55fc58-2312-ebfc-1902-8d4a7481d700@huawei.com>
+Date:   Thu, 10 Nov 2022 10:59:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 5.10 000/118] 5.10.154-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <stable@vger.kernel.org>
+CC:     <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>
+References: <20221108133340.718216105@linuxfoundation.org>
+Content-Language: en-US
+From:   zhouzhixiu <zhouzhixiu@huawei.com>
+In-Reply-To: <20221108133340.718216105@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.94]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,42 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The module_get_next_page() function return error pointers on error
-instead of NULL.
-Use IS_ERR() to check the return value to fix this.
 
-Fixes: b1ae6dc41eaa ("module: add in-kernel support for decompressing")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- kernel/module/decompress.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On 2022/11/8 21:37, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.154 release.
+> There are 118 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 10 Nov 2022 13:33:17 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.154-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
+> -------------
+Tested on arm64 and x86 for 5.10.154-rc1,
 
-diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-index c033572d83f0..720e719253cd 100644
---- a/kernel/module/decompress.c
-+++ b/kernel/module/decompress.c
-@@ -114,8 +114,8 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- 	do {
- 		struct page *page = module_get_next_page(info);
- 
--		if (!page) {
--			retval = -ENOMEM;
-+		if (IS_ERR(page)) {
-+			retval = PTR_ERR(page);
- 			goto out_inflate_end;
- 		}
- 
-@@ -173,8 +173,8 @@ static ssize_t module_xz_decompress(struct load_info *info,
- 	do {
- 		struct page *page = module_get_next_page(info);
- 
--		if (!page) {
--			retval = -ENOMEM;
-+		if (IS_ERR(page)) {
-+			retval = PTR_ERR(page);
- 			goto out;
- 		}
- 
--- 
-2.37.3.671.ge2130fe6da78.dirty
+Kernel 
+repo:https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.10.y
+Version: 5.10.154-rc1
+Commit: 296919ad8f27fa545d0d75aed165240cd3eda695
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9023
+passed: 9023
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9023
+passed: 9023
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+Tested-by: Hulk Robot <hulkrobot@huawei.com>
 
