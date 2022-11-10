@@ -2,323 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6F6624923
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D06E624925
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiKJSMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 13:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
+        id S231495AbiKJSN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 13:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbiKJSM3 (ORCPT
+        with ESMTP id S230392AbiKJSNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 13:12:29 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C801AB1E8;
-        Thu, 10 Nov 2022 10:12:26 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id n18so1921112qvt.11;
-        Thu, 10 Nov 2022 10:12:26 -0800 (PST)
+        Thu, 10 Nov 2022 13:13:23 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6D1B1E8;
+        Thu, 10 Nov 2022 10:13:21 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id u24so4284169edd.13;
+        Thu, 10 Nov 2022 10:13:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QjhrCoZQO78aH1Eq+NZaqmtVo4jyNmaRL9pB6MFNrko=;
-        b=dnw0bXKFNPNx7KYtv9J8mc7BNylOSoCT51+8cGLEs3/wfBuCYMroRZdfmembhmFYRu
-         Ftwqcsw52BRG8H3AZ0SkHBwiPjvm8YOXrPPJ625R7TbcO8hLkN7JiCZc2oSv4pbA1ydj
-         zUdcYhiFrbEBuGE4w90UTJ1jPNPgu1O7rXVa/z7ykJpIIk52ngH71q+qpyqkosuf1a47
-         lJSjaFEiIokN2Drndlv21/sKRAIYvbcXoQ0LWQ2pAxAi6tqJibUA4HQPjfW3L/QUGzfU
-         gha9ddCSr1Y8WlN6+ig0aMk/RP4an2H215sqazYi9PVw6U7nqEqW7+M4YBNfj/q2/9+K
-         pqGA==
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DY/ynAFUt6xV5jtU1HFvLU4KzvnGIXAlHi4AEy5swMw=;
+        b=oqPWWzEI4e/GAJJSphQE0f/l51W08aabzFPwlqjU6aXR4qcZPCvmiCZRAxK8+FBrNr
+         JIIo4dGvyvjRuJBK5U92dZBEUBjx589PsdnlNloYPR//iuPBoTuDCvR4k7KX+4DuzzC6
+         CiEm1JoCROmX+paQ2FcjwHqldaIWIkmLMU2WO4Zi963susArgk8iLveKu2uw0CbKuF/H
+         JU4eZ6O2835rr5IWHkFqazRN6+lLOVc0IUwdTtdcT7eLixELAKyrOEi4ZEhjJtSMb3r2
+         iP/pL1/JLNIRAJbSIm968y98M13+h4NzGELYt3qL9i//PRpXWNGgImsDVQJuvAGCtF8W
+         iMDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QjhrCoZQO78aH1Eq+NZaqmtVo4jyNmaRL9pB6MFNrko=;
-        b=3KB+SBA9NOsIo/uwHMV9zNIhYEiBekCimZeKkKXxNvbQ9+0qNhTNR2wjSY32HifJ2P
-         uPh6mE1g3gu0FLVbv7zxHn8PrSpM0DRj4RAPCFiHDo2AFnE+QIuWGWwqKs6Zf7nd4Syy
-         BHaPsdXdt1qajOoyM0d+c3/DuqQV0fPiLAKjv4XK+JaTpM/dn5Xcux4IZHApvuVRWBAf
-         CInlOP1Fq0qUXSVtSo4VGPhIWn2OZD1ot6eFks7831Z3cgJ0bu7vXagf/1x6wNA1rfGW
-         cfelMfLMLDPmq7Bbp55fvh/y/GMf7nOMbtYgS3WQDKtBV43MZLVP5GmNoo3oeMYsomrC
-         x4Rw==
-X-Gm-Message-State: ACrzQf3uyYrDGx47m6gEmWRDKtGsyDWAgcx+XCOarLDau+L/WGR/RSQz
-        14qA5qWJfeDELcyVr5vqZbw=
-X-Google-Smtp-Source: AMsMyM6PN9MhQ1V4GLQW/FFO2wTh0LDfhrT7sMmy0AcGKAFTmWANj0HolLsCbbRYoCG8ti+krOS/Gg==
-X-Received: by 2002:a05:6214:4005:b0:4bb:9c0f:bcaa with SMTP id kd5-20020a056214400500b004bb9c0fbcaamr61963356qvb.42.1668103945670;
-        Thu, 10 Nov 2022 10:12:25 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id j67-20020a378746000000b006fa5815b88dsm13005395qkd.88.2022.11.10.10.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 10:12:25 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id DB08827C005B;
-        Thu, 10 Nov 2022 13:12:24 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 10 Nov 2022 13:12:24 -0500
-X-ME-Sender: <xms:CD9tY7Gr8GRDNtH2lqfS2lECGcRMbpKh8rhpCxVYzzdMP0Eqfk51BQ>
-    <xme:CD9tY4U83EHX6r8eKEsOEbdeRWQEuLY9KoUJ_w87COJw7mxH3NG_10H7-fu_sOy4h
-    NzZw0-cO5w063_1uw>
-X-ME-Received: <xmr:CD9tY9KaIQEcsD-9pJCq5vwwikvdhvJTFSs_SMjnvYWzyRy831KVmR0fmEw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggdduudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeekheefledtgfekleelueekudeiudekffevlefhkeelueeitefhgeeigfef
-    jeekgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhruhhsthdqlhgrnhhgrdhorh
-    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsgho
-    qhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqd
-    dujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihm
-    vgdrnhgrmhgv
-X-ME-Proxy: <xmx:CD9tY5ED48YJnaU9QKRg5D_FWbCZSMDJ4m3vZKsdCBYxabRnMWrgrA>
-    <xmx:CD9tYxWPzOf02SaYj4IuMvi0UMuuXCk6UQ6N0ZbYLuyhUW996kMD-A>
-    <xmx:CD9tY0Nm6BilmPSobIJMBbjQiF_PMnIAz0HQDrBhRvEuFm20If7pCQ>
-    <xmx:CD9tY9rblKvEaOHIht9REC3W3Su_0BCPnGMGGdZRWyk2iT1hbccj0g>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Nov 2022 13:12:24 -0500 (EST)
-Date:   Thu, 10 Nov 2022 10:12:23 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Adam Bratschi-Kaye <ark.email@gmail.com>
-Subject: Re: [PATCH v1 02/28] rust: print: add more `pr_*!` levels
-Message-ID: <Y20/B80+eU4kYW3S@Boquns-Mac-mini.local>
-References: <20221110164152.26136-1-ojeda@kernel.org>
- <20221110164152.26136-3-ojeda@kernel.org>
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DY/ynAFUt6xV5jtU1HFvLU4KzvnGIXAlHi4AEy5swMw=;
+        b=xTpysD/hXhPwIFkWGNRbeubPWSP2cl8eXM5p4JMNnDItBLFA85fBzK5GT+wIu3GhkP
+         tk66/7U3Nk4GSm4hoVI8SBK4VDzI+V38Hnig/4kgaWq1uDcoJYox1w7BJyABe1NUPtEV
+         hhmCsENmVj85Z8Bd+aNlvjRvCF/FU1DTQGQFXNJSwjg+DCGVP2a30NhDb4soNxJCg8+Z
+         +7g4bwNXRQZVsxwRDoO5foHnmHNHCe5u3oh55jyyZHZ6kT/Mge5vulq6SYmQ+FdcQHMT
+         Q8VkF7IxRdfBRnHS3M+CLtmbvFPkn14+XNZB6CqaeRdAwoWKuyEYTjqr9k5Qr5Uzd1DG
+         xH0Q==
+X-Gm-Message-State: ACrzQf0aKQIGWRsKesZUowUA2J4xS4TcLnsASKsHQMHB1GN+ktfHOV6n
+        hlrxy5leQqQsKRv5RFvlVLU=
+X-Google-Smtp-Source: AMsMyM45aguoUhFP6GR7YJUOwitPLA+53uATFntDqAHLc1YrwWzhPP2KWYtzMfVzuoLs5uI61Xec5A==
+X-Received: by 2002:aa7:c70b:0:b0:459:9e3:c0b0 with SMTP id i11-20020aa7c70b000000b0045909e3c0b0mr2848522edq.279.1668104000411;
+        Thu, 10 Nov 2022 10:13:20 -0800 (PST)
+Received: from [192.168.1.10] ([46.249.74.23])
+        by smtp.googlemail.com with ESMTPSA id 9-20020a170906300900b00781b589a1afsm7544113ejz.159.2022.11.10.10.13.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 10 Nov 2022 10:13:19 -0800 (PST)
+Subject: Re: [PATCH 1/3] power: cpcap-battery: Do not issue low signal too
+ frequently
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony@atomide.com, philipp@uvos.xyz
+References: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <1667647544-12945-2-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <20221110155510.tobdbaabjoe7ugvl@mercury.elektranox.org>
+From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+Message-ID: <bd1d5ece-7665-a116-f37d-c21061030997@gmail.com>
+Date:   Thu, 10 Nov 2022 20:13:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110164152.26136-3-ojeda@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221110155510.tobdbaabjoe7ugvl@mercury.elektranox.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 05:41:14PM +0100, Miguel Ojeda wrote:
-> Currently, only `pr_info!` (for the minimal sample) and
-> `pr_emerg!` (for the panic handler) are there.
-> 
-> Add the other levels as new macros, i.e. `pr_alert!`, `pr_crit!`,
-> `pr_err!`, `pr_warn!`, `pr_notice!` and `pr_debug!`.
-> 
-> Co-developed-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-> Signed-off-by: Adam Bratschi-Kaye <ark.email@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Hi,
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-
-Regards,
-Boqun
-
-> ---
->  rust/kernel/prelude.rs |   2 +-
->  rust/kernel/print.rs   | 154 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 155 insertions(+), 1 deletion(-)
+On 10.11.22 г. 17:55 ч., Sebastian Reichel wrote:
+> Hi,
 > 
-> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-> index f8219285d8c0..6a1c6b38327f 100644
-> --- a/rust/kernel/prelude.rs
-> +++ b/rust/kernel/prelude.rs
-> @@ -17,7 +17,7 @@ pub use alloc::{boxed::Box, vec::Vec};
->  
->  pub use macros::module;
->  
-> -pub use super::{pr_emerg, pr_info};
-> +pub use super::{pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr_notice, pr_warn};
->  
->  pub use super::error::{Error, Result};
->  
-> diff --git a/rust/kernel/print.rs b/rust/kernel/print.rs
-> index 55db5a1ba752..694f51c6da5c 100644
-> --- a/rust/kernel/print.rs
-> +++ b/rust/kernel/print.rs
-> @@ -74,7 +74,13 @@ pub mod format_strings {
->      // Furthermore, `static` instead of `const` is used to share the strings
->      // for all the kernel.
->      pub static EMERG: [u8; LENGTH] = generate(false, bindings::KERN_EMERG);
-> +    pub static ALERT: [u8; LENGTH] = generate(false, bindings::KERN_ALERT);
-> +    pub static CRIT: [u8; LENGTH] = generate(false, bindings::KERN_CRIT);
-> +    pub static ERR: [u8; LENGTH] = generate(false, bindings::KERN_ERR);
-> +    pub static WARNING: [u8; LENGTH] = generate(false, bindings::KERN_WARNING);
-> +    pub static NOTICE: [u8; LENGTH] = generate(false, bindings::KERN_NOTICE);
->      pub static INFO: [u8; LENGTH] = generate(false, bindings::KERN_INFO);
-> +    pub static DEBUG: [u8; LENGTH] = generate(false, bindings::KERN_DEBUG);
->  }
->  
->  /// Prints a message via the kernel's [`_printk`].
-> @@ -172,6 +178,126 @@ macro_rules! pr_emerg (
->      )
->  );
->  
-> +/// Prints an alert-level message (level 1).
-> +///
-> +/// Use this level if action must be taken immediately.
-> +///
-> +/// Equivalent to the kernel's [`pr_alert`] macro.
-> +///
-> +/// Mimics the interface of [`std::print!`]. See [`core::fmt`] and
-> +/// `alloc::format!` for information about the formatting syntax.
-> +///
-> +/// [`pr_alert`]: https://www.kernel.org/doc/html/latest/core-api/printk-basics.html#c.pr_alert
-> +/// [`std::print!`]: https://doc.rust-lang.org/std/macro.print.html
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// pr_alert!("hello {}\n", "there");
-> +/// ```
-> +#[macro_export]
-> +macro_rules! pr_alert (
-> +    ($($arg:tt)*) => (
-> +        $crate::print_macro!($crate::print::format_strings::ALERT, $($arg)*)
-> +    )
-> +);
-> +
-> +/// Prints a critical-level message (level 2).
-> +///
-> +/// Use this level for critical conditions.
-> +///
-> +/// Equivalent to the kernel's [`pr_crit`] macro.
-> +///
-> +/// Mimics the interface of [`std::print!`]. See [`core::fmt`] and
-> +/// `alloc::format!` for information about the formatting syntax.
-> +///
-> +/// [`pr_crit`]: https://www.kernel.org/doc/html/latest/core-api/printk-basics.html#c.pr_crit
-> +/// [`std::print!`]: https://doc.rust-lang.org/std/macro.print.html
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// pr_crit!("hello {}\n", "there");
-> +/// ```
-> +#[macro_export]
-> +macro_rules! pr_crit (
-> +    ($($arg:tt)*) => (
-> +        $crate::print_macro!($crate::print::format_strings::CRIT, $($arg)*)
-> +    )
-> +);
-> +
-> +/// Prints an error-level message (level 3).
-> +///
-> +/// Use this level for error conditions.
-> +///
-> +/// Equivalent to the kernel's [`pr_err`] macro.
-> +///
-> +/// Mimics the interface of [`std::print!`]. See [`core::fmt`] and
-> +/// `alloc::format!` for information about the formatting syntax.
-> +///
-> +/// [`pr_err`]: https://www.kernel.org/doc/html/latest/core-api/printk-basics.html#c.pr_err
-> +/// [`std::print!`]: https://doc.rust-lang.org/std/macro.print.html
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// pr_err!("hello {}\n", "there");
-> +/// ```
-> +#[macro_export]
-> +macro_rules! pr_err (
-> +    ($($arg:tt)*) => (
-> +        $crate::print_macro!($crate::print::format_strings::ERR, $($arg)*)
-> +    )
-> +);
-> +
-> +/// Prints a warning-level message (level 4).
-> +///
-> +/// Use this level for warning conditions.
-> +///
-> +/// Equivalent to the kernel's [`pr_warn`] macro.
-> +///
-> +/// Mimics the interface of [`std::print!`]. See [`core::fmt`] and
-> +/// `alloc::format!` for information about the formatting syntax.
-> +///
-> +/// [`pr_warn`]: https://www.kernel.org/doc/html/latest/core-api/printk-basics.html#c.pr_warn
-> +/// [`std::print!`]: https://doc.rust-lang.org/std/macro.print.html
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// pr_warn!("hello {}\n", "there");
-> +/// ```
-> +#[macro_export]
-> +macro_rules! pr_warn (
-> +    ($($arg:tt)*) => (
-> +        $crate::print_macro!($crate::print::format_strings::WARNING, $($arg)*)
-> +    )
-> +);
-> +
-> +/// Prints a notice-level message (level 5).
-> +///
-> +/// Use this level for normal but significant conditions.
-> +///
-> +/// Equivalent to the kernel's [`pr_notice`] macro.
-> +///
-> +/// Mimics the interface of [`std::print!`]. See [`core::fmt`] and
-> +/// `alloc::format!` for information about the formatting syntax.
-> +///
-> +/// [`pr_notice`]: https://www.kernel.org/doc/html/latest/core-api/printk-basics.html#c.pr_notice
-> +/// [`std::print!`]: https://doc.rust-lang.org/std/macro.print.html
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// pr_notice!("hello {}\n", "there");
-> +/// ```
-> +#[macro_export]
-> +macro_rules! pr_notice (
-> +    ($($arg:tt)*) => (
-> +        $crate::print_macro!($crate::print::format_strings::NOTICE, $($arg)*)
-> +    )
-> +);
-> +
->  /// Prints an info-level message (level 6).
->  ///
->  /// Use this level for informational messages.
-> @@ -196,3 +322,31 @@ macro_rules! pr_info (
->          $crate::print_macro!($crate::print::format_strings::INFO, $($arg)*)
->      )
->  );
-> +
-> +/// Prints a debug-level message (level 7).
-> +///
-> +/// Use this level for debug messages.
-> +///
-> +/// Equivalent to the kernel's [`pr_debug`] macro, except that it doesn't support dynamic debug
-> +/// yet.
-> +///
-> +/// Mimics the interface of [`std::print!`]. See [`core::fmt`] and
-> +/// `alloc::format!` for information about the formatting syntax.
-> +///
-> +/// [`pr_debug`]: https://www.kernel.org/doc/html/latest/core-api/printk-basics.html#c.pr_debug
-> +/// [`std::print!`]: https://doc.rust-lang.org/std/macro.print.html
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// pr_debug!("hello {}\n", "there");
-> +/// ```
-> +#[macro_export]
-> +#[doc(alias = "print")]
-> +macro_rules! pr_debug (
-> +    ($($arg:tt)*) => (
-> +        if cfg!(debug_assertions) {
-> +            $crate::print_macro!($crate::print::format_strings::DEBUG, $($arg)*)
-> +        }
-> +    )
-> +);
-> -- 
-> 2.38.1
+> On Sat, Nov 05, 2022 at 01:25:42PM +0200, Ivaylo Dimitrov wrote:
+>> It seems that low battery irq may be generated tens of times per second,
+>> leading to userspace being flooded with unnecessary events.
+>>
+>> Fix that by preventing such events being generated more than once every 30
+>> seconds.
+>>
+>> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+>> ---
+> 
+> Concept looks ok to me, but the code is slightly racy, since the
+> thread is flushed before the IRQ is disabled in the remove routine.
+> 
+
+I did that on purpose, to have matching disable_irq()/enable_irq() 
+calls. Maybe I over-engineered it, but my understanding is:
+
+When remove() is called, if we have delayed work pending, that means 
+that lowbph IRQ was disabled in cpcap_battery_irq_thread() and we have 
+to re-enable it. If delayed_work is not pending, flush_delayed_work() 
+will do nothing, IIUC.
+
+Maybe I shall protect schedule_delayed_work() and disable_irq_nosync() 
+calls with a mutex and wait for it before calling flush_delayed_work() 
+in remove? That way there will be guarantee that if delayed_work is 
+pending, IRQ is disabled too, while now maybe there is a small time 
+window remove() to be called between schedule_delayed_work() and 
+disable_irq_nosync().
+
+>>   drivers/power/supply/cpcap-battery.c | 27 ++++++++++++++++++++++++++-
+>>   1 file changed, 26 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
+>> index 4676560..8869067 100644
+>> --- a/drivers/power/supply/cpcap-battery.c
+>> +++ b/drivers/power/supply/cpcap-battery.c
+>> @@ -137,6 +137,7 @@ struct cpcap_battery_ddata {
+>>   	struct power_supply *psy;
+>>   	struct cpcap_battery_config config;
+>>   	struct cpcap_battery_state_data state[CPCAP_BATTERY_STATE_NR];
+>> +	struct delayed_work low_irq_work;
+>>   	u32 cc_lsb;		/* μAms per LSB */
+>>   	atomic_t active;
+>>   	int charge_full;
+>> @@ -914,9 +915,13 @@ static irqreturn_t cpcap_battery_irq_thread(int irq, void *data)
+>>   		dev_info(ddata->dev, "Coulomb counter calibration done\n");
+>>   		break;
+>>   	case CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW:
+>> -		if (latest->current_ua >= 0)
+>> +		if (latest->current_ua >= 0 &&
+>> +		    !delayed_work_pending((&ddata->low_irq_work))) {
+>>   			dev_warn(ddata->dev, "Battery low at %imV!\n",
+>>   				latest->voltage / 1000);
+>> +			schedule_delayed_work(&ddata->low_irq_work, 30 * HZ);
+>> +			disable_irq_nosync(d->irq);
+>> +		}
+>>   		break;
+>>   	case CPCAP_BATTERY_IRQ_ACTION_POWEROFF:
+>>   		if (latest->current_ua >= 0 && latest->voltage <= 3200000) {
+>> @@ -1087,6 +1092,21 @@ static int cpcap_battery_calibrate(struct cpcap_battery_ddata *ddata)
+>>   	return error;
+>>   }
+>>   
+>> +static void cpcap_battery_lowbph_enable(struct work_struct *work)
+>> +{
+>> +	struct delayed_work *d_work = to_delayed_work(work);
+>> +	struct cpcap_battery_ddata *ddata = container_of(d_work,
+>> +			struct cpcap_battery_ddata, low_irq_work);
+>> +	struct cpcap_interrupt_desc *d;
+>> +
+>> +	list_for_each_entry(d, &ddata->irq_list, node) {
+>> +		if (d->action == CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW)
+>> +			break;
+>> +	}
+>> +
+>> +	enable_irq(d->irq);
+>> +}
+>> +
+>>   #ifdef CONFIG_OF
+>>   static const struct of_device_id cpcap_battery_id_table[] = {
+>>   	{
+>> @@ -1118,6 +1138,8 @@ static int cpcap_battery_probe(struct platform_device *pdev)
+>>   	if (!ddata)
+>>   		return -ENOMEM;
+>>   
+>> +	INIT_DELAYED_WORK(&ddata->low_irq_work, cpcap_battery_lowbph_enable);
+> 
+> use devm_delayed_work_autocancel() and put it directly before
+> cpcap_battery_init_interrupts().
+> 
+>>   	cpcap_battery_detect_battery_type(ddata);
+>>   
+>>   	INIT_LIST_HEAD(&ddata->irq_list);
+>> @@ -1185,6 +1207,9 @@ static int cpcap_battery_remove(struct platform_device *pdev)
+>>   	if (error)
+>>   		dev_err(&pdev->dev, "could not disable: %i\n", error);
+>>   
+>> +	/* make sure to call enable_irq() if needed */
+>> +	flush_delayed_work(&ddata->low_irq_work);
+> 
+> and this can be dropped afterwards.
+> 
+
+Ok, but what will happen if we have lowbph IRQ already disabled? 
+Wouldn't that cause issues, because of unbalanced 
+disable_irq()/enable_irq() calls?
+
+Thanks,
+Ivo
+
+>> +
+>>   	return 0;
+>>   }
+> 
+> Thanks,
+> 
+> -- Sebastian
 > 
