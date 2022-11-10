@@ -2,262 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFDD623CCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CB0623CCF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbiKJHjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:39:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S232491AbiKJHkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbiKJHj1 (ORCPT
+        with ESMTP id S230093AbiKJHk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:39:27 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B82E04
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:39:26 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-370547b8ca0so8575567b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Nov 2022 23:39:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2n116yHqsHx3GXDFBWj4GPvIYmNiRVCPoPYr5g3rrak=;
-        b=gYQsWdVOo9NH7cYp9EJkoemWayrJHXiS/a3isVMQa4fPDIoXQZuZRuzpPrbQhMsSDB
-         HNxHv2cx1GuGINBMy5EPOrByy5dPmJmbiO2QkkV1+PznHFuyXGyfd06C6t5jHBhbLYai
-         z5fiRGk3BmddUg8Q17lB46PmNJwHiS2yC/iqgaJY+JWa+0LlxjEBQdEi38oat8wgKXCB
-         +FIgIC2csbm6vi7/NUz6uHlCFRUjbKXfyMsLeeJuhCjtfPmUWdRWG+/WBvNz/OjIMyGW
-         sphblqWlJqR0nXAY1R6ClBnbX3AsiLdX+/Jy3BN2K2ZtXI9avMHrh4L6loZZDcUjUHb1
-         I8/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2n116yHqsHx3GXDFBWj4GPvIYmNiRVCPoPYr5g3rrak=;
-        b=f/CNyq2lkCxHHfLtGStKwwfVQ2lc+JKQl/qKGdlIxrBAmr1qE6XA8VlUMnPcrvGcr8
-         csETBhySFcPOht7PIVxgb52mXf7PD92DSSXiKx/c1hmtjGLgyGwLNzKl9DnfcQMFyo6k
-         bpss0R6Hja9LUKz8ofsYFR1DM1yB7bwEqi4Ivzxm5M/MCgx5MFKNEnr0MEq0wC+dgFjY
-         x2edUkrtnkBV8AUJho7Tp+UhEZAt7nRL4mw7yzKMxq8SNlOD9pzwBRFzh4fWL/KUjApt
-         JIoLZJJcHbuWy9bqgeK0VxSYQjcZAg/pSZD4HvocHWFK6vjBXNoZE25E3BR4D7b2/uPv
-         CUdg==
-X-Gm-Message-State: ACrzQf0lWNmUBH00JD2asi8QFfgLDaVV3ul80teWMXI/3TCwJNthicmO
-        PGPyTngaBH0s0MqaTd4QnnDG+T7pW8E8txCLFuCrog==
-X-Google-Smtp-Source: AMsMyM6TZxS3krtlbIG57zpax3YwZDYQBjX9Fy4TVuoobHQOO7xng6raFZf3sd+zmXR2AFOvpQSye3Lv1v5zGFv3evU=
-X-Received: by 2002:a05:690c:802:b0:36b:adba:8ff with SMTP id
- bx2-20020a05690c080200b0036badba08ffmr57582518ywb.237.1668065965190; Wed, 09
- Nov 2022 23:39:25 -0800 (PST)
+        Thu, 10 Nov 2022 02:40:28 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B799E615F
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 23:40:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VURxxwo_1668066023;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VURxxwo_1668066023)
+          by smtp.aliyun-inc.com;
+          Thu, 10 Nov 2022 15:40:24 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     huyue2@coolpad.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] erofs: enable large folio in device-based mode
+Date:   Thu, 10 Nov 2022 15:40:23 +0800
+Message-Id: <20221110074023.8059-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-References: <CA+G9fYvBtwi8jmQZNvYwjR425BXGgCG2ej3iE6gtgfRzZmQnOw@mail.gmail.com>
- <Y2rLm3O2mrG7PcZN@mail.local>
-In-Reply-To: <Y2rLm3O2mrG7PcZN@mail.local>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 10 Nov 2022 13:09:09 +0530
-Message-ID: <CA+G9fYtdy=yybGGdcpFWMoui0v57UwYrT-NP0pZvesURQU7BzA@mail.gmail.com>
-Subject: Re: kselftest rtctests failed on arm64 Raspberry Pi 4 -
- rtctest.c:34:date_read:Expected -1 (-1) != self->fd (-1)
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre,
+Enable large folio in device-based mode. Then the radahead routine will
+pass down large folio containing multiple pages.
 
-On Wed, 9 Nov 2022 at 03:05, Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> Hello,
->
-> On 08/11/2022 15:17:04+0530, Naresh Kamboju wrote:
-> > kselftest rtctests failed on arm64 Raspberry Pi 4 Model B device and
-> > passed on other devices and qemu emulators. Please refer to the
-> > full logs and test comparison results links.
-> >
->
-> It seems your board doesn't have an rtc at all, the tests will not run
-> unless you add one.
->
-> You can try the following patch:
+Enable this feature for non-compressed format for now, until the
+compression part supports large folio later.
 
-Daniel Diaz tested the following patch and results were changed from
-FAIL to SKIP [1].
+Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+I have tested it under workload of Linux compiling. I know it's not a
+perfect workload testing this feature, because large folio is less
+likely hit in this case since source files are generally small. But I
+indeed observed large folios (e.g. 16 pages) by peeking
+readahead_count(rac) in erofs_readahead().
+---
+ fs/erofs/inode.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Tested-by:  Daniel Diaz <daniel.diaz@linaro.org>
+diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+index ad2a82f2eb4c..e457b8a59ee7 100644
+--- a/fs/erofs/inode.c
++++ b/fs/erofs/inode.c
+@@ -295,6 +295,8 @@ static int erofs_fill_inode(struct inode *inode)
+ 		goto out_unlock;
+ 	}
+ 	inode->i_mapping->a_ops = &erofs_raw_access_aops;
++	if (!erofs_is_fscache_mode(inode->i_sb))
++		mapping_set_large_folios(inode->i_mapping);
+ #ifdef CONFIG_EROFS_FS_ONDEMAND
+ 	if (erofs_is_fscache_mode(inode->i_sb))
+ 		inode->i_mapping->a_ops = &erofs_fscache_access_aops;
+-- 
+2.19.1.6.gb485710b
 
-[  241.791361] kselftest: Running tests in rtc
-TAP version 13
-1..1
-# selftests: rtc: rtctest
-# TAP version 13
-# 1..8
-# # Starting 8 tests from 2 test cases.
-# #  RUN           rtc.date_read ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.date_read
-# ok 1 # SKIP Skipping test since /dev/rtc0 does not exist
-# #  RUN           rtc.date_read_loop ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.date_read_loop
-# ok 2 # SKIP Skipping test since /dev/rtc0 does not exist
-# #  RUN           rtc.uie_read ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.uie_read
-# ok 3 # SKIP Skipping test since /dev/rtc0 does not exist
-# #  RUN           rtc.uie_select ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.uie_select
-# ok 4 # SKIP Skipping test since /dev/rtc0 does not exist
-# #  RUN           rtc.alarm_alm_set ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.alarm_alm_set
-# ok 5 # SKIP Skipping test since /dev/rtc0 does not exist
-# #  RUN           rtc.alarm_wkalm_set ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.alarm_wkalm_set
-# ok 6 # SKIP Skipping test since /dev/rtc0 does not exist
-# #  RUN           rtc.alarm_alm_set_minute ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.alarm_alm_set_minute
-# ok 7 # SKIP Skipping test since /dev/rtc0 does not exist
-# #  RUN           rtc.alarm_wkalm_set_minute ...
-# #      SKIP      Skipping test since /dev/rtc0 does not exist
-# #            OK  rtc.alarm_wkalm_set_minute
-# ok 8 # SKIP Skipping test since /dev/rtc0 does not exist
-# # PASSED: 8 / 8 tests passed.
-# # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:8 error:0
-ok 1 selftests: rtc: rtctest
-
-
->
-> From e93ddc7046aba97b39b0ceffc53ebf1f10ad9868 Mon Sep 17 00:00:00 2001
-> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Date: Tue, 8 Nov 2022 22:18:55 +0100
-> Subject: [PATCH] selftests: rtc: skip when RTC is not present
->
-> There is not point in failing the tests when there the RTC is not present,
-> simply skip the test.
->
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
->  tools/testing/selftests/rtc/rtctest.c | 33 ++++++++++++++++++++++++++-
->  1 file changed, 32 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-> index 2b9d929a24ed..63ce02d1d5cc 100644
-> --- a/tools/testing/selftests/rtc/rtctest.c
-> +++ b/tools/testing/selftests/rtc/rtctest.c
-> @@ -31,7 +31,6 @@ FIXTURE(rtc) {
->
->  FIXTURE_SETUP(rtc) {
->         self->fd = open(rtc_file, O_RDONLY);
-> -       ASSERT_NE(-1, self->fd);
->  }
->
->  FIXTURE_TEARDOWN(rtc) {
-> @@ -42,6 +41,10 @@ TEST_F(rtc, date_read) {
->         int rc;
->         struct rtc_time rtc_tm;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         /* Read the RTC time/date */
->         rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
->         ASSERT_NE(-1, rc);
-> @@ -85,6 +88,10 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
->         struct rtc_time rtc_tm;
->         time_t start_rtc_read, prev_rtc_read;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         TH_LOG("Continuously reading RTC time for %ds (with %dms breaks after every read).",
->                READ_LOOP_DURATION_SEC, READ_LOOP_SLEEP_MS);
->
-> @@ -119,6 +126,10 @@ TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
->         int i, rc, irq = 0;
->         unsigned long data;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         /* Turn on update interrupts */
->         rc = ioctl(self->fd, RTC_UIE_ON, 0);
->         if (rc == -1) {
-> @@ -144,6 +155,10 @@ TEST_F(rtc, uie_select) {
->         int i, rc, irq = 0;
->         unsigned long data;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         /* Turn on update interrupts */
->         rc = ioctl(self->fd, RTC_UIE_ON, 0);
->         if (rc == -1) {
-> @@ -183,6 +198,10 @@ TEST_F(rtc, alarm_alm_set) {
->         time_t secs, new;
->         int rc;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         rc = ioctl(self->fd, RTC_RD_TIME, &tm);
->         ASSERT_NE(-1, rc);
->
-> @@ -237,6 +256,10 @@ TEST_F(rtc, alarm_wkalm_set) {
->         time_t secs, new;
->         int rc;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
->         ASSERT_NE(-1, rc);
->
-> @@ -285,6 +308,10 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
->         time_t secs, new;
->         int rc;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         rc = ioctl(self->fd, RTC_RD_TIME, &tm);
->         ASSERT_NE(-1, rc);
->
-> @@ -339,6 +366,10 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
->         time_t secs, new;
->         int rc;
->
-> +       if (self->fd == -1 && errno == ENOENT)
-> +               SKIP(return, "Skipping test since %s does not exist", rtc_file);
-> +       ASSERT_NE(-1, self->fd);
-> +
->         rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
->         ASSERT_NE(-1, rc);
-
-[1] https://lkft.validation.linaro.org/scheduler/job/5831980#L1760
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
