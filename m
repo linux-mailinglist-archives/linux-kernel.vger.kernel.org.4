@@ -2,50 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33F0623C2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9032623C33
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232318AbiKJG4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S232727AbiKJG5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbiKJG4A (ORCPT
+        with ESMTP id S232713AbiKJG5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:56:00 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0CD31EF9;
-        Wed,  9 Nov 2022 22:55:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7CKP4MH3z4xYY;
-        Thu, 10 Nov 2022 17:55:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668063354;
-        bh=TiZs+SEY1PgsVCWcuX9sf03rYQ9hc0zKFA0Q8uNqsXQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=M7MtsNyoelh+ptrpbponh/mYrNdgkqI2XNOSb9PPVucxUnvVLQ3kbvrEuRPxMERq/
-         6S7UJs27yMB+FEVGm13oaLdTaEeNSbu+YFSiKgsBvOQcwGHc2j9rZes0otnsbj6A7J
-         +xsiIKCgCIWo2w7OFdfV8YDcK+5BSdCf8GXJ+T7ABh8hfV/U+78VwTELtbfwAeKFqZ
-         B8nSK+wIP8+jrnX1pTlGUw3IpDR0fbRw5ShR+iZntohFVdaLXFf5ECvwrOO4Wy36co
-         hj1ht4R4ancodGYUVs6ohccX19nRyK8IGg0lZkLjEU3nIpGLYnWwQYUxpps8evjhMi
-         YWULYmLVVyINw==
-Date:   Thu, 10 Nov 2022 17:55:52 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>
-Subject: linux-next: manual merge of the mm tree with the block tree
-Message-ID: <20221110175552.20587f28@canb.auug.org.au>
+        Thu, 10 Nov 2022 01:57:11 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674552F38F;
+        Wed,  9 Nov 2022 22:57:10 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id j15so904231wrq.3;
+        Wed, 09 Nov 2022 22:57:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L1O9vx/w0pSScJPYJU2hSXOoClhMo14F1MGXdWp+Ufg=;
+        b=ih2hj2AwLw6uHnoVWJIxZvKqdEAjHM0jD7xTrnsEAwACZBNaBmpfcMk5js1HYZby6j
+         lZ14H3xql7RMtd4Y631wpUfgRpewaFbcFGzKPVwWfKNW2ligyRCLwPQ0coycdb/HPLK5
+         Aa1eGy6Pbd1viF+NxdMGsQyEO5mqdq94QY682+gg46t1yKKXWpO4OF40rayUs3SIG9KG
+         BN6bsWIsNMEzq0E+OtfV1rOk0IizI2F1Dpa0xipPGxX4ZJeUp16zdkHN+WshRusac+TJ
+         S4RoDuaavXzvW1osuQLAGkp00ifZsf31CoNtZIuefwBTNOVgXZexiRyt3fbOd97uwWYv
+         bdhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L1O9vx/w0pSScJPYJU2hSXOoClhMo14F1MGXdWp+Ufg=;
+        b=pD6Nv2uzd9O8Q6DHTF9PPrzb02A0Di6PrtVFtN2HDNk4XEr8rg+JmHc6D04in6fbOa
+         YTUT8FsTfkHcLskSPMk0/oRH+7DC3NnRxO1+Jf4+z8rjIhE7DpCxla+om6h13Sqq/J/b
+         PBVBNVN/4EZZFW6hSNqfSA8WybAKzAl4mej+Vq1XmGnmTLJ0bWWRsY2lf0l2bWRLBY5D
+         MZBgyUlPoEyWVpD7KFW6zqP6avkA4h9uXA6LTvy+ESN1RyvqD/SQPV6pgN0PZDQ3CYNZ
+         gw31oNh05wVnYinlKSIJGLdeDauEvvUzlAKjEfyVEdc1q1YHNtfBbN1gs7bWBkl4Splt
+         0nWQ==
+X-Gm-Message-State: ACrzQf0G/am4vk5Xm9J8yyMIZX7f/kpZXRPh/z2sIu/j2kPYYpwQFjYu
+        ikrn6lUPpTyac4z7P5iLdEc=
+X-Google-Smtp-Source: AMsMyM6YvildaZhGa/d4MYEc0dWoFhApR6w0TXgYEOeTCBEzNq0RU0eJrIdKmvqEDf29jjNFtqRVCQ==
+X-Received: by 2002:a5d:618e:0:b0:22a:f546:3f68 with SMTP id j14-20020a5d618e000000b0022af5463f68mr995725wru.651.1668063428798;
+        Wed, 09 Nov 2022 22:57:08 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003c6f426467fsm4357994wmq.40.2022.11.09.22.57.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 22:57:08 -0800 (PST)
+Date:   Thu, 10 Nov 2022 09:57:04 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v7 01/28] media: sun6i-csi: Add bridge v4l2 subdev with
+ port management
+Message-ID: <202211100529.cG57XaEQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bdPeSYhZzibRieP0Jg7JKnO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103163113.245462-2-paul.kocialkowski@bootlin.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,107 +82,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bdPeSYhZzibRieP0Jg7JKnO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Paul,
 
-Hi all,
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Today's linux-next merge of the mm tree got conflicts in:
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Kocialkowski/Allwinner-A31-A83T-MIPI-CSI-2-and-A31-ISP-CSI-Rework/20221104-003518
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20221103163113.245462-2-paul.kocialkowski%40bootlin.com
+patch subject: [PATCH v7 01/28] media: sun6i-csi: Add bridge v4l2 subdev with port management
+config: arc-randconfig-m041-20221107
+compiler: arc-elf-gcc (GCC) 12.1.0
 
-  mm/gup.c
-  mm/huge_memory.c
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-between commits:
+smatch warnings:
+drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c:86 sun6i_csi_bridge_s_stream() warn: missing error code 'ret'
+drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c:279 sun6i_csi_bridge_notifier_bound() error: uninitialized symbol 'enabled'.
 
-  0f0892356fa1 ("mm: allow multiple error returns in try_grab_page()")
-  4003f107fa2e ("mm: introduce FOLL_PCI_P2PDMA to gate getting PCI P2PDMA p=
-ages")
+vim +/ret +86 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
 
-from the block tree and commit:
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   62  static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   63  {
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   64  	struct sun6i_csi_device *csi_dev = v4l2_get_subdevdata(subdev);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   65  	struct sun6i_csi_bridge *bridge = &csi_dev->bridge;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   66  	struct media_pad *local_pad = &bridge->pads[SUN6I_CSI_BRIDGE_PAD_SINK];
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   67  	struct device *dev = csi_dev->dev;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   68  	struct v4l2_subdev *source_subdev;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   69  	struct media_pad *remote_pad;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   70  	/* Initialize to 0 to use both in disable label (ret != 0) and off. */
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   71  	int ret = 0;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   72  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   73  	/* Source */
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   74  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   75  	remote_pad = media_pad_remote_pad_unique(local_pad);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   76  	if (IS_ERR(remote_pad)) {
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   77  		dev_err(dev,
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   78  			"zero or more than a single source connected to the bridge\n");
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   79  		return PTR_ERR(remote_pad);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   80  	}
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   81  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   82  	source_subdev = media_entity_to_v4l2_subdev(remote_pad->entity);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   83  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   84  	if (!on) {
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   85  		v4l2_subdev_call(source_subdev, video, s_stream, 0);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  @86  		goto disable;
 
-  7928e6cb4ec6 ("mm/gup: drop DAX pgmap accounting")
+This is intentional, but it should just return 0;
 
-from the mm tree.
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   87  	}
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   88  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   89  	ret = v4l2_subdev_call(source_subdev, video, s_stream, 1);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   90  	if (ret && ret != -ENOIOCTLCMD)
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   91  		goto disable;
 
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+Do we really need to clean anything up?  Why not just:
 
---=20
-Cheers,
-Stephen Rothwell
+	source_subdev = media_entity_to_v4l2_subdev(remote_pad->entity);
 
-diff --cc mm/gup.c
-index 8a4b1a783cb6,5182abaaecde..000000000000
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@@ -2482,26 -2394,10 +2406,13 @@@ static int __gup_device_huge(unsigned l
-  	do {
-  		struct page *page =3D pfn_to_page(pfn);
- =20
-- 		pgmap =3D get_dev_pagemap(pfn, pgmap);
-- 		if (unlikely(!pgmap)) {
-- 			undo_dev_pagemap(nr, nr_start, flags, pages);
-- 			break;
-- 		}
--=20
-- 		if (!(flags & FOLL_PCI_P2PDMA) && is_pci_p2pdma_page(page)) {
-- 			undo_dev_pagemap(nr, nr_start, flags, pages);
-++		if (!(flags & FOLL_PCI_P2PDMA) && is_pci_p2pdma_page(page))
- +			break;
-- 		}
- +
-  		SetPageReferenced(page);
-  		pages[*nr] =3D page;
-- 		if (unlikely(try_grab_page(page, flags))) {
-- 			undo_dev_pagemap(nr, nr_start, flags, pages);
- -		if (unlikely(!try_grab_page(page, flags)))
-++		if (unlikely(try_grab_page(page, flags)))
-  			break;
-- 		}
-  		(*nr)++;
-  		pfn++;
-  	} while (addr +=3D PAGE_SIZE, addr !=3D end);
-diff --cc mm/huge_memory.c
-index a075e3803e5e,ed12cd3acbfd..000000000000
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@@ -1225,14 -1179,9 +1180,11 @@@ struct page *follow_devmap_pud(struct v
-  		return ERR_PTR(-EEXIST);
- =20
-  	pfn +=3D (addr & ~PUD_MASK) >> PAGE_SHIFT;
-- 	*pgmap =3D get_dev_pagemap(pfn, *pgmap);
-- 	if (!*pgmap)
-- 		return ERR_PTR(-EFAULT);
-  	page =3D pfn_to_page(pfn);
- -	if (!try_grab_page(page, flags))
- -		page =3D ERR_PTR(-ENOMEM);
- +
- +	ret =3D try_grab_page(page, flags);
- +	if (ret)
- +		page =3D ERR_PTR(ret);
- =20
-  	return page;
-  }
+	return v4l2_subdev_call(source_subdev, video, s_stream, !!on);
 
---Sig_/bdPeSYhZzibRieP0Jg7JKnO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   92  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   93  	return 0;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   94  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   95  disable:
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   96  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   97  	return ret;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   98  }
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03   99  
 
------BEGIN PGP SIGNATURE-----
+[ snip ]
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsoHgACgkQAVBC80lX
-0GyKggf+MgLrRQq6JXdCgAl4M+fD6N1WmxctiKjMJ/IqphZYxFvPn153IV2gh6gF
-l7MCpDcT4TlJeSvDoEu2wcf3F4ot8zVtbNpOxiSSyneuX0+ZyqyziU9iaX1kKxMZ
-4MDQBKefarsOVMyf02U0Mw+C2oSmPNQCCL84xSI2gsQvC+M3gjV/eLAAyFVW4UTc
-4sHC8iwni1SnE1pSEzsiWJUooGKTpLWAqlbnXWwnEWAwd1yT4zyzD7QR4Fig6rma
-xD862QS4pZ4gtQ9SPRN6KQ+RwHwPBPWj7tdDyYamPtjd/24PdW6Ac6nAYRYtM0VZ
-USgPZsDazFZjqHOwtBTIQ41BcKwOjQ==
-=kD/Y
------END PGP SIGNATURE-----
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  254  static int
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  255  sun6i_csi_bridge_notifier_bound(struct v4l2_async_notifier *notifier,
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  256  				struct v4l2_subdev *remote_subdev,
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  257  				struct v4l2_async_subdev *async_subdev)
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  258  {
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  259  	struct sun6i_csi_device *csi_dev =
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  260  		container_of(notifier, struct sun6i_csi_device,
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  261  			     bridge.notifier);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  262  	struct sun6i_csi_bridge_async_subdev *bridge_async_subdev =
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  263  		container_of(async_subdev, struct sun6i_csi_bridge_async_subdev,
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  264  			     async_subdev);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  265  	struct sun6i_csi_bridge_source *source = bridge_async_subdev->source;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  266  	bool enabled;
 
---Sig_/bdPeSYhZzibRieP0Jg7JKnO--
+This neesds to be "bool enabled = false;"
+
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  267  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  268  	switch (source->endpoint.base.port) {
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  269  	case SUN6I_CSI_PORT_PARALLEL:
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  270  		enabled = true;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  271  		break;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  272  	default:
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  273  		break;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  274  	}
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  275  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  276  	source->subdev = remote_subdev;
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  277  
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  278  	return sun6i_csi_bridge_link(csi_dev, SUN6I_CSI_BRIDGE_PAD_SINK,
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03 @279  				     remote_subdev, enabled);
+d26de0b15ad9da7 Paul Kocialkowski 2022-11-03  280  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
+
