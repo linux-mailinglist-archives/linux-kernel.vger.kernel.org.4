@@ -2,108 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8DA623C2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA92B623C13
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 07:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbiKJG4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 01:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58086 "EHLO
+        id S232458AbiKJGtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 01:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiKJG4l (ORCPT
+        with ESMTP id S232220AbiKJGtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 01:56:41 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C681570B;
-        Wed,  9 Nov 2022 22:56:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668063400; x=1699599400;
-  h=from:to:cc:subject:date:message-id;
-  bh=Mwsy1axZV+PTNKiw6w+BLcbXyV1HVAU1m3qtT1Ss6a8=;
-  b=Cm0+HXoqkqYmKZ1uEeSxEj4e/0WNl1V4+NOmhADuQDn0ylRfLeB8W+6v
-   oLt0WMAL6XD6yZs/+H5NYz+U778Q6BKsuI55JT9rNRmNuapPOTz+uF1r3
-   kucBfQPqur6xtjwBqhBxottYYn/SwM/wgBc9nUUHRFq8/Zrsv3jgt4reR
-   jZOWdYg7MFf5JViwLzYBIMtCeCO8SARrVbBIg4f0tswr+daEmYFXn7kj+
-   tEQN+REkhOVtexaWstbzg13F318uvmBBssU+PupCRxET/sEYLB+Xq4/Aq
-   NHYLIHy8uMj2OrJsJD8Za49jqpdL1VGPtyUVAOjynVBlorPHbWjFalSWj
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="290950751"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="290950751"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 22:56:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="588061142"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="588061142"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 09 Nov 2022 22:56:39 -0800
-Received: from noorazur1-iLBPG12.png.intel.com (noorazur1-iLBPG12.png.intel.com [10.88.229.87])
-        by linux.intel.com (Postfix) with ESMTP id 6417A580C99;
-        Wed,  9 Nov 2022 22:56:35 -0800 (PST)
-From:   Noor Azura Ahmad Tarmizi 
-        <noor.azura.ahmad.tarmizi@linux.intel.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Song Yoong Siang <yoong.siang.song@intel.com>,
-        Mohd Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>
-Subject: [PATCH net 1/1] net: stmmac: ensure tx function is not running in stmmac_xdp_release()
-Date:   Thu, 10 Nov 2022 14:45:52 +0800
-Message-Id: <20221110064552.22504-1-noor.azura.ahmad.tarmizi@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 01:49:11 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979F72CC95;
+        Wed,  9 Nov 2022 22:49:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ArAxXYQTv19xG0HQ97G5kIykezyq1mBXtgfd5wPYzE5zoeDr6Sli4wCYx/BxUmkjsgetbC3z+ThHbl7BsaQfe3DX6KvHW6kqPfxs0s6kBNxtgVsE0eHWhiQVvA50iwkVpiS2UTsJap+vXUS9Q5PUWrlN+t66k6Rcg/m/W+RRh6958MWfLaDnI9Zn4xE2HM2S9uNl7K2Dd0iuB563C8Lu690bXzjl5mBakPwQfCSPo1vtSWA0FiTuDc4nithPfQeG42eVBgkW2o8kOFbZaWkWtksq/LP/uhQzxhv7k9qITKf6gnjB8i2EuzWcGvsVMO4zIqujwJtTRRtJGi0Ex8W3fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uds4sGnpnXs60IdvtLB36YztlrtpeI1IpC17pfnWYTE=;
+ b=H6qU8EeRv0zPyKZx5FHssrWw4GYU+X75qi8fb3zy/c3pp2YxQhoIVw5F8L6a/IOhGNhSravpDifY2StV6j8c3zQLQKyfTSQjdl/TkKqvPlYdAvt/wpnJKvtuDq3IEV9tO0qDyiMab6gDWpvOA6v7PI1T6cBqcQkkfAeWXfbCCbCcfqQ9wsWRW8lLAEnO1v7cVHqsPRJ9dugGn0b7PcW/FRcfqBeb5Q0PT8YKlCs3f+xem3FZru/+LMsdoAxvmBUFJ/XHUHzB5ZOPzu/s+lKxTp6GsHev7WGXzBwpBlfWamYcy7be3ppVL3q7dYX2jL/UPiEt7N9QrF4Gmccfi3H1Og==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uds4sGnpnXs60IdvtLB36YztlrtpeI1IpC17pfnWYTE=;
+ b=XFXOHHDIzJPkcat8idcGZKbq8P+g1vAFi/oMEJgbAO0fspfjOBeIcKPC8tTw8zAPZc4mKl26H1R54NpDyJGrLHuObLw923xlGAvCpcB/4sEEI4wP3XP9p8k+IzHpGpdUOvNdQvQ/Lj1lC0oWYoq7khvG+nSBNm4DRUJILml97sc=
+Received: from MW4PR03CA0018.namprd03.prod.outlook.com (2603:10b6:303:8f::23)
+ by SJ0PR12MB6904.namprd12.prod.outlook.com (2603:10b6:a03:483::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Thu, 10 Nov
+ 2022 06:49:07 +0000
+Received: from CO1NAM11FT103.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8f:cafe::f) by MW4PR03CA0018.outlook.office365.com
+ (2603:10b6:303:8f::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.12 via Frontend
+ Transport; Thu, 10 Nov 2022 06:49:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT103.mail.protection.outlook.com (10.13.174.252) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.12 via Frontend Transport; Thu, 10 Nov 2022 06:49:07 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
+ 2022 00:48:08 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Sven van Ashbrook <svenva@chromium.org>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        <rrangel@chromium.org>, Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [RFC v2 0/3] Introduce infrastructure to report time in hardware sleep state
+Date:   Thu, 10 Nov 2022 00:47:20 -0600
+Message-ID: <20221110064723.8882-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT103:EE_|SJ0PR12MB6904:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec52ec94-80d5-4854-6e9e-08dac2e7aa06
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hpV3n71Sk0cZxcLNqpCuIW8+GQn15xVaZ+K1gDmVmBPTurHQUVPzGJqsTBVAKQvZ/lnTGa+ThiUEQ0xQdMvuevTGbjiIt9yYEqqY9D7Xpjl1yeQK19Z+i0dXfmeolICKnUcvmdTESbxk3l/ZSiTXL2lmNCKxsV+B0avh/SECcDCjaS0Qybo642ZzRTOC+KUltG4w7L+un3CW8qvWe4hFk+h3WrQ+hO3OyzB94GtRTAglUI9dBGb4AI3Mio19IRGd5UY9F6Goe096YAREjAKjAlyCrHGFXhS4gL8XGulgqR79/z5HUDMZjzpNj0D96+kGvLQIwu7PR0idtK+xdrBopBX1N0psf6eZHrh447S0lHO0E9Wtm5MUZm99baxsxYrv+GfM8TUMitimI7+Amudfqhl/cv1MyZdaWYI3vEWM8ECwFkkrTJBPPan8cNxe7ur/qp8pwQ1NQFUZyy6GStt3taFd5UO4bpPwO/r+h8N/GP62d37uYDlBFOlWAjV3ylMpMOKPITCwdXwlPL5M2LTLA8mtbuEAhjt/nUkwqTn6FlsaFWCzA8uMmHVfgoB1xqaZE4PRZvvHaTjFB0EnOtar14awMK0iIYGBzrDeLa5x8i50yltAY3OuoWPFLGT1SEL/1th5H4Z+khX2w8fFOgE6Eok/PWJQF7ndYJ18BJzR4PhQkN3CNfgs2fcwNtswBfuMq+SgC1YIgDz7/q3vPnX5aaAPBLGrcuEBHKci0LoFjmrwgjLRZ2xYYxLVPuLyUpCu3JRHUYrBy4v4T5Aw30GiH9UvpVtSxuoDEM5CPOM75gFnAI+TxWNFJmK1AJ1LvA1G
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(81166007)(83380400001)(7696005)(1076003)(186003)(336012)(16526019)(36860700001)(40480700001)(2616005)(356005)(40460700003)(82740400003)(47076005)(70206006)(7416002)(44832011)(36756003)(86362001)(426003)(26005)(2906002)(5660300002)(8936002)(41300700001)(82310400005)(6666004)(316002)(8676002)(110136005)(54906003)(4326008)(478600001)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 06:49:07.0566
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec52ec94-80d5-4854-6e9e-08dac2e7aa06
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT103.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6904
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mohd Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>
+Sven van Ashbrook brought a patch to the kernel mailing list that
+attempted to change the reporting level of a s0ix entry issue to a
+different debugging level so that infastructure used by Google could
+better scan logs to catch problems.
 
-When stmmac_xdp_release() is called, there is a possibility that tx
-function is still running on other queues which will lead to tx queue
-timed out and reset adapter.
+This approach was rejected, but during the conversation another
+suggestion was made by David E. Box to introduce some infrastructure
+into the kernel to report this information.
 
-This commit ensure that tx function is not running xdp before release
-flow continue to run.
+As it's information that is reported by both AMD and Intel platforms
+over s2idle, this seems to make sense.
 
-Fixes: ac746c8520d9 ("net: stmmac: enhance XDP ZC driver level switching performance")
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
-Signed-off-by: Mohd Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>
-Signed-off-by: Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 3 +++
- 1 file changed, 3 insertions(+)
+This series introduces new sysfs files representing duration in a hardware
+sleep state and total sleep duration.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 8273e6a175c8..6b43da78cdf0 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -6548,6 +6548,9 @@ void stmmac_xdp_release(struct net_device *dev)
- 	struct stmmac_priv *priv = netdev_priv(dev);
- 	u32 chan;
- 
-+	/* Ensure tx function is not running */
-+	netif_tx_disable(dev);
-+
- 	/* Disable NAPI process */
- 	stmmac_disable_all_queues(priv);
- 
+The expectation is that userspace could read these file after s2idle
+occurred to infer whta percentage of time was spent in a hardware sleep
+state.
+
+RFC v1->v2:
+ * Rename sysfs file for time in hardware state
+ * Export a sysfs file for total time in suspend
+ * Only export sysfs file for hardware state if system supports low
+   power idle.
+
+Mario Limonciello (3):
+  PM: Add a sysfs files to represent sleep duration
+  platform/x86/amd: pmc: Report duration of time in deepest hw state
+  platform/x86/intel/pmc: core: Report duration of time in deepest HW
+    state
+
+ Documentation/ABI/testing/sysfs-power | 17 +++++++++++
+ drivers/platform/x86/amd/pmc.c        |  4 +--
+ drivers/platform/x86/intel/pmc/core.c |  2 ++
+ include/linux/suspend.h               |  5 ++++
+ kernel/power/main.c                   | 42 +++++++++++++++++++++++++++
+ kernel/power/suspend.c                |  2 ++
+ kernel/time/timekeeping.c             |  2 ++
+ 7 files changed, 71 insertions(+), 3 deletions(-)
+
 -- 
-2.17.1
+2.34.1
 
