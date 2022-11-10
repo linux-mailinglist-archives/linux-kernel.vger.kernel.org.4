@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393616241D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3686241D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiKJMAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 07:00:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S229867AbiKJMBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:01:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiKJMAf (ORCPT
+        with ESMTP id S230063AbiKJMBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 07:00:35 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDAF21E0F;
-        Thu, 10 Nov 2022 04:00:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668081633; x=1699617633;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MXjGcSIK04ScLohpdYFk9DXdIqTJwmlzr90IomobVJ4=;
-  b=mK84qeq0hs/hmQbjjt7IWEwlOtGMvlpr4F/xQ7hdhwDn0Jdb7BUCasVG
-   ZkQV/eB1DS5acBoLjM8bjC9FCAgGaQmS6VzOM3S8GrpKwe8I8e8gvAX1Z
-   1plu74LaomWdSmnR18ck5L4roPEWLsbeD5W7M2vSyGDaVHoD6QkE5J7ek
-   imwrq8hCWM/WRp6qeloSf3mKqIpKnhkoeFBn7Eq9YQP12AT95eX6frQqO
-   FfDKrayLmwWO3K4yQT3r/0b8Cu32GKg9Fbk0NsfidRcDCUv92c89tw9Ob
-   BZRLbylUsE2dPCtAg6AtIOQlbBrRI/dqW1Un4WA3RVAYz4f0FKNzyeaCX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="373410977"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="373410977"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 04:00:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="588152059"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="588152059"
-Received: from jvpendej-mobl2.gar.corp.intel.com ([10.214.150.188])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 04:00:28 -0800
-Message-ID: <1d8ad923707b1c6347d830088a410c31b794968c.camel@intel.com>
-Subject: Re: [PATCH v2 0/5] rtc: rtc-cmos: Assorted ACPI-related cleanups
- and fixes
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Date:   Thu, 10 Nov 2022 20:00:25 +0800
-In-Reply-To: <5640233.DvuYhMxLoT@kreacher>
-References: <5640233.DvuYhMxLoT@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 10 Nov 2022 07:01:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5D71B1D0;
+        Thu, 10 Nov 2022 04:01:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 231D6615D8;
+        Thu, 10 Nov 2022 12:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADDBC433C1;
+        Thu, 10 Nov 2022 12:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668081663;
+        bh=nJA6lVr6zgeitszBqXo+vCIv1PWS9CxH/k89lrSezzM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YwDUDPzxlqtjltIIWBWr8WtYZkATmN3l4/u1T//eXkcnmeOFo49LNvhT83dIufhj/
+         gOrTYoF49BrZYxvkQz8IuPVVXOzPdNl/H7xSnr8jdp+06HG1X4DAp8BTHF8FxM7c6e
+         LpAdRBQEgSEwAu5WBWa4ovqTZFWpZST8WbCpafllI+iYSXMKb5AZmZsYZO3Wm0lKFa
+         4qTvl2yhlL14iS1wk3GVbe8DosfgN/rIFEn1bs/xFSbFO5kq9OPjQQBhcbva4OT8Cf
+         tFWmMSkNazlukJ8zD+W0X6OjHOqImun/uRemLb1XrVQQq7lJPxcL1tNjxO/0CEufsk
+         o+2gSI6ggGyWg==
+Date:   Thu, 10 Nov 2022 12:00:57 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     andersson@kernel.org, linux-arm-msm@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org, agross@kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, patches@linaro.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: regulator: qcom,smd: Document PMR735a
+Message-ID: <Y2zn+a7eL8PnGgWo@sirena.org.uk>
+References: <20221109110846.45789-1-konrad.dybcio@linaro.org>
+ <166807822235.115312.17138185226634439165.b4-ty@kernel.org>
+ <bf3e5725-8cf7-3a0e-aa9b-0b05a4507868@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1soP19EYi/kSFqKE"
+Content-Disposition: inline
+In-Reply-To: <bf3e5725-8cf7-3a0e-aa9b-0b05a4507868@linaro.org>
+X-Cookie: Torque is cheap.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-11-09 at 13:05 +0100, Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> This is a v2 of the series previously posted as
-> 
-> https://lore.kernel.org/linux-acpi/2276401.ElGaqSPkdT@kreacher/
-> 
-> The first three patches in the series have not changed since then (I
-> have
-> considered moving the last patch, which is a fix, to the front, but
-> that turns
-> out to be a bit cumbersome and not really worth the effort).
-> 
-> This series of patches does some assorted ACPI-related cleanups to
-> the CMOS RTC
-> driver:
-> - redundant static variable is dropped,
-> - code duplication is reduced,
-> - code is relocated so as to drop a few unnecessary forward
-> declarations of
->   functions,
-> - functions are renamed to avoid confusion,
-> and fixes up an issue in the driver removal path.
-> 
-> 
-> 
 
-Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+--1soP19EYi/kSFqKE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-And I have tested the patch series on a platform with both
-use_acpi_alarm parameter set and cleared, the ACPI RTC fixed event
-works as expected, for both runtime and suspend wakeups.
+On Thu, Nov 10, 2022 at 12:09:10PM +0100, Konrad Dybcio wrote:
+> On 10/11/2022 12:03, Mark Brown wrote:
 
-So
-Tested-by: Zhang Rui <rui.zhang@intel.com>
+> >     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-thanks,
-rui
+> Please apply v2 instead:
 
+> https://lore.kernel.org/linux-arm-msm/20221110091736.3344-2-konrad.dybcio@linaro.org/T/#u
 
+As the mail you are replying to says:
+
+> > If any updates are required or you are submitting further changes they
+> > should be sent as incremental updates against current git, existing
+> > patches will not be replaced.
+
+--1soP19EYi/kSFqKE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNs5/kACgkQJNaLcl1U
+h9C4Ewf/SHnnNEjZLkzNtk+rdcrPTtswUMrxgkedFWh/57GMkuA7p5zDjAXECpYm
+2ePQYgKNfj3XmtXOfS+q+rRBO1xmncS9l8gvo1jKesSPk8jGsQ9KanBmjT2wH+Gb
+yz2RCLDusrNm7rz18H5CcVR9fSMb+lCugjywrb2GlTnfyax8hA3RtnuYEg/8QA1R
+bqZTm6E2cvK75GVIV0uKdvX4w2fcA8WmPfrJrHdEZXYvrdmLJVZQHUuMILvDroJW
+ZJQvQGZ3BYn5DZFE8J/DbWhQHfbWoNUMHVGHbNYKiNXxLtjcSbYVfeQlzjVG6luN
+OckQVWFaQfYiVIbWjsk8LWfit2fRzA==
+=ApaU
+-----END PGP SIGNATURE-----
+
+--1soP19EYi/kSFqKE--
