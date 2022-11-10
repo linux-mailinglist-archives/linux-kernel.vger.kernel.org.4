@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F316244ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 15:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3489A6244F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbiKJO7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 09:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
+        id S230404AbiKJPAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:00:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiKJO7J (ORCPT
+        with ESMTP id S229697AbiKJPAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 09:59:09 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C057C13D24
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 06:59:06 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1E821FB;
-        Thu, 10 Nov 2022 06:59:12 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C2153F703;
-        Thu, 10 Nov 2022 06:59:02 -0800 (PST)
-Message-ID: <48c178fc-108f-382b-e054-83e88ef9b01b@arm.com>
-Date:   Thu, 10 Nov 2022 15:59:01 +0100
+        Thu, 10 Nov 2022 10:00:03 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53B014D3C;
+        Thu, 10 Nov 2022 07:00:00 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7Pzh4BMTzqSH7;
+        Thu, 10 Nov 2022 22:56:16 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 22:59:58 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 22:59:57 +0800
+Message-ID: <3198e463-2002-dc08-6d27-d4d0468b6da8@huawei.com>
+Date:   Thu, 10 Nov 2022 22:59:56 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Jian-Min Liu <jian-min.liu@mediatek.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Patrick Bellasi <patrick.bellasi@matbug.net>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Jonathan JMChen <jonathan.jmchen@mediatek.com>
-References: <20220829055450.1703092-1-dietmar.eggemann@arm.com>
- <0f82011994be68502fd9833e499749866539c3df.camel@mediatek.com>
- <YzVpqweg21yIn30A@hirez.programming.kicks-ass.net>
- <YzV9Gejo/+DL3UjK@e126311.manchester.arm.com>
- <YzV/yT6OYMgaq0kD@hirez.programming.kicks-ass.net>
- <YzWuq5ShtJC6KWqe@e126311.manchester.arm.com>
- <Y2kLA8x40IiBEPYg@hirez.programming.kicks-ass.net>
- <d2789d23-816b-11f1-d654-a7989f323ac8@arm.com>
- <Y2z2/nhGfud7NIM8@hirez.programming.kicks-ass.net>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <Y2z2/nhGfud7NIM8@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+Subject: Re: [PATCH] btrfs: qgroup: fix sleep from invalid context bug in
+ update_qgroup_limit_item()
+To:     <dsterba@suse.cz>
+CC:     <clm@fb.com>, <josef@toxicpanda.com>, <dsterba@suse.com>,
+        <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
+References: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
+ <20221110144630.GF5824@suse.cz>
+In-Reply-To: <20221110144630.GF5824@suse.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,57 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 14:05, Peter Zijlstra wrote:
-> On Thu, Nov 10, 2022 at 12:16:26PM +0100, Dietmar Eggemann wrote:
->> On 07/11/2022 14:41, Peter Zijlstra wrote:
->>> On Thu, Sep 29, 2022 at 03:41:47PM +0100, Kajetan Puchalski wrote:
->>
->> [...]
->>
->>> @@ -2956,13 +2958,26 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
->>>   */
->>>  static inline unsigned long cpu_util_cfs(int cpu)
->>>  {
->>> +	struct rq *rq = cpu_rq(cpu);
->>>  	struct cfs_rq *cfs_rq;
->>>  	unsigned long util;
->>>  
->>> -	cfs_rq = &cpu_rq(cpu)->cfs;
->>> +	cfs_rq = &rq->cfs;
->>>  	util = READ_ONCE(cfs_rq->avg.util_avg);
->>>  
->>>  	if (sched_feat(UTIL_EST)) {
->>> +		if (sched_feat(UTIL_EST_FASTER)) {
->>> +			struct task_struct *curr;
->>> +
->>> +			rcu_read_lock();
->>> +			curr = rcu_dereference(rq->curr);
->>> +			if (likely(curr->sched_class == &fair_sched_class)) {
->>> +				u64 runtime = curr->se.sum_exec_runtime - curr->se.exec_start;
->>
->> Don't we and up with gigantic runtime numbers here?
->>
->> oot@juno:~# cat /proc/1676/task/1676/schedstat
->> 36946300 1150620 11
->> root@juno:~# cat /proc/1676/task/1676/sched
->> rt-app (1676, #threads: 2)
->> -------------------------------------------------------------------
->> se.exec_start                                :         77766.964240 <- !
->> se.vruntime                                  :           563.587883
->> e.sum_exec_runtime                          :            36.946300  <- !
->> se.nr_migrations                             :                    0
->> ...
->>
->> I expect cpu_util_cfs() to be ~1024 almost all the time now.
+I have _no_ link to the report, I just reproduce it in my own qemu vm, 
+and _no_ c or syz repro.
+
+在 2022/11/10 22:46, David Sterba 写道:
+> On Thu, Nov 10, 2022 at 10:13:42PM +0800, ChenXiaoSong wrote:
+>> Syzkaller reported BUG as follows:
 > 
-> Duh, obviously I meant to measure the runtime of the current activation
-> and messed up.
+> Do you have link to the report? Or at least the identifier of the
+> report, there's some automation that recognizes Reported-by: syzbot-...
+> to close it once the patch is merged.
+> .
 > 
-> We don't appear to have the right information to compute this atm :/
-
-This would be:
-
-u64 now = rq_clock_task(rq);
-u64 runtime = now - curr->se.exec_start;
-
-but we don't hold the rq lock so we can't get `now`?
