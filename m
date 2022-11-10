@@ -2,159 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A41624B39
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BAB624B3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiKJUJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        id S230012AbiKJUKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiKJUJq (ORCPT
+        with ESMTP id S229607AbiKJUKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:09:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067692F382;
-        Thu, 10 Nov 2022 12:09:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC829B821E3;
-        Thu, 10 Nov 2022 20:09:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2D0C433C1;
-        Thu, 10 Nov 2022 20:09:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668110982;
-        bh=pSFInq4N4Bpw1KNnil1myJW1oupVm04I6GvyJ1r4M90=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZcRPHU5APr+eHfnFXysOgIHlqisvwx7xeSA+5tA0lqSek+E48B4aV6SQAlcs0pCJA
-         NnU/H79xbc/Gy1kZYW7sdTDbh90GhkkpROQBxNf0sk3MxSLrmqRmCoYEFEDbLaQNOd
-         x9qfjievWDnXssIKGrd6SFbBhsvsL6po7k9DuNmOR5yi7UfRMbawI9lpLkFA49RcXg
-         mvSwCqPn+ahcGthFzjbeA+Ax7Ag/8d63rulA8xBN2hgCdw9Ex7gYX9nLZVzX3/YziR
-         c0NgmJW2jnOpPzXjaGSBQleiT6VqNJvBtfkaVRJCWlqkhCLw1BZRtgvjYGRjXxdHAT
-         Wa/QORdRpcl6g==
-From:   SeongJae Park <sj@kernel.org>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     sj@kernel.org, Rong Tao <rongtao@cestc.cn>,
-        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
-Subject: Re: [PATCH] selftests/damon: Fix unnecessary compilation warnings
-Date:   Thu, 10 Nov 2022 20:09:39 +0000
-Message-Id: <20221110200939.101886-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <tencent_CF837EA1B8AC81CB7715E85797510D441E07@qq.com>
-References: 
+        Thu, 10 Nov 2022 15:10:39 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8E325EA6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668111039; x=1699647039;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sbPC+deMWuxM0Nd77xYhB54Nm/CFWT7fEo8f/FG5tWU=;
+  b=kjXInYslXPvBTa0Z9fX1UKMw7B6ck9rk2rQvgzCBFv1rGqJCNOW54Uxe
+   QmKvKiuiU5czwN/9841txIqVGBwl5eh88feniMcp1UyVWX5Mc0WOZ7nAm
+   lZqCNiGrnCun4FEts0ZLBZyPmC1ZnTbVtThOFlqrgBlhzuQcWHrfX7ILF
+   z3jK6vAJ8voxHIlPiobJ5ykpBGvWtlo7Ee/boBYn+yPnfjBXcpSPtBwjT
+   LVGwfGtAu9V6/gB00hOz4y7VF+OP18SOQUgioCvvgiuKiGy1GR4UMC61o
+   IF4OyB5bQYxnyHFs1HawwQ0HgptGnTOUrRfH/6b3wPypHtkJSgMyrugyR
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309056968"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="309056968"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 12:10:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="706286226"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="706286226"
+Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Nov 2022 12:10:37 -0800
+Received: from kbuild by e783503266e8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1otDsj-0003CU-0S;
+        Thu, 10 Nov 2022 20:10:37 +0000
+Date:   Fri, 11 Nov 2022 04:09:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ cede97a6d18cd12367950b2ed4cbafea1b2e605b
+Message-ID: <636d5a93.IHBCN/0vMyKS7st5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc-ing Yuanchu Xie.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: cede97a6d18cd12367950b2ed4cbafea1b2e605b  refscale: Add tests using SLAB_TYPESAFE_BY_RCU
 
-Hi Rong,
+elapsed time: 1538m
 
-On Thu, 10 Nov 2022 21:34:18 +0800 Rong Tao <rtoax@foxmail.com> wrote:
+configs tested: 93
+configs skipped: 2
 
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> When testing overflow and overread, there is no need to keep unnecessary
-> compilation warnings, we should simply ignore them.
-> 
-> How to reproduce the problem:
-> 
-> $ make -C tools/testing/selftests/
-> gcc     huge_count_read_write.c  -o /home/sd/Git/linux/tools/testing/selftests/damon/huge_count_read_write
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-'checkpatch.pl' complains:
+gcc tested configs:
+x86_64                            allnoconfig
+powerpc                     tqm8541_defconfig
+sh                         microdev_defconfig
+sh                   rts7751r2dplus_defconfig
+arc                        nsimosci_defconfig
+arm                             pxa_defconfig
+alpha                             allnoconfig
+m68k                           sun3_defconfig
+arc                                 defconfig
+arc                     nsimosci_hs_defconfig
+mips                         rt305x_defconfig
+sh                      rts7751r2d1_defconfig
+mips                 decstation_r4k_defconfig
+alpha                               defconfig
+i386                          randconfig-c001
+um                             i386_defconfig
+um                           x86_64_defconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+s390                             allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+ia64                             allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+arm                        cerfcube_defconfig
+sh                               alldefconfig
+sh                        sh7757lcr_defconfig
+arm                                 defconfig
+x86_64                              defconfig
+s390                       zfcpdump_defconfig
+powerpc                      arches_defconfig
+powerpc                     sequoia_defconfig
+mips                         cobalt_defconfig
+mips                             allyesconfig
+arm                      footbridge_defconfig
+xtensa                  cadence_csp_defconfig
+mips                         db1xxx_defconfig
+arm                        spear6xx_defconfig
+powerpc                      pasemi_defconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+x86_64                               rhel-8.3
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                           allyesconfig
+powerpc              randconfig-c003-20221110
+m68k                             allyesconfig
+m68k                             allmodconfig
+sh                           se7722_defconfig
+arm                         lpc18xx_defconfig
+nios2                         10m50_defconfig
+powerpc                 mpc837x_rdb_defconfig
+x86_64                        randconfig-a011
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+powerpc                    amigaone_defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+powerpc                       ppc64_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
 
-    WARNING: use relative pathname instead of absolute in changelog text
-    #20:
-    gcc     huge_count_read_write.c  -o /home/sd/Git/linux/tools/testing/selftests/damon/huge_count_read_write
+clang tested configs:
+arm                       imx_v4_v5_defconfig
+arm                          ep93xx_defconfig
+arm                     am200epdkit_defconfig
+arm                           omap1_defconfig
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+riscv                randconfig-r042-20221110
+x86_64                        randconfig-a003
+hexagon              randconfig-r041-20221110
+hexagon              randconfig-r045-20221110
+powerpc                        fsp2_defconfig
+powerpc                    gamecube_defconfig
+s390                 randconfig-r044-20221110
+x86_64                        randconfig-a001
 
-Also, could we add four spaces indent for code snippet/command outputs like
-above?
-
-> huge_count_read_write.c: In function ‘write_read_with_huge_count’:
-> huge_count_read_write.c:23:9: warning: ‘write’ reading 4294967295 bytes from a region of size 1 [-Wstringop-overread]
->    23 |         write(filedesc, "", 0xfffffffful);
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from huge_count_read_write.c:8:
-> /usr/include/unistd.h:378:16: note: in a call to function ‘write’ declared with attribute ‘access (read_only, 2, 3)’
->   378 | extern ssize_t write (int __fd, const void *__buf, size_t __n) __wur
->       |                ^~~~~
-> huge_count_read_write.c:25:15: warning: ‘read’ writing 4294967295 bytes into a region of size 25 overflows the destination [-Wstringop-overflow=]
->    25 |         ret = read(filedesc, buf, 0xfffffffful);
->       |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> huge_count_read_write.c:14:14: note: destination object ‘buf’ of size 25
->    14 |         char buf[25];
->       |              ^~~
-> In file included from huge_count_read_write.c:8:
-> /usr/include/unistd.h:371:16: note: in a call to function ‘read’ declared with attribute ‘access (write_only, 2, 3)’
->   371 | extern ssize_t read (int __fd, void *__buf, size_t __nbytes) __wur
->       |                ^~~~
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
->  tools/testing/selftests/damon/huge_count_read_write.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
-> index ad7a6b4cf338..8fbe276870e7 100644
-> --- a/tools/testing/selftests/damon/huge_count_read_write.c
-> +++ b/tools/testing/selftests/damon/huge_count_read_write.c
-> @@ -8,6 +8,11 @@
->  #include <unistd.h>
->  #include <stdio.h>
->  
-> +#pragma GCC diagnostic push
-> +/* Ignore read(2) overflow and write(2) overread compile warnings */
-> +#pragma GCC diagnostic ignored "-Wstringop-overread"
-> +#pragma GCC diagnostic ignored "-Wstringop-overflow"
-> +
-
-Thank you for sending this patch!
-
-However, there was a similar patch from Yuanchu[1], and this causes another
-warning for old gcc[2] that I use (9.4.0), like below.
-
-    gcc -Wno-stringop-overread -Wno-stringop-overflow    huge_count_read_write.c  -o /home/sjpark/linux/tools/testing/selftests/damon/huge_count_read_write
-    huge_count_read_write.c:13:32: warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas]
-       13 | #pragma GCC diagnostic ignored "-Wstringop-overread"
-          |                                ^~~~~~~~~~~~~~~~~~~~~
-    cc1: warning: unrecognized command line option ‘-Wno-stringop-overread’
-
-As mentioned as a reply to Yuanchu's patch, I'd slightly prefer making it
-silent for both new and old compilers than this approach, but no strong opinion
-from my side.  Yuanchu and Shuah, do you have some opinion?
-
-[1] https://lore.kernel.org/lkml/CAJj2-QE4ee=N9wYXVQc6gyZYC3zgAsWVwWJ7DMaS2B9q2WqBHw@mail.gmail.com/
-[2] https://lore.kernel.org/lkml/20220504184537.130085-1-sj@kernel.org/
-[3] https://lore.kernel.org/lkml/20220517160417.1096-1-sj@kernel.org/
-
-
-Thanks,
-SJ
-
->  void write_read_with_huge_count(char *file)
->  {
->  	int filedesc = open(file, O_RDWR);
-> @@ -27,6 +32,8 @@ void write_read_with_huge_count(char *file)
->  	close(filedesc);
->  }
->  
-> +#pragma GCC diagnostic pop
-> +
->  int main(int argc, char *argv[])
->  {
->  	if (argc != 2) {
-> -- 
-> 2.31.1
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
