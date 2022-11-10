@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7C1623D05
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC8D623D07
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbiKJIBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S232871AbiKJIBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbiKJIBA (ORCPT
+        with ESMTP id S232920AbiKJIBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:01:00 -0500
+        Thu, 10 Nov 2022 03:01:06 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9CC1CB01
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:00:59 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id i65-20020a25d144000000b006cfec5975d5so1146842ybg.15
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:00:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD251C41F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:01:05 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id f126-20020a255184000000b006cb2aebd124so1153775ybb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:01:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8vK2CTFtLD5YGZvxAtHHt4MBxX8fsqvLDieKgi2UpY=;
-        b=HaF/H/3MkcFULhHBzOSB9PUz3Skp+KtwKWMvJkFA25o4ce0byRTJRnB1Pftp0lH62r
-         9A4GwUXfbkSXOn6ueebI8CtEhwk9spUrrxU5UJ1ZuRVgvd0CfdUhd8cP7vG3f3WCtYdq
-         vxDnon+DaljAFnAfHzb+ISco8ApoRXACL/qfXvS/MotOfYrhhiKyn7SC5vTRUrBY+04w
-         bspiXPgGN5190d3+v6SP6zrc2UOdEwict7cVQO3vD4uBtphtjXoK6Ymm/YDPujpJtKY/
-         zk7k2etjtzYtKvlzfR38vTKUgyy3FaBlKyXuqu+8EtEdO71LM7cm0wwz8INlx9w0cxjl
-         oGxQ==
+        bh=5kJlT7ntgoYuCv4/yBaIZRIBzCyj+KBksQs6ck5uymo=;
+        b=fDaFqsnCmWfOp2sCyDZ2LXluglt+9BGNMH4fv3LPb752IiaQvNyMynq5/u3trO/Smi
+         tfXaDJ2X6KIcnFJ2Nu2wcLSWATosEnrNDsJM5GX8w+tzy2GF//YXWHuG6ADTj3O+e69h
+         /LqgVmJX3+Gix6KAlje0eQ2G6CZM9GYxpqTWzpduHnEmaCKcVcBH0Ne0bSd79d2y7xn1
+         yLhJxBn2FdrKj/jDI9l2z1W0pQibOQf936dhCJ9hxtVdTe8XJcHa40jJPp2HiCpuUiiF
+         jUZTY1uh8yLyx65sSHOjvCw0Oo936YiuN2Hmm8cBN+QMZ2CgXiUIF/VxGlYmihlUgsyD
+         SBGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O8vK2CTFtLD5YGZvxAtHHt4MBxX8fsqvLDieKgi2UpY=;
-        b=egnmNZsNySsqG1EYJbSN/AjYYbUDYbzw6HutgDmiFUowmel4v2AZacZb5TvOE/JUjx
-         6kquPoipRdgIqGXjUB7tNR9J5YdFkbZv/5e35jdclUVOAfsOu7qBQwd222G9ICXLV7e/
-         Qx/f5K0ng3/dAT0t8Ge2doMSqb/RdznI/vVg/QTzYFpW0KYFfy+AfyNXnwJ7cL7mjIxX
-         94X0YoXRmcvjhYFWN+o7LBHbB6H3HDdYtRC7CBVFemuMdXN/s/ASC8BNRlv1DdmZvgKN
-         uGUdVpPmIICAYpTCaMuOo+2FDJQXk6A5GulRcylXlT3g9KX4ANc8BPrEIFasVVHcubxn
-         9Q4g==
-X-Gm-Message-State: ACrzQf0N1uw394v4hPtM5x5m2fWMDOAWz4ky+JrWjub/Q/foaoWAwiT8
-        aq43RLW/WqDxHa/E3ajpludAe0Pgyv3t43kE9uY=
-X-Google-Smtp-Source: AMsMyM7Kl/6ds+ZaZdLDIKG04z2Za8eDR7Zgxfd3VWiKDhi+1gejDYi9rlhnaZzvtSq4SWaAa+EpbXSDkq15EM7yscQ=
+        bh=5kJlT7ntgoYuCv4/yBaIZRIBzCyj+KBksQs6ck5uymo=;
+        b=DmEg9yOykQnJlUmkCERef5jAPKD6We11kLjXgVH8pkYIExHLE2aDjV1dZb23hF4n9G
+         1OoJHoFWy+fAv3JV/9NU7oK6y4vIy51YKo98MUntXUHw86ltPczrcoy8tjZtlLK7Z0KT
+         9L8bCx34hg4kUGbzDqfUMrzasAjRl7LwYLH/K0KYK1HvLQzLNlFHAf77cX07k1gkS/Vw
+         E2EgL6OkblpaG1pJtub4fsNz8Juqyry9dGX7ABtPke81FLvDlIafvc5eUGVRljfVs/1D
+         REDO7XMexQ/stDN4sf8cYbGPUp5lp2uT7iuGbR8SooppQou603OAY85b+C2Wa6SU1HYE
+         N3mg==
+X-Gm-Message-State: ACrzQf2rFk34VPgVvnB/MUqBrd3wTwsUiyQ4w2AG72LfXR5dx9oa6ra+
+        zfW/NfTVApsgXJIM7Ih345hi4Cc+YgXB1YTDJbM=
+X-Google-Smtp-Source: AMsMyM5TB9dKmbd/GJV7W+4DoGbisl/2Tak7uAyBsIXZkGqRStZcLUrtCLMtXOJGq2sLZptXxsB5iSidsFQeM1DXX0k=
 X-Received: from albertccwang.ntc.corp.google.com ([2401:fa00:fc:202:2c6f:5c28:5579:9e27])
- (user=albertccwang job=sendgmr) by 2002:a81:9c51:0:b0:373:448b:6aea with SMTP
- id n17-20020a819c51000000b00373448b6aeamr44918198ywa.265.1668067259237; Thu,
- 10 Nov 2022 00:00:59 -0800 (PST)
-Date:   Thu, 10 Nov 2022 16:00:05 +0800
+ (user=albertccwang job=sendgmr) by 2002:a05:690c:601:b0:36b:b6f3:f0f4 with
+ SMTP id bq1-20020a05690c060100b0036bb6f3f0f4mr1194837ywb.116.1668067264475;
+ Thu, 10 Nov 2022 00:01:04 -0800 (PST)
+Date:   Thu, 10 Nov 2022 16:00:06 +0800
 In-Reply-To: <20221110080006.3563429-1-albertccwang@google.com>
-Message-Id: <20221110080006.3563429-3-albertccwang@google.com>
+Message-Id: <20221110080006.3563429-4-albertccwang@google.com>
 Mime-Version: 1.0
 References: <20221110080006.3563429-1-albertccwang@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v2 2/3] usb: xhci-plat: add xhci_plat_priv_overwrite
+Subject: [PATCH v2 3/3] usb: host: add the xhci offload hooks implementations
 From:   Albert Wang <albertccwang@google.com>
 To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
 Cc:     badhri@google.com, howardyen@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Albert Wang <albertccwang@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
@@ -68,81 +69,518 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Howard Yen <howardyen@google.com>
+Add the offload hooks implementations which are used in the xHCI driver
+for vendor offload function, and some functions will call to
+co-processor driver for further offload operations.
 
-Add an overwrite to platform specific callback for setting up the
-xhci_offload_ops, allow vendor to store the xhci_offload_ops and
-overwrite them when xhci_plat_probe invoked.
-
+Signed-off-by: Albert Wang <albertccwang@google.com>
 Signed-off-by: Howard Yen <howardyen@google.com>
 ---
 Changes in v2:
-- Use 'offload_ops' instead of 'vendor_ops'
+- New in v2
 
- drivers/usb/host/xhci-plat.c | 20 ++++++++++++++++++++
- drivers/usb/host/xhci-plat.h |  7 +++++++
- 2 files changed, 27 insertions(+)
+ drivers/usb/host/xhci-offload-impl.c | 492 +++++++++++++++++++++++++++
+ 1 file changed, 492 insertions(+)
+ create mode 100644 drivers/usb/host/xhci-offload-impl.c
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 2f04acb42fa6..11ff89f722b7 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -173,9 +173,26 @@ static const struct of_device_id usb_xhci_of_match[] = {
- MODULE_DEVICE_TABLE(of, usb_xhci_of_match);
- #endif
- 
-+static struct xhci_plat_priv_overwrite xhci_plat_vendor_overwrite;
+diff --git a/drivers/usb/host/xhci-offload-impl.c b/drivers/usb/host/xhci-offload-impl.c
+new file mode 100644
+index 000000000000..90e546d63fbe
+--- /dev/null
++++ b/drivers/usb/host/xhci-offload-impl.c
+@@ -0,0 +1,492 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2020 Google Corp.
++ *
++ * Author:
++ *  Howard.Yen <howardyen@google.com>
++ */
 +
-+int xhci_plat_register_offload_ops(struct xhci_offload_ops *offload_ops)
++#include <linux/dmapool.h>
++#include <linux/dma-mapping.h>
++#include <linux/of.h>
++#include <linux/of_reserved_mem.h>
++#include <linux/pm_wakeup.h>
++#include <linux/slab.h>
++#include <linux/usb.h>
++#include <linux/workqueue.h>
++#include <linux/usb/hcd.h>
++
++#include "xhci.h"
++#include "xhci-plat.h"
++
++enum usb_offload_op_mode {
++	USB_OFFLOAD_STOP,
++	USB_OFFLOAD_DRAM
++};
++
++enum usb_state {
++	USB_DISCONNECTED,
++	USB_CONNECTED
++};
++
++enum usb_offload_msg {
++	SET_DCBAA_PTR,
++	SETUP_DONE,
++	SET_ISOC_TR_INFO,
++	SYNC_CONN_STAT,
++	SET_OFFLOAD_STATE
++};
++
++struct conn_stat_args {
++	u16 bus_id;
++	u16 dev_num;
++	u16 slot_id;
++	u32 conn_stat;
++};
++
++struct get_isoc_tr_info_args {
++	u16 ep_id;
++	u16 dir;
++	u32 type;
++	u32 num_segs;
++	u32 seg_ptr;
++	u32 max_packet;
++	u32 deq_ptr;
++	u32 enq_ptr;
++	u32 cycle_state;
++	u32 num_trbs_free;
++};
++
++struct xhci_offload_data {
++	struct xhci_hcd *xhci;
++
++	bool usb_accessory_enabled;
++	bool usb_audio_offload;
++	bool dt_direct_usb_access;
++	bool offload_state;
++
++	enum usb_offload_op_mode op_mode;
++};
++
++static struct xhci_offload_data *offload_data;
++struct xhci_offload_data *xhci_get_offload_data(void)
 +{
-+	if (offload_ops == NULL)
-+		return -EINVAL;
++	return offload_data;
++}
 +
-+	xhci_plat_vendor_overwrite.offload_ops = offload_ops;
++/*
++ * Determine if an USB device is a compatible devices:
++ *     True: Devices are audio class and they contain ISOC endpoint
++ *    False: Devices are not audio class or they're audio class but no ISOC endpoint or
++ *           they have at least one interface is video class
++ */
++static bool is_compatible_with_usb_audio_offload(struct usb_device *udev)
++{
++	struct usb_endpoint_descriptor *epd;
++	struct usb_host_config *config;
++	struct usb_host_interface *alt;
++	struct usb_interface_cache *intfc;
++	int i, j, k;
++	bool is_audio = false;
++
++	config = udev->config;
++	for (i = 0; i < config->desc.bNumInterfaces; i++) {
++		intfc = config->intf_cache[i];
++		for (j = 0; j < intfc->num_altsetting; j++) {
++			alt = &intfc->altsetting[j];
++
++			if (alt->desc.bInterfaceClass == USB_CLASS_VIDEO) {
++				is_audio = false;
++				goto out;
++			}
++
++			if (alt->desc.bInterfaceClass == USB_CLASS_AUDIO) {
++				for (k = 0; k < alt->desc.bNumEndpoints; k++) {
++					epd = &alt->endpoint[k].desc;
++					if (usb_endpoint_xfer_isoc(epd)) {
++						is_audio = true;
++						break;
++					}
++				}
++			}
++		}
++	}
++
++out:
++	return is_audio;
++}
++
++/*
++ * check the usb device including the video class:
++ *     True: Devices contain video class
++ *    False: Device doesn't contain video class
++ */
++static bool is_usb_video_device(struct usb_device *udev)
++{
++	struct usb_host_config *config;
++	struct usb_host_interface *alt;
++	struct usb_interface_cache *intfc;
++	int i, j;
++	bool is_video = false;
++
++	if (!udev || !udev->config)
++		return is_video;
++
++	config = udev->config;
++
++	for (i = 0; i < config->desc.bNumInterfaces; i++) {
++		intfc = config->intf_cache[i];
++		for (j = 0; j < intfc->num_altsetting; j++) {
++			alt = &intfc->altsetting[j];
++
++			if (alt->desc.bInterfaceClass == USB_CLASS_VIDEO) {
++				is_video = true;
++				goto out;
++			}
++		}
++	}
++
++out:
++	return is_video;
++}
++
++/*
++ * This is the driver call to co-processor for offload operations.
++ */
++int offload_driver_call(enum usb_offload_msg msg, void *ptr)
++{
++	enum usb_offload_msg offload_msg;
++	void *argptr;
++
++	offload_msg = msg;
++	argptr = ptr;
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(xhci_plat_register_offload_ops);
 +
- static int xhci_vendor_init(struct xhci_hcd *xhci)
- {
- 	struct xhci_offload_ops *ops = xhci_offload_get_ops(xhci);
-+	struct xhci_plat_priv *priv = xhci_to_priv(xhci);
++static int xhci_sync_conn_stat(unsigned int bus_id, unsigned int dev_num, unsigned int slot_id,
++				unsigned int conn_stat)
++{
++	struct conn_stat_args conn_args;
 +
-+	if (xhci_plat_vendor_overwrite.offload_ops)
-+		ops = priv->offload_ops = xhci_plat_vendor_overwrite.offload_ops;
- 
- 	if (ops && ops->offload_init)
- 		return ops->offload_init(xhci);
-@@ -185,9 +202,12 @@ static int xhci_vendor_init(struct xhci_hcd *xhci)
- static void xhci_vendor_cleanup(struct xhci_hcd *xhci)
- {
- 	struct xhci_offload_ops *ops = xhci_offload_get_ops(xhci);
-+	struct xhci_plat_priv *priv = xhci_to_priv(xhci);
- 
- 	if (ops && ops->offload_cleanup)
- 		ops->offload_cleanup(xhci);
++	conn_args.bus_id = bus_id;
++	conn_args.dev_num = dev_num;
++	conn_args.slot_id = slot_id;
++	conn_args.conn_stat = conn_stat;
 +
-+	priv->offload_ops = NULL;
- }
- 
- static int xhci_plat_probe(struct platform_device *pdev)
-diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
-index 5aa0d38fa01a..0656d6daa194 100644
---- a/drivers/usb/host/xhci-plat.h
-+++ b/drivers/usb/host/xhci-plat.h
-@@ -22,4 +22,11 @@ struct xhci_plat_priv {
- 
- #define hcd_to_xhci_priv(h) ((struct xhci_plat_priv *)hcd_to_xhci(h)->priv)
- #define xhci_to_priv(x) ((struct xhci_plat_priv *)(x)->priv)
++	return offload_driver_call(SYNC_CONN_STAT, &conn_args);
++}
 +
-+struct xhci_plat_priv_overwrite {
-+	struct xhci_offload_ops *offload_ops;
++static int usb_host_mode_state_notify(enum usb_state usb_state)
++{
++	return xhci_sync_conn_stat(0, 0, 0, usb_state);
++}
++
++static int xhci_udev_notify(struct notifier_block *self, unsigned long action,
++				void *dev)
++{
++	struct usb_device *udev = dev;
++	struct xhci_offload_data *offload_data = xhci_get_offload_data();
++
++	switch (action) {
++	case USB_DEVICE_ADD:
++		if (is_compatible_with_usb_audio_offload(udev)) {
++			dev_dbg(&udev->dev, "Compatible with usb audio offload\n");
++			if (offload_data->op_mode == USB_OFFLOAD_DRAM) {
++				xhci_sync_conn_stat(udev->bus->busnum, udev->devnum, udev->slot_id,
++						    USB_CONNECTED);
++			}
++		}
++		offload_data->usb_accessory_enabled = false;
++		break;
++	case USB_DEVICE_REMOVE:
++		if (is_compatible_with_usb_audio_offload(udev) &&
++		    (offload_data->op_mode == USB_OFFLOAD_DRAM)) {
++			xhci_sync_conn_stat(udev->bus->busnum, udev->devnum, udev->slot_id,
++					    USB_DISCONNECTED);
++		}
++		offload_data->usb_accessory_enabled = false;
++		break;
++	}
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block xhci_udev_nb = {
++	.notifier_call = xhci_udev_notify,
 +};
 +
-+int xhci_plat_register_offload_ops(struct xhci_offload_ops *offload_ops);
++static int usb_audio_offload_init(struct xhci_hcd *xhci)
++{
++	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
++	struct xhci_offload_data *offload_data = xhci_get_offload_data();
++	int ret;
++	u32 out_val;
 +
- #endif	/* _XHCI_PLAT_H */
++	offload_data = kzalloc(sizeof(struct xhci_offload_data), GFP_KERNEL);
++	if (!offload_data)
++		return -ENOMEM;
++
++	if (!of_property_read_u32(dev->of_node, "offload", &out_val))
++		offload_data->usb_audio_offload = (out_val == 1) ? true : false;
++
++	ret = of_reserved_mem_device_init(dev);
++	if (ret) {
++		dev_err(dev, "Could not get reserved memory\n");
++		kfree(offload_data);
++		return ret;
++	}
++
++	offload_data->dt_direct_usb_access =
++		of_property_read_bool(dev->of_node, "direct-usb-access") ? true : false;
++	if (!offload_data->dt_direct_usb_access)
++		dev_warn(dev, "Direct USB access is not supported\n");
++
++	offload_data->offload_state = true;
++
++	usb_register_notify(&xhci_udev_nb);
++	offload_data->op_mode = USB_OFFLOAD_DRAM;
++	offload_data->xhci = xhci;
++
++	return 0;
++}
++
++static void usb_audio_offload_cleanup(struct xhci_hcd *xhci)
++{
++	struct xhci_offload_data *offload_data = xhci_get_offload_data();
++
++	offload_data->usb_audio_offload = false;
++	offload_data->op_mode = USB_OFFLOAD_STOP;
++	offload_data->xhci = NULL;
++
++	usb_unregister_notify(&xhci_udev_nb);
++
++	/* Notification for xhci driver removing */
++	usb_host_mode_state_notify(USB_DISCONNECTED);
++
++	kfree(offload_data);
++	offload_data = NULL;
++}
++
++static bool is_offload_enabled(struct xhci_hcd *xhci,
++		struct xhci_virt_device *vdev, unsigned int ep_index)
++{
++	struct usb_device *udev;
++	struct xhci_offload_data *offload_data = xhci_get_offload_data();
++	bool global_enabled = offload_data->op_mode != USB_OFFLOAD_STOP;
++	struct xhci_ring *ep_ring;
++
++	if (vdev == NULL || vdev->eps[ep_index].ring == NULL)
++		return global_enabled;
++
++	udev = vdev->udev;
++
++	if (global_enabled) {
++		ep_ring = vdev->eps[ep_index].ring;
++		if (offload_data->op_mode == USB_OFFLOAD_DRAM) {
++			if (is_usb_video_device(udev))
++				return false;
++			else if (ep_ring->type == TYPE_ISOC)
++				return offload_data->offload_state;
++		}
++	}
++
++	return false;
++}
++
++static bool is_usb_bulk_transfer_enabled(struct xhci_hcd *xhci, struct urb *urb)
++{
++	struct xhci_offload_data *offload_data = xhci_get_offload_data();
++	struct usb_endpoint_descriptor *desc = &urb->ep->desc;
++	int ep_type = usb_endpoint_type(desc);
++	struct usb_ctrlrequest *cmd;
++	bool skip_bulk = false;
++
++	cmd = (struct usb_ctrlrequest *) urb->setup_packet;
++
++	if (ep_type == USB_ENDPOINT_XFER_CONTROL) {
++		if (!usb_endpoint_dir_in(desc) && cmd->bRequest == 0x35)
++			offload_data->usb_accessory_enabled = true;
++		else
++			offload_data->usb_accessory_enabled = false;
++	}
++
++	if (ep_type == USB_ENDPOINT_XFER_BULK && !usb_endpoint_dir_in(desc))
++		skip_bulk = offload_data->usb_accessory_enabled;
++
++	return skip_bulk;
++}
++
++static int xhci_set_dcbaa_ptr(u64 dcbaa_ptr)
++{
++	return offload_driver_call(SET_DCBAA_PTR, &dcbaa_ptr);
++}
++
++static int xhci_setup_done(void)
++{
++	return offload_driver_call(SETUP_DONE, NULL);
++}
++
++static void alloc_dcbaa(struct xhci_hcd *xhci, gfp_t flags)
++{
++	dma_addr_t dma;
++	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
++	struct xhci_offload_data *offload_data = xhci_get_offload_data();
++
++	if (offload_data->op_mode == USB_OFFLOAD_DRAM) {
++		xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa),
++						 &dma, flags);
++		if (!xhci->dcbaa)
++			return;
++
++		xhci->dcbaa->dma = dma;
++		if (xhci_set_dcbaa_ptr(xhci->dcbaa->dma) != 0) {
++			xhci_err(xhci, "Set DCBAA pointer failed\n");
++			xhci->dcbaa = NULL;
++			return;
++		}
++		xhci_setup_done();
++
++		xhci_dbg(xhci, "Set dcbaa_ptr=%llx to AoC\n", xhci->dcbaa->dma);
++	} else {
++		xhci->dcbaa = dma_alloc_coherent(dev, sizeof(*xhci->dcbaa),
++						 &dma, flags);
++		if (!xhci->dcbaa)
++			return;
++
++		xhci->dcbaa->dma = dma;
++	}
++}
++
++static void free_dcbaa(struct xhci_hcd *xhci)
++{
++	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
++
++	if (!xhci->dcbaa)
++		return;
++
++	dma_free_coherent(dev, sizeof(*xhci->dcbaa),
++			  xhci->dcbaa, xhci->dcbaa->dma);
++
++	xhci->dcbaa = NULL;
++}
++
++static int xhci_set_isoc_tr_info(u16 ep_id, u16 dir, struct xhci_ring *ep_ring)
++{
++	struct get_isoc_tr_info_args tr_info;
++
++	tr_info.ep_id = ep_id;
++	tr_info.dir = dir;
++	tr_info.num_segs = ep_ring->num_segs;
++	tr_info.max_packet = ep_ring->bounce_buf_len;
++	tr_info.type = ep_ring->type;
++	tr_info.seg_ptr = ep_ring->first_seg->dma;
++	tr_info.cycle_state = ep_ring->cycle_state;
++	tr_info.num_trbs_free = ep_ring->num_trbs_free;
++
++	return offload_driver_call(SET_ISOC_TR_INFO, &tr_info);
++}
++
++static struct xhci_ring *alloc_transfer_ring(struct xhci_hcd *xhci,
++		u32 endpoint_type, enum xhci_ring_type ring_type,
++		unsigned int max_packet, gfp_t mem_flags)
++{
++	struct xhci_ring *ep_ring;
++	u16 dir;
++
++	ep_ring = xhci_ring_alloc(xhci, 1, 1, ring_type, max_packet, mem_flags);
++	dir = endpoint_type == ISOC_IN_EP ? 0 : 1;
++
++	xhci_set_isoc_tr_info(0, dir, ep_ring);
++
++	return ep_ring;
++}
++
++static void free_transfer_ring(struct xhci_hcd *xhci, struct xhci_virt_device *virt_dev,
++				unsigned int ep_index)
++{
++	struct xhci_ring *ring, *new_ring;
++	struct xhci_ep_ctx *ep_ctx;
++	struct xhci_input_control_ctx *ctrl_ctx;
++	u32 ep_type;
++	u32 ep_is_added, ep_is_dropped;
++
++	ring = virt_dev->eps[ep_index].ring;
++	new_ring = virt_dev->eps[ep_index].new_ring;
++	ep_ctx = xhci_get_ep_ctx(xhci, virt_dev->out_ctx, ep_index);
++	ep_type = CTX_TO_EP_TYPE(le32_to_cpu(ep_ctx->ep_info2));
++
++	ctrl_ctx = xhci_get_input_control_ctx(virt_dev->in_ctx);
++	if (!ctrl_ctx) {
++		xhci_warn(xhci, "%s: Could not get input context, bad type.\n", __func__);
++		return;
++	}
++	ep_is_added = EP_IS_ADDED(ctrl_ctx, ep_index);
++	ep_is_dropped = EP_IS_DROPPED(ctrl_ctx, ep_index);
++
++	xhci_dbg(xhci, "%s: ep %u is added(0x%x), is dropped(0x%x)\n", __func__, ep_index,
++		 ep_is_added, ep_is_dropped);
++
++	if (ring) {
++		xhci_dbg(xhci, "%s: ep_index=%u, ep_type=%u, ring type=%u, new_ring=%pK\n",
++			 __func__, ep_index, ep_type, ring->type, new_ring);
++
++		xhci_ring_free(xhci, virt_dev->eps[ep_index].ring);
++
++		virt_dev->eps[ep_index].ring = NULL;
++
++		if (ep_is_added == 0 && ep_is_dropped == 0)
++			return;
++	}
++
++	if (new_ring) {
++		xhci_dbg(xhci, "%s: ep_index=%u, ep_type=%u, new_ring type=%u\n", __func__,
++			ep_index, ep_type, new_ring->type);
++
++		xhci_ring_free(xhci, virt_dev->eps[ep_index].new_ring);
++
++		virt_dev->eps[ep_index].new_ring = NULL;
++
++		return;
++	}
++}
++
++static bool offload_skip_urb(struct xhci_hcd *xhci, struct urb *urb)
++{
++	struct xhci_virt_device *vdev = xhci->devs[urb->dev->slot_id];
++	struct usb_endpoint_descriptor *desc = &urb->ep->desc;
++	int ep_type = usb_endpoint_type(desc);
++	unsigned int ep_index;
++
++	if (ep_type == USB_ENDPOINT_XFER_CONTROL)
++		ep_index = (unsigned int)(usb_endpoint_num(desc)*2);
++	else
++		ep_index = (unsigned int)(usb_endpoint_num(desc)*2) +
++			   (usb_endpoint_dir_in(desc) ? 1 : 0) - 1;
++
++	xhci_dbg(xhci, "%s: ep_index=%u, ep_type=%d\n", __func__, ep_index, ep_type);
++
++	if (is_offload_enabled(xhci, vdev, ep_index))
++		return true;
++
++	if (is_usb_bulk_transfer_enabled(xhci, urb))
++		return true;
++
++	return false;
++}
++
++static struct xhci_offload_ops offload_ops = {
++	.offload_init = usb_audio_offload_init,
++	.offload_cleanup = usb_audio_offload_cleanup,
++	.is_offload_enabled = is_offload_enabled,
++	.alloc_dcbaa = alloc_dcbaa,
++	.free_dcbaa = free_dcbaa,
++	.alloc_transfer_ring = alloc_transfer_ring,
++	.free_transfer_ring = free_transfer_ring,
++	.usb_offload_skip_urb = offload_skip_urb,
++};
++
++int xhci_offload_helper_init(void)
++{
++	return xhci_plat_register_offload_ops(&offload_ops);
++}
 -- 
 2.38.1.431.g37b22c650d-goog
 
