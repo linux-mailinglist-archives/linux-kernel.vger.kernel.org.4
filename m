@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A004623CA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C79EC623C8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 08:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiKJH3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 02:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        id S232520AbiKJHYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 02:24:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbiKJH3n (ORCPT
+        with ESMTP id S229974AbiKJHYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 02:29:43 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A0C13E85;
-        Wed,  9 Nov 2022 23:29:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7D4N1M5bz4xGT;
-        Thu, 10 Nov 2022 18:29:40 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668065380;
-        bh=0I3H4V4YKqZP6S+Fe9HrjGaB0ZUQArhZIm8VwpuUsvg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EHNHgKNdgh39aQ3nhk8SQC0v5KnNP5COFUz5ZfXDb6XH06mnuCSGHmu/ibCZJ+ExP
-         6XwHrUVGAhbi0WddWHvT7wPkSmxNy74oySBOHklno4Znv/o4kyRmV8GjOSpnwowsTg
-         8lQIWmdg1PkHpIlotgJ0606hKs0bzc8ofpj1zQpAJDno0h/Ec2uMpnCh/Aiy8pd+z0
-         WrA1OF8jEfDXmPXFDl56YvHcuQVQ7Irqls7hWvTXV2VRvsBS4t4OqxiHpAvlfPcHcy
-         XLg1ohmV6qW8oVWN3CdLXmKR7i40Ex0yE6fpxNcW6x7RsCbfVEg9FTf6CoQmLoomb6
-         d3wcZvQfbJGBg==
-Date:   Thu, 10 Nov 2022 18:29:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the iommufd tree
-Message-ID: <20221110182938.40ce2651@canb.auug.org.au>
+        Thu, 10 Nov 2022 02:24:16 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461A32079;
+        Wed,  9 Nov 2022 23:24:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668065055; x=1699601055;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NpR3zgsRWqyqRv4WG8Mje9a0YXH5njFAug2x1iSvPYM=;
+  b=eFBe8wjzIaYjKj8U1SQr225WeXjvJ/cHOXQzl0lHiSWiGFjn6N0UYeEu
+   74QrR1fZ+CsU3TiTuneI/2gnkETV7jmdzw375B/e8xGQmu7M+5tPU/GIr
+   /HCbzA8FsPGjQ7GbqUj9ngcmY9ERRyy6O6JlDS9xm1aiNHzBLslFnaysu
+   jlVEEm+dwVOmAntmpUkBF4B0ewEIkW33mmCszTri1UdRKVSJI5A867o7H
+   4ANZkiPKkS6WCfHDLqFtei03W7WEG3Q/yz3M49ZxEW1PDt2yPnPQwYzba
+   Tm4yPxUBy8XvsznQafooEKmirbPSP5QC2JGUzEgI7/M+aZ50wfuCHTYe/
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="309950674"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="309950674"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 23:24:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="614994605"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="614994605"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 23:24:13 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] srcu: Release early_srcu resources when no longer in use
+Date:   Thu, 10 Nov 2022 15:30:13 +0800
+Message-Id: <20221110073013.1302564-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MVUTXbsDi83fKOnHfhreezG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MVUTXbsDi83fKOnHfhreezG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+When the "rcupdate.rcu_self_test = 1" is set in bootargs and CONFIG_SRCU
+option is enabled, the early_srcu will be tested, currently, for TREE SRCU,
+if "srcutree.convert_to_big = 1" is set, the srcu_node structure will be
+allocated at invoke init_srcu_struct_fields() time, after the test is
+completed, the early_srcu will not be used.
+Therefore, this commit invoke cleanup_srcu_struct() to release srcu_node
+structure.
 
-Hi all,
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/update.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-After merging the iommufd tree, today's linux-next build (htmldocs)
-produced these warnings:
+diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+index 738842c4886b..a05e23648c6b 100644
+--- a/kernel/rcu/update.c
++++ b/kernel/rcu/update.c
+@@ -589,6 +589,7 @@ static int rcu_verify_early_boot_tests(void)
+ 			early_boot_test_counter++;
+ 			srcu_barrier(&early_srcu);
+ 			WARN_ON_ONCE(!poll_state_synchronize_srcu(&early_srcu, early_srcu_cookie));
++			cleanup_srcu_struct(&early_srcu);
+ 		}
+ 	}
+ 	if (rcu_self_test_counter != early_boot_test_counter) {
+-- 
+2.25.1
 
-drivers/iommu/iommufd/device.c:1: warning: no structured comments found
-drivers/iommu/iommufd/main.c:1: warning: no structured comments found
-
-Introduced by commit
-
-  f3873afb9d7e ("iommufd: Document overview of iommufd")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MVUTXbsDi83fKOnHfhreezG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNsqGIACgkQAVBC80lX
-0GyRHQf/bz3pH/eniw+1wfKSy23gJgsvsILfTJw/PzN6VjqkCY/q6U7mkaYhdIXc
-BEIwizfW1cW27j2OlH1Nrd5JeviONnQ8QENeZzcLGoV5Spq3i6CA7GKNuvPLHNJb
-Mx+/G18ETV4bCaVSJC+BVw/yN1M4/Mx2MjRG+8HPDQC64moIfn9NimvbgzTa3wOV
-MH/1ns65677p6X0kPwNwbZqFBbxrjr1L+6Bjm+eXS057QDC1jpo3HbDiwWpNx7KG
-MnMZpB1+tEfoEkCJm8HUrW4dpI+W6XhxZSrc7wP8KUZ22w4I+mWoyIn8A9X6px3Q
-mDGveqphy1mfM9pqrz17aienlOrr/g==
-=gEEF
------END PGP SIGNATURE-----
-
---Sig_/MVUTXbsDi83fKOnHfhreezG--
