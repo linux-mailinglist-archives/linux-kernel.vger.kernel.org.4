@@ -2,146 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47013623F95
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA61623FA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiKJKOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S229705AbiKJKUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiKJKOS (ORCPT
+        with ESMTP id S229463AbiKJKUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:14:18 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DAF64A25
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:14:17 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id z17so784577qki.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MROv+ToXh8ryiyR2Mcd72J2oB24qvva8HoOx65uEfnw=;
-        b=JHKz0UX3sNsW9dh+Y6UMohkj8x7TLewUFGw+aCEZs8KbhGciz8bHucdInbV9AVhAue
-         IuJ16GHfz8vFwgTAv3c0LWh/rhHfoG+8DVPHhLOiMYKAs5j2cm/OvFFQBAtw+aUHv1oe
-         ykvxuIwZfY1Jy35F6uQai2CUkYfPxW30crjuSTw57uWnEA35nzJD9IyxZ52U6me5vFlF
-         /oami+J6UiP0CkbneAVaj6p4gzNmEYBkvK89ldTgolmdms9w9lEHSlOsDHFwzLhigp21
-         PmYUNKf+yP4lPbvRdpHpgERUZSy8ESkXAMnFDMkwjXVzhJcrhcHAyGZrrhWd2KVA4NIq
-         Ra7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MROv+ToXh8ryiyR2Mcd72J2oB24qvva8HoOx65uEfnw=;
-        b=RV6drL3p3C1/hvzBEDxGpiHRAzJ+rf7Ex71tEvpwhJAGSSqXeUu3PDmPQQlpXqrLOP
-         mNYWZ/SKzqak91HJg5/iiQN5IJteGPwErPUoNLeImB5LEspajphBPxvxzyzhhAKkzqiQ
-         pvXBprx8vMEwjrZIJrAG7TuBDI9uLzqMckPDPyYlh2NFLXp1bmJQLwcnilERVcffiNd3
-         iTTcRekRl4drv4NzUSxePl2ZO9dNoQUZ9Y4yiOp0MUACtnjyuTVyYSClA+t2GC1X28FR
-         EDHQXjZvGmj1oRo7a/W3yu4Guvf4tsFhP8nDHRQ4qc1XvvBVEiUKxI2F2894nGTYQE9/
-         ag2g==
-X-Gm-Message-State: ACrzQf03usPp4ci8L5Kcmo+OJzVcbVwRe/0GN9i9dbWZwkEonEzcsr6E
-        kOE2TWR0Hiic+UbIORnaHg+Bi9ZOtn6XIw==
-X-Google-Smtp-Source: AMsMyM7nyWanNqUFxUSk2u+rTgHu5Hoq0RXKFT7LEe1Txl2IRIN17/EUCAqazaXTg+Yi+rMRjb5eVg==
-X-Received: by 2002:a05:620a:200c:b0:6fa:4c1a:54e1 with SMTP id c12-20020a05620a200c00b006fa4c1a54e1mr34311275qka.113.1668075256555;
-        Thu, 10 Nov 2022 02:14:16 -0800 (PST)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id n16-20020a05620a295000b006ce0733caebsm12968550qkp.14.2022.11.10.02.14.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 02:14:16 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id r3so1772086yba.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:14:16 -0800 (PST)
-X-Received: by 2002:a05:6902:1001:b0:6be:820d:a0de with SMTP id
- w1-20020a056902100100b006be820da0demr63814060ybt.240.1668075255736; Thu, 10
- Nov 2022 02:14:15 -0800 (PST)
+        Thu, 10 Nov 2022 05:20:42 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410DC19C26
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:20:41 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot4fc-00074I-7y; Thu, 10 Nov 2022 11:20:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot4fZ-003Qp3-KW; Thu, 10 Nov 2022 11:20:26 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ot4fZ-00FcfD-NA; Thu, 10 Nov 2022 11:20:25 +0100
+Date:   Thu, 10 Nov 2022 11:20:25 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 3/6] pwm: lpss: Include headers we are direct user of
+Message-ID: <20221110102025.2tqdb3v6ndg6vyqk@pengutronix.de>
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+ <20221108142226.63161-4-andriy.shevchenko@linux.intel.com>
+ <20221110072144.2s37r52qcpi6utgh@pengutronix.de>
+ <CAHp75VenLc-QfuD3rHPh=5nu_SqWvEnsePbNMsBA4R-Zs+nvrw@mail.gmail.com>
 MIME-Version: 1.0
-References: <Y2lw4Qc1uI+Ep+2C@fedora> <4281b354-d67d-2883-d966-a7816ed4f811@kernel.dk>
- <Y2phEZKYuSmPL5B5@fedora> <93fa2da5-c81a-d7f8-115c-511ed14dcdbb@kernel.dk>
-In-Reply-To: <93fa2da5-c81a-d7f8-115c-511ed14dcdbb@kernel.dk>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 10 Nov 2022 11:13:38 +0100
-X-Gmail-Original-Message-ID: <CA+FuTSe=09sAafHnLLMdc0EJrcP0+xcKCqD+rfMtdfQdSQYBDw@mail.gmail.com>
-Message-ID: <CA+FuTSe=09sAafHnLLMdc0EJrcP0+xcKCqD+rfMtdfQdSQYBDw@mail.gmail.com>
-Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ilrfeteqmdew4gst"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VenLc-QfuD3rHPh=5nu_SqWvEnsePbNMsBA4R-Zs+nvrw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 3:09 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 11/8/22 7:00 AM, Stefan Hajnoczi wrote:
-> > On Mon, Nov 07, 2022 at 02:38:52PM -0700, Jens Axboe wrote:
-> >> On 11/7/22 1:56 PM, Stefan Hajnoczi wrote:
-> >>> Hi Jens,
-> >>> NICs and storage controllers have interrupt mitigation/coalescing
-> >>> mechanisms that are similar.
-> >>
-> >> Yep
-> >>
-> >>> NVMe has an Aggregation Time (timeout) and an Aggregation Threshold
-> >>> (counter) value. When a completion occurs, the device waits until the
-> >>> timeout or until the completion counter value is reached.
-> >>>
-> >>> If I've read the code correctly, min_wait is computed at the beginning
-> >>> of epoll_wait(2). NVMe's Aggregation Time is computed from the first
-> >>> completion.
-> >>>
-> >>> It makes me wonder which approach is more useful for applications. With
-> >>> the Aggregation Time approach applications can control how much extra
-> >>> latency is added. What do you think about that approach?
-> >>
-> >> We only tested the current approach, which is time noted from entry, not
-> >> from when the first event arrives. I suspect the nvme approach is better
-> >> suited to the hw side, the epoll timeout helps ensure that we batch
-> >> within xx usec rather than xx usec + whatever the delay until the first
-> >> one arrives. Which is why it's handled that way currently. That gives
-> >> you a fixed batch latency.
+
+--ilrfeteqmdew4gst
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Nov 10, 2022 at 11:53:59AM +0200, Andy Shevchenko wrote:
+> On Thu, Nov 10, 2022 at 9:22 AM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > On Tue, Nov 08, 2022 at 04:22:23PM +0200, Andy Shevchenko wrote:
+> > > For the sake of integrity, include headers we are direct user of.
+> > >
+> > > While at it, move the struct pwm_lpss_chip to be after
+> > > the struct pwm_lpss_boardinfo as the former uses pointer
+> > > to the latter.
 > >
-> > min_wait is fine when the goal is just maximizing throughput without any
-> > latency targets.
->
-> That's not true at all, I think you're in different time scales than
-> this would be used for.
->
-> > The min_wait approach makes it hard to set a useful upper bound on
-> > latency because unlucky requests that complete early experience much
-> > more latency than requests that complete later.
->
-> As mentioned in the cover letter or the main patch, this is most useful
-> for the medium load kind of scenarios. For high load, the min_wait time
-> ends up not mattering because you will hit maxevents first anyway. For
-> the testing that we did, the target was 2-300 usec, and 200 usec was
-> used for the actual test. Depending on what the kind of traffic the
-> server is serving, that's usually not much of a concern. From your
-> reply, I'm guessing you're thinking of much higher min_wait numbers. I
-> don't think those would make sense. If your rate of arrival is low
-> enough that min_wait needs to be high to make a difference, then the
-> load is low enough anyway that it doesn't matter. Hence I'd argue that
-> it is indeed NOT hard to set a useful upper bound on latency, because
-> that is very much what min_wait is.
->
-> I'm happy to argue merits of one approach over another, but keep in mind
-> that this particular approach was not pulled out of thin air AND it has
-> actually been tested and verified successfully on a production workload.
-> This isn't a hypothetical benchmark kind of setup.
+> > That part is fine.
+> >
+> > > Replace device.h with a forward declaration in order to improve
+> > > the compilation time due to reducing overhead of device.h parsing
+> > > with entire train of dependencies.
+> >
+> > Together with "For the sake of integrity, include headers we are direct
+> > user of." this makes an a bit schizophrenic impression on me. You add
+> > <linux/types.h> because the file is a direct user of it, but you drop
+> > <linux/device.h> despite being a direct user.
+>=20
+> But we don't use device.h.
 
-Following up on the interrupt mitigation analogy. This also reminds
-somewhat of SO_RCVLOWAT. That sets a lower bound on received data
-before waking up a single thread.
+What is the canonical header to provide struct device?
 
-Would it be more useful to define a minevents event count, rather than
-a minwait timeout? That might give the same amount of preferred batch
-size, without adding latency when unnecessary, or having to infer a
-reasonable bound from expected event rate. Bounded still by the max
-timeout.
+> > If you adapt the reasoning to something like:
+> >
+> > Replace the inclusion of <linux/device.h> by a forward declaration of
+> > struct device plus a (cheaper) #include of <linux/types.h> as
+> > <linux/device.h> is an expensive include (measured in compiler effort).
+>=20
+> Fine with me, thanks for the draft.
+>=20
+> > I could better live with it. I would even split this into two patches
+> > then. (i.e. move struct pwm_lpss_chip vs the include and forward change)
+>=20
+> I think for this small change for a driver that hasn't been modified
+> often it's fine to have them in one. But tell me if you are insisting
+> on a split, I can do that.
+
+I don't insist.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ilrfeteqmdew4gst
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNs0GcACgkQwfwUeK3K
+7Ak9iggAhGxxudCLGFL25NcgPyQ/qjyQM1LryRG9tCC0hHhkmpvNEdxRgdHghG9L
+48uWXHpGmJ4CToYbKjmeN+2pk0lrCWwh9R5Av8y8/O5oDNxrda8uwtG7mOdhpC3q
+0KZEvYuwlroI87pq1qG81UQdyHsQuZjusiFQctNHqgWI3XuDIOvMM8kGyET6uPe7
+w9v+4ZsvUv979VgO0c49L9C+G/3XF9Ta2uJuovwnQt2clj9RN//5ai9JDQw8vnDr
+pSjXFSO7sqokaRTsVEyUU4TbH0R/DI7UjuUApitn86YcEMrV/FLE8TiOg7CBbZzl
+fOZ+jcg1cBba21CAv43jNGufS8NknQ==
+=Gg6m
+-----END PGP SIGNATURE-----
+
+--ilrfeteqmdew4gst--
