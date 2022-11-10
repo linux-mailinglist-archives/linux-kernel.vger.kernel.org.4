@@ -2,99 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E05A623F3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1011623F4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 11:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiKJKAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 05:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S229697AbiKJKCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 05:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiKJKAX (ORCPT
+        with ESMTP id S230064AbiKJKCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 05:00:23 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C36011A0A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:00:22 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z18so2249214edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 02:00:22 -0800 (PST)
+        Thu, 10 Nov 2022 05:02:30 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A769B6B3B2;
+        Thu, 10 Nov 2022 02:02:27 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id hh9so628975qtb.13;
+        Thu, 10 Nov 2022 02:02:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2odpp67XrwEsYQ5qgNjwznTYFgGSgGMTen/aFOlfBHo=;
-        b=w5Oi/kOCYUP//oQsE/7WnRe4lkruoLsvkkON6QbMzHzT65213W8isBn10sgByyAphs
-         +YLn/DkdvpvQ29qVJ/b0p5xC4eJR6C7ZGjgwxQNzo1k5C6ly3dmzspu5oKyvtneCB8Km
-         aqpD8RAAK9LNQXkcnQLiWEkq0J7TgMQfJA9U9eXo55XWlEd4oOpyDCDZDO+cm3J3FpQO
-         H/6yusCZlu/zOzd9QjHMS5wM33wg8gtu2vLAZ4ZgNFCjqTeHkf/h0cSX93u4BGHAG8Ia
-         Pm1oOUmsjAhJVo8cinMRe6QjYmBJLHoePgHZPoipmGWFlkEmvLJMvo+GGD7OGJUv9jAG
-         KVMQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6FttHOwm7yc9wMfWVriclkQhHjfh2wdlqWSk7Onvpq8=;
+        b=CpYG5wHpFAWfwMEJkJ0eHYbZ9DL6XwV2Z/moVEO9AM4ClREtISOeFFzcR0rcxMVz9V
+         g2OxzAjvczR/8MOr1r1UBRKzsiVqV3b6O2ydSAvqXsVQPgcX7L7bW6F/lSzpePH8OJ02
+         8mIGf6EyfxQEo2Zyr1eLGPMFf+tmiZZNje+1FjEBU59ZRLBAxJ6JJVGszx8X7NTncvGv
+         UJVEyGc+3kDwaI7RaqpcSt8wJzU4SgGI8rBR5tS7qLUo966pmdZI4ZZ3LSG5DkuQ07ZC
+         R8ILr3qVPKxVyQfZPNKlATCvpJruYwCrJ2XgU9EFq+Vsj8e2h2kZ3+MfnfNKY2264vaP
+         nSCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2odpp67XrwEsYQ5qgNjwznTYFgGSgGMTen/aFOlfBHo=;
-        b=YSz8oGgifTs3jlvT4tdDqOX5FlT1oW+Tc5EAeSDtY7aZxtwaFWADTyuhbK9xZjz5vn
-         XL3rfSghFoap9aGYcgxHu3r/whzwdU+pDtcJBmFCJ+/JZKdvUyMucUY//hToq+ZpPaTS
-         nkhwrNkGt1w3Gq/juoqXJ9l4VDC8CrUbY8JxYM37rn1qA31AaKrV4LJVEoew0YZm4mzQ
-         cb8s96O0oUltfhA4DHvTP+HRvrnQXWlPBOKWX5o4vZmnUbn07uRJdnDmunDj5DFZgLbc
-         VnTMGycsTOD4RjqL/ZMTcYthpE+gXzGSW6bPNQBnphzxDGTBVVnsNJ5al88/1Osspw74
-         Cn4g==
-X-Gm-Message-State: ACrzQf21e4DGHO+iSrAx8rHssP6xMOK4+NxtM4s+vYrz/4hSKUo84S0p
-        OlAZSM4kF0JSyXD73hJYw9XJp1XjsgFo65a4QFTVbA==
-X-Google-Smtp-Source: AMsMyM6h/kF5BTrJAJvpwMlFB3z9bBGXZoV5+JPSItJMwFXOR5GNihzM7BleUV6gcrOiWnUTuuxCYagD9ge9jupAI4w=
-X-Received: by 2002:a05:6402:d0b:b0:458:a244:4e99 with SMTP id
- eb11-20020a0564020d0b00b00458a2444e99mr62575422edb.46.1668074420887; Thu, 10
- Nov 2022 02:00:20 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6FttHOwm7yc9wMfWVriclkQhHjfh2wdlqWSk7Onvpq8=;
+        b=hXDDvhum5A258L+bQQh/SsHTkeoPk/tNTNmb7qdKrDUukKqQoue8grdeG1Tbte8lmQ
+         E3vT3CUfSRCkMfCYIIRyfnXwqhD23PVKWJ/K+Dc2U1W4jl3U+A2F3FHko+YfRjzXYVBx
+         OY1eclQ5CokuxGnRfjPJ3hfhMJJ0Oo/nF6TCInNQAB6vfbgmEisQMgRRCv6HZFw4Y1vR
+         e2XqutUb7/Wl7HBJakCXo6XpZBcAwi6v8GBlMb894HqW2dXoU73NNWDAcw7YbQxJoO4G
+         Y0KqS/k8xhFKtZ/LNS2Ttq7BWhiJMRV6Aubdq1lkHcWafuaRdT6wZmRQC8qtIekUmPLc
+         GKsw==
+X-Gm-Message-State: ACrzQf1Ahc63nRwnJDkgiwt80NbPumRacz0+KYODxylUFyxW2llUklSZ
+        Nh658KHie8FEqyEyuJISFIvuFP7GLGgXp6utpd4=
+X-Google-Smtp-Source: AMsMyM5zyKKFkF0k+jBAxhQa09hMD/ILNPqt1IUoUwv+CYksYwl4z51Pjj8Y6qF5FNIYquzMCn/iEQzmc6JmyK82jgE=
+X-Received: by 2002:ac8:7152:0:b0:3a5:2fa2:cd1a with SMTP id
+ h18-20020ac87152000000b003a52fa2cd1amr40448801qtp.195.1668074546324; Thu, 10
+ Nov 2022 02:02:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20221031100843.14579-1-clin@suse.com> <20221031100843.14579-2-clin@suse.com>
- <CACRpkdY-uaQ--vFM+vVPbwa-q9nbSU0rQB+qbL=9m0wVMwA3Aw@mail.gmail.com> <Y2vZJaoWThP2aipE@linux-8mug>
-In-Reply-To: <Y2vZJaoWThP2aipE@linux-8mug>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 10 Nov 2022 11:00:05 +0100
-Message-ID: <CACRpkdbW=WMA-9OkJgBoBov7ewGMN_Coy=KOQfS_uwzHNsuGwA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: add schema for NXP S32 SoCs
-To:     Chester Lin <clin@suse.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        s32@nxp.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>
+References: <20221108142226.63161-1-andriy.shevchenko@linux.intel.com>
+ <20221108142226.63161-6-andriy.shevchenko@linux.intel.com> <20221110073831.ggudvgl6jzgbo2vb@pengutronix.de>
+In-Reply-To: <20221110073831.ggudvgl6jzgbo2vb@pengutronix.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 10 Nov 2022 12:01:50 +0200
+Message-ID: <CAHp75Ve837d_2UEQRMJEcmOdPVdqSAKv+dJje057uJouCPAe9Q@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] pwm: lpss: Add pwm_lpss_probe() stub
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 5:45 PM Chester Lin <clin@suse.com> wrote:
+On Thu, Nov 10, 2022 at 9:38 AM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+> On Tue, Nov 08, 2022 at 04:22:25PM +0200, Andy Shevchenko wrote:
+> > In case the PWM LPSS module is not provided, allow users to be
+> > compiled with a help of a pwm_lpss_probe() stub.
 
-> > If you have the compatible, surely you know these indexes from
-> > that compatible string?
+...
+
+> > +static inline
+> > +struct pwm_lpss_chip *pwm_lpss_probe(struct device *dev, void __iomem =
+*base,
+> > +                                  const struct pwm_lpss_boardinfo *inf=
+o)
+> > +{
+> > +     return ERR_PTR(-ENODEV);
 >
-> The nxp,pins property is more like a common language that both kernel and
-> u-boot can share with. Of course hardcoding indexes can be achieved as well
-> but that also means the index matrices in both kernel driver and u-boot driver
-> must be revised and synchronized if new boards may have different reg and
-> nxp,pins.
+> Would it be more consistent to return the same value as the pwmchip_add
+> stub does?
 
-Is it new *BOARDS* that need a new table really or new *SOC:s*?
+Then I will lose the ability to distinguish between absent driver (or
+device) and actual error during the probing of it. Any suggestions on
+how to do that better?
 
-I was under the impression that this is per-soc and then it can be derived
-from the compatible string and should be in the driver.
-
-If it is something that vary from board to board then it should be in the
-device tree because it can not be derived from the version of the hardware
-i.e the compatible string.
-
-So which one is it?
-
-Yours,
-Linus Walleij
+--=20
+With Best Regards,
+Andy Shevchenko
