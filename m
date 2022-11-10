@@ -2,199 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EDA623AA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC353623AA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 04:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbiKJDub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 22:50:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S232706AbiKJDvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 22:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiKJDuU (ORCPT
+        with ESMTP id S232431AbiKJDv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 22:50:20 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4DCA2F3B6;
-        Wed,  9 Nov 2022 19:50:18 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxGdj5dGxjl7AFAA--.16544S3;
-        Thu, 10 Nov 2022 11:50:17 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9Vb1dGxjO_4PAA--.25722S6;
-        Thu, 10 Nov 2022 11:50:17 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: [PATCH v5 4/4] perf bench syscall: Add execve syscall benchmark
-Date:   Thu, 10 Nov 2022 11:50:08 +0800
-Message-Id: <1668052208-14047-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1668052208-14047-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1668052208-14047-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8Dx9Vb1dGxjO_4PAA--.25722S6
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAF1rKw1xJF17Jw4DZr43Wrg_yoWrCFyfpF
-        s7Ca18Jw4ruFWYvr1aqr1DKFy3Awn7Zry5Kw12kw4DZr42g343tr4IgF9xWF17XwsrKa43
-        uF4kZry8Wa1rXaUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2
-        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I
-        0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCI
-        bckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
-        I_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
-        6ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj4
-        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
-        JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Nov 2022 22:51:27 -0500
+Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F5683055D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Nov 2022 19:51:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dVUyL
+        PAb6gzI8XbCZsHtM1m990u4NxC9ACv5+48r8FU=; b=H6IAlnfw97N8a0jybBX6g
+        WlUnO5UCHNTjlDnoS66xh/wpU/GkPHku4PsmOddjCGdYkO/Nj2FW05f1lMYUD2Yy
+        xerP56c2aRkcwf63A634OinsaL4RlWES2eDBcrVEK6dLz3GRxpuEmaIqbYl8QMme
+        zf6BIc2kIHTFtKFOIKEfxM=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by smtp5 (Coremail) with SMTP id HdxpCgBnhQ0KdWxj5kjlqg--.43429S2;
+        Thu, 10 Nov 2022 11:50:34 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     zhengyejian1@huawei.com, dimitri.sivanich@hpe.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        alex000young@gmail.com, security@kernel.org, sivanich@hpe.com,
+        lkp@intel.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v10] misc: sgi-gru: fix use-after-free error in  gru_set_context_option, gru_fault and gru_handle_user_call_os
+Date:   Thu, 10 Nov 2022 11:50:33 +0800
+Message-Id: <20221110035033.19498-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: HdxpCgBnhQ0KdWxj5kjlqg--.43429S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKryxXr13Xr47uryDZw1DZFb_yoW7ZrWkpa
+        1jg34F9rW3JF4avrsrta18XFW3CFykJFW5Gr9rKw1rur4rAFs8GryDtas8tr4DZrW0qF42
+        yF4rtFnI93Z0vaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbCqRO1U10DhgeDLAAAss
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds the execve syscall benchmark, more syscall
-benchmarks can be added in the future.
+In some bad situation, the gts may be freed gru_check_chiplet_assignment.
+The call chain can be gru_unload_context->gru_free_gru_context->gts_drop
+and kfree finally. However, the caller didn't know if the gts is freed
+or not and use it afterwards. This will trigger a Use after Free bug.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Fix it by introducing a return value to see if it's in error path or not.
+Free the gts in caller if gru_check_chiplet_assignment check failed.
+
+Fixes: 55484c45dbec ("gru: allow users to specify gru chiplet 2")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Acked-by: Dimitri Sivanich <sivanich@hpe.com>
 ---
- tools/arch/x86/include/uapi/asm/unistd_32.h |  3 +++
- tools/arch/x86/include/uapi/asm/unistd_64.h |  3 +++
- tools/perf/bench/bench.h                    |  1 +
- tools/perf/bench/syscall.c                  | 36 +++++++++++++++++++++++++++++
- tools/perf/builtin-bench.c                  |  1 +
- 5 files changed, 44 insertions(+)
+v10:
+- try again in gru_handle_user_call_osif gru_check_chiplet_assignment failed,
+  return success in gru_set_context_optionif we have unloaded gts, change the
+  comment, all suggested by Dimitri Sivanich.
 
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_32.h b/tools/arch/x86/include/uapi/asm/unistd_32.h
-index 053122c..2712d5e 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_32.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_32.h
-@@ -1,4 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __NR_execve
-+#define __NR_execve 11
-+#endif
- #ifndef __NR_getppid
- #define __NR_getppid 64
- #endif
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-index 54a6c4d..a6f7fe8 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-@@ -1,4 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __NR_execve
-+#define __NR_execve 59
-+#endif
- #ifndef __NR_getppid
- #define __NR_getppid 110
- #endif
-diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-index 0c03f12..4588d3a 100644
---- a/tools/perf/bench/bench.h
-+++ b/tools/perf/bench/bench.h
-@@ -35,6 +35,7 @@ int bench_sched_messaging(int argc, const char **argv);
- int bench_sched_pipe(int argc, const char **argv);
- int bench_syscall_basic(int argc, const char **argv);
- int bench_syscall_getpgid(int argc, const char **argv);
-+int bench_syscall_execve(int argc, const char **argv);
- int bench_mem_memcpy(int argc, const char **argv);
- int bench_mem_memset(int argc, const char **argv);
- int bench_mem_find_bit(int argc, const char **argv);
-diff --git a/tools/perf/bench/syscall.c b/tools/perf/bench/syscall.c
-index 6411b14..fe79f7f 100644
---- a/tools/perf/bench/syscall.c
-+++ b/tools/perf/bench/syscall.c
-@@ -14,6 +14,7 @@
- #include <sys/time.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
-+#include <sys/wait.h>
- #include <unistd.h>
- #include <stdlib.h>
- 
-@@ -30,6 +31,27 @@ static const char * const bench_syscall_usage[] = {
- 	NULL
- };
- 
-+static void test_execve(void)
-+{
-+	const char *pathname = "/bin/true";
-+	char *const argv[] = { (char *)pathname, NULL };
-+	pid_t pid = fork();
+v9:
+- rewrite changelog and add comment in the code to make it more clear
+
+v8:
+- remove tested-by tag suggested by Greg
+
+v7:
+- fix some spelling problems suggested by Greg, change kernel test robot from reported-by tag to tested-by tag
+
+v6:
+- remove unused var checked by kernel test robot
+
+v5:
+- fix logical issue and remove unnecessary variable suggested by Dimitri Sivanich
+
+v4:
+- use VM_FAULT_NOPAGE as failure code in gru_fault and -EINVAL in other functions suggested by Yejian
+
+v3:
+- add preempt_enable and use VM_FAULT_NOPAGE as failure code suggested by Yejian
+
+v2:
+- commit message changes suggested by Greg
+
+v1: https://lore.kernel.org/lkml/CAJedcCzY72jqgF-pCPtx66vXXwdPn-KMagZnqrxcpWw1NxTLaA@mail.gmail.com/
+---
+ drivers/misc/sgi-gru/grufault.c  | 15 ++++++++++++---
+ drivers/misc/sgi-gru/grumain.c   | 22 ++++++++++++++++++----
+ drivers/misc/sgi-gru/grutables.h |  2 +-
+ 3 files changed, 31 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grufault.c b/drivers/misc/sgi-gru/grufault.c
+index d7ef61e602ed..ff2970fbd644 100644
+--- a/drivers/misc/sgi-gru/grufault.c
++++ b/drivers/misc/sgi-gru/grufault.c
+@@ -647,7 +647,8 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	ucbnum = get_cb_number((void *)cb);
+ 	if ((cb & (GRU_HANDLE_STRIDE - 1)) || ucbnum >= GRU_NUM_CB)
+ 		return -EINVAL;
+-
 +
-+	if (pid < 0) {
-+		fprintf(stderr, "fork failed\n");
-+		exit(1);
-+	} else if (pid == 0) {
-+		execve(pathname, argv, NULL);
-+		fprintf(stderr, "execve /bin/true failed\n");
-+		exit(1);
-+	} else {
-+		if (waitpid(pid, NULL, 0) < 0) {
-+			fprintf(stderr, "waitpid failed\n");
-+			exit(1);
-+		}
++again:
+ 	gts = gru_find_lock_gts(cb);
+ 	if (!gts)
+ 		return -EINVAL;
+@@ -656,7 +657,11 @@ int gru_handle_user_call_os(unsigned long cb)
+ 	if (ucbnum >= gts->ts_cbr_au_count * GRU_CBR_AU_SIZE)
+ 		goto exit;
+ 
+-	gru_check_context_placement(gts);
++	if (gru_check_context_placement(gts)) {
++		gru_unlock_gts(gts);
++		gru_unload_context(gts, 1);
++		goto again;
 +	}
-+}
-+
- static int bench_syscall_common(int argc, const char **argv, int syscall)
- {
- 	struct timeval start, stop, diff;
-@@ -49,6 +71,12 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
- 		case __NR_getpgid:
- 			getpgid(0);
- 			break;
-+		case __NR_execve:
-+			test_execve();
-+			/* Only loop 10000 times to save time */
-+			if (i == 10000)
-+				loops = 10000;
-+			break;
- 		default:
- 			break;
+ 
+ 	/*
+ 	 * CCH may contain stale data if ts_force_cch_reload is set.
+@@ -874,7 +879,11 @@ int gru_set_context_option(unsigned long arg)
+ 		} else {
+ 			gts->ts_user_blade_id = req.val1;
+ 			gts->ts_user_chiplet_id = req.val0;
+-			gru_check_context_placement(gts);
++			if (gru_check_context_placement(gts)) {
++				gru_unlock_gts(gts);
++				gru_unload_context(gts, 1);
++				return ret;
++			}
  		}
-@@ -64,6 +92,9 @@ static int bench_syscall_common(int argc, const char **argv, int syscall)
- 	case __NR_getpgid:
- 		name = "getpgid()";
  		break;
-+	case __NR_execve:
-+		name = "execve()";
-+		break;
- 	default:
- 		break;
- 	}
-@@ -111,3 +142,8 @@ int bench_syscall_getpgid(int argc, const char **argv)
+ 	case sco_gseg_owner:
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 6706ef3c5977..5e5862e6ee6e 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -716,9 +716,10 @@ static int gru_check_chiplet_assignment(struct gru_state *gru,
+  * chiplet. Misassignment can occur if the process migrates to a different
+  * blade or if the user changes the selected blade/chiplet.
+  */
+-void gru_check_context_placement(struct gru_thread_state *gts)
++int gru_check_context_placement(struct gru_thread_state *gts)
  {
- 	return bench_syscall_common(argc, argv, __NR_getpgid);
- }
+ 	struct gru_state *gru;
++	int ret = 0;
+ 
+ 	/*
+ 	 * If the current task is the context owner, verify that the
+@@ -726,15 +727,23 @@ void gru_check_context_placement(struct gru_thread_state *gts)
+ 	 * references. Pthread apps use non-owner references to the CBRs.
+ 	 */
+ 	gru = gts->ts_gru;
++	/*
++	 * If gru or gts->ts_tgid_owner isn't initialized properly, return
++	 * success to indicate that the caller does not need to unload the
++	 * gru context.The caller is responsible for their inspection and
++	 * reinitialization if needed.
++	 */
+ 	if (!gru || gts->ts_tgid_owner != current->tgid)
+-		return;
++		return ret;
+ 
+ 	if (!gru_check_chiplet_assignment(gru, gts)) {
+ 		STAT(check_context_unload);
+-		gru_unload_context(gts, 1);
++		ret = -EINVAL;
+ 	} else if (gru_retarget_intr(gts)) {
+ 		STAT(check_context_retarget_intr);
+ 	}
 +
-+int bench_syscall_execve(int argc, const char **argv)
-+{
-+	return bench_syscall_common(argc, argv, __NR_execve);
-+}
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index c9a02ac..35f9df8 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -53,6 +53,7 @@ static struct bench sched_benchmarks[] = {
- static struct bench syscall_benchmarks[] = {
- 	{ "basic",	"Benchmark for basic getppid(2) calls",		bench_syscall_basic	},
- 	{ "getpgid",	"Benchmark for getpgid(2) calls",		bench_syscall_getpgid	},
-+	{ "execve",	"Benchmark for execve(2) calls",		bench_syscall_execve	},
- 	{ "all",	"Run all syscall benchmarks",			NULL			},
- 	{ NULL,		NULL,						NULL			},
- };
++	return ret;
+ }
+ 
+ 
+@@ -934,7 +943,12 @@ vm_fault_t gru_fault(struct vm_fault *vmf)
+ 	mutex_lock(&gts->ts_ctxlock);
+ 	preempt_disable();
+ 
+-	gru_check_context_placement(gts);
++	if (gru_check_context_placement(gts)) {
++		preempt_enable();
++		mutex_unlock(&gts->ts_ctxlock);
++		gru_unload_context(gts, 1);
++		return VM_FAULT_NOPAGE;
++	}
+ 
+ 	if (!gts->ts_gru) {
+ 		STAT(load_user_context);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 8c52776db234..640daf1994df 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -632,7 +632,7 @@ extern int gru_user_flush_tlb(unsigned long arg);
+ extern int gru_user_unload_context(unsigned long arg);
+ extern int gru_get_exception_detail(unsigned long arg);
+ extern int gru_set_context_option(unsigned long address);
+-extern void gru_check_context_placement(struct gru_thread_state *gts);
++extern int gru_check_context_placement(struct gru_thread_state *gts);
+ extern int gru_cpu_fault_map_id(void);
+ extern struct vm_area_struct *gru_find_vma(unsigned long vaddr);
+ extern void gru_flush_all_tlb(struct gru_state *gru);
 -- 
-2.1.0
+2.25.1
 
