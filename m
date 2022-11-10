@@ -2,219 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91095624CE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7FE624CD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 22:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbiKJVWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 16:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S232095AbiKJVWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 16:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbiKJVWd (ORCPT
+        with ESMTP id S231938AbiKJVWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 16:22:33 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986AE31DFD;
-        Thu, 10 Nov 2022 13:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=CtmGvO+Y27LomRwiSBbwQG3+4u8RGeKxNxvjoDf6oK0=; b=qR6c6Ftx4P7oFmkPrhdd+peSoP
-        BxtW50Whwo8o809uTCr9IIfuR9gXdcXwuFV1Ss47zVkVXdFuJCpCcEe0i9rxQZJkOJVNPTfeWnNA0
-        3ouYXYqmJe6cexCLB0AHJvd8gAGCZoNk65YQstBtkrfnUVQoJyxqaoBzaO8/BO3gBDj4=;
-Received: from p200300daa72ee10c199752172ce6dd7a.dip0.t-ipconnect.de ([2003:da:a72e:e10c:1997:5217:2ce6:dd7a] helo=Maecks.lan)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1otF05-0011Om-UX; Thu, 10 Nov 2022 22:22:18 +0100
-From:   Felix Fietkau <nbd@nbd.name>
-To:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 4/4] net: ethernet: mtk_eth_soc: enable hardware DSA untagging
-Date:   Thu, 10 Nov 2022 22:22:11 +0100
-Message-Id: <20221110212212.96825-5-nbd@nbd.name>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221110212212.96825-1-nbd@nbd.name>
-References: <20221110212212.96825-1-nbd@nbd.name>
+        Thu, 10 Nov 2022 16:22:19 -0500
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7FF31FBC;
+        Thu, 10 Nov 2022 13:22:18 -0800 (PST)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-13c2cfd1126so3539297fac.10;
+        Thu, 10 Nov 2022 13:22:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NZ+3Ccu0uhREUGx5S7RKmOuqs17Und03iOnQWDCqGPM=;
+        b=fX8H1hsYHwETdHcE16WqqwmMmbSZeRQpBXJt0lW0xUgFQql4hq/zKusJ7OIK9/FzNB
+         D2vElgOAKVaG4D99MWrJ8ODHwBVBUJCrcfQLImLbzkZUdpZJm2OuVxuJjEdOtEX0vYzj
+         KSb/czpc4Lq0m1EsrXnvZ/63JDgJkCttfZZ8cucnX2F/3YDTq6jx9Vnyq9WBDkQ4UgWx
+         9+5q2Zu7vOKwcvZqCxNtmXx7L9AT797wdITasWhIJP7G6nIUQSHYxj5dZF6h0Vk7ws1w
+         hma9PfqgEpOvKKTgZtumGefM9CwWOeH3NbDXNRPw4Q5U1DQc+Mg1jZvS5kuYBBXENNwo
+         /1eA==
+X-Gm-Message-State: ACrzQf3iA7V3i0fMdVZDpj/GKNtniRcCT8c+0sVPEnRmTUGtCMMG1gNn
+        e+ur9pANOiWvlliSSXCQdA==
+X-Google-Smtp-Source: AMsMyM6abEVLmKF/QrAZLvpq2Fr9k27olRNNzfOuZj+82upXJu7cEmVCsnZlQafB4BTwX9OzkzWwlQ==
+X-Received: by 2002:a05:6871:4045:b0:13b:be94:f56 with SMTP id ky5-20020a056871404500b0013bbe940f56mr2273595oab.198.1668115337801;
+        Thu, 10 Nov 2022 13:22:17 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j103-20020a9d17f0000000b0066c2d80c753sm314993otj.22.2022.11.10.13.22.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 13:22:17 -0800 (PST)
+Received: (nullmailer pid 1067668 invoked by uid 1000);
+        Thu, 10 Nov 2022 21:22:18 -0000
+Date:   Thu, 10 Nov 2022 15:22:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Jingoo Han <jingoohan1@gmail.com>, linux-pci@vger.kernel.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        devicetree@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH v6 10/20] dt-bindings: PCI: dwc: Add reg/reg-names common
+ properties
+Message-ID: <166811533701.1067589.1394970504851660332.robh@kernel.org>
+References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
+ <20221107204934.32655-11-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107204934.32655-11-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- pass the tag to DSA via metadata dst
-- disabled on 7986 for now, since it's not working yet
-- disabled if a MAC is enabled that does not use DSA
 
-This improves performance by bypassing the DSA tag driver and avoiding extra
-skb data mangling
+On Mon, 07 Nov 2022 23:49:24 +0300, Serge Semin wrote:
+> Even though there is a more-or-less limited set of the CSR spaces can be
+> defined for each DW PCIe controller the generic DT-schema currently
+> doesn't specify much limitations on the reg-space names used for one or
+> another range. In order to prevent the vendor-specific controller schemas
+> further deviation from the generic interface let's fix that by introducing
+> the reg-names definition in the common DW PCIe DT-schemas and preserving
+> the generic "reg" and "reg-names" properties in there. New DW PCIe device
+> DT-bindings are encouraged to use the generic set of the CSR spaces
+> defined in the generic DW PCIe RP/EP DT-bindings, while the already
+> available vendor-specific DT-bindings can still apple the common
+> DT-schemas.
+> 
+> Note the number of reg/reg-names items need to be changed in the DW PCIe
+> EP DT-schema since aside with the "dbi" CSRs space these arrays can have
+> "dbi2", "addr_space", "atu", etc ranges.
+> 
+> Also note since there are DW PCIe-based vendor-specific DT-bindings with
+> the custom names assigned to the same CSR resources we have no much choice
+> but to add them to the generic DT-schemas in order to have the schemas
+> being applicable for such devices. These names are marked as
+> vendor-specific and should be avoided being used in new bindings in favor
+> of the generic names.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v3:
+> - This is a new patch unpinned from the next one:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+>   by the Rob' request. (@Rob)
+> - Split up reg-names in the same way as the interrupt-names: common,
+>   Root Port and Endpoint specific names. (@Rob)
+> - Drop synonymous from the names list since the device schemas create
+>   their own enumerations anyway.
+> 
+> Changelog v5:
+> - Add platform-specific reg names, but mark them as deprecated.
+> 
+> Changelog v6:
+> - Move the common reg-names definitions to the RP/EP schemas. Thus drop
+>   the 'definitions' property. (@Rob)
+> - Drop the 'deprecated' keywords from the vendor-specific names. (@Rob)
+> ---
+>  .../bindings/pci/snps,dw-pcie-common.yaml     | 22 +++++
+>  .../bindings/pci/snps,dw-pcie-ep.yaml         | 82 +++++++++++++++++--
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 78 ++++++++++++++++--
+>  3 files changed, 169 insertions(+), 13 deletions(-)
+> 
 
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 66 ++++++++++++++++++---
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  8 +++
- 2 files changed, 67 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index a118c715b09b..991ffa0b02f5 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -23,6 +23,7 @@
- #include <linux/jhash.h>
- #include <linux/bitfield.h>
- #include <net/dsa.h>
-+#include <net/dst_metadata.h>
- 
- #include "mtk_eth_soc.h"
- #include "mtk_wed.h"
-@@ -1939,13 +1940,19 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 				__vlan_hwaccel_put_tag(skb, htons(RX_DMA_VPID(trxd.rxd3)),
- 						       RX_DMA_VID(trxd.rxd3));
- 			}
-+		}
-+
-+		/* When using VLAN untagging in combination with DSA, the
-+		 * hardware treats the MTK special tag as a VLAN and untags it.
-+		 */
-+		if (skb_vlan_tag_present(skb) && netdev_uses_dsa(netdev)) {
-+			unsigned int port = ntohs(skb->vlan_proto) & GENMASK(2, 0);
- 
--			/* If the device is attached to a dsa switch, the special
--			 * tag inserted in VLAN field by hw switch can * be offloaded
--			 * by RX HW VLAN offload. Clear vlan info.
--			 */
--			if (netdev_uses_dsa(netdev))
--				__vlan_hwaccel_clear_tag(skb);
-+			if (port < ARRAY_SIZE(eth->dsa_meta) &&
-+			    eth->dsa_meta[port])
-+				skb_dst_set_noref(skb, &eth->dsa_meta[port]->dst);
-+
-+			__vlan_hwaccel_clear_tag(skb);
- 		}
- 
- 		skb_record_rx_queue(skb, 0);
-@@ -2990,11 +2997,46 @@ static void mtk_gdm_config(struct mtk_eth *eth, u32 config)
- 	mtk_w32(eth, 0, MTK_RST_GL);
- }
- 
-+
-+static bool mtk_uses_dsa(struct net_device *dev)
-+{
-+#if IS_ENABLED(CONFIG_NET_DSA)
-+	return netdev_uses_dsa(dev) &&
-+	       dev->dsa_ptr->tag_ops->proto == DSA_TAG_PROTO_MTK;
-+#else
-+	return false;
-+#endif
-+}
-+
- static int mtk_open(struct net_device *dev)
- {
- 	struct mtk_mac *mac = netdev_priv(dev);
- 	struct mtk_eth *eth = mac->hw;
--	int err;
-+	int i, err;
-+
-+	if (mtk_uses_dsa(dev)) {
-+		for (i = 0; i < ARRAY_SIZE(eth->dsa_meta); i++) {
-+			struct metadata_dst *md_dst = eth->dsa_meta[i];
-+
-+			if (md_dst)
-+				continue;
-+
-+			md_dst = metadata_dst_alloc(0, METADATA_HW_PORT_MUX,
-+						    GFP_KERNEL);
-+			if (!md_dst)
-+				return -ENOMEM;
-+
-+			md_dst->u.port_info.port_id = i;
-+			eth->dsa_meta[i] = md_dst;
-+		}
-+	} else {
-+		/* Hardware special tag parsing needs to be disabled if at least
-+		 * one MAC does not use DSA.
-+		 */
-+		u32 val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
-+		val &= ~MTK_CDMP_STAG_EN;
-+		mtk_w32(eth, val, MTK_CDMP_IG_CTRL);
-+	}
- 
- 	err = phylink_of_phy_connect(mac->phylink, mac->of_node, 0);
- 	if (err) {
-@@ -3321,6 +3363,10 @@ static int mtk_hw_init(struct mtk_eth *eth)
- 	 */
- 	val = mtk_r32(eth, MTK_CDMQ_IG_CTRL);
- 	mtk_w32(eth, val | MTK_CDMQ_STAG_EN, MTK_CDMQ_IG_CTRL);
-+	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+		val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
-+		mtk_w32(eth, val | MTK_CDMP_STAG_EN, MTK_CDMP_IG_CTRL);
-+	}
- 
- 	/* Enable RX VLan Offloading */
- 	mtk_w32(eth, 1, MTK_CDMP_EG_CTRL);
-@@ -3538,6 +3584,12 @@ static int mtk_free_dev(struct mtk_eth *eth)
- 		free_netdev(eth->netdev[i]);
- 	}
- 
-+	for (i = 0; i < ARRAY_SIZE(eth->dsa_meta); i++) {
-+		if (!eth->dsa_meta[i])
-+			break;
-+		metadata_dst_free(eth->dsa_meta[i]);
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 589f27ddc401..a572416e25de 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -22,6 +22,9 @@
- #include <linux/bpf_trace.h>
- #include "mtk_ppe.h"
- 
-+#define MTK_MAX_DSA_PORTS	7
-+#define MTK_DSA_PORT_MASK	GENMASK(2, 0)
-+
- #define MTK_QDMA_PAGE_SIZE	2048
- #define MTK_MAX_RX_LENGTH	1536
- #define MTK_MAX_RX_LENGTH_2K	2048
-@@ -91,6 +94,9 @@
- #define MTK_CDMQ_IG_CTRL	0x1400
- #define MTK_CDMQ_STAG_EN	BIT(0)
- 
-+/* CDMQ Exgress Control Register */
-+#define MTK_CDMQ_EG_CTRL	0x1404
-+
- /* CDMP Ingress Control Register */
- #define MTK_CDMP_IG_CTRL	0x400
- #define MTK_CDMP_STAG_EN	BIT(0)
-@@ -1121,6 +1127,8 @@ struct mtk_eth {
- 
- 	int				ip_align;
- 
-+	struct metadata_dst		*dsa_meta[MTK_MAX_DSA_PORTS];
-+
- 	struct mtk_ppe			*ppe[2];
- 	struct rhashtable		flow_table;
- 
--- 
-2.38.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
