@@ -2,156 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C613E623D09
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D57C623D14
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbiKJICK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S232800AbiKJIDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiKJIBn (ORCPT
+        with ESMTP id S232539AbiKJIDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:01:43 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2042E9D8;
-        Thu, 10 Nov 2022 00:01:42 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2AA6cViV000492;
-        Thu, 10 Nov 2022 08:01:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
- content-transfer-encoding : mime-version : subject : message-id : date :
- cc : to; s=pp1; bh=UfS2M5BskP/u3MZdbZOc3sjFjYUZ2k9IwakRV9/QwBM=;
- b=Qy7Jxg20ogsjx2omGlC0V6AUHSb9V+teYfAXO1LY93oL+IzRU5g+umKmEzBK9NxE7kaN
- w2lL4gjonOywQ2elSCSVesHJW9eDKlQQwOFqTUre5FiKWHtxpZmcAjE6SiMph2uv3pu9
- W5zAuUuO63AsyGRjBSYjyVxsVd2omCNLqtXI4DVOwLrGIamJTKiTUcyR1SrewaDXY4su
- OU/6CiYa2t2iCnPcTLIYtBYU8aVMTWKX10TFgPXISQFGOMW80eJ9Dm5DRRzunOs+Xfgq
- lUFkDC21LageIWDv0TCRt+qYBnwV9XU4/LVh6mF9q3lZdDcL2igppniYD1tqSMyF3ZMS VQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3krupktjgj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 08:01:33 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AA7qifJ032580;
-        Thu, 10 Nov 2022 08:01:32 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3krcbr0t95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 08:01:31 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AA81T2j7537228
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Nov 2022 08:01:29 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 823D952050;
-        Thu, 10 Nov 2022 08:01:29 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.109.241.54])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B759D5204E;
-        Thu, 10 Nov 2022 08:01:28 +0000 (GMT)
-From:   Sachin Sant <sachinp@linux.ibm.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: [6.1.0-rc4-next-20221109] Boot time warning kernel/module/main.c:852
-Message-Id: <06C70AFA-75C5-49A7-9EB4-27AF20A80EBB@linux.ibm.com>
-Date:   Thu, 10 Nov 2022 13:31:17 +0530
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        open list <linux-kernel@vger.kernel.org>
-To:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: dgJqpu82evfKmaqG3ZN2ugS6iyQKhdh3
-X-Proofpoint-GUID: dgJqpu82evfKmaqG3ZN2ugS6iyQKhdh3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-10_05,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1011 mlxscore=0
- adultscore=0 spamscore=0 mlxlogscore=790 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211100056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Nov 2022 03:03:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40702BB2C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:02:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668067329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+9i8OhydFba5DJ5WEoqEn0GpBo7XQiRyZXUoAQZSKXw=;
+        b=CGQCdFOsLs7Gq8Huj1RYR0RosR63UiNIea54pQf926P9jV9IyRiDjQPdLhjj7FB4Micequ
+        HFa55hAp255yVM2JSV07gIcULRgAy3EE+IjQgj8FkQWzUqMd+1II9A2TVK1a5QWArr+TcZ
+        mRbX3LqLfG9r1P9gGQNrHk73PacU3ik=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-159-JT59ReYLMfaQmPNZnTJezg-1; Thu, 10 Nov 2022 03:02:08 -0500
+X-MC-Unique: JT59ReYLMfaQmPNZnTJezg-1
+Received: by mail-pg1-f199.google.com with SMTP id x23-20020a634857000000b0043c700f6441so622171pgk.21
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:02:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+9i8OhydFba5DJ5WEoqEn0GpBo7XQiRyZXUoAQZSKXw=;
+        b=dNntNze+hEs8LKubPaqCq3q6I2Ql9sIS9NmqKxCZvjUG7eTdexn4P6laqIvOLS2Twm
+         wvD7yz3hGguo5bh8yCDnnG7cIJjRmwAF8eBkBZTYTgOIQx/wB9zjG1gyn93FBCWJoWZO
+         fHmLfVj39f+OukhfgjEm7h149KeHddPQfIjJpkXIHVYL4wTcpKRzjKT7u6g5cewB6KDo
+         XyNhXikw43MQPpWPEYiDpaKP6AYOdXXouIc3eRkmCCL4x8K3SEAk7qYsw2jCg90tD1Lz
+         1B06nMwxzPE/AoZmoll4gVc/0oMMbO7iQll5CzmONaX7UuS19Y4O+GRfgiDzuBniryLZ
+         VgZA==
+X-Gm-Message-State: ACrzQf1f0IqdYx3dF2kc5UGdseuS5aBjkjYC8Efn/rG284MxJz/VRhkk
+        cWZfanA1tI5k+SKZy7TQSUuMt1FhS+G+XJrRQ7n2/7mJCqdJjAbpRvVfD2O5M8b5ZyBp+L/l0po
+        syQmpHNvgRjnMp3F/9scUMWyO
+X-Received: by 2002:a05:6a00:16c1:b0:563:177f:99ee with SMTP id l1-20020a056a0016c100b00563177f99eemr64280779pfc.7.1668067325731;
+        Thu, 10 Nov 2022 00:02:05 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM5yslBGXty4dTanvbKMrVsTvIZV2WFd1TRSIO+dOGiek5G+4D1x1sy9QxNs7SJbmVNIyKMaXA==
+X-Received: by 2002:a05:6a00:16c1:b0:563:177f:99ee with SMTP id l1-20020a056a0016c100b00563177f99eemr64280762pfc.7.1668067325347;
+        Thu, 10 Nov 2022 00:02:05 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id j12-20020a170902da8c00b0017eb2d62bbesm10572248plx.99.2022.11.10.00.01.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 00:02:04 -0800 (PST)
+Date:   Thu, 10 Nov 2022 09:01:47 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     ruanjinjie <ruanjinjie@huawei.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, eperezma@redhat.com,
+        gautam.dawar@xilinx.com, elic@nvidia.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vdpa_sim: fix possible memory leak in
+ vdpasim_net_init() and vdpasim_blk_init()
+Message-ID: <20221110080147.bpfumiab2yt7nehf@sgarzare-redhat>
+References: <20221110050446.3932031-1-ruanjinjie@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221110050446.3932031-1-ruanjinjie@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While booting 6.1.0-rc4-next-20221109 next kernel on a IBM Power9 LPAR
-following warning is seen:
+Hi,
 
-[ 8.808868] ------------[ cut here ]------------
-[ 8.808872] WARNING: CPU: 1 PID: 378 at kernel/module/main.c:852 =
-module_put+0x48/0x100
-[ 8.808881] Modules linked in: sr_mod(E) cdrom(E) sd_mod(E) sg(E) =
-lpfc(E) nvmet_fc(E) nvmet(E) ibmvscsi(E) scsi_transport_srp(E) =
-ibmveth(E) nvme_fc(E) nvme(E) nvme_fabrics(E) nvme_core(E) t10_pi(E) =
-scsi_transport_fc(E) crc64_rocksoft(E) crc64(E) tg3(E) fuse(E)
-[ 8.808912] sd 1:0:0:1: [sdc] Write Protect is off
-[ 8.808913] CPU: 1 PID: 378 Comm: kworker/1:3 Tainted: G E =
-6.1.0-rc4-next-20221109 #1
-[ 8.808916] Hardware name: IBM,8375-42A POWER9 (raw) 0x4e0202 0xf000005 =
-of:IBM,FW950.01 (VL950_047) hv:phyp pSeries
-[ 8.808924] Workqueue: kaluad alua_rtpg_work
-[ 8.808931] NIP: c000000000236c18 LR: c0000000009ee680 CTR: =
-00000000007088ec
-[ 8.808936] REGS: c000000007c37870 TRAP: 0700 Tainted: G E =
-(6.1.0-rc4-next-20221109)
-[ 8.808942] MSR: 800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE> CR: =
-88002884 XER: 20040007
-[ 8.808957] CFAR: c000000000236c04 IRQMASK: 0=20
-[ 8.808957] GPR00: c0000000009ee680 c000000007c37b10 c00000000137ec00 =
-c008000001d3a500=20
-[ 8.808957] GPR04: 0000000000000000 0000000000000000 0000000000000000 =
-00000000000000ff=20
-[ 8.808957] GPR08: 0000000000000001 0000000000000001 c008000001d3a8c0 =
-c0000000029674a8=20
-[ 8.808957] GPR12: 0000000000002000 c00000000d5cf300 c00000000018f3d8 =
-c000000003ce4d00=20
-[ 8.808957] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 8.808957] GPR20: 0000000000000000 0000000000000000 0000000000000000 =
-0000000000000000=20
-[ 8.808957] GPR24: c0000000092b0e00 0000000000000000 c00000008ee81000 =
-c0000000092b0fc0=20
-[ 8.808957] GPR28: c000000007c37c10 c000000007c37c10 c008000001d3a500 =
-c00000008ee81000=20
-[ 8.809018] NIP [c000000000236c18] module_put+0x48/0x100
-[ 8.809024] sd 1:0:0:1: [sdc] Write cache: disabled, read cache: =
-enabled, supports DPO and FUA
-[ 8.809024] LR [c0000000009ee680] scsi_device_put+0x50/0x70
-[ 8.809035] Call Trace:
-[ 8.809038] [c000000007c37b10] [c000000007c37b50] 0xc000000007c37b50 =
-(unreliable)
-[ 8.809045] [c000000007c37b50] [c0000000009ee674] =
-scsi_device_put+0x44/0x70
-[ 8.809053] [c000000007c37b80] [c000000000a10c70] =
-alua_rtpg_work+0x210/0x920
-[ 8.809059] [c000000007c37c90] [c000000000182314] =
-process_one_work+0x2b4/0x5b0
-[ 8.809066] [c000000007c37d30] [c000000000182688] =
-worker_thread+0x78/0x600
-[ 8.809072] [c000000007c37dc0] [c00000000018f4f4] kthread+0x124/0x130
-[ 8.809079] [c000000007c37e10] [c00000000000cffc] =
-ret_from_kernel_thread+0x5c/0x64
-[ 8.809086] Instruction dump:
-[ 8.809090] f821ffc1 41820034 395e03c0 7c0004ac 7d205028 2c090001 =
-3929ffff 41c00010=20
-[ 8.809101] 7d20512d=20
-[ 8.809101] sd 1:0:0:1: [sdc] Preferred minimum I/O size 32768 bytes
-[ 8.809102] 40c2ffec 7c0004ac 79290fe2 <0b090000> 60000000 38210040 =
-ebc1fff0=20
-[ 8.809115] ---[ end trace 0000000000000000 ]=E2=80=94
+On Thu, Nov 10, 2022 at 01:04:46PM +0800, ruanjinjie wrote:
+>Inject fault while probing module, if device_register() fails in
+>vdpasim_net_init() or vdpasim_blk_init(), but the refcount of kobject is
+>not decreased to 0, the name allocated in dev_set_name() is leaked.
+>Fix this by calling put_device(), so that name can be freed in
+>callback function kobject_cleanup().
+>
+>(vdpa_sim_net)
+>unreferenced object 0xffff88807eebc370 (size 16):
+>  comm "modprobe", pid 3848, jiffies 4362982860 (age 18.153s)
+>  hex dump (first 16 bytes):
+>    76 64 70 61 73 69 6d 5f 6e 65 74 00 6b 6b 6b a5  vdpasim_net.kkk.
+>  backtrace:
+>    [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+>    [<ffffffff81731d53>] kstrdup+0x33/0x60
+>    [<ffffffff83a5d421>] kobject_set_name_vargs+0x41/0x110
+>    [<ffffffff82d87aab>] dev_set_name+0xab/0xe0
+>    [<ffffffff82d91a23>] device_add+0xe3/0x1a80
+>    [<ffffffffa0270013>] 0xffffffffa0270013
+>    [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+>    [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+>    [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+>    [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+>    [<ffffffff83c4d505>] do_syscall_64+0x35/0x80
+>    [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>
+>(vdpa_sim_blk)
+>unreferenced object 0xffff8881070c1250 (size 16):
+>  comm "modprobe", pid 6844, jiffies 4364069319 (age 17.572s)
+>  hex dump (first 16 bytes):
+>    76 64 70 61 73 69 6d 5f 62 6c 6b 00 6b 6b 6b a5  vdpasim_blk.kkk.
+>  backtrace:
+>    [<ffffffff8174f19e>] __kmalloc_node_track_caller+0x4e/0x150
+>    [<ffffffff81731d53>] kstrdup+0x33/0x60
+>    [<ffffffff83a5d421>] kobject_set_name_vargs+0x41/0x110
+>    [<ffffffff82d87aab>] dev_set_name+0xab/0xe0
+>    [<ffffffff82d91a23>] device_add+0xe3/0x1a80
+>    [<ffffffffa0220013>] 0xffffffffa0220013
+>    [<ffffffff81001c27>] do_one_initcall+0x87/0x2e0
+>    [<ffffffff813739cb>] do_init_module+0x1ab/0x640
+>    [<ffffffff81379d20>] load_module+0x5d00/0x77f0
+>    [<ffffffff8137bc40>] __do_sys_finit_module+0x110/0x1b0
+>    [<ffffffff83c4d505>] do_syscall_64+0x35/0x80
+>    [<ffffffff83e0006a>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>
+>Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
+>---
+>v2:
+>- add fault inject message
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 4 +++-
+> drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 4 +++-
+> 2 files changed, 6 insertions(+), 2 deletions(-)
 
--next-20221108 was good. Git bisect points to following
+Thanks for the v2 of this patch!
+It LGTM, just a couple of comments about the submit process.
 
-commit 0b25e17e9018a0ea68a9f0b4787672e8c68fa8d5
-Date:   Mon Oct 31 15:47:25 2022 -0700
-    scsi: alua: Move a scsi_device_put() call out of alua_check_vpd()
+Usually when you get A-b R-b's and the patch doesn't change, it's better 
+to bring them in later versions.
 
-Reverting this patch gets rid of the warning.
+Also, we had suggested reporting the Fixes tag, because usually when we 
+fix a bug it's good to identify which patch introduced the problem, so 
+it's easier to backport this fix into stable versions of the kernel.
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#describe-your-changes
 
-- Sachin
+In this case we should use the following tags:
+
+Fixes: 899c4d187f6a ("vdpa_sim_blk: add support for vdpa management tool")
+Fixes: a3c06ae158dd ("vdpa_sim_net: Add support for user supported devices")
+
+With them:
+
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+Thanks,
+Stefano
 
