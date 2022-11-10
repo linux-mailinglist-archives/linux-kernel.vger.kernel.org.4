@@ -2,124 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5433862464C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A1E624642
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbiKJPqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
+        id S231520AbiKJPqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:46:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiKJPqm (ORCPT
+        with ESMTP id S229703AbiKJPqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:46:42 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9229B31231;
-        Thu, 10 Nov 2022 07:46:41 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AAFNOGg006316;
-        Thu, 10 Nov 2022 16:46:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=Vd1nmwWR7Zh9ApMapN6X7xEklVMUKzQ/GXf4SnNG6XI=;
- b=DZG614YQo1BhfkKYPWTpC4qnVwPB3ECNZ8CVDwfA2W9d5dWC4pOaLVi26rFi1TKWwu4d
- SKw9oXKgiByTEYZGQ9pQ8vKQRXL727qmpmCFWO8SpCpjChej9bCputTFo6Ha+aeavPNS
- unBJ2QGW7vXT0DwJ4chXyardEyjQUPqNe3PAzUTnc4bqDLQNgi05xrhj+LfccCxHwJ5D
- GviXjoY1904ZG8IolCtVs3IFHfLN8n2qJibgFewSFXMnS+0nDpMXbosHW2OpeV6oTEvG
- FieYVBcEobS5Ew/wSapN1o/+ykQuMnC6ILTjmF3R+2NgkCbM/9pg0sqJqQQLrq8DeURV IA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3krxfubgqu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 16:46:15 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D921910002A;
-        Thu, 10 Nov 2022 16:46:10 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D0D3522AFED;
-        Thu, 10 Nov 2022 16:46:10 +0100 (CET)
-Received: from localhost (10.252.15.206) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Thu, 10 Nov
- 2022 16:46:10 +0100
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-CC:     Fabrice GASNIER <fabrice.gasnier@foss.st.com>,
-        Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        Etienne CARRIERE <etienne.carriere@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v2 0/3] nvmem: stm32: add OP-TEE support for STM32MP13x
-Date:   Thu, 10 Nov 2022 16:45:46 +0100
-Message-ID: <20221110154550.3220800-1-patrick.delaunay@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Nov 2022 10:46:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED4C022B14;
+        Thu, 10 Nov 2022 07:46:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7ABFCB82224;
+        Thu, 10 Nov 2022 15:46:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6857AC433C1;
+        Thu, 10 Nov 2022 15:46:19 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="c5sSVGv6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668095176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Ps8DyLnWUFEOMzV5Hl0ko397uOHYl+uddPYlp1wLApA=;
+        b=c5sSVGv6D3cV3lHNPMTzl8p/lxxtl99+WBdwq8MiWaQvqdWmiWnsbgwBDBGUEM4HhVm0C2
+        GhC8wkz5IEFE0gm1h3tCP1+av16pMxsvH//4bYbufxRTzdJtM+bg65b1365iXrl19AZJoq
+        ME2zkmPmdY0Zoxg5O0T4TcXBcNuhOGk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd02204a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 10 Nov 2022 15:46:16 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ardb@kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Matthew Garrett <matthew.garrett@nebula.com>,
+        Lennart Poettering <lennart@poettering.net>
+Subject: [PATCH] efi: vars: allow passing fmode= and dmode= when mounting
+Date:   Thu, 10 Nov 2022 16:45:47 +0100
+Message-Id: <20221110154547.472519-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.15.206]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-10_10,2022-11-09_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The default wide-open permissions of efivarfs make the prospect of
+storing secrets there a bit sketchy. Currently systemd does this, and
+then pid 1 takes care of chmodding particular nodes. But this is limited
+and error-prone. Rather, allow passing an explicit dmode for directories
+and fmode for files.
 
-This serie update the NVMEM BSEC driver to be compatible with STM32MP13x
-SoC and the trusted application STM32MP BSEC in OP-TEE
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Jeremy Kerr <jk@ozlabs.org>
+Cc: Matthew Garrett <matthew.garrett@nebula.com>
+Suggested-by: Lennart Poettering <lennart@poettering.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ fs/efivarfs/internal.h |  5 ++++
+ fs/efivarfs/super.c    | 60 ++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 60 insertions(+), 5 deletions(-)
 
-This serie solve issue in initial support of STM32MP131
-(using BSEC STM32MP15 compatible) and so it break the STM32MP13x DTS
-compatible.
-
-I create this serie for more efficient review, including support for
-STM32MP15x.
-
-The first patches of the V1 series is already merged:
-"dt-bindings: nvmem: add new stm32mp13 compatible for stm32-romem"
-
-This STM32MP13x DTS break is acceptable as
-- the STM32MP13x SoC is not yet available outside STMicroelectronics
-  (not official)
-- the same patch is already integrated or modifications are in progress in
-  the other users (arm-trusted-firmware/TF-A, OP-TEE and U-Boot) of
-  stm32mp131 device tree.
-
-It is the good time to correct this issue before the real availability of
-the SoC and before full support of STM32MP13x SoC in Linux kernel.
-
-Regards
-
-Patrick
-
-Changes in v2:
-- rebase series on linux-next/master
-- minor update after V1 revue
-
-Changes in v1:
-- update commit message to indicate DTS break reason.
-
-Patrick Delaunay (3):
-  ARM: dts: stm32mp13: fix compatible for BSEC
-  nvmem: stm32: add OP-TEE support for STM32MP13x
-  nvmem: stm32: detect bsec pta presence for STM32MP15x
-
- arch/arm/boot/dts/stm32mp131.dtsi |   2 +-
- drivers/nvmem/stm32-romem.c       | 474 +++++++++++++++++++++++++++++-
- 2 files changed, 471 insertions(+), 5 deletions(-)
-
+diff --git a/fs/efivarfs/internal.h b/fs/efivarfs/internal.h
+index 8ebf3a6a8aa2..ea1ca322d247 100644
+--- a/fs/efivarfs/internal.h
++++ b/fs/efivarfs/internal.h
+@@ -24,6 +24,11 @@ struct efivar_entry {
+ 	struct kobject kobj;
+ };
+ 
++struct efivarfs_sb_info {
++	umode_t dmode;
++	umode_t fmode;
++};
++
+ int efivar_init(int (*func)(efi_char16_t *, efi_guid_t, unsigned long, void *),
+ 		void *data, bool duplicates, struct list_head *head);
+ 
+diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
+index 6780fc81cc11..45edbb1550e9 100644
+--- a/fs/efivarfs/super.c
++++ b/fs/efivarfs/super.c
+@@ -8,6 +8,7 @@
+ #include <linux/efi.h>
+ #include <linux/fs.h>
+ #include <linux/fs_context.h>
++#include <linux/fs_parser.h>
+ #include <linux/module.h>
+ #include <linux/pagemap.h>
+ #include <linux/ucs2_string.h>
+@@ -107,6 +108,7 @@ static int efivarfs_callback(efi_char16_t *name16, efi_guid_t vendor,
+ 			     unsigned long name_size, void *data)
+ {
+ 	struct super_block *sb = (struct super_block *)data;
++	struct efivarfs_sb_info *sbi = sb->s_fs_info;
+ 	struct efivar_entry *entry;
+ 	struct inode *inode = NULL;
+ 	struct dentry *dentry, *root = sb->s_root;
+@@ -144,7 +146,7 @@ static int efivarfs_callback(efi_char16_t *name16, efi_guid_t vendor,
+ 	/* replace invalid slashes like kobject_set_name_vargs does for /sys/firmware/efi/vars. */
+ 	strreplace(name, '/', '!');
+ 
+-	inode = efivarfs_get_inode(sb, d_inode(root), S_IFREG | 0644, 0,
++	inode = efivarfs_get_inode(sb, d_inode(root), S_IFREG | sbi->fmode, 0,
+ 				   is_removable);
+ 	if (!inode)
+ 		goto fail_name;
+@@ -187,6 +189,7 @@ static int efivarfs_destroy(struct efivar_entry *entry, void *data)
+ 
+ static int efivarfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ {
++	struct efivarfs_sb_info *sbi = sb->s_fs_info;
+ 	struct inode *inode = NULL;
+ 	struct dentry *root;
+ 	int err;
+@@ -202,7 +205,7 @@ static int efivarfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	if (!efivar_supports_writes())
+ 		sb->s_flags |= SB_RDONLY;
+ 
+-	inode = efivarfs_get_inode(sb, NULL, S_IFDIR | 0755, 0, true);
++	inode = efivarfs_get_inode(sb, NULL, S_IFDIR | sbi->dmode, 0, true);
+ 	if (!inode)
+ 		return -ENOMEM;
+ 	inode->i_op = &efivarfs_dir_inode_operations;
+@@ -226,12 +229,58 @@ static int efivarfs_get_tree(struct fs_context *fc)
+ 	return get_tree_single(fc, efivarfs_fill_super);
+ }
+ 
++enum {
++	Opt_dmode,
++	Opt_fmode,
++};
++
++static const struct fs_parameter_spec efivarfs_parameters[] = {
++	fsparam_u32oct("dmode",			Opt_dmode),
++	fsparam_u32oct("fmode",			Opt_fmode),
++	{}
++};
++
++static int efivarfs_parse_param(struct fs_context *fc,
++				struct fs_parameter *param)
++{
++	struct efivarfs_sb_info *sbi = fc->s_fs_info;
++	struct fs_parse_result result;
++	int opt;
++
++	opt = fs_parse(fc, efivarfs_parameters, param, &result);
++	if (opt < 0)
++		return opt;
++
++	switch (opt) {
++	case Opt_dmode:
++		sbi->dmode = result.uint_32;
++		break;
++	case Opt_fmode:
++		sbi->fmode = result.uint_32;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static const struct fs_context_operations efivarfs_context_ops = {
+ 	.get_tree	= efivarfs_get_tree,
++	.parse_param	= efivarfs_parse_param,
+ };
+ 
+ static int efivarfs_init_fs_context(struct fs_context *fc)
+ {
++	struct efivarfs_sb_info *sbi;
++
++	sbi = kzalloc(sizeof(*sbi), GFP_KERNEL);
++	if (!sbi)
++		return -ENOMEM;
++	sbi->dmode = 0755;
++	sbi->fmode = 0644;
++	fc->s_fs_info = sbi;
++
+ 	fc->ops = &efivarfs_context_ops;
+ 	return 0;
+ }
+@@ -245,10 +294,11 @@ static void efivarfs_kill_sb(struct super_block *sb)
+ }
+ 
+ static struct file_system_type efivarfs_type = {
+-	.owner   = THIS_MODULE,
+-	.name    = "efivarfs",
++	.owner   	 = THIS_MODULE,
++	.name    	 = "efivarfs",
+ 	.init_fs_context = efivarfs_init_fs_context,
+-	.kill_sb = efivarfs_kill_sb,
++	.parameters	 = efivarfs_parameters,
++	.kill_sb 	 = efivarfs_kill_sb,
+ };
+ 
+ static __init int efivarfs_init(void)
 -- 
-2.25.1
+2.38.1
 
