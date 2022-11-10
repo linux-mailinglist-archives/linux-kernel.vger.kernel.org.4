@@ -2,84 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52249624531
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78BD624502
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 16:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiKJPIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 10:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
+        id S230320AbiKJPDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 10:03:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbiKJPIm (ORCPT
+        with ESMTP id S229869AbiKJPDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 10:08:42 -0500
-Received: from mx.msync.work (mx.msync.work [185.250.0.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9991823157;
-        Thu, 10 Nov 2022 07:08:38 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F14AD123169;
-        Thu, 10 Nov 2022 15:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1668092469; h=from:subject:date:message-id:to:mime-version:
-         content-transfer-encoding:in-reply-to:references;
-        bh=dONz83S/sl0lvYKGXEj7vcvWK71sD2+ztpm57yFpufg=;
-        b=OTavFoQLMbkEqY41c8FhiUtigQYo9tCEen8cj5clEkrfIdSs/a2eaDQC69VZY0uoB2otoN
-        ++qyL00LAa2ymvVaLaAGYwr8PD0HNk97Qd40oz/Wl1PGUx/mTFQYYzZNFsM+UkwvhUlrPU
-        b59Au0227AfMxPCq0qq0vaLAwxlBWdoCxPooBnfsCwmAIjkZdp0SmUoosZ8e3TL2eAIvEx
-        ScisEvn3ghRTbEUg/EeAHFm1B9EHSvfiMT2mvvWYbLnEUc4EJitW3mJ6kCZPjRdFiVyV5x
-        lZmA9Y/zZoI+PQDDl0JNUuLKyemTzhFLZe/AfNsqGhBY8ukXMVPAJBg3rvGmPQ==
-From:   Vyacheslav Bocharov <adeep@lexina.in>
-To:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: docs: Update mmc meson-gx documentation for new config option amlogic,mmc-phase
-Date:   Thu, 10 Nov 2022 18:00:35 +0300
-Message-Id: <20221110150035.2824580-5-adeep@lexina.in>
-In-Reply-To: <20221110150035.2824580-1-adeep@lexina.in>
-References: <20221110150035.2824580-1-adeep@lexina.in>
+        Thu, 10 Nov 2022 10:03:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B743718B1C;
+        Thu, 10 Nov 2022 07:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dyByMJ1FnM8pS9wy50nx7QIU4ShnY0C2LEYs5nLdq7s=; b=BZ59WACHJvZgfqFRB11gUk1yT1
+        brXqYTm1gv1aZxTv8tk2GAw2D+qpM99gV17oc69z0YTx6XC3caEX7i0sW7hIJXiCULSh5GMSgPDMe
+        Ayqde6NPh7Cm5mazI4Gkmtd/s6UIg8p4x00orrdTwetPvHsBWREXjl0weKX53b3pDBMWeskm4idE7
+        +IMqt/j9BV4KeytyL2eH4DoqZgEs5lDw5BKe8dlgSG8lfOlfOvRGnm/ecdmuCZ913y68IGrk3zBpO
+        OzCgbyl+7DRlX2T8WzHF0abvztYBzhOcVcZh87PWfTLSuuLeZBDFqthO2I8LtrbuR7kbBp0TsopOl
+        8zIn8MzA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ot953-00C9kk-GP; Thu, 10 Nov 2022 15:03:01 +0000
+Date:   Thu, 10 Nov 2022 15:03:01 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] block: add partition parser for U-Boot uImage.FIT
+Message-ID: <Y20SpcPNbdhcM9ps@casper.infradead.org>
+References: <Y2rgNEQlxKgiIDdk@makrotopia.org>
+ <Y2uyBYyQOC4O5iep@casper.infradead.org>
+ <Y2u62z4DQVENz69L@makrotopia.org>
+ <Y2vhfdhvw0PADeIF@casper.infradead.org>
+ <Y2xZa9z3HHtddG3t@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2xZa9z3HHtddG3t@makrotopia.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- amlogic,mmc-phases: 3-element array of clock phases for core, tx, rx
-clock with values:
-	0: CLK_PHASE_0 - 0 phase
-	1: CLK_PHASE_90 - 90 phase
-	2: CLK_PHASE_180 - 180 phase
-	3: CLK_PHASE_270 - 270 phase
-By default driver use <CLK_PHASE_180 CLK_PHASE_0 CLK_PHASE_0> value.
+On Thu, Nov 10, 2022 at 01:52:43AM +0000, Daniel Golle wrote:
+> On Wed, Nov 09, 2022 at 05:21:01PM +0000, Matthew Wilcox wrote:
+> > On Wed, Nov 09, 2022 at 02:36:11PM +0000, Daniel Golle wrote:
+> > > On Wed, Nov 09, 2022 at 01:58:29PM +0000, Matthew Wilcox wrote:
+> > > > ... actually, why can't you call read_part_sector() and avoid all of
+> > > > this?
+> > > 
+> > > I've tried that before and the problem is that read_part_sector()
+> > > returns a pointer to one sector (typically 512 bytes) of data.
+> > > And this pointer should not be accesses beyond sector boundaries,
+> > > right? You'd have to call read_part_sector() again for the next
+> > > sector.
+> > > 
+> > > The FIT structure, however, usually exceeds the size of one sector,
+> > > and having a continous memory area covering the structure as a whole
+> > > is crucial for libfdt to do its job.
+> > > 
+> > > I could, of course, use read_part_sector() to copy all sectors
+> > > covering the FIT structure into a buffer, but that seemed strange
+> > > given that read_part_sector() actually used read_mapping_page()
+> > > (and now uses read_mapping_folio()) internally and then returns a
+> > > pointer to the offset within the page/folio. So why not read it in one
+> > > piece in first place instead of having it first split up to sectors
+> > > by read_part_sector() just to then having to reassemble it into a
+> > > continous buffer again.
+> > 
+> > Are you guaranteed that it's "sufficiently" aligned on storage so
+> > that it fits entirely within a single page?  If not, you'll have
+> > to copy it, vmap it, or fix libfdt to handle a segmented buffer.
+> 
+> Yes, for the uImage.FIT to be usable for the partition parser it has
+> to be page-aligned.
+> 
+> There is a check which makes sure that this is the case:
+> > +	/* uImage.FIT should be aligned to page boundaries */
+> > +	if (fit_start_sector % (1 << (PAGE_SHIFT - SECTOR_SHIFT)))
+> > +		return 0;
+> 
+> In case of mtdblock or ubiblock devices, the image always starts at
+> offset 0, so this is never a problem.
+> In case of the image being stored in a GPT partition, one has to make
+> sure that the start sector of the partition is page aligned, otherwise
+> the above check will fail and the partition parser will bail out.
 
-Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
-
-diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt
-index ccc5358db131..98c89c5b3455 100644
---- a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt
-+++ b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt
-@@ -25,6 +25,12 @@ Required properties:
- Optional properties:
- - amlogic,dram-access-quirk: set when controller's internal DMA engine cannot access the
-   DRAM memory, like on the G12A dedicated SDIO controller.
-+- amlogic,mmc-phases: 3-element array of clock phases for core, tx, rx clock with values:
-+	0: CLK_PHASE_0 - 0 phase
-+	1: CLK_PHASE_90 - 90 phase
-+	2: CLK_PHASE_180 - 180 phase
-+	3: CLK_PHASE_270 - 270 phase
-+  By default driver use <CLK_PHASE_180 CLK_PHASE_0 CLK_PHASE_0> value.
- 
- Example:
- 
-@@ -36,4 +42,5 @@ Example:
- 		clock-names = "core", "clkin0", "clkin1";
- 		pinctrl-0 = <&emmc_pins>;
- 		resets = <&reset RESET_SD_EMMC_A>;
-+		amlogic,mmc-phases = <CLK_PHASE_180 CLK_PHASE_0 CLK_PHASE_0>;
- 	};
--- 
-2.30.2
+OK.  Then I think open coding it is the right idea, just with all
+the cruft removed ;-)  I looked at extracting parts of
+read_part_sector() into read_part_page(), but it ended up being
+a two line function that wasn't terribly useful.
 
