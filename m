@@ -2,139 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9002B62473B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56B7624753
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiKJQl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S232256AbiKJQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:44:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiKJQls (ORCPT
+        with ESMTP id S232229AbiKJQnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:41:48 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9625243865
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:41:46 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id v17so3919144edc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:41:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PXjmgmTZbivYNCVWB/JUFc7h/+Q7RCIq92KdMMjOLfI=;
-        b=tadhODvAQBstTXxKr5UPmLw+VB7fNxM2svKr46LIB2KDzmBT5FyakWQoUP4PpuJ0HG
-         WnUU8TuxJnzHwD2FEUyixga1iE47JHIwFlLMic3SOl1rqHyxt9xhhS7IKfBDaoNxoHY/
-         Guo3wEjVfuhpr+bNUS9wwCkoQsGoI6w0vAO82n1E/VEgZqjRBxOZ8Jf0QWOhg44gyt4r
-         aG4H/8Be20qkWgEJ3q1IyuP1neyhXBnDpu+wIRpPwP5xaWzmaFz8/D0o54DGA/ML3fj2
-         BFSTiBstcr1FdQoI17Aj/Vps/AyBqS9+Wcp8nST4woTodIesMS0P1ECvmiEBbxM9Gd/y
-         vIAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PXjmgmTZbivYNCVWB/JUFc7h/+Q7RCIq92KdMMjOLfI=;
-        b=gXfCbcGgrnH9nV4QJOkHwk2fGo2ycIZxyxXyLiqiMD90XfiNj9GeellWgODOeLtgHr
-         /LZqsq2HVEmBrz+UOPiB7Qg+h4GVD52DVm9FDd17Jz7ISwMu7WoXAX4IgGXKzqGBbcNd
-         tuvYL8pMXvCO0KJXoWNbVUyIkjaN4FkUL5O7Tbp2k+cMZK7TLAnMTkDFgDaXZQP9Uu0H
-         V+pSSuj4JU6jM0QV3dgFlQcVUQCH2PW+6WP1izUTEdcCO0xk8OzzKRLEFxxV3lKT3bim
-         EhH968qCIzarCmC6C6aglocTOoVyWDAWvYqK9NJs+0shDzSWgKKRsqDcFLTGcmXm++AE
-         V7qg==
-X-Gm-Message-State: ACrzQf0iHww2tvFKr1bKXqbjod9rIW5RtYdgIjIyUtzwNyi0u+q21eIi
-        5jKxUtDq6A76fEROAEAQfkGMhN7nV7gGDc0QOtQy2umrK/4ndQ==
-X-Google-Smtp-Source: AMsMyM5xmiXxEeOzmNuy/Kq98htw3UnaNPQB44q/IPt7Hgv62yRSWf//kYvb/fxfl2oNtNsLD6xYTxGlImkj0jpfphQ=
-X-Received: by 2002:a05:6402:c07:b0:461:87ab:78aa with SMTP id
- co7-20020a0564020c0700b0046187ab78aamr64197695edb.258.1668098505181; Thu, 10
- Nov 2022 08:41:45 -0800 (PST)
+        Thu, 10 Nov 2022 11:43:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518064384D;
+        Thu, 10 Nov 2022 08:43:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D8560C3C;
+        Thu, 10 Nov 2022 16:43:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A19C433C1;
+        Thu, 10 Nov 2022 16:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668098589;
+        bh=lSrHt+F2Ze+/0shcXyGqT2iYHkhHUzJS18BpgwZFKfQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=WXfn05iCKkaThQThCXeKWEliWM8sYgdfDebypjfYb7zVgGuFoYbQC0a9EXewcfKeM
+         u1FwVCtDj7pABLT8E+A9RmwU1fg1dCOtsxDfD/9PVLaCScNel7NS0s/0/wfJeHXF/1
+         KMaM7KmBO4fwh0PCgDYgJCLG+qPhmpBACcfnPEQc4ndGdA29MBi4FYx6t3rDHhV9ba
+         utPqEiLMNvDmlJvS2KIyAZwP8FJzQJofuk1yjJYo7u9NL44ikmQQnLSV7ipciu9EwX
+         GrF7h4ljSCT/DwahFTNF1UfB+o4pblBGXx5RLhD27EzfsAnLsiFrmfkX/NkN2bGCgS
+         3usHAuTFJ3/wg==
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Morgan Bartlett <mjmouse9999@gmail.com>
+Subject: [PATCH v1 17/28] rust: str: implement several traits for `CStr`
+Date:   Thu, 10 Nov 2022 17:41:29 +0100
+Message-Id: <20221110164152.26136-18-ojeda@kernel.org>
+In-Reply-To: <20221110164152.26136-1-ojeda@kernel.org>
+References: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
-References: <202211100830.1F097DC@keescook>
-In-Reply-To: <202211100830.1F097DC@keescook>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 10 Nov 2022 16:41:28 +0000
-Message-ID: <CAPY8ntCkjG0BafMy+iLna2BDvr0n10E8hzUqL01WpUgFCjwV4g@mail.gmail.com>
-Subject: Re: Coverity: imx290_ctrl_init(): Error handling issues
-To:     coverity-bot <keescook@chromium.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 16:31, coverity-bot <keescook@chromium.org> wrote:
->
-> Hello!
->
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20221110 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
->
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
->
->   Thu Oct 27 14:38:02 2022 +0300
->     4c9c93cf8657 ("media: i2c: imx290: Create controls for fwnode properties")
->
-> Coverity reported the following:
->
-> *** CID 1527251:  Error handling issues  (CHECKED_RETURN)
-> drivers/media/i2c/imx290.c:1056 in imx290_ctrl_init()
-> 1050            imx290->vblank = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
-> 1051                                               V4L2_CID_VBLANK, blank, blank, 1,
-> 1052                                               blank);
-> 1053            if (imx290->vblank)
-> 1054                    imx290->vblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> 1055
-> vvv     CID 1527251:  Error handling issues  (CHECKED_RETURN)
-> vvv     Calling "v4l2_ctrl_new_fwnode_properties" without checking return value (as is done elsewhere 9 out of 10 times).
-> 1056            v4l2_ctrl_new_fwnode_properties(&imx290->ctrls, &imx290_ctrl_ops,
-> 1057                                            &props);
-> 1058
-> 1059            imx290->sd.ctrl_handler = &imx290->ctrls;
-> 1060
-> 1061            if (imx290->ctrls.error) {
->
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
+From: Gary Guo <gary@garyguo.net>
 
-I looked at this one when the patches were sent to the list.
+Implement `Debug`, `Display`, `Deref` (into `BStr`), `AsRef<BStr>`
+and a set of `Index<...>` traits.
 
-On failure, v4l2_ctrl_new_fwnode_properties will have set the error
-flag in struct v4l2_ctrl_handler. This is also what it returns.
+This makes it `CStr` more convenient to use (and closer to `str`).
 
-In most of the existing drivers the error flag has already been
-checked before calling v4l2_ctrl_new_fwnode_properties, therefore the
-return value has to be checked explicitly. In this case it is checked
-at line 1061 which is after v4l2_ctrl_new_fwnode_properties has been
-called, and therefore there is no need to check the return value of
-the call.
+Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+Co-developed-by: Morgan Bartlett <mjmouse9999@gmail.com>
+Signed-off-by: Morgan Bartlett <mjmouse9999@gmail.com>
+Signed-off-by: Gary Guo <gary@garyguo.net>
+[Reworded, adapted for upstream and applied latest changes]
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+ rust/kernel/str.rs | 124 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 123 insertions(+), 1 deletion(-)
 
-IMHO Neither is particularly right or wrong, just slightly different
-approaches. In some regards this new code pattern is nicer as it
-removes a number of error handling paths.
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index d66565f92f71..11d297c1a61c 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -2,7 +2,8 @@
+ 
+ //! String representations.
+ 
+-use core::fmt;
++use core::fmt::{self, Write};
++use core::ops::{self, Deref, Index};
+ 
+ use crate::{
+     bindings,
+@@ -199,6 +200,127 @@ impl CStr {
+     }
+ }
+ 
++impl fmt::Display for CStr {
++    /// Formats printable ASCII characters, escaping the rest.
++    ///
++    /// ```
++    /// # use kernel::c_str;
++    /// # use kernel::str::CStr;
++    /// # use kernel::str::CString;
++    /// let penguin = c_str!("🐧");
++    /// let s = CString::try_from_fmt(fmt!("{}", penguin)).unwrap();
++    /// assert_eq!(s.as_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_bytes());
++    ///
++    /// let ascii = c_str!("so \"cool\"");
++    /// let s = CString::try_from_fmt(fmt!("{}", ascii)).unwrap();
++    /// assert_eq!(s.as_bytes_with_nul(), "so \"cool\"\0".as_bytes());
++    /// ```
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        for &c in self.as_bytes() {
++            if (0x20..0x7f).contains(&c) {
++                // Printable character.
++                f.write_char(c as char)?;
++            } else {
++                write!(f, "\\x{:02x}", c)?;
++            }
++        }
++        Ok(())
++    }
++}
++
++impl fmt::Debug for CStr {
++    /// Formats printable ASCII characters with a double quote on either end, escaping the rest.
++    ///
++    /// ```
++    /// # use kernel::c_str;
++    /// # use kernel::str::CStr;
++    /// # use kernel::str::CString;
++    /// let penguin = c_str!("🐧");
++    /// let s = CString::try_from_fmt(fmt!("{:?}", penguin)).unwrap();
++    /// assert_eq!(s.as_bytes_with_nul(), "\"\\xf0\\x9f\\x90\\xa7\"\0".as_bytes());
++    ///
++    /// // Embedded double quotes are escaped.
++    /// let ascii = c_str!("so \"cool\"");
++    /// let s = CString::try_from_fmt(fmt!("{:?}", ascii)).unwrap();
++    /// assert_eq!(s.as_bytes_with_nul(), "\"so \\\"cool\\\"\"\0".as_bytes());
++    /// ```
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str("\"")?;
++        for &c in self.as_bytes() {
++            match c {
++                // Printable characters.
++                b'\"' => f.write_str("\\\"")?,
++                0x20..=0x7e => f.write_char(c as char)?,
++                _ => write!(f, "\\x{:02x}", c)?,
++            }
++        }
++        f.write_str("\"")
++    }
++}
++
++impl AsRef<BStr> for CStr {
++    #[inline]
++    fn as_ref(&self) -> &BStr {
++        self.as_bytes()
++    }
++}
++
++impl Deref for CStr {
++    type Target = BStr;
++
++    #[inline]
++    fn deref(&self) -> &Self::Target {
++        self.as_bytes()
++    }
++}
++
++impl Index<ops::RangeFrom<usize>> for CStr {
++    type Output = CStr;
++
++    #[inline]
++    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
++        // Delegate bounds checking to slice.
++        // Assign to _ to mute clippy's unnecessary operation warning.
++        let _ = &self.as_bytes()[index.start..];
++        // SAFETY: We just checked the bounds.
++        unsafe { Self::from_bytes_with_nul_unchecked(&self.0[index.start..]) }
++    }
++}
++
++impl Index<ops::RangeFull> for CStr {
++    type Output = CStr;
++
++    #[inline]
++    fn index(&self, _index: ops::RangeFull) -> &Self::Output {
++        self
++    }
++}
++
++mod private {
++    use core::ops;
++
++    // Marker trait for index types that can be forward to `BStr`.
++    pub trait CStrIndex {}
++
++    impl CStrIndex for usize {}
++    impl CStrIndex for ops::Range<usize> {}
++    impl CStrIndex for ops::RangeInclusive<usize> {}
++    impl CStrIndex for ops::RangeToInclusive<usize> {}
++}
++
++impl<Idx> Index<Idx> for CStr
++where
++    Idx: private::CStrIndex,
++    BStr: Index<Idx>,
++{
++    type Output = <BStr as Index<Idx>>::Output;
++
++    #[inline]
++    fn index(&self, index: Idx) -> &Self::Output {
++        &self.as_bytes()[index]
++    }
++}
++
+ /// Allows formatting of [`fmt::Arguments`] into a raw buffer.
+ ///
+ /// It does not fail if callers write past the end of the buffer so that they can calculate the
+-- 
+2.38.1
 
-  Dave
-
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1527251 ("Error handling issues")
-> Fixes: 4c9c93cf8657 ("media: i2c: imx290: Create controls for fwnode properties")
->
-> Thanks for your attention!
->
-> --
-> Coverity-bot
