@@ -2,193 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B3B624BC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EB0624BC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 21:29:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiKJU1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 15:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S231621AbiKJU31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 15:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKJU1J (ORCPT
+        with ESMTP id S229461AbiKJU3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 15:27:09 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45291C429;
-        Thu, 10 Nov 2022 12:27:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668112028; x=1699648028;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=m+ZS3rOfRmRa8UfzE++QCfs9Vzmvg4hPfC+PSx0NcaM=;
-  b=AJSHeQxjBWLyJ8QssGw7kdJtThX5LMAVnpHq6co2s9Cxqkh2nzr+g+R4
-   vEfNCLTB7Afbbwr1lyPz4pM+qiGrAoGTWKgpszkb1OUaRdaKiYtjNqEi8
-   JGVpEBzz9IJVQtd4ONh9WNJmyHHKC9PkBCymP3ly/KSiQ4id737iFuhmX
-   8pS3CFO1qoRR8rZLeuZafe8PSxo5PvUWKskKU37B9ZsI00xUoNN38wcj6
-   feILyxHOvoo/7v5ydaoGMRFH+FJdaXUPgxWAAcc2UFLz412urDmPcXpRf
-   OXy/Pn0n3rlA2kecuJT3e7Sxm/BI3iQWu8rptPBpCE7kir1aBWthix2lU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309060811"
-X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="309060811"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 12:27:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="637320121"
-X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
-   d="scan'208";a="637320121"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga002.jf.intel.com with SMTP; 10 Nov 2022 12:27:03 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Thu, 10 Nov 2022 22:27:02 +0200
-Date:   Thu, 10 Nov 2022 22:27:02 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bigeasy@linutronix.de, rjw@rjwysocki.net, oleg@redhat.com,
-        rostedt@goodmis.org, mingo@kernel.org, mgorman@suse.de,
-        intel-gfx@lists.freedesktop.org, tj@kernel.org,
-        Will Deacon <will@kernel.org>, dietmar.eggemann@arm.com,
-        ebiederm@xmission.com
-Subject: Re: [Intel-gfx] [PATCH v3 6/6] freezer, sched: Rewrite core freezer
- logic
-Message-ID: <Y21elgaCwy3FNk70@intel.com>
-References: <Y1LVYaPCCP3BBS4g@intel.com>
- <Y1drd2gzxUJWdz5F@intel.com>
- <Y1e/Kd+1UQqeSwzY@hirez.programming.kicks-ass.net>
- <Y1kMv1GpKwOSIt8f@intel.com>
- <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
- <Y1qC7d7QVJB8NCHt@intel.com>
- <Y1q3gzbPUCvEMHGD@hirez.programming.kicks-ass.net>
- <Y2Khj7n+tRq3r++O@intel.com>
- <Y2LsUIfbUiy2Ar0r@hirez.programming.kicks-ass.net>
- <Y2jwSwfRC3Q5x7Rm@intel.com>
+        Thu, 10 Nov 2022 15:29:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF89EDB4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668112114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s3qJXkjwOhbGiwzYiY8uWUuyvmMsTBnM2XzNPe9LD9s=;
+        b=AFu1fihkMf4yAkIY7TX22vzAQeuKR7aUoMOIM9pzFEM13Xvk2q3QZRe+eTtRgtIR6xtuPJ
+        twKMb3OMQ3Aan8unZNR0/j+9djDYy4TeJ4YgAn8cwWkVGu87KpEOJ0MGOLutcexpXzbRVH
+        m7nWmyIV22nDRN7oTtxMiX2IQKt5SZI=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-414-GMM8V5iYOdiaA8Ue18gi3Q-1; Thu, 10 Nov 2022 15:28:33 -0500
+X-MC-Unique: GMM8V5iYOdiaA8Ue18gi3Q-1
+Received: by mail-qt1-f197.google.com with SMTP id g3-20020ac84b63000000b003a529c62a92so2236556qts.23
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 12:28:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s3qJXkjwOhbGiwzYiY8uWUuyvmMsTBnM2XzNPe9LD9s=;
+        b=YUhN6ARHhdcgT5WTyBoG5fe3/EgfprPEZbVMvqUC8jw8f81EoCyUYdQ4e30HIyfXs8
+         BHBfIBMBrHssxNSaZOJcGpx+jg096981tefWaTkfbx7VWZrBrt1zg0jRL/9Fop8mQctM
+         T8l5IPw5nCMZHN15LM0axBKn30YW52R35pYh5TRYinpFCdeuxtVJumfpgvyDVnOi9B3w
+         a+3qowrSoBQPNVMqbIy7RcDus/3IFIiknLph8Yx5L45Y1XlqdymkVhLJnMpL+2SEpXq0
+         dS8hgwKBLXZO0lHGTGLr6/kTj1rNDT/Iy3lBibmMPybD/YTB87PdhTKG69RGgq7Uxv2s
+         7jyA==
+X-Gm-Message-State: ACrzQf1rq3TfoOpY+uVau96xyqG5+gc/FEftx1YeDHMNkTFZK2yisLzt
+        sQBbnl6FcxZVf2oTP0an1RfS7/6DlbSzufBdEswcoFEGa3TtZwisX4LESI/e4ukajB/89gONIGV
+        iSM4pMzW2CtNyr9+cM7J57lsf
+X-Received: by 2002:a37:8246:0:b0:6f9:bc42:699a with SMTP id e67-20020a378246000000b006f9bc42699amr1741832qkd.496.1668112112502;
+        Thu, 10 Nov 2022 12:28:32 -0800 (PST)
+X-Google-Smtp-Source: AMsMyM6U7SlZJzxRPAjnUqO/P0jD8kNSK5YAVkzCKarP217RdqceVGneo5WmOtTIZWolo1PJX/v1Lg==
+X-Received: by 2002:a37:8246:0:b0:6f9:bc42:699a with SMTP id e67-20020a378246000000b006f9bc42699amr1741822qkd.496.1668112112298;
+        Thu, 10 Nov 2022 12:28:32 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id y201-20020a3764d2000000b006fa7b5ea2d1sm138582qkb.125.2022.11.10.12.28.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 12:28:31 -0800 (PST)
+Date:   Thu, 10 Nov 2022 15:28:30 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ives van Hoorne <ives@codesandbox.io>
+Subject: Re: [PATCH 2/2] mm/uffd: Sanity check write bit for uffd-wp
+ protected ptes
+Message-ID: <Y21e7vvP54JrtkAp@x1n>
+References: <20221110151702.1478763-1-peterx@redhat.com>
+ <20221110151702.1478763-3-peterx@redhat.com>
+ <58FFF1A3-DC37-4D9F-ABF0-3C5DA519BFFB@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y2jwSwfRC3Q5x7Rm@intel.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <58FFF1A3-DC37-4D9F-ABF0-3C5DA519BFFB@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 01:47:23PM +0200, Ville Syrjälä wrote:
-> On Wed, Nov 02, 2022 at 11:16:48PM +0100, Peter Zijlstra wrote:
-> > On Wed, Nov 02, 2022 at 06:57:51PM +0200, Ville Syrjälä wrote:
-> > > On Thu, Oct 27, 2022 at 06:53:23PM +0200, Peter Zijlstra wrote:
-> > > > On Thu, Oct 27, 2022 at 04:09:01PM +0300, Ville Syrjälä wrote:
-> > > > > On Wed, Oct 26, 2022 at 01:43:00PM +0200, Peter Zijlstra wrote:
-> > > > 
-> > > > > > Could you please give the below a spin?
-> > > > > 
-> > > > > Thanks. I've added this to our CI branch. I'll try to keep and eye
-> > > > > on it in the coming days and let you know if anything still trips.
-> > > > > And I'll report back maybe ~middle of next week if we haven't caught
-> > > > > anything by then.
-> > > > 
-> > > > Thanks!
-> > > 
-> > > Looks like we haven't caught anything since I put the patch in.
-> > > So the fix seems good.
-> > 
-> > While writing up the Changelog, it occured to me it might be possible to
-> > fix another way, could I bother you to also run the below patch for a
-> > bit?
+On Thu, Nov 10, 2022 at 10:43:25AM -0800, Nadav Amit wrote:
+> On Nov 10, 2022, at 7:17 AM, Peter Xu <peterx@redhat.com> wrote:
 > 
-> I swapped in the new patch to the CI branch. I'll check back
-> after a few days.
-
-CI hasn't had anything new to report AFAICS, so looks like this
-version is good as well.
-
-> 
-> > 
-> > ---
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index cb2aa2b54c7a..daff72f00385 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -4200,6 +4200,40 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
-> >  	return success;
-> >  }
-> >  
-> > +static bool __task_needs_rq_lock(struct task_struct *p)
-> > +{
-> > +	unsigned int state = READ_ONCE(p->__state);
-> > +
+> > +#ifdef CONFIG_DEBUG_VM
 > > +	/*
-> > +	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
-> > +	 * the task is blocked. Make sure to check @state since ttwu() can drop
-> > +	 * locks at the end, see ttwu_queue_wakelist().
-> > +	 */
-> > +	if (state == TASK_RUNNING || state == TASK_WAKING)
-> > +		return true;
-> > +
-> > +	/*
-> > +	 * Ensure we load p->on_rq after p->__state, otherwise it would be
-> > +	 * possible to, falsely, observe p->on_rq == 0.
+> > +	 * Having write bit for wr-protect-marked present ptes is fatal,
+> > +	 * because it means the uffd-wp bit will be ignored and write will
+> > +	 * just go through.
 > > +	 *
-> > +	 * See try_to_wake_up() for a longer comment.
+> > +	 * Use any chance of pgtable walking to verify this (e.g., when
+> > +	 * page swapped out or being migrated for all purposes). It means
+> > +	 * something is already wrong.  Tell the admin even before the
+> > +	 * process crashes. We also nail it with wrong pgtable setup.
 > > +	 */
-> > +	smp_rmb();
-> > +	if (p->on_rq)
-> > +		return true;
-> > +
-> > +#ifdef CONFIG_SMP
-> > +	/*
-> > +	 * Ensure the task has finished __schedule() and will not be referenced
-> > +	 * anymore. Again, see try_to_wake_up() for a longer comment.
-> > +	 */
-> > +	smp_rmb();
-> > +	smp_cond_load_acquire(&p->on_cpu, !VAL);
-> > +#endif
-> > +
-> > +	return false;
-> > +}
-> > +
-> >  /**
-> >   * task_call_func - Invoke a function on task in fixed state
-> >   * @p: Process for which the function is to be invoked, can be @current.
-> > @@ -4217,28 +4251,12 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
-> >  int task_call_func(struct task_struct *p, task_call_f func, void *arg)
-> >  {
-> >  	struct rq *rq = NULL;
-> > -	unsigned int state;
-> >  	struct rq_flags rf;
-> >  	int ret;
-> >  
-> >  	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
-> >  
-> > -	state = READ_ONCE(p->__state);
-> > -
-> > -	/*
-> > -	 * Ensure we load p->on_rq after p->__state, otherwise it would be
-> > -	 * possible to, falsely, observe p->on_rq == 0.
-> > -	 *
-> > -	 * See try_to_wake_up() for a longer comment.
-> > -	 */
-> > -	smp_rmb();
-> > -
-> > -	/*
-> > -	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
-> > -	 * the task is blocked. Make sure to check @state since ttwu() can drop
-> > -	 * locks at the end, see ttwu_queue_wakelist().
-> > -	 */
-> > -	if (state == TASK_RUNNING || state == TASK_WAKING || p->on_rq)
-> > +	if (__task_needs_rq_lock(p))
-> >  		rq = __task_rq_lock(p, &rf);
-> >  
-> >  	/*
+> > +	WARN_ON_ONCE(wp && pte_write(pte));
 > 
-> -- 
-> Ville Syrjälä
-> Intel
+> How about VM_WARN_ON_ONCE() and no ifdef?
+
+Oops.. Will quickly respin, thanks.
 
 -- 
-Ville Syrjälä
-Intel
+Peter Xu
+
