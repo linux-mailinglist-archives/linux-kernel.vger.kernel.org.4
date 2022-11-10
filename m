@@ -2,213 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA35623E8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FAF623E93
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 10:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiKJJ1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 04:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S229893AbiKJJ2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 04:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiKJJ1E (ORCPT
+        with ESMTP id S229791AbiKJJ2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 04:27:04 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE776A697;
-        Thu, 10 Nov 2022 01:27:03 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so4207776pjc.3;
-        Thu, 10 Nov 2022 01:27:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yYm73sNWFFE4EpN1dR1Cx+FmfgIhAJM/KoAjWBFI0pU=;
-        b=S11BeIH9//OPm5srXrPrTgYJzz+5OmimB+1dMAHEycfVcEf/NOwXJJCasXSpwsi2WG
-         UOA5OtVZRUVwZvvindZLVt7X0OSeuXvxce6yQLh04fsADzfFiuhgfa8+o7hJBk8sqUYg
-         /g/2MlWduEstk/j84Fh338RjO+zz/JPMMSvEFVw9oYyysODTKYdIJKPYnX5Xt/0BqEyy
-         QpGaD+nhn84sHfYtINI9c/MJsy0vxK0VKVL/AD4Eky+WTKW6IlHVCW0Fa1YMXaMmFni+
-         2CFoeh6S04RYG7p27QOVEES6blCCO5A7Wr1ifVghvF3synbsdUBcBULux77gbKPd3BiV
-         5hSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yYm73sNWFFE4EpN1dR1Cx+FmfgIhAJM/KoAjWBFI0pU=;
-        b=ftkbzfvLNYlqD/HA3l7pmpvfx5J+CveiEY7BM4dBeM3lM2u64kH0HSYGdMMx4TlaBa
-         tzWuhmI6opJsSp1hD3NXuq09wd7CNc+yy3QcarYJyqKg2Pcg4DzruEFOXPd5uwD9VHXJ
-         3YCMXIBXKq4YEXoeJKLnIxmnN6Gm01sSudk9lFkvvXAgux2sewcmlDa0GkF/QaGrDHeQ
-         WTN2SjuhKPoK8WERyy6FuFJlm6Hg85/qBKlLPaDZvsepfn976FviT36fF2GlAgsvDDd/
-         LKkyeJVvW0J+1yJ0mD277kbBuxRWFD+mPiFpuJr2go8AqwtaIVU3jF883BoJcL1q8xaa
-         IDQQ==
-X-Gm-Message-State: ACrzQf3/pV1SD+Ze15eCBegZ5hEkvTrCifPbHZdl4gWGWEbcpA0oG059
-        zam/QhSFcysdmnto2z+/6sLf1gv8Jjg7VSYV
-X-Google-Smtp-Source: AMsMyM4EseASGx+Zu4adT2uRSUFLBvFguQM9DVRUkpSniAgkjaOqOeWtMXnKvUStdK8wRa+SV9ecEA==
-X-Received: by 2002:a17:902:bc88:b0:185:4421:250 with SMTP id bb8-20020a170902bc8800b0018544210250mr62698002plb.29.1668072423183;
-        Thu, 10 Nov 2022 01:27:03 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170902ea0b00b0018700ba9090sm10718065plg.185.2022.11.10.01.27.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 01:27:02 -0800 (PST)
-Message-ID: <948ec6a5-3f30-e8c2-9629-12235f1e1367@gmail.com>
-Date:   Thu, 10 Nov 2022 17:26:55 +0800
+        Thu, 10 Nov 2022 04:28:17 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E73E6A6B7;
+        Thu, 10 Nov 2022 01:28:15 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7Gj51hJjz4f3kpk;
+        Thu, 10 Nov 2022 17:28:09 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgDH69gqxGxjfpcmAQ--.40494S3;
+        Thu, 10 Nov 2022 17:28:12 +0800 (CST)
+Subject: Re: [PATCH] block, bfq: do the all counting of pending-request if
+ CONFIG_BFQ_GROUP_IOSCHED is enabled
+To:     Yuwei Guan <ssawgyw@gmail.com>, paolo.valente@linaro.org,
+        axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuwei.Guan@zeekrlife.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221109132914.438777-1-Yuwei.Guan@zeekrlife.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <52ccc3f0-a628-a9bf-f604-3b86dd34b006@huaweicloud.com>
+Date:   Thu, 10 Nov 2022 17:28:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/3] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg
- leaf 0x80000022
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
-References: <20220919093453.71737-1-likexu@tencent.com>
- <20220919093453.71737-4-likexu@tencent.com> <Y1sIHXX3HEJEXJm+@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y1sIHXX3HEJEXJm+@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221109132914.438777-1-Yuwei.Guan@zeekrlife.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgDH69gqxGxjfpcmAQ--.40494S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw4UJr1xXF1UCw4UWFy7GFg_yoW7Xr4kpa
+        9Ig3WUCF15JrsYgry5Ja18Xr93Wrn3uF9FkFWvy34Skr47Ar9xt3ZIkr1rZryIgr95Aw47
+        ZF1FgryDZw17AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 6:37 am, Sean Christopherson wrote:
-> On Mon, Sep 19, 2022, Like Xu wrote:
->> From: Sandipan Das <sandipan.das@amd.com>
->>
->> From: Sandipan Das <sandipan.das@amd.com>
-> 
-> Duplicate "From:"s.
-> 
->> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some
->> new performance monitoring features for AMD processors.
-> 
-> Wrap changelogs closer to ~75 chars.
-> 
->> Bit 0 of EAX indicates support for Performance Monitoring
->> Version 2 (PerfMonV2) features. If found to be set during
->> PMU initialization, the EBX bits of the same CPUID function
->> can be used to determine the number of available PMCs for
->> different PMU types.
->>
->> Expose the relevant bits via KVM_GET_SUPPORTED_CPUID so
->> that guests can make use of the PerfMonV2 features.
->>
->> Co-developed-by: Like Xu <likexu@tencent.com>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
->> ---
->>   arch/x86/include/asm/perf_event.h |  8 ++++++++
->>   arch/x86/kvm/cpuid.c              | 32 ++++++++++++++++++++++++++++++-
->>   2 files changed, 39 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
->> index f6fc8dd51ef4..c848f504e467 100644
->> --- a/arch/x86/include/asm/perf_event.h
->> +++ b/arch/x86/include/asm/perf_event.h
->> @@ -214,6 +214,14 @@ union cpuid_0x80000022_ebx {
->>   	unsigned int		full;
->>   };
->>   
->> +union cpuid_0x80000022_eax {
->> +	struct {
->> +		/* Performance Monitoring Version 2 Supported */
->> +		unsigned int	perfmon_v2:1;
->> +	} split;
->> +	unsigned int		full;
->> +};
-> 
-> I'm not a fan of perf's unions, but I at least understand the value added for
-> CPUID entries that are a bunch of multi-bit values.  However, this leaf appears
-> to be a pure features leaf.  In which case a union just makes life painful.
-> 
-> Please add a CPUID_8000_0022_EAX kvm_only_cpuid_leafs entry (details in link[*]
-> below) so that KVM can write sane code like
-> 
-> 	guest_cpuid_has(X86_FEATURE_AMD_PMU_V2)
-> 
-> and cpuid_entry_override() instead of manually filling in information.
-> 
-> where appropriate.
-> 
-> [*] https://lore.kernel.org/all/Y1AQX3RfM+awULlE@google.com
+Hi,
 
-When someone is selling syntactic sugar in the kernel space, extra attention
-needs to be paid to runtime performance (union) and memory footprint 
-(reverse_cpuid).
+ÔÚ 2022/11/09 21:29, Yuwei Guan Ð´µÀ:
+> The 'bfqd->num_groups_with_pending_reqs' is used when
+> CONFIG_BFQ_GROUP_IOSCHED is enabled, so let the variables and processes
+> take effect when ONFIG_BFQ_GROUP_IOSCHED is enabled.
+> 
+> Cc: Yu Kuai <yukuai3@huawei.com>
+> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+> ---
+>   block/bfq-iosched.c |  5 ++++-
+>   block/bfq-iosched.h |  6 ++++++
+>   block/bfq-wf2q.c    | 10 ++++++----
+>   3 files changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 2381cf220ba2..5a648433fd89 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -6192,8 +6192,9 @@ static void bfq_completed_request(struct bfq_queue *bfqq, struct bfq_data *bfqd)
+>   		 * mechanism).
+>   		 */
+>   		bfqq->budget_timeout = jiffies;
+> -
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
+> +#endif
+>   		bfq_weights_tree_remove(bfqq);
+>   	}
 
-Applied for this case, while the cpuid_0x80000022_eax will be used again
-in the perf core since the other new AMD PMU features are pacing at the door.
+Thanks for the patch, this make sense. However, I prefer to
+declare a empty function if the config is disabled instead of adding
+"#ifdef" everywhere the function is called.
 
+Thanks,
+Kuai
+>   
+> @@ -7051,7 +7052,9 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+>   	bfqd->idle_slice_timer.function = bfq_idle_slice_timer;
+>   
+>   	bfqd->queue_weights_tree = RB_ROOT_CACHED;
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   	bfqd->num_groups_with_pending_reqs = 0;
+> +#endif
+>   
+>   	INIT_LIST_HEAD(&bfqd->active_list);
+>   	INIT_LIST_HEAD(&bfqd->idle_list);
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index 9fa89577322d..d6b9fad28a3b 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -197,8 +197,10 @@ struct bfq_entity {
+>   	/* flag, set to request a weight, ioprio or ioprio_class change  */
+>   	int prio_changed;
+>   
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   	/* flag, set if the entity is counted in groups_with_pending_reqs */
+>   	bool in_groups_with_pending_reqs;
+> +#endif
+>   
+>   	/* last child queue of entity created (for non-leaf entities) */
+>   	struct bfq_queue *last_bfqq_created;
+> @@ -491,6 +493,7 @@ struct bfq_data {
+>   	 */
+>   	struct rb_root_cached queue_weights_tree;
+>   
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   	/*
+>   	 * Number of groups with at least one process that
+>   	 * has at least one request waiting for completion. Note that
+> @@ -538,6 +541,7 @@ struct bfq_data {
+>   	 * with no request waiting for completion.
+>   	 */
+>   	unsigned int num_groups_with_pending_reqs;
+> +#endif
+>   
+>   	/*
+>   	 * Per-class (RT, BE, IDLE) number of bfq_queues containing
+> @@ -1074,8 +1078,10 @@ void bfq_requeue_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>   		      bool expiration);
+>   void bfq_del_bfqq_busy(struct bfq_queue *bfqq, bool expiration);
+>   void bfq_add_bfqq_busy(struct bfq_queue *bfqq);
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq);
+>   void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq);
+> +#endif
+>   
+>   /* --------------- end of interface of B-WF2Q+ ---------------- */
+>   
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index b02b53658ed4..a29187ecdc39 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -1610,16 +1610,15 @@ void bfq_requeue_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>   				    bfqq == bfqd->in_service_queue, expiration);
+>   }
+>   
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   void bfq_add_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>   {
+>   	struct bfq_entity *entity = &bfqq->entity;
+>   
+>   	if (!entity->in_groups_with_pending_reqs) {
+>   		entity->in_groups_with_pending_reqs = true;
+> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   		if (!(bfqq_group(bfqq)->num_queues_with_pending_reqs++))
+>   			bfqq->bfqd->num_groups_with_pending_reqs++;
+> -#endif
+>   	}
+>   }
+>   
+> @@ -1629,12 +1628,11 @@ void bfq_del_bfqq_in_groups_with_pending_reqs(struct bfq_queue *bfqq)
+>   
+>   	if (entity->in_groups_with_pending_reqs) {
+>   		entity->in_groups_with_pending_reqs = false;
+> -#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   		if (!(--bfqq_group(bfqq)->num_queues_with_pending_reqs))
+>   			bfqq->bfqd->num_groups_with_pending_reqs--;
+> -#endif
+>   	}
+>   }
+> +#endif
+>   
+>   /*
+>    * Called when the bfqq no longer has requests pending, remove it from
+> @@ -1659,7 +1657,9 @@ void bfq_del_bfqq_busy(struct bfq_queue *bfqq, bool expiration)
+>   	bfq_deactivate_bfqq(bfqd, bfqq, true, expiration);
+>   
+>   	if (!bfqq->dispatched) {
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   		bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
+> +#endif
+>   		/*
+>   		 * Next function is invoked last, because it causes bfqq to be
+>   		 * freed. DO NOT use bfqq after the next function invocation.
+> @@ -1683,7 +1683,9 @@ void bfq_add_bfqq_busy(struct bfq_queue *bfqq)
+>   	bfqd->busy_queues[bfqq->ioprio_class - 1]++;
+>   
+>   	if (!bfqq->dispatched) {
+> +#ifdef CONFIG_BFQ_GROUP_IOSCHED
+>   		bfq_add_bfqq_in_groups_with_pending_reqs(bfqq);
+> +#endif
+>   		if (bfqq->wr_coeff == 1)
+>   			bfq_weights_tree_add(bfqq);
+>   	}
 > 
->>   struct x86_pmu_capability {
->>   	int		version;
->>   	int		num_counters_gp;
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 75dcf7a72605..34ba845c91b7 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -1094,7 +1094,7 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>   		entry->edx = 0;
->>   		break;
->>   	case 0x80000000:
->> -		entry->eax = min(entry->eax, 0x80000021);
->> +		entry->eax = min(entry->eax, 0x80000022);
->>   		/*
->>   		 * Serializing LFENCE is reported in a multitude of ways, and
->>   		 * NullSegClearsBase is not reported in CPUID on Zen2; help
->> @@ -1203,6 +1203,36 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->>   		if (!static_cpu_has_bug(X86_BUG_NULL_SEG))
->>   			entry->eax |= BIT(6);
->>   		break;
->> +	/* AMD Extended Performance Monitoring and Debug */
->> +	case 0x80000022: {
->> +		union cpuid_0x80000022_eax eax;
->> +		union cpuid_0x80000022_ebx ebx;
->> +
->> +		entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
->> +		if (!enable_pmu)
-> 
-> Shouldn't
-> 
-> 	case 0xa: { /* Architectural Performance Monitoring */
-> 
-> also check enable_pmu instead of X86_FEATURE_ARCH_PERFMON?
 
-Applied as a separate patch, though KVM will have zero-padded kvm_pmu_cap to do
-subsequent assignments when !enable_pmu but that doesn't hurt.
-
-> 
->> +			break;
->> +
->> +		if (kvm_pmu_cap.version > 1) {
->> +			/* AMD PerfMon is only supported up to V2 in the KVM. */
->> +			eax.split.perfmon_v2 = 1;
-> 
-> With a proper CPUID_8000_0022_EAX, this becomes:
-> 
-> 		entry->ecx = entry->edx = 0;
-> 		if (!enable_pmu || !kvm_cpu_cap_has(X86_FEATURE_AMD_PMU_V2)) {
-> 			entry->eax = entry->ebx;
-> 			break;
-> 		}
-> 
-> 		cpuid_entry_override(entry, CPUID_8000_0022_EAX);
-> 
-> 		...
-
-Then in this code block, we will have:
-
-	/* AMD PerfMon is only supported up to V2 in the KVM. */
-	entry->eax |= BIT(0);
-
-to cover AMD Perfmon V3+, any better move ?
-
-> 
-> 		entry->ebx = ebx.full;
