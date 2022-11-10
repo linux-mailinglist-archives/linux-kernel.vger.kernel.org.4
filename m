@@ -2,114 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD2562430F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE876624311
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 14:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiKJNRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 08:17:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S230326AbiKJNSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 08:18:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiKJNRa (ORCPT
+        with ESMTP id S229612AbiKJNS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 08:17:30 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28F731DCC;
-        Thu, 10 Nov 2022 05:17:29 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id k8so2238891wrh.1;
-        Thu, 10 Nov 2022 05:17:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3AuGOL+RtsyjgtlhQ1twOTD3QDsCayIE+ZhoLatVnh8=;
-        b=RV5fqXf/02xSU+of/wRNHSNDfokXIgvuEIDtcu2kKeQXudcWKZP7riIIAQARrusvVh
-         Lkq1O6makjoEtKWWLpH1hPAcpXDsKZB+UvgoZRacC+SDPk0Xil24mAG+ydEyT5jp6XUa
-         mhIR1h+1GF9Ms/9qw9vu/rgLJ7G6JVZxmyncSJUiUnKJ9+jNcscqpvoMhAhilt9hp6YQ
-         ED2C03XV/n45iW+2+TFaMrPtEpbW5pxd3OtVcrc5/4Q/SEEqJdpbI5IuMiHdv8ZuDOBG
-         HdM9FM9X0fkSZOdhZIEM8Vxx4dfH5iVq5dgJd4zL90MLpcDGOWmm55pqsy1VPIyUXZmV
-         Vnpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3AuGOL+RtsyjgtlhQ1twOTD3QDsCayIE+ZhoLatVnh8=;
-        b=cf6hMEG95ER7by9T1o/V7KqhDfkSqIAz9ckk0z7NpMkbls8CRsn46I4uGnRTEIBQNz
-         6qlThvOpfF5mTXaWvt+1ymVm3jgvs5cX98dcDTyXOOkdy6W7FomcLr9u0zHOsdgApszb
-         113y6io+vgJez4VG0NbOBFZKNrtJA/BznIWDGlgeaISs4+Ub13AIh2TW097I+YCub+Tz
-         LrS2UsushgIqOd6cOGBDgSR03HSQzXcYoSHYo5aaiRGVfCdSe3tlT4LmjdV5S533rVOo
-         y7T8eM7jrP0siOsLi25uSvXqmGCae5Gj92eM7t27co8QN8F3Rj7fdQ2YN9p7VT0AHOkW
-         xU6w==
-X-Gm-Message-State: ACrzQf2TG2kYqesfLy0tsdR6nCLhCMuXREH9MtwZXSPdrNSEBw2GFI3d
-        QQy0KTdNtBqrqq+zVqKH1u4=
-X-Google-Smtp-Source: AMsMyM5u8zbufjcwPB7JaqlJrtf4ezpLmiDlsEYr4/cyk2dW/70P5nxD22butpKFtIHBptJAMs4Xxw==
-X-Received: by 2002:a5d:4b11:0:b0:236:4e3c:7720 with SMTP id v17-20020a5d4b11000000b002364e3c7720mr1020738wrq.674.1668086248134;
-        Thu, 10 Nov 2022 05:17:28 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id z3-20020a05600c0a0300b003c83465ccbfsm5916631wmp.35.2022.11.10.05.17.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 05:17:26 -0800 (PST)
-Message-ID: <6def7161-d428-a822-59c4-d6012310379e@gmail.com>
-Date:   Thu, 10 Nov 2022 14:17:26 +0100
+        Thu, 10 Nov 2022 08:18:29 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1663A3;
+        Thu, 10 Nov 2022 05:18:25 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7Mpf1KwYz4f3vfX;
+        Thu, 10 Nov 2022 21:18:18 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAnmdYb+mxjjHEvAQ--.62147S3;
+        Thu, 10 Nov 2022 21:18:21 +0800 (CST)
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up queued
+ tags
+To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Gabriel Krisman Bertazi <krisman@suse.de>, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Liu Song <liusong@linux.alibaba.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221105231055.25953-1-krisman@suse.de>
+ <2a445c5c-fd15-c0bf-8655-2fb5bde3fe67@huaweicloud.com>
+ <20221110111636.ufgyp4tkbzexugk2@quack3>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <210f2c3d-0bc1-0a5f-964b-d75020d3d9fb@huaweicloud.com>
+Date:   Thu, 10 Nov 2022 21:18:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2] arm64: dts: mt7986: fix trng node name
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sam Shih <sam.shih@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20221027151022.5541-1-linux@fw-web.de>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221027151022.5541-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221110111636.ufgyp4tkbzexugk2@quack3>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAnmdYb+mxjjHEvAQ--.62147S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxJrW5Gr1DJF1ktr47Gw45ZFb_yoW8urWxpr
+        WDGF17ZF4DXry7KrWDJw4FvayfZrWxt3s3Gr15JFy8A39Fyr4av3y8Kr1rCr4kZr4kG3W8
+        tF4Yg39xW3Wjya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+在 2022/11/10 19:16, Jan Kara 写道:
+> Hi!
+> 
+> On Thu 10-11-22 17:42:49, Yu Kuai wrote:
+>> 在 2022/11/06 7:10, Gabriel Krisman Bertazi 写道:
+>>> +void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
+>>>    {
+>>> -	struct sbq_wait_state *ws;
+>>> -	unsigned int wake_batch;
+>>> -	int wait_cnt, cur, sub;
+>>> -	bool ret;
+>>> +	unsigned int wake_batch = READ_ONCE(sbq->wake_batch);
+>>> +	struct sbq_wait_state *ws = NULL;
+>>> +	unsigned int wakeups;
+>>> -	if (*nr <= 0)
+>>> -		return false;
+>>> +	if (!atomic_read(&sbq->ws_active))
+>>> +		return;
+>>> -	ws = sbq_wake_ptr(sbq);
+>>> -	if (!ws)
+>>> -		return false;
+>>> +	atomic_add(nr, &sbq->completion_cnt);
+>>> +	wakeups = atomic_read(&sbq->wakeup_cnt);
+>>> -	cur = atomic_read(&ws->wait_cnt);
+>>>    	do {
+>>> -		/*
+>>> -		 * For concurrent callers of this, callers should call this
+>>> -		 * function again to wakeup a new batch on a different 'ws'.
+>>> -		 */
+>>> -		if (cur == 0)
+>>> -			return true;
+>>> -		sub = min(*nr, cur);
+>>> -		wait_cnt = cur - sub;
+>>> -	} while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
+>>> -
+>>> -	/*
+>>> -	 * If we decremented queue without waiters, retry to avoid lost
+>>> -	 * wakeups.
+>>> -	 */
+>>> -	if (wait_cnt > 0)
+>>> -		return !waitqueue_active(&ws->wait);
+>>> +		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
+>>> +			return;
+>>
+>> Should it be considered that completion_cnt overflow and becomes
+>> negtive?
+> 
+> Yes, the counters can (and will) certainly overflow but since we only care
+> about (completion_cnt - wakeups), we should be fine - this number is always
+> sane (and relatively small) and in the kernel we do compile with signed
+> overflows being well defined.
 
-On 27/10/2022 17:10, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Binding requires node name to be rng not trng:
-> 
-> trng@1020f000: $nodename:0: 'trng@1020f000' does not match '^rng@[0-9a-f]+$'
-> 
-> Fixes: 50137c150f5f ("arm64: dts: mediatek: add basic mt7986 support")
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I'm worried about this: for example, the extreme scenaro that there
+is only one tag, currently there are only one infight rq and one thread
+is waiting for tag. When the infight rq complete, if 'completion_cnt'
+overflow to negative, then 'atomic_read(&sbq->completion_cnt) - wakeups
+< wake_batch' will be passed unexpected, then will the thread never be
+woken up if there are no new io issued ?
 
-Applied, thanks
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt7986a.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Kuai
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> index 72e0d9722e07..226648f48df2 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> @@ -168,7 +168,7 @@ sgmiisys1: syscon@10070000 {
->   			#clock-cells = <1>;
->   		};
->   
-> -		trng: trng@1020f000 {
-> +		trng: rng@1020f000 {
->   			compatible = "mediatek,mt7986-rng",
->   				     "mediatek,mt7623-rng";
->   			reg = <0 0x1020f000 0 0x100>;
+> 								Honza
+> 
+
