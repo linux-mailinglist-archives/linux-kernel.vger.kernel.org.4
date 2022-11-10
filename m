@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1EE623D3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731CF623D3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbiKJIRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S232701AbiKJIST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbiKJIRx (ORCPT
+        with ESMTP id S232667AbiKJISQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:17:53 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BECDB1E2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:17:52 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id bj12so2929721ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:17:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0rNxJTluv+aPb6qbERbUxRGQJ+FJ2B1ayQ2etLoV6Q=;
-        b=SjnpQc+sUQAfZXCU/tzpHLZoR+Vru8969ePWS+4wlZ4b/NTlQQgGoJHlUQhQNiULWu
-         G3w/p3fk3EIHYeKedqJbgDFdtGxciVsTrZgvKAiyei9fxI8OxMQgO/OhHonmwC20ls/5
-         P4BNwyGw/x30D/HxGlz7Pja1ErAiKIb+xSaF6OFZgyUFohSfsQjEMgrPZNf6kN9/xPRg
-         sk9/iyk1C0o5kFnQELcSxVEAM93TOiBTW6/iqHI9TceCo7alfLQdbXc3jkqt3jUzoT9b
-         sBKJbkg6Z6D5K/QoaKaDkKHqCJw9w+XKbAb20H0BySyFFxxi5s4pq/1uhzo6IIuzEnIo
-         e1eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s0rNxJTluv+aPb6qbERbUxRGQJ+FJ2B1ayQ2etLoV6Q=;
-        b=R+1JRWkgV/j6UtGUm3QR+CVLSbC8ulWGWt/HbttFeK6murvwDEb1gZajvF0Szzirbg
-         F6TY/eSSBIv31hYHeI762h7kdUBrzos+xjfHsS6jsvlVe3Erh9cP6N6E1x98UVkF4yD3
-         dbjI3dkfMYwprn3GkT8o5WIxSzfF8lOXRnqZZOs5CcFbKjUCGIUQFjTG9bt0HcuO1/Mr
-         Q1Qx60QgN08TKAe2bLWnsYfl6EVypS766gEQK26r4v5Kh2/ifln4WO9Cab4JsgJsZIkt
-         4JTsDTZQ2VHrAeVj1rKKtzaBzwPk4kyKsEcl/LYNsaT+3Fe8eQaU9CB80+qej3kdCpuP
-         ZFTA==
-X-Gm-Message-State: ACrzQf0RWQ8vGdKKH2R9twoFWv+3zeG2oQnw/79/OOoF7XHRnVejc0EH
-        PY8mRO3omb7Cmqynr5VKAFmKdYQshP8hNLTReHbCy9d5kSg=
-X-Google-Smtp-Source: AMsMyM57abG3IX31gqYD6zyZL+Mj4T4rDNK7ab1oXdvxrtb/1s9RZjcKgk+ZPq6eWhOb5IA0UvRuMLN7iE5ATrx4B8U=
-X-Received: by 2002:a17:906:2b55:b0:7ad:934f:abc2 with SMTP id
- b21-20020a1709062b5500b007ad934fabc2mr2266166ejg.690.1668068270958; Thu, 10
- Nov 2022 00:17:50 -0800 (PST)
+        Thu, 10 Nov 2022 03:18:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55701EAC3;
+        Thu, 10 Nov 2022 00:18:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8737CB82089;
+        Thu, 10 Nov 2022 08:18:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB91C433C1;
+        Thu, 10 Nov 2022 08:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668068292;
+        bh=/0karImFZlCAKADNQddiMrZVC++erl/YpQGLmQlnWDo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=reMJtpYwUD51u3FiTUjl8H0n3SarU6+ELwTgtOo14Eijd+6kvA6YIJfhQ36ubygmQ
+         4MDGcEYuxECc/8QwH1Xz0PvlKdlKqsj9eI5IJtqSNpOmqLcKyThXH7V7o6Ok+7PLoR
+         /zLAzVo69WRuDmoqDDuyW0wFjtdsEbpMAqlgF55M=
+Date:   Thu, 10 Nov 2022 09:18:08 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lduncan@suse.com, cleech@redhat.com,
+        michael.christie@oracle.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, rafael@kernel.org
+Subject: Re: [PATCH] drivers: base: transport_class: fix possible memory leak
+Message-ID: <Y2yzwB0IuaVS3AVq@kroah.com>
+References: <20221110034809.17258-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-References: <20221109061122.786-1-zhuyinbo@loongson.cn> <fc52c692-4cbd-e5f9-2e62-d05b5330052a@loongson.cn>
- <CACRpkdbu-gqNBK0=L8pOr2TwYGOv2MUvFxzYiBNfJ5KyJT+A8g@mail.gmail.com> <Y2vA09rQSbCRX+rL@smile.fi.intel.com>
-In-Reply-To: <Y2vA09rQSbCRX+rL@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 10 Nov 2022 09:17:39 +0100
-Message-ID: <CACRpkdb+siKhL+YKBarhRE6_f9LpQR=0y0zNihRLuONwQRkA7w@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver support
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110034809.17258-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,22 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 4:01 PM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
-> On Wed, Nov 09, 2022 at 09:30:03AM +0100, Linus Walleij wrote:
-> > On Wed, Nov 9, 2022 at 7:42 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
-> >
-> > > I had added some changes in these series patch in v8, please help add my
-> > > change and merge it into your tree and sync it to linux-next.
-> >
-> > Yeah no problem, I took out the v7 version and applied this one instead.
->
-> It needs more work.
+On Thu, Nov 10, 2022 at 11:48:09AM +0800, Yang Yingliang wrote:
+> Current some drivers(like iscsi) call transport_register_device()
+> failed, they don't call transport_destroy_device() to release the
+> memory allocated in transport_setup_device(), because they don't
+> know what was done, it should be internal thing to release the
+> resource in register function. So fix this leak by calling destroy
+> function inside register function.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  include/linux/transport_class.h | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/transport_class.h b/include/linux/transport_class.h
+> index 63076fb835e3..f4835250bbfc 100644
+> --- a/include/linux/transport_class.h
+> +++ b/include/linux/transport_class.h
+> @@ -70,8 +70,15 @@ void transport_destroy_device(struct device *);
+>  static inline int
+>  transport_register_device(struct device *dev)
+>  {
+> +	int ret;
+> +
+>  	transport_setup_device(dev);
+> -	return transport_add_device(dev);
+> +	ret = transport_add_device(dev);
+> +	if (ret) {
+> +		transport_destroy_device(dev);
+> +	}
 
-It also failed in linux-next because of missing MODULE_LICENSE()
-so I took it out again, thanks for poking me.
+Please use scripts/checkpatch.pl on your patches before sending them out
+so you don't get grumpy maintainers asking you to use
+scripts/checkpatch.pl on your patches :)
 
-Yinbo: don't lose your spirit, keep at it!
+thanks,
 
-Yours,
-Linus Walleij
+greg k-h
