@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56B7624753
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F327C624755
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiKJQoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S232529AbiKJQoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbiKJQnb (ORCPT
+        with ESMTP id S232384AbiKJQni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:43:31 -0500
+        Thu, 10 Nov 2022 11:43:38 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518064384D;
-        Thu, 10 Nov 2022 08:43:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C91C45090;
+        Thu, 10 Nov 2022 08:43:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D8560C3C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA5261BD9;
+        Thu, 10 Nov 2022 16:43:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2831AC433B5;
         Thu, 10 Nov 2022 16:43:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A19C433C1;
-        Thu, 10 Nov 2022 16:43:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668098589;
-        bh=lSrHt+F2Ze+/0shcXyGqT2iYHkhHUzJS18BpgwZFKfQ=;
+        s=k20201202; t=1668098592;
+        bh=McON9F/ZloZh668lpPUE38B16LOD0pkq/6vZiAe96vI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WXfn05iCKkaThQThCXeKWEliWM8sYgdfDebypjfYb7zVgGuFoYbQC0a9EXewcfKeM
-         u1FwVCtDj7pABLT8E+A9RmwU1fg1dCOtsxDfD/9PVLaCScNel7NS0s/0/wfJeHXF/1
-         KMaM7KmBO4fwh0PCgDYgJCLG+qPhmpBACcfnPEQc4ndGdA29MBi4FYx6t3rDHhV9ba
-         utPqEiLMNvDmlJvS2KIyAZwP8FJzQJofuk1yjJYo7u9NL44ikmQQnLSV7ipciu9EwX
-         GrF7h4ljSCT/DwahFTNF1UfB+o4pblBGXx5RLhD27EzfsAnLsiFrmfkX/NkN2bGCgS
-         3usHAuTFJ3/wg==
+        b=q9PPYY1RDgJiOgY/j1c3gLqlW1NCi+Y11qnDMQHXS+tqtbOuG/Ny56LlRF7+NwNnB
+         9Y/lhcdYdOiv+uiVlkW9HWFhyfxJIlmxwlJmDK+2V8AGbt5TdWRtZXumE1qkOGtsdb
+         tawjy5DCiUrEGcCnVjRUSgyL3zFL7l+yTA8i/wjzG4CAM7H5tJMMi6Mkph182Nyf9w
+         C5zxzTSteoJtEOtbPiPSDC7NCl1TJ/O/ucRBFtii1TWmL0YtDpsXuNeTg5h9InIMyg
+         y//I7SkZSGS9P304qTlJroPkvhPixeHCVtQ5A1JUpZCOX9v5FxNVUsIR0YqHFCtsxI
+         +VfABN/suQgVw==
 From:   Miguel Ojeda <ojeda@kernel.org>
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,10 +39,10 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Morgan Bartlett <mjmouse9999@gmail.com>
-Subject: [PATCH v1 17/28] rust: str: implement several traits for `CStr`
-Date:   Thu, 10 Nov 2022 17:41:29 +0100
-Message-Id: <20221110164152.26136-18-ojeda@kernel.org>
+        patches@lists.linux.dev, Milan Landaverde <milan@mdaverde.com>
+Subject: [PATCH v1 18/28] rust: str: add `CStr` unit tests
+Date:   Thu, 10 Nov 2022 17:41:30 +0100
+Message-Id: <20221110164152.26136-19-ojeda@kernel.org>
 In-Reply-To: <20221110164152.26136-1-ojeda@kernel.org>
 References: <20221110164152.26136-1-ojeda@kernel.org>
 MIME-Version: 1.0
@@ -57,160 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gary Guo <gary@garyguo.net>
+From: Milan Landaverde <milan@mdaverde.com>
 
-Implement `Debug`, `Display`, `Deref` (into `BStr`), `AsRef<BStr>`
-and a set of `Index<...>` traits.
+Add unit tests for `CStr::from_bytes_with_nul()` and
+`CStr::from_bytes_with_nul_unchecked()`.
 
-This makes it `CStr` more convenient to use (and closer to `str`).
+These serve as an example of the first unit tests for Rust code
+(i.e. different from documentation tests).
 
-Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-Co-developed-by: Morgan Bartlett <mjmouse9999@gmail.com>
-Signed-off-by: Morgan Bartlett <mjmouse9999@gmail.com>
-Signed-off-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Milan Landaverde <milan@mdaverde.com>
 [Reworded, adapted for upstream and applied latest changes]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/str.rs | 124 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 123 insertions(+), 1 deletion(-)
+ rust/kernel/str.rs | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index d66565f92f71..11d297c1a61c 100644
+index 11d297c1a61c..3ed685cb5a3c 100644
 --- a/rust/kernel/str.rs
 +++ b/rust/kernel/str.rs
-@@ -2,7 +2,8 @@
- 
- //! String representations.
- 
--use core::fmt;
-+use core::fmt::{self, Write};
-+use core::ops::{self, Deref, Index};
- 
- use crate::{
-     bindings,
-@@ -199,6 +200,127 @@ impl CStr {
+@@ -321,6 +321,35 @@ where
      }
  }
  
-+impl fmt::Display for CStr {
-+    /// Formats printable ASCII characters, escaping the rest.
-+    ///
-+    /// ```
-+    /// # use kernel::c_str;
-+    /// # use kernel::str::CStr;
-+    /// # use kernel::str::CString;
-+    /// let penguin = c_str!("🐧");
-+    /// let s = CString::try_from_fmt(fmt!("{}", penguin)).unwrap();
-+    /// assert_eq!(s.as_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_bytes());
-+    ///
-+    /// let ascii = c_str!("so \"cool\"");
-+    /// let s = CString::try_from_fmt(fmt!("{}", ascii)).unwrap();
-+    /// assert_eq!(s.as_bytes_with_nul(), "so \"cool\"\0".as_bytes());
-+    /// ```
-+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-+        for &c in self.as_bytes() {
-+            if (0x20..0x7f).contains(&c) {
-+                // Printable character.
-+                f.write_char(c as char)?;
-+            } else {
-+                write!(f, "\\x{:02x}", c)?;
-+            }
-+        }
-+        Ok(())
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    #[test]
++    fn test_cstr_to_str() {
++        let good_bytes = b"\xf0\x9f\xa6\x80\0";
++        let checked_cstr = CStr::from_bytes_with_nul(good_bytes).unwrap();
++        let checked_str = checked_cstr.to_str().unwrap();
++        assert_eq!(checked_str, "🦀");
 +    }
-+}
 +
-+impl fmt::Debug for CStr {
-+    /// Formats printable ASCII characters with a double quote on either end, escaping the rest.
-+    ///
-+    /// ```
-+    /// # use kernel::c_str;
-+    /// # use kernel::str::CStr;
-+    /// # use kernel::str::CString;
-+    /// let penguin = c_str!("🐧");
-+    /// let s = CString::try_from_fmt(fmt!("{:?}", penguin)).unwrap();
-+    /// assert_eq!(s.as_bytes_with_nul(), "\"\\xf0\\x9f\\x90\\xa7\"\0".as_bytes());
-+    ///
-+    /// // Embedded double quotes are escaped.
-+    /// let ascii = c_str!("so \"cool\"");
-+    /// let s = CString::try_from_fmt(fmt!("{:?}", ascii)).unwrap();
-+    /// assert_eq!(s.as_bytes_with_nul(), "\"so \\\"cool\\\"\"\0".as_bytes());
-+    /// ```
-+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-+        f.write_str("\"")?;
-+        for &c in self.as_bytes() {
-+            match c {
-+                // Printable characters.
-+                b'\"' => f.write_str("\\\"")?,
-+                0x20..=0x7e => f.write_char(c as char)?,
-+                _ => write!(f, "\\x{:02x}", c)?,
-+            }
-+        }
-+        f.write_str("\"")
++    #[test]
++    #[should_panic]
++    fn test_cstr_to_str_panic() {
++        let bad_bytes = b"\xc3\x28\0";
++        let checked_cstr = CStr::from_bytes_with_nul(bad_bytes).unwrap();
++        checked_cstr.to_str().unwrap();
 +    }
-+}
 +
-+impl AsRef<BStr> for CStr {
-+    #[inline]
-+    fn as_ref(&self) -> &BStr {
-+        self.as_bytes()
-+    }
-+}
-+
-+impl Deref for CStr {
-+    type Target = BStr;
-+
-+    #[inline]
-+    fn deref(&self) -> &Self::Target {
-+        self.as_bytes()
-+    }
-+}
-+
-+impl Index<ops::RangeFrom<usize>> for CStr {
-+    type Output = CStr;
-+
-+    #[inline]
-+    fn index(&self, index: ops::RangeFrom<usize>) -> &Self::Output {
-+        // Delegate bounds checking to slice.
-+        // Assign to _ to mute clippy's unnecessary operation warning.
-+        let _ = &self.as_bytes()[index.start..];
-+        // SAFETY: We just checked the bounds.
-+        unsafe { Self::from_bytes_with_nul_unchecked(&self.0[index.start..]) }
-+    }
-+}
-+
-+impl Index<ops::RangeFull> for CStr {
-+    type Output = CStr;
-+
-+    #[inline]
-+    fn index(&self, _index: ops::RangeFull) -> &Self::Output {
-+        self
-+    }
-+}
-+
-+mod private {
-+    use core::ops;
-+
-+    // Marker trait for index types that can be forward to `BStr`.
-+    pub trait CStrIndex {}
-+
-+    impl CStrIndex for usize {}
-+    impl CStrIndex for ops::Range<usize> {}
-+    impl CStrIndex for ops::RangeInclusive<usize> {}
-+    impl CStrIndex for ops::RangeToInclusive<usize> {}
-+}
-+
-+impl<Idx> Index<Idx> for CStr
-+where
-+    Idx: private::CStrIndex,
-+    BStr: Index<Idx>,
-+{
-+    type Output = <BStr as Index<Idx>>::Output;
-+
-+    #[inline]
-+    fn index(&self, index: Idx) -> &Self::Output {
-+        &self.as_bytes()[index]
++    #[test]
++    fn test_cstr_as_str_unchecked() {
++        let good_bytes = b"\xf0\x9f\x90\xA7\0";
++        let checked_cstr = CStr::from_bytes_with_nul(good_bytes).unwrap();
++        let unchecked_str = unsafe { checked_cstr.as_str_unchecked() };
++        assert_eq!(unchecked_str, "🐧");
 +    }
 +}
 +
