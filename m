@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A152623D76
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D01623D78
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbiKJIZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:25:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S229796AbiKJI0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbiKJIZy (ORCPT
+        with ESMTP id S232977AbiKJI0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:25:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB401EEEE;
-        Thu, 10 Nov 2022 00:25:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E7061DCB;
-        Thu, 10 Nov 2022 08:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF0FC433C1;
-        Thu, 10 Nov 2022 08:25:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668068753;
-        bh=//1Of4vPGHatF3Be5os2F6FZCfBq9FQoStjfPpeDOco=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZBoKSkeQcwCUM/rVT3249YeXYB90uP181eqym7EfGQyFvucZf0M52Rjkwrg2RI99B
-         bDYhVX4juY9eyXNxob0rEUs40DNTSpJGpor8GDhTMHF0kJZA5tEvfMz+8vfxHeq39W
-         2Kvs7Z14ThbnT6Xa/a6VBY1c+zn8m6qQws1JlbQO4uMCyE8nL9ShT9k4MVOy5cFZQo
-         yAaJiYh0S1z1GAlD/hX8Ofl84Z3dZnKs+TWf73pScj6kBdskmPFMm3iO1QYxcc00BC
-         kIVPirPiAxSkHev0lQ/p52YwHpe2Vysbc+aMBu/iuQXbO0k3wXMhvf76xINCpD5t0Q
-         4AyH8yTuhICGw==
-Message-ID: <1126f2ec-10ec-852c-b002-119781b91b58@kernel.org>
-Date:   Thu, 10 Nov 2022 09:25:45 +0100
+        Thu, 10 Nov 2022 03:26:37 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F831F2FA
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:26:35 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id s24so625930ljs.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:26:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rMK33ZLPXtrCd1qS8Z1zIzR9A9wpNvCs34PNuAlIq9I=;
+        b=J3Jf96X9YinMGN6kprvpY1QVKM/cQVd+6TbBSR710D9nrCKiWpDae8yq+FkOqvRltU
+         eFNaeVRV8Jhqr4rGsIdYAsH4UqLnZIQsQJpHZ+R+HJnAejg6Jc+HzZ96/Smen8xAewFk
+         as6h3weDL4NH4n2bxWxX9igdTlOO8420nilYuL0JvoOanUwX31QDHktK/4UiZK6p31iu
+         konDH0lDf+LQNhsv2yMGqGBcGvqeCl2m5alP2SA6Q6fkq1cy9ehqpzdFsv6Das5C7Yml
+         v0HTLLCxKyLSCCbPccF1cGTgSk9GoG+YDJOEphmEVAY4KOdZuKha3DXvVeSxwQ5OdFFQ
+         A8vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMK33ZLPXtrCd1qS8Z1zIzR9A9wpNvCs34PNuAlIq9I=;
+        b=ZNsprnECIiAq0aTcy3EBkr44kzOYUbCv9A8o63VOe4NV2hnYwtYlc2DfetMYEadvS2
+         QTNSR1M35hV86kUASo1X3dLGmOPse8xhVRcthYLglUoYe4/Z+2pjLTRsGWmv+OhjAukt
+         HKmj8n7DmkzUROKfhZjSq+Q+OaL7K6UofOork0D7/Hw03W3M2dEVy1x7Old5OQlWMA7w
+         AFc4Rd0X/dtAmrqa7dJ7vO2qrEuYYWNqL4RSIEB+aCOzvRTd7dOf60m27Gxgwld6Ccii
+         2xuCdpeN8oipbKeeoHAMXPyWZeNMR4gJ8y/k6E01qbJlokTwb9C7gKTLTtKmBsomWpCR
+         kk/w==
+X-Gm-Message-State: ACrzQf2VcPd1SDSIUzOFOYnXE9LhyYp8W3TOvfuDFSu1IwaKal9XcyJq
+        7+IkBRxj6qEINQfqFtoHQHU3rQ==
+X-Google-Smtp-Source: AMsMyM6Zi9zA8J8hiP/x4AOF3HfQ9cMmX90PzpzeqZgNPcM4B7qDonY4UVbrgI+sMOyqwhQvXJULJA==
+X-Received: by 2002:a2e:3017:0:b0:277:81ff:c2c7 with SMTP id w23-20020a2e3017000000b0027781ffc2c7mr6759752ljw.23.1668068793644;
+        Thu, 10 Nov 2022 00:26:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id b23-20020a2e8497000000b00267232d0652sm2552122ljh.46.2022.11.10.00.26.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 00:26:33 -0800 (PST)
+Message-ID: <5ace99aa-41aa-c0d3-fbb5-a23bcf06f6f0@linaro.org>
+Date:   Thu, 10 Nov 2022 09:26:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [Patch v2 1/3] arm: exynos: Add new compatible string for
- Exynos3250 SoC.
-To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
-        'Krzysztof Kozlowski' <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, smitha.t@samsung.com
-References: <CGME20221109034803epcas5p26644fa402ff1837754b61c1a307b2bb8@epcas5p2.samsung.com>
- <20221109035507.69086-1-aakarsh.jain@samsung.com>
- <5741e444-00b3-16f6-d012-f2b77cf8b0b2@linaro.org>
- <001101d8f449$c78f8010$56ae8030$@samsung.com>
+Subject: Re: [PATCH v2] arm64: defconfig: Enable missing configs for
+ mt8183-jacuzzi-juniper
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <001101d8f449$c78f8010$56ae8030$@samsung.com>
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221109195012.1231059-1-nfraprado@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221109195012.1231059-1-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 15:44, Aakarsh Jain wrote:
+On 09/11/2022 20:50, Nícolas F. R. A. Prado wrote:
+> Enable missing configs in the arm64 defconfig to get all devices probing
+> on the mt8183-kukui-jacuzzi-juniper machine.
 > 
+> The devices enabled are: ATH10K SDIO wireless adapter, Elan touchscreen,
+> cr50 TPM, MediaTek SPI controller, JPEG video decoder, ANX7625 DSI/DPI
+> to DP bridge (used for the internal display), MT8183 sound cards, SCP
+> co-processor, MediaTek Global Command Engine (controlled by CMDQ
+> driver), MediaTek Smart Voltage Scaling (SVS) engine, CCI frequency
+> and voltage scaling, AUXADC thermal sensors.
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->> Sent: 09 November 2022 14:31
->> To: Aakarsh Jain <aakarsh.jain@samsung.com>; linux-arm-
->> kernel@lists.infradead.org; linux-media@vger.kernel.org; linux-
->> kernel@vger.kernel.org; devicetree@vger.kernel.org
->> Cc: m.szyprowski@samsung.com; andrzej.hajda@intel.com;
->> mchehab@kernel.org; hverkuil-cisco@xs4all.nl;
->> ezequiel@vanguardiasur.com.ar; jernej.skrabec@gmail.com;
->> benjamin.gaignard@collabora.com; krzysztof.kozlowski+dt@linaro.org;
->> stanimir.varbanov@linaro.org; dillon.minfei@gmail.com;
->> david.plowman@raspberrypi.com; mark.rutland@arm.com;
->> robh+dt@kernel.org; krzk+dt@kernel.org; andi@etezian.org;
->> alim.akhtar@samsung.com; aswani.reddy@samsung.com;
->> pankaj.dubey@samsung.com; smitha.t@samsung.com
->> Subject: Re: [Patch v2 1/3] arm: exynos: Add new compatible string for
->> Exynos3250 SoC.
->>
->> On 09/11/2022 04:55, Aakarsh Jain wrote:
->>> Since,MFC v7 support was added for Exynos5420 and Exynos
->>> 3250 SoC with same compatible string "samsung,mfc-v7".As both SoCs
->>> having different hardware properties and having same compatible string
->>> for both SoCs doesn't seems to be correct.
->>> New compatible is added for Exynos3250 SOC which will differentiate
->>> the node properties for both SoCs which support MFC v7.
->>>
->>> Reviewed-by: Tommaso Merciai
->> <tommaso.merciai@amarulasolutions.com>
->>> Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
->>> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
->>> ---
->>>  Documentation/devicetree/bindings/media/s5p-mfc.txt | 9 +++++----
->>
->> Use subject prefixes matching the subsystem (git log --oneline -- ...).
->>
-> As with recent commits on Documentation/devicetree/bindings/media/s5p-mfc.txt with git log --oneline --  ,  subject prefix doesn't seems to be consistent.
+> All symbols are enabled as modules with the exception of SPI, which is
+> enabled as builtin since on some platforms like mt8195-cherry, the
+> ChromeOS Embedded Controller is connected through SPI and it is
+> responsible for the regulators powering the MMC controller used for the
+> SD card, and thus SPI support is required for booting.
 > 
-> b1394dc151cb media: s5p-mfc: Adding initial support for MFC v10.10
-> 60641e22599a [media] s5p-mfc: Use preallocated block allocator always for MFC v6+
-> 003611334d55 [media] s5p-mfc: Add support for MFC v8 available in Exynos 5433 SoCs
-> 0da658704136 ARM: dts: convert to generic power domain bindings for exynos DT
-> 77634289286a ARM: dts: Update clocks entry in MFC binding documentation
-> 2eae613b95a7 ARM: EXYNOS: Add MFC device tree support
-
-s5p-mfc is not a subsystem.
-
-git log --oneline  -- Documentation/devicetree/bindings/media/
-
-media: dt-bindings: NAME_OF_FILE:
-
-
+> By enabling the support for all of this machine's devices on the
+> defconfig we make it effortless to test the relevant hardware both by
+> developers as well as CI systems like KernelCI.
 > 
-> Closest is ARM: dts.
-
-This is not ARM subsystem and not a DTS file.
-
-> so what is your suggestion on this?
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > 
-> Anyway we are in a process of converting this txt file to yaml . 
-> 
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
