@@ -2,151 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325EC624906
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A619624907
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 19:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiKJSGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 13:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S230083AbiKJSGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 13:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiKJSGC (ORCPT
+        with ESMTP id S229982AbiKJSGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 13:06:02 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB3510D9;
-        Thu, 10 Nov 2022 10:06:01 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id x18so1594812qki.4;
-        Thu, 10 Nov 2022 10:06:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9kpITgtzcbJv0S4BDMGMha2mb2UADEkBMLljR4KrXhE=;
-        b=JI6YIXtaQsQTu4zkmXob1uhD/AxjtEUxDtq4QkvUChkoDwjL3PGr7JZ/FUZEvMCnzd
-         Q/+sNyTYbre5PWofpt1TPHCzPIizEsJ4qOvkpnhHF+QYCdgWsdOKHjGNI51FhKfR0hLU
-         ZoYNzNzdJKMc06psxjQG+rASoG66Yj6qAgBFnXREDIQQXV8LP4+qw/qHju4Bc3LS/7ZR
-         Zb11Q7vcyvKUxvEgqNbRjsoD8vcFUe1Co5AVfHcZY5wR5XrbLTARlkqCG166ewnh1QTr
-         rppjONQwur4r6XC5u1IIYHC3mym1QNU7EEa+/7AY8IFGNIUm/rog4sLkRqSBaSuRLEQd
-         Ad4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9kpITgtzcbJv0S4BDMGMha2mb2UADEkBMLljR4KrXhE=;
-        b=X3zFsEqYonFq6D7QlUZRWOtVQ5wvO5gdldxsuivI/27TLsoR1E50kwa9cSuaAJiIab
-         WtFNh3/qTJ+ceUqze/RXsjNluwQH+wSHg1evSpboxTuNT1groDNQ/Tz98s0iAaZR7XnD
-         F9qgLRQQuGZwstyPnzbBFDpkZ9vWpM08bsL4zrdEz4xtQiLNLY62w+aAdQ0OAKbcg0K5
-         TMjIY0ZR7FnXiwIFrB3hqxdH1R/FFZakPCAEW2BV8wWOvnCT3nrU4AlJxe1il5qjJSft
-         EFcmmcL9xrB8/1MXTHSTm104JjwZxlI4q4QenfqOqxIyPd9gvc+C9BqdnL2ixGQZQ3OW
-         GDTw==
-X-Gm-Message-State: ACrzQf3TuAQDmrj9AEuWOaqplWHuqzpMkuPFI6yZuWaCInOHgsNJ+j2k
-        8QZeQlF4ThebMxhqd9RsBiI=
-X-Google-Smtp-Source: AMsMyM6AMXawkWYHKDXpDq2cj5mNaNO+FK67QR/QjOByGCW5d4vl+8RfPLYmQQ/eo1fo63+MePmMIA==
-X-Received: by 2002:a05:620a:d5e:b0:6f9:2690:d33f with SMTP id o30-20020a05620a0d5e00b006f92690d33fmr48087596qkl.524.1668103560303;
-        Thu, 10 Nov 2022 10:06:00 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05622a188b00b0039a55f78792sm11728699qtc.89.2022.11.10.10.05.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 10:05:59 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 4D92A27C005B;
-        Thu, 10 Nov 2022 13:05:59 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 10 Nov 2022 13:05:59 -0500
-X-ME-Sender: <xms:hj1tY1qnfDmEszRxtGf7tRcLkcafT3ZABJg82w1wOsY6EUCXBqDQHQ>
-    <xme:hj1tY3o5XBOc7s2UDgS7u3AD_AyTw7pYzNvYsqTZSlLHT0nhd-qbV844bG3Vd6TtL
-    eL8Hmy5CugBEzRA7Q>
-X-ME-Received: <xmr:hj1tYyNtwNmjufnLZq7S2O_5T2litUFLkdZB5jrVBsFXSciwu2Wra9easnAj>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeggdduuddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:hj1tYw5WI9SpFYLoQVzfZPDlPH_obhAtJpDpGE8Iwxrf2iEHXg9FcA>
-    <xmx:hj1tY078h8edzXE-iiA7l-ABYg8w-bCHwfibrIx1JO5KmUeMFhwWVg>
-    <xmx:hj1tY4gdY96X7Sp5m7FM-6uCBobu3xqdIm4yDSveRMbR_ZDDOenTtg>
-    <xmx:hz1tYzYWj2AQwFQKbAu8lsJf0As13mlK7avC0VS5TLkyVN8wyAtMZQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Nov 2022 13:05:58 -0500 (EST)
-Date:   Thu, 10 Nov 2022 10:05:57 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v1 01/28] rust: prelude: split re-exports into groups
-Message-ID: <Y209hbMmb4V3eBh6@Boquns-Mac-mini.local>
-References: <20221110164152.26136-1-ojeda@kernel.org>
- <20221110164152.26136-2-ojeda@kernel.org>
+        Thu, 10 Nov 2022 13:06:38 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE60463C0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 10:06:36 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2AAGL0nG029537;
+        Thu, 10 Nov 2022 18:06:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=x9qGOFXLRv+uNhIKAtTPNY7eA9HL4PsoZn3ZoDOZtmc=;
+ b=P7QJDLBUTHyO2UG5q42yrD5YlRcaPfb5XoitdtYpkCHHZr/4ZO7UnOcPgGybUcQqxorv
+ 4S1/bb4AA4FEwxCoG7Ph8sWWw/99qiXrQaMD55kKTz5GutHy1GTD+DhKBkEffZ9bEfqS
+ Y95LyXh3Ah2jxWq7vXdez+pRaDXw8+Bjg9yZeJ2lV3KuPaMSkEfNMokBeZbnXpbAXPi2
+ wytGaztF7SjvlHGloZIyH6y0o/jBzZDiE9k2DhRdi6qeaXVfu17oTBHlsgwhwzTAUjiL
+ IFv27ESBFKCiXAqcNETl3C5aIIS17Ei89IfDvAgzupsbA87zUbVBn2S9qWYtchVcfru3 hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ks4r9kevv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 18:06:26 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AAHxovq004044;
+        Thu, 10 Nov 2022 18:06:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ks4r9keuj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 18:06:26 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AAI6N2M018071;
+        Thu, 10 Nov 2022 18:06:23 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kngncfnex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Nov 2022 18:06:23 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AAI6LTI36569638
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Nov 2022 18:06:21 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 888AEAE04D;
+        Thu, 10 Nov 2022 18:06:21 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 35443AE045;
+        Thu, 10 Nov 2022 18:06:21 +0000 (GMT)
+Received: from pomme.tlslab.ibm.com (unknown [9.101.4.33])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Nov 2022 18:06:21 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Consider the size of the added CPU nodes in the kexec FDT
+Date:   Thu, 10 Nov 2022 19:06:17 +0100
+Message-Id: <20221110180619.15796-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110164152.26136-2-ojeda@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: zoVLFG3OJV6pHXkxWDfLyhBtQByd5MIx
+X-Proofpoint-ORIG-GUID: zc8BYcdGoR9I64qUgwW1AI7Hpx_-H7et
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-10_12,2022-11-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 mlxlogscore=999
+ suspectscore=0 impostorscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211100126
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 05:41:13PM +0100, Miguel Ojeda wrote:
-> Split the prelude re-exports into groups: first the ones coming
-> from the `core` crate, then `alloc`, then our own crates and
-> finally the ones from modules from `kernel` itself (i.e. `super`).
-> 
-> We are doing this manually for the moment, but ideally, long-term,
-> this could be automated via `rustfmt` with options such as
-> `group_imports` and `imports_granularity` (both currently unstable).
-> 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+When adding CPUs to an already big system (test show it seems to start with
+more than 256 CPUs), the kernel is showing error messages when building the
+FDT for the kexec kernel (kdump or kexec).
 
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+It's worth to mention that the kdump kernel is reloaded after a CPU add
+operation.
 
-Regards,
-Boqun
+The messages look like (property's name may vary):
+10175.025675] Unable to add 32-64-bridge property: FDT_ERR_NOSPACE
 
-> ---
->  rust/kernel/prelude.rs | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-> index 495e22250726..f8219285d8c0 100644
-> --- a/rust/kernel/prelude.rs
-> +++ b/rust/kernel/prelude.rs
-> @@ -11,10 +11,14 @@
->  //! use kernel::prelude::*;
->  //! ```
->  
-> -pub use super::{
-> -    error::{Error, Result},
-> -    pr_emerg, pr_info, ThisModule,
-> -};
-> -pub use alloc::{boxed::Box, vec::Vec};
->  pub use core::pin::Pin;
-> +
-> +pub use alloc::{boxed::Box, vec::Vec};
-> +
->  pub use macros::module;
-> +
-> +pub use super::{pr_emerg, pr_info};
-> +
-> +pub use super::error::{Error, Result};
-> +
-> +pub use super::ThisModule;
-> -- 
-> 2.38.1
-> 
+This happens because the size of the FDT is computed based on the size of
+the FDT the kernel received at boot time. There is additional space added
+in kexec_extra_fdt_size_ppc64() for the added memory but nothing is done
+for the added CPUs.
+
+This patch adds this feature so adding new CPUs will increase the size of
+the FDT for the kexec kernel.
+
+To compute the additional size required, the number of CPU nodes of the
+initial FDT (the one the kernel receive at boot time) are recorded. When a
+kexec FDT is created, the number of CPU nodes in the current FDT is used to
+compute the additional size.
+
+The first patch of this series is creating a variable provided by the boot
+code when parsing the initial FDT at boot time.
+The second patch is computing the required additional space.
+
+This has been tested on a PowerVM LPAR running with than 256 CPUs in shared
+mode, adding 320 CPUs to this LPAR.
+
+Changes in v2:
+ - Fix build issue, moving definition in prom.h
+
+Laurent Dufour (2):
+  powerpc: export the CPU node count
+  powerpc: Take in account addition CPU node when building kexec FDT
+
+ arch/powerpc/include/asm/prom.h   |  1 +
+ arch/powerpc/kernel/prom.c        |  3 ++
+ arch/powerpc/kexec/file_load_64.c | 60 ++++++++++++++++++++++++++++++-
+ 3 files changed, 63 insertions(+), 1 deletion(-)
+
+-- 
+2.38.1
+
