@@ -2,65 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B754D623D7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C091623D84
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 09:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbiKJI2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 03:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
+        id S232571AbiKJIbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 03:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiKJI2h (ORCPT
+        with ESMTP id S229960AbiKJIbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 03:28:37 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0984A10C4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:28:36 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ot2vK-0004K0-BD; Thu, 10 Nov 2022 09:28:34 +0100
-Message-ID: <3f1721d6-e5d9-8861-4e3c-802a711e71da@leemhuis.info>
-Date:   Thu, 10 Nov 2022 09:28:33 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: BUG: kworker + systemd-udevd memory leaks found in 6.1.0-rc4
-Content-Language: en-US, de-DE
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Thu, 10 Nov 2022 03:31:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150DB10579
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 00:31:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A623761DC1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:31:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09339C433D6;
+        Thu, 10 Nov 2022 08:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668069108;
+        bh=FTZ37ZZEVEs+TiNITnQUDC2fgV3ZHp8BzIxq1ELh2Uc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ceqBPQ1z1DzdFP5DNoGCe197llXqC8iHcWxDXm5kKrVJHHNgKYk/VbDhmOV8AHLQo
+         Goj3OPPmLxnsX0V1is0UeWkl4QYy3Vtnxypkyz4gvd1kP2fJyfJDbj/F4+dflIuJoW
+         9aqjSVvzS6+/l1WAK27LfoUBS004ybKHpIC3FbOXgncMH+0aZTYcU4EQQTbrGe/jvr
+         smjz0e179+TdsF1uxZxdRqXfpbzHY7qkEU3ih2YQESunBqu5Ut+dgvF7jy6RVi+q4i
+         1LamVj6L4Qg/ZNsw0zNDYlU9RWAADlugkUEjkXaQRgbLVQZi5rHUt1SuFgk/qh01Ja
+         Qxd1X3CwqyCAg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ot2yP-0056PZ-Uk;
+        Thu, 10 Nov 2022 08:31:46 +0000
+Date:   Thu, 10 Nov 2022 08:31:21 +0000
+Message-ID: <87k043us6e.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Ilya Dikariev <dikarill@b-tu.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Samuel Holland <samuel@sholland.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Tejun Heo <tj@kernel.org>,
-        Florian Mickler <florian@mickler.org>,
-        systemd-devel@lists.freedesktop.org
-References: <0d9c3f6c-3948-d5d1-bcc1-baf31141beaa@alu.unizg.hr>
- <a6b76ce0-0fb3-4434-cc3e-ab6f39fb1cf9@alu.unizg.hr>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <a6b76ce0-0fb3-4434-cc3e-ab6f39fb1cf9@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668068916;f006bba5;
-X-HE-SMSGID: 1ot2vK-0004K0-BD
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] drivers/clocksource/arm_arch_timer: Tighten Allwinner arch timer workaround
+In-Reply-To: <20221109221049.4bf3c5bb@rosh>
+References: <20221109221049.4bf3c5bb@rosh>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: dikarill@b-tu.de, mark.rutland@arm.com, daniel.lezcano@linaro.org, tglx@linutronix.de, samuel@sholland.org, wens@csie.org, jernej.skrabec@gmail.com, linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.11.22 05:57, Mirsad Goran Todorovac wrote:
-> On 04. 11. 2022. 11:40, Mirsad Goran Todorovac wrote:
+On Wed, 09 Nov 2022 21:10:49 +0000,
+Ilya Dikariev <dikarill@b-tu.de> wrote:
+> 
+> As we know, the Allwinner A64 SoC has a buggy RCU time unit. The
 
-> This bug is confirmed in 6.1-rc4, among the "thermald" and "systemd-dev"
-> kernel memory leaks, potentially exposing race conditions or other more
-> serious bug.
+What is RCU?
 
-Maybe, but that sadly is also true for a lot of other known issues, for
-example those in this quite long list:
-https://syzkaller.appspot.com/upstream#open
+> workaround named UNKNOWN1 was not sufficient to cover some more buggy
+> bunches of this SoC. This workaround diminish the mask to 8 bits instead
+> of 9.
+> 
+> An example run of timer test tool https://github.com/smaeul/timer-tools
+> on PinePhone device (owns the A64 SoC) gives following result on a non
+> patched kernel (cut off):
+> 
+> Running parallel counter test...
+> 0: Failed after 5507 reads (0.003578 s)
+> 0: 0x0000000c8272cbf1 -> 0x0000000c8272ccff -> 0x0000000c8272cc0e (     0.011 ms)
+> 2: Failed after 14518 reads (0.009248 s)
+> 2: 0x0000000c827513f1 -> 0x0000000c82751300 -> 0x0000000c8275140e (    -0.010 ms)
+> 3: Failed after 14112 reads (0.008730 s)
+> 3: 0x0000000c8274f3f2 -> 0x0000000c8274f300 -> 0x0000000c8274f40d (    -0.010 ms)
+> 1: Failed after 12030 reads (0.008409 s)
+> 1: 0x0000000c8274abf1 -> 0x0000000c8274acff -> 0x0000000c8274ac0f (     0.011 ms)
+> 1: 0x0000000c827759f2 -> 0x0000000c82775aff -> 0x0000000c82775a0e (     0.011 ms)
+> 0: 0x0000000c8277a9f2 -> 0x0000000c8277aaff -> 0x0000000c8277aa0d (     0.011 ms)
+> 2: 0x0000000c8278f3f1 -> 0x0000000c8278f300 -> 0x0000000c8278f40e (    -0.010 ms)
+> 0: 0x0000000c82785ff2 -> 0x0000000c82784300 -> 0x0000000c8278600d (    -0.309 ms)
+> 
+> After the proposed patch applied the test runs
+> correctly (~2 hours of testing with a tool above without fails)
 
-It would help if you could pinpoint the problem, then we know who should
-look into this. You CCed me and the regression list, so I assume it's a
-regression. Hence: Could you try to bisect it?
+2 hours seems like an incredibly small amount of time given that the
+existing workaround was believed to be correct. Run it continuously
+for a couple of weeks on several different machines with varying
+workloads and less us know the outcome.
 
-Ciao, Thorsten
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
