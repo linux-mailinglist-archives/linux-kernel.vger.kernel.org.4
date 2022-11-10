@@ -2,125 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB20624894
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DED624896
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiKJRsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
+        id S230410AbiKJRs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKJRsd (ORCPT
+        with ESMTP id S230438AbiKJRsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:48:33 -0500
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5C4B7E0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:48:31 -0800 (PST)
-Date:   Thu, 10 Nov 2022 17:48:16 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skothe.de;
-        s=protonmail; t=1668102508; x=1668361708;
-        bh=jREI8kgsv+Ac+JI7HxX8UFFBUU8DxYtXvRHvFerAf7o=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=H5jzGUa4HQyLu6QpNeuoqlXwRtZhPI6Op0YxmjDEp0m0QXC+CUuZ2BSTFVc9GMTCH
-         vL+p0tKEmArLC9N08ioCGN4/xqGjdf8g0Fy8qyfNcCbcRZ75LetG31jX8MaINqntfw
-         awav3RCKcm/hmZVp3XENnqHNkIm3LAeMD0aLB/OZADNBDA2NSzCdP4LzC7Z5XZkCO8
-         FSEjnszKgMaY+h5LKlSOiwoy6K6CXzOebdWVoT5y+xAMVpt36IHsdVLtLgyBHXWrJU
-         meF6vRQl+yJVILkYezM5hxecW7ITpaTCvo6PbVbp6NNmQdegECl4n7p07WcGDNo276
-         aDKgEscg8EX7w==
-To:     Saravana Kannan <saravanak@google.com>
-From:   Steffen Kothe <steffen.kothe@skothe.de>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts: dev-needs.sh: Enforce bash usage
-Message-ID: <Y205W3kavB5tIDK3@p50>
-In-Reply-To: <CAGETcx9fx3TcgeD+pMyp+LuGfd=hOo5_Weeii2W1Mbd1T2Ua0Q@mail.gmail.com>
-References: <20221109170341.36785-1-steffen.kothe@skothe.de> <CAGETcx9fx3TcgeD+pMyp+LuGfd=hOo5_Weeii2W1Mbd1T2Ua0Q@mail.gmail.com>
-Feedback-ID: 55345914:user:proton
+        Thu, 10 Nov 2022 12:48:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F746303D1;
+        Thu, 10 Nov 2022 09:48:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 597A9B82299;
+        Thu, 10 Nov 2022 17:48:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA84CC433D6;
+        Thu, 10 Nov 2022 17:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668102526;
+        bh=LaCkfzvC3SDe5+BjeA2YYKfWouKye1Ldokf1V6KFsvc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vMXuhXFsxOxiFAzcVPY2ER5SCCLpFVBmjwpaJccYJ+GDNlZFyxLkVv2tY3iHAimwu
+         uLWMAub7O1Qv6bozsCz/aX1fmbhj7EQD0i0bAZuJKypW3nn3HdaslwotsRBpDsihHu
+         xCki/xwxAHG6rGU3NuPf8TJpxPSpYpIkzLNYlP5E=
+Date:   Thu, 10 Nov 2022 18:48:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, isdn@linux-pingi.de, kuba@kernel.org,
+        andrii@kernel.org, axboe@kernel.dk, davem@davemloft.net,
+        netdev@vger.kernel.org, zou_wei@huawei.com
+Subject: Re: [PATCH] mISDN: hfcpci: Fix use-after-free bug in hfcpci_softirq
+Message-ID: <Y205e/GpYNUVm9Bv@kroah.com>
+References: <20221009063731.22733-1-duoming@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221009063731.22733-1-duoming@zju.edu.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Wed, Nov 09, 2022 at 02:58:15PM -0800 schrieb Saravana Kannan:
-> On Wed, Nov 9, 2022 at 9:04 AM Steffen Kothe <steffen.kothe@skothe.de> wr=
-ote:
-> >
-> > Calling the script from a system which does not invoke bash
-> > by default causes a return with a syntax error like:
-> >
-> >         ./dev-needs.sh: 6: Syntax error: "(" unexpected
-> >
-> > /bin/sh invokes on most distributions a symbolic link to a
-> > default shell like dash (Debian) or bash (Ubuntu).
-> >
-> > Since the script depends on bash syntax, enforce the same by
-> > default to prevent syntax errors caused by wrong shell type usage.
->
-> I wrote this so that it can run on an Android target that runs toybox.
-> Sadly toybox doesn't like have /bin/bash. This will break my use case.
-> So I'll have to Nak this.
+On Sun, Oct 09, 2022 at 02:37:31PM +0800, Duoming Zhou wrote:
+> The function hfcpci_softirq() is a timer handler. If it
+> is running, the timer_pending() will return 0 and the
+> del_timer_sync() in HFC_cleanup() will not be executed.
+> As a result, the use-after-free bug will happen. The
+> process is shown below:
+> 
+>     (cleanup routine)          |        (timer handler)
+> HFC_cleanup()                  | hfcpci_softirq()
+>  if (timer_pending(&hfc_tl))   |
+>    del_timer_sync()            |
+>  ...                           | ...
+>  pci_unregister_driver(hc)     |
+>   driver_unregister            |  driver_for_each_device
+>    bus_remove_driver           |   _hfcpci_softirq
+>     driver_detach              |   ...
+>      put_device(dev) //[1]FREE |
+>                                |    dev_get_drvdata(dev) //[2]USE
+> 
+> The device is deallocated is position [1] and used in
+> position [2].
+> 
+> Fix by removing the "timer_pending" check in HFC_cleanup(),
+> which makes sure that the hfcpci_softirq() have finished
+> before the resource is deallocated.
+> 
+> Fixes: 009fc857c5f6 ("mISDN: fix possible use-after-free in HFC_cleanup()")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+>  drivers/isdn/hardware/mISDN/hfcpci.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/isdn/hardware/mISDN/hfcpci.c b/drivers/isdn/hardware/mISDN/hfcpci.c
+> index af17459c1a5..e964a8dd851 100644
+> --- a/drivers/isdn/hardware/mISDN/hfcpci.c
+> +++ b/drivers/isdn/hardware/mISDN/hfcpci.c
+> @@ -2345,8 +2345,7 @@ HFC_init(void)
+>  static void __exit
+>  HFC_cleanup(void)
+>  {
+> -	if (timer_pending(&hfc_tl))
+> -		del_timer_sync(&hfc_tl);
+> +	del_timer_sync(&hfc_tl);
 
-Ok, I see.
+How was this tested?  Do you have this hardware?
 
-> I'm open to other ideas though as I'd like to this to work in as many
-> cases as possible. Should we just add a wrapper that has /bin/bash and
-> then sources this file?
+thanks,
 
-I mean, we could leave at least a warning on top above the first
-function via a simple echo.
-
-Sth. like:
-
-=09echo "Warning: $0 is only tested for following shell variants
-=09      [toybox, bash]. Other shells might be not following the
-=09      specific syntax of this script."
-
-=09echo "Shell is: $(readlink /bin/sh)"
-
-I would prevent to add another wrapper to it, because its fairly easy
-to cp this file to a target. An embedded system with a pure POSIX compliant
-shell will never be compatible to this kind of syntax.
-
-What do you think about a more describing approach of the error instead
-of handling it with some weird logic and wrapping?
-
-Cheers,
-=09skothe
-
-> Also looks like multiple #! lines aren't supported by bash, so we
-> can't add multiple lines either.
->
-> -Saravana
->
-> >
-> > Signed-off-by: Steffen Kothe <steffen.kothe@skothe.de>
-> > ---
-> >  scripts/dev-needs.sh | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/dev-needs.sh b/scripts/dev-needs.sh
-> > index 454cc304fb448..46537859727bc 100755
-> > --- a/scripts/dev-needs.sh
-> > +++ b/scripts/dev-needs.sh
-> > @@ -1,4 +1,4 @@
-> > -#! /bin/sh
-> > +#! /bin/bash
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  # Copyright (c) 2020, Google LLC. All rights reserved.
-> >  # Author: Saravana Kannan <saravanak@google.com>
-> > --
-> > 2.30.2
-> >
-> >
-
---
-Cheers,
-=09Steffen
-
+greg k-h
