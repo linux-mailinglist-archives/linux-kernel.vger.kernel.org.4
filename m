@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAFA6241CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 12:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393616241D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 13:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiKJL4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 06:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
+        id S230414AbiKJMAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 07:00:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiKJL4G (ORCPT
+        with ESMTP id S230150AbiKJMAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 06:56:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C8B5D6B6;
-        Thu, 10 Nov 2022 03:56:06 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AABS89A025979;
-        Thu, 10 Nov 2022 11:55:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9nC1aGGRYutdDQBBOYtClzZFvLDZHcMMkdK1y/i78r4=;
- b=PNBlN5JhnEX9cY2yDfp7w1Www7g7XtL/Ce6nUeDU4juHDwyvJLphy4yauoRhL9y+zlAk
- bDqxy6PW0BG4I0pecgzqzLVJ0FLa4wB+Gxxs5zHHbg/ttlK1NTK3rLEhV4/XJ7WjhVAg
- 0UdiOeNhMS78yLo2tUilv9VdMwhhv1F+EH8qZ3pyXv/YXu/p+nFn/7uCxmKF6NlCpuON
- Lh+S//eL1YOz8G2aPzAr91t5t9VNJJAmrabHQv0T3UPcl+9Pc6Pnu+GEzull28CJ40lp
- lg5Wih0+PWj9lOP421IjJb40owkLRpAgP9vC5vK/5+glRCJ5z29Z4oaxPZpr2Ceqrm3+ ZQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3krw7n0gb6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 11:55:55 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AABtsZ6015842
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 11:55:54 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 10 Nov
- 2022 03:55:51 -0800
-Message-ID: <93735187-801f-8cc0-787c-3522800a079c@quicinc.com>
-Date:   Thu, 10 Nov 2022 17:25:49 +0530
+        Thu, 10 Nov 2022 07:00:35 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDAF21E0F;
+        Thu, 10 Nov 2022 04:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668081633; x=1699617633;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MXjGcSIK04ScLohpdYFk9DXdIqTJwmlzr90IomobVJ4=;
+  b=mK84qeq0hs/hmQbjjt7IWEwlOtGMvlpr4F/xQ7hdhwDn0Jdb7BUCasVG
+   ZkQV/eB1DS5acBoLjM8bjC9FCAgGaQmS6VzOM3S8GrpKwe8I8e8gvAX1Z
+   1plu74LaomWdSmnR18ck5L4roPEWLsbeD5W7M2vSyGDaVHoD6QkE5J7ek
+   imwrq8hCWM/WRp6qeloSf3mKqIpKnhkoeFBn7Eq9YQP12AT95eX6frQqO
+   FfDKrayLmwWO3K4yQT3r/0b8Cu32GKg9Fbk0NsfidRcDCUv92c89tw9Ob
+   BZRLbylUsE2dPCtAg6AtIOQlbBrRI/dqW1Un4WA3RVAYz4f0FKNzyeaCX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="373410977"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="373410977"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 04:00:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="588152059"
+X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
+   d="scan'208";a="588152059"
+Received: from jvpendej-mobl2.gar.corp.intel.com ([10.214.150.188])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 04:00:28 -0800
+Message-ID: <1d8ad923707b1c6347d830088a410c31b794968c.camel@intel.com>
+Subject: Re: [PATCH v2 0/5] rtc: rtc-cmos: Assorted ACPI-related cleanups
+ and fixes
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Date:   Thu, 10 Nov 2022 20:00:25 +0800
+In-Reply-To: <5640233.DvuYhMxLoT@kreacher>
+References: <5640233.DvuYhMxLoT@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] i2c: imx: use devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     <ye.xingchen@zte.com.cn>, <linux@rempel-privat.de>
-CC:     <kernel@pengutronix.de>, <shawnguo@kernel.org>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <chi.minghao@zte.com.cn>
-References: <202211101723428058432@zte.com.cn>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <202211101723428058432@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -Kd5uQzVROutHVUMuO9ZUClvUjwEMeV5
-X-Proofpoint-ORIG-GUID: -Kd5uQzVROutHVUMuO9ZUClvUjwEMeV5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-10_08,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 mlxlogscore=758 malwarescore=0 spamscore=0 adultscore=0
- impostorscore=0 phishscore=0 clxscore=1011 mlxscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211100087
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/10/2022 2:53 PM, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Wed, 2022-11-09 at 13:05 +0100, Rafael J. Wysocki wrote:
+> Hi All,
 > 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+> This is a v2 of the series previously posted as
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->   drivers/i2c/busses/i2c-imx.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+> https://lore.kernel.org/linux-acpi/2276401.ElGaqSPkdT@kreacher/
 > 
-> diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
-> index 3082183bd66a..1ce0cf7a323f 100644
-> --- a/drivers/i2c/busses/i2c-imx.c
-> +++ b/drivers/i2c/busses/i2c-imx.c
-> @@ -1449,8 +1449,7 @@ static int i2c_imx_probe(struct platform_device *pdev)
->   	if (irq < 0)
->   		return irq;
+> The first three patches in the series have not changed since then (I
+> have
+> considered moving the last patch, which is a fix, to the front, but
+> that turns
+> out to be a bit cumbersome and not really worth the effort).
 > 
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	base = devm_ioremap_resource(&pdev->dev, res);
-> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
->   	if (IS_ERR(base))
->   		return PTR_ERR(base);
+> This series of patches does some assorted ACPI-related cleanups to
+> the CMOS RTC
+> driver:
+> - redundant static variable is dropped,
+> - code duplication is reduced,
+> - code is relocated so as to drop a few unnecessary forward
+> declarations of
+>   functions,
+> - functions are renamed to avoid confusion,
+> and fixes up an issue in the driver removal path.
+> 
+> 
 > 
 
-LGTM.
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Reviewed-by: Zhang Rui <rui.zhang@intel.com>
 
-_Mukesh
+And I have tested the patch series on a platform with both
+use_acpi_alarm parameter set and cleared, the ACPI RTC fixed event
+works as expected, for both runtime and suspend wakeups.
+
+So
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+
+thanks,
+rui
+
+
