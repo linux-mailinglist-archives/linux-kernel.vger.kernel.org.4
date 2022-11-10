@@ -2,137 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA4C62474F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD912624774
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 17:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbiKJQn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 11:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
+        id S230471AbiKJQtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 11:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiKJQnR (ORCPT
+        with ESMTP id S232599AbiKJQsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 11:43:17 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED9745EEE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:42:58 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so5788307pjh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 08:42:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EfgsLc2+G9HPdaL8aH3Xzd8lv8JeS+eH5Ba4xV4l/yA=;
-        b=IruV/cOGCppTZMecE2WVY8zukl+kcYVeoo7vFWW6yGTBj+JNzqw7SwdygU11Ap5tXp
-         +IWICnrL7OpPlowtcizxkZ8u7fNIf7VOdlhb+UCVVdiNOgc1eLngTeYpENadc4W7k2ql
-         lwVFIi2Zm+49ixbK5qXD6pVFvTfaAaG7iPD9c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EfgsLc2+G9HPdaL8aH3Xzd8lv8JeS+eH5Ba4xV4l/yA=;
-        b=sj1dg41k2uI6Tw8HhB1138gHaFWVHFVfp8wZyRkL759mCHSfy8sTw1t6eGl5M6c8Dx
-         YP5R7J2tLJTprEiPn529sw4vog6w2+pYC9Slo0Qo373QtxLK1ggSi4+Q+yFpyqC6pKW5
-         YV6mD9E/noEupZcGKHI9ShW0uszXC25CdIfDa0quwBWtvH11sTDgGa2wvMgw8wttri4r
-         Z6T6f3RTbgTuCcDxI5YTbVJmhNCSAHEhNuYghiIokdSczRrnICR4WyIS22KjPW3oRw0d
-         p2f1TjKE/uXKZztFbIyRCamYmcquUlhS15yvho6wIyAmqXMA1J5H5Ct4gegZfWdJc31z
-         S7xQ==
-X-Gm-Message-State: ACrzQf1hwJuO8nWhmdm0BueMLWkXUuMc50GLBkySWYBouvPKJ+ZNgnwT
-        kVxL8yYzUvBLv2IW856Sbd+D3Q==
-X-Google-Smtp-Source: AMsMyM4zFp+Wrf9N4R4CuG0pbWGCwDSSClCq2oRdgHwJJKI1w+NXOW7FDTxl0KXE16WpLHC9sb8z8g==
-X-Received: by 2002:a17:902:82c2:b0:188:5581:c8de with SMTP id u2-20020a17090282c200b001885581c8demr1293917plz.140.1668098578376;
-        Thu, 10 Nov 2022 08:42:58 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t4-20020a1709027fc400b00186f0f59d1esm11373906plb.192.2022.11.10.08.42.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 08:42:58 -0800 (PST)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Thu, 10 Nov 2022 08:42:57 -0800
-To:     Ben Skeggs <bskeggs@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        Lyude Paul <lyude@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Jani Nikula <jani.nikula@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Coverity: nv50_hdmi_enable(): OVERRUN
-Message-ID: <202211100842.076585A@keescook>
+        Thu, 10 Nov 2022 11:48:45 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8451DD6F;
+        Thu, 10 Nov 2022 08:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668098874; x=1699634874;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sLTSISWzUr5ww4UVTAKQbU1w81C51YBDl84qwQHSgtI=;
+  b=GTJ5zzZVjI+YpVEU0Mjl7tKrdV5XH/5FWRPtRwePYYKvI07NWtU5bkTh
+   7hdtcOSqrBbqlFKLR6TyRmr5/U5PTZZ3QVUCOgPQvllGneGhrr53nwVNz
+   3mepKocRHqOq2JblspEse8wy39e92rgC9SSSg1xzpZLiYjZGW3275yiJd
+   /aaa2LfuQxNjItHjlRS/2R+fa3sMrv8AyZl1w+P0qaOG/p1ARMf4QqG3e
+   rlM9lFeiJaXPDfX04WG5zQD4NQQbxMCBafYp0jZb2AJKQJe4Rd47iYl2C
+   EFwIU6w2QHIl5WUqCG0wGSBFMSIa1nY1JvJrpdzSGEeUaaESLk4Zu+By7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="310078421"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="310078421"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 08:46:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="882418907"
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="882418907"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Nov 2022 08:46:38 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AAGkbeC023491;
+        Thu, 10 Nov 2022 16:46:37 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: [PATCH v2 RESEND 1/1] net: fec: add xdp and page pool statistics
+Date:   Thu, 10 Nov 2022 17:43:21 +0100
+Message-Id: <20221110164321.3534977-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <PAXPR04MB91853A6A1DDDBB06F33C975E89019@PAXPR04MB9185.eurprd04.prod.outlook.com>
+References: <20221109023147.242904-1-shenwei.wang@nxp.com> <4349bc93a5f2130a95305287141fde369245f921.camel@redhat.com> <PAXPR04MB91853A6A1DDDBB06F33C975E89019@PAXPR04MB9185.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: Shenwei Wang <shenwei.wang@nxp.com>
+Date: Thu, 10 Nov 2022 13:29:56 +0000
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20221110 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+> > -----Original Message-----
+> > From: Paolo Abeni <pabeni@redhat.com>
+> > Sent: Thursday, November 10, 2022 5:54 AM
+> > To: Shenwei Wang <shenwei.wang@nxp.com>; David S. Miller
+> > <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
+> > Kicinski <kuba@kernel.org>
+> > >       case ETH_SS_STATS:
+> > > -             for (i = 0; i < ARRAY_SIZE(fec_stats); i++)
+> > > -                     memcpy(data + i * ETH_GSTRING_LEN,
+> > > -                             fec_stats[i].name, ETH_GSTRING_LEN);
+> > > +             for (i = 0; i < ARRAY_SIZE(fec_stats); i++) {
+> > > +                     memcpy(data, fec_stats[i].name, ETH_GSTRING_LEN);
+> > > +                     data += ETH_GSTRING_LEN;
+> > > +             }
+> > > +             for (i = 0; i < ARRAY_SIZE(fec_xdp_stat_strs); i++) {
+> > > +                     memcpy(data, fec_xdp_stat_strs[i], ETH_GSTRING_LEN);
+> > > +                     data += ETH_GSTRING_LEN;
+> >
+> > The above triggers a warning:
+> >
+> > In function 'fortify_memcpy_chk',
+> >     inlined from 'fec_enet_get_strings'
+> > at ../drivers/net/ethernet/freescale/fec_main.c:2788:4:
+> > ../include/linux/fortify-string.h:413:25: warning: call to '__read_overflow2_field'
+> > declared with attribute warning: detected read beyond size of field (2nd
+> > parameter); maybe use struct_group()? [-Wattribute-warning]
+> >   413 |                         __read_overflow2_field(q_size_field, size);
+> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > I think you can address it changing fec_xdp_stat_strs definition to:
+> >
+> > static const char fec_xdp_stat_strs[XDP_STATS_TOTAL][ETH_GSTRING_LEN] =
+> 
+> That does a problem. How about just change the memcpy to strncpy?
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+Don't use a static char array, it would consume more memory than the
+current code. Just replace memcpy()s with strscpy().
 
-  Wed Nov 9 08:22:02 2022 +1000
-    f530bc60a30b ("drm/nouveau/disp: move HDMI config into acquire + infoframe methods")
+Why u32 for the stats tho? It will overflow sooner or later. "To
+keep it simple and compatible" you can use u64_stats API :)
 
-Coverity reported the following:
+> 
+> Regards,
+> Shenwei
+> 
+> > { // ...
+> >
+> > Cheers,
+> >
+> > Paolo
 
-*** CID 1527272:    (OVERRUN)
-drivers/gpu/drm/nouveau/dispnv50/disp.c:801 in nv50_hdmi_enable()
-795
-796     		size = hdmi_infoframe_pack(&infoframe, args.data, 17);
-797     	} else {
-798     		size = 0;
-799     	}
-800
-vvv     CID 1527272:    (OVERRUN)
-vvv     Overrunning struct type nvif_outp_infoframe_v0 of 8 bytes by passing it to a function which accesses it at byte offset 21 using argument "size" (which evaluates to 14).
-801     	nvif_outp_infoframe(&nv_encoder->outp, NVIF_OUTP_INFOFRAME_V0_AVI, &args.infoframe, size);
-802
-803     	/* Vendor InfoFrame. */
-804     	if (!drm_hdmi_vendor_infoframe_from_display_mode(&infoframe.vendor.hdmi,
-805     							 &nv_connector->base, mode))
-806     		size = hdmi_infoframe_pack(&infoframe, args.data, 17);
-drivers/gpu/drm/nouveau/dispnv50/disp.c:810 in nv50_hdmi_enable()
-804     	if (!drm_hdmi_vendor_infoframe_from_display_mode(&infoframe.vendor.hdmi,
-805     							 &nv_connector->base, mode))
-806     		size = hdmi_infoframe_pack(&infoframe, args.data, 17);
-807     	else
-808     		size = 0;
-809
-vvv     CID 1527272:    (OVERRUN)
-vvv     Overrunning struct type nvif_outp_infoframe_v0 of 8 bytes by passing it to a function which accesses it at byte offset 21 using argument "size" (which evaluates to 14).
-810     	nvif_outp_infoframe(&nv_encoder->outp, NVIF_OUTP_INFOFRAME_V0_VSI, &args.infoframe, size);
-811
-812     	nv50_audio_enable(encoder, nv_crtc, nv_connector, state, mode);
-813     }
-814
-815     /******************************************************************************
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527272 ("OVERRUN")
-Fixes: f530bc60a30b ("drm/nouveau/disp: move HDMI config into acquire + infoframe methods")
-
-It looks like this should address &args not &args.infoframe, if the
-intention is to include the "data" member.
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+Thanks,
+Olek
