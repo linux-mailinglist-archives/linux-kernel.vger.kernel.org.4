@@ -2,99 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B97624DB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78CC624DC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 23:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbiKJWo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 17:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S231250AbiKJWrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 17:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKJWoZ (ORCPT
+        with ESMTP id S231932AbiKJWqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 17:44:25 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30024509E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:44:24 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q71so2932931pgq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:44:24 -0800 (PST)
+        Thu, 10 Nov 2022 17:46:49 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7655C5EFAB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:46:47 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id g62so3319435pfb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 14:46:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LuSKrl+/DV5Kj4welJmVDK8XOamSFjC5ydfR3wdWhcU=;
-        b=nesWlNg6phzKngSp4sCx7/sF3vGW7h63W0IURGzR1Xjy4EQPpEMaC4d9lchWGizDU4
-         OxAMm/ZBTwTwTKz1Rki4j815EMVa0uvOSDKXtK68D8YsJ4OyuUqbanVTNQoipTMHCAhw
-         vVANyA7GzNRWY8iqZ5xK4K0Cfz5JjcHVb4VWxfAg7MvsJ4sqgoqSOUqZ+7i/dAS2jukX
-         s/XJe4C5rGw1sJTk1oR+q/1EDU69yN06QixBRhFp9DWs4bYlsh1pDYdHbEi7YZdCPv3M
-         n3HnqjqHPMcylqrlg7MkWqCFrZhpA7TAf4Om3Q1dLwQUMfdMMeOYT6Cwbjerl7H1n4lV
-         oLgA==
+        bh=+HQDpPym5LjtymWxLp9cUJ2V2mQCjf8ma1sxDeE3Trs=;
+        b=4OVUeR2TK6kWC2W5gQrF/BlbpmApyFxOIyfASWXy/mRnhwY6WACExnL/RULtvMHmhe
+         C8fGSRkbItiDjQ8hVxrOJAUjyIV9xkxtMqjVzhxKALVXd78L2XmkjRJaSQ6/KaXgd2in
+         RrQMuyzZhqK16eo7uIywZbvcPNos8I658qoFY3EbmR+soPcjKYd9aO/IvGemRrwPd9hz
+         ckiSEIZEWJQSkF4mAimRjRnVoOIvtnHn1YNGa5Seemn+U4SdpDYGdPQqqEI4JFopF8BA
+         F2QwkNRxECouBslnr+PswF65YjcizTLqA6wgcr+rzHC1V9MsicfDO37acZq+CpwEH9wz
+         EBLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LuSKrl+/DV5Kj4welJmVDK8XOamSFjC5ydfR3wdWhcU=;
-        b=dpSLkJbPPsBiL5zgwBMN/f07LqL3AjvNn6Bd+dkuutjaxBJnG6/07oDoacAS0diPJi
-         MruCIlgzJLs6/Vdbso41AYX8M5Yp9sVbRcF646cU2gZ00/Y1OvvEvoRQMv7GcDuLrQQl
-         uA7cBMEW/aUR7xPcxQIVDLO8LG93cycHDcDqlRQvGCSc4BYDTI/3nWN84+HU8qUCuxOP
-         rHbA+Y0jN9c8EQciS1441ANqP/M/EGxLmnMrzwbzpXoxCOnv5IZy+4KrokZ6WOZsDbu9
-         fwUAoRJdWyLo6s+85D620vCxlVsBvm6Es8/NlnL8kpPRtofjYqK0M6OFSNQ8J9zrAdEz
-         aoMA==
-X-Gm-Message-State: ACrzQf3xfiYeyxYLSVQ0ToRmxYacpJMyU6spsf/ViFjvlDan2ugVB4BO
-        1Tm89OPw+ZP+iAewkXDPvV6ErjeN+gI=
-X-Google-Smtp-Source: AMsMyM5ZlSfxNkT1wVmc6LzBzQEpADhgMFuyx8d2PgN/uZc+KwMjCEbWZw0xeb1TP2N0EJQB632OWA==
-X-Received: by 2002:a62:d401:0:b0:56b:676e:1815 with SMTP id a1-20020a62d401000000b0056b676e1815mr3880392pfh.66.1668120264246;
-        Thu, 10 Nov 2022 14:44:24 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:8c0b:3260:c81c:119d])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b00180daa59314sm198221pls.125.2022.11.10.14.44.23
+        bh=+HQDpPym5LjtymWxLp9cUJ2V2mQCjf8ma1sxDeE3Trs=;
+        b=Shm9hI8dtEquWi7OxzpTmgYsfHL+5bbzbWDG3hPQCyF1MAaEJaoHbYGl9VB5RKYgKC
+         Ccw9RBdNCH5gwPJCN3raOMCjjfBUTg8TcU6xEcXW+J7MTx9QerVt5nbZWHhunAuvc/yJ
+         Q0akmLOZXL3ciHDQ3e86ZU9PZH1sYSy3nlAQcjmHckYN1RhTGxEAVPKfNwCWoNVrAR9e
+         4KkkJOjgyWLyTCnr3Xkkvv0GKzq8SgjpLXvph3EJFOEDCJnQ1bGSaNk4LcU+MCqnzZfe
+         yPJUIvhTqUgxmedAKcYAxD55/zEb/hugS014g/3w+4B4gVLIJFcKRK4hWcbCgJ0FZd+p
+         3dbg==
+X-Gm-Message-State: ACrzQf34tiC06jBHuHUFBgIhmwiu7qs7tIj/V1Ts7MkQF+0oV+BQibf1
+        p3NfPW+xnqtSIDDvroTP+Nk6vk9DAIp+fQ==
+X-Google-Smtp-Source: AMsMyM6wdg+8KRdSAaiwO14Vxuxd+vx0l/jvivNeeD4ncPgJBLu1u77/UQZ2qL00jLHDi1FK6zWo0w==
+X-Received: by 2002:a63:6d49:0:b0:43c:4eef:bac7 with SMTP id i70-20020a636d49000000b0043c4eefbac7mr3654048pgc.356.1668120406609;
+        Thu, 10 Nov 2022 14:46:46 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id r10-20020a17090a454a00b00214247ac1acsm3571235pjm.12.2022.11.10.14.46.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 14:44:23 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 10 Nov 2022 14:44:22 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
-Message-ID: <Y21+xp52OQYi/qjQ@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
+        Thu, 10 Nov 2022 14:46:46 -0800 (PST)
+In-Reply-To: <20221031182943.2453-1-jszhang@kernel.org>
+References: <20221031182943.2453-1-jszhang@kernel.org>
+Subject: Re: [PATCH] riscv: vdso: fix build with llvm
+Message-Id: <166812034329.20280.6345239431217056884.b4-ty@rivosinc.com>
+Date:   Thu, 10 Nov 2022 14:45:43 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031054108.541190-1-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-36ce3
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Albert Ou <aou@eecs.berkeley.edu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 02:40:59PM +0900, Sergey Senozhatsky wrote:
-> 	Hello,
+On Tue, 1 Nov 2022 02:29:43 +0800, Jisheng Zhang wrote:
+> Even after commit 89fd4a1df829 ("riscv: jump_label: mark arguments as
+> const to satisfy asm constraints"), building with CC_OPTIMIZE_FOR_SIZE
+> + LLVM=1 can reproduce below build error:
 > 
-> 	Some use-cases and/or data patterns may benefit from
-> larger zspages. Currently the limit on the number of physical
-> pages that are linked into a zspage is hardcoded to 4. Higher
-> limit changes key characteristics of a number of the size
-> classes, improving compactness of the pool and redusing the
-> amount of memory zsmalloc pool uses. More on this in 0002
-> commit message.
+>   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+> In file included from <built-in>:4:
+> In file included from lib/vdso/gettimeofday.c:5:
+> In file included from include/vdso/datapage.h:17:
+> In file included from
+> include/vdso/processor.h:10:
+> In file included from
+> arch/riscv/include/asm/vdso/processor.h:7:
+> In file included from
+> include/linux/jump_label.h:112:
+> arch/riscv/include/asm/jump_label.h:42:3: error:
+> invalid operand fo
+> r inline asm constraint 'i'
+>                 "       .option push                            \n\t"
+>                 ^
+> 1 error generated.
+> 
+> [...]
 
-Hi Sergey,
+Applied, thanks!
 
-I think the idea that break of fixed subpages in zspage is
-really good start to optimize further. However, I am worry
-about introducing per-pool config this stage. How about
-to introduce just one golden value for the zspage size?
-order-3 or 4 in Kconfig with keeping default 2?
+[1/1] riscv: vdso: fix build with llvm
+      https://git.kernel.org/palmer/c/50f4dd657a0f
 
-And then we make more efforts to have auto tune based on
-the wasted memory and the number of size classes on the
-fly. A good thing to be able to achieve is we have indirect
-table(handle <-> zpage) so we could move the object anytime
-so I think we could do better way in the end.
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
