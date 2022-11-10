@@ -2,91 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CE8623A09
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3B2623A14
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 03:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbiKJCuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Nov 2022 21:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S232594AbiKJCyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Nov 2022 21:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbiKJCuR (ORCPT
+        with ESMTP id S231769AbiKJCyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Nov 2022 21:50:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B422EF48;
-        Wed,  9 Nov 2022 18:50:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D951761D4C;
-        Thu, 10 Nov 2022 02:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F187C433D7;
-        Thu, 10 Nov 2022 02:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668048614;
-        bh=ahZ3E/50V7Zw58bHNzS10THCBASQ+JFWuXNa3ZbHRiQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KNg8mpGgIUrSKPH5DN4hvfcxCO7a4wvx5cJ8tdQSJ8mk2i9KYduEkI/LhBuBupTwT
-         YWaX5w+Yh02xDRph2bc50RN5HfCN10ElRJysUvRImGNGx0IctaI28MgTD+HBFC1s1q
-         5TSd+GmoH6sPLTqVlTmd7v5POVzyXLFCBKJACoY03dhZoFBcquqUqdBMbMNkhhBIk0
-         MBgzXJMRq9vvPAFPPOcyYrNx5LYlmiSKJCdDieYyU3Q5ByQgnZCk35A0V0+sa9MdkS
-         7OFOEaapq857w/zinZuffsyZ+AeId6C8QO9LvWuTA7A+JRqZpl2ULq51kSGVXn7xMP
-         6FqqzOatx7lmQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1FC53C395F6;
-        Thu, 10 Nov 2022 02:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 9 Nov 2022 21:54:13 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837BD23BD8;
+        Wed,  9 Nov 2022 18:54:12 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N75yF3pdSz15MS4;
+        Thu, 10 Nov 2022 10:53:57 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 10:54:10 +0800
+Subject: Re: [PATCH] wifi: ath10k: Fix resource leak in ath10k_pci_init()
+From:   xiujianfeng <xiujianfeng@huawei.com>
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>, <kvalo@kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rmani@qti.qualcomm.com>
+CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221108133858.53308-1-xiujianfeng@huawei.com>
+ <4e81efea-23f1-e52c-b0b4-abf445ed5f15@quicinc.com>
+ <cd3194f8-3cad-ce12-602f-8651e99365ab@huawei.com>
+Message-ID: <fc6076c9-d61d-f404-61c1-d8df01ab93b9@huawei.com>
+Date:   Thu, 10 Nov 2022 10:54:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
+In-Reply-To: <cd3194f8-3cad-ce12-602f-8651e99365ab@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/1] stmmac: intel: Update PCH PTP clock rate from 200MHz
- to 204.8MHz
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166804861412.6959.10905430097116561347.git-patchwork-notify@kernel.org>
-Date:   Thu, 10 Nov 2022 02:50:14 +0000
-References: <20221108020811.12919-1-yi.fang.gan@intel.com>
-In-Reply-To: <20221108020811.12919-1-yi.fang.gan@intel.com>
-To:     Gan Yi Fang <yi.fang.gan@intel.com>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        hong.aun.looi@intel.com, weifeng.voon@intel.com,
-        pei.lee.ling@intel.com, tee.min.tan@intel.com,
-        muhammad.husaini.zulkifli@intel.com, michael.wei.hong.sit@intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  7 Nov 2022 21:08:11 -0500 you wrote:
-> From: "Tan, Tee Min" <tee.min.tan@intel.com>
+在 2022/11/10 9:54, xiujianfeng 写道:
+> Hi,
 > 
-> Current Intel platform has an output of ~976ms interval
-> when probed on 1 Pulse-per-Second(PPS) hardware pin.
+> 在 2022/11/10 0:34, Jeff Johnson 写道:
+>> On 11/8/2022 5:38 AM, Xiu Jianfeng wrote:
+>>> When ath10k_ahb_init() fails, it does not unregister ath10k_pci_driver,
+>>> which will cause a resource leak issue, call pci_unregister_driver() in
+>>> the error path to fix this issue.
+>>>
+>>> Fixes: 0b523ced9a3c ("ath10k: add basic skeleton to support ahb")
+>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>> ---
+>>>   drivers/net/wireless/ath/ath10k/pci.c | 4 +++-
+>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/net/wireless/ath/ath10k/pci.c 
+>>> b/drivers/net/wireless/ath/ath10k/pci.c
+>>> index e56c6a6b1379..22f8f8b20762 100644
+>>> --- a/drivers/net/wireless/ath/ath10k/pci.c
+>>> +++ b/drivers/net/wireless/ath/ath10k/pci.c
+>>> @@ -3800,8 +3800,10 @@ static int __init ath10k_pci_init(void)
+>>>                  ret);
+>>>       ret = ath10k_ahb_init();
+>>> -    if (ret)
+>>> +    if (ret) {
+>>>           printk(KERN_ERR "ahb init failed: %d\n", ret);
+>>> +        pci_unregister_driver(&ath10k_pci_driver);
+>>> +    }
+>>>       return ret;
+>>>   }
+>>
+>> imo neither the existing code nor the modified code is correct.
+>>
+>> the driver is attempting to register to support two different buses.
+>>
+>> if either of these is successful then ath10k_pci_init() should return 
+>> 0 so that hardware attached to the successful bus can be probed and 
+>> supported.
+>>
+>> only if both of these are unsuccessful should ath10k_pci_init() return 
+>> an errno.
+>>
+>> so I suggest
+>>      int ret1, ret2;
+>>
+>>      ret1 = pci_register_driver(&ath10k_pci_driver);
+>>      if (ret1)
+>>          printk(KERN_ERR "failed to register ath10k pci driver: %d\n",
+>>                 ret1);
+>>
+>>      ret2 = ath10k_ahb_init();
+>>      if (ret2)
+>>          printk(KERN_ERR "ahb init failed: %d\n", ret2);
+>>
+>>      if (ret1 && ret2)
+>>          return ret1;
+>>
+>>      /* registered to at least one bus */
+>>      return 0;
+>> }
 > 
-> The correct PTP clock frequency for PCH GbE should be 204.8MHz
-> instead of 200MHz. PSE GbE PTP clock rate remains at 200MHz.
+> Thanks, this is better. however, if pci_register_driver() returns 0
+> while ath10k_ahb_init() returns error, it's better to unregister the
+> first bus, here is my another proposal:
 > 
-> [...]
+>         int ret;
+> 
+>         ret = pci_register_driver(&ath10k_pci_driver);
+>         if (ret) {
+>                 printk(KERN_ERR "failed to register ath10k pci driver: 
+> %d\n",
+>                        ret);
+>                 return ret;
+>         }
+> 
+>         ret = ath10k_ahb_init();
+>         if (ret) {
+>                 printk(KERN_ERR "ahb init failed: %d\n", ret);
+>                 pci_unregister_driver(&ath10k_pci_driver);
+>                 return ret;
+>         }
+> 
+>         return 0;
+> 
+> If you agree, I will send v2 with this.
+> 
 
-Here is the summary with links:
-  - [net,1/1] stmmac: intel: Update PCH PTP clock rate from 200MHz to 204.8MHz
-    https://git.kernel.org/netdev/net/c/dcea1a8107c0
+Sorry, I misunderstood, I will send v2 according to your suggestion.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>>
+>> .
+> 
+> .
