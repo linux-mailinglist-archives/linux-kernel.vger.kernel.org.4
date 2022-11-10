@@ -2,71 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21CD62481B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C58D624826
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Nov 2022 18:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiKJRSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 12:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        id S231899AbiKJRTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 12:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbiKJRSi (ORCPT
+        with ESMTP id S231516AbiKJRSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 12:18:38 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10DFA4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:18:33 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id gw22so2087717pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 09:18:33 -0800 (PST)
+        Thu, 10 Nov 2022 12:18:50 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCF6659E;
+        Thu, 10 Nov 2022 09:18:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668100729; x=1699636729;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=jTgPsTpWEp2q8xuowsIAN0qL7D17f/OzFZJ6FJloswQ=;
+  b=qETrGZfsv0KGKQYfAdiutoZhLIWV6koseEGCc3Wl4l5I4svEt29ut/dJ
+   Xdjt6bpTcfmCJnVzDjk6cbZx8XS+0W+YH91DbrVpBxAATLqpGvRf+0eAZ
+   1UGyATTfF1BHVwlIoBbCMOzU04JUKP+LPoO5mn65+PscmXaa604xZOt62
+   zpRmap919XOXFRLYqfyVbII9rcYT3UzU72tGIiXgpgAXxpeRLqLYwwdXt
+   VoZOBoBbYKkkGMeHUEKhR3tOBc9K+jAnJYjc3mqPrL2CRoQBOUiTkRq+L
+   PM/mC99tq8bgYC2amFSWaCBSJ6SE4Q1SGS9Hwthl1gKWz34aO6qYiJb0F
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,154,1665471600"; 
+   d="scan'208";a="188473920"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Nov 2022 10:18:48 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 10 Nov 2022 10:18:48 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Thu, 10 Nov 2022 10:18:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RVK88LcmTncwIljPr/qm3BcB4nWJaAQXaeYftjDKp6DF1FolyaEIXl3nQqW8a3HAuGPxGfziDnwwqiEIcIfVZpq9gVaJoJ6/UpgP0Tg1cc81qn+yIFHTyRIVI5rNNUDWaV1siA2kLqILc0g2jvhZeJcqz6bJ6GyzCtrDdZasJP6bM23kD4IIOjTy9SyMGBMVtPRQ4IOb67EzF0FW/T8OcWAjHCzMtVSpaeXVyPlaJmWZm8yqcOwq4ESceU4AwINVxK0I5hue6d8ovTecK2p+IiW5mI342cBGvqq2hW1L3IAjWPHcZQmqYgt9zY4akRiZA1eqrjvVIHH4jEfgFDZnnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YKOy+JCnVGc6c9GhibF31x+dwHQMZrXATwLiwYXu4RQ=;
+ b=J7Gl1QPSL84IW3Ln6qfQ6QB1MAiejqofTNOzKDXdvBtSFfymiKP8kfC1mWwR+GlP3soXBkEuE6gX0j3G5xjE6zQO+Eo4ZsiQbfxkwQcVAnueFb09ugeJfIr2MttR3RR26hj5BtVDILlCgPMIB4KllnOao1BYYRqoL0sjGxMS52ZAAQedVblXRKtfMY9w3rkZFUI2TJ4SP1z86m7tH6gbq+h32p1iDYyjTgotrb7EuZrGqtx7dLrPt7w0M3DypkzpgGz89NWxfkq8UpOpAwk7UXrR8pw3UJyBUnJGn7reok0q24omGuhUIbVYkDg7meLzYk7QwlrV4Jv/G9F2cNR/mQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6+p59de6PsfQhghSr17SHi1vccXQnsphuAQf+FEG0HQ=;
-        b=Je1AWEgls8fX5fRsqqjYq3EJyLyKV7MZf9N1T/aVClFk3POIrv7COzBf4FD4SvUbaP
-         LgJaDOWNYXSDnktSJmsWkSVj6P7JqWVj7LF2N+1U14bXHgd3p+dvL13CNSdD893hgjKD
-         KQ+2SoOBhw6bBhFDkRa0HfyH5zVpnvKnr4EztAJZlVvTCUM54LG/KK+sZVgaXBj2wDY7
-         hFU6/DI/xCNfQGkvqJXN6leNlFpiQFhrZCTkMjHP27GLQ/eNIBn/FlcFC0msGuxVAv2r
-         1+4J+/xM3iuc4acHtoFrpL+P+y3rKIRpP8/05PVHb79EJCpBdlkVnF7qNHg9yso/U3Ll
-         DFFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6+p59de6PsfQhghSr17SHi1vccXQnsphuAQf+FEG0HQ=;
-        b=RkqnNrGT84oF3rtLtYRd0k3woIOPiigqhVELcNFDzrsp+dJApNUkMBnmfMECoixixE
-         GGN5/G08rWt16e6PfQIbSzsCqQyUCGjQtmDkUVQIYwgUtZqu67gvI0tjgLuaPZnOAD9x
-         wJWNlu6H3G/GcApIDRtf1wxS1q3Mk8QtpVwjQ4uaJzo8XLOPRf2nBof+HckWHLvvtPdk
-         WeNMam7QVMnjSwrM7Jrr0Qyo8BZaAEPUiU/9Kyj5EEIEFvp7zZSAQmvCtkuKJa0O5t8M
-         qdB08nEAiOb70GjoF8tHCXXXdR5qMPd6I7VNoVEUInOp42/EpRuRlXH7D54vsFkFsi9s
-         3dfA==
-X-Gm-Message-State: ACrzQf2ciKy2M9zcbR0f8/w9EJhgW8ZomKwBjowH4eecFNv4oJcM4YEd
-        465hYNep+PbQ0g5y32tC51bCrLrAG9fvQA==
-X-Google-Smtp-Source: AMsMyM6ymq/lxyuKszNR0m9UH9h7DZ+Sebq+bjrStgM3F+5tXEmSshH7ePAkNpgR5kzXnE0dJWyDVw==
-X-Received: by 2002:a17:902:e74a:b0:187:2039:5754 with SMTP id p10-20020a170902e74a00b0018720395754mr57814067plf.103.1668100713125;
-        Thu, 10 Nov 2022 09:18:33 -0800 (PST)
-Received: from localhost (fwdproxy-prn-021.fbsv.net. [2a03:2880:ff:15::face:b00c])
-        by smtp.gmail.com with ESMTPSA id z22-20020a630a56000000b0043c732e1536sm9427574pgk.45.2022.11.10.09.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 09:18:32 -0800 (PST)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     minchan@kernel.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ngupta@vflare.org,
-        senozhatsky@chromium.org, akpm@linux-foundation.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v3 3/5] zsmalloc: Add a LRU to zs_pool to keep track of zspages in LRU order
-Date:   Thu, 10 Nov 2022 09:18:31 -0800
-Message-Id: <20221110171831.19176-1-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <Y2wh4b3oMaknNqGP@google.com>
-References: <Y2wh4b3oMaknNqGP@google.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YKOy+JCnVGc6c9GhibF31x+dwHQMZrXATwLiwYXu4RQ=;
+ b=lh0lb+t1KqjQOgD0YbdBPkU1IM06akQUXQpBVi2Jlex4xRykbPokEADT+mpDbeE8Ca3dmXF/KckQzqaQI2C97IDHSq2gv0QTjmFFcQvIgIipDRrRNAqGVhKzqAu5eSYQLFwBByQX1nBz9zaj2fZtgwNmjivi1L/XA5RrhE0Nwy0=
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com (2603:10b6:408:81::24)
+ by SA1PR11MB5828.namprd11.prod.outlook.com (2603:10b6:806:237::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.12; Thu, 10 Nov
+ 2022 17:18:46 +0000
+Received: from BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::fecf:d286:328b:747f]) by BN8PR11MB3668.namprd11.prod.outlook.com
+ ([fe80::fecf:d286:328b:747f%7]) with mapi id 15.20.5791.027; Thu, 10 Nov 2022
+ 17:18:46 +0000
+From:   <Kumaravel.Thiagarajan@microchip.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <jirislaby@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <ilpo.jarvinen@linux.intel.com>, <macro@orcam.me.uk>,
+        <jay.dolan@accesio.com>, <cang1@live.co.uk>,
+        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
+        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
+        <biju.das.jz@bp.renesas.com>, <geert+renesas@glider.be>,
+        <phil.edworthy@renesas.com>, <lukas@wunner.de>,
+        <UNGLinuxDriver@microchip.com>
+Subject: RE: [PATCH v3 tty-next 1/3] 8250: microchip: pci1xxxx: Add driver for
+ quad-uart support.
+Thread-Topic: [PATCH v3 tty-next 1/3] 8250: microchip: pci1xxxx: Add driver
+ for quad-uart support.
+Thread-Index: AQHY8qbOKjSYZX8pv0a09I/nHE/OKK42gJIAgAHWaXA=
+Date:   Thu, 10 Nov 2022 17:18:46 +0000
+Message-ID: <BN8PR11MB366816A34B16BE29A5FD7912E9019@BN8PR11MB3668.namprd11.prod.outlook.com>
+References: <20221107124517.1364484-1-kumaravel.thiagarajan@microchip.com>
+ <20221107124517.1364484-2-kumaravel.thiagarajan@microchip.com>
+ <Y2uWftt5b2AWyTtX@kroah.com>
+In-Reply-To: <Y2uWftt5b2AWyTtX@kroah.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN8PR11MB3668:EE_|SA1PR11MB5828:EE_
+x-ms-office365-filtering-correlation-id: 9120063b-7269-4108-e4c5-08dac33fa03b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZUCcPcOioUOqWEpKPXWO98R+Vo97cScfFZqpoXs4+O+0krDJRfD4daiCTdNmda2rl3uwqCVopMBgadUriNaSEkQnKaMC8fIpkFjgmkNA0BdnX9po03qcCW5sXn0ZQsqdeeZgdOwfqJTG2obiezMUrvfXUoRUs5Iq9txQbiAi4P2zXKpi0r54cILj21VNediSbtrPq6Avtk2nJipd1kEGriofcaNIOrLeaw0sitxsjnErsaFliGKnXOkLAKAnUwt1zDnNMfmd+TOXBeEjvkZ8HueisBeyJDSuhtDBJvtODeucPsCGoY6e0cCJNMLVGw4Vg3pac1RKcAa2ZwraTpbS4GRBqFbgz5i2CCO2MzyDJWoUVuXkOKH3/cXQYWyqxoDrDZ8k6S2AXJA9TAEw29IkCg2zUmVtWqENnHWCaf/CGiMS+BO03KakTijKvARk41EkPhO2W8jtp2mJ/RFiPKHnYihy80E46GeeMRcWKwwuWOzBQjW3I9otbv2xPQ53UQ7xJuIKTlYZtvWbivxX5IAxxfFkC3JfaC85uqEJCLa2zI3uEOEfXfiGhqKFjECoxPylJ+/8dw4xrV9sA0OlvXdHHMpl9xxad/4kFepc0+G1rGfy2GuL8xwDPEPOtF6YxDbZifHod8OZdvHWu1UZliszXSPLe0wOCxYTq6Xp9cigL0H5wuJjkTwRBtyQVyuOY1PBLEfVWhkoRo7CQ1vSDerE/0yOQ6nQWMdQP9GNLvWH1uvgEMyoTyNI2glRFNip3YagFUA66JuhmId0/4cR7UHeGOb8yKv1et5nMR0JWtFyR5h7ZFmWf98gYUUJDdWkwRUnjdUhoII8L9MJ3RDhdM8Q74b0wF0Q68Y4KMsFkCnigWc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR11MB3668.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(366004)(396003)(346002)(376002)(451199015)(71200400001)(478600001)(107886003)(6916009)(38070700005)(54906003)(316002)(55016003)(7696005)(4326008)(38100700002)(64756008)(66476007)(66556008)(66446008)(8676002)(53546011)(76116006)(66946007)(5660300002)(26005)(122000001)(86362001)(186003)(9686003)(8936002)(7416002)(52536014)(6506007)(83380400001)(33656002)(41300700001)(2906002)(32563001)(473944003)(414714003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?J4mvkjwaulUrLhnyKu7PW/ep2RrsYXPNGV5UudQwpY28ldse8otgJ2YNHPU1?=
+ =?us-ascii?Q?nfRKCyhkBsEAhouyMV4IxpnuAuTyCTCouOrspRZmCDKBaSffPstv9f+o3wOz?=
+ =?us-ascii?Q?jguqwHbd0wH9uSUxAXhbhC0C+hjgPOHMDhiYc0ygdKTHJbshZX2PNzRu4qPd?=
+ =?us-ascii?Q?hOI6BolH95sanHNxeEoi5F/3jYZbr6oS3Vsi7dfV6F3uGJt17VLMK8kB+U5S?=
+ =?us-ascii?Q?Nkp5iJQZtdzpqBUYmoCsBOEKk+ssCgTFdZVCzdqDcukbsQ6t0ZESKkA86f6k?=
+ =?us-ascii?Q?3oYqKkHCTwrfKT7YGGR3DW3o6DxzMBRtbcQGYQL0cCpXB0FS2zD8bQ2a/KkO?=
+ =?us-ascii?Q?9+kECygrnODShBSfYQojHpwSUuUSv7GX17RtnZJ9ZP6digvigJtl5tM0/80C?=
+ =?us-ascii?Q?XxPmOqha3Py2oBF/yJ+SHSliMxvMH7rgMi0S6GSw4IUKoZZgui737bMeMa3w?=
+ =?us-ascii?Q?eII9M3lk+ldMjBy497ebwWvKTY3NFFAsXjUv5oRK3+lPqdAO5f3axFXFFGit?=
+ =?us-ascii?Q?6ivmrbcPUe5b7VbOiQM8DWL5sDGp/QLWrV9Io3VcUy/Qefh54l7CaDB6dOAV?=
+ =?us-ascii?Q?37jNpQEdSZ4i/E3tnzuKg70c07eA9oLJ27oUlpE3kg9jUPWzeSmheVMXoAIG?=
+ =?us-ascii?Q?PaQXiy8jb9sHgTShBS61KuVPBMwZRdTs2Q62mv17iX+QJkp7WKVytylGrf2u?=
+ =?us-ascii?Q?0XkOvJrnbyqvf0XkYz2tZXyq2+TXVohvZ9J7n7OLscALG/KbSN8cQkmcmA6N?=
+ =?us-ascii?Q?rwlAvQHspUTPHTtiJG+w1yCaCSiycbExP454iUEe8tFPlXlW83sCH4pYppr+?=
+ =?us-ascii?Q?nBBiWsGlOlVYywpCHaPURFBQNTI9PJm8mR4lMWm1z8EUT7kfYPLWDrd520Ef?=
+ =?us-ascii?Q?RzYTKfX8RBk1+eSh8/vGAcLgK1Q03m2sCAMAlAJe2IJCg+aCZKFZBNeNWPdJ?=
+ =?us-ascii?Q?AbcSr6WoGG6pqLTtLmddBZMzQXooT7GzTydQ+JE5rar411v+qcttYLFhJV3m?=
+ =?us-ascii?Q?NINk4+4Km7reToXP020iarpoi3joMzsPx/CihbmH/fn8UPlyAPB2LOv9ipUx?=
+ =?us-ascii?Q?alnKxgAKaajYHaAt6ya3A1ALK2S6ENpH29nP0qHF1hKMRYno4w60QbML98sq?=
+ =?us-ascii?Q?gPrJFxG/u7qEQ+JRPNsnBzuMyUOFs7DhXdqcNH7u7Puk8cbM/HNhfWEL5Ny4?=
+ =?us-ascii?Q?LV9E9oVR0A7F/Xo0kSDX23i3OGxTgv13DOD9PdmXUuyuO2Ib33IoG0NMrUeg?=
+ =?us-ascii?Q?SqeBni70fFwDnC2uLIQ8OaJwRP70U9s6chtFwlTakTAmWcAozjNMQlNz9UCu?=
+ =?us-ascii?Q?o0ZsC9gygCjvCgV1OFnquBkNKUeEA2i1WMAj+4fvwpobDtOltn2dhNG20+cA?=
+ =?us-ascii?Q?i5e3XM2Tx40K+Qk/ncQxspG7TnNZ9YO7oG3ti7rA2DZI1o/XMR2ZXOGKZwdk?=
+ =?us-ascii?Q?jdvCyj7yYnvXrp4r3cY+ozepFe5YbcG5db1AF0VvY0tL1sW7DRRppZqfnMUe?=
+ =?us-ascii?Q?yE6V8RCbclvkS6xz+sRIAIdpMSxSfvW6AEP0lm4DPvmNOlLI2/dvMC54FNYv?=
+ =?us-ascii?Q?uov1FtlvymelVZYoPSPHr7slzrQ9LyeuA+BVIaxoROVO6UyBcj7CWSKZgdOS?=
+ =?us-ascii?Q?xBcmpe0CV8nSCzDnb/32PO4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR11MB3668.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9120063b-7269-4108-e4c5-08dac33fa03b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Nov 2022 17:18:46.4825
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CfY1JaShmXDseUYMYnY7EaLFaxD8a3aOZ4wz3rMSNzc80CDn/fMlv5svJ9aWYwg89G48/HLKB7fv6dK9WgpNPQ9WJUIogSafc0Py4qTdgwlyMS1fPeRHCa/WsBZpHm8j
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB5828
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,10 +153,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Please put the LRU logic under config ZSMALLOC_LRU since we don't need the
-> additional logic to others.
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Wednesday, November 9, 2022 5:31 PM
+> To: Kumaravel Thiagarajan - I21417 <Kumaravel.Thiagarajan@microchip.com>
+> Subject: Re: [PATCH v3 tty-next 1/3] 8250: microchip: pci1xxxx: Add drive=
+r for
+> quad-uart support.
+> =20
+> On Mon, Nov 07, 2022 at 06:15:15PM +0530, Kumaravel Thiagarajan wrote:
+> > +++ b/drivers/tty/serial/8250/8250_pcilib.c
+> > @@ -0,0 +1,31 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Microchip pci1xxxx 8250 library. */
+>=20
+> Better name and a copyright line?
+Yes Greg. I think "8250 PCI library" would be the correct name. Is that fin=
+e?
+Regarding the copyright, we moved the "setup_port" function from 8250_pci.c=
+ to this new file.
+Can I use the same copyright statement from 8250_pci.c "Copyright (C) 2001 =
+Russell King, All Rights Reserved."?
 
-I think the existing CONFIG_ZPOOL would be a good option for this purpose. It
-should disable the LRU behavior for non-zswap use case (zram for e.g). The
-eviction logic is also currently defined under this. What do you think,
-Minchan?
+>=20
+> > +
+> > +#include <linux/pci.h>
+> > +#include "8250.h"
+> > +
+> > +int pci_setup_port(struct pci_dev *dev, struct uart_8250_port *port,
+> > +                u8 bar, unsigned int offset, int regshift) {
+> > +     if (bar >=3D PCI_STD_NUM_BARS)
+> > +             return -EINVAL;
+> > +
+> > +     if (pci_resource_flags(dev, bar) & IORESOURCE_MEM) {
+> > +             if (!pcim_iomap(dev, bar, 0) && !pcim_iomap_table(dev))
+> > +                     return -ENOMEM;
+> > +
+> > +             port->port.iotype =3D UPIO_MEM;
+> > +             port->port.iobase =3D 0;
+> > +             port->port.mapbase =3D pci_resource_start(dev, bar) + off=
+set;
+> > +             port->port.membase =3D pcim_iomap_table(dev)[bar] + offse=
+t;
+> > +             port->port.regshift =3D regshift;
+> > +     } else {
+> > +             port->port.iotype =3D UPIO_PORT;
+> > +             port->port.iobase =3D pci_resource_start(dev, bar) + offs=
+et;
+> > +             port->port.mapbase =3D 0;
+> > +             port->port.membase =3D NULL;
+> > +             port->port.regshift =3D 0;
+> > +     }
+> > +     return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(pci_setup_port);
+>=20
+> This needs a better name, 8250_pci_setup_port()?  This is not a pci core
+> function.
+Yes. I will rename as you mentioned.
+
+Thank You.
+
+Regards,
+Kumar
