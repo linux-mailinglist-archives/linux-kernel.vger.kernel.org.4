@@ -2,157 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1C2625FF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A4C625FF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbiKKRDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:03:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S233102AbiKKREP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbiKKRDo (ORCPT
+        with ESMTP id S232851AbiKKREM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:03:44 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A69E716D3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:03:43 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id b11so4925658pjp.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:03:43 -0800 (PST)
+        Fri, 11 Nov 2022 12:04:12 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97171F28
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:04:11 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id h14so4909680pjv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:04:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EQ/PiPe5gwho9v25N0iUTKiBMu6FKhYwPA8haVZ5Dt0=;
-        b=OB9uTHfmmHr/VG/rxH7BKYU1pTokkElGdk6Yag1OTSn9PxKmJP2ncyvb/VCRppc6Fa
-         RhvYHslLRRldC08xAu0eUL4ycYW6RvxkzW+AXrO/+1zX3c8uThmV+82aZCl6e+m8TN0A
-         1UGGdAtJd0nqEHbzcs8ITVaBqXaqaBnuqIPpXvOV8NacnDY0eOf0Ens3+UrwsCFRfEW8
-         jK/mx8w4iix767nLuTJOxwP3XVF+RQ2ExJWkzadSpjVCdL45WLRliIHVQSVgNKT0Jrx2
-         g7nv71DSeMTiwOu4DTlPxcl23QzRZD6uKuzJiIUzhJR1LWTRNgBUdUHlqIGtBJBOqbPx
-         G97g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+70jSVesYOoVF/IXWRbdTauFYwEc+auPprGXRcR1ME=;
+        b=KAC3sPvtwUWLqV/CfVyc/KAmjrnipAGbnAOsBQS9X3IONUNP7v8MHWFCegsozrwyQd
+         s8xzCAVr8tkW+R6kIWfjdEfNiCy8XbLUUy6xtad3aLG4QUKwFYx9TrN36n/BfrSKIQYr
+         Sn4oRStBtDbL8bBsmPaDZt0trwWwqAtHd+elpwnUMnfD9aSpOOWh1sQVGkbQF/2VP8cK
+         nkyQJBw3mIS9iC9wn5uLTAmoOpnu9CAqw+fiNN2D2iUgWMwPqbciY1CId0SZkHEd+iRM
+         TiLGTGy3Xhqz7en9VWJtO0i3LwO27oo0KZdUHMVoYtF6I0BSTbEkWXQcVxBJ8tPnvS1E
+         DJRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EQ/PiPe5gwho9v25N0iUTKiBMu6FKhYwPA8haVZ5Dt0=;
-        b=kvU/IzWKYmVglBBKovnjd51/BvDxuv5lNRIV6DbRoidQL28xJcgx1LAxmT3Dgsf/g1
-         M9iatCX8fP8LPoKa6ZMUnWpi96IXnB02aTIJxRwe2QXJosnPjZS9nvmikxcbTA7ONGfH
-         lVufcj6hBsHEVS55L0Q/KtuGjLfx5lXLxfCFppoX8NJF1iEWIi1HznSHevDhascO84UJ
-         CzdlsrrEL4ZJ4JE8QPJgRasn5cGLPfMd2uaIGnuSUF4D7QMVZe90/sdXKWEzrPp7hy7T
-         NTDKxzn2fGrCgQhGIN05bDyqqtgtK/gAuqIYjLexWJMd6AGzNTMb0KzlpgPT1r2IE1Vy
-         dPYA==
-X-Gm-Message-State: ANoB5pkuERo06ejnyM9yCz8+R9zHOZwrfI4eGRCcpVaLt8MsTIc2IlMa
-        abeSEPhIy4EAomDOrDj6VQo=
-X-Google-Smtp-Source: AA0mqf5RI+0G2uvs6dAqgHoAJil4DhW1XY3S79lJ5zYnCXqBsWKCbrFs3MoohzULj8CftcSw/vmGqQ==
-X-Received: by 2002:a17:90a:5a85:b0:214:6fd:90df with SMTP id n5-20020a17090a5a8500b0021406fd90dfmr2850362pji.35.1668186222885;
-        Fri, 11 Nov 2022 09:03:42 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:dab:6951:19b1:b46b])
-        by smtp.gmail.com with ESMTPSA id j30-20020a63fc1e000000b0045ff216a0casm1574507pgi.3.2022.11.11.09.03.41
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X+70jSVesYOoVF/IXWRbdTauFYwEc+auPprGXRcR1ME=;
+        b=3mUejNKmCLbbdYg+s7+xTGGOFUE4pxdVh+KLtEiuifmmeMnwV+55Ot1wXfjnAXmzWM
+         IG0Z32ZrPPtXc5/ToYpq5J21vns9uiDAS1ECCajABZUeYtbq0vcLz7+s4UyByXQjB+ln
+         nwIPQ1Ep/6TVay3vFczqnCKRVgoyAy8KST4V5ZfLgmJoWeZ657Zin4MFuvy1KTSxIYIs
+         qevwGebYzBlwkcLiG80QyaKJq+uo7S4aHr4iiufcxcvcS5PKr/H+KKrY56lI/xezmrQv
+         cBljFq/RCuSlcYpxptirweRlxd56qoGXbN8uLnVnjlRjbb4dzqMUcBZo+Ntm19XDzhQx
+         NZRw==
+X-Gm-Message-State: ANoB5pmV17wkpWtH0TPJFCNH9nFZBr+s/WPdc9VT+YRBa9zz+fignNxC
+        arhgtq4kF9uPoxSvMMrxVndJNv/dmyc=
+X-Google-Smtp-Source: AA0mqf4ZVUz5/qfpJXg1Ij+0V8wGCXqgIcWvPlOnlsFM7eFkJoaRLrLKFTErs3MmM+597hGv1c/lgQ==
+X-Received: by 2002:a17:90a:4282:b0:212:f810:a846 with SMTP id p2-20020a17090a428200b00212f810a846mr2960405pjg.71.1668186250818;
+        Fri, 11 Nov 2022 09:04:10 -0800 (PST)
+Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:b2f7:934a:d681:59d2])
+        by smtp.gmail.com with ESMTPSA id w9-20020a1709026f0900b001837463f654sm1926449plk.251.2022.11.11.09.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 09:03:42 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 11 Nov 2022 09:03:40 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
-Message-ID: <Y26AbHxhPBJdWZQE@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <Y21+xp52OQYi/qjQ@google.com>
- <Y22dxEcs2g5mjuQ7@google.com>
+        Fri, 11 Nov 2022 09:04:10 -0800 (PST)
+From:   Daeho Jeong <daeho43@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+Subject: [PATCH v7] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
+Date:   Fri, 11 Nov 2022 09:04:06 -0800
+Message-Id: <20221111170406.1086745-1-daeho43@gmail.com>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y22dxEcs2g5mjuQ7@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 09:56:36AM +0900, Sergey Senozhatsky wrote:
-> Hi,
-> 
-> On (22/11/10 14:44), Minchan Kim wrote:
-> > On Mon, Oct 31, 2022 at 02:40:59PM +0900, Sergey Senozhatsky wrote:
-> > > 	Hello,
-> > > 
-> > > 	Some use-cases and/or data patterns may benefit from
-> > > larger zspages. Currently the limit on the number of physical
-> > > pages that are linked into a zspage is hardcoded to 4. Higher
-> > > limit changes key characteristics of a number of the size
-> > > classes, improving compactness of the pool and redusing the
-> > > amount of memory zsmalloc pool uses. More on this in 0002
-> > > commit message.
-> > 
-> > Hi Sergey,
-> > 
-> > I think the idea that break of fixed subpages in zspage is
-> > really good start to optimize further. However, I am worry
-> > about introducing per-pool config this stage. How about
-> > to introduce just one golden value for the zspage size?
-> > order-3 or 4 in Kconfig with keeping default 2?
-> 
-> Sorry, not sure I'm following. So you want a .config value
-> for zspage limit? I really like the sysfs knob, because then
-> one may set values on per-device basis (if they have multiple
-> zram devices in a system with different data patterns):
+From: Daeho Jeong <daehojeong@google.com>
 
-Yes, I wanted to have just a global policy to drive zsmalloc smarter
-without needing user's big effort to decide right tune value(I thought
-the decision process would be quite painful for normal user who don't
-have enough resources) since zsmalloc's design makes it possible.
-But for the interim solution until we prove no regression, just
-provide config and then remove the config later when we add aggressive
-zpage compaction(if necessary, please see below) since it's easier to
-deprecate syfs knob.
+introduce a new ioctl to replace the whole content of a file atomically,
+which means it induces truncate and content update at the same time.
+We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
+F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
+F2FS_IOC_ABORT_ATOMIC_WRITE.
 
-> 
-> 	zram0 which is used as a swap device uses, say, 4
-> 	zram1 which is vfat block device uses, say, 6
-> 	zram2 which is ext4 block device uses, say, 8
-> 
-> The whole point of the series is that one single value does
-> not fit all purposes. There is no silver bullet.
+Signed-off-by: Daeho Jeong <daehojeong@google.com>
+---
+v7: changed where to clear FI_ATOMIC_REPLACE
+    fixed tentative race condition in f2fs_ioc_start_atomic_write()
+v3: move i_size change after setting atomic write flag
+v2: add undefined ioctl number reported by <lkp@intel.com>
+---
+ fs/f2fs/data.c            |  3 +++
+ fs/f2fs/f2fs.h            |  1 +
+ fs/f2fs/file.c            | 21 +++++++++++++++------
+ fs/f2fs/segment.c         | 13 ++++++++++++-
+ include/uapi/linux/f2fs.h |  1 +
+ 5 files changed, 32 insertions(+), 7 deletions(-)
 
-I understand what you want to achieve with per-pool config with exposing
-the knob to user but my worry is still how user could decide best fit
-since workload is so dynamic. Some groups have enough resouces to practice
-under fleet experimental while many others don't so if we really need the
-per-pool config step, at least, I'd like to provide default guide to user
-in the documentation along with the tunable knobs for experimental.
-Maybe, we can suggest 4 for swap case and 8 for fs case.
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 5f895ddcd64a..bce4dcc3ad78 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3457,6 +3457,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+ 	else if (*blk_addr != NULL_ADDR)
+ 		return 0;
+ 
++	if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
++		goto reserve_block;
++
+ 	/* Look for the block in the original inode */
+ 	err = __find_data_block(inode, index, &ori_blk_addr);
+ 	if (err)
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index e29f9adf60ca..d513ecd17550 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -765,6 +765,7 @@ enum {
+ 	FI_ALIGNED_WRITE,	/* enable aligned write */
+ 	FI_COW_FILE,		/* indicate COW file */
+ 	FI_ATOMIC_COMMITTED,	/* indicate atomic commit completed except disk sync */
++	FI_ATOMIC_REPLACE,	/* indicate atomic replace */
+ 	FI_MAX,			/* max flag, never be used */
+ };
+ 
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 7ce629c95f4a..f9a04f6d76cb 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1984,7 +1984,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
+ 	return put_user(inode->i_generation, (int __user *)arg);
+ }
+ 
+-static int f2fs_ioc_start_atomic_write(struct file *filp)
++static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+ {
+ 	struct inode *inode = file_inode(filp);
+ 	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+@@ -2053,15 +2053,22 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 
+ 	f2fs_write_inode(inode, NULL);
+ 
+-	isize = i_size_read(inode);
+-	fi->original_i_size = isize;
+-	f2fs_i_size_write(fi->cow_inode, isize);
+-
+ 	stat_inc_atomic_inode(inode);
+ 
+ 	set_inode_flag(inode, FI_ATOMIC_FILE);
+ 	set_inode_flag(fi->cow_inode, FI_COW_FILE);
+ 	clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
++
++	isize = i_size_read(inode);
++	fi->original_i_size = isize;
++	if (truncate) {
++		set_inode_flag(inode, FI_ATOMIC_REPLACE);
++		truncate_inode_pages_final(inode->i_mapping);
++		f2fs_i_size_write(inode, 0);
++		isize = 0;
++	}
++	f2fs_i_size_write(fi->cow_inode, isize);
++
+ 	f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+ 
+ 	f2fs_update_time(sbi, REQ_TIME);
+@@ -4089,7 +4096,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 	case FS_IOC_GETVERSION:
+ 		return f2fs_ioc_getversion(filp, arg);
+ 	case F2FS_IOC_START_ATOMIC_WRITE:
+-		return f2fs_ioc_start_atomic_write(filp);
++		return f2fs_ioc_start_atomic_write(filp, false);
++	case F2FS_IOC_START_ATOMIC_REPLACE:
++		return f2fs_ioc_start_atomic_write(filp, true);
+ 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+ 		return f2fs_ioc_commit_atomic_write(filp);
+ 	case F2FS_IOC_ABORT_ATOMIC_WRITE:
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 9cbf88092c78..f2930fffbc7d 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -197,6 +197,7 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
+ 	fi->cow_inode = NULL;
+ 	release_atomic_write_cnt(inode);
+ 	clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
++	clear_inode_flag(inode, FI_ATOMIC_REPLACE);
+ 	clear_inode_flag(inode, FI_ATOMIC_FILE);
+ 	stat_dec_atomic_inode(inode);
+ 
+@@ -261,14 +262,24 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
+ 					bool revoke)
+ {
+ 	struct revoke_entry *cur, *tmp;
++	pgoff_t start_index = 0;
++	bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
+ 
+ 	list_for_each_entry_safe(cur, tmp, head, list) {
+-		if (revoke)
++		if (revoke) {
+ 			__replace_atomic_write_block(inode, cur->index,
+ 						cur->old_addr, NULL, true);
++		} else if (truncate) {
++			f2fs_truncate_hole(inode, start_index, cur->index);
++			start_index = cur->index + 1;
++		}
++
+ 		list_del(&cur->list);
+ 		kmem_cache_free(revoke_entry_slab, cur);
+ 	}
++
++	if (!revoke && truncate)
++		f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
+ }
+ 
+ static int __f2fs_commit_atomic_write(struct inode *inode)
+diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
+index 3121d127d5aa..955d440be104 100644
+--- a/include/uapi/linux/f2fs.h
++++ b/include/uapi/linux/f2fs.h
+@@ -42,6 +42,7 @@
+ 						struct f2fs_comp_option)
+ #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
+ #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
++#define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
+ 
+ /*
+  * should be same as XFS_IOC_GOINGDOWN.
+-- 
+2.38.1.431.g37b22c650d-goog
 
-I don't disagree the sysfs knobs for use cases but can't we deal with the
-issue better way?
-
-In general, the bigger pages_per_zspage, the more memory saving. It would
-be same with slab_order in slab allocator but slab has the limit due to
-high-order allocation cost and internal fragmentation with bigger order
-size slab. However, zsmalloc is different in that it doesn't expose memory
-address directly and it knows when the object is accessed by user. And
-it doesn't need high-order allocation, either. That's how zsmalloc could
-support object migration and page migration. With those features, theoretically,
-zsmalloc doesn't need limitation of the pages_per_zspage so I am looking
-forward to seeing zsmalloc handles the memory fragmentation problem better way.
-
-Only concern with bigger pages_per_zspage(e.g., 8 or 16) is exhausting memory
-when zram is used for swap. The use case aims to help memory pressure but the
-worst case, the bigger pages_per_zspage, more chance to out of memory.
-However, we could bound the worst case memory consumption up to
-
-for class in classes:
-    wasted_bytes += class->pages_per_zspage * PAGE_SIZE - an object size
-
-with *aggressive zpage compaction*. Now, we are relying on shrinker
-(it might be already enough) to trigger but we could change the policy 
-wasted memory in the class size crossed a threshold we defind for zram fs
-usecase since it would be used without memory pressure.
-
-What do you think about?
