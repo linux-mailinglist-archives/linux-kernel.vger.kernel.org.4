@@ -2,202 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7FE6251A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 04:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5B96251A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 04:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbiKKD0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 22:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S231564AbiKKD1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 22:27:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiKKDZi (ORCPT
+        with ESMTP id S232335AbiKKD13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 22:25:38 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6324059867;
-        Thu, 10 Nov 2022 19:25:37 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AB2pi4c017396;
-        Fri, 11 Nov 2022 03:25:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=lD86X0OQ5dCB6O6o1/+iPAtT36dAVPEgdmKBPA9o/3w=;
- b=Dpvs6HDN2w0rzcCJiepfxs560b/+lSwRdbLQecVL7Zvr5N7Ak0tpjTbrG10papF6Oc5G
- xLx27F5eJzw4qgmnB1adDr3QtqnAtPOgw4P0sv6ODIdP7nlTrTSadE7bpWZhqJyFUmCU
- kBM/3lDxmkuMH/GAkxePO1pg4tR/8B/8EMCx4h21QxPvDUjc0YpmqH2m+cVdGCfzFcc0
- GnnWm9WiPWQG7O1l6BvG9xt0jQJ8QJIm9cV6tICRRCZYDIGa/DrSN3gLJwP260gp4n8l
- fwBdjZdOoNcRmuqFXuSddEVFuYtLS+mg8m1+hDtjP8unv7Su95J1W9uSIai4ep4Ok1qp Sg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksa89rg6u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 03:25:26 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AB3PQFV027175
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 03:25:26 GMT
-Received: from th-lint-050.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 10 Nov 2022 19:25:25 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 10/10] arm64: dts: qcom: sc8280xp: Add bwmon instances
-Date:   Thu, 10 Nov 2022 19:25:15 -0800
-Message-ID: <20221111032515.3460-11-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221111032515.3460-1-quic_bjorande@quicinc.com>
-References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
+        Thu, 10 Nov 2022 22:27:29 -0500
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C916F68C5F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 19:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1668137187;
+        bh=VG03AryjN1xYa93c1hmpENqh0pc82ZJb7GUcVRfapEg=;
+        h=From:To:Cc:Subject:Date;
+        b=jxpyxrMzXu0S6nnjluXJY6+WLuU/FGUCfS4ZQWZemR8HF/hYMjCx7c7MdxBir5kFP
+         48pXosBCB/s22b5nLKAa40AwQ7mIhaVSnwd5Jd+FtXChZ3h2WqwTfoGBqplF7qPj9M
+         /KYZfgMv9/h2i6jncEPn21EKkPXIcOhq0WCN6fis=
+Received: from localhost.localdomain ([111.199.191.46])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id 695818DF; Fri, 11 Nov 2022 11:26:21 +0800
+X-QQ-mid: xmsmtpt1668137181t31ricq3i
+Message-ID: <tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com>
+X-QQ-XMAILINFO: NhUkPfKlCtQwXEHQjVhadMlQmPdB09PSlN9uaDXEq28soLLj8jyChox9gJTCqR
+         REubEYCYiEeRGIsZfrpDgCR2Mkm6LMvFNCkFWnzgkRTY70pR7Fqx47jRFUEZf2U9RU9TR3ROn4WC
+         eVH7+y0yHhajHrr6DK2C6CYOtCzXZy0Jf+UhIRGQxYCq3BoADv7UNO4eeFJM1A36OBtQROfg7UKh
+         z/t8VQZl+IWhQIAg3dR/qF/k7yxJTPxGL/Kp7PxU/2/oMFY2pOS4wWPr3sGLWdv57/s8ovIKBAzG
+         2zXL6l/qCbSGaZdJ1yugAaRJnWBM0p/WJQ61XXq0V0UVmlTbr82VfGfZOHKYUv2+JXbTZXnjyH7f
+         T72i/gaUnVPR8AmdaxnuQVPciL6r4D45K0c7o4hQu7ch1tjXLGppqO69PpN11Lwrqpw1UIvsXt1U
+         n/Xy79DcTZcDATllKcLuwmP+mlgaRTZTMOebLj4T3VKnbfbM/I3eH4J6PNbPZfwyshk8sCcuE1hi
+         QGI+23clUYl01WwnwOF5ghgTN8bb3XpX0ENJr4LtQXae+oYXH+PHRGPEVN8BJ2gChzSPEJFCdFPN
+         AiPxmjT8D6vxhU2NQGl25jUfqUrGc3f3a83naZ1GQANUS19HmCAGBlQC421IoLWIV7/DRX29Z1Ew
+         ZtxrGPv+sNy6E5g3aPp5SJVJPGVk6t6QadoWeuZC8aapdjOb4OXckbDE1MoLGvYVA/vvbmZj94xE
+         cyxs3zXk1WsXygJ9JvVo6OMP4ACWTeyVh1XE15T95MXpJQu+R4xOpnGBHBY5sDKyZBKWUp1iJLpW
+         xu3/q3VEBQZoGHVl+KNuACyKzeK4id4/S2Yop2kgmElAZsjhNu2Cy1XJ0drEZ3Dd6WlCEnugAWoP
+         YP7XD8enx0UrBs8gCsuMoqWNz4eb+yDE/RVbeOLXO1r7/7H8I5MiOOv4r8zE++f1fvib229+WYX4
+         Cn8KXKf5Pn2iwFP5tROOBbL9jhFHI890FEjwDMQ2bgRajRuH0v5CWAD3ubDVHt
+From:   Rong Tao <rtoax@foxmail.com>
+To:     ast@kernel.org
+Cc:     Rong Tao <rongtao@cestc.cn>, kernel test robot <lkp@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
+        Tools)),
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next] selftests/bpf: Fix error undeclared identifier 'NF_NAT_MANIP_SRC'
+Date:   Fri, 11 Nov 2022 11:26:11 +0800
+X-OQ-MSGID: <20221111032613.31106-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: wMUIszZGM2dNCQetFurm7Nnz8up4nFKa
-X-Proofpoint-GUID: wMUIszZGM2dNCQetFurm7Nnz8up4nFKa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-10_14,2022-11-09_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 bulkscore=0 mlxscore=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211110021
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the two bwmon instances and define votes for CPU -> LLCC and LLCC ->
-DDR, with bandwidth values based on the downstream DeviceTree.
+From: Rong Tao <rongtao@cestc.cn>
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Tested-by: Steev Klimaszewski <steev@kali.org>
+commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
+introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
+and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
+kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c. We copy enum
+nf_nat_manip_type to test_bpf_nf.c fix this error.
+
+How to reproduce the error:
+
+    $ make -C tools/testing/selftests/bpf/
+    ...
+      CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+      error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+            bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+                                                           ^
+      error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+            bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+                                                           ^
+    2 errors generated.
+
+Link: https://lore.kernel.org/lkml/202210280447.STsT1gvq-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
+ tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Changes since v1:
-- Added "cpu" to compatible for the CPU-subsystem bwmon instance
-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 91 ++++++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 2ac8f5204905..62e9dd8a2f07 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1287,6 +1287,97 @@
- 			};
- 		};
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+index 227e85e85dda..307ca166ff34 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+@@ -3,6 +3,11 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
  
-+		pmu@9091000 {
-+			compatible = "qcom,sc8280xp-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-+			reg = <0 0x9091000 0 0x1000>;
++enum nf_nat_manip_type {
++	NF_NAT_MANIP_SRC,
++	NF_NAT_MANIP_DST
++};
 +
-+			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3>;
-+
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
-+
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <762000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <1720000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <2086000>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <2597000>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <2929000>;
-+				};
-+				opp-5 {
-+					opp-peak-kBps = <3879000>;
-+				};
-+				opp-6 {
-+					opp-peak-kBps = <5161000>;
-+				};
-+				opp-7 {
-+					opp-peak-kBps = <5931000>;
-+				};
-+				opp-8 {
-+					opp-peak-kBps = <6515000>;
-+				};
-+				opp-9 {
-+					opp-peak-kBps = <7980000>;
-+				};
-+				opp-10 {
-+					opp-peak-kBps = <8136000>;
-+				};
-+				opp-11 {
-+					opp-peak-kBps = <10437000>;
-+				};
-+				opp-12 {
-+					opp-peak-kBps = <12191000>;
-+				};
-+			};
-+		};
-+
-+		pmu@90b6400 {
-+			compatible = "qcom,sc8280xp-cpu-bwmon", "qcom,msm8998-bwmon";
-+			reg = <0 0x090b6400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <2288000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <4577000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <7110000>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <9155000>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <12298000>;
-+				};
-+				opp-5 {
-+					opp-peak-kBps = <14236000>;
-+				};
-+				opp-6 {
-+					opp-peak-kBps = <15258001>;
-+				};
-+			};
-+		};
-+
- 		system-cache-controller@9200000 {
- 			compatible = "qcom,sc8280xp-llcc";
- 			reg = <0 0x09200000 0 0x58000>, <0 0x09600000 0 0x58000>;
+ #define EAFNOSUPPORT 97
+ #define EPROTO 71
+ #define ENONET 64
 -- 
-2.17.1
+2.31.1
 
