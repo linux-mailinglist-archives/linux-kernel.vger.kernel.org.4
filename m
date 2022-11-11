@@ -2,220 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA4A62554A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD366625561
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiKKI3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:29:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S232978AbiKKIdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbiKKI3d (ORCPT
+        with ESMTP id S232177AbiKKIdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:29:33 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8D3E79
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:29:32 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id kt23so10983006ejc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:29:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lf3giwAMiTL69iTsaWeEw2qtvmJtf21YI6fNdLPl8xY=;
-        b=K6+uHl5cVWzocSa4VaSCNPJmC2aGjgNeNwXkrzp81/VEcm9IRSPo0Jtef7RLromQEM
-         DlJu45EfyOTZOGy0dkqGjRFvTyUHI0c4vXViLVogbPVCuB38fOlPXI29LdZClY9m4V7w
-         DzXwR9fAQOzb+AreQJ0UQHENe0QbfFffRls0QUUB4r4g6oYy6q7r1IYEBdXkJTD4w/sl
-         vTHs2V8eJnOCY5LNIGScLu5Gmep7pBvy/korqQML0LOp3JTKYBEUir5RQc0IlAAqrvUw
-         oLRcse9+0lp/TYn5y5ASJgebRqkoV5Q5xOitea+APB3heyumAN364iPCuM36E5pg/JwI
-         jTIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lf3giwAMiTL69iTsaWeEw2qtvmJtf21YI6fNdLPl8xY=;
-        b=fqKASsoSvJXL1nJ149+2TSIwVLpAN9ytU5D3dqL6NulSWdNRtvS/cDfDtDarnqNWLb
-         0HN4J65Kdnz2QPnud7Ha0RQiOzNpZEB+VHblZG/40iwcs53VO5NQmXGrNaaYlc8POQTw
-         t4TX5fWP4RC41BVD1gtUQBVsHwri5MmTEWOmdWIHqKnRTqQbeq/ZstzYPKrqRAPDnGOT
-         o2s+NrdXyRnWS/HMZR3TCkeCyWe9tLQU1iwWn+BS1LxIBs0OUV2x1X8kikt3tihiVL/6
-         Rgk0tO0vEyq38uOZUCrUqUbpR303wbpqa6ZdWo6zY65KZnbNEhl4pZU5gkDrF+rFKPpx
-         dnjw==
-X-Gm-Message-State: ANoB5plFiYf4ALY+KLBjfp72VjgHI+v+VvqCgaDmFGVtSzQgSHMTEm37
-        6KTu/2uX/BINlYwAwYdHZHKwmA==
-X-Google-Smtp-Source: AA0mqf6xej+sc2LVPlx6uboKpREw+PGVEQcTDqJl/Vk3BfmY7PDiEnM0ISche5Wu4wjzAxcevCdSsw==
-X-Received: by 2002:a17:906:249a:b0:781:fcf6:e73a with SMTP id e26-20020a170906249a00b00781fcf6e73amr1024035ejb.352.1668155370806;
-        Fri, 11 Nov 2022 00:29:30 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id hd16-20020a170907969000b007ab1b4cab9bsm590498ejc.224.2022.11.11.00.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 00:29:30 -0800 (PST)
-Date:   Fri, 11 Nov 2022 09:29:29 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     guoren@kernel.org
-Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de,
-        philipp.tomsich@vrull.eu, alex@ghiti.fr, hch@lst.de,
-        gary@garyguo.net, jszhang@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH V3] riscv: asid: Fixup stale TLB entry cause application
- crash
-Message-ID: <20221111082929.f5s5n53r63mkkney@kamzik>
-References: <20221111075902.798571-1-guoren@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Fri, 11 Nov 2022 03:33:06 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0407E981
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:33:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668155586; x=1699691586;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=gREuau1ZIFlVxxBJZYKXYlVC3QhBgvLHaHmjq31fM5U=;
+  b=Sh76OZ4h9Y5llbkjygtOr3mZzxcZi18V/gCkezL73EvuYPePn89ezqlh
+   cunOchwEmUeOI9OnQyhFhSbl6fqvKoQsch+/seyndGZwXxfMZWR+ofHIy
+   N3bnEEgMHKZWzIw2LFimV0psUZSGEXYwwkCw3MOI28aZNBlXmVADIh1c/
+   EXfVaPR4abpPtKw8Jwh9DaWqnCkKI0JsHq3tPg4JsSM30ZTKJzY/0BZjc
+   BDKa5d+wbpl/L+XvUrTDnE54tjQC+ymr7Y299aCuDvdWZde5ZTZ22w2fx
+   IoT8hq8SBFmliZHzxA0FKuAxPiuaLBcqcKqjYlVvRULNkLzDJS+9p/dS/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="294915083"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="294915083"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 00:33:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="615423560"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="615423560"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 11 Nov 2022 00:33:05 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 00:33:04 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 00:33:04 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Fri, 11 Nov 2022 00:33:04 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Fri, 11 Nov 2022 00:33:04 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qrq5P9j2u6mgMUfUL+Chr5R0hPex0cTRKzMUOoCFTX/L4+nV11QivrPtcIlJOAl3KmKvnkCDI2YNTge1wRmHmI2GcBhGL5od51JsmJ+24+8ILBxKBE6IgtrrFrDjusGCikrjNL1y8GrYr5eyF60CiaBy46ZqZIhOUk/1dwJ/aynPifCLCJlgJavRRBS3HYdPdVXm4fvNVX+uUGZBBJzm9VkCYDrdsPLuj5zwhWpTvBFjCkEVZbQmuc95SfX2TLPRFDAGuviFH0YwSLHGVVbTq0nQ3uHcArLHdjAlUHoZkUOYrL8ej1xosC3EdhAj8vsR+GL5dUjMb/g0XXHZrVHhyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ELtJPQP2atiOLXmD8Se9LjPtYEfHHH2Bkpef02Hw5Zg=;
+ b=clVB/alE6/nzZhOtG5De2In+TnXFvFY3m0uRuV27CGMC+RqzcH0qKTeWR9Gn18FECbzItoo7e8VWBIPQrTdk4yshieyWUnk9tzasDdM+FM/mzyyWrLbio6R3WF9GDAAgvFBy0nZkslszbMiMtS4saie4xIf6LUUcfdQKuYhyTWaySXsDZYLqy3D0vA4Jee2k9cNlnnir0n5ddWhejymlUVbly+adZr0PuTrkYWmHcqbFxTdrLw5hdGfc0DeiJ96UoWeFWCWjAfcdH13XYkkc0PsctU9CrMXM1uwqHRAsGKlFgTTboyeR2rPDAv+d4bgIiYZOekk/Q2LtVaZqtlqG+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by MN2PR11MB4599.namprd11.prod.outlook.com (2603:10b6:208:26d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.14; Fri, 11 Nov
+ 2022 08:33:00 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::1564:b428:df98:96eb%4]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
+ 08:33:00 +0000
+Date:   Fri, 11 Nov 2022 16:29:43 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>
+Subject: Re: [PATCH v7 0/3] mm/slub: extend redzone check for kmalloc objects
+Message-ID: <Y24H998aujvYXjkV@feng-clx>
+References: <20221021032405.1825078-1-feng.tang@intel.com>
+ <f9da0749-c109-1251-8489-de3cfb50ab24@suse.cz>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20221111075902.798571-1-guoren@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f9da0749-c109-1251-8489-de3cfb50ab24@suse.cz>
+X-ClientProxiedBy: SI2P153CA0003.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::20) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|MN2PR11MB4599:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4b3ab60-46ec-4f97-a333-08dac3bf5686
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KJN03ZC6UDm15+SJqWon3Cf/Jix7tjUGJ/DShJ8BJ1n4lW69iQ4xmbtU6kLCvu9e6Sou4CVjCKVFwUJQYxyOktHGsWP5CuMnl6BE8Ei+D7bMhQecFBy3mKGZ+srVqEOORhJHGqXLF73N+0f/DP5GK9L549g0Luo2tiCa3sJOLSeTgE2oDFr6J6Z3MK3zxsfC6RTWXpLheLtTt0DBi5HGakUjBei4VQ0jp8hPwDavdikkzN0PS4ba44m37Kolcr2RNtpnVboiNuk7wYLpMqHf/WYvv69DmhITl81yDVPCmD8lKqIhvCrOr1A44PvmnGOsosBASEiLtrQVsbHayH8TDC20mVfsR9HMvcls90y1b/RvwPetd7ri4QRU1XTop3SOq2xRXfbZcgT3smynWXS8nma5k90h3eyuH1MUb3IsF8ST474zY5pmU9WaUdKMOouZubVWcHg8pHD8xglzFYbd3X4jn77QogeQXLnrNW360aOgMS1CBAwMbhObdVYwmkbr1mlWxZac076xXVLiPkYrdZXteDdS5Vkp20Ccc7XfiYMzqJKjSJYaXUoUMmFQnl+0mQBn6IUTpVnlWjXZy/HtXVeKjozL9NUQCQmagRF0tqOjuJhbWllep0Gz+yH/tQzZVJRe1Hx3G8X0tRtQa9ht+XLkbD7QEY4lYH6GJaDkglYPvcMvRUxeM/H5qo7BtT8vtrQtMpBl3CzCTAxjGNDVew==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(39860400002)(366004)(346002)(396003)(136003)(451199015)(186003)(5660300002)(7416002)(8936002)(33716001)(6666004)(53546011)(6506007)(316002)(6916009)(41300700001)(54906003)(9686003)(4326008)(8676002)(26005)(6512007)(86362001)(66946007)(66476007)(66556008)(478600001)(83380400001)(44832011)(82960400001)(38100700002)(2906002)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xp9NVgGXR9FlqHlaoHaIOoUaRgQQ0iHu/dUS9cXxptNqw8+Psn4iIglJkasT?=
+ =?us-ascii?Q?YefeQSLDOcHNOgz0alTVMS1Ve3ta1IiAmYCqUvlwvto5KQlF4X7M+fll+nCh?=
+ =?us-ascii?Q?T+cFoL82jDxCASFm3u1v1lQDtjcM82SmYj2yexkYC2RQf11yMq4VFLDXJ1KQ?=
+ =?us-ascii?Q?MB4TK+alIUdaH83jXDDKdVpjuQP7DJD4spuDrsGlh8Ho7wICIAyvzbcCnvcP?=
+ =?us-ascii?Q?bMz7j14PJMwcZ7rspsNaMWck2920unvWiKPR/DuuCLxPYmU1N7ng3DsQZG1B?=
+ =?us-ascii?Q?/Et66srIo9oUOhN6MpQEKMjOC0z3DPQ0TdflYhSrZ4WwAPr2tUamQImoIFoz?=
+ =?us-ascii?Q?Eubvuu+2GwTLIQrSFNnfPZemVd6zpxhKeL1CSs/CBmk51Lf7rs19++4bwQU1?=
+ =?us-ascii?Q?jnAQJVz1ODFyP2u0uQW4FWC0zy+4D5A78QX1C4ox4We9NS/g2oQsZJ0WElza?=
+ =?us-ascii?Q?sBeBzYJol8J7ZEnEzI8+CX6tdtUBsAvzmQHF2VRqUkEzUxVmLX4DQjRSU5xm?=
+ =?us-ascii?Q?ZqJ9V/2obxAN+7QNap+jrwNesXNWe/QfKYGw8R1Bc6LInes882X8biLRvoaX?=
+ =?us-ascii?Q?P16GCvdufmRgb+n+W3yylaV3kxJ9ewaiKAE99IBVmmbLuiEHwp+wDAX3qWvl?=
+ =?us-ascii?Q?ItYby639Bxmditq5FMWt6CLDDJOI33BC2l4l+b5Yy7Q9bI2dwDSQlzRvCh6C?=
+ =?us-ascii?Q?WE23FFO0CfKStulqU0mL937iuzVLEeLJPMr5vfRLMf5lpwowM0Az8jlE2m4Y?=
+ =?us-ascii?Q?d8Z2kYBY8OWl7Lu5uCcrlaBs39sWFjXCiVhZW5B8FywiL2Ep9/9HC1I/sYOI?=
+ =?us-ascii?Q?1CwFlujC1OcRL8u2CkI4IAWF/N9YW7VLXWg6OzejSo64PiXEXPzebpIVBtcT?=
+ =?us-ascii?Q?Z5WOMr+zdWcunm5f63NF3oerMLKre5PImU+h7Sk+barQ4l1YXXsXcLP+mrKo?=
+ =?us-ascii?Q?3VFQ3FwioaudAMfALf7geDvzmI7Lb4y14V6yc750YczheUS59XyQ8/Hw5aJG?=
+ =?us-ascii?Q?hpmUlCBXr1FXSfg/Yr0GgpGNA/HYZo01X8C+phElTv/PrrKhPe4BL0OVxGQb?=
+ =?us-ascii?Q?xtmnrJgcDIZCLiNNu5LFysJM9bOCSRT1clM+J2BTfq4pPlcHp4uL5nPPdV7E?=
+ =?us-ascii?Q?a20Eb5Fiv2sGAA5M13C98naK+WElOpEwUG+HPjcgAf0geC0/VSiOF9ubb8UB?=
+ =?us-ascii?Q?bRvEHC9ngQSpZcifqZ936HgGxBH9hmcMjX2P5uPqLn0fqNqBtpp76x0EMNpB?=
+ =?us-ascii?Q?yb13iH7XFNorSxBFvSqYzAT0B+u1kus9nzSk1BhsJVkvsJd45MVWQxy7fm4E?=
+ =?us-ascii?Q?dX8wgLXkSybqq8xV/KvgogRPiZKEZerDwhaT3tHF67LEGKB+yzEun/2HVawI?=
+ =?us-ascii?Q?IdOw9RFod7wHe9J2eIwG+CUrhTuBJrFl/6eaCxxt6gh4rxq4E3ozJG2J7zeQ?=
+ =?us-ascii?Q?pvphbVe8ZKq84H4k5JbNzVDmarEqpSKxkuRV5qOYOMUK13hfyM100hpmuN70?=
+ =?us-ascii?Q?4gmsC5NiJU0llpoJ4kZ8TrXJY0RhlUlY+7o1Uf7GgcI+Zj1SJvuE1xL9aSJm?=
+ =?us-ascii?Q?nkJHswfMlJ3b+5EcM1rYksJ2aMywpiTIZ15bBLZB?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4b3ab60-46ec-4f97-a333-08dac3bf5686
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 08:32:59.9972
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5ccFgd5oJm9uqkEauj9Ac4ZHocn1Vw46RsU1glAdT/vl7uSqGo4ZfQ52vMNy2e9YLSMr7XDKjuxVAebb+ixx5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4599
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:59:02AM -0500, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On Fri, Nov 11, 2022 at 04:16:32PM +0800, Vlastimil Babka wrote:
+> On 10/21/22 05:24, Feng Tang wrote:
+> > kmalloc's API family is critical for mm, and one of its nature is that
+> > it will round up the request size to a fixed one (mostly power of 2).
+> > When user requests memory for '2^n + 1' bytes, actually 2^(n+1) bytes
+> > could be allocated, so there is an extra space than what is originally
+> > requested.
+> > 
+> > This patchset tries to extend the redzone sanity check to the extra
+> > kmalloced buffer than requested, to better detect un-legitimate access
+> > to it. (dependson SLAB_STORE_USER & SLAB_RED_ZONE)
+> > 
+> > The redzone part has been tested with code below:
+> > 
+> > 	for (shift = 3; shift <= 12; shift++) {
+> > 		size = 1 << shift;
+> > 		buf = kmalloc(size + 4, GFP_KERNEL);
+> > 		/* We have 96, 196 kmalloc size, which is not power of 2 */
+> > 		if (size == 64 || size == 128)
+> > 			oob_size = 16;
+> > 		else
+> > 			oob_size = size - 4;
+> > 		memset(buf + size + 4, 0xee, oob_size);
+> > 		kfree(buf);
+> > 	}
 > 
-> After use_asid_allocator is enabled, the userspace application will
-> crash by stale TLB entries. Because only using cpumask_clear_cpu without
-> local_flush_tlb_all couldn't guarantee CPU's TLB entries were fresh.
-> Then set_mm_asid would cause the user space application to get a stale
-> value by stale TLB entry, but set_mm_noasid is okay.
-> 
-> Here is the symptom of the bug:
-> unhandled signal 11 code 0x1 (coredump)
->    0x0000003fd6d22524 <+4>:     auipc   s0,0x70
->    0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
-> => 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
-> (gdb) i r s0
-> s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
-> (gdb) x /2x 0x3fd6d92490
-> 0x3fd6d92490:   0xd80ac8a8      0x0000003f
-> The core dump file shows that register s0 is wrong, but the value in
-> memory is correct. Because 'ld s0, -148(s0)' used a stale mapping entry
-> in TLB and got a wrong result from an incorrect physical address.
-> 
-> When the task ran on CPU0, which loaded/speculative-loaded the value of
-> address(0x3fd6d92490), then the first version of the mapping entry was
-> PTWed into CPU0's TLB.
-> When the task switched from CPU0 to CPU1 (No local_tlb_flush_all here by
-> asid), it happened to write a value on the address (0x3fd6d92490). It
-> caused do_page_fault -> wp_page_copy -> ptep_clear_flush ->
-> ptep_get_and_clear & flush_tlb_page.
-> The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need TLB
-> flush, but CPU0 had cleared the CPU0's mm_cpumask in the previous
-> switch_mm. So we only flushed the CPU1 TLB and set the second version
-> mapping of the PTE. When the task switched from CPU1 to CPU0 again, CPU0
-> still used a stale TLB mapping entry which contained a wrong target
-> physical address. It raised a bug when the task happened to read that
-> value.
-> 
->    CPU0                               CPU1
->    - switch 'task' in
->    - read addr (Fill stale mapping
->      entry into TLB)
->    - switch 'task' out (no tlb_flush)
->                                       - switch 'task' in (no tlb_flush)
->                                       - write addr cause pagefault
->                                         do_page_fault() (change to
->                                         new addr mapping)
->                                           wp_page_copy()
->                                             ptep_clear_flush()
->                                               ptep_get_and_clear()
->                                               & flush_tlb_page()
->                                         write new value into addr
->                                       - switch 'task' out (no tlb_flush)
->    - switch 'task' in (no tlb_flush)
->    - read addr again (Use stale
->      mapping entry in TLB)
->      get wrong value from old phyical
->      addr, BUG!
-> 
-> The solution is to keep all CPUs' footmarks of cpumask(mm) in switch_mm,
-> which could guarantee to invalidate all stale TLB entries during TLB
-> flush.
-> 
-> Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Anup Patel <apatel@ventanamicro.com>
-> Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
-> Changes in v3:
->  - Move set/clear cpumask(mm) into set_mm (Make code more pretty
->    with Andrew's advice)
->  - Optimize comment description
-> 
-> Changes in v2:
->  - Fixup nommu compile problem (Thx Conor, Also Reported-by: kernel
->    test robot <lkp@intel.com>)
->  - Keep cpumask_clear_cpu for noasid
-> ---
->  arch/riscv/mm/context.c | 30 ++++++++++++++++++++----------
->  1 file changed, 20 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-> index 7acbfbd14557..0f784e3d307b 100644
-> --- a/arch/riscv/mm/context.c
-> +++ b/arch/riscv/mm/context.c
-> @@ -205,12 +205,24 @@ static void set_mm_noasid(struct mm_struct *mm)
->  	local_flush_tlb_all();
->  }
->  
-> -static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-> +static inline void set_mm(struct mm_struct *prev,
-> +			  struct mm_struct *next, unsigned int cpu)
->  {
-> -	if (static_branch_unlikely(&use_asid_allocator))
-> -		set_mm_asid(mm, cpu);
-> -	else
-> -		set_mm_noasid(mm);
-> +	/*
-> +	 * The mm_cpumask indicates which harts' TLBs contain the virtual
-> +	 * address mapping of the mm. Compared to noasid, using asid
-> +	 * can't guarantee that stale TLB entries are invalidated because
-> +	 * the asid mechanism wouldn't flush TLB for every switch_mm for
-> +	 * performance. So when using asid, keep all CPUs footmarks in
-> +	 * cpumask() until mm reset.
-> +	 */
-> +	cpumask_set_cpu(cpu, mm_cpumask(next));
-> +	if (static_branch_unlikely(&use_asid_allocator)) {
-> +		set_mm_asid(next, cpu);
-> +	} else {
-> +		cpumask_clear_cpu(cpu, mm_cpumask(prev));
-> +		set_mm_noasid(next);
-> +	}
->  }
->  
->  static int __init asids_init(void)
-> @@ -264,7 +276,8 @@ static int __init asids_init(void)
->  }
->  early_initcall(asids_init);
->  #else
-> -static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-> +static inline void set_mm(struct mm_struct *prev,
-> +			  struct mm_struct *next, unsigned int cpu)
->  {
->  	/* Nothing to do here when there is no MMU */
->  }
-> @@ -317,10 +330,7 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
->  	 */
->  	cpu = smp_processor_id();
->  
-> -	cpumask_clear_cpu(cpu, mm_cpumask(prev));
-> -	cpumask_set_cpu(cpu, mm_cpumask(next));
-> -
-> -	set_mm(next, cpu);
-> +	set_mm(prev, next, cpu);
->  
->  	flush_icache_deferred(next, cpu);
->  }
-> -- 
-> 2.36.1
->
+> Sounds like a new slub_kunit test would be useful? :) doesn't need to be
+> that exhaustive wrt all sizes, we could just pick one and check that a write
+> beyond requested kmalloc size is detected?
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Just git-grepped out slub_kunit.c :), will try to add a case to it.
+I'll also check if the case will also be caught by other sanitizer
+tools like kasan/kfence etc.
+
+Thanks,
+Feng
+
+
+> Thanks!
+> 
