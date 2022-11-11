@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081F8625F5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCF0625F67
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233344AbiKKQXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S234158AbiKKQXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiKKQX1 (ORCPT
+        with ESMTP id S234215AbiKKQXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:23:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA7B2AC5;
-        Fri, 11 Nov 2022 08:23:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 11 Nov 2022 11:23:51 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE79E10FC2;
+        Fri, 11 Nov 2022 08:23:49 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACE5162046;
-        Fri, 11 Nov 2022 16:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF7FC433D6;
-        Fri, 11 Nov 2022 16:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668183805;
-        bh=/tPA7ws0rLIZu0fygMvLYm3y96ea/yW/c/ek6jeQqb4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MsFyIBzSZF1YnRUxRIJTc8+CwEyDSgbWFO8jpkHQvrFY8xJnJWQ/rvtEnsYE18jKl
-         R1IWfFyyyJ/bo5UEENCKFMpbUQafQqPvvU0uyjRBX3LCXd7TkXnAlTWNWjTupwvFjQ
-         DCMLeW0yIeQaVycvKi+uuUsE4uYJNgBrMXu/QN1E1YVvtmB1H3HE8XQu43ely22Ozt
-         cB1HtuHK0cW0FKLbsJNO4cgVJKR8Sb+LFrDKC/XPFgzUkow90lI3/fky5Ts2P+aeJ7
-         jcYD5mn2KsE0661bYGwEPIEVvGE4mzw/RDZUObzNu8YnxuLxEljw18ezSEmK2RCFbb
-         S2ytULmDZk3sw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1otWnw-0003he-Jq; Fri, 11 Nov 2022 17:22:57 +0100
-Date:   Fri, 11 Nov 2022 17:22:56 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/9] arm64: dts: qcom: sc8280xp-crd: enable NVMe SSD
-Message-ID: <Y2524KFw1izDx3pG@hovoldconsulting.com>
-References: <20221110103558.12690-1-johan+linaro@kernel.org>
- <20221110103558.12690-5-johan+linaro@kernel.org>
- <d3aead5b-413a-e929-1b33-7956fa117d4d@linaro.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 69FBD1EC042F;
+        Fri, 11 Nov 2022 17:23:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668183828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RQAgICrjFnZQrLGvUgI/C7Q9GLfgPJ4P+LW0OtdT8rs=;
+        b=moouNAFTAV7IcV/mP/nZqLe47DxjlL2ZUaRES6YJT6CZgM57NspuSpLyzVWCPkqJ6rbcKk
+        xY4bYHmZCLalHnrmbMD8dlM6xo8pYJ/OsbcktfAFK7mP9LgQI0vvRWlWMcxxoEg28NyBwv
+        ww4At+bFDSflMdaQCtpe9l4jVRdxDdY=
+Date:   Fri, 11 Nov 2022 17:23:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jithu Joseph <jithu.joseph@intel.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, gregkh@linuxfoundation.org, ashok.raj@intel.com,
+        tony.luck@intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
+        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
+Subject: Re: [PATCH v2 09/14] platform/x86/intel/ifs: Use generic microcode
+ headers and functions
+Message-ID: <Y253FKtLnmV3r7Kj@zn.tnic>
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-10-jithu.joseph@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d3aead5b-413a-e929-1b33-7956fa117d4d@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107225323.2733518-10-jithu.joseph@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 12:06:45PM +0100, Konrad Dybcio wrote:
-> On 10/11/2022 11:35, Johan Hovold wrote:
-> > Enable the NVMe SSD connected to PCIe2.
-> >
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 63 +++++++++++++++++++++++
-> >   1 file changed, 63 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > +	pcie2a_default: pcie2a-default-state {
-> 
-> Aren't they going to be identical for all boards anyway? Maybe there
-> could be some commonization..
+On Mon, Nov 07, 2022 at 02:53:18PM -0800, Jithu Joseph wrote:
+>  static int scan_chunks_sanity_check(struct device *dev)
+>  {
+> -	int metadata_size, curr_pkg, cpu, ret = -ENOMEM;
+>  	struct ifs_data *ifsd = ifs_get_data(dev);
+> +	int curr_pkg, cpu, ret = -ENOMEM;
+>  	bool *package_authenticated;
+>  	struct ifs_work local_work;
+> -	char *test_ptr;
+>  
+>  	package_authenticated = kcalloc(topology_max_packages(), sizeof(bool), GFP_KERNEL);
+>  	if (!package_authenticated)
+>  		return ret;
 
-We had that discussion and decided that keeping the pinconfig in the dts
-is the right thing to do.
+Bah, how big is that thing so that you can't simply do a bitfield on the
+stack here instead of kcalloc-ing?
 
-And even if the clkreq pin will be the same for all boards that's not
-necessarily the case for the other two.
+> @@ -203,67 +174,33 @@ static int scan_chunks_sanity_check(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int ifs_sanity_check(struct device *dev,
+> -			    const struct microcode_header_intel *mc_header)
+> +static int ifs_image_sanity_check(struct device *dev, const struct microcode_header_intel *data)
 
-> > +		clkreq-n-pins {
-> > +			pins = "gpio142";
-> > +			function = "pcie2a_clkreq";
-> > +			drive-strength = <2>;
-> > +			bias-pull-up;
-> > +		};
-> > +
-> > +		perst-n-pins {
-> > +			pins = "gpio143";
-> > +			function = "gpio";
-> > +			drive-strength = <2>;
-> > +			bias-pull-down;
-> > +		};
-> > +
-> > +		wake-n-pins {
-> > +		       pins = "gpio145";
-> > +		       function = "gpio";
-> > +		       drive-strength = <2>;
-> > +		       bias-pull-up;
-> > +	       };
-> > +	};
-> > +
-> >   	qup0_i2c4_default: qup0-i2c4-default-state {
-> >   		pins = "gpio171", "gpio172";
-> >   		function = "qup4";
+Yet another static function - no need for the ifs_ prefix.
 
-Johan
+...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
