@@ -2,132 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C58C625756
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A55C62575F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbiKKJyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S231895AbiKKJzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233232AbiKKJyu (ORCPT
+        with ESMTP id S233338AbiKKJzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:54:50 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F69E0B5;
-        Fri, 11 Nov 2022 01:54:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=evRlCKgEQECo3ai4GkdDmNZPq1lAkkoYTxFJ/d65SdE=; b=u+29K+4QkOtceIX3tLoQ9vv80+
-        WqWzxn55E3NXSqrW80hjOWMm8HPnHdACBYCGVp6fuk1NHI/v16sPyieyfGY2Lt+d1rbVMytb1gZyS
-        wFU5WcrRKjuMbj+/8bTW4MGUb5VQrUERWuBX5s14kZKYj5P7cTNyZJh1Cf/mRIHmiZlq5o14Orll2
-        jC2ehRQmcYCsgOHKmOlQnWa/eFTMVgOPkNm2L8wcU9ftTMtcHZ7/Gh87IQVP65MuJ+RiGA4kXyzN4
-        ypBYeSEwpCFjXuQ1sXcO4Mvq88Gepn/EydGefpCtSaF+/QEqpuxXIe4DEkfPgO8yYrFrUxw8CkOdD
-        WAHNnxjQ==;
-Received: from p200300ccff0666001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff06:6600:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1otQkC-00057X-Ul; Fri, 11 Nov 2022 10:54:41 +0100
-Date:   Fri, 11 Nov 2022 10:54:38 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        alistair@alistair23.me
-Subject: Re: [PATCH v3] ARM: dts: imx: e60k02: Add touchscreen
-Message-ID: <20221111105438.26c477ae@aktux>
-In-Reply-To: <20221111091223.if2ahwz67vkf72ba@pengutronix.de>
-References: <20221108191543.1752080-1-andreas@kemnade.info>
-        <20221109092350.2ke6sbgbcp3wpelc@pengutronix.de>
-        <20221109124536.5154cb03@aktux>
-        <20221111091223.if2ahwz67vkf72ba@pengutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 11 Nov 2022 04:55:46 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BFC6B238;
+        Fri, 11 Nov 2022 01:55:43 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A1F8020195;
+        Fri, 11 Nov 2022 09:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668160542; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b1XE/Se5I0+DLupPxmBeBy4R6iBzoI28YYS3C1nC3ts=;
+        b=ddAAIQqxm4+1CZLcBBAmTihoJJ4XBpPXHlqcZ7mR6G6llKYGc+KCI7bxV+OhI0pTVjhYN2
+        NLFIzIJkJt6twldDIqZn6S1c/i16m0gjNqOUdNbqS4GFD7V1z59yNZJIk5tJS8XZIGvk1z
+        +wDC9Qk8IvTcZTsSEKdg3qD4aQTjG5w=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 7749C2C14E;
+        Fri, 11 Nov 2022 09:55:42 +0000 (UTC)
+Date:   Fri, 11 Nov 2022 10:55:38 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Nicolai Stange <nstange@suse.de>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <Y24cGpeO8UHeiKGl@alley>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20221104010327.wa256pos75dczt4x@treble>
+ <Y2TooogxxLTIkBcj@alley>
+ <878rkhyhhv.fsf@linux.fritz.box>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <878rkhyhhv.fsf@linux.fritz.box>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
-
-On Fri, 11 Nov 2022 10:12:23 +0100
-Marco Felsch <m.felsch@pengutronix.de> wrote:
-
-> Hi Andreas,
+On Fri 2022-11-11 10:20:44, Nicolai Stange wrote:
+> Hi all,
 > 
-> On 22-11-09, Andreas Kemnade wrote:
-> > On Wed, 9 Nov 2022 10:23:50 +0100
-> > Marco Felsch <m.felsch@pengutronix.de> wrote:
-> >   
-> > > Hi Andreas,
-> > > 
-> > > On 22-11-08, Andreas Kemnade wrote:  
-> > > > Add the touchscreen now, since the driver is available.
-> > > > 
-> > > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > > > ---
-> > > > Changes in v3: no phandles pointing from dtsi to dts    
-> > > 
-> > > Thanks for this change...
-> > >   
-> > > > Changes in v2: fix pinmux naming
-> > > > 
-> > > >  arch/arm/boot/dts/e60k02.dtsi              |  9 ++++++++-
-> > > >  arch/arm/boot/dts/imx6sl-tolino-shine3.dts | 12 ++++++++++++
-> > > >  arch/arm/boot/dts/imx6sll-kobo-clarahd.dts | 12 ++++++++++++
-> > > >  3 files changed, 32 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/arch/arm/boot/dts/e60k02.dtsi
-> > > > b/arch/arm/boot/dts/e60k02.dtsi index 935e2359f8df..99091db3ab2a
-> > > > 100644 --- a/arch/arm/boot/dts/e60k02.dtsi
-> > > > +++ b/arch/arm/boot/dts/e60k02.dtsi
-> > > > @@ -104,7 +104,14 @@ &i2c2 {
-> > > >  	clock-frequency = <100000>;
-> > > >  	status = "okay";
-> > > >  
-> > > > -	/* TODO: CYTTSP5 touch controller at 0x24 */
-> > > > +	cyttsp5: touchscreen@24 {
-> > > > +		compatible = "cypress,tt21000";
-> > > > +		reg = <0x24>;
-> > > > +		interrupt-parent = <&gpio5>;
-> > > > +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-> > > > +		reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-> > > > +		vdd-supply = <&ldo5_reg>;
-> > > > +	};    
-> > > 
-> > > but we still have a cross-reference to the .dtsi file here. Therefore
-> > > I said to move the interrupt/reset-gpio into the dts file too. I know
-> > > this is a kind of a nitpick but I really don't like such
-> > > cross-references.
-> > >   
-> > hmm. &gpio5 references to imx6sl[l].dtsi, not dts, so what is the
-> > problem here?  
+> Petr Mladek <pmladek@suse.com> writes:
 > 
-> Sorry for the missunderstanding, I didn't mean the phandle. I mean the
-> mux setting which is done in the dts right? I'm just not a fan of
-> muxing pins in one file an using those 'assumptions' in others. Except
-> for platforms like the imx8mm-evk which is exactly the same hardware and
-> only differs in the RAM they used. But you have two different platforms
-> right?
+> > On Thu 2022-11-03 18:03:27, Josh Poimboeuf wrote:
+> >> On Wed, Oct 26, 2022 at 04:41:22PM -0300, Marcos Paulo de Souza wrote:
+> >> > The life of shadow variables is not completely trivial to maintain.
+> >> > They might be used by more livepatches and more livepatched objects.
+> >> > They should stay as long as there is any user.
+> >> > 
+> >> > In practice, it requires to implement reference counting in callbacks
+> >> > of all users. They should register all the user and remove the shadow
+> >> > variables only when there is no user left.
+> >> > 
+> >> > This patch hides the reference counting into the klp_shadow API.
+> >> > The counter is connected with the shadow variable @id. It requires
+> >> > an API to take and release the reference. The release function also
+> >> > calls the related dtor() when defined.
+> >> > 
+> >> > An easy solution would be to add some get_ref()/put_ref() API.
+> >> > But it would need to get called from pre()/post_un() callbacks.
+> >> > It might be easy to forget a callback and make it wrong.
+> >> > 
+> >> > A more safe approach is to associate the klp_shadow_type with
+> >> > klp_objects that use the shadow variables. The livepatch core
+> >> > code might then handle the reference counters on background.
+> >> > 
+> >> > The shadow variable type might then be added into a new @shadow_types
+> >> > member of struct klp_object. They will get then automatically registered
+> >> > and unregistered when the object is being livepatched. The registration
+> >> > increments the reference count. Unregistration decreases the reference
+> >> > count. All shadow variables of the given type are freed when the reference
+> >> > count reaches zero.
+> >> > 
+> >> > All klp_shadow_alloc/get/free functions also checks whether the requested
+> >> > type is registered. It will help to catch missing registration and might
+> >> > also help to catch eventual races.
+> >> 
+> >> Is there a reason the shadow variable lifetime is tied to klp_object
+> >> rather than klp_patch?
+> >
+> > Good question!
+> >
+> > My thinking was that shadow variables might be tight to variables
+> > from a particular livepatched module. It would make sense to free them
+> > when the only user (livepatched module) is removed.
+> >
+> > The question is if it is really important.
 > 
-Same board, same PCB marking, the only spotted difference is the name on the
-case and the SoC (which is pin-compatible, so GPIOs will be all the same).
+> I don't think so. For shadow variables attached to "real" data objects,
+> I would expect those objects to be gone by the time the patched ko gets
+> removed. For dummy shadows attached to NULL (see below), used for
+> handing over shared state between atomic-replace livepatch modules, the
+> memory footprint is negligible, I'd say.
+> 
+> OTOH, callbacks are per klp_object already, so for API consistency, it
+> might make sense to stick to this pattern for the shadows as well. But I
+> don't have a real opinion on this.
 
-In the case of different hardware platforms I would understand your
-ruffled feathers.
+Good point!
 
-Regards,
-Andreas
+> >From my experience, there are basically two relevant usage patterns of
+> shadow variables.
+> 1.) To hand over global state from one sublivepatch to its pendant in
+>     the to-be-applied livepatch module. Example: a new global mutex or
+>     alike.
+> 2.) The "regular" intended usage, attaching schadow variables to real
+>     (data) objects.
+> 
+> To manage lifetime for 1.), we usually implement some refcount scheme,
+> managed from the livepatches' module_init()/_exit(): the next livepatch
+> would subscribe to the shared state before the previous one got a chance
+> to release it. This works in practice, but the code related to it is
+> tedious to write and quite verbose.
+> 
+> The second usage pattern is much more difficult to implement correctly
+> in light of possible livepatch downgrades to a subset of
+> sublivepatches. Usually a sublivepatch making use of a shadow variable
+> attached to real objects would livepatch the associated object's
+> destruction code to free up the associated shadow, if any. If the next
+> livepatch to be applied happened to not contain this sublivepatch in
+> question as well, the destruction code would effectively become
+> unpatched, and any existing shadows leaked. Depending on the object type
+> in question, this memory leakage might or might not be an actual
+> problem, but it isn't nice either way.
+> 
+> Often, there's a more subtle issue with the latter usecase though: the
+> shadow continues to exist, but becomes unmaintained once the transitions
+> has started. If said sublivepatch happens to become reactivated later
+> on, it would potentially find stale shadows, and these could even get
+> wrongly associated with a completely different object which happened to
+> get allocated at the same memory address. Depending on the shadow type,
+> this might or might not be Ok. New per-object locks or a "TLB flush
+> needed" boolean would probably be Ok, but some kind of refcount would
+> certainly not. There's not much which could be done from the pre-unpatch
+> callbacks, because these aren't getting invoked for atomic-replace
+> downgrades.
+> 
+> We had quite some discussion internally on how to best approach these
+> limitations, the outcome being (IIRC), that a more versatile callbacks
+> support would perhaps quickly become too complex or error-prone to use
+> correctly. So Petr proposed this garbage collection/refcounting
+> mechanism posted here, which would solve the memory leakage issue as a
+> first step (and would make shadow variable usage less verbose IMO).
+> 
+> The consistency problem would still not be fully solved: consider a
+> refcount-like shadow, where during the transition some acquirer had been
+> unpatched already, while a releaser has not yet. But my hope is that we
+> can later build on this work here and somehow resolve this as well.
+> 
+> > Nicolai, your have the practical experience. Should the reference
+> > counting be per-livepatched object or per-livepatch, please?
+> 
+> See above, I think it won't matter much from a functionality POV.
+
+I would personally keep it tied together with the livepatched object
+just to be on the safe side.
+
+Is this acceptable for kPatch users in the end?
+
+Best Regards,
+Petr
