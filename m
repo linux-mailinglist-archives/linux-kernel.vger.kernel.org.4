@@ -2,89 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D3F62602A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1148462602F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbiKKRLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S234031AbiKKRNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbiKKRL0 (ORCPT
+        with ESMTP id S233762AbiKKRNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:11:26 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB5B0;
-        Fri, 11 Nov 2022 09:11:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1668186674; bh=1RIQ/IkEDUmv9IHs9QgFqfOSQHFRaOMUNJ4hAer8V7U=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=i7Ych6tATqnDt3txDGmf4tl2aOt6j5CZYTlZdYNIJWf5jIb9uQuKygWkgFAfZdqt/
-         pYrneCIpfWlMV9VzuVz1ZdUqjO5895K1q/RDvnlQak9uzy2G+RuZRW4GNIOXG9pjr+
-         /MEslRNG8FbBCpBUn7yCQyVWVglS7ckWx9LuL6Ws=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Fri, 11 Nov 2022 18:11:14 +0100 (CET)
-X-EA-Auth: V+drH4vY8UWXrgfnZZR7Hc2mA9wgmxew3GLoFUFYAmzIxO1+7Zdb/tpLl6NXQrz5gJPwo7XaSp0gWCF9ff8cCxjJDfF2L6q4
-Date:   Fri, 11 Nov 2022 22:41:03 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Dan Carpenter <error27@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: patches for staging:media drivers
-Message-ID: <Y26CJ9L52AmPBQYC@qemulion>
-References: <Y2eSCZJNWn6DzCUu@qemulion>
- <48f4bda9-b5e3-9649-aab9-b529889bf110@linaro.org>
- <Y2oO7fU4whKr+3hb@kadam>
- <Y2q7tFF7YeX16H20@lunn.ch>
- <Y2tLZaPSUT45TF4f@qemulion>
- <Y2uv56k515cKTXU4@lunn.ch>
+        Fri, 11 Nov 2022 12:13:25 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828A727D;
+        Fri, 11 Nov 2022 09:13:23 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id r186-20020a1c44c3000000b003cfa97c05cdso88697wma.4;
+        Fri, 11 Nov 2022 09:13:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WR4ZsPco/CVzRRsDXNuvPlkKAJC2kjEvAa/rMERYHO4=;
+        b=M3AEbeqXZHuWqEwxLOhiuRHLEVS/grmK5UD/bw1c3c5u1jSf5cVZkkl9a7x15JGFrp
+         EeOHFz9J+hzamMY6qzAXGQvXU1T21qXVihfY9Mi717h0bnN1aPBdJmtqBzPB7gPdon7c
+         QJ1Wb0YrPNg6Ceiiwvh0TACZfMWy9fffqMGhRGJYRBdrA9smS6FfuFIlhDMhydvaszVz
+         xn5Be5/ZMgtI44TokbRN7I/4WDzs5f6k7u7kalVqdxcXcHKri0gesrf+T6dq/+/tu8d/
+         lX/EnMThYOOhngSscebq+z81kljBCjXpj3OoE2TEcZtrpkQwhc2KXFmzxAXEXhOb87Uc
+         HjQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WR4ZsPco/CVzRRsDXNuvPlkKAJC2kjEvAa/rMERYHO4=;
+        b=Ps4iImRVMLi1Yq5dKNK5lenjrNB7w9BjsycM4Gzb4nk8ua4csvtUQDN/uierVmnOW4
+         xNcB2dTmQEO/YkRp4WlAgg1RLktokqcwYhiunNnbgP3wcoiGpy9MrROf3+m4k1XZf506
+         UYxehqfUdVC0HFOw/mHArHDheZPt5GuUPTz1aMEFY95fSDg/bTCG//g5ryhvPvlN/irV
+         2LnSIwVf0B9GBOeR8x1zP1knHYHUBVO6Rk9ag6Te6nVqjqA3+/JBe8/7Ob7mwKcsMnKV
+         lsFontxOIVyhYTuUIV1TfsqjvES7qCqPtNM+4NsSOKLVqS5eSKN5eZPtnI4kBmqPZ7LJ
+         ZfgQ==
+X-Gm-Message-State: ANoB5pmGtuEQuYJ5kgzCQzyHbKWN6jIVPq73oUO+0T3Pzj1aro7gqrFe
+        aJCGbtidkCJJlf5FGg5cUunvGF5oSRAo6g==
+X-Google-Smtp-Source: AA0mqf4brqlgDjFtqDK/8Sg9349i3GnsKYIQNV5QeNn0nBxE9Gri9+6KjqmRGBXfAF6pA9feV28GvQ==
+X-Received: by 2002:a05:600c:4e4d:b0:3cf:81b1:bc7b with SMTP id e13-20020a05600c4e4d00b003cf81b1bc7bmr1933783wmq.121.1668186801919;
+        Fri, 11 Nov 2022 09:13:21 -0800 (PST)
+Received: from michael-VirtualBox (89-139-102-221.bb.netvision.net.il. [89.139.102.221])
+        by smtp.gmail.com with ESMTPSA id p5-20020a05600c358500b003c6b9749505sm10370124wmq.30.2022.11.11.09.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 09:13:21 -0800 (PST)
+Date:   Fri, 11 Nov 2022 19:13:18 +0200
+From:   Michael Zaidman <michael.zaidman@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Enrik.Berkhan@inka.de,
+        Michael Zaidman <michael.zaidman@gmail.com>,
+        Andrew Robertson <andrew.robertson@ftdichip.com>
+Subject: Re: [PATCH v4 00/13] HID: ft260: fixes and performance improvements
+Message-ID: <Y26CrhASiOuPXOl3@michael-VirtualBox>
+References: <20221105211151.7094-1-michael.zaidman@gmail.com>
+ <nycvar.YFH.7.76.2211111109490.6045@cbobk.fhfr.pm>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2uv56k515cKTXU4@lunn.ch>
+In-Reply-To: <nycvar.YFH.7.76.2211111109490.6045@cbobk.fhfr.pm>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 02:49:27PM +0100, Andrew Lunn wrote:
-> On Wed, Nov 09, 2022 at 12:10:37PM +0530, Deepak R Varma wrote:
-> > On Tue, Nov 08, 2022 at 09:27:32PM +0100, Andrew Lunn wrote:
->
-> Staging drivers for network tend to be USB dongles for WiFi. Some of
-> those drivers need throwing away and starting again, others need less
-> work. If you are interested in that, i would suggest asking on
-> linux-wireless@vger.kernel.org.
->
-> Another option might be pi433? The problem with that is, i don't know
-> how it fits into the rest of the network stack? Could it maybe fit
-> under ieee802154? Or is it just unique and needs to do its own thing?
+On Fri, Nov 11, 2022 at 11:19:32AM +0100, Jiri Kosina wrote:
+> On Sat, 5 Nov 2022, Michael Zaidman wrote:
+> 
+> > This patch series is an updated version of this one:
+> > https://lore.kernel.org/all/20221030203403.4637-1-michael.zaidman@gmail.com/
+> > 
+> > Changes since v3:
+> >   - Fixes for the kernel CI bot warnings
+> >   - We now do not miss NACK on the wakeup from the power saving mode
+> >     on the KVM installation reported by Enrik. For details, see
+> >     https://github.com/MichaelZaidman/hid-ft260/pull/7
+> > 
+> > Changes since v2:
+> > 
+> >   - Remove SMBus Quick command support
+> >   - Missed NACK from big i2c read
+> >   - Wake up device from power saving mode
+> >   - Fix a NULL pointer dereference in ft260_i2c_write
+> >   - Missed NACK from busy device
+> > 
+> > Changes since v1:
+> > 
+> >   - Do not populate hidraw device
+> >   - Avoid stale read buffer pointer
+> > 
+> > Michael Zaidman (13):
+> >   HID: ft260: ft260_xfer_status routine cleanup
+> >   HID: ft260: improve i2c write performance
+> >   HID: ft260: support i2c writes larger than HID report size
+> >   HID: ft260: support i2c reads greater than HID report size
+> >   HID: ft260: improve i2c large reads performance
+> >   HID: ft260: do not populate /dev/hidraw device
+> >   HID: ft260: skip unexpected HID input reports
+> >   HID: ft260: remove SMBus Quick command support
+> >   HID: ft260: missed NACK from big i2c read
+> >   HID: ft260: wake up device from power saving mode
+> >   HID: ft260: fix a NULL pointer dereference in ft260_i2c_write
+> >   HID: ft260: missed NACK from busy device
+> >   HID: ft260: fix sparse warnings
+> 
+> Hi Michael,
+> 
+> this is now queued in hid.git#for-6.2/ft260.
+> 
+> Thanks,
+> 
+> -- 
+> Jiri Kosina
+> SUSE Labs
+> 
 
-Hello Andrew,
-I looked at the pi433 driver and it appears to be a good starting point. I have
-started studying more about the hardware, the RF technology etc. There is a TODO
-file with reasonable challenges.
+Thanks, Jiri! Much appreciated.
 
-Thank you for the recommendation.
-
-Have a nice weekend!
-./drv
-
->
->       Andrew
->
-
+Michael
 
