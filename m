@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F50E625531
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA1B625532
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbiKKI0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S233079AbiKKI1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:27:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbiKKI0p (ORCPT
+        with ESMTP id S232774AbiKKI1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:26:45 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285D621261
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:26:44 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id r12so7335908lfp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8rpVKE67IBmA7XtteX2UDcMQHdjbr00NDENJT6r74jo=;
-        b=rVyoTLGZn9mJFxahXkOBGebTf4V/UVm9x7ea3vJ4MlkqaEingvwMH6LThe0n89yA3M
-         Dqz93cqHAgMDuBIAW+jJWNe2kD56W6P6cOY9LllNqulQqWE04C+DXVShqhFRi3+1hboK
-         X0xHG2tL2ltm3aYAovIrOo9yf/DRLsEXMk3ZG4m6RUI4PBdaRBjBYOA1rBHhXTvotKai
-         GlIkEycBZ2y9txHNCwxN1EyHkgnHFZuLXP7BFguCX0GJTcTYs+GwvpfX2Hfd8u+pbglU
-         ClrZwpaw6lZT3QrNwnTWc43FxosLOPkkRILh4O6G34Qd8hJDNBE+hCKdUvbmGNt9Q7BX
-         kffA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8rpVKE67IBmA7XtteX2UDcMQHdjbr00NDENJT6r74jo=;
-        b=1lryr8jpHfxweizM4ryNqbLwpEcSNFBkZcIh9x4RwnaSji9P52Ts/QZW8Pp0I07N6e
-         RsPPJwluYBExbLL5LGqZXS97UY6gv5EbeikRHSnOvcgNyA59aMIFfbPJqKweQUm+FxxM
-         kqAWTo6jv4ehPqZwawlQ82CsurwqOouLJO764rDeL8DnqmAsylMjzJ3l1wu8J1ZUZwSs
-         mTPtF/2OVx1V5ZcrWRaOnVMTvstS7Osi7gpk7C0SJ8EI1psXyOhAwgax+OLAr+Gs8BYx
-         qaMXxjdDIbIH9WTteMnBrB7QEPs44xYKA/Roy/jL94Ld5D0ESnFbYXTKH4bIV2xcPt+C
-         EVRg==
-X-Gm-Message-State: ANoB5pmqh4vTu/O3QFALyI5E7zYZlYUMo38+lQdmOUGRMGsxJ/LWrj/L
-        TqJUZWnVH7jq79+ACkHl7KRGrg==
-X-Google-Smtp-Source: AA0mqf40KWGiBUxr2c5SK3GVpLInNlmJgA1Y+Gb3thXl4jUVA9nIYqvQ5QbV1/zxPa/lpRQLIvHctw==
-X-Received: by 2002:a19:491d:0:b0:4b1:7f47:2ecd with SMTP id w29-20020a19491d000000b004b17f472ecdmr378034lfa.333.1668155202512;
-        Fri, 11 Nov 2022 00:26:42 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id b9-20020a0565120b8900b004a4251c7f75sm211248lfv.202.2022.11.11.00.26.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 00:26:41 -0800 (PST)
-Message-ID: <900e6177-0a21-e2f5-6c03-81d1dd182c68@linaro.org>
-Date:   Fri, 11 Nov 2022 09:26:40 +0100
+        Fri, 11 Nov 2022 03:27:08 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC529F58
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:27:05 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7sDc3dqBzJnZw;
+        Fri, 11 Nov 2022 16:24:00 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 16:27:03 +0800
+Received: from [10.174.179.24] (10.174.179.24) by
+ dggpemm100009.china.huawei.com (7.185.36.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 16:27:03 +0800
+Subject: Re: [PATCH] kobject: hide illegible sysfs warning of kobject_del()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20221111065807.3278713-1-liushixin2@huawei.com>
+ <Y23rC0N1cL2LQpyF@kroah.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Liu Shixin <liushixin2@huawei.com>
+Message-ID: <d89eb156-3db2-df72-d21c-357baba3d377@huawei.com>
+Date:   Fri, 11 Nov 2022 16:27:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next 1/2] dt-bindings: net: qcom,ipa: remove an
- unnecessary restriction
-Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
-        elder@kernel.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221110195619.1276302-1-elder@linaro.org>
- <20221110195619.1276302-2-elder@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221110195619.1276302-2-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <Y23rC0N1cL2LQpyF@kroah.com>
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.24]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 20:56, Alex Elder wrote:
-> Commit d8604b209e9b3 ("dt-bindings: net: qcom,ipa: add firmware-name
-> property") added a requirement for a "firmware-name" property that
-> is more restrictive than necessary.
-> 
-> If the AP loads GSI firmware, the name of the firmware file to use
-> may optionally be provided via a "firmware-name" property.  If the
-> *modem* loads GSI firmware, "firmware-name" doesn't need to be
-> supplied--but it's harmless to do so (it will simply be ignored).
-> 
-> Remove the unnecessary restriction, and allow "firware-name" to be
-> supplied even if it's not needed.
-> 
-> Signed-off-by: Alex Elder <elder@linaro.org>
-> ---
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml | 10 ----------
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 2022/11/11 14:26, Greg Kroah-Hartman wrote:
+> On Fri, Nov 11, 2022 at 02:58:07PM +0800, Liu Shixin wrote:
+>> Some consumers do not care whether kobject_add() succeed or failed such as
+>> irqdesc. They call kobject_del() all the time even if kobject_add() failed.
+>> Then kernel will report some illegible sysfs warning like this:
+>>
+>>  kernfs: can not remove 'actions', no directory
+>>  WARNING: CPU: 0 PID: 277 at fs/kernfs/dir.c:1615 kernfs_remove_by_name_ns+0xd5/0xe0
+> Why not fix the caller here?  Is that somehow not possible?
+The caller should be freed by kobject_put() if kobject_add() failed. But in fact, the failure does not affect
+the function of the caller. So the caller do not call kobject_put() Immediately.
+If want to fix the caller, we can check konj->state_in_sysfs before call kobject_del(). This way has no difference
+with check kobj->state_in_sysfs in kobject_del().
+By the way, I'm not sure how many callers have this problem. So I think it's better to fix in kobject_del().
 
-Best regards,
-Krzysztof
+thanks,
+
+>
+> thanks,
+>
+> greg k-h
+> .
+>
 
