@@ -2,132 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825A462649E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F616264A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234637AbiKKWZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
+        id S234257AbiKKWbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiKKWZl (ORCPT
+        with ESMTP id S232918AbiKKWbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 17:25:41 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2040.outbound.protection.outlook.com [40.107.223.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5C5686A8;
-        Fri, 11 Nov 2022 14:25:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H1rzFvYTnCycH4p3rIlZ9tKGuar78ITulCdakW5KFxKqyXCwjJKVNgFrOhwjip0opC0AAwg5FoNr+gj6F+OOvbUmZE5De6poAOqqYgkBthSYjx6MBriRYWKEIjErU46W6oG2Nx6w6MwEbh3tNpjFKxduf5V2BoM4IpG6HqbrxYeTERrlBk7B1VlGeiLVgN+FnZWAudSZBGLsTLwBkGGCAVPZVXe4XNcWkPK44dE/G6gWeus43r08AJKrxbrVVP/DsfvpLlBhsWlmvir2ycNaiyuNfOH74OwcpagW7D10zUYIFd0D5RiAkPXp5/t1eo6H3xC/EHcTx6JTi1aemjZeHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jlxuoOAgE6Rq821g2XBvzzDEOAPmAnrRn1dxESZTM+0=;
- b=WaB+KEQXpFCHL4h3U/aLIpCS3IZ/4iSiZYFKOG3Mq+gSgbh6fy/CrilEtke62ToTpmDmi89FFsmVUi/oc8gM5Jz/o0zA5pca9qr6xrsyysK1zzPnhOL/1NZ57heR64B2eTsSyRdqG0n4HV/rHDeJWUsdqatksv6NPQTcOUbuSRXwUFjP/y9FVwLLUCd52pcP9zFgjdFjAiQ0Y5MYvkgd/WPFguaJ2gZP+AAhusbZp4c/YXd7mkh3os9fS2dkpJqnq3tsKVIuFvvxvuTNj7v0Goo9VQphyyenG+nxkbvnKY9bM4RszJi0sXfShvNPzOvOCyGDmSHy8LveTy9zFhlKvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jlxuoOAgE6Rq821g2XBvzzDEOAPmAnrRn1dxESZTM+0=;
- b=mnSqPpqtszJXK1GPylfoEU8kW4bY35vZMupEFSr6tyVzVPR9l9ma17YsdlsOJhlZJBTDPJlbfukWDeYdgHurpHAnk2M7U8UT8xTjszjcOljY+/EkMSy3L42pkzT548zD2OKkOtooAArHJiEWudX4ap3zMjk3FtGikxjfK0AGn+fyQlw5szB2v1LtJJCPJdk1qwE5YDKMXNCbQQBe3s92nrLW6i04E5HVvv+YQuRs56zUgrdtJ9JmsdpjOmMgYL3/nvLQLb6pDiveG8Y1/clwiTRlqF9VNcd2FFr8nO9nJA5kCbDwpN2FEWf2TTvQILpBZvG6PqJj4lMYB4c2FWAf6g==
-Received: from DS7PR03CA0172.namprd03.prod.outlook.com (2603:10b6:5:3b2::27)
- by MW4PR12MB6924.namprd12.prod.outlook.com (2603:10b6:303:207::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.24; Fri, 11 Nov
- 2022 22:25:32 +0000
-Received: from DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b2:cafe::cd) by DS7PR03CA0172.outlook.office365.com
- (2603:10b6:5:3b2::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.14 via Frontend
- Transport; Fri, 11 Nov 2022 22:25:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- DM6NAM11FT054.mail.protection.outlook.com (10.13.173.95) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.12 via Frontend Transport; Fri, 11 Nov 2022 22:25:32 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 11 Nov
- 2022 14:25:31 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 11 Nov 2022 14:25:31 -0800
-Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Fri, 11 Nov 2022 14:25:30 -0800
-From:   Besar Wicaksono <bwicaksono@nvidia.com>
-To:     <suzuki.poulose@arm.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <robin.murphy@arm.com>, <sudeep.holla@arm.com>,
-        <thanu.rangarajan@arm.com>, <Michael.Williams@arm.com>,
-        <treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
-        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>,
-        <leo.yan@linaro.org>, Besar Wicaksono <bwicaksono@nvidia.com>
-Subject: [PATCH v7 3/3] arm64: defconfig: enable ARM CoreSight PMU driver
-Date:   Fri, 11 Nov 2022 16:23:30 -0600
-Message-ID: <20221111222330.48602-4-bwicaksono@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221111222330.48602-1-bwicaksono@nvidia.com>
-References: <20221111222330.48602-1-bwicaksono@nvidia.com>
+        Fri, 11 Nov 2022 17:31:16 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4025E4E407
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:31:15 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id u7so4173419qvn.13
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g5QtNrTk+w8/73Vy3fSGZT5rE522rZx+3vx3VVx77Pw=;
+        b=4/1sXfbrZ8FjHb/XCuRiNI4Tkmqrjfe61YsZMRjH5IMEIR4XPXrqrQZCljGun93XkI
+         wAbpPWhO3iXyIaOywwixREQ2Ti9wf+MQe7VAxc9u3efD85AxuylWd57xuYo/xgwHB91K
+         elvPRmZIbBPJe11kpiyk/OwWAjCBBkwEH3wG+1r3W2izHmOwcIFhf++GejjBSRyBpiMu
+         FW0nmDuKbvv4+aEzSZtAR3ueo7qW7dcroe7ha6EzeRBT6KKN5yWlpGv8o+pORPLE3wKo
+         y/MtESZ/Yo5LKl+kN4hu3s+1QgKFXAR4nPTwUxXuIw9yTX7J/4jDH60Ehzha1bcbQ0nX
+         ngSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g5QtNrTk+w8/73Vy3fSGZT5rE522rZx+3vx3VVx77Pw=;
+        b=A0oAJ0XJwjukKke+KPErgq2eVVasldrRFu2NzaIvJK1X7MnwDrLRynECbmeseeicL8
+         dZzRw5CovUvkoE/JAgMt1jaHjRnGMpgr/7TuuW/lUTU/eJlDtRmg7pcgeCk2U0HOa6Tx
+         MiYtfHesRUPnonWrdWtHKGa2t9YTUG2BZB9PCtHSTYLoWhurlo9HbBGLXVf3UixFTwg0
+         EvF0I8d5fvOSVoCYzP9Lwz7ka/k+Blrmpw0jEZddI5gciAMbkPSFA+iHdSN0nu4UYvAC
+         YeXJ8MIz1cQSLa+oEbs6ACZkXW8CC6lYXUBXjVOD7ZaNpGjn+cZlmeHx38yidT4zjw4Y
+         HvbA==
+X-Gm-Message-State: ANoB5pk+lKYmxK/dHhWIqx7BRqlKRQutU2PrOBsXqvQtvIPwAOP14gkJ
+        Zl/GU+788NbUCa5RA7ERWISDAzN4hprXRA==
+X-Google-Smtp-Source: AA0mqf5NktUO7qEAJTx0O1rFTkLU5Jp2OahXZ/Qb67noQ5Q83wTWsjjhUvzSyoFNotCpUIHl4SS/pA==
+X-Received: by 2002:a05:6214:883:b0:4b9:6eb4:ba10 with SMTP id cz3-20020a056214088300b004b96eb4ba10mr3938072qvb.75.1668205874321;
+        Fri, 11 Nov 2022 14:31:14 -0800 (PST)
+Received: from abrestic-xps.ba.rivosinc.com (pool-72-80-155-134.nycmny.fios.verizon.net. [72.80.155.134])
+        by smtp.gmail.com with ESMTPSA id c18-20020ac85192000000b0039c7b9522ecsm1907290qtn.35.2022.11.11.14.31.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 14:31:13 -0800 (PST)
+From:   Andrew Bresticker <abrestic@rivosinc.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Atish Patra <atishp@rivosinc.com>, Guo Ren <guoren@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Bresticker <abrestic@rivosinc.com>
+Subject: [PATCH] RISC-V: Fix unannoted hardirqs-on in return to userspace slow-path
+Date:   Fri, 11 Nov 2022 17:31:08 -0500
+Message-Id: <20221111223108.1976562-1-abrestic@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT054:EE_|MW4PR12MB6924:EE_
-X-MS-Office365-Filtering-Correlation-Id: 48511e55-5800-4fc1-3162-08dac433a547
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pLgwnq5f4OqoQyJag73YZmhWKOXjo5jnddioN3OQ9ziNxTnP+HRuIUf9jS7lVY/ZsH5KkiY+ABLdb+ypX1RdNtMDixCX6ZVCZQo47GOVooBFpb5tmVrzUcNw/X2tWvJgdSKKagFFFjF0q1JOKPi1QC53ZzBB7vL2fIZQVdjOlIRCcwWpUkPsQNlinj2A94kcC9l3edsEQ6B+cdgU5DcMOsgA0EnOWGYywvyqmpyo2PDU2hmmMfCAe0DfTT8vdzNeGiAyc1h3qU+ZgqrUT47p+fO9p/14124/jZOUSVRhebDgsbZuTlpmcW5CrVlTp+bpIBHMcaLcdzsBunGcOXFQPtv7TApRcGN0efAreiM6aKDBnU8Wl2UqWdDstM0jAAKoKqglB49isvgaAQLmLPsemAHd4oWC1eMmlKrkCk8FTV13RJ5j6W1kSN/Vb19KrECQ7g51Uvn5LdbFFJRZwjGDGsIyOiaGdoATOn3sY9m7oNWLbyNDWa02Ie5FwTdadbAHJxfjEnLcYWZkvBl9xnobaZT2wXIsQObFbzuK0jCzmXUiuvsM+in3ayPjM6F/oMr4hjVd3k0aTjZN0M/GLd1iajYTgeeV4GyAeD+OWTlYv84JNu8E7AwygmOmZQqa7OoU25PK44/sSbcjs6YgFDOaOoPX+ckSm1FLLWmJJyJMuTLLqE8epOD2l0BCXaIVfqjePFxkNeojD3UhNYS3dy1fQzTDAA4CdM8jvmL/s+ah/4BZfkiPLG8S9l2mDPPIa8E5k2jjTI9++ZKnZ2gANTqyXQ==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(39860400002)(396003)(451199015)(40470700004)(46966006)(36840700001)(36860700001)(7416002)(82310400005)(47076005)(5660300002)(86362001)(7636003)(8936002)(356005)(70206006)(41300700001)(478600001)(316002)(54906003)(4326008)(1076003)(2616005)(8676002)(110136005)(2906002)(186003)(426003)(40480700001)(26005)(40460700003)(70586007)(82740400003)(4744005)(7696005)(36756003)(336012)(107886003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 22:25:32.0066
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48511e55-5800-4fc1-3162-08dac433a547
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6924
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable driver for Coresight PMU arch device.
+The return to userspace path in entry.S may enable interrupts without the
+corresponding lockdep annotation, producing a splat[0] when DEBUG_LOCKDEP
+is enabled. Simply calling __trace_hardirqs_on() here gets a bit messy
+due to the use of RA to point back to ret_from_exception, so just move
+the whole slow-path loop into C. It's more readable and it lets us use
+local_irq_{enable,disable}(), avoiding the need for manual annotations
+altogether.
 
-Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
+[0]:
+  ------------[ cut here ]------------
+  DEBUG_LOCKS_WARN_ON(!lockdep_hardirqs_enabled())
+  WARNING: CPU: 2 PID: 1 at kernel/locking/lockdep.c:5512 check_flags+0x10a/0x1e0
+  Modules linked in:
+  CPU: 2 PID: 1 Comm: init Not tainted 6.1.0-rc4-00160-gb56b6e2b4f31 #53
+  Hardware name: riscv-virtio,qemu (DT)
+  epc : check_flags+0x10a/0x1e0
+  ra : check_flags+0x10a/0x1e0
+  <snip>
+   status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
+  [<ffffffff808edb90>] lock_is_held_type+0x78/0x14e
+  [<ffffffff8003dae2>] __might_resched+0x26/0x22c
+  [<ffffffff8003dd24>] __might_sleep+0x3c/0x66
+  [<ffffffff80022c60>] get_signal+0x9e/0xa70
+  [<ffffffff800054a2>] do_notify_resume+0x6e/0x422
+  [<ffffffff80003c68>] ret_from_exception+0x0/0x10
+  irq event stamp: 44512
+  hardirqs last  enabled at (44511): [<ffffffff808f901c>] _raw_spin_unlock_irqrestore+0x54/0x62
+  hardirqs last disabled at (44512): [<ffffffff80008200>] __trace_hardirqs_off+0xc/0x14
+  softirqs last  enabled at (44472): [<ffffffff808f9fbe>] __do_softirq+0x3de/0x51e
+  softirqs last disabled at (44467): [<ffffffff80017760>] irq_exit+0xd6/0x104
+  ---[ end trace 0000000000000000 ]---
+  possible reason: unannotated irqs-on.
+
+Signed-off-by: Andrew Bresticker <abrestic@rivosinc.com>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+This should also theoretically be fixed by the conversion to generic entry,
+but it's not clear how far away that series is from landing.
+---
+ arch/riscv/kernel/entry.S  | 18 +++++-------------
+ arch/riscv/kernel/signal.c | 34 +++++++++++++++++++++-------------
+ 2 files changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0b6af3348e79..8f3f7593dc5f 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1262,6 +1262,7 @@ CONFIG_ARM_DSU_PMU=m
- CONFIG_FSL_IMX8_DDR_PMU=m
- CONFIG_ARM_SPE_PMU=m
- CONFIG_ARM_DMC620_PMU=m
-+CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU=y
- CONFIG_QCOM_L2_PMU=y
- CONFIG_QCOM_L3_PMU=y
- CONFIG_HISI_PMU=y
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index b9eda3fcbd6d..58dfa8595e19 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -263,12 +263,11 @@ ret_from_exception:
+ #endif
+ 	bnez s0, resume_kernel
+ 
+-resume_userspace:
+ 	/* Interrupts must be disabled here so flags are checked atomically */
+ 	REG_L s0, TASK_TI_FLAGS(tp) /* current_thread_info->flags */
+ 	andi s1, s0, _TIF_WORK_MASK
+-	bnez s1, work_pending
+-
++	bnez s1, resume_userspace_slow
++resume_userspace:
+ #ifdef CONFIG_CONTEXT_TRACKING_USER
+ 	call user_enter_callable
+ #endif
+@@ -368,19 +367,12 @@ resume_kernel:
+ 	j restore_all
+ #endif
+ 
+-work_pending:
++resume_userspace_slow:
+ 	/* Enter slow path for supplementary processing */
+-	la ra, ret_from_exception
+-	andi s1, s0, _TIF_NEED_RESCHED
+-	bnez s1, work_resched
+-work_notifysig:
+-	/* Handle pending signals and notify-resume requests */
+-	csrs CSR_STATUS, SR_IE /* Enable interrupts for do_notify_resume() */
+ 	move a0, sp /* pt_regs */
+ 	move a1, s0 /* current_thread_info->flags */
+-	tail do_notify_resume
+-work_resched:
+-	tail schedule
++	call do_work_pending
++	j resume_userspace
+ 
+ /* Slow paths for ptrace. */
+ handle_syscall_trace_enter:
+diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+index 5c591123c440..bfb2afa4135f 100644
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -313,19 +313,27 @@ static void do_signal(struct pt_regs *regs)
+ }
+ 
+ /*
+- * notification of userspace execution resumption
+- * - triggered by the _TIF_WORK_MASK flags
++ * Handle any pending work on the resume-to-userspace path, as indicated by
++ * _TIF_WORK_MASK. Entered from assembly with IRQs off.
+  */
+-asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
+-					   unsigned long thread_info_flags)
++asmlinkage __visible void do_work_pending(struct pt_regs *regs,
++					  unsigned long thread_info_flags)
+ {
+-	if (thread_info_flags & _TIF_UPROBE)
+-		uprobe_notify_resume(regs);
+-
+-	/* Handle pending signal delivery */
+-	if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+-		do_signal(regs);
+-
+-	if (thread_info_flags & _TIF_NOTIFY_RESUME)
+-		resume_user_mode_work(regs);
++	do {
++		if (thread_info_flags & _TIF_NEED_RESCHED) {
++			schedule();
++		} else {
++			local_irq_enable();
++			if (thread_info_flags & _TIF_UPROBE)
++				uprobe_notify_resume(regs);
++			/* Handle pending signal delivery */
++			if (thread_info_flags & (_TIF_SIGPENDING |
++						 _TIF_NOTIFY_SIGNAL))
++				do_signal(regs);
++			if (thread_info_flags & _TIF_NOTIFY_RESUME)
++				resume_user_mode_work(regs);
++		}
++		local_irq_disable();
++		thread_info_flags = read_thread_flags();
++	} while (thread_info_flags & _TIF_WORK_MASK);
+ }
 -- 
-2.17.1
+2.25.1
 
