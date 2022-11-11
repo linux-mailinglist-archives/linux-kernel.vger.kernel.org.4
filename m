@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642316264A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D572B6264AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiKKWb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S234225AbiKKWem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbiKKWbV (ORCPT
+        with ESMTP id S230043AbiKKWek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 17:31:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB1B56EC8;
-        Fri, 11 Nov 2022 14:31:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DED0B8281D;
-        Fri, 11 Nov 2022 22:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 036FBC433D7;
-        Fri, 11 Nov 2022 22:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668205878;
-        bh=RRxaeTg8Mv/o5Iwk8msvrvuRmEkkCophftg8hfGQADc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WSY7yio6XCWk01QsWkv3y29TpD9vTryvMLmoEcCdX7nR33x1GfeKBuzj6zQu2B5Rx
-         qLD8lsydoH88UswF5ajnIx/HBQej59HtSz9Aqphb0C5xsso8IoEgeKkyQ+fPDZmuQE
-         fFnaGIYZr8NG5I2z1+aKGtNQ0IrbtOwfzIohH3r8fXGWW1sfzNgK4XupJQVPaBAbW1
-         hyL0eotYbYZZ3gCS4dN/kwhzhQ4GhFNbCF4zakTpQGdty5iLjlBwLwKArciJuJEMoc
-         2sRpBlWxgz7UGDFpvlZ6dTKp06uLAE497D2UHNJ1Lo2EVlG3WBc36MRachFuvv3WTi
-         +GB5Nvb0DJJhw==
-Date:   Fri, 11 Nov 2022 14:31:17 -0800
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     zhang.songyi@zte.com.cn, saeedm@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        kliteyn@nvidia.com, shunh@nvidia.com, rongweil@nvidia.com,
-        valex@nvidia.com, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jiang.xuexin@zte.com.cn, xue.zhihong@zte.com.cn
-Subject: Re: [PATCH linux-next] net/mlx5: remove redundant ret variable
-Message-ID: <Y27NNTSc3N222DWK@x130.lan>
-References: <202211022150403300510@zte.com.cn>
- <Y2gDaRc3t7WiWoTT@unreal>
+        Fri, 11 Nov 2022 17:34:40 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B94013F47
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:34:38 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id b9so5989463ljr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:34:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qby6hZgYyrvExemm1RlZ9AJWUWC3KnZsFc/xC3qyX6M=;
+        b=O6r6qIS+LPhi9LYxdSPmRsvc64PJlF5O1D04D6rVa5vVGcNZYbLOaMP9OU6EdKXUj4
+         tT+AK/XFitdd2HnqWxiAhUmoboftwI0OZIjpI5LVnQtMSsjunZn+kGpbufsp9tq6ZmQz
+         HfJoHCyoKR+y9ZcwsvPynBlndcgQJ6LzSrSFMMhd4EEKcHwRsW42YUYbPw8P/JWWD3A8
+         KQenknpD2N5MAAVYP5QVD2UQPv+hmj3t/ATeJXJrgy1XNlauXHCjx99Ft19rIYVr1szm
+         JZuYCcU6QCNxD1531ycd55/DHx26U+Hj1Uve4mkTbNrJMtSxUzPEpeUKZvFjwtbVF8JD
+         WC4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qby6hZgYyrvExemm1RlZ9AJWUWC3KnZsFc/xC3qyX6M=;
+        b=bmCVKKBcPFSfpeqEvo13F7uwD75cicXRfDOpERe4ESphHaGiYeKNp/Tk1hKmkGPRay
+         glV1lMFjPecg7tAKE9tES7QTzC2qd51x5lF+MQC/o3tVD0S25eYrUR6iIPs9N3AmyfzL
+         9F3yE9TIwYVeaWSxpgnQ9AhTa7Ok4y/eY6aAbbviVTjJAAGm8o0NFENsd4j/djgFqc9W
+         Rv2yQnUQCKzjO7IFl5d7m7uhKoR/0ChMJhahUefMokFfHTMIe/RvZFz2hqVvoPFuD+JZ
+         YMgSGmQMuRXvKm4G9hyITA/qQ3ZP+FvUzaFUw/WYpnN7y/Cuync/MwxeVTDxzcIcP8tE
+         gymQ==
+X-Gm-Message-State: ANoB5pnrZymyFicMkmUUGCDPt4MpIFATe2HZg8ZJXJBmeMkOFCdDofcT
+        xu7GIr8nUNO9a9Ho5fbQsluC+Q==
+X-Google-Smtp-Source: AA0mqf6Ex6rWZ47dONV8+OaLJ4+yaeQ+JBS8tveQT43Etb0Vrsqlt0WZBYZQUJaHaFx+1XY4pMlEuw==
+X-Received: by 2002:a2e:3817:0:b0:26d:ec04:7487 with SMTP id f23-20020a2e3817000000b0026dec047487mr1391610lja.82.1668206076926;
+        Fri, 11 Nov 2022 14:34:36 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id v28-20020ac258fc000000b004b11af921fasm532603lfo.222.2022.11.11.14.34.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 14:34:36 -0800 (PST)
+Message-ID: <db85a38e-bd52-aa33-9c1e-769ac1451a92@linaro.org>
+Date:   Sat, 12 Nov 2022 01:34:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y2gDaRc3t7WiWoTT@unreal>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [v1] drm/msm/disp/dpu1: populate disp_info with connector type
+Content-Language: en-GB
+To:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
+References: <1668175019-10960-1-git-send-email-quic_kalyant@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1668175019-10960-1-git-send-email-quic_kalyant@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,17 +77,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06 Nov 20:56, Leon Romanovsky wrote:
->On Wed, Nov 02, 2022 at 09:50:40PM +0800, zhang.songyi@zte.com.cn wrote:
->> From 74562e313cf9a1b96c7030f27964f826a0c2572d Mon Sep 17 00:00:00 2001
->> From: zhang songyi <zhang.songyi@zte.com.cn>
->> Date: Wed, 2 Nov 2022 20:48:08 +0800
->> Subject: [PATCH linux-next] net/mlx5: remove redundant ret variable
->
->Subject line should be "[PATCH net-next] ..." for all net patches.
->And please use git send-email utility to send the patches.
->
->Thanks
+On 11/11/2022 16:56, Kalyan Thota wrote:
+> Populate disp_info with connector type. Since DRM encoder type
+> for few encoders can be similar (like eDP and DP) this information
+> will be useful to differentiate interfaces.
+> 
+> Changes in v1:
+> - add connector type in the disp_info (Dmitry)
 
-Also this patch doesn't apply to net-next.
+You can get connector type from
+
+> - add helper functions to know encoder type
+> - update commit text reflecting the change
+> 
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 44 +++++++++++++++++++++++++++--
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h | 26 +++++++++++++++--
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 ++
+>   drivers/gpu/drm/msm/dp/dp_display.c         |  5 ++++
+>   drivers/gpu/drm/msm/msm_drv.h               |  7 ++++-
+>   5 files changed, 77 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 9c6817b..c9058aa 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -217,6 +217,40 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>   	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>   };
+>   
+> +bool dpu_encoder_is_external(struct drm_encoder *drm_enc)
+> +{
+> +	struct dpu_encoder_virt *dpu_enc;
+> +
+> +	if (!drm_enc)
+> +		return false;
+> +
+> +	dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +	return (dpu_enc->disp_info.connector_type ==
+> +			DRM_MODE_CONNECTOR_DisplayPort);
+
+And also HDMI, DVI, VGA and several other connector types.
+
+It is much easier to enumerate non-interesting (in other words, 
+non-external ones):
+- Unknown
+- LVDS
+- eDP
+- DSI
+- DPI
+- VIRTUAL
+- WRITEBACK
+
+> +}
+> +
+> +bool dpu_encoder_is_virtual(struct drm_encoder *drm_enc)
+> +{
+> +	struct dpu_encoder_virt *dpu_enc;
+> +
+> +	if (!drm_enc)
+> +		return false;
+> +
+> +	dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +	return (dpu_enc->disp_info.connector_type == DRM_MODE_CONNECTOR_WRITEBACK);
+> +}
+> +
+> +bool dpu_encoder_is_primary(struct drm_encoder *drm_enc)
+> +{
+> +	struct dpu_encoder_virt *dpu_enc;
+> +
+> +	if (!drm_enc)
+> +		return false;
+> +
+> +	dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +	return((dpu_enc->disp_info.connector_type == DRM_MODE_CONNECTOR_DSI) ||
+> +		(dpu_enc->disp_info.connector_type == DRM_MODE_CONNECTOR_eDP));
+
+Why do you need a separate is_primary?
+
+> +}
+>   
+>   bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
+>   {
+> @@ -2412,7 +2446,7 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+>   	struct dpu_kms *dpu_kms = to_dpu_kms(priv->kms);
+>   	struct drm_encoder *drm_enc = NULL;
+>   	struct dpu_encoder_virt *dpu_enc = NULL;
+> -	int ret = 0;
+> +	int ret = 0, intf_i;
+>   
+>   	dpu_enc = to_dpu_encoder_virt(enc);
+>   
+> @@ -2424,13 +2458,17 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+>   	timer_setup(&dpu_enc->frame_done_timer,
+>   			dpu_encoder_frame_done_timeout, 0);
+>   
+> +	intf_i = disp_info->h_tile_instance[0];
+>   	if (disp_info->intf_type == DRM_MODE_ENCODER_DSI)
+>   		timer_setup(&dpu_enc->vsync_event_timer,
+>   				dpu_encoder_vsync_event_handler,
+>   				0);
+> -	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
+> +	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS) {
+>   		dpu_enc->wide_bus_en = msm_dp_wide_bus_available(
+> -				priv->dp[disp_info->h_tile_instance[0]]);
+> +				priv->dp[intf_i]);
+> +		disp_info->connector_type =
+> +			msm_dp_get_connector_type(priv->dp[intf_i]);
+> +	}
+>   
+>   	INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
+>   			dpu_encoder_off_work);
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> index 9e7236e..d361c5d 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> @@ -25,16 +25,18 @@
+>    * @num_of_h_tiles:     Number of horizontal tiles in case of split interface
+>    * @h_tile_instance:    Controller instance used per tile. Number of elements is
+>    *                      based on num_of_h_tiles
+> - * @is_cmd_mode		Boolean to indicate if the CMD mode is requested
+> + * @is_cmd_mode:        Boolean to indicate if the CMD mode is requested
+
+Unrelated change. If you want to fix a whitespace, please do so. In a 
+separate patch.
+
+> + * @connector_type:     DRM_MODE_CONNECTOR_ type
+
+You can get this kind of information from the atomic state.
+See the for_each_connector_on_encoder
+
+>    * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
+> - *				 used instead of panel TE in cmd mode panels
+> - * @dsc:		DSC configuration data for DSC-enabled displays
+> + *                      used instead of panel TE in cmd mode panels
+> + * @dsc:                DSC configuration data for DSC-enabled displays
+>    */
+>   struct msm_display_info {
+>   	int intf_type;
+>   	uint32_t num_of_h_tiles;
+>   	uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
+>   	bool is_cmd_mode;
+> +	int connector_type;
+>   	bool is_te_using_watchdog_timer;
+>   	struct drm_dsc_config *dsc;
+>   };
+> @@ -224,4 +226,22 @@ void dpu_encoder_cleanup_wb_job(struct drm_encoder *drm_enc,
+>    */
+>   bool dpu_encoder_is_valid_for_commit(struct drm_encoder *drm_enc);
+>   
+> +/**
+> +* dpu_encoder_is_external - find if the encoder is of type DP
+> +* @drm_enc:    Pointer to previously created drm encoder structure
+> +*/
+> +bool dpu_encoder_is_external(struct drm_encoder *drm_enc);
+> +
+> +/**
+> +* dpu_encoder_is_virtual - find if the encoder is of type Writeback
+> +* @drm_enc:    Pointer to previously created drm encoder structure
+> +*/
+> +bool dpu_encoder_is_virtual(struct drm_encoder *drm_enc);
+> +
+> +/**
+> +* dpu_encoder_is_primary - find if the encoder is of type DSI or eDP
+> +* @drm_enc:    Pointer to previously created drm encoder structure
+> +*/
+> +bool dpu_encoder_is_primary(struct drm_encoder *drm_enc);
+> +
+>   #endif /* __DPU_ENCODER_H__ */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 0d94eec0d..0709da2 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -574,6 +574,7 @@ static int _dpu_kms_initialize_dsi(struct drm_device *dev,
+>   
+>   		memset(&info, 0, sizeof(info));
+>   		info.intf_type = encoder->encoder_type;
+> +		info.connector_type = DRM_MODE_CONNECTOR_DSI;
+
+No, this is pure lie.
+
+>   
+>   		rc = msm_dsi_modeset_init(priv->dsi[i], dev, encoder);
+>   		if (rc) {
+> @@ -676,6 +677,7 @@ static int _dpu_kms_initialize_writeback(struct drm_device *dev,
+>   	/* use only WB idx 2 instance for DPU */
+>   	info.h_tile_instance[0] = WB_2;
+>   	info.intf_type = encoder->encoder_type;
+> +	info.connector_type = DRM_MODE_CONNECTOR_WRITEBACK;
+>   
+>   	rc = dpu_encoder_setup(dev, encoder, &info);
+>   	if (rc) {
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index bfd0aef..53f65dd 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1509,6 +1509,11 @@ bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+>   	return dp->wide_bus_en;
+>   }
+>   
+> +int msm_dp_get_connector_type(const struct msm_dp *dp_display)
+> +{
+> +	return dp_display->connector_type;
+> +}
+> +
+>   void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+>   {
+>   	struct dp_display_private *dp;
+> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+> index ea80846..2ecba6f 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.h
+> +++ b/drivers/gpu/drm/msm/msm_drv.h
+> @@ -331,7 +331,7 @@ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp_displa
+>   
+>   void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor);
+>   bool msm_dp_wide_bus_available(const struct msm_dp *dp_display);
+> -
+> +int msm_dp_get_connector_type(const struct msm_dp *dp_display);
+>   #else
+>   static inline int __init msm_dp_register(void)
+>   {
+> @@ -365,6 +365,11 @@ static inline bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+>   	return false;
+>   }
+>   
+> +static inline int msm_dp_get_connector_type(const struct msm_dp *dp_display)
+> +{
+> +	return 0;
+> +}
+> +
+>   #endif
+>   
+>   #ifdef CONFIG_DRM_MSM_MDP4
+
+-- 
+With best wishes
+Dmitry
 
