@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18C5626001
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E5862601A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiKKRGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:06:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S234271AbiKKRIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiKKRGp (ORCPT
+        with ESMTP id S234245AbiKKRHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:06:45 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EED729A8;
-        Fri, 11 Nov 2022 09:06:44 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id lf15so3700151qvb.9;
-        Fri, 11 Nov 2022 09:06:44 -0800 (PST)
+        Fri, 11 Nov 2022 12:07:44 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A6B86D7F;
+        Fri, 11 Nov 2022 09:07:17 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id m204so5436732oib.6;
+        Fri, 11 Nov 2022 09:07:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sXx3A05HJYEyorjvDLtzFzGsbPsAQOKVKTmCTm5nngs=;
-        b=LuoA2pzCpw3gU/2r/tNIjIqgohEuAWvxyozzM9Drqh8Mde8xAAnF0WmplIEIghqONO
-         KYnfeNt6UQ31fRt5WYs8UfGHKL2s+pf5pLzoZEBQmepZidwncGU2sE+wKqv6r6U+q0Xx
-         VkAGbZCEbaOP7fMixM7RfDma1p82fIgFP31FWOBO1xV1gp3ElnExn6kyQgNOdus3FHNp
-         /Jj6mLyU5fpREeAAp3IhkmU2wv86iOu46hvinkuyG+C3Ugg99tM824KNzC5ylZWmK/BL
-         x2jjMkpRn+TXxvxdlFa87pwtSwg3fjyvxYgfPH+FD1IWUEzCYtOIrSxsevdZb/H/mox1
-         Ze1g==
+        bh=AC0O3le8bk/sr0yNI25Hqpom2ujUVEBU3Z1XU45Dy38=;
+        b=PPHA7iWYBy4k5/xw+dIDuuhBjUxzOJNVpMhUmMio95WxSvS1WviKVTkEaIwe8pGe1n
+         m708NfylWOAXWxW+m5w6D+kz9yTYs+C8CPZhsNwWqSS0gTQF53yAQKp2JhTMsu/FC2Zr
+         8kCDcR3MmDrSrogmClYcaH9TOrHLDT39/8ldoWBEUlfGXW7/mRJxdvP3EEiJbDQWT8wm
+         BD+BAkKkSmZv3EngdzwauWZZa379am6LgSr4ZYtkoCZS2QDvk3Xq5scs1m57MuzWcq0W
+         0GFSFo9nLBRQrTDtNzfzCRwXtPCG9J8ya0G7SyBlcyDH+TXkQqlLXqvZg7zPA1CPRYHj
+         Talw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sXx3A05HJYEyorjvDLtzFzGsbPsAQOKVKTmCTm5nngs=;
-        b=6tVZ0RoPsF9ju7f1bTZiTFZGMx6ALICzFUw335hYo4d3dAUm7WgwT+xZpEY0sZo7Va
-         ZcRtLbTPYV70DBX4Ub3GvxLeyHIaJIZQCzZoyV2exWluvMNf7tR6ba5bK478SyWWkiWI
-         WXQ/KWGuzfAzNxk9d2HqWAjP/iBla4n06eOtls63entmGElmw/9tOBz9dlZ7okmZITwZ
-         hkoMChjH6h9M80ZgEaCdswpcANeEVTJstuEkmvXwfBpkVVj7oscgbWEpBucvYzAqvOAs
-         16y+MCIj0sVXsDP3tOxmgSKpzuRnxHQx9QFoMGMThNk67jEjeJ/nL+jmJf6MjTi62big
-         wLzQ==
-X-Gm-Message-State: ANoB5pkBvoCtQMA8k9gPB0zgjUhFmom5e/QXr6K6mruRRKaXKVQn3tTK
-        NxZ7VwF06sIDxj4PHo/WDvLJ9lKc7Y/q3A==
-X-Google-Smtp-Source: AA0mqf6YOtw97a/6+Em55RlLJKrxUctsXdKo0FRuP7JWgkrpNueVuon6iCUVLg6l2IDWDl6kjyCgdw==
-X-Received: by 2002:a0c:ec48:0:b0:4b7:c96b:80ec with SMTP id n8-20020a0cec48000000b004b7c96b80ecmr2673227qvq.17.1668186402972;
-        Fri, 11 Nov 2022 09:06:42 -0800 (PST)
-Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05622a180600b00343057845f7sm1527090qtc.20.2022.11.11.09.06.41
+        bh=AC0O3le8bk/sr0yNI25Hqpom2ujUVEBU3Z1XU45Dy38=;
+        b=CjrxNKgAFvEACqZDsPeLOnNtjQbiHj8MSn8H/OYonmy6hi9S3WSkZgkI68NFYF3sg1
+         XmdqNk0cZXaP8dr5eKN89KNxAIiyj53Unv1gKRSERLAtUrj+o3MnlJgLG02ZgtZYBGuB
+         sAwXRrDw3DNFJ2ej0psd5+PIKAWHBHXNGLqmGEOko7JcWjQv5lBtKHIfYqu2hD9GAwc1
+         rRUeFCisbvi5Xe/ZRLLwEuNcsrMDrMxQC6rsWpAlcSOF+PmGazInzxyDOGmlXqRUjcjU
+         /ZFsUWdwjmBOIiEaN8WDPCRjbVeYf78XFnbeSUKJmLASpzEuWWxDa0mp1CGFbR0Sg0FX
+         3dZw==
+X-Gm-Message-State: ANoB5pmPebQyUxf3ehcDZ8fpotyi+qesOItqJNC4kgXeTLfKC5v43yAF
+        FCTnpgOFz7ttE420eSu35Y8=
+X-Google-Smtp-Source: AA0mqf5CbL+HB7jUBweZ42GVe9TJkduoPVh3uCuHh5So5DMR3z6+gMER9JG/bLCtprd8Zn1FzP4RTA==
+X-Received: by 2002:a54:400d:0:b0:359:fa2c:78c6 with SMTP id x13-20020a54400d000000b00359fa2c78c6mr1293291oie.3.1668186436179;
+        Fri, 11 Nov 2022 09:07:16 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id l5-20020a056830154500b00661a33883b8sm1150722otp.71.2022.11.11.09.07.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 09:06:42 -0800 (PST)
-Date:   Fri, 11 Nov 2022 12:06:40 -0500
-From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com,
-        david.abdurachmanov@sifive.com, florent@enjoy-digital.fr
-Subject: Re: [PATCH v1 2/3] serial: liteuart: separate RX loop from poll timer
-Message-ID: <Y26BIPcWznDdHtEG@errol.ini.cmu.edu>
-References: <20221107171500.2537938-1-gsomlo@gmail.com>
- <20221107171500.2537938-3-gsomlo@gmail.com>
- <CACPK8XdGpGUispRcfgaVyE=18Wwg8GFHH7QJ6bcQLA5XDikSiQ@mail.gmail.com>
+        Fri, 11 Nov 2022 09:07:15 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:07:15 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 3/4] sched: add sched_numa_find_nth_cpu()
+Message-ID: <Y26BQ92l9xWKaz2z@yury-laptop>
+References: <20221111040027.621646-1-yury.norov@gmail.com>
+ <20221111040027.621646-4-yury.norov@gmail.com>
+ <Y241Jd+27r/ZIiji@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACPK8XdGpGUispRcfgaVyE=18Wwg8GFHH7QJ6bcQLA5XDikSiQ@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
+In-Reply-To: <Y241Jd+27r/ZIiji@smile.fi.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,93 +99,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 01:09:59AM +0000, Joel Stanley wrote:
-> On Mon, 7 Nov 2022 at 17:15, Gabriel Somlo <gsomlo@gmail.com> wrote:
-> >
-> > Move the character-receive (RX) loop to its own dedicated function,
-> > and (for now) call that from the poll timer, liteuart_timer().
-> >
-> > This is in preparation for adding IRQ support to the receive path.
-> >
-> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> > ---
-> >  drivers/tty/serial/liteuart.c | 25 +++++++++++++++----------
-> >  1 file changed, 15 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> > index 4b9cca249828..90a29ed79bff 100644
-> > --- a/drivers/tty/serial/liteuart.c
-> > +++ b/drivers/tty/serial/liteuart.c
-> > @@ -69,29 +69,34 @@ static struct uart_driver liteuart_driver = {
-> >  #endif
-> >  };
-> >
-> > -static void liteuart_timer(struct timer_list *t)
-> > +static void liteuart_rx_chars(struct uart_port *port)
-> >  {
-> > -       struct liteuart_port *uart = from_timer(uart, t, timer);
-> > -       struct uart_port *port = &uart->port;
-> >         unsigned char __iomem *membase = port->membase;
-> > -       unsigned int flg = TTY_NORMAL;
-> > -       int ch;
-> > -       unsigned long status;
-> > +       unsigned int status;
-> > +       unsigned char ch;
+On Fri, Nov 11, 2022 at 01:42:29PM +0200, Andy Shevchenko wrote:
+> On Thu, Nov 10, 2022 at 08:00:26PM -0800, Yury Norov wrote:
+> > The function finds Nth set CPU in a given cpumask starting from a given
+> > node.
+> > 
+> > Leveraging the fact that each hop in sched_domains_numa_masks includes the
+> > same or greater number of CPUs than the previous one, we can use binary
+> > search on hops instead of linear walk, which makes the overall complexity
+> > of O(log n) in terms of number of cpumask_weight() calls.
 > 
-> u32, u8, void __iomem * would be better kernel types to use here.
+> ...
 > 
-> You've also changed ch from a signed 32 to an unsigned 8.
-
-uart_insert_char() expects both `status` and `ch` to be of type
-`unsigned int`. Switching `ch` to 8-bit was a typo, thanks for
-catching it!
-
-I'm going to use `unsigned int status, ch` in v3, to match the
-signature of `uart_insert_char()` -- hope that's OK. This will be
-a separate commit preceding the "move rx loop out of poll timer"
-change.
- 
-> >
-> >         while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
-> >                 ch = litex_read8(membase + OFF_RXTX);
-> >                 port->icount.rx++;
-> >
-> >                 /* necessary for RXEMPTY to refresh its value */
-> > -               litex_write8(membase + OFF_EV_PENDING, EV_TX | EV_RX);
-> > +               litex_write8(membase + OFF_EV_PENDING, EV_RX);
-> 
-> You're no longer clearing EV_TX, but don't mention why (I understand
-> why with the context of the other changes, so perhaps add something to
-> this commit message).
-
-I'm adding a separate commit to document this (in v3) as well.
-
-Thanks,
---Gabriel
- 
-> 
-> >
-> >                 /* no overflow bits in status */
-> >                 if (!(uart_handle_sysrq_char(port, ch)))
-> > -                       uart_insert_char(port, status, 0, ch, flg);
-> > -
-> > -               tty_flip_buffer_push(&port->state->port);
-> > +                       uart_insert_char(port, status, 0, ch, TTY_NORMAL);
-> >         }
-> >
-> > +       tty_flip_buffer_push(&port->state->port);
-> > +}
-> > +
-> > +static void liteuart_timer(struct timer_list *t)
+> > +int sched_numa_find_nth_cpu(const struct cpumask *cpus, int cpu, int node)
 > > +{
-> > +       struct liteuart_port *uart = from_timer(uart, t, timer);
-> > +       struct uart_port *port = &uart->port;
+> > +	unsigned int first = 0, mid, last = sched_domains_numa_levels;
+> > +	struct cpumask ***masks;
+> 
+> *** ?
+> Hmm... Do we really need such deep indirection?
+
+It's 2d array of pointers, so - yes.
+ 
+> > +	int w, ret = nr_cpu_ids;
 > > +
-> > +       liteuart_rx_chars(port);
+> > +	rcu_read_lock();
+> > +	masks = rcu_dereference(sched_domains_numa_masks);
+> > +	if (!masks)
+> > +		goto out;
 > > +
-> >         mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
-> >  }
-> >
-> > --
-> > 2.37.3
-> >
+> > +	while (last >= first) {
+> > +		mid = (last + first) / 2;
+> > +
+> > +		if (cpumask_weight_and(cpus, masks[mid][node]) <= cpu) {
+> > +			first = mid + 1;
+> > +			continue;
+> > +		}
+> > +
+> > +		w = (mid == 0) ? 0 : cpumask_weight_and(cpus, masks[mid - 1][node]);
+> 
+> See below.
+> 
+> > +		if (w <= cpu)
+> > +			break;
+> > +
+> > +		last = mid - 1;
+> > +	}
+> 
+> We have lib/bsearch.h. I haven't really looked deeply into the above, but my
+> gut feelings that that might be useful here. Can you check that?
+
+Yes we do. I tried it, and it didn't work because nodes arrays are
+allocated dynamically, and distance between different pairs of hops
+for a given node is not a constant, which is a requirement for
+bsearch.
+
+However, distance between hops pointers in 1st level array should be
+constant, and we can try feeding bsearch with it. I'll experiment with
+bsearch for more.
+
+> > +	ret = (mid == 0) ?
+> > +		cpumask_nth_and(cpu - w, cpus, masks[mid][node]) :
+> > +		cpumask_nth_and_andnot(cpu - w, cpus, masks[mid][node], masks[mid - 1][node]);
+> 
+> You can also shorten this by inversing the conditional:
+> 
+> 	ret = mid ? ...not 0... : ...for 0...;
+
+Yep, why not.
+
+> > +out:
+> 
+> out_unlock: ?
+
+Do you think it's better?
+
+> > +	rcu_read_unlock();
+> > +	return ret;
+> > +}
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
