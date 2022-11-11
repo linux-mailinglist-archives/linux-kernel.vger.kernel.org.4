@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C5A624F0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A9D624F12
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiKKAsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
+        id S231765AbiKKAsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKKAsQ (ORCPT
+        with ESMTP id S230208AbiKKAsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:48:16 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3258961B87;
-        Thu, 10 Nov 2022 16:48:15 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id k2so9321275ejr.2;
-        Thu, 10 Nov 2022 16:48:15 -0800 (PST)
+        Thu, 10 Nov 2022 19:48:38 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E0B1E725
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:48:37 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id i3so3531013pfc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:48:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jccwGn6yraR6ggbRcl5+kQG8NY32menh2AFqjtDH2Ns=;
-        b=P5U2OVQ/nvzFp6KeGVu5Ia7mi8o7RbKUCzp1mUSahT2VHwPbpgY9kQsBj3i2y39X9u
-         /vDBkESTrEV1jp1hEJU730zDEZ+5IU3BiSklFdqzkjQieBAiYk2zxifgADC81VEazg43
-         HSTN8GidE/16q+P66QziSy5v49F1LqNfTXz2TmqH/aoji2Pgoy2RLPgyDhXz+7X1IFcD
-         R6UYn703346kzahSS8Mppto0C1j9FENa+wsylBCbbDjEiqZbecnqRbsx5lTqxYhImLlM
-         iYfTIlgPxirtYdQQ0TIUQozBQNGt0lV14uCSVuT5k6PLeXwa1G8EGKw5TVeX/HQoDqQh
-         8oNg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/gUNRy1qZIXrqUZUL7883/f/GJegibYfXZQZVngW38U=;
+        b=VWZwrH2WTLZH7q/x1ZgpdvYSrGqwsN5f7i9ypcQ7UreI7sa/e03yNK6qv9VxqDlXP8
+         i04ZhlEljAEqFDY6vjaYs/QXE3J3167rQ2D69YQqoO8AcyVoep415lPw40kShPC8NBdV
+         9bzPkkL603xzDjwINJOebgWujA4I8bQIIWYOA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jccwGn6yraR6ggbRcl5+kQG8NY32menh2AFqjtDH2Ns=;
-        b=F49MVUqu5Xnn8y/1JLmV+feDo1ePEjS0TEsLLX570BJIrLgLKjVSjSucj+uejbJYnX
-         1Pzxxy/n4k18y13ookwWZjyK/v85HzSPHygVOUJPTjOnDDsLE6JEXxNbZJ75d9Y4BsJI
-         nxlPMnq2oGkko/PaT9jYUAR2AZqFtxvLGS+I8L5Z1/KHfIeQn23+3+a9NMZbUbCynL5h
-         T2sqx8RZClaUTD7fPXmwPjUtNKia5fP/KyJi5upZXIE3yVSiCqbvvm5fo+uDqfFk1bsG
-         C+pi7S9yjhynEK+ORtw96nSeoIkkOF45pCGt0zyIzph8Z0G3nS+bOKFAkD+mtGbMzRNE
-         pXFA==
-X-Gm-Message-State: ANoB5pmVIPVBvu9NRqRYLOFyTShv8FrZ6qf/EYthT2mDTiecvyOBq2pH
-        2E7vH1kFLMuy1hii9MIU4iESB7z+u+oRSmgiZWU=
-X-Google-Smtp-Source: AA0mqf7+WaIbUDbHTenBcZfm6dv2gC5twOFRQs+QLb7avRwCeVzc2ICtecXSFuk0wg0gLob81C9GahjCkx9dzqOEKzQ=
-X-Received: by 2002:a17:907:2045:b0:78a:3479:ec7d with SMTP id
- pg5-20020a170907204500b0078a3479ec7dmr49199ejb.671.1668127693508; Thu, 10 Nov
- 2022 16:48:13 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/gUNRy1qZIXrqUZUL7883/f/GJegibYfXZQZVngW38U=;
+        b=qCPwe1hT3uzgFutGN+IwljCbKlb4Cf790Z+XKmRuqLzIwHtfQBGC2TuBz3Se6dTRYw
+         sUeWYfgztIvRLaEjVwaU2k+nHDsJLQYOOKeqCSuv5/CaLQFTkeosOpYS5S+3OUpgVqRh
+         zuz6DXBaFuQ1H89hHrPJ+0+tW3rejNzZbSzwf+VqHW8JCZVu8p8vwkyV5hKNy+GBCH+y
+         9EAHkNpXPccbdIYkY+zq/Z23lGVc3KNa+JwDwbHqF95wgMz7Nj+busw/gp/KNxeVmLae
+         4pLPgIUmMh1ujK0brNArO1jTqSo+FuJ5o/sQcTNRVofh7sj89rQksoXtWLDmflCJk6tb
+         fvdA==
+X-Gm-Message-State: ACrzQf0WzEFepZqxoItlawlHdDKXcf0q6TYXoLb4Bb99cMHXIX/+IZqX
+        xQ2Mpt9szfUBzCGs/IzhzyVR9Q==
+X-Google-Smtp-Source: AMsMyM7sIWgS/0TfYwBT7X/dzMu66eUOL/4N1tpn2UCyic5dZmo1cMUhDUlzUKuzT+rqzDYvi7knxQ==
+X-Received: by 2002:a63:fc14:0:b0:43c:2e57:97df with SMTP id j20-20020a63fc14000000b0043c2e5797dfmr3852168pgi.189.1668127717205;
+        Thu, 10 Nov 2022 16:48:37 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
+        by smtp.gmail.com with ESMTPSA id g6-20020a632006000000b004388ba7e5a9sm221005pgg.49.2022.11.10.16.48.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 16:48:36 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:48:31 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Martin Doucha <mdoucha@suse.cz>
+Cc:     Minchan Kim <minchan@kernel.org>, Petr Vorel <pvorel@suse.cz>,
+        ltp@lists.linux.it, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Yang Xu <xuyang2018.jy@fujitsu.com>
+Subject: Re: [PATCH 0/1] Possible bug in zram on ppc64le on vfat
+Message-ID: <Y22b3wWs2QfMjJHi@google.com>
+References: <20221107191136.18048-1-pvorel@suse.cz>
+ <Y2l3vJb1y2Jynf50@google.com>
+ <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
 MIME-Version: 1.0
-References: <CA+G9fYt49jY+sAqHXYwpJtF0oa-jL8t8nArY6W1_zui0sKFipA@mail.gmail.com>
- <29824864-f076-401f-bfb4-bc105bb2d38f@app.fastmail.com> <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
-In-Reply-To: <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date:   Thu, 10 Nov 2022 16:48:01 -0800
-Message-ID: <CAKdAkRTOanSFKzmDgJc9oi1CM9D5D97+_oz31-MM0ADOtY6A4Q@mail.gmail.com>
-Subject: Re: arm: TI BeagleBoard X15 : Unable to handle kernel NULL pointer
- dereference at virtual address 00000369 - Internal error: Oops: 5 [#1] SMP ARM
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ac740c0-954b-5e68-b413-0adc7bc5a2b5@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 9, 2022 at 2:20 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Nov 9, 2022, at 13:57, Arnd Bergmann wrote:
-> >
-> > One thing that sticks out is the print_constraints_debug() function
-> > in the regulator framework, which uses a larger-than-average stack
-> > to hold a string buffer, and then calls into the low-level
-> > driver to get the actual data (regulator_get_voltage_rdev,
-> > _regulator_is_enabled). Splitting the device access out into a
-> > different function from the string handling might reduce the
-> > stack usage enough to stay just under the 8KB limit, though it's
-> > probably not a complete fix. I added the regulator maintainers
-> > to Cc for thoughts on this.
->
-> I checked the stack usage for each of the 147 functions in the
-> backtrace, and as I was guessing print_constraints_debug() is
-> the largest, but it's still only 168 bytes, and everything else
-> is smaller, so no point hacking this.
+On (22/11/10 15:29), Martin Doucha wrote:
+> New version of LTP test zram01 found a sysfile issue with zram devices
+> mounted using VFAT filesystem. When when all available space is filled, e.g.
+> by `dd if=/dev/zero of=/mnt/zram0/file`, the corresponding sysfile
+> /sys/block/zram0/mm_stat will report that the compressed data size on the
+> device is 0 and total memory usage is also 0. LTP test zram01 uses these
+> values to calculate compression ratio, which results in division by zero.
+> 
+> The issue is specific to PPC64LE architecture and the VFAT filesystem. No
+> other tested filesystem has this issue and I could not reproduce it on other
+> archs (s390 not tested). The issue appears randomly about every 3 test runs
+> on SLE-15SP2 and 15SP3 (kernel 5.3). It appears less frequently on SLE-12SP5
+> (kernel 4.12). Other SLE version were not tested with the new test version
+> yet. The previous version of the test did not check the VFAT filesystem on
+> zram devices.
 
-You mentioned that we are doing probing of a device 6 levels deep.
-Could one of the parent devices be marked for an asynchronous probe
-thus breaking the chain?
+Whoooaa...
 
-Thanks.
+> I've tried to debug the issue and collected some interesting data (all
+> values come from zram device with 25M size limit and zstd compression
+> algorithm):
+> - mm_stat values are correct after mkfs.vfat:
+> 65536      220    65536 26214400    65536        0        0        0
+> 
+> - mm_stat values stay correct after mount:
+> 65536      220    65536 26214400    65536        0        0        0
+> 
+> - the bug is triggered by filling the filesystem to capacity (using dd):
+> 4194304        0        0 26214400   327680       64        0        0
 
--- 
-Dmitry
+Can you try using /dev/urandom for dd, not /dev/zero?
+Do you still see zeroes in sysfs output or some random values?
