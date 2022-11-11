@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3355C625557
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D87962556C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiKKIbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S230043AbiKKIgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232978AbiKKIbV (ORCPT
+        with ESMTP id S232675AbiKKIf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:31:21 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0F67C8D7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:31:19 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id o30so2547253wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:31:19 -0800 (PST)
+        Fri, 11 Nov 2022 03:35:59 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2436964A3C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:35:58 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so7349459lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:35:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ILQKPbjyWoRxHDAqSBL6QoJBaVHzXKbksM3KezorxPM=;
-        b=e5FxWUo0+SMymkxP1MLNhjSp9cJdwZ7MeUMHkMKh63YNS5+AdO8Udkzgi9LsuyZnvR
-         bK+Ut6bfeRkUyIP0mIDGF5G3XRqUlJCeXsmGxdEigqWNGxg1awwuJXgogY/FvHOQNAkT
-         IlisjD6vbInlJSgvgf6H0itnPwJGTw4wJnNRyFQXCCNGa9hO0cbkeF2nVYdwyboJt9gH
-         vjmryJtc+BnzZ6z/PMNi/HWGysN3OHKrcYqnpR2VDMFOHdXbNf3hT3NdvB/rdU32qreD
-         TFMxIJmIFZo0J6/d0IifY41aWugbFZb6WQ/yAMdBPDojJU48fQFH17c1ho2KdAh4fvFK
-         SUjw==
+        bh=twgHmIPH9il7il5wbqgTra+YIwMN83kWBZp7hPMXf2w=;
+        b=FVxWsRl4Kvf+vS3Y4w9Gu1eXDiw5q5d6pHyvGRxI+mXJBSW2j/Ll7z5OoouutImAlK
+         d2lfqSM/radzGvAlV1o2SK6EkOfFU+dTG6rFVAKF2JJGqA+JYSrd45J8vcig0bgWrNep
+         rEKQlIZEJ7K7W8B++EIpU73XtR269vhTE31kIn9+r3C+5B8EHFatUrguyEKSmFspgexj
+         b7pV2wTwImPQRvTLac9p2ywf0D6OSkcutPC60xYkEuW9+N0RdVYQGVupgQqmQlhL7XjV
+         nAHIfV9IiAHn3W5mcA5/UJK4TB97y8+a+0i+YPNXlQ9bOkQ52vw4DVw112AGhXAKWrnd
+         b9PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ILQKPbjyWoRxHDAqSBL6QoJBaVHzXKbksM3KezorxPM=;
-        b=q57u6H8+NOeKzFGXTY+LoZRmkV5yyeq6l3PUfTLp5Ft0JnB8kSVPf7wV3g7HB5wgEW
-         6RUhOjWzIcOCvF+fKiLJwr1Wmw36D5Y2M3+DbDxPnf+ZZpqwnxz47q7KfLnbHskElca0
-         +27phDRVmTaE1LY2tOVGkyiAA1ikARix3p45fna25AngFlbJ+alfe9GQ6wZ5ealN62c7
-         WAr8lkbQW2FJAxDn3wSIBt4v9VUKKMF1e2TckVhSJkVaUF6rltIuGC4R/9NFbfjaJST/
-         kPh9wH8Lkb5UVp+LHWpos2zUTEwebSGR6rwgCwydtEs7BAdyAQtZi5/bBFvqb2t/fqxO
-         azzw==
-X-Gm-Message-State: ANoB5pmgd+OWc3WxuSYg1zz1iLlFJkvf53fRasNWRXXhtMuANztoOR5v
-        rlacK0tUQXOR/IvMxoKRDH8=
-X-Google-Smtp-Source: AA0mqf4JkVa8kzZkdsc/bnynW+tiN56YWEa1BtHBq+7CkAFwiL9Bzu5gmXucv0j0YY2W/W3ccnCj/g==
-X-Received: by 2002:a7b:c447:0:b0:3a5:f600:502e with SMTP id l7-20020a7bc447000000b003a5f600502emr501296wmi.39.1668155477990;
-        Fri, 11 Nov 2022 00:31:17 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id p33-20020a05600c1da100b003c71358a42dsm10048391wms.18.2022.11.11.00.31.16
+        bh=twgHmIPH9il7il5wbqgTra+YIwMN83kWBZp7hPMXf2w=;
+        b=cpQ5dgbPl1zfy0hE++vLB5iCjwcpVl5LYmoh/o/TWEUslcq/QmDlL4WUAvM3bVJ7MQ
+         fMk7YN5aYC+/GYOshbNNWJUF25warjdahprLKdR5RklyA8XzrOsocGaBh1P2N0fmNkGG
+         08LBT4BIW7QQi3lrP+4M1+9zAWmzrCRBjPRLAt+qW0AFNgzQTFxKczHoclr3CjsP/RNS
+         g4mABVh3wo1LlunYpD7eU6BKzj3I8/3/XBeNe4h1AeC9QT7S0c0LMF5eWorzb7fSmNuV
+         p0nd4s2WhR2pHadAk/KvfULWqQKwawn+ZqhxckeQBicItSnBOn1HFsGHCgVZrjys+7bs
+         8i/A==
+X-Gm-Message-State: ANoB5pk6auccHM7Uj/rUQrL6tmZVVtWhasmKM5MvDIuEaU2NphAQmSRS
+        gXr+vWhQi8Ob9fhOAJ6h5eX4CA==
+X-Google-Smtp-Source: AA0mqf60iJpcrCMeahPcVkfeMPwgzC+qBrMypg018HfvSO7QD+mOoz8pMAfYCPhQ0s2W7nN55HmYlA==
+X-Received: by 2002:a05:6512:252c:b0:4aa:bad8:9b5d with SMTP id be44-20020a056512252c00b004aabad89b5dmr387326lfb.540.1668155756533;
+        Fri, 11 Nov 2022 00:35:56 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id h28-20020a2eb0fc000000b0027741daec09sm269129ljl.107.2022.11.11.00.35.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 00:31:16 -0800 (PST)
-Message-ID: <465810f6-98f0-4125-179d-dd484e5ac09d@gmail.com>
-Date:   Fri, 11 Nov 2022 09:31:15 +0100
+        Fri, 11 Nov 2022 00:35:55 -0800 (PST)
+Message-ID: <9918fb9d-b5d8-1521-8f16-bcc7362d2138@linaro.org>
+Date:   Fri, 11 Nov 2022 09:35:55 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] soc: mediatek: Add deprecated compatible to mmsys
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@kernel.org,
-        nancy.lin@mediatek.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221110120222.32297-1-matthias.bgg@kernel.org>
- <eae90e1e-408b-4f9a-9211-649da28b0358@collabora.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 09/10] dt-bindings: interconnect: qcom,msm8998-bwmon:
+ Add sc8280xp bwmon instances
 Content-Language: en-US
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <eae90e1e-408b-4f9a-9211-649da28b0358@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
+ <20221111032515.3460-10-quic_bjorande@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221111032515.3460-10-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/11/2022 04:25, Bjorn Andersson wrote:
+> The sc8280xp platform has two BWMON instances, one v4 and one v5. Extend
+> the existing qcom,msm8998-bwmon and qcom,sc7280-llcc-bwmon to describe
+> these.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Tested-by: Steev Klimaszewski <steev@kali.org>
 
 
-On 10/11/2022 16:03, AngeloGioacchino Del Regno wrote:
-> Il 10/11/22 13:02, matthias.bgg@kernel.org ha scritto:
->> From: Matthias Brugger <matthias.bgg@gmail.com>
->>
->> For backward compatibility we add the deprecated compatible.
->>
->> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-> 
-> Hello Matthias,
-> 
-> You forgot to advertise that this commit depends on [1]... and I'm afraid
-> that you have to push a v2 anyway, because...
-> 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Well yes I based it against mediateks for-next branch, sorry for the confusion.
+Best regards,
+Krzysztof
 
->> ---
->>   drivers/soc/mediatek/mtk-mmsys.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
->> index ba2e79b26993b..47106f557c574 100644
->> --- a/drivers/soc/mediatek/mtk-mmsys.c
->> +++ b/drivers/soc/mediatek/mtk-mmsys.c
->> @@ -303,6 +303,10 @@ static const struct of_device_id of_match_mtk_mmsys[] = {
->>           .compatible = "mediatek,mt8192-mmsys",
->>           .data = &mt8192_mmsys_driver_data,
->>       },
->> +    {    /* deprecated compatible */
->> +        .compatible = "mediatek,mt8195-mmsys",
->> +        .data = &mt8195_mmsys_match_data,
-> 
-> ...mt8195_mmsys_match_data doesn't exist anymore after [1], so this should be
-> 
->          .data = &mt8195_vdosys0_driver_data,
-> 
-
-Of course, should have compile tested at least. /o\
-
-Regards,
-Matthias
-
-> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
-> 
-> Cheers,
-> Angelo
-> 
