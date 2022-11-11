@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8069B626218
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 20:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E426A626220
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 20:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbiKKTfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 14:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
+        id S234157AbiKKThn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 14:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbiKKTfp (ORCPT
+        with ESMTP id S233965AbiKKThk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 14:35:45 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFA11707F;
-        Fri, 11 Nov 2022 11:35:45 -0800 (PST)
-Received: from falcon9.localnet (mtl.collabora.ca [66.171.169.34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 11 Nov 2022 14:37:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F047B228;
+        Fri, 11 Nov 2022 11:37:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: detlev)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7A13F6602A5B;
-        Fri, 11 Nov 2022 19:35:42 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668195343;
-        bh=LQzpqS6J1Op21IKDCU38ivvE8csL7oU4+93+9hQJ7JM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lBhMusJD3eXPpaiQORUMMm6FWJ4sGr65O/8ctweD+b8qcNdigavJM06VuNtKqJIhZ
-         jb7cLd0kJgsuewxrzwKOV1UBwfAhVS48V0j0dH17voi3cGUZsgiX3yEMhtUQMUGKCz
-         ORHLn2/AQrpW5RbjYTk9NEK13BDKbLyW3I8OUyImne45b0WA8vcux1oXp1K+3tIFA/
-         5L2UmWY3YRz6ylBakGxCzfq2svE6bO/hx7uxBEVBKpIOC1tKsQa4T+ADjIOJO/4WqI
-         KF4vqwnEhwGmJQYZdWcS++LYojVjSmXTw7wtrUzquw9uNsr9bleUI5TEgSNzLe2M0+
-         UxUp8Prd+y4fw==
-From:   Detlev Casanova <detlev.casanova@collabora.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] ARM: dts: imx6qdl-sabre: Add mmc aliases
-Date:   Fri, 11 Nov 2022 14:35:36 -0500
-Message-ID: <2868543.tdWV9SEqCh@falcon9>
-In-Reply-To: <20221111025232.GI125525@dragon>
-References: <20221028141811.101122-1-detlev.casanova@collabora.com> <20221111025232.GI125525@dragon>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D79A5620B9;
+        Fri, 11 Nov 2022 19:37:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 490ECC433D6;
+        Fri, 11 Nov 2022 19:37:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668195459;
+        bh=nWaRwP/snHWppC/yNrCmHvi3W7vus7PaJekh2R7dz3I=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=AtogUaO68Y46eGJOVXAZsFQ+i+VT/Ac+oDd99UGphEQ89ItCS/V7fMe7F2tIDlVve
+         vy4fc8VExGt2CKl2WwtrcGZR8w3dwVdsujt1X8nEgY5zHxpLrtI12W53RU50zsthio
+         OzdWKvzmIXZuJv826QwTtSVk5iAFn1kQ6wqw5WTMQbmj7Wp4DExqFvrPulwbTxsV33
+         Q//N+bDElEEfg1hr509ztDdknLAXDbCL9VTWf8jcCmjUPwEDKyI3hvjeBMZtbpN7hi
+         XzZYBgqmp50qGBk9EXXARgtk2SfdJixMvWX7eU7SuegGfFAQb0yfgBk9rMHlr8ClRI
+         14VQbs4grsYJQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 29141C395FE;
+        Fri, 11 Nov 2022 19:37:39 +0000 (UTC)
+Subject: Re: [GIT PULL] 4th round of NFSD fixes for v6.1-rc
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <90885D9A-C975-4B82-BC17-137F80E14181@oracle.com>
+References: <90885D9A-C975-4B82-BC17-137F80E14181@oracle.com>
+X-PR-Tracked-List-Id: <linux-nfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <90885D9A-C975-4B82-BC17-137F80E14181@oracle.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.1-4
+X-PR-Tracked-Commit-Id: 50256e4793a5e5ab77703c82a47344ad2e774a59
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f9bbe0c99e5b76a76a1a7fe3bbdd7eaab9f5ab57
+Message-Id: <166819545915.1340.12265102164354320465.pr-tracker-bot@kernel.org>
+Date:   Fri, 11 Nov 2022 19:37:39 +0000
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, November 10, 2022 9:52:32 P.M. EST Shawn Guo wrote:
-> On Fri, Oct 28, 2022 at 10:18:11AM -0400, Detlev Casanova wrote:
-> > If not specified, the mmc0 and mmc1 devices will be the devices
-> > mmc@2190000 and mmc@2194000, which are in disabled state on the iMX.6
-> > Sabrelite devices.
-> > 
-> > The actual SD card reader devices are the ones at mmc@2198000 and
-> > mmc@219c000.
-> > 
-> > Set aliases to use the correct mmc devices order.
-> 
-> Is this something never worked or a regression?  For the latter, we may
-> need a Fixes tag?
+The pull request you sent on Fri, 11 Nov 2022 15:05:35 +0000:
 
-These were apparently never set in the kernel device-tree and added manually 
-in u-boot when dts are synced.
+> https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.1-4
 
-Because most distributions use UUIDs in fstab, it is not a big problem in 
-Linux, just that the SD card is called /dev/mmcblk2. I would say that this has 
-always been an issue in Linux.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f9bbe0c99e5b76a76a1a7fe3bbdd7eaab9f5ab57
 
-> Shawn
-> 
-> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> > ---
-> > 
-> >  arch/arm/boot/dts/imx6qdl-sabrelite.dtsi | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
-> > b/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi index
-> > 22f8e2783cdf..12573e1f917c 100644
-> > --- a/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
-> > +++ b/arch/arm/boot/dts/imx6qdl-sabrelite.dtsi
-> > @@ -14,6 +14,11 @@ chosen {
-> > 
-> >  		stdout-path = &uart2;
-> >  	
-> >  	};
-> > 
-> > +	aliases {
-> > +		mmc0 = &usdhc3;
-> > +		mmc1 = &usdhc4;
-> > +	};
-> > +
-> > 
-> >  	memory@10000000 {
-> >  	
-> >  		device_type = "memory";
-> >  		reg = <0x10000000 0x40000000>;
+Thank you!
 
-
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
