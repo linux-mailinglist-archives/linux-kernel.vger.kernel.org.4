@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A72C62570D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11406625712
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbiKKJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S233529AbiKKJnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbiKKJmO (ORCPT
+        with ESMTP id S231235AbiKKJnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:42:14 -0500
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBDA6F359
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:42:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lohu.info;
-        s=biln2210; t=1668159728;
-        bh=6TWfla3heOtAprsw1myku4WcdbdDiEILx+Sip2tFN5M=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version;
-        b=h8iopr6mToAUhrv11EuHUgegzKS7U13FsYBbgPi9LxwKEt+jr7RHazC4NIAaCmXmr
-         cE124CHr6/JgORc7B4dKHSZX1Hg+0b+zvGUAH50JItdFA8GWI7Ko5SU9FkYXJM84Ot
-         EUyeAlkNO0jvBZfCfGlsoC3kIA2BXh+fT2fHaLq8=
-X-QQ-mid: bizesmtpipv602t1668159725tvip
-Received: from SJRobe ( [255.89.210.14])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 11 Nov 2022 17:42:04 +0800 (CST)
-X-QQ-SSF: 01100000000000G0Z000000A0000000
-X-QQ-FEAT: abxxcdK0JW6BtgDzVuCGZnsCqsggIbWc3Y3lIq3i1ZJ66NVpVK1fPjRF0Crcc
-        wYIkq6W/sKjSmZL0DCTTh6AixzzXED1nlHMlKSjBoP8q8dzMSVyPktvdzDOVu4VTBK5rNz/
-        Rs/e51iPrCiqmT6/DJY+8RDizSVX4qEDoHpqfd1OY8lzTsiyUVEhaYPWqrZeFhMclsMJhqI
-        bDCrNVcW9cBSzWtPoIhD4fVptJ5nwMGKzRGRQXjQO/nG+0MrK0ciStqJv7tHkXqMV4wUU/7
-        hTR9mfcTaud7OEb8jthwX7/lP8S8iwdrfDIZtXWuaThi4tZ22wfMPVEhFMNC/t6vky6Qih+
-        1/VUftuyeom/e7mEi2WKULqN0IDHaDDe9UFhNuUanX6wahWthU=
-X-QQ-GoodBg: 0
-From:   "Soha Jin" <soha@lohu.info>
-To:     "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
-Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>, "'Wende Tan'" <twd2.me@gmail.com>
-References: <20221028164120.2798-1-soha@lohu.info> <DS0PR05MB95440932459F31AA76618A75DA009@DS0PR05MB9544.namprd05.prod.outlook.com> <Y24NPPF+6CM6b/d2@kroah.com>
-In-Reply-To: <Y24NPPF+6CM6b/d2@kroah.com>
-Subject: RE: [PATCH v2] platform: use fwnode_irq_get_byname instead of of_irq_get_byname to get irq
-Date:   Fri, 11 Nov 2022 17:42:04 +0800
-Message-ID: <0DC3B09947627421+033401d8f5b1$dbcd48f0$9367dad0$@lohu.info>
+        Fri, 11 Nov 2022 04:43:03 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE02654E3;
+        Fri, 11 Nov 2022 01:43:02 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso4254438pjc.5;
+        Fri, 11 Nov 2022 01:43:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zy9kRwEDKOwzUuzNDwbNK6Ls9wmAWU8wrTb8CY1ASBM=;
+        b=UrYniHryQrt1oClRFAxO4NM+NTyxw9xTdQt/tkBzCt0JXKQGCjW0kEvDc+g/dhWFxA
+         kTju6QYgbkEEWUEXYgQ4ASkeuc+fcO/hG8ZLC8HfcQka1+ymUzo8avwj5iUAU6UFlTBZ
+         SSG9U27np35cWvCXoFcrJIrIFlLmwdf9qTSmPTL1vnD3ZSN0LDFxJuD8GUz/+d0+IYN0
+         qBgLo1yxsMiSAqS4gh06lPjWLswAlUjSSHP8oxMWb+lkBXfna77cBoSED+JUk9gUQWsG
+         2220ENr9ojjkMaxJlcRDFuTNaMvyu5jCO61MBbmrkF7vbu5sU8/OVXNoxH5KWGI1sm6w
+         ZnOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zy9kRwEDKOwzUuzNDwbNK6Ls9wmAWU8wrTb8CY1ASBM=;
+        b=p6QeYZi04IZrpIx3QzWBro2kUqruG/iC8Q3sV+zosIpz8n9Do/d5Da7wVPid89Plqm
+         82GbDwfGp3OhJHXMvRXFZEuDFAgOWmjnKS3RBcsyXSjI9B2sLbMjP1wQva/xppRcF3bg
+         1KA+Y5+NvwjLIG0QZOf+d7d4vBn/ynrhd8js2zG19mCGiTYyWeL91yqL8h1vcZnR0s5l
+         SMSKG/MTDe+fq79ATuNwbyDTPj7x+pme9IhFnxdw06uQqEzsTsW2J81QfWpT0mk1DzaC
+         pblCCbQt6Ox+WWWul8CaPnKaflU4Y6fhR4ll8iebgn0ggZN0siINiWZ1wjeXJSaf3zfX
+         f+2A==
+X-Gm-Message-State: ANoB5pkBxuTWI+iawC2JfvG6IIekQHhyX4pZiQQPOlBB7hS6psnTBHPB
+        SPt8bbJdoF70aDZOGPGOShA=
+X-Google-Smtp-Source: AA0mqf5h6rFIEUsgsGftthsKMgAP7sfBcKl6GMZWDSIXy4cjabS77++RvLmXzawJJwNT6veT27xS/g==
+X-Received: by 2002:a17:902:d18b:b0:186:8568:be82 with SMTP id m11-20020a170902d18b00b001868568be82mr1510898plb.110.1668159782097;
+        Fri, 11 Nov 2022 01:43:02 -0800 (PST)
+Received: from localhost.localdomain ([103.51.72.74])
+        by smtp.gmail.com with ESMTPSA id fa13-20020a17090af0cd00b002086ac07041sm1188450pjb.44.2022.11.11.01.42.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 01:43:01 -0800 (PST)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Anand Moon <linux.amoon@gmail.com>,
+        Chukun Pan <amadeus@jmu.edu.cn>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [linux-next-v1 1/3] arm64: dts: rockchip: Fix gmac phy mode to rgmii on Rock 3A sbc
+Date:   Fri, 11 Nov 2022 09:42:33 +0000
+Message-Id: <20221111094238.1640-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJW0/kaaJVFezSz0P9aVK3IkiqSVAJJO/DOAr0N53CtFYjowA==
-Content-Language: fr
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpipv:lohu.info:qybglogicsvr:qybglogicsvr3
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_ILLEGAL_IP,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,15 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Friday, November 11, 2022 4:52 PM
-> 
-> Please submit a fixup patch, sorry, I can't rebase that branch now.
-> 
-> greg k-h
+On rk356x ethernet phy support reduced media independent interface (RMII)
+and reduced gigabit media independent interface (RGMII).
+So set the phy mode to rgmii.
 
-Got it, I withdraw this patch.
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+---
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Soha
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+index ea74ba32fbbd..72e410e3aca8 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+@@ -253,7 +253,7 @@ &gmac1 {
+ 	assigned-clock-rates = <0>, <125000000>;
+ 	clock_in_out = "output";
+ 	phy-handle = <&rgmii_phy1>;
+-	phy-mode = "rgmii-id";
++	phy-mode = "rgmii";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&gmac1m1_miim
+ 		     &gmac1m1_tx_bus2
+-- 
+2.38.1
 
