@@ -2,119 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48DB6255D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE75C6255D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233048AbiKKIz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
+        id S233427AbiKKI4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:56:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbiKKIzz (ORCPT
+        with ESMTP id S233409AbiKKI4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:55:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3DADFD4;
-        Fri, 11 Nov 2022 00:55:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EB34B82473;
-        Fri, 11 Nov 2022 08:55:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0DD5C433B5;
-        Fri, 11 Nov 2022 08:55:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668156951;
-        bh=UwnQcW+DIbVM73qHx8GWpyYkzIMHZcKiFWqIze2hyRY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Pp8507HrWf8Jk/myn9ejt1xfHquBLgI59QDipZgTtByCB/o28TTut85Pagtx3u60V
-         JOhfsDu6b94aCjSsfi1sJePKXyQ+ud8Sw8HaGwi7yIdBnUc/t8AB5AmwLDcXqyBieN
-         8tudYmIWSvpEoXKy9AmGvadVsi1h8Kf9rMNGzpG+O8qPHKlUOMpDWMawYQRLbHY4Tw
-         zHttHHSU0WgPicCgn8rGaPLFi7cqXrKy5QQFFd30wFikAL7aESo33dfkd8STTqzi6Q
-         aaNpVp040u4v57UmfvkxkXyryVFd+mUPaGdKrhj704NgKv9sxZX8oIlo+QpUBQxbYe
-         ybzpFJeKvXNIQ==
-Received: by mail-lf1-f53.google.com with SMTP id r12so7424847lfp.1;
-        Fri, 11 Nov 2022 00:55:51 -0800 (PST)
-X-Gm-Message-State: ANoB5pkiL3EZ9Wa2lxgCXqnMCkCrDsLra8X9U46Pvr4qFlhJXhwxnXdK
-        3iFV14MLFcYlPkBl03o6ONjO6wvIlxiDTZNIjk4=
-X-Google-Smtp-Source: AA0mqf71xb+rTQ+RGjWOJjElNP/NJKbcHQEHO8Ea095YIB/Wp9FjUpaCoK/GGsmuVGM90XxvuvECKhKDmA5HUhyn68o=
-X-Received: by 2002:a05:6512:3ca8:b0:4a2:bfd2:b218 with SMTP id
- h40-20020a0565123ca800b004a2bfd2b218mr433243lfv.228.1668156949779; Fri, 11
- Nov 2022 00:55:49 -0800 (PST)
+        Fri, 11 Nov 2022 03:56:10 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E1377202;
+        Fri, 11 Nov 2022 00:56:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AfRcqsf6ejL03DcbffFiojk0ADSJ78lfGlZNfAZ1V2U=; b=HugVjGcHnTyIsDGx07ol/W+kIw
+        7ggClT5QAf0liWieHhjSiB44zU6v5dL85be8swzrWT8+8dydXV0hS3OAEKB+vltFSZOqYyhwiva8v
+        92vBUPIjLUCC3xkzXkdLUsLVpHbmUNwL7oTbz2mxm4vNqF+lc7/GoEZ1CK+pfOo2qXCeiv63VTi3f
+        abmW812Lxo63BrYMsgkTbwps3bGo+1214N01Hu+wY8TBMydPkgCVoCieLHIJBfsTd39JfPnGLD2nI
+        yTWAkeVdEbhbFeUfLI+v6J/w3dcovibb4P6+W7+fHxoH0kv21MxBMo0Gj7P9o48X89/p4Gs2U8ahj
+        tijVfu/w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1otPpG-00CsEc-Gp; Fri, 11 Nov 2022 08:55:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8FC623002EC;
+        Fri, 11 Nov 2022 09:55:43 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 427FF20243A99; Fri, 11 Nov 2022 09:55:43 +0100 (CET)
+Date:   Fri, 11 Nov 2022 09:55:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Li, Xin3" <xin3.li@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Subject: Re: [RESEND PATCH 2/6] x86/traps: add a system interrupt table for
+ system interrupt dispatch
+Message-ID: <Y24OD6nmPVS0v1vu@hirez.programming.kicks-ass.net>
+References: <20221110061545.1531-1-xin3.li@intel.com>
+ <20221110061545.1531-3-xin3.li@intel.com>
+ <Y2y8obdYDXo9vlH/@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB21619E2092AFF048422C6311A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <CA+G9fYt49jY+sAqHXYwpJtF0oa-jL8t8nArY6W1_zui0sKFipA@mail.gmail.com>
- <29824864-f076-401f-bfb4-bc105bb2d38f@app.fastmail.com> <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
- <CA+G9fYs_kWc1Zh=Zr4esnJYRvSMwv6k6m1eYW4PbHCYpvJPPOg@mail.gmail.com> <89a8e93c-f667-4de1-972f-3d2d051bd789@app.fastmail.com>
-In-Reply-To: <89a8e93c-f667-4de1-972f-3d2d051bd789@app.fastmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 11 Nov 2022 09:55:38 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH994YRCZ9mYfjfN2JdJ_-6_too66bLYGYres5zfXvRCw@mail.gmail.com>
-Message-ID: <CAMj1kXH994YRCZ9mYfjfN2JdJ_-6_too66bLYGYres5zfXvRCw@mail.gmail.com>
-Subject: Re: arm: TI BeagleBoard X15 : Unable to handle kernel NULL pointer
- dereference at virtual address 00000369 - Internal error: Oops: 5 [#1] SMP ARM
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN6PR1101MB21619E2092AFF048422C6311A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 at 09:45, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Nov 11, 2022, at 07:28, Naresh Kamboju wrote:
-> > On Thu, 10 Nov 2022 at 03:33, Arnd Bergmann <arnd@arndb.de> wrote:
-> >>
-> >> One more idea I had is the unwinder: since this kernel is built
-> >> with the frame-pointer unwinder, I think the stack usage per
-> >> function is going to be slightly larger than with the arm unwinder.
-> >>
-> >> Naresh, how hard is it to reproduce this bug intentionally?
-> >> Can you try if it still happens if you change the .config to
-> >> use these:?
-> >>
-> >> # CONFIG_FUNCTION_GRAPH_TRACER is not set
-> >> # CONFIG_UNWINDER_FRAME_POINTER is not set
-> >> CONFIG_UNWINDER_ARM=y
-> >
-> > I have done this experiment and reported crash not reproduced
-> > after eight rounds of testing [1].
-> >
-> > https://lkft.validation.linaro.org/scheduler/job/5835922#L1993
->
-> Ok, good to hear. In this case, I see three possible ways forward
-> to prevent this from coming back on your system:
->
-> a) use asynchronous probing for one or more of the drivers as
->    Dmitry suggested. This means fixing it upstream first and then
->    backporting the fix to all stable kernels. We should probably
->    do this anyway, but this will need more testing on your side.
->
-> b) Change your kernel config permanently with the options above,
->    if LKFT does not actually rely on CONFIG_FUNCTION_GRAPH_TRACER.
->    I don't know if it does.
->
-> c) backport commit 41918ec82eb6 ("ARM: ftrace: enable the graph
->    tracer with the EABI unwinder") from 5.17. This was part of
->    a longer series from Ard, and while the patch itself looks
->    simple enough to be backported, I suspect we'd have to
->    backport the entire series, which is probably not going to
->    be realistic. Ard, any comments on this?
->
+On Thu, Nov 10, 2022 at 07:55:22PM +0000, Li, Xin3 wrote:
+> > > Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> > > Signed-off-by: Xin Li <xin3.li@intel.com>
+> > 
+> > This is not a valid SOB, it would suggest hpa is the author, but he's not in in
+> > From.
+> 
+> HPA wrote the initial dispatch code for FRED, and I worked with him to
+> refactor it for KVM/VMX NMI/IRQ dispatch.  So use SOB from both.  No?
 
-It at least needs the preceding patch, which tracks the location of LR
-on the stack when using CONFIG_UNWINDER_ARM.
-
-But I'd take the whole series for good measure.
+Yes, but not like this. Please review the documentation we have on this.
