@@ -2,104 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB226251FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 05:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA7A625207
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 05:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiKKEAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 23:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S231126AbiKKEAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 23:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbiKKEAD (ORCPT
+        with ESMTP id S230232AbiKKEAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 23:00:03 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DED3D663D0;
-        Thu, 10 Nov 2022 19:59:59 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxC7a+yG1jeAAGAA--.6956S3;
-        Fri, 11 Nov 2022 11:59:58 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+C+yG1jYaMQAA--.45762S2;
-        Fri, 11 Nov 2022 11:59:58 +0800 (CST)
-Subject: Re: [PATCH v8 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver
- support
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, zhuyinbo@loongson.cn,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20221109061122.786-1-zhuyinbo@loongson.cn>
- <fc52c692-4cbd-e5f9-2e62-d05b5330052a@loongson.cn>
- <CACRpkdbu-gqNBK0=L8pOr2TwYGOv2MUvFxzYiBNfJ5KyJT+A8g@mail.gmail.com>
- <Y2vA09rQSbCRX+rL@smile.fi.intel.com>
- <CACRpkdb+siKhL+YKBarhRE6_f9LpQR=0y0zNihRLuONwQRkA7w@mail.gmail.com>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <cfec5c16-70dc-a05d-4bf3-688848dc7e92@loongson.cn>
-Date:   Fri, 11 Nov 2022 11:59:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 10 Nov 2022 23:00:32 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E265D6B5;
+        Thu, 10 Nov 2022 20:00:31 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-13c2cfd1126so4294987fac.10;
+        Thu, 10 Nov 2022 20:00:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=noz15JaTCdLus5U4sOLPjqv3bwt+1uKmzScfAp4rWSg=;
+        b=M0y8f58B89emx7VDfpcYz+luBmYMcBkXpsDjBQBWN8fAEF4DAF7j4W1sFdpbX3iQH3
+         DBsGdDm4Oa4aN6PyT3kbjpsuVjtjbT8ZLepChc5PMbK9s9WkctqOIJS6pZserU2J5dsn
+         5M7nFYVmqb5eqGbQnXTomg53hBR0Rhu+E8hTFS5iKMQSqGy1YVMSXp6ypQ2aHeju2lcf
+         K/KefFPwhaRjA6pFURKb6ue2eVNP5pFHQAhMqNS12UKeF9p2W/3GMaS2Mm0ImfIJ2l6h
+         Qw9la74vCT7jNI2Inp5q/vTAju59gEXE1b5q4s+8nd65hMIGxkqz6FDNtipOY77gm2iS
+         JMdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=noz15JaTCdLus5U4sOLPjqv3bwt+1uKmzScfAp4rWSg=;
+        b=70FAskbuSoDTtSFfsYYwAd4BCGJi4n1bAmW8Gbwv7Ro/Fyp+Pwdh0eDlZ1/2JTDk+F
+         UsRqeAiadCWpsC3zmZO41YhPtHEiOTCAQzE2/teVrvyo1P95JxRyUD/Bk5TvQJKw42lx
+         11rYtUudiSLKGPiqHjEK4pXXW9tLFFtPTuGP0Sqm/MQgdayEAFBNq2zb2myKplohfaqT
+         SBP6Vtob+NOarmlz0VjrVnRyivIsTibMjJqHHcWWpKsfNAR1LInMpqu+Wvbnk1xVRJhA
+         YCqZvqhWTZk3P3WoM3+LvaRI0G0G8VSBBc24vMymYgE0e6chuBHkV/xxfwBV60Jh8QQI
+         onlQ==
+X-Gm-Message-State: ACrzQf3QYF3mi+zVpXfHtOzFxqrI4SRUrp6tnG4sDORO6edprJ57giGH
+        DSa45iv1T0tpU1sP/GCPpPmqVYdrYbE=
+X-Google-Smtp-Source: AMsMyM7Y+meRC0ZMa270dUWGCP446I8C7TgwP4cnDdySGTCzW91kJ3zC+4m1SZSD4Mt+yL08Yqm91A==
+X-Received: by 2002:a05:6870:d99a:b0:13d:3935:9b25 with SMTP id gn26-20020a056870d99a00b0013d39359b25mr2782959oab.259.1668139230476;
+        Thu, 10 Nov 2022 20:00:30 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id n35-20020a4a9566000000b0049f08b7e8a5sm427591ooi.46.2022.11.10.20.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 20:00:30 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: [PATCH 0/4] cpumask: improve on cpumask_local_spread() locality
+Date:   Thu, 10 Nov 2022 20:00:23 -0800
+Message-Id: <20221111040027.621646-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdb+siKhL+YKBarhRE6_f9LpQR=0y0zNihRLuONwQRkA7w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+C+yG1jYaMQAA--.45762S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7GF17CFWkXw1UWr4DGFW5GFg_yoWfXFb_uF
-        1jyrn7Cr47JF1xK3WkJa13t397Aa4kJryDZry2g3srAa43Xa13KF1Fvr97X34fAa95JFn8
-        Cr92vF1S9r15KjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        G7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64
-        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
-        14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryU
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-        4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
-        vfC2KfnxnUUI43ZEXa7IU8QzVUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+cpumask_local_spread() currently checks local node for presence of i'th
+CPU, and then if it finds nothing makes a flat search among all non-local
+CPUs. We can do it better by checking CPUs per NUMA hops.
 
+This series is inspired by Valentin Schneider's "net/mlx5e: Improve remote
+NUMA preferences used for the IRQ affinity hints"
 
-在 2022/11/10 下午4:17, Linus Walleij 写道:
-> On Wed, Nov 9, 2022 at 4:01 PM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
->> On Wed, Nov 09, 2022 at 09:30:03AM +0100, Linus Walleij wrote:
->>> On Wed, Nov 9, 2022 at 7:42 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->>>
->>>> I had added some changes in these series patch in v8, please help add my
->>>> change and merge it into your tree and sync it to linux-next.
->>>
->>> Yeah no problem, I took out the v7 version and applied this one instead.
->>
->> It needs more work.
-> 
-> It also failed in linux-next because of missing MODULE_LICENSE()
-> so I took it out again, thanks for poking me.
-> 
-> Yinbo: don't lose your spirit, keep at it!
-> 
-> Yours,
-> Linus Walleij
-Hi Walleij,
+https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
 
-Thanks for your understanding.
+According to Valentin's measurements, for mlx5e:
 
-I had add v9 and verified that base your pinctrl tree and compile it use 
-W=1 that no any warning and error.
+	Bottleneck in RX side is released, reached linerate (~1.8x speedup).
+	~30% less cpu util on TX.
 
-BRs,
-Yinbo.
-> 
+This patch makes cpumask_local_spread() traversing CPUs based on NUMA
+distance, just as well, and I expect comparabale improvement for its
+users, as in Valentin's case.
+
+I tested it on my VM with the following NUMA configuration:
+
+root@debian:~# numactl -H
+available: 4 nodes (0-3)
+node 0 cpus: 0 1 2 3
+node 0 size: 3869 MB
+node 0 free: 3740 MB
+node 1 cpus: 4 5
+node 1 size: 1969 MB
+node 1 free: 1937 MB
+node 2 cpus: 6 7
+node 2 size: 1967 MB
+node 2 free: 1873 MB
+node 3 cpus: 8 9 10 11 12 13 14 15
+node 3 size: 7842 MB
+node 3 free: 7723 MB
+node distances:
+node   0   1   2   3
+  0:  10  50  30  70
+  1:  50  10  70  30
+  2:  30  70  10  50
+  3:  70  30  50  10
+
+And the cpumask_local_spread() for each node and offset traversing looks
+like this:
+
+node 0:   0   1   2   3   6   7   4   5   8   9  10  11  12  13  14  15
+node 1:   4   5   8   9  10  11  12  13  14  15   0   1   2   3   6   7
+node 2:   6   7   0   1   2   3   8   9  10  11  12  13  14  15   4   5
+node 3:   8   9  10  11  12  13  14  15   4   5   6   7   0   1   2   3
+
+Yury Norov (4):
+  lib/find: introduce find_nth_and_andnot_bit
+  cpumask: introduce cpumask_nth_and_andnot
+  sched: add sched_numa_find_nth_cpu()
+  cpumask: improve on cpumask_local_spread() locality
+
+ include/linux/cpumask.h  | 20 +++++++++++++++++++
+ include/linux/find.h     | 33 +++++++++++++++++++++++++++++++
+ include/linux/topology.h |  8 ++++++++
+ kernel/sched/topology.c  | 42 ++++++++++++++++++++++++++++++++++++++++
+ lib/cpumask.c            | 12 ++----------
+ lib/find_bit.c           |  9 +++++++++
+ 6 files changed, 114 insertions(+), 10 deletions(-)
+
+-- 
+2.34.1
 
