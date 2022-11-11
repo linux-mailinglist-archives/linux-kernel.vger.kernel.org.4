@@ -2,160 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D497B6258E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A97625879
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiKKK4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S233938AbiKKKeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232918AbiKKK4n (ORCPT
+        with ESMTP id S233897AbiKKKec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:56:43 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A8CC6A;
-        Fri, 11 Nov 2022 02:56:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668164203; x=1699700203;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=u7QIWUi0C6/FBWEuiDhVYicRF9D5dHYcVP0Zb/o5lgM=;
-  b=IbNuZXiGuAg/xzRtMi5TEzGdW564+9OE8b1PXsFm3EGMGDev7jKgq2h8
-   VZTbsxJXwd3wyrCIWHACvhZ+xeD1CQ/CVvhXjeITLnSZ2E072s9/N/mOT
-   KDI728URM/67mTm0A722SCJR1aPNBkc6Ux/zo9GdXv2c8VkpSkjHaqtsk
-   +k7xKzfQYSe7JVAnAtsxxdzX3te75pkT6Da2JhEVJrYs7pa1rfCngkZW/
-   rIhWgQ7dUfbtFXC3opl0i+drO5QzyFLw4mq0XlqeL4gor222TFTQYehQU
-   DMH14nrcErxFAmJe/fyq8FYGZgW+ECneC5/fLklIhpS5KE4wd19JyP287
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="313364622"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="313364622"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 02:56:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="637549316"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="637549316"
-Received: from yzhao56-desk.sh.intel.com ([10.238.200.254])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 02:56:40 -0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org, zhenyuw@linux.intel.com,
-        Yan Zhao <yan.y.zhao@intel.com>
-Subject: [PATCH v2 1/3] KVM: x86: add a new page track hook track_remove_slot
-Date:   Fri, 11 Nov 2022 18:33:50 +0800
-Message-Id: <20221111103350.22326-1-yan.y.zhao@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221111103247.22275-1-yan.y.zhao@intel.com>
-References: <20221111103247.22275-1-yan.y.zhao@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 05:34:32 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0586127910
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:34:32 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id b29so4525624pfp.13
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:34:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+i7NWs5ElLfzzgcx0B5LRq5KgAIbsYPPgqesylV99qc=;
+        b=auN3/+xhoPmbbT5Jr5mgDseb2NtTdMDLZUkWZXoWF/BlKqtpqh23AhY6vlvK9tyhO4
+         TdgEl0NnEMzfzeperKZ/1cvHhOZ3lBDsui8JlcKcT8qkQycLUyTaMZ+Kjh2AS8Arlkuk
+         2ACGV9xL/yLpEnN3WU3AIxlcV89LiqyOvwh8A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+i7NWs5ElLfzzgcx0B5LRq5KgAIbsYPPgqesylV99qc=;
+        b=xqp6CZFwR1FRr0P1T14W+VSdUpW6C1Zu1rv0l7Acs6qEwdzO3D2MVUhX4FUK/mdB/I
+         zVhPLEprWkHSohgjx9BkmXoPqpGsFd1Aqxqjl9HyozRXvvgVtweJmO2oYUyX7klo+0wb
+         L10z6gUvUhTtLylquNDKXWfPQ0NwuiinVKntmHIYc7eSqTEvkSpvi4arEtUQD/EfVe+X
+         3u5lbuCgBNmcWbBZ8YxXIdyb+kZG/8+rfO+ml5GNA+ygUB1nn7HerQ8XcQ78+Q89RYWa
+         lnoH/7dANJx8A6kgPPGo30rMTf1+VjlxpnudmhCdOuizuWw9bWNcR5PkuQ3Zg/H76imX
+         DudQ==
+X-Gm-Message-State: ANoB5plj8phscllN0Z7RECgPnNTCHOaigWqALyu24g37MYoRhix8DGWz
+        SXPqxPVfpHio1JXQtcao3EvspA==
+X-Google-Smtp-Source: AA0mqf48wRyFzQ1BYVpCEzg1z170CYhJdr8bvcAEjXyKB6FFAoNXQoJROj6OOCBhq7yDaKmXSEA5fw==
+X-Received: by 2002:a65:6107:0:b0:46e:d2ea:1417 with SMTP id z7-20020a656107000000b0046ed2ea1417mr1173842pgu.0.1668162871558;
+        Fri, 11 Nov 2022 02:34:31 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
+        by smtp.gmail.com with ESMTPSA id t186-20020a625fc3000000b0053e8fe8a705sm1311733pfb.17.2022.11.11.02.34.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 02:34:31 -0800 (PST)
+Date:   Fri, 11 Nov 2022 19:34:26 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 8/9] Documentation: document zram pages_per_pool_page
+ attribute
+Message-ID: <Y24lMtZc5tlxVObM@google.com>
+References: <20221031054108.541190-1-senozhatsky@chromium.org>
+ <20221031054108.541190-9-senozhatsky@chromium.org>
+ <Y22xiLFYb49TGeYm@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y22xiLFYb49TGeYm@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Page track hook track_remove_slot is used to notify users that a slot
-has been removed and is called when a slot DELETE/MOVE is about to be
-completed.
+On (22/11/10 18:20), Minchan Kim wrote:
+> > diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+> > index 010fb05a5999..4cb287520d45 100644
+> > --- a/Documentation/admin-guide/blockdev/zram.rst
+> > +++ b/Documentation/admin-guide/blockdev/zram.rst
+> > @@ -112,7 +112,29 @@ to list all of them using, for instance, /proc/crypto or any other
+> >  method. This, however, has an advantage of permitting the usage of
+> >  custom crypto compression modules (implementing S/W or H/W compression).
+> >  
+> > -4) Set Disksize
+> > +4) Set pages per-pool page limit: Optional
+> > +==========================================
+> > +
+> > +zsmalloc pages can consist of up to ZS_DEFAULT_PAGES_PER_ZSPAGE (single)
+> > +physical pages. The exact number is calculated for each zsmalloc size
+> > +class during zsmalloc pool creation. ZRAM provides pages_per_pool_page
+> > +device attribute that lets one adjust that limit (maximum possible value
+> > +is ZS_MAX_PAGES_PER_ZSPAGE). The default limit is considered to be good
+> > +enough, so tweak this value only when the changes in zsmalloc size classes
+> > +characteristics are beneficial for your data patterns. The limit on the
+> > +pages per zspages (currently) should be in [1,16] range; default value
+> > +is 4.
+> 
+> I think we need to introudce pros and cons for user to decide it since
+> it's not familiar with admin. I think It would need more explanation about
+> zsmalloc internal(especailly zspage and size classes)
 
-Users of this hook can drop write protections in the removed slot.
-
-Note:
-Since KVM_MR_MOVE currently never actually happens in KVM/QEMU, and has
-never been properly supported in the external page track user, we just
-use the hook track_remove_slot to notify users of the old slot being
-removed.
-
-Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
----
- arch/x86/include/asm/kvm_page_track.h | 11 +++++++++++
- arch/x86/kvm/mmu/page_track.c         | 26 ++++++++++++++++++++++++++
- arch/x86/kvm/x86.c                    |  3 +++
- 3 files changed, 40 insertions(+)
-
-diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
-index eb186bc57f6a..046b024d1813 100644
---- a/arch/x86/include/asm/kvm_page_track.h
-+++ b/arch/x86/include/asm/kvm_page_track.h
-@@ -44,6 +44,16 @@ struct kvm_page_track_notifier_node {
- 	 */
- 	void (*track_flush_slot)(struct kvm *kvm, struct kvm_memory_slot *slot,
- 			    struct kvm_page_track_notifier_node *node);
-+	/*
-+	 * It is called when memory slot is moved or removed
-+	 * users can drop write-protection for the pages in that memory slot
-+	 *
-+	 * @kvm: the kvm where memory slot being moved or removed
-+	 * @slot: the memory slot being moved or removed
-+	 * @node: this node
-+	 */
-+	void (*track_remove_slot)(struct kvm *kvm, struct kvm_memory_slot *slot,
-+				  struct kvm_page_track_notifier_node *node);
- };
- 
- int kvm_page_track_init(struct kvm *kvm);
-@@ -76,4 +86,5 @@ kvm_page_track_unregister_notifier(struct kvm *kvm,
- void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
- 			  int bytes);
- void kvm_page_track_flush_slot(struct kvm *kvm, struct kvm_memory_slot *slot);
-+void kvm_page_track_remove_slot(struct kvm *kvm, struct kvm_memory_slot *slot);
- #endif
-diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
-index 2e09d1b6249f..4d6bab1d61c9 100644
---- a/arch/x86/kvm/mmu/page_track.c
-+++ b/arch/x86/kvm/mmu/page_track.c
-@@ -300,3 +300,29 @@ void kvm_page_track_flush_slot(struct kvm *kvm, struct kvm_memory_slot *slot)
- 			n->track_flush_slot(kvm, slot, n);
- 	srcu_read_unlock(&head->track_srcu, idx);
- }
-+
-+/*
-+ * Notify the node that memory slot is removed or moved so that it can
-+ * drop write-protection for the pages in the memory slot.
-+ *
-+ * The node should figure out it has any write-protected pages in this slot
-+ * by itself.
-+ */
-+void kvm_page_track_remove_slot(struct kvm *kvm, struct kvm_memory_slot *slot)
-+{
-+	struct kvm_page_track_notifier_head *head;
-+	struct kvm_page_track_notifier_node *n;
-+	int idx;
-+
-+	head = &kvm->arch.track_notifier_head;
-+
-+	if (hlist_empty(&head->track_notifier_list))
-+		return;
-+
-+	idx = srcu_read_lock(&head->track_srcu);
-+	hlist_for_each_entry_srcu(n, &head->track_notifier_list, node,
-+				srcu_read_lock_held(&head->track_srcu))
-+		if (n->track_remove_slot)
-+			n->track_remove_slot(kvm, slot, n);
-+	srcu_read_unlock(&head->track_srcu, idx);
-+}
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 916ebbc81e52..a24a4a2ad1a0 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12844,6 +12844,9 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
- 				const struct kvm_memory_slot *new,
- 				enum kvm_mr_change change)
- {
-+	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE)
-+		kvm_page_track_remove_slot(kvm, old);
-+
- 	if (!kvm->arch.n_requested_mmu_pages &&
- 	    (change == KVM_MR_CREATE || change == KVM_MR_DELETE)) {
- 		unsigned long nr_mmu_pages;
--- 
-2.17.1
-
+OK, agreed. I have quite a bit of info in the 0002 commit messages.
+I can copy-paste some of those bits and edit them. We also have
+some info the internal doc, which I can also use as a "source of
+inspiration".
