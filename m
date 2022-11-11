@@ -2,171 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE9E625B33
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:30:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E33E625B3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbiKKNaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S234011AbiKKNa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbiKKNaE (ORCPT
+        with ESMTP id S233829AbiKKNa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:30:04 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3D560367
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:30:02 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id v28so4881997pfi.12
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:30:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M0HVMhLQv1RJfokbEb7w/OlQquqonqkODdkh8fwYdsI=;
-        b=SlLCCRurDhyCwz3e2I8fL7r/uAP6b1gny457Y5bcm2IsKnTrrPEpxgU3ZxL0Q/RVXG
-         jUkJtbv75/FGGaVJctxp871UliWISdbMdvJexhqM2rum4iSotN3qZs8FShHmMRhMqtTw
-         PDgE3iEXrtXiTqsjdqO1jzP/tgSoD5jpI4mWnErIbmZDMU7E6iFqU+qR0w+umw6yp5hX
-         Iu44nhVGTNgOX4F1l3USy5GwIcIUk16kChQ2FwDR1efIy9P/8dtoPaTYd2g7C+iCe44I
-         UR/gyr0IRWtiB/PbAT5TALWziKhRQDS1mf1uE/TlT1J10boVlUKOU2MYqq4hdP3QmRh0
-         8pxw==
+        Fri, 11 Nov 2022 08:30:26 -0500
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6395460359;
+        Fri, 11 Nov 2022 05:30:25 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-13c2cfd1126so5395096fac.10;
+        Fri, 11 Nov 2022 05:30:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M0HVMhLQv1RJfokbEb7w/OlQquqonqkODdkh8fwYdsI=;
-        b=Bj2/TSUCfPAHmzfcw71a6AK5JJsDw8MraDnOTd9JGpdHOr1ALGPZ5UBGaLEYNRWdLa
-         D9wgUsVMMKYaV6T1dTO/2U7PQ/mDot6tmjbgvZ+BSnTjg7O4y88JdUIyPdlKra12d3M+
-         58AkhcadWWjhvoNZ3bdM7AO8tcnWDDZi1q0A8QCg4DK1ZN6rU+RshDZB3SMzA5wH2pAx
-         ZH2rLr/j/ArK89FT7vOovVqR35BlYk5VSKSp5kLjzzqU1Oi6PMuzInVbDaJ0m+YnJpPO
-         kYZzDN38npA9cp1eVI6xMvVP+9WS6yEfZHAkQESFIaiEAvmCauM2E0fn+7tbJsM7+IaM
-         MB/A==
-X-Gm-Message-State: ANoB5plA/6j1wBjTttid2KASwQSP7lXu5qkbbpIkdbjOgyKuzh/3YwHr
-        9WxzqckYARGYnzgO7MpnetlU5WzivVPYESDDKqRk4Q==
-X-Google-Smtp-Source: AA0mqf6kliWqZX+ZuqUU2N7G7HxK+QseYkbm23tlyZ3IsNelzP82ZvMpOMo72W0xrY5NSLX5AtlqfHeDCyhR2t3+h4U=
-X-Received: by 2002:a63:493:0:b0:438:a751:f8fa with SMTP id
- 141-20020a630493000000b00438a751f8famr1585765pge.601.1668173401716; Fri, 11
- Nov 2022 05:30:01 -0800 (PST)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Lo2p58cHEgV1SDnl6XTUQGUtHBgdDU1qqKkHovtNXaI=;
+        b=49nrLbtqNjWXh0EjGzONm/Hug+gI8EVajt5pYYFtcQ82SU4evlqU7EbAYvP/3hV5vx
+         L6llixEdSWzR8IXDZa336+q9WWSviYQU+hDXGNpsy32zRbw6tVH22VpEXs071zygXXFD
+         +ThcCdJBBFJ5p8mGrZpIhHlVBgkJ+v0UCNHASWNCKVGjeTFB8jBERDRUJ+EQ/DWYtl9A
+         E5WhM+j+dEdK0JlWjY11/1WBLH9QGyc16MFBLuE983Vos56H1eMjVJUuj6SEiXEkaVg/
+         vhx6JUUgUA8BzWjpDl7fHDZjT2CzevrAVq3xEYriunrq/LnRhgT0xLTn/zwL+sh8Vpru
+         zzeg==
+X-Gm-Message-State: ANoB5pmZEmTKKuLfd6pSiJydFsFEYxoe2kRL2H5mEAG2qAxiKqeAdqu8
+        r/g/OIh3NOnBCT69W3d8hA==
+X-Google-Smtp-Source: AA0mqf71ZDnvJcVvYaHMWcT9ADtsziN74fdU+bu2Y8OC6CWAn6wtqLDgukiurl08AE4CGWhs2VIu8g==
+X-Received: by 2002:a05:6870:1708:b0:13c:59d5:3f5e with SMTP id h8-20020a056870170800b0013c59d53f5emr879353oae.129.1668173424622;
+        Fri, 11 Nov 2022 05:30:24 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g14-20020a4adc8e000000b004768f725b7csm798456oou.23.2022.11.11.05.30.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 05:30:24 -0800 (PST)
+Received: (nullmailer pid 3073770 invoked by uid 1000);
+        Fri, 11 Nov 2022 13:30:24 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <CGME20221103195201eucas1p2a6ec2df41ebac3d9ccbb0b252c2cad34@eucas1p2.samsung.com>
- <20221103195154.21495-1-semen.protsenko@linaro.org> <a7d9cd18-a328-209c-c89f-afdcb7db3eb0@samsung.com>
- <b7ad6444-e7d2-1150-6134-3dae8129dcdb@samsung.com>
-In-Reply-To: <b7ad6444-e7d2-1150-6134-3dae8129dcdb@samsung.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 11 Nov 2022 14:29:49 +0100
-Message-ID: <CAPLW+4=Y6qZG2XjJR_BkX-ar4GWdETKO1tteJjfbxVc664e4Kg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] iommu/exynos: Convert to a module
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Patrick Lai <plai@qti.qualcomm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org
+In-Reply-To: <20221111113547.100442-3-krzysztof.kozlowski@linaro.org>
+References: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
+ <20221111113547.100442-3-krzysztof.kozlowski@linaro.org>
+Message-Id: <166817308876.3060199.17933327732327950670.robh@kernel.org>
+Subject: Re: [PATCH 02/10] ASoC: dt-bindings: qcom,apr: Split services to
+ shared schema
+Date:   Fri, 11 Nov 2022 07:30:24 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 15:36, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
 
-[snip]
+On Fri, 11 Nov 2022 12:35:39 +0100, Krzysztof Kozlowski wrote:
+> The APR/GPR nodes are organized like:
+> 
+>   apr-or-gpr-device-node <- qcom,apr.yaml
+>     apr-gpr-service@[0-9] <- qcom,apr.yaml
+>       service-specific-components <- /schemas/sound/qcom,q6*.yaml
+> 
+> The schema for services (apr-gpr-service@[0-9]) already grows
+> considerably and is still quite not specific.  It allows several
+> incorrect combinations, like adding a clock-controller to a APM device.
+> Restricting it would complicate the schema even more.  Bringing new
+> support for sound on Qualcomm SM8450 and SC8280XP SoC would grow it as
+> well.
+> 
+> Simplify the qcom,apr.yaml by splitting the services to a shared file
+> which will be:
+> 1. Referenced by qcom,apr.yaml with additionalProperties:true,
+> 2. Referenced by specific bindings for services with
+>    additionalProperties:false (not yet in this commit).
+> 
+> While moving the code, add also required 'reg' and
+> 'qcom,protection-domain' to further constrain the bindings.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/soc/qcom/qcom,apr-services.yaml  |  54 +++++++++
+>  .../bindings/soc/qcom/qcom,apr.yaml           | 108 +-----------------
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 58 insertions(+), 106 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,apr-services.yaml
+> 
 
-> I've finally made Exynos IOMMU working as a module on Exynos5433 based
-> TM2e board. It looks that this will be a bit longer journey that I've
-> initially thought. I've posted a simple update of the fix for the driver
-> initialization sequence, but the real problem is in the platform driver
-> framework and OF helpers.
->
-> Basically to get it working as a module I had to apply the following
-> changes:
->
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 3dda62503102..f6921f5fcab6 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -257,7 +257,7 @@ static int deferred_devs_show(struct seq_file *s,
-> void *data)
->   DEFINE_SHOW_ATTRIBUTE(deferred_devs);
->
->   #ifdef CONFIG_MODULES
-> -int driver_deferred_probe_timeout = 10;
-> +int driver_deferred_probe_timeout = 30;
->   #else
->   int driver_deferred_probe_timeout;
->   #endif
-> diff --git a/drivers/of/property.c b/drivers/of/property.c
-> index 967f79b59016..e5df6672fee6 100644
-> --- a/drivers/of/property.c
-> +++ b/drivers/of/property.c
-> @@ -1384,7 +1384,7 @@ static struct device_node *parse_interrupts(struct
-> device_node *np,
->   static const struct supplier_bindings of_supplier_bindings[] = {
->          { .parse_prop = parse_clocks, },
->          { .parse_prop = parse_interconnects, },
-> -       { .parse_prop = parse_iommus, .optional = true, },
-> +       { .parse_prop = parse_iommus, },
->          { .parse_prop = parse_iommu_maps, .optional = true, },
->          { .parse_prop = parse_mboxes, },
->          { .parse_prop = parse_io_channels, },
->
-> Without that a really nasty things happened.
->
-> Initialization of the built-in drivers and loading modules takes time,
-> so the default 10s deferred probe timeout is not enough to ensure that
-> the built-in driver won't be probed before the Exynos IOMMU driver is
-> loaded.
->
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Yeah, the whole time-based sync looks nasty... I remember coming
-across the slides by Andrzej Hajda called "Deferred Problem" [1], but
-I guess the proposed solution was never applied. Just hope that
-increasing the timeout is upstreamable solution.
+yamllint warnings/errors:
 
-[1] https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Deferred-Problem-Issues-With-Complex-Dependencies-Between-Devices-in-Linux-Kernel-Andrzej-Hajda-Samsung.pdf
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@3: failed to match any schema with compatible: ['qcom,q6core']
+Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@4: failed to match any schema with compatible: ['qcom,q6afe']
+Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@7: failed to match any schema with compatible: ['qcom,q6asm']
+Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@8: failed to match any schema with compatible: ['qcom,q6adm']
+Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-1/gpr/service@1: failed to match any schema with compatible: ['qcom,q6apm']
+Documentation/devicetree/bindings/sound/qcom,q6adm-routing.example.dtb:0:0: /example-0/apr/service@8: failed to match any schema with compatible: ['qcom,q6adm']
+Documentation/devicetree/bindings/sound/qcom,q6asm-dais.example.dtb:0:0: /example-0/apr/service@7: failed to match any schema with compatible: ['qcom,q6asm']
+Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-clocks.example.dtb:0:0: /example-0/apr/service@4: failed to match any schema with compatible: ['qcom,q6afe']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-clocks.example.dtb: gpr: service@2: 'qcom,protection-domain' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-clocks.example.dtb:0:0: /example-1/gpr/service@2: failed to match any schema with compatible: ['qcom,q6prm']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,q6apm-dai.example.dtb: gpr: service@1: 'qcom,protection-domain' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+Documentation/devicetree/bindings/sound/qcom,q6apm-dai.example.dtb:0:0: /example-0/gpr/service@1: failed to match any schema with compatible: ['qcom,q6apm']
+Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-ports.example.dtb:0:0: /example-0/apr/service@4: failed to match any schema with compatible: ['qcom,q6afe']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-ports.example.dtb: gpr: service@1: 'qcom,protection-domain' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-ports.example.dtb:0:0: /example-1/gpr/service@1: failed to match any schema with compatible: ['qcom,q6apm']
 
-> The second change fixes the problem that driver core probes Exynos IOMMU
-> controllers in parallel to probing the master devices, what results in
-> calling exynos_iommu_of_xlate() and exynos_iommu_probe_device() even on
-> the partially initialized IOMMU controllers or initializing the dma_ops
-> under the already probed and working master device. This was easy to
-> observe especially on the master devices with multiple IOMMU
-> controllers. I wasn't able to solve this concurrency/race issues inside
-> the Exynos IOMMU driver.
->
-> Frankly speaking I don't know what is the rationale for making the
-> 'iommus' property optional, but this simply doesn't work well with IOMMU
-> driver being a module. CCed Saravana and Rob for this.
->
+doc reference errors (make refcheckdocs):
 
-The patch which makes 'iommus' optional doesn't provide much of
-insight on reasons in commit message either.
+See https://patchwork.ozlabs.org/patch/
 
-> Without fixing the above issues, I would add a warning that compiling
-> the driver as a module leads to serious issues.
->
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Nice catch! It doesn't reproduce on my platform, alas. Can I expect
-you to submit those patches? If so, I'll probably just wait for those
-to be applied, and then re-send my modularization series on top of it.
-Does that sounds reasonable?
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-[snip]
+pip3 install dtschema --upgrade
 
->
-> Best regards
-> --
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
->
+Please check and re-submit.
+
