@@ -2,125 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FECF625A37
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9B0625A3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiKKMGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
+        id S233758AbiKKMHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbiKKMGB (ORCPT
+        with ESMTP id S232963AbiKKMGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:06:01 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2079.outbound.protection.outlook.com [40.107.96.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28322F4C;
-        Fri, 11 Nov 2022 04:05:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dwjDOkpyuoKz/T/nh4RThyyWNZoR6PgUMCnT35zdCWDlVar7I6oU1oxwxXR3ZKQah2gMX4d9rw66T+t2/YqsAhztjY5JmZ9SRXaZKettzqiztN8SARVctRXSiBr0Flnwp7T9xS24+tJhkhiWayo60dpi3Oex0BmBKR7rO+fm2zZfELwtTkYY6twf71a9oZjQ6mTmB7dbufFeI1MtQS0E2yKnvnQRlMcrCTDY+S6NuAmjtXtx5NeprpqCqWSf+wDAyfROql+Kz4LhzoyFdUnG5UakK07+a97U86NZfqwLaLkRpaFp5scYXF4+82h2PyKiD7YZNgVoXLruzmJxaVY7lQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+95Fq6n6fulU4+nqRdI0trBuiLw6s+41/ZNaunRCyJM=;
- b=X6NIhHs1BvMWMgbTbnXKsIA+t1xOL0ECZD0YYc+8VZH4iY6EIa7fVVQtTrEbApdGxoWjZwIEaNhbRcvv/YQao5skZyScXbLT0gPW1ngm0nMW18FrEWr2qOWZWdxu63lXLsOE6KmXV2uSksAzDMZwJV+267eA6A8IZgHdVz6esrRGTa0DTe90IoH4duNDxiOgK15DWAYkyU+ygAUkOrbZzcmKD0U0ZcARE8r8zqKGmO16u3zfHd1W1BI9py4Mx7TDWThYvi5u9vlnEyYFZRU5xrDTXVASMqsVUswMqnnw39UG4TwxSXikgNAUXqjaJWagxFbQ2S7zYu/Ht3JCTEO2KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+95Fq6n6fulU4+nqRdI0trBuiLw6s+41/ZNaunRCyJM=;
- b=o9zWL8+YCMllvlekS510P/1GHBIH1ec28QcqgjEFPl5fmGS9TKGq1Tii3ZHksFyJrhxrGHTRAtw4Gzf5UK+LSoK4siZrnaGrmIwldxvIprmVb8EFhl754uFQkf7OaQdoU+fbqrIs3BytdynlWRSbsX6KTLwCKcqOxTo12RT81vc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM4PR12MB7693.namprd12.prod.outlook.com (2603:10b6:8:103::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
- 2022 12:05:53 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
- 12:05:53 +0000
-Message-ID: <2ee10e0e-a347-71a5-051a-02b9bac0bbb6@amd.com>
-Date:   Fri, 11 Nov 2022 13:05:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] udmabuf: add vmap method to udmabuf_ops
-Content-Language: en-US
-To:     Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
-        kraxel@redhat.com, Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20221111114528.608801-1-lukasz.wiecaszek@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20221111114528.608801-1-lukasz.wiecaszek@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0054.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:48::16) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Fri, 11 Nov 2022 07:06:20 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD6C63B86;
+        Fri, 11 Nov 2022 04:06:18 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d9so1526279wrm.13;
+        Fri, 11 Nov 2022 04:06:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8EPpu249C1iS+vS5aAokpcHbI/+UG9o3tliIc+zqVM=;
+        b=GbiHFNFeGSSe3fgiRGk3Rqrl9LHCEE4hiGwXnWLl/AZpzQrveRODftlNZCQm5J6uG1
+         Wgsf5vogflQjqptn8C2uI8ERsOBtAFmL8STl2hpGE70McvktX42HQiU0FJwhGO4ycb00
+         DsIG+FmFVAqrSPTpts03izC3GOLHFx1U7HmxflWqcKjmhdMTK55NTIlBBLwk09yrg6xD
+         kPpG9Xw3M+svboxcKhsm3SRpqNUnGCRV8bKv74f2Iyn/PpBKbgakj9ECCWIgA29njKvE
+         sDqDvA+lQRouJAFkJF1gwhh31iL2qICsegRv2x7sN2ulUEsZfuZOQKfi/RZ5FSYqXyPZ
+         qhXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O8EPpu249C1iS+vS5aAokpcHbI/+UG9o3tliIc+zqVM=;
+        b=fz763mRcZCjC3xun+hkjk+/fLBdAfXZnlHdj0h9ubsJ4BA2wCzTR6+cVXI9KQLkrgi
+         FHmPGrIOTnRpvBf77XsXfuOHVSZ84HAgIlYJ1Qj3uYNMtRZU9PsJ9AlAFHHMqTBq6ulD
+         RM+6yV5SWd4Ae5Pok8b+8yj0mn58W1Y7Qg6zV84SgKEZhMtCIbODukRuvwdKctgakozr
+         bExoJ0E9trE443P53Cyd2OzuGRhhwFEBlkgYwKfCkgSTV9irMsUMRj1uZvlS1Fh7qfEp
+         PtBKG2t7YW0sWI/I/oJiPK+w6qgHfcQUIQ2p8t5Uof+D0QLQJeEfnDXK8rzX+vIduxkR
+         xpZw==
+X-Gm-Message-State: ANoB5plwzKeNHVp8W2X2dKzA5jgepP4UCROAsqtgKGsFZU5RrabHXAYN
+        Ue+dD/hXi3M8X6OcYIEl4RIugh+hoVPAxQ==
+X-Google-Smtp-Source: AA0mqf6IC1sVUFiFQSqgpy82Q19APC8xlIQUsUe9AIxWLXTCpKzGLVqH+auGI5Q1ZboRXTZKrt//2Q==
+X-Received: by 2002:a05:6000:10c4:b0:236:5c22:216c with SMTP id b4-20020a05600010c400b002365c22216cmr1074460wrx.696.1668168376478;
+        Fri, 11 Nov 2022 04:06:16 -0800 (PST)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id az40-20020a05600c602800b003b492753826sm2595359wmb.43.2022.11.11.04.06.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 04:06:16 -0800 (PST)
+Date:   Fri, 11 Nov 2022 14:06:13 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Felix Fietkau <nbd@nbd.name>, Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 08/12] net: dsa: add support for DSA rx
+ offloading via metadata dst
+Message-ID: <20221111120613.ll5sywfeo25ub6ja@skbuf>
+References: <20221109163426.76164-1-nbd@nbd.name>
+ <20221109163426.76164-9-nbd@nbd.name>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DM4PR12MB7693:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1354d40c-a14c-465b-22c8-08dac3dd14b1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rKiDVNKO+jdzbu/5tHya9rm0mi2PdxfDLLSFoO0H+E5SI7sbHOvvSYCTB85ZcFASmgZ0OZbHHr0iJD5ea+afXW6j9uLPyAq/7UXliHGlrElw9kx6XRVqf6Z6AGVkzSFHN/tPNbem7AlNT6iKkhfoJX/6CVb40uOxvhHGAMDn5NaZySElfQGPu25ztPBbSm1hglxbd9HncUhDLJkrZ83ieH0URVeKsMKx2NymmT6vNYmpSp4ocSftcPcvx6zl3SD2sPWGuF1tMuyEfapwDrEvgGOogfBmShobu4vcPdLdwaoQIIUbttdkhLEn+wD1DXHbnrQrfKN3rWa9g1vlSpOczTcoa6qNlEuoOg3yy3K2Or44EAt+FtgxikpLXXE/igy0JN2zDG1m0O5uvC57VaeUXpij0PrqQiA4NfHSX6FqIgspcLhtgZRJJSJZ1xD8dSGetFJu/6pXT+XUk+EPRPPTKckDLDXCfxutqQ/LeNCFIFdrsO9s5fg4dzm4WzaIY8hYh1CKUv4ybwVdtokbyp4QuIizrPFNPO+b0wwvofTqKJT0ALzlysvyli0HA33CURExOrduamDQZ8lUIKU5xnBuLih5eTSPFeeDop/pCh5cf1NtFxaZdUEziwebmzoDfmepMCAMVJYGTgTjenH2JL7p4dZ+lwrUN/d2wVuT35gippuvh1Rt9aL/lueva2Vp/oTG+zQn5ZVXSQW88GCBmTvphNrBnJ2OSr/9rgQJCKyXCLUK66mTiJr7AWho2G+dD2SJZVrTpk0axe83FRzIsNOWh1vXwE29ga2VwiGy3eXTa3k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(451199015)(66899015)(6666004)(83380400001)(6486002)(8936002)(478600001)(41300700001)(5660300002)(2906002)(186003)(6506007)(316002)(38100700002)(4326008)(66476007)(8676002)(36756003)(6512007)(31686004)(86362001)(110136005)(2616005)(66946007)(66556008)(31696002)(54906003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N1FqeHVCdVNjbTlFaWl6NW56V1h5RFFHdGNKT1BnYnpISmFGVHc4S3VNcU5X?=
- =?utf-8?B?YjhSM2swVVRsbzFMZ3FML1VsRkpVN2N6Y1kwbXUrYkhKdFkwVTZjVCs4WGxN?=
- =?utf-8?B?TE9WUGNBYmZVdU1tRUszaVh5MytNdjk1RERWMEt4S0lzVFpsaVhVMlhCU3Zq?=
- =?utf-8?B?M3VSSWZjazNVK3RMWVc2dVFxaForcnRqYlFOOEhqaHNPTGNrOXQzd2NYQkxF?=
- =?utf-8?B?TW8vN1VVQWw5TUlsRTJ3eXZ3bjRleWM2UGIyOFM3UUpyNXhzSnVIc3U3U3pk?=
- =?utf-8?B?ZTlINjZ2SmVETUlpMTFxWU0zK3NpL2d3cTc1WFVpa3hWZytQNzZvT0t4NC9J?=
- =?utf-8?B?dG1zQnpJVGJaUnZrck1ZUDNYU3NZN2l6VWJHMmlldGN2djBxK0xLeU4vMS9o?=
- =?utf-8?B?ZjZvVmk2Q3gzaWdsOUpHQUhaMDZCZGxxUU90K2hlVHRxVW15cXpZbnA4akdG?=
- =?utf-8?B?K2djclNkWThkRllKUkloWTBoUk9XM3F4anFrTlRIQ1BQY0trZnFXSDNUZ2JY?=
- =?utf-8?B?b2c0NDI2VU1OSlFuUTIwajRrb0grUHlYMnh6bEw3VGRyS2lWZk8vMjBuNGxW?=
- =?utf-8?B?cE04Wk94T1J3TmptZVVucnMzd2lzWmJFdzBhQ05RMXNscmFZS2owSEVnSW8y?=
- =?utf-8?B?L21jM1NZZEU5THQ1bWVnS3pza1NrdEhHUWtjRGwzdFZkV3A2S3k1b2NSSEI5?=
- =?utf-8?B?SWlON05KbDlBSkw3ZTVXaEc3M0VWY3Ztelg5TUllVm03dTJWbHNzeGp3QSt5?=
- =?utf-8?B?VVJaZldtSFlVYnE3ZGpsQk4zWjNPZ3B6bk8xRTJlQjdHNTU1SzhqajVoOG9w?=
- =?utf-8?B?dENDWjBYc3N6dnZKWFBpdFNKbm44M3NSQ0x0bEw2bDk3dHpobU51ZFVrZm84?=
- =?utf-8?B?Q1AyekdKV1VsMG9oWjA5VlZKOXdMZnFxMURWR1NwRGFrVEpBdHZQTVUvWGFD?=
- =?utf-8?B?NmdwZ0dOL29ncEZwUUhDZnNDR2tvL2lCYis0SUdhZU9rSzFyVE5ZcThWbnFk?=
- =?utf-8?B?cGdYZG5JT2JoSEFqWnJTRC9YK2hvMnFhT1p4SFdsbE9WbTI5Vm9LU094Qy9Q?=
- =?utf-8?B?bG52TlQwUGpkTURSL3dCY1NSU0lyMExhdDE0WXNaNUZhamwvaGxKY3BHWitQ?=
- =?utf-8?B?d0lwdXkwQjdtUUdLdmZ5SnFTbU93ZU9lcXJkQjVIOGJ0NGlSZXRsWGpoVmN2?=
- =?utf-8?B?dGNTRGZJQ20wS1l2ZmNyOGhzcWR5SVlldFNIZnp6V1J5VW5OSEY3VUx3OE1E?=
- =?utf-8?B?VThPK0hidGhKYldtbEFvTGpIL01WR0JmNXJ0dFRhRVIwOXRXV2FPRXIwUUlX?=
- =?utf-8?B?NGpTdm9keWhZNThOaUR3MHNWNEZPWHdOR2N1Sm1jaHlpb2NaWFFEaW5VbUdv?=
- =?utf-8?B?b0JxUzJIck5jdHludkdBZzVpbmxVTnZMK2w1M3NvVk5nd2t1ejI3MWl5VTVv?=
- =?utf-8?B?MkxJZmRYVS82UDhhRWw1WnlsVWV2anNZUGNKN0IzS3RwZEoyUEh5dE1XWHZ0?=
- =?utf-8?B?Z01zN0RYOTF6dWx0RFlKTk5xTHltWjZ2T29uRDQzSWxvVGM1Q2JtZ0dCL2Ri?=
- =?utf-8?B?RVZQU0UrelhKYzhQWWNFWjV1NjBoQW8xL0N5OWpnVW1ac0hWY0RDb2d3cVpU?=
- =?utf-8?B?cm0zWlBXRWgzblZWMjFUTmlVem5Cb2x1eU9qWXg1S29jOXNUWmNVQk5lQSth?=
- =?utf-8?B?NGhKT1l5KzlqRG1oaC9RbnVydGN5WEZ3emd1TWZCdlkyblVrY0R4bFI4UkpX?=
- =?utf-8?B?NEoxSTBPWVh3NGEyUWNRWkpOSjhWYm9aVHV6NHZFblNUaytxSi9QVjE1MEJF?=
- =?utf-8?B?VFRSOUNKNVp4eDNHaDVZUXQ0OTd0VVZlNTk1aWdKdURXb1NtVC81dC9haXh6?=
- =?utf-8?B?Q0FUK2Q2cTA0ZUdYVUt1Z21xZnZGYVpQalBhalpnbTBUOU52SUVsbE85QU53?=
- =?utf-8?B?cU1jRzZCVThHRVltT05xTk4zcysxcklmZzc0QnR0R2U4aWZVd3VwNzI2akUx?=
- =?utf-8?B?aml2cGNkU25MTnVGOVNrdHN5c1NwcS9tdEE4akx0eThmVExxc0QxOU5zSUFY?=
- =?utf-8?B?bDdObkVBTE1rdE5aRGQ3dkxyNStVdE9aYVFwNnBNSFNRL09Wck5naTdMTHhD?=
- =?utf-8?B?RHM4U1VhZStlc0lUekJnTitKNDNhK2V4cTdETktnbEQvZEM4TEwzdDQrY2Rl?=
- =?utf-8?Q?9aAbRNhCdqWZAEsxI9++GcLJ9olvSwYOcmQCHEJS43Qu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1354d40c-a14c-465b-22c8-08dac3dd14b1
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 12:05:53.0563
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6vD2w0w8oeIreJaFvaxyG3ZLBbeV1fZptZ9SZXRlqDjHpL+JYy35E7Bwi33Mjav4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7693
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109163426.76164-9-nbd@nbd.name>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,93 +77,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding Dmitry as well.
-
-Am 11.11.22 um 12:45 schrieb Lukasz Wiecaszek:
-> The reason behind that patch is associated with videobuf2 subsystem
-> (or more genrally with v4l2 framework) and user created
-> dma buffers (udmabuf). In some circumstances
-> when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
-> wants to use dma_buf_vmap() method on the attached dma buffer.
-> As udmabuf does not have .vmap operation implemented,
-> such dma_buf_vmap() natually fails.
->
-> videobuf2_common: [cap-000000003473b2f1] __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
-> videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: buffer for plane 0 changed
-> videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: failed to map dmabuf for plane 0
-> videobuf2_common: [cap-000000003473b2f1] __buf_prepare: buffer preparation failed: -14
->
-> The patch itself seems to be strighforward.
-> It adds implementation of .vmap method to 'struct dma_buf_ops udmabuf_ops'.
-> .vmap method itself uses vm_map_ram() to map pages linearly
-> into the kernel virtual address space (only if such mapping
-> hasn't been created yet).
-
-Of hand that sounds sane to me.
-
-You should probably mention somewhere in a code comment that the cached 
-vaddr is protected by the reservation lock being taken. That's not 
-necessary obvious to everybody.
-
-Apart from that looks good to me.
-
-Regards,
-Christian.
-
->
-> Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+On Wed, Nov 09, 2022 at 05:34:22PM +0100, Felix Fietkau wrote:
+> If a metadata dst is present with the type METADATA_HW_PORT_MUX on a dsa cpu
+> port netdev, assume that it carries the port number and that there is no DSA
+> tag present in the skb data.
+> 
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
 > ---
->   drivers/dma-buf/udmabuf.c | 18 ++++++++++++++++++
->   1 file changed, 18 insertions(+)
->
-> diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-> index 2bcdb935a3ac..8649fcbd05c4 100644
-> --- a/drivers/dma-buf/udmabuf.c
-> +++ b/drivers/dma-buf/udmabuf.c
-> @@ -12,6 +12,7 @@
->   #include <linux/slab.h>
->   #include <linux/udmabuf.h>
->   #include <linux/hugetlb.h>
-> +#include <linux/vmalloc.h>
->   
->   static int list_limit = 1024;
->   module_param(list_limit, int, 0644);
-> @@ -26,6 +27,7 @@ struct udmabuf {
->   	struct page **pages;
->   	struct sg_table *sg;
->   	struct miscdevice *device;
-> +	void *vaddr;
->   };
->   
->   static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
-> @@ -57,6 +59,21 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
->   	return 0;
->   }
->   
-> +static int vmap_udmabuf(struct dma_buf *buf, struct dma_buf_map *map)
-> +{
-> +	struct udmabuf *ubuf = buf->priv;
+>  net/core/flow_dissector.c |  4 +++-
+>  net/dsa/dsa.c             | 18 +++++++++++++++++-
+>  2 files changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+> index 25cd35f5922e..1f476abc25e1 100644
+> --- a/net/core/flow_dissector.c
+> +++ b/net/core/flow_dissector.c
+> @@ -972,11 +972,13 @@ bool __skb_flow_dissect(const struct net *net,
+>  		if (unlikely(skb->dev && netdev_uses_dsa(skb->dev) &&
+>  			     proto == htons(ETH_P_XDSA))) {
+>  			const struct dsa_device_ops *ops;
+> +			struct metadata_dst *md_dst = skb_metadata_dst(skb);
+>  			int offset = 0;
+>  
+>  			ops = skb->dev->dsa_ptr->tag_ops;
+>  			/* Only DSA header taggers break flow dissection */
+> -			if (ops->needed_headroom) {
+> +			if (ops->needed_headroom &&
+> +			    (!md_dst || md_dst->type != METADATA_HW_PORT_MUX)) {
+>  				if (ops->flow_dissect)
+>  					ops->flow_dissect(skb, &proto, &offset);
+>  				else
+> diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
+> index 64b14f655b23..a20440e82dec 100644
+> --- a/net/dsa/dsa.c
+> +++ b/net/dsa/dsa.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/netdevice.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/ptp_classify.h>
+> +#include <net/dst_metadata.h>
+>  
+>  #include "dsa_priv.h"
+>  
+> @@ -216,6 +217,7 @@ static bool dsa_skb_defer_rx_timestamp(struct dsa_slave_priv *p,
+>  static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
+>  			  struct packet_type *pt, struct net_device *unused)
+>  {
+> +	struct metadata_dst *md_dst = skb_metadata_dst(skb);
+>  	struct dsa_port *cpu_dp = dev->dsa_ptr;
+>  	struct sk_buff *nskb = NULL;
+>  	struct dsa_slave_priv *p;
+> @@ -229,7 +231,21 @@ static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
+>  	if (!skb)
+>  		return 0;
+>  
+> -	nskb = cpu_dp->rcv(skb, dev);
+> +	if (md_dst && md_dst->type == METADATA_HW_PORT_MUX) {
+> +		unsigned int port = md_dst->u.port_info.port_id;
 > +
-> +	if (!ubuf->vaddr) {
-> +		ubuf->vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
-> +		if (!ubuf->vaddr)
-> +			return -EINVAL;
+> +		dsa_default_offload_fwd_mark(skb);
+> +		skb_dst_set(skb, NULL);
+> +		if (!skb_has_extensions(skb))
+> +			skb->slow_gro = 0;
+
+Paolo, does this look okay to you, hand rolled in DSA like that?
+Do you see a way in which this would be done automatically once the
+metadata dst pointer is unset?
+
+> +
+> +		skb->dev = dsa_master_find_slave(dev, 0, port);
+> +		if (skb->dev)
+> +			nskb = skb;
+> +	} else {
+> +		nskb = cpu_dp->rcv(skb, dev);
 > +	}
 > +
-> +	dma_buf_map_set_vaddr(map, ubuf->vaddr);
-> +
-> +	return 0;
-> +}
-> +
->   static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
->   				     enum dma_data_direction direction)
->   {
-> @@ -159,6 +176,7 @@ static const struct dma_buf_ops udmabuf_ops = {
->   	.unmap_dma_buf	   = unmap_udmabuf,
->   	.release	   = release_udmabuf,
->   	.mmap		   = mmap_udmabuf,
-> +	.vmap		   = vmap_udmabuf,
->   	.begin_cpu_access  = begin_cpu_udmabuf,
->   	.end_cpu_access    = end_cpu_udmabuf,
->   };
-
+>  	if (!nskb) {
+>  		kfree_skb(skb);
+>  		return 0;
+> -- 
+> 2.38.1
+> 
