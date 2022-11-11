@@ -2,125 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B0662533A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 06:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5730262533E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 06:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiKKFwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 00:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S232133AbiKKF6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 00:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiKKFws (ORCPT
+        with ESMTP id S229536AbiKKF56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 00:52:48 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97ACF70186;
-        Thu, 10 Nov 2022 21:52:45 -0800 (PST)
-Message-ID: <b9f3550a-6fbc-b279-22a3-50285da82e5d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1668145963;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uLYY4WnvmgnHcL2iG4T30Ot4zd2Y8MH4xKjOkkt+4yU=;
-        b=T/TdabyUmRctxZm3dzBWrevxa2R7Xy20ibM2Lpyot7dsupPTBTF0h5Q5Xp/tg3rmLVq6k8
-        WHUg9TuaanSrJTeWRPXOdEoO4MFMldGUmH+Pkt5QjrvtpamY4VKxxg1myNir3rSpze7Qv5
-        mjrhrHUvIjIGS3AaMRxFL88es+dnc/4=
-Date:   Fri, 11 Nov 2022 13:52:35 +0800
+        Fri, 11 Nov 2022 00:57:58 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC646339
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 21:57:57 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so3848120pjd.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 21:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KHGjxOmAPLTjSOKR1E4aRsoBMeGm6miKnYzYvwRoo/8=;
+        b=gohmZcSym6vfl404dEer4RoKFe3HbwM9Rjry0f1+FaJjNGXrOUU3IzieHCGv9fVlXU
+         20HPKuKbTfKr27+1pOgyQagqOwshsJdmX4++YUlZIJXEP0+OKkA7uvi2RIXbNPR061cE
+         wLFe9pHX6mFxXca6OZ0XiYwMbnGgeQ3SH20Mw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KHGjxOmAPLTjSOKR1E4aRsoBMeGm6miKnYzYvwRoo/8=;
+        b=k2LfWIkgZUNiBUzsPmuGaA0O9MgQvqvSxFrv11R2sC66GNneRpdT7OjdmZgQ+7vSeU
+         ytoczFtDD8GH9RXhZf4uudZqIJIUM2aTswnTxdvs6qPI64VT9SEL2U6kU4gwzs4nbZEB
+         hFMnepA+kW1wUHNEafy7gGOdVVZp7ku31isnsaJbEnYp1CwbU1FvUa1OWA3eG4a1fb0n
+         ijiio9U7Xx62+7ACd3ulfbiFCB6ktP3qEB+HEZ6WFWVEiUkU3qi3ZKq1y4cleMeTEpZ4
+         YyBFjt7NAvtZOeCbCGWLQEeqgPgw0ppfjVzxjlRWt8BBOY2+/CUJ8g8DJ7LM3hPGV+n/
+         h3Dw==
+X-Gm-Message-State: ANoB5pkYNrklfMv8Rmnyin0N7XgqB3EQIrJ7okSaN7LTWtssuHOWfECG
+        n/5V9v5w1o7CSQ41nPDfGxWSCA==
+X-Google-Smtp-Source: AA0mqf7iCcbOHwArRxyvqVIciEKulpY/TXf68aGvXkWAfzFVPXNotTaucQGneOg2BSYMzD+eEfnsGg==
+X-Received: by 2002:a17:902:efd1:b0:17b:4ace:b67f with SMTP id ja17-20020a170902efd100b0017b4aceb67fmr1229537plb.12.1668146277473;
+        Thu, 10 Nov 2022 21:57:57 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y197-20020a62cece000000b0056c47a5c34dsm662595pfg.122.2022.11.10.21.57.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 21:57:57 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Pedro Falcato <pedro.falcato@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>, Rich Felker <dalias@libc.org>,
+        Fangrui Song <maskray@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] binfmt_elf: Allow .bss in any interp PT_LOAD
+Date:   Thu, 10 Nov 2022 21:57:54 -0800
+Message-Id: <20221111055747.never.202-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [for-next PATCH v5 00/11] RDMA/rxe: Add RDMA FLUSH operation
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Yanjun Zhu <yanjun.zhu@linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>,
-        "mbloch@nvidia.com" <mbloch@nvidia.com>,
-        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
-        "tom@talpey.com" <tom@talpey.com>,
-        "tomasz.gromadzki@intel.com" <tomasz.gromadzki@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220927055337.22630-1-lizhijian@fujitsu.com>
- <Y1wX8n9R7dkLo0KU@nvidia.com>
- <a37814f9-ed8a-d70a-3024-466700276864@linux.dev>
- <00a3797c-9759-d4ec-6d6f-8f157cd2a220@fujitsu.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Yanjun Zhu <yanjun.zhu@linux.dev>
-In-Reply-To: <00a3797c-9759-d4ec-6d6f-8f157cd2a220@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1993; h=from:subject:message-id; bh=IFv7zG9ua/TUw6RPzUQWoXA14J5yfz12EiQFTB5lii0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjbeRibkBnJb+JHCktBamRZlj///oiFFeK7VpOpPsB 44aQDc2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY23kYgAKCRCJcvTf3G3AJnJvD/ wMpSquxigcVJfg5ewqR3cpfP5urArMS1hWUeQchcdyXTMfEUFgqyt9Ty+7OE6vdD/z3R3uiC3lpphP FBxBvEkLF5ZynousHcyUauCkIiwZT1PLigA2z5DGCbu2tRUOeUZEI4uaYvMxWwJf+LoEIgjeWcXlHH QfBmP/w18M2HZvcH5ma39HbdZQPEU9Nn1sa4/WuZLf6xs+a6yVjJL2JpWk1Z6Md0kGbSu/n7KQkvRM OtJvFB3QrDrI8Mhm/UgZ/44bBI8kpStf/wXcD2PCGfSie6D+bPUvNlMk0t8eVQ0tq22d3po13Shtph N8IJDsgmVLbS0jbJLbWS5DQN5RlRrvmd+ss6JeZeCxMQVyJsUbft/Yydnvd6uxj/WLMK/Y1SsMrBgR vvBEdrAbJ1uO6PTohfPWyTOBG4P0nwz5/GodjBItoS6ceZjbf5tr82KhuQ8skBW+uztDUbi98znHu7 494BhsMzVXPETrqKnMIshOd0fSUYuawrnNvCqKGN0O4MYRiv06uCFYyyK45PqZOsFT2NA7U1hC8FF+ 11Hn4IoGq6LaAsuVbgTfBE7LR0lxPnBLwXLrsf3woKx8wRL7SCI7XKcYsaHeu0JFg/ukPkU1tMpiII tv6vNwpD91PO6uTpbXuWBE8xgYj3IBtoPba44NCzuwf246ajS31oQK2S+zVA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/11/11 13:10, lizhijian@fujitsu.com 写道:
-> 
-> 
-> On 11/11/2022 10:49, Yanjun Zhu wrote:
->> 在 2022/10/29 1:57, Jason Gunthorpe 写道:
->>> On Tue, Sep 27, 2022 at 01:53:26PM +0800, Li Zhijian wrote:
->>>> Hey folks,
->>>>
->>>> Firstly i want to say thank you to all you guys, especially Bob, who
->>>> in the
->>>> past 1+ month, gave me a lots of idea and inspiration.
->>>
->>> I would like it if someone familiar with rxe could reviewed-by the
->>> protocol parts.
->>
->> Hi, Jason
->>
->> I reviewed these patches. I am fine with these patches.
->>
->> Hi, Zhijian
->>
->> I noticed the followings:
->> "
->> $ ./rdma_flush_server -s [server_address] -p [port_number]
->> client:
->> $ ./rdma_flush_client -s [server_address] -p [port_number]
->> "
->> Can you merge the server and the client to rdma-core?
-> 
-> Yanjun,
-> 
-> Yes, there was already a draft PR here
-> https://github.com/linux-rdma/rdma-core/pull/1181, but it cannot go
-> ahead until the kernel's patches are merged.
-> 
-> and i will post a new version these days, would you mind if i add your
-> "Reviewed-by" in next version ?
+Traditionally, only the final PT_LOAD for load_elf_interp() supported
+having p_memsz > p_filesz. Recently, lld's construction of musl's
+libc.so on PowerPC64 started having two PT_LOAD program headers with
+p_memsz > p_filesz.
 
-Reviewed-by: Zhu Yanjun <yanjun.zhu@linux.dev>
-Thanks.
+As the least invasive change possible, check for p_memsz > p_filesz for
+each PT_LOAD in load_elf_interp.
 
-Another problem, normally rxe should connect to physical ib devices, 
-such as mlx ib device. That is, one host is rxe, the other host is mlx 
-ib device. The rdma connection should be created between the 2 hosts.
+Reported-by: Rich Felker <dalias@libc.org>
+Link: https://maskray.me/blog/2022-11-05-lld-musl-powerpc64
+Cc: Pedro Falcato <pedro.falcato@gmail.com>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Rich, Pedro, and Fangrui, are you able to test this change? I haven't
+constructed a trivial reproducer yet (though it would be nice to have
+a self-contained test-case).
+---
+ fs/binfmt_elf.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-Do you connect to mlx ib device with this RDMA FLUSH operation?
-And what is the test result?
-
-Thanks a lot.
-Zhu Yanjun
-
-> 
-> 
-> 
->>
->> Thanks,
->> Zhu Yanjun
->>
->>>
->>> Jason
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index 528e2ac8931f..3f07945ff085 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -673,18 +673,19 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+ 				last_bss = k;
+ 				bss_prot = elf_prot;
+ 			}
++
++			/*
++			 * Now fill out any zeroed region (e.g. .bss): first pad the
++			 * last page from the file up to the page boundary, and zero
++			 * it from elf_bss up to the end of the page.
++			 */
++			if (last_bss > elf_bss && padzero(elf_bss)) {
++				error = -EFAULT;
++				goto out;
++			}
+ 		}
+ 	}
+ 
+-	/*
+-	 * Now fill out the bss section: first pad the last page from
+-	 * the file up to the page boundary, and zero it from elf_bss
+-	 * up to the end of the page.
+-	 */
+-	if (padzero(elf_bss)) {
+-		error = -EFAULT;
+-		goto out;
+-	}
+ 	/*
+ 	 * Next, align both the file and mem bss up to the page size,
+ 	 * since this is where elf_bss was just zeroed up to, and where
+-- 
+2.34.1
 
