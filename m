@@ -2,127 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151836259C9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7289C6259CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbiKKLts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S233424AbiKKLtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:49:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiKKLtf (ORCPT
+        with ESMTP id S233009AbiKKLtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:49:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9F427DFE;
-        Fri, 11 Nov 2022 03:49:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D35761F9F;
-        Fri, 11 Nov 2022 11:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3279C433D6;
-        Fri, 11 Nov 2022 11:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668167371;
-        bh=qSBF/ECZfbRTbQB9J8HIoNk5t+QvNMgL7PClSWUYqHg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bDIzMdHf8JocXoaBMAdhZfvVkDbL8LWt55WECcKB2Aj7sGpoJ/Z1nK1+s6BvDOyxP
-         6ljjxNPHydGcoROQ7RP4oeTNKFHeQQfWsssQGZS54zMriSX9rojgnr3Lpj6+1c8Bxg
-         Lzw09yIadbQo7BWkA2+H08Vkwtl37yId4GXoZisap5zw5SIpoW11AEJ9s595Ztqa/J
-         FdvOI9s06XauojJxWqftvcjCaZInONfEh6jwSH9CEfSXzCxiGWH51iSpnbo/8NVPGI
-         lbaKylLSc8P/Czb+YHXPh70zYtCVVq1j5SN6QFSOVMLHqpRwq/BEJotuYV1/cB/9F+
-         DRC1QAsO/0jWQ==
-Date:   Fri, 11 Nov 2022 11:49:25 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>, lee@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, tglx@linutronix.de,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic
- CS48L31/32/33 codecs
-Message-ID: <Y242xYJQMC2JlMtH@sirena.org.uk>
-References: <87mt8zutib.wl-maz@kernel.org>
- <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
- <86pmdvow5y.wl-maz@kernel.org>
- <ef60cbdb-f506-7bd6-a8e1-c92b6963a0f4@opensource.cirrus.com>
- <86k042q1uc.wl-maz@kernel.org>
- <05ae0e20-b472-f812-1afc-ef8c2a97cdeb@opensource.cirrus.com>
- <87iljmve87.wl-maz@kernel.org>
- <Y21gwGDb5CFft0kp@sirena.org.uk>
- <87h6z5vs39.wl-maz@kernel.org>
- <20221111111611.GH10437@ediswmail.ad.cirrus.com>
+        Fri, 11 Nov 2022 06:49:46 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82EB27FDB;
+        Fri, 11 Nov 2022 03:49:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668167385; x=1699703385;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=3WTKB0gRWInX7CZNTxACY+0jeVyHwA/nR2n3yesvK8c=;
+  b=nlsHp3HeOE4q1qPnReH/CgEhjeZTp3Ip4fFj/BiahORs2nyF7VTAk5n0
+   vGzedo7phJvl9/oNjoGakqRlQzJJVpJB0g4A2xUVGQ7bB8YallYlACT1x
+   N+/kCY88bpWl4+P/CMdL27tAd8f5JoaiJ3tYHl9qF095UyXQqzeanQvpw
+   +8Y5DL4B/T7i9ldKwwQDHhXD+K8ZBQFnYpf/GRNiLjjPwBhuw9voRUoHE
+   QqKLqge3MCC3VDB7rKmU0XzztGCE5vgMOz9TumfNSMI1BtAEwnHsx7t9L
+   FU7wRNqByh0ePycMT8p+hCGYdc1Ie9zamNHCeNP5uu/7C3ilUFsWdJjJ2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="397877451"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="397877451"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 03:49:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="706521314"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="706521314"
+Received: from iglushko-mobl1.ger.corp.intel.com ([10.249.44.68])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 03:49:41 -0800
+Date:   Fri, 11 Nov 2022 13:49:38 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 02/12] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+In-Reply-To: <Y24gJ7fIsUPmhzY2@yilunxu-OptiPlex-7050>
+Message-ID: <752a1dc-fae6-4431-41cf-a6deaf157ad3@linux.intel.com>
+References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com> <20221108144305.45424-3-ilpo.jarvinen@linux.intel.com> <Y24gJ7fIsUPmhzY2@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GX9PH0gqSEqgaksu"
-Content-Disposition: inline
-In-Reply-To: <20221111111611.GH10437@ediswmail.ad.cirrus.com>
-X-Cookie: Should I do my BOBBIE VINTON medley?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-512111020-1668167385=:1606"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---GX9PH0gqSEqgaksu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--8323329-512111020-1668167385=:1606
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-On Fri, Nov 11, 2022 at 11:16:11AM +0000, Charles Keepax wrote:
-> On Fri, Nov 11, 2022 at 08:00:10AM +0000, Marc Zyngier wrote:
->=20
-> > > ACPI gets to be a lot of fun here, it's just not idiomatic to describe
-> > > the internals of these devices in firmware there and a lot of the
-> > > systems shipping this stuff are targeted at other OSs and system
-> > > integrators are therefore not in the least worried about Linux
-> > > preferences.
+On Fri, 11 Nov 2022, Xu Yilun wrote:
 
-> I would echo Mark's statement that going the way of moving this
-> into DT/ACPI will actually likely necessitate the addition of a
-> lot of "board file" stuff in the future. If the part gets used in
-> any ACPI systems (granted support is not in yet but this is not a
-> super unlikely addition in the future for cs48l32) we will need to
-> support the laptops containing the part in Linux and the vendors are
-> extremely unlikely to put internal CODEC IRQs into the ACPI tables.
+> On 2022-11-08 at 16:42:55 +0200, Ilpo Järvinen wrote:
+> > BMC type specific info is currently set by a switch/case block. The
+> > size of this info is expected to grow as more dev types and features
+> > are added which would have made the switch block bloaty.
+> > 
+> > Store type specific info into struct and place them into .driver_data
+> > instead because it makes things a bit cleaner.
+> > 
+> > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/mfd/intel-m10-bmc.c       | 50 +++++++++++++++++--------------
+> >  include/linux/mfd/intel-m10-bmc.h | 14 +++++++++
+> >  2 files changed, 41 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > index ee167c5dcd29..762808906380 100644
+> > --- a/drivers/mfd/intel-m10-bmc.c
+> > +++ b/drivers/mfd/intel-m10-bmc.c
+> > @@ -156,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> >  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  {
+> >  	const struct spi_device_id *id = spi_get_device_id(spi);
+> > +	const struct intel_m10bmc_platform_info *info;
+> >  	struct device *dev = &spi->dev;
+> > -	struct mfd_cell *cells;
+> >  	struct intel_m10bmc *ddata;
+> > -	int ret, n_cell;
+> > +	int ret;
+> >  
+> >  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+> >  	if (!ddata)
+> >  		return -ENOMEM;
+> >  
+> > +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> > +	ddata->info = info;
+> 
+> Where to use the ddata->info?
 
-It's a bit of a stronger issue than that in that it's not how ACPI is
-usually expected to work (it draws more from the PCI model where you
-just get a top level ID from the device and have to figure the rest out
-yourself).
+In patch 5/12 there are many these constructs:
+const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
 
-> An alternative approach would be to actually represent the MFD in
-> device tree, I think this would allow things to work and look
-> something like (totally not tested just for discussion):
+Now that I look though, this particular line is altered by the split patch 
+4/12 so it would be not strictly necessary to do it here. I'd prefer, 
+however, still to add it here even if it's technically not used until 
+after the split 5/12 patch because it very much logically belongs to this 
+change.
 
-That's what Marc's pushing for - there is an idea to do that which works
-well enough for cases (like this irqchip for the most part, modulo how
-to handle the top level interrupts for the chip) where the way Linux
-wants to model the device maps clearly onto the hardware but like I was
-mentioning with the audio/clocking split it gets tricky where things are
-more up in the air and potentially changable since it's much harder to
-define a suitable ABI.
+> >  	ddata->dev = dev;
+> >  
+> >  	ddata->regmap =
+> > @@ -183,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  		return ret;
+> >  	}
+> >  
+> > -	switch (id->driver_data) {
+> > -	case M10_N3000:
+> > -		cells = m10bmc_pacn3000_subdevs;
+> > -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> > -		break;
+> > -	case M10_D5005:
+> > -		cells = m10bmc_d5005_subdevs;
+> > -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> > -		break;
+> > -	case M10_N5010:
+> > -		cells = m10bmc_n5010_subdevs;
+> > -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > -		break;
+> > -	default:
+> > -		return -ENODEV;
+> > -	}
+> > -
+> > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> > +				   info->cells, info->n_cells,
+> >  				   NULL, 0, NULL);
+> >  	if (ret)
+> >  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> > @@ -208,10 +194,28 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  	return ret;
+> >  }
+> >  
+> > +static const struct intel_m10bmc_platform_info m10bmc_m10_n3000 = {
+> > +	.type = M10_N3000,
+> 
+> Is the type enum still useful? Found no usage.
 
---GX9PH0gqSEqgaksu
-Content-Type: application/pgp-signature; name="signature.asc"
+There's no use within context of this patch series. However, I think there 
+might have been something depending on it in the changes that are not part 
+of this series so I left it in place for now.
 
------BEGIN PGP SIGNATURE-----
+-- 
+ i.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNuNsQACgkQJNaLcl1U
-h9DtIAf/aeBQQ3Lh5zmka+uBR54WcnQfWacUGj+JM5RC6CDwQ1Prz7UJd1YrZzbz
-NA5etQWvjvbCh/1Y+cn8KSpiNiKrNJmhVZOkqNehoPWPcyKFBbVKLhL8mRY5tk2f
-xPJkQ/MxrOFacsGRpkStfSZPew2Xt+cdIBOIN7vhww9+NHMsnGmx4xLjZc5tltpA
-BA9WFjV/yzMxgE2UiJYIX8QMZ8i3CftDNOIUS9KN2cXAqNa3S/+Nuxon5Qrc5Rmd
-07eq77gLTHoy0syRlbyDOjD24wVosKRomLl/B+koqEy5ZUJxjZz0W9IDllZ9fIKo
-B2IEu3AcIwLVXpeU0pwDN7OY6FCdFA==
-=Ljlu
------END PGP SIGNATURE-----
 
---GX9PH0gqSEqgaksu--
+> > +	.cells = m10bmc_pacn3000_subdevs,
+> > +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+> > +};
+> > +
+> > +static const struct intel_m10bmc_platform_info m10bmc_m10_d5005 = {
+> > +	.type = M10_D5005,
+> > +	.cells = m10bmc_d5005_subdevs,
+> > +	.n_cells = ARRAY_SIZE(m10bmc_d5005_subdevs),
+> > +};
+> > +
+> > +static const struct intel_m10bmc_platform_info m10bmc_m10_n5010 = {
+> > +	.type = M10_N5010,
+> > +	.cells = m10bmc_n5010_subdevs,
+> > +	.n_cells = ARRAY_SIZE(m10bmc_n5010_subdevs),
+> > +};
+> > +
+> >  static const struct spi_device_id m10bmc_spi_id[] = {
+> > -	{ "m10-n3000", M10_N3000 },
+> > -	{ "m10-d5005", M10_D5005 },
+> > -	{ "m10-n5010", M10_N5010 },
+> > +	{ "m10-n3000", (kernel_ulong_t)&m10bmc_m10_n3000 },
+> > +	{ "m10-d5005", (kernel_ulong_t)&m10bmc_m10_d5005 },
+> > +	{ "m10-n5010", (kernel_ulong_t)&m10bmc_m10_n5010 },
+> >  	{ }
+> >  };
+> >  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> > diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> > index d77383a8a410..e58115f514b9 100644
+> > --- a/include/linux/mfd/intel-m10-bmc.h
+> > +++ b/include/linux/mfd/intel-m10-bmc.h
+> > @@ -124,14 +124,28 @@ enum m10bmc_type {
+> >  /* Address of 4KB inverted bit vector containing staging area FLASH count */
+> >  #define STAGING_FLASH_COUNT	0x17ffb000
+> >  
+> > +/**
+> > + * struct intel_m10bmc_platform_info - Intel MAX 10 BMC platform specific information
+> > + * @type: the type of MAX10 BMC
+> > + * @cells: MFD cells
+> > + * @n_cells: MFD cells ARRAY_SIZE()
+> > + */
+> > +struct intel_m10bmc_platform_info {
+> > +	enum m10bmc_type type;
+> > +	struct mfd_cell *cells;
+> > +	int n_cells;
+> > +};
+> > +
+> >  /**
+> >   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+> >   * @dev: this device
+> >   * @regmap: the regmap used to access registers by m10bmc itself
+> > + * @info: the platform information for MAX10 BMC
+> >   */
+> >  struct intel_m10bmc {
+> >  	struct device *dev;
+> >  	struct regmap *regmap;
+> > +	const struct intel_m10bmc_platform_info *info;
+> >  };
+> >  
+> >  /*
+> > -- 
+> > 2.30.2
+> > 
+> 
+
+--8323329-512111020-1668167385=:1606--
