@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D8F625E42
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA53625E4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233554AbiKKPWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S233249AbiKKP0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233762AbiKKPWN (ORCPT
+        with ESMTP id S233163AbiKKP0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:22:13 -0500
+        Fri, 11 Nov 2022 10:26:12 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FB37B21F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:22:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D13120B0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:26:10 -0800 (PST)
 Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABFLZtM022216;
-        Fri, 11 Nov 2022 15:21:44 GMT
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABFLZv8022216;
+        Fri, 11 Nov 2022 15:25:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : in-reply-to : references : date : message-id : content-type :
  content-transfer-encoding : mime-version; s=corp-2022-7-12;
@@ -28,9 +28,9 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to 
  IC+0eOvh26TGonGIjVzF5VrlL9TdlK+TV7ZSTOuL4AKqb0j0dQ/dBecZnSTBp/hBRGiq
  yfa1UaJDZV5LrahkGOQfactWOUTQMsY3GHWMSGEyIhWlZQDOEoZDSV9vHwrb2GVliyD2 +w== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ksrjnr1ye-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ksrjnr2hb-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Nov 2022 15:13:56 +0000
+        Fri, 11 Nov 2022 15:25:50 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
         by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDWpTO022406;
         Fri, 11 Nov 2022 15:09:40 GMT
@@ -176,11 +176,11 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spams
  adultscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
  definitions=main-2211110101
-X-Proofpoint-ORIG-GUID: p456Cj4ojsC4-wueAyXY0noPAvzL12sv
-X-Proofpoint-GUID: p456Cj4ojsC4-wueAyXY0noPAvzL12sv
+X-Proofpoint-ORIG-GUID: uqs-Avh5PG75BpvM3OeJcicI0VoZR0ZA
+X-Proofpoint-GUID: uqs-Avh5PG75BpvM3OeJcicI0VoZR0ZA
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
