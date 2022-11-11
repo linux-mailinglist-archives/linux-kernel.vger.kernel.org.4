@@ -2,92 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F46D626D29
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 01:56:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE834626D41
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 02:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235048AbiKMA4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 19:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S235111AbiKMBJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 20:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiKMA4p (ORCPT
+        with ESMTP id S234838AbiKMBJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 19:56:45 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D457813D6E
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 16:56:44 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id a13so12589715edj.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 16:56:44 -0800 (PST)
+        Sat, 12 Nov 2022 20:09:44 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A849013F1D
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 17:09:43 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id s4so5039950qtx.6
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 17:09:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W0SikHTdUbXQLGro61wDie+oPkKhps+RKTwvHMmIsLg=;
-        b=mw93TmEeH1gUrFjBnB2pV2QBDf+ZR6rzwh3OIkxUlRatK4s7HhNKVu7jXkoEG09aTI
-         P0f8HQJhWzi4/70jiM86jX48e4C0NlM+4mMwlHpBlY0CCHhwjWCfghuNrhdqnS0bb71Z
-         aBn1hfjfVeIPNv8JtPUW28yCoaIFakVMmzyOD97hJ25M5B15btMtjPK5ArTH+EjbCKTI
-         CYxaNhakK1gZCX0CkGti6gNXeM8B+rkzZNOCw2vhMW1F/37bUPkyR2IrlXaxLcxTXZrO
-         Y94Acve50lqRZ3eBoKOkVHEQjrTeyaqk/uZLWoOvkMZjudhlccgnHQR+7zQK25PjLoW8
-         5CIA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B9moV2tcf0ddmvHVedu+MwgRdlsmBZvgLK4p0sh0Kag=;
+        b=MzFHzbaKyQbKnOXzPTkgOjON2Qv8hd/hDviB3+TH1oCIWHE5zZB1hb6X2SalbSoV7n
+         V5sNyfdL1KlMNpjXRnZdrU4NmFd/prZGDkhYi6oxUxR0OleT/VKDo8Eg4vlpuRfMHn3f
+         dmPo/Hp/nAq9PJ5N/XhOR3u78yeKiQ8Vn0tEFOg12ve/jqHxkRBbxjDEPEJrIZ5/J8eF
+         Bayx3llZjhdGZ+A6hZWoCz393OkeWaLocp8IMZV2cWGZp20ktSyCbINbxNO8EsuYvuiQ
+         Mri4+5DeBd7Rt13PQyWm0nSZSM3GlfIHRs2aq1OjBy6zKtbpmUm9WjSbmd6qv/fRPPtj
+         zc4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W0SikHTdUbXQLGro61wDie+oPkKhps+RKTwvHMmIsLg=;
-        b=xctt+fIuc4B1YlVd7L2CdNhZg0i3JdfIoQacFUjTN+C973IkjuSwibJEkcFrUFrQAF
-         LGOzemOcx81rhP1mU/q75s/rnM9CnACEKynLHWSXJkqDJlpT9xfJypAO2A1k6c35V1jY
-         G6mVYFfrZClXFmw8gRiSxGlZX7DU9PCQZ4V6wbllN+ldNOQnDx+U7QVTkpORzd7XNNUo
-         1Oc0MeyHS57KKYEd+P5BD+W4obJOzfXS7kEm7QbmKBc5wAYSUuho9Hzx2Z1mDLWTNj3q
-         MABxDNYy9hqai6yNjmRCF6Yzv/qAE/5lMKgKKlzVb02AWxjwJJHlHmGbfIkjKpd9zll+
-         8gxg==
-X-Gm-Message-State: ANoB5pmWPMHPrRim4NcEKJ2nPgNQW9QIjUkahS/s2wXTD1+8UqVakusF
-        Dhl7bEO1etF5WQWEHiZobT8=
-X-Google-Smtp-Source: AA0mqf6tPkb9QZNuvbeDhu+w2qQFk0kdlva83w34GrD+f50KhRRKfHfA71q565q1rM7fvZj/AKdyJA==
-X-Received: by 2002:a50:9eaa:0:b0:461:86b7:7627 with SMTP id a39-20020a509eaa000000b0046186b77627mr6974061edf.180.1668301003339;
-        Sat, 12 Nov 2022 16:56:43 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id p25-20020a17090653d900b00779a605c777sm2398728ejo.192.2022.11.12.16.56.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 12 Nov 2022 16:56:42 -0800 (PST)
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Liam.Howlett@oracle.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Wei Yang <richard.weiyang@gmail.com>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>
-Subject: [PATCH] maple_tree: not necessary to filter MAPLE_PARENT_ROOT since it is not a root
-Date:   Sun, 13 Nov 2022 00:56:18 +0000
-Message-Id: <20221113005618.29679-1-richard.weiyang@gmail.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B9moV2tcf0ddmvHVedu+MwgRdlsmBZvgLK4p0sh0Kag=;
+        b=sV1CiYFpt2WCcU6lk6ALrTXPn9qsuiA+DPaRcJWsX45ID8KtjQan4z0uGtqFHoyzk0
+         C/wUUHph+Q4YNKVbZsDyDJ6EOITfohS3JEA4waunX/Ku0lFP4LlBXQycr/21lBaFbtJu
+         jKkRueMbXHpv/Ki8Gy6j5+wFGSUdDjNtXe1ypba9lHBDSvEMcC6RUWdUdVaDNcPSCwXY
+         N9PeXqsin9jd5zLNBPrvswVNCA3qtara3gLejyLGg4RxvhgYLvJL0Hso/lhKmL9yhNxH
+         GzGLsLzUoB9tr7ixINmRYfpF+5xSyFd9Ervh3S/ujQaM4PMpvJ8Kbbs3Ktgb5uVjV9m0
+         d6Rw==
+X-Gm-Message-State: ANoB5plL1FgnvM3m3ZV5vQtStcJGQwEOO/rfyVebtr1QDiFU5mHs/a6D
+        razfm9JPd1N1vzmfF/vH7Wpovg==
+X-Google-Smtp-Source: AA0mqf5URGT7sbCFH2vYimEDRG/lFdRX6MHpCn6u5MHHIKe24WuM15aIbbnviXD3/idYrmMXqpthGA==
+X-Received: by 2002:ac8:6993:0:b0:3a5:81e1:7571 with SMTP id o19-20020ac86993000000b003a581e17571mr7252481qtq.290.1668301782781;
+        Sat, 12 Nov 2022 17:09:42 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05622a180600b00343057845f7sm3552498qtc.20.2022.11.12.17.09.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Nov 2022 17:09:41 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, michael@walle.cc, broonie@kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH v2 0/4] Migrate i8255 GPIO drivers to regmap API
+Date:   Thu, 10 Nov 2022 20:55:49 -0500
+Message-Id: <cover.1668129763.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Root node is return at the beginning, so we are sure bit 0 is not set.
+Changes in v2:
+ - Leveraged gpio_regmap to support GPIO functionality in 104-idi-48
+   driver and i8255 library
+ - Leveraged regmap_irq to support IRQ functionality in 104-idi-48 and
+   104-dio-48e drivers
+ - Removed i8255 dependency from 104-idi-48; simpler to just use
+   gpio_regmap directly in this case
+ - Adjust gpio_regmap to always set gpio_chip get_direction
+ - Introduce handle_mask_sync() callback to regmap_irq API
+ - i8255 library is simplified to a registration function, a
+   configuration structure, and a helper macro
 
-Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-CC: Liam R. Howlett <Liam.Howlett@Oracle.com>
----
- lib/maple_tree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver. The 104-dio-48e and gpio-mm modules depend on
+the i8255 library and are thus updated accordingly.
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 9aad98c24f3e..f8c4755e7c75 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -436,7 +436,7 @@ enum maple_type mte_parent_enum(struct maple_enode *p_enode,
- 		return 0; /* Validated in the caller. */
- 
- 	p_type &= MAPLE_NODE_MASK;
--	p_type = p_type & ~(MAPLE_PARENT_ROOT | mte_parent_slot_mask(p_type));
-+	p_type = p_type & ~mte_parent_slot_mask(p_type);
- 
- 	switch (p_type) {
- 	case MAPLE_PARENT_RANGE64: /* or MAPLE_PARENT_ARANGE64 */
+The 104-IDI-48 is hardwired as an input-only device. Because the i8255
+control registers are not exposed on the 104-IDI-48, the i8255 library
+doesn't provide much benefit here. In this case it's simpler to utilize
+the gpio_regmap API directly, so this patch series does such and removes
+the i8255 library dependency from the 104-idi-48 module.
+
+The first patch in this series adjusts gpio_regmap to always set
+gpio_chip get_direction. This patch is larger independent of the rest of
+the patches in the series and can be picked up separately if desired.
+I'm including it here because it allows the input-only 104-idi-48 driver
+to continue reporting offset directions after migrating to gpio_regmap.
+
+A handle_mask_sync() callback is introduced for the regmap_irq API. This
+is used by the 104-dio-48e driver to handle its enable/disable interrupt
+functionality. The 104-DIO-48E has a single register to handle
+enabling/disabling interrupts: a write of any value to this register
+enables interrupts, while any read disables interrupts.
+
+By leveraging the gpio_regmap API, the i8255 library is reduced to
+simply a devm_i8255_regmap_register() function, a configuration
+structure struct i8255_regmap_config, and a helper macro
+i8255_volatile_regmap_range() provided to simplify volatile PPI register
+hinting for the regmap.
+
+The regmap_irq API is leveraged by the 104-idi-48 and 104-dio-48e
+modules to support their IRQ functionality. Do their respective regmap
+configurations need use_hwlock set to true in this case, or is adequate
+locking already handled by the regmap_irq API?
+
+William Breathitt Gray (4):
+  gpio: regmap: Always set gpio_chip get_direction
+  regmap-irq: Add handle_mask_sync() callback
+  gpio: 104-idi-48: Migrate to regmap API
+  gpio: i8255: Migrate to regmap API
+
+ drivers/base/regmap/regmap-irq.c |  44 +++-
+ drivers/gpio/Kconfig             |   5 +-
+ drivers/gpio/gpio-104-dio-48e.c  | 397 ++++++++++------------------
+ drivers/gpio/gpio-104-idi-48.c   | 329 ++++++++----------------
+ drivers/gpio/gpio-gpio-mm.c      | 151 ++---------
+ drivers/gpio/gpio-i8255.c        | 429 ++++++++++---------------------
+ drivers/gpio/gpio-i8255.h        |  80 +++---
+ drivers/gpio/gpio-regmap.c       |   7 +-
+ include/linux/regmap.h           |   5 +
+ 9 files changed, 483 insertions(+), 964 deletions(-)
+ rewrite drivers/gpio/gpio-i8255.c (89%)
+ rewrite drivers/gpio/gpio-i8255.h (89%)
+
+
+base-commit: 8dab99c9eab3162bfb4326c35579a3388dbf68f2
 -- 
-2.33.1
+2.38.1
 
