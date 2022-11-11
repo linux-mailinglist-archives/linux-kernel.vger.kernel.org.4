@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AEE625FA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BD8625FA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbiKKQiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S234255AbiKKQiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiKKQiE (ORCPT
+        with ESMTP id S233842AbiKKQiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:38:04 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9374C836B0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:03 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id i131so6256979ybc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:03 -0800 (PST)
+        Fri, 11 Nov 2022 11:38:08 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E89836B6
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:07 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso5951213wmb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K6NvtIX+Lbvb+KUOrKTR0ljTcijw4msq9rtYQAvDAUk=;
-        b=ZIV1Enf0EAuq2JCxnGrXKI8jk/7tY3he6qJy8sZcYtjGNNiLD0dUKQN26hcwcVr7g0
-         ZHSsqZwjYd/amA7hKKNWDI9b5LZ19MVL2uGtfJ2XCvRFB4DlM9Gj7XdDctYmU/Rqnvt8
-         5kasCPXeKaizIqzuDA7tWJaJx/RmSqeAsezseVn+JObhr7w+AnWOUt0cuM9yl9qdfNRo
-         NOxm7kb/aTOMFj+7vJMjknh6lMSUQl08qkuBuQHNCypelX6FicXzpCsPfN44ihrZ+VP4
-         bAaZI7hDq6zsG384dY8S0x+JWdVqUt+Z1OxRjg3HZXFn5EboRSLm6+ZTiDvpmh+RGCqg
-         LumA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JaZVtFPPaLB1/chqLl5fXGZ9i1oLa0XpBUVRRJxd9cI=;
+        b=oZCyUTC9OW+Gao72Y6/Jy0WiGm29zM05RoR72zuCvODktorROYHO90I0wv148pxUJ3
+         AK61RQ5U62x4Rnv5wOt/kwbKT5vkWIIPdCRPXskn4CArmJgmYxukx8Hh8N76iuaCMrd7
+         MW4BNKE8I6AEM2OdLf7LnD4v5v7FD0+MyVozjtociVgHUjoblN1xGqLciTssf0vn8yCz
+         qZZlviM95ZPISMODwyEEmZBjsaEbNadI2eRHZwsGxZK/LPmRtWGtB2Pg6WvIsgmsaEbR
+         hMnqAU42OrbaqPR7sqSKj7H1sU3uW9peKaVCDtg0ihVjd3g0A3w17vX2/J5XbztGcgsE
+         fnEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K6NvtIX+Lbvb+KUOrKTR0ljTcijw4msq9rtYQAvDAUk=;
-        b=vImwZRugkinSd6Mkc7AZRHicPdsYbfhYEkLc+8jLR2DFuAFFbMZP5hS71A3g9JLWYc
-         v6gwoPnHb+rnM8msy+/NERbiu3qyMZAKxqrprzHA9ZNMAxJPz6612SBG+GtSmq1XNozr
-         o0OGkYFhgZXU5pfgrVxFSH62bmaK66vWlQhgKYiFY9Y4PlHy5c98jkVf2bOaGY5OsmcQ
-         bb60FvHXISoyCDi/s54bz56otc5H5aeKSIZIs2mSQfb5XlbMADzQKwu6FCc1xbETnZ9i
-         aiyps0CJHr/oSAS9/W4D89O5TDD0QizyjLHh5Wb0kfBL9hlIcVXz8OngpaMY2n04aWwf
-         2Mqg==
-X-Gm-Message-State: ANoB5pm4ik4/Fx30K0TJ1qFXVe44koiBlKts+62wXeOsRjBUGKiTCPWH
-        8pbuYWClWnmuXfeFQnfiHMoj8sOKDPIJ5QqXu4snqA==
-X-Google-Smtp-Source: AA0mqf59F1exMtt7BFu3TKN2pQsxyZEPjDy9r/NuB/KlmIuT83XtZxGvU1wIl1kHMhe4l07A5h8qeMI+Z94l5cp/ee4=
-X-Received: by 2002:a5b:38b:0:b0:6cb:75a6:3bdb with SMTP id
- k11-20020a5b038b000000b006cb75a63bdbmr2407196ybp.96.1668184682697; Fri, 11
- Nov 2022 08:38:02 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JaZVtFPPaLB1/chqLl5fXGZ9i1oLa0XpBUVRRJxd9cI=;
+        b=RPRJnSigE1UD569BJMpwjBRXMKzKa3UhLCtOB6qoNcLNYqLB85cwAtR7f9sblVPydM
+         /9s/ze40xMtA9CicpNUHMd2D7zQZitcmUi/AIAN4WzmybT8JhVtaqIhuB77WceBty/gE
+         Yz7lpRxRQfLn4i5DeLsIMnQ+zCidnq89Ra0zevp6NlWVsf7puvy4GGy6AtVn4tsTamdC
+         NCCdNP8k47dO2EPBs/+BVG2r/yyOsc2G1org0+gs/KWN4ntHUZiczzYDx/KSxEwD8NWq
+         wUuWOkBBzXWPg85t2ROexNmu4ZGn31UAPmZ8zI2E1DyjJMZ1+3X3qxCEF6xTvP4/meOY
+         FMqg==
+X-Gm-Message-State: ANoB5pmba7jXWNQx7SMfC6StlpUV9nZQ/wv4ssYunWuSFFJlN6+0w14i
+        QfuGQs0lLBxij9EZFMQ/daQfUA==
+X-Google-Smtp-Source: AA0mqf6HUq6BrzK2oEKsXnAtk4vpxLbFgDJjdJOF9mPjgwAHthV3NwQdmBi7OGwhXnGVxnyF073M6Q==
+X-Received: by 2002:a05:600c:204d:b0:3cf:a3c4:59b3 with SMTP id p13-20020a05600c204d00b003cfa3c459b3mr1854849wmg.198.1668184686366;
+        Fri, 11 Nov 2022 08:38:06 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id w9-20020adfee49000000b00228cd9f6349sm2265623wro.106.2022.11.11.08.38.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 08:38:05 -0800 (PST)
+Message-ID: <49722205-bd5b-8241-d2ff-7eb956e05ec1@linaro.org>
+Date:   Fri, 11 Nov 2022 16:38:04 +0000
 MIME-Version: 1.0
-References: <20221107063807.81774-1-khuey@kylehuey.com> <20221107063807.81774-2-khuey@kylehuey.com>
- <64e62ab9-71f6-6d90-24de-402921c244e7@intel.com> <CAP045ArEuTmA6DGoVEgeSRd-F+oQCqRaeyzwgdxuCnOP0jgqWA@mail.gmail.com>
- <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
-In-Reply-To: <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Fri, 11 Nov 2022 08:37:49 -0800
-Message-ID: <CAP045Ar1WxzWy+fDLrDYR6EWCYtH=wPca+ixJ=9SGQiMZS1ALQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again)
- written by ptrace.
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] ASoC: codecs: wsa883x: use correct header file
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>
+References: <20221108001829.5100-1-rdunlap@infradead.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20221108001829.5100-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,95 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 5:38 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 11/10/22 16:03, Kyle Huey wrote:
-> > On Tue, Nov 8, 2022 at 10:23 AM Dave Hansen <dave.hansen@intel.com> wrote:
-> ...
-> >> At a high level, this patch does a *LOT*.  Generally, it's nice when
-> >> bugfixes can be encapsulted in one patch, but I think there's too much
-> >> going on here for one patch.
-> >
-> > Ok. How about I break the first part into two pieces, one that changes the
-> > signatures of copy_uabi_from_kernel_to_xstate() and
-> > copy_sigframe_from_user_to_xstate(), and one that moves the relevant
-> > KVM code from fpu_copy_uabi_to_guest_fpstate() to copy_uabi_to_xstate()
-> > and deals with the edge case behavior of the mask?
->
-> Sounds like a good start.  My gut says there's another patch or two that
-> could be broken out, but that sounds like a reasonable next step.
->
-> >>> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> >>> index 3b28c5b25e12..c273669e8a00 100644
-> >>> --- a/arch/x86/kernel/fpu/core.c
-> >>> +++ b/arch/x86/kernel/fpu/core.c
-> >>> @@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
-> >>>  {
-> >>>       struct fpstate *kstate = gfpu->fpstate;
-> >>>       const union fpregs_state *ustate = buf;
-> >>> -     struct pkru_state *xpkru;
-> >>> -     int ret;
-> >>>
-> >>>       if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
-> >>>               if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
-> >>> @@ -406,16 +404,16 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
-> >>>       if (ustate->xsave.header.xfeatures & ~xcr0)
-> >>>               return -EINVAL;
-> >>>
-> >>> -     ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
-> >>> -     if (ret)
-> >>> -             return ret;
-> >>> +     /*
-> >>> +      * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
-> >>> +      * in the header.  KVM's odd ABI is to leave PKRU untouched in this
-> >>> +      * case (all other components are eventually re-initialized).
-> >>> +      * (Not clear that this is actually necessary for compat).
-> >>> +      */
-> >>> +     if (!(ustate->xsave.header.xfeatures & XFEATURE_MASK_PKRU))
-> >>> +             vpkru = NULL;
-> >>
-> >> I'm not a big fan of hunks that are part of bugfixes where it is not
-> >> clear that the hunk is necessary.
-> >
-> > This is necessary to avoid changing KVM's behavior at the same time
-> > that we change
-> > ptrace, since KVM doesn't want the same behavior as ptrace.
->
-> Your "This is necessary" doesn't really match with "Not clear that this
-> is actually necessary" from the comment, right?
->
-> Rather than claim whether it is necessary or not, maybe just say why
-> it's there: it's there to preserve wonky KVM behavior.
->
-> BTW, I'd love to know if KVM *REALLY* depends on this.  It'd be nice to
-> kill if not.
 
-qemu didn't appear to (it treats the KVM_GET_XSAVE2/KVM_SET_XSAVE
-buffers as opaque blobs afaict) but it's of course not the only KVM
-application out there.
 
-> >> Would something like this be more clear?
-> >>
-> >>         if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
-> >>                 struct pkru_state *xpkru;
-> >>
-> >>                 xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
-> >>                 *pkru = xpkru->pkru;
-> >>         } else {
-> >>                 /*
-> >>                  * KVM may pass a NULL 'pkru' to indicate
-> >>                  * that it does not need PKRU updated.
-> >>                  */
-> >>                 if (pkru)
-> >>                         *pkru = 0;
-> >>         }
-> >
-> > Yeah, Sean Christopherson suggested this (with the else and if
-> > collapsed into a single level) when I submitted this previously.
->
-> I generally agree with Sean, but he's also been guilty of an atrocity or
-> two over the years.  :)  While I generally like low levels of
-> indentation I also think my version is much more clear in this case.
->
+On 08/11/2022 00:18, Randy Dunlap wrote:
+> Fix build errors when GPIOLIB is not set/enabled:
+> 
+> ../sound/soc/codecs/wsa883x.c: In function 'wsa883x_probe':
+> ../sound/soc/codecs/wsa883x.c:1394:25: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
+>           wsa883x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
+> ../sound/soc/codecs/wsa883x.c:1395:49: error: 'GPIOD_FLAGS_BIT_NONEXCLUSIVE' undeclared (first use in this function)
+>           GPIOD_FLAGS_BIT_NONEXCLUSIVE);
+> ../sound/soc/codecs/wsa883x.c:1414:9: error: implicit declaration of function 'gpiod_direction_output'; did you mean 'gpio_direction_output'? [-Werror=implicit-function-declaration]
+>           gpiod_direction_output(wsa883x->sd_n, 1);
+> 
+> Fixes: 43b8c7dc85a1 ("ASoC: codecs: add wsa883x amplifier support")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Banajit Goswami <bgoswami@quicinc.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: alsa-devel@alsa-project.org
+> Cc: Jaroslav Kysela <perex@perex.cz>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> ---
 
-- Kyle
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+
+> v2: add the correct header file instead of messing with GPIOLIB in Kconfig
+> 
+>   sound/soc/codecs/wsa883x.c |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff -- a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
+> --- a/sound/soc/codecs/wsa883x.c
+> +++ b/sound/soc/codecs/wsa883x.c
+> @@ -7,7 +7,7 @@
+>   #include <linux/debugfs.h>
+>   #include <linux/delay.h>
+>   #include <linux/device.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>   #include <linux/init.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
