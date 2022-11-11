@@ -2,273 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84D162634E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E01626354
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbiKKU7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 15:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S234167AbiKKU75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 15:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKKU7O (ORCPT
+        with ESMTP id S231300AbiKKU74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 15:59:14 -0500
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996AF7BE71
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:59:13 -0800 (PST)
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2ABKwveG014903
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 05:58:58 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2ABKwveG014903
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1668200338;
-        bh=EyB7xuj27UQuQU7CUd0Wp/ZT6CK+jN98wSu6cp14EDQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=F3hLupm9fl6+RTjhQKIXcxV2isHW3mnsmw9s4vG1j9i6Sk1DVGG8w5tdWG572vW15
-         UQry74QlZJ/3tn95kl+OgR1nyiQ8iGj/cuzhvBhtCkURfecw7nbgVMEOuUJC8dUjVC
-         3WWeT9/IwYRF2ZSWaJuSE7vCUIS83WVVL3GxG1zE0b7W8d65ngDLqFtfNHLaDtuw97
-         dO/9luibo3xQtNmsc3h6NW6SEJlKw3qPUK6hzyP5a6pZCun7tE7OJEO8qCzl88qLXp
-         G0o59m+WRLE0kTFy20b7n7dgdDqdyetV2ZGnY8A+eL9haux/pxPX6d6i7SWUDmuXP1
-         nXAQ34ZXCQ0PA==
-X-Nifty-SrcIP: [209.85.160.45]
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-13d9a3bb27aso6612178fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:58:58 -0800 (PST)
-X-Gm-Message-State: ANoB5pnO6iQ7+W9fQ3gTva3DzYzAu9CrIuxqHLoqgd4mDLDeOfSbbO5t
-        zFIyvii8QS8LedN0H3SaJmJYZaB0SqZWsJW3tbM=
-X-Google-Smtp-Source: AA0mqf5voYn7dfFXZb4EqkDEEnUIihg546Lcb6UpRr14soZQ48O4Bs1i5ZJtBpLjo7NZKMPJwVlh0elpNn9YPZhcpVU=
-X-Received: by 2002:a05:6870:4b4a:b0:13b:5d72:d2c6 with SMTP id
- ls10-20020a0568704b4a00b0013b5d72d2c6mr1881372oab.287.1668200336889; Fri, 11
- Nov 2022 12:58:56 -0800 (PST)
+        Fri, 11 Nov 2022 15:59:56 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7B77BE71;
+        Fri, 11 Nov 2022 12:59:55 -0800 (PST)
+Received: from [192.168.2.108] (unknown [109.252.117.140])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5CDA66602A68;
+        Fri, 11 Nov 2022 20:59:50 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668200392;
+        bh=TrKdFBPru086RSsfc5wIzyFVxFZ3a1YCkJzhICjKkFM=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=kTzmPkaJO6D9W0IEssnpVYn8a0dml3ZRppn1qMWG4J42UsMw0cTQn/a79AsEqsy6X
+         QMrYQYyC8OxRUVB5zQFJrKCVAXk0bJ8lzcA/P1uBAGVtFYj/6P3E36H7NotZfUXQlA
+         m2J00IbXu60OvZGQx0RMmb7M4IIYhWVFKyaPRVOkHD/eqZ5Wfj3ySQg/WI6Ad+DAef
+         nPvkNldq/VIa3A2nmhJSI7PnY0IhPvdxhv49NeWamYwI+4Mfs5X4K69Hy0Kql9cqfk
+         7XBjipx8WNWslnDHQMpiUXQCpO0KfknfBszxAN5doYyGy+65O+6Y9l+KzgTo5o0jdg
+         3B3qBv+X+50cg==
+Message-ID: <b4dd0426-05fc-e33e-66b1-a2131c8c47dc@collabora.com>
+Date:   Fri, 11 Nov 2022 23:59:47 +0300
 MIME-Version: 1.0
-References: <20220929020823.1373722-1-aik@ozlabs.ru>
-In-Reply-To: <20220929020823.1373722-1-aik@ozlabs.ru>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 12 Nov 2022 05:58:20 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARv=yLgyxz6QNt+0NXNK7c0+LOPcmAa1+fHRaT7ajgGng@mail.gmail.com>
-Message-ID: <CAK7LNARv=yLgyxz6QNt+0NXNK7c0+LOPcmAa1+fHRaT7ajgGng@mail.gmail.com>
-Subject: Re: [PATCH kernel v3] zstd: Fixing mixed module-builtin objects
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     linux-kernel@vger.kernel.org, Nick Terrell <terrelln@fb.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 0/6] Move dma_buf_mmap_internal() to dynamic locking
+ specification
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel@collabora.com
+References: <20221110201349.351294-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20221110201349.351294-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 11:08 AM Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
->
-> With CONFIG_ZSTD_COMPRESS=m and CONFIG_ZSTD_DECOMPRESS=y we end up in
-> a situation when files from lib/zstd/common/ are compiled once to be
-> linked later for ZSTD_DECOMPRESS (build-in) and ZSTD_COMPRESS (module)
-> even though CFLAGS are different for builtins and modules.
-> So far somehow this was not a problem but enabling LLVM LTO exposes
-> the problem as:
->
-> ld.lld: error: linking module flags 'Code Model': IDs have conflicting values in 'lib/built-in.a(zstd_common.o at 5868)' and 'ld-temp.o'
->
-> This particular conflict is caused by KBUILD_CFLAGS=-mcmodel=medium vs.
-> KBUILD_CFLAGS_MODULE=-mcmodel=large , modules use the large model on
-> POWERPC as explained at
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/powerpc/Makefile?h=v5.18-rc4#n127
-> but the current use of common files is wrong anyway.
+On 11/10/22 23:13, Dmitry Osipenko wrote:
+> Hello,
+> 
+> Recently, dma-buf got a common locking convention for importers and
+> exporters. All the dma-buf functions were moved to the new locking
+> convention, apart from the dma_buf_mmap_internal() that was missed out
+> by accident. This series moves dma_buf_mmap_internal() to the dynamic
+> locking specification and updates drivers that support mmaping of
+> dma-bufs to use the debug-assert of the lock.
+> 
+> Thanks to Daniel Vetter for spotting the missed function!
+> 
+> Dmitry Osipenko (6):
+>   dma-buf: Move dma_buf_mmap_internal() to dynamic locking specification
+>   drm: Assert held reservation lock for dma-buf mmapping
+>   udmabuf: Assert held reservation lock for dma-buf mmapping
+>   dma-buf/heaps: Assert held reservation lock for dma-buf mmapping
+>   media: videobuf2: Assert held reservation lock for dma-buf mmapping
+>   fastrpc: Assert held reservation lock for dma-buf mmapping
+> 
+>  drivers/dma-buf/dma-buf.c                             | 7 ++++++-
+>  drivers/dma-buf/heaps/cma_heap.c                      | 3 +++
+>  drivers/dma-buf/heaps/system_heap.c                   | 3 +++
+>  drivers/dma-buf/udmabuf.c                             | 3 +++
+>  drivers/gpu/drm/drm_prime.c                           | 2 ++
+>  drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c            | 2 ++
+>  drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c             | 2 ++
+>  drivers/gpu/drm/tegra/gem.c                           | 2 ++
+>  drivers/media/common/videobuf2/videobuf2-dma-contig.c | 3 +++
+>  drivers/media/common/videobuf2/videobuf2-dma-sg.c     | 3 +++
+>  drivers/media/common/videobuf2/videobuf2-vmalloc.c    | 3 +++
+>  drivers/misc/fastrpc.c                                | 3 +++
+>  12 files changed, 35 insertions(+), 1 deletion(-)
+> 
 
-
-BTW, how to reproduce this error?
-
-You referred to the arch/powerpc/Makefile,
-but ARCH=powerpc cannot enable Clang LTO.
-(powerpc does not select ARCH_SUPPORTS_LTO_CLANG).
-
-
-
-
-
-
-> This works around the issue by introducing a zstd_common module with
-> shared code.
->
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-> [robot found a problem in v2]
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
-> Changes:
-> v3:
-> * added EXPORT_SYMBOL_GPL to compile with:
-> CONFIG_ZSTD_COMMON=m
-> CONFIG_ZSTD_COMPRESS=m
-> CONFIG_ZSTD_DECOMPRESS=m
-> Vast majority of cases have CONFIG_ZSTD_COMMON=y so this went unnoticed
-> ---
->  lib/zstd/Makefile                | 18 ++++++++----------
->  lib/zstd/common/entropy_common.c |  5 ++++-
->  lib/zstd/common/zstd_common.c    | 10 ++++++++++
->  lib/Kconfig                      |  8 ++++++--
->  4 files changed, 28 insertions(+), 13 deletions(-)
->
-> diff --git a/lib/zstd/Makefile b/lib/zstd/Makefile
-> index fc45339fc3a3..440bd0007ae2 100644
-> --- a/lib/zstd/Makefile
-> +++ b/lib/zstd/Makefile
-> @@ -10,14 +10,10 @@
->  # ################################################################
->  obj-$(CONFIG_ZSTD_COMPRESS) += zstd_compress.o
->  obj-$(CONFIG_ZSTD_DECOMPRESS) += zstd_decompress.o
-> +obj-$(CONFIG_ZSTD_COMMON) += zstd_common.o
->
->  zstd_compress-y := \
->                 zstd_compress_module.o \
-> -               common/debug.o \
-> -               common/entropy_common.o \
-> -               common/error_private.o \
-> -               common/fse_decompress.o \
-> -               common/zstd_common.o \
->                 compress/fse_compress.o \
->                 compress/hist.o \
->                 compress/huf_compress.o \
-> @@ -33,12 +29,14 @@ zstd_compress-y := \
->
->  zstd_decompress-y := \
->                 zstd_decompress_module.o \
-> -               common/debug.o \
-> -               common/entropy_common.o \
-> -               common/error_private.o \
-> -               common/fse_decompress.o \
-> -               common/zstd_common.o \
->                 decompress/huf_decompress.o \
->                 decompress/zstd_ddict.o \
->                 decompress/zstd_decompress.o \
->                 decompress/zstd_decompress_block.o \
-> +
-> +zstd_common-y := \
-> +               common/debug.o \
-> +               common/entropy_common.o \
-> +               common/error_private.o \
-> +               common/fse_decompress.o \
-> +               common/zstd_common.o \
-> diff --git a/lib/zstd/common/entropy_common.c b/lib/zstd/common/entropy_common.c
-> index 53b47a2b52ff..a311808c0d56 100644
-> --- a/lib/zstd/common/entropy_common.c
-> +++ b/lib/zstd/common/entropy_common.c
-> @@ -15,6 +15,7 @@
->  /* *************************************
->  *  Dependencies
->  ***************************************/
-> +#include <linux/module.h>
->  #include "mem.h"
->  #include "error_private.h"       /* ERR_*, ERROR */
->  #define FSE_STATIC_LINKING_ONLY  /* FSE_MIN_TABLELOG */
-> @@ -239,7 +240,7 @@ size_t FSE_readNCount(
->  {
->      return FSE_readNCount_bmi2(normalizedCounter, maxSVPtr, tableLogPtr, headerBuffer, hbSize, /* bmi2 */ 0);
->  }
-> -
-> +EXPORT_SYMBOL_GPL(FSE_readNCount);
->
->  /*! HUF_readStats() :
->      Read compact Huffman tree, saved by HUF_writeCTable().
-> @@ -255,6 +256,7 @@ size_t HUF_readStats(BYTE* huffWeight, size_t hwSize, U32* rankStats,
->      U32 wksp[HUF_READ_STATS_WORKSPACE_SIZE_U32];
->      return HUF_readStats_wksp(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, wksp, sizeof(wksp), /* bmi2 */ 0);
->  }
-> +EXPORT_SYMBOL_GPL(HUF_readStats);
->
->  FORCE_INLINE_TEMPLATE size_t
->  HUF_readStats_body(BYTE* huffWeight, size_t hwSize, U32* rankStats,
-> @@ -355,3 +357,4 @@ size_t HUF_readStats_wksp(BYTE* huffWeight, size_t hwSize, U32* rankStats,
->      (void)bmi2;
->      return HUF_readStats_body_default(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, workSpace, wkspSize);
->  }
-> +EXPORT_SYMBOL_GPL(HUF_readStats_wksp);
-> diff --git a/lib/zstd/common/zstd_common.c b/lib/zstd/common/zstd_common.c
-> index 3d7e35b309b5..0f1f63be25d9 100644
-> --- a/lib/zstd/common/zstd_common.c
-> +++ b/lib/zstd/common/zstd_common.c
-> @@ -13,6 +13,7 @@
->  /*-*************************************
->  *  Dependencies
->  ***************************************/
-> +#include <linux/module.h>
->  #define ZSTD_DEPS_NEED_MALLOC
->  #include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
->  #include "error_private.h"
-> @@ -35,14 +36,17 @@ const char* ZSTD_versionString(void) { return ZSTD_VERSION_STRING; }
->   *  tells if a return value is an error code
->   *  symbol is required for external callers */
->  unsigned ZSTD_isError(size_t code) { return ERR_isError(code); }
-> +EXPORT_SYMBOL_GPL(ZSTD_isError);
->
->  /*! ZSTD_getErrorName() :
->   *  provides error code string from function result (useful for debugging) */
->  const char* ZSTD_getErrorName(size_t code) { return ERR_getErrorName(code); }
-> +EXPORT_SYMBOL_GPL(ZSTD_getErrorName);
->
->  /*! ZSTD_getError() :
->   *  convert a `size_t` function result into a proper ZSTD_errorCode enum */
->  ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
-> +EXPORT_SYMBOL_GPL(ZSTD_getErrorCode);
->
->  /*! ZSTD_getErrorString() :
->   *  provides error code string from enum */
-> @@ -59,6 +63,7 @@ void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
->          return customMem.customAlloc(customMem.opaque, size);
->      return ZSTD_malloc(size);
->  }
-> +EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
->
->  void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
->  {
-> @@ -71,6 +76,7 @@ void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
->      }
->      return ZSTD_calloc(1, size);
->  }
-> +EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
->
->  void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
->  {
-> @@ -81,3 +87,7 @@ void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
->              ZSTD_free(ptr);
->      }
->  }
-> +EXPORT_SYMBOL_GPL(ZSTD_customFree);
-> +
-> +MODULE_LICENSE("Dual BSD/GPL");
-> +MODULE_DESCRIPTION("Zstd Common");
-> diff --git a/lib/Kconfig b/lib/Kconfig
-> index dc1ab2ed1dc6..3ea8941ab18d 100644
-> --- a/lib/Kconfig
-> +++ b/lib/Kconfig
-> @@ -343,12 +343,16 @@ config LZ4HC_COMPRESS
->  config LZ4_DECOMPRESS
->         tristate
->
-> +config ZSTD_COMMON
-> +       select XXHASH
-> +       tristate
-> +
->  config ZSTD_COMPRESS
-> -       select XXHASH
-> +       select ZSTD_COMMON
->         tristate
->
->  config ZSTD_DECOMPRESS
-> -       select XXHASH
-> +       select ZSTD_COMMON
->         tristate
->
->  source "lib/xz/Kconfig"
-> --
-> 2.37.3
->
-
+Applied to drm-misc-next
 
 -- 
-Best Regards
-Masahiro Yamada
+Best regards,
+Dmitry
+
