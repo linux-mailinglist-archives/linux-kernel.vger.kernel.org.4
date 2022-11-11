@@ -2,130 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C651C626171
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC13626180
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234550AbiKKShh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 13:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S234581AbiKKSir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 13:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234266AbiKKSgR (ORCPT
+        with ESMTP id S233968AbiKKSi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:36:17 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87E63C6E2;
-        Fri, 11 Nov 2022 10:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668191776; x=1699727776;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DOqa2OpJY5tyQ1/WvvYGJT74fyO9+N43ECB9nwSEed8=;
-  b=j82PPNe0a1cWIKPNO8kW7lPEH4nxz+YFy4c3j6TRa4YDOsTIVROEYMcA
-   WRcZ1VqJnUeNyyyOGrI3u4z5GyYDRh5m1D1lXKlubHszvol3VHzzjPGjX
-   gAxuuQvkatrjYrl/n4t8X7ShCdwwbOfAblMzDQarDTczUPc06OgPu6KeZ
-   EFDCHHQ7lxVcM++Jeh+AsQ1Hi599Mr1NQ0w2D2WFHuZ36Y6zK1eWu4K2K
-   KT9ZKTwjxpwFIxAy6zAzBNQtFBlYSCsKZJm8j6eZmenuQEch/musc5omj
-   rOAPwyQJd/DstLofi5pBFbi6TSb4I4qpFINEaH6aU+WjI085n9jsGSTlu
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="312795369"
-X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="312795369"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:35:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="670819245"
-X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="670819245"
-Received: from nmpoonaw-mobl1.amr.corp.intel.com (HELO [10.252.134.46]) ([10.252.134.46])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:35:55 -0800
-Message-ID: <115a87d7-144a-2828-8e4f-9c1f156b73ae@intel.com>
-Date:   Fri, 11 Nov 2022 10:35:54 -0800
+        Fri, 11 Nov 2022 13:38:28 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5ABF8293C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:36:52 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73F621FB;
+        Fri, 11 Nov 2022 10:36:58 -0800 (PST)
+Received: from [10.1.197.38] (unknown [10.1.197.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBDE03F703;
+        Fri, 11 Nov 2022 10:36:50 -0800 (PST)
+Message-ID: <ed63ba30-2d7f-e1dd-4019-bc7441086dbb@arm.com>
+Date:   Fri, 11 Nov 2022 18:36:44 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v17 1/3] x86/tdx: Add a wrapper to get TDREPORT from the
- TDX Module
-Content-Language: en-US
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
+Content-Language: en-GB
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Newman <peternewman@google.com>
+Cc:     Tony Luck <tony.luck@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221104032355.227814-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Babu Moger <Babu.Moger@amd.com>,
+        Gaurang Upasani <gupasani@google.com>
+References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
+ <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com>
+ <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
+ <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com>
+ <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
+ <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
+ <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com>
+ <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
+ <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com>
+ <09029c7a-489a-7054-1ab5-01fa879fb42f@intel.com>
+ <f80299a4-7eaf-46a0-89e6-b9f5385f183c@arm.com>
+ <c227a0df-7ac8-91f3-cada-0ca5ec047579@intel.com>
+ <8325a442-92c1-4170-1862-3bc891a8d6af@arm.com>
+ <eb1a0949-dbd0-482f-d19a-738cf8842b96@intel.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <eb1a0949-dbd0-482f-d19a-738cf8842b96@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 20:23, Kuppuswamy Sathyanarayanan wrote:
-> To support TDX attestation, the TDX guest driver exposes an IOCTL
-> interface to allow userspace to get the TDREPORT from the TDX module
-> via TDG.MR.TDREPORT TDCALL.
+Hi Reinette,
 
-This all acts and is named like this is *THE* way to do a TD report.
-This is the only type of TD report.
+On 09/11/2022 19:12, Reinette Chatre wrote:
+> On 11/9/2022 9:59 AM, James Morse wrote:
+>> On 08/11/2022 21:28, Reinette Chatre wrote:
+>>> On 11/3/2022 10:06 AM, James Morse wrote:
+>>>> (I've not got to the last message in this part of the thread yes - I'm out of time this
+>>>> week, back Monday!)
+>>>>
+>>>> On 21/10/2022 21:09, Reinette Chatre wrote:
+>>>>> On 10/19/2022 6:57 AM, James Morse wrote:
+>>>>>> On 17/10/2022 11:15, Peter Newman wrote:
+>>>>>>> On Wed, Oct 12, 2022 at 6:55 PM James Morse <james.morse@arm.com> wrote:
+>>>
+>>> ...
+>>>
+>>>>>>> If there are a lot more PARTIDs than PMGs, then it would fit well with a
+>>>>>>> user who never creates child MON groups. In case the number of MON
+>>>>>>> groups gets ahead of the number of CTRL_MON groups and you've run out of
+>>>>>>> PMGs, perhaps you would just try to allocate another PARTID and program
+>>>>>>> the same partitioning configuration before giving up.
+>>>>>>
+>>>>>> User-space can choose to do this.
+>>>>>> If the kernel tries to be clever and do this behind user-space's back, it needs to
+>>>>>> allocate two monitors for this secretly-two-control-groups, and always sum the counters
+>>>>>> before reporting them to user-space.
+>>>>
+>>>>> If I understand this scenario correctly, the kernel is already doing this.
+>>>>> As implemented in mon_event_count() the monitor data of a CTRL_MON group is
+>>>>> the sum of the parent CTRL_MON group and all its child MON groups.
+>>>>
+>>>> That is true. MPAM has an additional headache here as it needs to allocate a monitor in
+>>>> order to read the counters. If there are enough monitors for each CLOSID*RMID to have one,
+>>>> then MPAM can export the counter files in the same way RDT does.
+>>>>
+>>>> While there are systems that have enough monitors, I don't think this is going to be the
+>>>> norm. To allow systems that don't have a surfeit of monitors to use the counters, I plan
+>>>> to export the values from resctrl_arch_rmid_read() via perf. (but only for bandwidth counters)
+>>
+>>> This sounds related to the way monitoring was done in earlier kernels. This was
+>>> long before I become involved with this work. Unfortunately I am not familiar with
+>>> all the history involved that ended in it being removed from the kernel.
+>>
+>> Yup, I'm aware there is some history to this. It's not appropriate for the llc_occupancy
+>> counter as that reports state, instead of events.
 
-Is it?
+> Perf counts events while a process is running
 
-If so, why is there a subtype in the TDX module ABI?  It's easy to miss
-in the kernel code, btw:
+It's hooked up as an uncore PMU driver and it rejects attempts to attach it to a task.
+Some useful background is it has to be told which of the existing resctrl control/monitor
+groups to monitor. On x86 its just returning the the increase in events from the mbm files
+in resctrl via resctrl_arch_rmid_read().
+Unless you're curious [0], the details can come if/when I post it!
 
-> +int tdx_mcall_get_report(u8 *reportdata, u8 *tdreport)
-> +{
-> +	u64 ret;
-> +
-> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
-> +				virt_to_phys(reportdata), 0, 0, NULL);
 
-					     subtype here ^
+> so memory bandwidth monitoring may
+> also be impacted by the caveats Peter mentioned for the upcoming AMD changes:
+> 
+> https://lore.kernel.org/lkml/CALPaoCidd+WwGTyE3D74LhoL13ce+EvdTmOnyPrQN62j+zZ1fg@mail.gmail.com/
+> ("This has the caveats that evictions while one task is running could have
+> resulted from a previous task on the current CPU, but will be counted
+> against the new task's software-RMID, ...")
 
-mixed in next to another magic 0.
+If the logic to implement that is hidden entirely behind resctrl_arch_rmid_read(), then
+there should be no problem. (the values will be noisy, but that is the best that can be
+done on that platform)
 
-> +	if (ret) {
-> +		if (TDCALL_RETURN_CODE(ret) == TDCALL_INVALID_OPERAND)
-> +			return -EINVAL;
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_mcall_get_report);
 
-What happens to this interface when subtype 1 is added?
+Thanks,
 
-TDX_CMD_GET_REPORT can only get subtype 0.  So, we'll have, what, a new
-ioctl()?  TDX_CMD_GET_REPORT_SUBTYPE1?
+James
 
-This is why I was pushing for a more generic ABI that would actually
-work for more than one subtype.  Other folks thought that was a bad
-idea.  I can live with that.  But, what I can't live with is just
-pretending that this is the one and only forever "tdreport" interface.
-
-This is *NOT* "a wrapper to get TDREPORT from the TDX Module", this is
-at best "a wrapper to get TDREPORT sub type 0 from the TDX Module".
-
-It also occurs to me that "sub type 0" could use an actual name.  Could
-we give it one, please?
-
+[0] Beware, the changes to x86 to make resctrl_arch_rmid_read() irq safe aren't quite right.
+https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/commit/?h=mpam/snapshot/v6.0&id=b8ae575bd17e1d56db0f84dc456b964a23d252d6
