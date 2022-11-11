@@ -2,141 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E56625A48
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1415625A47
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbiKKMJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S233697AbiKKMJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiKKMJs (ORCPT
+        with ESMTP id S230377AbiKKMJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:09:48 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865C560E8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:09:47 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso4570160pjc.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:09:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s08YO+rPBtB2uwv5IJoOR+YbywlIrwvyXquHPxbqQy4=;
-        b=wasi9M2E49zmc8HflupPJNJX5BOmd2HA+06pH/USFgAM0KLcYG99l21PRZKLEgKcra
-         jFNwx7+tVkwsLkBE4hN9Q3f99EDBwjEvJZN34raW4fmp4ud7gNy3iMoiLXuYMS/VR3hv
-         oBSvnUauT4yeROtVjXG6dkHKH3bJh3R6ZJMhOr1odUsIhtCvEV3sJrIfS0IqGOrtGm+M
-         YS86+6HFQoKkghzN1ri6Pp5vvF8SsdunwDzkhoHHN0rPYtRYliVmwXefESGRdYMh8Kfp
-         hu9CTkyLFwuN3CEXVb6GHX/3yuJEgs44zZEu23KZzsDncrixneN5TMrsdnQ6tf+OJE27
-         viNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s08YO+rPBtB2uwv5IJoOR+YbywlIrwvyXquHPxbqQy4=;
-        b=Nk5Qw2a1FHw+EmhB920g3P9dNzsSClni+RSGkCNv33DSbTt2umAv0+LtSlinUM1fGg
-         sC4KtV4QHi+llDp2CAAtT0BnBIANtVP6zwc2oXNVAAmbytgm47p+GHB2jZgDEsPaSu6f
-         5ib7JViCpl7UH4aYmq474PeK3+5K6wBHcnVZD2+ccKYGoEzj9gHviStNrTGFuBAQHITt
-         XX2uxx+IuAsPZdBWZBtQpCtHA+HckygbtIpmYqs4rhI0jJzzNox9rc7MyD4jawa8kSWa
-         8RGcpHwWvf9HgB0vv8Pla+buZ4btcSCbXe9V8XbSNC0reHE28cDeWhk1vCLUrseezJCd
-         Bz1g==
-X-Gm-Message-State: ANoB5pn/30UvU3k7Qyj8Ods8KldjVJQ30S/7qjtA+mxX91b0NBv6fck7
-        9PwYt0CvBjxnQLR7C0k4Y6i6wQ==
-X-Google-Smtp-Source: AA0mqf6rpQlgVdwVPyESpUxSQWjA5DMRtVgmrD4pFlVUaKBVHikeqFObg/7efwTHDzbZ/ttmPse5eg==
-X-Received: by 2002:a17:902:b711:b0:186:a3a0:601c with SMTP id d17-20020a170902b71100b00186a3a0601cmr2265120pls.105.1668168586808;
-        Fri, 11 Nov 2022 04:09:46 -0800 (PST)
-Received: from leoy-huanghe.lan (211-75-219-204.hinet-ip.hinet.net. [211.75.219.204])
-        by smtp.gmail.com with ESMTPSA id mp14-20020a17090b190e00b0020ae09e9724sm1453408pjb.53.2022.11.11.04.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 04:09:45 -0800 (PST)
-Date:   Fri, 11 Nov 2022 20:09:34 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 0/7] Fix perf trace libbpf 1.0+ compatibility
-Message-ID: <Y247VY99skmc1wRk@leoy-huanghe.lan>
-References: <20221103045437.163510-1-irogers@google.com>
+        Fri, 11 Nov 2022 07:09:47 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AB863F4;
+        Fri, 11 Nov 2022 04:09:44 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4FEC21EC042F;
+        Fri, 11 Nov 2022 13:09:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668168582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=85fw3BZSc2Eju860xkeDyqGes4l/dOqnSw//0ViIseU=;
+        b=qCUvLYePXPFnGUN/2ZZqvkJTuEe7/8r41qfaRWWyMdrKEbYkTFbFDGSoGF7yiwUsLfHyke
+        p8pCpZyaThq2AJvIOfXaG1BpJHMRAv6Ax6/NbEddJ400GatF6QOpNf2GTxPNzUHrz8m7Fm
+        7LvzAm3lqJSetHKgerWPtJRoaLMxhFw=
+Date:   Fri, 11 Nov 2022 13:09:37 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kim Phillips <kim.phillips@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] x86/speculation: Support Automatic IBRS
+Message-ID: <Y247gY9NKYi34er6@zn.tnic>
+References: <20221104213651.141057-1-kim.phillips@amd.com>
+ <20221104213651.141057-3-kim.phillips@amd.com>
+ <Y2WJjdY3wwQl9/q9@zn.tnic>
+ <Y2ZEinL+wlIX+1Sn@hirez.programming.kicks-ass.net>
+ <d413c064-ee9b-5853-9cf1-544adde22c8a@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221103045437.163510-1-irogers@google.com>
+In-Reply-To: <d413c064-ee9b-5853-9cf1-544adde22c8a@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian, Arnaldo,
+On Mon, Nov 07, 2022 at 04:39:02PM -0600, Kim Phillips wrote:
+> I've started a version that has AUTOIBRS reuse SPECTRE_V2_EIBRS
+> spectre_v2_mitigation enum, but, so far, it's change to bugs.c
+> looks bigger: 58 lines changed vs. 34 (see below).
 
-On Wed, Nov 02, 2022 at 09:54:30PM -0700, Ian Rogers wrote:
-> Perf trace can augment system calls with a BPF program passed as an
-> event. The BPF code for this lives in examples. This patch fixes the
-> example code to not used deprecated/removed APIs in libbpf. As libbpf
-> has similar header files to tools/perf/include/bpf the code is
-> transitioned to use the more standard libbpf code and the perf BPF
-> header files removed.
+It can be smaller. You simply do:
 
-I think you missed to update the code examples/bpf/sys_enter_openat.c,
-either you could remove it (since it's duplicate with
-augmented_raw_syscalls.c), or we should apply below fixing:
+	if (cpu_has(c, X86_FEATURE_AUTOIBRS))
+		setup_force_cpu_cap(X86_FEATURE_IBRS_ENHANCED);
 
-From f30af3b43060e482c54e113cbe90223173c69abd Mon Sep 17 00:00:00 2001
-From: Leo Yan <leo.yan@linaro.org>
-Date: Fri, 11 Nov 2022 12:02:24 +0000
-Subject: [PATCH] perf trace: sys_enter_openat.c fix libbpf 1.0+ compatibility
+and the rest should just work - see below.
 
-Avoid use of tools/perf/include/bpf/bpf.h and use the more regular BPF
-headers.
+And yes, as Peter says, when the user requests something, the user
+should get it. No matter whether it makes sense or not.
 
-With fixing:
+Thx.
 
-  # ./perf trace -e examples/bpf/sys_enter_openat.c
-  0.000 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
-  1.596 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
-  1.832 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
-  1.864 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
-
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- tools/perf/examples/bpf/sys_enter_openat.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/tools/perf/examples/bpf/sys_enter_openat.c b/tools/perf/examples/bpf/sys_enter_openat.c
-index c4481c390d23..8edfa7c147d1 100644
---- a/tools/perf/examples/bpf/sys_enter_openat.c
-+++ b/tools/perf/examples/bpf/sys_enter_openat.c
-@@ -14,7 +14,9 @@
-  * the return value.
-  */
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 66d7addf1784..2b77eaee9bd2 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1005,6 +1005,7 @@ static inline const char *spectre_v2_module_string(void) { return ""; }
+ #endif
  
--#include <bpf/bpf.h>
-+#include <linux/bpf.h>
-+#include <linux/limits.h>
-+#include <bpf/bpf_helpers.h>
- 
- struct syscall_enter_openat_args {
- 	unsigned long long unused;
-@@ -25,9 +27,10 @@ struct syscall_enter_openat_args {
- 	long		   mode;
- };
- 
--int syscall_enter(openat)(struct syscall_enter_openat_args *args)
-+SEC("syscalls:sys_enter_openat")
-+int syscall_enter_openat(struct syscall_enter_openat_args *args)
- {
- 	return 1;
+ #define SPECTRE_V2_LFENCE_MSG "WARNING: LFENCE mitigation is not recommended for this CPU, data leaks possible!\n"
++#define SPECTRE_V2_EIBRS_AMD_MSG "WARNING: AutoIBRS does not need additional RETPOLINE/LFENCE mitigations, not doing them\n"
+ #define SPECTRE_V2_EIBRS_EBPF_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible via Spectre v2 BHB attacks!\n"
+ #define SPECTRE_V2_EIBRS_LFENCE_EBPF_SMT_MSG "WARNING: Unprivileged eBPF is enabled with eIBRS+LFENCE mitigation and SMT, data leaks possible via Spectre v2 BHB attacks!\n"
+ #define SPECTRE_V2_IBRS_PERF_MSG "WARNING: IBRS mitigation selected on Enhanced IBRS CPU, this may cause unnecessary performance loss\n"
+@@ -1124,6 +1125,7 @@ spectre_v2_parse_user_cmdline(void)
+ 	return SPECTRE_V2_USER_CMD_AUTO;
  }
  
--license(GPL);
-+char _license[] SEC("license") = "GPL";
++/* Checks for IBRS versions */
+ static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
+ {
+ 	return mode == SPECTRE_V2_IBRS ||
+@@ -1229,7 +1231,7 @@ static const char * const spectre_v2_strings[] = {
+ 	[SPECTRE_V2_NONE]			= "Vulnerable",
+ 	[SPECTRE_V2_RETPOLINE]			= "Mitigation: Retpolines",
+ 	[SPECTRE_V2_LFENCE]			= "Mitigation: LFENCE",
+-	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced IBRS",
++	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced / Automatic IBRS",
+ 	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced IBRS + LFENCE",
+ 	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced IBRS + Retpolines",
+ 	[SPECTRE_V2_IBRS]			= "Mitigation: IBRS",
+@@ -1247,6 +1249,7 @@ static const struct {
+ 	{ "retpoline,lfence",	SPECTRE_V2_CMD_RETPOLINE_LFENCE,  false },
+ 	{ "retpoline,generic",	SPECTRE_V2_CMD_RETPOLINE_GENERIC, false },
+ 	{ "eibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
++	{ "autoibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
+ 	{ "eibrs,lfence",	SPECTRE_V2_CMD_EIBRS_LFENCE,	  false },
+ 	{ "eibrs,retpoline",	SPECTRE_V2_CMD_EIBRS_RETPOLINE,	  false },
+ 	{ "auto",		SPECTRE_V2_CMD_AUTO,		  false },
+@@ -1300,7 +1303,7 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
+ 	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
+ 	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
+ 	    !boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
+-		pr_err("%s selected but CPU doesn't have eIBRS. Switching to AUTO select\n",
++		pr_err("%s selected but CPU doesn't have Enhanced or Automatic IBRS. Switching to AUTO select\n",
+ 		       mitigation_options[i].option);
+ 		return SPECTRE_V2_CMD_AUTO;
+ 	}
+@@ -1474,11 +1477,19 @@ static void __init spectre_v2_select_mitigation(void)
+ 		break;
+ 
+ 	case SPECTRE_V2_CMD_EIBRS_LFENCE:
+-		mode = SPECTRE_V2_EIBRS_LFENCE;
++		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++			pr_err(SPECTRE_V2_EIBRS_AMD_MSG);
++			mode = SPECTRE_V2_EIBRS;
++		} else
++			mode = SPECTRE_V2_EIBRS_LFENCE;
+ 		break;
+ 
+ 	case SPECTRE_V2_CMD_EIBRS_RETPOLINE:
+-		mode = SPECTRE_V2_EIBRS_RETPOLINE;
++		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++			pr_err(SPECTRE_V2_EIBRS_AMD_MSG);
++			mode = SPECTRE_V2_EIBRS;
++		} else
++			mode = SPECTRE_V2_EIBRS_RETPOLINE;
+ 		break;
+ 	}
+ 
+@@ -1486,8 +1497,12 @@ static void __init spectre_v2_select_mitigation(void)
+ 		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
+ 
+ 	if (spectre_v2_in_ibrs_mode(mode)) {
+-		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
+-		write_spec_ctrl_current(x86_spec_ctrl_base, true);
++		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
++			msr_set_bit(MSR_EFER, _EFER_AUTOIBRS);
++		} else {
++			x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
++			write_spec_ctrl_current(x86_spec_ctrl_base, true);
++		}
+ 	}
+ 
+ 	switch (mode) {
+@@ -1571,8 +1586,8 @@ static void __init spectre_v2_select_mitigation(void)
+ 	/*
+ 	 * Retpoline protects the kernel, but doesn't protect firmware.  IBRS
+ 	 * and Enhanced IBRS protect firmware too, so enable IBRS around
+-	 * firmware calls only when IBRS / Enhanced IBRS aren't otherwise
+-	 * enabled.
++	 * firmware calls only when IBRS / Enhanced / Automatic IBRS aren't
++	 * otherwise enabled.
+ 	 *
+ 	 * Use "mode" to check Enhanced IBRS instead of boot_cpu_has(), because
+ 	 * the user might select retpoline on the kernel command line and if
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 73cc546e024d..45e3670bdaaf 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1341,6 +1344,10 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
+ 	if (ia32_cap & ARCH_CAP_IBRS_ALL)
+ 		setup_force_cpu_cap(X86_FEATURE_IBRS_ENHANCED);
+ 
++	/* AMDs AutoIBRS is equivalent to Intel's eIBRS - use the Intel flag. */
++	if (cpu_has(c, X86_FEATURE_AUTOIBRS))
++		setup_force_cpu_cap(X86_FEATURE_IBRS_ENHANCED);
++
+ 	if (!cpu_matches(cpu_vuln_whitelist, NO_MDS) &&
+ 	    !(ia32_cap & ARCH_CAP_MDS_NO)) {
+ 		setup_force_cpu_bug(X86_BUG_MDS);
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
