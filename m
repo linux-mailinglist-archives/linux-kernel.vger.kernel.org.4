@@ -2,56 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968B9625B02
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C1F625B11
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234062AbiKKNIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:08:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S233869AbiKKNQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiKKNH7 (ORCPT
+        with ESMTP id S233552AbiKKNQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:07:59 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE3B88550;
-        Fri, 11 Nov 2022 05:07:51 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7zWb2VBDzHvDF;
-        Fri, 11 Nov 2022 21:07:23 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 21:07:49 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 21:07:49 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Robert Elliott <elliott@hpe.com>
-Subject: [PATCH v7 6/6] rcu: Align the output of RCU stall
-Date:   Fri, 11 Nov 2022 21:07:09 +0800
-Message-ID: <20221111130709.247-7-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20221111130709.247-1-thunder.leizhen@huawei.com>
-References: <20221111130709.247-1-thunder.leizhen@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Fri, 11 Nov 2022 08:16:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B967B38;
+        Fri, 11 Nov 2022 05:16:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 281C561FCE;
+        Fri, 11 Nov 2022 13:16:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A437C433C1;
+        Fri, 11 Nov 2022 13:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668172595;
+        bh=vShm4FbEZfLrSTZTdoHe8BVjL2FSxUzzg1DEBmpt/N8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lBLzNJwxA7YTlCf1RvNGPP8l6mh7wItwq9q7gAVAwX6W5FlZpaE9K822Tj5ajPUGf
+         oVaqQv5OO1now3pI1IfXNAmNkdQOY97wLLkiqYy8Z9MmHKe6R0fDvO+L9XjkFZfgSP
+         1kjWVbvTY+eJl7Ra1+hAaN/LBel/l8M/4XZRh+gh1aePibCjxl5LwFsNJLbH+twsyN
+         wbucubm+YqjOXhB/Z67rjSC1CMjuXUHUHi6X7G/XaBpFO6S+mvv6HXJvy3Nj7gMHf9
+         rAKh7kw5ho/IWqFuk2QuJJUH10FFNhfb0C9BZWb62RFaQd4+OXF+Pj3fNKbnzbGpBH
+         C2ozc3apmV/sw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.1-rc4
+Date:   Fri, 11 Nov 2022 13:16:16 +0000
+Message-Id: <20221111131635.0A437C433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,49 +48,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The time stamps is added to the output when CONFIG_PRINTK_TIME=y, which
-will cause the alignment function to fail. So replace pr_cont() with
-pr_err(), which also decouples the printing of subfunctions.
+The following changes since commit f8aa6c895d482847c9b799dcdac8bbdb56cb8e04:
 
-Before:
-[   37.567343] rcu: INFO: rcu_preempt self-detected stall on CPU
-[   37.567839] rcu:     0-....: (1500 ticks this GP) idle=***
-[   37.568270]  (t=1501 jiffies g=4717 q=28 ncpus=4)
-[   37.568668] CPU: 0 PID: 313 Comm: test0 Not tainted 6.1.0-rc4 #8
+  spi: aspeed: Fix window offset of CE1 (2022-10-19 14:36:43 +0100)
 
-After:
-[   36.762074] rcu: INFO: rcu_preempt self-detected stall on CPU
-[   36.762543] rcu:     0-....: (1499 ticks this GP) idle=***
-[   36.763003] rcu:     (t=1500 jiffies g=5097 q=27 ncpus=4)
-[   36.763522] CPU: 0 PID: 313 Comm: test0 Not tainted 6.1.0-rc4 #9
+are available in the Git repository at:
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/rcu/tree_stall.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.1-rc4
 
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index a91e844872e59d2..9dc76ba28d372e9 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -619,7 +619,7 @@ static void print_other_cpu_stall(unsigned long gp_seq, unsigned long gps)
- 
- 	for_each_possible_cpu(cpu)
- 		totqlen += rcu_get_n_cbs_cpu(cpu);
--	pr_cont("\t(detected by %d, t=%ld jiffies, g=%ld, q=%lu ncpus=%d)\n",
-+	pr_err("\t(detected by %d, t=%ld jiffies, g=%ld, q=%lu ncpus=%d)\n",
- 	       smp_processor_id(), (long)(jiffies - gps),
- 	       (long)rcu_seq_current(&rcu_state.gp_seq), totqlen, rcu_state.n_online_cpus);
- 	if (ndetected) {
-@@ -680,7 +680,7 @@ static void print_cpu_stall(unsigned long gps)
- 	raw_spin_unlock_irqrestore_rcu_node(rdp->mynode, flags);
- 	for_each_possible_cpu(cpu)
- 		totqlen += rcu_get_n_cbs_cpu(cpu);
--	pr_cont("\t(t=%lu jiffies g=%ld q=%lu ncpus=%d)\n",
-+	pr_err("\t(t=%lu jiffies g=%ld q=%lu ncpus=%d)\n",
- 		jiffies - gps,
- 		(long)rcu_seq_current(&rcu_state.gp_seq), totqlen, rcu_state.n_online_cpus);
- 
--- 
-2.25.1
+for you to fetch changes up to bff6bef701db784bb159a659e99c785b4594fc96:
 
+  spi: amd: Fix SPI_SPD7 value (2022-11-04 12:25:03 +0000)
+
+----------------------------------------------------------------
+spi: Fixes for v6.1
+
+A relatively large batch of fixes here but all device specific, plus an
+update to MAINTAINERS.  The summary print change to the STM32 driver is
+fixing an issue where the driver could easily end up spamming the logs
+with something that should be a debug message.
+
+----------------------------------------------------------------
+Jay Fang (1):
+      MAINTAINERS: Update HiSilicon SFC Driver maintainer
+
+Jon Hunter (1):
+      spi: tegra210-quad: Don't initialise DMA if not supported
+
+Marek Vasut (1):
+      spi: stm32: Print summary 'callbacks suppressed' message
+
+Mika Westerberg (1):
+      spi: intel: Use correct mask for flash and protected regions
+
+Neil Armstrong (2):
+      spi: meson-spicc: move wait completion in driver to take bursts delay in account
+      spi: meson-spicc: fix do_div build error on non-arm64
+
+Sean Nyekjaer (1):
+      spi: stm32: fix stm32_spi_prepare_mbr() that halves spi clk for every run
+
+Vitaly Rodionov (1):
+      spi: amd: Fix SPI_SPD7 value
+
+zhichao.liu (1):
+      spi: mediatek: Fix package division error
+
+ MAINTAINERS                     |  2 +-
+ drivers/spi/spi-amd.c           |  2 +-
+ drivers/spi/spi-intel.c         |  8 ++++----
+ drivers/spi/spi-meson-spicc.c   | 24 ++++++++++++++++++++++--
+ drivers/spi/spi-mt65xx.c        | 23 +++++++++++++----------
+ drivers/spi/spi-stm32.c         |  3 ++-
+ drivers/spi/spi-tegra210-quad.c |  6 ++++++
+ 7 files changed, 49 insertions(+), 19 deletions(-)
