@@ -2,94 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0786258FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3A2625900
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbiKKLBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S233407AbiKKLCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233602AbiKKLAx (ORCPT
+        with ESMTP id S233744AbiKKLCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:00:53 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E756EB7E6;
-        Fri, 11 Nov 2022 03:00:51 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b3so7818327lfv.2;
-        Fri, 11 Nov 2022 03:00:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=76BtwbFvEgk2Ooutx96DcencoxzI0YNwdpHtqJ9zpeA=;
-        b=nXtR+qxMq0XgeDJtDFVMdSUiQN1YYiLwdpQISUE9AmHgjBSYmDze3Gk+8SFABBQD+G
-         OOGZKAeZ51uvcfTozUAjWmulLtvR+IMTNP4pRiwu/4FBsZH0qfbcrsPRUo5wAyxV1kwn
-         6HewTOy6jBq0a/Vj8QHi9clu/v6wcfrbIUBBOqDrCLKqX8ppkkMIgJxodwHwlalHXqtU
-         K4wHeUCbE2UN2MOTpjg5YOl9MTtV9kWxRZy9R1uh62ocNbBj9GDNgWgMEAX7rxUYpyVq
-         tSVA4HI4R7aRc17NKxW0jggLp84KpRroSRLUN1g5GMZx/zfyOZM8S+b5EMug5wUdqtcj
-         PzQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76BtwbFvEgk2Ooutx96DcencoxzI0YNwdpHtqJ9zpeA=;
-        b=COYvxorFmqE52eFnkyOF6doEYpzt5Vxn9lAuAKsBZb+8P8Q6NhvhGrG+9bGGptNyxA
-         iw7k6dCiDNMH/gLMWWpIavBBM4YXRtFUJ7LE1T8fAhJ0MFRegbgC6BumR3dEZZOqI7BA
-         K18s91fQxm8I9u1ezUV3W4SttglySUIujhie6og4lvvUZJzrg1+5zaun8eHzbt+jUFAD
-         L1AjyfDLfjqmeBtefFpK1cPMohVTLHWnl9CrXhdfmKr13hFgkLUBDiu3mNyxZ37EywYx
-         GGq1FdmgucnsQM83lwXqfiA36sn0e7vKI2NIFISzDin9pzJgp5Y2Qq458xS9bt3HsQmx
-         1wQg==
-X-Gm-Message-State: ANoB5pnr1S9bYRzSqfo1UKDLf0nz7ivMlpPem1e4FjS63l0Aqp1uyS/j
-        Cky6UL8nMMQZZXIznM7VJGxxIEHfMi488A==
-X-Google-Smtp-Source: AA0mqf4JlFbm0dXu05TXiCgPSAqyGH8aeNu8J7BtUnNj5rU3c16j9GEa8NDTrdeqwcBgcn9ruWymuQ==
-X-Received: by 2002:a19:500f:0:b0:4a3:9533:f4c9 with SMTP id e15-20020a19500f000000b004a39533f4c9mr580057lfb.615.1668164450136;
-        Fri, 11 Nov 2022 03:00:50 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id p3-20020a2eb103000000b002770566d642sm351039ljl.17.2022.11.11.03.00.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 03:00:49 -0800 (PST)
-Date:   Fri, 11 Nov 2022 14:00:46 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 01/20] dt-bindings: imx6q-pcie: Fix clock names for
- imx6sx and imx8mq
-Message-ID: <20221111110046.rqjl2zaapipsgkpa@mobilestation>
-References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
- <20221107204934.32655-2-Sergey.Semin@baikalelectronics.ru>
- <20221110210104.GA963064-robh@kernel.org>
+        Fri, 11 Nov 2022 06:02:05 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63A4B7E6;
+        Fri, 11 Nov 2022 03:02:04 -0800 (PST)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N7whT3RCkz685b0;
+        Fri, 11 Nov 2022 18:59:53 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 12:02:02 +0100
+Received: from localhost (10.45.151.252) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 11 Nov
+ 2022 11:02:01 +0000
+Date:   Fri, 11 Nov 2022 11:02:00 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+CC:     Shaokun Zhang <zhangshaokun@hisilicon.com>, <liuqi6124@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>, <bagasdotme@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linuxarm@huawei.com>, <f.fangjian@huawei.com>,
+        <prime.zeng@huawei.com>, <shenyang39@huawei.com>
+Subject: Re: [PATCH v2 4/4] Documentation: perf: Indent filter options list
+ of hisi-pcie-pmu
+Message-ID: <20221111110200.000047fd@Huawei.com>
+In-Reply-To: <20221110085109.45227-5-yangyicong@huawei.com>
+References: <20221110085109.45227-1-yangyicong@huawei.com>
+        <20221110085109.45227-5-yangyicong@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110210104.GA963064-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.45.151.252]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,117 +62,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 03:01:04PM -0600, Rob Herring wrote:
-> On Mon, Nov 07, 2022 at 11:49:15PM +0300, Serge Semin wrote:
-> > Originally as it was defined the legacy bindings the pcie_inbound_axi and
-> > pcie_aux clock names were supposed to be used in the fsl,imx6sx-pcie and
-> > fsl,imx8mq-pcie devices respectively. But the bindings conversion has been
-> > incorrectly so now the fourth clock name is defined as "pcie_inbound_axi
-> > for imx6sx-pcie, pcie_aux for imx8mq-pcie", which is completely wrong.
-> > Let's fix that by conditionally apply the clock-names constraints based on
-> > the compatible string content.
-> > 
-> > Fixes: 751ca492f131 ("dt-bindings: PCI: imx6: convert the imx pcie controller to dtschema")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > 
-> > ---
-> > 
-> > Changelog v5:
-> > - This is a new patch added on the v5 release of the patchset.
-> > ---
-> >  .../bindings/pci/fsl,imx6q-pcie.yaml          | 47 +++++++++++++++++--
-> >  1 file changed, 42 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
-> > index 376e739bcad4..ebfe75f1576e 100644
-> > --- a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
-> > @@ -16,6 +16,47 @@ description: |+
-> >  
-> >  allOf:
-> >    - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: fsl,imx6sx-pcie
-> > +    then:
-> > +      properties:
-> > +        clock-names:
-> > +          items:
-> > +            - const: pcie
-> > +            - const: pcie_bus
-> > +            - const: pcie_phy
-> > +            - const: pcie_inbound_axi
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: fsl,imx8mq-pcie
-> > +    then:
-> > +      properties:
-> > +        clock-names:
-> > +          items:
-> > +            - const: pcie
-> > +            - const: pcie_bus
-> > +            - const: pcie_phy
-> > +            - const: pcie_aux
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          not:
-> > +            contains:
-> > +              enum:
-> > +                - fsl,imx6sx-pcie
-> > +                - fsl,imx8mq-pcie
-> > +    then:
-> > +      properties:
-> > +        clock-names:
-> > +          items:
-> > +            - const: pcie
-> > +            - const: pcie_bus
-> > +            - const: pcie_phy
-> >  
-> >  properties:
-> >    compatible:
-> > @@ -57,11 +98,7 @@ properties:
-> >  
-> >    clock-names:
-> >      minItems: 3
-> > -    items:
-> > -      - const: pcie
-> > -      - const: pcie_bus
-> > -      - const: pcie_phy
-> > -      - const: pcie_inbound_axi for imx6sx-pcie, pcie_aux for imx8mq-pcie
-> 
+On Thu, 10 Nov 2022 16:51:09 +0800
+Yicong Yang <yangyicong@huawei.com> wrote:
 
-> This should have been just 'enum: [ pcie_inbound_axi, pcie_aux ]'
+> From: Bagas Sanjaya <bagasdotme@gmail.com>
 > 
-> And then do:
+> The "Filter options" list have a rather ugly indentation. Also, the first
+> paragraph after list name is rendered without separator (as continuation
+> from the name).
 > 
->   - if:
->       properties:
->         compatible:
->           contains:
->             const: fsl,imx8mq-pcie
->     then:
->       properties:
->         clock-names:
->           items:
->             - {}
->             - {}
->             - {}
->             - const: pcie_aux
+> Align the list by indenting the list items and add a blank line
+> separator for each list name.
 > 
-> 
-> And then another if/then with 'maxItems: 3'
+> Fixes: c8602008e247 ("docs: perf: Add description for HiSilicon PCIe PMU driver")
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Annoying though it is to do, this should be a precusors to the changes added earlier
+in this series - or drop the fixes tag. I'd argue that 'ugly' isn't something that
+we need to potentially backport fixes to.
 
-Ok. Will fix it in v7. But IMO it looks a bit less descriptive
-especially with the '{}' pattern and a need to look in two different
-places to comprehend the whole constraint. I understand though what is an
-intention of such construction. It's to place as much info into the
-schema body and isolate the platform-specific constraints in the allOf
-clause. Pretty neat anyway.
+Change itself looks fine though.
 
--Sergey
+> ---
+>  .../admin-guide/perf/hisi-pcie-pmu.rst        | 80 ++++++++++---------
+>  1 file changed, 43 insertions(+), 37 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+> index b3615230a4f6..7e863662e2d4 100644
+> --- a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+> +++ b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+> @@ -48,62 +48,68 @@ Filter options
+>  --------------
+>  
+>  1. Target filter
+> -PMU could only monitor the performance of traffic downstream target Root Ports
+> -or downstream target Endpoint. PCIe PMU driver support "port" and "bdf"
+> -interfaces for users, and these two interfaces aren't supported at the same
+> -time.
+>  
+> --port
+> -"port" filter can be used in all PCIe PMU events, target Root Port can be
+> -selected by configuring the 16-bits-bitmap "port". Multi ports can be selected
+> -for AP-layer-events, and only one port can be selected for TL/DL-layer-events.
+> +   PMU could only monitor the performance of traffic downstream target Root
+> +   Ports or downstream target Endpoint. PCIe PMU driver support "port" and
+> +   "bdf" interfaces for users, and these two interfaces aren't supported at the
+> +   same time.
+>  
+> -For example, if target Root Port is 0000:00:00.0 (x8 lanes), bit0 of bitmap
+> -should be set, port=0x1; if target Root Port is 0000:00:04.0 (x4 lanes),
+> -bit8 is set, port=0x100; if these two Root Ports are both monitored, port=0x101.
+> +   - port
+>  
+> -Example usage of perf::
+> +     "port" filter can be used in all PCIe PMU events, target Root Port can be
+> +     selected by configuring the 16-bits-bitmap "port". Multi ports can be
+> +     selected for AP-layer-events, and only one port can be selected for
+> +     TL/DL-layer-events.
+>  
+> -  $# perf stat -e hisi_pcie0_core0/rx_mwr_latency,port=0x1/ sleep 5
+> +     For example, if target Root Port is 0000:00:00.0 (x8 lanes), bit0 of
+> +     bitmap should be set, port=0x1; if target Root Port is 0000:00:04.0 (x4
+> +     lanes), bit8 is set, port=0x100; if these two Root Ports are both
+> +     monitored, port=0x101.
+>  
+> --bdf
+> +     Example usage of perf::
+>  
+> -"bdf" filter can only be used in bandwidth events, target Endpoint is selected
+> -by configuring BDF to "bdf". Counter only counts the bandwidth of message
+> -requested by target Endpoint.
+> +       $# perf stat -e hisi_pcie0_core0/rx_mwr_latency,port=0x1/ sleep 5
+>  
+> -For example, "bdf=0x3900" means BDF of target Endpoint is 0000:39:00.0.
+> +   - bdf
+>  
+> -Example usage of perf::
+> +     "bdf" filter can only be used in bandwidth events, target Endpoint is
+> +     selected by configuring BDF to "bdf". Counter only counts the bandwidth of
+> +     message requested by target Endpoint.
+> +
+> +     For example, "bdf=0x3900" means BDF of target Endpoint is 0000:39:00.0.
+>  
+> -  $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,bdf=0x3900/ sleep 5
+> +     Example usage of perf::
+> +
+> +       $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,bdf=0x3900/ sleep 5
+>  
+>  2. Trigger filter
+> -Event statistics start when the first time TLP length is greater/smaller
+> -than trigger condition. You can set the trigger condition by writing "trig_len",
+> -and set the trigger mode by writing "trig_mode". This filter can only be used
+> -in bandwidth events.
+>  
+> -For example, "trig_len=4" means trigger condition is 2^4 DW, "trig_mode=0"
+> -means statistics start when TLP length > trigger condition, "trig_mode=1"
+> -means start when TLP length < condition.
+> +   Event statistics start when the first time TLP length is greater/smaller
+> +   than trigger condition. You can set the trigger condition by writing
+> +   "trig_len", and set the trigger mode by writing "trig_mode". This filter can
+> +   only be used in bandwidth events.
+>  
+> -Example usage of perf::
+> +   For example, "trig_len=4" means trigger condition is 2^4 DW, "trig_mode=0"
+> +   means statistics start when TLP length > trigger condition, "trig_mode=1"
+> +   means start when TLP length < condition.
+>  
+> -  $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,trig_len=0x4,trig_mode=1/ sleep 5
+> +   Example usage of perf::
+> +
+> +     $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,trig_len=0x4,trig_mode=1/ sleep 5
+>  
+>  3. Threshold filter
+> -Counter counts when TLP length within the specified range. You can set the
+> -threshold by writing "thr_len", and set the threshold mode by writing
+> -"thr_mode". This filter can only be used in bandwidth events.
+>  
+> -For example, "thr_len=4" means threshold is 2^4 DW, "thr_mode=0" means
+> -counter counts when TLP length >= threshold, and "thr_mode=1" means counts
+> -when TLP length < threshold.
+> +   Counter counts when TLP length within the specified range. You can set the
+> +   threshold by writing "thr_len", and set the threshold mode by writing
+> +   "thr_mode". This filter can only be used in bandwidth events.
+>  
+> -Example usage of perf::
+> +   For example, "thr_len=4" means threshold is 2^4 DW, "thr_mode=0" means
+> +   counter counts when TLP length >= threshold, and "thr_mode=1" means counts
+> +   when TLP length < threshold.
+> +
+> +   Example usage of perf::
+>  
+> -  $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,thr_len=0x4,thr_mode=1/ sleep 5
+> +     $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,thr_len=0x4,thr_mode=1/ sleep 5
+>  
+>  4. TLP Length filter
+>  
+
