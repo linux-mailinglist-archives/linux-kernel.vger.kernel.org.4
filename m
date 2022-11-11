@@ -2,201 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78887625904
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 166C662590A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiKKLCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S233378AbiKKLD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:03:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbiKKLC3 (ORCPT
+        with ESMTP id S233183AbiKKLDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:02:29 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08A5532FA;
-        Fri, 11 Nov 2022 03:02:28 -0800 (PST)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N7whx3tW8z67L71;
-        Fri, 11 Nov 2022 19:00:17 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 12:02:26 +0100
-Received: from localhost (10.45.151.252) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 11 Nov
- 2022 11:02:25 +0000
-Date:   Fri, 11 Nov 2022 11:02:24 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Yicong Yang <yangyicong@huawei.com>
-CC:     Shaokun Zhang <zhangshaokun@hisilicon.com>, <liuqi6124@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>, <bagasdotme@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linuxarm@huawei.com>, <f.fangjian@huawei.com>,
-        <prime.zeng@huawei.com>, <shenyang39@huawei.com>
-Subject: Re: [PATCH v2 4/4] Documentation: perf: Indent filter options list
- of hisi-pcie-pmu
-Message-ID: <20221111110200.000047fd@Huawei.com>
-In-Reply-To: <20221110085109.45227-5-yangyicong@huawei.com>
-References: <20221110085109.45227-1-yangyicong@huawei.com>
-        <20221110085109.45227-5-yangyicong@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 11 Nov 2022 06:03:25 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC38F21F;
+        Fri, 11 Nov 2022 03:03:22 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABAtA8E017294;
+        Fri, 11 Nov 2022 11:03:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=+kDapjqqACohbJuPfP4OnvhVvSwqGQZLrRF43v/RLpc=;
+ b=mhi0mSjwirBcH+gzNpDxcsud/GjjsfaIODwWLV2WBPYmGBge1/+zVJPToO9rs6Mp3DrV
+ K/4skT5cLl3UKgf6EjMWyp9z+TeIFEoaC07lYeLx3E3EO2h3+bA+b4oGBvflsG59e8tk
+ BnLWb9NCSj7rD+lQR1mV/2u1VzUF0w7a79SrurfrIeErepnzQNAtWxJnHuEj6iqGZAF7
+ Eok3QucZxtpZQ0oBynPadg22HgtFsj/q3aIHcVnuMozscyJm5d/ofzgdhz7Co2pUMg/6
+ evAFKO/nrXjbWVd+UrUxBK99IBNJGV6TjbeQn1CZoRrV9XmdWsyp3CZl5xqH+CbcJB8d BQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksh98rjcd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 11:03:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABB3DAp018726
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 11:03:13 GMT
+Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
+ 2022 03:03:09 -0800
+Message-ID: <57298a3b-443b-b49b-c395-e2d6420ad20b@quicinc.com>
+Date:   Fri, 11 Nov 2022 16:33:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 10/10] arm64: dts: qcom: sc8280xp: Add bwmon instances
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rob Herring" <robh+dt@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
+ <20221111032515.3460-11-quic_bjorande@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <20221111032515.3460-11-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.151.252]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: gzkRF2C_AY7zrZXj_bI6qJetK2WfAYJy
+X-Proofpoint-ORIG-GUID: gzkRF2C_AY7zrZXj_bI6qJetK2WfAYJy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_06,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211110073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 16:51:09 +0800
-Yicong Yang <yangyicong@huawei.com> wrote:
 
-> From: Bagas Sanjaya <bagasdotme@gmail.com>
+
+On 11/11/22 08:55, Bjorn Andersson wrote:
+> Add the two bwmon instances and define votes for CPU -> LLCC and LLCC ->
+> DDR, with bandwidth values based on the downstream DeviceTree.
 > 
-> The "Filter options" list have a rather ugly indentation. Also, the first
-> paragraph after list name is rendered without separator (as continuation
-> from the name).
-> 
-> Align the list by indenting the list items and add a blank line
-> separator for each list name.
-> 
-> Fixes: c8602008e247 ("docs: perf: Add description for HiSilicon PCIe PMU driver")
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Annoying though it is to do, this should be a precusors to the changes added earlier
-in this series - or drop the fixes tag. I'd argue that 'ugly' isn't something that
-we need to potentially backport fixes to.
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Tested-by: Steev Klimaszewski <steev@kali.org>
 
-Change itself looks fine though. FWIW
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
 
 > ---
->  .../admin-guide/perf/hisi-pcie-pmu.rst        | 80 ++++++++++---------
->  1 file changed, 43 insertions(+), 37 deletions(-)
 > 
-> diff --git a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
-> index b3615230a4f6..7e863662e2d4 100644
-> --- a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
-> +++ b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
-> @@ -48,62 +48,68 @@ Filter options
->  --------------
->  
->  1. Target filter
-> -PMU could only monitor the performance of traffic downstream target Root Ports
-> -or downstream target Endpoint. PCIe PMU driver support "port" and "bdf"
-> -interfaces for users, and these two interfaces aren't supported at the same
-> -time.
->  
-> --port
-> -"port" filter can be used in all PCIe PMU events, target Root Port can be
-> -selected by configuring the 16-bits-bitmap "port". Multi ports can be selected
-> -for AP-layer-events, and only one port can be selected for TL/DL-layer-events.
-> +   PMU could only monitor the performance of traffic downstream target Root
-> +   Ports or downstream target Endpoint. PCIe PMU driver support "port" and
-> +   "bdf" interfaces for users, and these two interfaces aren't supported at the
-> +   same time.
->  
-> -For example, if target Root Port is 0000:00:00.0 (x8 lanes), bit0 of bitmap
-> -should be set, port=0x1; if target Root Port is 0000:00:04.0 (x4 lanes),
-> -bit8 is set, port=0x100; if these two Root Ports are both monitored, port=0x101.
-> +   - port
->  
-> -Example usage of perf::
-> +     "port" filter can be used in all PCIe PMU events, target Root Port can be
-> +     selected by configuring the 16-bits-bitmap "port". Multi ports can be
-> +     selected for AP-layer-events, and only one port can be selected for
-> +     TL/DL-layer-events.
->  
-> -  $# perf stat -e hisi_pcie0_core0/rx_mwr_latency,port=0x1/ sleep 5
-> +     For example, if target Root Port is 0000:00:00.0 (x8 lanes), bit0 of
-> +     bitmap should be set, port=0x1; if target Root Port is 0000:00:04.0 (x4
-> +     lanes), bit8 is set, port=0x100; if these two Root Ports are both
-> +     monitored, port=0x101.
->  
-> --bdf
-> +     Example usage of perf::
->  
-> -"bdf" filter can only be used in bandwidth events, target Endpoint is selected
-> -by configuring BDF to "bdf". Counter only counts the bandwidth of message
-> -requested by target Endpoint.
-> +       $# perf stat -e hisi_pcie0_core0/rx_mwr_latency,port=0x1/ sleep 5
->  
-> -For example, "bdf=0x3900" means BDF of target Endpoint is 0000:39:00.0.
-> +   - bdf
->  
-> -Example usage of perf::
-> +     "bdf" filter can only be used in bandwidth events, target Endpoint is
-> +     selected by configuring BDF to "bdf". Counter only counts the bandwidth of
-> +     message requested by target Endpoint.
+> Changes since v1:
+> - Added "cpu" to compatible for the CPU-subsystem bwmon instance
+> 
+>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 91 ++++++++++++++++++++++++++
+>   1 file changed, 91 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 2ac8f5204905..62e9dd8a2f07 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -1287,6 +1287,97 @@
+>   			};
+>   		};
+>   
+> +		pmu@9091000 {
+> +			compatible = "qcom,sc8280xp-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
+> +			reg = <0 0x9091000 0 0x1000>;
 > +
-> +     For example, "bdf=0x3900" means BDF of target Endpoint is 0000:39:00.0.
->  
-> -  $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,bdf=0x3900/ sleep 5
-> +     Example usage of perf::
+> +			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
 > +
-> +       $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,bdf=0x3900/ sleep 5
->  
->  2. Trigger filter
-> -Event statistics start when the first time TLP length is greater/smaller
-> -than trigger condition. You can set the trigger condition by writing "trig_len",
-> -and set the trigger mode by writing "trig_mode". This filter can only be used
-> -in bandwidth events.
->  
-> -For example, "trig_len=4" means trigger condition is 2^4 DW, "trig_mode=0"
-> -means statistics start when TLP length > trigger condition, "trig_mode=1"
-> -means start when TLP length < condition.
-> +   Event statistics start when the first time TLP length is greater/smaller
-> +   than trigger condition. You can set the trigger condition by writing
-> +   "trig_len", and set the trigger mode by writing "trig_mode". This filter can
-> +   only be used in bandwidth events.
->  
-> -Example usage of perf::
-> +   For example, "trig_len=4" means trigger condition is 2^4 DW, "trig_mode=0"
-> +   means statistics start when TLP length > trigger condition, "trig_mode=1"
-> +   means start when TLP length < condition.
->  
-> -  $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,trig_len=0x4,trig_mode=1/ sleep 5
-> +   Example usage of perf::
+> +			interconnects = <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3>;
 > +
-> +     $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,trig_len=0x4,trig_mode=1/ sleep 5
->  
->  3. Threshold filter
-> -Counter counts when TLP length within the specified range. You can set the
-> -threshold by writing "thr_len", and set the threshold mode by writing
-> -"thr_mode". This filter can only be used in bandwidth events.
->  
-> -For example, "thr_len=4" means threshold is 2^4 DW, "thr_mode=0" means
-> -counter counts when TLP length >= threshold, and "thr_mode=1" means counts
-> -when TLP length < threshold.
-> +   Counter counts when TLP length within the specified range. You can set the
-> +   threshold by writing "thr_len", and set the threshold mode by writing
-> +   "thr_mode". This filter can only be used in bandwidth events.
->  
-> -Example usage of perf::
-> +   For example, "thr_len=4" means threshold is 2^4 DW, "thr_mode=0" means
-> +   counter counts when TLP length >= threshold, and "thr_mode=1" means counts
-> +   when TLP length < threshold.
+> +			operating-points-v2 = <&llcc_bwmon_opp_table>;
 > +
-> +   Example usage of perf::
->  
-> -  $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,thr_len=0x4,thr_mode=1/ sleep 5
-> +     $# perf stat -e hisi_pcie0_core0/rx_mrd_flux,thr_len=0x4,thr_mode=1/ sleep 5
->  
->  4. TLP Length filter
->  
-
+> +			llcc_bwmon_opp_table: opp-table {
+> +				compatible = "operating-points-v2";
+> +
+> +				opp-0 {
+> +					opp-peak-kBps = <762000>;
+> +				};
+> +				opp-1 {
+> +					opp-peak-kBps = <1720000>;
+> +				};
+> +				opp-2 {
+> +					opp-peak-kBps = <2086000>;
+> +				};
+> +				opp-3 {
+> +					opp-peak-kBps = <2597000>;
+> +				};
+> +				opp-4 {
+> +					opp-peak-kBps = <2929000>;
+> +				};
+> +				opp-5 {
+> +					opp-peak-kBps = <3879000>;
+> +				};
+> +				opp-6 {
+> +					opp-peak-kBps = <5161000>;
+> +				};
+> +				opp-7 {
+> +					opp-peak-kBps = <5931000>;
+> +				};
+> +				opp-8 {
+> +					opp-peak-kBps = <6515000>;
+> +				};
+> +				opp-9 {
+> +					opp-peak-kBps = <7980000>;
+> +				};
+> +				opp-10 {
+> +					opp-peak-kBps = <8136000>;
+> +				};
+> +				opp-11 {
+> +					opp-peak-kBps = <10437000>;
+> +				};
+> +				opp-12 {
+> +					opp-peak-kBps = <12191000>;
+> +				};
+> +			};
+> +		};
+> +
+> +		pmu@90b6400 {
+> +			compatible = "qcom,sc8280xp-cpu-bwmon", "qcom,msm8998-bwmon";
+> +			reg = <0 0x090b6400 0 0x600>;
+> +
+> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
+> +			operating-points-v2 = <&cpu_bwmon_opp_table>;
+> +
+> +			cpu_bwmon_opp_table: opp-table {
+> +				compatible = "operating-points-v2";
+> +
+> +				opp-0 {
+> +					opp-peak-kBps = <2288000>;
+> +				};
+> +				opp-1 {
+> +					opp-peak-kBps = <4577000>;
+> +				};
+> +				opp-2 {
+> +					opp-peak-kBps = <7110000>;
+> +				};
+> +				opp-3 {
+> +					opp-peak-kBps = <9155000>;
+> +				};
+> +				opp-4 {
+> +					opp-peak-kBps = <12298000>;
+> +				};
+> +				opp-5 {
+> +					opp-peak-kBps = <14236000>;
+> +				};
+> +				opp-6 {
+> +					opp-peak-kBps = <15258001>;
+> +				};
+> +			};
+> +		};
+> +
+>   		system-cache-controller@9200000 {
+>   			compatible = "qcom,sc8280xp-llcc";
+>   			reg = <0 0x09200000 0 0x58000>, <0 0x09600000 0 0x58000>;
