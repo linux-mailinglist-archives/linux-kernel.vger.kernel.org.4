@@ -2,94 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C40625D6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E772F625D6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbiKKOqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:46:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S234745AbiKKOqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:46:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234763AbiKKOp0 (ORCPT
+        with ESMTP id S234764AbiKKOph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:45:26 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487D27342A;
-        Fri, 11 Nov 2022 06:44:53 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id r14so7908647edc.7;
-        Fri, 11 Nov 2022 06:44:53 -0800 (PST)
+        Fri, 11 Nov 2022 09:45:37 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30666DF1B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:45:35 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id g12so8656438lfh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:45:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z2JELu3fGxOmGVkXFeaA5505l4a1jidBqZD8y7rjuSU=;
-        b=b80kxGzyFjuVt2eWN8RdQk5+0NuwtKPWjqUSXTc5WYzyaOpzmSNrMNy0GOL36yky+1
-         ng87cTyWuvq/QWxswMcvQznMQUnr2vtZH41F5gC83Gyxsv410qy12vkzCdVK6d4JKxPJ
-         oHgjHGv1pUNhRGUKAY88lWR76fsqnt1DFCZYnf+6Hv4Px+7b9sVxUbVht4cMxE0PI1cS
-         wJFJ/WOUSskHlXGLiVNUk9b4kK53549crKkZzRuc/mrDXOXGYIc24IT7e2uBnhrK96yC
-         on3ATboEwCtOA1Lm5GqQoMrnraGuGjZSGLLJzJWElx9PKQDpLyQKskMJmxl9fADRI2s5
-         yjpQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nKIh7Rn2uY03gvMDxLSAjGI/gyfIpOz2PNRYMB/8BVY=;
+        b=zMLqECAHr+5NcQNla/y7bj36+Jihm72LxNXySqm8xh+3R51WS6kmb8BtZlvnSPqDe/
+         igKUE/GAiR9gOUGc4qHV9tkJW/7sbMSEYiWS0UIQYo1Z7/kmm6k5wASAJOJKomoVAY47
+         Kb2GD5r0gu5itoPz6sZK49pbQhiySjQsFbvaEAnLSVpbI0fwR2LDfRE//v5AjgFf+DD+
+         waGekmsiQWHluWL22/FWNtkd/9TBklGK4p1GLIPqkb8dKq8tCscS52QU5WvSegdzfiVX
+         aYhHp1GTJg5XGXC58x1ppi9ZDqYtjsD7f3qL4rLaZ5BbJqNFlsPuI6//YxkETH8shZdL
+         P8GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z2JELu3fGxOmGVkXFeaA5505l4a1jidBqZD8y7rjuSU=;
-        b=BaNUT5o15PTDQGJ8ttp/kRWkh0+brls5Dge6sPhVfbXwb7PS8oMzbI7Q7XdPE7dVoe
-         AamIBYGpAaDV+Zyxf4WPY27kE7E07eEWnViklLuMJiNrG0ee5hgXX6+MkT39F7wQ04h7
-         HNPK2dXb4MGl1mUNhHyKHkDmbtyYD5v0PivheDiK0HZg3xp1fqzkWp/SEaxecpN8YqOK
-         p6W15jTDLTh+UeGlc1f1Zvp5Wk2ok+UJ2X07soVH1eaYpH4V3MMlehP360/xHK7qGDt8
-         8nHDchEusZbHvQ1IwZ14xwveI55yO6+xt71XfMWBE4CJcFn+x/92xbKqCpJ6heMwKcqM
-         eF+Q==
-X-Gm-Message-State: ANoB5plLRaTdKUu3g6CRuICPL2JZN3FJNTZND7/bohYgmmC39T2uEl69
-        krTcnn3s0tGk4/DWln9Hk0E=
-X-Google-Smtp-Source: AA0mqf6APIwDf/9nYycKA9AOhb4lIHvy+W14xqMDOq8PsbKJX1i4YgbyVJiYdjBSEicldwvSA5U5fA==
-X-Received: by 2002:aa7:d38b:0:b0:467:71de:fe10 with SMTP id x11-20020aa7d38b000000b0046771defe10mr208586edq.63.1668177892262;
-        Fri, 11 Nov 2022 06:44:52 -0800 (PST)
-Received: from localhost (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id iy6-20020a170907818600b0078de26f66b9sm943496ejc.114.2022.11.11.06.44.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 06:44:51 -0800 (PST)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org
-Subject: Re: [RESEND PATCH] drm/tegra: switch to using devm_fwnode_gpiod_get()
-Date:   Fri, 11 Nov 2022 15:44:50 +0100
-Message-Id: <166817787160.520183.17377804906951332813.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <Y2neBkfe6b+MzQGa@google.com>
-References: <Y2neBkfe6b+MzQGa@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nKIh7Rn2uY03gvMDxLSAjGI/gyfIpOz2PNRYMB/8BVY=;
+        b=rl1JZVcSegLpCAu+wyK2GxDN8WA34FYtbVdaWL5FF27ErXWTuC6e+ujJGjh19N1NVY
+         vtaRorCBN2mh1FxNSSPoHS04d6WmZr050fRs749XV3HCIfPuFPX1t9OlkecuoXlTD1E8
+         T47sV1CqmrsFiD1N5VsrBEykI768e/fQk2wNJukzbE870NMnyB+SEW+EXqOFrYEpWrs5
+         ev6AmuwXr6pdp7gDTnVqOnc718caPyEmA0QDzdyO+zsLwcH54k1r8CihtSJx7xXmEuMd
+         YBdJzLQe/QfpxksnHIRuYVY+RJk1PFsc1GM5KygxQAOHeRI/VZFs7gI1WXQUt4BQYuxu
+         UFUg==
+X-Gm-Message-State: ANoB5pm34k2o8J3H44jonrI1Msr9TeWbEyUKtox0hW+zkTVyuaAU4NZI
+        thUafqnQr3RHT3TmWqZkayy2Zw==
+X-Google-Smtp-Source: AA0mqf4sgLsj52HWaY59vMgHa4fGiq4HixM8ZVYXfqlh1s69CeMqoQVflfov72D5yRE0mhynje0tUA==
+X-Received: by 2002:a19:6d0f:0:b0:4a2:23b0:b850 with SMTP id i15-20020a196d0f000000b004a223b0b850mr780143lfc.60.1668177933536;
+        Fri, 11 Nov 2022 06:45:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id n26-20020ac2491a000000b00494a603953dsm361574lfi.89.2022.11.11.06.45.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 06:45:32 -0800 (PST)
+Message-ID: <72093230-9da4-665d-c177-055c0a5e33cc@linaro.org>
+Date:   Fri, 11 Nov 2022 15:45:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 3/9] dt-bindings: regulator: Add binding schema for
+ mt6357 regulators
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-3-5d2bb58e6087@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005-mt6357-support-v4-3-5d2bb58e6087@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
-
-On Mon, 7 Nov 2022 20:41:42 -0800, Dmitry Torokhov wrote:
-> devm_gpiod_get_from_of_node() is going away and GPIO consumers should
-> use generic device/firmware node APIs to fetch GPIOs assigned to them.
-> Switch the driver to use devm_fwnode_gpiod_get() instead.
+On 08/11/2022 19:43, Alexandre Mergnat wrote:
+> From: Fabien Parent <fparent@baylibre.com>
 > 
+> Add YAML schema for the MediaTek MT6357 regulators.
+
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
+regulator: dt-bindings:
+
 > 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  .../regulator/mediatek,mt6357-regulator.yaml       | 292 +++++++++++++++++++++
+>  1 file changed, 292 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml
+> new file mode 100644
+> index 000000000000..3997a70a8b6c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml
+> @@ -0,0 +1,292 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/mediatek,mt6357-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 
-Applied, thanks!
 
-[1/1] drm/tegra: switch to using devm_fwnode_gpiod_get()
-      (no commit info)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
--- 
-Thierry Reding <treding@nvidia.com>
+Krzysztof
+
