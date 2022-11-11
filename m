@@ -2,143 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2166256E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D80625758
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233656AbiKKJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S233563AbiKKJzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbiKKJa2 (ORCPT
+        with ESMTP id S232580AbiKKJzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:30:28 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6967AD48;
-        Fri, 11 Nov 2022 01:30:27 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id c15so2402399qtw.8;
-        Fri, 11 Nov 2022 01:30:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VcplOxG0knUnUxNr+LPhGG5rifvaq3v/b4kjjm7Hk9U=;
-        b=gMWqAgtlwha7T0RuWBUIAhI8hmWUr58eKaXkF867nIpBNQBPjol+/ErwjP9ZEiZDS5
-         OxkyhvY64ZJt5QGK4qGoF0r1Bnol5QeE0dpZJ0xA5soNX8RacKIVeQXfZuB7/vx80fLb
-         ylGeQv7DAMBFa8EfYdlk/yrwHIe+NRU02Rrykj/bFOkr0/D6LHT+17C2abxOmttGhsrW
-         zeqtIBo8xm5MTPznLqui3aL8/fthEGYH+FR434zi3D9/E0JDssTjODasKNwrLcnBmEtT
-         M87E/kPleNKORbDL5ADhi2VlHUBvuO9wg95K7/LrgDcdm4Jk0MVOwyg0t9c7lHCyfso3
-         RM5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VcplOxG0knUnUxNr+LPhGG5rifvaq3v/b4kjjm7Hk9U=;
-        b=bVuB1rrQdl8v9IJr4cWwxgnAn38gOWD2qs4i9jVC8Vo1xGGLm5c3BvJdhArY4t0O9i
-         bZ1B/Ihvi1sCFsXd7O/7gfqFHzQWemeUpFwUenIp6RMRwOtOa1Pl2sCNfL4RvPkovFMY
-         oCVuV/hD2hgmUmp1e8Dn33OBXBjZiV6MlAEAHtRMrPlDSEy2VMzBolBXfAw7PADtfCIe
-         kTCwnd39jcYpG3ZisA146O4zBZRlvx7+MNJEj4d2aTgyLYkN8troxEbP+eu39wOlt3Ch
-         UxJaURGPgzsTAwIIrZAltfvyrirZ+T9MbFQ6fNQtVbqS2C31nhflMU55L2s7RvskH/aT
-         4xEA==
-X-Gm-Message-State: ANoB5pkowfLd8HBQ05k1V7SG6KUKaiP82sb/nXJK9p7+uPxh1Qn50Szi
-        1Wvt+UlvKoTSvaQBGWeFEftRQMPaUh0pdMtbZYk=
-X-Google-Smtp-Source: AA0mqf5jxCXN/bBnVjpOV5BnLl7pV/IC9HKZa6r7vr9BndNgoNaCs/7sPZwrN/elijNNi1COkOeNsjtKkOZtUXUn2vs=
-X-Received: by 2002:ac8:6905:0:b0:3a5:8423:ebb7 with SMTP id
- bt5-20020ac86905000000b003a58423ebb7mr508480qtb.593.1668159026522; Fri, 11
- Nov 2022 01:30:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20221108092840.14945-1-JJLIU0@nuvoton.com> <20221108092840.14945-4-JJLIU0@nuvoton.com>
- <CACRpkdb+Bkwa8yCKGtRcsJ6KnJh+RUuz_gOrQV63pcYQLaHCaw@mail.gmail.com>
-In-Reply-To: <CACRpkdb+Bkwa8yCKGtRcsJ6KnJh+RUuz_gOrQV63pcYQLaHCaw@mail.gmail.com>
-From:   Jim Liu <jim.t90615@gmail.com>
-Date:   Fri, 11 Nov 2022 17:30:15 +0800
-Message-ID: <CAKUZ0+GCf_Zv=VhnY5Z=yYAfR1=_ha98BVVxRGVy8ui6so_Yrg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dt-bindings: gpio: Add Nuvoton NPCM750 serial I/O
- expansion interface(SGPIO)
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     JJLIU0@nuvoton.com, KWLIU@nuvoton.com, brgl@bgdev.pl,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 04:55:16 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573196712A;
+        Fri, 11 Nov 2022 01:55:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668160515; x=1699696515;
+  h=from:to:cc:subject:date:message-id;
+  bh=GJYrYNUtpEQsFbSwvNRlRAKIkv76R0GmUW9rcH9SpOA=;
+  b=YzOdIChvvlseMqCDnr7cmZIkpuRgmwbiCJm9GvAiPteKTwUKkIX3A4Zp
+   KJQeQJqIDBAjUfTad4vTWBhhdqJZUn5WNmDvtUd4GA1nnAaoetjltOilu
+   mV0DbZJOGzt4y5C+OM8ksXn6LtxN6QZtdQRwzebVvHavfyw2KV3XqlGyW
+   IIRj0Tz51anLfLUs/1qcvYSmYjDVUZKpOfNwhOoIJa41rhPrysOpkXwt9
+   3Tr6R3g2VazndeTCsGFlFYDUkQ9hCTV7EYOAJ1w4gFokPCTQv9eteEEc3
+   GwTHtuQbY+gHbJCMgiyDHBQyKRZk+u3zZicuLYSFQMOU6GYQERVTYVGz6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309194747"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="309194747"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 01:55:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="701165687"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="701165687"
+Received: from yzhao56-desk.sh.intel.com ([10.238.200.254])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 01:55:12 -0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, zhenyuw@linux.intel.com,
+        Yan Zhao <yan.y.zhao@intel.com>
+Subject: [PATCH 0/3] add track_remove_slot and remove track_flush_slot
+Date:   Fri, 11 Nov 2022 17:32:22 +0800
+Message-Id: <20221111093222.3148-1-yan.y.zhao@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus and Krzysztof
+This series is based on Sean's series
+https://lore.kernel.org/all/20221110014821.1548347-1-seanjc@google.com/,
+which allows KVM internal user of page track not to rely on the page track
+hook .track_flush_slot.
 
-This is a special feature of npcm750.
-it's not a normal gpio.
-It's similar to aspeed sgpio.
+Page track hook track_flush_slot is for notification of slot flush and
+is called when a slot DELETE/MOVE is on-going.
 
-The spec as below:
+Page track hook track_remove_slot is for notification of slot removal
+and is called when the slot DELETE/MOVE has been committed.
 
-The full name is "serial I/O expansion"  interface.
-The NPCM7xx and NPCM8xx include two SGPIO modules.
-This interface has 4 pins  (D_out , D_in, S_CLK, LDSH).
-Each module includes eight input ports and eight output ports.
-Each port can control eight pins.
-Input ports only can be input ,output is so on.
-So support up to 64 input pins and 64 output pins.
+As KVMGT, the only external user of page track, actually only cares about
+when slot removal indeed happens, this series switches KVMGT to use the new
+hook .track_remove_slot.
+And as there are no users to .track_flush_slot any more, this hook is
+removed.
+ 
+Yan Zhao (3):
+  KVM: x86: add a new page track hook track_remove_slot
+  drm/i915/gvt: switch from track_flush_slot to track_remove_slot
+  KVM: x86: Remove the unused page track hook track_flush_slot
 
--S_CLK:
-The clock is generated by APB3, so users can set the bus frequency and
-the driver will set the spgio divided reg to
-generate a similar clock to sgpio bus.
+ arch/x86/include/asm/kvm_page_track.h | 8 ++++----
+ arch/x86/kvm/mmu/page_track.c         | 8 ++++----
+ arch/x86/kvm/x86.c                    | 5 +++--
+ drivers/gpu/drm/i915/gvt/kvmgt.c      | 6 +++---
+ 4 files changed, 14 insertions(+), 13 deletions(-)
 
--D_out:
-the output data is the serial data needed to connect to hc595 and the
-data will output to hc595 parallel pins.
-you can use dts nout_gpios to create the number of pins.
+-- 
+2.17.1
 
--D_in
-this pin need to connect to hc165 and get the serial data from hc165.
-you can use dts nin_gpios to create the number of pins.
-
-LDSH:
-this pin is used to get input data or send output data.
-the user can't control this pin.
-one operation cycle is include input and output
-beginning the signal, the  LDSH is low and now will send output serial data ,
-after finished output serial data the LDSH will be high and get serial
-input data.
-
-If you have any questions or are confused please let me know.
-Your comments are most welcome.
-
-Best regards,
-Jim
-
-
-On Wed, Nov 9, 2022 at 5:14 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Tue, Nov 8, 2022 at 10:29 AM Jim Liu <jim.t90615@gmail.com> wrote:
->
-> > +  nin_gpios: true
-> > +
-> > +  nout_gpios: true
->
-> My comment from v1 still holds.
-> I'd say just drop these two, it's too much trying to protect
-> the users from themselves.
->
-> > +  bus-frequency: true
->
-> Given that you have clocks already, what does this actually specify?
-> Which bus? The one the GPIO is connected to? Why is it different
-> from the frequency from the clocks? And what is it used for, why does
-> it need to be specified? So many questions.
->
-> A description is necessary.
->
-> I guess the : true means it is picked up from the core schemas somehow
-> but that doesn't make me smarter.
->
-> Yours,
-> Linus Walleij
