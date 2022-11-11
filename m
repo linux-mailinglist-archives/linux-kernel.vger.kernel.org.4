@@ -2,125 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6382A625D7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37398625D7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234611AbiKKOuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S234760AbiKKOuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234325AbiKKOuQ (ORCPT
+        with ESMTP id S234362AbiKKOuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:50:16 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2DC26106
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:50:14 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id E827C5C0156;
-        Fri, 11 Nov 2022 09:50:11 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 11 Nov 2022 09:50:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1668178211; x=1668264611; bh=sl
-        toumMgbd2Y0dgw40UCIpr6gt4ZyAxTL8p2m2/tu4s=; b=Jo8ot5ZV+wng2sLJ/B
-        pxEVfMTI2h99BmdiQQPzh78GZd4NAWzS+WFi/sdiC8gJNyiYLk/qyYamnaXuUP14
-        Fu9sYjwXRx573/gdS2ZDap6HLt0K7I0jo8dWVZE8CtIsQo+h94sLNcNL3UkV48Sp
-        SdOO20v7M+yUZPZcXIMdyqCPZtsi3GtU+5U1nDitfo76kVL0Rj5WvFXsQA1pF7mh
-        sO0fkp+siKBLS2P6edsvLlpxV6k6l3UAqKg0lhvAKxB0Xz+5i/4yZcCrCDkN1hDF
-        SUAW/8T6d+6QsvgTHNcYasM3D57CAC+BIdCXs6uqP4wb5uPDMzYSjGhvMx3QbljN
-        RMxg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668178211; x=1668264611; bh=sltoumMgbd2Y0dgw40UCIpr6gt4Z
-        yAxTL8p2m2/tu4s=; b=O2aS6Vy4GpeAx0DEdlCisSzuq+rkD3pfBaPBW+/c+MKf
-        Jnj8kF4SABBoW3E1Vlcnn2nfYGJcfDQ8Z8tZyoFmPRG+MBE94IQ6BEqHJ3ue4Bkg
-        sFZW1em1jY9F1g4Bqq5Bdi1MF48xyuJ9CSd58VFPW6lq5GwJZQdJxPIq2OtC6MLQ
-        KpT+GpHtC/5hIHK6jiCGATmm3KIPD3DxWBtlRNOe/4yxeVY0mzH9EhOmehPrE7tD
-        e6soMtjgayt96Fy2Y2V874iOvAL4PncKUWIs2fZ0DYzVNjzmkaNPxZ3wTzu14pHv
-        3BZgiveGSqQEaZwYSYa7MbK3t5LZummJ/D/0X9SC2A==
-X-ME-Sender: <xms:I2FuYy3bmFY_ZSmK_sQcvNE5bnJ8WNpMnbwSEGsG82znF1PnZ9-Hyw>
-    <xme:I2FuY1HccY9jOxtPrtK-G2xkq5rf-GEQC13Up_h4Uo6PX1zIf6McKSJd9ERJLm-uE
-    b4935YKsZGxQBqHlzY>
-X-ME-Received: <xmr:I2FuY67sd68NK6xCYvmFHNvSxW9RvSsiC3-qAo8io-mOI9BsB01mlklXLjQJ6ttE9SOU4g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeigdeikecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:I2FuYz2G_81rkkbGkQPymqMxLFeKlhA4MeBxr992LXU9su4tRr4lRg>
-    <xmx:I2FuY1G65iqm7dj6yP9dzjPsnScFNJUT9PVMNbpwJyYrdQ6ovNx_Aw>
-    <xmx:I2FuY8-2NBEC5ZWUfe8H5-jchysjSwKfgJB6vRoXyHJ9ESpugq-oGQ>
-    <xmx:I2FuYwmTajT02N2XUvRKjG8Bct7IXmNMAI0vyXNrdLYIEG5DGPLpyQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Nov 2022 09:50:11 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 187A11094F9; Fri, 11 Nov 2022 17:50:08 +0300 (+03)
-Date:   Fri, 11 Nov 2022 17:50:08 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCHv12 09/16] mm: Expose untagging mask in /proc/$PID/status
-Message-ID: <20221111145008.cbll6av2cxnqd6hb@box.shutemov.name>
-References: <20221109165140.9137-1-kirill.shutemov@linux.intel.com>
- <20221109165140.9137-10-kirill.shutemov@linux.intel.com>
- <Y24c8WpfTWVWAC4F@arm.com>
+        Fri, 11 Nov 2022 09:50:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238AA532CE;
+        Fri, 11 Nov 2022 06:50:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2E7CB8262E;
+        Fri, 11 Nov 2022 14:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2715C433C1;
+        Fri, 11 Nov 2022 14:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668178217;
+        bh=iCLjWMPbfoh16X7pYdvXNGmxZTqAzxVpz4NBBs8pJhs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=o1B3isv3nOETepxAnGjwTi1UtBQLXiNIdvIaTRvA+NqqGwYzmtm7Kf4jw0reiB8uo
+         NUZvtzNz0eVeWcpooIGWlstMbzi/0DETeBtpclSiu77iF96/GhicS9gWIn2FH8s82/
+         0ZRUjWzeGzReWnEpbJrUFQoY8ocbsBV4u2yI5IXc2zufZw/cDu8pVg5qi3E4jxsgF7
+         QYpnUuO1tF1ptMI3qAze4kemGU9ztFZOZScBeQb/gCPIKwdKtvO7X4vtXHUclhklPM
+         HdkEEQjkRPNnV5Om6UMXvNnpDHYgJx2iHkpzVdqr2C9hn6C60kRD0IAQYoED3hFDA2
+         siv5EOaT2V8Kg==
+Message-ID: <a962c50bf96528468e33a91bbde016cf780a2d78.camel@kernel.org>
+Subject: Re: [PATCH -next] NFSD: Use struct_size() helpler in alloc_session()
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, chuck.lever@oracle.com
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 11 Nov 2022 09:50:15 -0500
+In-Reply-To: <20221111091835.151942-1-xiujianfeng@huawei.com>
+References: <20221111091835.151942-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y24c8WpfTWVWAC4F@arm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 09:59:13AM +0000, Catalin Marinas wrote:
-> On Wed, Nov 09, 2022 at 07:51:33PM +0300, Kirill A. Shutemov wrote:
-> > Add a line in /proc/$PID/status to report untag_mask. It can be
-> > used to find out LAM status of the process from the outside. It is
-> > useful for debuggers.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> 
-> I though I acked v11. Here it is again, for arm64:
-> 
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+On Fri, 2022-11-11 at 17:18 +0800, Xiu Jianfeng wrote:
+> Use struct_size() helper to simplify the code, no functional changes.
+>=20
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  fs/nfsd/nfs4state.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
+> index 2ec981fd2985..97badca3135e 100644
+> --- a/fs/nfsd/nfs4state.c
+> +++ b/fs/nfsd/nfs4state.c
+> @@ -1833,13 +1833,12 @@ static struct nfsd4_session *alloc_session(struct=
+ nfsd4_channel_attrs *fattrs,
+>  	int numslots =3D fattrs->maxreqs;
+>  	int slotsize =3D slot_bytes(fattrs);
+>  	struct nfsd4_session *new;
+> -	int mem, i;
+> +	int i;
+> =20
+> -	BUILD_BUG_ON(NFSD_MAX_SLOTS_PER_SESSION * sizeof(struct nfsd4_slot *)
+> -			+ sizeof(struct nfsd4_session) > PAGE_SIZE);
+> -	mem =3D numslots * sizeof(struct nfsd4_slot *);
+> +	BUILD_BUG_ON(struct_size(new, se_slots, NFSD_MAX_SLOTS_PER_SESSION)
+> +		     > PAGE_SIZE);
+> =20
+> -	new =3D kzalloc(sizeof(*new) + mem, GFP_KERNEL);
+> +	new =3D kzalloc(struct_size(new, se_slots, numslots), GFP_KERNEL);
+>  	if (!new)
+>  		return NULL;
+>  	/* allocate each struct nfsd4_slot and data cache in one piece */
 
-Sorry, my bad. Dave has already noticed that and will add it on apply.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
