@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBE462521C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 05:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB226251FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 05:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbiKKEDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 23:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S231955AbiKKEAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 23:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232728AbiKKECi (ORCPT
+        with ESMTP id S232408AbiKKEAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 23:02:38 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B3F6BDDE;
-        Thu, 10 Nov 2022 20:01:02 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id y203so3880592pfb.4;
-        Thu, 10 Nov 2022 20:01:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BWnTIIQeoks9JfmRMbsiRNYxrY/7LOgk1YEB5MJbrY4=;
-        b=R+zS9sgm9JYzIh8VWXJ3esOJ75LGdDqWGdcsMdrYjo5gF5dtVtB7TIGhhO/fsxaWUN
-         CPuCD3Jb/30Z9q1QQmGqwrDhGBxl79hW530Zb84WGvIToP8eTGroJq7Npq3RDhKjR8+I
-         zaSkECDr2nCb/esq7hF091xrJXqWAOGw+JA0ki2CPQn6TyHeN7NjjK/0josBSJZtfgMH
-         fcv9ifbJcojN9alevhDNg88Cv67iwP+OF1S4u32cMaesEwC9T7RTjEdcgXnHmFexo9hK
-         /0HTAJzjjQ/VQYSjutzKFHeFmhgHNoBiFiGpiewk0h8m8TYL4aeo10uffG2oE49U87YA
-         fNrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BWnTIIQeoks9JfmRMbsiRNYxrY/7LOgk1YEB5MJbrY4=;
-        b=eCZ+EeaCQu0bqogl70AkLiAPVfrgsLbJG7xVZaQjtB4BQVc6zsi3/xAd662xmC9jsS
-         x0K91/jzycVNn0VxVICWGnRyMo7nXySO4KDXqEVq7rMdFzqfmkkv33ohJCFO9kxmjHMj
-         PQhSEUiAsLccloiICjAtvZo9J8ML2BSzsMjFhVYqpLKI6KC8L5rPJRFjJYFtOb4wml6P
-         sUxxG2K5m7BarwweSMV8p7JZHexDkyVJopWahT6nsSj3KbkkDW2DVVYsxXHHWBoxc+Sq
-         gxdof5svcdwhl2hmk/GQyejTQMu2JrzT6vbEbmnm4SvHuAM2zXYWT26UpGgVKagb+31k
-         DUZg==
-X-Gm-Message-State: ANoB5pkbGic72OkIJ8huzm5cPPARY/iNl2skJqq4k78usmLL8xs8KQEv
-        jM2SdSJNOzYPakGd5E0+UHY=
-X-Google-Smtp-Source: AA0mqf4opk2VEFwESZfXyg3GMlRHYyF5qgXyV3DKfVhttC+UiUzjzKTTkANZ0EWkZ++C/HwA4NPMmw==
-X-Received: by 2002:a62:1494:0:b0:56d:4670:6e2a with SMTP id 142-20020a621494000000b0056d46706e2amr683601pfu.77.1668139260816;
-        Thu, 10 Nov 2022 20:01:00 -0800 (PST)
-Received: from localhost.localdomain ([110.147.198.134])
-        by smtp.gmail.com with ESMTPSA id t2-20020a170902b20200b00186fa988a13sm486875plr.166.2022.11.10.20.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 20:01:00 -0800 (PST)
-From:   Jamie Bainbridge <jamie.bainbridge@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] tcp: Add listening address to SYN flood message
-Date:   Fri, 11 Nov 2022 14:59:32 +1100
-Message-Id: <7ccd58e8e26bcdd82e66993cbd53ff59eebe3949.1668139105.git.jamie.bainbridge@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 10 Nov 2022 23:00:03 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DED3D663D0;
+        Thu, 10 Nov 2022 19:59:59 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxC7a+yG1jeAAGAA--.6956S3;
+        Fri, 11 Nov 2022 11:59:58 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+C+yG1jYaMQAA--.45762S2;
+        Fri, 11 Nov 2022 11:59:58 +0800 (CST)
+Subject: Re: [PATCH v8 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver
+ support
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, zhuyinbo@loongson.cn,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>
+References: <20221109061122.786-1-zhuyinbo@loongson.cn>
+ <fc52c692-4cbd-e5f9-2e62-d05b5330052a@loongson.cn>
+ <CACRpkdbu-gqNBK0=L8pOr2TwYGOv2MUvFxzYiBNfJ5KyJT+A8g@mail.gmail.com>
+ <Y2vA09rQSbCRX+rL@smile.fi.intel.com>
+ <CACRpkdb+siKhL+YKBarhRE6_f9LpQR=0y0zNihRLuONwQRkA7w@mail.gmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <cfec5c16-70dc-a05d-4bf3-688848dc7e92@loongson.cn>
+Date:   Fri, 11 Nov 2022 11:59:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <CACRpkdb+siKhL+YKBarhRE6_f9LpQR=0y0zNihRLuONwQRkA7w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8Axf+C+yG1jYaMQAA--.45762S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7GF17CFWkXw1UWr4DGFW5GFg_yoWfXFb_uF
+        1jyrn7Cr47JF1xK3WkJa13t397Aa4kJryDZry2g3srAa43Xa13KF1Fvr97X34fAa95JFn8
+        Cr92vF1S9r15KjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        G7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64
+        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
+        14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryU
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+        4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU8QzVUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SYN flood message prints the listening port number, but with many
-processes bound to the same port on different IPs, it's impossible to
-tell which socket is the problem.
 
-Add the listen IP address to the SYN flood message in the "IP.port"
-format like most other tools (eg: tcpdump).
 
-Each protcol's "any" address and a host address now look like:
+在 2022/11/10 下午4:17, Linus Walleij 写道:
+> On Wed, Nov 9, 2022 at 4:01 PM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+>> On Wed, Nov 09, 2022 at 09:30:03AM +0100, Linus Walleij wrote:
+>>> On Wed, Nov 9, 2022 at 7:42 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>>>
+>>>> I had added some changes in these series patch in v8, please help add my
+>>>> change and merge it into your tree and sync it to linux-next.
+>>>
+>>> Yeah no problem, I took out the v7 version and applied this one instead.
+>>
+>> It needs more work.
+> 
+> It also failed in linux-next because of missing MODULE_LICENSE()
+> so I took it out again, thanks for poking me.
+> 
+> Yinbo: don't lose your spirit, keep at it!
+> 
+> Yours,
+> Linus Walleij
+Hi Walleij,
 
- Possible SYN flooding on port 0.0.0.0.9001.
- Possible SYN flooding on port 127.0.0.1.9001.
- Possible SYN flooding on port ::.9001.
- Possible SYN flooding on port fc00::1.9001.
+Thanks for your understanding.
 
-Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
----
-v2: Place IS_ENABLED() inside if condition c/o Andrew Lunn.
-    Change port printf to unsigned c/o Stephen Hemminger.
-    Remove long and unhelpful "Check SNMP counters" c/o Stephen.
-    Use IP.port format c/o Eric Dumazet.
----
- net/ipv4/tcp_input.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+I had add v9 and verified that base your pinctrl tree and compile it use 
+W=1 that no any warning and error.
 
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 0640453fce54b6daae0861d948f3db075830daf6..5b156dfc13b3d45c20e4fe6a45af7c42f39b2c66 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -6831,9 +6831,17 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
- 		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
- 
- 	if (!queue->synflood_warned && syncookies != 2 &&
--	    xchg(&queue->synflood_warned, 1) == 0)
--		net_info_ratelimited("%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.\n",
--				     proto, sk->sk_num, msg);
-+	    xchg(&queue->synflood_warned, 1) == 0) {
-+		if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
-+			net_info_ratelimited("%s: Possible SYN flooding on port %pI6c.%u. %s.\n",
-+					proto, &sk->sk_v6_rcv_saddr,
-+					sk->sk_num, msg);
-+		} else {
-+			net_info_ratelimited("%s: Possible SYN flooding on port %pI4.%u. %s.\n",
-+					proto, &sk->sk_rcv_saddr,
-+					sk->sk_num, msg);
-+		}
-+	}
- 
- 	return want_cookie;
- }
--- 
-2.38.1
+BRs,
+Yinbo.
+> 
 
