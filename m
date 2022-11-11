@@ -2,75 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727B8625AF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022AB625AFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbiKKNHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
+        id S233896AbiKKNIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbiKKNGi (ORCPT
+        with ESMTP id S233926AbiKKNHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:06:38 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2200587B36
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:06:11 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id C4D55224D9;
-        Fri, 11 Nov 2022 13:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668171969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KX5oLwpnZH2N9Qi5YM1DSC3MXjaNuoVumjBNBVvNwRc=;
-        b=UGB1Wlq0dnMelgFdER/PiHh5/23OafowkgkHgnJtgQ0kMMecAPURYJ59NuSkXsK+QGF1+h
-        aCyig7HGRGu26uJSunLlA815p/nPDavANvAFi8EfyumePGehNlT42drk3v1amTvzZi730b
-        tMN/632ZTyVGH7L23VGUIcO8nN3iuI8=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 78C3A2C145;
-        Fri, 11 Nov 2022 13:06:09 +0000 (UTC)
-Date:   Fri, 11 Nov 2022 14:06:09 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Fri, 11 Nov 2022 08:07:53 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE8083B9A;
+        Fri, 11 Nov 2022 05:07:47 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7zWj1j1dzmVlV;
+        Fri, 11 Nov 2022 21:07:29 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 21:07:45 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 21:07:44 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Josh Triplett" <josh@joshtriplett.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v3 39/40] printk: relieve console_lock of list
- synchronization duties
-Message-ID: <Y25IwcYWp1mYhB7j@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-40-john.ogness@linutronix.de>
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Robert Elliott <elliott@hpe.com>
+Subject: [PATCH v7 0/6] rcu: Add RCU stall diagnosis information
+Date:   Fri, 11 Nov 2022 21:07:03 +0800
+Message-ID: <20221111130709.247-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107141638.3790965-40-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-07 15:22:37, John Ogness wrote:
-> The console_list_lock provides synchronization for console list and
-> console->flags updates. All call sites that were using the console_lock
-> for this synchronization have either switched to use the
-> console_list_lock or the SRCU list iterator.
-> 
-> Remove console_lock usage for console list updates and console->flags
-> updates.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+v6 --> v7:
+1. Use kcpustat_field() to obtain the cputime.
+2. Make the output start with "\t" to match other related prints.
+3. Aligns the output of the last line of RCU stall.
 
-All the accesses to console->flags and all the console_list walks
-looks safe, so:
+v5 --> v6:
+1. When there are more than two continuous RCU stallings, correctly handle the
+   value of the second and subsequent sampling periods. Update comments and
+   document.
+   Thanks to Elliott, Robert for the test.
+2. Change "rcu stall" to "RCU stall".
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+v4 --> v5:
+1. Resolve a git am conflict. No code change.
 
-Best Regards,
-Petr
+v3 --> v4:
+1. Rename rcu_cpu_stall_deep_debug to rcu_cpu_stall_cputime.
+
+v2 --> v3:
+1. Fix the return type of kstat_cpu_irqs_sum()
+2. Add Kconfig option CONFIG_RCU_CPU_STALL_DEEP_DEBUG and boot parameter
+   rcupdate.rcu_cpu_stall_deep_debug.
+3. Add comments and normalize local variable name
+
+
+v1 --> v2:
+1. Fixed a bug in the code. If the rcu stall is detected by another CPU,
+   kcpustat_this_cpu cannot be used.
+@@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
+        if (r->gp_seq != rdp->gp_seq)
+                return;
+
+-       cpustat = kcpustat_this_cpu->cpustat;
++       cpustat = kcpustat_cpu(cpu).cpustat;
+2. Move the start point of statistics from rcu_stall_kick_kthreads() to
+   rcu_implicit_dynticks_qs(), removing the dependency on irq_work.
+
+v1:
+In some extreme cases, such as the I/O pressure test, the CPU usage may
+be 100%, causing RCU stall. In this case, the printed information about
+current is not useful. Displays the number and usage of hard interrupts,
+soft interrupts, and context switches that are generated within half of
+the CPU stall timeout, can help us make a general judgment. In other
+cases, we can preliminarily determine whether an infinite loop occurs
+when local_irq, local_bh or preempt is disabled.
+
+Zhen Lei (6):
+  genirq: Fix the return type of kstat_cpu_irqs_sum()
+  sched: Add helper kstat_cpu_softirqs_sum()
+  sched: Add helper nr_context_switches_cpu()
+  rcu: Add RCU stall diagnosis information
+  doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
+  rcu: Align the output of RCU stall
+
+ Documentation/RCU/stallwarn.rst               | 88 +++++++++++++++++++
+ .../admin-guide/kernel-parameters.txt         |  6 ++
+ include/linux/kernel_stat.h                   | 14 ++-
+ kernel/rcu/Kconfig.debug                      | 11 +++
+ kernel/rcu/rcu.h                              |  1 +
+ kernel/rcu/tree.c                             | 18 ++++
+ kernel/rcu/tree.h                             | 19 ++++
+ kernel/rcu/tree_stall.h                       | 35 +++++++-
+ kernel/rcu/update.c                           |  2 +
+ kernel/sched/core.c                           |  5 ++
+ 10 files changed, 196 insertions(+), 3 deletions(-)
+
+-- 
+2.25.1
+
