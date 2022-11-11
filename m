@@ -2,188 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F004D6255A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFE462558D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiKKIpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        id S233256AbiKKInv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:43:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbiKKIo4 (ORCPT
+        with ESMTP id S232825AbiKKIns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:44:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7C67C8EC;
-        Fri, 11 Nov 2022 00:44:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25A3561EF8;
-        Fri, 11 Nov 2022 08:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC23C4315C;
-        Fri, 11 Nov 2022 08:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668156294;
-        bh=GOkeZXFvRBATroumnNo6PXdgXEhOj5gelgwu1q1W47o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lRyqQOTcF+8h8LwiUSVFsFjk6qdhxCBaWBdcXxBCnWRRzz3ph156sR22WeYcTMctR
-         VrChpFQxxNnhvJeF/LgudRQSeuszZlF2Fq6w5St2nSBllP9mde3ne2c+7Q0uRIaB3D
-         idBbDRotJeh4tZJYbEwLytkQYZVZW6AM5laDdW4yOwQh3mFXrtzSJPi8kZPsTWhsYk
-         yw2d5Nzq0wiqHiLW6WhH2SoSxuTkWEuCq+2BSq/3e2PMpq+dBDihpOeJe3EAdLheY/
-         L6sOllLuwSh6FxUc+/WVo4SoeArxDCeVviXdYXDoa9iSTbCBwCN5JEOH9mTDFuCpcC
-         qABcZsDH99q7A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1otPeE-0002Mx-0F; Fri, 11 Nov 2022 09:44:26 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 6/6] phy: qcom-qmp-combo: clean up common initialisation
-Date:   Fri, 11 Nov 2022 09:42:55 +0100
-Message-Id: <20221111084255.8963-7-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221111084255.8963-1-johan+linaro@kernel.org>
-References: <20221111084255.8963-1-johan+linaro@kernel.org>
+        Fri, 11 Nov 2022 03:43:48 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFD5748EC;
+        Fri, 11 Nov 2022 00:43:46 -0800 (PST)
+Message-ID: <ce4c5925-d321-6b33-7bd7-e05b7145acde@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668156224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sGmpgzjXSDEHtQLPRedUvX6Ie3geWInfb4mFNlmSFwM=;
+        b=Ls3DPhz0g72q7glwyWPLIILy5EPB+KjsQlSf0pGkUWKaFY5BtqkinjsQ14TvL9/yiVh2FC
+        GCdo/rMbmBLyT8MTQqJwGI4FvIKOgUx5aLROqXwqQnJkfyHqxCUhhp6mgGscPPjsMtRyGn
+        hrQBlwqceTN/F2WtimBW52TNfjfT25A=
+Date:   Fri, 11 Nov 2022 16:43:36 +0800
 MIME-Version: 1.0
+Subject: Re: [for-next PATCH v5 06/11] RDMA/rxe: Extend rxe packet format to
+ support flush
+To:     Li Zhijian <lizhijian@fujitsu.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
+Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, yangx.jy@fujitsu.com,
+        y-goto@fujitsu.com, mbloch@nvidia.com, liangwenpeng@huawei.com,
+        tom@talpey.com, tomasz.gromadzki@intel.com,
+        dan.j.williams@intel.com, linux-kernel@vger.kernel.org
+References: <20220927055337.22630-1-lizhijian@fujitsu.com>
+ <20220927055337.22630-7-lizhijian@fujitsu.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yanjun Zhu <yanjun.zhu@linux.dev>
+In-Reply-To: <20220927055337.22630-7-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo
-phy") added support for the DisplayPort part of QMP PHYs but
-unfortunately did so by duplicating parts of the shared configuration,
-something which has lead to subtle bugs depending on probe order.
+在 2022/9/27 13:53, Li Zhijian 写道:
+> Extend rxe opcode tables, headers, helper and constants to support
+> flush operations.
+> 
+> Refer to the IBA A19.4.1 for more FETH definition details
+> 
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> ---
+> V5: new FETH structure and simplify header helper
+>      new names and new patch split scheme, suggested by Bob.
+> ---
+>   drivers/infiniband/sw/rxe/rxe_hdr.h    | 47 ++++++++++++++++++++++++++
+>   drivers/infiniband/sw/rxe/rxe_opcode.c | 17 ++++++++++
+>   drivers/infiniband/sw/rxe/rxe_opcode.h | 16 +++++----
+>   3 files changed, 74 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/infiniband/sw/rxe/rxe_hdr.h b/drivers/infiniband/sw/rxe/rxe_hdr.h
+> index e432f9e37795..e995a97c54fd 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_hdr.h
+> +++ b/drivers/infiniband/sw/rxe/rxe_hdr.h
+> @@ -607,6 +607,52 @@ static inline void reth_set_len(struct rxe_pkt_info *pkt, u32 len)
+>   		rxe_opcode[pkt->opcode].offset[RXE_RETH], len);
+>   }
+>   
+> +/******************************************************************************
+> + * FLUSH Extended Transport Header
+> + ******************************************************************************/
+> +
+> +struct rxe_feth {
+> +	__be32 bits;
+> +};
+> +
+> +#define FETH_PLT_MASK		(0x0000000f) /* bits 3-0 */
+> +#define FETH_SEL_MASK		(0x00000030) /* bits 5-4 */
+> +#define FETH_SEL_SHIFT		(4U)
+> +
+> +static inline u32 __feth_plt(void *arg)
+> +{
+> +	struct rxe_feth *feth = arg;
+> +
+> +	return be32_to_cpu(feth->bits) & FETH_PLT_MASK;
+> +}
+> +
+> +static inline u32 __feth_sel(void *arg)
+> +{
+> +	struct rxe_feth *feth = arg;
+> +
+> +	return (be32_to_cpu(feth->bits) & FETH_SEL_MASK) >> FETH_SEL_SHIFT;
+> +}
+> +
+> +static inline u32 feth_plt(struct rxe_pkt_info *pkt)
+> +{
+> +	return __feth_plt(pkt->hdr + rxe_opcode[pkt->opcode].offset[RXE_FETH]);
+> +}
+> +
+> +static inline u32 feth_sel(struct rxe_pkt_info *pkt)
+> +{
+> +	return __feth_sel(pkt->hdr + rxe_opcode[pkt->opcode].offset[RXE_FETH]);
+> +}
+> +
+> +static inline void feth_init(struct rxe_pkt_info *pkt, u8 type, u8 level)
+> +{
+> +	struct rxe_feth *feth = (struct rxe_feth *)
+> +		    (pkt->hdr + rxe_opcode[pkt->opcode].offset[RXE_FETH]);
+> +	u32 bits = ((level << FETH_SEL_SHIFT) & FETH_SEL_MASK) |
+> +		   (type & FETH_PLT_MASK);
+> +
+> +	feth->bits = cpu_to_be32(bits);
+> +}
+> +
+>   /******************************************************************************
+>    * Atomic Extended Transport Header
+>    ******************************************************************************/
+> @@ -910,6 +956,7 @@ enum rxe_hdr_length {
+>   	RXE_ATMETH_BYTES	= sizeof(struct rxe_atmeth),
+>   	RXE_IETH_BYTES		= sizeof(struct rxe_ieth),
+>   	RXE_RDETH_BYTES		= sizeof(struct rxe_rdeth),
+> +	RXE_FETH_BYTES		= sizeof(struct rxe_feth),
+>   };
+>   
+>   static inline size_t header_size(struct rxe_pkt_info *pkt)
+> diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.c b/drivers/infiniband/sw/rxe/rxe_opcode.c
+> index d4ba4d506f17..55aad13e57bb 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_opcode.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_opcode.c
+> @@ -101,6 +101,12 @@ struct rxe_wr_opcode_info rxe_wr_opcode_info[] = {
+>   			[IB_QPT_UC]	= WR_LOCAL_OP_MASK,
+>   		},
+>   	},
+> +	[IB_WR_FLUSH]					= {
+> +		.name   = "IB_WR_FLUSH",
+> +		.mask   = {
+> +			[IB_QPT_RC]	= WR_FLUSH_MASK,
+> +		},
+> +	},
+>   };
 
-As the resources have always been requested based on the USB
-configuration, make sure to not rely on fields from the DP configuration
-when using them (e.g. in case they get out of sync) and remove the now
-unused fields from the DP configurations.
+Hi, Zhijian
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 47 ++---------------------
- 1 file changed, 4 insertions(+), 43 deletions(-)
+I am making tests with it. Except rc, other modes are supported? such as 
+rd, xrc?
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index fde30205f332..c7a926d548d8 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -1043,14 +1043,6 @@ static const struct qmp_phy_cfg sc7180_dpphy_cfg = {
- 	.swing_hbr3_hbr2	= &qmp_dp_v3_voltage_swing_hbr3_hbr2,
- 	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v3_pre_emphasis_hbr3_hbr2,
- 
--	.clk_list		= qmp_v3_phy_clk_l,
--	.num_clks		= ARRAY_SIZE(qmp_v3_phy_clk_l),
--	.reset_list		= sc7180_usb3phy_reset_l,
--	.num_resets		= ARRAY_SIZE(sc7180_usb3phy_reset_l),
--	.vreg_list		= qmp_phy_vreg_l,
--	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
--	.regs			= qmp_v3_usb3phy_regs_layout,
--
- 	.dp_aux_init = qcom_qmp_v3_phy_dp_aux_init,
- 	.configure_dp_tx = qcom_qmp_v3_phy_configure_dp_tx,
- 	.configure_dp_phy = qcom_qmp_v3_phy_configure_dp_phy,
-@@ -1108,14 +1100,6 @@ static const struct qmp_phy_cfg sdm845_dpphy_cfg = {
- 	.swing_hbr3_hbr2	= &qmp_dp_v3_voltage_swing_hbr3_hbr2,
- 	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v3_pre_emphasis_hbr3_hbr2,
- 
--	.clk_list		= qmp_v3_phy_clk_l,
--	.num_clks		= ARRAY_SIZE(qmp_v3_phy_clk_l),
--	.reset_list		= msm8996_usb3phy_reset_l,
--	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
--	.vreg_list		= qmp_phy_vreg_l,
--	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
--	.regs			= qmp_v3_usb3phy_regs_layout,
--
- 	.dp_aux_init = qcom_qmp_v3_phy_dp_aux_init,
- 	.configure_dp_tx = qcom_qmp_v3_phy_configure_dp_tx,
- 	.configure_dp_phy = qcom_qmp_v3_phy_configure_dp_phy,
-@@ -1176,14 +1160,6 @@ static const struct qmp_phy_cfg sc8180x_dpphy_cfg = {
- 	.swing_hbr3_hbr2	= &qmp_dp_v3_voltage_swing_hbr3_hbr2,
- 	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v3_pre_emphasis_hbr3_hbr2,
- 
--	.clk_list		= qmp_v3_phy_clk_l,
--	.num_clks		= ARRAY_SIZE(qmp_v3_phy_clk_l),
--	.reset_list		= msm8996_usb3phy_reset_l,
--	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
--	.vreg_list		= qmp_phy_vreg_l,
--	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
--	.regs			= qmp_v3_usb3phy_regs_layout,
--
- 	.dp_aux_init = qcom_qmp_v4_phy_dp_aux_init,
- 	.configure_dp_tx = qcom_qmp_v4_phy_configure_dp_tx,
- 	.configure_dp_phy = qcom_qmp_v4_phy_configure_dp_phy,
-@@ -1240,14 +1216,6 @@ static const struct qmp_phy_cfg sc8280xp_usb43dp_dp_cfg = {
- 	.swing_hbr3_hbr2	= &qmp_dp_v5_voltage_swing_hbr3_hbr2,
- 	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v5_pre_emphasis_hbr3_hbr2,
- 
--	.clk_list		= qmp_v4_phy_clk_l,
--	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
--	.reset_list		= msm8996_usb3phy_reset_l,
--	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
--	.vreg_list		= qmp_phy_vreg_l,
--	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
--	.regs			= qmp_v4_usb3phy_regs_layout,
--
- 	.dp_aux_init = qcom_qmp_v4_phy_dp_aux_init,
- 	.configure_dp_tx = qcom_qmp_v4_phy_configure_dp_tx,
- 	.configure_dp_phy = qcom_qmp_v5_phy_configure_dp_phy,
-@@ -1308,14 +1276,6 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
- 	.swing_hbr3_hbr2	= &qmp_dp_v3_voltage_swing_hbr3_hbr2,
- 	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v3_pre_emphasis_hbr3_hbr2,
- 
--	.clk_list		= qmp_v4_sm8250_usbphy_clk_l,
--	.num_clks		= ARRAY_SIZE(qmp_v4_sm8250_usbphy_clk_l),
--	.reset_list		= msm8996_usb3phy_reset_l,
--	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
--	.vreg_list		= qmp_phy_vreg_l,
--	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
--	.regs			= qmp_v4_usb3phy_regs_layout,
--
- 	.dp_aux_init = qcom_qmp_v4_phy_dp_aux_init,
- 	.configure_dp_tx = qcom_qmp_v4_phy_configure_dp_tx,
- 	.configure_dp_phy = qcom_qmp_v4_phy_configure_dp_phy,
-@@ -1911,8 +1871,8 @@ static int qcom_qmp_dp_phy_calibrate(struct phy *phy)
- static int qmp_combo_com_init(struct qmp_phy *qphy)
- {
- 	struct qcom_qmp *qmp = qphy->qmp;
--	const struct qmp_phy_cfg *cfg = qphy->cfg;
- 	struct qmp_phy *usb_phy = qmp->usb_phy;
-+	const struct qmp_phy_cfg *cfg = usb_phy->cfg;
- 	void __iomem *dp_com = qmp->dp_com;
- 	int ret;
- 
-@@ -1964,7 +1924,7 @@ static int qmp_combo_com_init(struct qmp_phy *qphy)
- 	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SWI_CTRL, 0x03);
- 	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SW_RESET, SW_RESET);
- 
--	qphy_setbits(usb_phy->pcs, usb_phy->cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-+	qphy_setbits(usb_phy->pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
- 			SW_PWRDN);
- 
- 	mutex_unlock(&qmp->phy_mutex);
-@@ -1984,7 +1944,8 @@ static int qmp_combo_com_init(struct qmp_phy *qphy)
- static int qmp_combo_com_exit(struct qmp_phy *qphy)
- {
- 	struct qcom_qmp *qmp = qphy->qmp;
--	const struct qmp_phy_cfg *cfg = qphy->cfg;
-+	struct qmp_phy *usb_phy = qmp->usb_phy;
-+	const struct qmp_phy_cfg *cfg = usb_phy->cfg;
- 
- 	mutex_lock(&qmp->phy_mutex);
- 	if (--qmp->init_count) {
--- 
-2.37.4
+Zhu Yanjun
+
+>   
+>   struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+> @@ -378,6 +384,17 @@ struct rxe_opcode_info rxe_opcode[RXE_NUM_OPCODE] = {
+>   					  RXE_IETH_BYTES,
+>   		}
+>   	},
+> +	[IB_OPCODE_RC_FLUSH]					= {
+> +		.name	= "IB_OPCODE_RC_FLUSH",
+> +		.mask	= RXE_FETH_MASK | RXE_RETH_MASK | RXE_FLUSH_MASK |
+> +			  RXE_START_MASK | RXE_END_MASK | RXE_REQ_MASK,
+> +		.length = RXE_BTH_BYTES + RXE_FETH_BYTES + RXE_RETH_BYTES,
+> +		.offset = {
+> +			[RXE_BTH]	= 0,
+> +			[RXE_FETH]	= RXE_BTH_BYTES,
+> +			[RXE_RETH]	= RXE_BTH_BYTES + RXE_FETH_BYTES,
+> +		}
+> +	},
+>   
+>   	/* UC */
+>   	[IB_OPCODE_UC_SEND_FIRST]			= {
+> diff --git a/drivers/infiniband/sw/rxe/rxe_opcode.h b/drivers/infiniband/sw/rxe/rxe_opcode.h
+> index 8f9aaaf260f2..02d256745793 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_opcode.h
+> +++ b/drivers/infiniband/sw/rxe/rxe_opcode.h
+> @@ -19,7 +19,8 @@ enum rxe_wr_mask {
+>   	WR_SEND_MASK			= BIT(2),
+>   	WR_READ_MASK			= BIT(3),
+>   	WR_WRITE_MASK			= BIT(4),
+> -	WR_LOCAL_OP_MASK		= BIT(5),
+> +	WR_FLUSH_MASK			= BIT(5),
+> +	WR_LOCAL_OP_MASK		= BIT(6),
+>   
+>   	WR_READ_OR_WRITE_MASK		= WR_READ_MASK | WR_WRITE_MASK,
+>   	WR_WRITE_OR_SEND_MASK		= WR_WRITE_MASK | WR_SEND_MASK,
+> @@ -47,6 +48,7 @@ enum rxe_hdr_type {
+>   	RXE_RDETH,
+>   	RXE_DETH,
+>   	RXE_IMMDT,
+> +	RXE_FETH,
+>   	RXE_PAYLOAD,
+>   	NUM_HDR_TYPES
+>   };
+> @@ -63,6 +65,7 @@ enum rxe_hdr_mask {
+>   	RXE_IETH_MASK		= BIT(RXE_IETH),
+>   	RXE_RDETH_MASK		= BIT(RXE_RDETH),
+>   	RXE_DETH_MASK		= BIT(RXE_DETH),
+> +	RXE_FETH_MASK		= BIT(RXE_FETH),
+>   	RXE_PAYLOAD_MASK	= BIT(RXE_PAYLOAD),
+>   
+>   	RXE_REQ_MASK		= BIT(NUM_HDR_TYPES + 0),
+> @@ -71,13 +74,14 @@ enum rxe_hdr_mask {
+>   	RXE_WRITE_MASK		= BIT(NUM_HDR_TYPES + 3),
+>   	RXE_READ_MASK		= BIT(NUM_HDR_TYPES + 4),
+>   	RXE_ATOMIC_MASK		= BIT(NUM_HDR_TYPES + 5),
+> +	RXE_FLUSH_MASK		= BIT(NUM_HDR_TYPES + 6),
+>   
+> -	RXE_RWR_MASK		= BIT(NUM_HDR_TYPES + 6),
+> -	RXE_COMP_MASK		= BIT(NUM_HDR_TYPES + 7),
+> +	RXE_RWR_MASK		= BIT(NUM_HDR_TYPES + 7),
+> +	RXE_COMP_MASK		= BIT(NUM_HDR_TYPES + 8),
+>   
+> -	RXE_START_MASK		= BIT(NUM_HDR_TYPES + 8),
+> -	RXE_MIDDLE_MASK		= BIT(NUM_HDR_TYPES + 9),
+> -	RXE_END_MASK		= BIT(NUM_HDR_TYPES + 10),
+> +	RXE_START_MASK		= BIT(NUM_HDR_TYPES + 9),
+> +	RXE_MIDDLE_MASK		= BIT(NUM_HDR_TYPES + 10),
+> +	RXE_END_MASK		= BIT(NUM_HDR_TYPES + 11),
+>   
+>   	RXE_LOOPBACK_MASK	= BIT(NUM_HDR_TYPES + 12),
+>   
 
