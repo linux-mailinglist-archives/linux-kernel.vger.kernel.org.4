@@ -2,185 +2,380 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94E06263E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC916263FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiKKVzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 16:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S233752AbiKKV61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 16:58:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiKKVzL (ORCPT
+        with ESMTP id S230103AbiKKV6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:55:11 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F68419C31
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:55:10 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id g4so2391113vkk.6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FBLvh8HDrSTVyJY825uCLCQg+DtN/s4Hedrzyz0sKsQ=;
-        b=qRUpMGjO41oswo0eWuEJnL4lA6NTT3EottV/MKOhv1tfm/fvdBrbl39qD6To/pMojR
-         IwOBWiSNm7tAIA4WarulF7NmnuUTnSQlYsVRd+fJJuwyIVVv09kapCofm75y04VBq8mk
-         NcITIDrEsTVstEUdOc6P1N9ujcKvGH7WtxppnDUYH8jfs0HonyGc9freox75/pgD0Yjd
-         c3aYqH6tbuXg5y7bssFWlZnSPDGYJk3pVMDsNJN0fbqJXKjcPrnt3iHCEtjqMaUU/PFz
-         rT3+NWDi9DWgY2SP04fOx8pSp9qR3pi1fhEuNKxivQdoLtdmNmTjlbeMsrXPhDKgJ1rR
-         30ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FBLvh8HDrSTVyJY825uCLCQg+DtN/s4Hedrzyz0sKsQ=;
-        b=aOko2C+G9bDDWn04/82ByWRrYoKCNbtQXGhsEXAMtONO4K8LYkc85mMa54l9S8Wp9E
-         b5PGjclpAklaVpOVETM5q/w1P3iVBYxGH3mib+rYN8vR6s8RjshkoJjUw3+DYZZpmRl/
-         vFQ1f0CNCwyMnTp4kg0FIdIs0qxM7Ulta5ItVaUCFnZo0yMX9S76MWdyrT/3lTBFskNM
-         N7U5ASnVEv1/2HKfk8yfcaYmJ3pikfN3c+MLdYgh6h1z+fODrIHRi59f1WyLWrX4wnVX
-         V+vRg0Uy1Bm+JRMid5RiEz8j4vMI2t+Wc2saUXpmWvx6IEU01l7bZgKufZ/BrWIYNBZT
-         2yFQ==
-X-Gm-Message-State: ANoB5pmAC4J+Nw4lMftetlzw7GLume2M5O+N70Va52Xn9YsVdJkRfr8B
-        QBHG4ysm5jKTFUwvoCZ9PWHrPbg0krDA9a+M6Mto5w==
-X-Google-Smtp-Source: AA0mqf6064Vn0CTjnLKRKzlBqbKkwGHDuSg2sxSCL5xzBsXvlzlPBQOwhe/EC0YWvSGl/TWX4sMwuQqebjxjD085XVs=
-X-Received: by 2002:a05:6122:852:b0:3b8:68cc:1d1d with SMTP id
- 18-20020a056122085200b003b868cc1d1dmr2098111vkk.14.1668203709387; Fri, 11 Nov
- 2022 13:55:09 -0800 (PST)
+        Fri, 11 Nov 2022 16:58:24 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D92FB9;
+        Fri, 11 Nov 2022 13:58:22 -0800 (PST)
+Date:   Fri, 11 Nov 2022 21:58:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668203899;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=sgFRx+YUYLURaSF5O8vuDDLXxJFuCKSHBieN9Fs6Pd0=;
+        b=KvBDGYd/UtFV2flMlOYaR1WqU9yqbwEpBGvqwXgeeHA/UJRu82d4wp0kOAOFDRu4mUGx/c
+        xLaxrv8Ic9u1MtixNfBVPAqJ9VZk7FFkG9TtrweC/Y6GbaLtYfJ2T3mSZvBl3iRccl0oP1
+        P83cmwBfXVNfv8bfGoMbrqxsjtbJKnsn4UAhrdoqoqQ8KDKpY6CQub6HQuVFZb6zumfGs3
+        RJNEWLqDnLonDDLZ9zLwVxsCIcdLS7gUI0VIsmBDX6ya8AGOU6w+YZbrJ/c6RA31ny2y6U
+        Ocyd/wwT4UHKOPfi8wROAxFEe98gvgKj09IzcybMCCmVPBRDUWYVYfMr1MCZxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668203899;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=sgFRx+YUYLURaSF5O8vuDDLXxJFuCKSHBieN9Fs6Pd0=;
+        b=yhmqPIPKHMXAnefwq6Klt0D6uIpFsiCiR0B5PbHvc4O9qG3LPz+EKgrQBXFwVvrVHesQco
+        hxAH9DmeuZNnchAA==
+From:   "tip-bot2 for Weihong Zhang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases
+ for linear-address masking
+Cc:     Weihong Zhang <weihong.zhang@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-References: <20221017171118.1588820-1-sammler@google.com> <CAM9Jb+ggq5L9XZZHhfA98XDO+P=8y-mT+ct0JFAtXRbsCuORsA@mail.gmail.com>
- <CAFPP518-gU1M1XcHMHgpx=ZPPkSyjPmfOK6D+wM6t6vM6Ve6XQ@mail.gmail.com>
- <CAM9Jb+hk0ZRtXnF+WVj0LiRiO7uH-jDydJrnUQ_57yTEcs--Dw@mail.gmail.com> <6359ab83d6e4d_4da3294d0@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <6359ab83d6e4d_4da3294d0@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Fri, 11 Nov 2022 13:54:58 -0800
-Message-ID: <CAHS8izOYYV+dz3vPdbkipt1i1XAU-mvJOn6c_z-NJJwzUtWzDg@mail.gmail.com>
-Subject: Re: [PATCH v1] virtio_pmem: populate numa information
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Michael Sammler <sammler@google.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166820389823.4906.10968580709475105825.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 2:50 PM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> Pankaj Gupta wrote:
-> > > > > Compute the numa information for a virtio_pmem device from the memory
-> > > > > range of the device. Previously, the target_node was always 0 since
-> > > > > the ndr_desc.target_node field was never explicitly set. The code for
-> > > > > computing the numa node is taken from cxl_pmem_region_probe in
-> > > > > drivers/cxl/pmem.c.
-> > > > >
-> > > > > Signed-off-by: Michael Sammler <sammler@google.com>
+The following commit has been merged into the x86/mm branch of tip:
 
-Tested-by: Mina Almasry <almasrymina@google.com>
+Commit-ID:     bf1269766228ef169145af26ae50ef9ef095b6fe
+Gitweb:        https://git.kernel.org/tip/bf1269766228ef169145af26ae50ef9ef095b6fe
+Author:        Weihong Zhang <weihong.zhang@intel.com>
+AuthorDate:    Wed, 09 Nov 2022 19:51:40 +03:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Fri, 11 Nov 2022 13:29:56 -08:00
 
-I don't have much expertise on this driver, but with the help of this
-patch I was able to get memory tiering [1] emulation going on qemu. As
-far as I know there is no alternative to this emulation, and so I
-would love to see this or equivalent merged, if possible.
+selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for linear-address masking
 
-This is what I have going to get memory tiering emulation:
+By default do not allow to enable both LAM and use SVA in the same
+process.
+The new ARCH_FORCE_TAGGED_SVA arch_prctl() overrides the limitation.
 
-In qemu, added these configs:
-      -object memory-backend-file,id=m4,share=on,mem-path="$path_to_virtio_pmem_file",size=2G
-\
-      -smp 2,sockets=2,maxcpus=2  \
-      -numa node,nodeid=0,memdev=m0 \
-      -numa node,nodeid=1,memdev=m1 \
-      -numa node,nodeid=2,memdev=m2,initiator=0 \
-      -numa node,nodeid=3,initiator=0 \
-      -device virtio-pmem-pci,memdev=m4,id=nvdimm1 \
+Add new test cases for the new arch_prctl:
+Before using ARCH_FORCE_TAGGED_SVA, should not allow to enable LAM/SVA
+coexisting. the test cases should be negative.
 
-On boot, ran these commands:
-    ndctl_static create-namespace -e namespace0.0 -m devdax -f 1&> /dev/null
-    echo dax0.0 > /sys/bus/dax/drivers/device_dax/unbind
-    echo dax0.0 > /sys/bus/dax/drivers/kmem/new_id
-    for i in `ls /sys/devices/system/memory/`; do
-      state=$(cat "/sys/devices/system/memory/$i/state" 2&>/dev/null)
-      if [ "$state" == "offline" ]; then
-        echo online_movable > "/sys/devices/system/memory/$i/state"
-      fi
-    done
+The test depands on idxd driver and iommu. before test, need add
+"intel_iommu=on,sm_on" in kernel command line and insmod idxd driver.
 
-Without this CL, I see the memory onlined in node 0 always, and is not
-a separate memory tier. With this CL and qemu configs, the memory is
-onlined in node 3 and is set as a separate memory tier, which enables
-qemu-based development:
+Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/all/20221109165140.9137-17-kirill.shutemov%40linux.intel.com
+---
+ tools/testing/selftests/x86/lam.c | 237 ++++++++++++++++++++++++++++-
+ 1 file changed, 235 insertions(+), 2 deletions(-)
 
-==> /sys/devices/virtual/memory_tiering/memory_tier22/nodelist <==
-3
-==> /sys/devices/virtual/memory_tiering/memory_tier4/nodelist <==
-0-2
-
-AFAIK there is no alternative to enabling memory tiering emulation in
-qemu, and would love to see this or equivalent merged, if possible.
-
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-
-> > > > > ---
-> > > > >  drivers/nvdimm/virtio_pmem.c | 11 +++++++++--
-> > > > >  1 file changed, 9 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
-> > > > > index 20da455d2ef6..a92eb172f0e7 100644
-> > > > > --- a/drivers/nvdimm/virtio_pmem.c
-> > > > > +++ b/drivers/nvdimm/virtio_pmem.c
-> > > > > @@ -32,7 +32,6 @@ static int init_vq(struct virtio_pmem *vpmem)
-> > > > >  static int virtio_pmem_probe(struct virtio_device *vdev)
-> > > > >  {
-> > > > >         struct nd_region_desc ndr_desc = {};
-> > > > > -       int nid = dev_to_node(&vdev->dev);
-> > > > >         struct nd_region *nd_region;
-> > > > >         struct virtio_pmem *vpmem;
-> > > > >         struct resource res;
-> > > > > @@ -79,7 +78,15 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
-> > > > >         dev_set_drvdata(&vdev->dev, vpmem->nvdimm_bus);
-> > > > >
-> > > > >         ndr_desc.res = &res;
-> > > > > -       ndr_desc.numa_node = nid;
-> > > > > +
-> > > > > +       ndr_desc.numa_node = memory_add_physaddr_to_nid(res.start);
-> > > > > +       ndr_desc.target_node = phys_to_target_node(res.start);
-> > > > > +       if (ndr_desc.target_node == NUMA_NO_NODE) {
-> > > > > +               ndr_desc.target_node = ndr_desc.numa_node;
-> > > > > +               dev_dbg(&vdev->dev, "changing target node from %d to %d",
-> > > > > +                       NUMA_NO_NODE, ndr_desc.target_node);
-> > > > > +       }
-> > > >
-> > > > As this memory later gets hotplugged using "devm_memremap_pages". I don't
-> > > > see if 'target_node' is used for fsdax case?
-> > > >
-> > > > It seems to me "target_node" is used mainly for volatile range above
-> > > > persistent memory ( e.g kmem driver?).
-> > > >
-> > > I am not sure if 'target_node' is used in the fsdax case, but it is
-> > > indeed used by the devdax/kmem driver when hotplugging the memory (see
-> > > 'dev_dax_kmem_probe' and '__dax_pmem_probe').
-> >
-> > Yes, but not currently for FS_DAX iiuc.
->
-> The target_node is only used by the dax_kmem driver. In the FSDAX case
-> the memory (persistent or otherwise) is mapped behind a block-device.
-> That block-device has affinity to a CPU initiator, but that memory does
-> not itself have any NUMA affinity or identity as a target.
->
-> So:
->
-> block-device NUMA node == closest CPU initiator node to the device
->
-> dax-device target node == memory only NUMA node target, after onlining
+diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+index cfc9073..52a876a 100644
+--- a/tools/testing/selftests/x86/lam.c
++++ b/tools/testing/selftests/x86/lam.c
+@@ -30,6 +30,7 @@
+ #define ARCH_GET_UNTAG_MASK     0x4001
+ #define ARCH_ENABLE_TAGGED_ADDR 0x4002
+ #define ARCH_GET_MAX_TAG_BITS   0x4003
++#define ARCH_FORCE_TAGGED_SVA	0x4004
+ 
+ /* Specified test function bits */
+ #define FUNC_MALLOC             0x1
+@@ -38,8 +39,9 @@
+ #define FUNC_SYSCALL            0x8
+ #define FUNC_URING              0x10
+ #define FUNC_INHERITE           0x20
++#define FUNC_PASID              0x40
+ 
+-#define TEST_MASK               0x3f
++#define TEST_MASK               0x7f
+ 
+ #define LOW_ADDR                (0x1UL << 30)
+ #define HIGH_ADDR               (0x3UL << 48)
+@@ -55,11 +57,19 @@
+ #define URING_QUEUE_SZ 1
+ #define URING_BLOCK_SZ 2048
+ 
++/* Pasid test define */
++#define LAM_CMD_BIT 0x1
++#define PAS_CMD_BIT 0x2
++#define SVA_CMD_BIT 0x4
++
++#define PAS_CMD(cmd1, cmd2, cmd3) (((cmd3) << 8) | ((cmd2) << 4) | ((cmd1) << 0))
++
+ struct testcases {
+ 	unsigned int later;
+ 	int expected; /* 2: SIGSEGV Error; 1: other errors */
+ 	unsigned long lam;
+ 	uint64_t addr;
++	uint64_t cmd;
+ 	int (*test_func)(struct testcases *test);
+ 	const char *msg;
+ };
+@@ -556,7 +566,7 @@ int do_uring(unsigned long lam)
+ 	struct file_io *fi;
+ 	struct stat st;
+ 	int ret = 1;
+-	char path[PATH_MAX];
++	char path[PATH_MAX] = {0};
+ 
+ 	/* get current process path */
+ 	if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
+@@ -852,6 +862,226 @@ static void cmd_help(void)
+ 	printf("\t-h: help\n");
+ }
+ 
++/* Check for file existence */
++uint8_t file_Exists(const char *fileName)
++{
++	struct stat buffer;
++
++	uint8_t ret = (stat(fileName, &buffer) == 0);
++
++	return ret;
++}
++
++/* Sysfs idxd files */
++const char *dsa_configs[] = {
++	"echo 1 > /sys/bus/dsa/devices/dsa0/wq0.1/group_id",
++	"echo shared > /sys/bus/dsa/devices/dsa0/wq0.1/mode",
++	"echo 10 > /sys/bus/dsa/devices/dsa0/wq0.1/priority",
++	"echo 16 > /sys/bus/dsa/devices/dsa0/wq0.1/size",
++	"echo 15 > /sys/bus/dsa/devices/dsa0/wq0.1/threshold",
++	"echo user > /sys/bus/dsa/devices/dsa0/wq0.1/type",
++	"echo MyApp1 > /sys/bus/dsa/devices/dsa0/wq0.1/name",
++	"echo 1 > /sys/bus/dsa/devices/dsa0/engine0.1/group_id",
++	"echo dsa0 > /sys/bus/dsa/drivers/idxd/bind",
++	/* bind files and devices, generated a device file in /dev */
++	"echo wq0.1 > /sys/bus/dsa/drivers/user/bind",
++};
++
++/* DSA device file */
++const char *dsaDeviceFile = "/dev/dsa/wq0.1";
++/* file for io*/
++const char *dsaPasidEnable = "/sys/bus/dsa/devices/dsa0/pasid_enabled";
++
++/*
++ * DSA depends on kernel cmdline "intel_iommu=on,sm_on"
++ * return pasid_enabled (0: disable 1:enable)
++ */
++int Check_DSA_Kernel_Setting(void)
++{
++	char command[256] = "";
++	char buf[256] = "";
++	char *ptr;
++	int rv = -1;
++
++	snprintf(command, sizeof(command) - 1, "cat %s", dsaPasidEnable);
++
++	FILE *cmd = popen(command, "r");
++
++	if (cmd) {
++		while (fgets(buf, sizeof(buf) - 1, cmd) != NULL);
++
++		pclose(cmd);
++		rv = strtol(buf, &ptr, 16);
++	}
++
++	return rv;
++}
++
++/*
++ * Config DSA's sysfs files as shared DSA's WQ.
++ * Generated a device file /dev/dsa/wq0.1
++ * Return:  0 OK; 1 Failed; 3 Skip(SVA disabled).
++ */
++int Dsa_Init_Sysfs(void)
++{
++	uint len = ARRAY_SIZE(dsa_configs);
++	const char **p = dsa_configs;
++
++	if (file_Exists(dsaDeviceFile) == 1)
++		return 0;
++
++	/* check the idxd driver */
++	if (file_Exists(dsaPasidEnable) != 1) {
++		printf("Please make sure idxd driver was loaded\n");
++		return 3;
++	}
++
++	/* Check SVA feature */
++	if (Check_DSA_Kernel_Setting() != 1) {
++		printf("Please enable SVA.(Add intel_iommu=on,sm_on in kernel cmdline)\n");
++		return 3;
++	}
++
++	/* Check the idxd device file on /dev/dsa/ */
++	for (int i = 0; i < len; i++) {
++		if (system(p[i]))
++			return 1;
++	}
++
++	/* After config, /dev/dsa/wq0.1 should be generated */
++	return (file_Exists(dsaDeviceFile) != 1);
++}
++
++/*
++ * Open DSA device file, triger API: iommu_sva_alloc_pasid
++ */
++void *allocate_dsa_pasid(void)
++{
++	int fd;
++	void *wq;
++
++	fd = open(dsaDeviceFile, O_RDWR);
++	if (fd < 0) {
++		perror("open");
++		return MAP_FAILED;
++	}
++
++	wq = mmap(NULL, 0x1000, PROT_WRITE,
++			   MAP_SHARED | MAP_POPULATE, fd, 0);
++	if (wq == MAP_FAILED)
++		perror("mmap");
++
++	return wq;
++}
++
++int set_force_svm(void)
++{
++	int ret = 0;
++
++	ret = syscall(SYS_arch_prctl, ARCH_FORCE_TAGGED_SVA);
++
++	return ret;
++}
++
++int handle_pasid(struct testcases *test)
++{
++	uint tmp = test->cmd;
++	uint runed = 0x0;
++	int ret = 0;
++	void *wq = NULL;
++
++	ret = Dsa_Init_Sysfs();
++	if (ret != 0)
++		return ret;
++
++	for (int i = 0; i < 3; i++) {
++		int err = 0;
++
++		if (tmp & 0x1) {
++			/* run set lam mode*/
++			if ((runed & 0x1) == 0)	{
++				err = set_lam(LAM_U57_BITS);
++				runed = runed | 0x1;
++			} else
++				err = 1;
++		} else if (tmp & 0x4) {
++			/* run force svm */
++			if ((runed & 0x4) == 0)	{
++				err = set_force_svm();
++				runed = runed | 0x4;
++			} else
++				err = 1;
++		} else if (tmp & 0x2) {
++			/* run allocate pasid */
++			if ((runed & 0x2) == 0) {
++				runed = runed | 0x2;
++				wq = allocate_dsa_pasid();
++				if (wq == MAP_FAILED)
++					err = 1;
++			} else
++				err = 1;
++		}
++
++		ret = ret + err;
++		if (ret > 0)
++			break;
++
++		tmp = tmp >> 4;
++	}
++
++	if (wq != MAP_FAILED && wq != NULL)
++		if (munmap(wq, 0x1000))
++			printf("munmap failed %d\n", errno);
++
++	if (runed != 0x7)
++		ret = 1;
++
++	return (ret != 0);
++}
++
++/*
++ * Pasid test depends on idxd and SVA, kernel should enable iommu and sm.
++ * command line(intel_iommu=on,sm_on)
++ */
++static struct testcases pasid_cases[] = {
++	{
++		.expected = 1,
++		.cmd = PAS_CMD(LAM_CMD_BIT, PAS_CMD_BIT, SVA_CMD_BIT),
++		.test_func = handle_pasid,
++		.msg = "PASID: [Negative] Execute LAM, PASID, SVA in sequence\n",
++	},
++	{
++		.expected = 0,
++		.cmd = PAS_CMD(LAM_CMD_BIT, SVA_CMD_BIT, PAS_CMD_BIT),
++		.test_func = handle_pasid,
++		.msg = "PASID: Execute LAM, SVA, PASID in sequence\n",
++	},
++	{
++		.expected = 1,
++		.cmd = PAS_CMD(PAS_CMD_BIT, LAM_CMD_BIT, SVA_CMD_BIT),
++		.test_func = handle_pasid,
++		.msg = "PASID: [Negative] Execute PASID, LAM, SVA in sequence\n",
++	},
++	{
++		.expected = 0,
++		.cmd = PAS_CMD(PAS_CMD_BIT, SVA_CMD_BIT, LAM_CMD_BIT),
++		.test_func = handle_pasid,
++		.msg = "PASID: Execute PASID, SVA, LAM in sequence\n",
++	},
++	{
++		.expected = 0,
++		.cmd = PAS_CMD(SVA_CMD_BIT, LAM_CMD_BIT, PAS_CMD_BIT),
++		.test_func = handle_pasid,
++		.msg = "PASID: Execute SVA, LAM, PASID in sequence\n",
++	},
++	{
++		.expected = 0,
++		.cmd = PAS_CMD(SVA_CMD_BIT, PAS_CMD_BIT, LAM_CMD_BIT),
++		.test_func = handle_pasid,
++		.msg = "PASID: Execute SVA, PASID, LAM in sequence\n",
++	},
++};
++
+ int main(int argc, char **argv)
+ {
+ 	int c = 0;
+@@ -910,6 +1140,9 @@ int main(int argc, char **argv)
+ 	if (tests & FUNC_INHERITE)
+ 		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
+ 
++	if (tests & FUNC_PASID)
++		run_test(pasid_cases, ARRAY_SIZE(pasid_cases));
++
+ 	ksft_set_plan(tests_cnt);
+ 
+ 	return ksft_exit_pass();
