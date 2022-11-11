@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868AA625E81
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8903625E7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:38:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233857AbiKKPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S233825AbiKKPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233851AbiKKPjE (ORCPT
+        with ESMTP id S233564AbiKKPiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:39:04 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830DF14D20
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:39:02 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otW7J-00032x-OM; Fri, 11 Nov 2022 16:38:53 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otW7G-0004Fi-Sa; Fri, 11 Nov 2022 16:38:50 +0100
-Date:   Fri, 11 Nov 2022 16:38:50 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        alistair@alistair23.me
-Subject: Re: [PATCH v3] ARM: dts: imx: e60k02: Add touchscreen
-Message-ID: <20221111153850.kxg7yyn2azrr5mu4@pengutronix.de>
-References: <20221108191543.1752080-1-andreas@kemnade.info>
- <20221109092350.2ke6sbgbcp3wpelc@pengutronix.de>
- <20221109124536.5154cb03@aktux>
- <20221111091223.if2ahwz67vkf72ba@pengutronix.de>
- <20221111105438.26c477ae@aktux>
+        Fri, 11 Nov 2022 10:38:55 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2883314D20
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:38:53 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id r81so3817650iod.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:38:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RlHsWdECQ3tv3fcWIrqXb+HedmBJAx9FZPX5VGtHlJU=;
+        b=06E4IE2EK4Xe7YJnb5xdW2QGv3nMsk7WXIBYseXjSBDuxkcOemdsx43M4AEUVfN+pp
+         S28Kq2MsoSMYF0+fp1Jghtivtd27tJ2cDQuPjWOfmrVwmTyy3GUmRdRnyDxjAZ2BdRq/
+         M26oAlxdPYxyAR2KQzFr6Ue0iAQpE9O6iKk/RL5E9QD023lfp5og0H9lT78dBrqFP5u3
+         N3aafdTe0RAreWUsJ10QjCR74pd2JBXNkbrvUkiu7YWfVXVSEcXa7nAFmxuYrtMhgXXO
+         qlUPqu+Jwz+s4kqadzjThpqgUXaB9acKCHCMgMDcXPu88NFe0IcuDY3KdPwhoPf1XFU/
+         FQMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RlHsWdECQ3tv3fcWIrqXb+HedmBJAx9FZPX5VGtHlJU=;
+        b=4d7vV4pxu9SHRQzppCud5cGf1TMx8M3z3dE+/CYkbCsV6+WQIRfE6AIjSCFYb2Ty1M
+         HPZSdM9whmRBdip+QZdKArXai8lcSOyxUPEoMlIBvBk39k8hv0ZBZOG8LpWWntB+dDDH
+         cmdDts6wXaeRxRQ2+aGf8QTyL11KuMr+LJlALPEnFIvzQNTWEp3WdCbxHgXzYFBYlpY/
+         D28PLxwooTePdLtYYELSrhnCOk86FjqXzjRZ8BsKqKGFrdj6Gz3bC3B8+Ux/Ebe5Dm5e
+         OX4rLAv4T/JqX2Eem2OceJGtyEplulHs0BsCSypgld88zMKDt+V9jGDCUkyLfw8htY1u
+         bwbw==
+X-Gm-Message-State: ANoB5pnbZF31VkbIg241ILeGO1VL9TgMbgdsMMQp16rfmUEg3PU7MeoR
+        Y4lff1Vn+B0k5J7RHANNGsXTew==
+X-Google-Smtp-Source: AA0mqf62/n8/c0Lbyw7i6gXxgtwSe5PEh/+r46m4qbOmL7CL/xHAVdWJn3E930xksqUa6ca85sInxA==
+X-Received: by 2002:a05:6602:4188:b0:6d2:da5f:304c with SMTP id bx8-20020a056602418800b006d2da5f304cmr1258091iob.17.1668181132383;
+        Fri, 11 Nov 2022 07:38:52 -0800 (PST)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id co17-20020a0566383e1100b00349deda465asm893160jab.39.2022.11.11.07.38.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 07:38:51 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     Hugh Dickins <hughd@google.com>, Keith Busch <kbusch@kernel.org>,
+        Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Liu Song <liusong@linux.alibaba.com>
+In-Reply-To: <20221105231055.25953-1-krisman@suse.de>
+References: <20221105231055.25953-1-krisman@suse.de>
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up queued tags
+Message-Id: <166818113152.9209.17718783188573289588.b4-ty@kernel.dk>
+Date:   Fri, 11 Nov 2022 08:38:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111105438.26c477ae@aktux>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-11, Andreas Kemnade wrote:
-> Hi Marco,
+On Sat, 5 Nov 2022 19:10:55 -0400, Gabriel Krisman Bertazi wrote:
+> sbitmap suffers from code complexity, as demonstrated by recent fixes,
+> and eventual lost wake ups on nested I/O completion.  The later happens,
+> from what I understand, due to the non-atomic nature of the updates to
+> wait_cnt, which needs to be subtracted and eventually reset when equal
+> to zero.  This two step process can eventually miss an update when a
+> nested completion happens to interrupt the CPU in between the wait_cnt
+> updates.  This is very hard to fix, as shown by the recent changes to
+> this code.
 > 
-> On Fri, 11 Nov 2022 10:12:23 +0100
-> Marco Felsch <m.felsch@pengutronix.de> wrote:
-> 
-> > Hi Andreas,
-> > 
-> > On 22-11-09, Andreas Kemnade wrote:
-> > > On Wed, 9 Nov 2022 10:23:50 +0100
-> > > Marco Felsch <m.felsch@pengutronix.de> wrote:
-> > >   
-> > > > Hi Andreas,
-> > > > 
-> > > > On 22-11-08, Andreas Kemnade wrote:  
-> > > > > Add the touchscreen now, since the driver is available.
-> > > > > 
-> > > > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > > > > ---
-> > > > > Changes in v3: no phandles pointing from dtsi to dts    
-> > > > 
-> > > > Thanks for this change...
-> > > >   
-> > > > > Changes in v2: fix pinmux naming
-> > > > > 
-> > > > >  arch/arm/boot/dts/e60k02.dtsi              |  9 ++++++++-
-> > > > >  arch/arm/boot/dts/imx6sl-tolino-shine3.dts | 12 ++++++++++++
-> > > > >  arch/arm/boot/dts/imx6sll-kobo-clarahd.dts | 12 ++++++++++++
-> > > > >  3 files changed, 32 insertions(+), 1 deletion(-)
-> > > > > 
-> > > > > diff --git a/arch/arm/boot/dts/e60k02.dtsi
-> > > > > b/arch/arm/boot/dts/e60k02.dtsi index 935e2359f8df..99091db3ab2a
-> > > > > 100644 --- a/arch/arm/boot/dts/e60k02.dtsi
-> > > > > +++ b/arch/arm/boot/dts/e60k02.dtsi
-> > > > > @@ -104,7 +104,14 @@ &i2c2 {
-> > > > >  	clock-frequency = <100000>;
-> > > > >  	status = "okay";
-> > > > >  
-> > > > > -	/* TODO: CYTTSP5 touch controller at 0x24 */
-> > > > > +	cyttsp5: touchscreen@24 {
-> > > > > +		compatible = "cypress,tt21000";
-> > > > > +		reg = <0x24>;
-> > > > > +		interrupt-parent = <&gpio5>;
-> > > > > +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-> > > > > +		reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-> > > > > +		vdd-supply = <&ldo5_reg>;
-> > > > > +	};    
-> > > > 
-> > > > but we still have a cross-reference to the .dtsi file here. Therefore
-> > > > I said to move the interrupt/reset-gpio into the dts file too. I know
-> > > > this is a kind of a nitpick but I really don't like such
-> > > > cross-references.
-> > > >   
-> > > hmm. &gpio5 references to imx6sl[l].dtsi, not dts, so what is the
-> > > problem here?  
-> > 
-> > Sorry for the missunderstanding, I didn't mean the phandle. I mean the
-> > mux setting which is done in the dts right? I'm just not a fan of
-> > muxing pins in one file an using those 'assumptions' in others. Except
-> > for platforms like the imx8mm-evk which is exactly the same hardware and
-> > only differs in the RAM they used. But you have two different platforms
-> > right?
-> > 
-> Same board, same PCB marking, the only spotted difference is the name on the
-> case and the SoC (which is pin-compatible, so GPIOs will be all the same).
-> 
-> In the case of different hardware platforms I would understand your
-> ruffled feathers.
+> [...]
 
-Okay, if it is the same PCB, you're right. In that case v2 should be
-sufficient. Sorry for the noise, but I didn't not assume that due to the
-complete different the .dts file names.
+Applied, thanks!
 
-Regards,
-  Marco
+[1/1] sbitmap: Use single per-bitmap counting to wake up queued tags
+      commit: 4f8126bb2308066b877859e4b5923ffb54143630
 
-> 
-> Regards,
-> Andreas
-> 
+Best regards,
+-- 
+Jens Axboe
+
+
