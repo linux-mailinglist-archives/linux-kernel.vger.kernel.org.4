@@ -2,77 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22486253CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A318F6253CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233148AbiKKG26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 01:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S233167AbiKKGbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 01:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbiKKG2b (ORCPT
+        with ESMTP id S232989AbiKKGad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 01:28:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56B283B9D;
-        Thu, 10 Nov 2022 22:24:34 -0800 (PST)
+        Fri, 11 Nov 2022 01:30:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376B079D11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 22:26:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 345F8B823E5;
-        Fri, 11 Nov 2022 06:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5470FC433D6;
-        Fri, 11 Nov 2022 06:24:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B32A6B822ED
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 974CCC433C1;
+        Fri, 11 Nov 2022 06:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668147857;
-        bh=pkd1UMY1+PxMpOoIYB08XNTmO7gcxgR+oayIFFqp0eE=;
+        s=korg; t=1668147984;
+        bh=VdXGwJ1MitCF6bo1N2NcBnI+xaeLtAPTr4j2mqTNPZ0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wuMutlAr/0jdY13rBGAh2TLEPAoo+1XsSFmcYgyZZmYPCwPnBDAczgVT/ULWnLQB4
-         GtVwSaV8WnLBQeecqAVjrhuW33xPOOpvstBv91P+bWXfwawRiwdn0rFD4tUKwLFc/S
-         sdmbqIq9QgnyqFOkVb7yjmD9qi7hXuQy5EtkPzJk=
-Date:   Fri, 11 Nov 2022 07:24:13 +0100
+        b=JBTza4lX/4Dt1TZ//ZHSiwlY4+UiTiQEssI8QnyNnyoofhKo7/PCm0q+zjyHfvk3c
+         E5VMr54D3Oh1LtkYzMJ5Ur852y+y3e+1BB6IS6+GLxHxY6koKyPA3ouqWvjEgHbX0a
+         IjT/BWyWjgnfNN4qZEfD93FjbB4EpYh10vkRN4DA=
+Date:   Fri, 11 Nov 2022 07:26:19 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 13/21] gunyah: vm_mgr: Introduce basic VM Manager
-Message-ID: <Y23qjcMmerVuKFdj@kroah.com>
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-14-quic_eberman@quicinc.com>
- <Y2H8oh7AvYDiMqKs@kroah.com>
- <722b05a1-4bf5-0837-baea-b1d0a9cc1e43@quicinc.com>
- <Y2MKWOihjAPxfl6v@kroah.com>
- <96238455-73b6-bead-0fdb-55ca68e5bf0b@quicinc.com>
- <9dd597d9-a3f3-48f2-8416-b5b097a230d5@app.fastmail.com>
- <980db147-794e-ecd9-9626-64ff81109bab@quicinc.com>
- <95a9f253-984a-14e0-7e01-f168452576c4@quicinc.com>
- <543d95f8-be31-7553-4700-5dc04872e8ea@quicinc.com>
+Subject: Re: [PATCH] kobject: hide illegible sysfs warning of kobject_del()
+Message-ID: <Y23rC0N1cL2LQpyF@kroah.com>
+References: <20221111065807.3278713-1-liushixin2@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <543d95f8-be31-7553-4700-5dc04872e8ea@quicinc.com>
+In-Reply-To: <20221111065807.3278713-1-liushixin2@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -82,20 +50,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 04:03:10PM -0800, Elliot Berman wrote:
-> > Agree, tools can be updated and that is the easy part as we grow the s/w
-> > stack around Gunyah in userspace, like we already do w/ CrosVM (Virtual
-> > Machine Manager) and QEMU will be next followed by rust-vmm. All of them
-> > can be done without Gunyah ioctls relying anything on the KVM ioctls.
-> > Elliot has also explained very well that we don't to go to KVM
-> > maintainers for any of our additions and we also don't want them to come
-> > to us, since there is no interoperability testing. It is best that both
-> > Hypervisors and their Linux interfaces evolve independently.
+On Fri, Nov 11, 2022 at 02:58:07PM +0800, Liu Shixin wrote:
+> Some consumers do not care whether kobject_add() succeed or failed such as
+> irqdesc. They call kobject_del() all the time even if kobject_add() failed.
+> Then kernel will report some illegible sysfs warning like this:
 > 
-> Are above explanations reasonable to not re-use KVM ioctl numbers?
+>  kernfs: can not remove 'actions', no directory
+>  WARNING: CPU: 0 PID: 277 at fs/kernfs/dir.c:1615 kernfs_remove_by_name_ns+0xd5/0xe0
 
-Try getting close at least, where possible please.  As your ioctl
-numbers didn't even start at 0, it's a bit odd...
+Why not fix the caller here?  Is that somehow not possible?
 
 thanks,
 
