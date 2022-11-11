@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B02626069
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBFA62606F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiKKRbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S233962AbiKKRck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:32:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiKKRbd (ORCPT
+        with ESMTP id S233495AbiKKRch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:31:33 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C049D1A82A;
-        Fri, 11 Nov 2022 09:31:32 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-367b8adf788so50106437b3.2;
-        Fri, 11 Nov 2022 09:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=prpDIZ3BYZ/cNF9JhJEHd9uz60rT0/OfMxiYhClGJnQ=;
-        b=Wzmzth18FIxXSWPYBPIUIIkwKhGTOTObxE85JRHaooraLOoUdTB3Lv4DVZrZC/6Tmm
-         E4yj68jnmJSqdA6uDC4woQONc4W8sqmM0Vv71nFr2DN84w7hOUNJqw2R0LK14fko8Ui7
-         UlhkULZqxMSsumrcu1IF29cNq8I42ZX4KFR9p1C2j750pr4rcnXIU/MonhlAH2avgY1p
-         RgYMe4pdqxa36UndBydIGE55t3nRAaPNBt+WVrz81XI0L45VFAr5YtCmS8RCGQwcSWtV
-         9DxrTEIAQLIPUk50dZTIgJWoPg0XK/k91bwxGNGQ4jUgSiNdNb80JkdbOHM8XAWTTsaP
-         tUSw==
+        Fri, 11 Nov 2022 12:32:37 -0500
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EADB1A815;
+        Fri, 11 Nov 2022 09:32:36 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so742090ooi.5;
+        Fri, 11 Nov 2022 09:32:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=prpDIZ3BYZ/cNF9JhJEHd9uz60rT0/OfMxiYhClGJnQ=;
-        b=oW+CiLgAXmm3Oy0Xw5SFapoBpAwQc87Gwj+4pROKyqsFDEvkduA2JkvbkqfUywu0oR
-         tQoLae+6YXOcF7tvv8IOmAZloEPLMgltIf7iErwZJyurZiX9qeYoLj3thAKP88FbzSOL
-         oVUmz1JhoEHTDUXpkv/ddWp4JvAeCPym+KtgwzTgE/g37l0JFItMSbQgWI8zz9aFi7Or
-         UjJS3jgbl1RWMXdmMJ1PdiUHwU1KaeP11J3efJKJ2FzDn553+m8qQGpLRtf7szEdvLC3
-         LoG2XxG4Xk+1EdpL9GTHWtgj66yadOayP/MBYWuo8aq3hDHSmc9UycftPatbtnwCyZme
-         lIKQ==
-X-Gm-Message-State: ANoB5pmhJuno+2H7rI6UB+TpbVJCiSQmGfnmXPrbmQXdfo5AoNrYNLPR
-        9gtgyje9ZA+JGkSt7POiBNEGspEbW6NRnAd7th4=
-X-Google-Smtp-Source: AA0mqf4SJPcsFe//JwHzczhAEgtzUngvwNQkjyHOuLKRqKSMivaREWk3rlCM+zC0jC8KQdeC9n6CsjLYsGz43FHF/SE=
-X-Received: by 2002:a81:7912:0:b0:342:4d19:c7b with SMTP id
- u18-20020a817912000000b003424d190c7bmr2894140ywc.67.1668187891982; Fri, 11
- Nov 2022 09:31:31 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=po5PnrsJOrtibdnuIvtZD7NvBSBhlNi4tJ/oxCe6Y54=;
+        b=jmxR6IKM9dqcj9G9TrskMylPFv5RloIgAzl+OCCYtSun8kgucvQcU/F6q3xVBrj3KP
+         GXcYqaeFZYDsBNDtlXZYbSBefSOJdMtZllCtlriashRiT8MhgdYhhJgkmnwj1d+CooKb
+         FELCWilELDlAopGB4emihseZmOmhNL3HojMk0w90b7+BgT359zBiRi01pxLhIGutjCgS
+         BTFFlOOQiDcPwYeMeEr/pvbRDZzGgPkXpWic7X01zoKwHFAO0NENJdMcF/G9IjAUai2Y
+         v5QcJJetEle+LGgric1evzJsPqKe34zgzNXDGWRqsqjFVY3JfUxkwGKsva0A6GTEnSRl
+         A6Jg==
+X-Gm-Message-State: ANoB5pmcE1RgqcE7b2Ic3DueyyuLoiNloxnZSPm3UVWWBP8DdQmX1qDu
+        SkCQKZ4ergOH3EE5XmxLaw==
+X-Google-Smtp-Source: AA0mqf4Z94tBfrdLD8Dbj2VxNYqWTWzdRAPZ/PPQAwiuJKHfq3mYjcMCQnCCnCuCCJIqaSvKoTgpGg==
+X-Received: by 2002:a4a:a78b:0:b0:498:260c:d780 with SMTP id l11-20020a4aa78b000000b00498260cd780mr1380739oom.27.1668187955744;
+        Fri, 11 Nov 2022 09:32:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i2-20020a4ac502000000b00480816a5b8csm999120ooq.18.2022.11.11.09.32.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 09:32:35 -0800 (PST)
+Received: (nullmailer pid 3566720 invoked by uid 1000);
+        Fri, 11 Nov 2022 17:32:36 -0000
+Date:   Fri, 11 Nov 2022 11:32:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Wayne Chang <waynec@nvidia.com>, mathias.nyman@intel.com,
+        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-tegra@vger.kernel.org,
+        singhanc@nvidia.com, balbi@kernel.org,
+        linux-phy@lists.infradead.org, vkoul@kernel.org,
+        thierry.reding@gmail.com, ajayg@nvidia.com,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        treding@nvidia.com, jckuo@nvidia.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 02/13] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
+Message-ID: <20221111173236.GA3561612-robh@kernel.org>
+References: <20221111101509.999589-1-waynec@nvidia.com>
+ <20221111101509.999589-3-waynec@nvidia.com>
+ <166817308790.3060162.14990231448404857914.robh@kernel.org>
+ <5782d31a-9a0c-33da-ff84-20cae29f977e@nvidia.com>
 MIME-Version: 1.0
-References: <20221110164152.26136-1-ojeda@kernel.org> <20221110164152.26136-5-ojeda@kernel.org>
- <6C48433C-2B12-4D35-A93E-72CC1B41A8C4@kloenk.dev>
-In-Reply-To: <6C48433C-2B12-4D35-A93E-72CC1B41A8C4@kloenk.dev>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 11 Nov 2022 18:31:21 +0100
-Message-ID: <CANiq72kaqNroTms5fBW9uhPdRVrYkVfMUa+_dqPFVVVBUBeUew@mail.gmail.com>
-Subject: Re: [PATCH v1 04/28] rust: samples: add `rust_print` example
-To:     Finn Behrens <me@kloenk.dev>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5782d31a-9a0c-33da-ff84-20cae29f977e@nvidia.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,14 +74,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 10:40 AM Finn Behrens <me@kloenk.dev> wrote:
->
-> Could be nice, to also have an int or similar as arg, but as internal the same macro is used as above, not really of interest.
+On Fri, Nov 11, 2022 at 02:38:21PM +0000, Jon Hunter wrote:
+> 
+> On 11/11/2022 13:30, Rob Herring wrote:
+> > 
+> > On Fri, 11 Nov 2022 18:14:58 +0800, Wayne Chang wrote:
+> > > Add device-tree binding documentation for the XUSB host controller present
+> > > on Tegra234 SoC. This controller supports the USB 3.1 specification.
+> > > 
+> > > Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> > > ---
+> > > V1 -> V2: new change for adding nvidia,tegra234-xusb.yaml
+> > >   .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 ++++++++++++++++++
+> > >   1 file changed, 159 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+> > > 
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.27-28 syntax error
+> > FATAL ERROR: Unable to parse input tree
+> > make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile:1492: dt_binding_check] Error 2
+> 
+> This compiles fine on top of -next. We are just missing the change that
+> populates the required definitions.
 
-Yeah, there are some integers above, but we can add more examples
-later on, e.g. with custom kernel types too.
+Where exactly is that mentioned in the commit msg?
 
-Thanks for the reviews in several patches, by the way!
+No maintainer can take patches which apply against linux-next, so not a 
+good dependency to mention either.
 
-Cheers,
-Miguel
+Rob
