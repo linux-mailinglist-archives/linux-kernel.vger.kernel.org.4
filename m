@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C648625838
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107CC625839
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbiKKKZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:25:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S233600AbiKKKZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:25:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiKKKZP (ORCPT
+        with ESMTP id S233643AbiKKKZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:25:15 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE47167EE;
-        Fri, 11 Nov 2022 02:25:11 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AB6bIQU010553;
-        Fri, 11 Nov 2022 10:25:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=D4ev74rNh6aBdUhbqjz831JBd2WeZ4da59FaYDrjdmE=;
- b=MnTz1FofVYu5eKcLGWS3ao4wkSeCGvrnjOZHCSkggUc9QeRRr3XtlGMMlvvjSMoqmjw7
- 838VJiNcGbK4b4SQsAhc6t++gun+fAoCo33hHlmC/ZXr5ZDg3Sg+3nwLuorNeAQgT5TN
- oBYT7g9kU4G/cRrw9rBlvWF2n9ZxrO5mAI5E3dFuCjO9iwrW+7+Ejhv+NNyguotHN/Pa
- bt3bqAMA2XLFhbM/HvL5CRpg2DRW92WYof3+N01/RNirBcc819T9hIHaLTw2y3sBNQg0
- FwpxwCcf4xtxWHdIA+uIYx+Bza9XCVmfY2XayghNY45KPv1wDFQ57thbM4dVoPxzeMvN 7A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksh9q0skx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 10:25:05 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABAP4gU006687
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 10:25:04 GMT
-Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
- 2022 02:25:00 -0800
-Message-ID: <d7451462-b847-5975-e3b6-b27496162cca@quicinc.com>
-Date:   Fri, 11 Nov 2022 15:54:57 +0530
+        Fri, 11 Nov 2022 05:25:50 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA2CBA7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:25:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 79B291FB4A;
+        Fri, 11 Nov 2022 10:25:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668162347; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OKlbaNjH9a/ib4nLB2iq4s9RI+vzvvZHsbyVJHY64Og=;
+        b=yNVg9j85Xiu55gGuCY08PXpWvE1cwnsaxvx88MqXrd+UAH3CSoTHudHee9dZdafbOALjYM
+        zF6tjmdQrQuEioF0/dfRrrcdp4lGQhry3mzct4ZE8KwSxMdE+FP8nKcc0vvha8JhHTKOnZ
+        2pfbUg+0/yft70tdVCTfIhI8d8iCBJ0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668162347;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OKlbaNjH9a/ib4nLB2iq4s9RI+vzvvZHsbyVJHY64Og=;
+        b=VgtDqXBAJsGsn1nOjsN3HfwJjVD3DnjswsaGwAoOls+kPLL1DsFaobg4RxvM8HKK8tcHDy
+        t/dKTJuLnlbvYEDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3C08913357;
+        Fri, 11 Nov 2022 10:25:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id npH1DSsjbmPSAgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 11 Nov 2022 10:25:47 +0000
+Message-ID: <5a902810-2e72-9021-e189-a1cd2aa6f77f@suse.cz>
+Date:   Fri, 11 Nov 2022 11:25:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 03/10] interconnect: qcom: osm-l3: Add per-core EPSS L3
- support
+ Thunderbird/102.4.1
+Subject: Re: Deprecating and removing SLOB
 Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        "Johan Hovold" <johan+linaro@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
- <20221111032515.3460-4-quic_bjorande@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20221111032515.3460-4-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Conor.Dooley@microchip.com
+Cc:     cl@linux.com, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        penberg@kernel.org, 42.hyeyoo@gmail.com, willy@infradead.org,
+        roman.gushchin@linux.dev, pasha.tatashin@soleen.com,
+        torvalds@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        rkovhaev@gmail.com, akpm@linux-foundation.org
+References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz>
+ <CA+CK2bD-uVGJ0=9uc7Lt5zwY+2PM2RTcfOhxEd65S7TvTrJULA@mail.gmail.com>
+ <efa623fb-686f-072e-df0d-9f5727ae1b1f@microchip.com>
+ <a0201035-8cd3-f8bc-7db3-4d011cd2c35c@opensource.wdc.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <a0201035-8cd3-f8bc-7db3-4d011cd2c35c@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fZi2uaXCqSTbUajrQbtK2MsxoysJ46dH
-X-Proofpoint-ORIG-GUID: fZi2uaXCqSTbUajrQbtK2MsxoysJ46dH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_05,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211110069
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,83 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/10/22 00:00, Damien Le Moal wrote:
+> On 11/10/22 02:57, Conor.Dooley@microchip.com wrote:
+>> +CC Damien
+>> 
+>>> There are some devices with configs where SLOB is enabled by default.
+>>> Perhaps, the owners/maintainers of those devices/configs should be
+>>> included into this thread:
+>>>
+>>> tatashin@soleen:~/x/linux$ git grep SLOB=y
+>> 
+>>> arch/riscv/configs/nommu_k210_defconfig:CONFIG_SLOB=y
+>>> arch/riscv/configs/nommu_k210_sdcard_defconfig:CONFIG_SLOB=y
+>>> arch/riscv/configs/nommu_virt_defconfig:CONFIG_SLOB=y
+>> 
+>> Saw you were not added to the CC Damien & I know you don't want your
+>> baby broken!
+> 
+> :)
+> 
+> I set SLOB=y for the K210 as the config help mentions it is a bit more
+> efficient in low memory cases. I did run a few times with SLAB and it
+> was OK, so removing slob should not be a problem. Can check again.
 
-
-On 11/11/22 08:55, Bjorn Andersson wrote:
-> The EPSS instance in e.g. SM8350 and SC8280XP has per-core L3 voting
-> enabled. In this configuration, the "shared" vote is done using the
-> REG_L3_VOTE register instead of PERF_STATE.
-> 
-> Rename epss_l3 to clarify that it's affecting the PERF_STATE register
-> and add a new L3_VOTE description. Given platform lineage it's assumed
-> that the L3_VOTE-based case will be the predominant one, so use this for
-> a new generic qcom,epss-l3 compatible.
-> 
-> While adding the EPSS generic, also add qcom,osm-l3.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Tested-by: Steev Klimaszewski <steev@kali.org>
-
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
-
-> ---
-> 
-> Changes since v1:
-> - None
-> 
->   drivers/interconnect/qcom/osm-l3.c | 17 ++++++++++++++---
->   1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
-> index 7d6844253241..469be732a00b 100644
-> --- a/drivers/interconnect/qcom/osm-l3.c
-> +++ b/drivers/interconnect/qcom/osm-l3.c
-> @@ -34,6 +34,7 @@
->   
->   /* EPSS Register offsets */
->   #define EPSS_LUT_ROW_SIZE		4
-> +#define EPSS_REG_L3_VOTE		0x90
->   #define EPSS_REG_FREQ_LUT		0x100
->   #define EPSS_REG_PERF_STATE		0x320
->   
-> @@ -112,7 +113,7 @@ static const struct qcom_osm_l3_desc osm_l3 = {
->   	.reg_perf_state = OSM_REG_PERF_STATE,
->   };
->   
-> -static const struct qcom_osm_l3_desc epss_l3 = {
-> +static const struct qcom_osm_l3_desc epss_l3_perf_state = {
->   	.nodes = epss_l3_nodes,
->   	.num_nodes = ARRAY_SIZE(epss_l3_nodes),
->   	.lut_row_size = EPSS_LUT_ROW_SIZE,
-> @@ -120,6 +121,14 @@ static const struct qcom_osm_l3_desc epss_l3 = {
->   	.reg_perf_state = EPSS_REG_PERF_STATE,
->   };
->   
-> +static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
-> +	.nodes = epss_l3_nodes,
-> +	.num_nodes = ARRAY_SIZE(epss_l3_nodes),
-> +	.lut_row_size = EPSS_LUT_ROW_SIZE,
-> +	.reg_freq_lut = EPSS_REG_FREQ_LUT,
-> +	.reg_perf_state = EPSS_REG_L3_VOTE,
-> +};
-> +
->   static int qcom_osm_l3_set(struct icc_node *src, struct icc_node *dst)
->   {
->   	struct qcom_osm_l3_icc_provider *qp;
-> @@ -285,12 +294,14 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->   }
->   
->   static const struct of_device_id osm_l3_of_match[] = {
-> +	{ .compatible = "qcom,epss-l3", .data = &epss_l3_l3_vote },
-> +	{ .compatible = "qcom,osm-l3", .data = &osm_l3 },
->   	{ .compatible = "qcom,sc7180-osm-l3", .data = &osm_l3 },
-> -	{ .compatible = "qcom,sc7280-epss-l3", .data = &epss_l3 },
-> +	{ .compatible = "qcom,sc7280-epss-l3", .data = &epss_l3_perf_state },
->   	{ .compatible = "qcom,sdm845-osm-l3", .data = &osm_l3 },
->   	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
->   	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
-> -	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3 },
-> +	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, osm_l3_of_match);
+Thanks, but please check with SLUB, not SLAB, if possible.
+Disable SLUB_CPU_PARTIAL (default y on SMP) if you want to minimize the
+memory usage.
