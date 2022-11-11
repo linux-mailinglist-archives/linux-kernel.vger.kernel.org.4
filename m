@@ -2,234 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3488662592D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AF8625935
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiKKLQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S232943AbiKKLTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbiKKLQi (ORCPT
+        with ESMTP id S233384AbiKKLS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:16:38 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8DE67120;
-        Fri, 11 Nov 2022 03:16:37 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AB6onVX025335;
-        Fri, 11 Nov 2022 05:16:13 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=icIp/NpjApk70+qmEkD18al3Vm2GjOXV0BKAdaUyF0M=;
- b=Xu/i756ZE7Xfo/+Q8ysxJwlb1ILquXAIr6zxmaSmhu4sLG2w+54G/YsN14FZgujwkWrb
- 6z6PUrAqJxL1Y9uH9dvjPykGhbuBg5qa3le/i0G9ZvwLXYy2iQaUnETTuw+kaXKLmaxr
- jM2pNB9WvRRM5ohZP5K2s4B1hLNK0ssbbzz3QAdoelqEaCkpCRX70XktZyITjwx3LJMx
- bVjY+vt6WC9Uxkk8fffeMsPUj7/69VSRUGGZx/Y9/mYMULSGiEEEBUqFTReqts5w48jt
- LOgnVoVtOY5BCMKndHjDbah83crFzfqQzvUAlHe0YsZgnXBdlJqNgfgnHySDUBSyih3b Og== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3knm8pgdud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 05:16:13 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.15; Fri, 11 Nov
- 2022 05:16:11 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.15 via Frontend Transport; Fri, 11 Nov 2022 05:16:11 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9CEAC46B;
-        Fri, 11 Nov 2022 11:16:11 +0000 (UTC)
-Date:   Fri, 11 Nov 2022 11:16:11 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Mark Brown <broonie@kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
-        <tglx@linutronix.de>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic
- CS48L31/32/33 codecs
-Message-ID: <20221111111611.GH10437@ediswmail.ad.cirrus.com>
-References: <20221109165331.29332-10-rf@opensource.cirrus.com>
- <87mt8zutib.wl-maz@kernel.org>
- <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
- <86pmdvow5y.wl-maz@kernel.org>
- <ef60cbdb-f506-7bd6-a8e1-c92b6963a0f4@opensource.cirrus.com>
- <86k042q1uc.wl-maz@kernel.org>
- <05ae0e20-b472-f812-1afc-ef8c2a97cdeb@opensource.cirrus.com>
- <87iljmve87.wl-maz@kernel.org>
- <Y21gwGDb5CFft0kp@sirena.org.uk>
- <87h6z5vs39.wl-maz@kernel.org>
+        Fri, 11 Nov 2022 06:18:58 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51D865858
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:18:56 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id be26-20020a056602379a00b006dd80a0ba1cso2928311iob.11
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:18:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ydVooePxmDrHayJC7VSqE+6bvJCgNaAZis4ZNWJBQpI=;
+        b=Mu3ucNHdpAoyF2McZFgQj72TvBeGxJG//rGuLGfQi/9G8UEaXp/W5LltiEzUm+U3Bo
+         py6L2dJXVVe1DJikmmxhZ24T0zrB/1gia5CrK57qCDlJ9LATuOFKbYDkV1k7t3s8K1Sd
+         E8nexoEXGe1lHH+0S8fHCQYfk9NB/4zcefHiiOI1HLffQeYmXGnvzCdv06CW91DMaiEN
+         4VeCIRrN9Uv8zwlDVzyT5evZoSK8uqAa+aLInw8FkdYlxOcVLRXmkBoW7CiGgGy2FM7+
+         VeR9/C82mrbYP5J6NV2w9OffImorH8mtEGDPmrT7kw1ecU7m8tHVZpzJZQcX4vocc/G4
+         7AjQ==
+X-Gm-Message-State: ANoB5pmzq0y5+hl9690Pw13fSEToYimLdVI5DAriuJlP6xUzsn6QewLB
+        73JKTt3Ak66J2KKDg4GhJzrtIWQr85qEAw/m1qq3XQU42LTS
+X-Google-Smtp-Source: AA0mqf7OzarPms6yOizs00yfd8/BLnWlraeFLHqq5NrrCa+o9KN2bB3b/Jv0GPVBWwYvPrkNaOqwNEmy0qpKCiOz4sOCKpk5v1Ux
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <87h6z5vs39.wl-maz@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: WegBKVeC5O_swQWdvMTrub_2WzcCjjI3
-X-Proofpoint-GUID: WegBKVeC5O_swQWdvMTrub_2WzcCjjI3
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:8792:0:b0:363:bb1f:7a03 with SMTP id
+ t18-20020a028792000000b00363bb1f7a03mr540230jai.16.1668165536040; Fri, 11 Nov
+ 2022 03:18:56 -0800 (PST)
+Date:   Fri, 11 Nov 2022 03:18:56 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000033d0f205ed300e3b@google.com>
+Subject: [syzbot] inconsistent lock state in trace_hardirqs_on
+From:   syzbot <syzbot+6d6c13e35721fb4393fd@syzkaller.appspotmail.com>
+To:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
+        gustavo@padovan.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        sumit.semwal@linaro.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 08:00:10AM +0000, Marc Zyngier wrote:
-> On Thu, 10 Nov 2022 20:36:16 +0000,
-> Mark Brown <broonie@kernel.org> wrote:
-> > On Thu, Nov 10, 2022 at 06:47:20PM +0000, Marc Zyngier wrote:
+Hello,
 
-Apologies this ended up getting quite long. Cirrus has no trouble
-changing how the IRQ driver works I just think we are struggling a
-little to understand exactly what parts of the code need reworking
-in what way, we appreciate your patience in helping us through.
+syzbot found the following issue on:
 
-> > > If you were implementing an actual interrupt controller driver, I'd
-> > > take it without any question. The fact that this code mandates
-> > > the use of its own homegrown API rules it out.
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=14c82f39880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=6d6c13e35721fb4393fd
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-I think this is part of the crossed wires here, the code does not
-mandate the use of its own home grown API, although it does
-provide one. For example our CODECs often provide GPIO/IRQ
-services for other devices such as say speaker amps attached
-along side them.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Here is a DT example from one of my dev systems with GPIO1 on
-cs47l35 (a madera CODEC) handling the IRQ for cs35l35 (a speaker
-amp):
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
 
-cs35l35_left: cs35l35@40 {
-	compatible = "cirrus,cs35l35";
-	reg = <0x40>;
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6d6c13e35721fb4393fd@syzkaller.appspotmail.com
 
-	#sound-dai-cells = <1>;
+================================
+WARNING: inconsistent lock state
+6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
+--------------------------------
+inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+syz-executor.4/21937 [HC0[0]:SC0[0]:HE0:SE1] takes:
+ffff80000d6384c8 (sync_timeline_list_lock){?...}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:374 [inline]
+ffff80000d6384c8 (sync_timeline_list_lock){?...}-{2:2}, at: sync_info_debugfs_show+0x54/0x2dc drivers/dma-buf/sync_debug.c:147
+{IN-HARDIRQ-W} state was registered at:
+  lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
+  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+  _raw_spin_lock_irqsave+0x6c/0xb4 kernel/locking/spinlock.c:162
+  sync_timeline_debug_remove+0x24/0x80 drivers/dma-buf/sync_debug.c:31
+  sync_timeline_free drivers/dma-buf/sw_sync.c:104 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  sync_timeline_put drivers/dma-buf/sw_sync.c:116 [inline]
+  timeline_fence_release+0xe0/0x15c drivers/dma-buf/sw_sync.c:144
+  dma_fence_release+0x70/0x11c drivers/dma-buf/dma-fence.c:549
+  kref_put include/linux/kref.h:65 [inline]
+  dma_fence_put include/linux/dma-fence.h:276 [inline]
+  dma_fence_array_release+0xac/0x154 drivers/dma-buf/dma-fence-array.c:120
+  dma_fence_release+0x70/0x11c drivers/dma-buf/dma-fence.c:549
+  kref_put include/linux/kref.h:65 [inline]
+  dma_fence_put include/linux/dma-fence.h:276 [inline]
+  irq_dma_fence_array_work+0x84/0x11c drivers/dma-buf/dma-fence-array.c:52
+  irq_work_single kernel/irq_work.c:211 [inline]
+  irq_work_run_list kernel/irq_work.c:242 [inline]
+  irq_work_run+0xc4/0x29c kernel/irq_work.c:251
+  do_handle_IPI arch/arm64/kernel/smp.c:899 [inline]
+  ipi_handler+0x120/0x1a8 arch/arm64/kernel/smp.c:922
+  handle_percpu_devid_irq+0xb0/0x1c8 kernel/irq/chip.c:930
+  generic_handle_irq_desc include/linux/irqdesc.h:158 [inline]
+  handle_irq_desc kernel/irq/irqdesc.c:648 [inline]
+  generic_handle_domain_irq+0x4c/0x6c kernel/irq/irqdesc.c:704
+  __gic_handle_irq drivers/irqchip/irq-gic-v3.c:695 [inline]
+  __gic_handle_irq_from_irqson drivers/irqchip/irq-gic-v3.c:746 [inline]
+  gic_handle_irq+0x78/0x1b4 drivers/irqchip/irq-gic-v3.c:790
+  call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:889
+  do_interrupt_handler+0x7c/0xc0 arch/arm64/kernel/entry-common.c:274
+  __el1_irq arch/arm64/kernel/entry-common.c:470 [inline]
+  el1_interrupt+0x34/0x68 arch/arm64/kernel/entry-common.c:485
+  el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:490
+  el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
+  arch_local_irq_enable arch/arm64/include/asm/irqflags.h:35 [inline]
+  __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
+  _raw_spin_unlock_irq+0x44/0x70 kernel/locking/spinlock.c:202
+  spin_unlock_irq include/linux/spinlock.h:399 [inline]
+  sw_sync_debugfs_release+0xa8/0x158 drivers/dma-buf/sw_sync.c:321
+  __fput+0x198/0x3dc fs/file_table.c:320
+  ____fput+0x20/0x30 fs/file_table.c:353
+  task_work_run+0xc4/0x14c kernel/task_work.c:177
+  exit_task_work include/linux/task_work.h:38 [inline]
+  do_exit+0x26c/0xbe0 kernel/exit.c:795
+  __arm64_sys_exit_group+0x0/0x18 kernel/exit.c:925
+  __do_sys_exit_group kernel/exit.c:936 [inline]
+  __se_sys_exit_group kernel/exit.c:934 [inline]
+  __wake_up_parent+0x0/0x40 kernel/exit.c:934
+  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+  invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+  el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+  do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+  el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+  el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+irq event stamp: 872
+hardirqs last  enabled at (871): [<ffff8000085633bc>] mod_objcg_state+0x19c/0x204 mm/memcontrol.c:3158
+hardirqs last disabled at (872): [<ffff80000bfc8834>] __raw_spin_lock_irq include/linux/spinlock_api_smp.h:117 [inline]
+hardirqs last disabled at (872): [<ffff80000bfc8834>] _raw_spin_lock_irq+0x34/0x9c kernel/locking/spinlock.c:170
+softirqs last  enabled at (856): [<ffff80000801c33c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (854): [<ffff80000801c308>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
 
-	reset-gpios = <&axi_gpio0 0 0>;
+other info that might help us debug this:
+ Possible unsafe locking scenario:
 
-	interrupt-parent = <&cs47l35>;
-	interrupts = <57 0>;
-};
+       CPU0
+       ----
+  lock(sync_timeline_list_lock);
+  <Interrupt>
+    lock(sync_timeline_list_lock);
 
-No special code is required in the cs35l35 driver (it is fully
-upstreamed sound/soc/codecs/cs35l35.c). So if we are missing some
-actual interrupt controller API we need to be supporting that we
-are not please point us at it and we will happily add support?
+ *** DEADLOCK ***
 
-So I think your objections are mostly regarding the
-cs48l32_request_irq function (and friends) that are being
-used by the other parts of the MFD.  I don't think it would be super
-hard to remove these functions and move the IRQ into DT if that is
-the preferred way.
+3 locks held by syz-executor.4/21937:
+ #0: ffff000128868ee8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x12c/0x154 fs/file.c:1036
+ #1: ffff000126e66d50 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0x5c/0x5e0 fs/seq_file.c:182
+ #2: ffff80000d6384c8 (sync_timeline_list_lock){?...}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:374 [inline]
+ #2: ffff80000d6384c8 (sync_timeline_list_lock){?...}-{2:2}, at: sync_info_debugfs_show+0x54/0x2dc drivers/dma-buf/sync_debug.c:147
 
-> > ACPI gets to be a lot of fun here, it's just not idiomatic to describe
-> > the internals of these devices in firmware there and a lot of the
-> > systems shipping this stuff are targeted at other OSs and system
-> > integrators are therefore not in the least worried about Linux
-> > preferences.
+stack backtrace:
+CPU: 0 PID: 21937 Comm: syz-executor.4 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_usage_bug+0x39c/0x3cc kernel/locking/lockdep.c:3961
+ mark_lock_irq+0x4a8/0x4b4
+ mark_lock+0x154/0x1b4 kernel/locking/lockdep.c:4632
+ mark_held_locks kernel/locking/lockdep.c:4234 [inline]
+ __trace_hardirqs_on_caller kernel/locking/lockdep.c:4252 [inline]
+ lockdep_hardirqs_on_prepare+0x158/0x2b0 kernel/locking/lockdep.c:4319
+ trace_hardirqs_on+0xc4/0x108 kernel/trace/trace_preemptirq.c:49
+ __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
+ _raw_spin_unlock_irq+0x3c/0x70 kernel/locking/spinlock.c:202
+ spin_unlock_irq include/linux/spinlock.h:399 [inline]
+ sync_print_obj drivers/dma-buf/sync_debug.c:118 [inline]
+ sync_info_debugfs_show+0xd8/0x2dc drivers/dma-buf/sync_debug.c:153
+ seq_read_iter+0x220/0x5e0 fs/seq_file.c:230
+ seq_read+0x98/0xd0 fs/seq_file.c:162
+ vfs_read+0x19c/0x448 fs/read_write.c:468
+ ksys_read+0xb4/0x160 fs/read_write.c:607
+ __do_sys_read fs/read_write.c:617 [inline]
+ __se_sys_read fs/read_write.c:615 [inline]
+ __arm64_sys_read+0x24/0x34 fs/read_write.c:615
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
 
-I would echo Mark's statement that going the way of moving this
-into DT/ACPI will actually likely necessitate the addition of a
-lot of "board file" stuff in the future. If the part gets used in
-any ACPI systems (granted support is not in yet but this is not a
-super unlikely addition in the future for cs48l32) we will need to
-support the laptops containing the part in Linux and the vendors are
-extremely unlikely to put internal CODEC IRQs into the ACPI tables.
 
-But that aside I guess my main question about this approach would
-be what the DT binding would look like for the CODEC. Currently
-our devices use a single DT node for the device. Again pulling a
-Madera example from my dev setup, this is what the DT binding for
-one of our CODECs currently looks vaguely like:
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-cs47l35: cs47l35@1 {
-	compatible = "cirrus,cs47l35";
-	reg = <0x1>;
-
-	spi-max-frequency = <11000000>;
-
-	interrupt-controller;
-	#interrupt-cells = <2>;
-	interrupt-parent = <&gpio0>;
-	interrupts = <56 8>;
-
-	gpio-controller;
-	#gpio-cells = <2>;
-
-	#sound-dai-cells = <1>;
-
-	AVDD-supply = <&lochnagar_vdd1v8>;
-	DBVDD1-supply = <&lochnagar_vdd1v8>;
-	DBVDD2-supply = <&lochnagar_vdd1v8>;
-	CPVDD1-supply = <&lochnagar_vdd1v8>;
-	CPVDD2-supply = <&lochnagar_vddcore>;
-	DCVDD-supply = <&lochnagar_vddcore>;
-	SPKVDD-supply = <&wallvdd>;
-
-	reset-gpios = <&lochnagar_pin 0 0>;
-
-	clocks = <&lochnagar_clk LOCHNAGAR_CDC_MCLK1>, <&lochnagar_clk LOCHNAGAR_CDC_MCLK2>;
-	clock-names = "mclk1", "mclk2";
-
-	pinctrl-names = "default";
-	pinctrl-0 = <&cs47l35_defaults>;
-};
-
-The interrupt-parent points at who our IRQ is connected to, and
-we are an interrupt-controller so people can use our IRQs. I
-think it is not currently supported to have more than a single
-interrupt-parent for a device so with the current binding is it
-actually possible for the device to refer to its own IRQs in DT?
-
-An alternative approach would be to actually represent the MFD in
-device tree, I think this would allow things to work and look
-something like (totally not tested just for discussion):
-
-cs47l35: cs47l35@1 {
-	compatible = "cirrus,cs47l35";
-	reg = <0x1>;
-
-	spi-max-frequency = <11000000>;
-
-	irq: madera-irq {
-		compatible = "cirrus,madera-irq";
-
-		interrupt-controller;
-		#interrupt-cells = <2>;
-		interrupt-parent = <&gpio0>;
-		interrupts = <56 8>;
-	};
-
-	gpio: madera-gpio {
-		compatible = "cirrus,madera-gpio";
-		gpio-controller;
-		#gpio-cells = <2>;
-	};
-
-	sound: madera-sound {
-		compatible = "cirrus,cs47l35-sound";
-
-		interrupt-parent = <&madera-irq>;
-		interrupts = <55 0>, <56 0>;
-		#sound-dai-cells = <1>;
-	};
-};
-
-Historically I believe we have been discouraged (by upstream, not
-from our customers) from explicitly representing the parts of the
-MFD in device tree separately, as it was viewed that this is just
-an external SPI CODEC and one node mapped much more logically to the
-hardware, which is what DT should be describing. However, are you
-saying this would be a preferrable approach from your side?  Or am
-I missing some alternative solution?
-
-Again thank you kindly for you time looking at this.
-
-Thanks,
-Charles
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
