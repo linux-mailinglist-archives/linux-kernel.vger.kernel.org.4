@@ -2,163 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9756257FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE2D625804
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbiKKKRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S233621AbiKKKSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233822AbiKKKQ7 (ORCPT
+        with ESMTP id S233486AbiKKKRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:16:59 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0850D742F5;
-        Fri, 11 Nov 2022 02:16:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V6OCI14v7wX6IcdhfiqBvevRc0vDEpe7C8UhS4Qqhcwd2Jun5xm5l/AKaZifVz+YcIvaSN23OVL86Z1678ttYA4ZrGmCpBafPquzzkpbrZwUeOTXiebYUV/MH+ncjmHAZnbOMdL+jB5B69fP0aOJjOS9PRcGL+q6bj0VWxETWseAv4AF6MgAQ9rtsFBJFXyYRLEtKUNyGFl5EvmlNMgX/lOkaeCCCbpQAN71gZdOb9S24p978A6ykqTlyOsHbR+CpICxyAwQDa07dr/WMeqPmwUj1lkZZSPf3DhQmbszLxB7AJDDnPVAcrmOKo7REUt9W3fkEHOebMqiV8hrL54R0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UJargNSXfW7QRE1/1dEp9jA9DYhmUchTKoXMao3tsQU=;
- b=VK+ZVTmYbXL7ay3aJQeAiUFSTFR/l1JP6/QD0VVpqN9zKnPZpwa0v2PtY5YMfIXHN1nkBt4Y3t8huLSfLKl00+fKmnze6B2zguEhMviwYb4F4eqUZJaIrgSdp7wDYMWBiOxMmxI6drjOq5dUuZ1vcahuMjiQ3aJjbUS8iNkIcGd3xc8Z+7iHohnJ3HpEi5tEL8Vs9yp8JXI3hoswkSNby2Nt/H1f9YYQC0PFbIaUtoJx+d8mzvKo4Yv4twnkjKoMx6BIo+1rH6X5udzY5jZeklWg2EjrO5SGCa0k3tZ0yE/WqMbgJd3euy/nDwHmIbm+Xd13GUZPrlQlS7BTdGbR3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UJargNSXfW7QRE1/1dEp9jA9DYhmUchTKoXMao3tsQU=;
- b=MeRo+KZqOHgUbMPVYjzf2oZp0FtbhzcK5SMM2Q+5k1TsveputBGI5ZjbLUp1GlZJZmzd4R+CTmFJ6oZHXAwRb2Y0ZZHAt333Kaa+9T5NlF/F7RNbuERDz4xvRgG0YLRx7rppbFT6IMxmUSPXjtk02+EWzXlr96z9ypHUUZ7Efm/6tckgVYqkykpHxoB3Ry4TZGWF7GgFupA1PqEDVjmiHB6VTXWmD/8EJsBeBP+tsDcFmiiSnOWU5A+VrwNz9wA9iOcxkMDfDONLoKuobbHc5bZnpw0fDvfjt9GpJ+tbRj1+QKCZhXbLSOr6j+Q6gOFwHZ9XgBYTqEJBPxC8xbW9Wg==
-Received: from MN2PR12CA0011.namprd12.prod.outlook.com (2603:10b6:208:a8::24)
- by BL1PR12MB5125.namprd12.prod.outlook.com (2603:10b6:208:309::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
- 2022 10:16:52 +0000
-Received: from BL02EPF0000EE3E.namprd05.prod.outlook.com
- (2603:10b6:208:a8:cafe::a7) by MN2PR12CA0011.outlook.office365.com
- (2603:10b6:208:a8::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27 via Frontend
- Transport; Fri, 11 Nov 2022 10:16:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF0000EE3E.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.11 via Frontend Transport; Fri, 11 Nov 2022 10:16:51 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Fri, 11 Nov
- 2022 02:16:37 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 11 Nov
- 2022 02:16:37 -0800
-Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
- mail.nvidia.com (10.129.68.7) with Microsoft SMTP Server id 15.2.986.36 via
- Frontend Transport; Fri, 11 Nov 2022 02:16:33 -0800
-From:   Wayne Chang <waynec@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <treding@nvidia.com>,
-        <jonathanh@nvidia.com>, <thierry.reding@gmail.com>,
-        <heikki.krogerus@linux.intel.com>, <ajayg@nvidia.com>,
-        <vkoul@kernel.org>, <p.zabel@pengutronix.de>, <balbi@kernel.org>,
-        <mathias.nyman@intel.com>, <jckuo@nvidia.com>
-CC:     <waynec@nvidia.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <singhanc@nvidia.com>, <linux-i2c@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-tegra@vger.kernel.org>
-Subject: [PATCH v2 13/13] usb: gadget: tegra-xudc: Add Tegra234 support
-Date:   Fri, 11 Nov 2022 18:15:09 +0800
-Message-ID: <20221111101509.999589-14-waynec@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221111101509.999589-1-waynec@nvidia.com>
-References: <20221111101509.999589-1-waynec@nvidia.com>
+        Fri, 11 Nov 2022 05:17:14 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA706829D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:17:12 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id k8so5876820wrh.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:17:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BH/APi1a0PoKAJZknP8AkAonpu9TnXBBnNUq+HUkcwM=;
+        b=4oOscMH7jU6ury8coe6FqLy7zK1XZNinWBvFR7izLUhT8UO+Uf7A34vnnALOX+0uZw
+         6u0BzpFG7Xf65rlpJuAvjMgTNhVx/gSKcxgRlSDN2zH7W+6LI6BnNcuT8FnlleBan74e
+         U+nnWKJgynFDrs5h1v4LHjxM1v+N8pvPWTcuhFJiAYBmZcFqEaaRiyqBxAjt+VLKVj27
+         ymKqo1xHrZ7qEJ3SsTyk8ixNapD9K4j74hbbeGy2nwxMGfxLNJInz1YB3DFYiKEqav4a
+         oeGBzhxJPbF4jd3XpyzDJKvMeI1dC4S63nsd7WzmmwS7/SrtVuS1+i59tvEjxRd8GW0+
+         CSgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BH/APi1a0PoKAJZknP8AkAonpu9TnXBBnNUq+HUkcwM=;
+        b=KOcmMPzno39XZ+jOKyMNawFgYTYBwb4lt5dEm5VeqsiryUFWP78c2aDgTJ1XBTSard
+         NjovQKPCVI2wOUIPP2Rhk5dqFbsVUZxWUz2oBouH9jWfXI6YNmdPtei8Ujj4DU2IZgKn
+         q9Ed7c1SoPq97fI1Vgbx5FYboBIQz1y4buHO+sR0HMAJ/1KHVs6WPEEkJzjfQMAT+nSf
+         Xxoyb+RzPv7amwjPZSdbbqCkrBzt1XQ2kLit8YX57NQRbHbpgtRtmXgbrXbZWcqOVZMa
+         Bw3wuMlUQugenT8WDxzLQRi0c3nmyBH35G6Vgj1BbJ1UZxWJhgNqSunPHSAfxtu65nql
+         9hlA==
+X-Gm-Message-State: ANoB5pkogW1X19/A33+CPv7gjorfYGm78xBcKWd0uLNMaMBxsDP39Kgz
+        lJ+HWINAAFb6o0biHPWpqNir8A==
+X-Google-Smtp-Source: AA0mqf4pSdxpuNsvbAiQ/VPT4Uicb2yIOEyOj0DptBJEnqY46AvxjvE1jv4RoOcak7HL0HGEg3fM1Q==
+X-Received: by 2002:a05:6000:18cc:b0:236:6d79:b312 with SMTP id w12-20020a05600018cc00b002366d79b312mr805921wrq.699.1668161831083;
+        Fri, 11 Nov 2022 02:17:11 -0800 (PST)
+Received: from localhost ([95.148.15.66])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c2ca800b003b4a699ce8esm8500043wmc.6.2022.11.11.02.17.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 02:17:10 -0800 (PST)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <anshuman.khandual@arm.com>, <linux-doc@vger.kernel.org>,
+        <corbet@lwn.net>, <peterz@infradead.org>, <arnd@arndb.de>,
+        <punit.agrawal@bytedance.com>, <linux-kernel@vger.kernel.org>,
+        <darren@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+        <huzhanyuan@oppo.com>, <lipeifeng@oppo.com>,
+        <zhangshiming@oppo.com>, <guojian@oppo.com>, <realmz6@gmail.com>,
+        <linux-mips@vger.kernel.org>, <openrisc@lists.librecores.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <linux-s390@vger.kernel.org>, Barry Song <21cnbao@gmail.com>,
+        <wangkefeng.wang@huawei.com>, <xhao@linux.alibaba.com>,
+        <prime.zeng@hisilicon.com>
+Subject: Re: [External] [PATCH v5 0/2] arm64: support batched/deferred tlb
+ shootdown during page reclamation
+References: <20221028081255.19157-1-yangyicong@huawei.com>
+Date:   Fri, 11 Nov 2022 10:17:09 +0000
+In-Reply-To: <20221028081255.19157-1-yangyicong@huawei.com> (Yicong Yang's
+        message of "Fri, 28 Oct 2022 16:12:53 +0800")
+Message-ID: <87pmdtztga.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3E:EE_|BL1PR12MB5125:EE_
-X-MS-Office365-Filtering-Correlation-Id: c8527019-35b7-4fd4-4b2f-08dac3cdda0c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x2aO9h5yqQF6bx/8L1lHqDc7OMlcJmtF8ffPsFwNjovHToZ55qKlHRFx/2UjniZB5ny4HvOJ4zkwT9E9nURPdHL+SpclwY3LIWlDlPqdwxq2u6WRi307cb/Xkl26O8DRSaUykSbMAplNP1xHsgr7hZ4dhbJ+gADIr9wKVp32k+PwBsgn8fVWoJ2kmnxU7yM5H4wW7xYt424kXiw7lXFD8o/X/SkFy8xzGlolFQjXo/3USiwnUNK62+UNBER1xCgiXjLCILiWJJ5rjebtOgKm816erOvP10Ua0uD4fdxoRW2g8VsDYEKWVlxALQNIg9Y9UO4jEvO1hh+kNMbBoXpOKj/kmpMwBcFOtZfravtQ7BSEBjP/0I+e7V6wbp6bxRJ1LW4XozHMamNwTgaN1Cffg1xu9R97JLiPySel5hPbDRqZs0qGG//2cp+D/kAVzfz7fyoSk4kxlcj6VaMQS+qMoUAn0RCBT0BGCIRb+t7dPhmUvLbBvjNSGo9B1h9uZozSPRtacvIJTYBI+Uy1KLKesbMfUirNdcLCcQ6t5mGhJUBdoPyiKCGI6F9v7O3wiyI/QCZMigOaxPSHl/iq55y4oPd5MWQDUH+QkKnnZJUM5wM2JDQE8UoFcnS5PFWapaMmCnhdLccTBEs1iwsWJKcYGze/PAECZxsM15r7TZmMc564FvkIieJUSVyG/pb69FVubcypV7Zyy2ZB1QbOinBrePRUyk84Wxf/1qIMRwOa8gVKN6njIxdnyALaTZNtsf5I+gat4HKXsfQ7hpv2p8WyH1uKJLTAjmBzGVW36zEk7bU=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(39860400002)(136003)(451199015)(46966006)(40470700004)(36840700001)(26005)(7696005)(2616005)(82310400005)(478600001)(6666004)(40480700001)(921005)(40460700003)(82740400003)(356005)(7636003)(86362001)(83380400001)(336012)(186003)(1076003)(47076005)(426003)(36756003)(36860700001)(8936002)(5660300002)(41300700001)(2906002)(7416002)(316002)(6636002)(54906003)(110136005)(4326008)(70586007)(70206006)(8676002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 10:16:51.8422
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8527019-35b7-4fd4-4b2f-08dac3cdda0c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3E.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5125
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sing-Han Chen <singhanc@nvidia.com>
+Yicong Yang <yangyicong@huawei.com> writes:
 
-This commit adds support for XUSB device mode controller support on
-Tegra234 SoC. This is very similar to the existing Tegra194 XUDC.
+> From: Yicong Yang <yangyicong@hisilicon.com>
+>
+> Though ARM64 has the hardware to do tlb shootdown, the hardware
+> broadcasting is not free.
+> A simplest micro benchmark shows even on snapdragon 888 with only
+> 8 cores, the overhead for ptep_clear_flush is huge even for paging
+> out one page mapped by only one process:
+> 5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+>
+> While pages are mapped by multiple processes or HW has more CPUs,
+> the cost should become even higher due to the bad scalability of
+> tlb shootdown.
+>
+> The same benchmark can result in 16.99% CPU consumption on ARM64
+> server with around 100 cores according to Yicong's test on patch
+> 4/4.
+>
+> This patchset leverages the existing BATCHED_UNMAP_TLB_FLUSH by
+> 1. only send tlbi instructions in the first stage -
+> 	arch_tlbbatch_add_mm()
+> 2. wait for the completion of tlbi by dsb while doing tlbbatch
+> 	sync in arch_tlbbatch_flush()
+> Testing on snapdragon shows the overhead of ptep_clear_flush
+> is removed by the patchset. The micro benchmark becomes 5% faster
+> even for one page mapped by single process on snapdragon 888.
+>
+> With this support we're possible to do more optimization for memory
+> reclamation and migration[*].
 
-Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-Signed-off-by: Wayne Chang <waynec@nvidia.com>
----
-V1 -> V2:Nothing has changed
- drivers/usb/gadget/udc/tegra-xudc.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+I applied the patches on v6.1-rc4 and was able to see the drop in
+ptep_clear_flush() in the perf report when running the test program from
+Patch 2. The tests were done on a rk3399 based system with benefits
+visible when running the tests on either of the clusters. 
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 76919d7570d2..ff697190469b 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -3660,6 +3660,19 @@ static struct tegra_xudc_soc tegra194_xudc_soc_data = {
- 	.has_ipfs = false,
- };
- 
-+static struct tegra_xudc_soc tegra234_xudc_soc_data = {
-+	.clock_names = tegra186_xudc_clock_names,
-+	.num_clks = ARRAY_SIZE(tegra186_xudc_clock_names),
-+	.num_phys = 4,
-+	.u1_enable = true,
-+	.u2_enable = true,
-+	.lpm_enable = true,
-+	.invalid_seq_num = false,
-+	.pls_quirk = false,
-+	.port_reset_quirk = false,
-+	.has_ipfs = false,
-+};
-+
- static const struct of_device_id tegra_xudc_of_match[] = {
- 	{
- 		.compatible = "nvidia,tegra210-xudc",
-@@ -3673,6 +3686,10 @@ static const struct of_device_id tegra_xudc_of_match[] = {
- 		.compatible = "nvidia,tegra194-xudc",
- 		.data = &tegra194_xudc_soc_data
- 	},
-+	{
-+		.compatible = "nvidia,tegra234-xudc",
-+		.data = &tegra234_xudc_soc_data
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, tegra_xudc_of_match);
--- 
-2.25.1
+So, for the series,
+
+Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
+
+Thanks,
+Punit
+
+[...]
 
