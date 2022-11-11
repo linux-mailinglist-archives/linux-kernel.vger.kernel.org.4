@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44654625A74
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 324E8625A77
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbiKKMaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S233317AbiKKMan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiKKMaW (ORCPT
+        with ESMTP id S233067AbiKKMak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:30:22 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060996B397
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:30:22 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so7628939pjs.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:30:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ffCoKNiZCbLVipbg2otJCA7P5+JqnENgNvxYbkwxONY=;
-        b=N+Nr23sjC8iHuDV8sBYjCDxfUaW9xTWufeYgLdv0iQPUZjkB3AuQpFxGzfFHP9Ksg5
-         mwSg+0N5bMCiSSH/X4oHtzItCxXD5NgCxhovidkgmSDZdvZX6XoS1s0uKXVf1tU07pcw
-         XZl8LzA1q9kn8mQvWNgFTr5hiSR/u/J0hiZhEufA9MMG7Ij2fssvrHolOPZKK3sheZjf
-         DuBLkN0sSVYUXcqkEnHdM/XuUJiOoOqQJgsZZVwVIw5NC5+Aw5EK5gxGNyvIi8TV5sf9
-         EVfB+MYDaNYV9YIa2Ub6amsZKHd0kGSuPtJrZqckuY13V34Iha2+GnQ7IIDVEzkSYYT4
-         P/QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffCoKNiZCbLVipbg2otJCA7P5+JqnENgNvxYbkwxONY=;
-        b=Zo/6ME5TjCJ+MMhzQipG4ZomRMhG3LMFgKvV8IDYm3ZokWZF/8OdXkHhXvicE5Mr5m
-         VyZJ1bnDiYdWhZmL40+MACjHpAY838sIsiyWRq7WqYUs5GhIchn+EBKmdqIqdpOu147r
-         q5166gqaTDE4ryxXgdhOYlt1jLS8MMJI/NbC5NhvsXe8P4a4lr5oHHjV4ERPVTtqrF5f
-         62oyH855YguH1RmgaZRM5eh50UCeMbOLbGBr4IqIWIo3Tgdyoq8YNhPwKTmoSiLfIKUt
-         kArGIUqAexR+B7Puhnf/PkOCF5cNvwp34QRh3vdQdYbBsdMvkc47O+8VB2BxvD/5SjaL
-         uOKw==
-X-Gm-Message-State: ANoB5pnIQGNfhSnuR5cGrkK4eUXo2xC1+kjb875/Z4nfr8wrl29FTW3w
-        Dh9x5JzdQt+DLc+Hmnmt/MISSqwE0sBoSuBocX8=
-X-Google-Smtp-Source: AA0mqf5C+N7KITTal0uVxMR6CKVzAKplA5WtQGe13CGWVHtVW3eHI2B2g24G6VslNPiaSs5UXctvTzEEE+g1t35404A=
-X-Received: by 2002:a17:90a:b286:b0:213:34f7:fb14 with SMTP id
- c6-20020a17090ab28600b0021334f7fb14mr1695901pjr.25.1668169821449; Fri, 11 Nov
- 2022 04:30:21 -0800 (PST)
+        Fri, 11 Nov 2022 07:30:40 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F021F6B397;
+        Fri, 11 Nov 2022 04:30:37 -0800 (PST)
+Received: from [192.168.1.103] (178.176.79.36) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Fri, 11 Nov
+ 2022 15:30:28 +0300
+Subject: Re: [PATCH] ata: ep93xx: use devm_platform_get_and_ioremap_resource()
+To:     <ye.xingchen@zte.com.cn>
+CC:     <damien.lemoal@opensource.wdc.com>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <chi.minghao@zte.com.cn>
+References: <202211111647123266703@zte.com.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <d54062da-7379-84b9-c787-d0c2f56ea172@omp.ru>
+Date:   Fri, 11 Nov 2022 15:30:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Received: by 2002:a17:902:e884:b0:187:110d:29fd with HTTP; Fri, 11 Nov 2022
- 04:30:21 -0800 (PST)
-Reply-To: ecobankauditormanager@yahoo.com
-From:   ECO BANK <cw209886@gmail.com>
-Date:   Fri, 11 Nov 2022 13:30:21 +0100
-Message-ID: <CAByE_KHj=Zig85B_QK84ApzCrC-irLPXdfNkAsmnLcBu1fhdcQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+In-Reply-To: <202211111647123266703@zte.com.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.79.36]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 11/11/2022 12:05:57
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 173506 [Nov 11 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.79.36 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.79.36
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 11/11/2022 12:08:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 11/11/2022 10:19:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, please I need to communicate with you,
-Can I share words with you?
+Hello!
 
-Steven
+On 11/11/22 11:47 AM, ye.xingchen@zte.com.cn wrote:
+
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+[...]
+
+MBR, Sergey
