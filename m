@@ -2,87 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A16B625CA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:11:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93757625CB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbiKKOL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:11:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S234338AbiKKOOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234567AbiKKOLA (ORCPT
+        with ESMTP id S234162AbiKKON4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:11:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC91833BD
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668175261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pblMlJlKTIR8aJeFOPL5URVyWNBrrDqkWQ8RWbtRpDI=;
-        b=MReBjSoLp4+GGXsSt3bK0l0ULy+YygVO8kap6MumLDDOBBQEdzc+RTC9ISdX9/H9O6pwW/
-        bpLe1n44Md7BvP150cHPpK4Pk4VSQP4MCNEtfa6G2v4Zsbr8jn88DZkD6kXa1ejXzJwn6H
-        9qNqoGuduZUOWYpg9RXXVuwlT2jG2q8=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-592-59CL3yrhNgKaX89_Bcjh8g-1; Fri, 11 Nov 2022 09:00:52 -0500
-X-MC-Unique: 59CL3yrhNgKaX89_Bcjh8g-1
-Received: by mail-qt1-f200.google.com with SMTP id gc12-20020a05622a59cc00b003a5444280e1so3680295qtb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:00:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pblMlJlKTIR8aJeFOPL5URVyWNBrrDqkWQ8RWbtRpDI=;
-        b=ukUtnQy3OJzUwYS+gQUB0nxX4XCHgKlkJfxplNQNEcHusjuPHGXazsOkhNq0fopo8l
-         JJdX3W/jlA3y+glWSQ4eg3MdusTTR48sBENdqrcbnjJlAArQnYwDs1W2sLZjXSUrQCNM
-         l9Dlrpxq/kQtvJfF3UuAdwEqf3ZJFd72yqBsn85O2jJrl7YLutzAecujdnNInraw1tb1
-         BwBNfTzJ7AgTU6vjCqjEg3CE0iW7GZhq0BM8uSfe0nXjUqBgHa6K9vuDaaLlXY8sje8g
-         Ane6vfwaUvaoe/sRV6WJvO52raxn6z7osG8ADT1ftv9pmyfLCTQb72RJOh9dRiktnx/e
-         s8fg==
-X-Gm-Message-State: ANoB5plkudBO87ewQ/RbIGpOCzHLzaYkB9pPQwdwUGmg9I5iV/ozLeIc
-        lmAt0MAAjcv3MwD2K8WgLGNp3PaqeByou8iyxAa9kCGj50cF9mGm8gzcdLeomwgts2l5MO3u1Dc
-        PZ523/NM6scFlGIzcOpKsUI/5
-X-Received: by 2002:a05:6214:4585:b0:4bc:9d7f:d963 with SMTP id op5-20020a056214458500b004bc9d7fd963mr1855172qvb.83.1668175251447;
-        Fri, 11 Nov 2022 06:00:51 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5VYy7bzsdKQg8e1ZZTpNjm7LiX0ZvLnQN/bOtw1CJKLdMCGMeAEZ1pQQG1Mlh0aVEgGkhR3g==
-X-Received: by 2002:a05:6214:4585:b0:4bc:9d7f:d963 with SMTP id op5-20020a056214458500b004bc9d7fd963mr1855138qvb.83.1668175251158;
-        Fri, 11 Nov 2022 06:00:51 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id dm30-20020a05620a1d5e00b006fb3ac7ee59sm1179967qkb.43.2022.11.11.06.00.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 06:00:50 -0800 (PST)
-Date:   Fri, 11 Nov 2022 15:00:40 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v3 08/11] test/vsock: rework message bound test
-Message-ID: <20221111140040.dpxif3ze446tedqw@sgarzare-redhat>
-References: <f60d7e94-795d-06fd-0321-6972533700c5@sberdevices.ru>
- <e35479dc-8b1d-2a6f-872c-31d14326b121@sberdevices.ru>
+        Fri, 11 Nov 2022 09:13:56 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B6F83B92;
+        Fri, 11 Nov 2022 06:04:10 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDhkou013729;
+        Fri, 11 Nov 2022 14:03:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=q70Wrrwfd0MAGjQANnCx/gTOnZ2WfE9mmP9oGwVRMts=;
+ b=XddvMeWoDLxBKIqUn+YceTqXlHZ38keyrmRZqsy79CU1T1QEcPczV0lBb+0e01pMDzTQ
+ bcudPho5FXztQ7ir3pUHiIJycSwdVa3sEjSALrF/5h49cIB5DY7wdxf57LnZSmKwG/3u
+ SzvJL1A6QdfWjZW6jeQdWSt+LhZUvprNN6You4xL8BGjPney9ci26vgNsecFUt5hyIZQ
+ YJVMj9LDhz5GOi3ivWL51wy96/cINjxevxQS7ehUiSVfYAWZVWL3WkkGp2r7frf63Jiw
+ cshKUvFT/rgNm9V0DJwqRutph1QCSECnRQFkHFEIK7QjSR+BQ96BDRgfaWKLvEoywLYv yA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ksqh301xx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Nov 2022 14:03:57 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDWp7C009038;
+        Fri, 11 Nov 2022 14:03:55 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kpcqmjdwn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Nov 2022 14:03:55 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cBdRxuSIn2R67oojhoFc8ZxL2XvoU5TSI3EuPLwfOY2ZXu0/EAHeydoKTKDck/+Fhe1k/M9XH8Qjmt0PyHtWSlOKAKv91kwmce6YqCiq04n0TBYKxutMXgZxqEUJZUibTBfxyokJEPlkT1jHHsyWaAkiwOPdDaKJ3regnY1mkc1P+MRXHWSG28CLi6vgRmZrL8wXBBF9vOenbHhNEUTm4Yog+PWJbRCy7KDXaPpOY/QpVYLNZEb/av0sxFdk1hUtFy9MJyqaCaHhrY7iO16fD3IajqqW2MUa8gxDfCknu/1djLLA9CI4C4kLjN4jkysDxqVYJli5Y7IdCTifL7cPcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q70Wrrwfd0MAGjQANnCx/gTOnZ2WfE9mmP9oGwVRMts=;
+ b=iBvPPWmIYH0oxEqujpYwu+ZoPdt5RcgZCqDOS5DNASsoqe+WlFFXQrrD7lp17YLA9r7DDLdyDIgB9qP3KJGiCeKzvHTGPO+TKTMkIXWQjSNfbarywKqT4DjaPShYDGFocneNVK7gzEFAWiGfiQmNvxLmPnvVHPmpoiJUEzkItl6UFU66clIXWT8zydbkhLhxlmipq5+FmGg58P4v/Of1rqCJUKH9xKH3dHcj8qgSLs8YZumesB2KglaJo4sfJ0vx7prbNnDR55fxqNnRDaVLmH3fvwx/XrbCfn2ct3+aF55REMPbSN8+W+7aUUv/2pe+zkULX4fXm6qU7sqgiZGZ7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q70Wrrwfd0MAGjQANnCx/gTOnZ2WfE9mmP9oGwVRMts=;
+ b=xgt8sBnkktyJj9FE6eRCKGS7RVf3r7RJjFX8xPCrIiwrejz9Sv/CEE4wtnoE1NElCJ3jmz0H4L1/JCsaIPj0nwXWarT+Uyl2fqjWhZYPaY6ZDGqG3Knn55TWnmVeFN4Es0r8O5TSf6F50SubR6Rz+ex9PfMuU+V0crr6M6iCONw=
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com (2603:10b6:8:13c::20)
+ by MN0PR10MB5983.namprd10.prod.outlook.com (2603:10b6:208:3c9::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
+ 2022 14:03:48 +0000
+Received: from DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d361:ae7a:f995:2bb2]) by DS0PR10MB6798.namprd10.prod.outlook.com
+ ([fe80::d361:ae7a:f995:2bb2%3]) with mapi id 15.20.5791.027; Fri, 11 Nov 2022
+ 14:03:48 +0000
+From:   Nick Alcock <nick.alcock@oracle.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com
+Subject: Re: [PATCH v9 2/8] kbuild: add modules_thick.builtin
+References: <20221109134132.9052-1-nick.alcock@oracle.com>
+        <20221109134132.9052-3-nick.alcock@oracle.com>
+        <Y2x22mKtaZvC7ZSk@bombadil.infradead.org>
+        <87h6z5wqlk.fsf@esperi.org.uk>
+Emacs:  it's all fun and games, until somebody tries to edit a file.
+Date:   Fri, 11 Nov 2022 14:03:43 +0000
+In-Reply-To: <87h6z5wqlk.fsf@esperi.org.uk> (Nick Alcock's message of "Fri, 11
+        Nov 2022 13:47:03 +0000")
+Message-ID: <87cz9twpts.fsf@esperi.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1.91 (gnu/linux)
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0420.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18b::11) To DS0PR10MB6798.namprd10.prod.outlook.com
+ (2603:10b6:8:13c::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <e35479dc-8b1d-2a6f-872c-31d14326b121@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR10MB6798:EE_|MN0PR10MB5983:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0708acce-698f-4882-3c8c-08dac3ed8e0e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UfCw+81Itt4C4gyJOz+CMTuSICBGpu/IZdqeJDqL0jSGh1E/7ibDIgu7XhJSg8Xnqh+Ot2RgxoOesRS3n6zF52GabWvSBanA+4UgP41dIqrtYnN9j1y1n0My/kbSjXMoGoA8mP57AEyoXJCUrNsCnmR/lr933fzw3mK6QyT5eHD2BfxXlnalKHoTIKzAoHInvXvi7jake38MAuBOv4L6X4r/Fuv+1wfrXSft85KhL+MuFq0qq2PEnRZT/8IzmXskl8vluhQuQdgM/+o55EeFbRvzFj9mLeJmO34oQiq+xx+t/WZQJPr5bHKWDErvXXfQ6zPNRuThM6SYy8rm07hUF6dhGZSXZQGCXaBS+n9aDfCfMmCOfsaJ5Gw/m7IbVAkk9z+kWLmYG8bTcrR/U6DUjsHNJEY2uBaS/x9Z1Bx45sy+ZXs5sZ2s59vP1q7Vg1AYBDkC2uvnXVhNe5JRfh6X6TkGW4NlNqTamZ5OEulpywLVZkCwebMSTR15nb0pRJfikTxzNPPImhuktn228wbPkNV/bqxzQObugY5HNM25pna4pZjCRlqHLU3XK51348DpAimjzHpZJmGqR+Te+vlcIF5TBFvGKL7Nm5Sx5VGhxqAbkBxxubG+D+4S0RiTvnEEoH3l6+woy6WxfWEG0wBlvcANS2IXtTQRWiVv41XnOicIUXbn6DLz4OLQoUHoy4ROXxW0pp0Rd8FEoCZtiPnCXg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB6798.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(396003)(346002)(136003)(366004)(451199015)(8676002)(107886003)(4326008)(44832011)(8936002)(6666004)(9686003)(6512007)(5660300002)(66946007)(66556008)(478600001)(66476007)(6486002)(2906002)(86362001)(6506007)(36756003)(41300700001)(186003)(38100700002)(316002)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zyUXuczyOShRMKPbxr+kdcGR43gbBM+u19nqdDXarkGeOVrToDptddcfFYeB?=
+ =?us-ascii?Q?yQwkVYqKE+FP9IMapp1Z+WXApCn1lBr8FPncRWrErfXq3RHHx3OXa0c2dXI5?=
+ =?us-ascii?Q?SJ383eqh1LMEOsTydug5xSnX8oL3ip40ccbVThAa2zpe/oz+wDdqulIQ9gZz?=
+ =?us-ascii?Q?cDfMXysR+kJqhrve1Y2W3u30uewDixncBssIYmZQFd7FcZYvngzB62LBi5dd?=
+ =?us-ascii?Q?36NZ+T2HY74QhoMXVa/5l+VA2H0IndGSsUYi1Wi0CxUhS7JEEcMx1Mq5I7DW?=
+ =?us-ascii?Q?0x4iH9peNNxIJu9U4YazlJmBZBTgK9bO8bvwA3eyO9DLps9t8CVUOj1wDA3Z?=
+ =?us-ascii?Q?eOhsZEB9V95Imatssk39uEHwnW2UnnkfShEHR4I/hLwWqKkcX7hfMwf9Es5s?=
+ =?us-ascii?Q?3mr2YsRnjcjYMSwTfJrgKG6bT+zssiXWzeOiZ+RF60Pp6hWBrHHT4k5LIHvL?=
+ =?us-ascii?Q?TO23eNYGDB750otiCyAn+wAuwhlH9eKqAybCwqD9huGO2zIH8tp8oecPrIZ7?=
+ =?us-ascii?Q?+89dHipmCuu+1sE5ow6LM9pIAgru6GEtARFmStfJUeulcz3MRXMtZDpVeTCC?=
+ =?us-ascii?Q?HCAnNWq+RTSpD9CnHLH6Apd3zZ91+VLu7CTMRhiIFoQBbfYO1heGQ4SUU9N6?=
+ =?us-ascii?Q?nX380gaVWK1wehEsxN8HemAVi70eWxNTPec7FXfY1SAHpzizlyZUragd3i59?=
+ =?us-ascii?Q?AvXRnh0RlzFYeTZe9XyGKswXBSfVSYlPUDuN/inOuTG4AvhQcf3WFAAFRqYl?=
+ =?us-ascii?Q?Tt3V8UXy+/wAeEIyaeHLnxRHF94IWkXah/fep2f4ySDv3MkgV5l6X6REXQb8?=
+ =?us-ascii?Q?zGDlY79FVudWK5Quk3TjdI92pEITneIhA6Q/f0zFok/9LDHkHxMqHUIji+vi?=
+ =?us-ascii?Q?r+xDg7CJIZpkuTkqivJCKwyZxlyAax4RnyWInLaH4ygpe7RubWKt6LrDRB+v?=
+ =?us-ascii?Q?84bhXOfixjnCfIERFJG40GWqVTEw9EdyL2m2Fu/8USfBrE8FMBt4TAHfO4cA?=
+ =?us-ascii?Q?+X9jMx0/+LYNEKffZ0O7KNGrVMRnLwT2Td7+Dwpm1XFfzJ2z8HvGpBGmcoj4?=
+ =?us-ascii?Q?ONAkwH9zAKb/3Ir/u4u9uVaQK8Dq5NUDLfWjyujKDraAEjomwT6mfM/gqHiu?=
+ =?us-ascii?Q?YfC0tlcW47YrOk1KrrcULaoIoiZkDC/vi3lRLaAK0pH8AKQizAJByu/pjrj1?=
+ =?us-ascii?Q?UATi9kXDaOwRNcAnMHl6x3uax8H/oyM0XsdLvZw+fNNyKewm7gwHSol+4r+t?=
+ =?us-ascii?Q?vVMkkDBrWoJDqeDnSFRqiUCI53G9Ab5NLeoSE6CHXgDt2cI0HUuC8uxOxeAw?=
+ =?us-ascii?Q?9qVmlTQb9BK+VZLfxG/Z9GONRqrsBywCUTfOOzH2mcAklYkTjzFIS1kId3I7?=
+ =?us-ascii?Q?6cpBRZ28cperf0kwOskT9SWjYDf1+r4dwEZ7lgn8/VORKeogrMsTyhqsuHwb?=
+ =?us-ascii?Q?bgveDSPZu9qvKJuosmT47/TtZ2WVUrcQH/R2rkpxFN7B8FkLiq4ZObv+9U8N?=
+ =?us-ascii?Q?qRQfX6k3+JGqPHfxCF9zp9AYxTncX5x3Qx1Bqujorjpg5UzAwWMLpCXdH6C4?=
+ =?us-ascii?Q?WpMvisuQ4UgbJ+ZQ1Nl0TyVY18pGZ+OOj8K7j7cA8uujb8dQYsUOfLAccnXj?=
+ =?us-ascii?Q?bw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0708acce-698f-4882-3c8c-08dac3ed8e0e
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB6798.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 14:03:48.4934
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JAcYPzVopfWDYjO1JeKI8XlIv5mg5+FPaTK0PYoFgeTRfHwUtUliE//aTQJ6m11148YYfwO3O6irxLVB/X3Tsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5983
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=538 adultscore=0 mlxscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211110094
+X-Proofpoint-GUID: 7cVE4r5nzkYWxa7W6k7iGD1skcWUsqSB
+X-Proofpoint-ORIG-GUID: 7cVE4r5nzkYWxa7W6k7iGD1skcWUsqSB
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,284 +151,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 07:48:56PM +0000, Arseniy Krasnov wrote:
->This updates message bound test making it more complex. Instead of
->sending 1 bytes messages with one MSG_EOR bit, it sends messages of
->random length(one half of messages are smaller than page size, second
->half are bigger) with random number of MSG_EOR bits set. Receiver
->also don't know total number of messages.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> tools/testing/vsock/control.c    |  34 +++++++++
-> tools/testing/vsock/control.h    |   2 +
-> tools/testing/vsock/util.c       |  13 ++++
-> tools/testing/vsock/util.h       |   1 +
-> tools/testing/vsock/vsock_test.c | 115 +++++++++++++++++++++++++++----
-> 5 files changed, 152 insertions(+), 13 deletions(-)
->
->diff --git a/tools/testing/vsock/control.c b/tools/testing/vsock/control.c
->index 4874872fc5a3..bed1649bdf3d 100644
->--- a/tools/testing/vsock/control.c
->+++ b/tools/testing/vsock/control.c
->@@ -141,6 +141,40 @@ void control_writeln(const char *str)
-> 	timeout_end();
-> }
->
->+void control_writeulong(unsigned long value)
->+{
->+	char str[32];
->+
->+	if (snprintf(str, sizeof(str), "%lu", value) >= sizeof(str)) {
->+		perror("snprintf");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	control_writeln(str);
->+}
->+
->+unsigned long control_readulong(bool *ok)
->+{
->+	unsigned long value;
->+	char *str;
->+
->+	if (ok)
->+		*ok = false;
->+
->+	str = control_readln();
->+
->+	if (str == NULL)
->+		return 0;
->+
->+	value = strtoul(str, NULL, 10);
->+	free(str);
->+
->+	if (ok)
->+		*ok = true;
->+
->+	return value;
->+}
->+
-> /* Return the next line from the control socket (without the trailing newline).
->  *
->  * The program terminates if a timeout occurs.
->diff --git a/tools/testing/vsock/control.h b/tools/testing/vsock/control.h
->index 51814b4f9ac1..cdd922dfea68 100644
->--- a/tools/testing/vsock/control.h
->+++ b/tools/testing/vsock/control.h
->@@ -9,7 +9,9 @@ void control_init(const char *control_host, const char *control_port,
-> void control_cleanup(void);
-> void control_writeln(const char *str);
-> char *control_readln(void);
->+unsigned long control_readulong(bool *ok);
-> void control_expectln(const char *str);
-> bool control_cmpln(char *line, const char *str, bool fail);
->+void control_writeulong(unsigned long value);
->
-> #endif /* CONTROL_H */
->diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
->index 2acbb7703c6a..351903836774 100644
->--- a/tools/testing/vsock/util.c
->+++ b/tools/testing/vsock/util.c
->@@ -395,3 +395,16 @@ void skip_test(struct test_case *test_cases, size_t test_cases_len,
->
-> 	test_cases[test_id].skip = true;
-> }
->+
->+unsigned long djb2(const void *data, size_t len)
+On 11 Nov 2022, Nick Alcock said:
 
-hash_djb2 maybe it's more understandable
+> But... it's not quite doing the same thing, so perhaps it can't be that
+> much simpler. Picking the first item that appears in my test build of
+> this but not in modules_thick.builtin:
+>
+> +arch/x86/crypto/libblake2s-x86_64.o: arch/x86/crypto/blake2s-core.o arch/x86/crypto/blake2s-glue.o
+>
+> But...
+>
+> obj-$(CONFIG_CRYPTO_BLAKE2S_X86) += libblake2s-x86_64.o
+> libblake2s-x86_64-y := blake2s-core.o blake2s-glue.o
+>
+> config CRYPTO_BLAKE2S_X86
+>         bool "Hash functions: BLAKE2s (SSSE3/AVX-512)"
+>
+> This cannot be built as a module. The point of modules_thick.builtin was
+> not to capture things that can be built into the kernel or left
+> unconfigured entirely (though that is *also* a nice thing to capture,
+> and should probably be captured regardless) but to capture *those things
+> that can possibly be built as modules*, i.e. those things which are
+> tristates in Kbuild and might possibly get built into .ko's. That was
+> the whole reason we needed the tristate stuff in the first place, and
+> I'm still not sure how to do it without that.
 
->+{
->+	unsigned long hash = 5381;
->+	int i = 0;
->+
->+	while (i < len) {
->+		hash = ((hash << 5) + hash) + ((unsigned char *)data)[i];
->+		i++;
->+	}
->+
->+	return hash;
->+}
->diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
->index a3375ad2fb7f..988cc69a4642 100644
->--- a/tools/testing/vsock/util.h
->+++ b/tools/testing/vsock/util.h
->@@ -49,4 +49,5 @@ void run_tests(const struct test_case *test_cases,
-> void list_tests(const struct test_case *test_cases);
-> void skip_test(struct test_case *test_cases, size_t test_cases_len,
-> 	       const char *test_id_str);
->+unsigned long djb2(const void *data, size_t len);
-> #endif /* UTIL_H */
->diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->index bb6d691cb30d..107c11165887 100644
->--- a/tools/testing/vsock/vsock_test.c
->+++ b/tools/testing/vsock/vsock_test.c
->@@ -284,10 +284,14 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
-> 	close(fd);
-> }
->
->-#define MESSAGES_CNT 7
->-#define MSG_EOR_IDX (MESSAGES_CNT / 2)
->+#define SOCK_BUF_SIZE (2 * 1024 * 1024)
->+#define MAX_MSG_SIZE (32 * 1024)
->+
-> static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
-> {
->+	unsigned long curr_hash;
->+	int page_size;
->+	int msg_count;
-> 	int fd;
->
-> 	fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
->@@ -296,18 +300,69 @@ static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
-> 		exit(EXIT_FAILURE);
-> 	}
->
->-	/* Send several messages, one with MSG_EOR flag */
->-	for (int i = 0; i < MESSAGES_CNT; i++)
->-		send_byte(fd, 1, (i == MSG_EOR_IDX) ? MSG_EOR : 0);
->+	/* Wait, until receiver sets buffer size. */
->+	control_expectln("SRVREADY");
->+
->+	curr_hash = 0;
->+	page_size = getpagesize();
->+	msg_count = SOCK_BUF_SIZE / MAX_MSG_SIZE;
->+
->+	for (int i = 0; i < msg_count; i++) {
->+		ssize_t send_size;
->+		size_t buf_size;
->+		int flags;
->+		void *buf;
->+
->+		/* Use "small" buffers and "big" buffers. */
->+		if (i & 1)
->+			buf_size = page_size +
->+					(rand() % (MAX_MSG_SIZE - page_size));
->+		else
->+			buf_size = 1 + (rand() % page_size);
->+
->+		buf = malloc(buf_size);
->+
->+		if (!buf) {
->+			perror("malloc");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		/* Set at least one MSG_EOR + some random. */
->+		if (i == (msg_count / 2) || (rand() & 1)) {
->+			flags = MSG_EOR;
->+			curr_hash++;
->+		} else {
->+			flags = 0;
->+		}
->+
->+		send_size = send(fd, buf, buf_size, flags);
->+
->+		if (send_size < 0) {
->+			perror("send");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		if (send_size != buf_size) {
->+			fprintf(stderr, "Invalid send size\n");
->+			exit(EXIT_FAILURE);
->+		}
->+
->+		curr_hash += send_size;
->+		curr_hash = djb2(&curr_hash, sizeof(curr_hash));
->+	}
->
-> 	control_writeln("SENDDONE");
->+	control_writeulong(curr_hash);
-> 	close(fd);
-> }
->
-> static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
-> {
->+	unsigned long sock_buf_size;
->+	unsigned long remote_hash;
->+	unsigned long curr_hash;
-> 	int fd;
->-	char buf[16];
->+	char buf[MAX_MSG_SIZE];
-> 	struct msghdr msg = {0};
-> 	struct iovec iov = {0};
->
->@@ -317,25 +372,58 @@ static void test_seqpacket_msg_bounds_server(const struct test_opts *opts)
-> 		exit(EXIT_FAILURE);
-> 	}
->
->+	sock_buf_size = SOCK_BUF_SIZE;
->+
->+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_MAX_SIZE,
->+		       &sock_buf_size, sizeof(sock_buf_size))) {
->+		perror("getsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	if (setsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
->+		       &sock_buf_size, sizeof(sock_buf_size))) {
->+		perror("getsockopt");
->+		exit(EXIT_FAILURE);
->+	}
->+
->+	/* Ready to receive data. */
->+	control_writeln("SRVREADY");
->+	/* Wait, until peer sends whole data. */
-> 	control_expectln("SENDDONE");
-> 	iov.iov_base = buf;
-> 	iov.iov_len = sizeof(buf);
-> 	msg.msg_iov = &iov;
-> 	msg.msg_iovlen = 1;
->
->-	for (int i = 0; i < MESSAGES_CNT; i++) {
->-		if (recvmsg(fd, &msg, 0) != 1) {
->-			perror("message bound violated");
->-			exit(EXIT_FAILURE);
->-		}
->+	curr_hash = 0;
->
->-		if ((i == MSG_EOR_IDX) ^ !!(msg.msg_flags & MSG_EOR)) {
->-			perror("MSG_EOR");
->+	while (1) {
->+		ssize_t recv_size;
->+
->+		recv_size = recvmsg(fd, &msg, 0);
->+
->+		if (!recv_size)
->+			break;
->+
->+		if (recv_size < 0) {
->+			perror("recvmsg");
-> 			exit(EXIT_FAILURE);
-> 		}
->+
->+		if (msg.msg_flags & MSG_EOR)
->+			curr_hash++;
->+
->+		curr_hash += recv_size;
->+		curr_hash = djb2(&curr_hash, sizeof(curr_hash));
-> 	}
->
-> 	close(fd);
->+	remote_hash = control_readulong(NULL);
->+
->+	if (curr_hash != remote_hash) {
->+		fprintf(stderr, "Message bounds broken\n");
->+		exit(EXIT_FAILURE);
->+	}
-> }
->
-> #define MESSAGE_TRUNC_SZ 32
->@@ -837,6 +925,7 @@ int main(int argc, char **argv)
-> 		.peer_cid = VMADDR_CID_ANY,
-> 	};
->
->+	srand(time(NULL));
-> 	init_signals();
->
-> 	for (;;) {
->-- 
->2.35.0
-
+OK, I think I should be able to combine your patch with (a variant of)
+the tristate stuff and get the best of both worlds (only-modular plus
+the efficiency of building and simplicity of your patch, with no nasty
+separate recursion like I had for modules_thick.builtin). Working on
+that...
