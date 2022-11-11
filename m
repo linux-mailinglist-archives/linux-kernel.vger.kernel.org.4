@@ -2,93 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCF0625F67
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAC2625F6D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiKKQXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S234178AbiKKQ0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234215AbiKKQXv (ORCPT
+        with ESMTP id S232979AbiKKQZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:23:51 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE79E10FC2;
-        Fri, 11 Nov 2022 08:23:49 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
+        Fri, 11 Nov 2022 11:25:58 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442D26324;
+        Fri, 11 Nov 2022 08:25:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 69FBD1EC042F;
-        Fri, 11 Nov 2022 17:23:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668183828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=RQAgICrjFnZQrLGvUgI/C7Q9GLfgPJ4P+LW0OtdT8rs=;
-        b=moouNAFTAV7IcV/mP/nZqLe47DxjlL2ZUaRES6YJT6CZgM57NspuSpLyzVWCPkqJ6rbcKk
-        xY4bYHmZCLalHnrmbMD8dlM6xo8pYJ/OsbcktfAFK7mP9LgQI0vvRWlWMcxxoEg28NyBwv
-        ww4At+bFDSflMdaQCtpe9l4jVRdxDdY=
-Date:   Fri, 11 Nov 2022 17:23:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jithu Joseph <jithu.joseph@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, gregkh@linuxfoundation.org, ashok.raj@intel.com,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
-        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
-Subject: Re: [PATCH v2 09/14] platform/x86/intel/ifs: Use generic microcode
- headers and functions
-Message-ID: <Y253FKtLnmV3r7Kj@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-10-jithu.joseph@intel.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8DD1ECE2843;
+        Fri, 11 Nov 2022 16:25:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76562C433D6;
+        Fri, 11 Nov 2022 16:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668183953;
+        bh=OQ/EpSlHbcD4pnx4y1IaBDrv3gzT9uiG1VObrf/kmUY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CnvaXD8N+0HL+jWFlNDj2BAS3IfMnVYgT6ci+Kz+CdBbnnIz4qjgeBZsYJehB2Izf
+         zaS7Zm/j2r7EpRCmDgzdIR38/PzONJ2wv3G0vhClVLWd3Bt9EFfVRbdyE+ZzOkl6M/
+         SDxJCmH+UXD976ynQycQFSHvV4wfw/KiKch39tky/7E+zc9hBEcfsl1YsYnIdZrRJL
+         G9B0T5Kw7BJSXwFCSd8kGfuC58NH6hb8dBQabV8x8sgfvUAk5rEIEnOhv6wQTvaPsU
+         jIEYvNHIY9i4FJh74MkGo/BOsjt3NlqISPDMpE7i7Az4Lh254P1iH1cnNvzzboJAeJ
+         6vIZ3gZSf0sAw==
+Date:   Fri, 11 Nov 2022 08:25:51 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 0/4] cpumask: improve on cpumask_local_spread() locality
+Message-ID: <20221111082551.7e71fbf4@kernel.org>
+In-Reply-To: <20221111040027.621646-1-yury.norov@gmail.com>
+References: <20221111040027.621646-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221107225323.2733518-10-jithu.joseph@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 02:53:18PM -0800, Jithu Joseph wrote:
->  static int scan_chunks_sanity_check(struct device *dev)
->  {
-> -	int metadata_size, curr_pkg, cpu, ret = -ENOMEM;
->  	struct ifs_data *ifsd = ifs_get_data(dev);
-> +	int curr_pkg, cpu, ret = -ENOMEM;
->  	bool *package_authenticated;
->  	struct ifs_work local_work;
-> -	char *test_ptr;
->  
->  	package_authenticated = kcalloc(topology_max_packages(), sizeof(bool), GFP_KERNEL);
->  	if (!package_authenticated)
->  		return ret;
+On Thu, 10 Nov 2022 20:00:23 -0800 Yury Norov wrote:
+> cpumask_local_spread() currently checks local node for presence of i'th
+> CPU, and then if it finds nothing makes a flat search among all non-local
+> CPUs. We can do it better by checking CPUs per NUMA hops.
 
-Bah, how big is that thing so that you can't simply do a bitfield on the
-stack here instead of kcalloc-ing?
+Nice.
 
-> @@ -203,67 +174,33 @@ static int scan_chunks_sanity_check(struct device *dev)
->  	return ret;
->  }
->  
-> -static int ifs_sanity_check(struct device *dev,
-> -			    const struct microcode_header_intel *mc_header)
-> +static int ifs_image_sanity_check(struct device *dev, const struct microcode_header_intel *data)
+> This series is inspired by Valentin Schneider's "net/mlx5e: Improve remote
+> NUMA preferences used for the IRQ affinity hints"
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
+> 
+> According to Valentin's measurements, for mlx5e:
+> 
+> 	Bottleneck in RX side is released, reached linerate (~1.8x speedup).
+> 	~30% less cpu util on TX.
+> 
+> This patch makes cpumask_local_spread() traversing CPUs based on NUMA
+> distance, just as well, and I expect comparabale improvement for its
+> users, as in Valentin's case.
+> 
+> I tested it on my VM with the following NUMA configuration:
 
-Yet another static function - no need for the ifs_ prefix.
-
-...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+nit: the authorship is a bit more complicated, it'd be good to mention
+Tariq. Both for the code and attribution of the testing / measurements.
