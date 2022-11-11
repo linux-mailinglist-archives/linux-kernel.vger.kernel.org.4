@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771716256F1
+	by mail.lfdr.de (Postfix) with ESMTP id C2AF76256F2
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbiKKJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S233679AbiKKJhR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Nov 2022 04:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbiKKJhM (ORCPT
+        with ESMTP id S233302AbiKKJhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:37:12 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62036EB41
+        Fri, 11 Nov 2022 04:37:14 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288FC6EB4E
         for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:37:11 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id k15so4466141pfg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AmA/wiGTgxxSgV/ULL1vm+H9tlQ/4RzcG0V6hjmLS9I=;
-        b=XVKz1JCSIPdyUUo4gQ9rUzrRy5HmEp3kpsdg8K3eHfOkirx8584NyU5vkmNzO4M5VQ
-         LW/XMA4X6QzDnJNA0aHHUM+z0S9D68b35PtTAF2iJ6iC+FAS/QdVq7i/Yvri6cVknKVU
-         eu3bkntCNFzkROvqz92xT2UYE4op15fKXzX0Q0RedU9TkzIgRtURCeSAQmAhvVFuWvzF
-         4GLOwvr0iBJVgYi9cQU0Boxnnwnd89oJbyI+uokfQV/iyUaznyEqZ9E/2D+haC5umf7Z
-         OPoHBkFXp3Gx5H6A4YZuvUytErrRs1vaUgOSOY4Vc4VLfw62W7z5XfQOYB+aTT+FJo19
-         byIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AmA/wiGTgxxSgV/ULL1vm+H9tlQ/4RzcG0V6hjmLS9I=;
-        b=Uw9FmCtUKwym0gjESWMW3foGelbsUeziHTFQJmEGgukO7E4jbaimrtsAiPVk08H5fi
-         GGbSuURyvczL5cWm3WzbTB5LDkK8jpSqo8EanxLUd2nbWJSvLEy8JJo0ALs96pdkydIM
-         saPi+GjprP40RdaT0Lc9vgr1o0/bVt/4+RplferBu2ybp1SRjgJduMAnOPYNHB03/QJx
-         R7BvNXelmxRA11asp2AxNhVwUc3G/9CW1sCQmjssEM0KTMBySQ9EimgU80kaoeBfJCdC
-         Hi2Net3+EfQGHtyjnrK1x9Tc96fulcjSKkhiuazHODTrdSuTHcLkQ5GfJv8bB/DGd/fC
-         z44Q==
-X-Gm-Message-State: ANoB5pnTuQimBGiTMQ1ClrSzhkLQ5QalEZxWe09r+poRZTRse8wYt5yk
-        RGXJnSa7XrAZ5tp4Awwr8L79Xw==
-X-Google-Smtp-Source: AA0mqf7NcsEz6aTfOTnAD7xYlmi5Q1EjHThNEZUL3L5HAg1X1EnPe6ebwr7+D3ccxgOWoZKuAG/Zow==
-X-Received: by 2002:aa7:91d8:0:b0:56b:e5de:8b4f with SMTP id z24-20020aa791d8000000b0056be5de8b4fmr1784629pfa.67.1668159431346;
-        Fri, 11 Nov 2022 01:37:11 -0800 (PST)
-Received: from localhost.localdomain ([61.120.150.75])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709029a4a00b001886863c6absm1235641plv.97.2022.11.11.01.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 01:37:10 -0800 (PST)
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Subject: [PATCH] fuse: initialize attr_version of new fuse inodes by fc->attr_version
-Date:   Fri, 11 Nov 2022 17:37:02 +0800
-Message-Id: <20221111093702.80975-1-zhangjiachen.jaycee@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-97-8TJG0fauNZW-nVbR3oMe2A-1; Fri, 11 Nov 2022 09:37:09 +0000
+X-MC-Unique: 8TJG0fauNZW-nVbR3oMe2A-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 11 Nov
+ 2022 09:37:08 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Fri, 11 Nov 2022 09:37:08 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+CC:     Theodore Ts'o <tytso@mit.edu>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "42.hyeyoo@gmail.com" <42.hyeyoo@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "cl@linux.com" <cl@linux.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "rkovhaev@gmail.com" <rkovhaev@gmail.com>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        Feng Tang <feng.tang@intel.com>
+Subject: RE: Deprecating and removing SLOB
+Thread-Topic: Deprecating and removing SLOB
+Thread-Index: AQHY9SBUoMjUW3vwt0m3f4uC9hH+/a45b0ow
+Date:   Fri, 11 Nov 2022 09:37:07 +0000
+Message-ID: <b6d691573f544a4ea44338430edb6911@AcuMS.aculab.com>
+References: <K5M3LR.3O50LSSSY5L3@crapouillou.net>
+ <CAHk-=wjBqwJk9RgfoBuM00T49M7uQiLnOvLST7L6v5rhS7fkDA@mail.gmail.com>
+ <20221109234832.GE307514@darkstar.musicnaut.iki.fi>
+ <Y2yArTbOpKd6ASkd@mit.edu> <e610b6fa-aa71-d612-0eb2-03ba6c4a6b46@suse.cz>
+ <Y20ktNwgPqUbOwxH@casper.infradead.org>
+In-Reply-To: <Y20ktNwgPqUbOwxH@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The FUSE_READDIRPLUS request reply handler fuse_direntplus_link() might
-call fuse_iget() to initialize a new fuse_inode and change its attributes.
-But as the new fi->attr_version is always initialized with 0, even if the
-attr_version of the FUSE_READDIRPLUS request has become staled, staled attr
-may still be set to the new fuse_inode. This may cause file size
-inconsistency even when a filesystem backend is mounted with a single FUSE
-mountpoint.
+From: Matthew Wilcox
+> Sent: 10 November 2022 16:20
+> 
+> On Thu, Nov 10, 2022 at 08:31:31AM +0100, Vlastimil Babka wrote:
+> > >     octeon-hcd will crash the kernel when SLOB is used. This usually happens
+> > >     after the 18-byte control transfer when a device descriptor is read.
+> > >     The DMA engine is always transfering full 32-bit words and if the
+> > >     transfer is shorter, some random garbage appears after the buffer.
+> > >     The problem is not visible with SLUB since it rounds up the allocations
+> > >     to word boundary, and the extra bytes will go undetected.
+> >
+> > Ah, actually it wouldn't *now* as SLUB would make the allocation fall into
+> > kmalloc-32 cache and only add redzone beyond 32 bytes. But with upcoming
+> > changes by Feng Tang, this should work.
+> 
+> This is kind of "if a bug stings a tree in a forest, does it hurt"
+> problem.  If all allocations of 18 bytes are rounded up to 20 or more
+> bytes, then it doesn't matter that the device has this bug.  Sure, it
+> may end up hurting in the future if we decide to create 18-byte slab
+> caches, but it's not actually going to affect anything today (and we
+> seem to be moving towards less precision in order to get more
+> performance)
 
-This commit fixes the issue by initializing new fuse_inode attr_versions by
-the global fc->attr_version. This may introduce more FUSE_GETATTR but can
-avoid weird attributes rollback being seen by users.
+Yes, even on dma-coherent systems allocated blocks have to be
+moderately aligned - so the space after an 18 byte block can't be used.
+I also doubt there is any benefit (and many bugs) from allowing
+2 bytes alignment on m68k.
+So the 'overwrite to a whole number of words' maybe reasonably expected
+to not cause any real bugs.
 
-Fixes: 19332138887c ("fuse: initialize attr_version of new fuse inodes by fc->attr_version")
-Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
----
- fs/fuse/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+x86 (even 32bit) probably requires 16 byte alignment (for some corner
+cases) - ok for a power-of-2 allocator that doesn't add a header.
+(Although 1, 2, 4 and 8 byte allocates are valid.)
 
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 6b3beda16c1b..145ded6b55af 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -71,6 +71,7 @@ struct fuse_forget_link *fuse_alloc_forget(void)
- static struct inode *fuse_alloc_inode(struct super_block *sb)
- {
- 	struct fuse_inode *fi;
-+	struct fuse_conn *fc = get_fuse_conn_super(sb);
- 
- 	fi = alloc_inode_sb(sb, fuse_inode_cachep, GFP_KERNEL);
- 	if (!fi)
-@@ -80,7 +81,7 @@ static struct inode *fuse_alloc_inode(struct super_block *sb)
- 	fi->inval_mask = 0;
- 	fi->nodeid = 0;
- 	fi->nlookup = 0;
--	fi->attr_version = 0;
-+	fi->attr_version = fuse_get_attr_version(fc);
- 	fi->orig_ino = 0;
- 	fi->state = 0;
- 	mutex_init(&fi->mutex);
--- 
-2.20.1
+To reduce memory wastage what you really don't want is an allocator
+that adds a header/trailer and then rounds up to a power of 2.
+Coders write in binary and do kmalloc(256) not kmalloc(200) and
+rounding 256 up to 512 is rather wasteful.
+(Search for the kmalloc(PAGE_SIZE+1) :-)
+
+I also think that one of the allocators only cuts pages into
+power-of-2 sizes.
+It is probably sensible to return cache-aligned (probably 64 byte)
+buffers for requests larger than a cache line.
+But a 4k page can be split into 21 192-byte buffers.
+As well as using less memory for allocates between 129 and 192 bytes
+it may reduce pressure on the d-cache by evening out cache line usage.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
