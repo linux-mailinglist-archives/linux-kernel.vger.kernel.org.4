@@ -2,121 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492E462594C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA2C625952
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233288AbiKKLZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S233146AbiKKL2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:28:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiKKLZw (ORCPT
+        with ESMTP id S232004AbiKKL2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:25:52 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7FC60EBB;
-        Fri, 11 Nov 2022 03:25:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668165951; x=1699701951;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=073BabzyP7Q387pgTQPUA7z0Dqu1AHe4kpWDDx08pSg=;
-  b=TyYpgW7Nx1KwFob2aDTHTNF4H45q6CGsDqqDXcD26uOgWnAgRj9cIlL1
-   8gV8SqEkfrLp6EwA58mz5FQqf+Q3mhBindFvusnorC7/mPEu2V9rALgmx
-   QSk9UI4Z/2bRBz8PejGxSgwwCtPiAquvZqYb+4S+CTsfRgsExXsZ2bwM/
-   nIR8I61MlfR5jp/LAKxgNvWl+xDgQw1xszpQ93Y2llr67E2oNg5YfWpZz
-   qDRfbcqdbls2VW0pAe1EGJzzlhCgfmvbX/8z+egQb3Jf7XuSBPbsSnV+F
-   PHD9yblvfPcEAPZi5CMkoA84Qjf0SqnW2Qn77N2cBJzJ0Pah30mflS8Or
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="311583484"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="311583484"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 03:25:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="812415062"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="812415062"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 11 Nov 2022 03:25:49 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1otSAN-00Afa1-0W;
-        Fri, 11 Nov 2022 13:25:47 +0200
-Date:   Fri, 11 Nov 2022 13:25:46 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Paul Gazzillo <paul@pgazz.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Fri, 11 Nov 2022 06:28:01 -0500
+Received: from dhl.lxnav.com (dhl.lxnav.com [IPv6:2a01:4f8:c010:2f07::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D09263150
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:28:00 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1CE4D4070A;
+        Fri, 11 Nov 2022 12:27:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lxnav.com; s=dhl;
+        t=1668166075; h=from:subject:date:message-id:to:mime-version:
+         content-transfer-encoding; bh=ZVhcBWv5g++vNVOshFC8d1giINTc5zv0mibtU5uzEW4=;
+        b=FkdTYr2rkOHQ4Dd4bwx5IJz4B5YoLsUtiapRqvDRTUp4s1+X9+0ENFeBjiNBAGalqatIf5
+        Xo+PiMQ1DdJb7gaLs9Vh+1TuHk1JaNUGqdkAuxSjJTCxuSiJ8g7jJoqcFVNlbhnifR///B
+        4Td7kOzm1yHERrGhRZCBm8itFfCdUujdd7gsYF7ioE2lwgjjkML187OBjwR+Jn/cBFo4Mu
+        LXFk4tkHSZxAgoyJFWlzOXGsn9tx3Yi2F0Y97obye4qGDMME1nUmMkeMtcgKaTQ5GlodIS
+        odWgrZ8P6WeVCpegYfpEv9CfKH9cCkBcoge4raFhRJmvf7pD6gcOu7JslLVxZw==
+From:   Mitja Spes <mitja@lxnav.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Mitja Spes <mitja@lxnav.com>,
+        Angelo Compagnucci <angelo.compagnucci@gmail.com>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1]: iio: light: rpr0521: add missing Kconfig
- dependencies
-Message-ID: <Y24xOvNVsuLsbBXX@smile.fi.intel.com>
-References: <20221110144448.wexu6neb67krqhla@device>
- <20221110214729.ls5ixav5kxpeftk7@device>
+Subject: [PATCH 0/4] iio: adc: mcp3422 improvements
+Date:   Fri, 11 Nov 2022 12:26:52 +0100
+Message-Id: <20221111112657.1521307-1-mitja@lxnav.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110214729.ls5ixav5kxpeftk7@device>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 04:47:29PM -0500, Paul Gazzillo wrote:
-> Fix an implicit declaration of function error for rpr0521 under some configs
-> 
-> When CONFIG_RPR0521 is enabled without CONFIG_IIO_TRIGGERED_BUFFER,
-> the build results in "implicit declaration of function" errors, e.g.,
->   drivers/iio/light/rpr0521.c:434:3: error: implicit declaration of function
->            'iio_trigger_poll_chained' [-Werror=implicit-function-declaration]
->     434 |   iio_trigger_poll_chained(data->drdy_trigger0);
->         |   ^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This fix adds select dependencies to RPR0521's configuration declaration.
-> 
-> Signed-off-by: Paul Gazzillo <paul@pgazz.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216678
+Fixes:
+* iio: adc: mcp3422: fix scale read bug
+  Scale was always returned for the last read input instead of the specified
+  channel.
 
-No need to create a bugzilla report on such tiny issues that do actually not
-affect the working configurations.
+Improvements:
+* iio: adc: mcp3422: allow setting gain and sampling per channel
+  Sampling was the same for all channels. This patch adds the ability to select
+  different gain and sampling per channel. They can be set together via scale
+  attribute.
+  Sampling can be set also via the standalone attribute which is now per
+  channel. This might be a breaking change for some.
 
-FWIW,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+* iio: adc: mcp3422: add hardware gain attribute
+  Setting via scale is cumbersome. This patch just adds a concise way to set
+  the gain, since sampling can already be set separately.
 
-> ---
-> V1 -> V2: Cleaned up commit message per reviewer comments and added link
->           to bug report.
-> 
->  drivers/iio/light/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
-> index 7cf6e8490123..0d4447df7200 100644
-> --- a/drivers/iio/light/Kconfig
-> +++ b/drivers/iio/light/Kconfig
-> @@ -293,6 +293,8 @@ config RPR0521
->  	tristate "ROHM RPR0521 ALS and proximity sensor driver"
->  	depends on I2C
->  	select REGMAP_I2C
-> +	select IIO_BUFFER
-> +	select IIO_TRIGGERED_BUFFER
->  	help
->  	  Say Y here if you want to build support for ROHM's RPR0521
->  	  ambient light and proximity sensor device.
-> -- 
-> 2.25.1
+* iio: adc: mcp3422: reduce sleep for fast sampling rates
+  msleep can produce a delay which is fi. 30ms off the mark. This patch uses
+  usleep_range for the higher sampling rates.
+
+Mitja Spes (4):
+  iio: adc: mcp3422: fix scale read bug
+  iio: adc: mcp3422: allow setting gain and sampling per channel
+  iio: adc: mcp3422: add hardware gain attribute
+  iio: adc: mcp3422: reduce sleep for fast sampling rates
+
+ drivers/iio/adc/mcp3422.c | 161 ++++++++++++++++++++++++--------------
+ 1 file changed, 103 insertions(+), 58 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
