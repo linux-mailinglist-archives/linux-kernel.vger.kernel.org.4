@@ -2,55 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E6862628D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B394C62628E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbiKKUJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 15:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S234402AbiKKUJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 15:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiKKUJq (ORCPT
+        with ESMTP id S233511AbiKKUJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 15:09:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D8A11816;
-        Fri, 11 Nov 2022 12:09:45 -0800 (PST)
+        Fri, 11 Nov 2022 15:09:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4CF4D5C1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:09:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73CC5B8260F;
-        Fri, 11 Nov 2022 20:09:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB719C433D6;
-        Fri, 11 Nov 2022 20:09:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19DD5B8260C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 20:09:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E74C4347C;
+        Fri, 11 Nov 2022 20:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668197383;
-        bh=PzS0md/R98teTQLOBivBEycYuxdpDjm/Kz1yZeYFP0w=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=K7mRA65GuShqGApRUfNyO8lLj7vIUm1koqrsswCYzunKzBv4G/Xd9JscPC7nBekHg
-         HGVCYXuxkPilExhHSueartS805yFmWZo/bZkw7N0cHWHCzh0JCJDrWbahiiH2ht26o
-         SqcDC2PouciYEyI4wypEuihkci4f/Z4J82SVQbSGEePLHtDpxyXFg8OKcNgYNo5Bnx
-         16OUSZhkdjcmpvIPU5vDYxGHysV6ppYMZfO8W4MnqC6ZkyG+pYO5ho4B8z7rs/oDYQ
-         uKQd0NtYR0G+cli5T07r9y+nzr766Rsqwb4Y0OGav+i2nEWhGNmpQBPqaq9j1piNbE
-         bTIATgHzkfuvQ==
+        s=k20201202; t=1668197385;
+        bh=ldAYlErMXxSDvX7PgibGsmXAVUAab9FUHEviKO69Pww=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=TvAzMBvw+7pqMaw76pvdDAJFa8J14riKoIBBcuULFCuDgcHMntPeQNaHi1/vuZxpo
+         dGHDkc90IsyrIAM/yBdmXAXoalY23d5KREt2KGKnyo6vylFEs2h8Cjo3lyAjoXYwzm
+         2TRrH6nshedPE+VLx20LQ1yBEGwooiFbqXe+Ye68v2+r2QIDxbCKO9nXEHUiIQYA5e
+         kfe58LFa0yQTcoMTne92EKcweqN2wEJqEnpXswX1HQLIIKKRHLMj3ZckXkcUtcAiJs
+         1Y82te4gDFRW/dEtstkk9VX9wpsYRKr2JO1c2t78g0WpiDxdwvFl+4mHy8X9yu5wvN
+         er0azwE47Y0Xw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     alsa-devel@alsa-project.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        kernel test robot <lkp@intel.com>,
         Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20221110133512.478831-1-krzysztof.kozlowski@linaro.org>
-References: <20221110133512.478831-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 1/2] ASoC: dt-bindings: qcom,wsa883x: Use correct SD_N polarity
-Message-Id: <166819737928.635730.17163192130637526976.b4-ty@kernel.org>
-Date:   Fri, 11 Nov 2022 20:09:39 +0000
+        Takashi Iwai <tiwai@suse.com>
+In-Reply-To: <20221108001829.5100-1-rdunlap@infradead.org>
+References: <20221108001829.5100-1-rdunlap@infradead.org>
+Subject: Re: [PATCH v2] ASoC: codecs: wsa883x: use correct header file
+Message-Id: <166819738332.635730.5845715184483403230.b4-ty@kernel.org>
+Date:   Fri, 11 Nov 2022 20:09:43 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,10 +59,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 14:35:11 +0100, Krzysztof Kozlowski wrote:
-> Use correct polarity in example and powerdown-gpios description.
+On Mon, 7 Nov 2022 16:18:29 -0800, Randy Dunlap wrote:
+> Fix build errors when GPIOLIB is not set/enabled:
 > 
+> ../sound/soc/codecs/wsa883x.c: In function 'wsa883x_probe':
+> ../sound/soc/codecs/wsa883x.c:1394:25: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
+>          wsa883x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
+> ../sound/soc/codecs/wsa883x.c:1395:49: error: 'GPIOD_FLAGS_BIT_NONEXCLUSIVE' undeclared (first use in this function)
+>          GPIOD_FLAGS_BIT_NONEXCLUSIVE);
+> ../sound/soc/codecs/wsa883x.c:1414:9: error: implicit declaration of function 'gpiod_direction_output'; did you mean 'gpio_direction_output'? [-Werror=implicit-function-declaration]
+>          gpiod_direction_output(wsa883x->sd_n, 1);
 > 
+> [...]
 
 Applied to
 
@@ -75,10 +78,8 @@ Applied to
 
 Thanks!
 
-[1/2] ASoC: dt-bindings: qcom,wsa883x: Use correct SD_N polarity
-      commit: 817e981736d27731adb9d7ca11eb8069d1ee569d
-[2/2] ASoC: codecs: wsa883x: Use proper shutdown GPIO polarity
-      commit: ec5dba73f7ba10797904cf18092d2e6975a22147
+[1/1] ASoC: codecs: wsa883x: use correct header file
+      commit: 5f52ceddc40cd61b1dd2ecf735624deaf05f779f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
