@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659AF624ED2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F260624ED3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiKKATE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S231207AbiKKATJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:19:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiKKAS6 (ORCPT
+        with ESMTP id S231455AbiKKAS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:18:58 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93712528E;
-        Thu, 10 Nov 2022 16:18:56 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id b2so2570933iof.12;
-        Thu, 10 Nov 2022 16:18:56 -0800 (PST)
+        Thu, 10 Nov 2022 19:18:59 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6366B12A8A;
+        Thu, 10 Nov 2022 16:18:58 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id h206so2579482iof.10;
+        Thu, 10 Nov 2022 16:18:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Akr74WzhT+2lGDGVllEO7CxN1d/TLLqV1PqBhKW+nrU=;
-        b=HBIcOn3aZwnpDChgpkAgz6CjDeqoLvyycnOuXJ3G6Tpur7mzx8FSozWrSB+eAVGcLK
-         7kpTAKDS+XtVRIWL4nPc/mjwJwfx9NHWNnf6rSbpBJOQ+srftD0G2GtbjrA2X4pCu6Ui
-         bJZpXFBx4IElmpzrRje09Fk3XpqaxCtQkPOX6uanwtx1X+NPGEYxSGzUmS9XBfRvl09Q
-         g/Aqgs0YViNVGDiT9x6DZtiNZZ83lbxBg5XhWsTO7rPm/PujLONb65ok534kaoeHclP8
-         TFlamWyiZhvCYBaVEPNX0op3pmWeV85sDIxAND+NkHjkVxCuc7AI2eQ9cWyHgxQG4FlS
-         7RBQ==
+        bh=DQdXfHXD2jNc0ULYmRYiq2ER1KgTrvIMpk00EXTgBbk=;
+        b=Vnj9M23/r3Xk9etno/U5LlsvbE9GrotARk5IVwFWCnpJ02xgi12L5Q0eLifnGIkFK2
+         N1K6Gnsn4w0COGvksYfFKKb4OFnmzLX2CMWabKtS8snn3ZcAmwj+60zX5PY8W9x3iIJl
+         bthQCB0ZxRlwmPtxDzKJjnm8fM/tIBCnbf4An7mW1p9z9TDDfWZbIv2HzWyDAXX2oH1N
+         QJo9tClDEF4Eh90JurelUW+KNSLpS1JhdP4+TEExTG0U+llBsro02M2WdXC59GDQRCcr
+         4D5DSqNNOWdZRx7E5Ti23RwoPo4ER1zfohcQbAkJ/kPNRKbX7pGHQRWKD/gN8KvzIXrN
+         sxJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Akr74WzhT+2lGDGVllEO7CxN1d/TLLqV1PqBhKW+nrU=;
-        b=h/j42++JOrEkMCltvA+YnrKDMWox6ObG+YsjtqYQIW06SYS7HxRVYXJM7/XreC8wk5
-         Qo8JXa50tQjbOgU3jyn3cnK/zI4YNUpHi+rH9VSRkDsjneLwzNTnI9SExP4BxQ8MrxvT
-         OFKvYf44zWIVUYSO0qD274vCoRb042Lk0o5IVtfEDGhkFkuFyZgmRnBnj0gCHI4ppnDv
-         6N+nbLuCNIwOzFcb3DeeJmT1o6LcXI+VB1nE2s41ib91LWIaMxfpim6BNWeCgF2DNJ28
-         jsRaYjrJR4sVFzyzxv7GmRE5rS6xirhAjB1klFN3Z9x49U/jPgKUtT8EBcjqg3AB/qPV
-         wuTA==
-X-Gm-Message-State: ACrzQf3Fm0UqQUdc1DLqs4AQd6ErVn/bIO++k4jtEGw9b18Pu0YqOhx+
-        JtPBjKb/rko2ARjDtkwdFyd2LLFk9tANUQ==
-X-Google-Smtp-Source: AMsMyM4LpIaxT1hlXHyMP4uqCqWQKrBcjjovUttOgCLLkDd8sxytJQc96HKH2uYaxN5gA6JKTx066A==
-X-Received: by 2002:a05:6602:178a:b0:6d6:8005:8527 with SMTP id y10-20020a056602178a00b006d680058527mr3499328iox.166.1668125936189;
-        Thu, 10 Nov 2022 16:18:56 -0800 (PST)
+        bh=DQdXfHXD2jNc0ULYmRYiq2ER1KgTrvIMpk00EXTgBbk=;
+        b=UPhbO0ZzHb0zXfqLt7346+z434t/yPuC+H+Bn6iL48rE+l4RzsvPDyChdiVs8v7QRy
+         /0xz2ZvAqDr0N84g1lul7cHBYs9j7rQJY9IX5DK89sVL26l73JdJz2Z5rD/uS/8IYaVT
+         4YLFEtr2jLsRHq2KiwsExXj/PZGw55ZDFr+iJQyHYJ2Z1m+jtuoGtG7/YiuQvdYXpbJG
+         RacxlyqURSBePpsAIO6J6mG9aMLDpSQZj+sdIb5InZFT6O7C+gNRJriEwitqafB9LfKG
+         czbmAh33cHmS6oWfw3X69zK6SlryOT0bul6394/+VUC+zjRS5vGFs3NdDeOWfGg/s3SZ
+         9KLA==
+X-Gm-Message-State: ACrzQf0cgONHE5+AC9HTxy55UWTPgrInX0ZSxYZehehRXQa64QcTq5zW
+        xhfmaapPCqgsAwbtI7cDSMM=
+X-Google-Smtp-Source: AMsMyM5rvIdQ21fThx7/qq6k5kqY3cxa3PGfZZFRLqhgG+eW+/B7xxurtfiJ0nbXAEOTYeffOfEemA==
+X-Received: by 2002:a6b:6018:0:b0:6a1:2c0c:6084 with SMTP id r24-20020a6b6018000000b006a12c0c6084mr3492310iog.128.1668125937660;
+        Thu, 10 Nov 2022 16:18:57 -0800 (PST)
 Received: from localhost ([2607:fea8:a2e2:2d00::61cc])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05660227cd00b006c1819ffe60sm220101ios.53.2022.11.10.16.18.55
+        by smtp.gmail.com with ESMTPSA id x6-20020a026f06000000b00363ac6a0b89sm298727jab.172.2022.11.10.16.18.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 16:18:55 -0800 (PST)
+        Thu, 10 Nov 2022 16:18:57 -0800 (PST)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -70,9 +70,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Subject: [PATCH v4 1/4] dt-bindings: arm: cpus: add qcom kryo 360 compatible
-Date:   Thu, 10 Nov 2022 19:18:16 -0500
-Message-Id: <20221111001818.124901-2-mailingradian@gmail.com>
+Subject: [PATCH v4 2/4] dt-bindings: arm: qcom: add sdm670 and pixel 3a compatible
+Date:   Thu, 10 Nov 2022 19:18:17 -0500
+Message-Id: <20221111001818.124901-3-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221111001818.124901-1-mailingradian@gmail.com>
 References: <20221111001818.124901-1-mailingradian@gmail.com>
@@ -88,27 +88,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Snapdragon 670 uses CPUs named Kryo 360 silver and Kryo 360 gold.
-Add the compatible string in the documentation.
+The Snapdragon 670 and Pixel 3a initial device trees are about to be
+added. Add the compatible strings for the board.
 
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 5c13b73e4d57..1247e9a975c9 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -178,6 +178,7 @@ properties:
-       - qcom,kryo250
-       - qcom,kryo260
-       - qcom,kryo280
-+      - qcom,kryo360
-       - qcom,kryo385
-       - qcom,kryo468
-       - qcom,kryo485
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 207e28260206..f9eddc22d4a4 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -51,6 +51,7 @@ description: |
+         sdm632
+         sdm636
+         sdm660
++        sdm670
+         sdm845
+         sdx55
+         sdx65
+@@ -654,6 +655,11 @@ properties:
+               - xiaomi,lavender
+           - const: qcom,sdm660
+ 
++      - items:
++          - enum:
++              - google,sargo
++          - const: qcom,sdm670
++
+       - items:
+           - enum:
+               - qcom,sdx55-mtp
 -- 
 2.38.1
 
