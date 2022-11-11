@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BC8625FCF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6511625FD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:50:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbiKKQsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
+        id S234071AbiKKQuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbiKKQsA (ORCPT
+        with ESMTP id S232004AbiKKQuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:48:00 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87087BE51
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:47:59 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso3469422wms.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:47:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tzIj0FbLWchm5YW+Ojb+mjYmHVpc0ognIOdlvY0jJmc=;
-        b=ORhWQXVLVCj32JAAdbD6We+SlO95hOo3Z4kePacUi0Y4dFJNCDHuu8Or4jGVP5syl/
-         tv0XO4ztzdwyoOGsjdOHi2kp9D12+rOGHjXiiCm/ytEKdvPXsJsAXhr7h/kicaYCeKfY
-         Ey8pwYYntRtXa9S7Oyd5k1u6h4KpNdVJeY5TGI6VA1JWDyPNUxU1WUwGr+F+iDr7IuKg
-         FLaWLRPXpqWBk3LRuVQF7Bi5OoZMGySUSndVWQiCAy9W5FuJQDgdK7hxa4vA463AJbOI
-         QPp9YBXHbZMTJVnPpDOGseekGWa9esEzo/3aZew/HbQBRzZIreOMoFHelwsCG8phCF7C
-         oxYg==
+        Fri, 11 Nov 2022 11:50:44 -0500
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0322E13E03;
+        Fri, 11 Nov 2022 08:50:44 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso5967362wmb.0;
+        Fri, 11 Nov 2022 08:50:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tzIj0FbLWchm5YW+Ojb+mjYmHVpc0ognIOdlvY0jJmc=;
-        b=UT/kifP3NF+NW8sYwSymR5kJ+bq2kWbTe0Jjs7tEd8rIS8NtDeXpW1gKY4ePd6I67+
-         NAYlCOPG/K+ckcF7o7SNKC+rN8wVp/hGEmgKxRI9ziznoR+qpuQRXrjSnhZagSvPqjeL
-         fMplO+rnZjVL3FOL939sW1lky5Fs7UcJaWSo6Xa0zDUS0Ka702CbxXsTZQOOKto+spgF
-         2Ogpg6/9KATxfuDtfZ/xLSlj8bzR9qznkGczJjEvYEp6eaf1oIaxKjrGcUmT0IeY9iAf
-         auORJzpSFhbsFcbpLz55fhYghJzo/1hwFOz8fXsMWPoWInBZDXcdINiMXh0ISon7NX62
-         YbwA==
-X-Gm-Message-State: ANoB5pn3XuLnQFEqUmsh4pDTJVpL0JA1Jojc8tFdRAUrgw/0LsK3giyC
-        /K2qlAGOh9Qp8vXuVMAmIdZUIQ==
-X-Google-Smtp-Source: AA0mqf4lxHD2VhR2gUmwYJipW4ys4Uden0b2CxCOUYSldiDwhdTomovtUeokqfW6glhyz46sxexSFA==
-X-Received: by 2002:a7b:cd12:0:b0:3cf:5080:412c with SMTP id f18-20020a7bcd12000000b003cf5080412cmr1821930wmj.99.1668185278322;
-        Fri, 11 Nov 2022 08:47:58 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id q12-20020a05600c46cc00b003b4ac05a8a4sm12135959wmo.27.2022.11.11.08.47.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 08:47:57 -0800 (PST)
-Message-ID: <c17ec8e0-a0c9-dc18-dbbe-3844b4147437@linaro.org>
-Date:   Fri, 11 Nov 2022 16:47:56 +0000
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JOvXDNO49PM7KIqPLjnou7naDaWKpFkuiADPMhOZ5gI=;
+        b=kDSC4GqBrDtOsgRomkNQJ+SLalnAOhceF+lq90ubPtuUZE0yurptGyMK0KKRcz1JU1
+         M9pVbVedvhNdl5a/nYsBBFu/QJ5GZ2THEZNHEzyLfyD9gvJxGuVmT8+K/IFCrkzZdBuz
+         hDBhZbo+IX7h1LQ64iSd/51Gb1z5qctRQT2HpFyMQ6GMG6A2RY1s450tISqU7dKqiyTX
+         Jp9p0mhDDpEcdzfV3jN3GobmK9bRjudck9WlPJuucfQFUuAVKsOuZE/Fa7gtktG6iV5f
+         YIL1EwrKD6omnGQMnxzJ7nO+EpbO/+WRauJVRtns4tQxvpZHFABTTozuwzFkK9vG76mC
+         toAQ==
+X-Gm-Message-State: ANoB5pnFq7RI4cE6rkJcdFG2M3PaI0lzGZ/TYTl7DGuVQVGXeS+oNgRC
+        4PMO7Kja9zmG2R4PgjtDGUA=
+X-Google-Smtp-Source: AA0mqf4QcS3ZEq0og5f/LYnK6wziZVxANgv0ng3LEYHS6q29l8ueZanJfTD08JlZC8plMxB5VwZQlg==
+X-Received: by 2002:a1c:cc01:0:b0:3cf:a9c2:2b04 with SMTP id h1-20020a1ccc01000000b003cfa9c22b04mr1884730wmb.152.1668185442522;
+        Fri, 11 Nov 2022 08:50:42 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id 6-20020a05600c228600b003cf4d99fd2asm3397453wmf.6.2022.11.11.08.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 08:50:42 -0800 (PST)
+Date:   Fri, 11 Nov 2022 16:50:40 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH] hv_balloon: Fix committed value in post_status() if
+ dynamic memory is disabled
+Message-ID: <Y259YF07nSes6zlp@liuwe-devbox-debian-v2>
+References: <1667544770-31377-1-git-send-email-shradhagupta@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 1/6] dt-bindings: nvmem: Fix example
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Christian Eggers <ceggers@arri.de>,
-        Cory Tusar <cory.tusar@pid1solutions.com>
-References: <20221104163833.1289857-1-miquel.raynal@bootlin.com>
- <20221104163833.1289857-2-miquel.raynal@bootlin.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221104163833.1289857-2-miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1667544770-31377-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/11/2022 16:38, Miquel Raynal wrote:
-> Despite not being listed nor required within the top level nvmem yaml
-> file, the "compatible" property is mandatory and is actually enforced by
-> all the nvmem provider bindings.
+On Thu, Nov 03, 2022 at 11:52:50PM -0700, Shradha Gupta wrote:
+> If Dynamic memory is disabled for VM, the committed value reported by the
+> post_status() call by hv_balloon driver includes compute_balloon_floor().
+> This is not needed if balloon_up operations or hot_add operations were
+> never requested on the VM(or if Dynamic memory was disabled for the VM)
 > 
-> Unfortunately, the lack of compatible in the nvmem.yaml to level
-> description file lead to the example not matching anything and thus not
-> being checked at all.
-> 
-> Let's pick a compatible almost randomly (one which is already used with
-> the qfprom label) to make the example at least valid on a semantic
-> point of view and getting it checked.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
 
-Applied thanks
+Can you put a Fixes: tag here?
 
---srini
+You can use git-blame to find out the culprit.
+
+Thanks,
+Wei.
+
 > ---
->   Documentation/devicetree/bindings/nvmem/nvmem.yaml | 1 +
->   1 file changed, 1 insertion(+)
+>  drivers/hv/hv_balloon.c | 22 +++++++++++++++++-----
+>  1 file changed, 17 insertions(+), 5 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> index 1eb22dba364c..0455506fc30f 100644
-> --- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-> @@ -67,6 +67,7 @@ examples:
->         #include <dt-bindings/gpio/gpio.h>
->   
->         qfprom: eeprom@700000 {
-> +          compatible = "qcom,msm8974-qfprom", "qcom,qfprom";
->             #address-cells = <1>;
->             #size-cells = <1>;
->             reg = <0x00700000 0x100000>;
+> diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+> index fdf6decacf06..a6f5321d4a2e 100644
+> --- a/drivers/hv/hv_balloon.c
+> +++ b/drivers/hv/hv_balloon.c
+> @@ -1129,11 +1129,23 @@ static unsigned long compute_balloon_floor(void)
+>  
+>  static unsigned long get_pages_committed(struct hv_dynmem_device *dm)
+>  {
+> -	return vm_memory_committed() +
+> -		dm->num_pages_ballooned +
+> -		(dm->num_pages_added > dm->num_pages_onlined ?
+> -		 dm->num_pages_added - dm->num_pages_onlined : 0) +
+> -		compute_balloon_floor();
+> +	unsigned long pages_committed;
+> +
+> +	pages_committed = vm_memory_committed();
+> +
+> +	/*
+> +	 * If no balloon_up or hot_add operation was performed do not add
+> +	 * num_pages_ballooned, number of pages offline or
+> +	 * compute_balloon_floor() to the pages_committed value
+> +	 */
+> +	if (dm->num_pages_ballooned || dm->num_pages_added) {
+> +		pages_committed += dm->num_pages_ballooned +
+> +			(dm->num_pages_added > dm->num_pages_onlined ?
+> +			 dm->num_pages_added - dm->num_pages_onlined : 0) +
+> +			 compute_balloon_floor();
+> +	}
+> +
+> +	return pages_committed;
+>  }
+>  
+>  /*
+> -- 
+> 2.37.2
+> 
