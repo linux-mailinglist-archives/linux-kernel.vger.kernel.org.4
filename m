@@ -2,161 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0836259AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5906259B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiKKLmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S231167AbiKKLnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiKKLml (ORCPT
+        with ESMTP id S233267AbiKKLnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:42:41 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA8F293;
-        Fri, 11 Nov 2022 03:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668166960; x=1699702960;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=124+lIYjUM+GMbJrh07c3Hmq7RwI2uO23bDDOBcYH8A=;
-  b=aagjEUbPjNTEda7sEzNZguqxSmdc2FzoirdaF4wJSHFDsdr2Yi/Z2JyE
-   T9kBr5XiPpp60Rs09+oZWbaUi47bvpqkZ18KjdvcvOe2BkYgHD9xmH1Cw
-   IjvdiEg4jydldh2LiNQYY543zZGHgoZtypumHHat046zVpq226vLzqaxE
-   E7CFBW4bktE76oRNOTlgj0aLVulS3gxIYhZH2iR1mhmAfCaELYplN40qi
-   Lm/FstDY1erKKXo9c8TPDejoZA/O91z7jiIApDxFBrXkLCbetYk7i+A6w
-   tvPsrT7VHDlCrn/9q9l5Fu8GPb4JFEjmpVEXSRqCeJ5+1Ke4SOrWrPUXv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="294940955"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="294940955"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 03:42:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="882740444"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="882740444"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Nov 2022 03:42:33 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1otSQX-00Afyh-3D;
-        Fri, 11 Nov 2022 13:42:30 +0200
-Date:   Fri, 11 Nov 2022 13:42:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 3/4] sched: add sched_numa_find_nth_cpu()
-Message-ID: <Y241Jd+27r/ZIiji@smile.fi.intel.com>
-References: <20221111040027.621646-1-yury.norov@gmail.com>
- <20221111040027.621646-4-yury.norov@gmail.com>
+        Fri, 11 Nov 2022 06:43:04 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0CE45ECF;
+        Fri, 11 Nov 2022 03:43:02 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABAt9kZ025079;
+        Fri, 11 Nov 2022 11:42:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=seBFUaRp3ouDX4be0OELujUijoj4Q03BoNVadg0/LK4=;
+ b=oVitbTaMdAuM7waoylsi39KLcq28CejbgAl/pb+ujA7f78qkVkD0+774T9TRPwDhxz26
+ Vzo8MkcDofre/6lm2Cbng98/C98GDb4t9ZkLmy6UjuRoNMDvHCUK7n9o7xJpKt1jP14N
+ /VNhtcx8lC8vXuCUjLVPkyptYqTgmuBrv+1od+YUBSS9li6Q+o0bvwWfrWyTEsxYeeRx
+ 7q0Nj5nk7Au+a2DOO9SIPltuGl6GDDtoT6GEGemn8ZDrkHJayH4PWnJPpZ2nm9i/nk/q
+ HDD+MS65+iR8kd3cQ/nEJIj35Z4vofYmph0g9YXzCY8uE4DWoNrMsoIlKFyFnSx9a8y0 fw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksada1t6k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 11:42:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABBgu7J010956
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 11:42:56 GMT
+Received: from youghand-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 11 Nov 2022 03:42:54 -0800
+From:   Youghandhar Chintala <quic_youghand@quicinc.com>
+To:     <ath11k@lists.infradead.org>
+CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_mpubbise@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        "Youghandhar Chintala" <quic_youghand@quicinc.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v3] wifi: ath10k: Add WLAN firmware image version info into smem
+Date:   Fri, 11 Nov 2022 17:12:35 +0530
+Message-ID: <20221111114235.10287-1-quic_youghand@quicinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111040027.621646-4-yury.norov@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pn7p2lM7IEusjRFCpMHEAhgXTRTm8JN8
+X-Proofpoint-GUID: pn7p2lM7IEusjRFCpMHEAhgXTRTm8JN8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_06,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ mlxscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211110078
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 08:00:26PM -0800, Yury Norov wrote:
-> The function finds Nth set CPU in a given cpumask starting from a given
-> node.
-> 
-> Leveraging the fact that each hop in sched_domains_numa_masks includes the
-> same or greater number of CPUs than the previous one, we can use binary
-> search on hops instead of linear walk, which makes the overall complexity
-> of O(log n) in terms of number of cpumask_weight() calls.
+In a SoC based solution, it would be useful to know the versions of the
+various binary firmware blobs the system is running on. On a QCOM based
+SoC, this info can be obtained from socinfo debugfs infrastructure. For
+this to work, respective subsystem drivers have to export the firmware
+version information to an SMEM based version information table.
 
-...
+Having firmware version information at one place will help quickly
+figure out the firmware versions of various subsystems on the device
+instead of going through builds/logs in an event of a system crash.
 
-> +int sched_numa_find_nth_cpu(const struct cpumask *cpus, int cpu, int node)
-> +{
-> +	unsigned int first = 0, mid, last = sched_domains_numa_levels;
-> +	struct cpumask ***masks;
+Fill WLAN firmware version information in SMEM version table to be
+printed as part of socinfo debugfs infrastructure on a Qualcomm based
+SoC.
 
-*** ?
-Hmm... Do we really need such deep indirection?
+This change is applicable only for WCN399X targets.
 
-> +	int w, ret = nr_cpu_ids;
-> +
-> +	rcu_read_lock();
-> +	masks = rcu_dereference(sched_domains_numa_masks);
-> +	if (!masks)
-> +		goto out;
-> +
-> +	while (last >= first) {
-> +		mid = (last + first) / 2;
-> +
-> +		if (cpumask_weight_and(cpus, masks[mid][node]) <= cpu) {
-> +			first = mid + 1;
-> +			continue;
-> +		}
-> +
-> +		w = (mid == 0) ? 0 : cpumask_weight_and(cpus, masks[mid - 1][node]);
+Example:
+cat /sys/kernel/debug/qcom_socinfo/cnss/name
+QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
 
-See below.
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +		if (w <= cpu)
-> +			break;
-> +
-> +		last = mid - 1;
-> +	}
+Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
 
-We have lib/bsearch.h. I haven't really looked deeply into the above, but my
-gut feelings that that might be useful here. Can you check that?
+Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+---
+Changes from v2:
+ - Removed blank line between trailers
+ - Changed memcpy to strscpy
+ - Removed version_string_size
+ - Added new condition fw_build_id against max length
+ - Added depends on QCOM_SMEM for ath10k_snoc
+---
+ drivers/net/wireless/ath/ath10k/Kconfig |  1 +
+ drivers/net/wireless/ath/ath10k/qmi.c   | 34 +++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-> +	ret = (mid == 0) ?
-> +		cpumask_nth_and(cpu - w, cpus, masks[mid][node]) :
-> +		cpumask_nth_and_andnot(cpu - w, cpus, masks[mid][node], masks[mid - 1][node]);
-
-You can also shorten this by inversing the conditional:
-
-	ret = mid ? ...not 0... : ...for 0...;
-
-> +out:
-
-out_unlock: ?
-
-> +	rcu_read_unlock();
-> +	return ret;
-> +}
-
+diff --git a/drivers/net/wireless/ath/ath10k/Kconfig b/drivers/net/wireless/ath/ath10k/Kconfig
+index ca007b800f75..e6ea884cafc1 100644
+--- a/drivers/net/wireless/ath/ath10k/Kconfig
++++ b/drivers/net/wireless/ath/ath10k/Kconfig
+@@ -44,6 +44,7 @@ config ATH10K_SNOC
+ 	tristate "Qualcomm ath10k SNOC support"
+ 	depends on ATH10K
+ 	depends on ARCH_QCOM || COMPILE_TEST
++	depends on QCOM_SMEM
+ 	select QCOM_SCM
+ 	select QCOM_QMI_HELPERS
+ 	help
+diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+index 66cb7a1e628a..6c3ddad26417 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi.c
++++ b/drivers/net/wireless/ath/ath10k/qmi.c
+@@ -14,6 +14,7 @@
+ #include <linux/net.h>
+ #include <linux/platform_device.h>
+ #include <linux/qcom_scm.h>
++#include <linux/soc/qcom/smem.h>
+ #include <linux/string.h>
+ #include <net/sock.h>
+ 
+@@ -22,6 +23,8 @@
+ 
+ #define ATH10K_QMI_CLIENT_ID		0x4b4e454c
+ #define ATH10K_QMI_TIMEOUT		30
++#define ATH10K_SMEM_IMAGE_VERSION_TABLE       469
++#define ATH10K_SMEM_IMAGE_TABLE_CNSS_INDEX     13
+ 
+ static int ath10k_qmi_map_msa_permission(struct ath10k_qmi *qmi,
+ 					 struct ath10k_msa_mem_info *mem_info)
+@@ -536,6 +539,35 @@ int ath10k_qmi_wlan_disable(struct ath10k *ar)
+ 	return ath10k_qmi_mode_send_sync_msg(ar, QMI_WLFW_OFF_V01);
+ }
+ 
++static void ath10k_qmi_add_wlan_ver_smem(struct ath10k *ar, const char *fw_build_id)
++{
++	u8 *smem_table_ptr;
++	size_t smem_block_size;
++	const u32 smem_img_idx_wlan = ATH10K_SMEM_IMAGE_TABLE_CNSS_INDEX * 128;
++
++	smem_table_ptr = qcom_smem_get(QCOM_SMEM_HOST_ANY,
++				       ATH10K_SMEM_IMAGE_VERSION_TABLE,
++				       &smem_block_size);
++	if (IS_ERR(smem_table_ptr)) {
++		ath10k_dbg(ar, ATH10K_DBG_QMI,
++			   "smem image version table not found\n");
++		return;
++	}
++
++	if (smem_img_idx_wlan + MAX_BUILD_ID_LEN > smem_block_size) {
++		ath10k_dbg(ar, ATH10K_DBG_QMI, "smem block size too small: %zu\n",
++			   smem_block_size);
++		return;
++	}
++
++	if (strlen(fw_build_id) > MAX_BUILD_ID_LEN) {
++		ath10k_dbg(ar, ATH10K_DBG_QMI, "fw_build_id length more than max length\n");
++		return;
++	}
++
++	strscpy(smem_table_ptr + smem_img_idx_wlan, fw_build_id, MAX_BUILD_ID_LEN);
++}
++
+ static int ath10k_qmi_cap_send_sync_msg(struct ath10k_qmi *qmi)
+ {
+ 	struct wlfw_cap_resp_msg_v01 *resp;
+@@ -606,6 +638,8 @@ static int ath10k_qmi_cap_send_sync_msg(struct ath10k_qmi *qmi)
+ 			    qmi->fw_version, qmi->fw_build_timestamp, qmi->fw_build_id);
+ 	}
+ 
++	ath10k_qmi_add_wlan_ver_smem(ar, qmi->fw_build_id);
++
+ 	kfree(resp);
+ 	return 0;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.38.0
 
