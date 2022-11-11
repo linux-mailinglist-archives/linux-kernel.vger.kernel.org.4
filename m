@@ -2,142 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A9E625728
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A1662572F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbiKKJpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S233350AbiKKJqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:46:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbiKKJo6 (ORCPT
+        with ESMTP id S233360AbiKKJqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:44:58 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4D165C8;
-        Fri, 11 Nov 2022 01:44:50 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7tyJ6p5QzJncW;
-        Fri, 11 Nov 2022 17:41:44 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 17:44:48 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 17:44:47 +0800
-Message-ID: <099a6096-b8b4-947f-681f-7176253d949e@huawei.com>
-Date:   Fri, 11 Nov 2022 17:44:46 +0800
+        Fri, 11 Nov 2022 04:46:15 -0500
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29889CDC
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:46:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lohu.info;
+        s=biln2210; t=1668159970;
+        bh=QBuozeCGvJ1pPUnPmH4I3zOe7+Yzr9DI6CwqEv6b9JE=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=HkZ9gWWj2+ADpfcrJZgt/xND7H/ZvFse4wjmloWQUCQaSLVKrQEP6PZucWt2jgrfa
+         gsM5f7/NRNnPQwdvBAmKSPl/3bb1fT0fqnDkUbd1+BcQv9EEB0YGCCFgvLX0GzopSe
+         QKs/cz3yTPE90heD2s8Xo6VX1rkPeVuFy7PQYnA8=
+X-QQ-mid: bizesmtp70t1668159967tkdhay0e
+Received: from localhost.localdomain ( [223.166.236.91])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 11 Nov 2022 17:45:58 +0800 (CST)
+X-QQ-SSF: 01100000000000G0Z000000A0000000
+X-QQ-FEAT: lP1Pu2Q8kTqcKFrUvbl6n7DNBaPweLpIzch4q+CEL724Fn8X3VErTTzPc7eqy
+        rubbPz/70YVXV6jTL1pHxjbOZt+/etvhXdx6VbnZ/as7bRUtftD48fd+kAK2n75G8MDQLwK
+        e7/++wIb6h04eyDWQow3NzHnFHADpqMM137xaGuBgYrQRibFanTEhEV1QA45+x/i/yprYfa
+        v3k/sHO/6mqVyc8LQi+/JsyweIfAfpVDJtXizzJTpX82PqnFbWT9nB7Zoz4zLBHMYHs9q3e
+        R/95L10xyDOVC8cE4OWUEpV+dCvNdYzfeDib3jf+nc/N8h0ZDu+G7s7WYjO77hSi0OZIJUR
+        7FRanaJEf/edEfBGwr7R/4DpRBn6nweixHCfygeAbypIK/MLws=
+X-QQ-GoodBg: 0
+From:   Soha Jin <soha@lohu.info>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Soha Jin <soha@lohu.info>
+Subject: [PATCH driver-core-next] platform: remove useless if-branch in __platform_get_irq_byname()
+Date:   Fri, 11 Nov 2022 17:45:42 +0800
+Message-Id: <20221111094542.270540-1-soha@lohu.info>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH v3] btrfs: qgroup: fix sleep from invalid context bug in
- update_qgroup_limit_item()
-To:     <clm@fb.com>, <josef@toxicpanda.com>, <dsterba@suse.com>
-CC:     <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhangxiaoxu5@huawei.com>, <quwenruo.btrfs@gmx.com>
-References: <20221111092000.2275068-1-chenxiaosong2@huawei.com>
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-In-Reply-To: <20221111092000.2275068-1-chenxiaosong2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:lohu.info:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please ignore this v3 patch, I will try to send a new version patch 
-according to Qu Wenruo's suggestions: 
-https://lore.kernel.org/all/df7ede88-86a2-1c6d-0343-c97a851b9bdf@gmx.com/
+When CONFIG_OF_IRQ is not enabled, there will be a stub method that always
+returns 0 when getting IRQ. Thus, the if-branch can be removed safely.
 
-在 2022/11/11 17:20, ChenXiaoSong 写道:
-> Syzkaller reported BUG as follows:
-> 
->    BUG: sleeping function called from invalid context at
->         include/linux/sched/mm.h:274
->    Call Trace:
->     <TASK>
->     dump_stack_lvl+0xcd/0x134
->     __might_resched.cold+0x222/0x26b
->     kmem_cache_alloc+0x2e7/0x3c0
->     update_qgroup_limit_item+0xe1/0x390
->     btrfs_qgroup_inherit+0x147b/0x1ee0
->     create_subvol+0x4eb/0x1710
->     btrfs_mksubvol+0xfe5/0x13f0
->     __btrfs_ioctl_snap_create+0x2b0/0x430
->     btrfs_ioctl_snap_create_v2+0x25a/0x520
->     btrfs_ioctl+0x2a1c/0x5ce0
->     __x64_sys_ioctl+0x193/0x200
->     do_syscall_64+0x35/0x80
-> 
-> Fix this by delaying the limit item updates until unlock the spin lock.
-> 
-> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-> ---
->   fs/btrfs/qgroup.c | 23 ++++++++++++++---------
->   1 file changed, 14 insertions(+), 9 deletions(-)
-> 
-> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
-> index 9334c3157c22..0071b2be6785 100644
-> --- a/fs/btrfs/qgroup.c
-> +++ b/fs/btrfs/qgroup.c
-> @@ -2860,6 +2860,8 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   	bool need_rescan = false;
->   	u32 level_size = 0;
->   	u64 nums;
-> +	bool update_limit = false;
-> +	int err;
->   
->   	/*
->   	 * There are only two callers of this function.
-> @@ -2950,15 +2952,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   		dstgroup->max_excl = inherit->lim.max_excl;
->   		dstgroup->rsv_rfer = inherit->lim.rsv_rfer;
->   		dstgroup->rsv_excl = inherit->lim.rsv_excl;
-> -
-> -		ret = update_qgroup_limit_item(trans, dstgroup);
-> -		if (ret) {
-> -			qgroup_mark_inconsistent(fs_info);
-> -			btrfs_info(fs_info,
-> -				   "unable to update quota limit for %llu",
-> -				   dstgroup->qgroupid);
-> -			goto unlock;
-> -		}
-> +		update_limit = true;
->   	}
->   
->   	if (srcid) {
-> @@ -2985,6 +2979,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   		dstgroup->max_excl = srcgroup->max_excl;
->   		dstgroup->rsv_rfer = srcgroup->rsv_rfer;
->   		dstgroup->rsv_excl = srcgroup->rsv_excl;
-> +		update_limit = true;
->   
->   		qgroup_dirty(fs_info, dstgroup);
->   		qgroup_dirty(fs_info, srcgroup);
-> @@ -3053,6 +3048,16 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
->   
->   unlock:
->   	spin_unlock(&fs_info->qgroup_lock);
-> +	if (update_limit) {
-> +		err = update_qgroup_limit_item(trans, dstgroup);
-> +		if (err) {
-> +			ret = err;
-> +			qgroup_mark_inconsistent(fs_info);
-> +			btrfs_info(fs_info,
-> +				   "unable to update quota limit for %llu",
-> +				   dstgroup->qgroupid);
-> +		}
-> +	}
->   	if (!ret)
->   		ret = btrfs_sysfs_add_one_qgroup(fs_info, dstgroup);
->   out:
-> 
+Fixes: d4ad017d6345 ("platform: use fwnode_irq_get_byname instead of of_irq_get_byname to get irq")
+Signed-off-by: Soha Jin <soha@lohu.info>
+---
+ drivers/base/platform.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+index 968f3d71eeab..6cd7fd478c5f 100644
+--- a/drivers/base/platform.c
++++ b/drivers/base/platform.c
+@@ -441,11 +441,9 @@ static int __platform_get_irq_byname(struct platform_device *dev,
+ 	struct resource *r;
+ 	int ret;
+ 
+-	if (!dev->dev.of_node || IS_ENABLED(CONFIG_OF_IRQ)) {
+-		ret = fwnode_irq_get_byname(dev_fwnode(&dev->dev), name);
+-		if (ret > 0 || ret == -EPROBE_DEFER)
+-			return ret;
+-	}
++	ret = fwnode_irq_get_byname(dev_fwnode(&dev->dev), name);
++	if (ret > 0 || ret == -EPROBE_DEFER)
++		return ret;
+ 
+ 	r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
+ 	if (r) {
+-- 
+2.30.2
+
