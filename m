@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF586254CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAD96254D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbiKKH70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S232963AbiKKIAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:00:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiKKH7Y (ORCPT
+        with ESMTP id S232987AbiKKIAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:59:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A558C45A3B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:59:23 -0800 (PST)
+        Fri, 11 Nov 2022 03:00:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D0E748E8;
+        Fri, 11 Nov 2022 00:00:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F158FCE257B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:59:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CDAC433D6;
-        Fri, 11 Nov 2022 07:59:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4505FB82405;
+        Fri, 11 Nov 2022 08:00:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA15C433C1;
+        Fri, 11 Nov 2022 08:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668153560;
-        bh=7YM4Ka0ebCuIEuz50vxHPcJkntgQCHzI1KnrlWMijZQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bjKMK8gRmG1/YFfOrdCMYD4UqRsJ0z9YnF9AnNT90pFjQrCMqnd1FgjRxql1JeKX1
-         f1r1SlN0S0fPWiJnDgrXXPboYMK2OLqIaAO0+d9cl9Wk05qISLZjLf4IlHFP/fRNsU
-         4NvqEDnRiV8tTlAjqGJ/XfhXPKAH5U2Rdw6wDUmRbajXIX2DqIpE7k48zKLZrzWxYa
-         ZNgU1Qw5/Sug37W0rZbq2wOTMLvOkbY5vi98CV+cbiSCs6+seywwaDeHoc64ZjvGOF
-         /UW9GRmBJZbLY/0jUkj7lnrliWZCe/460qYO1tP2fMZ0rTMucpgED3PK5idBIjtyv4
-         JGhcG/GPH4HCg==
-From:   guoren@kernel.org
-To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de,
-        philipp.tomsich@vrull.eu, alex@ghiti.fr, hch@lst.de,
-        ajones@ventanamicro.com, gary@garyguo.net, jszhang@kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH V3] riscv: asid: Fixup stale TLB entry cause application crash
-Date:   Fri, 11 Nov 2022 02:59:02 -0500
-Message-Id: <20221111075902.798571-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1668153637;
+        bh=/JhKtSplEXWQW83/PgxO5BdmEweOLgZbpN75oFE0iQE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bXKbxgj2UCTHUgeiGA+vW+Pc06m+20eJOo+npKH0T0z6xBvXwNBmy/nWBbAo7HJ2f
+         HDxHRP5biJytHOqONg5WlAPFBBWqfCjz5e3YiQH27oEZP2hW5wi5rQfPY2z7DIM6NL
+         cKst6mvMt3HKjZZK5fmNA593a2Xi9uIkxppyVXIy3bijpGj+R+aZx526NQQ678BB8o
+         YWDAG5KrCQBYMlyJsKUO3ItrixysfwtSnk+EKwWyBPKH7fU+yX1eernRm+A7Hjn//6
+         62ngoqWbRW6nzjTl+Tj2llrao/t4SaOFSa2hh7wR1eMQtrVyq86bnTJyVrFjpcQvtV
+         dnrWszvKuSCoA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1otOxn-005LMf-A2;
+        Fri, 11 Nov 2022 08:00:35 +0000
+Date:   Fri, 11 Nov 2022 08:00:10 +0000
+Message-ID: <87h6z5vs39.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, tglx@linutronix.de,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic CS48L31/32/33 codecs
+In-Reply-To: <Y21gwGDb5CFft0kp@sirena.org.uk>
+References: <20221109165331.29332-1-rf@opensource.cirrus.com>
+        <20221109165331.29332-10-rf@opensource.cirrus.com>
+        <87mt8zutib.wl-maz@kernel.org>
+        <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
+        <86pmdvow5y.wl-maz@kernel.org>
+        <ef60cbdb-f506-7bd6-a8e1-c92b6963a0f4@opensource.cirrus.com>
+        <86k042q1uc.wl-maz@kernel.org>
+        <05ae0e20-b472-f812-1afc-ef8c2a97cdeb@opensource.cirrus.com>
+        <87iljmve87.wl-maz@kernel.org>
+        <Y21gwGDb5CFft0kp@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: broonie@kernel.org, rf@opensource.cirrus.com, lee@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org, tglx@linutronix.de, alsa-devel@alsa-project.org, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,142 +78,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, 10 Nov 2022 20:36:16 +0000,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> On Thu, Nov 10, 2022 at 06:47:20PM +0000, Marc Zyngier wrote:
+> 
+> > Read again what I have written. Having to expose a device-specific API
+> > for endpoint drivers to obtain their interrupts, and requiring them to
+> > know about some magic values that describe the interrupts source are
+> > not a acceptable constructs.
+> 
+> > We have firmware descriptions to expose interrupt linkages, and your
+> > HW is not special enough to deserve its own top level API. Yes, we
+> > accepted such drivers in the past, but it has to stop.
+> 
+> > Either you describe the internal structure of your device in DT or
+> > ACPI, and make all client drivers use the standard API, or you make
+> > this a codec library, purely specific to your device and only used by
+> > it. But the current shape is not something I'm prepared to accept.
+> 
+> ACPI gets to be a lot of fun here, it's just not idiomatic to describe
+> the internals of these devices in firmware there and a lot of the
+> systems shipping this stuff are targeted at other OSs and system
+> integrators are therefore not in the least worried about Linux
+> preferences.
 
-After use_asid_allocator is enabled, the userspace application will
-crash by stale TLB entries. Because only using cpumask_clear_cpu without
-local_flush_tlb_all couldn't guarantee CPU's TLB entries were fresh.
-Then set_mm_asid would cause the user space application to get a stale
-value by stale TLB entry, but set_mm_noasid is okay.
+Let me reassure the vendors that I do not care about them either. By
+this standard, we'd all run Windows on x86.
 
-Here is the symptom of the bug:
-unhandled signal 11 code 0x1 (coredump)
-   0x0000003fd6d22524 <+4>:     auipc   s0,0x70
-   0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
-=> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
-(gdb) i r s0
-s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
-(gdb) x /2x 0x3fd6d92490
-0x3fd6d92490:   0xd80ac8a8      0x0000003f
-The core dump file shows that register s0 is wrong, but the value in
-memory is correct. Because 'ld s0, -148(s0)' used a stale mapping entry
-in TLB and got a wrong result from an incorrect physical address.
+> You'd need to look at having the MFD add additional
+> description via swnode or something to try to get things going.  MFD
+> does have support for that, though it's currently mainly used with
+> devices that only have ACPI use (axp20x looks like the only potentially
+> DT user, from the git history the swnode bits are apparently for use on
+> ACPI systems).  That might get fragile in the DT case since you could
+> have multiple sources for description of the same thing unless you do
+> something like suppress the swnode stuff on DT systems.
+> 
+> Given that swnode is basically DT written out in C code I'm not actually
+> convinced it's that much of a win, unless someone writes some tooling to
+> generate swnode data from DT files you're not getting the benefit of any
+> of the schema validation work that's being done.  We'd also need to do
+> some work for regulators to make sure that if we are parsing DT
+> properties on ACPI systems we don't do so from _DSD since ACPI has
+> strong ideas about how power works and we don't want to end up with
+> systems with firmware providing mixed ACPI/DT models without a clear
+> understanding of what we're geting into.
+> 
+> I do also have other concerns in the purely DT case, especially with
+> chip functions like the CODEC where there's a very poor mapping between
+> physical IPs and how Linux is tending to describe things internally at
+> the minute.  In particular these devices often have a clock tree
+> portions of which can be visible and useful off chip but which tends to
+> get lumped in with the audio IPs in our current code.  Ideally we'd
+> describe that as a clock subdevice (or subdevices if that fits the
+> hardware) using the clock bindings but then that has a bunch of knock on
+> effects the way the code currently is which probably it's probably
+> disproportionate to force an individual driver author to work through.
+> OTOH the DT bindings should be OS neutral ABI so...
 
-When the task ran on CPU0, which loaded/speculative-loaded the value of
-address(0x3fd6d92490), then the first version of the mapping entry was
-PTWed into CPU0's TLB.
-When the task switched from CPU0 to CPU1 (No local_tlb_flush_all here by
-asid), it happened to write a value on the address (0x3fd6d92490). It
-caused do_page_fault -> wp_page_copy -> ptep_clear_flush ->
-ptep_get_and_clear & flush_tlb_page.
-The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need TLB
-flush, but CPU0 had cleared the CPU0's mm_cpumask in the previous
-switch_mm. So we only flushed the CPU1 TLB and set the second version
-mapping of the PTE. When the task switched from CPU1 to CPU0 again, CPU0
-still used a stale TLB mapping entry which contained a wrong target
-physical address. It raised a bug when the task happened to read that
-value.
+I don't think this is a reason to continue on the current path that
+pretends to have something generic, but instead is literally a board
+file fragment with baked-in magic numbers.
 
-   CPU0                               CPU1
-   - switch 'task' in
-   - read addr (Fill stale mapping
-     entry into TLB)
-   - switch 'task' out (no tlb_flush)
-                                      - switch 'task' in (no tlb_flush)
-                                      - write addr cause pagefault
-                                        do_page_fault() (change to
-                                        new addr mapping)
-                                          wp_page_copy()
-                                            ptep_clear_flush()
-                                              ptep_get_and_clear()
-                                              & flush_tlb_page()
-                                        write new value into addr
-                                      - switch 'task' out (no tlb_flush)
-   - switch 'task' in (no tlb_flush)
-   - read addr again (Use stale
-     mapping entry in TLB)
-     get wrong value from old phyical
-     addr, BUG!
+An irqchip is supposed to offer services to arbitrary clients
+(endpoint drivers) that are oblivious of the irqchip itself, of the
+hwirq mapping, and use the standard APIs to obtain a virtual interrupt
+number. None of that here. This is a monolithic driver, only split
+across multiple subsystem to satisfy a "not in my backyard"
+requirement.
 
-The solution is to keep all CPUs' footmarks of cpumask(mm) in switch_mm,
-which could guarantee to invalidate all stale TLB entries during TLB
-flush.
+If the vendors/authors want to keep the shape of the code as is, they
+can do it outside of the irqchip code and have some library code with
+an internal API. At least they will stop pretending that this is a
+general purpose driver. And the existing madera code can also go in
+the process.
 
-Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Anup Patel <apatel@ventanamicro.com>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>
----
-Changes in v3:
- - Move set/clear cpumask(mm) into set_mm (Make code more pretty
-   with Andrew's advice)
- - Optimize comment description
+	M.
 
-Changes in v2:
- - Fixup nommu compile problem (Thx Conor, Also Reported-by: kernel
-   test robot <lkp@intel.com>)
- - Keep cpumask_clear_cpu for noasid
----
- arch/riscv/mm/context.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-index 7acbfbd14557..0f784e3d307b 100644
---- a/arch/riscv/mm/context.c
-+++ b/arch/riscv/mm/context.c
-@@ -205,12 +205,24 @@ static void set_mm_noasid(struct mm_struct *mm)
- 	local_flush_tlb_all();
- }
- 
--static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-+static inline void set_mm(struct mm_struct *prev,
-+			  struct mm_struct *next, unsigned int cpu)
- {
--	if (static_branch_unlikely(&use_asid_allocator))
--		set_mm_asid(mm, cpu);
--	else
--		set_mm_noasid(mm);
-+	/*
-+	 * The mm_cpumask indicates which harts' TLBs contain the virtual
-+	 * address mapping of the mm. Compared to noasid, using asid
-+	 * can't guarantee that stale TLB entries are invalidated because
-+	 * the asid mechanism wouldn't flush TLB for every switch_mm for
-+	 * performance. So when using asid, keep all CPUs footmarks in
-+	 * cpumask() until mm reset.
-+	 */
-+	cpumask_set_cpu(cpu, mm_cpumask(next));
-+	if (static_branch_unlikely(&use_asid_allocator)) {
-+		set_mm_asid(next, cpu);
-+	} else {
-+		cpumask_clear_cpu(cpu, mm_cpumask(prev));
-+		set_mm_noasid(next);
-+	}
- }
- 
- static int __init asids_init(void)
-@@ -264,7 +276,8 @@ static int __init asids_init(void)
- }
- early_initcall(asids_init);
- #else
--static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-+static inline void set_mm(struct mm_struct *prev,
-+			  struct mm_struct *next, unsigned int cpu)
- {
- 	/* Nothing to do here when there is no MMU */
- }
-@@ -317,10 +330,7 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
- 	 */
- 	cpu = smp_processor_id();
- 
--	cpumask_clear_cpu(cpu, mm_cpumask(prev));
--	cpumask_set_cpu(cpu, mm_cpumask(next));
--
--	set_mm(next, cpu);
-+	set_mm(prev, next, cpu);
- 
- 	flush_icache_deferred(next, cpu);
- }
 -- 
-2.36.1
-
+Without deviation from the norm, progress is not possible.
