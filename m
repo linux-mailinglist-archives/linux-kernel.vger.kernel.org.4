@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1058625851
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F31625857
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbiKKK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S233893AbiKKK2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbiKKK1F (ORCPT
+        with ESMTP id S233876AbiKKK1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:27:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203EA98;
-        Fri, 11 Nov 2022 02:27:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 11 Nov 2022 05:27:42 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D917596
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:27:27 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 02F6C22A78;
+        Fri, 11 Nov 2022 10:27:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668162446; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zRnotCSwwpTe65f/KJdeiKaNSmLCv5EuT1e7hywId2U=;
+        b=Hk6k65GZEtfwzi/hIlqDUlb2hm9Hxrqyh57Yn5ppiolHk5skH8sH+Z4lMY9HZ0U37DIJ5L
+        5nbjZuys5QG/Hntq+WZMlYvK1ddoSmcnoUiI6tFm2PgEFPCIDLwgf1LS0OQwW7SbfZtQE3
+        ppHudoLNs6UjeVOPQUmgWnx+pDBdHBI=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5A61B82515;
-        Fri, 11 Nov 2022 10:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3787AC433C1;
-        Fri, 11 Nov 2022 10:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668162421;
-        bh=NIKpSpHWlLy3T60+YotIDy3wX5KgU5OicTFFNaPOkFQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ibLA1W+pwsYEQ0vHTaOJwZR2is0QrWe8DpwuUYBWmZGDguyc6aIeqWGurz52H/2hw
-         zrtNORx1azaDKxNLtYciHAOGRmsNLjS7yNX11PXfdCt3uDGNP6Mj9i8FW8kKAgpsMA
-         T4361gvJ72SfLRN6l2UcTvB4rpv6Ct/L9hK7XS5vxk8OhSw/FeiEPRYYhWB5Nsdy+8
-         EadjY82otDc8gNRBnFFSii/q/UyK7EcT7XAX145OX7V3i+DZOUkGXhq09C2Zd0wAsf
-         PTZgezx8VfUFVd5FhCai4QSsJ1cFdJlRMDsVgem/Mbp6xl9ueL4Ob/oa0p04DlTIOo
-         cI30JOpv7uZZA==
-Date:   Fri, 11 Nov 2022 11:26:53 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/5] PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
-Message-ID: <Y24jbQ5iLVnqVCJh@lpieralisi>
-References: <20221014192730.GA3488778@bhelgaas>
- <6535ae14-3b09-3b17-d121-b75f433045fb@gmail.com>
- <CA+-6iNyiNLyMSsQtisDAqNF5_PNKzmAgbi11GDjFMP21naZHzw@mail.gmail.com>
+        by relay2.suse.de (Postfix) with ESMTPS id A9E842C142;
+        Fri, 11 Nov 2022 10:27:25 +0000 (UTC)
+Date:   Fri, 11 Nov 2022 11:27:25 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v3 39/40] printk: relieve console_lock of list
+ synchronization duties
+Message-ID: <Y24jjYXuNRdVoNns@alley>
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+ <20221107141638.3790965-40-john.ogness@linutronix.de>
+ <87r0ye916v.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+-6iNyiNLyMSsQtisDAqNF5_PNKzmAgbi11GDjFMP21naZHzw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87r0ye916v.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:43:13PM -0400, Jim Quinlan wrote:
-> On Thu, Nov 3, 2022 at 2:49 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >
-> > On 10/14/22 12:27, Bjorn Helgaas wrote:
-> > > On Fri, Oct 14, 2022 at 03:16:35PM -0400, Jim Quinlan wrote:
-> > >> On Thu, Oct 13, 2022 at 10:12 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >>> On Tue, Oct 11, 2022 at 02:42:10PM -0400, Jim Quinlan wrote:
-> > >>>> Set RCB_MPS mode bit so that data for PCIe read requests up to the size of
-> > >>>> the Maximum Payload Size (MPS) are returned in one completion, and data for
-> > >>>> PCIe read requests greater than the MPS are split at the specified Read
-> > >>>> Completion Boundary setting.
-> > >>>>
-> > >>>> Set RCB_64B so that the Read Compeletion Boundary is 64B.
-> > >>>
-> > >>> s/Compeletion/Completion/
-> > >>
-> > >> Hi Bjorn,
-> > >>
-> > >> TIL that checkpatch.pl only flags misspelled words only if they match
-> > >> its list of misspelled words.
-> > >> I've modified my checkpatch.pl wrapper script to use aspell to better
-> > >> address my typos.
-> > >> At any rate, do you mind if I add some new commits for V3?
-> > >
-> > > Fine with me, I think Lorenzo will look at these again after v6.1-rc1
-> > > is tagged this weekend.
-> >
-> > Lorenzo, any chance to get those patches reviewed and/or merged? Thanks!
+On Mon 2022-11-07 17:36:48, John Ogness wrote:
+> On 2022-11-07, John Ogness <john.ogness@linutronix.de> wrote:
+> > @@ -3344,7 +3340,6 @@ void register_console(struct console *newcon)
+> >  	 * Put this console in the list - keep the
+> >  	 * preferred driver at the head of the list.
+> >  	 */
+> > -	console_lock();
+> >  	if (hlist_empty(&console_list)) {
+> >  		/* Ensure CON_CONSDEV is always set for the head. */
+> >  		newcon->flags |= CON_CONSDEV;
+> > @@ -3358,7 +3353,6 @@ void register_console(struct console *newcon)
+> >  	} else {
+> >  		hlist_add_behind_rcu(&newcon->node, console_list.first);
+> >  	}
+> > -	console_unlock();
+> >  
+> >  	/*
+> >  	 * No need to synchronize SRCU here! The caller does not rely
 > 
-> Oops, I said I would add some commits but I don't have time right now.
->   Bjorn  or Lorenzo, could you review what is there and if you accept
-> the commits can you please make the single spelling correction?  If
-> not, I will correct the spelling along with any other requested
-> changes.
+> I just realized that because of the new @seq initialization (patch 5/40)
+> that we cannot completely remove the console_lock from
+> register_console(). It will still be needed for @seq synchronization
+> when registering non-boot/non-printbuffer consoles. So something like
+> the patch below will need to be folded into this one.
 
-I will fix the spelling, reviewing the patches now.
+Great catch!
 
-Lorenzo
+> I am not happy with this. If an enabled boot console is behind, the
+> console_unlock() will probably catch it up and we will end up with some
+> repeat messages. But maybe this is "good enough" until we implement some
+> real coordination between boot console and normal console takeovers.
+
+The same problem actually has been there even before. The new console
+was added in console_list under console_lock(). console_unlock() was
+called before the early consoles were unregistered.
+
+A solution would be to call pr_flush() before. But it should be
+done in a separate patch.
+
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index 17765166ac42..bb119001df56 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -3328,12 +3328,21 @@ void register_console(struct console *newcon)
+>  		 * that message instead. That boot console will be
+>  		 * unregistered shortly and may be the same device.
+>  		 */
+> +
+> +		/*
+> +		 * Hold the console_lock to guarantee safe access to
+> +		 * console->seq.
+> +		 */
+> +		console_lock();
+> +
+>  		for_each_console(con) {
+>  			if ((con->flags & (CON_BOOT | CON_ENABLED)) == (CON_BOOT | CON_ENABLED) &&
+>  			    con->seq < newcon->seq) {
+>  				newcon->seq = con->seq;
+>  			}
+>  		}
+> +
+> +		console_unlock();
+>  	}
+
+This should be added already into the 5th patch that added this cycle.
+We just must keep it in this patch.
+
+Best Regards,
+Petr
