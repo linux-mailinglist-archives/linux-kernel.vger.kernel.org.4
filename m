@@ -2,263 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AFC6254CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF586254CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiKKH7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
+        id S232921AbiKKH70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 02:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiKKH7K (ORCPT
+        with ESMTP id S232574AbiKKH7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:59:10 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A5367112;
-        Thu, 10 Nov 2022 23:59:09 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id b62so3864337pgc.0;
-        Thu, 10 Nov 2022 23:59:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pveMSuEdi3DIeMZ1Uax+ZhWeXDUKZE4SO272ZTa5I1Q=;
-        b=L+ngB/6ctN6+fdzn3cxFKD7rgYm67zAXAilqHhG6DzHtRp7Q48uShWTLNQLhq19iYo
-         EiW39dXpUVZd2JqSD4eKq88YHZkijkGtPaMTAcONnKaUdXsRh0Uj/Uf3r44Jni5KP5k4
-         wiVw0E0n8pEb3Bhec/JqaV/xAhUcTklaY7oz+ut6C2/OppO7WRv9X7SBZRvyPYBrl2QS
-         39prxqz93Up+p3QQCso0YhV0D0ddyrZE1YHdXsPPLjr28CxVD4qlCUYrUpe934iGDpEW
-         fdd/pG+benRFXzyKJffTyvSV7fDVwsNrk708tgrMNXvpD6TTw8B+SrcY4XSnoJ5sEYWz
-         PjHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pveMSuEdi3DIeMZ1Uax+ZhWeXDUKZE4SO272ZTa5I1Q=;
-        b=2RfggDE2fY2R8oW7ud8xqzInW5/xbZJmwlf+mSUaH7gDFsEaw6S1HEz2BwAL1y+dlM
-         xP7szAESMq60JNmqX+rOT2q4Gzgg0Nt+QMAcQpg9F1PGu5p8UrB7ck9YfSpkCppRmMUt
-         CcfsX5S0hVBRcI+V7/spE45O2NSTWQs3BVsR0vACKmBq7fXBGfUjx5ruka1V5zvtvpZ6
-         kcD45VA3xHCDzqA9e5wE8Tbuw6Qu0Sep460VJWJ5ZrmrNp4iFbD7r3S/PnLfP8/Obu2S
-         MjXIp2g8FYQtHems9M7PZi0hROrJ/qsDKtpuK/WXwi26Uh4c3TPf6twmrcrrBrVxlZRU
-         hZig==
-X-Gm-Message-State: ANoB5pmV47pJwjcMfpuPupC2QGf+xDKL0z32KDX8yromcafqFsiDwkyF
-        QsJYXfdTQQ8OOdJhHblEYzZQZTPqttOWnM6+75k=
-X-Google-Smtp-Source: AA0mqf7t/aEwRs6hHuzyCXOK7zP1ELR4qOfpipiy+XfjjmLkexGnAtX7s7V1SdR+voJcuTEGU344joHIjGJ3kCn/5JA=
-X-Received: by 2002:aa7:946f:0:b0:56e:174e:efdf with SMTP id
- t15-20020aa7946f000000b0056e174eefdfmr1544172pfq.29.1668153549039; Thu, 10
- Nov 2022 23:59:09 -0800 (PST)
+        Fri, 11 Nov 2022 02:59:24 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A558C45A3B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:59:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F158FCE257B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CDAC433D6;
+        Fri, 11 Nov 2022 07:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668153560;
+        bh=7YM4Ka0ebCuIEuz50vxHPcJkntgQCHzI1KnrlWMijZQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bjKMK8gRmG1/YFfOrdCMYD4UqRsJ0z9YnF9AnNT90pFjQrCMqnd1FgjRxql1JeKX1
+         f1r1SlN0S0fPWiJnDgrXXPboYMK2OLqIaAO0+d9cl9Wk05qISLZjLf4IlHFP/fRNsU
+         4NvqEDnRiV8tTlAjqGJ/XfhXPKAH5U2Rdw6wDUmRbajXIX2DqIpE7k48zKLZrzWxYa
+         ZNgU1Qw5/Sug37W0rZbq2wOTMLvOkbY5vi98CV+cbiSCs6+seywwaDeHoc64ZjvGOF
+         /UW9GRmBJZbLY/0jUkj7lnrliWZCe/460qYO1tP2fMZ0rTMucpgED3PK5idBIjtyv4
+         JGhcG/GPH4HCg==
+From:   guoren@kernel.org
+To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de,
+        philipp.tomsich@vrull.eu, alex@ghiti.fr, hch@lst.de,
+        ajones@ventanamicro.com, gary@garyguo.net, jszhang@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH V3] riscv: asid: Fixup stale TLB entry cause application crash
+Date:   Fri, 11 Nov 2022 02:59:02 -0500
+Message-Id: <20221111075902.798571-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20221021073025.18831-1-wenchao.chen666@gmail.com> <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com>
-In-Reply-To: <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com>
-From:   Wenchao Chen <wenchao.chen666@gmail.com>
-Date:   Fri, 11 Nov 2022 15:58:57 +0800
-Message-ID: <CA+Da2qyx7McYStMysPdK-DV9qiOnb9rvXYqqugxsbVgqqX59VQ@mail.gmail.com>
-Subject: Re: [PATCH V2 0/2] mmc: block: Support Host to control FUA
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     ulf.hansson@linaro.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        axboe@kernel.dk, avri.altman@wdc.com, kch@nvidia.com,
-        CLoehle@hyperstone.com, vincent.whitchurch@axis.com,
-        bigeasy@linutronix.de, s.shtylyov@omp.ru,
-        michael@allwinnertech.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
-        lzx.stg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hunter
-Thank you for your review!
-I'm sorry to reply you so late because I've been too busy lately.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On Fri, Oct 21, 2022 at 11:50 PM Adrian Hunter <adrian.hunter@intel.com> wr=
-ote:
->
-> On 21/10/22 10:30, Wenchao Chen wrote:
-> > From: Wenchao Chen <wenchao.chen@unisoc.com>
-> >
-> > Summary
-> > =3D=3D=3D=3D=3D=3D=3D
-> > These patches[1] supports the host to turn off FUA.
-> >
-> > About FUA, roughly deal with the following two parts:
-> > 1) FUA(Forced Unit Access):
-> > - The REQ_FUA flag can be OR ed into the r/w flags of a bio submitted f=
-rom the
-> >   filesystem and will make sure that I/O completion for this request is=
- only
-> >   signaled after the data has been committed to non-volatile storage.
-> >
-> > 2) In emmc, FUA is represented as Reliable write. code show as below:
-> > static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_re=
-q *mqrq,
-> >               int recovery_mode, bool *do_rel_wr_p, bool *do_data_tag_p=
-)
-> > {
-> >       ...
-> >       /*
-> >        * Reliable writes are used to implement Forced Unit Access and
-> >        * are supported only on MMCs.
-> >        */
-> >       do_rel_wr =3D (req->cmd_flags & REQ_FUA) &&
-> >                       rq_data_dir(req) =3D=3D WRITE &&
-> >                       (md->flags & MMC_BLK_REL_WR);
-> >       ...
-> > }
-> >
-> > Patch structure
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > patch#1:  for block
-> > patch#2:  for sdhci-sprd
-> >
-> > Tests
-> > =3D=3D=3D=3D=3D
-> > Ran 'AndroBench' to evaluate the performance:
->
-> It would be good to have more details e.g.
-> What file system? What block size?  What journal size?
-> What file size? What record size?
->
+After use_asid_allocator is enabled, the userspace application will
+crash by stale TLB entries. Because only using cpumask_clear_cpu without
+local_flush_tlb_all couldn't guarantee CPU's TLB entries were fresh.
+Then set_mm_asid would cause the user space application to get a stale
+value by stale TLB entry, but set_mm_noasid is okay.
 
-What file system?
-F2FS
-What block size?
-Sequential: 32768KB, Random: 4KB
-What file size?
-64MB
+Here is the symptom of the bug:
+unhandled signal 11 code 0x1 (coredump)
+   0x0000003fd6d22524 <+4>:     auipc   s0,0x70
+   0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
+=> 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
+(gdb) i r s0
+s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
+(gdb) x /2x 0x3fd6d92490
+0x3fd6d92490:   0xd80ac8a8      0x0000003f
+The core dump file shows that register s0 is wrong, but the value in
+memory is correct. Because 'ld s0, -148(s0)' used a stale mapping entry
+in TLB and got a wrong result from an incorrect physical address.
 
-> > 1. fua_disable =3D 1
-> > /sys/block/mmcblk0/queue # cat fua 0
-> > I tested 5 times for each case and output a average speed.
-> >
-> > 1) Sequential read:
-> > Speed: 266.8MiB/s, 265.1MiB/s, 262.9MiB/s, 268.7MiB/s, 265.2MiB/s
-> > Average speed: 265.74MiB/s
-> >
-> > 2) Random read:
-> > Speed: 98.75MiB/s, 98.7MiB/s, 98.5MiB/s, 99.4MiB/s, 98.7MiB/s
-> > Average speed: 98.81MiB/s
-> >
-> > 3) Sequential write:
-> > Speed: 199.94MiB/s, 199.1MiB/s, 205.5MiB/s, 206.5MiB/s, 191.5MiB/s
-> > Average speed: 200.5MiB/s
-> >
-> > 4) Random write:
-> > Speed: 68.6MiB/s, 71.8MiB/s, 77.1MiB/s, 64.8MiB/s, 69.3MiB/s
-> > Average speed: 70.32MiB/s
-> >
-> > 2. fua_disable =3D 0 (default 0)
-> > /sys/block/mmcblk0/queue # cat fua 1
-> > I tested 5 times for each case and output a average speed.
-> >
-> > 1) Sequential read:
-> > Speed: 259.3MiB/s, 258.8MiB/s, 258.2MiB/s, 259.5MiB/s, 253.5MiB/s
-> > Average speed: 257.86MiB/s
-> >
-> > 2) Random read:
-> > Speed: 98.9MiB/s, 101MiB/s, 101MiB/s, 99MiB/s, 101.1MiB/s
-> > Average speed: 100.2MiB/s
-> >
-> > 3) Sequential write:
-> > Speed: 153.7MiB/s, 146.2MiB/s, 151.2MiB/s, 148.8MiB/s, 147.5MiB/s
-> > Average speed: 149.48MiB/s
-> >
-> > 4) Random write:
-> > Speed: 12.9MiB/s, 12.3MiB/s, 12.6MiB/s, 12.8MiB/s, 12.8MiB/s
-> > Average speed: 12.68MiB/s
->
-> Is every write being sync'ed of just sync at the end?
->
+When the task ran on CPU0, which loaded/speculative-loaded the value of
+address(0x3fd6d92490), then the first version of the mapping entry was
+PTWed into CPU0's TLB.
+When the task switched from CPU0 to CPU1 (No local_tlb_flush_all here by
+asid), it happened to write a value on the address (0x3fd6d92490). It
+caused do_page_fault -> wp_page_copy -> ptep_clear_flush ->
+ptep_get_and_clear & flush_tlb_page.
+The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need TLB
+flush, but CPU0 had cleared the CPU0's mm_cpumask in the previous
+switch_mm. So we only flushed the CPU1 TLB and set the second version
+mapping of the PTE. When the task switched from CPU1 to CPU0 again, CPU0
+still used a stale TLB mapping entry which contained a wrong target
+physical address. It raised a bug when the task happened to read that
+value.
 
-/*
-* Reliable writes are used to implement Forced Unit Access and
-* are supported only on MMCs.
-*/
-do_rel_wr =3D (req->cmd_flags & REQ_FUA) &&
-    rq_data_dir(req) =3D=3D WRITE &&
-    (md->flags & MMC_BLK_REL_WR);
+   CPU0                               CPU1
+   - switch 'task' in
+   - read addr (Fill stale mapping
+     entry into TLB)
+   - switch 'task' out (no tlb_flush)
+                                      - switch 'task' in (no tlb_flush)
+                                      - write addr cause pagefault
+                                        do_page_fault() (change to
+                                        new addr mapping)
+                                          wp_page_copy()
+                                            ptep_clear_flush()
+                                              ptep_get_and_clear()
+                                              & flush_tlb_page()
+                                        write new value into addr
+                                      - switch 'task' out (no tlb_flush)
+   - switch 'task' in (no tlb_flush)
+   - read addr again (Use stale
+     mapping entry in TLB)
+     get wrong value from old phyical
+     addr, BUG!
 
-A Reliable Write access shall force the data to be written to the
-nonvolatile storage=E3=80=82
-It will consume more time.
+The solution is to keep all CPUs' footmarks of cpumask(mm) in switch_mm,
+which could guarantee to invalidate all stale TLB entries during TLB
+flush.
 
-> >
-> > According to the above data, disable FUA (fua_disable =3D 1) improves t=
-he
-> > performance:
-> > 1)Sequential read improved by 3%.
-> > 2)Random read were down 1%.
->
-> FUA should not affect reads.  If it is, you may want to investigate how.
->
-> > 3)Sequential write improved by 34%.
-> > 4)Random write improved by 454%.
-> > Therefore, it is recommended to support the host to control FUA.
-> >
-> > Reference
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/Documentation/block/writeback_cache_control.rst
-> > [2] Embedded Multi-Media Card (e=E2=80=A2MMC) Electrical Standard (5.1)=
-''
->
-> You do not seem to have considered data integrity.
->
-> Regular disks are assumed to provide atomic sector writes.  That is, a se=
-ctor has either the old data or the new data, but not some corrupt mixture.
->
-> mmc does not have that assumption, which is presumably why Reliable Write=
- has been used instead.  Although that idea appears to have been thrown awa=
-y for devices with no cache by commit 08ebf903af57 ("mmc: core: Fixup suppo=
-rt for writeback-cache for eMMC and SD").
->
-> File systems can use FUA to mark a successful journal flush.  Whether or =
-not getting a torn sector at that point will corrupt the file system recove=
-ry is presumably file system specific, and maybe specific to file system op=
-tions e.g. the use of checksums.
->
-> It may well be that a file system can survive a torn sector at that point=
-, or that user space would prefer to take the risk in order to get better p=
-erformance.  In either of those cases, it is not really a decision for the =
-host controller driver.
->
+Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Anup Patel <apatel@ventanamicro.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+---
+Changes in v3:
+ - Move set/clear cpumask(mm) into set_mm (Make code more pretty
+   with Andrew's advice)
+ - Optimize comment description
 
-Considering the data integrity, we did a random power-down test, and
-the experimental results were good.
+Changes in v2:
+ - Fixup nommu compile problem (Thx Conor, Also Reported-by: kernel
+   test robot <lkp@intel.com>)
+ - Keep cpumask_clear_cpu for noasid
+---
+ arch/riscv/mm/context.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-FUA can only reduce data loss under abnormal conditions, but cannot
-prevent data loss under abnormal conditions.
+diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+index 7acbfbd14557..0f784e3d307b 100644
+--- a/arch/riscv/mm/context.c
++++ b/arch/riscv/mm/context.c
+@@ -205,12 +205,24 @@ static void set_mm_noasid(struct mm_struct *mm)
+ 	local_flush_tlb_all();
+ }
+ 
+-static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
++static inline void set_mm(struct mm_struct *prev,
++			  struct mm_struct *next, unsigned int cpu)
+ {
+-	if (static_branch_unlikely(&use_asid_allocator))
+-		set_mm_asid(mm, cpu);
+-	else
+-		set_mm_noasid(mm);
++	/*
++	 * The mm_cpumask indicates which harts' TLBs contain the virtual
++	 * address mapping of the mm. Compared to noasid, using asid
++	 * can't guarantee that stale TLB entries are invalidated because
++	 * the asid mechanism wouldn't flush TLB for every switch_mm for
++	 * performance. So when using asid, keep all CPUs footmarks in
++	 * cpumask() until mm reset.
++	 */
++	cpumask_set_cpu(cpu, mm_cpumask(next));
++	if (static_branch_unlikely(&use_asid_allocator)) {
++		set_mm_asid(next, cpu);
++	} else {
++		cpumask_clear_cpu(cpu, mm_cpumask(prev));
++		set_mm_noasid(next);
++	}
+ }
+ 
+ static int __init asids_init(void)
+@@ -264,7 +276,8 @@ static int __init asids_init(void)
+ }
+ early_initcall(asids_init);
+ #else
+-static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
++static inline void set_mm(struct mm_struct *prev,
++			  struct mm_struct *next, unsigned int cpu)
+ {
+ 	/* Nothing to do here when there is no MMU */
+ }
+@@ -317,10 +330,7 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	 */
+ 	cpu = smp_processor_id();
+ 
+-	cpumask_clear_cpu(cpu, mm_cpumask(prev));
+-	cpumask_set_cpu(cpu, mm_cpumask(next));
+-
+-	set_mm(next, cpu);
++	set_mm(prev, next, cpu);
+ 
+ 	flush_icache_deferred(next, cpu);
+ }
+-- 
+2.36.1
 
-I think there should be a balance between FUA and NO FUA, but
-filesystems seem to favor FUA.
-
-FUA brings a drop in random write performance. If enough tests are
-done, NO FUA is acceptable.
-
-I found a discussion about FUA:
-https://lore.kernel.org/linux-f2fs-devel/20220528051238.GX1098723@dread.dis=
-aster.area/
-
-UFS reference:
-https://lore.kernel.org/linux-scsi/20220531201053.3300018-1-jaegeuk@kernel.=
-org/
-
-> >
-> > Wenchao Chen (2):
-> >   mmc: block: Support Host to control FUA
-> >   mmc: sdhci-sprd: enable fua_disable for SPRDSDHCI
-> >
-> >  drivers/mmc/core/block.c      | 3 ++-
-> >  drivers/mmc/host/sdhci-sprd.c | 2 ++
-> >  include/linux/mmc/host.h      | 3 +++
-> >  3 files changed, 7 insertions(+), 1 deletion(-)
-> >
->
