@@ -2,241 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86D96252FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 06:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F61625304
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 06:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiKKFO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 00:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S230270AbiKKFRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 00:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKKFOZ (ORCPT
+        with ESMTP id S229461AbiKKFR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 00:14:25 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A47267F48;
-        Thu, 10 Nov 2022 21:14:24 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so6817528pjc.3;
-        Thu, 10 Nov 2022 21:14:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=srcaCHFtK2vyQ3fYNkzOxa+xrjkCW1kyZ+JRGVA6Vqw=;
-        b=cRiuY95CmfdaeYKVExJSNoKjUYouXQ3xV3kzqphUAITWh0qJx2+k9AXnEDFCuIO8CX
-         pJfuRK6yr7Zg/r+f8a9Ndx9EODos+WayBXd5ttHjZk4lc9AOYA2ru1uCptyucnE27rVP
-         Am1ZH/Vtd4ui0EmC7heZTJIkHESNCrZ7+apxeWa6BLClgkOxmq/SNiToTSAEZYlCenu3
-         3qnllG/zchH4cOEbTz9LHibeIZqwDXs1oStYoAVj6Ei6A3oeNGGHKpINtemdSohVwdyH
-         Whczz3pNja1Q9y2FKZ+ojaJX9GWfLqg2SWZSONw2jzosAbUJjfItcDIbgsd439Hc+n2j
-         5GRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=srcaCHFtK2vyQ3fYNkzOxa+xrjkCW1kyZ+JRGVA6Vqw=;
-        b=IQg9tTdPVqzVzFFliDwjVil5mfIvSIPQPyqQIqmlphDmOiTWAu8wjXoRPmVQ+8C1XO
-         GBSKIB/zjjstI/5fVapwASuvCl9//mPSRsAMiUcKpKAUp4VplUu9dkAX3TBP4hWTX0gh
-         wgHZAuMQTrlq6JypFujdm0OdIGQdUBFjt06UO+EuQEPw9eP8WGIvkCCFMU9xcJc1d54g
-         eBAR8oZMU8r9vK1KcDaPjqh0a8co7ZRVXElOgVJ0uewtBvUNOy9FAVMVvCRO7R5PcVV+
-         w7PO/T75CMtqzxZ+VKl8Htk9e3X6Ou19KqvZrQebuOXrSs1O5LVRChx03n6vhbRINJ+D
-         fZFg==
-X-Gm-Message-State: ANoB5pkKVlkxNqZKV1UfVR/bm4lZEp9hZQvT7QGOGth0zDgI+6XxR064
-        CfpUFuTLdK+lR7gfqyJvWTw=
-X-Google-Smtp-Source: AA0mqf5doN4b/PD0hm0FXSFDJK8UtY3pGopv/1ZswZyGTJlUqB0S6e8DIRpFvGD+ZCJXkzM1NRiPUw==
-X-Received: by 2002:a17:90b:274c:b0:213:e907:5c0d with SMTP id qi12-20020a17090b274c00b00213e9075c0dmr147261pjb.83.1668143663961;
-        Thu, 10 Nov 2022 21:14:23 -0800 (PST)
-Received: from localhost ([122.172.87.196])
-        by smtp.gmail.com with ESMTPSA id x30-20020aa79a5e000000b005618189b0ffsm583785pfj.104.2022.11.10.21.14.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 21:14:23 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 11 Nov 2022 10:44:19 +0530
-Message-Id: <CO97KPQTBTVK.2NI3OSQT2BUG7@skynet-linux>
-From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
-To:     "Vinod Koul" <vkoul@kernel.org>
-Cc:     <andersson@kernel.org>, <agross@kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        "Vladimir Lypak" <vladimir.lypak@gmail.com>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] dmaengine: qcom: bam_dma: Add support for
- metadata
-X-Mailer: aerc 0.13.0
-References: <20221027052007.47403-1-sireeshkodali1@gmail.com>
- <20221027052007.47403-2-sireeshkodali1@gmail.com> <Y2UFuvg5sq9tLf83@matsya>
-In-Reply-To: <Y2UFuvg5sq9tLf83@matsya>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 00:17:29 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA676B383
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 21:17:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668143848; x=1699679848;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=ql328E2NG2zRXgk89uFvUx0p6YzxyXQHLwUbNDKXi8k=;
+  b=YKPQR9NHVqlhF+7+EP/LZBa8tq0MAE92NH/X3Xgg26CY/2HhOXNm1kzV
+   kNbDfzCGnqhX1PtJ21a8ZFvA4K/uUOnKdYyNfotqIqtQWueRVb/C2CRmy
+   EzqXzeSfrt/NMGnbPkBo+jfoDpbii0FxIs9ABpjjTZ1Hga8zRzyJQ6qQK
+   ozYjThFMMZ9o0CF/XTfh46AKX31+FE2vAr4Q/Hm8NCV1fATAQATrEDvPG
+   EQWgw5G5i92JirYkwgelAtyH5SWamxq1y1oGGmbFR7sM9hKk8i7k7VVnY
+   GBqme4KOwdaIzGi6hehnbGoCkRtnKYSgSjhI5vGBDkpaXYICnBgJeWDbj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="397823412"
+X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
+   d="asc'?scan'208";a="397823412"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 21:17:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="639894622"
+X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
+   d="asc'?scan'208";a="639894622"
+Received: from zhen-hp.sh.intel.com (HELO zhen-hp) ([10.239.159.108])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Nov 2022 21:17:27 -0800
+Date:   Fri, 11 Nov 2022 13:16:55 +0800
+From:   Zhenyu Wang <zhenyuw@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Zhi Wang <zhi.a.wang@intel.com>, intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] drm/i915/gvt: Fix for KVM refcounting bug
+Message-ID: <20221111051655.GO30028@zhen-hp.sh.intel.com>
+Reply-To: Zhenyu Wang <zhenyuw@linux.intel.com>
+References: <20221111002225.2418386-1-seanjc@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Rmm1Stw9KgbdL9/H"
+Content-Disposition: inline
+In-Reply-To: <20221111002225.2418386-1-seanjc@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Nov 4, 2022 at 5:59 PM IST, Vinod Koul wrote:
-> On 27-10-22, 10:50, Sireesh Kodali wrote:
-> > From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> >=20
-> > Add client metadata support for receiving information about transfers.
-> > Only type of metadata implemented is amount of transferred bytes. This
-> > can be used to know how much data is actually received if information
-> > transferred doesn't contain header with size or is aggregated.
-> >=20
-> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-> > ---
-> >  drivers/dma/qcom/bam_dma.c       | 57 ++++++++++++++++++++++++++++++++
-> >  include/linux/dma/qcom_bam_dma.h |  8 +++++
-> >  2 files changed, 65 insertions(+)
-> >=20
-> > diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-> > index 3135a3e4a167..264a9a2e199f 100644
-> > --- a/drivers/dma/qcom/bam_dma.c
-> > +++ b/drivers/dma/qcom/bam_dma.c
-> > @@ -30,6 +30,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/dma-mapping.h>
-> > +#include <linux/dma/qcom_bam_dma.h>
-> >  #include <linux/scatterlist.h>
-> >  #include <linux/device.h>
-> >  #include <linux/platform_device.h>
-> > @@ -70,6 +71,7 @@ struct bam_async_desc {
-> >  	u16 flags;
-> > =20
-> >  	struct bam_desc_hw *curr_desc;
-> > +	struct bam_dma_metadata *metadata;
-> > =20
-> >  	/* list node for the desc in the bam_chan list of descriptors */
-> >  	struct list_head desc_node;
-> > @@ -418,6 +420,52 @@ static inline void __iomem *bam_addr(struct bam_de=
-vice *bdev, u32 pipe,
-> >  		r.ee_mult * bdev->ee;
-> >  }
-> > =20
-> > +/**
-> > + * bam_update_metadata - update metadata buffer
-> > + * @bchan: BAM channel to read metadata from
-> > + * @async_desc: BAM async descriptior
-> > + *
-> > + * Updates metadata buffer (transfer size) based on values
-> > + * read from FIFO descriptors at bchan->head
-> > + */
-> > +
-> > +static inline void bam_update_metadata(struct bam_chan *bchan,
-> > +				       struct bam_async_desc *async_desc)
-> > +{
-> > +	unsigned int i, e, len =3D 0;
-> > +	struct bam_desc_hw *fifo;
-> > +
-> > +	if (!async_desc->metadata)
-> > +		return;
-> > +
-> > +	fifo =3D PTR_ALIGN(bchan->fifo_virt, sizeof(struct bam_desc_hw));
-> > +	for (i =3D bchan->head, e =3D i + async_desc->xfer_len; i < e; i++)
-> > +		len +=3D fifo[i % MAX_DESCRIPTORS].size;
-> > +
-> > +	async_desc->metadata->xfer_len_bytes +=3D len;
-> > +}
-> > +
-> > +/**
-> > + * bam_attach_metadata - attach metadata buffer to the async descripto=
-r
-> > + * @desc: async descriptor
-> > + * @data: buffer pointer
-> > + * @len: length of passed buffer
-> > + */
-> > +static int bam_attach_metadata(struct dma_async_tx_descriptor *desc, v=
-oid *data,
-> > +			       size_t len)
-> > +{
-> > +	struct bam_async_desc *async_desc;
-> > +
-> > +	if (!data || len !=3D sizeof(struct bam_dma_metadata))
-> > +		return -EINVAL;
-> > +
-> > +	async_desc =3D container_of(desc, struct bam_async_desc, vd.tx);
-> > +	async_desc->metadata =3D data;
-> > +	async_desc->metadata->xfer_len_bytes =3D 0;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  /**
-> >   * bam_reset() - reset and initialize BAM registers
-> >   * @bdev: bam device
-> > @@ -456,6 +504,10 @@ static void bam_reset(struct bam_device *bdev)
-> >  	writel_relaxed(BAM_IRQ_MSK, bam_addr(bdev, 0, BAM_IRQ_SRCS_MSK_EE));
-> >  }
-> > =20
-> > +static struct dma_descriptor_metadata_ops metadata_ops =3D {
-> > +	.attach =3D bam_attach_metadata,
-> > +};
-> > +
-> >  /**
-> >   * bam_reset_channel - Reset individual BAM DMA channel
-> >   * @bchan: bam channel
-> > @@ -714,6 +766,8 @@ static struct dma_async_tx_descriptor *bam_prep_sla=
-ve_sg(struct dma_chan *chan,
-> >  		} while (remainder > 0);
-> >  	}
-> > =20
-> > +	async_desc->vd.tx.metadata_ops =3D &metadata_ops;
-> > +
-> >  	return vchan_tx_prep(&bchan->vc, &async_desc->vd, flags);
-> >  }
-> > =20
-> > @@ -867,6 +921,8 @@ static u32 process_channel_irqs(struct bam_device *=
-bdev)
-> >  			if (avail < async_desc->xfer_len)
-> >  				break;
-> > =20
-> > +			bam_update_metadata(bchan, async_desc);
-> > +
-> >  			/* manage FIFO */
-> >  			bchan->head +=3D async_desc->xfer_len;
-> >  			bchan->head %=3D MAX_DESCRIPTORS;
-> > @@ -1347,6 +1403,7 @@ static int bam_dma_probe(struct platform_device *=
-pdev)
-> >  	bdev->common.residue_granularity =3D DMA_RESIDUE_GRANULARITY_SEGMENT;
-> >  	bdev->common.src_addr_widths =3D DMA_SLAVE_BUSWIDTH_4_BYTES;
-> >  	bdev->common.dst_addr_widths =3D DMA_SLAVE_BUSWIDTH_4_BYTES;
-> > +	bdev->common.desc_metadata_modes =3D DESC_METADATA_CLIENT;
-> >  	bdev->common.device_alloc_chan_resources =3D bam_alloc_chan;
-> >  	bdev->common.device_free_chan_resources =3D bam_free_chan;
-> >  	bdev->common.device_prep_slave_sg =3D bam_prep_slave_sg;
-> > diff --git a/include/linux/dma/qcom_bam_dma.h b/include/linux/dma/qcom_=
-bam_dma.h
-> > index 68fc0e643b1b..8168b0573f45 100644
-> > --- a/include/linux/dma/qcom_bam_dma.h
-> > +++ b/include/linux/dma/qcom_bam_dma.h
-> > @@ -8,6 +8,14 @@
-> > =20
-> >  #include <asm/byteorder.h>
-> > =20
-> > +/*
-> > + * This data type is used as client metadata buffer in bam driver.
-> > + */
-> > +struct bam_dma_metadata {
-> > +	/* Actual number of bytes transferred by hardware */
-> > +	size_t xfer_len_bytes;
->
-> Pls implement dmaengine_result() and report that with proper residue
-> set...
 
-Sure, I'll update the patch with this change
+--Rmm1Stw9KgbdL9/H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
-Sireesh
->
-> Thanks
->
-> --=20
-> ~Vinod
+On 2022.11.11 00:22:23 +0000, Sean Christopherson wrote:
+> Bug fix and cleanup related to KVM refcounting.  Found by inspection while
+> attempting to clean up KVM's page-tracker APIs.
+>=20
+> Compile tested only!
+>=20
+> Sean Christopherson (2):
+>   drm/i915/gvt: Get reference to KVM iff attachment to VM is successful
+>   drm/i915/gvt: Unconditionally put reference to KVM when detaching vGPU
+>=20
+>  drivers/gpu/drm/i915/gvt/kvmgt.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>=20
 
+Thanks, Sean! and Kevin's review. Pushed this to fixes tree, will issue
+regression test before going upstream.
+
+--Rmm1Stw9KgbdL9/H
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EARECAB0WIQTXuabgHDW6LPt9CICxBBozTXgYJwUCY23awgAKCRCxBBozTXgY
+J2EMAKCa/3JJB5jBs4Y27kn2yBiYr6NLmgCfaefRrTdWjykmFApwicOZO21ZUQg=
+=/qdW
+-----END PGP SIGNATURE-----
+
+--Rmm1Stw9KgbdL9/H--
