@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334D26260C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD686260C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234383AbiKKSCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 13:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S234424AbiKKSDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 13:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbiKKSCs (ORCPT
+        with ESMTP id S234112AbiKKSC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:02:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5660E63BA0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:01:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668189715;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q+VFaP9yDxSExDVcEKpk1aWOcb0mRXqNdFbpZ1STzPg=;
-        b=WWm4kzd9OmuGrR57kTRKlBGzQs/T3wbbhJnVKYov8DSKvH6QEk1VxYkADBmGiDT1AAAZmR
-        sjfhV2XmAZA5pqDLCCkzDrh3aJE7A9YFikIK+kBT8hS3BdOa9YMBwsX1C6NeI1+6vAMBfw
-        RJF1frAZ2TlYZQckpfrMWRlc0CeqH3I=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-624-lpKOK7l3MqOe-fw7n7r69g-1; Fri, 11 Nov 2022 13:01:54 -0500
-X-MC-Unique: lpKOK7l3MqOe-fw7n7r69g-1
-Received: by mail-qk1-f197.google.com with SMTP id x2-20020a05620a448200b006fa7dad5c1cso5290432qkp.10
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:01:53 -0800 (PST)
+        Fri, 11 Nov 2022 13:02:57 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCCF77E4A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:02:56 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so3613362wmi.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:02:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7OlH0QNtWKGQs1bVflWE70OyJVa1i7TKc+YHXJpmQvE=;
+        b=aEn5McTvGMq/smgffe9DlOFzMQOIABpmzOQUNz6DuKSJBIziPCx47on6ETUL0T507u
+         Eh5crjdJgyJ33iuGYcW1fnFYq/HkPuootm6JPKnIqg/GrQY6EiA8mC17JvqcnLeo1LjF
+         QQb8sPN5Oq857F7TCXh+pcdjKYvd7f0/OdxEDz7NpOEEh6kogjG4vXUS/14RYxUztKIn
+         P4h4v1zsyPH7uQ7u5WkTOOgjxIFxEcHxBFP43d0Dtp2p8rKEFZQB+mp8XSakuYnRFaTV
+         6Rth/SAOaftlI6+CXxP0mFcaDhlGGyMcqepWtAaNjMknE6n8W0BPQToVwXcgyoeulZ5+
+         MJiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q+VFaP9yDxSExDVcEKpk1aWOcb0mRXqNdFbpZ1STzPg=;
-        b=1maBaYjoT4c9FyDBONZhcefgvfY5bJLkewhFJ5q4gsbhQTudVLdrHfA/FKzAonCZ2M
-         4N0/s4yxJdkgSJjU93pcZ5oSuMGw1wKMD2Ehf7VhsAMNviffghlXc8ZX1fBNyyLEO5PF
-         fJzbnaqVb7ffQNVJKBqEtQ0ltOdCoLd0fpnaHfoEbXojHV0wRScszFePYiECnJ4wpFc8
-         L5DsoAMmT13QWx93KRYTI4oloebSFi9v+GdLhkdvMlJgrdNmU23+T7jRroEam6io+YUg
-         ikw2tWO1j9bzMkAn6cZ4WHZqKyU3X+F7yGxxmwMQY7pTi+tPR5XnU1mr09uNFZBWwPF+
-         Enuw==
-X-Gm-Message-State: ANoB5pnRjwtGFrxdpb/yfcZGevBf2xTYEhjfCxx0y0FdJ+jHsspU0uf1
-        9Daa4s2bd12gsrxw1hytpxrrNMxrVTVG59vd5qveKd4cLsHlmRtGT8DhIn6f9nB88yVcsKL1gut
-        +NmMxaGEJi40uUEWfZDr6MjKq
-X-Received: by 2002:ac8:4e05:0:b0:3a5:926c:e824 with SMTP id c5-20020ac84e05000000b003a5926ce824mr2341392qtw.546.1668189713498;
-        Fri, 11 Nov 2022 10:01:53 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5CHswaGItWsC6DrEunitMqwTz8zvmU6aVhtaB8D2n2MXV89b3m9NtakBxP0qqFLQQO5+9abw==
-X-Received: by 2002:ac8:4e05:0:b0:3a5:926c:e824 with SMTP id c5-20020ac84e05000000b003a5926ce824mr2341374qtw.546.1668189713268;
-        Fri, 11 Nov 2022 10:01:53 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id u16-20020a05620a0c5000b006cfc7f9eea0sm1764044qki.122.2022.11.11.10.01.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 10:01:52 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>, peterz@infradead.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: Re: [PATCH v2] sched/core: Minor optimize ttwu_runnable()
-In-Reply-To: <20221108162402.99125-1-zhouchengming@bytedance.com>
-References: <20221108162402.99125-1-zhouchengming@bytedance.com>
-Date:   Fri, 11 Nov 2022 18:01:29 +0000
-Message-ID: <xhsmhbkpdz7ye.mognet@vschneid.remote.csb>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7OlH0QNtWKGQs1bVflWE70OyJVa1i7TKc+YHXJpmQvE=;
+        b=oOUn93VXv/iXVCLHHrelcfVo7FeuijL+lTZmNaFYhVGSv2Jt1UVaSrUx4tskwgCE3b
+         k4CwJKw2EmHvLZ8I/uxCtvqWrEEA3IlhyREAwgxDbkT0uQ+Z7l5123Nf5dJ7Si9QGHma
+         Vw8NWXkSK7aDc7ifeDc/ZOSFZ5NbMklRsWvX0nKiMruIE6ugzpYrC1pLEIjvQ9aexWZe
+         15sacYXAJlgPT3NGlZ+DxFoMlyd8Z+uhEwvv8NcOVa/HkgxTRYFWOxNCVZL6ddYYzl6p
+         VIWGGhkCL2/50Vhx+RG3bS40ln5qLAVP8nOO47e6qn1qlnBLATxLQtgvLDW3kyehHnei
+         I9Cg==
+X-Gm-Message-State: ANoB5plDY5i6xsqwvSNkv30sdxK+ToL7gycV1AfauuRZCS6pylZ+QUhC
+        Nz4qvrEHux8w9bCYakJLL6Zqiw==
+X-Google-Smtp-Source: AA0mqf5gqJS5n7MhaHg/1SIXShxU3C0DKdNvmI4P3RLm/zSMCufpq/mhtGloXYsjWzUFfKNzsNS/cQ==
+X-Received: by 2002:a05:600c:1c1a:b0:3cf:aae0:802a with SMTP id j26-20020a05600c1c1a00b003cfaae0802amr2093558wms.112.1668189774731;
+        Fri, 11 Nov 2022 10:02:54 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id j5-20020a05600c1c0500b003cfbbd54178sm14542001wms.2.2022.11.11.10.02.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 10:02:53 -0800 (PST)
+Message-ID: <68533848-7deb-8f80-6218-04dc9001376e@linaro.org>
+Date:   Fri, 11 Nov 2022 18:02:53 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] nvmem: u-boot-env: add Broadcom format support
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     Tom Rini <trini@konsulko.com>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+References: <20221017071722.32731-1-zajec5@gmail.com>
+ <fe41146d-48f9-3e9c-1e5a-48e8488f4fee@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <fe41146d-48f9-3e9c-1e5a-48e8488f4fee@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,47 +78,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Hi,
 
-some minor changelog nitpicks, otherwise this LGTM
+On 11/11/2022 17:57, Rafał Miłecki wrote:
+> On 17.10.2022 09:17, Rafał Miłecki wrote:
+>> From: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> Broadcom uses U-Boot for a lot of their bcmbca familiy chipsets. They
+>> decided to store U-Boot environment data inside U-Boot partition and to
+>> use a custom header (with "uEnv" magic and env data length).
+>>
+>> Add support for Broadcom's specific binding and their custom format.
+>>
+>> Ref: c34f9f5499278 ("dt-bindings: nvmem: u-boot,env: add Broadcom's 
+>> variant binding")
+> 
+> This should be actually:
+> 6b0584c19d87 ("dt-bindings: nvmem: u-boot,env: add Broadcom's variant 
+> binding")
+> 
+> Srinivas: could you fix it up while applying, please?
+> 
 
-On 09/11/22 00:24, Chengming Zhou wrote:
-> ttwu_runnable() is used as a fast wakeup path when the wakee task
-> is running on CPU or runnable on RQ, in both cases we can just
-> set its state to TASK_RUNNING to prevent a sleep.
->
-> If the wakee task is on_cpu running, we don't need to update_rq_clock()
-> or check_preempt_curr().
->
-> But if the wakee task is on_rq && !on_cpu (e.g. an IRQ hit before
-> the task got to schedule() and the task been preempted), we should
-> check_preempt_curr() to see if it can preempt the current running.
->
-> This patch reorg ttwu_do_wakeup() and ttwu_do_activate() to make
-> ttwu_do_wakeup() only mark the task runnable, so it can be used
-> in ttwu_runnable() and try_to_wake_up() fast paths.
->
-> As for p->sched_class->task_woken(), ttwu_do_wakeup() needn't it
-> anymore, since p isn't a woken task in this case, so should not
-> affect RT/DL push/pull.
+Applied with this change
 
-I would rephrase that last paragraph into something like:
-"""
-This also removes the class->task_woken() callback from ttwu_runnable(),
-which wasn't required per the RT/DL implementations: any required push
-operation would have been queued during class->set_next_task() when p
-got preempted.
-
-ttwu_runnable() also loses the update to rq->idle_stamp, as by definition
-the rq cannot be idle in this scenario.
-"""
-
->
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> Suggested-by: Valentin Schneider <vschneid@redhat.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-
-With those changes:
-
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
-
+--srini
+> 
+>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>> ---
+>>   drivers/nvmem/u-boot-env.c | 14 ++++++++++++++
+>>   1 file changed, 14 insertions(+)
+>>
+>> diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
+>> index 8e72d1bbd649..049330660fd7 100644
+>> --- a/drivers/nvmem/u-boot-env.c
+>> +++ b/drivers/nvmem/u-boot-env.c
+>> @@ -16,6 +16,7 @@
+>>   enum u_boot_env_format {
+>>       U_BOOT_FORMAT_SINGLE,
+>>       U_BOOT_FORMAT_REDUNDANT,
+>> +    U_BOOT_FORMAT_BROADCOM,
+>>   };
+>>   struct u_boot_env {
+>> @@ -40,6 +41,13 @@ struct u_boot_env_image_redundant {
+>>       uint8_t data[];
+>>   } __packed;
+>> +struct u_boot_env_image_broadcom {
+>> +    __le32 magic;
+>> +    __le32 len;
+>> +    __le32 crc32;
+>> +    uint8_t data[0];
+>> +} __packed;
+>> +
+>>   static int u_boot_env_read(void *context, unsigned int offset, void 
+>> *val,
+>>                  size_t bytes)
+>>   {
+>> @@ -138,6 +146,11 @@ static int u_boot_env_parse(struct u_boot_env *priv)
+>>           crc32_data_offset = offsetof(struct 
+>> u_boot_env_image_redundant, mark);
+>>           data_offset = offsetof(struct u_boot_env_image_redundant, 
+>> data);
+>>           break;
+>> +    case U_BOOT_FORMAT_BROADCOM:
+>> +        crc32_offset = offsetof(struct u_boot_env_image_broadcom, 
+>> crc32);
+>> +        crc32_data_offset = offsetof(struct 
+>> u_boot_env_image_broadcom, data);
+>> +        data_offset = offsetof(struct u_boot_env_image_broadcom, data);
+>> +        break;
+>>       }
+>>       crc32 = le32_to_cpu(*(__le32 *)(buf + crc32_offset));
+>>       crc32_data_len = priv->mtd->size - crc32_data_offset;
+>> @@ -202,6 +215,7 @@ static const struct of_device_id 
+>> u_boot_env_of_match_table[] = {
+>>       { .compatible = "u-boot,env", .data = (void 
+>> *)U_BOOT_FORMAT_SINGLE, },
+>>       { .compatible = "u-boot,env-redundant-bool", .data = (void 
+>> *)U_BOOT_FORMAT_REDUNDANT, },
+>>       { .compatible = "u-boot,env-redundant-count", .data = (void 
+>> *)U_BOOT_FORMAT_REDUNDANT, },
+>> +    { .compatible = "brcm,env", .data = (void 
+>> *)U_BOOT_FORMAT_BROADCOM, },
+>>       {},
+>>   };
