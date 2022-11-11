@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4776625BFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FB6625C2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbiKKN7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        id S234146AbiKKOBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234093AbiKKN6t (ORCPT
+        with ESMTP id S234173AbiKKOAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:58:49 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A919C8B2D8;
-        Fri, 11 Nov 2022 05:55:38 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABDZLRb024299;
-        Fri, 11 Nov 2022 13:55:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=zDdDGagVPj/HRHOfbhQFfv0aAe+6mEJ/zIdkj0u0Knw=;
- b=cjsi0pVOiZXS+fL5azOtDJFENEdAIF77Telo8t/okpVEAuZeTvCjOJ/nm9CU92xfqoxV
- U1hokOtChjy92WwqfUJu8G63i9IppaQ/3FHJ/PPfcjWwsVpfhZlkyUcUhr8elzodhGuX
- 0HnGxuj9aKxdpPysSUTLQH1aF3LgrlP/OQbj+l6KT9l1LiMuoIpNn6H8bUBO+8tT3BU/
- tinaqbogdIba6nEyelcSstQ4SKH0MxREuYUi9KsfobsiClKqD/z4+SHaHeebqzxCljpS
- MfMKhDSCxZgiCHQehNEm6UbCk9Ji81YZuCfVTpYN5USfEZtFprdgPEXGVtd8EcEuHnej ZA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kshags13y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 13:55:35 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDtVJt031076;
-        Fri, 11 Nov 2022 13:55:31 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kngwkm2mw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 11 Nov 2022 13:55:31 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ABDtUv7031071;
-        Fri, 11 Nov 2022 13:55:30 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2ABDtUMP031065;
-        Fri, 11 Nov 2022 13:55:30 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id 902193892; Fri, 11 Nov 2022 05:55:29 -0800 (PST)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com
-Subject: [v9] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
-Date:   Fri, 11 Nov 2022 05:55:27 -0800
-Message-Id: <1668174927-10603-1-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8z8ZYqdBiCVolsxbT8uG9oeNRsYX_pSr
-X-Proofpoint-GUID: 8z8ZYqdBiCVolsxbT8uG9oeNRsYX_pSr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
- adultscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211110093
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        Fri, 11 Nov 2022 09:00:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7384778787
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668174969;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TJKpwo9c5AlIwO79tP1KNz4b2zBwa7daS3MoX79E/OA=;
+        b=gO/7oG6w1FKey3oRLIBT/i7+/uQF6pcuXU2iPCJxl0lgCslloayXctkXNVrd910GPw0LWN
+        WkApgZgl9w04yhQUq+Z3utmD18GaGKodv51ozP0zq7EdR3u+tHbG7LyZ2obxvWEy1HILAm
+        t2Nwfu2CCaJo/3umO2jvqytPMbIegjQ=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-349-vFlcZsvzOcCg5vT-Trhd2w-1; Fri, 11 Nov 2022 08:56:07 -0500
+X-MC-Unique: vFlcZsvzOcCg5vT-Trhd2w-1
+Received: by mail-qv1-f71.google.com with SMTP id x5-20020ad44585000000b004bb6c687f47so3712991qvu.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:56:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TJKpwo9c5AlIwO79tP1KNz4b2zBwa7daS3MoX79E/OA=;
+        b=XFvBcDwfJLSS9xF2DaXOotVHcs8X5ktKkvMeWJjqbW7QBAD43FoHwSlyNZOS+9146W
+         tDSn9FjUguWSm74BRG9BsI45+I/mpvD31Ua1FMqHACiOyhDUhCOqhzSnE7h2AsLuNqlT
+         R02deGQVlVLW8rczIFlA85ZpT3/lU4Q4IuxQloWtch/9RP589aFGNlXJo8HnDypJB6zM
+         DA1jHRkHuLoOdCdA7wBv7l4anfj9AFrdw/N2CWeiyuQXcnS4HSGTZuqzxkjVUEEnLy49
+         +jYrSO0r6Lx3mL15kdZXBINgUnbGWqHMcWT8UKh2BQdSEe6pjbwqJutHV7HJ7C6OYmF4
+         KPxw==
+X-Gm-Message-State: ANoB5plbGyJ6FrQXGvMQ6wk5VoDiSZgyC9GCmu69Ee8a2o9zUTcWBi2D
+        R82HDCMQVopniF0hRt50Muw95wBX24k3RmxKuaFX6Dy7RQ/soWqyNa95EvIyU4KkD5PKNfAXEj7
+        7Wy6ZsliRBMnv2njsomMw/OIQ
+X-Received: by 2002:a05:620a:31a6:b0:6fa:172:c37d with SMTP id bi38-20020a05620a31a600b006fa0172c37dmr1097470qkb.92.1668174967415;
+        Fri, 11 Nov 2022 05:56:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6E5N9TDha/oV3wOK0mu591qSZ1deevMEXV4lCRSdcvw2q6QTjtAAHLB3tamhyy49x6iMriNA==
+X-Received: by 2002:a05:620a:31a6:b0:6fa:172:c37d with SMTP id bi38-20020a05620a31a600b006fa0172c37dmr1097448qkb.92.1668174967146;
+        Fri, 11 Nov 2022 05:56:07 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id ay13-20020a05620a178d00b006b929a56a2bsm1486708qkb.3.2022.11.11.05.56.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 05:56:06 -0800 (PST)
+Date:   Fri, 11 Nov 2022 14:55:49 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v3 03/11] af_vsock: add zerocopy receive logic
+Message-ID: <20221111135549.2fqufprbc3muedmr@sgarzare-redhat>
+References: <f60d7e94-795d-06fd-0321-6972533700c5@sberdevices.ru>
+ <7aeba781-db09-9be1-a9a3-a4c16da38fb5@sberdevices.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <7aeba781-db09-9be1-a9a3-a4c16da38fb5@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,265 +90,304 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Flush mechanism for DSPP blocks has changed in sc7280 family, it
-allows individual sub blocks to be flushed in coordination with
-master flush control.
+On Sun, Nov 06, 2022 at 07:40:12PM +0000, Arseniy Krasnov wrote:
+>This:
+>1) Adds callback for 'mmap()' call on socket. It checks vm area flags
+>   and sets vm area ops.
+>2) Adds special 'getsockopt()' case which calls transport zerocopy
+>   callback. Input argument is vm area address.
+>3) Adds 'getsockopt()/setsockopt()' for switching on/off rx zerocopy
+>   mode.
+>
+>Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>---
+> include/net/af_vsock.h          |   8 ++
+> include/uapi/linux/vm_sockets.h |   3 +
+> net/vmw_vsock/af_vsock.c        | 187 +++++++++++++++++++++++++++++++-
+> 3 files changed, 196 insertions(+), 2 deletions(-)
+>
+>diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+>index 568a87c5e0d0..e4f12ef8e623 100644
+>--- a/include/net/af_vsock.h
+>+++ b/include/net/af_vsock.h
+>@@ -73,6 +73,8 @@ struct vsock_sock {
+>
+> 	/* Private to transport. */
+> 	void *trans;
+>+
+>+	bool rx_zerocopy_on;
 
-Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+Maybe better to leave the last fields the private ones to transports, so 
+I would say put it before trans;
 
-This change adds necessary support for the above design.
+> };
+>
+> s64 vsock_stream_has_data(struct vsock_sock *vsk);
+>@@ -138,6 +140,12 @@ struct vsock_transport {
+> 	bool (*stream_allow)(u32 cid, u32 port);
+> 	int (*set_rcvlowat)(struct vsock_sock *vsk, int val);
+>
+>+	int (*zerocopy_rx_mmap)(struct vsock_sock *vsk,
+>+				struct vm_area_struct *vma);
+>+	int (*zerocopy_dequeue)(struct vsock_sock *vsk,
+>+				struct page **pages,
+>+				unsigned long *pages_num);
+>+
+> 	/* SEQ_PACKET. */
+> 	ssize_t (*seqpacket_dequeue)(struct vsock_sock *vsk, struct msghdr *msg,
+> 				     int flags);
+>diff --git a/include/uapi/linux/vm_sockets.h b/include/uapi/linux/vm_sockets.h
+>index c60ca33eac59..d1f792bed1a7 100644
+>--- a/include/uapi/linux/vm_sockets.h
+>+++ b/include/uapi/linux/vm_sockets.h
+>@@ -83,6 +83,9 @@
+>
+> #define SO_VM_SOCKETS_CONNECT_TIMEOUT_NEW 8
+>
+>+#define SO_VM_SOCKETS_MAP_RX 9
+>+#define SO_VM_SOCKETS_ZEROCOPY 10
 
-Changes in v1:
-- Few nits (Doug, Dmitry)
-- Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+Before removing RFC, we should document these macros because they are 
+exposed to the user.
 
-Changes in v2:
-- Move the address offset to flush macro (Dmitry)
-- Seperate ops for the sub block flush (Dmitry)
-
-Changes in v3:
-- Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
-
-Changes in v4:
-- Use shorter version for unsigned int (Stephen)
-
-Changes in v5:
-- Spurious patch please ignore.
-
-Changes in v6:
-- Add SOB tag (Doug, Dmitry)
-
-Changes in v7:
-- Cache flush mask per dspp (Dmitry)
-- Few nits (Marijn)
-
-Changes in v8:
-- Few nits (Marijn)
-
-Changes in v9:
-- use DSPP enum while accessing flush mask to make it readable (Dmitry)
-- Few nits (Dmitry)
-
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 64 +++++++++++++++++++++-----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     |  5 +-
- 5 files changed, 65 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 601d687..4170fbe 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct drm_crtc *crtc)
- 
- 		/* stage config flush mask */
- 		ctl->ops.update_pending_flush_dspp(ctl,
--			mixer[i].hw_dspp->idx);
-+			mixer[i].hw_dspp->idx, DPU_DSPP_PCC);
- 	}
- }
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 27f029f..0eecb2f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -65,7 +65,10 @@
- 	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
- 
- #define CTL_SC7280_MASK \
--	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
-+	(BIT(DPU_CTL_ACTIVE_CFG) | \
-+	 BIT(DPU_CTL_FETCH_ACTIVE) | \
-+	 BIT(DPU_CTL_VM_CFG) | \
-+	 BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
- 
- #define MERGE_3D_SM8150_MASK (0)
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 38aa38a..126ee37 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -161,10 +161,12 @@ enum {
-  * DSPP sub-blocks
-  * @DPU_DSPP_PCC             Panel color correction block
-  * @DPU_DSPP_GC              Gamma correction block
-+ * @DPU_DSPP_IGC             Inverse gamma correction block
-  */
- enum {
- 	DPU_DSPP_PCC = 0x1,
- 	DPU_DSPP_GC,
-+	DPU_DSPP_IGC,
- 	DPU_DSPP_MAX
- };
- 
-@@ -191,6 +193,7 @@ enum {
-  * @DPU_CTL_SPLIT_DISPLAY:	CTL supports video mode split display
-  * @DPU_CTL_FETCH_ACTIVE:	Active CTL for fetch HW (SSPPs)
-  * @DPU_CTL_VM_CFG:		CTL config to support multiple VMs
-+ * @DPU_CTL_DSPP_BLOCK_FLUSH  CTL config to support dspp sub-block flush
-  * @DPU_CTL_MAX
-  */
- enum {
-@@ -198,6 +201,7 @@ enum {
- 	DPU_CTL_ACTIVE_CFG,
- 	DPU_CTL_FETCH_ACTIVE,
- 	DPU_CTL_VM_CFG,
-+	DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
- 	DPU_CTL_MAX
- };
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index a35ecb6..0ee8220 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -28,22 +28,23 @@
- #define   CTL_INTF_ACTIVE               0x0F4
- #define   CTL_MERGE_3D_FLUSH            0x100
- #define   CTL_DSC_ACTIVE                0x0E8
--#define   CTL_DSC_FLUSH                0x104
-+#define   CTL_DSC_FLUSH                 0x104
- #define   CTL_WB_FLUSH                  0x108
- #define   CTL_INTF_FLUSH                0x110
- #define   CTL_INTF_MASTER               0x134
- #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
-+#define   CTL_DSPP_n_FLUSH(n)           ((0x13C) + ((n) * 4))
- 
--#define CTL_MIXER_BORDER_OUT            BIT(24)
--#define CTL_FLUSH_MASK_CTL              BIT(17)
-+#define   CTL_MIXER_BORDER_OUT          BIT(24)
-+#define   CTL_FLUSH_MASK_CTL            BIT(17)
- 
--#define DPU_REG_RESET_TIMEOUT_US        2000
--#define  MERGE_3D_IDX   23
--#define  DSC_IDX        22
--#define  INTF_IDX       31
--#define WB_IDX          16
--#define CTL_INVALID_BIT                 0xffff
--#define CTL_DEFAULT_GROUP_ID		0xf
-+#define   DPU_REG_RESET_TIMEOUT_US      2000
-+#define   MERGE_3D_IDX                  23
-+#define   DSC_IDX                       22
-+#define   INTF_IDX                      31
-+#define   WB_IDX                        16
-+#define   CTL_INVALID_BIT               0xffff
-+#define   CTL_DEFAULT_GROUP_ID          0xf
- 
- static const u32 fetch_tbl[SSPP_MAX] = {CTL_INVALID_BIT, 16, 17, 18, 19,
- 	CTL_INVALID_BIT, CTL_INVALID_BIT, CTL_INVALID_BIT, CTL_INVALID_BIT, 0,
-@@ -113,6 +114,9 @@ static inline void dpu_hw_ctl_clear_pending_flush(struct dpu_hw_ctl *ctx)
- 	trace_dpu_hw_ctl_clear_pending_flush(ctx->pending_flush_mask,
- 				     dpu_hw_ctl_get_flush_register(ctx));
- 	ctx->pending_flush_mask = 0x0;
-+
-+	memset(ctx->pending_dspp_flush_mask, 0,
-+		sizeof(ctx->pending_dspp_flush_mask));
- }
- 
- static inline void dpu_hw_ctl_update_pending_flush(struct dpu_hw_ctl *ctx,
-@@ -130,6 +134,8 @@ static u32 dpu_hw_ctl_get_pending_flush(struct dpu_hw_ctl *ctx)
- 
- static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
- {
-+	int dspp;
-+
- 	if (ctx->pending_flush_mask & BIT(MERGE_3D_IDX))
- 		DPU_REG_WRITE(&ctx->hw, CTL_MERGE_3D_FLUSH,
- 				ctx->pending_merge_3d_flush_mask);
-@@ -140,6 +146,11 @@ static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
- 		DPU_REG_WRITE(&ctx->hw, CTL_WB_FLUSH,
- 				ctx->pending_wb_flush_mask);
- 
-+	for(dspp = DSPP_0; dspp < DSPP_MAX; dspp++)
-+		if (ctx->pending_dspp_flush_mask[dspp - DSPP_0])
-+			DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH(dspp - DSPP_0),
-+				ctx->pending_dspp_flush_mask[dspp - DSPP_0]);
-+
- 	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);
- }
- 
-@@ -287,8 +298,9 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
- }
- 
- static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
--	enum dpu_dspp dspp)
-+	enum dpu_dspp dspp, u32 dspp_sub_blk)
- {
-+
- 	switch (dspp) {
- 	case DSPP_0:
- 		ctx->pending_flush_mask |= BIT(13);
-@@ -307,6 +319,30 @@ static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
- 	}
- }
- 
-+static void dpu_hw_ctl_update_pending_flush_dspp_subblocks(
-+	struct dpu_hw_ctl *ctx,	enum dpu_dspp dspp, u32 dspp_sub_blk)
-+{
-+
-+	if (dspp >= DSPP_MAX)
-+		return;
-+
-+	switch (dspp_sub_blk) {
-+	case DPU_DSPP_IGC:
-+		ctx->pending_dspp_flush_mask[dspp - DSPP_0] |= BIT(2);
-+		break;
-+	case DPU_DSPP_PCC:
-+		ctx->pending_dspp_flush_mask[dspp - DSPP_0] |= BIT(4);
-+		break;
-+	case DPU_DSPP_GC:
-+		ctx->pending_dspp_flush_mask[dspp - DSPP_0] |= BIT(5);
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	ctx->pending_flush_mask |= BIT(29);
-+}
-+
- static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32 timeout_us)
- {
- 	struct dpu_hw_blk_reg_map *c = &ctx->hw;
-@@ -675,7 +711,11 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
- 	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
- 	ops->update_pending_flush_sspp = dpu_hw_ctl_update_pending_flush_sspp;
- 	ops->update_pending_flush_mixer = dpu_hw_ctl_update_pending_flush_mixer;
--	ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
-+	if (cap & BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
-+		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp_subblocks;
-+	else
-+		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
-+
- 	if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
- 		ops->set_active_pipes = dpu_hw_ctl_set_fetch_pipe_active;
- };
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-index 96c012e..78611a8 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-@@ -152,9 +152,11 @@ struct dpu_hw_ctl_ops {
- 	 * No effect on hardware
- 	 * @ctx       : ctl path ctx pointer
- 	 * @blk       : DSPP block index
-+	 * @dspp_sub_blk : DSPP sub-block index
- 	 */
- 	void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
--		enum dpu_dspp blk);
-+		enum dpu_dspp blk, u32 dspp_sub_blk);
-+
- 	/**
- 	 * Write the value of the pending_flush_mask to hardware
- 	 * @ctx       : ctl path ctx pointer
-@@ -242,6 +244,7 @@ struct dpu_hw_ctl {
- 	u32 pending_intf_flush_mask;
- 	u32 pending_wb_flush_mask;
- 	u32 pending_merge_3d_flush_mask;
-+	u32 pending_dspp_flush_mask[DSPP_MAX - DSPP_0];
- 
- 	/* ops */
- 	struct dpu_hw_ctl_ops ops;
--- 
-2.7.4
+>+
+> #if !defined(__KERNEL__)
+> #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && 
+> defined(__ILP32__))
+> #define SO_VM_SOCKETS_CONNECT_TIMEOUT SO_VM_SOCKETS_CONNECT_TIMEOUT_OLD
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index ee418701cdee..21a915eb0820 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1663,6 +1663,16 @@ static int vsock_connectible_setsockopt(struct socket *sock,
+> 		}
+> 		break;
+> 	}
+>+	case SO_VM_SOCKETS_ZEROCOPY: {
+>+		if (sock->state != SS_UNCONNECTED) {
+>+			err = -EOPNOTSUPP;
+>+			break;
+>+		}
+>+
+>+		COPY_IN(val);
+>+		vsk->rx_zerocopy_on = val;
+>+		break;
+>+	}
+>
+> 	default:
+> 		err = -ENOPROTOOPT;
+>@@ -1676,6 +1686,124 @@ static int vsock_connectible_setsockopt(struct socket *sock,
+> 	return err;
+> }
+>
+>+static const struct vm_operations_struct afvsock_vm_ops = {
+>+};
+>+
+>+static int vsock_recv_zerocopy(struct socket *sock,
+>+			       unsigned long address)
+>+{
+>+	const struct vsock_transport *transport;
+>+	struct vm_area_struct *vma;
+>+	unsigned long vma_pages;
+>+	struct vsock_sock *vsk;
+>+	struct page **pages;
+>+	struct sock *sk;
+>+	int err;
+>+	int i;
+>+
+>+	sk = sock->sk;
+>+	vsk = vsock_sk(sk);
+>+	err = 0;
+>+
+>+	lock_sock(sk);
+>+
+>+	if (!vsk->rx_zerocopy_on) {
+>+		err = -EOPNOTSUPP;
+>+		goto out_unlock_sock;
+>+	}
+>+
+>+	transport = vsk->transport;
+>+
+>+	if (!transport->zerocopy_dequeue) {
+>+		err = -EOPNOTSUPP;
+>+		goto out_unlock_sock;
+>+	}
+>+
+>+	mmap_write_lock(current->mm);
+>+
+>+	vma = vma_lookup(current->mm, address);
+>+
+>+	if (!vma || vma->vm_ops != &afvsock_vm_ops) {
+>+		err = -EINVAL;
+>+		goto out_unlock_vma;
+>+	}
+>+
+>+	/* Allow to use vm area only from the first page. */
+>+	if (vma->vm_start != address) {
+>+		err = -EINVAL;
+>+		goto out_unlock_vma;
+>+	}
+>+
+>+	vma_pages = (vma->vm_end - vma->vm_start) / PAGE_SIZE;
+>+	pages = kmalloc_array(vma_pages, sizeof(pages[0]),
+>+			      GFP_KERNEL | __GFP_ZERO);
+>+
+>+	if (!pages) {
+>+		err = -EINVAL;
+>+		goto out_unlock_vma;
+>+	}
+>+
+>+	err = transport->zerocopy_dequeue(vsk, pages, &vma_pages);
+>+
+>+	if (err)
+>+		goto out_unlock_vma;
+>+
+>+	/* Now 'vma_pages' contains number of pages in array.
+>+	 * If array element is NULL, skip it, go to next page.
+>+	 */
+>+	for (i = 0; i < vma_pages; i++) {
+>+		if (pages[i]) {
+>+			unsigned long pages_inserted;
+>+
+>+			pages_inserted = 1;
+>+			err = vm_insert_pages(vma, address, &pages[i], &pages_inserted);
+>+
+>+			if (err || pages_inserted) {
+>+				/* Failed to insert some pages, we have "partially"
+>+				 * mapped vma. Do not return, set error code. This
+>+				 * code will be returned to user. User needs to call
+>+				 * 'madvise()/mmap()' to clear this vma. Anyway,
+>+				 * references to all pages will to be dropped below.
+>+				 */
+>+				if (!err) {
+>+					err = -EFAULT;
+>+					break;
+>+				}
+>+			}
+>+		}
+>+
+>+		address += PAGE_SIZE;
+>+	}
+>+
+>+	i = 0;
+>+
+>+	while (i < vma_pages) {
+>+		/* Drop ref count for all pages, returned by transport.
+>+		 * We call 'put_page()' only once, as transport needed
+>+		 * to 'get_page()' at least only once also, to prevent
+>+		 * pages being freed. If transport calls 'get_page()'
+>+		 * more twice or more for every page - we don't care,
+>+		 * if transport calls 'get_page()' only one time, this
+>+		 * meanse that every page had ref count equal to 1,then
+>+		 * 'vm_insert_pages()' increments it to 2. After this
+>+		 * loop, ref count will be 1 again, and page will be
+>+		 * returned to allocator by user.
+>+		 */
+>+		if (pages[i])
+>+			put_page(pages[i]);
+>+		i++;
+>+	}
+>+
+>+	kfree(pages);
+>+
+>+out_unlock_vma:
+>+	mmap_write_unlock(current->mm);
+>+out_unlock_sock:
+>+	release_sock(sk);
+>+
+>+	return err;
+>+}
+>+
+> static int vsock_connectible_getsockopt(struct socket *sock,
+> 					int level, int optname,
+> 					char __user *optval,
+>@@ -1720,6 +1848,26 @@ static int vsock_connectible_getsockopt(struct socket *sock,
+> 		lv = sock_get_timeout(vsk->connect_timeout, &v,
+> 				      optname == SO_VM_SOCKETS_CONNECT_TIMEOUT_OLD);
+> 		break;
+>+	case SO_VM_SOCKETS_ZEROCOPY: {
+>+		lock_sock(sk);
+>+
+>+		v.val64 = vsk->rx_zerocopy_on;
+>+
+>+		release_sock(sk);
+>+
+>+		break;
+>+	}
+>+	case SO_VM_SOCKETS_MAP_RX: {
+>+		unsigned long vma_addr;
+>+
+>+		if (len < sizeof(vma_addr))
+>+			return -EINVAL;
+>+
+>+		if (copy_from_user(&vma_addr, optval, sizeof(vma_addr)))
+>+			return -EFAULT;
+>+
+>+		return vsock_recv_zerocopy(sock, vma_addr);
+>+	}
+>
+> 	default:
+> 		return -ENOPROTOOPT;
+>@@ -2167,6 +2315,41 @@ static int vsock_set_rcvlowat(struct sock *sk, int val)
+> 	return 0;
+> }
+>
+>+static int afvsock_mmap(struct file *file, struct socket *sock,
+>+			struct vm_area_struct *vma)
+>+{
+>+	const struct vsock_transport *transport;
+>+	struct vsock_sock *vsk;
+>+	struct sock *sk;
+>+	int err;
+>+
+>+	if (vma->vm_flags & (VM_WRITE | VM_EXEC))
+>+		return -EPERM;
+>+
+>+	vma->vm_flags &= ~(VM_MAYWRITE | VM_MAYEXEC);
+>+	vma->vm_flags |= (VM_MIXEDMAP);
+>+	vma->vm_ops = &afvsock_vm_ops;
+>+
+>+	sk = sock->sk;
+>+	vsk = vsock_sk(sk);
+>+
+>+	lock_sock(sk);
+>+
+>+	transport = vsk->transport;
+>+
+>+	if (!transport || !transport->zerocopy_rx_mmap) {
+>+		err = -EOPNOTSUPP;
+>+		goto out_unlock;
+>+	}
+>+
+>+	err = transport->zerocopy_rx_mmap(vsk, vma);
+>+
+>+out_unlock:
+>+	release_sock(sk);
+>+
+>+	return err;
+>+}
+>+
+> static const struct proto_ops vsock_stream_ops = {
+> 	.family = PF_VSOCK,
+> 	.owner = THIS_MODULE,
+>@@ -2184,7 +2367,7 @@ static const struct proto_ops vsock_stream_ops = {
+> 	.getsockopt = vsock_connectible_getsockopt,
+> 	.sendmsg = vsock_connectible_sendmsg,
+> 	.recvmsg = vsock_connectible_recvmsg,
+>-	.mmap = sock_no_mmap,
+>+	.mmap = afvsock_mmap,
+> 	.sendpage = sock_no_sendpage,
+> 	.set_rcvlowat = vsock_set_rcvlowat,
+> };
+>@@ -2206,7 +2389,7 @@ static const struct proto_ops vsock_seqpacket_ops = {
+> 	.getsockopt = vsock_connectible_getsockopt,
+> 	.sendmsg = vsock_connectible_sendmsg,
+> 	.recvmsg = vsock_connectible_recvmsg,
+>-	.mmap = sock_no_mmap,
+>+	.mmap = afvsock_mmap,
+> 	.sendpage = sock_no_sendpage,
+> };
+>
+>-- 
+>2.35.0
 
