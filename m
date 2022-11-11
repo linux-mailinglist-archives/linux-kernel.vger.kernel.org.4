@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B42862640E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06260626413
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234380AbiKKV7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 16:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
+        id S234318AbiKKV7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 16:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234157AbiKKV6q (ORCPT
+        with ESMTP id S234252AbiKKV6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:58:46 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E76F5AA;
-        Fri, 11 Nov 2022 13:58:33 -0800 (PST)
-Date:   Fri, 11 Nov 2022 21:58:30 -0000
+        Fri, 11 Nov 2022 16:58:54 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864AE1209B;
+        Fri, 11 Nov 2022 13:58:34 -0800 (PST)
+Date:   Fri, 11 Nov 2022 21:58:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668203912;
+        s=2020; t=1668203913;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=qErqtVV5bJCFQVAImQPlp+Ioi47svNnc5+/U9yTHKlc=;
-        b=Nm1JMTGkLNnCnhMhjc/FX7IUbkYTYZ+ouK9IpChUPuN4KabvRc2fE6JSzhASSGYe2Oh9FK
-        68nGBew6gr/+/UubWGfJNqvJQeGcQoC5oRkn6S0Ph3WtSRfd/crgIYfXhEY7QYhcZGPrGK
-        GdbpeDu18N7cZ3JnBxEv5ABOvQ2Wn0OtKggXbsQ6JMvNyyKsoyih7DeR9voaDLW+EsGHuH
-        WA4qXlVS43ZnullrVtfDVtbWDU4vOr4gKd9Djjv5Gji5La5pfoe+AJeBhnTaIRwQBzkJTF
-        +Hd8iQYAabsET7NSBQFjmBWg2AED58Wg9gf6gXknt8sSnbIcReDG4gvMcSXdqQ==
+        bh=9i1IRaGeoo5p6XGyqtyXO1VsI6H/IClkVu/II5MW4Rg=;
+        b=VH7LFagb7bXLnmSAwpmoff7fjhf7CyQlxl3yHsVtbexUr9M6y9unm7COcZzWj5v50V73xN
+        OjeEDtMWRRBJNXcr9VClqni9Zsw38mVJcUBsez5yMnU8UVLiPs4oubTtWgQDMDYgPe5St5
+        nAmvzZyYsV2r3d0m5L9Tdw236gNtmMwC28VLF6GIryN817EA9aFDSbFhy9pEYiaOpgwfhI
+        Mjzh+bhpjLhQeMJVUaVlaZd48C/qssB+B2TYX89JTnas96CYUZ/s3YuB+21OHXEahHiAZR
+        Cbyr9mHLKt4SNv2XV0lw+fjPzdcg2kcD7i29iBbG4Zd42PSdwvNRrz6Bxhol7A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668203912;
+        s=2020e; t=1668203913;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=qErqtVV5bJCFQVAImQPlp+Ioi47svNnc5+/U9yTHKlc=;
-        b=FBh7DAzflbNb66Aeg3Sf/1Jfx9UFAeOR0VEf1eUS60gIQ4yRfsVI776LF54V2S7IduYeSj
-        jED+I+SzK5l8c/DA==
+        bh=9i1IRaGeoo5p6XGyqtyXO1VsI6H/IClkVu/II5MW4Rg=;
+        b=M5LqzwUPrZMroKobj0pGmWVztdeVuOaTgE7TjPl1ZKvv6W4UuIcL+usRxEkmYrquDUKcRe
+        QmdcqtEN7DgpCQAQ==
 From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/uaccess: Provide untagged_addr() and remove tags
- before address check
+Subject: [tip: x86/mm] x86/mm: Handle LAM on context switch
 Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
         Alexander Potapenko <glider@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <166820391081.4906.11503973915855356452.tip-bot2@tip-bot2>
+Message-ID: <166820391188.4906.14835556050885514578.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -64,191 +62,298 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     5744534bdae403270f86d934a6c5878da6a5a64f
-Gitweb:        https://git.kernel.org/tip/5744534bdae403270f86d934a6c5878da6a5a64f
+Commit-ID:     d9d09133d3451528a3af57f2af5d29253a89fc5a
+Gitweb:        https://git.kernel.org/tip/d9d09133d3451528a3af57f2af5d29253a89fc5a
 Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Wed, 09 Nov 2022 19:51:29 +03:00
+AuthorDate:    Wed, 09 Nov 2022 19:51:28 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Fri, 11 Nov 2022 13:28:07 -08:00
 
-x86/uaccess: Provide untagged_addr() and remove tags before address check
+x86/mm: Handle LAM on context switch
 
-untagged_addr() is a helper used by the core-mm to strip tag bits and
-get the address to the canonical shape. In only handles userspace
-addresses. The untagging mask is stored in mmu_context and will be set
-on enabling LAM for the process.
+Linear Address Masking mode for userspace pointers encoded in CR3 bits.
+The mode is selected per-process and stored in mm_context_t.
 
-The tags must not be included into check whether it's okay to access the
-userspace address.
+switch_mm_irqs_off() now respects selected LAM mode and constructs CR3
+accordingly.
 
-Strip tags in access_ok().
-
-get_user() and put_user() don't use access_ok(), but check access
-against TASK_SIZE directly in assembly. Strip tags, before calling into
-the assembly helper.
+The active LAM mode gets recorded in the tlb_state.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Andy Lutomirski <luto@kernel.org>
 Tested-by: Alexander Potapenko <glider@google.com>
-Link: https://lore.kernel.org/all/20221109165140.9137-6-kirill.shutemov%40linux.intel.com
+Link: https://lore.kernel.org/all/20221109165140.9137-5-kirill.shutemov%40linux.intel.com
 ---
  arch/x86/include/asm/mmu.h         |  3 ++-
- arch/x86/include/asm/mmu_context.h | 11 ++++++++-
- arch/x86/include/asm/uaccess.h     | 42 ++++++++++++++++++++++++++---
- arch/x86/kernel/process.c          |  3 ++-
- 4 files changed, 56 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/mmu_context.h | 24 +++++++++++++-
+ arch/x86/include/asm/tlbflush.h    | 34 +++++++++++++++++++-
+ arch/x86/mm/tlb.c                  | 53 ++++++++++++++++++++---------
+ 4 files changed, 98 insertions(+), 16 deletions(-)
 
 diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-index 002889c..2fdb390 100644
+index 5d74946..002889c 100644
 --- a/arch/x86/include/asm/mmu.h
 +++ b/arch/x86/include/asm/mmu.h
-@@ -43,6 +43,9 @@ typedef struct {
+@@ -40,6 +40,9 @@ typedef struct {
  
- 	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
- 	unsigned long lam_cr3_mask;
+ #ifdef CONFIG_X86_64
+ 	unsigned short flags;
 +
-+	/* Significant bits of the virtual address. Excludes tag bits. */
-+	u64 untag_mask;
++	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
++	unsigned long lam_cr3_mask;
  #endif
  
  	struct mutex lock;
 diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index 58ad18c..92cf8f5 100644
+index b8d40dd..58ad18c 100644
 --- a/arch/x86/include/asm/mmu_context.h
 +++ b/arch/x86/include/asm/mmu_context.h
-@@ -100,6 +100,12 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- 	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
-+	mm->context.untag_mask = oldmm->context.untag_mask;
-+}
-+
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
-+{
-+	mm->context.untag_mask = -1UL;
+@@ -91,6 +91,29 @@ static inline void switch_ldt(struct mm_struct *prev, struct mm_struct *next)
  }
- 
- #else
-@@ -112,6 +118,10 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
- static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- {
- }
-+
-+static inline void mm_reset_untag_mask(struct mm_struct *mm)
-+{
-+}
- #endif
- 
- #define enter_lazy_tlb enter_lazy_tlb
-@@ -138,6 +148,7 @@ static inline int init_new_context(struct task_struct *tsk,
- 		mm->context.execute_only_pkey = -1;
- 	}
- #endif
-+	mm_reset_untag_mask(mm);
- 	init_new_context_ldt(mm);
- 	return 0;
- }
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 1cc756e..0db6f54 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -7,6 +7,7 @@
- #include <linux/compiler.h>
- #include <linux/instrumented.h>
- #include <linux/kasan-checks.h>
-+#include <linux/mm_types.h>
- #include <linux/string.h>
- #include <asm/asm.h>
- #include <asm/page.h>
-@@ -21,6 +22,30 @@ static inline bool pagefault_disabled(void);
- # define WARN_ON_IN_IRQ()
  #endif
  
 +#ifdef CONFIG_X86_64
-+/*
-+ * Mask out tag bits from the address.
-+ *
-+ * Magic with the 'sign' allows to untag userspace pointer without any branches
-+ * while leaving kernel addresses intact.
-+ */
-+#define untagged_addr(mm, addr)	({					\
-+	u64 __addr = (__force u64)(addr);				\
-+	s64 sign = (s64)__addr >> 63;					\
-+	__addr &= (mm)->context.untag_mask | sign;			\
-+	(__force __typeof__(addr))__addr;				\
-+})
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return READ_ONCE(mm->context.lam_cr3_mask);
++}
 +
-+#define untagged_ptr(mm, ptr)	({					\
-+	u64 __ptrval = (__force u64)(ptr);				\
-+	__ptrval = untagged_addr(mm, __ptrval);				\
-+	(__force __typeof__(*(ptr)) *)__ptrval;				\
-+})
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
++}
++
 +#else
-+#define untagged_addr(mm, addr)	(addr)
-+#define untagged_ptr(mm, ptr)	(ptr)
++
++static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
++{
++	return 0;
++}
++
++static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
++{
++}
 +#endif
 +
- /**
-  * access_ok - Checks if a user space pointer is valid
-  * @addr: User space pointer to start of block to check
-@@ -41,7 +66,7 @@ static inline bool pagefault_disabled(void);
- #define access_ok(addr, size)					\
- ({									\
- 	WARN_ON_IN_IRQ();						\
--	likely(__access_ok(addr, size));				\
-+	likely(__access_ok(untagged_addr(current->mm, addr), size));	\
- })
+ #define enter_lazy_tlb enter_lazy_tlb
+ extern void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk);
  
- #include <asm-generic/access_ok.h>
-@@ -127,7 +152,13 @@ extern int __get_user_bad(void);
-  * Return: zero on success, or -EFAULT on error.
-  * On error, the variable @x is set to zero.
-  */
--#define get_user(x,ptr) ({ might_fault(); do_get_user_call(get_user,x,ptr); })
-+#define get_user(x,ptr)							\
-+({									\
-+	__typeof__(*(ptr)) __user *__ptr_clean;				\
-+	__ptr_clean = untagged_ptr(current->mm, ptr);			\
-+	might_fault();							\
-+	do_get_user_call(get_user,x,__ptr_clean);			\
-+})
- 
- /**
-  * __get_user - Get a simple variable from user space, with less checking.
-@@ -227,7 +258,12 @@ extern void __put_user_nocheck_8(void);
-  *
-  * Return: zero on success, or -EFAULT on error.
-  */
--#define put_user(x, ptr) ({ might_fault(); do_put_user_call(put_user,x,ptr); })
-+#define put_user(x, ptr) ({						\
-+	__typeof__(*(ptr)) __user *__ptr_clean;				\
-+	__ptr_clean = untagged_ptr(current->mm, ptr);			\
-+	might_fault();							\
-+	do_put_user_call(put_user,x,__ptr_clean);			\
-+})
- 
- /**
-  * __put_user - Write a simple value into user space, with less checking.
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index c21b734..d1e83ba 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -47,6 +47,7 @@
- #include <asm/frame.h>
- #include <asm/unwind.h>
- #include <asm/tdx.h>
-+#include <asm/mmu_context.h>
- 
- #include "process.h"
- 
-@@ -367,6 +368,8 @@ void arch_setup_new_exec(void)
- 		task_clear_spec_ssb_noexec(current);
- 		speculation_ctrl_update(read_thread_flags());
- 	}
-+
-+	mm_reset_untag_mask(current->mm);
+@@ -168,6 +191,7 @@ static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
+ {
+ 	arch_dup_pkeys(oldmm, mm);
+ 	paravirt_arch_dup_mmap(oldmm, mm);
++	dup_lam(oldmm, mm);
+ 	return ldt_dup_context(oldmm, mm);
  }
  
- #ifdef CONFIG_X86_IOPL_IOPERM
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index cda3118..662598d 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -101,6 +101,16 @@ struct tlb_state {
+ 	 */
+ 	bool invalidate_other;
+ 
++#ifdef CONFIG_X86_64
++	/*
++	 * Active LAM mode.
++	 *
++	 * X86_CR3_LAM_U57/U48 shifted right by X86_CR3_LAM_U57_BIT or 0 if LAM
++	 * disabled.
++	 */
++	u8 lam;
++#endif
++
+ 	/*
+ 	 * Mask that contains TLB_NR_DYN_ASIDS+1 bits to indicate
+ 	 * the corresponding user PCID needs a flush next time we
+@@ -357,6 +367,30 @@ static inline bool huge_pmd_needs_flush(pmd_t oldpmd, pmd_t newpmd)
+ }
+ #define huge_pmd_needs_flush huge_pmd_needs_flush
+ 
++#ifdef CONFIG_X86_64
++static inline unsigned long tlbstate_lam_cr3_mask(void)
++{
++	unsigned long lam = this_cpu_read(cpu_tlbstate.lam);
++
++	return lam << X86_CR3_LAM_U57_BIT;
++}
++
++static inline void set_tlbstate_cr3_lam_mask(unsigned long mask)
++{
++	this_cpu_write(cpu_tlbstate.lam, mask >> X86_CR3_LAM_U57_BIT);
++}
++
++#else
++
++static inline unsigned long tlbstate_lam_cr3_mask(void)
++{
++	return 0;
++}
++
++static inline void set_tlbstate_cr3_lam_mask(u64 mask)
++{
++}
++#endif
+ #endif /* !MODULE */
+ 
+ static inline void __native_tlb_flush_global(unsigned long cr4)
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index c1e31e9..9d1e7a5 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -154,26 +154,30 @@ static inline u16 user_pcid(u16 asid)
+ 	return ret;
+ }
+ 
+-static inline unsigned long build_cr3(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3(pgd_t *pgd, u16 asid, unsigned long lam)
+ {
++	unsigned long cr3 = __sme_pa(pgd) | lam;
++
+ 	if (static_cpu_has(X86_FEATURE_PCID)) {
+-		return __sme_pa(pgd) | kern_pcid(asid);
++		VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
++		cr3 |= kern_pcid(asid);
+ 	} else {
+ 		VM_WARN_ON_ONCE(asid != 0);
+-		return __sme_pa(pgd);
+ 	}
++
++	return cr3;
+ }
+ 
+-static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid)
++static inline unsigned long build_cr3_noflush(pgd_t *pgd, u16 asid,
++					      unsigned long lam)
+ {
+-	VM_WARN_ON_ONCE(asid > MAX_ASID_AVAILABLE);
+ 	/*
+ 	 * Use boot_cpu_has() instead of this_cpu_has() as this function
+ 	 * might be called during early boot. This should work even after
+ 	 * boot because all CPU's the have same capabilities:
+ 	 */
+ 	VM_WARN_ON_ONCE(!boot_cpu_has(X86_FEATURE_PCID));
+-	return __sme_pa(pgd) | kern_pcid(asid) | CR3_NOFLUSH;
++	return build_cr3(pgd, asid, lam) | CR3_NOFLUSH;
+ }
+ 
+ /*
+@@ -274,15 +278,16 @@ static inline void invalidate_user_asid(u16 asid)
+ 		  (unsigned long *)this_cpu_ptr(&cpu_tlbstate.user_pcid_flush_mask));
+ }
+ 
+-static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, bool need_flush)
++static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, unsigned long lam,
++			    bool need_flush)
+ {
+ 	unsigned long new_mm_cr3;
+ 
+ 	if (need_flush) {
+ 		invalidate_user_asid(new_asid);
+-		new_mm_cr3 = build_cr3(pgdir, new_asid);
++		new_mm_cr3 = build_cr3(pgdir, new_asid, lam);
+ 	} else {
+-		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid);
++		new_mm_cr3 = build_cr3_noflush(pgdir, new_asid, lam);
+ 	}
+ 
+ 	/*
+@@ -491,6 +496,7 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ {
+ 	struct mm_struct *real_prev = this_cpu_read(cpu_tlbstate.loaded_mm);
+ 	u16 prev_asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
++	unsigned long new_lam = mm_lam_cr3_mask(next);
+ 	bool was_lazy = this_cpu_read(cpu_tlbstate_shared.is_lazy);
+ 	unsigned cpu = smp_processor_id();
+ 	u64 next_tlb_gen;
+@@ -520,7 +526,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	 * isn't free.
+ 	 */
+ #ifdef CONFIG_DEBUG_VM
+-	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid))) {
++	if (WARN_ON_ONCE(__read_cr3() != build_cr3(real_prev->pgd, prev_asid,
++						   tlbstate_lam_cr3_mask()))) {
+ 		/*
+ 		 * If we were to BUG here, we'd be very likely to kill
+ 		 * the system so hard that we don't see the call trace.
+@@ -552,10 +559,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 	 * instruction.
+ 	 */
+ 	if (real_prev == next) {
++		/* Not actually switching mm's */
+ 		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
+ 			   next->context.ctx_id);
+ 
+ 		/*
++		 * If this races with another thread that enables lam, 'new_lam'
++		 * might not match tlbstate_lam_cr3_mask().
++		 */
++
++		/*
+ 		 * Even in lazy TLB mode, the CPU should stay set in the
+ 		 * mm_cpumask. The TLB shootdown code can figure out from
+ 		 * cpu_tlbstate_shared.is_lazy whether or not to send an IPI.
+@@ -622,15 +635,16 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 		barrier();
+ 	}
+ 
++	set_tlbstate_cr3_lam_mask(new_lam);
+ 	if (need_flush) {
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].ctx_id, next->context.ctx_id);
+ 		this_cpu_write(cpu_tlbstate.ctxs[new_asid].tlb_gen, next_tlb_gen);
+-		load_new_mm_cr3(next->pgd, new_asid, true);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, true);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, TLB_FLUSH_ALL);
+ 	} else {
+ 		/* The new ASID is already up to date. */
+-		load_new_mm_cr3(next->pgd, new_asid, false);
++		load_new_mm_cr3(next->pgd, new_asid, new_lam, false);
+ 
+ 		trace_tlb_flush(TLB_FLUSH_ON_TASK_SWITCH, 0);
+ 	}
+@@ -691,6 +705,10 @@ void initialize_tlbstate_and_flush(void)
+ 	/* Assert that CR3 already references the right mm. */
+ 	WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
+ 
++	/* LAM expected to be disabled */
++	WARN_ON(cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57));
++	WARN_ON(mm_lam_cr3_mask(mm));
++
+ 	/*
+ 	 * Assert that CR4.PCIDE is set if needed.  (CR4.PCIDE initialization
+ 	 * doesn't work like other CR4 bits because it can only be set from
+@@ -699,8 +717,8 @@ void initialize_tlbstate_and_flush(void)
+ 	WARN_ON(boot_cpu_has(X86_FEATURE_PCID) &&
+ 		!(cr4_read_shadow() & X86_CR4_PCIDE));
+ 
+-	/* Force ASID 0 and force a TLB flush. */
+-	write_cr3(build_cr3(mm->pgd, 0));
++	/* Disable LAM, force ASID 0 and force a TLB flush. */
++	write_cr3(build_cr3(mm->pgd, 0, 0));
+ 
+ 	/* Reinitialize tlbstate. */
+ 	this_cpu_write(cpu_tlbstate.last_user_mm_spec, LAST_USER_MM_INIT);
+@@ -708,6 +726,7 @@ void initialize_tlbstate_and_flush(void)
+ 	this_cpu_write(cpu_tlbstate.next_asid, 1);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].ctx_id, mm->context.ctx_id);
+ 	this_cpu_write(cpu_tlbstate.ctxs[0].tlb_gen, tlb_gen);
++	set_tlbstate_cr3_lam_mask(0);
+ 
+ 	for (i = 1; i < TLB_NR_DYN_ASIDS; i++)
+ 		this_cpu_write(cpu_tlbstate.ctxs[i].ctx_id, 0);
+@@ -1071,8 +1090,10 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+  */
+ unsigned long __get_current_cr3_fast(void)
+ {
+-	unsigned long cr3 = build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
+-		this_cpu_read(cpu_tlbstate.loaded_mm_asid));
++	unsigned long cr3 =
++		build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
++			  this_cpu_read(cpu_tlbstate.loaded_mm_asid),
++			  tlbstate_lam_cr3_mask());
+ 
+ 	/* For now, be very restrictive about when this can be called. */
+ 	VM_WARN_ON(in_nmi() || preemptible());
