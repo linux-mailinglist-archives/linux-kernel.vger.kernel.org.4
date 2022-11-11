@@ -2,82 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE75C6255D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99776255D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233427AbiKKI4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:56:13 -0500
+        id S233419AbiKKI4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:56:11 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbiKKI4K (ORCPT
+        with ESMTP id S233416AbiKKI4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:56:10 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E1377202;
-        Fri, 11 Nov 2022 00:56:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AfRcqsf6ejL03DcbffFiojk0ADSJ78lfGlZNfAZ1V2U=; b=HugVjGcHnTyIsDGx07ol/W+kIw
-        7ggClT5QAf0liWieHhjSiB44zU6v5dL85be8swzrWT8+8dydXV0hS3OAEKB+vltFSZOqYyhwiva8v
-        92vBUPIjLUCC3xkzXkdLUsLVpHbmUNwL7oTbz2mxm4vNqF+lc7/GoEZ1CK+pfOo2qXCeiv63VTi3f
-        abmW812Lxo63BrYMsgkTbwps3bGo+1214N01Hu+wY8TBMydPkgCVoCieLHIJBfsTd39JfPnGLD2nI
-        yTWAkeVdEbhbFeUfLI+v6J/w3dcovibb4P6+W7+fHxoH0kv21MxBMo0Gj7P9o48X89/p4Gs2U8ahj
-        tijVfu/w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1otPpG-00CsEc-Gp; Fri, 11 Nov 2022 08:55:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Fri, 11 Nov 2022 03:56:09 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E251D2F5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:56:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8FC623002EC;
-        Fri, 11 Nov 2022 09:55:43 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 427FF20243A99; Fri, 11 Nov 2022 09:55:43 +0100 (CET)
-Date:   Fri, 11 Nov 2022 09:55:43 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: Re: [RESEND PATCH 2/6] x86/traps: add a system interrupt table for
- system interrupt dispatch
-Message-ID: <Y24OD6nmPVS0v1vu@hirez.programming.kicks-ass.net>
-References: <20221110061545.1531-1-xin3.li@intel.com>
- <20221110061545.1531-3-xin3.li@intel.com>
- <Y2y8obdYDXo9vlH/@hirez.programming.kicks-ass.net>
- <BN6PR1101MB21619E2092AFF048422C6311A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN6PR1101MB21619E2092AFF048422C6311A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DAEAD20156;
+        Fri, 11 Nov 2022 08:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668156961; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=y31vKWv53VFRQ56YCuILtx5NwovSykidEjUPP7uZ68g=;
+        b=NMh/4Kba8eXmQ2MEuDRSfDt28QN7D4U9RF9fuTv4QCq0JfudzTJlELNBb43APT0Ao9+cwL
+        kl0FWd5Xwj03fwYwnflAGCvw2QesnF8LtF5BgxGVcJFFV7m1sWacAx9Uf3ZcDTvYtD2XJ6
+        UxSzFZHeGnGHh/Srj4N8UgmojCZ0LW0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668156961;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=y31vKWv53VFRQ56YCuILtx5NwovSykidEjUPP7uZ68g=;
+        b=IZ5bkThLSF7IgvMVzvjHUxVz9aRGJZ6cXVbjPg1fEetaJ5T4z1fhEOr80z4IDaJvcePy60
+        pme8FzUN7OV8LCCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B554F13357;
+        Fri, 11 Nov 2022 08:56:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6AElKyEObmOKTwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 11 Nov 2022 08:56:01 +0000
+Date:   Fri, 11 Nov 2022 09:56:01 +0100
+Message-ID: <87fsepx42m.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.1-rc5
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 07:55:22PM +0000, Li, Xin3 wrote:
-> > > Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
-> > > Signed-off-by: Xin Li <xin3.li@intel.com>
-> > 
-> > This is not a valid SOB, it would suggest hpa is the author, but he's not in in
-> > From.
-> 
-> HPA wrote the initial dispatch code for FRED, and I worked with him to
-> refactor it for KVM/VMX NMI/IRQ dispatch.  So use SOB from both.  No?
+Linus,
 
-Yes, but not like this. Please review the documentation we have on this.
+please pull sound fixes for v6.1-rc5 from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.1-rc5
+
+The topmost commit is 9a5523f72bd2b0d66eef3d58810c6eb7b5ffc143
+
+----------------------------------------------------------------
+
+sound fixes for 6.1-rc5
+
+Things look calming down, as this contains only a few small fixes.
+
+- Fix for a corner-case bug with SG-buffer page allocation helper
+- A regression fix for Roland USB-audio device probe
+- A potential memory leak fix at the error path
+- Handful quirks and device-specific fixes for HD- and USB-audio
+
+----------------------------------------------------------------
+
+Ai Chao (1):
+      ALSA: usb-audio: add quirk to fix Hamedal C20 disconnect issue
+
+Edson Juliano Drosdeck (1):
+      ALSA: hda/realtek: Add Positivo C6300 model quirk
+
+Evan Quan (1):
+      ALSA: hda/hdmi - enable runtime pm for more AMD display audio
+
+Jussi Laako (1):
+      ALSA: usb-audio: Add DSD support for Accuphase DAC-60
+
+Pierre-Louis Bossart (1):
+      ALSA: hda: clarify comments on SCF changes
+
+Stefan Binding (1):
+      ALSA: hda/realtek: Add quirk for ASUS Zenbook using CS35L41
+
+Takashi Iwai (4):
+      ALSA: usb-audio: Yet more regression for for the delayed card registration
+      ALSA: usb-audio: Remove redundant workaround for Roland quirk
+      ALSA: usb-audio: Add quirk entry for M-Audio Micro
+      ALSA: memalloc: Don't fall back for SG-buffer with IOMMU
+
+Xian Wang (1):
+      ALSA: hda/ca0132: add quirk for EVGA Z390 DARK
+
+Yang Yingliang (1):
+      ALSA: arm: pxa: pxa2xx-ac97-lib: fix return value check of platform_get_irq()
+
+Ye Bin (1):
+      ALSA: hda: fix potential memleak in 'add_widget_node'
+
+---
+ sound/arm/pxa2xx-ac97-lib.c   |  4 +++-
+ sound/core/memalloc.c         | 20 +++++++++---------
+ sound/hda/hdac_sysfs.c        |  4 +++-
+ sound/pci/hda/hda_intel.c     | 11 ++++++----
+ sound/pci/hda/patch_ca0132.c  |  1 +
+ sound/pci/hda/patch_realtek.c |  2 ++
+ sound/usb/card.c              | 29 +++++++++++++++++---------
+ sound/usb/endpoint.c          |  3 ++-
+ sound/usb/quirks-table.h      |  4 ++++
+ sound/usb/quirks.c            | 47 ++++++-------------------------------------
+ sound/usb/usbaudio.h          |  3 +++
+ 11 files changed, 62 insertions(+), 66 deletions(-)
+
