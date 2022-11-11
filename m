@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A54686255A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8325C6255A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiKKIpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S233355AbiKKIpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233273AbiKKIo4 (ORCPT
+        with ESMTP id S233294AbiKKIo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:44:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5A77722F;
-        Fri, 11 Nov 2022 00:44:55 -0800 (PST)
+        Fri, 11 Nov 2022 03:44:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C58748EC;
+        Fri, 11 Nov 2022 00:44:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24C3E61EF7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47C9BB82456;
         Fri, 11 Nov 2022 08:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC788C433D7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6260C433B5;
         Fri, 11 Nov 2022 08:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668156293;
-        bh=thz5PLbWUCSRRMgFh85ujhV9iQEk87ZgQaGwFCOXKk8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=u+7mPtwFTd0Jv6TjJPnM1T7fU+y3HWt/G2GN114+0RqJsvTc02q5dtygejJZSaWB7
-         2W5cJaUu0u+ZYRwe49Zg+Yhxx0YgAiMPatlH+5vhUAauWdcZ34BNtp3tmp8VFOASf+
-         ShtGat5VHlWfWh38ZQf/tv6sv2QYmVWVmJHVUcbYWZBNam5guP/j+2Xr0vxQ73fVzY
-         4+3WEJJMQEXeeUkw6I2HBrD85l+cuxwZ5vXFZGtAA2vHy4jd4hAsUaZ+lMHMrfIWdN
-         Ir9zO/uYw0+HrzNgoRJoGwatYHXgyCbbPyBj3vJFLytk95nEF7R36zRxUyluog9Qjf
-         Seq9uEA+jDbTQ==
+        bh=I4u+iA9wG+mse/x7qapE0EwSlmwdaRWKqs47dh11hNs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LMsnzaTo8wn929aBHWk99K0FyRSzj+oelLX7Pfj+NXjWhRvgrsskrqaXuZZTHAfAd
+         Zr25+FET+uCUswqjZLmkQ1WTcppq4Obgu+7RYbezg+obKgo3rVwWCX1YCcQWcv1vt+
+         umhAUZM9WBPy+5CCgJL8huMIMPEYis4JilKab0cK7+sKXpqh9NgPi/21R/xFLS83Lm
+         B886jhZG+aZQdkr30DTcNzH4m/78ShiitzIwTCTU5FpP9ZdVYJFNuT3xvayLcnz/wA
+         47s4xxmSoeFB78oz3oI/DYhcKCkkdfyuhJ2wqgykwC9qTkaW5BJei1Q8qV7e+GZyYz
+         EcjRRC/WVKm6w==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1otPeC-0002Me-Px; Fri, 11 Nov 2022 09:44:25 +0100
+        id 1otPeD-0002Mg-JA; Fri, 11 Nov 2022 09:44:25 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -43,11 +43,13 @@ Cc:     Andy Gross <agross@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 0/6] phy: qcom-qmp-combo: preparatory fixes (set 1/3)
-Date:   Fri, 11 Nov 2022 09:42:49 +0100
-Message-Id: <20221111084255.8963-1-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH 1/6] phy: qcom-qmp-combo: fix out-of-bounds clock access
+Date:   Fri, 11 Nov 2022 09:42:50 +0100
+Message-Id: <20221111084255.8963-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221111084255.8963-1-johan+linaro@kernel.org>
+References: <20221111084255.8963-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,35 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here's a set of fixes for bugs founds while fixing the devicetree
-binding and adding (proper) support for SC8280XP to the combo driver.
+The SM8250 only uses three clocks but the DP configuration erroneously
+described four clocks.
 
-The full series is over forty patches and I'll be posting these in three
-parts of which this is the first. In an effort to get all of these into
-6.2, I'll also be submitting all three series before waiting for the
-previous ones to be applied.
+In case the DP part of the PHY is initialised before the USB part, this
+would lead to uninitialised memory beyond the bulk-clocks array to be
+treated as a clock pointer as the clocks are requested based on the USB
+configuration.
 
-The first fix below could possibly be considered 6.1-rc material, but I
-believe it's be fine to take all of these for 6.2.
+Fixes: aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp phy")
+Cc: stable@vger.kernel.org	# 5.13
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Note that the next part of the series will do away with some of problems
-with this driver that led to the issues being fixed here (e.g. the split
-driver data and configuration).
-
-Johan
-
-
-Johan Hovold (6):
-  phy: qcom-qmp-combo: fix out-of-bounds clock access
-  phy: qcom-qmp-combo: fix sdm845 reset
-  phy: qcom-qmp-combo: fix sc8180x reset
-  phy: qcom-qmp-combo: fix broken power on
-  phy: qcom-qmp-combo: fix runtime suspend
-  phy: qcom-qmp-combo: clean up common initialisation
-
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 91 +++++++++++------------
- 1 file changed, 44 insertions(+), 47 deletions(-)
-
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index 5e11b6a1d189..bb38b18258ca 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -1270,8 +1270,8 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
+ 	.swing_hbr3_hbr2	= &qmp_dp_v3_voltage_swing_hbr3_hbr2,
+ 	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v3_pre_emphasis_hbr3_hbr2,
+ 
+-	.clk_list		= qmp_v4_phy_clk_l,
+-	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
++	.clk_list		= qmp_v4_sm8250_usbphy_clk_l,
++	.num_clks		= ARRAY_SIZE(qmp_v4_sm8250_usbphy_clk_l),
+ 	.reset_list		= msm8996_usb3phy_reset_l,
+ 	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+ 	.vreg_list		= qmp_phy_vreg_l,
 -- 
 2.37.4
 
