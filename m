@@ -2,145 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E628626090
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4CF626099
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiKKRkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S233828AbiKKRlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:41:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiKKRkC (ORCPT
+        with ESMTP id S234046AbiKKRlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:40:02 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB82411442
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:40:01 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id j12so4757343plj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:40:01 -0800 (PST)
+        Fri, 11 Nov 2022 12:41:17 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12F164A06
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:41:07 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bd2aea61bso6183491fac.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:41:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9VmHrF7f47E4VNBhDF2e+NO6WB+riPDrXDo4vmyhQh4=;
-        b=Sy2alGhPAY4dRLL8NhVi5LMeqzPl4YZGksRyhbH6KFcOnxsoRCWeQDYO9bSUMuFp3F
-         HtMmuBHeWFqlGu9qWwLwHuzOlKzIeL6hJykKUO8Gdnq8ekXg9CV1XZEHZ8EIeVq5xO+V
-         4XGRgIVAgGbUlYpIm1V9GwDwg5hI7bfMRZ/v5SeknQu6Qm1B6z1tj0vYE2w8+4rUW66m
-         Zdqvfvy0qWjrG1dPYkIq3SZNiHMn2EXE+hGWJn1r6Wcc+JZ83GyQ7UQmRVWAjEyugQOL
-         Q70URkjCQsikEcdg6rDp8v2G6yl5D1h49qSS6fhtp+ga8VG0VKPQ6Bg9FSnJMhbxdOJd
-         a3AQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4FMbovKeaf0ACEXQ0YanGO9/PhL7FDv4zcGvp9Jqeb8=;
+        b=VC2441h1K58QJkK+WGDca1W1zE89fQLTCiI2j9YZF8c7kZutY8qZa37OsZfchHaWPS
+         rhMk5/lHhhn0VVnapdeeJdbRT73kCMs+fjJf2MKXFrEUUsifRb5msz4ssklMNJBwC7eh
+         Chg1S4lbsZ4dVFWnrIXNGPFFAx0LNq8OQ9MXm+IBeMhVnfnt6VtiEwgM8nb0msLSnp58
+         pb2LkeEZ2gFqjfjK6C7Sx0bex21qNoK1D05X39ls8QGfZpothPC5BYnsb9IAdN1Lxyps
+         Lisi72JrvKVaXERa9xDqo4MVML53UfqJmtjTDFPiT07Yk9rhBBSBf+xxCAGylshMQU5N
+         DFuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VmHrF7f47E4VNBhDF2e+NO6WB+riPDrXDo4vmyhQh4=;
-        b=N9ABbM24XxEHlgCitSBqUMQXxdGPVo9jbXB67d4MoMEdQC4CpmFn0D+9c+OZrJyTAi
-         EE6HiMT0C7b5BabALpT6q2ebi1REEvG5q8m9vQPqDywbw5lSHd5hkivUFa3QIoF4tB1e
-         Ud1RdlzDIF5/tpROEJTIzvCw9gcykr5nD//pTuKd3Yjt3ncYrXrJCVow0DMQjaKr79lD
-         Xe4eNUXy3CnK1TcMxiA63Q6a4igbGjKx2xs1MrPLmKlrfPq56UssWrQS1VUnHHCAy76/
-         Ys5B9YPSH6gKbDJ4hTLS4vYCUgBRQkg8jjfgZE/sWUUNh+rlgeVuNXA9lrf+KC1QhOkm
-         ++zg==
-X-Gm-Message-State: ANoB5pk5sI+Pv06MGjzJQHuxCwIPeSeuOOt8WRzGSq9lTyA9+HaJkcrk
-        gdwdaYp9PRQMUj3RsgL3rHwp
-X-Google-Smtp-Source: AA0mqf6do1AF7IWotNXWBySjLNiLHDmFVUhjU3XSuSGHRBnSljWdybQk2cF5f97EzaxvgTTslpsVOQ==
-X-Received: by 2002:a17:90b:3d83:b0:200:7cf7:3d79 with SMTP id pq3-20020a17090b3d8300b002007cf73d79mr2872179pjb.206.1668188401136;
-        Fri, 11 Nov 2022 09:40:01 -0800 (PST)
-Received: from thinkpad ([117.202.188.198])
-        by smtp.gmail.com with ESMTPSA id r17-20020a170903411100b00186c3727294sm1947481pld.270.2022.11.11.09.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 09:39:58 -0800 (PST)
-Date:   Fri, 11 Nov 2022 23:09:52 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Amit Pundir <amit.pundir@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [GIT PULL] arm64 updates for 6.1-rc1
-Message-ID: <20221111173952.GB5393@thinkpad>
-References: <20221005144116.2256580-1-catalin.marinas@arm.com>
- <CAMi1Hd38YB2m_r=m0wuDz+wErii37fUq1BJnvN9=y6opDzo_Fw@mail.gmail.com>
- <Y0aq8y5mEZi14lJ/@arm.com>
- <CAMi1Hd3Y9AibeVnh9_KYJ2EXar7bBSypKm4Tixj47htM7ZOURw@mail.gmail.com>
- <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
- <Y24uvyDJU3CL1jOi@arm.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4FMbovKeaf0ACEXQ0YanGO9/PhL7FDv4zcGvp9Jqeb8=;
+        b=vNHgY1i0I6w3YzztOVcHI+v0GJdngwuHOD4BUUiF0eEIwgeBJy3HkcyjeU6bn+zLtF
+         wKD4W+hYwZc8F1TlQivKEhezYSFudNr17/SkyNRKEF3LiZPljzLf3ui+Pe62/a69Q8EP
+         PkEVv6BL81u0uD1Sft/DVeK5L2uhm5uKuUvm1KMqJ0sJKpA0hXn/u/pgfYkNaBzHZiq4
+         dhtPDdM+gcoeJTx2xk0A8bgbpByWL5sVgK7e2y2R2WwkREqiUJFBhT4+AEJS6rfzPgX3
+         CDQyCM/Vpq3NV0x9M2mzjVrlviOcPGsLIj+nIs+1OrCvDoJ8JlDy9wJcd5CWOnlb2yKE
+         RUQg==
+X-Gm-Message-State: ANoB5pkRy7TRJjEm6dtMWYk+vUL5T3ZgewD35wdwS6V8/rNrA5s9ABnA
+        wmAd4ZVf2jM43lVlIkWYsmj4tdQgkb+TKUwxE6pK
+X-Google-Smtp-Source: AA0mqf655iw4JsNFSaXUguP05uOdtX8Svtt265PQFwzqFM6wcQ7IAUleTmgJzrbkAjGYudkUtWM48pVP5eznaOTF3uA=
+X-Received: by 2002:a05:6870:4304:b0:13b:d015:f1b5 with SMTP id
+ w4-20020a056870430400b0013bd015f1b5mr1591387oah.51.1668188467074; Fri, 11 Nov
+ 2022 09:41:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y24uvyDJU3CL1jOi@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <166807856758.2972602.14175912201162072721.stgit@warthog.procyon.org.uk>
+In-Reply-To: <166807856758.2972602.14175912201162072721.stgit@warthog.procyon.org.uk>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 11 Nov 2022 12:40:56 -0500
+Message-ID: <CAHC9VhTJh2tFbvOMzpGw7VSnHHb=boNhL5c7a1Ed+iHNFwWwqg@mail.gmail.com>
+Subject: Re: [PATCH v5] vfs, security: Fix automount superblock LSM init
+ problem, preventing NFS sb sharing
+To:     David Howells <dhowells@redhat.com>
+Cc:     viro@zeniv.linux.org.uk, Jeff Layton <jlayton@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Scott Mayhew <smayhew@redhat.com>, linux-nfs@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 11:15:11AM +0000, Catalin Marinas wrote:
-> On Tue, Nov 08, 2022 at 10:58:16PM +0530, Amit Pundir wrote:
-> > On Tue, 25 Oct 2022 at 18:08, Amit Pundir <amit.pundir@linaro.org> wrote:
-> > > On Wed, 12 Oct 2022 at 17:24, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > > On Sat, Oct 08, 2022 at 08:28:26PM +0530, Amit Pundir wrote:
-> > > > > On Wed, 5 Oct 2022 at 20:11, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > > > > Will Deacon (2):
-> > > > > >       arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()
-> > > > >
-> > > > > This patch broke AOSP on Dragonboard 845c (SDM845). I don't see any
-> > > > > relevant crash in the attached log and device silently reboots into
-> > > > > USB crash dump mode. The crash is fairly reproducible on db845c. I
-> > > > > could trigger it twice in 5 reboots and it always crash at the same
-> > > > > point during the boot process. Reverting this patch fixes the crash.
-> > > > >
-> > > > > I'm happy to test run any debug patche(s), that would help narrow
-> > > > > down this breakage.
-> [...]
-> > > Further narrowed down the breakage to the userspace daemon rmtfs
-> > > https://github.com/andersson/rmtfs. Is there anything specific in the
-> > > userspace code that I should be paying attention to?
-> 
-> Since you don't see anything in the logs like a crash and the system
-> restarts, I suspect it's some deadlock and that's triggering the
-> watchdog. We have an erratum (826319) but that's for Cortex-A53. IIUC
-> SDM845 has Kryo 3xx series which based on some random google searches is
-> derived from A75/A55. Unfortunately the MIDR_EL1 register doesn't match
-> the Arm Ltd numbering, so I have no idea what CPUs these are by looking
-> at the boot log.
-> 
-> I wouldn't be surprised if you hit a similar bug, though I couldn't find
-> anything close in the A55 errata notice.
-> 
-> While we could revert commit c44094eee32f ("arm64: dma: Drop cache
-> invalidation from arch_dma_prep_coherent()"), if you hit a real hardware
-> issue it may trigger in other scenario where we only do cache cleaning
-> (without invalidate), like arch_sync_dma_for_device(). So I'd rather get
-> to the bottom of this and potentially enable the workaround for this
-> chipset.
-> 
-> You could give it a quick try to by adding the MIDR ranges for SDM845 to
-> struct midr_range workaround_clean_cache[].
-> 
+On Thu, Nov 10, 2022 at 6:09 AM David Howells <dhowells@redhat.com> wrote:
+>
+> When NFS superblocks are created by automounting, their LSM parameters
+> aren't set in the fs_context struct prior to sget_fc() being called,
+> leading to failure to match existing superblocks.
+>
+> Fix this by adding a new LSM hook to load fc->security for submount
+> creation when alloc_fs_context() is creating the fs_context for it.
+>
+> However, this uncovers a further bug: nfs_get_root() initialises the
+> superblock security manually by calling security_sb_set_mnt_opts() or
+> security_sb_clone_mnt_opts() - but then vfs_get_tree() calls
+> security_sb_set_mnt_opts(), which can lead to SELinux, at least,
+> complaining.
+>
+> Fix that by adding a flag to the fs_context that suppresses the
+> security_sb_set_mnt_opts() call in vfs_get_tree().  This can be set by NFS
+> when it sets the LSM context on the new superblock.
+>
+> The first bug leads to messages like the following appearing in dmesg:
+>
+>         NFS: Cache volume key already in use (nfs,4.2,2,108,106a8c0,1,,,,100000,100000,2ee,3a98,1d4c,3a98,1)
+>
+> Changes
+> =======
+> ver #5)
+>  - Removed unused variable.
+>  - Only allocate smack_mnt_opts if we're dealing with a submount.
+>
+> ver #4)
+>  - When doing a FOR_SUBMOUNT mount, don't set the root label in SELinux or
+>    Smack.
+>
+> ver #3)
+>  - Made LSM parameter extraction dependent on fc->purpose ==
+>    FS_CONTEXT_FOR_SUBMOUNT.  Shouldn't happen on FOR_RECONFIGURE.
+>
+> ver #2)
+>  - Added Smack support
+>  - Made LSM parameter extraction dependent on reference != NULL.
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Fixes: 9bc61ab18b1d ("vfs: Introduce fs_context, switch vfs_kern_mount() to it.")
+> Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
+> Tested-by: Jeff Layton <jlayton@kernel.org>
+> Reviewed-by: Jeff Layton <jlayton@kernel.org>
+> Acked-by: Casey Schaufler <casey@schaufler-ca.com>
+> Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+> cc: Anna Schumaker <anna@kernel.org>
+> cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> cc: Scott Mayhew <smayhew@redhat.com>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: Paul Moore <paul@paul-moore.com>
+> cc: linux-nfs@vger.kernel.org
+> cc: selinux@vger.kernel.org
+> cc: linux-security-module@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> Link: https://lore.kernel.org/r/165962680944.3334508.6610023900349142034.stgit@warthog.procyon.org.uk/ # v1
+> Link: https://lore.kernel.org/r/165962729225.3357250.14350728846471527137.stgit@warthog.procyon.org.uk/ # v2
+> Link: https://lore.kernel.org/r/165970659095.2812394.6868894171102318796.stgit@warthog.procyon.org.uk/ # v3
+> Link: https://lore.kernel.org/r/166133579016.3678898.6283195019480567275.stgit@warthog.procyon.org.uk/ # v4
+> Link: https://lore.kernel.org/r/217595.1662033775@warthog.procyon.org.uk/ # v5
+> ---
+>
+>  fs/fs_context.c               |    4 +++
+>  fs/nfs/getroot.c              |    1 +
+>  fs/super.c                    |   10 +++++---
+>  include/linux/fs_context.h    |    1 +
+>  include/linux/lsm_hook_defs.h |    1 +
+>  include/linux/lsm_hooks.h     |    6 ++++-
+>  include/linux/security.h      |    6 +++++
+>  security/security.c           |    5 ++++
+>  security/selinux/hooks.c      |   25 +++++++++++++++++++
+>  security/smack/smack_lsm.c    |   54 +++++++++++++++++++++++++++++++++++++++++
+>  10 files changed, 108 insertions(+), 5 deletions(-)
+>
+> diff --git a/fs/fs_context.c b/fs/fs_context.c
+> index 24ce12f0db32..22248b8a88a8 100644
+> --- a/fs/fs_context.c
+> +++ b/fs/fs_context.c
+> @@ -282,6 +282,10 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
+>                 break;
+>         }
+>
+> +       ret = security_fs_context_init(fc, reference);
+> +       if (ret < 0)
+> +               goto err_fc;
+> +
+>         /* TODO: Make all filesystems support this unconditionally */
+>         init_fs_context = fc->fs_type->init_fs_context;
+>         if (!init_fs_context)
+> diff --git a/fs/nfs/getroot.c b/fs/nfs/getroot.c
+> index 11ff2b2e060f..651bffb0067e 100644
+> --- a/fs/nfs/getroot.c
+> +++ b/fs/nfs/getroot.c
+> @@ -144,6 +144,7 @@ int nfs_get_root(struct super_block *s, struct fs_context *fc)
+>         }
+>         if (error)
+>                 goto error_splat_root;
+> +       fc->lsm_set = true;
+>         if (server->caps & NFS_CAP_SECURITY_LABEL &&
+>                 !(kflags_out & SECURITY_LSM_NATIVE_LABELS))
+>                 server->caps &= ~NFS_CAP_SECURITY_LABEL;
+> diff --git a/fs/super.c b/fs/super.c
+> index 8d39e4f11cfa..f200ae0549ca 100644
+> --- a/fs/super.c
+> +++ b/fs/super.c
+> @@ -1553,10 +1553,12 @@ int vfs_get_tree(struct fs_context *fc)
+>         smp_wmb();
+>         sb->s_flags |= SB_BORN;
+>
+> -       error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
+> -       if (unlikely(error)) {
+> -               fc_drop_locked(fc);
+> -               return error;
+> +       if (!(fc->lsm_set)) {
+> +               error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
+> +               if (unlikely(error)) {
+> +                       fc_drop_locked(fc);
+> +                       return error;
+> +               }
+>         }
 
-I gave it a shot and indeed it fixes the crash on DB845.
+Thinking about all the different things that an LSM could do, would it
+ever be possible that a LSM would want the security_sb_set_mnt_opts()
+call to happen here?  I'm wondering if we are better off leaving it up
+to the LSM by passing the fs_context in the security_sb_set_mnt_opts()
+hook; those that want to effectively skip this call due to a submount
+setup already done in security_fs_context_init() can check the
+fs_context::purpose value in the security_sb_set_mnt_opts() hook.
 
-> After that I suggest you raise it with Qualcomm to investigate. Normally
-> we ask for an erratum number to enable a workaround and it's only
-> Qualcomm that can provide one here.
-> 
-
-I will check with Qualcomm folks and update.
-
-Thanks,
-Mani
-
-> -- 
-> Catalin
+Thoughts?
 
 -- 
-மணிவண்ணன் சதாசிவம்
+paul-moore.com
