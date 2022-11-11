@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9C1624FF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E43F1624FF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbiKKB47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 20:56:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S231235AbiKKB5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 20:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232707AbiKKB4l (ORCPT
+        with ESMTP id S232714AbiKKB4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Nov 2022 20:56:41 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5061454B2A
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAB858003
         for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 17:56:40 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7hdR0CXJzRnsM;
-        Fri, 11 Nov 2022 09:56:27 +0800 (CST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7hYN4MFGzqSGq;
+        Fri, 11 Nov 2022 09:52:56 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Fri, 11 Nov 2022 09:56:38 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -31,9 +31,11 @@ To:     <linux-kernel@vger.kernel.org>
 CC:     <gregkh@linuxfoundation.org>, <linmq006@gmail.com>,
         <chenzhongjin@huawei.com>
 Subject: [PATCH v2] firmware: dmi-sysfs: Fix null-ptr-deref in dmi_sysfs_register_handle
-Date:   Fri, 11 Nov 2022 09:53:25 +0800
-Message-ID: <20221111015326.251650-1-chenzhongjin@huawei.com>
+Date:   Fri, 11 Nov 2022 09:53:26 +0800
+Message-ID: <20221111015326.251650-2-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221111015326.251650-1-chenzhongjin@huawei.com>
+References: <20221111015326.251650-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.175.36]
