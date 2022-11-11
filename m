@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48D5625471
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3526625472
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:32:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbiKKHcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S233074AbiKKHcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 02:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbiKKHcL (ORCPT
+        with ESMTP id S232408AbiKKHcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:32:11 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E5D69DC7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:32:10 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id 138-20020a630290000000b004708e8a8dcfso2283123pgc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:32:10 -0800 (PST)
+        Fri, 11 Nov 2022 02:32:13 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ABF71F26
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:32:12 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id bt19-20020a17090af01300b00213c7cd1083so2359900pjb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:32:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YTRv55T0nJN4SwjHA1GUh+2SQie0Oys8BK6pYjQjoOc=;
-        b=OfXu9ejHMD7esXQ7C780sPXMvVo/q4vIc/de3NtU+Qt4LDV+CSbHFojkuIB6PCFHmu
-         7SeR+HH1auCzbOWhqb7uXuz6W7zViQXYpDvnGuDIbQP12CYy6xmZx4Dx/XjKbCOnHgUS
-         O/ZnV1GGNeaIdhmp9BYnf9TOjqQjHDl1wn6Bzh+/QXMXPaBrT0iWeQ9/D1w8nYpzbqVo
-         piNCi0mjX18EOfWnIukqf/jNewjJx1si/OUJTSErlGvyidgUlWZA4UolXHYrLKuMtfQ/
-         tOgDXw/Dmn2djbTjhyy3S+AvZuUwp9g/OLqQ+w/oNAkwa1nVrAodeG/f+zhvW/NcCcCB
-         NTLg==
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e0lTUdFcUyNaLsQ7N1Av0ruCtNjIy6nxrQKKSF4dfPs=;
+        b=HCaixx6+k/wPTxc4FBSW+AVjQMhf7k+ESRgLTgXtY7Gb81lzD3BTz13e4Vz/p/c69P
+         /FvbiY+Z+xjUGj4YfLu+Z85nz8YXzSNDO6+n+GnqZhTDxYt01mNNn7ZpVoBTdyWcJy4s
+         D1UNyNL86lVJHSxbRG+KpC7U/CEvsQcM5hXf+XOPz5O93OFPiAOQWelwqVsz6xEMYTwD
+         0AXK2yK+R2BcL9Rbo6ztZwu10MdbFP8+0Jhh6of5A4jwBYc/G//0Ffmq/Z3tVn6gyCmb
+         6Y6JaHaCx9e0DH0WlwVtbh5BtB30Y3yymdWVQk5lzGSKM64HeMYaJ3GYqcQu5T8U+n84
+         CgCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YTRv55T0nJN4SwjHA1GUh+2SQie0Oys8BK6pYjQjoOc=;
-        b=tfAjDm9ZmiOD4L7o942cclxyPwGvKBNA1tIxhQ1GbDLT2Z3QUmQD8rPAy/yJyjB/nB
-         38v4ogxgQTb+EeHxjeSn+/DUzFcn78xVqaNQMUujt+A0EGsx7cZsO3eR7ROZLR8J4PkH
-         amJtgYOSjZAPA7GRNyOi9b3WkuOXY1sc7GcWJtH7bgINK+LGYi7WLG3J7xQfPiP6d6zf
-         a79LCg7NYRTR8N4TY4cXACCPxh6VHEw99DJFDJ/tjKjNF4/kF8S2aRj2gpCZn/8rZGWD
-         P1x3WTiRmb4KPx3ZjOj0s21GEixastGomnns2nGFtv1SZVBWhQpLekpgI4RHrKMY/frP
-         vPkA==
-X-Gm-Message-State: ANoB5pl1F/nJuslhCVpi7CO7ZIRAi2HwtKbo8/1EPhHKte2QzsmBvesX
-        DPFGdd07D4Q4OS7YHCo98Hzq+BF/KKg=
-X-Google-Smtp-Source: AA0mqf45JlHLe27QAKztPTbsgrecXvcO6GGgxUcarPrIL58Z2jUtMub7d0laI0RNQnMOFqHe4S5Hk2B7DkQ=
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e0lTUdFcUyNaLsQ7N1Av0ruCtNjIy6nxrQKKSF4dfPs=;
+        b=3jmXDzZVLhihEGl7EAgB30fVPnSjzAgKZedRdn3RwjRwDwWZViWelVqwPcGZG9+Bun
+         D3q9csGnsBETwq+dXnlrxczuhsXp9/CK4uWIeqfR+zqHWOqeOP2zc48RGITVb8FK5N9+
+         6pmrUTOQNhOeGzEjcCE6yavDd1bkJ4L8wcSGiJ6NDl5VMs3hSaJEK9g7zXUhqYw0yoMC
+         Bx7ZC81p8BH0nJKot5MlNcQMCRWAIoYC592rT68ORW1rwAmbwlBpBPYG8SkpAVtOUa2r
+         6TWVNWfaRe2V8u+8OZkFetGFfr37YaMpIVk/Wp8ZS7A9ZVG85ETxp7zAGzqfl4aptuhH
+         VJpw==
+X-Gm-Message-State: ANoB5pn9X+H3+HXMVbf79edAmuzWXTM6hPGdi08Leb3FOtnrp+lY3YVR
+        og/GRfe2DIY/3d5864ia+R+2n9hlcSU=
+X-Google-Smtp-Source: AA0mqf4T9Ta4RTUhZ2r3JtB/hXAhEpecxlTCS0AJ4KaNl+atomPnN6G1U8w7+ggFfgZP2zoOv+UXB8cP9Js=
 X-Received: from avagin.kir.corp.google.com ([2620:0:1008:11:8cf3:f53:2863:82a3])
- (user=avagin job=sendgmr) by 2002:a62:6446:0:b0:565:c122:b63 with SMTP id
- y67-20020a626446000000b00565c1220b63mr1378271pfb.49.1668151929765; Thu, 10
- Nov 2022 23:32:09 -0800 (PST)
-Date:   Thu, 10 Nov 2022 23:31:52 -0800
+ (user=avagin job=sendgmr) by 2002:a17:90a:1b23:b0:20a:c032:da66 with SMTP id
+ q32-20020a17090a1b2300b0020ac032da66mr629756pjq.19.1668151931735; Thu, 10 Nov
+ 2022 23:32:11 -0800 (PST)
+Date:   Thu, 10 Nov 2022 23:31:53 -0800
 In-Reply-To: <20221111073154.784261-1-avagin@google.com>
 Mime-Version: 1.0
 References: <20221111073154.784261-1-avagin@google.com>
 X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
-Message-ID: <20221111073154.784261-4-avagin@google.com>
-Subject: [PATCH 3/5] sched: add a few helpers to wake up tasks on the current cpu
+Message-ID: <20221111073154.784261-5-avagin@google.com>
+Subject: [PATCH 4/5] seccomp: add the synchronous mode for seccomp_unotify
 From:   Andrei Vagin <avagin@google.com>
 To:     Kees Cook <keescook@chromium.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -67,6 +69,7 @@ Cc:     linux-kernel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
         Will Drewry <wad@chromium.org>,
         Vincent Guittot <vincent.guittot@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
@@ -79,150 +82,130 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrei Vagin <avagin@gmail.com>
 
-Add complete_on_current_cpu, wake_up_poll_on_current_cpu helpers to wake
-up tasks on the current CPU.
+seccomp_unotify allows more privileged processes do actions on behalf
+of less privileged processes.
 
-These two helpers are useful when the task needs to make a synchronous context
-switch to another task. In this context, synchronous means it wakes up the
-target task and falls asleep right after that.
+In many cases, the workflow is fully synchronous. It means a target
+process triggers a system call and passes controls to a supervisor
+process that handles the system call and returns controls to the target
+process. In this context, "synchronous" means that only one process is
+running and another one is waiting.
 
-One example of such workloads is seccomp user notifies. This mechanism allows
-the  supervisor process handles system calls on behalf of a target process.
-While the supervisor is handling an intercepted system call, the target process
-will be blocked in the kernel, waiting for a response to come back.
+There is the WF_CURRENT_CPU flag that is used to advise the scheduler to
+move the wakee to the current CPU. For such synchronous workflows, it
+makes context switches a few times faster.
 
-On-CPU context switches are much faster than regular ones.
+Right now, each interaction takes 12=C2=B5s. With this patch, it takes abou=
+t
+3=C2=B5s.
+
+This change introduce the SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP flag that
+it used to enable the sync mode.
 
 Signed-off-by: Andrei Vagin <avagin@gmail.com>
 ---
- include/linux/completion.h |  1 +
- include/linux/swait.h      |  1 +
- include/linux/wait.h       |  3 +++
- kernel/sched/completion.c  | 12 ++++++++++++
- kernel/sched/core.c        |  2 +-
- kernel/sched/swait.c       | 11 +++++++++++
- kernel/sched/wait.c        |  5 +++++
- 7 files changed, 34 insertions(+), 1 deletion(-)
+ include/uapi/linux/seccomp.h |  4 ++++
+ kernel/seccomp.c             | 31 +++++++++++++++++++++++++++++--
+ 2 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/completion.h b/include/linux/completion.h
-index 62b32b19e0a8..fb2915676574 100644
---- a/include/linux/completion.h
-+++ b/include/linux/completion.h
-@@ -116,6 +116,7 @@ extern bool try_wait_for_completion(struct completion *x);
- extern bool completion_done(struct completion *x);
- 
- extern void complete(struct completion *);
-+extern void complete_on_current_cpu(struct completion *x);
- extern void complete_all(struct completion *);
- 
- #endif
-diff --git a/include/linux/swait.h b/include/linux/swait.h
-index 6a8c22b8c2a5..1f27b254adf5 100644
---- a/include/linux/swait.h
-+++ b/include/linux/swait.h
-@@ -147,6 +147,7 @@ static inline bool swq_has_sleeper(struct swait_queue_head *wq)
- extern void swake_up_one(struct swait_queue_head *q);
- extern void swake_up_all(struct swait_queue_head *q);
- extern void swake_up_locked(struct swait_queue_head *q);
-+extern void swake_up_locked_on_current_cpu(struct swait_queue_head *q);
- 
- extern void prepare_to_swait_exclusive(struct swait_queue_head *q, struct swait_queue *wait, int state);
- extern long prepare_to_swait_event(struct swait_queue_head *q, struct swait_queue *wait, int state);
-diff --git a/include/linux/wait.h b/include/linux/wait.h
-index 7f5a51aae0a7..c7d3e78a500d 100644
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -210,6 +210,7 @@ __remove_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq
- }
- 
- void __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
-+void __wake_up_on_current_cpu(struct wait_queue_head *wq_head, unsigned int mode, void *key);
- void __wake_up_locked_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
- void __wake_up_locked_key_bookmark(struct wait_queue_head *wq_head,
- 		unsigned int mode, void *key, wait_queue_entry_t *bookmark);
-@@ -237,6 +238,8 @@ void __wake_up_pollfree(struct wait_queue_head *wq_head);
- #define key_to_poll(m) ((__force __poll_t)(uintptr_t)(void *)(m))
- #define wake_up_poll(x, m)							\
- 	__wake_up(x, TASK_NORMAL, 1, poll_to_key(m))
-+#define wake_up_poll_on_current_cpu(x, m)					\
-+	__wake_up_on_current_cpu(x, TASK_NORMAL, poll_to_key(m))
- #define wake_up_locked_poll(x, m)						\
- 	__wake_up_locked_key((x), TASK_NORMAL, poll_to_key(m))
- #define wake_up_interruptible_poll(x, m)					\
-diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
-index d57a5c1c1cd9..a1931a79c05a 100644
---- a/kernel/sched/completion.c
-+++ b/kernel/sched/completion.c
-@@ -38,6 +38,18 @@ void complete(struct completion *x)
- }
- EXPORT_SYMBOL(complete);
- 
-+void complete_on_current_cpu(struct completion *x)
-+{
-+	unsigned long flags;
+diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
+index 0fdc6ef02b94..dbfc9b37fcae 100644
+--- a/include/uapi/linux/seccomp.h
++++ b/include/uapi/linux/seccomp.h
+@@ -115,6 +115,8 @@ struct seccomp_notif_resp {
+ 	__u32 flags;
+ };
+=20
++#define SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP (1UL << 0)
 +
-+	raw_spin_lock_irqsave(&x->wait.lock, flags);
+ /* valid flags for seccomp_notif_addfd */
+ #define SECCOMP_ADDFD_FLAG_SETFD	(1UL << 0) /* Specify remote fd */
+ #define SECCOMP_ADDFD_FLAG_SEND		(1UL << 1) /* Addfd and return it, atomic=
+ally */
+@@ -150,4 +152,6 @@ struct seccomp_notif_addfd {
+ #define SECCOMP_IOCTL_NOTIF_ADDFD	SECCOMP_IOW(3, \
+ 						struct seccomp_notif_addfd)
+=20
++#define SECCOMP_IOCTL_NOTIF_SET_FLAGS	SECCOMP_IOW(4, __u64)
 +
-+	if (x->done != UINT_MAX)
-+		x->done++;
-+	swake_up_locked_on_current_cpu(&x->wait);
-+	raw_spin_unlock_irqrestore(&x->wait.lock, flags);
-+}
-+
- /**
-  * complete_all: - signals all threads waiting on this completion
-  * @x:  holds the state of this particular completion
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 4b591e7773fd..8125e02efd2c 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6822,7 +6822,7 @@ asmlinkage __visible void __sched preempt_schedule_irq(void)
- int default_wake_function(wait_queue_entry_t *curr, unsigned mode, int wake_flags,
- 			  void *key)
- {
--	WARN_ON_ONCE(IS_ENABLED(CONFIG_SCHED_DEBUG) && wake_flags & ~WF_SYNC);
-+	WARN_ON_ONCE(IS_ENABLED(CONFIG_SCHED_DEBUG) && wake_flags & ~(WF_SYNC|WF_CURRENT_CPU));
- 	return try_to_wake_up(curr->private, mode, wake_flags);
- }
- EXPORT_SYMBOL(default_wake_function);
-diff --git a/kernel/sched/swait.c b/kernel/sched/swait.c
-index 76b9b796e695..9ebe23868942 100644
---- a/kernel/sched/swait.c
-+++ b/kernel/sched/swait.c
-@@ -31,6 +31,17 @@ void swake_up_locked(struct swait_queue_head *q)
- }
- EXPORT_SYMBOL(swake_up_locked);
- 
-+void swake_up_locked_on_current_cpu(struct swait_queue_head *q)
-+{
-+	struct swait_queue *curr;
-+
-+	if (list_empty(&q->task_list))
-+		return;
-+
-+	curr = list_first_entry(&q->task_list, typeof(*curr), task_list);
-+	try_to_wake_up(curr->task, TASK_NORMAL, WF_CURRENT_CPU);
-+	list_del_init(&curr->task_list);
-+}
- /*
-  * Wake up all waiters. This is an interface which is solely exposed for
-  * completions and not for general usage.
-diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
-index 9860bb9a847c..9a78bca79419 100644
---- a/kernel/sched/wait.c
-+++ b/kernel/sched/wait.c
-@@ -157,6 +157,11 @@ void __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
- }
- EXPORT_SYMBOL(__wake_up);
- 
-+void __wake_up_on_current_cpu(struct wait_queue_head *wq_head, unsigned int mode, void *key)
-+{
-+	__wake_up_common_lock(wq_head, mode, 1, WF_CURRENT_CPU, key);
-+}
-+
- /*
-  * Same as __wake_up but called with the spinlock in wait_queue_head_t held.
+ #endif /* _UAPI_LINUX_SECCOMP_H */
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 876022e9c88c..0a62d44f4898 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -143,9 +143,12 @@ struct seccomp_kaddfd {
+  *           filter->notify_lock.
+  * @next_id: The id of the next request.
+  * @notifications: A list of struct seccomp_knotif elements.
++ * @flags: A set of SECCOMP_USER_NOTIF_FD_* flags.
   */
--- 
++
+ struct notification {
+ 	atomic_t requests;
++	u32 flags;
+ 	u64 next_id;
+ 	struct list_head notifications;
+ };
+@@ -1117,7 +1120,10 @@ static int seccomp_do_user_notification(int this_sys=
+call,
+ 	INIT_LIST_HEAD(&n.addfd);
+=20
+ 	atomic_add(1, &match->notif->requests);
+-	wake_up_poll(&match->wqh, EPOLLIN | EPOLLRDNORM);
++	if (match->notif->flags & SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP)
++		wake_up_poll_on_current_cpu(&match->wqh, EPOLLIN | EPOLLRDNORM);
++	else
++		wake_up_poll(&match->wqh, EPOLLIN | EPOLLRDNORM);
+=20
+ 	/*
+ 	 * This is where we wait for a reply from userspace.
+@@ -1593,7 +1599,10 @@ static long seccomp_notify_send(struct seccomp_filte=
+r *filter,
+ 	knotif->error =3D resp.error;
+ 	knotif->val =3D resp.val;
+ 	knotif->flags =3D resp.flags;
+-	complete(&knotif->ready);
++	if (filter->notif->flags & SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP)
++		complete_on_current_cpu(&knotif->ready);
++	else
++		complete(&knotif->ready);
+ out:
+ 	mutex_unlock(&filter->notify_lock);
+ 	return ret;
+@@ -1623,6 +1632,22 @@ static long seccomp_notify_id_valid(struct seccomp_f=
+ilter *filter,
+ 	return ret;
+ }
+=20
++static long seccomp_notify_set_flags(struct seccomp_filter *filter,
++				    unsigned long flags)
++{
++	long ret;
++
++	if (flags & ~SECCOMP_USER_NOTIF_FD_SYNC_WAKE_UP)
++		return -EINVAL;
++
++	ret =3D mutex_lock_interruptible(&filter->notify_lock);
++	if (ret < 0)
++		return ret;
++	filter->notif->flags =3D flags;
++	mutex_unlock(&filter->notify_lock);
++	return 0;
++}
++
+ static long seccomp_notify_addfd(struct seccomp_filter *filter,
+ 				 struct seccomp_notif_addfd __user *uaddfd,
+ 				 unsigned int size)
+@@ -1752,6 +1777,8 @@ static long seccomp_notify_ioctl(struct file *file, u=
+nsigned int cmd,
+ 	case SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR:
+ 	case SECCOMP_IOCTL_NOTIF_ID_VALID:
+ 		return seccomp_notify_id_valid(filter, buf);
++	case SECCOMP_IOCTL_NOTIF_SET_FLAGS:
++		return seccomp_notify_set_flags(filter, arg);
+ 	}
+=20
+ 	/* Extensible Argument ioctls */
+--=20
 2.38.1.493.g58b659f92b-goog
 
