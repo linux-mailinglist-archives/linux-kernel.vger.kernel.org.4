@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793006255A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE517625598
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbiKKIpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbiKKIo5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233297AbiKKIo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 11 Nov 2022 03:44:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933D17C8E7;
-        Fri, 11 Nov 2022 00:44:56 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233271AbiKKIoz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 11 Nov 2022 03:44:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87187C8DA;
+        Fri, 11 Nov 2022 00:44:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4ED05B8245A;
-        Fri, 11 Nov 2022 08:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF7ACC43142;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87B6F61EF4;
+        Fri, 11 Nov 2022 08:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE389C433D6;
         Fri, 11 Nov 2022 08:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668156293;
-        bh=lNIoKDoFO4aYN+HOb6Or1Q9qGXfioSo1MkkvV/9tMeo=;
+        bh=n6gU/Kh4pLDrdvJwnrFedkFVS9iAnD1+wNhxscwN2M4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UTz2aeWwlbSVEsHLWLBdKOrgty07atSygAyISrUHTGrZg9E22blnBH86WfMYkQEtC
-         a5VVc6NWCMDkRV/xTlojDysgXgD/Gi2nt6hK+rFtCDrAYBdE2I8oT7sAmuJhZi1i45
-         OZZnhM+3zHUxDGoUNdHbqAkyWBf9Jhmb4p6GEe7tHSr+2VNeTQs7L7vxxfIOArcgzS
-         Stxyi/SYnTCmD0ogaHu7YTp0pW4xVI3X66TQGgILlYO2Y5weCaLztLVZwMSxntATtu
-         u4jb/3YJsKl6DJgzleaCsZm3sbvprMHDuHR4Tj/7fge1tzAL5CTnxDDadivQzpArIV
-         Cc9FoZxw4XGGA==
+        b=Sc16wmgRz0fnc1vnv7vYp7ZAnYJnLymMZlmKpeukxR6m2NQUV9AzgSPA8ZwjLANLA
+         miKXJ1rLB7NWLRM5G93LjMiWOQHIYCioqLs9+TutSTH/DJhCE6uUcwhUWAhkf9d/wY
+         P3qceWqhcIT4+c9aZ30dRjDt314nQXW6zmKsZFHeUtlD2V8JbjYi5WlcX91l+AzXV/
+         iEl25p4WMthcHEJWzrB11LaGAn6c+JbDxVL64mlyIqQmj6A/vyV5AvmnXbG/4z3ETQ
+         FE5+6RoTPSx0IOTHVzp8bRVeEFKJiLONEL0qqhJosqWyWrme9thwoE1fUaK4I+WEff
+         2Ovw58G6jlabg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1otPeD-0002Mm-Rp; Fri, 11 Nov 2022 09:44:25 +0100
+        id 1otPeD-0002Mo-U1; Fri, 11 Nov 2022 09:44:25 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -43,10 +43,10 @@ Cc:     Andy Gross <agross@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 4/6] phy: qcom-qmp-combo: fix broken power on
-Date:   Fri, 11 Nov 2022 09:42:53 +0100
-Message-Id: <20221111084255.8963-5-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 5/6] phy: qcom-qmp-combo: fix runtime suspend
+Date:   Fri, 11 Nov 2022 09:42:54 +0100
+Message-Id: <20221111084255.8963-6-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221111084255.8963-1-johan+linaro@kernel.org>
 References: <20221111084255.8963-1-johan+linaro@kernel.org>
@@ -61,76 +61,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PHY is powered on during phy-init by setting the SW_PRWDN bit in the
-COM_POWER_DOWN_CTRL register and then setting the same bit in the in the
-PCS_POWER_DOWN_CONTROL register that belongs to the USB part of the
-PHY.
+Drop the confused runtime-suspend type check which effectively broke
+runtime PM if the DP child node happens to be parsed before the USB
+child node during probe (e.g. due to order of child nodes in the
+devicetree).
 
-Currently, whether power on succeeds depends on probe order and having
-the USB part of the PHY be initialised first. In case the DP part of the
-PHY is instead initialised first, the intended power on of the USB block
-results in a corrupted DP_PHY register (e.g. DP_PHY_AUX_CFG8).
+Instead use the new driver data USB PHY pointer to access the USB
+configuration and resources.
 
-Add a pointer to the USB part of the PHY to the driver data and use that
-to power on the PHY also if the DP part of the PHY is initialised first.
-
-Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-Cc: stable@vger.kernel.org	# 5.10
+Fixes: ac0d239936bd ("phy: qcom-qmp: Add support for runtime PM")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 40c25a0ead23..17707f68d482 100644
+index 17707f68d482..fde30205f332 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -932,6 +932,7 @@ struct qcom_qmp {
- 	struct regulator_bulk_data *vregs;
- 
- 	struct qmp_phy **phys;
-+	struct qmp_phy *usb_phy;
- 
- 	struct mutex phy_mutex;
- 	int init_count;
-@@ -1911,7 +1912,7 @@ static int qmp_combo_com_init(struct qmp_phy *qphy)
+@@ -2207,15 +2207,11 @@ static void qmp_combo_disable_autonomous_mode(struct qmp_phy *qphy)
+ static int __maybe_unused qmp_combo_runtime_suspend(struct device *dev)
  {
- 	struct qcom_qmp *qmp = qphy->qmp;
+ 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
+-	struct qmp_phy *qphy = qmp->phys[0];
++	struct qmp_phy *qphy = qmp->usb_phy;
  	const struct qmp_phy_cfg *cfg = qphy->cfg;
--	void __iomem *pcs = qphy->pcs;
-+	struct qmp_phy *usb_phy = qmp->usb_phy;
- 	void __iomem *dp_com = qmp->dp_com;
- 	int ret;
  
-@@ -1963,7 +1964,8 @@ static int qmp_combo_com_init(struct qmp_phy *qphy)
- 	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SWI_CTRL, 0x03);
- 	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SW_RESET, SW_RESET);
+ 	dev_vdbg(dev, "Suspending QMP phy, mode:%d\n", qphy->mode);
  
--	qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL], SW_PWRDN);
-+	qphy_setbits(usb_phy->pcs, usb_phy->cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-+			SW_PWRDN);
+-	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
+-	if (cfg->type != PHY_TYPE_USB3)
+-		return 0;
+-
+ 	if (!qmp->init_count) {
+ 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
+ 		return 0;
+@@ -2232,16 +2228,12 @@ static int __maybe_unused qmp_combo_runtime_suspend(struct device *dev)
+ static int __maybe_unused qmp_combo_runtime_resume(struct device *dev)
+ {
+ 	struct qcom_qmp *qmp = dev_get_drvdata(dev);
+-	struct qmp_phy *qphy = qmp->phys[0];
++	struct qmp_phy *qphy = qmp->usb_phy;
+ 	const struct qmp_phy_cfg *cfg = qphy->cfg;
+ 	int ret = 0;
  
- 	mutex_unlock(&qmp->phy_mutex);
+ 	dev_vdbg(dev, "Resuming QMP phy, mode:%d\n", qphy->mode);
  
-@@ -2831,6 +2833,8 @@ static int qmp_combo_probe(struct platform_device *pdev)
- 				goto err_node_put;
- 			}
- 
-+			qmp->usb_phy = qmp->phys[id];
-+
- 			/*
- 			 * Register the pipe clock provided by phy.
- 			 * See function description to see details of this pipe clock.
-@@ -2846,6 +2850,9 @@ static int qmp_combo_probe(struct platform_device *pdev)
- 		id++;
- 	}
- 
-+	if (!qmp->usb_phy)
-+		return -EINVAL;
-+
- 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
- 
- 	return PTR_ERR_OR_ZERO(phy_provider);
+-	/* Supported only for USB3 PHY and luckily USB3 is the first phy */
+-	if (cfg->type != PHY_TYPE_USB3)
+-		return 0;
+-
+ 	if (!qmp->init_count) {
+ 		dev_vdbg(dev, "PHY not initialized, bailing out\n");
+ 		return 0;
 -- 
 2.37.4
 
