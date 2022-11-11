@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075F06254D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAE36254DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbiKKIAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
+        id S233009AbiKKIEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:04:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232080AbiKKIAQ (ORCPT
+        with ESMTP id S232988AbiKKIEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:00:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4652F45A3B;
-        Fri, 11 Nov 2022 00:00:16 -0800 (PST)
+        Fri, 11 Nov 2022 03:04:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E3569DEA;
+        Fri, 11 Nov 2022 00:04:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0DFA61EC2;
-        Fri, 11 Nov 2022 08:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2FE79C433B5;
-        Fri, 11 Nov 2022 08:00:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D003B823FF;
+        Fri, 11 Nov 2022 08:04:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21029C433C1;
+        Fri, 11 Nov 2022 08:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668153615;
-        bh=rp5s+WHWJdQXdj9VlFYO2btrCckerEkGtgYzOTDZ76M=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LR93ubxCAffNpIsiFtUe0rLH43pSuXi2kJhcYsr/SjD++3XAvnBfQQL0Fdv0S4o4Q
-         Uw3uiNzJb/fJLuFdN7BYNe/bDzcS9hyTmSG38nWbYPkbKxLmqmYje5Sd+VSLH72lmh
-         JPm2A5nDVSJA8ibMdud2nPpwprXXsxN+x1VOyndMQtT+zTEL9P0ZgGvsraCfhhOKpS
-         Y3KwK7kkmEfsU4LI48PHqKqN0WHfGUuZSfGF0xiB3+Bpl/3sC465bfQzr7KaPaazjl
-         2iVkPaBuhOc/3Ld+X+gZD8/hhU2P4ks0adi1e8GnF034czIdbK0lttUwSt3hZg5LJo
-         fBjE3wCxxo8fg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 12DF6C395FE;
-        Fri, 11 Nov 2022 08:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1668153885;
+        bh=UH08BgNIy0Ir2cfbIMbIdEh7C7tlvhLyxSSliZqjUek=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=S8mj79k718mREVoqdFRhDIGz19Y3+5qssHA769RxwE12gayAl6Hko04Ii158uV0qQ
+         RTEatj47R5rMD8o1/qXhRS1aBGI6SdpsXaEFyG8ZD7dpy+9iufmzxSeY3shJ4K9AK7
+         iOJ9o3b8LMfs+kavNNC9bMeXhCBVnym7MUzHW3WHlbEdBGY4AaT45ZFvw7CEJTGkPk
+         bBDUKkuxiS/fKFqjjbCT/QTox1g7JjTZCnG8wKuz5PoyMMVSfZulaAO0cmRmPkaR2Q
+         Tq098x8mzG6c/avZ8GKeP06EvqiuSSaeJzIbCqyEEGEXFNmbHTxV9kfVdMIMOei7ND
+         CK7tvZqISskuw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C4A395C0A59; Fri, 11 Nov 2022 00:04:42 -0800 (PST)
+Date:   Fri, 11 Nov 2022 00:04:42 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] srcu: Make Tiny SRCU synchronize_srcu() more complete
+Message-ID: <20221111080442.GU725751@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221109073638.935473-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] MAINTAINERS: Update hinic maintainers from orphan
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166815361507.21559.11527970974823578189.git-patchwork-notify@kernel.org>
-Date:   Fri, 11 Nov 2022 08:00:15 +0000
-References: <20221109072641.27051-1-cai.huoqing@linux.dev>
-In-Reply-To: <20221109072641.27051-1-cai.huoqing@linux.dev>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109073638.935473-1-qiang1.zhang@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,28 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed,  9 Nov 2022 15:26:41 +0800 you wrote:
-> HINIC is marked orphan for 14 months from the commit "5cfe5109a1d7",
-> but there are lots of HINIC in use.
+On Wed, Nov 09, 2022 at 03:36:38PM +0800, Zqiang wrote:
+> This commit add lockdep detection for illegal use synchronize_srcu()
+> in same-type SRCU (or in RCU) read-side critical section and support
+> early boot operations.
 > 
-> I have a SP582 NIC (hi1822 inside which is a kind of HINIC SOC),
-> and implement based on hinic driver, and if there are some patches
-> for HINIC, I can test and do some code review.
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+
+Queued and pushed with the usual wordsmithing (please check), thank you!
+
+							Thanx, Paul
+
+> ---
+>  kernel/rcu/srcutiny.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> [...]
-
-Here is the summary with links:
-  - [net-next] MAINTAINERS: Update hinic maintainers from orphan
-    https://git.kernel.org/netdev/net-next/c/a07b3835b895
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> diff --git a/kernel/rcu/srcutiny.c b/kernel/rcu/srcutiny.c
+> index 33adafdad261..b12fb0cec44d 100644
+> --- a/kernel/rcu/srcutiny.c
+> +++ b/kernel/rcu/srcutiny.c
+> @@ -197,6 +197,16 @@ void synchronize_srcu(struct srcu_struct *ssp)
+>  {
+>  	struct rcu_synchronize rs;
+>  
+> +	RCU_LOCKDEP_WARN(lockdep_is_held(ssp) ||
+> +			lock_is_held(&rcu_bh_lock_map) ||
+> +			lock_is_held(&rcu_lock_map) ||
+> +			lock_is_held(&rcu_sched_lock_map),
+> +			"Illegal synchronize_srcu() in same-type SRCU (or in RCU) read-side critical section");
+> +
+> +	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE)
+> +		return;
+> +
+> +	might_sleep();
+>  	init_rcu_head_on_stack(&rs.head);
+>  	init_completion(&rs.completion);
+>  	call_srcu(ssp, &rs.head, wakeme_after_rcu);
+> -- 
+> 2.25.1
+> 
