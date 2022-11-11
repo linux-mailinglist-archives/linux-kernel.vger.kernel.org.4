@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209486256FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFD36256F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233361AbiKKJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S233491AbiKKJji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:39:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233116AbiKKJkN (ORCPT
+        with ESMTP id S231167AbiKKJjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:40:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7C7654DD;
-        Fri, 11 Nov 2022 01:40:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F23E61F1F;
-        Fri, 11 Nov 2022 09:40:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AC53C433B5;
-        Fri, 11 Nov 2022 09:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668159611;
-        bh=pwJld/NDv6EFSXj/8bGWt2JYworcFl8ayZrNG0RBYVg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BvB545SeJo3aPXhqnDqx0vrS5nZIUtHJdsgjeJ/QP+3YW3m4h9CpN9abDWqpFNTk0
-         HrR9sY3Z4gLQFP76NW/irY5vUP/YPJRd3UPBcRxSxor/L/Cu0x7OYotvUjkxNIVddj
-         d9PZ2na8SyjAzvqzL/WJn/kxv7Nxzeo7sZPwynAlfC9Uewpa0lRuKPes76SB9+ho/e
-         jy6pZa6GKjL5OQAFiBDMERdvzvqJTk4I4m+p9KV8q48pwvc/yyudz2Sk3M4x4mdzNI
-         NmGnmVlNyPgWiqVhXOOos6J4Y3dyNn1wqsvmgbpcfNZ1G9h6XVFU3BFKIOc0WNjxmM
-         LL7tGhslsAjpQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1otQVj-0002xl-D6; Fri, 11 Nov 2022 10:39:43 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 3/3] arm64: dts: qcom: sc8280xp: drop reference-clock source
-Date:   Fri, 11 Nov 2022 10:38:57 +0100
-Message-Id: <20221111093857.11360-4-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221111093857.11360-1-johan+linaro@kernel.org>
-References: <20221111093857.11360-1-johan+linaro@kernel.org>
+        Fri, 11 Nov 2022 04:39:36 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8074B654FF;
+        Fri, 11 Nov 2022 01:39:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96CB81FB;
+        Fri, 11 Nov 2022 01:39:40 -0800 (PST)
+Received: from [10.57.69.19] (unknown [10.57.69.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E17A3F534;
+        Fri, 11 Nov 2022 01:39:32 -0800 (PST)
+Message-ID: <a396936c-7df6-8fb7-320e-435b852d0702@arm.com>
+Date:   Fri, 11 Nov 2022 09:39:30 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 10/12] perf test: Replace brstack test workload
+To:     German Gomez <german.gomez@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+References: <20221110181920.84900-1-namhyung@kernel.org>
+ <20221110181920.84900-11-namhyung@kernel.org>
+ <1036a42b-b438-67b2-c4ca-0e440d266d6d@arm.com>
+ <a9a6eabf-e102-b7f8-92b4-48c2b77e013e@arm.com>
+Content-Language: en-US
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <a9a6eabf-e102-b7f8-92b4-48c2b77e013e@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The source clock for the reference clock should not be described by the
-devicetree binding and instead this relationship should be modelled in
-the clock driver.
 
-Update the USB PHY nodes to match the fixed binding.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+On 10/11/2022 19:31, German Gomez wrote:
+> 
+> On 10/11/2022 19:20, German Gomez wrote:
+>> Hi Namhyung, thanks for doing the refactor, it looks a lot cleaner
+>>
+>> On 10/11/2022 18:19, Namhyung Kim wrote:
+>>> So that it can get rid of requirement of a compiler.  Also rename the
+>>> symbols to match with the perf test workload.
+>>>
+>>> Cc: German Gomez <german.gomez@arm.com>
+>>> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>>> ---
+>>>  tools/perf/tests/shell/test_brstack.sh | 66 +++++---------------------
+>>>  1 file changed, 12 insertions(+), 54 deletions(-)
+>>>
+>>> diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
+>>> index ec801cffae6b..a8a182dea25f 100755
+>>> --- a/tools/perf/tests/shell/test_brstack.sh
+>>> +++ b/tools/perf/tests/shell/test_brstack.sh
+>>> @@ -4,18 +4,12 @@
+>>>  # SPDX-License-Identifier: GPL-2.0
+>>>  # German Gomez <german.gomez@arm.com>, 2022
+>>>  
+>>> -# we need a C compiler to build the test programs
+>>> -# so bail if none is found
+>>> -if ! [ -x "$(command -v cc)" ]; then
+>>> -	echo "failed: no compiler, install gcc"
+>>> -	exit 2
+>>> -fi
+>>> -
+>>>  # skip the test if the hardware doesn't support branch stack sampling
+>>>  # and if the architecture doesn't support filter types: any,save_type,u
+>>>  perf record -b -o- -B --branch-filter any,save_type,u true > /dev/null 2>&1 || exit 2
+> 
+> Hmm I was wondering why this command was failing for me and always skipping the test. Is the -b conflicting with the --branch-filter here?
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 985138b6adac..531cd68a80ea 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1595,12 +1595,10 @@ usb_2_qmpphy0: phy@88ef000 {
- 			reg = <0 0x088ef000 0 0x2000>;
- 
- 			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
--				 <&rpmhcc RPMH_CXO_CLK>,
- 				 <&gcc GCC_USB3_MP0_CLKREF_CLK>,
- 				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
- 				 <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
--			clock-names = "aux", "ref_clk_src", "ref", "com_aux",
--				      "pipe";
-+			clock-names = "aux", "ref", "com_aux", "pipe";
- 
- 			resets = <&gcc GCC_USB3_UNIPHY_MP0_BCR>,
- 				 <&gcc GCC_USB3UNIPHY_PHY_MP0_BCR>;
-@@ -1621,12 +1619,10 @@ usb_2_qmpphy1: phy@88f1000 {
- 			reg = <0 0x088f1000 0 0x2000>;
- 
- 			clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
--				 <&rpmhcc RPMH_CXO_CLK>,
- 				 <&gcc GCC_USB3_MP1_CLKREF_CLK>,
- 				 <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
- 				 <&gcc GCC_USB3_MP_PHY_PIPE_1_CLK>;
--			clock-names = "aux", "ref_clk_src", "ref", "com_aux",
--				      "pipe";
-+			clock-names = "aux", "ref", "com_aux", "pipe";
- 
- 			resets = <&gcc GCC_USB3_UNIPHY_MP1_BCR>,
- 				 <&gcc GCC_USB3UNIPHY_PHY_MP1_BCR>;
--- 
-2.37.4
+Yes, the fix is here [1], but I don't see it on git yet.
 
+[1]:
+https://lore.kernel.org/linux-perf-users/Y2rDhkyn9ta5skDm@kernel.org/T/#t
