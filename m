@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B8D625520
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C60625536
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiKKIV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S232341AbiKKI1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKKIV4 (ORCPT
+        with ESMTP id S231235AbiKKI1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:21:56 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49B413CE7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:21:54 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id be13so7302891lfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RaXB6dN6ptekdk24JrkBO1mYR3sj0qJtXHnyugR9QHo=;
-        b=a2g3SnvKK+xz2sLTjlgXMio5mgQbURrE6LawvamLerfbL6eLSdhUDPCIPevb/dnFbr
-         Y7KnjrOgYh045wITt8Nkot3LveepWYCFC1txDsXBhLNne7ZzGdeis9E8I34Ewl1/Vcew
-         no/tiezkwXS2HfLR2LlsPQJ2Qvr7G51IBgTLiby61DPCqjJAArYtq2rKDsfaNGudOK8g
-         bU0F6sNXDijc0TkplafA4wvsztaKnz2VaVxYfw7aD+B7oicKI0RAiuv6hSwaKYkSl98V
-         GiQN13fkkCQmatFEj9c4In6eToZO6ms+imQp3PmeQWnX4YSSAKlk1UnACGawwB9Sc9m+
-         L3Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RaXB6dN6ptekdk24JrkBO1mYR3sj0qJtXHnyugR9QHo=;
-        b=F/JUXnxLbx6oJEsIKXT81pFM4qgsjogouT27J9VqsHLreROppki/DsayHGwaN8i5u9
-         cJ6jLK71ePpepFsDl0PVoqaJUOJMevn4l8E0uRKnw+MvIHpkepi4FgL016GidnS5Sf/C
-         9wGiXO74a+cnaU48awHp/vXgCfOgGiPTNNAnfYw1dQG+oipT6OnqCwKVljnKfNZLSpnv
-         WobEjwwpZqaFRV7yPQT3kE9E46cQCo+zWF+J9o4gBll0o5lxQ24NpWwWCqRs0mPSz3xG
-         OxKwJFfj3wkDmxE5PBFAfQEv3hGPlfws1DOHdxfTwKykJQL+JqPGXGXV0fJwMtxLyDdZ
-         B6Vw==
-X-Gm-Message-State: ANoB5pnIjTbeoAcriS3o7uQj6HZwkkJq7w+0TXVZB0YiVCX4XFKanr9A
-        MtOKHRZEpfZYDa5LQzax52E5tw==
-X-Google-Smtp-Source: AA0mqf5H8FEamvhBHsnS1Kb+wkjKZTuntz658YH1Sdaz0Lniv1d8nAxLjpLbjbvtqRkJtkzrb4z2ew==
-X-Received: by 2002:a19:6553:0:b0:4b0:fbfe:84fb with SMTP id c19-20020a196553000000b004b0fbfe84fbmr367750lfj.417.1668154913117;
-        Fri, 11 Nov 2022 00:21:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id f29-20020a05651c03dd00b0026e897e3236sm282161ljp.6.2022.11.11.00.21.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 00:21:52 -0800 (PST)
-Message-ID: <affc49a4-ecbc-23c7-3d24-25cec1c302c7@linaro.org>
-Date:   Fri, 11 Nov 2022 09:21:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: aspeed: add Facebook Greatlakes
- board
-Content-Language: en-US
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>, patrick@stwcx.xyz,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     garnermic@fb.com, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20221007055346.3484180-1-Delphine_CC_Chiu@Wiwynn.com>
- <20221111034828.2377-2-Delphine_CC_Chiu@Wiwynn.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221111034828.2377-2-Delphine_CC_Chiu@Wiwynn.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Fri, 11 Nov 2022 03:27:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEE424085;
+        Fri, 11 Nov 2022 00:27:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58E9261EBE;
+        Fri, 11 Nov 2022 08:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B667EC433D6;
+        Fri, 11 Nov 2022 08:27:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668155253;
+        bh=e1/d/8WJcd5q4Zo+wAS3Yn8BOJ7hTNu5U8ybWGzTWSA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z5Lo6/QxPZZi4/tmWRUwTkusz+fQQk/7gsE9/crjsG55v2Z6z08e23HfnklH6VzT2
+         wChL012poapeFKpMu+BSLo9D3Oc9QG8c16Gj2j6So7CBeU0XjudS6dMeu6CQNHSkdI
+         USGb3AOBLBe9RbbCaM2tXYnup+Hk8eUX9vgrng4/kGbKCLuytHFwQduzxjoENMgU0P
+         m51kt2c1AI+lveMeHr9pyvpQfZV9HFFkrMlwdx/v53gCZW0zGVNGGaqAM3avyr32br
+         Kj2Xewc3c9nHeDfr94d4YGc732/P00mx3+PiggLlxocooMFw/o1Nv2FcocojC8tWzq
+         I3ZDnFbw/SgEA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1otPNr-005Lew-C3;
+        Fri, 11 Nov 2022 08:27:31 +0000
+Date:   Fri, 11 Nov 2022 08:26:02 +0000
+Message-ID: <87fsepvqw5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] KVM: arm64: Allow userspace to trap SMCCC sub-ranges
+In-Reply-To: <Y21pktYPLPM6eYga@google.com>
+References: <20221110015327.3389351-1-oliver.upton@linux.dev>
+        <20221110015327.3389351-3-oliver.upton@linux.dev>
+        <86o7tfov7v.wl-maz@kernel.org>
+        <Y21pktYPLPM6eYga@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, rananta@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,16 +76,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 04:48, Delphine CC Chiu wrote:
-> Document the new compatibles used on Facebook Greatlakes
+On Thu, 10 Nov 2022 21:13:54 +0000,
+Oliver Upton <oliver.upton@linux.dev> wrote:
 > 
-> Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> ---
->  Documentation/devicetree/bindings/arm/aspeed/aspeed.yaml | 1 +
+> On Thu, Nov 10, 2022 at 12:22:12PM +0000, Marc Zyngier wrote:
+> > > +static bool kvm_hvc_call_user_trapped(struct kvm_vcpu *vcpu, u32 func_id)
+> > > +{
+> > > +	struct kvm *kvm = vcpu->kvm;
+> > > +	unsigned long *bmap = &kvm->arch.smccc_feat.user_trap_bmap;
+> > > +
+> > > +	switch (ARM_SMCCC_OWNER_NUM(func_id)) {
+> > > +	case ARM_SMCCC_OWNER_ARCH:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_ARCH, bmap);
+> > > +	case ARM_SMCCC_OWNER_CPU:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_CPU, bmap);
+> > > +	case ARM_SMCCC_OWNER_SIP:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_SIP, bmap);
+> > > +	case ARM_SMCCC_OWNER_OEM:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_OEM, bmap);
+> > > +	case ARM_SMCCC_OWNER_STANDARD:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_STANDARD, bmap);
+> > > +	case ARM_SMCCC_OWNER_STANDARD_HYP:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_STANDARD_HYP, bmap);
+> > > +	case ARM_SMCCC_OWNER_VENDOR_HYP:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_VENDOR_HYP, bmap);
+> > > +	case ARM_SMCCC_OWNER_TRUSTED_APP ... ARM_SMCCC_OWNER_TRUSTED_APP_END:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_TRUSTED_APP, bmap);
+> > > +	case ARM_SMCCC_OWNER_TRUSTED_OS ... ARM_SMCCC_OWNER_TRUSTED_OS_END:
+> > > +		return test_bit(KVM_ARM_USER_HYPERCALL_OWNER_TRUSTED_OS, bmap);
+> > > +	default:
+> > > +		return false;
+> > > +	}
+> > 
+> > You have multiple problems here:
+> > 
+> > - the granularity is way too coarse. You want to express arbitrary
+> >   ranges, and not necessarily grab a whole owner range.
+> > 
+> > - you have now an overlap between ranges that are handled in the
+> >   kernel (PSCI, spectre mitigations) and ranges that userspace wants
+> >   to observe. Not good.
+> 
+> We need to come to agreement on what degree of mix-and-match should be
+> supported.
+> 
+> Spectre really ought to be in the kernel, and I don't think anyone is
+> particularly excited about reimplementing PSCI. Right now my interest
+> in this starts and ends with forwarding the vendor-specific hypercall
+> range to userspace, allowing something like Hyper-V PV on KVM.
+> 
+> > If we are going down this road, this can only be done at the
+> > *function* level. And userspace must know that the kernel will refuse
+> > to forward some ranges.
+> 
+> The goal of what I was trying to get at is that either the kernel or
+> userspace takes ownership of a range that has an ABI, but not both. i.e.
+> you really wouldn't want some VMM or cloud provider trapping portions of
+> KVM's vendor-specific range while still reporting a 'vanilla' ABI at the
+> time of discovery. Same goes for PSCI, TRNG, etc.
 
+But I definitely think this is one of the major use cases. For
+example, there is value in taking PSCI to userspace in order to
+implement a newer version of the spec, or to support sub-features that
+KVM doesn't (want to) implement. I don't think this changes the ABI
+from the guest perspective.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+pKVM also has a use case for this where userspace gets a notification
+of the hypercall that a guest has performed to share memory.
 
-Best regards,
-Krzysztof
+Communication with a TEE also is on the cards, as would be a FFA
+implementation. All of this could be implemented in KVM, or in
+userspace, depending what users of these misfeatures want to do.
 
+> 
+> > So obviously, this cannot be a simple bitmap. Making it a radix tree
+> > (or an xarray, which is basically the same thing) could work. And the
+> > filtering request from userspace can be similar to what we have for
+> > the PMU filters.
+> 
+> Right, we'll need a more robust data structure for all this.
+> 
+> My only concern is that communicating the hypercall filter between
+> user/kernel with a set of ranges or function numbers is that we could be
+> mutating what KVM *doesn't* already implement into an ABI of sorts.
+> 
+> i.e. suppose that userspace wants to filter function(s) in an
+> unallocated/unused range of function numbers. Later down the line KVM
+> adds support for a new shiny thing and the filter becomes a subset of a
+> now allocated range of calls. We then reject the filter due to the
+> incongruence.
+
+But isn't the problem to ask for ranges that are unallocated the first
+place? What semantic can userspace give to such a thing other than
+replying "not implemented", which is what the kernel would do anyway?
+
+The more interesting problem is when you want to emulate another
+hypervisor, and that the vendor spaces overlap (a very likely
+outcome). Somehow, this means overriding all the KVM-specific
+hypercalls, and let userspace deal with it. But again, this can be
+done on a per function basis.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
