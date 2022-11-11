@@ -2,118 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882A6624EC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6BD624EDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiKKASr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:18:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
+        id S230522AbiKKAUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:20:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKKASo (ORCPT
+        with ESMTP id S230411AbiKKAUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:18:44 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01C2D2ED
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:18:43 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id x14-20020a17090a2b0e00b002134b1401ddso1878582pjc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:18:43 -0800 (PST)
+        Thu, 10 Nov 2022 19:20:37 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD3A43865
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:20:36 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so6378134pjk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:20:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F2sF9sKVeJ8Hy0mPBnq+5X2UG8c6CtO5Y5aaiJ32Ab8=;
-        b=iWxHPBQdfxc7Ady8snj2Fq6LrD5knjzXVP9qN7cdFukXzp+TGCInUVYKCRov6aD1eP
-         5w6yk66ck4sYfoBBc2ZQnHzt91eK9cx+GTwF1rW9bm/wNH7PLUa4QopuRcM4Z2p7hEbl
-         w251avWXQQjSa3PzKYbR+hYhv0jvJ2QAnlmSxmxlGBLHa6YX/6Eu/6HsHABO3T76ZeKu
-         2+aEIgFn7omVh9I3ZABEe4WzKkPQCuGCboUwfvuAKqNySiHga9xq8UzSiWUcTYJfQbrQ
-         o35wEbJs43B8cQPeQyIhhn8eHuhKc1L/N6/zdXizA1IOR4IrnIEBevjGt1aKIvfetJjK
-         GNQQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rgBWPJbei+FelwuPjDXn2dCEJUPh8F3/6uN4AZp70/o=;
+        b=ETy1FVWPcrAfX01GsufjlOq61UfvWACkc/LKVL66MjfHjAL8Mvu607O5U9QmA5KaRJ
+         4iVw+0ZaYGBQeY246vJjOs+L0vrAMy1jViTZVtjzudQJ11osmTlfqAq8yJKRbW1zk8tI
+         IDdPCv9LvmwB/SAiGsanFDk7hpN2aeztYysA0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2sF9sKVeJ8Hy0mPBnq+5X2UG8c6CtO5Y5aaiJ32Ab8=;
-        b=Rdo5sIZwAES9EZp81fXboJO2EitZxVGP8UO2uZusNrpf7ZKPu+hxXAJVUP4PMrkYt9
-         gDsoDjRgtk0OGsXq/1KYlVu/lnOBm17hOqQpF95Yi4UYPs3rQo402HkQshzP8ZqveZBI
-         nkMS4I5DRSrT3O/kdoic6ndoSwYM8pK4oNKEF3Ir3Jr7TcyS9jWWbWLLuSK03fp+wZvf
-         hH4+Br9vScTyT5YvpPfNAe8pUXDbL2Tbleue3D6aH4AapAB814i+d02XdvyELfQikwwo
-         pj9VBXbrz+Y3v4K1LG97YJSaYPsgZAvAAvAHbLPAMhfECco8ywujRYBeB3VcOaJFTWfz
-         tiYw==
-X-Gm-Message-State: ACrzQf3X5Rb4QCUZm1wN6wlQJIOgGEkxKniBhv58pkWz8e/J1rhNNoTN
-        bE2e4Yhinsppop/xPTd3QJnzS97wDWs=
-X-Google-Smtp-Source: AMsMyM7BrHlBgWbShhkyyoU74kyn4h0d1z1NeCWQQMYL5oUkL7jcUxM2j3EIwwrfwHiToC/Bz7eptbOXnlU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:e194:b0:17e:587:6bb6 with SMTP id
- y20-20020a170902e19400b0017e05876bb6mr2768221pla.114.1668125923558; Thu, 10
- Nov 2022 16:18:43 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 11 Nov 2022 00:18:41 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221111001841.2412598-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86/mmu: Block all page faults during kvm_zap_gfn_range()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rgBWPJbei+FelwuPjDXn2dCEJUPh8F3/6uN4AZp70/o=;
+        b=cs0BSKxhT/jzcFIA9R0aX8tk4s0NVnUWgZnHAWlY29ylnshJtFlfjq5F+1OFR2fqc0
+         gPnOobz+gpBjQ7UWgMtFsKPP/Ac19vzwq+EW+ZALyQyskcdrMZpYP2YarzCy8TIxhnX4
+         aP7egMMAb1zMsQLK7i0k5eC2I8MhGIfRoALCkw/+yEmtgyo23Gnpg3P3Mikv+Pozz7nt
+         vpoDajWHkoxzKB3Hr+av14j+mpTbwXGbhLETx21LpHVIXHEJsvi2Q/xRJO6l9TAfP3JQ
+         lOgITE+s6CHB8BnC+/37CgXwrWI5x0C26hTk1VVkLWgeg5ji0EgL4emgeujizFyHH1Hx
+         XgSQ==
+X-Gm-Message-State: ACrzQf0FHfzJkx1qz8I975CkPW29B2StVrm0+aI6hs/y2r0Rf2mmgEqz
+        lssLq2Hk0DbT0axScwIxyEJzBA==
+X-Google-Smtp-Source: AMsMyM5zP6O0SX+e+k0GvFD3LtwU2AycxZU1aQrkd6tKJKqtjtOtQO0RNcPyMz97EXUWVCPAzOm6Rg==
+X-Received: by 2002:a17:90a:194b:b0:212:e521:7cbd with SMTP id 11-20020a17090a194b00b00212e5217cbdmr2767295pjh.230.1668126035895;
+        Thu, 10 Nov 2022 16:20:35 -0800 (PST)
+Received: from localhost ([2401:fa00:8f:203:729a:7662:547f:f4a3])
+        by smtp.gmail.com with ESMTPSA id u14-20020a170903124e00b001869394a372sm259473plh.201.2022.11.10.16.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 16:20:35 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:20:32 +0900
+From:   Hidenori Kobayashi <hidenorik@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/1] i2c: Restore initial power state when we are done.
+Message-ID: <20221111002032.b7j3cizpe5nbj6id@google.com>
+References: <20221109-i2c-waive-v5-0-2839667f8f6a@chromium.org>
+ <20221109-i2c-waive-v5-1-2839667f8f6a@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109-i2c-waive-v5-1-2839667f8f6a@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When zapping a GFN range, pass 0 => ALL_ONES for the to-be-invalidated
-range to effectively block all page faults while the zap is in-progress.
-The invalidation helpers take a host virtual address, whereas zapping a
-GFN obviously provides a guest physical address and with the wrong unit
-of measurement (frame vs. byte).
+Hi Ricardo,
 
-Alternatively, KVM could walk all memslots to get the associated HVAs,
-but thanks to SMM, that would require multiple lookups.  And practically
-speaking, kvm_zap_gfn_range() usage is quite rare and not a hot path,
-e.g. MTRR and CR0.CD are almost guaranteed to be done only on vCPU0
-during boot, and APICv inhibits are similarly infrequent operations.
+On Thu, Nov 10, 2022 at 05:20:39PM +0100, Ricardo Ribalda wrote:
+> A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
+> power off a device that it has not powered on previously.
+> 
+> For devices operating in "full_power" mode, the first call to
+> `i2c_acpi_waive_d0_probe` will return 0, which means that the device
+> will be turned on with `dev_pm_domain_attach`.
+> 
+> If probe fails or the device is removed the second call to
+> `i2c_acpi_waive_d0_probe` will return 1, which means that the device
+> will not be turned off. This is, it will be left in a different power
+> state. Lets fix it.
+> 
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: stable@vger.kernel.org
+> Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Fixes: edb298c663fc ("KVM: x86/mmu: bump mmu notifier count in kvm_zap_gfn_range")
-Reported-by: Chao Peng <chao.p.peng@linux.intel.com>
-Cc: stable@vger.kernel.org
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+It's much easier to read now. Thanks!
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 93c389eaf471..f14efcaebec3 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6098,7 +6098,7 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
- 
- 	write_lock(&kvm->mmu_lock);
- 
--	kvm_mmu_invalidate_begin(kvm, gfn_start, gfn_end);
-+	kvm_mmu_invalidate_begin(kvm, 0, -1ul);
- 
- 	flush = kvm_rmap_zap_gfn_range(kvm, gfn_start, gfn_end);
- 
-@@ -6112,7 +6112,7 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
- 		kvm_flush_remote_tlbs_with_address(kvm, gfn_start,
- 						   gfn_end - gfn_start);
- 
--	kvm_mmu_invalidate_end(kvm, gfn_start, gfn_end);
-+	kvm_mmu_invalidate_end(kvm, 0, -1ul);
- 
- 	write_unlock(&kvm->mmu_lock);
- }
+Reviewed-by: Hidenori Kobayashi <hidenorik@chromium.org>
 
-base-commit: d663b8a285986072428a6a145e5994bc275df994
--- 
-2.38.1.431.g37b22c650d-goog
-
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index b4edf10e8fd0..6f4974c76404 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
+>  {
+>  	struct i2c_client	*client = i2c_verify_client(dev);
+>  	struct i2c_driver	*driver;
+> +	bool do_power_on;
+>  	int status;
+>  
+>  	if (!client)
+> @@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
+>  	if (status < 0)
+>  		goto err_clear_wakeup_irq;
+>  
+> -	status = dev_pm_domain_attach(&client->dev,
+> -				      !i2c_acpi_waive_d0_probe(dev));
+> +	do_power_on = !i2c_acpi_waive_d0_probe(dev);
+> +	status = dev_pm_domain_attach(&client->dev, do_power_on);
+>  	if (status)
+>  		goto err_clear_wakeup_irq;
+>  
+> @@ -580,12 +581,14 @@ static int i2c_device_probe(struct device *dev)
+>  	if (status)
+>  		goto err_release_driver_resources;
+>  
+> +	client->power_off_on_remove = do_power_on;
+> +
+>  	return 0;
+>  
+>  err_release_driver_resources:
+>  	devres_release_group(&client->dev, client->devres_group_id);
+>  err_detach_pm_domain:
+> -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
+> +	dev_pm_domain_detach(&client->dev, do_power_on);
+>  err_clear_wakeup_irq:
+>  	dev_pm_clear_wake_irq(&client->dev);
+>  	device_init_wakeup(&client->dev, false);
+> @@ -610,7 +613,7 @@ static void i2c_device_remove(struct device *dev)
+>  
+>  	devres_release_group(&client->dev, client->devres_group_id);
+>  
+> -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
+> +	dev_pm_domain_detach(&client->dev, client->power_off_on_remove);
+>  
+>  	dev_pm_clear_wake_irq(&client->dev);
+>  	device_init_wakeup(&client->dev, false);
+> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+> index f7c49bbdb8a1..eba83bc5459e 100644
+> --- a/include/linux/i2c.h
+> +++ b/include/linux/i2c.h
+> @@ -326,6 +326,8 @@ struct i2c_driver {
+>   *	calls it to pass on slave events to the slave driver.
+>   * @devres_group_id: id of the devres group that will be created for resources
+>   *	acquired when probing this device.
+> + * @power_off_on_remove: Record if we have turned on the device before probing
+> + *	so we can turn off the device at removal.
+>   *
+>   * An i2c_client identifies a single device (i.e. chip) connected to an
+>   * i2c bus. The behaviour exposed to Linux is defined by the driver
+> @@ -355,6 +357,8 @@ struct i2c_client {
+>  	i2c_slave_cb_t slave_cb;	/* callback for slave mode	*/
+>  #endif
+>  	void *devres_group_id;		/* ID of probe devres group	*/
+> +	bool power_off_on_remove;	/* if device needs to be turned	*/
+> +					/* off by framework at removal	*/
+>  };
+>  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
+>  
+> 
+> -- 
+> b4 0.11.0-dev-d93f8
+> 
