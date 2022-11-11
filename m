@@ -2,119 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3286265A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 00:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E71156265A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 00:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiKKXjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 18:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S234602AbiKKXjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 18:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiKKXjN (ORCPT
+        with ESMTP id S230105AbiKKXjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 18:39:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F27E2B623;
-        Fri, 11 Nov 2022 15:39:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D207FB82836;
-        Fri, 11 Nov 2022 23:39:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB48C433C1;
-        Fri, 11 Nov 2022 23:39:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668209949;
-        bh=Vlb+/7QojmhhvH1wfSO9VCLJ7Gp43IqzkXJWqxZOk0c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DDta3/Dz1CRlZBWgtSaqjUxwEJCUBrvTLhf6rLi5V6AIPcQoLraYaQN2FK+pXV14N
-         sh/2rxaYiZrJRFXkdYH7zi7f3Y7tSJuED20GyZiNYt1rbqOHU6+cJ2rI7UxsGVV5YA
-         atztOz3slba/5EuGcfJ9KSx5VWjjZhg+xVd8K/q6ijvWFR3UP1thFKg4Zf8V8xlvzO
-         6vH6J1PcvgKA7UDLZkxPEdTcARWY2s3efkbfKwns6MK4xkIhatNqG58rzaWBpJY02m
-         P4g3flw86vTnoTs4KhQzqLLviznl5MG/qEbIJDA+Y9sTRsWwEBe07OdlAhZZOQb9/D
-         uTdnowRJ99v1Q==
-Date:   Fri, 11 Nov 2022 17:39:07 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Wei Gong <gongwei833x@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
-Message-ID: <20221111233907.GA763281@bhelgaas>
+        Fri, 11 Nov 2022 18:39:16 -0500
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02B02B623;
+        Fri, 11 Nov 2022 15:39:14 -0800 (PST)
+Date:   Fri, 11 Nov 2022 23:39:09 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668209953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zIYQx8/+sO34DwoG2CiugqgOKWcAgSm6gxrxSDTWj7M=;
+        b=h1QJ4NkA5S3hZo0nWLXh6z8hWAamDw5T9WdqI/3tjUFAmKDAR0JJbmWNFHmnDn6wf1RNF9
+        6XwhqF2KKw1JFa/cRJsrxDGkTIJU3hLJFmytRs9qVy2qGFN2uBimBh243lhAXDGmanBWr/
+        ptGzbyl7uS2g1CxhCgD4ZdQKLLPy5DI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Raghavendra Rao Ananta <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] KVM: arm64: Allow userspace to trap SMCCC
+ sub-ranges
+Message-ID: <Y27dHf+PRt+G4jNg@google.com>
+References: <20221110015327.3389351-1-oliver.upton@linux.dev>
+ <20221110015327.3389351-3-oliver.upton@linux.dev>
+ <86o7tfov7v.wl-maz@kernel.org>
+ <Y21pktYPLPM6eYga@google.com>
+ <87fsepvqw5.wl-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221026060912.173250-1-mst@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87fsepvqw5.wl-maz@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:11:21AM -0400, Michael S. Tsirkin wrote:
-> virtio uses the same driver for VFs and PFs.  Accordingly,
-> pci_device_is_present is used to detect device presence. This function
-> isn't currently working properly for VFs since it attempts reading
-> device and vendor ID. As VFs are present if and only if PF is present,
-> just return the value for that device.
+On Fri, Nov 11, 2022 at 08:26:02AM +0000, Marc Zyngier wrote:
+> On Thu, 10 Nov 2022 21:13:54 +0000, Oliver Upton <oliver.upton@linux.dev> wrote:
+> > The goal of what I was trying to get at is that either the kernel or
+> > userspace takes ownership of a range that has an ABI, but not both. i.e.
+> > you really wouldn't want some VMM or cloud provider trapping portions of
+> > KVM's vendor-specific range while still reporting a 'vanilla' ABI at the
+> > time of discovery. Same goes for PSCI, TRNG, etc.
 > 
-> Reported-by: Wei Gong <gongwei833x@gmail.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+> But I definitely think this is one of the major use cases. For
+> example, there is value in taking PSCI to userspace in order to
+> implement a newer version of the spec, or to support sub-features that
+> KVM doesn't (want to) implement. I don't think this changes the ABI from
+> the guest perspective.
 
-Applied as below to pci/enumeration for v6.2, thanks!
+I disagree for the implications of partially trapping the 'Vendor
+Specific Hypervisor Service'. If the UID for the range still reports KVM
+but userspace decided to add some new widget, then from the guest
+perspective that widget is now part of KVM's own ABI with the guest.
 
-commit 98b04dd0b457 ("PCI: Fix pci_device_is_present() for VFs by checking PF")
-Author: Michael S. Tsirkin <mst@redhat.com>
-Date:   Wed Oct 26 02:11:21 2022 -0400
+Trapping the whole range is a bit of a hack to workaround the need for
+more complicated verification of a hypercall filter.
 
-    PCI: Fix pci_device_is_present() for VFs by checking PF
-    
-    pci_device_is_present() previously didn't work for VFs because it reads the
-    Vendor and Device ID, which are 0xffff for VFs, which looks like they
-    aren't present.  Check the PF instead.
-    
-    Wei Gong reported that if virtio I/O is in progress when the driver is
-    unbound or "0" is written to /sys/.../sriov_numvfs, the virtio I/O
-    operation hangs, which may result in output like this:
-    
-      task:bash state:D stack:    0 pid: 1773 ppid:  1241 flags:0x00004002
-      Call Trace:
-       schedule+0x4f/0xc0
-       blk_mq_freeze_queue_wait+0x69/0xa0
-       blk_mq_freeze_queue+0x1b/0x20
-       blk_cleanup_queue+0x3d/0xd0
-       virtblk_remove+0x3c/0xb0 [virtio_blk]
-       virtio_dev_remove+0x4b/0x80
-       ...
-       device_unregister+0x1b/0x60
-       unregister_virtio_device+0x18/0x30
-       virtio_pci_remove+0x41/0x80
-       pci_device_remove+0x3e/0xb0
-    
-    This happened because pci_device_is_present(VF) returned "false" in
-    virtio_pci_remove(), so it called virtio_break_device().  The broken vq
-    meant that vring_interrupt() skipped the vq.callback() that would have
-    completed the virtio I/O operation via virtblk_done().
-    
-    [bhelgaas: commit log, simplify to always use pci_physfn(), add stable tag]
-    Link: https://lore.kernel.org/r/20221026060912.173250-1-mst@redhat.com
-    Reported-by: Wei Gong <gongwei833x@gmail.com>
-    Tested-by: Wei Gong <gongwei833x@gmail.com>
-    Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-    Cc: stable@vger.kernel.org
+But for everything else, I'm fine with arbitrary function filtering.
+Userspace is always welcome to shoot itself in the foot.
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 9f3cc829dfee..fba95486caaf 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -6447,6 +6447,8 @@ bool pci_device_is_present(struct pci_dev *pdev)
- {
- 	u32 v;
- 
-+	/* Check PF if pdev is a VF, since VF Vendor/Device IDs are 0xffff */
-+	pdev = pci_physfn(pdev);
- 	if (pci_dev_is_disconnected(pdev))
- 		return false;
- 	return pci_bus_read_dev_vendor_id(pdev->bus, pdev->devfn, &v, 0);
+> pKVM also has a use case for this where userspace gets a notification
+> of the hypercall that a guest has performed to share memory.
+
+Is that hypercall in the 'Vendor Specific Hypervisor Service' range?
+
+> Communication with a TEE also is on the cards, as would be a FFA
+> implementation. All of this could be implemented in KVM, or in
+> userspace, depending what users of these misfeatures want to do.
+
+I'm very hopeful that by forwarding all of this to userspace we can get
+out of the business of implementing every darn spec that comes along.
+
+> > > So obviously, this cannot be a simple bitmap. Making it a radix tree
+> > > (or an xarray, which is basically the same thing) could work. And the
+> > > filtering request from userspace can be similar to what we have for
+> > > the PMU filters.
+> > 
+> > Right, we'll need a more robust data structure for all this.
+> > 
+> > My only concern is that communicating the hypercall filter between
+> > user/kernel with a set of ranges or function numbers is that we could be
+> > mutating what KVM *doesn't* already implement into an ABI of sorts.
+> > 
+> > i.e. suppose that userspace wants to filter function(s) in an
+> > unallocated/unused range of function numbers. Later down the line KVM
+> > adds support for a new shiny thing and the filter becomes a subset of a
+> > now allocated range of calls. We then reject the filter due to the
+> > incongruence.
+> 
+> But isn't the problem to ask for ranges that are unallocated the first
+> place? What semantic can userspace give to such a thing other than
+> replying "not implemented", which is what the kernel would do anyway?
+
+... assuming we know about all defined services in the kernel. I don't
+care about it too much, but there is the case about a new userspace on
+an old kernel.
+
+> The more interesting problem is when you want to emulate another
+> hypervisor, and that the vendor spaces overlap (a very likely
+> outcome). Somehow, this means overriding all the KVM-specific
+> hypercalls, and let userspace deal with it. But again, this can be
+> done on a per function basis.
+
+Other hypercalls removed, would you be in favor of an all-or-nothing
+rule for KVM's vendor range implementation? Of course, that could still
+be enforced on whatever UAPI approach we take.
+
+--
+Thanks,
+Oliver
