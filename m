@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F39B625721
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F4C62571F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233570AbiKKJnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
+        id S233691AbiKKJnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233736AbiKKJnV (ORCPT
+        with ESMTP id S233685AbiKKJnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:43:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F79B77E65;
-        Fri, 11 Nov 2022 01:43:19 -0800 (PST)
+        Fri, 11 Nov 2022 04:43:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AFE78787;
+        Fri, 11 Nov 2022 01:43:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 20940CE2651;
-        Fri, 11 Nov 2022 09:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5888DC433B5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04A8C61F2C;
+        Fri, 11 Nov 2022 09:43:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF55C4347C;
         Fri, 11 Nov 2022 09:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668159796;
-        bh=8YG8lt72rO1Cs+V80J6Go1x/JXY6d0vosuLh08p4JvM=;
+        bh=NPLRtc4/Xi9APO2NAgfGkGH+wyMbp8HKKo8ZM8BktiM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5jHfJUzbt3T6B3evWEbe7XBmR3i3yHG507NsBMsKamKI4dQu51FmTFke4ymx831l
-         eqzxRpr6QOMOH0RN8Cy8A87r2ejEwC5IyF/CtZTUXhMj9SXm6bvaPW+Y7QoTUKd0zN
-         TV7ACvzoaBfbbvD4ioCrB26gtGFGKHnmOgkOt91usj/Yvz53aKzOb4gYxi4Y90rEOu
-         59j9CJ5qsJPb3ZDgJ7yj4AE8RCDsYWTnBMe0KOaS7w0KLqTkKpqYjga+6yMhN6Hui1
-         O3N1HDKdplQnhKHVbwt5vczUdLOc0hsxRkZPGbDATJ6PxDH+uNvEi4E6lwCng3NZIx
-         GoXaR7YUF9rcw==
+        b=SmTC1BBmrJxXcYYRf0fP3bXS4z3EM0EYWeLP9UXr0ulim3nf06NrmRvF0HfJ766kw
+         Krzq1iH5aamZYtsRKqYQys8BlObh/bzCX2qSY3SFPTXmlaiYqtcWG87lhR24fM8sP0
+         5gNN2VHtaOnvBJQpxwSYonvdk/s6oGfLO+0EbBxTJWLXmR910uSHEki/mEYO9Xw5oV
+         eH3jhao8g3WxHqBVVdYmZjD2SXW3hml5ViNpgpCQUUYuRIfUx8KULpVyiRy41cGTth
+         oMA5bB0MpqmKi9xbz5TTUdIyISQR34+nr8/uPuPFVDFjEmC65DzU+7Hc6sajR09qgC
+         VjiwEg8w5zU8g==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1otQYi-00030b-Ep; Fri, 11 Nov 2022 10:42:48 +0100
+        id 1otQYi-00030d-I4; Fri, 11 Nov 2022 10:42:48 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -44,9 +44,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 1/3] phy: qcom-qmp: drop unused type header
-Date:   Fri, 11 Nov 2022 10:42:37 +0100
-Message-Id: <20221111094239.11547-2-johan+linaro@kernel.org>
+Subject: [PATCH 2/3] phy: qcom-qmp-usb: drop redundant clock allocation
+Date:   Fri, 11 Nov 2022 10:42:38 +0100
+Message-Id: <20221111094239.11547-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221111094239.11547-1-johan+linaro@kernel.org>
 References: <20221111094239.11547-1-johan+linaro@kernel.org>
@@ -61,69 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PHY type defines are no longer used in the PCIe, UFS and USB QMP
-drivers so drop the corresponding include.
+Since the QMP driver split, there is no reason to allocate the
+fixed-rate pipe clock structure separately from the driver data.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 2 --
- drivers/phy/qualcomm/phy-qcom-qmp-pcie.c         | 2 --
- drivers/phy/qualcomm/phy-qcom-qmp-ufs.c          | 2 --
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c          | 2 --
- 4 files changed, 8 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-index ff198d846fd2..a088477e274f 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
-@@ -20,8 +20,6 @@
- #include <linux/reset.h>
- #include <linux/slab.h>
- 
--#include <dt-bindings/phy/phy.h>
--
- #include "phy-qcom-qmp.h"
- 
- /* QPHY_SW_RESET bit */
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-index 111716e25b17..328708a09c37 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-@@ -23,8 +23,6 @@
- #include <linux/reset.h>
- #include <linux/slab.h>
- 
--#include <dt-bindings/phy/phy.h>
--
- #include "phy-qcom-qmp.h"
- 
- /* QPHY_SW_RESET bit */
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-index 189103d1bd18..318eea35b972 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-@@ -20,8 +20,6 @@
- #include <linux/reset.h>
- #include <linux/slab.h>
- 
--#include <dt-bindings/phy/phy.h>
--
- #include "phy-qcom-qmp.h"
- 
- /* QPHY_SW_RESET bit */
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 9b1f8c9d0eb8..8b111b7087b9 100644
+index 8b111b7087b9..27f2398ebf08 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -20,8 +20,6 @@
- #include <linux/reset.h>
- #include <linux/slab.h>
+@@ -1485,6 +1485,8 @@ struct qmp_usb {
+ 	enum phy_mode mode;
  
--#include <dt-bindings/phy/phy.h>
+ 	struct phy *phy;
++
++	struct clk_fixed_rate pipe_clk_fixed;
+ };
+ 
+ static inline void qphy_setbits(void __iomem *base, u32 offset, u32 val)
+@@ -2357,7 +2359,7 @@ static void phy_clk_release_provider(void *res)
+  */
+ static int phy_pipe_clk_register(struct qmp_usb *qmp, struct device_node *np)
+ {
+-	struct clk_fixed_rate *fixed;
++	struct clk_fixed_rate *fixed = &qmp->pipe_clk_fixed;
+ 	struct clk_init_data init = { };
+ 	int ret;
+ 
+@@ -2367,10 +2369,6 @@ static int phy_pipe_clk_register(struct qmp_usb *qmp, struct device_node *np)
+ 		return ret;
+ 	}
+ 
+-	fixed = devm_kzalloc(qmp->dev, sizeof(*fixed), GFP_KERNEL);
+-	if (!fixed)
+-		return -ENOMEM;
 -
- #include "phy-qcom-qmp.h"
+ 	init.ops = &clk_fixed_rate_ops;
  
- /* QPHY_SW_RESET bit */
+ 	/* controllers using QMP phys use 125MHz pipe clock interface */
 -- 
 2.37.4
 
