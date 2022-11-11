@@ -2,137 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6AA626363
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA741626366
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234163AbiKKVHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 16:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
+        id S234318AbiKKVJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 16:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbiKKVHo (ORCPT
+        with ESMTP id S233804AbiKKVJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:07:44 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C48983B94
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:07:43 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso8788769pjc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1UbHOqnPNCOilnpyC/Gk6owDbQr/DghKe/AIdJFL7OA=;
-        b=dcqjaS5Sm4AFaJ7A8iLje/A4mP/MuV/4c61ZgTQZyLFNnGrZZ/BGiUXI09P1InJiFR
-         KW0Xm6rz6GpThAC0xv5uqffYho4bvpSMBTuoqW4KOh+mOUlEix0p7YZhkV11KlQpoy2K
-         ifVskTSrHPisCc47y4ok1EkR0YbtEILMfy3CUr4+Vq96T+6aW8FAhac7YsiRUa+QXhSr
-         2NqNbVwfSo1HAyTd+JW/g0EGjO4M2C5GBeM5jHLMYMnPNGEFR+1iD82/tlFjKeQrUrs7
-         AJrohjKqYCTrhGr4OhyQ5sX+/jGoVvKvgX/9DGz7ua8UbvT3qQhq74wWw4l0Xl0wNmYf
-         69jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1UbHOqnPNCOilnpyC/Gk6owDbQr/DghKe/AIdJFL7OA=;
-        b=WQn1gXsdbizMuiWXD/cRTQ4wcQ35ZxZfBKdlpuxQ05N8G+T1JLrBnAARzJHRdbGitR
-         /pPrA6Q0DpI+h1YPJ+a1XW2mOlFiKkLdTa2eMv46rjRwayQgTVz9dKdnRFDVwFPhxV6K
-         ehNfIfYX2i0RqwWfAMYSdbKlkdeXAg25GXMBHd8aJUAzsbsQCf7GT+Ved4VeeyeMW5wD
-         tgKsPNPb813EPbisZ7xrEysqb0wzre7LP0iXmHK+r7QGZMViyNn95DsVI1kmfgEmmuoi
-         zeW1y4GprmjWj/vyNmVh7mhnG2x1CCezW3Gv0eJ6ewKHCYLGgZaIVy3MufO2kYPEYZuy
-         q9xw==
-X-Gm-Message-State: ANoB5pnJRAvMFTA3ZtWaF3tPhvdzWC+MaBQF7cYUaOJ7H8QYHqV38H/E
-        bJNHM9wE92svUnhZsYvl2jSXQ4ohKeqwkA==
-X-Google-Smtp-Source: AA0mqf6A3RRROpoZCJbd2mFTNzmTgQE6WZbH93Czcwbm8bITJSEMnmyIrjCwAdplvykKwvdBjqBreQ==
-X-Received: by 2002:a17:90b:4fce:b0:203:6932:1d5f with SMTP id qa14-20020a17090b4fce00b0020369321d5fmr3813947pjb.112.1668200862943;
-        Fri, 11 Nov 2022 13:07:42 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
-        by smtp.gmail.com with ESMTPSA id w125-20020a623083000000b00571bdf45885sm980169pfw.196.2022.11.11.13.07.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 13:07:42 -0800 (PST)
-Message-ID: <cc62e433-83c4-f285-edc2-a2d808163074@9elements.com>
-Date:   Sat, 12 Nov 2022 02:37:38 +0530
+        Fri, 11 Nov 2022 16:09:02 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD70E018
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:09:00 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.83]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MXXZf-1oU2ZK1IHX-00Z1to; Fri, 11 Nov 2022 22:08:41 +0100
+Message-ID: <737e7e23-1bc5-eaf3-2d15-5498fc5b0415@i2se.com>
+Date:   Fri, 11 Nov 2022 22:08:39 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] drm/vc4: hdmi: Enforce the minimum rate at
+ runtime_resume
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
- <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
- <20221024161806.GA1855651-robh@kernel.org>
- <dcd22f70-e51c-290e-c11f-9a5ce32748c1@9elements.com>
- <CAL_JsqKT52ULEZjKo9emEAt74nH2OpMO8ymLLKM_T-NzAwqGog@mail.gmail.com>
- <3152c290-8aca-b91a-df20-335c33395835@9elements.com>
- <20221101184402.GA1884153-robh@kernel.org>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221101184402.GA1884153-robh@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+References: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
+ <20220929-rpi-pi3-unplugged-fixes-v1-1-cd22e962296c@cerno.tech>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220929-rpi-pi3-unplugged-fixes-v1-1-cd22e962296c@cerno.tech>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Provags-ID: V03:K1:p1P9ebm+F+zvfBkVXdlQhDM4wdPDfMtQZFdKRBA4EtF/oQ2vqFl
+ 67GVvwHEHSTyJVq9hAnxdu1TbIgpEFbARDD1Xr6giCmH3SeC1WphljI/YrgImgT50QSGlVy
+ xI4b1fdJaqEHwbweyC837c58JBHpqo4CaRlRo90//fLEGmi5QX7N4cA86jJs6j1yqKbJg51
+ +ie/aUV76gGV/yb5mfdxQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WDb+IGX8DmU=:HFU8yHplq3TceO8E3Fv7KA
+ sz+k8Qh4XEVEv3f9h2OEFgstLgGPcXHTlsrui0MpijsuuXRgEIbMy7YTIf68JHG7Tf8jmEqfW
+ BW7gdN9kBXzMh+UnlR2yhdXAbmIzTpv7o03Ae80pFLNwUk2h8Eaqot3L8D5rFBuQ1mlfQ0IOD
+ I/NX5zYjVi1f76HsheLxWKW5RaeeAahAa5Pcvpf+whdfVxvJsjfjzA7DYO7eiqnUrH5iaLNHr
+ vpoCnZQoV3aKT1AAV/1nSMav8Wd7ml7pzHVk2atRNL7/JgP+Uv4JK6T5C9b9yN81cs8UGcJG+
+ vijcIqn1UdMrySKuzRSndJAsSZ8WoSjri05KcwMIbkpdYgH8iyfX14tymLDcTV/bbgkZ/hl/A
+ 635AiMHm97wy8ScuJAFd7nCvFz/Gz1pyjoZo2OlZqRHaa7BMrfdfize+F+pRNID57YGvb7QPq
+ dBd910zBgakdfDGjAXaxVNCnucJtos9yRlHFW4tMSgpn6NjlfMIK/QFjLXuoUcKaQc/cD4M7m
+ zcSER4ma3qV2kwseKfQKd+vQmpD3rZuxD71tMcThGDmElcHD6zJTDDcXu73FnySozTIA/OLmd
+ fivcc71S9XMWVqfquElK3ktaouk1uP/XyxDIs9JXiivHijcOONDWSOKjVBX5lGKs7TPjq4e0a
+ PJwR+iUacrTLz6ne0EPn9hD6BL+ogF5iEvfwKR1863Uy0CZ1Vinw0ZcgPRDCjoRGBphPpfQrv
+ URXnMAzw0uXdHw3062UjHYbZmzRYLJsa4GcGsdKEy8pREyz8qlRDgSHTpANWOmXifXZCpKbSJ
+ 0VOd4ycNjnzGMs8rDVvRpI97hsi0h2/hjr5VIwzmAqyRg2BzRkRiwmmBMmucnR6nXhgkv8YlN
+ ziLPDAZOcczL0QYh8lgOsyecyjyetZTT22If3V3TZ/1XqiHshoawBg9SMMZ0Mf2+zQhZRRXGE
+ CPdLCIqM8xAzrxvFTuPlaI0DyJLASrVYqh6f5G2Ov5aVb0f5fxcVddt1DxkBaVjwETeRaDZBp
+ eRB5qs6Pd/x5a4IggihoFUQa9F0e0u8GsR9aCT0KMOZw2yMATbsCZQcICL0W7p/Qyvg/rdeE7
+ +Ss0QgmWSnbTlh3z5kgXor5k2jxJNK+jQ5YZbaT07L7UE1qaPFDEzAxl9x3daBwiy3rnoy1g2
+ NoPvuN1RF0p622WRlk0lZsCSPrhJ+VOX+DZluoF+X3HHYW7lK+RH3hXgw4V12aqtsQ1TpfTIN
+ rHIHavmU5BPmGfbUQ9aZ2A8V7C9AfhF8dpjbMRsbbkcZkPeOOQRkvgDL9i7rl092JN3jrLQft
+ KwojJu/8TzP9CZPjhWDCn5MZscSKiQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi Maxime,
 
-On 02-11-2022 12:14 am, Rob Herring wrote:
-> On Mon, Oct 31, 2022 at 01:35:09PM +0530, Naresh Solanki wrote:
->> Hi Rob,
->>
->> On 26-10-2022 07:07 pm, Rob Herring wrote:
->>> fanc: fan-controller {
->>>     #pwm-cells = <3>;
->>>     ...
->>>
->>>     fan {
->>>       pwms = <&fanc 0 500000  PWM_POLARITY_INVERTED>;
->>>       ...
->>>     };
->>> };
->>>
->>> 0 is PWM number and 500000 is the PWM frequency. The 3rd cell are per
->>> consumer flags. See pwm.txt for more details.
->>
->> Did the implementation & while testing getting the below err:
->> [63.626505] max6639 166-002e: failed to create device link to 166-002e
-> 
-> Does turning off fw_devlink help (fw_devlink=off)?
+Am 29.09.22 um 11:21 schrieb Maxime Ripard:
+> This is a revert of commit fd5894fa2413 ("drm/vc4: hdmi: Remove clock
+> rate initialization"), with the code slightly moved around.
+>
+> It turns out that we can't downright remove that code from the driver,
+> since the Pi0-3 and Pi4 are in different cases, and it only works for
+> the Pi4.
+>
+> Indeed, the commit mentioned above was relying on the RaspberryPi
+> firmware clocks driver to initialize the rate if it wasn't done by the
+> firmware. However, the Pi0-3 are using the clk-bcm2835 clock driver that
+> wasn't doing this initialization. We therefore end up with the clock not
+> being assigned a rate, and the CPU stalling when trying to access a
+> register.
+>
+> We can't move that initialization in the clk-bcm2835 driver, since the
+> HSM clock we depend on is actually part of the HDMI power domain, so any
+> rate setup is only valid when the power domain is enabled. Thus, we
+> reinstated the minimum rate setup at runtime_suspend, which should
+> address both issues.
+>
+> Link: https://lore.kernel.org/dri-devel/20220922145448.w3xfywkn5ecak2et@pengutronix.de/
+> Fixes: fd5894fa2413 ("drm/vc4: hdmi: Remove clock rate initialization")
+> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>   drivers/gpu/drm/vc4/vc4_hdmi.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> index 199bc398817f..2e28fe16ed5e 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -2891,6 +2891,15 @@ static int vc4_hdmi_runtime_resume(struct device *dev)
+>   	u32 __maybe_unused value;
+>   	int ret;
+>   
+> +	/*
+> +	 * The HSM clock is in the HDMI power domain, so we need to set
+> +	 * its frequency while the power domain is active so that it
+> +	 * keeps its rate.
+> +	 */
+> +	ret = clk_set_min_rate(vc4_hdmi->hsm_clock, HSM_MIN_CLOCK_FREQ);
+> +	if (ret)
+> +		return ret;
+> +
 
-Will supplier == consumer, device link creation fails.
-Not sure what is best approach but not creating device link in this 
-scenario help & for that below additional changes needed in pwm core.
+unfortunately this breaks X on Raspberry Pi 4 in Linux 6.0.5 
+(multi_v7_defconfig + LPAE). Today i saw this report [1] and bisected 
+the issue down to this patch. Shame on me that i only tested this patch 
+with Rpi 3B+ :-(
 
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index 4527f09a5c50..afea51c49138 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -730,6 +730,12 @@ static struct device_link 
-*pwm_device_link_add(struct device *dev,
-  		return NULL;
-  	}
+Best regards
 
-+	/*
-+	 * Do not attempt to create link if consumer itself is supplier.
-+	 */
-+	if (dev == pwm->chip->dev)
-+		return 0;
-+
-  	dl = device_link_add(dev, pwm->chip->dev, DL_FLAG_AUTOREMOVE_CONSUMER);
-  	if (!dl) {
-  		dev_err(dev, "failed to create device link to %s\n",
+[1] - https://bugzilla.suse.com/show_bug.cgi?id=1205259
 
-
-
-Regards,
-Naresh
+>   	ret = clk_prepare_enable(vc4_hdmi->hsm_clock);
+>   	if (ret)
+>   		return ret;
+>
