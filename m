@@ -2,353 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D056257B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3071A625792
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbiKKKNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:13:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S233338AbiKKKEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:04:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiKKKNd (ORCPT
+        with ESMTP id S232177AbiKKKEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:13:33 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466471403F;
-        Fri, 11 Nov 2022 02:13:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668161611; x=1699697611;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hT6VwI9Lfadetc7tu4o4wb1qK4/zT2RrGyprifczX3s=;
-  b=aKhr68e80bp3CvtxHNayXof/kxXUGZcLYadZWlTijkFkgZJovna03ZqF
-   i1mWBtv+fbfVUgwywUEtz7dyTKIp0T1sq+wGCWk7UjA+nKTgpd1nTvlXv
-   2o9FUeKNpiNEMuzfeV77t0Fy7Cg1VQE/hpgHWH4ROmDYi1exJ7ezVSt66
-   9TIKVcd2BIFxaAtsXZszUjUZKkQ1rpoWy7Z788lbt6k79CInBiRSxnbb0
-   6SL/VMWNgzlUzfc+cKfQiUUTGdA00o7lkjh0wOS1aFhD2wuPNcH4OeSUL
-   HqodJ6iiIyXQkaAdB8/dLc8hmOBXywKhjon4Aq3IgAyrgVXZo/1LtpFQb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309197148"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="309197148"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 02:13:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="701169668"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="701169668"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Nov 2022 02:13:27 -0800
-Date:   Fri, 11 Nov 2022 18:04:07 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/12] mfd: intel-m10-bmc: Add PMCI driver
-Message-ID: <Y24eF6OsRTFGcB/F@yilunxu-OptiPlex-7050>
-References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
- <20221108144305.45424-11-ilpo.jarvinen@linux.intel.com>
+        Fri, 11 Nov 2022 05:04:31 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488E8E08A;
+        Fri, 11 Nov 2022 02:04:30 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7vSD5FWMzmVfg;
+        Fri, 11 Nov 2022 18:04:12 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 18:04:28 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 18:04:27 +0800
+Subject: Re: [PATCH] rcu: Dump memory object info if callback is invalid
+To:     <paulmck@kernel.org>
+CC:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221105023519.147-1-thunder.leizhen@huawei.com>
+ <20221111074538.GS725751@paulmck-ThinkPad-P17-Gen-1>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <bccf11c7-f376-6b5b-f842-76e73bfae2cc@huawei.com>
+Date:   Fri, 11 Nov 2022 18:04:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221108144305.45424-11-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221111074538.GS725751@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-08 at 16:43:03 +0200, Ilpo Järvinen wrote:
-> Adding an mfd driver for the PMCI-based interface of Intel MAX10 BMC
-> controller.
 
-Could you help describe what is PMCI? Also add the description somewhere
-in code.
+
+On 2022/11/11 15:45, Paul E. McKenney wrote:
+> On Sat, Nov 05, 2022 at 10:35:19AM +0800, Zhen Lei wrote:
+>> The callback rhp->func becomes NULL is usually caused by use-after-free.
+>> So the information about 'rhp' is very useful. Unfortunately, nothing is
+>> printed at the moment. Look at the panic output below, if no vmcore is
+>> generated, there is almost no way to analyze it except to know that the
+>> bug exists.
+>>
+>> Unable to handle kernel NULL pointer dereference at virtual address 0
+>> ... ...
+>> PC is at 0x0
+>> LR is at rcu_do_batch+0x1c0/0x3b8
+>> ... ...
+>>  (rcu_do_batch) from (rcu_core+0x1d4/0x284)
+>>  (rcu_core) from (__do_softirq+0x24c/0x344)
+>>  (__do_softirq) from (__irq_exit_rcu+0x64/0x108)
+>>  (__irq_exit_rcu) from (irq_exit+0x8/0x10)
+>>  (irq_exit) from (__handle_domain_irq+0x74/0x9c)
+>>  (__handle_domain_irq) from (gic_handle_irq+0x8c/0x98)
+>>  (gic_handle_irq) from (__irq_svc+0x5c/0x94)
+>>  (__irq_svc) from (arch_cpu_idle+0x20/0x3c)
+>>  (arch_cpu_idle) from (default_idle_call+0x4c/0x78)
+>>  (default_idle_call) from (do_idle+0xf8/0x150)
+>>  (do_idle) from (cpu_startup_entry+0x18/0x20)
+>>  (cpu_startup_entry) from (0xc01530)
+>>
+>> So add mem_dump_obj(rhp) to output some information, for example:
+>>   slab kmalloc-256 start ffff410c45019900 pointer offset 0 size 256
+>>
+>> Now we know the size of the memory block and the offset of rcu_head. Then
+>> we can check the code. It's going to be slow and tiring, but it's better
+>> than no way to start.
+>>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> 
+> I have pulled this in with the usual wordsmithing (please check!)
+> for review and testing, thank you!
+
+Great! Thanks. Provides a lot of valuable debugging method information.
+
+In the following two lines, there are a few extra spaces after the dot.
+I will delete it in v2.
+
+rhp->func to be set to NULL.  This defeats the debugging prints used by
+locate the problem.   If the problem is reproducible, additional slab
 
 > 
-> Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
-> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  .../ABI/testing/sysfs-driver-intel-m10-bmc    |   8 +-
->  drivers/mfd/Kconfig                           |  12 ++
->  drivers/mfd/Makefile                          |   1 +
->  drivers/mfd/intel-m10-bmc-pmci.c              | 154 ++++++++++++++++++
->  include/linux/mfd/intel-m10-bmc.h             |   1 +
->  5 files changed, 172 insertions(+), 4 deletions(-)
->  create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+> Questions include "Is 0x3 correct for functions compiled with all
+> supported compiler options on all architectures on which the Linux
+
+Sorry, I found it possible that it wouldn't work on x86. Although I had
+no problems booting up on x86 before. I ran a script today and found that
+there were addresses that were not 4-byte aligned.
+
+I'll send v2 on your basis.
+
+cat System.map | grep -E ' t | T ' | awk '{print substr($1,length($1),length($1))}' | sort | uniq -c
+  52521 0
+    409 1
+    394 2
+    417 3
+    404 4
+    458 5
+    405 6
+    393 7
+   1205 8
+    457 9
+    442 a
+    435 b
+    421 c
+    418 d
+    421 e
+    426 f
+
+
+> kernel runs?", "Is this added information useful often enough for
+> this to be pushed to mainline?", and so on.
+
+I originally wanted to add a member in struct rcu_head and backup
+'func' to the previous node. This way, when the error is detected,
+the hook function can be printed out. This will help us quickly
+find the user of the invalid rhp. However, the size of the struct
+page is limited and cannot be expanded.
+
+Further more, we can dump the contents of mem object.
+
+I have a problem that has not been resolved and has not reproduced.
+The surrounding contents of 'rhp' have been dumped, as below.
+You can highlight 00000024 and 00000030, you'll see that this is a
+fixed 80-bytes structure. There is also a bidirectional linked list
+in the structure. If I have mem_dump_obj(rhp) information, I can
+narrow it down considerably.
+
+[20220928044206]5390: 00000024 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[20220928044206]53b0: 00000000 00000000 00000000 00000000 cfa4d580 ffff4596 00000000 00000000
+[20220928044206]53d0: 7438f148 ffff4596 7438f148 ffff4596 00000024 00000000 0b828cfa 0f00aaf4
+[20220928044206]53f0: 00000000 00000000 00000000 00000000 496653c0 ffff4596 00000000 00000000
+[20220928044206]5410: 00000000 00000000 00000000 00000000 ae0769e0 ffff4596 ae0769e0 ffff4596
+[20220928044206]5430: 00000030 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[20220928044206]5450: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[20220928044206]5470: ae076988 ffff4596 ae076988 ffff4596 00000024 00000000 00000000 00000000
+
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> index 9773925138af..a8ab58035c95 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc
-> @@ -1,4 +1,4 @@
-> -What:		/sys/bus/spi/devices/.../bmc_version
-> +What:		/sys/bus/.../drivers/intel-m10-bmc/.../bmc_version
-
-It's good. And could you add in commit message about why the changes to the ABI
-description.
-
->  Date:		June 2020
->  KernelVersion:	5.10
->  Contact:	Xu Yilun <yilun.xu@intel.com>
-> @@ -6,7 +6,7 @@ Description:	Read only. Returns the hardware build version of Intel
->  		MAX10 BMC chip.
->  		Format: "0x%x".
->  
-> -What:		/sys/bus/spi/devices/.../bmcfw_version
-> +What:		/sys/bus/.../drivers/intel-m10-bmc/.../bmcfw_version
->  Date:		June 2020
->  KernelVersion:	5.10
->  Contact:	Xu Yilun <yilun.xu@intel.com>
-> @@ -14,7 +14,7 @@ Description:	Read only. Returns the firmware version of Intel MAX10
->  		BMC chip.
->  		Format: "0x%x".
->  
-> -What:		/sys/bus/spi/devices/.../mac_address
-> +What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_address
->  Date:		January 2021
->  KernelVersion:  5.12
->  Contact:	Russ Weight <russell.h.weight@intel.com>
-> @@ -25,7 +25,7 @@ Description:	Read only. Returns the first MAC address in a block
->  		space.
->  		Format: "%02x:%02x:%02x:%02x:%02x:%02x".
->  
-> -What:		/sys/bus/spi/devices/.../mac_count
-> +What:		/sys/bus/.../drivers/intel-m10-bmc/.../mac_count
->  Date:		January 2021
->  KernelVersion:  5.12
->  Contact:	Russ Weight <russell.h.weight@intel.com>
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index a09d4ac60dc7..38d53f6c4d7b 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -2238,6 +2238,18 @@ config MFD_INTEL_M10_BMC_SPI
->            additional drivers must be enabled in order to use the functionality
->            of the device.
->  
-> +config MFD_INTEL_M10_BMC_PMCI
-> +	tristate "Intel MAX 10 Board Management Controller with PMCI"
-> +	depends on FPGA_DFL
-> +	select MFD_INTEL_M10_BMC_CORE
-> +	select REGMAP_INDIRECT
-> +	help
-> +	  Support for the Intel MAX 10 board management controller via PMCI.
-> +
-> +	  This driver provides common support for accessing the device,
-> +	  additional drivers must be enabled in order to use the functionality
-> +	  of the device.
-> +
->  config MFD_RSMU_I2C
->  	tristate "Renesas Synchronization Management Unit with I2C"
->  	depends on I2C && OF
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index f32276cdd0c2..7559362cb438 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -275,6 +275,7 @@ obj-$(CONFIG_MFD_SIMPLE_MFD_I2C)	+= simple-mfd-i2c.o
->  intel-m10-bmc-objs             := intel-m10-bmc-core.o
->  obj-$(CONFIG_MFD_INTEL_M10_BMC_CORE)   += intel-m10-bmc.o
->  obj-$(CONFIG_MFD_INTEL_M10_BMC_SPI)   += intel-m10-bmc-spi.o
-> +obj-$(CONFIG_MFD_INTEL_M10_BMC_PMCI)  += intel-m10-bmc-pmci.o
->  
->  obj-$(CONFIG_MFD_ATC260X)	+= atc260x-core.o
->  obj-$(CONFIG_MFD_ATC260X_I2C)	+= atc260x-i2c.o
-> diff --git a/drivers/mfd/intel-m10-bmc-pmci.c b/drivers/mfd/intel-m10-bmc-pmci.c
-> new file mode 100644
-> index 000000000000..918378a78bdb
-> --- /dev/null
-> +++ b/drivers/mfd/intel-m10-bmc-pmci.c
-> @@ -0,0 +1,154 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * PMCI-based interface to MAX10 BMC
-> + *
-> + * Copyright (C) 2020-2022 Intel Corporation, Inc.
-> + *
-> + */
-> +
-> +#include <linux/dfl.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/mfd/intel-m10-bmc.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +
-> +#define M10BMC_PMCI_INDIRECT_BASE	0x400
-> +
-> +#define M10BMC_PMCI_SYS_BASE		0x0
-> +#define M10BMC_PMCI_SYS_END		0xfff
-> +
-> +#define M10BMC_PMCI_DOORBELL		0x1c0
-> +#define M10BMC_PMCI_AUTH_RESULT		0x1c4
-> +
-> +/* Telemetry registers */
-> +#define M10BMC_PMCI_TELEM_START		0x400
-> +#define M10BMC_PMCI_TELEM_END		0x78c
-> +
-> +#define M10BMC_PMCI_BUILD_VER		0x0
-> +#define NIOS2_PMCI_FW_VERSION		0x4
-> +#define M10BMC_PMCI_MAC_LOW		0x20
-> +#define M10BMC_PMCI_MAC_HIGH		(M10BMC_PMCI_MAC_LOW + 4)
-> +
-> +/* Addresses for security related data in FLASH */
-> +#define PMCI_BMC_REH_ADDR		0x7ffc004
-> +#define PMCI_BMC_PROG_ADDR		0x7ffc000
-> +#define PMCI_BMC_PROG_MAGIC		0x5746
-> +
-> +#define PMCI_SR_REH_ADDR		0x7ffd004
-> +#define PMCI_SR_PROG_ADDR		0x7ffd000
-> +#define PMCI_SR_PROG_MAGIC		0x5253
-> +
-> +#define PMCI_PR_REH_ADDR		0x7ffe004
-> +#define PMCI_PR_PROG_ADDR		0x7ffe000
-> +#define PMCI_PR_PROG_MAGIC		0x5250
-> +
-> +#define PMCI_STAGING_FLASH_COUNT	0x7ff5000
-> +
-> +struct pmci_device {
-> +	void __iomem *base;
-> +	struct device *dev;
-> +	struct intel_m10bmc m10bmc;
-> +};
-> +
-> +static const struct regmap_range m10bmc_pmci_regmap_range[] = {
-> +	regmap_reg_range(M10BMC_PMCI_SYS_BASE, M10BMC_PMCI_SYS_END),
-> +};
-> +
-> +static const struct regmap_access_table m10_access_table = {
-> +	.yes_ranges	= m10bmc_pmci_regmap_range,
-> +	.n_yes_ranges	= ARRAY_SIZE(m10bmc_pmci_regmap_range),
-> +};
-> +
-> +static const struct regmap_indirect_cfg indirect_cfg = {
-> +	INTEL_M10_REGMAP_INDIRECT_CFG,
-> +};
-> +
-> +static struct regmap_config m10bmc_pmci_regmap_config = {
-> +	.reg_bits = 32,
-> +	.reg_stride = 4,
-> +	.val_bits = 32,
-> +	.wr_table = &m10_access_table,
-> +	.rd_table = &m10_access_table,
-> +	.max_register = M10BMC_PMCI_SYS_END,
-> +	.indirect_cfg = &indirect_cfg,
-> +};
-> +
-> +static struct mfd_cell m10bmc_n6000_bmc_subdevs[] = {
-> +	{ .name = "n6000bmc-hwmon" },
-> +};
-> +
-> +static const struct m10bmc_csr_map m10bmc_pmci_csr_map = {
-> +	.base = M10BMC_PMCI_SYS_BASE,
-> +	.build_version = M10BMC_PMCI_BUILD_VER,
-> +	.fw_version = NIOS2_PMCI_FW_VERSION,
-> +	.mac_low = M10BMC_PMCI_MAC_LOW,
-> +	.mac_high = M10BMC_PMCI_MAC_HIGH,
-> +	.doorbell = M10BMC_PMCI_DOORBELL,
-> +	.auth_result = M10BMC_PMCI_AUTH_RESULT,
-> +	.bmc_prog_addr = PMCI_BMC_PROG_ADDR,
-> +	.bmc_reh_addr = PMCI_BMC_REH_ADDR,
-> +	.bmc_magic = PMCI_BMC_PROG_MAGIC,
-> +	.sr_prog_addr = PMCI_SR_PROG_ADDR,
-> +	.sr_reh_addr = PMCI_SR_REH_ADDR,
-> +	.sr_magic = PMCI_SR_PROG_MAGIC,
-> +	.pr_prog_addr = PMCI_PR_PROG_ADDR,
-> +	.pr_reh_addr = PMCI_PR_REH_ADDR,
-> +	.pr_magic = PMCI_PR_PROG_MAGIC,
-> +	.rsu_update_counter = PMCI_STAGING_FLASH_COUNT,
-> +};
-> +
-> +static const struct intel_m10bmc_platform_info m10bmc_m10_n6000 = {
-> +	.type = M10_N6000,
-> +	.cells = m10bmc_n6000_bmc_subdevs,
-> +	.n_cells = ARRAY_SIZE(m10bmc_n6000_bmc_subdevs),
-> +	.csr_map = &m10bmc_pmci_csr_map,
-> +};
-> +
-> +static int pmci_probe(struct dfl_device *ddev)
-> +{
-> +	struct device *dev = &ddev->dev;
-> +	struct pmci_device *pmci;
-> +
-> +	pmci = devm_kzalloc(dev, sizeof(*pmci), GFP_KERNEL);
-> +	if (!pmci)
-> +		return -ENOMEM;
-> +
-> +	pmci->m10bmc.dev = dev;
-> +	pmci->dev = dev;
-
-I don't see its usage.
-
-> +
-> +	pmci->base = devm_ioremap_resource(dev, &ddev->mmio_res);
-> +	if (IS_ERR(pmci->base))
-> +		return PTR_ERR(pmci->base);
-> +
-> +	pmci->m10bmc.regmap =
-> +		devm_regmap_init_indirect(dev,
-> +					  pmci->base + M10BMC_PMCI_INDIRECT_BASE,
-> +					  &m10bmc_pmci_regmap_config);
-> +	if (IS_ERR(pmci->m10bmc.regmap))
-> +		return PTR_ERR(pmci->m10bmc.regmap);
-> +
-> +	return m10bmc_dev_init(&pmci->m10bmc, &m10bmc_m10_n6000);
-> +}
-> +
-> +#define FME_FEATURE_ID_PMCI_BMC	0x12
-> +
-> +static const struct dfl_device_id pmci_ids[] = {
-> +	{ FME_ID, FME_FEATURE_ID_PMCI_BMC },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(dfl, pmci_ids);
-> +
-> +static struct dfl_driver pmci_driver = {
-> +	.drv	= {
-> +		.name       = "intel-m10-bmc",
-> +		.dev_groups = m10bmc_dev_groups,
-> +	},
-> +	.id_table = pmci_ids,
-> +	.probe    = pmci_probe,
-> +};
-> +
-> +module_dfl_driver(pmci_driver);
-
-Maybe change the name. This is still a MAX10 bmc driver, pmci is just the
-interface to max10.
-
-Thanks,
-Yilun
-
-> +
-> +MODULE_DESCRIPTION("MAX10 BMC PMCI-based interface");
-> +MODULE_AUTHOR("Intel Corporation");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> index 1b907c1a176f..90f2a691ef46 100644
-> --- a/include/linux/mfd/intel-m10-bmc.h
-> +++ b/include/linux/mfd/intel-m10-bmc.h
-> @@ -13,6 +13,7 @@ enum m10bmc_type {
->  	M10_N3000,
->  	M10_D5005,
->  	M10_N5010,
-> +	M10_N6000,
->  };
->  
->  #define INTEL_M10_REGMAP_INDIRECT_CFG	\
-> -- 
-> 2.30.2
+> 							Thanx, Paul
 > 
+>> ---
+>>  kernel/rcu/rcu.h      | 7 +++++++
+>>  kernel/rcu/srcutiny.c | 1 +
+>>  kernel/rcu/srcutree.c | 1 +
+>>  kernel/rcu/tasks.h    | 1 +
+>>  kernel/rcu/tiny.c     | 1 +
+>>  kernel/rcu/tree.c     | 1 +
+>>  6 files changed, 12 insertions(+)
+>>
+>> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+>> index 70c79adfdc7046c..4844dec36bddb48 100644
+>> --- a/kernel/rcu/rcu.h
+>> +++ b/kernel/rcu/rcu.h
+>> @@ -10,6 +10,7 @@
+>>  #ifndef __LINUX_RCU_H
+>>  #define __LINUX_RCU_H
+>>  
+>> +#include <linux/mm.h>
+>>  #include <trace/events/rcu.h>
+>>  
+>>  /*
+>> @@ -211,6 +212,12 @@ static inline void debug_rcu_head_unqueue(struct rcu_head *head)
+>>  }
+>>  #endif	/* #else !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
+>>  
+>> +static inline void debug_rcu_head_callback(struct rcu_head *rhp)
+>> +{
+>> +	if (unlikely(!rhp->func || (unsigned long)rhp->func & 0x3))
+>> +		mem_dump_obj(rhp);
+>> +}
+>> +
+>>  extern int rcu_cpu_stall_suppress_at_boot;
+>>  
+>>  static inline bool rcu_stall_is_suppressed_at_boot(void)
+>> diff --git a/kernel/rcu/srcutiny.c b/kernel/rcu/srcutiny.c
+>> index 33adafdad261389..5e7f336baa06ae0 100644
+>> --- a/kernel/rcu/srcutiny.c
+>> +++ b/kernel/rcu/srcutiny.c
+>> @@ -138,6 +138,7 @@ void srcu_drive_gp(struct work_struct *wp)
+>>  	while (lh) {
+>>  		rhp = lh;
+>>  		lh = lh->next;
+>> +		debug_rcu_head_callback(rhp);
+>>  		local_bh_disable();
+>>  		rhp->func(rhp);
+>>  		local_bh_enable();
+>> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+>> index ca4b5dcec675bac..294972e66b31863 100644
+>> --- a/kernel/rcu/srcutree.c
+>> +++ b/kernel/rcu/srcutree.c
+>> @@ -1631,6 +1631,7 @@ static void srcu_invoke_callbacks(struct work_struct *work)
+>>  	rhp = rcu_cblist_dequeue(&ready_cbs);
+>>  	for (; rhp != NULL; rhp = rcu_cblist_dequeue(&ready_cbs)) {
+>>  		debug_rcu_head_unqueue(rhp);
+>> +		debug_rcu_head_callback(rhp);
+>>  		local_bh_disable();
+>>  		rhp->func(rhp);
+>>  		local_bh_enable();
+>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+>> index b0b885e071fa8dc..b7f8c67c586cdc4 100644
+>> --- a/kernel/rcu/tasks.h
+>> +++ b/kernel/rcu/tasks.h
+>> @@ -478,6 +478,7 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
+>>  	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
+>>  	len = rcl.len;
+>>  	for (rhp = rcu_cblist_dequeue(&rcl); rhp; rhp = rcu_cblist_dequeue(&rcl)) {
+>> +		debug_rcu_head_callback(rhp);
+>>  		local_bh_disable();
+>>  		rhp->func(rhp);
+>>  		local_bh_enable();
+>> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+>> index bb8f7d270f01747..56e9a5d91d97ec5 100644
+>> --- a/kernel/rcu/tiny.c
+>> +++ b/kernel/rcu/tiny.c
+>> @@ -97,6 +97,7 @@ static inline bool rcu_reclaim_tiny(struct rcu_head *head)
+>>  
+>>  	trace_rcu_invoke_callback("", head);
+>>  	f = head->func;
+>> +	debug_rcu_head_callback(head);
+>>  	WRITE_ONCE(head->func, (rcu_callback_t)0L);
+>>  	f(head);
+>>  	rcu_lock_release(&rcu_callback_map);
+>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+>> index 93c286b98c8f03d..3b93b9df8042a84 100644
+>> --- a/kernel/rcu/tree.c
+>> +++ b/kernel/rcu/tree.c
+>> @@ -2256,6 +2256,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
+>>  		trace_rcu_invoke_callback(rcu_state.name, rhp);
+>>  
+>>  		f = rhp->func;
+>> +		debug_rcu_head_callback(rhp);
+>>  		WRITE_ONCE(rhp->func, (rcu_callback_t)0L);
+>>  		f(rhp);
+>>  
+>> -- 
+>> 2.25.1
+>>
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
