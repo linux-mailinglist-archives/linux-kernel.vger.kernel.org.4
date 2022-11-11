@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30C4625513
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7677762551B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbiKKISg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S232877AbiKKIUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiKKIS2 (ORCPT
+        with ESMTP id S232471AbiKKIUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:18:28 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9856E9B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1668154707; x=1699690707;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=goKayUn+kIt0wuTD4YEeWlIv9qi4VVZqBIGQMIXzaHc=;
-  b=ceQzjG2HxD216Iblb9u1qQ5BTawZZN+uDCkBGCvy60S5Irci/ep5QGuT
-   yM7EjhHB005onKZE148khyYHbEVEX51ZOUxreIuStoKaUVGo7YeZ+Ld2G
-   LZ1Bcw/5TqWt6SIzXb6gZjyfwInPd6fk3Y4JZIWDB6pE9nBRfahcUE1oW
-   VYVWJVSleEOTfJEfocpXAvyBlV5YWbmyIClKDmBNRpQPUrniVuSyFuvJJ
-   JFXAT7O+QcvbDFEh9JwHqcugPPkhNfo2f2EUTQb/2RDj+lajDlvFiv9NM
-   kRQPB+tRyGOdqXY+xiAtWRzup41+j/vY3GfAuPfsvCKXA1gamqJe86nQm
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,156,1665417600"; 
-   d="scan'208";a="214310449"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Nov 2022 16:18:20 +0800
-IronPort-SDR: rgdUYdbkV3RDFLyXR0JXWE2tl4kj+2YOtRP5K8vmqRq2AsbQiVunKFNxGUeMeM54aE3RuRDYLX
- +6/G1Y2r3aiCq1uC2+TIdhdpBdwgwvUlouYaurKApGUGFNKby3Gi+7Wza8o9HBlPubni2mGy7A
- 3yC8MDp6hV51IIvVlH2YXog7aTYTIuAfD6ijRruZpJ8Zs6YgzSL1siZvoyBgj77KCswkm5HgZg
- KDddDwRqkZXXEUI2SqsGI3d5WYEWNyRYUb0sTDx/lMI9/omT4IL1jlEJnnW1hZQpa6QsISJeWA
- kaI=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Nov 2022 23:31:39 -0800
-IronPort-SDR: HhD4Ws2MSC0kr9rzSUrpaCEt8wGx1bX9fA6yOwSYZ/ZsKP7p4dxpvGCwzB0IuXJ7qExwJDFMJd
- U0pHL+Vg1eJ664gQVS9IjLx3Kky3SucbBh1PPcZTmPMQig58Sp4/5seBiXDS4bZydhGMSsUKZj
- 1pDwniBxRY+8cUCzf0VZodR3Q7IR4q9b2DJPvARyF+RRu1Uso5lv0YZmXeUWAUXGVgYZTREF7M
- tPXogoW7XQesSdsG+qPwx1fdb7thvIm9mV7hcYP7P9BuPrtE8fd8/kT4/BcTp8cHe98LOieE08
- VJY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Nov 2022 00:18:22 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N7s645FKmz1RwqL
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:18:20 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1668154700; x=1670746701; bh=goKayUn+kIt0wuTD4YEeWlIv9qi4VVZqBIG
-        QMIXzaHc=; b=HA/WKu5F8bhHjH0pdZK7L3s+ZdHK3f8+HljbszWVD+YLYCN2o4C
-        XJ37sPdqh+YfWmXnyMwC0IX6OCW8seZUapqMvPa/3jEzmpnjE644uj4VgPQOHuDk
-        C36UsbrfrOX2iFWTYwkJKDy03lYwFxKP7MvCe8AgR3Jk1NxYa90DtE3kKAWb19w5
-        4UPAGhuevueX+9QM7rYZlJLTA7YgvQv8X2yxxE1toV8hLkJGBEXhfJ1S7SnIRaql
-        numrMsGloqegW3qYWeztlYxjFLhO+DVFjp/kMI68s3rEuVsrAPr09M82LRx0T2bP
-        RD2aH2sSs9e7C0I8Gi5+HC2ZdKwtpdZ2QDA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id FEVl411fEk5y for <linux-kernel@vger.kernel.org>;
-        Fri, 11 Nov 2022 00:18:20 -0800 (PST)
-Received: from [10.225.163.43] (unknown [10.225.163.43])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N7s634918z1RvLy;
-        Fri, 11 Nov 2022 00:18:19 -0800 (PST)
-Message-ID: <5b301bb6-3d50-b6f3-e541-7b6754ceeb7b@opensource.wdc.com>
-Date:   Fri, 11 Nov 2022 17:18:18 +0900
+        Fri, 11 Nov 2022 03:20:42 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECA171F14
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:20:40 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id c1so7284278lfi.7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:20:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m7Ka71WJnUiAb9fvGY9CNSs9KdiUBfWOURrQspmYDMA=;
+        b=tD8dVfVTwQei5KACu20o0XLwgAARP34M1YmWgCtHFXL2eE04ultRTvyqqPIEbl41XH
+         3h9a3UlXK9oGLr42gNN2P3fWJQ1FRbQdint+WleKKg+6kfwRimn6bhJ9fQeu8zDSkFIF
+         GYS+MKs2cjHVRJC9+MYoXX30JxfzHFy9ogsdLBUC4gqH6WIDj130tROm195MPYGyL1eO
+         UP1GG6IiIjJ14ky5R6VVvs/nronUHKiknMBsof5jL7IPDw48/ln5ahTjg/met3l+p8FO
+         dIW6XXi7hMAncrN4+oDeeo4LQ/7l8d+RPx4gpXzt8LrVbD06aeQDIQEBVJhDvj/Zxas6
+         s/5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m7Ka71WJnUiAb9fvGY9CNSs9KdiUBfWOURrQspmYDMA=;
+        b=eF8KG7xBKRuZTy+RyEVx6Rn9kmZ2zLW+E2ojbt7RhHENKNIy+TNSZAjQGH0n1Y2MaS
+         FPMNnbwtU/2HOZBSalA7EO0fZi6YiY30iQxpDI4L4iCcnFHbivIODzRfS5AXRZL8jf6d
+         87rthVnA4kUieQeHRa5nWgk3iOju5gjxcsRdw7iAsiwlb1g8jC3ekb7YhWLzmGJZNZ9e
+         c9v5As1Rq7osyWfR262U+8q2QzVQcH7/c7vjg6FS4GlZCNNdtggdW0WelqfMfXZVLk69
+         AtIGPycJXt24TQQCBx73sjjHtpZMKcixRaRs5enjyHLPRshAOr8v4bTLDYgMNm81K2/q
+         Wgmw==
+X-Gm-Message-State: ANoB5pk3CVfluC7wS7KDiVsAzfm+ZQ9NgJJjPJ5KlbcT+ccrLttzkPAh
+        Z2T9GiiNS5ryTO8pV4SgWmOllg==
+X-Google-Smtp-Source: AA0mqf6oEBYq1lUaIJv8EvmNwB7aw0DrLt6oIirmfX4VsIKPBfkQ6dfRACGvX4/i69yzydm/945ajA==
+X-Received: by 2002:ac2:4ecf:0:b0:4a2:741f:1909 with SMTP id p15-20020ac24ecf000000b004a2741f1909mr428635lfr.484.1668154838719;
+        Fri, 11 Nov 2022 00:20:38 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id v2-20020ac25922000000b004946a1e045fsm208768lfi.197.2022.11.11.00.20.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 00:20:38 -0800 (PST)
+Message-ID: <8931d67d-6f4a-913e-8873-995703dbb97f@linaro.org>
+Date:   Fri, 11 Nov 2022 09:20:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] ata: sata_dwc_460ex: Check !irq instead of irq == NO_IRQ
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 2/7] dt-bindings: usb: hpe,gxp-udc: Add binding for gxp
+ gadget
 Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org
-References: <a99c89d7b39b63663739f064cd60514938b77833.1668106138.git.christophe.leroy@csgroup.eu>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <a99c89d7b39b63663739f064cd60514938b77833.1668106138.git.christophe.leroy@csgroup.eu>
+To:     "Yu, Richard" <richard.yu@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Chang, Clay" <clayc@hpe.com>
+References: <20221103160625.15574-1-richard.yu@hpe.com>
+ <20221103160625.15574-3-richard.yu@hpe.com>
+ <b85230d4-8fce-ba49-0d6b-8c4d20132cda@linaro.org>
+ <SJ0PR84MB2085E6B922DAF1070DC802EF8D3C9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
+ <c199600a-aad9-5639-ea57-a4d59d719ade@linaro.org>
+ <SJ0PR84MB20853F3B0FCCF2A9583524B48D3E9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SJ0PR84MB20853F3B0FCCF2A9583524B48D3E9@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,65 +93,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/22 03:50, Christophe Leroy wrote:
-> NO_IRQ is a relic from the old days. It is not used anymore in core
-> functions. By the way, function irq_of_parse_and_map() returns value 0
-> on error.
+On 09/11/2022 04:37, Yu, Richard wrote:
+> Hi Mr. Kozlowski,
 > 
-> In some drivers, NO_IRQ is erroneously used to check the return of
-> irq_of_parse_and_map().
+> Thank you very much for inputs.
 > 
-> It is not a real bug today because the only architectures using the
-> drivers being fixed by this patch define NO_IRQ as 0, but there are
-> architectures which define NO_IRQ as -1. If one day those
-> architectures start using the non fixed drivers, there will be a
-> problem.
+>>>>> +
+>>>>> +  vdevnum:
+>>>>> +    description:
+>>>>> +      virtual device number.
+>>
+>>>> That's unusual property... Why numbering devices is part of DT (hardware description)?
+>>
+>>>  In HPE GXP virtual EHCI controller chipset, it can support up to 8  
+>>> virtual devices(gadgets). Each device/gadget will be represented  by 
+>>> a bit in 8 bits register. For example, the interrupt register bit 0  
+>>> indicates the interrupt from device 0, bit 1 for device 1 ... so on.
+>>> When a user defines a device/gadget, he/she can define the device 
+>>> number as between 0 and 7. Thus, the driver can look up to the bit 
+>>> position. That is why we have numbering devices as part of DT.
 > 
-> Long time ago Linus advocated for not using NO_IRQ, see
-> https://lkml.org/lkml/2005/11/21/221 . He re-iterated the same view
-> recently in https://lkml.org/lkml/2022/10/12/622
+>> Wrap your lines properly, it's impossible to reply in-line to such messages.
 > 
-> So test !irq instead of tesing irq == NO_IRQ.
+> Sorry for the improper wrapping. Hope the above fixed the problem.
 > 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  drivers/ata/sata_dwc_460ex.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>> Then how do you specify two devices? You allow here only one, right?
 > 
-> diff --git a/drivers/ata/sata_dwc_460ex.c b/drivers/ata/sata_dwc_460ex.c
-> index e3263e961045..5fb80ccde65b 100644
-> --- a/drivers/ata/sata_dwc_460ex.c
-> +++ b/drivers/ata/sata_dwc_460ex.c
-> @@ -242,7 +242,7 @@ static int sata_dwc_dma_init_old(struct platform_device *pdev,
->  
->  	/* Get SATA DMA interrupt number */
->  	hsdev->dma->irq = irq_of_parse_and_map(np, 1);
-> -	if (hsdev->dma->irq == NO_IRQ) {
-> +	if (!hsdev->dma->irq) {
->  		dev_err(dev, "no SATA DMA irq\n");
->  		return -ENODEV;
->  	}
-> @@ -1180,7 +1180,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
->  
->  	/* Get SATA interrupt number */
->  	irq = irq_of_parse_and_map(np, 0);
-> -	if (irq == NO_IRQ) {
-> +	if (!irq) {
->  		dev_err(dev, "no SATA DMA irq\n");
->  		return -ENODEV;
->  	}
+> In our current design, to specify two devices, we added the gadget 
+> structure into the device tree, such as  gadget0:udc@80401000{}; gadget1:udc@80402000{};....
+> 
+> No, we can allow up to 8 devices by adding the gadget structure,
+> such as gadget0:udc@80401000{}; gadget1:udc@80402000{};....gadget8:udc@80408000{};
+> 
+>> Which bit in which register? Your devices have separate address space, so why they cannot poke the same register, right? Then just always set it to 0...
+> 
+> In HPE GXP vEHCI controller, there are three register groups: standard USB EHCI registers, 
+> virtual device global registers, and virtual device registers.
+> 
+> Standard USB EHCI registers ---- We defined as "hpe,gxp-vudc" in the device tree (vuhc0) 
+> Virtual device global registers --- We defined as "hpe,gxp-udcg" 
+> Virtual device registers -- We defined as "hpe,gxp-udc"
+> 
+> Each virtual device will have its own separate address space. 
+> There is only single address space for the virtual device global registers. 
+> 
+> The virtual device global registers are including vDevice Global Interrupt Status register(EVGISTAT), 
+> vDevice Global Interrupt Enable register(EVGIEN), vEHCI FlexEndpoint Mapping register (EVFEMAP) ....
+> We need the vdevnum for the bit position in EVGISTAT and EVGIEN for each device.  
+> We write vdevnum into the EVFEMAP register to assign an EP to a specific device. 
+> 
+>> I might miss here something but so far it looks to me like some hacky description matching the driver, not hardware, not existing bindings.
+> 
+> We create "vdevnum" as device configuration parameter due to our hardware need.
 
-You can also remove the:
+That's not an argument... everything can be a "hardware need".
 
-#ifndef NO_IRQ
+> 
+>>>>> +
+>>>>> +  fepnum:
+>>>>> +    description:
+>>>>> +      number of the flexible end-points this device is needed.
+>>>
+>>>> Similar question.
+>>>
+>>> In HPE GXP virtual EHCI Controller chipset, there is a flexible End-Point(EP) pool. 
+>>> Each flexible EP has its own mapping register. The mapping register 
+>>> bit 0 to 3 is for device number (vdevnum) and bit 4 to 7 is for EP number inside the device.
+>>> The device driver configures the mapping register to assign a flexible 
+>>> EP to a specific device.  Here, "fepnum" is the input letting the 
+>>> driver know how many EPs are needed for this device/gadget.
+> 
+>> Nope. So you create here some weird IDs to poke into syscon register.
+>> First, syscon has offset if you need. You could treat it maybe as bits?
+>> I don't know... but even then your design is poor - two devices 
+>> changing the same register. Even though it is sunchronized by regmap, it is conflicting, obfuscated access.
+> 
+> The "fepnum" is the input parameter to define how many end-points (EPs) is needed
+> for the device.
+> 
+> You are correct that all devices need to access the virtual 
+> device global registers during the runtime. 
+> Thus, we create " hpe,syscon-phandle = <&udc_system_controller>;'
+> for the driver getting the vDevice Global registers address.
 
-#define NO_IRQ          0
+And how do you solve poking into the same register by two devices? Who
+owns it? You don't...
 
-#endif
+> 
+> In our current chip registers layout with the vDevice Global registers, I don’t see
+> a way to avoid "two devices changing the same register".
 
-at the top of the file.
+I see at least an idea - create proper hierarchy, where parent device
+instantiates its children (thus knows and increments the IDs) and is
+responsible for proper handling of shared register (thus the parent owns
+the register).
 
--- 
-Damien Le Moal
-Western Digital Research
+I understand why you created vdevnum/fepnum properties but the reason is
+not matching DT bindings. These are not additional hardware properties
+which deserve their own DT properties - they are already part of unit
+address and/or just incremented ID based on device number managed by a
+parent.
+
+Best regards,
+Krzysztof
 
