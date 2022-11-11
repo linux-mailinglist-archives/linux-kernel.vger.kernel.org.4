@@ -2,159 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998936254C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AFC6254CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbiKKH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
+        id S232851AbiKKH7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 02:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKKH6w (ORCPT
+        with ESMTP id S232004AbiKKH7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:58:52 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7332316C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:58:51 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b3so7230357lfv.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:58:51 -0800 (PST)
+        Fri, 11 Nov 2022 02:59:10 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A5367112;
+        Thu, 10 Nov 2022 23:59:09 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id b62so3864337pgc.0;
+        Thu, 10 Nov 2022 23:59:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KwU5CkjoRIEtbAhM41+6jkxe2GJWOzFr6ZG3QP2ECFg=;
-        b=ZaSv/KRfXBtxkGUSgji6I7GnV9tr2AB9YForlVDX5XFX6IR3erR2a1qmlIrpvxkUYj
-         i3hyWfIpzIWcI+Kq3vmbpOTVnsxd+HJLwV8+NALZ0Lxz9b9hGPZ9Gp++JIr+YOgt5VL1
-         raGG3kk0h2+gCCfZD7YOrHpjkw6SF0I8Ya2k3q0dSyXiHlIfUxbg2WmCbUpTwH67JFo7
-         pTBjIYjYffG0o2U+5Pkkf7pLKPRicVhZnL49LIfTlet+92BuI8MvbYaEk8L2wMN573O1
-         eM2YItr/iN5Gpd38qPIlTs2i59ZVUMNFqlEM+QMpcTcKplFbHiLss68f/a2jd2Hrw93c
-         513A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pveMSuEdi3DIeMZ1Uax+ZhWeXDUKZE4SO272ZTa5I1Q=;
+        b=L+ngB/6ctN6+fdzn3cxFKD7rgYm67zAXAilqHhG6DzHtRp7Q48uShWTLNQLhq19iYo
+         EiW39dXpUVZd2JqSD4eKq88YHZkijkGtPaMTAcONnKaUdXsRh0Uj/Uf3r44Jni5KP5k4
+         wiVw0E0n8pEb3Bhec/JqaV/xAhUcTklaY7oz+ut6C2/OppO7WRv9X7SBZRvyPYBrl2QS
+         39prxqz93Up+p3QQCso0YhV0D0ddyrZE1YHdXsPPLjr28CxVD4qlCUYrUpe934iGDpEW
+         fdd/pG+benRFXzyKJffTyvSV7fDVwsNrk708tgrMNXvpD6TTw8B+SrcY4XSnoJ5sEYWz
+         PjHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KwU5CkjoRIEtbAhM41+6jkxe2GJWOzFr6ZG3QP2ECFg=;
-        b=heTUxxRGn21oZtiGP7Oa2fab2CjfzKG+tvrmgVY30A6TmJ4jDpd8j5MPiOjE4/MgSq
-         ldEIS07aq8KlEf8JbTatKuy5rMdWDYjPd2rcC1fT/+qzGFgsYag+gpnZXKdScLBO5zMQ
-         ZYV+BpfOkIrM4sHNAxRC8QLwNvO9Pm3uqKqufvsfsztVz5XmK94kaCXVZLJ9GGdXwfFE
-         JChRuvLG/+5u1JjUKHL6XijFduoR3K1Q8uG4HGfi4KS9WTw2ukIwuQByGmBlskfNMgn8
-         wMMyQ8qFRYdMrmWRD08bd6ZBpFYLVdkQa9ggQ3YR+knrQAMX3izDd9MCNoVZo7SKQXNn
-         Rjsg==
-X-Gm-Message-State: ANoB5pkFSxKdmJVZNqhnLRDvoXFEHREX3C2fGhewB+TqNKNXaJ7GwMvR
-        HKebwy1BbvzwAx+VydR9xHnuHQ==
-X-Google-Smtp-Source: AA0mqf6p3rZ6O0OVw4hUrGNozzgAitQ9QVJ9blTJGAml+eH1lWfauMEDnESpyUls6Sygn0NkeUXOEw==
-X-Received: by 2002:a05:6512:456:b0:4b1:5bf0:df51 with SMTP id y22-20020a056512045600b004b15bf0df51mr419009lfk.674.1668153529875;
-        Thu, 10 Nov 2022 23:58:49 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id a18-20020a056512391200b004b097f2c73dsm199930lfu.253.2022.11.10.23.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Nov 2022 23:58:49 -0800 (PST)
-Message-ID: <ca66fe57-33c8-a98e-b6c7-cf1c94473a64@linaro.org>
-Date:   Fri, 11 Nov 2022 08:58:48 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pveMSuEdi3DIeMZ1Uax+ZhWeXDUKZE4SO272ZTa5I1Q=;
+        b=2RfggDE2fY2R8oW7ud8xqzInW5/xbZJmwlf+mSUaH7gDFsEaw6S1HEz2BwAL1y+dlM
+         xP7szAESMq60JNmqX+rOT2q4Gzgg0Nt+QMAcQpg9F1PGu5p8UrB7ck9YfSpkCppRmMUt
+         CcfsX5S0hVBRcI+V7/spE45O2NSTWQs3BVsR0vACKmBq7fXBGfUjx5ruka1V5zvtvpZ6
+         kcD45VA3xHCDzqA9e5wE8Tbuw6Qu0Sep460VJWJ5ZrmrNp4iFbD7r3S/PnLfP8/Obu2S
+         MjXIp2g8FYQtHems9M7PZi0hROrJ/qsDKtpuK/WXwi26Uh4c3TPf6twmrcrrBrVxlZRU
+         hZig==
+X-Gm-Message-State: ANoB5pmV47pJwjcMfpuPupC2QGf+xDKL0z32KDX8yromcafqFsiDwkyF
+        QsJYXfdTQQ8OOdJhHblEYzZQZTPqttOWnM6+75k=
+X-Google-Smtp-Source: AA0mqf7t/aEwRs6hHuzyCXOK7zP1ELR4qOfpipiy+XfjjmLkexGnAtX7s7V1SdR+voJcuTEGU344joHIjGJ3kCn/5JA=
+X-Received: by 2002:aa7:946f:0:b0:56e:174e:efdf with SMTP id
+ t15-20020aa7946f000000b0056e174eefdfmr1544172pfq.29.1668153549039; Thu, 10
+ Nov 2022 23:59:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] dt-bindings: Convert active-semi PMIC docs to YAML
- schemas
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        list@opendingux.net
-References: <20221105225803.39197-1-paul@crapouillou.net>
- <02c45ae9-61a4-9fc5-4daf-8c4c9df9a4a0@linaro.org>
- <NEH5LR.URZKYH8VLESF1@crapouillou.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <NEH5LR.URZKYH8VLESF1@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221021073025.18831-1-wenchao.chen666@gmail.com> <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com>
+In-Reply-To: <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com>
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+Date:   Fri, 11 Nov 2022 15:58:57 +0800
+Message-ID: <CA+Da2qyx7McYStMysPdK-DV9qiOnb9rvXYqqugxsbVgqqX59VQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/2] mmc: block: Support Host to control FUA
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     ulf.hansson@linaro.org, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        axboe@kernel.dk, avri.altman@wdc.com, kch@nvidia.com,
+        CLoehle@hyperstone.com, vincent.whitchurch@axis.com,
+        bigeasy@linutronix.de, s.shtylyov@omp.ru,
+        michael@allwinnertech.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, megoo.tang@gmail.com,
+        lzx.stg@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 22:08, Paul Cercueil wrote:
-> Hi Krzysztof,
-> 
-> Le dim. 6 nov. 2022 à 10:55:11 +0100, Krzysztof Kozlowski 
-> <krzysztof.kozlowski@linaro.org> a écrit :
->> On 05/11/2022 23:58, Paul Cercueil wrote:
->>>  Create YAML bindings for the Active-semi PMICs and remove the old 
->>> text
->>>  files.
->>>
->>>  The bindings aren't perfect, for instance I couldn't find good
->>>  descriptions for the vendor properties in the "charger" node of the
->>>  ACT8945A because I am not familiar with the hardware and these
->>>  properties were not documented anywhere.
->>>
->>>  The YAML schemas are a bit different than what is described in the 
->>> old
->>>  text files, because these were sometimes wrong or had missing
->>>  information. This is the case for the ACT8600 documentation, which
->>>  specified the valid node names for the regulators, while the driver 
->>> was
->>>  expecting different names. This led to the current situation where 
->>> we
->>>  have two different boards using different names for the regulators:
->>>  - arch/mips/boot/dts/ingenic/ci20.dts uses the names documented in 
->>> the
->>>    text file,
->>>  - arch/mips/boot/dts/ingenic/gcw0.dts uses the names that the driver
->>>    expects.
->>>  In theory, the driver should be fixed to follow the documentation, 
->>> and
->>>  accept both naming schemes. In practice though, when the PMIC node 
->>> was
->>>  added to the ci20.dts board file, the names were already wrong in
->>>  regards to what the driver expected, so it never really worked
->>>  correctly and wasn't tested properly. Furthermore, in that board the
->>>  consumers of the regulators aren't working for various other reasons
->>>  (invalid GPIOs, etc.).
->>>
->>>  For that reason, for the ACT8600 bindings I decided to only use the 
->>> node
->>>  names that the driver expects (and that gcw0.dts uses), instead of
->>>  accepting both old and new names. A follow-up patch will update the 
->>> CI20
->>>  board to use the new regulator names.
->>>
->>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>>  ---
->>>
->>>  Notes:
->>>      v2:
->>>      - Avoid | character in descriptions that can be single-line
->>>      - Remove unevaluatedProperties when additionalProperties is 
->>> also present
->>>      - Remove useless inner parentheses in regular expressions
->>>      - Rename I2C nodes to just... i2c
->>>      - Remove node handles
->>>
->>>      Note:
->>>      I set Liam Girdwood and Mark Brown as the maintainers by 
->>> default, since
->>>      it doesn't appear that anybody is managing the Active-semi 
->>> drivers, but
->>>      if anybody steps up I can update it.
->>
->> It should not be Liam and Mark, but someone having/knowing this
->> particular hardware.
-> 
-> Well, who would that be?
-> 
-> I do have a board with the ACT8600, but that's about it.
+Hi Hunter
+Thank you for your review!
+I'm sorry to reply you so late because I've been too busy lately.
 
-You or driver maintainer or recent contributors.
+On Fri, Oct 21, 2022 at 11:50 PM Adrian Hunter <adrian.hunter@intel.com> wr=
+ote:
+>
+> On 21/10/22 10:30, Wenchao Chen wrote:
+> > From: Wenchao Chen <wenchao.chen@unisoc.com>
+> >
+> > Summary
+> > =3D=3D=3D=3D=3D=3D=3D
+> > These patches[1] supports the host to turn off FUA.
+> >
+> > About FUA, roughly deal with the following two parts:
+> > 1) FUA(Forced Unit Access):
+> > - The REQ_FUA flag can be OR ed into the r/w flags of a bio submitted f=
+rom the
+> >   filesystem and will make sure that I/O completion for this request is=
+ only
+> >   signaled after the data has been committed to non-volatile storage.
+> >
+> > 2) In emmc, FUA is represented as Reliable write. code show as below:
+> > static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_re=
+q *mqrq,
+> >               int recovery_mode, bool *do_rel_wr_p, bool *do_data_tag_p=
+)
+> > {
+> >       ...
+> >       /*
+> >        * Reliable writes are used to implement Forced Unit Access and
+> >        * are supported only on MMCs.
+> >        */
+> >       do_rel_wr =3D (req->cmd_flags & REQ_FUA) &&
+> >                       rq_data_dir(req) =3D=3D WRITE &&
+> >                       (md->flags & MMC_BLK_REL_WR);
+> >       ...
+> > }
+> >
+> > Patch structure
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > patch#1:  for block
+> > patch#2:  for sdhci-sprd
+> >
+> > Tests
+> > =3D=3D=3D=3D=3D
+> > Ran 'AndroBench' to evaluate the performance:
+>
+> It would be good to have more details e.g.
+> What file system? What block size?  What journal size?
+> What file size? What record size?
+>
 
-Best regards,
-Krzysztof
+What file system?
+F2FS
+What block size?
+Sequential: 32768KB, Random: 4KB
+What file size?
+64MB
 
+> > 1. fua_disable =3D 1
+> > /sys/block/mmcblk0/queue # cat fua 0
+> > I tested 5 times for each case and output a average speed.
+> >
+> > 1) Sequential read:
+> > Speed: 266.8MiB/s, 265.1MiB/s, 262.9MiB/s, 268.7MiB/s, 265.2MiB/s
+> > Average speed: 265.74MiB/s
+> >
+> > 2) Random read:
+> > Speed: 98.75MiB/s, 98.7MiB/s, 98.5MiB/s, 99.4MiB/s, 98.7MiB/s
+> > Average speed: 98.81MiB/s
+> >
+> > 3) Sequential write:
+> > Speed: 199.94MiB/s, 199.1MiB/s, 205.5MiB/s, 206.5MiB/s, 191.5MiB/s
+> > Average speed: 200.5MiB/s
+> >
+> > 4) Random write:
+> > Speed: 68.6MiB/s, 71.8MiB/s, 77.1MiB/s, 64.8MiB/s, 69.3MiB/s
+> > Average speed: 70.32MiB/s
+> >
+> > 2. fua_disable =3D 0 (default 0)
+> > /sys/block/mmcblk0/queue # cat fua 1
+> > I tested 5 times for each case and output a average speed.
+> >
+> > 1) Sequential read:
+> > Speed: 259.3MiB/s, 258.8MiB/s, 258.2MiB/s, 259.5MiB/s, 253.5MiB/s
+> > Average speed: 257.86MiB/s
+> >
+> > 2) Random read:
+> > Speed: 98.9MiB/s, 101MiB/s, 101MiB/s, 99MiB/s, 101.1MiB/s
+> > Average speed: 100.2MiB/s
+> >
+> > 3) Sequential write:
+> > Speed: 153.7MiB/s, 146.2MiB/s, 151.2MiB/s, 148.8MiB/s, 147.5MiB/s
+> > Average speed: 149.48MiB/s
+> >
+> > 4) Random write:
+> > Speed: 12.9MiB/s, 12.3MiB/s, 12.6MiB/s, 12.8MiB/s, 12.8MiB/s
+> > Average speed: 12.68MiB/s
+>
+> Is every write being sync'ed of just sync at the end?
+>
+
+/*
+* Reliable writes are used to implement Forced Unit Access and
+* are supported only on MMCs.
+*/
+do_rel_wr =3D (req->cmd_flags & REQ_FUA) &&
+    rq_data_dir(req) =3D=3D WRITE &&
+    (md->flags & MMC_BLK_REL_WR);
+
+A Reliable Write access shall force the data to be written to the
+nonvolatile storage=E3=80=82
+It will consume more time.
+
+> >
+> > According to the above data, disable FUA (fua_disable =3D 1) improves t=
+he
+> > performance:
+> > 1)Sequential read improved by 3%.
+> > 2)Random read were down 1%.
+>
+> FUA should not affect reads.  If it is, you may want to investigate how.
+>
+> > 3)Sequential write improved by 34%.
+> > 4)Random write improved by 454%.
+> > Therefore, it is recommended to support the host to control FUA.
+> >
+> > Reference
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/Documentation/block/writeback_cache_control.rst
+> > [2] Embedded Multi-Media Card (e=E2=80=A2MMC) Electrical Standard (5.1)=
+''
+>
+> You do not seem to have considered data integrity.
+>
+> Regular disks are assumed to provide atomic sector writes.  That is, a se=
+ctor has either the old data or the new data, but not some corrupt mixture.
+>
+> mmc does not have that assumption, which is presumably why Reliable Write=
+ has been used instead.  Although that idea appears to have been thrown awa=
+y for devices with no cache by commit 08ebf903af57 ("mmc: core: Fixup suppo=
+rt for writeback-cache for eMMC and SD").
+>
+> File systems can use FUA to mark a successful journal flush.  Whether or =
+not getting a torn sector at that point will corrupt the file system recove=
+ry is presumably file system specific, and maybe specific to file system op=
+tions e.g. the use of checksums.
+>
+> It may well be that a file system can survive a torn sector at that point=
+, or that user space would prefer to take the risk in order to get better p=
+erformance.  In either of those cases, it is not really a decision for the =
+host controller driver.
+>
+
+Considering the data integrity, we did a random power-down test, and
+the experimental results were good.
+
+FUA can only reduce data loss under abnormal conditions, but cannot
+prevent data loss under abnormal conditions.
+
+I think there should be a balance between FUA and NO FUA, but
+filesystems seem to favor FUA.
+
+FUA brings a drop in random write performance. If enough tests are
+done, NO FUA is acceptable.
+
+I found a discussion about FUA:
+https://lore.kernel.org/linux-f2fs-devel/20220528051238.GX1098723@dread.dis=
+aster.area/
+
+UFS reference:
+https://lore.kernel.org/linux-scsi/20220531201053.3300018-1-jaegeuk@kernel.=
+org/
+
+> >
+> > Wenchao Chen (2):
+> >   mmc: block: Support Host to control FUA
+> >   mmc: sdhci-sprd: enable fua_disable for SPRDSDHCI
+> >
+> >  drivers/mmc/core/block.c      | 3 ++-
+> >  drivers/mmc/host/sdhci-sprd.c | 2 ++
+> >  include/linux/mmc/host.h      | 3 +++
+> >  3 files changed, 7 insertions(+), 1 deletion(-)
+> >
+>
