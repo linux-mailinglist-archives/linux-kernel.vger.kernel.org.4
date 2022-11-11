@@ -2,151 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6788562619C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 466AA6261A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbiKKSnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 13:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S233225AbiKKSsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 13:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiKKSnP (ORCPT
+        with ESMTP id S232177AbiKKSsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:43:15 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5AE13EA9;
-        Fri, 11 Nov 2022 10:43:14 -0800 (PST)
+        Fri, 11 Nov 2022 13:48:52 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F8D391EA;
+        Fri, 11 Nov 2022 10:48:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668192194; x=1699728194;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JkhCDlfC4G8PjgtwMiU9aSAo1nZwhhcu2HF+orAPBSg=;
-  b=gsjHtjmWvXeeprcIBLz/WLRt8JQDlgkavbk3uRq11VuZJk/vszGaerg6
-   nJfXwoTLFkb46z9KEMCgPXKNBiZ14Xr01lQwyBwbxGuBPBinQxeQYiYkY
-   8b3Wl7z2NNIMJcft9FSNHv18uh42fAoeTJwrnwx3lRJaVD6bAWZhaQmJH
-   slkAkzJCDV9LrvVP2OW7l/5xYORxj8GEOiY/9KAOc+fFpDOq9oNChmIbV
-   t1dRQ969oVQSAEO5i/TzEabspnu784esnOY1FYryoTDtWg2U7O67BiJrZ
-   6PNfSncVrCFr4eVe3E26hAkhYa0h8JevjQfm79amF1INsJGq0TV6zYfeD
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="299162196"
+  t=1668192532; x=1699728532;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cPvINtLB33xYjofGkhy4PsIph/HjXemLXjTdWzqkIB0=;
+  b=NSOyef2Ec4dc4ycUqltdr5RlY8HkGVWzz5tnToV87D0v0VG1kTztJ3rJ
+   3p0THhQBsTYguHAZTfIq7csGGN0b1/sJiUzFthufrZbzuXUT3me2I26h0
+   uYX5xEwZJPVkbVq9pEztKDTizq4LtKGeySe/AYHuoAt1+/c7XoZxfcESa
+   p1Tqzk0KAViQ/mpnKug7I7HB0Mqnv9XjtGIRpvoh/BEyXiHhhYh2YaQn0
+   pJci6MfOoYJmPLyPZvoCKkafjOe81tad5aTHbRgliIC8fCezJsD4Ha3Z5
+   x87SyWLb0jHT1EMgalOMvCPI9Fo6Q9idE8wL0oBQjW/4DR2M3OP7lFRca
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="375918225"
 X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="299162196"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:43:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="812517804"
+   d="scan'208";a="375918225"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:48:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="966902129"
 X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="812517804"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 11 Nov 2022 10:43:11 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 5394B4B5; Fri, 11 Nov 2022 20:43:32 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v3 6/6] pinctrl: intel: Enumerate PWM device when community has a capability
-Date:   Fri, 11 Nov 2022 20:43:28 +0200
-Message-Id: <20221111184328.58108-7-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221111184328.58108-1-andriy.shevchenko@linux.intel.com>
-References: <20221111184328.58108-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="966902129"
+Received: from nmpoonaw-mobl1.amr.corp.intel.com (HELO [10.252.134.46]) ([10.252.134.46])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:48:49 -0800
+Message-ID: <82d6137f-4183-d994-f8b1-56b4be3d620f@intel.com>
+Date:   Fri, 11 Nov 2022 10:48:49 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 10/14] platform/x86/intel/ifs: Add metadata validation
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Jithu Joseph <jithu.joseph@intel.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, gregkh@linuxfoundation.org, ashok.raj@intel.com,
+        tony.luck@intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
+        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-11-jithu.joseph@intel.com> <Y26W+emSSL5Xik0G@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y26W+emSSL5Xik0G@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of the Communities may have PWM capability. In such cases,
-enumerate the PWM device via respective driver. User is still
-responsible for setting correct pin muxing for the line that
-needs to output the signal.
+On 11/11/22 10:39, Borislav Petkov wrote:
+>> +struct meta_data {
+>> +	unsigned int meta_type;		// metadata type
+>> +	unsigned int meta_size;		// size of this entire struct including hdrs.
+>> +	unsigned int test_type;		// IFS test type
+>> +	unsigned int fusa_info;		// Fusa info
+>> +	unsigned int total_images;	// Total number of images
+>> +	unsigned int current_image;	// Current Image #
+>> +	unsigned int total_chunks;	// Total number of chunks in this image
+>> +	unsigned int starting_chunk;	// Starting chunk number in this image
+>> +	unsigned int size_per_chunk;	// size of each chunk
+>> +	unsigned int chunks_per_stride;	// number of chunks in a stride
+>> +	unsigned int reserved[54];	// Align to 256 bytes for chunk alignment.
+> That looks weird.
+> 
+> __packed and __aligned doesn't work?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Thierry Reding <thierry.reding@gmail.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/pinctrl/intel/pinctrl-intel.c | 32 +++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+... and don't we try to use fixed-size typed in hardware structures,
+like u32?
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 52ecd66ce357..3ebdf5589bd6 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -21,6 +21,8 @@
- #include <linux/pinctrl/pinconf.h>
- #include <linux/pinctrl/pinconf-generic.h>
- 
-+#include <linux/platform_data/x86/pwm-lpss.h>
-+
- #include "../core.h"
- #include "pinctrl-intel.h"
- 
-@@ -46,6 +48,8 @@
- #define PADOWN_MASK(p)			(GENMASK(3, 0) << PADOWN_SHIFT(p))
- #define PADOWN_GPP(p)			((p) / 8)
- 
-+#define PWMC				0x204
-+
- /* Offset from pad_regs */
- #define PADCFG0				0x000
- #define PADCFG0_RXEVCFG_SHIFT		25
-@@ -1499,6 +1503,30 @@ static int intel_pinctrl_pm_init(struct intel_pinctrl *pctrl)
- 	return 0;
- }
- 
-+static int intel_pinctrl_probe_pwm(struct intel_pinctrl *pctrl,
-+				   struct intel_community *community)
-+{
-+	static const struct pwm_lpss_boardinfo info = {
-+		.clk_rate = 19200000,
-+		.npwm = 1,
-+		.base_unit_bits = 22,
-+		.bypass = true,
-+	};
-+	struct pwm_lpss_chip *pwm;
-+
-+	if (!(community->features & PINCTRL_FEATURE_PWM))
-+		return 0;
-+
-+	if (!IS_REACHABLE(CONFIG_PWM_LPSS))
-+		return 0;
-+
-+	pwm = pwm_lpss_probe(pctrl->dev, community->regs + PWMC, &info);
-+	if (IS_ERR(pwm))
-+		return PTR_ERR(pwm);
-+
-+	return 0;
-+}
-+
- static int intel_pinctrl_probe(struct platform_device *pdev,
- 			       const struct intel_pinctrl_soc_data *soc_data)
- {
-@@ -1584,6 +1612,10 @@ static int intel_pinctrl_probe(struct platform_device *pdev,
- 			ret = intel_pinctrl_add_padgroups_by_size(pctrl, community);
- 		if (ret)
- 			return ret;
-+
-+		ret = intel_pinctrl_probe_pwm(pctrl, community);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	irq = platform_get_irq(pdev, 0);
--- 
-2.35.1
+There are also much nicer ways to do this:
 
+union meta_data {
+	struct {
+		u32 meta_type;		// metadata type
+		u32 meta_size;		// size of ...
+	};
+	u8 padding[IFS_CHUNK_ALIGNMENT];
+}
+
+That doesn't have any magic linkage between the magic "54" (times 4) and
+IFS_CHUNK_ALIGNMENT.  It makes the compiler do the hard work for you.
+
+Voila, you have a union that's always IFS_CHUNK_ALIGNMENT in size,  No
+magic 54's necessary.
