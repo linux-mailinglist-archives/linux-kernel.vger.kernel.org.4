@@ -2,261 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AAB6256DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2166256E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbiKKJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
+        id S233656AbiKKJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbiKKJaG (ORCPT
+        with ESMTP id S233449AbiKKJa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:30:06 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532F17BE69
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:30:05 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otQMM-0000ND-OR; Fri, 11 Nov 2022 10:30:02 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otQMM-00061j-6t; Fri, 11 Nov 2022 10:30:02 +0100
-Date:   Fri, 11 Nov 2022 10:30:02 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
- support wifi
-Message-ID: <20221111093002.dpp73hkef6ihkduk@pengutronix.de>
-References: <20221111032811.2456916-1-peng.fan@oss.nxp.com>
- <20221111032811.2456916-13-peng.fan@oss.nxp.com>
- <20221111090232.6ibqzoivfqsndhxg@pengutronix.de>
- <DU0PR04MB94177ED8966506D445CFBA5688009@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <AS8PR04MB8404426EC83A75A3058F774192009@AS8PR04MB8404.eurprd04.prod.outlook.com>
+        Fri, 11 Nov 2022 04:30:28 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6967AD48;
+        Fri, 11 Nov 2022 01:30:27 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id c15so2402399qtw.8;
+        Fri, 11 Nov 2022 01:30:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcplOxG0knUnUxNr+LPhGG5rifvaq3v/b4kjjm7Hk9U=;
+        b=gMWqAgtlwha7T0RuWBUIAhI8hmWUr58eKaXkF867nIpBNQBPjol+/ErwjP9ZEiZDS5
+         OxkyhvY64ZJt5QGK4qGoF0r1Bnol5QeE0dpZJ0xA5soNX8RacKIVeQXfZuB7/vx80fLb
+         ylGeQv7DAMBFa8EfYdlk/yrwHIe+NRU02Rrykj/bFOkr0/D6LHT+17C2abxOmttGhsrW
+         zeqtIBo8xm5MTPznLqui3aL8/fthEGYH+FR434zi3D9/E0JDssTjODasKNwrLcnBmEtT
+         M87E/kPleNKORbDL5ADhi2VlHUBvuO9wg95K7/LrgDcdm4Jk0MVOwyg0t9c7lHCyfso3
+         RM5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VcplOxG0knUnUxNr+LPhGG5rifvaq3v/b4kjjm7Hk9U=;
+        b=bVuB1rrQdl8v9IJr4cWwxgnAn38gOWD2qs4i9jVC8Vo1xGGLm5c3BvJdhArY4t0O9i
+         bZ1B/Ihvi1sCFsXd7O/7gfqFHzQWemeUpFwUenIp6RMRwOtOa1Pl2sCNfL4RvPkovFMY
+         oCVuV/hD2hgmUmp1e8Dn33OBXBjZiV6MlAEAHtRMrPlDSEy2VMzBolBXfAw7PADtfCIe
+         kTCwnd39jcYpG3ZisA146O4zBZRlvx7+MNJEj4d2aTgyLYkN8troxEbP+eu39wOlt3Ch
+         UxJaURGPgzsTAwIIrZAltfvyrirZ+T9MbFQ6fNQtVbqS2C31nhflMU55L2s7RvskH/aT
+         4xEA==
+X-Gm-Message-State: ANoB5pkowfLd8HBQ05k1V7SG6KUKaiP82sb/nXJK9p7+uPxh1Qn50Szi
+        1Wvt+UlvKoTSvaQBGWeFEftRQMPaUh0pdMtbZYk=
+X-Google-Smtp-Source: AA0mqf5jxCXN/bBnVjpOV5BnLl7pV/IC9HKZa6r7vr9BndNgoNaCs/7sPZwrN/elijNNi1COkOeNsjtKkOZtUXUn2vs=
+X-Received: by 2002:ac8:6905:0:b0:3a5:8423:ebb7 with SMTP id
+ bt5-20020ac86905000000b003a58423ebb7mr508480qtb.593.1668159026522; Fri, 11
+ Nov 2022 01:30:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB8404426EC83A75A3058F774192009@AS8PR04MB8404.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221108092840.14945-1-JJLIU0@nuvoton.com> <20221108092840.14945-4-JJLIU0@nuvoton.com>
+ <CACRpkdb+Bkwa8yCKGtRcsJ6KnJh+RUuz_gOrQV63pcYQLaHCaw@mail.gmail.com>
+In-Reply-To: <CACRpkdb+Bkwa8yCKGtRcsJ6KnJh+RUuz_gOrQV63pcYQLaHCaw@mail.gmail.com>
+From:   Jim Liu <jim.t90615@gmail.com>
+Date:   Fri, 11 Nov 2022 17:30:15 +0800
+Message-ID: <CAKUZ0+GCf_Zv=VhnY5Z=yYAfR1=_ha98BVVxRGVy8ui6so_Yrg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] dt-bindings: gpio: Add Nuvoton NPCM750 serial I/O
+ expansion interface(SGPIO)
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     JJLIU0@nuvoton.com, KWLIU@nuvoton.com, brgl@bgdev.pl,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-11, Sherry Sun wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Peng Fan <peng.fan@nxp.com>
-> > Sent: 2022年11月11日 17:08
-> > To: Marco Felsch <m.felsch@pengutronix.de>; Peng Fan (OSS)
-> > <peng.fan@oss.nxp.com>
-> > Cc: shawnguo@kernel.org; s.hauer@pengutronix.de; linux-
-> > kernel@vger.kernel.org; Sherry Sun <sherry.sun@nxp.com>;
-> > kernel@pengutronix.de; festevam@gmail.com; linux-arm-
-> > kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>
-> > Subject: RE: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
-> > support wifi
-> > 
-> > Sherry,
-> > 
-> > > Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
-> > > support wifi
-> > >
-> > > Hi Peng,
-> > >
-> > > On 22-11-11, Peng Fan (OSS) wrote:
-> > > > From: Sherry Sun <sherry.sun@nxp.com>
-> > > >
-> > > > Enable usdhc1 which is used for wifi.
-> > > >
-> > > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > > ---
-> > > >  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 27 +++++++++++++
-> > > > arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 39
-> > > +++++++++++++++++++
-> > > >  2 files changed, 66 insertions(+)
-> > > >
-> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > index a2b24d4d4e3e..7b80f144327d 100644
-> > > > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > @@ -15,6 +15,13 @@ / {
-> > > >  	aliases {
-> > > >  		spi0 = &flexspi;
-> > > >  	};
-> > > > +
-> > > > +	usdhc1_pwrseq: usdhc1_pwrseq {
-> > > > +		compatible = "mmc-pwrseq-simple";
-> > > > +		pinctrl-names = "default";
-> > > > +		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
-> > > > +		reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
-> > > > +	};
-> > > >  };
-> > > >
-> > > >  &ddrc {
-> > > > @@ -53,6 +60,19 @@ flash@0 {
-> > > >  	};
-> > > >  };
-> > > >
-> > > > +&usdhc1 {
-> > > > +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> > > > +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
-> > > > +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
-> > > > +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
-> > > > +	bus-width = <4>;
-> > > > +	keep-power-in-suspend;
-> > > > +	mmc-pwrseq = <&usdhc1_pwrseq>;
-> > > > +	non-removable;
-> > > > +	wakeup-source;
-> > > > +	status = "okay";
-> > > > +};
-> > > > +
-> > > >  &usdhc3 {
-> > > >  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
-> > > >  	assigned-clock-rates = <400000000>; @@ -125,4 +145,11 @@
-> > > > MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7
-> > > 0x1d6
-> > > >  			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE
-> > > 0x196
-> > > >  		>;
-> > > >  	};
-> > > > +
-> > > > +	pinctrl_wlan: wlangrp {
-> > > > +		fsl,pins = <
-> > > > +
-> > > 	MX8MM_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K
-> > > 	0x141
-> > > > +			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9
-> > > 	0x159
-> > > > +		>;
-> > > > +	};
-> > >
-> > > Out of curiousity, this is not shareable with the other ddr4 evk?
-> > [Peng Fan]
-> > 
-> > Could you please help answer?
-> > 
-> 
-> Hi Peng, I suggest to remove the pinctrl_wlan configure here, it should be added along with the wifi wowlan subnode later.
+Hi Linus and Krzysztof
 
-Does this apply to the imx8mn-evk patch as well?
+This is a special feature of npcm750.
+it's not a normal gpio.
+It's similar to aspeed sgpio.
 
-Also if the usdhc1 is used only for WLAN and this patch series don't add
-the WLAN subnode, we could remove this patch and the imx8mn-evk usdhc1
-patch completely till you have a complete patchset adding the full WLAN
-support.
+The spec as below:
 
-Regards,
-  Marco
+The full name is "serial I/O expansion"  interface.
+The NPCM7xx and NPCM8xx include two SGPIO modules.
+This interface has 4 pins  (D_out , D_in, S_CLK, LDSH).
+Each module includes eight input ports and eight output ports.
+Each port can control eight pins.
+Input ports only can be input ,output is so on.
+So support up to 64 input pins and 64 output pins.
 
-> 
-> Best Regards
-> Sherry
-> 
-> 
-> > Thanks,
-> > Peng.
-> > 
-> > >
-> > > Regards,
-> > >   Marco
-> > >
-> > > >  };
-> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > > b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > > index 7d6317d95b13..ce450965e837 100644
-> > > > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> > > > @@ -559,6 +559,45 @@ MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX
-> > > 	0x140
-> > > >  		>;
-> > > >  	};
-> > > >
-> > > > +	pinctrl_usdhc1_gpio: usdhc1grpgpio {
-> > > > +		fsl,pins = <
-> > > > +			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
-> > > > +		>;
-> > > > +	};
-> > > > +
-> > > > +	pinctrl_usdhc1: usdhc1grp {
-> > > > +		fsl,pins = <
-> > > > +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK
-> > > 	0x190
-> > > > +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD
-> > > 	0x1d0
-> > > > +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0
-> > > 	0x1d0
-> > > > +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1
-> > > 	0x1d0
-> > > > +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2
-> > > 	0x1d0
-> > > > +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3
-> > > 	0x1d0
-> > > > +		>;
-> > > > +	};
-> > > > +
-> > > > +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
-> > > > +		fsl,pins = <
-> > > > +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK
-> > > 	0x194
-> > > > +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD
-> > > 	0x1d4
-> > > > +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0
-> > > 	0x1d4
-> > > > +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1
-> > > 	0x1d4
-> > > > +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2
-> > > 	0x1d4
-> > > > +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3
-> > > 	0x1d4
-> > > > +		>;
-> > > > +	};
-> > > > +
-> > > > +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
-> > > > +		fsl,pins = <
-> > > > +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK
-> > > 	0x196
-> > > > +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD
-> > > 	0x1d6
-> > > > +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0
-> > > 	0x1d6
-> > > > +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1
-> > > 	0x1d6
-> > > > +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2
-> > > 	0x1d6
-> > > > +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3
-> > > 	0x1d6
-> > > > +		>;
-> > > > +	};
-> > > > +
-> > > >  	pinctrl_usdhc2_gpio: usdhc2grpgpiogrp {
-> > > >  		fsl,pins = <
-> > > >  			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15
-> > > 	0x1c4
-> > > > --
-> > > > 2.37.1
-> > > >
-> > > >
-> > > >
+-S_CLK:
+The clock is generated by APB3, so users can set the bus frequency and
+the driver will set the spgio divided reg to
+generate a similar clock to sgpio bus.
+
+-D_out:
+the output data is the serial data needed to connect to hc595 and the
+data will output to hc595 parallel pins.
+you can use dts nout_gpios to create the number of pins.
+
+-D_in
+this pin need to connect to hc165 and get the serial data from hc165.
+you can use dts nin_gpios to create the number of pins.
+
+LDSH:
+this pin is used to get input data or send output data.
+the user can't control this pin.
+one operation cycle is include input and output
+beginning the signal, the  LDSH is low and now will send output serial data ,
+after finished output serial data the LDSH will be high and get serial
+input data.
+
+If you have any questions or are confused please let me know.
+Your comments are most welcome.
+
+Best regards,
+Jim
+
+
+On Wed, Nov 9, 2022 at 5:14 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Tue, Nov 8, 2022 at 10:29 AM Jim Liu <jim.t90615@gmail.com> wrote:
+>
+> > +  nin_gpios: true
+> > +
+> > +  nout_gpios: true
+>
+> My comment from v1 still holds.
+> I'd say just drop these two, it's too much trying to protect
+> the users from themselves.
+>
+> > +  bus-frequency: true
+>
+> Given that you have clocks already, what does this actually specify?
+> Which bus? The one the GPIO is connected to? Why is it different
+> from the frequency from the clocks? And what is it used for, why does
+> it need to be specified? So many questions.
+>
+> A description is necessary.
+>
+> I guess the : true means it is picked up from the core schemas somehow
+> but that doesn't make me smarter.
+>
+> Yours,
+> Linus Walleij
