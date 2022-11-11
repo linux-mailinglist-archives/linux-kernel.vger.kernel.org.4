@@ -2,179 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C63C625624
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A361625626
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbiKKJEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:04:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
+        id S233600AbiKKJE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbiKKJEX (ORCPT
+        with ESMTP id S233497AbiKKJEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:04:23 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D33077E56
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:02:37 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otPvl-0003xp-Pn; Fri, 11 Nov 2022 10:02:33 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otPvk-00044O-Am; Fri, 11 Nov 2022 10:02:32 +0100
-Date:   Fri, 11 Nov 2022 10:02:32 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        Sherry Sun <sherry.sun@nxp.com>, kernel@pengutronix.de,
-        festevam@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com
-Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
- support wifi
-Message-ID: <20221111090232.6ibqzoivfqsndhxg@pengutronix.de>
-References: <20221111032811.2456916-1-peng.fan@oss.nxp.com>
- <20221111032811.2456916-13-peng.fan@oss.nxp.com>
+        Fri, 11 Nov 2022 04:04:35 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271E84AF2F
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:03:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PnAmLH1qhIUUbX2bHz6lpo+Jse9D0L6MGh47IMAXGgh5EsbDKB6A8+N263i0JMC4eeTBWNfOxAFROTmfWO5XDg3H5DkwCfZY2ZCM4SJ6UlIGD+n3u+ERxVWpB7RBS+sJKqlz2T3ruiGHfAa9eTNuWCNFgqlyPOuOLpPdMZpzmhk4eD2wLNTmLKofnxZbTdYhc2OWBBzuQO/sv3IZlIR/n9jC5ZfB1zJWYKAE7iTfCU07ZMb1JIfqvQHOvZ5mcUJK0b/33wvDxMQmDGxBf8KIkrSR9Bi0YaofviImU3HV78X5gZKj1xUOn3XM7WL/CNH+4eZtOuMoyTz8yghByQ3sYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ysk6FZPA2Dl3cHPtdvzJ3qokvNNIWmkQkXmhWFu2Chc=;
+ b=UkftvNfRlRVJaD5egFmyAOKi0+keOPRNqZ8p4KhDWgfpCHucIPdxG/qjV14POCjMfqqrwU47b0EUf23+Ijcaw4pAMm9bs+qnCFUBvQyYsBhfNUmboN2fR9L1hDKvB/FtEG0rGvg8qZ3bMUEsLz13F9M1NgT1t1/J9iPddXgN2ZquJiXVX/KT1zPN4/MXFlFiNoK0IAqxWqxWqH3KZV48gScfIxjHWpquD+nPjxI9jI4B1gDzWhT3HWltWmEMPhAxdSxiBz4Yregta9LJGv++mtgMZMvviXT71c22Q1viWS3eiBgg4BHuuxLxeHb8v3/GfvCREp022KCE+hqUFR+5dA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ysk6FZPA2Dl3cHPtdvzJ3qokvNNIWmkQkXmhWFu2Chc=;
+ b=LDJePcU4C2QRPc+vJuzHpNaAI5k5oKVSd+MTpDcOeg3maNSn44pw00Kc27g3/4FZhAd4aepRhQ74NuVKgJ7+RuK4434EkZjualnldIW/12bG1b8JLcaR2D9ChSSpMHZydifKYyxT/0jZE3PHiCDo+xSpnOxOpO6QpptGhwXqiYg=
+Received: from BN9PR12MB5257.namprd12.prod.outlook.com (2603:10b6:408:11e::16)
+ by SA0PR12MB4591.namprd12.prod.outlook.com (2603:10b6:806:9d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
+ 2022 09:03:35 +0000
+Received: from BN9PR12MB5257.namprd12.prod.outlook.com
+ ([fe80::8bd7:b65c:13f4:9b]) by BN9PR12MB5257.namprd12.prod.outlook.com
+ ([fe80::8bd7:b65c:13f4:9b%8]) with mapi id 15.20.5791.027; Fri, 11 Nov 2022
+ 09:03:35 +0000
+From:   "Zhang, Hawking" <Hawking.Zhang@amd.com>
+To:     Denis Arefev <arefev@swemel.ru>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>
+CC:     avid Airlie <airlied@linux.ie>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>
+Subject: RE: [PATCH] nbio_v7_4: Add pointer check
+Thread-Topic: [PATCH] nbio_v7_4: Add pointer check
+Thread-Index: AQHY9ao0+b8BxEO8PESymkR/B234tK45ay9Q
+Date:   Fri, 11 Nov 2022 09:03:35 +0000
+Message-ID: <BN9PR12MB52576CD30DB9A3BA7E7F848AFC009@BN9PR12MB5257.namprd12.prod.outlook.com>
+References: <20221111074121.23296-1-arefev@swemel.ru>
+In-Reply-To: <20221111074121.23296-1-arefev@swemel.ru>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-11-11T09:03:30Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=dc89fb22-28d0-4387-bc97-d398bc12b0d4;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR12MB5257:EE_|SA0PR12MB4591:EE_
+x-ms-office365-filtering-correlation-id: f622a7f6-8687-4e61-af23-08dac3c39d46
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 19rxdgZ9Wv2MAHyIvnzoJidHG2qW2e/StM2Ya53VZE/xRbmN30+eNjyQ7zrtVDDq1W4qXTPNqAitWqImjU7FATXW7fTSOdl0nLIPthH9rA54ry6CdabGntNy0yFkgPbhOBI8hs5yyZeA1G6Gg6kTgvCEsrNnmG4TS8TMbsLILhdx4hIJSfszvEqlJ+3LRa7Cgv9MmUNqxlh+J9NxFeObHMisEgDsad+V/xw9SLLs+ppuY26OTOvMxQvHxH/Z4d4H+l4kTWrmJwJoEM3e0GDumMZO1Hht/HvqPEqrRiPBjqbgtbhxXk3S5IFxLcxU+deWqaBbOHqia0us2wYBmvBFAbeklPB4UhMV6Wg0rZF4bbV3b0IXbXzxQRrrjwGiKNSXJBl2XJ2Wy/6wsP4mfU74Cqk9yKQNuF2aDd0e8gIpLPIy0bSw9AXbpolw/iF+IMWCcyy6aEJ+aElpeM+X7Rdj2Q55bsneqhhy2HUy3mypiaEXYoASlYIyC2l0PU5xWs+Hcdk68UnDFNgE+EK/SlPStrlHW8MTi/0T7YA/bCYaB0oCk4Omk9tD4s7SjU5UyqXLhg7PtLOL8AN8QXP1cxNHnUtN4x1/KYcIaGmeMLJruyKIUieHAPsmcDSX6Cc3Vf+LQGUfMYJ6M1vk0OmaSDSRqahv0OhUx85dbhOGshVgTEDtONaJ2OKTt5109eEtkI8ThjblhogEcmH1/qbbkzTdWeR9BzYcaHedkj6bssTEd5Ayo6H+l47r4ruXNDWkcRPLrG0CTerIXN7dcAsJVDgnZg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5257.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199015)(83380400001)(53546011)(26005)(186003)(6506007)(38100700002)(7696005)(110136005)(66556008)(5660300002)(2906002)(55016003)(9686003)(54906003)(6636002)(122000001)(71200400001)(478600001)(8936002)(4326008)(41300700001)(316002)(66476007)(76116006)(8676002)(64756008)(52536014)(66946007)(66446008)(33656002)(86362001)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RgO6YSpdTJHvHiUJIQu+UUAZoWatdi3Xx2Mh3ozBRxVtWBdSxZGOcrge5Jot?=
+ =?us-ascii?Q?UWaBAeng+TtFFBBOKT0pt09iBnKI3BZhCWcvmVHBninWRg7k7sNiMdtnzngM?=
+ =?us-ascii?Q?EAp8Sk4pQvKmKsppzAGDGqcCV/v8pxKVk4+Q1v9NDS+g6two6I0xtpAqHYuE?=
+ =?us-ascii?Q?un6MV5tBKoESzBVkKOLV99PGUUEZCqtu4054PPNETjX4WT6+b117XYRwiLkR?=
+ =?us-ascii?Q?z+LtWV2+YQw8UQ8a7I6CXTfi11CiFii/kmL0Ki2/edGAD9ui+aSLcAlIoaAC?=
+ =?us-ascii?Q?+0tf0G+Is3SYX2raX1CLjaBSFosYn3RWWHpGxm0waBo8Zg1VaGcKZ4zumJLn?=
+ =?us-ascii?Q?O6uFnoHtex5oybeHIPGW6atUglPQEQO6LqH1DRNiof345dt3dH10azX4zoWw?=
+ =?us-ascii?Q?vKAi4Motwf+jIcpJ35ycSoeBTEIkrXHavtTipvnMpb0iyrNIbJj1kMOrUf4R?=
+ =?us-ascii?Q?gWvmsjR8fCwhuc3coHDrtCd9BQt7WPVpDFcBqecvh56mKGFoG5bOngVNldAe?=
+ =?us-ascii?Q?YIEXlWktF1oYgqTzya72bkf+L8wh+qo6yCFWAPtea177B5Z9yBmcg8f0NcaX?=
+ =?us-ascii?Q?vF6ArGnysOKJ09T+arQqowYWBQ8zWniIf1YZ2SwTsC6MbZAbSmI8/okvxC/J?=
+ =?us-ascii?Q?9gOp4bh/63KQ8LwuGD+65z0Bbtc3VWauEDEuRGd3EiU3L7oPu4cabtx040eh?=
+ =?us-ascii?Q?ydhueLwFzbF0v0uAQrUH9WKO1cLggJPIBp/Uxvbw0shnNfIF8QA2Ru7OI5B+?=
+ =?us-ascii?Q?PV6Qea0Cr7w2khlEt/WlnqiiF0dzLKLTopImFKwDwdi+EBAjy0BQbtJpeaRw?=
+ =?us-ascii?Q?yPyY0TZdM+kaVG5T5ok/0fylpliN+n3uHJwUAhyNnKHaFBR5F/3TK2iTTKwJ?=
+ =?us-ascii?Q?KjhwtR51KB4rgsct4CAOWqxYlTz+kjVIiUYfvolYEGxb1Jf5kh7Iv68bZorP?=
+ =?us-ascii?Q?Xkpl6WG8KzsXBOcH3dkbScIpI6AOa9RRcUEX3JMmP/9iMolK+PN/fG08OJn8?=
+ =?us-ascii?Q?1lKI3hO0Bo/BTprOW1NGi6AOuIeN+fBiokC/uW6FKv0taXmlsd3RG8+Gld5b?=
+ =?us-ascii?Q?fW/f6dyHYzkadJ0ysPqnXtTesyQIuEBi8bMIx4cSYw1SFx+7y+IxjCbHNTGO?=
+ =?us-ascii?Q?8q9mkvo8cNWw0G5Qnl0xjY91JQQXs7PHabjb78SVS6ZY2sL4C8Pk01XslyTT?=
+ =?us-ascii?Q?k6Bh4LRQqjgUQuR8+5LfcjP8daBOV0/reDtV6tppEeCyo3zHYUkoSFqe/f39?=
+ =?us-ascii?Q?DJptzkoz6vR33tUtqfQQ6SqlNrRCPSKxRviH8h/OXTbXHx5f0M7BsYJMweMx?=
+ =?us-ascii?Q?t4z7ujYgeZxoKYJzw/uRuxlqIZshGh0sFXE08SiPDtNQ4XrIzgo8FMhha9fg?=
+ =?us-ascii?Q?+19PPAi6pP7mgln8iepjvDl641pt9DU2Ttmi6ko7l89PDZ5i9hh81UKHbJaG?=
+ =?us-ascii?Q?YZrCSWqsVuJgRtz0991IUU00lQJkwvIsQU0HalXqPVbi2IOXZnIK4r9nyBlw?=
+ =?us-ascii?Q?aLXsizNzo92ExBDiXSbUPsE0mucJaBTqnEbmPTW4tV0Ch/gPgdjb2vRdjsLt?=
+ =?us-ascii?Q?wt1qqnNsJZH98pCgNHpyS6E8yIIBpx16Jx6nnu/D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111032811.2456916-13-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5257.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f622a7f6-8687-4e61-af23-08dac3c39d46
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2022 09:03:35.0415
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ePC4oo9hlJqXhU7dnMdMxR/baPiPmmCy1KyjAIpRg7DA8o7WvI9GOs3LLCY8CtLFjazKcqSZ/gMkvYllNeMFQQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4591
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+[AMD Official Use Only - General]
 
-On 22-11-11, Peng Fan (OSS) wrote:
-> From: Sherry Sun <sherry.sun@nxp.com>
-> 
-> Enable usdhc1 which is used for wifi.
-> 
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 27 +++++++++++++
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 39 +++++++++++++++++++
->  2 files changed, 66 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> index a2b24d4d4e3e..7b80f144327d 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> @@ -15,6 +15,13 @@ / {
->  	aliases {
->  		spi0 = &flexspi;
->  	};
-> +
-> +	usdhc1_pwrseq: usdhc1_pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
-> +		reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
-> +	};
->  };
->  
->  &ddrc {
-> @@ -53,6 +60,19 @@ flash@0 {
->  	};
->  };
->  
-> +&usdhc1 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
-> +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
-> +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
-> +	bus-width = <4>;
-> +	keep-power-in-suspend;
-> +	mmc-pwrseq = <&usdhc1_pwrseq>;
-> +	non-removable;
-> +	wakeup-source;
-> +	status = "okay";
-> +};
-> +
->  &usdhc3 {
->  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
->  	assigned-clock-rates = <400000000>;
-> @@ -125,4 +145,11 @@ MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7              0x1d6
->  			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE           0x196
->  		>;
->  	};
-> +
-> +	pinctrl_wlan: wlangrp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K	0x141
-> +			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9		0x159
-> +		>;
-> +	};
+Hey,
 
-Out of curiousity, this is not shareable with the other ddr4 evk?
+The patch does the right thing from coding principal perspective, but it is=
+ really redundant check in RAS context.
+
+The function is a hardware interrupt handler which is only triggered for sp=
+ecific RAS event. When software receives the interrupt, the pointer of RAS =
+context must be valid one. Otherwise, even the interrupt won't be enabled a=
+t all...
 
 Regards,
-  Marco
+Hawking
 
->  };
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> index 7d6317d95b13..ce450965e837 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> @@ -559,6 +559,45 @@ MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX	0x140
->  		>;
->  	};
->  
-> +	pinctrl_usdhc1_gpio: usdhc1grpgpio {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1: usdhc1grp {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x190
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d0
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d0
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x194
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d4
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d4
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x196
-> +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d6
-> +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d6
-> +		>;
-> +	};
-> +
->  	pinctrl_usdhc2_gpio: usdhc2grpgpiogrp {
->  		fsl,pins = <
->  			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15	0x1c4
-> -- 
-> 2.37.1
-> 
-> 
-> 
+-----Original Message-----
+From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of Denis Ar=
+efev
+Sent: Friday, November 11, 2022 15:41
+To: Deucher, Alexander <Alexander.Deucher@amd.com>
+Cc: avid Airlie <airlied@linux.ie>; linux-kernel@vger.kernel.org; dri-devel=
+@lists.freedesktop.org; amd-gfx@lists.freedesktop.org; Daniel Vetter <danie=
+l@ffwll.ch>; Koenig, Christian <Christian.Koenig@amd.com>
+Subject: [PATCH] nbio_v7_4: Add pointer check
+
+Return value of a function 'amdgpu_ras_find_obj' is dereferenced at nbio_v7=
+_4.c:325 without checking for null
+
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
+---
+ drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c b/drivers/gpu/drm/amd/a=
+mdgpu/nbio_v7_4.c
+index eadc9526d33f..0f2ac99de864 100644
+--- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
++++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
+@@ -304,6 +304,9 @@ static void nbio_v7_4_handle_ras_controller_intr_no_bif=
+ring(struct amdgpu_device
+ 	struct ras_err_data err_data =3D {0, 0, 0, NULL};
+ 	struct amdgpu_ras *ras =3D amdgpu_ras_get_context(adev);
+=20
++	if (!obj)
++	  return;
+=20
+ 	bif_doorbell_intr_cntl =3D RREG32_SOC15(NBIO, 0, mmBIF_DOORBELL_INT_CNTL)=
+;
+ 	if (REG_GET_FIELD(bif_doorbell_intr_cntl,
+ 		BIF_DOORBELL_INT_CNTL, RAS_CNTLR_INTERRUPT_STATUS)) {
+--
+2.25.1
