@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5FA625628
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B6562562E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiKKJFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S233523AbiKKJFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:05:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232943AbiKKJEy (ORCPT
+        with ESMTP id S233553AbiKKJFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:04:54 -0500
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41939E0FF;
-        Fri, 11 Nov 2022 01:04:37 -0800 (PST)
-Received: by mail-pj1-x1041.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so7232417pjc.3;
-        Fri, 11 Nov 2022 01:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fRlLUlsxf2yRq+biVPsvrOIU+jGYg4EFs8dRHlFQCiM=;
-        b=eoinuhlfGT04Lfrw+Bt3sB5LfN/Nlj6nZb2kr3L4Xcan1rVgzTV5prYN7dTcoOZwIY
-         X6MyJarwFIZsyyl+EkUoD3lOtx0sE27N60MJjdYdrgHBxnlAmzP46+XNReFWoYEtPT4/
-         PK+UvsWp3ya4v2vdPri+OzPJGl6u7o7ZIUAqdTEsFfXX7hAmzdRz5kMZZ0E1LoZRsYHk
-         L8hxs7Ze1E4DAFFZrla1hIRbFEXs/GOP9wuLfZ1iAOtDVDgc4eaHCgI0umXOtxCQZ8vJ
-         pQsG2AvO0IY+XhfdSE4uvFMHdAqOZ7WA3rwWdNeCS3R8PZzI9SyKDsusoBynZKK5DnpY
-         LG8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fRlLUlsxf2yRq+biVPsvrOIU+jGYg4EFs8dRHlFQCiM=;
-        b=qRIQOxAaYR7maplTFqJxIAPBm0D4ekRHudJ0E5hYZA2uhWDMyhtFkRE5RBoqn2ntvJ
-         0ewjnx21gS3644NXRhuZrJEpgPWQNtlsBBB8r1HaPN/TAh7UW7YE2SfST29yQSdlcKin
-         FsO5eMTfe1adMnTTyF/diRsjy/xiugBF572LzaWfmby0W+fzm8qUz5jFsRI53HWbJeIu
-         Ls46RfhNYsVKxEm9JxsCQ7tApwswcViEpqwqrD+LnhrXRADh+0vj38V6RJO05U6KwP29
-         NO6KtDPniW2eJNETCBFW44w2qr1Cj/ChUZNajTeAgHgqEYDUBS7dbs8xurt6tE0m+rL0
-         gkjQ==
-X-Gm-Message-State: ANoB5pn9aXbC2yzLwFQ/L0l56TOelU3C7SSy2PIOYjqQ1k5EhPtoE/PZ
-        lxiWXvLG9NiJDBS+1qaivgg=
-X-Google-Smtp-Source: AA0mqf4GISLugFZ92A2NGOzco/Iv/0Wz0ddZVYZ0XdN90ymQLWDb63J5yN3skgDjx389luc9UfoFgg==
-X-Received: by 2002:a17:902:7c0c:b0:188:5681:4dc7 with SMTP id x12-20020a1709027c0c00b0018856814dc7mr1387819pll.97.1668157476750;
-        Fri, 11 Nov 2022 01:04:36 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e17-20020a17090301d100b00177f25f8ab3sm1178005plh.89.2022.11.11.01.04.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 01:04:36 -0800 (PST)
-From:   xu.xin.sc@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     edumazet@google.com, davem@davemloft.net
-Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xu xin <xu.xin16@zte.com.cn>
-Subject: [PATCH linux-next] ipasdv4/tcp_ipv4: remove redundant assignment
-Date:   Fri, 11 Nov 2022 09:04:20 +0000
-Message-Id: <20221111090419.494633-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 11 Nov 2022 04:05:35 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81D41F620
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:05:29 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1otPyV-0004XQ-En; Fri, 11 Nov 2022 10:05:23 +0100
+Message-ID: <fda5dd3656ffa2d0a18fd4dbe6d5a0d4a50f4798.camel@pengutronix.de>
+Subject: Re: [PATCH] soc: imx8m: Increase the clock enable before reading
+ the register
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        "Wang, Xiaolei" <xiaolei.wang@windriver.com>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 11 Nov 2022 10:05:21 +0100
+In-Reply-To: <20221111035304.GL125525@dragon>
+References: <20221028041418.4033261-1-xiaolei.wang@windriver.com>
+         <20221111024607.GH125525@dragon>
+         <f0e35731-07df-bd80-329f-a5ad9818e1e8@windriver.com>
+         <20221111035304.GL125525@dragon>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Am Freitag, dem 11.11.2022 um 11:53 +0800 schrieb Shawn Guo:
+> On Fri, Nov 11, 2022 at 11:01:15AM +0800, Wang, Xiaolei wrote:
+> > 
+> > On 11/11/2022 10:46 AM, Shawn Guo wrote:
+> > > CAUTION: This email comes from a non Wind River email account!
+> > > Do not click links or open attachments unless you recognize the sender and know the content is safe.
+> > > 
+> > > On Fri, Oct 28, 2022 at 12:14:18PM +0800, Xiaolei Wang wrote:
+> > > > When executing kdump to start the second kernel,
+> > > > since IMX-OCOTP has turned off the clock, the clock
+> > > > needs to be re-enabled, otherwise the system will hang.
+> > > > 
+> > > > Fixes: ac34de14ac30 ("Revert "soc: imx8m: change to use platform driver"")
+> > > Are you saying this fixes a regression caused by ac34de14ac30?
+> > 
+> > 
+> > Yes,
+> > 
+> > Although there is a problem with commit 7d981405d0fd, it also solves the
+> > kexec kernel hang, commit 7d981405d0fd is reverted, and the kexec kernel
+> > hang will also be introduced, so the clock needs to be enabled when the
+> > kexec kernel starts.
+> 
+> Ok.
+> 
+> Lucas,
+> 
+> Any comments here?
 
-The value of 'st->state' has been verified as "TCP_SEQ_STATE_LISTENING",
-it's unnecessary to assign TCP_SEQ_STATE_LISTENING to it, so we can remove it.
+Yea, the explanation with kdump in the commit message is a tad too
+specific I think. The simple fact is: OCOTP register access needs the
+OCOTP clock to be running and this code peeks into this register
+region, so it needs to ensure the clock is active.
 
-Signed-off-by: xu xin <xu.xin16@zte.com.cn>
----
- net/ipv4/tcp_ipv4.c | 1 -
- 1 file changed, 1 deletion(-)
+Other than this minor issue with the commit message, the change itself
+looks fine:
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 7a250ef9d1b7..0180f3cefa9c 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2478,7 +2478,6 @@ static void *tcp_seek_last_pos(struct seq_file *seq)
- 	case TCP_SEQ_STATE_LISTENING:
- 		if (st->bucket > hinfo->lhash2_mask)
- 			break;
--		st->state = TCP_SEQ_STATE_LISTENING;
- 		rc = listening_get_first(seq);
- 		while (offset-- && rc && bucket == st->bucket)
- 			rc = listening_get_next(seq, rc);
--- 
-2.25.1
+Regards,
+Lucas
 
