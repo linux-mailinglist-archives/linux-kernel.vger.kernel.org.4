@@ -2,163 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4746262A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13B26262A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234436AbiKKUOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 15:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S234096AbiKKUOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 15:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiKKUOR (ORCPT
+        with ESMTP id S234449AbiKKUOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 15:14:17 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9905EF82;
-        Fri, 11 Nov 2022 12:14:16 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id 13so15091822ejn.3;
-        Fri, 11 Nov 2022 12:14:16 -0800 (PST)
+        Fri, 11 Nov 2022 15:14:19 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1FB5B860
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:14:18 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id f63so5211411pgc.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:14:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0/Uknr7+nm9wMAuF/jnGoLItaH2Ut6RvlQgHhDJ7rd0=;
-        b=VRD8e7incGFFFuEUPDwybwHSJac12luhz0APKPuT0k3aklxT9mXvwa+c0OJDqx2DNH
-         Xp3KQQHG69qgDoEgm6Ug+zNf4I2UY71t2G1clWXV+AxoZcV/dKgSYj82uGeGa+IyNpLm
-         6C5yemSj5cW0PcmZFv8tc21du8D38Xn5/VSRzKbzgrcsCYq6ImgUZhJqmsLHx4OIG74H
-         dZLqssPYiEjHmTh37K63fTwhvwYo8GsmbGsYt2xA+DJxWhERbEi9WACOC+W547kxTg+9
-         WjjgNrNQVR2WSYPjNDJGPannxr2LCZWm4VdwwL/+lCT9o4tL/D6uuc2WpBwiqsarb+NZ
-         9dIg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CzfuirqUexa4OrUP6aM1ldAHfjduol2fhAGQPIMhaNg=;
+        b=eiMN91hnPXZQzawWYNQtt2JbgJX4zONo3XXA2vHKrwUDAZM35OEnfRYlvN5dnWnHK3
+         pjLnnizKKu4ocjX9ODiE3DPWno1mHG1fttmdmWfyUh8rGHcRgmCdXnDpnak17egxCSpg
+         lGr2Lz2VD1IMD9rcdGZMZuwgOUP314MaWeyXo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0/Uknr7+nm9wMAuF/jnGoLItaH2Ut6RvlQgHhDJ7rd0=;
-        b=vq4szUElB0uOkAUg4mJYP+0asu6GQMmfWzURIY5ga6rrBhSSua/8XMMDflgowyVWus
-         XUXI13uUJveA0SzFEkbF5hyplvLvfPhhluas2O01A9iBuKF/87KHV3TeP+Uz90vIOVoe
-         H4IrE0GYrMQx6/1TljMseXfblP6FZmpLJ+3AVIgclxZmTKX64n4+qFIK5SF9sqlAprJZ
-         8WRjUu/nEHcgWIASiyvQIQhG9/2f2gWxdmE2CUVKj5ENJwwdVKUDKXTzog6X01nnyAxH
-         EXlujakRlBNyWFiykDX2cye6HBVe1mZ5JBYA7v5cPbCsprEFa1CD6B3J8st4S9F91kM8
-         8buA==
-X-Gm-Message-State: ANoB5pkpHZGXezad0NXsQKbWn54b8X+ZTk8auHyk4NlKAVIQY+9IBR/7
-        5PlnO0LqMlLC37pqsaDZrsxdg2fxcjZqwgE65Ik=
-X-Google-Smtp-Source: AA0mqf4uCrdbiRi2Rbe08GXCPfAP1KO3SqmDkVjzWCecdf36EGfwlLgmC4kMqVJdHMVImwZsFUVRZOAuFSa2JRNqt7g=
-X-Received: by 2002:a17:906:cd0f:b0:78d:99ee:4e68 with SMTP id
- oz15-20020a170906cd0f00b0078d99ee4e68mr3103709ejb.302.1668197581252; Fri, 11
- Nov 2022 12:13:01 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CzfuirqUexa4OrUP6aM1ldAHfjduol2fhAGQPIMhaNg=;
+        b=3h2ed5IyePcbNKmr2e9hzeErYf5mlrL9WV3hKkAdP+kNZU61Q1SImmfaCUuVELIoV8
+         WcwkAHRgiBMoIT25ir2mmZlEfYlRMeMYP0gbXbcmQONkKgN/+cDw2krZlH9Ez1l8l69Z
+         juwdfapVYOPdObUxmRk1qbygB57l5eoZk/W0upS9aDSucoZWnGFEV6ci+5UIdaBQ37X4
+         YEZrxdF4M+DXZgDy3sLIfSpKLwUNfFi0Ia+qzYWqsV6YO2CyNhyEaMsZMVy1dpPwUH+Z
+         H2T7DDQtGJFCi0dSLeWXoiVbyPFJtmL7aEW8B+ukVlhu4nbMy6JRnRMY8untIdydV//l
+         W+9Q==
+X-Gm-Message-State: ANoB5pkllaXCNLkMQkamB93gzTEfviJktOGl9OX2UJQaHjVXDh+BY/4D
+        WGzP9bjVR7BOTZRMC0+O8JsG6g==
+X-Google-Smtp-Source: AA0mqf7dRnhsd5f6m0AWWkQi2sWwEKci8En1oXPzGRb7yjL8j7GgD9if6YefVSBseGMxJjBYOXq8yQ==
+X-Received: by 2002:aa7:99c5:0:b0:562:3add:37e1 with SMTP id v5-20020aa799c5000000b005623add37e1mr4169347pfi.80.1668197600735;
+        Fri, 11 Nov 2022 12:13:20 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c188-20020a624ec5000000b0056be7ac5261sm1951559pfb.163.2022.11.11.12.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 12:13:20 -0800 (PST)
+Date:   Fri, 11 Nov 2022 12:13:19 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Fangrui Song <maskray@google.com>
+Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
+        Rich Felker <dalias@libc.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>, sam@gentoo.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] binfmt_elf: Allow .bss in any interp PT_LOAD
+Message-ID: <202211111211.93ED8B4B@keescook>
+References: <20221111061315.gonna.703-kees@kernel.org>
+ <20221111074234.xm5a6ota7ppdsto5@google.com>
 MIME-Version: 1.0
-References: <20221110122128.105214-1-xukuohai@huawei.com> <83161e5e-5aa4-acdc-630b-95274bfb47d3@bytedance.com>
- <f6d87d0e-4773-d27a-dd50-139307460b4c@huawei.com>
-In-Reply-To: <f6d87d0e-4773-d27a-dd50-139307460b4c@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 11 Nov 2022 12:12:49 -0800
-Message-ID: <CAEf4BzYG_Rw_vNWK1pX9WJPdWw8c4nxtQPFwisX13iepHT+7KQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4] bpf: Initialize same number of free nodes for
- each pcpu_freelist
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     wuqiang <wuqiang.matt@bytedance.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111074234.xm5a6ota7ppdsto5@google.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 11:00 PM Xu Kuohai <xukuohai@huawei.com> wrote:
->
-> On 11/11/2022 11:53 AM, wuqiang wrote:
-> > On 2022/11/10 20:21, Xu Kuohai wrote:
-> >> pcpu_freelist_populate() initializes nr_elems / num_possible_cpus() + 1
-> >> free nodes for some CPUs, and then possibly one CPU with fewer nodes,
-> >> followed by remaining cpus with 0 nodes. For example, when nr_elems == 256
-> >> and num_possible_cpus() == 32, CPU 0~27 each gets 9 free nodes, CPU 28 gets
-> >> 4 free nodes, CPU 29~31 get 0 free nodes, while in fact each CPU should get
-> >> 8 nodes equally.
-> >>
-> >> This patch initializes nr_elems / num_possible_cpus() free nodes for each
-> >> CPU firstly, then allocates the remaining free nodes by one for each CPU
-> >> until no free nodes left.
-> >>
-> >> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> >> Acked-by: Yonghong Song <yhs@fb.com>
-> >> ---
-> >> v4: Remove unneeded min()
-> >> v3: Simplify code as suggested by Andrii
-> >> v2: Update commit message and add Yonghong's ack
-> >> ---
-> >>   kernel/bpf/percpu_freelist.c | 26 +++++++++++++-------------
-> >>   1 file changed, 13 insertions(+), 13 deletions(-)
-> >>
-> >> diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
-> >> index b6e7f5c5b9ab..27f2c4aff623 100644
-> >> --- a/kernel/bpf/percpu_freelist.c
-> >> +++ b/kernel/bpf/percpu_freelist.c
-> >> @@ -100,22 +100,22 @@ void pcpu_freelist_populate(struct pcpu_freelist *s, void *buf, u32 elem_size,
-> >>                   u32 nr_elems)
-> >>   {
-> >>       struct pcpu_freelist_head *head;
-> >> -    int i, cpu, pcpu_entries;
-> >> +    unsigned int cpu, cpu_idx, i, j, n, m;
-> >> -    pcpu_entries = nr_elems / num_possible_cpus() + 1;
-> >> -    i = 0;
-> >> +    n = nr_elems / num_possible_cpus();
-> >> +    m = nr_elems % num_possible_cpus();
-> >> +
-> >> +    cpu_idx = 0;
-> >>       for_each_possible_cpu(cpu) {
-> >> -again:
-> >> -        head = per_cpu_ptr(s->freelist, cpu);
-> >> -        /* No locking required as this is not visible yet. */
-> >> -        pcpu_freelist_push_node(head, buf);
-> >> -        i++;
-> >> -        buf += elem_size;
-> >> -        if (i == nr_elems)
-> >> -            break;
-> >> -        if (i % pcpu_entries)
-> >> -            goto again;
-> >> +        j = n + (cpu_idx < m ? 1 : 0);
-> >> +        for (i = 0; i < j; i++) {
-> >> +            head = per_cpu_ptr(s->freelist, cpu);
-> >
-> > Better move it out of "i-loop",
->
-> OK, will do
->
+On Thu, Nov 10, 2022 at 11:42:34PM -0800, Fangrui Song wrote:
+> (+ sam@gentoo.org from Pedro Falcato's patch)
+> 
+> On 2022-11-10, Kees Cook wrote:
+> > Traditionally, only the final PT_LOAD for load_elf_interp() supported
+> > having p_memsz > p_filesz. Recently, lld's construction of musl's
+> > libc.so on PowerPC64 started having two PT_LOAD program headers with
+> > p_memsz > p_filesz.
+> > 
+> > As the least invasive change possible, check for p_memsz > p_filesz for
+> > each PT_LOAD in load_elf_interp.
+> > 
+> > Reported-by: Rich Felker <dalias@libc.org>
+> > Link: https://maskray.me/blog/2022-11-05-lld-musl-powerpc64
+> > Cc: Pedro Falcato <pedro.falcato@gmail.com>
+> > Cc: Fangrui Song <maskray@google.com>
+> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > Cc: Eric Biederman <ebiederm@xmission.com>
+> > Cc: linux-fsdevel@vger.kernel.org
+> > Cc: linux-mm@kvack.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v2: I realized we need to retain the final padding call.
+> > v1: https://lore.kernel.org/linux-hardening/20221111055747.never.202-kees@kernel.org/
+> > ---
+> > fs/binfmt_elf.c | 18 ++++++++++++++----
+> > 1 file changed, 14 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> > index 528e2ac8931f..0a24bbbef1d6 100644
+> > --- a/fs/binfmt_elf.c
+> > +++ b/fs/binfmt_elf.c
+> > @@ -673,15 +673,25 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+> > 				last_bss = k;
+> > 				bss_prot = elf_prot;
+> > 			}
+> > +
+> > +			/*
+> > +			 * Clear any p_memsz > p_filesz area up to the end
+> > +			 * of the page to wipe anything left over from the
+> > +			 * loaded file contents.
+> > +			 */
+> > +			if (last_bss > elf_bss && padzero(elf_bss))
+> 
+> Missing {
+> 
+> But after fixing this, I get a musl ld.so error.
+> 
+> > +				error = -EFAULT;
+> > +				goto out;
+> > +			}
+> > 		}
+> > 	}
+> > 
+> > 	/*
+> > -	 * Now fill out the bss section: first pad the last page from
+> > -	 * the file up to the page boundary, and zero it from elf_bss
+> > -	 * up to the end of the page.
+> > +	 * Finally, pad the last page from the file up to the page boundary,
+> > +	 * and zero it from elf_bss up to the end of the page, if this did
+> > +	 * not already happen with the last PT_LOAD.
+> > 	 */
+> > -	if (padzero(elf_bss)) {
+> > +	if (last_bss == elf_bss && padzero(elf_bss)) {
+> > 		error = -EFAULT;
+> > 		goto out;
+> > 	}
+> > -- 
+> > 2.34.1
+> > 
+> 
+> I added a new section to https://maskray.me/blog/2022-11-05-lld-musl-powerpc64
+> Copying here:
+> 
+> To test that the kernel ELF loader can handle more RW `PT_LOAD` program headers, we can create an executable with more RW `PT_LOAD` program headers with `p_filesz < p_memsz`.
+> We can place a read-only section after `.bss` followed by a `SHT_NOBITS` `SHF_ALLOC|SHF_WRITE` section. The read-only section will form a read-only `PT_LOAD` while the RW section will form a RW `PT_LOAD`.
+> 
+> ```text
+> #--- a.c
+> #include <assert.h>
+> #include <stdio.h>
+> 
+> extern const char toc[];
+> char nobits0[0] __attribute__((section(".nobits0")));
+> char nobits1[0] __attribute__((section(".nobits1")));
+> 
+> int main(void) {
+>   assert(toc[4096-1] == 0);
+>   for (int i = 0; i < 1024; i++)
+>     assert(nobits0[i] == 0);
+>   nobits0[0] = nobits0[1024-1] = 1;
+>   for (int i = 0; i < 4096; i++)
+>     assert(nobits1[i] == 0);
+>   nobits1[0] = nobits1[4096-1] = 1;
+> 
+>   puts("hello");
+> }
+> 
+> #--- toc.s
+> .section .toc,"aw",@nobits
+> .globl toc
+> toc:
+> .space 4096
+> 
+> .section .ro0,"a"; .byte 255
+> .section .nobits0,"aw",@nobits; .space 1024
+> .section .ro1,"a"; .byte 255
+> .section .nobits1,"aw",@nobits; .space 4096
+> 
+> #--- a.lds
+> SECTIONS { .ro0 : {} .nobits0 : {} .ro1 : {} .nobits1 : {} } INSERT AFTER .bss;
+> ```
+> 
+> ```sh
+> split-file a.txt a
+> path/to/musl-gcc -Wl,--dynamic-linker=/lib/libc.so a/a.c a/a.lds -o toy
+> ```
+> 
+> split-file is a utility in llvm-project.
 
-I did that while applying. Also added
+Where is a.txt? Also, it'd be nice to have this without needing the
+musl-gcc.
 
-Fixes: e19494edab82 ("bpf: introduce percpu_freelist")
-
-Please don't forget to add Fixes tag for future patches.
-
-Applied to bpf tree.
-
-> > and rename "j" to a meaningful name to avoid
-> > possible misuse.
-> >
-> The loop is short enough to be readable and "j" is not used elsewhere, so I
-> think it's good to keep the name simple.
->
-> >> +            /* No locking required as this is not visible yet. */
-> >> +            pcpu_freelist_push_node(head, buf);
-> >> +            buf += elem_size;
-> >> +        }
-> >> +        cpu_idx++;
-> >>       }
-> >>   }
-> >
-> > .
->
+-- 
+Kees Cook
