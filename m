@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255A5625587
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7322B625589
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbiKKImb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S233251AbiKKImk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiKKIm1 (ORCPT
+        with ESMTP id S233180AbiKKImd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:42:27 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F41B7C8E9;
-        Fri, 11 Nov 2022 00:42:26 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id 140so2879772pfz.6;
-        Fri, 11 Nov 2022 00:42:26 -0800 (PST)
+        Fri, 11 Nov 2022 03:42:33 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1787C8E0;
+        Fri, 11 Nov 2022 00:42:31 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id f63so3912165pgc.2;
+        Fri, 11 Nov 2022 00:42:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O6txTBfedUg47A+1SaRTB83c1B6flmoZ3lT0pRxr6Rg=;
-        b=KACvd+ObSftiPnKEo0vZd2XEFkWsCd6GAtWOyAS9KEZjkuMyH3rfn0o+QKnBVHCwtJ
-         h2Yn10CrD4in1vbPFh+ByTYMAop38ANjC7GQ/EHkw9yjZXIOZK0+hk5hrWNqGbxjtF9A
-         JWtK7ihib3/jvdlW8I0d2wVWQP3v4uwzrKRUY15eduSFJXS32//BgqaNHsXILZnZ9Fy4
-         58CU0eMBXpjJn/0ETNXLDHsNLyhmr5iI1dKFZC7N1onj5XmIQp+kXIkOhUuBRbx157Ra
-         XLywL4q31iKRaiWsTFDi485zJeQWTUSAtmYjqYGL2Ito6wPQcnrD1zN0+PwrBVACvSlr
-         e3EQ==
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ufORKQiDl3My/Sxu75qdEz6doPHgCGMva2vtUdxxbeA=;
+        b=W3r+pgs2MlYxwca0+X2vjtRr3xGo9WWBLk66EM4nZszDGwA9k3X4Cx5zV0JMtCtK/x
+         gKDp3ly99dd94fdpuNOQlwX789Sdd/Vu4gYV+dt7zvYOW6det3p5Tfiw893I8ra/YFQ1
+         rAbstYYE7TBuIFQjT+uKfW988qXRPCLoTUv1NG7j/1tmCX5RO8Ruqexf4zvLHD1N7j44
+         pYysl+s90nMEnpIZixCgj1isKAPP/EhDvrLd417NOo3p8PXrOxFl0T6nNAT1DOvk8SWV
+         niuKCVWbB3xCUW03Sel2Vsaovs9YoksX63BCG6EaLRUiwyJdO/Z9YwPIsFA5swZGqrVt
+         z2IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O6txTBfedUg47A+1SaRTB83c1B6flmoZ3lT0pRxr6Rg=;
-        b=g6NfEJT6l+kMJXxzaIkob46BrAYeXgrh1XThQBOCjXM/a91iMVXgZbTRlpjOuhclYf
-         hzGSfgTCvbyO4Aj0r6SfOfexMqmpWh08xVYv0WPto0ikGtGFeobyhxrM6JTvfhUUizSS
-         zguVXOwDqsT6mRBt9aSUJCusr5k1nFrqNx3i64Bk+YfRjhOb+i2SNo/WY9/oEsIbqzZt
-         DV9uA1ExFi77pRF2a4uTCUPNC9q5QparFKGtdeqopyzH3d93dQde7RbE+0pg+VxBcYXf
-         lmN4BptSDhUdhOSki+1BlhOdeDFbJr4oHHU3VSu4hwLEWXzgpbiCrhOApv1oN1qVAV7E
-         mRRA==
-X-Gm-Message-State: ANoB5pnWpMrxuTDb8TnzH7ZPq8tmbY8eiFjY6BAA9sk1h809b/v44CH9
-        0hWThTZRhKBB1squu9xlNcJp7PxJiyfDuw==
-X-Google-Smtp-Source: AA0mqf7QnaktnhdZSNb/U7ZuRCYdiuwIKrrMVuo8uoRg1qJGsrXDA6izuMn+9t125FdwbsWc80/xEw==
-X-Received: by 2002:a62:174b:0:b0:56d:3de3:c525 with SMTP id 72-20020a62174b000000b0056d3de3c525mr1669410pfx.41.1668156145849;
-        Fri, 11 Nov 2022 00:42:25 -0800 (PST)
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ufORKQiDl3My/Sxu75qdEz6doPHgCGMva2vtUdxxbeA=;
+        b=dsoykX853ya+nsgWVVF8KzCCJkk144FLl38fDeUjHkhhGScUeI0F1qJD+/wgcF4tYH
+         nAzgJpa6Rfiny7Hez0os8KC91L3c/YdNGQ5WJOEE5yBW1Wh4VSIIrHHFqQBBRlXuEA1b
+         HLFiohmf7TNq5WbAy0+X7qky9FemCVavvkJRkmX829rzzjBoVnGCRt6hy5teLA/68uIR
+         Y3h6xxOEMPczd1WoLeQlPOpbb0Bsj+uFnHPPRYCAoIU+EVeQlzmlL5eaodRDX0wwS8Gm
+         ljLbZKrm/VLMhLd/ACF8MfXV4lL4Y8toNmJ5hYDKpBhfcIXGkzz5/3isZ6839O/aGDf7
+         uYmA==
+X-Gm-Message-State: ANoB5pnde3Vhdx3GceEa+WFXimAFJvBgiB1VCHQB0YtxkkNF38TeZk86
+        2T9Po7U62gG22hdRTybKO9g=
+X-Google-Smtp-Source: AA0mqf6nD3e0rQEbmdBh/bIQ6DoIgNmLGa42XXbGZQUPUjZYWzTm7LJF0MGUK116zFrlLtyngC3bIw==
+X-Received: by 2002:aa7:970d:0:b0:56b:823d:e3b5 with SMTP id a13-20020aa7970d000000b0056b823de3b5mr1544074pfg.81.1668156151494;
+        Fri, 11 Nov 2022 00:42:31 -0800 (PST)
 Received: from xm06403pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id l5-20020a170903244500b00186f81a074fsm1088731pls.290.2022.11.11.00.42.22
+        by smtp.gmail.com with ESMTPSA id l5-20020a170903244500b00186f81a074fsm1088731pls.290.2022.11.11.00.42.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 00:42:25 -0800 (PST)
+        Fri, 11 Nov 2022 00:42:31 -0800 (PST)
 From:   Wenchao Chen <wenchao.chen666@gmail.com>
 To:     ulf.hansson@linaro.org, adrian.hunter@intel.com
 Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         megoo.tang@gmail.com, lzx.stg@gmail.com
-Subject: [PATCH 0/1] mmc: Reduce tuning log output
-Date:   Fri, 11 Nov 2022 16:42:13 +0800
-Message-Id: <20221111084214.14822-1-wenchao.chen666@gmail.com>
+Subject: [PATCH 1/1] mmc: sdhci: Fixed too many logs being printed during tuning
+Date:   Fri, 11 Nov 2022 16:42:14 +0800
+Message-Id: <20221111084214.14822-2-wenchao.chen666@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221111084214.14822-1-wenchao.chen666@gmail.com>
+References: <20221111084214.14822-1-wenchao.chen666@gmail.com>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,55 +70,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wenchao Chen <wenchao.chen@unisoc.com>
 
-During the HS200 Tuning process, a lot of "mmc0: Got data interrupt 0x00200000
-even though no data operation was in progress." logs were printed.
-From the cmd in the log, it is CMD21.
-[    4.547365][    C0] mmc0: Got data interrupt 0x00200000 even though no data operation was in progress.
-[    4.564088][    C0] mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
-[    4.571213][    C0] mmc0: sdhci: Sys addr:  0x00000001 | Version:  0x00000004
-[    4.578339][    C0] mmc0: sdhci: Blk size:  0x00000080 | Blk cnt:  0x00000000
-[    4.585466][    C0] mmc0: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
-[    4.592595][    C0] mmc0: sdhci: Present:   0x01f000f0 | Host ctl: 0x00000030
-[    4.599723][    C0] mmc0: sdhci: Power:     0x00000000 | Blk gap:  0x00000000
-[    4.606849][    C0] mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00000007
-[    4.613978][    C0] mmc0: sdhci: Timeout:   0x0000000c | Int stat: 0x00000000
-[    4.621106][    C0] mmc0: sdhci: Int enab:  0x037f000b | Sig enab: 0x037f000b
-[    4.628233][    C0] mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
-[    4.635360][    C0] mmc0: sdhci: Caps:      0x1e6d0080 | Caps_1:   0x08000007
-[    4.642489][    C0] mmc0: sdhci: Cmd:       0x0000153a | Max curr: 0x000003fc
-[    4.649616][    C0] mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000900
-[    4.656743][    C0] mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
-[    4.663881][    C0] mmc0: sdhci: Host ctl2: 0x00003005
-[    4.669002][    C0] mmc0: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0x00000000f0200200
-[    4.811901][    C0] mmc0: sdhci: ============================================
+During the HS200 tuning process, too many tuning errors are printed in
+the log.
 
-.......
-
-[    4.819456][    C0] mmc0: Got data interrupt 0x00200000 even though no data operation was in progress.
-[    4.835111][    C0] mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
-[    4.835116][    C0] mmc0: sdhci: Sys addr:  0x00000001 | Version:  0x00000004
-[    4.870574][    C0] mmc0: sdhci: Blk size:  0x00000080 | Blk cnt:  0x00000000
-[    4.870580][    C0] mmc0: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
-[    4.920122][    C0] mmc0: sdhci: Present:   0x01f000f0 | Host ctl: 0x00000030
-[    4.927249][    C0] mmc0: sdhci: Power:     0x00000000 | Blk gap:  0x00000000
-[    4.934377][    C0] mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00000007
-[    4.941506][    C0] mmc0: sdhci: Timeout:   0x0000000c | Int stat: 0x00000000
-[    4.948631][    C0] mmc0: sdhci: Int enab:  0x037f000b | Sig enab: 0x037f000b
-[    4.955759][    C0] mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
-[    4.962887][    C0] mmc0: sdhci: Caps:      0x1e6d0080 | Caps_1:   0x08000007
-[    4.970014][    C0] mmc0: sdhci: Cmd:       0x0000153a | Max curr: 0x000003fc
-[    4.977143][    C0] mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000900
-[    4.984270][    C0] mmc0: sdhci: Resp[2]:   0x000ls00900 | Resp[3]:  0x00000000
-[    4.991398][    C0] mmc0: sdhci: Host ctl2: 0x00003005
-[    4.996526][    C0] mmc0: sdhci: ADMA Err:  0x00000000 | ADMA Ptr: 0x00000000f0200200
-[    4.811901][    C0] mmc0: sdhci: ============================================
-
-Wenchao Chen (1):
-  mmc: sdhci: Fixed too many logs being printed during tuning
-
+Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+---
  drivers/mmc/host/sdhci.c | 4 ++++
  1 file changed, 4 insertions(+)
 
+diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+index fef03de85b99..a503b54305eb 100644
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -3401,6 +3401,10 @@ static void sdhci_data_irq(struct sdhci_host *host, u32 intmask)
+ 		if (host->pending_reset)
+ 			return;
+ 
++		command = SDHCI_GET_CMD(sdhci_readw(host, SDHCI_COMMAND));
++		if (command == MMC_SEND_TUNING_BLOCK || command == MMC_SEND_TUNING_BLOCK_HS200)
++			return;
++
+ 		pr_err("%s: Got data interrupt 0x%08x even though no data operation was in progress.\n",
+ 		       mmc_hostname(host->mmc), (unsigned)intmask);
+ 		sdhci_err_stats_inc(host, UNEXPECTED_IRQ);
 -- 
 2.17.1
 
