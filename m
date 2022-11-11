@@ -2,117 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61250625F3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25203625F3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbiKKQQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S233842AbiKKQRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbiKKQQ4 (ORCPT
+        with ESMTP id S233688AbiKKQRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:16:56 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1647A658C;
-        Fri, 11 Nov 2022 08:16:56 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 47D7E1EC042F;
-        Fri, 11 Nov 2022 17:16:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668183414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=eMsQDKWlL6uraJj5HUJ5zGvCAF7tvNGuIrG9jb/77bQ=;
-        b=VyMmcjUcFzrEj87XvYgjPWlJQ/nyBUi8rvS6Ssa/rQLLvz5ySP90o3+lLi470c2UGCJH4Q
-        XHMNVCYWD8K8q5Bdj+yxPeozoc4uL0Sna1f5+BEWGNiCz8qNA230r0nmeJxcwutsJB+XOh
-        w1RL933kcSGlhMUDsr4IHlBsuIY72JE=
-Date:   Fri, 11 Nov 2022 17:16:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jithu Joseph <jithu.joseph@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, gregkh@linuxfoundation.org, ashok.raj@intel.com,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
-        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
-Subject: Re: [PATCH v2 08/14] platform/x86/intel/ifs: Add metadata support
-Message-ID: <Y251cGhb+x7Lqk9W@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-9-jithu.joseph@intel.com>
+        Fri, 11 Nov 2022 11:17:40 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54341658C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:17:38 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id i21so8243292edj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:17:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PPFK299nWfDr/V9J7p74DjQEhALYVf51OEuCFpbYSbM=;
+        b=KBU+AAvwge0Xr3lQE8QmWKlPSunFws73fRLUrfKBI3t0C7DwjZNxz9x1Rs/CD8AOg7
+         aACR3Djshp/4SGNH1bl3rM8whcVgrQwz8IpxNGkznbL+XM9X+u05meAx3yOmRGlMyEoe
+         bXMuNxJrrrdXPC6j9kBN7+DChSccZwvS1fHmE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PPFK299nWfDr/V9J7p74DjQEhALYVf51OEuCFpbYSbM=;
+        b=sJtv8NM4auKGtdB03/9UPjN62Lmf77oR7d1bPs0nIQW0lKYMB+rkpLwg4ZYqUkS2bb
+         xsB9eQhiDFtpJcMsi6Jxz3GW/1N1CGpI+LPJqObm5AT6YI9d5eWUZPeXoS/Q4fxExZ/r
+         5ThgCUoesW6lJSd7BuCB5Tt3MChGO4QDiRy1s8gI5+kt56XVNcADr0EasgEkWywyaHDl
+         dMgJJAf6uAzlMNo2ob/UnurS1VgYxDeO/uGO9bPSAyiM4XEtNarRjJWNgba52daQan2P
+         qpiOKBX9By7leni/ZQEaKesyAoR9sOIqSdJsvUqJgXtcqa0WVyaOPaCxOSqtFkIDQs/d
+         3jRQ==
+X-Gm-Message-State: ANoB5pnFPzKz75pGHjnpA1ThYjUd3TB3lQqAwPtDKGafyZC327LAkzW1
+        bNvAoX8/qn77HH9yBIDrRte2pA==
+X-Google-Smtp-Source: AA0mqf7u9SiEuoNGLTdYBPh06DGK3wmN6MkxzOpkOfRUqlwNciq8kr6m4nWPJ2n3bwGG3KfupCj0Mg==
+X-Received: by 2002:aa7:d4d3:0:b0:45f:b80f:1fe8 with SMTP id t19-20020aa7d4d3000000b0045fb80f1fe8mr2064057edr.118.1668183456903;
+        Fri, 11 Nov 2022 08:17:36 -0800 (PST)
+Received: from prevas-ravi.tritech.se ([80.208.71.65])
+        by smtp.gmail.com with ESMTPSA id v2-20020a170906292200b007aacfce2a91sm1038990ejd.27.2022.11.11.08.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 08:17:35 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: dsa: use NET_NAME_PREDICTABLE for user ports with name given in DT
+Date:   Fri, 11 Nov 2022 17:17:28 +0100
+Message-Id: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221107225323.2733518-9-jithu.joseph@intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 02:53:17PM -0800, Jithu Joseph wrote:
-> diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
-> index 89ce265887ea..60ba5a057f91 100644
-> --- a/drivers/platform/x86/intel/ifs/load.c
-> +++ b/drivers/platform/x86/intel/ifs/load.c
-> @@ -44,6 +44,38 @@ static const char * const scan_authentication_status[] = {
->  	[2] = "Chunk authentication error. The hash of chunk did not match expected value"
->  };
->  
-> +#define META_TYPE_END		(0)
+When a user port has a label in device tree, the corresponding
+netdevice is "predictably named by the kernel".
 
-MC_HEADER_META_TYPE_END
+Expose that information properly for the benefit of userspace tools
+that make decisions based on the name_assign_type attribute,
+e.g. a systemd-udev rule with "kernel" in NamePolicy.
 
-> +
-> +struct metadata_header {
-> +	unsigned int		type;
-> +	unsigned int		blk_size;
-> +};
-> +
-> +static struct metadata_header *ifs_find_meta_data(void *ucode, unsigned int meta_type)
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ net/dsa/dsa2.c  |  3 ---
+ net/dsa/slave.c | 13 +++++++++++--
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-It's a static function - no need for the ifs_ prefix.
-
-> +{
-> +	struct metadata_header *meta_header;
-> +	unsigned long data_size, total_meta;
-> +	unsigned long meta_size = 0;
-> +
-> +	data_size = get_datasize(ucode);
-> +	total_meta = ((struct microcode_intel *)ucode)->hdr.metasize;
-> +
-
-
-^ Superfluous newline.
-
-> +	if (!total_meta)
-> +		return NULL;
-> +
-> +	meta_header = (ucode + MC_HEADER_SIZE + data_size) - total_meta;
-> +
-> +	while ((meta_header->type != META_TYPE_END) && meta_header->blk_size &&
-
-You don't need the brackets.
-
-> +	       meta_size < total_meta) {
-
-And you can align all three conditions vertically for better readability:
-
-        while (meta_header->type != META_TYPE_END && 
-               meta_header->blk_size &&
-               meta_size < total_meta) {
-
-...
-
+diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
+index e504a18fc125..522fc1b6e8c6 100644
+--- a/net/dsa/dsa2.c
++++ b/net/dsa/dsa2.c
+@@ -1364,9 +1364,6 @@ static struct dsa_port *dsa_port_touch(struct dsa_switch *ds, int index)
+ 
+ static int dsa_port_parse_user(struct dsa_port *dp, const char *name)
+ {
+-	if (!name)
+-		name = "eth%d";
+-
+ 	dp->type = DSA_PORT_TYPE_USER;
+ 	dp->name = name;
+ 
+diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+index a9fde48cffd4..dfefcc4a9ccf 100644
+--- a/net/dsa/slave.c
++++ b/net/dsa/slave.c
+@@ -2374,16 +2374,25 @@ int dsa_slave_create(struct dsa_port *port)
+ {
+ 	struct net_device *master = dsa_port_to_master(port);
+ 	struct dsa_switch *ds = port->ds;
+-	const char *name = port->name;
+ 	struct net_device *slave_dev;
+ 	struct dsa_slave_priv *p;
++	const char *name;
++	int assign_type;
+ 	int ret;
+ 
+ 	if (!ds->num_tx_queues)
+ 		ds->num_tx_queues = 1;
+ 
++	if (port->name) {
++		name = port->name;
++		assign_type = NET_NAME_PREDICTABLE;
++	} else {
++		name = "eth%d";
++		assign_type = NET_NAME_UNKNOWN;
++	}
++
+ 	slave_dev = alloc_netdev_mqs(sizeof(struct dsa_slave_priv), name,
+-				     NET_NAME_UNKNOWN, ether_setup,
++				     assign_type, ether_setup,
+ 				     ds->num_tx_queues, 1);
+ 	if (slave_dev == NULL)
+ 		return -ENOMEM;
 -- 
-Regards/Gruss,
-    Boris.
+2.37.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
