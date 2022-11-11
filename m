@@ -2,168 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911F76261B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34496261B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbiKKSz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 13:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
+        id S233758AbiKKS4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 13:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKKSz0 (ORCPT
+        with ESMTP id S230303AbiKKS4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:55:26 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAAA71F22
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:55:25 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id g7so1288465ile.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:55:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=g9eX0z58SKZAsOdWY7m+4OycDcrautiSe0xtp5Jr/YA=;
-        b=oBkyoNti/n1H5DmNo5si5qEcD97KnH26ULsAv7/mh/gPF0I34K0iSx2MPU9UD9msZm
-         OGWU3y4E2vepo7LW/uixh9h+9a92AbtaGcYsE1/LjAjOXmzCpzvh3pmBPWttCVExH/yf
-         feeD9w1lk1m/pbK2qonPx/ctIIAYxGBHzYU6udBvP0y03PWol2GJBNV1HgVh6+oZjGEK
-         SNJqvAdzsOZnmzyY/CR8tGtwXuJHbnVwSHCM4QqJRXM4ocObhIWDmVZZwsRl/gLI3mso
-         +yKkXrnYTky4dY+fCjs0mZjcSZGlgSgVsw6+uxDkLuRJP5GQWH63URM3rN3hWmdNpy2d
-         nO0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g9eX0z58SKZAsOdWY7m+4OycDcrautiSe0xtp5Jr/YA=;
-        b=R5Cfi1dgGEjfm4N3bySKdmFuo2G6YYd42xdhlEgjjxVxxfZoSfADsHGvUETMqumvRa
-         dVdqWnJq01N2nKzi7dPpFBl9EYLO/ptz800uZuMI1gBUL3o2hS3aqHPm/KOlfzdfRNsV
-         CcnHKG3ejHA5dQAivDuYeBdzTOifJuTiV3q1X3dp3NNKKZbdf/DSjJl/Csi0BhQvnjiV
-         dk7GBQrgYAMZgkGXC4UjRcY80MHGBtC8PGteC6PJLZ0E/YBoOfvh9xTTx2cbLeq42QEs
-         OydTe9wjiY/TwDHzwoGcSr2eLCIgx6g/Lj+tjXaX86vVp6MZcO9Ov+qIpQsWfaQGg3CN
-         C3iQ==
-X-Gm-Message-State: ANoB5pkUhUO1feILiWJF9408kpX45zJpgswAsJBKn8ARhlPuD4n16NjP
-        Dow+Vc7QaIpyRQDsP8MSXiMwhOnj1BTPsMiboHP+5Q==
-X-Google-Smtp-Source: AA0mqf6hLmbobvzmsTs81beRE0LT0fUFgNcuW/eZQJXVhOOi5VsuVDwTovAvzok6/rTjGxsKTMoroYPCFtGti9Yy2CA=
-X-Received: by 2002:a92:de41:0:b0:2ff:9e9f:6604 with SMTP id
- e1-20020a92de41000000b002ff9e9f6604mr1734778ilr.20.1668192925093; Fri, 11 Nov
- 2022 10:55:25 -0800 (PST)
-MIME-Version: 1.0
-References: <tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com>
- <Y26FgIJLR3nVKjcb@google.com> <Y26MSS2twSskZ5J2@lore-desk>
- <CAKH8qBvxZBX7_GQYQzSrZ5j=P3rViyqNq3V3oo5CtEMR9BQepA@mail.gmail.com> <Y26QjqvVTosoCgPT@lore-desk>
-In-Reply-To: <Y26QjqvVTosoCgPT@lore-desk>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Fri, 11 Nov 2022 10:55:14 -0800
-Message-ID: <CAKH8qBsA-r=7S9hrsX=S7wXMaUikNh0gY=PdQK0urjORahrVBw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix error undeclared identifier 'NF_NAT_MANIP_SRC'
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Rong Tao <rtoax@foxmail.com>, ast@kernel.org,
-        Rong Tao <rongtao@cestc.cn>, kernel test robot <lkp@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
-        <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 13:56:52 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9632A71F28;
+        Fri, 11 Nov 2022 10:56:50 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2D9025C00AB;
+        Fri, 11 Nov 2022 13:56:48 -0500 (EST)
+Received: from imap46 ([10.202.2.96])
+  by compute5.internal (MEProxy); Fri, 11 Nov 2022 13:56:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1668193008; x=1668279408; bh=sZ
+        nlr/hRQupQXvXt4IW1vs60z2riRmemioARd1D/gO4=; b=ZrrwOctX5eIYzJn1bU
+        fYGpI8KeH5Pkv1JpSS3fSxZ76+5mhH+ejG4OPWU2F8Hvsj6uAW7DeVKcM6uR9uml
+        G3iynlovi6mGI53/jCfQCmTFmxovQWUl8cm6mRjfflheEymyoLe7mjIMJLSgYWse
+        25u0lKqyr0YJOSzb5GRbNp/roPsiXJwPW2DMQT0llUScQYitf42vr6mZV2xbFliy
+        q0+P3u0bMbbgG/76P4JW8TtIOw8M/XZCqi7L+Trv3hKM7qhNF1Cm6XAXL9d2erwl
+        kun2qIX4w6aU5dXadjH8vHAUJzYyx5amioL9UrLaKX3rGELBitLZQWKywGnvW/un
+        +u8w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668193008; x=1668279408; bh=sZnlr/hRQupQXvXt4IW1vs60z2ri
+        RmemioARd1D/gO4=; b=YRar+X8Tqtg2N7smwupOrZpOwtIAgn9ZZmO453vvJB0U
+        u6waDefwAuJQ1saK7Q7ZZmSjXf7hoUbVfrr1QsSBbL3l9bzpW/JxxSJ9fK9jizTu
+        eyDyuyuRxQ4h/rEt8fgi6eSEz+t5BwmF8zMJULBWI+gEgxUbj1GOJi+MsF6+PjNS
+        j9lM6wEgPghxw4C3r5Hh2JjFWGutMGR/ZeyT1mCOOI26t+tVJ+YAwioMmnhkw0wO
+        z4RmxD7HXT48J6tilNAX4g6/D7KDErCcj6gTP4HEmB3AW9uWJ7RUQIa5T1p+O++x
+        r4OQFTzexV7bV339jrSviTzwZpwqo15skkfRsK3sag==
+X-ME-Sender: <xms:75puYzt8UvOudHjr4oMqDLcpI-fyEpW05FdO40CDTKYnqdIF_ErRHQ>
+    <xme:75puY0cDFq6mAIk1gLi3Y2_uWB0EGNcA9CDv7-Z49FC1ik8_mwYPADQE647Y2FMva
+    mXE3dkC9yCYK1g0EQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeigdduudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedflfho
+    hhhnucfvhhhomhhsohhnfdcuoehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrg
+    hilhdrtghomhdrrghuqeenucggtffrrghtthgvrhhnpedvgffgjeettdeifedvfedvheeu
+    tdeitedthfetudfffeeuvdfhkeelleffgeeivdenucffohhmrghinhepkhgvrhhnvghlrd
+    horhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
+    ghhithesjhhohhhnthhhohhmshhonhdrfhgrshhtmhgrihhlrdgtohhmrdgruh
+X-ME-Proxy: <xmx:75puY2yHJXUgu1yBQ8ym-gOer1XHMAVxXxNP5VAsr76pCusAnzUcnA>
+    <xmx:75puYyMdGV2v2Xh3zVgkHq_sXSxDKqNSoPtQ1ZZ2Me6OT_AayT137w>
+    <xmx:75puYz-eZqapWUkqo4WcSck2e8QFJ5nZoT4k8zFcKyGerXIux9ce4Q>
+    <xmx:8JpuY0PtMm4pnhi4Gg0Y7GpfROo7tYxFf6T_caZuoezlrlK92cXKdg>
+Feedback-ID: ic081425d:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D7D522A20080; Fri, 11 Nov 2022 13:56:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <d9b2102a-5a10-4c81-8baa-5f68218419fb@app.fastmail.com>
+In-Reply-To: <20221104205242.3440388-3-git@johnthomson.fastmail.com.au>
+References: <20221104205242.3440388-1-git@johnthomson.fastmail.com.au>
+ <20221104205242.3440388-3-git@johnthomson.fastmail.com.au>
+Date:   Fri, 11 Nov 2022 18:55:29 +0000
+From:   "John Thomson" <git@johnthomson.fastmail.com.au>
+To:     "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
+        "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        "Rob Herring" <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "John Thomson" <git@johnthomson.fastmail.com.au>
+Subject: Re: [PATCH 2/2] PCI: mt7621: add sentinel to quirks table
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 10:12 AM Lorenzo Bianconi <lorenzo@kernel.org> wrote:
+On Fri, 4 Nov 2022, at 20:52, John Thomson wrote:
+> With mt7621 soc_dev_attr fixed to register the soc as a device,
+> kernel will experience an oops in soc_device_match_attr
 >
-> > On Fri, Nov 11, 2022 at 9:54 AM Lorenzo Bianconi <lorenzo@kernel.org> wrote:
-> > >
-> > > > On 11/11, Rong Tao wrote:
-> > > > > From: Rong Tao <rongtao@cestc.cn>
-> > > >
-> > > > > commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
-> > > > > introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
-> > > > > and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
-> > > > > kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c. We copy enum
-> > > > > nf_nat_manip_type to test_bpf_nf.c fix this error.
-> > > >
-> > > > > How to reproduce the error:
-> > > >
-> > > > >      $ make -C tools/testing/selftests/bpf/
-> > > > >      ...
-> > > > >        CLNG-BPF [test_maps] test_bpf_nf.bpf.o
-> > > > >        error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
-> > > > >              bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
-> > > > >                                                             ^
-> > > > >        error: use of undeclared identifier 'NF_NAT_MANIP_DST'
-> > > > >              bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
-> > > > >                                                             ^
-> > > > >      2 errors generated.
-> > > >
-> > > > $ grep NF_NAT_MANIP_SRC
-> > > > ./tools/testing/selftests/bpf/tools/include/vmlinux.h
-> > > >         NF_NAT_MANIP_SRC = 0,
-> > > >
-> > > > Doesn't look like your kernel config compiles netfilter nat modules?
-> > >
-> > > yes, in bpf kself-test config (tools/testing/selftests/bpf/config) nf_nat
-> > > is compiled as built-in. This issue occurs just if it is compiled as module.
-> >
-> > Right, but if we unconditionally define this enum, I think you'll
-> > break the case where it's compiled as a built-in?
-> > Since at least in my vmlinux.h I have all the defines and this test
-> > includes vmlinux.h...
+> This quirk test was introduced in the staging driver in
+> commit b483b4e4d3f6 ("staging: mt7621-pci: add quirks for 'E2' revision
+> using 'soc_device_attribute'"), and the staging driver was moved in
+> commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host
+> controller driver") for the 5.16 kernel
 >
-> yes, it is correct.
+> Link: 
+> https://lore.kernel.org/lkml/26ebbed1-0fe9-4af9-8466-65f841d0b382@app.fastmail.com
+> Fixes: b483b4e4d3f6 ("staging: mt7621-pci: add quirks for 'E2' revision
+> using 'soc_device_attribute'")
+> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+> ---
+>  drivers/pci/controller/pcie-mt7621.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/controller/pcie-mt7621.c 
+> b/drivers/pci/controller/pcie-mt7621.c
+> index 4bd1abf26008..ee7aad09d627 100644
+> --- a/drivers/pci/controller/pcie-mt7621.c
+> +++ b/drivers/pci/controller/pcie-mt7621.c
+> @@ -466,7 +466,8 @@ static int mt7621_pcie_register_host(struct 
+> pci_host_bridge *host)
+>  }
+> 
+>  static const struct soc_device_attribute mt7621_pcie_quirks_match[] = {
+> -	{ .soc_id = "mt7621", .revision = "E2" }
+> +	{ .soc_id = "mt7621", .revision = "E2" },
+> +	{ /* sentinel */ }
+>  };
+> 
+>  static int mt7621_pcie_probe(struct platform_device *pdev)
+> -- 
+> 2.37.2
 
-And it will break the CI:
+Ping for the PCI change.
+Original link: https://lore.kernel.org/lkml/20221104205242.3440388-3-git@johnthomson.fastmail.com.au/#t
+I would like this pci controller patch applied before we fix the MIPS mt7621 early kzalloc boot failure.
+The phy-pci patch was accepted.
 
-$ grep NETFILTER tools/testing/selftests/bpf/config
-CONFIG_NETFILTER=y
 
-So yeah, not sure what to do here. The selftests expect "sane" configs
-(see that bpf/config above) which is not what the bot seems to be
-doing...
-
-> > > Regards,
-> > > Lorenzo
-> > >
-> > > >
-> > > > > Link: https://lore.kernel.org/lkml/202210280447.STsT1gvq-lkp@intel.com/
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> > > > > ---
-> > > > >   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
-> > > > >   1 file changed, 5 insertions(+)
-> > > >
-> > > > > diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > > b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > > index 227e85e85dda..307ca166ff34 100644
-> > > > > --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > > +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-> > > > > @@ -3,6 +3,11 @@
-> > > > >   #include <bpf/bpf_helpers.h>
-> > > > >   #include <bpf/bpf_endian.h>
-> > > >
-> > > > > +enum nf_nat_manip_type {
-> > > > > +   NF_NAT_MANIP_SRC,
-> > > > > +   NF_NAT_MANIP_DST
-> > > > > +};
-> > > > > +
-> > > > >   #define EAFNOSUPPORT 97
-> > > > >   #define EPROTO 71
-> > > > >   #define ENONET 64
-> > > > > --
-> > > > > 2.31.1
-> > > >
+Cheers,
+-- 
+  John Thomson
