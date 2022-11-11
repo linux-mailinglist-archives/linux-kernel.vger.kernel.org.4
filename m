@@ -2,237 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001C3625328
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 06:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCDF62532C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 06:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbiKKFkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 00:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S232110AbiKKFmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 00:42:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKKFki (ORCPT
+        with ESMTP id S230181AbiKKFmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 00:40:38 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2FA42996;
-        Thu, 10 Nov 2022 21:40:37 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id b185so4016842pfb.9;
-        Thu, 10 Nov 2022 21:40:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D8HH1xBFiha6+sm/Y4eoKI3Sva17f983aTsKIsT9yJg=;
-        b=XOCtEjy6X6yotSYRZaRr4X9l+mtikYBW/JdosZi1C9LWHw3eNb8uToajxLxhJnWXdz
-         mg1ZNtzBsbT/ZjaMOsHV0pYETDxI+tMVubLuOLI1Qt++d2dYYWDVnO0AOAMJDr6MieXZ
-         KzHFmG/C+gR9ZuKEGWeBIvwjf+4gn2C7gY3zH5aJpLS4rGAggIP7dVuDZ1V4uXhHgTjj
-         XujCXOk10zqTj+EMhBxkzAzGI/uFLE1ITWDGbnjk5aqFByRlenlRnBDPb9B4y/eR5lRu
-         d5F33g3vzOE31hgf3JJdkPb1+XMI00GY6FaP1ZM1vUcUoR0u/vVgOlzxgeo5rmIQwsHo
-         oFDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D8HH1xBFiha6+sm/Y4eoKI3Sva17f983aTsKIsT9yJg=;
-        b=QPpHJJgsWvECxKKkWub1rdb5HD6nDmvS2n2Kk0c4yMN9qZk+hZ9ezzbjF6AIstBcUy
-         XFe1kEmlv0sT5THVLifUY4Mp7FmgEOghj7UJip5lVFxsK6FpnMarTAh1vUv96BO7Te0n
-         Jmavacs6B1NACcsMyo2DGUv+9TNdfCz5ppIjrsL25U7MB8VaQKfqBrAqdljajEgCa9Ew
-         csmyzEVgZHVwrLJDBTvTOnapez7dNGDdnsR+xhXI7+1FmnCvtBy0oK5SaSxansdn+6WS
-         lIa3DCFkXF205hxQBhRut3IiuPYuixcb4anH+Ma3kKvuPQLr3JMoJhQ608fzil+UYZJe
-         ri1g==
-X-Gm-Message-State: ANoB5pm4IWS+CdcuO3x+0w/SQnoQ4fVUmwrmrfnUMhhqS2kUNdd3Tf4i
-        vF/UaojlPmBW9BPa32gb2qXvP9vRPJcyWl3U33QgbUPpcdhEbA==
-X-Google-Smtp-Source: AA0mqf7LtyWb4mv/BiYN+GCemkrpM0E23HkAcxyLA53+ZairQeI1XE3OCKbdza4ZBfABDJlMa+kqN31acJjCn/ox24c=
-X-Received: by 2002:a63:a47:0:b0:46f:b3e:4d46 with SMTP id z7-20020a630a47000000b0046f0b3e4d46mr309632pgk.265.1668145236629;
- Thu, 10 Nov 2022 21:40:36 -0800 (PST)
+        Fri, 11 Nov 2022 00:42:15 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F10D682AC;
+        Thu, 10 Nov 2022 21:42:13 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8AxDdmz4G1jSwUGAA--.18633S3;
+        Fri, 11 Nov 2022 13:42:11 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeCs4G1jrq4QAA--.45491S2;
+        Fri, 11 Nov 2022 13:42:08 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v7 1/2] soc: loongson: add GUTS driver for loongson-2 platforms
+Date:   Fri, 11 Nov 2022 13:42:00 +0800
+Message-Id: <20221111054201.18528-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz> <60f6526fffa99416d2429dfb0b454148170cce8a.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
-In-Reply-To: <60f6526fffa99416d2429dfb0b454148170cce8a.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
-From:   Cye Borg <cyborgyn@gmail.com>
-Date:   Fri, 11 Nov 2022 06:40:24 +0100
-Message-ID: <CAD4NMubS_DV0+1hgz3MEwNd4m9MUpUHXQ_EPJdd2MsgvMBSqpw@mail.gmail.com>
-Subject: Re: [PATCH v3 08/15] MIPS: IP27: remove KV_MAGIC
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxLeCs4G1jrq4QAA--.45491S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWfJFW5tFW5KF4rur1xuryDJrb_yoWDWw15pa
+        1fCa4rGrWUJF45urs8Ja48WFyY9as7Ca9xZF4Igwn8urykA34UXasrJFyUZrs7AryDA342
+        qF95C3yjkFWUA3DanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
+        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
+        Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUIdWrDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just asking:
-This code in SGI seems to help bring online other CPUs.
-- Does it use the firmware to do it?
-- Is there a possibility that the magic number in this case is used by
-the firmware?
-- If yes: do we break multiprocessing on SGI if we delete this
-"useless relic", which is not referenced in the linux code elsewhere?
+The global utilities block controls PCIE device enabling, alternate
+function selection for multiplexed signals, consistency of HDA, USB
+and PCIE, configuration of memory controller, rtc controller, lio
+controller, and clock control.
 
-Best regards:
-Barnab=C3=A1s Vir=C3=A1gh
+This patch adds a driver to manage and access global utilities block
+for LoongArch architecture Loongson-2 SoCs. Initially only reading SVR
+and registering soc device are supported. Other guts accesses, such
+as reading firmware configuration by default, should eventually be
+added into this driver as well.
 
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+---
+Change in v7:
+		1. Replace LA/loongarch with LoongArch.
+		2. Replace PMON with firmware.
+		3. Add MODULE_LICENSE and MODULE_DESCRIPTION in driver ending.
+Change in v6:
+		1. Add full name spelling about GUTS in Kconfig.
+		2. Add reviewed-by information.
+Change in v5:
+		1. Add all history change log information.
+Change in v4:
+		1. Remove menu information in Kconfig.
+Change in v3:
+		1. Replace string loongson2/Loongson2 with Loongson-2/loongson-2
+	           in commit message, Kconfig, Makefile file.
+		2. Replace string LOONGSON2 with LOONGSON-2.
+Change in v2:
+		1. Add architecture support commit log description.
+		2. Add other guts accesses plan commit log description.
+		3. Add "depends on LOONGARCH || COMPILE_TEST" for
+		   LOONGSON2_GUTS in Kconfig.
+		4. Move the scfg_guts to .c file from .h and delete .h.
+		5. Remove __packed on scfg_guts.
 
-On Fri, Nov 11, 2022 at 2:15 AM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> It appeared in the original import of SGI code in 2.4.0-test3pre8 and
-> has never been used anywhere.
->
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
-z>
-> ---
->  Documentation/process/magic-number.rst                    | 1 -
->  Documentation/translations/it_IT/process/magic-number.rst | 1 -
->  Documentation/translations/zh_CN/process/magic-number.rst | 1 -
->  Documentation/translations/zh_TW/process/magic-number.rst | 1 -
->  arch/mips/include/asm/sn/klkernvars.h                     | 8 ++------
->  arch/mips/sgi-ip27/ip27-klnuma.c                          | 1 -
->  6 files changed, 2 insertions(+), 11 deletions(-)
->
-> diff --git a/Documentation/process/magic-number.rst b/Documentation/proce=
-ss/magic-number.rst
-> index 7dada7abc733..d8ffbc21872e 100644
-> --- a/Documentation/process/magic-number.rst
-> +++ b/Documentation/process/magic-number.rst
-> @@ -72,7 +72,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/=
-Documentation/translations/it_IT/process/magic-number.rst
-> index f9634a04d349..0e59704aa617 100644
-> --- a/Documentation/translations/it_IT/process/magic-number.rst
-> +++ b/Documentation/translations/it_IT/process/magic-number.rst
-> @@ -78,7 +78,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/=
-Documentation/translations/zh_CN/process/magic-number.rst
-> index 966b9e6b1a46..17a73661ef17 100644
-> --- a/Documentation/translations/zh_CN/process/magic-number.rst
-> +++ b/Documentation/translations/zh_CN/process/magic-number.rst
-> @@ -61,7 +61,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/=
-Documentation/translations/zh_TW/process/magic-number.rst
-> index f3e87a6b3a01..9d44d49b93bf 100644
-> --- a/Documentation/translations/zh_TW/process/magic-number.rst
-> +++ b/Documentation/translations/zh_TW/process/magic-number.rst
-> @@ -64,7 +64,6 @@ APM_BIOS_MAGIC        0x4101           apm_user        =
-         ``arch/x86/kerne
->  FASYNC_MAGIC          0x4601           fasync_struct            ``includ=
-e/linux/fs.h``
->  SLIP_MAGIC            0x5302           slip                     ``driver=
-s/net/slip.h``
->  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``includ=
-e/linux/hdlcdrv.h``
-> -KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/m=
-ips/include/asm/sn/klkernvars.h``
->  CCB_MAGIC             0xf2691ad2       ccb                      ``driver=
-s/scsi/ncr53c8xx.c``
->  QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``driver=
-s/scsi/arm/queue.c``
->  QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``driver=
-s/scsi/arm/queue.c``
-> diff --git a/arch/mips/include/asm/sn/klkernvars.h b/arch/mips/include/as=
-m/sn/klkernvars.h
-> index ea6b21795163..93d5eb873255 100644
-> --- a/arch/mips/include/asm/sn/klkernvars.h
-> +++ b/arch/mips/include/asm/sn/klkernvars.h
-> @@ -6,18 +6,14 @@
->  #ifndef __ASM_SN_KLKERNVARS_H
->  #define __ASM_SN_KLKERNVARS_H
->
-> -#define KV_MAGIC_OFFSET                0x0
-> -#define KV_RO_NASID_OFFSET     0x4
-> -#define KV_RW_NASID_OFFSET     0x6
-> -
-> -#define KV_MAGIC               0x5f4b565f
-> +#define KV_RO_NASID_OFFSET     0x0
-> +#define KV_RW_NASID_OFFSET     0x2
->
->  #ifndef __ASSEMBLY__
->
->  #include <asm/sn/types.h>
->
->  typedef struct kern_vars_s {
-> -       int             kv_magic;
->         nasid_t         kv_ro_nasid;
->         nasid_t         kv_rw_nasid;
->         unsigned long   kv_ro_baseaddr;
-> diff --git a/arch/mips/sgi-ip27/ip27-klnuma.c b/arch/mips/sgi-ip27/ip27-k=
-lnuma.c
-> index abd7a84df7dd..82bb7ac20ef8 100644
-> --- a/arch/mips/sgi-ip27/ip27-klnuma.c
-> +++ b/arch/mips/sgi-ip27/ip27-klnuma.c
-> @@ -61,7 +61,6 @@ static __init void set_ktext_source(nasid_t client_nasi=
-d, nasid_t server_nasid)
->
->         KERN_VARS_ADDR(client_nasid) =3D (unsigned long)kvp;
->
-> -       kvp->kv_magic =3D KV_MAGIC;
->         kvp->kv_ro_nasid =3D server_nasid;
->         kvp->kv_rw_nasid =3D master_nasid;
->         kvp->kv_ro_baseaddr =3D NODE_CAC_BASE(server_nasid);
-> --
-> 2.30.2
+ MAINTAINERS                           |   6 +
+ drivers/soc/Kconfig                   |   1 +
+ drivers/soc/Makefile                  |   1 +
+ drivers/soc/loongson/Kconfig          |  18 +++
+ drivers/soc/loongson/Makefile         |   6 +
+ drivers/soc/loongson/loongson2_guts.c | 192 ++++++++++++++++++++++++++
+ 6 files changed, 224 insertions(+)
+ create mode 100644 drivers/soc/loongson/Kconfig
+ create mode 100644 drivers/soc/loongson/Makefile
+ create mode 100644 drivers/soc/loongson/loongson2_guts.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c4fc50eb260b..99aa2cb9c80a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12044,6 +12044,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+ F:	drivers/pinctrl/pinctrl-loongson2.c
+ 
++LOONGSON-2 SOC SERIES GUTS DRIVER
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	loongarch@lists.linux.dev
++S:	Maintained
++F:	drivers/soc/loongson/loongson2_guts.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index e461c071189b..5dbb09f843f7 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -13,6 +13,7 @@ source "drivers/soc/fujitsu/Kconfig"
+ source "drivers/soc/imx/Kconfig"
+ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
++source "drivers/soc/loongson/Kconfig"
+ source "drivers/soc/mediatek/Kconfig"
+ source "drivers/soc/microchip/Kconfig"
+ source "drivers/soc/pxa/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 69ba6508cf2c..fff513bd522d 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -18,6 +18,7 @@ obj-y				+= imx/
+ obj-y				+= ixp4xx/
+ obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+ obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
++obj-y				+= loongson/
+ obj-y				+= mediatek/
+ obj-y				+= microchip/
+ obj-y				+= pxa/
+diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+new file mode 100644
+index 000000000000..707f56358dc4
+--- /dev/null
++++ b/drivers/soc/loongson/Kconfig
+@@ -0,0 +1,18 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Loongson-2 series SoC drivers
++#
++
++config LOONGSON2_GUTS
++	tristate "Loongson-2 SoC Global UtiliTieS (GUTS) register block"
++	depends on LOONGARCH || COMPILE_TEST
++	select SOC_BUS
++	help
++	 The global utilities block controls PCIE device enabling, alternate
++	 function selection for multiplexed signals, consistency of HDA, USB
++	 and PCIE, configuration of memory controller, rtc controller, lio
++	 controller, and clock control. This patch adds a driver to manage
++	 and access global utilities block for LoongArch architecture Loongson-2
++	 SoCs. Initially only reading SVR and registering soc device are
++	 supported. Other guts accesses, such as reading firmware configuration
++	 by default, should eventually be added into this driver as well.
+diff --git a/drivers/soc/loongson/Makefile b/drivers/soc/loongson/Makefile
+new file mode 100644
+index 000000000000..263c486df638
+--- /dev/null
++++ b/drivers/soc/loongson/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Makefile for the Linux Kernel SoC Loongson-2 specific device drivers
++#
++
++obj-$(CONFIG_LOONGSON2_GUTS)		+= loongson2_guts.o
+diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongson/loongson2_guts.c
+new file mode 100644
+index 000000000000..bace4bc8e03b
+--- /dev/null
++++ b/drivers/soc/loongson/loongson2_guts.c
+@@ -0,0 +1,192 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/io.h>
++#include <linux/slab.h>
++#include <linux/module.h>
++#include <linux/of_fdt.h>
++#include <linux/sys_soc.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++
++static struct soc_device_attribute soc_dev_attr;
++static struct soc_device *soc_dev;
++
++/*
++ * Global Utility Registers.
++ *
++ * Not all registers defined in this structure are available on all chips, so
++ * you are expected to know whether a given register actually exists on your
++ * chip before you access it.
++ *
++ * Also, some registers are similar on different chips but have slightly
++ * different names.  In these cases, one name is chosen to avoid extraneous
++ * #ifdefs.
++ */
++struct scfg_guts {
++	u32     svr;            /* Version Register */
++	u8      res0[4];
++	u16     feature;        /* Feature Register */
++	u32     vendor;         /* Vendor Register */
++	u8      res1[6];
++	u32     id;
++	u8      res2[0x3ff8 - 0x18];
++	u32     chip;
++};
++
++static struct guts {
++	struct scfg_guts __iomem *regs;
++	bool little_endian;
++} *guts;
++
++struct loongson2_soc_die_attr {
++	char	*die;
++	u32	svr;
++	u32	mask;
++};
++
++/* SoC die attribute definition for Loongson-2 platform */
++static const struct loongson2_soc_die_attr loongson2_soc_die[] = {
++
++	/*
++	 * LoongArch-based SoCs Loongson-2 Series
++	 */
++
++	/* Die: 2k1000, SoC: 2k1000 */
++	{ .die		= "2K1000",
++	  .svr		= 0x00000013,
++	  .mask		= 0x000000ff,
++	},
++	{ },
++};
++
++static const struct loongson2_soc_die_attr *loongson2_soc_die_match(
++	u32 svr, const struct loongson2_soc_die_attr *matches)
++{
++	while (matches->svr) {
++		if (matches->svr == (svr & matches->mask))
++			return matches;
++		matches++;
++	};
++
++	return NULL;
++}
++
++static u32 loongson2_guts_get_svr(void)
++{
++	u32 svr = 0;
++
++	if (!guts || !guts->regs)
++		return svr;
++
++	if (guts->little_endian)
++		svr = ioread32(&guts->regs->svr);
++	else
++		svr = ioread32be(&guts->regs->svr);
++
++	return svr;
++}
++
++static int loongson2_guts_probe(struct platform_device *pdev)
++{
++	struct device_node *root, *np = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	const struct loongson2_soc_die_attr *soc_die;
++	const char *machine;
++	u32 svr;
++
++	/* Initialize guts */
++	guts = devm_kzalloc(dev, sizeof(*guts), GFP_KERNEL);
++	if (!guts)
++		return -ENOMEM;
++
++	guts->little_endian = of_property_read_bool(np, "little-endian");
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	guts->regs = ioremap(res->start, res->end - res->start + 1);
++	if (IS_ERR(guts->regs))
++		return PTR_ERR(guts->regs);
++
++	/* Register soc device */
++	root = of_find_node_by_path("/");
++	if (of_property_read_string(root, "model", &machine))
++		of_property_read_string_index(root, "compatible", 0, &machine);
++	of_node_put(root);
++	if (machine)
++		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
++
++	svr = loongson2_guts_get_svr();
++	soc_die = loongson2_soc_die_match(svr, loongson2_soc_die);
++	if (soc_die) {
++		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL,
++						     "Loongson %s", soc_die->die);
++	} else {
++		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL, "Loongson");
++	}
++	if (!soc_dev_attr.family)
++		return -ENOMEM;
++	soc_dev_attr.soc_id = devm_kasprintf(dev, GFP_KERNEL,
++					     "svr:0x%08x", svr);
++	if (!soc_dev_attr.soc_id)
++		return -ENOMEM;
++	soc_dev_attr.revision = devm_kasprintf(dev, GFP_KERNEL, "%d.%d",
++					       (svr >>  4) & 0xf, svr & 0xf);
++	if (!soc_dev_attr.revision)
++		return -ENOMEM;
++
++	soc_dev = soc_device_register(&soc_dev_attr);
++	if (IS_ERR(soc_dev))
++		return PTR_ERR(soc_dev);
++
++	pr_info("Machine: %s\n", soc_dev_attr.machine);
++	pr_info("SoC family: %s\n", soc_dev_attr.family);
++	pr_info("SoC ID: %s, Revision: %s\n",
++		soc_dev_attr.soc_id, soc_dev_attr.revision);
++
++	return 0;
++}
++
++static int loongson2_guts_remove(struct platform_device *dev)
++{
++	soc_device_unregister(soc_dev);
++
++	return 0;
++}
++
++/*
++ * Table for matching compatible strings, for device tree
++ * guts node, for Loongson-2 SoCs.
++ */
++static const struct of_device_id loongson2_guts_of_match[] = {
++	{ .compatible = "loongson,ls2k-chipid", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, loongson2_guts_of_match);
++
++static struct platform_driver loongson2_guts_driver = {
++	.driver = {
++		.name = "loongson2-guts",
++		.of_match_table = loongson2_guts_of_match,
++	},
++	.probe = loongson2_guts_probe,
++	.remove = loongson2_guts_remove,
++};
++
++static int __init loongson2_guts_init(void)
++{
++	return platform_driver_register(&loongson2_guts_driver);
++}
++core_initcall(loongson2_guts_init);
++
++static void __exit loongson2_guts_exit(void)
++{
++	platform_driver_unregister(&loongson2_guts_driver);
++}
++module_exit(loongson2_guts_exit);
++
++MODULE_DESCRIPTION("Loongson2 GUTS driver");
++MODULE_LICENSE("GPL");
+-- 
+2.20.1
+
