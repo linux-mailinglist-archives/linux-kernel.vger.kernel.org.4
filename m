@@ -2,111 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D610625017
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 03:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FD9625020
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 03:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbiKKCVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 21:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S231343AbiKKC0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 21:26:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiKKCVA (ORCPT
+        with ESMTP id S231820AbiKKC02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 21:21:00 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2710C326CE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 18:20:59 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id y4so3148231plb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 18:20:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6i6KL/hpCXNpABcruUBMYgjhMEOWPp+uaTBGW7BZZY0=;
-        b=p4Srq9BBF4Qsrt/CuzRJBQkh5eQA5tPR1+jjoQrvDqTUUJEBTsvAxXGF5ig3NXj94w
-         fryCSn6ORHHw/kogN1q7mRYNttBjmOMqMaTw3dtRX8d1YeTLZHNN5a1VRyH7eW6GwYDh
-         Lnd1+l1gbVI8yh74zc/yxpk25gQU+WgADZbhkXThJPuDVhU6dDfPKbqObbY8AUJ3Mpm2
-         10kStfYX6wjhKuEKfE8iCV897VELM/J//g2nnLfho5+aNAVHBjgxqycx+M1e/idNOeKS
-         ehEDGtPQEBKEjZQ7TU1JbXdJ0lzd1G77hsgPcWayzP9eAPNWTfNW6v0KvoHqfBQHUf9v
-         VBtA==
+        Thu, 10 Nov 2022 21:26:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D371D6239F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 18:25:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668133532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WaG6D9NPul5lwMcNCuIe3sGhugQZUKvnrKFJmGoro3c=;
+        b=PWTZZynKGvfUR+JqAZVPOYCA2ZWbXYR3k49Prqqfk4ZoNFNUmD+lz54BXhMMCezCS6Cb69
+        pBcffh+pcDKt1wpNpRgvUns8fT7jSGgCdRZDHhfJNBa34AhNJEAvmPp6ytexH0GSEsgVxa
+        qeTLvdloFXhwus9Nks8QNylQy/L0bGk=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-94-zK5Lo7vZOqSgW1IuKs0uEw-1; Thu, 10 Nov 2022 21:25:30 -0500
+X-MC-Unique: zK5Lo7vZOqSgW1IuKs0uEw-1
+Received: by mail-pg1-f197.google.com with SMTP id v18-20020a637a12000000b0046ed84b94efso1904111pgc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 18:25:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6i6KL/hpCXNpABcruUBMYgjhMEOWPp+uaTBGW7BZZY0=;
-        b=mIRrBqABxWDGAAB2HxZKCgNU5hzy49jrcCHRd5kU4pc8DvLuWUn6nKEWxRZnurAxZc
-         /aSF3yaCmImYHWAz543FiGThw7cWx3Ip2oFeb/iNPMsE9WDgL+Tg4kXfcfe/NTmwy9ad
-         mJNbXx8XfTaY1Fa/lxgGzDU25vPXBVY7h4aesUdwHz2ZW0XAdagDNhVtcA4ab5Dctckt
-         tQSiY50FrfHfmRJV4p7RLMkup8HHUcVzgJst16nhw989vg7/wm9SzZKmTk+0p5JHTF9/
-         tWkS90N9cAmm58hz8S4CtUg5cP1YL+8vytdoYF95Lb8qU7pu1WOKBo/PNuTCQynE8jEH
-         73NQ==
-X-Gm-Message-State: ANoB5pkYSFccbyL+1FyNqjC+JCNANmCPC9BIRg6w6qSMQ0US778BAWrZ
-        9CxHHxiV7IxRJKvKHfdWsql5xWQMoWM=
-X-Google-Smtp-Source: AA0mqf7Aj6fFKusF+WM23rFan6S+RRVt19RQy8IRcWuOnINtT7AYSKlD/gssvyUyQWrjaiHH0gchYQ==
-X-Received: by 2002:a17:902:7c97:b0:186:91fa:59cc with SMTP id y23-20020a1709027c9700b0018691fa59ccmr468005pll.44.1668133258545;
-        Thu, 10 Nov 2022 18:20:58 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:8c0b:3260:c81c:119d])
-        by smtp.gmail.com with ESMTPSA id y17-20020a17090322d100b0017bb38e4588sm376597plg.135.2022.11.10.18.20.57
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WaG6D9NPul5lwMcNCuIe3sGhugQZUKvnrKFJmGoro3c=;
+        b=lh65CwAx5WaS/dQPI/UD9WjJj8ASO9XJ8SkOeLPkgS9XexyoMJWpjF8xHoIxwkJ29v
+         YaPUnAsU/gNtSZ0a1AWbrwuD4AZ/sRszNNJ9f8o6t5Wxi3yWjXazPpE2LsBgbl3yk9Zm
+         4Ef6b6OwazfMMXnR0vbXLm8w4vIInsg9elJKRHqbMAyRbbedUxvEyUqNbmW/MH3nYluN
+         MdVG6Gn88o8OvTB/LkUcVn/YnuNhekeqGvltHRYd7gTOnoq/FDQwT/Jisqb7jaEFftu5
+         lnK20Ob6Obzr82Ps4z1lH3myPrG3TEUqd6fMmobNBDXWPRWa2o9jzI71HiDIZVvWWabc
+         18QQ==
+X-Gm-Message-State: ANoB5pl2xl2CYvC+TsRwAUitV6O4QlLfPsIwDYSm9sIsnCjR+zs9TmgA
+        i/IAcAwsQ9a/t8uVFCCuM6U57kZaNhEf+G56g7mrHEs/sn8Zz6BLkUh4X8zzF4VfI61j2ggpCRV
+        UnKcZ7GBJ4e/YO11qiLJHkDld
+X-Received: by 2002:a17:902:f811:b0:187:19c4:373a with SMTP id ix17-20020a170902f81100b0018719c4373amr321314plb.163.1668133529853;
+        Thu, 10 Nov 2022 18:25:29 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5JE5CicYQ2l/VDcgKu1A3Opx/g/1lm/7vpkfRaW5I/+bVsxwi+MrsKOPNQCArSCBYFvx9qNQ==
+X-Received: by 2002:a17:902:f811:b0:187:19c4:373a with SMTP id ix17-20020a170902f81100b0018719c4373amr321304plb.163.1668133529575;
+        Thu, 10 Nov 2022 18:25:29 -0800 (PST)
+Received: from localhost ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id w8-20020a1709026f0800b0018544ad1e8esm358845plk.238.2022.11.10.18.25.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 18:20:58 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 10 Nov 2022 18:20:56 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 8/9] Documentation: document zram pages_per_pool_page
- attribute
-Message-ID: <Y22xiLFYb49TGeYm@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <20221031054108.541190-9-senozhatsky@chromium.org>
+        Thu, 10 Nov 2022 18:25:28 -0800 (PST)
+Date:   Fri, 11 Nov 2022 10:21:43 +0800
+From:   Coiby Xu <coxu@redhat.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>, kexec@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        nayna@linux.ibm.com, nasastry@in.ibm.com,
+        Baoquan He <bhe@redhat.com>
+Subject: Re: [PATCH v8 0/4] tpm: Preserve TPM measurement log across kexec
+ (ppc64)
+Message-ID: <20221111022143.xvpi3pfwwrw4qda2@Rk>
+References: <20220901214610.768645-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221031054108.541190-9-senozhatsky@chromium.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220901214610.768645-1-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 02:41:07PM +0900, Sergey Senozhatsky wrote:
-> Provide a simple documentation for pages_per_pool_page ZRAM
-> device attribute.
-> 
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  Documentation/admin-guide/blockdev/zram.rst | 38 ++++++++++++++++-----
->  1 file changed, 30 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
-> index 010fb05a5999..4cb287520d45 100644
-> --- a/Documentation/admin-guide/blockdev/zram.rst
-> +++ b/Documentation/admin-guide/blockdev/zram.rst
-> @@ -112,7 +112,29 @@ to list all of them using, for instance, /proc/crypto or any other
->  method. This, however, has an advantage of permitting the usage of
->  custom crypto compression modules (implementing S/W or H/W compression).
->  
-> -4) Set Disksize
-> +4) Set pages per-pool page limit: Optional
-> +==========================================
-> +
-> +zsmalloc pages can consist of up to ZS_DEFAULT_PAGES_PER_ZSPAGE (single)
-> +physical pages. The exact number is calculated for each zsmalloc size
-> +class during zsmalloc pool creation. ZRAM provides pages_per_pool_page
-> +device attribute that lets one adjust that limit (maximum possible value
-> +is ZS_MAX_PAGES_PER_ZSPAGE). The default limit is considered to be good
-> +enough, so tweak this value only when the changes in zsmalloc size classes
-> +characteristics are beneficial for your data patterns. The limit on the
-> +pages per zspages (currently) should be in [1,16] range; default value
-> +is 4.
+Hi Michael,
 
-I think we need to introudce pros and cons for user to decide it since
-it's not familiar with admin. I think It would need more explanation about
-zsmalloc internal(especailly zspage and size classes)
+Could the PowerPC tree take this patch set which resolves a
+PowerVM/KVM-specific issue?
+
+On Thu, Sep 01, 2022 at 05:46:06PM -0400, Stefan Berger wrote:
+>The of-tree subsystem does not currently preserve the IBM vTPM 1.2 and
+>vTPM 2.0 measurement logs across a kexec on PowerVM and PowerKVM. This
+>series fixes this for the kexec_file_load() syscall using the flattened
+>device tree (fdt) to carry the TPM measurement log's buffer across kexec.
+>
+>   Stefan
+>
+>v8:
+> - Added Jarkko's, Coiby's, and Rob's tags
+> - Rebase on v6.0-rc3 that absorbed 2 already upstreamed patches
+>
+>v7:
+> - Added Nageswara's Tested-by tags
+> - Added back original comment to inline function and removed Jarkko's R-b tag
+>
+>v6:
+> - Add __init to get_kexec_buffer as suggested by Jonathan
+> - Fixed issue detected by kernel test robot
+>
+>v5:
+> - Rebased on 1 more patch that would otherwise create merge conflicts
+>
+>v4:
+> - Rebased on 2 patches that would otherwise create merge conflicts;
+>   posting these patches in this series with several tags removed so
+>   krobot can test the series already
+> - Changes to individual patches documented in patch descripitons
+>
+>v3:
+> - Moved TPM Open Firmware related function to drivers/char/tpm/eventlog/tpm_of.c
+>
+>v2:
+> - rearranged patches
+> - fixed compilation issues for x86
+>
+>Palmer Dabbelt (1):
+>  drivers: of: kexec ima: Support 32-bit platforms
+>
+>Stefan Berger (3):
+>  tpm: of: Make of-tree specific function commonly available
+>  of: kexec: Refactor IMA buffer related functions to make them reusable
+>  tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
+>
+> drivers/char/tpm/eventlog/of.c |  31 +--
+> drivers/of/kexec.c             | 336 ++++++++++++++++++++++++++++-----
+> include/linux/kexec.h          |   6 +
+> include/linux/of.h             |   9 +-
+> include/linux/tpm.h            |  36 ++++
+> kernel/kexec_file.c            |   6 +
+> 6 files changed, 346 insertions(+), 78 deletions(-)
+>
+>
+>base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
+>-- 
+>2.35.1
+>
+
+-- 
+Best regards,
+Coiby
+
