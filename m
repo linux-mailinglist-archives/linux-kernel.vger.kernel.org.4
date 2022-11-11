@@ -2,113 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDCA6257B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E212F625824
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiKKKNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S233857AbiKKKX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiKKKNV (ORCPT
+        with ESMTP id S233254AbiKKKWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:13:21 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7973EE20
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:13:18 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7vZQ4bVTzbndc;
-        Fri, 11 Nov 2022 18:09:34 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 18:13:17 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.174) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 18:13:16 +0800
-From:   Li Huafei <lihuafei1@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <mhiramat@kernel.org>
-CC:     <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
-        <davem@davemloft.net>, <rostedt@goodmis.org>,
-        <joe.lawrence@redhat.com>, <zhaogongyi@huawei.com>,
-        <lihuafei1@huawei.com>
-Subject: [PATCH] kprobes: Update ftrace_ops when clearing ftrace-based aggrprobe's post_handler
-Date:   Fri, 11 Nov 2022 18:10:06 +0800
-Message-ID: <20221111101006.239177-1-lihuafei1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 11 Nov 2022 05:22:50 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CB677225;
+        Fri, 11 Nov 2022 02:22:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668162142; x=1699698142;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/D9EhNFlTttYvmVVnJZDdQIYkR+YCuvihpc0/HImI0w=;
+  b=lsshsQmDPadnfHLgWCN/qy2LKl42QtVYGIkTHd8s1HFQwZPtpY+CO2jJ
+   bkDL9D4xsTytprQX+7pJSpGC3YdApiCq9VHaMtt3WJXxyxRlT9khDXzM/
+   7+PEXLZEqaeuNSjcy/z1STYbaA32Afxrx/58k055/w9/eO71mwVgV084h
+   90FYaVeVZ8WO7pxhdntqWO1ioty7NbUx4QPhoREg6Tj+GueFhfgBVKa1r
+   ZQFpAEa5n60b7sxttMEkNL6rWNvRZPRwJiRRHoAPrDadui8VB12GVy6rf
+   Y0gyw7xIIen3aTNr/NAIAIZOJ6z2ZWWyaaCPSN8DmdSkwtHjvpbPCFF6+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="291976265"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="291976265"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 02:22:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="670704207"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="670704207"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga001.jf.intel.com with ESMTP; 11 Nov 2022 02:22:15 -0800
+Date:   Fri, 11 Nov 2022 18:12:55 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/12] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y24gJ7fIsUPmhzY2@yilunxu-OptiPlex-7050>
+References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
+ <20221108144305.45424-3-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221108144305.45424-3-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __unregister_kprobe_top(), if the currently unregistered probe has
-post_handler but other child probes of the aggrprobe do not have
-post_handler, the post_handler of the aggrprobe is cleared. If this is
-a ftrace-based probe, there is a problem. In later calls to
-disarm_kprobe(), we will use kprobe_ftrace_ops because post_handler is
-NULL. But we're armed with kprobe_ipmodify_ops. This triggers a WARN in
-__disarm_kprobe_ftrace() and may even cause use-after-free:
+On 2022-11-08 at 16:42:55 +0200, Ilpo Järvinen wrote:
+> BMC type specific info is currently set by a switch/case block. The
+> size of this info is expected to grow as more dev types and features
+> are added which would have made the switch block bloaty.
+> 
+> Store type specific info into struct and place them into .driver_data
+> instead because it makes things a bit cleaner.
+> 
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/mfd/intel-m10-bmc.c       | 50 +++++++++++++++++--------------
+>  include/linux/mfd/intel-m10-bmc.h | 14 +++++++++
+>  2 files changed, 41 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> index ee167c5dcd29..762808906380 100644
+> --- a/drivers/mfd/intel-m10-bmc.c
+> +++ b/drivers/mfd/intel-m10-bmc.c
+> @@ -156,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+>  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  {
+>  	const struct spi_device_id *id = spi_get_device_id(spi);
+> +	const struct intel_m10bmc_platform_info *info;
+>  	struct device *dev = &spi->dev;
+> -	struct mfd_cell *cells;
+>  	struct intel_m10bmc *ddata;
+> -	int ret, n_cell;
+> +	int ret;
+>  
+>  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+>  	if (!ddata)
+>  		return -ENOMEM;
+>  
+> +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> +	ddata->info = info;
 
-  Failed to disarm kprobe-ftrace at kernel_clone+0x0/0x3c0 (error -2)
-  WARNING: CPU: 5 PID: 137 at kernel/kprobes.c:1135 __disarm_kprobe_ftrace.isra.21+0xcf/0xe0
-  Modules linked in: testKprobe_007(-)
-  CPU: 5 PID: 137 Comm: rmmod Not tainted 6.1.0-rc4-dirty #18
-  [...]
-  Call Trace:
-   <TASK>
-   __disable_kprobe+0xcd/0xe0
-   __unregister_kprobe_top+0x12/0x150
-   ? mutex_lock+0xe/0x30
-   unregister_kprobes.part.23+0x31/0xa0
-   unregister_kprobe+0x32/0x40
-   __x64_sys_delete_module+0x15e/0x260
-   ? do_user_addr_fault+0x2cd/0x6b0
-   do_syscall_64+0x3a/0x90
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-   [...]
+Where to use the ddata->info?
 
-For ftrace kprobe, update post_handler at the same time update
-ftrace_ops, moving it from kprobe_ipmodify_ops to kprobe_ftrace_ops.
+>  	ddata->dev = dev;
+>  
+>  	ddata->regmap =
+> @@ -183,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  		return ret;
+>  	}
+>  
+> -	switch (id->driver_data) {
+> -	case M10_N3000:
+> -		cells = m10bmc_pacn3000_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> -		break;
+> -	case M10_D5005:
+> -		cells = m10bmc_d5005_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> -		break;
+> -	case M10_N5010:
+> -		cells = m10bmc_n5010_subdevs;
+> -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> -		break;
+> -	default:
+> -		return -ENODEV;
+> -	}
+> -
+> -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> +				   info->cells, info->n_cells,
+>  				   NULL, 0, NULL);
+>  	if (ret)
+>  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> @@ -208,10 +194,28 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+>  	return ret;
+>  }
+>  
+> +static const struct intel_m10bmc_platform_info m10bmc_m10_n3000 = {
+> +	.type = M10_N3000,
 
-Fixes: 0bc11ed5ab60 ("kprobes: Allow kprobes coexist with livepatch")
-Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
----
- kernel/kprobes.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Is the type enum still useful? Found no usage.
 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index cd9f5a66a690..f8bec48a9cf9 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1766,7 +1766,17 @@ static int __unregister_kprobe_top(struct kprobe *p)
- 				if ((list_p != p) && (list_p->post_handler))
- 					goto noclean;
- 			}
--			ap->post_handler = NULL;
-+			/*
-+			 * For ftrace kprobe, we need to update ftrace_ops
-+			 * at the same time as we update post_handler, moving
-+			 * it from kprobe_ipmodify_ops to kprobe_ftrace_ops.
-+			 */
-+			if (unlikely(kprobe_ftrace(ap))) {
-+				disarm_kprobe(ap, false);
-+				ap->post_handler = NULL;
-+				arm_kprobe(ap);
-+			} else
-+				ap->post_handler = NULL;
- 		}
- noclean:
- 		/*
--- 
-2.17.1
+Thanks,
+Yilun
 
+> +	.cells = m10bmc_pacn3000_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_pacn3000_subdevs),
+> +};
+> +
+> +static const struct intel_m10bmc_platform_info m10bmc_m10_d5005 = {
+> +	.type = M10_D5005,
+> +	.cells = m10bmc_d5005_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_d5005_subdevs),
+> +};
+> +
+> +static const struct intel_m10bmc_platform_info m10bmc_m10_n5010 = {
+> +	.type = M10_N5010,
+> +	.cells = m10bmc_n5010_subdevs,
+> +	.n_cells = ARRAY_SIZE(m10bmc_n5010_subdevs),
+> +};
+> +
+>  static const struct spi_device_id m10bmc_spi_id[] = {
+> -	{ "m10-n3000", M10_N3000 },
+> -	{ "m10-d5005", M10_D5005 },
+> -	{ "m10-n5010", M10_N5010 },
+> +	{ "m10-n3000", (kernel_ulong_t)&m10bmc_m10_n3000 },
+> +	{ "m10-d5005", (kernel_ulong_t)&m10bmc_m10_d5005 },
+> +	{ "m10-n5010", (kernel_ulong_t)&m10bmc_m10_n5010 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(spi, m10bmc_spi_id);
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index d77383a8a410..e58115f514b9 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -124,14 +124,28 @@ enum m10bmc_type {
+>  /* Address of 4KB inverted bit vector containing staging area FLASH count */
+>  #define STAGING_FLASH_COUNT	0x17ffb000
+>  
+> +/**
+> + * struct intel_m10bmc_platform_info - Intel MAX 10 BMC platform specific information
+> + * @type: the type of MAX10 BMC
+> + * @cells: MFD cells
+> + * @n_cells: MFD cells ARRAY_SIZE()
+> + */
+> +struct intel_m10bmc_platform_info {
+> +	enum m10bmc_type type;
+> +	struct mfd_cell *cells;
+> +	int n_cells;
+> +};
+> +
+>  /**
+>   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+>   * @dev: this device
+>   * @regmap: the regmap used to access registers by m10bmc itself
+> + * @info: the platform information for MAX10 BMC
+>   */
+>  struct intel_m10bmc {
+>  	struct device *dev;
+>  	struct regmap *regmap;
+> +	const struct intel_m10bmc_platform_info *info;
+>  };
+>  
+>  /*
+> -- 
+> 2.30.2
+> 
