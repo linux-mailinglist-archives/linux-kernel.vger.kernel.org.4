@@ -2,183 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF823625EE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E4E625DD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234369AbiKKP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S234825AbiKKPEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:04:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbiKKP7S (ORCPT
+        with ESMTP id S234900AbiKKPDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:59:18 -0500
-X-Greylist: delayed 2394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Nov 2022 07:59:17 PST
-Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2623C6CE;
-        Fri, 11 Nov 2022 07:59:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1668177821;
-        bh=EYvFyeYoIXdpRZUrDIt9Kwnd3gAkvdIgxw1lIXG8SKY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l66N3oiBVl0WpLOT0hkLWrSBLQJsJSW4+ouPxFZH5QD5KKmXDB6CMjzwtM8VVLLpX
-         a4mvKpJXJiuV9Qw3ANDqSRII+7K5waLtTRLYZ90oeO3HFXyKJpVusI8jz1TOHWpOiX
-         dJRcqsFN0mN40E/3U0KhejsRReLLA8QsqIZLb9mPKd4oL95EyLfXlhHXXYFtuTieM/
-         mQitMOSC/OQ89QyOELCnHdOHRibH9OXvgNxVpUIxiREjJL0PTMu3jrCYcnxgmXCUU+
-         h1vYvH07RGr00OmtJNBP+zQXctnrrr738WJXcAPDjU36sTOHtCkNno5wnO/vjAKkO+
-         R+/kME1qSOXkw==
-Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N81fh5HFrzgt1;
-        Fri, 11 Nov 2022 09:43:40 -0500 (EST)
-Message-ID: <02cdf436-6942-89a7-98b2-bfa75ba5f301@efficios.com>
-Date:   Fri, 11 Nov 2022 09:43:49 -0500
+        Fri, 11 Nov 2022 10:03:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21C87F556;
+        Fri, 11 Nov 2022 07:01:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA1F061FFF;
+        Fri, 11 Nov 2022 15:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C0BC433D7;
+        Fri, 11 Nov 2022 15:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668178883;
+        bh=3IpjaTnl0Pjxf4MekfmGVUqIt/pNy0uUtZS+fnyoQHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VajMEA22U/Utg14uq5jSsHUpldLMZT6ifoAgAby85B+8j8I2p5gHiuUAr5vRPPkyp
+         CzgOR6e7M9/ejoSFAPFdwsr7Y3LdB8Z9Pb2uKjDQ7siJt8kq9ZfWbIsoMfUwa3U+JA
+         A2wLVSTTeKNUthcPqZ6Vwksy3eJoJAqKGbdNa7n54F65vpPIQSCKSRv+hIqOYRAsn1
+         vNQ1Y8myyNnK2Oty8cIND0IYa49YZ/ZJPSniRpxDHWZoCNjFq4eq9m+QZrj0YehwBx
+         9TYKgpS5DuCl3giZHdUH0UR1c7sUOz2w9uFsXemYahKYP/iew+SbJHijtbtrWJWqIQ
+         bQ3SGuvKt6Oyw==
+Date:   Fri, 11 Nov 2022 16:01:15 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] PCI: histb: switch to using gpiod API
+Message-ID: <Y25juwnlU+ujvue9@lpieralisi>
+References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH printk v3 00/40] reduce console_lock scope
-Content-Language: en-US
-To:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Tony Lindgren <tony@atomide.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221107141638.3790965-1-john.ogness@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-07 09:15, John Ogness wrote:
-[...]
+On Tue, Sep 06, 2022 at 01:43:00PM -0700, Dmitry Torokhov wrote:
+> This patch switches the driver away from legacy gpio/of_gpio API to
+> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> make private to gpiolib.
 > 
-> The base commit for this series is from Paul McKenney's RCU tree
-> and provides an NMI-safe SRCU implementation [1]. Without the
-> NMI-safe SRCU implementation, this series is not less safe than
-> mainline. But we will need the NMI-safe SRCU implementation for
-> atomic consoles anyway, so we might as well get it in
-> now. Especially since it _does_ increase the reliability for
-> mainline in the panic path.
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-So, your email got me to review the SRCU nmi-safe series:
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/log/?h=srcunmisafe.2022.10.21a
-
-Especially this commit:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=srcunmisafe.2022.10.21a&id=5d0f5953b60f5f7a278085b55ddc73e2932f4c33
-
-I disagree with the overall approach taken there, which is to create
-yet another SRCU flavor, this time with explicit "nmi-safe" read-locks.
-This adds complexity to the kernel APIs and I think we can be clever
-about this and make SRCU nmi-safe without requiring a whole new incompatible
-API.
-
-You can find the basic idea needed to achieve this in the libside RCU
-user-space implementation. I needed to introduce a split-counter concept
-to support rseq vs atomics to keep track of per-cpu grace period counters.
-The "rseq" counter is the fast-path, but if rseq fails, the abort handler
-uses the atomic counter instead.
-
-https://github.com/compudj/side/blob/main/src/rcu.h#L23
-
-struct side_rcu_percpu_count {
-	uintptr_t begin;
-	uintptr_t rseq_begin;
-	uintptr_t end;
-	uintptr_t rseq_end;
-}  __attribute__((__aligned__(SIDE_CACHE_LINE_SIZE)));
-
-The idea is to "split" each percpu counter into two counters, one for rseq,
-and the other for atomics. When a grace period wants to observe the value of
-a percpu counter, it simply sums the two counters:
-
-https://github.com/compudj/side/blob/main/src/rcu.c#L112
-
-The same idea can be applied to SRCU in the kernel: one counter for percpu ops,
-and the other counter for nmi context, so basically:
-
-srcu_read_lock()
-
-if (likely(!in_nmi()))
-   increment the percpu-ops lock counter
-else
-   increment the atomic lock counter
-
-srcu_read_unlock()
-
-if (likely(!in_nmi()))
-   increment the percpu-ops unlock counter
-else
-   increment the atomic unlock counter
-
-Then in the grace period sum the percpu-ops and the atomic values whenever
-each counter value is read.
-
-This would allow SRCU to be NMI-safe without requiring the callers to
-explicitly state whether they need to be nmi-safe or not, and would only
-take the overhead of the atomics in the NMI handlers rather than for all
-users which happen to use SRCU read locks shared with nmi handlers.
-
-Thoughts ?
+Should I pick this up ? On patch (2/2) I am not sure we reached
+a consensus - please let me know.
 
 Thanks,
+Lorenzo
 
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+> ---
+>  drivers/pci/controller/dwc/pcie-histb.c | 39 ++++++++++++-------------
+>  1 file changed, 19 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-histb.c b/drivers/pci/controller/dwc/pcie-histb.c
+> index e2b80f10030d..43c27812dd6d 100644
+> --- a/drivers/pci/controller/dwc/pcie-histb.c
+> +++ b/drivers/pci/controller/dwc/pcie-histb.c
+> @@ -10,11 +10,11 @@
+>  
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/pci.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+> @@ -60,7 +60,7 @@ struct histb_pcie {
+>  	struct reset_control *sys_reset;
+>  	struct reset_control *bus_reset;
+>  	void __iomem *ctrl;
+> -	int reset_gpio;
+> +	struct gpio_desc *reset_gpio;
+>  	struct regulator *vpcie;
+>  };
+>  
+> @@ -212,8 +212,8 @@ static void histb_pcie_host_disable(struct histb_pcie *hipcie)
+>  	clk_disable_unprepare(hipcie->sys_clk);
+>  	clk_disable_unprepare(hipcie->bus_clk);
+>  
+> -	if (gpio_is_valid(hipcie->reset_gpio))
+> -		gpio_set_value_cansleep(hipcie->reset_gpio, 0);
+> +	if (hipcie->reset_gpio)
+> +		gpiod_set_value_cansleep(hipcie->reset_gpio, 1);
+>  
+>  	if (hipcie->vpcie)
+>  		regulator_disable(hipcie->vpcie);
+> @@ -235,8 +235,8 @@ static int histb_pcie_host_enable(struct dw_pcie_rp *pp)
+>  		}
+>  	}
+>  
+> -	if (gpio_is_valid(hipcie->reset_gpio))
+> -		gpio_set_value_cansleep(hipcie->reset_gpio, 1);
+> +	if (hipcie->reset_gpio)
+> +		gpiod_set_value_cansleep(hipcie->reset_gpio, 0);
+>  
+>  	ret = clk_prepare_enable(hipcie->bus_clk);
+>  	if (ret) {
+> @@ -298,10 +298,7 @@ static int histb_pcie_probe(struct platform_device *pdev)
+>  	struct histb_pcie *hipcie;
+>  	struct dw_pcie *pci;
+>  	struct dw_pcie_rp *pp;
+> -	struct device_node *np = pdev->dev.of_node;
+>  	struct device *dev = &pdev->dev;
+> -	enum of_gpio_flags of_flags;
+> -	unsigned long flag = GPIOF_DIR_OUT;
+>  	int ret;
+>  
+>  	hipcie = devm_kzalloc(dev, sizeof(*hipcie), GFP_KERNEL);
+> @@ -336,17 +333,19 @@ static int histb_pcie_probe(struct platform_device *pdev)
+>  		hipcie->vpcie = NULL;
+>  	}
+>  
+> -	hipcie->reset_gpio = of_get_named_gpio_flags(np,
+> -				"reset-gpios", 0, &of_flags);
+> -	if (of_flags & OF_GPIO_ACTIVE_LOW)
+> -		flag |= GPIOF_ACTIVE_LOW;
+> -	if (gpio_is_valid(hipcie->reset_gpio)) {
+> -		ret = devm_gpio_request_one(dev, hipcie->reset_gpio,
+> -				flag, "PCIe device power control");
+> -		if (ret) {
+> -			dev_err(dev, "unable to request gpio\n");
+> -			return ret;
+> -		}
+> +	hipcie->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+> +						     GPIOD_OUT_HIGH);
+> +	ret = PTR_ERR_OR_ZERO(hipcie->reset_gpio);
+> +	if (ret) {
+> +		dev_err(dev, "unable to request reset gpio: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = gpiod_set_consumer_name(hipcie->reset_gpio,
+> +				      "PCIe device power control");
+> +	if (ret) {
+> +		dev_err(dev, "unable to set reset gpio name: %d\n", ret);
+> +		return ret;
+>  	}
+>  
+>  	hipcie->aux_clk = devm_clk_get(dev, "aux");
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 
