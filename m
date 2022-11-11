@@ -2,109 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1162B625DCA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF823625EE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbiKKPC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60162 "EHLO
+        id S234369AbiKKP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234933AbiKKPBa (ORCPT
+        with ESMTP id S233842AbiKKP7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:01:30 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DDA729BB
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:00:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1668178834;
-  x=1699714834;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=fON7pObanRF1Uh/P00Mehvr/bi1ufQEx4XCvxOtF19o=;
-  b=W5IGUlVxAixecHeNIGOLKFiUmvIrYcA2G3L7J6BdIVgkQ56AV1X3Veg4
-   9d9sgJyjgSQK+iXWzsHMMyON/Yobcitec/gd6kMvpT0AUl0yKNlFPcoaW
-   qVTnFgLyZZKclauLZhcQxOtVfYPiDuGcXHe2J2FofwYlqJAn6dZigOHJL
-   Xa9wCyO9qopWaa2Ll+yVtLfhr8H4u5YT7ebPiwhgDMnzJdc1j8S1i2sl5
-   ojNcrIOuEgsqJZo2ryemlNfdefR/FExMIhIYwWEpVHwuBrg8YhW0VtJiK
-   4wLPoIUOBcRUrTIUHI/cMDAF8Y8iJhx/x6Uz3e7bcYfnm+phhjsagGvgw
-   g==;
-From:   =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>
-To:     "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>,
-        "etienne.carriere@linaro.org" <etienne.carriere@linaro.org>,
-        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] firmware: arm_scmi: Resolve dependency with TEE subsystem
-Thread-Topic: [PATCH] firmware: arm_scmi: Resolve dependency with TEE
- subsystem
-Thread-Index: AQHY9bNyMyeFeP3G1keVYelAsguUwK45ujoAgAAGSIA=
-Date:   Fri, 11 Nov 2022 15:00:29 +0000
-Message-ID: <7a32a3694ffd6790e4e2a7c5896931cf8f1a7243.camel@axis.com>
-References: <20221111095313.2010815-1-sumit.garg@linaro.org>
-         <20221111143800.k7xje6g23ujefnye@bogus>
-In-Reply-To: <20221111143800.k7xje6g23ujefnye@bogus>
-Accept-Language: en-US, sv-SE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.0.5.60]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D8924B4C78786645BA9E21081AD15CAB@exhub.se.axis.com>
-Content-Transfer-Encoding: base64
+        Fri, 11 Nov 2022 10:59:18 -0500
+X-Greylist: delayed 2394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Nov 2022 07:59:17 PST
+Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2623C6CE;
+        Fri, 11 Nov 2022 07:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1668177821;
+        bh=EYvFyeYoIXdpRZUrDIt9Kwnd3gAkvdIgxw1lIXG8SKY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=l66N3oiBVl0WpLOT0hkLWrSBLQJsJSW4+ouPxFZH5QD5KKmXDB6CMjzwtM8VVLLpX
+         a4mvKpJXJiuV9Qw3ANDqSRII+7K5waLtTRLYZ90oeO3HFXyKJpVusI8jz1TOHWpOiX
+         dJRcqsFN0mN40E/3U0KhejsRReLLA8QsqIZLb9mPKd4oL95EyLfXlhHXXYFtuTieM/
+         mQitMOSC/OQ89QyOELCnHdOHRibH9OXvgNxVpUIxiREjJL0PTMu3jrCYcnxgmXCUU+
+         h1vYvH07RGr00OmtJNBP+zQXctnrrr738WJXcAPDjU36sTOHtCkNno5wnO/vjAKkO+
+         R+/kME1qSOXkw==
+Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N81fh5HFrzgt1;
+        Fri, 11 Nov 2022 09:43:40 -0500 (EST)
+Message-ID: <02cdf436-6942-89a7-98b2-bfa75ba5f301@efficios.com>
+Date:   Fri, 11 Nov 2022 09:43:49 -0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH printk v3 00/40] reduce console_lock scope
+Content-Language: en-US
+To:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tony Lindgren <tony@atomide.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221107141638.3790965-1-john.ogness@linutronix.de>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221107141638.3790965-1-john.ogness@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTExLTExIGF0IDE0OjM4ICswMDAwLCBTdWRlZXAgSG9sbGEgd3JvdGU6DQo+
-IE9uIEZyaSwgTm92IDExLCAyMDIyIGF0IDAzOjIzOjEzUE0gKzA1MzAsIFN1bWl0IEdhcmcgd3Jv
-dGU6DQo+ID4gVGhlIE9QLVRFRSBTQ01JIHRyYW5zcG9ydCBjaGFubmVsIGlzIGRlcGVuZGVudCBv
-biBURUUgc3Vic3lzdGVtIHRvDQo+ID4gYmUNCj4gPiBpbml0aWFsaXplZCBmaXJzdC4gQnV0IGN1
-cnJlbnRseSB0aGUgQXJtIFNDTUkgc3Vic3lzdGVtIGFuZCBURUUNCj4gPiBzdWJzeXN0ZW0gYXJl
-IGludm9rZWQgb24gdGhlIHNhbWUgaW5pdGNhbGwgbGV2ZWwgYXMNCj4gPiBzdWJzeXN0ZW1faW5p
-dCgpLg0KPiA+IA0KPiA+IEl0IGlzIG9ic2VydmVkIHRoYXQgdGhlIFNDTUkgc3Vic3lzdGVtIGlu
-aXRjYWxsIGlzIGludm9rZWQgcHJpb3IgdG8NCj4gPiBURUUNCj4gPiBzdWJzeXN0ZW0gaW5pdGNh
-bGwuIFRoaXMgbGVhZHMgdG8gdW53YW50ZWQgZXJyb3IgbWVzc2FnZXMgcmVnYXJkaW5nDQo+ID4g
-VEVFDQo+ID4gYnVzIGlzIG5vdCBwcmVzZW50IHlldC4gQWx0aG91Z2gsIC1FUFJPQkVfREVGRVIg
-dHJpZXMgdG8gd29ya2Fyb3VuZA0KPiA+IHRoYXQNCj4gPiBwcm9ibGVtLg0KPiA+IA0KPiA+IExl
-dHMgdHJ5IHRvIHJlc29sdmUgaW50ZXIgc3Vic3lzdGVtIGRlcGVuZGVuY3kgcHJvYmxlbSB2aWEg
-c2hpZnRpbmcNCj4gPiBBcm0NCj4gPiBTQ01JIHN1YnN5c3RlbSB0byBzdWJzeXN0ZW1faW5pdF9z
-eW5jKCkgaW5pdGNhbGwgbGV2ZWwuDQo+ID4gDQo+IA0KPiBJIHdvdWxkIGF2b2lkIGRvaW5nIHRo
-YXQuIFdlIGFscmVhZHkgaGF2ZSBzb21lIGltcGxpY2l0IGRlcGVuZGVuY3kNCj4gd2l0aA0KPiBz
-dWJzeXNfaW5pdGNhbGwgYmVjYXVzZSB0aGlzIGRyaXZlciBjcmVhdGVzL3JlZ2lzdGVycyBidXMg
-YW5kIG5lZWQgdG8NCj4gYmUNCj4gZG9uZSBlYXJseS4gTm93IGluIG9yZGVyIHRvIHNvbHZlIHRo
-ZSBkZXBlbmRlbmN5IGJldHdlZW4gU0NNSSBhbmQNCj4gVEVFLA0KPiBib3RoIG9mIHdoaWNoIGNy
-ZWF0ZXMvcmVnaXN0ZXJzIGJ1cyBhbmQgYXJlIGF0IHNhbWUgc3Vic3lzX2luaXRjYWxsLA0KPiB3
-ZSBhcmUgcmVseWluZyBvbiBzdWJzeXNfaW5pdGNhbGxfc3luYy4NCj4gDQo+IE1lIGFuZCBMdWR2
-aWcgZGlzY3Vzc2VkIHRoaXMgaW4gcHJpdmF0ZSBhbmQgSSBzdWdnZXN0ZWQgaGltIHRvIGRvDQo+
-IHNvbWV0aGluZw0KPiBsaWtlIGJlbG93IHBhdGNoIHNuaXBwZXQuIEhlIG1lbnRpb25lZCBoZSBk
-aWQgcG9zdCBhIHBhdGNoIG9uIHRoZQ0KPiBsaXN0IGJ1dA0KPiBJIGNvdWxkbid0IGZpbmQgaXQu
-IEZvciB0aGlzIHRoZSBzY21pIG5vZGUgbXVzdCBiZSBjaGlsZCBub2RlIG9mDQo+IE9QVEVFIGFz
-DQo+IGl0IGlzIHByb3ZpZGluZyB0aGUgdHJhbnNwb3J0Lg0KPiANCj4gQEx1ZHZpZywgPw0KPiAN
-Cj4gUmVnYXJkcywNCj4gU3VkZWVwDQo+IA0KPiAtLQ0KPiBkaWZmIC0tZ2l0IGkvZHJpdmVycy90
-ZWUvb3B0ZWUvc21jX2FiaS5jDQo+IHcvZHJpdmVycy90ZWUvb3B0ZWUvc21jX2FiaS5jDQo+IGlu
-ZGV4IGExYzFmYTFhOWMyOC4uODM5ZmVjYTBkZWY0IDEwMDY0NA0KPiAtLS0gaS9kcml2ZXJzL3Rl
-ZS9vcHRlZS9zbWNfYWJpLmMNCj4gKysrIHcvZHJpdmVycy90ZWUvb3B0ZWUvc21jX2FiaS5jDQo+
-IEBAIC0xNTM0LDcgKzE1MzQsOSBAQCBzdGF0aWMgaW50IG9wdGVlX3Byb2JlKHN0cnVjdCBwbGF0
-Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBn
-b3RvIGVycl9kaXNhYmxlX3NobV9jYWNoZTsNCj4gDQo+IMKgwqDCoMKgwqDCoMKgIHByX2luZm8o
-ImluaXRpYWxpemVkIGRyaXZlclxuIik7DQo+IC3CoMKgwqDCoMKgwqAgcmV0dXJuIDA7DQo+ICsN
-Cj4gK8KgwqDCoMKgwqDCoCAvKiBQb3B1bGF0ZSBhbnkgZGVwZW5kZW50IGNoaWxkIG5vZGUoaWYg
-YW55KSAqLw0KPiArwqDCoMKgwqDCoMKgIHJldHVybiBkZXZtX29mX3BsYXRmb3JtX3BvcHVsYXRl
-KCZwZGV2LT5kZXYpOw0KPiANCj4gwqBlcnJfZGlzYWJsZV9zaG1fY2FjaGU6DQo+IMKgwqDCoMKg
-wqDCoMKgIGlmICghb3B0ZWUtPnJwY19wYXJhbV9jb3VudCkNCj4gDQpJIGhhdmUgYW5zd2VyZWQg
-c29tZXRoaW5nIHNpbWlsYXIgaW4gbXkgc3VibWl0IFsxXS4gTWF5YmUgSSBzaG91bGQgaGF2ZQ0K
-Q0NlZCB5b3UsIG9yIGF0bGVhc3Qgc2VudCB5b3UgdGhpcyBsaW5rIHdoZW4gSSB0b2xkIHlvdSBJ
-IG1hZGUgdGhlDQpzdWJtaXNzaW9uLg0KDQpbMV0gaHR0cHM6Ly9sa21sLm9yZy9sa21sLzIwMjIv
-MTEvOS84MDMNCg0KQlIsDQpMdWR2aWcNCg==
+On 2022-11-07 09:15, John Ogness wrote:
+[...]
+> 
+> The base commit for this series is from Paul McKenney's RCU tree
+> and provides an NMI-safe SRCU implementation [1]. Without the
+> NMI-safe SRCU implementation, this series is not less safe than
+> mainline. But we will need the NMI-safe SRCU implementation for
+> atomic consoles anyway, so we might as well get it in
+> now. Especially since it _does_ increase the reliability for
+> mainline in the panic path.
+
+So, your email got me to review the SRCU nmi-safe series:
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/log/?h=srcunmisafe.2022.10.21a
+
+Especially this commit:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=srcunmisafe.2022.10.21a&id=5d0f5953b60f5f7a278085b55ddc73e2932f4c33
+
+I disagree with the overall approach taken there, which is to create
+yet another SRCU flavor, this time with explicit "nmi-safe" read-locks.
+This adds complexity to the kernel APIs and I think we can be clever
+about this and make SRCU nmi-safe without requiring a whole new incompatible
+API.
+
+You can find the basic idea needed to achieve this in the libside RCU
+user-space implementation. I needed to introduce a split-counter concept
+to support rseq vs atomics to keep track of per-cpu grace period counters.
+The "rseq" counter is the fast-path, but if rseq fails, the abort handler
+uses the atomic counter instead.
+
+https://github.com/compudj/side/blob/main/src/rcu.h#L23
+
+struct side_rcu_percpu_count {
+	uintptr_t begin;
+	uintptr_t rseq_begin;
+	uintptr_t end;
+	uintptr_t rseq_end;
+}  __attribute__((__aligned__(SIDE_CACHE_LINE_SIZE)));
+
+The idea is to "split" each percpu counter into two counters, one for rseq,
+and the other for atomics. When a grace period wants to observe the value of
+a percpu counter, it simply sums the two counters:
+
+https://github.com/compudj/side/blob/main/src/rcu.c#L112
+
+The same idea can be applied to SRCU in the kernel: one counter for percpu ops,
+and the other counter for nmi context, so basically:
+
+srcu_read_lock()
+
+if (likely(!in_nmi()))
+   increment the percpu-ops lock counter
+else
+   increment the atomic lock counter
+
+srcu_read_unlock()
+
+if (likely(!in_nmi()))
+   increment the percpu-ops unlock counter
+else
+   increment the atomic unlock counter
+
+Then in the grace period sum the percpu-ops and the atomic values whenever
+each counter value is read.
+
+This would allow SRCU to be NMI-safe without requiring the callers to
+explicitly state whether they need to be nmi-safe or not, and would only
+take the overhead of the atomics in the NMI handlers rather than for all
+users which happen to use SRCU read locks shared with nmi handlers.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
