@@ -2,302 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A0362565D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B836A62565F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbiKKJOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S233223AbiKKJOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbiKKJOD (ORCPT
+        with ESMTP id S233266AbiKKJOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:14:03 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2065.outbound.protection.outlook.com [40.107.93.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FE45800C;
-        Fri, 11 Nov 2022 01:14:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TM17eKNegAxX1M1xcJSw1E7ZENbS4lA9C5+fCvJmg73MylaiUgwuk96XsrRV9szZjVhLgN9ESi4IoPV/hRCEMbZPBvRlT6TfFMtvc6WZx307DS6DgYwXufsI9mC7uuz/uYQfR8ET0P0cntJGXY8mqX5/cTl/Rb8d2jh5bO3+QeY9m2sMbjTLf8jwR56qD+zNCQ4hl0YTCKCifwAq2Xcrk7KOdrRwn1UbKOAWo/jFjGSSf0+B7hWOCjz9ZvQTpsxvkiCNcqo2JjYeJ/CcVqrH+zcadYudniQrPurCH8KtZ7GyyH93rdfd3ensMcxhP5npTfDgmvzwI6Zc4LnxpEZTjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XKDpUVdUgzZShfkRONApw2H/8OSut3+L4FLhYf1LOFg=;
- b=lnj/HROWkIO0bVmAVvO8Miytks5nOderHTTn9k+52dU/f6UoDsbjGR3ejAcbH1qEf7ql0G+sE0yRhdEbbj/dMKm7EHCDXNHP8QQrmyM4dNbctTbVUxprDNP4OXpSbGVf/Ce/Azj+xLT9PfuzCg5GZF22bBNa3z54eDCrLCrMSY+8wuapzJQKstVwV2qpp46+ERfmqwLhRDHAoTdKQWXbFrzS/dwc2VQuFX7mCu/q2rn/Wx5unUYh+s3NyeddmCLe6y1pDuxAgyH7qembZlhDjjMJ2wAUy08D+3mP1E9RlcpBouc0Oh5tB9wh8Ar39M4ekQHM1NmqfJQGl1KbEF5c+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+        Fri, 11 Nov 2022 04:14:11 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBED5CD36
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:14:09 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 136so3973300pga.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:14:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XKDpUVdUgzZShfkRONApw2H/8OSut3+L4FLhYf1LOFg=;
- b=Ue4hkrfvrbfvj5B7R+AqfnOMQ6iDc2l7nDHv/shEDIZyuZrzOu8tywL21eSuTj2qbzfnNOGfldXF7jg7S09JL3l+C1l4THXol/2r0zj3H5t+7anVVjdM8zKRnSmDnVbST/rFBOYVqEQomzWH733Pp33ZXvRW1VHeOxrKuSalVsw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by MW4PR03MB6379.namprd03.prod.outlook.com (2603:10b6:303:11e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
- 2022 09:14:00 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1%5]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
- 09:14:00 +0000
-Message-ID: <60870934-1842-161a-5ece-9e188ebbf279@synaptics.com>
-Date:   Fri, 11 Nov 2022 17:13:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RFC PATCH v6 02/11] media: v4l2: Extend pixel formats to unify
- single/multi-planar handling (and more)
-Content-Language: en-US
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>, mchehab@kernel.org,
-        hans.verkuil@cisco.com, laurent.pinchart@ideasonboard.com,
-        sakari.ailus@iki.fi, boris.brezillon@collabora.com,
-        hiroh@chromium.org, Brian.Starkey@arm.com, kernel@collabora.com,
-        narmstrong@baylibre.com, linux-kernel@vger.kernel.org,
-        frkoenig@chromium.org, stanimir.varbanov@linaro.org,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
-References: <20210114180738.1758707-1-helen.koike@collabora.com>
- <20210114180738.1758707-3-helen.koike@collabora.com>
- <d0d1f74f-7e77-1b18-0529-dbbec8889584@xs4all.nl>
- <577c56bf-146c-f34a-2028-075170076de7@collabora.com>
- <708221e8-a805-c394-6958-6c7ec24bfe66@synaptics.com>
- <03f6fd9ff6a757f6d1cb6cc552efcb0b94327104.camel@ndufresne.ca>
- <3b1edf81-bcc0-0b56-7e55-93da55d7f747@synaptics.com>
- <CAAFQd5Ab0giyCS_69Wt4=C9yiBmLfV=0yZY2vGeaOwFgGsb_bQ@mail.gmail.com>
- <91a96b4a-a91e-aae6-733f-c307ca6840f0@synaptics.com>
- <CAAFQd5DD4QgDs-Dff_SB2tNT3d9Hs8HG0rkQFPV+6vgvKqg+qA@mail.gmail.com>
-From:   Hsia-Jun Li <Randy.Li@synaptics.com>
-In-Reply-To: <CAAFQd5DD4QgDs-Dff_SB2tNT3d9Hs8HG0rkQFPV+6vgvKqg+qA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR01CA0048.prod.exchangelabs.com (2603:10b6:a03:94::25)
- To DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XMc8vI7zPupIH5NMouyK7zEwaRdl05YzFkjBeaTXwAs=;
+        b=VkaY5AsLYXMb0wlAaHJROmjkzOY/qJyXntdM8NFQHne3OqOCHMXf8Ck14YxHvNwelP
+         +SZUeVCXmP9iw9UhVt84mkTdOu5fCwFeh5B7ql5O47uH9WykeAdERScFSO32M0RgGEkT
+         dyAjDwc+/03BRSZjsfTj1jXYulzXq2v+boQqmmhvXY9p6zCH2ejmlmU08nAO0fZL1jk5
+         gO3WR2eN8+9vUh9t7zCfNjhqfC08+XHPLoeo4Q1DwrWrtZohPICOWHPSXTZrnsD7DEom
+         Q922u4jLiFBHyxJmVi33aJGrFMw6tA1WcT3A3+nFCLzLokQoYUifJMHpyQbfUktXGRbE
+         bsrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMc8vI7zPupIH5NMouyK7zEwaRdl05YzFkjBeaTXwAs=;
+        b=5Q6N9iPzl+MNOPcEsYm97injOZvftgGV3DoS2QoUL97TfuzbEVEr0a3LLfnw+NE2o4
+         qggYmi6RQYnP8CXwR0RbDwzCX6ITHbxFxE+IGloA2MTbrJee9jQPlfMvC7ixBKyoOzqF
+         2YyH6D3OZZKdg6JyhIPHXw5bO00rZHgRYM6EqWxsAVHPciM8ORpB9n3PX56GWeIgnE7r
+         0KX8LlIJFpHBsPqnOUIStlaJc3dn5XpFW0irF+BvjfkMxJ3H6AR64k+Fnw7Yuwl0RyzB
+         tF1o7nwyeNzG+Gm4cpHBa2aMgQ3VdDv6ZHRVlJXmUB4z4vN9JpJ5ywq4OJTlOj1mC1hz
+         Xlyg==
+X-Gm-Message-State: ANoB5plr7jN1qfnF+C/I814GTYfWJinYpTCi4CvEcv+1bRr5+3DxxOgz
+        yZQKTwdGmaxK2oBxlxiKu3Gkgg==
+X-Google-Smtp-Source: AA0mqf4j//T+50H849o2X6we+9B/8/KWeod28ayuSO03WgwbyHOZw13Kw4IT7cxaJhSSzSXUPhU4Nw==
+X-Received: by 2002:a63:4759:0:b0:46e:ca75:a5f1 with SMTP id w25-20020a634759000000b0046eca75a5f1mr891201pgk.161.1668158048484;
+        Fri, 11 Nov 2022 01:14:08 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
+        by smtp.gmail.com with ESMTPSA id x21-20020a170902ea9500b001753654d9c5sm1175501plb.95.2022.11.11.01.14.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 01:14:07 -0800 (PST)
+Message-ID: <f5e5a2d3-d985-f351-78e0-8a479a6d896a@9elements.com>
+Date:   Fri, 11 Nov 2022 14:44:06 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|MW4PR03MB6379:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ab253fb-7ef6-446e-d930-08dac3c511c4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YinsYGM/m6IEeWgS+BXGUPmgz26cA58ir0/p5o1p0Yk3GmF/JF25chMVJmudvYbBmcotXbYcPa/NWkrIqHQmlyaE8TdsAN+rH1+/apxqT3zwLj/pp8DujkaZa4cn8gnmOFUZVYkRu7Z5K8Ynfqs/sXQQanDWnMPUFJLEqkcCA2whoid6W3ekZK1d3UwEVEUfCQqXH9AWn9FBHGgenulXVdHtozB/FnokHp2lRCQ7Z6dFSQEg8+2mH249Kw9nE9nKM4NDX6HA6ETlaiLAnIDfN3rOQ6dN85Ve0LFxvzLfHnuyLDl0tmhet6Vy+04yfMCXSy8BTT0ipMiXq8q3H6dvdGlQWGpVmpdE4/moyxvhyAWfQ8SwzqzAEL0gjLLTSKYwlkRt4x/QF2eAQEcnbULPRbXOIAFMg/FfNQYEurhcYoEIpzLtagPKxHUbz80AMnZJW9q9Ohe3iaCbUyHuZe2qB+OX69JdCk9Q6MXfnA5UX3byZuG1fZ2uD5TPyqxgniVV9rfnoZnSUW75A3vOf3AZ3Qrt1eJOJQICh4TP8Wzt7hsaUj8FfU3QbB2/HXhFW1to3vdKAEFia+WL7REXESeP+rPfUsAwKEhVZnXlgcutXgzneJvzfdsMAhBCC/CU9p+jO27LGPwCOVJfbogpT2cGEIJoBBmzGaBQGUCswGFSjqYi9OVovbMgogLSFYRHejqsMQr8sX8MZkdRgJG5ojzrBjhy+62G+ZqQB+RecOl0xqNqWM0T0Tc2TNJhMWT2KR+1Vbsnx4W7mNnxpUKm1vnYt104VBA9SbzgOKki0mUEDgzsHYzETSFta/fQS1C+5Mlp99On+D0ZdlhtLJwE/6AI0hz2xU6J/gJa37L2peD6f5k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(366004)(136003)(346002)(376002)(451199015)(966005)(66556008)(66899015)(6486002)(6512007)(66476007)(31686004)(26005)(4326008)(8676002)(66946007)(66574015)(83380400001)(2906002)(86362001)(478600001)(31696002)(6666004)(38100700002)(6506007)(53546011)(8936002)(2616005)(41300700001)(52116002)(6916009)(54906003)(5660300002)(36756003)(316002)(38350700002)(7416002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UUxYZmJwVlZkUEFlL01OR3pWYjRYa1dZcmd2UzdFNXJkdXFoMjNwd01JK1hL?=
- =?utf-8?B?Z1ZQNXhvUzc3anFCcXp1SEh4dXdkaWVIMmNNNm1ocTgreUJjZ0RuNzNCN2Zs?=
- =?utf-8?B?Q09JOWpBTW5LMHZ2UDM5YjQrNWJyWlB1MnR0RWJvNFRuSDhXcEUzUlp1LzN1?=
- =?utf-8?B?dUNLa1RYM1Jiajl4cE4veUtVYURpK2lBQkVFZk40QUFLejM2RVV1RnQ2T05l?=
- =?utf-8?B?UE1OS3MwNTYxdGJlNGpsakgyWElRZUxVSDdGSDJJampNaXBpUWxmOFg4TkNz?=
- =?utf-8?B?U1drTWE2ZExQZXE2UG9jbCtLaFZvODQzTDFNcGRMYUtPSkxuN29VNDhFd1VY?=
- =?utf-8?B?NGpIY0c4Y0srREhNazQvTVBXT1gzekhaQmZBN1lTK2JNeURxaUJYUXU1NDVm?=
- =?utf-8?B?WWFDNnFScE80MEtRY21nY0hJMlJJdkU3MzUwZW52bGhkK2pUaG1QbFJMc29R?=
- =?utf-8?B?U2orSUxiKzN6K0drTkVGaDgzVThvdmNyKzROZzdiQlBKV0lxQTBaZDcydW9v?=
- =?utf-8?B?ODU2dVRrcHIyMlNmTDhsYlI4cldjWHFZR0dOR1VqRnZQUGRxa0JuWmhVUUc1?=
- =?utf-8?B?T0pHeEM2NkQ4amdqdG9seGh1bk1PN0VsTmpyWFpCM3B4VG85LzZCY2lqLzBT?=
- =?utf-8?B?ak5VUWtROUZxNXB4QWx3VFJpdFBDc2Q5b1o1RDBlWndPNG15UzZUZ0FhQWFn?=
- =?utf-8?B?aGsvdkk5RTh4dElGeStodmRUVFdJcnVCN203aVg2Z1dBMjFCTFJxc1ZSVjBI?=
- =?utf-8?B?dElTK2N5TnA1UWtsamNFTmZyN1FuQTVzQlZZaXNHRHIycEI3a2dma1p6anRE?=
- =?utf-8?B?Uzd2azEyZnB5cWlKdXJmOVpOQ3VxZ1k3S3UyVm5kdnd5TDg2RHRVV0tDdWph?=
- =?utf-8?B?eCtKQVpRclhFand3cWxLSzR4c2txMzhpUXorclI2U3FzVVJFNVFUa051RWlE?=
- =?utf-8?B?Rkk0WEpQWHRzY1ZVWUZpeVlpMVNtbUQzWko3d25RS21GZnYzMnlSSU9IR0FK?=
- =?utf-8?B?c05DN3B2dUlKUWd2SXpHcDZ4R3B4U21xeWliSm1uRWp0a2FGeW5UUzR2TmQy?=
- =?utf-8?B?NkdQcXpEV2RUQWx6UURpUXdzZWJSdGZNc1c2ZWNtR3FNVkRlOHZudk0zWkxy?=
- =?utf-8?B?RVpJaTdBalpUQklHNWV3T0dzZFh3ZWxWSjQzSTRSS1RSdDRvcnNSalFvc0p6?=
- =?utf-8?B?TEVEMmdLczF6RkxyUHcyc3l2Z05aenVjZWpqRWU5Um94UXpzRHJHOUg1ZE5R?=
- =?utf-8?B?WWVudjFGc2lDbEFtUXBrbmRZUjRHcDdHNzBDTmpHS2poV0JvOGNFRFR0NnFG?=
- =?utf-8?B?QURpbGlkS3I4dGI3Q2R2SUlMSVhiQzNvL2MrcnErYWFUTldaSUNNM3RtK0JR?=
- =?utf-8?B?bTJPdzJxdHZaVkU2dUlpUGRXcTlIU1FBOUNtY05pclJTTE5WZy9FaGt0dWtq?=
- =?utf-8?B?YzRET29PSjh4WnQvVnBRc3ZwMWg4WDFtMlhHL3JFZWpNajR5NWdMM2hZQVV5?=
- =?utf-8?B?MCtsVTV3VlA2TjN5NzZSZ1NsYkJJUXYrMmVNNDMwT0oxYlNOU1EyS3lKMFQ4?=
- =?utf-8?B?cE1lalhCOUliNEtDdXVhVnhxT0V0RnI3ZzF4V1FXOFAxbUNMTjBOTmVFNFNS?=
- =?utf-8?B?bEg4UTQvN2dXSmpuaUFpakgzd211c3JXRXJ1ZTNEYklNdC9ZWmdCYS9saXMr?=
- =?utf-8?B?ZlVheURRd0JBZ2hrSURzd3hJSEs5WXhCQkE2S0pEdmtKSnNoNWtSenppbFFL?=
- =?utf-8?B?ajE1M1ByR2JjZFVLSEkrQVZNQys3NTkwUVEwUnZPWHpQRXVWbmFST01rbmRo?=
- =?utf-8?B?S3JocGt4UkNxVEwySUhmU3pQZ04vUzR0THM2R29KZHRTOEFVV2lMc1hQRk4r?=
- =?utf-8?B?TnpRdDd2bW9HRU9XclJsT1QwRHo5bFN4d3Znc1VYcHZORDlHZ1pjR3pPNmlm?=
- =?utf-8?B?dFNBeUFodWxvWXFGY3lqbjk5ZzV4SFRuY0wxdnJ4UzJBY1RCbG1LRktncCsx?=
- =?utf-8?B?cXdiRmxNREJPSkxIN0lGYU5KQVZBKzJtcElsaGJEb2lmSmovTTFoTDhvald0?=
- =?utf-8?B?dFcveG1HTU1GREV6WVZscWxITHVIMk04ekwxL1Y0bHJzbkFzdHRVSzh6elRn?=
- =?utf-8?Q?HSreRJebVJTrcmnos/olhI2TI?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ab253fb-7ef6-446e-d930-08dac3c511c4
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 09:14:00.1683
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lA18pzT+VBS/GdAYfsGKkTnjFPgCTYXe0TweHHuUHfRU/4NMOlMlJUifMVF2spjTpWzNaSkyhAh4dw7ZpGIZKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR03MB6379
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v8 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221103213425.2474772-1-Naresh.Solanki@9elements.com>
+ <20221103213425.2474772-3-Naresh.Solanki@9elements.com>
+ <Y2jRm2J4tvK5ET1e@google.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <Y2jRm2J4tvK5ET1e@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lee
 
-
-On 11/11/22 16:52, Tomasz Figa wrote:
-> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
+On 07-11-2022 03:06 pm, Lee Jones wrote:
+> On Thu, 03 Nov 2022, Naresh Solanki wrote:
 > 
-> 
-> On Fri, Nov 11, 2022 at 3:31 PM Hsia-Jun Li <Randy.Li@synaptics.com> wrote:
+>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
 >>
+>> Implement a regulator driver with IRQ support for fault management.
+> 
+> This is not a "regulator driver".
+> 
+>> Written against documentation [1] and [2] and tested on real hardware.
 >>
+>> Every channel has its own regulator supplies nammed 'vss1-supply' and
+>> 'vss2-supply'. The regulator supply is used to determine the output
+>> voltage, as the smart switch provides no output regulation.
+>> The driver requires the 'shunt-resistor-micro-ohms' property to be
+>> present in Device Tree to properly calculate current related
+>> values.
 >>
->> On 11/11/22 13:48, Tomasz Figa wrote:
->>> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
->>>
->>>
->>> On Fri, Nov 11, 2022 at 12:04 PM Hsia-Jun Li <Randy.Li@synaptics.com> wrote:
->>>>
->>>>
->>>>
->>>> On 11/11/22 01:06, Nicolas Dufresne wrote:
->>>>> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
->>>>>
->>>>>
->>>>> Le samedi 05 novembre 2022 à 23:19 +0800, Hsia-Jun Li a écrit :
->>>>>>>> VIDIOC_ENUM_EXT_PIX_FMT would report NV12 and NV12M, while
->>>>>>>> VIDIOC_ENUM_FMT
->>>>>>>> would just report NV12M.
->>>>>>>
->>>>>>> If NV12 and NV12M are equivalent in Ext API, I don't see why we would
->>>>>>> report both (unless I'm missing something, which is probably the case).
->>>>>>>
->>>>>>> The idea was to deprecate the M-variants one day.
->>>>>> I was thinking the way in DRM API is better, always assuming it would
->>>>>> always in a multiple planes. The only problem is we don't have a way to
->>>>>> let the allocator that allocate contiguous memory for planes when we
->>>>>> need to do that.
->>>>>
->>>>> Its not too late to allow this to be negotiated, but I would move this out of
->>>>> the pixel format definition to stop the explosion of duplicate pixel formats,
->>>>> which is a nightmare to deal with.
->>>> I wonder whether we need to keep the pixel formats in videodev2.h
->>>> anymore. If we would like to use the modifiers from drm_fourcc.h, why
->>>> don't we use their pixel formats, they should be the same values of
->>>> non-M variant pixel formats of v4l2.
->>>>
->>>> Let videodev2.h only maintain the those codecs or motion based
->>>> compressed (pixel) formats.
->>>>
->>>> If I simplify the discussion, we want to
->>>>> negotiate contiguity with the driver. The new FMT structure should have a
->>>>> CONTIGUOUS flag. So if userpace sets:
->>>>>
->>>>>      S_FMT(NV12, CONTIGUOUS)
->>>> I wonder whether we would allow some planes being contiguous while some
->>>> would not. For example, the graphics planes could be in a contiguous
->>>> memory address while its compression metadata are not.
->>>> Although that is not the case of our platform. I believe it sounds like
->>>> reasonable case for improving the performance, two meta planes could
->>>> resident in a different memory bank.
->>>
->>> I feel like this would be only useful in the MMAP mode. Looking at how
->>> the other UAPIs are evolving, things are going towards
->>> userspace-managed allocations, using, for example, DMA-buf heaps. I
->>> think we should follow the trend and keep the MMAP mode just at the
->>> same level of functionality as is today and focus on improvements and
->>> new functionality for the DMABUF mode.
->>>
->> I know there are still some devices(encoder) which only have one
->> register for storing the address of a graphics buffer.
-> 
-> For those, the legacy MMAP mode (with existing functionality) can be
-> successfully used, we wouldn't be removing it any time soon. Just
-> don't want to design new functionality specifically for the legacy
-> mode.
-> 
-But it prevents the encoder using the buffer from the outside.
-For example, there was an PCI-e interface camera which would write to 
-the system memory where is configured to its register, then we would 
-like to encode those buffers.
->>>>
->>>> That lead to another question which I forgot whether I mention it before.
->>>>
->>>> There are four modifiers in DRM while we would only one in these patches.
->>>>    From the EGL
->>>> https://urldefense.proofpoint.com/v2/url?u=https-3A__registry.khronos.org_EGL_extensions_EXT_EGL-5FEXT-5Fimage-5Fdma-5Fbuf-5Fimport-5Fmodifiers.txt&d=DwIFaQ&c=7dfBJ8cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=P4xb2_7biqBxD4LGGPrSV6j-jf3C3xlR7PXU-mLTeZE&m=mCebYOAiZK6pbpH1MrZGq-ZkDW-OqORCSwsCEX9ScgdXk_yfWZFJPC5aC93CUg5F&s=rtmW_t2LYoJ6g3Y5wgyICmABu-2Npw3JCOlvUVIYH2o&e=
->>>>
->>>> The modifier for echo plane could be different. I wish it would be
->>>> better to create a framebuffer being aware of which planes are graphics
->>>> or metadata.
->>>
->>> What's an echo plane?
->>>
->> They could be
->> DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED
->> DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED
->> DRM_FORMAT_MOD_SYNA_MTR
->> DRM_FORMAT_MOD_SYNA_MTR
->> Or
->> DRM_FORMAT_MOD_SYNA_V4H3P8_64L4
->> DRM_FORMAT_MOD_SYNA_V4H3P8_64L4
+>> Datasheet links:
+>> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
+>> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
 >>
->> in our platform. It could give a better idea on what is stored in a plane.
+>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 > 
-> Yes, that's what I was thinking, but my question is more about what
-> those planes hold.
-DRM_FORMAT_MOD_SYNA_V4H1* or DRM_FORMAT_MOD_SYNA_V4H3P8*
-would be the luma and chroma (un)compressed data here. They are 
-modifiers to NV12 and NV15.
-  Are you sure that they should be planes of the same
-> buffer rather than separate buffers?
-I am not sure about your question here. I prefer they are in a different 
-memory plane. But not all Android APIs support that. If I just think 
-about our platform and GNU Linux, I won't care about those limitations.
+> Can you explain these tags to me please?
 > 
->>> That said, it indeed looks like we may want to be consistent with DRM
->>> here and allow per-plane modifiers.
->>>
->>>>
->>>> I wonder whether it would be better that convincing the DRM maintainer
->>>> adding a non vendor flag for contiguous memory allocation here(DRM
->>>> itself don't need it).
->>>> While whether the memory could be contiguous for these vendor pixel
->>>> formats, it is complex vendor defined.
->>>
->>> Memory allocation doesn't sound to me like it is related to formats or
->>> modifiers in any way. I agree with Nicolas that if we want to allow
->>> the userspace to specify if the memory should be contiguous or not,
->>> that should be a separate flag and actually I'd probably see it in
->>> REQBUF_EXT and CREATE_BUFS_EXT, rather than as a part of the format.
->>>
->> I agree with that. But here is a problem, if there was a display
->> device(DRM) that only supports contiguous planes in a frame buffer.
->> How do we be aware of that?
+> Patrick wrote it.  Then what happened?
 > 
-> That's why I think the MMAP mode is not scalable and shouldn't be
-> expanded anymore. Both V4L2 and DRM devices should describe their
-> constraints to the userspace and then the userspace should allocate
-> accordingly from the right DMA-buf heap. (Or as Android and ChromeOS
-> do, just have a central allocator library that understands the
-> constraints, so there is no need to query the drivers.)
-> 
-Because we are working for embedded platforms which don't have memory 
-beyond the system memory. I believe those GPU vendors would hate idea of 
-DMAheap only.
->>>>
->>>>>
->>>>> The driver can accepts, and return the unmodified structure, or may drop the
->>>>> CONTIGUOUS flag, which would mean its not supported. Could be the other way
->>>>> around too. As for allocation, if you have CONTIGUOUS flag set, userspace does
->>>>> not have to export or map memory for each planes, as they are the same. We
->>>>> simply need to define the offset as relative to their allocation, which I think
->>>>> is the most sensible thing.
->>>>>
->>>>> Nicolas
->>>>>
->>>>
->>>> --
->>>> Hsia-Jun(Randy) Li
+Yes Its written by Patrick & Marcello.
+>> ---
+>>   drivers/mfd/Kconfig         |  12 +++++
+>>   drivers/mfd/Makefile        |   1 +
+>>   drivers/mfd/max597x.c       |  92 ++++++++++++++++++++++++++++++++
+>>   include/linux/mfd/max597x.h | 103 ++++++++++++++++++++++++++++++++++++
+>>   4 files changed, 208 insertions(+)
+>>   create mode 100644 drivers/mfd/max597x.c
+>>   create mode 100644 include/linux/mfd/max597x.h
 >>
->> --
->> Hsia-Jun(Randy) Li
-
--- 
-Hsia-Jun(Randy) Li
+>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>> index 8b93856de432..416fe7986b7b 100644
+>> --- a/drivers/mfd/Kconfig
+>> +++ b/drivers/mfd/Kconfig
+>> @@ -253,6 +253,18 @@ config MFD_MADERA_SPI
+>>   	  Support for the Cirrus Logic Madera platform audio SoC
+>>   	  core functionality controlled via SPI.
+>>   
+>> +config MFD_MAX597X
+>> +	tristate "Maxim 597x Power Switch and Monitor"
+>> +	depends on I2C
+>> +	depends on OF
+>> +	select MFD_CORE
+>> +	select REGMAP_I2C
+>> +	help
+>> +	  This driver controls a Maxim 5970/5978 switch via I2C bus.
+>> +	  The MAX5970/5978 is a smart switch with no output regulation, but
+>> +	  fault protection and voltage and current monitoring capabilities.
+>> +	  Also it supports upto 4 indication LEDs.
+>> +
+>>   config MFD_CS47L15
+>>   	bool "Cirrus Logic CS47L15"
+>>   	select PINCTRL_CS47L15
+>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+>> index 7ed3ef4a698c..819d711fa748 100644
+>> --- a/drivers/mfd/Makefile
+>> +++ b/drivers/mfd/Makefile
+>> @@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
+>>   obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
+>>   
+>>   obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
+>> +obj-$(CONFIG_MFD_MAX597X)	+= max597x.o
+>>   obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
+>>   obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
+>>   obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
+>> diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
+>> new file mode 100644
+>> index 000000000000..2c64edb6b6dd
+>> --- /dev/null
+>> +++ b/drivers/mfd/max597x.c
+>> @@ -0,0 +1,92 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Maxim MAX5970/MAX5978 MFD Driver
+> 
+> Please drop "MFD Driver" and replace it with what it does.
+> 
+> "Power Switch and Monitor"?
+> 
+Yes. that makes more sense. sure.
+>> + * Copyright (c) 2022 9elements GmbH
+>> + *
+>> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> + */
+>> +
+>> +#include <linux/i2c.h>
+>> +#include <linux/mfd/core.h>
+>> +#include <linux/mfd/max597x.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +static const struct regmap_config max597x_regmap_config = {
+>> +	.reg_bits = 8,
+>> +	.val_bits = 8,
+>> +	.max_register = MAX_REGISTERS,
+>> +};
+>> +
+>> +static const struct mfd_cell max597x_cells[] = {
+>> +	{ .name = "max597x-regulator", },
+>> +	{ .name = "max597x-iio", },
+>> +	{ .name = "max597x-led", },
+>> +};
+>> +
+>> +static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
+>> +{
+>> +	struct max597x_data *ddata;
+>> +	enum max597x_chip_type chip = id->driver_data;
+>> +
+>> +	ddata = devm_kzalloc(&i2c->dev, sizeof(*ddata),	GFP_KERNEL);
+>> +	if (!ddata)
+>> +		return -ENOMEM;
+>> +
+>> +	/* Initialize num of switch based on chip type for later use by regulator
+>> +	 * & iio cells
+>> +	 */
+> 
+> Please use proper multi-line comment structure.
+> 
+> Also use proper words, unlike 'num'.
+> 
+> In fact, it looks like this whole comment could do with some love.
+> 
+Done.
+>> +	switch (chip) {
+>> +	case MAX597x_TYPE_MAX5970:
+>> +		ddata->num_switches = MAX5970_NUM_SWITCHES;
+>> +		break;
+>> +	case MAX597x_TYPE_MAX5978:
+>> +		ddata->num_switches = MAX5978_NUM_SWITCHES;
+>> +		break;
+>> +	}
+>> +
+>> +	ddata->regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
+>> +	if (IS_ERR(ddata->regmap)) {
+>> +		dev_err(&i2c->dev, "Failed to initialise regmap");
+> 
+> Are you using American spelling or English?
+> 
+> Please make up your mind and be consistent.
+> 
+Sure
+>> +		return -EINVAL;
+> 
+> Shouldn't you be propagating the error you received?
+> 
+Yes. Will update in next version.
+>> +	}
+>> +
+>> +	/* IRQ used by regulator cell */
+> 
+> What IRQ is this?  Does it have a name?
+>Its is VR fault status update related irq.
+> If it's only used in Regulator, why not fetch it there?
+> >> +	ddata->irq = i2c->irq;
+>> +	ddata->dev = &i2c->dev;
+> 
+> You should already have access to the Driver, else how are you going
+> to fetch the data back in the first place?
+> 
+>> +	i2c_set_clientdata(i2c, ddata);
+>> +
+>> +	return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
+>> +				    max597x_cells, ARRAY_SIZE(max597x_cells),
+>> +				    NULL, 0, NULL);
+>> +}
+>> +
+>> +static const struct i2c_device_id max597x_table[] = {
+>> +	{ .name = "max5970", MAX597x_TYPE_MAX5970 },
+>> +	{ .name = "max5978", MAX597x_TYPE_MAX5978 },
+> 
+> You don't need ".name = ".
+> 
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(i2c, max597x_table);
+>> +
+>> +static const struct of_device_id max597x_of_match[] = {
+>> +	{ .compatible = "maxim,max5970", .data = (void *)MAX597x_TYPE_MAX5970 },
+>> +	{ .compatible = "maxim,max5978", .data = (void *)MAX597x_TYPE_MAX5978 },
+> 
+> Where is .data used?
+The .data isn't used.
+> 
+>> +	{ /* sentinel */ }
+> > Drop the comment.  We know what a NULL entry means.
+Sure.
+> 
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(of, max597x_of_match);
+>> +
+>> +static struct i2c_driver max597x_driver = {
+>> +	.id_table = max597x_table,
+>> +	.driver = {
+>> +		.name = "max597x",
+>> +		.of_match_table = of_match_ptr(max597x_of_match),
+>> +		},
+> 
+> Tabbing error.
+Fixed Will be in next version.
+> 
+>> +	.probe = max597x_probe,
+>> +};
+>> +
+> 
+> Remove this line.
+Sure.
+> 
+>> +module_i2c_driver(max597x_driver);
+>> +
+>> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
+>> +MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
+>> +MODULE_LICENSE("GPL v2");
+>> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
+>> new file mode 100644
+>> index 000000000000..f88a57f0e4f2
+>> --- /dev/null
+>> +++ b/include/linux/mfd/max597x.h
+>> @@ -0,0 +1,103 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Maxim MAX5970/MAX5978 MFD Driver
+> 
+> Same here.
+> 
+>> + * Copyright (c) 2022 9elements GmbH
+>> + *
+>> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+>> + */
+>> +
+>> +#ifndef MFD_MAX597X_H
+>> +#define MFD_MAX597X_H
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +/* Number of switch based on chip variant */
+> 
+> This comment is superfluous.
+You mean this comment should be removed ?
+> 
+>> +#define MAX5970_NUM_SWITCHES 2
+>> +#define MAX5978_NUM_SWITCHES 1
+>> +/* Both chip variant have 4 indication LEDs used by LED cell */
+> 
+> Here too I think.
+> 
+>> +#define MAX597X_NUM_LEDS     4
+>> +
+>> +enum max597x_chip_type {
+>> +	MAX597x_TYPE_MAX5978 = 1,
+> 
+> Why 1?
+MAX5978 & single power switch wheres MAX5970 has two.
+> 
+>> +	MAX597x_TYPE_MAX5970,
+>> +};
+>> +
+>> +#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
+>> +#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
+>> +#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
+>> +#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
+>> +#define MAX5970_REG_MON_RANGE			0x18
+>> +#define  MAX5970_MON_MASK				0x3
+>> +#define  MAX5970_MON(reg, ch)		(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
+>> +#define  MAX5970_MON_MAX_RANGE_UV		16000000
+>> +
+>> +#define MAX5970_REG_CH_UV_WARN_H(ch)	(0x1A + (ch) * 10)
+>> +#define MAX5970_REG_CH_UV_WARN_L(ch)	(0x1B + (ch) * 10)
+>> +#define MAX5970_REG_CH_UV_CRIT_H(ch)	(0x1C + (ch) * 10)
+>> +#define MAX5970_REG_CH_UV_CRIT_L(ch)	(0x1D + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_WARN_H(ch)	(0x1E + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_WARN_L(ch)	(0x1F + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_CRIT_H(ch)	(0x20 + (ch) * 10)
+>> +#define MAX5970_REG_CH_OV_CRIT_L(ch)	(0x21 + (ch) * 10)
+>> +
+>> +#define  MAX5970_VAL2REG_H(x)			(((x) >> 2) & 0xFF)
+>> +#define  MAX5970_VAL2REG_L(x)			((x) & 0x3)
+>> +
+>> +#define MAX5970_REG_DAC_FAST(ch)		(0x2E + (ch))
+>> +
+>> +#define MAX5970_FAST2SLOW_RATIO			200
+>> +
+>> +#define MAX5970_REG_STATUS0				0x31
+>> +#define  MAX5970_CB_IFAULTF(ch)			(1 << (ch))
+>> +#define  MAX5970_CB_IFAULTS(ch)			(1 << ((ch) + 4))
+>> +
+>> +#define MAX5970_REG_STATUS1				0x32
+>> +#define  STATUS1_PROT_MASK				0x3
+>> +#define  STATUS1_PROT(reg) \
+>> +	(((reg) >> 6) & STATUS1_PROT_MASK)
+>> +#define  STATUS1_PROT_SHUTDOWN			0
+>> +#define  STATUS1_PROT_CLEAR_PG			1
+>> +#define  STATUS1_PROT_ALERT_ONLY		2
+>> +
+>> +#define MAX5970_REG_STATUS2				0x33
+>> +#define  MAX5970_IRNG_MASK				0x3
+>> +#define  MAX5970_IRNG(reg, ch)	\
+>> +						(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
+>> +
+>> +#define MAX5970_REG_STATUS3				0x34
+>> +#define  MAX5970_STATUS3_ALERT			BIT(4)
+>> +#define  MAX5970_STATUS3_PG(ch)			BIT(ch)
+>> +
+>> +#define MAX5970_REG_FAULT0				0x35
+>> +#define  UV_STATUS_WARN(ch)				BIT(ch)
+>> +#define  UV_STATUS_CRIT(ch)				BIT(ch + 4)
+>> +
+>> +#define MAX5970_REG_FAULT1				0x36
+>> +#define  OV_STATUS_WARN(ch)				BIT(ch)
+>> +#define  OV_STATUS_CRIT(ch)				BIT(ch + 4)
+>> +
+>> +#define MAX5970_REG_FAULT2				0x37
+>> +#define  OC_STATUS_WARN(ch)				BIT(ch)
+>> +
+>> +#define MAX5970_REG_CHXEN				0x3b
+>> +#define  CHXEN(ch)						(3 << (ch * 2))
+>> +
+>> +#define MAX5970_REG_LED_FLASH			0x43
+> 
+> Do these all need to be shared?
+> 
+> Or can they be isolated into, say, the Regulator driver?
+> 
+Shared reg.
+>> +#define MAX_REGISTERS					0x49
+>> +#define ADC_MASK						0x3FF
+>> +
+>> +struct max597x_data {
+>> +	struct device *dev;
+>> +	int irq;
+>> +	int num_switches;
+>> +	struct regmap *regmap;
+>> +	/* Chip specific parameters needed by regulator & iio cells */
+>> +	u32 irng[MAX5970_NUM_SWITCHES];
+>> +	u32 mon_rng[MAX5970_NUM_SWITCHES];
+>> +	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
+>> +};
+>> +
+>> +#endif				/* _MAX597X_H */
+> 
+>                                         This is incorrect and doesn't
+> 				       need to be tabbed out over
+> 				       here.
+> 
+Will update in next version.
