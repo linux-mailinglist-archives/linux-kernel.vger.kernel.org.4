@@ -2,134 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C64626025
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2F0626026
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbiKKRJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
+        id S234364AbiKKRKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234161AbiKKRJL (ORCPT
+        with ESMTP id S234319AbiKKRJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:09:11 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A271A3B1;
-        Fri, 11 Nov 2022 09:08:58 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABG8uCs017312;
-        Fri, 11 Nov 2022 17:08:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=03eezIBJKpj7j/9qQicis47eqBl7PzCBbko9n8Odntw=;
- b=kOOadAQhlY4zwHKiYPvrmOmjtKiym8vFfjo0fkSROG0rUkDtQG4/T8aLV1abIUNRRNzs
- KVhdJqh2dFX7UKzXv1Ox/GY2tQdSvd1eLiSUv/XOYkCMu6Fo6daP4RF0JQQKLjVpn5Z3
- 06TNBkvWXum/MG27j2DpecykoQL5mMYLh3IUR+bzHL8EUDvFQLN+JDFitQNkj6AOYhgN
- pA8yFevS7PrJeUOhqLzVkPq7gFFkkp+v1wKMsovkKAcETJeBRbzRtdFZAK2LAMbVJ+Uq
- 8S5+X6FKRDaOjLZ3FzR6w01rGp1hSkOQSN1huXcCXnz2Gc7HtQM7MVZ2qKUKs3+AkMgk 9w== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kshkdhqaw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 17:08:42 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABH8fDq023857
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 17:08:41 GMT
-Received: from [10.110.50.128] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
- 2022 09:08:40 -0800
-Message-ID: <e10ca37a-5d02-ce00-423d-18f9a9e6fe0d@quicinc.com>
-Date:   Fri, 11 Nov 2022 09:08:40 -0800
+        Fri, 11 Nov 2022 12:09:46 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00981BE2B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:09:21 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id e129so4849040pgc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8np7/G7bsyFXWgIxYekl7kPxfItn8rFnlB5cNNDFqN4=;
+        b=Vk1KDeaImsSydqONneD4SKhmcDiZUj2sLkG+UGXR5C18BKD9dc7eov9JlfcjpRveW/
+         GNIHwtiJ1+nQx310I5JwbrcGfdgVkVXyI1PtwfjTPZWc2FoLj3tmRsmmNfSgck/qEy9g
+         gKAEUutfqR699uAbQvSToUczY09dl3waMFGCiuaSsfjsRuuyJNWJccRA+O1k1FCqov9/
+         xFNi2xvq9+rAiVHmgFvjYTIZG14qNGciPN8QVxQPJx/wNh4Phk2iUcdVF9O/6/AMdGUw
+         6g2wmIckWDf8qhGutH8CNzy5bmj6IcVH+FF/yadUQHyth3btUtc5esxNUlxUdSJccoT/
+         /p5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8np7/G7bsyFXWgIxYekl7kPxfItn8rFnlB5cNNDFqN4=;
+        b=Rn8oH4aA7nrI62HErD6x8pbOGtyZyx1lTMGuayusCml49fWmDSC0RKXZ6W2KTSE3og
+         7sfW4ogSmOgTzNCnvVcBxKzdiZybsIiZRCnjhJ3Bknskk2rHI240SihRLlfDIgIRULwf
+         e7mcliomotCV7oEmNtzx5CWWjEe4IEzeNPQlbLKBIUwQY9LPTXomNGmjf94Vb0Sp2WY9
+         4MMcgSZWsny9xaJChy+TP4DDL5OVgNyRceg+gsmdJknmcuxzevpp3GOD9Ucp0SI1xGNC
+         Si9x15XpnIh/7ykpYq9dhbbeB4TDvEoT6QlLHzXd+dFE+ZoTJnO4as+7PHabBxvl5icT
+         fgUQ==
+X-Gm-Message-State: ANoB5pl+wkaeICJHccaA2OyoSi51ylx6RXwj8p+Nyoe5vdvbxwhbuv37
+        mhCdnsdu3Q2uUraugw48QmQ=
+X-Google-Smtp-Source: AA0mqf6bOc6eswnSV3TfmcRFzmPhTL6Ee1KbWpaBaOGQLlUb9Jl61D3zc4K3ORXo+CB6cVL5uBgJAg==
+X-Received: by 2002:a63:5115:0:b0:46f:a989:ad72 with SMTP id f21-20020a635115000000b0046fa989ad72mr2401863pgb.430.1668186561335;
+        Fri, 11 Nov 2022 09:09:21 -0800 (PST)
+Received: from google.com ([2620:15c:211:201:dab:6951:19b1:b46b])
+        by smtp.gmail.com with ESMTPSA id o28-20020aa7979c000000b0056babe4fb8asm931672pfp.49.2022.11.11.09.09.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 09:09:20 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Fri, 11 Nov 2022 09:09:19 -0800
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 2/9] zsmalloc: turn zspage order into runtime variable
+Message-ID: <Y26BvxM1CeqnaLI3@google.com>
+References: <20221031054108.541190-1-senozhatsky@chromium.org>
+ <20221031054108.541190-3-senozhatsky@chromium.org>
+ <Y210OrSgrqWPr0DT@google.com>
+ <Y24mEiy0pt2qSCqr@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 13/21] gunyah: vm_mgr: Introduce basic VM Manager
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Bjorn Andersson" <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-14-quic_eberman@quicinc.com>
- <Y2H8oh7AvYDiMqKs@kroah.com>
- <722b05a1-4bf5-0837-baea-b1d0a9cc1e43@quicinc.com>
- <Y2MKWOihjAPxfl6v@kroah.com>
- <96238455-73b6-bead-0fdb-55ca68e5bf0b@quicinc.com>
- <9dd597d9-a3f3-48f2-8416-b5b097a230d5@app.fastmail.com>
- <980db147-794e-ecd9-9626-64ff81109bab@quicinc.com>
- <95a9f253-984a-14e0-7e01-f168452576c4@quicinc.com>
- <543d95f8-be31-7553-4700-5dc04872e8ea@quicinc.com>
- <Y23qjcMmerVuKFdj@kroah.com>
-Content-Language: en-US
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <Y23qjcMmerVuKFdj@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9nZnTzysHz-yQwmjXf_a3mkpW5qatf5E
-X-Proofpoint-ORIG-GUID: 9nZnTzysHz-yQwmjXf_a3mkpW5qatf5E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
- spamscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 suspectscore=0
- mlxlogscore=550 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211110115
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y24mEiy0pt2qSCqr@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 11, 2022 at 07:38:10PM +0900, Sergey Senozhatsky wrote:
+< snip >
 
-
-On 11/10/2022 10:24 PM, Greg Kroah-Hartman wrote:
-> On Thu, Nov 10, 2022 at 04:03:10PM -0800, Elliot Berman wrote:
->>> Agree, tools can be updated and that is the easy part as we grow the s/w
->>> stack around Gunyah in userspace, like we already do w/ CrosVM (Virtual
->>> Machine Manager) and QEMU will be next followed by rust-vmm. All of them
->>> can be done without Gunyah ioctls relying anything on the KVM ioctls.
->>> Elliot has also explained very well that we don't to go to KVM
->>> maintainers for any of our additions and we also don't want them to come
->>> to us, since there is no interoperability testing. It is best that both
->>> Hypervisors and their Linux interfaces evolve independently.
->>
->> Are above explanations reasonable to not re-use KVM ioctl numbers?
+> [..]
+> > >  enum fullness_group {
+> > >  	ZS_EMPTY,
+> > > @@ -230,12 +221,15 @@ struct link_free {
+> > >  struct zs_pool {
+> > >  	const char *name;
+> > >  
+> > > -	struct size_class *size_class[ZS_SIZE_CLASSES];
+> > > +	struct size_class **size_class;
+> > >  	struct kmem_cache *handle_cachep;
+> > >  	struct kmem_cache *zspage_cachep;
+> > >  
+> > >  	atomic_long_t pages_allocated;
+> > >  
+> > > +	u32 num_size_classes;
+> > > +	u32 min_alloc_size;
+> > 
+> > Please use int.
 > 
-> Try getting close at least, where possible please.  As your ioctl
-> numbers didn't even start at 0, it's a bit odd...
+> OK. Any reason why we don't want u32? I thought that
+> s16/u16/s32/u32/etc. is the new normal.
 
-Ack, will do.
+Oh, I didn't know the new normal.
 
-Thanks,
-Elliot
+# ag u32 mm/ | wc -l 
+65
+
+Then, I'd like to use int to be consistent with others.
+
+> 
+> > From this patch, I couldn't figure why we need
+> > variable in the pool. Let's have the change in the patch where
+> > you really need to have the usecase.
+> 
+> Let me take a look.
+> 
+> > > -static int get_pages_per_zspage(int class_size)
+> > > +static int get_pages_per_zspage(u32 class_size, u32 num_pages)
+> > 
+> > Let's just use int instead of u32
+> > 
+> > Why do you need num_pages argument instead of using 1UL << ZS_DEFAULT_PAGE_ORDER?
+> > It looks like static value.
+> 
+> It is static right now, but in the a couple of patches it'll change to
+> dynamic.
+
+Then, plase have the change in the patch you will use to review easier.
