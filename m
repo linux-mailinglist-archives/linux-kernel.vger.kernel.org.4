@@ -2,184 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AF262603C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E08626045
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiKKRQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S234376AbiKKRSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbiKKRQJ (ORCPT
+        with ESMTP id S234306AbiKKRSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:16:09 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF4620F71;
-        Fri, 11 Nov 2022 09:16:04 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B3E6A22427;
-        Fri, 11 Nov 2022 17:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668186962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FxrxM7pL3XKtifIuT+LlAb2dWxKEfCKW4HflKcsOazM=;
-        b=Bx93kEFIydrek2IJhS1lyxdnzNwsqiFWcSHlAxlTXbGbLl8Lk667JwSy1+8nQrjVP4gzUK
-        pk7Pxa39UFsq+onAdTpLvmGhPWQO4bmOhnEYXxKi2ONuoPJKIvtHs/cqCGFk2+29VflLLL
-        YjzXL5z0HLnd9i/Kgm5/5Wa6hVfQATQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4937A2C145;
-        Fri, 11 Nov 2022 17:16:02 +0000 (UTC)
-Date:   Fri, 11 Nov 2022 18:15:58 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH printk v3 40/40] tty: serial: sh-sci: use setup()
- callback for early console
-Message-ID: <Y26DTir7jozrsEST@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-41-john.ogness@linutronix.de>
+        Fri, 11 Nov 2022 12:18:03 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6F53F077;
+        Fri, 11 Nov 2022 09:18:01 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ABHHokh079454;
+        Fri, 11 Nov 2022 11:17:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668187070;
+        bh=yyoNJRT9+sRkSyBtz2H+CMlPQ7h0N1T+j7lp3IM8q4k=;
+        h=From:To:CC:Subject:Date;
+        b=s/iRlNiOo2JkCS09lTOXx2SGfewFrAza+Xh4n8+KCfPCY64xixThG10A99XedQBUE
+         L0Zyx0Sa/zDQlwV25NIPtW4+71sRDrzwzVwIzxk2qIhTU1bzv+Howu1o3zcGRQ3EcX
+         WzyaD+OVqQeJsJd+gVlqJbqMjnlMtJt13n8t55Gs=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ABHHoFO091819
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Nov 2022 11:17:50 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 11
+ Nov 2022 11:17:49 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Fri, 11 Nov 2022 11:17:49 -0600
+Received: from jti.ent.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ABHHewX028454;
+        Fri, 11 Nov 2022 11:17:42 -0600
+From:   Georgi Vlaev <g-vlaev@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Vibhore Vardhan <vibhore@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: [PATCH v3 0/5] firmware: ti_sci: Introduce system suspend support
+Date:   Fri, 11 Nov 2022 19:17:34 +0200
+Message-ID: <20221111171739.160693-1-g-vlaev@ti.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107141638.3790965-41-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ccing Bartosz who should be familiar with the early platform code.
+This series introduces necessary ti_sci driver functionality in
+preparation of supporting DeepSleep mode for suspend to mem on TI
+K3 AM62x. This version is a fixup and rebase of the patch series by
+Dave Gerlach [1]. It applies on top of v6.1-rc4.
 
-On Mon 2022-11-07 15:22:38, John Ogness wrote:
-> When setting up the early console, the setup() callback of the
-> regular console is used. It is called manually before registering
-> the early console instead of providing a setup() callback for the
-> early console. This is probably because the early setup needs a
-> different @options during the early stage.
+Deep Sleep mode is described in section "5.2.4.4 DeepSleep" of the
+AM62x Technical Reference Manual [2].
 
-This last sentece makes a bit nervous ;-)
+The kernel triggers entry to Deep Sleep mode through the mem suspend
+transition with the following:
 
-I think that I understood it in the end, see below.
+* Use a TF-A binary that supports PSCI_SYSTEM_SUSPEND call. This causes
+  system to use PSCI system suspend as last step of mem sleep.
 
-> The issue here is that the setup() callback is called without the
-> console_list_lock held and functions such as uart_set_options()
-> expect that.
-> 
-> Rather than manually calling the setup() function before registering,
-> provide an early console setup() callback that will use the different
-> early options. This ensures that the error checking, ordering, and
-> locking context when setting up the early console are correct.
-> 
-> Note that technically the current implementation works because it is
-> only used in early boot. And since the early console setup is
-> performed before registering, it cannot race with anything and thus
-> does not need any locking. However, longterm maintenance is easier
-> when drivers rely on the subsystem API rather than manually
-> implementing steps that could cause breakage in the future.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> ---
->  drivers/tty/serial/sh-sci.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> index 62f773286d44..f3a1cfec757a 100644
-> --- a/drivers/tty/serial/sh-sci.c
-> +++ b/drivers/tty/serial/sh-sci.c
-> @@ -3054,15 +3054,26 @@ static struct console serial_console = {
->  };
->  
->  #ifdef CONFIG_SUPERH
-> +static char early_serial_buf[32];
-> +
-> +static int early_serial_console_setup(struct console *co, char *options)
-> +{
-> +	WARN_ON(options);
-> +	/*
-> +	 * Use @early_serial_buf because @options will always be
-> +	 * NULL at this early stage.
-> +	 */
+* The firmware requires that the OS sends a TISCI_MSG_PREPARE_SLEEP
+  message in order to provide details about suspend, so we must add the
+  ability to send this message. We also add TISCI_MSG_LPM_WAKE_REASON
+  and TISCI_MSG_SET_IO_ISOLATION messages as part of a new PM ops. These
+  messages are part of the TISCI PM Low Power Mode API [3]. (Patch 2)
 
-The commit message says that we use @early_serial_buf because
-the early console probably needs another parameters.
+* A memory address must be provided to the firmware using the above
+  message, which is allocated and managed by dma_alloc_coherent()
+  and friends. (Patch 3)
 
-It suggests that @options might be for the later stage and
-we need to replace them there. Are we sure that this will always
-be NULL?
+* System must load firmware to a specific location before Deep Sleep is
+  entered, and this is accomplished using a memory region in device
+  tree to indicate where this firmware should be loaded, and also a
+  "firmware-name" property to indicate the name of the firmware
+  to load. The ti_sci driver checks in its pm handler to see if
+  the firmware has been loaded and if not, loads it. (Patch 4)
 
-Background:
+* Finally, the ti_sci driver must actually send TISCI_MSG_PREPARE_SLEEP
+  message to firmware with the above information included, which it
+  does during the driver suspend handler when PM_MEM_SUSPEND is the
+  determined state being entered. (Patch 5)
 
-The console->setup() is called in two situations:
+This is tested on am625-sk using a limited dts with all devices disabled
+apart from cpu0, main_uart0, i2c, rtc, mmc/sd, dmsc, and secure_proxy_main.
 
-   1. when the console is registered as the default console, see
-     try_enable_default_console(). In this case, @options
-     is really NULL.
+Testing this sequence requires K3 sdhci suspend/resume support [4],
+enable the wkup_rtc in the am625-sk.dts, disable devices that don't
+support system suspend/resume like OSPI and CPSW3G.
 
-   2. when the console is preferred either via the commnadline,
-      or device tree, or SPCR, see try_enable_preferred_console().
-      In this case, some real @options would be passed.
+In can be tested on the following branch:
+https://github.com/gvlaev/linux/tree/upstream-v6.2/lpm-ti-sci-v2
 
-     From the code POV, the preferred consoles are added by calling
-     add_preferred_console().
+Changelog:
+v3:
+- Fix the compile warnings on 32-bit platforms reported by the kernel
+  test robot in patches (3,5).
+- Pick up Roger's "Tested-by" tags.
+
+v2:
+- Addressed comments received for v1 series [1].
+- Updated v1 patch 5 to use pm notifier to avoid firmware loading
+  issues.
+- Dropped the reserved region requirement and allocate DMA memory
+  instead. The reserved region binding patch is also removed.
+- Introduce two more TISCI LPM messages that are supported in SysFW.
+- Fixes in error handling.
+
+[1] https://lore.kernel.org/lkml/20220421203659.27853-1-d-gerlach@ti.com
+[2] https://www.ti.com/lit/pdf/spruiv7
+[3] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
+[4] https://lore.kernel.org/lkml/20220408124338.27090-1-a-govindraju@ti.com
+
+Georgi Vlaev (5):
+  dt-bindings: ti, sci: Add lpm region and firmware-name
+  firmware: ti_sci: Introduce Power Management Ops
+  firmware: ti_sci: Allocate memory for the LPM modes
+  firmware: ti_sci: Use dt provided fw name and address to load at
+    suspend time
+  firmware: ti_sci: Introduce prepare system suspend call
+
+ .../bindings/arm/keystone/ti,sci.yaml         |  21 +-
+ drivers/firmware/ti_sci.c                     | 356 ++++++++++++++++++
+ drivers/firmware/ti_sci.h                     |  64 +++-
+ include/linux/soc/ti/ti_sci_protocol.h        |  44 +++
+ 4 files changed, 480 insertions(+), 5 deletions(-)
 
 
-Now, it means that the WARN_ON() is correct only when this console
-is always registered before the preferred consoles are defined.
+base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
+-- 
+2.30.2
 
-I think that this is really the case. This console
-is actually registered via the "earlyprintk" parameter that
-is proceed by the arch-specific code before the preferred
-consoles are added the standard way via the kernel commandline.
-
-Note that "earlyprintk" and "earlycon" are two different parameters.
-
-"earlyprintk" normally initializes "early_console" that is
-called directly by early_printk(). It is used for super early
-debugging. These messages even do not end in the ring buffer.
-
-"earlycon" defines a "normal" console that is used by the standard
-printk(). They are later replaced by properly initialized console
-drivers that are in sysfs, ...
-
-Note that "earlycon" calls add_preferred_console() so that
-the @options are stored and passed from try_enable_preferred_console().
-
-But "earlyprintk" does not call add_preferred_console() so
-we need this hack to store and pass the console options
-another way.
-
-> +	return serial_console_setup(co, early_serial_buf);
-> +}
-> +
-
-So I would do something like:
-
-static int early_serial_console_setup(struct console *co, char *options)
-{
-	/*
-	 * This early console is registered using earlyprintk= parameter
-	 * that does not call add_preferred_console(). The @options
-	 * are passed using a custom buffer.
-	 */
-	WARN_ON(options);
-
-	return serial_console_setup(co, early_serial_buf);
-}
-
-Also we should explain this in the commit message.
-
-Best Regards,
-Petr
