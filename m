@@ -2,47 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A318F6253CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D12D6253D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbiKKGbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 01:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S229703AbiKKGcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 01:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiKKGad (ORCPT
+        with ESMTP id S232935AbiKKGbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 01:30:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376B079D11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 22:26:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B32A6B822ED
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:26:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 974CCC433C1;
-        Fri, 11 Nov 2022 06:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668147984;
-        bh=VdXGwJ1MitCF6bo1N2NcBnI+xaeLtAPTr4j2mqTNPZ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JBTza4lX/4Dt1TZ//ZHSiwlY4+UiTiQEssI8QnyNnyoofhKo7/PCm0q+zjyHfvk3c
-         E5VMr54D3Oh1LtkYzMJ5Ur852y+y3e+1BB6IS6+GLxHxY6koKyPA3ouqWvjEgHbX0a
-         IjT/BWyWjgnfNN4qZEfD93FjbB4EpYh10vkRN4DA=
-Date:   Fri, 11 Nov 2022 07:26:19 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kobject: hide illegible sysfs warning of kobject_del()
-Message-ID: <Y23rC0N1cL2LQpyF@kroah.com>
-References: <20221111065807.3278713-1-liushixin2@huawei.com>
+        Fri, 11 Nov 2022 01:31:24 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46EC1AF24
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 22:29:01 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id y192so1557973yby.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 22:29:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YfGpV2JA6patueMGzEYztlKL5Nu/nd16bt9DITnJUsw=;
+        b=EhhSM3ubjZZaNZW6RsLRC5+FRMYk1rWzaPCdefEyP6qJ3zQelmXzARbaV4VbwNhuUU
+         Z5Es/matWC2laMecuVrAfpFH43B8jkn6BuywA3Rl38VFl4g0dkFqhMMv7pVWyLLTH4Vh
+         IhmS6VaIQOHK9sMSN+nIaVZ67YvF7rbs4J5b0MXjABKQiXCL1DgICa4ZfLmB68aAw7M0
+         uggrcvUXW+11tHXofn0LcNQlrKdteVdAHkc7ruWcANvyDoSNB9mnrs6Z7228tVlIu77B
+         8zxW2oxbAvd1G87KDie6SBwvO6O/n9muMnP4eHQsL+/wwZ2fTx+xq79Y26xQyK4pijoz
+         7TpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YfGpV2JA6patueMGzEYztlKL5Nu/nd16bt9DITnJUsw=;
+        b=AOoEadkwiYy92TU34mnPrMZAiEzYQ+ToSayvgGOIeoyJ+g5B2Lip1Kz/vVarclYmcn
+         cE9hFQAl0bbhVkoFH/muOVr0ix8OZFFGlQl0yjAio/GvGF6jJPSg70oNZ3lSqs7By2jS
+         4390r9Bd0jacBXizyp8UZ5eTFylzfhlEyXBXKXIA0Qrm/ZlQ9L6W9olLzCJ/xnIxli/x
+         oSj8nBpN18E7QxvhPKuTzHESulmTIFRQ7pgc1OWV3qLB11zbMqXeV4avoRox5/n01XgQ
+         53zI1EJPKX3vxxOJ6eeIFZnKzrbFAt+vuIZrs3A89wVFFu5pslcacCqtO+YhNmmYUVEC
+         amFg==
+X-Gm-Message-State: ANoB5pmuDQDHZakFSTqJoTjureR4+0Oaq46xjCRh78cMQYpR3FT4itkM
+        mfz5qSYa4JFmXNwBxFj845LMqSCCkLfb9ohypyqDcw==
+X-Google-Smtp-Source: AA0mqf7h9gVbHC9AIBKiyUShaRgyYmJgsc/IKxG8U0ryPQvMgEnypOPr6AWgIEdMQtAbmXCJHUnS5NDMJkuqCMSxkJQ=
+X-Received: by 2002:a25:900c:0:b0:6c4:8a9:e4d2 with SMTP id
+ s12-20020a25900c000000b006c408a9e4d2mr544847ybl.164.1668148140428; Thu, 10
+ Nov 2022 22:29:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111065807.3278713-1-liushixin2@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <CA+G9fYt49jY+sAqHXYwpJtF0oa-jL8t8nArY6W1_zui0sKFipA@mail.gmail.com>
+ <29824864-f076-401f-bfb4-bc105bb2d38f@app.fastmail.com> <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
+In-Reply-To: <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 11 Nov 2022 11:58:48 +0530
+Message-ID: <CA+G9fYs_kWc1Zh=Zr4esnJYRvSMwv6k6m1eYW4PbHCYpvJPPOg@mail.gmail.com>
+Subject: Re: arm: TI BeagleBoard X15 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000369 - Internal error: Oops: 5 [#1] SMP ARM
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,16 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:58:07PM +0800, Liu Shixin wrote:
-> Some consumers do not care whether kobject_add() succeed or failed such as
-> irqdesc. They call kobject_del() all the time even if kobject_add() failed.
-> Then kernel will report some illegible sysfs warning like this:
-> 
->  kernfs: can not remove 'actions', no directory
->  WARNING: CPU: 0 PID: 277 at fs/kernfs/dir.c:1615 kernfs_remove_by_name_ns+0xd5/0xe0
+Hi Arnd,
 
-Why not fix the caller here?  Is that somehow not possible?
+On Thu, 10 Nov 2022 at 03:33, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, Nov 9, 2022, at 13:57, Arnd Bergmann wrote:
+> >
+> > One thing that sticks out is the print_constraints_debug() function
+> > in the regulator framework, which uses a larger-than-average stack
+> > to hold a string buffer, and then calls into the low-level
+> > driver to get the actual data (regulator_get_voltage_rdev,
+> > _regulator_is_enabled). Splitting the device access out into a
+> > different function from the string handling might reduce the
+> > stack usage enough to stay just under the 8KB limit, though it's
+> > probably not a complete fix. I added the regulator maintainers
+> > to Cc for thoughts on this.
+>
+> I checked the stack usage for each of the 147 functions in the
+> backtrace, and as I was guessing print_constraints_debug() is
+> the largest, but it's still only 168 bytes, and everything else
+> is smaller, so no point hacking this.
+>
+> 168     print_constraints_debug
+> 96      timekeeping_advance
+> 64      set_machine_constraints
+> 64      of_i2c_register_device
+> 56      of_platform_bus_create
+> 48      schedule_timeout
+>
+> One more idea I had is the unwinder: since this kernel is built
+> with the frame-pointer unwinder, I think the stack usage per
+> function is going to be slightly larger than with the arm unwinder.
+>
+> Naresh, how hard is it to reproduce this bug intentionally?
+> Can you try if it still happens if you change the .config to
+> use these:?
+>
+> # CONFIG_FUNCTION_GRAPH_TRACER is not set
+> # CONFIG_UNWINDER_FRAME_POINTER is not set
+> CONFIG_UNWINDER_ARM=y
 
-thanks,
+I have done this experiment and reported crash not reproduced
+after eight rounds of testing [1].
 
-greg k-h
+https://lkft.validation.linaro.org/scheduler/job/5835922#L1993
+
+>
+>        Arnd
+
+- Naresh
