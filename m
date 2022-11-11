@@ -2,45 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A7A62544F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F637625451
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233172AbiKKHJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S233023AbiKKHKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 02:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233171AbiKKHJn (ORCPT
+        with ESMTP id S229461AbiKKHKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:09:43 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B647918383;
-        Thu, 10 Nov 2022 23:09:40 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7qZJ5vkXzHvgZ;
-        Fri, 11 Nov 2022 15:09:12 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 15:09:38 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <vburru@marvell.com>, <aayarekar@marvell.com>,
-        <sburla@marvell.com>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net 4/4] octeon_ep: ensure get mac address successfully before eth_hw_addr_set()
-Date:   Fri, 11 Nov 2022 15:09:35 +0800
-Message-ID: <223ee27c25cc506b8d49c87e8a95b06c6eb2b971.1668150074.git.william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1668150074.git.william.xuanziyang@huawei.com>
-References: <cover.1668150074.git.william.xuanziyang@huawei.com>
+        Fri, 11 Nov 2022 02:10:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA8ABF5A;
+        Thu, 10 Nov 2022 23:10:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C22BF61EB2;
+        Fri, 11 Nov 2022 07:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 239ADC433D6;
+        Fri, 11 Nov 2022 07:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668150651;
+        bh=44w+Fl51DHOavbg54OA+rUmVXD6RmtykGkZJuEnzcRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lfn389LsSaZIIFb6vDyCicz/Y7tqEhtcG15ht7ywC1xXXMH5G+Ek7ZVZN85AOrBpR
+         5WJJyY8W9PZ7/loeHgwjpim5tpZQsCCZs9JzN1rJz9bH+Nhd3yUkJXF6LlLswjDN35
+         bZjiXIhDBTqoMrlcHVSZ4JPP9TgJAzlfRRMzFyjQOvluLC3F3I67rlRgStFifWq9FP
+         UD1AhC9LAqNJ4JRcBxztwzUBhBi0rOR0NIVJ+EvNOi1urFM/Y/qelGum9z15tdV3uJ
+         Odvj86Pi9jtbVOCAoipLf19B5uWGElpSdEiq2AVdMC+61U1vVG2dyyZrmoumGmhaxB
+         wUWWKi4lhkm6w==
+Date:   Fri, 11 Nov 2022 15:10:44 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8m{m,n}-venice-gw7902: add gpio pins for
+ new board revision
+Message-ID: <20221111071044.GQ2649582@dragon>
+References: <20221107181754.218158-1-tharvey@gateworks.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107181754.218158-1-tharvey@gateworks.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,33 +59,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-octep_get_mac_addr() can fail because send mbox message failed. If this
-happens, octep_dev->mac_addr will be zero. It should not continue to
-initialize. Add exception handling for octep_get_mac_addr() to fix it.
+On Mon, Nov 07, 2022 at 10:17:54AM -0800, Tim Harvey wrote:
+> Add gpio pins present on new board revision:
+>  * LTE modem support (imx8mm-gw7902 only)
+>   - lte_pwr#
+>   - lte_rst
+>   - lte_int
+>  * M2 power enable
+>   - m2_pwr_en
+>  * off-board 4.0V supply
+>   - vdd_4p0_en
+> 
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 
-Fixes: 862cd659a6fb ("octeon_ep: Add driver framework and device initialization")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- drivers/net/ethernet/marvell/octeon_ep/octep_main.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index 53f288c32238..b45dd7f04e21 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -1072,7 +1072,11 @@ static int octep_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	netdev->max_mtu = OCTEP_MAX_MTU;
- 	netdev->mtu = OCTEP_DEFAULT_MTU;
- 
--	octep_get_mac_addr(octep_dev, octep_dev->mac_addr);
-+	err = octep_get_mac_addr(octep_dev, octep_dev->mac_addr);
-+	if (err) {
-+		dev_err(&pdev->dev, "Failed to get mac address\n");
-+		goto register_dev_err;
-+	}
- 	eth_hw_addr_set(netdev, octep_dev->mac_addr);
- 
- 	err = register_netdev(netdev);
--- 
-2.25.1
-
+Applied, thanks!
