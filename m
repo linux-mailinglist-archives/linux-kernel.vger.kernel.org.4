@@ -2,52 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2490362608F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E628626090
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbiKKRjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:39:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S233758AbiKKRkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233851AbiKKRjB (ORCPT
+        with ESMTP id S231625AbiKKRkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:39:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046AD61B84;
-        Fri, 11 Nov 2022 09:38:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9527E6206D;
-        Fri, 11 Nov 2022 17:38:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C25C433C1;
-        Fri, 11 Nov 2022 17:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668188338;
-        bh=pVSG4o9o7ELZjK0i4XqofCGBuPWYjWKlXf96GCOImGc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t1H/cEE4N44Xw3DctnOnlHXKoi27WfQjOTKxdjmtmS5ep1HuMVWnGoaD7M40rz/PZ
-         HDCenm1V5W+mtGUbmNqu3oSf+fUpPjUrAMNIT18SVLnuV1WXuG8A4817b55IJ4dI8Z
-         ion0aTgFjjYPAU0BvtvFpFaHuJ4VK5nzQ04BqU9CtdF4wm3hcmVpemXs+mVmOHXq29
-         ZFOb0H57A+Z3wtKiM5+JhmCUWey7dRhfe+wQwsUdPFWA8dexZYM9Jf3lDRZvlulz2r
-         bv0BFpbPPziC3o8ry8PqGp49AaI9HO3JHdXQAxFpyfdWRMvowhzIFjo4FCsub3v3PZ
-         TbEGlfhvOjuqQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     sj@kernel.org, damon@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        rongtao@cestc.cn, shuah@kernel.org, yuanchu@google.com
-Subject: Re: [PATCH] selftests/damon: Fix unnecessary compilation warnings
-Date:   Fri, 11 Nov 2022 17:38:55 +0000
-Message-Id: <20221111173855.108360-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <tencent_32CBE47252C5F69571B40751DE6054082D05@qq.com>
-References: 
+        Fri, 11 Nov 2022 12:40:02 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB82411442
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:40:01 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id j12so4757343plj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:40:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9VmHrF7f47E4VNBhDF2e+NO6WB+riPDrXDo4vmyhQh4=;
+        b=Sy2alGhPAY4dRLL8NhVi5LMeqzPl4YZGksRyhbH6KFcOnxsoRCWeQDYO9bSUMuFp3F
+         HtMmuBHeWFqlGu9qWwLwHuzOlKzIeL6hJykKUO8Gdnq8ekXg9CV1XZEHZ8EIeVq5xO+V
+         4XGRgIVAgGbUlYpIm1V9GwDwg5hI7bfMRZ/v5SeknQu6Qm1B6z1tj0vYE2w8+4rUW66m
+         Zdqvfvy0qWjrG1dPYkIq3SZNiHMn2EXE+hGWJn1r6Wcc+JZ83GyQ7UQmRVWAjEyugQOL
+         Q70URkjCQsikEcdg6rDp8v2G6yl5D1h49qSS6fhtp+ga8VG0VKPQ6Bg9FSnJMhbxdOJd
+         a3AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9VmHrF7f47E4VNBhDF2e+NO6WB+riPDrXDo4vmyhQh4=;
+        b=N9ABbM24XxEHlgCitSBqUMQXxdGPVo9jbXB67d4MoMEdQC4CpmFn0D+9c+OZrJyTAi
+         EE6HiMT0C7b5BabALpT6q2ebi1REEvG5q8m9vQPqDywbw5lSHd5hkivUFa3QIoF4tB1e
+         Ud1RdlzDIF5/tpROEJTIzvCw9gcykr5nD//pTuKd3Yjt3ncYrXrJCVow0DMQjaKr79lD
+         Xe4eNUXy3CnK1TcMxiA63Q6a4igbGjKx2xs1MrPLmKlrfPq56UssWrQS1VUnHHCAy76/
+         Ys5B9YPSH6gKbDJ4hTLS4vYCUgBRQkg8jjfgZE/sWUUNh+rlgeVuNXA9lrf+KC1QhOkm
+         ++zg==
+X-Gm-Message-State: ANoB5pk5sI+Pv06MGjzJQHuxCwIPeSeuOOt8WRzGSq9lTyA9+HaJkcrk
+        gdwdaYp9PRQMUj3RsgL3rHwp
+X-Google-Smtp-Source: AA0mqf6do1AF7IWotNXWBySjLNiLHDmFVUhjU3XSuSGHRBnSljWdybQk2cF5f97EzaxvgTTslpsVOQ==
+X-Received: by 2002:a17:90b:3d83:b0:200:7cf7:3d79 with SMTP id pq3-20020a17090b3d8300b002007cf73d79mr2872179pjb.206.1668188401136;
+        Fri, 11 Nov 2022 09:40:01 -0800 (PST)
+Received: from thinkpad ([117.202.188.198])
+        by smtp.gmail.com with ESMTPSA id r17-20020a170903411100b00186c3727294sm1947481pld.270.2022.11.11.09.39.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 09:39:58 -0800 (PST)
+Date:   Fri, 11 Nov 2022 23:09:52 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Amit Pundir <amit.pundir@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [GIT PULL] arm64 updates for 6.1-rc1
+Message-ID: <20221111173952.GB5393@thinkpad>
+References: <20221005144116.2256580-1-catalin.marinas@arm.com>
+ <CAMi1Hd38YB2m_r=m0wuDz+wErii37fUq1BJnvN9=y6opDzo_Fw@mail.gmail.com>
+ <Y0aq8y5mEZi14lJ/@arm.com>
+ <CAMi1Hd3Y9AibeVnh9_KYJ2EXar7bBSypKm4Tixj47htM7ZOURw@mail.gmail.com>
+ <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
+ <Y24uvyDJU3CL1jOi@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y24uvyDJU3CL1jOi@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,77 +83,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rong,
-
-
-It would be better if you could notice the version of this patch using 'PATCH
-v2' like subject prefix from next time.
-
-On Fri, 11 Nov 2022 10:37:20 +0800 Rong Tao <rtoax@foxmail.com> wrote:
-
-> From: Rong Tao <rongtao@cestc.cn>
+On Fri, Nov 11, 2022 at 11:15:11AM +0000, Catalin Marinas wrote:
+> On Tue, Nov 08, 2022 at 10:58:16PM +0530, Amit Pundir wrote:
+> > On Tue, 25 Oct 2022 at 18:08, Amit Pundir <amit.pundir@linaro.org> wrote:
+> > > On Wed, 12 Oct 2022 at 17:24, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > On Sat, Oct 08, 2022 at 08:28:26PM +0530, Amit Pundir wrote:
+> > > > > On Wed, 5 Oct 2022 at 20:11, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > > > Will Deacon (2):
+> > > > > >       arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()
+> > > > >
+> > > > > This patch broke AOSP on Dragonboard 845c (SDM845). I don't see any
+> > > > > relevant crash in the attached log and device silently reboots into
+> > > > > USB crash dump mode. The crash is fairly reproducible on db845c. I
+> > > > > could trigger it twice in 5 reboots and it always crash at the same
+> > > > > point during the boot process. Reverting this patch fixes the crash.
+> > > > >
+> > > > > I'm happy to test run any debug patche(s), that would help narrow
+> > > > > down this breakage.
+> [...]
+> > > Further narrowed down the breakage to the userspace daemon rmtfs
+> > > https://github.com/andersson/rmtfs. Is there anything specific in the
+> > > userspace code that I should be paying attention to?
 > 
-> When testing overflow and overread, there is no need to keep unnecessary
-> compilation warnings, we should simply ignore them.
+> Since you don't see anything in the logs like a crash and the system
+> restarts, I suspect it's some deadlock and that's triggering the
+> watchdog. We have an erratum (826319) but that's for Cortex-A53. IIUC
+> SDM845 has Kryo 3xx series which based on some random google searches is
+> derived from A75/A55. Unfortunately the MIDR_EL1 register doesn't match
+> the Arm Ltd numbering, so I have no idea what CPUs these are by looking
+> at the boot log.
 > 
-> How to reproduce the problem:
+> I wouldn't be surprised if you hit a similar bug, though I couldn't find
+> anything close in the A55 errata notice.
 > 
->     $ make -C tools/testing/selftests/
->     ...
->     warning: ‘write’ reading 4294967295 bytes from a region of size 1
->     [-Wstringop-overread]
->     warning: ‘read’ writing 4294967295 bytes into a region of size 25
->     overflows the destination [-Wstringop-overflow=]
-
-Thank you for indenting as I suggested!  BTW, I'm ok to violate the line length
-limit for quoting commands outputs.
-
+> While we could revert commit c44094eee32f ("arm64: dma: Drop cache
+> invalidation from arch_dma_prep_coherent()"), if you hit a real hardware
+> issue it may trigger in other scenario where we only do cache cleaning
+> (without invalidate), like arch_sync_dma_for_device(). So I'd rather get
+> to the bottom of this and potentially enable the workaround for this
+> chipset.
 > 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
->  tools/testing/selftests/damon/huge_count_read_write.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> You could give it a quick try to by adding the MIDR ranges for SDM845 to
+> struct midr_range workaround_clean_cache[].
 > 
-> diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
-> index ad7a6b4cf338..8fbe276870e7 100644
-> --- a/tools/testing/selftests/damon/huge_count_read_write.c
-> +++ b/tools/testing/selftests/damon/huge_count_read_write.c
-> @@ -8,6 +8,11 @@
->  #include <unistd.h>
->  #include <stdio.h>
->  
-> +#pragma GCC diagnostic push
-> +/* Ignore read(2) overflow and write(2) overread compile warnings */
-> +#pragma GCC diagnostic ignored "-Wstringop-overread"
 
-This still trigger below error on my old gcc.
+I gave it a shot and indeed it fixes the crash on DB845.
 
-    gcc -Wno-stringop-overread -Wno-stringop-overflow    huge_count_read_write.c  -o /home/sjpark/linux/tools/testing/selftests/damon/huge_count_read_write
-    huge_count_read_write.c:13:32: warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas]
-       13 | #pragma GCC diagnostic ignored "-Wstringop-overread"
-          |                                ^~~~~~~~~~~~~~~~~~~~~
-    cc1: warning: unrecognized command line option ‘-Wno-stringop-overread’
+> After that I suggest you raise it with Qualcomm to investigate. Normally
+> we ask for an erratum number to enable a workaround and it's only
+> Qualcomm that can provide one here.
+> 
 
-I don't think that's a blocker of this patch, but hope to hear your opinion.
-
+I will check with Qualcomm folks and update.
 
 Thanks,
-SJ
+Mani
 
-> +#pragma GCC diagnostic ignored "-Wstringop-overflow"
-> +
->  void write_read_with_huge_count(char *file)
->  {
->  	int filedesc = open(file, O_RDWR);
-> @@ -27,6 +32,8 @@ void write_read_with_huge_count(char *file)
->  	close(filedesc);
->  }
->  
-> +#pragma GCC diagnostic pop
-> +
->  int main(int argc, char *argv[])
->  {
->  	if (argc != 2) {
 > -- 
-> 2.31.1
-> 
+> Catalin
+
+-- 
+மணிவண்ணன் சதாசிவம்
