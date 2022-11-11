@@ -2,151 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEE66259B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EA56259BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbiKKLqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        id S233276AbiKKLsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKKLqf (ORCPT
+        with ESMTP id S233015AbiKKLsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:46:35 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FFBE0BB;
-        Fri, 11 Nov 2022 03:46:34 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id j4so8027906lfk.0;
-        Fri, 11 Nov 2022 03:46:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8+TGbcI0QMZONMioawRdiUS9+5vmjoD8ChogAY21Oa0=;
-        b=K5nlJPYQZx78+Mgn7RBBkCqYmu3Rn6ArgOwGOf2XXY7HAgZoJ9QjWVGhyg1cE6r9Rw
-         kEQDEI+qTn83kiYVLHOOLrwoMQ5SCSru6awifHCwiI1tmWgqW7b1oa8ab36hG/fMWV2W
-         ciFYrd6x3q5OcT7sYB9b0as4UqBgI9MAe5/vyuoHAKS+qPV89g6qVnLb3NKIrYMFZye3
-         rxHA0LvaUTUFkaLK+k7im6nbFwPvI3Ek1hPhrTbUpu4WR+sZQoDcnxBXKugB0Le3HpUc
-         TQgeC4cYZWc3HBPSa5vA3e3mgnb2b5GWUkLAmkF2qtIscMbhLPxFP3N2xXIiVGAV8bxm
-         BE0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8+TGbcI0QMZONMioawRdiUS9+5vmjoD8ChogAY21Oa0=;
-        b=gDjDMohFLwoQEA+MMURID1VYGv5tFmQgRwg7K0GwiTFS3DhzY/Amm0ZmO8q/YlY/sF
-         jg63RiW2y4Sfgqy/tcPikvO1aY5H/mi7bxHUs1Sc7efDefCPkRXO6B6VxSyI+F3USlPB
-         fp2Knj3fUOG5620URMTsPe/mLYtjvVIrUOXY83c36rfLmY2byWdH0uQdBUbmDvvudXWG
-         kEAFXMrCYdSqJMnbNewUhkyL/J7aVMdnSgW2tL1DzNklDJbUDzngjx8MxJoigAn19i/S
-         agNIDtJ9tAfzLAIzdutOAMooSNjz8HduR3Y/Q5qAKDB/VG/OEhmyhw25D0hLZ3Zrrdca
-         OyzA==
-X-Gm-Message-State: ANoB5pmxG+lU/1ptncTX8MhWUkxv6Rv9t3eEe5nZQZ+vOht4AygUOaMB
-        aqVwpo1rFd7T+8lKPagWX8I=
-X-Google-Smtp-Source: AA0mqf4wiSpCasQPxQc2XZal1V3LS9Za3jYalQQVWS8JERfMTmHASiNZacgz6jFLRAGzfiUbS2gPpA==
-X-Received: by 2002:a19:e601:0:b0:4a8:e955:77e7 with SMTP id d1-20020a19e601000000b004a8e95577e7mr565011lfh.573.1668167192277;
-        Fri, 11 Nov 2022 03:46:32 -0800 (PST)
-Received: from localhost.localdomain ([78.133.163.249])
-        by smtp.googlemail.com with ESMTPSA id 10-20020ac25f4a000000b004979ec19380sm281616lfz.285.2022.11.11.03.46.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 03:46:31 -0800 (PST)
-From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
-X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-To:     kraxel@redhat.com
-Cc:     Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] udmabuf: add vmap method to udmabuf_ops
-Date:   Fri, 11 Nov 2022 12:45:28 +0100
-Message-Id: <20221111114528.608801-1-lukasz.wiecaszek@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 11 Nov 2022 06:48:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B45E0BB
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:48:15 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1otSW4-0002UZ-Ln; Fri, 11 Nov 2022 12:48:12 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1otSW3-0007NZ-UL; Fri, 11 Nov 2022 12:48:11 +0100
+Date:   Fri, 11 Nov 2022 12:48:11 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Sherry Sun <sherry.sun@nxp.com>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
+ support wifi
+Message-ID: <20221111114811.mvsjlfggxmdrhsep@pengutronix.de>
+References: <20221111032811.2456916-1-peng.fan@oss.nxp.com>
+ <20221111032811.2456916-13-peng.fan@oss.nxp.com>
+ <20221111090232.6ibqzoivfqsndhxg@pengutronix.de>
+ <DU0PR04MB94177ED8966506D445CFBA5688009@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <AS8PR04MB8404426EC83A75A3058F774192009@AS8PR04MB8404.eurprd04.prod.outlook.com>
+ <20221111093002.dpp73hkef6ihkduk@pengutronix.de>
+ <AS8PR04MB8404B33905D685F820A6F07D92009@AS8PR04MB8404.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <AS8PR04MB8404B33905D685F820A6F07D92009@AS8PR04MB8404.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reason behind that patch is associated with videobuf2 subsystem
-(or more genrally with v4l2 framework) and user created
-dma buffers (udmabuf). In some circumstances
-when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
-wants to use dma_buf_vmap() method on the attached dma buffer.
-As udmabuf does not have .vmap operation implemented,
-such dma_buf_vmap() natually fails.
+On 22-11-11, Sherry Sun wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Marco Felsch <m.felsch@pengutronix.de>
+> > Sent: 2022年11月11日 17:30
+> > To: Sherry Sun <sherry.sun@nxp.com>
+> > Cc: Peng Fan <peng.fan@nxp.com>; Peng Fan (OSS)
+> > <peng.fan@oss.nxp.com>; shawnguo@kernel.org; s.hauer@pengutronix.de;
+> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; festevam@gmail.com;
+> > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>
+> > Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
+> > support wifi
+> > 
+> > On 22-11-11, Sherry Sun wrote:
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > Sent: 2022年11月11日 17:08
+> > > > To: Marco Felsch <m.felsch@pengutronix.de>; Peng Fan (OSS)
+> > > > <peng.fan@oss.nxp.com>
+> > > > Cc: shawnguo@kernel.org; s.hauer@pengutronix.de; linux-
+> > > > kernel@vger.kernel.org; Sherry Sun <sherry.sun@nxp.com>;
+> > > > kernel@pengutronix.de; festevam@gmail.com; linux-arm-
+> > > > kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>
+> > > > Subject: RE: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1
+> > > > to support wifi
+> > > >
+> > > > Sherry,
+> > > >
+> > > > > Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable
+> > > > > usdhc1 to support wifi
+> > > > >
+> > > > > Hi Peng,
+> > > > >
+> > > > > On 22-11-11, Peng Fan (OSS) wrote:
+> > > > > > From: Sherry Sun <sherry.sun@nxp.com>
+> > > > > >
+> > > > > > Enable usdhc1 which is used for wifi.
+> > > > > >
+> > > > > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> > > > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > > > > ---
+> > > > > >  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 27
+> > > > > > +++++++++++++ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi |
+> > 39
+> > > > > +++++++++++++++++++
+> > > > > >  2 files changed, 66 insertions(+)
+> > > > > >
+> > > > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > > > b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > > > index a2b24d4d4e3e..7b80f144327d 100644
+> > > > > > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > > > @@ -15,6 +15,13 @@ / {
+> > > > > >  	aliases {
+> > > > > >  		spi0 = &flexspi;
+> > > > > >  	};
+> > > > > > +
+> > > > > > +	usdhc1_pwrseq: usdhc1_pwrseq {
+> > > > > > +		compatible = "mmc-pwrseq-simple";
+> > > > > > +		pinctrl-names = "default";
+> > > > > > +		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
+> > > > > > +		reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
+> > > > > > +	};
+> > > > > >  };
+> > > > > >
+> > > > > >  &ddrc {
+> > > > > > @@ -53,6 +60,19 @@ flash@0 {
+> > > > > >  	};
+> > > > > >  };
+> > > > > >
+> > > > > > +&usdhc1 {
+> > > > > > +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+> > > > > > +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
+> > > > > > +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
+> > > > > > +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
+> > > > > > +	bus-width = <4>;
+> > > > > > +	keep-power-in-suspend;
+> > > > > > +	mmc-pwrseq = <&usdhc1_pwrseq>;
+> > > > > > +	non-removable;
+> > > > > > +	wakeup-source;
+> > > > > > +	status = "okay";
+> > > > > > +};
+> > > > > > +
+> > > > > >  &usdhc3 {
+> > > > > >  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
+> > > > > >  	assigned-clock-rates = <400000000>; @@ -125,4 +145,11 @@
+> > > > > > MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7
+> > > > > 0x1d6
+> > > > > >  			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE
+> > > > > 0x196
+> > > > > >  		>;
+> > > > > >  	};
+> > > > > > +
+> > > > > > +	pinctrl_wlan: wlangrp {
+> > > > > > +		fsl,pins = <
+> > > > > > +
+> > > > > 	MX8MM_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K
+> > > > > 	0x141
+> > > > > > +			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9
+> > > > > 	0x159
+> > > > > > +		>;
+> > > > > > +	};
+> > > > >
+> > > > > Out of curiousity, this is not shareable with the other ddr4 evk?
+> > > > [Peng Fan]
+> > > >
+> > > > Could you please help answer?
+> > > >
+> > >
+> > > Hi Peng, I suggest to remove the pinctrl_wlan configure here, it should be
+> > added along with the wifi wowlan subnode later.
+> > 
+> > Does this apply to the imx8mn-evk patch as well?
+> > 
+> > Also if the usdhc1 is used only for WLAN and this patch series don't add the
+> > WLAN subnode, we could remove this patch and the imx8mn-evk usdhc1
+> > patch completely till you have a complete patchset adding the full WLAN
+> > support.
+> > 
+> 
+> Hi Marco, actually here enable usdhc1 can support the wifi basic
+> function, so this patch is ok to enable wifi on 8mm, same for 8mn.
 
-videobuf2_common: [cap-000000003473b2f1] __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
-videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: buffer for plane 0 changed
-videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: failed to map dmabuf for plane 0
-videobuf2_common: [cap-000000003473b2f1] __buf_prepare: buffer preparation failed: -14
+Okay, thanks for the clarification.
 
-The patch itself seems to be strighforward.
-It adds implementation of .vmap method to 'struct dma_buf_ops udmabuf_ops'.
-.vmap method itself uses vm_map_ram() to map pages linearly
-into the kernel virtual address space (only if such mapping
-hasn't been created yet).
+> But pinctrl_wlan is used to support the out-of-band WoWLAN feature,
+> needs to be used with wifi child dts node, which looks like the
+> following code.
+> 
+> So I suggest to add the pinctrl_wlan along with the wifi_wake_host
+> child node later to support the wifi WoWLAN function. Here only need
+> to enable the usdhc1 to support wifi basic function, no need to add
+> pinctrl_wlan.
 
-Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
----
- drivers/dma-buf/udmabuf.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
++1 from my side. @Peng can you drop the pinctrl_wlan from this patch and
+from the mx8mn patch as well?
 
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index 2bcdb935a3ac..8649fcbd05c4 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -12,6 +12,7 @@
- #include <linux/slab.h>
- #include <linux/udmabuf.h>
- #include <linux/hugetlb.h>
-+#include <linux/vmalloc.h>
- 
- static int list_limit = 1024;
- module_param(list_limit, int, 0644);
-@@ -26,6 +27,7 @@ struct udmabuf {
- 	struct page **pages;
- 	struct sg_table *sg;
- 	struct miscdevice *device;
-+	void *vaddr;
- };
- 
- static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
-@@ -57,6 +59,21 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
- 	return 0;
- }
- 
-+static int vmap_udmabuf(struct dma_buf *buf, struct dma_buf_map *map)
-+{
-+	struct udmabuf *ubuf = buf->priv;
-+
-+	if (!ubuf->vaddr) {
-+		ubuf->vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
-+		if (!ubuf->vaddr)
-+			return -EINVAL;
-+	}
-+
-+	dma_buf_map_set_vaddr(map, ubuf->vaddr);
-+
-+	return 0;
-+}
-+
- static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
- 				     enum dma_data_direction direction)
- {
-@@ -159,6 +176,7 @@ static const struct dma_buf_ops udmabuf_ops = {
- 	.unmap_dma_buf	   = unmap_udmabuf,
- 	.release	   = release_udmabuf,
- 	.mmap		   = mmap_udmabuf,
-+	.vmap		   = vmap_udmabuf,
- 	.begin_cpu_access  = begin_cpu_udmabuf,
- 	.end_cpu_access    = end_cpu_udmabuf,
- };
--- 
-2.25.1
+Regards,
+  Marco
 
+> &usdhc1 {
+>     pinctrl-names = "default", "state_100mhz", "state_200mhz";
+>     pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
+>     pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
+>     pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
+>     bus-width = <4>;
+>     keep-power-in-suspend;
+>     non-removable;
+>     wakeup-source;
+>     mmc-pwrseq = <&usdhc1_pwrseq>;
+>     status = "okay";
+> 
+>     wifi_wake_host {
+>         compatible = "nxp,wifi-wake-host";
+>         interrupt-parent = <&gpio2>;
+>         interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
+>         interrupt-names = "host-wake";
+>     };
+> };
+> 
+> Best Regards
+> Sherry
