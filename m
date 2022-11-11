@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FEB625990
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02BD625998
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:39:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233702AbiKKLiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S233252AbiKKLjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiKKLhx (ORCPT
+        with ESMTP id S233446AbiKKLjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:37:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BD687B3D;
-        Fri, 11 Nov 2022 03:36:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B64DBB82510;
-        Fri, 11 Nov 2022 11:36:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87287C433D7;
-        Fri, 11 Nov 2022 11:36:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668166604;
-        bh=3RaDnZ53pbckdRhlNF7hOhtOnoJFCOeiN6Pj8MvQ8c8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aV9KCEk/eelSsOvQGNfpWwxqxT3sdtc53rs06VUfQu+lfvmnlyWUqyFEAgahVZeae
-         xeOxJyMMD851iGKgUL80M8BYAmss+6Kec7H2z5c9nMtE5pQ+29cz2uk80tyw8FJ+q9
-         QJRGOFNNOdsl52L7H0d4wO0n9wpF6CTGJFL3VOKRRQAEzCkicmLHOF36Nbjn6Z6hgf
-         HouWlXWFbPAmrD5OSEo/rwVkHg6j+ROQs5emKIlQ/woGHL/qZWbo8lWHru3URUUjXY
-         WX9qCoP46xs3Klu3QP64ckH11cpsp3dN8rLniuLVy42S8Em2HwVdK0i466Uhd3ohjj
-         FcPwfLOnOupcw==
-From:   matthias.bgg@kernel.org
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, frank-w@public-files.de
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <mbrugger@suse.com>
-Subject: [PATCH] arm64: dts: mediatek: mt7986: Add SoC compatible
-Date:   Fri, 11 Nov 2022 12:36:35 +0100
-Message-Id: <20221111113635.4603-1-matthias.bgg@kernel.org>
-X-Mailer: git-send-email 2.38.0
+        Fri, 11 Nov 2022 06:39:08 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77488D18C;
+        Fri, 11 Nov 2022 03:37:38 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id k8so6141856wrh.1;
+        Fri, 11 Nov 2022 03:37:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kcYkB/mxztaLgFeEdGXiapfCgu8NPHMQKOD54+dU1Xg=;
+        b=Ynrf4dU5EOo5yHCKTcZ3ChryXeMxonMaIZ96DCkpPoDic+1exkeZWdnFCtr1JclsZE
+         RmQ2zSjtW/yPIFCuTmvH3lBv3XHwZkT3hds4aiiYsbz8Kivx9QddzOgBgsZBws2JhXbu
+         UI3F5uBkSurqh4pmGlEyqCTvVeZ2P/Kije5JtyBqL0IQujI/SetdLHRQga0Hr19zQ/Av
+         CODd0CIyAIK4ekmBQtxRhwSgS+vLGXLMV8TGGDNPJiF7ae5IyDl2zLP6StJcCyqQN59J
+         XijfvMnvKjWMqxO1aV8224i24H/PhsEkB2/WIP8WaxpM+v1jpfd5FiBmpEdJqBsV7PnV
+         dOOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kcYkB/mxztaLgFeEdGXiapfCgu8NPHMQKOD54+dU1Xg=;
+        b=Tx9qYJC9rLV/eW5O2OgudPAjLJLvKkgkO4KB9Cd9ZnmpAHioCZYlyS8lf/Y7Fw/dEf
+         I9bwe2SN2y3sfV9iE5IS9h8ZpJXNp3dkhn/QxnIA2M//W+j92RMVKDBBV7pTshekhlHs
+         IN+sX1K6/y7AEy0aX4FaxNFT8DmtA3bxghToMZcnh41HakcUON0iIih/k1PQF9+Yjnis
+         d0eIm29aIRXigDm3dF4JncIDRlTJLSIqCSPYevNfMSZEWm8s2vd/KiLgbDn6CTeXuN70
+         2hFunaIAwe8SHfQxXowzJitKuZOhm+s8bK/8j/sDNguMMwcgeoiJWo/NSPQJ2WKVHBrP
+         mPQw==
+X-Gm-Message-State: ANoB5pmvc7BhI17MgEnAP24Kw7XEOh4ku2r/w49nRLKXihcUwMdYfX74
+        zjRLMtaU/A0Ew+lEy/nsUzbCSLvwcEw=
+X-Google-Smtp-Source: AA0mqf5KjyuueErqc2vgVBh9hgG0yWx3HILirKu4yTe7CZaYDlcu+VL/edTiEV1O3l2naXzULa/hqQ==
+X-Received: by 2002:adf:e546:0:b0:236:7083:21d5 with SMTP id z6-20020adfe546000000b00236708321d5mr932526wrm.126.1668166656750;
+        Fri, 11 Nov 2022 03:37:36 -0800 (PST)
+Received: from localhost (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id e12-20020adffd0c000000b00236576c8eddsm1728349wrr.12.2022.11.11.03.37.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 03:37:36 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
+Date:   Fri, 11 Nov 2022 12:37:32 +0100
+Message-Id: <20221111113732.461881-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias Brugger <mbrugger@suse.com>
+From: Thierry Reding <treding@nvidia.com>
 
-Missing SoC compatible in the board file causes dt bindings check.
+The OF node store in chip->fwnode is used to explicitly override the FW
+node for a GPIO chip. For chips that use the default FW node (i.e. that
+of their parent device), this will be NULL and cause the chip not to be
+fully registered.
 
-Signed-off-by: Matthias Brugger <mbrugger@suse.com>
+Instead, use the GPIO device's FW node, which is set to either the node
+of the parent device or the explicit override in chip->fwnode.
+
+Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode")
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 2 +-
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpio/gpiolib-of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-index afe37b702eef9..0e3b603159477 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-@@ -9,7 +9,7 @@
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index 4be3c21aa718..55c3712592db 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -1067,7 +1067,7 @@ int of_gpiochip_add(struct gpio_chip *chip)
+ 	struct device_node *np;
+ 	int ret;
  
- / {
- 	model = "MediaTek MT7986a RFB";
--	compatible = "mediatek,mt7986a-rfb";
-+	compatible = "mediatek,mt7986a-rfb", "mediatek,mt7986a";
+-	np = to_of_node(chip->fwnode);
++	np = to_of_node(dev_fwnode(&chip->gpiodev->dev));
+ 	if (!np)
+ 		return 0;
  
- 	aliases {
- 		serial0 = &uart0;
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-index 72e0d9722e07a..1191ecf345a7d 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -14,6 +14,8 @@ / {
- 	#address-cells = <2>;
- 	#size-cells = <2>;
- 
-+	compatible = "mediatek,mt7986a";
-+
- 	clk40m: oscillator@0 {
- 		compatible = "fixed-clock";
- 		clock-frequency = <40000000>;
 -- 
-2.38.0
+2.38.1
 
