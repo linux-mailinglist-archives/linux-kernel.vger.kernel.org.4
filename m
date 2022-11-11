@@ -2,139 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4304626222
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 20:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E267626229
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 20:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbiKKTjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 14:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S234137AbiKKTkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 14:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbiKKTjM (ORCPT
+        with ESMTP id S233965AbiKKTkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 14:39:12 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11022016.outbound.protection.outlook.com [40.93.200.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C6A7BE61;
-        Fri, 11 Nov 2022 11:39:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G285MzQRrYzFIyYeIQA5R7s7qTxcEE8ZWyrGEFhpjL0jep3huI2FGiFrnHgw4VRjW8A9rLIg7LWj9nPBjx6PrGrwH97jWB3m9CX6Rs4tw3jShugLNenSAh5WGNA3vubGak29GI1DFGOkofWwgJAsFeqrA3Wg2JBNDbddhch8VJZp5g3FNjWAkPinUmGH3dOD4PoqCmTI1LmvJSiUeENedY5RcUlQs79PF0xAIeEAooDsWXEsYiYa8Qk4QNUQF2kNRumxgN9CjusynA8/F7OV75JFy95uurlvF+cN4GAvruhXluoBCF5+kF/BmP7C4AdPrbTyy7Bqe76gYqkLYkaqXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hZcRkiQm69eJitYu/z+P4Vn/Emzm0MJXaqcISMacPU8=;
- b=A1rx9bOvA+znD++rrYSf7lyJwI7qO/OLD+0KQ8JudwoKulYdbyd4POzA7dqM/5aJ9TohMy8hZuZFoeSD9WQvcOYMd0Bk9V1lrnniuU+KBU0cSpYW0Bhb5CiA5+2Vbvem0tbRwpsijTsZWiWFICsZopqn6LbFQIoXwMdkOOPwSNYYEKc9UPXYfy8m9sDUFO1x8pHZDsmdrTqM9rpYXAi6xL3ZF3z8BaxtICBQHZz2PT6DiQ9R+TXGeX5Jk0LiSpyYS9waqx+BrczGcOHz8upt2/+tIkkFj2ZZqPPl0QJApF+X80xsK4Z9ntlnuhy0eWXSP7eR07l9Lc6gDSJ0hBK7BA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hZcRkiQm69eJitYu/z+P4Vn/Emzm0MJXaqcISMacPU8=;
- b=irgoOerRjeDthtPLOf/Tbj7Q+v/4uHK6KpRpDqZ89SPnhiobCxWQq+o7JdQ/4G6uibXIKi+ZvkBcYe/aTjrHv7hc4pJ+yWrO3T+A3kEZfi0JTOKZPoCzWktu6f/1BvLoozKgMdiibOPTwNWfWtJIuulQetw5jItdDWWVvnv2c8k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
- by MN2PR21MB1502.namprd21.prod.outlook.com (2603:10b6:208:20b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.2; Fri, 11 Nov
- 2022 19:39:09 +0000
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::c3e3:a6ef:232c:299b]) by DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::c3e3:a6ef:232c:299b%7]) with mapi id 15.20.5834.002; Fri, 11 Nov 2022
- 19:39:09 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        tomas.winkler@intel.com, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     mikelley@microsoft.com
-Subject: [PATCH 1/1] tpm/tpm_crb: Fix error message in __crb_relinquish_locality()
-Date:   Fri, 11 Nov 2022 11:38:53 -0800
-Message-Id: <1668195533-16761-1-git-send-email-mikelley@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0114.namprd03.prod.outlook.com
- (2603:10b6:303:b7::29) To DM6PR21MB1370.namprd21.prod.outlook.com
- (2603:10b6:5:16b::28)
+        Fri, 11 Nov 2022 14:40:05 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2FD7BE68;
+        Fri, 11 Nov 2022 11:40:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668195604; x=1699731604;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GLdMSB5CsEKL3506k4a4m+VfHEqPk8gt4vgr9ECm460=;
+  b=RN3Y/Ld5ZqXQkdaVkwf4k6a6F7CtGCYf27M9f0YLMHoZmTHeLW+qcOyX
+   IezvlhZCArgsdRGJK8FischrgGiFnLknXzHydXqj8qj/bk4W3MxMxsRbu
+   xxBMh/UmficwDAFuQ6y6oVb/F+YFgCeSU2lGoidUPAAGqUVuoaYBp05/p
+   PbeB4faUW9qEruQ8oiP4itSv9BcHtnYMgK5SuTiJkyIZ8OuUnKQKJykpJ
+   /0GQIOLhVDnE3ZyxEQu0+Adv675pE4hoiQBrJtACiCkeJ28vXPKiCKuKP
+   51xstpk0Nru1+Q4ieiDak4jIO6t+tOMzIkL2eQ1V2fFBCwGRjcHK8uWje
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="311660271"
+X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
+   d="scan'208";a="311660271"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 11:40:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="637674932"
+X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
+   d="scan'208";a="637674932"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 11 Nov 2022 11:39:59 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1otZsb-00AsUm-0A;
+        Fri, 11 Nov 2022 21:39:57 +0200
+Date:   Fri, 11 Nov 2022 21:39:56 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Andrew Davis <afd@ti.com>, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
+Message-ID: <Y26lDEtiG4KFzc91@smile.fi.intel.com>
+References: <20221024173434.32518-1-afd@ti.com>
+ <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR21MB1370:EE_|MN2PR21MB1502:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ae3e7ec-a418-4b52-1548-08dac41c66e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MrIU229qqzQdmsX5SrUHkmJp9cGr4+jBM/bqylT/ZRCDJhHIWWRpOqSFxRv7XsJlsbzo1N1RFny6hs5M2iSTDBKokCHDOITkATFa36+E3fnRVFm+XT2zUoJqYdqeepqwpLDMF0YBCbAfmK2uW+wmIb+LMb97OHbB3DeTnRs2GaOjPoFvyPlPedV2AKO7CiL4fcavPxcioOyQlmdHf1CzCAGDULoGwAXBR0YPGkOQoH2MZfKu05D1S6a7hT0p6KuJh2CdsUw4xWxCY2wIsVXnlWoadMkcW6VOcpQ5oezAI5oGJI0I8mD+M1MD6/doRxr28tWXjpyWlMIZn9UE2daymZINNot6lX++rkK+ANLhBbNaKHeJYfdL3OipuVQ8gyV42FfbUBrEI8h6kqGvALwfHgzic6HLV/HsAqto0NM6V7aM61grOhWsF426lL3a0+EVaha4ruiU/pDqQVtL7SHUkBlV/kLF50zalGr2XwUXHarw/15Ye/ORMgD5TTdFCTkYDsQrPo63ogBduDgYpSZGJI+9L1BShsc1PKeA5ifdFJGE1H0wXyYMOjMvnv14H8v2xfezG4mho9Fc5UZeYGxDUv4nB7IK0sS0F8xv0GicxMDi4P3z1HkqlBkc37jTk1SLhX28jcdVdk/IjTm6JzRNbU/houqObNeS6XhZ19qqaKnsErsBxn48U8ROpmLdjtuTnDGCVPRsuNhT6Vw57eEYWIMOT0BH2jyD1S6fg4oQDwtytUf7tHcbNgpsJNbSREUfG2Q+MHifQyNAB2gk62DLE4leBMd035VvwKeE1dyFU1s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(376002)(136003)(396003)(451199015)(83380400001)(41300700001)(478600001)(82950400001)(66476007)(6486002)(66946007)(82960400001)(8936002)(5660300002)(4326008)(2906002)(66556008)(38350700002)(8676002)(36756003)(316002)(10290500003)(38100700002)(15650500001)(4744005)(2616005)(107886003)(6512007)(186003)(6666004)(52116002)(26005)(6506007)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?F7FIadfxTOwZJkU2LMC4anYTLz8Te7qQzvtgq0bYqokWeJNnQT3qY9d6b4Ja?=
- =?us-ascii?Q?hcImDBu2JQHRTVa0+o6YjpAQhQuDTzoVZ8zXv/+Z5IQxAV3jOOAzGdMi7maO?=
- =?us-ascii?Q?Y8idLGeYzAr1wunCpp3FUGurgrebOL3SRGgXtDbh98BkyFQv05Nx3W6sS8/2?=
- =?us-ascii?Q?gr4LITUU8XDnZDykoEZJbNkmBPb83nby5gEiF3HbV5CjG9KGaEwaNpx85nvj?=
- =?us-ascii?Q?XyH0ljg6Qu2ynwF0Pa+5OpXCHoc22bFEVL6bcpC2LyjTxC8YRNh+ammYg6rx?=
- =?us-ascii?Q?90ZIBGlABvfIUhN/+Isn76UEv0FUo5M+BZB+7vksIhUH62LEjfiw5GtNXwMf?=
- =?us-ascii?Q?vLPgxuuLsiDaTELvti4WjEWTsjL9yof+6Hs5f3SoKoDNDBmH0C9S8Dy7g0zc?=
- =?us-ascii?Q?mz+8yxMsGCCBvFaLR8e1l4JnQuPWZIOYBWWBDi+NNBh1Wb0g1dp94Im1GYux?=
- =?us-ascii?Q?cUA4bV6w1z/D+E4ng0j+huu0b28mVVaJqac5m95Za7nPAyxUyPh1w+yoa9hb?=
- =?us-ascii?Q?Vh+qkVlXZ2PmSQyrU/lIpN7OawBUXnK/REM5EYOb44zqPungdFxkObdggoW0?=
- =?us-ascii?Q?CuuHjngRSMV7hKFdphIADSzjX3w6KZ5dT5LOaFfWkIhN1ON6edv3GW60j7F0?=
- =?us-ascii?Q?ehEm1jOi5yl32pJSgzO3JfCTwHoOL1qXPzCxrMFIXOpBVUMF/1ejSEXUSqju?=
- =?us-ascii?Q?BnU2SIdqZM95omc2iTqZhFPGPkCTd1D2pG+yjT/4XNFXDEJFOSAcbcf+E+WB?=
- =?us-ascii?Q?vLoxZgluz7vQgpPNsgN1PbSW09VFiy2JXASurajSAcrIQjTVLKWyeqC/42qn?=
- =?us-ascii?Q?TJRWK6Twp2FjvHgYKVI0uejVswLIJE9G9qbwsQq1O5nqXlV+2d5WNEWHwKCp?=
- =?us-ascii?Q?mx/X0909+5o5YLYEEGZhDitBd3DVZ8RPbhk4aSrcaRHxewbSOad+tpJzG26q?=
- =?us-ascii?Q?+Jl+tvG/Gh+04rnt14KhiKSzh1gqUjy06XpdBW9jCeBHtXVnMvSk6TifdoeR?=
- =?us-ascii?Q?Kkbc11GhYjF2OkvVO8VhJpyHPj8ksDWU1X95jJrlJZB2xft9664T1BtvT/hq?=
- =?us-ascii?Q?jpxfYuaiy7fizeAQhHTrlPlPP8jWM8Q7iNhKLxoURdXYz3W8oRgMN8FSHo+l?=
- =?us-ascii?Q?efTD3p8VnEv/LyCF3hQkgu2+IYnNLGEy3jpHw0lnfKbdnn9RdIrBTl3/NCer?=
- =?us-ascii?Q?OBNbGoQE6LvW7m0O3uojExCYQliMHdpKixNZxN+wOdjo6OCm4CCfg/ZyBxAM?=
- =?us-ascii?Q?klye81DhSHI15DxYo5yaGgIZsnNvzFf2ZB5qF55oK7HSWM2r/enfGBN1wMcW?=
- =?us-ascii?Q?e+X/v6seZ80vpHsHVn+VDuWHUjSDfiXGb/sYPAXUpFoaEzNA338G/m3oulSP?=
- =?us-ascii?Q?/b1k1Fnp0jPSwcGmK5yLq1oiHXpJj0tJUjqIhB35mIYsxfgm127yGxLCor1L?=
- =?us-ascii?Q?SQ2t8heKAkv8oDSj6cuoe7aZZtP+fKZOyZMJEBOVi6onVL/8PtMey2j9A19n?=
- =?us-ascii?Q?AVRgEPNRYMWrLM/cbFDzhh/o51UxXeSeVbmADhAPahT1C3aKaNnmAtxdO79D?=
- =?us-ascii?Q?4NPwFnikAgB6se8vIc9JUZmuNOdgm1xBJAb3kN3l?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ae3e7ec-a418-4b52-1548-08dac41c66e8
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 19:39:09.3148
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BmiGsFlRy2hqVksuxgZROl6bS4rotXa51sOj88/w7vp0Cath6v3rn/NK1z2kso8oEe5+YGY0asNqfVOc4tm3lQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR21MB1502
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error message in __crb_relinquish_locality() mentions requestAccess
-instead of Relinquish. Fix it.
+On Wed, Oct 26, 2022 at 09:11:21AM -0500, Rob Herring wrote:
+> On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
+> >
+> > Hello all,
+> >
+> > This is a series based on my patch here[0]. As suggested by Rob
+> > I've resurrected Frank's patch and appended it to mine as a series.
+> >
+> > First patch here is my original patch, 3rd is Frank's patch but with
+> > the unittest changes pulled out into the 2nd patch. That was re-worked
+> > moving the source building macro into scripts/Makefile.lib.
+> >
+> > Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
+> > overlays. Split out by platform so they could be taken by platform
+> > maintainers or if easier ACK'd here and taken all together.
+> >
+> > This should cover all the DTB overlays so we can remove the old .dts
+> > rule for overlays and make .dtso the only supported way, let me know
+> > if we want that this cycle and I can post that too.
+> >
+> > Thanks,
+> > Andrew
+> >
+> > Changes from v1[1]:
+> >  - Added patch to rename pi433 overlay.
+> >  - Cleaned wording on patch 4-6.
+> >  - Collected some ACKs
+> >
+> > [0] https://www.spinics.net/lists/kernel/msg4548509.html
+> > [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
+> >
+> > Andrew Davis (6):
+> >   kbuild: Allow DTB overlays to built from .dtso named source files
+> >   kbuild: Allow DTB overlays to built into .dtso.S files
+> >   arm64: dts: freescale: Rename DTB overlay source files from .dts to
+> >     .dtso
+> >   arm64: dts: renesas: Rename DTB overlay source files from .dts to
+> >     .dtso
+> >   arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
+> >   staging: pi433: overlay: Rename overlay source file from .dts to .dtso
+> >
+> > Frank Rowand (1):
+> >   of: overlay: rename overlay source files from .dts to .dtso
+> 
+> I've applied patches 1-3 and 7. I'll send a PR for the branch to the
+> platform maintainers after a few days in linux-next.
 
-Fixes: 888d867df441 ("tpm: cmd_ready command can be issued only after granting locality")
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
----
- drivers/char/tpm/tpm_crb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The patch
 
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index 1860665..65f8f17 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -252,7 +252,7 @@ static int __crb_relinquish_locality(struct device *dev,
- 	iowrite32(CRB_LOC_CTRL_RELINQUISH, &priv->regs_h->loc_ctrl);
- 	if (!crb_wait_for_reg_32(&priv->regs_h->loc_state, mask, value,
- 				 TPM2_TIMEOUT_C)) {
--		dev_warn(dev, "TPM_LOC_STATE_x.requestAccess timed out\n");
-+		dev_warn(dev, "TPM_LOC_STATE_x.Relinquish timed out\n");
- 		return -ETIME;
- 	}
- 
+commit 941214a512d8c80d47e720c17ec17e8539175e93
+Author: Andrew Davis <afd@ti.com>
+Date:   Mon Oct 24 12:34:29 2022 -0500
+
+    kbuild: Allow DTB overlays to built into .dtbo.S files
+
+broke the build reproducibility / no-op builds.
+
+Before:
+  2+ execution of `make` on non-changed tree did nothing
+
+Now:
+  Each run of `make` (even without a single bit changed) restarts vmlinux
+  rebuild.
+
+Please, revert or fix.
+
 -- 
-1.8.3.1
+With Best Regards,
+Andy Shevchenko
+
 
