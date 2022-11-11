@@ -2,112 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7B8625E94
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B73625E9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233981AbiKKPpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
+        id S234081AbiKKPqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:46:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiKKPpP (ORCPT
+        with ESMTP id S233923AbiKKPqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:45:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7017DFD1;
-        Fri, 11 Nov 2022 07:45:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9AE76B82650;
-        Fri, 11 Nov 2022 15:45:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5CECC433D6;
-        Fri, 11 Nov 2022 15:45:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668181511;
-        bh=lR4bMWKhnNrJk1jx2Z3SsRfOPp6SGBKMIvk/tkRMFE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rLVQlPv+lLXhlTc5OR6rS90VGyuYM8MyxP294ig9aUnXlctUdWH6SOnCbaUld8Qms
-         VdbpyEK+529dGe4VwEYJsItIASbcVwtxOxO13K5PlZ2xGH0vpzo0ynKnaXktBnqeFP
-         JwzcIRZe+DzXCLN3NBVPZkg7nOM0UqF64M+BjMHY=
-Date:   Fri, 11 Nov 2022 16:45:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Fri, 11 Nov 2022 10:46:04 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A480625C4D;
+        Fri, 11 Nov 2022 07:46:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668181563; x=1699717563;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DmQaptAdDzNbGCp3ivClJtgkBMbzP5Q4OG5xUGDVa0A=;
+  b=Z4Gb+3im8KbmFkDdos4X2EHC1Z0os0MURDxlh+fdbYu3d9s8pftFMlza
+   19gEUMMzdCtrCN+e7nZ/uC2VwPX+m2jNPtyeotHigFBbWpw43PD3EwHOE
+   dgYRrlRVKuioppTm/QkozmNw1S85ejBqMBaU76jZgFlkyuJohZlV264gO
+   V8irFa2lx0POvvHBOy+9bYbJD8tcezsF7dRId+kUxA+yVsPQEoMd7+959
+   BI+WAjwSmXWN2nRo0MEbYhZrocWZjVjzTf8lGHIoaORnB4j1XVHuTX1tb
+   pf0yhY9iVJsRp2N2hVCo6Z8NqbZVZMvp3jxDyoF/+FIGy7zAUzWOFUy9g
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="309246132"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="309246132"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 07:46:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="668843583"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="668843583"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 11 Nov 2022 07:46:00 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8376B155; Fri, 11 Nov 2022 17:46:24 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-Message-ID: <Y25uBK8Ty3g9D1aq@kroah.com>
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com>
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 1/3] device property: Get rid of __PROPERTY_ENTRY_ARRAY_EL*SIZE*()
+Date:   Fri, 11 Nov 2022 17:46:19 +0200
+Message-Id: <20221111154621.15941-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111152852.2837363-1-allenwebb@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
-> USB devices support the authorized attribute which can be used by
-> user-space to implement trust-based systems for enabling USB devices. It
-> would be helpful when building these systems to be able to know in
-> advance which kernel drivers (or modules) are reachable from a
-> particular USB device.
-> 
-> This information is readily available for external modules in
-> modules.alias. However, builtin kernel modules are not covered. This
-> patch adds a sys-fs attribute to both builtin and loaded modules
-> exposing the matching rules in the modalias format for integration
-> with tools like USBGuard.
-> 
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  drivers/base/Makefile          |   2 +-
->  drivers/base/base.h            |   8 ++
->  drivers/base/bus.c             |  42 ++++++
->  drivers/base/mod_devicetable.c | 241 +++++++++++++++++++++++++++++++++
->  drivers/usb/core/driver.c      |   2 +
->  include/linux/device/bus.h     |   8 ++
->  include/linux/module.h         |   1 +
->  kernel/module/internal.h       |   2 +
->  kernel/module/sysfs.c          | 100 ++++++++++++++
->  kernel/params.c                |   2 +
->  10 files changed, 407 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/base/mod_devicetable.c
-> 
+First of all, _ELEMENT_SIZE() repeats existing sizeof_field() macro.
+Second, usage of _ARRAY_ELSIZE_LEN() adds unnecessary indirection
+to the data layout. It's more understandable when the data structure
+is placed explicitly. That said, get rid of those macros by replacing
+them with the existing helper and explicit data structure layout.
 
-Hi,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: fixed typo in PROPERTY_ENTRY_REF_ARRAY_LEN() impl (LKP)
+v2: rebased on latest Linux Next, fixed anon union assignment
+ include/linux/property.h | 34 ++++++++++++++--------------------
+ 1 file changed, 14 insertions(+), 20 deletions(-)
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+diff --git a/include/linux/property.h b/include/linux/property.h
+index 5d840299146d..0eab13a5c7df 100644
+--- a/include/linux/property.h
++++ b/include/linux/property.h
+@@ -12,6 +12,7 @@
+ 
+ #include <linux/bits.h>
+ #include <linux/fwnode.h>
++#include <linux/stddef.h>
+ #include <linux/types.h>
+ 
+ struct device;
+@@ -311,24 +312,14 @@ struct property_entry {
+  * crafted to avoid gcc-4.4.4's problems with initialization of anon unions
+  * and structs.
+  */
+-
+-#define __PROPERTY_ENTRY_ELEMENT_SIZE(_elem_)				\
+-	sizeof(((struct property_entry *)NULL)->value._elem_[0])
+-
+-#define __PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_, _elsize_, _Type_,	\
+-					  _val_, _len_)			\
+-(struct property_entry) {						\
+-	.name = _name_,							\
+-	.length = (_len_) * (_elsize_),					\
+-	.type = DEV_PROP_##_Type_,					\
+-	{ .pointer = _val_ },						\
++#define __PROPERTY_ENTRY_ARRAY_LEN(_name_, _elem_, _Type_, _val_, _len_)		\
++(struct property_entry) {								\
++	.name = _name_,									\
++	.length = (_len_) * sizeof_field(struct property_entry, value._elem_[0]),	\
++	.type = DEV_PROP_##_Type_,							\
++	{ .pointer = _val_ },								\
+ }
+ 
+-#define __PROPERTY_ENTRY_ARRAY_LEN(_name_, _elem_, _Type_, _val_, _len_)\
+-	__PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_,			\
+-				__PROPERTY_ENTRY_ELEMENT_SIZE(_elem_),	\
+-				_Type_, _val_, _len_)
+-
+ #define PROPERTY_ENTRY_U8_ARRAY_LEN(_name_, _val_, _len_)		\
+ 	__PROPERTY_ENTRY_ARRAY_LEN(_name_, u8_data, U8, _val_, _len_)
+ #define PROPERTY_ENTRY_U16_ARRAY_LEN(_name_, _val_, _len_)		\
+@@ -340,9 +331,12 @@ struct property_entry {
+ #define PROPERTY_ENTRY_STRING_ARRAY_LEN(_name_, _val_, _len_)		\
+ 	__PROPERTY_ENTRY_ARRAY_LEN(_name_, str, STRING, _val_, _len_)
+ #define PROPERTY_ENTRY_REF_ARRAY_LEN(_name_, _val_, _len_)		\
+-	__PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_,			\
+-				sizeof(struct software_node_ref_args),	\
+-				REF, _val_, _len_)
++(struct property_entry) {						\
++	.name = _name_,							\
++	.length = (_len_) * sizeof(struct software_node_ref_args),	\
++	.type = DEV_PROP_REF,						\
++	{ .pointer = _val_ },						\
++}
+ 
+ #define PROPERTY_ENTRY_U8_ARRAY(_name_, _val_)				\
+ 	PROPERTY_ENTRY_U8_ARRAY_LEN(_name_, _val_, ARRAY_SIZE(_val_))
+@@ -360,7 +354,7 @@ struct property_entry {
+ #define __PROPERTY_ENTRY_ELEMENT(_name_, _elem_, _Type_, _val_)		\
+ (struct property_entry) {						\
+ 	.name = _name_,							\
+-	.length = __PROPERTY_ENTRY_ELEMENT_SIZE(_elem_),		\
++	.length = sizeof_field(struct property_entry, value._elem_[0]),	\
+ 	.is_inline = true,						\
+ 	.type = DEV_PROP_##_Type_,					\
+ 	{ .value = { ._elem_[0] = _val_ } },				\
+-- 
+2.35.1
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
