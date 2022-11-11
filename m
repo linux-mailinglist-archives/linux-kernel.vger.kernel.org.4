@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CD06252B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 05:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514BD6252B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 05:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbiKKEhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 23:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S232702AbiKKElo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 23:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKKEho (ORCPT
+        with ESMTP id S229463AbiKKElg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 23:37:44 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A91A24BE6;
-        Thu, 10 Nov 2022 20:37:42 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N7mCP3TZxz4xGW;
-        Fri, 11 Nov 2022 15:37:37 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668141457;
-        bh=WU6TrlXeelXb8CQZe8wCt/Lm64tF14H8Nkwbsvlo4Wg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MtPP4J08ZyyWxQtRVxPULU/8WEDmu4pB/X4frrY8Ra/zWQSbQv34mvUPGiFP6csfI
-         zz7Gjw4aSgxPeQbdTQz4FaTug+bm9yugBhb65MEGqnJXYqrZCph6+bT75ypQh/Ve5P
-         p6+sCYx2LeZk3KWM9tiehzPmC/y26AavWBPsu4sYkHTGc3Z8wHyYUZGw+ykHJLU+Hz
-         ELo7q1+mdL9EMDSUQ29j8VWhjxWniYc3qo1HvYLx5elmd2Dvy/nicUOI8oE0W9wrdu
-         hzHrMUFL7HhFegciii5/jbclbUqZ5Sk0JkQdbBVFTV89ng2yaiMWlkdbunK8pmn1hj
-         VlUrZv+86+AcA==
-Date:   Fri, 11 Nov 2022 15:37:35 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>
-Cc:     Anthony DeRossi <ajderossi@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the iommufd tree with the vfio-fixes
- tree
-Message-ID: <20221111153735.07a2bee1@canb.auug.org.au>
+        Thu, 10 Nov 2022 23:41:36 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4ABF6A754
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 20:41:31 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id d185so4285838vsd.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 20:41:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IiYBUrLnAPnSzUH+5luFf4rsxd6j3SEXozYrQ1VG+Vs=;
+        b=kbRjL4aEWeLaFURRB8LSsLsdgoMX2ZSVARyIwGsueXmJZGqGr/vEp/rxDe4KUrq23/
+         SitXGbompn1PCKKVdCmSFg6SAcZcqBAHbE1oUc5STExqcm9qy2ALvca6TQAhUYc4gJmG
+         Bw9okzVaVlrQIjfKdNS4hQEh42vl5c1emvXmviSfBI0iBZCVh9zgwgaz7oCMh8leANnE
+         CRZPiVHR5Pg0XNY2u38Mo2N5xSTC1wRBsfzOQ+ZFZDjGLK/B68jbV1GWVGJQ+olqWWxn
+         +LcAhfdZEdmFtyXOA50AT4ZYzli9WJi4mc6ZCVVxDzP4WaIFF9B/9vumg80UAj/FQySW
+         +aTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IiYBUrLnAPnSzUH+5luFf4rsxd6j3SEXozYrQ1VG+Vs=;
+        b=1TzAlrI8lgGF2/5xfY9ie1uLfDk2tQgyn2pmY3T45r+WUCtzMQK+u8HcKcdeCw43AJ
+         VxtSx3gyJMkCDNXWEabTRfi61B3NtZerevFFcTTYzojaQ2Cf5E/5J58LZWxGs6kbCT73
+         x6TEyRAG3i6Np1p+KMm76pu28pXGgVpObOTT4Z2XPKN9M04Y86VYJWF0gOTYptbezAwO
+         Pega2eVZd7kdK+gBFviGzZ9esfH29i7YlJWiu1kPue4xUQGJFnnVCFD8m4/wn5HWZ+Z9
+         jxDvp+t8IeWCAINFoHzOB/6U0HkZzukfKjGdRHboTK2Zay97LT6NzCZZTfjRvAArqf/Y
+         SIrw==
+X-Gm-Message-State: ANoB5plsjPU23Ly4ixc//YPe91vN8FYY7kOUMvXKEafuTJyFRJXT5YSh
+        b9lotQec5bmjCXsSeMOrTofGEbxtZpHYdtByQZ95Mg==
+X-Google-Smtp-Source: AA0mqf6BOMhYk9IL/Kor3xFlAIKpxSvscdAp0X2MXHJH3SI4JhdnrK56lS0AOpB2tLS0XU7CLGYkV5LUZb7vaKevn3c=
+X-Received: by 2002:a67:be0c:0:b0:3aa:a89:3168 with SMTP id
+ x12-20020a67be0c000000b003aa0a893168mr74170vsq.31.1668141691018; Thu, 10 Nov
+ 2022 20:41:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KXem6=en_JgDoDkb=9JC/X/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103200359.328736-1-mathieu.desnoyers@efficios.com> <20221103200359.328736-9-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221103200359.328736-9-mathieu.desnoyers@efficios.com>
+From:   Andy Lutomirski <luto@amacapital.net>
+Date:   Thu, 10 Nov 2022 20:41:07 -0800
+Message-ID: <CALCETrW1doHX3=za+KDuB=4y+wHsnaZpVkDP3OhZXGrQU2iffw@mail.gmail.com>
+Subject: Re: [PATCH v5 08/24] sched: Introduce per memory space current
+ virtual cpu id
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/KXem6=en_JgDoDkb=9JC/X/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Nov 3, 2022 at 1:05 PM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+> This feature allows the scheduler to expose a current virtual cpu id
+> to user-space. This virtual cpu id is within the possible cpus range,
+> and is temporarily (and uniquely) assigned while threads are actively
+> running within a memory space. If a memory space has fewer threads than
+> cores, or is limited to run on few cores concurrently through sched
+> affinity or cgroup cpusets, the virtual cpu ids will be values close
+> to 0, thus allowing efficient use of user-space memory for per-cpu
+> data structures.
+>
 
-Hi all,
+Just to check, is a "memory space" an mm?  I've heard these called
+"mms" or sometimes (mostly accurately) "processes" but never memory
+spaces.  Although I guess the clone(2) manpage says "memory space".
 
-Today's linux-next merge of the iommufd tree got a conflict in:
-
-  drivers/vfio/vfio_main.c
-
-between commit:
-
-  7fdba0011157 ("vfio: Fix container device registration life cycle")
-
-from the vfio-fixes tree and commit:
-
-  55e16a188913 ("vfio: Move vfio_device driver open/close code to a functio=
-n")
-
-from the iommufd tree.
-
-I fixed it up (I just used the latter version since it seems to
-incorporate the former change) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KXem6=en_JgDoDkb=9JC/X/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNt0Y8ACgkQAVBC80lX
-0Gx6FwgAliIPn/1IsW5RmQijg8xXvCVC8d0dphtDutH0+LcTeddjx7NPHKsP7eQy
-8d8Aliy9iFBVI4S4xQfbY37jPnVf7fB/HmAHUJ3RJDlsUjmFTmtN+h0gRTNlPNg6
-7peJdWzxqKiPIL+w6iEracq66uxq2Jk/Zs124nPAhh3brB1pcpbWJyN0u/OGLVWh
-Eonkr508fWuFMIQbhznqprCUxGd4D9HdZczEA2kR8lGmDXAT2dr4Nbau2MbBNAdz
-BoNvwT+3ek8Jb2cLr15TJm83j4ZsPUfEYwpAihVfcCSpNPAlSTZennIY8+e0lAK0
-taHfWrpIn7g5EQPBR20NtjLgzaYPHA==
-=qSB2
------END PGP SIGNATURE-----
-
---Sig_/KXem6=en_JgDoDkb=9JC/X/--
+Also, in my mind "virtual cpu" is vCPU, which this isn't.  Maybe
+"compacted cpu" or something?  It's a strange sort of concept.
