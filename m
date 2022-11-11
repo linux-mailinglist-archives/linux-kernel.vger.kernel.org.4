@@ -2,160 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1770625458
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 264CE62545F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbiKKHPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:15:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S230075AbiKKHR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 02:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKKHPL (ORCPT
+        with ESMTP id S232841AbiKKHRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:15:11 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE965E3E7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:15:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668150910; x=1699686910;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AqSSC9u9s1vfj5jE9vYe9QMuZCGDma/zcI5XUkyoGhk=;
-  b=jpt+isMGHxzINRqgFCcbe6LXJjlQkYGMAe771ixiztsfx3HKoWWsCZ6/
-   SETbEYATcAPpDUxoD/MR/mh9YcUV39vVlun9wCgAYi5m2EE1n61GeUp8O
-   PIcfEO7P59AuR3U8HY6uqz2/F2hiCO8qGQRH1yd+IY7OeEQMxwsyIySR/
-   Ju/8p+TsRaI9SwGVX+mG38Yxc0kfQvnkjwbVg03i6beFQ4pq8GpaWj/iH
-   JL6xmPDovIZasGsR1T4Y7DfpBD/WSSFHDbaAduEVLiEpsPwCXszJG6/J3
-   8i2E/NdPSGr3Y9vvDQVy0Y7ms13qRxSdReOcoBizdlsYHjlei0JteuIdp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="310256378"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="310256378"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 23:14:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="670656089"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="670656089"
-Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 10 Nov 2022 23:14:57 -0800
-Received: from kbuild by e783503266e8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1otOFc-0003hB-26;
-        Fri, 11 Nov 2022 07:14:56 +0000
-Date:   Fri, 11 Nov 2022 15:14:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/splitlock] BUILD SUCCESS
- 727209376f4998bc84db1d5d8af15afea846a92b
-Message-ID: <636df668.j12K3bb6XTEwn1bI%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 11 Nov 2022 02:17:24 -0500
+Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11022016.outbound.protection.outlook.com [40.93.200.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFD979D0A;
+        Thu, 10 Nov 2022 23:17:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=awuLX5RbbgYWmCV0N774FrtXcxe4ciLcVABhia51KdtoFmuhgeFHEx2GcIMVt3l+Knea6x9Sz8tGQPMo1Y3YxmYJtcoWE30mSnEAyFvAuo9Lrktu7YeTAGOg9bnllW8vlwqMktDLPkz/TRmWj139F4VfmktkqvJ1PcrgGv7WiNbpdcp/TPjfsGREmkiA8N44xGaDfqqbr4iRWUfgeNvWRgeXnxYOSlwSvAo/aWoqymaDw/eqPTyfPdM+o0k4gSLeXZ1ix+s2LFM0nPBREZ7wCSaenWxHLbaQNHsmZBcTnjFmUcXPA9R9ZsTHY69BRs/WXFT5qNzDjt35Y6nOibMSEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/dyuJgfAU5AKkhpd0GMgko026rrf1+5TFe+tOn3AnKE=;
+ b=lTVZhd97r+2WuTFf+Wgb30MJaMBO4ROGYtSFDJKnvciQZaLAANtcCIqWPSZidYUINME9HSGlbjw/5rKJxdM2z9Vdk7gsW+oO1tq67oAtuHFrFE1CoQI1U+jHLxB/f2g0WOCbMNkwvludsw9gs3fFUQJgprLADrbRbbKrGQ5BRt8mITsDR9MJnGKf0mxKDf3FE2DeW+Ec/w0hqNaeOxiBEAfbJnT5JHD7Z9lOsq+K+MuAkXddjOe/VaXtRlVrcObYja4SDFp1BD2CPbzw9Jo3ItcvX7PewxOPJUWEUpo06uNNaek0MiEOgp9fw7rJYX+kagt5DM8MEmQlQq1H/+o2qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/dyuJgfAU5AKkhpd0GMgko026rrf1+5TFe+tOn3AnKE=;
+ b=D1Aqdmv0nQyTTCbCLEEFdYNpj+1qyXVVLASX1EFnsvZbBPrWY7PTqg9+p5/uX5EXg3u0X55AD8R1Y2J/24lfMchzd/h2XGzByQ9Rw+rDUj6QZJJiGthYvEykNHUnNR4z8voQ05MwTjlDODy5btPuYrgfO3HLKgemo4FOQ/6KhLI=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by SJ0PR21MB1935.namprd21.prod.outlook.com (2603:10b6:a03:295::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.2; Fri, 11 Nov
+ 2022 07:17:21 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817%6]) with mapi id 15.20.5834.002; Fri, 11 Nov 2022
+ 07:17:21 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>
+CC:     "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
+        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        Boqun Feng <Boqun.Feng@microsoft.com>
+Subject: RE: [PATCH v3] PCI: hv: Only reuse existing IRTE allocation for
+ Multi-MSI
+Thread-Topic: [PATCH v3] PCI: hv: Only reuse existing IRTE allocation for
+ Multi-MSI
+Thread-Index: AQHY9U2HlQKzFek9kkuOCBwYhpuQEq45T4hA
+Date:   Fri, 11 Nov 2022 07:17:21 +0000
+Message-ID: <SA1PR21MB1335FC9D3380B032E6A9E975BF009@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20221104222953.11356-1-decui@microsoft.com>
+ <20221110214354.GA674181@bhelgaas>
+In-Reply-To: <20221110214354.GA674181@bhelgaas>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=33b948f6-3522-4a7b-84dd-4c8973b38d44;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-11T07:13:16Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|SJ0PR21MB1935:EE_
+x-ms-office365-filtering-correlation-id: 514f65ca-e00c-4235-ed82-08dac3b4c62d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5qnkK2bFL1tYyhIS6CdHD4Lg8FF4j6ZC91hLhgkDgvRUxE0oWpq1+73kp+0GBd+CdmGa8O4/m/6oE30d/jcCLAbJBtsyCxDkKDESuyy+7Uiw9Pn46gn011417HyT89xFDNYEwxZHHEA4SBy6ndDdoTpnjCxtdGbXjo3XE4pfPWHpCW/mFtXQciHQ6nQaYd3evLElhsXnxn7znE5zCEpb+U5rBgAh5TcTjm94DKtdHiykNRx6kny+FcyHztw9W/suec1u7LcGn6MCjGwiGTAGTqQjVlZvcR/3VKv691XxT9//yTKKbGpEDFcmBW6pkfVs7P6Y3ajUPH5tloBuF1zMeUibDuE+EQB3LuItNLlY2iXbGEMsncJI8p87bKrzTarC9UN5a563ULOVjUlsBULt3QznESgNUx1e/8gJjbFKPdcb1bsTCjflGfygDJfPVj23HdVEusyoIXXPD/3OpVDw1hMgSvBsLR4hZbxfiieJiqpVIL6HGD2aBlGxClWO0SQK3aNzF7NgyMNxoBdJVL69mvuy5zn2rG6UCXojosYdLgB1g5PHOh1zBifQnPdb5oJ+x/E7xpugH91fNNThda/47/2q8cr8iHZTQTGSAemtO2z6rVfhNJH6WwXkDD8zDrchZY71V7p6VJmZPbSxphuq2Dr+ICyoYSF76Ci1oHrtCcgvwfwTPZJ7PlGcn/Bk+HGF/aIJV1wqhqB+VEDgeoY+a++cg10/m0E0BDCbhuLfptg7yUaaUFVRX5mZ3Q0jDn6bXApvs3Ww8KbkfA5wqSHr1AWLzc2ZThoq28pme3AZWIJbROsDp3HeRqEGHC/CYVkZ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(376002)(346002)(39860400002)(451199015)(82960400001)(38070700005)(82950400001)(122000001)(38100700002)(54906003)(55016003)(10290500003)(86362001)(110136005)(33656002)(316002)(71200400001)(8990500004)(5660300002)(66946007)(107886003)(478600001)(4744005)(66476007)(52536014)(66446008)(41300700001)(7696005)(7416002)(76116006)(8676002)(66556008)(4326008)(2906002)(64756008)(8936002)(26005)(9686003)(6506007)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?L/jWFDntRjGCMeS91sZg7Het06SEP/Fcp5bwS8gjmr2BaQvuHkb/apLTvotB?=
+ =?us-ascii?Q?Co3iGGVN9tzg02/Z/iQPbYbdxlrxh7eR21t7zFZtAOuSuv7JqQkvpryxbp65?=
+ =?us-ascii?Q?sjuLIckXcyaXKdB4Q5plpe1wgo1vkeOID5aTLVtqtsiyRtVeTu8BIUH5/+es?=
+ =?us-ascii?Q?I0R3K1NrLVl+9kkJsNwhNGR9CM6QLlYxmX0UvOaBSloN0kgrRFw/OAp2lfD0?=
+ =?us-ascii?Q?/Shv7qr60o3b8FIw7vjQ/+8ewSeXrzCJZJ/aE1UjOFdqQ1mckKatEnm63p73?=
+ =?us-ascii?Q?lNydhQ8PRYGqw6af2eAhv9IzIW0l292nWaZZLxPT290W4UrA0UJDyNPAZ1kO?=
+ =?us-ascii?Q?jvtrzfnCGJ7PBErjgjy1QPy44Fr1ohwhbV/m1iHdIdH6MND4YoNGq9trSSJx?=
+ =?us-ascii?Q?qhTRjpidbiqYnhwM4b/w94AxZkE0ZNVPL2rNrSCXRG662a4egKq1FoDOdTDQ?=
+ =?us-ascii?Q?tFJOnvO38vwOBaGLNulRBlot/mZRmUu6g7FVRVjju+sI8XMdldVvQL6+FpXc?=
+ =?us-ascii?Q?kDBhxoSFLzGiuKVP3JjOXfU07FEqlHVx6DrxnVUi5QNQcVK2oH2/nC9Ta+P7?=
+ =?us-ascii?Q?lTUPKQ7ZBJsfMSthAdlrR/RbJr/hnv8TsRi2jvlUaUuQbEWXtuERZLQ/moHu?=
+ =?us-ascii?Q?b/3b6h3rjJ5OYgJwb606p+c9ve2NRS2V8WdJ92pTr8uehW64CN56hsr8tvbX?=
+ =?us-ascii?Q?hvMYrcaB1xtm5w8ZJa74lCTMtj6ICx8yeCqhhs5aSaa6IDDasWGG2nji316t?=
+ =?us-ascii?Q?G0u+FSBheTBF7kopFhr0EKfNzWAY0Z6cGrdA+Ht1ny+mNZJLboexmtmUhH+Q?=
+ =?us-ascii?Q?5kEG1QyXDqriIe5lHe5gPR77sd2RD6JkV2MMfagQk+HwuHOpDCBizvkwARIH?=
+ =?us-ascii?Q?393Ro3mvWM/sbpA2FctjZctXxVIUVslj4Xg2RC8Vy51p81MqkemcP7qT7dJQ?=
+ =?us-ascii?Q?427WmD8ORAQWJCwAL+bWzDWfhR4LFEVWWa2SfnSd0GL8FG3N8sl2veU9jYM6?=
+ =?us-ascii?Q?MEUwEFVl4IwpZ01hIyiXuibQ1+dDwKSjDGkSt6gdKgB+FhYDnGo9y8MllIcQ?=
+ =?us-ascii?Q?rdxTQr1Zd7Gb9/f4a5LUZAFaUXsPjmfHDn2N9TCRpaIM+hZrxLW5Bt5QBTx0?=
+ =?us-ascii?Q?bPyyhR9nlaoiICDfHVPMPvArK6NNZFntCJ535ToUMaWg9ignxadaJPVGVc/H?=
+ =?us-ascii?Q?AtFP64QHfp020Z6X3IkL9q8/667yHH8kEkPNc8vjAo82PXwbRMOE4xTQLqmo?=
+ =?us-ascii?Q?5UlVD1ruHR0Ykd5FnCjxsoQqtZZz6UOWCdT6h/80oAf4HDxBJMYetKpXY86G?=
+ =?us-ascii?Q?kDAdKH+0AeVqHLjQT2TrAJLI2q37Ng1gzxnIRut9quuNeJTHXk2/PFjIaid8?=
+ =?us-ascii?Q?h8K0+XDA5yvB9y/dHJ/P8z15EwcmUdYmmR5tFj93NZK/MfyIEghXiFJHHpGP?=
+ =?us-ascii?Q?aD0b5g4gRsRVQV/H16TLDA8xlzxZvukjFbBK25ATirkLan57Df6wOUqCk6jP?=
+ =?us-ascii?Q?qRM+G5Mt3AVl/BY1TUS5PiY8AHnuAgXtqO7gIqi/NUPJBo2fJOguy2bqD7pe?=
+ =?us-ascii?Q?VVGzTH86IceET6Km4jSCv9IfyLSLlUvUnmq383Tb?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 514f65ca-e00c-4235-ed82-08dac3b4c62d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2022 07:17:21.2149
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jBRW6o6FRXUyD1MQvT0T1AauKU6hX8facxYErPX00/T+J+6Qo2kfrEQirFTBpsqKQmXA8pR7ZO8cyhYlww0Oeg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1935
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/splitlock
-branch HEAD: 727209376f4998bc84db1d5d8af15afea846a92b  x86/split_lock: Add sysctl to control the misery mode
+> From: Bjorn Helgaas <helgaas@kernel.org>
+> Sent: Thursday, November 10, 2022 1:44 PM
+> > ...
+> > Note: before b4b77778ecc5, the pCPU is determined twice, and when the
+> >  pCPU is determinted the second time, the vCPU in the effective affinit=
+y
+> > mask is
+>=20
+> s/determinted/determined/
 
-elapsed time: 726m
+Thanks, Bjorn! I suppose Wei can help fix this :-)
 
-configs tested: 78
-configs skipped: 2
+> > The hypercall fix may not be backported to all old versions of Hyper-V,=
+ so
+> > we want to have this guest side change for ever (or at least till we're=
+ sure
+>=20
+> s/for ever/forever/
+ditto.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> > Bjorn, Lorenzo, it would be great to have your Ack. The patch needs to =
+go
+> > through the Hyper-V tree because it's rebased to another hv_pci patch
+> > (which only exists in the Hyper-V tree for now):
+> >       e70af8d040d2 ("PCI: hv: Fix the definition of vector in
+> > hv_compose_msi_msg()")
+>=20
+> Fine with me, but it's Lorenzo's area so I don't want to preemptively
+> ack it.
 
-gcc tested configs:
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                            allnoconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-ia64                             allmodconfig
-sh                   secureedge5410_defconfig
-parisc                generic-64bit_defconfig
-powerpc                 mpc837x_rdb_defconfig
-xtensa                    xip_kc705_defconfig
-xtensa                          iss_defconfig
-powerpc                 mpc834x_mds_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-i386                             allyesconfig
-i386                                defconfig
-arc                        nsimosci_defconfig
-xtensa                           alldefconfig
-parisc                generic-32bit_defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-c001
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc                       ppc64_defconfig
-arm                          pxa910_defconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-s390                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-alpha                               defconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-s390                 randconfig-r044-20221111
-sh                           se7724_defconfig
-parisc                           alldefconfig
-powerpc                    amigaone_defconfig
-arm                           viper_defconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-microblaze                          defconfig
-powerpc              randconfig-c003-20221110
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-
-clang tested configs:
-hexagon              randconfig-r041-20221111
-hexagon              randconfig-r045-20221111
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-arm                       aspeed_g4_defconfig
-mips                      pic32mzda_defconfig
-arm                         lpc32xx_defconfig
-powerpc                      obs600_defconfig
-mips                malta_qemu_32r6_defconfig
-s390                 randconfig-r044-20221110
-riscv                randconfig-r042-20221110
-hexagon              randconfig-r041-20221110
-hexagon              randconfig-r045-20221110
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks. Hopefully Lorenzo can take a look soon.
