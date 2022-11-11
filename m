@@ -2,125 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4439624FC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885D9624FC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiKKBly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 20:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S232417AbiKKBmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 20:42:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbiKKBlw (ORCPT
+        with ESMTP id S231681AbiKKBmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 20:41:52 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C69B627F0;
-        Thu, 10 Nov 2022 17:41:48 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3477118pjk.1;
-        Thu, 10 Nov 2022 17:41:48 -0800 (PST)
+        Thu, 10 Nov 2022 20:42:52 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9366315E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 17:42:52 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id r10-20020a17090a1bca00b002137a500398so1988441pjr.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 17:42:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=orhM7Rfdk0osFddng1SzY4yb/5vhA8/Z7hW4tdCc1iE=;
-        b=IEJbJI0+sK5kz21pv/o/x5DX8Zvj+a3eJTIdDF/2KjrmEUj8QJyZmFFqy4pFcqp2Ua
-         EKzAKeTjbanuXIOVAbip8YSN9ZoMKSo9RfjhOFAsxT9cLvjE/pd7EHAynMdywegNHndp
-         OtC8rb8GO9CORgzHKHpmEIo3vj4Rr3vfEsUNjyaJZnDXQJcm4y1wr6yyqxWG8GfKJeOw
-         Sz4a1VIe9DE2hHcG/hNXvh7d3QivXdNRPtsSCYzCPsyl+ikrY4S25jhzX6axRVOAExvA
-         Z1tnVLSAJllppeZVF3drVGMJ00yHjZp7PlFuWBpFabvKZz63KNpV4zraF2rUWrUTRWNY
-         fdIA==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TAHihsTyfGyAOhGUW7I4wir9NV3xrHHtanIUEi5rljw=;
+        b=ctVUY+NuP8bjPDhX7vuhDJvm2n25aX8oAUBCZdazRVXluVmP2yFQNgL+fjvTiAE9xc
+         4ynf3N8CCEFL5RljMwLCl3O5hJDYjH2EaLiXkOCV3+11QdPEv0794VY3V9S5THhl66FW
+         nCNCPuFc/nfO+hwhcG8yOjc8CJw6yyeeJE72502RbwENwKbX7jcZtHlpMmGuy9L/QEwh
+         SZU2FC2Aje8OKXZJUaym3TvV+tfZggBmCPaLSk7h+e0eLbUaspI5+4cnTbSltIJwgWDy
+         jHAfK8k1GJgWseBKRl3xxDzuw03JbTtfuvFxL702lzXG/8BkQAEjuzlkLRknd2hNZIfA
+         LjVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=orhM7Rfdk0osFddng1SzY4yb/5vhA8/Z7hW4tdCc1iE=;
-        b=YkV5/Jnd4F8+avJoj6wRYMDvvR82aKwOoTRw/huD7fGKlYcR5grGbhCZpyR+Mo/mOK
-         YZTVlK6n7TijamQu3/fr4MPDz8/2UCMn621w2dndfXDJlp5gUi9VDiNHKndSQ2Bn+Bli
-         7ytDdet80KgBBbwaYWH6khyptv0Q3K0vBXkJv0CZQngpXa//1Mj8JbybDyOy9LGJfguc
-         pXIsQBr4O/NSjbATPo9NMHOIl8n9pqXbeLF46ZrapjJ2EL78PeJdurx1HQBfcfnh4kMS
-         tZ0DV+mKRx5dW97wsDDCfeHu9mxglG/vHd3bKMWMj4ECd6oMpXb26DoVhudGppuCLa0V
-         jKyA==
-X-Gm-Message-State: ANoB5pmabIhArErzVs7fOU6KmzPOi152ke3XDw2q51Jv9WMZ/qo8wwfq
-        6iWxrapxD2PqV18ffwS9u5I=
-X-Google-Smtp-Source: AA0mqf76XwJ1wkQbrkUg+nQZtVFsq+fUytf76VzVz9Ni4T/Rrniz/Ng647bIIecQkvQtmK1YsobUIg==
-X-Received: by 2002:a17:902:9a01:b0:186:9c43:5969 with SMTP id v1-20020a1709029a0100b001869c435969mr105570plp.32.1668130907524;
-        Thu, 10 Nov 2022 17:41:47 -0800 (PST)
-Received: from localhost.localdomain ([47.242.114.172])
-        by smtp.gmail.com with ESMTPSA id y10-20020aa793ca000000b00562cfc80864sm317578pff.36.2022.11.10.17.41.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 17:41:47 -0800 (PST)
-From:   Chuang Wang <nashuiliang@gmail.com>
-Cc:     Chuang Wang <nashuiliang@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Braun <michael-dev@fami-braun.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2] net: macvlan: Use built-in RCU list checking
-Date:   Fri, 11 Nov 2022 09:41:30 +0800
-Message-Id: <20221111014131.693854-1-nashuiliang@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TAHihsTyfGyAOhGUW7I4wir9NV3xrHHtanIUEi5rljw=;
+        b=NjwdbYpdiNnJjbLumPh57KKEEEV8lUZ/NY0GETvOfVlUj5hVLmXMM6Wpu1Sx2M0U1L
+         GLVZLmCUfRqUCNxPdgrGDSSQnA3ZdmMg7FymTTzZW6Eq/IyYHhKiZgzbBokiQx2e96tA
+         GoD/8IyHmR3LPd9YYYdwGRRf+SK56qWI3Pa9QMgPzrevxaPgBw4OsP0YzjE1XVX5fUe6
+         qFwMzzxM8nzzZDFihO1nSYVlQFB+5xjY4eiWvJyRBoGiP1V3SfM5neNMTy95u+wMXqrO
+         wdISi/u6GtiRF94kxf5R7aIDAYrZhFbaKJxTYY1jE6NklNX1FqipdyYpKNZq3XYvhFFS
+         eyBg==
+X-Gm-Message-State: ANoB5pkQG1H3HM/yLRBsh0GV5se3WT2WetGwUvmkzWHNJV9wWuX4CMl0
+        AijQ1VzAZTtL+nZVJWUmVqqvS7+Ogo9zC7ux
+X-Google-Smtp-Source: AA0mqf52xLE3aMk5fS5x1WInkfim/45aB6RnUca127I+fO5id2BwMfEKoajVorUywyMwwNE39hKAh1Z0O/EkuHrJ
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a05:6a00:1581:b0:56b:d19f:33f8 with
+ SMTP id u1-20020a056a00158100b0056bd19f33f8mr386838pfk.17.1668130971513; Thu,
+ 10 Nov 2022 17:42:51 -0800 (PST)
+Date:   Fri, 11 Nov 2022 01:42:38 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221111014244.1714148-1-vannapurve@google.com>
+Subject: [V1 PATCH 0/6] selftests: KVM: selftests for fd-based private memory
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shuah@kernel.org, yang.zhong@intel.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, pgonda@google.com, nikunj@amd.com,
+        seanjc@google.com, diviness@google.com, maz@kernel.org,
+        dmatlack@google.com, axelrasmussen@google.com,
+        maciej.szmigiero@oracle.com, mizhang@google.com,
+        bgardon@google.com, ackerleytng@google.com,
+        Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hlist_for_each_entry_rcu() has built-in RCU and lock checking.
+This series implements selftests targeting the feature floated by Chao
+via:
+https://lore.kernel.org/linux-mm/20221109041358.GA118963@chaop.bj.intel.com/T/
 
-Pass cond argument to hlist_for_each_entry_rcu() to silence false
-lockdep warning when CONFIG_PROVE_RCU_LIST is enabled.
+Below changes aim to test the fd based approach for guest private memory
+in context of normal (non-confidential) VMs executing on non-confidential
+platforms.
 
-Execute as follow:
+private_mem_test.c file adds selftest to access private memory from the
+guest via private/shared accesses and checking if the contents can be
+leaked to/accessed by vmm via shared memory view before/after conversions.
 
- ip link add link eth0 type macvlan mode source macaddr add <MAC-ADDR>
+Updates in V1 (Compared to RFC v3 patches):
+1) Incorporated suggestions from Sean around simplifying KVM changes
+2) Addressed comments from Sean
+3) Added private mem test with shared memory backed by 2MB hugepages.
 
-The rtnl_lock is held when macvlan_hash_lookup_source() or
-macvlan_fill_info_macaddr() are called in the non-RCU read side section.
-So, pass lockdep_rtnl_is_held() to silence false lockdep warning.
+RFC v3 series:
+https://lore.kernel.org/lkml/20220819174659.2427983-1-vannapurve@google.com/t/
 
-Fixes: 79cf79abce71 ("macvlan: add source mode")
-Signed-off-by: Chuang Wang <nashuiliang@gmail.com>
----
-v1 -> v2:
-- fix the patch Subject, add a Fixed tag
+This series has dependency on following patches:
+1) V9 series patches from Chao mentioned above.
 
-v0 -> v1:
-- fix typo
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/priv_memfd_selftests-v1
 
- drivers/net/macvlan.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Vishal Annapurve (6):
+  KVM: x86: Add support for testing private memory
+  KVM: Selftests: Add support for private memory
+  KVM: selftests: x86: Add IS_ALIGNED/IS_PAGE_ALIGNED helpers
+  KVM: selftests: x86: Execute VMs with private memory
+  KVM: selftests: Add get_free_huge_2m_pages
+  KVM: selftests: x86: Add selftest for private memory
 
-diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
-index 578897aaada0..b8cc55b2d721 100644
---- a/drivers/net/macvlan.c
-+++ b/drivers/net/macvlan.c
-@@ -141,7 +141,7 @@ static struct macvlan_source_entry *macvlan_hash_lookup_source(
- 	u32 idx = macvlan_eth_hash(addr);
- 	struct hlist_head *h = &vlan->port->vlan_source_hash[idx];
- 
--	hlist_for_each_entry_rcu(entry, h, hlist) {
-+	hlist_for_each_entry_rcu(entry, h, hlist, lockdep_rtnl_is_held()) {
- 		if (ether_addr_equal_64bits(entry->addr, addr) &&
- 		    entry->vlan == vlan)
- 			return entry;
-@@ -1647,7 +1647,7 @@ static int macvlan_fill_info_macaddr(struct sk_buff *skb,
- 	struct hlist_head *h = &vlan->port->vlan_source_hash[i];
- 	struct macvlan_source_entry *entry;
- 
--	hlist_for_each_entry_rcu(entry, h, hlist) {
-+	hlist_for_each_entry_rcu(entry, h, hlist, lockdep_rtnl_is_held()) {
- 		if (entry->vlan != vlan)
- 			continue;
- 		if (nla_put(skb, IFLA_MACVLAN_MACADDR, ETH_ALEN, entry->addr))
+ arch/x86/kvm/mmu/mmu.c                        |   4 +
+ arch/x86/kvm/mmu/mmu_internal.h               |   4 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/include/kvm_util_base.h     |  15 +-
+ .../testing/selftests/kvm/include/test_util.h |   5 +
+ .../kvm/include/x86_64/private_mem.h          |  37 +++
+ .../selftests/kvm/include/x86_64/processor.h  |   1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  58 ++++-
+ tools/testing/selftests/kvm/lib/test_util.c   |  30 +++
+ .../selftests/kvm/lib/x86_64/private_mem.c    | 211 ++++++++++++++++++
+ .../selftests/kvm/x86_64/private_mem_test.c   | 190 ++++++++++++++++
+ virt/kvm/Kconfig                              |   4 +
+ virt/kvm/kvm_main.c                           |   2 +-
+ 14 files changed, 555 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem.h
+ create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem.c
+ create mode 100644 tools/testing/selftests/kvm/x86_64/private_mem_test.c
+
 -- 
-2.37.2
+2.38.1.431.g37b22c650d-goog
 
