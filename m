@@ -2,210 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4CF626099
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E889626093
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbiKKRlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S233851AbiKKRlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbiKKRlR (ORCPT
+        with ESMTP id S231625AbiKKRlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:41:17 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12F164A06
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:41:07 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bd2aea61bso6183491fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:41:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4FMbovKeaf0ACEXQ0YanGO9/PhL7FDv4zcGvp9Jqeb8=;
-        b=VC2441h1K58QJkK+WGDca1W1zE89fQLTCiI2j9YZF8c7kZutY8qZa37OsZfchHaWPS
-         rhMk5/lHhhn0VVnapdeeJdbRT73kCMs+fjJf2MKXFrEUUsifRb5msz4ssklMNJBwC7eh
-         Chg1S4lbsZ4dVFWnrIXNGPFFAx0LNq8OQ9MXm+IBeMhVnfnt6VtiEwgM8nb0msLSnp58
-         pb2LkeEZ2gFqjfjK6C7Sx0bex21qNoK1D05X39ls8QGfZpothPC5BYnsb9IAdN1Lxyps
-         Lisi72JrvKVaXERa9xDqo4MVML53UfqJmtjTDFPiT07Yk9rhBBSBf+xxCAGylshMQU5N
-         DFuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4FMbovKeaf0ACEXQ0YanGO9/PhL7FDv4zcGvp9Jqeb8=;
-        b=vNHgY1i0I6w3YzztOVcHI+v0GJdngwuHOD4BUUiF0eEIwgeBJy3HkcyjeU6bn+zLtF
-         wKD4W+hYwZc8F1TlQivKEhezYSFudNr17/SkyNRKEF3LiZPljzLf3ui+Pe62/a69Q8EP
-         PkEVv6BL81u0uD1Sft/DVeK5L2uhm5uKuUvm1KMqJ0sJKpA0hXn/u/pgfYkNaBzHZiq4
-         dhtPDdM+gcoeJTx2xk0A8bgbpByWL5sVgK7e2y2R2WwkREqiUJFBhT4+AEJS6rfzPgX3
-         CDQyCM/Vpq3NV0x9M2mzjVrlviOcPGsLIj+nIs+1OrCvDoJ8JlDy9wJcd5CWOnlb2yKE
-         RUQg==
-X-Gm-Message-State: ANoB5pkRy7TRJjEm6dtMWYk+vUL5T3ZgewD35wdwS6V8/rNrA5s9ABnA
-        wmAd4ZVf2jM43lVlIkWYsmj4tdQgkb+TKUwxE6pK
-X-Google-Smtp-Source: AA0mqf655iw4JsNFSaXUguP05uOdtX8Svtt265PQFwzqFM6wcQ7IAUleTmgJzrbkAjGYudkUtWM48pVP5eznaOTF3uA=
-X-Received: by 2002:a05:6870:4304:b0:13b:d015:f1b5 with SMTP id
- w4-20020a056870430400b0013bd015f1b5mr1591387oah.51.1668188467074; Fri, 11 Nov
- 2022 09:41:07 -0800 (PST)
+        Fri, 11 Nov 2022 12:41:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7B1623B2;
+        Fri, 11 Nov 2022 09:41:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D08F961EF1;
+        Fri, 11 Nov 2022 17:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DC8C433D7;
+        Fri, 11 Nov 2022 17:41:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668188463;
+        bh=h0amQIIU7hED/32DFMcXw4epT9dOxlQO8lA1tG9vlT0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=rNJfBnDLMw+Gyy5dhe+jL1zlotxE1AreN70AKPHSP5ubJfTNcOCXse+Ierwr0yPZQ
+         31p1kr2SF4HooALu32k07NVWK91tpazAni/v/bMsFOo4L2vLUM43+Ugtx4ylUWk6A5
+         pOPxQMHOimhsrG/GucAc36pDuUK8JMO2kVjVj7ZhPsDyZqWH6F86ZVs9KrV/9NALgu
+         gvP+eDQWVyrEXKX7waWTtXPu+kLdmgpUjFH3SLYSLT2Vu6AkKuTMiOdoLv6YNtUw98
+         V7wNLil+U7oJzD0yJC4zgko03CnKJi20ggmBxb4nhe69hkYa8nX35oThu0GpckRrJR
+         eLY9Vkx4h07Gg==
+Date:   Fri, 11 Nov 2022 11:41:01 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
+ resources support D3
+Message-ID: <20221111174101.GA729137@bhelgaas>
 MIME-Version: 1.0
-References: <166807856758.2972602.14175912201162072721.stgit@warthog.procyon.org.uk>
-In-Reply-To: <166807856758.2972602.14175912201162072721.stgit@warthog.procyon.org.uk>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 11 Nov 2022 12:40:56 -0500
-Message-ID: <CAHC9VhTJh2tFbvOMzpGw7VSnHHb=boNhL5c7a1Ed+iHNFwWwqg@mail.gmail.com>
-Subject: Re: [PATCH v5] vfs, security: Fix automount superblock LSM init
- problem, preventing NFS sb sharing
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk, Jeff Layton <jlayton@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Scott Mayhew <smayhew@redhat.com>, linux-nfs@vger.kernel.org,
-        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221031223356.32570-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URI_TRY_3LD autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 6:09 AM David Howells <dhowells@redhat.com> wrote:
->
-> When NFS superblocks are created by automounting, their LSM parameters
-> aren't set in the fs_context struct prior to sget_fc() being called,
-> leading to failure to match existing superblocks.
->
-> Fix this by adding a new LSM hook to load fc->security for submount
-> creation when alloc_fs_context() is creating the fs_context for it.
->
-> However, this uncovers a further bug: nfs_get_root() initialises the
-> superblock security manually by calling security_sb_set_mnt_opts() or
-> security_sb_clone_mnt_opts() - but then vfs_get_tree() calls
-> security_sb_set_mnt_opts(), which can lead to SELinux, at least,
-> complaining.
->
-> Fix that by adding a flag to the fs_context that suppresses the
-> security_sb_set_mnt_opts() call in vfs_get_tree().  This can be set by NFS
-> when it sets the LSM context on the new superblock.
->
-> The first bug leads to messages like the following appearing in dmesg:
->
->         NFS: Cache volume key already in use (nfs,4.2,2,108,106a8c0,1,,,,100000,100000,2ee,3a98,1d4c,3a98,1)
->
-> Changes
-> =======
-> ver #5)
->  - Removed unused variable.
->  - Only allocate smack_mnt_opts if we're dealing with a submount.
->
-> ver #4)
->  - When doing a FOR_SUBMOUNT mount, don't set the root label in SELinux or
->    Smack.
->
-> ver #3)
->  - Made LSM parameter extraction dependent on fc->purpose ==
->    FS_CONTEXT_FOR_SUBMOUNT.  Shouldn't happen on FOR_RECONFIGURE.
->
-> ver #2)
->  - Added Smack support
->  - Made LSM parameter extraction dependent on reference != NULL.
->
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Fixes: 9bc61ab18b1d ("vfs: Introduce fs_context, switch vfs_kern_mount() to it.")
-> Fixes: 779df6a5480f ("NFS: Ensure security label is set for root inode)
-> Tested-by: Jeff Layton <jlayton@kernel.org>
-> Reviewed-by: Jeff Layton <jlayton@kernel.org>
-> Acked-by: Casey Schaufler <casey@schaufler-ca.com>
-> Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-> cc: Anna Schumaker <anna@kernel.org>
-> cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> cc: Scott Mayhew <smayhew@redhat.com>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Paul Moore <paul@paul-moore.com>
-> cc: linux-nfs@vger.kernel.org
-> cc: selinux@vger.kernel.org
-> cc: linux-security-module@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> Link: https://lore.kernel.org/r/165962680944.3334508.6610023900349142034.stgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/165962729225.3357250.14350728846471527137.stgit@warthog.procyon.org.uk/ # v2
-> Link: https://lore.kernel.org/r/165970659095.2812394.6868894171102318796.stgit@warthog.procyon.org.uk/ # v3
-> Link: https://lore.kernel.org/r/166133579016.3678898.6283195019480567275.stgit@warthog.procyon.org.uk/ # v4
-> Link: https://lore.kernel.org/r/217595.1662033775@warthog.procyon.org.uk/ # v5
+On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
+> Firmware typically advertises that ACPI devices that represent PCIe
+> devices can support D3 by a combination of the value returned by
+> _S0W as well as the HotPlugSupportInD3 _DSD [1].
+> 
+> `acpi_pci_bridge_d3` looks for this combination but also contains
+> an assumption that if an ACPI device contains power resources the PCIe
+> device it's associated with can support D3.  This was introduced
+> from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
+> D3 if power managed by ACPI").
+> 
+> Some firmware configurations for "AMD Pink Sardine" do not support
+> wake from D3 in _S0W for the ACPI device representing the PCIe root
+> port used for tunneling. The PCIe device will still be opted into
+> runtime PM in the kernel [2] because of the logic within
+> `acpi_pci_bridge_d3`. This currently happens because the ACPI
+> device contains power resources.
+> 
+> When the thunderbolt driver is loaded two device links are created:
+> * USB4 router <- PCIe root port for tunneling
+> * USB4 router <- XHCI PCIe device
+> 
+> These device links are created because the ACPI devices declare the
+> `usb4-host-interface` _DSD [3]. For both links the USB4 router is the
+> supplier and these other devices are the consumers.
+> Here is a demonstration of this topology that occurs:
+> 
+> |
+> ├─ 00:03.1
+> |       | "PCIe root port used for tunneling"
+> |       | ACPI Path: \_SB_.PCI0.GP11
+> |       | ACPI Power Resources: Yes
+
+I guess this means it has _PR0 and/or _PS0?  (same for devices below)
+
+> |       | ACPI _S0W return value: 0
+> |       | Device Links: supplier:pci:0000:c4:00.5
+> |       └─ PCIe Power state: D0
+
+What bus does 00:03.1 lead to?  I guess it doesn't lead to any of the
+devices below?
+
+> └─ 00:08.3
+>         | ACPI Path: \_SB_.PCI0.GP19
+>         ├─ PCIe Power state: D0
+
+I guess 00:08.3 is a Root Port leading to bus c4?
+
+>         ├─ c4:00.3
+>         |       | "XHCI PCIe device used for tunneling"
+>         |       | ACPI Path: \_SB_.PCI0.GP19.XHC3
+>         |       | ACPI Power Resources: Yes
+>         |       | ACPI _S0W return value: 4
+>         |       | Device Links: supplier:pci:0000:c4:00.5
+>         |       └─ PCIe Power state: D3cold
+>         └─ c4:00.5
+>                 | "USB4 Router"
+>                 | ACPI Path: \_SB_.PCI0.GP19.NHI0
+>                 | ACPI Power Resources: Yes
+>                 | ACPI _S0W return value: 4
+>                 | Device Links: consumer:pci:0000:00:03.1 consumer:pci:0000:c4:00.3
+>                 └─ PCIe Power state: D3cold
+
+I'm reading the excellent Documentation/driver-api/device_link.rst and
+trying to match up with this topology.  This is a case where 00:03.1
+is a consumer of c4:00.5.  The driver core automatically enforces that
+children are suspended before parents, but since 00:03.1 is an aunt
+(not a child) of c4:00.5, the device link enforces the requirement
+that 00:03.1 be suspended before c4:00.5.  Right?
+
+Is c4:00.5 an NHI?
+
+The PCI power states shown above are the failure case?  c4:00.5
+*should* remain in D0 as long as 00:03.1 is in D0, but was instead put
+in D3cold?
+
+> Currently runtime PM is allowed for all of these devices.
+
+This is because they all have _PR0 and/or _PS0?  (Diagram doesn't show
+that for 00:08.3, but I assume it must?)
+
+And I guess they all must have dev->is_hotplug_bridge set?
+
+> This means that
+> when all consumers are idle long enough, they will runtime suspend to
+> enter their deepest allowed sleep state. Once all consumers are in their
+> deepest allowed sleep state the suppliers will enter the deepest sleep
+> state as well.
+> 
+> * The PCIe root port for tunneling doesn't support waking from D3hot or
+>   D3cold so although runtime suspended it stays in D0.
+> * The XHCI PCIe device supports wakeup from D3cold so it runtime suspends
+>   to D3cold.
+> * Both consumers are in their deepest state and the USB4 router supports
+>   wakeup from D3cold, so it runtime suspends into this state.
+> 
+> At least for AMD's case the hardware designer's expectation is the USB4
+> router should have also remained in D0 since the PCIe root port for
+> tunneling remained in D0 and a device link exists between the two devices.
+> The current Linux behavior is undefined.
+
+Is the requirement that the supplier can never be in a lower-power
+state than the consumer?
+
+I guess that's *not* actually a requirement even though that's the
+effect of this patch in this situation.  If it *were* that simple, we
+would just check the supplier and consumer power states instead of
+looking at all these ACPI properties.
+
+> Instead of making the assertion that the device can support D3 (and thus
+> runtime PM) solely from the presence of ACPI power resources, move the check
+> to later on in the function, which will have validated that the ACPI device
+> supports wake from D3hot or D3cold.
+> 
+> This fix prevents the USB4 router being put into D3 when the firmware
+> says that ACPI device representing the PCIe root port for tunneling can't
+> handle it while still allowing ACPI devices that don't have the
+> HotplugSupportInD3 _DSD to also enter D3 if they have power resources that
+> can wake from D3.
+
+So I guess this changes what acpi_pci_bridge_d3() returns for 00:03.1?
+Previously it returned "true" because it has _PR0/_PS0 (so
+acpi_pci_power_manageable() is true), but now it will return "false"
+because _S0W says it can only wake from D0?
+
+> Link: https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3 [1]
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pcie/portdrv_pci.c?id=v6.0#n126 [2]
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thunderbolt/acpi.c?id=v6.0#n29 [3]
+> Fixes: dff6139015dc6 ("PCI/ACPI: Allow D3 only if Root Port can signal and wake from D3")
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->
->  fs/fs_context.c               |    4 +++
->  fs/nfs/getroot.c              |    1 +
->  fs/super.c                    |   10 +++++---
->  include/linux/fs_context.h    |    1 +
->  include/linux/lsm_hook_defs.h |    1 +
->  include/linux/lsm_hooks.h     |    6 ++++-
->  include/linux/security.h      |    6 +++++
->  security/security.c           |    5 ++++
->  security/selinux/hooks.c      |   25 +++++++++++++++++++
->  security/smack/smack_lsm.c    |   54 +++++++++++++++++++++++++++++++++++++++++
->  10 files changed, 108 insertions(+), 5 deletions(-)
->
-> diff --git a/fs/fs_context.c b/fs/fs_context.c
-> index 24ce12f0db32..22248b8a88a8 100644
-> --- a/fs/fs_context.c
-> +++ b/fs/fs_context.c
-> @@ -282,6 +282,10 @@ static struct fs_context *alloc_fs_context(struct file_system_type *fs_type,
->                 break;
->         }
->
-> +       ret = security_fs_context_init(fc, reference);
-> +       if (ret < 0)
-> +               goto err_fc;
-> +
->         /* TODO: Make all filesystems support this unconditionally */
->         init_fs_context = fc->fs_type->init_fs_context;
->         if (!init_fs_context)
-> diff --git a/fs/nfs/getroot.c b/fs/nfs/getroot.c
-> index 11ff2b2e060f..651bffb0067e 100644
-> --- a/fs/nfs/getroot.c
-> +++ b/fs/nfs/getroot.c
-> @@ -144,6 +144,7 @@ int nfs_get_root(struct super_block *s, struct fs_context *fc)
->         }
->         if (error)
->                 goto error_splat_root;
-> +       fc->lsm_set = true;
->         if (server->caps & NFS_CAP_SECURITY_LABEL &&
->                 !(kflags_out & SECURITY_LSM_NATIVE_LABELS))
->                 server->caps &= ~NFS_CAP_SECURITY_LABEL;
-> diff --git a/fs/super.c b/fs/super.c
-> index 8d39e4f11cfa..f200ae0549ca 100644
-> --- a/fs/super.c
-> +++ b/fs/super.c
-> @@ -1553,10 +1553,12 @@ int vfs_get_tree(struct fs_context *fc)
->         smp_wmb();
->         sb->s_flags |= SB_BORN;
->
-> -       error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
-> -       if (unlikely(error)) {
-> -               fc_drop_locked(fc);
-> -               return error;
-> +       if (!(fc->lsm_set)) {
-> +               error = security_sb_set_mnt_opts(sb, fc->security, 0, NULL);
-> +               if (unlikely(error)) {
-> +                       fc_drop_locked(fc);
-> +                       return error;
-> +               }
->         }
-
-Thinking about all the different things that an LSM could do, would it
-ever be possible that a LSM would want the security_sb_set_mnt_opts()
-call to happen here?  I'm wondering if we are better off leaving it up
-to the LSM by passing the fs_context in the security_sb_set_mnt_opts()
-hook; those that want to effectively skip this call due to a submount
-setup already done in security_fs_context_init() can check the
-fs_context::purpose value in the security_sb_set_mnt_opts() hook.
-
-Thoughts?
-
--- 
-paul-moore.com
+> v4->v5:
+>  * Update github->git.kernel.org
+>  * Correct arrow direction
+>  * Clarify some commit message comments from Lukas' feedback.
+> v3->v4:
+>  * Pick up tags
+>  * Add more details to the commit message
+> v2->v3:
+>  * Reword commit message
+> v1->v2:
+>  * Just return value of acpi_pci_power_manageable (Rafael)
+>  * Remove extra word in commit message
+> ---
+>  drivers/pci/pci-acpi.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index a46fec776ad77..8c6aec50dd471 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -984,10 +984,6 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>  	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+>  		return false;
+>  
+> -	/* Assume D3 support if the bridge is power-manageable by ACPI. */
+> -	if (acpi_pci_power_manageable(dev))
+> -		return true;
+> -
+>  	rpdev = pcie_find_root_port(dev);
+>  	if (!rpdev)
+>  		return false;
+> @@ -1023,7 +1019,8 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>  	    obj->integer.value == 1)
+>  		return true;
+>  
+> -	return false;
+> +	/* Assume D3 support if the bridge is power-manageable by ACPI. */
+> +	return acpi_pci_power_manageable(dev);
+>  }
+>  
+>  int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
+> -- 
+> 2.34.1
+> 
