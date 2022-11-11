@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82B3625667
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD4962566B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiKKJQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S233194AbiKKJRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbiKKJQs (ORCPT
+        with ESMTP id S233108AbiKKJRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:16:48 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66026C18;
-        Fri, 11 Nov 2022 01:16:47 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bs21so5658397wrb.4;
-        Fri, 11 Nov 2022 01:16:47 -0800 (PST)
+        Fri, 11 Nov 2022 04:17:32 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DB5C18;
+        Fri, 11 Nov 2022 01:17:31 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id l14so5668974wrw.2;
+        Fri, 11 Nov 2022 01:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
          :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jovw191tkqhEY/091trHnhlrx/URL9SGNNv7OLPeWTQ=;
-        b=QZ4qUEYywU25+PgljwAk53ASLfWTPNIIJylvWVU4Y8JyQX9plUYn0ALvKbih/5RMPE
-         GvSYY90MsMVyO4vtRwyieahWlG2iWiNESdeN572tvMSzNAOL8xKRoy1BbamgRnG/jblx
-         Uy+x5C3JondEUg6F1GniqGmCeP/nKKXnXTKsBMlL6QRSyfSiA2yIjml1ZVWGdCb6r5t7
-         gu4gLkxEXy4Rp9IFqrJjApbZmZMkMlMQV5rezaNZ+NHfSkfqwE1wMCsKb5fpRJtyk19v
-         vo/RqVu0A7hEROSQdZaCsQw1bdLzFu3Pd3WgiSYbsCsId8CCP4M+Z64UlISJ0EuLvPkZ
-         kCJw==
+        bh=W/ebyNNdcssi3hRRYLWpmNEf5xWYN6pzQQIYvDfsfC0=;
+        b=qB5rci9QMrKNx876F44YgKr3R228CBhLq9v3pbCwJc6tBdSVts7vh42/c4ZMxGiZgU
+         jgjCfPMbKLRruHboDGI616o2VvVtcMZvEWRC9N8fX/ZyRMyq0+O4obDGn5xrnsqrIhq1
+         NPHu9oISiqsywzGBKOTzIm631IKK2fwM3sgRhvs2W6lTsvJe+sg42I8Yyzs4tHI8prRW
+         My070S3eIN2kiRBRO1x79gFnoLJXChcxAdeWJxYyJ85VvXHZJMkSkKxnMx6qY/rCJ6Ig
+         nLQoPH64AbanLHHPC/pKYCaH6H2zAsupzYr7G+fMe3JTj9GG2ddz62vT33uvqzSbXPfq
+         KR4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
          :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jovw191tkqhEY/091trHnhlrx/URL9SGNNv7OLPeWTQ=;
-        b=WWXKULgeveXiIFCpogs2T/bkWAnbRgEEOnYQ+XNUyheP/qXIqGT3ajlzBUp3d73lJA
-         48lVOIzb+npzqBRBWh/q0RWz/jXtAP6l0FBKfmyppt+5zcAb2zpx/e015wk+BOTBKdJ9
-         JxQkKDRRJaJnjhsGKie3U74cnnfRaKXMnhg7qSAENH8PA7v+i5Gyu57CL+Mz9NCVpaN1
-         /ohcDnGOPP/7zSDAo3zNJOsPm1Gl09xlXlWRPfcgdyzke20B7PpjNIz4QEHnRFgOXY+z
-         lPXwAP+j8DaskST6nUxfCmd+pTBwrN+yxPCe3+EJhtMY9smkdAtrGB27GOovxMNrdeym
-         98Ig==
-X-Gm-Message-State: ANoB5pmqOMbuY2ZESWL3WQGj3I11KJSYuLv6+30tOdYk0Mvi0eNPKbdD
-        q1sxgPq3MYqD/w4Tt5Eior0=
-X-Google-Smtp-Source: AA0mqf4WOo4GYRvJTD5FEYyn6wAGMohgHK1JIfF6SWmlWvK2hyBZhFpiw9mF2RR/u7NBQe9HXADfWA==
-X-Received: by 2002:a05:6000:181c:b0:236:60ce:7c10 with SMTP id m28-20020a056000181c00b0023660ce7c10mr673951wrh.440.1668158205774;
-        Fri, 11 Nov 2022 01:16:45 -0800 (PST)
+        bh=W/ebyNNdcssi3hRRYLWpmNEf5xWYN6pzQQIYvDfsfC0=;
+        b=NkhF++HyrV6quMa883kzxbwIzKrEMFKBlqf6GebpXwRem96a4UgfUheZLTCfOxAkS7
+         qAM/G9+1iJ9fPT6Ue4E20Ub56XU93fgS+vqvs9S55xDb+F8vc/8FIf1WGm64zTMERlJK
+         gPbHYxkcbWgsDQhoK7kuMPQL5JIc2OTpKKVYc+ORh20xAUMZibFYjlYPifMiq1eL51WC
+         wxM31DoXomv7rbZfyraYWg+xqTPFnivNBRB9BpS4wTUuAWBis36Geae7Vp1aG7kDqRA6
+         ymG58mCDPSecbWRlS2Ki2OS5KKKPi74c9F6YR3YoxjHai6GBA7oDlRVB4lM4L5bR5StT
+         +yMg==
+X-Gm-Message-State: ANoB5pmRBE89t4l6IGJJdLqANU1HN/LCvKsfgJkQ3qtlMrm04LPG9ayG
+        YvqBbvGGa2PDJ+Dud2DVJY0=
+X-Google-Smtp-Source: AA0mqf4mn3Vis0rrN5zFsq6rDmS+s0zkcStXU1hOp+ETfbY9sTiViasujU9Aebr+C2Vt5S6xmmK25Q==
+X-Received: by 2002:a5d:4ec3:0:b0:22e:3180:f75a with SMTP id s3-20020a5d4ec3000000b0022e3180f75amr672361wrv.340.1668158250141;
+        Fri, 11 Nov 2022 01:17:30 -0800 (PST)
 Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id fc18-20020a05600c525200b003b49bd61b19sm8545557wmb.15.2022.11.11.01.16.43
+        by smtp.gmail.com with ESMTPSA id b15-20020adff24f000000b002345cb2723esm1390242wrp.17.2022.11.11.01.17.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 01:16:44 -0800 (PST)
-Message-ID: <5ece2b19-cbc7-5ecf-c29a-8f0258f260f4@gmail.com>
-Date:   Fri, 11 Nov 2022 10:16:43 +0100
+        Fri, 11 Nov 2022 01:17:28 -0800 (PST)
+Message-ID: <a34fd2d5-b7ed-2fea-7a6c-acc7659cb001@gmail.com>
+Date:   Fri, 11 Nov 2022 10:17:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
 Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
+To:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, Frank Wunderlich <linux@fw-web.de>
 References: <20221106085034.12582-1-linux@fw-web.de>
- <20221106085034.12582-12-linux@fw-web.de>
+ <trinity-e9c6aa94-6656-4d9c-9d9b-90ede6c8e6fc-1668099812662@3c-app-gmx-bs29>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [RFC v3 11/11] arm64: dts: mt7986: add BPI-R3 nand/nor overlays
-In-Reply-To: <20221106085034.12582-12-linux@fw-web.de>
+Subject: Re: Aw: [RFC v3 00/11] Add BananaPi R3
+In-Reply-To: <trinity-e9c6aa94-6656-4d9c-9d9b-90ede6c8e6fc-1668099812662@3c-app-gmx-bs29>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,175 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob, Krzysztof,
 
-On 06/11/2022 09:50, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add devicetree overlays for using nand and nor on BPI-R3.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
->   arch/arm64/boot/dts/mediatek/Makefile         |  2 +
->   .../mediatek/mt7986a-bananapi-bpi-r3-nand.dts | 53 +++++++++++++++
->   .../mediatek/mt7986a-bananapi-bpi-r3-nor.dts  | 67 +++++++++++++++++++
->   3 files changed, 122 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index e8902f2cc58f..d42208c4090d 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -8,6 +8,8 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-emmc.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-nand.dtbo
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-nor.dtbo
 
-Do we allow the inclusion of overlays in the kernel?
-I don't think so. I see there are some dtbos for some freescale platforms, but I 
-wasn't aware that we support that. I thought it is all about dtsi includes.
+On 10/11/2022 18:03, Frank Wunderlich wrote:
+> Hi Rob,
+> 
+> can you please take Patches 1+3 of v1 into your tree?
+> due to reordering in my tree i missed them in this version
+> 
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=685798
+> 
 
-@frank In any case we would need to apply these overlays to some base board to 
-create a valis dtb.
+They should go through the subsystem maintainers trees. I'd advise to resend, 
+dropping the RFC prefix and add the corresponding maintainers.
 
 Regards,
 Matthias
 
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-sd.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-rfb.dtb
->   dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986b-rfb.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
-> new file mode 100644
-> index 000000000000..e12ff825bb50
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
-> @@ -0,0 +1,53 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +//dtc -O dtb -o bpi-r3-nand.dtbo mt7986a-bananapi-bpi-r3-nand.dts
-> +
-> +/ {
-> +	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
-> +
-> +	fragment@0 {
-> +		target-path = "/soc/spi@1100a000";
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			spi_nand: spi_nand@0 {
-> +				compatible = "spi-nand";
-> +				reg = <0>;
-> +				spi-max-frequency = <10000000>;
-> +				spi-tx-buswidth = <4>;
-> +				spi-rx-buswidth = <4>;
-> +
-> +				partitions {
-> +					compatible = "fixed-partitions";
-> +					#address-cells = <1>;
-> +					#size-cells = <1>;
-> +
-> +					partition@0 {
-> +						label = "bl2";
-> +						reg = <0x0 0x80000>;
-> +						read-only;
-> +					};
-> +
-> +					partition@80000 {
-> +						label = "reserved";
-> +						reg = <0x80000 0x300000>;
-> +					};
-> +
-> +					partition@380000 {
-> +						label = "fip";
-> +						reg = <0x380000 0x200000>;
-> +						read-only;
-> +					};
-> +
-> +					partition@580000 {
-> +						label = "ubi";
-> +						reg = <0x580000 0x7a80000>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
-> new file mode 100644
-> index 000000000000..f11ffd9c4bce
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
-> @@ -0,0 +1,67 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +//dtc -O dtb -o bpi-r3-nor.dtbo mt7986a-bananapi-bpi-r3-nor.dts
-> +
-> +/ {
-> +	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
-> +
-> +	fragment@0 {
-> +		target-path = "/soc/spi@1100a000";
-> +		__overlay__ {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			flash@0 {
-> +				compatible = "jedec,spi-nor";
-> +				reg = <0>;
-> +				spi-max-frequency = <10000000>;
-> +
-> +				partitions {
-> +					compatible = "fixed-partitions";
-> +					#address-cells = <1>;
-> +					#size-cells = <1>;
-> +
-> +					partition@0 {
-> +						label = "bl2";
-> +						reg = <0x0 0x20000>;
-> +						read-only;
-> +					};
-> +
-> +					partition@20000 {
-> +						label = "reserved";
-> +						reg = <0x20000 0x20000>;
-> +					};
-> +
-> +					partition@40000 {
-> +						label = "u-boot-env";
-> +						reg = <0x40000 0x40000>;
-> +					};
-> +
-> +					partition@80000 {
-> +						label = "reserved2";
-> +						reg = <0x80000 0x80000>;
-> +					};
-> +
-> +					partition@100000 {
-> +						label = "fip";
-> +						reg = <0x100000 0x80000>;
-> +						read-only;
-> +					};
-> +
-> +					partition@180000 {
-> +						label = "recovery";
-> +						reg = <0x180000 0xa80000>;
-> +					};
-> +
-> +					partition@c00000 {
-> +						label = "fit";
-> +						reg = <0xc00000 0x1400000>;
-> +						compatible = "denx,fit";
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
+> pcie-bindings are here:
+> 
+> https://patchwork.kernel.org/project/linux-mediatek/list/?series=690172
+> 
+> i found 1 error in bpi-r3 dts (properties from sfp1 not plural) which i will fix in next version and will drop
+> the compile comment in dt overlays.
+> 
+> also i've found this commit:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/?h=dt/next&id=363547d2191cbc32ca954ba75d72908712398ff2
+> 
+> so maybe i need to rename my overlay dts files to dtso?
+> 
+> maybe the others can be applied (at least the mt7986 nodes)?
+> 
+> regards Frank
