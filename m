@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4AC62648A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F496626491
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbiKKWUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
+        id S234696AbiKKWVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234612AbiKKWTY (ORCPT
+        with ESMTP id S234685AbiKKWUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 17:19:24 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327E39FF3;
-        Fri, 11 Nov 2022 14:19:23 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id k7so5277944pll.6;
-        Fri, 11 Nov 2022 14:19:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8e9qt1EThZ8DxhiWWBzObBNLU7s1JE4dLO1Y/7HqnGA=;
-        b=la77TJAPgqsJGHCt1tRPnBp6TO/wknDaKOMIAU0HQ677C5OX7mGcET+dVn4SpT1Kfy
-         MckhDcY0IUeY3XWu7Iy9dEXKGyGHDn42/DlZZkOd7DM4oh2uo7K+CM8AoYKTSYXB6WpF
-         X5VYmsGyUkO2jkYP3pcIqd6f8H4udTPzfRExYdRX5Ix8CObDxJgTT9D368XaGkR8Kbuc
-         PKxBTfLk+MaV7k8RzfJta5Cv6ew6i3xb8y29RkNJYpCiq3fneUFf/k15biV/OxeNpocf
-         d1rtE40hk2ce1GQ6P3CZm1e8rzCAfiCINXlhx69ehORrZCQrf2dOzf+FNKog5Rv/BfvZ
-         ei4g==
+        Fri, 11 Nov 2022 17:20:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4DE9FC0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668205186;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BAZzp91yWabasniwc4N0s7M5/Ii7ug/2UrAa4xLSvVI=;
+        b=YBvd8tgBEGSVcZY8qMuVWboG/ru65VgGfDdFwzRp2k5qLgCIqQu00rwBebVqzK6iBahMzQ
+        vaFf8kAe/OP8HHkwVEf8Op1LnXT7G/6gjFoet0QmJQnyOAi+y/S49JmUqZjkfI0oos/ebX
+        1mrdlP4Ecx87NVK2RFytS2LdGSL2A8k=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-21-j1jSMJYhNMGUJRRYXKONTg-1; Fri, 11 Nov 2022 17:19:45 -0500
+X-MC-Unique: j1jSMJYhNMGUJRRYXKONTg-1
+Received: by mail-vk1-f197.google.com with SMTP id v67-20020a1fac46000000b003a2699aa42fso1524258vke.8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:19:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8e9qt1EThZ8DxhiWWBzObBNLU7s1JE4dLO1Y/7HqnGA=;
-        b=Px9AkceT4mvQycnzxwgY/njfahGKSMll2F4uLngaiSoexCqKCAJkdY51DpNm4x6y+v
-         wfzlSXscf66UR2lYfxlQth3VASeEz5Dd7tsFXiDbP9JuipFkWC9Te5yTsG5Yya1GUjxK
-         1bKL16noUrNHXpogBNawVNq2LVhcun4BnztnSmzOa3YOnQfNuQzBnjqWK+pX0oif8hjC
-         MFqVOhB4nLdi/OS8eHJczPvNfwvZqD45iR9FTEPGPwQVZ3fYqAV1TFxVkwrNqXc4JJKM
-         gHHvJSMIx1PdqnduUi4o5WFdUzFYM1ejlWVtfErqBtExQqM5yP6VJF68h3K3BUym/9Lc
-         hB9g==
-X-Gm-Message-State: ANoB5pkunNeV7ZBCwQ7hvBkHHYHZ+ufJEi2X2RMb8TJAneeLBRboCOBK
-        ZU7SzcNOM4Cn+niVH6z+PbE=
-X-Google-Smtp-Source: AA0mqf6JFu3NdHAl9ynWlwiXLiCenaaQREKQsMlK4py6nS55dkkLBaUKJBPiMvitH10IGm5z6PC9Bg==
-X-Received: by 2002:a17:903:2442:b0:186:e8bd:9c14 with SMTP id l2-20020a170903244200b00186e8bd9c14mr4428835pls.174.1668205162520;
-        Fri, 11 Nov 2022 14:19:22 -0800 (PST)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:de05:ad1e:65ae:ea4d])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b00180daa59314sm2201109pls.125.2022.11.11.14.19.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 14:19:21 -0800 (PST)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: [PATCH v4 6/6] gpiolib: add support for software nodes
-Date:   Fri, 11 Nov 2022 14:19:08 -0800
-Message-Id: <20221031-gpiolib-swnode-v4-6-6c1671890027@gmail.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221031-gpiolib-swnode-v4-0-6c1671890027@gmail.com>
-References: <20221031-gpiolib-swnode-v4-0-6c1671890027@gmail.com>
+        bh=BAZzp91yWabasniwc4N0s7M5/Ii7ug/2UrAa4xLSvVI=;
+        b=K2pgIE2NejQzS4gNwVhYPQRRT9rQHCmAHwV7Feb3p2bRqEB23Cgpn4BjJEXQWYdw1P
+         qvnLkHLe5vP56e2GPth2mu9vuGnJNuyLIHLkshCZpAySXXV5NXKwyo6mx1bGR7aWQChR
+         Wx9GgzpMOju74jUeVJh4cmTDI1E2zxe7j37umRu4ogBRvd/uNgFwGhzqYPNGBDeAWlXQ
+         DpR0SvyurOeGjMUQ4kU5KC0lgPl+ckkf2zHNtw40C8vP7tSo6aL/qAwJcV57FrtEsHRV
+         tNrhtq6W1ej72FTF4z/bFQQxSpyTbfNmF9A4Hcq9y1B2DpdPutCTC7U2+VMRrSmZ1PhZ
+         kFjQ==
+X-Gm-Message-State: ANoB5plUlsvYkMtvlnfgATBkzCaklD36AyVU8wtkFtAifl8/n+mtpB/z
+        DF0tQISHDinkbI72Mlm7dGBYs4Ny+y+TlD7XNHcpRQoMamUrt/13G1UJcDHtAeEBrOzE90+fJ4A
+        dP/yrGt1hvwDYQHHGND1wgSUwi+DiMIAagStqA4BC
+X-Received: by 2002:a05:6122:644:b0:3b8:9b88:fd20 with SMTP id h4-20020a056122064400b003b89b88fd20mr2171409vkp.19.1668205184665;
+        Fri, 11 Nov 2022 14:19:44 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4KdW3Y1GnVPEPVmuFkScPhalSulvfQloZ6yH+NRBRD1Q6elMvS+prLPLU6pwcAWBm0bRyOJ8T0c61Dh32Lw5k=
+X-Received: by 2002:a05:6122:644:b0:3b8:9b88:fd20 with SMTP id
+ h4-20020a056122064400b003b89b88fd20mr2171405vkp.19.1668205184392; Fri, 11 Nov
+ 2022 14:19:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.11.0-dev-28747
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <PH0PR02MB738464CE7E6D9C54D29ED35DF63F9@PH0PR02MB7384.namprd02.prod.outlook.com>
+In-Reply-To: <PH0PR02MB738464CE7E6D9C54D29ED35DF63F9@PH0PR02MB7384.namprd02.prod.outlook.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Fri, 11 Nov 2022 23:19:33 +0100
+Message-ID: <CABgObfZjvac5KpdY5MENLjhPuFf_N6+HFbM4DKqE2C+r2p==cg@mail.gmail.com>
+Subject: Re: Centos 7(kernel-3.10) guests stuck in recursive asyn faults on
+ kernel 5.10
+To:     Manish Mishra <manish.mishra@nutanix.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Prerna Saxena <prerna.saxena@nutanix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,281 +76,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that static device properties understand notion of child nodes and
-references, let's teach gpiolib to handle them:
+Note that the series you linked is not the final one; the final
+version disabled asynchronous page faults completely on old guests:
 
-- GPIOs are represented as a references to software nodes representing
-  gpiochip
-- references must have 2 arguments - GPIO number within the chip and
-  GPIO flags (GPIO_ACTIVE_LOW/GPIO_ACTIVE_HIGH, etc)
-- a new PROPERTY_ENTRY_GPIO() macro is supplied to ensure the above
-- name of the software node representing gpiochip must match label of
-  the gpiochip, as we use it to locate gpiochip structure at runtime
-
-The following illustrates use of software nodes to describe a "System"
-button that is currently specified via use of gpio_keys_platform_data
-in arch/mips/alchemy/board-mtx1.c. It follows bindings specified in
-Documentation/devicetree/bindings/input/gpio-keys.yaml.
-
-static const struct software_node mxt1_gpiochip2_node = {
-	.name = "alchemy-gpio2",
-};
-
-static const struct property_entry mtx1_gpio_button_props[] = {
-	PROPERTY_ENTRY_U32("linux,code", BTN_0),
-	PROPERTY_ENTRY_STRING("label", "System button"),
-	PROPERTY_ENTRY_GPIO("gpios", &mxt1_gpiochip2_node, 7, GPIO_ACTIVE_LOW),
-	{ }
-};
-
-Similarly, arch/arm/mach-tegra/board-paz00.c can be converted to:
-
-static const struct software_node tegra_gpiochip_node = {
-	.name = "tegra-gpio",
-};
-
-static struct property_entry wifi_rfkill_prop[] __initdata = {
-	PROPERTY_ENTRY_STRING("name", "wifi_rfkill"),
-	PROPERTY_ENTRY_STRING("type", "wlan"),
-	PROPERTY_ENTRY_GPIO("reset-gpios",
-			    &tegra_gpiochip_node, 25, GPIO_ACTIVE_HIGH);
-	PROPERTY_ENTRY_GPIO("shutdown-gpios",
-			    &tegra_gpiochip_node, 85, GPIO_ACTIVE_HIGH);
-	{ },
-};
-
-static struct platform_device wifi_rfkill_device = {
-	.name	= "rfkill_gpio",
-	.id	= -1,
-};
-
-...
-
-	software_node_register(&tegra_gpiochip_node);
-	device_create_managed_software_node(&wifi_rfkill_device.dev,
-					    wifi_rfkill_prop, NULL);
-
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/gpio/Makefile         |   1 +
- drivers/gpio/gpiolib-swnode.c | 123 ++++++++++++++++++++++++++++++++++++++++++
- drivers/gpio/gpiolib-swnode.h |  14 +++++
- drivers/gpio/gpiolib.c        |   7 +++
- include/linux/gpio/property.h |  11 ++++
- 5 files changed, 156 insertions(+)
-
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 8629e9eaf79e..010587025fc8 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_OF_GPIO)		+= gpiolib-of.o
- obj-$(CONFIG_GPIO_CDEV)		+= gpiolib-cdev.o
- obj-$(CONFIG_GPIO_SYSFS)	+= gpiolib-sysfs.o
- obj-$(CONFIG_GPIO_ACPI)		+= gpiolib-acpi.o
-+obj-$(CONFIG_GPIOLIB)		+= gpiolib-swnode.o
- 
- # Device drivers. Generally keep list sorted alphabetically
- obj-$(CONFIG_GPIO_REGMAP)	+= gpio-regmap.o
-diff --git a/drivers/gpio/gpiolib-swnode.c b/drivers/gpio/gpiolib-swnode.c
-new file mode 100644
-index 000000000000..dd9ccac214d1
---- /dev/null
-+++ b/drivers/gpio/gpiolib-swnode.c
-@@ -0,0 +1,123 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Software Node helpers for the GPIO API
-+ *
-+ * Copyright 2022 Google LLC
-+ */
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/kernel.h>
-+#include <linux/printk.h>
-+#include <linux/property.h>
-+#include <linux/string.h>
-+
-+#include "gpiolib.h"
-+#include "gpiolib-swnode.h"
-+
-+static void swnode_format_propname(const char *con_id, char *propname,
-+				   size_t max_size)
++static inline bool kvm_pv_async_pf_enabled(struct kvm_vcpu *vcpu)
 +{
-+	/*
-+	 * Note we do not need to try both -gpios and -gpio suffixes,
-+	 * as, unlike OF and ACPI, we can fix software nodes to conform
-+	 * to the proper binding.
-+	 */
-+	if (con_id)
-+		snprintf(propname, max_size, "%s-gpios", con_id);
-+	else
-+		strscpy(propname, "gpios", max_size);
++       u64 mask =3D KVM_ASYNC_PF_ENABLED | KVM_ASYNC_PF_DELIVERY_AS_INT;
++
++       return (vcpu->arch.apf.msr_en_val & mask) =3D=3D mask;
 +}
-+
-+static int swnode_gpiochip_match_name(struct gpio_chip *chip, void *data)
-+{
-+	return !strcmp(chip->label, data);
-+}
-+
-+static struct gpio_chip *swnode_get_chip(struct fwnode_handle *fwnode)
-+{
-+	const struct software_node *chip_node;
-+	struct gpio_chip *chip;
-+
-+	chip_node = to_software_node(fwnode);
-+	if (!chip_node || !chip_node->name)
-+		return ERR_PTR(-EINVAL);
-+
-+	chip = gpiochip_find((void *)chip_node->name, swnode_gpiochip_match_name);
-+	return chip ?: ERR_PTR(-EPROBE_DEFER);
-+}
-+
-+struct gpio_desc *swnode_find_gpio(struct fwnode_handle *fwnode,
-+				   const char *con_id, unsigned int idx,
-+				   unsigned long *flags)
-+{
-+	const struct software_node *swnode;
-+	struct fwnode_reference_args args;
-+	struct gpio_chip *chip;
-+	struct gpio_desc *desc;
-+	char propname[32]; /* 32 is max size of property name */
-+	int error;
-+
-+	swnode = to_software_node(fwnode);
-+	if (!swnode)
-+		return ERR_PTR(-EINVAL);
-+
-+	swnode_format_propname(con_id, propname, sizeof(propname));
-+
-+	/*
-+	 * We expect all swnode-described GPIOs have GPIO number and
-+	 * polarity arguments, hence nargs is set to 2.
-+	 */
-+	error = fwnode_property_get_reference_args(fwnode, propname, NULL, 2, idx, &args);
-+	if (error) {
-+		pr_debug("%s: can't parse '%s' property of node '%pfwP[%d]'\n",
-+			__func__, propname, fwnode, idx);
-+		return ERR_PTR(error);
-+	}
-+
-+	chip = swnode_get_chip(args.fwnode);
-+	fwnode_handle_put(args.fwnode);
-+	if (IS_ERR(chip))
-+		return ERR_CAST(chip);
-+
-+	desc = gpiochip_get_desc(chip, args.args[0]);
-+	*flags = args.args[1]; /* We expect native GPIO flags */
-+
-+	pr_debug("%s: parsed '%s' property of node '%pfwP[%d]' - status (%d)\n",
-+		 __func__, propname, fwnode, idx, PTR_ERR_OR_ZERO(desc));
-+
-+	return desc;
-+}
-+
-+/**
-+ * swnode_gpio_count - count the GPIOs associated with a device / function
-+ * @fwnode:	firmware node of the GPIO consumer, can be %NULL for
-+ *		system-global GPIOs
-+ * @con_id:	function within the GPIO consumer
-+ *
-+ * Return:
-+ * The number of GPIOs associated with a device / function or %-ENOENT,
-+ * if no GPIO has been assigned to the requested function.
-+ */
-+int swnode_gpio_count(const struct fwnode_handle *fwnode, const char *con_id)
-+{
-+	struct fwnode_reference_args args;
-+	char propname[32];
-+	int count;
-+
-+	swnode_format_propname(con_id, propname, sizeof(propname));
-+
-+	/*
-+	 * This is not very efficient, but GPIO lists usually have only
-+	 * 1 or 2 entries.
-+	 */
-+	count = 0;
-+	while (fwnode_property_get_reference_args(fwnode, propname, NULL, 0,
-+						  count, &args) == 0) {
-+		fwnode_handle_put(args.fwnode);
-+		count++;
-+	}
-+
-+	return count ?: -ENOENT;
-+}
-diff --git a/drivers/gpio/gpiolib-swnode.h b/drivers/gpio/gpiolib-swnode.h
-new file mode 100644
-index 000000000000..af849e56f6bc
---- /dev/null
-+++ b/drivers/gpio/gpiolib-swnode.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef GPIOLIB_SWNODE_H
-+#define GPIOLIB_SWNODE_H
-+
-+struct fwnode_handle;
-+struct gpio_desc;
-+
-+struct gpio_desc *swnode_find_gpio(struct fwnode_handle *fwnode,
-+				   const char *con_id, unsigned int idx,
-+				   unsigned long *flags);
-+int swnode_gpio_count(const struct fwnode_handle *fwnode, const char *con_id);
-+
-+#endif /* GPIOLIB_SWNODE_H */
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 7f739096c4cf..7936d54a2e30 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -26,6 +26,7 @@
- #include "gpiolib.h"
- #include "gpiolib-of.h"
- #include "gpiolib-acpi.h"
-+#include "gpiolib-swnode.h"
- #include "gpiolib-cdev.h"
- #include "gpiolib-sysfs.h"
- 
-@@ -3870,6 +3871,10 @@ static struct gpio_desc *gpiod_find_by_fwnode(struct fwnode_handle *fwnode,
- 		dev_dbg(consumer, "using ACPI '%pfw' for '%s' GPIO lookup\n",
- 			fwnode, con_id);
- 		desc = acpi_find_gpio(fwnode, con_id, idx, flags, lookupflags);
-+	} else if (is_software_node(fwnode)) {
-+		dev_dbg(consumer, "using swnode '%pfw' for '%s' GPIO lookup\n",
-+			fwnode, con_id);
-+		desc = swnode_find_gpio(fwnode, con_id, idx, lookupflags);
- 	}
- 
- 	return desc;
-@@ -3987,6 +3992,8 @@ int gpiod_count(struct device *dev, const char *con_id)
- 		count = of_gpio_get_count(dev, con_id);
- 	else if (is_acpi_node(fwnode))
- 		count = acpi_gpio_count(dev, con_id);
-+	else if (is_software_node(fwnode))
-+		count = swnode_gpio_count(fwnode, con_id);
- 
- 	if (count < 0)
- 		count = platform_gpio_count(dev, con_id);
-diff --git a/include/linux/gpio/property.h b/include/linux/gpio/property.h
-new file mode 100644
-index 000000000000..6c75c8bd44a0
---- /dev/null
-+++ b/include/linux/gpio/property.h
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+#ifndef __LINUX_GPIO_PROPERTY_H
-+#define __LINUX_GPIO_PROPERTY_H
-+
-+#include <dt-bindings/gpio/gpio.h> /* for GPIO_* flags */
-+#include <linux/property.h>
-+
-+#define PROPERTY_ENTRY_GPIO(_name_, _chip_node_, _idx_, _flags_) \
-+	PROPERTY_ENTRY_REF(_name_, _chip_node_, _idx_, _flags_)
-+
-+#endif /* __LINUX_GPIO_PROPERTY_H */
 
--- 
-b4 0.11.0-dev-28747
+(commit 2635b5c4a0e407b84f68e188c719f28ba0e9ae1b)
+
+Old guests are not deprecated, but the old implementation had issues
+that cannot be solved so old guests will not have asynchronous page
+faults anymore. For this reason I think it's strange that you still
+see async page fault in the guest. What do the stack traces look like?
+
+Thanks,
+
+Paolo
+
+On Tue, Nov 8, 2022 at 2:33 PM Manish Mishra <manish.mishra@nutanix.com> wr=
+ote:
+>
+> Hi Everyone,
+>
+> We are facing some issues with memory hotplug on Centos 7(kernel-3.10) gu=
+ests with kernel-5.10 kvm hosts. I see guest is stuck in recursive async pa=
+ge faults for very long hence creating deadlocks on guests. I was looking a=
+t changes between kernel 5.2 and 5.10 around async page faults. I see this =
+series could be related, https://lore.kernel.org/lkml/20200429093634.151490=
+2-7-vkuznets@redhat.com/.
+>
+>
+>
+> Have we deprecated older linux guests with 5.10 hosts, after this update =
+in async page fault handler mechanism or this issue is unrelated. I do not =
+have much idea knowledge of async page faults so wanted to confirm. Any hel=
+p will be really appreciated.
+>
+> Thanks
+>
+> Manish Mishra
+
