@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC916263FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6916263FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiKKV61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 16:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S233933AbiKKV6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 16:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiKKV6Y (ORCPT
+        with ESMTP id S230105AbiKKV6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Nov 2022 16:58:24 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D92FB9;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20701DD;
         Fri, 11 Nov 2022 13:58:22 -0800 (PST)
-Date:   Fri, 11 Nov 2022 21:58:18 -0000
+Date:   Fri, 11 Nov 2022 21:58:19 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668203899;
+        s=2020; t=1668203900;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=sgFRx+YUYLURaSF5O8vuDDLXxJFuCKSHBieN9Fs6Pd0=;
-        b=KvBDGYd/UtFV2flMlOYaR1WqU9yqbwEpBGvqwXgeeHA/UJRu82d4wp0kOAOFDRu4mUGx/c
-        xLaxrv8Ic9u1MtixNfBVPAqJ9VZk7FFkG9TtrweC/Y6GbaLtYfJ2T3mSZvBl3iRccl0oP1
-        P83cmwBfXVNfv8bfGoMbrqxsjtbJKnsn4UAhrdoqoqQ8KDKpY6CQub6HQuVFZb6zumfGs3
-        RJNEWLqDnLonDDLZ9zLwVxsCIcdLS7gUI0VIsmBDX6ya8AGOU6w+YZbrJ/c6RA31ny2y6U
-        Ocyd/wwT4UHKOPfi8wROAxFEe98gvgKj09IzcybMCCmVPBRDUWYVYfMr1MCZxA==
+        bh=AakrqikpH8annH1JmSdshbJ0IgoBk5P3SChU/3KnNMw=;
+        b=pbcwS4qYMDRdv+vEa+Ajifj7d0gzqo70LOYK5I9zfDg8PbeVcyWc6HXcaVo+cuZrpWr40T
+        1qtpQii7p5Wx6+atC9BpjPNrTtWJRXEdzA9jZTHjUTBfCYxA/6xBD2hGp7NVSi04ZCfjdN
+        mXCn9/WxVSyOTE8LWADR09b7njujfrhHKIb6x82tdCi7onRvlu5veSkdjAvNFA5Fdpt/wL
+        BDtjVZn0v7Hs/HJd/ttWUHRMoV9ceArrOnMCgRfI9tqnfaW6iXqbThzAsHvO76Qnfm48NC
+        CuOiR4yYMzN46p+tJbfw9J9phhNyabO9bgeUoiQ1dm7ZKT3cveTkaiJqY4CqzQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668203899;
+        s=2020e; t=1668203900;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=sgFRx+YUYLURaSF5O8vuDDLXxJFuCKSHBieN9Fs6Pd0=;
-        b=yhmqPIPKHMXAnefwq6Klt0D6uIpFsiCiR0B5PbHvc4O9qG3LPz+EKgrQBXFwVvrVHesQco
-        hxAH9DmeuZNnchAA==
+        bh=AakrqikpH8annH1JmSdshbJ0IgoBk5P3SChU/3KnNMw=;
+        b=z2PxnURn2OyMiCPOHp81U3QMIAr72WOO3t+frzLcPg1rrWTTv3qwpEcRkZWGrowCeXUqjs
+        bP8E5jbQWwp7FdBg==
 From:   "tip-bot2 for Weihong Zhang" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases
- for linear-address masking
+Subject: [tip: x86/mm] selftests/x86/lam: Add inherit test cases for
+ linear-address masking
 Cc:     Weihong Zhang <weihong.zhang@intel.com>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <166820389823.4906.10968580709475105825.tip-bot2@tip-bot2>
+Message-ID: <166820389946.4906.16863903818809845382.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,319 +62,227 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     bf1269766228ef169145af26ae50ef9ef095b6fe
-Gitweb:        https://git.kernel.org/tip/bf1269766228ef169145af26ae50ef9ef095b6fe
+Commit-ID:     ec5e0525225a92f339b485fe0b21eadfa44e1867
+Gitweb:        https://git.kernel.org/tip/ec5e0525225a92f339b485fe0b21eadfa44e1867
 Author:        Weihong Zhang <weihong.zhang@intel.com>
-AuthorDate:    Wed, 09 Nov 2022 19:51:40 +03:00
+AuthorDate:    Wed, 09 Nov 2022 19:51:39 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Fri, 11 Nov 2022 13:29:56 -08:00
 
-selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for linear-address masking
+selftests/x86/lam: Add inherit test cases for linear-address masking
 
-By default do not allow to enable both LAM and use SVA in the same
-process.
-The new ARCH_FORCE_TAGGED_SVA arch_prctl() overrides the limitation.
+LAM is enabled per-thread and gets inherited on fork(2)/clone(2). exec()
+reverts LAM status to the default disabled state.
 
-Add new test cases for the new arch_prctl:
-Before using ARCH_FORCE_TAGGED_SVA, should not allow to enable LAM/SVA
-coexisting. the test cases should be negative.
+There are two test scenarios:
 
-The test depands on idxd driver and iommu. before test, need add
-"intel_iommu=on,sm_on" in kernel command line and insmod idxd driver.
+ - Fork test cases:
+
+   These cases were used to test the inheritance of LAM for per-thread,
+   Child process generated by fork() should inherit LAM feature from
+   parent process, Child process can get the LAM mode same as parent
+   process.
+
+ - Execve test cases:
+
+   Processes generated by execve() are different from processes
+   generated by fork(), these processes revert LAM status to disabled
+   status.
 
 Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/all/20221109165140.9137-17-kirill.shutemov%40linux.intel.com
+Link: https://lore.kernel.org/all/20221109165140.9137-16-kirill.shutemov%40linux.intel.com
 ---
- tools/testing/selftests/x86/lam.c | 237 ++++++++++++++++++++++++++++-
- 1 file changed, 235 insertions(+), 2 deletions(-)
+ tools/testing/selftests/x86/lam.c | 125 ++++++++++++++++++++++++++++-
+ 1 file changed, 121 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index cfc9073..52a876a 100644
+index 8ea1fce..cfc9073 100644
 --- a/tools/testing/selftests/x86/lam.c
 +++ b/tools/testing/selftests/x86/lam.c
-@@ -30,6 +30,7 @@
- #define ARCH_GET_UNTAG_MASK     0x4001
- #define ARCH_ENABLE_TAGGED_ADDR 0x4002
- #define ARCH_GET_MAX_TAG_BITS   0x4003
-+#define ARCH_FORCE_TAGGED_SVA	0x4004
- 
- /* Specified test function bits */
- #define FUNC_MALLOC             0x1
-@@ -38,8 +39,9 @@
+@@ -37,8 +37,9 @@
+ #define FUNC_MMAP               0x4
  #define FUNC_SYSCALL            0x8
  #define FUNC_URING              0x10
- #define FUNC_INHERITE           0x20
-+#define FUNC_PASID              0x40
++#define FUNC_INHERITE           0x20
  
--#define TEST_MASK               0x3f
-+#define TEST_MASK               0x7f
+-#define TEST_MASK               0x1f
++#define TEST_MASK               0x3f
  
  #define LOW_ADDR                (0x1UL << 30)
  #define HIGH_ADDR               (0x3UL << 48)
-@@ -55,11 +57,19 @@
- #define URING_QUEUE_SZ 1
- #define URING_BLOCK_SZ 2048
- 
-+/* Pasid test define */
-+#define LAM_CMD_BIT 0x1
-+#define PAS_CMD_BIT 0x2
-+#define SVA_CMD_BIT 0x4
-+
-+#define PAS_CMD(cmd1, cmd2, cmd3) (((cmd3) << 8) | ((cmd2) << 4) | ((cmd1) << 0))
-+
- struct testcases {
- 	unsigned int later;
- 	int expected; /* 2: SIGSEGV Error; 1: other errors */
- 	unsigned long lam;
- 	uint64_t addr;
-+	uint64_t cmd;
- 	int (*test_func)(struct testcases *test);
- 	const char *msg;
- };
-@@ -556,7 +566,7 @@ int do_uring(unsigned long lam)
- 	struct file_io *fi;
- 	struct stat st;
- 	int ret = 1;
--	char path[PATH_MAX];
-+	char path[PATH_MAX] = {0};
- 
- 	/* get current process path */
- 	if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
-@@ -852,6 +862,226 @@ static void cmd_help(void)
- 	printf("\t-h: help\n");
+@@ -174,6 +175,28 @@ static unsigned long get_default_tag_bits(void)
+ 	return lam;
  }
  
-+/* Check for file existence */
-+uint8_t file_Exists(const char *fileName)
++/*
++ * Set tagged address and read back untag mask.
++ * check if the untag mask is expected.
++ */
++static int get_lam(void)
 +{
-+	struct stat buffer;
++	uint64_t ptr = 0;
++	int ret = -1;
++	/* Get untagged mask */
++	if (syscall(SYS_arch_prctl, ARCH_GET_UNTAG_MASK, &ptr) == -1)
++		return -1;
 +
-+	uint8_t ret = (stat(fileName, &buffer) == 0);
++	/* Check mask returned is expected */
++	if (ptr == ~(LAM_U57_MASK))
++		ret = LAM_U57_BITS;
++	else if (ptr == -1ULL)
++		ret = LAM_NONE;
++
 +
 +	return ret;
 +}
 +
-+/* Sysfs idxd files */
-+const char *dsa_configs[] = {
-+	"echo 1 > /sys/bus/dsa/devices/dsa0/wq0.1/group_id",
-+	"echo shared > /sys/bus/dsa/devices/dsa0/wq0.1/mode",
-+	"echo 10 > /sys/bus/dsa/devices/dsa0/wq0.1/priority",
-+	"echo 16 > /sys/bus/dsa/devices/dsa0/wq0.1/size",
-+	"echo 15 > /sys/bus/dsa/devices/dsa0/wq0.1/threshold",
-+	"echo user > /sys/bus/dsa/devices/dsa0/wq0.1/type",
-+	"echo MyApp1 > /sys/bus/dsa/devices/dsa0/wq0.1/name",
-+	"echo 1 > /sys/bus/dsa/devices/dsa0/engine0.1/group_id",
-+	"echo dsa0 > /sys/bus/dsa/drivers/idxd/bind",
-+	/* bind files and devices, generated a device file in /dev */
-+	"echo wq0.1 > /sys/bus/dsa/drivers/user/bind",
-+};
-+
-+/* DSA device file */
-+const char *dsaDeviceFile = "/dev/dsa/wq0.1";
-+/* file for io*/
-+const char *dsaPasidEnable = "/sys/bus/dsa/devices/dsa0/pasid_enabled";
-+
-+/*
-+ * DSA depends on kernel cmdline "intel_iommu=on,sm_on"
-+ * return pasid_enabled (0: disable 1:enable)
-+ */
-+int Check_DSA_Kernel_Setting(void)
+ /* According to LAM mode, set metadata in high bits */
+ static uint64_t set_metadata(uint64_t src, unsigned long lam)
+ {
+@@ -581,7 +604,7 @@ out:
+ 
+ 			switch (lam) {
+ 			case LAM_U57_BITS: /* Clear bits 62:57 */
+-				addr = (addr & ~(0x3fULL << 57));
++				addr = (addr & ~(LAM_U57_MASK));
+ 				break;
+ 			}
+ 			free((void *)addr);
+@@ -632,6 +655,72 @@ static int fork_test(struct testcases *test)
+ 	return ret;
+ }
+ 
++static int handle_execve(struct testcases *test)
 +{
-+	char command[256] = "";
-+	char buf[256] = "";
-+	char *ptr;
-+	int rv = -1;
++	int ret, child_ret;
++	int lam = test->lam;
++	pid_t pid;
 +
-+	snprintf(command, sizeof(command) - 1, "cat %s", dsaPasidEnable);
++	pid = fork();
++	if (pid < 0) {
++		perror("Fork failed.");
++		ret = 1;
++	} else if (pid == 0) {
++		char path[PATH_MAX];
 +
-+	FILE *cmd = popen(command, "r");
++		/* Set LAM mode in parent process */
++		if (set_lam(lam) != 0)
++			return 1;
 +
-+	if (cmd) {
-+		while (fgets(buf, sizeof(buf) - 1, cmd) != NULL);
++		/* Get current binary's path and the binary was run by execve */
++		if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
++			exit(-1);
 +
-+		pclose(cmd);
-+		rv = strtol(buf, &ptr, 16);
-+	}
-+
-+	return rv;
-+}
-+
-+/*
-+ * Config DSA's sysfs files as shared DSA's WQ.
-+ * Generated a device file /dev/dsa/wq0.1
-+ * Return:  0 OK; 1 Failed; 3 Skip(SVA disabled).
-+ */
-+int Dsa_Init_Sysfs(void)
-+{
-+	uint len = ARRAY_SIZE(dsa_configs);
-+	const char **p = dsa_configs;
-+
-+	if (file_Exists(dsaDeviceFile) == 1)
-+		return 0;
-+
-+	/* check the idxd driver */
-+	if (file_Exists(dsaPasidEnable) != 1) {
-+		printf("Please make sure idxd driver was loaded\n");
-+		return 3;
-+	}
-+
-+	/* Check SVA feature */
-+	if (Check_DSA_Kernel_Setting() != 1) {
-+		printf("Please enable SVA.(Add intel_iommu=on,sm_on in kernel cmdline)\n");
-+		return 3;
-+	}
-+
-+	/* Check the idxd device file on /dev/dsa/ */
-+	for (int i = 0; i < len; i++) {
-+		if (system(p[i]))
++		/* run binary to get LAM mode and return to parent process */
++		if (execlp(path, path, "-t 0x0", NULL) < 0) {
++			perror("error on exec");
++			exit(-1);
++		}
++	} else {
++		wait(&child_ret);
++		ret = WEXITSTATUS(child_ret);
++		if (ret != LAM_NONE)
 +			return 1;
 +	}
 +
-+	/* After config, /dev/dsa/wq0.1 should be generated */
-+	return (file_Exists(dsaDeviceFile) != 1);
++	return 0;
 +}
 +
-+/*
-+ * Open DSA device file, triger API: iommu_sva_alloc_pasid
-+ */
-+void *allocate_dsa_pasid(void)
++static int handle_inheritance(struct testcases *test)
 +{
-+	int fd;
-+	void *wq;
++	int ret, child_ret;
++	int lam = test->lam;
++	pid_t pid;
 +
-+	fd = open(dsaDeviceFile, O_RDWR);
-+	if (fd < 0) {
-+		perror("open");
-+		return MAP_FAILED;
++	/* Set LAM mode in parent process */
++	if (set_lam(lam) != 0)
++		return 1;
++
++	pid = fork();
++	if (pid < 0) {
++		perror("Fork failed.");
++		return 1;
++	} else if (pid == 0) {
++		/* Set LAM mode in parent process */
++		int child_lam = get_lam();
++
++		exit(child_lam);
++	} else {
++		wait(&child_ret);
++		ret = WEXITSTATUS(child_ret);
++
++		if (lam != ret)
++			return 1;
 +	}
 +
-+	wq = mmap(NULL, 0x1000, PROT_WRITE,
-+			   MAP_SHARED | MAP_POPULATE, fd, 0);
-+	if (wq == MAP_FAILED)
-+		perror("mmap");
-+
-+	return wq;
++	return 0;
 +}
 +
-+int set_force_svm(void)
-+{
-+	int ret = 0;
-+
-+	ret = syscall(SYS_arch_prctl, ARCH_FORCE_TAGGED_SVA);
-+
-+	return ret;
-+}
-+
-+int handle_pasid(struct testcases *test)
-+{
-+	uint tmp = test->cmd;
-+	uint runed = 0x0;
-+	int ret = 0;
-+	void *wq = NULL;
-+
-+	ret = Dsa_Init_Sysfs();
-+	if (ret != 0)
-+		return ret;
-+
-+	for (int i = 0; i < 3; i++) {
-+		int err = 0;
-+
-+		if (tmp & 0x1) {
-+			/* run set lam mode*/
-+			if ((runed & 0x1) == 0)	{
-+				err = set_lam(LAM_U57_BITS);
-+				runed = runed | 0x1;
-+			} else
-+				err = 1;
-+		} else if (tmp & 0x4) {
-+			/* run force svm */
-+			if ((runed & 0x4) == 0)	{
-+				err = set_force_svm();
-+				runed = runed | 0x4;
-+			} else
-+				err = 1;
-+		} else if (tmp & 0x2) {
-+			/* run allocate pasid */
-+			if ((runed & 0x2) == 0) {
-+				runed = runed | 0x2;
-+				wq = allocate_dsa_pasid();
-+				if (wq == MAP_FAILED)
-+					err = 1;
-+			} else
-+				err = 1;
-+		}
-+
-+		ret = ret + err;
-+		if (ret > 0)
-+			break;
-+
-+		tmp = tmp >> 4;
-+	}
-+
-+	if (wq != MAP_FAILED && wq != NULL)
-+		if (munmap(wq, 0x1000))
-+			printf("munmap failed %d\n", errno);
-+
-+	if (runed != 0x7)
-+		ret = 1;
-+
-+	return (ret != 0);
-+}
-+
-+/*
-+ * Pasid test depends on idxd and SVA, kernel should enable iommu and sm.
-+ * command line(intel_iommu=on,sm_on)
-+ */
-+static struct testcases pasid_cases[] = {
+ static void run_test(struct testcases *test, int count)
+ {
+ 	int i, ret = 0;
+@@ -740,11 +829,26 @@ static struct testcases mmap_cases[] = {
+ 	},
+ };
+ 
++static struct testcases inheritance_cases[] = {
 +	{
-+		.expected = 1,
-+		.cmd = PAS_CMD(LAM_CMD_BIT, PAS_CMD_BIT, SVA_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: [Negative] Execute LAM, PASID, SVA in sequence\n",
++		.expected = 0,
++		.lam = LAM_U57_BITS,
++		.test_func = handle_inheritance,
++		.msg = "FORK: LAM_U57, child process should get LAM mode same as parent\n",
 +	},
 +	{
 +		.expected = 0,
-+		.cmd = PAS_CMD(LAM_CMD_BIT, SVA_CMD_BIT, PAS_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute LAM, SVA, PASID in sequence\n",
-+	},
-+	{
-+		.expected = 1,
-+		.cmd = PAS_CMD(PAS_CMD_BIT, LAM_CMD_BIT, SVA_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: [Negative] Execute PASID, LAM, SVA in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(PAS_CMD_BIT, SVA_CMD_BIT, LAM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute PASID, SVA, LAM in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(SVA_CMD_BIT, LAM_CMD_BIT, PAS_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute SVA, LAM, PASID in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(SVA_CMD_BIT, PAS_CMD_BIT, LAM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute SVA, PASID, LAM in sequence\n",
++		.lam = LAM_U57_BITS,
++		.test_func = handle_execve,
++		.msg = "EXECVE: LAM_U57, child process should get disabled LAM mode\n",
 +	},
 +};
 +
- int main(int argc, char **argv)
+ static void cmd_help(void)
  {
- 	int c = 0;
-@@ -910,6 +1140,9 @@ int main(int argc, char **argv)
- 	if (tests & FUNC_INHERITE)
- 		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
+ 	printf("usage: lam [-h] [-t test list]\n");
+ 	printf("\t-t test list: run tests specified in the test list, default:0x%x\n", TEST_MASK);
+-	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring.\n");
++	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring; 0x20:inherit;\n");
+ 	printf("\t-h: help\n");
+ }
  
-+	if (tests & FUNC_PASID)
-+		run_test(pasid_cases, ARRAY_SIZE(pasid_cases));
+@@ -764,7 +868,7 @@ int main(int argc, char **argv)
+ 		switch (c) {
+ 		case 't':
+ 			tests = strtoul(optarg, NULL, 16);
+-			if (!(tests & TEST_MASK)) {
++			if (tests && !(tests & TEST_MASK)) {
+ 				ksft_print_msg("Invalid argument!\n");
+ 				return -1;
+ 			}
+@@ -778,6 +882,16 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
++	/*
++	 * When tests is 0, it is not a real test case;
++	 * the option used by test case(execve) to check the lam mode in
++	 * process generated by execve, the process read back lam mode and
++	 * check with lam mode in parent process.
++	 */
++	if (!tests)
++		return (get_lam());
++
++	/* Run test cases */
+ 	if (tests & FUNC_MALLOC)
+ 		run_test(malloc_cases, ARRAY_SIZE(malloc_cases));
+ 
+@@ -793,6 +907,9 @@ int main(int argc, char **argv)
+ 	if (tests & FUNC_URING)
+ 		run_test(uring_cases, ARRAY_SIZE(uring_cases));
+ 
++	if (tests & FUNC_INHERITE)
++		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
 +
  	ksft_set_plan(tests_cnt);
  
