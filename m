@@ -2,209 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166C662590A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20C062590D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbiKKLD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S233615AbiKKLE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233183AbiKKLDZ (ORCPT
+        with ESMTP id S233251AbiKKLEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:03:25 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC38F21F;
-        Fri, 11 Nov 2022 03:03:22 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABAtA8E017294;
-        Fri, 11 Nov 2022 11:03:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+kDapjqqACohbJuPfP4OnvhVvSwqGQZLrRF43v/RLpc=;
- b=mhi0mSjwirBcH+gzNpDxcsud/GjjsfaIODwWLV2WBPYmGBge1/+zVJPToO9rs6Mp3DrV
- K/4skT5cLl3UKgf6EjMWyp9z+TeIFEoaC07lYeLx3E3EO2h3+bA+b4oGBvflsG59e8tk
- BnLWb9NCSj7rD+lQR1mV/2u1VzUF0w7a79SrurfrIeErepnzQNAtWxJnHuEj6iqGZAF7
- Eok3QucZxtpZQ0oBynPadg22HgtFsj/q3aIHcVnuMozscyJm5d/ofzgdhz7Co2pUMg/6
- evAFKO/nrXjbWVd+UrUxBK99IBNJGV6TjbeQn1CZoRrV9XmdWsyp3CZl5xqH+CbcJB8d BQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksh98rjcd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 11:03:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABB3DAp018726
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 11:03:13 GMT
-Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
- 2022 03:03:09 -0800
-Message-ID: <57298a3b-443b-b49b-c395-e2d6420ad20b@quicinc.com>
-Date:   Fri, 11 Nov 2022 16:33:06 +0530
+        Fri, 11 Nov 2022 06:04:54 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A2C5B585;
+        Fri, 11 Nov 2022 03:04:53 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b3so7832774lfv.2;
+        Fri, 11 Nov 2022 03:04:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Od3UfcxF+ZlfXUq7jjNyBB+yQGOCv7zBBlbMwLtdKYc=;
+        b=jhd9smis2M3IZo23nle2YDPArf49P1H5YrCs1sOs84gjAm567Cidw1mbDVvi9+eKrf
+         Ey15I+AtsSqccvFe0BzzN+VmjjWUi43/nZjTVZ4gc2ySza/fNwQSDwy9AL+craDnuAyq
+         1pvV+x7mObRwZ8R/JO1pa7NqbJWivfETT+VsfAhDw2UGnHE7B5B0R1FNX0KDZ1zN962f
+         KXLTQNis/ikVFwxbGXS9wibE9LTQp62xNpRjKuWLoLYu0PRAvCq71kj31d1AN7wVQ6Zt
+         qmoObX0eJ65uLpFwflQFBvkAFk5ca5TYF+mNGm3f4NruwcjjIKbu1sv/oBNGPswKice7
+         p6Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Od3UfcxF+ZlfXUq7jjNyBB+yQGOCv7zBBlbMwLtdKYc=;
+        b=dIKXtrQlV2TX3hs9whr2XwmA4pwJpijOwi5d6jbkTmgIHiUUNU+xIgc9F4kKyYOcrj
+         CEcez0LyMlxHZQtFT7G8koRRDJFpBndccEZfjoLSRBth45j7rXePdV+CUybKHRMBghOI
+         b5v0DEqk2Hotn1ovN/R2MhpBqDN0AJRd0vkYmnFwdKalZtd9Etzszbgz5+OKqKbX4TIm
+         zPXOFbk7qbLOJLtfU2VAJPVbrC4ziSTMSrJ0l/AGXuT1fmR666VOZ7vowy2LQjoirVZp
+         E1YVEOAjciQ1VvFj8+knYUQw9OqCUq+IX8Z983uxGuoSy4pPyQdYSfuLi6LWHNBsBA1T
+         iWFA==
+X-Gm-Message-State: ANoB5pn73LweeL1w/1Qkz7i6byrcZfELh/LVSLTuyHQ4XTyACeJOncnl
+        +KWffpSbGoGANRW/VeZdslY=
+X-Google-Smtp-Source: AA0mqf6jouf+KgJGa/dHztcF3ByX4zhLiwA6QV1oVepCq86SFD9tdHuC93GSpciMjrxiMkd3O6xwOw==
+X-Received: by 2002:a05:6512:2202:b0:4a2:34d5:9929 with SMTP id h2-20020a056512220200b004a234d59929mr660434lfu.31.1668164691423;
+        Fri, 11 Nov 2022 03:04:51 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id a3-20020a2e8303000000b002770e531535sm347193ljh.55.2022.11.11.03.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 03:04:50 -0800 (PST)
+Date:   Fri, 11 Nov 2022 14:04:48 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Vinod Koul <vkoul@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        caihuoqing <caihuoqing@baidu.com>
+Subject: Re: [PATCH v6 11/20] dt-bindings: PCI: dwc: Add clocks/resets common
+ properties
+Message-ID: <20221111110448.oiekd5rzewhvhogv@mobilestation>
+References: <20221107204934.32655-1-Sergey.Semin@baikalelectronics.ru>
+ <20221107204934.32655-12-Sergey.Semin@baikalelectronics.ru>
+ <166811541565.1069420.11032822569415159193.robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 10/10] arm64: dts: qcom: sc8280xp: Add bwmon instances
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rob Herring" <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
- <20221111032515.3460-11-quic_bjorande@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20221111032515.3460-11-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: gzkRF2C_AY7zrZXj_bI6qJetK2WfAYJy
-X-Proofpoint-ORIG-GUID: gzkRF2C_AY7zrZXj_bI6qJetK2WfAYJy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_06,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 spamscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211110073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166811541565.1069420.11032822569415159193.robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/11/22 08:55, Bjorn Andersson wrote:
-> Add the two bwmon instances and define votes for CPU -> LLCC and LLCC ->
-> DDR, with bandwidth values based on the downstream DeviceTree.
+On Thu, Nov 10, 2022 at 03:23:37PM -0600, Rob Herring wrote:
 > 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Tested-by: Steev Klimaszewski <steev@kali.org>
+> On Mon, 07 Nov 2022 23:49:25 +0300, Serge Semin wrote:
+> > DW PCIe RP/EP reference manuals explicit define all the clocks and reset
+> > requirements in [1] and [2]. Seeing the DW PCIe vendor-specific
+> > DT-bindings have already started assigning random names to the same set of
+> > the clocks and resets lines, let's define a generic names sets and add
+> > them to the DW PCIe common DT-schema.
+> > 
+> > Note since there are DW PCI-based vendor-specific DT-bindings with the
+> > custom names assigned to the same clocks and resets resources we have no
+> > much choice but to add them to the generic DT-schemas in order to have the
+> > schemas being applicable for such devices. These names are marked as
+> > vendor-specific and should be avoided being used in new bindings in favor
+> > of the generic names.
+> > 
+> > [1] Synopsys DesignWare Cores PCI Express Controller Databook - DWC PCIe
+> > Root Port, Version 5.40a, March 2019, p.55 - 78.
+> > [2] Synopsys DesignWare Cores PCI Express Controller Databook - DWC PCIe
+> > Endpoint, Version 5.40a, March 2019, p.58 - 81.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > ---
+> > 
+> > Changelog v3:
+> > - This is a new patch unpinned from the next one:
+> >   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+> >   by the Rob' request. (@Rob)
+> > - Drop synonymous from the names list since the device schemas create
+> >   their own enumerations anyway.
+> > 
+> > Changelog v5:
+> > - Add platform-specific clock/reset names, but mark them as deprecated.
+> > 
+> > Changelog v6:
+> > - Move the common *-names definitions to the RP/EP schemas. Thus drop
+> >   the 'definitions' property. (@Rob)
+> > - Drop the 'deprecated' keywords from the vendor-specific names. (@Rob)
+> > ---
+> >  .../bindings/pci/snps,dw-pcie-common.yaml     | 120 ++++++++++++++++++
+> >  .../bindings/pci/snps,dw-pcie-ep.yaml         |   6 +
+> >  .../devicetree/bindings/pci/snps,dw-pcie.yaml |   2 -
+> >  3 files changed, 126 insertions(+), 2 deletions(-)
+> > 
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+Yahoo! We've finally done this) Thanks.
 
-> ---
-> 
-> Changes since v1:
-> - Added "cpu" to compatible for the CPU-subsystem bwmon instance
-> 
->   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 91 ++++++++++++++++++++++++++
->   1 file changed, 91 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 2ac8f5204905..62e9dd8a2f07 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1287,6 +1287,97 @@
->   			};
->   		};
->   
-> +		pmu@9091000 {
-> +			compatible = "qcom,sc8280xp-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-> +			reg = <0 0x9091000 0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3>;
-> +
-> +			operating-points-v2 = <&llcc_bwmon_opp_table>;
-> +
-> +			llcc_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-0 {
-> +					opp-peak-kBps = <762000>;
-> +				};
-> +				opp-1 {
-> +					opp-peak-kBps = <1720000>;
-> +				};
-> +				opp-2 {
-> +					opp-peak-kBps = <2086000>;
-> +				};
-> +				opp-3 {
-> +					opp-peak-kBps = <2597000>;
-> +				};
-> +				opp-4 {
-> +					opp-peak-kBps = <2929000>;
-> +				};
-> +				opp-5 {
-> +					opp-peak-kBps = <3879000>;
-> +				};
-> +				opp-6 {
-> +					opp-peak-kBps = <5161000>;
-> +				};
-> +				opp-7 {
-> +					opp-peak-kBps = <5931000>;
-> +				};
-> +				opp-8 {
-> +					opp-peak-kBps = <6515000>;
-> +				};
-> +				opp-9 {
-> +					opp-peak-kBps = <7980000>;
-> +				};
-> +				opp-10 {
-> +					opp-peak-kBps = <8136000>;
-> +				};
-> +				opp-11 {
-> +					opp-peak-kBps = <10437000>;
-> +				};
-> +				opp-12 {
-> +					opp-peak-kBps = <12191000>;
-> +				};
-> +			};
-> +		};
-> +
-> +		pmu@90b6400 {
-> +			compatible = "qcom,sc8280xp-cpu-bwmon", "qcom,msm8998-bwmon";
-> +			reg = <0 0x090b6400 0 0x600>;
-> +
-> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-> +			operating-points-v2 = <&cpu_bwmon_opp_table>;
-> +
-> +			cpu_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-0 {
-> +					opp-peak-kBps = <2288000>;
-> +				};
-> +				opp-1 {
-> +					opp-peak-kBps = <4577000>;
-> +				};
-> +				opp-2 {
-> +					opp-peak-kBps = <7110000>;
-> +				};
-> +				opp-3 {
-> +					opp-peak-kBps = <9155000>;
-> +				};
-> +				opp-4 {
-> +					opp-peak-kBps = <12298000>;
-> +				};
-> +				opp-5 {
-> +					opp-peak-kBps = <14236000>;
-> +				};
-> +				opp-6 {
-> +					opp-peak-kBps = <15258001>;
-> +				};
-> +			};
-> +		};
-> +
->   		system-cache-controller@9200000 {
->   			compatible = "qcom,sc8280xp-llcc";
->   			reg = <0 0x09200000 0 0x58000>, <0 0x09600000 0 0x58000>;
+-Sergey
