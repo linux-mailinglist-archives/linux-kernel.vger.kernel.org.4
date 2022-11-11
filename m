@@ -2,103 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A415B625B7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6823B625B83
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbiKKNwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:52:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S233367AbiKKNw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiKKNwG (ORCPT
+        with ESMTP id S233350AbiKKNw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:52:06 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8668BB4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:52:02 -0800 (PST)
-Received: from notapiano (unknown [169.150.201.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 62C6D6602A3F;
-        Fri, 11 Nov 2022 13:51:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668174721;
-        bh=Y1n4/TLE/T+5dOKYdmwLPQmqxJho0aneBZSccErw/7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oZILSQkdxpFMjDb/MJ/wWC7M04kSNciX3vN3xRaktfYoBobjh9KRI7uPdKI9Q0khh
-         aKFPkeyrt2LdN0Km5iawFuaBqAVxZN+OJRh+CwHc9JRpvwFCRm60ic3u6DL9sNZ/iA
-         e4tTIYCSjAPoa1oWyE/XUO6OZ9ZEJxcdqj/fHWxn2vYXWl/hSKWVi/drJpq/qzNxO9
-         Sf7+JIJHgmRV1i5qoQbun3f189MXCmEUe6MeVgj2nZ/brIBEViesZej+Vv4iJYcWxv
-         2NK/dOj7D6WemQm/9A8h/p0hbVOjSQi3ITk07a2FJkjS65sdaiVsml98r1zy6Bpo0g
-         S75ALSGUGgU1Q==
-Date:   Fri, 11 Nov 2022 08:51:51 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: defconfig: Enable missing configs for
- mt8183-jacuzzi-juniper
-Message-ID: <20221111135151.2fzkzfnzjwp35e3l@notapiano>
-References: <20221109195012.1231059-1-nfraprado@collabora.com>
- <b4d674a1-228b-4ab5-45e1-42a02ab2339d@gmail.com>
+        Fri, 11 Nov 2022 08:52:27 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCA223BCA
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:52:25 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id v17so7696758edc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:52:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JXM+RlfecQsl8R3fGlmC6x2JLEc2q3nlhhTEJRNAqbQ=;
+        b=mj7EW2C4wI/AYrFuJnRR3eDzgId1RmzDGW48XzKmelMZyNEnRLGZxFruOa2GzQX7pG
+         9MLy4XDPrtTHeNIOp4CQhL6m7V+lisnBvntxIxnA9z80qjgzEBkrylHNLE3q965PTSoZ
+         MJNyPhzJFl7IZpvHrOLcQBFZ7DJ5Ief6N9gaVsbRGPRdRSYyjGQ5ECz6/3U+NSzahXF+
+         yrlIzAWBGc8dG+U0VZvsUqIyMMDbd6HGh9a5r0akpvZiho/UyndEZJUzqHAyUkB9yAHp
+         as5oFzLT/3JZ3J5jT3BzvjD8PhGQPNcmTe9JmUesqI9OrQhQd0e7KiwBN17ZcTMFB7i6
+         8PFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JXM+RlfecQsl8R3fGlmC6x2JLEc2q3nlhhTEJRNAqbQ=;
+        b=dDJX5oiqZLRjEV8tblRZvB+7hP3K8z7A+JRbUOMENcAjKwEGfUbM/4FiA/GLGZS2i6
+         zCUqeRcPt7jEzeh1K0ItM4AaS2ioQMtMclUeAgzkeyAaFIrunBJcYvgoQoFdW16A9517
+         d7TVXSKjXrmWsFmm4Jq7iET8Z5oVAnEHXOHHyQVAm6bMCFqMAsGVfkoHTiwxnjKItx+G
+         dTCSv/9HcWqx/mE12XaxMk1ox2vimVydA8tRHlpfn5v5fE4u+A9n7nqOIoUVciJ9/7EM
+         7bMS69tyKe9z2OpdxMnvpyNWfGtb/fKmesYpz7i6TmYdCRzSeNLuI6lii07/YVQKXmVR
+         aIeA==
+X-Gm-Message-State: ANoB5pmw91Q6EWtYaRPhGuCka73csWSCEKXm2uF7H0O8uxWfswpYX33C
+        KluMkb8PWuQbhMMcIHveY9rb0jRQiLFEmbbIOJSdBg==
+X-Google-Smtp-Source: AA0mqf6c96jhEwp5IIcqNLzVQh7v/brBFkuXH94v9FZGLFHBvHuFSMAHGSUBmt76nOSVZW30mNXKo7pEKrfyx0BQZrA=
+X-Received: by 2002:aa7:d716:0:b0:461:cdfb:3072 with SMTP id
+ t22-20020aa7d716000000b00461cdfb3072mr1594817edq.56.1668174744060; Fri, 11
+ Nov 2022 05:52:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b4d674a1-228b-4ab5-45e1-42a02ab2339d@gmail.com>
+References: <20221028120812.339100-1-robert.foss@linaro.org>
+ <20221028120812.339100-7-robert.foss@linaro.org> <20221028134439.ugja55guopmql4nk@baldur>
+In-Reply-To: <20221028134439.ugja55guopmql4nk@baldur>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Fri, 11 Nov 2022 14:52:12 +0100
+Message-ID: <CAG3jFysvDa7QR5cXZCjHx-28ir40TVngBDUfEy0-Xgo-_jhBmQ@mail.gmail.com>
+Subject: Re: [PATCH v1 6/9] arm64: dts: qcom: sm8350: Use 2 interconnect cells
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        quic_kalyant@quicinc.com, swboyd@chromium.org,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org,
+        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
+        quic_jesszhan@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 09:42:07AM +0100, Matthias Brugger wrote:
-> 
-> 
-> On 09/11/2022 20:50, Nícolas F. R. A. Prado wrote:
-> > Enable missing configs in the arm64 defconfig to get all devices probing
-> > on the mt8183-kukui-jacuzzi-juniper machine.
-> > 
-> > The devices enabled are: ATH10K SDIO wireless adapter, Elan touchscreen,
-> > cr50 TPM, MediaTek SPI controller, JPEG video decoder, ANX7625 DSI/DPI
-> > to DP bridge (used for the internal display), MT8183 sound cards, SCP
-> > co-processor, MediaTek Global Command Engine (controlled by CMDQ
-> > driver), MediaTek Smart Voltage Scaling (SVS) engine, CCI frequency
-> > and voltage scaling, AUXADC thermal sensors.
-> > 
-> > All symbols are enabled as modules with the exception of SPI, which is
-> > enabled as builtin since on some platforms like mt8195-cherry, the
-> > ChromeOS Embedded Controller is connected through SPI and it is
-> > responsible for the regulators powering the MMC controller used for the
-> > SD card, and thus SPI support is required for booting.
-> > 
-> > By enabling the support for all of this machine's devices on the
-> > defconfig we make it effortless to test the relevant hardware both by
-> > developers as well as CI systems like KernelCI.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > 
-> 
-> Applied! Next time please make sure to add the linux mediatek mailinglist.
+On Fri, 28 Oct 2022 at 15:44, Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Fri, Oct 28, 2022 at 02:08:09PM +0200, Robert Foss wrote:
+> > Use two interconnect cells in order to optionally
+> > support a path tag.
+> >
+> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sm8350.dtsi | 20 ++++++++++----------
+> >  1 file changed, 10 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> > index 606fab087945..b6e44cd3b394 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> > @@ -1543,56 +1543,56 @@ apps_smmu: iommu@15000000 {
+> >               config_noc: interconnect@1500000 {
+> >                       compatible = "qcom,sm8350-config-noc";
+> >                       reg = <0 0x01500000 0 0xa580>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+>
+> You also need amend all the interconnects references with the additional
+> tag cell.
 
-Argh, didn't realize it was missing, I just went with what get_maintainer
-listed. Thanks for the heads up, will keep it in mind for next time!
+Ack
 
-Thanks,
-Nícolas
+>
+> Regards,
+> Bjorn
+>
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               mc_virt: interconnect@1580000 {
+> >                       compatible = "qcom,sm8350-mc-virt";
+> >                       reg = <0 0x01580000 0 0x1000>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               system_noc: interconnect@1680000 {
+> >                       compatible = "qcom,sm8350-system-noc";
+> >                       reg = <0 0x01680000 0 0x1c200>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               aggre1_noc: interconnect@16e0000 {
+> >                       compatible = "qcom,sm8350-aggre1-noc";
+> >                       reg = <0 0x016e0000 0 0x1f180>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               aggre2_noc: interconnect@1700000 {
+> >                       compatible = "qcom,sm8350-aggre2-noc";
+> >                       reg = <0 0x01700000 0 0x33000>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               mmss_noc: interconnect@1740000 {
+> >                       compatible = "qcom,sm8350-mmss-noc";
+> >                       reg = <0 0x01740000 0 0x1f080>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               lpass_ag_noc: interconnect@3c40000 {
+> >                       compatible = "qcom,sm8350-lpass-ag-noc";
+> >                       reg = <0 0x03c40000 0 0xf080>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               compute_noc: interconnect@a0c0000{
+> >                       compatible = "qcom,sm8350-compute-noc";
+> >                       reg = <0 0x0a0c0000 0 0xa180>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> > @@ -2420,14 +2420,14 @@ usb_2_ssphy: phy@88ebe00 {
+> >               dc_noc: interconnect@90c0000 {
+> >                       compatible = "qcom,sm8350-dc-noc";
+> >                       reg = <0 0x090c0000 0 0x4200>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> >               gem_noc: interconnect@9100000 {
+> >                       compatible = "qcom,sm8350-gem-noc";
+> >                       reg = <0 0x09100000 0 0xb4000>;
+> > -                     #interconnect-cells = <1>;
+> > +                     #interconnect-cells = <2>;
+> >                       qcom,bcm-voters = <&apps_bcm_voter>;
+> >               };
+> >
+> > --
+> > 2.34.1
+> >
