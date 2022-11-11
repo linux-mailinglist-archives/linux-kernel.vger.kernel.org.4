@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E46625DC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABA3625DC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbiKKPAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S234887AbiKKPAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234821AbiKKO7b (ORCPT
+        with ESMTP id S234696AbiKKO7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:59:31 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F4763BA5;
-        Fri, 11 Nov 2022 06:59:30 -0800 (PST)
+        Fri, 11 Nov 2022 09:59:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34B8654C5;
+        Fri, 11 Nov 2022 06:59:31 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E33896602A58;
-        Fri, 11 Nov 2022 14:59:27 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 171966602A5B;
+        Fri, 11 Nov 2022 14:59:29 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668178768;
-        bh=JcV01OqQI7OdtwJTtMaesEof4OedrSHFsOnwvt1LCKw=;
+        s=mail; t=1668178770;
+        bh=v/SdConwcLDUdB+vnhsUHtZDsg7PCN+jxysiLSvSwfo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LRUOTRGO0uBnM8bPfeMDf0RIaTYPy1DIRPgczuBYj4PdtZ824iTT86trL0ve86ylM
-         JggF9OamOyqMeUqyZhRyaM5jHwoHvXr6Ur7eHUUI8Oiord9SoYP7BJm18qE/C1AV+Z
-         zRc/uPyI0OvgLrP1up2zxIAmcChju+he4wL+e7NuF3WVG5wxaYYQzN2aacupkkPZWK
-         BPSxGM27H8MFABoCPYNg4I/bKdWdBjNGX8ZdDDdVCFoGxh8JIlBSuUX8AgsTz5JS9V
-         JpLD948++zXnahTwhzNdbkSs/SSSM6YcSiKgXkvonmm0OqSjwWftKiNkrO4Oa3jFIi
-         Awk9q8+pSzcug==
+        b=YuAw4h1USZuYNtGIaP6keEe/eLKOeSIf/5tQleLSFTXcIT42TOAqp9qF+GDluirO4
+         sCWOD1UqLTGVjNYDYV7Q1Qp5Mk0gj2FKqAWqhssUdLm4rLmktjE7r5amdn7qTJAUoe
+         8/1M807zf/RQTpzuJ1hD/XnJUcdnATFONhHpa5NuP1Vbvrn/lJWcoWEw9pryXo+aCO
+         PsP4MwitdKWT28YOvZW6YFTPrDkfwXCPHuknDNKEmX5CkSOyTtWRT4lG5HFYhYzI5d
+         53A/IdpRUNXN2e14DtX3IAI5LbusGdPKLIprYyzqRGNRvnCrqXIYLgX46jGtiIjx7J
+         3ZwBwtb3e2pZA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     agross@kernel.org
@@ -46,9 +46,9 @@ Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 2/8] iommu/qcom: Use the asid read from device-tree if specified
-Date:   Fri, 11 Nov 2022 15:59:13 +0100
-Message-Id: <20221111145919.221159-3-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 3/8] iommu/arm-smmu: Add definition for ARM_SMMU_CB_FSRRESTORE
+Date:   Fri, 11 Nov 2022 15:59:14 +0100
+Message-Id: <20221111145919.221159-4-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221111145919.221159-1-angelogioacchino.delregno@collabora.com>
 References: <20221111145919.221159-1-angelogioacchino.delregno@collabora.com>
@@ -63,72 +63,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As specified in this driver, the context banks are 0x1000 apart but
-on some SoCs the context number does not necessarily match this
-logic, hence we end up using the wrong ASID: keeping in mind that
-this IOMMU implementation relies heavily on SCM (TZ) calls, it is
-mandatory that we communicate the right context number.
+In preparation for adding a proper context bank reset sequence in
+qcom_iommu, add a definition for the implementation defined Fault
+Status Restore register (FSRRESTORE).
 
-Since this is all about how context banks are mapped in firmware,
-which may be board dependent (as a different firmware version may
-eventually change the expected context bank numbers), introduce a
-new property "qcom,ctx-num": when found, the ASID will be forced
-as read from the devicetree.
-
-When "qcom,ctx-num" is not found, this driver retains the previous
-behavior as to avoid breaking older devicetrees or systems that do
-not require forcing ASID numbers.
-
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-[Marijn: Rebased over next-20221111]
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/arm/arm-smmu/qcom_iommu.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ drivers/iommu/arm/arm-smmu/arm-smmu.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index bfd7b51eb5db..491a8093f3d6 100644
---- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-+++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -551,7 +551,8 @@ static int qcom_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
- 	 * index into qcom_iommu->ctxs:
- 	 */
- 	if (WARN_ON(asid < 1) ||
--	    WARN_ON(asid > qcom_iommu->num_ctxs)) {
-+	    WARN_ON(asid > qcom_iommu->num_ctxs) ||
-+	    WARN_ON(qcom_iommu->ctxs[asid - 1] == NULL)) {
- 		put_device(&iommu_pdev->dev);
- 		return -EINVAL;
- 	}
-@@ -638,7 +639,8 @@ static int qcom_iommu_sec_ptbl_init(struct device *dev)
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+index 703fd5817ec1..5015138799c5 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+@@ -219,6 +219,7 @@ enum arm_smmu_cbar_type {
+ 					 ARM_SMMU_FSR_TF |		\
+ 					 ARM_SMMU_FSR_IGN)
  
- static int get_asid(const struct device_node *np)
- {
--	u32 reg;
-+	u32 reg, val;
-+	int asid;
++#define ARM_SMMU_CB_FSRRESTORE		0x5c
+ #define ARM_SMMU_CB_FAR			0x60
  
- 	/* read the "reg" property directly to get the relative address
- 	 * of the context bank, and calculate the asid from that:
-@@ -646,7 +648,17 @@ static int get_asid(const struct device_node *np)
- 	if (of_property_read_u32_index(np, "reg", 0, &reg))
- 		return -ENODEV;
- 
--	return reg / 0x1000;      /* context banks are 0x1000 apart */
-+	/*
-+	 * Context banks are 0x1000 apart but, in some cases, the ASID
-+	 * number doesn't match to this logic and needs to be passed
-+	 * from the DT configuration explicitly.
-+	 */
-+	if (of_property_read_u32(np, "qcom,ctx-num", &val))
-+		asid = reg / 0x1000;
-+	else
-+		asid = val;
-+
-+	return asid;
- }
- 
- static int qcom_iommu_ctx_probe(struct platform_device *pdev)
+ #define ARM_SMMU_CB_FSYNR0		0x68
 -- 
 2.38.1
 
