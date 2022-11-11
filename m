@@ -2,127 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE88625E08
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106C3625E0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbiKKPPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S234160AbiKKPQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234847AbiKKPOY (ORCPT
+        with ESMTP id S234947AbiKKPP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:14:24 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 949F043AE2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:13:36 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E6121FB;
-        Fri, 11 Nov 2022 07:13:42 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 29A273F73D;
-        Fri, 11 Nov 2022 07:13:35 -0800 (PST)
-Date:   Fri, 11 Nov 2022 15:13:32 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ludvig =?utf-8?Q?P=C3=A4rsson?= <Ludvig.Parsson@axis.com>
-Cc:     "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "etienne.carriere@linaro.org" <etienne.carriere@linaro.org>,
-        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] firmware: arm_scmi: Resolve dependency with TEE subsystem
-Message-ID: <20221111151332.umzh6hncj43gqzo7@bogus>
-References: <20221111095313.2010815-1-sumit.garg@linaro.org>
- <20221111143800.k7xje6g23ujefnye@bogus>
- <7a32a3694ffd6790e4e2a7c5896931cf8f1a7243.camel@axis.com>
+        Fri, 11 Nov 2022 10:15:57 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE2682908;
+        Fri, 11 Nov 2022 07:15:04 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 241B01EC054E;
+        Fri, 11 Nov 2022 16:15:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668179703;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rUkLtAes2bHlVR6TF/TOsV4kRyhqCvCXjQ6BIXFJmE4=;
+        b=LduFPuW4XNtNddh1mRBiUvLSDSbqgkpucFNKR0ZUff+DIGMBJTbCIZLhlS1f0AE+UoFAz3
+        DtNsRqpXU/0NpwhkQLMJA+KnV3XXjiliQUdIdh0CxgzA/M2vHN6gBbt7MRp/pX/PbtOCl3
+        SGLwUvhVvXzbLzr9yv7p6i2Gfssr7m0=
+Date:   Fri, 11 Nov 2022 16:14:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Yupeng Li <liyupeng@zbhlos.com>, Shyam-sundar.S-k@amd.com,
+        markgross@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, caizp2008@163.com,
+        smf-linux@virginmedia.com
+Subject: Re: [PATCH 1/1] platform/x86/amd: Fix pmc compile dependency errors.
+Message-ID: <Y25m8tPTtyfHOCfK@zn.tnic>
+References: <20221026072531.346013-1-liyupeng@zbhlos.com>
+ <0910bcc4-d55f-6f3a-b2df-4e30d164aeeb@redhat.com>
+ <721f6a1a-1144-4fe4-e722-2ba2d7200680@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a32a3694ffd6790e4e2a7c5896931cf8f1a7243.camel@axis.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <721f6a1a-1144-4fe4-e722-2ba2d7200680@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:00:29PM +0000, Ludvig Pärsson wrote:
-> On Fri, 2022-11-11 at 14:38 +0000, Sudeep Holla wrote:
-> > On Fri, Nov 11, 2022 at 03:23:13PM +0530, Sumit Garg wrote:
-> > > The OP-TEE SCMI transport channel is dependent on TEE subsystem to
-> > > be
-> > > initialized first. But currently the Arm SCMI subsystem and TEE
-> > > subsystem are invoked on the same initcall level as
-> > > subsystem_init().
-> > > 
-> > > It is observed that the SCMI subsystem initcall is invoked prior to
-> > > TEE
-> > > subsystem initcall. This leads to unwanted error messages regarding
-> > > TEE
-> > > bus is not present yet. Although, -EPROBE_DEFER tries to workaround
-> > > that
-> > > problem.
-> > > 
-> > > Lets try to resolve inter subsystem dependency problem via shifting
-> > > Arm
-> > > SCMI subsystem to subsystem_init_sync() initcall level.
-> > > 
+On Mon, Nov 07, 2022 at 06:27:52AM -0600, Mario Limonciello wrote:
+> On 11/7/22 04:28, Hans de Goede wrote:
+> > Hi,
 > > 
-> > I would avoid doing that. We already have some implicit dependency
-> > with
-> > subsys_initcall because this driver creates/registers bus and need to
-> > be
-> > done early. Now in order to solve the dependency between SCMI and
-> > TEE,
-> > both of which creates/registers bus and are at same subsys_initcall,
-> > we are relying on subsys_initcall_sync.
+> > On 10/26/22 09:25, Yupeng Li wrote:
+> > > When disabled CONFIG_SUSPEND and CONFIG_DEBUG_FS, get_metrics_table
+> > > and amd_pmc_idlemask_read is defined under two conditions of this,
+> > > pmc build with implicit declaration of function error.Some build error
+> > > messages are as follows:
+> > > 
+> > >   CC [M]  drivers/platform/x86/amd/pmc.o
+> > > drivers/platform/x86/amd/pmc.c: In function â€˜smu_fw_info_showâ€™:
+> > > drivers/platform/x86/amd/pmc.c:436:6: error: implicit declaration of function â€˜get_metrics_tableâ€™ [-Werror=implicit-function-declaration]
+> > >    436 |  if (get_metrics_table(dev, &table))
+> > >        |      ^~~~~~~~~~~~~~~~~
+> > > drivers/platform/x86/amd/pmc.c: In function â€˜amd_pmc_idlemask_showâ€™:
+> > > drivers/platform/x86/amd/pmc.c:508:8: error: implicit declaration of function â€˜amd_pmc_idlemask_readâ€™; did you mean â€˜amd_pmc_idlemask_showâ€™? [-Werror=implicit-function-declaration]
+> > >    508 |   rc = amd_pmc_idlemask_read(dev, NULL, s);
+> > >        |        ^~~~~~~~~~~~~~~~~~~~~
+> > >        |        amd_pmc_idlemask_show
+> > > cc1: some warnings being treated as errors
+> > > 
+> > > Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
+> > > Reviewed-by: Caicai <caizp2008@163.com>
 > > 
-> > Me and Ludvig discussed this in private and I suggested him to do
-> > something
-> > like below patch snippet. He mentioned he did post a patch on the
-> > list but
-> > I couldn't find it. For this the scmi node must be child node of
-> > OPTEE as
-> > it is providing the transport.
+> > Thank you for your patch, however I do not believe that this is the correct fix:
 > > 
-> > @Ludvig, ?
+> > > ---
+> > >   drivers/platform/x86/amd/pmc.c | 5 ++++-
+> > >   1 file changed, 4 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
+> > > index ce859b300712..2b08039921b8 100644
+> > > --- a/drivers/platform/x86/amd/pmc.c
+> > > +++ b/drivers/platform/x86/amd/pmc.c
+> > > @@ -433,8 +433,10 @@ static int smu_fw_info_show(struct seq_file *s, void *unused)
+> > >   	struct smu_metrics table;
+> > >   	int idx;
+> > > +#if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
+> > >   	if (get_metrics_table(dev, &table))
+> > >   		return -EINVAL;
+> > > +#endif
+> > >   	seq_puts(s, "\n=== SMU Statistics ===\n");
+> > >   	seq_printf(s, "Table Version: %d\n", table.table_version);
+> > 
+> > The table variable gets used here, but now it no longer has been initialized by
+> > get_metrics_table() so just #ifdef-ing out the get_metrics_table() call is wrong.
+> > 
+> > > @@ -503,11 +505,12 @@ static int amd_pmc_idlemask_show(struct seq_file *s, void *unused)
+> > >   		if (rc)
+> > >   			return rc;
+> > >   	}
+> > > -
+> > >   	if (dev->major > 56 || (dev->major >= 55 && dev->minor >= 37)) {
+> > > +#if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
+> > >   		rc = amd_pmc_idlemask_read(dev, NULL, s);
+> > >   		if (rc)
+> > >   			return rc;
+> > > +#endif
+> > >   	} else {
+> > >   		seq_puts(s, "Unsupported SMU version for Idlemask\n");
+> > >   	}
+> > 
+> > Same thing except now nothing gets send to the struct seq_file *s,
+> > so this is wrong too.
+> > 
+> > Shyam / Mario, can you take a look at the reported compile errors please?
 > > 
 > > Regards,
-> > Sudeep
 > > 
-> > --
-> > diff --git i/drivers/tee/optee/smc_abi.c
-> > w/drivers/tee/optee/smc_abi.c
-> > index a1c1fa1a9c28..839feca0def4 100644
-> > --- i/drivers/tee/optee/smc_abi.c
-> > +++ w/drivers/tee/optee/smc_abi.c
-> > @@ -1534,7 +1534,9 @@ static int optee_probe(struct platform_device
-> > *pdev)
-> >                 goto err_disable_shm_cache;
+> > Hans
 > > 
-> >         pr_info("initialized driver\n");
-> > -       return 0;
-> > +
-> > +       /* Populate any dependent child node(if any) */
-> > +       return devm_of_platform_populate(&pdev->dev);
-> > 
-> >  err_disable_shm_cache:
-> >         if (!optee->rpc_param_count)
-> > 
-> I have answered something similar in my submit [1]. Maybe I should have
-> CCed you, or atleast sent you this link when I told you I made the
-> submission.
 > 
-> [1] https://lkml.org/lkml/2022/11/9/803
->
+> What kernel is this?  Shyam removed CONFIG_DEBUGFS in b37fe34c83.  So is
+> this failure still happening in 6.1-rc4?
 
-Thanks for the reference.
+It managed to trickle into stable too:
+
+https://bugzilla.kernel.org/show_bug.cgi?id=216679
+
+Adding bug reporter to Cc too.
+
+From a quick glance, I'd drop all that ifdeffery and add empty stubs.
+IMNSVHO.
+
+Thx.
 
 -- 
-Regards,
-Sudeep
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
