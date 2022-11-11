@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E594D625704
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C7C625703
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233781AbiKKJk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:40:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S233533AbiKKJkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbiKKJkR (ORCPT
+        with ESMTP id S233711AbiKKJkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Nov 2022 04:40:17 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D3D6CA04;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7617369DC8;
         Fri, 11 Nov 2022 01:40:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1EB6ACE2608;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 496B1CE2645;
         Fri, 11 Nov 2022 09:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F69C433D6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DA4CC43470;
         Fri, 11 Nov 2022 09:40:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668159611;
-        bh=VAAWEKuCo1e53QmgMf0yNFFYiMrUPT/oqX01uL3eBHM=;
+        bh=fzA0ymuZns87NaioE1ixSH2KZM29mzl1IX77mtV6cDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uYOMf9mBwZBbhzoMGhd/IP5+2FhdEyP88CEu1obynBoQyyOKBbQXgyxjkFgPgrIRw
-         QiADi82aeD1qQW4NTIWVAs1f3Foft+0UQGES3SK3+l3x2SyDXd0GtQtNQIGBNGNP7m
-         HforyS5UYvJld+GOz0Jvu5PFYXLbXrbaItQV0KY1f7ni7cjgsVJnc1a7Gd5MJ9bhKy
-         WBQBebVFHWhhRxfNQRTQGT8Lq4gDqdt1f7/XkDN0CtH+DQ06L6IjAqfgI2sWXjsEzd
-         uiUBKu2ynyv4+WR2zF2xED05NYlimf4sr64ll7gSZaFG2MmzBg4SZ/beIi1/xKVFmZ
-         LvODC0yfkwmQQ==
+        b=sitkBlKVGgtIsJNR1lyHOGvIiRMCRneIiBjq71QH/svgEk9wzwfJX49pFi3ONegHF
+         9cLBb04tqhtFpOVEiaFdTOWGDChiHi5UtG1hC6sigLi/p/MS0aE4BwPTejibCoQss4
+         dJRLoZQJ46A1jnBhJepK3e808i0WDXj1WvgpHd9BJV3jfeSe2KZ6iqDOOQ9erv1M33
+         dAJ/YRet+GZHf6DzkxA298YqlzUfRaVBvraodJwfNgym3ng9uaCLEab58s6KGjsdld
+         KitCxZbUFXQ2ITVRvLjfWUSXQH6uDhPxj9U4q4cnLpxwAXfRn2UOhiEnOVd9F62e28
+         e82mYSSJ2897g==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1otQVj-0002xh-7c; Fri, 11 Nov 2022 10:39:43 +0100
+        id 1otQVj-0002xj-A5; Fri, 11 Nov 2022 10:39:43 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 1/3] dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: drop reference-clock source
-Date:   Fri, 11 Nov 2022 10:38:55 +0100
-Message-Id: <20221111093857.11360-2-johan+linaro@kernel.org>
+Subject: [PATCH 2/3] phy: qcom-qmp-usb: drop sc8280xp reference-clock source
+Date:   Fri, 11 Nov 2022 10:38:56 +0100
+Message-Id: <20221111093857.11360-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221111093857.11360-1-johan+linaro@kernel.org>
 References: <20221111093857.11360-1-johan+linaro@kernel.org>
@@ -64,46 +64,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The source clock for the reference clock is not used by the PHY directly
-and should not be included in the devicetree binding.
+and should not be described by the devicetree (instead this relationship
+should be modelled in the clock driver).
 
-Fixes: e8e58e29a0c9 ("dt-bindings: phy: qcom,qmp-usb: fix sc8280xp binding")
+Drop the driver management of the reference-clock source for SC8280XP.
+
+Once the other clock drivers have been updated, the corresponding change
+can be done also for the other QMP v4 platforms.
+
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- .../bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml       | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-index ef080509747a..16fce1038285 100644
---- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-@@ -22,12 +22,11 @@ properties:
-     maxItems: 1
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+index 372f9853c749..9b1f8c9d0eb8 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+@@ -1523,6 +1523,10 @@ static const char * const qmp_v3_phy_clk_l[] = {
+ };
  
-   clocks:
--    maxItems: 5
-+    maxItems: 4
+ static const char * const qmp_v4_phy_clk_l[] = {
++	"aux", "ref", "com_aux",
++};
++
++static const char * const qmp_v4_ref_phy_clk_l[] = {
+ 	"aux", "ref_clk_src", "ref", "com_aux",
+ };
  
-   clock-names:
-     items:
-       - const: aux
--      - const: ref_clk_src
-       - const: ref
-       - const: com_aux
-       - const: pipe
-@@ -82,12 +81,10 @@ examples:
-       reg = <0x088ef000 0x2000>;
- 
-       clocks = <&gcc GCC_USB3_MP_PHY_AUX_CLK>,
--               <&rpmhcc RPMH_CXO_CLK>,
-                <&gcc GCC_USB3_MP0_CLKREF_CLK>,
-                <&gcc GCC_USB3_MP_PHY_COM_AUX_CLK>,
-                <&gcc GCC_USB3_MP_PHY_PIPE_0_CLK>;
--      clock-names = "aux", "ref_clk_src", "ref", "com_aux",
--                    "pipe";
-+      clock-names = "aux", "ref", "com_aux", "pipe";
- 
-       power-domains = <&gcc USB30_MP_GDSC>;
- 
+@@ -1729,8 +1733,8 @@ static const struct qmp_phy_cfg sm8150_usb3phy_cfg = {
+ 	.pcs_tbl_num		= ARRAY_SIZE(sm8150_usb3_pcs_tbl),
+ 	.pcs_usb_tbl		= sm8150_usb3_pcs_usb_tbl,
+ 	.pcs_usb_tbl_num	= ARRAY_SIZE(sm8150_usb3_pcs_usb_tbl),
+-	.clk_list		= qmp_v4_phy_clk_l,
+-	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
++	.clk_list		= qmp_v4_ref_phy_clk_l,
++	.num_clks		= ARRAY_SIZE(qmp_v4_ref_phy_clk_l),
+ 	.reset_list		= msm8996_usb3phy_reset_l,
+ 	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+ 	.vreg_list		= qmp_phy_vreg_l,
+@@ -1755,8 +1759,8 @@ static const struct qmp_phy_cfg sm8150_usb3_uniphy_cfg = {
+ 	.pcs_tbl_num		= ARRAY_SIZE(sm8150_usb3_uniphy_pcs_tbl),
+ 	.pcs_usb_tbl		= sm8150_usb3_uniphy_pcs_usb_tbl,
+ 	.pcs_usb_tbl_num	= ARRAY_SIZE(sm8150_usb3_uniphy_pcs_usb_tbl),
+-	.clk_list		= qmp_v4_phy_clk_l,
+-	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
++	.clk_list		= qmp_v4_ref_phy_clk_l,
++	.num_clks		= ARRAY_SIZE(qmp_v4_ref_phy_clk_l),
+ 	.reset_list		= msm8996_usb3phy_reset_l,
+ 	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+ 	.vreg_list		= qmp_phy_vreg_l,
+@@ -1806,8 +1810,8 @@ static const struct qmp_phy_cfg sm8250_usb3_uniphy_cfg = {
+ 	.pcs_tbl_num		= ARRAY_SIZE(sm8250_usb3_uniphy_pcs_tbl),
+ 	.pcs_usb_tbl		= sm8250_usb3_uniphy_pcs_usb_tbl,
+ 	.pcs_usb_tbl_num	= ARRAY_SIZE(sm8250_usb3_uniphy_pcs_usb_tbl),
+-	.clk_list		= qmp_v4_phy_clk_l,
+-	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
++	.clk_list		= qmp_v4_ref_phy_clk_l,
++	.num_clks		= ARRAY_SIZE(qmp_v4_ref_phy_clk_l),
+ 	.reset_list		= msm8996_usb3phy_reset_l,
+ 	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+ 	.vreg_list		= qmp_phy_vreg_l,
+@@ -1907,8 +1911,8 @@ static const struct qmp_phy_cfg sm8350_usb3_uniphy_cfg = {
+ 	.pcs_tbl_num		= ARRAY_SIZE(sm8350_usb3_uniphy_pcs_tbl),
+ 	.pcs_usb_tbl		= sm8350_usb3_uniphy_pcs_usb_tbl,
+ 	.pcs_usb_tbl_num	= ARRAY_SIZE(sm8350_usb3_uniphy_pcs_usb_tbl),
+-	.clk_list		= qmp_v4_phy_clk_l,
+-	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
++	.clk_list		= qmp_v4_ref_phy_clk_l,
++	.num_clks		= ARRAY_SIZE(qmp_v4_ref_phy_clk_l),
+ 	.reset_list		= msm8996_usb3phy_reset_l,
+ 	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+ 	.vreg_list		= qmp_phy_vreg_l,
 -- 
 2.37.4
 
