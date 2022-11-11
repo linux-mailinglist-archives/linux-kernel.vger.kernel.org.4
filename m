@@ -2,156 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9890062576E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF8C625773
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiKKJ5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:57:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S232979AbiKKJ6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiKKJ5q (ORCPT
+        with ESMTP id S233330AbiKKJ5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:57:46 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88844686A8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:57:45 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id F40C55C00D7;
-        Fri, 11 Nov 2022 04:57:42 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 11 Nov 2022 04:57:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1668160662; x=
-        1668247062; bh=b7XPwc4bj4pQJuvSbD7H9uyA+buey1LxLq7ggZ+S3dQ=; b=P
-        PeCk4miRzjy7uOJpTTtcn5CH/PaA/dCTbj6Bg95I4Xgr4OjR+8hNFkEth8tuS36X
-        GSY9tPZfXgwd+OoNrSIPj/FMV7cFJvvPP5joYP7DYkeAfeYkX31EPchnfjfbTU0a
-        1RNndw1sN3PqZvcPpW/5GkFCUI3m9o8lcWxSyOGqwhrVQIMhRft1KoQNxsXnNd8c
-        l3ImG/LfTz7OyaDw6cTodgRWLgC1bhHK7x4Hj4RwGMElbljT8aB9uLirvfKFd0AA
-        ljXUdEfSXBiEsc/C0xBfCB9QKUraIyOsLf7wXdnwgEBhXTiamvjz+7C0nK5yMxVA
-        ocDwgegVj7975SB8jYdsw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668160662; x=
-        1668247062; bh=b7XPwc4bj4pQJuvSbD7H9uyA+buey1LxLq7ggZ+S3dQ=; b=V
-        O8XvIEzSKRD3P+VLEJnCwZALf2Ce/+l2ZV85fH9Qyc+fZA1QbBI43Z/Kn3CcVta3
-        SODi5QVGAQgHnMenUQV94I+WH8WarAeH/9tQa0zd8EgL/x91VVc4bjpwQD8dJ9rc
-        SKCyr5NknlVvZ6abbZ8kAwNOxWlOg0zEf3rgQxypOqTDqvDnGnn1DqNsMeVBRYEe
-        VYaENgOeqTDA1ApQn3pKedQtPBVnEAafTDF+8naxqbejf2WQRVPs2SAhonNvibQ0
-        IH/NewvZ69v92OEhSxz+cuwyyslF8spUQZlsIfgqvcGgHPQ7aADbvQ6Vdlk78yvM
-        VZP0dA7RuZn5SCLeca+oQ==
-X-ME-Sender: <xms:lhxuY2UGHr_zNh_QYLXdiSdr6yJVlMtBf3dIZ9X1OTP58vaJ8EAXMQ>
-    <xme:lhxuYymTmRyntiAb1x4ZpnKYKUjAnPiUtIDfaxwH00K-p7RnPmD4U-LdTSU8wdO4m
-    -In60vg9Mff4qNshMY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeigddutdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:lhxuY6bWxlZJQM_ah-xk5zayo_mM9oaD8SpER4Kxanwhi8R9m2ix1A>
-    <xmx:lhxuY9X0bbHfEFKGlMCUv3wABgQ8tiJzW0Ls_DpFTFPuyS3tvfQ3Qg>
-    <xmx:lhxuYwlhaPwWxqBJjZr7ho-ma-DULVYkZ2401-OnDN367-Od_5K-7Q>
-    <xmx:lhxuY-bO3TPsKdIRISlEq4dWpkIrMJrpd33U6McLpLgSHM2jsfQgsw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 02B5FB60089; Fri, 11 Nov 2022 04:57:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <cd818e0c-4c8c-421e-ae39-c7cea79eeb7e@app.fastmail.com>
-In-Reply-To: <CAHJ8P3KU4NBr9ftqp1J_QWxGUjusoUZo6JjefPN-4YazD4mrUQ@mail.gmail.com>
-References: <1667889638-9106-1-git-send-email-zhiguo.niu@unisoc.com>
- <202211101659.j9z9jLHv-lkp@intel.com>
- <88fce16b-5092-4246-8bbf-23f2c03224f3@app.fastmail.com>
- <CAHJ8P3+g7dr3PBZFQCD5HQLZ2b0WHe=b6Jt7ha1o7mqZJ7_-BQ@mail.gmail.com>
- <97c529f2-c5a2-4ed6-89eb-c79f020e9d0c@app.fastmail.com>
- <CAHJ8P3KU4NBr9ftqp1J_QWxGUjusoUZo6JjefPN-4YazD4mrUQ@mail.gmail.com>
-Date:   Fri, 11 Nov 2022 10:57:21 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhiguo Niu" <niuzhiguo84@gmail.com>
-Cc:     "kernel test robot" <lkp@intel.com>,
-        "zhiguo.niu" <zhiguo.niu@unisoc.com>, jaegeuk@kernel.org,
-        chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH V2] f2fs: fix atgc bug on issue in 32bits platform
-Content-Type: text/plain;charset=utf-8
+        Fri, 11 Nov 2022 04:57:50 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF95F69DED
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:57:48 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id p21so3860917plr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:57:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n206+tJC+Ak/LTNgJlYlC5EPsXYzLVAG5DbuMJ2wVfs=;
+        b=Oh8NnHkTZGYHl4wK+rN0tE0AH8GTY8kMKZBJ/7AMmP6Fm/Pkqi3zVVtbTbgRuNld8E
+         LcPDJrThOXkBoVw1eg82IinH8hwXTYH0IxHVI3za+ZtCZgfvxvem6F+T5PJ1XMXLUXDm
+         2T9/aUyomQa5dgatt1gUS2qJA25wIGglDRXZNrWhFv/3UsqjqWDvVABGc02kX5/dhjxu
+         Oe5KT1htM3AAWxrdL7vwwE2mfJHVpLlsV/94Yta/gMo2WKT2XmwhxE3yT3rTj2RAucgy
+         gc4m27i38BWxy+haYiEf2yY7EyrzTIliCq2MZqtUzS+3vE7jg81cS254rGVaG0Gy3tlA
+         BARA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n206+tJC+Ak/LTNgJlYlC5EPsXYzLVAG5DbuMJ2wVfs=;
+        b=pIRnSbSAsoG4xkwyoAcFQ69YF5FJ5FdZHeJwuv4XZG3SBDEqWLwYF+8zoUYysYAPup
+         YeqgD2blHcP4aHUwOUfDOqrNp6ORKCgR4jhn6idDc7T72YEPA8ysZG682z3IRmcZQ+in
+         t010OvwXa1Tfn08hSiX8+BKTMOmhegnNFPipuTSzwzqEAOxIVK3GJ8TxURy/1p9ntcly
+         MoEgHmEBiRNdZCJwGJXHab3qfAVtQegIw2ih3Wa1JlACMhBFVsw1vIKISd0EUYnWfX0f
+         D8jITm7DogbD/hGXBL0HYpR3OPMUDurDgvm72AtMXgSvIgD4IaopVMkjhG56PH8hgZD6
+         7L0A==
+X-Gm-Message-State: ANoB5pmNeDagUUSC5BSMUHB6jJgZPM/hERh1jyrZoJRUguOets7nkS7T
+        gKHe5kf3/Tk9P4IozZWY1t7BO1j2suox3kIK+dBc+g==
+X-Google-Smtp-Source: AA0mqf42XzzdT0veI+pWbithrmi1rQlOURTJCj3sOF3raB7Fwl2H3/LH2Xrty17mU+y6kwEyJ00B2INAn0s8VAeCIz8=
+X-Received: by 2002:a17:902:d70e:b0:188:6387:8d8e with SMTP id
+ w14-20020a170902d70e00b0018863878d8emr1523689ply.104.1668160668104; Fri, 11
+ Nov 2022 01:57:48 -0800 (PST)
+MIME-Version: 1.0
+References: <20221109160708.507481-1-ludvig.parsson@axis.com>
+ <CAFA6WYPxTET4mUQ4YHosbPN1o0UthP6PU=t8bAp91GZL+5rjRA@mail.gmail.com> <df564dc6ffbddcae12bd345b7a0525e586aba5ed.camel@axis.com>
+In-Reply-To: <df564dc6ffbddcae12bd345b7a0525e586aba5ed.camel@axis.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Fri, 11 Nov 2022 15:27:36 +0530
+Message-ID: <CAFA6WYPgW0ya3+yiD49QH3q4nLj1rUyEPye_x2engtihYVaNuA@mail.gmail.com>
+Subject: Re: [PATCH] tee: optee: Populate child nodes in probe function
+To:     =?UTF-8?Q?Ludvig_P=C3=A4rsson?= <Ludvig.Parsson@axis.com>
+Cc:     "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022, at 10:40, Zhiguo Niu wrote:
-> Arnd Bergmann <arnd@arndb.de> =E4=BA=8E2022=E5=B9=B411=E6=9C=8810=E6=97=
-=A5=E5=91=A8=E5=9B=9B 21:45=E5=86=99=E9=81=93=EF=BC=9A
->   I thinks the gcc complier build warning :
-> ----------------------------------------------------------------
->     In file included from fs/f2fs/segment.c:24:
->>> fs/f2fs/gc.h:73:1: warning: alignment 1 of 'struct victim_entry' is=20
+On Thu, 10 Nov 2022 at 17:39, Ludvig P=C3=A4rsson <Ludvig.Parsson@axis.com>=
+ wrote:
 >
->>> less than 8 [-Wpacked-not-aligned]
+> On Thu, 2022-11-10 at 16:23 +0530, Sumit Garg wrote:
+> > On Wed, 9 Nov 2022 at 21:37, Ludvig P=C3=A4rsson <ludvig.parsson@axis.c=
+om>
+> > wrote:
+> > >
+> > > Currently there is no dependency between the "linaro,scmi-optee"
+> > > driver
+> > > and the tee_core. If the scmi-optee driver gets probed before the
+> > > tee_bus_type is initialized, then we will get an unwanted error
+> > > print.
+> > >
+> >
+> > What error print do you observe? I suppose this case is already
+> > handled by scmi optee driver via -EPROBE_DEFER.
+> >
+> > -Sumit
+> >
+> Hi Sumit,
 >
->       73 | } __packed;
+> The error print is in driver_register().
 >
->          | ^
+> This is kind of what happens:
+> scmi_driver_init()
+> scmi_probe()
+>     scmi_optee_link_supplier()
+>         scmi_optee_init()
+>             driver_register() <--- pr_err() if tee_bus_type is not
+> initialized
+> tee_init() <--- tee_bus_type gets initialized here
 >
->  ---------------------------------------------------------------
->
-> It is because struct rb_node has the attribute=20
-> "__attribute__((aligned(sizeof(long)", it is 8 bytes in 64bits platfor=
-m.
->
-> struct rb_node {
-> unsigned long  __rb_parent_color;
-> struct rb_node *rb_right;
-> struct rb_node *rb_left;
-> } __attribute__((aligned(sizeof(long))));
->
-> so I just try to put __packed on union of struct victim_entry and i=20
-> also keep consistent with struct rb_entry.
+> The scmi_optee_link_supplier() will always return -EPROBE_DEFER the
+> first time because scmi_optee_private is initialized in
+> scmi_optee_service_probe, which is only called after the driver is
+> registered in scmi_optee_init. Right now the driver_register fails
+> because tee_bus_type is not initialized which is printing the unwanted
+> error print. Another side effect of this is that
+> scmi_optee_link_supplier() will return -EPROBE_DEFER a second time, and
+> scmi_probe will be successful the third time instead of the second
+> time.
 
-No, that attribute has no effect on any architecture other
-than m68k, which defaults to 16-bit alignment for 32-bit
-members. I'm fairly sure the alignment attribute on
-rb_node is entirely unrelated to the problems you are
-seeing in f2fs that come from having a structure with
-stricter (4 byte or 8 byte) alignment requirements embedded
-in a structure with relaxed (single-byte) alignment:
+Thanks for the report. It rather looks like an inter subsystem
+dependency problem. Check if this [1] patch resolves your problem?
 
-> struct rb_entry {
-> struct rb_node rb_node; /* rb node located in rb-tree */
-> union {
-> struct {
-> unsigned int ofs; /* start offset of the entry */
-> unsigned int len; /* length of the entry */
-> };
-> unsigned long long key; /* 64-bits key */
-> } __packed;
-> };
+[1] https://lkml.org/lkml/2022/11/11/329
 
-This tells the compiler that the anonymous union is=20
-entirely unconstrained, but the anonymous struct inside
-it has the default alignment, which is the contradition
-that gcc correctly warns about.
+-Sumit
 
-Since the only thing you need here is to lower the
-alignment constraint from 8 bytes to 4 bytes, the easiest
-way is to have the __packed annotation on the 'key'
-member. This avoids all warnings, as long you do not
-take the address of the 'key' member and pass it to
-a function that expects an aligned 'u64' pointer.
-
-     Arnd
+>
+> BR,
+> Ludvig
+>
+> > > This patch enables putting scmi-optee nodes as children to the
+> > > optee
+> > > node in devicetree, which indirectly creates the missing
+> > > dependency.
+> > >
+> > > Signed-off-by: Ludvig P=C3=A4rsson <ludvig.parsson@axis.com>
+> > > ---
+> > >  drivers/tee/optee/smc_abi.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/drivers/tee/optee/smc_abi.c
+> > > b/drivers/tee/optee/smc_abi.c
+> > > index a1c1fa1a9c28..be6f02fd5a7f 100644
+> > > --- a/drivers/tee/optee/smc_abi.c
+> > > +++ b/drivers/tee/optee/smc_abi.c
+> > > @@ -1533,6 +1533,11 @@ static int optee_probe(struct
+> > > platform_device *pdev)
+> > >         if (rc)
+> > >                 goto err_disable_shm_cache;
+> > >
+> > > +       /* Populate any dependent child node (if any) */
+> > > +       rc =3D devm_of_platform_populate(&pdev->dev);
+> > > +       if (rc)
+> > > +               goto err_disable_shm_cache;
+> > > +
+> > >         pr_info("initialized driver\n");
+> > >         return 0;
+> > >
+> > > --
+> > > 2.30.2
+> > >
+>
