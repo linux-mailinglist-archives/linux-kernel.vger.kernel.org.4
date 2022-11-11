@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41401625D33
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C597625D35
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234618AbiKKOhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
+        id S234639AbiKKOiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:38:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234652AbiKKOhp (ORCPT
+        with ESMTP id S234646AbiKKOiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:37:45 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B879863BBB;
-        Fri, 11 Nov 2022 06:37:37 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 55BF01EC050B;
-        Fri, 11 Nov 2022 15:37:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668177456;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=XoIfnPx5anyIgOtrmn9qEj57defnQ2RkyAT8E7rwRzk=;
-        b=qAHNnVHN2AP3ZI9fbs4A/MPndo3qgRLcS/D4Atq18vgDDJhXDf2mObqDL5Li3FWNOKhg3g
-        tjxHqfhJaWedVi8r8CyigdFtn7qeZlU9Ph4N4QUohNLTUJFxVVDPYcT08gfQpytUaiq9xp
-        QZvJvd+T5ZkPhH8yWGvUWQyPRXSK6w0=
-Date:   Fri, 11 Nov 2022 15:37:36 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jithu Joseph <jithu.joseph@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, gregkh@linuxfoundation.org, ashok.raj@intel.com,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
-        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
-Subject: Re: [PATCH v2 07/14] x86/microcode/intel: Use a reserved field for
- metasize
-Message-ID: <Y25eMMwi+9GolAmJ@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-8-jithu.joseph@intel.com>
+        Fri, 11 Nov 2022 09:38:06 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E28E65C755
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:38:03 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEE111FB;
+        Fri, 11 Nov 2022 06:38:09 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 950643F73D;
+        Fri, 11 Nov 2022 06:38:02 -0800 (PST)
+Date:   Fri, 11 Nov 2022 14:38:00 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, cristian.marussi@arm.com,
+        Ludvig.Parsson@axis.com, jens.wiklander@linaro.org,
+        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: arm_scmi: Resolve dependency with TEE subsystem
+Message-ID: <20221111143800.k7xje6g23ujefnye@bogus>
+References: <20221111095313.2010815-1-sumit.garg@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221107225323.2733518-8-jithu.joseph@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221111095313.2010815-1-sumit.garg@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 02:53:16PM -0800, Jithu Joseph wrote:
-> Intel is using microcode file format for IFS test images too.
+On Fri, Nov 11, 2022 at 03:23:13PM +0530, Sumit Garg wrote:
+> The OP-TEE SCMI transport channel is dependent on TEE subsystem to be
+> initialized first. But currently the Arm SCMI subsystem and TEE
+> subsystem are invoked on the same initcall level as subsystem_init().
 > 
-> IFS test images use one of the existing reserved fields in microcode
-> header to indicate the size of the region in the file allocated for
-> metadata structures.
+> It is observed that the SCMI subsystem initcall is invoked prior to TEE
+> subsystem initcall. This leads to unwanted error messages regarding TEE
+> bus is not present yet. Although, -EPROBE_DEFER tries to workaround that
+> problem.
 > 
-> In prepration for this, rename first of the existing reserved fields
+> Lets try to resolve inter subsystem dependency problem via shifting Arm
+> SCMI subsystem to subsystem_init_sync() initcall level.
+>
 
-Unknown word [prepration] in commit message.
-Suggestions: ['preparation', 'peroration', 'prep ration', 'prep-ration', 'preparations', 'reparation', 'perspiration', "preparation's", 'proportion']
+I would avoid doing that. We already have some implicit dependency with
+subsys_initcall because this driver creates/registers bus and need to be
+done early. Now in order to solve the dependency between SCMI and TEE,
+both of which creates/registers bus and are at same subsys_initcall,
+we are relying on subsys_initcall_sync.
 
--- 
-Regards/Gruss,
-    Boris.
+Me and Ludvig discussed this in private and I suggested him to do something
+like below patch snippet. He mentioned he did post a patch on the list but
+I couldn't find it. For this the scmi node must be child node of OPTEE as
+it is providing the transport.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+@Ludvig, ?
+
+Regards,
+Sudeep
+
+--
+diff --git i/drivers/tee/optee/smc_abi.c w/drivers/tee/optee/smc_abi.c
+index a1c1fa1a9c28..839feca0def4 100644
+--- i/drivers/tee/optee/smc_abi.c
++++ w/drivers/tee/optee/smc_abi.c
+@@ -1534,7 +1534,9 @@ static int optee_probe(struct platform_device *pdev)
+                goto err_disable_shm_cache;
+
+        pr_info("initialized driver\n");
+-       return 0;
++
++       /* Populate any dependent child node(if any) */
++       return devm_of_platform_populate(&pdev->dev);
+
+ err_disable_shm_cache:
+        if (!optee->rpc_param_count)
+
