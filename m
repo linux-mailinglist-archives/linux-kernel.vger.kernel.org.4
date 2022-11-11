@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4D5625505
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C46B62543C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiKKINS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S233127AbiKKHET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 02:04:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiKKINQ (ORCPT
+        with ESMTP id S232471AbiKKHEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:13:16 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAA1729A0;
-        Fri, 11 Nov 2022 00:13:14 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4N7s072rwQz9snR;
-        Fri, 11 Nov 2022 09:13:11 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 07M8D8QAOO2x; Fri, 11 Nov 2022 09:13:11 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4N7s063rWRz9snY;
-        Fri, 11 Nov 2022 09:13:10 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 75DA78B763;
-        Fri, 11 Nov 2022 09:13:10 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 45bLmjQ46Rob; Fri, 11 Nov 2022 09:13:10 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.235.201])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 442AC8B786;
-        Fri, 11 Nov 2022 09:13:10 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 2AAIoap61220191
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 10 Nov 2022 19:50:36 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 2AAIoY851220189;
-        Thu, 10 Nov 2022 19:50:34 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org
-Subject: [PATCH] ata: sata_dwc_460ex: Check !irq instead of irq == NO_IRQ
-Date:   Thu, 10 Nov 2022 19:50:33 +0100
-Message-Id: <a99c89d7b39b63663739f064cd60514938b77833.1668106138.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
+        Fri, 11 Nov 2022 02:04:15 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4507376D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:04:14 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id g24so3574735plq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:04:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vixtechnology.com; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h/cvJ9sc0hORXX4XNhoBtz3X88Tmy8E2J7Yon6Hz0m0=;
+        b=GoHdzeK2cWAWWKiQeIjIc3dvXwxrFUjA+sjpbYdeaaJq0VgmUzle0E8jZ9z1ZBpCfD
+         JB0nGdN69DgsmhJOGncMqR5mgYyR2WOx44GqC8fqEtG87ySbQnwNE2wJNog6cnwlwNKk
+         JBTzVSZHTKbTy+rlczquokQ+ahbuyGEDzG9rY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h/cvJ9sc0hORXX4XNhoBtz3X88Tmy8E2J7Yon6Hz0m0=;
+        b=GOdRRIsJyM/+9IMtrAXPR7BHVlk/0r96MJE9GGE96QXgVyd5dA8Bht6x0Gqb9EL8I5
+         kS5uNnaLWEsETiG8JDxa/Hiflt/DFXBApmudyMG1n6cLhO67bcPzl9Tr9EVBZbol4XPL
+         cwqArfMsGJQwgumwnrDoXIQ/QsETWU7b+Yml3vWTkjyKfX9WAYCLND7aWnVaEeq+s6rc
+         +8g7ARawkOesrCWllTY4Y69g7F0t3r6T2AYiY1uHGAQVX248bK5vrNZ99QbboNOICsWX
+         qb6stOrwqL6yJ7gJBqqLKV4th5kokiZ8I/YYZlGeAvjPpOQ6SvluOkhJYnvGKp1fL4kP
+         phyQ==
+X-Gm-Message-State: ANoB5pnxPcSzHWlDm+7aXxeMnh0b34XzFibPiQ6EDOmSEkDKJAkz0OFM
+        Qfn7yOCq4/GClqoD+Bxob6Hi40V+yOGgKHr4zYaOMD/TnOFOq2qNHGBy3+RRwAwpdwBVCmUUwT9
+        i76t0zrUGQs6kkZm5
+X-Google-Smtp-Source: AA0mqf6dMzGkQ+m0jPkh3k61n6nVufN8KOIKDaCNH9ufKB4IPmfKnvG8ehSOXgrL1c+eqKHWea/QtA==
+X-Received: by 2002:a17:903:2797:b0:17f:628d:2a8 with SMTP id jw23-20020a170903279700b0017f628d02a8mr1074616plb.34.1668150254214;
+        Thu, 10 Nov 2022 23:04:14 -0800 (PST)
+Received: from [10.240.3.88] ([124.148.245.238])
+        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0018689e2c9dfsm881133plk.153.2022.11.10.23.04.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 23:04:13 -0800 (PST)
+Message-ID: <91e0ffc5-6517-c045-7bac-0b8d904822b9@vixtechnology.com>
+Date:   Fri, 11 Nov 2022 15:04:08 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1668106231; l=1673; s=20211009; h=from:subject:message-id; bh=697B1goXQCfCxCA8jP4a/aN+jcy10LL+IqzfU/rtgcU=; b=/bAZD59D7IhmBsRVLLf9ggh312NYkXw4m3g7vxpft2/aRG/FjRQ5sSJl85mXQsVi+6XKdrvhWBzL 2k0tpyW2CCXgccKpZ3DGHikIMtUldnUOpQXPI+caqba0Olj0PYPW
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] iio: light: apds9960: Fix iio_event_spec structures
+To:     Matt Ranostay <matt.ranostay@konsulko.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20221110101241.10576-1-subhajit.ghosh@vixtechnology.com>
+ <CAJCx=g=qRd+WaCLOHwnEjg1Myg4Ng=PK0sxcGgEG9VT+VpondA@mail.gmail.com>
+ <b6ac2692-3152-dfc4-5388-7986042970f0@vixtechnology.com>
+ <CAJCx=g=WaGiBFYJTTjNgzrnW3We0qpuMvyy9iFAVDC8Mkbscsg@mail.gmail.com>
+From:   Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>
+In-Reply-To: <CAJCx=g=WaGiBFYJTTjNgzrnW3We0qpuMvyy9iFAVDC8Mkbscsg@mail.gmail.com>
+Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NO_IRQ is a relic from the old days. It is not used anymore in core
-functions. By the way, function irq_of_parse_and_map() returns value 0
-on error.
 
-In some drivers, NO_IRQ is erroneously used to check the return of
-irq_of_parse_and_map().
+>>
+>=20
+> Hmm maybe Jonathan will have some feedback on this (and if it is okay
+> to break the ABI interface). Been awhile since I've touched
+> this driver and a little rusty on iio events.  But I am guessing your
+> method makes sense since the event(s) has direction and a type, and
+> can't just have one of the .mask_shared_by_dir and mask_shared_by_type.
+>=20
+> In any case:
+>=20
+> Reviewed-by: Matt Ranostay <matt.ranostay@konsulko.com>
+>=20
 
-It is not a real bug today because the only architectures using the
-drivers being fixed by this patch define NO_IRQ as 0, but there are
-architectures which define NO_IRQ as -1. If one day those
-architectures start using the non fixed drivers, there will be a
-problem.
+Thank you so much for your time and review Matt.
 
-Long time ago Linus advocated for not using NO_IRQ, see
-https://lkml.org/lkml/2005/11/21/221 . He re-iterated the same view
-recently in https://lkml.org/lkml/2022/10/12/622
+Apologies for the company disclaimer message which auto generates after
+the message body. I am still working on proper submission skills. =20
 
-So test !irq instead of tesing irq == NO_IRQ.
+Regards,
+Subhajit Ghosh
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- drivers/ata/sata_dwc_460ex.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ata/sata_dwc_460ex.c b/drivers/ata/sata_dwc_460ex.c
-index e3263e961045..5fb80ccde65b 100644
---- a/drivers/ata/sata_dwc_460ex.c
-+++ b/drivers/ata/sata_dwc_460ex.c
-@@ -242,7 +242,7 @@ static int sata_dwc_dma_init_old(struct platform_device *pdev,
- 
- 	/* Get SATA DMA interrupt number */
- 	hsdev->dma->irq = irq_of_parse_and_map(np, 1);
--	if (hsdev->dma->irq == NO_IRQ) {
-+	if (!hsdev->dma->irq) {
- 		dev_err(dev, "no SATA DMA irq\n");
- 		return -ENODEV;
- 	}
-@@ -1180,7 +1180,7 @@ static int sata_dwc_probe(struct platform_device *ofdev)
- 
- 	/* Get SATA interrupt number */
- 	irq = irq_of_parse_and_map(np, 0);
--	if (irq == NO_IRQ) {
-+	if (!irq) {
- 		dev_err(dev, "no SATA DMA irq\n");
- 		return -ENODEV;
- 	}
--- 
-2.37.1
-
+--=20
+This email is confidential. If you have received this email in error please=
+=20
+notify=C2=A0us immediately by return email and delete this email and any=20
+attachments.=C2=A0Vix accepts no liability for any damage caused by this em=
+ail=20
+or any attachments due=C2=A0to viruses, interference, interception, corrupt=
+ion=20
+or unauthorised access.
