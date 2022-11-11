@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A216250FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 03:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A0C62510C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 03:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbiKKCkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 21:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S233169AbiKKCtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 21:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbiKKCji (ORCPT
+        with ESMTP id S232711AbiKKCsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 21:39:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D8A6BDDA;
-        Thu, 10 Nov 2022 18:36:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A94B461E85;
-        Fri, 11 Nov 2022 02:36:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6DB4C43143;
-        Fri, 11 Nov 2022 02:36:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668134176;
-        bh=jaIfmu7Hf+LYHt/io+xZKFY3kE2DYxP+3IYPwsRmUe0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W6vD8uB8Fcbczd/TTINKk83Rn6whewxZMoAsrHBAs2s08jpsWMWm45MFfLsM6olgq
-         y/dp7of1n65rzTv2toftk7d+b7S0m8WKWo0cJCMmDe81UGerijIqWXwcnbgkVNFmtb
-         Vl/O24Z8G1Hxn6WO069miWyulFzt5/KGG9xJxAlsTILgn/SAeQpWEQef2M4hkcXTct
-         C5gY3ad3EUxPS1JlsX1LXvS8GqHMhf02+j5WbmGFcLOVtcjaJ4ZZKTc6lQjZdN0A6h
-         h0lVYR66TL1WwZ6bxaQtKoRkaIeRC4Kgit1h9b6O8E54dfaNwkBRsAnSMClOm+RO4/
-         xEeAJhG5X7BiA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Tedd Ho-Jeong An <tedd.an@intel.com>,
-        Sasha Levin <sashal@kernel.org>, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 2/2] Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm
-Date:   Thu, 10 Nov 2022 21:36:11 -0500
-Message-Id: <20221111023611.228238-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221111023611.228238-1-sashal@kernel.org>
-References: <20221111023611.228238-1-sashal@kernel.org>
+        Thu, 10 Nov 2022 21:48:40 -0500
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E701E42;
+        Thu, 10 Nov 2022 18:43:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1668134590;
+        bh=BL3Df7T2fda2YYRMS2L+HCFmYgkJzAzwFsLU2JM9Hkw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=op116er2zCaFNKU2gJBwvP6wi2j3j4m/14zzKInq1OhzkFqgUn7nRYvVuKHEUIHpe
+         080wVBrV4wf4Y3iWecSpurBxHBJ0iNEUUuSpN5V7coMkwE/lHka7EiHODm3KtCPBdc
+         rBg70rIolxtvtYf5A2YSYlmjVxEBjBupqsOR+x6w=
+Received: from localhost.localdomain ([111.199.191.46])
+        by newxmesmtplogicsvrsza2-0.qq.com (NewEsmtp) with SMTP
+        id 95619E78; Fri, 11 Nov 2022 10:37:22 +0800
+X-QQ-mid: xmsmtpt1668134242to097gvqf
+Message-ID: <tencent_32CBE47252C5F69571B40751DE6054082D05@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9pmo2KIyz9dprN6UpTtnMoo5DdTsNsP5dbyXhL/Dto/WxKS/eji
+         yPnSz9aKaiLE8FYJd/UyyLYRg8KD7lbY5XwlDrzbMiMCFnXnziV/ouqi56ahVuJPpKDMYivtPHj7
+         hEdOKJu8hyeuPO0TJH1Am3Fyzi5WdqU+vL51uVMogq/cnZwMyqhoH5xeTR5a9Y1wwrCMjeyjYnAO
+         Kn3426Ha/lty+eUNfldE4meYk8g7blNbaGMvkA3SMPfUhayvMa0meed1BZUynFsz3g0Q8S0qaKts
+         mG3g3PZcvTbibyrAwYkUq1gwStRxoygKDFn6buaOLXjKHS0Tgp98MEHrUopCY/XDyxhrbHghf/If
+         E0NGyuFmAVJk89c6sJUEofJ6ffZXzjXXmQ0Wp5No8CxPFpwdmDHzOchxPS0Tf1LW4JkyqjwneM23
+         prUgJTFe5IFekbfM61Mkez1L+e9is4orQr0EDJWQLs1FETG0T7kVCgbIAkRRpKQeEwbZGRAMICd6
+         cO2PfCcGo+g90Sx+bQyGvLmyRHFN4Trt65w7tC87SBtrogIaPZew20LJXFFaRpk0Laf1sG44Ycw/
+         xoQ3Qp/dnjOeOakhdrEOUeCtjBOvLdixMSyB02RD4naS8WW/q9mw35sY9oKeU004o4vGfGG7xfDF
+         //txyYHrQalcHVOQF7G60c76Qou3cw6ulBmX6y3Z/ReGmJx97+ILWOzsP4oybqtA6UiNjm9bIIBk
+         fIZsuCq7SU+2a4WMXx6LuO24Zyl17TrAQnvIabW4zGOxjYpdEbT8VrsNVCbmRkncq8wQ0W7eeIET
+         vHUHsOl3YMe5lAiGdM4TbHRL7VG/xUwYD9NcvgLeSd2UlYB6mD/yFI66ZcMskfsDaEevjZnJBv3E
+         W7bcBMkjoCsNezWV17gi7vqMzqoqfK5IzMGePHJdyl4994IMru+xwppnN7Y0awKFbgPUyn2o1tYf
+         N8xrVY5VUhMHNpyNlQgrKiy7KzEkRIXrkckUDftwNGsJ3ZEkXBqLzOpIuE0CQbM+A4mAmBqHJjIM
+         CMBHVEQw==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     sj@kernel.org
+Cc:     damon@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        rongtao@cestc.cn, rtoax@foxmail.com, shuah@kernel.org,
+        yuanchu@google.com
+Subject: [PATCH] selftests/damon: Fix unnecessary compilation warnings
+Date:   Fri, 11 Nov 2022 10:37:20 +0800
+X-OQ-MSGID: <20221111023720.15408-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221110200939.101886-1-sj@kernel.org>
+References: <20221110200939.101886-1-sj@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Rong Tao <rongtao@cestc.cn>
 
-[ Upstream commit f937b758a188d6fd328a81367087eddbb2fce50f ]
+When testing overflow and overread, there is no need to keep unnecessary
+compilation warnings, we should simply ignore them.
 
-l2cap_global_chan_by_psm shall not return fixed channels as they are not
-meant to be connected by (S)PSM.
+How to reproduce the problem:
 
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Reviewed-by: Tedd Ho-Jeong An <tedd.an@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    $ make -C tools/testing/selftests/
+    ...
+    warning: ‘write’ reading 4294967295 bytes from a region of size 1
+    [-Wstringop-overread]
+    warning: ‘read’ writing 4294967295 bytes into a region of size 25
+    overflows the destination [-Wstringop-overflow=]
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- net/bluetooth/l2cap_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/damon/huge_count_read_write.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index ec04a7ea5537..6e93f2290ed5 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -1824,7 +1824,7 @@ static struct l2cap_chan *l2cap_global_chan_by_psm(int state, __le16 psm,
- 		if (link_type == LE_LINK && c->src_type == BDADDR_BREDR)
- 			continue;
+diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
+index ad7a6b4cf338..8fbe276870e7 100644
+--- a/tools/testing/selftests/damon/huge_count_read_write.c
++++ b/tools/testing/selftests/damon/huge_count_read_write.c
+@@ -8,6 +8,11 @@
+ #include <unistd.h>
+ #include <stdio.h>
  
--		if (c->psm == psm) {
-+		if (c->chan_type != L2CAP_CHAN_FIXED && c->psm == psm) {
- 			int src_match, dst_match;
- 			int src_any, dst_any;
++#pragma GCC diagnostic push
++/* Ignore read(2) overflow and write(2) overread compile warnings */
++#pragma GCC diagnostic ignored "-Wstringop-overread"
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
++
+ void write_read_with_huge_count(char *file)
+ {
+ 	int filedesc = open(file, O_RDWR);
+@@ -27,6 +32,8 @@ void write_read_with_huge_count(char *file)
+ 	close(filedesc);
+ }
  
++#pragma GCC diagnostic pop
++
+ int main(int argc, char *argv[])
+ {
+ 	if (argc != 2) {
 -- 
-2.35.1
+2.31.1
 
