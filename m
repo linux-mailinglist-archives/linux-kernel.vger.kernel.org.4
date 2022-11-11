@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FB6625C2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABD2625C17
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234146AbiKKOBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S234238AbiKKOAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbiKKOAm (ORCPT
+        with ESMTP id S234053AbiKKN7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:00:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7384778787
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668174969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TJKpwo9c5AlIwO79tP1KNz4b2zBwa7daS3MoX79E/OA=;
-        b=gO/7oG6w1FKey3oRLIBT/i7+/uQF6pcuXU2iPCJxl0lgCslloayXctkXNVrd910GPw0LWN
-        WkApgZgl9w04yhQUq+Z3utmD18GaGKodv51ozP0zq7EdR3u+tHbG7LyZ2obxvWEy1HILAm
-        t2Nwfu2CCaJo/3umO2jvqytPMbIegjQ=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-349-vFlcZsvzOcCg5vT-Trhd2w-1; Fri, 11 Nov 2022 08:56:07 -0500
-X-MC-Unique: vFlcZsvzOcCg5vT-Trhd2w-1
-Received: by mail-qv1-f71.google.com with SMTP id x5-20020ad44585000000b004bb6c687f47so3712991qvu.3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:56:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TJKpwo9c5AlIwO79tP1KNz4b2zBwa7daS3MoX79E/OA=;
-        b=XFvBcDwfJLSS9xF2DaXOotVHcs8X5ktKkvMeWJjqbW7QBAD43FoHwSlyNZOS+9146W
-         tDSn9FjUguWSm74BRG9BsI45+I/mpvD31Ua1FMqHACiOyhDUhCOqhzSnE7h2AsLuNqlT
-         R02deGQVlVLW8rczIFlA85ZpT3/lU4Q4IuxQloWtch/9RP589aFGNlXJo8HnDypJB6zM
-         DA1jHRkHuLoOdCdA7wBv7l4anfj9AFrdw/N2CWeiyuQXcnS4HSGTZuqzxkjVUEEnLy49
-         +jYrSO0r6Lx3mL15kdZXBINgUnbGWqHMcWT8UKh2BQdSEe6pjbwqJutHV7HJ7C6OYmF4
-         KPxw==
-X-Gm-Message-State: ANoB5plbGyJ6FrQXGvMQ6wk5VoDiSZgyC9GCmu69Ee8a2o9zUTcWBi2D
-        R82HDCMQVopniF0hRt50Muw95wBX24k3RmxKuaFX6Dy7RQ/soWqyNa95EvIyU4KkD5PKNfAXEj7
-        7Wy6ZsliRBMnv2njsomMw/OIQ
-X-Received: by 2002:a05:620a:31a6:b0:6fa:172:c37d with SMTP id bi38-20020a05620a31a600b006fa0172c37dmr1097470qkb.92.1668174967415;
-        Fri, 11 Nov 2022 05:56:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6E5N9TDha/oV3wOK0mu591qSZ1deevMEXV4lCRSdcvw2q6QTjtAAHLB3tamhyy49x6iMriNA==
-X-Received: by 2002:a05:620a:31a6:b0:6fa:172:c37d with SMTP id bi38-20020a05620a31a600b006fa0172c37dmr1097448qkb.92.1668174967146;
-        Fri, 11 Nov 2022 05:56:07 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id ay13-20020a05620a178d00b006b929a56a2bsm1486708qkb.3.2022.11.11.05.56.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 05:56:06 -0800 (PST)
-Date:   Fri, 11 Nov 2022 14:55:49 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [RFC PATCH v3 03/11] af_vsock: add zerocopy receive logic
-Message-ID: <20221111135549.2fqufprbc3muedmr@sgarzare-redhat>
-References: <f60d7e94-795d-06fd-0321-6972533700c5@sberdevices.ru>
- <7aeba781-db09-9be1-a9a3-a4c16da38fb5@sberdevices.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <7aeba781-db09-9be1-a9a3-a4c16da38fb5@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        Fri, 11 Nov 2022 08:59:50 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF03E8D7E1;
+        Fri, 11 Nov 2022 05:56:26 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABDqkGd007901;
+        Fri, 11 Nov 2022 13:56:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=hawB2hozmEIbG+S0PxbOS0Lg6mklfrCYrE5506MfVBQ=;
+ b=MhKg6a3yUjo6Ao6a5jjfi8p3sSVXST2S11Ybe0YQpkO947TsRrpT/ZkRIkCT5EXSfl26
+ IOLFOKYa9/mSx/WWf1ynkR5pPbewnz/ENlvhjguWy0y0qZkOEayFHbBGV1Udswqbcxra
+ kxF/kAC3wV9DnNmr5GpEk73Fu59ZfKXDh6DX5MW3KFFKW9rbxkU9Fh4aaeBEsCyajGK1
+ c0tagyQyEO4sBQ7JdZIXN9M0o/TVfGYfmQWV3FS1iFYfG+QnqzbHxsF4CVvj76cSqOAH
+ eYhPCDV258VLbPcDb4bQuLBPA435LuSey1KQldwJtCrOpOEmBItfxGH8Ylfg47cy7NzJ hw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksh98s1jm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 13:56:23 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDuKsM031611;
+        Fri, 11 Nov 2022 13:56:20 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kngwkm2nv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 11 Nov 2022 13:56:20 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ABDuK5U031604;
+        Fri, 11 Nov 2022 13:56:20 GMT
+Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2ABDuKaT031603;
+        Fri, 11 Nov 2022 13:56:20 +0000
+Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
+        id 591B43892; Fri, 11 Nov 2022 05:56:19 -0800 (PST)
+From:   Kalyan Thota <quic_kalyant@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com
+Subject: [v1] drm/msm/disp/dpu1: pin 1 crtc to 1 encoder
+Date:   Fri, 11 Nov 2022 05:56:18 -0800
+Message-Id: <1668174978-10676-1-git-send-email-quic_kalyant@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: p3K9OGmL20MGRoA_wKrWepqYl-LqhdTD
+X-Proofpoint-ORIG-GUID: p3K9OGmL20MGRoA_wKrWepqYl-LqhdTD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211110093
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,304 +81,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 06, 2022 at 07:40:12PM +0000, Arseniy Krasnov wrote:
->This:
->1) Adds callback for 'mmap()' call on socket. It checks vm area flags
->   and sets vm area ops.
->2) Adds special 'getsockopt()' case which calls transport zerocopy
->   callback. Input argument is vm area address.
->3) Adds 'getsockopt()/setsockopt()' for switching on/off rx zerocopy
->   mode.
->
->Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->---
-> include/net/af_vsock.h          |   8 ++
-> include/uapi/linux/vm_sockets.h |   3 +
-> net/vmw_vsock/af_vsock.c        | 187 +++++++++++++++++++++++++++++++-
-> 3 files changed, 196 insertions(+), 2 deletions(-)
->
->diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
->index 568a87c5e0d0..e4f12ef8e623 100644
->--- a/include/net/af_vsock.h
->+++ b/include/net/af_vsock.h
->@@ -73,6 +73,8 @@ struct vsock_sock {
->
-> 	/* Private to transport. */
-> 	void *trans;
->+
->+	bool rx_zerocopy_on;
+Pin each crtc with one encoder. This arrangement will
+disallow crtc switching between encoders and also will
+facilitate to advertise certain features on crtc based
+on encoder type.
 
-Maybe better to leave the last fields the private ones to transports, so 
-I would say put it before trans;
+Changes in v1:
+- use drm_for_each_encoder macro while iterating through
+  encoder list (Dmitry)
 
-> };
->
-> s64 vsock_stream_has_data(struct vsock_sock *vsk);
->@@ -138,6 +140,12 @@ struct vsock_transport {
-> 	bool (*stream_allow)(u32 cid, u32 port);
-> 	int (*set_rcvlowat)(struct vsock_sock *vsk, int val);
->
->+	int (*zerocopy_rx_mmap)(struct vsock_sock *vsk,
->+				struct vm_area_struct *vma);
->+	int (*zerocopy_dequeue)(struct vsock_sock *vsk,
->+				struct page **pages,
->+				unsigned long *pages_num);
->+
-> 	/* SEQ_PACKET. */
-> 	ssize_t (*seqpacket_dequeue)(struct vsock_sock *vsk, struct msghdr *msg,
-> 				     int flags);
->diff --git a/include/uapi/linux/vm_sockets.h b/include/uapi/linux/vm_sockets.h
->index c60ca33eac59..d1f792bed1a7 100644
->--- a/include/uapi/linux/vm_sockets.h
->+++ b/include/uapi/linux/vm_sockets.h
->@@ -83,6 +83,9 @@
->
-> #define SO_VM_SOCKETS_CONNECT_TIMEOUT_NEW 8
->
->+#define SO_VM_SOCKETS_MAP_RX 9
->+#define SO_VM_SOCKETS_ZEROCOPY 10
+Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-Before removing RFC, we should document these macros because they are 
-exposed to the user.
-
->+
-> #if !defined(__KERNEL__)
-> #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && 
-> defined(__ILP32__))
-> #define SO_VM_SOCKETS_CONNECT_TIMEOUT SO_VM_SOCKETS_CONNECT_TIMEOUT_OLD
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index ee418701cdee..21a915eb0820 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -1663,6 +1663,16 @@ static int vsock_connectible_setsockopt(struct socket *sock,
-> 		}
-> 		break;
-> 	}
->+	case SO_VM_SOCKETS_ZEROCOPY: {
->+		if (sock->state != SS_UNCONNECTED) {
->+			err = -EOPNOTSUPP;
->+			break;
->+		}
->+
->+		COPY_IN(val);
->+		vsk->rx_zerocopy_on = val;
->+		break;
->+	}
->
-> 	default:
-> 		err = -ENOPROTOOPT;
->@@ -1676,6 +1686,124 @@ static int vsock_connectible_setsockopt(struct socket *sock,
-> 	return err;
-> }
->
->+static const struct vm_operations_struct afvsock_vm_ops = {
->+};
->+
->+static int vsock_recv_zerocopy(struct socket *sock,
->+			       unsigned long address)
->+{
->+	const struct vsock_transport *transport;
->+	struct vm_area_struct *vma;
->+	unsigned long vma_pages;
->+	struct vsock_sock *vsk;
->+	struct page **pages;
->+	struct sock *sk;
->+	int err;
->+	int i;
->+
->+	sk = sock->sk;
->+	vsk = vsock_sk(sk);
->+	err = 0;
->+
->+	lock_sock(sk);
->+
->+	if (!vsk->rx_zerocopy_on) {
->+		err = -EOPNOTSUPP;
->+		goto out_unlock_sock;
->+	}
->+
->+	transport = vsk->transport;
->+
->+	if (!transport->zerocopy_dequeue) {
->+		err = -EOPNOTSUPP;
->+		goto out_unlock_sock;
->+	}
->+
->+	mmap_write_lock(current->mm);
->+
->+	vma = vma_lookup(current->mm, address);
->+
->+	if (!vma || vma->vm_ops != &afvsock_vm_ops) {
->+		err = -EINVAL;
->+		goto out_unlock_vma;
->+	}
->+
->+	/* Allow to use vm area only from the first page. */
->+	if (vma->vm_start != address) {
->+		err = -EINVAL;
->+		goto out_unlock_vma;
->+	}
->+
->+	vma_pages = (vma->vm_end - vma->vm_start) / PAGE_SIZE;
->+	pages = kmalloc_array(vma_pages, sizeof(pages[0]),
->+			      GFP_KERNEL | __GFP_ZERO);
->+
->+	if (!pages) {
->+		err = -EINVAL;
->+		goto out_unlock_vma;
->+	}
->+
->+	err = transport->zerocopy_dequeue(vsk, pages, &vma_pages);
->+
->+	if (err)
->+		goto out_unlock_vma;
->+
->+	/* Now 'vma_pages' contains number of pages in array.
->+	 * If array element is NULL, skip it, go to next page.
->+	 */
->+	for (i = 0; i < vma_pages; i++) {
->+		if (pages[i]) {
->+			unsigned long pages_inserted;
->+
->+			pages_inserted = 1;
->+			err = vm_insert_pages(vma, address, &pages[i], &pages_inserted);
->+
->+			if (err || pages_inserted) {
->+				/* Failed to insert some pages, we have "partially"
->+				 * mapped vma. Do not return, set error code. This
->+				 * code will be returned to user. User needs to call
->+				 * 'madvise()/mmap()' to clear this vma. Anyway,
->+				 * references to all pages will to be dropped below.
->+				 */
->+				if (!err) {
->+					err = -EFAULT;
->+					break;
->+				}
->+			}
->+		}
->+
->+		address += PAGE_SIZE;
->+	}
->+
->+	i = 0;
->+
->+	while (i < vma_pages) {
->+		/* Drop ref count for all pages, returned by transport.
->+		 * We call 'put_page()' only once, as transport needed
->+		 * to 'get_page()' at least only once also, to prevent
->+		 * pages being freed. If transport calls 'get_page()'
->+		 * more twice or more for every page - we don't care,
->+		 * if transport calls 'get_page()' only one time, this
->+		 * meanse that every page had ref count equal to 1,then
->+		 * 'vm_insert_pages()' increments it to 2. After this
->+		 * loop, ref count will be 1 again, and page will be
->+		 * returned to allocator by user.
->+		 */
->+		if (pages[i])
->+			put_page(pages[i]);
->+		i++;
->+	}
->+
->+	kfree(pages);
->+
->+out_unlock_vma:
->+	mmap_write_unlock(current->mm);
->+out_unlock_sock:
->+	release_sock(sk);
->+
->+	return err;
->+}
->+
-> static int vsock_connectible_getsockopt(struct socket *sock,
-> 					int level, int optname,
-> 					char __user *optval,
->@@ -1720,6 +1848,26 @@ static int vsock_connectible_getsockopt(struct socket *sock,
-> 		lv = sock_get_timeout(vsk->connect_timeout, &v,
-> 				      optname == SO_VM_SOCKETS_CONNECT_TIMEOUT_OLD);
-> 		break;
->+	case SO_VM_SOCKETS_ZEROCOPY: {
->+		lock_sock(sk);
->+
->+		v.val64 = vsk->rx_zerocopy_on;
->+
->+		release_sock(sk);
->+
->+		break;
->+	}
->+	case SO_VM_SOCKETS_MAP_RX: {
->+		unsigned long vma_addr;
->+
->+		if (len < sizeof(vma_addr))
->+			return -EINVAL;
->+
->+		if (copy_from_user(&vma_addr, optval, sizeof(vma_addr)))
->+			return -EFAULT;
->+
->+		return vsock_recv_zerocopy(sock, vma_addr);
->+	}
->
-> 	default:
-> 		return -ENOPROTOOPT;
->@@ -2167,6 +2315,41 @@ static int vsock_set_rcvlowat(struct sock *sk, int val)
-> 	return 0;
-> }
->
->+static int afvsock_mmap(struct file *file, struct socket *sock,
->+			struct vm_area_struct *vma)
->+{
->+	const struct vsock_transport *transport;
->+	struct vsock_sock *vsk;
->+	struct sock *sk;
->+	int err;
->+
->+	if (vma->vm_flags & (VM_WRITE | VM_EXEC))
->+		return -EPERM;
->+
->+	vma->vm_flags &= ~(VM_MAYWRITE | VM_MAYEXEC);
->+	vma->vm_flags |= (VM_MIXEDMAP);
->+	vma->vm_ops = &afvsock_vm_ops;
->+
->+	sk = sock->sk;
->+	vsk = vsock_sk(sk);
->+
->+	lock_sock(sk);
->+
->+	transport = vsk->transport;
->+
->+	if (!transport || !transport->zerocopy_rx_mmap) {
->+		err = -EOPNOTSUPP;
->+		goto out_unlock;
->+	}
->+
->+	err = transport->zerocopy_rx_mmap(vsk, vma);
->+
->+out_unlock:
->+	release_sock(sk);
->+
->+	return err;
->+}
->+
-> static const struct proto_ops vsock_stream_ops = {
-> 	.family = PF_VSOCK,
-> 	.owner = THIS_MODULE,
->@@ -2184,7 +2367,7 @@ static const struct proto_ops vsock_stream_ops = {
-> 	.getsockopt = vsock_connectible_getsockopt,
-> 	.sendmsg = vsock_connectible_sendmsg,
-> 	.recvmsg = vsock_connectible_recvmsg,
->-	.mmap = sock_no_mmap,
->+	.mmap = afvsock_mmap,
-> 	.sendpage = sock_no_sendpage,
-> 	.set_rcvlowat = vsock_set_rcvlowat,
-> };
->@@ -2206,7 +2389,7 @@ static const struct proto_ops vsock_seqpacket_ops = {
-> 	.getsockopt = vsock_connectible_getsockopt,
-> 	.sendmsg = vsock_connectible_sendmsg,
-> 	.recvmsg = vsock_connectible_recvmsg,
->-	.mmap = sock_no_mmap,
->+	.mmap = afvsock_mmap,
-> 	.sendpage = sock_no_sendpage,
-> };
->
->-- 
->2.35.0
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index 7a5fabc..0d94eec0d 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -798,19 +798,20 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
+ 	max_crtc_count = min(max_crtc_count, primary_planes_idx);
+ 
+ 	/* Create one CRTC per encoder */
+-	for (i = 0; i < max_crtc_count; i++) {
+-		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
+-		if (IS_ERR(crtc)) {
+-			ret = PTR_ERR(crtc);
+-			return ret;
++	i = 0;
++	drm_for_each_encoder(encoder, dev) {
++		if (i < max_crtc_count) {
++			crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
++			if (IS_ERR(crtc)) {
++				ret = PTR_ERR(crtc);
++				return ret;
++			}
++			priv->crtcs[priv->num_crtcs++] = crtc;
++			encoder->possible_crtcs = 1 << drm_crtc_index(crtc);
+ 		}
+-		priv->crtcs[priv->num_crtcs++] = crtc;
++		i++;
+ 	}
+ 
+-	/* All CRTCs are compatible with all encoders */
+-	drm_for_each_encoder(encoder, dev)
+-		encoder->possible_crtcs = (1 << priv->num_crtcs) - 1;
+-
+ 	return 0;
+ }
+ 
+-- 
+2.7.4
 
