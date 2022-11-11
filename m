@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A91D6253D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE0B6253DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbiKKGcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 01:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        id S232796AbiKKGe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 01:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233262AbiKKGcS (ORCPT
+        with ESMTP id S233050AbiKKGeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 01:32:18 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791DF5F51;
-        Thu, 10 Nov 2022 22:31:04 -0800 (PST)
-Message-ID: <7ee2c646-0be0-5a37-83bd-110d8a8717d7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1668148263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FqnpMcpcFHI1JVz6e9lYAIU4l1pkcJ14xujvc36hbdg=;
-        b=HUWLtknOEyKecQQ7mSkNAa60axRvBDswoJecTW9tT4h+HVwFFW8rsiIK5j1cPLKAByQDnU
-        k1Bfc2iq8acLFBEbrWt0qzvdmw5CQYckq+5sGm06jDMd8QFsML2/EsQLIXowWpf8zcfXSn
-        SORrgwr4OWJlcsnPPUWFa0fjOyUhDUc=
-Date:   Fri, 11 Nov 2022 14:30:51 +0800
-MIME-Version: 1.0
-Subject: Re: [for-next PATCH v5 00/11] RDMA/rxe: Add RDMA FLUSH operation
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>,
-        "mbloch@nvidia.com" <mbloch@nvidia.com>,
-        "liangwenpeng@huawei.com" <liangwenpeng@huawei.com>,
-        "tom@talpey.com" <tom@talpey.com>,
-        "tomasz.gromadzki@intel.com" <tomasz.gromadzki@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220927055337.22630-1-lizhijian@fujitsu.com>
- <Y1wX8n9R7dkLo0KU@nvidia.com>
- <a37814f9-ed8a-d70a-3024-466700276864@linux.dev>
- <00a3797c-9759-d4ec-6d6f-8f157cd2a220@fujitsu.com>
- <b9f3550a-6fbc-b279-22a3-50285da82e5d@linux.dev>
- <9fa30c8b-cb8d-efec-5896-b96177929d08@fujitsu.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Yanjun Zhu <yanjun.zhu@linux.dev>
-In-Reply-To: <9fa30c8b-cb8d-efec-5896-b96177929d08@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 01:34:21 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1108814D17;
+        Thu, 10 Nov 2022 22:33:48 -0800 (PST)
+Received: from mxde.zte.com.cn (unknown [10.35.20.165])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N7pnQ5vNFz1Dwb;
+        Fri, 11 Nov 2022 14:33:46 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4N7pn71HTcz5TCGC;
+        Fri, 11 Nov 2022 14:33:31 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N7pn32kkBzdmYkq;
+        Fri, 11 Nov 2022 14:33:27 +0800 (CST)
+Received: from mxct.zte.com.cn (unknown [192.168.251.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N7pmz2Xf7z5PkGm;
+        Fri, 11 Nov 2022 14:33:23 +0800 (CST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N7pmw6h5Pz501Qd;
+        Fri, 11 Nov 2022 14:33:20 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2AB6XCw2066862;
+        Fri, 11 Nov 2022 14:33:12 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp02[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Fri, 11 Nov 2022 14:33:14 +0800 (CST)
+Date:   Fri, 11 Nov 2022 14:33:14 +0800 (CST)
+X-Zmail-TransId: 2afa636decaaffffffffeb37579f
+X-Mailer: Zmail v1.0
+Message-ID: <202211111433143392243@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <stern@rowland.harvard.edu>
+Cc:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <chi.minghao@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIXSB1c2I6IGVoY2ktb3Jpb246IHVzZSBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2AB6XCw2066862
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 636DECC9.000 by FangMail milter!
+X-FangMail-Envelope: 1668148427/4N7pnQ5vNFz1Dwb/636DECC9.000/10.35.20.165/[10.35.20.165]/mxde.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 636DECC9.000/4N7pnQ5vNFz1Dwb
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-在 2022/11/11 14:10, lizhijian@fujitsu.com 写道:
->
-> On 11/11/2022 13:52, Yanjun Zhu wrote:
->> 在 2022/11/11 13:10, lizhijian@fujitsu.com 写道:
->>>
->>> On 11/11/2022 10:49, Yanjun Zhu wrote:
->>>> 在 2022/10/29 1:57, Jason Gunthorpe 写道:
->>>>> On Tue, Sep 27, 2022 at 01:53:26PM +0800, Li Zhijian wrote:
->>>>>> Hey folks,
->>>>>>
->>>>>> Firstly i want to say thank you to all you guys, especially Bob, who
->>>>>> in the
->>>>>> past 1+ month, gave me a lots of idea and inspiration.
->>>>> I would like it if someone familiar with rxe could reviewed-by the
->>>>> protocol parts.
->>>> Hi, Jason
->>>>
->>>> I reviewed these patches. I am fine with these patches.
->>>>
->>>> Hi, Zhijian
->>>>
->>>> I noticed the followings:
->>>> "
->>>> $ ./rdma_flush_server -s [server_address] -p [port_number]
->>>> client:
->>>> $ ./rdma_flush_client -s [server_address] -p [port_number]
->>>> "
->>>> Can you merge the server and the client to rdma-core?
->>> Yanjun,
->>>
->>> Yes, there was already a draft PR here
->>> https://github.com/linux-rdma/rdma-core/pull/1181, but it cannot go
->>> ahead until the kernel's patches are merged.
->>>
->>> and i will post a new version these days, would you mind if i add your
->>> "Reviewed-by" in next version ?
->> Reviewed-by: Zhu Yanjun <yanjun.zhu@linux.dev>
->> Thanks.
->>
->> Another problem, normally rxe should connect to physical ib devices,
->> such as mlx ib device. That is, one host is rxe, the other host is mlx
->> ib device. The rdma connection should be created between the 2 hosts.
-> it's fully compatible with old operation.
->
->
->> Do you connect to mlx ib device with this RDMA FLUSH operation?
->> And what is the test result?
-> Yes, i tested it.
->
-> After these patches, only RXE device can register *FLUSHABLE* MRs
-> successfully. If mlx try that, EOPNOSUPP will be returned.
->
-> Similarly, Since other hardwares(MLX for example) have not supported
-> FLUSH operation, EOPNOSUPP will be returned if users try to to that.
->
-> In short, for RXE requester, MLX responder will return error for the
-> request. MLX requester is not able to request a FLUSH operation.
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Thanks. Do you mean that FLUSH operation is only supported in RXE? ^_^
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/usb/host/ehci-orion.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-And MLX does not support FLUSH operation currently?
+diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
+index a3454a3ea4e0..d0970caf3c3a 100644
+--- a/drivers/usb/host/ehci-orion.c
++++ b/drivers/usb/host/ehci-orion.c
+@@ -234,8 +234,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto err;
 
-Zhu Yanjun
-
->
-> Thanks
-> Zhijian
->
->
->> Thanks a lot.
->> Zhu Yanjun
->>
->>>
->>>
->>>> Thanks,
->>>> Zhu Yanjun
->>>>
->>>>> Jason
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	regs = devm_ioremap_resource(&pdev->dev, res);
++	regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(regs)) {
+ 		err = PTR_ERR(regs);
+ 		goto err;
+-- 
+2.25.1
