@@ -2,169 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB36625D55
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1023B625D58
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234784AbiKKOki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S234760AbiKKOlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbiKKOjv (ORCPT
+        with ESMTP id S234670AbiKKOkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:39:51 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B1169DC9;
-        Fri, 11 Nov 2022 06:39:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bA6nQJxrZ01Zz1XUkoZ6XW23Q/+BP5Dxi224w6E7vd/wuD0/67vF9YmIwGxBjsU3cTS+/tA2kwJL3W71uT2mo+tR3ELVKj9LgD4vZLB17Q5wJSDXBa8pRfUZlV5xIqYwH1z5+OO7/Y28TYQTKxISfZb1iMmdWQG94+v12X4QjoR9I9YhTb5wlUkUTgkptIEoKUlR+83uor93fUfjr0Ouwiu20nlTnPphW4o4p6hrWhtpY5KNnULOhzISKlAeJ8mDRhKFEerU4RNrl+aXIcgrfShDLsomMDezSFLJOxhPaOAM++MEM/dXdM5hLWdloNPKP3VJ25/uOKsNvnDeItxs4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tKaWpWpjStPB8aFHCJchFP/7URpcrQSc9wv7JC6hINI=;
- b=PruEBZqw2jTST7wtCUN4lJijh3/KK+GCQHhq00boGgeTM5WTmHJqx/5kTgeahK+7hSjgmzvMBZa/E9YcfUkHQpH3CM/JLwOiV0dY93DM3F+khz5KIH/6I/LmVCr2V74ZgQX6b3mWMzK6Z9gHZymPBfHgVzwX3yooBrmqUrna+KRXFK7OFOcayxe3IRNBcb510pbCXHoqkKJU7kT8jZ83QMOzfQ8HmSeuCgxuC7rzhyT1Hlo7OywPuy6c2rbhKzZGaqFecS7QSrHuXYC5WXgwfPHvUMGMAPCOotG6c2xhPtG5uUhgAUDUUT3AAlsxW0VhH7+SKR9Sm/9nQBApIj0l+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tKaWpWpjStPB8aFHCJchFP/7URpcrQSc9wv7JC6hINI=;
- b=e8VuYiJ0SfLEFN5I+g2GQ1+f7jXolyAzb1oyOUWPe9a+J0fmNdW8DcPw3YdVg0bJNOi6U6cnArqgnxX877HDeqMSr5KSFXa97svsKqr0YAchMjnntIx1D0Bv4Q9GE02baA8MZrVdnWgcbRBk6aCkTDsDtoxX3bsdIo5el8fL3Uxxg9sGl51zRJ7KBUTz5Fi2iYav/LGjVS/WGMVlGl5hR8MP8PngxES3tcZtkJBboXi3JdxqXUDcwpibdHeLmJeQ0Q9biRrnU/Yr5QCjOYlcWlryYpKw+9OEXDgJElokqGlVCPLDWpkXtvYA0F8vErkQYA6P1Qaz5LuaKFelftRvOA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- MW4PR12MB7118.namprd12.prod.outlook.com (2603:10b6:303:213::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Fri, 11 Nov
- 2022 14:39:36 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::1912:a3a8:1a8d:a960]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::1912:a3a8:1a8d:a960%4]) with mapi id 15.20.5791.030; Fri, 11 Nov 2022
- 14:39:36 +0000
-Message-ID: <ac1a91ff-7fda-f0ba-254c-cc389c519a5f@nvidia.com>
-Date:   Fri, 11 Nov 2022 14:39:30 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 2/3] xhci: hub: export symbol on xhci_hub_control
-Content-Language: en-US
-To:     Jim Lin <jilin@nvidia.com>, thierry.reding@gmail.com,
-        gregkh@linuxfoundation.org
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20221111101813.32482-1-jilin@nvidia.com>
- <20221111101813.32482-3-jilin@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20221111101813.32482-3-jilin@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0075.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:8::15) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Fri, 11 Nov 2022 09:40:16 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E8D657C3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:40:06 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b3so8619746lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 06:40:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ps6+CrFrf1G8yxoOGed9ZXoVR3hjv0NG/3mQJo+Ut9Q=;
+        b=oGx3VkoPSO2ZKYabYiWWOTYN53Hpr4zaQMnkzolc249rz0cPeC88yNt1bYNVrAPS8r
+         AIYiVqED1zrsePxKZtPycqKpNFePYaKpXnSxy7apkC0UMcNcV9kEAmATmWglnJ9JEOtJ
+         3AXJYOGv9d3kY1Nl65rE1djkxjc6pv3eWx3WdwMXLOBXxLfcJrtr4cGmIvi10Xehpk5K
+         VLSvq/8EIoiY85GIPy77R273rffBqeBLLvAcayCqMI3BB7LMofgPHCOV0JfV6I8Stkuj
+         fvyf8gQvjW1oPqSZigjRZ4+bezCnTO/Yw9d+ZehIDA/GLuF33PzcLyyOorc3e3VKo8uu
+         vZbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ps6+CrFrf1G8yxoOGed9ZXoVR3hjv0NG/3mQJo+Ut9Q=;
+        b=H/jB+FPavD5VI0AoL6wix0PgVPi9VlY7uWhmNeR1H52mBI6+2JdtTYCgR9zit+fIo+
+         6ykYkoBCSnS+in9gn/E2qexrMrqLIbkevCwGZ+qzsYcBS+81hlxOFVY9GUmEoOiAGUC+
+         CG8fSGqSapBw/sX83OZKWG+4GA/5gvJ1CEIwWX+F/EUb9a4EigYEnzcyUdWYOptEXhvu
+         F/mLNVC92Nc2Abgskw+4GG2Qhsb4Zrns5Wy1xCipZrtcCJG5gu1Ub5aF2Phj3o1zIdJM
+         rCXUG1Y5pix7IQU0KCnD4u3uE40kz8K36FWU7e7qF2/J4YsJxBC2ojUlY2U6TUi8W/N6
+         jFtg==
+X-Gm-Message-State: ANoB5plYpgAx9gCm8/y3rBhwpuGOTXvxmZ2gPg+J/iDt7Rhyopxpb12m
+        5HDHIdZRJpvQr/NIjWzoA9Yjqw==
+X-Google-Smtp-Source: AA0mqf70IVc17pOFBXcRbcVopq4rQFE6Z5pSqKrcFJi6790TOHWOmuJf3IppF3ixjppkrhD1p+EB9Q==
+X-Received: by 2002:a05:6512:3581:b0:4a8:41b8:5cb7 with SMTP id m1-20020a056512358100b004a841b85cb7mr777625lfr.61.1668177604331;
+        Fri, 11 Nov 2022 06:40:04 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id q28-20020ac2515c000000b004a8f824466bsm358339lfd.188.2022.11.11.06.40.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 06:40:03 -0800 (PST)
+Message-ID: <36680a5e-7b0c-4d7e-f039-734e9304dc18@linaro.org>
+Date:   Fri, 11 Nov 2022 15:40:02 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|MW4PR12MB7118:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ce6ebb1-2128-4508-caa1-08dac3f28e27
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7cbQ5tj5fvY7AQ7BSaoA0SBvgrNOshExPm/gNEQes9/Itm5mRDgvArTmnGB5kQ+NyPSgk59Q6RTaDpDc8Ew0D7yWzH+YqNK7k4CU/jmp6uDjWzRhvooI2iZTnEKUSe6x0h/ZR/Qc3tYVYnoNJyQ4qdHvMI0cjobtt2s2cmhqKOrUFArM2fvP5NNaJTODVIab0tC5XKBct3xGCAtwgwbn+3MrU5eEfS2daJOYKox2OdljTIjfJRz03IHdJqP5cAp1h/MNjKl15foikixbpBJHgvAy1LgKCTVnnAJYrelLoISctebG8+vC5Lvef9YkkkbJO0cNZnAsFUAnUxD3vRjsGZYJV7yA9xHA4VLv7aAZ8yUaj2JpC59K4EQEqfL+wmUn5EJx/kQSTaRV/k5CFOanfaaTyAKh2xxRGAyj49W6qvl9DfpZZRAKBrZV4qlhItBCUhWaH1gYzrmMuDk0b/Ktce1HGLehOo5djWciglami2ULxbN1+R0E9OW5Pwqs8gGxTResdmGBngsbJoZJ6X0RSHZVBrUzTFJWyNzYcS17QLBdNfdB7ONUmVNKkEQdZppnriXz+XJ8/1LBzW+4SqLRP8dplwFQdxHt+YL7ls3zRQYDIRNAo8+noWZDNX47F4WLYt6CD6zXztKnfxjlSwZle7+wxCE71cqpX4ox3H6iGvtA/pGZ7WENquw58N+qx6aJX6YJzt1c1tBBvIgTtwCFMSQWDArhMzJ7oav7bVml5TsVnvebucPka2Q+jqu1UkzPh66SNaJbt8G5eSyWWKcftz8jit+BnRQUje8WzOuxZwQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(366004)(451199015)(31686004)(41300700001)(38100700002)(5660300002)(36756003)(8676002)(478600001)(66476007)(2906002)(8936002)(66946007)(6486002)(316002)(4326008)(86362001)(66556008)(83380400001)(186003)(53546011)(2616005)(31696002)(6506007)(6512007)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUx0K1E3SVhOdXc5Z0NZRlJyemFVcjNmTXoxNGk4YzNsTG12ZmdLNlFqZEZr?=
- =?utf-8?B?RTNIK01NSlhFTEk1QWlSc0k2R0g0S2RXNGYwUDJleGpjcFhvcjVtWGw2OWpp?=
- =?utf-8?B?YlVZR3c4OGVKa2RhYnNQV01ETHdQZnhUUmFUTlZuVDUyN0tOQkdpWkgwQkFu?=
- =?utf-8?B?VlAyYWdrdDNGbi9IVXBjMUlrNytFL3VwZTkwN25iWEpydXh5SEJTcUFFa1BS?=
- =?utf-8?B?OElHb0NoYUhkOFZkdU82N3EvdldOUUJnNEJPWTlUUHV0bVo3Wnc4K3QzYmhW?=
- =?utf-8?B?VnF3WTZwVjJLVkxWcnBNbS96VGpwemlYcTc3MzU4bk1MckoxWGM4dlJOVHd3?=
- =?utf-8?B?dlhiTHAzQnpRTTBibXg5a1hQS3lGUTZZNzVmbmZwbHl1QXBkNnJmRFNFd3RZ?=
- =?utf-8?B?bi95NFd0RGRaRStNOEVKbTJlMW1MaHhCSzI3RzJxWkY2aEI4ZnVYSFV2MVlq?=
- =?utf-8?B?QmRrQ2Rab1lVTjBESlo5YkNIQk1ndWlBWTJZcUxVRTFRMGlJamxvMmZtemM4?=
- =?utf-8?B?Tko4aEVvRDdGeTFRVXZiYXM4SndjTTdQb0ZOUjhoalNVOG15ZXdCampsYjBr?=
- =?utf-8?B?Tnh5d081NFAwYmxEdzNoeGthZ1cyWVdEYndETjAybGJENXlLOXJHMkU1dzRX?=
- =?utf-8?B?SndpQ09EQWxzVHdma2VCVVhnQ2lNYmhmNEpWdHc4eU9tVEZ1SGZlVVhHVlps?=
- =?utf-8?B?Q2VFZ0NmaWZzYjJNQ0RTQTJRMDlvWDdJUTQ2bk9pMGIrNjN6d1JCeExJd1Bj?=
- =?utf-8?B?eVo2M1NOQ0tGL0djcHJxTHdKMjl1N3p1Z1orbGU3WjE5SWpmWDBic3lpYXRC?=
- =?utf-8?B?VkJ0SXhiS0RjZnQzaFF6ZWg0VlBBNEh5cmZFcDNtNkdka2dGaklRYXp2VmZT?=
- =?utf-8?B?VXMwRUVLRnYzNzlQd2o4VTNkdEZrQmVHbG5nVFBlWFA1c0VIVzU1b0Z6aUN1?=
- =?utf-8?B?NlhCYUpSVW9nRUNxeUFRZFVEN2ZTOURDM3l3MWtJRlVNN29KMjJXNjE2MTEr?=
- =?utf-8?B?QlR5UzIrQnlwL3h1d3BGRjdNRUZrcElIZXh5NGVGV2gzMzh6SzhCQWlqOUFV?=
- =?utf-8?B?VE4wenlkNkw5UW5EdUJGL3pWYmlaK0QyM0ZiOElzMU9LeFVlUk9NMmg3VlNr?=
- =?utf-8?B?R3ZONml2L2p1N2lUbVRJbzNWT09NcWRkQmtpYzhPQ05ZblMraXY2cHdEZDc2?=
- =?utf-8?B?OXh1UkhSOXBzU1htWmxTbUhWQVNXbDNVblVlSit5VStvSzhQVVpRc09Fbkp2?=
- =?utf-8?B?YTlWektWNDEyaVdLOG5PczRyUXdtSmFsVThnTzJ6MlVEMzNUcSsvTVJZeHh1?=
- =?utf-8?B?cnRGYzNhVjlQQXlIM0xNNzd6d3cxM0FVUkw0emFXWXNxbC8wQlJkOXdocDNW?=
- =?utf-8?B?ZG5mcUorcEJHRjNid01Sa3FyM1k0OFNqT1hSWVM2WExZNWtHV3dTMkNlL1J2?=
- =?utf-8?B?QXBGajVuT0RPNkIvdFVMKzhOTUtJZmNFandjWUxRRFNoeUhYOHZjeHVSSkNX?=
- =?utf-8?B?ZzhDQUswQURJMm0zeGhxWFUwbmRydG9lMTk1MDdKVEQ2QTROVG9HbldUQUlq?=
- =?utf-8?B?NXoxSDJuQVVWYTVRT3ZocnFpa1dycnF1SmtxM0szd2NyME1tV3NyVlVyNW83?=
- =?utf-8?B?akdQSFFmTWdGU2VzNEltN201MlgwZDNGRElndzBzWDBZWWZ5cEQzaytKRFl4?=
- =?utf-8?B?RTV2UTIrQzNJK3o4a2pLOEphTjhFemtQbXNGTnBkWEdMUkVjRmQ2SDFGWEZF?=
- =?utf-8?B?RFVNc3pWWlhHTXh1TTRNYmFjR3JJWGNQSWlWb1poTmVIQ1o4b1ZERU9KZmhL?=
- =?utf-8?B?WG1TejVrUUZNdkJPUFVFb2xiOWViWXYxYjI4RHBTblZtYVFyWFFVQXQ3SE1F?=
- =?utf-8?B?NVh3S1FlbnR2VC9ZWEVlL1RvVXNkMmZHZ2VHZ3ZWMmVuTnlQOFhXcXhubjJS?=
- =?utf-8?B?aHlKNjZDT0JXUDBnVE9MZ0J1OThseVl2M1FnL2lGV2p5WUpXQTg0dHRLZ25u?=
- =?utf-8?B?c3prSm5jTFdxZFp4ZWk3eWFNZXVCdjFqWHRZM2U0L2IySy80RzdMUE5PQ0w1?=
- =?utf-8?B?Z2tpUWxHSCtxRXd2MFFRVzB3VWVDMzEyOUZLNldQMnFPR0pEdmtBaVBZUzhJ?=
- =?utf-8?B?ekdTWm81SzU5d0xUZ1dHSXZhek9ERGhFc2NrQURHcUpVRE4yODhySFMvSTFJ?=
- =?utf-8?B?M2lXOExLMTVGRmlEUlZKKy9jZ1JHbXFINVloU1JOVXgxSXBQODBTWDNLSlJO?=
- =?utf-8?B?WCt1RDg3MU9pYWpxT1RxRkFKYkJBPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ce6ebb1-2128-4508-caa1-08dac3f28e27
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 14:39:36.3633
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XyFYB5bYnUmYPxRgBhz1H1Tvq/7EJBoFW2VcUwMwMZqI7zUHG1XbC+L+lDs4ln1tRBT0O/kL1uiQ+GZhLXz6VQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7118
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 5/5] arm64: dts: uniphier: Add NX1 SoC and boards
+ support
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
+ <20221107103410.3443-6-hayashi.kunihiko@socionext.com>
+ <f8f83839-2e76-e500-a16e-5fd2985a278d@linaro.org>
+ <df21cfca-67ed-0c78-7f1e-13e321edabe1@socionext.com>
+ <a1e4a039-3b65-2f2b-2196-340cc754b1c1@linaro.org>
+ <afdb63d2-217b-1ed5-3398-3e610bce8ecb@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <afdb63d2-217b-1ed5-3398-3e610bce8ecb@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 11/11/2022 10:18, Jim Lin wrote:
-> XHCI host drivers may override the default xhci_hub_control() with
-> their own device specific function. To allow these host drivers to
-> call the xhci_hub_control() function from within their own
-> hub_control() callback and be built as a module, export the symbol
-> for xhci_hub_control.
+On 11/11/2022 09:48, Kunihiko Hayashi wrote:
+> Hi Krzysztof,
 > 
-> Signed-off-by: Jim Lin <jilin@nvidia.com>
+> On 2022/11/09 0:11, Krzysztof Kozlowski wrote:
+>> On 08/11/2022 15:30, Kunihiko Hayashi wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 2022/11/08 20:13, Krzysztof Kozlowski wrote:
+>>>> On 07/11/2022 11:34, Kunihiko Hayashi wrote:
+>>>>> Initial version of devicetree sources for NX1 SoC and boards.
+>>>>>
+>>>>> NX1 SoC belongs to the UniPhier armv8 architecture platform, and is
+>>>>> designed for IoT and AI/ML application fields.
+>>>>>
+>>>>
+>>>>> +
+>>>>> +		soc_glue: syscon@1f800000 {
+>>>>> +			compatible = "socionext,uniphier-nx1-soc-glue",
+>>>>> +				     "simple-mfd", "syscon";
+>>>>> +			reg = <0x1f800000 0x2000>;
+>>>>> +
+>>>>> +			pinctrl: pinctrl {
+>>>>> +				compatible = "socionext,uniphier-nx1-pinctrl";
+>>>>
+>>>> So instead of documenting the hardware precisily, you have one big bag
+>>>> for everything under simple-mfd. This is not how the SoC should be
+>>>> described in DTS.
+>>>
+>>> Sorry I don't understand. This is inherited from the previous
+>>> descriptions,
+>>> but is there some example to express DTS correctly about that?
+>>
+>> I think yes, although it actually depends what is this hardware.
+>> Generally speaking, do not use simple-mfd and syscon when these are not
+>> really simple devices. There are quite many in your DTS, which got my
+>> attention. Instead - have regular device with or without children.
+>>
+>> There is no real need to have this a simple-mfd with one children
+>> without any resources (no address space, no clocks, no interrupts, nothing).
+>>
+>> Why this syscon/mfd and pinctrl is not a regular, one device?
 > 
-> ---
-> v5: new change
-> v6: modify commit message
-> v7: change commit message
+> The mfd/syscon.yaml says:
+>    System controller node represents a register region containing a set
+>    of miscellaneous registers.
 > 
->   drivers/usb/host/xhci-hub.c | 1 +
->   1 file changed, 1 insertion(+)
+> The "soc-glue" is exactly this, it contains various register functions
+> and might be referred to the drivers.
 > 
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index af946c42b6f0..4f20cdae2a89 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -1604,6 +1604,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->   	spin_unlock_irqrestore(&xhci->lock, flags);
->   	return retval;
->   }
-> +EXPORT_SYMBOL_GPL(xhci_hub_control);
->   
->   /*
->    * Returns 0 if the status hasn't changed, or the number of bytes in buf.
+> For example in this NX1 dts, ethernet node points to "soc-glue" node.
+> 
+>      eth: ethernet@15000000 {
+>          compatible = "socionext,uniphier-nx1-ave4";
+>          ...
+>          socionext,syscon-phy-mode = <&soc_glue 0>;
+>      };
+> 
+> Since such register region is not often systematically designed,
+> it is tough to cut out as specific memory region for "pinctrl".
 
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+So your choice is instead use entire address space as pinctrl - as a
+child device without IO address space. That's also not a good solution.
 
-Thanks
-Jon
+> 
+> And more, the existing pinctrl driver uses of_get_parent() and
+> syscon_node_to_regmap(), so this change breaks compatibility.
 
--- 
-nvpublic
+This is a new DTS, so what compatibility is broken? With old kernel?
+There was no compatibility with this Devicetree. Anyway using driver
+implementation as reason for specific hardware description (DTS) is also
+not correct.
+
+> 
+>>>>> +			};
+>>>>> +		};
+>>>>> +
+>>>>> +		soc-glue@1f900000 {
+>>>>> +			compatible = "simple-mfd";
+>>>>
+>>>> No, it is not allowed on its own. You need a specific compatible and
+>>>> bindings describing its children.
+>>>
+>>> I saw the definition of "simple-mfd" itself is only in mfd/mfd.txt.
+>>>
+>>> Currently there are only efuse devices as children, and this space means
+>>> nothing. I think it had better define the devices directly.
+>>
+>> You need to start describe the hardware. efuse is an efuse, not MFD.
+>> pinctrl is pinctrl not MFD + pinctrl.
+> 
+> This region also has multiple functions, though, the efuse might be
+> cut out as specific region without "simple-mfd", unlike pinctrl.
+
+simple-mfd itself does not mean region has multiple functions, but that
+children do not depend on anything from the parent device.
+
+You over-use syscon and simple-mfd in multiple places. of course some of
+them will be reasonable, but now it does not.
+
+
+Best regards,
+Krzysztof
+
