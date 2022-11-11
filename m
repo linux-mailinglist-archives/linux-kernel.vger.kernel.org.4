@@ -2,74 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519CD625F19
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29765625F1B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233984AbiKKQES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
+        id S233865AbiKKQGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiKKQEQ (ORCPT
+        with ESMTP id S232574AbiKKQG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:04:16 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230791120;
-        Fri, 11 Nov 2022 08:04:15 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id kt23so13523894ejc.7;
-        Fri, 11 Nov 2022 08:04:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5RYiINc4Bd6qZGurHjg+i3dUcjtgpz53hBmH4uiN6W8=;
-        b=bpT9H0VSq61mtRaB+w+MwktB4H8/QwY/fZ906ouZhTn7IvSeYM5mJ1dmM8UY3XU9P3
-         Nssj9gJ+/0Kx9r9vy2aPbh4f87J/ZqqPrjSQCuCNMOVGK6lwgfBtebBlC5yuE5BSYOO9
-         s1KGT107UMiVitYYZmmutd6EIE4P1DDAMda/kxGKZyBzRmExtXEF0Eo0GOuiWWN9dESl
-         XNXbyAUTmwjcvW4xN1WHG59CaOC45Ja8j7OhpMzaIDhYR5zMv/u/v00KaZeJa4T28t+n
-         cIjB8Y5H/h10YF9Jpqfn82YlNVCkDtZAwqMfjaLCdAL05zDsV/1y3kwGl2InZ5WDXaMU
-         /Dvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5RYiINc4Bd6qZGurHjg+i3dUcjtgpz53hBmH4uiN6W8=;
-        b=FjHNURBsepfPDHWNCpZGQfceuI66ybSUMci41B8w20D2WJF6nJWWdUcXGalnjkyWJc
-         THTAvdZ2yymOb1MPcqAkHrhgc15WYegzwBoFEY5+W7db8lcY7J+0QdZWq3z0WS6fby4D
-         hc3ghlldO3V2UIzH4oXT0XZ2rVoNMJRKmKaBH7V5ilRlT1KimjvLD0ZfYwV/TLnB8B5T
-         Yk8EUu42kZqGOHyS/Dn4Ybtr9WdArJ1Tzu7BxDrrCe5YI0H1yjsZNx10STg1dEToh+of
-         lvo3DJ3b/IKEGTOZscjc7zFwnlHtnJIHEIPuGvyr7KAaAw4miDLTRX80cWGG1Su4t6xH
-         2gjA==
-X-Gm-Message-State: ANoB5pnsVpDHJxLE56K2CIzT6uDVwcC3vPdClkxt4GrIGkB5SvAMBvru
-        xFmkpIwzcx4rfpk8LoX7prQ=
-X-Google-Smtp-Source: AA0mqf4AUdHpt/P34pxIzEAXU6V6SkqQL2dQgB7e6fxY93k0WVMr3qmlCKRO9BLsPmuDRIS0pOAIAQ==
-X-Received: by 2002:a17:907:7681:b0:78d:d10b:4bd5 with SMTP id jv1-20020a170907768100b0078dd10b4bd5mr2362294ejc.467.1668182653487;
-        Fri, 11 Nov 2022 08:04:13 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id t18-20020a056402021200b00459f4974128sm1239843edv.50.2022.11.11.08.04.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 08:04:12 -0800 (PST)
-Date:   Fri, 11 Nov 2022 17:04:10 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dipen Patel <dipenp@nvidia.com>
-Cc:     jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linus.walleij@linaro.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH 4/7] dt-bindings: timestamp: Add Tegra234 support
-Message-ID: <Y25yerZJMwKWCy3+@orome>
-References: <20221103174523.29592-1-dipenp@nvidia.com>
- <20221103174523.29592-5-dipenp@nvidia.com>
+        Fri, 11 Nov 2022 11:06:28 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EF856EFD;
+        Fri, 11 Nov 2022 08:06:27 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 8CBDF320090A;
+        Fri, 11 Nov 2022 11:06:23 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 11 Nov 2022 11:06:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668182783; x=
+        1668269183; bh=84aqGE7+TnTRj/APHvCLROYWnvU22/p77SRHEtjrWtU=; b=F
+        xkaQpJbyEmL5732RyXmGaJal9HbRh0WaXREu9QBq9LMmnHyecCe4/titrejs4iKF
+        o4HXw82LSyyQmMDjViXoi6k958blmh+iyh+/6aChjzXgInLDe93n1kokqpkuVj0m
+        hbcXdUGXWziaYueua9bmxPawrlAsODzFZdc+7Lm389Gs1Xxe8cX1JXkYnfvZQMkS
+        8dafdKhm2qBb3mzwpq366YKPjOm7BCbLWiezwTavLpWIvoFFRP2DjsFEaqlP36cl
+        LQiDaMk9UyZtBXoYWf+aTXApnfiExAUQKo/kGWx9U8KSmN5SDK2zeck5oL32vq71
+        /d6WxuGRRkFpA0PG1Vzkw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668182783; x=
+        1668269183; bh=84aqGE7+TnTRj/APHvCLROYWnvU22/p77SRHEtjrWtU=; b=D
+        6lQEillyzweHPuTxkbzirPgCg3A1Bb2g+oy4sUFOdJ43cyIb2ywwxdPHdUeRDp+5
+        i703J8dnt/91FeCJ4XUDtJQx81hV9lyFcUJOLX5zfYRUc3Peq8aH7apo0MObOpWT
+        rDNe6Fciiy2IF70eRZpm9thXBtWfwx4ehzHaNnmcXjefgnMAGXD87ppmdTsvKkNe
+        WQmeKJOUTmbGBzTyI7mNQ28HetMGi3f+WTbA+QeFZhWzbNUipMHwGxuixpuJR96A
+        +oMe12t8Uf0kNBfT50w4DG/ii+TNREy6zQHBf6/2JsYfcK3mAwy3dzmQeweLrhiP
+        8/mAv7sONkAySQCcQd5UA==
+X-ME-Sender: <xms:_nJuYxAzYaIzCo7Emhao-eT_lgxNnZBoNzZPWYB1eDu3ym5xIbQofA>
+    <xme:_nJuY_g5-bEOWScs8xj0irFmSCrlvwyXYCTInGwL1uvUlfYn3FImT0LN1xtH0EIas
+    ENnBP07xQKfxV8LfDM>
+X-ME-Received: <xmr:_nJuY8nWMimJQtCY4D0pI49_Af8ACb1LKuS0IV8qYBLxW7YE-skKjyT3PDkt7Rsa>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeigdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeduhfekvedvtdeukeeffefgteelgfeugeeuledttdeijeegieeh
+    vefghefgvdefgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:_nJuY7x1zcuGf5yhsvUJ-E9COsKncYntIzMl_rezg22dstN_0LLIww>
+    <xmx:_nJuY2TN1SuIfkYoILJW0f0KIj8Zs5IxGwlBbb_Y4Is0_7CffTj79A>
+    <xmx:_nJuY-bnplG9vAspXuaXaixWWS8IqAqFBdaekOYH3DRGKaHtWpkA1A>
+    <xmx:_3JuYybA_pt4NHazdIZrOCmmO3BcWQJEc34xD1FDT65n42_RhfMesg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 11 Nov 2022 11:06:20 -0500 (EST)
+Message-ID: <dfd408ed-5c2c-c73a-b901-6641ae7aae5f@flygoat.com>
+Date:   Fri, 11 Nov 2022 16:06:06 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OI8OX5lQwVXJ1cTS"
-Content-Disposition: inline
-In-Reply-To: <20221103174523.29592-5-dipenp@nvidia.com>
-User-Agent: Mutt/2.2.8 (2022-11-05)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V4] PCI: loongson: Skip scanning unavailable child devices
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Liu Peibao <liupeibao@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20221110231351.GA681551@bhelgaas>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20221110231351.GA681551@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,47 +99,83 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---OI8OX5lQwVXJ1cTS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 03, 2022 at 10:45:20AM -0700, Dipen Patel wrote:
-> Added timestamp provider support for the Tegra234 in devicetree
-> bindings.
->=20
-> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
-> ---
->  .../timestamp/nvidia,tegra194-hte.yaml        | 44 +++++++++++++++++--
->  1 file changed, 40 insertions(+), 4 deletions(-)
+在 2022/11/10 23:13, Bjorn Helgaas 写道:
+> On Thu, Nov 10, 2022 at 11:00:45PM +0000, Jiaxun Yang wrote:
+>> 在2022年11月10日十一月 下午9:07，Bjorn Helgaas写道：
+>>> On Tue, Nov 08, 2022 at 02:42:40PM +0800, Liu Peibao wrote:
+>>>> The PCI Controller of 2k1000 could not mask devices by setting vender ID or
+>>>> device ID in configuration space header as invalid values. When there are
+>>>> pins shareable between the platform device and PCI device, if the platform
+>>>> device is preferred, we should not scan this PCI device. In the above
+>>>> scene, add `status = "disabled"` property in DT node of this PCI device.
+>>>>
+>>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>>>> ---
+>>>> V3 -> V4: 1. get rid of the masklist and search the status property
+>>>> 	  directly.
+>>>>            2. check the status property only when accessing the vendor ID.
+>>>> V2 -> V3: 1. use list_for_each_entry() for more clearly.
+>>>>            2. fix wrong use of sizeof().
+>>>> V1 -> V2: use existing property "status" instead of adding new property.
+>>>>
+>>>>   drivers/pci/controller/pci-loongson.c | 11 +++++++++++
+>>>>   1 file changed, 11 insertions(+)
+>>>>
+>>>> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+>>>> index 05c50408f13b..efca0b3b5a29 100644
+>>>> --- a/drivers/pci/controller/pci-loongson.c
+>>>> +++ b/drivers/pci/controller/pci-loongson.c
+>>>> @@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+>>>>   			return NULL;
+>>>>   	}
+>>>>   
+>>>> +#ifdef CONFIG_OF
+>>>> +	/* Don't access disabled devices. */
+>>>> +	if (pci_is_root_bus(bus) && where == PCI_VENDOR_ID) {
+>>>> +		struct device_node *dn;
+>>>> +
+>>>> +		dn = of_pci_find_child_device(bus->dev.of_node, devfn);
+>>>> +		if (dn && !of_device_is_available(dn))
+>>>> +			return NULL;
+>>>> +	}
+>>>> +#endif
+>>> Looks nice and simple, thanks for trying this out.
+>> Should we make this into common PCI code?
+>> I guess Loongson won’t be the last platform having such problem.
+> I think we should wait until somebody else has this problem.
+>
+> It's not a completely trivial situation because if the device uses PCI
+> memory or I/O space, we have to worry about how that space is handled.
+> Does the BIOS assign that space?  Is it included in the host bridge
+> _CRS or "ranges" properties?  If the device is below any PCI bridges
+> (I don't think that's the case in your situation), how does the space
+> it requires get routed through the bridges?
 
-As I mentioned in the other patch, perhaps we should extend the binding
-with a phandle property that lets us point directly to the GPIO
-controller that a given HTE is coupled with.
+I believe in this case the address is assigned by BIOS and they are out 
+of ranges
+properties of host bridge. Those are all on chip devices so there won't 
+be any
+bridges.
 
-We haven't technically started making use of these bindings yet, so
-backwards-compatibility shouldn't be an issue yet.
+@Peibao, can you please confirm this? I was never able to boot mainline 
+kernel
+on my LS2K board.
 
-Thierry
+Thanks.
+- Jiaxun
 
---OI8OX5lQwVXJ1cTS
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+>
+> It would be nice to say something in this commit log about whether
+> these are issues on your platform.
+>
+>>>>   	/* CFG0 can only access standard space */
+>>>>   	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
+>>>>   		return cfg0_map(priv, bus, devfn, where);
+>>>> -- 
+>>>> 2.20.1
+>>>>
+>> -- 
+>> - Jiaxun
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNucnoACgkQ3SOs138+
-s6GgsBAAq5eiY8YLwRzd4588a63jlCN9cKM5G6WCoqwddVWxf37jY6Yf4tN1sQ9h
-RBmozpq98vzV0IbMFAfxGOruhGetjgAnksZT8646hQQ3I7neGyqH5WYDpNF3m06e
-n7eTrWxUuVGhVjesrb2uUh5xNVBE/ovrGLTZeDMxtxrNz30SPDpbYesdamf0Gykw
-DuEy8N+9CqH+mqyrEm2lpnHTREI8RdpS3GvmI9R9eFXFoRAsmseh4oyRhNaKXhk4
-vqSTIuq4HKh+7DcShUAx4zRDOVyspS5deo0tXi/iawwSCDzx/siy/Q9GsrvnC2uX
-yVibpFEqvzN7g3BB/Hf5D69ojnA3sdubEZAS1V8Hg9sM+vAfAsetyGM3nYvoskAQ
-5TxNrhhv9+Gv9WDfjAibhsmYMhl+yfWdDzy1nvsH8j0Cih/SIFmHp1iYdLSf0bg3
-bXdt8niJNjJgbQhLLDDbAhekeZzJM4cvzzIToJl1eOUEahxq4YAy/qZ3Um9XI7QV
-sDbA4jJykgbEXMRJLHdwowCAvbnVpjZytp15bX9uOU6tUwoni4oEMzkV3gDgRIW5
-/AIsumuhyyAmxoW3WmKxrCBDojaYN+KFGCMMK8atFrrMQV+NuttPrzpuGTY3IdfA
-g8V3pLSXR+eQQzBsWlFkz8uo62TMEvaizeW2ZE6m9EO784fStSw=
-=7qDJ
------END PGP SIGNATURE-----
-
---OI8OX5lQwVXJ1cTS--
