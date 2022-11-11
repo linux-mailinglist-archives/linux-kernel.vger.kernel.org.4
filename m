@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54951625968
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E09662596E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbiKKLfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S233426AbiKKLgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:36:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKKLfN (ORCPT
+        with ESMTP id S229461AbiKKLgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:35:13 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB182D1CF
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:35:11 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id h14so4217695pjv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:35:11 -0800 (PST)
+        Fri, 11 Nov 2022 06:36:11 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A03FDE84
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:36:10 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id x21so4199993ljg.10
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:36:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZoIY7DKb5p1kzhT5B2FzSv6iW2VGwt91bZbpKjEpyDc=;
-        b=p3rDoP1vzMyiRRpiEQt/A//n+YOLwJjuDcx6Ad8cZLYHt3AV2mn6IECAHucxBly8wa
-         IwXWelN9jCtYtZE5OvWX+7nu4uJHquce4b3nwUS2IgHAl1KN6c8MnWSVSN5rLDrZBhSZ
-         koSlwkqjvWk9CdVR6Nc21VNV34uLjn4X/p+5DzoPcpHol3Z2evfQATkrfjCys+cDrNiQ
-         cAsa4NtP+vdaioJUqMPb4yI5U9jqjxrzzAsgO0GiPBBe5aea8YJ9OqmLsp4saCnyeepn
-         ig4GJGEK1U51ozSj7kzRRN75VBvItfk6AvIw+T6e4P/ESf7ZDdw2xUFYy+gBsRJlxgZv
-         g7kA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8+lo+EYchQIrutfVK7r/d71O1gZIvEmM22KyAmAwjKs=;
+        b=zqzPwf0VhpEKqnCJQeB0cnMdP0hokvV0Xjbk46zcHBaH/WGMkK0ilcn5ZTjIoEjERy
+         R+fU8Ifo5B5st2HNnfBFhjhkdVUcahN9cnzJaFzXWQZ/qBD8erQsfNDYiuZv2infQ/2N
+         FFWRDmTX+5xIafMQpS5yIKM0Iw0zBUF4U62f5eLnlkO6HaT18V2lBXUNRJ9miqTJUcf/
+         JBakGu05Diiy1F6bjHIS2+PSoa4zRdL6a3idwVYdgF4wIhrzSHpuz/Hy5XI6wkR+rLC+
+         WwFppQTw8eTdo7P5I4hysvzkWWWwzXLvyXaajXneXiGLptSWzl47/ZerTddPm+9fFVz1
+         WYRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZoIY7DKb5p1kzhT5B2FzSv6iW2VGwt91bZbpKjEpyDc=;
-        b=nSqFgkHi6pqirv4B3YkQOYKQEetE2ltaDCc2eb5FlDITZtODhPvBQ3p1iiSWk8Nvbk
-         gtK3OvdfvwqldZKg9EBlPwyFwT/xEP3sBX1ML1xMqunlrSTXPM6TrGGliURZ0LiPu+D6
-         3YzVPKSyMzOX10aGIqmjDfiEs7JkGLHVYMErBkL9BzB+5osk4gplfQB0UNCZHpMYRvqp
-         e18G9aM+bui7wX6QtT+NFf3w6hhg128QDsD50ZBntsfIiXK53ilkQC33L0x4T3qUET9s
-         rvTCesr2wGQ5yzGQ93ykbnQmaFzm0z3znt56/Pz8jnHMq2d12GeXR38947wCDxH98m9V
-         RjMw==
-X-Gm-Message-State: ANoB5pmvaaxii/I1b/x0WXOJpGojrm6BwVMsQNo7ZX7PQONMk5K7L0qx
-        Caw4m2hK1LQLN1fPAwvtnB5tDsLa5OX1voJ/mqvHhw==
-X-Google-Smtp-Source: AA0mqf4l1aJGllrWXMtwrV/h85w3mWa0CRJ72auSdt1G0JNnkGkUQh2Ngu/T9fGBTTwpHSxmeA6cshKZKMSEE2vU6mQ=
-X-Received: by 2002:a17:902:c142:b0:188:55f5:972f with SMTP id
- 2-20020a170902c14200b0018855f5972fmr2095276plj.148.1668166511266; Fri, 11 Nov
- 2022 03:35:11 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8+lo+EYchQIrutfVK7r/d71O1gZIvEmM22KyAmAwjKs=;
+        b=73f1AV7JrPaNQDFa/2HcvgOSO6Y/pNaInOXMEO54xrtcuXMwEngZW4rme1SfNX5HE9
+         VGHQz8pcn/MuU3eZVeWb0IuFBfG0KTVrQPSCOLcw0eNskN5zHAnQZ/vVtZghiFji8GCZ
+         V3+GwM3SkO4sCS6UvVBSdZJPS2VhVH+MIjOYlhjS8q1BJDf04tTp1NB2QeWyDkV1DBny
+         XbHMO5VBwqIyqGGXlPTJsSGSHvH/OQg1C5z3J/mEvqhnFQo8/YS54N85a+p+pgAkeUWJ
+         /olyT0YBZ4ZKB39uVnuZQ8cNbmKJ6dlj1MKpo+ipJo6LDgqcV+Jhuy1VUKH8QF6Qeh7k
+         AO2w==
+X-Gm-Message-State: ANoB5pnv1RMFnAIEbk1npY4IzA0/oUJqkqM8DiXtmHuslZBu40RljAgT
+        T1JouVY5zRJWGAGcM7EWqvvHLA==
+X-Google-Smtp-Source: AA0mqf7Af5u4htDHYrs+2hewvDJau4fu8DLkLCe3TaU8xXrl/EP9cN9v5Txbclnj1xYPEGYOF2lwPA==
+X-Received: by 2002:a2e:960c:0:b0:278:eab6:7542 with SMTP id v12-20020a2e960c000000b00278eab67542mr300253ljh.400.1668166568655;
+        Fri, 11 Nov 2022 03:36:08 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id bi30-20020a0565120e9e00b004acb2adfa1fsm274970lfb.307.2022.11.11.03.36.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 03:36:08 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Patrick Lai <plai@qti.qualcomm.com>,
+        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 00/10] ASoC: dt-bindings: Rework Qualcomm APR/GPR Sound nodes for SM8450
+Date:   Fri, 11 Nov 2022 12:35:37 +0100
+Message-Id: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221021073025.18831-1-wenchao.chen666@gmail.com>
- <22499ab9-340d-7059-b3ff-45342b0810cf@intel.com> <CA+Da2qyx7McYStMysPdK-DV9qiOnb9rvXYqqugxsbVgqqX59VQ@mail.gmail.com>
-In-Reply-To: <CA+Da2qyx7McYStMysPdK-DV9qiOnb9rvXYqqugxsbVgqqX59VQ@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 11 Nov 2022 12:34:34 +0100
-Message-ID: <CAPDyKFq8JXO6q+_JFhSGWoVfSUEtowUX85kJpsVMa0jmEEjOiQ@mail.gmail.com>
-Subject: Re: [PATCH V2 0/2] mmc: block: Support Host to control FUA
-To:     Wenchao Chen <wenchao.chen666@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Cc:     orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, axboe@kernel.dk, avri.altman@wdc.com,
-        kch@nvidia.com, CLoehle@hyperstone.com,
-        vincent.whitchurch@axis.com, bigeasy@linutronix.de,
-        s.shtylyov@omp.ru, michael@allwinnertech.com,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        megoo.tang@gmail.com, lzx.stg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,205 +79,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 at 08:59, Wenchao Chen <wenchao.chen666@gmail.com> wrot=
-e:
->
-> Hi Hunter
-> Thank you for your review!
-> I'm sorry to reply you so late because I've been too busy lately.
->
-> On Fri, Oct 21, 2022 at 11:50 PM Adrian Hunter <adrian.hunter@intel.com> =
-wrote:
-> >
-> > On 21/10/22 10:30, Wenchao Chen wrote:
-> > > From: Wenchao Chen <wenchao.chen@unisoc.com>
-> > >
-> > > Summary
-> > > =3D=3D=3D=3D=3D=3D=3D
-> > > These patches[1] supports the host to turn off FUA.
-> > >
-> > > About FUA, roughly deal with the following two parts:
-> > > 1) FUA(Forced Unit Access):
-> > > - The REQ_FUA flag can be OR ed into the r/w flags of a bio submitted=
- from the
-> > >   filesystem and will make sure that I/O completion for this request =
-is only
-> > >   signaled after the data has been committed to non-volatile storage.
-> > >
-> > > 2) In emmc, FUA is represented as Reliable write. code show as below:
-> > > static void mmc_blk_data_prep(struct mmc_queue *mq, struct mmc_queue_=
-req *mqrq,
-> > >               int recovery_mode, bool *do_rel_wr_p, bool *do_data_tag=
-_p)
-> > > {
-> > >       ...
-> > >       /*
-> > >        * Reliable writes are used to implement Forced Unit Access and
-> > >        * are supported only on MMCs.
-> > >        */
-> > >       do_rel_wr =3D (req->cmd_flags & REQ_FUA) &&
-> > >                       rq_data_dir(req) =3D=3D WRITE &&
-> > >                       (md->flags & MMC_BLK_REL_WR);
-> > >       ...
-> > > }
-> > >
-> > > Patch structure
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > patch#1:  for block
-> > > patch#2:  for sdhci-sprd
-> > >
-> > > Tests
-> > > =3D=3D=3D=3D=3D
-> > > Ran 'AndroBench' to evaluate the performance:
-> >
-> > It would be good to have more details e.g.
-> > What file system? What block size?  What journal size?
-> > What file size? What record size?
-> >
->
-> What file system?
-> F2FS
-> What block size?
-> Sequential: 32768KB, Random: 4KB
-> What file size?
-> 64MB
->
-> > > 1. fua_disable =3D 1
-> > > /sys/block/mmcblk0/queue # cat fua 0
-> > > I tested 5 times for each case and output a average speed.
-> > >
-> > > 1) Sequential read:
-> > > Speed: 266.8MiB/s, 265.1MiB/s, 262.9MiB/s, 268.7MiB/s, 265.2MiB/s
-> > > Average speed: 265.74MiB/s
-> > >
-> > > 2) Random read:
-> > > Speed: 98.75MiB/s, 98.7MiB/s, 98.5MiB/s, 99.4MiB/s, 98.7MiB/s
-> > > Average speed: 98.81MiB/s
-> > >
-> > > 3) Sequential write:
-> > > Speed: 199.94MiB/s, 199.1MiB/s, 205.5MiB/s, 206.5MiB/s, 191.5MiB/s
-> > > Average speed: 200.5MiB/s
-> > >
-> > > 4) Random write:
-> > > Speed: 68.6MiB/s, 71.8MiB/s, 77.1MiB/s, 64.8MiB/s, 69.3MiB/s
-> > > Average speed: 70.32MiB/s
-> > >
-> > > 2. fua_disable =3D 0 (default 0)
-> > > /sys/block/mmcblk0/queue # cat fua 1
-> > > I tested 5 times for each case and output a average speed.
-> > >
-> > > 1) Sequential read:
-> > > Speed: 259.3MiB/s, 258.8MiB/s, 258.2MiB/s, 259.5MiB/s, 253.5MiB/s
-> > > Average speed: 257.86MiB/s
-> > >
-> > > 2) Random read:
-> > > Speed: 98.9MiB/s, 101MiB/s, 101MiB/s, 99MiB/s, 101.1MiB/s
-> > > Average speed: 100.2MiB/s
-> > >
-> > > 3) Sequential write:
-> > > Speed: 153.7MiB/s, 146.2MiB/s, 151.2MiB/s, 148.8MiB/s, 147.5MiB/s
-> > > Average speed: 149.48MiB/s
-> > >
-> > > 4) Random write:
-> > > Speed: 12.9MiB/s, 12.3MiB/s, 12.6MiB/s, 12.8MiB/s, 12.8MiB/s
-> > > Average speed: 12.68MiB/s
-> >
-> > Is every write being sync'ed of just sync at the end?
-> >
->
-> /*
-> * Reliable writes are used to implement Forced Unit Access and
-> * are supported only on MMCs.
-> */
-> do_rel_wr =3D (req->cmd_flags & REQ_FUA) &&
->     rq_data_dir(req) =3D=3D WRITE &&
->     (md->flags & MMC_BLK_REL_WR);
->
-> A Reliable Write access shall force the data to be written to the
-> nonvolatile storage=E3=80=82
-> It will consume more time.
+Adding sound support for Qualcomm SM8450 SoC (and later for SC8280XP) brought
+some changes to APR/GPR services bindings.  These bindings are part of
+qcom,apr.yaml:
 
-My apologies for side-stepping the discussion.
+  apr-or-gpr-device-node <- qcom,apr.yaml
+    apr-gpr-service@[0-9] <- qcom,apr.yaml
+      service-specific-components <- /schemas/sound/qcom,q6*.yaml
 
-Yes, REQ_FUA is per definition a write and a flush of the
-write-back-cache to non-volatile storage. So, this is indeed the
-correct behaviour, even if it consumes more time to complete the
-operation.
+The schema for services (apr-gpr-service@[0-9]) already grows considerably and
+is still quite not specific.  It allows several incorrect combinations, like
+adding a clock-controller to a APM device.  Restricting it would complicate the
+schema even more.  Bringing new support for sound on Qualcomm SM8450 and
+SC8280XP SoC would grow it as well.
 
->
-> > >
-> > > According to the above data, disable FUA (fua_disable =3D 1) improves=
- the
-> > > performance:
-> > > 1)Sequential read improved by 3%.
-> > > 2)Random read were down 1%.
-> >
-> > FUA should not affect reads.  If it is, you may want to investigate how=
-.
-> >
-> > > 3)Sequential write improved by 34%.
-> > > 4)Random write improved by 454%.
-> > > Therefore, it is recommended to support the host to control FUA.
-> > >
-> > > Reference
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/tree/Documentation/block/writeback_cache_control.rst
-> > > [2] Embedded Multi-Media Card (e=E2=80=A2MMC) Electrical Standard (5.=
-1)''
-> >
-> > You do not seem to have considered data integrity.
-> >
-> > Regular disks are assumed to provide atomic sector writes.  That is, a =
-sector has either the old data or the new data, but not some corrupt mixtur=
-e.
-> >
-> > mmc does not have that assumption, which is presumably why Reliable Wri=
-te has been used instead.  Although that idea appears to have been thrown a=
-way for devices with no cache by commit 08ebf903af57 ("mmc: core: Fixup sup=
-port for writeback-cache for eMMC and SD").
-> >
-> > File systems can use FUA to mark a successful journal flush.  Whether o=
-r not getting a torn sector at that point will corrupt the file system reco=
-very is presumably file system specific, and maybe specific to file system =
-options e.g. the use of checksums.
-> >
-> > It may well be that a file system can survive a torn sector at that poi=
-nt, or that user space would prefer to take the risk in order to get better=
- performance.  In either of those cases, it is not really a decision for th=
-e host controller driver.
-> >
->
-> Considering the data integrity, we did a random power-down test, and
-> the experimental results were good.
->
-> FUA can only reduce data loss under abnormal conditions, but cannot
-> prevent data loss under abnormal conditions.
->
-> I think there should be a balance between FUA and NO FUA, but
-> filesystems seem to favor FUA.
->
-> FUA brings a drop in random write performance. If enough tests are
-> done, NO FUA is acceptable.
+Refactor the bindings before extending them for Qualcomm SM8450 SoC.
 
-Testing this isn't entirely easy. It requires you to hook up
-electrical switches to allow you to automate the powering on/off of
-the platform(s). Then at each cycle, really make sure to stress test
-the data integrity of the flash memory. Is that what the tests did -
-or can you elaborate a bit on what was really tested?
+Best regards,
+Krzysztof
 
-In any case, the performance impact boils down to how each eMMC/SD
-card internally manages reliable writes vs regular writes. Some
-vendors may treat them very similarly, while others do not.
+Krzysztof Kozlowski (10):
+  ASoC: dt-bindings: qcom,apr: Add GLINK channel name for SM8450
+  ASoC: dt-bindings: qcom,apr: Split services to shared schema
+  ASoC: dt-bindings: qcom,q6afe: Split to separate schema
+  ASoC: dt-bindings: qcom,q6apm: Split to separate schema
+  ASoC: dt-bindings: qcom,q6adm: Split to separate schema
+  ASoC: dt-bindings: qcom,q6asm: Split to separate schema
+  ASoC: dt-bindings: qcom,q6prm: Split to separate schema
+  ASoC: dt-bindings: qcom,q6core: Split to separate schema
+  ASoC: dt-bindings: qcom,q6apm-lpass-dais: Split to separate schema
+  ASoC: dt-bindings: qcom,q6apm: Add SM8450 bedais node
 
-That said, trying to disable REQ_FUA from an mmc host driver is the
-wrong approach, as also pointed out by Adrian above. These types of
-decisions belong solely in the mmc core layer.
+ .../bindings/soc/qcom/qcom,apr-services.yaml  |  54 ++++++++
+ .../bindings/soc/qcom/qcom,apr.yaml           | 119 ++----------------
+ .../bindings/sound/qcom,q6adm-routing.yaml    |  22 +---
+ .../devicetree/bindings/sound/qcom,q6adm.yaml |  51 ++++++++
+ .../devicetree/bindings/sound/qcom,q6afe.yaml |  69 ++++++++++
+ .../bindings/sound/qcom,q6apm-dai.yaml        |  19 +--
+ .../bindings/sound/qcom,q6apm-lpass-dais.yaml |  32 +++++
+ .../devicetree/bindings/sound/qcom,q6apm.yaml |  67 ++++++++++
+ .../bindings/sound/qcom,q6asm-dais.yaml       |  48 +++----
+ .../devicetree/bindings/sound/qcom,q6asm.yaml |  68 ++++++++++
+ .../bindings/sound/qcom,q6core.yaml           |  39 ++++++
+ .../sound/qcom,q6dsp-lpass-clocks.yaml        |  40 +-----
+ .../sound/qcom,q6dsp-lpass-ports.yaml         |  57 ++-------
+ .../devicetree/bindings/sound/qcom,q6prm.yaml |  50 ++++++++
+ MAINTAINERS                                   |   2 +-
+ 15 files changed, 477 insertions(+), 260 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,apr-services.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6adm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6afe.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6apm-lpass-dais.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6core.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6prm.yaml
 
-Instead of what the $subject series proposes, I would rather suggest
-we discuss (and test) whether it could make sense to disable REQ_FUA -
-*if* the eMMC/SD card supports a write-back-cache (REQ_OP_FLUSH) too.
-Hence, the mmc core could then announce only REQ_OP_FLUSH.
+-- 
+2.34.1
 
-Kind regards
-Uffe
