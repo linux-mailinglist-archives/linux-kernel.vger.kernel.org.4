@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8BF62611F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E68B4626125
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbiKKS3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 13:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
+        id S234206AbiKKS3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 13:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234018AbiKKS3G (ORCPT
+        with ESMTP id S234120AbiKKS3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:29:06 -0500
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8305CD21;
-        Fri, 11 Nov 2022 10:29:04 -0800 (PST)
-Received: by mail-ot1-f48.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso3255268otb.2;
-        Fri, 11 Nov 2022 10:29:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kn6cAuYLHXjup8F+hSWw66Gou+VIIUB2Qhp5H7Bh0Tg=;
-        b=WDNOUSpMqQl/fxfudEl62wBJeUyiczXnbDCbYSXhuJO5OVqgsAEpEWui4nGpmhL0xA
-         8pb+nrHWgv7nuRIe40GwTjfcs020HIQ5bUbdt8zs7c0xn7c/dcY6ZWeysp+hD+0FaZQ7
-         qGWOfl1AAtB4I8v0hKyNt0SHtl7HcYv2rClQeomkcwf3q0CnbsP4hdSrTS4feVDbtB/i
-         ZyITpfBddHvx1gsk96rwOuoPTjXW0DeY1G/KFH23ra5l0qriLV/M2XL/3Ei+bmGEaBxe
-         Acf3DvT7pe0jeLMJNj57T4KZhFueo4nKvgwIy4PYN18Fe8GILa9PJc2k4eSwd4G7nari
-         ffVA==
-X-Gm-Message-State: ANoB5pnbi4g2fxRp/AHGuWPcuwi6WNP2cY+tXt35Dl0Y8OeOk+XNSoMG
-        631drFWYEwQvyXZvMF72Ww==
-X-Google-Smtp-Source: AA0mqf4vvOwpMmuZbUoSfNP/tvj1KV5ImhkBMZ+xV6rlZ9oL/EWWI+dPEitu0oRTvnzovddFX5JKhw==
-X-Received: by 2002:a9d:3e4:0:b0:662:2458:3ef7 with SMTP id f91-20020a9d03e4000000b0066224583ef7mr1880568otf.150.1668191344118;
-        Fri, 11 Nov 2022 10:29:04 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05683011cd00b00661b5e95173sm1249469otq.35.2022.11.11.10.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 10:29:03 -0800 (PST)
-Received: (nullmailer pid 3650938 invoked by uid 1000);
-        Fri, 11 Nov 2022 18:29:05 -0000
-Date:   Fri, 11 Nov 2022 12:29:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-Cc:     krzysztof.kozlowski@linaro.org, michals@xilinx.com,
-        linux-pci@vger.kernel.org, bhelgaas@google.com,
-        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        nagaradhesh.yeleswarapu@amd.com
-Subject: Re: [PATCH v6 2/2] dt-bindings: PCI: xilinx-nwl: Convert to YAML
- schemas of Xilinx NWL PCIe Root Port Bridge
-Message-ID: <166819134102.3650802.6455003560050534177.robh@kernel.org>
-References: <20221111053709.1474323-1-thippeswamy.havalige@amd.com>
- <20221111053709.1474323-2-thippeswamy.havalige@amd.com>
+        Fri, 11 Nov 2022 13:29:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25445CD01;
+        Fri, 11 Nov 2022 10:29:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=7tbDqOMUc+B0QqDmK1vKonS3aMRfoeVXeqTyBRBdDGw=; b=XfnFLZn3DzVTYvZQ7U1999V054
+        8yFd9Y2yjEJWPS6NgNmRXeNoQVxgbA3uabTTmUgrTCuCWP9Yqaet3TCpPe6f3ONXMBxoDfdYiIY2R
+        5Nwg3IcBTLt07PHgYxJqqNgj7hA3kEy07TReI/iQ6e4Ct643vfhJRdTLdq1KDjIY57DdV9+iQp/6w
+        7llxZh830ds70Q+8jjOg3pIgxgvLWkuF281Lw9uI6fIcJPOBcQV61/mQsthid3SRGwWwYaAuYwdSh
+        cy0bHfLdANcW+nTRLfgzyzrwCq0tNQH19UMil8FptHpVHzbPUUisXw7jL6iig49FyTBlJGx2F+a3g
+        Z95zCMHg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1otYm1-0006OL-Ai; Fri, 11 Nov 2022 18:29:05 +0000
+Date:   Fri, 11 Nov 2022 10:29:05 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Allen Webb <allenwebb@google.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Alexey Gladkov <gladkov.alexey@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
+Message-ID: <Y26UcbviRaoK9a3C@bombadil.infradead.org>
+References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
+ <20221111152852.2837363-1-allenwebb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221111053709.1474323-2-thippeswamy.havalige@amd.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20221111152852.2837363-1-allenwebb@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,21 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
+> USB devices support the authorized attribute which can be used by
+> user-space to implement trust-based systems for enabling USB devices. It
+> would be helpful when building these systems to be able to know in
+> advance which kernel drivers (or modules) are reachable from a
+> particular USB device.
+> 
+> This information is readily available for external modules in
+> modules.alias. However, builtin kernel modules are not covered. This
+> patch adds a sys-fs attribute to both builtin and loaded modules
+> exposing the matching rules in the modalias format for integration
+> with tools like USBGuard.
+> 
+> Signed-off-by: Allen Webb <allenwebb@google.com>
 
-On Fri, 11 Nov 2022 11:07:09 +0530, Thippeswamy Havalige wrote:
-> Convert to YAML schemas for Xilinx NWL PCIe Root Port Bridge
-> dt binding.
-> 
-> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-> ---
-> changes in v6:
-> Added maxItems to clocks property.
-> 
->  .../bindings/pci/xilinx-nwl-pcie.txt          |  73 ---------
->  .../bindings/pci/xlnx,nwl-pcie.yaml           | 149 ++++++++++++++++++
->  2 files changed, 149 insertions(+), 73 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt
->  create mode 100644 Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
-> 
+Thanks for the patch Allen!
 
-Applied, thanks!
+I'd rather have something generic though, and it would seem kmod [0] already
+does this, have you seen the kmod support for builtin.alias.bin
+
+Can't that be used?
+
+[0] git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
+
+  Luis
